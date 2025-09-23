@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  eio,
-  lwt,
+{ lib
+, buildDunePackage
+, fetchurl
+, eio
+, lwt
+,
 }:
 buildDunePackage rec {
   pname = "lwt_eio";

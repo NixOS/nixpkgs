@@ -1,21 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  enableVTK ? true,
-  vtk,
-  DarwinTools, # sw_vers
-  enablePython ? false,
-  python ? null,
-  swig,
-  expat,
-  libuuid,
-  openjpeg,
-  zlib,
-  pkg-config,
-  ctestCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, enableVTK ? true
+, vtk
+, DarwinTools
+, # sw_vers
+  enablePython ? false
+, python ? null
+, swig
+, expat
+, libuuid
+, openjpeg
+, zlib
+, pkg-config
+, ctestCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

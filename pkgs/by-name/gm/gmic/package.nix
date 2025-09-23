@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  buildPackages,
-  cimg,
-  cmake,
-  common-updater-scripts,
-  coreutils,
-  curl,
-  fftw,
-  gmic-qt,
-  gnugrep,
-  gnused,
-  graphicsmagick,
-  jq,
-  libX11,
-  libXext,
-  libjpeg,
-  libpng,
-  libtiff,
-  llvmPackages,
-  ninja,
-  opencv,
-  openexr,
-  pkg-config,
-  writeShellScript,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, buildPackages
+, cimg
+, cmake
+, common-updater-scripts
+, coreutils
+, curl
+, fftw
+, gmic-qt
+, gnugrep
+, gnused
+, graphicsmagick
+, jq
+, libX11
+, libXext
+, libjpeg
+, libpng
+, libtiff
+, llvmPackages
+, ninja
+, opencv
+, openexr
+, pkg-config
+, writeShellScript
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

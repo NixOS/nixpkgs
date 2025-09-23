@@ -1,32 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  aiohttp,
-  frozendict,
-  inject,
-  joblib,
-  loguru,
-  nix,
-  nix-prefetch-git,
-  nurl,
-  platformdirs,
-  pydantic,
-  typer,
-
-  # tests
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  aioresponses,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  aiohttp
+, frozendict
+, inject
+, joblib
+, loguru
+, nix
+, nix-prefetch-git
+, nurl
+, platformdirs
+, pydantic
+, typer
+, # tests
+  writableTmpDirAsHomeHook
+, pytestCheckHook
+, aioresponses
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+,
 }:
 buildPythonPackage rec {
   pname = "nixpkgs-updaters-library";

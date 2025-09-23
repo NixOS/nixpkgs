@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   cfg = config.services.vault;
@@ -44,10 +43,12 @@ let
   configOptions = lib.escapeShellArgs (
     lib.optional cfg.dev "-dev"
     ++ lib.optional (cfg.dev && cfg.devRootTokenID != null) "-dev-root-token-id=${cfg.devRootTokenID}"
-    ++ (lib.concatMap (p: [
-      "-config"
-      p
-    ]) allConfigPaths)
+    ++ (lib.concatMap
+      (p: [
+        "-config"
+        p
+      ])
+      allConfigPaths)
   );
 
 in
@@ -216,9 +217,10 @@ in
     };
     users.groups.vault.gid = config.ids.gids.vault;
 
-    systemd.tmpfiles.rules = lib.optional (
-      cfg.storagePath != null
-    ) "d '${cfg.storagePath}' 0700 vault vault - -";
+    systemd.tmpfiles.rules = lib.optional
+      (
+        cfg.storagePath != null
+      ) "d '${cfg.storagePath}' 0700 vault vault - -";
 
     systemd.services.vault = {
       description = "Vault server daemon";

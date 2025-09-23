@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  fetchurl,
-  librosa,
-  matplotlib,
-  mido,
-  setuptools,
-  torch,
-  torchlibrosa,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, fetchurl
+, librosa
+, matplotlib
+, mido
+, setuptools
+, torch
+, torchlibrosa
+,
 }:
 
 buildPythonPackage rec {

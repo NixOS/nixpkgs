@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  frrSource,
-  frrVersion,
-
-  # build time
-  autoreconfHook,
-  flex,
-  bison,
-  pkg-config,
-  elfutils,
-  perl,
-  python3,
-
+{ lib
+, stdenv
+, frrSource
+, frrVersion
+, # build time
+  autoreconfHook
+, flex
+, bison
+, pkg-config
+, elfutils
+, perl
+, python3
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,25 +1,25 @@
-{
-  lib,
-  aiolimiter,
-  apscheduler,
-  beautifulsoup4,
-  buildPythonPackage,
-  cachetools,
-  cffi,
-  cryptography,
-  fetchFromGitHub,
-  flaky,
-  hatchling,
-  httpx,
-  pytest-asyncio,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pytz,
-  setuptools,
-  tornado,
+{ lib
+, aiolimiter
+, apscheduler
+, beautifulsoup4
+, buildPythonPackage
+, cachetools
+, cffi
+, cryptography
+, fetchFromGitHub
+, flaky
+, hatchling
+, httpx
+, pytest-asyncio
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pytz
+, setuptools
+, tornado
+,
 }:
 
 buildPythonPackage rec {

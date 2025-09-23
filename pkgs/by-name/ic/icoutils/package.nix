@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  libpng,
-  perl,
-  perlPackages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, libpng
+, perl
+, perlPackages
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

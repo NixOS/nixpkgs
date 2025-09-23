@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pandas,
-  typing-extensions,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
-  scikit-learn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pandas
+, typing-extensions
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+, scikit-learn
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  hyprwayland-scanner,
-  libxkbcommon,
-  pango,
-  libjpeg,
-  hyprutils,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wayland
+, wayland-protocols
+, wayland-scanner
+, hyprwayland-scanner
+, libxkbcommon
+, pango
+, libjpeg
+, hyprutils
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

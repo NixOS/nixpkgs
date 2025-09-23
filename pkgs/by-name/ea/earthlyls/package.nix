@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-
-  earthlyls,
-  nix-update-script,
-  testers,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, earthlyls
+, nix-update-script
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nix-update-script,
-  polaris-web,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, nix-update-script
+, polaris-web
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage rec {

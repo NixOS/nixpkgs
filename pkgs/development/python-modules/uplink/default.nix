@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  requests,
-  six,
-  uritemplate,
-  pytestCheckHook,
-  pytest-mock,
-  aiohttp,
-  marshmallow,
-  pydantic,
-  pytest-asyncio,
-  pytest-twisted,
-  twisted,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, requests
+, six
+, uritemplate
+, pytestCheckHook
+, pytest-mock
+, aiohttp
+, marshmallow
+, pydantic
+, pytest-asyncio
+, pytest-twisted
+, twisted
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

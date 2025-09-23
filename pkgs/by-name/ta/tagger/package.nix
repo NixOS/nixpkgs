@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  blueprint-compiler,
-  chromaprint,
-  glib,
-  gtk4,
-  libadwaita,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, blueprint-compiler
+, chromaprint
+, glib
+, gtk4
+, libadwaita
+,
 }:
 
 let

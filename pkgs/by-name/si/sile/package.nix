@@ -1,30 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # nativeBuildInputs
-  zstd,
-  pkg-config,
-  jq,
-  cargo,
-  rustc,
-  rustPlatform,
-  luarocks,
-
-  # buildInputs
-  lua,
-  harfbuzz,
-  icu,
-  fontconfig,
-  libiconv,
-  # FONTCONFIG_FILE
-  makeFontsConf,
-  gentium-plus,
-
-  # passthru.tests
-  runCommand,
-  poppler-utils,
+{ lib
+, stdenv
+, fetchurl
+, # nativeBuildInputs
+  zstd
+, pkg-config
+, jq
+, cargo
+, rustc
+, rustPlatform
+, luarocks
+, # buildInputs
+  lua
+, harfbuzz
+, icu
+, fontconfig
+, libiconv
+, # FONTCONFIG_FILE
+  makeFontsConf
+, gentium-plus
+, # passthru.tests
+  runCommand
+, poppler-utils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

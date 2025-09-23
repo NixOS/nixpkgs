@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glib,
-  gtk3,
-  gnome,
-  gsettings-desktop-schemas,
-  wrapGAppsHook3,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, gtk3
+, gnome
+, gsettings-desktop-schemas
+, wrapGAppsHook3
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

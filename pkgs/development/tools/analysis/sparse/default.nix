@@ -1,14 +1,14 @@
-{
-  callPackage,
-  fetchgit,
-  lib,
-  stdenv,
-  gtk3,
-  pkg-config,
-  libxml2,
-  llvm,
-  perl,
-  sqlite,
+{ callPackage
+, fetchgit
+, lib
+, stdenv
+, gtk3
+, pkg-config
+, libxml2
+, llvm
+, perl
+, sqlite
+,
 }:
 
 let

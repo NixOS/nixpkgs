@@ -1,9 +1,9 @@
-{
-  lib,
-  iosevka,
-  fetchFromGitHub,
-  buildNpmPackage,
-  symlinkJoin,
+{ lib
+, iosevka
+, fetchFromGitHub
+, buildNpmPackage
+, symlinkJoin
+,
 }:
 
 let

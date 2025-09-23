@@ -1,16 +1,16 @@
-{
-  pkgs,
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  coreutils,
-  ghostscript,
-  gnugrep,
-  gnused,
-  which,
-  perl,
+{ pkgs
+, lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, coreutils
+, ghostscript
+, gnugrep
+, gnused
+, which
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

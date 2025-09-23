@@ -1,32 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  gymnasium,
-  numpy,
-  packaging,
-  typer,
-  typing-extensions,
-
-  # optional-dependencies
-  pyarrow,
-  jax,
-  google-cloud-storage,
-  tqdm,
-  h5py,
-  huggingface-hub,
-  mktestdocs,
-  pytest,
-  scikit-image,
-
-  # tests
-  jaxlib,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  gymnasium
+, numpy
+, packaging
+, typer
+, typing-extensions
+, # optional-dependencies
+  pyarrow
+, jax
+, google-cloud-storage
+, tqdm
+, h5py
+, huggingface-hub
+, mktestdocs
+, pytest
+, scikit-image
+, # tests
+  jaxlib
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

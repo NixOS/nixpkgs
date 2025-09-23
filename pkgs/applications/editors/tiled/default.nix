@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  env,
-  fetchFromGitHub,
-  pkg-config,
-  qbs,
-  wrapQtAppsHook,
-  qtbase,
-  qtdeclarative,
-  qttools,
-  qtwayland,
-  qtsvg,
-  zlib,
-  zstd,
-  libGL,
+{ lib
+, stdenv
+, env
+, fetchFromGitHub
+, pkg-config
+, qbs
+, wrapQtAppsHook
+, qtbase
+, qtdeclarative
+, qttools
+, qtwayland
+, qtsvg
+, zlib
+, zstd
+, libGL
+,
 }:
 
 let

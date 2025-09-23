@@ -1,24 +1,24 @@
-{
-  cudaPackages,
-  feature ? null,
-  lib,
-  libraries,
-  name ? if feature == null then "torch-compile-cpu" else "torch-compile-${feature}",
-  stdenv,
+{ cudaPackages
+, feature ? null
+, lib
+, libraries
+, name ? if feature == null then "torch-compile-cpu" else "torch-compile-${feature}"
+, stdenv
+,
 }:
 let
   deviceStr = if feature == null then "" else '', device="cuda"'';
 in
 cudaPackages.writeGpuTestPython
-  {
-    inherit name feature libraries;
-    makeWrapperArgs = [
-      "--suffix"
-      "PATH"
-      ":"
-      "${lib.getBin stdenv.cc}/bin"
-    ];
-  }
+{
+  inherit name feature libraries;
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    "${lib.getBin stdenv.cc}/bin"
+  ];
+}
   ''
     import torch
 

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  dateutils,
-  fetchFromGitHub,
-  poetry-core,
-  pyaml,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, dateutils
+, fetchFromGitHub
+, poetry-core
+, pyaml
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

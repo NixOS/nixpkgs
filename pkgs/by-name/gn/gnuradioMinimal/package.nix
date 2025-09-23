@@ -1,7 +1,7 @@
-{
-  gnuradio,
-  volk,
-  uhdMinimal,
+{ gnuradio
+, volk
+, uhdMinimal
+,
 }:
 # A build without gui components and other utilities not needed for end user
 # libraries

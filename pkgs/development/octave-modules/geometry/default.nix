@@ -1,8 +1,8 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchhg,
-  matgeom,
+{ buildOctavePackage
+, lib
+, fetchhg
+, matgeom
+,
 }:
 
 buildOctavePackage rec {

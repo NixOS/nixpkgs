@@ -1,22 +1,22 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtquick3d,
-  qtsensors,
-  qttools,
-  qtvirtualkeyboard,
-  qtwayland,
-  libinput,
-  xorg,
-  xwayland,
-  libcanberra,
-  libdisplay-info,
-  libei,
-  libgbm,
-  lcms2,
-  pipewire,
-  krunner,
-  python3,
+{ mkKdeDerivation
+, pkg-config
+, qtquick3d
+, qtsensors
+, qttools
+, qtvirtualkeyboard
+, qtwayland
+, libinput
+, xorg
+, xwayland
+, libcanberra
+, libdisplay-info
+, libei
+, libgbm
+, lcms2
+, pipewire
+, krunner
+, python3
+,
 }:
 mkKdeDerivation {
   pname = "kwin";

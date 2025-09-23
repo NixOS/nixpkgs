@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  hypothesis,
-  lib,
-  nix-update-script,
-  pytestCheckHook,
-  pythonOlder,
-  rustPlatform,
+{ buildPythonPackage
+, fetchPypi
+, hypothesis
+, lib
+, nix-update-script
+, pytestCheckHook
+, pythonOlder
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  isPyPy,
-  fetchPypi,
-  setuptools,
-  pytestCheckHook,
-  libffi,
-  pkg-config,
-  pycparser,
+{ lib
+, stdenv
+, buildPythonPackage
+, isPyPy
+, fetchPypi
+, setuptools
+, pytestCheckHook
+, libffi
+, pkg-config
+, pycparser
+,
 }:
 
 let
   version = "1.17.1";
 in
 if isPyPy then
-  buildPythonPackage {
+  buildPythonPackage
+  {
     pname = "cffi";
     inherit version;
     pyproject = false;

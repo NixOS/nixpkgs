@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  go-md2man,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, go-md2man
+, fetchFromGitHub
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,19 +1,19 @@
-{
-  lib,
-  flutter335,
-  fetchFromGitHub,
-  gst_all_1,
-  libunwind,
-  orc,
-  webkitgtk_4_1,
-  autoPatchelfHook,
-  xorg,
-  jdk,
-  zlib,
-  runCommand,
-  yq-go,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter335
+, fetchFromGitHub
+, gst_all_1
+, libunwind
+, orc
+, webkitgtk_4_1
+, autoPatchelfHook
+, xorg
+, jdk
+, zlib
+, runCommand
+, yq-go
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 let

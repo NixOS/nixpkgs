@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  yaml,
-  ...
+{ lib
+, config
+, yaml
+, ...
 }:
 let
   cfg = config.services.suricata;

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  qt5,
-  apr,
-  aprutil,
-  subversion,
-  subversionClient,
-  libsForQt5,
-  extra-cmake-modules,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, qt5
+, apr
+, aprutil
+, subversion
+, subversionClient
+, libsForQt5
+, extra-cmake-modules
+,
 }:
 
 stdenv.mkDerivation {

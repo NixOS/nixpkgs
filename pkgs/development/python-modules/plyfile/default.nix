@@ -1,16 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  numpy,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  pdm-backend
+, # dependencies
+  numpy
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,32 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  certifi,
-  python-dateutil,
-  requests,
-  six,
-  urllib3,
-  events,
-
-  # optional-dependencies
-  aiohttp,
-
-  # tests
-  botocore,
-  mock,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pyyaml,
-  pytz,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  certifi
+, python-dateutil
+, requests
+, six
+, urllib3
+, events
+, # optional-dependencies
+  aiohttp
+, # tests
+  botocore
+, mock
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pyyaml
+, pytz
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libansilove,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libansilove
+,
 }:
 
 stdenv.mkDerivation rec {

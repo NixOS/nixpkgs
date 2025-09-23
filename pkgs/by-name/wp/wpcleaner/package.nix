@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeBinaryWrapper,
-  jdk17,
-  ant,
-  stripJavaArchivesHook,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, makeBinaryWrapper
+, jdk17
+, ant
+, stripJavaArchivesHook
+, gettext
+,
 }:
 
 let

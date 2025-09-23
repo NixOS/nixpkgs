@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  fetchurl,
-  pkg-config,
-  cmake,
-  libcbor,
-  openssl,
-  zlib,
-  gnugrep,
-  gawk,
-  # Linux only
-  pcsclite,
-  udev,
-  imagemagick,
-  # GUI
-  python3,
-  xterm,
-  makeDesktopItem,
-  copyDesktopItems,
-  # Darwin only
-  libuv,
-  libsolv,
-  libcouchbase,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, fetchurl
+, pkg-config
+, cmake
+, libcbor
+, openssl
+, zlib
+, gnugrep
+, gawk
+, # Linux only
+  pcsclite
+, udev
+, imagemagick
+, # GUI
+  python3
+, xterm
+, makeDesktopItem
+, copyDesktopItems
+, # Darwin only
+  libuv
+, libsolv
+, libcouchbase
+,
 }:
 let
   pythonEnv = python3.withPackages (ps: [ ps.tkinter ]);

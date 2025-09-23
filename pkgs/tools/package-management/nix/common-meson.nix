@@ -1,87 +1,84 @@
-{
-  lib,
-  fetchFromGitHub,
-  version,
-  suffix ? "",
-  hash ? null,
-  src ? fetchFromGitHub {
+{ lib
+, fetchFromGitHub
+, version
+, suffix ? ""
+, hash ? null
+, src ? fetchFromGitHub {
     owner = "NixOS";
     repo = "nix";
     rev = version;
     inherit hash;
-  },
-  patches ? [ ],
-  maintainers ? [
+  }
+, patches ? [ ]
+, maintainers ? [
     lib.maintainers.artturin
     lib.maintainers.philiptaron
     lib.maintainers.lovesegfault
-  ],
-  teams ? [ lib.teams.nix ],
-  self_attribute_name,
+  ]
+, teams ? [ lib.teams.nix ]
+, self_attribute_name
+,
 }@args:
 assert (hash == null) -> (src != null);
-{
-  stdenv,
-  bison,
-  boehmgc,
-  boost,
-  brotli,
-  busybox-sandbox-shell,
-  bzip2,
-  callPackage,
-  cmake,
-  curl,
-  doxygen,
-  editline,
-  flex,
-  git,
-  gtest,
-  jq,
-  lib,
-  libarchive,
-  libblake3,
-  libcpuid,
-  libgit2,
-  libsodium,
-  lowdown,
-  lowdown-unsandboxed,
-  toml11,
-  man,
-  meson,
-  ninja,
-  mdbook,
-  mdbook-linkcheck,
-  nlohmann_json,
-  nixosTests,
-  openssl,
-  perl,
-  python3,
-  pkg-config,
-  rapidcheck,
-  rsync,
-  sqlite,
-  util-linuxMinimal,
-  xz,
-  enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ?
-    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+{ stdenv
+, bison
+, boehmgc
+, boost
+, brotli
+, busybox-sandbox-shell
+, bzip2
+, callPackage
+, cmake
+, curl
+, doxygen
+, editline
+, flex
+, git
+, gtest
+, jq
+, lib
+, libarchive
+, libblake3
+, libcpuid
+, libgit2
+, libsodium
+, lowdown
+, lowdown-unsandboxed
+, toml11
+, man
+, meson
+, ninja
+, mdbook
+, mdbook-linkcheck
+, nlohmann_json
+, nixosTests
+, openssl
+, perl
+, python3
+, pkg-config
+, rapidcheck
+, rsync
+, sqlite
+, util-linuxMinimal
+, xz
+, enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, enableStatic ? stdenv.hostPlatform.isStatic
+, withAWS ? lib.meta.availableOn stdenv.hostPlatform aws-c-common
     && !enableStatic
-    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  aws-c-common,
-  aws-sdk-cpp,
-  withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
-  libseccomp,
-
-  confDir,
-  stateDir,
-  storeDir,
-
-  # passthru tests
-  pkgsi686Linux,
-  pkgsStatic,
-  runCommand,
-  pkgs,
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+, aws-c-common
+, aws-sdk-cpp
+, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
+, libseccomp
+, confDir
+, stateDir
+, storeDir
+, # passthru tests
+  pkgsi686Linux
+, pkgsStatic
+, runCommand
+, pkgs
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

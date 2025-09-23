@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  gcc_meta,
-  release_version,
-  version,
-  getVersionFile,
-  monorepoSrc ? null,
-  fetchpatch,
-  autoreconfHook269,
-  runCommand,
+{ lib
+, stdenv
+, gcc_meta
+, release_version
+, version
+, getVersionFile
+, monorepoSrc ? null
+, fetchpatch
+, autoreconfHook269
+, runCommand
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libatomic";

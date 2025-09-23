@@ -1,19 +1,19 @@
-{
-  lib,
-  SDL2,
-  autoreconfHook,
-  fetchurl,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  pkg-config,
-  stdenv,
-  zlib,
-  # Boolean flags
-  enableSTB ? true,
-  ## Darwin headless will hang when trying to run the SDL test program
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL2
+, autoreconfHook
+, fetchurl
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, pkg-config
+, stdenv
+, zlib
+, # Boolean flags
+  enableSTB ? true
+, ## Darwin headless will hang when trying to run the SDL test program
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

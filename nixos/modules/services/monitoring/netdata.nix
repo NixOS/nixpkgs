@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.netdata;
@@ -60,9 +59,11 @@ let
 
   isThereAnyWireGuardTunnels =
     config.networking.wireguard.enable
-    || lib.any (
-      c: lib.hasAttrByPath [ "netdevConfig" "Kind" ] c && c.netdevConfig.Kind == "wireguard"
-    ) (builtins.attrValues config.systemd.network.netdevs);
+    || lib.any
+      (
+        c: lib.hasAttrByPath [ "netdevConfig" "Kind" ] c && c.netdevConfig.Kind == "wireguard"
+      )
+      (builtins.attrValues config.systemd.network.netdevs);
 
   extraNdsudoPathsEnv = pkgs.buildEnv {
     name = "netdata-ndsudo-env";
@@ -262,9 +263,11 @@ in
       ps.netdata-pandas
     ]);
 
-    services.netdata.configDir.".opt-out-from-anonymous-statistics" = lib.mkIf (
-      !cfg.enableAnalyticsReporting
-    ) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
+    services.netdata.configDir.".opt-out-from-anonymous-statistics" = lib.mkIf
+      (
+        !cfg.enableAnalyticsReporting
+      )
+      (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 

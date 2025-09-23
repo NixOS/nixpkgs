@@ -1,8 +1,8 @@
-{
-  lib,
-  requireFile,
-  lang,
-  majorVersion ? null,
+{ lib
+, requireFile
+, lang
+, majorVersion ? null
+,
 }:
 
 let
@@ -54,12 +54,12 @@ let
         }
       ]
       (
-        {
-          version,
-          lang,
-          language,
-          sha256,
-          installer,
+        { version
+        , lang
+        , language
+        , sha256
+        , installer
+        ,
         }:
         {
           inherit version lang;
@@ -83,6 +83,9 @@ let
       majorVersion;
   maxVersion = toString (1 + builtins.fromJSON minVersion);
 in
-lib.findFirst (
-  l: (l.lang == lang && l.version >= minVersion && l.version < maxVersion)
-) (throw "Version ${minVersion} in language ${lang} not supported") allVersions
+lib.findFirst
+  (
+    l: (l.lang == lang && l.version >= minVersion && l.version < maxVersion)
+  )
+  (throw "Version ${minVersion} in language ${lang} not supported")
+  allVersions

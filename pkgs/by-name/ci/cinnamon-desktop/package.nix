@@ -1,22 +1,22 @@
-{
-  fetchFromGitHub,
-  gdk-pixbuf,
-  gobject-introspection,
-  gtk3,
-  intltool,
-  isocodes,
-  meson,
-  ninja,
-  pkg-config,
-  pulseaudio,
-  python3,
-  lib,
-  stdenv,
-  systemd,
-  xkeyboard_config,
-  xorg,
-  wrapGAppsHook3,
-  glib,
+{ fetchFromGitHub
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, intltool
+, isocodes
+, meson
+, ninja
+, pkg-config
+, pulseaudio
+, python3
+, lib
+, stdenv
+, systemd
+, xkeyboard_config
+, xorg
+, wrapGAppsHook3
+, glib
+,
 }:
 
 stdenv.mkDerivation rec {

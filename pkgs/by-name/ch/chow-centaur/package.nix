@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  cairo,
-  libxkbcommon,
-  xcbutilcursor,
-  xcbutilkeysyms,
-  xcbutil,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  alsa-lib,
-  libjack2,
-  lv2,
-  gcc-unwrapped,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, cairo
+, libxkbcommon
+, xcbutilcursor
+, xcbutilkeysyms
+, xcbutil
+, libXrandr
+, libXinerama
+, libXcursor
+, alsa-lib
+, libjack2
+, lv2
+, gcc-unwrapped
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

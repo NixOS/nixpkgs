@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  callPackage,
-  buildMozillaMach,
-  nixosTests,
+{ stdenv
+, lib
+, callPackage
+, buildMozillaMach
+, nixosTests
+,
 }:
 
 let
@@ -48,7 +48,7 @@ in
     attrPath = "librewolf-unwrapped";
   };
 }).override
-  {
-    crashreporterSupport = false;
-    enableOfficialBranding = false;
-  }
+{
+  crashreporterSupport = false;
+  enableOfficialBranding = false;
+}

@@ -1,16 +1,16 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  gobject-introspection,
-  gst_all_1,
-  lib,
-  libadwaita,
-  libcanberra-gtk3,
-  pkg-config,
-  sound-theme-freedesktop,
-  libspelling,
-  gtksourceview5,
-  wrapGAppsHook4,
+{ buildGoModule
+, fetchFromGitHub
+, gobject-introspection
+, gst_all_1
+, lib
+, libadwaita
+, libcanberra-gtk3
+, pkg-config
+, sound-theme-freedesktop
+, libspelling
+, gtksourceview5
+, wrapGAppsHook4
+,
 }:
 
 buildGoModule rec {

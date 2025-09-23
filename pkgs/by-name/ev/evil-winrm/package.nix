@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bundlerEnv,
-  bundlerUpdateScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bundlerEnv
+, bundlerUpdateScript
+,
 }:
 let
   rubyEnv = bundlerEnv {

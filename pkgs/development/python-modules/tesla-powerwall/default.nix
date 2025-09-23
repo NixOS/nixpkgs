@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  aiohttp,
-  urllib3,
-  orjson,
-  aresponses,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, aiohttp
+, urllib3
+, orjson
+, aresponses
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

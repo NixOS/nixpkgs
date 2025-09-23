@@ -1,14 +1,14 @@
-{
-  lib,
-  setuptools,
-  setuptools-scm,
-  jsonschema,
-  pyyaml,
-  podman,
-  fetchPypi,
-  bindep,
-  buildPythonPackage,
-  packaging,
+{ lib
+, setuptools
+, setuptools-scm
+, jsonschema
+, pyyaml
+, podman
+, fetchPypi
+, bindep
+, buildPythonPackage
+, packaging
+,
 }:
 
 buildPythonPackage rec {

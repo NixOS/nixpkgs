@@ -1,28 +1,24 @@
-{
-  lib,
-  symlinkJoin,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-  ninja,
-
-  # buildInputs
-  ffmpeg_6-full,
-  pybind11,
-  sox,
-  torch,
-  llvmPackages,
-
-  cudaSupport ? torch.cudaSupport,
-  cudaPackages,
-  rocmSupport ? torch.rocmSupport,
-  rocmPackages,
-
-  gpuTargets ? [ ],
+{ lib
+, symlinkJoin
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # nativeBuildInputs
+  cmake
+, pkg-config
+, ninja
+, # buildInputs
+  ffmpeg_6-full
+, pybind11
+, sox
+, torch
+, llvmPackages
+, cudaSupport ? torch.cudaSupport
+, cudaPackages
+, rocmSupport ? torch.rocmSupport
+, rocmPackages
+, gpuTargets ? [ ]
+,
 }:
 
 let
@@ -67,7 +63,7 @@ let
   # Only used for ROCm
   gpuTargetString = lib.strings.concatStringsSep ";" (
     if gpuTargets != [ ] then
-      # If gpuTargets is specified, it always takes priority.
+    # If gpuTargets is specified, it always takes priority.
       gpuTargets
     else if rocmSupport then
       rocmPackages.clr.gpuTargets

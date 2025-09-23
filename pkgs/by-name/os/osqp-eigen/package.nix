@@ -1,12 +1,12 @@
-{
-  catch2,
-  cmake,
-  eigen,
-  fetchFromGitHub,
-  lib,
-  osqp,
-  stdenv,
-  valgrind,
+{ catch2
+, cmake
+, eigen
+, fetchFromGitHub
+, lib
+, osqp
+, stdenv
+, valgrind
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

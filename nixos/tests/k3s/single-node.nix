@@ -1,10 +1,9 @@
 # A test that runs a single node k3s cluster and verify a pod can run
 import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    k3s,
-    ...
+  { pkgs
+  , lib
+  , k3s
+  , ...
   }:
   let
     imageEnv = pkgs.buildEnv {

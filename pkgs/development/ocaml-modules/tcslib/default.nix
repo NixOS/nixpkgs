@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildOasisPackage,
-  extlib,
-  num,
+{ lib
+, fetchFromGitHub
+, buildOasisPackage
+, extlib
+, num
+,
 }:
 
 buildOasisPackage rec {

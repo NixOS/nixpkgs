@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libax25,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libax25
+, ncurses
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,7 +1,7 @@
-{
-  stdenv,
-  libsecret,
-  jsoncpp,
+{ stdenv
+, libsecret
+, jsoncpp
+,
 }:
 
 { version, src, ... }:

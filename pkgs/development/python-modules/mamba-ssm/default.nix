@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  causal-conv1d,
-  einops,
-  ninja,
-  setuptools,
-  torch,
-  transformers,
-  triton,
-  cudaPackages,
-  rocmPackages,
-  config,
-  cudaSupport ? config.cudaSupport,
-  which,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, causal-conv1d
+, einops
+, ninja
+, setuptools
+, torch
+, transformers
+, triton
+, cudaPackages
+, rocmPackages
+, config
+, cudaSupport ? config.cudaSupport
+, which
+,
 }:
 
 buildPythonPackage rec {

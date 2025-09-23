@@ -1,19 +1,19 @@
-{
-  stdenv,
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  perl,
-  gnused,
-  dpkg,
-  makeWrapper,
-  autoPatchelfHook,
-  libredirect,
-  gnugrep,
-  coreutils,
-  ghostscript,
-  file,
-  pkgsi686Linux,
+{ stdenv
+, stdenvNoCC
+, lib
+, fetchurl
+, perl
+, gnused
+, dpkg
+, makeWrapper
+, autoPatchelfHook
+, libredirect
+, gnugrep
+, coreutils
+, ghostscript
+, file
+, pkgsi686Linux
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

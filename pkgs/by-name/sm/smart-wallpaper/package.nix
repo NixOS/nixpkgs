@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  xdpyinfo,
-  killall,
-  xwinwrap,
-  swaybg,
-  redshift,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeWrapper
+, xdpyinfo
+, killall
+, xwinwrap
+, swaybg
+, redshift
+,
 }:
 
 stdenvNoCC.mkDerivation {

@@ -1,26 +1,26 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  cbor2,
-  fetchFromGitHub,
-  exceptiongroup,
-  hatchling,
-  hatch-vcs,
-  hypothesis,
-  immutables,
-  motor,
-  msgpack,
-  msgspec,
-  orjson,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pyyaml,
-  tomlkit,
-  typing-extensions,
-  ujson,
+{ lib
+, attrs
+, buildPythonPackage
+, cbor2
+, fetchFromGitHub
+, exceptiongroup
+, hatchling
+, hatch-vcs
+, hypothesis
+, immutables
+, motor
+, msgpack
+, msgspec
+, orjson
+, pytest-xdist
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pyyaml
+, tomlkit
+, typing-extensions
+, ujson
+,
 }:
 
 buildPythonPackage rec {

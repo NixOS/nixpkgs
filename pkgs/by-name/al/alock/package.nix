@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  pkg-config,
-  autoreconfHook,
-  libX11,
-  pam,
-  libgcrypt,
-  libXrender,
-  imlib2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, pkg-config
+, autoreconfHook
+, libX11
+, pam
+, libgcrypt
+, libXrender
+, imlib2
+,
 }:
 
 stdenv.mkDerivation rec {

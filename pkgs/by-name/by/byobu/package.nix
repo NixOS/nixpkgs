@@ -1,16 +1,16 @@
-{
-  lib,
-  autoreconfHook,
-  bc,
-  fetchFromGitHub,
-  gettext,
-  makeWrapper,
-  perl,
-  python3,
-  screen,
-  stdenv,
-  vim,
-  tmux,
+{ lib
+, autoreconfHook
+, bc
+, fetchFromGitHub
+, gettext
+, makeWrapper
+, perl
+, python3
+, screen
+, stdenv
+, vim
+, tmux
+,
 }:
 
 let

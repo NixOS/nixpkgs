@@ -1,8 +1,8 @@
-{
-  lib,
-  runCommand,
-  junicode,
-  texliveBasic,
+{ lib
+, runCommand
+, junicode
+, texliveBasic
+,
 }:
 let
   texliveWithJunicode = texliveBasic.withPackages (p: [
@@ -11,11 +11,11 @@ let
   ]);
 
   texTest =
-    {
-      package,
-      tex,
-      fonttype,
-      file,
+    { package
+    , tex
+    , fonttype
+    , file
+    ,
     }:
     lib.attrsets.nameValuePair "${package}-${tex}-${fonttype}" (
       runCommand "${package}-test-${tex}-${fonttype}.pdf"
@@ -31,18 +31,19 @@ let
     );
 in
 builtins.listToAttrs (
-  lib.mapCartesianProduct texTest {
-    tex = [
-      "xelatex"
-      "lualatex"
-    ];
-    fonttype = [
-      "ttf"
-      "otf"
-    ];
-    package = [ "junicode" ];
-    file = [ ./test.tex ];
-  }
+  lib.mapCartesianProduct texTest
+    {
+      tex = [
+        "xelatex"
+        "lualatex"
+      ];
+      fonttype = [
+        "ttf"
+        "otf"
+      ];
+      package = [ "junicode" ];
+      file = [ ./test.tex ];
+    }
   ++ [
     (texTest {
       package = "junicodevf";

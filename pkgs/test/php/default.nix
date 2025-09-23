@@ -1,7 +1,7 @@
-{
-  lib,
-  php,
-  runCommand,
+{ lib
+, php
+, runCommand
+,
 }:
 
 let

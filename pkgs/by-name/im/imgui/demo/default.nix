@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  imgui,
+{ lib
+, stdenv
+, cmake
+, imgui
+,
 }:
 
 stdenv.mkDerivation {

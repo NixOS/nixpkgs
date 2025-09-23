@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  cmake,
-  libnest2d,
-  sip4,
-  clipper,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, cmake
+, libnest2d
+, sip4
+, clipper
+,
 }:
 
 buildPythonPackage rec {

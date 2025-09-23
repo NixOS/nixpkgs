@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libsForQt5,
-  libusb1,
-  hidapi,
-  pkg-config,
-  coreutils,
-  mbedtls_2,
-  symlinkJoin,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libsForQt5
+, libusb1
+, hidapi
+, pkg-config
+, coreutils
+, mbedtls_2
+, symlinkJoin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

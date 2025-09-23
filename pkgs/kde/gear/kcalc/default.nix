@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  qt5compat,
-  gmp,
-  libmpc,
-  mpfr,
-  kdoctools,
+{ mkKdeDerivation
+, qt5compat
+, gmp
+, libmpc
+, mpfr
+, kdoctools
+,
 }:
 mkKdeDerivation {
   pname = "kcalc";

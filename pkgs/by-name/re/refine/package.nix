@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitLab,
-  nix-update-script,
-  blueprint-compiler,
-  desktop-file-utils,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  python3,
-  libxml2,
-  python3Packages,
-  libportal,
-  libportal-gtk4,
-  appstream,
-  gtk4,
-  glib,
+{ lib
+, fetchFromGitLab
+, nix-update-script
+, blueprint-compiler
+, desktop-file-utils
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, python3
+, libxml2
+, python3Packages
+, libportal
+, libportal-gtk4
+, appstream
+, gtk4
+, glib
+,
 }:
 
 python3Packages.buildPythonApplication rec {

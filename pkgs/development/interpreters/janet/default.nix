@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  nix-update-script,
-  runCommand,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, nix-update-script
+, runCommand
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

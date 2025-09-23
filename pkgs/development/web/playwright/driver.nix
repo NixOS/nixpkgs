@@ -1,18 +1,18 @@
-{
-  lib,
-  buildNpmPackage,
-  stdenv,
-  chromium,
-  ffmpeg,
-  jq,
-  nodejs,
-  fetchFromGitHub,
-  linkFarm,
-  callPackage,
-  makeFontsConf,
-  makeWrapper,
-  runCommand,
-  cacert,
+{ lib
+, buildNpmPackage
+, stdenv
+, chromium
+, ffmpeg
+, jq
+, nodejs
+, fetchFromGitHub
+, linkFarm
+, callPackage
+, makeFontsConf
+, makeWrapper
+, runCommand
+, cacert
+,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -24,8 +24,7 @@ let
       aarch64-linux = "linux-arm64";
       x86_64-darwin = "mac";
       aarch64-darwin = "mac-arm64";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   version = "1.54.1";
 
@@ -231,15 +230,16 @@ let
   };
 
   browsers = lib.makeOverridable (
-    {
-      withChromium ? true,
-      withFirefox ? true,
-      withWebkit ? true, # may require `export PLAYWRIGHT_HOST_PLATFORM_OVERRIDE="ubuntu-24.04"`
-      withFfmpeg ? true,
-      withChromiumHeadlessShell ? true,
-      fontconfig_file ? makeFontsConf {
+    { withChromium ? true
+    , withFirefox ? true
+    , withWebkit ? true
+    , # may require `export PLAYWRIGHT_HOST_PLATFORM_OVERRIDE="ubuntu-24.04"`
+      withFfmpeg ? true
+    , withChromiumHeadlessShell ? true
+    , fontconfig_file ? makeFontsConf {
         fontDirectories = [ ];
-      },
+      }
+    ,
     }:
     let
       browsers =
@@ -251,17 +251,19 @@ let
     in
     linkFarm "playwright-browsers" (
       lib.listToAttrs (
-        map (
-          name:
-          let
-            revName = if name == "chromium-headless-shell" then "chromium" else name;
-            value = playwright-core.passthru.browsersJSON.${revName};
-          in
-          lib.nameValuePair
-            # TODO check platform for revisionOverrides
-            "${lib.replaceStrings [ "-" ] [ "_" ] name}-${value.revision}"
-            components.${name}
-        ) browsers
+        map
+          (
+            name:
+            let
+              revName = if name == "chromium-headless-shell" then "chromium" else name;
+              value = playwright-core.passthru.browsersJSON.${revName};
+            in
+            lib.nameValuePair
+              # TODO check platform for revisionOverrides
+              "${lib.replaceStrings [ "-" ] [ "_" ] name}-${value.revision}"
+              components.${name}
+          )
+          browsers
       )
     )
   );

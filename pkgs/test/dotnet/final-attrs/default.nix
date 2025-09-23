@@ -1,9 +1,10 @@
-{
-  lib,
-  dotnet-sdk,
-  buildPackages, # buildDotnetModule
-  testers,
-  runCommand,
+{ lib
+, dotnet-sdk
+, buildPackages
+, # buildDotnetModule
+  testers
+, runCommand
+,
 }:
 let
   copyrightString = "Original Copyright";

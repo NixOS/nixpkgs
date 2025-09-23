@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  gtest,
-  static ? stdenv.hostPlatform.isStatic,
-  cxxStandard ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, gtest
+, static ? stdenv.hostPlatform.isStatic
+, cxxStandard ? null
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

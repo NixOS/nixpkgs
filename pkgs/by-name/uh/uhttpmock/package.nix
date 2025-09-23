@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  docbook-xsl-nons,
-  glib,
-  libsoup_2_4,
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook-xsl-nons
+, glib
+, libsoup_2_4
+,
 }:
 
 stdenv.mkDerivation rec {

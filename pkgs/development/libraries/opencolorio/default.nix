@@ -1,24 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  expat,
-  yaml-cpp,
-  pystring,
-  imath,
-  minizip-ng,
-  zlib,
-  # Only required on Linux
-  glew,
-  libglut,
-  # Python bindings
-  pythonBindings ? true, # Python bindings
-  python3Packages,
-  # Build apps
-  buildApps ? true, # Utility applications
-  lcms2,
-  openexr,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, expat
+, yaml-cpp
+, pystring
+, imath
+, minizip-ng
+, zlib
+, # Only required on Linux
+  glew
+, libglut
+, # Python bindings
+  pythonBindings ? true
+, # Python bindings
+  python3Packages
+, # Build apps
+  buildApps ? true
+, # Utility applications
+  lcms2
+, openexr
+,
 }:
 
 stdenv.mkDerivation rec {

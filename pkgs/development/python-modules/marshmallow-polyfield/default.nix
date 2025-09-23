@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  marshmallow,
-  pythonOlder,
-  pytestCheckHook,
-  pytest-cov-stub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, marshmallow
+, pythonOlder
+, pytestCheckHook
+, pytest-cov-stub
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

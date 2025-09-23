@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  libusb1,
-  libyubikey,
-  json_c,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, libusb1
+, libyubikey
+, json_c
+,
 }:
 
 stdenv.mkDerivation rec {

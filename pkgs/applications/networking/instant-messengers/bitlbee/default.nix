@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  stdenv,
-  gnutls,
-  glib,
-  pkg-config,
-  check,
-  libotr,
-  python3,
-  enableLibPurple ? false,
-  pidgin ? null,
-  enablePam ? false,
-  pam ? null,
+{ lib
+, fetchurl
+, fetchpatch
+, stdenv
+, gnutls
+, glib
+, pkg-config
+, check
+, libotr
+, python3
+, enableLibPurple ? false
+, pidgin ? null
+, enablePam ? false
+, pam ? null
+,
 }:
 
 stdenv.mkDerivation rec {

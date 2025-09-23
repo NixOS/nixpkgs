@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  pyperclip,
-  textual,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  tree-sitter-python,
-  tree-sitter-sql,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  pyperclip
+, textual
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, tree-sitter-python
+, tree-sitter-sql
+,
 }:
 
 buildPythonPackage rec {

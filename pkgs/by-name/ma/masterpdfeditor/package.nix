@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  libsForQt5,
-  cups,
-  libinput,
-  mtdev,
-  nss,
-  pkcs11helper,
-  sane-backends,
-  common-updater-scripts,
-  nix-update,
-  writeShellScript,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, libsForQt5
+, cups
+, libinput
+, mtdev
+, nss
+, pkcs11helper
+, sane-backends
+, common-updater-scripts
+, nix-update
+, writeShellScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

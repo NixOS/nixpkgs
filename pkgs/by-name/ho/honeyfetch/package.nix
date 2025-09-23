@@ -1,8 +1,8 @@
-{
-  lib,
-  libdrm,
-  fetchFromGitLab,
-  rustPlatform,
+{ lib
+, libdrm
+, fetchFromGitLab
+, rustPlatform
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "honeyfetch";

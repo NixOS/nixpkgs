@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  buildGoModule,
-  nix-update-script,
-  installShellFiles,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, buildGoModule
+, nix-update-script
+, installShellFiles
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "gh-classroom";

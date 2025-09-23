@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkgsStatic,
-  python3,
-  docutils,
-  bzip2,
-  zlib,
-  jitterentropy,
-  darwin,
-  esdm,
-  tpm2-tss,
-  static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
-  windows,
-
-  # build ESDM RNG plugin
-  withEsdm ? false,
-  # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
-  withTpm2 ? false,
-  policy ? null,
+{ lib
+, stdenv
+, fetchurl
+, pkgsStatic
+, python3
+, docutils
+, bzip2
+, zlib
+, jitterentropy
+, darwin
+, esdm
+, tpm2-tss
+, static ? stdenv.hostPlatform.isStatic
+, # generates static libraries *only*
+  windows
+, # build ESDM RNG plugin
+  withEsdm ? false
+, # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
+  withTpm2 ? false
+, policy ? null
+,
 }:
 
 assert lib.assertOneOf "policy" policy [
@@ -34,10 +34,10 @@ assert lib.assertOneOf "policy" policy [
 
 let
   common =
-    {
-      version,
-      hash,
-      patches ? [ ],
+    { version
+    , hash
+    , patches ? [ ]
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "botan";

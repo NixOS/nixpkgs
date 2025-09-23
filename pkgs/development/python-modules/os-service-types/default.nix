@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchPypi,
-  pbr,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchPypi
+, pbr
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

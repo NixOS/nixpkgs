@@ -1,15 +1,15 @@
-{
-  lib,
-  bluetooth-data-tools,
-  bluetooth-sensor-state-data,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pytz,
-  sensor-state-data,
+{ lib
+, bluetooth-data-tools
+, bluetooth-sensor-state-data
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, poetry-core
+, pytest-cov-stub
+, pytestCheckHook
+, pytz
+, sensor-state-data
+,
 }:
 
 buildPythonPackage rec {

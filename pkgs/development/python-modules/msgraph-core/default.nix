@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  python-dotenv,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  httpx,
-  microsoft-kiota-abstractions,
-  microsoft-kiota-authentication-azure,
-  microsoft-kiota-http,
-  microsoft-kiota-serialization-json,
-  azure-identity,
-  pytestCheckHook,
-  responses,
+{ lib
+, buildPythonPackage
+, python-dotenv
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, httpx
+, microsoft-kiota-abstractions
+, microsoft-kiota-authentication-azure
+, microsoft-kiota-http
+, microsoft-kiota-serialization-json
+, azure-identity
+, pytestCheckHook
+, responses
+,
 }:
 
 buildPythonPackage rec {

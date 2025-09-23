@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitea,
-  rustPlatform,
-  versionCheckHook,
+{ lib
+, fetchFromGitea
+, rustPlatform
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";

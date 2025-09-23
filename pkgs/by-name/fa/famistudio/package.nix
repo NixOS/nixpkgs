@@ -1,21 +1,21 @@
-{
-  stdenvNoCC,
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  callPackage,
-  fetchFromGitHub,
-  ffmpeg,
-  glfw,
-  gtk3,
-  libglvnd,
-  libogg,
-  libvorbis,
-  openal,
-  portaudio,
-  rtmidi,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ stdenvNoCC
+, lib
+, buildDotnetModule
+, dotnetCorePackages
+, callPackage
+, fetchFromGitHub
+, ffmpeg
+, glfw
+, gtk3
+, libglvnd
+, libogg
+, libvorbis
+, openal
+, portaudio
+, rtmidi
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 let
@@ -109,10 +109,12 @@ buildDotnetModule (finalAttrs: {
           ];
         })
       ];
-      libraryReplaceArgs = lib.strings.concatMapStringsSep " " (
-        library:
-        "--replace-fail '${libname library.expectedName}' '${lib.getLib library.package}/lib/${libname library.ourName}'"
-      ) librariesToReplace;
+      libraryReplaceArgs = lib.strings.concatMapStringsSep " "
+        (
+          library:
+          "--replace-fail '${libname library.expectedName}' '${lib.getLib library.package}/lib/${libname library.ourName}'"
+        )
+        librariesToReplace;
     in
     ''
       # Don't use any prebuilt libraries

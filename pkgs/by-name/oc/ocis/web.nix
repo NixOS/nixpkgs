@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  nodejs,
-  pnpm_9,
-  fetchFromGitHub,
+{ lib
+, stdenvNoCC
+, nodejs
+, pnpm_9
+, fetchFromGitHub
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ocis-web";

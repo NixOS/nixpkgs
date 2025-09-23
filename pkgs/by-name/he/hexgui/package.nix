@@ -1,10 +1,10 @@
-{
-  ant,
-  fetchFromGitHub,
-  jdk,
-  lib,
-  makeWrapper,
-  stdenv,
+{ ant
+, fetchFromGitHub
+, jdk
+, lib
+, makeWrapper
+, stdenv
+,
 }:
 stdenv.mkDerivation {
   pname = "hexgui";

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  swt,
-  jre,
-  makeWrapper,
-  alsa-lib,
-  jack2,
-  fluidsynth,
-  libpulseaudio,
-  lilv,
-  which,
-  wrapGAppsHook3,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, swt
+, jre
+, makeWrapper
+, alsa-lib
+, jack2
+, fluidsynth
+, libpulseaudio
+, lilv
+, which
+, wrapGAppsHook3
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

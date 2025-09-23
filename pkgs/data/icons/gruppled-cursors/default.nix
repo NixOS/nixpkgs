@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  theme,
-  lib,
+{ stdenvNoCC
+, fetchFromGitHub
+, theme
+, lib
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

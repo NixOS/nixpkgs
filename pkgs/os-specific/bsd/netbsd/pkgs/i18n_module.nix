@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvLibcMinimal,
-  mkDerivation,
-  libcMinimal,
+{ lib
+, stdenvLibcMinimal
+, mkDerivation
+, libcMinimal
+,
 }:
 
 mkDerivation {

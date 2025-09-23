@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  stalwart-mail,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, stdenv
+, stalwart-mail
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

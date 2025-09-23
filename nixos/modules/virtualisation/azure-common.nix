@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -81,8 +80,10 @@ in
 
     networking.usePredictableInterfaceNames = false;
 
-    services.udev.extraRules = lib.concatMapStrings (i: ''
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:${toString i}", ATTR{removable}=="0", SYMLINK+="disk/by-lun/${toString i}"
-    '') (lib.range 1 15);
+    services.udev.extraRules = lib.concatMapStrings
+      (i: ''
+        ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:${toString i}", ATTR{removable}=="0", SYMLINK+="disk/by-lun/${toString i}"
+      '')
+      (lib.range 1 15);
   };
 }

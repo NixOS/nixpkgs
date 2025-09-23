@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  slang,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, slang
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

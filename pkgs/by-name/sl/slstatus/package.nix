@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  writeText,
-  libX11,
-  libxcb,
-  libXau,
-  libXdmcp,
-  config,
-  conf ? config.slstatus.conf or null,
-  patches ? config.slstatus.patches or [ ],
-  extraLibs ? config.slstatus.extraLibs or [ ],
-  # update script dependencies
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, writeText
+, libX11
+, libxcb
+, libXau
+, libXdmcp
+, config
+, conf ? config.slstatus.conf or null
+, patches ? config.slstatus.patches or [ ]
+, extraLibs ? config.slstatus.extraLibs or [ ]
+, # update script dependencies
+  gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

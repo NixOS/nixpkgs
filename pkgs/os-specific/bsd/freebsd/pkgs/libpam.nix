@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  openssl,
-  libradius,
+{ mkDerivation
+, openssl
+, libradius
+,
 }:
 mkDerivation {
   path = "lib/libpam/libpam";

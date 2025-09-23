@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  wrapGAppsHook3,
-  libsForQt5,
-  boost,
-  graphviz,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, extra-cmake-modules
+, pkg-config
+, wrapGAppsHook3
+, libsForQt5
+, boost
+, graphviz
+,
 }:
 
 stdenv.mkDerivation rec {

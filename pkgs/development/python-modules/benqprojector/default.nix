@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  pyserial,
-  pyserial-asyncio-fast,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, pyserial
+, pyserial-asyncio-fast
+,
 }:
 
 buildPythonPackage rec {

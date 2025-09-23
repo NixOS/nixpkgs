@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  vectorscan,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, protoc-gen-go
+, protoc-gen-go-grpc
+, vectorscan
+,
 }:
 
 buildGoModule rec {

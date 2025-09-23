@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gnutls,
-  libedit,
-  texinfo,
-  libcap,
-  libseccomp,
-  pps-tools,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gnutls
+, libedit
+, texinfo
+, libcap
+, libseccomp
+, pps-tools
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

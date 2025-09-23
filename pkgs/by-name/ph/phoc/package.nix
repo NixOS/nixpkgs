@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wayland-scanner,
-  wrapGAppsHook3,
-  libinput,
-  gobject-introspection,
-  mutter,
-  gnome-desktop,
-  glib,
-  gtk3,
-  json-glib,
-  wayland,
-  libdrm,
-  libxkbcommon,
-  wlroots_0_19,
-  xorg,
-  nix-update-script,
-  nixosTests,
-  testers,
-  gmobile,
+{ lib
+, stdenv
+, stdenvNoCC
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, python3
+, wayland-scanner
+, wrapGAppsHook3
+, libinput
+, gobject-introspection
+, mutter
+, gnome-desktop
+, glib
+, gtk3
+, json-glib
+, wayland
+, libdrm
+, libxkbcommon
+, wlroots_0_19
+, xorg
+, nix-update-script
+, nixosTests
+, testers
+, gmobile
+,
 }:
 
 let

@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  nasm,
-  pkg-config,
-  setuptools,
-
-  # native dependencies
-  libheif,
-  libaom,
-  libde265,
-  x265,
-
-  # dependencies
-  pillow,
-
-  # tests
-  opencv4,
-  numpy,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, nasm
+, pkg-config
+, setuptools
+, # native dependencies
+  libheif
+, libaom
+, libde265
+, x265
+, # dependencies
+  pillow
+, # tests
+  opencv4
+, numpy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

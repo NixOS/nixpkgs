@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  nix-update-script,
-  SDL,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, nix-update-script
+, SDL
+,
 }:
 
 stdenv.mkDerivation rec {

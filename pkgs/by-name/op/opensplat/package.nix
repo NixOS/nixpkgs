@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  ninja,
-  fetchFromGitHub,
-  python3,
-  opencv,
-  nlohmann_json,
-  nanoflann,
-  glm,
-  cxxopts,
-  nix-update-script,
-  config,
-  # Upstream has rocm/hip support, too. anyone?
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  autoAddDriverRunpath,
-  fetchpatch2,
+{ lib
+, stdenv
+, cmake
+, ninja
+, fetchFromGitHub
+, python3
+, opencv
+, nlohmann_json
+, nanoflann
+, glm
+, cxxopts
+, nix-update-script
+, config
+, # Upstream has rocm/hip support, too. anyone?
+  cudaSupport ? config.cudaSupport
+, cudaPackages
+, autoAddDriverRunpath
+, fetchpatch2
+,
 }:
 let
   version = "1.1.4";

@@ -1,24 +1,23 @@
 { stdenv, unzip }:
 let
   buildFreshRssExtension =
-    args@{
-      pname,
-      version,
-      src,
-      FreshRssExtUniqueId,
-      configurePhase ? ''
+    args@{ pname
+    , version
+    , src
+    , FreshRssExtUniqueId
+    , configurePhase ? ''
         runHook preConfigure
         runHook postConfigure
-      '',
-      buildPhase ? ''
+      ''
+    , buildPhase ? ''
         runHook preBuild
         runHook postBuild
-      '',
-      dontPatchELF ? true,
-      dontStrip ? true,
-      passthru ? { },
-      sourceRoot ? "source",
-      ...
+      ''
+    , dontPatchELF ? true
+    , dontStrip ? true
+    , passthru ? { }
+    , sourceRoot ? "source"
+    , ...
     }:
     stdenv.mkDerivation (
       (removeAttrs args [ "FreshRssExtUniqueId" ])

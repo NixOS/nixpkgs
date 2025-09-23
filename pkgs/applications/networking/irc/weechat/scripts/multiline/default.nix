@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  replaceVars,
-  PodParser,
+{ stdenv
+, lib
+, fetchurl
+, replaceVars
+, PodParser
+,
 }:
 
 stdenv.mkDerivation {

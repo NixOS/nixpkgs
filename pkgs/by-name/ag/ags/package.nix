@@ -1,23 +1,22 @@
-{
-  lib,
-  astal,
-  blueprint-compiler,
-  buildGoModule,
-  callPackage,
-  dart-sass,
-  symlinkJoin,
-  fetchFromGitHub,
-  gjs,
-  glib,
-  gobject-introspection,
-  gtk4-layer-shell,
-  installShellFiles,
-  nix-update-script,
-  nodejs,
-  stdenv,
-  wrapGAppsHook3,
-
-  extraPackages ? [ ],
+{ lib
+, astal
+, blueprint-compiler
+, buildGoModule
+, callPackage
+, dart-sass
+, symlinkJoin
+, fetchFromGitHub
+, gjs
+, glib
+, gobject-introspection
+, gtk4-layer-shell
+, installShellFiles
+, nix-update-script
+, nodejs
+, stdenv
+, wrapGAppsHook3
+, extraPackages ? [ ]
+,
 }:
 buildGoModule rec {
   pname = "ags";

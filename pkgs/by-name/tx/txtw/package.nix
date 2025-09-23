@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cairo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cairo
+,
 }:
 
 stdenv.mkDerivation rec {

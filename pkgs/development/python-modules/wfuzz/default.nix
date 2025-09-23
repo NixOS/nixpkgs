@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  chardet,
-  colorama,
-  distutils,
-  fetchFromGitHub,
-  netaddr,
-  pycurl,
-  pyparsing,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
-  fetchpatch2,
-  pythonAtLeast,
-  legacy-cgi,
+{ lib
+, stdenv
+, buildPythonPackage
+, chardet
+, colorama
+, distutils
+, fetchFromGitHub
+, netaddr
+, pycurl
+, pyparsing
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+, fetchpatch2
+, pythonAtLeast
+, legacy-cgi
+,
 }:
 
 buildPythonPackage rec {

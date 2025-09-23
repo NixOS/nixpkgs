@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "alertmanager-gotify-bridge";

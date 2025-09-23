@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  exiv2,
-  libxml2,
-  gtk3,
-  libxslt,
-  docbook_xsl,
-  docbook_xml_dtd_42,
-  desktop-file-utils,
-  wrapGAppsHook3,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, exiv2
+, libxml2
+, gtk3
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, desktop-file-utils
+, wrapGAppsHook3
+, desktopToDarwinBundle
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

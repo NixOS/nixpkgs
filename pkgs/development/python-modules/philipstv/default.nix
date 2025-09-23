@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  poetry-core,
-  poetry-dynamic-versioning,
-  installShellFiles,
-  pytestCheckHook,
-  requests-mock,
-  requests,
-  pydantic,
-  click,
-  appdirs,
-  stdenv,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, poetry-core
+, poetry-dynamic-versioning
+, installShellFiles
+, pytestCheckHook
+, requests-mock
+, requests
+, pydantic
+, click
+, appdirs
+, stdenv
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

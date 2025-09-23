@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  wolfssl,
-  bionic-translation,
-  python3,
-  which,
-  jdk17,
-  zip,
-  xz,
-  icu,
-  zlib,
-  libcap,
-  expat,
-  openssl,
-  libbsd,
-  lz4,
-  runtimeShell,
-  libpng,
-  makeWrapper,
-  binutils,
+{ lib
+, stdenv
+, fetchFromGitLab
+, wolfssl
+, bionic-translation
+, python3
+, which
+, jdk17
+, zip
+, xz
+, icu
+, zlib
+, libcap
+, expat
+, openssl
+, libbsd
+, lz4
+, runtimeShell
+, libpng
+, makeWrapper
+, binutils
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "art-standalone";

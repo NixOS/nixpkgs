@@ -1,13 +1,13 @@
-{
-  lib,
-  atdgen-codec-runtime,
-  cmdliner,
-  menhir,
-  easy-format,
-  buildDunePackage,
-  re,
-  yojson,
-  nixosTests,
+{ lib
+, atdgen-codec-runtime
+, cmdliner
+, menhir
+, easy-format
+, buildDunePackage
+, re
+, yojson
+, nixosTests
+,
 }:
 
 buildDunePackage {

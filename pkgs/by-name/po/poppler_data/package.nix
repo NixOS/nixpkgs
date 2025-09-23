@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  cmake,
-  ninja,
-  poppler,
+{ fetchurl
+, lib
+, stdenv
+, cmake
+, ninja
+, poppler
+,
 }:
 
 stdenv.mkDerivation rec {

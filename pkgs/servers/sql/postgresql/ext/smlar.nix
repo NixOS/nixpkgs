@@ -1,8 +1,8 @@
-{
-  fetchgit,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
+{ fetchgit
+, lib
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 postgresqlBuildExtension {

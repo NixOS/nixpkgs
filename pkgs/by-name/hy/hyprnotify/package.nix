@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  alsa-lib,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, alsa-lib
+,
 }:
 
 buildGoModule rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  cmake,
-  libtool,
-  ffmpeg-headless,
-  hm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, testers
+, cmake
+, libtool
+, ffmpeg-headless
+, hm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

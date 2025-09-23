@@ -1,10 +1,10 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  cups,
-  unzip,
+{ stdenvNoCC
+, lib
+, fetchurl
+, autoPatchelfHook
+, cups
+, unzip
+,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -29,8 +29,7 @@ stdenvNoCC.mkDerivation {
         {
           x86_64-linux = "x64";
           x86-linux = "x86";
-        }
-        ."${stdenvNoCC.hostPlatform.system}"
+        }."${stdenvNoCC.hostPlatform.system}"
           or (throw "cups-idprt-mt890: No prebuilt filters for system: ${stdenvNoCC.hostPlatform.system}");
     in
     ''

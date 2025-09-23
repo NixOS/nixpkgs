@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  aqipy-atmotech,
-  buildPythonPackage,
-  dacite,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-error-for-skips,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  syrupy,
-  tenacity,
+{ lib
+, aiohttp
+, aioresponses
+, aqipy-atmotech
+, buildPythonPackage
+, dacite
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-error-for-skips
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, syrupy
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

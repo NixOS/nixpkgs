@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  buildPackages,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, buildPackages
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "xlsxsql";

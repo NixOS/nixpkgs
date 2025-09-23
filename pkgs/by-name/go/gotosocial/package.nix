@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  fetchFromGitea,
-  buildGo124Module,
-  nixosTests,
+{ lib
+, fetchurl
+, fetchFromGitea
+, buildGo124Module
+, nixosTests
+,
 }:
 let
   domain = "codeberg.org";

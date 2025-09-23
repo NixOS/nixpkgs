@@ -1,18 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  ninja,
-  makeWrapper,
-
-  # buildInputs
-  fmt,
-  rsync,
-
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  ninja
+, makeWrapper
+, # buildInputs
+  fmt
+, rsync
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

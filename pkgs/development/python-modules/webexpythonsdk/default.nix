@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyjwt,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  poetry-core,
-  poetry-dynamic-versioning,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyjwt
+, pythonOlder
+, requests
+, requests-toolbelt
+, poetry-core
+, poetry-dynamic-versioning
+,
 }:
 
 buildPythonPackage rec {

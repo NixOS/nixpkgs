@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  uri,
-  cohttp-lwt,
-  atdgen,
-  atdgen-runtime,
-  yojson,
-  iso8601,
-  stringext,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, uri
+, cohttp-lwt
+, atdgen
+, atdgen-runtime
+, yojson
+, iso8601
+, stringext
+,
 }:
 
 buildDunePackage rec {

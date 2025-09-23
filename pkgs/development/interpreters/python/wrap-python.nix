@@ -1,11 +1,12 @@
-{
-  lib,
-  python,
-  makePythonHook,
-  makeWrapper,
+{ lib
+, python
+, makePythonHook
+, makeWrapper
+,
 }:
 
-makePythonHook {
+makePythonHook
+{
   name = "wrap-python-hook";
   propagatedBuildInputs = [ makeWrapper ];
   substitutions.sitePackages = python.sitePackages;

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  libX11,
-  libXext,
-  xorgproto,
-  libICE,
-  libSM,
-  libpng12,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libX11
+, libXext
+, xorgproto
+, libICE
+, libSM
+, libpng12
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

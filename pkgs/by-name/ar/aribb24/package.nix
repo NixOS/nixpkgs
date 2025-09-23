@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  testers,
-  gitUpdater,
-  autoreconfHook,
-  pkg-config,
-  libpng,
+{ lib
+, stdenv
+, fetchFromGitLab
+, testers
+, gitUpdater
+, autoreconfHook
+, pkg-config
+, libpng
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

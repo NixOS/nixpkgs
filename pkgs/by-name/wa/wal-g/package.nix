@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  brotli,
-  libsodium,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, brotli
+, libsodium
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

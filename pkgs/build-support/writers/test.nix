@@ -1,15 +1,15 @@
-{
-  haskellPackages,
-  lib,
-  guile-lib,
-  akkuPackages,
-  nodePackages,
-  perlPackages,
-  python3Packages,
-  runCommand,
-  testers,
-  writers,
-  writeText,
+{ haskellPackages
+, lib
+, guile-lib
+, akkuPackages
+, nodePackages
+, perlPackages
+, python3Packages
+, runCommand
+, testers
+, writers
+, writeText
+,
 }:
 
 # If you are reading this, you can test these writers by running: nix-build . -A tests.writers

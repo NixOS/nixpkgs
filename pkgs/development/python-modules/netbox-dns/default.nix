@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  dnspython,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dnspython
+,
 }:
 buildPythonPackage rec {
   pname = "netbox-plugin-dns";

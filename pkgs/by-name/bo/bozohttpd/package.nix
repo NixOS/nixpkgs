@@ -1,23 +1,23 @@
-{
-  lib,
-  bmake,
-  fetchurl,
-  groff,
-  inetutils,
-  libxcrypt,
-  lua,
-  openssl,
-  stdenv,
-  wget,
-  # Boolean flags
-  minimal ? false,
-  userSupport ? !minimal,
-  cgiSupport ? !minimal,
-  dirIndexSupport ? !minimal,
-  dynamicContentSupport ? !minimal,
-  sslSupport ? !minimal,
-  luaSupport ? !minimal,
-  htpasswdSupport ? !minimal,
+{ lib
+, bmake
+, fetchurl
+, groff
+, inetutils
+, libxcrypt
+, lua
+, openssl
+, stdenv
+, wget
+, # Boolean flags
+  minimal ? false
+, userSupport ? !minimal
+, cgiSupport ? !minimal
+, dirIndexSupport ? !minimal
+, dynamicContentSupport ? !minimal
+, sslSupport ? !minimal
+, luaSupport ? !minimal
+, htpasswdSupport ? !minimal
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

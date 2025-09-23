@@ -1,31 +1,25 @@
-{
-  lib,
-  stdenv,
-  mkMesonDerivation,
+{ lib
+, stdenv
+, mkMesonDerivation
+, meson
+, ninja
+, pkg-config
+, jq
+, git
+, mercurial
+, util-linux
+, nix-store
+, nix-expr
+, nix-cli
+, toml11
+, busybox-sandbox-shell ? null
+, # Configuration Options
 
-  meson,
-  ninja,
-  pkg-config,
-
-  jq,
-  git,
-  mercurial,
-  util-linux,
-
-  nix-store,
-  nix-expr,
-  nix-cli,
-  toml11,
-
-  busybox-sandbox-shell ? null,
-
-  # Configuration Options
-
-  pname ? "nix-functional-tests",
-  version,
-
-  # For running the functional tests against a different pre-built Nix.
-  test-daemon ? null,
+  pname ? "nix-functional-tests"
+, version
+, # For running the functional tests against a different pre-built Nix.
+  test-daemon ? null
+,
 }:
 
 mkMesonDerivation (
@@ -95,7 +89,7 @@ mkMesonDerivation (
     };
 
   }
-  // lib.optionalAttrs (test-daemon != null) {
+    // lib.optionalAttrs (test-daemon != null) {
     NIX_DAEMON_PACKAGE = test-daemon;
     _NIX_TEST_CLIENT_VERSION = nix-cli.version;
   }

@@ -1,21 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  autoPatchelfHook,
-  glfw,
-  SDL2,
-  alsa-lib,
-  libpulseaudio,
-  raylib-games,
-  libGLU,
-  libX11,
-  platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
-  pulseSupport ? stdenv.hostPlatform.isLinux,
-  alsaSupport ? false,
-  sharedLib ? true,
-  includeEverything ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, autoPatchelfHook
+, glfw
+, SDL2
+, alsa-lib
+, libpulseaudio
+, raylib-games
+, libGLU
+, libX11
+, platform ? "Desktop"
+, # Note that "Web", "Android" and "Raspberry Pi" do not currently work
+  pulseSupport ? stdenv.hostPlatform.isLinux
+, alsaSupport ? false
+, sharedLib ? true
+, includeEverything ? true
+,
 }:
 let
   inherit (lib) optional;

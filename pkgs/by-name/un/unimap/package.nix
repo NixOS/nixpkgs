@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  makeBinaryWrapper,
-  stdenv,
-  pkg-config,
-  openssl,
-  nmap,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, makeBinaryWrapper
+, stdenv
+, pkg-config
+, openssl
+, nmap
+,
 }:
 
 rustPlatform.buildRustPackage rec {

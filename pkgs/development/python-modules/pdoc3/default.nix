@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mako,
-  markdown,
-  setuptools-scm,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mako
+, markdown
+, setuptools-scm
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

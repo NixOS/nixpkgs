@@ -1,11 +1,11 @@
-{
-  stdenv,
-  texinfo,
-  flex,
-  bison,
-  fetchFromGitHub,
-  stdenvNoLibc,
-  buildPackages,
+{ stdenv
+, texinfo
+, flex
+, bison
+, fetchFromGitHub
+, stdenvNoLibc
+, buildPackages
+,
 }:
 
 stdenvNoLibc.mkDerivation {

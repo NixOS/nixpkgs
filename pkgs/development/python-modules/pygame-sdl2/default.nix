@@ -1,16 +1,16 @@
-{
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  lib,
-  libjpeg,
-  libpng,
-  nix-update-script,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  setuptools,
+{ buildPythonPackage
+, cython
+, fetchFromGitHub
+, lib
+, libjpeg
+, libpng
+, nix-update-script
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

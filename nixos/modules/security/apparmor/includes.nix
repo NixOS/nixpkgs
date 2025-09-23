@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (builtins) attrNames hasAttr isAttrs;
@@ -14,10 +13,10 @@ let
     arg:
     let
       go =
-        {
-          path ? null,
-          mode ? "r",
-          trail ? "",
+        { path ? null
+        , mode ? "r"
+        , trail ? ""
+        ,
         }:
         lib.optionalString (hasAttr path etc) "${mode} ${config.environment.etc.${path}.source}${trail},";
     in

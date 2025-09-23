@@ -1,25 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  isPyPy,
-  python,
-  libev,
-  cffi,
-  cython,
-  greenlet,
-  importlib-metadata,
-  setuptools,
-  zope-event,
-  zope-interface,
-  c-ares,
-  libuv,
-
-  # for passthru.tests
-  dulwich,
-  gunicorn,
-  pika,
+{ stdenv
+, lib
+, fetchPypi
+, buildPythonPackage
+, isPyPy
+, python
+, libev
+, cffi
+, cython
+, greenlet
+, importlib-metadata
+, setuptools
+, zope-event
+, zope-interface
+, c-ares
+, libuv
+, # for passthru.tests
+  dulwich
+, gunicorn
+, pika
+,
 }:
 
 buildPythonPackage rec {

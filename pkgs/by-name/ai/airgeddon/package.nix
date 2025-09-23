@@ -1,61 +1,63 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  # Required
-  aircrack-ng,
-  bash,
-  coreutils-full,
-  gawk,
-  gnugrep,
-  gnused,
-  iproute2,
-  iw,
-  pciutils,
-  procps,
-  tmux,
-  # X11 Front
-  xterm,
-  xorg,
-  # what the author calls "Internals"
-  usbutils,
-  wget,
-  ethtool,
-  util-linux,
-  ccze,
-  # Optionals
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, # Required
+  aircrack-ng
+, bash
+, coreutils-full
+, gawk
+, gnugrep
+, gnused
+, iproute2
+, iw
+, pciutils
+, procps
+, tmux
+, # X11 Front
+  xterm
+, xorg
+, # what the author calls "Internals"
+  usbutils
+, wget
+, ethtool
+, util-linux
+, ccze
+, # Optionals
   # Missing in nixpkgs: beef, hostapd-wpe
-  asleap,
-  bettercap,
-  bully,
-  crunch,
-  dnsmasq,
-  ettercap,
-  hashcat,
-  hcxdumptool,
-  hcxtools,
-  hostapd,
-  john,
-  lighttpd,
-  mdk4,
-  nftables,
-  openssl,
-  pixiewps,
-  reaverwps-t6x, # Could be the upstream version too
-  wireshark-cli,
-  # Undocumented requirements (there is also ping)
-  apparmor-bin-utils,
-  curl,
-  glibc,
-  ncurses,
-  networkmanager,
-  systemd,
-  # Support groups
-  supportWpaWps ? true, # Most common use-case
-  supportHashCracking ? false,
-  supportEvilTwin ? false,
-  supportX11 ? false, # Allow using xterm instead of tmux, hard to test
+  asleap
+, bettercap
+, bully
+, crunch
+, dnsmasq
+, ettercap
+, hashcat
+, hcxdumptool
+, hcxtools
+, hostapd
+, john
+, lighttpd
+, mdk4
+, nftables
+, openssl
+, pixiewps
+, reaverwps-t6x
+, # Could be the upstream version too
+  wireshark-cli
+, # Undocumented requirements (there is also ping)
+  apparmor-bin-utils
+, curl
+, glibc
+, ncurses
+, networkmanager
+, systemd
+, # Support groups
+  supportWpaWps ? true
+, # Most common use-case
+  supportHashCracking ? false
+, supportEvilTwin ? false
+, supportX11 ? false
+, # Allow using xterm instead of tmux, hard to test
 }:
 let
   deps = [

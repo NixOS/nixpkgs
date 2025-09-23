@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  brotli,
-  lib,
-  fetchFromGitHub,
+{ buildGoModule
+, brotli
+, lib
+, fetchFromGitHub
+,
 }:
 
 # update instructions:

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  kbd,
-  bdftopcf,
-  libfaketime,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, kbd
+, bdftopcf
+, libfaketime
+, xorg
+,
 }:
 
 stdenv.mkDerivation {

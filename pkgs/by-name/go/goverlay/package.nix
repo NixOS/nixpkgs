@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash,
-  coreutils,
-  fpc,
-  git,
-  gnugrep,
-  iproute2,
-  lazarus-qt6,
-  libGL,
-  libGLU,
-  libnotify,
-  libX11,
-  nix-update-script,
-  pciutils,
-  polkit,
-  procps,
-  qt6Packages,
-  systemd,
-  util-linux,
-  vulkan-tools,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, coreutils
+, fpc
+, git
+, gnugrep
+, iproute2
+, lazarus-qt6
+, libGL
+, libGLU
+, libnotify
+, libX11
+, nix-update-script
+, pciutils
+, polkit
+, procps
+, qt6Packages
+, systemd
+, util-linux
+, vulkan-tools
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

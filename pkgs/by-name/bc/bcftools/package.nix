@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  htslib,
-  zlib,
-  bzip2,
-  xz,
-  curl,
-  perl,
-  python3,
-  bash,
+{ lib
+, stdenv
+, fetchurl
+, htslib
+, zlib
+, bzip2
+, xz
+, curl
+, perl
+, python3
+, bash
+,
 }:
 
 stdenv.mkDerivation rec {

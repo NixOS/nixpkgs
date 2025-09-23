@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  scikit-build,
-  cmake,
-  ninja,
-  python,
-  flaky,
-  hypothesis,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, scikit-build
+, cmake
+, ninja
+, python
+, flaky
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

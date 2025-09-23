@@ -1,18 +1,18 @@
-{
-  lib,
-  check,
-  cmake,
-  fetchFromGitHub,
-  gengetopt,
-  help2man,
-  nix-update-script,
-  openssl,
-  pcsclite,
-  pkg-config,
-  stdenv,
-  testers,
-  zlib,
-  withApplePCSC ? stdenv.hostPlatform.isDarwin,
+{ lib
+, check
+, cmake
+, fetchFromGitHub
+, gengetopt
+, help2man
+, nix-update-script
+, openssl
+, pcsclite
+, pkg-config
+, stdenv
+, testers
+, zlib
+, withApplePCSC ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

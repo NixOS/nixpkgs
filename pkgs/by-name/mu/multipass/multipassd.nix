@@ -1,32 +1,31 @@
-{
-  commonMeta,
-  multipass_src,
-  version,
-
-  cmake,
-  dnsmasq,
-  fetchFromGitHub,
-  fmt_11,
-  git,
-  grpc,
-  gtest,
-  iproute2,
-  iptables,
-  lib,
-  libapparmor,
-  libvirt,
-  libxml2,
-  openssl,
-  OVMF,
-  pkg-config,
-  poco,
-  protobuf,
-  qemu-utils,
-  qemu,
-  qt6,
-  slang,
-  stdenv,
-  xterm,
+{ commonMeta
+, multipass_src
+, version
+, cmake
+, dnsmasq
+, fetchFromGitHub
+, fmt_11
+, git
+, grpc
+, gtest
+, iproute2
+, iptables
+, lib
+, libapparmor
+, libvirt
+, libxml2
+, openssl
+, OVMF
+, pkg-config
+, poco
+, protobuf
+, qemu-utils
+, qemu
+, qt6
+, slang
+, stdenv
+, xterm
+,
 }:
 
 stdenv.mkDerivation {

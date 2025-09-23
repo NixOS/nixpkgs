@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  urllib3,
-  certifi,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, urllib3
+, certifi
+,
 }:
 
 buildPythonPackage rec {

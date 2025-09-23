@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.9.0" else "0.8.0",
-  topkg,
-  buildTopkgPackage,
-  cmdlinerSupport ? true,
-  cmdliner,
-  fmtSupport ? lib.versionAtLeast ocaml.version "4.08",
-  fmt,
-  jsooSupport ? true,
-  js_of_ocaml-compiler,
-  lwtSupport ? true,
-  lwt,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, version ? if lib.versionAtLeast ocaml.version "4.14" then "0.9.0" else "0.8.0"
+, topkg
+, buildTopkgPackage
+, cmdlinerSupport ? true
+, cmdliner
+, fmtSupport ? lib.versionAtLeast ocaml.version "4.08"
+, fmt
+, jsooSupport ? true
+, js_of_ocaml-compiler
+, lwtSupport ? true
+, lwt
+,
 }:
 let
   param =
@@ -26,8 +26,7 @@ let
         minimalOCamlVersion = "4.14";
         sha512 = "b75fb28e83f33461b06b5c9b60972c4a9a9a1599d637b4a0c7b1e86a87f34fe5361e817cb31f42ad7e7cbb822473b28fab9f58a02870eb189ebe88dae8e045ff";
       };
-    }
-    .${version};
+    }.${version};
 
   pname = "logs";
   webpage = "https://erratique.ch/software/${pname}";
@@ -54,10 +53,12 @@ let
       enabled = cmdlinerSupport;
     }
   ];
-  enable_flags = lib.concatMap (d: [
-    d.enable_flag
-    (lib.boolToString d.enabled)
-  ]) optional_deps;
+  enable_flags = lib.concatMap
+    (d: [
+      d.enable_flag
+      (lib.boolToString d.enabled)
+    ])
+    optional_deps;
   optional_buildInputs = map (d: d.pkg) (lib.filter (d: d.enabled) optional_deps);
 in
 buildTopkgPackage {

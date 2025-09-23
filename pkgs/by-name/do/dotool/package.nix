@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  libxkbcommon,
-  pkg-config,
-  installShellFiles,
-  scdoc,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, libxkbcommon
+, pkg-config
+, installShellFiles
+, scdoc
+,
 }:
 
 buildGoModule rec {

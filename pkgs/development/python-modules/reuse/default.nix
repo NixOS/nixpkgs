@@ -1,27 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  sphinxHook,
-  furo,
-  myst-parser,
-  pbr,
-  sphinxcontrib-apidoc,
-
-  # dependencies
-  attrs,
-  binaryornot,
-  boolean-py,
-  click,
-  python-debian,
-  jinja2,
-  license-expression,
-  tomlkit,
-
-  # test dependencies
-  freezegun,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, sphinxHook
+, furo
+, myst-parser
+, pbr
+, sphinxcontrib-apidoc
+, # dependencies
+  attrs
+, binaryornot
+, boolean-py
+, click
+, python-debian
+, jinja2
+, license-expression
+, tomlkit
+, # test dependencies
+  freezegun
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

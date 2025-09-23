@@ -1,36 +1,28 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  pkg-config,
-  python3,
-  autoPatchelfHook,
-  autoAddDriverRunpath,
-
-  # buildInputs
-  oniguruma,
-  openssl,
-  mkl,
-
-  # env
-  fetchurl,
-
-  versionCheckHook,
-
-  testers,
-  mistral-rs,
-  nix-update-script,
-
-  cudaPackages,
-  cudaCapability ? null,
-
-  config,
-  # one of `[ null false "cuda" "mkl" "metal" ]`
-  acceleration ? null,
-
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  pkg-config
+, python3
+, autoPatchelfHook
+, autoAddDriverRunpath
+, # buildInputs
+  oniguruma
+, openssl
+, mkl
+, # env
+  fetchurl
+, versionCheckHook
+, testers
+, mistral-rs
+, nix-update-script
+, cudaPackages
+, cudaCapability ? null
+, config
+, # one of `[ null false "cuda" "mkl" "metal" ]`
+  acceleration ? null
+,
 }:
 
 let

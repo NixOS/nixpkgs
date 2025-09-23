@@ -1,21 +1,23 @@
-{
-  runCommand,
-  buildEnv,
-  makeWrapper,
-  lib,
-  python311,
-  writeShellScript,
+{ runCommand
+, buildEnv
+, makeWrapper
+, lib
+, python311
+, writeShellScript
+,
 }:
 let
   wrapPathsStr =
     flag: values:
     builtins.concatStringsSep " " (
-      builtins.concatMap (p: [
-        "--add-flags"
-        flag
-        "--add-flags"
-        p
-      ]) values
+      builtins.concatMap
+        (p: [
+          "--add-flags"
+          flag
+          "--add-flags"
+          p
+        ])
+        values
     );
 
   wrapCfgStr =
@@ -46,13 +48,13 @@ let
     freecad
     // {
       customize =
-        {
-          name ? freecad.name,
-          modules ? [ ],
-          pythons ? [ ],
-          makeWrapperFlags ? [ ],
-          userCfg ? null,
-          systemCfg ? null,
+        { name ? freecad.name
+        , modules ? [ ]
+        , pythons ? [ ]
+        , makeWrapperFlags ? [ ]
+        , userCfg ? null
+        , systemCfg ? null
+        ,
         }:
         let
           modulesStr = wrapPathsStr "--module-path" modules;

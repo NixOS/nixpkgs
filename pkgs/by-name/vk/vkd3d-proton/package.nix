@@ -1,11 +1,11 @@
-{
-  lib,
-  callPackage,
-  glslang,
-  meson,
-  ninja,
-  stdenv,
-  wine,
+{ lib
+, callPackage
+, glslang
+, meson
+, ninja
+, stdenv
+, wine
+,
 }:
 
 let

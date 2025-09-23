@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoPatchelfHook,
-  makeBinaryWrapper,
-
-  alsa-lib,
-  libjack2,
-  curl,
-  xorg,
-  libGL,
-  freetype,
-  zenity,
+{ lib
+, stdenv
+, fetchzip
+, autoPatchelfHook
+, makeBinaryWrapper
+, alsa-lib
+, libjack2
+, curl
+, xorg
+, libGL
+, freetype
+, zenity
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

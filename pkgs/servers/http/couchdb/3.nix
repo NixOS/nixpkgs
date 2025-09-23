@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  erlang,
-  icu,
-  openssl,
-  python3,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, erlang
+, icu
+, openssl
+, python3
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

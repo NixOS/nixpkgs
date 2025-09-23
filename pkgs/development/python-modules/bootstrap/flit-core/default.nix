@@ -1,7 +1,7 @@
-{
-  stdenv,
-  python,
-  flit-core,
+{ stdenv
+, python
+, flit-core
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchzip,
-  openjdk17,
-  lib,
-  makeWrapper,
-  testers,
+{ stdenv
+, fetchzip
+, openjdk17
+, lib
+, makeWrapper
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

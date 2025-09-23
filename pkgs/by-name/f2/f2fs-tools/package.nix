@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchpatch,
-  autoreconfHook,
-  libselinux,
-  libuuid,
-  pkg-config,
-  lz4,
-  lzo,
+{ lib
+, stdenv
+, fetchzip
+, fetchpatch
+, autoreconfHook
+, libselinux
+, libuuid
+, pkg-config
+, lz4
+, lzo
+,
 }:
 
 stdenv.mkDerivation rec {

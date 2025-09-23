@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  writeText,
-  dos2unix,
-  dataPath ? "/var/lib/rainloop",
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, writeText
+, dos2unix
+, dataPath ? "/var/lib/rainloop"
+,
 }:
 let
   common =

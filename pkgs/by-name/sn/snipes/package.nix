@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  SDL2,
-  SDL2_ttf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, SDL2
+, SDL2_ttf
+,
 }:
 
 let

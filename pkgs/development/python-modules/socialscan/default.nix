@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  colorama,
-  pythonOlder,
-  tqdm,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, colorama
+, pythonOlder
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

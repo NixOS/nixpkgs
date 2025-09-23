@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  hpack,
-  hyperframe,
-  pytestCheckHook,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, hpack
+, hyperframe
+, pytestCheckHook
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

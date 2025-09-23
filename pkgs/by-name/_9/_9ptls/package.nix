@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  tlsclient,
+{ lib
+, stdenv
+, tlsclient
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

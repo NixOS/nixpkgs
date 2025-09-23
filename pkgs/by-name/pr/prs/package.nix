@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  installShellFiles,
-  pkg-config,
-  python3,
-  glib,
-  gpgme,
-  gtk3,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, installShellFiles
+, pkg-config
+, python3
+, glib
+, gpgme
+, gtk3
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

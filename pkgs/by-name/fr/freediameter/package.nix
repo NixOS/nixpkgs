@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  cmake,
-  flex,
-  pkg-config,
-  gnutls,
-  libgcrypt,
-  libidn2,
-  lksctp-tools,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, cmake
+, flex
+, pkg-config
+, gnutls
+, libgcrypt
+, libidn2
+, lksctp-tools
+, unstableGitUpdater
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "freediameter";

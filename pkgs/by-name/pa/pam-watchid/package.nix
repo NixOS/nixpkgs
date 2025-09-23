@@ -1,9 +1,9 @@
-{
-  lib,
-  swiftPackages,
-  swift,
-  swiftpm,
-  fetchFromGitHub,
+{ lib
+, swiftPackages
+, swift
+, swiftpm
+, fetchFromGitHub
+,
 }:
 
 swiftPackages.stdenv.mkDerivation {

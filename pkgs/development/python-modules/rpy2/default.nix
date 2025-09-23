@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  rpy2-rinterface,
-  rpy2-robjects,
-  pytestCheckHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, rpy2-rinterface
+, rpy2-robjects
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

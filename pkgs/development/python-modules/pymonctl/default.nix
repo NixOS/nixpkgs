@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-
-  ewmhlib,
-  xlib,
-  typing-extensions,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, ewmhlib
+, xlib
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

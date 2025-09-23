@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, nix-update-script
+,
 }:
 buildGoModule {
   pname = "addr-book-combine";

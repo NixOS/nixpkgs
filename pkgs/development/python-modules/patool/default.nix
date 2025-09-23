@@ -1,25 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  installShellFiles,
-  argcomplete,
-  pytestCheckHook,
-  p7zip,
-  cabextract,
-  zip,
-  lzip,
-  zpaq,
-  gnutar,
-  unar, # Free alternative to unrar
-  gnugrep,
-  diffutils,
-  file,
-  gzip,
-  bzip2,
-  xz,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, installShellFiles
+, argcomplete
+, pytestCheckHook
+, p7zip
+, cabextract
+, zip
+, lzip
+, zpaq
+, gnutar
+, unar
+, # Free alternative to unrar
+  gnugrep
+, diffutils
+, file
+, gzip
+, bzip2
+, xz
+,
 }:
 
 let

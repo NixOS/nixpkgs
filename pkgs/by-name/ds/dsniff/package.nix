@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  autoreconfHook,
-  libpcap,
-  db,
-  glib,
-  libnet,
-  libnids,
-  symlinkJoin,
-  openssl,
-  rpcsvc-proto,
-  libtirpc,
-  libnsl,
-  libnl,
+{ stdenv
+, lib
+, fetchFromGitLab
+, autoreconfHook
+, libpcap
+, db
+, glib
+, libnet
+, libnids
+, symlinkJoin
+, openssl
+, rpcsvc-proto
+, libtirpc
+, libnsl
+, libnl
+,
 }:
 
 let

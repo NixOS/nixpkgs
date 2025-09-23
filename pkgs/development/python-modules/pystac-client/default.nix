@@ -1,19 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  pystac,
-  pytest-benchmark,
-  pytest-console-scripts,
-  pytest-mock,
-  pytest-recording,
-  python-dateutil,
-  requests,
-  requests-mock,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, pystac
+, pytest-benchmark
+, pytest-console-scripts
+, pytest-mock
+, pytest-recording
+, python-dateutil
+, requests
+, requests-mock
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

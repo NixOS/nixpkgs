@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  stdenv,
-  lib,
-  cmake,
-  qt5,
+{ fetchFromGitHub
+, stdenv
+, lib
+, cmake
+, qt5
+,
 }:
 stdenv.mkDerivation {
   pname = "qhttpengine";

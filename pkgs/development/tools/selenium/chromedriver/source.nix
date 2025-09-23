@@ -1,7 +1,7 @@
-{
-  chromium,
-  testers,
-  chromedriver,
+{ chromium
+, testers
+, chromedriver
+,
 }:
 chromium.mkDerivation (_: {
   name = "chromedriver";

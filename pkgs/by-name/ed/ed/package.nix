@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  lzip,
-  runtimeShellPackage,
-  stdenv,
-  testers,
+{ lib
+, fetchurl
+, lzip
+, runtimeShellPackage
+, stdenv
+, testers
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use

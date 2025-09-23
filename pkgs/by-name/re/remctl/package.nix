@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libevent,
-  krb5,
-  openssl,
-  perl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libevent
+, krb5
+, openssl
+, perl
+, pkg-config
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "remctl";

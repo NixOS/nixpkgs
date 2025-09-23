@@ -1,29 +1,30 @@
-{
-  stdenv,
-  buildPythonApplication,
-  fetchFromGitHub,
-  isPyPy,
-  pythonOlder,
-  lib,
-  defusedxml,
-  packaging,
-  psutil,
-  setuptools,
-  nixosTests,
-  pytestCheckHook,
-  which,
-  podman,
-  selenium,
-  # Optional dependencies:
-  fastapi,
-  jinja2,
-  pysnmp,
-  hddtemp,
-  netifaces2, # IP module
-  uvicorn,
-  requests,
-  prometheus-client,
-  shtab,
+{ stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, isPyPy
+, pythonOlder
+, lib
+, defusedxml
+, packaging
+, psutil
+, setuptools
+, nixosTests
+, pytestCheckHook
+, which
+, podman
+, selenium
+, # Optional dependencies:
+  fastapi
+, jinja2
+, pysnmp
+, hddtemp
+, netifaces2
+, # IP module
+  uvicorn
+, requests
+, prometheus-client
+, shtab
+,
 }:
 
 buildPythonApplication rec {

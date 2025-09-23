@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  mbedtls,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchzip
+, mbedtls
+, meson
+, ninja
+,
 }:
 let
   webManModVersion = "1.47.42";

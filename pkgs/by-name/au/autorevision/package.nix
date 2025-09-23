@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  asciidoc,
-  libxml2,
-  docbook_xml_dtd_45,
-  libxslt,
-  docbook_xsl,
-  diffutils,
-  coreutils,
-  gnugrep,
-  gnused,
+{ lib
+, stdenv
+, fetchurl
+, asciidoc
+, libxml2
+, docbook_xml_dtd_45
+, libxslt
+, docbook_xsl
+, diffutils
+, coreutils
+, gnugrep
+, gnused
+,
 }:
 
 stdenv.mkDerivation rec {

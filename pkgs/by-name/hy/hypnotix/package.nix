@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  xapp,
-  circle-flags,
-  gettext,
-  gobject-introspection,
-  mpv,
-  python3,
-  wrapGAppsHook3,
-  yt-dlp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, xapp
+, circle-flags
+, gettext
+, gobject-introspection
+, mpv
+, python3
+, wrapGAppsHook3
+, yt-dlp
+,
 }:
 
 stdenv.mkDerivation rec {

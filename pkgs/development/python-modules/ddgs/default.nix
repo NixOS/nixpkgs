@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  primp,
-  lxml,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, primp
+, lxml
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  release_version,
-  buildLlvmTools,
-  monorepoSrc ? null,
-  src ? null,
-  runCommand,
-  cmake,
-  ninja,
-  libxml2,
-  libllvm,
-  version,
-  devExtraCmakeFlags ? [ ],
-  getVersionFile,
-  fetchpatch,
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, buildLlvmTools
+, monorepoSrc ? null
+, src ? null
+, runCommand
+, cmake
+, ninja
+, libxml2
+, libllvm
+, version
+, devExtraCmakeFlags ? [ ]
+, getVersionFile
+, fetchpatch
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lld";
@@ -22,14 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } (''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/lld "$out"
-        mkdir -p "$out/libunwind"
-        cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
-        mkdir -p "$out/llvm"
-      '')
+      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/lld "$out"
+            mkdir -p "$out/libunwind"
+            cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
+            mkdir -p "$out/llvm"
+          ''
+        )
     else
       src;
 

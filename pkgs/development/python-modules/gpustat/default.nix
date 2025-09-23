@@ -1,14 +1,14 @@
-{
-  lib,
-  blessed,
-  buildPythonPackage,
-  fetchPypi,
-  mockito,
-  nvidia-ml-py,
-  psutil,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, blessed
+, buildPythonPackage
+, fetchPypi
+, mockito
+, nvidia-ml-py
+, psutil
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

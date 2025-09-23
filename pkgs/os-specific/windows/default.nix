@@ -1,12 +1,12 @@
-{
-  lib,
-  config,
-  stdenv,
-  buildPackages,
-  pkgs,
-  newScope,
-  overrideCC,
-  stdenvNoLibc,
+{ lib
+, config
+, stdenv
+, buildPackages
+, pkgs
+, newScope
+, overrideCC
+, stdenvNoLibc
+,
 }:
 
 lib.makeScope newScope (
@@ -44,7 +44,7 @@ lib.makeScope newScope (
 
     sdk = callPackage ./msvcSdk { };
   }
-  // lib.optionalAttrs config.allowAliases {
+    // lib.optionalAttrs config.allowAliases {
     mingw_w64_pthreads = lib.warn "windows.mingw_w64_pthreads is deprecated, windows.pthreads should be preferred" self.pthreads;
   }
 )

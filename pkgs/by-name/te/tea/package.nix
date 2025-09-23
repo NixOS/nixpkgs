@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-  installShellFiles,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitea
+, installShellFiles
+, stdenv
+,
 }:
 
 buildGoModule rec {

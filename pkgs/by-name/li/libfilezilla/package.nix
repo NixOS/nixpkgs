@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  autoreconfHook,
-  gettext,
-  gnutls,
-  nettle,
-  pkg-config,
-  libiconv,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchsvn
+, autoreconfHook
+, gettext
+, gnutls
+, nettle
+, pkg-config
+, libiconv
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  json_c,
-  hidapi,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, json_c
+, hidapi
+,
 }:
 
 stdenv.mkDerivation rec {

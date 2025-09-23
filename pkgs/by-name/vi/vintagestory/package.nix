@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  xorg,
-  gtk2,
-  sqlite,
-  openal,
-  cairo,
-  libGLU,
-  SDL2,
-  freealut,
-  libglvnd,
-  pipewire,
-  libpulseaudio,
-  dotnet-runtime_8,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, xorg
+, gtk2
+, sqlite
+, openal
+, cairo
+, libGLU
+, SDL2
+, freealut
+, libglvnd
+, pipewire
+, libpulseaudio
+, dotnet-runtime_8
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  fetchFromGitHub,
-  libmaxminddb,
+{ buildPecl
+, lib
+, fetchFromGitHub
+, libmaxminddb
+,
 }:
 let
   pname = "maxminddb";

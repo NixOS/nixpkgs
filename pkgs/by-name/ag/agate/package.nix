@@ -1,15 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-
-  pkg-config,
-  openssl,
-
-  versionCheckHook,
-
-  nix-update-script,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, versionCheckHook
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

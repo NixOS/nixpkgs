@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  stdenv,
-  libusb1,
-  pkg-config,
-  lib,
-  writeText,
+{ fetchFromGitHub
+, stdenv
+, libusb1
+, pkg-config
+, lib
+, writeText
+,
 }:
 let
   stellaris-udev-rules = writeText "61.stellpad.rules" ''

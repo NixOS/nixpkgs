@@ -1,14 +1,13 @@
-{
-  home-assistant,
-  makeSetupHook,
+{ home-assistant
+, makeSetupHook
+,
 }:
 
-{
-  owner,
-  domain,
-  version,
-  format ? "other",
-  ...
+{ owner
+, domain
+, version
+, format ? "other"
+, ...
 }@args:
 
 let
@@ -64,7 +63,7 @@ home-assistant.python.pkgs.buildPythonPackage (
     // args.meta or { };
 
   }
-  // builtins.removeAttrs args [
+    // builtins.removeAttrs args [
     "meta"
     "nativeCheckInputs"
     "passthru"

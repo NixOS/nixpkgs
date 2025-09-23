@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  bash,
-  which,
-  ffmpeg-full,
-  makeBinaryWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, bash
+, which
+, ffmpeg-full
+, makeBinaryWrapper
+,
 }:
 let
   version = "0.2.3";

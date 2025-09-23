@@ -1,20 +1,20 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  ldfparser,
-  lxml,
-  openpyxl,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  xlrd,
-  xlwt,
+{ lib
+, attrs
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, ldfparser
+, lxml
+, openpyxl
+, pytest-cov-stub
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, xlrd
+, xlwt
+,
 }:
 
 buildPythonPackage rec {

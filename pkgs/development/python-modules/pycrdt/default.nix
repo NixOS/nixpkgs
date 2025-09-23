@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  rustPlatform,
-
-  # tests
-  anyio,
-  objsize,
-  pydantic,
-  pytestCheckHook,
-  trio,
-  y-py,
-
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  rustPlatform
+, # tests
+  anyio
+, objsize
+, pydantic
+, pytestCheckHook
+, trio
+, y-py
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

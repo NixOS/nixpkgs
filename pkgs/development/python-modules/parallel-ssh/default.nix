@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  gevent,
-  ssh-python,
-  ssh2-python,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, gevent
+, ssh-python
+, ssh2-python
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # dependencies
-  flask,
-  jsonschema,
-  mistune,
-  pyyaml,
-  six,
-  werkzeug,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # dependencies
+  flask
+, jsonschema
+, mistune
+, pyyaml
+, six
+, werkzeug
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

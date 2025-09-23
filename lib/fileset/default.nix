@@ -13,46 +13,46 @@
 
   - [`lib.fileset.maybeMissing`](#function-library-lib.fileset.maybeMissing):
 
-    Create a file set from a path that may be missing.
+  Create a file set from a path that may be missing.
 
   - [`lib.fileset.trace`](#function-library-lib.fileset.trace)/[`lib.fileset.traceVal`](#function-library-lib.fileset.trace):
 
-    Pretty-print file sets for debugging.
+  Pretty-print file sets for debugging.
 
   - [`lib.fileset.toSource`](#function-library-lib.fileset.toSource):
 
-    Add files in file sets to the store to use as derivation sources.
+  Add files in file sets to the store to use as derivation sources.
 
   - [`lib.fileset.toList`](#function-library-lib.fileset.toList):
 
-    The list of files contained in a file set.
+  The list of files contained in a file set.
 
   Combinators:
   - [`lib.fileset.union`](#function-library-lib.fileset.union)/[`lib.fileset.unions`](#function-library-lib.fileset.unions):
 
-    Create a larger file set from all the files in multiple file sets.
+  Create a larger file set from all the files in multiple file sets.
 
   - [`lib.fileset.intersection`](#function-library-lib.fileset.intersection):
 
-    Create a smaller file set from only the files in both file sets.
+  Create a smaller file set from only the files in both file sets.
 
   - [`lib.fileset.difference`](#function-library-lib.fileset.difference):
 
-    Create a smaller file set containing all files that are in one file set, but not another one.
+  Create a smaller file set containing all files that are in one file set, but not another one.
 
   Filtering:
   - [`lib.fileset.fileFilter`](#function-library-lib.fileset.fileFilter):
 
-    Create a file set from all files that satisisfy a predicate in a directory.
+  Create a file set from all files that satisisfy a predicate in a directory.
 
   Utilities:
   - [`lib.fileset.fromSource`](#function-library-lib.fileset.fromSource):
 
-    Create a file set from a `lib.sources`-based value.
+  Create a file set from a `lib.sources`-based value.
 
   - [`lib.fileset.gitTracked`](#function-library-lib.fileset.gitTracked)/[`lib.fileset.gitTrackedWith`](#function-library-lib.fileset.gitTrackedWith):
 
-    Create a file set from all tracked files in a local Git repository.
+  Create a file set from all tracked files in a local Git repository.
 
   If you need more file set functions,
   see [this issue](https://github.com/NixOS/nixpkgs/issues/266356) to request it.
@@ -417,9 +417,9 @@ in
     :::
   */
   toSource =
-    {
-      root,
-      fileset,
+    { root
+    , fileset
+    ,
     }:
     let
       # We cannot rename matched attribute arguments, so let's work around it with an extra `let in` statement
@@ -901,7 +901,7 @@ in
     else if isFiltered then
       _fromSourceFilter path source.filter
     else
-      # If there's no filter, no need to run the expensive conversion, all subpaths will be included
+    # If there's no filter, no need to run the expensive conversion, all subpaths will be included
       _singleton path;
 
   /**
@@ -993,8 +993,8 @@ in
     :::
   */
   gitTrackedWith =
-    {
-      recurseSubmodules ? false,
+    { recurseSubmodules ? false
+    ,
     }:
     path:
     if !isBool recurseSubmodules then

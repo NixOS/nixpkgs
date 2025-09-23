@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  bash,
-  openmodelica,
-  mkOpenModelicaDerivation,
+{ lib
+, stdenv
+, fetchgit
+, bash
+, openmodelica
+, mkOpenModelicaDerivation
+,
 }:
 let
   fakegit = import ./fakegit.nix {

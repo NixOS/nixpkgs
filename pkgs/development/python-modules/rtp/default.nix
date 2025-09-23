@@ -1,12 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # nativeCheckInputs
-  hypothesis,
-  unittestCheckHook,
-
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # nativeCheckInputs
+  hypothesis
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

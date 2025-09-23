@@ -1,88 +1,90 @@
-{
-  SDL,
-  addDriverRunpath,
-  alembic,
-  apple-sdk_15,
-  blender,
-  boost,
-  brotli,
-  callPackage,
-  cmake,
-  colladaSupport ? true,
-  config,
-  cudaPackages,
-  cudaSupport ? config.cudaSupport,
-  dbus,
-  embree,
-  fetchzip,
-  fetchFromGitHub,
-  ffmpeg,
-  fftw,
-  fftwFloat,
-  freetype,
-  gettext,
-  glew,
-  gmp,
-  hipSupport ? false,
-  jackaudioSupport ? false,
-  jemalloc,
-  lib,
-  libGL,
-  libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXrender,
-  libXxf86vm,
-  libdecor,
-  libepoxy,
-  libffi,
-  libharu,
-  libjack2,
-  libjpeg,
-  libpng,
-  libsamplerate,
-  libsndfile,
-  libspnav,
-  libtiff,
-  libwebp,
-  libxkbcommon,
-  llvmPackages,
-  makeWrapper,
-  manifold,
-  mesa,
-  nix-update-script,
-  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
-  openal,
-  opencollada-blender,
-  opencolorio,
-  openexr,
-  openimagedenoise,
-  openimageio,
-  openjpeg,
-  openpgl,
-  opensubdiv,
-  openvdb,
-  openxr-loader,
-  pkg-config,
-  potrace,
-  pugixml,
-  python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
-  rocmPackages, # comes with a significantly larger closure size
-  runCommand,
-  shaderc,
-  spaceNavSupport ? stdenv.hostPlatform.isLinux,
-  sse2neon,
-  stdenv,
-  tbb_2022,
-  vulkan-headers,
-  vulkan-loader,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
-  zlib,
-  zstd,
+{ SDL
+, addDriverRunpath
+, alembic
+, apple-sdk_15
+, blender
+, boost
+, brotli
+, callPackage
+, cmake
+, colladaSupport ? true
+, config
+, cudaPackages
+, cudaSupport ? config.cudaSupport
+, dbus
+, embree
+, fetchzip
+, fetchFromGitHub
+, ffmpeg
+, fftw
+, fftwFloat
+, freetype
+, gettext
+, glew
+, gmp
+, hipSupport ? false
+, jackaudioSupport ? false
+, jemalloc
+, lib
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXi
+, libXrender
+, libXxf86vm
+, libdecor
+, libepoxy
+, libffi
+, libharu
+, libjack2
+, libjpeg
+, libpng
+, libsamplerate
+, libsndfile
+, libspnav
+, libtiff
+, libwebp
+, libxkbcommon
+, llvmPackages
+, makeWrapper
+, manifold
+, mesa
+, nix-update-script
+, openUsdSupport ? !stdenv.hostPlatform.isDarwin
+, openal
+, opencollada-blender
+, opencolorio
+, openexr
+, openimagedenoise
+, openimageio
+, openjpeg
+, openpgl
+, opensubdiv
+, openvdb
+, openxr-loader
+, pkg-config
+, potrace
+, pugixml
+, python3Packages
+, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+  rocmPackages
+, # comes with a significantly larger closure size
+  runCommand
+, shaderc
+, spaceNavSupport ? stdenv.hostPlatform.isLinux
+, sse2neon
+, stdenv
+, tbb_2022
+, vulkan-headers
+, vulkan-loader
+, wayland
+, wayland-protocols
+, wayland-scanner
+, waylandSupport ? stdenv.hostPlatform.isLinux
+, zlib
+, zstd
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  qt6,
-  libusb-compat-0_1,
-  gsl,
-  blas,
-  bison,
-  flex,
-  zlib,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, qt6
+, libusb-compat-0_1
+, gsl
+, blas
+, bison
+, flex
+, zlib
+, makeDesktopItem
+,
 }:
 
 let

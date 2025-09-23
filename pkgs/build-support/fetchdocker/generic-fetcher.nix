@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  haskellPackages,
-  writeText,
-  gawk,
+{ stdenv
+, lib
+, haskellPackages
+, writeText
+, gawk
+,
 }:
 let
   awk = "${gawk}/bin/awk";
   dockerCredentialsFile = import ./credentials.nix { inherit lib; };
 in
-{
-  fetcher,
-  name,
-  registry ? "https://registry-1.docker.io/v2/",
-  repository ? "library",
-  imageName,
-  sha256,
-  tag ? "",
-  layerDigest ? "",
+{ fetcher
+, name
+, registry ? "https://registry-1.docker.io/v2/"
+, repository ? "library"
+, imageName
+, sha256
+, tag ? ""
+, layerDigest ? ""
+,
 }:
 
 # There must be no slashes in the repository or container names since

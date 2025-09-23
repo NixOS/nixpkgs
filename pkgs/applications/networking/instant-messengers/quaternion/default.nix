@@ -1,17 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtquickcontrols2 ? null, # only a separate package on qt5
-  qtkeychain,
-  qtmultimedia,
-  qttools,
-  libquotient,
-  libsecret,
-  olm,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, wrapQtAppsHook
+, qtbase
+, qtquickcontrols2 ? null
+, # only a separate package on qt5
+  qtkeychain
+, qtmultimedia
+, qttools
+, libquotient
+, libsecret
+, olm
+,
 }:
 
 let

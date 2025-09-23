@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  requests,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  opentelemetry-util-http,
-  httpretty,
-  opentelemetry-test-utils,
-  pytestCheckHook,
-  pythonOlder,
+{ buildPythonPackage
+, requests
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-semantic-conventions
+, opentelemetry-util-http
+, httpretty
+, opentelemetry-test-utils
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  httplib2,
-  lazr-restfulclient,
-  lazr-uri,
-  setuptools,
-  six,
-  testresources,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, httplib2
+, lazr-restfulclient
+, lazr-uri
+, setuptools
+, six
+, testresources
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

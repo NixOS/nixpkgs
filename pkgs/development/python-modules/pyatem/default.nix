@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromSourcehut,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pyusb,
-  tqdm,
-  zeroconf,
-
-  # tests
-  pillow,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromSourcehut
+, # build-system
+  setuptools
+, # dependencies
+  pyusb
+, tqdm
+, zeroconf
+, # tests
+  pillow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

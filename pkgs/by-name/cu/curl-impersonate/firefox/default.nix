@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  callPackage,
-  buildGoModule,
-  installShellFiles,
-  buildPackages,
-  zlib,
-  sqlite,
-  cmake,
-  python3,
-  ninja,
-  perl,
-  autoconf,
-  automake,
-  libtool,
-  cctools,
-  cacert,
-  unzip,
-  go,
-  p11-kit,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, callPackage
+, buildGoModule
+, installShellFiles
+, buildPackages
+, zlib
+, sqlite
+, cmake
+, python3
+, ninja
+, perl
+, autoconf
+, automake
+, libtool
+, cctools
+, cacert
+, unzip
+, go
+, p11-kit
+,
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate-ff";

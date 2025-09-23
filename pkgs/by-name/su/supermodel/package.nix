@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  libGLU,
-  SDL2,
-  SDL2_net,
-  xorg,
-  stdenv,
-  zlib,
+{ fetchFromGitHub
+, lib
+, libGLU
+, SDL2
+, SDL2_net
+, xorg
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

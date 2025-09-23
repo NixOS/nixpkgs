@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  certifi,
-  scapy,
-  urllib3,
-  semantic-version,
-  aiohttp,
-  jsons,
-  requests,
-  # Test inputs
-  pytestCheckHook,
-  pyyaml,
-  pytest-asyncio,
-  async-timeout,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, certifi
+, scapy
+, urllib3
+, semantic-version
+, aiohttp
+, jsons
+, requests
+, # Test inputs
+  pytestCheckHook
+, pyyaml
+, pytest-asyncio
+, async-timeout
+,
 }:
 
 buildPythonPackage rec {

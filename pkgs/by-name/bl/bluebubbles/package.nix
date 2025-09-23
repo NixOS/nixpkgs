@@ -1,13 +1,13 @@
-{
-  lib,
-  flutter327,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  webkitgtk_4_1,
-  libnotify,
-  libayatana-appindicator,
-  jdk,
-  mpv,
+{ lib
+, flutter327
+, fetchFromGitHub
+, autoPatchelfHook
+, webkitgtk_4_1
+, libnotify
+, libayatana-appindicator
+, jdk
+, mpv
+,
 }:
 
 flutter327.buildFlutterApplication rec {

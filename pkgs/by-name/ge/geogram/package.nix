@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  zlib,
-  python3Packages,
-  nix-update-script,
-  fetchpatch2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, zlib
+, python3Packages
+, nix-update-script
+, fetchpatch2
+,
 }:
 
 let

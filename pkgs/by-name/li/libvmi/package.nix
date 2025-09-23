@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  autoreconfHook,
-  autoconf-archive,
-  bison,
-  flex,
-  glib,
-  pkg-config,
-  json_c,
-  libvirt,
-
-  withVMIFS ? true,
-  fuse,
-
-  legacyKVM ? false,
-  libkvmi,
-
-  xenSupport ? true,
-  xen,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, autoreconfHook
+, autoconf-archive
+, bison
+, flex
+, glib
+, pkg-config
+, json_c
+, libvirt
+, withVMIFS ? true
+, fuse
+, legacyKVM ? false
+, libkvmi
+, xenSupport ? true
+, xen
+,
 }:
 
 let

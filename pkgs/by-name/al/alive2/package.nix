@@ -1,14 +1,14 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  re2c,
-  z3,
-  hiredis,
-  llvm,
-  cmake,
-  ninja,
-  nix-update-script,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, re2c
+, z3
+, hiredis
+, llvm
+, cmake
+, ninja
+, nix-update-script
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtk3,
-  glib,
-  libappindicator-gtk3,
-  libpthreadstubs,
-  xorg,
-  libxkbcommon,
-  libepoxy,
-  at-spi2-core,
-  dbus,
-  libdbusmenu,
-  lz4,
-  wrapGAppsHook3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtk3
+, glib
+, libappindicator-gtk3
+, libpthreadstubs
+, xorg
+, libxkbcommon
+, libepoxy
+, at-spi2-core
+, dbus
+, libdbusmenu
+, lz4
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

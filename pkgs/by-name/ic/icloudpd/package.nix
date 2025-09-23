@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  nix-update-script,
-  testers,
-  icloudpd,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, nix-update-script
+, testers
+, icloudpd
+,
 }:
 
 python3Packages.buildPythonApplication rec {

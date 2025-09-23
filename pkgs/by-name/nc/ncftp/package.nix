@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  coreutils,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, coreutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

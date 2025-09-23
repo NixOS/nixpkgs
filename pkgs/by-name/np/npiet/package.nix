@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gd,
-  giflib,
-  groff,
-  libpng,
-  tk,
-  callPackage,
+{ lib
+, stdenv
+, fetchurl
+, gd
+, giflib
+, groff
+, libpng
+, tk
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

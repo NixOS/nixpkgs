@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libuuid,
-  gnutls,
-  makeWrapper,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libuuid
+, gnutls
+, makeWrapper
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

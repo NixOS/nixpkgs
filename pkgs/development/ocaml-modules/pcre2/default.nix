@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  dune-configurator,
-  pcre2,
-  version ? "8.0.3",
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, dune-configurator
+, pcre2
+, version ? "8.0.3"
+,
 }:
 
 buildDunePackage {

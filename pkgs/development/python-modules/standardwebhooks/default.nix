@@ -1,15 +1,15 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  deprecated,
-  fetchPypi,
-  httpx,
-  pytestCheckHook,
-  python-dateutil,
-  setuptools,
-  types-deprecated,
-  types-python-dateutil,
+{ lib
+, attrs
+, buildPythonPackage
+, deprecated
+, fetchPypi
+, httpx
+, pytestCheckHook
+, python-dateutil
+, setuptools
+, types-deprecated
+, types-python-dateutil
+,
 }:
 
 buildPythonPackage rec {

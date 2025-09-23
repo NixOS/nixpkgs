@@ -1,22 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # build
-  meson,
-  ninja,
-  pkg-config,
-
-  # docs
-  sphinx,
-
-  # runtime
-  buildPackages,
-  ffmpeg-headless,
-
-  # tests
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, # build
+  meson
+, ninja
+, pkg-config
+, # docs
+  sphinx
+, # runtime
+  buildPackages
+, ffmpeg-headless
+, # tests
+  nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

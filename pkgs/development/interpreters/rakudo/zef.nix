@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rakudo,
-  makeBinaryWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rakudo
+, makeBinaryWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

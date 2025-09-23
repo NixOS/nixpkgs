@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  aiomqtt,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
-  pythonOlder,
-  setuptools,
-  tenacity,
+{ lib
+, aiohttp
+, aiomqtt
+, buildPythonPackage
+, fetchFromGitHub
+, pydantic
+, pythonOlder
+, setuptools
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

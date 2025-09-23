@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchurl,
-  intltool,
-  libtorrent-rasterbar,
-  python3Packages,
-  gtk3,
-  glib,
-  gobject-introspection,
-  librsvg,
-  wrapGAppsHook3,
-  nixosTests,
+{ lib
+, fetchurl
+, intltool
+, libtorrent-rasterbar
+, python3Packages
+, gtk3
+, glib
+, gobject-introspection
+, librsvg
+, wrapGAppsHook3
+, nixosTests
+,
 }:
 
 let

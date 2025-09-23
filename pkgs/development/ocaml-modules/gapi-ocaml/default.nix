@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  camlp-streams,
-  cppo,
-  cryptokit,
-  ocurl,
-  yojson,
-  ounit2,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, camlp-streams
+, cppo
+, cryptokit
+, ocurl
+, yojson
+, ounit2
+,
 }:
 
 buildDunePackage rec {

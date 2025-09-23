@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  zconfig,
-  manuel,
-  unittestCheckHook,
-  zope-testing,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, zconfig
+, manuel
+, unittestCheckHook
+, zope-testing
+,
 }:
 
 buildPythonPackage rec {

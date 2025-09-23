@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf-archive,
-  autoreconfHook,
-  cmocka,
-  curl,
-  expat,
-  expect,
-  glib,
-  glibcLocales,
-  libstrophe,
-  libmicrohttpd,
-  libotr,
-  libuuid,
-  ncurses,
-  openssl,
-  pkg-config,
-  readline,
-  sqlite,
-  autoAwaySupport ? true,
-  libXScrnSaver,
-  libX11,
-  notifySupport ? true,
-  libnotify,
-  gdk-pixbuf,
-  omemoSupport ? true,
-  libsignal-protocol-c,
-  libgcrypt,
-  qrencode,
-  pgpSupport ? true,
-  gpgme,
-  pythonPluginSupport ? true,
-  python3,
-  traySupport ? true,
-  gtk3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf-archive
+, autoreconfHook
+, cmocka
+, curl
+, expat
+, expect
+, glib
+, glibcLocales
+, libstrophe
+, libmicrohttpd
+, libotr
+, libuuid
+, ncurses
+, openssl
+, pkg-config
+, readline
+, sqlite
+, autoAwaySupport ? true
+, libXScrnSaver
+, libX11
+, notifySupport ? true
+, libnotify
+, gdk-pixbuf
+, omemoSupport ? true
+, libsignal-protocol-c
+, libgcrypt
+, qrencode
+, pgpSupport ? true
+, gpgme
+, pythonPluginSupport ? true
+, python3
+, traySupport ? true
+, gtk3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

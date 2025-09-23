@@ -1,6 +1,6 @@
-{
-  callPackage,
-  dotnetCorePackages,
+{ callPackage
+, dotnetCorePackages
+,
 }:
 callPackage ../dotnet.nix {
   releaseManifestFile = ./release.json;

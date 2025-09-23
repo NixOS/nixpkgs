@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libnetfilter_queue,
-  libnfnetlink,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libnetfilter_queue
+, libnfnetlink
+,
 }:
 
 stdenv.mkDerivation {

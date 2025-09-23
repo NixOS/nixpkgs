@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  flex,
-  readline,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, flex
+, readline
+, ncurses
+,
 }:
 
 stdenv.mkDerivation {

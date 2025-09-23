@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  ddt,
-  fetchPypi,
-  flake8,
-  pbr,
-  pythonOlder,
-  setuptools,
-  stestr,
-  testscenarios,
+{ lib
+, buildPythonPackage
+, ddt
+, fetchPypi
+, flake8
+, pbr
+, pythonOlder
+, setuptools
+, stestr
+, testscenarios
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  colors,
-  tty,
+{ lib
+, buildDunePackage
+, fetchurl
+, colors
+, tty
+,
 }:
 
 buildDunePackage rec {

@@ -19,13 +19,13 @@ lib: pkgs: actuallySplice:
 let
 
   spliceReal =
-    {
-      pkgsBuildBuild,
-      pkgsBuildHost,
-      pkgsBuildTarget,
-      pkgsHostHost,
-      pkgsHostTarget,
-      pkgsTargetTarget,
+    { pkgsBuildBuild
+    , pkgsBuildHost
+    , pkgsBuildTarget
+    , pkgsHostHost
+    , pkgsHostTarget
+    , pkgsTargetTarget
+    ,
     }:
     let
       mash =
@@ -52,11 +52,11 @@ let
             augmentedValue = defaultValue // {
               __spliced =
                 (lib.optionalAttrs (pkgsBuildBuild ? ${name}) { buildBuild = valueBuildBuild; })
-                // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { buildHost = valueBuildHost; })
-                // (lib.optionalAttrs (pkgsBuildTarget ? ${name}) { buildTarget = valueBuildTarget; })
-                // (lib.optionalAttrs (pkgsHostHost ? ${name}) { hostHost = valueHostHost; })
-                // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { hostTarget = valueHostTarget; })
-                // (lib.optionalAttrs (pkgsTargetTarget ? ${name}) {
+                  // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { buildHost = valueBuildHost; })
+                  // (lib.optionalAttrs (pkgsBuildTarget ? ${name}) { buildTarget = valueBuildTarget; })
+                  // (lib.optionalAttrs (pkgsHostHost ? ${name}) { hostHost = valueHostHost; })
+                  // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { hostTarget = valueHostTarget; })
+                  // (lib.optionalAttrs (pkgsTargetTarget ? ${name}) {
                   targetTarget = valueTargetTarget;
                 });
             };
@@ -73,7 +73,7 @@ let
               value: lib.genAttrs (value.outputs or (lib.optional (value ? out) "out")) (output: value.${output});
           in
           # The derivation along with its outputs, which we recur
-          # on to splice them together.
+            # on to splice them together.
           if lib.isDerivation defaultValue then
             augmentedValue
             // spliceReal {
@@ -86,16 +86,17 @@ let
               # Just recur on plain attrsets
             }
           else if lib.isAttrs defaultValue then
-            spliceReal {
-              pkgsBuildBuild = valueBuildBuild;
-              pkgsBuildHost = valueBuildHost;
-              pkgsBuildTarget = valueBuildTarget;
-              pkgsHostHost = valueHostHost;
-              pkgsHostTarget = valueHostTarget;
-              pkgsTargetTarget = valueTargetTarget;
-              # Don't be fancy about non-derivations. But we could have used used
-              # `__functor__` for functions instead.
-            }
+            spliceReal
+              {
+                pkgsBuildBuild = valueBuildBuild;
+                pkgsBuildHost = valueBuildHost;
+                pkgsBuildTarget = valueBuildTarget;
+                pkgsHostHost = valueHostHost;
+                pkgsHostTarget = valueHostTarget;
+                pkgsTargetTarget = valueTargetTarget;
+                # Don't be fancy about non-derivations. But we could have used used
+                # `__functor__` for functions instead.
+              }
           else
             defaultValue;
       };
@@ -103,27 +104,28 @@ let
     lib.listToAttrs (map merge (lib.attrNames mash));
 
   splicePackages =
-    {
-      pkgsBuildBuild,
-      pkgsBuildHost,
-      pkgsBuildTarget,
-      pkgsHostHost,
-      pkgsHostTarget,
-      pkgsTargetTarget,
+    { pkgsBuildBuild
+    , pkgsBuildHost
+    , pkgsBuildTarget
+    , pkgsHostHost
+    , pkgsHostTarget
+    , pkgsTargetTarget
+    ,
     }@args:
     if actuallySplice then spliceReal args else pkgsHostTarget;
 
   splicedPackages =
-    splicePackages {
-      inherit (pkgs)
-        pkgsBuildBuild
-        pkgsBuildHost
-        pkgsBuildTarget
-        pkgsHostHost
-        pkgsHostTarget
-        pkgsTargetTarget
-        ;
-    }
+    splicePackages
+      {
+        inherit (pkgs)
+          pkgsBuildBuild
+          pkgsBuildHost
+          pkgsBuildTarget
+          pkgsHostHost
+          pkgsHostTarget
+          pkgsTargetTarget
+          ;
+      }
     // {
       # These should never be spliced under any circumstances
       inherit (pkgs)

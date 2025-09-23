@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  fcitx5,
-  gettext,
-  go,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, fcitx5
+, gettext
+, go
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

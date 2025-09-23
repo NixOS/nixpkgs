@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  azure-kusto-data,
-  azure-storage-blob,
-  azure-storage-queue,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pandas,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  responses,
-  setuptools,
-  tenacity,
+{ lib
+, aiohttp
+, azure-kusto-data
+, azure-storage-blob
+, azure-storage-queue
+, buildPythonPackage
+, fetchFromGitHub
+, pandas
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, responses
+, setuptools
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

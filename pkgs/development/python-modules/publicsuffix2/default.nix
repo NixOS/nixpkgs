@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+,
 }:
 let
   tagVersion = "2.2019-12-21";

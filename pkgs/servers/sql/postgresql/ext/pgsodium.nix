@@ -1,11 +1,11 @@
-{
-  bash,
-  fetchFromGitHub,
-  lib,
-  libsodium,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
+{ bash
+, fetchFromGitHub
+, lib
+, libsodium
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

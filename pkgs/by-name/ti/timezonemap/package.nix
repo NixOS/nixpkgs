@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  autoreconfHook,
-  fetchbzr,
-  fetchpatch,
-  pkg-config,
-  gtk3,
-  glib,
-  file,
-  gobject-introspection,
-  json-glib,
-  libsoup_3,
+{ stdenv
+, lib
+, autoreconfHook
+, fetchbzr
+, fetchpatch
+, pkg-config
+, gtk3
+, glib
+, file
+, gobject-introspection
+, json-glib
+, libsoup_3
+,
 }:
 
 stdenv.mkDerivation {

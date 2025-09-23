@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  clang,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, clang
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

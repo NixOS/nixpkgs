@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, SDL2
+, nix-update-script
+,
 }:
 
 # As of 2025-06-27 this library has no dependents in nixpkgs (https://github.com/NixOS/nixpkgs/pull/420339) and is

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  packaging,
-  primepy,
-  torch,
-  torchaudio,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, packaging
+, primepy
+, torch
+, torchaudio
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

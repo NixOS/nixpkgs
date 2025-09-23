@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pytestCheckHook,
-  fetchFromGitHub,
-  setuptools-scm,
-  setuptools,
-  fast-histogram,
-  matplotlib,
-  numpy,
-  wheel,
-  pytest-mpl,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pytestCheckHook
+, fetchFromGitHub
+, setuptools-scm
+, setuptools
+, fast-histogram
+, matplotlib
+, numpy
+, wheel
+, pytest-mpl
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

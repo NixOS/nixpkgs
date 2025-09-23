@@ -1,10 +1,10 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  php83,
-  nixosTests,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeWrapper
+, php83
+, nixosTests
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

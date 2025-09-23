@@ -1,12 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  replaceVars,
-  ffmpeg,
-  extras ? [
+{ lib
+, python3Packages
+, fetchPypi
+, replaceVars
+, ffmpeg
+, extras ? [
     "decompress"
-  ],
+  ]
+,
 }:
 
 python3Packages.buildPythonApplication rec {

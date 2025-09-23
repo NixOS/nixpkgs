@@ -89,13 +89,15 @@ import ../make-test-python.nix (
       };
     };
 
-    kafkaNodes = builtins.mapAttrs (
-      _: val:
-      mkMerge [
-        val
-        kafkaConfig
-      ]
-    ) extraKafkaConfig;
+    kafkaNodes = builtins.mapAttrs
+      (
+        _: val:
+          mkMerge [
+            val
+            kafkaConfig
+          ]
+      )
+      extraKafkaConfig;
   in
   {
     name = "kafka-cluster";

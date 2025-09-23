@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libtool,
-  libxml2,
-  minizip,
-  pcsclite,
-  opensc,
-  openssl,
-  pkg-config,
-  zlib,
-  xmlsec,
-  xxd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libtool
+, libxml2
+, minizip
+, pcsclite
+, opensc
+, openssl
+, pkg-config
+, zlib
+, xmlsec
+, xxd
+,
 }:
 
 stdenv.mkDerivation rec {

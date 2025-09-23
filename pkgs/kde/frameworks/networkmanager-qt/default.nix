@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  pkg-config,
-  networkmanager,
+{ mkKdeDerivation
+, qtdeclarative
+, pkg-config
+, networkmanager
+,
 }:
 mkKdeDerivation {
   pname = "networkmanager-qt";

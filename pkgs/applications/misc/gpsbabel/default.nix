@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  pkg-config,
-  which,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
-  libusb1,
-  shapelib,
-  zlib,
-  withGUI ? false,
-  qtserialport,
-  withMapPreview ? (!stdenv.hostPlatform.isDarwin),
-  qtwebengine,
-  withDoc ? false,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  expat,
-  fop,
-  libxml2,
-  libxslt,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, pkg-config
+, which
+, qmake
+, qttools
+, wrapQtAppsHook
+, libusb1
+, shapelib
+, zlib
+, withGUI ? false
+, qtserialport
+, withMapPreview ? (!stdenv.hostPlatform.isDarwin)
+, qtwebengine
+, withDoc ? false
+, docbook_xml_dtd_45
+, docbook_xsl
+, expat
+, fop
+, libxml2
+, libxslt
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

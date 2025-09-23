@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  perlPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, perlPackages
+,
 }:
 
 let

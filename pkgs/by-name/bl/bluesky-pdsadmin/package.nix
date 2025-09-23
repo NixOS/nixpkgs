@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  bash,
-  bluesky-pds,
-  makeBinaryWrapper,
-  jq,
-  curl,
-  openssl,
-  lib,
+{ stdenvNoCC
+, bash
+, bluesky-pds
+, makeBinaryWrapper
+, jq
+, curl
+, openssl
+, lib
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

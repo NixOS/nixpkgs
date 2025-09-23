@@ -110,23 +110,25 @@ rec {
     let
       loop = (
         vv: v: l:
-        if l == [ ] then
-          vv ++ [ v ]
-        else
-          let
-            hd = head l;
-            tl = tail l;
-          in
-          if pred hd then
-            loop (
-              vv
-              ++ [
-                v
-                hd
-              ]
-            ) [ ] tl
+          if l == [ ] then
+            vv ++ [ v ]
           else
-            loop vv (v ++ [ hd ]) tl
+            let
+              hd = head l;
+              tl = tail l;
+            in
+            if pred hd then
+              loop
+                (
+                  vv
+                  ++ [
+                    v
+                    hd
+                  ]
+                ) [ ]
+                tl
+            else
+              loop vv (v ++ [ hd ]) tl
       );
     in
     loop [ ] [ ] l;
@@ -196,15 +198,19 @@ rec {
 
   switch =
     var: clauses: default:
-    with pred;
-    let
-      compare = f: if isFunction f then f else equal f;
-      combine =
-        cl: var:
-        if cl ? case then compare cl.case var else all (equal true) (zipListsWith compare cl.cases var);
-    in
-    switch-if (map (cl: {
-      cond = combine cl var;
-      inherit (cl) out;
-    }) clauses) default;
+      with pred;
+      let
+        compare = f: if isFunction f then f else equal f;
+        combine =
+          cl: var:
+          if cl ? case then compare cl.case var else all (equal true) (zipListsWith compare cl.cases var);
+      in
+      switch-if
+        (map
+          (cl: {
+            cond = combine cl var;
+            inherit (cl) out;
+          })
+          clauses)
+        default;
 }

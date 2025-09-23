@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  fetchurl,
-  rustPlatform,
-  pkg-config,
-  oniguruma,
-  openssl,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, fetchurl
+, rustPlatform
+, pkg-config
+, oniguruma
+, openssl
+, zstd
+,
 }:
 
 rustPlatform.buildRustPackage {

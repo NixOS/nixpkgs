@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  rustPlatform,
-  lib,
-  versionCheckHook,
-  writeShellScript,
-  lua,
+{ fetchFromGitHub
+, rustPlatform
+, lib
+, versionCheckHook
+, writeShellScript
+, lua
+,
 }:
 let
   version = "0.7.1";

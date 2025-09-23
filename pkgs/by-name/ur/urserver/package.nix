@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  bluez,
-  libX11,
-  libXtst,
-  makeWrapper,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, bluez
+, libX11
+, libXtst
+, makeWrapper
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

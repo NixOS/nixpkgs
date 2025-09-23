@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  frozendict,
-  pydantic,
-  torch,
-  transformers,
-
-  # tests
-  nbconvert,
-  nbformat,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  frozendict
+, pydantic
+, torch
+, transformers
+, # tests
+  nbconvert
+, nbformat
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

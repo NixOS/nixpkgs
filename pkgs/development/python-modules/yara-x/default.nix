@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  pkgs,
+{ lib
+, buildPythonPackage
+, rustPlatform
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, pkgs
+,
 }:
 buildPythonPackage rec {
   pname = "yara-x";

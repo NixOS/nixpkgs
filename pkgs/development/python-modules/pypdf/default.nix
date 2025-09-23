@@ -1,28 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # docs
-  sphinxHook,
-  sphinx-rtd-theme,
-  myst-parser,
-
-  # propagates
-  typing-extensions,
-
-  # optionals
-  cryptography,
-  pillow,
-
-  # tests
-  fpdf2,
-  pytestCheckHook,
-  pytest-timeout,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  flit-core
+, # docs
+  sphinxHook
+, sphinx-rtd-theme
+, myst-parser
+, # propagates
+  typing-extensions
+, # optionals
+  cryptography
+, pillow
+, # tests
+  fpdf2
+, pytestCheckHook
+, pytest-timeout
+,
 }:
 
 buildPythonPackage rec {

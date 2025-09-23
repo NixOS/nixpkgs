@@ -1,21 +1,20 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  makeWrapper,
-
-  armTrustedFirmwareTools,
-  bzip2,
-  cbfstool,
-  gzip,
-  lz4,
-  lzop,
-  openssl,
-  ubootTools,
-  vboot_reference,
-  xilinx-bootgen,
-  xz,
-  zstd,
+{ lib
+, python3Packages
+, fetchPypi
+, makeWrapper
+, armTrustedFirmwareTools
+, bzip2
+, cbfstool
+, gzip
+, lz4
+, lzop
+, openssl
+, ubootTools
+, vboot_reference
+, xilinx-bootgen
+, xz
+, zstd
+,
 }:
 
 let

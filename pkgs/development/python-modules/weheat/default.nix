@@ -1,14 +1,14 @@
-{
-  lib,
-  aenum,
-  aiohttp-retry,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
-  python-dateutil,
-  setuptools,
-  urllib3,
+{ lib
+, aenum
+, aiohttp-retry
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pydantic
+, python-dateutil
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

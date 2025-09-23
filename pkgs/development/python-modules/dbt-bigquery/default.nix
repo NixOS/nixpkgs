@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  agate,
-  dbt-adapters,
-  dbt-common,
-  dbt-core,
-  google-cloud-bigquery,
-  google-cloud-dataproc,
-  google-cloud-storage,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  agate
+, dbt-adapters
+, dbt-common
+, dbt-core
+, google-cloud-bigquery
+, google-cloud-dataproc
+, google-cloud-storage
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

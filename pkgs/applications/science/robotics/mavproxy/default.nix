@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  lxml,
-  matplotlib,
-  numpy,
-  opencv-python,
-  pymavlink,
-  pyserial,
-  setuptools,
-  wxpython,
-  billiard,
-  gnureadline,
+{ stdenv
+, lib
+, buildPythonApplication
+, fetchFromGitHub
+, lxml
+, matplotlib
+, numpy
+, opencv-python
+, pymavlink
+, pyserial
+, setuptools
+, wxpython
+, billiard
+, gnureadline
+,
 }:
 
 buildPythonApplication rec {

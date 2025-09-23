@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  isPy27,
-  libopus,
-  pytestCheckHook,
-  lib,
-  stdenv,
-  replaceVars,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, isPy27
+, libopus
+, pytestCheckHook
+, lib
+, stdenv
+, replaceVars
+, setuptools
+,
 }:
 
 buildPythonPackage {

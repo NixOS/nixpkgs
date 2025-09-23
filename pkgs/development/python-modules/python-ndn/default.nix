@@ -1,17 +1,17 @@
-{
-  lib,
-  aenum,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lark,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pycryptodomex,
-  pygtrie,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aenum
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lark
+, poetry-core
+, poetry-dynamic-versioning
+, pycryptodomex
+, pygtrie
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

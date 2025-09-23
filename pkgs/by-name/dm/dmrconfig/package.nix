@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libusb1,
-  systemd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libusb1
+, systemd
+,
 }:
 
 stdenv.mkDerivation rec {

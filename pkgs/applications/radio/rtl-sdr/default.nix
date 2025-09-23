@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libusb1,
+{ lib
+, stdenv
+, fetchFromGitea
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libusb1
+,
 }:
 let
   generic =
-    {
-      version,
-      pname,
-      src,
-      meta,
+    { version
+    , pname
+    , src
+    , meta
+    ,
     }:
     stdenv.mkDerivation {
       inherit version pname src;

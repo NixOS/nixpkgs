@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  qt6,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, qt6
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  meson,
-  ninja,
-  pam,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, meson
+, ninja
+, pam
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

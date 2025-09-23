@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  bash,
-  cmake,
-  inotify-tools,
-  pkg-config,
-  mir,
-  libxkbcommon,
-  swaybg,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, bash
+, cmake
+, inotify-tools
+, pkg-config
+, mir
+, libxkbcommon
+, swaybg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

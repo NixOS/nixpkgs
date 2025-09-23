@@ -1,6 +1,6 @@
-{
-  vimUtils,
-  statix,
+{ vimUtils
+, statix
+,
 }:
 vimUtils.buildVimPlugin rec {
   inherit (statix) pname src meta;

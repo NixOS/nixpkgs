@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  libwacom,
+{ lib
+, fetchFromGitHub
+, libwacom
+,
 }:
 
 let

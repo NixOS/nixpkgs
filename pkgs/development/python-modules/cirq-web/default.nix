@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  cirq-core,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, cirq-core
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

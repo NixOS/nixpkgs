@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  distutils,
-  graphviz,
-  numpy,
-  pkgs,
-  python,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, distutils
+, graphviz
+, numpy
+, pkgs
+, python
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage {

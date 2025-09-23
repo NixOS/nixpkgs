@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, twisted
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  buildPackages,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  withDynarec ? stdenv.hostPlatform.isAarch32,
-  runCommand,
-  hello-x86_32,
+{ buildPackages
+, lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, withDynarec ? stdenv.hostPlatform.isAarch32
+, runCommand
+, hello-x86_32
+,
 }:
 
 # Currently only supported on specific archs

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  hypothesis,
-  pytestCheckHook,
-  pythonOlder,
-  rustc,
-  rustPlatform,
+{ lib
+, buildPythonPackage
+, cargo
+, fetchFromGitHub
+, hypothesis
+, pytestCheckHook
+, pythonOlder
+, rustc
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

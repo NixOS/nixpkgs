@@ -6,11 +6,10 @@
   It contains both the relevant guest settings as well as an installer script
   that manages it as a QEMU virtual machine on the host.
 */
-{
-  config,
-  lib,
-  options,
-  ...
+{ config
+, lib
+, options
+, ...
 }:
 
 let
@@ -182,17 +181,17 @@ in
             set -euo pipefail
           ''
           +
-            # When running as non-interactively as part of a DarwinConfiguration the working directory
-            # must be set to a writeable directory.
-            (
-              if cfg.workingDirectory != "." then
-                ''
-                  ${hostPkgs.coreutils}/bin/mkdir --parent "${cfg.workingDirectory}"
-                  cd "${cfg.workingDirectory}"
-                ''
-              else
-                ""
-            )
+          # When running as non-interactively as part of a DarwinConfiguration the working directory
+          # must be set to a writeable directory.
+          (
+            if cfg.workingDirectory != "." then
+              ''
+                ${hostPkgs.coreutils}/bin/mkdir --parent "${cfg.workingDirectory}"
+                cd "${cfg.workingDirectory}"
+              ''
+            else
+              ""
+          )
           + ''
             KEYS="''${KEYS:-./keys}"
             ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
@@ -208,18 +207,22 @@ in
           ''
         );
 
-        run-builder = hostPkgs.writeShellScriptBin "run-builder" (''
-          set -euo pipefail
-          KEYS="''${KEYS:-./keys}"
-          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
-        '');
+        run-builder = hostPkgs.writeShellScriptBin "run-builder" (
+          ''
+            set -euo pipefail
+            KEYS="''${KEYS:-./keys}"
+            KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
+          ''
+        );
 
-        script = hostPkgs.writeShellScriptBin "create-builder" (''
-          set -euo pipefail
-          export KEYS="''${KEYS:-./keys}"
-          ${lib.getExe add-keys}
-          ${lib.getExe run-builder}
-        '');
+        script = hostPkgs.writeShellScriptBin "create-builder" (
+          ''
+            set -euo pipefail
+            export KEYS="''${KEYS:-./keys}"
+            ${lib.getExe add-keys}
+            ${lib.getExe run-builder}
+          ''
+        );
 
       in
       script.overrideAttrs (old: {

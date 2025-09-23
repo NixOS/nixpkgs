@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  which,
-  openssl,
-  readline,
-  fetchpatch,
+{ stdenv
+, lib
+, fetchFromGitHub
+, which
+, openssl
+, readline
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

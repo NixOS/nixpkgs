@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  cxxopts,
-  libpulseaudio,
-  meson,
-  ninja,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cxxopts
+, libpulseaudio
+, meson
+, ninja
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

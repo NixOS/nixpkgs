@@ -1,43 +1,43 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  qt6,
-  # transports
-  curl,
-  libmms,
-  # input plugins
-  libmad,
-  taglib,
-  libvorbis,
-  libogg,
-  flac,
-  libmpcdec,
-  libmodplug,
-  libsndfile,
-  libcdio,
-  cdparanoia,
-  libcddb,
-  faad2,
-  ffmpeg,
-  wildmidi,
-  libbs2b,
-  game-music-emu,
-  libarchive,
-  opusfile,
-  soxr,
-  wavpack,
-  libxmp,
-  libsidplayfp,
-  # output plugins
-  alsa-lib,
-  libpulseaudio,
-  pipewire,
-  libjack2,
-  # effect plugins
-  libsamplerate,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, qt6
+, # transports
+  curl
+, libmms
+, # input plugins
+  libmad
+, taglib
+, libvorbis
+, libogg
+, flac
+, libmpcdec
+, libmodplug
+, libsndfile
+, libcdio
+, cdparanoia
+, libcddb
+, faad2
+, ffmpeg
+, wildmidi
+, libbs2b
+, game-music-emu
+, libarchive
+, opusfile
+, soxr
+, wavpack
+, libxmp
+, libsidplayfp
+, # output plugins
+  alsa-lib
+, libpulseaudio
+, pipewire
+, libjack2
+, # effect plugins
+  libsamplerate
+,
 }:
 
 # Additional plugins that can be added:

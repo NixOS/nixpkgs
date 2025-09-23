@@ -1,26 +1,26 @@
-{
-  stdenv,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_net,
-  fpc,
-  haskell,
-  ffmpeg,
-  libglut,
-  lib,
-  fetchurl,
-  cmake,
-  pkg-config,
-  lua5_1,
-  SDL2,
-  SDL2_mixer,
-  zlib,
-  libpng,
-  libGL,
-  libGLU,
-  physfs,
-  qt5,
-  withServer ? true,
+{ stdenv
+, SDL2_image
+, SDL2_ttf
+, SDL2_net
+, fpc
+, haskell
+, ffmpeg
+, libglut
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, lua5_1
+, SDL2
+, SDL2_mixer
+, zlib
+, libpng
+, libGL
+, libGLU
+, physfs
+, qt5
+, withServer ? true
+,
 }:
 
 let

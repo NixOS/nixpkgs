@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  requireFile,
+{ lib
+, stdenv
+, fetchzip
+, requireFile
+,
 }:
 
 let

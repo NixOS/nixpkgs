@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  autoconf,
-  automake,
-  libtool,
-  bison,
-  fetchFromGitHub,
-  flex,
-  lksctp-tools,
-  openssl,
-  pkg-config,
-  sqlite,
-  util-linux,
-  unstableGitUpdater,
-  nixosTests,
+{ lib
+, stdenv
+, autoconf
+, automake
+, libtool
+, bison
+, fetchFromGitHub
+, flex
+, lksctp-tools
+, openssl
+, pkg-config
+, sqlite
+, util-linux
+, unstableGitUpdater
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  SDL2,
-  SDL2_gfx,
-  SDL2_image,
-  SDL2_ttf,
-  busybox,
-  curl,
-  geoclue2-with-demo-agent,
-  gpsd,
-  jq,
-  makeWrapper,
-  mobroute,
-  ncurses,
-  pkg-config,
-  util-linux,
-  xwininfo,
-  zenity,
-  zig_0_14,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, SDL2
+, SDL2_gfx
+, SDL2_image
+, SDL2_ttf
+, busybox
+, curl
+, geoclue2-with-demo-agent
+, gpsd
+, jq
+, makeWrapper
+, mobroute
+, ncurses
+, pkg-config
+, util-linux
+, xwininfo
+, zenity
+, zig_0_14
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

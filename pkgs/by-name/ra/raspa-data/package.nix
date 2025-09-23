@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  raspa,
+{ lib
+, stdenvNoCC
+, raspa
+,
 }:
 
 stdenvNoCC.mkDerivation {

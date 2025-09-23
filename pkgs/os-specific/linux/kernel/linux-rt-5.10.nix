@@ -1,12 +1,11 @@
-{
-  lib,
-  buildLinux,
-  fetchurl,
-  kernelPatches ? [ ],
-  structuredExtraConfig ? { },
-  extraMeta ? { },
-  argsOverride ? { },
-  ...
+{ lib
+, buildLinux
+, fetchurl
+, kernelPatches ? [ ]
+, structuredExtraConfig ? { }
+, extraMeta ? { }
+, argsOverride ? { }
+, ...
 }@args:
 
 let
@@ -58,5 +57,5 @@ buildLinux (
       inherit branch;
     };
   }
-  // argsOverride
+    // argsOverride
 )

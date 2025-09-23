@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  chromadb,
-  langchain-core,
-  numpy,
-
-  # tests
-  langchain-tests,
-  pytestCheckHook,
-  pytest-asyncio,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  chromadb
+, langchain-core
+, numpy
+, # tests
+  langchain-tests
+, pytestCheckHook
+, pytest-asyncio
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

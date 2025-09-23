@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  poetry-core,
-  icalendar,
-  pook,
-  python-dateutil,
-  pytz,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, poetry-core
+, icalendar
+, pook
+, python-dateutil
+, pytz
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

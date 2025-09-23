@@ -1,51 +1,49 @@
-{
-  lib,
-  stdenv,
-  icu,
-  zlib,
-  bzip2,
-  zstd,
-  xz,
-  python ? null,
-  fixDarwinDylibNames,
-  libiconv,
-  libxcrypt,
-  makePkgconfigItem,
-  copyPkgconfigItems,
-  boost-build,
-  fetchpatch,
-  which,
-  toolset ?
-    if stdenv.cc.isClang then
-      "clang"
-    else if stdenv.cc.isGNU then
-      "gcc"
-    else
-      null,
-  enableRelease ? true,
-  enableDebug ? false,
-  enableSingleThreaded ? false,
-  enableMultiThreaded ? true,
-  enableShared ? !(with stdenv.hostPlatform; isStatic || isMinGW), # problems for now
-  enableStatic ? !enableShared,
-  enablePython ? false,
-  enableNumpy ? false,
-  enableIcu ? stdenv.hostPlatform == stdenv.buildPlatform,
-  taggedLayout ? (
+{ lib
+, stdenv
+, icu
+, zlib
+, bzip2
+, zstd
+, xz
+, python ? null
+, fixDarwinDylibNames
+, libiconv
+, libxcrypt
+, makePkgconfigItem
+, copyPkgconfigItems
+, boost-build
+, fetchpatch
+, which
+, toolset ? if stdenv.cc.isClang then
+    "clang"
+  else if stdenv.cc.isGNU then
+    "gcc"
+  else
+    null
+, enableRelease ? true
+, enableDebug ? false
+, enableSingleThreaded ? false
+, enableMultiThreaded ? true
+, enableShared ? !(with stdenv.hostPlatform; isStatic || isMinGW)
+, # problems for now
+  enableStatic ? !enableShared
+, enablePython ? false
+, enableNumpy ? false
+, enableIcu ? stdenv.hostPlatform == stdenv.buildPlatform
+, taggedLayout ? (
     (enableRelease && enableDebug)
     || (enableSingleThreaded && enableMultiThreaded)
     || (enableShared && enableStatic)
-  ),
-  patches ? [ ],
-  boostBuildPatches ? [ ],
-  useMpi ? false,
-  mpi,
-  extraB2Args ? [ ],
-
-  # Attributes inherit from specific versions
-  version,
-  src,
-  ...
+  )
+, patches ? [ ]
+, boostBuildPatches ? [ ]
+, useMpi ? false
+, mpi
+, extraB2Args ? [ ]
+, # Attributes inherit from specific versions
+  version
+, src
+, ...
 }:
 
 # We must build at least one type of libraries
@@ -101,16 +99,16 @@ let
     ]
     # TODO: make this unconditional
     ++
-      lib.optionals
-        (
-          stdenv.hostPlatform != stdenv.buildPlatform
-          ||
-            # required on mips; see 61d9f201baeef4c4bb91ad8a8f5f89b747e0dfe4
-            (stdenv.hostPlatform.isMips && lib.versionAtLeast version "1.79")
-        )
-        [
-          "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
-          "architecture=${
+    lib.optionals
+      (
+        stdenv.hostPlatform != stdenv.buildPlatform
+        ||
+        # required on mips; see 61d9f201baeef4c4bb91ad8a8f5f89b747e0dfe4
+        (stdenv.hostPlatform.isMips && lib.versionAtLeast version "1.79")
+      )
+      [
+        "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
+        "architecture=${
             if stdenv.hostPlatform.isMips64 then
               if lib.versionOlder version "1.78" then "mips1" else "mips"
             else if stdenv.hostPlatform.isS390 then
@@ -118,18 +116,18 @@ let
             else
               toString stdenv.hostPlatform.parsed.cpu.family
           }"
-          # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
-          "binary-format=${
+        # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
+        "binary-format=${
             if stdenv.hostPlatform.isMacho then
               "mach-o"
             else
               toString stdenv.hostPlatform.parsed.kernel.execFormat.name
           }"
-          "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
+        "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
-          # adapted from table in boost manual
-          # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
-          "abi=${
+        # adapted from table in boost manual
+        # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
+        "abi=${
             if stdenv.hostPlatform.parsed.cpu.family == "arm" then
               "aapcs"
             else if stdenv.hostPlatform.isWindows then
@@ -141,7 +139,7 @@ let
             else
               "sysv"
           }"
-        ]
+      ]
     ++ lib.optional (link != "static") "runtime-link=${runtime-link}"
     ++ lib.optional (variant == "release") "debug-symbols=off"
     ++ lib.optional (toolset != null) "toolset=${toolset}"
@@ -165,9 +163,10 @@ stdenv.mkDerivation {
 
   patches =
     patches
-    ++ lib.optional (
-      lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
-    ) ./darwin-no-system-python.patch
+    ++ lib.optional
+      (
+        lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
+      ) ./darwin-no-system-python.patch
     ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
     ++ lib.optional (lib.versionAtLeast version "1.88") ./cmake-paths-188.patch
     ++ lib.optional (version == "1.77.0") (fetchpatch {
@@ -213,9 +212,10 @@ stdenv.mkDerivation {
       })
     ]
 
-    ++ lib.optional (
-      lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
-    ) ./fix-clang-target.patch
+    ++ lib.optional
+      (
+        lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
+      ) ./fix-clang-target.patch
     ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
       # Backport fix for NumPy 2 support.
       (fetchpatch {

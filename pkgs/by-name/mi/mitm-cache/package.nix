@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  callPackage,
-  rustPlatform,
-  replaceVars,
-  openssl,
-  python3Packages,
+{ lib
+, fetchFromGitHub
+, callPackage
+, rustPlatform
+, replaceVars
+, openssl
+, python3Packages
+,
 }:
 
 rustPlatform.buildRustPackage rec {

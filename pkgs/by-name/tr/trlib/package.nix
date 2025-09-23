@@ -1,12 +1,12 @@
-{
-  blas,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  pythonSupport ? false,
-  python3Packages,
-  stdenv,
+{ blas
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, lib
+, pythonSupport ? false
+, python3Packages
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

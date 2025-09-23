@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  bison,
-  libtool,
-  pkg-config,
-  which,
-  alsa-lib,
-  asio,
-  libjack2,
-  libgig,
-  libsndfile,
-  lv2,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, bison
+, libtool
+, pkg-config
+, which
+, alsa-lib
+, asio
+, libjack2
+, libgig
+, libsndfile
+, lv2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

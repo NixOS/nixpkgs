@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  fixup-yarn-lock,
-  yarn,
-  nixosTests,
-  git,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, fixup-yarn-lock
+, yarn
+, nixosTests
+, git
+, nix-update-script
+,
 }:
 let
   # this rarely changes https://github.com/zabbly/incus/blob/daily/patches/ui-canonical-renames.sed

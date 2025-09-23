@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchzip,
-  autoPatchelfHook,
-  stdenv,
-  qt5,
+{ lib
+, fetchzip
+, autoPatchelfHook
+, stdenv
+, qt5
+,
 }:
 
 stdenv.mkDerivation rec {

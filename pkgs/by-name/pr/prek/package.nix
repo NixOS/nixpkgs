@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  git,
-  uv,
-  python312,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, git
+, uv
+, python312
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

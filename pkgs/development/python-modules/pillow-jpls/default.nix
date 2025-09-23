@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  cmake,
-  ninja,
-  scikit-build-core,
-  charls,
-  eigen,
-  fmt,
-  numpy,
-  pillow,
-  pybind11,
-  setuptools,
-  pathspec,
-  pyproject-metadata,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, cmake
+, ninja
+, scikit-build-core
+, charls
+, eigen
+, fmt
+, numpy
+, pillow
+, pybind11
+, setuptools
+, pathspec
+, pyproject-metadata
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

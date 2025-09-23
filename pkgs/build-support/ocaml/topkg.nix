@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  topkg,
-  ocamlbuild,
-  cmdliner,
-  odoc,
-  b0,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, topkg
+, ocamlbuild
+, cmdliner
+, odoc
+, b0
+,
 }:
 
-{
-  pname,
-  version,
-  nativeBuildInputs ? [ ],
-  buildInputs ? [ ],
-  ...
+{ pname
+, version
+, nativeBuildInputs ? [ ]
+, buildInputs ? [ ]
+, ...
 }@args:
 
 lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion)
@@ -33,7 +32,7 @@ lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.m
 
     }
     // (builtins.removeAttrs args [ "minimalOCamlVersion" ])
-    // {
+      // {
 
       name = "ocaml${ocaml.version}-${pname}-${version}";
 

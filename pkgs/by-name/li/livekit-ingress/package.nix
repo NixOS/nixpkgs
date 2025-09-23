@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  glib,
-  gst_all_1,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, glib
+, gst_all_1
+,
 }:
 
 buildGoModule rec {

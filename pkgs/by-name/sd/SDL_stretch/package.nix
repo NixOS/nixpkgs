@@ -1,8 +1,8 @@
-{
-  lib,
-  SDL,
-  fetchurl,
-  stdenv,
+{ lib
+, SDL
+, fetchurl
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

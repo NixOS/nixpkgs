@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  desktop-file-utils,
-  gtk3,
-  libX11,
-  cmake,
-  imagemagick,
-  pkg-config,
-  perl,
-  wrapGAppsHook3,
-  nixosTests,
-  writeScript,
-  halibut,
-  isMobile ? false,
+{ lib
+, stdenv
+, fetchurl
+, desktop-file-utils
+, gtk3
+, libX11
+, cmake
+, imagemagick
+, pkg-config
+, perl
+, wrapGAppsHook3
+, nixosTests
+, writeScript
+, halibut
+, isMobile ? false
+,
 }:
 
 stdenv.mkDerivation rec {

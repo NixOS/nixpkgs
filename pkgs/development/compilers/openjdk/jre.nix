@@ -1,10 +1,11 @@
-{
-  stdenv,
-  jdk,
-  jdkOnBuild, # must provide jlink
-  lib,
-  callPackage,
-  modules ? [ "java.base" ],
+{ stdenv
+, jdk
+, jdkOnBuild
+, # must provide jlink
+  lib
+, callPackage
+, modules ? [ "java.base" ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

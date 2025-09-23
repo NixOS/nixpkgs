@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  aiobotocore,
-  aiohttp,
-  attr,
-  aws-request-signer,
-  botocore,
-  requests-aws4auth,
-  pycognito,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, aiobotocore
+, aiohttp
+, attr
+, aws-request-signer
+, botocore
+, requests-aws4auth
+, pycognito
+,
 }:
 
 buildPythonPackage rec {

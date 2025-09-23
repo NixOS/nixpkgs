@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  meson,
-  ninja,
-  psutil,
-  pygobject3,
-  gtk3,
-  gobject-introspection,
-  xapp,
-  polkit,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, meson
+, ninja
+, psutil
+, pygobject3
+, gtk3
+, gobject-introspection
+, xapp
+, polkit
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

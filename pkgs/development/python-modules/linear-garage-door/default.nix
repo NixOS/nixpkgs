@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  dnspython,
-  fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
-  tenacity,
+{ lib
+, aiohttp
+, buildPythonPackage
+, dnspython
+, fetchFromGitHub
+, poetry-core
+, pythonOlder
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  gpgme,
-  lvm2,
-  btrfs-progs,
-  pkg-config,
-  go-md2man,
-  installShellFiles,
-  makeWrapper,
-  fuse-overlayfs,
-  dockerTools,
-  runCommand,
-  testers,
-  skopeo,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, gpgme
+, lvm2
+, btrfs-progs
+, pkg-config
+, go-md2man
+, installShellFiles
+, makeWrapper
+, fuse-overlayfs
+, dockerTools
+, runCommand
+, testers
+, skopeo
+,
 }:
 
 buildGoModule rec {

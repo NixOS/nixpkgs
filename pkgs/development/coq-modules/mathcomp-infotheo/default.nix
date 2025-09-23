@@ -1,12 +1,12 @@
-{
-  coq,
-  mkCoqDerivation,
-  mathcomp-analysis,
-  mathcomp-analysis-stdlib,
-  mathcomp-algebra-tactics,
-  interval,
-  lib,
-  version ? null,
+{ coq
+, mkCoqDerivation
+, mathcomp-analysis
+, mathcomp-analysis-stdlib
+, mathcomp-algebra-tactics
+, interval
+, lib
+, version ? null
+,
 }:
 
 (mkCoqDerivation {

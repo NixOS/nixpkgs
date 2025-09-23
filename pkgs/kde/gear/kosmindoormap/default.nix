@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  bison,
-  flex,
-  recastnavigation,
+{ mkKdeDerivation
+, bison
+, flex
+, recastnavigation
+,
 }:
 mkKdeDerivation {
   pname = "kosmindoormap";

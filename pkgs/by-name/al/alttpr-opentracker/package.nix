@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  wrapGAppsHook3,
-  dotnetCorePackages,
-  fontconfig,
-  gtk3,
-  icu,
-  libkrb5,
-  libunwind,
-  openssl,
-  xinput,
-  xorg,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, autoPatchelfHook
+, wrapGAppsHook3
+, dotnetCorePackages
+, fontconfig
+, gtk3
+, icu
+, libkrb5
+, libunwind
+, openssl
+, xinput
+, xorg
+,
 }:
 buildDotnetModule rec {
   pname = "opentracker";

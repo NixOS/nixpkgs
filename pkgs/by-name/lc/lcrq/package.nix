@@ -1,7 +1,7 @@
-{
-  stdenv,
-  fetchFromGitea,
-  lib,
+{ stdenv
+, fetchFromGitea
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcrq";

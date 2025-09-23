@@ -1,17 +1,15 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  lib,
-  libpq,
-  nix-update-script,
-  openssl,
-  stdenv,
-
-  withLibiodbc ? false,
-  libiodbc,
-
-  withUnixODBC ? true,
-  unixODBC,
+{ autoreconfHook
+, fetchFromGitHub
+, lib
+, libpq
+, nix-update-script
+, openssl
+, stdenv
+, withLibiodbc ? false
+, libiodbc
+, withUnixODBC ? true
+, unixODBC
+,
 }:
 
 assert lib.xor withLibiodbc withUnixODBC;

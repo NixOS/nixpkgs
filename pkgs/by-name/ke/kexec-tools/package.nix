@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  fetchpatch,
-  nixosTests,
-  gitUpdater,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, nixosTests
+, gitUpdater
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

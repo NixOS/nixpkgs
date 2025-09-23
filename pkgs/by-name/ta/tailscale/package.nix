@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-
-  buildGoModule,
-  fetchFromGitHub,
-
-  makeWrapper,
-  installShellFiles,
-  # runtime tooling - linux
-  getent,
-  iproute2,
-  iptables,
-  shadow,
-  procps,
-  # runtime tooling - darwin
-  lsof,
-  # check phase tooling - darwin
-  unixtools,
-
-  nixosTests,
-  tailscale-nginx-auth,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, # runtime tooling - linux
+  getent
+, iproute2
+, iptables
+, shadow
+, procps
+, # runtime tooling - darwin
+  lsof
+, # check phase tooling - darwin
+  unixtools
+, nixosTests
+, tailscale-nginx-auth
+,
 }:
 
 buildGoModule (finalAttrs: {

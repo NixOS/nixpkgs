@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  jdk,
-  jre,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, jdk
+, jre
+,
 }:
 
 stdenv.mkDerivation {

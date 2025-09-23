@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNimPackage,
-  nim-2_0,
+{ lib
+, fetchFromGitHub
+, buildNimPackage
+, nim-2_0
+,
 }:
 let
   buildNimPackage' = buildNimPackage.override {

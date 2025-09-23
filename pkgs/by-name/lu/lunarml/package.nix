@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  mlton,
-  lua5_3,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, mlton
+, lua5_3
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -21,7 +21,7 @@
 
   `replacements` (AttrsOf String)
   : Each entry in this set corresponds to a `--subst-var-by` entry in [`substitute`](https://nixos.org/manual/nixpkgs/stable/#fun-substitute) or
-    null to keep it unchanged.
+  null to keep it unchanged.
 
   `dir` (String)
   : Sub directory in $out to store the result in. Commonly set to "bin".
@@ -38,22 +38,21 @@
   { replaceVarsWith }:
 
   replaceVarsWith {
-    src = ./my-setup-hook.sh;
-    replacements = { world = "hello"; };
-    dir = "bin";
-    isExecutable = true;
+  src = ./my-setup-hook.sh;
+  replacements = { world = "hello"; };
+  dir = "bin";
+  isExecutable = true;
   }
   ```
 
   See `../../test/replace-vars/default.nix` for tests of this function. Also see `replaceVars` for a short
   version with src and replacements only.
 */
-{
-  src,
-  replacements,
-  dir ? null,
-  isExecutable ? false,
-  ...
+{ src
+, replacements
+, dir ? null
+, isExecutable ? false
+, ...
 }@attrs:
 
 let
@@ -125,5 +124,5 @@ stdenvNoCC.mkDerivation (
     name = baseNameOf (toString src);
   }
   // optionalAttrs
-  // forcedAttrs
+    // forcedAttrs
 )

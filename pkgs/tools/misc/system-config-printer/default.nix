@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  udev,
-  pkg-config,
-  glib,
-  xmlto,
-  wrapGAppsHook3,
-  docbook_xml_dtd_412,
-  docbook_xsl,
-  libxml2,
-  desktop-file-utils,
-  libusb1,
-  cups,
-  gdk-pixbuf,
-  pango,
-  atk,
-  libnotify,
-  gobject-introspection,
-  libsecret,
-  packagekit,
-  libcupsfilters,
-  gettext,
-  libtool,
-  autoconf-archive,
-  python3Packages,
-  autoreconfHook,
-  bash,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, udev
+, pkg-config
+, glib
+, xmlto
+, wrapGAppsHook3
+, docbook_xml_dtd_412
+, docbook_xsl
+, libxml2
+, desktop-file-utils
+, libusb1
+, cups
+, gdk-pixbuf
+, pango
+, atk
+, libnotify
+, gobject-introspection
+, libsecret
+, packagekit
+, libcupsfilters
+, gettext
+, libtool
+, autoconf-archive
+, python3Packages
+, autoreconfHook
+, bash
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

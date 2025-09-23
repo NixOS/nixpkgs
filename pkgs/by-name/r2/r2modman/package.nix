@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  yarn,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
-  electron,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, yarn
+, fetchYarnDeps
+, fixup-yarn-lock
+, nodejs
+, electron
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

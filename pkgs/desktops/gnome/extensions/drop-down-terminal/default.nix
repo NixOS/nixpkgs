@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  gjs,
-  vte,
-  gnome,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, gjs
+, vte
+, gnome
+,
 }:
 
 stdenv.mkDerivation {

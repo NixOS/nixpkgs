@@ -1,24 +1,24 @@
-{
-  lib,
-  fetchFromGitea,
-  desktop-file-utils,
-  gettext,
-  glib,
-  gobject-introspection,
-  blueprint-compiler,
-  gtk4,
-  libadwaita,
-  libnotify,
-  webkitgtk_6_0,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wrapGAppsHook4,
-  librsvg,
-  gnome,
-  webp-pixbuf-loader,
-  nix-update-script,
+{ lib
+, fetchFromGitea
+, desktop-file-utils
+, gettext
+, glib
+, gobject-introspection
+, blueprint-compiler
+, gtk4
+, libadwaita
+, libnotify
+, webkitgtk_6_0
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook4
+, librsvg
+, gnome
+, webp-pixbuf-loader
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitea,
-  unstableGitUpdater,
-  curl,
-  coreutils,
+{ lib
+, buildLua
+, fetchFromGitea
+, unstableGitUpdater
+, curl
+, coreutils
+,
 }:
 
 buildLua {

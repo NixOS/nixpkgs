@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  stdenv,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, stdenv
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "nezha-agent";

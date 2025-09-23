@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  dune-configurator,
-  fdk_aac,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, dune-configurator
+, fdk_aac
+,
 }:
 
 buildDunePackage rec {

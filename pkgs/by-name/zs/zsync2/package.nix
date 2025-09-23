@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  libgcrypt,
-  libcpr,
-  libargs,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, libgcrypt
+, libcpr
+, libargs
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

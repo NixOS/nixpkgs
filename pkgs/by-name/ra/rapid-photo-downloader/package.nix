@@ -1,23 +1,23 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  libsForQt5,
-  file,
-  intltool,
-  gobject-introspection,
-  libgudev,
-  udisks,
-  gexiv2,
-  gst_all_1,
-  libnotify,
-  ifuse,
-  libimobiledevice,
-  exiftool,
-  gdk-pixbuf,
-  libmediainfo,
-  vmtouch,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, libsForQt5
+, file
+, intltool
+, gobject-introspection
+, libgudev
+, udisks
+, gexiv2
+, gst_all_1
+, libnotify
+, ifuse
+, libimobiledevice
+, exiftool
+, gdk-pixbuf
+, libmediainfo
+, vmtouch
+, gitUpdater
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mock,
-  plotly,
-  requests,
-  retrying,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, plotly
+, requests
+, retrying
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

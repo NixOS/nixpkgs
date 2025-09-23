@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  git,
-  python3,
-  m4,
-  cairo,
-  libX11,
-  mesa,
-  mesa_glu,
-  ncurses,
-  tcl,
-  tcsh,
-  tk,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchFromGitHub
+, git
+, python3
+, m4
+, cairo
+, libX11
+, mesa
+, mesa_glu
+, ncurses
+, tcl
+, tcsh
+, tk
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation rec {

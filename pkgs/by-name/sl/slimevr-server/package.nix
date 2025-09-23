@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  replaceVars,
-  slimevr,
-  jdk17,
-  gradle,
-  hidapi,
-  makeWrapper,
+{ lib
+, stdenv
+, runCommand
+, replaceVars
+, slimevr
+, jdk17
+, gradle
+, hidapi
+, makeWrapper
+,
 }:
 let
   # JDK can't be headless while SlimeVR uses JavaOSC 0.8.

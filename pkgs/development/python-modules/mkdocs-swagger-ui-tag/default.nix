@@ -1,13 +1,13 @@
-{
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  mkdocs,
-  playwright,
-  pytestCheckHook,
-  pythonOlder,
+{ beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, lib
+, mkdocs
+, playwright
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

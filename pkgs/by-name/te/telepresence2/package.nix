@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  fuse,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, fuse
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  mcpelauncher-client,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  zlib,
-  libzip,
-  curl,
-  protobuf,
-  qt6,
-  glfw,
+{ lib
+, stdenv
+, mcpelauncher-client
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zlib
+, libzip
+, curl
+, protobuf
+, qt6
+, glfw
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

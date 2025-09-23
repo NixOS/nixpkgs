@@ -1,9 +1,8 @@
-{
-  config,
-  hostPkgs,
-  lib,
-  options,
-  ...
+{ config
+, hostPkgs
+, lib
+, options
+, ...
 }:
 let
   inherit (lib) types mkOption;
@@ -83,48 +82,50 @@ in
     rawTestDerivation = hostPkgs.stdenv.mkDerivation config.rawTestDerivationArg;
     rawTestDerivationArg =
       finalAttrs:
-      assert lib.assertMsg (
-        config.sshBackdoor.enable -> isLinux
-      ) "The SSH backdoor is not supported for macOS host systems!";
+        assert lib.assertMsg
+          (
+            config.sshBackdoor.enable -> isLinux
+          ) "The SSH backdoor is not supported for macOS host systems!";
 
-      assert lib.assertMsg (
-        config.enableDebugHook -> isLinux
-      ) "The debugging hook is not supported for macOS host systems!";
-      {
-        name = "vm-test-run-${config.name}";
+        assert lib.assertMsg
+          (
+            config.enableDebugHook -> isLinux
+          ) "The debugging hook is not supported for macOS host systems!";
+        {
+          name = "vm-test-run-${config.name}";
 
-        requiredSystemFeatures = [
-          "nixos-test"
-        ]
-        ++ lib.optional isLinux "kvm"
-        ++ lib.optional isDarwin "apple-virt";
+          requiredSystemFeatures = [
+            "nixos-test"
+          ]
+          ++ lib.optional isLinux "kvm"
+          ++ lib.optional isDarwin "apple-virt";
 
-        nativeBuildInputs = lib.optionals config.enableDebugHook [
-          hostPkgs.openssh
-          hostPkgs.inetutils
-        ];
+          nativeBuildInputs = lib.optionals config.enableDebugHook [
+            hostPkgs.openssh
+            hostPkgs.inetutils
+          ];
 
-        buildCommand = ''
-          mkdir -p $out
+          buildCommand = ''
+            mkdir -p $out
 
-          # effectively mute the XMLLogger
-          export LOGFILE=/dev/null
+            # effectively mute the XMLLogger
+            export LOGFILE=/dev/null
 
-          ${lib.optionalString config.enableDebugHook ''
-            ln -sf \
-              ${hostPkgs.systemd}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf \
-              ssh_config
-          ''}
+            ${lib.optionalString config.enableDebugHook ''
+              ln -sf \
+                ${hostPkgs.systemd}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf \
+                ssh_config
+            ''}
 
-          ${config.driver}/bin/nixos-test-driver \
-            -o $out \
-            ${lib.optionalString config.enableDebugHook "--debug-hook=${hostPkgs.breakpointHook.attach}"}
-        '';
+            ${config.driver}/bin/nixos-test-driver \
+              -o $out \
+              ${lib.optionalString config.enableDebugHook "--debug-hook=${hostPkgs.breakpointHook.attach}"}
+          '';
 
-        passthru = config.passthru;
+          passthru = config.passthru;
 
-        meta = config.meta;
-      };
+          meta = config.meta;
+        };
     test = lib.lazyDerivation {
       # lazyDerivation improves performance when only passthru items and/or meta are used.
       derivation = config.rawTestDerivation;

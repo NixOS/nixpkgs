@@ -1,29 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  cxxopts,
-  deepsearch-toolkit,
-  docling-core,
-  fasttext,
-  fmt,
-  loguru,
-  matplotlib,
-  nlohmann_json,
-  pandas,
-  pcre2,
-  pkg-config,
-  poetry-core,
-  pybind11,
-  python-dotenv,
-  requests,
-  rich,
-  sentencepiece,
-  tabulate,
-  tqdm,
-  utf8cpp,
-  zlib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, cxxopts
+, deepsearch-toolkit
+, docling-core
+, fasttext
+, fmt
+, loguru
+, matplotlib
+, nlohmann_json
+, pandas
+, pcre2
+, pkg-config
+, poetry-core
+, pybind11
+, python-dotenv
+, requests
+, rich
+, sentencepiece
+, tabulate
+, tqdm
+, utf8cpp
+, zlib
+,
 }:
 
 buildPythonPackage rec {

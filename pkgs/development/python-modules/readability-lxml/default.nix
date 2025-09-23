@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  chardet,
-  cssselect,
-  lxml,
-  lxml-html-clean,
-  timeout-decorator,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, chardet
+, cssselect
+, lxml
+, lxml-html-clean
+, timeout-decorator
+,
 }:
 
 buildPythonPackage rec {

@@ -5,11 +5,11 @@
     services.foo.bar = "baz";
     result =
       assert
-        config.services.foos == {
-          "" = {
-            bar = "baz";
-          };
+      config.services.foos == {
+        "" = {
+          bar = "baz";
         };
+      };
       true;
   };
 }

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  SDL,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, SDL
+, makeDesktopItem
+, copyDesktopItems
+, imagemagick
+,
 }:
 
 let

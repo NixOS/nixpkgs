@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  attrs,
-  defusedxml,
-  pytest-asyncio_0,
-  pytest-aiohttp,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, attrs
+, defusedxml
+, pytest-asyncio_0
+, pytest-aiohttp
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

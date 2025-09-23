@@ -10,11 +10,10 @@
   };
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     {
       imports = [ ../modules/installer/cd-dvd/channel.nix ];

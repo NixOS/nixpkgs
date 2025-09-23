@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  gevent,
-  pika,
-  prometheus-client,
-  pylibmc,
-  pytestCheckHook,
-  pytest-cov-stub,
-  redis,
-  setuptools,
-  watchdog,
-  watchdog-gevent,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, gevent
+, pika
+, prometheus-client
+, pylibmc
+, pytestCheckHook
+, pytest-cov-stub
+, redis
+, setuptools
+, watchdog
+, watchdog-gevent
+,
 }:
 
 buildPythonPackage rec {

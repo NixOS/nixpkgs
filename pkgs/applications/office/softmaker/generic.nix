@@ -1,40 +1,34 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  makeDesktopItem,
-  makeWrapper,
-  copyDesktopItems,
-
-  # Dynamic Libraries
-  curl,
-  glib,
-  gst_all_1,
-  libGL,
-  libX11,
-  libXext,
-  libXmu,
-  libXrandr,
-  libXrender,
-
-  # For fixing up execution of /bin/ls, which is necessary for
+{ lib
+, stdenv
+, autoPatchelfHook
+, makeDesktopItem
+, makeWrapper
+, copyDesktopItems
+, # Dynamic Libraries
+  curl
+, glib
+, gst_all_1
+, libGL
+, libX11
+, libXext
+, libXmu
+, libXrandr
+, libXrender
+, # For fixing up execution of /bin/ls, which is necessary for
   # product unlocking.
-  coreutils,
-  libredirect,
-
-  # Extra utilities used by the SoftMaker applications.
-  gnugrep,
-  util-linux,
-  which,
-
-  pname,
-  version,
-  edition,
-  suiteName,
-  src,
-  archive,
-
-  ...
+  coreutils
+, libredirect
+, # Extra utilities used by the SoftMaker applications.
+  gnugrep
+, util-linux
+, which
+, pname
+, version
+, edition
+, suiteName
+, src
+, archive
+, ...
 }:
 
 let

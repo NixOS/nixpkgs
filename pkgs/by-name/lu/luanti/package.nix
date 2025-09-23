@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  substitute,
-  cmake,
-  coreutils,
-  libpng,
-  bzip2,
-  curl,
-  libogg,
-  jsoncpp,
-  libjpeg,
-  libGLU,
-  openal,
-  libvorbis,
-  sqlite,
-  luajit,
-  freetype,
-  gettext,
-  doxygen,
-  ncurses,
-  graphviz,
-  xorg,
-  gmp,
-  libspatialindex,
-  leveldb,
-  libpq,
-  hiredis,
-  libiconv,
-  ninja,
-  prometheus-cpp,
-  buildClient ? true,
-  buildServer ? true,
-  SDL2,
-  useSDL2 ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, substitute
+, cmake
+, coreutils
+, libpng
+, bzip2
+, curl
+, libogg
+, jsoncpp
+, libjpeg
+, libGLU
+, openal
+, libvorbis
+, sqlite
+, luajit
+, freetype
+, gettext
+, doxygen
+, ncurses
+, graphviz
+, xorg
+, gmp
+, libspatialindex
+, leveldb
+, libpq
+, hiredis
+, libiconv
+, ninja
+, prometheus-cpp
+, buildClient ? true
+, buildServer ? true
+, SDL2
+, useSDL2 ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

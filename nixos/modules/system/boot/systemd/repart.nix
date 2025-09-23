@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -16,20 +15,22 @@ let
     lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions
   );
 
-  partitionAssertions = lib.mapAttrsToList (
-    fileName: definition:
-    let
-      inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
-      labelLength = builtins.stringLength definition.Label;
-    in
-    {
-      assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
-      message = ''
-        The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
-        characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
-      '';
-    }
-  ) cfg.partitions;
+  partitionAssertions = lib.mapAttrsToList
+    (
+      fileName: definition:
+        let
+          inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
+          labelLength = builtins.stringLength definition.Label;
+        in
+        {
+          assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
+          message = ''
+            The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
+            characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
+          '';
+        }
+    )
+    cfg.partitions;
 in
 {
   options = {

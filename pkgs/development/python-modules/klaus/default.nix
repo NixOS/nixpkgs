@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  isPy3k,
-  flask,
-  pygments,
-  dulwich,
-  httpauth,
-  humanize,
-  pytest,
-  requests,
-  python-ctags3,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, isPy3k
+, flask
+, pygments
+, dulwich
+, httpauth
+, humanize
+, pytest
+, requests
+, python-ctags3
+, mock
+,
 }:
 
 buildPythonPackage rec {

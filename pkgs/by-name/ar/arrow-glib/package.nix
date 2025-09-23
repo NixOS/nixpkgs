@@ -1,13 +1,13 @@
-{
-  arrow-cpp,
-  glib,
-  gobject-introspection,
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  stdenv,
+{ arrow-cpp
+, glib
+, gobject-introspection
+, lib
+, meson
+, ninja
+, pkg-config
+, python3
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

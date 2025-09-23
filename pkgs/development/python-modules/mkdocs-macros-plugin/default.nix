@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  hjson,
-  jinja2,
-  mkdocs,
-  packaging,
-  pathspec,
-  python-dateutil,
-  pyyaml,
-  termcolor,
-  super-collections,
-  mkdocs-test,
-  mkdocs-material,
-  mkdocs-macros-test,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, hjson
+, jinja2
+, mkdocs
+, packaging
+, pathspec
+, python-dateutil
+, pyyaml
+, termcolor
+, super-collections
+, mkdocs-test
+, mkdocs-material
+, mkdocs-macros-test
+,
 }:
 
 buildPythonPackage rec {

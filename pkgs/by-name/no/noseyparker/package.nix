@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  boost,
-  cmake,
-  vectorscan,
-  openssl,
-  pkg-config,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, boost
+, cmake
+, vectorscan
+, openssl
+, pkg-config
+, installShellFiles
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitLab,
-  ocaml,
+{ lib
+, buildDunePackage
+, fetchFromGitLab
+, ocaml
+,
 }:
 
 if !(lib.versionOlder ocaml.version "5.0.0") then

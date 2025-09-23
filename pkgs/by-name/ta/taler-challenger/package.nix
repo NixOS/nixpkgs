@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  libgcrypt,
-  pkg-config,
-  texinfo,
-  curl,
-  gnunet,
-  jansson,
-  libgnurl,
-  libmicrohttpd,
-  libsodium,
-  libtool,
-  libpq,
-  taler-exchange,
-  taler-merchant,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, libgcrypt
+, pkg-config
+, texinfo
+, curl
+, gnunet
+, jansson
+, libgnurl
+, libmicrohttpd
+, libsodium
+, libtool
+, libpq
+, taler-exchange
+, taler-merchant
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

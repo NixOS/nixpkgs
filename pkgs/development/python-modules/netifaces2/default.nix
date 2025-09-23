@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, rustPlatform
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+,
 }:
 let
   pname = "netifaces2";

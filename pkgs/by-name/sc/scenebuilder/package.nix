@@ -1,13 +1,13 @@
-{
-  lib,
-  jdk21,
-  maven,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  glib,
-  makeWrapper,
-  wrapGAppsHook3,
+{ lib
+, jdk21
+, maven
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, glib
+, makeWrapper
+, wrapGAppsHook3
+,
 }:
 
 let

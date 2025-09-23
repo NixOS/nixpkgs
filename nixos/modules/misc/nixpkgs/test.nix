@@ -1,10 +1,10 @@
 # [nixpkgs]$ nix-build -A nixosTests.nixpkgs --show-trace
 
-{
-  evalMinimalConfig,
-  pkgs,
-  lib,
-  stdenv,
+{ evalMinimalConfig
+, pkgs
+, lib
+, stdenv
+,
 }:
 let
   eval =
@@ -109,50 +109,51 @@ lib.recurseIntoAttrs {
     assert withHostAndBuild._module.args.pkgs.stdenv.hostPlatform.system == "aarch64-linux";
     assert withHostAndBuild._module.args.pkgs.stdenv.buildPlatform.system == "aarch64-darwin";
     assert
-      withSameHostAndBuild.config.nixpkgs.buildPlatform
-      == withSameHostAndBuild.config.nixpkgs.hostPlatform;
+    withSameHostAndBuild.config.nixpkgs.buildPlatform
+    == withSameHostAndBuild.config.nixpkgs.hostPlatform;
     assert
-      withSameHostAndBuild._module.args.pkgs.stdenv.buildPlatform
-      == withSameHostAndBuild._module.args.pkgs.stdenv.hostPlatform;
+    withSameHostAndBuild._module.args.pkgs.stdenv.buildPlatform
+    == withSameHostAndBuild._module.args.pkgs.stdenv.hostPlatform;
     assert
-      builtins.trace (lib.head (getErrors ambiguous)) getErrors ambiguous == [
-        ''
-          Your system configures nixpkgs with the platform parameters:
-          nixpkgs.hostPlatform, with values defined in:
-            - repeat.nix
-            - ambiguous.nix
-          nixpkgs.buildPlatform, with values defined in:
-            - ambiguous.nix
+    builtins.trace (lib.head (getErrors ambiguous)) getErrors ambiguous == [
+      ''
+        Your system configures nixpkgs with the platform parameters:
+        nixpkgs.hostPlatform, with values defined in:
+          - repeat.nix
+          - ambiguous.nix
+        nixpkgs.buildPlatform, with values defined in:
+          - ambiguous.nix
 
-          However, it also defines the legacy options:
-          nixpkgs.system, with values defined in:
-            - ambiguous.nix
-          nixpkgs.localSystem, with values defined in:
-            - ambiguous.nix
-          nixpkgs.crossSystem, with values defined in:
-            - ambiguous.nix
+        However, it also defines the legacy options:
+        nixpkgs.system, with values defined in:
+          - ambiguous.nix
+        nixpkgs.localSystem, with values defined in:
+          - ambiguous.nix
+        nixpkgs.crossSystem, with values defined in:
+          - ambiguous.nix
 
-          For a future proof system configuration, we recommend to remove
-          the legacy definitions.
-        ''
-      ];
+        For a future proof system configuration, we recommend to remove
+        the legacy definitions.
+      ''
+    ];
     assert
-      builtins.trace (lib.head (getErrors externalPkgsWithConfig)) getErrors externalPkgsWithConfig == [
-        ''
-          Your system configures nixpkgs with an externally created instance.
-          `nixpkgs.config` options should be passed when creating the instance instead.
+    builtins.trace (lib.head (getErrors externalPkgsWithConfig)) getErrors externalPkgsWithConfig == [
+      ''
+        Your system configures nixpkgs with an externally created instance.
+        `nixpkgs.config` options should be passed when creating the instance instead.
 
-          Current value:
-          {
-            allowUnfree = true;
-          }
+        Current value:
+        {
+          allowUnfree = true;
+        }
 
-          Defined in:
-            - ext-pkgs-config.nix
-        ''
-      ];
+        Defined in:
+          - ext-pkgs-config.nix
+      ''
+    ];
     assert
-      getErrors {
+    getErrors
+      {
         nixpkgs.localSystem = pkgs.stdenv.hostPlatform;
         nixpkgs.hostPlatform = pkgs.stdenv.hostPlatform;
         nixpkgs.pkgs = pkgs;

@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  testers,
-  surrealdb-migrations,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, testers
+, surrealdb-migrations
+, nix-update-script
+,
 }:
 
 let

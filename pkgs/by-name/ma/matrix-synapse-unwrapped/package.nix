@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  openssl,
-  libiconv,
-  cargo,
-  rustPlatform,
-  rustc,
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, openssl
+, libiconv
+, cargo
+, rustPlatform
+, rustc
+, nixosTests
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

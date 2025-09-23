@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  guileSupport ? false,
-  guile,
-  # avoid guile depend on bootstrap to prevent dependency cycles
-  inBootstrap ? false,
-  pkg-config,
-  gnumake,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, guileSupport ? false
+, guile
+, # avoid guile depend on bootstrap to prevent dependency cycles
+  inBootstrap ? false
+, pkg-config
+, gnumake
+,
 }:
 
 let

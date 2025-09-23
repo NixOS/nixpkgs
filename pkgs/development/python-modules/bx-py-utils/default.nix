@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  beautifulsoup4,
-  boto3,
-  freezegun,
-  hatchling,
-  lxml,
-  openpyxl,
-  parameterized,
-  pdoc,
-  pytestCheckHook,
-  requests-mock,
-  typeguard,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, beautifulsoup4
+, boto3
+, freezegun
+, hatchling
+, lxml
+, openpyxl
+, parameterized
+, pdoc
+, pytestCheckHook
+, requests-mock
+, typeguard
+,
 }:
 
 buildPythonPackage rec {

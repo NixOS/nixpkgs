@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  colorama,
-  fetchPypi,
-  flask,
-  poetry-core,
-  progress,
-  pythonOlder,
-  requests,
-  yt-dlp,
+{ lib
+, buildPythonPackage
+, click
+, colorama
+, fetchPypi
+, flask
+, poetry-core
+, progress
+, pythonOlder
+, requests
+, yt-dlp
+,
 }:
 
 buildPythonPackage rec {

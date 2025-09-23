@@ -1,18 +1,18 @@
-{
-  deno,
-  runCommand,
-  lib,
-  testers,
+{ deno
+, runCommand
+, lib
+, testers
+,
 }:
 let
   testDenoRun =
     name:
-    {
-      args ? "",
-      dir ? ./. + "/${name}",
-      file ? "index.ts",
-      expected ? "",
-      expectFailure ? false,
+    { args ? ""
+    , dir ? ./. + "/${name}"
+    , file ? "index.ts"
+    , expected ? ""
+    , expectFailure ? false
+    ,
     }:
     let
       command = "deno run ${args} ${dir}/${file}";
@@ -71,7 +71,7 @@ in
     dir = ./read-file;
   };
 })
-// {
+  // {
   version = testers.testVersion {
     package = deno;
     command = "deno --version";

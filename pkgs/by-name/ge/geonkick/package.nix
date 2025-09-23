@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  libsndfile,
-  rapidjson,
-  libjack2,
-  lv2,
-  libX11,
-  cairo,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, libsndfile
+, rapidjson
+, libjack2
+, lv2
+, libX11
+, cairo
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

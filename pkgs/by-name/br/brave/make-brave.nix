@@ -1,85 +1,79 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  dpkg,
-  expat,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  adwaita-icon-theme,
-  gsettings-desktop-schemas,
-  gtk3,
-  gtk4,
-  qt6,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libdrm,
-  libkrb5,
-  libuuid,
-  libxkbcommon,
-  libxshmfence,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  pipewire,
-  snappy,
-  udev,
-  wayland,
-  xdg-utils,
-  coreutils,
-  xorg,
-  zlib,
-
-  # Darwin dependencies
-  unzip,
-  makeWrapper,
-
-  # command line arguments which are always set e.g "--disable-gpu"
-  commandLineArgs ? "",
-
-  # Necessary for USB audio devices.
-  pulseSupport ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-
-  # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
-  libGL,
-
-  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
-  libvaSupport ? stdenv.hostPlatform.isLinux,
-  libva,
-  enableVideoAcceleration ? libvaSupport,
-
-  # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
-  vulkanSupport ? false,
-  addDriverRunpath,
-  enableVulkan ? vulkanSupport,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, dpkg
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, adwaita-icon-theme
+, gsettings-desktop-schemas
+, gtk3
+, gtk4
+, qt6
+, libX11
+, libXScrnSaver
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, libdrm
+, libkrb5
+, libuuid
+, libxkbcommon
+, libxshmfence
+, libgbm
+, nspr
+, nss
+, pango
+, pipewire
+, snappy
+, udev
+, wayland
+, xdg-utils
+, coreutils
+, xorg
+, zlib
+, # Darwin dependencies
+  unzip
+, makeWrapper
+, # command line arguments which are always set e.g "--disable-gpu"
+  commandLineArgs ? ""
+, # Necessary for USB audio devices.
+  pulseSupport ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
+  libGL
+, # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
+  libvaSupport ? stdenv.hostPlatform.isLinux
+, libva
+, enableVideoAcceleration ? libvaSupport
+, # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
+  vulkanSupport ? false
+, addDriverRunpath
+, enableVulkan ? vulkanSupport
+,
 }:
 
-{
-  pname,
-  version,
-  hash,
-  url,
+{ pname
+, version
+, hash
+, url
+,
 }:
 
 let

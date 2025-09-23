@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnInstallHook,
-  nodejs,
-  makeBinaryWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnInstallHook
+, nodejs
+, makeBinaryWrapper
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

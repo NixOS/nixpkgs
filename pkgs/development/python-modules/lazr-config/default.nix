@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchgit,
-  setuptools,
-  lazr-delegates,
-  zope-interface,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchgit
+, setuptools
+, lazr-delegates
+, zope-interface
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

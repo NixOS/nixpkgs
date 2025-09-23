@@ -1,8 +1,7 @@
-{
-  systemdStage1,
-  lib,
-  pkgs,
-  ...
+{ systemdStage1
+, lib
+, pkgs
+, ...
 }:
 let
   msg = "Shutting down NixOS";

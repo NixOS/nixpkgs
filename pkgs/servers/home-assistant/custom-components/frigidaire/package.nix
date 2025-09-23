@@ -1,8 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  frigidaire,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, frigidaire
+,
 }:
 buildHomeAssistantComponent rec {
   owner = "bm1549";

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  intltool,
-  gtk3,
-  gnome,
-  adwaita-icon-theme,
-  librsvg,
-  pkg-config,
-  pango,
-  atk,
-  gtk2,
-  gdk-pixbuf,
-  hicolor-icon-theme,
+{ lib
+, stdenv
+, fetchurl
+, intltool
+, gtk3
+, gnome
+, adwaita-icon-theme
+, librsvg
+, pkg-config
+, pango
+, atk
+, gtk2
+, gdk-pixbuf
+, hicolor-icon-theme
+,
 }:
 
 stdenv.mkDerivation rec {

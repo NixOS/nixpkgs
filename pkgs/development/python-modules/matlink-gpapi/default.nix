@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  lib,
-  protobuf,
-  pycryptodome,
-  requests,
+{ buildPythonPackage
+, cryptography
+, fetchPypi
+, lib
+, protobuf
+, pycryptodome
+, requests
+,
 }:
 
 buildPythonPackage rec {

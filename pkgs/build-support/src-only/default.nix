@@ -10,7 +10,7 @@
   => «derivation /nix/store/gyfk2jg9079ga5g5gfms5i4h0k9jhf0f-hello-2.12.1-source.drv»
 
   srcOnly {
-    inherit (pkgs.hello) name version src stdenv;
+  inherit (pkgs.hello) name version src stdenv;
   }
   => «derivation /nix/store/vf9hdhz38z7rfhzhrk0vi70h755fnsw7-hello-2.12.1-source.drv»
   ```
@@ -27,8 +27,8 @@
 
   : One of the following:
 
-    - A derivation with (at minimum) an unpackPhase and a patchPhase.
-    - A set of attributes that would be passed to a `stdenv.mkDerivation` or `stdenvNoCC.mkDerivation` call.
+  - A derivation with (at minimum) an unpackPhase and a patchPhase.
+  - A set of attributes that would be passed to a `stdenv.mkDerivation` or `stdenvNoCC.mkDerivation` call.
 
   # Output
 
@@ -49,8 +49,11 @@ let
     ];
     separateDebugInfo = false;
 
-    dontUnpack = lib.warnIf (args.dontUnpack or false
-    ) "srcOnly: derivation has dontUnpack set, overriding" false;
+    dontUnpack = lib.warnIf
+      (
+        args.dontUnpack or false
+      ) "srcOnly: derivation has dontUnpack set, overriding"
+      false;
 
     dontInstall = false;
     installPhase = "cp -pr --reflink=auto -- . $out";
@@ -58,13 +61,13 @@ let
 in
 
 # If we are passed a derivation (based on stdenv*), we can use overrideAttrs to
-# update the arguments to mkDerivation. This gives us the proper awareness of
-# what arguments were effectively passed *to* mkDerivation as opposed to
-# builtins.derivation (by mkDerivation). For example, stdenv.mkDerivation
-# accepts an `env` attribute set which is postprocessed before being passed to
-# builtins.derivation. This can lead to evaluation failures, if we assume
-# that drvAttrs is equivalent to the arguments passed to mkDerivation.
-# See https://github.com/NixOS/nixpkgs/issues/269539.
+  # update the arguments to mkDerivation. This gives us the proper awareness of
+  # what arguments were effectively passed *to* mkDerivation as opposed to
+  # builtins.derivation (by mkDerivation). For example, stdenv.mkDerivation
+  # accepts an `env` attribute set which is postprocessed before being passed to
+  # builtins.derivation. This can lead to evaluation failures, if we assume
+  # that drvAttrs is equivalent to the arguments passed to mkDerivation.
+  # See https://github.com/NixOS/nixpkgs/issues/269539.
 if lib.isDerivation attrs && attrs ? overrideAttrs then
   attrs.overrideAttrs (_finalAttrs: prevAttrs: argsToOverride prevAttrs)
 else

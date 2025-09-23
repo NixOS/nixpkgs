@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bap,
-  ocaml,
-  findlib,
-  ctypes,
-  ctypes-foreign,
-  autoreconfHook,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bap
+, ocaml
+, findlib
+, ctypes
+, ctypes-foreign
+, autoreconfHook
+, which
+,
 }:
 
 stdenv.mkDerivation {

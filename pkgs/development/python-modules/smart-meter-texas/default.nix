@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  aiohttp,
-  asn1,
-  python-dateutil,
-  setuptools,
-  tenacity,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, aiohttp
+, asn1
+, python-dateutil
+, setuptools
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

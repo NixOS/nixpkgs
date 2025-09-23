@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnet-sdk_6,
-  dotnet-runtime_6,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnet-sdk_6
+, dotnet-runtime_6
+,
 }:
 buildDotnetModule rec {
   pname = "tshock";

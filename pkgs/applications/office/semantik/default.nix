@@ -1,26 +1,26 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitLab,
-  wafHook,
-  pkg-config,
-  cmake,
-  qtbase,
-  python3,
-  qtwebengine,
-  qtsvg,
-  ncurses6,
-  kio,
-  kauth,
-  kiconthemes,
-  kconfigwidgets,
-  kxmlgui,
-  kcoreaddons,
-  kconfig,
-  kwidgetsaddons,
-  ki18n,
-  sonnet,
-  kdelibs4support,
+{ lib
+, mkDerivation
+, fetchFromGitLab
+, wafHook
+, pkg-config
+, cmake
+, qtbase
+, python3
+, qtwebengine
+, qtsvg
+, ncurses6
+, kio
+, kauth
+, kiconthemes
+, kconfigwidgets
+, kxmlgui
+, kcoreaddons
+, kconfig
+, kwidgetsaddons
+, ki18n
+, sonnet
+, kdelibs4support
+,
 }:
 
 mkDerivation rec {

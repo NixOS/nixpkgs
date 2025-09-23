@@ -1,33 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  attrs,
-  argon2-cffi,
-  cbor2,
-  cffi,
-  cryptography,
-  flatbuffers,
-  hyperlink,
-  mock,
-  msgpack,
-  passlib,
-  py-ubjson,
-  pynacl,
-  pygobject3,
-  pyopenssl,
-  qrcode,
-  pytest-asyncio_0,
-  python-snappy,
-  pytestCheckHook,
-  pythonOlder,
-  service-identity,
-  setuptools,
-  twisted,
-  txaio,
-  ujson,
-  zope-interface,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, attrs
+, argon2-cffi
+, cbor2
+, cffi
+, cryptography
+, flatbuffers
+, hyperlink
+, mock
+, msgpack
+, passlib
+, py-ubjson
+, pynacl
+, pygobject3
+, pyopenssl
+, qrcode
+, pytest-asyncio_0
+, python-snappy
+, pytestCheckHook
+, pythonOlder
+, service-identity
+, setuptools
+, twisted
+, txaio
+, ujson
+, zope-interface
+,
 }:
 
 buildPythonPackage rec {

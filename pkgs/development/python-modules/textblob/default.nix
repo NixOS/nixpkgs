@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  flit-core,
-  nltk,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools
+, flit-core
+, nltk
+,
 }:
 
 buildPythonPackage rec {

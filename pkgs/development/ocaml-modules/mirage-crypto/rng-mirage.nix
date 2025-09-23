@@ -1,16 +1,16 @@
-{
-  buildDunePackage,
-  mirage-crypto-rng,
-  duration,
-  mirage-runtime,
-  mirage-mtime,
-  mirage-sleep,
-  mirage-unix,
-  mirage-time-unix,
-  mirage-clock-unix,
-  logs,
-  lwt,
-  ohex,
+{ buildDunePackage
+, mirage-crypto-rng
+, duration
+, mirage-runtime
+, mirage-mtime
+, mirage-sleep
+, mirage-unix
+, mirage-time-unix
+, mirage-clock-unix
+, logs
+, lwt
+, ohex
+,
 }:
 
 buildDunePackage {

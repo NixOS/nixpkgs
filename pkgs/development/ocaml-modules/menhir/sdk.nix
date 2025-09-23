@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDunePackage,
-  menhirLib,
+{ lib
+, buildDunePackage
+, menhirLib
+,
 }:
 
 buildDunePackage {

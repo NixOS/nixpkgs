@@ -50,7 +50,7 @@ in
                 inherit ssid;
                 authentication = {
                   mode = "wpa3-sae";
-                  saePasswords = [ { password = psk; } ];
+                  saePasswords = [{ password = psk; }];
                   enableRecommendedPairwiseCiphers = true;
                 };
               };

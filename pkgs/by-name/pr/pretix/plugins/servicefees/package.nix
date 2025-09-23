@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pretix-plugin-build,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pretix-plugin-build
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

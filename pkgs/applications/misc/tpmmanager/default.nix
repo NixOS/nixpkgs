@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qtbase,
-  qmake,
-  wrapQtAppsHook,
-  trousers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qtbase
+, qmake
+, wrapQtAppsHook
+, trousers
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  perl,
-  libminc,
-  bicpl,
-  itk_5_2,
-  fftwFloat,
-  gsl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, perl
+, libminc
+, bicpl
+, itk_5_2
+, fftwFloat
+, gsl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

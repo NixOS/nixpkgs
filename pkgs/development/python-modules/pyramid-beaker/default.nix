@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest,
-  beaker,
-  pyramid,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, beaker
+, pyramid
+,
 }:
 
 buildPythonPackage rec {

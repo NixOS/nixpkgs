@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  electron,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, electron
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

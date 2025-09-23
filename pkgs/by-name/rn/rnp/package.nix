@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  asciidoctor,
-  botan3,
-  bzip2,
-  cmake,
-  fetchFromGitHub,
-  gnupg,
-  gtest,
-  json_c,
-  pkg-config,
-  python3,
-  sexpp,
-  zlib,
+{ lib
+, stdenv
+, asciidoctor
+, botan3
+, bzip2
+, cmake
+, fetchFromGitHub
+, gnupg
+, gtest
+, json_c
+, pkg-config
+, python3
+, sexpp
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

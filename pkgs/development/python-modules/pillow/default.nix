@@ -1,44 +1,39 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  pkg-config,
-
-  # native dependencies
-  freetype,
-  lcms2,
-  libavif,
-  libimagequant,
-  libjpeg,
-  libraqm,
-  libtiff,
-  libwebp,
-  libxcb,
-  openjpeg,
-  zlib-ng,
-
-  # optional dependencies
-  defusedxml,
-  olefile,
-  typing-extensions,
-
-  # tests
-  numpy,
-  pytest-cov-stub,
-  pytestCheckHook,
-
-  # for passthru.tests
-  imageio,
-  matplotlib,
-  pilkit,
-  pydicom,
-  reportlab,
-  sage,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  setuptools
+, pkg-config
+, # native dependencies
+  freetype
+, lcms2
+, libavif
+, libimagequant
+, libjpeg
+, libraqm
+, libtiff
+, libwebp
+, libxcb
+, openjpeg
+, zlib-ng
+, # optional dependencies
+  defusedxml
+, olefile
+, typing-extensions
+, # tests
+  numpy
+, pytest-cov-stub
+, pytestCheckHook
+, # for passthru.tests
+  imageio
+, matplotlib
+, pilkit
+, pydicom
+, reportlab
+, sage
+,
 }:
 
 buildPythonPackage rec {

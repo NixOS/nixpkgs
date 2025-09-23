@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  flex,
-  pam,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, pam
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

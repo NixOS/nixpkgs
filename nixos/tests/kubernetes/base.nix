@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+,
 }:
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
@@ -9,12 +9,12 @@ with pkgs.lib;
 
 let
   mkKubernetesBaseTest =
-    {
-      name,
-      domain ? "my.zyx",
-      test,
-      machines,
-      extraConfiguration ? null,
+    { name
+    , domain ? "my.zyx"
+    , test
+    , machines
+    , extraConfiguration ? null
+    ,
     }:
     let
       masterName = head (
@@ -40,82 +40,85 @@ let
     makeTest {
       inherit name;
 
-      nodes = mapAttrs (
-        machineName: machine:
-        {
-          config,
-          pkgs,
-          lib,
-          nodes,
-          ...
-        }:
-        mkMerge [
-          {
-            boot.postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
-            virtualisation.memorySize = mkDefault 1536;
-            virtualisation.diskSize = mkDefault 4096;
-            networking = {
-              inherit domain extraHosts;
-              primaryIPAddress = mkForce machine.ip;
+      nodes = mapAttrs
+        (
+          machineName: machine:
+            { config
+            , pkgs
+            , lib
+            , nodes
+            , ...
+            }:
+            mkMerge [
+              {
+                boot.postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
+                virtualisation.memorySize = mkDefault 1536;
+                virtualisation.diskSize = mkDefault 4096;
+                networking = {
+                  inherit domain extraHosts;
+                  primaryIPAddress = mkForce machine.ip;
 
-              firewall = {
-                allowedTCPPorts = [
-                  10250 # kubelet
+                  firewall = {
+                    allowedTCPPorts = [
+                      10250 # kubelet
+                    ];
+                    trustedInterfaces = [ "mynet" ];
+
+                    extraCommands = concatMapStrings
+                      (node: ''
+                        iptables -A INPUT -s ${node.networking.primaryIPAddress} -j ACCEPT
+                      '')
+                      (attrValues nodes);
+                  };
+                };
+                programs.bash.completion.enable = true;
+                environment.systemPackages = [ wrapKubectl ];
+                services.flannel.iface = "eth1";
+                services.kubernetes = {
+                  proxy.hostname = "${masterName}.${domain}";
+
+                  easyCerts = true;
+                  inherit (machine) roles;
+                  apiserver = {
+                    securePort = 443;
+                    advertiseAddress = master.ip;
+                  };
+                  # NOTE: what featureGates are useful for testing might change in
+                  # the future, see link below to find new ones
+                  # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
+                  featureGates = {
+                    AnonymousAuthConfigurableEndpoints = true;
+                    ConsistentListFromCache = false;
+                  };
+                  masterAddress = "${masterName}.${config.networking.domain}";
+                };
+              }
+              (optionalAttrs (any (role: role == "master") machine.roles) {
+                networking.firewall.allowedTCPPorts = [
+                  443 # kubernetes apiserver
                 ];
-                trustedInterfaces = [ "mynet" ];
-
-                extraCommands = concatMapStrings (node: ''
-                  iptables -A INPUT -s ${node.networking.primaryIPAddress} -j ACCEPT
-                '') (attrValues nodes);
-              };
-            };
-            programs.bash.completion.enable = true;
-            environment.systemPackages = [ wrapKubectl ];
-            services.flannel.iface = "eth1";
-            services.kubernetes = {
-              proxy.hostname = "${masterName}.${domain}";
-
-              easyCerts = true;
-              inherit (machine) roles;
-              apiserver = {
-                securePort = 443;
-                advertiseAddress = master.ip;
-              };
-              # NOTE: what featureGates are useful for testing might change in
-              # the future, see link below to find new ones
-              # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
-              featureGates = {
-                AnonymousAuthConfigurableEndpoints = true;
-                ConsistentListFromCache = false;
-              };
-              masterAddress = "${masterName}.${config.networking.domain}";
-            };
-          }
-          (optionalAttrs (any (role: role == "master") machine.roles) {
-            networking.firewall.allowedTCPPorts = [
-              443 # kubernetes apiserver
-            ];
-          })
-          (optionalAttrs (machine ? extraConfiguration) (
-            machine.extraConfiguration {
-              inherit
-                config
-                pkgs
-                lib
-                nodes
-                ;
-            }
-          ))
-          (optionalAttrs (extraConfiguration != null) (extraConfiguration {
-            inherit
-              config
-              pkgs
-              lib
-              nodes
-              ;
-          }))
-        ]
-      ) machines;
+              })
+              (optionalAttrs (machine ? extraConfiguration) (
+                machine.extraConfiguration {
+                  inherit
+                    config
+                    pkgs
+                    lib
+                    nodes
+                    ;
+                }
+              ))
+              (optionalAttrs (extraConfiguration != null) (extraConfiguration {
+                inherit
+                  config
+                  pkgs
+                  lib
+                  nodes
+                  ;
+              }))
+            ]
+        )
+        machines;
 
       testScript = ''
         start_all()

@@ -1,12 +1,12 @@
 # builder for Emacs packages built for packages.el
 # using MELPA package-build.el
 
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  emacs,
-  texinfo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, emacs
+, texinfo
+,
 }:
 
 let
@@ -54,42 +54,42 @@ lib.extendMkDerivation {
         pname: Nix package name without special symbols and without version or
         "emacs-" prefix.
       */
-      pname,
-      /*
+      pname
+    , /*
         ename: Original Emacs package name, possibly containing special symbols.
         Default: pname
       */
-      ename ? pname,
-      /*
+      ename ? pname
+    , /*
         version: Either a stable version such as "1.2" or an unstable version.
         An unstable version can use either Nix format (preferred) such as
         "1.2-unstable-2024-06-01" or MELPA format such as "20240601.1230".
       */
-      version,
-      /*
+      version
+    , /*
         commit: Optional package history commit.
         Default: src.rev or "unknown"
         This will be written into the generated package but it is not needed during
         the build process.
       */
-      commit ? (finalAttrs.src.rev or "unknown"),
-      /*
+      commit ? (finalAttrs.src.rev or "unknown")
+    , /*
         files: Optional recipe property specifying the files used to build the package.
         If null, do not set it in recipe, keeping the default upstream behaviour.
         Default: null
       */
-      files ? null,
-      /*
+      files ? null
+    , /*
         recipe: Optional MELPA recipe.
         Default: a minimally functional recipe
         This can be a path of a recipe file, a string of the recipe content or an empty string.
         The default value is used if it is an empty string.
       */
-      recipe ? "",
-      preUnpack ? "",
-      postUnpack ? "",
-      meta ? { },
-      ...
+      recipe ? ""
+    , preUnpack ? ""
+    , postUnpack ? ""
+    , meta ? { }
+    , ...
     }@args:
 
     {

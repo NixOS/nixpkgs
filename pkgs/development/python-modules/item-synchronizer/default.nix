@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  bidict,
-  bubop,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, bidict
+, bubop
+,
 }:
 
 buildPythonPackage rec {

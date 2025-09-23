@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  perl,
-  ghostscript,
-  coreutils,
-  gnugrep,
-  which,
-  file,
-  gnused,
-  dpkg,
-  makeWrapper,
-  libredirect,
-  debugLvl ? "0",
+{ stdenv
+, lib
+, fetchurl
+, perl
+, ghostscript
+, coreutils
+, gnugrep
+, which
+, file
+, gnused
+, dpkg
+, makeWrapper
+, libredirect
+, debugLvl ? "0"
+,
 }:
 
 stdenv.mkDerivation rec {

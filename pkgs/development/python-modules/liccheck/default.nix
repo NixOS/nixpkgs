@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  configparser,
-  fetchFromGitHub,
-  pip,
-  pytest-mock,
-  pytestCheckHook,
-  python3-openid,
-  pythonOlder,
-  semantic-version,
-  setuptools,
-  toml,
+{ lib
+, buildPythonPackage
+, configparser
+, fetchFromGitHub
+, pip
+, pytest-mock
+, pytestCheckHook
+, python3-openid
+, pythonOlder
+, semantic-version
+, setuptools
+, toml
+,
 }:
 
 buildPythonPackage rec {

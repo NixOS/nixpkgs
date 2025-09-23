@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  nix-update-script,
-  makeBinaryWrapper,
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzip
+, nix-update-script
+, makeBinaryWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.apache-kafka;
@@ -209,9 +208,11 @@ in
     };
     users.groups.apache-kafka = { };
 
-    systemd.tmpfiles.rules = map (
-      logDir: "d '${logDir}' 0700 apache-kafka - - -"
-    ) cfg.settings."log.dirs";
+    systemd.tmpfiles.rules = map
+      (
+        logDir: "d '${logDir}' 0700 apache-kafka - - -"
+      )
+      cfg.settings."log.dirs";
 
     systemd.services.apache-kafka = {
       description = "Apache Kafka Daemon";

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  esbuild,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchgit,
-  srcOnly,
-  removeReferencesTo,
-  nodejs_20,
-  pnpm_9,
-  python3,
-  gitMinimal,
-  jq,
-  zip,
+{ lib
+, stdenv
+, esbuild
+, buildGoModule
+, fetchFromGitHub
+, fetchgit
+, srcOnly
+, removeReferencesTo
+, nodejs_20
+, pnpm_9
+, python3
+, gitMinimal
+, jq
+, zip
+,
 }:
 let
   nodeSources = srcOnly nodejs_20;

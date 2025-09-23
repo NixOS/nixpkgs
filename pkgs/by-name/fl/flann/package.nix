@@ -1,14 +1,14 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  lz4,
-  pkg-config,
-  python3,
-  stdenv,
-  unzip,
-  enablePython ? false,
+{ lib
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, lz4
+, pkg-config
+, python3
+, stdenv
+, unzip
+, enablePython ? false
+,
 }:
 
 stdenv.mkDerivation rec {

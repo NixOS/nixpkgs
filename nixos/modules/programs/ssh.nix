@@ -1,10 +1,9 @@
 # Global configuration for the SSH client.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -22,11 +21,11 @@ let
   knownHostsText =
     (lib.flip (lib.concatMapStringsSep "\n") knownHosts (
       h:
-      assert h.hostNames != [ ];
-      lib.optionalString h.certAuthority "@cert-authority "
-      + builtins.concatStringsSep "," h.hostNames
-      + " "
-      + (if h.publicKey != null then h.publicKey else builtins.readFile h.publicKeyFile)
+        assert h.hostNames != [ ];
+        lib.optionalString h.certAuthority "@cert-authority "
+        + builtins.concatStringsSep "," h.hostNames
+        + " "
+        + (if h.publicKey != null then h.publicKey else builtins.readFile h.publicKeyFile)
     ))
     + "\n";
 
@@ -160,11 +159,10 @@ in
         default = { };
         type = lib.types.attrsOf (
           lib.types.submodule (
-            {
-              name,
-              config,
-              options,
-              ...
+            { name
+            , config
+            , options
+            , ...
             }:
             {
               options = {
@@ -330,7 +328,7 @@ in
       name: data: {
         assertion =
           (data.publicKey == null && data.publicKeyFile != null)
-          || (data.publicKey != null && data.publicKeyFile == null);
+            || (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       }
     );

@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  boost,
-  bison,
-  flex,
-  pkg-config,
-  fetchFromGitHub,
-  fetchpatch,
-  symlinkJoin,
-  perl,
-  python3,
-  zlib,
-  minisat,
-  cryptominisat,
-  gmp,
-  cadical,
-  gtest,
-  lit,
-  outputcheck,
-  nix-update-script,
-  useCadical ? true,
+{ lib
+, stdenv
+, cmake
+, boost
+, bison
+, flex
+, pkg-config
+, fetchFromGitHub
+, fetchpatch
+, symlinkJoin
+, perl
+, python3
+, zlib
+, minisat
+, cryptominisat
+, gmp
+, cadical
+, gtest
+, lit
+, outputcheck
+, nix-update-script
+, useCadical ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

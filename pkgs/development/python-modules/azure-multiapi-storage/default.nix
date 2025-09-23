@@ -1,15 +1,15 @@
-{
-  lib,
-  azure-common,
-  azure-core,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  msrest,
-  pythonOlder,
-  requests,
-  setuptools,
-  python-dateutil,
+{ lib
+, azure-common
+, azure-core
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, msrest
+, pythonOlder
+, requests
+, setuptools
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

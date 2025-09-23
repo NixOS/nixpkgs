@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # dependencies
-  docutils,
-  nicegui,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, setuptools
+, # dependencies
+  docutils
+, nicegui
+,
 }:
 
 buildPythonPackage rec {

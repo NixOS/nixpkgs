@@ -1,47 +1,47 @@
-{
-  stdenv,
-  config,
-  callPackages,
-  lib,
-  pkgs,
-  phpPackage,
-  autoconf,
-  pkg-config,
-  bzip2,
-  curl,
-  cyrus_sasl,
-  enchant2,
-  freetds,
-  gd,
-  gettext,
-  gmp,
-  html-tidy,
-  icu73,
-  libffi,
-  libiconv,
-  libkrb5,
-  libpq,
-  libsodium,
-  libxml2,
-  libxslt,
-  libzip,
-  net-snmp,
-  nix-update-script,
-  oniguruma,
-  openldap,
-  openssl_1_1,
-  openssl,
-  pam,
-  pcre2,
-  bison,
-  re2c,
-  readline,
-  rsync,
-  sqlite,
-  unixODBC,
-  uwimap,
-  valgrind,
-  zlib,
+{ stdenv
+, config
+, callPackages
+, lib
+, pkgs
+, phpPackage
+, autoconf
+, pkg-config
+, bzip2
+, curl
+, cyrus_sasl
+, enchant2
+, freetds
+, gd
+, gettext
+, gmp
+, html-tidy
+, icu73
+, libffi
+, libiconv
+, libkrb5
+, libpq
+, libsodium
+, libxml2
+, libxslt
+, libzip
+, net-snmp
+, nix-update-script
+, oniguruma
+, openldap
+, openssl_1_1
+, openssl
+, pam
+, pcre2
+, bison
+, re2c
+, readline
+, rsync
+, sqlite
+, unixODBC
+, uwimap
+, valgrind
+, zlib
+,
 }:
 
 lib.makeScope pkgs.newScope (
@@ -81,15 +81,17 @@ lib.makeScope pkgs.newScope (
       origArgs:
       let
         args = lib.fix (
-          lib.extends (_: previousAttrs: {
-            pname = "php-${previousAttrs.pname}";
-            passthru = (previousAttrs.passthru or { }) // {
-              updateScript = nix-update-script { };
-            };
-            meta = (previousAttrs.meta or { }) // {
-              mainProgram = previousAttrs.meta.mainProgram or previousAttrs.pname;
-            };
-          }) (if lib.isFunction origArgs then origArgs else (_: origArgs))
+          lib.extends
+            (_: previousAttrs: {
+              pname = "php-${previousAttrs.pname}";
+              passthru = (previousAttrs.passthru or { }) // {
+                updateScript = nix-update-script { };
+              };
+              meta = (previousAttrs.meta or { }) // {
+                mainProgram = previousAttrs.meta.mainProgram or previousAttrs.pname;
+              };
+            })
+            (if lib.isFunction origArgs then origArgs else (_: origArgs))
         );
       in
       pkgs.stdenv.mkDerivation args;
@@ -103,16 +105,15 @@ lib.makeScope pkgs.newScope (
     # Build inputs is used for extra deps that may be needed. And zendExtension
     # will mark the extension as a zend extension or not.
     mkExtension = lib.makeOverridable (
-      {
-        name,
-        configureFlags ? [ "--enable-${extName}" ],
-        internalDeps ? [ ],
-        postPhpize ? "",
-        buildInputs ? [ ],
-        zendExtension ? false,
-        doCheck ? true,
-        extName ? name,
-        ...
+      { name
+      , configureFlags ? [ "--enable-${extName}" ]
+      , internalDeps ? [ ]
+      , postPhpize ? ""
+      , buildInputs ? [ ]
+      , zendExtension ? false
+      , doCheck ? true
+      , extName ? name
+      , ...
       }@args:
       stdenv.mkDerivation (
         (builtins.removeAttrs args [ "name" ])
@@ -576,9 +577,11 @@ lib.makeScope pkgs.newScope (
               buildInputs = [
                 pcre2
               ]
-              ++ lib.optional (
-                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
-              ) valgrind.dev;
+              ++ lib.optional
+                (
+                  !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+                )
+                valgrind.dev;
               configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
               zendExtension = true;
               postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -845,10 +848,12 @@ lib.makeScope pkgs.newScope (
           # [ { name = <name>; value = <extension drv>; } ... ]
           #
           # which we later use listToAttrs to make all attrs available by name.
-          namedExtensions = builtins.map (drv: {
-            name = drv.name;
-            value = mkExtension drv;
-          }) extensionData;
+          namedExtensions = builtins.map
+            (drv: {
+              name = drv.name;
+              value = mkExtension drv;
+            })
+            extensionData;
 
         in
         # Produce the final attribute set of all extensions defined.

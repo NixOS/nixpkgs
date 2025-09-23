@@ -1,16 +1,16 @@
-{
-  lib,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  symlinkJoin,
-  cmake,
-  ninja,
-  pathspec,
-  pcre,
-  scikit-build-core,
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchFromGitHub
+, symlinkJoin
+, cmake
+, ninja
+, pathspec
+, pcre
+, scikit-build-core
+, pytestCheckHook
+, pytest-mock
+,
 }:
 let
   lib-deps = symlinkJoin {

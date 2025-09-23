@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libnotify,
-  gdk-pixbuf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libnotify
+, gdk-pixbuf
+,
 }:
 
 stdenv.mkDerivation rec {

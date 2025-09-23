@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  python,
-  pkg-config,
-  pythonAtLeast,
-  gdb,
-  numpy,
-  ncurses,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, python
+, pkg-config
+, pythonAtLeast
+, gdb
+, numpy
+, ncurses
+,
 }:
 
 let

@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ddt,
-  keystoneauth1,
-  openstackdocstheme,
-  oslo-i18n,
-  oslo-serialization,
-  oslo-utils,
-  pbr,
-  requests,
-  prettytable,
-  pythonOlder,
-  reno,
-  requests-mock,
-  setuptools,
-  simplejson,
-  sphinxHook,
-  stestr,
-  stevedore,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ddt
+, keystoneauth1
+, openstackdocstheme
+, oslo-i18n
+, oslo-serialization
+, oslo-utils
+, pbr
+, requests
+, prettytable
+, pythonOlder
+, reno
+, requests-mock
+, setuptools
+, simplejson
+, sphinxHook
+, stestr
+, stevedore
+,
 }:
 
 buildPythonPackage rec {

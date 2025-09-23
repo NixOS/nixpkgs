@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  appstream-glib,
-  desktop-file-utils,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  rustPlatform,
-  rustc,
-  cargo,
-  wrapGAppsHook3,
-  glib,
-  gtk4,
-  libadwaita,
-  wayland,
-  gocryptfs,
-  cryfs,
-  fuse,
-  util-linux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, appstream-glib
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, python3
+, rustPlatform
+, rustc
+, cargo
+, wrapGAppsHook3
+, glib
+, gtk4
+, libadwaita
+, wayland
+, gocryptfs
+, cryfs
+, fuse
+, util-linux
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

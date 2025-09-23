@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  asio,
-  glib,
-  jsoncpp,
-  libcap_ng,
-  libnl,
-  libuuid,
-  lz4,
-  openssl,
-  pkg-config,
-  protobuf,
-  python3,
-  systemd,
-  tinyxml-2,
-  wrapGAppsHook3,
-  gobject-introspection,
-  meson,
-  ninja,
-  gdbuspp,
-  cmake,
-  git,
-  nix-update-script,
-  enableSystemdResolved ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, asio
+, glib
+, jsoncpp
+, libcap_ng
+, libnl
+, libuuid
+, lz4
+, openssl
+, pkg-config
+, protobuf
+, python3
+, systemd
+, tinyxml-2
+, wrapGAppsHook3
+, gobject-introspection
+, meson
+, ninja
+, gdbuspp
+, cmake
+, git
+, nix-update-script
+, enableSystemdResolved ? true
+,
 }:
 
 stdenv.mkDerivation rec {

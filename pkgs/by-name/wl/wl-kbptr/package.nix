@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  gtk3,
-  libxkbcommon,
-  meson,
-  ninja,
-  opencv,
-  pixman,
-  pkg-config,
-  stdenv,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, gtk3
+, libxkbcommon
+, meson
+, ninja
+, opencv
+, pixman
+, pkg-config
+, stdenv
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 let
   pname = "wl-kbptr";

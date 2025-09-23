@@ -1,20 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-
-  inflection,
-  pydantic,
-  requests,
-  urllib3,
-  click,
-
-  pytest,
-  pytest-cov,
-  mock,
-  requests-mock,
-  tox,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, inflection
+, pydantic
+, requests
+, urllib3
+, click
+, pytest
+, pytest-cov
+, mock
+, requests-mock
+, tox
+,
 }:
 
 buildPythonPackage rec {

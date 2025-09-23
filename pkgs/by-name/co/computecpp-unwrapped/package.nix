@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  autoPatchelfHook,
-  installShellFiles,
-  ocl-icd,
-  zlib,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, autoPatchelfHook
+, installShellFiles
+, ocl-icd
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

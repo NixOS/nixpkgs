@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  xorg,
-  wayland,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, xorg
+, wayland
+,
 }:
 
 buildGoModule {

@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  pkgs,
-  lib,
-  ...
+{ config
+, options
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.paperless;
@@ -37,15 +36,17 @@ let
   // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
     OMP_NUM_THREADS = "1";
   }
-  // (lib.mapAttrs (
-    _: s:
-    if (lib.isAttrs s || lib.isList s) then
-      builtins.toJSON s
-    else if lib.isBool s then
-      lib.boolToString s
-    else
-      toString s
-  ) cfg.settings);
+  // (lib.mapAttrs
+    (
+      _: s:
+        if (lib.isAttrs s || lib.isList s) then
+          builtins.toJSON s
+        else if lib.isBool s then
+          lib.boolToString s
+        else
+          toString s
+    )
+    cfg.settings);
 
   manage = pkgs.writeShellScriptBin "paperless-manage" ''
     set -o allexport # Export the following env vars
@@ -266,14 +267,15 @@ in
             # tesseract fails to build when eng is not present
             enableLanguages =
               if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
-                lib.lists.unique (
-                  [
-                    "equ"
-                    "osd"
-                    "eng"
-                  ]
-                  ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
-                )
+                lib.lists.unique
+                  (
+                    [
+                      "equ"
+                      "osd"
+                      "eng"
+                    ]
+                    ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+                  )
               else
                 null;
           };
@@ -479,9 +481,10 @@ in
             User = cfg.user;
             ExecStart = "${cfg.package}/bin/celery --app paperless beat --loglevel INFO";
             Restart = "on-failure";
-            LoadCredential = lib.optionalString (
-              cfg.passwordFile != null
-            ) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
+            LoadCredential = lib.optionalString
+              (
+                cfg.passwordFile != null
+              ) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
             PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
           };
           environment = env;

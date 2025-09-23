@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost186,
-  glibc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost186
+, glibc
+,
 }:
 let
   boost' = boost186.override {

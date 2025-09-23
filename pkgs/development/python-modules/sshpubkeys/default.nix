@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cryptography,
-  ecdsa,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cryptography
+, ecdsa
+,
 }:
 
 buildPythonPackage rec {

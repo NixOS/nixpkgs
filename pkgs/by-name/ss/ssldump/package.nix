@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  json_c,
-  libnet,
-  libpcap,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, json_c
+, libnet
+, libpcap
+, openssl
+,
 }:
 
 stdenv.mkDerivation {

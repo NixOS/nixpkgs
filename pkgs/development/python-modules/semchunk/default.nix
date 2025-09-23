@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  mpire,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, mpire
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

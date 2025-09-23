@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  restic,
-  bash,
-  testers,
-  resticprofile,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, restic
+, bash
+, testers
+, resticprofile
+,
 }:
 
 buildGoModule rec {

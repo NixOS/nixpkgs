@@ -1,15 +1,18 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gnome-themes-extra,
-  gtk-engine-murrine,
-  jdupes,
-  sassc,
-  themeVariants ? [ ], # default: teal
-  colorVariants ? [ ], # default: all
-  sizeVariants ? [ ], # default: standard
-  tweaks ? [ ],
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gnome-themes-extra
+, gtk-engine-murrine
+, jdupes
+, sassc
+, themeVariants ? [ ]
+, # default: teal
+  colorVariants ? [ ]
+, # default: all
+  sizeVariants ? [ ]
+, # default: standard
+  tweaks ? [ ]
+,
 }:
 
 let
@@ -49,54 +52,54 @@ lib.checkListOfEnum "${pname}: theme variants"
   tweaks
 
   stdenvNoCC.mkDerivation
-  rec {
-    inherit pname;
-    version = "0-unstable-2025-04-02";
+rec {
+  inherit pname;
+  version = "0-unstable-2025-04-02";
 
-    src = fetchFromGitHub {
-      owner = "vinceliuice";
-      repo = "Jasper-gtk-theme";
-      rev = "71cb99a6618d839b1058cb8e6660a3b2f63aca70";
-      hash = "sha256-ZWPUyVszDPUdzttAJuIA9caDpP4SQ7mIbCoczxwvsus=";
-    };
+  src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = "Jasper-gtk-theme";
+    rev = "71cb99a6618d839b1058cb8e6660a3b2f63aca70";
+    hash = "sha256-ZWPUyVszDPUdzttAJuIA9caDpP4SQ7mIbCoczxwvsus=";
+  };
 
-    nativeBuildInputs = [
-      jdupes
-      sassc
-    ];
+  nativeBuildInputs = [
+    jdupes
+    sassc
+  ];
 
-    buildInputs = [
-      gnome-themes-extra
-    ];
+  buildInputs = [
+    gnome-themes-extra
+  ];
 
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine
-    ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
-    postPatch = ''
-      patchShebangs install.sh
-    '';
+  postPatch = ''
+    patchShebangs install.sh
+  '';
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      name= HOME="$TMPDIR" ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
-        --dest $out/share/themes
+    name= HOME="$TMPDIR" ./install.sh \
+      ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
+      ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
+      ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+      --dest $out/share/themes
 
-      jdupes --quiet --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    meta = {
-      description = "Modern and clean Gtk theme";
-      homepage = "https://github.com/vinceliuice/Jasper-gtk-theme";
-      license = lib.licenses.gpl3Only;
-      platforms = lib.platforms.unix;
-      maintainers = [ lib.maintainers.romildo ];
-    };
-  }
+  meta = {
+    description = "Modern and clean Gtk theme";
+    homepage = "https://github.com/vinceliuice/Jasper-gtk-theme";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
+  };
+}

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -56,13 +55,15 @@ let
     }
   '';
   secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (
-    _: v:
-    !lib.elem v [
-      { }
-      null
-    ]
-  )) cfg.config;
+  filteredConfig = lib.converge
+    (lib.filterAttrsRecursive (
+      _: v:
+        !lib.elem v [
+          { }
+          null
+        ]
+    ))
+    cfg.config;
   davisEnv = pkgs.writeText "davis.env" (davisEnvVars filteredConfig);
 in
 {
@@ -222,8 +223,7 @@ in
     nginx = lib.mkOption {
       type = lib.types.nullOr (
         lib.types.submodule (
-          lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
-          }
+          lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
         )
       );
       default = { };

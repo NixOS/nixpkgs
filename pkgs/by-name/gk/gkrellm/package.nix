@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  pkg-config,
-  glib,
-  gtk2,
-  libX11,
-  libSM,
-  libICE,
-  which,
-  copyDesktopItems,
-  makeDesktopItem,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, pkg-config
+, glib
+, gtk2
+, libX11
+, libSM
+, libICE
+, which
+, copyDesktopItems
+, makeDesktopItem
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

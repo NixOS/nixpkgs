@@ -1,8 +1,8 @@
-{
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  lib,
+{ stdenv
+, cmake
+, fetchFromGitHub
+, lib
+,
 }:
 let
   version = "0.2.0";

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fwts,
-  kernel,
-  kernelModuleMakeFlags,
+{ lib
+, stdenv
+, fwts
+, kernel
+, kernelModuleMakeFlags
+,
 }:
 
 stdenv.mkDerivation rec {

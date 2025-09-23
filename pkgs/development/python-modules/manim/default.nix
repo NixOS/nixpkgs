@@ -1,53 +1,48 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  texliveInfraOnly,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # buildInputs
-  cairo,
-
-  # dependencies
-  av,
-  beautifulsoup4,
-  click,
-  cloup,
-  decorator,
-  isosurfaces,
-  manimpango,
-  mapbox-earcut,
-  moderngl,
-  moderngl-window,
-  networkx,
-  numpy,
-  pillow,
-  pycairo,
-  pydub,
-  pygments,
-  rich,
-  scipy,
-  screeninfo,
-  skia-pathops,
-  srt,
-  svgelements,
-  tqdm,
-  typing-extensions,
-  watchdog,
-
-  # optional-dependencies
-  jupyterlab,
-  notebook,
-
-  # tests
-  ffmpeg,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, texliveInfraOnly
+, # build-system
+  poetry-core
+, setuptools
+, # buildInputs
+  cairo
+, # dependencies
+  av
+, beautifulsoup4
+, click
+, cloup
+, decorator
+, isosurfaces
+, manimpango
+, mapbox-earcut
+, moderngl
+, moderngl-window
+, networkx
+, numpy
+, pillow
+, pycairo
+, pydub
+, pygments
+, rich
+, scipy
+, screeninfo
+, skia-pathops
+, srt
+, svgelements
+, tqdm
+, typing-extensions
+, watchdog
+, # optional-dependencies
+  jupyterlab
+, notebook
+, # tests
+  ffmpeg
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  melpaBuild,
-  fetchFromGitHub,
-  git,
-  unstableGitUpdater,
-  lib,
+{ melpaBuild
+, fetchFromGitHub
+, git
+, unstableGitUpdater
+, lib
+,
 }:
 
 melpaBuild {

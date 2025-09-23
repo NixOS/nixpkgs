@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  krb5-c, # C krb5 library, not PyPI krb5
+{ lib
+, fetchPypi
+, buildPythonPackage
+, krb5-c
+, # C krb5 library, not PyPI krb5
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  boost,
-  freefont_ttf,
-  fribidi,
-  gettext,
-  imagemagick,
-  libpng,
-  lua,
-  pkg-config,
-  povray,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, boost
+, freefont_ttf
+, fribidi
+, gettext
+, imagemagick
+, libpng
+, lua
+, pkg-config
+, povray
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

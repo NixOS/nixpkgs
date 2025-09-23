@@ -1,15 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-backend,
-  rich-toolkit,
-  typer,
-  uvicorn,
-
-  # checks
-  pytestCheckHook,
-  rich,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-backend
+, rich-toolkit
+, typer
+, uvicorn
+, # checks
+  pytestCheckHook
+, rich
+,
 }:
 
 let

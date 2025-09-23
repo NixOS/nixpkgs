@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  numpy,
-  scipy,
-
-  # tests
-  autograd,
-  jax,
-  matplotlib,
-  pytestCheckHook,
-  tensorflow,
-  torch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  setuptools-scm
+, # dependencies
+  numpy
+, scipy
+, # tests
+  autograd
+, jax
+, matplotlib
+, pytestCheckHook
+, tensorflow
+, torch
+,
 }:
 
 buildPythonPackage rec {

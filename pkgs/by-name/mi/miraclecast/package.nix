@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  glib,
-  gst_all_1,
-  iproute2,
-  libtool,
-  makeBinaryWrapper,
-  meson,
-  miraclecast,
-  ninja,
-  pkg-config,
-  readline,
-  stdenv,
-  systemdLibs,
-  testers,
-  udev,
-  wpa_supplicant,
-  relyUdev ? true,
+{ lib
+, fetchFromGitHub
+, glib
+, gst_all_1
+, iproute2
+, libtool
+, makeBinaryWrapper
+, meson
+, miraclecast
+, ninja
+, pkg-config
+, readline
+, stdenv
+, systemdLibs
+, testers
+, udev
+, wpa_supplicant
+, relyUdev ? true
+,
 }:
 
 let

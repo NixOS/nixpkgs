@@ -1,9 +1,9 @@
-{
-  buildPecl,
-  lib,
-  zstd,
-  pkg-config,
-  fetchFromGitHub,
+{ buildPecl
+, lib
+, zstd
+, pkg-config
+, fetchFromGitHub
+,
 }:
 
 let

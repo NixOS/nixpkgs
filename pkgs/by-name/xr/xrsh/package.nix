@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  makeWrapper,
-  unstableGitUpdater,
-  writeShellApplication,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitea
+, makeWrapper
+, unstableGitUpdater
+, writeShellApplication
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation {

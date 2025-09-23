@@ -1,23 +1,23 @@
-{
-  lib,
-  autograd,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cvxopt,
-  cython,
-  jax,
-  jaxlib,
-  matplotlib,
-  numpy,
-  pymanopt,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  scikit-learn,
-  scipy,
-  setuptools,
-  tensorflow,
-  torch,
+{ lib
+, autograd
+, buildPythonPackage
+, fetchFromGitHub
+, cvxopt
+, cython
+, jax
+, jaxlib
+, matplotlib
+, numpy
+, pymanopt
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, scikit-learn
+, scipy
+, setuptools
+, tensorflow
+, torch
+,
 }:
 
 buildPythonPackage rec {

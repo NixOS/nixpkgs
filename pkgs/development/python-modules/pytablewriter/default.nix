@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  dataproperty,
-  dominate,
-  elasticsearch,
-  fetchFromGitHub,
-  loguru,
-  mbstrdecoder,
-  pandas,
-  pathvalidate,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools-scm,
-  simplejson,
-  tabledata,
-  tcolorpy,
-  toml,
-  typepy,
-  xlsxwriter,
-  xlwt,
+{ lib
+, buildPythonPackage
+, dataproperty
+, dominate
+, elasticsearch
+, fetchFromGitHub
+, loguru
+, mbstrdecoder
+, pandas
+, pathvalidate
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools-scm
+, simplejson
+, tabledata
+, tcolorpy
+, toml
+, typepy
+, xlsxwriter
+, xlwt
+,
 }:
 
 buildPythonPackage rec {

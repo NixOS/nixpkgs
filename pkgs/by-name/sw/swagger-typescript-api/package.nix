@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  yarn-berry_4,
-  stdenv,
-  nodejs,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, yarn-berry_4
+, stdenv
+, nodejs
+, makeWrapper
+,
 }:
 let
   pname = "swagger-typescript-api";

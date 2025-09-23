@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  automake,
-  fftw,
-  ladspaH,
-  libxml2,
-  pkg-config,
-  perlPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, automake
+, fftw
+, ladspaH
+, libxml2
+, pkg-config
+, perlPackages
+,
 }:
 
 stdenv.mkDerivation rec {

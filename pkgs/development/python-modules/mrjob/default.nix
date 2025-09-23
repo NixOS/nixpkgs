@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # propagates
-  distutils,
-  pyyaml,
-  standard-pipes,
-
-  # optionals
-  boto3,
-  botocore,
-  google-cloud-dataproc,
-  google-cloud-logging,
-  google-cloud-storage,
-  python-rapidjson,
-  simplejson,
-  ujson,
-
-  # tests
-  pyspark,
-  unittestCheckHook,
-  warcio,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # propagates
+  distutils
+, pyyaml
+, standard-pipes
+, # optionals
+  boto3
+, botocore
+, google-cloud-dataproc
+, google-cloud-logging
+, google-cloud-storage
+, python-rapidjson
+, simplejson
+, ujson
+, # tests
+  pyspark
+, unittestCheckHook
+, warcio
+,
 }:
 
 buildPythonPackage rec {

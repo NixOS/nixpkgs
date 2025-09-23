@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  shhmsg,
-  shhopt,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, shhmsg
+, shhopt
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  promise,
-  python-socketio,
-  pythonOlder,
-  requests,
-  websockets,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, promise
+, python-socketio
+, pythonOlder
+, requests
+, websockets
+,
 }:
 
 buildPythonPackage rec {

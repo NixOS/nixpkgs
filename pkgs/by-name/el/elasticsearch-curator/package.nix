@@ -1,10 +1,10 @@
-{
-  lib,
-  elasticsearch-curator,
-  fetchFromGitHub,
-  nix-update-script,
-  python3,
-  testers,
+{ lib
+, elasticsearch-curator
+, fetchFromGitHub
+, nix-update-script
+, python3
+, testers
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   version = "1.8.24285.1";

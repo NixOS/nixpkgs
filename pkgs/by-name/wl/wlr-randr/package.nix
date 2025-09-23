@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation rec {

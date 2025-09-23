@@ -1,14 +1,14 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  gtk3,
-  pkg-config,
-  libofx,
-  intltool,
-  wrapGAppsHook3,
-  libsoup_3,
-  adwaita-icon-theme,
+{ fetchurl
+, lib
+, stdenv
+, gtk3
+, pkg-config
+, libofx
+, intltool
+, wrapGAppsHook3
+, libsoup_3
+, adwaita-icon-theme
+,
 }:
 
 stdenv.mkDerivation rec {

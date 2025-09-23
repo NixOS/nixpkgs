@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  python3,
-  runCommand,
-  stdenv,
-  stress-ng,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, python3
+, runCommand
+, stdenv
+, stress-ng
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

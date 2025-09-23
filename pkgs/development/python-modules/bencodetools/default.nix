@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  bencodetools,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, bencodetools
+, pytestCheckHook
+, setuptools
+,
 }:
 buildPythonPackage {
   inherit (bencodetools) pname version src;

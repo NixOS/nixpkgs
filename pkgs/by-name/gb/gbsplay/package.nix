@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  libpulseaudio,
-  nas,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, libpulseaudio
+, nas
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  libvorbis,
-  speex,
-  flac,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, libvorbis
+, speex
+, flac
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

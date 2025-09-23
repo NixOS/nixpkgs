@@ -1,16 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-
-  ncurses,
-  SDL2,
-  SDL2_image,
-
-  terminal ? false,
-  graphics ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, ncurses
+, SDL2
+, SDL2_image
+, terminal ? false
+, graphics ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

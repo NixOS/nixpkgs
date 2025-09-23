@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libcosmicAppHook,
-  pkg-config,
-  just,
-  glib,
-  flatpak,
-  openssl,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libcosmicAppHook
+, pkg-config
+, just
+, glib
+, flatpak
+, openssl
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

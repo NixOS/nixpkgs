@@ -1,31 +1,31 @@
-{
-  lts ? false,
-  version,
-  rev ? "refs/tags/v${version}",
-  hash,
-  npmDepsHash,
-  vendorHash,
-  nixUpdateExtraArgs ? [ ],
+{ lts ? false
+, version
+, rev ? "refs/tags/v${version}"
+, hash
+, npmDepsHash
+, vendorHash
+, nixUpdateExtraArgs ? [ ]
+,
 }:
 
-{
-  bash,
-  brotli,
-  buildGoModule,
-  forgejo,
-  git,
-  gzip,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  nixosTests,
-  openssh,
-  sqliteSupport ? true,
-  xorg,
-  runCommand,
-  stdenv,
-  fetchFromGitea,
-  buildNpmPackage,
+{ bash
+, brotli
+, buildGoModule
+, forgejo
+, git
+, gzip
+, lib
+, makeWrapper
+, nix-update-script
+, nixosTests
+, openssh
+, sqliteSupport ? true
+, xorg
+, runCommand
+, stdenv
+, fetchFromGitea
+, buildNpmPackage
+,
 }:
 
 let

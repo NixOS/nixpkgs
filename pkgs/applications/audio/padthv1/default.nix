@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  libjack2,
-  alsa-lib,
-  libsndfile,
-  liblo,
-  lv2,
-  qt5,
-  fftwFloat,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, libjack2
+, alsa-lib
+, libsndfile
+, liblo
+, lv2
+, qt5
+, fftwFloat
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

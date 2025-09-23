@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeDesktopItem,
-  nix-update-script,
-
-  copyDesktopItems,
-  icoutils,
-  makeWrapper,
-
-  ffmpeg,
-  gtk2,
-  hunspell,
-  mono,
-  mpv,
-  tesseract4,
+{ lib
+, stdenv
+, fetchzip
+, makeDesktopItem
+, nix-update-script
+, copyDesktopItems
+, icoutils
+, makeWrapper
+, ffmpeg
+, gtk2
+, hunspell
+, mono
+, mpv
+, tesseract4
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  ogg,
-  libvorbis,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, ogg
+, libvorbis
+,
 }:
 
 buildDunePackage {

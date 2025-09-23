@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  nix-update-script,
-  s-tui,
-  testers,
-  stress,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, nix-update-script
+, s-tui
+, testers
+, stress
+,
 }:
 
 python3Packages.buildPythonPackage rec {

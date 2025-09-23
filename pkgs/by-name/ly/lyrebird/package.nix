@@ -1,13 +1,13 @@
-{
-  python3Packages,
-  lib,
-  fetchFromGitHub,
-  makeDesktopItem,
-  wrapGAppsHook3,
-  gtk3,
-  gobject-introspection,
-  sox,
-  pulseaudio,
+{ python3Packages
+, lib
+, fetchFromGitHub
+, makeDesktopItem
+, wrapGAppsHook3
+, gtk3
+, gobject-introspection
+, sox
+, pulseaudio
+,
 }:
 let
   desktopItem = makeDesktopItem {

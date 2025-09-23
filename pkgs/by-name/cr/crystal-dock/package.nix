@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kdePackages,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kdePackages
+, qt6
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "crystal-dock";

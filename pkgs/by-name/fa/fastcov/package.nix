@@ -1,10 +1,10 @@
-{
-  python3Packages,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  libgcc,
+{ python3Packages
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, libgcc
+,
 }:
 
 python3Packages.buildPythonPackage rec {

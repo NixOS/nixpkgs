@@ -2,23 +2,22 @@
 {
   # Format for defining configuration of some PHP services, that use "include 'config.php';" approach.
   format =
-    {
-      finalVariable ? null,
+    { finalVariable ? null
+    ,
     }:
     let
       toPHP =
         value:
-        {
-          "null" = "null";
-          "bool" = if value then "true" else "false";
-          "int" = toString value;
-          "float" = toString value;
-          "string" = string value;
-          "set" = attrs value;
-          "list" = list value;
-        }
-        .${builtins.typeOf value}
-        or (abort "should never happen: unknown value type ${builtins.typeOf value}");
+          {
+            "null" = "null";
+            "bool" = if value then "true" else "false";
+            "int" = toString value;
+            "float" = toString value;
+            "string" = string value;
+            "set" = attrs value;
+            "list" = list value;
+          }.${builtins.typeOf value}
+            or (abort "should never happen: unknown value type ${builtins.typeOf value}");
 
       # https://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.single
       escapeSingleQuotedString = lib.escape [
@@ -46,19 +45,19 @@
         {
           "mixed_array" = mixedArray value;
           "raw" = value;
-        }
-        .${_phpType};
+        }.${_phpType};
 
       type =
         with lib.types;
-        nullOr (oneOf [
-          bool
-          int
-          float
-          str
-          (attrsOf type)
-          (listOf type)
-        ])
+        nullOr
+          (oneOf [
+            bool
+            int
+            float
+            str
+            (attrsOf type)
+            (listOf type)
+          ])
         // {
           description = "PHP value";
         };

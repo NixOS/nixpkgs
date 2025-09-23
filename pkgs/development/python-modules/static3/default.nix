@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # optionals
-  genshi,
-
-  # tests
-  pytestCheckHook,
-  webtest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # optionals
+  genshi
+, # tests
+  pytestCheckHook
+, webtest
+,
 }:
 
 buildPythonPackage rec {

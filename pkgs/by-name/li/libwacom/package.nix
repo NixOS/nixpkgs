@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  glib,
-  pkg-config,
-  udev,
-  udevCheckHook,
-  libevdev,
-  libgudev,
-  python3,
-  valgrind,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, glib
+, pkg-config
+, udev
+, udevCheckHook
+, libevdev
+, libgudev
+, python3
+, valgrind
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

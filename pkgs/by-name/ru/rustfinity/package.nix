@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  openssl,
+{ lib
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, openssl
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rustfinity";

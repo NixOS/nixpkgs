@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  python3,
-  xmlbird,
-  cairo,
-  gdk-pixbuf,
-  libgee,
-  glib,
-  gtk3,
-  webkitgtk_4_1,
-  libnotify,
-  sqlite,
-  vala,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  wrapGAppsHook3,
-  autoPatchelfHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, python3
+, xmlbird
+, cairo
+, gdk-pixbuf
+, libgee
+, glib
+, gtk3
+, webkitgtk_4_1
+, libnotify
+, sqlite
+, vala
+, gobject-introspection
+, gsettings-desktop-schemas
+, wrapGAppsHook3
+, autoPatchelfHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

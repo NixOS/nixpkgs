@@ -1,20 +1,19 @@
-{
-  lib,
-  linuxHeaders, # Linux source tree
-  makeWrapper,
-  stdenvNoCC,
-
-  binutils,
-  coreutils,
-  gnugrep,
-
-  # decompressors for possible kernel image formats
-  bzip2,
-  gzip,
-  lz4,
-  lzop,
-  xz,
-  zstd,
+{ lib
+, linuxHeaders
+, # Linux source tree
+  makeWrapper
+, stdenvNoCC
+, binutils
+, coreutils
+, gnugrep
+, # decompressors for possible kernel image formats
+  bzip2
+, gzip
+, lz4
+, lzop
+, xz
+, zstd
+,
 }:
 
 let

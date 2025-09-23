@@ -1,8 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  benqprojector,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, benqprojector
+,
 }:
 
 buildHomeAssistantComponent rec {

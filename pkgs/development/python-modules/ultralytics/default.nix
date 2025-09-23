@@ -1,34 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  lap,
-  matplotlib,
-  opencv-python,
-  pandas,
-  pillow,
-  polars,
-  psutil,
-  py-cpuinfo,
-  pyyaml,
-  requests,
-  scipy,
-  seaborn,
-  torch,
-  torchvision,
-  tqdm,
-  ultralytics-thop,
-
-  # tests
-  pytestCheckHook,
-  onnx,
-  onnxruntime,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  lap
+, matplotlib
+, opencv-python
+, pandas
+, pillow
+, polars
+, psutil
+, py-cpuinfo
+, pyyaml
+, requests
+, scipy
+, seaborn
+, torch
+, torchvision
+, tqdm
+, ultralytics-thop
+, # tests
+  pytestCheckHook
+, onnx
+, onnxruntime
+,
 }:
 
 buildPythonPackage rec {

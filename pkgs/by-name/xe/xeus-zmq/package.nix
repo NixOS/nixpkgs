@@ -1,15 +1,15 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  cmake,
-  cppzmq,
-  libuuid,
-  nlohmann_json,
-  openssl,
-  xeus,
-  xtl,
-  zeromq,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, cmake
+, cppzmq
+, libuuid
+, nlohmann_json
+, openssl
+, xeus
+, xtl
+, zeromq
+,
 }:
 
 clangStdenv.mkDerivation rec {

@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  hackrf,
-  rtl-sdr,
-  airspy,
-  limesuite,
-  libiio,
-  libbladeRF,
-  makeDesktopItem,
-  copyDesktopItems,
-  qt5,
-  wrapGAppsHook3,
-  USRPSupport ? false,
-  uhd,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3Packages
+, hackrf
+, rtl-sdr
+, airspy
+, limesuite
+, libiio
+, libbladeRF
+, makeDesktopItem
+, copyDesktopItems
+, qt5
+, wrapGAppsHook3
+, USRPSupport ? false
+, uhd
+,
 }:
 
 python3Packages.buildPythonApplication rec {

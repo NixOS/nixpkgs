@@ -1,32 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-
-  # Dependencies
-  bzip2,
-  cmake,
-  dri-pkgconfig-stub,
-  freetype,
-  libGL,
-  libgbm,
-  libjpeg_turbo,
-  makeWrapper,
-  mesa-gl-headers, # for built-in 3D software rendering using swrast
-  openjdk, # for the client with Java GUI
-  openjdk_headless, # for the server
-  openssh,
-  openssl,
-  pam,
-  perl,
-  pkg-config,
-  python3,
-  which,
-  xkbcomp,
-  xkeyboard_config,
-  xorg,
-  xterm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, # Dependencies
+  bzip2
+, cmake
+, dri-pkgconfig-stub
+, freetype
+, libGL
+, libgbm
+, libjpeg_turbo
+, makeWrapper
+, mesa-gl-headers
+, # for built-in 3D software rendering using swrast
+  openjdk
+, # for the client with Java GUI
+  openjdk_headless
+, # for the server
+  openssh
+, openssl
+, pam
+, perl
+, pkg-config
+, python3
+, which
+, xkbcomp
+, xkeyboard_config
+, xorg
+, xterm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,6 +1,6 @@
-{
-  nim-unwrapped-1,
-  nim,
+{ nim-unwrapped-1
+, nim
+,
 }:
 
 nim.passthru.wrapNim {

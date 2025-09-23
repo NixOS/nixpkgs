@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml,
-  fetchurl,
-  ctypes,
-  result,
-  alcotest,
-  file,
+{ lib
+, buildDunePackage
+, ocaml
+, fetchurl
+, ctypes
+, result
+, alcotest
+, file
+,
 }:
 
 buildDunePackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flake8,
-  pydocstyle,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flake8
+, pydocstyle
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

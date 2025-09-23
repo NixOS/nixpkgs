@@ -11,11 +11,10 @@ in
 
   nodes = {
     target =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
+      { config
+      , pkgs
+      , lib
+      , ...
       }:
       {
         virtualisation.vlans = [
@@ -91,11 +90,10 @@ in
       };
 
     initiatorAuto =
-      {
-        nodes,
-        config,
-        pkgs,
-        ...
+      { nodes
+      , config
+      , pkgs
+      , ...
       }:
       {
         virtualisation.vlans = [
@@ -139,12 +137,11 @@ in
       };
 
     initiatorRootDisk =
-      {
-        config,
-        pkgs,
-        modulesPath,
-        lib,
-        ...
+      { config
+      , pkgs
+      , modulesPath
+      , lib
+      , ...
       }:
       {
         boot.initrd.network.enable = true;

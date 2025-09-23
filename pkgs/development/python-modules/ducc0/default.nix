@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  cmake,
-  nanobind,
-  ninja,
-  scikit-build-core,
-  setuptools,
-  numpy,
-  pytestCheckHook,
-  scipy,
-  pytest-xdist,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, cmake
+, nanobind
+, ninja
+, scikit-build-core
+, setuptools
+, numpy
+, pytestCheckHook
+, scipy
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

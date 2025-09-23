@@ -1,13 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  gevent,
-
-  pytestCheckHook,
-
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gevent
+, pytestCheckHook
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "gevent-eventemitter";

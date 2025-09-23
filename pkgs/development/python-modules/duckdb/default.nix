@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  duckdb,
-  fsspec,
-  google-cloud-storage,
-  numpy,
-  openssl,
-  pandas,
-  psutil,
-  pybind11,
-  setuptools-scm,
-  pytest-reraise,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, duckdb
+, fsspec
+, google-cloud-storage
+, numpy
+, openssl
+, pandas
+, psutil
+, pybind11
+, setuptools-scm
+, pytest-reraise
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

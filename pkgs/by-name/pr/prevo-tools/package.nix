@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  expat,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, glib
+, expat
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

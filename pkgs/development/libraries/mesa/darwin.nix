@@ -1,18 +1,18 @@
 # The Darwin build of Mesa is different enough that we just give it an entire separate expression.
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  bison,
-  flex,
-  libxml2,
-  llvmPackages,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-  xorg,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, bison
+, flex
+, libxml2
+, llvmPackages
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, xorg
+, zlib
+,
 }:
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };

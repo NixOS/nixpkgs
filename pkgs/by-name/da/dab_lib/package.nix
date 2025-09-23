@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  faad2,
-  fftwFloat,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, faad2
+, fftwFloat
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

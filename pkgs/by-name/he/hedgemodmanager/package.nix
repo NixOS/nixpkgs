@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 buildDotnetModule (finalAttrs: {

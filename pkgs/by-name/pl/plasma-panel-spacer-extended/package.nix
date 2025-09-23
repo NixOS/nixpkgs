@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kdePackages,
-  glib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kdePackages
+, glib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

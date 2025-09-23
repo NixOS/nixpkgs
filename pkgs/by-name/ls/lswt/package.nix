@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  fetchpatch,
-  wayland-scanner,
-  wayland,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, fetchpatch
+, wayland-scanner
+, wayland
+,
 }:
 
 stdenv.mkDerivation rec {

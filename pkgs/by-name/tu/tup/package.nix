@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fuse3,
-  macfuse-stubs,
-  pkg-config,
-  sqlite,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse3
+, macfuse-stubs
+, pkg-config
+, sqlite
+, pcre2
+,
 }:
 
 let

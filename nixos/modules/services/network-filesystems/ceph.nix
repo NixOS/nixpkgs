@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.ceph;
@@ -14,11 +13,13 @@ let
   makeServices =
     daemonType: daemonIds:
     lib.mkMerge (
-      map (daemonId: {
-        "ceph-${daemonType}-${daemonId}" =
-          makeService daemonType daemonId cfg.global.clusterName
-            cfg.${daemonType}.package;
-      }) daemonIds
+      map
+        (daemonId: {
+          "ceph-${daemonType}-${daemonId}" =
+            makeService daemonType daemonId cfg.global.clusterName
+              cfg.${daemonType}.package;
+        })
+        daemonIds
     );
 
   makeService =

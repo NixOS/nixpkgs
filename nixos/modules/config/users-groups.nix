@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  utils,
-  pkgs,
-  ...
+{ config
+, lib
+, utils
+, pkgs
+, ...
 }:
 
 let
@@ -147,10 +146,10 @@ let
           type = types.passwdEntry types.str;
           apply =
             x:
-            assert (
-              stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"
-            );
-            x;
+              assert (
+                stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"
+              );
+              x;
           description = ''
             The name of the user account. If undefined, the name of the
             attribute set will be used.
@@ -210,10 +209,10 @@ let
           type = types.str;
           apply =
             x:
-            assert (
-              stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"
-            );
-            x;
+              assert (
+                stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"
+              );
+              x;
           default = "";
           description = "The user's primary group.";
         };
@@ -577,81 +576,92 @@ let
 
   idsAreUnique =
     set: idAttr:
-    !(foldr
-      (
-        name:
-        args@{ dup, acc }:
-        let
-          id = toString (getAttr idAttr (getAttr name set));
-          exists = hasAttr id acc;
-          newAcc =
-            acc
-            // (listToAttrs [
+      !(foldr
+        (
+          name:
+          args@{ dup, acc }:
+          let
+            id = toString (getAttr idAttr (getAttr name set));
+            exists = hasAttr id acc;
+            newAcc =
+              acc
+              // (listToAttrs [
+                {
+                  name = id;
+                  value = true;
+                }
+              ]);
+          in
+          if dup then
+            args
+          else if exists then
+            trace "Duplicate ${idAttr} ${id}"
               {
-                name = id;
-                value = true;
+                dup = true;
+                acc = null;
               }
-            ]);
-        in
-        if dup then
-          args
-        else if exists then
-          trace "Duplicate ${idAttr} ${id}" {
-            dup = true;
-            acc = null;
-          }
-        else
-          {
-            dup = false;
-            acc = newAcc;
-          }
-      )
-      {
-        dup = false;
-        acc = { };
-      }
-      (attrNames set)
-    ).dup;
+          else
+            {
+              dup = false;
+              acc = newAcc;
+            }
+        )
+        {
+          dup = false;
+          acc = { };
+        }
+        (attrNames set)
+      ).dup;
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
-  sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (
-    n: u: u.uid != null
-  ) config.boot.initrd.systemd.users) "uid";
-  sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (
-    n: g: g.gid != null
-  ) config.boot.initrd.systemd.groups) "gid";
+  sdInitrdUidsAreUnique = idsAreUnique
+    (filterAttrs
+      (
+        n: u: u.uid != null
+      )
+      config.boot.initrd.systemd.users) "uid";
+  sdInitrdGidsAreUnique = idsAreUnique
+    (filterAttrs
+      (
+        n: g: g.gid != null
+      )
+      config.boot.initrd.systemd.groups) "gid";
   groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
-  usersWithoutExistingGroup = lib.filterAttrs (
-    n: u: u.group != "" && !lib.elem u.group groupNames
-  ) cfg.users;
+  usersWithoutExistingGroup = lib.filterAttrs
+    (
+      n: u: u.group != "" && !lib.elem u.group groupNames
+    )
+    cfg.users;
   usersWithNullShells = attrNames (filterAttrs (name: cfg: cfg.shell == null) cfg.users);
 
   spec = pkgs.writeText "users-groups.json" (
     builtins.toJSON {
       inherit (cfg) mutableUsers;
-      users = mapAttrsToList (_: u: {
-        inherit (u)
-          name
-          uid
-          group
-          description
-          home
-          homeMode
-          createHome
-          isSystemUser
-          password
-          hashedPasswordFile
-          hashedPassword
-          autoSubUidGidRange
-          subUidRanges
-          subGidRanges
-          initialPassword
-          initialHashedPassword
-          expires
-          ;
-        shell = utils.toShellPath u.shell;
-      }) (filterAttrs (_: u: u.enable) cfg.users);
+      users = mapAttrsToList
+        (_: u: {
+          inherit (u)
+            name
+            uid
+            group
+            description
+            home
+            homeMode
+            createHome
+            isSystemUser
+            password
+            hashedPasswordFile
+            hashedPassword
+            autoSubUidGidRange
+            subUidRanges
+            subGidRanges
+            initialPassword
+            initialHashedPassword
+            expires
+            ;
+          shell = utils.toShellPath u.shell;
+        })
+        (filterAttrs (_: u: u.enable) cfg.users);
       groups = attrValues cfg.groups;
     }
   );
@@ -954,19 +964,21 @@ in
       # Install all the user shells
       environment.systemPackages = systemShells;
 
-      environment.etc = mapAttrs' (
-        _:
-        { packages, name, ... }:
-        {
-          name = "profiles/per-user/${name}";
-          value.source = pkgs.buildEnv {
-            name = "user-environment";
-            paths = packages;
-            inherit (config.environment) pathsToLink extraOutputsToInstall;
-            inherit (config.system.path) ignoreCollisions postBuild;
-          };
-        }
-      ) (filterAttrs (_: u: u.packages != [ ]) cfg.users);
+      environment.etc = mapAttrs'
+        (
+          _:
+          { packages, name, ... }:
+          {
+            name = "profiles/per-user/${name}";
+            value.source = pkgs.buildEnv {
+              name = "user-environment";
+              paths = packages;
+              inherit (config.environment) pathsToLink extraOutputsToInstall;
+              inherit (config.system.path) ignoreCollisions postBuild;
+            };
+          }
+        )
+        (filterAttrs (_: u: u.packages != [ ]) cfg.users);
 
       environment.profiles = [
         "$HOME/.nix-profile"
@@ -1000,9 +1012,10 @@ in
             )}
           '';
           "/etc/shells".text =
-            lib.concatStringsSep "\n" (
-              lib.unique (lib.mapAttrsToList (_: u: u.shell) config.boot.initrd.systemd.users)
-            )
+            lib.concatStringsSep "\n"
+              (
+                lib.unique (lib.mapAttrsToList (_: u: u.shell) config.boot.initrd.systemd.users)
+              )
             + "\n";
         };
 
@@ -1078,19 +1091,21 @@ in
           # The check does not apply when users.mutableUsers
           assertion =
             !cfg.mutableUsers
-            -> !cfg.allowNoPasswordLogin
-            -> any id (
-              mapAttrsToList (
-                name: cfg:
-                (name == "root" || cfg.group == "wheel" || elem "wheel" cfg.extraGroups)
-                && (
-                  allowsLogin cfg.hashedPassword
-                  || cfg.password != null
-                  || cfg.hashedPasswordFile != null
-                  || cfg.openssh.authorizedKeys.keys != [ ]
-                  || cfg.openssh.authorizedKeys.keyFiles != [ ]
+              -> !cfg.allowNoPasswordLogin
+              -> any id (
+              mapAttrsToList
+                (
+                  name: cfg:
+                    (name == "root" || cfg.group == "wheel" || elem "wheel" cfg.extraGroups)
+                      && (
+                      allowsLogin cfg.hashedPassword
+                        || cfg.password != null
+                        || cfg.hashedPasswordFile != null
+                        || cfg.openssh.authorizedKeys.keys != [ ]
+                        || cfg.openssh.authorizedKeys.keyFiles != [ ]
+                    )
                 )
-              ) cfg.users
+                cfg.users
               ++ [
                 config.security.googleOsLogin.enable
               ]
@@ -1107,162 +1122,164 @@ in
       ++ flatten (
         flip mapAttrsToList cfg.users (
           name: user:
-          [
-            (
-              let
-                # Things fail in various ways with especially non-ascii usernames.
-                # This regex mirrors the one from shadow's is_valid_name:
-                # https://github.com/shadow-maint/shadow/blob/bee77ffc291dfed2a133496db465eaa55e2b0fec/lib/chkname.c#L68
-                # though without the trailing $, because Samba 3 got its last release
-                # over 10 years ago and is not in Nixpkgs anymore,
-                # while later versions don't appear to require anything like that.
-                nameRegex = "[a-zA-Z0-9_.][a-zA-Z0-9_.-]*";
-              in
-              {
-                assertion = builtins.match nameRegex user.name != null;
-                message = "The username \"${user.name}\" is not valid, it does not match the regex \"${nameRegex}\".";
-              }
-            )
-            {
-              assertion = (user.hashedPassword != null) -> (match ".*:.*" user.hashedPassword == null);
-              message = ''
-                The password hash of user "${user.name}" contains a ":" character.
-                This is invalid and would break the login system because the fields
-                of /etc/shadow (file where hashes are stored) are colon-separated.
-                Please check the value of option `users.users."${user.name}".hashedPassword`.'';
-            }
-            {
-              assertion = user.isNormalUser && user.uid != null -> user.uid >= 1000;
-              message = ''
-                A user cannot have a users.users.${user.name}.uid set below 1000 and set users.users.${user.name}.isNormalUser.
-                Either users.users.${user.name}.isSystemUser must be set to true instead of users.users.${user.name}.isNormalUser
-                or users.users.${user.name}.uid must be changed to 1000 or above.
-              '';
-            }
-            {
-              assertion =
-                let
-                  # we do an extra check on isNormalUser here, to not trigger this assertion when isNormalUser is set and uid to < 1000
-                  isEffectivelySystemUser =
-                    user.isSystemUser || (user.uid != null && user.uid < 1000 && !user.isNormalUser);
-                in
-                xor isEffectivelySystemUser user.isNormalUser;
-              message = ''
-                Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
-              '';
-            }
-            {
-              assertion = user.group != "";
-              message = ''
-                users.users.${user.name}.group is unset. This used to default to
-                nogroup, but this is unsafe. For example you can create a group
-                for this user with:
-                users.users.${user.name}.group = "${user.name}";
-                users.groups.${user.name} = {};
-              '';
-            }
-          ]
-          ++ (map
-            (shell: {
-              assertion =
-                !user.ignoreShellProgramCheck
-                -> (user.shell == pkgs.${shell})
-                -> (config.programs.${shell}.enable == true);
-              message = ''
-                users.users.${user.name}.shell is set to ${shell}, but
-                programs.${shell}.enable is not true. This will cause the ${shell}
-                shell to lack the basic nix directories in its PATH and might make
-                logging in as that user impossible. You can fix it with:
-                programs.${shell}.enable = true;
-
-                If you know what you're doing and you are fine with the behavior,
-                set users.users.${user.name}.ignoreShellProgramCheck = true;
-                instead.
-              '';
-            })
             [
-              "fish"
-              "xonsh"
-              "zsh"
+              (
+                let
+                  # Things fail in various ways with especially non-ascii usernames.
+                  # This regex mirrors the one from shadow's is_valid_name:
+                  # https://github.com/shadow-maint/shadow/blob/bee77ffc291dfed2a133496db465eaa55e2b0fec/lib/chkname.c#L68
+                  # though without the trailing $, because Samba 3 got its last release
+                  # over 10 years ago and is not in Nixpkgs anymore,
+                  # while later versions don't appear to require anything like that.
+                  nameRegex = "[a-zA-Z0-9_.][a-zA-Z0-9_.-]*";
+                in
+                {
+                  assertion = builtins.match nameRegex user.name != null;
+                  message = "The username \"${user.name}\" is not valid, it does not match the regex \"${nameRegex}\".";
+                }
+              )
+              {
+                assertion = (user.hashedPassword != null) -> (match ".*:.*" user.hashedPassword == null);
+                message = ''
+                  The password hash of user "${user.name}" contains a ":" character.
+                  This is invalid and would break the login system because the fields
+                  of /etc/shadow (file where hashes are stored) are colon-separated.
+                  Please check the value of option `users.users."${user.name}".hashedPassword`.'';
+              }
+              {
+                assertion = user.isNormalUser && user.uid != null -> user.uid >= 1000;
+                message = ''
+                  A user cannot have a users.users.${user.name}.uid set below 1000 and set users.users.${user.name}.isNormalUser.
+                  Either users.users.${user.name}.isSystemUser must be set to true instead of users.users.${user.name}.isNormalUser
+                  or users.users.${user.name}.uid must be changed to 1000 or above.
+                '';
+              }
+              {
+                assertion =
+                  let
+                    # we do an extra check on isNormalUser here, to not trigger this assertion when isNormalUser is set and uid to < 1000
+                    isEffectivelySystemUser =
+                      user.isSystemUser || (user.uid != null && user.uid < 1000 && !user.isNormalUser);
+                  in
+                  xor isEffectivelySystemUser user.isNormalUser;
+                message = ''
+                  Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+                '';
+              }
+              {
+                assertion = user.group != "";
+                message = ''
+                  users.users.${user.name}.group is unset. This used to default to
+                  nogroup, but this is unsafe. For example you can create a group
+                  for this user with:
+                  users.users.${user.name}.group = "${user.name}";
+                  users.groups.${user.name} = {};
+                '';
+              }
             ]
-          )
+            ++ (map
+              (shell: {
+                assertion =
+                  !user.ignoreShellProgramCheck
+                    -> (user.shell == pkgs.${shell})
+                    -> (config.programs.${shell}.enable == true);
+                message = ''
+                  users.users.${user.name}.shell is set to ${shell}, but
+                  programs.${shell}.enable is not true. This will cause the ${shell}
+                  shell to lack the basic nix directories in its PATH and might make
+                  logging in as that user impossible. You can fix it with:
+                  programs.${shell}.enable = true;
+
+                  If you know what you're doing and you are fine with the behavior,
+                  set users.users.${user.name}.ignoreShellProgramCheck = true;
+                  instead.
+                '';
+              })
+              [
+                "fish"
+                "xonsh"
+                "zsh"
+              ]
+            )
         )
       );
 
       warnings =
-        flip concatMap (attrValues cfg.users) (
-          user:
-          let
-            passwordOptions = [
-              "hashedPassword"
-              "hashedPasswordFile"
-              "password"
-            ]
-            ++ optionals cfg.mutableUsers [
-              # For immutable users, initialHashedPassword is set to hashedPassword,
-              # so using these options would always trigger the assertion.
-              "initialHashedPassword"
-              "initialPassword"
-            ];
-            unambiguousPasswordConfiguration =
-              1 >= length (filter (x: x != null) (map (flip getAttr user) passwordOptions));
-          in
-          optional (!unambiguousPasswordConfiguration) ''
-            The user '${user.name}' has multiple of the options
-            `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`
-            & `hashedPasswordFile` set to a non-null value.
-
-            ${multiplePasswordsWarning}
-            ${overrideOrderText cfg.mutableUsers}
-            The values of these options are:
-            ${concatMapStringsSep "\n" (
-              value: "* users.users.\"${user.name}\".${value}: ${generators.toPretty { } user.${value}}"
-            ) passwordOptions}
-          ''
-        )
-        ++ filter (x: x != null) (
-          flip mapAttrsToList cfg.users (
-            _: user:
-            # This regex matches a subset of the Modular Crypto Format (MCF)[1]
-            # informal standard. Since this depends largely on the OS or the
-            # specific implementation of crypt(3) we only support the (sane)
-            # schemes implemented by glibc and BSDs. In particular the original
-            # DES hash is excluded since, having no structure, it would validate
-            # common mistakes like typing the plaintext password.
-            #
-            # [1]: https://en.wikipedia.org/wiki/Crypt_(C)
+        flip concatMap (attrValues cfg.users)
+          (
+            user:
             let
-              sep = "\\$";
-              base64 = "[a-zA-Z0-9./]+";
-              id = cryptSchemeIdPatternGroup;
-              name = "[a-z0-9-]+";
-              value = "[a-zA-Z0-9/+.-]+";
-              options = "${name}(=${value})?(,${name}=${value})*";
-              scheme = "${id}(${sep}${options})?";
-              content = "${base64}${sep}${base64}(${sep}${base64})?";
-              mcf = "^${sep}${scheme}${sep}${content}$";
+              passwordOptions = [
+                "hashedPassword"
+                "hashedPasswordFile"
+                "password"
+              ]
+              ++ optionals cfg.mutableUsers [
+                # For immutable users, initialHashedPassword is set to hashedPassword,
+                # so using these options would always trigger the assertion.
+                "initialHashedPassword"
+                "initialPassword"
+              ];
+              unambiguousPasswordConfiguration =
+                1 >= length (filter (x: x != null) (map (flip getAttr user) passwordOptions));
             in
-            if
-              (
-                allowsLogin user.hashedPassword
-                && user.hashedPassword != "" # login without password
-                && match mcf user.hashedPassword == null
-              )
-            then
-              ''
-                The password hash of user "${user.name}" may be invalid. You must set a
-                valid hash or the user will be locked out of their account. Please
-                check the value of option `users.users."${user.name}".hashedPassword`.''
-            else
-              null
+            optional (!unambiguousPasswordConfiguration) ''
+              The user '${user.name}' has multiple of the options
+              `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`
+              & `hashedPasswordFile` set to a non-null value.
+
+              ${multiplePasswordsWarning}
+              ${overrideOrderText cfg.mutableUsers}
+              The values of these options are:
+              ${concatMapStringsSep "\n" (
+                value: "* users.users.\"${user.name}\".${value}: ${generators.toPretty { } user.${value}}"
+              ) passwordOptions}
+            ''
           )
+        ++ filter (x: x != null) (
+          flip mapAttrsToList cfg.users
+            (
+              _: user:
+                # This regex matches a subset of the Modular Crypto Format (MCF)[1]
+                # informal standard. Since this depends largely on the OS or the
+                # specific implementation of crypt(3) we only support the (sane)
+                # schemes implemented by glibc and BSDs. In particular the original
+                # DES hash is excluded since, having no structure, it would validate
+                # common mistakes like typing the plaintext password.
+                #
+                # [1]: https://en.wikipedia.org/wiki/Crypt_(C)
+                let
+                  sep = "\\$";
+                  base64 = "[a-zA-Z0-9./]+";
+                  id = cryptSchemeIdPatternGroup;
+                  name = "[a-z0-9-]+";
+                  value = "[a-zA-Z0-9/+.-]+";
+                  options = "${name}(=${value})?(,${name}=${value})*";
+                  scheme = "${id}(${sep}${options})?";
+                  content = "${base64}${sep}${base64}(${sep}${base64})?";
+                  mcf = "^${sep}${scheme}${sep}${content}$";
+                in
+                if
+                  (
+                    allowsLogin user.hashedPassword
+                    && user.hashedPassword != "" # login without password
+                    && match mcf user.hashedPassword == null
+                  )
+                then
+                  ''
+                    The password hash of user "${user.name}" may be invalid. You must set a
+                    valid hash or the user will be locked out of their account. Please
+                    check the value of option `users.users."${user.name}".hashedPassword`.''
+                else
+                  null
+            )
           ++ flip mapAttrsToList cfg.users (
             name: user:
-            if user.passwordFile != null then
-              ''The option `users.users."${name}".passwordFile' has been renamed ''
-              + ''to `users.users."${name}".hashedPasswordFile'.''
-            else
-              null
+              if user.passwordFile != null then
+                ''The option `users.users."${name}".passwordFile' has been renamed ''
+                + ''to `users.users."${name}".hashedPasswordFile'.''
+              else
+                null
           )
         );
     };

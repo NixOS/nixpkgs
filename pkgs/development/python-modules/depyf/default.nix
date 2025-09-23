@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  astor,
-  dill,
-  filelock,
-
-  # tests
-  pytestCheckHook,
-  torch,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  astor
+, dill
+, filelock
+, # tests
+  pytestCheckHook
+, torch
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

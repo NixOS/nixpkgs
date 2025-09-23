@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  makeWrapper,
-  perlPackages,
-  coreutils,
-  zip,
-  imagemagick,
-  pngcrush,
-  lcms2,
-  facedetect,
-  fbida,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeWrapper
+, perlPackages
+, coreutils
+, zip
+, imagemagick
+, pngcrush
+, lcms2
+, facedetect
+, fbida
+,
 }:
 
 # TODO: add optional dependencies (snippet from fgallery source):

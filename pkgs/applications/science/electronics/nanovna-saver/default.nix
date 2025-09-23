@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  qt6,
-  writeShellScriptBin,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, qt6
+, writeShellScriptBin
+,
 }:
 let
   # Matches the pyside6-uic and pyside6-rcc implementations

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  cmake,
-  cmake-extras,
-  pkg-config,
-  python3,
-  qtbase,
-  qtdeclarative,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, cmake
+, cmake-extras
+, pkg-config
+, python3
+, qtbase
+, qtdeclarative
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

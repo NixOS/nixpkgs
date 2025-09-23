@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  moduleType,
-  hostPkgs,
-  ...
+{ config
+, lib
+, moduleType
+, hostPkgs
+, ...
 }:
 let
   inherit (lib) mkOption types;

@@ -1,16 +1,16 @@
-{
-  lib,
-  bison,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  flex,
-  gnupg,
-  meson,
-  meson-python,
-  pytestCheckHook,
-  python-dateutil,
-  regex,
+{ lib
+, bison
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, flex
+, gnupg
+, meson
+, meson-python
+, pytestCheckHook
+, python-dateutil
+, regex
+,
 }:
 
 buildPythonPackage rec {

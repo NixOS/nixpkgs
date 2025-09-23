@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  texinfo,
-  allegro,
-  perl,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, texinfo
+, allegro
+, perl
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

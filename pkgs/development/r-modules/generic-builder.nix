@@ -1,19 +1,18 @@
-{
-  stdenv,
-  lib,
-  R,
-  xvfb-run,
-  util-linux,
-  gettext,
-  gfortran,
-  libiconv,
+{ stdenv
+, lib
+, R
+, xvfb-run
+, util-linux
+, gettext
+, gfortran
+, libiconv
+,
 }:
 
-{
-  name,
-  buildInputs ? [ ],
-  requireX ? false,
-  ...
+{ name
+, buildInputs ? [ ]
+, requireX ? false
+, ...
 }@attrs:
 
 stdenv.mkDerivation (
@@ -53,8 +52,8 @@ stdenv.mkDerivation (
 
     rCommand =
       if requireX then
-        # Unfortunately, xvfb-run has a race condition even with -a option, so that
-        # we acquire a lock explicitly.
+      # Unfortunately, xvfb-run has a race condition even with -a option, so that
+      # we acquire a lock explicitly.
         "flock ${xvfb-run} xvfb-run -a -e xvfb-error R"
       else
         "R";
@@ -77,7 +76,7 @@ stdenv.mkDerivation (
     '';
   }
   // attrs
-  // {
+    // {
     name = "r-" + name;
   }
 )

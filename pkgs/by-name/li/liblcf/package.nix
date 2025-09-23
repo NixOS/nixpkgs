@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  autoreconfHook,
-  pkg-config,
-  expat,
-  icu74,
-  inih,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, pkg-config
+, expat
+, icu74
+, inih
+,
 }:
 
 stdenv.mkDerivation rec {

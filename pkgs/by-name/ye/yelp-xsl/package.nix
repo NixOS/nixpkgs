@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  gettext,
-  fetchurl,
-  pkg-config,
-  itstool,
-  libxml2,
-  libxslt,
-  gnome,
+{ lib
+, stdenv
+, meson
+, ninja
+, gettext
+, fetchurl
+, pkg-config
+, itstool
+, libxml2
+, libxslt
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

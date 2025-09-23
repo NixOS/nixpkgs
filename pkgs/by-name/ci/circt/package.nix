@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  cmake,
-  coreutils,
-  python3,
-  git,
-  fetchFromGitHub,
-  ninja,
-  lit,
-  z3,
-  gitUpdater,
-  callPackage,
+{ stdenv
+, lib
+, cmake
+, coreutils
+, python3
+, git
+, fetchFromGitHub
+, ninja
+, lit
+, z3
+, gitUpdater
+, callPackage
+,
 }:
 
 let

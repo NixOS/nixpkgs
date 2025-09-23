@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  bzip2,
-  callPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  testers,
-  xz,
-  zstd,
+{ lib
+, stdenv
+, bzip2
+, callPackage
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, testers
+, xz
+, zstd
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

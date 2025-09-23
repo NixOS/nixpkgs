@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  napalm,
-  librouteros,
-  pytestCheckHook,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, napalm
+, librouteros
+, pytestCheckHook
+, pythonAtLeast
+,
 }:
 buildPythonPackage rec {
   pname = "napalm-ros";

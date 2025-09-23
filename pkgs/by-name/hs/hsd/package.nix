@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  python3,
-  unbound,
-  cctools,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, python3
+, unbound
+, cctools
+,
 }:
 
 buildNpmPackage rec {

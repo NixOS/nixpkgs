@@ -1,15 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  meson,
-  ninja,
-  pkg-config,
-
-  libxkbcommon,
-  wayland,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libxkbcommon
+, wayland
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation rec {

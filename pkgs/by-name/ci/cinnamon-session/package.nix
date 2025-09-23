@@ -1,25 +1,25 @@
-{
-  fetchFromGitHub,
-  cinnamon-desktop,
-  cinnamon-settings-daemon,
-  cinnamon-translations,
-  glib,
-  gsettings-desktop-schemas,
-  gtk3,
-  libcanberra,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  lib,
-  stdenv,
-  systemd,
-  wrapGAppsHook3,
-  xapp,
-  xorg,
-  libexecinfo,
-  pango,
+{ fetchFromGitHub
+, cinnamon-desktop
+, cinnamon-settings-daemon
+, cinnamon-translations
+, glib
+, gsettings-desktop-schemas
+, gtk3
+, libcanberra
+, libxslt
+, meson
+, ninja
+, pkg-config
+, python3
+, lib
+, stdenv
+, systemd
+, wrapGAppsHook3
+, xapp
+, xorg
+, libexecinfo
+, pango
+,
 }:
 
 let

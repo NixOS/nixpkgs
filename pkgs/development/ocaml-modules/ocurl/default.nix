@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  ocaml,
-  findlib,
-  curl,
-  lwt,
-  lwt_ppx,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, ocaml
+, findlib
+, curl
+, lwt
+, lwt_ppx
+,
 }:
 if lib.versionOlder ocaml.version "4.04" then
   throw "ocurl is not available for OCaml ${ocaml.version}"

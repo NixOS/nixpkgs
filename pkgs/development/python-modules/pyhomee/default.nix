@@ -1,10 +1,10 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  websockets,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

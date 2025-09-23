@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qtsvg,
-  fluidsynth,
+{ mkKdeDerivation
+, qtdeclarative
+, qtsvg
+, fluidsynth
+,
 }:
 mkKdeDerivation {
   pname = "minuet";

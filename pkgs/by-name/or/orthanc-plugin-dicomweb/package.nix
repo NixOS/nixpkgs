@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchhg,
-  fetchurl,
-  orthanc,
-  cmake,
-  python3,
-  unzip,
-  gtest,
-  jsoncpp,
-  boost,
-  pugixml,
-  libuuid,
-  zlib,
+{ lib
+, stdenv
+, fetchhg
+, fetchurl
+, orthanc
+, cmake
+, python3
+, unzip
+, gtest
+, jsoncpp
+, boost
+, pugixml
+, libuuid
+, zlib
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  pytest,
-  tornado,
-  fetchPypi,
+{ lib
+, buildPythonPackage
+, pytest
+, tornado
+, fetchPypi
+,
 }:
 
 buildPythonPackage rec {

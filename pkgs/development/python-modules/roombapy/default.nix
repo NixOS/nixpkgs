@@ -1,17 +1,17 @@
-{
-  lib,
-  amqtt,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  mashumaro,
-  orjson,
-  paho-mqtt,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  tabulate,
+{ lib
+, amqtt
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, mashumaro
+, orjson
+, paho-mqtt
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

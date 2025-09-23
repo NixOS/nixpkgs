@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pycryptodome,
-  py-datastruct,
-  pyserial,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pycryptodome
+, py-datastruct
+, pyserial
+,
 }:
 
 buildPythonPackage rec {

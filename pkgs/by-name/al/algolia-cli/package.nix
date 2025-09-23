@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 let
   version = "1.7.1";

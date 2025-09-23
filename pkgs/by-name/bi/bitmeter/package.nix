@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchurl,
-  libjack2,
-  gtk2,
-  pkg-config,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchurl
+, libjack2
+, gtk2
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

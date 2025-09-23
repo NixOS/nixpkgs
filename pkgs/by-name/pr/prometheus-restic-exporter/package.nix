@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  python3,
-  restic,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, python3
+, restic
+, nixosTests
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  freetype,
-  lcms2,
-  libjpeg,
-  libpng,
-  libtiff,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, freetype
+, lcms2
+, libjpeg
+, libpng
+, libtiff
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

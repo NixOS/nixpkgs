@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  checkseum,
-  optint,
-  cmdliner,
-  bigstringaf,
-  alcotest,
-  camlzip,
-  base64,
-  ctypes,
-  fmt,
-  crowbar,
-  rresult,
-  astring,
-  bos,
+{ lib
+, fetchurl
+, buildDunePackage
+, checkseum
+, optint
+, cmdliner
+, bigstringaf
+, alcotest
+, camlzip
+, base64
+, ctypes
+, fmt
+, crowbar
+, rresult
+, astring
+, bos
+,
 }:
 
 buildDunePackage rec {

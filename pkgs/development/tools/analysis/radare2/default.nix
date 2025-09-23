@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  capstone,
-  file,
-  gtk2,
-  gtkdialog,
-  libewf,
-  libusb-compat-0_1,
-  libuv,
-  libzip,
-  lua,
-  lz4,
-  meson,
-  ninja,
-  openssl,
-  perl,
-  pkg-config,
-  python3,
-  readline,
-  ruby,
-  vte,
-  xxHash,
-  zlib,
-  useX11 ? false,
-  rubyBindings ? false,
-  luaBindings ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, capstone
+, file
+, gtk2
+, gtkdialog
+, libewf
+, libusb-compat-0_1
+, libuv
+, libzip
+, lua
+, lz4
+, meson
+, ninja
+, openssl
+, perl
+, pkg-config
+, python3
+, readline
+, ruby
+, vte
+, xxHash
+, zlib
+, useX11 ? false
+, rubyBindings ? false
+, luaBindings ? false
+,
 }:
 let
   binaryninja = fetchFromGitHub {

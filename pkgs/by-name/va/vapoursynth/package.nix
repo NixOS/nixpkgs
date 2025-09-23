@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  makeWrapper,
-  runCommandCC,
-  runCommand,
-  vapoursynth,
-  buildEnv,
-  zimg,
-  libass,
-  python3,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, makeWrapper
+, runCommandCC
+, runCommand
+, vapoursynth
+, buildEnv
+, zimg
+, libass
+, python3
+, testers
+,
 }:
 
 stdenv.mkDerivation rec {

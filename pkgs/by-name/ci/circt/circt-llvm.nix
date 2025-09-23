@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  ninja,
-  circt,
-  llvm,
-  python3,
+{ lib
+, stdenv
+, cmake
+, ninja
+, circt
+, llvm
+, python3
+,
 }:
 stdenv.mkDerivation {
   pname = circt.pname + "-llvm";

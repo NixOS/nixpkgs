@@ -1,20 +1,20 @@
-{
-  stdenv,
-  gn,
-  ninja,
-  llvmPackages_21,
-  gclient2nix,
-  pkg-config,
-  glib,
-  python3,
-  symlinkJoin,
-  lib,
-  xorg,
-  wayland,
-  pciutils,
-  libGL,
-  apple-sdk_15,
-  xcbuild,
+{ stdenv
+, gn
+, ninja
+, llvmPackages_21
+, gclient2nix
+, pkg-config
+, glib
+, python3
+, symlinkJoin
+, lib
+, xorg
+, wayland
+, pciutils
+, libGL
+, apple-sdk_15
+, xcbuild
+,
 }:
 let
   llvmPackages = llvmPackages_21;

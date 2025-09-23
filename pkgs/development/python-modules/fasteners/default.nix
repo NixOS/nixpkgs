@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  diskcache,
-  eventlet,
-  fetchFromGitHub,
-  more-itertools,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, diskcache
+, eventlet
+, fetchFromGitHub
+, more-itertools
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,38 +1,38 @@
-{
-  lib,
-  fetchFromGitea,
-  installShellFiles,
-  libX11,
-  libinput,
-  libxcb,
-  libxkbcommon,
-  pixman,
-  pkg-config,
-  stdenv,
-  testers,
-  nixosTests,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots,
-  writeText,
-  xcbutilwm,
-  xwayland,
-  # Boolean flags
-  enableXWayland ? true,
-  withCustomConfigH ? (configH != null),
-  # Configurable options
-  configH ?
-    if conf != null then
-      lib.warn ''
-        conf parameter is deprecated;
-        use configH instead
-      '' conf
-    else
-      null,
-  # Deprecated options
+{ lib
+, fetchFromGitea
+, installShellFiles
+, libX11
+, libinput
+, libxcb
+, libxkbcommon
+, pixman
+, pkg-config
+, stdenv
+, testers
+, nixosTests
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlroots
+, writeText
+, xcbutilwm
+, xwayland
+, # Boolean flags
+  enableXWayland ? true
+, withCustomConfigH ? (configH != null)
+, # Configurable options
+  configH ? if conf != null then
+    lib.warn ''
+      conf parameter is deprecated;
+      use configH instead
+    ''
+      conf
+  else
+    null
+, # Deprecated options
   # Remove them before next version of either Nixpkgs or dwl itself
-  conf ? null,
+  conf ? null
+,
 }:
 
 # If we set withCustomConfigH, let's not forget configH

@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoconf,
-
-  # for passthru.tests
-  audacity,
-  mpd,
-  normalize,
-  ocamlPackages,
-  streamripper,
-  vlc,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoconf
+, # for passthru.tests
+  audacity
+, mpd
+, normalize
+, ocamlPackages
+, streamripper
+, vlc
+,
 }:
 
 stdenv.mkDerivation rec {

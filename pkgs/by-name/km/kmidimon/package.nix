@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  nix-update-script,
-  qt6,
-  qt6Packages,
-  cmake,
-  alsa-lib,
-  pandoc,
+{ lib
+, fetchFromGitHub
+, stdenv
+, nix-update-script
+, qt6
+, qt6Packages
+, cmake
+, alsa-lib
+, pandoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

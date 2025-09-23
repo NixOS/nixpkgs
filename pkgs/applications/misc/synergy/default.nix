@@ -1,32 +1,30 @@
-{
-  withGUI ? true,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-
-  cmake,
-  openssl,
-  pcre,
-  util-linux,
-  libselinux,
-  libsepol,
-  pkg-config,
-  gdk-pixbuf,
-  libnotify,
-  qttools,
-  libICE,
-  libSM,
-  libX11,
-  libxkbfile,
-  libXi,
-  libXtst,
-  libXrandr,
-  libXinerama,
-  xkeyboardconfig,
-  xinput,
-  avahi-compat,
-
+{ withGUI ? true
+, stdenv
+, lib
+, fetchFromGitHub
+, wrapQtAppsHook
+, cmake
+, openssl
+, pcre
+, util-linux
+, libselinux
+, libsepol
+, pkg-config
+, gdk-pixbuf
+, libnotify
+, qttools
+, libICE
+, libSM
+, libX11
+, libxkbfile
+, libXi
+, libXtst
+, libXrandr
+, libXinerama
+, xkeyboardconfig
+, xinput
+, avahi-compat
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  kdePackages,
-  qt6,
-  makeDesktopItem,
-  nix-update-script,
-  copyDesktopItems,
+{ stdenv
+, lib
+, fetchFromGitHub
+, kdePackages
+, qt6
+, makeDesktopItem
+, nix-update-script
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  cmake,
-  ninja,
-  pybind11,
-  scikit-build-core,
-
-  # dependencies
-  numpy,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  cmake
+, ninja
+, pybind11
+, scikit-build-core
+, # dependencies
+  numpy
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  perl,
-  pkg-config,
-  buildsystem,
-  libparserutils,
-  libwapcaplet,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, perl
+, pkg-config
+, buildsystem
+, libparserutils
+, libwapcaplet
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

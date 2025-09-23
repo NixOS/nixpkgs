@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  qtpositioning,
+{ mkKdeDerivation
+, qtpositioning
+,
 }:
 mkKdeDerivation {
   pname = "kweathercore";

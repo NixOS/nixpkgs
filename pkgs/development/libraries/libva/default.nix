@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  wayland-scanner,
-  libdrm,
-  minimal ? false,
-  libX11,
-  libxcb,
-  libXext,
-  libXfixes,
-  wayland,
-  libffi,
-  libGL,
-  mesa,
-  # for passthru.tests
-  intel-compute-runtime,
-  intel-media-driver,
-  mpv,
-  intel-vaapi-driver,
-  vlc,
-  testers,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, wayland-scanner
+, libdrm
+, minimal ? false
+, libX11
+, libxcb
+, libXext
+, libXfixes
+, wayland
+, libffi
+, libGL
+, mesa
+, # for passthru.tests
+  intel-compute-runtime
+, intel-media-driver
+, mpv
+, intel-vaapi-driver
+, vlc
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

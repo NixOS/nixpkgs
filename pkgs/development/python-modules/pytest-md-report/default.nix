@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  pytablewriter,
-  pytest,
-  tcolorpy,
-  typepy,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, pytablewriter
+, pytest
+, tcolorpy
+, typepy
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

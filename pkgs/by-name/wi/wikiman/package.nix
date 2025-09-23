@@ -1,17 +1,15 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-
-  fzf,
-  ripgrep,
-  gawk,
-  w3m,
-  coreutils,
-  parallel,
-
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, fzf
+, ripgrep
+, gawk
+, w3m
+, coreutils
+, parallel
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wikiman";

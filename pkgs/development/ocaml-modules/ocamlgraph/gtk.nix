@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  lablgtk,
-  ocamlgraph,
+{ buildDunePackage
+, lablgtk
+, ocamlgraph
+,
 }:
 
 buildDunePackage {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  fixDarwinDylibNames,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, fixDarwinDylibNames
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

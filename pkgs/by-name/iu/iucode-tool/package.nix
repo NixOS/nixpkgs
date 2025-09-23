@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  fetchpatch,
-  argp-standalone,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, fetchpatch
+, argp-standalone
+,
 }:
 
 stdenv.mkDerivation rec {

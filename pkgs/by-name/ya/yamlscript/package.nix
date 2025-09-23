@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGraalvmNativeImage,
-  fetchurl,
+{ lib
+, buildGraalvmNativeImage
+, fetchurl
+,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {

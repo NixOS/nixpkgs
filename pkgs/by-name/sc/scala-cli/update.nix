@@ -1,17 +1,17 @@
-{
-  lib,
-  curl,
-  writeShellScript,
-  jq,
-  gnused,
-  git,
-  nix,
-  coreutils,
+{ lib
+, curl
+, writeShellScript
+, jq
+, gnused
+, git
+, nix
+, coreutils
+,
 }:
-{
-  platforms,
-  pname,
-  version,
+{ platforms
+, pname
+, version
+,
 }:
 
 writeShellScript "${pname}-update-script" ''

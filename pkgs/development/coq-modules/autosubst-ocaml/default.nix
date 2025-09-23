@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -29,7 +29,8 @@ mkCoqDerivation {
         case = isEq "8.19";
         out = "1.1+8.19";
       }
-    ] null;
+    ]
+      null;
 
   buildInputs = with coq.ocamlPackages; [
     angstrom

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-pep517,
-  aiohttp,
-  async-timeout,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-pep517
+, aiohttp
+, async-timeout
+,
 }:
 
 buildPythonPackage rec {

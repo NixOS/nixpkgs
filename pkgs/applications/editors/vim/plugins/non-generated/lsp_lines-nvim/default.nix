@@ -1,8 +1,8 @@
-{
-  lib,
-  vimUtils,
-  fetchFromSourcehut,
-  nix-update-script,
+{ lib
+, vimUtils
+, fetchFromSourcehut
+, nix-update-script
+,
 }:
 let
   version = "3.0.0";

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libedit,
-  gmpxx,
-  bison,
-  flex,
-  enableReadline ? false,
-  readline,
-  gtest,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libedit
+, gmpxx
+, bison
+, flex
+, enableReadline ? false
+, readline
+, gtest
+,
 }:
 
 stdenv.mkDerivation rec {

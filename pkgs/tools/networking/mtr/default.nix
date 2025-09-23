@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libcap,
-  ncurses,
-  jansson,
-  withGtk ? false,
-  gtk3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libcap
+, ncurses
+, jansson
+, withGtk ? false
+, gtk3
+,
 }:
 
 stdenv.mkDerivation rec {

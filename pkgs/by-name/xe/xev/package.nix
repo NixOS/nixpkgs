@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libxrandr,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libx11
+, libxrandr
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xev";

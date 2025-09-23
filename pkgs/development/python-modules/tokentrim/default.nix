@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  tiktoken,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, tiktoken
+,
 }:
 
 buildPythonPackage rec {

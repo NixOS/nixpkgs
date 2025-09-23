@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  bison,
-  ruby,
-  zlib,
-  readline,
-  libiconv,
-  libunwind,
-  libxcrypt,
-  libyaml,
-  rust-jemalloc-sys-unprefixed,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, autoconf
+, automake
+, bison
+, ruby
+, zlib
+, readline
+, libiconv
+, libunwind
+, libxcrypt
+, libyaml
+, rust-jemalloc-sys-unprefixed
+,
 }:
 
 rustPlatform.buildRustPackage rec {

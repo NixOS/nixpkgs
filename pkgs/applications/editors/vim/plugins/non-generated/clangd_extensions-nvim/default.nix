@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromSourcehut,
-  nix-update-script,
-  vimUtils,
+{ lib
+, fetchFromSourcehut
+, nix-update-script
+, vimUtils
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "clangd_extensions.nvim";

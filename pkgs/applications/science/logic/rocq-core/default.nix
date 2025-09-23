@@ -4,19 +4,19 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchurl,
-  writeText,
-  pkg-config,
-  customOCamlPackages ? null,
-  ocamlPackages_4_14,
-  ncurses,
-  csdp ? null,
-  version,
-  rocq-version ? null,
+{ lib
+, stdenv
+, fetchzip
+, fetchurl
+, writeText
+, pkg-config
+, customOCamlPackages ? null
+, ocamlPackages_4_14
+, ncurses
+, csdp ? null
+, version
+, rocq-version ? null
+,
 }@args:
 let
   lib = import ../../../../build-support/rocq/extra-lib.nix { inherit (args) lib; };

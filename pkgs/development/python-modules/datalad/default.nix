@@ -1,52 +1,52 @@
-{
-  buildPythonPackage,
-  lib,
-  setuptools,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  git,
-  coreutils,
-  versioneer,
-  # core
-  platformdirs,
-  chardet,
-  iso8601,
-  humanize,
-  fasteners,
-  packaging,
-  patool,
-  tqdm,
-  annexremote,
-  looseversion,
-  git-annex,
-  # downloaders
-  boto3,
-  keyrings-alt,
-  keyring,
-  msgpack,
-  requests,
-  # publish
-  python-gitlab,
-  # misc
-  argcomplete,
-  pyperclip,
-  python-dateutil,
-  # duecredit
-  duecredit,
-  distro,
-  # win
-  colorama,
-  # python-version-dependent
-  pythonOlder,
-  importlib-metadata,
-  typing-extensions,
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
-  p7zip,
-  curl,
-  httpretty,
+{ buildPythonPackage
+, lib
+, setuptools
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, git
+, coreutils
+, versioneer
+, # core
+  platformdirs
+, chardet
+, iso8601
+, humanize
+, fasteners
+, packaging
+, patool
+, tqdm
+, annexremote
+, looseversion
+, git-annex
+, # downloaders
+  boto3
+, keyrings-alt
+, keyring
+, msgpack
+, requests
+, # publish
+  python-gitlab
+, # misc
+  argcomplete
+, pyperclip
+, python-dateutil
+, # duecredit
+  duecredit
+, distro
+, # win
+  colorama
+, # python-version-dependent
+  pythonOlder
+, importlib-metadata
+, typing-extensions
+, # tests
+  pytest-xdist
+, pytestCheckHook
+, p7zip
+, curl
+, httpretty
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pyyaml,
-  unidecode,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pyyaml
+, unidecode
+,
 }:
 
 buildPythonPackage rec {

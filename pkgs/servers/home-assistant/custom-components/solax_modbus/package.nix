@@ -1,8 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  pymodbus,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, pymodbus
+,
 }:
 
 buildHomeAssistantComponent rec {

@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  awscli,
-  azure-common,
-  azure-core,
-  azure-storage-blob,
-  boto3,
-  google-cloud-storage,
-  requests,
-  moto,
-  numpy,
-  paramiko,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pyopenssl,
-  responses,
-  setuptools,
-  setuptools-scm,
-  wrapt,
-  zstandard,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, awscli
+, azure-common
+, azure-core
+, azure-storage-blob
+, boto3
+, google-cloud-storage
+, requests
+, moto
+, numpy
+, paramiko
+, pytest-cov-stub
+, pytestCheckHook
+, pyopenssl
+, responses
+, setuptools
+, setuptools-scm
+, wrapt
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

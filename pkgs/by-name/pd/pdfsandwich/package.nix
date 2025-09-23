@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  ocaml,
-  makeWrapper,
-  fetchsvn,
-  ghostscript,
-  imagemagick,
-  perl,
-  poppler-utils,
-  tesseract,
-  unpaper,
+{ lib
+, stdenv
+, ocaml
+, makeWrapper
+, fetchsvn
+, ghostscript
+, imagemagick
+, perl
+, poppler-utils
+, tesseract
+, unpaper
+,
 }:
 
 stdenv.mkDerivation {

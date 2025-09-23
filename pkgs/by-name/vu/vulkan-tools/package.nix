@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  cmake,
-  pkg-config,
-  python3,
-  glslang,
-  libffi,
-  libX11,
-  libXau,
-  libxcb,
-  libXdmcp,
-  libXrandr,
-  vulkan-headers,
-  vulkan-loader,
-  vulkan-volk,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  moltenvk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, cmake
+, pkg-config
+, python3
+, glslang
+, libffi
+, libX11
+, libXau
+, libxcb
+, libXdmcp
+, libXrandr
+, vulkan-headers
+, vulkan-loader
+, vulkan-volk
+, wayland
+, wayland-protocols
+, wayland-scanner
+, moltenvk
+,
 }:
 
 stdenv.mkDerivation rec {

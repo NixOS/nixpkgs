@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  aiortsp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  orjson,
-  pycryptodomex,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, aiohttp
+, aiortsp
+, buildPythonPackage
+, fetchFromGitHub
+, orjson
+, pycryptodomex
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

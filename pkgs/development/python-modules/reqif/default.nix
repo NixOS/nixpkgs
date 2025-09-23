@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  jinja2,
-  lxml,
-  pytestCheckHook,
-  python,
-  xmlschema,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, jinja2
+, lxml
+, pytestCheckHook
+, python
+, xmlschema
+,
 }:
 
 buildPythonPackage rec {

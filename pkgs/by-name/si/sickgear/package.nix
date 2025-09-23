@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  makeWrapper,
-  libarchive,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, makeWrapper
+, libarchive
+,
 }:
 
 let

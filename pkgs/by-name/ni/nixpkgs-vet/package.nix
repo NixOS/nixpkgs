@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix,
-  nix-update-script,
-  rustPlatform,
+{ fetchFromGitHub
+, lib
+, nix
+, nix-update-script
+, rustPlatform
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-vet";

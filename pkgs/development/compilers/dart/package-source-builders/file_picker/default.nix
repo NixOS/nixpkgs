@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  zenity,
+{ lib
+, stdenv
+, zenity
+,
 }:
 
 { version, src, ... }:

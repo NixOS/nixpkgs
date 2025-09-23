@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  boost,
-  gd,
-  libogg,
-  libtheora,
-  libvorbis,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, pkg-config
+, boost
+, gd
+, libogg
+, libtheora
+, libvorbis
+,
 }:
 
 stdenv.mkDerivation rec {

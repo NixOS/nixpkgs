@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  numactl,
-  mpi,
-  sparsehash,
-  tbb_2022,
-  gtest,
-  mpiCheckPhaseHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, numactl
+, mpi
+, sparsehash
+, tbb_2022
+, gtest
+, mpiCheckPhaseHook
+,
 }:
 let
   kassert-src = fetchFromGitHub {

@@ -1,64 +1,60 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  aiohttp,
-  fsspec,
-  jinja2,
-  numpy,
-  psutil,
-  pyparsing,
-  requests,
-  torch,
-  tqdm,
-
-  # optional-dependencies
-  matplotlib,
-  networkx,
-  pandas,
-  protobuf,
-  wandb,
-  ipython,
-  matplotlib-inline,
-  pre-commit,
-  torch-geometric,
-  ase,
-  # captum,
-  graphviz,
-  h5py,
-  numba,
-  opt-einsum,
-  pgmpy,
-  pynndescent,
-  # pytorch-memlab,
-  rdflib,
-  rdkit,
-  scikit-image,
-  scikit-learn,
-  scipy,
-  statsmodels,
-  sympy,
-  tabulate,
-  torchmetrics,
-  trimesh,
-  pytorch-lightning,
-  yacs,
-  huggingface-hub,
-  onnx,
-  onnxruntime,
-  pytest,
-  pytest-cov-stub,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  aiohttp
+, fsspec
+, jinja2
+, numpy
+, psutil
+, pyparsing
+, requests
+, torch
+, tqdm
+, # optional-dependencies
+  matplotlib
+, networkx
+, pandas
+, protobuf
+, wandb
+, ipython
+, matplotlib-inline
+, pre-commit
+, torch-geometric
+, ase
+, # captum,
+  graphviz
+, h5py
+, numba
+, opt-einsum
+, pgmpy
+, pynndescent
+, # pytorch-memlab,
+  rdflib
+, rdkit
+, scikit-image
+, scikit-learn
+, scipy
+, statsmodels
+, sympy
+, tabulate
+, torchmetrics
+, trimesh
+, pytorch-lightning
+, yacs
+, huggingface-hub
+, onnx
+, onnxruntime
+, pytest
+, pytest-cov-stub
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

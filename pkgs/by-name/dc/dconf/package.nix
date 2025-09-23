@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  python3,
-  vala,
-  libxslt,
-  pkg-config,
-  glib,
-  bash-completion,
-  dbus,
-  gnome,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  nixosTests,
-  buildPackages,
-  gobject-introspection,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withDocs ? withIntrospection,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, mesonEmulatorHook
+, ninja
+, python3
+, vala
+, libxslt
+, pkg-config
+, glib
+, bash-completion
+, dbus
+, gnome
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, nixosTests
+, buildPackages
+, gobject-introspection
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withDocs ? withIntrospection
+,
 }:
 
 stdenv.mkDerivation rec {

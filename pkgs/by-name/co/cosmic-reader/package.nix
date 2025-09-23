@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  just,
-  libcosmicAppHook,
-  fontconfig,
-  freetype,
-  gumbo,
-  harfbuzz,
-  jbig2dec,
-  lcms2,
-  leptonica,
-  libjpeg,
-  openjpeg,
-  tesseract,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, just
+, libcosmicAppHook
+, fontconfig
+, freetype
+, gumbo
+, harfbuzz
+, jbig2dec
+, lcms2
+, leptonica
+, libjpeg
+, openjpeg
+, tesseract
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-reader";

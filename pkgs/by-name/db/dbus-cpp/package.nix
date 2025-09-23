@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  boost186,
-  cmake,
-  dbus,
-  doxygen,
-  graphviz,
-  gtest,
-  libxml2,
-  lomiri,
-  pkg-config,
-  process-cpp,
-  properties-cpp,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, boost186
+, cmake
+, dbus
+, doxygen
+, graphviz
+, gtest
+, libxml2
+, lomiri
+, pkg-config
+, process-cpp
+, properties-cpp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

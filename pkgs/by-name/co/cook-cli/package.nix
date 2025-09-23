@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  rustPlatform,
-  pkg-config,
-  openssl,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, rustPlatform
+, pkg-config
+, openssl
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cook-cli";

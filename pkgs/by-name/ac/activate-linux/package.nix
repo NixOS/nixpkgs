@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  xorg,
-  cairo,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  libconfig,
+{ stdenv
+, fetchFromGitHub
+, lib
+, pkg-config
+, xorg
+, cairo
+, wayland
+, wayland-protocols
+, wayland-scanner
+, libconfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gettext,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  libxfce4ui,
-  libxfce4util,
-  python3,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gettext
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, glib
+, gtk3
+, libxfce4ui
+, libxfce4util
+, python3
+, gitUpdater
+,
 }:
 
 let

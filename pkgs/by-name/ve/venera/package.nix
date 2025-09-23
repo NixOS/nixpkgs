@@ -1,14 +1,14 @@
-{
-  lib,
-  flutter335,
-  fetchFromGitHub,
-  webkitgtk_4_1,
-  copyDesktopItems,
-  makeDesktopItem,
-  runCommand,
-  yq-go,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter335
+, fetchFromGitHub
+, webkitgtk_4_1
+, copyDesktopItems
+, makeDesktopItem
+, runCommand
+, yq-go
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 let

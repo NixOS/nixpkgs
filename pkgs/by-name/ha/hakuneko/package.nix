@@ -1,18 +1,18 @@
-{
-  autoPatchelfHook,
-  dpkg,
-  fetchurl,
-  makeDesktopItem,
-  makeWrapper,
-  udev,
-  stdenv,
-  lib,
-  wrapGAppsHook3,
-  alsa-lib,
-  nss,
-  nspr,
-  systemd,
-  xorg,
+{ autoPatchelfHook
+, dpkg
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, udev
+, stdenv
+, lib
+, wrapGAppsHook3
+, alsa-lib
+, nss
+, nspr
+, systemd
+, xorg
+,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
         url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_i386.deb";
         sha256 = "32017d26bafffaaf0a83dd6954d3926557014af4022a972371169c56c0e3d98b";
       };
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   dontBuild = true;
   dontConfigure = true;

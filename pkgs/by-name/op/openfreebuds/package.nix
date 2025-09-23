@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  python3Packages,
-  qt6,
-  qt6Packages,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, python3Packages
+, qt6
+, qt6Packages
+,
 }:
 python3Packages.buildPythonApplication rec {
   name = "openfreebuds";

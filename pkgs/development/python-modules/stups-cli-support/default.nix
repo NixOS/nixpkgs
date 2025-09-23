@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  clickclick,
-  dnspython,
-  requests,
-  pytestCheckHook,
-  isPy3k,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, clickclick
+, dnspython
+, requests
+, pytestCheckHook
+, isPy3k
+,
 }:
 
 buildPythonPackage rec {

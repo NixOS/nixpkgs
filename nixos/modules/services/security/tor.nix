@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   cfg = config.services.tor;
@@ -291,29 +290,33 @@ let
         mkKeyValue = k: lib.generators.mkKeyValueDefault { mkValueString = mkValueString k; } " " k;
       }
       (
-        lib.mapAttrs (
-          k: v:
-          # Not necessary, but prettier rendering
-          if
-            lib.elem k [
-              "AutomapHostsSuffixes"
-              "DirPolicy"
-              "ExitPolicy"
-              "SocksPolicy"
-            ]
-            && v != [ ]
-          then
-            lib.concatStringsSep "," v
-          else
-            v
-        ) (lib.filterAttrs (k: v: !(v == null || v == "")) settings)
+        lib.mapAttrs
+          (
+            k: v:
+            # Not necessary, but prettier rendering
+            if
+              lib.elem k [
+                "AutomapHostsSuffixes"
+                "DirPolicy"
+                "ExitPolicy"
+                "SocksPolicy"
+              ]
+              && v != [ ]
+            then
+              lib.concatStringsSep "," v
+            else
+              v
+          )
+          (lib.filterAttrs (k: v: !(v == null || v == "")) settings)
       );
   torrc = pkgs.writeText "torrc" (
     genTorrc cfg.settings
     + lib.concatStrings (
-      lib.mapAttrsToList (
-        name: onion: "HiddenServiceDir ${onion.path}\n" + genTorrc onion.settings
-      ) cfg.relay.onionServices
+      lib.mapAttrsToList
+        (
+          name: onion: "HiddenServiceDir ${onion.path}\n" + genTorrc onion.settings
+        )
+        cfg.relay.onionServices
     )
   );
 in
@@ -816,9 +819,11 @@ in
                       config.authorizeClient.authType + " " + lib.concatStringsSep "," config.authorizeClient.clientNames
                     else
                       null;
-                  settings.HiddenServicePort = map (
-                    p: mkValueString "" p.port + " " + mkValueString "" p.target
-                  ) config.map;
+                  settings.HiddenServicePort = map
+                    (
+                      p: mkValueString "" p.port + " " + mkValueString "" p.target
+                    )
+                    config.map;
                 };
               }
             )
@@ -892,7 +897,7 @@ in
           options.ControlPort = lib.mkOption {
             description = (descriptionGeneric "ControlPort");
             default = [ ];
-            example = [ { port = 9051; } ];
+            example = [{ port = 9051; }];
             type =
               with lib.types;
               oneOf [
@@ -1133,13 +1138,13 @@ in
           };
           options.SOCKSPort = lib.mkOption {
             description = (descriptionGeneric "SOCKSPort");
-            default = lib.optionals cfg.settings.HiddenServiceNonAnonymousMode [ { port = 0; } ];
+            default = lib.optionals cfg.settings.HiddenServiceNonAnonymousMode [{ port = 0; }];
             defaultText = lib.literalExpression ''
               if config.${opt.settings}.HiddenServiceNonAnonymousMode == true
               then [ { port = 0; } ]
               else [ ]
             '';
-            example = [ { port = 9090; } ];
+            example = [{ port = 9090; }];
             type = lib.types.listOf (optionSOCKSPort true);
           };
           options.TestingTorNetwork = optionBool "TestingTorNetwork";
@@ -1191,25 +1196,27 @@ in
           always create a container/VM with a separate Tor daemon instance.
         ''
       ++ lib.flatten (
-        lib.mapAttrsToList (
-          n: o:
-          lib.optionals (o.settings.HiddenServiceVersion == 2) [
-            (lib.optional (o.settings.HiddenServiceExportCircuitID != null) ''
-              HiddenServiceExportCircuitID is used in the HiddenService: ${n}
-              but this option is only for v3 hidden services.
-            '')
-          ]
-          ++ lib.optionals (o.settings.HiddenServiceVersion != 2) [
-            (lib.optional (o.settings.HiddenServiceAuthorizeClient != null) ''
-              HiddenServiceAuthorizeClient is used in the HiddenService: ${n}
-              but this option is only for v2 hidden services.
-            '')
-            (lib.optional (o.settings.RendPostPeriod != null) ''
-              RendPostPeriod is used in the HiddenService: ${n}
-              but this option is only for v2 hidden services.
-            '')
-          ]
-        ) cfg.relay.onionServices
+        lib.mapAttrsToList
+          (
+            n: o:
+              lib.optionals (o.settings.HiddenServiceVersion == 2) [
+                (lib.optional (o.settings.HiddenServiceExportCircuitID != null) ''
+                  HiddenServiceExportCircuitID is used in the HiddenService: ${n}
+                  but this option is only for v3 hidden services.
+                '')
+              ]
+              ++ lib.optionals (o.settings.HiddenServiceVersion != 2) [
+                (lib.optional (o.settings.HiddenServiceAuthorizeClient != null) ''
+                  HiddenServiceAuthorizeClient is used in the HiddenService: ${n}
+                  but this option is only for v2 hidden services.
+                '')
+                (lib.optional (o.settings.RendPostPeriod != null) ''
+                  RendPostPeriod is used in the HiddenService: ${n}
+                  but this option is only for v2 hidden services.
+                '')
+              ]
+          )
+          cfg.relay.onionServices
       );
 
     users.groups.tor.gid = config.ids.gids.tor;
@@ -1236,21 +1243,22 @@ in
         ];
       })
       (lib.mkIf cfg.relay.enable (
-        lib.optionalAttrs (cfg.relay.role != "exit") {
-          ExitPolicy = lib.mkForce [ "reject *:*" ];
-        }
+        lib.optionalAttrs (cfg.relay.role != "exit")
+          {
+            ExitPolicy = lib.mkForce [ "reject *:*" ];
+          }
         //
-          lib.optionalAttrs
-            (lib.elem cfg.relay.role [
-              "bridge"
-              "private-bridge"
-            ])
-            {
-              BridgeRelay = true;
-              ExtORPort.port = lib.mkDefault "auto";
-              ServerTransportPlugin.transports = lib.mkDefault [ "obfs4" ];
-              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe pkgs.obfs4} managed";
-            }
+        lib.optionalAttrs
+          (lib.elem cfg.relay.role [
+            "bridge"
+            "private-bridge"
+          ])
+          {
+            BridgeRelay = true;
+            ExtORPort.port = lib.mkDefault "auto";
+            ServerTransportPlugin.transports = lib.mkDefault [ "obfs4" ];
+            ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe pkgs.obfs4} managed";
+          }
         // lib.optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;
           PublishServerDescriptor = false;
@@ -1293,11 +1301,11 @@ in
           AutomapHostsOnResolve = true;
         }
         //
-          lib.optionalAttrs
-            (lib.flatten (lib.mapAttrsToList (n: o: o.clientAuthorizations) cfg.client.onionServices) != [ ])
-            {
-              ClientOnionAuthDir = runDir + "/ClientOnionAuthDir";
-            }
+        lib.optionalAttrs
+          (lib.flatten (lib.mapAttrsToList (n: o: o.clientAuthorizations) cfg.client.onionServices) != [ ])
+          {
+            ClientOnionAuthDir = runDir + "/ClientOnionAuthDir";
+          }
       ))
     ];
 
@@ -1341,40 +1349,48 @@ in
               lib.concatStringsSep "\n" (
                 lib.flatten (
                   [ "set -eu" ]
-                  ++ lib.mapAttrsToList (
-                    name: onion:
-                    lib.optional (onion.authorizedClients != [ ]) ''
-                      rm -rf ${lib.escapeShellArg onion.path}/authorized_clients
-                      install -d -o tor -g tor -m 0700 ${lib.escapeShellArg onion.path} ${lib.escapeShellArg onion.path}/authorized_clients
-                    ''
-                    ++ lib.imap0 (i: pubKey: ''
-                      echo ${pubKey} |
-                      install -o tor -g tor -m 0400 /dev/stdin ${lib.escapeShellArg onion.path}/authorized_clients/${toString i}.auth
-                    '') onion.authorizedClients
-                    ++ lib.optional (onion.secretKey != null) ''
-                      install -d -o tor -g tor -m 0700 ${lib.escapeShellArg onion.path}
-                      key="$(cut -f1 -d: ${lib.escapeShellArg onion.secretKey} | head -1)"
-                      case "$key" in
-                       ("== ed25519v"*"-secret")
-                        install -o tor -g tor -m 0400 ${lib.escapeShellArg onion.secretKey} ${lib.escapeShellArg onion.path}/hs_ed25519_secret_key;;
-                       (*) echo >&2 "NixOS does not (yet) support secret key type for onion: ${name}"; exit 1;;
-                      esac
-                    ''
-                  ) cfg.relay.onionServices
-                  ++ lib.mapAttrsToList (
-                    name: onion:
-                    lib.imap0 (
-                      i: prvKeyPath:
-                      let
-                        hostname = lib.removeSuffix ".onion" name;
-                      in
-                      ''
-                        printf "%s:" ${lib.escapeShellArg hostname} | cat - ${lib.escapeShellArg prvKeyPath} |
-                        install -o tor -g tor -m 0700 /dev/stdin \
-                         ${runDir}/ClientOnionAuthDir/${lib.escapeShellArg hostname}.${toString i}.auth_private
-                      ''
-                    ) onion.clientAuthorizations
-                  ) cfg.client.onionServices
+                  ++ lib.mapAttrsToList
+                    (
+                      name: onion:
+                        lib.optional (onion.authorizedClients != [ ]) ''
+                          rm -rf ${lib.escapeShellArg onion.path}/authorized_clients
+                          install -d -o tor -g tor -m 0700 ${lib.escapeShellArg onion.path} ${lib.escapeShellArg onion.path}/authorized_clients
+                        ''
+                        ++ lib.imap0
+                          (i: pubKey: ''
+                            echo ${pubKey} |
+                            install -o tor -g tor -m 0400 /dev/stdin ${lib.escapeShellArg onion.path}/authorized_clients/${toString i}.auth
+                          '')
+                          onion.authorizedClients
+                        ++ lib.optional (onion.secretKey != null) ''
+                          install -d -o tor -g tor -m 0700 ${lib.escapeShellArg onion.path}
+                          key="$(cut -f1 -d: ${lib.escapeShellArg onion.secretKey} | head -1)"
+                          case "$key" in
+                           ("== ed25519v"*"-secret")
+                            install -o tor -g tor -m 0400 ${lib.escapeShellArg onion.secretKey} ${lib.escapeShellArg onion.path}/hs_ed25519_secret_key;;
+                           (*) echo >&2 "NixOS does not (yet) support secret key type for onion: ${name}"; exit 1;;
+                          esac
+                        ''
+                    )
+                    cfg.relay.onionServices
+                  ++ lib.mapAttrsToList
+                    (
+                      name: onion:
+                        lib.imap0
+                          (
+                            i: prvKeyPath:
+                              let
+                                hostname = lib.removeSuffix ".onion" name;
+                              in
+                              ''
+                                printf "%s:" ${lib.escapeShellArg hostname} | cat - ${lib.escapeShellArg prvKeyPath} |
+                                install -o tor -g tor -m 0700 /dev/stdin \
+                                 ${runDir}/ClientOnionAuthDir/${lib.escapeShellArg hostname}.${toString i}.auth_private
+                              ''
+                          )
+                          onion.clientAuthorizations
+                    )
+                    cfg.client.onionServices
                 )
               )
             )
@@ -1400,9 +1416,11 @@ in
           "tor/onion"
         ]
         ++ lib.flatten (
-          lib.mapAttrsToList (
-            name: onion: lib.optional (onion.secretKey == null) "tor/onion/${name}"
-          ) cfg.relay.onionServices
+          lib.mapAttrsToList
+            (
+              name: onion: lib.optional (onion.secretKey == null) "tor/onion/${name}"
+            )
+            cfg.relay.onionServices
         );
         # The following options are only to optimize:
         # systemd-analyze security tor

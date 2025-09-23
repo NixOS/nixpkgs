@@ -1,32 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  poetry-core,
-
-  # dependencies
-  docling,
-  pydantic-settings,
-  typer,
-  boto3,
-  pandas,
-  fastparquet,
-  pyarrow,
-  httpx,
-
-  # optional dependencies
-  ray,
-  rq,
-  msgpack,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, poetry-core
+, # dependencies
+  docling
+, pydantic-settings
+, typer
+, boto3
+, pandas
+, fastparquet
+, pyarrow
+, httpx
+, # optional dependencies
+  ray
+, rq
+, msgpack
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

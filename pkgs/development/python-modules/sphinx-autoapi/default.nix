@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  astroid,
-  jinja2,
-  pyyaml,
-  sphinx,
-  stdlib-list,
-
-  # tests
-  beautifulsoup4,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  flit-core
+, # dependencies
+  astroid
+, jinja2
+, pyyaml
+, sphinx
+, stdlib-list
+, # tests
+  beautifulsoup4
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

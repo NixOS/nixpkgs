@@ -1,13 +1,11 @@
-{
-  lib,
-  recurseIntoAttrs,
-
-  cudaPackages,
-
-  cudaPackages_12_6,
-  cudaPackages_12_8,
-  cudaPackages_12_9,
-  cudaPackages_12,
+{ lib
+, recurseIntoAttrs
+, cudaPackages
+, cudaPackages_12_6
+, cudaPackages_12_8
+, cudaPackages_12_9
+, cudaPackages_12
+,
 }@args:
 
 let
@@ -22,10 +20,10 @@ in
   (lib.filterAttrs (name: _: lib.hasPrefix "cudaPackages" name))
   (lib.mapAttrs (
     _: ps:
-    lib.pipe ps [
-      (lib.filterAttrs isTest)
-      recurseIntoAttrs
-    ]
+      lib.pipe ps [
+        (lib.filterAttrs isTest)
+        recurseIntoAttrs
+      ]
   ))
   recurseIntoAttrs
 ])

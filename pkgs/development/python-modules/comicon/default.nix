@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  ebooklib,
-  fetchFromGitHub,
-  lib,
-  lxml,
-  nix-update-script,
-  pillow,
-  poetry-core,
-  pypdf,
-  python-slugify,
-  pythonOlder,
+{ buildPythonPackage
+, ebooklib
+, fetchFromGitHub
+, lib
+, lxml
+, nix-update-script
+, pillow
+, poetry-core
+, pypdf
+, python-slugify
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

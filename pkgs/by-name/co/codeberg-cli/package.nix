@@ -1,11 +1,11 @@
-{
-  fetchFromGitea,
-  installShellFiles,
-  lib,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  stdenv,
+{ fetchFromGitea
+, installShellFiles
+, lib
+, openssl
+, pkg-config
+, rustPlatform
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "codeberg-cli";

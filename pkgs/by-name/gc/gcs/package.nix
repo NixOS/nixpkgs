@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  libGL,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXinerama,
-  libXi,
-  libXxf86vm,
-  mupdf,
-  fontconfig,
-  freetype,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, libGL
+, libX11
+, libXcursor
+, libXrandr
+, libXinerama
+, libXi
+, libXxf86vm
+, mupdf
+, fontconfig
+, freetype
+,
 }:
 
 buildGoModule rec {

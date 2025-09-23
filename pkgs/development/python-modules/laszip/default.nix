@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  scikit-build-core,
-  pybind11,
-  cmake,
-  laszip,
-  ninja,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, scikit-build-core
+, pybind11
+, cmake
+, laszip
+, ninja
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

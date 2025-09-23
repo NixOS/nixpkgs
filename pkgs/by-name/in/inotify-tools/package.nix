@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  nix-update-script,
-  fanotifySupport ? true,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, nix-update-script
+, fanotifySupport ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

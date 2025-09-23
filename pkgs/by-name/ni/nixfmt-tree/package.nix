@@ -1,18 +1,16 @@
-{
-  lib,
-  runCommand,
-  treefmt,
-  nixfmt,
-  nixfmt-tree,
-  git,
-  writableTmpDirAsHomeHook,
-
-  settings ? { },
-  runtimeInputs ? [ ],
-  nixfmtPackage ? nixfmt,
-
-  # NOTE: `runtimePackages` is deprecated. Use `nixfmtPackage` and/or `runtimeInputs`.
-  runtimePackages ? [ nixfmtPackage ],
+{ lib
+, runCommand
+, treefmt
+, nixfmt
+, nixfmt-tree
+, git
+, writableTmpDirAsHomeHook
+, settings ? { }
+, runtimeInputs ? [ ]
+, nixfmtPackage ? nixfmt
+, # NOTE: `runtimePackages` is deprecated. Use `nixfmtPackage` and/or `runtimeInputs`.
+  runtimePackages ? [ nixfmtPackage ]
+,
 }@args:
 let
   allRuntimeInputs = runtimePackages ++ runtimeInputs;
@@ -51,7 +49,8 @@ let
         nixfmt-tree: overriding `runtimePackages` is deprecated, use `runtimeInputs` instead.
         Note: you do not need to supply a nixfmt package when using `runtimeInputs`, however you can override `nixfmtPackage` to a different nixfmt package.
         For additional flexibility, or to configure treefmt without nixfmt, consider using `treefmt.withConfig` instead of `nixfmt-tree`.
-      '' allRuntimeInputs;
+      ''
+        allRuntimeInputs;
   };
 in
 treefmtWithConfig.overrideAttrs {

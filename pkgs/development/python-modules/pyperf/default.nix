@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  psutil,
-  unittestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, psutil
+, unittestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

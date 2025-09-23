@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libX11,
-  libXcursor,
-  libxcb,
-  python3,
-  installShellFiles,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libX11
+, libXcursor
+, libxcb
+, python3
+, installShellFiles
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 rustPlatform.buildRustPackage rec {

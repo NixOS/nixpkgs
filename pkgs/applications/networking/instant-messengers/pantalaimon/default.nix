@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
-  nixosTests,
-  enableDbusUi ? true,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, nixosTests
+, enableDbusUi ? true
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

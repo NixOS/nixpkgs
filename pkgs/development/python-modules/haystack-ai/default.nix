@@ -1,92 +1,92 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  boilerpy3,
-  events,
-  httpx,
-  jsonschema,
-  lazy-imports,
-  more-itertools,
-  networkx,
-  pandas,
-  pillow,
-  platformdirs,
-  posthog,
-  prompthub-py,
-  pydantic,
-  quantulum3,
-  rank-bm25,
-  requests,
-  requests-cache,
-  scikit-learn,
-  sseclient-py,
-  tenacity,
-  tiktoken,
-  tqdm,
-  transformers,
-  openai-whisper,
-  boto3,
-  botocore,
-  # , beir
-  selenium,
-  coverage,
-  dulwich,
-  # , jupytercontrib
-  mkdocs,
-  mypy,
-  pre-commit,
-  psutil,
-  # , pydoc-markdown
-  pylint,
-  pytest,
-  pytest-asyncio,
-  pytest-cov,
-  # , pytest-custom-exit-code
-  python-multipart,
-  reno,
-  responses,
-  toml,
-  tox,
-  watchdog,
-  elastic-transport,
-  elasticsearch,
-  # , azure-ai-formrecognizer
-  beautifulsoup4,
-  markdown,
-  python-docx,
-  python-frontmatter,
-  python-magic,
-  tika,
-  black,
-  huggingface-hub,
-  sentence-transformers,
-  mlflow,
-  rapidfuzz,
-  scipy,
-  seqeval,
-  pdf2image,
-  pytesseract,
-  faiss,
-  # , faiss-gpu
-  pinecone-client,
-  onnxruntime,
-  onnxruntime-tools,
-  # , onnxruntime-gpu
-  opensearch-py,
-  pymupdf,
-  langdetect,
-  nltk,
-  canals,
-  jinja2,
-  openai,
-  aiorwlock,
-  ray,
-  psycopg2,
-  sqlalchemy,
-  sqlalchemy-utils,
-  weaviate-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, boilerpy3
+, events
+, httpx
+, jsonschema
+, lazy-imports
+, more-itertools
+, networkx
+, pandas
+, pillow
+, platformdirs
+, posthog
+, prompthub-py
+, pydantic
+, quantulum3
+, rank-bm25
+, requests
+, requests-cache
+, scikit-learn
+, sseclient-py
+, tenacity
+, tiktoken
+, tqdm
+, transformers
+, openai-whisper
+, boto3
+, botocore
+, # , beir
+  selenium
+, coverage
+, dulwich
+, # , jupytercontrib
+  mkdocs
+, mypy
+, pre-commit
+, psutil
+, # , pydoc-markdown
+  pylint
+, pytest
+, pytest-asyncio
+, pytest-cov
+, # , pytest-custom-exit-code
+  python-multipart
+, reno
+, responses
+, toml
+, tox
+, watchdog
+, elastic-transport
+, elasticsearch
+, # , azure-ai-formrecognizer
+  beautifulsoup4
+, markdown
+, python-docx
+, python-frontmatter
+, python-magic
+, tika
+, black
+, huggingface-hub
+, sentence-transformers
+, mlflow
+, rapidfuzz
+, scipy
+, seqeval
+, pdf2image
+, pytesseract
+, faiss
+, # , faiss-gpu
+  pinecone-client
+, onnxruntime
+, onnxruntime-tools
+, # , onnxruntime-gpu
+  opensearch-py
+, pymupdf
+, langdetect
+, nltk
+, canals
+, jinja2
+, openai
+, aiorwlock
+, ray
+, psycopg2
+, sqlalchemy
+, sqlalchemy-utils
+, weaviate-client
+,
 }:
 
 buildPythonPackage rec {

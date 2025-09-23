@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libjpeg_turbo,
-  setuptools,
-  numpy,
-  python,
-  replaceVars,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, libjpeg_turbo
+, setuptools
+, numpy
+, python
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

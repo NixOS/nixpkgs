@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromSourcehut,
-  gentium-plus,
-  makeDesktopItem,
+{ lib
+, buildNimPackage
+, fetchFromSourcehut
+, gentium-plus
+, makeDesktopItem
+,
 }:
 
 buildNimPackage (finalAttrs: {

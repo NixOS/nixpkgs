@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPackages,
-  stdenv,
-  mkMesonExecutable,
+{ lib
+, buildPackages
+, stdenv
+, mkMesonExecutable
+, nix-util
+, nix-util-c
+, nix-util-test-support
+, rapidcheck
+, gtest
+, runCommand
+, # Configuration Options
 
-  nix-util,
-  nix-util-c,
-  nix-util-test-support,
-
-  rapidcheck,
-  gtest,
-  runCommand,
-
-  # Configuration Options
-
-  version,
-  resolvePath,
+  version
+, resolvePath
+,
 }:
 
 mkMesonExecutable (finalAttrs: {

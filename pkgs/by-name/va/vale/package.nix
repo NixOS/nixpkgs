@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  symlinkJoin,
-  versionCheckHook,
-  vale,
-  valeStyles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeBinaryWrapper
+, symlinkJoin
+, versionCheckHook
+, vale
+, valeStyles
+,
 }:
 
 buildGoModule rec {

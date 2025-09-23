@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  python312,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, python312
+, fetchFromGitHub
+,
 }:
 
 let

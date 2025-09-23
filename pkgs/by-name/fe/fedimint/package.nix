@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPackages,
-  fetchFromGitHub,
-  openssl,
-  pkg-config,
-  protobuf,
-  rustPlatform,
-  version ? "0.7.1",
-  hash ? "sha256-7meBYUN7sG1OAtMEm6I66+ptf4EfsbA+dm5/4P3IRV4=",
-  cargoHash ? "sha256-4cFuasH2hvrnzTBTFifHEMtXZKsBv7OVpuwPlV19GGw=",
+{ lib
+, buildPackages
+, fetchFromGitHub
+, openssl
+, pkg-config
+, protobuf
+, rustPlatform
+, version ? "0.7.1"
+, hash ? "sha256-7meBYUN7sG1OAtMEm6I66+ptf4EfsbA+dm5/4P3IRV4="
+, cargoHash ? "sha256-4cFuasH2hvrnzTBTFifHEMtXZKsBv7OVpuwPlV19GGw="
+,
 }:
 
 rustPlatform.buildRustPackage rec {

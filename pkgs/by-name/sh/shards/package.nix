@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal,
+{ lib
+, fetchFromGitHub
+, crystal
+,
 }:
 
 crystal.buildCrystalPackage rec {

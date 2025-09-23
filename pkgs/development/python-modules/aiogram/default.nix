@@ -1,30 +1,30 @@
-{
-  lib,
-  aiodns,
-  aiofiles,
-  aiohttp-socks,
-  aiohttp,
-  aresponses,
-  babel,
-  buildPythonPackage,
-  certifi,
-  cryptography,
-  fetchFromGitHub,
-  gitUpdater,
-  hatchling,
-  magic-filter,
-  motor,
-  pycryptodomex,
-  pydantic,
-  pymongo,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytest-lazy-fixture,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  redis,
-  uvloop,
+{ lib
+, aiodns
+, aiofiles
+, aiohttp-socks
+, aiohttp
+, aresponses
+, babel
+, buildPythonPackage
+, certifi
+, cryptography
+, fetchFromGitHub
+, gitUpdater
+, hatchling
+, magic-filter
+, motor
+, pycryptodomex
+, pydantic
+, pymongo
+, pytest-aiohttp
+, pytest-asyncio
+, pytest-lazy-fixture
+, pytestCheckHook
+, pythonOlder
+, pytz
+, redis
+, uvloop
+,
 }:
 
 buildPythonPackage rec {

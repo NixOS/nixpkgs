@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  datalad,
-  dcm2niix,
-  dcmstack,
-  etelemetry,
-  fetchPypi,
-  filelock,
-  git,
-  git-annex,
-  nibabel,
-  nipype,
-  pydicom,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  versioningit,
+{ lib
+, buildPythonPackage
+, datalad
+, dcm2niix
+, dcmstack
+, etelemetry
+, fetchPypi
+, filelock
+, git
+, git-annex
+, nibabel
+, nipype
+, pydicom
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, versioningit
+,
 }:
 
 buildPythonPackage rec {

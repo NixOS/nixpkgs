@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPackages,
-  fetchFromGitHub,
-  makeRustPlatform,
-  installShellFiles,
-  stdenv,
+{ lib
+, buildPackages
+, fetchFromGitHub
+, makeRustPlatform
+, installShellFiles
+, stdenv
+,
 }:
 
 let
@@ -60,7 +60,7 @@ in
 
 rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (
   args
-  // {
+    // {
     nativeBuildInputs = [
       installShellFiles
     ];

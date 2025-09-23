@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flake8,
-  pytestCheckHook,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flake8
+, pytestCheckHook
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,12 @@
-{
-  lib,
-  makeSetupHook,
-  which,
-  callPackage,
+{ lib
+, makeSetupHook
+, which
+, callPackage
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "patch-ppd-files";
   substitutions = {
     which = lib.getBin which;

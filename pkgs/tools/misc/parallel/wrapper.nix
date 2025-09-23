@@ -1,17 +1,17 @@
-{
-  lib,
-  symlinkJoin,
-  makeWrapper,
-  parallel,
-  perlPackages,
-  extraPerlPackages ? with perlPackages; [
+{ lib
+, symlinkJoin
+, makeWrapper
+, parallel
+, perlPackages
+, extraPerlPackages ? with perlPackages; [
     DBI
     DBDPg
     DBDSQLite
     DBDCSV
     TextCSV
-  ],
-  willCite ? false,
+  ]
+, willCite ? false
+,
 }:
 
 symlinkJoin {

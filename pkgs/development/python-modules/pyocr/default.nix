@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  buildPythonPackage,
-  pillow,
-  tesseract,
-  cuneiform,
-  isPy3k,
-  replaceVars,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  withTesseractSupport ? true,
-  withCuneiformSupport ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitLab
+, buildPythonPackage
+, pillow
+, tesseract
+, cuneiform
+, isPy3k
+, replaceVars
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, withTesseractSupport ? true
+, withCuneiformSupport ? stdenv.hostPlatform.isLinux
+,
 }:
 
 buildPythonPackage rec {

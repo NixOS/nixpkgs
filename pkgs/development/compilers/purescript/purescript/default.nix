@@ -1,10 +1,10 @@
-{
-  stdenv,
-  pkgs,
-  fetchurl,
-  zlib,
-  gmp,
-  lib,
+{ stdenv
+, pkgs
+, fetchurl
+, zlib
+, gmp
+, lib
+,
 }:
 
 # from justinwoo/easy-purescript-nix
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
         };
       };
     in
-    sources.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      sources.${stdenv.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   buildInputs = [
     zlib

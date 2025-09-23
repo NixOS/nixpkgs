@@ -1,16 +1,16 @@
-{
-  lib,
-  ansible-core,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  hatch-vcs,
-  paramiko,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  pywinrm,
-  salt,
+{ lib
+, ansible-core
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, hatch-vcs
+, paramiko
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pywinrm
+, salt
+,
 }:
 
 buildPythonPackage rec {

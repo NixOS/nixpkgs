@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, wrapQtAppsHook
+,
 }:
 
 python3Packages.buildPythonPackage rec {

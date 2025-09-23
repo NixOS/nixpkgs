@@ -1,20 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  gevent,
-  twisted,
-  tornado,
-
-  # tests
-  nose2,
-  mock,
-
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  gevent
+, twisted
+, tornado
+, # tests
+  nose2
+, mock
+,
 }:
 
 buildPythonPackage rec {

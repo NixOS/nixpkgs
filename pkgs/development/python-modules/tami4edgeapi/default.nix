@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyjwt,
-  pypasser,
-  requests,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyjwt
+, pypasser
+, requests
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

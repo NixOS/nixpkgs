@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.mosquitto;
@@ -37,14 +36,16 @@ let
 
   assertKeysValid =
     prefix: valid: config:
-    lib.mapAttrsToList (n: _: {
-      assertion = valid ? ${n};
-      message = "Invalid config key ${prefix}.${n}.";
-    }) config;
+    lib.mapAttrsToList
+      (n: _: {
+        assertion = valid ? ${n};
+        message = "Invalid config key ${prefix}.${n}.";
+      })
+      config;
 
   formatFreeform =
-    {
-      prefix ? "",
+    { prefix ? ""
+    ,
     }:
     lib.mapAttrsToList (n: v: "${prefix}${n} ${optionToString v}");
 
@@ -117,20 +118,24 @@ let
 
   userAsserts =
     prefix: users:
-    lib.mapAttrsToList (n: _: {
-      assertion = builtins.match "[^:\r\n]+" n != null;
-      message = "Invalid user name ${n} in ${prefix}";
-    }) users
-    ++ lib.mapAttrsToList (n: u: {
-      assertion =
-        lib.count (s: s != null) [
-          u.password
-          u.passwordFile
-          u.hashedPassword
-          u.hashedPasswordFile
-        ] <= 1;
-      message = "Cannot set more than one password option for user ${n} in ${prefix}";
-    }) users;
+    lib.mapAttrsToList
+      (n: _: {
+        assertion = builtins.match "[^:\r\n]+" n != null;
+        message = "Invalid user name ${n} in ${prefix}";
+      })
+      users
+    ++ lib.mapAttrsToList
+      (n: u: {
+        assertion =
+          lib.count (s: s != null) [
+            u.password
+            u.passwordFile
+            u.hashedPassword
+            u.hashedPasswordFile
+          ] <= 1;
+        message = "Cannot set more than one password option for user ${n} in ${prefix}";
+      })
+      users;
 
   listenerScope = index: "listener-${toString index}";
   userScope = prefix: index: "${prefix}-user-${toString index}";
@@ -174,14 +179,18 @@ let
         let
           scopedUsers = toScopedUsers listenerScope users;
         in
-        lib.mapAttrsToList (
-          name: user:
-          ''addLine ${lib.escapeShellArg name} "''$(systemd-creds cat ${credentialID user.scope store})"''
-        ) (lib.filterAttrs (_: user: user.${store} != null) scopedUsers)
-        ++ lib.mapAttrsToList (
-          name: user:
-          ''addFile ${lib.escapeShellArg name} "''${CREDENTIALS_DIRECTORY}/${credentialID user.scope file}"''
-        ) (lib.filterAttrs (_: user: user.${file} != null) scopedUsers);
+        lib.mapAttrsToList
+          (
+            name: user:
+            ''addLine ${lib.escapeShellArg name} "''$(systemd-creds cat ${credentialID user.scope store})"''
+          )
+          (lib.filterAttrs (_: user: user.${store} != null) scopedUsers)
+        ++ lib.mapAttrsToList
+          (
+            name: user:
+            ''addFile ${lib.escapeShellArg name} "''${CREDENTIALS_DIRECTORY}/${credentialID user.scope file}"''
+          )
+          (lib.filterAttrs (_: user: user.${file} != null) scopedUsers);
       plainLines = makeLines "password" "passwordFile";
       hashedLines = makeLines "hashedPassword" "hashedPasswordFile";
     in
@@ -249,10 +258,12 @@ let
 
   authAsserts =
     prefix: auth:
-    lib.mapAttrsToList (n: _: {
-      assertion = configKey.check n;
-      message = "Invalid auth plugin key ${prefix}.${n}";
-    }) auth;
+    lib.mapAttrsToList
+      (n: _: {
+        assertion = configKey.check n;
+        message = "Invalid auth plugin key ${prefix}.${n}";
+      })
+      auth;
 
   formatAuthPlugin =
     plugin:
@@ -723,22 +734,26 @@ in
           cfg.includeDirs
           ++ lib.filter (v: v != null) (
             lib.flatten [
-              (map (l: [
-                (l.settings.psk_file or null)
-                (l.settings.http_dir or null)
-                (l.settings.cafile or null)
-                (l.settings.capath or null)
-                (l.settings.certfile or null)
-                (l.settings.crlfile or null)
-                (l.settings.dhparamfile or null)
-                (l.settings.keyfile or null)
-              ]) cfg.listeners)
-              (lib.mapAttrsToList (_: b: [
-                (b.settings.bridge_cafile or null)
-                (b.settings.bridge_capath or null)
-                (b.settings.bridge_certfile or null)
-                (b.settings.bridge_keyfile or null)
-              ]) cfg.bridges)
+              (map
+                (l: [
+                  (l.settings.psk_file or null)
+                  (l.settings.http_dir or null)
+                  (l.settings.cafile or null)
+                  (l.settings.capath or null)
+                  (l.settings.certfile or null)
+                  (l.settings.crlfile or null)
+                  (l.settings.dhparamfile or null)
+                  (l.settings.keyfile or null)
+                ])
+                cfg.listeners)
+              (lib.mapAttrsToList
+                (_: b: [
+                  (b.settings.bridge_cafile or null)
+                  (b.settings.bridge_capath or null)
+                  (b.settings.bridge_certfile or null)
+                  (b.settings.bridge_keyfile or null)
+                ])
+                cfg.bridges)
             ]
           )
         );
@@ -761,30 +776,34 @@ in
         UMask = "0077";
       };
       preStart = lib.concatStringsSep "\n" (
-        lib.imap0 (
-          idx: listener:
-          makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"
-        ) cfg.listeners
+        lib.imap0
+          (
+            idx: listener:
+              makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"
+          )
+          cfg.listeners
       );
     };
 
     environment.etc = lib.listToAttrs (
-      lib.imap0 (idx: listener: {
-        name = "mosquitto/acl-${toString idx}.conf";
-        value = {
-          user = config.users.users.mosquitto.name;
-          group = config.users.users.mosquitto.group;
-          mode = "0400";
-          text = (
-            lib.concatStringsSep "\n" (
-              lib.flatten [
-                listener.acl
-                (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
-              ]
-            )
-          );
-        };
-      }) cfg.listeners
+      lib.imap0
+        (idx: listener: {
+          name = "mosquitto/acl-${toString idx}.conf";
+          value = {
+            user = config.users.users.mosquitto.name;
+            group = config.users.users.mosquitto.group;
+            mode = "0400";
+            text = (
+              lib.concatStringsSep "\n" (
+                lib.flatten [
+                  listener.acl
+                  (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
+                ]
+              )
+            );
+          };
+        })
+        cfg.listeners
     );
 
     users.users.mosquitto = {

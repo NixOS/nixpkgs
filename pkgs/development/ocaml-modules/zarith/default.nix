@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  pkg-config,
-  gmp,
-  version ? if lib.versionAtLeast ocaml.version "4.08" then "1.14" else "1.13",
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, pkg-config
+, gmp
+, version ? if lib.versionAtLeast ocaml.version "4.08" then "1.14" else "1.13"
+,
 }:
 
 if lib.versionOlder ocaml.version "4.04" then
@@ -24,8 +24,7 @@ else
         {
           "1.13" = "sha256-CNVKoJeO3fsmWaV/dwnUA8lgI4ZlxR/LKCXpCXUrpSg=";
           "1.14" = "sha256-xUrBDr+M8uW2KOy7DZieO/vDgsSOnyBnpOzQDlXJ0oE=";
-        }
-        ."${finalAttrs.version}";
+        }."${finalAttrs.version}";
     };
 
     nativeBuildInputs = [

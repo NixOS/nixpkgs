@@ -1,11 +1,11 @@
-{
-  qtModule,
-  stdenv,
-  lib,
-  qtbase,
-  qtdeclarative,
-  replaceVars,
-  llvmPackages,
+{ qtModule
+, stdenv
+, lib
+, qtbase
+, qtdeclarative
+, replaceVars
+, llvmPackages
+,
 }:
 
 qtModule {
@@ -60,9 +60,10 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "bin/macdeployqt" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && qtdeclarative != null
-  ) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.hostPlatform.isDarwin && qtdeclarative != null
+    ) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }

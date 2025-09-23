@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  cmake,
-  dbus,
-  dbus-test-runner,
-  dconf,
-  gnome-keyring,
-  libphonenumber,
-  libqtdbustest,
-  pkg-config,
-  protobuf,
-  qtbase,
-  qtdeclarative,
-  qtpim,
-  sqlite,
-  telepathy,
-  telepathy-mission-control,
-  validatePkgConfig,
-  wrapQtAppsHook,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, cmake
+, dbus
+, dbus-test-runner
+, dconf
+, gnome-keyring
+, libphonenumber
+, libqtdbustest
+, pkg-config
+, protobuf
+, qtbase
+, qtdeclarative
+, qtpim
+, sqlite
+, telepathy
+, telepathy-mission-control
+, validatePkgConfig
+, wrapQtAppsHook
+, xvfb-run
+,
 }:
 
 let

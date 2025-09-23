@@ -1,24 +1,24 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  buildPythonPackage,
-  setuptools,
-  beautifulsoup4,
-  gitpython,
-  pydata-sphinx-theme,
-  pygithub,
-  sphinx,
-  breathe,
-  myst-nb,
-  myst-parser,
-  sphinx-book-theme,
-  sphinx-copybutton,
-  sphinx-design,
-  sphinx-external-toc,
-  sphinx-notfound-page,
-  pyyaml,
-  fastjsonschema,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, buildPythonPackage
+, setuptools
+, beautifulsoup4
+, gitpython
+, pydata-sphinx-theme
+, pygithub
+, sphinx
+, breathe
+, myst-nb
+, myst-parser
+, sphinx-book-theme
+, sphinx-copybutton
+, sphinx-design
+, sphinx-external-toc
+, sphinx-notfound-page
+, pyyaml
+, fastjsonschema
+,
 }:
 
 # FIXME: Move to rocmPackages_common

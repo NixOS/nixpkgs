@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
-  asar,
-
-  tpsecore,
-  tetrio-desktop,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchYarnDeps
+, yarn
+, fixup-yarn-lock
+, nodejs
+, asar
+, tpsecore
+, tetrio-desktop
+,
 }:
 
 let

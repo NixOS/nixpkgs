@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libarchive,
-  python3,
-  file,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, libarchive
+, python3
+, file
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gobject-introspection,
-  meson,
-  ninja,
-  python3,
-  wrapGAppsHook3,
-  xapp,
-  glib,
-  gspell,
-  gtk3,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gobject-introspection
+, meson
+, ninja
+, python3
+, wrapGAppsHook3
+, xapp
+, glib
+, gspell
+, gtk3
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

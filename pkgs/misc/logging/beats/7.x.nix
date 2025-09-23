@@ -1,44 +1,46 @@
-{
-  lib,
-  fetchFromGitHub,
-  elk7Version,
-  buildGoModule,
-  libpcap,
-  nixosTests,
-  systemd,
-  config,
+{ lib
+, fetchFromGitHub
+, elk7Version
+, buildGoModule
+, libpcap
+, nixosTests
+, systemd
+, config
+,
 }:
 
 let
   beat =
     package: extraArgs:
     buildGoModule (
-      lib.attrsets.recursiveUpdate (rec {
-        pname = package;
-        version = elk7Version;
+      lib.attrsets.recursiveUpdate
+        (rec {
+          pname = package;
+          version = elk7Version;
 
-        src = fetchFromGitHub {
-          owner = "elastic";
-          repo = "beats";
-          rev = "v${version}";
-          hash = "sha256-TzcKB1hIHe1LNZ59GcvR527yvYqPKNXPIhpWH2vyMTY=";
-        };
+          src = fetchFromGitHub {
+            owner = "elastic";
+            repo = "beats";
+            rev = "v${version}";
+            hash = "sha256-TzcKB1hIHe1LNZ59GcvR527yvYqPKNXPIhpWH2vyMTY=";
+          };
 
-        vendorHash = "sha256-JOCcceYYutC5MI+/lXBqcqiET+mcrG1e3kWySo3+NIk=";
+          vendorHash = "sha256-JOCcceYYutC5MI+/lXBqcqiET+mcrG1e3kWySo3+NIk=";
 
-        subPackages = [ package ];
+          subPackages = [ package ];
 
-        meta = with lib; {
-          homepage = "https://www.elastic.co/products/beats";
-          license = licenses.asl20;
-          maintainers = with maintainers; [
-            fadenb
-            basvandijk
-            dfithian
-          ];
-          platforms = platforms.linux;
-        };
-      }) extraArgs
+          meta = with lib; {
+            homepage = "https://www.elastic.co/products/beats";
+            license = licenses.asl20;
+            maintainers = with maintainers; [
+              fadenb
+              basvandijk
+              dfithian
+            ];
+            platforms = platforms.linux;
+          };
+        })
+        extraArgs
     );
 in
 rec {

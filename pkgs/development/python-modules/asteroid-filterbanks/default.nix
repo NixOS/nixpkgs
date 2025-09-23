@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  torch,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  scipy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, torch
+, typing-extensions
+, # tests
+  pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage {

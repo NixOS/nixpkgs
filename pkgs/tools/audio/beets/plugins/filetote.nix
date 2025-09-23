@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  beets,
-  beetsPackages,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, beets
+, beetsPackages
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

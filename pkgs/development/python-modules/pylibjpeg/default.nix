@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  flit-core,
-  numpy,
-  pydicom,
-  pylibjpeg-data,
-  pylibjpeg-libjpeg,
-  pylibjpeg-openjpeg,
-  pylibjpeg-rle,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, flit-core
+, numpy
+, pydicom
+, pylibjpeg-data
+, pylibjpeg-libjpeg
+, pylibjpeg-openjpeg
+, pylibjpeg-rle
+,
 }:
 
 buildPythonPackage rec {

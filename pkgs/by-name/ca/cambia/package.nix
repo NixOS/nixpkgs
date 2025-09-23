@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  cargo-tauri,
-  fetchpatch,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, cargo-tauri
+, fetchpatch
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+,
 }:
 let
   version = "0-unstable-2025-03-07";

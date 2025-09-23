@@ -1,7 +1,7 @@
-{
-  rustPlatform,
-  libdeltachat,
-  pkg-config,
+{ rustPlatform
+, libdeltachat
+, pkg-config
+,
 }:
 
 rustPlatform.buildRustPackage {

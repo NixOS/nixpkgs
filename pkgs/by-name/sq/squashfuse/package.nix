@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libtool,
-  fuse3,
-  pkg-config,
-  lz4,
-  xz,
-  zlib,
-  lzo,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
+, fuse3
+, pkg-config
+, lz4
+, xz
+, zlib
+, lzo
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

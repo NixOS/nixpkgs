@@ -1,32 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  bitsandbytes,
-  numpy,
-  packaging,
-  torch,
-  unsloth-zoo,
-  xformers,
-  tyro,
-  transformers,
-  datasets,
-  sentencepiece,
-  tqdm,
-  accelerate,
-  trl,
-  peft,
-  protobuf,
-  huggingface-hub,
-  hf-transfer,
-  diffusers,
-  torchvision,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  bitsandbytes
+, numpy
+, packaging
+, torch
+, unsloth-zoo
+, xformers
+, tyro
+, transformers
+, datasets
+, sentencepiece
+, tqdm
+, accelerate
+, trl
+, peft
+, protobuf
+, huggingface-hub
+, hf-transfer
+, diffusers
+, torchvision
+,
 }:
 
 buildPythonPackage rec {

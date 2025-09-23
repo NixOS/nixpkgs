@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 
 let
@@ -73,10 +72,12 @@ in
         observation-path = lib.mkDefault "/var/run/ntpd-rs/observe";
       };
       source = lib.mkIf cfg.useNetworkingTimeServers (
-        map (ts: {
-          mode = if lib.strings.hasInfix "pool" ts then "pool" else "server";
-          address = ts;
-        }) config.networking.timeServers
+        map
+          (ts: {
+            mode = if lib.strings.hasInfix "pool" ts then "pool" else "server";
+            address = ts;
+          })
+          config.networking.timeServers
       );
     };
 

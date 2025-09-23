@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fuse3,
-  help2man,
-  makeWrapper,
-  meson,
-  ninja,
-  nix-update-script,
-  nixosTests,
-  pkg-config,
-  python3,
-  util-linux,
-  coreutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse3
+, help2man
+, makeWrapper
+, meson
+, ninja
+, nix-update-script
+, nixosTests
+, pkg-config
+, python3
+, util-linux
+, coreutils
+,
 }:
 
 stdenv.mkDerivation rec {

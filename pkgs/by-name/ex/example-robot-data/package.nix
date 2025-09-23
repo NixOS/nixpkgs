@@ -1,13 +1,13 @@
-{
-  cmake,
-  doxygen,
-  fetchFromGitHub,
-  lib,
-  jrl-cmakemodules,
-  pkg-config,
-  pythonSupport ? false,
-  python3Packages,
-  stdenv,
+{ cmake
+, doxygen
+, fetchFromGitHub
+, lib
+, jrl-cmakemodules
+, pkg-config
+, pythonSupport ? false
+, python3Packages
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

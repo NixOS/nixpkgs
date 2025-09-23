@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  pybind11,
-  setuptools,
-
-  # buildInputs
-  abseil-cpp,
-  protobuf,
-  gtest,
-
-  # dependencies
-  ml-dtypes,
-  numpy,
-  typing-extensions,
-
-  # tests
-  google-re2,
-  nbval,
-  parameterized,
-  pillow,
-  pytestCheckHook,
-  tabulate,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, pybind11
+, setuptools
+, # buildInputs
+  abseil-cpp
+, protobuf
+, gtest
+, # dependencies
+  ml-dtypes
+, numpy
+, typing-extensions
+, # tests
+  google-re2
+, nbval
+, parameterized
+, pillow
+, pytestCheckHook
+, tabulate
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

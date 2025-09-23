@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  libcosmicAppHook,
-  pkg-config,
-  util-linux,
-  libgbm,
-  pipewire,
-  gst_all_1,
-  cosmic-wallpapers,
-  coreutils,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libcosmicAppHook
+, pkg-config
+, util-linux
+, libgbm
+, pipewire
+, gst_all_1
+, cosmic-wallpapers
+, coreutils
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

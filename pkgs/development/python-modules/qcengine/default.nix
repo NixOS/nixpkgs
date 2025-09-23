@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ipykernel,
-  msgpack,
-  networkx,
-  nglview,
-  numpy,
-  psutil,
-  py-cpuinfo,
-  pydantic,
-  pytestCheckHook,
-  pyyaml,
-  qcelemental,
-  scipy,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ipykernel
+, msgpack
+, networkx
+, nglview
+, numpy
+, psutil
+, py-cpuinfo
+, pydantic
+, pytestCheckHook
+, pyyaml
+, qcelemental
+, scipy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  testers,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, testers
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "wrtag";

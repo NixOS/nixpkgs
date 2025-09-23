@@ -1,13 +1,13 @@
-{
-  runCommand,
-  nuv,
-  version,
+{ runCommand
+, nuv
+, version
+,
 }:
 
 runCommand "nuv-test-run"
-  {
-    nativeBuildInputs = [ nuv ];
-  }
+{
+  nativeBuildInputs = [ nuv ];
+}
   ''
     export TMP_BASE=$(mktemp -d /tmp/.nuv-XXXXX)
     export HOME=$TMP_BASE

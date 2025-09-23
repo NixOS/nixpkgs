@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  fftwFloat,
-  mbedtls,
-  boost,
-  lksctp-tools,
-  libconfig,
-  pcsclite,
-  uhd,
-  soapysdr-with-plugins,
-  libbladeRF,
-  zeromq,
-  enableLteRates ? false,
-  enableAvx ? stdenv.hostPlatform.avxSupport,
-  enableAvx2 ? stdenv.hostPlatform.avx2Support,
-  enableFma ? stdenv.hostPlatform.fmaSupport,
-  enableAvx512 ? stdenv.hostPlatform.avx512Support,
+{ stdenv
+, lib
+, cmake
+, fetchFromGitHub
+, pkg-config
+, fftwFloat
+, mbedtls
+, boost
+, lksctp-tools
+, libconfig
+, pcsclite
+, uhd
+, soapysdr-with-plugins
+, libbladeRF
+, zeromq
+, enableLteRates ? false
+, enableAvx ? stdenv.hostPlatform.avxSupport
+, enableAvx2 ? stdenv.hostPlatform.avx2Support
+, enableFma ? stdenv.hostPlatform.fmaSupport
+, enableAvx512 ? stdenv.hostPlatform.avx512Support
+,
 }:
 
 stdenv.mkDerivation rec {

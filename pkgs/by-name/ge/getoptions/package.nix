@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  shellspec,
-  busybox-sandbox-shell,
-  ksh,
-  mksh,
-  yash,
-  zsh,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, shellspec
+, busybox-sandbox-shell
+, ksh
+, mksh
+, yash
+, zsh
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  zlib,
-  gnutlsSupport ? false,
-  gnutls,
-  nettle,
-  opensslSupport ? true,
-  openssl,
+{ lib
+, stdenv
+, fetchgit
+, zlib
+, gnutlsSupport ? false
+, gnutls
+, nettle
+, opensslSupport ? true
+, openssl
+,
 }:
 
 assert (gnutlsSupport || opensslSupport);

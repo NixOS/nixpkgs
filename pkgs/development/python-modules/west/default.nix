@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  colorama,
-  fetchPypi,
-  packaging,
-  pykwalify,
-  pythonOlder,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, setuptools
+, colorama
+, fetchPypi
+, packaging
+, pykwalify
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

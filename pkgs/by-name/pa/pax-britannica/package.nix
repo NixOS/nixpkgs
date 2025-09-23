@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  copyDesktopItems,
-  fetchFromGitLab,
-  fetchpatch,
-  pkg-config,
-  luajit_2_0,
-  libGL,
-  libGLU,
-  alsa-lib,
-  xorg,
-  glfw2,
-  glfw3,
-  useGlfw3 ? false,
+{ lib
+, stdenv
+, copyDesktopItems
+, fetchFromGitLab
+, fetchpatch
+, pkg-config
+, luajit_2_0
+, libGL
+, libGLU
+, alsa-lib
+, xorg
+, glfw2
+, glfw3
+, useGlfw3 ? false
+,
 }:
 
 stdenv.mkDerivation {

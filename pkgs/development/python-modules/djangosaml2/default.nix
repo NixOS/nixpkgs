@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  defusedxml,
-  django,
-  pysaml2,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, defusedxml
+, django
+, pysaml2
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

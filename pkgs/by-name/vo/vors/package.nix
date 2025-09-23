@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchurl,
-
-  # buildInputs
-  libogg,
-  opusfile,
-  sox,
-
-  # nativeBuildInputs
-  makeWrapper,
-  perl,
-  pkg-config,
-  zstd,
-
-  # updateScript
-  curl,
-  genericUpdater,
-  writeShellScript,
+{ lib
+, stdenv
+, buildGoModule
+, fetchurl
+, # buildInputs
+  libogg
+, opusfile
+, sox
+, # nativeBuildInputs
+  makeWrapper
+, perl
+, pkg-config
+, zstd
+, # updateScript
+  curl
+, genericUpdater
+, writeShellScript
+,
 }:
 
 buildGoModule (finalAttrs: {

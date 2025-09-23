@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  coreutils,
-  gnugrep,
-  gnused,
-  mfc465cnlpr,
-  pkgsi686Linux,
-  psutils,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, coreutils
+, gnugrep
+, gnused
+, mfc465cnlpr
+, pkgsi686Linux
+, psutils
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDartApplication,
-  kdePackages,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, buildDartApplication
+, kdePackages
+, sqlite
+,
 }:
 
 let

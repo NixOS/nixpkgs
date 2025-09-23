@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  testers,
-  zig_0_14,
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, zig_0_14
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "findup";

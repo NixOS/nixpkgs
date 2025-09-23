@@ -1,10 +1,10 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  cmake,
+{ stdenvNoCC
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, cmake
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

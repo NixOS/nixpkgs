@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitLab,
-  stdenv,
-  cmake,
-  boost,
-  shared-mime-info,
-  rrdtool,
-  kdePackages,
+{ lib
+, fetchFromGitLab
+, stdenv
+, cmake
+, boost
+, shared-mime-info
+, rrdtool
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

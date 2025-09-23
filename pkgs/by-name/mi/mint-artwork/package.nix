@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  glib,
-  nixos-artwork,
+{ stdenv
+, lib
+, fetchurl
+, glib
+, nixos-artwork
+,
 }:
 
 stdenv.mkDerivation rec {

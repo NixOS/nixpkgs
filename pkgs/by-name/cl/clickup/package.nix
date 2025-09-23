@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  appimageTools,
-  fetchurl,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, appimageTools
+, fetchurl
+, makeWrapper
+,
 }:
 let
   pname = "clickup";

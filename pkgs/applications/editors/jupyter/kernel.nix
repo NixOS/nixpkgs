@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  python3,
+{ lib
+, stdenv
+, python3
+,
 }:
 
 let
@@ -33,8 +33,8 @@ in
   # Definitions is an attribute set.
 
   create =
-    {
-      definitions ? default,
+    { definitions ? default
+    ,
     }:
     stdenv.mkDerivation {
 

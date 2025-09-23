@@ -1,9 +1,9 @@
-{
-  bash,
-  boost,
-  faust,
-  lv2,
-  qt5,
+{ bash
+, boost
+, faust
+, lv2
+, qt5
+,
 }:
 
 faust.wrapWithBuildEnv {

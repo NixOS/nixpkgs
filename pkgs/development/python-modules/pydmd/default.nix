@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-git-versioning,
-
-  # dependencies
-  ezyrb,
-  future,
-  h5netcdf,
-  matplotlib,
-  numpy,
-  scipy,
-  xarray,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-git-versioning
+, # dependencies
+  ezyrb
+, future
+, h5netcdf
+, matplotlib
+, numpy
+, scipy
+, xarray
+, # tests
+  pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  matplotlib,
-  numpy,
-  pytestCheckHook,
-  pillow,
-  nix-update-script,
-  typst,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, matplotlib
+, numpy
+, pytestCheckHook
+, pillow
+, nix-update-script
+, typst
+,
 }:
 
 buildPythonPackage rec {

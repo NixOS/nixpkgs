@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  swiftPackages,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  makeWrapper,
-  aria2,
+{ lib
+, fetchFromGitHub
+, swiftPackages
+, swift
+, swiftpm
+, swiftpm2nix
+, makeWrapper
+, aria2
+,
 }:
 let
   generated = swiftpm2nix.helpers ./generated;

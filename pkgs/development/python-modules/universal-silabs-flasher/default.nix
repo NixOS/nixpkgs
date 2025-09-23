@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  async-timeout,
-  bellows,
-  click,
-  coloredlogs,
-  crc,
-  libgpiod,
-  pyserial-asyncio-fast,
-  typing-extensions,
-  zigpy,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-timeout,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  async-timeout
+, bellows
+, click
+, coloredlogs
+, crc
+, libgpiod
+, pyserial-asyncio-fast
+, typing-extensions
+, zigpy
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, pytest-mock
+, pytest-timeout
+,
 }:
 
 buildPythonPackage rec {

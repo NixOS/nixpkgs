@@ -1,27 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # dependencies
-  aiohappyeyeballs,
-  async-interrupt,
-  async-timeout,
-  chacha20poly1305-reuseable,
-  cryptography,
-  noiseprotocol,
-  protobuf,
-  zeroconf,
-
-  # tests
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  cython
+, setuptools
+, # dependencies
+  aiohappyeyeballs
+, async-interrupt
+, async-timeout
+, chacha20poly1305-reuseable
+, cryptography
+, noiseprotocol
+, protobuf
+, zeroconf
+, # tests
+  mock
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  ninja,
-  llvmPackages,
-  tbb,
-  mpi,
-  mpiSupport ? true,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, ninja
+, llvmPackages
+, tbb
+, mpi
+, mpiSupport ? true
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "viskores";

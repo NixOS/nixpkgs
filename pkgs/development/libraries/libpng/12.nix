@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, testers
+,
 }:
 
 assert stdenv.hostPlatform == stdenv.buildPlatform -> zlib != null;

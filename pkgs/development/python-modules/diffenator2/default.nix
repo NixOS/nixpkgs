@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  poetry-core,
-  poetry-dynamic-versioning,
-  blackrenderer,
-  fonttools,
-  freetype-py,
-  gflanguages,
-  glyphsets,
-  jinja2,
-  ninja,
-  pillow,
-  protobuf,
-  pyahocorasick,
-  python-bidi,
-  selenium,
-  tqdm,
-  uharfbuzz,
-  unicodedata2,
-  youseedee,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, poetry-core
+, poetry-dynamic-versioning
+, blackrenderer
+, fonttools
+, freetype-py
+, gflanguages
+, glyphsets
+, jinja2
+, ninja
+, pillow
+, protobuf
+, pyahocorasick
+, python-bidi
+, selenium
+, tqdm
+, uharfbuzz
+, unicodedata2
+, youseedee
+, numpy
+,
 }:
 
 buildPythonPackage rec {

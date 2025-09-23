@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, unstableGitUpdater
+,
 }:
 
 python3Packages.buildPythonPackage {

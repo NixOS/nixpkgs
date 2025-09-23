@@ -1,24 +1,24 @@
-{
-  stdenv,
-  fetchzip,
-  lib,
-  wrapGAppsHook3,
-  xdg-utils,
-  which,
-  alsa-lib,
-  atk,
-  cairo,
-  fontconfig,
-  gdk-pixbuf,
-  glib,
-  gst_all_1,
-  gtk3,
-  libSM,
-  libX11,
-  libXtst,
-  libpng12,
-  pango,
-  zlib,
+{ stdenv
+, fetchzip
+, lib
+, wrapGAppsHook3
+, xdg-utils
+, which
+, alsa-lib
+, atk
+, cairo
+, fontconfig
+, gdk-pixbuf
+, glib
+, gst_all_1
+, gtk3
+, libSM
+, libX11
+, libXtst
+, libpng12
+, pango
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
-        sha256 = "sha256-QCEkxOP1nWtBHFS259Oyqo2beehgCeR7zZ6wqBZe00s=";
-      }
+      fetchzip
+        {
+          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
+          sha256 = "sha256-QCEkxOP1nWtBHFS259Oyqo2beehgCeR7zZ6wqBZe00s=";
+        }
     else
       throw "Platform not supported";
 

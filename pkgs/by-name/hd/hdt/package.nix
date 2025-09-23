@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  libtool,
-  pkg-config,
-  zlib,
-  serd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, libtool
+, pkg-config
+, zlib
+, serd
+,
 }:
 
 stdenv.mkDerivation rec {

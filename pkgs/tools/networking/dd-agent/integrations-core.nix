@@ -33,11 +33,11 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  extraIntegrations ? { },
+{ lib
+, fetchFromGitHub
+, python3Packages
+, extraIntegrations ? { }
+,
 }:
 
 let
@@ -126,17 +126,19 @@ let
 
   # All integrations (default + extra):
   integrations = defaultIntegrations // extraIntegrations;
-  builtIntegrations = mapAttrs (
-    pname: fdeps:
-    buildIntegration {
-      inherit pname;
-      propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
-    }
-  ) integrations;
+  builtIntegrations = mapAttrs
+    (
+      pname: fdeps:
+        buildIntegration {
+          inherit pname;
+          propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
+        }
+    )
+    integrations;
 
 in
 builtIntegrations
-// {
+  // {
   inherit datadog_checks_base;
   python = python3Packages.python.withPackages (_: (attrValues builtIntegrations));
 }

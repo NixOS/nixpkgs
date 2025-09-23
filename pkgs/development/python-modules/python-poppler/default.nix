@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  meson-python,
-  ninja,
-  poppler,
-  pkg-config,
-  pybind11,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, meson-python
+, ninja
+, poppler
+, pkg-config
+, pybind11
+,
 }:
 
 buildPythonPackage rec {

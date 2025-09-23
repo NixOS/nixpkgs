@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  hypothesis,
-  six,
-  strict-rfc3339,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, hypothesis
+, six
+, strict-rfc3339
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flatbencode,
-  pytest-cov-stub,
-  pytest-httpserver,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flatbencode
+, pytest-cov-stub
+, pytest-httpserver
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

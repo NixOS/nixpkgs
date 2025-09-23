@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  fsspec,
-  lightning-utilities,
-  numpy,
-  packaging,
-  pyyaml,
-  torch,
-  torchmetrics,
-  tqdm,
-  traitlets,
-
-  # tests
-  psutil,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  fsspec
+, lightning-utilities
+, numpy
+, packaging
+, pyyaml
+, torch
+, torchmetrics
+, tqdm
+, traitlets
+, # tests
+  psutil
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

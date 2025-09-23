@@ -23,11 +23,10 @@ let
   nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames nodes) (range 1 254));
 
   networkModule =
-    {
-      config,
-      nodes,
-      pkgs,
-      ...
+    { config
+    , nodes
+    , pkgs
+    , ...
     }:
     let
       qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
@@ -96,14 +95,16 @@ let
           let
             config = nodes.${m'};
             hostnames =
-              optionalString (
-                config.networking.domain != null
-              ) "${config.networking.hostName}.${config.networking.domain} "
+              optionalString
+                (
+                  config.networking.domain != null
+                ) "${config.networking.hostName}.${config.networking.domain} "
               + "${config.networking.hostName}\n";
           in
-          optionalString (
-            config.networking.primaryIPAddress != ""
-          ) "${config.networking.primaryIPAddress} ${hostnames}"
+          optionalString
+            (
+              config.networking.primaryIPAddress != ""
+            ) "${config.networking.primaryIPAddress} ${hostnames}"
           + optionalString (config.networking.primaryIPv6Address != "") (
             "${config.networking.primaryIPv6Address} ${hostnames}"
           )

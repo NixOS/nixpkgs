@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libgcrypt,
+{ lib
+, stdenv
+, fetchurl
+, libgcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

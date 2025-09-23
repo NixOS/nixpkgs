@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchurl,
-  popt,
-  ncurses,
-  python3,
-  readline,
-  lib,
-  openssl,
+{ stdenv
+, fetchurl
+, popt
+, ncurses
+, python3
+, readline
+, lib
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

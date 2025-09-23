@@ -1,8 +1,8 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  nixos,
-  conmon,
+{ callPackage
+, fetchFromGitHub
+, nixos
+, conmon
+,
 }:
 let
   apptainer =

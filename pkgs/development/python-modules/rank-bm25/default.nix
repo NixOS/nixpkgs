@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  numpy,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, numpy
+,
 }:
 let
   pname = "rank-bm25";

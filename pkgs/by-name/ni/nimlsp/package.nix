@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  srcOnly,
-  nim-2_0,
-  nim-unwrapped-2_0,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, srcOnly
+, nim-2_0
+, nim-unwrapped-2_0
+,
 }:
 
 let

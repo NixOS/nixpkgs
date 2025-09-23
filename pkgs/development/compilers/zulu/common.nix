@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  setJavaClassPath,
-  testers,
-  enableJavaFX ? false,
-  dists,
-  # minimum dependencies
-  unzip,
-  autoPatchelfHook,
-  makeWrapper,
-  alsa-lib,
-  fontconfig,
-  freetype,
-  zlib,
-  xorg,
-  # runtime dependencies
-  cups,
-  # runtime dependencies for GTK+ Look and Feel
-  gtkSupport ? stdenv.hostPlatform.isLinux,
-  cairo,
-  glib,
-  gtk2,
-  gtk3,
-  # runtime dependencies for JavaFX
-  ffmpeg,
+{ lib
+, stdenv
+, fetchurl
+, setJavaClassPath
+, testers
+, enableJavaFX ? false
+, dists
+, # minimum dependencies
+  unzip
+, autoPatchelfHook
+, makeWrapper
+, alsa-lib
+, fontconfig
+, freetype
+, zlib
+, xorg
+, # runtime dependencies
+  cups
+, # runtime dependencies for GTK+ Look and Feel
+  gtkSupport ? stdenv.hostPlatform.isLinux
+, cairo
+, glib
+, gtk2
+, gtk3
+, # runtime dependencies for JavaFX
+  ffmpeg
+,
 }:
 let
   dist =
@@ -34,16 +34,14 @@ let
     {
       "aarch64" = "aarch64";
       "x86_64" = "x64";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name}
+    }.${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "Unsupported architecture: ${stdenv.hostPlatform.parsed.cpu.name}");
 
   platform =
     {
       "darwin" = "macosx";
       "linux" = "linux";
-    }
-    .${stdenv.hostPlatform.parsed.kernel.name}
+    }.${stdenv.hostPlatform.parsed.kernel.name}
       or (throw "Unsupported platform: ${stdenv.hostPlatform.parsed.kernel.name}");
 
   runtimeDependencies = [

@@ -1,34 +1,32 @@
-{
-  stdenv,
-  lib,
-  cacert,
-  curl,
-  runCommandLocal,
-  unzip,
-  appimage-run,
-  addDriverRunpath,
-  dbus,
-  libGLU,
-  xorg,
-  buildFHSEnv,
-  buildFHSEnvChroot,
-  bash,
-  writeText,
-  ocl-icd,
-  xkeyboard_config,
-  glib,
-  libarchive,
-  libxcrypt,
-  python3,
-  aprutil,
-  makeDesktopItem,
-  copyDesktopItems,
-  jq,
-
-  studioVariant ? false,
-
-  common-updater-scripts,
-  writeShellApplication,
+{ stdenv
+, lib
+, cacert
+, curl
+, runCommandLocal
+, unzip
+, appimage-run
+, addDriverRunpath
+, dbus
+, libGLU
+, xorg
+, buildFHSEnv
+, buildFHSEnvChroot
+, bash
+, writeText
+, ocl-icd
+, xkeyboard_config
+, glib
+, libarchive
+, libxcrypt
+, python3
+, aprutil
+, makeDesktopItem
+, copyDesktopItems
+, jq
+, studioVariant ? false
+, common-updater-scripts
+, writeShellApplication
+,
 }:
 
 let

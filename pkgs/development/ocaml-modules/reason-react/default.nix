@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  melange,
-  reason,
-  reason-react-ppx,
+{ buildDunePackage
+, melange
+, reason
+, reason-react-ppx
+,
 }:
 
 buildDunePackage {

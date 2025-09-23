@@ -1,17 +1,17 @@
-{
-  lib,
-  foomatic-db,
-  foomatic-db-nonfree,
-  buildEnv,
-  foomatic-db-engine,
-  stdenv,
-  cups-filters,
-  ghostscript,
-  netpbm,
-  perl,
-  psutils,
-  patchPpdFilesHook,
-  withNonfreeDb ? false, # include foomatic-db-nonfree ppd files
+{ lib
+, foomatic-db
+, foomatic-db-nonfree
+, buildEnv
+, foomatic-db-engine
+, stdenv
+, cups-filters
+, ghostscript
+, netpbm
+, perl
+, psutils
+, patchPpdFilesHook
+, withNonfreeDb ? false
+, # include foomatic-db-nonfree ppd files
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doctest,
-  nlohmann_json,
-  libuuid,
-  nix-update-script,
-  xtl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doctest
+, nlohmann_json
+, libuuid
+, nix-update-script
+, xtl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

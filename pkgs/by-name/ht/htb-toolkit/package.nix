@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  stdenv,
-  coreutils,
-  gnome-keyring,
-  libsecret,
-  openvpn,
-  gzip,
-  killall,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, coreutils
+, gnome-keyring
+, libsecret
+, openvpn
+, gzip
+, killall
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  cmake,
-  rtl-sdr,
-  libao,
-  fftwFloat,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, cmake
+, rtl-sdr
+, libao
+, fftwFloat
+,
 }:
 let
   src_faad2 = fetchFromGitHub {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  check,
-  subunit,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, check
+, subunit
+,
 }:
 stdenv.mkDerivation rec {
   pname = "orcania";

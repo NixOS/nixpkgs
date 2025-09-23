@@ -1,19 +1,19 @@
-{
-  lib,
-  python3Packages,
-  blueprint-compiler,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gst_all_1,
-  gobject-introspection,
-  libadwaita,
-  libportal-gtk4,
-  meson,
-  networkmanager,
-  ninja,
-  pipewire,
-  pkg-config,
-  wrapGAppsHook4,
+{ lib
+, python3Packages
+, blueprint-compiler
+, desktop-file-utils
+, fetchFromGitHub
+, gst_all_1
+, gobject-introspection
+, libadwaita
+, libportal-gtk4
+, meson
+, networkmanager
+, ninja
+, pipewire
+, pkg-config
+, wrapGAppsHook4
+,
 }:
 
 python3Packages.buildPythonApplication rec {

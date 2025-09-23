@@ -1,15 +1,15 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-regex-commit,
-  hatchling,
-  lib,
-  mashumaro,
-  orjson,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-regex-commit
+, hatchling
+, lib
+, mashumaro
+, orjson
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsForQt5,
-  x11Support ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsForQt5
+, x11Support ? true
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-
-  # build-system
-  setuptools,
-  versioningit,
-
-  # native dependencies
-  isa-l,
-
-  # tests
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, # build-system
+  setuptools
+, versioningit
+, # native dependencies
+  isa-l
+, # tests
+  pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

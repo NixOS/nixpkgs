@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  cachecontrol,
-  feedparser,
-  fetchFromGitHub,
-  gitpython,
-  jsonfeed,
-  mkdocs,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  validator-collection,
+{ lib
+, buildPythonPackage
+, cachecontrol
+, feedparser
+, fetchFromGitHub
+, gitpython
+, jsonfeed
+, mkdocs
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, validator-collection
+,
 }:
 
 buildPythonPackage rec {

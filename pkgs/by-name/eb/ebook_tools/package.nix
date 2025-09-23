@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  libxml2,
-  libzip,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, libxml2
+, libzip
+,
 }:
 
 stdenv.mkDerivation rec {

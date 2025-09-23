@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter332,
-  keybinder3,
-  libayatana-appindicator,
-  buildGoModule,
-  makeDesktopItem,
-  copyDesktopItems,
-  autoPatchelfHook,
+{ lib
+, fetchFromGitHub
+, flutter332
+, keybinder3
+, libayatana-appindicator
+, buildGoModule
+, makeDesktopItem
+, copyDesktopItems
+, autoPatchelfHook
+,
 }:
 
 let

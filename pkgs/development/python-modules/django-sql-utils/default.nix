@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  django,
-  sqlparse,
-  pytestCheckHook,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, django
+, sqlparse
+, pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

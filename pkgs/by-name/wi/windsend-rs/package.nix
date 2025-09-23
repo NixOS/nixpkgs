@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  copyDesktopItems,
-  pkg-config,
-  glib,
-  gtk3,
-  openssl,
-  wayland,
-  xdotool,
-  makeDesktopItem,
-  libayatana-appindicator,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, copyDesktopItems
+, pkg-config
+, glib
+, gtk3
+, openssl
+, wayland
+, xdotool
+, makeDesktopItem
+, libayatana-appindicator
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

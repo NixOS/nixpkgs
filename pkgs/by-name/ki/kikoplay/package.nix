@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  stdenv,
-  lib,
-  callPackage,
-  libsForQt5,
-  makeWrapper,
-  qt5,
-  mpv,
-  lua5_3_compat,
+{ fetchFromGitHub
+, stdenv
+, lib
+, callPackage
+, libsForQt5
+, makeWrapper
+, qt5
+, mpv
+, lua5_3_compat
+,
 }:
 let
   qhttpengine = callPackage ./qhttpengine.nix { };

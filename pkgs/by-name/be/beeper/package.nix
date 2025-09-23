@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  makeWrapper,
-  writeShellApplication,
-  curl,
-  common-updater-scripts,
+{ lib
+, fetchurl
+, appimageTools
+, makeWrapper
+, writeShellApplication
+, curl
+, common-updater-scripts
+,
 }:
 let
   pname = "beeper";

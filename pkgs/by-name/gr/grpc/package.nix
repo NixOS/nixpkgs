@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPackages,
-  cmake,
-  zlib,
-  c-ares,
-  pkg-config,
-  re2,
-  openssl,
-  protobuf,
-  grpc,
-  abseil-cpp,
-  libnsl,
-
-  # tests
-  python3,
-  arrow-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildPackages
+, cmake
+, zlib
+, c-ares
+, pkg-config
+, re2
+, openssl
+, protobuf
+, grpc
+, abseil-cpp
+, libnsl
+, # tests
+  python3
+, arrow-cpp
+,
 }:
 
 # This package should be updated together with all related python grpc packages
@@ -94,7 +93,7 @@ stdenv.mkDerivation rec {
     let
       defaultCxxIsOlderThan17 =
         (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
-        || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
+          || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
     in
     lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17) [
       "-DCMAKE_CXX_STANDARD=17"

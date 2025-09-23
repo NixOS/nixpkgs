@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  oldest-supported-numpy,
-  setuptools,
-
-  # dependencies
-  numpy,
-
-  # checks
-  colormath,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  cython
+, oldest-supported-numpy
+, setuptools
+, # dependencies
+  numpy
+, # checks
+  colormath
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

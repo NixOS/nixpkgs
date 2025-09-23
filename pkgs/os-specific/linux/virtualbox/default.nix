@@ -1,7 +1,7 @@
-{
-  stdenv,
-  virtualbox,
-  kernel,
+{ stdenv
+, virtualbox
+, kernel
+,
 }:
 
 stdenv.mkDerivation {

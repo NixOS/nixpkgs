@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libiconv,
-  numpy,
-  pytestCheckHook,
-  rustPlatform,
-  nix-update-script,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, libiconv
+, numpy
+, pytestCheckHook
+, rustPlatform
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

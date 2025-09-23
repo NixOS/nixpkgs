@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  fetchFromGitLab,
-  perl,
-  flex,
-  gnused,
-  coreutils,
-  which,
-  opensp,
-  groff,
-  texliveMedium,
-  texinfo,
-  withLatex ? false,
+{ stdenv
+, lib
+, makeWrapper
+, fetchFromGitLab
+, perl
+, flex
+, gnused
+, coreutils
+, which
+, opensp
+, groff
+, texliveMedium
+, texinfo
+, withLatex ? false
+,
 }:
 
 stdenv.mkDerivation rec {

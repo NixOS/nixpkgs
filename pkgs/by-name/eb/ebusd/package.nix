@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  fetchFromGitHub,
-  fetchpatch,
-  argparse,
-  mosquitto,
-  cmake,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  openssl,
+{ lib
+, stdenv
+, pkgs
+, fetchFromGitHub
+, fetchpatch
+, argparse
+, mosquitto
+, cmake
+, autoconf
+, automake
+, libtool
+, pkg-config
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

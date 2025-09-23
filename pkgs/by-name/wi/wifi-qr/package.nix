@@ -1,21 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  zenity,
-  ncurses,
-  networkmanager,
-  patsh,
-  procps,
-  qrencode,
-  stdenvNoCC,
-  xdg-utils,
-  zbar,
-  coreutils,
-  gnused,
-  gnugrep,
-  file,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, zenity
+, ncurses
+, networkmanager
+, patsh
+, procps
+, qrencode
+, stdenvNoCC
+, xdg-utils
+, zbar
+, coreutils
+, gnused
+, gnugrep
+, file
+,
 }:
 stdenvNoCC.mkDerivation (finalAttr: {
   pname = "wifi-qr";

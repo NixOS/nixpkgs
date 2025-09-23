@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ibus,
-  ibus-table,
-  pkg-config,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, ibus
+, ibus-table
+, pkg-config
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

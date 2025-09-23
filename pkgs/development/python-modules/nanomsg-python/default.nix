@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nanomsg,
-  setuptools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nanomsg
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

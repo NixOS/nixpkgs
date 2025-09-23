@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  pytest7CheckHook,
-  numpy,
-  pandas,
-  pytz,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, pytest7CheckHook
+, numpy
+, pandas
+, pytz
+,
 }:
 
 buildPythonPackage rec {

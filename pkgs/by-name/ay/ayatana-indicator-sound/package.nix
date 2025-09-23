@@ -1,31 +1,31 @@
-{
-  stdenv,
-  lib,
-  gitUpdater,
-  fetchFromGitHub,
-  nixosTests,
-  accountsservice,
-  cmake,
-  dbus,
-  dbus-test-runner,
-  glib,
-  gobject-introspection,
-  gtest,
-  intltool,
-  libayatana-common,
-  libgee,
-  libnotify,
-  libpulseaudio,
-  libqtdbusmock,
-  libqtdbustest,
-  libsForQt5,
-  libxml2,
-  lomiri,
-  pkg-config,
-  python3,
-  systemd,
-  vala,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, gitUpdater
+, fetchFromGitHub
+, nixosTests
+, accountsservice
+, cmake
+, dbus
+, dbus-test-runner
+, glib
+, gobject-introspection
+, gtest
+, intltool
+, libayatana-common
+, libgee
+, libnotify
+, libpulseaudio
+, libqtdbusmock
+, libqtdbustest
+, libsForQt5
+, libxml2
+, lomiri
+, pkg-config
+, python3
+, systemd
+, vala
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

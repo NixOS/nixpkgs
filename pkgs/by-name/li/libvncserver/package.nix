@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libjpeg,
-  openssl,
-  zlib,
-  libgcrypt,
-  libpng,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  buildExamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libjpeg
+, openssl
+, zlib
+, libgcrypt
+, libpng
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, enableShared ? !stdenv.hostPlatform.isStatic
+, buildExamples ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

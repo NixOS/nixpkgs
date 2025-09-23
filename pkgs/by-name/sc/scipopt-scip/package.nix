@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  readline,
-  gmp,
-  scipopt-soplex,
-  scipopt-papilo,
-  scipopt-zimpl,
-  ipopt,
-  tbb_2022,
-  boost,
-  gfortran,
-  criterion,
-  mpfr,
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, cmake
+, zlib
+, readline
+, gmp
+, scipopt-soplex
+, scipopt-papilo
+, scipopt-zimpl
+, ipopt
+, tbb_2022
+, boost
+, gfortran
+, criterion
+, mpfr
+,
 }:
 
 stdenv.mkDerivation rec {

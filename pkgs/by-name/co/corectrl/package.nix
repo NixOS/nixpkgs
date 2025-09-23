@@ -1,20 +1,20 @@
-{
-  botan3,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  hwdata,
-  lib,
-  libdrm,
-  kdePackages,
-  mesa-demos,
-  polkit,
-  procps,
-  pugixml,
-  spdlog,
-  stdenv,
-  util-linux,
-  vulkan-tools,
+{ botan3
+, fetchFromGitLab
+, cmake
+, pkg-config
+, hwdata
+, lib
+, libdrm
+, kdePackages
+, mesa-demos
+, polkit
+, procps
+, pugixml
+, spdlog
+, stdenv
+, util-linux
+, vulkan-tools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

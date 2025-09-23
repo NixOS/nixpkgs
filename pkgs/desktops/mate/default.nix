@@ -6,11 +6,11 @@ let
 
       # Update script tailored to mate packages from git repository
       mateUpdateScript =
-        {
-          pname,
-          odd-unstable ? true,
-          rev-prefix ? "v",
-          url ? null,
+        { pname
+        , odd-unstable ? true
+        , rev-prefix ? "v"
+        , url ? null
+        ,
         }:
         pkgs.gitUpdater {
           inherit odd-unstable rev-prefix;

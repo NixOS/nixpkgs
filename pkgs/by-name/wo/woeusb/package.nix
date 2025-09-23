@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  coreutils,
-  dosfstools,
-  findutils,
-  gawk,
-  gnugrep,
-  grub2_light,
-  ncurses,
-  ntfs3g,
-  parted,
-  p7zip,
-  util-linux,
-  wimlib,
-  wget,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, coreutils
+, dosfstools
+, findutils
+, gawk
+, gnugrep
+, grub2_light
+, ncurses
+, ntfs3g
+, parted
+, p7zip
+, util-linux
+, wimlib
+, wget
+,
 }:
 
 stdenv.mkDerivation rec {

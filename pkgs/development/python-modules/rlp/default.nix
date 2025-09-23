@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  setuptools,
-  buildPythonPackage,
-  eth-utils,
-  hypothesis,
-  pytestCheckHook,
-  pydantic,
+{ lib
+, fetchFromGitHub
+, setuptools
+, buildPythonPackage
+, eth-utils
+, hypothesis
+, pytestCheckHook
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

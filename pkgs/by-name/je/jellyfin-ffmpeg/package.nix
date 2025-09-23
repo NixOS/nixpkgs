@@ -1,7 +1,7 @@
-{
-  ffmpeg_7-full,
-  fetchFromGitHub,
-  lib,
+{ ffmpeg_7-full
+, fetchFromGitHub
+, lib
+,
 }:
 
 let

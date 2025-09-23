@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pillow,
-  xlib,
-  xvfb-run,
-  scrot,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pillow
+, xlib
+, xvfb-run
+, scrot
+,
 }:
 buildPythonPackage {
   pname = "pyscreeze";

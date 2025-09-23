@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  replaceVars,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  gi-docgen,
-  gnome,
-  glib,
-  gtk3,
-  gobject-introspection,
-  python3,
-  ncurses,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchurl
+, replaceVars
+, meson
+, ninja
+, pkg-config
+, gettext
+, gi-docgen
+, gnome
+, glib
+, gtk3
+, gobject-introspection
+, python3
+, ncurses
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

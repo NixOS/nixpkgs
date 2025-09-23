@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  cairo,
-  wayland,
-  libGL,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, glib
+, cairo
+, wayland
+, libGL
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "enkei";

@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  khard,
-  testers,
+{ lib
+, python3
+, fetchPypi
+, khard
+, testers
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

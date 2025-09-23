@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  readline,
-  libmysqlclient,
-  libpq,
-  sqlite,
+{ lib
+, stdenv
+, fetchurl
+, readline
+, libmysqlclient
+, libpq
+, sqlite
+,
 }:
 
 let

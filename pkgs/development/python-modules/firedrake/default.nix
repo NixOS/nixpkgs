@@ -1,52 +1,48 @@
-{
-  lib,
-  newScope,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  python,
-  pax-utils,
-
-  # build-system
-  setuptools,
-  cython,
-  pybind11,
-
-  # dependencies
-  decorator,
-  cachetools,
-  mpi4py,
-  fenics-ufl,
-  firedrake-fiat,
-  h5py,
-  libsupermesh,
-  loopy,
-  petsc4py,
-  numpy,
-  packaging,
-  pkgconfig,
-  progress,
-  pyadjoint-ad,
-  pycparser,
-  pytools,
-  requests,
-  rtree,
-  scipy,
-  sympy,
-  islpy,
-  matplotlib,
-
-  # tests
-  pytest,
-  mpi-pytest,
-  mpiCheckPhaseHook,
-  writableTmpDirAsHomeHook,
-
-  # passthru
-  firedrake,
-  mpich,
-  nix-update-script,
+{ lib
+, newScope
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, python
+, pax-utils
+, # build-system
+  setuptools
+, cython
+, pybind11
+, # dependencies
+  decorator
+, cachetools
+, mpi4py
+, fenics-ufl
+, firedrake-fiat
+, h5py
+, libsupermesh
+, loopy
+, petsc4py
+, numpy
+, packaging
+, pkgconfig
+, progress
+, pyadjoint-ad
+, pycparser
+, pytools
+, requests
+, rtree
+, scipy
+, sympy
+, islpy
+, matplotlib
+, # tests
+  pytest
+, mpi-pytest
+, mpiCheckPhaseHook
+, writableTmpDirAsHomeHook
+, # passthru
+  firedrake
+, mpich
+, nix-update-script
+,
 }:
 let
   firedrakePackages = lib.makeScope newScope (self: {

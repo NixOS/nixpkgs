@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  six,
-  pythonAtLeast,
-  distutils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, six
+, pythonAtLeast
+, distutils
+,
 }:
 
 buildPythonPackage rec {

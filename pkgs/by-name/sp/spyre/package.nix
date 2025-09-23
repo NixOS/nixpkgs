@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  yara,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, yara
+,
 }:
 
 buildGoModule rec {

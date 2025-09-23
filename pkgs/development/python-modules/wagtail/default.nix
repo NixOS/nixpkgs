@@ -1,32 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  anyascii,
-  beautifulsoup4,
-  django,
-  django-filter,
-  django-modelcluster,
-  django-taggit,
-  django-tasks,
-  django-treebeard,
-  djangorestframework,
-  draftjs-exporter,
-  laces,
-  openpyxl,
-  permissionedforms,
-  pillow,
-  requests,
-  telepath,
-  willow,
-
-  # tests
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  anyascii
+, beautifulsoup4
+, django
+, django-filter
+, django-modelcluster
+, django-taggit
+, django-tasks
+, django-treebeard
+, djangorestframework
+, draftjs-exporter
+, laces
+, openpyxl
+, permissionedforms
+, pillow
+, requests
+, telepath
+, willow
+, # tests
+  callPackage
+,
 }:
 
 buildPythonPackage rec {

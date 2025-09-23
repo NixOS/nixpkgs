@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  fetchzip,
-  testdisk,
-  imagemagick,
-  jdk,
-  findutils,
-  sleuthkit,
+{ stdenv
+, lib
+, makeWrapper
+, fetchzip
+, testdisk
+, imagemagick
+, jdk
+, findutils
+, sleuthkit
+,
 }:
 let
   jdkWithJfx = jdk.override (

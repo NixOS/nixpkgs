@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  osi,
-  cplex,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, python3
+, osi
+, cplex
+,
 }:
 
 stdenv.mkDerivation rec {

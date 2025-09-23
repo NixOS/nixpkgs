@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  rustPlatform,
-  cargo,
-  rustc,
-  unittestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, rustPlatform
+, cargo
+, rustc
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

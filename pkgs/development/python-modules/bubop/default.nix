@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  loguru,
-  python-dateutil,
-  pyyaml,
-  tqdm,
-  click,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, loguru
+, python-dateutil
+, pyyaml
+, tqdm
+, click
+,
 }:
 
 buildPythonPackage rec {

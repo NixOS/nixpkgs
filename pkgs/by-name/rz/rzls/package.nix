@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  jq,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, jq
+,
 }:
 let
   pname = "rzls";

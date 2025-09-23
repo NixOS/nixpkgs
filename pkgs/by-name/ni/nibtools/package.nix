@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  opencbm,
-  cc65,
+{ lib
+, stdenv
+, fetchFromGitHub
+, opencbm
+, cc65
+,
 }:
 
 stdenv.mkDerivation {

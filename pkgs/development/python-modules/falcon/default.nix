@@ -1,30 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  isPyPy,
-  fetchFromGitHub,
-
-  # build
-  cython,
-  setuptools,
-
-  # tests
-  aiofiles,
-  cbor2,
-  httpx,
-  msgpack,
-  mujson,
-  orjson,
-  pytest7CheckHook,
-  pyyaml,
-  rapidjson,
-  requests,
-  testtools,
-  ujson,
-  uvicorn,
-  websockets,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, isPyPy
+, fetchFromGitHub
+, # build
+  cython
+, setuptools
+, # tests
+  aiofiles
+, cbor2
+, httpx
+, msgpack
+, mujson
+, orjson
+, pytest7CheckHook
+, pyyaml
+, rapidjson
+, requests
+, testtools
+, ujson
+, uvicorn
+, websockets
+,
 }:
 
 buildPythonPackage rec {

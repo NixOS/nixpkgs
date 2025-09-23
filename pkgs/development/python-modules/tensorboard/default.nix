@@ -1,22 +1,20 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-
-  # dependencies
-  absl-py,
-  grpcio,
-  markdown,
-  numpy,
-  packaging,
-  pillow,
-  protobuf,
-  setuptools,
-  tensorboard-data-server,
-  werkzeug,
-  standard-imghdr,
-
-  versionCheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, # dependencies
+  absl-py
+, grpcio
+, markdown
+, numpy
+, packaging
+, pillow
+, protobuf
+, setuptools
+, tensorboard-data-server
+, werkzeug
+, standard-imghdr
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

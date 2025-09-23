@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ppxlib,
-  menhir,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ppxlib
+, menhir
+,
 }:
 
 buildDunePackage rec {

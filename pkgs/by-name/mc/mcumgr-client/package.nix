@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  udev,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, udev
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

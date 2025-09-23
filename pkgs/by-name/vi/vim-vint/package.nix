@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  replaceVars,
-  versionCheckHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, replaceVars
+, versionCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

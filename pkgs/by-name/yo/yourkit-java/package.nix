@@ -1,11 +1,11 @@
-{
-  fetchzip,
-  lib,
-  stdenvNoCC,
-  copyDesktopItems,
-  imagemagick,
-  makeDesktopItem,
-  jre,
+{ fetchzip
+, lib
+, stdenvNoCC
+, copyDesktopItems
+, imagemagick
+, makeDesktopItem
+, jre
+,
 }:
 let
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;

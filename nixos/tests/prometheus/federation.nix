@@ -118,7 +118,7 @@
             }
             {
               job_name = "prometheus";
-              static_configs = [ { targets = [ "prometheus1:${toString config.services.prometheus.port}" ]; } ];
+              static_configs = [{ targets = [ "prometheus1:${toString config.services.prometheus.port}" ]; }];
             }
           ];
         };
@@ -144,7 +144,7 @@
             }
             {
               job_name = "prometheus";
-              static_configs = [ { targets = [ "prometheus2:${toString config.services.prometheus.port}" ]; } ];
+              static_configs = [{ targets = [ "prometheus2:${toString config.services.prometheus.port}" ]; }];
             }
           ];
         };

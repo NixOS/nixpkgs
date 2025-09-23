@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  fftw,
-  alsa-lib,
-  pulseaudio,
+{ lib
+, python3
+, fetchPypi
+, fftw
+, alsa-lib
+, pulseaudio
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

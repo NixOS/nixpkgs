@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  ncurses6,
-  openssl,
-  sqlite,
-  perl,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, ncurses6
+, openssl
+, sqlite
+, perl
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

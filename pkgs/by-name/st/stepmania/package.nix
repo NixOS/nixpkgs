@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  nasm,
-  alsa-lib,
-  ffmpeg_6,
-  glew,
-  glib,
-  gtk2,
-  libmad,
-  libogg,
-  libpng,
-  libpulseaudio,
-  libvorbis,
-  udev,
-  xorg,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, nasm
+, alsa-lib
+, ffmpeg_6
+, glew
+, glib
+, gtk2
+, libmad
+, libogg
+, libpng
+, libpulseaudio
+, libvorbis
+, udev
+, xorg
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

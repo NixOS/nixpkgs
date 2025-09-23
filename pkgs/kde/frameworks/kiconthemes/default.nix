@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qtsvg,
-  qttools,
+{ mkKdeDerivation
+, qtdeclarative
+, qtsvg
+, qttools
+,
 }:
 mkKdeDerivation {
   pname = "kiconthemes";

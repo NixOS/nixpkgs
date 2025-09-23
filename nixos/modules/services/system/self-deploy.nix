@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -152,9 +151,10 @@ in
 
       after = requires;
 
-      environment.GIT_SSH_COMMAND = lib.mkIf (
-        cfg.sshKeyFile != null
-      ) "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
+      environment.GIT_SSH_COMMAND = lib.mkIf
+        (
+          cfg.sshKeyFile != null
+        ) "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 
       restartIfChanged = false;
 

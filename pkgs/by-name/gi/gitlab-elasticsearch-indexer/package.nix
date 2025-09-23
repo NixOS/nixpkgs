@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitLab,
-  pkg-config,
-  icu,
+{ lib
+, buildGoModule
+, fetchFromGitLab
+, pkg-config
+, icu
+,
 }:
 
 buildGoModule rec {

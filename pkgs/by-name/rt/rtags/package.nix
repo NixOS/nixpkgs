@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  llvmPackages,
-  openssl,
-  emacs,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, llvmPackages
+, openssl
+, emacs
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

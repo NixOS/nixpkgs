@@ -1,9 +1,9 @@
-{
-  lib,
-  # Module requires Go 1.25, drop pin once buildGoModule uses Go >= 1.25.
-  buildGo125Module,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, # Module requires Go 1.25, drop pin once buildGoModule uses Go >= 1.25.
+  buildGo125Module
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 buildGo125Module (finalAttrs: {

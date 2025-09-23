@@ -1,6 +1,6 @@
-{
-  lib,
-  writeScript,
+{ lib
+, writeScript
+,
 }:
 
 { version }:

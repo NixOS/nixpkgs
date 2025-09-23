@@ -1,9 +1,8 @@
 import ./make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    withNg ? false,
-    ...
+  { pkgs
+  , lib
+  , withNg ? false
+  , ...
   }:
   {
     name = "nixos-rebuild-install-bootloader";

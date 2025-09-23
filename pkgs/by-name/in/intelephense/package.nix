@@ -1,7 +1,7 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchurl,
+{ lib
+, buildNpmPackage
+, fetchurl
+,
 }:
 let
   version = "1.14.4";

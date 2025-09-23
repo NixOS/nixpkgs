@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  wrapGAppsHook3,
-  makeWrapper,
-  wxGTK32,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, wrapGAppsHook3
+, makeWrapper
+, wxGTK32
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

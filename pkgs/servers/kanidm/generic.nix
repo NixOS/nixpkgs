@@ -1,36 +1,36 @@
-{
-  version,
-  hash,
-  cargoHash,
-  unsupported ? false,
-  eolDate ? null,
-  patches ? [ ],
+{ version
+, hash
+, cargoHash
+, unsupported ? false
+, eolDate ? null
+, patches ? [ ]
+,
 }:
 
-{
-  stdenv,
-  lib,
-  formats,
-  nixosTests,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  pkg-config,
-  udev,
-  openssl,
-  sqlite,
-  pam,
-  bashInteractive,
-  rust-jemalloc-sys,
-  kanidmWithSecretProvisioning,
-  # If this is enabled, kanidm will be built with two patches allowing both
+{ stdenv
+, lib
+, formats
+, nixosTests
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, pkg-config
+, udev
+, openssl
+, sqlite
+, pam
+, bashInteractive
+, rust-jemalloc-sys
+, kanidmWithSecretProvisioning
+, # If this is enabled, kanidm will be built with two patches allowing both
   # oauth2 basic secrets and admin credentials to be provisioned.
   # This is NOT officially supported (and will likely never be),
   # see https://github.com/kanidm/kanidm/issues/1747.
   # Please report any provisioning-related errors to
   # https://github.com/oddlama/kanidm-provision/issues/ instead.
-  enableSecretProvisioning ? false,
+  enableSecretProvisioning ? false
+,
 }:
 
 let
@@ -137,10 +137,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     tests = {
       kanidm = nixosTests.kanidm.extend {
-        modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage; } ];
+        modules = [{ _module.args.kanidmPackage = finalAttrs.finalPackage; }];
       };
       kanidm-provisioning = nixosTests.kanidm-provisioning.extend {
-        modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage.withSecretProvisioning; } ];
+        modules = [{ _module.args.kanidmPackage = finalAttrs.finalPackage.withSecretProvisioning; }];
       };
     };
 

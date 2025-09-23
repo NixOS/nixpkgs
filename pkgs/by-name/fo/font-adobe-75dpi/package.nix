@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  font-util,
-  bdftopcf,
-  mkfontscale,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, font-util
+, bdftopcf
+, mkfontscale
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "font-adobe-75dpi";

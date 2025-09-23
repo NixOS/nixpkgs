@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  libpcap,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, libpcap
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

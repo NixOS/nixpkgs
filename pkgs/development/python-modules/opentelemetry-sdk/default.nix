@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  flaky,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-semantic-conventions,
-  opentelemetry-test-utils,
-  typing-extensions,
-  pytestCheckHook,
+{ buildPythonPackage
+, pythonOlder
+, flaky
+, hatchling
+, opentelemetry-api
+, opentelemetry-semantic-conventions
+, opentelemetry-test-utils
+, typing-extensions
+, pytestCheckHook
+,
 }:
 
 let

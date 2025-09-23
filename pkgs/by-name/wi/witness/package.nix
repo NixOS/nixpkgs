@@ -1,12 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-
-  # testing
-  testers,
-  witness,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, # testing
+  testers
+, witness
+,
 }:
 
 buildGoModule rec {

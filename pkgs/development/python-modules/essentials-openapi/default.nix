@@ -1,20 +1,20 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  click,
-  essentials,
-  flask,
-  hatchling,
-  httpx,
-  jinja2,
-  markupsafe,
-  pydantic,
-  pytestCheckHook,
-  pyyaml,
-  rich,
-  setuptools,
-  stdenv,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, click
+, essentials
+, flask
+, hatchling
+, httpx
+, jinja2
+, markupsafe
+, pydantic
+, pytestCheckHook
+, pyyaml
+, rich
+, setuptools
+, stdenv
+,
 }:
 buildPythonPackage rec {
   pname = "essentials-openapi";

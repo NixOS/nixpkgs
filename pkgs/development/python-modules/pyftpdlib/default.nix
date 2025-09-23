@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  psutil,
-  pyasyncore,
-  pyasynchat,
-  pyopenssl,
-  pysendfile,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, psutil
+, pyasyncore
+, pyasynchat
+, pyopenssl
+, pysendfile
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

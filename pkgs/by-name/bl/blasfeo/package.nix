@@ -1,9 +1,9 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  withTarget ? "GENERIC",
+{ cmake
+, fetchFromGitHub
+, lib
+, stdenv
+, withTarget ? "GENERIC"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

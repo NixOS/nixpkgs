@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  glib,
-  libev,
-  libevent,
-  pkg-config,
-  glibSupport ? true,
-  libevSupport ? true,
-  libeventSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, glib
+, libev
+, libevent
+, pkg-config
+, glibSupport ? true
+, libevSupport ? true
+, libeventSupport ? true
+,
 }:
 
 let

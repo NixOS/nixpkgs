@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  glibcLocales,
-  gnureadline,
-  pyperclip,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  rich-argparse,
-  setuptools-scm,
-  wcwidth,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, glibcLocales
+, gnureadline
+, pyperclip
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, rich-argparse
+, setuptools-scm
+, wcwidth
+,
 }:
 
 buildPythonPackage rec {

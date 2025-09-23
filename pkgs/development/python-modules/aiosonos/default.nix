@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  orjson,
-  faust-cchardet,
-  aiodns,
-  brotli,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, orjson
+, faust-cchardet
+, aiodns
+, brotli
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

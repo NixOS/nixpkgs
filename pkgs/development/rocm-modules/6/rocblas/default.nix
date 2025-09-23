@@ -1,38 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  clr,
-  python3,
-  tensile,
-  msgpack,
-  libxml2,
-  gtest,
-  gfortran,
-  openmp,
-  git,
-  amd-blis,
-  zstd,
-  hipblas-common,
-  hipblaslt,
-  python3Packages,
-  rocm-smi,
-  buildTensile ? true,
-  buildTests ? true,
-  buildBenchmarks ? true,
-  # https://github.com/ROCm/Tensile/issues/1757
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, clr
+, python3
+, tensile
+, msgpack
+, libxml2
+, gtest
+, gfortran
+, openmp
+, git
+, amd-blis
+, zstd
+, hipblas-common
+, hipblaslt
+, python3Packages
+, rocm-smi
+, buildTensile ? true
+, buildTests ? true
+, buildBenchmarks ? true
+, # https://github.com/ROCm/Tensile/issues/1757
   # Allows gfx101* users to use rocBLAS normally.
   # Turn the below two values to `true` after the fix has been cherry-picked
   # into a release. Just backporting that single fix is not enough because it
   # depends on some previous commits.
-  tensileSepArch ? true,
-  tensileLazyLib ? true,
-  withHipBlasLt ? true,
-  # `gfx940`, `gfx941` are not present in this list because they are early
+  tensileSepArch ? true
+, tensileLazyLib ? true
+, withHipBlasLt ? true
+, # `gfx940`, `gfx941` are not present in this list because they are early
   # engineering samples, and all final MI300 hardware are `gfx942`:
   # https://github.com/NixOS/nixpkgs/pull/298388#issuecomment-2032791130
   #
@@ -56,7 +55,8 @@
       "gfx1200"
       "gfx1201"
     ]
-  ),
+  )
+,
 }:
 
 let
@@ -120,9 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-O3 -DNDEBUG -I${hipblas-common}/include"
     + lib.optionalString (buildTests || buildBenchmarks) " -I${amd-blis}/include/blis";
   # Fails to link tests if we don't add amd-blis libs
-  env.LDFLAGS = lib.optionalString (
-    buildTests || buildBenchmarks
-  ) "-Wl,--as-needed -L${amd-blis}/lib -lblis-mt -lcblas";
+  env.LDFLAGS = lib.optionalString
+    (
+      buildTests || buildBenchmarks
+    ) "-Wl,--as-needed -L${amd-blis}/lib -lblis-mt -lcblas";
   env.TENSILE_ROCM_ASSEMBLER_PATH = "${stdenv.cc}/bin/clang++";
 
   cmakeFlags = [

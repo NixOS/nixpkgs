@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  httpagentparser,
-  cherrypy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools
+, setuptools-scm
+, httpagentparser
+, cherrypy
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "cherrypy-cors";

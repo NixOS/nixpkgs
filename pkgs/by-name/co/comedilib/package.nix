@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  flex,
-  bison,
-  xmlto,
-  docbook_xsl,
-  docbook_xml_dtd_44,
-  swig,
-  perl,
-  python3,
-  udevCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, flex
+, bison
+, xmlto
+, docbook_xsl
+, docbook_xml_dtd_44
+, swig
+, perl
+, python3
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

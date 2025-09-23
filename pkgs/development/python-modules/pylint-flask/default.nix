@@ -1,12 +1,12 @@
-{
-  lib,
-  astroid,
-  buildPythonPackage,
-  fetchPypi,
-  pylint,
-  pylint-plugin-utils,
-  pythonOlder,
-  setuptools,
+{ lib
+, astroid
+, buildPythonPackage
+, fetchPypi
+, pylint
+, pylint-plugin-utils
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

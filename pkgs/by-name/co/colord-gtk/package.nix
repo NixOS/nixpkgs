@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  colord,
-  gettext,
-  meson,
-  ninja,
-  gobject-introspection,
-  gtk-doc,
-  docbook-xsl-ns,
-  docbook-xsl-nons,
-  docbook_xml_dtd_412,
-  libxslt,
-  glib,
-  withGtk4 ? false,
-  gtk3,
-  gtk4,
-  pkg-config,
-  lcms2,
+{ lib
+, stdenv
+, fetchurl
+, colord
+, gettext
+, meson
+, ninja
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-ns
+, docbook-xsl-nons
+, docbook_xml_dtd_412
+, libxslt
+, glib
+, withGtk4 ? false
+, gtk3
+, gtk4
+, pkg-config
+, lcms2
+,
 }:
 
 stdenv.mkDerivation rec {

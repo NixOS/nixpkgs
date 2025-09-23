@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  linux-firmware,
-  libarchive,
+{ lib
+, stdenv
+, linux-firmware
+, libarchive
+,
 }:
 
 stdenv.mkDerivation {

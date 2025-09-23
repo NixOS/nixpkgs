@@ -1,18 +1,18 @@
-{
-  lib,
-  acl,
-  attr,
-  autoreconfHook,
-  bzip2,
-  fetchFromGitea,
-  libburn,
-  libcdio,
-  libiconv,
-  libisofs,
-  pkg-config,
-  readline,
-  stdenv,
-  zlib,
+{ lib
+, acl
+, attr
+, autoreconfHook
+, bzip2
+, fetchFromGitea
+, libburn
+, libcdio
+, libiconv
+, libisofs
+, pkg-config
+, readline
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

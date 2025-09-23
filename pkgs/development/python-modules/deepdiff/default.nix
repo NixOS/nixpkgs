@@ -1,30 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  orderly-set,
-
-  # optional-dependencies
-  click,
-  orjson,
-  pyyaml,
-
-  # tests
-  jsonpickle,
-  numpy,
-  pytestCheckHook,
-  python-dateutil,
-  pydantic,
-  tomli-w,
-  polars,
-  pandas,
-  uuid6,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, # build-system
+  flit-core
+, # dependencies
+  orderly-set
+, # optional-dependencies
+  click
+, orjson
+, pyyaml
+, # tests
+  jsonpickle
+, numpy
+, pytestCheckHook
+, python-dateutil
+, pydantic
+, tomli-w
+, polars
+, pandas
+, uuid6
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  awkward,
-  pandas,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  awkward
+, pandas
+,
 }:
 
 buildPythonPackage rec {

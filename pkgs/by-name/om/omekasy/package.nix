@@ -1,8 +1,8 @@
-{
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, lib
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "omekasy";

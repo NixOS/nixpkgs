@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPackages,
-  callPackage,
-  stdenv,
-  nim1,
-  nim2,
-  nim_builder,
-  defaultNimVersion ? 2,
-  nimOverrides,
-  buildNimPackage,
+{ lib
+, buildPackages
+, callPackage
+, stdenv
+, nim1
+, nim2
+, nim_builder
+, defaultNimVersion ? 2
+, nimOverrides
+, buildNimPackage
+,
 }:
 
 let
@@ -50,13 +50,12 @@ let
             inherit url sha256;
           };
         git =
-          {
-            fetchSubmodules,
-            leaveDotGit,
-            rev,
-            sha256,
-            url,
-            ...
+          { fetchSubmodules
+          , leaveDotGit
+          , rev
+          , sha256
+          , url
+          , ...
           }:
           buildPackages.fetchgit {
             inherit
@@ -93,26 +92,31 @@ let
 
       lockFileNimFlags = map fodFromLockEntry lockDepends;
 
-      postNimOverrides = builtins.foldl' (
-        prevAttrs:
-        { packages, ... }@lockAttrs:
-        builtins.foldl' (
-          prevAttrs: name:
-          if (builtins.hasAttr name nimOverrides) then
-            (prevAttrs // (nimOverrides.${name} lockAttrs prevAttrs))
-          else
+      postNimOverrides = builtins.foldl'
+        (
+          prevAttrs:
+          { packages, ... }@lockAttrs:
+          builtins.foldl'
+            (
+              prevAttrs: name:
+                if (builtins.hasAttr name nimOverrides) then
+                  (prevAttrs // (nimOverrides.${name} lockAttrs prevAttrs))
+                else
+                  prevAttrs
+            )
             prevAttrs
-        ) prevAttrs packages
-      ) postPkg lockDepends;
+            packages
+        )
+        postPkg
+        lockDepends;
 
       finalOverride =
-        {
-          depsBuildBuild ? [ ],
-          nativeBuildInputs ? [ ],
-          nimFlags ? [ ],
-          requiredNimVersion ? defaultNimVersion,
-          passthru ? { },
-          ...
+        { depsBuildBuild ? [ ]
+        , nativeBuildInputs ? [ ]
+        , nimFlags ? [ ]
+        , requiredNimVersion ? defaultNimVersion
+        , passthru ? { }
+        , ...
         }:
         (
           if requiredNimVersion == 1 then

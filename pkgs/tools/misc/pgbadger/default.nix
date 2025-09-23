@@ -1,17 +1,17 @@
-{
-  buildPerlPackage,
-  bzip2,
-  fetchFromGitHub,
-  JSONXS,
-  lib,
-  nix-update-script,
-  pgbadger,
-  PodMarkdown,
-  shortenPerlShebang,
-  stdenv,
-  testers,
-  TextCSV_XS,
-  which,
+{ buildPerlPackage
+, bzip2
+, fetchFromGitHub
+, JSONXS
+, lib
+, nix-update-script
+, pgbadger
+, PodMarkdown
+, shortenPerlShebang
+, stdenv
+, testers
+, TextCSV_XS
+, which
+,
 }:
 
 buildPerlPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsHook3,
-  gtk3,
-  gst_all_1,
-  gtksourceview,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook3
+, gtk3
+, gst_all_1
+, gtksourceview
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

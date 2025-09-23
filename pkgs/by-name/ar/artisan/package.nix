@@ -1,8 +1,8 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  nix-update-script,
+{ lib
+, appimageTools
+, fetchurl
+, nix-update-script
+,
 }:
 let
   pname = "artisan";

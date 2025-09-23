@@ -1,7 +1,7 @@
-{
-  recurseIntoAttrs,
-  callPackage,
-  lib,
+{ recurseIntoAttrs
+, callPackage
+, lib
+,
 }:
 
 # All versions are taken from `version.json` created by `update.py`, and realised with `generic.nix`.

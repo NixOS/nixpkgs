@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  html5lib,
-  pillow,
-  django-cms,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, html5lib
+, pillow
+, django-cms
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

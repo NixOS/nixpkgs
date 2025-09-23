@@ -1,16 +1,17 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.webdav-server-rs;
   format = pkgs.formats.toml { };
-  settings = lib.recursiveUpdate {
-    server.uid = config.users.users."${cfg.user}".uid;
-    server.gid = config.users.groups."${cfg.group}".gid;
-  } cfg.settings;
+  settings = lib.recursiveUpdate
+    {
+      server.uid = config.users.users."${cfg.user}".uid;
+      server.gid = config.users.groups."${cfg.group}".gid;
+    }
+    cfg.settings;
 in
 {
   options = {

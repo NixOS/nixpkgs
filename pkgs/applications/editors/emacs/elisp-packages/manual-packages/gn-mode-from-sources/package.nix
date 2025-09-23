@@ -1,7 +1,7 @@
-{
-  lib,
-  gn,
-  melpaBuild,
+{ lib
+, gn
+, melpaBuild
+,
 }:
 
 melpaBuild {

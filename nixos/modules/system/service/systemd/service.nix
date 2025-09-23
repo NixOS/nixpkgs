@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  systemdPackage,
-  ...
+{ lib
+, config
+, systemdPackage
+, ...
 }:
 let
   inherit (lib)

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  SDL,
-  SDL2,
-  fetchurl,
-  gzip,
-  libGL,
-  libGLU,
-  libvorbis,
-  libmad,
-  flac,
-  libopus,
-  opusfile,
-  libogg,
-  libxmp,
-  copyDesktopItems,
-  makeDesktopItem,
-  pkg-config,
-  useSDL2 ? stdenv.hostPlatform.isDarwin, # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
+{ lib
+, stdenv
+, SDL
+, SDL2
+, fetchurl
+, gzip
+, libGL
+, libGLU
+, libvorbis
+, libmad
+, flac
+, libopus
+, opusfile
+, libogg
+, libxmp
+, copyDesktopItems
+, makeDesktopItem
+, pkg-config
+, useSDL2 ? stdenv.hostPlatform.isDarwin
+, # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
 stdenv.mkDerivation rec {

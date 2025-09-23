@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.hadoop;
@@ -12,10 +11,10 @@ let
 
   # Generator for HDFS service options
   hadoopServiceOption =
-    {
-      serviceName,
-      firewallOption ? true,
-      extraOpts ? null,
+    { serviceName
+    , firewallOption ? true
+    , extraOpts ? null
+    ,
     }:
     {
       enable = lib.mkEnableOption serviceName;
@@ -55,15 +54,15 @@ let
 
   # Generator for HDFS service configs
   hadoopServiceConfig =
-    {
-      name,
-      serviceOptions ? cfg.hdfs."${lib.toLower name}",
-      description ? "Hadoop HDFS ${name}",
-      User ? "hdfs",
-      allowedTCPPorts ? [ ],
-      preStart ? "",
-      environment ? { },
-      extraConfig ? { },
+    { name
+    , serviceOptions ? cfg.hdfs."${lib.toLower name}"
+    , description ? "Hadoop HDFS ${name}"
+    , User ? "hdfs"
+    , allowedTCPPorts ? [ ]
+    , preStart ? ""
+    , environment ? { }
+    , extraConfig ? { }
+    ,
     }:
     (
 
@@ -85,9 +84,11 @@ let
 
             services.hadoop.gatewayRole.enable = true;
 
-            networking.firewall.allowedTCPPorts = lib.mkIf (
-              (builtins.hasAttr "openFirewall" serviceOptions) && serviceOptions.openFirewall
-            ) allowedTCPPorts;
+            networking.firewall.allowedTCPPorts = lib.mkIf
+              (
+                (builtins.hasAttr "openFirewall" serviceOptions) && serviceOptions.openFirewall
+              )
+              allowedTCPPorts;
           }
           extraConfig
         ]
@@ -190,9 +191,11 @@ in
             50010 # datanode.address
             50020 # datanode.ipc.address
           ];
-      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = lib.mkIf (
-        cfg.hdfs.datanode.dataDirs != null
-      ) (lib.concatMapStringsSep "," (x: "[" + x.type + "]file://" + x.path) cfg.hdfs.datanode.dataDirs);
+      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = lib.mkIf
+        (
+          cfg.hdfs.datanode.dataDirs != null
+        )
+        (lib.concatMapStringsSep "," (x: "[" + x.type + "]file://" + x.path) cfg.hdfs.datanode.dataDirs);
     })
 
     (hadoopServiceConfig {

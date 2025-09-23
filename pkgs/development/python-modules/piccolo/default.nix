@@ -1,24 +1,24 @@
-{
-  lib,
-  aiosqlite,
-  asyncpg,
-  black,
-  buildPythonPackage,
-  colorama,
-  email-validator,
-  fetchFromGitHub,
-  httpx,
-  inflection,
-  jinja2,
-  orjson,
-  postgresql,
-  postgresqlTestHook,
-  pydantic,
-  pytestCheckHook,
-  python-dateutil,
-  setuptools,
-  targ,
-  typing-extensions,
+{ lib
+, aiosqlite
+, asyncpg
+, black
+, buildPythonPackage
+, colorama
+, email-validator
+, fetchFromGitHub
+, httpx
+, inflection
+, jinja2
+, orjson
+, postgresql
+, postgresqlTestHook
+, pydantic
+, pytestCheckHook
+, python-dateutil
+, setuptools
+, targ
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

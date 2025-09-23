@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchgit,
-  rustPlatform,
-  zlib,
+{ lib
+, fetchgit
+, rustPlatform
+, zlib
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "genpass";

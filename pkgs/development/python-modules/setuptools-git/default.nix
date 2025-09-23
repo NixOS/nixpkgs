@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitMinimal,
-  replaceVars,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gitMinimal
+, replaceVars
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

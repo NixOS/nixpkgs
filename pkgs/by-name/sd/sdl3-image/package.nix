@@ -1,20 +1,20 @@
-{
-  lib,
-  sdl3,
-  libavif,
-  libtiff,
-  libwebp,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  validatePkgConfig,
-  libpng,
-  libjpeg,
-  nix-update-script,
-  # Boolean flags
-  enableTests ? true,
-  enableSTB ? true,
-  enableImageIO ? stdenv.hostPlatform.isDarwin,
+{ lib
+, sdl3
+, libavif
+, libtiff
+, libwebp
+, stdenv
+, cmake
+, fetchFromGitHub
+, validatePkgConfig
+, libpng
+, libjpeg
+, nix-update-script
+, # Boolean flags
+  enableTests ? true
+, enableSTB ? true
+, enableImageIO ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

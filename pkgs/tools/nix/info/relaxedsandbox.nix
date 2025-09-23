@@ -2,9 +2,9 @@ let
   pkgs = import <nixpkgs> { };
 in
 pkgs.runCommand "diagnostics-sandbox"
-  {
-    __noChroot = true;
-  }
+{
+  __noChroot = true;
+}
   ''
     set -x
     # no cache: ${toString builtins.currentTime}

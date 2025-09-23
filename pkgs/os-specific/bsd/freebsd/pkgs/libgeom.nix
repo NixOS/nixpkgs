@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  libbsdxml,
-  libsbuf,
+{ mkDerivation
+, libbsdxml
+, libsbuf
+,
 }:
 mkDerivation {
   path = "lib/libgeom";

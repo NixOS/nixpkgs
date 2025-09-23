@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  scipy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, numpy
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, scipy
+,
 }:
 
 buildPythonPackage rec {

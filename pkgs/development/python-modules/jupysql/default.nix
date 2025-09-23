@@ -1,39 +1,35 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  ipython-genutils,
-  jinja2,
-  jupysql-plugin,
-  ploomber-core,
-  prettytable,
-  sqlalchemy,
-  sqlglot,
-  sqlparse,
-
-  # optional-dependencies
-  duckdb,
-  duckdb-engine,
-  grpcio,
-  ipython,
-  ipywidgets,
-  matplotlib,
-  numpy,
-  pandas,
-  polars,
-  pyarrow,
-  pyspark,
-
-  # tests
-  pytestCheckHook,
-  psutil,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  ipython-genutils
+, jinja2
+, jupysql-plugin
+, ploomber-core
+, prettytable
+, sqlalchemy
+, sqlglot
+, sqlparse
+, # optional-dependencies
+  duckdb
+, duckdb-engine
+, grpcio
+, ipython
+, ipywidgets
+, matplotlib
+, numpy
+, pandas
+, polars
+, pyarrow
+, pyspark
+, # tests
+  pytestCheckHook
+, psutil
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

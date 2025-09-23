@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  nodePackages,
-  stdenvNoCC,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, nodePackages
+, stdenvNoCC
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mpv-cheatsheet";

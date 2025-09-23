@@ -1,18 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-
-  # dependencies
-  hass-web-proxy-lib,
-
-  # tests
-  homeassistant,
-  pytest-aiohttp,
-  pytest-cov-stub,
-  pytest-homeassistant-custom-component,
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, # dependencies
+  hass-web-proxy-lib
+, # tests
+  homeassistant
+, pytest-aiohttp
+, pytest-cov-stub
+, pytest-homeassistant-custom-component
+, pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildHomeAssistantComponent rec {

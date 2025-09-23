@@ -1,45 +1,42 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  appdirs,
-  blinker,
-  chromadb,
-  click,
-  instructor,
-  json-repair,
-  json5,
-  jsonref,
-  litellm,
-  onnxruntime,
-  openai,
-  opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-http,
-  opentelemetry-sdk,
-  openpyxl,
-  pdfplumber,
-  portalocker,
-  pydantic,
-  pyjwt,
-  python-dotenv,
-  pyvis,
-  qdrant-client,
-  regex,
-  tokenizers,
-  tomli,
-  tomli-w,
-  uv,
-
-  # tests
-  pytestCheckHook,
-  pytest-xdist,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  appdirs
+, blinker
+, chromadb
+, click
+, instructor
+, json-repair
+, json5
+, jsonref
+, litellm
+, onnxruntime
+, openai
+, opentelemetry-api
+, opentelemetry-exporter-otlp-proto-http
+, opentelemetry-sdk
+, openpyxl
+, pdfplumber
+, portalocker
+, pydantic
+, pyjwt
+, python-dotenv
+, pyvis
+, qdrant-client
+, regex
+, tokenizers
+, tomli
+, tomli-w
+, uv
+, # tests
+  pytestCheckHook
+, pytest-xdist
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

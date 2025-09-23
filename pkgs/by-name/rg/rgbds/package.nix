@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  flex,
-  pkg-config,
-  libpng,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, flex
+, pkg-config
+, libpng
+,
 }:
 
 stdenv.mkDerivation rec {

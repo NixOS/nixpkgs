@@ -1,34 +1,34 @@
-{
-  lib,
-  asn1crypto,
-  buildPythonPackage,
-  boto3,
-  botocore,
-  certifi,
-  cffi,
-  charset-normalizer,
-  cryptography,
-  cython,
-  fetchFromGitHub,
-  filelock,
-  idna,
-  keyring,
-  numpy,
-  packaging,
-  pandas,
-  platformdirs,
-  pyarrow,
-  pyjwt,
-  pyopenssl,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  requests,
-  setuptools,
-  sortedcontainers,
-  tomlkit,
-  typing-extensions,
+{ lib
+, asn1crypto
+, buildPythonPackage
+, boto3
+, botocore
+, certifi
+, cffi
+, charset-normalizer
+, cryptography
+, cython
+, fetchFromGitHub
+, filelock
+, idna
+, keyring
+, numpy
+, packaging
+, pandas
+, platformdirs
+, pyarrow
+, pyjwt
+, pyopenssl
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pytz
+, requests
+, setuptools
+, sortedcontainers
+, tomlkit
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

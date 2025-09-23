@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  cargo-c,
-  validatePkgConfig,
-  rust,
-  libiconv,
-  curl,
-  apacheHttpd,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, cargo-c
+, validatePkgConfig
+, rust
+, libiconv
+, curl
+, apacheHttpd
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  xdg-utils,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, makeWrapper
+, xdg-utils
+,
 }:
 buildGoModule rec {
   pname = "aws-sso-creds";

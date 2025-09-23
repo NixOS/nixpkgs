@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  h5py,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  pytest-mock,
-  pytest-remotedata,
-  pytest-rerunfailures,
-  pytest-timeout,
-  pythonOlder,
-  pytz,
-  requests,
-  requests-mock,
-  scipy,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, h5py
+, numpy
+, pandas
+, pytestCheckHook
+, pytest-mock
+, pytest-remotedata
+, pytest-rerunfailures
+, pytest-timeout
+, pythonOlder
+, pytz
+, requests
+, requests-mock
+, scipy
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  caqti,
-  findlib,
+{ buildDunePackage
+, caqti
+, findlib
+,
 }:
 
 buildDunePackage {

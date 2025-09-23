@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cryptography,
-  azure-common,
-  azure-storage-common,
-  azure-cosmosdb-nspkg,
-  futures ? null,
-  isPy3k,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, azure-common
+, azure-storage-common
+, azure-cosmosdb-nspkg
+, futures ? null
+, isPy3k
+,
 }:
 
 buildPythonPackage rec {

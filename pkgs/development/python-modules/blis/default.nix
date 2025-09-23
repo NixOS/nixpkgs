@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  cython,
-  numpy,
-
-  # tests
-  hypothesis,
-  pytestCheckHook,
-
-  # passthru
-  blis,
-  numpy_1,
-  gitUpdater,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, cython
+, numpy
+, # tests
+  hypothesis
+, pytestCheckHook
+, # passthru
+  blis
+, numpy_1
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildFHSEnv,
-  fetchFromGitHub,
-  ocl-icd,
-  openssl,
-  re2,
-  libevent,
-  git,
-  zlib,
-  expat,
-  scons,
-  stdenv,
-  extraPkgs ? [ ],
+{ lib
+, buildFHSEnv
+, fetchFromGitHub
+, ocl-icd
+, openssl
+, re2
+, libevent
+, git
+, zlib
+, expat
+, scons
+, stdenv
+, extraPkgs ? [ ]
+,
 }:
 let
   pname = "fah-client";

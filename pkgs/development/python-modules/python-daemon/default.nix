@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  changelog-chug,
-  docutils,
-  lockfile,
-  packaging,
-  pytestCheckHook,
-  testscenarios,
-  testtools,
-  setuptools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, changelog-chug
+, docutils
+, lockfile
+, packaging
+, pytestCheckHook
+, testscenarios
+, testtools
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

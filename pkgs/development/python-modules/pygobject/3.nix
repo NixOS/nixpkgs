@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPythonPackage,
-  pkg-config,
-  glib,
-  gobject-introspection,
-  pycairo,
-  cairo,
-  ncurses,
-  meson,
-  ninja,
-  pythonOlder,
-  gnome,
-  python,
+{ lib
+, stdenv
+, fetchurl
+, buildPythonPackage
+, pkg-config
+, glib
+, gobject-introspection
+, pycairo
+, cairo
+, ncurses
+, meson
+, ninja
+, pythonOlder
+, gnome
+, python
+,
 }:
 
 buildPythonPackage rec {

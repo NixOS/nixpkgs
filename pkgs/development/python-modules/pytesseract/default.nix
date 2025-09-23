@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  packaging,
-  pillow,
-  tesseract,
-  replaceVars,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, packaging
+, pillow
+, tesseract
+, replaceVars
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

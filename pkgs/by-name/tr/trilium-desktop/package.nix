@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  unzip,
-  fetchurl,
-  makeBinaryWrapper,
-  # use specific electron since it has to load a compiled module
-  electron_37,
-  autoPatchelfHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  wrapGAppsHook3,
-  asar,
+{ stdenv
+, lib
+, unzip
+, fetchurl
+, makeBinaryWrapper
+, # use specific electron since it has to load a compiled module
+  electron_37
+, autoPatchelfHook
+, makeDesktopItem
+, copyDesktopItems
+, wrapGAppsHook3
+, asar
+,
 }:
 
 let

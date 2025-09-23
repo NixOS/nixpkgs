@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  python3,
-  xcbuild,
-  nix-update-script,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, python3
+, xcbuild
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

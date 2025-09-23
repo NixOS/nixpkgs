@@ -1,25 +1,25 @@
-{
-  stdenv,
-  stdenvNoCC,
-  lib,
-  writeText,
-  testers,
-  runCommand,
-  runCommandWith,
-  darwin,
-  expect,
-  curl,
-  installShellFiles,
-  callPackage,
-  zlib,
-  swiftPackages,
-  icu,
-  lndir,
-  replaceVars,
-  nugetPackageHook,
-  xmlstarlet,
-  pkgs,
-  recurseIntoAttrs,
+{ stdenv
+, stdenvNoCC
+, lib
+, writeText
+, testers
+, runCommand
+, runCommandWith
+, darwin
+, expect
+, curl
+, installShellFiles
+, callPackage
+, zlib
+, swiftPackages
+, icu
+, lndir
+, replaceVars
+, nugetPackageHook
+, xmlstarlet
+, pkgs
+, recurseIntoAttrs
+,
 }:
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -90,18 +90,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tests =
       let
         mkDotnetTest =
-          {
-            name,
-            stdenv ? stdenvNoCC,
-            template,
-            lang ? null,
-            usePackageSource ? false,
-            build,
-            buildInputs ? [ ],
-            runtime ? finalAttrs.finalPackage.runtime,
-            runInputs ? [ ],
-            run ? null,
-            runAllowNetworking ? false,
+          { name
+          , stdenv ? stdenvNoCC
+          , template
+          , lang ? null
+          , usePackageSource ? false
+          , build
+          , buildInputs ? [ ]
+          , runtime ? finalAttrs.finalPackage.runtime
+          , runInputs ? [ ]
+          , run ? null
+          , runAllowNetworking ? false
+          ,
           }:
           let
             sdk = finalAttrs.finalPackage;
@@ -173,48 +173,49 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               { name, ... }@args:
               mkDotnetTest (
                 args
-                // {
+                  // {
                   name = "console-${name}-${suffix}";
                   template = "console";
                   inherit lang;
                 }
               );
           in
-          lib.recurseIntoAttrs {
-            run = mkConsoleTest {
-              name = "run";
-              build = checkConsoleOutput "dotnet run";
-            };
+          lib.recurseIntoAttrs
+            {
+              run = mkConsoleTest {
+                name = "run";
+                build = checkConsoleOutput "dotnet run";
+              };
 
-            publish = mkConsoleTest {
-              name = "publish";
-              build = "dotnet publish -o $out/bin";
-              run = checkConsoleOutput "$src/bin/test";
-            };
+              publish = mkConsoleTest {
+                name = "publish";
+                build = "dotnet publish -o $out/bin";
+                run = checkConsoleOutput "$src/bin/test";
+              };
 
-            self-contained = mkConsoleTest {
-              name = "self-contained";
-              usePackageSource = true;
-              build = "dotnet publish --use-current-runtime --sc -o $out";
-              runtime = null;
-              run = checkConsoleOutput "$src/test";
-            };
+              self-contained = mkConsoleTest {
+                name = "self-contained";
+                usePackageSource = true;
+                build = "dotnet publish --use-current-runtime --sc -o $out";
+                runtime = null;
+                run = checkConsoleOutput "$src/test";
+              };
 
-            single-file = mkConsoleTest {
-              name = "single-file";
-              usePackageSource = true;
-              build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out/bin";
-              runtime = null;
-              run = checkConsoleOutput "$src/bin/test";
-            };
+              single-file = mkConsoleTest {
+                name = "single-file";
+                usePackageSource = true;
+                build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out/bin";
+                runtime = null;
+                run = checkConsoleOutput "$src/bin/test";
+              };
 
-            ready-to-run = mkConsoleTest {
-              name = "ready-to-run";
-              usePackageSource = true;
-              build = "dotnet publish --use-current-runtime -p:PublishReadyToRun=true -o $out/bin";
-              run = checkConsoleOutput "$src/bin/test";
-            };
-          }
+              ready-to-run = mkConsoleTest {
+                name = "ready-to-run";
+                usePackageSource = true;
+                build = "dotnet publish --use-current-runtime -p:PublishReadyToRun=true -o $out/bin";
+                run = checkConsoleOutput "$src/bin/test";
+              };
+            }
           // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
             aot = mkConsoleTest {
               name = "aot";
@@ -275,13 +276,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           };
       in
       unwrapped.passthru.tests or { }
-      // {
+        // {
         version = testers.testVersion {
           package = finalAttrs.finalPackage;
           command = "HOME=$(mktemp -d) dotnet " + (if type == "sdk" then "--version" else "--info");
         };
       }
-      // lib.optionalAttrs (type == "sdk") ({
+        // lib.optionalAttrs (type == "sdk") ({
         buildDotnetModule = recurseIntoAttrs (
           (pkgs.appendOverlays [
             (self: super: {

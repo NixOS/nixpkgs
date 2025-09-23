@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  buildGhidraExtension,
-  ghidra,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildGhidraExtension
+, ghidra
+,
 }:
 buildGhidraExtension {
   pname = "ret-sync-ghidra";

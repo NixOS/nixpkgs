@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  curl,
-  openssl,
-  stdenv,
-  libiconv,
-  rav1e,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, curl
+, openssl
+, stdenv
+, libiconv
+, rav1e
+,
 }:
 
 let

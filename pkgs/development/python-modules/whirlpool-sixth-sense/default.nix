@@ -1,17 +1,17 @@
-{
-  lib,
-  aioconsole,
-  aiohttp,
-  aioresponses,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  websockets,
+{ lib
+, aioconsole
+, aiohttp
+, aioresponses
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

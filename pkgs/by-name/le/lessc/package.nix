@@ -1,13 +1,13 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  callPackage,
-  testers,
-  runCommand,
-  writeText,
-  nix-update-script,
-  lessc,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, callPackage
+, testers
+, runCommand
+, writeText
+, nix-update-script
+, lessc
+,
 }:
 
 buildNpmPackage rec {

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromBitbucket,
-  jdk,
+{ stdenv
+, lib
+, fetchFromBitbucket
+, jdk
+,
 }:
 
 stdenv.mkDerivation rec {

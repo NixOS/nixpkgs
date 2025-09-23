@@ -1,29 +1,29 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  openssl,
-  libGL,
-  vulkan-loader,
-  wayland,
-  wayland-protocols,
-  libxkbcommon,
-  libX11,
-  libXrandr,
-  libXi,
-  libXcursor,
-  udev,
-  alsa-lib,
-  stdenv,
-  libxcb,
-  bzip2,
-  cmake,
-  fontconfig,
-  freetype,
-  pkg-config,
-  makeWrapper,
-  writeShellScript,
-  patchelf,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, openssl
+, libGL
+, vulkan-loader
+, wayland
+, wayland-protocols
+, libxkbcommon
+, libX11
+, libXrandr
+, libXi
+, libXcursor
+, udev
+, alsa-lib
+, stdenv
+, libxcb
+, bzip2
+, cmake
+, fontconfig
+, freetype
+, pkg-config
+, makeWrapper
+, writeShellScript
+, patchelf
+,
 }:
 let
   version = "0.16.0";

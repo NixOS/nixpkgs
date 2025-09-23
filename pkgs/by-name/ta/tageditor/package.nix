@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  cpp-utilities,
-  mp4v2,
-  libid3tag,
-  kdePackages,
-  qt6,
-  tagparser,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, cmake
+, cpp-utilities
+, mp4v2
+, libid3tag
+, kdePackages
+, qt6
+, tagparser
+,
 }:
 
 stdenv.mkDerivation rec {

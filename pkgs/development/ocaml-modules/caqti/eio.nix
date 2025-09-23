@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  caqti,
-  logs,
-  eio,
+{ buildDunePackage
+, caqti
+, logs
+, eio
+,
 }:
 
 buildDunePackage {

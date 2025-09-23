@@ -1,12 +1,12 @@
-{
-  alcotest,
-  buildDunePackage,
-  dune-configurator,
-  fetchFromGitHub,
-  lib,
-  ocaml,
-  openssl,
-  pkg-config,
+{ alcotest
+, buildDunePackage
+, dune-configurator
+, fetchFromGitHub
+, lib
+, ocaml
+, openssl
+, pkg-config
+,
 }:
 
 buildDunePackage rec {

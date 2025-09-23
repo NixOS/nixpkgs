@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  buildType ? "meson",
-  cmake,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  blas,
-  lapack,
-  mctc-lib,
-  mstore,
-  multicharge,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, buildType ? "meson"
+, cmake
+, meson
+, ninja
+, pkg-config
+, python3
+, blas
+, lapack
+, mctc-lib
+, mstore
+, multicharge
+,
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;

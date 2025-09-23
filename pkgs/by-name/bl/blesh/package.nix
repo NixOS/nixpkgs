@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  runtimeShell,
-  bashInteractive,
-  glibcLocales,
+{ lib
+, stdenvNoCC
+, fetchzip
+, runtimeShell
+, bashInteractive
+, glibcLocales
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

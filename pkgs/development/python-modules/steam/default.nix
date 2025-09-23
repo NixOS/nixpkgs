@@ -1,18 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  six,
-  pycryptodomex,
-  requests,
-  urllib3,
-  vdf,
-  gevent,
-  protobuf,
-  gevent-eventemitter,
-  cachetools,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, pycryptodomex
+, requests
+, urllib3
+, vdf
+, gevent
+, protobuf
+, gevent-eventemitter
+, cachetools
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "steam";

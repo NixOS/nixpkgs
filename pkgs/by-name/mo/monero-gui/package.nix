@@ -1,29 +1,28 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeDesktopItem,
-  boost186,
-  cmake,
-  libgcrypt,
-  libgpg-error,
-  libsodium,
-  miniupnpc,
-  monero-cli,
-  pkg-config,
-  qt5,
-  quirc,
-  randomx,
-  rapidjson,
-  stdenv,
-  unbound,
-  zeromq,
-
-  trezorSupport ? true,
-  hidapi,
-  libusb1,
-  protobuf_21,
-  python3,
-  udev,
+{ lib
+, fetchFromGitHub
+, makeDesktopItem
+, boost186
+, cmake
+, libgcrypt
+, libgpg-error
+, libsodium
+, miniupnpc
+, monero-cli
+, pkg-config
+, qt5
+, quirc
+, randomx
+, rapidjson
+, stdenv
+, unbound
+, zeromq
+, trezorSupport ? true
+, hidapi
+, libusb1
+, protobuf_21
+, python3
+, udev
+,
 }:
 
 stdenv.mkDerivation rec {

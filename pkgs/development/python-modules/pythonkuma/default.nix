@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-regex-commit,
-  hatchling,
-  mashumaro,
-  prometheus-client,
-  pythonOlder,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-regex-commit
+, hatchling
+, mashumaro
+, prometheus-client
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

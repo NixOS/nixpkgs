@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  undmg,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchurl
+, undmg
+, nix-update-script
+,
 }:
 
 let

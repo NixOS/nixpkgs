@@ -1,9 +1,9 @@
-{
-  lib,
-  runCommand,
-  prisma,
-  prisma-engines,
-  sqlite-interactive,
+{ lib
+, runCommand
+, prisma
+, prisma-engines
+, sqlite-interactive
+,
 }:
 
 let
@@ -11,13 +11,13 @@ let
   enginesMajorVersion = lib.versions.majorMinor prisma-engines.version;
 in
 runCommand "prisma-cli-tests"
-  {
-    nativeBuildInputs = [
-      prisma
-      sqlite-interactive
-    ];
-    meta.timeout = 60;
-  }
+{
+  nativeBuildInputs = [
+    prisma
+    sqlite-interactive
+  ];
+  meta.timeout = 60;
+}
   ''
     mkdir $out
     cd $out

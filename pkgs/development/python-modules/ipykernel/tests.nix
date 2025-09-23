@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  flaky,
-  ipykernel,
-  ipyparallel,
-  pre-commit,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-timeout,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, flaky
+, ipykernel
+, ipyparallel
+, pre-commit
+, pytestCheckHook
+, pytest-asyncio
+, pytest-timeout
+,
 }:
 
 buildPythonPackage {

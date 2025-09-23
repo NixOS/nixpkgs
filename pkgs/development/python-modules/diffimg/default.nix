@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pillow,
-  unittestCheckHook,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pillow
+, unittestCheckHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage {

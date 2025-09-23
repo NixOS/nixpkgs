@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  click-plugins,
-  colorama,
-  fetchPypi,
-  pythonOlder,
-  requests,
-  setuptools,
-  tldextract,
-  xlsxwriter,
+{ lib
+, buildPythonPackage
+, click-plugins
+, colorama
+, fetchPypi
+, pythonOlder
+, requests
+, setuptools
+, tldextract
+, xlsxwriter
+,
 }:
 
 buildPythonPackage rec {

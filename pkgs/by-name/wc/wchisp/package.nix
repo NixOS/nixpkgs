@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  libusb1,
-  nix-update-script,
-  versionCheckHook,
+{ stdenv
+, lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, libusb1
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

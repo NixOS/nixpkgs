@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  fontconfig,
-  libX11,
-  libXi,
-  freetype,
-  libgbm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, fontconfig
+, libX11
+, libXi
+, freetype
+, libgbm
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.meilisearch;
@@ -43,12 +42,14 @@ let
   master-key-placeholder = "@MASTER_KEY@";
 
   configFile = settingsFormat.generate "config.toml" (
-    builtins.removeAttrs (
-      if cfg.masterKeyFile != null then
-        cfg.settings // { master_key = master-key-placeholder; }
-      else
-        builtins.removeAttrs cfg.settings [ "master_key" ]
-    ) (map (secret: secret.name) secrets-with-path)
+    builtins.removeAttrs
+      (
+        if cfg.masterKeyFile != null then
+          cfg.settings // { master_key = master-key-placeholder; }
+        else
+          builtins.removeAttrs cfg.settings [ "master_key" ]
+      )
+      (map (secret: secret.name) secrets-with-path)
   );
 
 in
@@ -140,16 +141,18 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        imports = builtins.map (secret: {
-          # give them proper types, just so they're easier to consume from this file
-          options.${secret.name} = lib.mkOption {
-            # but they should not show up in documentation as special in any way.
-            visible = false;
+        imports = builtins.map
+          (secret: {
+            # give them proper types, just so they're easier to consume from this file
+            options.${secret.name} = lib.mkOption {
+              # but they should not show up in documentation as special in any way.
+              visible = false;
 
-            type = lib.types.nullOr lib.types.path;
-            default = null;
-          };
-        }) secrets-with-path;
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+            };
+          })
+          secrets-with-path;
       };
     };
   };
@@ -216,10 +219,12 @@ in
       ];
 
       environment = builtins.listToAttrs (
-        builtins.map (secret: {
-          name = secret.environment;
-          value = lib.mkIf (secret.setting != null) "%d/${secret.name}";
-        }) secrets-with-path
+        builtins.map
+          (secret: {
+            name = secret.environment;
+            value = lib.mkIf (secret.setting != null) "%d/${secret.name}";
+          })
+          secrets-with-path
       );
 
       serviceConfig = {
@@ -227,9 +232,11 @@ in
           [
             (lib.mkIf (cfg.masterKeyFile != null) [ "master_key:${cfg.masterKeyFile}" ])
           ]
-          ++ builtins.map (
-            secret: lib.mkIf (secret.setting != null) [ "${secret.name}:${secret.setting}" ]
-          ) secrets-with-path
+          ++ builtins.map
+            (
+              secret: lib.mkIf (secret.setting != null) [ "${secret.name}:${secret.setting}" ]
+            )
+            secrets-with-path
         );
         ExecStart = "${lib.getExe cfg.package} --config-file-path \${RUNTIME_DIRECTORY}/config.toml";
         DynamicUser = true;

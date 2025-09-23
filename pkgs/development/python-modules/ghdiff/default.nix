@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  zope-testrunner,
-  six,
-  chardet,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, zope-testrunner
+, six
+, chardet
+,
 }:
 
 buildPythonPackage rec {

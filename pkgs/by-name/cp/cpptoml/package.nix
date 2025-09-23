@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libcxxCmakeModule ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libcxxCmakeModule ? false
+,
 }:
 
 stdenv.mkDerivation {

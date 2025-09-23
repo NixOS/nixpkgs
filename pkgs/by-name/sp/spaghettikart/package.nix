@@ -1,33 +1,33 @@
-{
-  lib,
-  fetchFromGitHub,
-  applyPatches,
-  writeTextFile,
-  fetchurl,
-  stdenv,
-  replaceVars,
-  yaml-cpp,
-  srcOnly,
-  cmake,
-  copyDesktopItems,
-  installShellFiles,
-  lsb-release,
-  makeWrapper,
-  ninja,
-  pkg-config,
-  libGL,
-  libvorbis,
-  libX11,
-  libzip,
-  nlohmann_json,
-  SDL2,
-  SDL2_net,
-  spdlog,
-  tinyxml-2,
-  zenity,
-  sdl_gamecontrollerdb,
-  spaghettikart,
-  makeDesktopItem,
+{ lib
+, fetchFromGitHub
+, applyPatches
+, writeTextFile
+, fetchurl
+, stdenv
+, replaceVars
+, yaml-cpp
+, srcOnly
+, cmake
+, copyDesktopItems
+, installShellFiles
+, lsb-release
+, makeWrapper
+, ninja
+, pkg-config
+, libGL
+, libvorbis
+, libX11
+, libzip
+, nlohmann_json
+, SDL2
+, SDL2_net
+, spdlog
+, tinyxml-2
+, zenity
+, sdl_gamecontrollerdb
+, spaghettikart
+, makeDesktopItem
+,
 }:
 
 let

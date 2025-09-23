@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  buildPythonApplication,
-  python-dateutil,
-  sqlalchemy,
-  setproctitle,
-  icalendar,
-  colorama,
+{ lib
+, fetchurl
+, buildPythonApplication
+, python-dateutil
+, sqlalchemy
+, setproctitle
+, icalendar
+, colorama
+,
 }:
 
 buildPythonApplication rec {

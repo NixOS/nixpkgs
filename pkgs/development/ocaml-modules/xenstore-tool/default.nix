@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  camlp-streams,
-  xenstore_transport,
-  xenstore,
-  lwt,
+{ buildDunePackage
+, camlp-streams
+, xenstore_transport
+, xenstore
+, lwt
+,
 }:
 
 buildDunePackage {

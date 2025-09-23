@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gfortran,
-  python3,
-  util-linux,
-  which,
-
-  enableStatic ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gfortran
+, python3
+, util-linux
+, which
+, enableStatic ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {

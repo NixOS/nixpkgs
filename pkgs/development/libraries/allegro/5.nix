@@ -1,43 +1,43 @@
-{
-  lib,
-  alsa-lib,
-  cmake,
-  enet,
-  fetchFromGitHub,
-  fixDarwinDylibNames,
-  flac,
-  freetype,
-  gtk3,
-  libGL,
-  libGLU,
-  libjpeg,
-  libpng,
-  libpthreadstubs,
-  libpulseaudio,
-  libtheora,
-  libvorbis,
-  libwebp,
-  libX11,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXi,
-  libXpm,
-  libXt,
-  libXxf86dga,
-  libXxf86misc,
-  libXxf86vm,
-  openal,
-  physfs,
-  pkg-config,
-  stdenv,
-  texinfo,
-  xorgproto,
-  zlib,
-  # https://github.com/liballeg/allegro5/blob/master/README_sdl.txt
-  useSDL ? false,
-  sdl2-compat ? null,
+{ lib
+, alsa-lib
+, cmake
+, enet
+, fetchFromGitHub
+, fixDarwinDylibNames
+, flac
+, freetype
+, gtk3
+, libGL
+, libGLU
+, libjpeg
+, libpng
+, libpthreadstubs
+, libpulseaudio
+, libtheora
+, libvorbis
+, libwebp
+, libX11
+, libXcursor
+, libXdmcp
+, libXext
+, libXfixes
+, libXi
+, libXpm
+, libXt
+, libXxf86dga
+, libXxf86misc
+, libXxf86vm
+, openal
+, physfs
+, pkg-config
+, stdenv
+, texinfo
+, xorgproto
+, zlib
+, # https://github.com/liballeg/allegro5/blob/master/README_sdl.txt
+  useSDL ? false
+, sdl2-compat ? null
+,
 }:
 
 assert useSDL -> sdl2-compat != null;

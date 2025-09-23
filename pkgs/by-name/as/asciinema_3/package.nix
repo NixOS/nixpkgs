@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  python3,
-  rustPlatform,
-  testers,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, python3
+, rustPlatform
+, testers
+,
 }:
 
 let

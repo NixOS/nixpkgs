@@ -1,35 +1,33 @@
 { version, hash }:
 
-{
-  callPackage,
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-
-  # build time
-  apple-sdk_14,
-  apple-sdk_15,
-  buildPackages,
-  cargo,
-  m4,
-  perl,
-  pkg-config,
-  python3,
-  rust-cbindgen,
-  rustPlatform,
-  rustc,
-  which,
-  zip,
-  xcbuild,
-
-  # runtime
-  icu75,
-  icu77,
-  nspr,
-  readline,
-  zlib,
-  libiconv,
+{ callPackage
+, lib
+, stdenv
+, fetchurl
+, fetchpatch
+, # build time
+  apple-sdk_14
+, apple-sdk_15
+, buildPackages
+, cargo
+, m4
+, perl
+, pkg-config
+, python3
+, rust-cbindgen
+, rustPlatform
+, rustc
+, which
+, zip
+, xcbuild
+, # runtime
+  icu75
+, icu77
+, nspr
+, readline
+, zlib
+, libiconv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

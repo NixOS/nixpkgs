@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal,
-  gobject-introspection,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, crystal
+, gobject-introspection
+, gitUpdater
+,
 }:
 crystal.buildCrystalPackage rec {
   pname = "gi-crystal";

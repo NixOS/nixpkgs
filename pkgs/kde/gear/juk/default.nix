@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtmultimedia,
-  qtsvg,
-  taglib,
+{ mkKdeDerivation
+, qtmultimedia
+, qtsvg
+, taglib
+,
 }:
 mkKdeDerivation {
   pname = "juk";

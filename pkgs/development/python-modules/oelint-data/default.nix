@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  oelint-parser,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, oelint-parser
+,
 }:
 
 buildPythonPackage rec {

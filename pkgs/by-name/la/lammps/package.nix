@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpng,
-  gzip,
-  fftw,
-  blas,
-  lapack,
-  python3,
-  cmake,
-  autoAddDriverRunpath,
-  pkg-config,
-  # Available list of packages can be found near here:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpng
+, gzip
+, fftw
+, blas
+, lapack
+, python3
+, cmake
+, autoAddDriverRunpath
+, pkg-config
+, # Available list of packages can be found near here:
   #
   # - https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
   # - https://docs.lammps.org/Build_extras.html
@@ -39,11 +38,12 @@
     SRD = true;
     REAXFF = true;
     PYTHON = true;
-  },
-  # Extra cmakeFlags to add as "-D${attr}=${value}"
-  extraCmakeFlags ? { },
-  # Extra `buildInputs` - meant for packages that require more inputs
-  extraBuildInputs ? [ ],
+  }
+, # Extra cmakeFlags to add as "-D${attr}=${value}"
+  extraCmakeFlags ? { }
+, # Extra `buildInputs` - meant for packages that require more inputs
+  extraBuildInputs ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

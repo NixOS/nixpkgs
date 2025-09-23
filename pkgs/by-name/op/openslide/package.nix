@@ -1,24 +1,24 @@
-{
-  buildPackages,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  cairo,
-  doxygen,
-  glib,
-  gdk-pixbuf,
-  libdicom,
-  libjpeg,
-  libpng,
-  libtiff,
-  libxml2,
-  openjpeg,
-  sqlite,
-  zlib,
-  zstd,
+{ buildPackages
+, lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, cairo
+, doxygen
+, glib
+, gdk-pixbuf
+, libdicom
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, openjpeg
+, sqlite
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

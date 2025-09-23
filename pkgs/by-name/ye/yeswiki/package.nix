@@ -1,7 +1,7 @@
-{
-  stdenv,
-  fetchurl,
-  unzip,
+{ stdenv
+, fetchurl
+, unzip
+,
 }:
 let
   version = "4.4.2";

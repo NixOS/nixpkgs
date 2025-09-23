@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  prettytable,
-  sqlglot,
-  typing-extensions,
-
-  # tests
-  databricks-sql-connector,
-  duckdb,
-  findspark,
-  google-cloud-bigquery,
-  pyspark,
-  pytest-postgresql,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  prettytable
+, sqlglot
+, typing-extensions
+, # tests
+  databricks-sql-connector
+, duckdb
+, findspark
+, google-cloud-bigquery
+, pyspark
+, pytest-postgresql
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

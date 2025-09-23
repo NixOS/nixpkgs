@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  unittestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

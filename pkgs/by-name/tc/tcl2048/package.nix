@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  tcl,
-  tclPackages,
-  runtimeShell,
+{ lib
+, fetchurl
+, tcl
+, tclPackages
+, runtimeShell
+,
 }:
 
 tcl.mkTclDerivation rec {

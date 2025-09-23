@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  perlPackages,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, perlPackages
+,
 }:
 
 perlPackages.buildPerlPackage {

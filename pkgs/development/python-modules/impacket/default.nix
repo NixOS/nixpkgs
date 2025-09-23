@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  charset-normalizer,
-  dsinternals,
-  fetchPypi,
-  flask,
-  ldap3,
-  ldapdomaindump,
-  pyasn1,
-  pyasn1-modules,
-  pycryptodomex,
-  pyopenssl,
-  pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  six,
+{ lib
+, buildPythonPackage
+, charset-normalizer
+, dsinternals
+, fetchPypi
+, flask
+, ldap3
+, ldapdomaindump
+, pyasn1
+, pyasn1-modules
+, pycryptodomex
+, pyopenssl
+, pythonOlder
+, setuptools
+, pytestCheckHook
+, six
+,
 }:
 
 buildPythonPackage rec {

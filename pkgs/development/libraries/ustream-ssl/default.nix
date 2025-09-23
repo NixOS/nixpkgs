@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  cmake,
-  pkg-config,
-  libubox-nossl,
-  ssl_implementation,
-  additional_buildInputs ? [ ],
+{ stdenv
+, lib
+, fetchgit
+, cmake
+, pkg-config
+, libubox-nossl
+, ssl_implementation
+, additional_buildInputs ? [ ]
+,
 }:
 
 stdenv.mkDerivation {

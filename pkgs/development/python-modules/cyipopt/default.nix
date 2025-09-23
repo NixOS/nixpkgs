@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  ipopt,
-  numpy,
-  pkg-config,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, ipopt
+, numpy
+, pkg-config
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

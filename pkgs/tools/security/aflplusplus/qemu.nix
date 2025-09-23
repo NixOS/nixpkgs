@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  python3,
-  zlib,
-  pkg-config,
-  glib,
-  perl,
-  texinfo,
-  libuuid,
-  flex,
-  bison,
-  pixman,
-  meson,
-  fetchFromGitHub,
-  ninja,
+{ lib
+, stdenv
+, python3
+, zlib
+, pkg-config
+, glib
+, perl
+, texinfo
+, libuuid
+, flex
+, bison
+, pixman
+, meson
+, fetchFromGitHub
+, ninja
+,
 }:
 
 let

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.paretosecurity;
@@ -66,54 +65,56 @@ in
 
       # Each user can set their inviteID, which creates a systemd service
       # that runs `paretosecurity link ...` to link their device to Pareto Cloud.
-      lib.mapAttrs' (
-        username: userConfig:
-        lib.nameValuePair "paretosecurity-link-${username}" {
-          description = "Link Pareto Desktop to Pareto Cloud for user ${username}";
-          after = [ "network-online.target" ];
-          wants = [ "network-online.target" ];
+      lib.mapAttrs'
+        (
+          username: userConfig:
+            lib.nameValuePair "paretosecurity-link-${username}" {
+              description = "Link Pareto Desktop to Pareto Cloud for user ${username}";
+              after = [ "network-online.target" ];
+              wants = [ "network-online.target" ];
 
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            User = username;
-            StateDirectory = "paretosecurity/${username}";
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                User = username;
+                StateDirectory = "paretosecurity/${username}";
 
-            ExecStart = pkgs.writeShellScript "paretosecurity-link-${username}" ''
-              set -euo pipefail
+                ExecStart = pkgs.writeShellScript "paretosecurity-link-${username}" ''
+                  set -euo pipefail
 
-              INVITE_ID="${userConfig.inviteId}"
-              STATE_FILE="/var/lib/paretosecurity/${username}/linked-$INVITE_ID"
-              CONFIG_FILE="$HOME/.config/pareto.toml"
+                  INVITE_ID="${userConfig.inviteId}"
+                  STATE_FILE="/var/lib/paretosecurity/${username}/linked-$INVITE_ID"
+                  CONFIG_FILE="$HOME/.config/pareto.toml"
 
-              # Check if already linked with this specific invite
-              if [ -f "$STATE_FILE" ]; then
-                echo "Device already linked with invite $INVITE_ID for user ${username}"
-                exit 0
-              fi
+                  # Check if already linked with this specific invite
+                  if [ -f "$STATE_FILE" ]; then
+                    echo "Device already linked with invite $INVITE_ID for user ${username}"
+                    exit 0
+                  fi
 
-              # Ensure config directory exists
-              mkdir -p "$(dirname "$CONFIG_FILE")"
+                  # Ensure config directory exists
+                  mkdir -p "$(dirname "$CONFIG_FILE")"
 
-              # Perform linking
-              echo "Linking device to Pareto Cloud for user ${username}..."
-              ${cfg.package}/bin/paretosecurity link \
-                "paretosecurity://linkDevice/?invite_id=$INVITE_ID"
+                  # Perform linking
+                  echo "Linking device to Pareto Cloud for user ${username}..."
+                  ${cfg.package}/bin/paretosecurity link \
+                    "paretosecurity://linkDevice/?invite_id=$INVITE_ID"
 
-              # Verify linking succeeded
-              if [ -f "$CONFIG_FILE" ] && grep -q "TeamID" "$CONFIG_FILE"; then
-                echo "Successfully linked to Pareto Cloud for user ${username}"
-                touch "$STATE_FILE"
-              else
-                echo "Failed to link to Pareto Cloud for user ${username}"
-                exit 1
-              fi
-            '';
-          };
+                  # Verify linking succeeded
+                  if [ -f "$CONFIG_FILE" ] && grep -q "TeamID" "$CONFIG_FILE"; then
+                    echo "Successfully linked to Pareto Cloud for user ${username}"
+                    touch "$STATE_FILE"
+                  else
+                    echo "Failed to link to Pareto Cloud for user ${username}"
+                    exit 1
+                  fi
+                '';
+              };
 
-          wantedBy = [ "multi-user.target" ];
-        }
-      ) cfg.users
+              wantedBy = [ "multi-user.target" ];
+            }
+        )
+        cfg.users
     );
 
     # Enable the tray icon and timer services if the trayIcon option is enabled

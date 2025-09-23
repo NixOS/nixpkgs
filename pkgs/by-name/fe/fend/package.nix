@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pandoc,
-  pkg-config,
-  openssl,
-  installShellFiles,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
-  testers,
-  writeText,
-  runCommand,
-  fend,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pandoc
+, pkg-config
+, openssl
+, installShellFiles
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+, testers
+, writeText
+, runCommand
+, fend
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

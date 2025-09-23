@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  buildNpmPackage,
-  fetchFromGitHub,
-  moreutils,
-  jq,
-  git,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildGoModule
+, buildNpmPackage
+, fetchFromGitHub
+, moreutils
+, jq
+, git
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule (finalAttrs: {

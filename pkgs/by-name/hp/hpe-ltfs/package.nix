@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fuse,
-  icu66,
-  pkg-config,
-  libxml2,
-  libuuid,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse
+, icu66
+, pkg-config
+, libxml2
+, libuuid
+,
 }:
 
 stdenv.mkDerivation rec {

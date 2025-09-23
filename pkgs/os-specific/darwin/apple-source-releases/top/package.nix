@@ -1,9 +1,9 @@
-{
-  apple-sdk,
-  libutil,
-  mkAppleDerivation,
-  ncurses,
-  pkg-config,
+{ apple-sdk
+, libutil
+, mkAppleDerivation
+, ncurses
+, pkg-config
+,
 }:
 
 let

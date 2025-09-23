@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  numpy,
-  imageio,
-  cairosvg,
-  imageio-ffmpeg,
-  pwkit,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pythonOlder
+, numpy
+, imageio
+, cairosvg
+, imageio-ffmpeg
+, pwkit
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nbconvert,
-  pytestCheckHook,
-  requests,
-  responses,
-  setuptools,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nbconvert
+, pytestCheckHook
+, requests
+, responses
+, setuptools
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

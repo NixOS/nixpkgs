@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
-  gensim,
-  numpy,
-  requests,
-  sentencepiece,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, gensim
+, numpy
+, requests
+, sentencepiece
+, tqdm
+,
 }:
 
 buildPythonPackage {

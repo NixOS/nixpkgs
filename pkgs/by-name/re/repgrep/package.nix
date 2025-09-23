@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  asciidoctor,
-  installShellFiles,
-  makeWrapper,
-  ripgrep,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, asciidoctor
+, installShellFiles
+, makeWrapper
+, ripgrep
+,
 }:
 
 rustPlatform.buildRustPackage rec {

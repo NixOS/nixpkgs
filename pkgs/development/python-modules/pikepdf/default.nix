@@ -1,26 +1,26 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  pythonOlder,
-  jbig2dec,
-  deprecated,
-  lxml,
-  mupdf-headless,
-  numpy,
-  packaging,
-  pillow,
-  psutil,
-  pybind11,
-  pytest-xdist,
-  pytestCheckHook,
-  python-dateutil,
-  python-xmp-toolkit,
-  qpdf,
-  setuptools,
-  replaceVars,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, pythonOlder
+, jbig2dec
+, deprecated
+, lxml
+, mupdf-headless
+, numpy
+, packaging
+, pillow
+, psutil
+, pybind11
+, pytest-xdist
+, pytestCheckHook
+, python-dateutil
+, python-xmp-toolkit
+, qpdf
+, setuptools
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

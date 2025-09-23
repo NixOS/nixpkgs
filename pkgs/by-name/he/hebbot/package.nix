@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  rustPlatform,
-  pkg-config,
-  cmake,
-  openssl,
-  autoconf,
-  automake,
-  unstableGitUpdater,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, stdenv
+, rustPlatform
+, pkg-config
+, cmake
+, openssl
+, autoconf
+, automake
+, unstableGitUpdater
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage rec {

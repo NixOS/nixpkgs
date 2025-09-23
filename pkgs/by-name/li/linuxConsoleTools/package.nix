@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  SDL2,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, SDL2
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

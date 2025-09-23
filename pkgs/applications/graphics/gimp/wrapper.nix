@@ -1,10 +1,10 @@
-{
-  lib,
-  symlinkJoin,
-  makeWrapper,
-  gimpPlugins,
-  gnome-themes-extra,
-  plugins ? null,
+{ lib
+, symlinkJoin
+, makeWrapper
+, gimpPlugins
+, gnome-themes-extra
+, plugins ? null
+,
 }:
 
 let

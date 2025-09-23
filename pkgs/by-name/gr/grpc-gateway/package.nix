@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  testers,
-  grpc-gateway,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, testers
+, grpc-gateway
+,
 }:
 
 buildGoModule rec {

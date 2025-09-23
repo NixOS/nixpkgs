@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-nodejs-version,
-  hatchling,
-
-  # dependencies
-  pycrdt,
-  pytestCheckHook,
-
-  # tests
-  websockets,
-  ypy-websocket,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-nodejs-version
+, hatchling
+, # dependencies
+  pycrdt
+, pytestCheckHook
+, # tests
+  websockets
+, ypy-websocket
+,
 }:
 
 buildPythonPackage rec {

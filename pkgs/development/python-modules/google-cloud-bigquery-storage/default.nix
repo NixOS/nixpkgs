@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fastavro,
-  fetchPypi,
-  google-api-core,
-  google-auth,
-  google-cloud-bigquery,
-  pandas,
-  protobuf,
-  pyarrow,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fastavro
+, fetchPypi
+, google-api-core
+, google-auth
+, google-cloud-bigquery
+, pandas
+, protobuf
+, pyarrow
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

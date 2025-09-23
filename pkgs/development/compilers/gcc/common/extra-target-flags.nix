@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  withoutTargetLibc,
-  libcCross,
-  threadsCross,
+{ lib
+, stdenv
+, withoutTargetLibc
+, libcCross
+, threadsCross
+,
 }:
 
 let

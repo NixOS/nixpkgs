@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  glean-parser,
-  pytest-localserver,
-  pytestCheckHook,
-  rustPlatform,
-  semver,
-  setuptools,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, glean-parser
+, pytest-localserver
+, pytestCheckHook
+, rustPlatform
+, semver
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

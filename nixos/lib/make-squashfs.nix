@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  squashfsTools,
-  closureInfo,
-
-  fileName ? "squashfs",
-  # The root directory of the squashfs filesystem is filled with the
+{ lib
+, stdenv
+, squashfsTools
+, closureInfo
+, fileName ? "squashfs"
+, # The root directory of the squashfs filesystem is filled with the
   # closures of the Nix store paths listed here.
-  storeContents ? [ ],
-  # Pseudo files to be added to squashfs image
-  pseudoFiles ? [ ],
-  noStrip ? false,
-  # Compression parameters.
+  storeContents ? [ ]
+, # Pseudo files to be added to squashfs image
+  pseudoFiles ? [ ]
+, noStrip ? false
+, # Compression parameters.
   # For zstd compression you can use "zstd -Xcompression-level 6".
-  comp ? "xz -Xdict-size 100%",
-  # create hydra build product. will put image in directory instead
+  comp ? "xz -Xdict-size 100%"
+, # create hydra build product. will put image in directory instead
   # of directly in the store
-  hydraBuildProduct ? false,
+  hydraBuildProduct ? false
+,
 }:
 
 let

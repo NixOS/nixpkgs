@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  jre,
-  maven,
+{ lib
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, jre
+, maven
+,
 }:
 
 let

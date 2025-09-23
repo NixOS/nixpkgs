@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  swig,
-  cmake,
-  ninja,
-  setuptools,
-  scikit-build,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, swig
+, cmake
+, ninja
+, setuptools
+, scikit-build
+,
 }:
 
 buildPythonPackage rec {

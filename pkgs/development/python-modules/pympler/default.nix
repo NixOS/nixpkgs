@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bottle,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonAtLeast,
-  setuptools,
+{ lib
+, stdenv
+, bottle
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonAtLeast
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

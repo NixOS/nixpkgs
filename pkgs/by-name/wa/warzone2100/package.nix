@@ -1,42 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  ninja,
-  p7zip,
-  pkg-config,
-  asciidoctor,
-  gettext,
-
-  SDL2,
-  libtheora,
-  libvorbis,
-  libopus,
-  openal,
-  openalSoft,
-  physfs,
-  miniupnpc,
-  libsodium,
-  curl,
-  libpng,
-  freetype,
-  harfbuzz,
-  sqlite,
-  which,
-  vulkan-headers,
-  vulkan-loader,
-  shaderc,
-  protobuf,
-  libzip,
-
-  testers,
-  warzone2100,
-  nixosTests,
-
-  gitUpdater,
-
-  withVideos ? false,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, ninja
+, p7zip
+, pkg-config
+, asciidoctor
+, gettext
+, SDL2
+, libtheora
+, libvorbis
+, libopus
+, openal
+, openalSoft
+, physfs
+, miniupnpc
+, libsodium
+, curl
+, libpng
+, freetype
+, harfbuzz
+, sqlite
+, which
+, vulkan-headers
+, vulkan-loader
+, shaderc
+, protobuf
+, libzip
+, testers
+, warzone2100
+, nixosTests
+, gitUpdater
+, withVideos ? false
+,
 }:
 
 let

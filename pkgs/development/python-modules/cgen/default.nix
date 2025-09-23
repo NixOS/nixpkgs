@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  pytools,
-  numpy,
-  typing-extensions,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pytools
+, numpy
+, typing-extensions
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

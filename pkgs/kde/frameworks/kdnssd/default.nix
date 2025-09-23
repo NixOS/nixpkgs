@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qttools,
-  avahi,
+{ mkKdeDerivation
+, qttools
+, avahi
+,
 }:
 mkKdeDerivation {
   pname = "kdnssd";

@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  makeShellWrapper,
-  wrapGAppsHook3,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  glib,
-  glibc,
-  gtk3,
-  libsecret,
-  libgbm,
-  musl,
-  nss,
-  pango,
-  udev,
-  xdg-utils,
-  xorg,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, makeShellWrapper
+, wrapGAppsHook3
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, glib
+, glibc
+, gtk3
+, libsecret
+, libgbm
+, musl
+, nss
+, pango
+, udev
+, xdg-utils
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

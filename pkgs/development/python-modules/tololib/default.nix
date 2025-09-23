@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitLab
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

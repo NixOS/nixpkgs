@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  qtwebkit,
-  hunspell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtwebkit
+, hunspell
+,
 }:
 
 stdenv.mkDerivation {

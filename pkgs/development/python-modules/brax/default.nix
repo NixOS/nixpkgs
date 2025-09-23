@@ -1,39 +1,36 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  absl-py,
-  etils,
-  flask,
-  flask-cors,
-  flax,
-  jax,
-  jaxlib,
-  jaxopt,
-  jinja2,
-  ml-collections,
-  mujoco,
-  mujoco-mjx,
-  numpy,
-  optax,
-  orbax-checkpoint,
-  pillow,
-  scipy,
-  tensorboardx,
-  typing-extensions,
-
-  # tests
-  dm-env,
-  gym,
-  pytestCheckHook,
-  pytest-xdist,
-  transforms3d,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, # build-system
+  hatchling
+, # dependencies
+  absl-py
+, etils
+, flask
+, flask-cors
+, flax
+, jax
+, jaxlib
+, jaxopt
+, jinja2
+, ml-collections
+, mujoco
+, mujoco-mjx
+, numpy
+, optax
+, orbax-checkpoint
+, pillow
+, scipy
+, tensorboardx
+, typing-extensions
+, # tests
+  dm-env
+, gym
+, pytestCheckHook
+, pytest-xdist
+, transforms3d
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  git,
-  pkg-config,
-  openssl,
-  erlang_27,
-  nodejs,
-  bun,
-  deno,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, git
+, pkg-config
+, openssl
+, erlang_27
+, nodejs
+, bun
+, deno
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

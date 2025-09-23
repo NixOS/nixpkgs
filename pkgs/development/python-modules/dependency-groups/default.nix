@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  packaging,
-  pytestCheckHook,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, packaging
+, pytestCheckHook
+, tomli
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  libiconv,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

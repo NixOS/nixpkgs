@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  lv2,
-  gtkmm2,
-  boost,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, lv2
+, gtkmm2
+, boost
+,
 }:
 
 stdenv.mkDerivation rec {

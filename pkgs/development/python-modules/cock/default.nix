@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  click,
-  sortedcontainers,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, click
+, sortedcontainers
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

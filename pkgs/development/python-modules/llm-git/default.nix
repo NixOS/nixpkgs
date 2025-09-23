@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  deepmerge,
-  pyyaml,
-  rich,
-  pygments,
-  llm,
-  llm-git,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-asyncio,
-  pytest-httpx,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, deepmerge
+, pyyaml
+, rich
+, pygments
+, llm
+, llm-git
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-asyncio
+, pytest-httpx
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

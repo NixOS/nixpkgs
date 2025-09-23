@@ -1,14 +1,14 @@
-{
-  cmake,
-  fetchFromGitHub,
-  hidapi,
-  lib,
-  libftdi1,
-  libusb1,
-  pkg-config,
-  stdenv,
-  udev,
-  zlib,
+{ cmake
+, fetchFromGitHub
+, hidapi
+, lib
+, libftdi1
+, libusb1
+, pkg-config
+, stdenv
+, udev
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vapoursynth,
-  ffmpeg,
-  xxHash,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vapoursynth
+, ffmpeg
+, xxHash
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

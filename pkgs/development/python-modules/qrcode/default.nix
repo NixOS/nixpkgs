@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  pillow,
-  pypng,
-
-  # tests
-  mock,
-  pytestCheckHook,
-  qrcode,
-  testers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, # build-system
+  poetry-core
+, # dependencies
+  pillow
+, pypng
+, # tests
+  mock
+, pytestCheckHook
+, qrcode
+, testers
+,
 }:
 
 buildPythonPackage rec {

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  cairo,
-  cmake,
-  fetchFromGitHub,
-  ffmpeg,
-  gettext,
-  wxGTK32,
-  gtk3,
-  libGLU,
-  libGL,
-  openal,
-  pkg-config,
-  SDL2,
-  sfml_2,
-  zip,
-  zlib,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
+{ lib
+, stdenv
+, cairo
+, cmake
+, fetchFromGitHub
+, ffmpeg
+, gettext
+, wxGTK32
+, gtk3
+, libGLU
+, libGL
+, openal
+, pkg-config
+, SDL2
+, sfml_2
+, zip
+, zlib
+, wrapGAppsHook3
+, gsettings-desktop-schemas
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

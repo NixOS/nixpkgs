@@ -1,14 +1,14 @@
-{
-  lib,
-  coreutils,
-  fakechroot,
-  fakeroot,
-  evalMinimalConfig,
-  pkgsModule,
-  runCommand,
-  util-linux,
-  vmTools,
-  writeText,
+{ lib
+, coreutils
+, fakechroot
+, fakeroot
+, evalMinimalConfig
+, pkgsModule
+, runCommand
+, util-linux
+, vmTools
+, writeText
+,
 }:
 let
   node = evalMinimalConfig (

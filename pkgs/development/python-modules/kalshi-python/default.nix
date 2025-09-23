@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pytestCheckHook,
-  urllib3,
-  certifi,
-  python-dateutil,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pytestCheckHook
+, urllib3
+, certifi
+, python-dateutil
+, six
+,
 }:
 
 buildPythonPackage rec {

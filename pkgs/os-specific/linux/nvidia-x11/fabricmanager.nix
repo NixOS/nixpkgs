@@ -1,12 +1,12 @@
 nvidia_x11: sha256:
 
-{
-  stdenv,
-  lib,
-  fetchurl,
-  patchelf,
-  zlib,
-  glibc,
+{ stdenv
+, lib
+, fetchurl
+, patchelf
+, zlib
+, glibc
+,
 }:
 
 let

@@ -1,21 +1,21 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  html5lib,
-  pytest-asyncio,
-  pytest-aiohttp,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  requests,
-  requests-mock,
-  setuptools,
-  setuptools-scm,
-  urllib3,
+{ lib
+, aiohttp
+, aioresponses
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, html5lib
+, pytest-asyncio
+, pytest-aiohttp
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests
+, requests-mock
+, setuptools
+, setuptools-scm
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

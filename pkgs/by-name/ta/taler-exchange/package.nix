@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  curl,
-  gnunet,
-  jansson,
-  libgcrypt,
-  libmicrohttpd,
-  libsodium,
-  libunistring,
-  pkg-config,
-  libpq,
-  autoreconfHook,
-  python3,
-  recutils,
-  wget,
-  jq,
-  gettext,
-  texinfo,
-  libtool,
-  nixosTests,
+{ lib
+, stdenv
+, fetchgit
+, curl
+, gnunet
+, jansson
+, libgcrypt
+, libmicrohttpd
+, libsodium
+, libunistring
+, pkg-config
+, libpq
+, autoreconfHook
+, python3
+, recutils
+, wget
+, jq
+, gettext
+, texinfo
+, libtool
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

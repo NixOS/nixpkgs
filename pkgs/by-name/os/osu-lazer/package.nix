@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenvNoCC,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  ffmpeg,
-  alsa-lib,
-  SDL2,
-  lttng-ust,
-  numactl,
-  libglvnd,
-  xorg,
-  udev,
-  vulkan-loader,
-  nix-update-script,
-  nativeWayland ? false,
+{ lib
+, stdenvNoCC
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, ffmpeg
+, alsa-lib
+, SDL2
+, lttng-ust
+, numactl
+, libglvnd
+, xorg
+, udev
+, vulkan-loader
+, nix-update-script
+, nativeWayland ? false
+,
 }:
 
 buildDotnetModule rec {

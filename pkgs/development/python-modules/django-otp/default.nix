@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  django,
-  freezegun,
-  qrcode,
-  pytest,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, django
+, freezegun
+, qrcode
+, pytest
+, python
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  intltool,
-  gobject-introspection,
-  glib,
-  gdk-pixbuf,
-  libxml2,
-  cairo,
-  pango,
-  gnome,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, intltool
+, gobject-introspection
+, glib
+, gdk-pixbuf
+, libxml2
+, cairo
+, pango
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

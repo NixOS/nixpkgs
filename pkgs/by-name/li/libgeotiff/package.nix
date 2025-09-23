@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libjpeg,
-  libtiff,
-  proj,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libjpeg
+, libtiff
+, proj
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mlton,
-  unzip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mlton
+, unzip
+,
 }:
 
 stdenv.mkDerivation rec {

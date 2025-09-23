@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  jansson,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, jansson
+,
 }:
 
 let

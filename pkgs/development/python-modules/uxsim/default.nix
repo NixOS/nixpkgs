@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  qt5,
-  python,
-  dill,
-  matplotlib,
-  networkx,
-  numpy,
-  pandas,
-  pillow,
-  pyqt5,
-  scipy,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, qt5
+, python
+, dill
+, matplotlib
+, networkx
+, numpy
+, pandas
+, pillow
+, pyqt5
+, scipy
+, tqdm
+,
 }:
 buildPythonPackage rec {
   pname = "uxsim";

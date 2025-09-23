@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  hatchling,
-  hatch-vcs,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, hatchling
+, hatch-vcs
+,
 }:
 
 buildPythonPackage rec {

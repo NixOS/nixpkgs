@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  buildFHSEnv,
-  fetchzip,
-  fetchurl,
-  appimageTools,
-  undmg,
+{ lib
+, stdenvNoCC
+, buildFHSEnv
+, fetchzip
+, fetchurl
+, appimageTools
+, undmg
+,
 }:
 
 let
@@ -84,12 +84,12 @@ selectKernel {
       };
       multiPkgs =
         pkgs:
-        with pkgs;
-        [
-          icu
-          libappindicator-gtk3
-        ]
-        ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
+          with pkgs;
+          [
+            icu
+            libappindicator-gtk3
+          ]
+          ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
       runScript = "${src}/bin/jetbrains-toolbox --update-failed";
 
       extraInstallCommands = ''

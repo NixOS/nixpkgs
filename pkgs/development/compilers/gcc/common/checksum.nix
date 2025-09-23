@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  nukeReferences,
-  langC,
-  langCC,
-  runtimeShell,
+{ lib
+, stdenv
+, nukeReferences
+, langC
+, langCC
+, runtimeShell
+,
 }:
 
 let

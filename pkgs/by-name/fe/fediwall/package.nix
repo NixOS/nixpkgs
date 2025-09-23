@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fediwall-unwrapped,
-  conf ? { },
+{ lib
+, stdenv
+, fediwall-unwrapped
+, conf ? { }
+,
 }:
 
 if (conf == { }) then

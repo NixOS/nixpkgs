@@ -1,11 +1,11 @@
-{
-  lib,
-  pkgs,
-  rustPackages,
-  fetchFromGitHub,
-  rustPlatform,
-  writers,
-  nixosTests,
+{ lib
+, pkgs
+, rustPackages
+, fetchFromGitHub
+, rustPlatform
+, writers
+, nixosTests
+,
 }:
 
 let

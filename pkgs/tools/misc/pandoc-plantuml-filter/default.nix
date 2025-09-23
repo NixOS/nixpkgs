@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  pandocfilters,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, setuptools
+, setuptools-scm
+, pandocfilters
+,
 }:
 
 buildPythonApplication rec {

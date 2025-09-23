@@ -14,13 +14,13 @@
 
   Notes:
   - We need a fully functional TLS setup without having any access to
-    the internet. We do that by issuing a self-signed cert, add this
-    self-cert to the hosts pki trust store and finally spoof the
-    hostnames using /etc/hosts.
+  the internet. We do that by issuing a self-signed cert, add this
+  self-cert to the hosts pki trust store and finally spoof the
+  hostnames using /etc/hosts.
   - For this NixOS test, we *had* to store some DB-related and
-    pleroma-related secrets to the store. Keep in mind the store is
-    world-readable, it's the worst place possible to store *any*
-    secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
+  pleroma-related secrets to the store. Keep in mind the store is
+  world-readable, it's the worst place possible to store *any*
+  secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
 */
 
 import ./make-test-python.nix (
@@ -187,11 +187,10 @@ import ./make-test-python.nix (
     name = "pleroma";
     nodes = {
       client =
-        {
-          nodes,
-          pkgs,
-          config,
-          ...
+        { nodes
+        , pkgs
+        , config
+        , ...
         }:
         {
           security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
@@ -202,11 +201,10 @@ import ./make-test-python.nix (
           ];
         };
       pleroma =
-        {
-          nodes,
-          pkgs,
-          config,
-          ...
+        { nodes
+        , pkgs
+        , config
+        , ...
         }:
         {
           security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];

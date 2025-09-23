@@ -1,6 +1,6 @@
-{
-  stdenv,
-  pdfium-binaries,
+{ stdenv
+, pdfium-binaries
+,
 }:
 
 { version, src, ... }:

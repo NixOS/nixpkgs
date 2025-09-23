@@ -1,13 +1,13 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  perl,
-  makeWrapper,
-  procps,
-  coreutils,
-  gawk,
-  buildPackages,
+{ fetchurl
+, lib
+, stdenv
+, perl
+, makeWrapper
+, procps
+, coreutils
+, gawk
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

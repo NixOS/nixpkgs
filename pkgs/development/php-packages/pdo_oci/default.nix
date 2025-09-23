@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  oracle-instantclient,
-  php,
+{ buildPecl
+, lib
+, oracle-instantclient
+, php
+,
 }:
 
 buildPecl {

@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitLab,
-  glib,
-  gtk4,
-  meson,
-  ninja,
-  gitUpdater,
-  desktop-file-utils,
-  appstream,
-  blueprint-compiler,
-  python3Packages,
-  pkg-config,
-  libadwaita,
-  wrapGAppsHook4,
-  upscayl-ncnn,
+{ lib
+, fetchFromGitLab
+, glib
+, gtk4
+, meson
+, ninja
+, gitUpdater
+, desktop-file-utils
+, appstream
+, blueprint-compiler
+, python3Packages
+, pkg-config
+, libadwaita
+, wrapGAppsHook4
+, upscayl-ncnn
+,
 }:
 
 python3Packages.buildPythonApplication rec {

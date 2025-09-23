@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gmp,
-  autoreconfHook,
-  texliveSmall,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gmp
+, autoreconfHook
+, texliveSmall
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy3k,
-  pytestCheckHook,
-  pyyaml,
-  requests,
-  requests-mock,
-  sqlite-utils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, pytestCheckHook
+, pyyaml
+, requests
+, requests-mock
+, sqlite-utils
+,
 }:
 
 buildPythonPackage rec {

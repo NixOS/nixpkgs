@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  numpy,
-  pint,
-  xarray,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, numpy
+, pint
+, xarray
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

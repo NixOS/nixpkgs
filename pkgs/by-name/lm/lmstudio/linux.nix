@@ -1,14 +1,14 @@
-{
-  appimageTools,
-  fetchurl,
-  version,
-  url,
-  hash,
-  pname,
-  meta,
-  stdenv,
-  lib,
-  passthru,
+{ appimageTools
+, fetchurl
+, version
+, url
+, hash
+, pname
+, meta
+, stdenv
+, lib
+, passthru
+,
 }:
 let
   src = fetchurl { inherit url hash; };

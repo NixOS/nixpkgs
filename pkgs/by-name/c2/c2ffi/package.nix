@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  llvmPackages_18,
-  unstableGitUpdater,
+{ lib
+, fetchFromGitHub
+, cmake
+, llvmPackages_18
+, unstableGitUpdater
+,
 }:
 
 let

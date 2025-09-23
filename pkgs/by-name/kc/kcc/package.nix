@@ -1,16 +1,14 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-
-  qt6,
-  archiveSupport ? true,
-  p7zip,
-
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, qt6
+, archiveSupport ? true
+, p7zip
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

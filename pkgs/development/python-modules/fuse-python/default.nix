@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pkg-config,
-  setuptools,
-  fuse,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pkg-config
+, setuptools
+, fuse
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  iptables,
-  fetchFromGitHub,
-  buildGoModule,
+{ lib
+, iptables
+, fetchFromGitHub
+, buildGoModule
+,
 }:
 
 buildGoModule rec {

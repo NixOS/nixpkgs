@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
 
@@ -843,118 +842,133 @@ in
       systemd.tmpfiles.settings = {
         "10-crowdsec" =
 
-          builtins.listToAttrs (
+          builtins.listToAttrs
+            (
+              map
+                (dirName: {
+                  inherit cfg;
+                  name = lib.strings.normalizePath dirName;
+                  value = {
+                    d = {
+                      user = cfg.user;
+                      group = cfg.group;
+                      mode = "0750";
+                    };
+                  };
+                })
+                [
+                  stateDir
+                  hubDir
+                  confDir
+                  localScenariosDir
+                  localPostOverflowsDir
+                  localPostOverflowsS01WhitelistDir
+                  parsersDir
+                  localParsersS00RawDir
+                  localParsersS01ParseDir
+                  localParsersS02EnrichDir
+                  localContextsDir
+                  notificationsDir
+                  pluginDir
+                ]
+            )
+          // builtins.listToAttrs (
             map
-              (dirName: {
+              (scenarioFile: {
                 inherit cfg;
-                name = lib.strings.normalizePath dirName;
+                name = lib.strings.normalizePath "${localScenariosDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf scenarioFile)}";
                 value = {
-                  d = {
-                    user = cfg.user;
-                    group = cfg.group;
-                    mode = "0750";
+                  link = {
+                    type = "L+";
+                    argument = "${scenarioFile}";
                   };
                 };
               })
-              [
-                stateDir
-                hubDir
-                confDir
-                localScenariosDir
-                localPostOverflowsDir
-                localPostOverflowsS01WhitelistDir
-                parsersDir
-                localParsersS00RawDir
-                localParsersS01ParseDir
-                localParsersS02EnrichDir
-                localContextsDir
-                notificationsDir
-                pluginDir
-              ]
+              localScenariosMap
           )
           // builtins.listToAttrs (
-            map (scenarioFile: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localScenariosDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf scenarioFile)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${scenarioFile}";
+            map
+              (parser: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${parser}";
+                  };
                 };
-              };
-            }) localScenariosMap
+              })
+              localParsersS00RawMap
           )
           // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
+            map
+              (parser: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${parser}";
+                  };
                 };
-              };
-            }) localParsersS00RawMap
+              })
+              localParsersS01ParseMap
           )
           // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
+            map
+              (parser: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${parser}";
+                  };
                 };
-              };
-            }) localParsersS01ParseMap
+              })
+              localParsersS02EnrichMap
           )
           // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
+            map
+              (postoverflow: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf postoverflow)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${postoverflow}";
+                  };
                 };
-              };
-            }) localParsersS02EnrichMap
+              })
+              localPostOverflowsS01WhitelistMap
           )
           // builtins.listToAttrs (
-            map (postoverflow: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf postoverflow)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${postoverflow}";
+            map
+              (context: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localContextsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf context)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${context}";
+                  };
                 };
-              };
-            }) localPostOverflowsS01WhitelistMap
+              })
+              localContextsMap
           )
           // builtins.listToAttrs (
-            map (context: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localContextsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf context)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${context}";
+            map
+              (notification: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${notificationsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf notification)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${notification}";
+                  };
                 };
-              };
-            }) localContextsMap
-          )
-          // builtins.listToAttrs (
-            map (notification: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${notificationsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf notification)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${notification}";
-                };
-              };
-            }) localNotificationsMap
+              })
+              localNotificationsMap
           );
       };
 

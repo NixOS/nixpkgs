@@ -1,10 +1,10 @@
-{
-  lib,
-  immich,
-  jq,
-  nodejs,
-  makeWrapper,
-  stdenv,
+{ lib
+, immich
+, jq
+, nodejs
+, makeWrapper
+, stdenv
+,
 }:
 
 let

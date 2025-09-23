@@ -1,29 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  anyio,
-  typing-extensions,
-
-  # optional dependencies
-  itsdangerous,
-  jinja2,
-  python-multipart,
-  pyyaml,
-  httpx,
-
-  # tests
-  pytestCheckHook,
-  pythonOlder,
-  trio,
-
-  # reverse dependencies
-  fastapi,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  anyio
+, typing-extensions
+, # optional dependencies
+  itsdangerous
+, jinja2
+, python-multipart
+, pyyaml
+, httpx
+, # tests
+  pytestCheckHook
+, pythonOlder
+, trio
+, # reverse dependencies
+  fastapi
+,
 }:
 
 buildPythonPackage rec {

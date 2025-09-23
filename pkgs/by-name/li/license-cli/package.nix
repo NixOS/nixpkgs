@@ -1,15 +1,14 @@
-{
-  lib,
-  fetchFromSourcehut,
-  rustPlatform,
-  installShellFiles,
-  scdoc,
-  makeWrapper,
-
-  # Script dependencies.
-  fzf,
-  wl-clipboard,
-  xclip,
+{ lib
+, fetchFromSourcehut
+, rustPlatform
+, installShellFiles
+, scdoc
+, makeWrapper
+, # Script dependencies.
+  fzf
+, wl-clipboard
+, xclip
+,
 }:
 
 rustPlatform.buildRustPackage rec {

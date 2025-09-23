@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  curl,
+{ lib
+, python3Packages
+, fetchPypi
+, curl
+,
 }:
 
 python3Packages.buildPythonPackage rec {

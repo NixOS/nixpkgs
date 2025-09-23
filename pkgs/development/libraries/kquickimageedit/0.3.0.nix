@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  extra-cmake-modules,
-  qtbase,
-  qtdeclarative,
+{ lib
+, stdenv
+, fetchFromGitLab
+, extra-cmake-modules
+, qtbase
+, qtdeclarative
+,
 }:
 
 stdenv.mkDerivation rec {

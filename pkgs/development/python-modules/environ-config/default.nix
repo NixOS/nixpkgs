@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  hatch-fancy-pypi-readme,
-  attrs,
-  importlib-metadata,
-  pytestCheckHook,
-  moto,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, hatch-fancy-pypi-readme
+, attrs
+, importlib-metadata
+, pytestCheckHook
+, moto
+,
 }:
 buildPythonPackage rec {
   pname = "environ-config";

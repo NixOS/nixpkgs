@@ -1,12 +1,12 @@
-{
-  lib,
-  node_webkit,
-  pkgs,
-  copyDesktopItems,
-  makeDesktopItem,
-  stdenv,
-  writeShellScript,
-  wrapGAppsHook3,
+{ lib
+, node_webkit
+, pkgs
+, copyDesktopItems
+, makeDesktopItem
+, stdenv
+, writeShellScript
+, wrapGAppsHook3
+,
 }:
 
 let

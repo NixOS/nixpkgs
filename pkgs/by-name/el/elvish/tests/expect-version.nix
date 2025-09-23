@@ -1,7 +1,7 @@
-{
-  stdenv,
-  elvish,
-  replaceVars,
+{ stdenv
+, elvish
+, replaceVars
+,
 }:
 
 stdenv.mkDerivation {

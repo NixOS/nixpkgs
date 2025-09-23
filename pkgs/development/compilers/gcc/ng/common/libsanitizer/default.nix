@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  libstdcxx,
-  gcc_meta,
-  release_version,
-  version,
-  monorepoSrc ? null,
-  runCommand,
+{ lib
+, stdenv
+, libstdcxx
+, gcc_meta
+, release_version
+, version
+, monorepoSrc ? null
+, runCommand
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsanitizer";

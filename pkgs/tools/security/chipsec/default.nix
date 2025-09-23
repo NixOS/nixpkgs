@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel ? null,
-  elfutils,
-  nasm,
-  python3,
-  withDriver ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel ? null
+, elfutils
+, nasm
+, python3
+, withDriver ? false
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

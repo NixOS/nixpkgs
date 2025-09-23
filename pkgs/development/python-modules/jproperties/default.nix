@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  six,
-  pytest-cov-stub,
-  pytest-datadir,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, six
+, pytest-cov-stub
+, pytest-datadir
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,41 +1,40 @@
-{
-  stdenv,
-  lib,
-  makeDesktopItem,
-  makeWrapper,
-  patchelf,
-  writeText,
-  coreutils,
-  gnugrep,
-  which,
-  git,
-  unzip,
-  libsecret,
-  libnotify,
-  udev,
-  e2fsprogs,
-  python3,
-  autoPatchelfHook,
-  vmopts ? null,
-  glibcLocales,
+{ stdenv
+, lib
+, makeDesktopItem
+, makeWrapper
+, patchelf
+, writeText
+, coreutils
+, gnugrep
+, which
+, git
+, unzip
+, libsecret
+, libnotify
+, udev
+, e2fsprogs
+, python3
+, autoPatchelfHook
+, vmopts ? null
+, glibcLocales
+,
 }:
 
-{
-  pname,
-  product,
-  productShort ? product,
-  version,
-  src,
-  wmClass,
-  buildNumber,
-  jdk,
-  meta,
-  libdbm,
-  fsnotifier,
-  extraLdPath ? [ ],
-  extraWrapperArgs ? [ ],
-  extraBuildInputs ? [ ],
-  ...
+{ pname
+, product
+, productShort ? product
+, version
+, src
+, wmClass
+, buildNumber
+, jdk
+, meta
+, libdbm
+, fsnotifier
+, extraLdPath ? [ ]
+, extraWrapperArgs ? [ ]
+, extraBuildInputs ? [ ]
+, ...
 }@args:
 
 let
@@ -167,7 +166,7 @@ lib.makeOverridable mkDerivation (
       runHook postInstall
     '';
   }
-  // lib.optionalAttrs (!(meta.license.free or true)) {
+    // lib.optionalAttrs (!(meta.license.free or true)) {
     preferLocalBuild = true;
   }
 )

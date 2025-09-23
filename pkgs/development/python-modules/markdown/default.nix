@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  fetchpatch,
-  importlib-metadata,
-  pyyaml,
-  setuptools,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, importlib-metadata
+, pyyaml
+, setuptools
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

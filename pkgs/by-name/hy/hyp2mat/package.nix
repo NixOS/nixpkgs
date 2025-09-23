@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  flex,
-  gengetopt,
-  help2man,
-  groff,
-  libharu,
-  autoreconfHook,
-  pkg-config,
-  libpng,
-  zlib,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, flex
+, gengetopt
+, help2man
+, groff
+, libharu
+, autoreconfHook
+, pkg-config
+, libpng
+, zlib
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

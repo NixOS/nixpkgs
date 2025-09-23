@@ -1,15 +1,15 @@
-{
-  jax,
-  pkgs,
+{ jax
+, pkgs
+,
 }:
 
 pkgs.writers.writePython3Bin "jax-test-cuda"
-  {
-    libraries = [
-      jax
-    ]
-    ++ jax.optional-dependencies.cuda;
-  }
+{
+  libraries = [
+    jax
+  ]
+  ++ jax.optional-dependencies.cuda;
+}
   ''
     import jax
     import jax.numpy as jnp

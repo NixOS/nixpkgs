@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gettext,
-  libxml2,
-  desktop-file-utils,
-  wrapGAppsHook4,
-  glib,
-  gtk4,
-  json-glib,
-  libadwaita,
-  libgee,
-  libgtop,
-  networkmanager,
-  gnome,
-  tinysparql,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, vala
+, gettext
+, libxml2
+, desktop-file-utils
+, wrapGAppsHook4
+, glib
+, gtk4
+, json-glib
+, libadwaita
+, libgee
+, libgtop
+, networkmanager
+, gnome
+, tinysparql
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

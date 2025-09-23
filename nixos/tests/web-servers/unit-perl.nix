@@ -16,11 +16,10 @@ in
   meta.maintainers = with pkgs.lib.maintainers; [ sgo ];
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.unit = {

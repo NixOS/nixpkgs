@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  bison,
-  pkg-config,
-  glib,
-  gettext,
-  perl,
-  libgdiplus,
-  libX11,
-  ncurses,
-  zlib,
-  bash,
-  cacert,
-  python3,
-  version,
-  src,
-  autoconf,
-  libtool,
-  automake,
-  cmake,
-  which,
-  gnumake42,
-  enableParallelBuilding ? true,
-  extraPatches ? [ ],
-  env ? { },
+{ lib
+, stdenv
+, bison
+, pkg-config
+, glib
+, gettext
+, perl
+, libgdiplus
+, libX11
+, ncurses
+, zlib
+, bash
+, cacert
+, python3
+, version
+, src
+, autoconf
+, libtool
+, automake
+, cmake
+, which
+, gnumake42
+, enableParallelBuilding ? true
+, extraPatches ? [ ]
+, env ? { }
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

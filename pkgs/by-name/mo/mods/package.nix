@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  installShellFiles,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  mods,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ lib
+, stdenv
+, buildGoModule
+, installShellFiles
+, fetchFromGitHub
+, gitUpdater
+, testers
+, mods
+, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 buildGoModule (finalAttrs: {

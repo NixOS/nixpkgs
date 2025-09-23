@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  onlykey-cli,
+{ lib
+, python3Packages
+, fetchPypi
+, onlykey-cli
+,
 }:
 
 let

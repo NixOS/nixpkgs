@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  importlib-resources,
-  iso3166,
-  pycountry,
-  rstr,
-
-  # optional-dependencies
-  pydantic,
-
-  # tests
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, hatch-vcs
+, # dependencies
+  importlib-resources
+, iso3166
+, pycountry
+, rstr
+, # optional-dependencies
+  pydantic
+, # tests
+  pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

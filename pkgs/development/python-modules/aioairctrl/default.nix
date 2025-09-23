@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  aiocoap,
-  pycryptodomex,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, aiocoap
+, pycryptodomex
+,
 }:
 
 buildPythonPackage rec {

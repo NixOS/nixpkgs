@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  copyDesktopItems,
-  makeDesktopItem,
-  imagemagick,
-  SDL,
-  isStereo ? false,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, copyDesktopItems
+, makeDesktopItem
+, imagemagick
+, SDL
+, isStereo ? false
+,
 }:
 
 let

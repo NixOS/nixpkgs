@@ -1,7 +1,7 @@
-{
-  lib,
-  python312Packages,
-  fetchFromGitHub,
+{ lib
+, python312Packages
+, fetchFromGitHub
+,
 }:
 
 # ao3downloader explicitly does not support Python 3.13 yet

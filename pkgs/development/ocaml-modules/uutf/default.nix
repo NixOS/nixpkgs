@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  cmdliner,
-  topkg,
-  uchar,
-  version ?
-    if lib.versionAtLeast ocaml.version "4.08" then
-      "1.0.4"
-    else if lib.versionAtLeast ocaml.version "4.03" then
-      "1.0.3"
-    else
-      throw "uutf is not available with OCaml ${ocaml.version}",
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, cmdliner
+, topkg
+, uchar
+, version ? if lib.versionAtLeast ocaml.version "4.08" then
+    "1.0.4"
+  else if lib.versionAtLeast ocaml.version "4.03" then
+    "1.0.3"
+  else
+    throw "uutf is not available with OCaml ${ocaml.version}"
+,
 }:
 
 stdenv.mkDerivation {
@@ -27,8 +26,7 @@ stdenv.mkDerivation {
       {
         "1.0.3" = "sha256-h3KlYT0ecCmM4U3zMkGjaF8h5O9r20zwP+mF+x7KBWg=";
         "1.0.4" = "sha256-p6V45q+RSaiJThjjtHWchWWTemnGyaznowu/BIRhnKg=";
-      }
-      ."${version}";
+      }."${version}";
   };
 
   nativeBuildInputs = [

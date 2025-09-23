@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  dbus,
-  fontconfig,
-  portaudio,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, dbus
+, fontconfig
+, portaudio
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 buildDotnetModule rec {

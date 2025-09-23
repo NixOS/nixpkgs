@@ -1,8 +1,8 @@
-{
-  runCommand,
-  fetchFromGitLab,
-  wrapFirefox,
-  firefox-unwrapped,
+{ runCommand
+, fetchFromGitLab
+, wrapFirefox
+, firefox-unwrapped
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  premake4,
-  bootil,
+{ lib
+, stdenv
+, fetchFromGitHub
+, premake4
+, bootil
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  absl-py,
-  buildPythonPackage,
-  contextlib2,
-  fetchFromGitHub,
-  lib,
-  pyyaml,
-  six,
-  flit-core,
-  pytestCheckHook,
-  pytest-xdist,
+{ absl-py
+, buildPythonPackage
+, contextlib2
+, fetchFromGitHub
+, lib
+, pyyaml
+, six
+, flit-core
+, pytestCheckHook
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

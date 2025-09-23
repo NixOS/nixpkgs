@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  docbook_xsl,
-  libxslt,
-  c-ares,
-  cjson,
-  libuuid,
-  libuv,
-  libwebsockets,
-  openssl,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  uthash,
-  nixosTests,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, docbook_xsl
+, libxslt
+, c-ares
+, cjson
+, libuuid
+, libuv
+, libwebsockets
+, openssl
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, uthash
+, nixosTests
+,
 }:
 
 let

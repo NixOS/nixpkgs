@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  enableMultilib,
-  targetConfig,
+{ lib
+, stdenv
+, enableMultilib
+, targetConfig
+,
 }:
 
 let
@@ -17,7 +17,7 @@ originalAttrs:
 (stdenv.mkDerivation (
   finalAttrs:
   originalAttrs
-  // {
+    // {
     passthru = (originalAttrs.passthru or { }) // {
       inherit forceLibgccToBuildCrtStuff;
     };
@@ -264,19 +264,19 @@ originalAttrs:
         }
       ''
       +
-        # This will redirect $output/lib{32,64} to $output/lib.
-        # Multilib is special, because it creates $out/lib (for 32-bit)
-        # and $out/lib64 (for 64-bit). No other targets can have both.
-        lib.optionalString (!enableMultilib) ''
-          makeCompatibilitySymlink lib lib32
-          makeCompatibilitySymlink lib lib64
-        ''
+      # This will redirect $output/lib{32,64} to $output/lib.
+      # Multilib is special, because it creates $out/lib (for 32-bit)
+      # and $out/lib64 (for 64-bit). No other targets can have both.
+      lib.optionalString (!enableMultilib) ''
+        makeCompatibilitySymlink lib lib32
+        makeCompatibilitySymlink lib lib64
+      ''
       +
-        # This will redirect $output/$targetConfig/lib{,32,64} to $output/$targetConfig/lib.
-        lib.optionalString isCross ''
-          makeCompatibilitySymlink lib $targetConfig/lib32
-          makeCompatibilitySymlink lib $targetConfig/lib64
-        '';
+      # This will redirect $output/$targetConfig/lib{,32,64} to $output/$targetConfig/lib.
+      lib.optionalString isCross ''
+        makeCompatibilitySymlink lib $targetConfig/lib32
+        makeCompatibilitySymlink lib $targetConfig/lib64
+      '';
 
     postInstall = ''
       # Clean up our compatibility symlinks (see above)

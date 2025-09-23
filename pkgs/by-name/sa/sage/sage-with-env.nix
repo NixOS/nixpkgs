@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  sage-env,
-  blas,
-  lapack,
-  pkg-config,
-  three,
-  singular,
-  gap,
-  giac,
-  maxima,
-  pari,
-  gmp,
-  gfan,
-  python3,
-  eclib,
-  ntl,
-  ecm,
-  pythonEnv,
+{ stdenv
+, lib
+, sage-env
+, blas
+, lapack
+, pkg-config
+, three
+, singular
+, gap
+, giac
+, maxima
+, pari
+, gmp
+, gfan
+, python3
+, eclib
+, ntl
+, ecm
+, pythonEnv
+,
 }:
 
 # lots of segfaults with (64 bit) blas
@@ -63,8 +63,8 @@ let
   transitiveClosure =
     dep:
     if dep == null then
-      # propagatedBuildInputs might contain null
-      # (although that might be considered a programming error in the derivation)
+    # propagatedBuildInputs might contain null
+    # (although that might be considered a programming error in the derivation)
       [ ]
     else
       [ dep ]

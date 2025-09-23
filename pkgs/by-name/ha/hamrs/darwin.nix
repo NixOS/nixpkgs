@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  pname,
-  version,
-  meta,
-  fetchurl,
-  _7zz,
-  undmg,
+{ lib
+, stdenvNoCC
+, pname
+, version
+, meta
+, fetchurl
+, _7zz
+, undmg
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

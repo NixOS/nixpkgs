@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  zelus,
-  lablgtk,
+{ buildDunePackage
+, zelus
+, lablgtk
+,
 }:
 
 buildDunePackage {

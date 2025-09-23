@@ -1,14 +1,14 @@
-{
-  lib,
-  buildNpmPackage,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  accessible-pygments,
-  beautifulsoup4,
-  pygments,
-  sphinx,
-  sphinx-basic-ng,
+{ lib
+, buildNpmPackage
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, accessible-pygments
+, beautifulsoup4
+, pygments
+, sphinx
+, sphinx-basic-ng
+,
 }:
 
 let

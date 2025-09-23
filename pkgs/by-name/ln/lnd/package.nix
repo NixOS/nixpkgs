@@ -1,8 +1,7 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  tags ? [
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, tags ? [
     # `RELEASE_TAGS` from https://github.com/lightningnetwork/lnd/blob/master/make/release_flags.mk
     "autopilotrpc"
     "chainrpc"
@@ -18,7 +17,8 @@
     "watchtowerrpc"
     # Extra tags useful for testing
     "routerrpc"
-  ],
+  ]
+,
 }:
 
 buildGoModule rec {

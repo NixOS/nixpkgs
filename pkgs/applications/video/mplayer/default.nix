@@ -1,71 +1,71 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchurl,
-  fetchsvn,
-  pkg-config,
-  freetype,
-  yasm,
-  ffmpeg,
-  aalibSupport ? true,
-  aalib,
-  fontconfigSupport ? true,
-  fontconfig,
-  freefont_ttf,
-  fribidiSupport ? true,
-  fribidi,
-  x11Support ? true,
-  libX11,
-  libXext,
-  libGLU,
-  libGL,
-  xineramaSupport ? true,
-  libXinerama,
-  xvSupport ? true,
-  libXv,
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  screenSaverSupport ? true,
-  libXScrnSaver,
-  vdpauSupport ? false,
-  libvdpau,
-  cddaSupport ? !stdenv.hostPlatform.isDarwin,
-  cdparanoia,
-  dvdnavSupport ? !stdenv.hostPlatform.isDarwin,
-  libdvdnav,
-  dvdreadSupport ? true,
-  libdvdread,
-  bluraySupport ? true,
-  libbluray,
-  amrSupport ? false,
-  amrnb,
-  amrwb,
-  cacaSupport ? true,
-  libcaca,
-  lameSupport ? true,
-  lame,
-  speexSupport ? true,
-  speex,
-  theoraSupport ? true,
-  libtheora,
-  x264Support ? false,
-  x264,
-  jackaudioSupport ? false,
-  libjack2,
-  pulseSupport ? config.pulseaudio or false,
-  libpulseaudio,
-  bs2bSupport ? false,
-  libbs2b,
-  v4lSupport ? false,
-  libv4l,
-  # For screenshots
-  libpngSupport ? true,
-  libpng,
-  libjpegSupport ? true,
-  libjpeg,
-  useUnfreeCodecs ? false,
-  buildPackages,
+{ config
+, lib
+, stdenv
+, fetchurl
+, fetchsvn
+, pkg-config
+, freetype
+, yasm
+, ffmpeg
+, aalibSupport ? true
+, aalib
+, fontconfigSupport ? true
+, fontconfig
+, freefont_ttf
+, fribidiSupport ? true
+, fribidi
+, x11Support ? true
+, libX11
+, libXext
+, libGLU
+, libGL
+, xineramaSupport ? true
+, libXinerama
+, xvSupport ? true
+, libXv
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, screenSaverSupport ? true
+, libXScrnSaver
+, vdpauSupport ? false
+, libvdpau
+, cddaSupport ? !stdenv.hostPlatform.isDarwin
+, cdparanoia
+, dvdnavSupport ? !stdenv.hostPlatform.isDarwin
+, libdvdnav
+, dvdreadSupport ? true
+, libdvdread
+, bluraySupport ? true
+, libbluray
+, amrSupport ? false
+, amrnb
+, amrwb
+, cacaSupport ? true
+, libcaca
+, lameSupport ? true
+, lame
+, speexSupport ? true
+, speex
+, theoraSupport ? true
+, libtheora
+, x264Support ? false
+, x264
+, jackaudioSupport ? false
+, libjack2
+, pulseSupport ? config.pulseaudio or false
+, libpulseaudio
+, bs2bSupport ? false
+, libbs2b
+, v4lSupport ? false
+, libv4l
+, # For screenshots
+  libpngSupport ? true
+, libpng
+, libjpegSupport ? true
+, libjpeg
+, useUnfreeCodecs ? false
+, buildPackages
+,
 }:
 
 assert xineramaSupport -> x11Support;
@@ -79,37 +79,41 @@ let
       version = "20071007";
     in
     if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "${dir}/essential-${version}.tar.bz2";
-        sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
-      }
+      fetchurl
+        {
+          url = "${dir}/essential-${version}.tar.bz2";
+          sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
+        }
     else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "${dir}/essential-amd64-${version}.tar.bz2";
-        sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
-      }
+      fetchurl
+        {
+          url = "${dir}/essential-amd64-${version}.tar.bz2";
+          sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
+        }
     else if stdenv.hostPlatform.system == "powerpc-linux" then
-      fetchurl {
-        url = "${dir}/essential-ppc-${version}.tar.bz2";
-        sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
-      }
+      fetchurl
+        {
+          url = "${dir}/essential-ppc-${version}.tar.bz2";
+          sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
+        }
     else
       null;
 
   codecs =
     if codecs_src != null then
-      stdenv.mkDerivation {
-        pname = "MPlayer-codecs-essential";
+      stdenv.mkDerivation
+        {
+          pname = "MPlayer-codecs-essential";
 
-        src = codecs_src;
+          src = codecs_src;
 
-        installPhase = ''
-          mkdir $out
-          cp -prv * $out
-        '';
+          installPhase = ''
+            mkdir $out
+            cp -prv * $out
+          '';
 
-        meta.license = lib.licenses.unfree;
-      }
+          meta.license = lib.licenses.unfree;
+        }
     else
       null;
 

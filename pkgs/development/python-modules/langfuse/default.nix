@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  anyio,
-  backoff,
-  httpx,
-  idna,
-  langchain,
-  llama-index,
-  openai,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  opentelemetry-exporter-otlp,
-  packaging,
-  poetry-core,
-  pydantic,
-  requests,
-  wrapt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, anyio
+, backoff
+, httpx
+, idna
+, langchain
+, llama-index
+, openai
+, opentelemetry-api
+, opentelemetry-sdk
+, opentelemetry-exporter-otlp
+, packaging
+, poetry-core
+, pydantic
+, requests
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

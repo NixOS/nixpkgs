@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  eigen,
-  frugally-deep,
-  functionalplus,
-  nlohmann_json,
-  src,
-  version,
+{ lib
+, stdenv
+, eigen
+, frugally-deep
+, functionalplus
+, nlohmann_json
+, src
+, version
+,
 }:
 
 stdenv.mkDerivation {

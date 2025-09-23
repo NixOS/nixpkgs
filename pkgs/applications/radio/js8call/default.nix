@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  hamlib_4,
-  libusb1,
-  cmake,
-  fftw,
-  fftwFloat,
-  qt6,
-  boost,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, hamlib_4
+, libusb1
+, cmake
+, fftw
+, fftwFloat
+, qt6
+, boost
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

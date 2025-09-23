@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  jinja2,
-  json-flatten,
-  packageurl-python,
-  semver,
-  toml,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, jinja2
+, json-flatten
+, packageurl-python
+, semver
+, toml
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nautilus-python,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nautilus-python
+, python3
+,
 }:
 stdenv.mkDerivation rec {
   pname = "code-nautilus";

@@ -1,17 +1,17 @@
-{
-  mkDerivation,
-  lib,
-  fetchurl,
-  qtbase,
-  qmake,
-  openjpeg,
-  pkg-config,
-  fftw,
-  libpulseaudio,
-  alsa-lib,
-  hamlib,
-  libv4l,
-  fftwFloat,
+{ mkDerivation
+, lib
+, fetchurl
+, qtbase
+, qmake
+, openjpeg
+, pkg-config
+, fftw
+, libpulseaudio
+, alsa-lib
+, hamlib
+, libv4l
+, fftwFloat
+,
 }:
 
 mkDerivation rec {

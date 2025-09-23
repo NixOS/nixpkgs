@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  cython,
-  catalogue,
-  mock,
-  numpy,
-  psutil,
-  pytest,
-  ruamel-yaml,
-  setuptools,
-  tornado,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, cython
+, catalogue
+, mock
+, numpy
+, psutil
+, pytest
+, ruamel-yaml
+, setuptools
+, tornado
+,
 }:
 
 buildPythonPackage rec {

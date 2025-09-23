@@ -1,28 +1,28 @@
-{
-  lib,
-  symlinkJoin,
-  backendStdenv,
-  cudaMajorMinorVersion,
-  cuda_cccl ? null,
-  cuda_cudart ? null,
-  cuda_cuobjdump ? null,
-  cuda_cupti ? null,
-  cuda_cuxxfilt ? null,
-  cuda_gdb ? null,
-  cuda_nvcc ? null,
-  cuda_nvdisasm ? null,
-  cuda_nvml_dev ? null,
-  cuda_nvprune ? null,
-  cuda_nvrtc ? null,
-  cuda_nvtx ? null,
-  cuda_profiler_api ? null,
-  cuda_sanitizer_api ? null,
-  libcublas ? null,
-  libcufft ? null,
-  libcurand ? null,
-  libcusolver ? null,
-  libcusparse ? null,
-  libnpp ? null,
+{ lib
+, symlinkJoin
+, backendStdenv
+, cudaMajorMinorVersion
+, cuda_cccl ? null
+, cuda_cudart ? null
+, cuda_cuobjdump ? null
+, cuda_cupti ? null
+, cuda_cuxxfilt ? null
+, cuda_gdb ? null
+, cuda_nvcc ? null
+, cuda_nvdisasm ? null
+, cuda_nvml_dev ? null
+, cuda_nvprune ? null
+, cuda_nvrtc ? null
+, cuda_nvtx ? null
+, cuda_profiler_api ? null
+, cuda_sanitizer_api ? null
+, libcublas ? null
+, libcufft ? null
+, libcurand ? null
+, libcusolver ? null
+, libcusparse ? null
+, libnpp ? null
+,
 }:
 
 let

@@ -1,24 +1,24 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  aioresponses,
-  asyncclick,
-  buildPythonPackage,
-  fetchPypi,
-  firebase-messaging,
-  freezegun,
-  hatchling,
-  oauthlib,
-  pytest-asyncio,
-  pytest-freezer,
-  pytest-mock,
-  pytest-socket,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  typing-extensions,
-  websockets,
+{ lib
+, aiofiles
+, aiohttp
+, aioresponses
+, asyncclick
+, buildPythonPackage
+, fetchPypi
+, firebase-messaging
+, freezegun
+, hatchling
+, oauthlib
+, pytest-asyncio
+, pytest-freezer
+, pytest-mock
+, pytest-socket
+, pytestCheckHook
+, pythonOlder
+, pytz
+, typing-extensions
+, websockets
+,
 }:
 
 buildPythonPackage rec {

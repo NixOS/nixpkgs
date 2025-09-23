@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-  pycparser,
-  psutil,
-  dotnet-sdk_6,
-  buildDotnetModule,
-  clr-loader,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, pycparser
+, psutil
+, dotnet-sdk_6
+, buildDotnetModule
+, clr-loader
+, setuptools
+,
 }:
 
 let

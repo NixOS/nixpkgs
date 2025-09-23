@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  sbcl,
-  texinfo,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, sbcl
+, texinfo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

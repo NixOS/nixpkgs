@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromSourcehut,
-  rustPlatform,
-  wayland,
+{ lib
+, fetchFromSourcehut
+, rustPlatform
+, wayland
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waylevel";

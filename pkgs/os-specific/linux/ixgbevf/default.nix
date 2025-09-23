@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  kernel,
-  kmod,
+{ lib
+, stdenv
+, fetchurl
+, kernel
+, kmod
+,
 }:
 
 stdenv.mkDerivation rec {

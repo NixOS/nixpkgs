@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  azure-identity,
-  azure-storage-blob,
-  billiard,
-  buildPythonPackage,
-  click-didyoumean,
-  click-plugins,
-  click-repl,
-  click,
-  fetchFromGitHub,
-  gevent,
-  google-cloud-firestore,
-  google-cloud-storage,
-  kombu,
-  moto,
-  msgpack,
-  pymongo,
-  redis,
-  pydantic,
-  pytest-celery,
-  pytest-click,
-  pytest-subtests,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  python-dateutil,
-  pyyaml,
-  setuptools,
-  vine,
+{ lib
+, stdenv
+, azure-identity
+, azure-storage-blob
+, billiard
+, buildPythonPackage
+, click-didyoumean
+, click-plugins
+, click-repl
+, click
+, fetchFromGitHub
+, gevent
+, google-cloud-firestore
+, google-cloud-storage
+, kombu
+, moto
+, msgpack
+, pymongo
+, redis
+, pydantic
+, pytest-celery
+, pytest-click
+, pytest-subtests
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, python-dateutil
+, pyyaml
+, setuptools
+, vine
+,
 }:
 
 buildPythonPackage rec {

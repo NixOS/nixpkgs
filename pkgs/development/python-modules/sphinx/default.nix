@@ -1,45 +1,41 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  fetchFromGitHub,
-  isPyPy,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  babel,
-  alabaster,
-  docutils,
-  imagesize,
-  importlib-metadata,
-  jinja2,
-  packaging,
-  pygments,
-  requests,
-  roman-numerals-py,
-  snowballstemmer,
-  sphinxcontrib-applehelp,
-  sphinxcontrib-devhelp,
-  sphinxcontrib-htmlhelp,
-  sphinxcontrib-jsmath,
-  sphinxcontrib-qthelp,
-  sphinxcontrib-serializinghtml,
-  sphinxcontrib-websupport,
-  tomli,
-
-  # check phase
-  defusedxml,
-  filelock,
-  html5lib,
-  pytestCheckHook,
-  pytest-xdist,
-  typing-extensions,
-
-  # reverse dependencies to test
-  breathe,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, fetchFromGitHub
+, isPyPy
+, # build-system
+  flit-core
+, # dependencies
+  babel
+, alabaster
+, docutils
+, imagesize
+, importlib-metadata
+, jinja2
+, packaging
+, pygments
+, requests
+, roman-numerals-py
+, snowballstemmer
+, sphinxcontrib-applehelp
+, sphinxcontrib-devhelp
+, sphinxcontrib-htmlhelp
+, sphinxcontrib-jsmath
+, sphinxcontrib-qthelp
+, sphinxcontrib-serializinghtml
+, sphinxcontrib-websupport
+, tomli
+, # check phase
+  defusedxml
+, filelock
+, html5lib
+, pytestCheckHook
+, pytest-xdist
+, typing-extensions
+, # reverse dependencies to test
+  breathe
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchurl,
-  struct,
-  statistics,
-  lapack,
-  blas,
+{ buildOctavePackage
+, lib
+, fetchurl
+, struct
+, statistics
+, lapack
+, blas
+,
 }:
 
 buildOctavePackage rec {

@@ -1,11 +1,11 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  stdenv,
+{ autoreconfHook
+, fetchFromGitHub
+, lib
+, nix-update-script
+, openssl
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

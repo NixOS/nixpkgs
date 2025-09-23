@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  fixDarwinDylibNames,
-  lib,
-  meson,
-  ninja,
-  stdenv,
-  pkg-config,
-  check,
+{ fetchFromGitHub
+, fixDarwinDylibNames
+, lib
+, meson
+, ninja
+, stdenv
+, pkg-config
+, check
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -20,11 +19,12 @@ let
 
   staticConfigFile =
     if cfg.staticConfigFile == null then
-      format.generate "config.toml" (
-        recursiveUpdate cfg.staticConfigOptions {
-          providers.file.filename = "${dynamicConfigFile}";
-        }
-      )
+      format.generate "config.toml"
+        (
+          recursiveUpdate cfg.staticConfigOptions {
+            providers.file.filename = "${dynamicConfigFile}";
+          }
+        )
     else
       cfg.staticConfigFile;
 
@@ -83,7 +83,7 @@ in
           service = "service1";
         };
 
-        http.services.service1.loadBalancer.servers = [ { url = "http://localhost:8080"; } ];
+        http.services.service1.loadBalancer.servers = [{ url = "http://localhost:8080"; }];
       };
     };
 

@@ -1,28 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
-
-  # dependencies
-  docstring-parser,
-  typing-extensions,
-
-  # optional-dependencies
-  tomli,
-  tomli-w,
-  pyyaml,
-
-  # tests
-  matplotlib,
-  numpy,
-  orion,
-  pytest-benchmark,
-  pytest-regressions,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, poetry-dynamic-versioning
+, # dependencies
+  docstring-parser
+, typing-extensions
+, # optional-dependencies
+  tomli
+, tomli-w
+, pyyaml
+, # tests
+  matplotlib
+, numpy
+, orion
+, pytest-benchmark
+, pytest-regressions
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

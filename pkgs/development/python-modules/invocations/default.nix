@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  blessed,
-  fetchFromGitHub,
-  invoke,
-  pythonOlder,
-  releases,
-  semantic-version,
-  tabulate,
-  tqdm,
-  twine,
-  pytestCheckHook,
-  pytest-relaxed,
-  pytest-mock,
-  icecream,
-  pip,
+{ lib
+, buildPythonPackage
+, blessed
+, fetchFromGitHub
+, invoke
+, pythonOlder
+, releases
+, semantic-version
+, tabulate
+, tqdm
+, twine
+, pytestCheckHook
+, pytest-relaxed
+, pytest-mock
+, icecream
+, pip
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  alsa-lib,
-  pkg-config,
-  fetchFromGitHub,
-  gtk3,
-  adwaita-icon-theme,
-  gdk-pixbuf,
-  librsvg,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, makeWrapper
+, alsa-lib
+, pkg-config
+, fetchFromGitHub
+, gtk3
+, adwaita-icon-theme
+, gdk-pixbuf
+, librsvg
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

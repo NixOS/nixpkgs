@@ -1,11 +1,11 @@
-{
-  lib,
-  buildFHSEnv,
-  fetchurl,
-  jdk,
-  makeDesktopItem,
-  proEdition ? false,
-  unzip,
+{ lib
+, buildFHSEnv
+, fetchurl
+, jdk
+, makeDesktopItem
+, proEdition ? false
+, unzip
+,
 }:
 
 let

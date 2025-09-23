@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  wheel,
-  anyio,
-  numpy,
-  pillow,
-  pytest-forked,
-  pytest-xdist,
-  pytestCheckHook,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, wheel
+, anyio
+, numpy
+, pillow
+, pytest-forked
+, pytest-xdist
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

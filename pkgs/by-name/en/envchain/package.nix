@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libedit,
-  libsecret,
-  ncurses,
-  pkg-config,
-  readline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libedit
+, libsecret
+, ncurses
+, pkg-config
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {

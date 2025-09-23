@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -268,15 +267,18 @@ in
       "Z  ${secretsDir} 700 canaille canaille - -"
       "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
     ]
-    ++ optional (
-      cfg.smtpPasswordFile != null
-    ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
-    ++ optional (
-      cfg.jwtPrivateKeyFile != null
-    ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
-    ++ optional (
-      cfg.ldapBindPasswordFile != null
-    ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
+    ++ optional
+      (
+        cfg.smtpPasswordFile != null
+      ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
+    ++ optional
+      (
+        cfg.jwtPrivateKeyFile != null
+      ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
+    ++ optional
+      (
+        cfg.ldapBindPasswordFile != null
+      ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
 
     # This is not a migration, just an initial setup of schemas
     systemd.services.canaille-install = {

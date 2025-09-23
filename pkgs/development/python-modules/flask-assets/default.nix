@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  setuptools,
-  flask,
-  webassets,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, setuptools
+, flask
+, webassets
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  blas,
-  lapack,
-  lib,
-  fetchFromGitHub,
-  stdenv,
+{ blas
+, lapack
+, lib
+, fetchFromGitHub
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

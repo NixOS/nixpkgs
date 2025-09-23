@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 with lib;
@@ -624,8 +623,7 @@ in
             hcaptcha = "HCAPTCHA";
             mcaptcha = "MCAPTCHA";
             cfturnstile = "CF_TURNSTILE";
-          }
-          ."${cfg.captcha.type}"
+          }."${cfg.captcha.type}"
         );
       in
       {

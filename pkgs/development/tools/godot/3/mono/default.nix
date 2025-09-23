@@ -1,11 +1,11 @@
-{
-  godot3,
-  callPackage,
-  mkNugetDeps,
-  mono,
-  dotnet-sdk,
-  scons,
-  python311Packages,
+{ godot3
+, callPackage
+, mkNugetDeps
+, mono
+, dotnet-sdk
+, scons
+, python311Packages
+,
 }:
 
 (godot3.override {

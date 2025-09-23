@@ -1,29 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  ply,
-  prompt-toolkit,
-  pygments,
-
-  addBinToPathHook,
-  writableTmpDirAsHomeHook,
-  gitMinimal,
-  glibcLocales,
-  pip,
-  pyte,
-  pytest-mock,
-  pytest-subprocess,
-  pytestCheckHook,
-  requests,
-
-  coreutils,
-
-  nix-update-script,
-  python,
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, ply
+, prompt-toolkit
+, pygments
+, addBinToPathHook
+, writableTmpDirAsHomeHook
+, gitMinimal
+, glibcLocales
+, pip
+, pyte
+, pytest-mock
+, pytest-subprocess
+, pytestCheckHook
+, requests
+, coreutils
+, nix-update-script
+, python
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

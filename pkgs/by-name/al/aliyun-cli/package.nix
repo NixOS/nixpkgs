@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

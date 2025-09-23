@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  autoPatchelfHook,
-  pypaInstallHook,
-  wheelUnpackHook,
-  cudaPackages,
-  python,
-  jaxlib,
-  jax-cuda12-pjrt,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, autoPatchelfHook
+, pypaInstallHook
+, wheelUnpackHook
+, cudaPackages
+, python
+, jaxlib
+, jax-cuda12-pjrt
+,
 }:
 let
   inherit (jaxlib) version;
   inherit (jax-cuda12-pjrt) cudaLibPath;
 
   getSrcFromPypi =
-    {
-      platform,
-      dist,
-      hash,
+    { platform
+    , dist
+    , hash
+    ,
     }:
     fetchPypi {
       inherit

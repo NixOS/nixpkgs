@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  protobuf,
-  openssl,
-  libpcap,
-  traceroute,
-  withGUI ? false,
-  qt5,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, protobuf
+, openssl
+, libpcap
+, traceroute
+, withGUI ? false
+, qt5
+,
 }:
 
 let

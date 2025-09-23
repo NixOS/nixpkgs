@@ -1,7 +1,7 @@
-{
-  freecad,
-  runCommand,
-  writeTextFile,
+{ freecad
+, runCommand
+, writeTextFile
+,
 }:
 let
   mkModule =
@@ -29,9 +29,9 @@ let
   };
 in
 runCommand "freecad-test-modules"
-  {
-    nativeBuildInputs = [ freecad-customized ];
-  }
+{
+  nativeBuildInputs = [ freecad-customized ];
+}
   ''
     mkdir $out
     HOME="$(mktemp -d)" FreeCADCmd --log-file $out/freecad.log -c "sys.exit(0)" </dev/null

@@ -1,8 +1,8 @@
 { lib, stdenv }:
 
-{
-  paths,
-  disabledDefaultBackends ? [ ],
+{ paths
+, disabledDefaultBackends ? [ ]
+,
 }:
 
 let

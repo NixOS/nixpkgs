@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  just,
-  libcosmicAppHook,
-  fontconfig,
-  freetype,
-  libinput,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, just
+, libcosmicAppHook
+, fontconfig
+, freetype
+, libinput
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

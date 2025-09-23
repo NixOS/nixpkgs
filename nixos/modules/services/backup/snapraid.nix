@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.snapraid;
@@ -132,14 +131,17 @@ in
               prependContent = mkPrepend "content ";
               prependExclude = mkPrepend "exclude ";
             in
-            lib.concatStringsSep "\n" (
-              map prependData ((lib.mapAttrsToList (name: value: name + " " + value)) dataDisks)
-              ++ lib.zipListsWith (a: b: a + b) (
-                [ "parity " ] ++ map (i: toString i + "-parity ") (lib.range 2 6)
-              ) parityFiles
-              ++ map prependContent contentFiles
-              ++ map prependExclude exclude
-            )
+            lib.concatStringsSep "\n"
+              (
+                map prependData ((lib.mapAttrsToList (name: value: name + " " + value)) dataDisks)
+                ++ lib.zipListsWith (a: b: a + b)
+                  (
+                    [ "parity " ] ++ map (i: toString i + "-parity ") (lib.range 2 6)
+                  )
+                  parityFiles
+                ++ map prependContent contentFiles
+                ++ map prependExclude exclude
+              )
             + "\n"
             + extraConfig;
         };

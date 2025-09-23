@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  flit-core,
-  packaging,
-  sphinx,
-  click,
-  myst-parser,
-  pytest-regressions,
-  pytestCheckHook,
-  sphinx-external-toc,
-  sphinxcontrib-bibtex,
-  texsoup,
-  defusedxml,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, flit-core
+, packaging
+, sphinx
+, click
+, myst-parser
+, pytest-regressions
+, pytestCheckHook
+, sphinx-external-toc
+, sphinxcontrib-bibtex
+, texsoup
+, defusedxml
+,
 }:
 
 buildPythonPackage rec {

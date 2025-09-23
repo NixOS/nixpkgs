@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  simple-dftd3,
-  cffi,
-  numpy,
-  toml,
-  qcengine,
-  pyscf,
-  ase,
-  pytestCheckHook,
+{ buildPythonPackage
+, simple-dftd3
+, cffi
+, numpy
+, toml
+, qcengine
+, pyscf
+, ase
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

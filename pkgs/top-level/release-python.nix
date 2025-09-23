@@ -8,8 +8,8 @@
   supportedSystems ? [
     "aarch64-linux"
     "x86_64-linux"
-  ],
-  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  ]
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
       allowAliases = false;
@@ -18,7 +18,8 @@
     };
 
     __allowFileset = false;
-  },
+  }
+,
 }:
 
 let
@@ -32,17 +33,17 @@ let
 
   packagePython = mapAttrs (
     name: value:
-    let
-      res = builtins.tryEval (
-        if isDerivation value then
-          value.meta.isBuildPythonPackage or [ ]
-        else if value.recurseForDerivations or false || value.recurseForRelease or false then
-          packagePython value
-        else
-          [ ]
-      );
-    in
-    optionals res.success res.value
+      let
+        res = builtins.tryEval (
+          if isDerivation value then
+            value.meta.isBuildPythonPackage or [ ]
+          else if value.recurseForDerivations or false || value.recurseForRelease or false then
+            packagePython value
+          else
+            [ ]
+        );
+      in
+      optionals res.success res.value
   );
 
   jobs = {

@@ -1,23 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gnutls,
-  openssl,
-  libgcrypt,
-  libgpg-error,
-  pkg-config,
-  gettext,
-  which,
-
-  # GUI support
-  gtk3,
-  qt5,
-
-  pluginSearchPaths ? [
+{ lib
+, stdenv
+, fetchurl
+, gnutls
+, openssl
+, libgcrypt
+, libgpg-error
+, pkg-config
+, gettext
+, which
+, # GUI support
+  gtk3
+, qt5
+, pluginSearchPaths ? [
     "/run/current-system/sw/lib/gwenhywfar/plugins"
     ".nix-profile/lib/gwenhywfar/plugins"
-  ],
+  ]
+,
 }:
 
 let

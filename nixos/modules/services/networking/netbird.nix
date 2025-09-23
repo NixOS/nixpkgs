@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -186,9 +185,11 @@ in
                 '';
                 apply =
                   iface:
-                  lib.throwIfNot (
-                    builtins.stringLength iface <= 15
-                  ) "Network interface name must be 15 characters or less" iface;
+                  lib.throwIfNot
+                    (
+                      builtins.stringLength iface <= 15
+                    ) "Network interface name must be 15 characters or less"
+                    iface;
               };
 
               environment = mkOption {
@@ -283,11 +284,13 @@ in
                 default =
                   let
                     makeWrapperArgs = concatLists (
-                      mapAttrsToList (key: value: [
-                        "--set-default"
-                        key
-                        value
-                      ]) client.environment
+                      mapAttrsToList
+                        (key: value: [
+                          "--set-default"
+                          key
+                          value
+                        ])
+                        client.environment
                     );
                     mkBin = mkBinName client;
                   in
@@ -471,15 +474,17 @@ in
       };
     })
     {
-      boot.extraModulePackages = optional (
-        cfg.clients != { } && (versionOlder kernel.version "5.6")
-      ) kernelPackages.wireguard;
+      boot.extraModulePackages = optional
+        (
+          cfg.clients != { } && (versionOlder kernel.version "5.6")
+        )
+        kernelPackages.wireguard;
 
       environment.systemPackages = toClientList (client: client.wrapper)
-      # omitted due to https://github.com/netbirdio/netbird/issues/1562
-      #++ optional (cfg.clients != { }) cfg.package
-      # omitted due to https://github.com/netbirdio/netbird/issues/1581
-      #++ optional (cfg.clients != { } && cfg.ui.enable) cfg.ui.package
+        # omitted due to https://github.com/netbirdio/netbird/issues/1562
+        #++ optional (cfg.clients != { }) cfg.package
+        # omitted due to https://github.com/netbirdio/netbird/issues/1581
+        #++ optional (cfg.clients != { } && cfg.ui.enable) cfg.ui.package
       ;
 
       networking.dhcpcd.denyInterfaces = toClientList (client: client.interface);
@@ -495,9 +500,10 @@ in
         allowedUDPPorts = concatLists (toClientList (client: optional client.openFirewall client.port));
 
         # Required for the routing ("Exit node") feature(s) to work
-        checkReversePath = mkIf (
-          cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
-        ) "loose";
+        checkReversePath = mkIf
+          (
+            cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
+          ) "loose";
 
         # Ports opened on a specific
         interfaces = listToAttrs (
@@ -619,9 +625,10 @@ in
               # required for eBPF filter, used to be subset of CAP_SYS_ADMIN
               ++ optional (versionAtLeast kernel.version "5.8") "CAP_BPF"
               ++ optional (versionOlder kernel.version "5.8") "CAP_SYS_ADMIN"
-              ++ optional (
-                client.dns-resolver.address != null && client.dns-resolver.port < 1024
-              ) "CAP_NET_BIND_SERVICE";
+              ++ optional
+                (
+                  client.dns-resolver.address != null && client.dns-resolver.port < 1024
+                ) "CAP_NET_BIND_SERVICE";
             };
           }
         )

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  click-shell,
-  click,
-  fetchFromGitHub,
-  hatchling,
-  iterfzf,
-  pythonOlder,
-  pyyaml,
-  rich,
-  typer,
+{ lib
+, buildPythonPackage
+, click-shell
+, click
+, fetchFromGitHub
+, hatchling
+, iterfzf
+, pythonOlder
+, pyyaml
+, rich
+, typer
+,
 }:
 
 buildPythonPackage rec {

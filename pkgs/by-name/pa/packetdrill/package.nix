@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  bison,
-  flex,
-  cmake,
-  libpcap,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, bison
+, flex
+, cmake
+, libpcap
+,
 }:
 stdenv.mkDerivation {
   pname = "packetdrill";

@@ -1,11 +1,11 @@
-{
-  lib,
-  linkFarm,
-  fetchurl,
-  writers,
-  torch,
-  torchvision,
-  runCommand,
+{ lib
+, linkFarm
+, fetchurl
+, writers
+, torch
+, torchvision
+, runCommand
+,
 }:
 let
   fashionMnistDataset = linkFarm "fashion-mnist-dataset" (
@@ -25,13 +25,15 @@ let
       }
   );
 
-  mnist-script = writers.writePython3 "test_mnist" {
-    libraries = [
-      torch
-      torchvision
-    ];
-    flakeIgnore = [ "E501" ];
-  } (builtins.readFile ./script.py);
+  mnist-script = writers.writePython3 "test_mnist"
+    {
+      libraries = [
+        torch
+        torchvision
+      ];
+      flakeIgnore = [ "E501" ];
+    }
+    (builtins.readFile ./script.py);
 in
 runCommand "mnist" { } ''
   mkdir -p data/FashionMNIST/raw

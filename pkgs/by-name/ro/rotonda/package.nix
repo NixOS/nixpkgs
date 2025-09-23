@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  nix-update-script,
-  testers,
-  rotonda,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, nix-update-script
+, testers
+, rotonda
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

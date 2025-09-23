@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+,
 }:
 let
   version = "0.1.20";

@@ -1,12 +1,12 @@
-{
-  type,
-  version,
-  srcs,
-  commonPackages ? null,
-  hostPackages ? null,
-  targetPackages ? null,
-  runtime ? null,
-  aspnetcore ? null,
+{ type
+, version
+, srcs
+, commonPackages ? null
+, hostPackages ? null
+, targetPackages ? null
+, runtime ? null
+, aspnetcore ? null
+,
 }:
 
 assert builtins.elem type [
@@ -15,37 +15,37 @@ assert builtins.elem type [
   "sdk"
 ];
 assert
-  if type == "sdk" then
-    commonPackages != null
-    && hostPackages != null
-    && targetPackages != null
-    && runtime != null
+if type == "sdk" then
+  commonPackages != null
+  && hostPackages != null
+  && targetPackages != null
+  && runtime != null
     && aspnetcore != null
-  else
-    true;
+else
+  true;
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  writeText,
-  autoPatchelfHook,
-  makeWrapper,
-  libunwind,
-  icu,
-  libuuid,
-  zlib,
-  libkrb5,
-  openssl,
-  curl,
-  lttng-ust_2_12,
-  testers,
-  runCommand,
-  writeShellScript,
-  mkNugetDeps,
-  callPackage,
-  systemToDotnetRid,
-  xmlstarlet,
+{ lib
+, stdenv
+, fetchurl
+, writeText
+, autoPatchelfHook
+, makeWrapper
+, libunwind
+, icu
+, libuuid
+, zlib
+, libkrb5
+, openssl
+, curl
+, lttng-ust_2_12
+, testers
+, runCommand
+, writeShellScript
+, mkNugetDeps
+, callPackage
+, systemToDotnetRid
+, xmlstarlet
+,
 }:
 
 let
@@ -227,13 +227,15 @@ mkWrapper type (
         corngood
       ];
       mainProgram = "dotnet";
-      platforms = lib.filter (
-        platform:
-        let
-          e = builtins.tryEval (systemToDotnetRid platform);
-        in
-        e.success && srcs ? "${e.value}"
-      ) lib.platforms.all;
+      platforms = lib.filter
+        (
+          platform:
+          let
+            e = builtins.tryEval (systemToDotnetRid platform);
+          in
+          e.success && srcs ? "${e.value}"
+        )
+        lib.platforms.all;
       sourceProvenance = with lib.sourceTypes; [
         binaryBytecode
         binaryNativeCode

@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  gtk3,
-  gettext,
-  json_c,
-  lcms2,
-  libpng,
-  librsvg,
-  gobject-introspection,
-  libmypaint,
-  hicolor-icon-theme,
-  mypaint-brushes,
-  gdk-pixbuf,
-  pkg-config,
-  python3,
-  swig,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, gtk3
+, gettext
+, json_c
+, lcms2
+, libpng
+, librsvg
+, gobject-introspection
+, libmypaint
+, hicolor-icon-theme
+, mypaint-brushes
+, gdk-pixbuf
+, pkg-config
+, python3
+, swig
+, wrapGAppsHook3
+,
 }:
 
 let

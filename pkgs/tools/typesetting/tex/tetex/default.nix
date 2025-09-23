@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  zlib,
-  libpng,
-  ncurses,
-  ed,
-  automake,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, zlib
+, libpng
+, ncurses
+, ed
+, automake
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  fetchpatch,
-  ppx_assert ? null,
-  ppx_bench ? null,
-  ppx_bin_prot ? null,
-  ppx_compare ? null,
-  ppx_enumerate ? null,
-  ppx_expect,
-  ppx_hash,
-  ppx_here,
-  ppx_optcomp,
-  ppx_sexp_conv,
-  ppx_sexp_value ? null,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, fetchpatch
+, ppx_assert ? null
+, ppx_bench ? null
+, ppx_bin_prot ? null
+, ppx_compare ? null
+, ppx_enumerate ? null
+, ppx_expect
+, ppx_hash
+, ppx_here
+, ppx_optcomp
+, ppx_sexp_conv
+, ppx_sexp_value ? null
+,
 }:
 
 buildDunePackage rec {

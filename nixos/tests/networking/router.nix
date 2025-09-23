@@ -51,29 +51,31 @@ in
           service-sockets-max-retries = 5;
           service-sockets-retry-wait-time = 2500;
         };
-        subnet4 = map (n: {
-          id = n;
-          subnet = "192.168.${toString n}.0/24";
-          pools = [ { pool = "192.168.${toString n}.3 - 192.168.${toString n}.254"; } ];
-          option-data = [
-            {
-              data = "192.168.${toString n}.1";
-              name = "routers";
-            }
-            {
-              data = "192.168.${toString n}.1";
-              name = "domain-name-servers";
-            }
-          ];
+        subnet4 = map
+          (n: {
+            id = n;
+            subnet = "192.168.${toString n}.0/24";
+            pools = [{ pool = "192.168.${toString n}.3 - 192.168.${toString n}.254"; }];
+            option-data = [
+              {
+                data = "192.168.${toString n}.1";
+                name = "routers";
+              }
+              {
+                data = "192.168.${toString n}.1";
+                name = "domain-name-servers";
+              }
+            ];
 
-          reservations = [
-            {
-              hw-address = qemu-common.qemuNicMac n 1;
-              hostname = "client${toString n}";
-              ip-address = "192.168.${toString n}.2";
-            }
-          ];
-        }) vlanIfs;
+            reservations = [
+              {
+                hw-address = qemu-common.qemuNicMac n 1;
+                hostname = "client${toString n}";
+                ip-address = "192.168.${toString n}.2";
+              }
+            ];
+          })
+          vlanIfs;
       };
     };
     dhcp6 = {
@@ -86,12 +88,14 @@ in
           service-sockets-retry-wait-time = 2500;
         };
 
-        subnet6 = map (n: {
-          id = n;
-          subnet = "fd00:1234:5678:${toString n}::/64";
-          interface = "eth${toString n}";
-          pools = [ { pool = "fd00:1234:5678:${toString n}::2-fd00:1234:5678:${toString n}::2"; } ];
-        }) vlanIfs;
+        subnet6 = map
+          (n: {
+            id = n;
+            subnet = "fd00:1234:5678:${toString n}::/64";
+            interface = "eth${toString n}";
+            pools = [{ pool = "fd00:1234:5678:${toString n}::2-fd00:1234:5678:${toString n}::2"; }];
+          })
+          vlanIfs;
       };
     };
   };

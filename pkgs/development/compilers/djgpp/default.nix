@@ -1,19 +1,19 @@
-{
-  bison,
-  buildPackages,
-  curl,
-  fetchFromGitHub,
-  fetchurl,
-  file,
-  flex,
-  targetArchitecture ? "i586",
-  lib,
-  makeWrapper,
-  perl,
-  stdenv,
-  texinfo,
-  unzip,
-  which,
+{ bison
+, buildPackages
+, curl
+, fetchFromGitHub
+, fetchurl
+, file
+, flex
+, targetArchitecture ? "i586"
+, lib
+, makeWrapper
+, perl
+, stdenv
+, texinfo
+, unzip
+, which
+,
 }:
 
 let

@@ -5,10 +5,9 @@
 # that the nameserver can resolve the clients fqdn to the correct IP
 # address.
 
-{
-  pkgs,
-  lib,
-  ...
+{ pkgs
+, lib
+, ...
 }:
 {
   meta.maintainers = with lib.maintainers; [ hexa ];

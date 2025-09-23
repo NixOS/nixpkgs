@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  validatePkgConfig,
-  freexl,
-  geos,
-  librttopo,
-  libxml2,
-  minizip,
-  proj,
-  sqlite,
-  libiconv,
-  zlib,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, validatePkgConfig
+, freexl
+, geos
+, librttopo
+, libxml2
+, minizip
+, proj
+, sqlite
+, libiconv
+, zlib
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

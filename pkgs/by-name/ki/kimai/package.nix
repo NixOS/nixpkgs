@@ -1,8 +1,8 @@
-{
-  php,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
+{ php
+, fetchFromGitHub
+, lib
+, nixosTests
+,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

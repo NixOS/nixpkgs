@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  installShellFiles,
-  pytestCheckHook,
-  pythonOlder,
-
-  # for passthru.tests
-  django,
-  django_4,
-  django-silk,
-  pgadmin4,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, installShellFiles
+, pytestCheckHook
+, pythonOlder
+, # for passthru.tests
+  django
+, django_4
+, django-silk
+, pgadmin4
+,
 }:
 
 buildPythonPackage rec {

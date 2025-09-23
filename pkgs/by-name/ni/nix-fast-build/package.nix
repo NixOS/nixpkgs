@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  nix-eval-jobs,
-  nix-output-monitor,
-  nix-update-script,
-  bashInteractive,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, nix-eval-jobs
+, nix-output-monitor
+, nix-update-script
+, bashInteractive
+,
 }:
 
 python3Packages.buildPythonApplication rec {

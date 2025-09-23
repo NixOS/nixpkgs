@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  pytestCheckHook,
-  filelock,
-  execnet,
-  pytest,
-  psutil,
-  setproctitle,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, setuptools-scm
+, pytestCheckHook
+, filelock
+, execnet
+, pytest
+, psutil
+, setproctitle
+,
 }:
 
 buildPythonPackage rec {

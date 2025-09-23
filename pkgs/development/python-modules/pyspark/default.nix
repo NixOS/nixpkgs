@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  pandas,
-  py4j,
-  pyarrow,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, pandas
+, py4j
+, pyarrow
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

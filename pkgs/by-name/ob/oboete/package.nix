@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  libcosmicAppHook,
-  sqlite,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, libcosmicAppHook
+, sqlite
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

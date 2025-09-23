@@ -1,24 +1,24 @@
-{
-  lib,
-  bash,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gnumake,
-  h2,
-  hpack,
-  httpx,
-  hyperframe,
-  openssl,
-  paramiko,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools-scm,
-  typing-extensions,
+{ lib
+, bash
+, buildPythonPackage
+, fetchFromGitHub
+, gnumake
+, h2
+, hpack
+, httpx
+, hyperframe
+, openssl
+, paramiko
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools-scm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

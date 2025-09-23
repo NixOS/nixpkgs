@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  stdenv,
-  lib,
-  help2man,
-  installShellFiles,
+{ fetchFromGitHub
+, stdenv
+, lib
+, help2man
+, installShellFiles
+,
 }:
 stdenv.mkDerivation rec {
   pname = "deark";

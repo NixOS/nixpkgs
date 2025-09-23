@@ -1,46 +1,42 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  #  build-system
-  setuptools,
-
-  # dependencies
-  filelock,
-  huggingface-hub,
-  importlib-metadata,
-  numpy,
-  pillow,
-  regex,
-  requests,
-  safetensors,
-
-  # optional dependencies
-  accelerate,
-  datasets,
-  flax,
-  jax,
-  jaxlib,
-  jinja2,
-  peft,
-  protobuf,
-  tensorboard,
-  torch,
-
-  # tests
-  writeText,
-  parameterized,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  requests-mock,
-  scipy,
-  sentencepiece,
-  torchsde,
-  transformers,
-  pythonAtLeast,
-  diffusers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, #  build-system
+  setuptools
+, # dependencies
+  filelock
+, huggingface-hub
+, importlib-metadata
+, numpy
+, pillow
+, regex
+, requests
+, safetensors
+, # optional dependencies
+  accelerate
+, datasets
+, flax
+, jax
+, jaxlib
+, jinja2
+, peft
+, protobuf
+, tensorboard
+, torch
+, # tests
+  writeText
+, parameterized
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, requests-mock
+, scipy
+, sentencepiece
+, torchsde
+, transformers
+, pythonAtLeast
+, diffusers
+,
 }:
 
 buildPythonPackage rec {

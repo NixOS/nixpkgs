@@ -1,23 +1,23 @@
-{
-  stdenv,
-  fetchurl,
-  dpkg,
-  lib,
-  glib,
-  nss,
-  nspr,
-  cups,
-  dbus,
-  libdrm,
-  gtk3,
-  pango,
-  cairo,
-  libxkbcommon,
-  libgbm,
-  expat,
-  alsa-lib,
-  buildFHSEnv,
-  writeTextFile,
+{ stdenv
+, fetchurl
+, dpkg
+, lib
+, glib
+, nss
+, nspr
+, cups
+, dbus
+, libdrm
+, gtk3
+, pango
+, cairo
+, libxkbcommon
+, libgbm
+, expat
+, alsa-lib
+, buildFHSEnv
+, writeTextFile
+,
 }:
 
 let

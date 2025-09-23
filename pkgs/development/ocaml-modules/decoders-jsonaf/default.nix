@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  decoders,
-  jsonaf ? null,
-  containers,
-  ounit2,
+{ lib
+, buildDunePackage
+, decoders
+, jsonaf ? null
+, containers
+, ounit2
+,
 }:
 
 buildDunePackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  curio-compat,
-  fetchFromGitHub,
-  hypothesis,
-  pytest,
-  pytestCheckHook,
-  pythonOlder,
-  poetry-core,
-  trio,
-  trio-asyncio,
-  uvloop,
+{ lib
+, anyio
+, buildPythonPackage
+, curio-compat
+, fetchFromGitHub
+, hypothesis
+, pytest
+, pytestCheckHook
+, pythonOlder
+, poetry-core
+, trio
+, trio-asyncio
+, uvloop
+,
 }:
 
 buildPythonPackage rec {

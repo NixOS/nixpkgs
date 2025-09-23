@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  dill,
-  fetchFromGitHub,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, colorama
+, dill
+, fetchFromGitHub
+, numpy
+, pandas
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

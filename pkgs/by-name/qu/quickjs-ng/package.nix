@@ -1,10 +1,10 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  stdenv,
-  testers,
-  texinfo,
+{ lib
+, cmake
+, fetchFromGitHub
+, stdenv
+, testers
+, texinfo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

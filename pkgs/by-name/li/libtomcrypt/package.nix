@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  libtool,
-  libtommath,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libtool
+, libtommath
+,
 }:
 
 stdenv.mkDerivation rec {

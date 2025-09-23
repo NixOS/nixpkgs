@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  inkcut,
-  callPackage,
-  texlive,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, inkcut
+, callPackage
+, texlive
+,
 }:
 
 {

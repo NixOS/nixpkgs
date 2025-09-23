@@ -1,22 +1,18 @@
-{
-  lib,
-
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  lxml,
-  trimesh,
-  numpy,
-  six,
-
-  # nativeCheckInputs
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  lxml
+, trimesh
+, numpy
+, six
+, # nativeCheckInputs
+  pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

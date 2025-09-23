@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, versionCheckHook
+,
 }:
 
 let

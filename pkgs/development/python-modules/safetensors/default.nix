@@ -1,28 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # optional-dependencies
-  numpy,
-  torch,
-  tensorflow,
-  flax,
-  jax,
-  mlx,
-  paddlepaddle,
-  h5py,
-  huggingface-hub,
-  setuptools-rust,
-  pytest,
-  pytest-benchmark,
-  hypothesis,
-  fsspec,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # optional-dependencies
+  numpy
+, torch
+, tensorflow
+, flax
+, jax
+, mlx
+, paddlepaddle
+, h5py
+, huggingface-hub
+, setuptools-rust
+, pytest
+, pytest-benchmark
+, hypothesis
+, fsspec
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

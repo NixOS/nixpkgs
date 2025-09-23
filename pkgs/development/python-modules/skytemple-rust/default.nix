@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  libiconv,
-  rustPlatform,
-  rustc,
-  setuptools-rust,
-  range-typed-integers,
+{ lib
+, stdenv
+, buildPythonPackage
+, cargo
+, fetchFromGitHub
+, libiconv
+, rustPlatform
+, rustc
+, setuptools-rust
+, range-typed-integers
+,
 }:
 
 buildPythonPackage rec {

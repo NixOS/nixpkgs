@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  flex,
-  bison,
-  libX11,
-  cmake,
-  gperf,
-  adms,
-  ngspice,
-  qucsator-rf,
-  qt6Packages,
-  kernels ? [
+{ stdenv
+, lib
+, fetchFromGitHub
+, flex
+, bison
+, libX11
+, cmake
+, gperf
+, adms
+, ngspice
+, qucsator-rf
+, qt6Packages
+, kernels ? [
     ngspice
     qucsator-rf
-  ],
+  ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

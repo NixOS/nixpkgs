@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnused,
-  gnugrep,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnused
+, gnugrep
+,
 }:
 let
   pname = "gnutar";
@@ -20,32 +20,32 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnused
-      gnugrep
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnused
+    gnugrep
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/tar --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/tar --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "GNU implementation of the `tar' archiver";
-      homepage = "https://www.gnu.org/software/tar";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "tar";
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU implementation of the `tar' archiver";
+    homepage = "https://www.gnu.org/software/tar";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    mainProgram = "tar";
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     ungz --file ${src} --output tar.tar

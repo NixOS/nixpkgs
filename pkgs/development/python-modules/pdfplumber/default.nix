@@ -1,21 +1,21 @@
-{
-  pkgs,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  jupyterlab,
-  nbexec,
-  pandas,
-  pandas-stubs,
-  pdfminer-six,
-  pillow,
-  pypdfium2,
-  pytest-cov-stub,
-  pytest-parallel,
-  pytestCheckHook,
-  types-pillow,
-  writableTmpDirAsHomeHook,
+{ pkgs
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, jupyterlab
+, nbexec
+, pandas
+, pandas-stubs
+, pdfminer-six
+, pillow
+, pypdfium2
+, pytest-cov-stub
+, pytest-parallel
+, pytestCheckHook
+, types-pillow
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  testers,
-  unstableGitUpdater,
+{ autoreconfHook
+, fetchFromGitHub
+, lib
+, stdenv
+, testers
+, unstableGitUpdater
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "alac";

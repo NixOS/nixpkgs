@@ -28,11 +28,10 @@
 
   nodes = {
     ats =
-      {
-        pkgs,
-        lib,
-        config,
-        ...
+      { pkgs
+      , lib
+      , config
+      , ...
       }:
       let
         user = config.users.users.trafficserver.name;

@@ -1,10 +1,10 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchFromGitLab,
-  mpv-unwrapped,
-  qtdeclarative,
-  qtbase,
+{ lib
+, mkKdeDerivation
+, fetchFromGitLab
+, mpv-unwrapped
+, qtdeclarative
+, qtbase
+,
 }:
 
 mkKdeDerivation rec {

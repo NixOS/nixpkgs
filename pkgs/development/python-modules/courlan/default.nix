@@ -1,14 +1,14 @@
-{
-  lib,
-  babel,
-  buildPythonPackage,
-  fetchPypi,
-  langcodes,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tld,
-  urllib3,
+{ lib
+, babel
+, buildPythonPackage
+, fetchPypi
+, langcodes
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tld
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

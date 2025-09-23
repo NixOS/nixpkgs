@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  enableMail ? false,
-  gnused,
-  hostname,
-  mailutils,
-  systemdLibs,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, enableMail ? false
+, gnused
+, hostname
+, mailutils
+, systemdLibs
+,
 }:
 
 let

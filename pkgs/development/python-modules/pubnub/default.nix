@@ -1,19 +1,19 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  busypie,
-  cbor2,
-  fetchFromGitHub,
-  h2,
-  httpx,
-  pycryptodomex,
-  pytest-asyncio,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, busypie
+, cbor2
+, fetchFromGitHub
+, h2
+, httpx
+, pycryptodomex
+, pytest-asyncio
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

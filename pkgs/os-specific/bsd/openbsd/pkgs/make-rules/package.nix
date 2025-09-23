@@ -1,7 +1,7 @@
-{
-  fetchpatch,
-  lib,
-  mkDerivation,
+{ fetchpatch
+, lib
+, mkDerivation
+,
 }:
 
 mkDerivation {

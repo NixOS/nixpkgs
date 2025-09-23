@@ -1,23 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  gz-cmake,
-  doxygen,
-  graphviz,
-
-  # buildInputs
-  cli11,
-  spdlog,
-
-  # nativeCheckInputs
-  python3,
-
-  # checkInputs
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, gz-cmake
+, doxygen
+, graphviz
+, # buildInputs
+  cli11
+, spdlog
+, # nativeCheckInputs
+  python3
+, # checkInputs
+  gtest
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  sphinx,
-  pdf2svg,
-  texliveSmall,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, sphinx
+, pdf2svg
+, texliveSmall
+,
 }:
 
 buildPythonPackage rec {

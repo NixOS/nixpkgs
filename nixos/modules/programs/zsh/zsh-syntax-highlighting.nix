@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -111,13 +110,16 @@ in
         [
           "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
         ]
-        ++ lib.optional (
-          builtins.length (cfg.highlighters) > 0
-        ) "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"
+        ++ lib.optional
+          (
+            builtins.length (cfg.highlighters) > 0
+          ) "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"
         ++ lib.optionals (builtins.length (builtins.attrNames cfg.patterns) > 0) (
-          lib.mapAttrsToList (
-            pattern: design: "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
-          ) cfg.patterns
+          lib.mapAttrsToList
+            (
+              pattern: design: "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
+            )
+            cfg.patterns
         )
         ++ lib.optionals (builtins.length (builtins.attrNames cfg.styles) > 0) (
           lib.mapAttrsToList (styles: design: "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'") cfg.styles

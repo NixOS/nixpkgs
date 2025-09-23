@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  cryptography,
-  pycryptodomex,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  cryptography
+, pycryptodomex
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

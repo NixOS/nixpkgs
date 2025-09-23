@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unzip,
-  pkg-config,
-  glib,
-  llvm,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unzip
+, pkg-config
+, glib
+, llvm
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation {

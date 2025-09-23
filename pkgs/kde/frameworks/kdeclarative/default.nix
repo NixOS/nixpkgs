@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  spirv-tools,
+{ mkKdeDerivation
+, qtdeclarative
+, spirv-tools
+,
 }:
 mkKdeDerivation {
   pname = "kdeclarative";

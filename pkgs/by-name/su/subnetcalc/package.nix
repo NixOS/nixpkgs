@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, gettext
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

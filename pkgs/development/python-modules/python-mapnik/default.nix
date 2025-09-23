@@ -1,29 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  isPyPy,
-  python,
-  setuptools,
-  pillow,
-  pycairo,
-  pkg-config,
-  boost,
-  cairo,
-  harfbuzz,
-  icu,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  mapnik,
-  proj,
-  zlib,
-  libxml2,
-  sqlite,
-  pytestCheckHook,
-  sparsehash,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, isPyPy
+, python
+, setuptools
+, pillow
+, pycairo
+, pkg-config
+, boost
+, cairo
+, harfbuzz
+, icu
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, mapnik
+, proj
+, zlib
+, libxml2
+, sqlite
+, pytestCheckHook
+, sparsehash
+,
 }:
 
 buildPythonPackage rec {

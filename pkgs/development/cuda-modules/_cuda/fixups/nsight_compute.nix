@@ -1,17 +1,17 @@
-{
-  cudaAtLeast,
-  cudaMajorMinorVersion,
-  cudaOlder,
-  e2fsprogs,
-  elfutils,
-  flags,
-  gst_all_1,
-  lib,
-  libjpeg8,
-  qt6,
-  rdma-core,
-  stdenv,
-  ucx,
+{ cudaAtLeast
+, cudaMajorMinorVersion
+, cudaOlder
+, e2fsprogs
+, elfutils
+, flags
+, gst_all_1
+, lib
+, libjpeg8
+, qt6
+, rdma-core
+, stdenv
+, ucx
+,
 }:
 prevAttrs:
 let
@@ -21,8 +21,7 @@ let
     {
       aarch64-linux = "linux-" + (if flags.isJetsonBuild then "v4l_l4t" else "desktop") + "-t210-a64";
       x86_64-linux = "linux-desktop-glibc_2_11_3-x64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 {
   outputs = [ "out" ]; # NOTE(@connorbaker): Force a single output so relative lookups work.

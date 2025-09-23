@@ -1,45 +1,43 @@
-{
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
-  lib,
-  stdenv,
-  which,
-
-  # build dependencies
-  boost,
-  curl,
-  eigen,
-  fftwFloat,
-  gdal,
-  itk,
-  libsvm,
-  libgeotiff,
-  muparser,
-  muparserx,
-  opencv,
-  perl,
-  python3,
-  shark,
-  swig,
-  tinyxml,
-
-  # otb modules
-  enableFFTW ? false,
-  enableFeatureExtraction ? true,
-  enableHyperspectral ? true,
-  enableLearning ? true,
-  enableMiscellaneous ? true,
-  enableOpenMP ? false,
-  enablePython ? true,
-  extraPythonPackages ? ps: with ps; [ ],
-  enableRemote ? true,
-  enableShark ? true,
-  enableSAR ? true,
-  enableSegmentation ? true,
-  enableStereoProcessing ? true,
-  enableThirdParty ? true,
+{ cmake
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, lib
+, stdenv
+, which
+, # build dependencies
+  boost
+, curl
+, eigen
+, fftwFloat
+, gdal
+, itk
+, libsvm
+, libgeotiff
+, muparser
+, muparserx
+, opencv
+, perl
+, python3
+, shark
+, swig
+, tinyxml
+, # otb modules
+  enableFFTW ? false
+, enableFeatureExtraction ? true
+, enableHyperspectral ? true
+, enableLearning ? true
+, enableMiscellaneous ? true
+, enableOpenMP ? false
+, enablePython ? true
+, extraPythonPackages ? ps: with ps; [ ]
+, enableRemote ? true
+, enableShark ? true
+, enableSAR ? true
+, enableSegmentation ? true
+, enableStereoProcessing ? true
+, enableThirdParty ? true
+,
 }:
 let
   inherit (lib) optionals;

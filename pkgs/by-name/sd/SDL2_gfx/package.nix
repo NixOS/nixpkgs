@@ -1,13 +1,13 @@
-{
-  lib,
-  SDL2,
-  fetchurl,
-  pkg-config,
-  stdenv,
-  testers,
-  # Boolean flags
-  enableMmx ? stdenv.hostPlatform.isx86,
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL2
+, fetchurl
+, pkg-config
+, stdenv
+, testers
+, # Boolean flags
+  enableMmx ? stdenv.hostPlatform.isx86
+, enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

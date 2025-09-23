@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  libosmium,
-  protozero,
-  boost,
-  expat,
-  bzip2,
-  zlib,
-  pybind11,
-  pythonOlder,
-  pytest-httpserver,
-  pytestCheckHook,
-  setuptools,
-  shapely,
-  werkzeug,
-  isPyPy,
-  lz4,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, libosmium
+, protozero
+, boost
+, expat
+, bzip2
+, zlib
+, pybind11
+, pythonOlder
+, pytest-httpserver
+, pytestCheckHook
+, setuptools
+, shapely
+, werkzeug
+, isPyPy
+, lz4
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  python,
-  fetchFromGitHub,
-  lib,
-  requests,
-  pyyaml,
-  setuptools,
-  wheel,
-  nodejs,
-  ruby,
-  pytestCheckHook,
+{ buildPythonPackage
+, python
+, fetchFromGitHub
+, lib
+, requests
+, pyyaml
+, setuptools
+, wheel
+, nodejs
+, ruby
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

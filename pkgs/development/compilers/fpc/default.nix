@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gawk,
-  fetchpatch,
-  undmg,
-  cpio,
-  xar,
-  libiconv,
+{ lib
+, stdenv
+, fetchurl
+, gawk
+, fetchpatch
+, undmg
+, cpio
+, xar
+, libiconv
+,
 }:
 
 let

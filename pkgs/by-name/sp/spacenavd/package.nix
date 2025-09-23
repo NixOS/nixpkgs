@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libXext,
-  libX11,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libXext
+, libX11
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spacenavd";

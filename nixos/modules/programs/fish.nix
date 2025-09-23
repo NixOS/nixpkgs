@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -40,10 +39,11 @@ let
 
   babelfishTranslate =
     path: name:
-    pkgs.runCommand "${name}.fish" {
-      preferLocalBuild = true;
-      nativeBuildInputs = [ pkgs.babelfish ];
-    } "babelfish < ${path} > $out;";
+    pkgs.runCommand "${name}.fish"
+      {
+        preferLocalBuild = true;
+        nativeBuildInputs = [ pkgs.babelfish ];
+      } "babelfish < ${path} > $out;";
 
 in
 

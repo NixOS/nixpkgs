@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libsamplerate,
-  libsndfile,
-  fftw,
-  lv2,
-  jdk_headless,
-  vamp-plugin-sdk,
-  ladspaH,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libsamplerate
+, libsndfile
+, fftw
+, lv2
+, jdk_headless
+, vamp-plugin-sdk
+, ladspaH
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

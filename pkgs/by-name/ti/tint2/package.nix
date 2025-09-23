@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  pkg-config,
-  cmake,
-  gettext,
-  cairo,
-  pango,
-  glib,
-  imlib2,
-  gtk3,
-  libXinerama,
-  libXrender,
-  libXcomposite,
-  libXdamage,
-  libX11,
-  libXrandr,
-  librsvg,
-  libpthreadstubs,
-  libXdmcp,
-  libstartup_notification,
-  wrapGAppsHook3,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, pkg-config
+, cmake
+, gettext
+, cairo
+, pango
+, glib
+, imlib2
+, gtk3
+, libXinerama
+, libXrender
+, libXcomposite
+, libXdamage
+, libX11
+, libXrandr
+, librsvg
+, libpthreadstubs
+, libXdmcp
+, libstartup_notification
+, wrapGAppsHook3
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  withDocs ? true,
-  doxygen,
-  graphviz-nox,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gtest
+, withDocs ? true
+, doxygen
+, graphviz-nox
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

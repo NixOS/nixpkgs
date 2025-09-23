@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  sqlite,
-  xdg-utils,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, sqlite
+, xdg-utils
+,
 }:
 
 rustPlatform.buildRustPackage rec {

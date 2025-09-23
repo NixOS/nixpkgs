@@ -1,32 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  arrow,
-  babel,
-  colour,
-  cryptography,
-  docutils,
-  fetchFromGitHub,
-  flexmock,
-  furl,
-  # intervals,
-  jinja2,
-  passlib,
-  pendulum,
-  pg8000,
-  phonenumbers,
-  psycopg2,
-  psycopg2cffi,
-  pygments,
-  pymysql,
-  pyodbc,
-  pytestCheckHook,
-  python-dateutil,
-  pythonAtLeast,
-  pythonOlder,
-  pytz,
-  setuptools,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, arrow
+, babel
+, colour
+, cryptography
+, docutils
+, fetchFromGitHub
+, flexmock
+, furl
+, # intervals,
+  jinja2
+, passlib
+, pendulum
+, pg8000
+, phonenumbers
+, psycopg2
+, psycopg2cffi
+, pygments
+, pymysql
+, pyodbc
+, pytestCheckHook
+, python-dateutil
+, pythonAtLeast
+, pythonOlder
+, pytz
+, setuptools
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

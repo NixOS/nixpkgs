@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  just,
-  libcosmicAppHook,
-  pciutils,
-  usbutils,
-  util-linux,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, just
+, libcosmicAppHook
+, pciutils
+, usbutils
+, util-linux
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "examine";

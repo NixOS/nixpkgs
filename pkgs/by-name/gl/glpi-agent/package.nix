@@ -1,16 +1,16 @@
-{
-  lib,
-  perlPackages,
-  nix,
-  dmidecode,
-  pciutils,
-  usbutils,
-  iproute2,
-  net-tools,
-  fetchFromGitHub,
-  makeWrapper,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, perlPackages
+, nix
+, dmidecode
+, pciutils
+, usbutils
+, iproute2
+, net-tools
+, fetchFromGitHub
+, makeWrapper
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 perlPackages.buildPerlPackage rec {

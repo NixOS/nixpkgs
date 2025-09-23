@@ -1,33 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  attrdict,
-  beautifulsoup4,
-  cython,
-  fire,
-  fonttools,
-  lmdb,
-  lxml,
-  numpy,
-  opencv-python,
-  openpyxl,
-  pdf2docx,
-  pillow,
-  pyclipper,
-  pymupdf,
-  python-docx,
-  rapidfuzz,
-  scikit-image,
-  shapely,
-  tqdm,
-  paddlepaddle,
-  lanms-neo,
-  polygon3,
-  paddlex,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, attrdict
+, beautifulsoup4
+, cython
+, fire
+, fonttools
+, lmdb
+, lxml
+, numpy
+, opencv-python
+, openpyxl
+, pdf2docx
+, pillow
+, pyclipper
+, pymupdf
+, python-docx
+, rapidfuzz
+, scikit-image
+, shapely
+, tqdm
+, paddlepaddle
+, lanms-neo
+, polygon3
+, paddlex
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

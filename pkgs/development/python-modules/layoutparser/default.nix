@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # build inputs
-  numpy,
-  opencv-python,
-  scipy,
-  pandas,
-  pillow,
-  pyyaml,
-  iopath,
-  pdfplumber,
-  pdf2image,
-  google-cloud-vision,
-  pytesseract,
-  torch,
-  torchvision,
-  effdet,
-  # check inputs
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build inputs
+  numpy
+, opencv-python
+, scipy
+, pandas
+, pillow
+, pyyaml
+, iopath
+, pdfplumber
+, pdf2image
+, google-cloud-vision
+, pytesseract
+, torch
+, torchvision
+, effdet
+, # check inputs
+  pytestCheckHook
+,
 }:
 let
   pname = "layoutparser";

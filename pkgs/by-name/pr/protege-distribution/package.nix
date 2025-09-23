@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  jdk11,
-  copyDesktopItems,
-  iconConvTools,
-  makeDesktopItem,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, jdk11
+, copyDesktopItems
+, iconConvTools
+, makeDesktopItem
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flex,
-  bison,
-  cmake,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, flex
+, bison
+, cmake
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

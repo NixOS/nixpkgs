@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-  callPackage,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitea
+, callPackage
+, nixosTests
+,
 }:
 
 let

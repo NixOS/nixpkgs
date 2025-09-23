@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
-  cmake,
-  SDL,
-  libGLU,
-  libGL,
-  libX11,
-  upx,
-  zlib,
+{ lib
+, stdenv
+, fetchFromBitbucket
+, cmake
+, SDL
+, libGLU
+, libGL
+, libX11
+, upx
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

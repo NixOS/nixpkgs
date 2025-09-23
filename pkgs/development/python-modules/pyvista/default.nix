@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  matplotlib,
-  numpy,
-  pillow,
-  pooch,
-  pythonAtLeast,
-  scooby,
-  setuptools,
-  typing-extensions,
-  vtk,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, matplotlib
+, numpy
+, pillow
+, pooch
+, pythonAtLeast
+, scooby
+, setuptools
+, typing-extensions
+, vtk
+,
 }:
 
 buildPythonPackage rec {

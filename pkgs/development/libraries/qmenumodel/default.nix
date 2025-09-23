@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-test-runner,
-  glib,
-  pkg-config,
-  python3,
-  qtbase,
-  qtdeclarative,
-  gobject-introspection,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, testers
+, cmake
+, cmake-extras
+, dbus
+, dbus-test-runner
+, glib
+, pkg-config
+, python3
+, qtbase
+, qtdeclarative
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

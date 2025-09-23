@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  python3,
-  config,
-  acceptLicense ? config.input-fonts.acceptLicense or false,
-  parallel,
-  writeShellApplication,
+{ lib
+, stdenv
+, fetchzip
+, python3
+, config
+, acceptLicense ? config.input-fonts.acceptLicense or false
+, parallel
+, writeShellApplication
+,
 }:
 
 let

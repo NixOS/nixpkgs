@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  glfw,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableDebug ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, glfw
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableDebug ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

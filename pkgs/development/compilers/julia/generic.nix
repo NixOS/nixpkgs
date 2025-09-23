@@ -1,24 +1,24 @@
-{
-  version,
-  hash,
-  patches,
+{ version
+, hash
+, patches
+,
 }:
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  which,
-  python3,
-  gfortran,
-  cacert,
-  cmake,
-  perl,
-  gnum4,
-  openssl,
-  libxml2,
-  zlib,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, which
+, python3
+, gfortran
+, cacert
+, cmake
+, perl
+, gnum4
+, openssl
+, libxml2
+, zlib
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

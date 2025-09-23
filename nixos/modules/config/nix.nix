@@ -7,11 +7,10 @@
    - ./nix-remote-build.nix
    - nixos/modules/services/system/nix-daemon.nix
 */
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -40,7 +39,7 @@ let
   ++ optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
     # a builder can run code for `gcc.arch` and inferior architectures
     [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ]
-    ++ map (x: "gccarch-${x}") (
+      ++ map (x: "gccarch-${x}") (
       systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
     )
   );
@@ -64,14 +63,15 @@ let
     with types;
     let
       confAtom =
-        nullOr (oneOf [
-          bool
-          int
-          float
-          str
-          path
-          package
-        ])
+        nullOr
+          (oneOf [
+            bool
+            int
+            float
+            str
+            path
+            package
+          ])
         // {
           description = "Nix config atom (null, bool, int, float, str, path or package)";
         };
@@ -117,21 +117,23 @@ in
       ];
     })
   ]
-  ++ mapAttrsToList (
-    oldConf: newConf:
-    mkRenamedOptionModuleWith {
-      sinceRelease = 2205;
-      from = [
-        "nix"
-        oldConf
-      ];
-      to = [
-        "nix"
-        "settings"
-        newConf
-      ];
-    }
-  ) legacyConfMappings;
+  ++ mapAttrsToList
+    (
+      oldConf: newConf:
+        mkRenamedOptionModuleWith {
+          sinceRelease = 2205;
+          from = [
+            "nix"
+            oldConf
+          ];
+          to = [
+            "nix"
+            "settings"
+            newConf
+          ];
+        }
+    )
+    legacyConfMappings;
 
   options = {
     nix = {

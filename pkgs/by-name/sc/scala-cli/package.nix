@@ -1,16 +1,16 @@
-{
-  stdenv,
-  coreutils,
-  lib,
-  installShellFiles,
-  zlib,
-  autoPatchelfHook,
-  fetchurl,
-  makeWrapper,
-  callPackage,
-  jre,
-  testers,
-  scala-cli,
+{ stdenv
+, coreutils
+, lib
+, installShellFiles
+, zlib
+, autoPatchelfHook
+, fetchurl
+, makeWrapper
+, callPackage
+, jre
+, testers
+, scala-cli
+,
 }:
 
 let

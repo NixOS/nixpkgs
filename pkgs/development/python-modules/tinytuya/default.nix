@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  cryptography,
-  fetchFromGitHub,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, colorama
+, cryptography
+, fetchFromGitHub
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

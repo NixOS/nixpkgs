@@ -1,11 +1,11 @@
-{
-  asar,
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  dpkg,
-  electron,
+{ asar
+, lib
+, stdenv
+, fetchurl
+, makeWrapper
+, dpkg
+, electron
+,
 }:
 let
   mainProgram = "proton-mail";

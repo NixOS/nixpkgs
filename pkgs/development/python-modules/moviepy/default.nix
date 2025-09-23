@@ -1,32 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  decorator,
-  imageio,
-  imageio-ffmpeg,
-  numpy,
-  proglog,
-  python-dotenv,
-  requests,
-  tqdm,
-
-  # optional-dependencies
-  matplotlib,
-  scikit-image,
-  scikit-learn,
-  scipy,
-  yt-dlp,
-
-  # tests
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  decorator
+, imageio
+, imageio-ffmpeg
+, numpy
+, proglog
+, python-dotenv
+, requests
+, tqdm
+, # optional-dependencies
+  matplotlib
+, scikit-image
+, scikit-learn
+, scipy
+, yt-dlp
+, # tests
+  pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

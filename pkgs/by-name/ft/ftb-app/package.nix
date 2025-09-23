@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, nix-update-script
+,
 }:
 let
   pname = "ftb-app";
@@ -21,8 +21,7 @@ let
             url = "https://piston.feed-the-beast.com/app/ftb-app-linux-${version}-x86_64.AppImage";
             hash = "sha256-35GEI1OBvVkUvHvQAzzGz8ux9h+5W3acH0Wr5VkqyBw=";
           };
-        }
-        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+        }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     in
     fetchurl src';
 

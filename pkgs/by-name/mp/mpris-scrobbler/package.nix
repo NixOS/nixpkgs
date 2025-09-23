@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  curl,
-  dbus,
-  libevent,
-  m4,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  json_c,
-  xdg-utils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, curl
+, dbus
+, libevent
+, m4
+, meson
+, ninja
+, pkg-config
+, scdoc
+, json_c
+, xdg-utils
+,
 }:
 
 stdenv.mkDerivation rec {

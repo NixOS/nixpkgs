@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  colorful,
-  fetchFromGitHub,
-  git,
-  httpx,
-  lxml,
-  packaging,
-  poetry-core,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  semver,
-  shtab,
-  rich,
-  tomlkit,
+{ lib
+, buildPythonPackage
+, colorful
+, fetchFromGitHub
+, git
+, httpx
+, lxml
+, packaging
+, poetry-core
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, semver
+, shtab
+, rich
+, tomlkit
+,
 }:
 
 buildPythonPackage rec {

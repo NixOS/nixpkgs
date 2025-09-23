@@ -1,8 +1,8 @@
-{
-  rustPlatform,
-  pkg-config,
-  openssl,
-  zlib,
+{ rustPlatform
+, pkg-config
+, openssl
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildGoModule,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, buildGoModule
+, installShellFiles
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "optinix";

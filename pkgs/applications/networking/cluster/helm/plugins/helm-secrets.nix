@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  findutils,
-  getopt,
-  gnugrep,
-  gnused,
-  sops,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, findutils
+, getopt
+, gnugrep
+, gnused
+, sops
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-  cmake,
-  meson,
-  ninja,
-  pkg-config,
-  wf-config,
-  cairo,
-  doctest,
-  libGL,
-  libdrm,
-  libexecinfo,
-  libevdev,
-  libinput,
-  libjpeg,
-  libxkbcommon,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots,
-  pango,
-  nlohmann_json,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, cmake
+, meson
+, ninja
+, pkg-config
+, wf-config
+, cairo
+, doctest
+, libGL
+, libdrm
+, libexecinfo
+, libevdev
+, libinput
+, libjpeg
+, libxkbcommon
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlroots
+, pango
+, nlohmann_json
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

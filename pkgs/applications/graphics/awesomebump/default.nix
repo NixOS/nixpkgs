@@ -1,13 +1,13 @@
-{
-  mkDerivation,
-  lib,
-  fetchgit,
-  qtbase,
-  qmake,
-  qtscript,
-  flex,
-  bison,
-  qtdeclarative,
+{ mkDerivation
+, lib
+, fetchgit
+, qtbase
+, qmake
+, qtscript
+, flex
+, bison
+, qtdeclarative
+,
 }:
 
 let

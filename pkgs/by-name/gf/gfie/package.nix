@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  qt5,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, qt5
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfie";

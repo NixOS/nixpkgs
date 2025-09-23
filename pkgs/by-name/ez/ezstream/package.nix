@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # nativeBuildInputs
-  pkg-config,
-
-  # buildInputs
-  libiconv,
-  libshout,
-  libxml2,
-  taglib,
-
-  # checkInputs
-  check,
+{ lib
+, stdenv
+, fetchurl
+, # nativeBuildInputs
+  pkg-config
+, # buildInputs
+  libiconv
+, libshout
+, libxml2
+, taglib
+, # checkInputs
+  check
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

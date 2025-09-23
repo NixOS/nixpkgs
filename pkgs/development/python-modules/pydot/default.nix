@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  replaceVars,
-  graphviz,
-  pytestCheckHook,
-  chardet,
-  parameterized,
-  pythonOlder,
-  pyparsing,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, replaceVars
+, graphviz
+, pytestCheckHook
+, chardet
+, parameterized
+, pythonOlder
+, pyparsing
+,
 }:
 
 buildPythonPackage rec {

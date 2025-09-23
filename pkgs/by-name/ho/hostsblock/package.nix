@@ -1,15 +1,14 @@
-{
-  lib,
-  coreutils,
-  curl,
-  fetchFromGitHub,
-  unzip,
-  p7zip,
-  gnused,
-  gnugrep,
-  stdenv,
-  blacklist ? [ "adwords.google.com" ],
-  whitelist ? [
+{ lib
+, coreutils
+, curl
+, fetchFromGitHub
+, unzip
+, p7zip
+, gnused
+, gnugrep
+, stdenv
+, blacklist ? [ "adwords.google.com" ]
+, whitelist ? [
     ".dropbox.com"
     " www.malwaredomainlists.com"
     " www.arcamax.com"
@@ -26,7 +25,8 @@
     "login.yahoo.com"
     " l.yimg.com"
     ".bp.blogspot.com"
-  ],
+  ]
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  lib,
-  pkgs,
-  enableXWayland ? true,
-  enableWlrPortal ? true,
-  enableGtkPortal ? true,
+{ lib
+, pkgs
+, enableXWayland ? true
+, enableWlrPortal ? true
+, enableGtkPortal ? true
+,
 }:
 
 {

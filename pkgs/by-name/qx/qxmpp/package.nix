@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  kdePackages,
-  withGstreamer ? true,
-  gst_all_1,
-  withOmemo ? true,
-  libomemo-c,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, pkg-config
+, kdePackages
+, withGstreamer ? true
+, gst_all_1
+, withOmemo ? true
+, libomemo-c
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,15 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs =
-    lib.optionals withGstreamer (
-      with gst_all_1;
-      [
-        gstreamer
-        gst-plugins-bad
-        gst-plugins-base
-        gst-plugins-good
-      ]
-    )
+    lib.optionals withGstreamer
+      (
+        with gst_all_1;
+        [
+          gstreamer
+          gst-plugins-bad
+          gst-plugins-base
+          gst-plugins-good
+        ]
+      )
     ++ lib.optionals withOmemo [
       kdePackages.qtbase
       kdePackages.qca

@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  lwt,
-  lwt_log,
-  amqp-client,
-  uri,
-  ezxmlm,
+{ buildDunePackage
+, lwt
+, lwt_log
+, amqp-client
+, uri
+, ezxmlm
+,
 }:
 buildDunePackage {
   pname = "amqp-client-lwt";

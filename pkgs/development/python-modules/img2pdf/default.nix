@@ -1,23 +1,23 @@
-{
-  lib,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitea,
-  replaceVars,
-  colord,
-  setuptools,
-  pikepdf,
-  pillow,
-  stdenv,
-  exiftool,
-  imagemagick,
-  mupdf-headless,
-  netpbm,
-  numpy,
-  poppler-utils,
-  pytestCheckHook,
-  runCommand,
-  scipy,
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchFromGitea
+, replaceVars
+, colord
+, setuptools
+, pikepdf
+, pillow
+, stdenv
+, exiftool
+, imagemagick
+, mupdf-headless
+, netpbm
+, numpy
+, poppler-utils
+, pytestCheckHook
+, runCommand
+, scipy
+,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
         if stdenv.hostPlatform.isDarwin then
           "/System/Library/ColorSync/Profiles/sRGB Profile.icc"
         else
-          # break runtime dependency chain all of colord dependencies
+        # break runtime dependency chain all of colord dependencies
           runCommand "sRGC.icc" { } ''
             cp ${colord}/share/color/icc/colord/sRGB.icc $out
           '';

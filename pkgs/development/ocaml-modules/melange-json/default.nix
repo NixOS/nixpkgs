@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  yojson,
-  melange,
-  ppxlib,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, yojson
+, melange
+, ppxlib
+,
 }:
 
 buildDunePackage rec {

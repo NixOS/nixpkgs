@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  makeDesktopItem,
-  appimageTools,
+{ lib
+, fetchurl
+, makeDesktopItem
+, appimageTools
+,
 }:
 let
   pname = "saleae-logic-2";

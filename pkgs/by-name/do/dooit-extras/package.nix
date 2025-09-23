@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  dooit,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3
+, dooit
+, nix-update-script
+,
 }:
 python3.pkgs.buildPythonPackage rec {
   pname = "dooit-extras";
@@ -23,8 +23,7 @@ python3.pkgs.buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
-  passthru.updateScript = nix-update-script {
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Extra Utilities for Dooit";

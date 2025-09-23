@@ -1,39 +1,39 @@
-{
-  stdenv,
-  lib,
-  buildEnv,
-  replaceVars,
-  makeWrapper,
-  runCommand,
-  coreutils,
-  gawk,
-  dwarf-fortress,
-  dwarf-therapist,
-  SDL2_mixer,
-  enableDFHack ? false,
-  dfhack,
-  enableSoundSense ? false,
-  soundSense,
-  jre,
-  expect,
-  xvfb-run,
-  writeText,
-  enableStoneSense ? false,
-  enableTWBT ? false,
-  twbt,
-  themes ? { },
-  theme ? null,
-  extraPackages ? [ ],
-  # General config options:
-  enableIntro ? true,
-  enableTruetype ? null, # defaults to 24, see init.txt
-  enableFPS ? false,
-  enableTextMode ? false,
-  enableSound ? true,
-  # An attribute set of settings to override in data/init/*.txt.
+{ stdenv
+, lib
+, buildEnv
+, replaceVars
+, makeWrapper
+, runCommand
+, coreutils
+, gawk
+, dwarf-fortress
+, dwarf-therapist
+, SDL2_mixer
+, enableDFHack ? false
+, dfhack
+, enableSoundSense ? false
+, soundSense
+, jre
+, expect
+, xvfb-run
+, writeText
+, enableStoneSense ? false
+, enableTWBT ? false
+, twbt
+, themes ? { }
+, theme ? null
+, extraPackages ? [ ]
+, # General config options:
+  enableIntro ? true
+, enableTruetype ? null
+, # defaults to 24, see init.txt
+  enableFPS ? false
+, enableTextMode ? false
+, enableSound ? true
+, # An attribute set of settings to override in data/init/*.txt.
   # For example, `init.FOO = true;` is translated to `[FOO:YES]` in init.txt
-  settings ? { },
-# TODO world-gen.txt, interface.txt require special logic
+  settings ? { }
+, # TODO world-gen.txt, interface.txt require special logic
 }:
 
 let
@@ -66,23 +66,25 @@ let
     ignoreCollisions = true;
   };
 
-  settings' = lib.recursiveUpdate {
-    init = {
-      PRINT_MODE =
-        if enableTextMode then
-          "TEXT"
-        else if enableTWBT' then
-          "TWBT"
-        else if stdenv.hostPlatform.isDarwin then
-          "STANDARD" # https://www.bay12games.com/dwarves/mantisbt/view.php?id=11680
-        else
-          null;
-      INTRO = enableIntro;
-      TRUETYPE = enableTruetype;
-      FPS = enableFPS;
-      SOUND = enableSound;
-    };
-  } settings;
+  settings' = lib.recursiveUpdate
+    {
+      init = {
+        PRINT_MODE =
+          if enableTextMode then
+            "TEXT"
+          else if enableTWBT' then
+            "TWBT"
+          else if stdenv.hostPlatform.isDarwin then
+            "STANDARD" # https://www.bay12games.com/dwarves/mantisbt/view.php?id=11680
+          else
+            null;
+        INTRO = enableIntro;
+        TRUETYPE = enableTruetype;
+        FPS = enableFPS;
+        SOUND = enableSound;
+      };
+    }
+    settings;
 
   forEach = attrs: f: lib.concatStrings (lib.mapAttrsToList f attrs);
 
@@ -126,21 +128,21 @@ let
         ''
         + forEach settings' (
           file: kv:
-          ''
-            file=data/init/${lib.escapeShellArg file}.txt
-            if [ -f "${baseEnv}/$file" ]; then
-              cp "${baseEnv}/$file" "$out/$file"
-            else
-              echo "warning: no file ${baseEnv}/$file; cannot copy" >&2
-            fi
-          ''
-          + forEach kv (
-            k: v:
-            lib.optionalString (v != null) ''
-              export k=${lib.escapeShellArg k} v=${lib.escapeShellArg (toTxt v)}
-              edit_setting
             ''
-          )
+              file=data/init/${lib.escapeShellArg file}.txt
+              if [ -f "${baseEnv}/$file" ]; then
+                cp "${baseEnv}/$file" "$out/$file"
+              else
+                echo "warning: no file ${baseEnv}/$file; cannot copy" >&2
+              fi
+            ''
+            + forEach kv (
+              k: v:
+                lib.optionalString (v != null) ''
+                  export k=${lib.escapeShellArg k} v=${lib.escapeShellArg (toTxt v)}
+                  edit_setting
+                ''
+            )
         )
         + lib.optionalString enableDFHack ''
           mkdir -p $out/hack
@@ -182,124 +184,124 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
   "dwarf-fortress: text mode and TWBT are mutually exclusive"
 
   stdenv.mkDerivation
-  {
-    pname = "dwarf-fortress";
-    version = dwarf-fortress.dfVersion;
+{
+  pname = "dwarf-fortress";
+  version = dwarf-fortress.dfVersion;
 
-    dfInit = replaceVars ./dwarf-fortress-init.in {
-      inherit env;
-      stdenv_shell = "${stdenv.shell}";
-      cp = "${coreutils}/bin/cp";
-      rm = "${coreutils}/bin/rm";
-      ln = "${coreutils}/bin/ln";
-      cat = "${coreutils}/bin/cat";
-      mkdir = "${coreutils}/bin/mkdir";
-      printf = "${coreutils}/bin/printf";
-      uname = "${coreutils}/bin/uname";
-      SDL2_mixer = "${SDL2_mixer}/lib/libSDL2_mixer.so";
-    };
+  dfInit = replaceVars ./dwarf-fortress-init.in {
+    inherit env;
+    stdenv_shell = "${stdenv.shell}";
+    cp = "${coreutils}/bin/cp";
+    rm = "${coreutils}/bin/rm";
+    ln = "${coreutils}/bin/ln";
+    cat = "${coreutils}/bin/cat";
+    mkdir = "${coreutils}/bin/mkdir";
+    printf = "${coreutils}/bin/printf";
+    uname = "${coreutils}/bin/uname";
+    SDL2_mixer = "${SDL2_mixer}/lib/libSDL2_mixer.so";
+  };
 
-    runDF = ./dwarf-fortress.in;
-    runSoundSense = ./soundSense.in;
+  runDF = ./dwarf-fortress.in;
+  runSoundSense = ./soundSense.in;
 
-    passthru = {
-      inherit
-        dwarf-fortress
-        dwarf-therapist
-        twbt
-        env
-        ;
-      dfhack = dfhack';
-    };
+  passthru = {
+    inherit
+      dwarf-fortress
+      dwarf-therapist
+      twbt
+      env
+      ;
+    dfhack = dfhack';
+  };
 
-    dontUnpack = true;
-    dontBuild = true;
-    preferLocalBuild = true;
-    installPhase = ''
-      mkdir -p $out/bin
+  dontUnpack = true;
+  dontBuild = true;
+  preferLocalBuild = true;
+  installPhase = ''
+    mkdir -p $out/bin
 
-      substitute $runDF $out/bin/dwarf-fortress \
-        --subst-var-by stdenv_shell ${stdenv.shell} \
-        --subst-var-by dfExe ${dwarf-fortress.exe} \
-        --subst-var dfInit
-      chmod 755 $out/bin/dwarf-fortress
-    ''
-    + lib.optionalString enableDFHack ''
-      substitute $runDF $out/bin/dfhack \
-        --subst-var-by stdenv_shell ${stdenv.shell} \
-        --subst-var-by dfExe dfhack \
-        --subst-var dfInit
-      chmod 755 $out/bin/dfhack
-    ''
-    + lib.optionalString enableSoundSense ''
-      substitute $runSoundSense $out/bin/soundsense \
-        --subst-var-by stdenv_shell ${stdenv.shell} \
-        --subst-var-by jre ${jre} \
-        --subst-var dfInit
-      chmod 755 $out/bin/soundsense
-    '';
+    substitute $runDF $out/bin/dwarf-fortress \
+      --subst-var-by stdenv_shell ${stdenv.shell} \
+      --subst-var-by dfExe ${dwarf-fortress.exe} \
+      --subst-var dfInit
+    chmod 755 $out/bin/dwarf-fortress
+  ''
+  + lib.optionalString enableDFHack ''
+    substitute $runDF $out/bin/dfhack \
+      --subst-var-by stdenv_shell ${stdenv.shell} \
+      --subst-var-by dfExe dfhack \
+      --subst-var dfInit
+    chmod 755 $out/bin/dfhack
+  ''
+  + lib.optionalString enableSoundSense ''
+    substitute $runSoundSense $out/bin/soundsense \
+      --subst-var-by stdenv_shell ${stdenv.shell} \
+      --subst-var-by jre ${jre} \
+      --subst-var dfInit
+    chmod 755 $out/bin/soundsense
+  '';
 
-    doInstallCheck = stdenv.hostPlatform.isLinux;
-    nativeInstallCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
-      expect
-      xvfb-run
-    ];
+  doInstallCheck = stdenv.hostPlatform.isLinux;
+  nativeInstallCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    expect
+    xvfb-run
+  ];
 
-    installCheckPhase =
-      let
-        commonExpectStatements = ''
-          expect "Loading bindings from data/init/interface.txt"
-        '';
-        dfHackExpectScript = writeText "dfhack-test.exp" (
+  installCheckPhase =
+    let
+      commonExpectStatements = ''
+        expect "Loading bindings from data/init/interface.txt"
+      '';
+      dfHackExpectScript = writeText "dfhack-test.exp" (
+        ''
+          spawn env NIXPKGS_DF_OPTS=debug xvfb-run $env(out)/bin/dfhack
+        ''
+        + commonExpectStatements
+        + ''
+          expect "DFHack is ready. Have a nice day!"
+          expect "DFHack version ${dfhack'.version}"
+          expect "\[DFHack\]#"
+          send -- "lua print(os.getenv('out'))\r"
+          expect "$env(out)"
+          # Don't send 'die' here; just exit. Some versions of dfhack crash on exit.
+          exit 0
+        ''
+      );
+      vanillaExpectScript =
+        fmod:
+        writeText "vanilla-test.exp" (
           ''
-            spawn env NIXPKGS_DF_OPTS=debug xvfb-run $env(out)/bin/dfhack
+            spawn env NIXPKGS_DF_OPTS=debug,${lib.optionalString fmod "fmod"} xvfb-run $env(out)/bin/dwarf-fortress
           ''
           + commonExpectStatements
           + ''
-            expect "DFHack is ready. Have a nice day!"
-            expect "DFHack version ${dfhack'.version}"
-            expect "\[DFHack\]#"
-            send -- "lua print(os.getenv('out'))\r"
-            expect "$env(out)"
-            # Don't send 'die' here; just exit. Some versions of dfhack crash on exit.
             exit 0
           ''
         );
-        vanillaExpectScript =
-          fmod:
-          writeText "vanilla-test.exp" (
-            ''
-              spawn env NIXPKGS_DF_OPTS=debug,${lib.optionalString fmod "fmod"} xvfb-run $env(out)/bin/dwarf-fortress
-            ''
-            + commonExpectStatements
-            + ''
-              exit 0
-            ''
-          );
-      in
-      ''
-        export HOME="$(mktemp -dt dwarf-fortress.XXXXXX)"
-      ''
-      + lib.optionalString enableDFHack ''
-        expect ${dfHackExpectScript}
-        df_home="$(find ~ -name "df_*" | head -n1)"
-        test -f "$df_home/dfhack"
-      ''
-      + lib.optionalString isAtLeast50 ''
-        expect ${vanillaExpectScript true}
-        df_home="$(find ~ -name "df_*" | head -n1)"
-        test ! -f "$df_home/dfhack"
-        test -f "$df_home/libfmod_plugin.so"
-      ''
-      + ''
-        expect ${vanillaExpectScript false}
-        df_home="$(find ~ -name "df_*" | head -n1)"
-        test ! -f "$df_home/dfhack"
-        test ! -f "$df_home/libfmod_plugin.so"
-      ''
-      + ''
-        test -d "$df_home/data"
-      '';
+    in
+    ''
+      export HOME="$(mktemp -dt dwarf-fortress.XXXXXX)"
+    ''
+    + lib.optionalString enableDFHack ''
+      expect ${dfHackExpectScript}
+      df_home="$(find ~ -name "df_*" | head -n1)"
+      test -f "$df_home/dfhack"
+    ''
+    + lib.optionalString isAtLeast50 ''
+      expect ${vanillaExpectScript true}
+      df_home="$(find ~ -name "df_*" | head -n1)"
+      test ! -f "$df_home/dfhack"
+      test -f "$df_home/libfmod_plugin.so"
+    ''
+    + ''
+      expect ${vanillaExpectScript false}
+      df_home="$(find ~ -name "df_*" | head -n1)"
+      test ! -f "$df_home/dfhack"
+      test ! -f "$df_home/libfmod_plugin.so"
+    ''
+    + ''
+      test -d "$df_home/data"
+    '';
 
-    inherit (dwarf-fortress) meta;
-  }
+  inherit (dwarf-fortress) meta;
+}

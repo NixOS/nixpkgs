@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  wrapGAppsHook3,
-  gobject-introspection,
-  glib,
-  gtk3,
-  qt5,
-  makeDesktopItem,
-  copyDesktopItems,
-  withCurses ? false,
-  withGTK ? false,
-  withQT ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, wrapGAppsHook3
+, gobject-introspection
+, glib
+, gtk3
+, qt5
+, makeDesktopItem
+, copyDesktopItems
+, withCurses ? false
+, withGTK ? false
+, withQT ? false
+,
 }:
 let
   mkDesktopItem =
@@ -83,9 +83,10 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optional withGTK "wrapGApp $out/bin/trackma-gtk";
 
   desktopItems =
-    lib.optional withQT (
-      mkDesktopItem "trackma-qt" "Trackma (Qt)" "Trackma Updater (Qt-frontend)" false
-    )
+    lib.optional withQT
+      (
+        mkDesktopItem "trackma-qt" "Trackma (Qt)" "Trackma Updater (Qt-frontend)" false
+      )
     ++ lib.optional withGTK (
       mkDesktopItem "trackma-gtk" "Trackma (GTK)" "Trackma Updater (Gtk-frontend)" false
     )

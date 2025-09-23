@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk-engine-murrine,
-  lib,
+{ stdenvNoCC
+, fetchFromGitHub
+, gtk-engine-murrine
+, lib
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "gruvbox-material-gtk-theme";

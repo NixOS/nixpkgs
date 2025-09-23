@@ -1,45 +1,43 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  nixosTests,
-
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  gettext,
-  libxml2,
-  libxslt,
-  pkg-config,
-  xmlto,
-  meson,
-  ninja,
-
-  acl,
-  appstream,
-  breezy,
-  binutils,
-  bzip2,
-  coreutils,
-  cpio,
-  curl,
-  debugedit,
-  elfutils,
-  flatpak,
-  gitMinimal,
-  glib,
-  glibcLocales,
-  gnumake,
-  gnupg,
-  gnutar,
-  json-glib,
-  libcap,
-  libyaml,
-  ostree,
-  patch,
-  rpm,
-  unzip,
-  attr,
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, nixosTests
+, docbook_xml_dtd_45
+, docbook_xsl
+, gettext
+, libxml2
+, libxslt
+, pkg-config
+, xmlto
+, meson
+, ninja
+, acl
+, appstream
+, breezy
+, binutils
+, bzip2
+, coreutils
+, cpio
+, curl
+, debugedit
+, elfutils
+, flatpak
+, gitMinimal
+, glib
+, glibcLocales
+, gnumake
+, gnupg
+, gnutar
+, json-glib
+, libcap
+, libyaml
+, ostree
+, patch
+, rpm
+, unzip
+, attr
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

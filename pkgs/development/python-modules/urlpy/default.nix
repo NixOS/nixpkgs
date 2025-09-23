@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  publicsuffix2,
-  pytestCheckHook,
-  pythonAtLeast,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, publicsuffix2
+, pytestCheckHook
+, pythonAtLeast
+,
 }:
 buildPythonPackage rec {
   pname = "urlpy";

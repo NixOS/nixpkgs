@@ -1,18 +1,18 @@
-{
-  lib,
-  symlinkJoin,
-  runCommand,
-  unwrapped,
-  python3,
-  formats,
+{ lib
+, symlinkJoin
+, runCommand
+, unwrapped
+, python3
+, formats
+,
 }:
 
 let
   wrapper =
-    {
-      pythonPackages ? (_: [ ]),
-      plugins ? (_: [ ]),
-      baseConfig ? null,
+    { pythonPackages ? (_: [ ])
+    , plugins ? (_: [ ])
+    , baseConfig ? null
+    ,
     }:
     let
       plugins' = plugins unwrapped.plugins;

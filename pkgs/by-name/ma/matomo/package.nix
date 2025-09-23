@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  php,
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, php
+, nixosTests
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

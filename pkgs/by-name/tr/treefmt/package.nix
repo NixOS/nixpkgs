@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  callPackages,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, callPackages
+, fetchFromGitHub
+,
 }:
 buildGoModule rec {
   pname = "treefmt";

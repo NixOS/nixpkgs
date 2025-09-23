@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  imagemagick,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, imagemagick
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  ocamlPackages,
-  opaline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, ocamlPackages
+, opaline
+,
 }:
 
 stdenv.mkDerivation rec {

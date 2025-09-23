@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -148,7 +147,7 @@ let
     (lib.mapAttrs (name: pkgs.writeText "cups-pdf-${name}.conf"))
     (lib.mapAttrsToList (
       name: confFile:
-      "ln --symbolic --no-target-directory ${confFile} /var/lib/cups/cups-pdf-${name}.conf\n"
+        "ln --symbolic --no-target-directory ${confFile} /var/lib/cups/cups-pdf-${name}.conf\n"
     ))
     lib.concatStrings
   ];
@@ -158,13 +157,13 @@ let
     (lib.filterAttrs (name: lib.getAttr "installPrinter"))
     (lib.mapAttrsToList (
       name: instance:
-      (lib.mapAttrs (key: lib.mkDefault) {
-        inherit name;
-        model = "CUPS-PDF_opt.ppd";
-        deviceUri = "cups-pdf:/${name}";
-        description = "virtual printer for cups-pdf instance ${name}";
-        location = instance.settings.Out;
-      })
+        (lib.mapAttrs (key: lib.mkDefault) {
+          inherit name;
+          model = "CUPS-PDF_opt.ppd";
+          deviceUri = "cups-pdf:/${name}";
+          description = "virtual printer for cups-pdf instance ${name}";
+          location = instance.settings.Out;
+        })
     ))
   ];
 

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  which,
-  ldc,
-  zlib,
-  lz4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, which
+, ldc
+, zlib
+, lz4
+,
 }:
 
 stdenv.mkDerivation rec {

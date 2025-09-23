@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fuse,
-  ncurses,
-  python3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, fuse
+, ncurses
+, python3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

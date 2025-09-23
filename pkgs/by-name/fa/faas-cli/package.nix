@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  git,
-  installShellFiles,
-  testers,
-  faas-cli,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, git
+, installShellFiles
+, testers
+, faas-cli
+,
 }:
 let
   faasPlatform =
@@ -15,12 +15,11 @@ let
     let
       cpuName = platform.parsed.cpu.name;
     in
-    {
-      "aarch64" = "arm64";
-      "armv7l" = "armhf";
-      "armv6l" = "armhf";
-    }
-    .${cpuName} or cpuName;
+      {
+        "aarch64" = "arm64";
+        "armv7l" = "armhf";
+        "armv6l" = "armhf";
+      }.${cpuName} or cpuName;
 in
 buildGoModule rec {
   pname = "faas-cli";

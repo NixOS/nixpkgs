@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libkrun,
-  passt,
-  dhcpcd,
-  systemd,
-  udev,
-  pkg-config,
-  procps,
-  fex,
-  writeShellApplication,
-  coreutils,
-  makeBinaryWrapper,
-# TODO: Enable again when sommelier is not broken.
-# For now, don't give false impression of sommelier being supported.
-# sommelier,
-# withSommelier ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libkrun
+, passt
+, dhcpcd
+, systemd
+, udev
+, pkg-config
+, procps
+, fex
+, writeShellApplication
+, coreutils
+, makeBinaryWrapper
+, # TODO: Enable again when sommelier is not broken.
+  # For now, don't give false impression of sommelier being supported.
+  # sommelier,
+  # withSommelier ? false,
 }:
 let
   # TODO: Setup setuid wrappers.

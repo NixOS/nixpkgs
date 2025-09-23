@@ -1,13 +1,13 @@
-{
-  lib,
-  aiosmtpd,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  mkdocs-material-extensions,
-  flask,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiosmtpd
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, mkdocs-material-extensions
+, flask
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

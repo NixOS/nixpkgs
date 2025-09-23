@@ -1,19 +1,16 @@
-{
-  lib,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchzip,
-
-  cmake,
-  cython,
-  numpy,
-  setuptools,
-  setuptools-scm,
-
-  tqdm,
-
-  pytestCheckHook,
+{ lib
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, fetchzip
+, cmake
+, cython
+, numpy
+, setuptools
+, setuptools-scm
+, tqdm
+, pytestCheckHook
+,
 }:
 
 let

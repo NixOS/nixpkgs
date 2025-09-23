@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  ppx_sexp_conv,
-  ounit2,
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, ppx_sexp_conv
+, ounit2
+,
 }:
 
 buildDunePackage rec {

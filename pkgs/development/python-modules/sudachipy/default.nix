@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cargo,
-  libiconv,
-  rustPlatform,
-  rustc,
-  sudachi-rs,
-  setuptools-rust,
-  pytestCheckHook,
-  sudachidict-core,
-  tokenizers,
-  sudachipy,
+{ lib
+, stdenv
+, buildPythonPackage
+, cargo
+, libiconv
+, rustPlatform
+, rustc
+, sudachi-rs
+, setuptools-rust
+, pytestCheckHook
+, sudachidict-core
+, tokenizers
+, sudachipy
+,
 }:
 
 buildPythonPackage rec {

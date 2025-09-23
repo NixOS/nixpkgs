@@ -1,24 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  fontconfig,
-
-  # nativeBuildInputs
-  cmake,
-  doxygen,
-  graphviz,
-  scipy,
-
-  # buildInputs
-  boost,
-
-  # propagatedBuildInputs
-  eigen,
-  jrl-cmakemodules,
-  numpy,
-
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fontconfig
+, # nativeBuildInputs
+  cmake
+, doxygen
+, graphviz
+, scipy
+, # buildInputs
+  boost
+, # propagatedBuildInputs
+  eigen
+, jrl-cmakemodules
+, numpy
+,
 }:
 
 buildPythonPackage rec {

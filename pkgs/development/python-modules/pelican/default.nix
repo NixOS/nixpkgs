@@ -1,38 +1,34 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  pdm-backend,
-
-  # native dependencies
-  glibcLocales,
-  git,
-  pandoc,
-  typogrify,
-
-  # dependencies
-  blinker,
-  docutils,
-  feedgenerator,
-  jinja2,
-  markdown,
-  ordered-set,
-  pygments,
-  python-dateutil,
-  rich,
-  tzdata,
-  unidecode,
-  watchfiles,
-
-  # tests
-  beautifulsoup4,
-  lxml,
-  mock,
-  pytestCheckHook,
-  pytest-xdist,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  pdm-backend
+, # native dependencies
+  glibcLocales
+, git
+, pandoc
+, typogrify
+, # dependencies
+  blinker
+, docutils
+, feedgenerator
+, jinja2
+, markdown
+, ordered-set
+, pygments
+, python-dateutil
+, rich
+, tzdata
+, unidecode
+, watchfiles
+, # tests
+  beautifulsoup4
+, lxml
+, mock
+, pytestCheckHook
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

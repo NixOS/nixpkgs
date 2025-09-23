@@ -1,26 +1,26 @@
-{
-  boost,
-  cmake,
-  fetchFromGitHub,
-  libglut,
-  freetype,
-  glew,
-  libsForQt5,
-  libjpeg,
-  libmypaint,
-  libpng,
-  libusb1,
-  lz4,
-  xz,
-  lzo,
-  openblas,
-  opencv,
-  pkg-config,
-  lib,
-  stdenv,
-  superlu,
-  libtiff,
-  zlib,
+{ boost
+, cmake
+, fetchFromGitHub
+, libglut
+, freetype
+, glew
+, libsForQt5
+, libjpeg
+, libmypaint
+, libpng
+, libusb1
+, lz4
+, xz
+, lzo
+, openblas
+, opencv
+, pkg-config
+, lib
+, stdenv
+, superlu
+, libtiff
+, zlib
+,
 }:
 let
   libtiff-ver = "4.0.3"; # The version in thirdparty/tiff-*

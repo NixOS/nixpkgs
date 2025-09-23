@@ -1,9 +1,9 @@
-{
-  cava,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
+{ cava
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+,
 }:
 cava.overrideAttrs (old: rec {
   pname = "libcava";

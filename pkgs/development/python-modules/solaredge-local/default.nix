@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  uplink,
-  uplink-protobuf,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, uplink
+, uplink-protobuf
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  pkg-config,
-  libusb1,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, pkg-config
+, libusb1
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  zlib,
-  bzip2,
-  perl,
-  cpio,
-  gawk,
-  coreutils,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, zlib
+, bzip2
+, perl
+, cpio
+, gawk
+, coreutils
+,
 }:
 
 stdenv.mkDerivation rec {

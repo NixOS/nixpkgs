@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -12,19 +11,21 @@ let
 
   toMandocOutput =
     output:
-    (lib.mapAttrsToList (
-      name: value:
-      if lib.isString value || lib.isPath value then
-        "output ${name} ${value}"
-      else if lib.isInt value then
-        "output ${name} ${builtins.toString value}"
-      else if lib.isBool value then
-        lib.optionalString value "output ${name}"
-      else if value == null then
-        ""
-      else
-        throw "Unrecognized value type ${builtins.typeOf value} of key ${name} in mandoc output settings"
-    ) output);
+    (lib.mapAttrsToList
+      (
+        name: value:
+        if lib.isString value || lib.isPath value then
+          "output ${name} ${value}"
+        else if lib.isInt value then
+          "output ${name} ${builtins.toString value}"
+        else if lib.isBool value then
+          lib.optionalString value "output ${name}"
+        else if value == null then
+          ""
+        else
+          throw "Unrecognized value type ${builtins.typeOf value} of key ${name} in mandoc output settings"
+      )
+      output);
 
   makeLeadingSlashes = map (path: if builtins.substring 0 1 path != "/" then "/${path}" else path);
 in

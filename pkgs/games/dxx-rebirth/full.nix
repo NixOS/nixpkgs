@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  dxx-rebirth,
-  descent1-assets,
-  descent2-assets,
+{ lib
+, stdenv
+, makeWrapper
+, dxx-rebirth
+, descent1-assets
+, descent2-assets
+,
 }:
 
 let

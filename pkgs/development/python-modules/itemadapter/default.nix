@@ -1,12 +1,12 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  pydantic,
-  pythonOlder,
-  scrapy,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pydantic
+, pythonOlder
+, scrapy
+,
 }:
 
 buildPythonPackage rec {

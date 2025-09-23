@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  writeText,
+{ lib
+, stdenv
+, fetchurl
+, writeText
+,
 }:
 
 import ./versions.nix (

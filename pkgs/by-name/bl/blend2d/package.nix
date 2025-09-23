@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  asmjit,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, asmjit
+,
 }:
 
 stdenv.mkDerivation {

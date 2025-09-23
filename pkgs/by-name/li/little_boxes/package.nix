@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  little_boxes,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, testers
+, little_boxes
+,
 }:
 
 rustPlatform.buildRustPackage rec {

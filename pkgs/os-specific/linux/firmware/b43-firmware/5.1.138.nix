@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  b43FirmwareCutter,
+{ lib
+, stdenvNoCC
+, fetchurl
+, b43FirmwareCutter
+,
 }:
 
 let

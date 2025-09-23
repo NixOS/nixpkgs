@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonApplication,
-  pythonOlder,
-  fetchFromGitHub,
-  protonvpn-nm-lib,
-  pythondialog,
-  dialog,
-  wrapGAppsNoGuiHook,
-  gobject-introspection,
-  glib,
+{ lib
+, buildPythonApplication
+, pythonOlder
+, fetchFromGitHub
+, protonvpn-nm-lib
+, pythondialog
+, dialog
+, wrapGAppsNoGuiHook
+, gobject-introspection
+, glib
+,
 }:
 
 buildPythonApplication rec {

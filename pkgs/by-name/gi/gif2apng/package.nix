@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchpatch,
-  zlib,
-  zopfli,
+{ lib
+, stdenv
+, fetchzip
+, fetchpatch
+, zlib
+, zopfli
+,
 }:
 
 stdenv.mkDerivation rec {

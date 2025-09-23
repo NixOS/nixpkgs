@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libmcrypt,
-  libmhash,
+{ lib
+, stdenv
+, fetchurl
+, libmcrypt
+, libmhash
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

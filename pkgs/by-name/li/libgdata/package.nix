@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  nixosTests,
-  vala,
-  gettext,
-  libxml2,
-  glib,
-  json-glib,
-  gcr,
-  gnome-online-accounts,
-  gobject-introspection,
-  gnome,
-  p11-kit,
-  openssl,
-  uhttpmock,
-  libsoup_2_4,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, nixosTests
+, vala
+, gettext
+, libxml2
+, glib
+, json-glib
+, gcr
+, gnome-online-accounts
+, gobject-introspection
+, gnome
+, p11-kit
+, openssl
+, uhttpmock
+, libsoup_2_4
+,
 }:
 
 stdenv.mkDerivation rec {

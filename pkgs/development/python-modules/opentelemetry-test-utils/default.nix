@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  asgiref,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-sdk,
+{ buildPythonPackage
+, pythonOlder
+, asgiref
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-sdk
+,
 }:
 
 buildPythonPackage {

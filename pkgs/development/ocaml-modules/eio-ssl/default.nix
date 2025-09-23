@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  eio,
-  ssl,
+{ lib
+, buildDunePackage
+, fetchurl
+, eio
+, ssl
+,
 }:
 
 buildDunePackage rec {

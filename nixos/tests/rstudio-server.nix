@@ -7,22 +7,20 @@
   ];
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.rstudio-server.enable = true;
     };
 
   nodes.customPackageMachine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.rstudio-server = {

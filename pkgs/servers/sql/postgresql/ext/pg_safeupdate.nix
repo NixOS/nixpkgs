@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
+{ fetchFromGitHub
+, lib
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 let

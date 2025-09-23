@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pytest-mock,
-  pytestCheckHook,
-  tomli,
-  twine,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pytest-mock
+, pytestCheckHook
+, tomli
+, twine
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

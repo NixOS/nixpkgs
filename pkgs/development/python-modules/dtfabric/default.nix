@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  pyyaml,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pyyaml
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "dtfabric";

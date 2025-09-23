@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  kaccounts-integration,
-  kdeclarative,
-  prison,
+{ mkKdeDerivation
+, qtdeclarative
+, kaccounts-integration
+, kdeclarative
+, prison
+,
 }:
 mkKdeDerivation {
   pname = "purpose";

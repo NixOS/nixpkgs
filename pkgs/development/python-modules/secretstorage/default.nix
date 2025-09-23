@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  jeepney,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, jeepney
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

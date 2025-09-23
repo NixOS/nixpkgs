@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.gonic;
@@ -47,9 +46,11 @@ in
         ExecStart =
           let
             # these values are null by default but should not appear in the final config
-            filteredSettings = lib.filterAttrs (
-              n: v: !((n == "tls-cert" || n == "tls-key") && v == null)
-            ) cfg.settings;
+            filteredSettings = lib.filterAttrs
+              (
+                n: v: !((n == "tls-cert" || n == "tls-key") && v == null)
+              )
+              cfg.settings;
           in
           "${pkgs.gonic}/bin/gonic -config-path ${settingsFormat.generate "gonic" filteredSettings}";
         DynamicUser = true;

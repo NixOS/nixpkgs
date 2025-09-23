@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  unittestCheckHook,
-  pandoc,
-  lib,
+{ buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pythonOlder
+, unittestCheckHook
+, pandoc
+, lib
+,
 }:
 let
   version = "0.7.0";

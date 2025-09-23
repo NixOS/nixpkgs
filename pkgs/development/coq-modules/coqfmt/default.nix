@@ -1,11 +1,11 @@
-{
-  coq,
-  coq-lsp,
-  ocamlPackages,
-  lib,
-  mkCoqDerivation,
-  version ? null,
-  makeWrapper,
+{ coq
+, coq-lsp
+, ocamlPackages
+, lib
+, mkCoqDerivation
+, version ? null
+, makeWrapper
+,
 }:
 
 mkCoqDerivation rec {
@@ -30,7 +30,8 @@ mkCoqDerivation rec {
         case = isEq "8.20";
         out = "master";
       }
-    ] null;
+    ]
+      null;
 
   installPhase = ''
     runHook preInstall

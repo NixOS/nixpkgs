@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  docutils,
-  fetchPypi,
-  packaging,
-  pygments,
-  pytestCheckHook,
-  pythonOlder,
-  readme-renderer,
-  setuptools,
+{ lib
+, buildPythonPackage
+, docutils
+, fetchPypi
+, packaging
+, pygments
+, pytestCheckHook
+, pythonOlder
+, readme-renderer
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

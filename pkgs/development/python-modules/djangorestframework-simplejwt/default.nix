@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  django,
-  djangorestframework,
-  fetchPypi,
-  pyjwt,
-  python-jose,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, cryptography
+, django
+, djangorestframework
+, fetchPypi
+, pyjwt
+, python-jose
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

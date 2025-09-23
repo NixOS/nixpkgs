@@ -1,23 +1,19 @@
-{
-  stdenv,
-  lib,
-
-  fetchFromGitHub,
-
-  pkg-config,
-  meson,
-  ninja,
-
-  jack2,
-  alsa-lib,
-  libopus,
-  libsamplerate,
-  libsndfile,
-  readline,
-  zita-alsa-pcmi,
-  zita-resampler,
-
-  enableAlsa ? stdenv.hostPlatform.isLinux,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, jack2
+, alsa-lib
+, libopus
+, libsamplerate
+, libsndfile
+, readline
+, zita-alsa-pcmi
+, zita-resampler
+, enableAlsa ? stdenv.hostPlatform.isLinux
+,
 }:
 
 stdenv.mkDerivation (final: {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  fluidsynth,
-  libjack2,
-  cmake,
-  pkg-config,
-  qtbase,
-  qttools,
-  qtx11extras,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, fluidsynth
+, libjack2
+, cmake
+, pkg-config
+, qtbase
+, qttools
+, qtx11extras
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

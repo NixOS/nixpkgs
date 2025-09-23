@@ -1,25 +1,25 @@
-{
-  lib,
-  buildDotnetModule,
-  writeShellScript,
-  glibc,
-  gtk3,
-  libappindicator,
-  webkitgtk_4_0,
-  e2fsprogs,
-  libnotify,
-  libgit2,
-  openssl,
-  xdelta,
-  file,
-  openjdk,
-  patchelf,
-  fetchFromGitHub,
-  buildFHSEnv,
-  glib-networking,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  dotnetCorePackages,
+{ lib
+, buildDotnetModule
+, writeShellScript
+, glibc
+, gtk3
+, libappindicator
+, webkitgtk_4_0
+, e2fsprogs
+, libnotify
+, libgit2
+, openssl
+, xdelta
+, file
+, openjdk
+, patchelf
+, fetchFromGitHub
+, buildFHSEnv
+, glib-networking
+, wrapGAppsHook3
+, gsettings-desktop-schemas
+, dotnetCorePackages
+,
 }:
 let
   am2r-run = buildFHSEnv {

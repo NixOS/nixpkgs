@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  appdirs,
-  matplotlib,
-  meshio,
-  numpy,
-  nutils-poly,
-  scipy,
-  stringly,
-  treelog,
-  pytestCheckHook,
-  pythonOlder,
-  pkgs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, appdirs
+, matplotlib
+, meshio
+, numpy
+, nutils-poly
+, scipy
+, stringly
+, treelog
+, pytestCheckHook
+, pythonOlder
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

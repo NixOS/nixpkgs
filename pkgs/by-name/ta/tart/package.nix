@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  # Softnet support ("--net-softnet") is disabled by default as it requires
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, # Softnet support ("--net-softnet") is disabled by default as it requires
   # passwordless-sudo when installed through nix. Alternatively users may install
   # softnet through other means with "setuid"-bit enabled.
   # See https://github.com/cirruslabs/softnet#installing
-  enableSoftnet ? false,
-  softnet,
+  enableSoftnet ? false
+, softnet
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";

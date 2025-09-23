@@ -1,30 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  oldest-supported-numpy,
-  setuptools,
-
-  # dependencies
-  numpy,
-  packaging,
-  scipy,
-
-  # tests
-  pytestCheckHook,
-  pytest-rerunfailures,
-  writableTmpDirAsHomeHook,
-  python,
-
-  # optional-dependencies
-  matplotlib,
-  ipython,
-  cvxopt,
-  cvxpy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, oldest-supported-numpy
+, setuptools
+, # dependencies
+  numpy
+, packaging
+, scipy
+, # tests
+  pytestCheckHook
+, pytest-rerunfailures
+, writableTmpDirAsHomeHook
+, python
+, # optional-dependencies
+  matplotlib
+, ipython
+, cvxopt
+, cvxpy
+,
 }:
 
 buildPythonPackage rec {

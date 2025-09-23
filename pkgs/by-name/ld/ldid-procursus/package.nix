@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  fetchpatch,
-  pkg-config,
-  libplist,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, fetchpatch
+, pkg-config
+, libplist
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  factory-boy,
-  faker,
-  fetchFromGitHub,
-  importlib-metadata,
-  numpy,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, factory-boy
+, faker
+, fetchFromGitHub
+, importlib-metadata
+, numpy
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

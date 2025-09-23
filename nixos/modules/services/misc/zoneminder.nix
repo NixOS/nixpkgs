@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -17,8 +16,7 @@ let
     {
       nginx = config.services.nginx.group;
       none = user;
-    }
-    .${cfg.webserver};
+    }.${cfg.webserver};
 
   useNginx = cfg.webserver == "nginx";
 

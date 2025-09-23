@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 buildGoModule rec {

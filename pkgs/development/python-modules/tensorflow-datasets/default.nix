@@ -1,65 +1,62 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  array-record,
-  dm-tree,
-  etils,
-  immutabledict,
-  numpy,
-  promise,
-  protobuf,
-  psutil,
-  pyarrow,
-  requests,
-  simple-parsing,
-  tensorflow-metadata,
-  termcolor,
-  toml,
-  tqdm,
-  wrapt,
-  pythonOlder,
-  importlib-resources,
-
-  # tests
-  apache-beam,
-  beautifulsoup4,
-  click,
-  cloudpickle,
-  datasets,
-  dill,
-  ffmpeg,
-  imagemagick,
-  jax,
-  jaxlib,
-  jinja2,
-  langdetect,
-  lxml,
-  matplotlib,
-  mlcroissant,
-  mwparserfromhell,
-  mwxml,
-  networkx,
-  nltk,
-  opencv4,
-  pandas,
-  pillow,
-  pycocotools,
-  pydub,
-  pytest-xdist,
-  pytestCheckHook,
-  scikit-image,
-  scipy,
-  sortedcontainers,
-  tensorflow,
-  tifffile,
-  zarr,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  setuptools
+, # dependencies
+  absl-py
+, array-record
+, dm-tree
+, etils
+, immutabledict
+, numpy
+, promise
+, protobuf
+, psutil
+, pyarrow
+, requests
+, simple-parsing
+, tensorflow-metadata
+, termcolor
+, toml
+, tqdm
+, wrapt
+, pythonOlder
+, importlib-resources
+, # tests
+  apache-beam
+, beautifulsoup4
+, click
+, cloudpickle
+, datasets
+, dill
+, ffmpeg
+, imagemagick
+, jax
+, jaxlib
+, jinja2
+, langdetect
+, lxml
+, matplotlib
+, mlcroissant
+, mwparserfromhell
+, mwxml
+, networkx
+, nltk
+, opencv4
+, pandas
+, pillow
+, pycocotools
+, pydub
+, pytest-xdist
+, pytestCheckHook
+, scikit-image
+, scipy
+, sortedcontainers
+, tensorflow
+, tifffile
+, zarr
+,
 }:
 
 buildPythonPackage rec {

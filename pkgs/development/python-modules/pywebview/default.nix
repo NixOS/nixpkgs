@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  bottle,
-  proxy-tools,
-  pyside6,
-  qtpy,
-  six,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, bottle
+, proxy-tools
+, pyside6
+, qtpy
+, six
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

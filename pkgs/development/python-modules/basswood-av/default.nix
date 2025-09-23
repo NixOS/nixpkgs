@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pkg-config,
-  cython,
-  ffmpeg,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pkg-config
+, cython
+, ffmpeg
+,
 }:
 
 buildPythonPackage rec {

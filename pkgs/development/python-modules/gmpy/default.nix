@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPyPy,
-  pythonAtLeast,
-  setuptools,
-  gmp,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPyPy
+, pythonAtLeast
+, setuptools
+, gmp
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  autoconf,
-  automake,
-  dssi,
-  gtk2,
-  libjack2,
-  ladspaH,
-  ladspaPlugins,
-  liblo,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, autoconf
+, automake
+, dssi
+, gtk2
+, libjack2
+, ladspaH
+, ladspaPlugins
+, liblo
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

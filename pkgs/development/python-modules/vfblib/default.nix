@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  buildPythonPackage,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  fonttools,
-  orjson,
-  typing-extensions,
-  ufonormalizer,
-  ufolib2,
-  defcon,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, buildPythonPackage
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, fonttools
+, orjson
+, typing-extensions
+, ufonormalizer
+, ufolib2
+, defcon
+,
 }:
 
 buildPythonPackage rec {

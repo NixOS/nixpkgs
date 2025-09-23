@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  rocm-runtime,
-  rocprofiler,
-  numactl,
-  libpciaccess,
-  libxml2,
-  elfutils,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  clang,
-  clr,
-  python3Packages,
-  gpuTargets ? clr.gpuTargets,
+{ lib
+, stdenv
+, rocm-runtime
+, rocprofiler
+, numactl
+, libpciaccess
+, libxml2
+, elfutils
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, clang
+, clr
+, python3Packages
+, gpuTargets ? clr.gpuTargets
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  zlib,
-  mpi,
+{ stdenv
+, lib
+, fetchurl
+, zlib
+, mpi
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

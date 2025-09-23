@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  elfutils,
-  pcre,
+{ lib
+, stdenv
+, fetchFromGitHub
+, elfutils
+, pcre
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

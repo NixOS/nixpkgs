@@ -1,10 +1,10 @@
-{
-  cmake,
-  fetchFromGitea,
-  lib,
-  nlohmann_json,
-  qt6,
-  stdenv,
+{ cmake
+, fetchFromGitea
+, lib
+, nlohmann_json
+, qt6
+, stdenv
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   version = "1.1";

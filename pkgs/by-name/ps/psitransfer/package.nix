@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  pkg-config,
-  vips,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, pkg-config
+, vips
+,
 }:
 
 buildNpmPackage (finalAttrs: {

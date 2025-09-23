@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  less,
-  makeWrapper,
-  autoPatchelfHook,
-  curl,
-  icu,
-  libuuid,
-  libunwind,
-  openssl,
-  lttng-ust,
-  pam,
-  testers,
-  powershell,
-  writeShellScript,
-  common-updater-scripts,
-  gnused,
-  jq,
+{ lib
+, stdenv
+, fetchurl
+, less
+, makeWrapper
+, autoPatchelfHook
+, curl
+, icu
+, libuuid
+, libunwind
+, openssl
+, lttng-ust
+, pam
+, testers
+, powershell
+, writeShellScript
+, common-updater-scripts
+, gnused
+, jq
+,
 }:
 
 let
@@ -26,8 +26,7 @@ let
     {
       darwin = "DYLD_FALLBACK_LIBRARY_PATH";
       linux = "LD_LIBRARY_PATH";
-    }
-    .${stdenv.hostPlatform.parsed.kernel.name} or (throw "unsupported platform");
+    }.${stdenv.hostPlatform.parsed.kernel.name} or (throw "unsupported platform");
 in
 stdenv.mkDerivation rec {
   pname = "powershell";

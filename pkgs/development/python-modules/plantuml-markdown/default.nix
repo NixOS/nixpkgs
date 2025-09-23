@@ -1,15 +1,16 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  pkgs, # Only for pkgs.plantuml,
-  lib,
-  plantuml,
-  markdown,
-  requests,
-  six,
-  runCommand,
-  writeText,
-  plantuml-markdown,
+{ buildPythonPackage
+, fetchFromGitHub
+, pkgs
+, # Only for pkgs.plantuml,
+  lib
+, plantuml
+, markdown
+, requests
+, six
+, runCommand
+, writeText
+, plantuml-markdown
+,
 }:
 
 buildPythonPackage rec {

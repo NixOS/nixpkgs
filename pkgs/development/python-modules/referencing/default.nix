@@ -1,16 +1,16 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  jsonschema,
-  pytest-subtests,
-  pytestCheckHook,
-  pythonOlder,
-  rpds-py,
-  typing-extensions,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, jsonschema
+, pytest-subtests
+, pytestCheckHook
+, pythonOlder
+, rpds-py
+, typing-extensions
+,
 }:
 
 let

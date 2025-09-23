@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  boost,
-  nlohmann_json,
-  nixVersions,
-  pkg-config,
-  meson,
-  ninja,
-  stdenv,
-  fetchpatch2,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, boost
+, nlohmann_json
+, nixVersions
+, pkg-config
+, meson
+, ninja
+, stdenv
+, fetchpatch2
+,
 }:
 let
   nixComponents = nixVersions.nixComponents_2_30;

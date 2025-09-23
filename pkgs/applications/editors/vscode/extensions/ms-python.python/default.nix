@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  vscode-utils,
-  icu,
-  python3,
-  # When `true`, the python default setting will be fixed to specified.
+{ stdenv
+, lib
+, vscode-utils
+, icu
+, python3
+, # When `true`, the python default setting will be fixed to specified.
   # Use version from `PATH` for default setting otherwise.
   # Defaults to `false` as we expect it to be project specific most of the time.
-  pythonUseFixed ? false,
-  # For updateScript
-  vscode-extension-update-script,
+  pythonUseFixed ? false
+, # For updateScript
+  vscode-extension-update-script
+,
 }:
 
 let

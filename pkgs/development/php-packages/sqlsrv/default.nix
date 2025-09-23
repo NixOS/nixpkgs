@@ -1,9 +1,9 @@
-{
-  stdenv,
-  buildPecl,
-  lib,
-  unixODBC,
-  libiconv,
+{ stdenv
+, buildPecl
+, lib
+, unixODBC
+, libiconv
+,
 }:
 
 buildPecl {

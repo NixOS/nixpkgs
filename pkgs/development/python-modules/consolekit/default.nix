@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  flit-core,
-  click,
-  colorama,
-  deprecation-alias,
-  domdf-python-tools,
-  mistletoe,
-  typing-extensions,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, flit-core
+, click
+, colorama
+, deprecation-alias
+, domdf-python-tools
+, mistletoe
+, typing-extensions
+,
 }:
 buildPythonPackage rec {
   pname = "consolekit";

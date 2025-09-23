@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   pcmciaUtils = pkgs.pcmciaUtils.overrideAttrs {

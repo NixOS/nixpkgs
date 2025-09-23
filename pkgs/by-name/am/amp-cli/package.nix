@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchzip,
-  ripgrep,
-  makeWrapper,
-  testers,
+{ lib
+, buildNpmPackage
+, fetchzip
+, ripgrep
+, makeWrapper
+, testers
+,
 }:
 
 buildNpmPackage (finalAttrs: {

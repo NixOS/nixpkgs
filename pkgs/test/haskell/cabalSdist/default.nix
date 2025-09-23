@@ -1,8 +1,8 @@
-{
-  lib,
-  haskell,
-  haskellPackages,
-  runCommand,
+{ lib
+, haskell
+, haskellPackages
+, runCommand
+,
 }:
 
 let

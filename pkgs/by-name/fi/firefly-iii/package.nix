@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  nodejs,
-  fetchNpmDeps,
-  buildPackages,
-  php84,
-  nixosTests,
-  nix-update-script,
-  dataDir ? "/var/lib/firefly-iii",
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, nodejs
+, fetchNpmDeps
+, buildPackages
+, php84
+, nixosTests
+, nix-update-script
+, dataDir ? "/var/lib/firefly-iii"
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

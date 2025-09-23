@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPackages,
-  stdenv,
-  mkMesonExecutable,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPackages
+, stdenv
+, mkMesonExecutable
+, writableTmpDirAsHomeHook
+, nix-fetchers
+, nix-fetchers-c
+, nix-store-test-support
+, libgit2
+, rapidcheck
+, gtest
+, runCommand
+, # Configuration Options
 
-  nix-fetchers,
-  nix-fetchers-c,
-  nix-store-test-support,
-
-  libgit2,
-  rapidcheck,
-  gtest,
-  runCommand,
-
-  # Configuration Options
-
-  version,
-  resolvePath,
+  version
+, resolvePath
+,
 }:
 
 mkMesonExecutable (finalAttrs: {

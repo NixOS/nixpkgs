@@ -1,29 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontconfig,
-  nix-update-script,
-  pythonSupport ? false,
-  python3Packages,
-
-  # nativeBuildInputs
-  cmake,
-  doxygen,
-  graphviz,
-
-  # propagatedBuildInputs
-  cereal_1_3_2,
-  eigen,
-  jrl-cmakemodules,
-  simde,
-
-  # nativeCheckInputs
-  ctestCheckHook,
-
-  # checkInputs
-  matio,
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontconfig
+, nix-update-script
+, pythonSupport ? false
+, python3Packages
+, # nativeBuildInputs
+  cmake
+, doxygen
+, graphviz
+, # propagatedBuildInputs
+  cereal_1_3_2
+, eigen
+, jrl-cmakemodules
+, simde
+, # nativeCheckInputs
+  ctestCheckHook
+, # checkInputs
+  matio
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";

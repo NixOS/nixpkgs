@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  cython,
-  fftw,
-  pandas,
-  scikit-learn,
-  numpy,
-  pip,
-  setuptools,
-  pytestCheckHook,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, cython
+, fftw
+, pandas
+, scikit-learn
+, numpy
+, pip
+, setuptools
+, pytestCheckHook
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

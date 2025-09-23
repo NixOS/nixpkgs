@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-
-  hatchling,
-  hatch-jupyter-builder,
-  jupyterlab,
-  bqplot,
-  ipywidgets,
-  pandas,
-  py2vega,
-  yarn-berry_3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, hatchling
+, hatch-jupyter-builder
+, jupyterlab
+, bqplot
+, ipywidgets
+, pandas
+, py2vega
+, yarn-berry_3
+,
 }:
 
 let

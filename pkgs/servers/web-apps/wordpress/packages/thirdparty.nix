@@ -1,7 +1,7 @@
-{
-  fetchzip,
-  stdenv,
-  lib,
+{ fetchzip
+, stdenv
+, lib
+,
 }:
 {
   plugins.civicrm = stdenv.mkDerivation rec {

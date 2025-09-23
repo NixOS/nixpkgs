@@ -1,8 +1,7 @@
-{
-  lib,
-  modulesPath,
-  pkgs,
-  ...
+{ lib
+, modulesPath
+, pkgs
+, ...
 }:
 let
   ssh-keys =

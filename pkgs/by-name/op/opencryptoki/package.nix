@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  flex,
-  openldap,
-  openssl,
-  trousers,
-  libcap,
-  getent,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, openldap
+, openssl
+, trousers
+, libcap
+, getent
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  azure-core,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  microsoft-kiota-abstractions,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  gitUpdater,
+{ lib
+, aiohttp
+, azure-core
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, microsoft-kiota-abstractions
+, opentelemetry-api
+, opentelemetry-sdk
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

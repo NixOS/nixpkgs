@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontforge,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontforge
+,
 }:
 
 stdenv.mkDerivation rec {

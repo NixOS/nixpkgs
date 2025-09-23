@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  firefox-bin,
-  suffix,
-  revision,
-  system,
-  throwSystem,
+{ lib
+, stdenv
+, fetchzip
+, firefox-bin
+, suffix
+, revision
+, system
+, throwSystem
+,
 }:
 let
   firefox-linux = stdenv.mkDerivation {
@@ -19,8 +19,7 @@ let
         {
           x86_64-linux = "sha256-j7gOuXMyftNQencgfpk8Y4ED2LuT7TAa30IPyzmir48=";
           aarch64-linux = "sha256-deIUGKBrp56TsDr61cbNbRRSRcVpSoa6pdmMk4oB/Eg=";
-        }
-        .${system} or throwSystem;
+        }.${system} or throwSystem;
     };
 
     inherit (firefox-bin.unwrapped)
@@ -43,14 +42,12 @@ let
       {
         x86_64-darwin = "sha256-ljgFoyqCg9kma2cDFodNjbkAeEylIzVdWkS1vU/9Rbg=";
         aarch64-darwin = "sha256-W2J5APPWEkmoDgBEox6/ygg2xyWpOHZESXFG0tZbj1M=";
-      }
-      .${system} or throwSystem;
+      }.${system} or throwSystem;
   };
 in
-{
-  x86_64-linux = firefox-linux;
-  aarch64-linux = firefox-linux;
-  x86_64-darwin = firefox-darwin;
-  aarch64-darwin = firefox-darwin;
-}
-.${system} or throwSystem
+  {
+    x86_64-linux = firefox-linux;
+    aarch64-linux = firefox-linux;
+    x86_64-darwin = firefox-darwin;
+    aarch64-darwin = firefox-darwin;
+  }.${system} or throwSystem

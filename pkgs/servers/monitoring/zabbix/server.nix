@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  curl,
-  libevent,
-  libiconv,
-  libxml2,
-  openssl,
-  pcre,
-  pcre2,
-  zlib,
-  jabberSupport ? true,
-  iksemel,
-  ldapSupport ? true,
-  openldap,
-  odbcSupport ? true,
-  unixODBC,
-  snmpSupport ? true,
-  net-snmp,
-  sshSupport ? true,
-  libssh2,
-  mysqlSupport ? false,
-  libmysqlclient,
-  postgresqlSupport ? false,
-  libpq,
-  ipmiSupport ? false,
-  openipmi,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, curl
+, libevent
+, libiconv
+, libxml2
+, openssl
+, pcre
+, pcre2
+, zlib
+, jabberSupport ? true
+, iksemel
+, ldapSupport ? true
+, openldap
+, odbcSupport ? true
+, unixODBC
+, snmpSupport ? true
+, net-snmp
+, sshSupport ? true
+, libssh2
+, mysqlSupport ? false
+, libmysqlclient
+, postgresqlSupport ? false
+, libpq
+, ipmiSupport ? false
+, openipmi
+,
 }:
 
 # ensure exactly one primary database type is selected

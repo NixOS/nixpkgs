@@ -1,9 +1,8 @@
-{
-  options,
-  config,
-  lib,
-  pkgs,
-  ...
+{ options
+, config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -13,10 +12,12 @@ let
   opt = options.services.grafana;
   provisioningSettingsFormat = pkgs.formats.yaml { };
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (
-    builtins.map (pkg: {
-      name = pkg.pname;
-      path = pkg;
-    }) cfg.declarativePlugins
+    builtins.map
+      (pkg: {
+        name = pkg.pname;
+        path = pkg;
+      })
+      cfg.declarativePlugins
   );
   useMysql = cfg.settings.database.type == "mysql";
   usePostgresql = cfg.settings.database.type == "postgres";
@@ -33,9 +34,10 @@ let
   # [0]: https://github.com/grafana/grafana/blob/main/conf/defaults.ini
   settingsFormatIni = pkgs.formats.ini {
     listToValue = concatMapStringsSep " " (generators.mkValueStringDefault { });
-    mkKeyValue = generators.mkKeyValueDefault {
-      mkValueString = v: if v == null then "" else generators.mkValueStringDefault { } v;
-    } "=";
+    mkKeyValue = generators.mkKeyValueDefault
+      {
+        mkValueString = v: if v == null then "" else generators.mkValueStringDefault { } v;
+      } "=";
   };
   configFile = settingsFormatIni.generate "config.ini" cfg.settings;
 
@@ -70,10 +72,10 @@ let
   muteTimingsFileOrDir = generateAlertingProvisioningYaml "muteTimings";
 
   ln =
-    {
-      src,
-      dir,
-      filename,
+    { src
+    , dir
+    , filename
+    ,
     }:
     ''
       if [[ -d "${src}" ]]; then
@@ -1969,9 +1971,11 @@ in
           optional
             (
               let
-                datasourcesToCheck = optionals (
-                  cfg.provision.datasources.settings != null
-                ) cfg.provision.datasources.settings.datasources;
+                datasourcesToCheck = optionals
+                  (
+                    cfg.provision.datasources.settings != null
+                  )
+                  cfg.provision.datasources.settings.datasources;
                 declarationUnsafe =
                   { secureJsonData, ... }:
                   secureJsonData != null && any (flip doesntUseFileProvider null) (attrValues secureJsonData);

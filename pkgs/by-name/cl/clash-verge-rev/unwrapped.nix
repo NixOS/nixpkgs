@@ -1,28 +1,24 @@
-{
-  pname,
-  version,
-  src,
-  meta,
-
-  pnpm-hash,
-  vendor-hash,
-
-  rustPlatform,
-
-  cargo-tauri,
-  jq,
-  moreutils,
-  nodejs,
-  pkg-config,
-  pnpm_9,
-
-  glib,
-  kdePackages,
-  libayatana-appindicator,
-  libsForQt5,
-  libsoup,
-  openssl,
-  webkitgtk_4_1,
+{ pname
+, version
+, src
+, meta
+, pnpm-hash
+, vendor-hash
+, rustPlatform
+, cargo-tauri
+, jq
+, moreutils
+, nodejs
+, pkg-config
+, pnpm_9
+, glib
+, kdePackages
+, libayatana-appindicator
+, libsForQt5
+, libsoup
+, openssl
+, webkitgtk_4_1
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  gtk4,
-  pkg-config,
-  pango,
-  wrapGAppsHook4,
-  versionCheckHook,
+{ fetchFromGitHub
+, lib
+, rustPlatform
+, gtk4
+, pkg-config
+, pango
+, wrapGAppsHook4
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

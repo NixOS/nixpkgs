@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # tests
-  aiounittest,
-  mock,
-  pytestCheckHook,
-  pyyaml,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, # tests
+  aiounittest
+, mock
+, pytestCheckHook
+, pyyaml
+, six
+,
 }:
 
 buildPythonPackage rec {

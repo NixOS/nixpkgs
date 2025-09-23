@@ -1,7 +1,7 @@
-{
-  haskellPackages,
-  fetchFromGitHub,
-  lib,
+{ haskellPackages
+, fetchFromGitHub
+, lib
+,
 }:
 haskellPackages.mkDerivation rec {
   pname = "pshash";

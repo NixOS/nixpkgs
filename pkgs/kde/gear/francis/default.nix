@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  knotifications,
+{ mkKdeDerivation
+, qtsvg
+, knotifications
+,
 }:
 mkKdeDerivation {
   pname = "francis";

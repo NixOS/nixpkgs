@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  future,
-  numpy,
-  pillow,
-  scipy,
-  scikit-learn,
-  scikit-image,
-  threadpoolctl,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, future
+, numpy
+, pillow
+, scipy
+, scikit-learn
+, scikit-image
+, threadpoolctl
+,
 }:
 
 buildPythonPackage rec {

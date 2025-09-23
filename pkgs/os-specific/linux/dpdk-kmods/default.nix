@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  kernel,
-  kernelModuleMakeFlags,
+{ lib
+, stdenv
+, fetchzip
+, kernel
+, kernelModuleMakeFlags
+,
 }:
 
 stdenv.mkDerivation rec {

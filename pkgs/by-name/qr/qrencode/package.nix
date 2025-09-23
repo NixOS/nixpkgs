@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  libpng,
-  libiconv,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, libpng
+, libiconv
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

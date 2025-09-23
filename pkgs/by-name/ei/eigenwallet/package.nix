@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  dpkg,
-  autoPatchelfHook,
-  cairo,
-  gdk-pixbuf,
-  webkitgtk_4_1,
-  gtk3,
+{ lib
+, fetchurl
+, stdenv
+, dpkg
+, autoPatchelfHook
+, cairo
+, gdk-pixbuf
+, webkitgtk_4_1
+, gtk3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

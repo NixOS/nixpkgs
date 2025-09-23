@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  dbus,
-  fmt_9,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, dbus
+, fmt_9
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "simpleBluez";

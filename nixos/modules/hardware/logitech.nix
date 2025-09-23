@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.hardware.logitech;
@@ -83,10 +82,12 @@ in
       extraRules = ''
         # nixos: hardware.logitech.lcd
       ''
-      + lib.concatMapStringsSep "\n" (
-        dev:
-        ''ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="${vendor}", ATTRS{idProduct}=="${dev}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="${daemon}.service"''
-      ) cfg.lcd.devices;
+      + lib.concatMapStringsSep "\n"
+        (
+          dev:
+          ''ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="${vendor}", ATTRS{idProduct}=="${dev}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="${daemon}.service"''
+        )
+        cfg.lcd.devices;
     };
 
     systemd.services."${daemon}" = lib.mkIf cfg.lcd.enable {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  deprecated,
-  fetchFromGitHub,
-  pynacl,
-  typing-extensions,
-  pyjwt,
-  pythonOlder,
-  requests,
-  setuptools,
-  setuptools-scm,
-  urllib3,
+{ lib
+, buildPythonPackage
+, deprecated
+, fetchFromGitHub
+, pynacl
+, typing-extensions
+, pyjwt
+, pythonOlder
+, requests
+, setuptools
+, setuptools-scm
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

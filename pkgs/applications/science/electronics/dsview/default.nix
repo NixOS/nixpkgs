@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  wrapQtAppsHook,
-  libzip,
-  boost,
-  fftw,
-  libusb1,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  python3,
-  desktopToDarwinBundle,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, cmake
+, wrapQtAppsHook
+, libzip
+, boost
+, fftw
+, libusb1
+, qtbase
+, qtsvg
+, qtwayland
+, python3
+, desktopToDarwinBundle
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

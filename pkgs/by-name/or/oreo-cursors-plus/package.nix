@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  ruby,
-  inkscape,
-  xorg,
-  writeText,
-  cursorsConf ? null, # If set to a string, overwrites contents of './cursors.conf'
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, ruby
+, inkscape
+, xorg
+, writeText
+, cursorsConf ? null
+, # If set to a string, overwrites contents of './cursors.conf'
 }:
 let
   newCursorsConf = writeText "oreo-cursors-plus.conf" cursorsConf;

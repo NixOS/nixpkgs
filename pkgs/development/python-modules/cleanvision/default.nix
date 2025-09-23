@@ -1,27 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  fsspec,
-  imagehash,
-  matplotlib,
-  numpy,
-  pandas,
-  pillow,
-  tabulate,
-  tqdm,
-
-  # tests
-  datasets,
-  psutil,
-  pytestCheckHook,
-  torchvision,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  fsspec
+, imagehash
+, matplotlib
+, numpy
+, pandas
+, pillow
+, tabulate
+, tqdm
+, # tests
+  datasets
+, psutil
+, pytestCheckHook
+, torchvision
+,
 }:
 
 buildPythonPackage rec {

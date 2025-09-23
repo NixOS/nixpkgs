@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsForQt5,
-  graphicsmagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsForQt5
+, graphicsmagick
+,
 }:
 
 stdenv.mkDerivation rec {

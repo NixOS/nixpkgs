@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, perl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

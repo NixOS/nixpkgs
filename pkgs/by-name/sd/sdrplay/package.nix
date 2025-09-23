@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  udev,
-  libusb1,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, udev
+, libusb1
+,
 }:
 let
   arch =

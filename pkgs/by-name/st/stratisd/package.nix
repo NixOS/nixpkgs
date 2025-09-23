@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo,
-  rustc,
-  pkg-config,
-  asciidoc,
-  ncurses,
-  glibc,
-  dbus,
-  cryptsetup,
-  util-linux,
-  lvm2,
-  python3,
-  systemd,
-  xfsprogs,
-  thin-provisioning-tools,
-  clevis,
-  jose,
-  jq,
-  curl,
-  tpm2-tools,
-  coreutils,
-  udevCheckHook,
-  clevisSupport ? false,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, rustc
+, pkg-config
+, asciidoc
+, ncurses
+, glibc
+, dbus
+, cryptsetup
+, util-linux
+, lvm2
+, python3
+, systemd
+, xfsprogs
+, thin-provisioning-tools
+, clevis
+, jose
+, jq
+, curl
+, tpm2-tools
+, coreutils
+, udevCheckHook
+, clevisSupport ? false
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

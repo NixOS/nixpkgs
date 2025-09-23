@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.security.auditd;
@@ -211,18 +210,22 @@ in
     environment.etc = {
       "audit/auditd.conf".text = prepareConfigText cfg.settings;
     }
-    // (lib.mapAttrs' (
-      pluginName: pluginDefinitionConfigValue:
-      lib.nameValuePair "audit/plugins.d/${pluginName}.conf" {
-        text = prepareConfigText (lib.removeAttrs pluginDefinitionConfigValue [ "settings" ]);
-      }
-    ) cfg.plugins)
-    // (lib.mapAttrs' (
-      pluginName: pluginDefinitionConfigValue:
-      lib.nameValuePair "audit/audisp-${pluginName}.conf" {
-        text = prepareConfigText pluginDefinitionConfigValue.settings;
-      }
-    ) (lib.filterAttrs (_: v: v.settings != null) cfg.plugins));
+    // (lib.mapAttrs'
+      (
+        pluginName: pluginDefinitionConfigValue:
+          lib.nameValuePair "audit/plugins.d/${pluginName}.conf" {
+            text = prepareConfigText (lib.removeAttrs pluginDefinitionConfigValue [ "settings" ]);
+          }
+      )
+      cfg.plugins)
+    // (lib.mapAttrs'
+      (
+        pluginName: pluginDefinitionConfigValue:
+          lib.nameValuePair "audit/audisp-${pluginName}.conf" {
+            text = prepareConfigText pluginDefinitionConfigValue.settings;
+          }
+      )
+      (lib.filterAttrs (_: v: v.settings != null) cfg.plugins));
 
     security.auditd.plugins = {
       af_unix = {

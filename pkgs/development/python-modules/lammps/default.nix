@@ -1,8 +1,8 @@
-{
-  lib,
-  lammps,
-  stdenv,
-  buildPythonPackage,
+{ lib
+, lammps
+, stdenv
+, buildPythonPackage
+,
 }:
 
 let

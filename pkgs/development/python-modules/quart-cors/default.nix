@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  pdm-backend,
-
-  # propagates
-  quart,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  pdm-backend
+, # propagates
+  quart
+, typing-extensions
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

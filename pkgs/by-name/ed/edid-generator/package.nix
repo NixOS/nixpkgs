@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  dos2unix,
-  hexdump,
-  v4l-utils,
-  zsh,
+{ lib
+, stdenv
+, fetchFromGitHub
+, dos2unix
+, hexdump
+, v4l-utils
+, zsh
+,
 }:
 
 # Usage:

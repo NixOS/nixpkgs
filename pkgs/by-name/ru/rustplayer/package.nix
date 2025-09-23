@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  alsa-lib,
-  ffmpeg_6,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, alsa-lib
+, ffmpeg_6
+,
 }:
 
 rustPlatform.buildRustPackage {

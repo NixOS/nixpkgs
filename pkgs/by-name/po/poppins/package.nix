@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  unzip,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, unzip
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "poppins";

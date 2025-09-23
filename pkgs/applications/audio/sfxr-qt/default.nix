@@ -1,16 +1,16 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  qtbase,
-  qtquickcontrols2,
-  SDL,
-  python3,
-  catch2_3,
-  callPackage,
-  nixosTests,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, qtbase
+, qtquickcontrols2
+, SDL
+, python3
+, catch2_3
+, callPackage
+, nixosTests
+,
 }:
 
 mkDerivation rec {

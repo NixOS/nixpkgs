@@ -1,7 +1,7 @@
-{
-  lib,
-  newScope,
-  fetchurl,
+{ lib
+, newScope
+, fetchurl
+,
 }:
 lib.makeScope newScope (self: rec {
   akkuDerivation = self.callPackage ./akkuDerivation.nix { };
@@ -12,17 +12,16 @@ lib.makeScope newScope (self: rec {
       overrides = self.callPackage ./overrides.nix { };
       makeAkkuPackage =
         akkuself: pname:
-        {
-          version,
-          dependencies,
-          dev-dependencies,
-          license,
-          url,
-          sha256,
-          source,
-          synopsis ? "",
-          homepage ? "",
-          ...
+        { version
+        , dependencies
+        , dev-dependencies
+        , license
+        , url
+        , sha256
+        , source
+        , synopsis ? ""
+        , homepage ? ""
+        , ...
         }:
         (akkuDerivation {
           pname = "akku-${pname}";
@@ -41,34 +40,34 @@ lib.makeScope newScope (self: rec {
             let
               stringToLicense =
                 s:
-                (
-                  lib.licenses
-                  // (with lib.licenses; {
-                    "agpl" = agpl3Only;
-                    "artistic" = artistic2;
-                    "bsd" = bsd3;
-                    "bsd-1-clause" = bsd1;
-                    "bsd-2-clause" = bsd2;
-                    "bsd-3-clause" = bsd3;
-                    "gpl" = gpl3Only;
-                    "gpl-2" = gpl2Only;
-                    "gplv2" = gpl2Only;
-                    "gpl-3" = gpl3Only;
-                    "gpl-3.0" = gpl3Only;
-                    "gplv3" = gpl3Only;
-                    "lgpl" = lgpl3Only;
-                    "lgpl-2" = lgpl2Only;
-                    "lgpl-2.0+" = lgpl2Plus;
-                    "lgpl-2.1" = lgpl21Only;
-                    "lgpl-2.1-or-later" = lgpl21Plus;
-                    "lgpl-3" = lgpl3Only;
-                    "lgplv3" = lgpl3Only;
-                    "public-domain" = publicDomain;
-                    "srfi" = bsd3;
-                    "unicode" = ucd;
-                    "zlib-acknowledgement" = zlib;
-                  })
-                ).${s} or s;
+                  (
+                    lib.licenses
+                    // (with lib.licenses; {
+                      "agpl" = agpl3Only;
+                      "artistic" = artistic2;
+                      "bsd" = bsd3;
+                      "bsd-1-clause" = bsd1;
+                      "bsd-2-clause" = bsd2;
+                      "bsd-3-clause" = bsd3;
+                      "gpl" = gpl3Only;
+                      "gpl-2" = gpl2Only;
+                      "gplv2" = gpl2Only;
+                      "gpl-3" = gpl3Only;
+                      "gpl-3.0" = gpl3Only;
+                      "gplv3" = gpl3Only;
+                      "lgpl" = lgpl3Only;
+                      "lgpl-2" = lgpl2Only;
+                      "lgpl-2.0+" = lgpl2Plus;
+                      "lgpl-2.1" = lgpl21Only;
+                      "lgpl-2.1-or-later" = lgpl21Plus;
+                      "lgpl-3" = lgpl3Only;
+                      "lgplv3" = lgpl3Only;
+                      "public-domain" = publicDomain;
+                      "srfi" = bsd3;
+                      "unicode" = ucd;
+                      "zlib-acknowledgement" = zlib;
+                    })
+                  ).${s} or s;
             in
             if builtins.isList license then map stringToLicense license else stringToLicense license;
         }).overrideAttrs

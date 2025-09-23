@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  linux-pam,
-  replaceVars,
-  enablePython ? false,
-  python ? null,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, linux-pam
+, replaceVars
+, enablePython ? false
+, python ? null
+,
 }:
 
 assert enablePython -> python != null;

@@ -1,6 +1,6 @@
-{
-  fetchMavenArtifact,
-  lib,
+{ fetchMavenArtifact
+, lib
+,
 }:
 
 fetchMavenArtifact {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-backend,
-  pdm-pep517,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-backend
+, pdm-pep517
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

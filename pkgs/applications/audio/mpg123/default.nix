@@ -1,20 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  pkg-config,
-  libOnly ? false, # whether to build only the library
-  withAlsa ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  withPulse ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  withCoreAudio ? stdenv.hostPlatform.isDarwin,
-  withJack ? stdenv.hostPlatform.isUnix,
-  jack,
-  withConplay ? !stdenv.hostPlatform.isWindows,
-  perl,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, libOnly ? false
+, # whether to build only the library
+  withAlsa ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, withPulse ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, withCoreAudio ? stdenv.hostPlatform.isDarwin
+, withJack ? stdenv.hostPlatform.isUnix
+, jack
+, withConplay ? !stdenv.hostPlatform.isWindows
+, perl
+, writeScript
+,
 }:
 
 assert withConplay -> !libOnly;

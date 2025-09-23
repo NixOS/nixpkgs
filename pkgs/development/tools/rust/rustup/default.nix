@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  runCommand,
-  patchelf,
-  fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  pkg-config,
-  openssl,
-  curl,
-  writableTmpDirAsHomeHook,
-  installShellFiles,
-  zlib,
-  libiconv,
-  xz,
-  buildPackages,
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, fetchFromGitHub
+, rustPlatform
+, makeBinaryWrapper
+, pkg-config
+, openssl
+, curl
+, writableTmpDirAsHomeHook
+, installShellFiles
+, zlib
+, libiconv
+, xz
+, buildPackages
+,
 }:
 
 let

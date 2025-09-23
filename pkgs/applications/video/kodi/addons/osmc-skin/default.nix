@@ -1,7 +1,7 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+,
 }:
 buildKodiAddon rec {
   pname = "osmc-skin";

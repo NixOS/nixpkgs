@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  lib,
-  numpy,
-  pandas,
-  pyarrow,
-  pytestCheckHook,
-  tqdm,
+{ buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, lib
+, numpy
+, pandas
+, pyarrow
+, pytestCheckHook
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

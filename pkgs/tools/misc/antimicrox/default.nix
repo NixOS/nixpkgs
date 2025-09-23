@@ -1,15 +1,15 @@
-{
-  mkDerivation,
-  lib,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  SDL2,
-  qttools,
-  xorg,
-  fetchFromGitHub,
-  itstool,
-  udevCheckHook,
+{ mkDerivation
+, lib
+, cmake
+, extra-cmake-modules
+, pkg-config
+, SDL2
+, qttools
+, xorg
+, fetchFromGitHub
+, itstool
+, udevCheckHook
+,
 }:
 
 mkDerivation rec {

@@ -1,13 +1,12 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  moreutils,
-  languageserver ? rPackages.languageserver,
-  R,
-  radian,
-
-  rPackages,
+{ lib
+, vscode-utils
+, jq
+, moreutils
+, languageserver ? rPackages.languageserver
+, R
+, radian
+, rPackages
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

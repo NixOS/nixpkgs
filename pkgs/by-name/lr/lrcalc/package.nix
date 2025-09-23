@@ -1,11 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
-  autoreconfHook,
-
-  # Reverse dependency
-  sage,
+{ lib
+, stdenv
+, fetchFromBitbucket
+, autoreconfHook
+, # Reverse dependency
+  sage
+,
 }:
 
 stdenv.mkDerivation rec {

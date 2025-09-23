@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  gcc,
-  python312Packages,
+{ lib
+, fetchFromGitHub
+, stdenv
+, gcc
+, python312Packages
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "almo";

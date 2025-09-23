@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -133,83 +132,85 @@ in
         ;
     in
     mkIf (cfg.servers != { }) {
-      systemd.services = mapAttrs' (
-        server: options:
-        nameValuePair "wyoming-piper-${server}" {
-          inherit (options) enable;
-          description = "Wyoming Piper server instance ${server}";
-          wants = [
-            "network-online.target"
-          ];
-          after = [
-            "network-online.target"
-          ];
-          wantedBy = [
-            "multi-user.target"
-          ];
-          serviceConfig = {
-            DynamicUser = true;
-            User = "wyoming-piper";
-            StateDirectory = [ "wyoming/piper" ];
-            # https://github.com/home-assistant/addons/blob/master/piper/rootfs/etc/s6-overlay/s6-rc.d/piper/run
-            ExecStart = escapeSystemdExecArgs (
-              [
-                (lib.getExe cfg.package)
-                "--data-dir"
-                "/var/lib/wyoming/piper"
-                "--uri"
-                options.uri
-                "--piper"
-                (lib.getExe options.piper)
-                "--voice"
-                options.voice
-                "--speaker"
-                options.speaker
-                "--length-scale"
-                options.lengthScale
-                "--noise-scale"
-                options.noiseScale
-                "--noise-w"
-                options.noiseWidth
-              ]
-              ++ lib.optionals options.streaming [
-                "--streaming"
-              ]
-              ++ lib.optionals options.useCUDA [
-                "--use-cuda"
-              ]
-              ++ options.extraArgs
-            );
-            CapabilityBoundingSet = "";
-            DeviceAllow = "";
-            DevicePolicy = "closed";
-            LockPersonality = true;
-            MemoryDenyWriteExecute = false; # required for onnxruntime
-            PrivateDevices = true;
-            PrivateUsers = true;
-            ProtectHome = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectControlGroups = true;
-            ProtectProc = "invisible";
-            ProcSubset = "pid";
-            RestrictAddressFamilies = [
-              "AF_INET"
-              "AF_INET6"
-              "AF_UNIX"
-            ];
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            SystemCallArchitectures = "native";
-            SystemCallFilter = [
-              "@system-service"
-              "~@privileged"
-            ];
-            UMask = "0077";
-          };
-        }
-      ) cfg.servers;
+      systemd.services = mapAttrs'
+        (
+          server: options:
+            nameValuePair "wyoming-piper-${server}" {
+              inherit (options) enable;
+              description = "Wyoming Piper server instance ${server}";
+              wants = [
+                "network-online.target"
+              ];
+              after = [
+                "network-online.target"
+              ];
+              wantedBy = [
+                "multi-user.target"
+              ];
+              serviceConfig = {
+                DynamicUser = true;
+                User = "wyoming-piper";
+                StateDirectory = [ "wyoming/piper" ];
+                # https://github.com/home-assistant/addons/blob/master/piper/rootfs/etc/s6-overlay/s6-rc.d/piper/run
+                ExecStart = escapeSystemdExecArgs (
+                  [
+                    (lib.getExe cfg.package)
+                    "--data-dir"
+                    "/var/lib/wyoming/piper"
+                    "--uri"
+                    options.uri
+                    "--piper"
+                    (lib.getExe options.piper)
+                    "--voice"
+                    options.voice
+                    "--speaker"
+                    options.speaker
+                    "--length-scale"
+                    options.lengthScale
+                    "--noise-scale"
+                    options.noiseScale
+                    "--noise-w"
+                    options.noiseWidth
+                  ]
+                  ++ lib.optionals options.streaming [
+                    "--streaming"
+                  ]
+                  ++ lib.optionals options.useCUDA [
+                    "--use-cuda"
+                  ]
+                  ++ options.extraArgs
+                );
+                CapabilityBoundingSet = "";
+                DeviceAllow = "";
+                DevicePolicy = "closed";
+                LockPersonality = true;
+                MemoryDenyWriteExecute = false; # required for onnxruntime
+                PrivateDevices = true;
+                PrivateUsers = true;
+                ProtectHome = true;
+                ProtectHostname = true;
+                ProtectKernelLogs = true;
+                ProtectKernelModules = true;
+                ProtectKernelTunables = true;
+                ProtectControlGroups = true;
+                ProtectProc = "invisible";
+                ProcSubset = "pid";
+                RestrictAddressFamilies = [
+                  "AF_INET"
+                  "AF_INET6"
+                  "AF_UNIX"
+                ];
+                RestrictNamespaces = true;
+                RestrictRealtime = true;
+                SystemCallArchitectures = "native";
+                SystemCallFilter = [
+                  "@system-service"
+                  "~@privileged"
+                ];
+                UMask = "0077";
+              };
+            }
+        )
+        cfg.servers;
     };
 }

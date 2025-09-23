@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  xorg,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitea
+, xorg
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

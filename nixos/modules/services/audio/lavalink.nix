@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -214,32 +213,36 @@ in
   config =
     let
       pluginSymlinks = lib.concatStringsSep "\n" (
-        map (
-          pluginCfg:
-          let
-            pluginParts = lib.match ''^(.*?:(.*?):)([0-9]+\.[0-9]+\.[0-9]+)$'' pluginCfg.dependency;
+        map
+          (
+            pluginCfg:
+            let
+              pluginParts = lib.match ''^(.*?:(.*?):)([0-9]+\.[0-9]+\.[0-9]+)$'' pluginCfg.dependency;
 
-            pluginWebPath = lib.replaceStrings [ "." ":" ] [ "/" "/" ] (lib.elemAt pluginParts 0);
+              pluginWebPath = lib.replaceStrings [ "." ":" ] [ "/" "/" ] (lib.elemAt pluginParts 0);
 
-            pluginFileName = lib.elemAt pluginParts 1;
-            pluginVersion = lib.elemAt pluginParts 2;
+              pluginFileName = lib.elemAt pluginParts 1;
+              pluginVersion = lib.elemAt pluginParts 2;
 
-            pluginFile = "${pluginFileName}-${pluginVersion}.jar";
-            pluginUrl = "${pluginCfg.repository}/${pluginWebPath}${pluginVersion}/${pluginFile}";
+              pluginFile = "${pluginFileName}-${pluginVersion}.jar";
+              pluginUrl = "${pluginCfg.repository}/${pluginWebPath}${pluginVersion}/${pluginFile}";
 
-            plugin = pkgs.fetchurl {
-              url = pluginUrl;
-              inherit (pluginCfg) hash;
-            };
-          in
-          "ln -sf ${plugin} ${cfg.home}/plugins/${pluginFile}"
-        ) cfg.plugins
+              plugin = pkgs.fetchurl {
+                url = pluginUrl;
+                inherit (pluginCfg) hash;
+              };
+            in
+            "ln -sf ${plugin} ${cfg.home}/plugins/${pluginFile}"
+          )
+          cfg.plugins
       );
 
       pluginExtraConfigs = builtins.listToAttrs (
-        builtins.map (
-          pluginConfig: lib.attrsets.nameValuePair pluginConfig.configName pluginConfig.extraConfig
-        ) (lib.lists.filter (pluginCfg: pluginCfg.configName != null) cfg.plugins)
+        builtins.map
+          (
+            pluginConfig: lib.attrsets.nameValuePair pluginConfig.configName pluginConfig.extraConfig
+          )
+          (lib.lists.filter (pluginCfg: pluginCfg.configName != null) cfg.plugins)
       );
 
       config = lib.attrsets.recursiveUpdate cfg.extraConfig {
@@ -250,14 +253,16 @@ in
 
         plugins = pluginExtraConfigs;
         lavalink.plugins = (
-          builtins.map (
-            pluginConfig:
-            builtins.removeAttrs pluginConfig [
-              "name"
-              "extraConfig"
-              "hash"
-            ]
-          ) cfg.plugins
+          builtins.map
+            (
+              pluginConfig:
+              builtins.removeAttrs pluginConfig [
+                "name"
+                "extraConfig"
+                "hash"
+              ]
+            )
+            cfg.plugins
         );
       };
 
@@ -271,9 +276,11 @@ in
       assertions = [
         {
           assertion =
-            !(lib.lists.any (
-              pluginCfg: pluginCfg.extraConfig != { } && pluginCfg.configName == null
-            ) cfg.plugins);
+            !(lib.lists.any
+              (
+                pluginCfg: pluginCfg.extraConfig != { } && pluginCfg.configName == null
+              )
+              cfg.plugins);
           message = "Plugins with extra configuration need to have the `configName` attribute defined";
         }
       ];

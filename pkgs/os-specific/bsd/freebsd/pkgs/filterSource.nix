@@ -1,15 +1,15 @@
-{
-  lib,
-  pkgsBuildBuild,
-  runCommand,
-  writeText,
-  source,
+{ lib
+, pkgsBuildBuild
+, runCommand
+, writeText
+, source
+,
 }:
 
-{
-  pname,
-  path,
-  extraPaths ? [ ],
+{ pname
+, path
+, extraPaths ? [ ]
+,
 }:
 
 let
@@ -19,21 +19,21 @@ let
   );
 in
 runCommand "${pname}-filtered-src"
-  {
-    nativeBuildInputs = [
-      (
-        (pkgsBuildBuild.rsync.override {
-          enableZstd = false;
-          enableXXHash = false;
-          enableOpenSSL = false;
-          enableLZ4 = false;
-        }).overrideAttrs
+{
+  nativeBuildInputs = [
+    (
+      (pkgsBuildBuild.rsync.override {
+        enableZstd = false;
+        enableXXHash = false;
+        enableOpenSSL = false;
+        enableLZ4 = false;
+      }).overrideAttrs
         {
           doCheck = false;
         }
-      )
-    ];
-  }
+    )
+  ];
+}
   ''
     rsync -a -r --files-from=${filterText} ${source}/ $out
   ''

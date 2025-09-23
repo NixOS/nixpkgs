@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  tie,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, tie
+,
 }:
 
 let

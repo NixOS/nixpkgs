@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  unstableGitUpdater,
-  accounts-qt,
-  dbus-test-runner,
-  pkg-config,
-  qmake,
-  qtbase,
-  qtdeclarative,
-  qttools,
-  signond,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, unstableGitUpdater
+, accounts-qt
+, dbus-test-runner
+, pkg-config
+, qmake
+, qtbase
+, qtdeclarative
+, qttools
+, signond
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

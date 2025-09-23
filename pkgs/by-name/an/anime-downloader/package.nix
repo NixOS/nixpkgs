@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  aria2,
-  mpv,
-  nodejs,
-  qt5,
-  fetchFromGitHub,
+{ lib
+, python3
+, aria2
+, mpv
+, nodejs
+, qt5
+, fetchFromGitHub
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

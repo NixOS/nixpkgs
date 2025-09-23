@@ -1,22 +1,22 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  openssl,
-  pkg-config,
-  protobuf,
-  cacert,
-  nixosTests,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, openssl
+, pkg-config
+, protobuf
+, cacert
+, nixosTests
+,
 }:
 let
   generic =
-    {
-      version,
-      hash,
-      cargoHash,
-      cargoPatches ? [ ],
-      eol ? false,
-      broken ? false,
+    { version
+    , hash
+    , cargoHash
+    , cargoPatches ? [ ]
+    , eol ? false
+    , broken ? false
+    ,
     }:
     rustPlatform.buildRustPackage {
       pname = "garage";

@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  glib,
-  gtk3,
-  pango,
-  cairo,
-  harfbuzz,
-  networkmanager,
-  libsecret,
-  libsoup_3,
-  webkitgtk_4_1,
-  glib-networking,
-  wrapGAppsHook3,
-  dpkg,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, glib
+, gtk3
+, pango
+, cairo
+, harfbuzz
+, networkmanager
+, libsecret
+, libsoup_3
+, webkitgtk_4_1
+, glib-networking
+, wrapGAppsHook3
+, dpkg
+,
 }:
 stdenv.mkDerivation rec {
   pname = "easyroam-connect-desktop";

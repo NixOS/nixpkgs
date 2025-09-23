@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  greenlet,
-  trio,
-  outcome,
-  sniffio,
-  exceptiongroup,
-  pytest-trio,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, greenlet
+, trio
+, outcome
+, sniffio
+, exceptiongroup
+, pytest-trio
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

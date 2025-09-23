@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  libusb1,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, libusb1
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

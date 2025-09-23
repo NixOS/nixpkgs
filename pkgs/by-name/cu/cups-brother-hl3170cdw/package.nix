@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  gnused,
-  coreutils,
-  psutils,
-  gnugrep,
-  ghostscript,
-  file,
-  a2ps,
-  gawk,
-  which,
-  pkgsi686Linux,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, gnused
+, coreutils
+, psutils
+, gnugrep
+, ghostscript
+, file
+, a2ps
+, gawk
+, which
+, pkgsi686Linux
+,
 }:
 
 stdenv.mkDerivation rec {

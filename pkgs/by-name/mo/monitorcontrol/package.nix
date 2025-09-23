@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  undmg,
+{ lib
+, fetchurl
+, stdenv
+, undmg
+,
 }:
 
 # This cannot be built from source due to the problematic nature of XCode - so

@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  withOpenCL ? true,
-  stdenv,
-  ocl-icd,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, withOpenCL ? true
+, stdenv
+, ocl-icd
+,
 }:
 
 rustPlatform.buildRustPackage rec {

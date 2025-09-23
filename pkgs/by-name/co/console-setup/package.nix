@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitLab,
-  bdfresize,
-  perl,
-  unifont,
-  dejavu_fonts,
-  otf2bdf,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchFromGitLab
+, bdfresize
+, perl
+, unifont
+, dejavu_fonts
+, otf2bdf
+, gitUpdater
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

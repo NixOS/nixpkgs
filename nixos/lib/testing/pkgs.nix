@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  hostPkgs,
-  ...
+{ config
+, lib
+, hostPkgs
+, ...
 }:
 {
   config = {

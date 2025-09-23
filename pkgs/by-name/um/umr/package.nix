@@ -1,22 +1,18 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitLab,
-
-  cmake,
-  pkg-config,
-
-  libdrm,
-  libgbm,
-  libpciaccess,
-  llvmPackages,
-  nanomsg,
-  ncurses,
-  SDL2,
-  bash-completion,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, libdrm
+, libgbm
+, libpciaccess
+, llvmPackages
+, nanomsg
+, ncurses
+, SDL2
+, bash-completion
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

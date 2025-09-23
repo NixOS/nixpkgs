@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  gjs,
-  webkitgtk_6_0,
-  glib-networking,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, gjs
+, webkitgtk_6_0
+, glib-networking
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

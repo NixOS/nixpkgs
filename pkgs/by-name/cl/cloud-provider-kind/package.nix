@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitUpdater,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitUpdater
+, stdenv
+,
 }:
 buildGoModule rec {
   pname = "cloud-provider-kind";

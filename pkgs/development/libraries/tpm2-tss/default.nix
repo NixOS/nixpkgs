@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  doxygen,
-  perl,
-  openssl,
-  json_c,
-  curl,
-  libgcrypt,
-  cmocka,
-  uthash,
-  swtpm,
-  iproute2,
-  procps,
-  which,
-  libuuid,
-  libtpms,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, doxygen
+, perl
+, openssl
+, json_c
+, curl
+, libgcrypt
+, cmocka
+, uthash
+, swtpm
+, iproute2
+, procps
+, which
+, libuuid
+, libtpms
+,
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,

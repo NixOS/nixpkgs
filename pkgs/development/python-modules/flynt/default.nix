@@ -1,12 +1,12 @@
-{
-  astor,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  pytestCheckHook,
-  pythonOlder,
-  tomli,
+{ astor
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, lib
+, pytestCheckHook
+, pythonOlder
+, tomli
+,
 }:
 
 buildPythonPackage rec {

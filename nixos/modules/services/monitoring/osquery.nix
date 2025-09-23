@@ -1,16 +1,15 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.osquery;
   dirname =
     path:
-    with lib.strings;
-    with lib.lists;
-    concatStringsSep "/" (init (splitString "/" (normalizePath path)));
+      with lib.strings;
+      with lib.lists;
+      concatStringsSep "/" (init (splitString "/" (normalizePath path)));
 
   # conf is the osquery configuration file used when the --config_plugin=filesystem.
   # filesystem is the osquery default value for the config_plugin flag.

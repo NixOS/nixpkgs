@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  asciidoctor,
-  buildah,
-  buildah-unwrapped,
-  cargo,
-  libiconv,
-  libkrun,
-  makeWrapper,
-  rustc,
-  sigtool,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, asciidoctor
+, buildah
+, buildah-unwrapped
+, cargo
+, libiconv
+, libkrun
+, makeWrapper
+, rustc
+, sigtool
+,
 }:
 
 stdenv.mkDerivation rec {

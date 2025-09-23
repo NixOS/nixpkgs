@@ -1,14 +1,14 @@
-{
-  lib,
-  async-timeout,
-  bleak-retry-connector,
-  bleak,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, async-timeout
+, bleak-retry-connector
+, bleak
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

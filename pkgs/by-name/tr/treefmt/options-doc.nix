@@ -1,8 +1,8 @@
 # To build this derivation, run `nix-build -A treefmt.optionsDoc`
-{
-  lib,
-  treefmt,
-  nixosOptionsDoc,
+{ lib
+, treefmt
+, nixosOptionsDoc
+,
 }:
 
 let

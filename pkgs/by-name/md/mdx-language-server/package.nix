@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  nodejs,
-  buildNpmPackage,
+{ lib
+, fetchurl
+, nodejs
+, buildNpmPackage
+,
 }:
 
 buildNpmPackage rec {

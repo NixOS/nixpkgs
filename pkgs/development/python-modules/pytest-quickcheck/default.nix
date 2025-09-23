@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest,
-  pytestCheckHook,
-  pytest-flakes,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pytestCheckHook
+, pytest-flakes
+,
 }:
 
 buildPythonPackage rec {

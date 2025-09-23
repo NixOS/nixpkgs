@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libbsd,
-  libevent,
-  libjpeg,
-  libdrm,
-  pkg-config,
-  janus-gateway,
-  glib,
-  alsa-lib,
-  speex,
-  jansson,
-  libopus,
-  nixosTests,
-  systemdLibs,
-  which,
-  withSystemd ? true,
-  withJanus ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libbsd
+, libevent
+, libjpeg
+, libdrm
+, pkg-config
+, janus-gateway
+, glib
+, alsa-lib
+, speex
+, jansson
+, libopus
+, nixosTests
+, systemdLibs
+, which
+, withSystemd ? true
+, withJanus ? true
+,
 }:
 stdenv.mkDerivation rec {
   pname = "ustreamer";

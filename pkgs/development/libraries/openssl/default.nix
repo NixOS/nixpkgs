@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  perl,
-  coreutils,
-  writeShellScript,
-  makeBinaryWrapper,
-  withCryptodev ? false,
-  cryptodev,
-  withZlib ? false,
-  zlib,
-  enableSSL2 ? false,
-  enableSSL3 ? false,
-  enableMD2 ? false,
-  enableKTLS ? stdenv.hostPlatform.isLinux,
-  # change this to a value between 0 and 5 (as of OpenSSL 3.5)
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, perl
+, coreutils
+, writeShellScript
+, makeBinaryWrapper
+, withCryptodev ? false
+, cryptodev
+, withZlib ? false
+, zlib
+, enableSSL2 ? false
+, enableSSL3 ? false
+, enableMD2 ? false
+, enableKTLS ? stdenv.hostPlatform.isLinux
+, # change this to a value between 0 and 5 (as of OpenSSL 3.5)
   # if null, default is used, changes the permitted algorithms
   # and key lengths in the default config
   # see: https://docs.openssl.org/3.5/man3/SSL_CTX_set_security_level/
-  securityLevel ? null,
-  static ? stdenv.hostPlatform.isStatic,
-  # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
-  conf ? null,
-  removeReferencesTo,
-  testers,
+  securityLevel ? null
+, static ? stdenv.hostPlatform.isStatic
+, # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
+  conf ? null
+, removeReferencesTo
+, testers
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -37,12 +37,12 @@ assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
 
 let
   common =
-    {
-      version,
-      hash,
-      patches ? [ ],
-      withDocs ? false,
-      extraMeta ? { },
+    { version
+    , hash
+    , patches ? [ ]
+    , withDocs ? false
+    , extraMeta ? { }
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "openssl";
@@ -132,8 +132,7 @@ let
             if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"
           }";
           riscv64-linux = "./Configure linux64-riscv64";
-        }
-        .${stdenv.hostPlatform.system} or (
+        }.${stdenv.hostPlatform.system} or (
           if stdenv.hostPlatform == stdenv.buildPlatform then
             "./config"
           else if stdenv.hostPlatform.isBSD then
@@ -177,9 +176,9 @@ let
           if !static then
             "--openssldir=etc/ssl"
           else
-            # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
-            # to the path to make it appear absolute before variable expansion,
-            # else the 'prefix' would be prepended to it.
+          # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
+          # to the path to make it appear absolute before variable expansion,
+          # else the 'prefix' would be prepended to it.
             "--openssldir=/.$(etc)/etc/ssl"
         )
       ]
@@ -193,9 +192,10 @@ let
       # starting with 3.5 its nice to speed things up for free
       ++ lib.optional stdenv.hostPlatform.isx86_64 "enable-ec_nistp_64_gcc_128"
       # useful to set e.g. 256 bit security level with setting this to 5
-      ++ lib.optional (
-        securityLevel != null
-      ) "-DOPENSSL_TLS_SECURITY_LEVEL=${builtins.toString securityLevel}"
+      ++ lib.optional
+        (
+          securityLevel != null
+        ) "-DOPENSSL_TLS_SECURITY_LEVEL=${builtins.toString securityLevel}"
       ++ lib.optional enableMD2 "enable-md2"
       ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
@@ -271,16 +271,16 @@ let
 
         ''
         +
-          lib.optionalString (!stdenv.hostPlatform.isWindows)
-            # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
-            ''
-              # c_rehash is a legacy perl script with the same functionality
-              # as `openssl rehash`
-              # this wrapper script is created to maintain backwards compatibility without
-              # depending on perl
-              makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
-                --add-flags "rehash"
-            ''
+        lib.optionalString (!stdenv.hostPlatform.isWindows)
+          # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
+          ''
+            # c_rehash is a legacy perl script with the same functionality
+            # as `openssl rehash`
+            # this wrapper script is created to maintain backwards compatibility without
+            # depending on perl
+            makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
+              --add-flags "rehash"
+          ''
         + ''
 
           mkdir $dev

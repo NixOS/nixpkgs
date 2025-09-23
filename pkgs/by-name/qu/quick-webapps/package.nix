@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  just,
-  pkg-config,
-  makeBinaryWrapper,
-  libcosmicAppHook,
-
-  libxkbcommon,
-  openssl,
-  wayland,
-
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, just
+, pkg-config
+, makeBinaryWrapper
+, libcosmicAppHook
+, libxkbcommon
+, openssl
+, wayland
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quick-webapps";

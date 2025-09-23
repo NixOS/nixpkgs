@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  defusedxml,
-  fetchFromGitHub,
-  httpretty,
-  lxml,
-  oauthlib,
-  pyjwt,
-  pytest-xdist,
-  pytestCheckHook,
-  python-jose,
-  python3-openid,
-  python3-saml,
-  pythonOlder,
-  requests,
-  requests-oauthlib,
-  responses,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, cryptography
+, defusedxml
+, fetchFromGitHub
+, httpretty
+, lxml
+, oauthlib
+, pyjwt
+, pytest-xdist
+, pytestCheckHook
+, python-jose
+, python3-openid
+, python3-saml
+, pythonOlder
+, requests
+, requests-oauthlib
+, responses
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

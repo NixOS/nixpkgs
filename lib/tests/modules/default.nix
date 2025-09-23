@@ -1,6 +1,6 @@
-{
-  lib ? import ../..,
-  modules ? [ ],
+{ lib ? import ../..
+, modules ? [ ]
+,
 }:
 
 {

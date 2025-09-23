@@ -1,15 +1,15 @@
-{
-  buildNpmPackage,
-  lib,
-  autoPatchelfHook,
-  electron,
-  fetchFromGitHub,
-  gitUpdater,
-  makeWrapper,
-  ollama,
-  pkg-config,
-  stdenv,
-  vips,
+{ buildNpmPackage
+, lib
+, autoPatchelfHook
+, electron
+, fetchFromGitHub
+, gitUpdater
+, makeWrapper
+, ollama
+, pkg-config
+, stdenv
+, vips
+,
 }:
 
 buildNpmPackage rec {

@@ -1,24 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  fmt,
-  liblo,
-  alsa-lib,
-  freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
-
-  # Enabling JACK requires a JACK server at runtime, no fallback mechanism
-  withJack ? false,
-  libjack2,
-
-  type ? "ADL",
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, fmt
+, liblo
+, alsa-lib
+, freetype
+, libX11
+, libXrandr
+, libXinerama
+, libXext
+, libXcursor
+, # Enabling JACK requires a JACK server at runtime, no fallback mechanism
+  withJack ? false
+, libjack2
+, type ? "ADL"
+,
 }:
 
 assert lib.assertOneOf "type" type [
@@ -30,8 +28,7 @@ let
     {
       ADL = "OPL3";
       OPN = "OPN2";
-    }
-    .${type};
+    }.${type};
   mainProgram = "${type}plug";
 in
 stdenv.mkDerivation {

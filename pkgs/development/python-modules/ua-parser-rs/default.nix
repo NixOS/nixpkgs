@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  lib,
-  pytestCheckHook,
-  pyyaml,
-  rustPlatform,
+{ buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, lib
+, pytestCheckHook
+, pyyaml
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

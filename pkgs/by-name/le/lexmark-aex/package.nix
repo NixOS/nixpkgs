@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  cups,
-  fetchurl,
-  patchPpdFilesHook,
-  autoPatchelfHook,
-  dpkg,
-  perl,
-  avahi,
+{ lib
+, stdenv
+, cups
+, fetchurl
+, patchPpdFilesHook
+, autoPatchelfHook
+, dpkg
+, perl
+, avahi
+,
 }:
 
 stdenv.mkDerivation {

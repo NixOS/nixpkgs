@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  libcap,
-  zlib,
-  bzip2,
-  perl,
-  quilt,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, libcap
+, zlib
+, bzip2
+, perl
+, quilt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

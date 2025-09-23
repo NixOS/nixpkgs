@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  godot_4_4,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, godot_4_4
+, nix-update-script
+,
 }:
 
 let

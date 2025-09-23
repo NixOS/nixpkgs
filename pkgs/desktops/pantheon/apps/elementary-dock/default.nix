@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wayland-scanner,
-  wrapGAppsHook4,
-  glib,
-  granite7,
-  gtk4,
-  libadwaita,
-  wayland,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, wayland-scanner
+, wrapGAppsHook4
+, glib
+, granite7
+, gtk4
+, libadwaita
+, wayland
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

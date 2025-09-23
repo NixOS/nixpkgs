@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  icontract,
-  pytestCheckHook,
-  pythonOlder,
-  replaceVars,
-  setuptools,
-  typing-extensions,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, icontract
+, pytestCheckHook
+, pythonOlder
+, replaceVars
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  scipy,
-  matplotlib,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, scipy
+, matplotlib
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

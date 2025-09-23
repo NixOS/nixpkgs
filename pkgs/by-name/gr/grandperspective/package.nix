@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  undmg,
-  makeWrapper,
-  writeShellApplication,
-  curl,
-  cacert,
-  gnugrep,
-  common-updater-scripts,
+{ stdenv
+, lib
+, fetchurl
+, undmg
+, makeWrapper
+, writeShellApplication
+, curl
+, cacert
+, gnugrep
+, common-updater-scripts
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

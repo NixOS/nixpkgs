@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -27,9 +26,11 @@ let
 
   # A list of attrnames is coerced into an attrset of bools by
   # setting the values to true.
-  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
-    enabledList: lib.genAttrs enabledList (_attrName: true)
-  ) (types.attrsOf types.bool);
+  attrNamesToTrue = types.coercedTo (types.listOf types.str)
+    (
+      enabledList: lib.genAttrs enabledList (_attrName: true)
+    )
+    (types.attrsOf types.bool);
 
 in
 
@@ -508,10 +509,12 @@ in
           let
             cfg = config.boot.kernelPackages.kernel.config;
           in
-          map (attrs: {
-            assertion = attrs.assertion cfg;
-            inherit (attrs) message;
-          }) config.system.requiredKernelConfig;
+          map
+            (attrs: {
+              assertion = attrs.assertion cfg;
+              inherit (attrs) message;
+            })
+            config.system.requiredKernelConfig;
 
     })
 

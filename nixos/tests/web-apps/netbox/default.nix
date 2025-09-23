@@ -10,11 +10,10 @@ let
   testGroup = "netbox-users";
 in
 import ../../make-test-python.nix (
-  {
-    lib,
-    pkgs,
-    netbox,
-    ...
+  { lib
+  , pkgs
+  , netbox
+  , ...
   }:
   {
     name = "netbox";

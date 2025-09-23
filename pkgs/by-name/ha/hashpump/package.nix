@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, openssl
+, lib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -43,7 +42,7 @@ let
       seed_provider = [
         {
           class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
-          parameters = [ { seeds = concatStringsSep "," cfg.seedAddresses; } ];
+          parameters = [{ seeds = concatStringsSep "," cfg.seedAddresses; }];
         }
       ];
     }

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtk3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtk3
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  docutils,
-  fetchFromGitHub,
-  geographiclib,
-  pytest7CheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pytz,
+{ lib
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, geographiclib
+, pytest7CheckHook
+, pythonAtLeast
+, pythonOlder
+, pytz
+,
 }:
 
 buildPythonPackage rec {

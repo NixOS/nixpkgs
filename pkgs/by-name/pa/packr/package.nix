@@ -1,9 +1,9 @@
-{
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  symlinkJoin,
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, lib
+, symlinkJoin
+,
 }:
 
 let
@@ -12,12 +12,13 @@ let
     version = "2.8.0";
 
     src =
-      fetchFromGitHub {
-        owner = "gobuffalo";
-        repo = "packr";
-        rev = "v${version}";
-        hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
-      }
+      fetchFromGitHub
+        {
+          owner = "gobuffalo";
+          repo = "packr";
+          rev = "v${version}";
+          hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
+        }
       + "/v2";
 
     subPackages = [ "packr2" ];

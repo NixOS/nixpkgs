@@ -1,20 +1,20 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  fetchpatch,
-  cmake,
-  ninja,
-  python3,
-  openjdk,
-  mono,
-  openssl,
-  boost186,
-  pkg-config,
-  msgpack-cxx,
-  toml11,
-  jemalloc,
-  doctest,
+{ stdenv
+, fetchFromGitHub
+, lib
+, fetchpatch
+, cmake
+, ninja
+, python3
+, openjdk
+, mono
+, openssl
+, boost186
+, pkg-config
+, msgpack-cxx
+, toml11
+, jemalloc
+, doctest
+,
 }:
 let
   boost = boost186;

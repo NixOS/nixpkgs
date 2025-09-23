@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libX11,
-  libGL,
-  libGLU,
-  libglut,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libX11
+, libGL
+, libGLU
+, libglut
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

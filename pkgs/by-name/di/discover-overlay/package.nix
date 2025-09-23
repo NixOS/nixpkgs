@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  gtk3,
-  gobject-introspection,
-  gtk-layer-shell,
-  wrapGAppsHook3,
+{ lib
+, python3
+, fetchFromGitHub
+, gtk3
+, gobject-introspection
+, gtk-layer-shell
+, wrapGAppsHook3
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "discover-overlay";

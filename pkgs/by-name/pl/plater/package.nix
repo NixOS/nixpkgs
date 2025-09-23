@@ -1,11 +1,11 @@
-{
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  libGLU,
-  makeDesktopItem,
-  qt5,
+{ stdenv
+, cmake
+, fetchFromGitHub
+, lib
+, libGLU
+, makeDesktopItem
+, qt5
+,
 }:
 
 stdenv.mkDerivation rec {

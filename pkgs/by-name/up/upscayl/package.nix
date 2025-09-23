@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  callPackage,
+{ stdenv
+, lib
+, fetchurl
+, callPackage
+,
 }:
 
 let
@@ -32,7 +32,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit
       pname
       version

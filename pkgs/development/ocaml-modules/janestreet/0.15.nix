@@ -1,12 +1,12 @@
-{
-  self,
-  bash,
-  fetchpatch,
-  fzf,
-  lib,
-  ocaml,
-  openssl,
-  zstd,
+{ self
+, bash
+, fetchpatch
+, fzf
+, lib
+, ocaml
+, openssl
+, zstd
+,
 }:
 
 let

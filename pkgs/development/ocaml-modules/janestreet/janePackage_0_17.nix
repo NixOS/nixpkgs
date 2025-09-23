@@ -1,23 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  defaultVersion ? "0.17.0",
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, defaultVersion ? "0.17.0"
+,
 }:
 
-{
-  pname,
-  version ? defaultVersion,
-  hash,
-  minimalOCamlVersion ? "5.1",
-  doCheck ? true,
-  buildInputs ? [ ],
-  ...
+{ pname
+, version ? defaultVersion
+, hash
+, minimalOCamlVersion ? "5.1"
+, doCheck ? true
+, buildInputs ? [ ]
+, ...
 }@args:
 
 buildDunePackage (
   args
-  // {
+    // {
     inherit version buildInputs;
 
     inherit minimalOCamlVersion;

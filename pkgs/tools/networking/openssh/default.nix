@@ -1,9 +1,9 @@
-{
-  callPackage,
-  lib,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
+{ callPackage
+, lib
+, fetchurl
+, fetchpatch
+, autoreconfHook
+,
 }:
 let
   common = opts: callPackage (import ./common.nix opts) { };
@@ -17,8 +17,7 @@ let
           # 10.0p1 was accidentally released as 10.0p2:
           # https://www.openwall.com/lists/oss-security/2025/04/09/6
           "10.0p2" = "10.0p1";
-        }
-        .${version} or version;
+        }.${version} or version;
     in
     "mirror://openbsd/OpenSSH/portable/openssh-${urlVersion}.tar.gz";
 in

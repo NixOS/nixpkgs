@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  btrfs-progs,
-  gpgme,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, btrfs-progs
+, gpgme
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

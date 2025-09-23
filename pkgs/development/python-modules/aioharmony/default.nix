@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-cov-stub,
-  pytestCheckHook,
-  setuptools,
-  slixmpp,
+{ lib
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-cov-stub
+, pytestCheckHook
+, setuptools
+, slixmpp
+,
 }:
 
 buildPythonPackage rec {

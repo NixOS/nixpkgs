@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+,
 }:
 
 let

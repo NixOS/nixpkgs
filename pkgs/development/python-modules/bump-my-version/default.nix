@@ -1,32 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  click,
-  httpx,
-  pydantic,
-  pydantic-settings,
-  questionary,
-  rich-click,
-  rich,
-  tomlkit,
-  wcmatch,
-
-  # test
-  mercurial,
-  gitMinimal,
-  freezegun,
-  pytest-cov-stub,
-  pytest-localserver,
-  pytest-mock,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  hatchling
+, hatch-vcs
+, # dependencies
+  click
+, httpx
+, pydantic
+, pydantic-settings
+, questionary
+, rich-click
+, rich
+, tomlkit
+, wcmatch
+, # test
+  mercurial
+, gitMinimal
+, freezegun
+, pytest-cov-stub
+, pytest-localserver
+, pytest-mock
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

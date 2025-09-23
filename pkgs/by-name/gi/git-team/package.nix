@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  go-mockery_2,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, go-mockery_2
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

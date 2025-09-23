@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  buildNpmPackage,
-  cargo-tauri,
-  dbip-country-lite,
-  glib,
-  libayatana-appindicator,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  webkitgtk_4_1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, buildNpmPackage
+, cargo-tauri
+, dbip-country-lite
+, glib
+, libayatana-appindicator
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, webkitgtk_4_1
+,
 }:
 let
   version = "1.4.0-unstable-2025-05-18";

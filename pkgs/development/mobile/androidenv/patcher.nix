@@ -1,11 +1,11 @@
-{
-  deployAndroidPackage,
-  lib,
-  package,
-  os,
-  arch,
-  autoPatchelfHook,
-  stdenv,
+{ deployAndroidPackage
+, lib
+, package
+, os
+, arch
+, autoPatchelfHook
+, stdenv
+,
 }:
 
 deployAndroidPackage {

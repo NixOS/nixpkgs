@@ -1,42 +1,40 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  copyDesktopItems,
-  autoPatchelfHook,
-
-  # Upstream is officially built with Electron 18
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, copyDesktopItems
+, autoPatchelfHook
+, # Upstream is officially built with Electron 18
   # (but it works with latest Electron with minor changes, see HACK below)
-  electron,
-  asar,
-  dpkg,
-
-  # qemu deps
+  electron
+, asar
+, dpkg
+, # qemu deps
   # (it's not possible to de-vendor the qemu binary since it relies on proprietary cpu extensions)
-  glib,
-  libgcc,
-  libcxx,
-  zlib,
-  libepoxy,
-  libpng,
-  libaio,
-  xorg,
-  libvterm,
-  vte,
-  gsasl,
-  gtk3,
-  cairo,
-  gdk-pixbuf,
-  numactl,
-  cyrus_sasl,
-  SDL2,
-  # aarch64-only?
-  dtc,
-  capstone_4,
-  libjpeg8,
-  libgbm,
-  curlWithGnuTls,
+  glib
+, libgcc
+, libcxx
+, zlib
+, libepoxy
+, libpng
+, libaio
+, xorg
+, libvterm
+, vte
+, gsasl
+, gtk3
+, cairo
+, gdk-pixbuf
+, numactl
+, cyrus_sasl
+, SDL2
+, # aarch64-only?
+  dtc
+, capstone_4
+, libjpeg8
+, libgbm
+, curlWithGnuTls
+,
 }:
 
 let

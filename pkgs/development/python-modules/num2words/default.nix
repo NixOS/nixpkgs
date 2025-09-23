@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchPypi,
-  docopt,
-  delegator-py,
-  pytest,
+{ buildPythonPackage
+, lib
+, fetchPypi
+, docopt
+, delegator-py
+, pytest
+,
 }:
 
 buildPythonPackage rec {

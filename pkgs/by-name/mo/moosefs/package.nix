@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  fuse,
-  pkg-config,
-  libpcap,
-  zlib,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, fuse
+, pkg-config
+, libpcap
+, zlib
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

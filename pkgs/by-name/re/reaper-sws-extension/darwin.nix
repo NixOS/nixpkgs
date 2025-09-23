@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  pname,
-  version,
-  meta,
+{ stdenvNoCC
+, fetchurl
+, pname
+, version
+, meta
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -25,8 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           {
             x86_64-darwin = "sha256-B185QWS9FaC/0XDhxUBbgr9zu2Ot8OIsfaPQ3sUHh4s=";
             aarch64-darwin = "sha256-8gbyPlnIXdWtSD+Aj70xzacJhO34edTTG2IOryB67os=";
-          }
-          .${stdenvNoCC.hostPlatform.system};
+          }.${stdenvNoCC.hostPlatform.system};
       };
     in
     [

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  setuptools,
-  libX11,
-  libXt,
-  libGL,
-  openimageio,
-  imath,
-  python,
-  apple-sdk_14,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, setuptools
+, libX11
+, libXt
+, libGL
+, openimageio
+, imath
+, python
+, apple-sdk_14
+,
 }:
 
 buildPythonPackage rec {

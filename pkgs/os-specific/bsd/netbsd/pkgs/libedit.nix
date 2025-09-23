@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  libterminfo,
-  libcurses,
-  compatIfNeeded,
-  defaultMakeFlags,
+{ mkDerivation
+, libterminfo
+, libcurses
+, compatIfNeeded
+, defaultMakeFlags
+,
 }:
 
 mkDerivation {

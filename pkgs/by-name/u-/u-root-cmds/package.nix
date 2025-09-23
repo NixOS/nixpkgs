@@ -1,7 +1,7 @@
-{
-  lib,
-  u-root,
-  which,
+{ lib
+, u-root
+, which
+,
 }:
 
 u-root.overrideAttrs (prevAttrs: {

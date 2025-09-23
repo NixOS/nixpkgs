@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  aiofiles,
-  aiohttp,
-
-  # optional dependencies
-  aioftp,
-
-  # tests
-  pytest-asyncio,
-  pytest-localserver,
-  pytest-socket,
-  pytestCheckHook,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  aiofiles
+, aiohttp
+, # optional dependencies
+  aioftp
+, # tests
+  pytest-asyncio
+, pytest-localserver
+, pytest-socket
+, pytestCheckHook
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

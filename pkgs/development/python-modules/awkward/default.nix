@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-fancy-pypi-readme,
-  hatchling,
-
-  # dependencies
-  awkward-cpp,
-  fsspec,
-  numpy,
-  packaging,
-
-  # tests
-  numba,
-  numexpr,
-  pandas,
-  pyarrow,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-fancy-pypi-readme
+, hatchling
+, # dependencies
+  awkward-cpp
+, fsspec
+, numpy
+, packaging
+, # tests
+  numba
+, numexpr
+, pandas
+, pyarrow
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  xmltodict,
-  pyhamcrest,
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, requests
+, xmltodict
+, pyhamcrest
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

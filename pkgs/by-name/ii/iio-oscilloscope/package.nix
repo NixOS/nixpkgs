@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  wrapGAppsHook3,
-  libiio,
-  glib,
-  gtk3,
-  gtkdatabox,
-  matio,
-  fftw,
-  libxml2,
-  curl,
-  jansson,
-  enable9361 ? true,
-  libad9361,
-# enable9166 ? true,
-# libad9166,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, wrapGAppsHook3
+, libiio
+, glib
+, gtk3
+, gtkdatabox
+, matio
+, fftw
+, libxml2
+, curl
+, jansson
+, enable9361 ? true
+, libad9361
+, # enable9166 ? true,
+  # libad9166,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

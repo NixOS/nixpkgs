@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoconf,
-  bison,
-  bzip2,
-  flex,
-  gperf,
-  ncurses,
-  perl,
-  python3,
-  readline,
-  zlib,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoconf
+, bison
+, bzip2
+, flex
+, gperf
+, ncurses
+, perl
+, python3
+, readline
+, zlib
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

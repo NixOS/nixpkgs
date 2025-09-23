@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal,
-  copyDesktopItems,
-  gtk3,
-  libxkbcommon,
-  xorg,
-  libnotify,
-  gobject-introspection, # needed to build gi-crystal
-  openbox,
-  xvfb-run,
-  xdotool,
-  nix-update-script,
-  versionCheckHook,
-
-  buildDevTarget ? false, # the dev version prints debug info
+{ lib
+, fetchFromGitHub
+, crystal
+, copyDesktopItems
+, gtk3
+, libxkbcommon
+, xorg
+, libnotify
+, gobject-introspection
+, # needed to build gi-crystal
+  openbox
+, xvfb-run
+, xdotool
+, nix-update-script
+, versionCheckHook
+, buildDevTarget ? false
+, # the dev version prints debug info
 }:
 
 # NOTICE: AHK_X11 from this package does not support compiling scripts into portable executables.

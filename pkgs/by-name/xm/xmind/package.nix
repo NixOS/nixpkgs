@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  glib,
-  at-spi2-atk,
-  cairo,
-  pango,
-  gtk3,
-  nss,
-  nspr,
-  cups,
-  dbus,
-  libdrm,
-  libxkbcommon,
-  alsa-lib,
-  expat,
-  xorg,
-  libgbm,
-  systemd,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, glib
+, at-spi2-atk
+, cairo
+, pango
+, gtk3
+, nss
+, nspr
+, cups
+, dbus
+, libdrm
+, libxkbcommon
+, alsa-lib
+, expat
+, xorg
+, libgbm
+, systemd
+, libGL
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

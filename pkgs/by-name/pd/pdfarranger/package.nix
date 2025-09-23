@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  wrapGAppsHook3,
-  python3Packages,
-  gtk3,
-  poppler_gi,
-  libhandy,
-  gettext,
-  stdenv,
+{ fetchFromGitHub
+, lib
+, wrapGAppsHook3
+, python3Packages
+, gtk3
+, poppler_gi
+, libhandy
+, gettext
+, stdenv
+,
 }:
 
 python3Packages.buildPythonApplication rec {

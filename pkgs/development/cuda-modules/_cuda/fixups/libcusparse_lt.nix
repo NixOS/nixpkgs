@@ -1,7 +1,7 @@
-{
-  cuda_cudart,
-  lib,
-  libcublas,
+{ cuda_cudart
+, lib
+, libcublas
+,
 }:
 finalAttrs: prevAttrs: {
   buildInputs =

@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  hatchling,
-  lib,
-  uv,
+{ buildPythonPackage
+, hatchling
+, lib
+, uv
+,
 }:
 
 buildPythonPackage {

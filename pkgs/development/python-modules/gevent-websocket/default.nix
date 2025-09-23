@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  gevent,
-  gunicorn,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gevent
+, gunicorn
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

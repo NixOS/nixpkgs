@@ -1,33 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
-  pkg-config,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  python3,
-  mutest,
-  nixosTests,
-  glib,
-  withDocumentation ?
-    (
-      stdenv.buildPlatform.canExecute stdenv.hostPlatform
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, pkg-config
+, meson
+, mesonEmulatorHook
+, ninja
+, python3
+, mutest
+, nixosTests
+, glib
+, withDocumentation ? (
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
       || stdenv.hostPlatform.emulatorAvailable buildPackages
-    )
-    && !stdenv.hostPlatform.isStatic,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_43,
-  buildPackages,
-  gobject-introspection,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  makeWrapper,
-  testers,
+  )
+  && !stdenv.hostPlatform.isStatic
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, buildPackages
+, gobject-introspection
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, makeWrapper
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

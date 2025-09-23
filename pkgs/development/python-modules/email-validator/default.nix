@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  dnspython,
-  fetchPypi,
-  idna,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, dnspython
+, fetchPypi
+, idna
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

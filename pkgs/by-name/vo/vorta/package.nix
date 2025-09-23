@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  qt6Packages,
-  borgbackup,
-  versionCheckHook,
-  makeFontsConf,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, qt6Packages
+, borgbackup
+, versionCheckHook
+, makeFontsConf
+,
 }:
 
 python3Packages.buildPythonApplication rec {

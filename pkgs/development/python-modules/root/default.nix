@@ -1,7 +1,7 @@
-{
-  buildPythonPackage,
-  python,
-  root,
+{ buildPythonPackage
+, python
+, root
+,
 }:
 
 let

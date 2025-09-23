@@ -1,8 +1,8 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  writeScript,
+{ lib
+, appimageTools
+, fetchurl
+, writeScript
+,
 }:
 let
   pname = "chatbox";

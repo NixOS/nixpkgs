@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  replaceVars,
-  alsa-utils,
-  libnotify,
-  which,
-  poetry-core,
-  jeepney,
-  loguru,
-  pytest,
-  dbus,
-  coreutils,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, replaceVars
+, alsa-utils
+, libnotify
+, which
+, poetry-core
+, jeepney
+, loguru
+, pytest
+, dbus
+, coreutils
+,
 }:
 
 buildPythonPackage rec {

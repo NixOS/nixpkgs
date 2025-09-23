@@ -1,31 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  libpng,
-  libtiff,
-  zlib,
-  lcms2,
-  jpipLibSupport ? false, # JPIP library & executables
-  jpipServerSupport ? false,
-  curl,
-  fcgi, # JPIP Server
-  jdk,
-
-  # for passthru.tests
-  ffmpeg,
-  gdal,
-  gdcm,
-  ghostscript,
-  imagemagick,
-  leptonica,
-  mupdf,
-  poppler,
-  python3,
-  vips,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, libpng
+, libtiff
+, zlib
+, lcms2
+, jpipLibSupport ? false
+, # JPIP library & executables
+  jpipServerSupport ? false
+, curl
+, fcgi
+, # JPIP Server
+  jdk
+, # for passthru.tests
+  ffmpeg
+, gdal
+, gdcm
+, ghostscript
+, imagemagick
+, leptonica
+, mupdf
+, poppler
+, python3
+, vips
+,
 }:
 
 let

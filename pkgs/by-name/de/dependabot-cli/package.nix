@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  dependabot-cli,
-  dockerTools,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  symlinkJoin,
-  testers,
+{ lib
+, stdenv
+, buildGoModule
+, dependabot-cli
+, dockerTools
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, symlinkJoin
+, testers
+,
 }:
 let
   pname = "dependabot-cli";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  libX11,
-  libpthreadstubs,
-  perl,
-  readline,
-  texliveBasic,
-  withThread ? true,
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, libX11
+, libpthreadstubs
+, perl
+, readline
+, texliveBasic
+, withThread ? true
+,
 }:
 
 assert withThread -> libpthreadstubs != null;

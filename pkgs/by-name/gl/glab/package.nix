@@ -1,14 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitLab,
-  installShellFiles,
-  makeBinaryWrapper,
-  stdenv,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  gitMinimal,
+{ lib
+, buildGoModule
+, fetchFromGitLab
+, installShellFiles
+, makeBinaryWrapper
+, stdenv
+, nix-update-script
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, gitMinimal
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  boost,
-  xercesc,
-  python3Packages,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, xercesc
+, python3Packages
+, qt6
+,
 }:
 
 stdenv.mkDerivation rec {

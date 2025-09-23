@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  ocamlbuild,
+{ stdenv
+, lib
+, fetchFromGitHub
+, ocaml
+, findlib
+, ocamlbuild
+,
 }:
 
 stdenv.mkDerivation (
@@ -20,7 +20,7 @@ stdenv.mkDerivation (
     };
 
   }
-  // (
+    // (
     if lib.versionOlder ocaml.version "4.07" then
       {
 

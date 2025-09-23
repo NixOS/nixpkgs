@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  libarchive,
-  nix-update-script,
-  pkg-config,
-  qt6,
-  wrapGAppsHook4,
-  testers,
-  writeShellScriptBin,
-  xz,
-  gnutls,
-  zstd,
-  libtasn1,
-  enableTelemetry ? false,
+{ lib
+, stdenv
+, cmake
+, curl
+, fetchFromGitHub
+, libarchive
+, nix-update-script
+, pkg-config
+, qt6
+, wrapGAppsHook4
+, testers
+, writeShellScriptBin
+, xz
+, gnutls
+, zstd
+, libtasn1
+, enableTelemetry ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

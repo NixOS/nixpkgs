@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nodejs_20,
-  pnpm_8,
-  wails,
-  wrapGAppsHook3,
-  glib-networking,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nodejs_20
+, pnpm_8
+, wails
+, wrapGAppsHook3
+, glib-networking
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

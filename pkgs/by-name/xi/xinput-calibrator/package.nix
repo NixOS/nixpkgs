@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  desktop-file-utils,
-  pkg-config,
-  meson,
-  ninja,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitLab
+, desktop-file-utils
+, pkg-config
+, meson
+, ninja
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

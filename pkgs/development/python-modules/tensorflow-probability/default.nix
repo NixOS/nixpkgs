@@ -1,43 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchpatch2,
-
-  # bazel wheel
-  buildBazelPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  python,
-  setuptools,
-  wheel,
-  absl-py,
-
-  #bazel_6,
-  bazel,
-  cctools,
-
-  # python package
-  buildPythonPackage,
-
-  # dependencies
-  cloudpickle,
-  decorator,
-  dm-tree,
-  gast,
-  keras,
-  numpy,
-  six,
-  tensorflow,
-
-  # tests
-  hypothesis,
-  matplotlib,
-  mock,
-  mpmath,
-  pandas,
-  pytest,
-  scipy,
+{ lib
+, stdenv
+, fetchpatch2
+, # bazel wheel
+  buildBazelPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  python
+, setuptools
+, wheel
+, absl-py
+, #bazel_6,
+  bazel
+, cctools
+, # python package
+  buildPythonPackage
+, # dependencies
+  cloudpickle
+, decorator
+, dm-tree
+, gast
+, keras
+, numpy
+, six
+, tensorflow
+, # tests
+  hypothesis
+, matplotlib
+, mock
+, mpmath
+, pandas
+, pytest
+, scipy
+,
 }:
 
 let

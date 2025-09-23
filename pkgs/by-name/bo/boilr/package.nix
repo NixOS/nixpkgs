@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  clangStdenv,
-  gtk3,
-  xorg,
-  perl,
-  pkg-config,
-  openssl,
-  speechd-minimal,
-  libxkbcommon,
-  libGL,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, clangStdenv
+, gtk3
+, xorg
+, perl
+, pkg-config
+, openssl
+, speechd-minimal
+, libxkbcommon
+, libGL
+, wayland
+,
 }:
 let
   rpathLibs = [

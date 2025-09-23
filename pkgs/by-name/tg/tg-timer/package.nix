@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  # Configure
-  autoreconfHook,
-  # Build binaries
-  pkg-config,
-  # Build libraries
-  gtk3,
-  portaudio,
-  fftwFloat,
-  libjack2,
-  python3,
-  # Check Binaries
-  xvfb-run,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # Configure
+  autoreconfHook
+, # Build binaries
+  pkg-config
+, # Build libraries
+  gtk3
+, portaudio
+, fftwFloat
+, libjack2
+, python3
+, # Check Binaries
+  xvfb-run
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tg-timer";

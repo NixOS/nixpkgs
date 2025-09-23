@@ -1,39 +1,38 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  enableAlsa ? true,
-  alsa-lib,
-  enableLibao ? true,
-  libao,
-  enableLame ? config.sox.enableLame or false,
-  lame,
-  enableLibmad ? true,
-  libmad,
-  enableLibogg ? true,
-  libogg,
-  libvorbis,
-  enableOpusfile ? true,
-  opusfile,
-  enableFLAC ? true,
-  flac,
-  enablePNG ? true,
-  libpng,
-  enableLibsndfile ? true,
-  libsndfile,
-  enableWavpack ? true,
-  wavpack,
-  # amrnb and amrwb are unfree, disabled by default
-  enableAMR ? false,
-  amrnb,
-  amrwb,
-  enableLibpulseaudio ?
-    stdenv.hostPlatform.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio,
-  libpulseaudio,
+{ config
+, lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, enableAlsa ? true
+, alsa-lib
+, enableLibao ? true
+, libao
+, enableLame ? config.sox.enableLame or false
+, lame
+, enableLibmad ? true
+, libmad
+, enableLibogg ? true
+, libogg
+, libvorbis
+, enableOpusfile ? true
+, opusfile
+, enableFLAC ? true
+, flac
+, enablePNG ? true
+, libpng
+, enableLibsndfile ? true
+, libsndfile
+, enableWavpack ? true
+, wavpack
+, # amrnb and amrwb are unfree, disabled by default
+  enableAMR ? false
+, amrnb
+, amrwb
+, enableLibpulseaudio ? stdenv.hostPlatform.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation {

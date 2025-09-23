@@ -1,23 +1,23 @@
-{
-  pname,
-  version,
-  hash,
-  autoPatchelfHook,
-  copyDesktopItems,
-  fetchurl,
-  fontconfig,
-  freetype,
-  lib,
-  libGL,
-  libxkbcommon,
-  makeDesktopItem,
-  makeWrapper,
-  stdenvNoCC,
-  unzip,
-  writeShellApplication,
-  xorg,
-  zlib,
-  metaCommon ? { },
+{ pname
+, version
+, hash
+, autoPatchelfHook
+, copyDesktopItems
+, fetchurl
+, fontconfig
+, freetype
+, lib
+, libGL
+, libxkbcommon
+, makeDesktopItem
+, makeWrapper
+, stdenvNoCC
+, unzip
+, writeShellApplication
+, xorg
+, zlib
+, metaCommon ? { }
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

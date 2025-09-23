@@ -8,15 +8,15 @@
 # - year identifies the year portion of the version, defaults to most recent year.
 # - pname is either "pdfstudio${year}" or "pdfstudioviewer".
 
-{
-  lib,
-  stdenv,
-  program ? "pdfstudio",
-  year ? "2024",
-  fetchurl,
-  callPackage,
-  jdk11,
-  jdk17,
+{ lib
+, stdenv
+, program ? "pdfstudio"
+, year ? "2024"
+, fetchurl
+, callPackage
+, jdk11
+, jdk17
+,
 }:
 let
   longDescription = ''
@@ -121,5 +121,4 @@ in
     jdk = jdk17;
   };
 
-}
-.${pname}
+}.${pname}

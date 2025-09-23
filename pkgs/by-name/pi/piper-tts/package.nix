@@ -1,18 +1,15 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-
-  # build time
-  pkg-config,
-
-  # runtime
-  espeak-ng,
-
-  # extras
-  withTrain ? true,
-  withHTTP ? true,
-  withAlignment ? true,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, # build time
+  pkg-config
+, # runtime
+  espeak-ng
+, # extras
+  withTrain ? true
+, withHTTP ? true
+, withAlignment ? true
+,
 }:
 
 let

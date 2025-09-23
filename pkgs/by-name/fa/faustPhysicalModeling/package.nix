@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  bash,
-  fetchFromGitHub,
-  faust2jaqt,
-  faust2lv2,
+{ stdenv
+, lib
+, bash
+, fetchFromGitHub
+, faust2jaqt
+, faust2lv2
+,
 }:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";

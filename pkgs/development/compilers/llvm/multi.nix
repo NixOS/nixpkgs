@@ -1,9 +1,9 @@
-{
-  runCommand,
-  clang,
-  gcc64,
-  gcc32,
-  glibc_multi,
+{ runCommand
+, clang
+, gcc64
+, gcc32
+, glibc_multi
+,
 }:
 
 let
@@ -58,7 +58,7 @@ let
       inherit (glibc_multi) libgcc;
       langCC =
         assert
-          (gcc64.cc.langCC != gcc32.cc.langCC)
+        (gcc64.cc.langCC != gcc32.cc.langCC)
           -> throw "(gcc64.cc.langCC=${gcc64.cc.langCC}) != (gcc32.cc.langCC=${gcc32.cc.langCC})";
         gcc64.cc.langCC;
     };

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  dnspython,
-  chardet,
-  python-daemon,
-  jinja2,
-  click,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dnspython
+, chardet
+, python-daemon
+, jinja2
+, click
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

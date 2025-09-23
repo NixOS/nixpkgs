@@ -2,9 +2,9 @@
   # If you want to use the in-tree version of nixpkgs:
   pkgs ? import ../../../../.. {
     config.allowUnfree = true;
-  },
-
-  licenseAccepted ? pkgs.callPackage ../license.nix { },
+  }
+, licenseAccepted ? pkgs.callPackage ../license.nix { }
+,
 }:
 
 # Tests IFD with androidenv. Needs a folder of `../xml` in your local tree;

@@ -1,13 +1,13 @@
-{
-  version,
-  lib,
-  stdenv,
-  pkgsCross,
-  testers,
-  cloudflared,
-  runCommand,
-  wine,
-  wine64,
+{ version
+, lib
+, stdenv
+, pkgsCross
+, testers
+, cloudflared
+, runCommand
+, wine
+, wine64
+,
 }:
 
 let
@@ -47,7 +47,7 @@ in
         mkdir $out
       '';
 }
-// lib.optionalAttrs (buildPlatform.isLinux && buildPlatform.isx86_64) {
+  // lib.optionalAttrs (buildPlatform.isLinux && buildPlatform.isx86_64) {
   runs-through-wine64 =
     runCommand "cloudflared-${version}-runs-through-wine64"
       {

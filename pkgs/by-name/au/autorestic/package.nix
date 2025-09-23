@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  buildGoModule,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, buildGoModule
+,
 }:
 
 buildGoModule rec {

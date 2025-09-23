@@ -1,11 +1,10 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 {
   imports = [

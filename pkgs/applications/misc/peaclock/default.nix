@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libpthreadstubs,
-  icu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libpthreadstubs
+, icu
+,
 }:
 
 stdenv.mkDerivation rec {

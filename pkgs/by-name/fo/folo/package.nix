@@ -1,13 +1,13 @@
-{
-  electron,
-  fetchFromGitHub,
-  imagemagick,
-  lib,
-  makeDesktopItem,
-  makeWrapper,
-  nodejs,
-  pnpm_10,
-  stdenv,
+{ electron
+, fetchFromGitHub
+, imagemagick
+, lib
+, makeDesktopItem
+, makeWrapper
+, nodejs
+, pnpm_10
+, stdenv
+,
 }:
 stdenv.mkDerivation rec {
   pname = "folo";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libedit,
-  makeWrapper,
-  nasm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libedit
+, makeWrapper
+, nasm
+,
 }:
 
 stdenv.mkDerivation {

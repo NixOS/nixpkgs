@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  melpaBuild,
-  fetchFromGitHub,
-  hydra,
-  ivy,
-  pkg-config,
-  tclap,
-  unstableGitUpdater,
-  xapian,
-  # Configurable options
+{ lib
+, stdenv
+, melpaBuild
+, fetchFromGitHub
+, hydra
+, ivy
+, pkg-config
+, tclap
+, unstableGitUpdater
+, xapian
+, # Configurable options
   # Include pre-configured hydras
-  withHydra ? false,
-  # Include Ivy integration
-  withIvy ? false,
+  withHydra ? false
+, # Include Ivy integration
+  withIvy ? false
+,
 }:
 
 melpaBuild {

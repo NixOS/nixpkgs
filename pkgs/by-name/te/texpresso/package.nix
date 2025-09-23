@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  writeScript,
-  mupdf,
-  SDL2,
-  re2c,
-  freetype,
-  jbig2dec,
-  harfbuzz,
-  openjpeg,
-  gumbo,
-  libjpeg,
-  callPackage,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, writeScript
+, mupdf
+, SDL2
+, re2c
+, freetype
+, jbig2dec
+, harfbuzz
+, openjpeg
+, gumbo
+, libjpeg
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

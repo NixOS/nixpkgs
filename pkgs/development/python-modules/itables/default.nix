@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-
-  # build-system
-  dash,
-  hatchling,
-  hatch-jupyter-builder,
-  pyyaml,
-  setuptools,
-
-  # nativeBuildInputs
-  nodejs,
-
-  # dependencies
-  ipython,
-  numpy,
-  pandas,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, # build-system
+  dash
+, hatchling
+, hatch-jupyter-builder
+, pyyaml
+, setuptools
+, # nativeBuildInputs
+  nodejs
+, # dependencies
+  ipython
+, numpy
+, pandas
+,
 }:
 
 buildPythonPackage rec {

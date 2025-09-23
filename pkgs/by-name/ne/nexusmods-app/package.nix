@@ -1,15 +1,15 @@
-{
-  _7zz,
-  avalonia,
-  buildDotnetModule,
-  callPackage,
-  desktop-file-utils,
-  dotnetCorePackages,
-  fetchgit,
-  imagemagick,
-  lib,
-  xdg-utils,
-  pname ? "nexusmods-app",
+{ _7zz
+, avalonia
+, buildDotnetModule
+, callPackage
+, desktop-file-utils
+, dotnetCorePackages
+, fetchgit
+, imagemagick
+, lib
+, xdg-utils
+, pname ? "nexusmods-app"
+,
 }:
 let
   # From https://nexus-mods.github.io/NexusMods.App/developers/Contributing/#for-package-maintainers

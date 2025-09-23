@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  glib,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, glib
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

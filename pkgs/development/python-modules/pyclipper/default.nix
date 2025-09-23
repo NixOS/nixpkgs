@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  setuptools-scm,
-  cython,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, setuptools-scm
+, cython
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  freetds,
-  readline,
-  libiconv,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, freetds
+, readline
+, libiconv
+,
 }:
 
 let

@@ -1,33 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  dj-rest-auth,
-  django,
-  django-allauth,
-  django-filter,
-  django-oauth-toolkit,
-  django-polymorphic,
-  django-rest-auth,
-  django-rest-polymorphic,
-  djangorestframework,
-  djangorestframework-camel-case,
-  djangorestframework-dataclasses,
-  djangorestframework-recursive,
-  djangorestframework-simplejwt,
-  drf-jwt,
-  drf-nested-routers,
-  drf-spectacular-sidecar,
-  fetchFromGitHub,
-  fetchpatch,
-  inflection,
-  jsonschema,
-  psycopg2,
-  pytest-django,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  uritemplate,
+{ lib
+, buildPythonPackage
+, dj-rest-auth
+, django
+, django-allauth
+, django-filter
+, django-oauth-toolkit
+, django-polymorphic
+, django-rest-auth
+, django-rest-polymorphic
+, djangorestframework
+, djangorestframework-camel-case
+, djangorestframework-dataclasses
+, djangorestframework-recursive
+, djangorestframework-simplejwt
+, drf-jwt
+, drf-nested-routers
+, drf-spectacular-sidecar
+, fetchFromGitHub
+, fetchpatch
+, inflection
+, jsonschema
+, psycopg2
+, pytest-django
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, uritemplate
+,
 }:
 
 buildPythonPackage rec {

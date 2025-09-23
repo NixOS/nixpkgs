@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  libxcrypt-legacy,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, libxcrypt-legacy
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +21,7 @@ stdenv.mkDerivation rec {
         url = "https://download-cdn.resilio.com/${version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
         hash = "sha256-iczg1jEy+49QczKxc0/UZJ8LPaCHsXKmSrudVb3RWZ8=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontStrip = true; # Don't strip, otherwise patching the rpaths breaks
   sourceRoot = ".";

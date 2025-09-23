@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  config,
-  enableCuda ? config.cudaSupport,
-  cudaPackages,
-  versionCheckHook,
-  installShellFiles,
-  unstableGitUpdater,
-  autoAddDriverRunpath,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, config
+, enableCuda ? config.cudaSupport
+, cudaPackages
+, versionCheckHook
+, installShellFiles
+, unstableGitUpdater
+, autoAddDriverRunpath
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

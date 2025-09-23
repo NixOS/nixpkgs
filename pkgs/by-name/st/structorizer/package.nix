@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  jdk11,
-  makeDesktopItem,
-  makeWrapper,
-  wrapGAppsHook3,
-  copyDesktopItems,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, jdk11
+, makeDesktopItem
+, makeWrapper
+, wrapGAppsHook3
+, copyDesktopItems
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-
-  pathos,
-  pytestCheckHook,
-  pytest-mock,
-  setuptools,
-  tqdm,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pathos
+, pytestCheckHook
+, pytest-mock
+, setuptools
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

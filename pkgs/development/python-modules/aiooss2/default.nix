@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  oss2,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  setuptools-scm,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, oss2
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiobotocore,
-  aiohttp,
-  fsspec,
-
-  # tests
-  flask,
-  flask-cors,
-  moto,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiobotocore
+, aiohttp
+, fsspec
+, # tests
+  flask
+, flask-cors
+, moto
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

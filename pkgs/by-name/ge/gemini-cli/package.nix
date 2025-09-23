@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  ripgrep,
-  jq,
-  pkg-config,
-  libsecret,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, ripgrep
+, jq
+, pkg-config
+, libsecret
+,
 }:
 
 buildNpmPackage (finalAttrs: {

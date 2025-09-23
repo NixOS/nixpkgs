@@ -1,21 +1,21 @@
-{
-  bzip2,
-  fetchFromGitHub,
-  lib,
-  libbacktrace,
-  libpq,
-  libssh2,
-  libxml2,
-  libyaml,
-  lz4,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  stdenv,
-  zlib,
-  zstd,
-  nixosTests,
+{ bzip2
+, fetchFromGitHub
+, lib
+, libbacktrace
+, libpq
+, libssh2
+, libxml2
+, libyaml
+, lz4
+, meson
+, ninja
+, pkg-config
+, python3
+, stdenv
+, zlib
+, zstd
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

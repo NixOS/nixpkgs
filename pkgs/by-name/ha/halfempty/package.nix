@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  glib,
-  hexdump,
-  scowl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, glib
+, hexdump
+, scowl
+,
 }:
 
 stdenv.mkDerivation rec {

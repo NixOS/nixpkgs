@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xorgproto,
-  libX11,
-  libXft,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXinerama,
-  libjpeg,
-  giflib,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xorgproto
+, libX11
+, libXft
+, libXcomposite
+, libXdamage
+, libXext
+, libXinerama
+, libjpeg
+, giflib
+, pkg-config
+,
 }:
 stdenv.mkDerivation {
   pname = "skippy-xd";

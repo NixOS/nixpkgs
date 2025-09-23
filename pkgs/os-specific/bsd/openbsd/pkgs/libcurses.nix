@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  buildPackages,
+{ lib
+, mkDerivation
+, buildPackages
+,
 }:
 mkDerivation {
   path = "lib/libcurses";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  readline,
-  ncurses,
-  autoreconfHook,
-  pkg-config,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, readline
+, ncurses
+, autoreconfHook
+, pkg-config
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

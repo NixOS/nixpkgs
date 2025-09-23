@@ -1,25 +1,24 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  pkg-config,
-  mono,
-  dotnetbuildhelpers,
+{ stdenv
+, lib
+, makeWrapper
+, pkg-config
+, mono
+, dotnetbuildhelpers
+,
 }:
 
-attrsOrig@{
-  pname,
-  version,
-  nativeBuildInputs ? [ ],
-  xBuildFiles ? [ ],
-  xBuildFlags ? [ "/p:Configuration=Release" ],
-  outputFiles ? [ "bin/Release/*" ],
-  dllFiles ? [ "*.dll" ],
-  exeFiles ? [ "*.exe" ],
-  # Additional arguments to pass to the makeWrapper function, which wraps
+attrsOrig@{ pname
+, version
+, nativeBuildInputs ? [ ]
+, xBuildFiles ? [ ]
+, xBuildFlags ? [ "/p:Configuration=Release" ]
+, outputFiles ? [ "bin/Release/*" ]
+, dllFiles ? [ "*.dll" ]
+, exeFiles ? [ "*.exe" ]
+, # Additional arguments to pass to the makeWrapper function, which wraps
   # generated binaries.
-  makeWrapperArgs ? [ ],
-  ...
+  makeWrapperArgs ? [ ]
+, ...
 }:
 let
   arrayToShell = (a: toString (map (lib.escape (lib.stringToCharacters "\\ ';$`()|<>\t")) a));

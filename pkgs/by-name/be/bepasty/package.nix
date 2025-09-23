@@ -1,7 +1,7 @@
-{
-  lib,
-  python3,
-  fetchPypi,
+{ lib
+, python3
+, fetchPypi
+,
 }:
 
 let
@@ -22,8 +22,8 @@ let
 in
 
 # We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
-# This is needed for services.bepasty
-# https://github.com/NixOS/nixpkgs/pull/38300
+  # This is needed for services.bepasty
+  # https://github.com/NixOS/nixpkgs/pull/38300
 
 bepastyPython.pkgs.buildPythonPackage rec {
   pname = "bepasty";

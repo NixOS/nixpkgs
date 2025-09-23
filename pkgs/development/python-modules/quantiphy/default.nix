@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pytestCheckHook,
-  pythonOlder,
-  inform,
-  parametrize-from-file,
-  setuptools,
-  voluptuous,
-  quantiphy-eval,
-  rkm-codes,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pytestCheckHook
+, pythonOlder
+, inform
+, parametrize-from-file
+, setuptools
+, voluptuous
+, quantiphy-eval
+, rkm-codes
+,
 }:
 
 buildPythonPackage rec {

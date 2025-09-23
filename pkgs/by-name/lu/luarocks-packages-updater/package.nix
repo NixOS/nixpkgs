@@ -1,16 +1,16 @@
-{
-  nix,
-  makeWrapper,
-  python3Packages,
-  lib,
-  nix-prefetch-scripts,
-  luarocks-nix,
-  pluginupdate,
-  lua5_1,
-  lua5_2,
-  lua5_3,
-  lua5_4,
-  luajit,
+{ nix
+, makeWrapper
+, python3Packages
+, lib
+, nix-prefetch-scripts
+, luarocks-nix
+, pluginupdate
+, lua5_1
+, lua5_2
+, lua5_3
+, lua5_4
+, luajit
+,
 }:
 let
 

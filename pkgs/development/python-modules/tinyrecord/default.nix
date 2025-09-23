@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  tinydb,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, tinydb
+,
 }:
 
 buildPythonPackage rec {

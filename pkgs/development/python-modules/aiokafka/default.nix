@@ -1,16 +1,16 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  cramjam,
-  cython,
-  fetchFromGitHub,
-  gssapi,
-  packaging,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-  zlib,
+{ lib
+, async-timeout
+, buildPythonPackage
+, cramjam
+, cython
+, fetchFromGitHub
+, gssapi
+, packaging
+, pythonOlder
+, setuptools
+, typing-extensions
+, zlib
+,
 }:
 
 buildPythonPackage rec {

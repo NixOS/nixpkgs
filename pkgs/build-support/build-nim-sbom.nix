@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchzip,
-  runCommand,
-  xorg,
-  nim,
-  nimOverrides,
+{ lib
+, stdenv
+, fetchgit
+, fetchzip
+, runCommand
+, xorg
+, nim
+, nimOverrides
+,
 }:
 
 let
@@ -18,13 +18,12 @@ let
         inherit url sha256;
       };
     fetchgit =
-      {
-        fetchSubmodules ? false,
-        leaveDotGit ? false,
-        rev,
-        sha256,
-        url,
-        ...
+      { fetchSubmodules ? false
+      , leaveDotGit ? false
+      , rev
+      , sha256
+      , url
+      , ...
       }:
       fetchgit {
         inherit
@@ -54,15 +53,17 @@ let
   buildNimCfg =
     { backend, components, ... }:
     let
-      componentSrcDirs = map (
-        { properties, ... }:
-        let
-          fodProps = filterPropertiesToAttrs "nix:fod:" properties;
-          fod = fetchers.${fodProps.method} fodProps;
-          srcDir = fodProps.srcDir or "";
-        in
-        if srcDir == "" then fod else "${fod}/${srcDir}"
-      ) components;
+      componentSrcDirs = map
+        (
+          { properties, ... }:
+          let
+            fodProps = filterPropertiesToAttrs "nix:fod:" properties;
+            fod = fetchers.${fodProps.method} fodProps;
+            srcDir = fodProps.srcDir or "";
+          in
+          if srcDir == "" then fod else "${fod}/${srcDir}"
+        )
+        components;
     in
     runCommand "nim.cfg"
       {
@@ -97,11 +98,10 @@ let
 
   applySbom =
     sbom:
-    {
-      nimFlags ? [ ],
-      nimRelease ? true,
-      passthru ? { },
-      ...
+    { nimFlags ? [ ]
+    , nimRelease ? true
+    , passthru ? { }
+    , ...
     }@prevAttrs:
     let
       properties = # SBOM metadata.component.properties as an attrset.
@@ -109,15 +109,16 @@ let
           passthru.properties or { };
 
       nimBin = # A mapping of Nim module file paths to names of programs.
-        lib.attrsets.recursiveUpdate (lib.pipe properties [
-          (lib.attrsets.filterAttrs (name: value: lib.strings.hasPrefix "nim:bin:" name))
-          (lib.attrsets.mapAttrs' (
-            name: value: {
-              name = lib.strings.removePrefix "nim:bin:" name;
-              value = "${properties."nim:binDir" or (properties."nim:srcDir" or ".")}/${value}";
-            }
-          ))
-        ]) passthru.nimBin or { };
+        lib.attrsets.recursiveUpdate
+          (lib.pipe properties [
+            (lib.attrsets.filterAttrs (name: value: lib.strings.hasPrefix "nim:bin:" name))
+            (lib.attrsets.mapAttrs' (
+              name: value: {
+                name = lib.strings.removePrefix "nim:bin:" name;
+                value = "${properties."nim:binDir" or (properties."nim:srcDir" or ".")}/${value}";
+              }
+            ))
+          ]) passthru.nimBin or { };
     in
     {
       strictDeps = true;
@@ -176,17 +177,20 @@ let
 
   applyOverrides =
     prevAttrs:
-    builtins.foldl' (
-      prevAttrs:
-      { name, ... }@component:
-      if (builtins.hasAttr name nimOverrides) then
-        let
-          result = nimOverrides.${name} component prevAttrs;
-        in
-        prevAttrs // (if builtins.isAttrs result then result else result { })
-      else
-        prevAttrs
-    ) prevAttrs prevAttrs.passthru.sbom.components;
+    builtins.foldl'
+      (
+        prevAttrs:
+        { name, ... }@component:
+        if (builtins.hasAttr name nimOverrides) then
+          let
+            result = nimOverrides.${name} component prevAttrs;
+          in
+          prevAttrs // (if builtins.isAttrs result then result else result { })
+        else
+          prevAttrs
+      )
+      prevAttrs
+      prevAttrs.passthru.sbom.components;
 
   compose =
     callerArg: sbom: finalAttrs:

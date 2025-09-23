@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  dune-configurator,
-  alcotest,
-  ctypes,
-  stdio,
-  openblasCompat,
-  owl-base,
-  npy,
+{ buildDunePackage
+, dune-configurator
+, alcotest
+, ctypes
+, stdio
+, openblasCompat
+, owl-base
+, npy
+,
 }:
 
 buildDunePackage {

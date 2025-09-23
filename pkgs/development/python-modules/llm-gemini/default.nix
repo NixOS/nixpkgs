@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-gemini,
-  httpx,
-  ijson,
-  pytestCheckHook,
-  pytest-recording,
-  pytest-asyncio,
-  nest-asyncio,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-gemini
+, httpx
+, ijson
+, pytestCheckHook
+, pytest-recording
+, pytest-asyncio
+, nest-asyncio
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage rec {
   pname = "llm-gemini";

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  runtimeShell,
-  pkg-config,
-  gettext,
-  ncurses,
-  tiles,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  libX11,
-  freetype,
-  zlib,
-  debug,
-  useXdgDir,
+{ lib
+, stdenv
+, runtimeShell
+, pkg-config
+, gettext
+, ncurses
+, tiles
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, libX11
+, freetype
+, zlib
+, debug
+, useXdgDir
+,
 }:
 
 let

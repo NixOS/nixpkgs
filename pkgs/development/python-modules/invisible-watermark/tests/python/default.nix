@@ -1,10 +1,10 @@
-{
-  image,
-  invisible-watermark,
-  opencv4,
-  python,
-  runCommand,
-  stdenvNoCC,
+{ image
+, invisible-watermark
+, opencv4
+, python
+, runCommand
+, stdenvNoCC
+,
 }:
 
 # This test checks if the python code shown in the README works correctly

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libunwind,
-  python3,
-  rustPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libunwind
+, python3
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

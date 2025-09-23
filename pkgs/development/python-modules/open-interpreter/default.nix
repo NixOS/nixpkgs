@@ -1,43 +1,41 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  poetry-core,
-
-  anthropic,
-  astor,
-  fastapi,
-  google-generativeai,
-  html2image,
-  html2text,
-  inquirer,
-  ipykernel,
-  jupyter-client,
-  litellm,
-  matplotlib,
-  platformdirs,
-  psutil,
-  pyautogui,
-  pydantic,
-  pyperclip,
-  pyyaml,
-  rich,
-  selenium,
-  send2trash,
-  setuptools,
-  shortuuid,
-  six,
-  starlette,
-  tiktoken,
-  tokentrim,
-  toml,
-  typer,
-  uvicorn,
-  webdriver-manager,
-  wget,
-  yaspin,
-
-  nltk,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, poetry-core
+, anthropic
+, astor
+, fastapi
+, google-generativeai
+, html2image
+, html2text
+, inquirer
+, ipykernel
+, jupyter-client
+, litellm
+, matplotlib
+, platformdirs
+, psutil
+, pyautogui
+, pydantic
+, pyperclip
+, pyyaml
+, rich
+, selenium
+, send2trash
+, setuptools
+, shortuuid
+, six
+, starlette
+, tiktoken
+, tokentrim
+, toml
+, typer
+, uvicorn
+, webdriver-manager
+, wget
+, yaspin
+, nltk
+,
 }:
 
 buildPythonPackage rec {

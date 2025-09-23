@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  pkgsCross,
-  makeBinaryWrapper,
-  writeText,
-  runCommand,
-  runCommandCC,
+{ lib
+, stdenv
+, pkgsCross
+, makeBinaryWrapper
+, writeText
+, runCommand
+, runCommandCC
+,
 }:
 
 let
@@ -59,7 +59,8 @@ let
       "overlength-strings"
       "prefix"
       "suffix"
-    ] makeGoldenTest
+    ]
+      makeGoldenTest
     // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       cross =
         pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.callPackage
@@ -71,4 +72,4 @@ in
 writeText "make-binary-wrapper-tests" ''
   ${lib.concatStringsSep "\n" (builtins.attrValues tests)}
 ''
-// tests
+  // tests

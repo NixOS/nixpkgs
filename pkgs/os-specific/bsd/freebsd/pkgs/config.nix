@@ -1,17 +1,17 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  groff,
-  flex,
-  byacc,
-  file2c,
-  compatIfNeeded,
-  libnv,
-  libsbuf,
+{ mkDerivation
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, install
+, mandoc
+, groff
+, flex
+, byacc
+, file2c
+, compatIfNeeded
+, libnv
+, libsbuf
+,
 }:
 
 mkDerivation {

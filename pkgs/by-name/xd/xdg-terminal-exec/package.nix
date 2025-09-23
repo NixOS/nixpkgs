@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  dash,
-  scdoc,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, dash
+, scdoc
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xdg-terminal-exec";

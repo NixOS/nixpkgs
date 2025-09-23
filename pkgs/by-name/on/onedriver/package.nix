@@ -1,15 +1,15 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  webkitgtk_4_1,
-  glib,
-  fuse,
-  installShellFiles,
-  wrapGAppsHook3,
-  glib-networking,
-  wrapperDir ? "/run/wrappers/bin",
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, pkg-config
+, webkitgtk_4_1
+, glib
+, fuse
+, installShellFiles
+, wrapGAppsHook3
+, glib-networking
+, wrapperDir ? "/run/wrappers/bin"
+,
 }:
 let
   pname = "onedriver";

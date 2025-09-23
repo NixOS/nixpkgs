@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bzip2,
-  cmake,
-  fetchurl,
-  fftw,
-  llvmPackages,
-  zlib,
+{ lib
+, stdenv
+, bzip2
+, cmake
+, fetchurl
+, fftw
+, llvmPackages
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

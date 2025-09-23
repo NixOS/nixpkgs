@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  swi-prolog,
-  makeWrapper,
-  fetchFromGitHub,
-  lexiconPath ? "prolog/lexicon/clex_lexicon.pl",
-  pname ? "ape",
-  description ? "Parser for Attempto Controlled English (ACE)",
-  license ? lib.licenses.lgpl3,
+{ lib
+, stdenv
+, swi-prolog
+, makeWrapper
+, fetchFromGitHub
+, lexiconPath ? "prolog/lexicon/clex_lexicon.pl"
+, pname ? "ape"
+, description ? "Parser for Attempto Controlled English (ACE)"
+, license ? lib.licenses.lgpl3
+,
 }:
 
 stdenv.mkDerivation {

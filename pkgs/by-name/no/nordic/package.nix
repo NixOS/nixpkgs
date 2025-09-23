@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk-engine-murrine,
-  jdupes,
-  kdePackages,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk-engine-murrine
+, jdupes
+, kdePackages
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

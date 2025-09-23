@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  swift,
-  swiftpm,
-  swiftPackages,
+{ lib
+, fetchFromGitHub
+, stdenv
+, swift
+, swiftpm
+, swiftPackages
+,
 }:
 
 # Use the same stdenv, including clang, as Swift itself

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPackages,
-  pkgs,
-  targetPackages,
-  generateSplicesForMkScope,
-  makeScopeWithSplicing',
-  stdenv,
-  config,
+{ lib
+, buildPackages
+, pkgs
+, targetPackages
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
+, stdenv
+, config
+,
 }:
 
 let
@@ -17,13 +17,15 @@ let
   mkBootstrapStdenv =
     stdenv:
     stdenv.override (old: {
-      extraBuildInputs = map (
-        pkg:
-        if lib.isDerivation pkg && lib.getName pkg == "apple-sdk" then
-          pkg.override { enableBootstrap = true; }
-        else
-          pkg
-      ) (old.extraBuildInputs or [ ]);
+      extraBuildInputs = map
+        (
+          pkg:
+          if lib.isDerivation pkg && lib.getName pkg == "apple-sdk" then
+            pkg.override { enableBootstrap = true; }
+          else
+            pkg
+        )
+        (old.extraBuildInputs or [ ]);
     });
 in
 
@@ -105,10 +107,11 @@ makeScopeWithSplicing' {
 
         signingUtils = callPackage ../os-specific/darwin/signing-utils { };
 
-        autoSignDarwinBinariesHook = pkgs.makeSetupHook {
-          name = "auto-sign-darwin-binaries-hook";
-          propagatedBuildInputs = [ self.signingUtils ];
-        } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
+        autoSignDarwinBinariesHook = pkgs.makeSetupHook
+          {
+            name = "auto-sign-darwin-binaries-hook";
+            propagatedBuildInputs = [ self.signingUtils ];
+          } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
         iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
           buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
@@ -176,42 +179,45 @@ makeScopeWithSplicing' {
           requireXcode
           ;
 
-        xcodeProjectCheckHook = pkgs.makeSetupHook {
-          name = "xcode-project-check-hook";
-          propagatedBuildInputs = [ pkgs.pkgsBuildHost.openssl ];
-        } ../os-specific/darwin/xcode-project-check-hook/setup-hook.sh;
+        xcodeProjectCheckHook = pkgs.makeSetupHook
+          {
+            name = "xcode-project-check-hook";
+            propagatedBuildInputs = [ pkgs.pkgsBuildHost.openssl ];
+          } ../os-specific/darwin/xcode-project-check-hook/setup-hook.sh;
 
         # See doc/packages/darwin-builder.section.md
-        linux-builder = lib.makeOverridable (
-          { modules }:
-          let
-            toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
+        linux-builder = lib.makeOverridable
+          (
+            { modules }:
+            let
+              toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
 
-            nixos = import ../../nixos {
-              configuration = {
-                imports = [
-                  ../../nixos/modules/profiles/nix-builder-vm.nix
-                ]
-                ++ modules;
+              nixos = import ../../nixos {
+                configuration = {
+                  imports = [
+                    ../../nixos/modules/profiles/nix-builder-vm.nix
+                  ]
+                  ++ modules;
 
-                # If you need to override this, consider starting with the right Nixpkgs
-                # in the first place, ie change `pkgs` in `pkgs.darwin.linux-builder`.
-                # or if you're creating new wiring that's not `pkgs`-centric, perhaps use the
-                # macos-builder profile directly.
-                virtualisation.host = { inherit pkgs; };
+                  # If you need to override this, consider starting with the right Nixpkgs
+                  # in the first place, ie change `pkgs` in `pkgs.darwin.linux-builder`.
+                  # or if you're creating new wiring that's not `pkgs`-centric, perhaps use the
+                  # macos-builder profile directly.
+                  virtualisation.host = { inherit pkgs; };
 
-                nixpkgs.hostPlatform = lib.mkDefault (toGuest stdenv.hostPlatform.system);
+                  nixpkgs.hostPlatform = lib.mkDefault (toGuest stdenv.hostPlatform.system);
+                };
+
+                system = null;
               };
 
-              system = null;
-            };
-
-          in
-          nixos.config.system.build.macos-builder-installer
-        ) { modules = [ ]; };
+            in
+            nixos.config.system.build.macos-builder-installer
+          )
+          { modules = [ ]; };
 
         linux-builder-x86_64 = self.linux-builder.override {
-          modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
+          modules = [{ nixpkgs.hostPlatform = "x86_64-linux"; }];
         };
 
       }

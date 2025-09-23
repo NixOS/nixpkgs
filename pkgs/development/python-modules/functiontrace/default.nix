@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  toml,
-  functiontrace-server,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, toml
+, functiontrace-server
+,
 }:
 
 buildPythonPackage rec {

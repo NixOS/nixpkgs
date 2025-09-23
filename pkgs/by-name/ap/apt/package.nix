@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  bzip2,
-  cmake,
-  curl,
-  db,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  doxygen,
-  dpkg,
-  gettext,
-  gnutls,
-  gtest,
-  libgcrypt,
-  libgpg-error,
-  libseccomp,
-  libtasn1,
-  libxslt,
-  lz4,
-  p11-kit,
-  perlPackages,
-  pkg-config,
-  triehash,
-  udev,
-  w3m,
-  xxHash,
-  xz,
-  zstd,
-  withDocs ? true,
-  withNLS ? true,
+{ lib
+, stdenv
+, fetchFromGitLab
+, bzip2
+, cmake
+, curl
+, db
+, docbook_xml_dtd_45
+, docbook_xsl
+, doxygen
+, dpkg
+, gettext
+, gnutls
+, gtest
+, libgcrypt
+, libgpg-error
+, libseccomp
+, libtasn1
+, libxslt
+, lz4
+, p11-kit
+, perlPackages
+, pkg-config
+, triehash
+, udev
+, w3m
+, xxHash
+, xz
+, zstd
+, withDocs ? true
+, withNLS ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  runtimeShell,
-
-  # build
-  poetry-core,
-
-  # propagates
-  docutils,
-
-  # tests
-  pytestCheckHook,
-  readme-renderer,
-  textile,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, runtimeShell
+, # build
+  poetry-core
+, # propagates
+  docutils
+, # tests
+  pytestCheckHook
+, readme-renderer
+, textile
+,
 }:
 
 buildPythonPackage rec {

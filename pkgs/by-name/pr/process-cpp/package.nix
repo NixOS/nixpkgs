@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  testers,
-  gitUpdater,
-  cmake,
-  coreutils,
-  boost,
-  gtest,
-  lomiri,
-  properties-cpp,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitLab
+, testers
+, gitUpdater
+, cmake
+, coreutils
+, boost
+, gtest
+, lomiri
+, properties-cpp
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

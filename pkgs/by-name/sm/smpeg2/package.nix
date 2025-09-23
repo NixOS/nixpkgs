@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  autoconf,
-  automake,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  SDL2,
+{ lib
+, stdenv
+, autoconf
+, automake
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, SDL2
+,
 }:
 
 stdenv.mkDerivation {

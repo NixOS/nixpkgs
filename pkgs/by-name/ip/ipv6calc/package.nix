@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  getopt,
-  ip2location-c,
-  openssl,
-  perl,
-  libmaxminddb ? null,
-  geolite-legacy ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, getopt
+, ip2location-c
+, openssl
+, perl
+, libmaxminddb ? null
+, geolite-legacy ? null
+,
 }:
 
 stdenv.mkDerivation rec {

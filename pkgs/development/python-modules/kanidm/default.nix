@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build
-  pdm-backend,
-
-  # propagates
-  aiohttp,
-  authlib,
-  pydantic,
-  toml,
-
-  # tests
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build
+  pdm-backend
+, # propagates
+  aiohttp
+, authlib
+, pydantic
+, toml
+, # tests
+  pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  powerpipe,
-  testers,
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, makeWrapper
+, nix-update-script
+, powerpipe
+, testers
+,
 }:
 
 buildGoModule rec {

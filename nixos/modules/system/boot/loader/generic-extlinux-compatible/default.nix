@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -63,7 +62,7 @@ in
       };
 
       mirroredBoots = mkOption {
-        default = [ { path = "/boot"; } ];
+        default = [{ path = "/boot"; }];
         example = [
           { path = "/boot1"; }
           { path = "/boot2"; }

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  which,
-  ocaml,
-  camlp-streams,
-  ocamlbuild,
-  findlib,
+{ lib
+, stdenv
+, fetchzip
+, which
+, ocaml
+, camlp-streams
+, ocamlbuild
+, findlib
+,
 }:
 
 if lib.versionAtLeast ocaml.version "5.4" then
@@ -84,8 +84,7 @@ else
           version = "5.3";
           sha256 = "sha256-V/kKhTP9U4jWDFuQKuB7BS3XICg1lq/2Avj7UJR55+k=";
         };
-      }
-      .${ocaml.meta.branch};
+      }.${ocaml.meta.branch};
   in
 
   stdenv.mkDerivation rec {

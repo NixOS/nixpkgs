@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  genshi,
-  lxml,
-  pyyaml,
-  python-magic,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, genshi
+, lxml
+, pyyaml
+, python-magic
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

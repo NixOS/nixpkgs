@@ -1,10 +1,9 @@
 # A test that runs a multi-node k3s cluster and verify pod networking works across nodes
 import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    k3s,
-    ...
+  { pkgs
+  , lib
+  , k3s
+  , ...
   }:
   let
     imageEnv = pkgs.buildEnv {

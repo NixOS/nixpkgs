@@ -1,15 +1,15 @@
 # The wrapper script ensures variables like PKG_CONFIG_PATH and
 # PKG_CONFIG_PATH_FOR_BUILD work properly.
 
-{
-  stdenvNoCC,
-  lib,
-  buildPackages,
-  pkg-config,
-  baseBinName ? "pkg-config",
-  propagateDoc ? pkg-config != null && pkg-config ? man,
-  extraPackages ? [ ],
-  extraBuildCommands ? "",
+{ stdenvNoCC
+, lib
+, buildPackages
+, pkg-config
+, baseBinName ? "pkg-config"
+, propagateDoc ? pkg-config != null && pkg-config ? man
+, extraPackages ? [ ]
+, extraBuildCommands ? ""
+,
 }:
 
 let

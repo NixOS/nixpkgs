@@ -1,7 +1,7 @@
-{
-  substitute,
-  testers,
-  runCommand,
+{ substitute
+, testers
+, runCommand
+,
 }:
 let
   # Ofborg doesn't allow any traces on stderr,

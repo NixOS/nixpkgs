@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  options,
-  ...
+{ lib
+, pkgs
+, config
+, options
+, ...
 }:
 
 let
@@ -155,97 +154,101 @@ let
       $sudo ${cfg.package}/bin/tootctl "$@"
     '';
 
-  sidekiqUnits = lib.attrsets.mapAttrs' (
-    name: processCfg:
-    lib.nameValuePair "mastodon-sidekiq-${name}" (
-      let
-        jobClassArgs = toString (builtins.map (c: "-q ${c}") processCfg.jobClasses);
-        jobClassLabel = toString ([ "" ] ++ processCfg.jobClasses);
-        threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
-      in
-      {
-        after = [
-          "network.target"
-          "mastodon-init-dirs.service"
-        ]
-        ++ commonUnits;
-        requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
-        description = "Mastodon sidekiq${jobClassLabel}";
-        wantedBy = [ "mastodon.target" ];
-        environment = env // {
-          PORT = toString cfg.sidekiqPort;
-          DB_POOL = threads;
-        };
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/sidekiq ${jobClassArgs} -c ${threads} -r ${cfg.package}";
-          Restart = "always";
-          RestartSec = 20;
-          EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
-          WorkingDirectory = cfg.package;
-          LimitNOFILE = "1024000";
-          # System Call Filtering
-          SystemCallFilter = [
-            ("~" + lib.concatStringsSep " " systemCallsList)
-            "@chown"
-            "pipe"
-            "pipe2"
-          ];
-        }
-        // cfgService;
-        path = with pkgs; [
-          ffmpeg-headless
-          file
-        ];
-      }
+  sidekiqUnits = lib.attrsets.mapAttrs'
+    (
+      name: processCfg:
+        lib.nameValuePair "mastodon-sidekiq-${name}" (
+          let
+            jobClassArgs = toString (builtins.map (c: "-q ${c}") processCfg.jobClasses);
+            jobClassLabel = toString ([ "" ] ++ processCfg.jobClasses);
+            threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
+          in
+          {
+            after = [
+              "network.target"
+              "mastodon-init-dirs.service"
+            ]
+            ++ commonUnits;
+            requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
+            description = "Mastodon sidekiq${jobClassLabel}";
+            wantedBy = [ "mastodon.target" ];
+            environment = env // {
+              PORT = toString cfg.sidekiqPort;
+              DB_POOL = threads;
+            };
+            serviceConfig = {
+              ExecStart = "${cfg.package}/bin/sidekiq ${jobClassArgs} -c ${threads} -r ${cfg.package}";
+              Restart = "always";
+              RestartSec = 20;
+              EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
+              WorkingDirectory = cfg.package;
+              LimitNOFILE = "1024000";
+              # System Call Filtering
+              SystemCallFilter = [
+                ("~" + lib.concatStringsSep " " systemCallsList)
+                "@chown"
+                "pipe"
+                "pipe2"
+              ];
+            }
+            // cfgService;
+            path = with pkgs; [
+              ffmpeg-headless
+              file
+            ];
+          }
+        )
     )
-  ) cfg.sidekiqProcesses;
+    cfg.sidekiqProcesses;
 
   streamingUnits = builtins.listToAttrs (
-    map (i: {
-      name = "mastodon-streaming-${toString i}";
-      value = {
-        after = [
-          "network.target"
-          "mastodon-init-dirs.service"
-        ]
-        ++ commonUnits;
-        requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
-        wantedBy = [
-          "mastodon.target"
-          "mastodon-streaming.target"
-        ];
-        description = "Mastodon streaming ${toString i}";
-        environment = env // {
-          SOCKET = "/run/mastodon-streaming/streaming-${toString i}.socket";
-        };
-        serviceConfig = {
-          ExecStart = "${cfg.package}/run-streaming.sh";
-          Restart = "always";
-          RestartSec = 20;
-          EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
-          WorkingDirectory = cfg.package;
-          # Runtime directory and mode
-          RuntimeDirectory = "mastodon-streaming";
-          RuntimeDirectoryMode = "0750";
-          # System Call Filtering
-          SystemCallFilter = [
-            (
-              "~"
-              + lib.concatStringsSep " " (
-                systemCallsList
-                ++ [
-                  "@memlock"
-                  "@resources"
-                ]
-              )
-            )
-            "pipe"
-            "pipe2"
+    map
+      (i: {
+        name = "mastodon-streaming-${toString i}";
+        value = {
+          after = [
+            "network.target"
+            "mastodon-init-dirs.service"
+          ]
+          ++ commonUnits;
+          requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
+          wantedBy = [
+            "mastodon.target"
+            "mastodon-streaming.target"
           ];
-        }
-        // cfgService;
-      };
-    }) (lib.range 1 cfg.streamingProcesses)
+          description = "Mastodon streaming ${toString i}";
+          environment = env // {
+            SOCKET = "/run/mastodon-streaming/streaming-${toString i}.socket";
+          };
+          serviceConfig = {
+            ExecStart = "${cfg.package}/run-streaming.sh";
+            Restart = "always";
+            RestartSec = 20;
+            EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
+            WorkingDirectory = cfg.package;
+            # Runtime directory and mode
+            RuntimeDirectory = "mastodon-streaming";
+            RuntimeDirectoryMode = "0750";
+            # System Call Filtering
+            SystemCallFilter = [
+              (
+                "~"
+                  + lib.concatStringsSep " " (
+                  systemCallsList
+                    ++ [
+                    "@memlock"
+                    "@resources"
+                  ]
+                )
+              )
+              "pipe"
+              "pipe2"
+            ];
+          }
+          // cfgService;
+        };
+      })
+      (lib.range 1 cfg.streamingProcesses)
   );
 
 in
@@ -836,9 +839,11 @@ in
           {
             assertion =
               1 == (lib.count (x: x) (
-                lib.mapAttrsToList (
-                  _: v: builtins.elem "scheduler" v.jobClasses || v.jobClasses == [ ]
-                ) cfg.sidekiqProcesses
+                lib.mapAttrsToList
+                  (
+                    _: v: builtins.elem "scheduler" v.jobClasses || v.jobClasses == [ ]
+                  )
+                  cfg.sidekiqProcesses
               ));
             message = "There must be exactly one Sidekiq queue in services.mastodon.sidekiqProcesses with jobClass \"scheduler\".";
           }
@@ -1090,10 +1095,12 @@ in
               least_conn;
             '';
             servers = builtins.listToAttrs (
-              map (i: {
-                name = "unix:/run/mastodon-streaming/streaming-${toString i}.socket";
-                value = { };
-              }) (lib.range 1 cfg.streamingProcesses)
+              map
+                (i: {
+                  name = "unix:/run/mastodon-streaming/streaming-${toString i}.socket";
+                  value = { };
+                })
+                (lib.range 1 cfg.streamingProcesses)
             );
           };
         };

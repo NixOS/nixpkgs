@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  click,
-  numpy,
-  pyparsing,
-  pytestCheckHook,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, click
+, numpy
+, pyparsing
+, pytestCheckHook
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

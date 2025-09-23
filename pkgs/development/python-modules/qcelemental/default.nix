@@ -1,18 +1,18 @@
-{
-  stdenv,
-  buildPythonPackage,
-  lib,
-  fetchPypi,
-  poetry-core,
-  ipykernel,
-  networkx,
-  numpy,
-  packaging,
-  pint,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
+{ stdenv
+, buildPythonPackage
+, lib
+, fetchPypi
+, poetry-core
+, ipykernel
+, networkx
+, numpy
+, packaging
+, pint
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, scipy
+,
 }:
 
 buildPythonPackage rec {

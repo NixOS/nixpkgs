@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  amass,
-  alterx,
-  oam-tools,
-  subfinder,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, amass
+, alterx
+, oam-tools
+, subfinder
+,
 }:
 
 buildGoModule rec {

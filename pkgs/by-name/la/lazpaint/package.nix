@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  lazarus-qt5,
-  fpc,
-  autoPatchelfHook,
-  libsForQt5,
-  xorg,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, lazarus-qt5
+, fpc
+, autoPatchelfHook
+, libsForQt5
+, xorg
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

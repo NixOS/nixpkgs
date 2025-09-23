@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  vala,
-  meson,
-  ninja,
-  pkg-config,
-  pantheon,
-  gettext,
-  wrapGAppsHook3,
-  python3,
-  desktop-file-utils,
-  gtk3,
-  glib,
-  libgee,
-  libgda5,
-  gtksourceview,
-  libxml2,
-  libsecret,
-  libssh2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, vala
+, meson
+, ninja
+, pkg-config
+, pantheon
+, gettext
+, wrapGAppsHook3
+, python3
+, desktop-file-utils
+, gtk3
+, glib
+, libgee
+, libgda5
+, gtksourceview
+, libxml2
+, libsecret
+, libssh2
+,
 }:
 
 let

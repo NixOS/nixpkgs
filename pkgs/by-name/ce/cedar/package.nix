@@ -1,10 +1,10 @@
-{
-  lib,
-  cedar,
-  testers,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, cedar
+, testers
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

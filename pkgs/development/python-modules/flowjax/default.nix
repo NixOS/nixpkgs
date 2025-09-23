@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  equinox,
-  jax,
-  jaxtyping,
-  optax,
-  paramax,
-  tqdm,
-
-  # tests
-  beartype,
-  numpyro,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  equinox
+, jax
+, jaxtyping
+, optax
+, paramax
+, tqdm
+, # tests
+  beartype
+, numpyro
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

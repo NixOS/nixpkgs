@@ -1,44 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  cmake,
-  pkg-config,
-  # required dependencies
-  fftwFloat,
-  libpng,
-  libtiff,
-  jemalloc,
-  volk,
-  nng,
-  curl,
-  # Optional dependencies
-  withZIQRecordingCompression ? true,
-  zstd,
-  withGUI ? true,
-  glfw,
-  zenity,
-  withAudio ? true,
-  portaudio,
-  withOfficialProductSupport ? true,
-  hdf5,
-  withOpenCL ? true,
-  opencl-headers,
-  ocl-icd,
-  withSourceRtlsdr ? true,
-  rtl-sdr-librtlsdr,
-  withSourceHackRF ? true,
-  hackrf,
-  withSourceAirspy ? true,
-  airspy,
-  withSourceAirspyHF ? true,
-  airspyhf,
-  withSourceAD9361 ? true,
-  libad9361,
-  libiio,
-  withSourceBladeRF ? true,
-  libbladeRF,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, # required dependencies
+  fftwFloat
+, libpng
+, libtiff
+, jemalloc
+, volk
+, nng
+, curl
+, # Optional dependencies
+  withZIQRecordingCompression ? true
+, zstd
+, withGUI ? true
+, glfw
+, zenity
+, withAudio ? true
+, portaudio
+, withOfficialProductSupport ? true
+, hdf5
+, withOpenCL ? true
+, opencl-headers
+, ocl-icd
+, withSourceRtlsdr ? true
+, rtl-sdr-librtlsdr
+, withSourceHackRF ? true
+, hackrf
+, withSourceAirspy ? true
+, airspy
+, withSourceAirspyHF ? true
+, airspyhf
+, withSourceAD9361 ? true
+, libad9361
+, libiio
+, withSourceBladeRF ? true
+, libbladeRF
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

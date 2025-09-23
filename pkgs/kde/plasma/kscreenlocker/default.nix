@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  pam,
-  wayland-scanner,
-  qqc2-breeze-style,
+{ mkKdeDerivation
+, pam
+, wayland-scanner
+, qqc2-breeze-style
+,
 }:
 mkKdeDerivation {
   pname = "kscreenlocker";

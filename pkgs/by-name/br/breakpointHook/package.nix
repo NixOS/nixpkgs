@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-
-  bashInteractive,
-  makeSetupHook,
+{ lib
+, stdenv
+, buildPackages
+, bashInteractive
+, makeSetupHook
+,
 }:
 
 let
@@ -20,7 +19,8 @@ let
   '';
 in
 
-makeSetupHook {
+makeSetupHook
+{
   name = "breakpoint-hook";
   meta.broken = !stdenv.buildPlatform.isLinux;
   substitutions = {

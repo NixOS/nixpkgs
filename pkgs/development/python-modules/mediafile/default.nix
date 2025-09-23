@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  filetype,
-  mutagen,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, filetype
+, mutagen
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  config,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  checkMeta,
+{ lib
+, config
+, buildPlatform
+, hostPlatform
+, fetchurl
+, checkMeta
+,
 }:
 
 lib.makeScope
@@ -24,7 +24,7 @@ lib.makeScope
           checkMeta
           ;
       }
-      // extra
+        // extra
     )
   )
   (

@@ -1,17 +1,17 @@
-{
-  enableGStreamer,
-  enableGtk2,
-  enableGtk3,
-  gst_all_1,
-  lib,
-  opencv4,
-  runAccuracyTests,
-  runCommand,
-  runPerformanceTests,
-  stdenv,
-  testDataSrc,
-  writableTmpDirAsHomeHook,
-  xvfb-run,
+{ enableGStreamer
+, enableGtk2
+, enableGtk3
+, gst_all_1
+, lib
+, opencv4
+, runAccuracyTests
+, runCommand
+, runPerformanceTests
+, stdenv
+, testDataSrc
+, writableTmpDirAsHomeHook
+, xvfb-run
+,
 }:
 let
   inherit (lib) getExe optionals optionalString;
@@ -19,72 +19,72 @@ let
   inherit (stdenv.hostPlatform) isAarch64 isDarwin;
 in
 runCommand "opencv4-tests"
-  {
-    __structuredAttrs = true;
-    strictDeps = true;
+{
+  __structuredAttrs = true;
+  strictDeps = true;
 
-    nativeBuildInputs = [
-      writableTmpDirAsHomeHook
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ optionals enableGStreamer (
+    with gst_all_1;
+    [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
     ]
-    ++ optionals enableGStreamer (
-      with gst_all_1;
-      [
-        gstreamer
-        gst-plugins-base
-        gst-plugins-good
-      ]
-    );
+  );
 
-    ignoredTests = [
-      "AsyncAPICancelation/cancel*"
-      "Photo_CalibrateDebevec.regression"
-    ]
-    ++ optionals cudaSupport [
-      # opencv4-tests> /build/source/modules/photo/test/test_denoising.cuda.cpp:115: Failure
-      # opencv4-tests> The max difference between matrices "bgr_gold" and "dbgr" is 2 at (339, 486), which exceeds "1", where "bgr_gold" at (339, 486) evaluates to (182, 239, 239), "dbgr" at (339, 486) evaluates to (184, 239, 239), "1" evaluates to 1
-      # opencv4-tests> [  FAILED  ] CUDA_FastNonLocalMeans.Regression (48 ms)
-      "CUDA_FastNonLocalMeans.Regression"
-    ];
+  ignoredTests = [
+    "AsyncAPICancelation/cancel*"
+    "Photo_CalibrateDebevec.regression"
+  ]
+  ++ optionals cudaSupport [
+    # opencv4-tests> /build/source/modules/photo/test/test_denoising.cuda.cpp:115: Failure
+    # opencv4-tests> The max difference between matrices "bgr_gold" and "dbgr" is 2 at (339, 486), which exceeds "1", where "bgr_gold" at (339, 486) evaluates to (182, 239, 239), "dbgr" at (339, 486) evaluates to (184, 239, 239), "1" evaluates to 1
+    # opencv4-tests> [  FAILED  ] CUDA_FastNonLocalMeans.Regression (48 ms)
+    "CUDA_FastNonLocalMeans.Regression"
+  ];
 
-    inherit runAccuracyTests;
+  inherit runAccuracyTests;
 
-    accuracyTestNames = [
-      "calib3d"
-      "core"
-      "features2d"
-      "flann"
-      "imgcodecs"
-      "imgproc"
-      "ml"
-      "objdetect"
-      "photo"
-      "stitching"
-      "video"
-      #"videoio" # - a lot of GStreamer warnings and failed tests
-      #"dnn" #- some caffe tests failed, probably because github workflow also downloads additional models
-    ]
-    ++ optionals (!isAarch64 && enableGStreamer) [ "gapi" ]
-    ++ optionals (enableGtk2 || enableGtk3) [ "highgui" ];
+  accuracyTestNames = [
+    "calib3d"
+    "core"
+    "features2d"
+    "flann"
+    "imgcodecs"
+    "imgproc"
+    "ml"
+    "objdetect"
+    "photo"
+    "stitching"
+    "video"
+    #"videoio" # - a lot of GStreamer warnings and failed tests
+    #"dnn" #- some caffe tests failed, probably because github workflow also downloads additional models
+  ]
+  ++ optionals (!isAarch64 && enableGStreamer) [ "gapi" ]
+  ++ optionals (enableGtk2 || enableGtk3) [ "highgui" ];
 
-    inherit runPerformanceTests;
+  inherit runPerformanceTests;
 
-    performanceTestNames = [
-      "calib3d"
-      "core"
-      "features2d"
-      "imgcodecs"
-      "imgproc"
-      "objdetect"
-      "photo"
-      "stitching"
-      "video"
-    ]
-    ++ optionals (!isAarch64 && enableGStreamer) [ "gapi" ];
+  performanceTestNames = [
+    "calib3d"
+    "core"
+    "features2d"
+    "imgcodecs"
+    "imgproc"
+    "objdetect"
+    "photo"
+    "stitching"
+    "video"
+  ]
+  ++ optionals (!isAarch64 && enableGStreamer) [ "gapi" ];
 
-    testRunner = optionalString (!isDarwin) "${getExe xvfb-run} -a ";
+  testRunner = optionalString (!isDarwin) "${getExe xvfb-run} -a ";
 
-    requiredSystemFeatures = optionals cudaSupport [ "cuda" ];
-  }
+  requiredSystemFeatures = optionals cudaSupport [ "cuda" ];
+}
   ''
     set -euo pipefail
 

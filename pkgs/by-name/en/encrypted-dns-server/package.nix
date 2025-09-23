@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libsodium,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libsodium
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "encrypted-dns-server";

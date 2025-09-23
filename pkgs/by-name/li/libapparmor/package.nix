@@ -1,34 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  which,
-  flex,
-  bison,
-  withPerl ?
-    stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl,
-  perl,
-  withPython ?
-    # static can't load python libraries
-    !stdenv.hostPlatform.isStatic
-    && lib.meta.availableOn stdenv.hostPlatform python3Packages.python
-    # m4 python include script fails if cpu bit depth is different across machines
-    && stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
-  python3Packages,
-  swig,
-  ncurses,
-  libxcrypt,
-
-  # test
-  dejagnu,
-
-  # passthru
-  nix-update-script,
-  nixosTests,
-  callPackage,
+{ stdenv
+, lib
+, fetchFromGitLab
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, which
+, flex
+, bison
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl
+, perl
+, withPython ? # static can't load python libraries
+  !stdenv.hostPlatform.isStatic
+  && lib.meta.availableOn stdenv.hostPlatform python3Packages.python
+  # m4 python include script fails if cpu bit depth is different across machines
+  && stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits
+, python3Packages
+, swig
+, ncurses
+, libxcrypt
+, # test
+  dejagnu
+, # passthru
+  nix-update-script
+, nixosTests
+, callPackage
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libapparmor";

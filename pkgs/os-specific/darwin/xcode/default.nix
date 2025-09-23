@@ -1,7 +1,7 @@
-{
-  stdenv,
-  requireFile,
-  lib,
+{ stdenv
+, requireFile
+, lib
+,
 }:
 
 let

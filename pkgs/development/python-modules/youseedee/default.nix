@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-  setuptools,
-  setuptools-scm,
-  filelock,
-  requests,
-  platformdirs,
-  unicode-character-database,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, setuptools
+, setuptools-scm
+, filelock
+, requests
+, platformdirs
+, unicode-character-database
+,
 }:
 
 buildPythonPackage rec {

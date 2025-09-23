@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  rpmextract,
-  testers,
+{ lib
+, stdenvNoCC
+, fetchzip
+, rpmextract
+, testers
+,
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs:

@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  gdk-pixbuf,
-  gtk4,
-  libadwaita,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, gdk-pixbuf
+, gtk4
+, libadwaita
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

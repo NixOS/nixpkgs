@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  isPy27,
-  lib,
-  setuptools,
-  setuptools-declarative-requirements,
-  setuptools-scm,
+{ buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, isPy27
+, lib
+, setuptools
+, setuptools-declarative-requirements
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

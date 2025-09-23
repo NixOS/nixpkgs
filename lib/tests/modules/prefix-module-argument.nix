@@ -8,10 +8,10 @@
   config = {
     foo =
       { _prefix, ... }:
-      assert _prefix == [ "foo" ];
-      {
-        options.ok = lib.mkOption { };
-        config.ok = true;
-      };
+        assert _prefix == [ "foo" ];
+        {
+          options.ok = lib.mkOption { };
+          config.ok = true;
+        };
   };
 }

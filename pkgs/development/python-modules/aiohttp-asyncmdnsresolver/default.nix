@@ -1,15 +1,15 @@
-{
-  lib,
-  aiodns,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  zeroconf,
+{ lib
+, aiodns
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  mkDerivation,
-  stdenv,
-  libterminfo,
-  compatIfNeeded,
-  defaultMakeFlags,
+{ lib
+, mkDerivation
+, stdenv
+, libterminfo
+, compatIfNeeded
+, defaultMakeFlags
+,
 }:
 
 mkDerivation {

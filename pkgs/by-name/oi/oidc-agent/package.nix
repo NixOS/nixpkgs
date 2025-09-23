@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  webkitgtk_4_0,
-  libmicrohttpd,
-  libsecret,
-  qrencode,
-  libsodium,
-  pkg-config,
-  help2man,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, webkitgtk_4_0
+, libmicrohttpd
+, libsecret
+, qrencode
+, libsodium
+, pkg-config
+, help2man
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  e3-core,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, e3-core
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

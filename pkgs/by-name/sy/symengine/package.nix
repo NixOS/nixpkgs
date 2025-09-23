@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gmp,
-  flint3,
-  mpfr,
-  libmpc,
-  withShared ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gmp
+, flint3
+, mpfr
+, libmpc
+, withShared ? true
+,
 }:
 
 stdenv.mkDerivation rec {

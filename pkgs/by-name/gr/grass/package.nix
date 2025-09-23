@@ -1,41 +1,39 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  wrapGAppsHook3,
-
-  withOpenGL ? !stdenv.hostPlatform.isDarwin,
-
-  bison,
-  blas,
-  cairo,
-  ffmpeg,
-  fftw,
-  flex,
-  freetype,
-  gdal,
-  geos,
-  lapack,
-  libGLU,
-  libiconv,
-  libpng,
-  libsvm,
-  libtiff,
-  libxml2,
-  llvmPackages,
-  netcdf,
-  pdal,
-  pkg-config,
-  libpq,
-  proj,
-  python3Packages,
-  readline,
-  sqlite,
-  wxGTK32,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, makeWrapper
+, wrapGAppsHook3
+, withOpenGL ? !stdenv.hostPlatform.isDarwin
+, bison
+, blas
+, cairo
+, ffmpeg
+, fftw
+, flex
+, freetype
+, gdal
+, geos
+, lapack
+, libGLU
+, libiconv
+, libpng
+, libsvm
+, libtiff
+, libxml2
+, llvmPackages
+, netcdf
+, pdal
+, pkg-config
+, libpq
+, proj
+, python3Packages
+, readline
+, sqlite
+, wxGTK32
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,26 +1,25 @@
-{
-  lib,
-  pythonOlder,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  jmespath,
-  jsonschema,
-  jxmlease,
-  ncclient,
-  netaddr,
-  paramiko,
-  ansible-pylibssh,
-  pynetbox,
-  scp,
-  textfsm,
-  ttp,
-  xmltodict,
-  passlib,
-
-  # optionals
-  withJunos ? false,
-  withNetbox ? false,
+{ lib
+, pythonOlder
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, jmespath
+, jsonschema
+, jxmlease
+, ncclient
+, netaddr
+, paramiko
+, ansible-pylibssh
+, pynetbox
+, scp
+, textfsm
+, ttp
+, xmltodict
+, passlib
+, # optionals
+  withJunos ? false
+, withNetbox ? false
+,
 }:
 
 let

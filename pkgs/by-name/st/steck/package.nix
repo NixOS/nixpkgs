@@ -1,9 +1,9 @@
-{
-  lib,
-  pkgs,
-  python3Packages,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, pkgs
+, python3Packages
+, fetchFromGitHub
+, nixosTests
+,
 }:
 
 python3Packages.buildPythonApplication rec {

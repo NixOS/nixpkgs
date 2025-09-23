@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  include,
-  libcMinimal,
-  libgcc,
-  csu,
+{ mkDerivation
+, include
+, libcMinimal
+, libgcc
+, csu
+,
 }:
 
 mkDerivation {

@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchCrate
+, nix-update-script
+,
 }:
 
 let

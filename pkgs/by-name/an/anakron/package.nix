@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  xorg,
+{ lib
+, stdenvNoCC
+, fetchzip
+, xorg
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

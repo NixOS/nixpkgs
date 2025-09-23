@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  replaceVars,
-  bubblewrap,
-  cairo,
-  cargo,
-  gettext,
-  git,
-  gnome,
-  gtk4,
-  lcms2,
-  libheif,
-  libjxl,
-  librsvg,
-  libseccomp,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  rustPlatform,
+{ stdenv
+, lib
+, fetchurl
+, replaceVars
+, bubblewrap
+, cairo
+, cargo
+, gettext
+, git
+, gnome
+, gtk4
+, lcms2
+, libheif
+, libjxl
+, librsvg
+, libseccomp
+, libxml2
+, meson
+, ninja
+, pkg-config
+, rustc
+, rustPlatform
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

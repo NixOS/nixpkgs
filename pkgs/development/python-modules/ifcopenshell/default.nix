@@ -1,54 +1,53 @@
-{
-  lib,
-  stdenv,
-  testers,
-  buildPythonPackage,
-  pythonOlder,
-  python,
-  pytestCheckHook,
-  # fetchers
-  fetchFromGitHub,
-  fetchpatch,
-  gitUpdater,
-  # build tools
-  cmake,
-  swig,
-  # native dependencies
-  eigen,
-  boost,
-  cgal_5,
-  gmp,
-  hdf5,
-  icu,
-  libaec,
-  libxml2,
-  mpfr,
-  nlohmann_json,
-  opencascade-occt_7_6,
-  opencollada,
-  pcre,
-  zlib,
-
-  # python deps
+{ lib
+, stdenv
+, testers
+, buildPythonPackage
+, pythonOlder
+, python
+, pytestCheckHook
+, # fetchers
+  fetchFromGitHub
+, fetchpatch
+, gitUpdater
+, # build tools
+  cmake
+, swig
+, # native dependencies
+  eigen
+, boost
+, cgal_5
+, gmp
+, hdf5
+, icu
+, libaec
+, libxml2
+, mpfr
+, nlohmann_json
+, opencascade-occt_7_6
+, opencollada
+, pcre
+, zlib
+, # python deps
   ## tools
-  setuptools,
-  build,
-  pytest,
-  ## dependencies
-  isodate,
-  lark,
-  numpy,
-  python-dateutil,
-  shapely,
-  typing-extensions,
-  ## additional deps for tests
-  ifcopenshell,
-  lxml,
-  mathutils,
-  networkx,
-  tabulate,
-  xmlschema,
-  xsdata,
+  setuptools
+, build
+, pytest
+, ## dependencies
+  isodate
+, lark
+, numpy
+, python-dateutil
+, shapely
+, typing-extensions
+, ## additional deps for tests
+  ifcopenshell
+, lxml
+, mathutils
+, networkx
+, tabulate
+, xmlschema
+, xsdata
+,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;

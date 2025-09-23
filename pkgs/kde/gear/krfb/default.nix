@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtwayland,
-  libvncserver,
-  pipewire,
-  xorg,
+{ mkKdeDerivation
+, pkg-config
+, qtwayland
+, libvncserver
+, pipewire
+, xorg
+,
 }:
 mkKdeDerivation {
   pname = "krfb";

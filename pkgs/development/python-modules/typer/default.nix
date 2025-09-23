@@ -1,29 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  click,
-  typing-extensions,
-
-  # optional-dependencies
-  rich,
-  shellingham,
-
-  # tests
-  coverage,
-  pytest-xdist,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  procps,
-
-  # typer or typer-slim
-  package ? "typer",
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  click
+, typing-extensions
+, # optional-dependencies
+  rich
+, shellingham
+, # tests
+  coverage
+, pytest-xdist
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+, procps
+, # typer or typer-slim
+  package ? "typer"
+,
 }:
 
 buildPythonPackage rec {

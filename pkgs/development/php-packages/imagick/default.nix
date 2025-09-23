@@ -1,11 +1,11 @@
-{
-  buildPecl,
-  fetchpatch,
-  lib,
-  imagemagick,
-  pkg-config,
-  pcre2,
-  php,
+{ buildPecl
+, fetchpatch
+, lib
+, imagemagick
+, pkg-config
+, pcre2
+, php
+,
 }:
 
 buildPecl {

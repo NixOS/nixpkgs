@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  inkscape,
-  poetry-core,
-  cssselect,
-  lxml,
-  numpy,
-  pillow,
-  pygobject3,
-  pyparsing,
-  pyserial,
-  scour,
-  tinycss2,
-  gobject-introspection,
-  pytestCheckHook,
-  gtk3,
+{ lib
+, stdenv
+, buildPythonPackage
+, inkscape
+, poetry-core
+, cssselect
+, lxml
+, numpy
+, pillow
+, pygobject3
+, pyparsing
+, pyserial
+, scour
+, tinycss2
+, gobject-introspection
+, pytestCheckHook
+, gtk3
+,
 }:
 
 buildPythonPackage {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeBinaryWrapper,
-  itk,
-  vtk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeBinaryWrapper
+, itk
+, vtk
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

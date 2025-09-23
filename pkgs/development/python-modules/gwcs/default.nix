@@ -1,18 +1,18 @@
-{
-  lib,
-  asdf-astropy,
-  asdf-wcs-schemas,
-  asdf,
-  astropy,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  pytest-astropy,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
-  setuptools-scm,
-  setuptools,
+{ lib
+, asdf-astropy
+, asdf-wcs-schemas
+, asdf
+, astropy
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pytest-astropy
+, pytestCheckHook
+, pythonOlder
+, scipy
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

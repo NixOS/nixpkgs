@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  zlib,
-  curl,
-  xz,
-  patchelf,
-  runtimeShell,
+{ stdenv
+, lib
+, fetchurl
+, zlib
+, curl
+, xz
+, patchelf
+, runtimeShell
+,
 }:
 
 let

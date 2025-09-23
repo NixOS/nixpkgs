@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  mpi,
-  scalapack,
-  llvmPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, mpi
+, scalapack
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation rec {

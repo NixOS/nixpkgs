@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  udisks2,
-  qt6,
-  cmake,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitLab
+, udisks2
+, qt6
+, cmake
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

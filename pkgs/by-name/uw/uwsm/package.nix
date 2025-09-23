@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  meson,
-  ninja,
-  scdoc,
-  pkg-config,
-  nix-update-script,
-  bash,
-  dmenu,
-  libnotify,
-  newt,
-  python3Packages,
-  systemd,
-  util-linux,
-  fumonSupport ? true,
-  uuctlSupport ? true,
-  uwsmAppSupport ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeBinaryWrapper
+, meson
+, ninja
+, scdoc
+, pkg-config
+, nix-update-script
+, bash
+, dmenu
+, libnotify
+, newt
+, python3Packages
+, systemd
+, util-linux
+, fumonSupport ? true
+, uuctlSupport ? true
+, uwsmAppSupport ? true
+,
 }:
 let
   python = python3Packages.python.withPackages (ps: [

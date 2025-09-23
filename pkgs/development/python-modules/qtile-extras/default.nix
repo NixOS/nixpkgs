@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gobject-introspection,
-  gtk3,
-  imagemagick,
-  keyring,
-  librsvg,
-  pulseaudio,
-  pytest-asyncio,
-  pytest-lazy-fixture,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  python-dateutil,
-  qtile,
-  requests,
-  setuptools-scm,
-  xorgserver,
-  nixosTests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, imagemagick
+, keyring
+, librsvg
+, pulseaudio
+, pytest-asyncio
+, pytest-lazy-fixture
+, pytest-rerunfailures
+, pytestCheckHook
+, python-dateutil
+, qtile
+, requests
+, setuptools-scm
+, xorgserver
+, nixosTests
+,
 }:
 buildPythonPackage rec {
   pname = "qtile-extras";

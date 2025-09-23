@@ -1,16 +1,16 @@
-{
-  stdenvNoCC,
-  callPackage,
-  lib,
-  fetchurl,
-  releaseManifestFile,
-  releaseInfoFile,
-  bootstrapSdkFile,
-  allowPrerelease ? false,
-  depsFile,
-  fallbackTargetPackages,
-  pkgsBuildHost,
-  buildDotnetSdk,
+{ stdenvNoCC
+, callPackage
+, lib
+, fetchurl
+, releaseManifestFile
+, releaseInfoFile
+, bootstrapSdkFile
+, allowPrerelease ? false
+, depsFile
+, fallbackTargetPackages
+, pkgsBuildHost
+, buildDotnetSdk
+,
 }:
 
 let
@@ -51,7 +51,7 @@ let
 
 in
 pkgs
-// {
+  // {
   vmr = pkgs.vmr.overrideAttrs (old: {
     passthru = old.passthru // {
       updateScript = pkgsBuildHost.callPackage ./update.nix {

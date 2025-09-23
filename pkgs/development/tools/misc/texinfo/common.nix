@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  perl,
-  libintl,
-  bashNonInteractive,
-  updateAutotoolsGnuConfigScriptsHook,
-  gawk,
-  freebsd,
-  glibcLocales,
-  libiconv,
-
-  # we are a dependency of gcc, this simplifies bootstrapping
-  interactive ? false,
-  ncurses,
-  procps,
-  meta,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, perl
+, libintl
+, bashNonInteractive
+, updateAutotoolsGnuConfigScriptsHook
+, gawk
+, freebsd
+, glibcLocales
+, libiconv
+, # we are a dependency of gcc, this simplifies bootstrapping
+  interactive ? false
+, ncurses
+, procps
+, meta
+,
 }:
 
-{
-  version,
-  hash,
-  patches ? [ ],
+{ version
+, hash
+, patches ? [ ]
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

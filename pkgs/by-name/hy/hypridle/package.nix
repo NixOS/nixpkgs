@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  hyprlang,
-  hyprutils,
-  hyprland-protocols,
-  hyprwayland-scanner,
-  sdbus-cpp_2,
-  systemdLibs,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, wayland
+, wayland-protocols
+, wayland-scanner
+, hyprlang
+, hyprutils
+, hyprland-protocols
+, hyprwayland-scanner
+, sdbus-cpp_2
+, systemdLibs
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

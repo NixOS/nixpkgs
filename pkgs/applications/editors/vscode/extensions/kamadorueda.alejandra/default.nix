@@ -1,9 +1,9 @@
-{
-  alejandra,
-  jq,
-  lib,
-  moreutils,
-  vscode-utils,
+{ alejandra
+, jq
+, lib
+, moreutils
+, vscode-utils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-  vulkan-headers,
-  vulkan-loader,
-  shaderc,
-  lcms2,
-  libGL,
-  libX11,
-  libunwind,
-  libdovi,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, vulkan-headers
+, vulkan-loader
+, shaderc
+, lcms2
+, libGL
+, libX11
+, libunwind
+, libdovi
+,
 }:
 
 stdenv.mkDerivation rec {

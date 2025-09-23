@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  ruby,
+{ stdenv
+, lib
+, fetchurl
+, ruby
+,
 }:
 
 let

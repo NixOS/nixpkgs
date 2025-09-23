@@ -60,11 +60,10 @@ in
   nodes = {
     # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
     serverpostgres =
-      {
-        pkgs,
-        nodes,
-        config,
-        ...
+      { pkgs
+      , nodes
+      , config
+      , ...
       }:
       let
         mailserverIP = nodes.mailserver.networking.primaryIPAddress;

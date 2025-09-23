@@ -1,7 +1,7 @@
-{
-  qtModule,
-  fetchFromGitHub,
-  qtbase,
+{ qtModule
+, fetchFromGitHub
+, qtbase
+,
 }:
 
 qtModule rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  digiham,
-  pycsdr,
-  codecserver,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, digiham
+, pycsdr
+, codecserver
+,
 }:
 
 buildPythonPackage rec {

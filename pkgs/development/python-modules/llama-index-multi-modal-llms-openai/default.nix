@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  llama-index-core,
-  llama-index-llms-openai,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, llama-index-core
+, llama-index-llms-openai
+,
 }:
 
 buildPythonPackage rec {

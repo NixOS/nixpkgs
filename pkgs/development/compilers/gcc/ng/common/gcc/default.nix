@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  gcc_meta,
-  release_version,
-  version,
-  monorepoSrc ? null,
-  fetchpatch,
-  langAda ? false,
-  langC ? true,
-  langCC ? true,
-  langFortran ? false,
-  langGo ? false,
-  langJava ? false,
-  langObjC ? stdenv.targetPlatform.isDarwin,
-  langObjCpp ? stdenv.targetPlatform.isDarwin,
-  langJit ? false,
-  enablePlugin ? lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform,
-  runCommand,
-  buildPackages,
-  isl,
-  zlib,
-  gmp,
-  libmpc,
-  mpfr,
-  perl,
-  texinfo,
-  which,
-  gettext,
-  getVersionFile,
-  buildGccPackages,
-  targetPackages,
-  libc,
-  bintools,
+{ lib
+, stdenv
+, gcc_meta
+, release_version
+, version
+, monorepoSrc ? null
+, fetchpatch
+, langAda ? false
+, langC ? true
+, langCC ? true
+, langFortran ? false
+, langGo ? false
+, langJava ? false
+, langObjC ? stdenv.targetPlatform.isDarwin
+, langObjCpp ? stdenv.targetPlatform.isDarwin
+, langJit ? false
+, enablePlugin ? lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
+, runCommand
+, buildPackages
+, isl
+, zlib
+, gmp
+, libmpc
+, mpfr
+, perl
+, texinfo
+, which
+, gettext
+, getVersionFile
+, buildGccPackages
+, targetPackages
+, libc
+, bintools
+,
 }:
 let
   inherit (stdenv) targetPlatform hostPlatform;
@@ -134,10 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     # actually different we need to convince the configure script that it
     # is in fact building a cross compiler although it doesn't believe it.
     +
-      lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform)
-        ''
-          substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
-        ''
+    lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform)
+      ''
+        substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
+      ''
     # Cannot configure from src dir
     + ''
       cd "$buildRoot"
@@ -224,11 +224,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-plugins"
   ]
   ++
-    # Only pass when the arch supports it.
-    # Exclude RISC-V because GCC likes to fail when the string is empty on RISC-V.
-    lib.optionals (targetPlatform.isAarch || targetPlatform.isAvr || targetPlatform.isx86_64) [
-      "--with-multilib-list="
-    ];
+  # Only pass when the arch supports it.
+  # Exclude RISC-V because GCC likes to fail when the string is empty on RISC-V.
+  lib.optionals (targetPlatform.isAarch || targetPlatform.isAvr || targetPlatform.isx86_64) [
+    "--with-multilib-list="
+  ];
 
   doCheck = false;
 

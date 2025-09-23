@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  rustPlatform,
-  autoPatchelfHook,
-  fontconfig,
-  libxkbcommon,
-  pkg-config,
-  libgcc,
-  wayland,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, autoPatchelfHook
+, fontconfig
+, libxkbcommon
+, pkg-config
+, libgcc
+, wayland
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "yofi";

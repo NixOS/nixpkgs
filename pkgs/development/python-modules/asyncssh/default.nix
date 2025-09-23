@@ -1,22 +1,22 @@
-{
-  lib,
-  bcrypt,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  fido2,
-  gssapi,
-  libnacl,
-  libsodium,
-  nettle,
-  openssh,
-  openssl,
-  pyopenssl,
-  pytestCheckHook,
-  python-pkcs11,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, bcrypt
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, fido2
+, gssapi
+, libnacl
+, libsodium
+, nettle
+, openssh
+, openssl
+, pyopenssl
+, pytestCheckHook
+, python-pkcs11
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  libGL,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, libGL
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

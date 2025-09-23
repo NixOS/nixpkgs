@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  cargo,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  openssl,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, meson
+, ninja
+, pkg-config
+, rustc
+, cargo
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, openssl
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

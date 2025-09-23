@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  zlib,
-  openssl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, zlib
+, openssl
+, nixosTests
+,
 }:
 buildDotnetModule rec {
   pname = "wasabibackend";

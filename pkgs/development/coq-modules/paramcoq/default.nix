@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -19,7 +19,8 @@ mkCoqDerivation {
         case = range "8.7" "8.13";
         out = "1.1.2+coq${coq.coq-version}";
       }
-    ] null;
+    ]
+      null;
   displayVersion = {
     paramcoq = "...";
   };

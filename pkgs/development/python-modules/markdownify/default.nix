@@ -1,13 +1,13 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  six,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, six
+,
 }:
 
 buildPythonPackage rec {

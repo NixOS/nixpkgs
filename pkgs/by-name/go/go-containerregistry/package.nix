@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 
 let
@@ -45,13 +45,16 @@ buildGoModule rec {
     ];
 
   postInstall =
-    lib.concatStringsSep "\n" (
-      map (bin: ''
-        mkdir -p ''$${bin}/bin &&
-        mv $out/bin/${bin} ''$${bin}/bin/ &&
-        ln -s ''$${bin}/bin/${bin} $out/bin/
-      '') bins
-    )
+    lib.concatStringsSep "\n"
+      (
+        map
+          (bin: ''
+            mkdir -p ''$${bin}/bin &&
+            mv $out/bin/${bin} ''$${bin}/bin/ &&
+            ln -s ''$${bin}/bin/${bin} $out/bin/
+          '')
+          bins
+      )
     + ''
       for cmd in crane gcrane; do
         installShellCompletion --cmd "$cmd" \

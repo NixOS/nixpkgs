@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  dulwich,
-  pbr,
-  sphinx,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, dulwich
+, pbr
+, sphinx
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

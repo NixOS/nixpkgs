@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  dataclasses-json,
-  deprecated,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, dataclasses-json
+, deprecated
+, pytestCheckHook
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  yajl,
-  cmake,
-  libgcrypt,
-  curl,
-  expat,
-  boost,
-  libiberty,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, yajl
+, cmake
+, libgcrypt
+, curl
+, expat
+, boost
+, libiberty
+,
 }:
 
 stdenv.mkDerivation rec {

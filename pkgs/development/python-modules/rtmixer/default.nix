@@ -1,14 +1,14 @@
-{
-  fetchFromGitHub,
-  buildPythonPackage,
-  isPy27,
-  setuptools,
-  cython,
-  portaudio,
-  cffi,
-  pa-ringbuffer,
-  sounddevice,
-  lib,
+{ fetchFromGitHub
+, buildPythonPackage
+, isPy27
+, setuptools
+, cython
+, portaudio
+, cffi
+, pa-ringbuffer
+, sounddevice
+, lib
+,
 }:
 
 buildPythonPackage rec {

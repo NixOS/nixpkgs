@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxml,
-  matplotlib,
-  numpy,
-  pytestCheckHook,
-  scikit-image,
-  scikit-learn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, lxml
+, matplotlib
+, numpy
+, pytestCheckHook
+, scikit-image
+, scikit-learn
+,
 }:
 
 let

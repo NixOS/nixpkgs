@@ -1,48 +1,48 @@
-{
-  pname,
-  version,
-  extraDesc ? "",
-  src,
-  extraPatches ? [ ],
-  extraNativeBuildInputs ? [ ],
-  extraConfigureFlags ? [ ],
-  extraMeta ? { },
+{ pname
+, version
+, extraDesc ? ""
+, src
+, extraPatches ? [ ]
+, extraNativeBuildInputs ? [ ]
+, extraConfigureFlags ? [ ]
+, extraMeta ? { }
+,
 }:
 
-{
-  lib,
-  stdenv,
-  # This *is* correct, though unusual. as a way of getting krb5-config from the
+{ lib
+, stdenv
+, # This *is* correct, though unusual. as a way of getting krb5-config from the
   # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
-  pkgs,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  zlib,
-  openssl,
-  softhsm,
-  libedit,
-  ldns,
-  pkg-config,
-  pam,
-  libredirect,
-  etcDir ? null,
-  withKerberos ? false,
-  withLdns ? true,
-  krb5,
-  libfido2,
-  libxcrypt,
-  hostname,
-  nixosTests,
-  withSecurityKey ? !stdenv.hostPlatform.isStatic,
-  withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
-  withPAM ? stdenv.hostPlatform.isLinux,
-  # Attempts to mlock the entire sshd process on startup to prevent swapping.
+  pkgs
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, zlib
+, openssl
+, softhsm
+, libedit
+, ldns
+, pkg-config
+, pam
+, libredirect
+, etcDir ? null
+, withKerberos ? false
+, withLdns ? true
+, krb5
+, libfido2
+, libxcrypt
+, hostname
+, nixosTests
+, withSecurityKey ? !stdenv.hostPlatform.isStatic
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey
+, withPAM ? stdenv.hostPlatform.isLinux
+, # Attempts to mlock the entire sshd process on startup to prevent swapping.
   # Currently disabled when PAM support is enabled due to crashes
   # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103418
-  withLinuxMemlock ? (stdenv.hostPlatform.isLinux && !withPAM),
-  linkOpenssl ? true,
-  isNixos ? stdenv.hostPlatform.isLinux,
+  withLinuxMemlock ? (stdenv.hostPlatform.isLinux && !withPAM)
+, linkOpenssl ? true
+, isNixos ? stdenv.hostPlatform.isLinux
+,
 }:
 
 # FIDO support requires SK support

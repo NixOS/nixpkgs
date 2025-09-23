@@ -10,9 +10,10 @@ lib.concatLists [
   (lib.optional (!targetPlatform.isx86_64 && !isAarch64Darwin && p ? arch) "--with-arch=${p.arch}")
   # See supported_defaults in gcc/config.gcc for architecture support.
   # --with-cpu on aarch64-darwin fails with "Unknown cpu used in --with-cpu=apple-a13".
-  (lib.optional (
-    with targetPlatform; !isLoongArch64 && !isMips && !isRiscV && !isS390 && !isAarch64Darwin && p ? cpu
-  ) "--with-cpu=${p.cpu}")
+  (lib.optional
+    (
+      with targetPlatform; !isLoongArch64 && !isMips && !isRiscV && !isS390 && !isAarch64Darwin && p ? cpu
+    ) "--with-cpu=${p.cpu}")
   (lib.optional (p ? abi) "--with-abi=${p.abi}")
   (lib.optional (p ? fpu) "--with-fpu=${p.fpu}")
   (lib.optional (p ? float) "--with-float=${p.float}")
@@ -27,14 +28,14 @@ lib.concatLists [
           && (
             targetPlatform.isLittleEndian
             ||
-              # "... --with-long-double-format is only supported if the default cpu is power7 or newer"
-              #  https://github.com/NixOS/nixpkgs/pull/170215#issuecomment-1202164709
-              (lib.lists.elem (lib.strings.substring 0 6 (p.cpu or "")) [
-                "power7"
-                "power8"
-                "power9"
-                "power1" # 0, 11, etc
-              ])
+            # "... --with-long-double-format is only supported if the default cpu is power7 or newer"
+            #  https://github.com/NixOS/nixpkgs/pull/170215#issuecomment-1202164709
+            (lib.lists.elem (lib.strings.substring 0 6 (p.cpu or "")) [
+              "power7"
+              "power8"
+              "power9"
+              "power1" # 0, 11, etc
+            ])
           )
         )
         [

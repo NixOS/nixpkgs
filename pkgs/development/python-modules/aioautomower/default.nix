@@ -1,23 +1,23 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  ical,
-  mashumaro,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pyjwt,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  python-dateutil,
-  syrupy,
-  time-machine,
-  tzlocal,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, ical
+, mashumaro
+, poetry-core
+, poetry-dynamic-versioning
+, pyjwt
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, python-dateutil
+, syrupy
+, time-machine
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

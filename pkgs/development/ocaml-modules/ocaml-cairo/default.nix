@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  automake,
-  ocaml,
-  autoconf,
-  gnum4,
-  pkg-config,
-  freetype,
-  lablgtk,
-  unzip,
-  cairo,
-  findlib,
-  gdk-pixbuf,
-  gtk2,
-  pango,
+{ stdenv
+, lib
+, fetchurl
+, automake
+, ocaml
+, autoconf
+, gnum4
+, pkg-config
+, freetype
+, lablgtk
+, unzip
+, cairo
+, findlib
+, gdk-pixbuf
+, gtk2
+, pango
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  symlinkJoin,
-  include,
-  sys-headers,
-  libpthread-headers,
+{ lib
+, symlinkJoin
+, include
+, sys-headers
+, libpthread-headers
+,
 }:
 
 symlinkJoin {

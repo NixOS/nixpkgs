@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchPypi,
-  flask,
-  google-api-core,
-  google-cloud-appengine-logging,
-  google-cloud-audit-log,
-  google-cloud-core,
-  google-cloud-testutils,
-  grpc-google-iam-v1,
-  mock,
-  opentelemetry-api,
-  pandas,
-  proto-plus,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
-  setuptools,
+{ lib
+, buildPythonPackage
+, django
+, fetchPypi
+, flask
+, google-api-core
+, google-cloud-appengine-logging
+, google-cloud-audit-log
+, google-cloud-core
+, google-cloud-testutils
+, grpc-google-iam-v1
+, mock
+, opentelemetry-api
+, pandas
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, rich
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

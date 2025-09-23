@@ -1,12 +1,12 @@
-{
-  lib,
-  guile,
-  stdenv,
-  fetchFromGitea,
-  pkg-config,
-  bash,
-  makeWrapper,
-  guile-json-rpc,
+{ lib
+, guile
+, stdenv
+, fetchFromGitea
+, pkg-config
+, bash
+, makeWrapper
+, guile-json-rpc
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-lsp-server";

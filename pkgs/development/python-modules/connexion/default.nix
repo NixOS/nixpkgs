@@ -1,36 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  asgiref,
-  httpx,
-  inflection,
-  jsonschema,
-  jinja2,
-  python-multipart,
-  pyyaml,
-  requests,
-  starlette,
-  typing-extensions,
-  werkzeug,
-
-  # optional-dependencies
-  a2wsgi,
-  flask,
-  swagger-ui-bundle,
-  uvicorn,
-
-  # tests
-  pytest-aiohttp,
-  pytestCheckHook,
-  testfixtures,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, # build-system
+  poetry-core
+, # dependencies
+  asgiref
+, httpx
+, inflection
+, jsonschema
+, jinja2
+, python-multipart
+, pyyaml
+, requests
+, starlette
+, typing-extensions
+, werkzeug
+, # optional-dependencies
+  a2wsgi
+, flask
+, swagger-ui-bundle
+, uvicorn
+, # tests
+  pytest-aiohttp
+, pytestCheckHook
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

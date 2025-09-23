@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  lib,
-  cmake,
-  setuptools,
-  typing-extensions,
-  pybind11,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, lib
+, cmake
+, setuptools
+, typing-extensions
+, pybind11
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

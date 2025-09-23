@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-
-  # tests
-  firefox-esr-unwrapped,
-  firefox-unwrapped,
-  thunderbird-unwrapped,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, # tests
+  firefox-esr-unwrapped
+, firefox-unwrapped
+, thunderbird-unwrapped
+,
 }:
 
 let

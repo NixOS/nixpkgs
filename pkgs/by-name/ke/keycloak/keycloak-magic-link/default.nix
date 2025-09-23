@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  maven,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, maven
+, nix-update-script
+,
 }:
 maven.buildMavenPackage rec {
   pname = "keycloak-magic-link";

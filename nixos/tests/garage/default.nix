@@ -1,12 +1,12 @@
-{
-  runTest,
-  package,
+{ runTest
+, package
+,
 }:
 let
   mkNode =
-    {
-      publicV6Address ? "::1",
-      extraSettings ? { },
+    { publicV6Address ? "::1"
+    , extraSettings ? { }
+    ,
     }:
     { pkgs, ... }:
     {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildNpmPackage,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  hatch-vcs,
-  hatchling,
-  jinja2,
-  pytest,
-  pytest-metadata,
+{ lib
+, buildNpmPackage
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatch-vcs
+, hatchling
+, jinja2
+, pytest
+, pytest-metadata
+,
 }:
 let
   pname = "pytest-html";

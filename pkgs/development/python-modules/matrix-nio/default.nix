@@ -1,46 +1,40 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiofiles,
-  aiohttp,
-  aiohttp-socks,
-  h11,
-  h2,
-  jsonschema,
-  pycryptodome,
-  unpaddedbase64,
-
-  # optional-dependencies
-  atomicwrites,
-  cachetools,
-  peewee,
-  python-olm,
-
-  # tests
-  aioresponses,
-  faker,
-  hpack,
-  hyperframe,
-  hypothesis,
-  pytest-aiohttp,
-  pytest-asyncio_0,
-  pytest-benchmark,
-  pytestCheckHook,
-
-  # passthru tests
-  nixosTests,
-  opsdroid,
-  pantalaimon,
-  weechatScripts,
-  zulip,
-
-  withOlm ? false,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiofiles
+, aiohttp
+, aiohttp-socks
+, h11
+, h2
+, jsonschema
+, pycryptodome
+, unpaddedbase64
+, # optional-dependencies
+  atomicwrites
+, cachetools
+, peewee
+, python-olm
+, # tests
+  aioresponses
+, faker
+, hpack
+, hyperframe
+, hypothesis
+, pytest-aiohttp
+, pytest-asyncio_0
+, pytest-benchmark
+, pytestCheckHook
+, # passthru tests
+  nixosTests
+, opsdroid
+, pantalaimon
+, weechatScripts
+, zulip
+, withOlm ? false
+,
 }:
 
 buildPythonPackage rec {

@@ -1,43 +1,40 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  setuptools,
-  fetchPypi,
-  replaceVars,
-
-  # build
-  autoPatchelfHook,
-  attrdict,
-  doxygen,
-  pkg-config,
-  python,
-  requests,
-  sip,
-  which,
-  buildPackages,
-
-  # runtime
-  cairo,
-  gst_all_1,
-  gtk3,
-  libGL,
-  libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
-  libglvnd,
-  libgbm,
-  pango,
-  webkitgtk_4_1,
-  wxGTK,
-  xorgproto,
-
-  # propagates
-  numpy,
-  pillow,
-  six,
+{ lib
+, stdenv
+, buildPythonPackage
+, setuptools
+, fetchPypi
+, replaceVars
+, # build
+  autoPatchelfHook
+, attrdict
+, doxygen
+, pkg-config
+, python
+, requests
+, sip
+, which
+, buildPackages
+, # runtime
+  cairo
+, gst_all_1
+, gtk3
+, libGL
+, libGLU
+, libSM
+, libXinerama
+, libXtst
+, libXxf86vm
+, libglvnd
+, libgbm
+, pango
+, webkitgtk_4_1
+, wxGTK
+, xorgproto
+, # propagates
+  numpy
+, pillow
+, six
+,
 }:
 
 buildPythonPackage rec {

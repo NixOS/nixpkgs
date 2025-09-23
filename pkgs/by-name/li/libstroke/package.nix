@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  automake,
-  autoconf,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, automake
+, autoconf
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

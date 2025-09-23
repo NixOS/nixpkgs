@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchurl,
-  makeWrapper,
-  nixosTests,
-  nodejs,
-  pnpm_10,
-  prisma-engines,
-  openssl,
-  rustPlatform,
-  # build variables
-  databaseType ? "postgresql",
-  collectApiEndpoint ? "",
-  trackerScriptNames ? [ ],
-  basePath ? "",
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchurl
+, makeWrapper
+, nixosTests
+, nodejs
+, pnpm_10
+, prisma-engines
+, openssl
+, rustPlatform
+, # build variables
+  databaseType ? "postgresql"
+, collectApiEndpoint ? ""
+, trackerScriptNames ? [ ]
+, basePath ? ""
+,
 }:
 let
   sources = lib.importJSON ./sources.json;

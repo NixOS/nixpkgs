@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  oniguruma,
-  openssl,
-  pkg-config,
-  rustPlatform,
+{ fetchFromGitHub
+, fetchpatch
+, lib
+, oniguruma
+, openssl
+, pkg-config
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

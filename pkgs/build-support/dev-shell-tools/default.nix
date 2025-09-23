@@ -1,6 +1,6 @@
-{
-  lib,
-  writeTextFile,
+{ lib
+, writeTextFile
+,
 }:
 let
   inherit (builtins) typeOf;
@@ -39,10 +39,11 @@ rec {
           let
             nameHash =
               if builtins ? convertHash then
-                builtins.convertHash {
-                  hash = "sha256:" + builtins.hashString "sha256" name;
-                  toHashFormat = "nix32";
-                }
+                builtins.convertHash
+                  {
+                    hash = "sha256:" + builtins.hashString "sha256" name;
+                    toHashFormat = "nix32";
+                  }
               else
                 builtins.hashString "sha256" name;
             basename = ".attr-${nameHash}";

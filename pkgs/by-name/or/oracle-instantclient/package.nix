@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  fixDarwinDylibNames,
-  unzip,
-  _7zz,
-  libaio,
-  makeWrapper,
-  odbcSupport ? true,
-  unixODBC,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, fixDarwinDylibNames
+, unzip
+, _7zz
+, libaio
+, makeWrapper
+, odbcSupport ? true
+, unixODBC
+,
 }:
 
 assert odbcSupport -> unixODBC != null;
@@ -35,8 +35,7 @@ let
       aarch64-linux = "19.10.0.0.0";
       x86_64-darwin = "19.8.0.0.0";
       aarch64-darwin = "23.3.0.23.09";
-    }
-    .${stdenv.hostPlatform.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
   directory =
     {
@@ -44,8 +43,7 @@ let
       aarch64-linux = "191000";
       x86_64-darwin = "198000";
       aarch64-darwin = "233023";
-    }
-    .${stdenv.hostPlatform.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
   # hashes per component and architecture
   hashes =
@@ -78,8 +76,7 @@ let
         tools = "sha256-gA+SbgXXpY12TidpnjBzt0oWQ5zLJg6wUpzpSd/N5W4=";
         odbc = "sha256-JzoSdH7mJB709cdXELxWzpgaNTjOZhYH/wLkdzKA2N0=";
       };
-    }
-    .${stdenv.hostPlatform.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
   # rels per component and architecture, optional
   rels =
@@ -88,8 +85,7 @@ let
         basic = "1";
         tools = "1";
       };
-    }
-    .${stdenv.hostPlatform.system} or { };
+    }.${stdenv.hostPlatform.system} or { };
 
   # convert platform to oracle architecture names
   arch =
@@ -98,8 +94,7 @@ let
       aarch64-linux = "linux.arm64";
       x86_64-darwin = "macos.x64";
       aarch64-darwin = "macos.arm64";
-    }
-    .${stdenv.hostPlatform.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
   shortArch =
     {
@@ -107,14 +102,12 @@ let
       aarch64-linux = "linux";
       x86_64-darwin = "mac";
       aarch64-darwin = "mac";
-    }
-    .${stdenv.hostPlatform.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
   suffix =
     {
       aarch64-darwin = ".dmg";
-    }
-    .${stdenv.hostPlatform.system} or "dbru.zip";
+    }.${stdenv.hostPlatform.system} or "dbru.zip";
 
   # calculate the filename of a single zip file
   srcFilename =
@@ -130,10 +123,12 @@ let
     };
 
   # assemble srcs
-  srcs = map (
-    component:
-    (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or "")
-  ) components;
+  srcs = map
+    (
+      component:
+      (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or "")
+    )
+    components;
 
   isDarwinAarch64 = stdenv.hostPlatform.system == "aarch64-darwin";
 

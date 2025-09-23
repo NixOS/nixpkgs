@@ -1,11 +1,11 @@
-{
-  lib,
-  buildEnv,
-  makeBinaryWrapper,
-  indilib ? indilib,
-  pname ? "indi-with-drivers",
-  version ? indilib.version,
-  extraDrivers ? [ ],
+{ lib
+, buildEnv
+, makeBinaryWrapper
+, indilib ? indilib
+, pname ? "indi-with-drivers"
+, version ? indilib.version
+, extraDrivers ? [ ]
+,
 }:
 
 buildEnv {

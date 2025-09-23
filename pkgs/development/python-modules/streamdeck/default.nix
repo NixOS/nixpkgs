@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-  pkgs,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

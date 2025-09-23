@@ -1,25 +1,25 @@
-{
-  acl,
-  coreutils,
-  cryptsetup,
-  e2fsprogs,
-  fetchFromGitHub,
-  file,
-  gawk,
-  getent,
-  gettext,
-  gnugrep,
-  gnupg,
-  lib,
-  libargon2,
-  lsof,
-  makeWrapper,
-  nix-update-script,
-  pinentry,
-  stdenvNoCC,
-  testers,
-  util-linux,
-  zsh,
+{ acl
+, coreutils
+, cryptsetup
+, e2fsprogs
+, fetchFromGitHub
+, file
+, gawk
+, getent
+, gettext
+, gnugrep
+, gnupg
+, lib
+, libargon2
+, lsof
+, makeWrapper
+, nix-update-script
+, pinentry
+, stdenvNoCC
+, testers
+, util-linux
+, zsh
+,
 }:
 
 let

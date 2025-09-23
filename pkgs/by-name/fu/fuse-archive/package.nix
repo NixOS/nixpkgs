@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fuse,
-  libarchive,
-  pkg-config,
-  boost,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse
+, libarchive
+, pkg-config
+, boost
+,
 }:
 
 stdenv.mkDerivation rec {

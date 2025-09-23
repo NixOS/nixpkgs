@@ -1,64 +1,61 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  attrs,
-  chardet,
-  humanize,
-  isodate,
-  jinja2,
-  jsonschema,
-  marko,
-  petl,
-  pydantic,
-  python-dateutil,
-  python-slugify,
-  pyyaml,
-  requests,
-  rfc3986,
-  simpleeval,
-  tabulate,
-  typer,
-  typing-extensions,
-  validators,
-
-  # Optional formats
-  boto3,
-  google-api-python-client,
-  datasette,
-  duckdb,
-  duckdb-engine,
-  sqlalchemy,
-  pygithub,
-  pyquery,
-  ijson,
-  jsonlines,
-  pymysql,
-  ezodf,
-  lxml,
-  pandas,
-  pyarrow,
-  fastparquet,
-  psycopg,
-  psycopg2,
-  visidata,
-  tatsu,
-
-  # Tests
-  pytestCheckHook,
-  pytest-cov,
-  pytest-dotenv,
-  pytest-lazy-fixtures,
-  pytest-mock,
-  pytest-timeout,
-  pytest-vcr,
-  moto,
-  requests-mock,
-
-  # Tests depending on excel
-  openpyxl,
-  xlrd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, attrs
+, chardet
+, humanize
+, isodate
+, jinja2
+, jsonschema
+, marko
+, petl
+, pydantic
+, python-dateutil
+, python-slugify
+, pyyaml
+, requests
+, rfc3986
+, simpleeval
+, tabulate
+, typer
+, typing-extensions
+, validators
+, # Optional formats
+  boto3
+, google-api-python-client
+, datasette
+, duckdb
+, duckdb-engine
+, sqlalchemy
+, pygithub
+, pyquery
+, ijson
+, jsonlines
+, pymysql
+, ezodf
+, lxml
+, pandas
+, pyarrow
+, fastparquet
+, psycopg
+, psycopg2
+, visidata
+, tatsu
+, # Tests
+  pytestCheckHook
+, pytest-cov
+, pytest-dotenv
+, pytest-lazy-fixtures
+, pytest-mock
+, pytest-timeout
+, pytest-vcr
+, moto
+, requests-mock
+, # Tests depending on excel
+  openpyxl
+, xlrd
+,
 }:
 
 buildPythonPackage rec {

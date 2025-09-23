@@ -1,23 +1,23 @@
-{
-  lib,
-  callPackage,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  jq,
-  glslang,
-  libffi,
-  libX11,
-  libXau,
-  libxcb,
-  libXdmcp,
-  libXrandr,
-  spirv-headers,
-  spirv-tools,
-  vulkan-headers,
-  vulkan-utility-libraries,
-  wayland,
+{ lib
+, callPackage
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, jq
+, glslang
+, libffi
+, libX11
+, libXau
+, libxcb
+, libXdmcp
+, libXrandr
+, spirv-headers
+, spirv-tools
+, vulkan-headers
+, vulkan-utility-libraries
+, wayland
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  enableUnfree ? true,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, enableUnfree ? true
+,
 }:
 
 buildGoModule rec {

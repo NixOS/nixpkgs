@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  fetchFromGitLab,
-  gperf,
-  gawk,
-  gitUpdater,
-  pkg-config,
-  boost,
-  luajit_openresty,
-  asciidoctor,
-  libsForQt5,
-  emilua,
-  liburing,
-  fmt,
-  runCommand,
-  xvfb-run,
-  qt5, # this
+{ lib
+, stdenv
+, meson
+, ninja
+, fetchFromGitLab
+, gperf
+, gawk
+, gitUpdater
+, pkg-config
+, boost
+, luajit_openresty
+, asciidoctor
+, libsForQt5
+, emilua
+, liburing
+, fmt
+, runCommand
+, xvfb-run
+, qt5
+, # this
 }:
 
 stdenv.mkDerivation rec {

@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchFromGitHub,
-  nix-update-script,
-  runCommand,
-  which,
-  rustPlatform,
-  emscripten,
-  openssl,
-  pkg-config,
-  callPackage,
-  linkFarm,
-  substitute,
-  installShellFiles,
-  buildPackages,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  webUISupport ? false,
-  extraGrammars ? { },
-
-  # tests
-  lunarvim,
+{ lib
+, stdenv
+, fetchgit
+, fetchFromGitHub
+, nix-update-script
+, runCommand
+, which
+, rustPlatform
+, emscripten
+, openssl
+, pkg-config
+, callPackage
+, linkFarm
+, substitute
+, installShellFiles
+, buildPackages
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
+, webUISupport ? false
+, extraGrammars ? { }
+, # tests
+  lunarvim
+,
 }:
 
 let
@@ -59,9 +58,11 @@ let
       mkdir $out
     ''
     + (lib.concatStrings (
-      lib.mapAttrsToList (
-        name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n"
-      ) (import ./grammars { inherit lib; })
+      lib.mapAttrsToList
+        (
+          name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n"
+        )
+        (import ./grammars { inherit lib; })
     ))
   );
 
@@ -148,20 +149,22 @@ let
       grammars = grammarFn builtGrammars;
     in
     linkFarm "grammars" (
-      map (
-        drv:
-        let
-          name = lib.strings.getName drv;
-        in
-        {
-          name =
-            (lib.strings.replaceStrings [ "-" ] [ "_" ] (
-              lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
-            ))
-            + ".so";
-          path = "${drv}/parser";
-        }
-      ) grammars
+      map
+        (
+          drv:
+          let
+            name = lib.strings.getName drv;
+          in
+          {
+            name =
+              (lib.strings.replaceStrings [ "-" ] [ "_" ] (
+                lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
+              ))
+              + ".so";
+            path = "${drv}/parser";
+          }
+        )
+        grammars
     );
 
   allGrammars = builtins.attrValues builtGrammars;

@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  aiohttp,
-  attrs,
-  packaging,
-  structlog,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  poetry-core
+, # dependencies
+  aiohttp
+, attrs
+, packaging
+, structlog
+,
 }:
 
 buildPythonPackage rec {

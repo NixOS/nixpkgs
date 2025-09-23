@@ -1,20 +1,20 @@
-{
-  lib,
-  runCommand,
-  powerline,
+{ lib
+, runCommand
+, powerline
+,
 }:
 
 let
   inherit (powerline) version;
 in
 runCommand "powerline-symbols-${version}"
-  {
-    meta = {
-      inherit (powerline.meta) license;
-      priority = (powerline.meta.priority or lib.meta.defaultPriority) + 1;
-      maintainers = with lib.maintainers; [ midchildan ];
-    };
-  }
+{
+  meta = {
+    inherit (powerline.meta) license;
+    priority = (powerline.meta.priority or lib.meta.defaultPriority) + 1;
+    maintainers = with lib.maintainers; [ midchildan ];
+  };
+}
   ''
     install -Dm644 \
       ${powerline.src}/font/PowerlineSymbols.otf \

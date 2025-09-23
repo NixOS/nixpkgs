@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  bison,
-  flex,
-  pam,
-  perl,
-  sendmailPath ? "/run/wrappers/bin/sendmail",
-  atWrapperPath ? "/run/wrappers/bin/at",
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, bison
+, flex
+, pam
+, perl
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+, atWrapperPath ? "/run/wrappers/bin/at"
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  sphinxHook,
-  # Build system
-  pbr,
-  setuptools,
-  # Dependencies
-  click,
-  docutils,
-  sphinx,
-  # Checks
-  pytestCheckHook,
-  defusedxml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, sphinxHook
+, # Build system
+  pbr
+, setuptools
+, # Dependencies
+  click
+, docutils
+, sphinx
+, # Checks
+  pytestCheckHook
+, defusedxml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  six,
-  toolz,
-  tornado,
-  zict,
-
-  # tests
-  dask,
-  distributed,
-  flaky,
-  pandas,
-  pyarrow,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  six
+, toolz
+, tornado
+, zict
+, # tests
+  dask
+, distributed
+, flaky
+, pandas
+, pyarrow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

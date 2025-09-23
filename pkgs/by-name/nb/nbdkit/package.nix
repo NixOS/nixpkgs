@@ -1,21 +1,21 @@
-{
-  stdenv,
-  testers,
-  fetchurl,
-  autoreconfHook,
-  makeWrapper,
-  pkg-config,
-  bash-completion,
-  gnutls,
-  libtool,
-  curl,
-  xz,
-  zlib-ng,
-  libssh,
-  libnbd,
-  lib,
-  cdrkit,
-  e2fsprogs,
+{ stdenv
+, testers
+, fetchurl
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, bash-completion
+, gnutls
+, libtool
+, curl
+, xz
+, zlib-ng
+, libssh
+, libnbd
+, lib
+, cdrkit
+, e2fsprogs
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

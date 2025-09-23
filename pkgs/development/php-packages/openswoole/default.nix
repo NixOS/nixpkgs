@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPecl,
-  valgrind,
-  pcre2,
-  fetchFromGitHub,
-  php,
+{ lib
+, stdenv
+, buildPecl
+, valgrind
+, pcre2
+, fetchFromGitHub
+, php
+,
 }:
 
 let

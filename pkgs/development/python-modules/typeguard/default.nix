@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  pytestCheckHook,
-  typing-extensions,
-  importlib-metadata,
-  mypy,
-  sphinxHook,
-  sphinx-autodoc-typehints,
-  sphinx-rtd-theme,
-  glibcLocales,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, setuptools-scm
+, pytestCheckHook
+, typing-extensions
+, importlib-metadata
+, mypy
+, sphinxHook
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
+, glibcLocales
+,
 }:
 
 buildPythonPackage rec {

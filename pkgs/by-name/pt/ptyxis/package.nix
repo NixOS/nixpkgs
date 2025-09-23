@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  json-glib,
-  vte-gtk4,
-  libportal-gtk4,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, json-glib
+, vte-gtk4
+, libportal-gtk4
+, pcre2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

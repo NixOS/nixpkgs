@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cryptography,
-  types-pyopenssl,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, types-pyopenssl
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

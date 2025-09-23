@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  asyncstdlib,
-  buildPythonPackage,
-  dataclasses-json,
-  fetchFromGitHub,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, asyncstdlib
+, buildPythonPackage
+, dataclasses-json
+, fetchFromGitHub
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

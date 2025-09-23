@@ -1,5 +1,5 @@
-{
-  mattermost,
+{ mattermost
+,
 }:
 
 mattermost.override {

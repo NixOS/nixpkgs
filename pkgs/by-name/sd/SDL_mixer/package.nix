@@ -1,21 +1,21 @@
-{
-  lib,
-  SDL,
-  fetchpatch,
-  fetchurl,
-  fluidsynth,
-  libopenmpt-modplug,
-  libogg,
-  libvorbis,
-  pkg-config,
-  smpeg,
-  stdenv,
-  # passthru.tests
-  onscripter-en,
-  # Boolean flags
-  enableNativeMidi ? false,
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
-  enableSmpegtest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL
+, fetchpatch
+, fetchurl
+, fluidsynth
+, libopenmpt-modplug
+, libogg
+, libvorbis
+, pkg-config
+, smpeg
+, stdenv
+, # passthru.tests
+  onscripter-en
+, # Boolean flags
+  enableNativeMidi ? false
+, enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+, enableSmpegtest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

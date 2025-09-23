@@ -1,22 +1,22 @@
-{
-  callPackage,
-  lib,
-  stdenv,
-  pname ? "telegram-desktop",
-  unwrapped ? callPackage ./unwrapped.nix { inherit stdenv; },
-  qtbase,
-  qtimageformats,
-  qtsvg,
-  qtwayland,
-  kimageformats,
-  libavif,
-  libheif,
-  libjxl,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
-  glib-networking,
-  webkitgtk_4_1,
-  withWebkit ? true,
+{ callPackage
+, lib
+, stdenv
+, pname ? "telegram-desktop"
+, unwrapped ? callPackage ./unwrapped.nix { inherit stdenv; }
+, qtbase
+, qtimageformats
+, qtsvg
+, qtwayland
+, kimageformats
+, libavif
+, libheif
+, libjxl
+, wrapGAppsHook3
+, wrapQtAppsHook
+, glib-networking
+, webkitgtk_4_1
+, withWebkit ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;

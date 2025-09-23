@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  fmt,
-  ocaml_lwt,
+{ lib
+, buildDunePackage
+, fetchurl
+, fmt
+, ocaml_lwt
+,
 }:
 
 buildDunePackage rec {

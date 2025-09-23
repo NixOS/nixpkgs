@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  argparse-dataclass,
-  throttler,
-  snakemake-interface-common,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, argparse-dataclass
+, throttler
+, snakemake-interface-common
+,
 }:
 
 buildPythonPackage rec {

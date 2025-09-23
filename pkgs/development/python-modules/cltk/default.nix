@@ -1,30 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  boltons,
-  gensim,
-  gitpython,
-  greek-accentuation,
-  nltk,
-  pyyaml,
-  rapidfuzz,
-  requests,
-  scikit-learn,
-  scipy,
-  spacy,
-  stanza,
-  torch,
-  tqdm,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  boltons
+, gensim
+, gitpython
+, greek-accentuation
+, nltk
+, pyyaml
+, rapidfuzz
+, requests
+, scikit-learn
+, scipy
+, spacy
+, stanza
+, torch
+, tqdm
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage rec {
   pname = "cltk";

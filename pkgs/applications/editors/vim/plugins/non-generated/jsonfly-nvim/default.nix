@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitea,
-  vimUtils,
-  nix-update-script,
+{ lib
+, fetchFromGitea
+, vimUtils
+, nix-update-script
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "jsonfly.nvim";

@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtsensors,
-  qtwayland,
-  dbus,
-  wayland-protocols,
+{ mkKdeDerivation
+, pkg-config
+, qtsensors
+, qtwayland
+, dbus
+, wayland-protocols
+,
 }:
 mkKdeDerivation {
   pname = "kscreen";

@@ -1,39 +1,32 @@
-{
-  lib,
-  stdenv,
-  gcc13Stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-
-  # build-system
-  pathspec,
-  pyproject-metadata,
-  scikit-build-core,
-
-  # dependencies
-  diskcache,
-  jinja2,
-  numpy,
-  typing-extensions,
-
-  # tests
-  scipy,
-  huggingface-hub,
-
-  # passthru
-  gitUpdater,
-  pytestCheckHook,
-  llama-cpp-python,
-
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
-
+{ lib
+, stdenv
+, gcc13Stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # nativeBuildInputs
+  cmake
+, ninja
+, # build-system
+  pathspec
+, pyproject-metadata
+, scikit-build-core
+, # dependencies
+  diskcache
+, jinja2
+, numpy
+, typing-extensions
+, # tests
+  scipy
+, huggingface-hub
+, # passthru
+  gitUpdater
+, pytestCheckHook
+, llama-cpp-python
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+,
 }:
 let
   stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;

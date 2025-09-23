@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gi-docgen,
-  glib,
-  gtk3,
-  gtk4,
-  libsForQt5,
-  qt6Packages,
-  variant ? null,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, glib
+, gtk3
+, gtk4
+, libsForQt5
+, qt6Packages
+, variant ? null
+,
 }:
 
 assert
-  variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5" || variant == "qt6";
+variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5" || variant == "qt6";
 
 stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";

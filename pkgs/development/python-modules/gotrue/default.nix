@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  httpx,
-  h2,
-  pydantic,
-  pyjwt,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, httpx
+, h2
+, pydantic
+, pyjwt
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

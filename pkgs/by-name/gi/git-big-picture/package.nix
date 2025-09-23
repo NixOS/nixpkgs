@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  git,
-  graphviz,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, git
+, graphviz
+,
 }:
 
 python3Packages.buildPythonApplication rec {

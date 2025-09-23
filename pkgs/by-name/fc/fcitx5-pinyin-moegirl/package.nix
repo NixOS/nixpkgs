@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  nix-update-script,
-  stdenvNoCC,
+{ lib
+, fetchurl
+, nix-update-script
+, stdenvNoCC
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-pinyin-moegirl";

@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  installShellFiles,
-  alsa-lib,
-  libjack2,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, installShellFiles
+, alsa-lib
+, libjack2
+,
 }:
 
 rustPlatform.buildRustPackage rec {

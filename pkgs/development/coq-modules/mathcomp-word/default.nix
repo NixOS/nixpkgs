@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  coq,
-  mkCoqDerivation,
-  mathcomp,
-  stdlib,
-  lib,
-  version ? null,
+{ fetchurl
+, coq
+, mkCoqDerivation
+, mathcomp
+, stdlib
+, lib
+, version ? null
+,
 }:
 
 let
@@ -15,13 +15,12 @@ let
   ];
   pname = "word";
   fetcher =
-    {
-      domain,
-      owner,
-      repo,
-      rev,
-      sha256 ? null,
-      ...
+    { domain
+    , owner
+    , repo
+    , rev
+    , sha256 ? null
+    , ...
     }:
     let
       prefix = "https://${domain}/${owner}/${repo}/";

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  python3,
-  librandombytes,
+{ lib
+, stdenv
+, fetchzip
+, python3
+, librandombytes
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkgsBuildHost,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgsBuildHost
+, versionCheckHook
+,
 }:
 
 # Changing the variables CPPFLAGS and BUILD_CONFIG_NAME can be done by

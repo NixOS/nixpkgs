@@ -1,31 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  accelerate,
-  docling-core,
-  huggingface-hub,
-  jsonlines,
-  numpy,
-  opencv-python-headless,
-  pillow,
-  pydantic,
-  rtree,
-  safetensors,
-  torch,
-  torchvision,
-  tqdm,
-  transformers,
-
-  # tests
-  datasets,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  accelerate
+, docling-core
+, huggingface-hub
+, jsonlines
+, numpy
+, opencv-python-headless
+, pillow
+, pydantic
+, rtree
+, safetensors
+, torch
+, torchvision
+, tqdm
+, transformers
+, # tests
+  datasets
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

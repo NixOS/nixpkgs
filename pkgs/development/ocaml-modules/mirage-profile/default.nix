@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ppx_cstruct,
-  stdlib-shims,
-  cstruct,
-  lwt,
+{ lib
+, fetchurl
+, buildDunePackage
+, ppx_cstruct
+, stdlib-shims
+, cstruct
+, lwt
+,
 }:
 
 buildDunePackage rec {

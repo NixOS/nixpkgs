@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  cmocka,
-  acl,
-  libuuid,
-  lzo,
-  util-linux,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, cmocka
+, acl
+, libuuid
+, lzo
+, util-linux
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

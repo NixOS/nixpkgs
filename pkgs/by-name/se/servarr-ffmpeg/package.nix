@@ -1,8 +1,8 @@
-{
-  ffmpeg-headless,
-  fetchFromGitHub,
-  fetchpatch2,
-  lib,
+{ ffmpeg-headless
+, fetchFromGitHub
+, fetchpatch2
+, lib
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mpi,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mpi
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

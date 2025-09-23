@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  llvmPackages,
-  fetchurl,
-  pkg-config,
-  freetype,
-  cmake,
-  static ? stdenv.hostPlatform.isStatic,
-  testers,
+{ lib
+, stdenv
+, llvmPackages
+, fetchurl
+, pkg-config
+, freetype
+, cmake
+, static ? stdenv.hostPlatform.isStatic
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

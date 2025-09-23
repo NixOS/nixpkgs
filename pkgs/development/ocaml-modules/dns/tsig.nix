@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  dns,
-  digestif,
-  base64,
-  alcotest,
+{ buildDunePackage
+, dns
+, digestif
+, base64
+, alcotest
+,
 }:
 
 buildDunePackage {

@@ -1,16 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  unittestCheckHook,
-
-  setuptools,
-
-  regex,
-  panphon,
-  marisa-trie,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unittestCheckHook
+, setuptools
+, regex
+, panphon
+, marisa-trie
+, requests
+,
 }:
 
 buildPythonPackage rec {

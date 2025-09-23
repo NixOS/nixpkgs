@@ -1,30 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-
-  # build time
-  bison,
-  flex,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-
-  # runtime
-  boost,
-  log4cplus,
-  openssl,
-  python3,
-  withKrb5 ? true,
-  krb5,
-  withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
-  libmysqlclient,
-  withPostgresql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
-  libpq,
-
-  # tests
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, # build time
+  bison
+, flex
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, # runtime
+  boost
+, log4cplus
+, openssl
+, python3
+, withKrb5 ? true
+, krb5
+, withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
+, libmysqlclient
+, withPostgresql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
+, libpq
+, # tests
+  nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

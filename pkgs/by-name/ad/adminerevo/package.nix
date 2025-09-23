@@ -1,12 +1,12 @@
-{
-  lib,
-  pkgs,
-  stdenvNoCC,
-  fetchFromGitHub,
-  php,
-  nix-update-script,
-  theme ? null,
-  plugins ? [ ],
+{ lib
+, pkgs
+, stdenvNoCC
+, fetchFromGitHub
+, php
+, nix-update-script
+, theme ? null
+, plugins ? [ ]
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

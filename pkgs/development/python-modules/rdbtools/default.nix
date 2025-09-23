@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  distutils,
-  redis,
-  unittestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, distutils
+, redis
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

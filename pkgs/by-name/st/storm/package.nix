@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  zip,
-  unzip,
-  jdk,
-  python3,
-  confFile ? "",
-  extraLibraryPaths ? [ ],
-  extraJars ? [ ],
-  testers,
+{ stdenv
+, lib
+, fetchurl
+, zip
+, unzip
+, jdk
+, python3
+, confFile ? ""
+, extraLibraryPaths ? [ ]
+, extraJars ? [ ]
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

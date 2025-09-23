@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  include,
-  libgcc,
-  libcMinimal,
-  csu,
+{ mkDerivation
+, include
+, libgcc
+, libcMinimal
+, csu
+,
 }:
 mkDerivation {
   path = "lib/libutil";

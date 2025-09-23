@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, pytestCheckHook
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "snapshot-restore-py";

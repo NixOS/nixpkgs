@@ -1,8 +1,8 @@
-{
-  haskell,
-  haskellPackages,
-  installShellFiles,
-  lib,
+{ haskell
+, haskellPackages
+, installShellFiles
+, lib
+,
 }:
 let
   inherit (haskell.lib.compose) justStaticExecutables overrideCabal;

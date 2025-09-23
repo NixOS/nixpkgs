@@ -29,11 +29,10 @@ let
 
   generateNodeConf =
     { octet, vlan }:
-    {
-      lib,
-      pkgs,
-      config,
-      ...
+    { lib
+    , pkgs
+    , config
+    , ...
     }:
     {
       imports = [
@@ -54,11 +53,10 @@ let
 
   generateSwitchConf =
     vlans:
-    {
-      lib,
-      pkgs,
-      config,
-      ...
+    { lib
+    , pkgs
+    , config
+    , ...
     }:
     {
       imports = [

@@ -6,9 +6,8 @@
 
   nodes = {
     authelia =
-      {
-        pkgs,
-        ...
+      { pkgs
+      , ...
       }:
       {
         services.authelia.instances.testing = {

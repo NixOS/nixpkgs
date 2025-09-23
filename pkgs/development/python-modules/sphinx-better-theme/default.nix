@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  sphinxHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, sphinxHook
+,
 }:
 
 buildPythonPackage rec {

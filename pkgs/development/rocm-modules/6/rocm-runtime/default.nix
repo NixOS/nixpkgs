@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  rocmUpdateScript,
-  pkg-config,
-  cmake,
-  ninja,
-  xxd,
-  rocm-device-libs,
-  elfutils,
-  libdrm,
-  numactl,
-  valgrind,
-  libxml2,
-  rocm-merged-llvm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rocmUpdateScript
+, pkg-config
+, cmake
+, ninja
+, xxd
+, rocm-device-libs
+, elfutils
+, libdrm
+, numactl
+, valgrind
+, libxml2
+, rocm-merged-llvm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

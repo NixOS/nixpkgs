@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  libpulseaudio,
-  nix-update-script,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, libpulseaudio
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

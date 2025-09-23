@@ -1,22 +1,22 @@
-{
-  alcotest-lwt,
-  buildDunePackage,
-  ca-certs,
-  colombe,
-  containers,
-  domain-name,
-  emile,
-  fetchFromGitHub,
-  fmt,
-  lib,
-  logs,
-  lwt,
-  mrmime,
-  ptime,
-  rresult,
-  sendmail,
-  tls-lwt,
-  x509,
+{ alcotest-lwt
+, buildDunePackage
+, ca-certs
+, colombe
+, containers
+, domain-name
+, emile
+, fetchFromGitHub
+, fmt
+, lib
+, logs
+, lwt
+, mrmime
+, ptime
+, rresult
+, sendmail
+, tls-lwt
+, x509
+,
 }:
 
 let

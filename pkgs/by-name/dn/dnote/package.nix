@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
-  nodejs,
-  nix-update-script,
-  versionCheckHook,
-  postgresqlTestHook,
-  postgresql,
-  defaultApiEndPoint ? "https://api.getdnote.com",
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchNpmDeps
+, npmHooks
+, nodejs
+, nix-update-script
+, versionCheckHook
+, postgresqlTestHook
+, postgresql
+, defaultApiEndPoint ? "https://api.getdnote.com"
+,
 }:
 
 buildGoModule rec {

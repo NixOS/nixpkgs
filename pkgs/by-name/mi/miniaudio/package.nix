@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  testers,
-
-  cmake,
-  ninja,
-
-  alsa-lib,
-  libjack2,
-  libpulseaudio,
-  libvorbis,
-  opusfile,
-  sndio,
-
-  alsaSupport ? true,
-  pulseSupport ? true,
-  jackSupport ? true,
-  sndioSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, cmake
+, ninja
+, alsa-lib
+, libjack2
+, libpulseaudio
+, libvorbis
+, opusfile
+, sndio
+, alsaSupport ? true
+, pulseSupport ? true
+, jackSupport ? true
+, sndioSupport ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudio";

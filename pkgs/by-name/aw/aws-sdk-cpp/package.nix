@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  openssl,
-  zlib,
-  aws-crt-cpp,
-  nix,
-  arrow-cpp,
-  aws-sdk-cpp,
-  # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
-  apis ? [ "*" ],
-  # Whether to enable AWS' custom memory management.
-  customMemoryManagement ? true,
-  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
-  requiredSystemFeatures ? [ "big-parallel" ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, openssl
+, zlib
+, aws-crt-cpp
+, nix
+, arrow-cpp
+, aws-sdk-cpp
+, # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
+  apis ? [ "*" ]
+, # Whether to enable AWS' custom memory management.
+  customMemoryManagement ? true
+, # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
+  requiredSystemFeatures ? [ "big-parallel" ]
+,
 }:
 
 let

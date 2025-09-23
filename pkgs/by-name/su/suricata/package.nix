@@ -1,38 +1,38 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  clang,
-  llvm,
-  pkg-config,
-  makeWrapper,
-  elfutils,
-  file,
-  jansson,
-  libbpf_0,
-  libcap_ng,
-  libevent,
-  libmaxminddb,
-  libnet,
-  libnetfilter_log,
-  libnetfilter_queue,
-  libnfnetlink,
-  libpcap,
-  libyaml,
-  luajit,
-  lz4,
-  nspr,
-  pcre2,
-  python3,
-  vectorscan,
-  zlib,
-  redisSupport ? true,
-  valkey,
-  hiredis,
-  rustSupport ? true,
-  rustc,
-  cargo,
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, clang
+, llvm
+, pkg-config
+, makeWrapper
+, elfutils
+, file
+, jansson
+, libbpf_0
+, libcap_ng
+, libevent
+, libmaxminddb
+, libnet
+, libnetfilter_log
+, libnetfilter_queue
+, libnfnetlink
+, libpcap
+, libyaml
+, luajit
+, lz4
+, nspr
+, pcre2
+, python3
+, vectorscan
+, zlib
+, redisSupport ? true
+, valkey
+, hiredis
+, rustSupport ? true
+, rustc
+, cargo
+, nixosTests
+,
 }:
 let
   libmagic = file;

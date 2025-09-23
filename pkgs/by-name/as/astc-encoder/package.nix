@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  simdExtensions ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, simdExtensions ? null
+,
 }:
 
 let

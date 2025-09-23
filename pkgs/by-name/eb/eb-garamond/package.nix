@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  python3,
-  ttfautohint,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, python3
+, ttfautohint
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "eb-garamond";

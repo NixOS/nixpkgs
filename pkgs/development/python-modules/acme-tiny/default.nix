@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  fusepy,
-  fuse,
-  openssl,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, fusepy
+, fuse
+, openssl
+,
 }:
 
 buildPythonPackage rec {

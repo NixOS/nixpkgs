@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -177,10 +176,12 @@ in
           source = configFile;
         };
 
-        services.nipap.settings = lib.attrsets.mapAttrs' (name: value: {
-          name = "auth.backends.${name}";
-          inherit value;
-        }) cfg.authBackendSettings;
+        services.nipap.settings = lib.attrsets.mapAttrs'
+          (name: value: {
+            name = "auth.backends.${name}";
+            inherit value;
+          })
+          cfg.authBackendSettings;
 
         services.nipap.nipapd.enable = lib.mkDefault true;
         services.nipap.nipap-www.enable = lib.mkDefault true;

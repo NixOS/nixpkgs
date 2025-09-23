@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  distutils,
-  fetchFromGitHub,
-  liberasurecode,
-  pytestCheckHook,
-  setuptools,
-  six,
+{ lib
+, stdenv
+, buildPythonPackage
+, distutils
+, fetchFromGitHub
+, liberasurecode
+, pytestCheckHook
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

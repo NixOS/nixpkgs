@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  git,
-  doxygen,
-  help2man,
-  ncurses,
-  tecla,
-  libusb1,
-  udev,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, cmake
+, git
+, doxygen
+, help2man
+, ncurses
+, tecla
+, libusb1
+, udev
+,
 }:
 
 stdenv.mkDerivation rec {

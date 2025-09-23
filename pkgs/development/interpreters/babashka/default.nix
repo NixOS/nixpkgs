@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGraalvmNativeImage,
-  fetchurl,
-  writeScript,
-  installShellFiles,
+{ lib
+, buildGraalvmNativeImage
+, fetchurl
+, writeScript
+, installShellFiles
+,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {

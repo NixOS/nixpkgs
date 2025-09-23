@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  click,
-  six,
-  tqdm,
-  joblib,
-  pytest,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, click
+, six
+, tqdm
+, joblib
+, pytest
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  brotlipy,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  yarl,
+{ lib
+, aiohttp
+, brotlipy
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, yarl
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  mkTmuxPlugin,
-  replaceVars,
-  fetchFromGitHub,
-  crystal,
+{ mkTmuxPlugin
+, replaceVars
+, fetchFromGitHub
+, crystal
+,
 }:
 let
   fingers = crystal.buildCrystalPackage rec {

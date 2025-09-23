@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromSourcehut,
-  hatchling,
-  pook,
-  pytest,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromSourcehut
+, hatchling
+, pook
+, pytest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

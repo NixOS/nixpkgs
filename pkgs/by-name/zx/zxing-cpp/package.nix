@@ -1,11 +1,11 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  gitUpdater,
-  python3,
-  stdenv,
-  libzint,
+{ lib
+, cmake
+, fetchFromGitHub
+, gitUpdater
+, python3
+, stdenv
+, libzint
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

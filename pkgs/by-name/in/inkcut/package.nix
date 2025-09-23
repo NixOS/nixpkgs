@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchpatch,
-  python3,
-  fetchFromGitHub,
-  qt5,
-  cups,
+{ lib
+, fetchpatch
+, python3
+, fetchFromGitHub
+, qt5
+, cups
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

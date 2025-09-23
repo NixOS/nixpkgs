@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  ds-store,
-  importlib-resources,
-  mac-alias,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, ds-store
+, importlib-resources
+, mac-alias
+,
 }:
 
 buildPythonPackage rec {

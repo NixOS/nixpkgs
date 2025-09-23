@@ -111,15 +111,10 @@ rec {
     :::
   */
   toGNUCommandLine =
-    {
-      mkOptionName ? k: if builtins.stringLength k == 1 then "-${k}" else "--${k}",
-
-      mkBool ? k: v: lib.optional v (mkOptionName k),
-
-      mkList ? k: v: lib.concatMap (mkOption k) v,
-
-      mkOption ?
-        k: v:
+    { mkOptionName ? k: if builtins.stringLength k == 1 then "-${k}" else "--${k}"
+    , mkBool ? k: v: lib.optional v (mkOptionName k)
+    , mkList ? k: v: lib.concatMap (mkOption k) v
+    , mkOption ? k: v:
         if v == null then
           [ ]
         else if optionValueSeparator == null then
@@ -128,9 +123,9 @@ rec {
             (lib.generators.mkValueStringDefault { } v)
           ]
         else
-          [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ],
-
-      optionValueSeparator ? null,
+          [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ]
+    , optionValueSeparator ? null
+    ,
     }:
     options:
     let

@@ -1,10 +1,9 @@
-{
-  python3,
-  fetchFromGitHub,
-  nixosTests,
-  lib,
-
-  plugins ? ps: [ ],
+{ python3
+, fetchFromGitHub
+, nixosTests
+, lib
+, plugins ? ps: [ ]
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

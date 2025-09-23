@@ -1,29 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  writeShellApplication,
-  cmake,
-  fontconfig,
-  freetype,
-  glib,
-  gtk2,
-  libusb1,
-  libX11,
-  openssl,
-  pkg-config,
-  SDL2,
-  SDL2_ttf,
-  SDL2_mixer,
-
-  enable16Bit ? true,
-  enableX11 ? stdenv.hostPlatform.isLinux,
-  # HAXM build succeeds but the binary segfaults, seemingly due to the missing HAXM kernel module
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, writeShellApplication
+, cmake
+, fontconfig
+, freetype
+, glib
+, gtk2
+, libusb1
+, libX11
+, openssl
+, pkg-config
+, SDL2
+, SDL2_ttf
+, SDL2_mixer
+, enable16Bit ? true
+, enableX11 ? stdenv.hostPlatform.isLinux
+, # HAXM build succeeds but the binary segfaults, seemingly due to the missing HAXM kernel module
   # Enable once there is a HAXM kernel module option in NixOS? Or somehow bind it to the system kernel having HAXM?
   # Or leave it disabled by default?
   # https://github.com/intel/haxm/blob/master/docs/manual-linux.md
-  enableHAXM ? false,
+  enableHAXM ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

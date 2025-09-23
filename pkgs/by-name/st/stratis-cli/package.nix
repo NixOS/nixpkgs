@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, nixosTests
+,
 }:
 
 python3Packages.buildPythonApplication rec {

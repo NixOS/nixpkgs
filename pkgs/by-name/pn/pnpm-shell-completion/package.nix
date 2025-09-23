@@ -1,8 +1,8 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  installShellFiles,
+{ rustPlatform
+, fetchFromGitHub
+, lib
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {

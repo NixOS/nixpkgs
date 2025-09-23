@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  squashfsTools,
-  makeBinaryWrapper,
-  alsa-lib,
-  atk,
-  at-spi2-atk,
-  cups,
-  gtk3,
-  libdrm,
-  libsecret,
-  libxkbcommon,
-  libgbm,
-  libGL,
-  pango,
-  sqlite,
-  systemd,
-  wayland,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, squashfsTools
+, makeBinaryWrapper
+, alsa-lib
+, atk
+, at-spi2-atk
+, cups
+, gtk3
+, libdrm
+, libsecret
+, libxkbcommon
+, libgbm
+, libGL
+, pango
+, sqlite
+, systemd
+, wayland
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

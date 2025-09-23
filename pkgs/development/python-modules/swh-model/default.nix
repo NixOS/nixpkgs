@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  attrs,
-  attrs-strict,
-  dateutils,
-  deprecated,
-  hypothesis,
-  iso8601,
-  typing-extensions,
-  click,
-  dulwich,
-  aiohttp,
-  pytestCheckHook,
-  pytz,
-  types-click,
-  types-python-dateutil,
-  types-pytz,
-  types-deprecated,
-
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, attrs
+, attrs-strict
+, dateutils
+, deprecated
+, hypothesis
+, iso8601
+, typing-extensions
+, click
+, dulwich
+, aiohttp
+, pytestCheckHook
+, pytz
+, types-click
+, types-python-dateutil
+, types-pytz
+, types-deprecated
+,
 }:
 
 buildPythonPackage rec {

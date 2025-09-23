@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  atpublic,
-  pdm-pep517,
-  pytestCheckHook,
-  pytest-cov-stub,
-  sybil,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, atpublic
+, pdm-pep517
+, pytestCheckHook
+, pytest-cov-stub
+, sybil
+,
 }:
 
 buildPythonPackage rec {

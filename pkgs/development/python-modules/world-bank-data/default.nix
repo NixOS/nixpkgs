@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  cachetools,
-  pandas,
-  requests,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, cachetools
+, pandas
+, requests
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

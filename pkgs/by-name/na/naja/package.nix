@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  bison,
-  boost,
-  capnproto,
-  doxygen,
-  flex,
-  pkg-config,
-  python3,
-  sphinx,
-  tbb_2022,
-  buildPackages,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, bison
+, boost
+, capnproto
+, doxygen
+, flex
+, pkg-config
+, python3
+, sphinx
+, tbb_2022
+, buildPackages
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "naja";

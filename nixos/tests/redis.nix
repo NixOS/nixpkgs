@@ -1,9 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-
-  lib ? pkgs.lib,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+, lib ? pkgs.lib
+,
 }:
 let
   makeTest = import ./make-test-python.nix;
@@ -13,9 +12,9 @@ let
     inherit (pkgs) redis keydb valkey;
   };
   makeRedisTest =
-    {
-      package,
-      name ? mkTestName package,
+    { package
+    , name ? mkTestName package
+    ,
     }:
     makeTest {
       inherit name;

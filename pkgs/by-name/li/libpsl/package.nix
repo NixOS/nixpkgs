@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  docbook_xsl,
-  docbook_xml_dtd_43,
-  gtk-doc,
-  lzip,
-  libidn2,
-  libunistring,
-  libxslt,
-  pkg-config,
-  buildPackages,
-  publicsuffix-list,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
+, lzip
+, libidn2
+, libunistring
+, libxslt
+, pkg-config
+, buildPackages
+, publicsuffix-list
+,
 }:
 
 stdenv.mkDerivation rec {

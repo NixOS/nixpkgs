@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl ? null,
-  fetchgit ? null,
-  release_version ? null,
-  gitRelease ? null,
-  officialRelease ? null,
-  monorepoSrc' ? null,
-  version ? null,
+{ lib
+, fetchurl ? null
+, fetchgit ? null
+, release_version ? null
+, gitRelease ? null
+, officialRelease ? null
+, monorepoSrc' ? null
+, version ? null
+,
 }@args:
 
 rec {
@@ -34,11 +34,12 @@ rec {
     if monorepoSrc' != null then
       monorepoSrc'
     else if gitRelease != null then
-      fetchgit {
-        url = "https://gcc.gnu.org/git/gcc.git";
-        inherit (gitRelease) rev;
-        hash = releaseInfo.original.sha256;
-      }
+      fetchgit
+        {
+          url = "https://gcc.gnu.org/git/gcc.git";
+          inherit (gitRelease) rev;
+          hash = releaseInfo.original.sha256;
+        }
     else
       fetchurl {
         url = "mirror://gcc/releases/gcc-${releaseInfo.version}/gcc-${releaseInfo.version}.tar.xz";

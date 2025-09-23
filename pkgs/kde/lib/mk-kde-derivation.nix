@@ -1,13 +1,13 @@
 self:
-{
-  lib,
-  stdenv,
-  makeSetupHook,
-  cmake,
-  ninja,
-  qt6,
-  python3,
-  python3Packages,
+{ lib
+, stdenv
+, makeSetupHook
+, cmake
+, ninja
+, qt6
+, python3
+, python3Packages
+,
 }:
 let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
@@ -15,10 +15,12 @@ let
 
   licenseInfo = lib.importJSON ../generated/licenses.json;
   licensesBySpdxId =
-    (lib.mapAttrs' (_: v: {
-      name = v.spdxId or "unknown";
-      value = v;
-    }) lib.licenses)
+    (lib.mapAttrs'
+      (_: v: {
+        name = v.spdxId or "unknown";
+        value = v;
+      })
+      lib.licenses)
     // {
       # https://community.kde.org/Policies/Licensing_Policy
       "LicenseRef-KDE-Accepted-GPL" = lib.licenses.gpl3Plus;
@@ -78,17 +80,16 @@ let
 
   moveOutputsHook = makeSetupHook { name = "kf6-move-outputs-hook"; } ./move-outputs-hook.sh;
 in
-{
-  pname,
-  version ? self.sources.${pname}.version,
-  src ? self.sources.${pname},
-  extraBuildInputs ? [ ],
-  extraNativeBuildInputs ? [ ],
-  extraPropagatedBuildInputs ? [ ],
-  extraCmakeFlags ? [ ],
-  excludeDependencies ? [ ],
-  hasPythonBindings ? false,
-  ...
+{ pname
+, version ? self.sources.${pname}.version
+, src ? self.sources.${pname}
+, extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
+, extraPropagatedBuildInputs ? [ ]
+, extraCmakeFlags ? [ ]
+, excludeDependencies ? [ ]
+, hasPythonBindings ? false
+, ...
 }@args:
 let
   depNames = dependencies.${pname} or [ ];
@@ -102,9 +103,11 @@ let
     attrName: attrValue:
     let
       pretty = lib.generators.toPretty { };
-      duplicates = builtins.filter (
-        dep: dep != null && builtins.elem (lib.getName dep) filteredDepNames
-      ) attrValue;
+      duplicates = builtins.filter
+        (
+          dep: dep != null && builtins.elem (lib.getName dep) filteredDepNames
+        )
+        attrValue;
     in
     if duplicates != [ ] then
       lib.warn "Duplicate dependencies in ${attrName} of package ${pname}: ${pretty duplicates}"

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  kubernetes-kcp,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, kubernetes-kcp
+,
 }:
 
 buildGoModule rec {

@@ -1,36 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-
-  # nativeBuildInputs
-  scons,
-  pkg-config,
-
-  # buildInputs
-  dbus,
-  libusb1,
-  ncurses,
-  kppsSupport ? stdenv.hostPlatform.isLinux,
-  pps-tools,
-  python3Packages,
-
-  # optional deps for GUI packages
-  guiSupport ? true,
-  dbus-glib,
-  libX11,
-  libXt,
-  libXpm,
-  libXaw,
-  libXext,
-  gobject-introspection,
-  pango,
-  gdk-pixbuf,
-  atk,
-  wrapGAppsHook3,
-
-  gpsdUser ? "gpsd",
-  gpsdGroup ? "dialout",
+{ stdenv
+, lib
+, fetchurl
+, # nativeBuildInputs
+  scons
+, pkg-config
+, # buildInputs
+  dbus
+, libusb1
+, ncurses
+, kppsSupport ? stdenv.hostPlatform.isLinux
+, pps-tools
+, python3Packages
+, # optional deps for GUI packages
+  guiSupport ? true
+, dbus-glib
+, libX11
+, libXt
+, libXpm
+, libXaw
+, libXext
+, gobject-introspection
+, pango
+, gdk-pixbuf
+, atk
+, wrapGAppsHook3
+, gpsdUser ? "gpsd"
+, gpsdGroup ? "dialout"
+,
 }:
 
 stdenv.mkDerivation rec {

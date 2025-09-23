@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  gtk-doc,
-  gettext,
-  yelp-tools,
-  caja,
-  gtk3,
-  glib,
-  libxml2,
-  libarchive,
-  libsecret,
-  poppler,
-  mate-desktop,
-  itstool,
-  hicolor-icon-theme,
-  texlive,
-  wrapGAppsHook3,
-  enableEpub ? true,
-  webkitgtk_4_1,
-  enableDjvu ? true,
-  djvulibre,
-  enablePostScript ? true,
-  libspectre,
-  enableXps ? true,
-  libgxps,
-  enableImages ? false,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, gtk-doc
+, gettext
+, yelp-tools
+, caja
+, gtk3
+, glib
+, libxml2
+, libarchive
+, libsecret
+, poppler
+, mate-desktop
+, itstool
+, hicolor-icon-theme
+, texlive
+, wrapGAppsHook3
+, enableEpub ? true
+, webkitgtk_4_1
+, enableDjvu ? true
+, djvulibre
+, enablePostScript ? true
+, libspectre
+, enableXps ? true
+, libgxps
+, enableImages ? false
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

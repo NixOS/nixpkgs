@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  fetchFromGitHub,
-  gradle_7,
-  openjdk17,
+{ lib
+, stdenv
+, makeWrapper
+, fetchFromGitHub
+, gradle_7
+, openjdk17
+,
 }:
 
 let

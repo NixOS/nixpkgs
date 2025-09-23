@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  libffi,
-  readline,
+{ lib
+, fetchurl
+, stdenv
+, libffi
+, readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

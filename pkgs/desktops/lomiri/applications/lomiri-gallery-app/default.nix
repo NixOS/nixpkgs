@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  exiv2,
-  imagemagick,
-  libglvnd,
-  libmediainfo,
-  lomiri-content-hub,
-  lomiri-thumbnailer,
-  lomiri-ui-extras,
-  lomiri-ui-toolkit,
-  pkg-config,
-  qqc2-suru-style,
-  qtbase,
-  qtdeclarative,
-  qtmultimedia,
-  qtsvg,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, cmake
+, exiv2
+, imagemagick
+, libglvnd
+, libmediainfo
+, lomiri-content-hub
+, lomiri-thumbnailer
+, lomiri-ui-extras
+, lomiri-ui-toolkit
+, pkg-config
+, qqc2-suru-style
+, qtbase
+, qtdeclarative
+, qtmultimedia
+, qtsvg
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

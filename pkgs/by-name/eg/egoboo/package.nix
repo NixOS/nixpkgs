@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGLU,
-  libGL,
-  SDL,
-  SDL_mixer,
-  SDL_image,
-  SDL_ttf,
+{ lib
+, stdenv
+, fetchurl
+, libGLU
+, libGL
+, SDL
+, SDL_mixer
+, SDL_image
+, SDL_ttf
+,
 }:
 
 stdenv.mkDerivation rec {

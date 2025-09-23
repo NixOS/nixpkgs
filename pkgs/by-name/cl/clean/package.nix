@@ -1,10 +1,10 @@
-{
-  binutils,
-  fetchurl,
-  gcc,
-  lib,
-  runCommand,
-  stdenv,
+{ binutils
+, fetchurl
+, gcc
+, lib
+, runCommand
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

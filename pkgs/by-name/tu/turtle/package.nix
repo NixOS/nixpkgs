@@ -1,12 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitLab,
-  gobject-introspection,
-  wrapGAppsHook4,
-  installShellFiles,
-  libadwaita,
-  meld,
+{ lib
+, python3Packages
+, fetchFromGitLab
+, gobject-introspection
+, wrapGAppsHook4
+, installShellFiles
+, libadwaita
+, meld
+,
 }:
 
 python3Packages.buildPythonApplication rec {

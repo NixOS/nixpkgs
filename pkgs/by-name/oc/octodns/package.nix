@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  runCommand,
-
-  # passthru
-  octodns,
+{ lib
+, fetchFromGitHub
+, python3
+, runCommand
+, # passthru
+  octodns
+,
 }:
 let
   # Export `python` with `octodns` as a module for `octodns-providers`.

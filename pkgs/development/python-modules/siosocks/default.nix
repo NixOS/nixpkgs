@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest-asyncio,
-  pytest-trio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  trio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest-asyncio
+, pytest-trio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, trio
+,
 }:
 
 buildPythonPackage rec {

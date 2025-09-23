@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  linuxPackages_latest,
-  perl,
-  python3,
-  man,
+{ lib
+, stdenv
+, linuxPackages_latest
+, perl
+, python3
+, man
+,
 }:
 
 stdenv.mkDerivation {

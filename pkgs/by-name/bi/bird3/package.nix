@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  flex,
-  bison,
-  readline,
-  libssh,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, flex
+, bison
+, readline
+, libssh
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

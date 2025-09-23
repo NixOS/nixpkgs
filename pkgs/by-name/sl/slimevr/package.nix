@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  replaceVars,
-  makeWrapper,
-  slimevr-server,
-  nodejs,
-  pnpm_9,
-  rustPlatform,
-  cargo-tauri,
-  wrapGAppsHook3,
-  pkg-config,
-  openssl,
-  glib-networking,
-  webkitgtk_4_1,
-  gst_all_1,
-  libayatana-appindicator,
-  udevCheckHook,
+{ lib
+, fetchFromGitHub
+, stdenv
+, replaceVars
+, makeWrapper
+, slimevr-server
+, nodejs
+, pnpm_9
+, rustPlatform
+, cargo-tauri
+, wrapGAppsHook3
+, pkg-config
+, openssl
+, glib-networking
+, webkitgtk_4_1
+, gst_all_1
+, libayatana-appindicator
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

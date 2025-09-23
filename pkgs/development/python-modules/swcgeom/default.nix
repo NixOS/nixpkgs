@@ -1,28 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  numpy,
-  setuptools,
-  wheel,
-  imagecodecs,
-  matplotlib,
-  pandas,
-  pynrrd,
-  scipy,
-  sdflit,
-  seaborn,
-  tifffile,
-  tqdm,
-  typing-extensions,
-  beautifulsoup4,
-  certifi,
-  chardet,
-  lmdb,
-  requests,
-  urllib3,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, numpy
+, setuptools
+, wheel
+, imagecodecs
+, matplotlib
+, pandas
+, pynrrd
+, scipy
+, sdflit
+, seaborn
+, tifffile
+, tqdm
+, typing-extensions
+, beautifulsoup4
+, certifi
+, chardet
+, lmdb
+, requests
+, urllib3
+, pytestCheckHook
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  wayland,
-  meson,
-  pkg-config,
-  ninja,
-  wayland-scanner,
-  expat,
-  libxml2,
+{ lib
+, stdenv
+, wayland
+, meson
+, pkg-config
+, ninja
+, wayland-scanner
+, expat
+, libxml2
+,
 }:
 
 stdenv.mkDerivation {

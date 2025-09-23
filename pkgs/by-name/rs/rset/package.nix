@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  openssh,
-  gnutar,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, openssh
+, gnutar
+,
 }:
 
 stdenv.mkDerivation rec {

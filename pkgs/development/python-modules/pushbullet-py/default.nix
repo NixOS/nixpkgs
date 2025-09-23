@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  websocket-client,
-  python-magic,
-  cryptography,
-  pytestCheckHook,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, websocket-client
+, python-magic
+, cryptography
+, pytestCheckHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

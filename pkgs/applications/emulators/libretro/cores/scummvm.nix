@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  which,
-  zip,
-  mkLibretroCore,
+{ lib
+, fetchFromGitHub
+, libGL
+, libGLU
+, which
+, zip
+, mkLibretroCore
+,
 }:
 let
   # https://github.com/libretro/scummvm/blob/master/backends/platform/libretro/dependencies.mk#L8-L14

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  alsa-lib,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, alsa-lib
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

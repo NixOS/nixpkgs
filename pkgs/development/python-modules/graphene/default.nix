@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  graphql-core,
-  graphql-relay,
-  pytest-asyncio,
-  pytest-benchmark,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
-  python-dateutil,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, graphql-core
+, graphql-relay
+, pytest-asyncio
+, pytest-benchmark
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

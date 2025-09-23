@@ -1,16 +1,16 @@
-{
-  lib,
-  llvmPackages,
-  fetchurl,
-  fetchFromGitHub,
-  linuxHeaders,
-  python3,
-  curl,
-  which,
-  nix-update-script,
-  debugRuntime ? true,
-  runtimeAsserts ? false,
-  extraKleeuClibcConfig ? { },
+{ lib
+, llvmPackages
+, fetchurl
+, fetchFromGitHub
+, linuxHeaders
+, python3
+, curl
+, which
+, nix-update-script
+, debugRuntime ? true
+, runtimeAsserts ? false
+, extraKleeuClibcConfig ? { }
+,
 }:
 
 let

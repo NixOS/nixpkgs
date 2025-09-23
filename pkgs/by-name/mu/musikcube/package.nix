@@ -1,32 +1,32 @@
-{
-  asio,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  ffmpeg-headless,
-  gnutls,
-  lame,
-  lib,
-  libev,
-  game-music-emu,
-  libmicrohttpd,
-  libopenmpt,
-  mpg123,
-  ncurses,
-  pkg-config,
-  portaudio,
-  stdenv,
-  taglib,
-  # Linux Dependencies
-  alsa-lib,
-  pipewireSupport ? !stdenv.hostPlatform.isDarwin,
-  pipewire,
-  pulseaudio,
-  sndioSupport ? true,
-  sndio,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  coreaudioSupport ? stdenv.hostPlatform.isDarwin,
+{ asio
+, cmake
+, curl
+, fetchFromGitHub
+, ffmpeg-headless
+, gnutls
+, lame
+, lib
+, libev
+, game-music-emu
+, libmicrohttpd
+, libopenmpt
+, mpg123
+, ncurses
+, pkg-config
+, portaudio
+, stdenv
+, taglib
+, # Linux Dependencies
+  alsa-lib
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin
+, pipewire
+, pulseaudio
+, sndioSupport ? true
+, sndio
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 let

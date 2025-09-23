@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  glibcLocales,
-  python,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, glibcLocales
+, python
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

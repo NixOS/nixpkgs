@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
 
@@ -373,9 +372,10 @@ in
     let
       binaryCommand = "${pkg}/bin/${name}";
       interfaceFlag = lib.optionalString (cfg.interface != "") "--interface ${cfg.interface}";
-      configFlag = lib.optionalString (
-        !cfg.customCfg
-      ) "--config ${pkgs.writeText "config.xml" configText}";
+      configFlag = lib.optionalString
+        (
+          !cfg.customCfg
+        ) "--config ${pkgs.writeText "config.xml" configText}";
     in
     lib.mkIf cfg.enable {
       systemd.services.mediatomb = {

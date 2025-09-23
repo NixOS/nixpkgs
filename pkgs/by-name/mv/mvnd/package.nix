@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  graalvmPackages,
-  installShellFiles,
-  makeWrapper,
-  maven,
-  mvnd,
-  nix-update-script,
-  runCommand,
-  stdenv,
-  testers,
+{ lib
+, fetchFromGitHub
+, graalvmPackages
+, installShellFiles
+, makeWrapper
+, maven
+, mvnd
+, nix-update-script
+, runCommand
+, stdenv
+, testers
+,
 }:
 
 let

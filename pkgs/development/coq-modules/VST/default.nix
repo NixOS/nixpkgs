@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  compcert,
-  ITree,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, compcert
+, ITree
+, version ? null
+,
 }:
 
 # A few modules that are not built and installed by default
@@ -44,7 +44,8 @@ mkCoqDerivation {
       (case (range "8.14" "8.16") "2.10")
       (case (range "8.13" "8.15") "2.9")
       (case (range "8.12" "8.13") "2.8")
-    ] null;
+    ]
+      null;
   release."2.15".sha256 = "sha256-51k2W4efMaEO4nZ0rdkRT9rA8ZJLpot1YpFmd6RIAXw=";
   release."2.14".sha256 = "sha256-NHc1ZQ2VmXZy4lK2+mtyeNz1Qr9Nhj2QLxkPhhQB7Iw=";
   release."2.13".sha256 = "sha256-i6rvP3cpayBln5KHZOpeNfraYU5h0O9uciBQ4jRH4XA=";
@@ -61,13 +62,13 @@ mkCoqDerivation {
     patchShebangs util
   ''
   +
-    lib.optionalString
-      (coq.coq-version != null && coq.coq-version != "dev" && lib.versions.isLe "8.20" coq.coq-version)
-      ''
-        substituteInPlace Makefile \
-          --replace-fail 'COQVERSION= ' 'COQVERSION= 8.20.1 or-else 8.19.2 or-else 8.17.1 or-else 8.16.1 or-else 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
-          --replace-fail 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
-      '';
+  lib.optionalString
+    (coq.coq-version != null && coq.coq-version != "dev" && lib.versions.isLe "8.20" coq.coq-version)
+    ''
+      substituteInPlace Makefile \
+        --replace-fail 'COQVERSION= ' 'COQVERSION= 8.20.1 or-else 8.19.2 or-else 8.17.1 or-else 8.16.1 or-else 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
+        --replace-fail 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
+    '';
 
   makeFlags = [
     "BITSIZE=64"

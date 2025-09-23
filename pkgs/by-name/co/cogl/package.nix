@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libGL,
-  glib,
-  gdk-pixbuf,
-  xorg,
-  libintl,
-  pangoSupport ? true,
-  pango,
-  cairo,
-  gobject-introspection,
-  wayland,
-  gnome,
-  libgbm,
-  mesa-gl-headers,
-  automake,
-  autoconf,
-  gstreamerSupport ? false,
-  gst_all_1,
-  harfbuzz,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libGL
+, glib
+, gdk-pixbuf
+, xorg
+, libintl
+, pangoSupport ? true
+, pango
+, cairo
+, gobject-introspection
+, wayland
+, gnome
+, libgbm
+, mesa-gl-headers
+, automake
+, autoconf
+, gstreamerSupport ? false
+, gst_all_1
+, harfbuzz
+,
 }:
 
 stdenv.mkDerivation rec {

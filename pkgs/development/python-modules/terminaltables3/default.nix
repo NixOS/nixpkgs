@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  colorclass,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  termcolor,
+{ lib
+, buildPythonPackage
+, colorama
+, colorclass
+, fetchFromGitHub
+, poetry-core
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, termcolor
+,
 }:
 
 buildPythonPackage rec {

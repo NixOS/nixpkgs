@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  requests,
-  greenlet,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-httpbin,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, requests
+, greenlet
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-httpbin
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  ftfy,
-  huggingface-hub,
-  protobuf,
-  regex,
-  safetensors,
-  sentencepiece,
-  timm,
-  torch,
-  torchvision,
-  tqdm,
-
-  # checks
-  pytestCheckHook,
-  braceexpand,
-  pandas,
-  transformers,
-  webdataset,
-
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  ftfy
+, huggingface-hub
+, protobuf
+, regex
+, safetensors
+, sentencepiece
+, timm
+, torch
+, torchvision
+, tqdm
+, # checks
+  pytestCheckHook
+, braceexpand
+, pandas
+, transformers
+, webdataset
+, stdenv
+,
 }:
 buildPythonPackage rec {
   pname = "open-clip-torch";

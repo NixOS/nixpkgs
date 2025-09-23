@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  spark-parser,
-  xdis,
-  pytestCheckHook,
-  hypothesis,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, spark-parser
+, xdis
+, pytestCheckHook
+, hypothesis
+, six
+,
 }:
 
 buildPythonPackage rec {

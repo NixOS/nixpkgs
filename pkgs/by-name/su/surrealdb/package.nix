@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  rocksdb,
-  testers,
-  protobuf,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, rocksdb
+, testers
+, protobuf
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surrealdb";

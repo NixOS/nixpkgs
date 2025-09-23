@@ -1,24 +1,24 @@
-{
-  lib,
-  gitUpdater,
-  fetchFromGitHub,
-  qt6Packages,
-  stdenv,
-  cmake,
-  extra-cmake-modules,
-  inotify-tools,
-  kdePackages,
-  libcloudproviders,
-  libp11,
-  librsvg,
-  libsecret,
-  openssl,
-  pcre,
-  pkg-config,
-  sphinx,
-  sqlite,
-  xdg-utils,
-  libsysprof-capture,
+{ lib
+, gitUpdater
+, fetchFromGitHub
+, qt6Packages
+, stdenv
+, cmake
+, extra-cmake-modules
+, inotify-tools
+, kdePackages
+, libcloudproviders
+, libp11
+, librsvg
+, libsecret
+, openssl
+, pcre
+, pkg-config
+, sphinx
+, sqlite
+, xdg-utils
+, libsysprof-capture
+,
 }:
 
 stdenv.mkDerivation rec {

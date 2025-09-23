@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtk3,
-  pcre,
-  pkg-config,
-  vte,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtk3
+, pcre
+, pkg-config
+, vte
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

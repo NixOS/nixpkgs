@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  gawk,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, stdenv
+, gawk
+,
 }:
 
 buildGoModule rec {

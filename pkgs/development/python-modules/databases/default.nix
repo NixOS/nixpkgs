@@ -1,16 +1,16 @@
-{
-  lib,
-  aiomysql,
-  aiopg,
-  aiosqlite,
-  asyncmy,
-  asyncpg,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  sqlalchemy,
+{ lib
+, aiomysql
+, aiopg
+, aiosqlite
+, asyncmy
+, asyncpg
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qtbase,
-  qtwayland,
-  libsForQt5,
-  xorg,
+{ mkKdeDerivation
+, qtbase
+, qtwayland
+, libsForQt5
+, xorg
+,
 }:
 mkKdeDerivation {
   pname = "plasma-integration";

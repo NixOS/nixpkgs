@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  aiomqtt,
-  aiohttp,
-  certifi,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  poetry-core
+, # dependencies
+  aiomqtt
+, aiohttp
+, certifi
+,
 }:
 
 buildPythonPackage rec {

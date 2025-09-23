@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  angstrom,
-  lwt,
+{ lib
+, buildDunePackage
+, angstrom
+, lwt
+,
 }:
 
 buildDunePackage {

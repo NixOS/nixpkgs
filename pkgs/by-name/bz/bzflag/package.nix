@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  curl,
-  SDL2,
-  libGLU,
-  libGL,
-  glew,
-  ncurses,
-  c-ares,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, curl
+, SDL2
+, libGLU
+, libGL
+, glew
+, ncurses
+, c-ares
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

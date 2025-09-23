@@ -1,8 +1,7 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchzip,
-  variants ? [
+{ stdenvNoCC
+, lib
+, fetchzip
+, variants ? [
     "display"
     "hand"
     "poster"
@@ -13,15 +12,16 @@
     "komikazba"
     "komikaze"
     "komikazoom"
-  ],
+  ]
+,
 }:
 
 let
   fetchFont =
-    {
-      url,
-      hash,
-      curlOptsList ? [ ],
+    { url
+    , hash
+    , curlOptsList ? [ ]
+    ,
     }:
     fetchzip {
       inherit url hash curlOptsList;

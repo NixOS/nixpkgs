@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  pixman,
-  pkg-config,
-  wayland,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, pixman
+, pkg-config
+, wayland
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation {

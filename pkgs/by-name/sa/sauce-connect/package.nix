@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  zlib,
-  unzip,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchurl
+, zlib
+, unzip
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

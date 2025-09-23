@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  abseil-cpp,
-  meson,
-  ninja,
-  pkg-config,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, abseil-cpp
+, meson
+, ninja
+, pkg-config
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  python3Packages,
-  makeDesktopItem,
-  copyDesktopItems,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook3
+, python3Packages
+, makeDesktopItem
+, copyDesktopItems
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "pixelflasher";

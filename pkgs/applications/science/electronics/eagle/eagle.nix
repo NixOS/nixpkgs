@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchurl,
-  makeDesktopItem,
-  libXrender,
-  libXrandr,
-  libXcursor,
-  libX11,
-  libXext,
-  libXi,
-  libxcb,
-  libGL,
-  glib,
-  nss,
-  nspr,
-  expat,
-  alsa-lib,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qtlocation,
-  qtwebchannel,
-  qtwebengine,
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, makeDesktopItem
+, libXrender
+, libXrandr
+, libXcursor
+, libX11
+, libXext
+, libXi
+, libxcb
+, libGL
+, glib
+, nss
+, nspr
+, expat
+, alsa-lib
+, qtbase
+, qtdeclarative
+, qtsvg
+, qtlocation
+, qtwebchannel
+, qtwebengine
+,
 }:
 
 let

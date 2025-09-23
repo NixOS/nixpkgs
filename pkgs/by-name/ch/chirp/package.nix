@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  writeShellScript,
-  glib,
-  gsettings-desktop-schemas,
-  python3Packages,
-  unstableGitUpdater,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitHub
+, writeShellScript
+, glib
+, gsettings-desktop-schemas
+, python3Packages
+, unstableGitUpdater
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication {

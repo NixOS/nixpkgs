@@ -1,17 +1,17 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  autoconf,
-  automake,
-  libpulseaudio,
-  libtool,
-  pkg-config,
-  portaudio,
-  which,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, autoconf
+, automake
+, libpulseaudio
+, libtool
+, pkg-config
+, portaudio
+, which
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

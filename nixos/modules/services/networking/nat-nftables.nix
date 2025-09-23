@@ -32,38 +32,44 @@ let
     };
 
   mkTable =
-    {
-      ipVer,
-      dest,
-      ipSet,
-      forwardPorts,
-      dmzHost,
-      externalIP,
+    { ipVer
+    , dest
+    , ipSet
+    , forwardPorts
+    , dmzHost
+    , externalIP
+    ,
     }:
     let
       # nftables maps for port forward
       # [daddr .] l4proto . dport : addr . port
       fwdMap = toNftSet (
-        map (
-          fwd:
-          with (splitIPPorts fwd.destination);
-          "${
+        map
+          (
+            fwd:
+              with (splitIPPorts fwd.destination);
+              "${
             optionalString (externalIP != null) "${externalIP} . "
           }${fwd.proto} . ${toNftRange fwd.sourcePort} : ${IP} . ${ports}"
-        ) forwardPorts
+          )
+          forwardPorts
       );
 
       # nftables maps for port forward loopback dnat
       # daddr . l4proto . dport : addr . port
       fwdLoopDnatMap = toNftSet (
-        concatMap (
-          fwd:
-          map (
-            loopbackip:
-            with (splitIPPorts fwd.destination);
-            "${loopbackip} . ${fwd.proto} . ${toNftRange fwd.sourcePort} : ${IP} . ${ports}"
-          ) fwd.loopbackIPs
-        ) forwardPorts
+        concatMap
+          (
+            fwd:
+            map
+              (
+                loopbackip:
+                  with (splitIPPorts fwd.destination);
+                  "${loopbackip} . ${fwd.proto} . ${toNftRange fwd.sourcePort} : ${IP} . ${ports}"
+              )
+              fwd.loopbackIPs
+          )
+          forwardPorts
       );
 
       # nftables set for port forward loopback snat

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  anyio,
-  hatchling,
-  httpx,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, anyio
+, hatchling
+, httpx
+,
 }:
 
 buildPythonPackage rec {

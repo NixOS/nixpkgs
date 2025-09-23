@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml_gettext,
-  dune-configurator,
-  ounit2,
+{ lib
+, buildDunePackage
+, ocaml_gettext
+, dune-configurator
+, ounit2
+,
 }:
 
 buildDunePackage {

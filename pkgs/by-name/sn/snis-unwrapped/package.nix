@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  coreutils,
-  portaudio,
-  libbsd,
-  libpng,
-  libvorbis,
-  libX11,
-  sdl2-compat,
-  makeWrapper,
-  lua5_2,
-  glew,
-  openssl,
-  picotts,
-  alsa-utils,
-  espeak-classic,
-  sox,
-  libopus,
-  openscad,
-  libxcrypt-legacy,
-  curlMinimal,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, coreutils
+, portaudio
+, libbsd
+, libpng
+, libvorbis
+, libX11
+, sdl2-compat
+, makeWrapper
+, lua5_2
+, glew
+, openssl
+, picotts
+, alsa-utils
+, espeak-classic
+, sox
+, libopus
+, openscad
+, libxcrypt-legacy
+, curlMinimal
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  tinyprog,
-  scons,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, tinyprog
+, scons
+,
 }:
 
 python3Packages.buildPythonApplication rec {

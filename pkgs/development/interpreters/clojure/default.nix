@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  bashNonInteractive,
-  fetchurl,
-  installShellFiles,
-  jdk,
-  rlwrap,
-  makeWrapper,
-  writeScript,
+{ lib
+, stdenv
+, bashNonInteractive
+, fetchurl
+, installShellFiles
+, jdk
+, rlwrap
+, makeWrapper
+, writeScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

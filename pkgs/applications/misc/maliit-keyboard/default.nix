@@ -1,21 +1,19 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-
-  anthy,
-  hunspell,
-  libchewing,
-  libpinyin,
-  maliit-framework,
-  qtfeedback,
-  qtmultimedia,
-  qtquickcontrols2,
-  qtgraphicaleffects,
-
-  cmake,
-  pkg-config,
-  wrapGAppsHook3,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, anthy
+, hunspell
+, libchewing
+, libpinyin
+, maliit-framework
+, qtfeedback
+, qtmultimedia
+, qtquickcontrols2
+, qtgraphicaleffects
+, cmake
+, pkg-config
+, wrapGAppsHook3
+,
 }:
 
 mkDerivation {

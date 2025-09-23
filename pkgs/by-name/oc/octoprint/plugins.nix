@@ -1,10 +1,10 @@
-{
-  lib,
-  config,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchpatch,
-  marlin-calc,
+{ lib
+, config
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchpatch
+, marlin-calc
+,
 }:
 
 self: super:
@@ -715,6 +715,6 @@ in
     };
   };
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   octoprint-dashboard = super.dashboard;
 }

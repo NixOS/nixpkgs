@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  callPackage,
-  ...
+{ pkgs
+, lib
+, callPackage
+, ...
 }:
 
 let
@@ -132,7 +131,7 @@ in
     let
       baseName = baseNameOf path;
     in
-    !(elem baseName gerbilSkippableFiles || hasSuffix "~" baseName);
+      !(elem baseName gerbilSkippableFiles || hasSuffix "~" baseName);
 
   gerbilFilterSource = filterSource gerbilSourceFilter;
 

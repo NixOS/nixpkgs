@@ -1,10 +1,10 @@
-{
-  pname,
-  version,
-  src,
-  meta,
-  appimageTools,
-  libgpg-error,
+{ pname
+, version
+, src
+, meta
+, appimageTools
+, libgpg-error
+,
 }:
 
 let

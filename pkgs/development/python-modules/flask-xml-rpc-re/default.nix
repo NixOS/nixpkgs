@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  flask,
-  nose2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, flask
+, nose2
+,
 }:
 
 buildPythonPackage rec {

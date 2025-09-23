@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  openssl,
-  protobuf_21,
-  catch2,
-  boost,
-  icu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, openssl
+, protobuf_21
+, catch2
+, boost
+, icu
+,
 }:
 let
   boost' = boost.override { enableStatic = true; };

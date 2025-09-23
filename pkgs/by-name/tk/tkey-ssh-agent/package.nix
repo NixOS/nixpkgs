@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  gitUpdater,
-  testers,
-  tkey-ssh-agent,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, gitUpdater
+, testers
+, tkey-ssh-agent
+,
 }:
 
 buildGoModule rec {

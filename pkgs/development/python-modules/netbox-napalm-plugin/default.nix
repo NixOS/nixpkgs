@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  netbox,
-  python,
-  napalm,
-  django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, netbox
+, python
+, napalm
+, django
+,
 }:
 buildPythonPackage rec {
   pname = "netbox-napalm-plugin";

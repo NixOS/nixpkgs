@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  obs-studio,
-  cmake,
-  zlib,
-  curl,
-  dbus,
-  pkg-config,
-  qtbase,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, obs-studio
+, cmake
+, zlib
+, curl
+, dbus
+, pkg-config
+, qtbase
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

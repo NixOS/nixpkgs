@@ -1,18 +1,18 @@
-{
-  fetchFromGitLab,
-  glib,
-  json-glib,
-  lib,
-  libgcrypt,
-  libsecret,
-  libsoup_3,
-  cmake,
-  meson,
-  ninja,
-  olm,
-  pkg-config,
-  sqlite,
-  stdenv,
+{ fetchFromGitLab
+, glib
+, json-glib
+, lib
+, libgcrypt
+, libsecret
+, libsoup_3
+, cmake
+, meson
+, ninja
+, olm
+, pkg-config
+, sqlite
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

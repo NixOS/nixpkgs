@@ -1,13 +1,13 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pyserial-asyncio-fast,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pyserial-asyncio-fast
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

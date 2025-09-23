@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  buildGoModule,
-  libGL,
-  libX11,
-  libxcb,
-  libXcursor,
-  libXfixes,
-  libxkbcommon,
-  vulkan-headers,
-  wayland,
-  fetchpatch,
+{ lib
+, fetchFromGitHub
+, pkg-config
+, buildGoModule
+, libGL
+, libX11
+, libxcb
+, libXcursor
+, libXfixes
+, libxkbcommon
+, vulkan-headers
+, wayland
+, fetchpatch
+,
 }:
 
 buildGoModule rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  boost,
-  zlib,
-  openssl,
-  upnpSupport ? true,
-  miniupnpc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, boost
+, zlib
+, openssl
+, upnpSupport ? true
+, miniupnpc
+,
 }:
 
 stdenv.mkDerivation rec {

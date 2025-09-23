@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  gmp,
-  zlib,
-  iproute2,
-  net-tools,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, gmp
+, zlib
+, iproute2
+, net-tools
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

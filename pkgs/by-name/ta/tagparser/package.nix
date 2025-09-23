@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  cpp-utilities,
-  zlib,
-  isocodes,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, cpp-utilities
+, zlib
+, isocodes
+,
 }:
 
 stdenv.mkDerivation rec {

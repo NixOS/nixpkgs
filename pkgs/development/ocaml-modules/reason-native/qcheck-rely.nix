@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  qcheck-core,
-  reason,
-  console,
-  rely,
-  src,
+{ lib
+, buildDunePackage
+, qcheck-core
+, reason
+, console
+, rely
+, src
+,
 }:
 
 buildDunePackage {

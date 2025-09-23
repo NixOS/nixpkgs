@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  importlib-metadata,
-  platformdirs,
-  tomli,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, importlib-metadata
+, platformdirs
+, tomli
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

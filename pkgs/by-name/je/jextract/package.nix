@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  gradle,
-  jdk23,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, gradle
+, jdk23
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation {

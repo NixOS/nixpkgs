@@ -1,31 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-  cmake,
-  ninja,
-
-  # dependencies
-  packaging,
-  pathspec,
-  exceptiongroup,
-
-  # tests
-  build,
-  cattrs,
-  numpy,
-  pybind11,
-  pytest-subprocess,
-  pytestCheckHook,
-  setuptools,
-  tomli,
-  virtualenv,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  hatch-vcs
+, hatchling
+, cmake
+, ninja
+, # dependencies
+  packaging
+, pathspec
+, exceptiongroup
+, # tests
+  build
+, cattrs
+, numpy
+, pybind11
+, pytest-subprocess
+, pytestCheckHook
+, setuptools
+, tomli
+, virtualenv
+, wheel
+,
 }:
 
 buildPythonPackage rec {

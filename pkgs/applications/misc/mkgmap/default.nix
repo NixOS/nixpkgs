@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchsvn,
-  jdk,
-  jre,
-  ant,
-  makeWrapper,
-  stripJavaArchivesHook,
-  doCheck ? true,
-  withExamples ? false,
+{ lib
+, stdenv
+, fetchurl
+, fetchsvn
+, jdk
+, jre
+, ant
+, makeWrapper
+, stripJavaArchivesHook
+, doCheck ? true
+, withExamples ? false
+,
 }:
 let
   deps = import ./deps.nix { inherit fetchurl; };

@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  coreutils,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiohttp,
-  certifi,
-  python-dateutil,
-  pyyaml,
-  six,
-  urllib3,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, coreutils
+, # build-system
+  setuptools
+, # dependencies
+  aiohttp
+, certifi
+, python-dateutil
+, pyyaml
+, six
+, urllib3
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

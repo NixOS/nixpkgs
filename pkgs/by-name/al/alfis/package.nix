@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  webkitgtk_4_0,
-  zenity,
-  withGui ? true,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, webkitgtk_4_0
+, zenity
+, withGui ? true
+,
 }:
 
 rustPlatform.buildRustPackage rec {

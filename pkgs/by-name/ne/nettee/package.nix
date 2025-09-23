@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

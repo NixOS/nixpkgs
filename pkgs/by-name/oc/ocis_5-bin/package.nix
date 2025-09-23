@@ -1,8 +1,8 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  autoPatchelfHook,
+{ fetchurl
+, lib
+, stdenv
+, autoPatchelfHook
+,
 }:
 
 let
@@ -14,8 +14,7 @@ let
       armv7l-linux = "arm";
       x86_64-darwin = "amd64";
       aarch64-darwin = "arm64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   os =
     if stdenv.hostPlatform.isLinux then
@@ -33,8 +32,7 @@ let
       hash_arm-linux = "sha256-uMLRow1NeHufSI5B4k5qSIfH3lTxg+WxzLxgdedAz40=";
       hash_amd64-darwin = "sha256-LZ6n/f2MdbFaPnBCoJqZZ7HQiLG3Z6ZoatgFsxaFvMc=";
       hash_arm64-darwin = "sha256-k5X2ZInFS/HlToOZPX23TRJqlx/XM1ZG++Xr4BHn8SY=";
-    }
-    ."hash_${arch}-${os}";
+    }."hash_${arch}-${os}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocis_5-bin";

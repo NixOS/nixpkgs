@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hidapi,
-  pyscard,
-  ecdsa,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hidapi
+, pyscard
+, ecdsa
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  qt6,
-  pkg-config,
-  dbus,
-  simpleBluez,
-  simpleDBus,
+{ stdenv
+, fetchFromGitHub
+, lib
+, qt6
+, pkg-config
+, dbus
+, simpleBluez
+, simpleDBus
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmkBATx";

@@ -1,41 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  which,
-  # Most packages depending on openblas expect integer width to match
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, which
+, # Most packages depending on openblas expect integer width to match
   # pointer width, but some expect to use 32-bit integers always
   # (for compatibility with reference BLAS).
-  blas64 ? null,
-  # Multi-threaded applications must not call a threaded OpenBLAS
+  blas64 ? null
+, # Multi-threaded applications must not call a threaded OpenBLAS
   # (the only exception is when an application uses OpenMP as its
   # *only* form of multi-threading). See
   #     https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   #     https://github.com/OpenMathLib/OpenBLAS/issues/2543
   # This flag builds a single-threaded OpenBLAS using the flags
   # stated in thre.
-  singleThreaded ? false,
-  buildPackages,
-  # Select a specific optimization target (other than the default)
+  singleThreaded ? false
+, buildPackages
+, # Select a specific optimization target (other than the default)
   # See https://github.com/OpenMathLib/OpenBLAS/blob/develop/TargetList.txt
-  target ? null,
-  # Select whether DYNAMIC_ARCH is enabled or not.
-  dynamicArch ? null,
-  # enable AVX512 optimized kernels.
+  target ? null
+, # Select whether DYNAMIC_ARCH is enabled or not.
+  dynamicArch ? null
+, # enable AVX512 optimized kernels.
   # These kernels have been a source of trouble in the past.
   # Use with caution.
-  enableAVX512 ? false,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-
-  # for passthru.tests
-  ceres-solver,
-  giac,
-  octave,
-  opencv,
-  python3,
-  openmp ? null,
+  enableAVX512 ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
+, # for passthru.tests
+  ceres-solver
+, giac
+, octave
+, opencv
+, python3
+, openmp ? null
+,
 }:
 
 let

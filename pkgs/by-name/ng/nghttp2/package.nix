@@ -1,38 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  installShellFiles,
-  pkg-config,
-
-  # Optional dependencies
-  enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic,
-  c-aresMinimal,
-  libev,
-  openssl,
-  zlib,
-  enableGetAssets ? false,
-  libxml2,
-  enableHpack ? false,
-  jansson,
-  enableHttp3 ? false,
-  ngtcp2,
-  nghttp3,
-  quictls,
-  enableJemalloc ? false,
-  jemalloc,
-  enablePython ? false,
-  python3,
-  ncurses,
-
-  # Unit tests ; we have to set TZDIR, which is a GNUism.
-  enableTests ? stdenv.hostPlatform.isGnu,
-  cunit,
-  tzdata,
-
-  # downstream dependencies, for testing
-  curl,
-  libsoup_3,
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+, pkg-config
+, # Optional dependencies
+  enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
+, c-aresMinimal
+, libev
+, openssl
+, zlib
+, enableGetAssets ? false
+, libxml2
+, enableHpack ? false
+, jansson
+, enableHttp3 ? false
+, ngtcp2
+, nghttp3
+, quictls
+, enableJemalloc ? false
+, jemalloc
+, enablePython ? false
+, python3
+, ncurses
+, # Unit tests ; we have to set TZDIR, which is a GNUism.
+  enableTests ? stdenv.hostPlatform.isGnu
+, cunit
+, tzdata
+, # downstream dependencies, for testing
+  curl
+, libsoup_3
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use fetchpatch!

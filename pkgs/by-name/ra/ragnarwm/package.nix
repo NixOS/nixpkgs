@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeText,
-  fontconfig,
-  libX11,
-  libXft,
-  libXcursor,
-  libXcomposite,
-  conf ? null,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, fontconfig
+, libX11
+, libXft
+, libXcursor
+, libXcomposite
+, conf ? null
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

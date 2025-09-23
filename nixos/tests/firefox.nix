@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  firefoxPackage,
-  ...
+{ lib
+, pkgs
+, firefoxPackage
+, ...
 }:
 {
   name = firefoxPackage.pname;

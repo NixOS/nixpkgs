@@ -1,12 +1,12 @@
-{
-  lib,
-  betamax,
-  buildPythonPackage,
-  fetchPypi,
-  pyopenssl,
-  pytestCheckHook,
-  requests,
-  trustme,
+{ lib
+, betamax
+, buildPythonPackage
+, fetchPypi
+, pyopenssl
+, pytestCheckHook
+, requests
+, trustme
+,
 }:
 
 buildPythonPackage rec {

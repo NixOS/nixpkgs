@@ -1,12 +1,12 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  fftw,
-  libsndfile,
-  qtbase,
-  qtmultimedia,
-  qmake,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fftw
+, libsndfile
+, qtbase
+, qtmultimedia
+, qmake
+,
 }:
 
 let

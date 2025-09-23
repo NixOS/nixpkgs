@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  python,
-  isPy27,
-  six,
-  zope-testing,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, python
+, isPy27
+, six
+, zope-testing
+,
 }:
 
 buildPythonPackage rec {

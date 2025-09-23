@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  emacs,
-  fetchFromSourcehut,
-  xapian,
+{ lib
+, stdenv
+, emacs
+, fetchFromSourcehut
+, xapian
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

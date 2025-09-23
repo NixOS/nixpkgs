@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchgit,
-  pyptlib,
-  twisted,
-  pycrypto,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchgit
+, pyptlib
+, twisted
+, pycrypto
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

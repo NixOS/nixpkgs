@@ -28,7 +28,7 @@
           enable = true;
           globalConfig.scrape_interval = "2s";
 
-          remoteWrite = [ { url = "http://receiver:9090/api/v1/write"; } ];
+          remoteWrite = [{ url = "http://receiver:9090/api/v1/write"; }];
 
           scrapeConfigs = [
             {

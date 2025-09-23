@@ -1,7 +1,7 @@
-{
-  skawarePackages,
-  stdenv,
-  skalibs,
+{ skawarePackages
+, stdenv
+, skalibs
+,
 }:
 
 skawarePackages.buildPackage {

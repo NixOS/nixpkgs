@@ -1,12 +1,12 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  pkg-config,
-  glm,
-  libGL,
-  projectm_3,
+{ lib
+, rel
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, pkg-config
+, glm
+, libGL
+, projectm_3
+,
 }:
 
 buildKodiBinaryAddon rec {

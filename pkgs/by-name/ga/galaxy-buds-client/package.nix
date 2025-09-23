@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  fontconfig,
-  glib,
-  libglvnd,
-  xorg,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  nix-update-script,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, fontconfig
+, glib
+, libglvnd
+, xorg
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nix-update-script
+,
 }:
 
 buildDotnetModule rec {

@@ -1,16 +1,16 @@
-{
-  bash,
-  buildGoModule,
-  fetchFromGitHub,
-  getent,
-  goss,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  nixosTests,
-  stdenv,
-  systemd,
-  testers,
+{ bash
+, buildGoModule
+, fetchFromGitHub
+, getent
+, goss
+, lib
+, makeWrapper
+, nix-update-script
+, nixosTests
+, stdenv
+, systemd
+, testers
+,
 }:
 
 buildGoModule rec {

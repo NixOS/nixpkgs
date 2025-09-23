@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  megacmd,
-  unzip,
-  makeWrapper,
-  autoPatchelfHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  libgcc,
-  cairo,
-  dbus,
-  xorg_sys_opengl,
-  systemd,
-  libcap,
-  libdrm,
-  pulseaudio,
-  libsndfile,
-  flac,
-  glib,
-  libvorbis,
-  libopus,
-  mpg123,
-  lame,
-  libGL,
-  vulkan-loader,
-  libasyncns,
-  pango,
-  xorg,
-  wayland,
+{ lib
+, stdenv
+, runCommand
+, megacmd
+, unzip
+, makeWrapper
+, autoPatchelfHook
+, makeDesktopItem
+, copyDesktopItems
+, libgcc
+, cairo
+, dbus
+, xorg_sys_opengl
+, systemd
+, libcap
+, libdrm
+, pulseaudio
+, libsndfile
+, flac
+, glib
+, libvorbis
+, libopus
+, mpg123
+, lame
+, libGL
+, vulkan-loader
+, libasyncns
+, pango
+, xorg
+, wayland
+,
 }:
 
 let

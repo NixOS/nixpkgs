@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  poetry-core,
-  jedi,
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  xonsh,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, jedi
+, writableTmpDirAsHomeHook
+, pytestCheckHook
+, xonsh
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

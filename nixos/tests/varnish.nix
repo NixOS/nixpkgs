@@ -18,11 +18,10 @@ in
 
   nodes = {
     varnish =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
+      { config
+      , pkgs
+      , lib
+      , ...
       }:
       {
         services.nix-serve = {

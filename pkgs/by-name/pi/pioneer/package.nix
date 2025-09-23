@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  assimp,
-  curl,
-  freetype,
-  #, glew
-  libGL,
-  libGLU,
-  libpng,
-  libsigcxx,
-  libvorbis,
-  libX11,
-  lua5_2,
-  libgbm,
-  SDL2,
-  SDL2_image,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, assimp
+, curl
+, freetype
+, #, glew
+  libGL
+, libGLU
+, libpng
+, libsigcxx
+, libvorbis
+, libX11
+, lua5_2
+, libgbm
+, SDL2
+, SDL2_image
+,
 }:
 
 stdenv.mkDerivation rec {

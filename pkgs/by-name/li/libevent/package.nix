@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  findutils,
-  fixDarwinDylibNames,
-  updateAutotoolsGnuConfigScriptsHook,
-  sslSupport ? true,
-  openssl,
-  fetchpatch,
-
-  static ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchurl
+, findutils
+, fixDarwinDylibNames
+, updateAutotoolsGnuConfigScriptsHook
+, sslSupport ? true
+, openssl
+, fetchpatch
+, static ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {

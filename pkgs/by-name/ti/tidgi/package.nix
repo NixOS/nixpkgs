@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  writeShellScript,
-  jq,
-  ast-grep,
-  common-updater-scripts,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, writeShellScript
+, jq
+, ast-grep
+, common-updater-scripts
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${finalAttrs.version}/TidGi-darwin-arm64-${finalAttrs.version}.zip";
         hash = "sha256-bSJFM67+KVECUqjwu1HYipn+zOps1ahNzM721yZL52c=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontBuild = true;
 

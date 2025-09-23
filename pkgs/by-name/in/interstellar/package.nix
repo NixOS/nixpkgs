@@ -1,12 +1,12 @@
-{
-  copyDesktopItems,
-  flutter332,
-  fetchFromGitHub,
-  imagemagick,
-  lib,
-  libass,
-  makeDesktopItem,
-  mpv-unwrapped,
+{ copyDesktopItems
+, flutter332
+, fetchFromGitHub
+, imagemagick
+, lib
+, libass
+, makeDesktopItem
+, mpv-unwrapped
+,
 }:
 
 flutter332.buildFlutterApplication rec {

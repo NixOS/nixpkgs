@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  ncurses,
-  alsa-lib,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, ncurses
+, alsa-lib
+,
 }:
 
 stdenv.mkDerivation rec {

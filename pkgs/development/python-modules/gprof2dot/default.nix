@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  python,
-  graphviz,
-  pythonOlder,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, python
+, graphviz
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

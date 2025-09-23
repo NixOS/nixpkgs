@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyyaml,
-  posthog,
-  pytestCheckHook,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyyaml
+, posthog
+, pytestCheckHook
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

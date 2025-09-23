@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  meson,
-  ninja,
-  unstableGitUpdater,
-  stdenv,
-  testers,
+{ fetchFromGitHub
+, lib
+, meson
+, ninja
+, unstableGitUpdater
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

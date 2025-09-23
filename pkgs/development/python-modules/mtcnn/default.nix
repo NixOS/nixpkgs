@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  joblib,
-  keras,
-  lz4,
-  pythonAtLeast,
-  distutils,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  joblib
+, keras
+, lz4
+, pythonAtLeast
+, distutils
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

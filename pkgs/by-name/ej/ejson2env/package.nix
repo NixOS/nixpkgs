@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  testers,
-  callPackage,
-  ejson2env,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, testers
+, callPackage
+, ejson2env
+,
 }:
 
 buildGoModule rec {

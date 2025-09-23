@@ -1,14 +1,14 @@
-{
-  lib,
-  argcomplete,
-  buildPythonPackage,
-  fetchPypi,
-  gql,
-  pythonOlder,
-  pyyaml,
-  requests-toolbelt,
-  requests,
-  setuptools,
+{ lib
+, argcomplete
+, buildPythonPackage
+, fetchPypi
+, gql
+, pythonOlder
+, pyyaml
+, requests-toolbelt
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

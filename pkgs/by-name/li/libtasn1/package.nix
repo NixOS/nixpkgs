@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  texinfo,
-
-  # for passthru.tests
-  gnutls,
-  samba,
-  qemu,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, texinfo
+, # for passthru.tests
+  gnutls
+, samba
+, qemu
+,
 }:
 
 stdenv.mkDerivation rec {

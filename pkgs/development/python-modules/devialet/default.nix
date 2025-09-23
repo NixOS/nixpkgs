@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  async-upnp-client,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, async-upnp-client
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

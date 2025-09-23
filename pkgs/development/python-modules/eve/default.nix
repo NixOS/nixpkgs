@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cerberus,
-  events,
-  fetchFromGitHub,
-  flask,
-  pymongo,
-  pythonOlder,
-  setuptools,
-  simplejson,
+{ lib
+, buildPythonPackage
+, cerberus
+, events
+, fetchFromGitHub
+, flask
+, pymongo
+, pythonOlder
+, setuptools
+, simplejson
+,
 }:
 
 buildPythonPackage rec {

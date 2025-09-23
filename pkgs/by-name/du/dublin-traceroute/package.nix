@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  jsoncpp,
-  libtins,
-  libpcap,
-  openssl,
-  unstableGitUpdater,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, jsoncpp
+, libtins
+, libpcap
+, openssl
+, unstableGitUpdater
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

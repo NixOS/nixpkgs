@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # optional-dependencies
-  coverage,
-
-  # tests
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, # optional-dependencies
+  coverage
+, # tests
+  unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

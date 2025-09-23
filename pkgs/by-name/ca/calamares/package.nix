@@ -1,30 +1,24 @@
-{
-  lib,
-  stdenv,
-
-  writeShellScriptBin,
-  xdg-utils,
-
-  fetchFromGitea,
-
-  cmake,
-  ninja,
-  kdePackages,
-  qt6,
-
-  libpwquality,
-  libxcrypt,
-  parted,
-  yaml-cpp,
-
-  tzdata,
-  ckbcomp,
-  util-linux,
-  os-prober,
-  xkeyboard_config,
-
-  # passthru.tests
-  calamares-nixos,
+{ lib
+, stdenv
+, writeShellScriptBin
+, xdg-utils
+, fetchFromGitea
+, cmake
+, ninja
+, kdePackages
+, qt6
+, libpwquality
+, libxcrypt
+, parted
+, yaml-cpp
+, tzdata
+, ckbcomp
+, util-linux
+, os-prober
+, xkeyboard_config
+, # passthru.tests
+  calamares-nixos
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-backend,
-  anyio,
-  typing-extensions,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-backend
+, anyio
+, typing-extensions
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

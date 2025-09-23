@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -24,19 +23,19 @@ let
   toBool = val: if val then "yes" else "no";
   serialize =
     val:
-    with types;
-    if str.check val then
-      val
-    else if int.check val then
-      toString val
-    else if path.check val then
-      toString val
-    else if bool.check val then
-      toBool val
-    else if builtins.isList val then
-      (concatMapStringsSep "," serialize val)
-    else
-      "";
+      with types;
+      if str.check val then
+        val
+      else if int.check val then
+        toString val
+      else if path.check val then
+        toString val
+      else if bool.check val then
+        toBool val
+      else if builtins.isList val then
+        (concatMapStringsSep "," serialize val)
+      else
+        "";
 
   settingsFormat = pkgs.formats.yaml { };
 
@@ -51,7 +50,7 @@ let
 
   configFile =
     if cfg.old-settings != { } then
-      # Convert recursor.conf to recursor.yml and merge it
+    # Convert recursor.conf to recursor.yml and merge it
       let
         conf = pkgs.writeText "recursor.conf" (
           concatStringsSep "\n" (mapAttrsToList (name: val: "${name}=${serialize val}") cfg.old-settings)

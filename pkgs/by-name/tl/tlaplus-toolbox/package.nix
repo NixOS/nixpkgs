@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchzip,
-  makeShellWrapper,
-  makeDesktopItem,
-  stdenv,
-  gtk3,
-  libXtst,
-  glib,
-  zlib,
-  wrapGAppsHook3,
+{ lib
+, fetchzip
+, makeShellWrapper
+, makeDesktopItem
+, stdenv
+, gtk3
+, libXtst
+, glib
+, zlib
+, wrapGAppsHook3
+,
 }:
 
 let

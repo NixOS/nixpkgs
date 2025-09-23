@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glibcLocales,
-  installShellFiles,
-  python3Packages,
-  sphinxHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibcLocales
+, installShellFiles
+, python3Packages
+, sphinxHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

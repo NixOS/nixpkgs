@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  typing-extensions,
-  toml,
-  zipp,
-
-  # Reverse dependency
-  sage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, setuptools-scm
+, typing-extensions
+, toml
+, zipp
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

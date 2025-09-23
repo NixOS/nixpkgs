@@ -1,10 +1,10 @@
-{
-  lib,
-  writeShellApplication,
-  coreutils,
-  git,
-  nix,
-  common-updater-scripts,
+{ lib
+, writeShellApplication
+, coreutils
+, git
+, nix
+, common-updater-scripts
+,
 }:
 
 # This is an updater for unstable packages that should always use the latest
@@ -13,19 +13,25 @@
 # passthru.updateScript = unstableGitUpdater { };
 # relevant attributes can be passed as below:
 
-{
-  url ? null, # The git url, if empty it will be set to src.gitRepoUrl
-  branch ? null,
-  hardcodeZeroVersion ? false, # Use a made-up version "0" instead of latest tag. Use when the project's tagging system is incompatible with what we expect from versions
-  tagFormat ? "*", # A `git describe --tags --match '<format>'` pattern that tags must match to be considered
-  tagPrefix ? null, # strip this prefix from a tag name
-  tagConverter ? null, # A command to convert more complex tag formats. It receives the git tag via stdin and should convert it into x.y.z format to stdout
-  shallowClone ? true,
+{ url ? null
+, # The git url, if empty it will be set to src.gitRepoUrl
+  branch ? null
+, hardcodeZeroVersion ? false
+, # Use a made-up version "0" instead of latest tag. Use when the project's tagging system is incompatible with what we expect from versions
+  tagFormat ? "*"
+, # A `git describe --tags --match '<format>'` pattern that tags must match to be considered
+  tagPrefix ? null
+, # strip this prefix from a tag name
+  tagConverter ? null
+, # A command to convert more complex tag formats. It receives the git tag via stdin and should convert it into x.y.z format to stdout
+  shallowClone ? true
+,
 }:
 
-assert lib.asserts.assertMsg (
-  tagPrefix == null || tagConverter == null
-) "Can only use either tagPrefix or tagConverter!";
+assert lib.asserts.assertMsg
+  (
+    tagPrefix == null || tagConverter == null
+  ) "Can only use either tagPrefix or tagConverter!";
 
 let
   updateScript = writeShellApplication {

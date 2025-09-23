@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  bash,
-  bashInteractive,
-  util-linux,
-  setuptools,
-  distro,
-  udevCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, bash
+, bashInteractive
+, util-linux
+, setuptools
+, distro
+, udevCheckHook
+,
 }:
 
 buildPythonPackage rec {

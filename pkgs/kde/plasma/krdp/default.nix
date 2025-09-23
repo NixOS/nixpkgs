@@ -1,11 +1,11 @@
-{
-  lib,
-  mkKdeDerivation,
-  replaceVars,
-  openssl,
-  pkg-config,
-  qtwayland,
-  freerdp,
+{ lib
+, mkKdeDerivation
+, replaceVars
+, openssl
+, pkg-config
+, qtwayland
+, freerdp
+,
 }:
 mkKdeDerivation {
   pname = "krdp";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
-  bzip2,
-  lzfse,
-  xz,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, bzip2
+, lzfse
+, xz
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

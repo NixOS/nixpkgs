@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  attrs,
-  backoff,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pyhumps,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  warrant-lite,
+{ lib
+, aiohttp
+, attrs
+, backoff
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pyhumps
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, warrant-lite
+,
 }:
 
 buildPythonPackage rec {

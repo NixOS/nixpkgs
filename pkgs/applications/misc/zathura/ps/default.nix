@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  zathura_core,
-  girara,
-  libspectre,
-  gettext,
-  desktop-file-utils,
-  appstream-glib,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, zathura_core
+, girara
+, libspectre
+, gettext
+, desktop-file-utils
+, appstream-glib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

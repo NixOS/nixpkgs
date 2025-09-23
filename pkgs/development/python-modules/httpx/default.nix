@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  anyio,
-  brotli,
-  brotlicffi,
-  buildPythonPackage,
-  certifi,
-  chardet,
-  click,
-  fetchFromGitHub,
-  h2,
-  hatch-fancy-pypi-readme,
-  hatchling,
-  httpcore,
-  idna,
-  isPyPy,
-  multipart,
-  pygments,
-  python,
-  pythonOlder,
-  rich,
-  socksio,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-trio,
-  trustme,
-  uvicorn,
-  zstandard,
+{ lib
+, stdenv
+, anyio
+, brotli
+, brotlicffi
+, buildPythonPackage
+, certifi
+, chardet
+, click
+, fetchFromGitHub
+, h2
+, hatch-fancy-pypi-readme
+, hatchling
+, httpcore
+, idna
+, isPyPy
+, multipart
+, pygments
+, python
+, pythonOlder
+, rich
+, socksio
+, pytestCheckHook
+, pytest-asyncio
+, pytest-trio
+, trustme
+, uvicorn
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

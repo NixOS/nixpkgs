@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libdwarf,
-  gtest,
-  callPackage,
-  zstd,
-  nix-update-script,
-  static ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libdwarf
+, gtest
+, callPackage
+, zstd
+, nix-update-script
+, static ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

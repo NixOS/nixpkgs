@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenv,
-  darwin,
-  callPackage,
-  flutter,
-  supportedTargetFlutterPlatforms ? [
+{ lib
+, stdenv
+, darwin
+, callPackage
+, flutter
+, supportedTargetFlutterPlatforms ? [
     "universal"
     "web"
   ]
@@ -13,36 +12,37 @@
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "macos"
     "ios"
-  ],
-  artifactHashes ? flutter.artifactHashes,
-  extraPkgConfigPackages ? [ ],
-  extraLibraries ? [ ],
-  extraIncludes ? [ ],
-  extraCxxFlags ? [ ],
-  extraCFlags ? [ ],
-  extraLinkerFlags ? [ ],
-  makeWrapper,
-  writeShellScript,
-  wrapGAppsHook3,
-  git,
-  which,
-  pkg-config,
-  atk,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  harfbuzz,
-  libepoxy,
-  pango,
-  libX11,
-  xorgproto,
-  libdeflate,
-  zlib,
-  cmake,
-  ninja,
-  clang,
-  symlinkJoin,
+  ]
+, artifactHashes ? flutter.artifactHashes
+, extraPkgConfigPackages ? [ ]
+, extraLibraries ? [ ]
+, extraIncludes ? [ ]
+, extraCxxFlags ? [ ]
+, extraCFlags ? [ ]
+, extraLinkerFlags ? [ ]
+, makeWrapper
+, writeShellScript
+, wrapGAppsHook3
+, git
+, which
+, pkg-config
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gtk3
+, harfbuzz
+, libepoxy
+, pango
+, libX11
+, xorgproto
+, libdeflate
+, zlib
+, cmake
+, ninja
+, clang
+, symlinkJoin
+,
 }:
 
 let

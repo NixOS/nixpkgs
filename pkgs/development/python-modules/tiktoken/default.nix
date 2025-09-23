@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  rustPlatform,
-  cargo,
-  rustc,
-  setuptools,
-  setuptools-rust,
-  libiconv,
-  requests,
-  regex,
-  blobfile,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, rustPlatform
+, cargo
+, rustc
+, setuptools
+, setuptools-rust
+, libiconv
+, requests
+, regex
+, blobfile
+,
 }:
 let
   pname = "tiktoken";

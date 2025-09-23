@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  updateAutotoolsGnuConfigScriptsHook,
-  withCMake ? true,
-  cmake,
-
-  # sensitive downstream packages
-  curl,
-  grpc, # consumes cmake config
+{ lib
+, stdenv
+, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
+, withCMake ? true
+, cmake
+, # sensitive downstream packages
+  curl
+, grpc
+, # consumes cmake config
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

@@ -1,7 +1,7 @@
-{
-  lib,
-  newScope,
-  config,
+{ lib
+, newScope
+, config
+,
 }:
 
 lib.makeScope newScope (
@@ -93,7 +93,7 @@ lib.makeScope newScope (
 
     z = callPackage ./z.nix { };
   }
-  // lib.optionalAttrs config.allowAliases {
+    // lib.optionalAttrs config.allowAliases {
     autopair-fish = self.autopair; # Added 2023-03-10
   }
 )

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  fftw,
-  fftwFloat,
-  flex,
-  libjack2,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, fftw
+, fftwFloat
+, flex
+, libjack2
+,
 }:
 
 stdenv.mkDerivation rec {

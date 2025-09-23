@@ -1,13 +1,12 @@
-{
-  callPackage,
-  sratom,
-  flex,
-  ...
+{ callPackage
+, sratom
+, flex
+, ...
 }@args:
 
 callPackage ./generic.nix (
   args
-  // {
+    // {
     pname = "sherlock";
     version = "0.28.0";
 

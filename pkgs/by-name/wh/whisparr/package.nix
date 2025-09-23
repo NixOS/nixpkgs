@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenv,
-
-  curl,
-  dotnet-runtime,
-  fetchurl,
-  icu,
-  libmediainfo,
-  makeWrapper,
-  mono,
-  openssl,
-  sqlite,
-  zlib,
-
-  nixosTests,
+{ lib
+, stdenv
+, curl
+, dotnet-runtime
+, fetchurl
+, icu
+, libmediainfo
+, makeWrapper
+, mono
+, openssl
+, sqlite
+, zlib
+, nixosTests
+,
 }:
 
 let
@@ -25,16 +23,14 @@ let
       aarch64-linux = "arm64";
       x86_64-darwin = "x64";
       x86_64-linux = "x64";
-    }
-    ."${system}" or (throw "Unsupported system: ${system}");
+    }."${system}" or (throw "Unsupported system: ${system}");
   hash =
     {
       arm64-linux-hash = "sha256-rzxvj+jLtHzHnHY31YiJsf7hAhn2Lxzra/cfPl/ibV8=";
       arm64-osx-hash = "sha256-7ITEK4Nu63BBX+WnuLN89RLtxbDn7QWQ3iFkgUEn+oc=";
       x64-linux-hash = "sha256-191CTseBjOKhMX1O8vTnOOYh+x0x43r6jQyz1oU946o=";
       x64-osx-hash = "sha256-DZgdcpE6kIdlL58AOlQI8V4fWytkA9QGrEW7QwIHzkM=";
-    }
-    ."${arch}-${os}-hash";
+    }."${arch}-${os}-hash";
 in
 stdenv.mkDerivation rec {
   pname = "whisparr";

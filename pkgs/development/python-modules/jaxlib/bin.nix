@@ -4,17 +4,17 @@
 
 # See `python3Packages.jax.passthru` for CUDA tests.
 
-{
-  absl-py,
-  autoPatchelfHook,
-  buildPythonPackage,
-  fetchPypi,
-  flatbuffers,
-  lib,
-  ml-dtypes,
-  python,
-  scipy,
-  stdenv,
+{ absl-py
+, autoPatchelfHook
+, buildPythonPackage
+, fetchPypi
+, flatbuffers
+, lib
+, ml-dtypes
+, python
+, scipy
+, stdenv
+,
 }:
 
 let
@@ -26,10 +26,10 @@ let
   srcs =
     let
       getSrcFromPypi =
-        {
-          platform,
-          dist,
-          hash,
+        { platform
+        , dist
+        , hash
+        ,
         }:
         fetchPypi {
           inherit

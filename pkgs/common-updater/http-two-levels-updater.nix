@@ -1,20 +1,20 @@
-{
-  lib,
-  genericUpdater,
-  common-updater-scripts,
+{ lib
+, genericUpdater
+, common-updater-scripts
+,
 }:
 
-{
-  pname ? null,
-  version ? null,
-  attrPath ? null,
-  allowedVersions ? "",
-  ignoredVersions ? "",
-  rev-prefix ? "",
-  rev-suffix ? "",
-  odd-unstable ? false,
-  patchlevel-unstable ? false,
-  url ? null,
+{ pname ? null
+, version ? null
+, attrPath ? null
+, allowedVersions ? ""
+, ignoredVersions ? ""
+, rev-prefix ? ""
+, rev-suffix ? ""
+, odd-unstable ? false
+, patchlevel-unstable ? false
+, url ? null
+,
 }:
 
 genericUpdater {

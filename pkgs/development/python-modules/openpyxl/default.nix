@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  et-xmlfile,
-  fetchFromGitLab,
-  lxml,
-  pandas,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, et-xmlfile
+, fetchFromGitLab
+, lxml
+, pandas
+, pillow
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash,
-  cmake,
-  dockbarx,
-  gobject-introspection,
-  keybinder3,
-  pkg-config,
-  python3Packages,
-  wrapGAppsHook3,
-  xfce,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, cmake
+, dockbarx
+, gobject-introspection
+, keybinder3
+, pkg-config
+, python3Packages
+, wrapGAppsHook3
+, xfce
+,
 }:
 
 stdenv.mkDerivation rec {

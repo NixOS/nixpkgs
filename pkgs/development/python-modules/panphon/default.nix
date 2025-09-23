@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  unittestCheckHook,
-
-  setuptools,
-
-  unicodecsv,
-  pyyaml,
-  regex,
-  numpy,
-  editdistance,
-  munkres,
-  pandas,
-  levenshtein,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, unittestCheckHook
+, setuptools
+, unicodecsv
+, pyyaml
+, regex
+, numpy
+, editdistance
+, munkres
+, pandas
+, levenshtein
+,
 }:
 
 buildPythonPackage rec {

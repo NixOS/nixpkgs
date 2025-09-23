@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  requireFile,
-  dpkg,
-  xorg,
-  libGL,
-  alsa-lib,
-  pulseaudio,
+{ lib
+, stdenv
+, requireFile
+, dpkg
+, xorg
+, libGL
+, alsa-lib
+, pulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,6 +1,6 @@
-{
-  fetchurl,
-  callPackage,
+{ fetchurl
+, callPackage
+,
 }:
 
 (callPackage ./common.nix { }).overrideAttrs (_: rec {

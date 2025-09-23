@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  bluez-tools,
-  gnome-bluetooth_1_0,
-  gobject-introspection,
-  libnotify,
-  pavucontrol,
-  python3Packages,
-  util-linux,
-  wrapGAppsHook3,
-  xapp,
+{ stdenv
+, lib
+, fetchFromGitHub
+, bluez-tools
+, gnome-bluetooth_1_0
+, gobject-introspection
+, libnotify
+, pavucontrol
+, python3Packages
+, util-linux
+, wrapGAppsHook3
+, xapp
+,
 }:
 
 python3Packages.buildPythonApplication rec {

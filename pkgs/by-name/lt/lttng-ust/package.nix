@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  asciidoc,
-  xmlto,
-  liburcu,
-  numactl,
-  python3,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, asciidoc
+, xmlto
+, liburcu
+, numactl
+, python3
+, testers
+, nix-update-script
+,
 }:
 
 # NOTE:

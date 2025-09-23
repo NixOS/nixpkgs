@@ -1,16 +1,16 @@
-{
-  lib,
-  runCommand,
-  makeWrapper,
-  calamares,
-  calamares-nixos-extensions,
+{ lib
+, runCommand
+, makeWrapper
+, calamares
+, calamares-nixos-extensions
+,
 }:
 runCommand "calamares-wrapped"
-  {
-    inherit (calamares) version meta;
+{
+  inherit (calamares) version meta;
 
-    nativeBuildInputs = [ makeWrapper ];
-  }
+  nativeBuildInputs = [ makeWrapper ];
+}
   ''
     mkdir -p $out/bin
 

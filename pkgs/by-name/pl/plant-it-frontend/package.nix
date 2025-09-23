@@ -1,7 +1,7 @@
-{
-  lib,
-  flutter329,
-  plant-it,
+{ lib
+, flutter329
+, plant-it
+,
 }:
 
 flutter329.buildFlutterApplication {

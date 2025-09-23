@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fixDarwinDylibNames,
-  oracle-instantclient,
-  libaio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fixDarwinDylibNames
+, oracle-instantclient
+, libaio
+,
 }:
 
 let

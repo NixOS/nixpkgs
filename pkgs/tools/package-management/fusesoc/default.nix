@@ -1,17 +1,17 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  iverilog,
-  verilator,
-  gnumake,
-  edalize,
-  fastjsonschema,
-  pyparsing,
-  pyyaml,
-  simplesat,
-  ipyxact,
-  setuptools-scm,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, iverilog
+, verilator
+, gnumake
+, edalize
+, fastjsonschema
+, pyparsing
+, pyyaml
+, simplesat
+, ipyxact
+, setuptools-scm
+,
 }:
 buildPythonPackage rec {
   pname = "fusesoc";

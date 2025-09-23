@@ -1,13 +1,13 @@
 # This turns ./outpaths.nix into chunks of a fixed size.
-{
-  lib ? import ../../lib,
-  path ? ../..,
-  # The file containing all available attribute paths, which are split into chunks here
-  attrpathFile,
-  chunkSize,
-  myChunk,
-  includeBroken,
-  systems,
+{ lib ? import ../../lib
+, path ? ../..
+, # The file containing all available attribute paths, which are split into chunks here
+  attrpathFile
+, chunkSize
+, myChunk
+, includeBroken
+, systems
+,
 }:
 
 let
@@ -24,20 +24,22 @@ let
     let
       recurse =
         index: paths: attrs:
-        lib.mapAttrs (
-          name: values:
-          if attrs ? ${name} then
-            if lib.any (value: lib.length value <= index + 1) values then
-              attrs.${name}
+        lib.mapAttrs
+          (
+            name: values:
+            if attrs ? ${name} then
+              if lib.any (value: lib.length value <= index + 1) values then
+                attrs.${name}
+              else
+                recurse (index + 1) values attrs.${name}
+                # Make sure nix-env recurses as well
+                // {
+                  recurseForDerivations = true;
+                }
             else
-              recurse (index + 1) values attrs.${name}
-              # Make sure nix-env recurses as well
-              // {
-                recurseForDerivations = true;
-              }
-          else
-            null
-        ) (lib.groupBy (a: lib.elemAt a index) paths);
+              null
+          )
+          (lib.groupBy (a: lib.elemAt a index) paths);
     in
     recurse 0 myAttrpaths unfiltered;
 

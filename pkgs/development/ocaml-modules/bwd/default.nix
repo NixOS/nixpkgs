@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  qcheck-core,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, qcheck-core
+,
 }:
 
 buildDunePackage rec {

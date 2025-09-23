@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  pkg-config,
-  fetchFromGitHub,
-  hyprland-qt-support,
-  hyprutils,
-  kdePackages,
-  polkit,
-  qt6,
+{ lib
+, stdenv
+, cmake
+, pkg-config
+, fetchFromGitHub
+, hyprland-qt-support
+, hyprutils
+, kdePackages
+, polkit
+, qt6
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";

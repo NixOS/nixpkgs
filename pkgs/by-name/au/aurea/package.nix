@@ -1,17 +1,17 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  blueprint-compiler,
-  desktop-file-utils,
-  pkg-config,
-  wrapGAppsHook4,
-  libsoup_3,
-  glib-networking,
-  libadwaita,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, meson
+, ninja
+, blueprint-compiler
+, desktop-file-utils
+, pkg-config
+, wrapGAppsHook4
+, libsoup_3
+, glib-networking
+, libadwaita
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

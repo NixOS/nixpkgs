@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  cacert,
-  crystal,
-  openssl,
-  pkg-config,
-  invidious,
-  versions,
+{ stdenvNoCC
+, cacert
+, crystal
+, openssl
+, pkg-config
+, invidious
+, versions
+,
 }:
 
 stdenvNoCC.mkDerivation {

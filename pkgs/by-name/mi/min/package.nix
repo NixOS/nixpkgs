@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  openssl,
-  pcre,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, openssl
+, pcre
+,
 }:
 
 buildNimPackage (finalAttrs: {

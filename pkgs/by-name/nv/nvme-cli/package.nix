@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  libnvme,
-  json_c,
-  zlib,
-  python3Packages,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, libnvme
+, json_c
+, zlib
+, python3Packages
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

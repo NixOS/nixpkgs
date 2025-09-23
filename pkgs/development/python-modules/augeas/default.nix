@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  unittestCheckHook,
-  pkg-config,
-  augeas,
-  cffi,
-  pkgs, # for libxml2
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, unittestCheckHook
+, pkg-config
+, augeas
+, cffi
+, pkgs
+, # for libxml2
 }:
 buildPythonPackage rec {
   pname = "augeas";

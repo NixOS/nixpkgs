@@ -1,20 +1,20 @@
-{
-  lib,
-  copyDesktopItems,
-  electron_37,
-  fetchFromGitHub,
-  deltachat-rpc-server,
-  makeDesktopItem,
-  makeWrapper,
-  nodejs,
-  pkg-config,
-  pnpm_9,
-  python3,
-  rustPlatform,
-  stdenv,
-  testers,
-  deltachat-desktop,
-  yq,
+{ lib
+, copyDesktopItems
+, electron_37
+, fetchFromGitHub
+, deltachat-rpc-server
+, makeDesktopItem
+, makeWrapper
+, nodejs
+, pkg-config
+, pnpm_9
+, python3
+, rustPlatform
+, stdenv
+, testers
+, deltachat-desktop
+, yq
+,
 }:
 
 let

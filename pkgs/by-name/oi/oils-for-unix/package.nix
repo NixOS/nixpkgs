@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  symlinkJoin,
-  withReadline ? true,
-  readline,
+{ stdenv
+, lib
+, fetchurl
+, symlinkJoin
+, withReadline ? true
+, readline
+,
 }:
 
 let

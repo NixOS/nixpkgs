@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  dbus-python,
-  fetchFromGitHub,
-  numpy,
-  openrazer-daemon,
-  setuptools,
+{ lib
+, buildPythonPackage
+, dbus-python
+, fetchFromGitHub
+, numpy
+, openrazer-daemon
+, setuptools
+,
 }:
 
 let
@@ -13,7 +13,7 @@ let
 in
 buildPythonPackage (
   common
-  // {
+    // {
     pname = "openrazer";
 
     sourceRoot = "${common.src.name}/pylib";

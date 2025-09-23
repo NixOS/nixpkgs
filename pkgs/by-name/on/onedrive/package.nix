@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # native
-  autoreconfHook,
-  installShellFiles,
-  ldc,
-  pkg-config,
-
-  # host
-  coreutils,
-  curl,
-  dbus,
-  libnotify,
-  sqlite,
-  systemd,
-  testers,
-
-  # Boolean flags
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # native
+  autoreconfHook
+, installShellFiles
+, ldc
+, pkg-config
+, # host
+  coreutils
+, curl
+, dbus
+, libnotify
+, sqlite
+, systemd
+, testers
+, # Boolean flags
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  lz4,
-  libxkbcommon,
-  installShellFiles,
-  scdoc,
-  wayland-protocols,
-  wayland-scanner,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, lz4
+, libxkbcommon
+, installShellFiles
+, scdoc
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

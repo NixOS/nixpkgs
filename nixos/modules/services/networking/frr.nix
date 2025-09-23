@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -169,9 +168,11 @@ in
     { options.services.frr = (lib.genAttrs allDaemons serviceOptions); }
     (lib.mkRemovedOptionModule [ "services" "frr" "zebra" "enable" ] "FRR zebra is always enabled")
   ]
-  ++ (map (
-    d: lib.mkRenamedOptionModule [ "services" "frr" d "enable" ] [ "services" "frr" "${d}d" "enable" ]
-  ) renamedServices)
+  ++ (map
+    (
+      d: lib.mkRenamedOptionModule [ "services" "frr" d "enable" ] [ "services" "frr" "${d}d" "enable" ]
+    )
+    renamedServices)
   ++ (map
     (
       d:
@@ -181,7 +182,7 @@ in
     )
     (
       renamedServices
-      ++ [
+        ++ [
         "static"
         "mgmt"
       ]
@@ -193,34 +194,42 @@ in
       "mgmt"
     ]
   )
-  ++ (map (
-    d:
-    lib.mkRemovedOptionModule [
-      "services"
-      "frr"
-      d
-      "config"
-    ] "FRR switched to integrated-vtysh-config, please use services.frr.config"
-  ) obsoleteServices)
-  ++ (map (
-    d:
-    lib.mkRemovedOptionModule [ "services" "frr" d "configFile" ]
-      "FRR switched to integrated-vtysh-config, please use services.frr.config or services.frr.configFile"
-  ) obsoleteServices)
-  ++ (map (
-    d:
-    lib.mkRemovedOptionModule [
-      "services"
-      "frr"
-      d
-      "vtyListenAddress"
-    ] "Please change -A option in services.frr.${d}.options instead"
-  ) obsoleteServices)
-  ++ (map (
-    d:
-    lib.mkRemovedOptionModule [ "services" "frr" d "vtyListenPort" ]
-      "Please use `-P «vtyListenPort»` option with services.frr.${d}.extraOptions instead, or change services.frr.${d}.options accordingly"
-  ) obsoleteServices);
+  ++ (map
+    (
+      d:
+      lib.mkRemovedOptionModule [
+        "services"
+        "frr"
+        d
+        "config"
+      ] "FRR switched to integrated-vtysh-config, please use services.frr.config"
+    )
+    obsoleteServices)
+  ++ (map
+    (
+      d:
+      lib.mkRemovedOptionModule [ "services" "frr" d "configFile" ]
+        "FRR switched to integrated-vtysh-config, please use services.frr.config or services.frr.configFile"
+    )
+    obsoleteServices)
+  ++ (map
+    (
+      d:
+      lib.mkRemovedOptionModule [
+        "services"
+        "frr"
+        d
+        "vtyListenAddress"
+      ] "Please change -A option in services.frr.${d}.options instead"
+    )
+    obsoleteServices)
+  ++ (map
+    (
+      d:
+      lib.mkRemovedOptionModule [ "services" "frr" d "vtyListenPort" ]
+        "Please use `-P «vtyListenPort»` option with services.frr.${d}.extraOptions instead, or change services.frr.${d}.options accordingly"
+    )
+    obsoleteServices);
 
   ###### implementation
 

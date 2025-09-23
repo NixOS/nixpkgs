@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  bash,
-  which,
-  versionCheckHook,
-  coreutils,
-  makeBinaryWrapper,
-  nix-update-script,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, bash
+, which
+, versionCheckHook
+, coreutils
+, makeBinaryWrapper
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  nixosTests,
-  autoreconfHook,
-  pkg-config,
-  flex,
-  perl,
-  bison,
-  autoPatchelfHook,
-  check,
-  pam,
-  bash,
-  bashNonInteractive,
-  coreutils,
-  zlib,
-  bzip2,
-  xz,
-  zstd,
-  gitUpdater,
-  pkgsCross,
-  withVlock ? true,
+{ lib
+, stdenv
+, fetchgit
+, nixosTests
+, autoreconfHook
+, pkg-config
+, flex
+, perl
+, bison
+, autoPatchelfHook
+, check
+, pam
+, bash
+, bashNonInteractive
+, coreutils
+, zlib
+, bzip2
+, xz
+, zstd
+, gitUpdater
+, pkgsCross
+, withVlock ? true
+,
 }:
 
 stdenv.mkDerivation {

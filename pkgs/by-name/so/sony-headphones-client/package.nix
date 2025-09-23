@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  bluez,
-  dbus,
-  glew,
-  glfw,
-  imgui,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, bluez
+, dbus
+, glew
+, glfw
+, imgui
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation rec {

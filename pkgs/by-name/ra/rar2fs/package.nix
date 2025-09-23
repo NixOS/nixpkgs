@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  fuse2,
-  unrar,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, fuse2
+, unrar
+,
 }:
 
 stdenv.mkDerivation rec {

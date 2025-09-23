@@ -1,10 +1,10 @@
-{
-  lib,
-  llvmPackages,
-  fetchFromGitHub,
-  opencflite,
-  libuuid,
-  zlib,
+{ lib
+, llvmPackages
+, fetchFromGitHub
+, opencflite
+, libuuid
+, zlib
+,
 }:
 
 let

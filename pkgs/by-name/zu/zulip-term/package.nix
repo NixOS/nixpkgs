@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  glibcLocales,
-  libnotify,
+{ lib
+, python3
+, fetchFromGitHub
+, glibcLocales
+, libnotify
+,
 }:
 
 let

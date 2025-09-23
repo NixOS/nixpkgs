@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gfortran,
-  python3,
-  amd-blis,
-  aocl-utils,
-
-  withOpenMP ? true,
-  blas64 ? false,
-  withAMDOpt ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gfortran
+, python3
+, amd-blis
+, aocl-utils
+, withOpenMP ? true
+, blas64 ? false
+, withAMDOpt ? true
+,
 }:
 
 stdenv.mkDerivation rec {

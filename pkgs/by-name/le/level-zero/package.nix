@@ -1,12 +1,12 @@
-{
-  lib,
-  addDriverRunpath,
-  cmake,
-  fetchFromGitHub,
-  intel-compute-runtime,
-  openvino,
-  stdenv,
-  nix-update-script,
+{ lib
+, addDriverRunpath
+, cmake
+, fetchFromGitHub
+, intel-compute-runtime
+, openvino
+, stdenv
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

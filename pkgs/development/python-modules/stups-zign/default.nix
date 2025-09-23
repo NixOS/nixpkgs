@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  stups-tokens,
-  stups-cli-support,
-  pytestCheckHook,
-  isPy3k,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, stups-tokens
+, stups-cli-support
+, pytestCheckHook
+, isPy3k
+,
 }:
 
 buildPythonPackage rec {

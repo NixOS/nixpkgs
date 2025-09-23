@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  boilerpy3,
-  cdxj-indexer,
-  frictionless,
-  pytest-cov,
-  pyyaml,
-  shortuuid,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, boilerpy3
+, cdxj-indexer
+, frictionless
+, pytest-cov
+, pyyaml
+, shortuuid
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

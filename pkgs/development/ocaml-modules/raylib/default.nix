@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  buildDunePackage,
-  dune-configurator,
-  ctypes,
-  integers,
-  patch,
-  libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
+{ lib
+, fetchurl
+, fetchpatch
+, buildDunePackage
+, dune-configurator
+, ctypes
+, integers
+, patch
+, libGL
+, libX11
+, libXcursor
+, libXi
+, libXinerama
+, libXrandr
+,
 }:
 
 buildDunePackage rec {

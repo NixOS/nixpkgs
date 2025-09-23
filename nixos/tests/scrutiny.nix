@@ -6,11 +6,10 @@
 
   nodes = {
     machine =
-      {
-        self,
-        pkgs,
-        lib,
-        ...
+      { self
+      , pkgs
+      , lib
+      , ...
       }:
       {
         services = {

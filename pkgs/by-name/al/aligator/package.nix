@@ -1,29 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  fontconfig,
-  llvmPackages,
-  nix-update-script,
-  python3Packages,
-  pythonSupport ? false,
-  stdenv,
-
-  # nativeBuildInputs
-  doxygen,
-  cmake,
-  graphviz,
-  pkg-config,
-
-  # buildInputs
-  fmt,
-
-  # propagatedBuildInputs
-  suitesparse,
-  crocoddyl,
-  pinocchio,
-
-  # checkInputs
-  gbenchmark,
+{ lib
+, fetchFromGitHub
+, fontconfig
+, llvmPackages
+, nix-update-script
+, python3Packages
+, pythonSupport ? false
+, stdenv
+, # nativeBuildInputs
+  doxygen
+, cmake
+, graphviz
+, pkg-config
+, # buildInputs
+  fmt
+, # propagatedBuildInputs
+  suitesparse
+, crocoddyl
+, pinocchio
+, # checkInputs
+  gbenchmark
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

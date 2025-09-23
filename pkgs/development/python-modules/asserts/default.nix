@@ -1,16 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  typing-extensions,
-
-  # tests
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  typing-extensions
+, # tests
+  unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

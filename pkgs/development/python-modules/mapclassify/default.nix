@@ -1,19 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  geopandas,
-  libpysal,
-  matplotlib,
-  networkx,
-  numpy,
-  pandas,
-  scikit-learn,
-  scipy,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, geopandas
+, libpysal
+, matplotlib
+, networkx
+, numpy
+, pandas
+, scikit-learn
+, scipy
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

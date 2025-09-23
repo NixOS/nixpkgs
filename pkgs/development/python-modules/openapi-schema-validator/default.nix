@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # propagates
-  jsonschema,
-  jsonschema-specifications,
-  rfc3339-validator,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # propagates
+  jsonschema
+, jsonschema-specifications
+, rfc3339-validator
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

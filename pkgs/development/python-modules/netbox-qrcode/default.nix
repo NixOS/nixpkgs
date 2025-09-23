@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  netaddr,
-  netbox,
-  pillow,
-  qrcode,
-  setuptools,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, netaddr
+, netbox
+, pillow
+, qrcode
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

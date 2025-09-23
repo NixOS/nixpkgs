@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pulsectl,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pulsectl
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

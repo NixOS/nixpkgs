@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  python,
-  pythonAtLeast,
-  pythonOlder,
-  arrow-cpp,
-  cffi,
-  cloudpickle,
-  cmake,
-  cython,
-  fsspec,
-  hypothesis,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  pytest-lazy-fixture,
-  pkg-config,
-  setuptools,
-  setuptools-scm,
-  oldest-supported-numpy,
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, pythonAtLeast
+, pythonOlder
+, arrow-cpp
+, cffi
+, cloudpickle
+, cmake
+, cython
+, fsspec
+, hypothesis
+, numpy
+, pandas
+, pytestCheckHook
+, pytest-lazy-fixture
+, pkg-config
+, setuptools
+, setuptools-scm
+, oldest-supported-numpy
+,
 }:
 
 let

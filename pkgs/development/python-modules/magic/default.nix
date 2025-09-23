@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pkgs,
+{ lib
+, stdenv
+, buildPythonPackage
+, pkgs
+,
 }:
 
 buildPythonPackage {

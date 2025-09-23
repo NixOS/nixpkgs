@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perlPackages,
-  gettext,
-  libintl,
+{ lib
+, stdenv
+, fetchurl
+, perlPackages
+, gettext
+, libintl
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

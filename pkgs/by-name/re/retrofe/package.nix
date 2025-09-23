@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  glib,
-  gst_all_1,
-  makeWrapper,
-  pkg-config,
-  python3,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  sqlite,
-  zlib,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, glib
+, gst_all_1
+, makeWrapper
+, pkg-config
+, python3
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, sqlite
+, zlib
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation {

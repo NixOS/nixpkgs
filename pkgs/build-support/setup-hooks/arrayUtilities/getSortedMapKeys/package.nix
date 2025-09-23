@@ -1,11 +1,12 @@
-{
-  callPackages,
-  isDeclaredArray,
-  isDeclaredMap,
-  makeSetupHook,
-  sortArray,
+{ callPackages
+, isDeclaredArray
+, isDeclaredMap
+, makeSetupHook
+, sortArray
+,
 }:
-makeSetupHook {
+makeSetupHook
+{
   name = "getSortedMapKeys";
   propagatedBuildInputs = [
     isDeclaredArray

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  requests,
-  requests-toolbelt,
-  requests-oauthlib,
-  six,
-  pytestCheckHook,
-  responses,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, requests-toolbelt
+, requests-oauthlib
+, six
+, pytestCheckHook
+, responses
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

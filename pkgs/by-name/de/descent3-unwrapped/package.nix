@@ -1,17 +1,17 @@
-{
-  cmake,
-  fetchFromGitHub,
-  glm,
-  httplib,
-  lib,
-  openssl,
-  plog,
-  runCommand,
-  sdl3,
-  stdenv,
-  unstableGitUpdater,
-  writeShellScript,
-  zlib,
+{ cmake
+, fetchFromGitHub
+, glm
+, httplib
+, lib
+, openssl
+, plog
+, runCommand
+, sdl3
+, stdenv
+, unstableGitUpdater
+, writeShellScript
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  configobj,
-  fetchPypi,
-  postgresql,
-  postgresqlTestHook,
-  psycopg,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  sqlparse,
-  stdenv,
+{ lib
+, buildPythonPackage
+, click
+, configobj
+, fetchPypi
+, postgresql
+, postgresqlTestHook
+, psycopg
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, sqlparse
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

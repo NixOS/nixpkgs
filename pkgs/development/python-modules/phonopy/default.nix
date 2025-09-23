@@ -1,26 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  nanobind,
-  ninja,
-  numpy,
-  scikit-build-core,
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  h5py,
-  matplotlib,
-  pyyaml,
-  scipy,
-  spglib,
-  symfc,
-
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, nanobind
+, ninja
+, numpy
+, scikit-build-core
+, setuptools
+, setuptools-scm
+, # dependencies
+  h5py
+, matplotlib
+, pyyaml
+, scipy
+, spglib
+, symfc
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

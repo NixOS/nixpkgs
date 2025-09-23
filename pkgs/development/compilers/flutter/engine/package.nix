@@ -1,52 +1,52 @@
-{
-  lib,
-  callPackage,
-  writeText,
-  symlinkJoin,
-  darwin,
-  clang,
-  llvm,
-  tools ? callPackage ./tools.nix {
+{ lib
+, callPackage
+, writeText
+, symlinkJoin
+, darwin
+, clang
+, llvm
+, tools ? callPackage ./tools.nix {
     inherit (stdenv)
       hostPlatform
       buildPlatform
       ;
-  },
-  stdenv,
-  stdenvNoCC,
-  dart,
-  fetchgit,
-  runCommand,
-  llvmPackages,
-  patchelf,
-  openbox,
-  xorg,
-  libglvnd,
-  libepoxy,
-  wayland,
-  freetype,
-  pango,
-  glib,
-  harfbuzz,
-  cairo,
-  gdk-pixbuf,
-  at-spi2-atk,
-  zlib,
-  gtk3,
-  pkg-config,
-  ninja,
-  python312,
-  gitMinimal,
-  version,
-  flutterVersion,
-  dartSdkVersion,
-  swiftshaderHash,
-  swiftshaderRev,
-  hashes,
-  patches,
-  url,
-  runtimeMode ? "release",
-  isOptimized ? runtimeMode != "debug",
+  }
+, stdenv
+, stdenvNoCC
+, dart
+, fetchgit
+, runCommand
+, llvmPackages
+, patchelf
+, openbox
+, xorg
+, libglvnd
+, libepoxy
+, wayland
+, freetype
+, pango
+, glib
+, harfbuzz
+, cairo
+, gdk-pixbuf
+, at-spi2-atk
+, zlib
+, gtk3
+, pkg-config
+, ninja
+, python312
+, gitMinimal
+, version
+, flutterVersion
+, dartSdkVersion
+, swiftshaderHash
+, swiftshaderRev
+, hashes
+, patches
+, url
+, runtimeMode ? "release"
+, isOptimized ? runtimeMode != "debug"
+,
 }:
 let
   expandSingleDep =
@@ -117,37 +117,38 @@ stdenv.mkDerivation (finalAttrs: {
     name = "flutter-engine-toolchain-${version}";
 
     paths =
-      expandDeps (
-        lib.optionals (stdenv.hostPlatform.isLinux) [
-          gtk3
-          wayland
-          libepoxy
-          libglvnd
-          freetype
-          at-spi2-atk
-          glib
-          gdk-pixbuf
-          harfbuzz
-          pango
-          cairo
-          xorg.libxcb
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXrender
-          xorg.libXinerama
-          xorg.libXi
-          xorg.libXext
-          xorg.libXfixes
-          xorg.libXxf86vm
-          xorg.xorgproto
-          zlib
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-          clang
-          llvm
-        ]
-      )
+      expandDeps
+        (
+          lib.optionals (stdenv.hostPlatform.isLinux) [
+            gtk3
+            wayland
+            libepoxy
+            libglvnd
+            freetype
+            at-spi2-atk
+            glib
+            gdk-pixbuf
+            harfbuzz
+            pango
+            cairo
+            xorg.libxcb
+            xorg.libX11
+            xorg.libXcursor
+            xorg.libXrandr
+            xorg.libXrender
+            xorg.libXinerama
+            xorg.libXi
+            xorg.libXext
+            xorg.libXfixes
+            xorg.libXxf86vm
+            xorg.xorgproto
+            zlib
+          ]
+          ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+            clang
+            llvm
+          ]
+        )
       ++ [
         stdenv.cc.libc_dev
         stdenv.cc.libc_lib

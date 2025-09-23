@@ -1,25 +1,25 @@
-{
-  pname,
-  version,
-  packageVersion ? version,
-  meta,
-  updateScript ? null,
-  binaryName ? "firefox",
-  application ? "browser",
-  applicationName ? "Firefox",
-  branding ? null,
-  requireSigning ? true,
-  allowAddonSideload ? false,
-  src,
-  unpackPhase ? null,
-  extraPatches ? [ ],
-  extraPostPatch ? "",
-  extraNativeBuildInputs ? [ ],
-  extraConfigureFlags ? [ ],
-  extraBuildInputs ? [ ],
-  extraMakeFlags ? [ ],
-  extraPassthru ? { },
-  tests ? { },
+{ pname
+, version
+, packageVersion ? version
+, meta
+, updateScript ? null
+, binaryName ? "firefox"
+, application ? "browser"
+, applicationName ? "Firefox"
+, branding ? null
+, requireSigning ? true
+, allowAddonSideload ? false
+, src
+, unpackPhase ? null
+, extraPatches ? [ ]
+, extraPostPatch ? ""
+, extraNativeBuildInputs ? [ ]
+, extraConfigureFlags ? [ ]
+, extraBuildInputs ? [ ]
+, extraMakeFlags ? [ ]
+, extraPassthru ? { }
+, tests ? { }
+,
 }:
 
 let
@@ -40,139 +40,129 @@ let
     );
 in
 
-{
-  lib,
-  pkgs,
-  stdenv,
-  patchelf,
-
-  # build time
-  autoconf,
-  cargo,
-  dump_syms,
-  makeWrapper,
-  mimalloc,
-  nodejs,
-  perl,
-  pkg-config,
-  pkgsCross, # wasm32 rlbox
-  python3,
-  runCommand,
-  rustc,
-  rust-cbindgen,
-  rustPlatform,
-  unzip,
-  which,
-  wrapGAppsHook3,
-
-  # runtime
-  bzip2,
-  dbus,
-  dbus-glib,
-  file,
-  fontconfig,
-  freetype,
-  glib,
-  gnum4,
-  gtk3,
-  icu73,
-  icu77, # if you fiddle with the icu parameters, please check Thunderbird's overrides
-  libGL,
-  libGLU,
-  libevent,
-  libffi,
-  libjpeg,
-  libpng,
-  libstartup_notification,
-  libvpx,
-  libwebp,
-  nasm,
-  nspr,
-  nss_esr,
-  nss_3_114,
-  nss_3_115,
-  nss_latest,
-  onnxruntime,
-  pango,
-  xorg,
-  zip,
-  zlib,
-  pkgsBuildBuild,
-
-  # Darwin
-  apple-sdk_14,
-  apple-sdk_15,
-  cups,
-  rsync, # used when preparing .app directory
+{ lib
+, pkgs
+, stdenv
+, patchelf
+, # build time
+  autoconf
+, cargo
+, dump_syms
+, makeWrapper
+, mimalloc
+, nodejs
+, perl
+, pkg-config
+, pkgsCross
+, # wasm32 rlbox
+  python3
+, runCommand
+, rustc
+, rust-cbindgen
+, rustPlatform
+, unzip
+, which
+, wrapGAppsHook3
+, # runtime
+  bzip2
+, dbus
+, dbus-glib
+, file
+, fontconfig
+, freetype
+, glib
+, gnum4
+, gtk3
+, icu73
+, icu77
+, # if you fiddle with the icu parameters, please check Thunderbird's overrides
+  libGL
+, libGLU
+, libevent
+, libffi
+, libjpeg
+, libpng
+, libstartup_notification
+, libvpx
+, libwebp
+, nasm
+, nspr
+, nss_esr
+, nss_3_114
+, nss_3_115
+, nss_latest
+, onnxruntime
+, pango
+, xorg
+, zip
+, zlib
+, pkgsBuildBuild
+, # Darwin
+  apple-sdk_14
+, apple-sdk_15
+, cups
+, rsync
+, # used when preparing .app directory
 
   # optionals
 
   ## addon signing/sideloading
-  requireSigning ? requireSigningDefault,
-  allowAddonSideload ? allowAddonSideloadDefault,
+  requireSigning ? requireSigningDefault
+, allowAddonSideload ? allowAddonSideloadDefault
+, ## debugging
 
-  ## debugging
+  debugBuild ? false
+, # On 32bit platforms, we disable adding "-g" for easier linking.
+  enableDebugSymbols ? !stdenv.hostPlatform.is32bit
+, ## optional libraries
 
-  debugBuild ? false,
-
-  # On 32bit platforms, we disable adding "-g" for easier linking.
-  enableDebugSymbols ? !stdenv.hostPlatform.is32bit,
-
-  ## optional libraries
-
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  ffmpegSupport ? true,
-  gssSupport ? true,
-  libkrb5,
-  jackSupport ? stdenv.hostPlatform.isLinux,
-  libjack2,
-  jemallocSupport ? !stdenv.hostPlatform.isMusl,
-  jemalloc,
-  ltoSupport ? (
+  alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, ffmpegSupport ? true
+, gssSupport ? true
+, libkrb5
+, jackSupport ? stdenv.hostPlatform.isLinux
+, libjack2
+, jemallocSupport ? !stdenv.hostPlatform.isMusl
+, jemalloc
+, ltoSupport ? (
     stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV
-  ),
-  overrideCC,
-  buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
-  xvfb-run,
-  elfhackSupport ?
-    isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
-  pipewireSupport ? waylandSupport && webrtcSupport,
-  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  sndioSupport ? stdenv.hostPlatform.isLinux,
-  sndio,
-  waylandSupport ? !stdenv.hostPlatform.isDarwin,
-  libxkbcommon,
-  libdrm,
+  )
+, overrideCC
+, buildPackages
+, pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform)
+, xvfb-run
+, elfhackSupport ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
+, pipewireSupport ? waylandSupport && webrtcSupport
+, pulseaudioSupport ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, sndioSupport ? stdenv.hostPlatform.isLinux
+, sndio
+, waylandSupport ? !stdenv.hostPlatform.isDarwin
+, libxkbcommon
+, libdrm
+, ## privacy-related options
 
-  ## privacy-related options
-
-  privacySupport ? false,
-
-  # WARNING: NEVER set any of the options below to `true` by default.
+  privacySupport ? false
+, # WARNING: NEVER set any of the options below to `true` by default.
   # Set to `!privacySupport` or `false`.
 
-  crashreporterSupport ?
-    !privacySupport
+  crashreporterSupport ? !privacySupport
     && !stdenv.hostPlatform.isLoongArch64
     && !stdenv.hostPlatform.isRiscV
-    && !stdenv.hostPlatform.isMusl,
-  curl,
-  geolocationSupport ? !privacySupport,
-  webrtcSupport ? !privacySupport,
-
-  # digital rights managemewnt
+    && !stdenv.hostPlatform.isMusl
+, curl
+, geolocationSupport ? !privacySupport
+, webrtcSupport ? !privacySupport
+, # digital rights managemewnt
 
   # This flag controls whether Firefox will show the nagbar, that allows
   # users at runtime the choice to enable Widevine CDM support when a site
   # requests it.
   # Controlling the nagbar and widevine CDM at runtime is possible by setting
   # `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
-  drmSupport ? true,
-
-  # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+  drmSupport ? true
+, # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
   # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
   # have permission to use the official firefox branding.
   #
@@ -190,13 +180,14 @@ in
   # > Therefor, as long as you keep the patch queue sane and you don't alter
   # > the experience of Firefox users, you won't have any issues using the
   # > official branding.
-  enableOfficialBranding ? true,
+  enableOfficialBranding ? true
+,
 }:
 
 assert stdenv.cc.libc or null != null;
 assert
-  pipewireSupport
-  -> !waylandSupport || !webrtcSupport
+pipewireSupport
+-> !waylandSupport || !webrtcSupport
   -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
 assert elfhackSupport -> isElfhackPlatform stdenv;
 
@@ -272,10 +263,12 @@ let
 
   defaultPrefsFile = pkgs.writeText "nixos-default-prefs.js" (
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (key: value: ''
-        // ${value.reason}
-        pref("${key}", ${builtins.toJSON value.value});
-      '') defaultPrefs
+      lib.mapAttrsToList
+        (key: value: ''
+          // ${value.reason}
+          pref("${key}", ${builtins.toJSON value.value});
+        '')
+        defaultPrefs
     )
   );
 
@@ -316,14 +309,14 @@ buildStdenv.mkDerivation {
       ./139-wayland-drag-animation.patch
     ]
     ++
-      lib.optionals
-        (
-          lib.versionAtLeast version "141.0.2"
-          || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
-        )
-        [
-          ./142-relax-apple-sdk.patch
-        ]
+    lib.optionals
+      (
+        lib.versionAtLeast version "141.0.2"
+        || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
+      )
+      [
+        ./142-relax-apple-sdk.patch
+      ]
     ++ extraPatches;
 
   postPatch = ''
@@ -447,18 +440,18 @@ buildStdenv.mkDerivation {
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   ''
   +
-    # fileport.h was exposed in SDK 15.4 but we have only 15.2 in nixpkgs so far.
-    lib.optionalString
-      (
-        stdenv.hostPlatform.isDarwin
+  # fileport.h was exposed in SDK 15.4 but we have only 15.2 in nixpkgs so far.
+  lib.optionalString
+    (
+      stdenv.hostPlatform.isDarwin
         && lib.versionAtLeast version "143"
         && lib.versionOlder apple-sdk_15.version "15.4"
-      )
-      ''
-        mkdir -p xnu/sys
-        cp ${apple-sdk_15.sourceRelease "xnu"}/bsd/sys/fileport.h xnu/sys
-        export CXXFLAGS="-isystem $(pwd)/xnu"
-      '';
+    )
+    ''
+      mkdir -p xnu/sys
+      cp ${apple-sdk_15.sourceRelease "xnu"}/bsd/sys/fileport.h xnu/sys
+      export CXXFLAGS="-isystem $(pwd)/xnu"
+    '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];

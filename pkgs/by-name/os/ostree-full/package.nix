@@ -1,5 +1,5 @@
-{
-  ostree,
+{ ostree
+,
 }:
 
 ostree.override {

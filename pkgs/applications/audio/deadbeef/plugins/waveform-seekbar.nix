@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  deadbeef,
-  pkg-config,
-  gtk3,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, deadbeef
+, pkg-config
+, gtk3
+, sqlite
+,
 }:
 
 stdenv.mkDerivation {

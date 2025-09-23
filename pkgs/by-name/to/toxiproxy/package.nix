@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  toxiproxy,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, toxiproxy
+,
 }:
 
 buildGoModule rec {

@@ -1,16 +1,16 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  pandoc,
-  pkg-config,
-  makeWrapper,
-  curl,
-  openssl,
-  tpm2-tss,
-  libuuid,
-  abrmdSupport ? true,
-  tpm2-abrmd ? null,
+{ stdenv
+, fetchurl
+, lib
+, pandoc
+, pkg-config
+, makeWrapper
+, curl
+, openssl
+, tpm2-tss
+, libuuid
+, abrmdSupport ? true
+, tpm2-abrmd ? null
+,
 }:
 
 stdenv.mkDerivation rec {

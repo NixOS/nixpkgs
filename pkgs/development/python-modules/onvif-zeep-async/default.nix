@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  ciso8601,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  yarl,
-  zeep,
+{ lib
+, aiohttp
+, buildPythonPackage
+, ciso8601
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, yarl
+, zeep
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,8 @@
 # fwupd daemon.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.fwupd;
@@ -49,9 +48,12 @@ let
     };
   };
   remotes =
-    (lib.foldl' (
-      configFiles: remote: configFiles // (enableRemote cfg.package remote)
-    ) { } cfg.extraRemotes)
+    (lib.foldl'
+      (
+        configFiles: remote: configFiles // (enableRemote cfg.package remote)
+      )
+      { }
+      cfg.extraRemotes)
     // (
       # We cannot include the file in $out and rely on filesInstalledToEtc
       # to install it because it would create a cyclic dependency between

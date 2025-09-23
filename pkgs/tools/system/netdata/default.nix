@@ -1,61 +1,60 @@
-{
-  bash,
-  bison,
-  buildGoModule,
-  cmake,
-  cups,
-  curl,
-  dlib,
-  fetchFromGitHub,
-  fetchurl,
-  flex,
-  freeipmi,
-  go,
-  google-cloud-cpp,
-  grpc,
-  jemalloc,
-  json_c,
-  lib,
-  libbacktrace,
-  libbpf,
-  libcap,
-  libelf,
-  libmnl,
-  libnetfilter_acct,
-  libossp_uuid,
-  libuuid,
-  libuv,
-  libyaml,
-  lm_sensors,
-  lz4,
-  makeWrapper,
-  ninja,
-  nixosTests,
-  openssl,
-  pkg-config,
-  protobuf,
-  replaceVars,
-  snappy,
-  stdenv,
-  systemd,
-  zlib,
-
-  withCloudUi ? false,
-  withConnPrometheus ? false,
-  withConnPubSub ? false,
-  withCups ? false,
-  withDBengine ? true,
-  withDebug ? false,
-  withEbpf ? false,
-  withIpmi ? stdenv.hostPlatform.isLinux,
-  withLibbacktrace ? true,
-  withML ? true,
-  withNdsudo ? false,
-  withNetfilter ? stdenv.hostPlatform.isLinux,
-  withNetworkViewer ? stdenv.hostPlatform.isLinux,
-  withSsl ? true,
-  withSystemdJournal ? stdenv.hostPlatform.isLinux,
-  withSystemdUnits ? stdenv.hostPlatform.isLinux,
+{ bash
+, bison
+, buildGoModule
+, cmake
+, cups
+, curl
+, dlib
+, fetchFromGitHub
+, fetchurl
+, flex
+, freeipmi
+, go
+, google-cloud-cpp
+, grpc
+, jemalloc
+, json_c
+, lib
+, libbacktrace
+, libbpf
+, libcap
+, libelf
+, libmnl
+, libnetfilter_acct
+, libossp_uuid
+, libuuid
+, libuv
+, libyaml
+, lm_sensors
+, lz4
+, makeWrapper
+, ninja
+, nixosTests
+, openssl
+, pkg-config
+, protobuf
+, replaceVars
+, snappy
+, stdenv
+, systemd
+, zlib
+, withCloudUi ? false
+, withConnPrometheus ? false
+, withConnPubSub ? false
+, withCups ? false
+, withDBengine ? true
+, withDebug ? false
+, withEbpf ? false
+, withIpmi ? stdenv.hostPlatform.isLinux
+, withLibbacktrace ? true
+, withML ? true
+, withNdsudo ? false
+, withNetfilter ? stdenv.hostPlatform.isLinux
+, withNetworkViewer ? stdenv.hostPlatform.isLinux
+, withSsl ? true
+, withSystemdJournal ? stdenv.hostPlatform.isLinux
+, withSystemdUnits ? stdenv.hostPlatform.isLinux
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   version = "2.6.3";

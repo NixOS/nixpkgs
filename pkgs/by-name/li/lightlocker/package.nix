@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  gtk3,
-  glib,
-  intltool,
-  dbus-glib,
-  libX11,
-  libXScrnSaver,
-  libXxf86vm,
-  libXext,
-  systemd,
-  pantheon,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, gtk3
+, glib
+, intltool
+, dbus-glib
+, libX11
+, libXScrnSaver
+, libXxf86vm
+, libXext
+, systemd
+, pantheon
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

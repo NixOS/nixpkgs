@@ -1,11 +1,11 @@
-{
-  lib,
-  cmake,
-  fixDarwinDylibNames,
-  isLuaJIT,
-  libuv,
-  lua,
-  stdenv,
+{ lib
+, cmake
+, fixDarwinDylibNames
+, isLuaJIT
+, libuv
+, lua
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

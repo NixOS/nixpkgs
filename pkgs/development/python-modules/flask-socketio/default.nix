@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  flask,
-  pytestCheckHook,
-  python-socketio,
-  pythonOlder,
-  redis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, flask
+, pytestCheckHook
+, python-socketio
+, pythonOlder
+, redis
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glib,
-  zlib,
-  gnupg,
-  libgpg-error,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, zlib
+, gnupg
+, libgpg-error
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {

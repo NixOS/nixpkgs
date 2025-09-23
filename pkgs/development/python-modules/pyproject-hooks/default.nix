@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  pyproject-hooks,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  testpath,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, pyproject-hooks
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, testpath
+, tomli
+,
 }:
 
 buildPythonPackage rec {

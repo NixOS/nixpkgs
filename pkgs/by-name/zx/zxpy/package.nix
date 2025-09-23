@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  deterministic-uname,
-  addBinToPathHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, deterministic-uname
+, addBinToPathHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

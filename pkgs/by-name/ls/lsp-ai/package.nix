@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  openssl,
-  zlib,
-  perl,
-  gitUpdater,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, cmake
+, openssl
+, zlib
+, perl
+, gitUpdater
+,
 }:
 
 rustPlatform.buildRustPackage rec {

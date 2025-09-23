@@ -1,17 +1,17 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  docutils,
-  fetchPypi,
-  od,
-  pygments,
-  python-dateutil,
-  pythonOlder,
-  repeated-test,
-  setuptools-scm,
-  sigtools,
-  unittestCheckHook,
+{ lib
+, attrs
+, buildPythonPackage
+, docutils
+, fetchPypi
+, od
+, pygments
+, python-dateutil
+, pythonOlder
+, repeated-test
+, setuptools-scm
+, sigtools
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

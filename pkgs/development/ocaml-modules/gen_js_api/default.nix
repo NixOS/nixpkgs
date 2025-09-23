@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  ocaml,
-  lib,
-  ppxlib,
-  fetchFromGitHub,
-  ojs,
-  js_of_ocaml-compiler,
-  nodejs,
+{ buildDunePackage
+, ocaml
+, lib
+, ppxlib
+, fetchFromGitHub
+, ojs
+, js_of_ocaml-compiler
+, nodejs
+,
 }:
 
 buildDunePackage rec {

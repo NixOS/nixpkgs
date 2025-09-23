@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  ninja,
-  libxml2,
-  zlib,
-  zstd,
-  ncurses,
-  rocm-merged-llvm,
-  python3,
+{ lib
+, stdenv
+, cmake
+, ninja
+, libxml2
+, zlib
+, zstd
+, ncurses
+, rocm-merged-llvm
+, python3
+,
 }:
 
 let

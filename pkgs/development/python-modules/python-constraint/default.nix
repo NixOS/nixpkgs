@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  poetry-core,
-  cython,
-  # Check inputs
-  pytestCheckHook,
-  pytest-cov-stub,
-  tomli,
-  pep440,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, poetry-core
+, cython
+, # Check inputs
+  pytestCheckHook
+, pytest-cov-stub
+, tomli
+, pep440
+,
 }:
 
 buildPythonPackage rec {

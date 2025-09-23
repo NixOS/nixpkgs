@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -104,76 +103,78 @@ in
         ;
     in
     mkIf (cfg.servers != { }) {
-      systemd.services = mapAttrs' (
-        server: options:
-        nameValuePair "tts-${server}" {
-          description = "Coqui TTS server instance ${server}";
-          after = [
-            "network-online.target"
-          ];
-          wantedBy = [
-            "multi-user.target"
-          ];
-          path = with pkgs; [
-            espeak-ng
-          ];
-          environment.HOME = "/var/lib/tts";
-          serviceConfig = {
-            DynamicUser = true;
-            User = "tts";
-            StateDirectory = "tts";
-            ExecStart =
-              "${pkgs.tts}/bin/tts-server --port ${toString options.port} "
-              + optionalString (options.model != null) "--model_name ${options.model} "
-              + optionalString (options.useCuda) "--use_cuda "
-              + (escapeShellArgs options.extraArgs);
-            CapabilityBoundingSet = "";
-            DeviceAllow =
-              if options.useCuda then
-                [
-                  # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
-                  "/dev/nvidia1"
-                  "/dev/nvidia2"
-                  "/dev/nvidia3"
-                  "/dev/nvidia4"
-                  "/dev/nvidia-caps/nvidia-cap1"
-                  "/dev/nvidia-caps/nvidia-cap2"
-                  "/dev/nvidiactl"
-                  "/dev/nvidia-modeset"
-                  "/dev/nvidia-uvm"
-                  "/dev/nvidia-uvm-tools"
-                ]
-              else
-                "";
-            DevicePolicy = "closed";
-            LockPersonality = true;
-            # jit via numba->llvmpipe
-            MemoryDenyWriteExecute = false;
-            PrivateDevices = true;
-            PrivateUsers = true;
-            ProtectHome = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectControlGroups = true;
-            ProtectProc = "invisible";
-            ProcSubset = "pid";
-            RestrictAddressFamilies = [
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            SystemCallArchitectures = "native";
-            SystemCallFilter = [
-              "@system-service"
-              "~@privileged"
-            ];
-            UMask = "0077";
-          };
-        }
-      ) cfg.servers;
+      systemd.services = mapAttrs'
+        (
+          server: options:
+            nameValuePair "tts-${server}" {
+              description = "Coqui TTS server instance ${server}";
+              after = [
+                "network-online.target"
+              ];
+              wantedBy = [
+                "multi-user.target"
+              ];
+              path = with pkgs; [
+                espeak-ng
+              ];
+              environment.HOME = "/var/lib/tts";
+              serviceConfig = {
+                DynamicUser = true;
+                User = "tts";
+                StateDirectory = "tts";
+                ExecStart =
+                  "${pkgs.tts}/bin/tts-server --port ${toString options.port} "
+                  + optionalString (options.model != null) "--model_name ${options.model} "
+                  + optionalString (options.useCuda) "--use_cuda "
+                  + (escapeShellArgs options.extraArgs);
+                CapabilityBoundingSet = "";
+                DeviceAllow =
+                  if options.useCuda then
+                    [
+                      # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+                      "/dev/nvidia1"
+                      "/dev/nvidia2"
+                      "/dev/nvidia3"
+                      "/dev/nvidia4"
+                      "/dev/nvidia-caps/nvidia-cap1"
+                      "/dev/nvidia-caps/nvidia-cap2"
+                      "/dev/nvidiactl"
+                      "/dev/nvidia-modeset"
+                      "/dev/nvidia-uvm"
+                      "/dev/nvidia-uvm-tools"
+                    ]
+                  else
+                    "";
+                DevicePolicy = "closed";
+                LockPersonality = true;
+                # jit via numba->llvmpipe
+                MemoryDenyWriteExecute = false;
+                PrivateDevices = true;
+                PrivateUsers = true;
+                ProtectHome = true;
+                ProtectHostname = true;
+                ProtectKernelLogs = true;
+                ProtectKernelModules = true;
+                ProtectKernelTunables = true;
+                ProtectControlGroups = true;
+                ProtectProc = "invisible";
+                ProcSubset = "pid";
+                RestrictAddressFamilies = [
+                  "AF_UNIX"
+                  "AF_INET"
+                  "AF_INET6"
+                ];
+                RestrictNamespaces = true;
+                RestrictRealtime = true;
+                SystemCallArchitectures = "native";
+                SystemCallFilter = [
+                  "@system-service"
+                  "~@privileged"
+                ];
+                UMask = "0077";
+              };
+            }
+        )
+        cfg.servers;
     };
 }

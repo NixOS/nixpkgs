@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitMinimal,
-  cacert,
-  makeBinaryWrapper,
-  nodejs,
-  python3,
-  nixosTests,
-  yarn-berry_4,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitMinimal
+, cacert
+, makeBinaryWrapper
+, nodejs
+, python3
+, nixosTests
+, yarn-berry_4
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

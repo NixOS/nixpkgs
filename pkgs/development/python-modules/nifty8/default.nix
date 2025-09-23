@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitLab,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  astropy,
-  ducc0,
-  h5py,
-  jax,
-  jaxlib,
-  matplotlib,
-  mpi,
-  mpi4py,
-  numpy,
-  scipy,
-
-  # test
-  pytestCheckHook,
-  pytest-xdist,
-  mpiCheckPhaseHook,
-  openssh,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitLab
+, # build-system
+  setuptools
+, # dependencies
+  astropy
+, ducc0
+, h5py
+, jax
+, jaxlib
+, matplotlib
+, mpi
+, mpi4py
+, numpy
+, scipy
+, # test
+  pytestCheckHook
+, pytest-xdist
+, mpiCheckPhaseHook
+, openssh
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  asciidoc,
-  docbook_xsl,
-  fuse,
-  libuuid,
-  libxslt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, asciidoc
+, docbook_xsl
+, fuse
+, libuuid
+, libxslt
+,
 }:
 
 stdenv.mkDerivation rec {

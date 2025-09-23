@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  flint3,
-  gmp,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, flint3
+, gmp
+,
 }:
 
 stdenv.mkDerivation {

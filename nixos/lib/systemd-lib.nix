@@ -1,8 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
+{ config
+, lib
+, pkgs
+, utils
+,
 }:
 
 let
@@ -117,28 +117,30 @@ rec {
     in
     builtins.isInt s
     || (
-      elem suffix (
-        [
-          "K"
-          "M"
-          "G"
-          "T"
-        ]
-        ++ digits
-      )
+      elem suffix
+        (
+          [
+            "K"
+            "M"
+            "G"
+            "T"
+          ]
+          ++ digits
+        )
       && all (num: elem num digits) nums
     );
 
   assertByteFormat =
     name: group: attr:
-    optional (
-      attr ? ${name} && !isByteFormat attr.${name}
-    ) "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
+    optional
+      (
+        attr ? ${name} && !isByteFormat attr.${name}
+      ) "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
 
   toIntBaseDetected =
     value:
-    assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null;
-    (builtins.fromTOML "v=${value}").v;
+      assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null;
+      (builtins.fromTOML "v=${value}").v;
 
   hexChars = stringToCharacters "0123456789abcdefABCDEF";
 
@@ -149,15 +151,17 @@ rec {
 
   assertMacAddress =
     name: group: attr:
-    optional (
-      attr ? ${name} && !isMacAddress attr.${name}
-    ) "Systemd ${group} field `${name}' must be a valid MAC address.";
+    optional
+      (
+        attr ? ${name} && !isMacAddress attr.${name}
+      ) "Systemd ${group} field `${name}' must be a valid MAC address.";
 
   assertNetdevMacAddress =
     name: group: attr:
-    optional (
-      attr ? ${name} && (!isMacAddress attr.${name} && attr.${name} != "none")
-    ) "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
+    optional
+      (
+        attr ? ${name} && (!isMacAddress attr.${name} && attr.${name} != "none")
+      ) "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
 
   isNumberOrRangeOf =
     check: v:
@@ -175,9 +179,10 @@ rec {
 
   assertPort =
     name: group: attr:
-    optional (
-      attr ? ${name} && !isPort attr.${name}
-    ) "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
+    optional
+      (
+        attr ? ${name} && !isPort attr.${name}
+      ) "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
 
   assertPortOrPortRange =
     name: group: attr:
@@ -186,16 +191,18 @@ rec {
 
   assertValueOneOf =
     name: values: group: attr:
-    optional (
-      attr ? ${name} && !elem attr.${name} values
-    ) "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
+    optional
+      (
+        attr ? ${name} && !elem attr.${name} values
+      ) "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertValuesSomeOfOr =
     name: values: default: group: attr:
-    optional (
-      attr ? ${name}
-      && !(all (x: elem x values) (splitString " " attr.${name}) || attr.${name} == default)
-    ) "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
+    optional
+      (
+        attr ? ${name}
+        && !(all (x: elem x values) (splitString " " attr.${name}) || attr.${name} == default)
+      ) "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertHasField =
     name: group: attr:
@@ -203,9 +210,10 @@ rec {
 
   assertRange =
     name: min: max: group: attr:
-    optional (
-      attr ? ${name} && !(min <= attr.${name} && max >= attr.${name})
-    ) "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
+    optional
+      (
+        attr ? ${name} && !(min <= attr.${name} && max >= attr.${name})
+      ) "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
   assertRangeOrOneOf =
     name: min: max: values: group: attr:
@@ -239,9 +247,10 @@ rec {
           in
           optional (!(min <= value && max >= value))
             "Systemd ${group} field `${name}' has main value outside the range [${toString min},${toString max}]."
-          ++ optional (
-            mask != null && !(min <= mask && max >= mask)
-          ) "Systemd ${group} field `${name}' has mask outside the range [${toString min},${toString max}]."
+          ++ optional
+            (
+              mask != null && !(min <= mask && max >= mask)
+            ) "Systemd ${group} field `${name}' has mask outside the range [${toString min},${toString max}]."
       else
         [ "Systemd ${group} field `${name}' must either be an integer or a string." ]
     else
@@ -249,24 +258,27 @@ rec {
 
   assertMinimum =
     name: min: group: attr:
-    optional (
-      attr ? ${name} && attr.${name} < min
-    ) "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
+    optional
+      (
+        attr ? ${name} && attr.${name} < min
+      ) "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
 
   assertOnlyFields =
     fields: group: attr:
     let
       badFields = filter (name: !elem name fields) (attrNames attr);
     in
-    optional (
-      badFields != [ ]
-    ) "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
+    optional
+      (
+        badFields != [ ]
+      ) "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
 
   assertInt =
     name: group: attr:
-    optional (
-      attr ? ${name} && !isInt attr.${name}
-    ) "Systemd ${group} field `${name}' is not an integer";
+    optional
+      (
+        attr ? ${name} && !isInt attr.${name}
+      ) "Systemd ${group} field `${name}' is not an integer";
 
   assertRemoved =
     name: see: group: attr:
@@ -274,9 +286,10 @@ rec {
 
   assertKeyIsSystemdCredential =
     name: group: attr:
-    optional (
-      attr ? ${name} && !(hasPrefix "@" attr.${name})
-    ) "Systemd ${group} field `${name}' is not a systemd credential";
+    optional
+      (
+        attr ? ${name} && !(hasPrefix "@" attr.${name})
+      ) "Systemd ${group} field `${name}' is not a systemd credential";
 
   checkUnitConfig =
     group: checks: attrs:
@@ -284,15 +297,17 @@ rec {
       # We're applied at the top-level type (attrsOf unitOption), so the actual
       # unit options might contain attributes from mkOverride and mkIf that we need to
       # convert into single values before checking them.
-      defs = mapAttrs (const (
-        v:
-        if v._type or "" == "override" then
-          v.content
-        else if v._type or "" == "if" then
-          v.content
-        else
-          v
-      )) attrs;
+      defs = mapAttrs
+        (const (
+          v:
+          if v._type or "" == "override" then
+            v.content
+          else if v._type or "" == "if" then
+            v.content
+          else
+            v
+        ))
+        attrs;
       errors = concatMap (c: c group defs) checks;
     in
     if errors == [ ] then true else trace (concatStringsSep "\n" errors) false;
@@ -301,10 +316,12 @@ rec {
     legacyKey: group: checks: attrs:
     let
       dump = lib.generators.toPretty { } (
-        lib.generators.withRecursion {
-          depthLimit = 2;
-          throwOnDepthLimit = false;
-        } attrs
+        lib.generators.withRecursion
+          {
+            depthLimit = 2;
+            throwOnDepthLimit = false;
+          }
+          attrs
       );
       attrs' =
         if legacyKey == null then
@@ -340,24 +357,28 @@ rec {
     as:
     concatStrings (
       concatLists (
-        mapAttrsToList (
-          name: value:
-          map (x: ''
-            ${name}=${toOption x}
-          '') (if isList value then value else [ value ])
-        ) as
+        mapAttrsToList
+          (
+            name: value:
+            map
+              (x: ''
+                ${name}=${toOption x}
+              '')
+              (if isList value then value else [ value ])
+          )
+          as
       )
     );
 
   generateUnits =
-    {
-      allowCollisions ? true,
-      type,
-      units,
-      upstreamUnits,
-      upstreamWants,
-      packages ? cfg.packages,
-      package ? cfg.package,
+    { allowCollisions ? true
+    , type
+    , units
+    , upstreamUnits
+    , upstreamWants
+    , packages ? cfg.packages
+    , package ? cfg.package
+    ,
     }:
     let
       typeDir =
@@ -530,10 +551,10 @@ rec {
       ''; # */
 
   makeJobScript =
-    {
-      name,
-      text,
-      enableStrictShellChecks,
+    { name
+    , text
+    , enableStrictShellChecks
+    ,
     }:
     let
       scriptName = replaceStrings [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
@@ -560,11 +581,10 @@ rec {
     lib.getExe out;
 
   unitConfig =
-    {
-      config,
-      name,
-      options,
-      ...
+    { config
+    , name
+    , options
+    , ...
     }:
     {
       config = {
@@ -621,11 +641,10 @@ rec {
     let
       nixosConfig = config;
     in
-    {
-      name,
-      lib,
-      config,
-      ...
+    { name
+    , lib
+    , config
+    , ...
     }:
     {
       config = {
@@ -768,18 +787,20 @@ rec {
         let
           env = cfg.globalEnvironment // def.environment;
         in
-        concatMapStrings (
-          n:
-          let
-            s = optionalString (env.${n} != null) "Environment=${toJSON "${n}=${env.${n}}"}\n";
-            # systemd max line length is now 1MiB
-            # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
-          in
-          if stringLength s >= 1048576 then
-            throw "The value of the environment variable ‘${n}’ in systemd service ‘${def.name}.service’ is too long."
-          else
-            s
-        ) (attrNames env)
+        concatMapStrings
+          (
+            n:
+            let
+              s = optionalString (env.${n} != null) "Environment=${toJSON "${n}=${env.${n}}"}\n";
+              # systemd max line length is now 1MiB
+              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+            in
+            if stringLength s >= 1048576 then
+              throw "The value of the environment variable ‘${n}’ in systemd service ‘${def.name}.service’ is too long."
+            else
+              s
+          )
+          (attrNames env)
       )
       + (
         if def ? reloadIfChanged && def.reloadIfChanged then

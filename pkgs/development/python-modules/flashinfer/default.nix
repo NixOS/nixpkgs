@@ -4,28 +4,25 @@
 #
 # This means that if you plan to use flashinfer, you will need to set the
 # environment variable `CUDA_HOME` to `cudatoolkit`.
-{
-  lib,
-  config,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-  cudaPackages,
-
-  # dependencies
-  click,
-  einops,
-  numpy,
-  pynvml,
-  tabulate,
-  torch,
-  tqdm,
+{ lib
+, config
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # nativeBuildInputs
+  cmake
+, ninja
+, cudaPackages
+, # dependencies
+  click
+, einops
+, numpy
+, pynvml
+, tabulate
+, torch
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

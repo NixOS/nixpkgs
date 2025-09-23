@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cffi,
-  libiconv,
-  buildPythonPackage,
-  appdirs,
-  pyyaml,
-  hypothesis,
-  jinja2,
-  pytestCheckHook,
-  unzip,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cffi
+, libiconv
+, buildPythonPackage
+, appdirs
+, pyyaml
+, hypothesis
+, jinja2
+, pytestCheckHook
+, unzip
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  ecdsa,
-  fetchFromGitHub,
-  hypothesis,
-  pytestCheckHook,
-  pythonAtLeast,
-  setuptools,
+{ lib
+, buildPythonPackage
+, ecdsa
+, fetchFromGitHub
+, hypothesis
+, pytestCheckHook
+, pythonAtLeast
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

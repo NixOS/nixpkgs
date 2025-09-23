@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  cmake,
-  pkg-config,
-  json_c,
-  with_lua ? false,
-  lua5_1,
-  with_ustream_ssl ? false,
-  ustream-ssl,
+{ stdenv
+, lib
+, fetchgit
+, cmake
+, pkg-config
+, json_c
+, with_lua ? false
+, lua5_1
+, with_ustream_ssl ? false
+, ustream-ssl
+,
 }:
 
 stdenv.mkDerivation {

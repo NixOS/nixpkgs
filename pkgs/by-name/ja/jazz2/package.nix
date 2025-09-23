@@ -1,18 +1,18 @@
-{
-  cmake,
-  curl,
-  fetchFromGitHub,
-  gitUpdater,
-  jazz2-content,
-  lib,
-  libGL,
-  libopenmpt,
-  libvorbis,
-  openal,
-  SDL2,
-  stdenv,
-  versionCheckHook,
-  zlib,
+{ cmake
+, curl
+, fetchFromGitHub
+, gitUpdater
+, jazz2-content
+, lib
+, libGL
+, libopenmpt
+, libvorbis
+, openal
+, SDL2
+, stdenv
+, versionCheckHook
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

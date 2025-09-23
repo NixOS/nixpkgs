@@ -1,42 +1,37 @@
-{
-  bundlerEnv,
-  cacert,
-  defaultGemConfig,
-  fetchFromGitLab,
-  fetchYarnDeps,
-  yarnConfigHook,
-  git,
-  gitlabEnterprise ? false,
-  lib,
-  makeWrapper,
-  net-tools,
-  nixosTests,
-  nodejs_20,
-  replace,
-  ruby_3_3,
-  stdenv,
-  tzdata,
-
-  # gem dependencies:
+{ bundlerEnv
+, cacert
+, defaultGemConfig
+, fetchFromGitLab
+, fetchYarnDeps
+, yarnConfigHook
+, git
+, gitlabEnterprise ? false
+, lib
+, makeWrapper
+, net-tools
+, nixosTests
+, nodejs_20
+, replace
+, ruby_3_3
+, stdenv
+, tzdata
+, # gem dependencies:
   # gitlab-glfm-markdown
-  buildRubyGem,
-  cargo,
-  rustc,
-  rustPlatform,
-
-  # gpgme
-  pkg-config,
-
-  # openssl
-  openssl,
-
-  # ruby-magic
-  file,
-
-  # static-holmes
-  icu,
-  which,
-  zlib,
+  buildRubyGem
+, cargo
+, rustc
+, rustPlatform
+, # gpgme
+  pkg-config
+, # openssl
+  openssl
+, # ruby-magic
+  file
+, # static-holmes
+  icu
+, which
+, zlib
+,
 }:
 
 let

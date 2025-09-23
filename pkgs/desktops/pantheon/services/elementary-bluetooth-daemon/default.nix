@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook3,
-  granite,
-  gtk3,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook3
+, granite
+, gtk3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

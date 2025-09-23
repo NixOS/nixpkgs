@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  perl,
-  readline,
-  rsh,
-  ssh,
-  slurm,
-  slurmSupport ? false,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, perl
+, readline
+, rsh
+, ssh
+, slurm
+, slurmSupport ? false
+,
 }:
 
 stdenv.mkDerivation rec {

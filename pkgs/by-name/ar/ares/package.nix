@@ -1,30 +1,30 @@
-{
-  lib,
-  alsa-lib,
-  apple-sdk_14,
-  cmake,
-  fetchFromGitHub,
-  gtk3,
-  gtksourceview3,
-  libGL,
-  libGLU,
-  libX11,
-  libXv,
-  libao,
-  libpulseaudio,
-  libretro-shaders-slang,
-  librashader,
-  ninja,
-  moltenvk,
-  openal,
-  pkg-config,
-  replaceVars,
-  sdl3,
-  stdenv,
-  udev,
-  vulkan-loader,
-  wrapGAppsHook3,
-  zlib,
+{ lib
+, alsa-lib
+, apple-sdk_14
+, cmake
+, fetchFromGitHub
+, gtk3
+, gtksourceview3
+, libGL
+, libGLU
+, libX11
+, libXv
+, libao
+, libpulseaudio
+, libretro-shaders-slang
+, librashader
+, ninja
+, moltenvk
+, openal
+, pkg-config
+, replaceVars
+, sdl3
+, stdenv
+, udev
+, vulkan-loader
+, wrapGAppsHook3
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

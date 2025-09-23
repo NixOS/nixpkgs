@@ -1,8 +1,8 @@
-{
-  lib,
-  config,
-  newScope,
-  runCommand,
+{ lib
+, config
+, newScope
+, runCommand
+,
 }:
 
 let
@@ -82,17 +82,17 @@ let
 
   scope =
     self:
-    with lib;
-    pipe
-      {
-        inherit (self) callPackage;
-        directory = ./scripts;
-      }
-      [
-        packagesFromDirectoryRecursive
-        recurseIntoAttrs
-        (mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests)
-      ];
+      with lib;
+      pipe
+        {
+          inherit (self) callPackage;
+          directory = ./scripts;
+        }
+        [
+          packagesFromDirectoryRecursive
+          recurseIntoAttrs
+          (mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests)
+        ];
 
   mkAliases = self: {
     inherit (self.builtins)

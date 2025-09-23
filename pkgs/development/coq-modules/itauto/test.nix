@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  coq,
-  itauto,
+{ stdenv
+, lib
+, coq
+, itauto
+,
 }:
 
 let

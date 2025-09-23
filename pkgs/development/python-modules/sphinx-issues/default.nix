@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  sphinx,
-  fetchFromGitHub,
+{ lib
+, buildPythonPackage
+, sphinx
+, fetchFromGitHub
+,
 }:
 buildPythonPackage rec {
   pname = "sphinx-issues";

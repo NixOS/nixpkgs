@@ -1,32 +1,32 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  atk,
-  buildPackages,
-  cairo,
-  cups,
-  gdk-pixbuf,
-  gettext,
-  glib,
-  gobject-introspection,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  pango,
-  perl,
-  pkg-config,
-  replaceVars,
-  testers,
-  gdktarget ? if stdenv.hostPlatform.isDarwin then "quartz" else "x11",
-  cupsSupport ? config.gtk2.cups or stdenv.hostPlatform.isLinux,
-  xineramaSupport ? stdenv.hostPlatform.isLinux,
+{ config
+, lib
+, stdenv
+, fetchurl
+, fetchpatch
+, atk
+, buildPackages
+, cairo
+, cups
+, gdk-pixbuf
+, gettext
+, glib
+, gobject-introspection
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, pango
+, perl
+, pkg-config
+, replaceVars
+, testers
+, gdktarget ? if stdenv.hostPlatform.isDarwin then "quartz" else "x11"
+, cupsSupport ? config.gtk2.cups or stdenv.hostPlatform.isLinux
+, xineramaSupport ? stdenv.hostPlatform.isLinux
+,
 }:
 
 let
@@ -101,9 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     libXdamage
   ];
 
-  preConfigure = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11"
-  ) "MACOSX_DEPLOYMENT_TARGET=10.16";
+  preConfigure = lib.optionalString
+    (
+      stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11"
+    ) "MACOSX_DEPLOYMENT_TARGET=10.16";
 
   configureFlags = [
     "--sysconfdir=/etc"

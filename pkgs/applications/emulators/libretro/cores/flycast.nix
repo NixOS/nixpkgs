@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  cmake,
-  libGL,
-  libGLU,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, cmake
+, libGL
+, libGLU
+,
 }:
 mkLibretroCore {
   core = "flycast";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  freetype,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, freetype
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

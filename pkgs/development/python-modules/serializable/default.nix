@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  simplejson,
-  six,
-  typechecks,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, simplejson
+, six
+, typechecks
+,
 }:
 
 buildPythonPackage {

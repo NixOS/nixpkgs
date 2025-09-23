@@ -1,7 +1,6 @@
-{
-  a ? false,
-  lib,
-  ...
+{ a ? false
+, lib
+, ...
 }:
 {
   options = {

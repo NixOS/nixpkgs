@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nixosTests,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, nixosTests
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "envfs";

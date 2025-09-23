@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libvorbis,
-  libogg,
-  libtheora,
-  SDL,
-  libXft,
-  SDL_image,
-  zlib,
-  libX11,
-  libpng,
-  openal,
-  runtimeShell,
-  requireFile,
-  commercialVersion ? false,
+{ lib
+, stdenv
+, fetchurl
+, libvorbis
+, libogg
+, libtheora
+, SDL
+, libXft
+, SDL_image
+, zlib
+, libX11
+, libpng
+, openal
+, runtimeShell
+, requireFile
+, commercialVersion ? false
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,20 +29,21 @@ stdenv.mkDerivation rec {
         demoUrl = "http://www.andyetitmoves.net/demo/${pname}Demo-${version}_${postfix}.tar.gz";
       in
       if commercialVersion then
-        requireFile {
-          message = ''
-            We cannot download the commercial version automatically, as you require a license.
-            Once you bought a license, you need to add your downloaded version to the nix store.
-            You can do this by using "nix-prefetch-url file:///\$PWD/${commercialName}" in the
-            directory where yousaved it.
-          '';
-          name = commercialName;
-          sha256 =
-            if stdenv.hostPlatform.system == "i686-linux" then
-              "15wvzmmidvykwjrbnq70h5jrvnjx1hcrm0357qj85q4aqbzavh01"
-            else
-              "1v8z16qa9ka8sf7qq45knsxj87s6sipvv3a7xq11pb5xk08fb2ql";
-        }
+        requireFile
+          {
+            message = ''
+              We cannot download the commercial version automatically, as you require a license.
+              Once you bought a license, you need to add your downloaded version to the nix store.
+              You can do this by using "nix-prefetch-url file:///\$PWD/${commercialName}" in the
+              directory where yousaved it.
+            '';
+            name = commercialName;
+            sha256 =
+              if stdenv.hostPlatform.system == "i686-linux" then
+                "15wvzmmidvykwjrbnq70h5jrvnjx1hcrm0357qj85q4aqbzavh01"
+              else
+                "1v8z16qa9ka8sf7qq45knsxj87s6sipvv3a7xq11pb5xk08fb2ql";
+          }
       else
         fetchurl {
           url = demoUrl;

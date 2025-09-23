@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  testers,
-  prometheus-pushgateway,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, testers
+, prometheus-pushgateway
+,
 }:
 
 buildGoModule rec {

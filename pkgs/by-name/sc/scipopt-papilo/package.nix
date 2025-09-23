@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  boost,
-  blas,
-  gmp,
-  tbb_2022,
-  gfortran,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, boost
+, blas
+, gmp
+, tbb_2022
+, gfortran
+,
 }:
 
 stdenv.mkDerivation rec {

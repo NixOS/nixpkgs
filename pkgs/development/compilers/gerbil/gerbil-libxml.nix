@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  fetchFromGitHub,
-  libxml2,
-  ...
+{ pkgs
+, lib
+, fetchFromGitHub
+, libxml2
+, ...
 }:
 
 {

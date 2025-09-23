@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  click,
-  pyyaml,
-  tqdm,
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, pyyaml
+, tqdm
+, pytestCheckHook
+, pytest-mock
+,
 }:
 let
   version = "2.3.2";

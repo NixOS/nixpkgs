@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  itstool,
-  libxml2,
-  pkg-config,
-  gnome-panel,
-  gtk3,
-  glib,
-  libwnck,
-  libgtop,
-  libnotify,
-  upower,
-  wirelesstools,
-  linuxPackages,
-  adwaita-icon-theme,
-  libgweather,
-  gucharmap,
-  tinysparql,
-  polkit,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, itstool
+, libxml2
+, pkg-config
+, gnome-panel
+, gtk3
+, glib
+, libwnck
+, libgtop
+, libnotify
+, upower
+, wirelesstools
+, linuxPackages
+, adwaita-icon-theme
+, libgweather
+, gucharmap
+, tinysparql
+, polkit
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

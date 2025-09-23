@@ -1,11 +1,11 @@
-{
-  emptyDirectory,
-  hello,
-  lib,
-  overrideStructuredAttrs,
-  runCommand,
-  stdenvNoCC,
-  testers,
+{ emptyDirectory
+, hello
+, lib
+, overrideStructuredAttrs
+, runCommand
+, stdenvNoCC
+, testers
+,
 }:
 let
   inherit (lib.attrsets) recurseIntoAttrs;

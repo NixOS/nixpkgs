@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  perl,
-  which,
-  rdkafka,
-  jansson,
-  curl,
-  avro-c,
-  avro-cpp,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, perl
+, which
+, rdkafka
+, jansson
+, curl
+, avro-c
+, avro-cpp
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

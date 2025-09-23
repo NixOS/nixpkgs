@@ -1,19 +1,18 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  dev_only_shellcheck ? null,
-  fetchFromGitHub,
-
-  fzf,
-  coreutils,
-  libxml2,
-  libxslt,
-  jing,
-  findutils,
-  gnugrep,
-  gnused,
-  docbook5,
+{ stdenv
+, lib
+, makeWrapper
+, dev_only_shellcheck ? null
+, fetchFromGitHub
+, fzf
+, coreutils
+, libxml2
+, libxslt
+, jing
+, findutils
+, gnugrep
+, gnused
+, docbook5
+,
 }:
 stdenv.mkDerivation rec {
   pname = "xmloscopy";

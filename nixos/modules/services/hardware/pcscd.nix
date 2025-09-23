@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.pcscd;
@@ -116,9 +115,11 @@ in
           lib.concatStringsSep ":" cfg.ignoreReaderNames
         );
 
-        PCSCLITE_FILTER_EXTEND_READER_NAMES = lib.mkIf (
-          cfg.extendReaderNames != null
-        ) cfg.extendReaderNames;
+        PCSCLITE_FILTER_EXTEND_READER_NAMES = lib.mkIf
+          (
+            cfg.extendReaderNames != null
+          )
+          cfg.extendReaderNames;
       };
 
       # If the cfgFile is empty and not specified (in which case the default

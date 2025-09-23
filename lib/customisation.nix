@@ -198,7 +198,7 @@ rec {
             fdrv: overrideResult (x: x.overrideAttrs fdrv);
         }
       else if isFunction result then
-        # Transform the result into a functor while propagating its arguments
+      # Transform the result into a functor while propagating its arguments
         setFunctionArgs result (functionArgs result)
         // {
           override = overrideArgs;
@@ -357,11 +357,12 @@ rec {
       mkAttrOverridable = name: _: makeOverridable (mirrorArgs (newArgs: (f newArgs).${name})) origArgs;
     in
     if isDerivation pkgs then
-      throw (
-        "function `callPackages` was called on a *single* derivation "
-        + ''"${pkgs.name or "<unknown-name>"}";''
-        + " did you mean to use `callPackage` instead?"
-      )
+      throw
+        (
+          "function `callPackages` was called on a *single* derivation "
+          + ''"${pkgs.name or "<unknown-name>"}";''
+          + " did you mean to use `callPackage` instead?"
+        )
     else
       mapAttrs mkAttrOverridable pkgs;
 
@@ -412,13 +413,13 @@ rec {
               drv.${outputName}.outPath;
           }
           //
-            # TODO: give the derivation control over the outputs.
-            #       `overrideAttrs` may not be the only attribute that needs
-            #       updating when switching outputs.
-            optionalAttrs (passthru ? overrideAttrs) {
-              # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
-              overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
-            };
+          # TODO: give the derivation control over the outputs.
+          #       `overrideAttrs` may not be the only attribute that needs
+          #       updating when switching outputs.
+          optionalAttrs (passthru ? overrideAttrs) {
+            # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
+            overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
+          };
       };
 
       outputsList = map outputToAttrListElement outputs;
@@ -688,17 +689,16 @@ rec {
     ```
   */
   makeScopeWithSplicing' =
-    {
-      splicePackages,
-      newScope,
+    { splicePackages
+    , newScope
+    ,
     }:
-    {
-      otherSplices,
-      # Attrs from `self` which won't be spliced.
+    { otherSplices
+    , # Attrs from `self` which won't be spliced.
       # Avoid using keep, it's only used for a python hook workaround, added in PR #104201.
       # ex: `keep = (self: { inherit (self) aAttr; })`
-      keep ? (_self: { }),
-      # Additional attrs to add to the sets `callPackage`.
+      keep ? (_self: { })
+    , # Additional attrs to add to the sets `callPackage`.
       # When the package is from a subset (but not a subset within a package IS #211340)
       # within `spliced0` it will be spliced.
       # When using an package outside the set but it's available from `pkgs`, use the package from `pkgs.__splicedPackages`.
@@ -712,8 +712,9 @@ rec {
       # nix-repl> darwin.callPackage ({ CoreFoundation }: CoreFoundation) { }
       #   «derivation ...CoreFoundation-11.0.0.drv»
       # ```
-      extra ? (_spliced0: { }),
-      f,
+      extra ? (_spliced0: { })
+    , f
+    ,
     }:
     let
       spliced0 = splicePackages {
@@ -832,12 +833,12 @@ rec {
         in
         removeAttrs previous excludedNames // g final previous;
     in
-    {
-      constructDrv,
-      excludeDrvArgNames ? [ ],
-      extendDrvArgs,
-      inheritFunctionArgs ? true,
-      transformDrv ? id,
+    { constructDrv
+    , excludeDrvArgNames ? [ ]
+    , extendDrvArgs
+    , inheritFunctionArgs ? true
+    , transformDrv ? id
+    ,
     }:
     setFunctionArgs
       # Adds the fixed-point style support

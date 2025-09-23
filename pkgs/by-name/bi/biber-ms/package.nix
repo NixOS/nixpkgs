@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perlPackages,
-  shortenPerlShebang,
-  texlive,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perlPackages
+, shortenPerlShebang
+, texlive
+,
 }:
 
 let

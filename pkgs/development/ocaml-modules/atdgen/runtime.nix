@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  atdgen-codec-runtime,
-  biniou,
-  yojson,
+{ buildDunePackage
+, atdgen-codec-runtime
+, biniou
+, yojson
+,
 }:
 
 buildDunePackage {

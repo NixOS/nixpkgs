@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  autoreconfHook,
-  glib,
-  kyotocabinet,
-  pkg-config,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, autoreconfHook
+, glib
+, kyotocabinet
+, pkg-config
+, nix-update-script
+,
 }:
 
 let

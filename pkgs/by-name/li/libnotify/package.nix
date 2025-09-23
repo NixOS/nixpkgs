@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  libxslt,
-  docbook-xsl-ns,
-  glib,
-  gdk-pixbuf,
-  gnome,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, libxslt
+, docbook-xsl-ns
+, glib
+, gdk-pixbuf
+, gnome
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {

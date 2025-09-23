@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cjson,
-  cmake,
-  docutils,
-  libev,
-  openssl,
-  systemd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cjson
+, cmake
+, docutils
+, libev
+, openssl
+, systemd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

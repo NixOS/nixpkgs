@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  runCommand,
-  coreutils,
-  gnugrep,
-  gnused,
-  lm_sensors,
-  net-snmp,
-  openssh,
-  openssl,
-  perl,
-  dnsutils,
-  libdbi,
-  libmysqlclient,
-  uriparser,
-  zlib,
-  openldap,
-  procps,
-  runtimeShell,
-  unixtools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, runCommand
+, coreutils
+, gnugrep
+, gnused
+, lm_sensors
+, net-snmp
+, openssh
+, openssl
+, perl
+, dnsutils
+, libdbi
+, libmysqlclient
+, uriparser
+, zlib
+, openldap
+, procps
+, runtimeShell
+, unixtools
+,
 }:
 
 let

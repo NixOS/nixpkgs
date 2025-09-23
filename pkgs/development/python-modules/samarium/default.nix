@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  crossandra,
-  dahlia,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, crossandra
+, dahlia
+,
 }:
 
 buildPythonPackage rec {

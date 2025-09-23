@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  installShellFiles,
-  coreutils,
-  gnused,
-  gnugrep,
-  sqlite,
-  wget,
-  w3m,
-  socat,
-  gawk,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, coreutils
+, gnused
+, gnugrep
+, sqlite
+, wget
+, w3m
+, socat
+, gawk
+,
 }:
 
 stdenv.mkDerivation rec {

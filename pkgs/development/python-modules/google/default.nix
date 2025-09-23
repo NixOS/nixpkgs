@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  beautifulsoup4,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, beautifulsoup4
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

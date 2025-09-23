@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  ncurses,
-  lib,
-  stdenv,
-  autoconf,
-  automake,
-  pkg-config,
-  installShellFiles,
+{ fetchFromGitHub
+, ncurses
+, lib
+, stdenv
+, autoconf
+, automake
+, pkg-config
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation {

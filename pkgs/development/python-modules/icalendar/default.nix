@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  hatch-vcs,
-  hatchling,
-  python-dateutil,
-  tzdata,
-  hypothesis,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, hatch-vcs
+, hatchling
+, python-dateutil
+, tzdata
+, hypothesis
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

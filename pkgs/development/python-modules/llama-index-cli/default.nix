@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  llama-index-core,
-  llama-index-embeddings-openai,
-  llama-index-llms-openai,
-  llama-index-vector-stores-chroma,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, llama-index-core
+, llama-index-embeddings-openai
+, llama-index-llms-openai
+, llama-index-vector-stores-chroma
+,
 }:
 
 buildPythonPackage rec {

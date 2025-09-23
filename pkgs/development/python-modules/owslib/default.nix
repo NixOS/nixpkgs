@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxml,
-  pytest-cov-stub,
-  pytest-httpserver,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pyyaml,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, lxml
+, pytest-cov-stub
+, pytest-httpserver
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pyyaml
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

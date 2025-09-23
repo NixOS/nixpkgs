@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+, writableTmpDirAsHomeHook
+,
 }:
 let
   arch =
@@ -43,8 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
         "i686-linux" = "sha256-5A0kUegKVHSTZ+jRg5+07wvV4PkCvOPddvyC1ZLCbmI=";
         "powerpc64le-linux" = "sha256-XcHrdA9i3Euc0yIjUtFrmIFMJi+onXRK+tHzNxmQwHg=";
         "s390x-linux" = "sha256-loGQxvUqp9ngieVOVuZ6IhOKgyrVGBd+y9LdZtKEPwc=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [

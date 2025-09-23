@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  cmake,
-  ninja,
-  luajit,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  physfs,
-  openal,
-  libmodplug,
-  libvorbis,
-  solarus,
-  glm,
-  qt6,
-  qlementine,
-  qlementine-icons,
-  qtappinstancemanager,
+{ lib
+, stdenv
+, replaceVars
+, cmake
+, ninja
+, luajit
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, physfs
+, openal
+, libmodplug
+, libvorbis
+, solarus
+, glm
+, qt6
+, qlementine
+, qlementine-icons
+, qtappinstancemanager
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

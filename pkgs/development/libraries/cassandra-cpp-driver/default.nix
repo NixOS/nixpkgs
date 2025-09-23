@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  cmake,
-  zlib,
-  libuv,
-  openssl,
-  pkg-config,
-  examples ? false,
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, zlib
+, libuv
+, openssl
+, pkg-config
+, examples ? false
+,
 }:
 stdenv.mkDerivation rec {
   pname = "cassandra-cpp-driver";

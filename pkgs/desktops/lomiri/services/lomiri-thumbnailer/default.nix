@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  nixosTests,
-  testers,
-  boost,
-  cmake,
-  cmake-extras,
-  doxygen,
-  gst_all_1,
-  gdk-pixbuf,
-  gtest,
-  makeFontsConf,
-  libapparmor,
-  libexif,
-  libqtdbustest,
-  librsvg,
-  lomiri-api,
-  persistent-cache-cpp,
-  pkg-config,
-  python3,
-  qtbase,
-  qtdeclarative,
-  shared-mime-info,
-  taglib,
-  validatePkgConfig,
-  wrapGAppsHook3,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, nixosTests
+, testers
+, boost
+, cmake
+, cmake-extras
+, doxygen
+, gst_all_1
+, gdk-pixbuf
+, gtest
+, makeFontsConf
+, libapparmor
+, libexif
+, libqtdbustest
+, librsvg
+, lomiri-api
+, persistent-cache-cpp
+, pkg-config
+, python3
+, qtbase
+, qtdeclarative
+, shared-mime-info
+, taglib
+, validatePkgConfig
+, wrapGAppsHook3
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -101,11 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     (python3.withPackages (
       ps:
-      with ps;
-      lib.optionals finalAttrs.finalPackage.doCheck [
-        python-dbusmock
-        tornado
-      ]
+        with ps;
+        lib.optionals finalAttrs.finalPackage.doCheck [
+          python-dbusmock
+          tornado
+        ]
     ))
     validatePkgConfig
     wrapGAppsHook3

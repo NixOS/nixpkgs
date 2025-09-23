@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  untangle,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, untangle
+,
 }:
 
 buildPythonPackage rec {

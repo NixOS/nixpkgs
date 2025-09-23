@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocm-merged-llvm,
-  clr,
-  rocminfo,
-  python3,
-  hipify,
-  gitMinimal,
-  gtest,
-  zstd,
-  buildTests ? false,
-  buildExamples ? false,
-  gpuTargets ? (
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocm-merged-llvm
+, clr
+, rocminfo
+, python3
+, hipify
+, gitMinimal
+, gtest
+, zstd
+, buildTests ? false
+, buildExamples ? false
+, gpuTargets ? (
     clr.localGpuTargets or [
       "gfx900"
       "gfx906"
@@ -29,7 +28,8 @@
       "gfx1200"
       "gfx1201"
     ]
-  ),
+  )
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

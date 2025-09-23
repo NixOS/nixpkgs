@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  imath,
-  python3,
-  rapidjson,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, imath
+, python3
+, rapidjson
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

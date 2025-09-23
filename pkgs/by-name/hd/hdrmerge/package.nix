@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libsForQt5,
-  libraw,
-  exiv2,
-  zlib,
-  alglib,
-  pkg-config,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libsForQt5
+, libraw
+, exiv2
+, zlib
+, alglib
+, pkg-config
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation rec {

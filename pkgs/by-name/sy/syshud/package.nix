@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glibmm,
-  gtk4-layer-shell,
-  gtkmm4,
-  libevdev,
-  nix-update-script,
-  pkg-config,
-  wireplumber,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibmm
+, gtk4-layer-shell
+, gtkmm4
+, libevdev
+, nix-update-script
+, pkg-config
+, wireplumber
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

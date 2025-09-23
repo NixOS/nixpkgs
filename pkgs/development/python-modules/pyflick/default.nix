@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  json-api-doc,
-  python-dateutil,
-  setuptools-scm,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, json-api-doc
+, python-dateutil
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

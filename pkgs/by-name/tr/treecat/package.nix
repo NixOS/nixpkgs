@@ -1,11 +1,11 @@
-{
-  fetchFromSourcehut,
-  fetchpatch,
-  hareHook,
-  haredo,
-  lib,
-  scdoc,
-  stdenv,
+{ fetchFromSourcehut
+, fetchpatch
+, hareHook
+, haredo
+, lib
+, scdoc
+, stdenv
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "treecat";

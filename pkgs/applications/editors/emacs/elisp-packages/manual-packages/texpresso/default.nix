@@ -1,7 +1,7 @@
-{
-  lib,
-  melpaBuild,
-  texpresso,
+{ lib
+, melpaBuild
+, texpresso
+,
 }:
 melpaBuild {
   pname = "texpresso";

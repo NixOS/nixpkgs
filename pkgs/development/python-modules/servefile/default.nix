@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  legacy-cgi,
-  lib,
-  pyopenssl,
-  pytestCheckHook,
-  pythonAtLeast,
-  requests,
+{ buildPythonPackage
+, fetchFromGitHub
+, legacy-cgi
+, lib
+, pyopenssl
+, pytestCheckHook
+, pythonAtLeast
+, requests
+,
 }:
 
 buildPythonPackage rec {

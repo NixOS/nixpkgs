@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  lib,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  librsvg,
-  xorg,
-  shared-mime-info,
+{ stdenvNoCC
+, lib
+, wrapGAppsHook3
+, gdk-pixbuf
+, librsvg
+, xorg
+, shared-mime-info
+,
 }:
 
 timeshift-unwrapped: runtimeDeps:

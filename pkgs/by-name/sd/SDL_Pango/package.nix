@@ -1,14 +1,14 @@
-{
-  lib,
-  SDL,
-  autoreconfHook,
-  fetchpatch,
-  fetchurl,
-  pango,
-  pkg-config,
-  stdenv,
-  # Boolean flags
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL
+, autoreconfHook
+, fetchpatch
+, fetchurl
+, pango
+, pkg-config
+, stdenv
+, # Boolean flags
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

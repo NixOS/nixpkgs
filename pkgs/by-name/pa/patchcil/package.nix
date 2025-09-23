@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  stdenv,
-  nix-update-script,
-  aot ? dotnetCorePackages.sdk_9_0.hasILCompiler && !stdenv.hostPlatform.isDarwin,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, stdenv
+, nix-update-script
+, aot ? dotnetCorePackages.sdk_9_0.hasILCompiler && !stdenv.hostPlatform.isDarwin
+,
 }:
 
 buildDotnetModule rec {

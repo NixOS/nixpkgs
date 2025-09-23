@@ -1,12 +1,12 @@
-{
-  blackmagic,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  versionCheckHook,
-  udevCheckHook,
-  pkg-config,
-  openssl,
+{ blackmagic
+, lib
+, fetchFromGitHub
+, rustPlatform
+, versionCheckHook
+, udevCheckHook
+, pkg-config
+, openssl
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bmputil";

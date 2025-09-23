@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  testers,
-  nix-update-script,
-  couchbase-shell,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, testers
+, nix-update-script
+, couchbase-shell
+,
 }:
 
 rustPlatform.buildRustPackage rec {

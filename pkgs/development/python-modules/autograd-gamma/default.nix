@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  autograd,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, autograd
+, scipy
+,
 }:
 
 buildPythonPackage rec {

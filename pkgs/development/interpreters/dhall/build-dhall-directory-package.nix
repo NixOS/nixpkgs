@@ -8,15 +8,15 @@
 lib.makePackageOverridable (
   {
     # Arguments passed through to `buildDhallPackage`
-    name,
-    dependencies ? [ ],
-    source ? false,
-
-    src,
-    # The file to import, relative to the root directory
-    file ? "package.dhall",
-    # Set to `true` to generate documentation for the package
-    document ? false,
+    name
+  , dependencies ? [ ]
+  , source ? false
+  , src
+  , # The file to import, relative to the root directory
+    file ? "package.dhall"
+  , # Set to `true` to generate documentation for the package
+    document ? false
+  ,
   }:
 
   buildDhallPackage (
@@ -26,6 +26,6 @@ lib.makePackageOverridable (
       code = "${src}/${file}";
 
     }
-    // lib.optionalAttrs document { documentationRoot = "${src}"; }
+      // lib.optionalAttrs document { documentationRoot = "${src}"; }
   )
 )

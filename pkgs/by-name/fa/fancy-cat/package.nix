@@ -1,18 +1,18 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  freetype,
-  gumbo,
-  harfbuzz,
-  jbig2dec,
-  lib,
-  libjpeg,
-  libz,
-  mujs,
-  mupdf,
-  openjpeg,
-  stdenv,
-  zig_0_14,
+{ callPackage
+, fetchFromGitHub
+, freetype
+, gumbo
+, harfbuzz
+, jbig2dec
+, lib
+, libjpeg
+, libz
+, mujs
+, mupdf
+, openjpeg
+, stdenv
+, zig_0_14
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fancy-cat";

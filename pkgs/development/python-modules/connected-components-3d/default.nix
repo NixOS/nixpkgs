@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cython,
-  numpy,
-  pbr,
-  fastremap,
-  pytestCheckHook,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cython
+, numpy
+, pbr
+, fastremap
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

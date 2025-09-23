@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  barcode,
-  gnome,
-  gnome-common,
-  autoreconfHook,
-  gtk3,
-  gtk-doc,
-  libxml2,
-  librsvg,
-  libtool,
-  libe-book,
-  gsettings-desktop-schemas,
-  intltool,
-  itstool,
-  makeWrapper,
-  pkg-config,
-  yelp-tools,
-  qrencode,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, barcode
+, gnome
+, gnome-common
+, autoreconfHook
+, gtk3
+, gtk-doc
+, libxml2
+, librsvg
+, libtool
+, libe-book
+, gsettings-desktop-schemas
+, intltool
+, itstool
+, makeWrapper
+, pkg-config
+, yelp-tools
+, qrencode
+,
 }:
 
 stdenv.mkDerivation rec {

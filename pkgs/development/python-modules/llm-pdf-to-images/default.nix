@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pymupdf,
-  llm,
-  llm-pdf-to-images,
-  pytestCheckHook,
-  pytest-asyncio,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pymupdf
+, llm
+, llm-pdf-to-images
+, pytestCheckHook
+, pytest-asyncio
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

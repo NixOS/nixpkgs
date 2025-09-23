@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  react,
-  result,
-  uchar,
-  uutf,
-  uucp,
-  uuseg,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, react
+, result
+, uchar
+, uutf
+, uucp
+, uuseg
+,
 }:
 
 buildDunePackage rec {

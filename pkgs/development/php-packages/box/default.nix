@@ -1,8 +1,8 @@
-{
-  lib,
-  php82,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, php82
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 php82.buildComposerProject2 (finalAttrs: {

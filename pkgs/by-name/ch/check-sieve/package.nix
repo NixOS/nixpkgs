@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  diffutils,
-  flex,
-  python3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, diffutils
+, flex
+, python3
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "check-sieve";

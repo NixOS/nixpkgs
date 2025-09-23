@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  pyasn1,
-  pysmi,
-  pysnmpcrypto,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  pyasn1
+, pysmi
+, pysnmpcrypto
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

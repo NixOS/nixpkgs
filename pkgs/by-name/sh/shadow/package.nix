@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-  autoreconfHook,
-  bison,
-  flex,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  itstool,
-  libxml2,
-  libxslt,
-  libxcrypt,
-  pkg-config,
-  glibc ? null,
-  pam ? null,
-  withLibbsd ? lib.meta.availableOn stdenv.hostPlatform libbsd,
-  libbsd,
-  withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
-  tcb,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, autoreconfHook
+, bison
+, flex
+, docbook_xml_dtd_45
+, docbook_xsl
+, itstool
+, libxml2
+, libxslt
+, libxcrypt
+, pkg-config
+, glibc ? null
+, pam ? null
+, withLibbsd ? lib.meta.availableOn stdenv.hostPlatform libbsd
+, libbsd
+, withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb
+, tcb
+,
 }:
 let
   glibc' =
@@ -112,9 +112,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  disallowedReferences = lib.optional (
-    stdenv.buildPlatform != stdenv.hostPlatform
-  ) stdenv.shellPackage;
+  disallowedReferences = lib.optional
+    (
+      stdenv.buildPlatform != stdenv.hostPlatform
+    )
+    stdenv.shellPackage;
 
   meta = with lib; {
     homepage = "https://github.com/shadow-maint/shadow";

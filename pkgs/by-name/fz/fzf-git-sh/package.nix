@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  bash,
-  bat,
-  coreutils,
-  fetchFromGitHub,
-  findutils,
-  fzf,
-  gawk,
-  git,
-  gnugrep,
-  gnused,
-  util-linux,
-  xdg-utils,
-  zsh,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, bash
+, bat
+, coreutils
+, fetchFromGitHub
+, findutils
+, fzf
+, gawk
+, git
+, gnugrep
+, gnused
+, util-linux
+, xdg-utils
+, zsh
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

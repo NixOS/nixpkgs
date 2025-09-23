@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pyopenssl,
-  pythonOlder,
-  requests,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pyopenssl
+, pythonOlder
+, requests
+, six
+,
 }:
 
 buildPythonPackage rec {

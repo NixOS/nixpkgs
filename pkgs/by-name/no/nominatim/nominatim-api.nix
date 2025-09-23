@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  hatchling,
-  psycopg,
-  pyicu,
-  python-dotenv,
-  pyyaml,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, psycopg
+, pyicu
+, python-dotenv
+, pyyaml
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

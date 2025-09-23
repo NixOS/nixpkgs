@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  ocaml,
-  ocamlPackages,
-  gnum4,
-  fetchFromGitLab,
+{ stdenv
+, lib
+, ocaml
+, ocamlPackages
+, gnum4
+, fetchFromGitLab
+,
 }:
 stdenv.mkDerivation rec {
   pname = "caper";

@@ -1,12 +1,12 @@
-{
-  lib,
-  appimageTools,
-  makeWrapper,
-  runCommand,
-  curl,
-  gnugrep,
-  cacert,
-  dpkg,
+{ lib
+, appimageTools
+, makeWrapper
+, runCommand
+, curl
+, gnugrep
+, cacert
+, dpkg
+,
 }:
 let
   version = "2.0.3";

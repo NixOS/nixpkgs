@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  coreutils,
-  makeWrapper,
-  sway-unwrapped,
-  installShellFiles,
-  wl-clipboard,
-  libnotify,
-  slurp,
-  grim,
-  jq,
-  gnugrep,
-  bash,
-
-  python3Packages,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, coreutils
+, makeWrapper
+, sway-unwrapped
+, installShellFiles
+, wl-clipboard
+, libnotify
+, slurp
+, grim
+, jq
+, gnugrep
+, bash
+, python3Packages
+,
 }:
 
 let

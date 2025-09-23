@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libGL,
-  SDL,
-  SDL_image,
-  libjack2,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libGL
+, SDL
+, SDL_image
+, libjack2
+,
 }:
 
 stdenv.mkDerivation rec {

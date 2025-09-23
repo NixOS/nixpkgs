@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  cssselect,
-  chardet,
-  lxml,
-  pdfminer-six,
-  pyquery,
-  roman,
-  six,
-  setuptools,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, cssselect
+, chardet
+, lxml
+, pdfminer-six
+, pyquery
+, roman
+, six
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

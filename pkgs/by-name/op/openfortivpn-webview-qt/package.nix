@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  qt6Packages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, qt6Packages
+,
 }:
 stdenv.mkDerivation rec {
   pname = "openfortivpn-webview-qt";

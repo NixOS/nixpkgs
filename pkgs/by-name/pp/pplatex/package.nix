@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  pcre,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, pcre
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

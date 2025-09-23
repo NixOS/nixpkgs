@@ -1,60 +1,57 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  filelock,
-  huggingface-hub,
-  numpy,
-  protobuf,
-  packaging,
-  pyyaml,
-  regex,
-  requests,
-  tokenizers,
-  safetensors,
-  tqdm,
-
-  # optional-dependencies
-  diffusers,
-  scikit-learn,
-  tensorflow,
-  onnxconverter-common,
-  opencv4,
-  tf2onnx,
-  torch,
-  accelerate,
-  faiss,
-  datasets,
-  jax,
-  jaxlib,
-  flax,
-  optax,
-  ftfy,
-  onnxruntime,
-  onnxruntime-tools,
-  cookiecutter,
-  sagemaker,
-  fairscale,
-  optuna,
-  ray,
-  pydantic,
-  uvicorn,
-  fastapi,
-  starlette,
-  librosa,
-  phonemizer,
-  torchaudio,
-  pillow,
-  timm,
-  torchvision,
-  av,
-  sentencepiece,
-  hf-xet,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  filelock
+, huggingface-hub
+, numpy
+, protobuf
+, packaging
+, pyyaml
+, regex
+, requests
+, tokenizers
+, safetensors
+, tqdm
+, # optional-dependencies
+  diffusers
+, scikit-learn
+, tensorflow
+, onnxconverter-common
+, opencv4
+, tf2onnx
+, torch
+, accelerate
+, faiss
+, datasets
+, jax
+, jaxlib
+, flax
+, optax
+, ftfy
+, onnxruntime
+, onnxruntime-tools
+, cookiecutter
+, sagemaker
+, fairscale
+, optuna
+, ray
+, pydantic
+, uvicorn
+, fastapi
+, starlette
+, librosa
+, phonemizer
+, torchaudio
+, pillow
+, timm
+, torchvision
+, av
+, sentencepiece
+, hf-xet
+,
 }:
 
 buildPythonPackage rec {

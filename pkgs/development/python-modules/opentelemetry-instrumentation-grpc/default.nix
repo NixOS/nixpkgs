@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  opentelemetry-test-utils,
-  wrapt,
-  pytestCheckHook,
-  grpcio,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-semantic-conventions
+, opentelemetry-test-utils
+, wrapt
+, pytestCheckHook
+, grpcio
+,
 }:
 
 buildPythonPackage {

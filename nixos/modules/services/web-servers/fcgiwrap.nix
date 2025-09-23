@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -120,28 +119,30 @@ in
 
   config = {
     assertions = concatLists (
-      mapAttrsToList (name: cfg: [
-        {
-          assertion = cfg.socket.type == "unix" -> cfg.socket.user != null;
-          message = "Socket owner is required for the UNIX socket type.";
-        }
-        {
-          assertion = cfg.socket.type == "unix" -> cfg.socket.group != null;
-          message = "Socket owner is required for the UNIX socket type.";
-        }
-        {
-          assertion = cfg.socket.user != null -> cfg.socket.type == "unix";
-          message = "Socket owner can only be set for the UNIX socket type.";
-        }
-        {
-          assertion = cfg.socket.group != null -> cfg.socket.type == "unix";
-          message = "Socket owner can only be set for the UNIX socket type.";
-        }
-        {
-          assertion = cfg.socket.mode != null -> cfg.socket.type == "unix";
-          message = "Socket mode can only be set for the UNIX socket type.";
-        }
-      ]) config.services.fcgiwrap.instances
+      mapAttrsToList
+        (name: cfg: [
+          {
+            assertion = cfg.socket.type == "unix" -> cfg.socket.user != null;
+            message = "Socket owner is required for the UNIX socket type.";
+          }
+          {
+            assertion = cfg.socket.type == "unix" -> cfg.socket.group != null;
+            message = "Socket owner is required for the UNIX socket type.";
+          }
+          {
+            assertion = cfg.socket.user != null -> cfg.socket.type == "unix";
+            message = "Socket owner can only be set for the UNIX socket type.";
+          }
+          {
+            assertion = cfg.socket.group != null -> cfg.socket.type == "unix";
+            message = "Socket owner can only be set for the UNIX socket type.";
+          }
+          {
+            assertion = cfg.socket.mode != null -> cfg.socket.type == "unix";
+            message = "Socket mode can only be set for the UNIX socket type.";
+          }
+        ])
+        config.services.fcgiwrap.instances
     );
 
     systemd.services = forEachInstance (cfg: {

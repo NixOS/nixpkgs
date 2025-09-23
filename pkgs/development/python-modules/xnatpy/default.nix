@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  hatchling,
-  versioningit,
-  click,
-  click-option-group,
-  importlib-metadata,
-  isodate,
-  progressbar2,
-  pydicom,
-  python-dateutil,
-  pyyaml,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatchling
+, versioningit
+, click
+, click-option-group
+, importlib-metadata
+, isodate
+, progressbar2
+, pydicom
+, python-dateutil
+, pyyaml
+, requests
+,
 }:
 
 buildPythonPackage rec {

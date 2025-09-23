@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  pytestCheckHook,
-  numpy,
-  decopatch,
-  more-itertools,
-  nestedtext,
-  pyyaml,
-  tidyexc,
-  toml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, pytestCheckHook
+, numpy
+, decopatch
+, more-itertools
+, nestedtext
+, pyyaml
+, tidyexc
+, toml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  scikit-build-core,
-  setuptools,
-  setuptools-scm,
-  cmake,
-  ninja,
-  matchpy,
-  numpy,
-  astunparse,
-  typing-extensions,
-  nix-update-script,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, scikit-build-core
+, setuptools
+, setuptools-scm
+, cmake
+, ninja
+, matchpy
+, numpy
+, astunparse
+, typing-extensions
+, nix-update-script
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

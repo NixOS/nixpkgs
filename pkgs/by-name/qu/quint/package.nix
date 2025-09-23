@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  nodejs,
-  nodejs_20,
-  makeWrapper,
-  jre,
-  fetchzip,
-  buildNpmPackage,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, nodejs
+, nodejs_20
+, makeWrapper
+, jre
+, fetchzip
+, buildNpmPackage
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  cmdliner,
-  menhir,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, cmdliner
+, menhir
+,
 }:
 
 buildDunePackage rec {

@@ -12,11 +12,10 @@ let
   rootFsDevice = "/dev/disk/by-label/${rootFslabel}";
 
   externalModule =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       boot.loader.systemd-boot.enable = true;
@@ -44,11 +43,10 @@ in
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       virtualisation.directBoot.enable = false;

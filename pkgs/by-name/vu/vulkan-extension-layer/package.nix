@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  writeText,
-  vulkan-headers,
-  vulkan-utility-libraries,
-  jq,
-  libX11,
-  libXrandr,
-  libxcb,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, writeText
+, vulkan-headers
+, vulkan-utility-libraries
+, jq
+, libX11
+, libXrandr
+, libxcb
+, wayland
+,
 }:
 
 stdenv.mkDerivation rec {

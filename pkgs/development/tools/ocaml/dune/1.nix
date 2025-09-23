@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  ocaml,
-  findlib,
-  ncurses,
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, ncurses
+,
 }:
 
 if lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "4.12" then

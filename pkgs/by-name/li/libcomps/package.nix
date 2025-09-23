@@ -1,15 +1,15 @@
-{
-  lib,
-  check,
-  cmake,
-  doxygen,
-  expat,
-  fetchFromGitHub,
-  libxml2,
-  python3,
-  sphinx,
-  stdenv,
-  zlib,
+{ lib
+, check
+, cmake
+, doxygen
+, expat
+, fetchFromGitHub
+, libxml2
+, python3
+, sphinx
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

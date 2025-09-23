@@ -1,11 +1,11 @@
-{
-  buildDunePackage,
-  alcotest,
-  logs,
-  lwt,
-  fmt,
-  re,
-  cmdliner,
+{ buildDunePackage
+, alcotest
+, logs
+, lwt
+, fmt
+, re
+, cmdliner
+,
 }:
 
 buildDunePackage {

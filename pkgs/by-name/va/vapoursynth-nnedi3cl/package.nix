@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  boost,
-  vapoursynth,
-  opencl-headers,
-  ocl-icd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, boost
+, vapoursynth
+, opencl-headers
+, ocl-icd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

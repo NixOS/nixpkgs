@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  coreutils,
-  setuptools,
-  pbr,
-  prettytable,
-  keystoneauth1,
-  requests,
-  warlock,
-  oslo-utils,
-  oslo-i18n,
-  wrapt,
-  pyopenssl,
-  stestr,
-  testscenarios,
-  ddt,
-  requests-mock,
-  writeText,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, coreutils
+, setuptools
+, pbr
+, prettytable
+, keystoneauth1
+, requests
+, warlock
+, oslo-utils
+, oslo-i18n
+, wrapt
+, pyopenssl
+, stestr
+, testscenarios
+, ddt
+, requests-mock
+, writeText
+,
 }:
 let
   pname = "python-glanceclient";

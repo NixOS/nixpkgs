@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  pythonOlder,
-  pyyaml,
-  platformdirs,
-  build,
-  psygnal,
-  pydantic,
-  tomli-w,
-  tomli,
-  rich,
-  typer,
-  napari, # reverse dependency, for tests
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, pythonOlder
+, pyyaml
+, platformdirs
+, build
+, psygnal
+, pydantic
+, tomli-w
+, tomli
+, rich
+, typer
+, napari
+, # reverse dependency, for tests
 }:
 
 buildPythonPackage rec {

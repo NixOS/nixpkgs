@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  pathlib-abc,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  smart-open,
-  typer,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pathlib-abc
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, smart-open
+, typer
+,
 }:
 
 buildPythonPackage rec {

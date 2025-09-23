@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  pyyaml,
-  requests,
-  pythonAtLeast,
-  importlib-resources,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  pyyaml
+, requests
+, pythonAtLeast
+, importlib-resources
+,
 }:
 
 buildPythonPackage rec {

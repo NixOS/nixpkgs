@@ -1,39 +1,40 @@
 {
   #alpaqa,
-  blas,
-  blasfeo,
-  bonmin,
-  bzip2,
-  cbc,
-  clp,
-  cmake,
-  cplex,
-  fatrop,
-  fetchFromGitHub,
-  fetchpatch,
-  gurobi,
-  highs,
-  hpipm,
-  lib,
-  ipopt,
-  lapack,
-  llvmPackages,
-  mumps,
-  ninja,
-  osqp,
-  pkg-config,
-  pythonSupport ? false,
-  python3Packages,
-  proxsuite,
-  stdenv,
-  sleqp,
-  suitesparse,
-  #sundials,
-  superscs,
-  spral,
-  swig,
-  tinyxml-2,
-  withUnfree ? false,
+  blas
+, blasfeo
+, bonmin
+, bzip2
+, cbc
+, clp
+, cmake
+, cplex
+, fatrop
+, fetchFromGitHub
+, fetchpatch
+, gurobi
+, highs
+, hpipm
+, lib
+, ipopt
+, lapack
+, llvmPackages
+, mumps
+, ninja
+, osqp
+, pkg-config
+, pythonSupport ? false
+, python3Packages
+, proxsuite
+, stdenv
+, sleqp
+, suitesparse
+, #sundials,
+  superscs
+, spral
+, swig
+, tinyxml-2
+, withUnfree ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  jre,
-  giflib,
-  gawk,
-  makeBinaryWrapper,
-  icoutils,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchzip
+, jre
+, giflib
+, gawk
+, makeBinaryWrapper
+, icoutils
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

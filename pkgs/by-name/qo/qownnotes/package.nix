@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  qt6Packages,
-  cmake,
-  makeWrapper,
-  botan3,
-  libgit2,
-  pkg-config,
-  nixosTests,
-  installShellFiles,
-  xvfb-run,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, qt6Packages
+, cmake
+, makeWrapper
+, botan3
+, libgit2
+, pkg-config
+, nixosTests
+, installShellFiles
+, xvfb-run
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

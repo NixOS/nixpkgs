@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  autoreconfHook,
-  gettext,
-  libev,
-  pcre2,
-  pkg-config,
-  udns,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, autoreconfHook
+, gettext
+, libev
+, pcre2
+, pkg-config
+, udns
+,
 }:
 
 stdenv.mkDerivation rec {

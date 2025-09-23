@@ -1,24 +1,24 @@
-{
-  stdenv,
-  callPackage,
-  lib,
-  fetchRepoProject,
-  nix-update-script,
-  cmake,
-  directx-shader-compiler,
-  glslang,
-  ninja,
-  patchelf,
-  perl,
-  pkg-config,
-  python3,
-  expat,
-  libdrm,
-  ncurses,
-  openssl,
-  wayland,
-  xorg,
-  zlib,
+{ stdenv
+, callPackage
+, lib
+, fetchRepoProject
+, nix-update-script
+, cmake
+, directx-shader-compiler
+, glslang
+, ninja
+, patchelf
+, perl
+, pkg-config
+, python3
+, expat
+, libdrm
+, ncurses
+, openssl
+, wayland
+, xorg
+, zlib
+,
 }:
 let
 

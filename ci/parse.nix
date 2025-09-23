@@ -1,7 +1,7 @@
-{
-  lib,
-  nix,
-  runCommand,
+{ lib
+, nix
+, runCommand
+,
 }:
 let
   nixpkgs =
@@ -12,11 +12,11 @@ let
     };
 in
 runCommand "nix-parse-${nix.name}"
-  {
-    nativeBuildInputs = [
-      nix
-    ];
-  }
+{
+  nativeBuildInputs = [
+    nix
+  ];
+}
   ''
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state

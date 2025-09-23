@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  autoreconfHook,
-  flex,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, autoreconfHook
+, flex
+,
 }:
 let
   rev = "7e93dee44df1a7e8f551a2e408a600b2e90a0974";

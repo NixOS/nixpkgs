@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  rofi-unwrapped,
-  libqalculate,
-  glib,
-  cairo,
-  gobject-introspection,
-  wrapGAppsHook3,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, rofi-unwrapped
+, libqalculate
+, glib
+, cairo
+, gobject-introspection
+, wrapGAppsHook3
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  callPackage,
-  mkCoqDerivation,
-  coq,
-  ExtLib,
-  version ? null,
+{ lib
+, callPackage
+, mkCoqDerivation
+, coq
+, ExtLib
+, version ? null
+,
 }:
 
 (mkCoqDerivation {
@@ -21,7 +21,8 @@
       (case (range "8.17" "9.1") "1.10.0")
       (case (range "8.11" "8.19") "1.8.0")
       (case (range "8.7" "8.13") "1.3.0")
-    ] null;
+    ]
+      null;
   release."1.10.0".sha256 = "sha256-67cBhLvRMWLWBL7NXK1zZTQC4PtSKu9qtesU4SqKkOw=";
   release."1.8.0".sha256 = "sha256-3ADNeXrBIpYRlfUW+LkLHUWV1w1HFrVc/TZISMuwvRY=";
   release."1.7.0".sha256 = "sha256:1a1q9x2abx71hqvjdai3n12jxzd49mhf3nqqh3ya2ssl2lj609ci";

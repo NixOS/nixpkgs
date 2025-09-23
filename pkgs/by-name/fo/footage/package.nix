@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  rustPlatform,
-  cargo,
-  rustc,
-  appstream-glib,
-  blueprint-compiler,
-  desktop-file-utils,
-  gettext,
-  glib,
-  gst_all_1,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  a52dec,
-  fdk_aac,
-  ffmpeg,
-  x264,
-  x265,
-  vo-aacenc,
-  svt-av1,
-  libmpeg2,
+{ lib
+, stdenv
+, fetchFromGitLab
+, rustPlatform
+, cargo
+, rustc
+, appstream-glib
+, blueprint-compiler
+, desktop-file-utils
+, gettext
+, glib
+, gst_all_1
+, gtk4
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, a52dec
+, fdk_aac
+, ffmpeg
+, x264
+, x265
+, vo-aacenc
+, svt-av1
+, libmpeg2
+,
 }:
 
 stdenv.mkDerivation rec {

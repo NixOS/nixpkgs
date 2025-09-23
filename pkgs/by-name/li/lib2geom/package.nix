@@ -1,19 +1,19 @@
-{
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  ninja,
-  pkg-config,
-  boost,
-  glib,
-  gsl,
-  cairo,
-  double-conversion,
-  gtest,
-  ctestCheckHook,
-  lib,
-  inkscape,
-  pkgsCross,
+{ stdenv
+, fetchFromGitLab
+, cmake
+, ninja
+, pkg-config
+, boost
+, glib
+, gsl
+, cairo
+, double-conversion
+, gtest
+, ctestCheckHook
+, lib
+, inkscape
+, pkgsCross
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

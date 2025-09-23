@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  libicns,
-  imagemagick,
-  makeDesktopItem,
-  copyDesktopItems,
-  cmake,
-  python3Packages,
-  mpi,
-  mpiCheckPhaseHook,
-  metis,
-  opencascade-occt,
-  libGLU,
-  zlib,
-  tcl,
-  tk,
-  xorg,
-  libjpeg,
-  ffmpeg,
-  catch2,
-  avxSupport ? stdenv.hostPlatform.avxSupport,
-  avx2Support ? stdenv.hostPlatform.avx2Support,
-  avx512Support ? stdenv.hostPlatform.avx512Support,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, libicns
+, imagemagick
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, python3Packages
+, mpi
+, mpiCheckPhaseHook
+, metis
+, opencascade-occt
+, libGLU
+, zlib
+, tcl
+, tk
+, xorg
+, libjpeg
+, ffmpeg
+, catch2
+, avxSupport ? stdenv.hostPlatform.avxSupport
+, avx2Support ? stdenv.hostPlatform.avx2Support
+, avx512Support ? stdenv.hostPlatform.avx512Support
+,
 }:
 let
   archFlags = toString (

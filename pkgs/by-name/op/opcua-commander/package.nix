@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  typescript,
-  esbuild,
-  makeWrapper,
-  nodejs,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, typescript
+, esbuild
+, makeWrapper
+, nodejs
+,
 }:
 buildNpmPackage rec {
   pname = "opcua-commander";

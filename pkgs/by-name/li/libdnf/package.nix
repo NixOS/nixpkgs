@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gettext,
-  pkg-config,
-  libsolv,
-  openssl,
-  check,
-  json_c,
-  libmodulemd,
-  util-linux,
-  sqlite,
-  librepo,
-  libyaml,
-  rpm,
-  zchunk,
-  cppunit,
-  python3,
-  swig,
-  pcre2,
-  sphinx,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, pkg-config
+, libsolv
+, openssl
+, check
+, json_c
+, libmodulemd
+, util-linux
+, sqlite
+, librepo
+, libyaml
+, rpm
+, zchunk
+, cppunit
+, python3
+, swig
+, pcre2
+, sphinx
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  unar,
-  appName,
-  fetchurl,
-  ...
+{ lib
+, stdenvNoCC
+, unar
+, appName
+, fetchurl
+, ...
 }:
 builtins.mapAttrs
   (

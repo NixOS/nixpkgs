@@ -1,16 +1,16 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  click,
-  click-default-group,
-  fetchFromGitHub,
-  hypothesis,
-  moto,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, boto3
+, buildPythonPackage
+, click
+, click-default-group
+, fetchFromGitHub
+, hypothesis
+, moto
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

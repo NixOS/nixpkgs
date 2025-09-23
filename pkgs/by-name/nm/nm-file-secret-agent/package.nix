@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitea,
-  rustPlatform,
-  dbus,
-  networkmanager,
-  pkg-config,
-  nix-update-script,
+{ lib
+, fetchFromGitea
+, rustPlatform
+, dbus
+, networkmanager
+, pkg-config
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   name = "nm-file-secret-agent";

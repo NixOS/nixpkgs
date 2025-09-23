@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 
 with lib;
@@ -14,10 +13,12 @@ let
     "module.exports = " + builtins.toJSON ({ inherit (cfg) public port; } // cfg.extraConfig);
   pluginManifest = {
     dependencies = builtins.listToAttrs (
-      builtins.map (pkg: {
-        name = getName pkg;
-        value = getVersion pkg;
-      }) cfg.plugins
+      builtins.map
+        (pkg: {
+          name = getName pkg;
+          value = getVersion pkg;
+        })
+        cfg.plugins
     );
   };
   plugins =

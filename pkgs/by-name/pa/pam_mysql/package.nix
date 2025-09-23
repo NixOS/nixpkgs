@@ -1,15 +1,15 @@
-{
-  lib,
-  nixosTests,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pam,
-  pkg-config,
-  libmysqlclient,
-  mariadb,
-  libxcrypt,
+{ lib
+, nixosTests
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pam
+, pkg-config
+, libmysqlclient
+, mariadb
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

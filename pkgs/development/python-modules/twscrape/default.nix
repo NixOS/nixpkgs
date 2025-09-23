@@ -1,17 +1,17 @@
-{
-  lib,
-  aiosqlite,
-  beautifulsoup4,
-  buildPythonPackage,
-  fake-useragent,
-  fetchFromGitHub,
-  hatchling,
-  httpx,
-  loguru,
-  pyotp,
-  pytestCheckHook,
-  pytest-httpx,
-  pythonOlder,
+{ lib
+, aiosqlite
+, beautifulsoup4
+, buildPythonPackage
+, fake-useragent
+, fetchFromGitHub
+, hatchling
+, httpx
+, loguru
+, pyotp
+, pytestCheckHook
+, pytest-httpx
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

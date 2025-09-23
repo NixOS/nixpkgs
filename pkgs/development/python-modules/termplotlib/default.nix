@@ -1,13 +1,13 @@
-{
-  lib,
-  replaceVars,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  exdown,
-  numpy,
-  gnuplot,
-  setuptools,
+{ lib
+, replaceVars
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, exdown
+, numpy
+, gnuplot
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

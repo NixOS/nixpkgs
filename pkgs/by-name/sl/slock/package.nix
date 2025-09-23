@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  writeText,
-  xorgproto,
-  libX11,
-  libXext,
-  libXrandr,
-  libxcrypt,
-  config,
-  conf ? config.slock.conf or null,
-  patches ? config.slock.patches or [ ],
-  extraLibs ? config.slock.extraLibs or [ ],
-  # update script dependencies
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, writeText
+, xorgproto
+, libX11
+, libXext
+, libXrandr
+, libxcrypt
+, config
+, conf ? config.slock.conf or null
+, patches ? config.slock.patches or [ ]
+, extraLibs ? config.slock.extraLibs or [ ]
+, # update script dependencies
+  gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

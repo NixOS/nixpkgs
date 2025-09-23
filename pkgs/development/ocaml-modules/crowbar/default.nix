@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildDunePackage,
-  fetchFromGitHub,
-  ocplib-endian,
-  cmdliner,
-  afl-persistent,
-  calendar,
-  fpath,
-  pprint,
-  uutf,
-  uunf,
-  uucp,
+{ lib
+, stdenv
+, buildDunePackage
+, fetchFromGitHub
+, ocplib-endian
+, cmdliner
+, afl-persistent
+, calendar
+, fpath
+, pprint
+, uutf
+, uunf
+, uucp
+,
 }:
 
 buildDunePackage rec {

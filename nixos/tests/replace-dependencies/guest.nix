@@ -58,27 +58,31 @@ let
   '';
 in
 {
-  replacedependency-basic = mkCheckOutput "replacedependency-basic" (replaceDependency {
-    drv = basic;
-    inherit oldDependency newDependency;
-  }) "got new dependency";
+  replacedependency-basic = mkCheckOutput "replacedependency-basic"
+    (replaceDependency {
+      drv = basic;
+      inherit oldDependency newDependency;
+    }) "got new dependency";
 
-  replacedependency-basic-old-ca = mkCheckOutput "replacedependency-basic" (replaceDependency {
-    drv = basic-ca;
-    oldDependency = oldDependency-ca;
-    inherit newDependency;
-  }) "got new dependency";
+  replacedependency-basic-old-ca = mkCheckOutput "replacedependency-basic"
+    (replaceDependency {
+      drv = basic-ca;
+      oldDependency = oldDependency-ca;
+      inherit newDependency;
+    }) "got new dependency";
 
-  replacedependency-basic-new-ca = mkCheckOutput "replacedependency-basic" (replaceDependency {
-    drv = basic;
-    inherit oldDependency;
-    newDependency = newDependency-ca;
-  }) "got new dependency";
+  replacedependency-basic-new-ca = mkCheckOutput "replacedependency-basic"
+    (replaceDependency {
+      drv = basic;
+      inherit oldDependency;
+      newDependency = newDependency-ca;
+    }) "got new dependency";
 
-  replacedependency-transitive = mkCheckOutput "replacedependency-transitive" (replaceDependency {
-    drv = transitive;
-    inherit oldDependency newDependency;
-  }) "got new dependency";
+  replacedependency-transitive = mkCheckOutput "replacedependency-transitive"
+    (replaceDependency {
+      drv = transitive;
+      inherit oldDependency newDependency;
+    }) "got new dependency";
 
   replacedependency-weird =
     mkCheckOutput "replacedependency-weird"
@@ -91,23 +95,25 @@ in
         got weird dependency
         got old dependency'';
 
-  replacedependencies-precedence = mkCheckOutput "replacedependencies-precedence" (replaceDependencies
-    {
-      drv = basic;
-      replacements = [ { inherit oldDependency newDependency; } ];
-      cutoffPackages = [ oldDependency ];
-    }
-  ) "got new dependency";
-
-  replacedependencies-self = mkCheckOutput "replacedependencies-self" (replaceDependencies {
-    drv = basic;
-    replacements = [
+  replacedependencies-precedence = mkCheckOutput "replacedependencies-precedence"
+    (replaceDependencies
       {
-        inherit oldDependency;
-        newDependency = oldDependency;
+        drv = basic;
+        replacements = [{ inherit oldDependency newDependency; }];
+        cutoffPackages = [ oldDependency ];
       }
-    ];
-  }) "got old dependency";
+    ) "got new dependency";
+
+  replacedependencies-self = mkCheckOutput "replacedependencies-self"
+    (replaceDependencies {
+      drv = basic;
+      replacements = [
+        {
+          inherit oldDependency;
+          newDependency = oldDependency;
+        }
+      ];
+    }) "got old dependency";
 
   replacedependencies-deep-order1 =
     mkCheckOutput "replacedependencies-deep-order1"

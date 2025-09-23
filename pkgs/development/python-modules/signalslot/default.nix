@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  contexter,
-  eventlet,
-  mock,
-  pytest-xdist,
-  pytestCheckHook,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, contexter
+, eventlet
+, mock
+, pytest-xdist
+, pytestCheckHook
+, six
+,
 }:
 
 buildPythonPackage rec {

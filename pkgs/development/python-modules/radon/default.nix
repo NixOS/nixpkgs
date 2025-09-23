@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  fetchpatch,
-  # Python deps
-  mando,
-  colorama,
-  pytest-mock,
-  tomli,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, fetchpatch
+, # Python deps
+  mando
+, colorama
+, pytest-mock
+, tomli
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

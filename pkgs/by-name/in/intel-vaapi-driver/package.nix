@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gnum4,
-  pkg-config,
-  python3,
-  wayland-scanner,
-  intel-gpu-tools,
-  libdrm,
-  libva,
-  libX11,
-  libGL,
-  wayland,
-  libXext,
-  enableHybridCodec ? false,
-  vaapi-intel-hybrid,
-  enableGui ? true,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gnum4
+, pkg-config
+, python3
+, wayland-scanner
+, intel-gpu-tools
+, libdrm
+, libva
+, libX11
+, libGL
+, wayland
+, libXext
+, enableHybridCodec ? false
+, vaapi-intel-hybrid
+, enableGui ? true
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

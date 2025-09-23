@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gnutls,
-  cunit,
-  ncurses,
-  knot-dns,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gnutls
+, cunit
+, ncurses
+, knot-dns
+,
 }:
 
 stdenv.mkDerivation rec {

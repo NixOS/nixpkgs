@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  nodejs,
-  pnpm_9,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, nodejs
+, pnpm_9
+, testers
+,
 }:
 let
   go-turbo-version = "1.7.4";

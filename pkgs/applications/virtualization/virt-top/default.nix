@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  ocamlPackages,
-  autoreconfHook,
-  libxml2,
-  pkg-config,
-  getopt,
-  gettext,
+{ lib
+, stdenv
+, fetchgit
+, ocamlPackages
+, autoreconfHook
+, libxml2
+, pkg-config
+, getopt
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

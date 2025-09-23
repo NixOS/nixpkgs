@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qtmultimedia,
+{ mkKdeDerivation
+, qtsvg
+, qtmultimedia
+,
 }:
 mkKdeDerivation {
   pname = "kwordquiz";

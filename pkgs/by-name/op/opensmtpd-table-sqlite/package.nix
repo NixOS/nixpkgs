@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, sqlite
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd-table-sqlite";

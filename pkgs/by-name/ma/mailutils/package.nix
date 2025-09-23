@@ -1,33 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  dejagnu,
-  gettext,
-  gnum4,
-  pkg-config,
-  texinfo,
-  fribidi,
-  gdbm,
-  gnutls,
-  gss,
-  guile,
-  libmysqlclient,
-  mailcap,
-  net-tools,
-  pam,
-  readline,
-  ncurses,
-  python3,
-  gsasl,
-  system-sendmail,
-  libxcrypt,
-  mkpasswd,
-
-  pythonSupport ? true,
-  guileSupport ? true,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, dejagnu
+, gettext
+, gnum4
+, pkg-config
+, texinfo
+, fribidi
+, gdbm
+, gnutls
+, gss
+, guile
+, libmysqlclient
+, mailcap
+, net-tools
+, pam
+, readline
+, ncurses
+, python3
+, gsasl
+, system-sendmail
+, libxcrypt
+, mkpasswd
+, pythonSupport ? true
+, guileSupport ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

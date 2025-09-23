@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  unzip,
-  fetchurl,
+{ lib
+, stdenv
+, unzip
+, fetchurl
+,
 }:
 
 # Upstream changes files in-place, to update:

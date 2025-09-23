@@ -1,7 +1,7 @@
-{
-  runCommand,
-  testers,
-  emptyDirectory,
+{ runCommand
+, testers
+, emptyDirectory
+,
 }:
 let
   sitePkg = runCommand "site" { } ''

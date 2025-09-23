@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  openldap,
-  openssl,
-  popt,
-  glib,
-  libxcrypt,
-  ncurses,
-  readline,
-  pkg-config,
-  cyrus_sasl,
-  autoconf,
-  automake,
+{ lib
+, stdenv
+, fetchgit
+, openldap
+, openssl
+, popt
+, glib
+, libxcrypt
+, ncurses
+, readline
+, pkg-config
+, cyrus_sasl
+, autoconf
+, automake
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  findlib,
-  ocsipersist-sqlite,
-  ocsigen_server,
-  xml-light,
+{ buildDunePackage
+, findlib
+, ocsipersist-sqlite
+, ocsigen_server
+, xml-light
+,
 }:
 
 buildDunePackage {

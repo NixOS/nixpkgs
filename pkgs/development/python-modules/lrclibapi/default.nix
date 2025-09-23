@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  requests,
-  vcrpy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, requests
+, vcrpy
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "lrclibapi";

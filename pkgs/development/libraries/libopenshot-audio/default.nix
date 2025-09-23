@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  cmake,
-  doxygen,
-  libX11,
-  libXcursor,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, cmake
+, doxygen
+, libX11
+, libXcursor
+, libXext
+, libXft
+, libXinerama
+, libXrandr
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

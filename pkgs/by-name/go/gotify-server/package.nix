@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  sqlite,
-  callPackage,
-  nixosTests,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, sqlite
+, callPackage
+, nixosTests
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

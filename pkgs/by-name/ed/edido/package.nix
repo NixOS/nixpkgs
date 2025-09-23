@@ -1,12 +1,12 @@
-{
-  writeShellApplication,
-  bc,
-  diffutils,
-  findutils,
-  coreutils,
-  firmwarePaths ? [
+{ writeShellApplication
+, bc
+, diffutils
+, findutils
+, coreutils
+, firmwarePaths ? [
     "/run/current-system/firmware"
-  ],
+  ]
+,
 }:
 writeShellApplication {
   name = "edido";

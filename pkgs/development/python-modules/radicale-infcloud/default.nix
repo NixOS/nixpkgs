@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  radicale,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, radicale
+, setuptools
+,
 }:
 
 buildPythonPackage {

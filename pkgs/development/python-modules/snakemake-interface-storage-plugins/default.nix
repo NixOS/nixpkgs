@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  humanfriendly,
-  reretry,
-  snakemake-interface-common,
-  throttler,
-  wrapt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, humanfriendly
+, reretry
+, snakemake-interface-common
+, throttler
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

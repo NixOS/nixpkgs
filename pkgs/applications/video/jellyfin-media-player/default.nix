@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkDerivation,
-  stdenv,
-  SDL2,
-  cmake,
-  libGL,
-  libX11,
-  libXrandr,
-  libvdpau,
-  mpv,
-  ninja,
-  pkg-config,
-  python3,
-  qtbase,
-  qtwayland,
-  qtwebchannel,
-  qtwebengine,
-  qtx11extras,
-  jellyfin-web,
-  withDbus ? stdenv.hostPlatform.isLinux,
+{ lib
+, fetchFromGitHub
+, mkDerivation
+, stdenv
+, SDL2
+, cmake
+, libGL
+, libX11
+, libXrandr
+, libvdpau
+, mpv
+, ninja
+, pkg-config
+, python3
+, qtbase
+, qtwayland
+, qtwebchannel
+, qtwebengine
+, qtx11extras
+, jellyfin-web
+, withDbus ? stdenv.hostPlatform.isLinux
+,
 }:
 
 mkDerivation rec {

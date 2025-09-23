@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  ecdsa,
-  fetchFromGitHub,
-  flask,
-  pytestCheckHook,
-  python-http-client,
-  pyyaml,
-  setuptools,
-  starkbank-ecdsa,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, cryptography
+, ecdsa
+, fetchFromGitHub
+, flask
+, pytestCheckHook
+, python-http-client
+, pyyaml
+, setuptools
+, starkbank-ecdsa
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

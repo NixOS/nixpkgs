@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nlohmann_json,
-  pybind11,
-  replaceVars,
-  gtest,
-  setuptools,
-  cmake,
-  sfml_2,
-  hydra-core,
-  pyvirtualdisplay,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nlohmann_json
+, pybind11
+, replaceVars
+, gtest
+, setuptools
+, cmake
+, sfml_2
+, hydra-core
+, pyvirtualdisplay
+,
 }:
 
 buildPythonPackage {

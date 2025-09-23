@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  which,
-  zip,
-  libicns,
-  botan3,
-  capstone,
-  jansson,
-  libunistring,
-  wxGTK32,
-  lua53Packages,
-  perlPackages,
-  gtk3,
-  nix-update-script,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, zip
+, libicns
+, botan3
+, capstone
+, jansson
+, libunistring
+, wxGTK32
+, lua53Packages
+, perlPackages
+, gtk3
+, nix-update-script
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

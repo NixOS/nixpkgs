@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  lv2,
-  pkg-config,
-  qt5,
-  alsa-lib,
-  libjack2,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, lv2
+, pkg-config
+, qt5
+, alsa-lib
+, libjack2
+,
 }:
 
 stdenv.mkDerivation rec {

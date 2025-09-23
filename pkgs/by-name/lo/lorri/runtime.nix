@@ -1,11 +1,12 @@
 {
   # Plumbing tools:
-  closureInfo,
-  runCommand,
-  buildEnv,
-  # Actual dependencies to propagate:
-  bash,
-  coreutils,
+  closureInfo
+, runCommand
+, buildEnv
+, # Actual dependencies to propagate:
+  bash
+, coreutils
+,
 }:
 let
   tools = buildEnv {

@@ -1,15 +1,15 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  groff,
-  nbperf,
-  compatIfNeeded,
-  defaultMakeFlags,
-  libterminfo,
+{ mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, mandoc
+, groff
+, nbperf
+, compatIfNeeded
+, defaultMakeFlags
+, libterminfo
+,
 }:
 
 mkDerivation {

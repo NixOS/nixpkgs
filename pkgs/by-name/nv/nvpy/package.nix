@@ -1,7 +1,7 @@
-{
-  pkgs,
-  fetchFromGitHub,
-  python3Packages,
+{ pkgs
+, fetchFromGitHub
+, python3Packages
+,
 }:
 
 let

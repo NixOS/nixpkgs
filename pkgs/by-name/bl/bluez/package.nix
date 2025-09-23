@@ -1,30 +1,29 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  autoreconfHook,
-  bluez-headers,
-  dbus,
-  docutils,
-  ell,
-  enableExperimental ? false,
-  fetchurl,
-  glib,
-  json_c,
-  libical,
-  pkg-config,
-  python3Packages,
-  readline,
-  udev,
-  # Test gobject-introspection instead of pygobject because the latter
+{ lib
+, stdenv
+, alsa-lib
+, autoreconfHook
+, bluez-headers
+, dbus
+, docutils
+, ell
+, enableExperimental ? false
+, fetchurl
+, glib
+, json_c
+, libical
+, pkg-config
+, python3Packages
+, readline
+, udev
+, # Test gobject-introspection instead of pygobject because the latter
   # causes an infinite recursion.
-  gobject-introspection,
-  buildPackages,
-  installTests ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gitUpdater,
-  udevCheckHook,
+  gobject-introspection
+, buildPackages
+, installTests ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gitUpdater
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,25 +71,25 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
   ''
   +
-    # Disable some tests:
-    # - test-mesh-crypto depends on the following kernel settings:
-    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
-    # - test-vcp is flaky (?), see:
-    #     - https://github.com/bluez/bluez/issues/683
-    #     - https://github.com/bluez/bluez/issues/726
-    ''
-      skipTest() {
-        if [[ ! -f unit/$1.c ]]; then
-          echo "unit/$1.c no longer exists"
-          false
-        fi
+  # Disable some tests:
+  # - test-mesh-crypto depends on the following kernel settings:
+  #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+  # - test-vcp is flaky (?), see:
+  #     - https://github.com/bluez/bluez/issues/683
+  #     - https://github.com/bluez/bluez/issues/726
+  ''
+    skipTest() {
+      if [[ ! -f unit/$1.c ]]; then
+        echo "unit/$1.c no longer exists"
+        false
+      fi
 
-        echo 'int main() { return 77; }' > unit/$1.c
-      }
+      echo 'int main() { return 77; }' > unit/$1.c
+    }
 
-      skipTest test-mesh-crypto
-      skipTest test-vcp
-    '';
+    skipTest test-mesh-crypto
+    skipTest test-vcp
+  '';
 
   configureFlags = [
     "--localstatedir=/var"

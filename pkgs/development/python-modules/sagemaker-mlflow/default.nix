@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  boto3,
-  mlflow,
-
-  # tests
-  pytestCheckHook,
-  scikit-learn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  boto3
+, mlflow
+, # tests
+  pytestCheckHook
+, scikit-learn
+,
 }:
 
 buildPythonPackage rec {

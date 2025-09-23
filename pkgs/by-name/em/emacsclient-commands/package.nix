@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  gnumake,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, gnumake
+,
 }:
 
 buildGoModule {

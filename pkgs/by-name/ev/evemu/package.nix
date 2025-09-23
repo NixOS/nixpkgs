@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  python3Packages,
-  libevdev,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, python3Packages
+, libevdev
+,
 }:
 
 stdenv.mkDerivation rec {

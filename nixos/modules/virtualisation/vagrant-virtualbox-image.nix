@@ -1,10 +1,9 @@
 # Vagrant + VirtualBox
 
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 {

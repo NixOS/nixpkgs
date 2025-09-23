@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  blurhash,
-  cryptography,
-  decorator,
-  grapheme,
-  http-ece,
-  python-dateutil,
-  python-magic,
-  requests,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-vcr,
-  requests-mock,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, blurhash
+, cryptography
+, decorator
+, grapheme
+, http-ece
+, python-dateutil
+, python-magic
+, requests
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+, pytest-vcr
+, requests-mock
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  gnu-efi,
-  python3,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, gnu-efi
+, python3
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

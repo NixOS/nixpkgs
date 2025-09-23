@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  testers,
-  cmake,
-  cmake-extras,
-  coreutils,
-  dbus,
-  doxygen,
-  gettext,
-  glib,
-  gmenuharness,
-  gtest,
-  intltool,
-  libsecret,
-  libqofono,
-  libqtdbusmock,
-  libqtdbustest,
-  lomiri-api,
-  lomiri-url-dispatcher,
-  networkmanager,
-  ofono,
-  pkg-config,
-  python3,
-  qtdeclarative,
-  qtbase,
-  qttools,
-  validatePkgConfig,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, testers
+, cmake
+, cmake-extras
+, coreutils
+, dbus
+, doxygen
+, gettext
+, glib
+, gmenuharness
+, gtest
+, intltool
+, libsecret
+, libqofono
+, libqtdbusmock
+, libqtdbustest
+, lomiri-api
+, lomiri-url-dispatcher
+, networkmanager
+, ofono
+, pkg-config
+, python3
+, qtdeclarative
+, qtbase
+, qttools
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

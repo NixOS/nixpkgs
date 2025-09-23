@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoreconfHook,
-  docutils,
-  pkg-config,
-  libcap,
-  libkrb5,
-  keyutils,
-  pam,
-  samba,
-  talloc,
-  python3,
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, docutils
+, pkg-config
+, libcap
+, libkrb5
+, keyutils
+, pam
+, samba
+, talloc
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

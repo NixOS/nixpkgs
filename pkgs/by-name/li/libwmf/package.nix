@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  freetype,
-  glib,
-  imagemagick,
-  libjpeg,
-  libpng,
-  libxml2,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, freetype
+, glib
+, imagemagick
+, libjpeg
+, libpng
+, libxml2
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-
-  # build-systems
-  setuptools,
-
-  # dependencies
-  cffi,
-  zope-deferredimport,
-  zope-interface,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, # build-systems
+  setuptools
+, # dependencies
+  cffi
+, zope-deferredimport
+, zope-interface
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

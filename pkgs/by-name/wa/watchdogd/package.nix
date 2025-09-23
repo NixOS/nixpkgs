@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  libite,
-  libuev,
-  libconfuse,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, libite
+, libuev
+, libconfuse
+, nixosTests
+,
 }:
 stdenv.mkDerivation rec {
   pname = "watchdogd";

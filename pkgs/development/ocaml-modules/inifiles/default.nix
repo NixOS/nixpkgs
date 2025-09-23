@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  ocaml,
-  findlib,
-  ocaml_pcre,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, ocaml
+, findlib
+, ocaml_pcre
+,
 }:
 
 stdenv.mkDerivation rec {

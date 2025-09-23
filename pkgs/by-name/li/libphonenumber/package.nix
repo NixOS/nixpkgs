@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  cmake,
-  enableTests ? true,
-  gtest,
-  jre,
-  pkg-config,
-  boost,
-  icu,
-  protobuf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, cmake
+, enableTests ? true
+, gtest
+, jre
+, pkg-config
+, boost
+, icu
+, protobuf
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

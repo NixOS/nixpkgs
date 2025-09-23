@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  joblib,
-  keras,
-  numpy,
-  pandas,
-  scikit-learn,
-  scipy,
-  tensorflow,
-  threadpoolctl,
-  pytestCheckHook,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, joblib
+, keras
+, numpy
+, pandas
+, scikit-learn
+, scipy
+, tensorflow
+, threadpoolctl
+, pytestCheckHook
+, python
+,
 }:
 
 buildPythonPackage rec {

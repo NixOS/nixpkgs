@@ -1,12 +1,12 @@
-{
-  buildPerlPackage,
-  exiftool,
-  fetchurl,
-  gitUpdater,
-  lib,
-  shortenPerlShebang,
-  stdenv,
-  testers,
+{ buildPerlPackage
+, exiftool
+, fetchurl
+, gitUpdater
+, lib
+, shortenPerlShebang
+, stdenv
+, testers
+,
 }:
 
 buildPerlPackage rec {

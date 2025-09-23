@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  qtModule,
-  qtdeclarative,
-  qtwebengine,
+{ lib
+, stdenv
+, qtModule
+, qtdeclarative
+, qtwebengine
+,
 }:
 
 qtModule {

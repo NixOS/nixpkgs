@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  gettext,
-  fetchurl,
-  python3,
-  meson,
-  ninja,
-  pkg-config,
-  gtk3,
-  glib,
-  gjs,
-  enableWebkit2gtk ? stdenv.hostPlatform.isLinux,
-  webkitgtk_4_1,
-  gobject-introspection,
-  wrapGAppsHook3,
-  itstool,
-  libxml2,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  gnome,
-  adwaita-icon-theme,
-  gdk-pixbuf,
-  libxslt,
-  gsettings-desktop-schemas,
+{ stdenv
+, lib
+, gettext
+, fetchurl
+, python3
+, meson
+, ninja
+, pkg-config
+, gtk3
+, glib
+, gjs
+, enableWebkit2gtk ? stdenv.hostPlatform.isLinux
+, webkitgtk_4_1
+, gobject-introspection
+, wrapGAppsHook3
+, itstool
+, libxml2
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, gnome
+, adwaita-icon-theme
+, gdk-pixbuf
+, libxslt
+, gsettings-desktop-schemas
+,
 }:
 
 stdenv.mkDerivation rec {

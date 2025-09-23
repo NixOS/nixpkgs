@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  cmake,
-  cython,
-  poetry-core,
-  setuptools,
-  numpy,
-  openjpeg,
-  pytestCheckHook,
-  pydicom,
-  pylibjpeg,
-  pylibjpeg-data,
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, cmake
+, cython
+, poetry-core
+, setuptools
+, numpy
+, openjpeg
+, pytestCheckHook
+, pydicom
+, pylibjpeg
+, pylibjpeg-data
+,
 }:
 
 buildPythonPackage rec {

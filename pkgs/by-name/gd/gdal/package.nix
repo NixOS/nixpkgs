@@ -1,85 +1,82 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  useMinimalFeatures ? false,
-  useArmadillo ? (!useMinimalFeatures),
-  useArrow ? (!useMinimalFeatures),
-  useHDF ? (!useMinimalFeatures),
-  useJava ? (!useMinimalFeatures),
-  useLibAvif ? (!useMinimalFeatures),
-  useLibHEIF ? (!useMinimalFeatures),
-  useLibJXL ? (!useMinimalFeatures),
-  useMysql ? (!useMinimalFeatures),
-  useNetCDF ? (!useMinimalFeatures),
-  usePoppler ? (!useMinimalFeatures),
-  usePostgres ? (!useMinimalFeatures),
-  useTiledb ?
-    (!useMinimalFeatures) && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64),
-
-  ant,
-  armadillo,
-  arrow-cpp,
-  bison,
-  brunsli,
-  c-blosc,
-  cfitsio,
-  cmake,
-  crunch,
-  cryptopp,
-  curl,
-  dav1d,
-  doxygen,
-  expat,
-  geos,
-  giflib,
-  graphviz,
-  gtest,
-  hdf4,
-  hdf5-cpp,
-  jdk,
-  json_c,
-  lerc,
-  libaom,
-  libavif,
-  libde265,
-  libdeflate,
-  libgeotiff,
-  libheif,
-  libhwy,
-  libiconv,
-  libjpeg,
-  libjxl,
-  libmysqlclient,
-  libpq,
-  libpng,
-  libspatialite,
-  libtiff,
-  libwebp,
-  libxml2,
-  lz4,
-  netcdf,
-  openexr,
-  openjpeg,
-  openssl,
-  pcre2,
-  pkg-config,
-  poppler,
-  proj,
-  python3,
-  qhull,
-  rav1e,
-  sqlite,
-  swig,
-  tiledb,
-  x265,
-  xercesc,
-  xz,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, fetchpatch
+, useMinimalFeatures ? false
+, useArmadillo ? (!useMinimalFeatures)
+, useArrow ? (!useMinimalFeatures)
+, useHDF ? (!useMinimalFeatures)
+, useJava ? (!useMinimalFeatures)
+, useLibAvif ? (!useMinimalFeatures)
+, useLibHEIF ? (!useMinimalFeatures)
+, useLibJXL ? (!useMinimalFeatures)
+, useMysql ? (!useMinimalFeatures)
+, useNetCDF ? (!useMinimalFeatures)
+, usePoppler ? (!useMinimalFeatures)
+, usePostgres ? (!useMinimalFeatures)
+, useTiledb ? (!useMinimalFeatures) && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
+, ant
+, armadillo
+, arrow-cpp
+, bison
+, brunsli
+, c-blosc
+, cfitsio
+, cmake
+, crunch
+, cryptopp
+, curl
+, dav1d
+, doxygen
+, expat
+, geos
+, giflib
+, graphviz
+, gtest
+, hdf4
+, hdf5-cpp
+, jdk
+, json_c
+, lerc
+, libaom
+, libavif
+, libde265
+, libdeflate
+, libgeotiff
+, libheif
+, libhwy
+, libiconv
+, libjpeg
+, libjxl
+, libmysqlclient
+, libpq
+, libpng
+, libspatialite
+, libtiff
+, libwebp
+, libxml2
+, lz4
+, netcdf
+, openexr
+, openjpeg
+, openssl
+, pcre2
+, pkg-config
+, poppler
+, proj
+, python3
+, qhull
+, rav1e
+, sqlite
+, swig
+, tiledb
+, x265
+, xercesc
+, xz
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

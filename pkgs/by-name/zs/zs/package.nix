@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitea,
-  buildGoModule,
-  installShellFiles,
+{ lib
+, fetchFromGitea
+, buildGoModule
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

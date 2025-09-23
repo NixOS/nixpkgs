@@ -1,13 +1,12 @@
 # This module exposes options to build a disk image with a GUID Partition Table
 # (GPT). It uses systemd-repart to build the image.
 
-{
-  config,
-  options,
-  pkgs,
-  lib,
-  utils,
-  ...
+{ config
+, options
+, pkgs
+, lib
+, utils
+, ...
 }:
 
 let
@@ -81,10 +80,12 @@ let
 
   mkfsOptionsToEnv =
     opts:
-    lib.mapAttrs' (fsType: options: {
-      name = "SYSTEMD_REPART_MKFS_OPTIONS_${lib.toUpper fsType}";
-      value = builtins.concatStringsSep " " options;
-    }) opts;
+    lib.mapAttrs'
+      (fsType: options: {
+        name = "SYSTEMD_REPART_MKFS_OPTIONS_${lib.toUpper fsType}";
+        value = builtins.concatStringsSep " " options;
+      })
+      opts;
 in
 {
   imports = [
@@ -297,8 +298,7 @@ in
               "zstd" = ".zst";
               "xz" = ".xz";
               "zstd-seekable" = ".zst";
-            }
-            ."${cfg.compression.algorithm}";
+            }."${cfg.compression.algorithm}";
 
       in
       "raw" + compressionSuffix;
@@ -328,51 +328,54 @@ in
                 "zstd" = 3;
                 "xz" = 3;
                 "zstd-seekable" = 3;
-              }
-              ."${cfg.compression.algorithm}";
+              }."${cfg.compression.algorithm}";
         };
 
         finalPartitions = lib.mapAttrs addClosure cfg.partitions;
 
-        assertions = lib.mapAttrsToList (
-          fileName: partitionConfig:
-          let
-            inherit (partitionConfig) repartConfig;
-            labelLength = builtins.stringLength repartConfig.Label;
-          in
-          {
-            assertion = repartConfig ? Label -> GPTMaxLabelLength >= labelLength;
-            message = ''
-              The partition label '${repartConfig.Label}'
-              defined for '${fileName}' is ${toString labelLength} characters long,
-              but the maximum label length supported by UEFI is ${toString GPTMaxLabelLength}.
-            '';
-          }
-        ) cfg.partitions;
+        assertions = lib.mapAttrsToList
+          (
+            fileName: partitionConfig:
+              let
+                inherit (partitionConfig) repartConfig;
+                labelLength = builtins.stringLength repartConfig.Label;
+              in
+              {
+                assertion = repartConfig ? Label -> GPTMaxLabelLength >= labelLength;
+                message = ''
+                  The partition label '${repartConfig.Label}'
+                  defined for '${fileName}' is ${toString labelLength} characters long,
+                  but the maximum label length supported by UEFI is ${toString GPTMaxLabelLength}.
+                '';
+              }
+          )
+          cfg.partitions;
 
         warnings = lib.filter (v: v != null) (
-          lib.mapAttrsToList (
-            fileName: partitionConfig:
-            let
-              inherit (partitionConfig) repartConfig;
-              suggestedMaxLabelLength = GPTMaxLabelLength - 2;
-              labelLength = builtins.stringLength repartConfig.Label;
-            in
-            if (repartConfig ? Label && labelLength >= suggestedMaxLabelLength) then
-              ''
-                The partition label '${repartConfig.Label}'
-                defined for '${fileName}' is ${toString labelLength} characters long.
-                The suggested maximum label length is ${toString suggestedMaxLabelLength}.
+          lib.mapAttrsToList
+            (
+              fileName: partitionConfig:
+                let
+                  inherit (partitionConfig) repartConfig;
+                  suggestedMaxLabelLength = GPTMaxLabelLength - 2;
+                  labelLength = builtins.stringLength repartConfig.Label;
+                in
+                if (repartConfig ? Label && labelLength >= suggestedMaxLabelLength) then
+                  ''
+                    The partition label '${repartConfig.Label}'
+                    defined for '${fileName}' is ${toString labelLength} characters long.
+                    The suggested maximum label length is ${toString suggestedMaxLabelLength}.
 
-                If you use sytemd-sysupdate style A/B updates, this might
-                not leave enough space to increment the version number included in
-                the label in a future release. For example, if your label is
-                ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
-                you're at version 9, you cannot increment this to 10.
-              ''
-            else
-              null
-          ) cfg.partitions
+                    If you use sytemd-sysupdate style A/B updates, this might
+                    not leave enough space to increment the version number included in
+                    the label in a future release. For example, if your label is
+                    ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
+                    you're at version 9, you cannot increment this to 10.
+                  ''
+                else
+                  null
+            )
+            cfg.partitions
         );
       };
 

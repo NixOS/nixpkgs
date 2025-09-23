@@ -1,10 +1,10 @@
-{
-  lib,
-  atf,
-  gperf,
-  mkAppleDerivation,
-  pkg-config,
-  stdenv,
+{ lib
+, atf
+, gperf
+, mkAppleDerivation
+, pkg-config
+, stdenv
+,
 }:
 
 let

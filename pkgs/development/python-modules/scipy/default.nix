@@ -1,46 +1,41 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  writeText,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  cython,
-  gfortran,
-  meson-python,
-  nukeReferences,
-  pythran,
-  pkg-config,
-  setuptools,
-  xcbuild,
-
-  # buildInputs
+{ lib
+, stdenv
+, fetchurl
+, writeText
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  cython
+, gfortran
+, meson-python
+, nukeReferences
+, pythran
+, pkg-config
+, setuptools
+, xcbuild
+, # buildInputs
   # Upstream has support for using Darwin's Accelerate package. However this
   # requires a Darwin user to work on a nice way to do that via an override.
   # See:
   # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L194-L211
-  blas,
-  lapack,
-  pybind11,
-  pooch,
-  xsimd,
-  boost188,
-  qhull,
-
-  # dependencies
-  numpy,
-
-  # tests
-  hypothesis,
-  pytestCheckHook,
-  pytest-xdist,
-
-  # Reverse dependency
-  sage,
+  blas
+, lapack
+, pybind11
+, pooch
+, xsimd
+, boost188
+, qhull
+, # dependencies
+  numpy
+, # tests
+  hypothesis
+, pytestCheckHook
+, pytest-xdist
+, # Reverse dependency
+  sage
+,
 }:
 
 let
@@ -57,13 +52,15 @@ let
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
     face = "11i8x29h80y7hhyqhil1fg8mxag5f827g33lhnsf44qk116hp2wx";
   };
-  datasets = lib.mapAttrs (
-    d: hash:
-    fetchurl {
-      url = "https://raw.githubusercontent.com/scipy/dataset-${d}/main/${d}.dat";
-      sha256 = hash;
-    }
-  ) datasetsHashes;
+  datasets = lib.mapAttrs
+    (
+      d: hash:
+        fetchurl {
+          url = "https://raw.githubusercontent.com/scipy/dataset-${d}/main/${d}.dat";
+          sha256 = hash;
+        }
+    )
+    datasetsHashes;
   # Additional cross compilation related properties that scipy reads in scipy/meson.build
   crossFileScipy = writeText "cross-file-scipy.conf" ''
     [properties]
@@ -175,11 +172,13 @@ buildPythonPackage {
     export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
   ''
   + (lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (
-      d: dpath:
-      # Actually copy the datasets
-      "cp ${dpath} scipy-data/${d}.dat"
-    ) datasets
+    lib.mapAttrsToList
+      (
+        d: dpath:
+          # Actually copy the datasets
+          "cp ${dpath} scipy-data/${d}.dat"
+      )
+      datasets
   ));
 
   mesonFlags = [

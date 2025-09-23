@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  copyDesktopItems,
-  makeDesktopItem,
-  libicns,
-
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-
-  git,
-  xdg-utils,
-
-  nix-update-script,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, copyDesktopItems
+, makeDesktopItem
+, libicns
+, libXcursor
+, libXext
+, libXi
+, libXrandr
+, git
+, xdg-utils
+, nix-update-script
+,
 }:
 
 buildDotnetModule (finalAttrs: {

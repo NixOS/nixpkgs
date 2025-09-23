@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  chardet,
-  click,
-  flex,
-  packaging,
-  pyicu,
-  requests,
-  ruamel-yaml,
-  setuptools-scm,
-  six,
-  swagger-spec-validator,
-  pytest-cov-stub,
-  pytestCheckHook,
-  openapi-spec-validator,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, chardet
+, click
+, flex
+, packaging
+, pyicu
+, requests
+, ruamel-yaml
+, setuptools-scm
+, six
+, swagger-spec-validator
+, pytest-cov-stub
+, pytestCheckHook
+, openapi-spec-validator
+,
 }:
 
 buildPythonPackage rec {

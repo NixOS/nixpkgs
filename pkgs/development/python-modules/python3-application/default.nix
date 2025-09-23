@@ -1,11 +1,11 @@
-{
-  lib,
-  isPy3k,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  zope-interface,
-  twisted,
+{ lib
+, isPy3k
+, buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, zope-interface
+, twisted
+,
 }:
 
 buildPythonPackage rec {

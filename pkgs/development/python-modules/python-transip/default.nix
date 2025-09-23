@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  requests,
-  cryptography,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, requests
+, cryptography
+, responses
+,
 }:
 buildPythonPackage rec {
   pname = "python-transip";

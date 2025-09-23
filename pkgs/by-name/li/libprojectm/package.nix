@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libGL,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGL
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

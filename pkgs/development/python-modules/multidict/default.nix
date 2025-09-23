@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  objgraph,
-  psutil,
-  pytestCheckHook,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildPythonPackage
+, objgraph
+, psutil
+, pytestCheckHook
+, pytest-codspeed
+, pytest-cov-stub
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

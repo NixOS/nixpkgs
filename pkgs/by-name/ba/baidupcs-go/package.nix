@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  buildGoModule,
-  lib,
-  versionCheckHook,
+{ fetchFromGitHub
+, buildGoModule
+, lib
+, versionCheckHook
+,
 }:
 
 buildGoModule rec {

@@ -13,12 +13,11 @@
 # 2. Configure your DE to ignore input events from buffyboard (product-id=25209; vendor-id=26214; name=rd)
 #   e.g. `echo 'input "26214:25209:rd" events disabled' > ~/.config/sway/config`
 
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
   cfg = config.services.buffyboard;

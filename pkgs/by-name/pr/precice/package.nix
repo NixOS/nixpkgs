@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  eigen,
-  libxml2,
-  mpi,
-  python3Packages,
-  petsc,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, eigen
+, libxml2
+, mpi
+, python3Packages
+, petsc
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

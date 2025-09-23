@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  mirage-time,
-  lwt,
-  duration,
+{ buildDunePackage
+, mirage-time
+, lwt
+, duration
+,
 }:
 
 buildDunePackage {

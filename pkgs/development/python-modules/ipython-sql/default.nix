@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  ipython,
-  ipython-genutils,
-  prettytable,
-  sqlalchemy,
-  sqlparse,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, ipython
+, ipython-genutils
+, prettytable
+, sqlalchemy
+, sqlparse
+,
 }:
 buildPythonPackage rec {
   pname = "ipython-sql";

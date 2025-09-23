@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  attr,
-  acl,
-  libcap,
-  liburing,
-  oniguruma,
+{ lib
+, stdenv
+, fetchFromGitHub
+, attr
+, acl
+, libcap
+, liburing
+, oniguruma
+,
 }:
 
 stdenv.mkDerivation rec {

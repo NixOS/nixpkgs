@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  cmake,
-  cups,
+{ stdenv
+, lib
+, fetchzip
+, cmake
+, cups
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  dask,
-  distributed,
-  mpi4py,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, dask
+, distributed
+, mpi4py
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

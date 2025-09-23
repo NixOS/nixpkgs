@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nodejs,
-  pnpm_9,
-  testers,
-  shadcn,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeBinaryWrapper
+, nodejs
+, pnpm_9
+, testers
+, shadcn
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

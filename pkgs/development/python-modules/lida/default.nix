@@ -1,33 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  altair,
-  fastapi,
-  geopandas,
-  kaleido,
-  llmx,
-  matplotlib,
-  matplotlib-venn,
-  networkx,
-  numpy,
-  pandas,
-  plotly,
-  plotnine,
-  pydantic,
-  python-multipart,
-  scipy,
-  seaborn,
-  statsmodels,
-  typer,
-  uvicorn,
-  wordcloud,
-  peacasso,
-  basemap,
-  basemap-data-hires,
-  geopy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, altair
+, fastapi
+, geopandas
+, kaleido
+, llmx
+, matplotlib
+, matplotlib-venn
+, networkx
+, numpy
+, pandas
+, plotly
+, plotnine
+, pydantic
+, python-multipart
+, scipy
+, seaborn
+, statsmodels
+, typer
+, uvicorn
+, wordcloud
+, peacasso
+, basemap
+, basemap-data-hires
+, geopy
+,
 }:
 
 buildPythonPackage rec {

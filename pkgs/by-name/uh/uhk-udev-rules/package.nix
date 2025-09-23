@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  uhk-agent,
-  udevCheckHook,
+{ lib
+, stdenv
+, uhk-agent
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation {

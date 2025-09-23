@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  celery,
-  cron-descriptor,
-  django-timezone-field,
-  ephem,
-  fetchFromGitHub,
-  pytest-django,
-  pytest-timeout,
-  pytestCheckHook,
-  python-crontab,
-  pythonOlder,
-  setuptools,
-  tzdata,
+{ lib
+, buildPythonPackage
+, celery
+, cron-descriptor
+, django-timezone-field
+, ephem
+, fetchFromGitHub
+, pytest-django
+, pytest-timeout
+, pytestCheckHook
+, python-crontab
+, pythonOlder
+, setuptools
+, tzdata
+,
 }:
 
 buildPythonPackage rec {

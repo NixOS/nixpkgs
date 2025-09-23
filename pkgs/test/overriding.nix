@@ -1,7 +1,7 @@
-{
-  lib,
-  pkgs,
-  stdenvNoCC,
+{ lib
+, pkgs
+, stdenvNoCC
+,
 }:
 
 let
@@ -73,11 +73,10 @@ let
         ];
         extendDrvArgs =
           finalAttrs:
-          {
-            preferLocalBuild ? true,
-            allowSubstitute ? false,
-            specialArg ? (_: false),
-            ...
+          { preferLocalBuild ? true
+          , allowSubstitute ? false
+          , specialArg ? (_: false)
+          , ...
           }@args:
           {
             inherit preferLocalBuild allowSubstitute;
@@ -315,8 +314,10 @@ stdenvNoCC.mkDerivation {
   buildCommand = ''
     touch $out
   ''
-  + lib.concatMapAttrsStringSep "\n" (
-    name: t:
-    "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
-  ) tests;
+  + lib.concatMapAttrsStringSep "\n"
+    (
+      name: t:
+        "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
+    )
+    tests;
 }

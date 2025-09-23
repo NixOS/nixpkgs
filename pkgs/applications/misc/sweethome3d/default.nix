@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchzip,
-  stdenv,
-  callPackage,
+{ lib
+, fetchzip
+, stdenv
+, callPackage
+,
 }:
 
 let
@@ -39,15 +39,16 @@ in
 {
   application =
     if stdenv.hostPlatform.isDarwin then
-      callPackage ./darwin.nix {
-        inherit
-          pname
-          version
-          src
-          meta
-          patches
-          ;
-      }
+      callPackage ./darwin.nix
+        {
+          inherit
+            pname
+            version
+            src
+            meta
+            patches
+            ;
+        }
     else
       callPackage ./linux.nix {
         inherit

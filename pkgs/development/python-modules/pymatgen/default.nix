@@ -1,54 +1,49 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # nativeBuildInputs
-  cython,
-  glibcLocales,
-
-  # dependencies
-  bibtexparser,
-  joblib,
-  matplotlib,
-  monty,
-  networkx,
-  numpy,
-  orjson,
-  palettable,
-  pandas,
-  plotly,
-  pybtex,
-  requests,
-  ruamel-yaml,
-  scipy,
-  spglib,
-  sympy,
-  tabulate,
-  tqdm,
-  uncertainties,
-
-  # optional-dependencies
-  netcdf4,
-  ase,
-  pytest,
-  pytest-cov,
-  invoke,
-  sphinx,
-  sphinx-rtd-theme,
-  numba,
-  vtk,
-
-  # tests
-  addBinToPathHook,
-  moyopy,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # nativeBuildInputs
+  cython
+, glibcLocales
+, # dependencies
+  bibtexparser
+, joblib
+, matplotlib
+, monty
+, networkx
+, numpy
+, orjson
+, palettable
+, pandas
+, plotly
+, pybtex
+, requests
+, ruamel-yaml
+, scipy
+, spglib
+, sympy
+, tabulate
+, tqdm
+, uncertainties
+, # optional-dependencies
+  netcdf4
+, ase
+, pytest
+, pytest-cov
+, invoke
+, sphinx
+, sphinx-rtd-theme
+, numba
+, vtk
+, # tests
+  addBinToPathHook
+, moyopy
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

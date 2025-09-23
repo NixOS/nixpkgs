@@ -1,11 +1,11 @@
-{
-  fetchCrate,
-  installShellFiles,
-  lib,
-  libbsd,
-  pkg-config,
-  rustPlatform,
-  stdenv,
+{ fetchCrate
+, installShellFiles
+, lib
+, libbsd
+, pkg-config
+, rustPlatform
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

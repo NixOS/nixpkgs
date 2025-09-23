@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  pytestCheckHook,
-  future,
-  imageio,
-  numpy,
-  pandas,
-  torch,
-  tensorboard,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, pytestCheckHook
+, future
+, imageio
+, numpy
+, pandas
+, torch
+, tensorboard
+,
 }:
 
 buildPythonPackage rec {

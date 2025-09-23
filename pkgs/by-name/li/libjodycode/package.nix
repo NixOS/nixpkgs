@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  jdupes,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchFromGitea
+, jdupes
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

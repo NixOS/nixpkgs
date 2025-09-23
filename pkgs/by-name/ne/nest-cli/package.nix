@@ -1,8 +1,8 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  lib,
-  python3,
+{ buildNpmPackage
+, fetchFromGitHub
+, lib
+, python3
+,
 }:
 
 buildNpmPackage rec {

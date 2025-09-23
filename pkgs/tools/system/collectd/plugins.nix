@@ -1,51 +1,50 @@
-{
-  lib,
-  stdenv,
-  curl,
-  hiredis,
-  iptables,
-  jdk,
-  libatasmart,
-  libdbi,
-  libesmtp,
-  libgcrypt,
-  libmemcached,
-  cyrus_sasl,
-  libmodbus,
-  libmicrohttpd,
-  libmnl,
-  libmysqlclient,
-  libnotify,
-  gdk-pixbuf,
-  liboping,
-  libpcap,
-  libpq,
-  libsigrok,
-  libvirt,
-  libxml2,
-  lua,
-  lvm2,
-  lm_sensors,
-  mongoc,
-  mosquitto,
-  net-snmp,
-  openldap,
-  openipmi,
-  perl,
-  protobufc,
-  python3,
-  rabbitmq-c,
-  rdkafka,
-  riemann_c_client,
-  rrdtool,
-  udev,
-  varnish,
-  xen,
-  yajl,
-  # Defaults to `null` for all supported plugins (except xen, which is marked as
+{ lib
+, stdenv
+, curl
+, hiredis
+, iptables
+, jdk
+, libatasmart
+, libdbi
+, libesmtp
+, libgcrypt
+, libmemcached
+, cyrus_sasl
+, libmodbus
+, libmicrohttpd
+, libmnl
+, libmysqlclient
+, libnotify
+, gdk-pixbuf
+, liboping
+, libpcap
+, libpq
+, libsigrok
+, libvirt
+, libxml2
+, lua
+, lvm2
+, lm_sensors
+, mongoc
+, mosquitto
+, net-snmp
+, openldap
+, openipmi
+, perl
+, protobufc
+, python3
+, rabbitmq-c
+, rdkafka
+, riemann_c_client
+, rrdtool
+, udev
+, varnish
+, xen
+, yajl
+, # Defaults to `null` for all supported plugins (except xen, which is marked as
   # insecure), otherwise a list of plugin names for a custom build
-  enabledPlugins ? null,
-  ...
+  enabledPlugins ? null
+, ...
 }:
 
 let
@@ -186,15 +185,18 @@ let
 
   pluginBuildInputs =
     plugin:
-    lib.optionals (
-      plugins ? ${plugin} && plugins.${plugin} ? buildInputs
-    ) plugins.${plugin}.buildInputs;
+    lib.optionals
+      (
+        plugins ? ${plugin} && plugins.${plugin} ? buildInputs
+      )
+      plugins.${plugin}.buildInputs;
 
   buildInputs =
     if enabledPlugins == null then
-      builtins.concatMap pluginBuildInputs (
-        builtins.attrNames (builtins.removeAttrs plugins [ "xencpu" ])
-      )
+      builtins.concatMap pluginBuildInputs
+        (
+          builtins.attrNames (builtins.removeAttrs plugins [ "xencpu" ])
+        )
     else
       builtins.concatMap pluginBuildInputs enabledPlugins;
 in

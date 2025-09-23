@@ -1,44 +1,42 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  cmake,
-  pkg-config,
-  catch2_3,
-  qtbase,
-  qtsvg,
-  qttools,
-  qtwayland,
-  qwt,
-  qscintilla,
-  kissfftFloat,
-  crossguid,
-  reproc,
-  platform-folders,
-  ruby_3_2,
-  erlang,
-  elixir,
-  beamPackages,
-  alsa-lib,
-  rtmidi,
-  boost,
-  aubio,
-  jack2,
-  jack-example-tools,
-  pipewire,
-  supercollider-with-sc3-plugins,
-  parallel,
-
-  withTauWidget ? false,
-  qtwebengine,
-
-  withImGui ? false,
-  gl3w,
-  SDL2,
-  fmt,
+{ stdenv
+, lib
+, fetchFromGitHub
+, wrapQtAppsHook
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, pkg-config
+, catch2_3
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
+, qwt
+, qscintilla
+, kissfftFloat
+, crossguid
+, reproc
+, platform-folders
+, ruby_3_2
+, erlang
+, elixir
+, beamPackages
+, alsa-lib
+, rtmidi
+, boost
+, aubio
+, jack2
+, jack-example-tools
+, pipewire
+, supercollider-with-sc3-plugins
+, parallel
+, withTauWidget ? false
+, qtwebengine
+, withImGui ? false
+, gl3w
+, SDL2
+, fmt
+,
 }:
 
 # Sonic Pi fails to build with Ruby 3.3.

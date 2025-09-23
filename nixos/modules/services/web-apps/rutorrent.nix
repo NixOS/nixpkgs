@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -290,10 +289,11 @@ in
                 user = cfg.user;
                 group = config.services.rtorrent.group;
                 settings =
-                  mapAttrs (name: mkDefault) {
-                    "listen.owner" = config.services.nginx.user;
-                    "listen.group" = config.services.nginx.group;
-                  }
+                  mapAttrs (name: mkDefault)
+                    {
+                      "listen.owner" = config.services.nginx.user;
+                      "listen.group" = config.services.nginx.group;
+                    }
                   // cfg.poolSettings;
               };
             in

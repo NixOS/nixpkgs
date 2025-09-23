@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  aiohttp,
-  aiohttp-retry,
-  pythonOlder,
-  pyjwt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, aiohttp
+, aiohttp-retry
+, pythonOlder
+, pyjwt
+,
 }:
 
 buildPythonPackage rec {

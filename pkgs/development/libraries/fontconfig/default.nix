@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  python3,
-  freetype,
-  expat,
-  libxslt,
-  gperf,
-  dejavu_fonts,
-  autoreconfHook,
-  versionCheckHook,
-  testers,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, python3
+, freetype
+, expat
+, libxslt
+, gperf
+, dejavu_fonts
+, autoreconfHook
+, versionCheckHook
+, testers
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

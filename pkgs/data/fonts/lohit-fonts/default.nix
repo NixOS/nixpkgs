@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
+{ lib
+, stdenvNoCC
+, fetchurl
+,
 }:
 let
   fonts = {
@@ -97,10 +97,10 @@ let
 
   mkpkg =
     license: pname:
-    {
-      label,
-      version,
-      hash,
+    { label
+    , version
+    , hash
+    ,
     }:
     stdenvNoCC.mkDerivation {
       inherit pname version;

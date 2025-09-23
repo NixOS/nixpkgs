@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  bleak,
-  pycayennelpp,
-  pyserial-asyncio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, # dependencies
+  bleak
+, pycayennelpp
+, pyserial-asyncio
+,
 }:
 
 buildPythonPackage rec {

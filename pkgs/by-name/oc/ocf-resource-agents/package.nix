@@ -1,18 +1,18 @@
 # This combines together OCF definitions from other derivations.
 # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
-{
-  stdenv,
-  lib,
-  runCommand,
-  lndir,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  python3,
-  glib,
-  drbd,
-  pacemaker,
+{ stdenv
+, lib
+, runCommand
+, lndir
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, python3
+, glib
+, drbd
+, pacemaker
+,
 }:
 
 let
@@ -76,19 +76,19 @@ let
 in
 
 # This combines together OCF definitions from other derivations.
-# https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
+  # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
 runCommand "ocf-resource-agents"
-  {
-    # Fix derivation location so things like
-    #   $ nix edit -f. ocf-resource-agents
-    # just work.
-    pos = builtins.unsafeGetAttrPos "version" resource-agentsForOCF;
+{
+  # Fix derivation location so things like
+  #   $ nix edit -f. ocf-resource-agents
+  # just work.
+  pos = builtins.unsafeGetAttrPos "version" resource-agentsForOCF;
 
-    # Useful to build and undate inputs individually:
-    passthru.inputs = {
-      inherit resource-agentsForOCF drbdForOCF pacemakerForOCF;
-    };
-  }
+  # Useful to build and undate inputs individually:
+  passthru.inputs = {
+    inherit resource-agentsForOCF drbdForOCF pacemakerForOCF;
+  };
+}
   ''
     mkdir -p $out/usr/lib/ocf
     ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf

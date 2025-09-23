@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  dart,
-  dartHooks,
-  jq,
-  yq,
-  cacert,
+{ lib
+, stdenvNoCC
+, dart
+, dartHooks
+, jq
+, yq
+, cacert
+,
 }:
 
 {
@@ -13,8 +13,8 @@
   # Passing these is recommended to ensure that the same steps are made to
   # prepare the sources in both this derivation and the one that builds the Dart
   # package.
-  buildDrvArgs ? { },
-  ...
+  buildDrvArgs ? { }
+, ...
 }@args:
 
 # This is a derivation and setup hook that can be used to fetch dependencies for Dart projects.
@@ -39,19 +39,22 @@ let
     "postPatch"
   ];
 
-  buildDrvInheritArgs = builtins.foldl' (
-    attrs: arg: if buildDrvArgs ? ${arg} then attrs // { ${arg} = buildDrvArgs.${arg}; } else attrs
-  ) { } buildDrvInheritArgNames;
+  buildDrvInheritArgs = builtins.foldl'
+    (
+      attrs: arg: if buildDrvArgs ? ${arg} then attrs // { ${arg} = buildDrvArgs.${arg}; } else attrs
+    )
+    { }
+    buildDrvInheritArgNames;
 
   drvArgs = buildDrvInheritArgs // (removeAttrs args [ "buildDrvArgs" ]);
   name = (if drvArgs ? name then drvArgs.name else "${drvArgs.pname}-${drvArgs.version}");
 
   # Adds the root package to a dependency package_config.json file from pub2nix.
   linkPackageConfig =
-    {
-      pubspecLock,
-      packageConfig,
-      extraSetupCommands ? "",
+    { pubspecLock
+    , packageConfig
+    , extraSetupCommands ? ""
+    ,
     }:
     stdenvNoCC.mkDerivation (
       drvArgs
@@ -77,7 +80,7 @@ let
               else if pubspecLock.sdks.dart == "any" then
                 "null"
               else
-                # https://github.com/dart-lang/pub/blob/15b96589066884300a30bdc356566f3398794857/lib/src/language_version.dart#L109
+              # https://github.com/dart-lang/pub/blob/15b96589066884300a30bdc356566f3398794857/lib/src/language_version.dart#L109
                 "2.7";
           in
           ''

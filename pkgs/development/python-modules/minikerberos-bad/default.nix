@@ -1,17 +1,17 @@
-{
-  lib,
-  asn1crypto,
-  asysocks,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  fetchPypi,
-  oscrypto,
-  pythonOlder,
-  setuptools,
-  six,
-  tqdm,
-  unicrypto,
+{ lib
+, asn1crypto
+, asysocks
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, fetchPypi
+, oscrypto
+, pythonOlder
+, setuptools
+, six
+, tqdm
+, unicrypto
+,
 }:
 
 buildPythonPackage rec {

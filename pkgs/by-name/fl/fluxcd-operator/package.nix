@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+, stdenv
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "fluxcd-operator";

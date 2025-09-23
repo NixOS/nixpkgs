@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  patchelf,
-  libusb-compat-0_1,
+{ lib
+, stdenv
+, fetchurl
+, patchelf
+, libusb-compat-0_1
+,
 }:
 
 assert stdenv ? cc && stdenv.cc.libc != null;

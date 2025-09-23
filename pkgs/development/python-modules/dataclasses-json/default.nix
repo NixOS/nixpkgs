@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  marshmallow,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pytestCheckHook,
-  pythonOlder,
-  typing-inspect,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, marshmallow
+, poetry-core
+, poetry-dynamic-versioning
+, pytestCheckHook
+, pythonOlder
+, typing-inspect
+,
 }:
 
 buildPythonPackage rec {

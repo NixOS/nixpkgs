@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  release_version,
-  cmake,
-  zlib,
-  ncurses,
-  swig,
-  which,
-  libedit,
-  libxml2,
-  libllvm,
-  libclang,
-  python3,
-  version,
-  darwin,
-  lit,
-  makeWrapper,
-  lua5_3,
-  ninja,
-  runCommand,
-  src ? null,
-  monorepoSrc ? null,
-  enableManpages ? false,
-  devExtraCmakeFlags ? [ ],
-  getVersionFile,
-  fetchpatch,
-  fetchpatch2,
-  replaceVars,
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, cmake
+, zlib
+, ncurses
+, swig
+, which
+, libedit
+, libxml2
+, libllvm
+, libclang
+, python3
+, version
+, darwin
+, lit
+, makeWrapper
+, lua5_3
+, ninja
+, runCommand
+, src ? null
+, monorepoSrc ? null
+, enableManpages ? false
+, devExtraCmakeFlags ? [ ]
+, getVersionFile
+, fetchpatch
+, fetchpatch2
+, replaceVars
+,
 }:
 
 let
@@ -46,17 +46,18 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/lldb "$out"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
-            mkdir -p "$out/llvm"
-            cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
-          ''
-        )
+        runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/lldb "$out"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+              mkdir -p "$out/llvm"
+              cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+            ''
+          )
       else
         src;
 
@@ -181,7 +182,7 @@ stdenv.mkDerivation (
       mainProgram = "lldb";
     };
   }
-  // lib.optionalAttrs enableManpages {
+    // lib.optionalAttrs enableManpages {
     pname = "lldb-manpages";
 
     # TODO: Remove on `staging`.

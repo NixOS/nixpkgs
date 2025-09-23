@@ -1,15 +1,15 @@
-{
-  curl,
-  fetchFromGitHub,
-  git,
-  jq,
-  lib,
-  nix-update,
-  nodejs,
-  pnpm_10,
-  stdenv,
-  writeShellScript,
-  buildWebExtension ? false,
+{ curl
+, fetchFromGitHub
+, git
+, jq
+, lib
+, nix-update
+, nodejs
+, pnpm_10
+, stdenv
+, writeShellScript
+, buildWebExtension ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

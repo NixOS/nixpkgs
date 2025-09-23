@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  perl,
-  installShellFiles,
-  fetchFromBitbucket,
+{ lib
+, stdenvNoCC
+, perl
+, installShellFiles
+, fetchFromBitbucket
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

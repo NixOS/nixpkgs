@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  pytest,
-  spacy-models,
+{ lib
+, stdenv
+, pytest
+, spacy-models
+,
 }:
 
 stdenv.mkDerivation {

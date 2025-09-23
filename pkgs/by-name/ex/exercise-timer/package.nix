@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  appstream-glib,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitHub,
-  glib,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, alsa-lib
+, appstream-glib
+, cargo
+, desktop-file-utils
+, fetchFromGitHub
+, glib
+, gtk4
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

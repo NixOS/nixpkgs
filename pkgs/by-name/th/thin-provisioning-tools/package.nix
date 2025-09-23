@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  pkg-config,
-  udev,
-  lvm2,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, rustPlatform
+, pkg-config
+, udev
+, lvm2
+, fetchFromGitHub
+, nixosTests
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "thin-provisioning-tools";

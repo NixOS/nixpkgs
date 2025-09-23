@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build time
-  pdm-backend,
-
-  # runtime
-  packaging,
-  platformdirs,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build time
+  pdm-backend
+, # runtime
+  packaging
+, platformdirs
+, # tests
+  pytestCheckHook
+,
 }:
 
 let

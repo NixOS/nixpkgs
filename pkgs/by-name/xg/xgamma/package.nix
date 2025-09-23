@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libxxf86vm,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libx11
+, libxxf86vm
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xgamma";

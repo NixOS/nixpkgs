@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-  dbus,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+, dbus
+,
 }:
 
 buildGo125Module (finalAttrs: {

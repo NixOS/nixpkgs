@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  dolmen,
-  dolmen_loop,
-  dolmen_type,
-  linol,
-  linol-lwt,
-  logs,
-  lsp,
+{ lib
+, buildDunePackage
+, dolmen
+, dolmen_loop
+, dolmen_type
+, linol
+, linol-lwt
+, logs
+, lsp
+,
 }:
 
 buildDunePackage {

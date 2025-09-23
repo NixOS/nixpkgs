@@ -1,10 +1,10 @@
-{
-  fetchzip,
-  gitUpdater,
-  installShellFiles,
-  lib,
-  stdenv,
-  versionCheckHook,
+{ fetchzip
+, gitUpdater
+, installShellFiles
+, lib
+, stdenv
+, versionCheckHook
+,
 }:
 
 let

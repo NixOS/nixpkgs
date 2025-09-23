@@ -1,26 +1,26 @@
-{
-  fetchFromGitHub,
-  glib,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  lib,
-  stdenv,
-  wrapGAppsHook3,
-  libxmlb,
-  gtk3,
-  gvfs,
-  cinnamon-desktop,
-  xapp,
-  libexif,
-  json-glib,
-  exempi,
-  intltool,
-  shared-mime-info,
-  cinnamon-translations,
-  libgsf,
-  python3,
+{ fetchFromGitHub
+, glib
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, lib
+, stdenv
+, wrapGAppsHook3
+, libxmlb
+, gtk3
+, gvfs
+, cinnamon-desktop
+, xapp
+, libexif
+, json-glib
+, exempi
+, intltool
+, shared-mime-info
+, cinnamon-translations
+, libgsf
+, python3
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  pkg-config,
-  installShellFiles,
-  libftdi1,
-  popt,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, pkg-config
+, installShellFiles
+, libftdi1
+, popt
+,
 }:
 
 stdenv.mkDerivation {

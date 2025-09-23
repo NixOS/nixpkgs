@@ -1,13 +1,13 @@
-{
-  mkDerivation,
-  include,
-  rpcgen,
-  flex,
-  byacc,
-  gencat,
-  csu,
-  i18n,
-  extraSrc ? [ ],
+{ mkDerivation
+, include
+, rpcgen
+, flex
+, byacc
+, gencat
+, csu
+, i18n
+, extraSrc ? [ ]
+,
 }:
 
 mkDerivation {

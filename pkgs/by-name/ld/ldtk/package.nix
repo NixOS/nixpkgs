@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  unzip,
-  appimage-run,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, unzip
+, appimage-run
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  boost,
-  cmake,
-  ninja,
-  pkg-config,
-  sqlite,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, boost
+, cmake
+, ninja
+, pkg-config
+, sqlite
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

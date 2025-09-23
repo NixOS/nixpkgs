@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  pydantic,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-oauthlib,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pydantic
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-oauthlib
+,
 }:
 
 buildPythonPackage rec {

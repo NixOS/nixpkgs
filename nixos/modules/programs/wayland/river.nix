@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -15,16 +14,17 @@ in
     enable = lib.mkEnableOption "river-classic, a dynamic tiling Wayland compositor";
 
     package =
-      lib.mkPackageOption pkgs "river-classic" {
-        nullable = true;
-        extraDescription = ''
-          If the package is not overridable with `xwaylandSupport`, then the module option
-          {option}`xwayland` will have no effect.
+      lib.mkPackageOption pkgs "river-classic"
+        {
+          nullable = true;
+          extraDescription = ''
+            If the package is not overridable with `xwaylandSupport`, then the module option
+            {option}`xwayland` will have no effect.
 
-          Set to `null` to not add any River package to your path.
-          This should be done if you want to use the Home Manager River module to install River.
-        '';
-      }
+            Set to `null` to not add any River package to your path.
+            This should be done if you want to use the Home Manager River module to install River.
+          '';
+        }
       // {
         apply =
           p:

@@ -1,7 +1,7 @@
-{
-  ip4,
-  ip6,
-  extraConfig,
+{ ip4
+, ip6
+, extraConfig
+,
 }:
 {
   imports = [

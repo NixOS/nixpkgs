@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  appdirs,
-  ecdsa,
-  httpx,
-  ms-cv,
-  pydantic,
-  pytest-asyncio_0,
-  pytestCheckHook,
-  respx,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, appdirs
+, ecdsa
+, httpx
+, ms-cv
+, pydantic
+, pytest-asyncio_0
+, pytestCheckHook
+, respx
+,
 }:
 
 buildPythonPackage rec {

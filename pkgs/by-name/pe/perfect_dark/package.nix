@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  sdl2-compat,
-  cmake,
-  libGL,
-  pkg-config,
-  python3,
-  zlib,
-  unstableGitUpdater,
-  romID ? "ntsc-final",
+{ lib
+, stdenv
+, fetchFromGitHub
+, sdl2-compat
+, cmake
+, libGL
+, pkg-config
+, python3
+, zlib
+, unstableGitUpdater
+, romID ? "ntsc-final"
+,
 }:
 let
   roms = [

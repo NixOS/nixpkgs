@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  cython,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  numpy,
-  scipy,
-  matplotlib,
-  networkx,
-  nibabel,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, cython
+, setuptools
+, setuptools-scm
+, wheel
+, numpy
+, scipy
+, matplotlib
+, networkx
+, nibabel
+,
 }:
 
 buildPythonPackage rec {

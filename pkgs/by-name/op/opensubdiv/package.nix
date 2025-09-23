@@ -1,19 +1,19 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  xorg,
-  libGLU,
-  libGL,
-  glew,
-  ocl-icd,
-  python3,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  openclSupport ? !cudaSupport,
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, xorg
+, libGLU
+, libGL
+, glew
+, ocl-icd
+, python3
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+, openclSupport ? !cudaSupport
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

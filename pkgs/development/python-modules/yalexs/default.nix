@@ -1,26 +1,26 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  aioresponses,
-  aiounittest,
-  buildPythonPackage,
-  ciso8601,
-  fetchFromGitHub,
-  freenub,
-  poetry-core,
-  propcache,
-  pyjwt,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-freezegun,
-  pytestCheckHook,
-  python-dateutil,
-  python-socketio,
-  pythonOlder,
-  requests-mock,
-  requests,
-  typing-extensions,
+{ lib
+, aiofiles
+, aiohttp
+, aioresponses
+, aiounittest
+, buildPythonPackage
+, ciso8601
+, fetchFromGitHub
+, freenub
+, poetry-core
+, propcache
+, pyjwt
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-freezegun
+, pytestCheckHook
+, python-dateutil
+, python-socketio
+, pythonOlder
+, requests-mock
+, requests
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

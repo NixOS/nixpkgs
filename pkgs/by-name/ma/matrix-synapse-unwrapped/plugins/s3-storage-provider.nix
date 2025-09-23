@@ -1,14 +1,14 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  humanize,
-  matrix-synapse-unwrapped,
-  pythonOlder,
-  tqdm,
-  twisted,
-  psycopg2,
+{ lib
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, humanize
+, matrix-synapse-unwrapped
+, pythonOlder
+, tqdm
+, twisted
+, psycopg2
+,
 }:
 
 buildPythonPackage rec {

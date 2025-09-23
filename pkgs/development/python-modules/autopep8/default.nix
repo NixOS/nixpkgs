@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  glibcLocales,
-  pycodestyle,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, glibcLocales
+, pycodestyle
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tomli
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
-  nodejs,
-  python3,
-  pkg-config,
-  sqlite,
-  zstd,
-  stdenv,
-  open-policy-agent,
-  cctools,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchNpmDeps
+, npmHooks
+, nodejs
+, python3
+, pkg-config
+, sqlite
+, zstd
+, stdenv
+, open-policy-agent
+, cctools
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

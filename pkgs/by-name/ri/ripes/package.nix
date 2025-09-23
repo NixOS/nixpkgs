@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  qt6,
-  cereal,
-  cmake,
-  python3,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, qt6
+, cereal
+, cmake
+, python3
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

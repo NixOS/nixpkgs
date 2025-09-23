@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pyrate-limiter,
-  pytestCheckHook,
-  pythonOlder,
-  requests-mock,
-  requests,
-  requests-cache,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pyrate-limiter
+, pytestCheckHook
+, pythonOlder
+, requests-mock
+, requests
+, requests-cache
+,
 }:
 
 buildPythonPackage rec {

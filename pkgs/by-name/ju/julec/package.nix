@@ -1,7 +1,7 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+,
 }:
 
 let

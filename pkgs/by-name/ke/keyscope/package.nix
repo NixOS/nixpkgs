@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  openssl,
-  pkg-config,
-  rustPlatform,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, openssl
+, pkg-config
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

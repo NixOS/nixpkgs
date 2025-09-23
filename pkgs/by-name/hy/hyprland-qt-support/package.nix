@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  qt6,
-  pkg-config,
-  hyprlang,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, qt6
+, pkg-config
+, hyprlang
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qt-support";

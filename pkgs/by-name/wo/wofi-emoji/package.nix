@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  jq,
-  wofi,
-  wtype,
-  wl-clipboard,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, jq
+, wofi
+, wtype
+, wl-clipboard
+,
 }:
 
 let

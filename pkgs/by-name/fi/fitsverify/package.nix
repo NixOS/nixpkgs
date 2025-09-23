@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cfitsio,
+{ lib
+, stdenv
+, fetchurl
+, cfitsio
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

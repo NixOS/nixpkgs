@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  flask,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-  pygments,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  flask
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, pygments
+,
 }:
 
 buildPythonPackage rec {

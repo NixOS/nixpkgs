@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitea,
-  cmake,
-  python3,
-  boost186,
-  libsodium,
-  openssl,
-  rapidjson,
-  readline,
-  unbound,
-  zeromq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitea
+, cmake
+, python3
+, boost186
+, libsodium
+, openssl
+, rapidjson
+, readline
+, unbound
+, zeromq
+,
 }:
 
 let

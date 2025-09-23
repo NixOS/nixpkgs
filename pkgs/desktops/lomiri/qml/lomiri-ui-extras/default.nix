@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  cmake,
-  cmake-extras,
-  cups,
-  exiv2,
-  lomiri-ui-toolkit,
-  mesa,
-  pam,
-  pkg-config,
-  qtbase,
-  qtdeclarative,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, cmake
+, cmake-extras
+, cups
+, exiv2
+, lomiri-ui-toolkit
+, mesa
+, pam
+, pkg-config
+, qtbase
+, qtdeclarative
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

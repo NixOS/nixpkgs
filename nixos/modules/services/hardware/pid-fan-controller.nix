@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
   cfg = config.services.pid-fan-controller;
@@ -125,23 +124,27 @@ in
     #map camel cased attrs into snake case for config
     environment.etc."pid-fan-settings.json".text = builtins.toJSON {
       interval = cfg.settings.interval;
-      heat_srcs = map (heatSrc: {
-        name = heatSrc.name;
-        wildcard_path = heatSrc.wildcardPath;
-        PID_params = {
-          set_point = heatSrc.pidParams.setPoint;
-          P = heatSrc.pidParams.P;
-          I = heatSrc.pidParams.I;
-          D = heatSrc.pidParams.D;
-        };
-      }) cfg.settings.heatSources;
-      fans = map (fan: {
-        wildcard_path = fan.wildcardPath;
-        min_pwm = fan.minPwm;
-        max_pwm = fan.maxPwm;
-        cutoff = fan.cutoff;
-        heat_pressure_srcs = fan.heatPressureSrcs;
-      }) cfg.settings.fans;
+      heat_srcs = map
+        (heatSrc: {
+          name = heatSrc.name;
+          wildcard_path = heatSrc.wildcardPath;
+          PID_params = {
+            set_point = heatSrc.pidParams.setPoint;
+            P = heatSrc.pidParams.P;
+            I = heatSrc.pidParams.I;
+            D = heatSrc.pidParams.D;
+          };
+        })
+        cfg.settings.heatSources;
+      fans = map
+        (fan: {
+          wildcard_path = fan.wildcardPath;
+          min_pwm = fan.minPwm;
+          max_pwm = fan.maxPwm;
+          cutoff = fan.cutoff;
+          heat_pressure_srcs = fan.heatPressureSrcs;
+        })
+        cfg.settings.fans;
     };
 
     systemd.services.pid-fan-controller = {

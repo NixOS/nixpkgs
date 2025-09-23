@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  copyDesktopItems,
-  makeWrapper,
-
-  # buildInputs
-  anttweakbar,
-  eigen,
-  glew,
-  glm,
-  sfml_2,
-
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, copyDesktopItems
+, makeWrapper
+, # buildInputs
+  anttweakbar
+, eigen
+, glew
+, glm
+, sfml_2
+, makeDesktopItem
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "marble-marcher-ce";

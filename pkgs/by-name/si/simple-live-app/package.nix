@@ -1,11 +1,11 @@
-{
-  lib,
-  flutter332,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  mpv,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, flutter332
+, fetchFromGitHub
+, autoPatchelfHook
+, mpv
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 flutter332.buildFlutterApplication rec {

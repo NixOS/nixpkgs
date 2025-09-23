@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  openjdk11,
-  jnr-posix,
-  makeWrapper,
-  zip,
-  nixosTests,
-  bash,
-  glib,
-  xorg,
-  alsa-lib,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, openjdk11
+, jnr-posix
+, makeWrapper
+, zip
+, nixosTests
+, bash
+, glib
+, xorg
+, alsa-lib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -21,17 +20,18 @@ let
     else
       generators.mkValueStringDefault { } v;
   mkKeyValueTinyproxy =
-    {
-      mkValueString ? mkValueStringDefault { },
+    { mkValueString ? mkValueStringDefault { }
+    ,
     }:
     sep: k: v:
     if null == v then "" else "${lib.strings.escape [ sep ] k}${sep}${mkValueString v}";
 
   settingsFormat = (
     pkgs.formats.keyValue {
-      mkKeyValue = mkKeyValueTinyproxy {
-        mkValueString = mkValueStringTinyproxy;
-      } " ";
+      mkKeyValue = mkKeyValueTinyproxy
+        {
+          mkValueString = mkValueStringTinyproxy;
+        } " ";
       listsAsDuplicateKeys = true;
     }
   );

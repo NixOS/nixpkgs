@@ -1,39 +1,38 @@
-{
-  alsa-lib,
-  boost,
-  chromaprint,
-  cmake,
-  fetchFromGitHub,
-  fftw,
-  glib-networking,
-  gnutls,
-  gst_all_1,
-  kdsingleapplication,
-  lib,
-  libXdmcp,
-  libcdio,
-  libebur128,
-  libidn2,
-  libmtp,
-  libpthreadstubs,
-  libpulseaudio,
-  libselinux,
-  libsepol,
-  libtasn1,
-  ninja,
-  nix-update-script,
-  p11-kit,
-  pkg-config,
-  qt6,
-  sqlite,
-  stdenv,
-  taglib,
-  util-linux,
-  sparsehash,
-  rapidjson,
-
-  # tests
-  gtest,
+{ alsa-lib
+, boost
+, chromaprint
+, cmake
+, fetchFromGitHub
+, fftw
+, glib-networking
+, gnutls
+, gst_all_1
+, kdsingleapplication
+, lib
+, libXdmcp
+, libcdio
+, libebur128
+, libidn2
+, libmtp
+, libpthreadstubs
+, libpulseaudio
+, libselinux
+, libsepol
+, libtasn1
+, ninja
+, nix-update-script
+, p11-kit
+, pkg-config
+, qt6
+, sqlite
+, stdenv
+, taglib
+, util-linux
+, sparsehash
+, rapidjson
+, # tests
+  gtest
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

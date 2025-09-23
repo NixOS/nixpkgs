@@ -1,49 +1,49 @@
-{
-  stdenv,
-  # nix tooling and utilities
-  lib,
-  fetchurl,
-  makeWrapper,
-  writeTextFile,
-  replaceVars,
-  writeShellApplication,
-  makeBinaryWrapper,
-  autoPatchelfHook,
-  buildFHSEnv,
-  # this package (through the fixpoint glass)
+{ stdenv
+, # nix tooling and utilities
+  lib
+, fetchurl
+, makeWrapper
+, writeTextFile
+, replaceVars
+, writeShellApplication
+, makeBinaryWrapper
+, autoPatchelfHook
+, buildFHSEnv
+, # this package (through the fixpoint glass)
   # TODO probably still need for tests at some point
-  bazel_self,
-  # native build inputs
-  runtimeShell,
-  zip,
-  unzip,
-  bash,
-  coreutils,
-  which,
-  gawk,
-  gnused,
-  gnutar,
-  gnugrep,
-  gzip,
-  findutils,
-  diffutils,
-  gnupatch,
-  file,
-  installShellFiles,
-  lndir,
-  python3,
-  # Apple dependencies
-  cctools,
-  libtool,
-  sigtool,
-  # Allow to independently override the jdks used to build and run respectively
-  buildJdk,
-  runJdk,
-  # Toggle for hacks for running bazel under buildBazelPackage:
+  bazel_self
+, # native build inputs
+  runtimeShell
+, zip
+, unzip
+, bash
+, coreutils
+, which
+, gawk
+, gnused
+, gnutar
+, gnugrep
+, gzip
+, findutils
+, diffutils
+, gnupatch
+, file
+, installShellFiles
+, lndir
+, python3
+, # Apple dependencies
+  cctools
+, libtool
+, sigtool
+, # Allow to independently override the jdks used to build and run respectively
+  buildJdk
+, runJdk
+, # Toggle for hacks for running bazel under buildBazelPackage:
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
-  enableNixHacks ? false,
-  version ? "7.6.0",
+  enableNixHacks ? false
+, version ? "7.6.0"
+,
 }:
 
 let
@@ -106,20 +106,23 @@ let
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
-          hash = "sha256-CYL1paAtzTbfl7TfsqwJry/dkoTO/yZdHrX0NSA1+Ig=";
-        }
+        fetchurl
+          {
+            url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
+            hash = "sha256-CYL1paAtzTbfl7TfsqwJry/dkoTO/yZdHrX0NSA1+Ig=";
+          }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
-        fetchurl {
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
-          hash = "sha256-6DzTEx218/Qq38eMWvXOX/t9VJDyPczz6Edh4eHdOfg=";
-        }
+        fetchurl
+          {
+            url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
+            hash = "sha256-6DzTEx218/Qq38eMWvXOX/t9VJDyPczz6Edh4eHdOfg=";
+          }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
-        fetchurl {
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-Ut00wXzJezqlvf49RcTjk4Im8j3Qv7R77t1iWpU/HwU=";
-        }
+        fetchurl
+          {
+            url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
+            hash = "sha256-Ut00wXzJezqlvf49RcTjk4Im8j3Qv7R77t1iWpU/HwU=";
+          }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
@@ -249,7 +252,7 @@ let
         else if stdenv.hostPlatform.system == "aarch64-darwin" then
           "sha256-QVk0Qr86U350oLJ5P50SE6CUYqn5XEqgGCXVf+89wVY="
         else
-          # x86_64-darwin
+        # x86_64-darwin
           "sha256-VDrqS9YByYxboF6AcjAR0BRZa5ioGgX1pjx09zPfWTE=";
       outputHashAlgo = "sha256";
 

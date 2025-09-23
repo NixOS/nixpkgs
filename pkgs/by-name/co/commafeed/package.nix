@@ -1,13 +1,13 @@
-{
-  lib,
-  biome,
-  buildNpmPackage,
-  fetchFromGitHub,
-  jre,
-  maven,
-  makeWrapper,
-  nixosTests,
-  writeText,
+{ lib
+, biome
+, buildNpmPackage
+, fetchFromGitHub
+, jre
+, maven
+, makeWrapper
+, nixosTests
+, writeText
+,
 }:
 let
   version = "4.6.0";

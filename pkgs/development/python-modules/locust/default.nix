@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  callPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  pytestCheckHook,
-  configargparse,
-  cryptography,
-  flask,
-  flask-cors,
-  flask-login,
-  gevent,
-  geventhttpclient,
-  msgpack,
-  psutil,
-  pyquery,
-  pyzmq,
-  requests,
-  retry,
-  tomli,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, python
+, callPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, pytestCheckHook
+, configargparse
+, cryptography
+, flask
+, flask-cors
+, flask-login
+, gevent
+, geventhttpclient
+, msgpack
+, psutil
+, pyquery
+, pyzmq
+, requests
+, retry
+, tomli
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

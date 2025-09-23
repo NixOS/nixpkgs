@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromSourcehut,
-  buildGoModule,
+{ lib
+, fetchFromSourcehut
+, buildGoModule
+,
 }:
 buildGoModule rec {
   pname = "betula";

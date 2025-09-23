@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, unzip
+,
 }:
 
 let

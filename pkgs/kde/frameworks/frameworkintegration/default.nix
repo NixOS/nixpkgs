@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  packagekit-qt,
+{ mkKdeDerivation
+, pkg-config
+, packagekit-qt
+,
 }:
 mkKdeDerivation {
   pname = "frameworkintegration";

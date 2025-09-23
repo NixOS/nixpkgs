@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mpi,
-  mpich,
-  tmux,
-  reptyr,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mpi
+, mpich
+, tmux
+, reptyr
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

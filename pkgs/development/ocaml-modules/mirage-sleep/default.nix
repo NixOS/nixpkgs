@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  lwt,
-  duration,
-  version ? "4.1.0",
+{ lib
+, buildDunePackage
+, fetchurl
+, lwt
+, duration
+, version ? "4.1.0"
+,
 }:
 
 buildDunePackage {

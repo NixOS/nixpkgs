@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cups,
-  autoPatchelfHook,
-  python3Packages,
-
-  # Sets the default paper format: use "EU" for A4, or "Global" for Letter
-  region ? "EU",
+{ lib
+, stdenv
+, fetchurl
+, cups
+, autoPatchelfHook
+, python3Packages
+, # Sets the default paper format: use "EU" for A4, or "Global" for Letter
+  region ? "EU"
+,
 }:
 
 assert region == "Global" || region == "EU";

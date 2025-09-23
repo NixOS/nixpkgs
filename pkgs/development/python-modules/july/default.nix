@@ -1,13 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-  fetchPypi,
-
-  matplotlib,
-  numpy,
-
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, matplotlib
+, numpy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

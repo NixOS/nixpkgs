@@ -1,11 +1,11 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  git,
-  makeWrapper,
-  overcommit,
-  testers,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, git
+, makeWrapper
+, overcommit
+, testers
+,
 }:
 
 bundlerApp rec {

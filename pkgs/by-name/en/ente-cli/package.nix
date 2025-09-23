@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  stdenv,
-  testers,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, stdenv
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {
@@ -45,17 +45,17 @@ buildGoModule (finalAttrs: {
   # > error setting password in keyring: exit status 195
   #
   +
-    lib.optionalString
-      (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      ''
-        export ENTE_CLI_CONFIG_PATH=$TMP
-        export ENTE_CLI_SECRETS_PATH=$TMP/secrets
+  lib.optionalString
+    (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    ''
+      export ENTE_CLI_CONFIG_PATH=$TMP
+      export ENTE_CLI_SECRETS_PATH=$TMP/secrets
 
-        installShellCompletion --cmd ente \
-          --bash <($out/bin/ente completion bash) \
-          --fish <($out/bin/ente completion fish) \
-          --zsh <($out/bin/ente completion zsh)
-      '';
+      installShellCompletion --cmd ente \
+        --bash <($out/bin/ente completion bash) \
+        --fish <($out/bin/ente completion fish) \
+        --zsh <($out/bin/ente completion zsh)
+    '';
 
   passthru = {
     # only works on linux, see comment above about ENTE_CLI_SECRETS_PATH on darwin

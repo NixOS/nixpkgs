@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cargo,
-  libiconv,
-  fetchFromGitHub,
-  json-stream,
-  json-stream-rs-tokenizer,
-  pythonOlder,
-  rustc,
-  rustPlatform,
-  setuptools,
-  setuptools-rust,
-  wheel,
+{ lib
+, stdenv
+, buildPythonPackage
+, cargo
+, libiconv
+, fetchFromGitHub
+, json-stream
+, json-stream-rs-tokenizer
+, pythonOlder
+, rustc
+, rustPlatform
+, setuptools
+, setuptools-rust
+, wheel
+,
 }:
 
 buildPythonPackage rec {

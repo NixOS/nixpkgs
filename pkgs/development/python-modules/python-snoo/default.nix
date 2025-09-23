@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  aiohttp,
-  aiomqtt,
-  freenub,
-  mashumaro,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, aiohttp
+, aiomqtt
+, freenub
+, mashumaro
+,
 }:
 
 buildPythonPackage rec {

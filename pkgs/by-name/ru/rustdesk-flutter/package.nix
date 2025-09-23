@@ -1,35 +1,35 @@
-{
-  lib,
-  clangStdenv,
-  cargo,
-  copyDesktopItems,
-  fetchFromGitHub,
-  flutter,
-  ffmpeg,
-  gst_all_1,
-  fuse3,
-  libXtst,
-  libaom,
-  libopus,
-  libpulseaudio,
-  libva,
-  libvdpau,
-  libvpx,
-  libxkbcommon,
-  libyuv,
-  pam,
-  makeDesktopItem,
-  rustPlatform,
-  libayatana-appindicator,
-  rustc,
-  rustfmt,
-  xdotool,
-  xdg-user-dirs,
-  pipewire,
-  cargo-expand,
-  yq,
-  callPackage,
-  addDriverRunpath,
+{ lib
+, clangStdenv
+, cargo
+, copyDesktopItems
+, fetchFromGitHub
+, flutter
+, ffmpeg
+, gst_all_1
+, fuse3
+, libXtst
+, libaom
+, libopus
+, libpulseaudio
+, libva
+, libvdpau
+, libvpx
+, libxkbcommon
+, libyuv
+, pam
+, makeDesktopItem
+, rustPlatform
+, libayatana-appindicator
+, rustc
+, rustfmt
+, xdotool
+, xdg-user-dirs
+, pipewire
+, cargo-expand
+, yq
+, callPackage
+, addDriverRunpath
+,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {

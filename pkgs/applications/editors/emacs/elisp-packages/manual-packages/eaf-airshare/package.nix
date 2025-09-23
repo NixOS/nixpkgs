@@ -1,10 +1,11 @@
 {
   # Basic
-  lib,
-  melpaBuild,
-  fetchFromGitHub,
-  # Updater
-  unstableGitUpdater,
+  lib
+, melpaBuild
+, fetchFromGitHub
+, # Updater
+  unstableGitUpdater
+,
 }:
 
 melpaBuild {
@@ -28,11 +29,11 @@ melpaBuild {
     updateScript = unstableGitUpdater { };
     eafPythonDeps =
       ps:
-      with ps;
-      [
-        qrcode
-      ]
-      ++ ps.qrcode.optional-dependencies.pil;
+        with ps;
+        [
+          qrcode
+        ]
+        ++ ps.qrcode.optional-dependencies.pil;
     eafOtherDeps = [ ];
   };
 

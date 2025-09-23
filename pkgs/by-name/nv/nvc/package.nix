@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  autoreconfHook,
-  check,
-  flex,
-  pkg-config,
-  which,
-  elfutils,
-  libffi,
-  llvm,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, autoreconfHook
+, check
+, flex
+, pkg-config
+, which
+, elfutils
+, libffi
+, llvm
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  fixup-yarn-lock,
-  nodejs_20,
-  python3,
-  makeBinaryWrapper,
-  git,
-  docker,
-  yarn,
-  docker-compose,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchYarnDeps
+, fetchFromGitHub
+, fixup-yarn-lock
+, nodejs_20
+, python3
+, makeBinaryWrapper
+, git
+, docker
+, yarn
+, docker-compose
+, nix-update-script
+,
 }:
 
 let

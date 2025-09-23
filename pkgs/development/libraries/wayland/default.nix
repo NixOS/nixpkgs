@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  pkg-config,
-  ninja,
-  wayland-scanner,
-  withTests ? stdenv.hostPlatform.isLinux,
-  libffi,
-  epoll-shim,
-  withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  graphviz-nox,
-  doxygen,
-  libxslt,
-  xmlto,
-  python3,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  docbook_xml_dtd_42,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, pkg-config
+, ninja
+, wayland-scanner
+, withTests ? stdenv.hostPlatform.isLinux
+, libffi
+, epoll-shim
+, withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, graphviz-nox
+, doxygen
+, libxslt
+, xmlto
+, python3
+, docbook_xsl
+, docbook_xml_dtd_45
+, docbook_xml_dtd_42
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

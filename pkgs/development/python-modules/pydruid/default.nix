@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # required dependencies
-  requests,
-  setuptools,
-  # optional dependencies
-  pandas,
-  tornado,
-  sqlalchemy,
-  # test dependencies
-  pycurl,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # required dependencies
+  requests
+, setuptools
+, # optional dependencies
+  pandas
+, tornado
+, sqlalchemy
+, # test dependencies
+  pycurl
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

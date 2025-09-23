@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  autoreconfHook,
-  atf,
-  pkg-config,
-  kyua,
+{ lib
+, stdenv
+, fetchFromGitea
+, autoreconfHook
+, atf
+, pkg-config
+, kyua
+,
 }:
 stdenv.mkDerivation rec {
   pname = "mlmmj";

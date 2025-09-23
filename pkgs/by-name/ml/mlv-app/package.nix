@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libsForQt5,
-  writableTmpDirAsHomeHook,
-  ffmpeg-headless,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libsForQt5
+, writableTmpDirAsHomeHook
+, ffmpeg-headless
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

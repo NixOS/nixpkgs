@@ -4,11 +4,10 @@
 { formats, coreutils }:
 
 # Service module
-{
-  options,
-  config,
-  lib,
-  ...
+{ options
+, config
+, lib
+, ...
 }:
 let
   cfg = config.php-fpm;

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  crystal,
-  wrapGAppsHook4,
-  gobject-introspection,
-  desktopToDarwinBundle,
-  webkitgtk_6_0,
-  sqlite,
-  libadwaita,
-  gtk4,
-  glib,
-  pango,
-  symlinkJoin,
-  gitUpdater,
-  _experimental-update-script-combinators,
-  runCommand,
-  crystal2nix,
-  writeShellScript,
+{ stdenv
+, lib
+, fetchFromGitHub
+, crystal
+, wrapGAppsHook4
+, gobject-introspection
+, desktopToDarwinBundle
+, webkitgtk_6_0
+, sqlite
+, libadwaita
+, gtk4
+, glib
+, pango
+, symlinkJoin
+, gitUpdater
+, _experimental-update-script-combinators
+, runCommand
+, crystal2nix
+, writeShellScript
+,
 }:
 let
   version = "0.6.2";

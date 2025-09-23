@@ -1,25 +1,25 @@
-{
-  lib,
-  blinker,
-  brotli,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  h2,
-  hyperframe,
-  kaitaistruct,
-  pyasn1,
-  httpbin,
-  pyopenssl,
-  pyparsing,
-  pysocks,
-  gunicorn,
-  pytestCheckHook,
-  pythonOlder,
-  selenium,
-  setuptools,
-  wsproto,
-  zstandard,
+{ lib
+, blinker
+, brotli
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, h2
+, hyperframe
+, kaitaistruct
+, pyasn1
+, httpbin
+, pyopenssl
+, pyparsing
+, pysocks
+, gunicorn
+, pytestCheckHook
+, pythonOlder
+, selenium
+, setuptools
+, wsproto
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

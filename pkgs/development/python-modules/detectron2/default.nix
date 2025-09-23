@@ -1,49 +1,44 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  ninja,
-  which,
-
-  # buildInputs
-  pybind11,
-
-  # dependencies
-  black,
-  cloudpickle,
-  fvcore,
-  hydra-core,
-  iopath,
-  matplotlib,
-  omegaconf,
-  packaging,
-  pillow,
-  pycocotools,
-  pydot,
-  tabulate,
-  tensorboard,
-  termcolor,
-  torch,
-  tqdm,
-  yacs,
-
-  # optional-dependencies
-  fairscale,
-  psutil,
-  pygments,
-  scipy,
-  shapely,
-  timm,
-
-  # tests
-  av,
-  opencv4,
-  pytest-mock,
-  pytestCheckHook,
-  torchvision,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  ninja
+, which
+, # buildInputs
+  pybind11
+, # dependencies
+  black
+, cloudpickle
+, fvcore
+, hydra-core
+, iopath
+, matplotlib
+, omegaconf
+, packaging
+, pillow
+, pycocotools
+, pydot
+, tabulate
+, tensorboard
+, termcolor
+, torch
+, tqdm
+, yacs
+, # optional-dependencies
+  fairscale
+, psutil
+, pygments
+, scipy
+, shapely
+, timm
+, # tests
+  av
+, opencv4
+, pytest-mock
+, pytestCheckHook
+, torchvision
+,
 }:
 
 let

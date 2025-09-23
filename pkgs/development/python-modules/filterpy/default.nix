@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  scipy,
-  matplotlib,
-  pytestCheckHook,
-  isPy3k,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, scipy
+, matplotlib
+, pytestCheckHook
+, isPy3k
+,
 }:
 
 buildPythonPackage {

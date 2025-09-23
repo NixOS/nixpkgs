@@ -1,7 +1,7 @@
-{
-  backports-functools-lru-cache,
-  wcwidth,
-  lib,
+{ backports-functools-lru-cache
+, wcwidth
+, lib
+,
 }:
 
 wcwidth.overridePythonAttrs (oldAttrs: {

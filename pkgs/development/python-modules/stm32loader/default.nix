@@ -1,21 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  progress,
-  pyserial,
-
-  # optional-dependencies
-  intelhex,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, # build-system
+  flit-core
+, # dependencies
+  progress
+, pyserial
+, # optional-dependencies
+  intelhex
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

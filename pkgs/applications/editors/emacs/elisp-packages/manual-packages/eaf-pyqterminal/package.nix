@@ -1,10 +1,11 @@
 {
   # Basic
-  lib,
-  melpaBuild,
-  fetchFromGitHub,
-  # Updater
-  unstableGitUpdater,
+  lib
+, melpaBuild
+, fetchFromGitHub
+, # Updater
+  unstableGitUpdater
+,
 }:
 
 melpaBuild {

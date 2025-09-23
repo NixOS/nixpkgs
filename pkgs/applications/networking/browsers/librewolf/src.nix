@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchurl,
-  fetchFromGitea,
+{ lib
+, fetchurl
+, fetchFromGitea
+,
 }:
 let
   src = lib.importJSON ./src.json;

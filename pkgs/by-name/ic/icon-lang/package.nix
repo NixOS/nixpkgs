@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  libXt,
-  withGraphics ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libXt
+, withGraphics ? true
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  autoreconfHook,
-  docbook_xsl,
-  libxslt,
-  meson,
-  pkg-config,
-  wrapGAppsHook3,
-  python3,
-  autoconf,
-  automake,
-  glib,
-  gtk-doc,
-  libtool,
-  intltool,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, autoreconfHook
+, docbook_xsl
+, libxslt
+, meson
+, pkg-config
+, wrapGAppsHook3
+, python3
+, autoconf
+, automake
+, glib
+, gtk-doc
+, libtool
+, intltool
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  pkgs,
-  lib,
-  hfst,
+{ buildPythonPackage
+, pkgs
+, lib
+, hfst
+,
 }:
 
 buildPythonPackage rec {

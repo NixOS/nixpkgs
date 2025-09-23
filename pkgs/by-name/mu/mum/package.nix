@@ -1,21 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  gdk-pixbuf,
-  glib,
-  libnotify,
-  libopus,
-  openssl,
-  versionCheckHook,
-  nix-update-script,
-  installShellFiles,
-
-  withNotifications ? true,
-  withOgg ? true,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pkg-config
+, alsa-lib
+, gdk-pixbuf
+, glib
+, libnotify
+, libopus
+, openssl
+, versionCheckHook
+, nix-update-script
+, installShellFiles
+, withNotifications ? true
+, withOgg ? true
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

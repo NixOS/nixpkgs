@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  nixosTests,
-  rustPlatform,
-  stdenv,
-  installShellFiles,
-  cmake,
-  libsodium,
-  pkg-config,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, nixosTests
+, rustPlatform
+, stdenv
+, installShellFiles
+, cmake
+, libsodium
+, pkg-config
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rosenpass";

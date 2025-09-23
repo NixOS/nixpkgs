@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  packaging,
-  pan-python,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, packaging
+, pan-python
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

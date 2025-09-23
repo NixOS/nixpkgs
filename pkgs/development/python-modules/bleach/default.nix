@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  html5lib,
-  setuptools,
-  tinycss2,
-  packaging,
-  webencodings,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, html5lib
+, setuptools
+, tinycss2
+, packaging
+, webencodings
+,
 }:
 
 buildPythonPackage rec {

@@ -1,46 +1,46 @@
-{
-  lib,
-  stdenv,
-  asn1crypto,
-  buildPythonPackage,
-  defusedxml,
-  dissect-btrfs,
-  dissect-cim,
-  dissect-clfs,
-  dissect-cstruct,
-  dissect-esedb,
-  dissect-etl,
-  dissect-eventlog,
-  dissect-evidence,
-  dissect-extfs,
-  dissect-fat,
-  dissect-ffs,
-  dissect-hypervisor,
-  dissect-ntfs,
-  dissect-regf,
-  dissect-shellitem,
-  dissect-sql,
-  dissect-thumbcache,
-  dissect-util,
-  dissect-volume,
-  dissect-xfs,
-  docutils,
-  fetchFromGitHub,
-  flow-record,
-  fusepy,
-  impacket,
-  ipython,
-  paho-mqtt,
-  pycryptodome,
-  pytestCheckHook,
-  pythonOlder,
-  ruamel-yaml,
-  setuptools,
-  setuptools-scm,
-  structlog,
-  tomli,
-  yara-python,
-  zstandard,
+{ lib
+, stdenv
+, asn1crypto
+, buildPythonPackage
+, defusedxml
+, dissect-btrfs
+, dissect-cim
+, dissect-clfs
+, dissect-cstruct
+, dissect-esedb
+, dissect-etl
+, dissect-eventlog
+, dissect-evidence
+, dissect-extfs
+, dissect-fat
+, dissect-ffs
+, dissect-hypervisor
+, dissect-ntfs
+, dissect-regf
+, dissect-shellitem
+, dissect-sql
+, dissect-thumbcache
+, dissect-util
+, dissect-volume
+, dissect-xfs
+, docutils
+, fetchFromGitHub
+, flow-record
+, fusepy
+, impacket
+, ipython
+, paho-mqtt
+, pycryptodome
+, pytestCheckHook
+, pythonOlder
+, ruamel-yaml
+, setuptools
+, setuptools-scm
+, structlog
+, tomli
+, yara-python
+, zstandard
+,
 }:
 
 buildPythonPackage rec {
@@ -154,8 +154,8 @@ buildPythonPackage rec {
     "test_yara"
   ]
   ++
-    # test is broken on Darwin
-    lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
+  # test is broken on Darwin
+  lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
 
   disabledTestPaths = [
     # Tests are using Windows paths, missing test files

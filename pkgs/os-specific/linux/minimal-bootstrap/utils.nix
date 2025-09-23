@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPlatform,
-  callPackage,
-  kaem,
-  mescc-tools-extra,
-  checkMeta,
+{ lib
+, buildPlatform
+, callPackage
+, kaem
+, mescc-tools-extra
+, checkMeta
+,
 }:
 rec {
   derivationWithMeta =
@@ -29,20 +29,24 @@ rec {
           tests = lib.mapAttrs (_: f: f baseDrv) passthru.tests;
         };
     in
-    lib.extendDerivation validity.handled (
-      {
-        inherit meta;
-        passthru = passthru';
-      }
-      // passthru'
-    ) baseDrv;
+    lib.extendDerivation validity.handled
+      (
+        {
+          inherit meta;
+          passthru = passthru';
+        }
+        // passthru'
+      )
+      baseDrv;
 
   writeTextFile =
-    {
-      name, # the name of the derivation
-      text,
-      executable ? false, # run chmod +x ?
-      destination ? "", # relative path appended to $out eg "/bin/foo"
+    { name
+    , # the name of the derivation
+      text
+    , executable ? false
+    , # run chmod +x ?
+      destination ? ""
+    , # relative path appended to $out eg "/bin/foo"
     }:
     derivationWithMeta {
       inherit name text;

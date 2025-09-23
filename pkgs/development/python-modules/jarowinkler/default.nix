@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  rapidfuzz,
-  hypothesis,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, rapidfuzz
+, hypothesis
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

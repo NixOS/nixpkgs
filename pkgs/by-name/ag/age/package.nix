@@ -1,17 +1,17 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  age-plugin-fido2-hmac,
-  age-plugin-ledger,
-  age-plugin-se,
-  age-plugin-sss,
-  age-plugin-tpm,
-  age-plugin-yubikey,
-  age-plugin-1p,
-  makeWrapper,
-  runCommand,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, age-plugin-fido2-hmac
+, age-plugin-ledger
+, age-plugin-se
+, age-plugin-sss
+, age-plugin-tpm
+, age-plugin-yubikey
+, age-plugin-1p
+, makeWrapper
+, runCommand
+,
 }:
 
 buildGoModule (final: {

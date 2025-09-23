@@ -1,25 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  packaging,
-  requests,
-  urllib3,
-
-  # optional-dependencies
-  paramiko,
-  websocket-client,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  hatchling
+, hatch-vcs
+, # dependencies
+  packaging
+, requests
+, urllib3
+, # optional-dependencies
+  paramiko
+, websocket-client
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

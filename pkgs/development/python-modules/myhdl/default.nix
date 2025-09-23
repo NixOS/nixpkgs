@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  iverilog,
-  ghdl,
-  pytest,
-  pytest-xdist,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, iverilog
+, ghdl
+, pytest
+, pytest-xdist
+,
 }:
 
 buildPythonPackage {

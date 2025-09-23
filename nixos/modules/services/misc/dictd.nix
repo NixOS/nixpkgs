@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.dictd;
@@ -44,10 +43,12 @@ in
   config =
     let
       dictdb = pkgs.dictDBCollector {
-        dictlist = map (x: {
-          name = x.name;
-          filename = x;
-        }) cfg.DBs;
+        dictlist = map
+          (x: {
+            name = x.name;
+            filename = x;
+          })
+          cfg.DBs;
       };
     in
     lib.mkIf cfg.enable {

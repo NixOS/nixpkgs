@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  cython,
-  memory-profiler,
-  ninja,
-  pathspec,
-  pocketsphinx,
-  pytestCheckHook,
-  scikit-build-core,
-  sounddevice,
+{ lib
+, buildPythonPackage
+, cmake
+, cython
+, memory-profiler
+, ninja
+, pathspec
+, pocketsphinx
+, pytestCheckHook
+, scikit-build-core
+, sounddevice
+,
 }:
 
 buildPythonPackage rec {

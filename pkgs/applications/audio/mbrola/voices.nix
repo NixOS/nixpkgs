@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mbrola,
-  languages ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, mbrola
+, languages ? [ ]
+,
 }:
 
 let

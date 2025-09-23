@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  huggingface-hub,
-  matplotlib,
-  numpy,
-  packaging,
-  pandas,
-  prettytable,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  rich,
-  scikit-learn,
-  streamlit,
-  tabulate,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, huggingface-hub
+, matplotlib
+, numpy
+, packaging
+, pandas
+, prettytable
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, rich
+, scikit-learn
+, streamlit
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

@@ -1,6 +1,6 @@
-{
-  system ? builtins.currentSystem,
-  pkgs ? import ../../.. { inherit system; },
+{ system ? builtins.currentSystem
+, pkgs ? import ../../.. { inherit system; }
+,
 }:
 with import ./base.nix { inherit system; };
 let

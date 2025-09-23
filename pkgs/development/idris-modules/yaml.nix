@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  lightyear,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, lightyear
+, lib
+,
 }:
 build-idris-package {
   pname = "yaml";

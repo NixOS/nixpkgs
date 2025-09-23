@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  asciidoc,
-  fetchFromGitLab,
-  git,
-  makeWrapper,
-  python3,
-  rcs,
-  asciidoctor,
+{ lib
+, stdenv
+, asciidoc
+, fetchFromGitLab
+, git
+, makeWrapper
+, python3
+, rcs
+, asciidoctor
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

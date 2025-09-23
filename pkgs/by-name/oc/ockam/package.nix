@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  git,
-  nix-update-script,
-  pkg-config,
-  openssl,
-  dbus,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, git
+, nix-update-script
+, pkg-config
+, openssl
+, dbus
+,
 }:
 
 let

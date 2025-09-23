@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
-  typing-extensions,
-  xeddsa,
-  doubleratchet,
-  omemo,
-  x3dh,
-  cryptography,
-  protobuf,
-
-  xmlschema,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, typing-extensions
+, xeddsa
+, doubleratchet
+, omemo
+, x3dh
+, cryptography
+, protobuf
+, xmlschema
+,
 }:
 
 buildPythonPackage rec {

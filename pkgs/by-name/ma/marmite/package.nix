@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  oniguruma,
-  stdenv,
-  darwin,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, oniguruma
+, stdenv
+, darwin
+,
 }:
 
 rustPlatform.buildRustPackage rec {

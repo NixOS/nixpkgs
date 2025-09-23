@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  gpgme,
-  libgpg-error,
-  pkg-config,
-  python3,
-  libiconv,
-  libresolv,
-  x11Support ? true,
-  libxcb,
-  libxkbcommon,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, gpgme
+, libgpg-error
+, pkg-config
+, python3
+, libiconv
+, libresolv
+, x11Support ? true
+, libxcb
+, libxkbcommon
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wayland-scanner,
-  mpv-unwrapped,
-  openssl,
-  curl,
-  libxkbcommon,
-  dbus,
-  libffi,
-  wayland,
-  egl-wayland,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wayland-scanner
+, mpv-unwrapped
+, openssl
+, curl
+, libxkbcommon
+, dbus
+, libffi
+, wayland
+, egl-wayland
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

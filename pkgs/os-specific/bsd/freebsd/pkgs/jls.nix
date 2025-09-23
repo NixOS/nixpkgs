@@ -1,8 +1,8 @@
-{
-  lib,
-  mkDerivation,
-  libjail,
-  libxo,
+{ lib
+, mkDerivation
+, libjail
+, libxo
+,
 }:
 mkDerivation {
   path = "usr.sbin/jls";

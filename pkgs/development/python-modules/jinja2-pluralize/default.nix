@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jinja2,
-  inflect,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jinja2
+, inflect
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

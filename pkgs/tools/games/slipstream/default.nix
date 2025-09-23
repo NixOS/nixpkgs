@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  maven,
-  jdk,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, maven
+, jdk
+,
 }:
 
 maven.buildMavenPackage rec {

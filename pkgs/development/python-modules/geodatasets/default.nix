@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  geopandas,
-  pooch,
-  pyogrio,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, geopandas
+, pooch
+, pyogrio
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

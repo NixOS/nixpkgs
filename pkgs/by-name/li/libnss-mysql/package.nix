@@ -1,11 +1,11 @@
-{
-  lib,
-  nixosTests,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  which,
-  libmysqlclient,
+{ lib
+, nixosTests
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, which
+, libmysqlclient
+,
 }:
 
 stdenv.mkDerivation rec {

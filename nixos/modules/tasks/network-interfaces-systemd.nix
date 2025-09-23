@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  utils,
-  pkgs,
-  ...
+{ config
+, lib
+, utils
+, pkgs
+, ...
 }:
 
 with utils;
@@ -168,9 +167,10 @@ let
         );
         networkConfig.IPv6PrivacyExtensions = "kernel";
         linkConfig =
-          optionalAttrs (i.macAddress != null) {
-            MACAddress = i.macAddress;
-          }
+          optionalAttrs (i.macAddress != null)
+            {
+              MACAddress = i.macAddress;
+            }
           // optionalAttrs (i.mtu != null) {
             MTUBytes = toString i.mtu;
           };
@@ -343,25 +343,27 @@ in
                         unknownOptions = [ "primary" ];
                         assertTrace = bool: msg: if bool then true else builtins.trace msg false;
                       in
-                      assert all (
-                        driverOpt:
-                        assertTrace (elem driverOpt (knownOptions ++ unknownOptions))
-                          "The bond.driverOption `${driverOpt}` cannot be mapped to the list of known networkd bond options. Please add it to the mapping above the assert or to `unknownOptions` should it not exist in networkd."
-                      ) (mapAttrsToList (k: _: k) do);
+                      assert all
+                        (
+                          driverOpt:
+                          assertTrace (elem driverOpt (knownOptions ++ unknownOptions))
+                            "The bond.driverOption `${driverOpt}` cannot be mapped to the list of known networkd bond options. Please add it to the mapping above the assert or to `unknownOptions` should it not exist in networkd."
+                        )
+                        (mapAttrsToList (k: _: k) do);
                       "";
                     # get those driverOptions that have been set
                     filterSystemdOptions = filterAttrs (sysDOpt: kOpts: any (kOpt: do ? ${kOpt}) kOpts.optNames);
                     # build final set of systemd options to bond values
                     buildOptionSet = mapAttrs (
                       _: kOpts:
-                      with kOpts;
-                      # we simply take the first set kernel bond option
-                      # (one option has multiple names, which is silly)
-                      head (
-                        map (optN: valTransform (do.${optN}))
-                          # only map those that exist
-                          (filter (o: do ? ${o}) optNames)
-                      )
+                        with kOpts;
+                        # we simply take the first set kernel bond option
+                        # (one option has multiple names, which is silly)
+                        head (
+                          map (optN: valTransform (do.${optN}))
+                            # only map those that exist
+                            (filter (o: do ? ${o}) optNames)
+                        )
                     );
                   in
                   seq assertNoUnknownOption (buildOptionSet (filterSystemdOptions driverOptionMapping));

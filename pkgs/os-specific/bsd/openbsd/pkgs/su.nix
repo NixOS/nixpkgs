@@ -1,5 +1,5 @@
-{
-  mkDerivation,
+{ mkDerivation
+,
 }:
 mkDerivation {
   path = "usr.bin/su";

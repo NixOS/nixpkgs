@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  options,
-  ...
+{ lib
+, config
+, options
+, ...
 }:
 let
   inherit (lib) types;

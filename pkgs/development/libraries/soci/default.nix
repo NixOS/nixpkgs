@@ -1,12 +1,12 @@
-{
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  sqlite,
-  libpq,
-  boost,
-  lib,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, fetchpatch
+, sqlite
+, libpq
+, boost
+, lib
+, stdenv
+,
 }:
 stdenv.mkDerivation rec {
   pname = "soci";

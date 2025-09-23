@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  glib,
-  gtk4,
-  pango,
-  librsvg,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, glib
+, gtk4
+, pango
+, librsvg
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

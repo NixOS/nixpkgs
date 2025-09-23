@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  llvmPackages,
-  setuptools,
-  writeText,
+{ lib
+, buildPythonPackage
+, llvmPackages
+, setuptools
+, writeText
+,
 }:
 
 let

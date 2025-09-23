@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ant,
-  jdk,
-  openjdk8-bootstrap,
-  jre,
-  stripJavaArchivesHook,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk
+, openjdk8-bootstrap
+, jre
+, stripJavaArchivesHook
+, makeWrapper
+, nix-update-script
+,
 }:
 
 let

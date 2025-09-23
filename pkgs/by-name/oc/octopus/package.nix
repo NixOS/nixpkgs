@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  ninja,
-  gfortran,
-  which,
-  perl,
-  procps,
-  libvdwxc,
-  libyaml,
-  libxc,
-  fftw,
-  blas,
-  lapack,
-  gsl,
-  netcdf,
-  arpack,
-  spglib,
-  metis,
-  scalapack,
-  mpi,
-  enableMpi ? true,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, ninja
+, gfortran
+, which
+, perl
+, procps
+, libvdwxc
+, libyaml
+, libxc
+, fftw
+, blas
+, lapack
+, gsl
+, netcdf
+, arpack
+, spglib
+, metis
+, scalapack
+, mpi
+, enableMpi ? true
+, python3
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

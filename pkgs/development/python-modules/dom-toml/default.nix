@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  flit-core,
-  setuptools,
-  domdf-python-tools,
-  tomli,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, flit-core
+, setuptools
+, domdf-python-tools
+, tomli
+,
 }:
 buildPythonPackage rec {
   pname = "dom-toml";

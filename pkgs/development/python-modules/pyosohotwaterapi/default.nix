@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  loguru,
-  numpy,
-  setuptools,
-  unasync,
-  urllib3,
-  writableTmpDirAsHomeHook,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, loguru
+, numpy
+, setuptools
+, unasync
+, urllib3
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

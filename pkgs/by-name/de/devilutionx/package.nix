@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  bzip2,
-  cmake,
-  pkg-config,
-  gettext,
-  libsodium,
-  SDL2,
-  SDL2_image,
-  SDL_audiolib,
-  simpleini,
-  fmt,
-  libpng,
-  libtiff,
-  libwebp,
-  smpq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, bzip2
+, cmake
+, pkg-config
+, gettext
+, libsodium
+, SDL2
+, SDL2_image
+, SDL_audiolib
+, simpleini
+, fmt
+, libpng
+, libtiff
+, libwebp
+, smpq
+,
 }:
 
 let

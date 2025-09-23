@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  itsdangerous,
-  python-multipart,
-
-  # tests
-  asgi-lifespan,
-  pytestCheckHook,
-  starlette,
-  httpx,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  itsdangerous
+, python-multipart
+, # tests
+  asgi-lifespan
+, pytestCheckHook
+, starlette
+, httpx
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

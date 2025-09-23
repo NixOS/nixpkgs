@@ -1,19 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  attrs,
-  httpcore,
-  httpx,
-  packaging,
-  protobuf,
-  python-dateutil,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  attrs
+, httpcore
+, httpx
+, packaging
+, protobuf
+, python-dateutil
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

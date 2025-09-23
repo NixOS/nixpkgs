@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -116,8 +115,8 @@ in
         let
           conf =
             if cfg.configFile == null then
-              # Config validation may fail when using extraFlags = [ "-config.expand-env=true" ].
-              # To work around this, we simply skip it when extraFlags is not empty.
+            # Config validation may fail when using extraFlags = [ "-config.expand-env=true" ].
+            # To work around this, we simply skip it when extraFlags is not empty.
               if cfg.extraFlags == [ ] then
                 validateConfig (prettyJSON cfg.configuration)
               else

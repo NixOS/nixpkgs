@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pythonOlder,
-  pydal,
-  graphviz,
-  pandoc,
-  plantuml,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pythonOlder
+, pydal
+, graphviz
+, pandoc
+, plantuml
+,
 }:
 
 buildPythonPackage rec {

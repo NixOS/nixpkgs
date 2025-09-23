@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mkdocs,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mkdocs
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";

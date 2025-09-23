@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  xorg,
+{ lib
+, stdenv
+, fetchzip
+, xorg
+,
 }:
 stdenv.mkDerivation rec {
   pname = "xtris";

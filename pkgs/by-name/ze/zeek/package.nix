@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchurl,
-  cmake,
-  flex,
-  bison,
-  openssl,
-  libkqueue,
-  libpcap,
-  zlib,
-  file,
-  curl,
-  libmaxminddb,
-  gperftools,
-  python3,
-  swig,
-  gettext,
-  coreutils,
-  ncurses,
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, cmake
+, flex
+, bison
+, openssl
+, libkqueue
+, libpcap
+, zlib
+, file
+, curl
+, libmaxminddb
+, gperftools
+, python3
+, swig
+, gettext
+, coreutils
+, ncurses
+,
 }:
 
 let

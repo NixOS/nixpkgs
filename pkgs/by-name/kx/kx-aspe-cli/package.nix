@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  openssl,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

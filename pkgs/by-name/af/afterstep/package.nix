@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  dbus,
-  fltk13,
-  gtk2,
-  libICE,
-  libSM,
-  libtiff,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, dbus
+, fltk13
+, gtk2
+, libICE
+, libSM
+, libtiff
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  gst_all_1,
-  gtk3,
-  libGL,
-  libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
-  pkg-config,
-  xorgproto,
-  compat28 ? false,
-  compat30 ? true,
-  unicode ? true,
-  withCurl ? false,
-  withPrivateFonts ? false,
-  withEGL ? true,
-  withMesa ? !stdenv.hostPlatform.isDarwin,
-  withWebKit ? stdenv.hostPlatform.isDarwin,
-  webkitgtk_4_1,
-  libpng,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, gst_all_1
+, gtk3
+, libGL
+, libGLU
+, libSM
+, libXinerama
+, libXtst
+, libXxf86vm
+, pkg-config
+, xorgproto
+, compat28 ? false
+, compat30 ? true
+, unicode ? true
+, withCurl ? false
+, withPrivateFonts ? false
+, withEGL ? true
+, withMesa ? !stdenv.hostPlatform.isDarwin
+, withWebKit ? stdenv.hostPlatform.isDarwin
+, webkitgtk_4_1
+, libpng
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -88,9 +88,10 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "${libGLU.out}/lib ${libGL.out}/lib ";
+  SEARCH_LIB = lib.optionalString
+    (
+      !stdenv.hostPlatform.isDarwin
+    ) "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = ''
     substituteInPlace configure --replace \

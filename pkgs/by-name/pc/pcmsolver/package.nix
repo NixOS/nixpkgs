@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  perl,
-  gfortran,
-  python3,
-  boost,
-  eigen,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, gfortran
+, python3
+, boost
+, eigen
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

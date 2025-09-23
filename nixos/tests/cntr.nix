@@ -80,4 +80,4 @@ in
 {
   nixos-container = mkContainersTest;
 }
-// (lib.genAttrs [ "docker" "podman" ] mkOCITest)
+  // (lib.genAttrs [ "docker" "podman" ] mkOCITest)

@@ -1,8 +1,8 @@
-{
-  lib,
-  bundlerEnv,
-  bundlerUpdateScript,
-  git,
+{ lib
+, bundlerEnv
+, bundlerUpdateScript
+, git
+,
 }:
 bundlerEnv {
   pname = "homesick";

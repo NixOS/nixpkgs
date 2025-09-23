@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  perl,
+{ mkKdeDerivation
+, perl
+,
 }:
 mkKdeDerivation {
   pname = "kdesdk-kio";

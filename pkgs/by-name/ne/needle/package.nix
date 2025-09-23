@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  sqlite,
+{ stdenv
+, lib
+, fetchFromGitHub
+, swift
+, swiftpm
+, swiftpm2nix
+, sqlite
+,
 }:
 let
   generated = swiftpm2nix.helpers ./nix;

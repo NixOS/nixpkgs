@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  replaceVars,
-  fetchPypi,
-  cython,
-  fontconfig,
-  freetype-py,
-  hsluv,
-  kiwisolver,
-  libGL,
-  numpy,
-  oldest-supported-numpy,
-  packaging,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  wheel,
+{ lib
+, stdenv
+, buildPythonPackage
+, replaceVars
+, fetchPypi
+, cython
+, fontconfig
+, freetype-py
+, hsluv
+, kiwisolver
+, libGL
+, numpy
+, oldest-supported-numpy
+, packaging
+, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
+,
 }:
 
 buildPythonPackage rec {

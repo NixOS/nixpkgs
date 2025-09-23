@@ -1,50 +1,40 @@
-{
-  stdenv,
-  fetchFromGitLab,
-  python3,
-  libxml2,
-  sqlite,
-
-  boost,
-  gtk3-x11,
-  root,
-  glib,
-  gsl,
-
-  cmake,
-  pkg-config,
-
-  libpcap,
-
-  jansson,
-
-  harfbuzz,
-  freetype,
-
-  # for binding generation
-  castxml ? null,
-  cppyy ? null,
-
-  # can take a long time, generates > 30000 images/graphs
-  enableDoxygen ? false,
-
-  # very long
-  withManual ? false,
-  doxygen ? null,
-  graphviz ? null,
-  imagemagick ? null,
-  # for manual, tetex is used to get the eps2pdf binary
+{ stdenv
+, fetchFromGitLab
+, python3
+, libxml2
+, sqlite
+, boost
+, gtk3-x11
+, root
+, glib
+, gsl
+, cmake
+, pkg-config
+, libpcap
+, jansson
+, harfbuzz
+, freetype
+, # for binding generation
+  castxml ? null
+, cppyy ? null
+, # can take a long time, generates > 30000 images/graphs
+  enableDoxygen ? false
+, # very long
+  withManual ? false
+, doxygen ? null
+, graphviz ? null
+, imagemagick ? null
+, # for manual, tetex is used to get the eps2pdf binary
   # texlive to get latexmk. building manual still fails though
-  dia,
-  tetex ? null,
-  ghostscript ? null,
-  texliveMedium ? null,
-
-  # generates python bindings
-  pythonSupport ? true,
-  ncurses ? null,
-
-  lib,
+  dia
+, tetex ? null
+, ghostscript ? null
+, texliveMedium ? null
+, # generates python bindings
+  pythonSupport ? true
+, ncurses ? null
+, lib
+,
 }:
 
 let

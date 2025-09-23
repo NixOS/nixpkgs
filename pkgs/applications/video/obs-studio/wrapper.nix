@@ -1,12 +1,12 @@
-{
-  lib,
-  obs-studio,
-  symlinkJoin,
-  makeWrapper,
+{ lib
+, obs-studio
+, symlinkJoin
+, makeWrapper
+,
 }:
 
-{
-  plugins ? [ ],
+{ plugins ? [ ]
+,
 }:
 
 symlinkJoin {

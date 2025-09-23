@@ -1,8 +1,8 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitLab,
-  fetchpatch2,
+{ lib
+, callPackage
+, fetchFromGitLab
+, fetchpatch2
+,
 }:
 
 let

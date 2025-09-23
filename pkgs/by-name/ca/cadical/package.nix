@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  copyPkgconfigItems,
-  makePkgconfigItem,
-  version ? "2.1.3",
+{ lib
+, stdenv
+, fetchFromGitHub
+, copyPkgconfigItems
+, makePkgconfigItem
+, version ? "2.1.3"
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
       {
         "2.1.3" = "sha256-W3kO+6nVzkmJXyHJU+NZWP0oatK3gon4EWF1/03rgL4=";
         "2.0.0" = "sha256-qoeEM9SdpuFuBPeQlCzuhPLcJ+bMQkTUTGiT8QdU8rc=";
-      }
-      .${version};
+      }.${version};
   };
 
   outputs = [

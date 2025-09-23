@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  glib,
-  libxml2,
-  libxslt,
-  getopt,
-  dysnomia,
-  libintl,
-  libiconv,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, glib
+, libxml2
+, libxslt
+, getopt
+, dysnomia
+, libintl
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  python3,
-  hadoop,
-  RSupport ? true,
-  R,
-  nixosTests,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, python3
+, hadoop
+, RSupport ? true
+, R
+, nixosTests
+,
 }:
 
 let
   spark =
-    {
-      pname,
-      version,
-      hash,
-      extraMeta ? { },
-      pysparkPython ? python3,
+    { pname
+    , version
+    , hash
+    , extraMeta ? { }
+    , pysparkPython ? python3
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       inherit

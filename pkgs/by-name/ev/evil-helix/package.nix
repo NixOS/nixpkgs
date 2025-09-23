@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  helix,
-  installShellFiles,
-  nix-update-script,
-  rustPlatform,
+{ lib
+, fetchFromGitHub
+, helix
+, installShellFiles
+, nix-update-script
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage (final: {

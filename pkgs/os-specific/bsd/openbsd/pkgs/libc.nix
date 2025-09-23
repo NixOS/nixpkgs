@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoLibc,
-  symlinkJoin,
-  libcMinimal,
-  librthread,
-  libm,
-  librpcsvc,
-  libutil,
-  libexecinfo,
-  libkvm,
-  rtld,
-  version,
+{ lib
+, stdenvNoLibc
+, symlinkJoin
+, libcMinimal
+, librthread
+, libm
+, librpcsvc
+, libutil
+, libexecinfo
+, libkvm
+, rtld
+, version
+,
 }:
 
 symlinkJoin rec {

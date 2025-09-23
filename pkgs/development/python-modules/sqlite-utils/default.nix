@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  click,
-  click-default-group,
-  python-dateutil,
-  sqlite-fts4,
-  tabulate,
-  pluggy,
-  pytestCheckHook,
-  hypothesis,
-  testers,
-  sqlite-utils,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, click
+, click-default-group
+, python-dateutil
+, sqlite-fts4
+, tabulate
+, pluggy
+, pytestCheckHook
+, hypothesis
+, testers
+, sqlite-utils
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "sqlite-utils";

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy27,
-  pytestCheckHook,
-  pytest-cov-stub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pytestCheckHook
+, pytest-cov-stub
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

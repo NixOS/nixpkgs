@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  aws-rotate-key,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, aws-rotate-key
+,
 }:
 
 buildGoModule rec {

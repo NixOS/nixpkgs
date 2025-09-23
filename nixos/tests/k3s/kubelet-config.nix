@@ -1,10 +1,9 @@
 # A test that sets extra kubelet configuration and enables graceful node shutdown
 import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    k3s,
-    ...
+  { pkgs
+  , lib
+  , k3s
+  , ...
   }:
   let
     nodeName = "test";

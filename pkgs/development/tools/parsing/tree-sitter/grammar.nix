@@ -1,20 +1,20 @@
-{
-  stdenv,
-  nodejs,
-  tree-sitter,
-  lib,
+{ stdenv
+, nodejs
+, tree-sitter
+, lib
+,
 }:
 
 # Build a parser grammar and put the resulting shared object in `$out/parser`
 
 {
   # language name
-  language,
-  version,
-  src,
-  location ? null,
-  generate ? false,
-  ...
+  language
+, version
+, src
+, location ? null
+, generate ? false
+, ...
 }@args:
 
 stdenv.mkDerivation (
@@ -72,7 +72,7 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
   }
-  // removeAttrs args [
+    // removeAttrs args [
     "language"
     "location"
     "generate"

@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  bash-completion,
-  pkg-config,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  fetchFromGitLab,
-  libgudev,
-  glib,
-  polkit,
-  dbus,
-  gobject-introspection,
-  wrapGAppsNoGuiHook,
-  gettext,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_412,
-  libxml2,
-  libxslt,
-  upower,
-  umockdev,
-  systemd,
-  python3,
-  nixosTests,
-  nix-update-script,
+{ stdenv
+, lib
+, bash-completion
+, pkg-config
+, meson
+, mesonEmulatorHook
+, ninja
+, fetchFromGitLab
+, libgudev
+, glib
+, polkit
+, dbus
+, gobject-introspection
+, wrapGAppsNoGuiHook
+, gettext
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_412
+, libxml2
+, libxslt
+, upower
+, umockdev
+, systemd
+, python3
+, nixosTests
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

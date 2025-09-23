@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  wayland-scanner,
-  wayland,
-  gtk3,
-  gobject-introspection,
-  vala,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, wayland-scanner
+, wayland
+, gtk3
+, gobject-introspection
+, vala
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

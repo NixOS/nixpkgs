@@ -1310,26 +1310,27 @@ in
             `pkcs12` folder.
           '';
 
-      token = mkPrefixedAttrsOfParams {
-        handle = mkOptionalHexParam ''
-          Hex-encoded CKA_ID or handle of the private key on the token or TPM,
-          respectively.
-        '';
+      token = mkPrefixedAttrsOfParams
+        {
+          handle = mkOptionalHexParam ''
+            Hex-encoded CKA_ID or handle of the private key on the token or TPM,
+            respectively.
+          '';
 
-        slot = mkOptionalIntParam ''
-          Optional slot number to access the token.
-        '';
+          slot = mkOptionalIntParam ''
+            Optional slot number to access the token.
+          '';
 
-        module = mkOptionalStrParam ''
-          Optional PKCS#11 module name to access the token.
-        '';
+          module = mkOptionalStrParam ''
+            Optional PKCS#11 module name to access the token.
+          '';
 
-        pin = mkOptionalStrParam ''
-          Optional PIN required to access the key on the token. If none is
-          provided the user is prompted during an interactive
-          `--load-creds` call.
-        '';
-      } "Definition for a private key that's stored on a token/smartcard/TPM.";
+          pin = mkOptionalStrParam ''
+            Optional PIN required to access the key on the token. If none is
+            provided the user is prompted during an interactive
+            `--load-creds` call.
+          '';
+        } "Definition for a private key that's stored on a token/smartcard/TPM.";
 
     };
 

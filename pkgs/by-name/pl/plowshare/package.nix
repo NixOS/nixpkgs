@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  curl,
-  recode,
-  spidermonkey_140,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, curl
+, recode
+, spidermonkey_140
+,
 }:
 
 stdenv.mkDerivation rec {

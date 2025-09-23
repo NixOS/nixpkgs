@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  git,
-  buildPackages,
-  # passthru
-  callPackage,
-  testers,
-  pulumi,
-  pulumiPackages,
-  python3Packages,
-  nix-update-script,
-  _experimental-update-script-combinators,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, git
+, buildPackages
+, # passthru
+  callPackage
+, testers
+, pulumi
+, pulumiPackages
+, python3Packages
+, nix-update-script
+, _experimental-update-script-combinators
+,
 }:
 buildGoModule rec {
   pname = "pulumi";

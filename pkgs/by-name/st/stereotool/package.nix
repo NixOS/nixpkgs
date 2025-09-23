@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  libX11,
-  libXpm,
-  alsa-lib,
-  bzip2,
-  zlib,
-  kdePackages,
-  libgcc,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, libX11
+, libXpm
+, alsa-lib
+, bzip2
+, zlib
+, kdePackages
+, libgcc
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -107,8 +107,7 @@ stdenv.mkDerivation rec {
             hash = "sha256-lPNg58u163DcWk11jbg8l77OdqX+6rVQalGmEXD674s=";
           })
         ];
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
     );
 
   unpackPhase = ''

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  graalvmPackages,
-  useMusl ? false,
-  version ? "25",
+{ lib
+, stdenv
+, fetchurl
+, graalvmPackages
+, useMusl ? false
+, version ? "25"
+,
 }:
 
 graalvmPackages.buildGraalvm {

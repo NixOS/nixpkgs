@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
           "aarch64-darwin" = "macos-aarch64";
           "x86_64-darwin" = "macos-x86_64";
           "x86_64-linux" = "linux-x86_64";
-        }
-        .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+        }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
       getUrl =
         version: arch:
@@ -30,8 +29,7 @@ stdenv.mkDerivation rec {
           "macos-aarch64" = "sha256-UnDl9wj/7RXrEaApuAaLczIfz0lscQPf+pCeSdJxJeY=";
           "macos-x86_64" = "sha256-mmsBQrx0yKqvvhnD8CU+oxqhWsOT1RzvzSniN3CeG7g=";
           "linux-x86_64" = "sha256-2Ff+4rTj/W0tQBo6lADcQMIN4dAj32UnIXF9PRme0Nw=";
-        }
-        .${arch};
+        }.${arch};
     in
     fetchurl {
       url = getUrl version getArch;

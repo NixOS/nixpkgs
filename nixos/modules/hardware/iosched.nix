@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -28,11 +27,11 @@ let
   };
 
   udevRule =
-    {
-      rotational ? null,
-      include ? null,
-      exclude ? null,
-      scheduler,
+    { rotational ? null
+    , include ? null
+    , exclude ? null
+    , scheduler
+    ,
     }:
     concatStringsSep ", " (
       [
@@ -165,21 +164,24 @@ in
         services.udev.packages = [
           (pkgs.writeTextDir "etc/udev/rules.d/98-block-io-scheduler.rules" (
             concatLines (
-              optional (cfg.defaultScheduler != null) (udevRule {
-                exclude = cfg.defaultSchedulerExclude;
-                scheduler = cfg.defaultScheduler;
-              })
+              optional (cfg.defaultScheduler != null)
+                (udevRule {
+                  exclude = cfg.defaultSchedulerExclude;
+                  scheduler = cfg.defaultScheduler;
+                })
               ++ optional (cfg.defaultSchedulerRotational != null) (udevRule {
                 rotational = true;
                 exclude = cfg.defaultSchedulerExclude;
                 scheduler = cfg.defaultSchedulerRotational;
               })
-              ++ mapAttrsToList (
-                include: scheduler:
-                udevRule {
-                  inherit include scheduler;
-                }
-              ) cfg.scheduler
+              ++ mapAttrsToList
+                (
+                  include: scheduler:
+                    udevRule {
+                      inherit include scheduler;
+                    }
+                )
+                cfg.scheduler
             )
           ))
         ];

@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools-scm,
-  django,
-  django-ipware,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-django,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools-scm
+, django
+, django-ipware
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

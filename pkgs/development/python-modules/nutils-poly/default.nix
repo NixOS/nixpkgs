@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  libiconv,
-  numpy,
-  unittestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+, numpy
+, unittestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

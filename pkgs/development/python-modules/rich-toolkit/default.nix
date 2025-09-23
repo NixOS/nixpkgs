@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  click,
-  rich,
-  typing-extensions,
-
-  # tests
-  inline-snapshot,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  click
+, rich
+, typing-extensions
+, # tests
+  inline-snapshot
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

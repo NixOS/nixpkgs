@@ -8,8 +8,7 @@
   nodes = {
     client =
       { nodes, pkgs, ... }:
-      {
-      };
+      { };
     server =
       { config, pkgs, ... }:
       {

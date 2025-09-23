@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  pulumiTestHook,
-  pulumi,
-  pulumi-python,
-  python3Packages,
+{ lib
+, stdenvNoCC
+, pulumiTestHook
+, pulumi
+, pulumi-python
+, python3Packages
+,
 }:
 stdenvNoCC.mkDerivation {
   name = "pulumi-python-smoke-test";

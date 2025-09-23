@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  future,
-  numpy,
-  scipy,
-  matplotlib,
-  scikit-learn,
-  torch,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  future
+, numpy
+, scipy
+, matplotlib
+, scikit-learn
+, torch
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

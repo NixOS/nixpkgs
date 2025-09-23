@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jdk11,
-  atlassian-plugin-sdk,
-  testers,
-  writeShellScript,
-  common-updater-scripts,
-  curl,
-  jq,
-  yq,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jdk11
+, atlassian-plugin-sdk
+, testers
+, writeShellScript
+, common-updater-scripts
+, curl
+, jq
+, yq
+,
 }:
 
 let

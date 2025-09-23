@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGLU,
-  libXmu,
-  libXi,
-  libXext,
-  testers,
-  mesa,
+{ lib
+, stdenv
+, fetchurl
+, libGLU
+, libXmu
+, libXi
+, libXext
+, testers
+, mesa
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

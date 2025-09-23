@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, python3Packages
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "calibre-web";

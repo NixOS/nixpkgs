@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # tests
-  djangorestframework,
-  html5lib,
-  lxml,
-  pytest-django,
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # tests
+  djangorestframework
+, html5lib
+, lxml
+, pytest-django
+, pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

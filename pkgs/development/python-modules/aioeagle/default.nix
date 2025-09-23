@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  xmltodict,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

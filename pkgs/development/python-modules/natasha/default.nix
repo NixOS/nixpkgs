@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pymorphy2,
-  razdel,
-  navec,
-  slovnet,
-  yargy,
-  ipymarkup,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pymorphy2
+, razdel
+, navec
+, slovnet
+, yargy
+, ipymarkup
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

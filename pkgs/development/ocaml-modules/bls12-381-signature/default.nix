@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchzip,
-  buildDunePackage,
-  bls12-381,
-  alcotest,
-  bisect_ppx,
-  integers_stubs_js,
+{ lib
+, fetchzip
+, buildDunePackage
+, bls12-381
+, alcotest
+, bisect_ppx
+, integers_stubs_js
+,
 }:
 
 buildDunePackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  six,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, six
+,
 }:
 
 buildPythonPackage rec {

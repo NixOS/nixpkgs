@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3Packages,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  gtk3,
-  wrapGAppsHook3,
-  xrandr,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, python3Packages
+, gobject-introspection
+, gsettings-desktop-schemas
+, gtk3
+, wrapGAppsHook3
+, xrandr
+, nix-update-script
+,
 }:
 
 let

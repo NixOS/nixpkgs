@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  libsepol,
-  libselinux,
-  libsemanage,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, libsepol
+, libselinux
+, libsemanage
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

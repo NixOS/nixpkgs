@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # build-system
-  setuptools,
-  # dependencies
-  nbtlib,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  nbtlib
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

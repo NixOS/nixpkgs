@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  python3,
-  curl,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, python3
+, curl
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

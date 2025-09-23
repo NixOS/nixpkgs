@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  cerberus,
-  configparser,
-  deepdiff,
-  fetchFromGitHub,
-  geoip2,
-  jinja2,
-  netmiko,
-  openpyxl,
-  pytestCheckHook,
-  poetry-core,
-  pyyaml,
-  tabulate,
-  ttp-templates,
-  yangson,
+{ lib
+, buildPythonPackage
+, cerberus
+, configparser
+, deepdiff
+, fetchFromGitHub
+, geoip2
+, jinja2
+, netmiko
+, openpyxl
+, pytestCheckHook
+, poetry-core
+, pyyaml
+, tabulate
+, ttp-templates
+, yangson
+,
 }:
 
 buildPythonPackage rec {

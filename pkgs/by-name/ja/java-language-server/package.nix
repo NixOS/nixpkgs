@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jdk_headless,
-  maven,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk_headless
+, maven
+, makeWrapper
+,
 }:
 
 let

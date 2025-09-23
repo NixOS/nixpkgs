@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libusb1,
-  sfml_2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libusb1
+, sfml_2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

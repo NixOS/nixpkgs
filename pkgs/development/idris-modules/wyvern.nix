@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  effects,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, effects
+, lib
+,
 }:
 build-idris-package {
   pname = "wyvern";

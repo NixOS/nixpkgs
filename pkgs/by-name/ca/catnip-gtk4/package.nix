@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  gobject-introspection,
-  gtk4,
-  libadwaita,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, gobject-introspection
+, gtk4
+, libadwaita
+,
 }:
 
 buildGoModule {

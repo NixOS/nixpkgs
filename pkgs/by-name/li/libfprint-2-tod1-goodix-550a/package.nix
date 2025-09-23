@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  unzip,
-  libfprint-tod,
+{ stdenv
+, lib
+, fetchzip
+, unzip
+, libfprint-tod
+,
 }:
 
 stdenv.mkDerivation {

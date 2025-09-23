@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  python,
-  fetchurl,
-  pythonOlder,
-  pythonAtLeast,
-
-  # buildInputs
-  cudaPackages,
-  ffmpeg_6,
-  sox,
-
-  # nativeBuildInputs
-  addDriverRunpath,
-  autoPatchelfHook,
-
-  # dependencies
-  torch-bin,
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, fetchurl
+, pythonOlder
+, pythonAtLeast
+, # buildInputs
+  cudaPackages
+, ffmpeg_6
+, sox
+, # nativeBuildInputs
+  addDriverRunpath
+, autoPatchelfHook
+, # dependencies
+  torch-bin
+,
 }:
 
 buildPythonPackage rec {

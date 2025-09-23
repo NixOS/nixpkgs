@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  colcon,
-  cargo,
-  fetchFromGitHub,
-  scspell,
-  setuptools,
-  pythonOlder,
-  pytestCheckHook,
-  rustfmt,
-  toml,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, colcon
+, cargo
+, fetchFromGitHub
+, scspell
+, setuptools
+, pythonOlder
+, pytestCheckHook
+, rustfmt
+, toml
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage rec {
   pname = "colcon-cargo";

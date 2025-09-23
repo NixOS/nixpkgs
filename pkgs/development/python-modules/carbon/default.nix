@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cachetools,
-  fetchPypi,
-  nixosTests,
-  setuptools,
-  twisted,
-  txamqp,
-  urllib3,
-  whisper,
+{ lib
+, buildPythonPackage
+, cachetools
+, fetchPypi
+, nixosTests
+, setuptools
+, twisted
+, txamqp
+, urllib3
+, whisper
+,
 }:
 
 buildPythonPackage rec {

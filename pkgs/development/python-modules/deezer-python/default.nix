@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  environs,
-  fetchFromGitHub,
-  httpx,
-  setuptools,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  tornado,
+{ lib
+, buildPythonPackage
+, environs
+, fetchFromGitHub
+, httpx
+, setuptools
+, pytest-cov-stub
+, pytest-mock
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, tornado
+,
 }:
 
 buildPythonPackage rec {

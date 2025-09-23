@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  go-md2man,
-  installShellFiles,
-  pkg-config,
-  which,
-  libapparmor,
-  libseccomp,
-  libselinux,
-  stdenv,
-  makeBinaryWrapper,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, go-md2man
+, installShellFiles
+, pkg-config
+, which
+, libapparmor
+, libseccomp
+, libselinux
+, stdenv
+, makeBinaryWrapper
+, nixosTests
+,
 }:
 
 buildGoModule (finalAttrs: {

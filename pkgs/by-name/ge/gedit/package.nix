@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  meson,
-  mesonEmulatorHook,
-  fetchFromGitLab,
-  pkg-config,
-  gtk3,
-  gtk-mac-integration,
-  glib,
-  libgedit-amtk,
-  libgedit-gtksourceview,
-  libgedit-tepl,
-  libpeas,
-  libxml2,
-  gsettings-desktop-schemas,
-  wrapGAppsHook3,
-  gtk-doc,
-  gobject-introspection,
-  docbook-xsl-nons,
-  ninja,
-  gitUpdater,
-  gspell,
-  itstool,
-  desktop-file-utils,
-  vala,
+{ stdenv
+, lib
+, meson
+, mesonEmulatorHook
+, fetchFromGitLab
+, pkg-config
+, gtk3
+, gtk-mac-integration
+, glib
+, libgedit-amtk
+, libgedit-gtksourceview
+, libgedit-tepl
+, libpeas
+, libxml2
+, gsettings-desktop-schemas
+, wrapGAppsHook3
+, gtk-doc
+, gobject-introspection
+, docbook-xsl-nons
+, ninja
+, gitUpdater
+, gspell
+, itstool
+, desktop-file-utils
+, vala
+,
 }:
 
 stdenv.mkDerivation rec {

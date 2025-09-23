@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  caqti,
-  ocaml_sqlite3,
-  alcotest,
-  dune-site,
+{ buildDunePackage
+, caqti
+, ocaml_sqlite3
+, alcotest
+, dune-site
+,
 }:
 
 buildDunePackage {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  kaem,
-  tinycc,
-  gnupatch,
+{ lib
+, fetchurl
+, kaem
+, tinycc
+, gnupatch
+,
 }:
 let
   pname = "gnumake";
@@ -155,23 +155,23 @@ let
   objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (builtins.baseNameOf x)) sources;
 in
 kaem.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnupatch
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnupatch
+  ];
 
-    meta = with lib; {
-      description = "Tool to control the generation of non-source files from sources";
-      homepage = "https://www.gnu.org/software/make";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "make";
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "Tool to control the generation of non-source files from sources";
+    homepage = "https://www.gnu.org/software/make";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    mainProgram = "make";
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     ungz --file ${src} --output make.tar

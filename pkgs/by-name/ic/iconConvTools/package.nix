@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  icoutils,
+{ lib
+, stdenv
+, icoutils
+,
 }:
 
 stdenv.mkDerivation {

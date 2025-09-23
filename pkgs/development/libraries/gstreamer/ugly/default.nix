@@ -1,28 +1,28 @@
-{
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  gst-plugins-base,
-  orc,
-  gettext,
-  a52dec,
-  libcdio,
-  libdvdread,
-  libmad,
-  libmpeg2,
-  x264,
-  libintl,
-  lib,
-  enableGplPlugins ? true,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  directoryListingUpdater,
-  gst-plugins-ugly,
-  apple-sdk_gstreamer,
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, gst-plugins-base
+, orc
+, gettext
+, a52dec
+, libcdio
+, libdvdread
+, libmad
+, libmpeg2
+, x264
+, libintl
+, lib
+, enableGplPlugins ? true
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, directoryListingUpdater
+, gst-plugins-ugly
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

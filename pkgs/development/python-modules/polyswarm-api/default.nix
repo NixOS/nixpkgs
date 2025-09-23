@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jsonschema,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
-  vcrpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jsonschema
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, responses
+, setuptools
+, vcrpy
+,
 }:
 
 buildPythonPackage rec {

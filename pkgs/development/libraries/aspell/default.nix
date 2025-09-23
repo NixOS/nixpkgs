@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  fetchzip,
-  perl,
-  ncurses,
-
-  # for tests
-  aspell,
-  glibc,
-  runCommand,
-
-  searchNixProfiles ? true,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, fetchzip
+, perl
+, ncurses
+, # for tests
+  aspell
+, glibc
+, runCommand
+, searchNixProfiles ? true
+,
 }:
 
 let

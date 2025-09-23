@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchurl,
-  perl,
-  zlib,
-  groff,
-  withBzip2 ? false,
-  bzip2,
-  withLZMA ? false,
-  xz,
-  withOpenssl ? false,
-  openssl,
-  withZstd ? false,
-  zstd,
-  testers,
+{ lib
+, stdenv
+, cmake
+, fetchurl
+, perl
+, zlib
+, groff
+, withBzip2 ? false
+, bzip2
+, withLZMA ? false
+, xz
+, withOpenssl ? false
+, openssl
+, withZstd ? false
+, zstd
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

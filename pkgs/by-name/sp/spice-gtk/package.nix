@@ -1,44 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  acl,
-  cyrus_sasl,
-  docbook_xsl,
-  libepoxy,
-  gettext,
-  gobject-introspection,
-  gst_all_1,
-  gtk-doc,
-  gtk3,
-  hwdata,
-  json-glib,
-  libcacard,
-  libcap_ng,
-  libdrm,
-  libjpeg_turbo,
-  libopus,
-  libsoup_3,
-  libusb1,
-  lz4,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  openssl,
-  perl,
-  phodav,
-  pixman,
-  pkg-config,
-  polkit,
-  python3,
-  spice-protocol,
-  usbredir,
-  vala,
-  wayland-protocols,
-  wayland-scanner,
-  zlib,
-  wrapGAppsHook3,
-  withPolkit ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchurl
+, acl
+, cyrus_sasl
+, docbook_xsl
+, libepoxy
+, gettext
+, gobject-introspection
+, gst_all_1
+, gtk-doc
+, gtk3
+, hwdata
+, json-glib
+, libcacard
+, libcap_ng
+, libdrm
+, libjpeg_turbo
+, libopus
+, libsoup_3
+, libusb1
+, lz4
+, meson
+, mesonEmulatorHook
+, ninja
+, openssl
+, perl
+, phodav
+, pixman
+, pkg-config
+, polkit
+, python3
+, spice-protocol
+, usbredir
+, vala
+, wayland-protocols
+, wayland-scanner
+, zlib
+, wrapGAppsHook3
+, withPolkit ? stdenv.hostPlatform.isLinux
+,
 }:
 
 # If this package is built with polkit support (withPolkit=true),

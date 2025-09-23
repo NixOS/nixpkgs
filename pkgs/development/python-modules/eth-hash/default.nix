@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  isPyPy,
-  # nativeCheckInputs
-  pytest,
-  pytest-xdist,
-  # optional dependencies
-  pycryptodome,
-  safe-pysha3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, isPyPy
+, # nativeCheckInputs
+  pytest
+, pytest-xdist
+, # optional dependencies
+  pycryptodome
+, safe-pysha3
+,
 }:
 
 buildPythonPackage rec {

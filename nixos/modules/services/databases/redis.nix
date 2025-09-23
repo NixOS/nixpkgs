@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.redis;
@@ -19,10 +18,12 @@ let
   redisConfig =
     settings:
     pkgs.writeText "redis.conf" (
-      lib.generators.toKeyValue {
-        listsAsDuplicateKeys = true;
-        mkKeyValue = lib.generators.mkKeyValueDefault { inherit mkValueString; } " ";
-      } settings
+      lib.generators.toKeyValue
+        {
+          listsAsDuplicateKeys = true;
+          mkKeyValue = lib.generators.mkKeyValueDefault { inherit mkValueString; } " ";
+        }
+        settings
     );
 
   redisName = name: "redis" + lib.optionalString (name != "") ("-" + name);
@@ -453,123 +454,132 @@ in
   config = lib.mkIf (enabledServers != { }) {
 
     assertions = lib.attrValues (
-      lib.mapAttrs (name: conf: {
-        assertion = conf.requirePass != null -> conf.requirePassFile == null;
-        message = ''
-          You can only set one services.redis.servers.${name}.requirePass
-          or services.redis.servers.${name}.requirePassFile
-        '';
-      }) enabledServers
+      lib.mapAttrs
+        (name: conf: {
+          assertion = conf.requirePass != null -> conf.requirePassFile == null;
+          message = ''
+            You can only set one services.redis.servers.${name}.requirePass
+            or services.redis.servers.${name}.requirePassFile
+          '';
+        })
+        enabledServers
     );
 
     boot.kernel.sysctl = lib.mkIf cfg.vmOverCommit {
       "vm.overcommit_memory" = "1";
     };
 
-    networking.firewall.allowedTCPPorts = lib.concatMap (
-      conf: lib.optional conf.openFirewall conf.port
-    ) (lib.attrValues enabledServers);
+    networking.firewall.allowedTCPPorts = lib.concatMap
+      (
+        conf: lib.optional conf.openFirewall conf.port
+      )
+      (lib.attrValues enabledServers);
 
     environment.systemPackages = [ cfg.package ];
 
-    users.users = lib.mapAttrs' (
-      name: conf:
-      lib.nameValuePair (redisName name) {
-        description = "System user for the redis-server instance ${name}";
-        isSystemUser = true;
-        group = redisName name;
-      }
-    ) enabledServers;
-    users.groups = lib.mapAttrs' (
-      name: conf:
-      lib.nameValuePair (redisName name) {
-      }
-    ) enabledServers;
+    users.users = lib.mapAttrs'
+      (
+        name: conf:
+          lib.nameValuePair (redisName name) {
+            description = "System user for the redis-server instance ${name}";
+            isSystemUser = true;
+            group = redisName name;
+          }
+      )
+      enabledServers;
+    users.groups = lib.mapAttrs'
+      (
+        name: conf:
+          lib.nameValuePair (redisName name) { }
+      )
+      enabledServers;
 
-    systemd.services = lib.mapAttrs' (
-      name: conf:
-      lib.nameValuePair (redisName name) {
-        description = "Redis Server - ${redisName name}";
+    systemd.services = lib.mapAttrs'
+      (
+        name: conf:
+          lib.nameValuePair (redisName name) {
+            description = "Redis Server - ${redisName name}";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network.target" ];
 
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/${
+            serviceConfig = {
+              ExecStart = "${cfg.package}/bin/${
             cfg.package.serverBin or "redis-server"
           } /var/lib/${redisName name}/redis.conf ${lib.escapeShellArgs conf.extraParams}";
-          ExecStartPre =
-            "+"
-            + pkgs.writeShellScript "${redisName name}-prep-conf" (
-              let
-                redisConfVar = "/var/lib/${redisName name}/redis.conf";
-                redisConfRun = "/run/${redisName name}/nixos.conf";
-                redisConfStore = redisConfig conf.settings;
-              in
-              ''
-                touch "${redisConfVar}" "${redisConfRun}"
-                chown '${conf.user}':'${conf.group}' "${redisConfVar}" "${redisConfRun}"
-                chmod 0600 "${redisConfVar}" "${redisConfRun}"
-                if [ ! -s ${redisConfVar} ]; then
-                  echo 'include "${redisConfRun}"' > "${redisConfVar}"
-                fi
-                echo 'include "${redisConfStore}"' > "${redisConfRun}"
-                ${lib.optionalString (conf.requirePassFile != null) ''
-                  {
-                    echo -n "requirepass "
-                    cat ${lib.escapeShellArg conf.requirePassFile}
-                  } >> "${redisConfRun}"
-                ''}
-              ''
-            );
-          Type = "notify";
-          # User and group
-          User = conf.user;
-          Group = conf.group;
-          # Runtime directory and mode
-          RuntimeDirectory = redisName name;
-          RuntimeDirectoryMode = "0750";
-          # State directory and mode
-          StateDirectory = redisName name;
-          StateDirectoryMode = "0700";
-          # Access write directories
-          UMask = "0077";
-          # Capabilities
-          CapabilityBoundingSet = "";
-          # Security
-          NoNewPrivileges = true;
-          # Process Properties
-          LimitNOFILE = lib.mkDefault "${toString (conf.maxclients + 32)}";
-          # Sandboxing
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          PrivateUsers = true;
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
-          RestrictNamespaces = true;
-          LockPersonality = true;
-          # we need to disable MemoryDenyWriteExecute for keydb
-          MemoryDenyWriteExecute = cfg.package.pname != "keydb";
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          PrivateMounts = true;
-          # System Call Filtering
-          SystemCallArchitectures = "native";
-          SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
-        };
-      }
-    ) enabledServers;
+              ExecStartPre =
+                "+"
+                + pkgs.writeShellScript "${redisName name}-prep-conf" (
+                  let
+                    redisConfVar = "/var/lib/${redisName name}/redis.conf";
+                    redisConfRun = "/run/${redisName name}/nixos.conf";
+                    redisConfStore = redisConfig conf.settings;
+                  in
+                  ''
+                    touch "${redisConfVar}" "${redisConfRun}"
+                    chown '${conf.user}':'${conf.group}' "${redisConfVar}" "${redisConfRun}"
+                    chmod 0600 "${redisConfVar}" "${redisConfRun}"
+                    if [ ! -s ${redisConfVar} ]; then
+                      echo 'include "${redisConfRun}"' > "${redisConfVar}"
+                    fi
+                    echo 'include "${redisConfStore}"' > "${redisConfRun}"
+                    ${lib.optionalString (conf.requirePassFile != null) ''
+                      {
+                        echo -n "requirepass "
+                        cat ${lib.escapeShellArg conf.requirePassFile}
+                      } >> "${redisConfRun}"
+                    ''}
+                  ''
+                );
+              Type = "notify";
+              # User and group
+              User = conf.user;
+              Group = conf.group;
+              # Runtime directory and mode
+              RuntimeDirectory = redisName name;
+              RuntimeDirectoryMode = "0750";
+              # State directory and mode
+              StateDirectory = redisName name;
+              StateDirectoryMode = "0700";
+              # Access write directories
+              UMask = "0077";
+              # Capabilities
+              CapabilityBoundingSet = "";
+              # Security
+              NoNewPrivileges = true;
+              # Process Properties
+              LimitNOFILE = lib.mkDefault "${toString (conf.maxclients + 32)}";
+              # Sandboxing
+              ProtectSystem = "strict";
+              ProtectHome = true;
+              PrivateTmp = true;
+              PrivateDevices = true;
+              PrivateUsers = true;
+              ProtectClock = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectControlGroups = true;
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ];
+              RestrictNamespaces = true;
+              LockPersonality = true;
+              # we need to disable MemoryDenyWriteExecute for keydb
+              MemoryDenyWriteExecute = cfg.package.pname != "keydb";
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
+              PrivateMounts = true;
+              # System Call Filtering
+              SystemCallArchitectures = "native";
+              SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
+            };
+          }
+      )
+      enabledServers;
 
   };
 }

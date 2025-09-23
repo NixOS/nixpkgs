@@ -1,12 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  cctools,
-  remarshal,
-  ttfautohint-nox,
-  # Custom font set options.
+{ stdenv
+, lib
+, buildNpmPackage
+, fetchFromGitHub
+, cctools
+, remarshal
+, ttfautohint-nox
+, # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
   # Can be a raw TOML string, or a Nix attrset.
 
@@ -35,8 +34,8 @@
   #     italic.i = "tailed";
   #   };
   # }
-  privateBuildPlan ? null,
-  # Extra parameters. Can be used for ligature mapping.
+  privateBuildPlan ? null
+, # Extra parameters. Can be used for ligature mapping.
   # It must be a raw TOML string.
 
   # Ex:
@@ -46,9 +45,10 @@
   #   featureTag = 'XHS0'
   #   sequence = "+>"
   # '';
-  extraParameters ? null,
-  # Custom font set name. Required if any custom settings above.
-  set ? null,
+  extraParameters ? null
+, # Custom font set name. Required if any custom settings above.
+  set ? null
+,
 }:
 
 assert (privateBuildPlan != null) -> set != null;
@@ -86,9 +86,10 @@ buildNpmPackage rec {
   passAsFile = [
     "extraParameters"
   ]
-  ++ lib.optionals (
-    !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
-  ) [ "buildPlan" ];
+  ++ lib.optionals
+    (
+      !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
+    ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure

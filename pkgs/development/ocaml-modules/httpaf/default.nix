@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  angstrom,
-  faraday,
-  result,
-  alcotest,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, angstrom
+, faraday
+, result
+, alcotest
+,
 }:
 
 buildDunePackage rec {

@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  ruff,
-
-  # dependencies
-  cattrs,
-  lsprotocol,
-  python-lsp-server,
-  tomli,
-
-  # checks
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, ruff
+, # dependencies
+  cattrs
+, lsprotocol
+, python-lsp-server
+, tomli
+, # checks
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

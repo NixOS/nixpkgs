@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchpatch,
-  ocaml,
-  bitstring,
-  ppxlib,
-  ounit,
+{ lib
+, buildDunePackage
+, fetchpatch
+, ocaml
+, bitstring
+, ppxlib
+, ounit
+,
 }:
 
 if lib.versionOlder ppxlib.version "0.18.0" then

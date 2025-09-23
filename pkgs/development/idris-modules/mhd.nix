@@ -1,10 +1,10 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  effects,
-  libmicrohttpd,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, effects
+, libmicrohttpd
+, lib
+,
 }:
 build-idris-package {
   pname = "mhd";

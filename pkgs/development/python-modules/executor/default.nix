@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  isPy27,
-  pythonAtLeast,
-  coloredlogs,
-  humanfriendly,
-  property-manager,
-  fasteners,
-  six,
-  pytestCheckHook,
-  mock,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, isPy27
+, pythonAtLeast
+, coloredlogs
+, humanfriendly
+, property-manager
+, fasteners
+, six
+, pytestCheckHook
+, mock
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

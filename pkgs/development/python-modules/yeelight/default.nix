@@ -1,12 +1,12 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitLab,
-  flit-core,
-  ifaddr,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchFromGitLab
+, flit-core
+, ifaddr
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

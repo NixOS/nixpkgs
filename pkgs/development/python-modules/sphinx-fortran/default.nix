@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  future,
-  numpy,
-  sphinx,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, future
+, numpy
+, sphinx
+, six
+,
 }:
 
 buildPythonPackage {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitHub,
-  ffmpeg,
-  unstableGitUpdater,
+{ lib
+, buildLua
+, fetchFromGitHub
+, ffmpeg
+, unstableGitUpdater
+,
 }:
 
 buildLua {

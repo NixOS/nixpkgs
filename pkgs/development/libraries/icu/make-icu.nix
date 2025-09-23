@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchurl,
-  fixDarwinDylibNames,
-  testers,
-  updateAutotoolsGnuConfigScriptsHook,
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, fixDarwinDylibNames
+, testers
+, updateAutotoolsGnuConfigScriptsHook
+,
 }:
 
-{
-  version,
-  hash,
-  patches ? [ ],
-  patchFlags ? [ ],
-  withStatic ? stdenv.hostPlatform.isStatic,
+{ version
+, hash
+, patches ? [ ]
+, patchFlags ? [ ]
+, withStatic ? stdenv.hostPlatform.isStatic
+,
 }:
 
 let
@@ -70,9 +70,10 @@ let
       "--disable-debug"
     ]
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) "--enable-rpath"
-    ++ lib.optional (
-      stdenv.buildPlatform != stdenv.hostPlatform
-    ) "--with-cross-build=${nativeBuildRoot}"
+    ++ lib.optional
+      (
+        stdenv.buildPlatform != stdenv.hostPlatform
+      ) "--with-cross-build=${nativeBuildRoot}"
     ++ lib.optional withStatic "--enable-static";
 
     enableParallelBuilding = true;
@@ -104,9 +105,9 @@ let
       updateAutotoolsGnuConfigScriptsHook
     ]
     ++
-      # FIXME: This fixes dylib references in the dylibs themselves, but
-      # not in the programs in $out/bin.
-      lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    # FIXME: This fixes dylib references in the dylibs themselves, but
+    # not in the programs in $out/bin.
+    lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall =

@@ -1,14 +1,14 @@
-{
-  version,
-  sha256,
-  patches ? [ ],
+{ version
+, sha256
+, patches ? [ ]
+,
 }:
 
-{
-  autoPatchelfHook,
-  fetchurl,
-  lib,
-  stdenv,
+{ autoPatchelfHook
+, fetchurl
+, lib
+, stdenv
+,
 }:
 
 let
@@ -72,8 +72,7 @@ stdenv.mkDerivation {
         url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
         sha256 = sha256.aarch64-darwin;
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   postPatch = ''
     # Julia fails to pick up our Certification Authority root certificates, but

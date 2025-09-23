@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # propagates
-  packaging,
-
-  # tests
-  pyqt5,
-  pyside2,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # propagates
+  packaging
+, # tests
+  pyqt5
+, pyside2
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,36 +1,32 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  uv-build,
-
-  # dependencies
-  deprecated,
-  einops,
-  humanize,
-  nibabel,
-  numpy,
-  packaging,
-  rich,
-  scipy,
-  simpleitk,
-  torch,
-  tqdm,
-  typer,
-
-  # optional dependencies
-  colorcet,
-  matplotlib,
-  pandas,
-  ffmpeg-python,
-  scikit-learn,
-
-  # tests
-  parameterized,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  uv-build
+, # dependencies
+  deprecated
+, einops
+, humanize
+, nibabel
+, numpy
+, packaging
+, rich
+, scipy
+, simpleitk
+, torch
+, tqdm
+, typer
+, # optional dependencies
+  colorcet
+, matplotlib
+, pandas
+, ffmpeg-python
+, scikit-learn
+, # tests
+  parameterized
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,26 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  duckdb,
-  sqlalchemy,
-
-  # testing
-  fsspec,
-  hypothesis,
-  pandas,
-  pyarrow,
-  pytest-remotedata,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  snapshottest,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  duckdb
+, sqlalchemy
+, # testing
+  fsspec
+, hypothesis
+, pandas
+, pyarrow
+, pytest-remotedata
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, snapshottest
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

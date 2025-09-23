@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPythonPackage,
-  dos2unix,
-  setuptools,
-  pyasn1,
-  unittestCheckHook,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildPythonPackage
+, dos2unix
+, setuptools
+, pyasn1
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  fetchFromGitHub,
-  rustPlatform,
-  electron_35,
-  nodejs_22,
-  yarn-berry_4,
-  cacert,
-  writableTmpDirAsHomeHook,
-  cargo,
-  rustc,
-  findutils,
-  zip,
-  rsync,
-  jq,
-  copyDesktopItems,
-  makeWrapper,
-  llvmPackages,
-  apple-sdk_15,
-  makeDesktopItem,
-  nix-update-script,
-  buildType ? "stable",
-  commandLineArgs ? "",
+{ lib
+, stdenv
+, stdenvNoCC
+, fetchFromGitHub
+, rustPlatform
+, electron_35
+, nodejs_22
+, yarn-berry_4
+, cacert
+, writableTmpDirAsHomeHook
+, cargo
+, rustc
+, findutils
+, zip
+, rsync
+, jq
+, copyDesktopItems
+, makeWrapper
+, llvmPackages
+, apple-sdk_15
+, makeDesktopItem
+, nix-update-script
+, buildType ? "stable"
+, commandLineArgs ? ""
+,
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;

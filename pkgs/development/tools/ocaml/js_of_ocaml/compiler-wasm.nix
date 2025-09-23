@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  binaryen,
-  cmdliner,
-  js_of_ocaml-compiler,
-  menhir,
-  menhirLib,
-  ppxlib,
-  sedlex,
-  yojson,
+{ lib
+, buildDunePackage
+, binaryen
+, cmdliner
+, js_of_ocaml-compiler
+, menhir
+, menhirLib
+, ppxlib
+, sedlex
+, yojson
+,
 }:
 
 buildDunePackage {

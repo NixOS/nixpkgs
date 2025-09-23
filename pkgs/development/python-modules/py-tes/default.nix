@@ -1,16 +1,16 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  future,
-  python-dateutil,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  setuptools,
-  sphinx-rtd-theme,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, python-dateutil
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, setuptools
+, sphinx-rtd-theme
+,
 }:
 
 buildPythonPackage rec {

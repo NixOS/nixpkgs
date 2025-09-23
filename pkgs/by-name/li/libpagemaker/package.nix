@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchpatch,
-  pkg-config,
-  boost,
-  doxygen,
-  librevenge,
+{ lib
+, stdenv
+, fetchzip
+, fetchpatch
+, pkg-config
+, boost
+, doxygen
+, librevenge
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpagemaker";

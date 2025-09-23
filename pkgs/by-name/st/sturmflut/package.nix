@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  imagemagick,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, pkg-config
+, imagemagick
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

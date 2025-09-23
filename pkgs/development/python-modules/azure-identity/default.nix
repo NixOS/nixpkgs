@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  azure-core,
-  cryptography,
-  msal,
-  msal-extensions,
-  typing-extensions,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, azure-core
+, cryptography
+, msal
+, msal-extensions
+, typing-extensions
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

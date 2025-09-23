@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  jdk11,
-  makeDesktopItem,
-  copyDesktopItems,
-  runtimeShell,
-  unzip,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, jdk11
+, makeDesktopItem
+, copyDesktopItems
+, runtimeShell
+, unzip
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

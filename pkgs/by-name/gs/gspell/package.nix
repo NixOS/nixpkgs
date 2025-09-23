@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  docbook-xsl-nons,
-  glib,
-  gobject-introspection,
-  gtk-doc,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  mesonEmulatorHook,
-  gtk3,
-  icu,
-  enchant2,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, docbook-xsl-nons
+, glib
+, gobject-introspection
+, gtk-doc
+, meson
+, ninja
+, pkg-config
+, vala
+, mesonEmulatorHook
+, gtk3
+, icu
+, enchant2
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

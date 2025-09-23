@@ -4,15 +4,15 @@ let
 
   mkLicense =
     lname:
-    {
-      shortName ? lname,
-      # Most of our licenses are Free, explicitly declare unfree additions as such!
-      free ? true,
-      deprecated ? false,
-      spdxId ? null,
-      url ? null,
-      fullName ? null,
-      redistributable ? free,
+    { shortName ? lname
+    , # Most of our licenses are Free, explicitly declare unfree additions as such!
+      free ? true
+    , deprecated ? false
+    , spdxId ? null
+    , url ? null
+    , fullName ? null
+    , redistributable ? free
+    ,
     }@attrs:
     {
       inherit
@@ -1480,7 +1480,7 @@ lib.mapAttrs mkLicense (
     };
 
   }
-  // {
+    // {
     # TODO: remove legacy aliases
     apsl10 = {
       # deprecated for consistency with `apple-psl20`; use `apple-psl10`

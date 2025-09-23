@@ -1,12 +1,12 @@
-{
-  lib,
-  asn1crypto,
-  asysocks,
-  buildPythonPackage,
-  fetchFromGitHub,
-  minikerberos-bad,
-  setuptools,
-  unicrypto,
+{ lib
+, asn1crypto
+, asysocks
+, buildPythonPackage
+, fetchFromGitHub
+, minikerberos-bad
+, setuptools
+, unicrypto
+,
 }:
 
 buildPythonPackage rec {

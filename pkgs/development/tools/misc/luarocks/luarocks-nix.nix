@@ -1,9 +1,9 @@
-{
-  luarocks_bootstrap,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  nurl,
-  file,
+{ luarocks_bootstrap
+, fetchFromGitHub
+, unstableGitUpdater
+, nurl
+, file
+,
 }:
 
 luarocks_bootstrap.overrideAttrs (old: {

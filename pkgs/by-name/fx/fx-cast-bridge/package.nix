@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  avahi-compat,
-  nodejs_22,
-  python3,
-  stdenv,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, avahi-compat
+, nodejs_22
+, python3
+, stdenv
+,
 }:
 
 buildNpmPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  SDL2,
-  SDL2_net,
-  alsa-lib,
-  fluidsynth,
-  libebur128,
-  libsndfile,
-  libxmp,
-  openal,
-  yyjson,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, SDL2
+, SDL2_net
+, alsa-lib
+, fluidsynth
+, libebur128
+, libsndfile
+, libxmp
+, openal
+, yyjson
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nugget-doom";

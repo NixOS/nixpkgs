@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  jre_headless,
-  maven,
-  jdk17,
-  makeWrapper,
-  writeShellApplication,
-  curl,
-  pcre,
-  common-updater-scripts,
-  jq,
-  gnused,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, jre_headless
+, maven
+, jdk17
+, makeWrapper
+, writeShellApplication
+, curl
+, pcre
+, common-updater-scripts
+, jq
+, gnused
+, versionCheckHook
+,
 }:
 
 maven.buildMavenPackage rec {

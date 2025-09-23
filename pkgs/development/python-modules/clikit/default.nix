@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  crashtest,
-  fetchFromGitHub,
-  pastel,
-  poetry-core,
-  pylev,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, crashtest
+, fetchFromGitHub
+, pastel
+, poetry-core
+, pylev
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

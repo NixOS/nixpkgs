@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDunePackage,
-  dune-action-plugin,
+{ lib
+, buildDunePackage
+, dune-action-plugin
+,
 }:
 
 buildDunePackage {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  php,
-  writeText,
-  nix-update-script,
-  theme ? null,
-  plugins ? [ ],
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, php
+, writeText
+, nix-update-script
+, theme ? null
+, plugins ? [ ]
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminneo";

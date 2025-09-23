@@ -1,19 +1,18 @@
-{
-  lib,
-  blinker,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  mock,
-  pyjwt,
-  pytestCheckHook,
-  setuptools,
-
-  # for passthru.tests
-  django-allauth,
-  django-oauth-toolkit,
-  google-auth-oauthlib,
-  requests-oauthlib,
+{ lib
+, blinker
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, mock
+, pyjwt
+, pytestCheckHook
+, setuptools
+, # for passthru.tests
+  django-allauth
+, django-oauth-toolkit
+, google-auth-oauthlib
+, requests-oauthlib
+,
 }:
 
 buildPythonPackage rec {

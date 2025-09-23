@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  testers,
-  nix-update-script,
-  moonpalace,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, testers
+, nix-update-script
+, moonpalace
+,
 }:
 buildGoModule rec {
   pname = "moonpalace";

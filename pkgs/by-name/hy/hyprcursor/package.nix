@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  cairo,
-  hyprlang,
-  librsvg,
-  libzip,
-  xcur2png,
-  tomlplusplus,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, cairo
+, hyprlang
+, librsvg
+, libzip
+, xcur2png
+, tomlplusplus
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";

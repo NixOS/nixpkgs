@@ -1,34 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  cython,
-  versioneer,
-
-  # dependencies
-  cons,
-  etuples,
-  filelock,
-  logical-unification,
-  minikanren,
-  numpy,
-  scipy,
-
-  # tests
-  jax,
-  jaxlib,
-  numba,
-  pytest-benchmark,
-  pytest-mock,
-  pytestCheckHook,
-  tensorflow-probability,
-  writableTmpDirAsHomeHook,
-
-  nix-update-script,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, cython
+, versioneer
+, # dependencies
+  cons
+, etuples
+, filelock
+, logical-unification
+, minikanren
+, numpy
+, scipy
+, # tests
+  jax
+, jaxlib
+, numba
+, pytest-benchmark
+, pytest-mock
+, pytestCheckHook
+, tensorflow-probability
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

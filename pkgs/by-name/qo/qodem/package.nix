@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch2,
-  autoreconfHook,
-  ncurses,
-  SDL,
-  gpm,
-  miniupnpc,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch2
+, autoreconfHook
+, ncurses
+, SDL
+, gpm
+, miniupnpc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

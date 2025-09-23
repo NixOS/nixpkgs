@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  ncurses,
+{ stdenv
+, lib
+, fetchFromGitHub
+, installShellFiles
+, ncurses
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cano";

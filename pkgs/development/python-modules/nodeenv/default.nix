@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mock,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  which,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, pytestCheckHook
+, python
+, pythonOlder
+, setuptools
+, setuptools-scm
+, which
+,
 }:
 
 buildPythonPackage rec {

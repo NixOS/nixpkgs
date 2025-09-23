@@ -1,14 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # build inputs
-  cacert,
-  libuuid,
-
-  # build inputs (darwin)
-  readline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # build inputs
+  cacert
+, libuuid
+, # build inputs (darwin)
+  readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase =
     if stdenv.hostPlatform.isDarwin then
-      # Error compiling the builtin zlib source, but it's not used currently
+    # Error compiling the builtin zlib source, but it's not used currently
       ''
         make PREMAKE_OPTS="--zlib-src=none" \
              PLATFORM="Universal" \

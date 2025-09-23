@@ -6,9 +6,8 @@
 # Configuration data support for portable services
 # This module provides configData for services, enabling configuration reloading
 # without terminating and restarting the service process.
-{
-  lib,
-  ...
+{ lib
+, ...
 }:
 let
   inherit (lib) mkOption types;

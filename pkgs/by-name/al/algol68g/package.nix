@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  curl,
-  gmp,
-  gsl,
-  libpq,
-  mpfr,
-  ncurses,
-  plotutils,
-  pkg-config,
-  withPDFDoc ? true,
+{ lib
+, stdenv
+, fetchurl
+, curl
+, gmp
+, gsl
+, libpq
+, mpfr
+, ncurses
+, plotutils
+, pkg-config
+, withPDFDoc ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  rapidfuzz,
-  click,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, rapidfuzz
+, click
+,
 }:
 
 buildPythonPackage rec {

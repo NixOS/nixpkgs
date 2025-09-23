@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  callPackage,
-  php,
-  unzip,
-  _7zz,
-  xz,
-  gitMinimal,
-  curl,
-  cacert,
-  makeBinaryWrapper,
-  versionCheckHook,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, callPackage
+, php
+, unzip
+, _7zz
+, xz
+, gitMinimal
+, curl
+, cacert
+, makeBinaryWrapper
+, versionCheckHook
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

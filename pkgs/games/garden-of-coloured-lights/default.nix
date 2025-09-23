@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  allegro,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, allegro
+,
 }:
 
 stdenv.mkDerivation rec {

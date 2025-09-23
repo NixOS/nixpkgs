@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  packaging,
-  quantities,
-  pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  pillow,
-  which,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, packaging
+, quantities
+, pythonOlder
+, setuptools
+, pytestCheckHook
+, pillow
+, which
+,
 }:
 
 buildPythonPackage rec {

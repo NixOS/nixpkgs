@@ -1,39 +1,39 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  lua,
-  cairo,
-  librsvg,
-  cmake,
-  imagemagick,
-  pkg-config,
-  gdk-pixbuf,
-  xorg,
-  libstartup_notification,
-  libxdg_basedir,
-  libpthreadstubs,
-  xcb-util-cursor,
-  makeWrapper,
-  pango,
-  gobject-introspection,
-  which,
-  dbus,
-  net-tools,
-  git,
-  doxygen,
-  xmlto,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  findXMLCatalogs,
-  libxkbcommon,
-  xcbutilxrm,
-  hicolor-icon-theme,
-  asciidoctor,
-  fontsConf,
-  gtk3Support ? false,
-  gtk3 ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, lua
+, cairo
+, librsvg
+, cmake
+, imagemagick
+, pkg-config
+, gdk-pixbuf
+, xorg
+, libstartup_notification
+, libxdg_basedir
+, libpthreadstubs
+, xcb-util-cursor
+, makeWrapper
+, pango
+, gobject-introspection
+, which
+, dbus
+, net-tools
+, git
+, doxygen
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, findXMLCatalogs
+, libxkbcommon
+, xcbutilxrm
+, hicolor-icon-theme
+, asciidoctor
+, fontsConf
+, gtk3Support ? false
+, gtk3 ? null
+,
 }:
 
 # needed for beautiful.gtk to work

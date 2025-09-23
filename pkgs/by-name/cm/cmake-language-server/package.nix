@@ -1,14 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-
-  # dependencies
-  cmake-format,
-
-  # tests
-  cmake,
-  versionCheckHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, # dependencies
+  cmake-format
+, # tests
+  cmake
+, versionCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

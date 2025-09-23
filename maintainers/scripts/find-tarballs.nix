@@ -1,8 +1,8 @@
 # This expression returns a list of all fetchurl calls used by ‘expr’.
 
-{
-  expr,
-  lib ? import ../../lib,
+{ expr
+, lib ? import ../../lib
+,
 }:
 
 let
@@ -24,25 +24,31 @@ let
   root = expr;
 
   uniqueFiles = map (x: x.file) (genericClosure {
-    startSet = map (file: {
-      key = with file; (if type == null then "" else type + "+") + hash;
-      inherit file;
-    }) files;
+    startSet = map
+      (file: {
+        key = with file; (if type == null then "" else type + "+") + hash;
+        inherit file;
+      })
+      files;
     operator = const [ ];
   });
 
-  files = map (drv: {
-    urls = drv.urls or [ drv.url ];
-    hash = drv.outputHash;
-    isPatch = (drv ? postFetch && drv.postFetch != "");
-    type = drv.outputHashAlgo;
-    name = drv.name;
-  }) fetchurlDependencies;
+  files = map
+    (drv: {
+      urls = drv.urls or [ drv.url ];
+      hash = drv.outputHash;
+      isPatch = (drv ? postFetch && drv.postFetch != "");
+      type = drv.outputHashAlgo;
+      name = drv.name;
+    })
+    fetchurlDependencies;
 
-  fetchurlDependencies = filter (
-    drv:
-    drv.outputHash or "" != "" && drv.outputHashMode or "flat" == "flat" && (drv ? url || drv ? urls)
-  ) dependencies;
+  fetchurlDependencies = filter
+    (
+      drv:
+      drv.outputHash or "" != "" && drv.outputHashMode or "flat" == "flat" && (drv ? url || drv ? urls)
+    )
+    dependencies;
 
   dependencies = map (x: x.value) (genericClosure {
     startSet = map keyDrv (derivationsIn' root);
@@ -58,9 +64,10 @@ let
     else if isList x then
       concatLists (map derivationsIn' x)
     else if isAttrs x then
-      concatLists (
-        mapAttrsToList (n: v: addErrorContext "while finding tarballs in '${n}':" (derivationsIn' v)) x
-      )
+      concatLists
+        (
+          mapAttrsToList (n: v: addErrorContext "while finding tarballs in '${n}':" (derivationsIn' v)) x
+        )
     else
       [ ];
 

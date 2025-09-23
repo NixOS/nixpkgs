@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  robotframework,
-  robotframework-pythonlibcore,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, robotframework
+, robotframework-pythonlibcore
+,
 }:
 
 buildPythonPackage rec {

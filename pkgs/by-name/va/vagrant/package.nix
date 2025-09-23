@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  buildRubyGem,
-  bundlerEnv,
-  ruby_3_4,
-  libarchive,
-  libguestfs,
-  qemu,
-  writeText,
-  withLibvirt ? stdenv.hostPlatform.isLinux,
-  openssl,
+{ stdenv
+, lib
+, fetchurl
+, buildRubyGem
+, bundlerEnv
+, ruby_3_4
+, libarchive
+, libguestfs
+, qemu
+, writeText
+, withLibvirt ? stdenv.hostPlatform.isLinux
+, openssl
+,
 }:
 
 let

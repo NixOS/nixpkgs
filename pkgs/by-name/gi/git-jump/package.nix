@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  lib,
-  buildNpmPackage,
+{ fetchFromGitHub
+, lib
+, buildNpmPackage
+,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "git-jump";

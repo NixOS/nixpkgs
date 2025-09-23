@@ -1,19 +1,19 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  apischema,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  gql,
-  graphql-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  setuptools-scm,
+{ lib
+, aiohttp
+, aioresponses
+, apischema
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, gql
+, graphql-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

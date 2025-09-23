@@ -1,29 +1,28 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchPypi,
-  hatch-fancy-pypi-readme,
-  hatch-vcs,
-  hatchling,
-  jsonpath-ng,
-  jsonschema-specifications,
-  pip,
-  pytestCheckHook,
-  referencing,
-  rpds-py,
-
-  # optionals
-  fqdn,
-  idna,
-  isoduration,
-  jsonpointer,
-  rfc3339-validator,
-  rfc3986-validator,
-  rfc3987,
-  rfc3987-syntax,
-  uri-template,
-  webcolors,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchPypi
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, jsonpath-ng
+, jsonschema-specifications
+, pip
+, pytestCheckHook
+, referencing
+, rpds-py
+, # optionals
+  fqdn
+, idna
+, isoduration
+, jsonpointer
+, rfc3339-validator
+, rfc3986-validator
+, rfc3987
+, rfc3987-syntax
+, uri-template
+, webcolors
+,
 }:
 
 buildPythonPackage rec {

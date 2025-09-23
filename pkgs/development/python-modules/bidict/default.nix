@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  hypothesis,
-  pytest-xdist,
-  pytestCheckHook,
-  typing-extensions,
-  pythonOlder,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, hypothesis
+, pytest-xdist
+, pytestCheckHook
+, typing-extensions
+, pythonOlder
+, wheel
+,
 }:
 
 buildPythonPackage rec {

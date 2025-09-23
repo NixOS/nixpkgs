@@ -1,18 +1,18 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  apk-tools,
-  coreutils,
-  findutils,
-  gnugrep,
-  gnused,
-  gnutar,
-  gzip,
-  rsync,
-  util-linux,
-  wget,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeWrapper
+, apk-tools
+, coreutils
+, findutils
+, gnugrep
+, gnused
+, gnutar
+, gzip
+, rsync
+, util-linux
+, wget
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "alpine-make-rootfs";

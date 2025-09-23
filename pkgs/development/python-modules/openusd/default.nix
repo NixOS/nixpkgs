@@ -1,44 +1,44 @@
-{
-  alembic,
-  bison,
-  boost,
-  buildPythonPackage,
-  cmake,
-  distutils,
-  doxygen,
-  draco,
-  embree,
-  fetchFromGitHub,
-  fetchpatch,
-  flex,
-  git,
-  graphviz-nox,
-  imath,
-  jinja2,
-  lib,
-  libGL,
-  libX11,
-  libXt,
-  materialx,
-  ninja,
-  numpy,
-  opencolorio,
-  openimageio,
-  opensubdiv,
-  osl,
-  ptex,
-  pyopengl,
-  pyqt6,
-  pyside6,
-  python,
-  qt6,
-  setuptools,
-  tbb,
-  withDocs ? false,
-  withOsl ? true,
-  withTools ? false,
-  withUsdView ? false,
-  writeShellScriptBin,
+{ alembic
+, bison
+, boost
+, buildPythonPackage
+, cmake
+, distutils
+, doxygen
+, draco
+, embree
+, fetchFromGitHub
+, fetchpatch
+, flex
+, git
+, graphviz-nox
+, imath
+, jinja2
+, lib
+, libGL
+, libX11
+, libXt
+, materialx
+, ninja
+, numpy
+, opencolorio
+, openimageio
+, opensubdiv
+, osl
+, ptex
+, pyopengl
+, pyqt6
+, pyside6
+, python
+, qt6
+, setuptools
+, tbb
+, withDocs ? false
+, withOsl ? true
+, withTools ? false
+, withUsdView ? false
+, writeShellScriptBin
+,
 }:
 
 let

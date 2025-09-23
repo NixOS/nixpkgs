@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  fetchFromGitHub,
-  pytestCheckHook,
-  libxcrypt,
-  gtest,
-  pybind11,
-  nlohmann_json,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cmake
+, fetchFromGitHub
+, pytestCheckHook
+, libxcrypt
+, gtest
+, pybind11
+, nlohmann_json
+, setuptools
+,
 }:
 
 let

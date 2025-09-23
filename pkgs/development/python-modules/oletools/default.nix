@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  colorclass,
-  easygui,
-  fetchFromGitHub,
-  msoffcrypto-tool,
-  olefile,
-  pcodedmp,
-  pyparsing,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, colorclass
+, easygui
+, fetchFromGitHub
+, msoffcrypto-tool
+, olefile
+, pcodedmp
+, pyparsing
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

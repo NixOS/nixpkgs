@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  qrcode,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, qrcode
+, pillow
+,
 }:
 buildPythonPackage rec {
   pname = "qrcode-terminal";

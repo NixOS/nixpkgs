@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  versionCheckHook,
-  libusb1,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, versionCheckHook
+, libusb1
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

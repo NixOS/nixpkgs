@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  gtk4,
-  gtk4-layer-shell,
-  hyprland,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, gtk4
+, gtk4-layer-shell
+, hyprland
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

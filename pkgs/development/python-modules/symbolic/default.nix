@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-rust,
-  rustPlatform,
-  rustc,
-  cargo,
-  milksnake,
-  cffi,
-  pytestCheckHook,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-rust
+, rustPlatform
+, rustc
+, cargo
+, milksnake
+, cffi
+, pytestCheckHook
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

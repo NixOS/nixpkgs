@@ -1,33 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocm-device-libs,
-  clr,
-  pkg-config,
-  rpp,
-  rocblas,
-  miopen,
-  migraphx,
-  openmp,
-  protobuf,
-  qtcreator,
-  opencv,
-  ffmpeg,
-  boost,
-  libjpeg_turbo,
-  half,
-  lmdb,
-  rapidjson,
-  rocm-docs-core,
-  python3Packages,
-  useOpenCL ? false,
-  useCPU ? false,
-  buildDocs ? false, # Needs internet
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocm-device-libs
+, clr
+, pkg-config
+, rpp
+, rocblas
+, miopen
+, migraphx
+, openmp
+, protobuf
+, qtcreator
+, opencv
+, ffmpeg
+, boost
+, libjpeg_turbo
+, half
+, lmdb
+, rapidjson
+, rocm-docs-core
+, python3Packages
+, useOpenCL ? false
+, useCPU ? false
+, buildDocs ? false
+, # Needs internet
+  gpuTargets ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

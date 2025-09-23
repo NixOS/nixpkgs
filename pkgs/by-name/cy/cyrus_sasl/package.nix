@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  openssl,
-  openldap,
-  libkrb5,
-  db,
-  gettext,
-  pam,
-  libxcrypt,
-  fixDarwinDylibNames,
-  autoreconfHook,
-  enableLdap ? false,
-  buildPackages,
-  pruneLibtoolFiles,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, openldap
+, libkrb5
+, db
+, gettext
+, pam
+, libxcrypt
+, fixDarwinDylibNames
+, autoreconfHook
+, enableLdap ? false
+, buildPackages
+, pruneLibtoolFiles
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

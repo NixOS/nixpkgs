@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  libksysguard,
-  networkmanager-qt,
-  lm_sensors,
-  libnl,
+{ mkKdeDerivation
+, pkg-config
+, libksysguard
+, networkmanager-qt
+, lm_sensors
+, libnl
+,
 }:
 mkKdeDerivation {
   pname = "ksystemstats";

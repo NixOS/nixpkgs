@@ -1,19 +1,19 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  awesomeversion,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  mashumaro,
-  orjson,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  syrupy,
-  webrtc-models,
+{ lib
+, aiohttp
+, aioresponses
+, awesomeversion
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, mashumaro
+, orjson
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, syrupy
+, webrtc-models
+,
 }:
 
 buildPythonPackage rec {

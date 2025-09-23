@@ -1,20 +1,17 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-
-  clang,
-  pkg-config,
-
-  elfutils,
-  libbpf,
-  zlib,
-  zstd,
-
-  nixosTests,
-  testers,
-  tracee,
-  makeWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, clang
+, pkg-config
+, elfutils
+, libbpf
+, zlib
+, zstd
+, nixosTests
+, testers
+, tracee
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

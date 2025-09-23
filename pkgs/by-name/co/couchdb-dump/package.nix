@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  curl,
-  gawk,
-  gnugrep,
-  gnused,
-  gzip,
-  sysctl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, curl
+, gawk
+, gnugrep
+, gnused
+, gzip
+, sysctl
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "couchdb-dump";

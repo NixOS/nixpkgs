@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  mpi,
-  blas,
-  gfortran,
-  llvmPackages,
-  cudaPackages,
-  rocmPackages,
-  config,
-  gpuBackend ? (
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, mpi
+, blas
+, gfortran
+, llvmPackages
+, cudaPackages
+, rocmPackages
+, config
+, gpuBackend ? (
     if config.cudaSupport then
       "cuda"
     else if config.rocmSupport then
       "rocm"
     else
       "none"
-  ),
+  )
+,
 }:
 
 assert builtins.elem gpuBackend [

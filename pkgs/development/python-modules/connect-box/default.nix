@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  attrs,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  pythonOlder,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  pytest-vcr,
-  syrupy,
+{ lib
+, aiohttp
+, attrs
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, pythonOlder
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, pytest-vcr
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

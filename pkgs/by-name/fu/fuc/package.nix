@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  clippy,
-  rustfmt,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, clippy
+, rustfmt
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

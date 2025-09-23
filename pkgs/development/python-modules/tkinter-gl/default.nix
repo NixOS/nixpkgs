@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  tkinter,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, tkinter
+,
 }:
 
 buildPythonPackage rec {

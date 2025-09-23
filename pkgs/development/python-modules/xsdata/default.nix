@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  ruff,
-  click,
-  click-default-group,
-  docformatter,
-  jinja2,
-  toposort,
-  typing-extensions,
-  lxml,
-  requests,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, ruff
+, click
+, click-default-group
+, docformatter
+, jinja2
+, toposort
+, typing-extensions
+, lxml
+, requests
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

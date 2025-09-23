@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  callPackage,
-  autoPatchelfHook,
-  wrapGAppsHook4,
-  libusb1,
-  libsoup_3,
-  webkitgtk_4_1,
-  makeDesktopItem,
-  copyDesktopItems,
-  undmg,
+{ stdenv
+, lib
+, fetchurl
+, callPackage
+, autoPatchelfHook
+, wrapGAppsHook4
+, libusb1
+, libsoup_3
+, webkitgtk_4_1
+, makeDesktopItem
+, copyDesktopItems
+, undmg
+,
 }:
 let
   pname = "keymapp";
@@ -49,7 +49,8 @@ let
 
 in
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit
       pname
       version

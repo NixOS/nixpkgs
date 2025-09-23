@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  qtbase,
-  wrapQtAppsHook,
-  qtwebengine,
-  grantlee,
-  kxmlgui,
-  kwallet,
-  kparts,
-  kdoctools,
-  kjobwidgets,
-  kiconthemes,
-  knewstuff,
-  sqlcipher,
-  qca,
-  plasma-activities,
-  karchive,
-  kguiaddons,
-  knotifyconfig,
-  krunner,
-  ktexttemplate,
-  kwindowsystem,
-  libofx,
-  shared-mime-info,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, extra-cmake-modules
+, pkg-config
+, qtbase
+, wrapQtAppsHook
+, qtwebengine
+, grantlee
+, kxmlgui
+, kwallet
+, kparts
+, kdoctools
+, kjobwidgets
+, kiconthemes
+, knewstuff
+, sqlcipher
+, qca
+, plasma-activities
+, karchive
+, kguiaddons
+, knotifyconfig
+, krunner
+, ktexttemplate
+, kwindowsystem
+, libofx
+, shared-mime-info
+,
 }:
 
 stdenv.mkDerivation rec {

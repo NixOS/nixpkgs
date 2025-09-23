@@ -1,9 +1,9 @@
-{
-  lib,
-  mkChromiumDerivation,
-  chromiumVersionAtLeast,
-  enableWideVine,
-  ungoogled,
+{ lib
+, mkChromiumDerivation
+, chromiumVersionAtLeast
+, enableWideVine
+, ungoogled
+,
 }:
 
 mkChromiumDerivation (base: rec {

@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  gf2x,
-  lib,
-  rustPlatform,
+{ fetchFromGitHub
+, gf2x
+, lib
+, rustPlatform
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "delsum";

@@ -1,8 +1,8 @@
-{
-  steam,
-  heroic-unwrapped,
-  extraPkgs ? pkgs: [ ],
-  extraLibraries ? pkgs: [ ],
+{ steam
+, heroic-unwrapped
+, extraPkgs ? pkgs: [ ]
+, extraLibraries ? pkgs: [ ]
+,
 }:
 
 steam.buildRuntimeEnv {

@@ -1,18 +1,18 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  buildNpmPackage,
-  fetchFromGitHub,
-  html5lib,
-  lxml,
-  nodejs,
-  pytestCheckHook,
-  pythonOlder,
-  regex,
-  setuptools,
-  testers,
-  readabilipy,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, buildNpmPackage
+, fetchFromGitHub
+, html5lib
+, lxml
+, nodejs
+, pytestCheckHook
+, pythonOlder
+, regex
+, setuptools
+, testers
+, readabilipy
+,
 }:
 
 buildPythonPackage rec {

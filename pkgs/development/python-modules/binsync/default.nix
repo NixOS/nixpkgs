@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  filelock,
-  gitpython,
-  libbs,
-  prompt-toolkit,
-  pycparser,
-  pyside6,
-  pytest-qt,
-  pytestCheckHook,
-  setuptools,
-  sortedcontainers,
-  toml,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, filelock
+, gitpython
+, libbs
+, prompt-toolkit
+, pycparser
+, pyside6
+, pytest-qt
+, pytestCheckHook
+, setuptools
+, sortedcontainers
+, toml
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

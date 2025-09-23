@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  lib4sbom,
-  python-magic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, lib4sbom
+, python-magic
+,
 }:
 
 buildPythonPackage rec {

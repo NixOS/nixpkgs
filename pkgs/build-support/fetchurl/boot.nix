@@ -2,17 +2,17 @@ let
   mirrors = import ./mirrors.nix;
 in
 
-{
-  rewriteURL,
-  system,
+{ rewriteURL
+, system
+,
 }:
 
-{
-  url ? builtins.head urls,
-  urls ? [ ],
-  sha256 ? "",
-  hash ? "",
-  name ? baseNameOf (toString url),
+{ url ? builtins.head urls
+, urls ? [ ]
+, sha256 ? ""
+, hash ? ""
+, name ? baseNameOf (toString url)
+,
 }:
 
 # assert exactly one hash is set

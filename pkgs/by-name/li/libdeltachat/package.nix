@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  cmake,
-  deltachat-desktop,
-  deltachat-repl,
-  deltachat-rpc-server,
-  openssl,
-  perl,
-  pkg-config,
-  python3,
-  rustPlatform,
-  sqlcipher,
-  sqlite,
-  fixDarwinDylibNames,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, cmake
+, deltachat-desktop
+, deltachat-repl
+, deltachat-rpc-server
+, openssl
+, perl
+, pkg-config
+, python3
+, rustPlatform
+, sqlcipher
+, sqlite
+, fixDarwinDylibNames
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

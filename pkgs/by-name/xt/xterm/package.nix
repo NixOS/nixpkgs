@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  xorg,
-  ncurses,
-  freetype,
-  fontconfig,
-  pkg-config,
-  makeWrapper,
-  nixosTests,
-  pkgsCross,
-  gitUpdater,
-  enableDecLocator ? true,
+{ lib
+, stdenv
+, fetchurl
+, xorg
+, ncurses
+, freetype
+, fontconfig
+, pkg-config
+, makeWrapper
+, nixosTests
+, pkgsCross
+, gitUpdater
+, enableDecLocator ? true
+,
 }:
 
 stdenv.mkDerivation rec {

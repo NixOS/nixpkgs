@@ -1,7 +1,7 @@
-{
-  lib,
-  vscode-utils,
-  vscode-extension-update-script,
+{ lib
+, vscode-utils
+, vscode-extension-update-script
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

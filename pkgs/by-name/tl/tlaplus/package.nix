@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  # TODO: switch to jre https://github.com/NixOS/nixpkgs/pull/89731
-  jre8,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, # TODO: switch to jre https://github.com/NixOS/nixpkgs/pull/89731
+  jre8
+,
 }:
 
 stdenv.mkDerivation rec {

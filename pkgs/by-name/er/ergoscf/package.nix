@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  blas,
-  lapack,
+{ lib
+, stdenv
+, fetchurl
+, blas
+, lapack
+,
 }:
 
 stdenv.mkDerivation rec {

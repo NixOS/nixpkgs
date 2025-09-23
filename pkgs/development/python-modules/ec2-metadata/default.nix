@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

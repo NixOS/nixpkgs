@@ -1,16 +1,16 @@
-{
-  lib,
-  pythonPackages,
-  fetchFromGitHub,
-  makeWrapper,
-  sshfs-fuse,
-  torsocks,
-  sshuttle,
-  conntrack-tools,
-  openssh,
-  coreutils,
-  iptables,
-  bash,
+{ lib
+, pythonPackages
+, fetchFromGitHub
+, makeWrapper
+, sshfs-fuse
+, torsocks
+, sshuttle
+, conntrack-tools
+, openssh
+, coreutils
+, iptables
+, bash
+,
 }:
 
 let

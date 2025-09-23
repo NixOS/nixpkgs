@@ -1,7 +1,7 @@
-{
-  libcublas,
-  numactl,
-  rdma-core,
+{ libcublas
+, numactl
+, rdma-core
+,
 }:
 prevAttrs: {
   buildInputs = prevAttrs.buildInputs or [ ] ++ [

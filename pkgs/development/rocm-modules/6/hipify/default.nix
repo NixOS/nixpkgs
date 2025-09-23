@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  clang,
-  libxml2,
-  rocm-merged-llvm,
-  zlib,
-  zstd,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, clang
+, libxml2
+, rocm-merged-llvm
+, zlib
+, zstd
+, perl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

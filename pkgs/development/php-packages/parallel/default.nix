@@ -1,7 +1,7 @@
-{
-  buildPecl,
-  lib,
-  php,
+{ buildPecl
+, lib
+, php
+,
 }:
 
 buildPecl {

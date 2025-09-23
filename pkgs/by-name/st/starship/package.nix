@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
-  gitMinimal,
-  nixosTests,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, writableTmpDirAsHomeHook
+, gitMinimal
+, nixosTests
+, buildPackages
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

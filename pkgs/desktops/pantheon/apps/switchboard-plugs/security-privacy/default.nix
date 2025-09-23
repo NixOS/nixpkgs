@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  elementary-settings-daemon,
-  libgee,
-  gettext,
-  granite7,
-  gsettings-desktop-schemas,
-  gala,
-  gtk4,
-  glib,
-  polkit,
-  zeitgeist,
-  switchboard,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, elementary-settings-daemon
+, libgee
+, gettext
+, granite7
+, gsettings-desktop-schemas
+, gala
+, gtk4
+, glib
+, polkit
+, zeitgeist
+, switchboard
+,
 }:
 
 stdenv.mkDerivation rec {

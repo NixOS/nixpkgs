@@ -1,18 +1,17 @@
-{
-  lib,
-  fetchzip,
-  fetchurl,
+{ lib
+, fetchzip
+, fetchurl
+,
 }:
 
-{
-  crateName ? args.pname,
-  pname ? null,
-  # The `dl` field of the registry's index configuration
+{ crateName ? args.pname
+, pname ? null
+, # The `dl` field of the registry's index configuration
   # https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-  registryDl ? "https://crates.io/api/v1/crates",
-  version,
-  unpack ? true,
-  ...
+  registryDl ? "https://crates.io/api/v1/crates"
+, version
+, unpack ? true
+, ...
 }@args:
 
 assert pname == null || pname == crateName;
@@ -27,7 +26,7 @@ assert pname == null || pname == crateName;
   // lib.optionalAttrs unpack {
     extension = "tar.gz";
   }
-  // removeAttrs args [
+    // removeAttrs args [
     "crateName"
     "pname"
     "registryDl"

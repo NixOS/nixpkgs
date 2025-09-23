@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  boost,
-  nlohmann_json,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, boost
+, nlohmann_json
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

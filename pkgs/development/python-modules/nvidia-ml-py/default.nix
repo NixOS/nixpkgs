@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  replaceVars,
-  addDriverRunpath,
-  setuptools,
-  cudaPackages,
-  nvidia-ml-py,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, replaceVars
+, addDriverRunpath
+, setuptools
+, cudaPackages
+, nvidia-ml-py
+,
 }:
 
 buildPythonPackage rec {

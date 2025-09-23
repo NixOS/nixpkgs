@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
-  SDL2_mixer,
-  libpng,
-  darwin,
-  libicns,
-  imagemagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+, SDL2_mixer
+, libpng
+, darwin
+, libicns
+, imagemagick
+,
 }:
 
 stdenv.mkDerivation rec {

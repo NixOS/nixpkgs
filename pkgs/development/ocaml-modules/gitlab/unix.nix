@@ -1,13 +1,13 @@
-{
-  buildDunePackage,
-  gitlab,
-  cmdliner,
-  cohttp,
-  cohttp-lwt-unix,
-  tls,
-  lwt,
-  stringext,
-  alcotest,
+{ buildDunePackage
+, gitlab
+, cmdliner
+, cohttp
+, cohttp-lwt-unix
+, tls
+, lwt
+, stringext
+, alcotest
+,
 }:
 
 buildDunePackage {

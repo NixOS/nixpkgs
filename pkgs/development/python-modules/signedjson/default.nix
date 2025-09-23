@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  canonicaljson,
-  fetchPypi,
-  importlib-metadata,
-  pynacl,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  typing-extensions,
-  unpaddedbase64,
+{ lib
+, buildPythonPackage
+, canonicaljson
+, fetchPypi
+, importlib-metadata
+, pynacl
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, typing-extensions
+, unpaddedbase64
+,
 }:
 
 buildPythonPackage rec {

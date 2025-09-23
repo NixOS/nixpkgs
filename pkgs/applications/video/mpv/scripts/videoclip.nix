@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  curl,
-  xclip,
-  wl-clipboard,
-  stdenv,
-  buildLua,
-  unstableGitUpdater,
+{ lib
+, fetchFromGitHub
+, curl
+, xclip
+, wl-clipboard
+, stdenv
+, buildLua
+, unstableGitUpdater
+,
 }:
 buildLua {
   pname = "videoclip";

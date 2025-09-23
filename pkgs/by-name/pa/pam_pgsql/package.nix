@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libpq,
-  libgcrypt,
-  pam,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libpq
+, libgcrypt
+, pam
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation {

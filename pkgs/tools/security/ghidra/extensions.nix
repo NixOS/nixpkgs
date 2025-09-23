@@ -1,8 +1,8 @@
-{
-  lib,
-  newScope,
-  callPackage,
-  ghidra,
+{ lib
+, newScope
+, callPackage
+, ghidra
+,
 }:
 
 lib.makeScope newScope (self: {

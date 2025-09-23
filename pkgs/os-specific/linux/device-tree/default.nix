@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  dtc,
-  writers,
-  python3,
+{ lib
+, stdenv
+, stdenvNoCC
+, dtc
+, writers
+, python3
+,
 }:
 
 {
   # Compile single Device Tree overlay source
   # file (.dts) into its compiled variant (.dtb)
   compileDTS = (
-    {
-      name,
-      dtsFile,
-      includePaths ? [ ],
-      extraPreprocessorFlags ? [ ],
+    { name
+    , dtsFile
+    , includePaths ? [ ]
+    , extraPreprocessorFlags ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       inherit name;
@@ -36,14 +36,14 @@
 
   applyOverlays = (
     base: overlays':
-    stdenvNoCC.mkDerivation {
-      name = "device-tree-overlays";
-      nativeBuildInputs = [
-        (python3.pythonOnBuildForHost.withPackages (ps: [ ps.libfdt ]))
-      ];
-      buildCommand = ''
-        python ${./apply_overlays.py} --source ${base} --destination $out --overlays ${writers.writeJSON "overlays.json" overlays'}
-      '';
-    }
+      stdenvNoCC.mkDerivation {
+        name = "device-tree-overlays";
+        nativeBuildInputs = [
+          (python3.pythonOnBuildForHost.withPackages (ps: [ ps.libfdt ]))
+        ];
+        buildCommand = ''
+          python ${./apply_overlays.py} --source ${base} --destination $out --overlays ${writers.writeJSON "overlays.json" overlays'}
+        '';
+      }
   );
 }

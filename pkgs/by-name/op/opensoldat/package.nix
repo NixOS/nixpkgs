@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fpc,
-  zip,
-  makeWrapper,
-  SDL2,
-  freetype,
-  physfs,
-  openal,
-  gamenetworkingsockets,
-  xorg,
-  autoPatchelfHook,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fpc
+, zip
+, makeWrapper
+, SDL2
+, freetype
+, physfs
+, openal
+, gamenetworkingsockets
+, xorg
+, autoPatchelfHook
+, cmake
+,
 }:
 
 let

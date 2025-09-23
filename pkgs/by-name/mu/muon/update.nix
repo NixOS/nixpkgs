@@ -1,9 +1,9 @@
-{
-  lib,
-  writeShellApplication,
-  common-updater-scripts,
-  curl,
-  gnugrep,
+{ lib
+, writeShellApplication
+, common-updater-scripts
+, curl
+, gnugrep
+,
 }:
 
 lib.getExe (writeShellApplication {

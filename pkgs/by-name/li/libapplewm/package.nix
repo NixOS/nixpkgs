@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  autoreconfHook,
-  util-macros,
-  xorgproto,
-  libX11,
-  libXext,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, autoreconfHook
+, util-macros
+, xorgproto
+, libX11
+, libXext
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libapplewm";

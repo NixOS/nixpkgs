@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  perl,
-  zlib,
-  libxml2,
-  eigen,
-  python3,
-  cairo,
-  pkg-config,
-  swig,
-  rapidjson,
-  boost,
-  maeparser,
-  coordgenlibs,
-  ctestCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, perl
+, zlib
+, libxml2
+, eigen
+, python3
+, cairo
+, pkg-config
+, swig
+, rapidjson
+, boost
+, maeparser
+, coordgenlibs
+, ctestCheckHook
+,
 }:
 
 stdenv.mkDerivation {

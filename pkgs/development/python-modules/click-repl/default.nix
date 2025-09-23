@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  click,
-  prompt-toolkit,
-  six,
-
-  # tests
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  click
+, prompt-toolkit
+, six
+, # tests
+  pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

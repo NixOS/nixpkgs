@@ -46,9 +46,8 @@ let
   );
 
   makeCMakeFlags =
-    {
-      cmakeFlags ? [ ],
-      ...
+    { cmakeFlags ? [ ]
+    , ...
     }:
     cmakeFlags ++ cmakeFlags';
 

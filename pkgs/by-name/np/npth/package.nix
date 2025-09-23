@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkgsCross,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkgsCross
+,
 }:
 
 stdenv.mkDerivation rec {

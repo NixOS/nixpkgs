@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  ffmpeg,
-  vlc,
-  jq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, ffmpeg
+, vlc
+, jq
+,
 }:
 
 stdenv.mkDerivation {

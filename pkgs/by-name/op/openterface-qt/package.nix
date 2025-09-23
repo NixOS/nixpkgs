@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  makeDesktopItem,
-  copyDesktopItems,
-  fetchFromGitHub,
-  writeText,
-  qt6,
-  libusb1,
+{ lib
+, stdenv
+, makeDesktopItem
+, copyDesktopItems
+, fetchFromGitHub
+, writeText
+, qt6
+, libusb1
+,
 }:
 let
   # Based on upstream instructions: https://github.com/TechxArtisanStudio/Openterface_QT#for-linux-users

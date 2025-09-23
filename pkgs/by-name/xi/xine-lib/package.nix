@@ -1,33 +1,33 @@
-{
-  lib,
-  aalib,
-  alsa-lib,
-  autoreconfHook,
-  fetchhg,
-  ffmpeg,
-  flac,
-  libGL,
-  libGLU,
-  libX11,
-  libXext,
-  libXinerama,
-  libXv,
-  libcaca,
-  libcdio,
-  libmng,
-  libmpcdec,
-  libpulseaudio,
-  libtheora,
-  libv4l,
-  libvorbis,
-  libxcb,
-  ncurses,
-  perl,
-  pkg-config,
-  speex,
-  stdenv,
-  vcdimager,
-  zlib,
+{ lib
+, aalib
+, alsa-lib
+, autoreconfHook
+, fetchhg
+, ffmpeg
+, flac
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXinerama
+, libXv
+, libcaca
+, libcdio
+, libmng
+, libmpcdec
+, libpulseaudio
+, libtheora
+, libv4l
+, libvorbis
+, libxcb
+, ncurses
+, perl
+, pkg-config
+, speex
+, stdenv
+, vcdimager
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

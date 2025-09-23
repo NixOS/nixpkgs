@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  findlib,
-  alcotest,
-  astring,
-  cmdliner,
-  cppo,
-  fmt,
-  logs,
-  ocaml-version,
-  camlp-streams,
-  lwt,
-  re,
-  result,
-  csexp,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, buildDunePackage
+, ocaml
+, findlib
+, alcotest
+, astring
+, cmdliner
+, cppo
+, fmt
+, logs
+, ocaml-version
+, camlp-streams
+, lwt
+, re
+, result
+, csexp
+, gitUpdater
+,
 }:
 
 buildDunePackage rec {

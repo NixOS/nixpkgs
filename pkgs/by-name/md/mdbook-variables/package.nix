@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-variables";

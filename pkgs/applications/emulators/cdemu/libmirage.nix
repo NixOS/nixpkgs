@@ -1,21 +1,21 @@
-{
-  stdenv,
-  callPackage,
-  cmake,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  glib,
-  libsndfile,
-  zlib,
-  bzip2,
-  xz,
-  libsamplerate,
-  intltool,
-  pcre,
-  util-linux,
-  libselinux,
-  libsepol,
+{ stdenv
+, callPackage
+, cmake
+, pkg-config
+, gobject-introspection
+, vala
+, glib
+, libsndfile
+, zlib
+, bzip2
+, xz
+, libsamplerate
+, intltool
+, pcre
+, util-linux
+, libselinux
+, libsepol
+,
 }:
 
 let

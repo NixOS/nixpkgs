@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitMinimal,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitMinimal
+, nix-update-script
+,
 }:
 
 buildGoModule {

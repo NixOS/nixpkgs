@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  django-gravatar2,
-  django-allauth,
-  mailmanclient,
-  pytz,
-
-  # tests
-  django,
-  pytest-django,
-  pytestCheckHook,
-  nixosTests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  pdm-backend
+, # dependencies
+  django-gravatar2
+, django-allauth
+, mailmanclient
+, pytz
+, # tests
+  django
+, pytest-django
+, pytestCheckHook
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {

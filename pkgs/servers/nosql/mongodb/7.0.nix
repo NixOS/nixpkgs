@@ -1,12 +1,12 @@
-{
-  stdenv,
-  callPackage,
-  sasl,
-  boost,
-  cctools,
-  avxSupport ? stdenv.hostPlatform.avxSupport,
-  nixosTests,
-  lib,
+{ stdenv
+, callPackage
+, sasl
+, boost
+, cctools
+, avxSupport ? stdenv.hostPlatform.avxSupport
+, nixosTests
+, lib
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  aioboto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  orjson,
-  pythonOlder,
-  redis,
-  setuptools,
-  unittestCheckHook,
+{ lib
+, aioboto3
+, buildPythonPackage
+, fetchFromGitHub
+, orjson
+, pythonOlder
+, redis
+, setuptools
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  autoconf,
-  automake,
-  bison,
-  fetchFromGitHub,
-  fetchpatch,
-  flex,
-  gitMinimal,
-  lib,
-  libpq,
-  libtool,
-  libunwind,
-  pkg-config,
-  ripgrep,
-  stdenv,
+{ autoconf
+, automake
+, bison
+, fetchFromGitHub
+, fetchpatch
+, flex
+, gitMinimal
+, lib
+, libpq
+, libtool
+, libunwind
+, pkg-config
+, ripgrep
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

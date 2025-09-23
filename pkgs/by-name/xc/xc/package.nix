@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitUpdater,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitUpdater
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

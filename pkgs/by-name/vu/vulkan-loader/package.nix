@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libX11,
-  libxcb,
-  libXrandr,
-  wayland,
-  moltenvk,
-  vulkan-headers,
-  addDriverRunpath,
-  enableX11 ? stdenv.hostPlatform.isLinux,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libX11
+, libxcb
+, libXrandr
+, wayland
+, moltenvk
+, vulkan-headers
+, addDriverRunpath
+, enableX11 ? stdenv.hostPlatform.isLinux
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

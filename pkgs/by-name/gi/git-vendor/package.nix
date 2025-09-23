@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeShellScriptBin,
-  skawarePackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeShellScriptBin
+, skawarePackages
+,
 }:
 
 let

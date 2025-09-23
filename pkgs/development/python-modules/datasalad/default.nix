@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  lib,
-  gitMinimal,
-  more-itertools,
-  psutil,
-  pytestCheckHook,
-  unzip,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, lib
+, gitMinimal
+, more-itertools
+, psutil
+, pytestCheckHook
+, unzip
+,
 }:
 
 buildPythonPackage rec {

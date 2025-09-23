@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libxcb,
-  cmake,
-  qtbase,
-  qtdeclarative,
-  wrapQtAppsHook,
-  qtsvg,
-  ffmpeg,
-  gst_all_1,
-  libpulseaudio,
-  alsa-lib,
-  jack2,
-  v4l-utils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libxcb
+, cmake
+, qtbase
+, qtdeclarative
+, wrapQtAppsHook
+, qtsvg
+, ffmpeg
+, gst_all_1
+, libpulseaudio
+, alsa-lib
+, jack2
+, v4l-utils
+,
 }:
 
 stdenv.mkDerivation rec {

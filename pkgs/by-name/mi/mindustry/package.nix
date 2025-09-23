@@ -1,39 +1,34 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  fetchFromGitHub,
-  gradle,
-  jdk17,
-  zenity,
-
-  # for arc
-  SDL2,
-  pkg-config,
-  ant,
-  curl,
-  wget,
-  alsa-lib,
-  alsa-plugins,
-  glew,
-
-  # for soloud
-  libpulseaudio ? null,
-  libjack2 ? null,
-
-  nixosTests,
-
-  # Make the build version easily overridable.
+{ lib
+, stdenv
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, fetchFromGitHub
+, gradle
+, jdk17
+, zenity
+, # for arc
+  SDL2
+, pkg-config
+, ant
+, curl
+, wget
+, alsa-lib
+, alsa-plugins
+, glew
+, # for soloud
+  libpulseaudio ? null
+, libjack2 ? null
+, nixosTests
+, # Make the build version easily overridable.
   # Server and client build versions must match, and an empty build version means
   # any build is allowed, so this parameter acts as a simple whitelist.
   # Takes the package version and returns the build version.
-  makeBuildVersion ? (v: v),
-  enableClient ? true,
-  enableServer ? true,
-
-  enableWayland ? false,
+  makeBuildVersion ? (v: v)
+, enableClient ? true
+, enableServer ? true
+, enableWayland ? false
+,
 }:
 
 let
@@ -74,9 +69,10 @@ let
   };
 
 in
-assert lib.assertMsg (
-  enableClient || enableServer
-) "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
+assert lib.assertMsg
+  (
+    enableClient || enableServer
+  ) "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
 stdenv.mkDerivation {
   inherit pname version;
 

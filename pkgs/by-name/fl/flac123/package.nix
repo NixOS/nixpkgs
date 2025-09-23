@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  flac,
-  libao,
-  libogg,
-  popt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, flac
+, libao
+, libogg
+, popt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

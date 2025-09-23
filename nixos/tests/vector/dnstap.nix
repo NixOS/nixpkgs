@@ -43,11 +43,10 @@ in
       };
 
     knot =
-      {
-        config,
-        nodes,
-        pkgs,
-        ...
+      { config
+      , nodes
+      , pkgs
+      , ...
       }:
       let
         exampleZone = pkgs.writeTextDir "example.com.zone" ''
@@ -149,11 +148,10 @@ in
       };
 
     unbound =
-      {
-        config,
-        nodes,
-        pkgs,
-        ...
+      { config
+      , nodes
+      , pkgs
+      , ...
       }:
       {
         networking.firewall.allowedUDPPorts = [ 53 ];

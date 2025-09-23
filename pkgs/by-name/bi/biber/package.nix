@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  perlPackages,
-  shortenPerlShebang,
-  texlive,
+{ lib
+, stdenv
+, perlPackages
+, shortenPerlShebang
+, texlive
+,
 }:
 
 let

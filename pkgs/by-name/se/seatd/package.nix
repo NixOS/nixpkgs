@@ -1,14 +1,14 @@
-{
-  fetchFromSourcehut,
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  stdenv,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  nixosTests,
+{ fetchFromSourcehut
+, lib
+, meson
+, ninja
+, pkg-config
+, scdoc
+, stdenv
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  python312Packages,
-  fetchFromGitHub,
-  replaceVars,
-  gitMinimal,
-  portaudio,
-  playwright-driver,
-  nix-update-script,
+{ lib
+, stdenv
+, python312Packages
+, fetchFromGitHub
+, replaceVars
+, gitMinimal
+, portaudio
+, playwright-driver
+, nix-update-script
+,
 }:
 
 let
@@ -220,21 +220,19 @@ let
 
     passthru = {
       withOptional =
-        {
-          withAll ? false,
-          withPlaywright ? withAll,
-          withBrowser ? withAll,
-          withHelp ? withAll,
-          withBedrock ? withAll,
-          ...
+        { withAll ? false
+        , withPlaywright ? withAll
+        , withBrowser ? withAll
+        , withHelp ? withAll
+        , withBedrock ? withAll
+        , ...
         }:
         aider-chat.overridePythonAttrs (
-          {
-            pname,
-            dependencies,
-            makeWrapperArgs,
-            propagatedBuildInputs ? [ ],
-            ...
+          { pname
+          , dependencies
+          , makeWrapperArgs
+          , propagatedBuildInputs ? [ ]
+          , ...
           }:
 
           {

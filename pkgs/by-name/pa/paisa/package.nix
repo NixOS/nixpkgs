@@ -1,21 +1,21 @@
-{
-  lib,
-  buildGoModule,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs_20,
-  versionCheckHook,
-  node-gyp,
-  python3,
-  pkg-config,
-  cairo,
-  giflib,
-  libjpeg,
-  libpng,
-  librsvg,
-  pango,
-  pixman,
-  nixosTests,
+{ lib
+, buildGoModule
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs_20
+, versionCheckHook
+, node-gyp
+, python3
+, pkg-config
+, cairo
+, giflib
+, libjpeg
+, libpng
+, librsvg
+, pango
+, pixman
+, nixosTests
+,
 }:
 
 let

@@ -1,42 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  bison,
-  cmake,
-  doxygen,
-  flex,
-  gitMinimal,
-  gtest,
-  libsForQt5,
-  pkg-config,
-  swig,
-
-  # buildInputs
-  boost186, # 1.87.0 broken https://github.com/boostorg/asio/issues/442
-  cbc, # for clp
-  cimg,
-  clp, # for or-tools
-  cudd,
-  eigen,
-  glpk,
-  lcov,
-  lemon-graph,
-  libjpeg,
-  or-tools,
-  pcre,
-  python3,
-  re2, # for or-tools
-  readline,
-  spdlog,
-  tcl,
-  tclPackages,
-  yosys,
-  zlib,
-  xorg,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  bison
+, cmake
+, doxygen
+, flex
+, gitMinimal
+, gtest
+, libsForQt5
+, pkg-config
+, swig
+, # buildInputs
+  boost186
+, # 1.87.0 broken https://github.com/boostorg/asio/issues/442
+  cbc
+, # for clp
+  cimg
+, clp
+, # for or-tools
+  cudd
+, eigen
+, glpk
+, lcov
+, lemon-graph
+, libjpeg
+, or-tools
+, pcre
+, python3
+, re2
+, # for or-tools
+  readline
+, spdlog
+, tcl
+, tclPackages
+, yosys
+, zlib
+, xorg
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation rec {

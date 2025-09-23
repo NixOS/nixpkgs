@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyserial,
-  pythonOlder,
-  setuptools,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+, pythonOlder
+, setuptools
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

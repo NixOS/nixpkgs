@@ -1,13 +1,13 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  deprecated,
-  fetchFromGitHub,
-  hatchling,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, attrs
+, buildPythonPackage
+, deprecated
+, fetchFromGitHub
+, hatchling
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  itstool,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk3,
-  gtksourceview,
-  gtkspell3,
-  webkitgtk_4_1,
-  pandoc,
+{ stdenv
+, lib
+, fetchFromGitHub
+, itstool
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, gtk3
+, gtksourceview
+, gtkspell3
+, webkitgtk_4_1
+, pandoc
+,
 }:
 
 stdenv.mkDerivation rec {

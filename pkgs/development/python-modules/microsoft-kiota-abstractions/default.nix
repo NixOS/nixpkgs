@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  std-uritemplate,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, opentelemetry-api
+, opentelemetry-sdk
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, std-uritemplate
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

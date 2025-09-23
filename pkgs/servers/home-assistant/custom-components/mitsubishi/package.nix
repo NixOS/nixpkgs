@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  pymitsubishi,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pytest-homeassistant-custom-component,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, pymitsubishi
+, pytest-cov-stub
+, pytestCheckHook
+, pytest-homeassistant-custom-component
+,
 }:
 
 buildHomeAssistantComponent rec {

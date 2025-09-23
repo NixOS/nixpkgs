@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  ifaddr,
-  pyserial,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  ifaddr
+, pyserial
+,
 }:
 
 buildPythonPackage rec {

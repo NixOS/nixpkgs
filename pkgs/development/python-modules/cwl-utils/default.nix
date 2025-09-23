@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  cwl-upgrader,
-  cwlformat,
-  fetchFromGitHub,
-  jsonschema,
-  packaging,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  rdflib,
-  requests,
-  ruamel-yaml,
-  schema-salad,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cwl-upgrader
+, cwlformat
+, fetchFromGitHub
+, jsonschema
+, packaging
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, rdflib
+, requests
+, ruamel-yaml
+, schema-salad
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

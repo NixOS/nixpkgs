@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  sqlite,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, sqlite
+, stdenv
+,
 }:
 
 buildGoModule rec {

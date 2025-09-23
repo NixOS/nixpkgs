@@ -1,10 +1,9 @@
-{
-  mkDerivation,
-  libjail,
-  libncurses-tinfo,
-  libutil,
-  libsbuf,
-  ...
+{ mkDerivation
+, libjail
+, libncurses-tinfo
+, libutil
+, libsbuf
+, ...
 }:
 mkDerivation {
   path = "usr.bin/top";

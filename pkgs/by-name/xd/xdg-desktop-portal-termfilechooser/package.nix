@@ -1,15 +1,15 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  xdg-desktop-portal,
-  ninja,
-  meson,
-  pkg-config,
-  inih,
-  systemd,
-  scdoc,
-  nix-update-script,
+{ stdenv
+, fetchFromGitHub
+, lib
+, xdg-desktop-portal
+, ninja
+, meson
+, pkg-config
+, inih
+, systemd
+, scdoc
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-termfilechooser";

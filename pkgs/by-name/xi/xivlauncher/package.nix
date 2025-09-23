@@ -1,19 +1,19 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  SDL2,
-  libsecret,
-  glib,
-  gnutls,
-  aria2,
-  steam,
-  gst_all_1,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  useSteamRun ? true,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, SDL2
+, libsecret
+, glib
+, gnutls
+, aria2
+, steam
+, gst_all_1
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, useSteamRun ? true
+,
 }:
 
 let
@@ -68,21 +68,22 @@ buildDotnetModule rec {
   '';
 
   postFixup =
-    lib.optionalString useSteamRun (
-      let
-        steam-run =
-          (steam.override {
-            extraPkgs = pkgs: [ pkgs.libunwind ];
-            extraProfile = ''
-              unset TZ
-            '';
-          }).run;
-      in
-      ''
-        substituteInPlace $out/bin/XIVLauncher.Core \
-          --replace-fail 'exec' 'exec ${steam-run}/bin/steam-run'
-      ''
-    )
+    lib.optionalString useSteamRun
+      (
+        let
+          steam-run =
+            (steam.override {
+              extraPkgs = pkgs: [ pkgs.libunwind ];
+              extraProfile = ''
+                unset TZ
+              '';
+            }).run;
+        in
+        ''
+          substituteInPlace $out/bin/XIVLauncher.Core \
+            --replace-fail 'exec' 'exec ${steam-run}/bin/steam-run'
+        ''
+      )
     + ''
       wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
       # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065

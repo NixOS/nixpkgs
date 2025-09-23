@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -538,41 +537,47 @@ in
       {
         assertion =
           cfg.installDeviceTree
-          -> config.hardware.deviceTree.enable
-          -> config.hardware.deviceTree.name != null;
+            -> config.hardware.deviceTree.enable
+            -> config.hardware.deviceTree.name != null;
         message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
       }
     ]
-    ++ concatMap (filename: [
-      {
-        assertion = !(hasInfix "/" filename);
-        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
-      }
-      {
-        assertion = hasSuffix ".conf" filename;
-        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
-      }
-    ]) (builtins.attrNames cfg.extraEntries)
-    ++ concatMap (filename: [
-      {
-        assertion = !(hasPrefix "/" filename);
-        message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not begin with a slash";
-      }
-      {
-        assertion = !(hasInfix ".." filename);
-        message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not reference the parent directory";
-      }
-      {
-        assertion = !(hasInfix "nixos/.extra-files" (toLower filename));
-        message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: files cannot be placed in the nixos/.extra-files directory";
-      }
-    ]) (builtins.attrNames cfg.extraFiles)
-    ++ concatMap (winVersion: [
-      {
-        assertion = lib.match "^[-_0-9A-Za-z]+$" winVersion != null;
-        message = "boot.loader.systemd-boot.windows.${winVersion} is invalid: key must only contain alphanumeric characters, hyphens, and underscores";
-      }
-    ]) (builtins.attrNames cfg.windows);
+    ++ concatMap
+      (filename: [
+        {
+          assertion = !(hasInfix "/" filename);
+          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
+        }
+        {
+          assertion = hasSuffix ".conf" filename;
+          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
+        }
+      ])
+      (builtins.attrNames cfg.extraEntries)
+    ++ concatMap
+      (filename: [
+        {
+          assertion = !(hasPrefix "/" filename);
+          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not begin with a slash";
+        }
+        {
+          assertion = !(hasInfix ".." filename);
+          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not reference the parent directory";
+        }
+        {
+          assertion = !(hasInfix "nixos/.extra-files" (toLower filename));
+          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: files cannot be placed in the nixos/.extra-files directory";
+        }
+      ])
+      (builtins.attrNames cfg.extraFiles)
+    ++ concatMap
+      (winVersion: [
+        {
+          assertion = lib.match "^[-_0-9A-Za-z]+$" winVersion != null;
+          message = "boot.loader.systemd-boot.windows.${winVersion} is invalid: key must only contain alphanumeric characters, hyphens, and underscores";
+        }
+      ])
+      (builtins.attrNames cfg.windows);
 
     boot.loader.grub.enable = mkDefault false;
 
@@ -614,14 +619,16 @@ in
           '';
         })
       ]
-      ++ (mapAttrsToList (winVersion: cfg: {
-        "windows_${winVersion}.conf" = ''
-          title ${cfg.title}
-          efi /${edk2ShellEspPath}
-          options -nointerrupt -nomap -noversion ${cfg.efiDeviceHandle}:EFI\Microsoft\Boot\Bootmgfw.efi
-          sort-key ${cfg.sortKey}
-        '';
-      }) cfg.windows)
+      ++ (mapAttrsToList
+        (winVersion: cfg: {
+          "windows_${winVersion}.conf" = ''
+            title ${cfg.title}
+            efi /${edk2ShellEspPath}
+            options -nointerrupt -nomap -noversion ${cfg.efiDeviceHandle}:EFI\Microsoft\Boot\Bootmgfw.efi
+            sort-key ${cfg.sortKey}
+          '';
+        })
+        cfg.windows)
     );
 
     boot.bootspec.extensions."org.nixos.systemd-boot" = {

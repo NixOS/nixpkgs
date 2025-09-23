@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isal,
-  poetry-core,
-  pytestCheckHook,
-  zlib-ng,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, isal
+, poetry-core
+, pytestCheckHook
+, zlib-ng
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
-  testers,
-  runCommand,
-  writeText,
-  nix-update-script,
-  brush,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+, testers
+, runCommand
+, writeText
+, nix-update-script
+, brush
+,
 }:
 
 rustPlatform.buildRustPackage rec {

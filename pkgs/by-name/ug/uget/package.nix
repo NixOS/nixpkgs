@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  intltool,
-  openssl,
-  curl,
-  libnotify,
-  libappindicator-gtk3,
-  gst_all_1,
-  gtk3,
-  dconf,
-  wrapGAppsHook3,
-  aria2,
-  # Boolean guards
-  aria2Support ? true,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, openssl
+, curl
+, libnotify
+, libappindicator-gtk3
+, gst_all_1
+, gtk3
+, dconf
+, wrapGAppsHook3
+, aria2
+, # Boolean guards
+  aria2Support ? true
+,
 }:
 
 stdenv.mkDerivation rec {

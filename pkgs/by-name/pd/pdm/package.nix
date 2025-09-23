@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  runtimeShell,
-  installShellFiles,
-  testers,
-  pdm,
+{ lib
+, python3
+, fetchFromGitHub
+, runtimeShell
+, installShellFiles
+, testers
+, pdm
+,
 }:
 
 let

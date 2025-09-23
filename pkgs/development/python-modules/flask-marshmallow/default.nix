@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  flask-sqlalchemy,
-  flit-core,
-  marshmallow,
-  marshmallow-sqlalchemy,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, flask-sqlalchemy
+, flit-core
+, marshmallow
+, marshmallow-sqlalchemy
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

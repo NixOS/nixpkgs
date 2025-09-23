@@ -1,28 +1,28 @@
-{
-  gtk3,
-  gdk-pixbuf,
-  librsvg,
-  webp-pixbuf-loader,
-  gobject-introspection,
-  glib-networking,
-  glib,
-  shared-mime-info,
-  gsettings-desktop-schemas,
-  wrapGAppsHook3,
-  gtk-layer-shell,
-  adwaita-icon-theme,
-  libxkbcommon,
-  libdbusmenu-gtk3,
-  openssl,
-  pkg-config,
-  hicolor-icon-theme,
-  rustPlatform,
-  lib,
-  fetchFromGitHub,
-  luajit,
-  luajitPackages,
-  libpulseaudio,
-  features ? [ ],
+{ gtk3
+, gdk-pixbuf
+, librsvg
+, webp-pixbuf-loader
+, gobject-introspection
+, glib-networking
+, glib
+, shared-mime-info
+, gsettings-desktop-schemas
+, wrapGAppsHook3
+, gtk-layer-shell
+, adwaita-icon-theme
+, libxkbcommon
+, libdbusmenu-gtk3
+, openssl
+, pkg-config
+, hicolor-icon-theme
+, rustPlatform
+, lib
+, fetchFromGitHub
+, luajit
+, luajitPackages
+, libpulseaudio
+, features ? [ ]
+,
 }:
 
 let

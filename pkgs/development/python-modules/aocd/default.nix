@@ -1,26 +1,26 @@
-{
-  lib,
-  aocd-example-parser,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  pebble,
-  pook,
-  pytest-freezegun,
-  pytest-mock,
-  pytest-cov-stub,
-  pytest-raisin,
-  pytest-socket,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  requests-mock,
-  rich,
-  setuptools,
-  termcolor,
-  tzlocal,
+{ lib
+, aocd-example-parser
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pebble
+, pook
+, pytest-freezegun
+, pytest-mock
+, pytest-cov-stub
+, pytest-raisin
+, pytest-socket
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, requests-mock
+, rich
+, setuptools
+, termcolor
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

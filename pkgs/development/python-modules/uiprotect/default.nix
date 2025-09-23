@@ -1,41 +1,38 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  aiofiles,
-  aiohttp,
-  aioshutil,
-  async-timeout,
-  convertertools,
-  dateparser,
-  orjson,
-  packaging,
-  pillow,
-  platformdirs,
-  propcache,
-  pydantic,
-  pydantic-extra-types,
-  pyjwt,
-  rich,
-  typer,
-  yarl,
-
-  # tests
-  aiosqlite,
-  asttokens,
-  ffmpeg,
-  pytest-asyncio,
-  pytest-benchmark,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # dependencies
+  aiofiles
+, aiohttp
+, aioshutil
+, async-timeout
+, convertertools
+, dateparser
+, orjson
+, packaging
+, pillow
+, platformdirs
+, propcache
+, pydantic
+, pydantic-extra-types
+, pyjwt
+, rich
+, typer
+, yarl
+, # tests
+  aiosqlite
+, asttokens
+, ffmpeg
+, pytest-asyncio
+, pytest-benchmark
+, pytest-cov-stub
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

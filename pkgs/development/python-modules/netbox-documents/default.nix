@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  drf-extra-fields,
-  python,
-  netbox,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, drf-extra-fields
+, python
+, netbox
+,
 }:
 
 buildPythonPackage rec {

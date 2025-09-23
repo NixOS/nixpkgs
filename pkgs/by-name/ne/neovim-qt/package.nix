@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  makeWrapper,
-  neovim,
-  neovim-qt-unwrapped,
+{ stdenvNoCC
+, makeWrapper
+, neovim
+, neovim-qt-unwrapped
+,
 }:
 
 let

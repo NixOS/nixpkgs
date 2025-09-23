@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ppxlib,
-  rio,
-  sedlex,
-  spices,
-  uutf,
-  qcheck,
+{ lib
+, buildDunePackage
+, fetchurl
+, ppxlib
+, rio
+, sedlex
+, spices
+, uutf
+, qcheck
+,
 }:
 
 buildDunePackage rec {

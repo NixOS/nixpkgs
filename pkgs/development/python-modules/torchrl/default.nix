@@ -1,74 +1,70 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  ninja,
-  numpy,
-  pybind11,
-  setuptools,
-  torch,
-
-  # dependencies
-  cloudpickle,
-  packaging,
-  pyvers,
-  tensordict,
-
-  # optional-dependencies
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, ninja
+, numpy
+, pybind11
+, setuptools
+, torch
+, # dependencies
+  cloudpickle
+, packaging
+, pyvers
+, tensordict
+, # optional-dependencies
   # atari
-  gymnasium,
-  # brax
-  brax,
-  jax,
-  # checkpointing
-  torchsnapshot,
-  # dm-control
-  dm-control,
-  # gym-continuous
-  mujoco,
-  # llm
-  accelerate,
-  datasets,
-  einops,
-  immutabledict,
-  langdetect,
-  nltk,
-  playwright,
-  protobuf,
-  safetensors,
-  sentencepiece,
-  transformers,
-  vllm,
-  # marl
-  pettingzoo,
-  # offline-data
-  h5py,
-  huggingface-hub,
-  minari,
-  pandas,
-  pillow,
-  requests,
-  scikit-learn,
-  torchvision,
-  tqdm,
-  # rendering
-  moviepy,
-  # utils
-  git,
-  hydra-core,
-  tensorboard,
-  wandb,
-
-  # tests
-  imageio,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  pyyaml,
-  scipy,
+  gymnasium
+, # brax
+  brax
+, jax
+, # checkpointing
+  torchsnapshot
+, # dm-control
+  dm-control
+, # gym-continuous
+  mujoco
+, # llm
+  accelerate
+, datasets
+, einops
+, immutabledict
+, langdetect
+, nltk
+, playwright
+, protobuf
+, safetensors
+, sentencepiece
+, transformers
+, vllm
+, # marl
+  pettingzoo
+, # offline-data
+  h5py
+, huggingface-hub
+, minari
+, pandas
+, pillow
+, requests
+, scikit-learn
+, torchvision
+, tqdm
+, # rendering
+  moviepy
+, # utils
+  git
+, hydra-core
+, tensorboard
+, wandb
+, # tests
+  imageio
+, pytest-rerunfailures
+, pytestCheckHook
+, pyyaml
+, scipy
+,
 }:
 
 buildPythonPackage rec {

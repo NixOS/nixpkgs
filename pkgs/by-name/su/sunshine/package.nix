@@ -1,55 +1,55 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  autoAddDriverRunpath,
-  makeWrapper,
-  buildNpmPackage,
-  nixosTests,
-  cmake,
-  avahi,
-  libevdev,
-  libpulseaudio,
-  xorg,
-  libxcb,
-  openssl,
-  libopus,
-  boost,
-  pkg-config,
-  libdrm,
-  wayland,
-  wayland-scanner,
-  libffi,
-  libcap,
-  libgbm,
-  curl,
-  pcre,
-  pcre2,
-  python3,
-  libuuid,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libxkbcommon,
-  libepoxy,
-  libva,
-  libvdpau,
-  libglvnd,
-  numactl,
-  amf-headers,
-  svt-av1,
-  vulkan-loader,
-  libappindicator,
-  libnotify,
-  miniupnpc,
-  nlohmann_json,
-  config,
-  coreutils,
-  udevCheckHook,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoPatchelfHook
+, autoAddDriverRunpath
+, makeWrapper
+, buildNpmPackage
+, nixosTests
+, cmake
+, avahi
+, libevdev
+, libpulseaudio
+, xorg
+, libxcb
+, openssl
+, libopus
+, boost
+, pkg-config
+, libdrm
+, wayland
+, wayland-scanner
+, libffi
+, libcap
+, libgbm
+, curl
+, pcre
+, pcre2
+, python3
+, libuuid
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, libepoxy
+, libva
+, libvdpau
+, libglvnd
+, numactl
+, amf-headers
+, svt-av1
+, vulkan-loader
+, libappindicator
+, libnotify
+, miniupnpc
+, nlohmann_json
+, config
+, coreutils
+, udevCheckHook
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+,
 }:
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
@@ -88,28 +88,28 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   postPatch = # remove upstream dependency on systemd and udev
-  ''
-    substituteInPlace cmake/packaging/linux.cmake \
-      --replace-fail 'find_package(Systemd)' "" \
-      --replace-fail 'find_package(Udev)' ""
-  ''
-  # don't look for npm since we build webui separately
-  + ''
-    substituteInPlace cmake/targets/common.cmake \
-      --replace-fail 'find_program(NPM npm REQUIRED)' ""
+    ''
+      substituteInPlace cmake/packaging/linux.cmake \
+        --replace-fail 'find_package(Systemd)' "" \
+        --replace-fail 'find_package(Udev)' ""
+    ''
+    # don't look for npm since we build webui separately
+    + ''
+      substituteInPlace cmake/targets/common.cmake \
+        --replace-fail 'find_program(NPM npm REQUIRED)' ""
 
-    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
-      --subst-var-by PROJECT_NAME 'Sunshine' \
-      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
-      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
-      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+      substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
+        --subst-var-by PROJECT_NAME 'Sunshine' \
+        --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+        --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
+        --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
+        --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
 
-    substituteInPlace packaging/linux/sunshine.service.in \
-      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
-      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
-  '';
+      substituteInPlace packaging/linux/sunshine.service.in \
+        --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+        --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
+        --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
+    '';
 
   nativeBuildInputs = [
     cmake

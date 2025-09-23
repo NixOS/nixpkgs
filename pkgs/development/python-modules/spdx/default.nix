@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  nix-update-script,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, nix-update-script
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

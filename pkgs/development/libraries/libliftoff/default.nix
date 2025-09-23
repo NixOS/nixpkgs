@@ -1,14 +1,14 @@
-{
-  callPackage,
-  fetchFromGitLab,
-  fetchpatch,
+{ callPackage
+, fetchFromGitLab
+, fetchpatch
+,
 }:
 let
   mkVariant =
-    {
-      version,
-      hash,
-      patches ? [ ],
+    { version
+    , hash
+    , patches ? [ ]
+    ,
     }:
     callPackage ./generic.nix {
       inherit version patches;

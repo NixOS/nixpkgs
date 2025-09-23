@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  google-auth,
-  requests,
-
-  # tests
-  langchain-openai,
-  openai,
-  pyfakefs,
-  pytestCheckHook,
-  pytest-mock,
-  requests-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  google-auth
+, requests
+, # tests
+  langchain-openai
+, openai
+, pyfakefs
+, pytestCheckHook
+, pytest-mock
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

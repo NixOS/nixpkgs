@@ -1,18 +1,19 @@
-{
-  lib,
-  stdenv,
-  source, # this is ./source.nix
+{ lib
+, stdenv
+, source
+, # this is ./source.nix
 
-  glib,
-  wrapGAppsHook3,
-  gobject-introspection,
-  meson,
-  pkg-config,
-  ninja,
-  vala,
-  wayland,
-  wayland-scanner,
-  python3,
+  glib
+, wrapGAppsHook3
+, gobject-introspection
+, meson
+, pkg-config
+, ninja
+, vala
+, wayland
+, wayland-scanner
+, python3
+,
 }:
 let
   cleanArgs = lib.flip builtins.removeAttrs [
@@ -25,14 +26,13 @@ let
   ];
 
   buildAstalModule =
-    {
-      name,
-      sourceRoot ? "lib/${name}",
-      nativeBuildInputs ? [ ],
-      buildInputs ? [ ],
-      website-path ? name,
-      meta ? { },
-      ...
+    { name
+    , sourceRoot ? "lib/${name}"
+    , nativeBuildInputs ? [ ]
+    , buildInputs ? [ ]
+    , website-path ? name
+    , meta ? { }
+    , ...
     }@args:
     stdenv.mkDerivation (
       finalAttrs:

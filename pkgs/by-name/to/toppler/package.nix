@@ -1,22 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
-
-  buildPackages,
-  pkg-config,
-  gettext,
-  povray,
-  imagemagick,
-  gimp,
-
-  sdl2-compat,
-  SDL2_mixer,
-  SDL2_image,
-  libpng,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, nix-update-script
+, writableTmpDirAsHomeHook
+, buildPackages
+, pkg-config
+, gettext
+, povray
+, imagemagick
+, gimp
+, sdl2-compat
+, SDL2_mixer
+, SDL2_image
+, libpng
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

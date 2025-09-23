@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  thunar,
-  exo,
-  libxfce4ui,
-  libxfce4util,
-  gtk3,
-  glib,
-  subversion,
-  apr,
-  aprutil,
-  withSubversion ? false,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gettext
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, thunar
+, exo
+, libxfce4ui
+, libxfce4util
+, gtk3
+, glib
+, subversion
+, apr
+, aprutil
+, withSubversion ? false
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

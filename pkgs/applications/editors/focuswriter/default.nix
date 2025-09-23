@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  cmake,
-  hunspell,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qt5compat,
-  qtwayland,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, cmake
+, hunspell
+, qtbase
+, qtmultimedia
+, qttools
+, qt5compat
+, qtwayland
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

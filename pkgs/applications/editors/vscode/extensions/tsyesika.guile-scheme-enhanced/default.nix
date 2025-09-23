@@ -1,9 +1,9 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  guile,
-  moreutils,
+{ lib
+, vscode-utils
+, jq
+, guile
+, moreutils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

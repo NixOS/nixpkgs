@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gtk3,
-  rgbds,
-  SDL2,
-  wrapGAppsHook3,
-  glib,
-  gdk-pixbuf,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk3
+, rgbds
+, SDL2
+, wrapGAppsHook3
+, glib
+, gdk-pixbuf
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

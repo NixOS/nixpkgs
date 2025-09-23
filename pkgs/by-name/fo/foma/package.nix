@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  cmake,
-  flex,
-  pkg-config,
-  readline,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, cmake
+, flex
+, pkg-config
+, readline
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

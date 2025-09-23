@@ -1,42 +1,39 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  dill,
-  numpy,
-  pandas,
-  sortedcontainers,
-  typing-extensions,
-
-  # optional-dependencies
-  autograd,
-  botorch,
-  # configspace,
-  fastparquet,
-  h5py,
-  huggingface-hub,
-  matplotlib,
-  onnxruntime,
-  pymoo,
-  pyyaml,
-  scikit-learn,
-  scipy,
-  # smac,
-  statsmodels,
-  swig,
-  xgboost,
-  # yahpo-gym,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  dill
+, numpy
+, pandas
+, sortedcontainers
+, typing-extensions
+, # optional-dependencies
+  autograd
+, botorch
+, # configspace,
+  fastparquet
+, h5py
+, huggingface-hub
+, matplotlib
+, onnxruntime
+, pymoo
+, pyyaml
+, scikit-learn
+, scipy
+, # smac,
+  statsmodels
+, swig
+, xgboost
+, # yahpo-gym,
 
   # tests
-  pytestCheckHook,
-  pytest-timeout,
-  ray,
-  writableTmpDirAsHomeHook,
+  pytestCheckHook
+, pytest-timeout
+, ray
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage rec {
   pname = "syne-tune";

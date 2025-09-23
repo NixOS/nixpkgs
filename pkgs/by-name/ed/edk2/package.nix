@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  applyPatches,
-  libuuid,
-  bc,
-  lib,
-  buildPackages,
-  nixosTests,
-  writeScript,
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, applyPatches
+, libuuid
+, bc
+, lib
+, buildPackages
+, nixosTests
+, writeScript
+,
 }:
 
 let

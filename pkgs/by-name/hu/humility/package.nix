@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  libusb1,
-  libftdi,
-  cargo-readme,
-  pkg-config,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, libusb1
+, libftdi
+, cargo-readme
+, pkg-config
+,
 }:
 
 rustPlatform.buildRustPackage {

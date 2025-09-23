@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  trezor-udev-rules,
-  nixosTests,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, trezor-udev-rules
+, nixosTests
+,
 }:
 
 buildGoModule rec {

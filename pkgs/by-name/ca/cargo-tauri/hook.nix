@@ -1,18 +1,19 @@
-{
-  lib,
-  stdenv,
-  makeSetupHook,
-  cargo,
-  cargo-tauri,
-  rust,
-  # The subdirectory of `target/` from which to copy the build artifacts
-  targetSubdirectory ? stdenv.hostPlatform.rust.cargoShortTarget,
+{ lib
+, stdenv
+, makeSetupHook
+, cargo
+, cargo-tauri
+, rust
+, # The subdirectory of `target/` from which to copy the build artifacts
+  targetSubdirectory ? stdenv.hostPlatform.rust.cargoShortTarget
+,
 }:
 
 let
   kernelName = stdenv.hostPlatform.parsed.kernel.name;
 in
-makeSetupHook {
+makeSetupHook
+{
   name = "tauri-hook";
 
   propagatedBuildInputs = [
@@ -30,8 +31,7 @@ makeSetupHook {
       {
         darwin = "app";
         linux = "deb";
-      }
-      .${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");
+      }.${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");
 
     # $targetDir is the path to the build artifacts (i.e., `./target/release`)
     installScript =
@@ -45,8 +45,7 @@ makeSetupHook {
           mkdir -p $out
           mv "$targetDir"/bundle/deb/*/data/usr/* $out/
         '';
-      }
-      .${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");
+      }.${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");
   };
 
   meta = {

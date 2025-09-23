@@ -3,11 +3,10 @@
   name = "nginx-modsecurity";
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.nginx = {

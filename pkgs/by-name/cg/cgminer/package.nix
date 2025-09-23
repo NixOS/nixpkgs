@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libtool,
-  autoconf,
-  automake,
-  curl,
-  ncurses,
-  ocl-icd,
-  opencl-headers,
-  libusb1,
-  xorg,
-  jansson,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libtool
+, autoconf
+, automake
+, curl
+, ncurses
+, ocl-icd
+, opencl-headers
+, libusb1
+, xorg
+, jansson
+,
 }:
 
 stdenv.mkDerivation rec {

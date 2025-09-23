@@ -1,9 +1,9 @@
 lib:
 
-{
-  cert,
-  groups,
-  services,
+{ cert
+, groups
+, services
+,
 }:
 let
   catSep = builtins.concatStringsSep;
@@ -15,12 +15,14 @@ let
     ++ lib.toList (svc.serviceConfig.SupplementaryGroups or [ ]);
 in
 {
-  assertion = builtins.all (
-    svc:
-    svcUser svc == "root"
-    || builtins.elem (svcUser svc) groups.${cert.group}.members
-    || builtins.elem cert.group (svcGroups svc)
-  ) services;
+  assertion = builtins.all
+    (
+      svc:
+      svcUser svc == "root"
+      || builtins.elem (svcUser svc) groups.${cert.group}.members
+      || builtins.elem cert.group (svcGroups svc)
+    )
+    services;
 
   message = "Certificate ${cert.domain} (group=${cert.group}) must be readable by service(s) ${
     catSep ", " (

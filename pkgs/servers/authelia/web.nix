@@ -1,8 +1,8 @@
-{
-  stdenv,
-  nodejs,
-  pnpm,
-  fetchFromGitHub,
+{ stdenv
+, nodejs
+, pnpm
+, fetchFromGitHub
+,
 }:
 
 let

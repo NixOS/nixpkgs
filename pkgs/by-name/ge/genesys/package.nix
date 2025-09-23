@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  graphviz,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, graphviz
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

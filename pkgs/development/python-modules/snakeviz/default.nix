@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ipython,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  tornado,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ipython
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, tornado
+,
 }:
 
 buildPythonPackage rec {

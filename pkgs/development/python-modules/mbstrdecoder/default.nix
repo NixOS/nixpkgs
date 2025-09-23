@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  chardet,
-  pytestCheckHook,
-  faker,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, chardet
+, pytestCheckHook
+, faker
+,
 }:
 
 buildPythonPackage rec {

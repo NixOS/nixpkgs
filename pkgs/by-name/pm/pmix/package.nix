@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  autoconf,
-  automake,
-  removeReferencesTo,
-  libtool,
-  python3,
-  flex,
-  libevent,
-  targetPackages,
-  makeWrapper,
-  hwloc,
-  munge,
-  zlib,
-  gitMinimal,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, autoconf
+, automake
+, removeReferencesTo
+, libtool
+, python3
+, flex
+, libevent
+, targetPackages
+, makeWrapper
+, hwloc
+, munge
+, zlib
+, gitMinimal
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

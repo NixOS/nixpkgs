@@ -1,19 +1,19 @@
-{
-  lib,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  boost,
-  cmake,
-  fetchFromGitHub,
-  gettext,
-  gitUpdater,
-  ninja,
-  physfs,
-  pkg-config,
-  stdenv,
-  zip,
+{ lib
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, boost
+, cmake
+, fetchFromGitHub
+, gettext
+, gitUpdater
+, ninja
+, physfs
+, pkg-config
+, stdenv
+, zip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

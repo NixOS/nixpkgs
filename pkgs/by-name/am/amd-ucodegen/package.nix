@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

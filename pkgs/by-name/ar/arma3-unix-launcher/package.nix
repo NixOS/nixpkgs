@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  curl,
-  curlpp,
-  srcOnly,
-  fetchFromGitHub,
-  fetchurl,
-  fmt,
-  nlohmann_json,
-  qt5,
-  spdlog,
-  steam-run,
-  replaceVars,
-  buildDayZLauncher ? false,
+{ lib
+, stdenv
+, cmake
+, curl
+, curlpp
+, srcOnly
+, fetchFromGitHub
+, fetchurl
+, fmt
+, nlohmann_json
+, qt5
+, spdlog
+, steam-run
+, replaceVars
+, buildDayZLauncher ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "arma3-unix-launcher";

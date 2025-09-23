@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-  requests,
-  setuptools,
-  standard-telnetlib,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, requests
+, setuptools
+, standard-telnetlib
+,
 }:
 
 buildPythonPackage rec {

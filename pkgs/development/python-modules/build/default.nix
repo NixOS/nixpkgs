@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  build,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  filelock,
-  packaging,
-  pyproject-hooks,
-  pytest-mock,
-  pytest-rerunfailures,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tomli,
-  virtualenv,
-  wheel,
+{ lib
+, stdenv
+, build
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, filelock
+, packaging
+, pyproject-hooks
+, pytest-mock
+, pytest-rerunfailures
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tomli
+, virtualenv
+, wheel
+,
 }:
 
 buildPythonPackage rec {

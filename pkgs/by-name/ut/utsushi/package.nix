@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  writeScriptBin,
-  fetchpatch,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  autoconf-archive,
-  libxslt,
-  boost,
-  gtkmm2,
-  imagemagick,
-  sane-backends,
-  tesseract4,
-  udev,
-  libusb1,
-  withNetworkScan ? false,
-  utsushi-networkscan,
+{ lib
+, stdenv
+, writeScriptBin
+, fetchpatch
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, autoconf-archive
+, libxslt
+, boost
+, gtkmm2
+, imagemagick
+, sane-backends
+, tesseract4
+, udev
+, libusb1
+, withNetworkScan ? false
+, utsushi-networkscan
+,
 }:
 
 let

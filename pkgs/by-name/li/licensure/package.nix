@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  git,
-  gitls,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, git
+, gitls
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "licensure";

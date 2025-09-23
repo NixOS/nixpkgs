@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  makeWrapper,
-  libpcap,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, makeWrapper
+, libpcap
+,
 }:
 
 stdenv.mkDerivation rec {

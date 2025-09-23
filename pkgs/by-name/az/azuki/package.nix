@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
+{ lib
+, stdenvNoCC
+, fetchzip
+,
 }:
 
 let
@@ -45,18 +45,20 @@ stdenvNoCC.mkDerivation {
 
   sourceRoot = "azuki";
 
-  srcs = map (
-    {
-      name,
-      downloadVersion,
-      hash,
-    }:
-    fetchzip {
-      url = "https://azukifont.com/font/azukifont${downloadVersion}.zip";
-      stripRoot = false;
-      inherit name hash;
-    }
-  ) fonts;
+  srcs = map
+    (
+      { name
+      , downloadVersion
+      , hash
+      ,
+      }:
+      fetchzip {
+        url = "https://azukifont.com/font/azukifont${downloadVersion}.zip";
+        stripRoot = false;
+        inherit name hash;
+      }
+    )
+    fonts;
 
   installPhase = ''
     runHook preInstall

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  attrs,
-  coverage,
-  pexpect,
-  doCheck ? true,
-  pytest,
-  pytest-xdist,
-  flaky,
-  mock,
-  sortedcontainers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, attrs
+, coverage
+, pexpect
+, doCheck ? true
+, pytest
+, pytest-xdist
+, flaky
+, mock
+, sortedcontainers
+,
 }:
 buildPythonPackage rec {
   # https://hypothesis.readthedocs.org/en/latest/packaging.html

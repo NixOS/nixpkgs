@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  xorg,
-  getopt,
-  xauth,
-  util-linux,
-  which,
-  fontsConf,
-  gawk,
-  coreutils,
-  installShellFiles,
-  xterm,
-  bashNonInteractive,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, xorg
+, getopt
+, xauth
+, util-linux
+, which
+, fontsConf
+, gawk
+, coreutils
+, installShellFiles
+, xterm
+, bashNonInteractive
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "xvfb-run";

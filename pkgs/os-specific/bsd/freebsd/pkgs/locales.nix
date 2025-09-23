@@ -1,18 +1,18 @@
-{
-  mkDerivation,
-  lib,
-  symlinkJoin,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
-  mandoc,
-  groff,
-  localedef,
-  allLocales ? true,
-  locales ? [ "en_US.UTF-8" ],
+{ mkDerivation
+, lib
+, symlinkJoin
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+, mandoc
+, groff
+, localedef
+, allLocales ? true
+, locales ? [ "en_US.UTF-8" ]
+,
 }:
 let
   build =

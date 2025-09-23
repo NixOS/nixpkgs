@@ -1,21 +1,21 @@
-args@{
-  klipper-firmware,
-  stdenv,
-  lib,
-  pkg-config,
-  pkgsCross,
-  bintools-unwrapped,
-  libffi,
-  libusb1,
-  wxGTK32,
-  python3,
-  gcc-arm-embedded,
-  klipper,
-  avrdude,
-  stm32flash,
-  klipper-flash,
-  mcu ? "mcu",
-  firmwareConfig ? ./simulator.cfg,
+args@{ klipper-firmware
+, stdenv
+, lib
+, pkg-config
+, pkgsCross
+, bintools-unwrapped
+, libffi
+, libusb1
+, wxGTK32
+, python3
+, gcc-arm-embedded
+, klipper
+, avrdude
+, stm32flash
+, klipper-flash
+, mcu ? "mcu"
+, firmwareConfig ? ./simulator.cfg
+,
 }:
 # are used by flash scripts
 # find those with `rg '\[\"lib'` inside of klipper repo

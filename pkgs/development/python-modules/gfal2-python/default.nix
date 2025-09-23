@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  boost,
-  gfal2,
-  glib,
-  pythonAtLeast,
-  # For tests
-  gfal2-util ? null,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, gfal2
+, glib
+, pythonAtLeast
+, # For tests
+  gfal2-util ? null
+,
 }:
 buildPythonPackage rec {
   pname = "gfal2-python";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchzip,
-  writeText,
-  conf ? null,
+{ lib
+, stdenv
+, fetchpatch
+, fetchzip
+, writeText
+, conf ? null
+,
 }:
 
 let

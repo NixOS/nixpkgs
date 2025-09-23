@@ -50,8 +50,8 @@ in
 
       # Snipe-IT has been installed successfully if the site name shows up on the login page
       checkLoginPage =
-        {
-          shouldSucceed ? true,
+        { shouldSucceed ? true
+        ,
         }:
         ''
           snipeit.${

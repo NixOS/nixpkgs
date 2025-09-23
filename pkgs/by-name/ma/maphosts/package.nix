@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  bundlerEnv,
-  ruby,
-  bundlerUpdateScript,
+{ stdenv
+, lib
+, bundlerEnv
+, ruby
+, bundlerUpdateScript
+,
 }:
 
 let

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  directoryListingUpdater,
-  fetchurl,
-  alsa-lib,
-  alsa-plugins,
-  gettext,
-  makeWrapper,
-  pkg-config,
-  ncurses,
-  libsamplerate,
-  pciutils,
-  procps,
-  which,
-  fftw,
-  pipewire,
-  withPipewireLib ? true,
-  symlinkJoin,
+{ lib
+, stdenv
+, directoryListingUpdater
+, fetchurl
+, alsa-lib
+, alsa-plugins
+, gettext
+, makeWrapper
+, pkg-config
+, ncurses
+, libsamplerate
+, pciutils
+, procps
+, which
+, fftw
+, pipewire
+, withPipewireLib ? true
+, symlinkJoin
+,
 }:
 
 let

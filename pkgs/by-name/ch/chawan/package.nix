@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  makeBinaryWrapper,
-  curlMinimal,
-  mandoc,
-  ncurses,
-  nim,
-  pandoc,
-  pkg-config,
-  brotli,
-  zlib,
-  gitUpdater,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, makeBinaryWrapper
+, curlMinimal
+, mandoc
+, ncurses
+, nim
+, pandoc
+, pkg-config
+, brotli
+, zlib
+, gitUpdater
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

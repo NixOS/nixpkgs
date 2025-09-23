@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  flake8-import-order,
-  pyflakes,
-  tomli,
-  setuptools,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, flake8-import-order
+, pyflakes
+, tomli
+, setuptools
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

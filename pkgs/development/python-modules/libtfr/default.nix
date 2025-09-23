@@ -1,21 +1,18 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-
-  # build-system
-  setuptools,
-  pkg-config,
-  cython,
-  pkgconfig,
-
-  # Dependencies
-  numpy,
-  fftw,
-  lapack,
-
-  # Check
-  pytestCheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, # build-system
+  setuptools
+, pkg-config
+, cython
+, pkgconfig
+, # Dependencies
+  numpy
+, fftw
+, lapack
+, # Check
+  pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "libtfr";

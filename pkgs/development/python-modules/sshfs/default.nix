@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  asyncssh,
-  bcrypt,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  importlib-metadata,
-  mock-ssh-server,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
+{ lib
+, stdenv
+, asyncssh
+, bcrypt
+, buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, importlib-metadata
+, mock-ssh-server
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

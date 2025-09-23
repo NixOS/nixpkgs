@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  wayland,
-  wayland-scanner,
-  wayland-protocols,
-  unstableGitUpdater,
-  pixman,
-  fcft,
-  writeText,
-  # Boolean flags
-  withCustomConfigH ? (configH != null),
-  # Configurable options
-  configH ? null,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, wayland
+, wayland-scanner
+, wayland-protocols
+, unstableGitUpdater
+, pixman
+, fcft
+, writeText
+, # Boolean flags
+  withCustomConfigH ? (configH != null)
+, # Configurable options
+  configH ? null
+,
 }:
 
 stdenv.mkDerivation {

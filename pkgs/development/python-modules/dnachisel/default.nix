@@ -1,18 +1,18 @@
-{
-  lib,
-  biopython,
-  buildPythonPackage,
-  docopt,
-  fetchFromGitHub,
-  flametree,
-  genome-collector,
-  matplotlib,
-  numpy,
-  primer3,
-  proglog,
-  pytestCheckHook,
-  python-codon-tables,
-  setuptools,
+{ lib
+, biopython
+, buildPythonPackage
+, docopt
+, fetchFromGitHub
+, flametree
+, genome-collector
+, matplotlib
+, numpy
+, primer3
+, proglog
+, pytestCheckHook
+, python-codon-tables
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

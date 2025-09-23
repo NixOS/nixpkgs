@@ -1,23 +1,23 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  bibtexparser_2,
-  git,
-  lxml,
-  markdown,
-  markupsafe,
-  postgresql,
-  pylatexenc,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  tabulate,
+{ lib
+, attrs
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, bibtexparser_2
+, git
+, lxml
+, markdown
+, markupsafe
+, postgresql
+, pylatexenc
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

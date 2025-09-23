@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  filelock,
-  lxml,
-  pycryptodomex,
-  pythonOlder,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, filelock
+, lxml
+, pycryptodomex
+, pythonOlder
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

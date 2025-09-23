@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitLab,
-  rustPlatform,
-  pkg-config,
-  gtk3-x11,
-  atk,
-  glib,
-  librsvg,
-  gdk-pixbuf,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitLab
+, rustPlatform
+, pkg-config
+, gtk3-x11
+, atk
+, glib
+, librsvg
+, gdk-pixbuf
+, wrapGAppsHook3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

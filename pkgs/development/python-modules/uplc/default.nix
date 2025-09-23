@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  # Python deps
-  frozenlist2,
-  python-secp256k1-cardano,
-  setuptools,
-  poetry-core,
-  frozendict,
-  cbor2WithoutCExtensions,
-  cbor2,
-  rply,
-  pycardano,
-  uplc,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # Python deps
+  frozenlist2
+, python-secp256k1-cardano
+, setuptools
+, poetry-core
+, frozendict
+, cbor2WithoutCExtensions
+, cbor2
+, rply
+, pycardano
+, uplc
+,
 }:
 
 buildPythonPackage rec {

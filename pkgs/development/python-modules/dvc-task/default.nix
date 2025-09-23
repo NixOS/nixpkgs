@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  celery,
-  fetchFromGitHub,
-  funcy,
-  kombu,
-  pytest-celery,
-  pytest-mock,
-  pytest-test-utils,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  shortuuid,
+{ lib
+, buildPythonPackage
+, celery
+, fetchFromGitHub
+, funcy
+, kombu
+, pytest-celery
+, pytest-mock
+, pytest-test-utils
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, shortuuid
+,
 }:
 
 buildPythonPackage rec {

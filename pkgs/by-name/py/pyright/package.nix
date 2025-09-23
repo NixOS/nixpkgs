@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  runCommand,
-  jq,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, runCommand
+, jq
+,
 }:
 
 let

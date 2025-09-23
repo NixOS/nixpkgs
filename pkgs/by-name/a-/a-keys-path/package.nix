@@ -1,24 +1,24 @@
 # copied from oh-my-git/package.nix by @jojosch (Johannes Schleifenbaum)
 # added in nixos/nixpkgs#119642
-{
-  lib,
-  autoPatchelfHook,
-  copyDesktopItems,
-  fetchFromGitHub,
-  makeDesktopItem,
-  stdenv,
-  alsa-lib,
-  godot3-export-templates,
-  godot3-headless,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libglvnd,
-  writableTmpDirAsHomeHook,
+{ lib
+, autoPatchelfHook
+, copyDesktopItems
+, fetchFromGitHub
+, makeDesktopItem
+, stdenv
+, alsa-lib
+, godot3-export-templates
+, godot3-headless
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, libglvnd
+, writableTmpDirAsHomeHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "a-keys-path";

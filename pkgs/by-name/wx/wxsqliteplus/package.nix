@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  wxGTK32,
-  wxsqlite3,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, makeWrapper
+, wxGTK32
+, wxsqlite3
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

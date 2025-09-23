@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libjpeg,
-  libpng,
-  libtiff,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libjpeg
+, libpng
+, libtiff
+, perl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

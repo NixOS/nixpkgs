@@ -1,31 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  # native deps.
-  runCommand,
-  pkg-config,
-  meson,
-  ninja,
-  makeWrapper,
-  # build+runtime deps.
-  knot-dns,
-  luajitPackages,
-  libuv,
-  gnutls,
-  lmdb,
-  jemalloc,
-  systemd,
-  libcap_ng,
-  dns-root-data,
-  nghttp2, # optionals, in principle
-  fstrm,
-  protobufc, # more optionals
+{ lib
+, stdenv
+, fetchurl
+, # native deps.
+  runCommand
+, pkg-config
+, meson
+, ninja
+, makeWrapper
+, # build+runtime deps.
+  knot-dns
+, luajitPackages
+, libuv
+, gnutls
+, lmdb
+, jemalloc
+, systemd
+, libcap_ng
+, dns-root-data
+, nghttp2
+, # optionals, in principle
+  fstrm
+, protobufc
+, # more optionals
   # test-only deps.
-  cmocka,
-  which,
-  cacert,
-  extraFeatures ? false, # catch-all if defaults aren't enough
+  cmocka
+, which
+, cacert
+, extraFeatures ? false
+, # catch-all if defaults aren't enough
 }:
 let
   result = if extraFeatures then wrapped-full else unwrapped;
@@ -119,7 +121,7 @@ let
     ++ optional doInstallCheck "-Dunit_tests=enabled"
     ++ optional doInstallCheck "-Dconfig_tests=enabled"
     ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
-    #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
+      #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
     ;
 
     postInstall = ''

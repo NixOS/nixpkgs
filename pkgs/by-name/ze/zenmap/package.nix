@@ -1,11 +1,11 @@
-{
-  gobject-introspection,
-  gtk3,
-  lib,
-  nmap,
-  python3Packages,
-  wrapGAppsHook3,
-  xterm,
+{ gobject-introspection
+, gtk3
+, lib
+, nmap
+, python3Packages
+, wrapGAppsHook3
+, xterm
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,17 +1,17 @@
-{
-  mkDerivation,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  procps,
-  qtbase,
-  qtwebengine,
-  qtwebkit,
-  cmake,
-  syncthing,
-  preferQWebView ? false,
-  preferNative ? true,
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, procps
+, qtbase
+, qtwebengine
+, qtwebkit
+, cmake
+, syncthing
+, preferQWebView ? false
+, preferNative ? true
+,
 }:
 
 mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  pkgs,
-  lib,
-  fetchFromSourcehut,
-  nixosTests,
+{ stdenv
+, pkgs
+, lib
+, fetchFromSourcehut
+, nixosTests
+,
 }:
 
 let

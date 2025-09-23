@@ -1,12 +1,12 @@
-{
-  autoPatchelfHook,
-  fetchurl,
-  jre,
-  lib,
-  makeWrapper,
-  sourcesJSON ? ./sources.json,
-  stdenvNoCC,
-  zlib,
+{ autoPatchelfHook
+, fetchurl
+, jre
+, lib
+, makeWrapper
+, sourcesJSON ? ./sources.json
+, stdenvNoCC
+, zlib
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

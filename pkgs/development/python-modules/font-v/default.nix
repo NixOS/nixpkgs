@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fonttools,
-  gitMinimal,
-  gitpython,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fonttools
+, gitMinimal
+, gitpython
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

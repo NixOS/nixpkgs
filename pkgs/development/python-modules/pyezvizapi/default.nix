@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  paho-mqtt,
-  pandas,
-  pycryptodome,
-  requests,
-  setuptools,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, paho-mqtt
+, pandas
+, pycryptodome
+, requests
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

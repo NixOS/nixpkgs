@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  systemd,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, pkg-config
+, rustPlatform
+, stdenv
+, systemd
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
-  skytemple-files,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pillow
+, pytestCheckHook
+, pythonOlder
+, skytemple-files
+,
 }:
 
 buildPythonPackage rec {

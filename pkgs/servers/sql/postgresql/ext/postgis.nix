@@ -1,33 +1,32 @@
-{
-  autoconf,
-  automake,
-  cunit,
-  docbook5,
-  fetchFromGitHub,
-  gdalMinimal,
-  geos,
-  jitSupport,
-  json_c,
-  lib,
-  libiconv,
-  libtool,
-  libxml2,
-  libxslt,
-  llvm,
-  pcre2,
-  perl,
-  pkg-config,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
-  postgresqlTestHook,
-  proj,
-  protobufc,
-  stdenv,
-  which,
-
-  withSfcgal ? false,
-  sfcgal,
+{ autoconf
+, automake
+, cunit
+, docbook5
+, fetchFromGitHub
+, gdalMinimal
+, geos
+, jitSupport
+, json_c
+, lib
+, libiconv
+, libtool
+, libxml2
+, libxslt
+, llvm
+, pcre2
+, perl
+, pkg-config
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+, postgresqlTestHook
+, proj
+, protobufc
+, stdenv
+, which
+, withSfcgal ? false
+, sfcgal
+,
 }:
 
 let

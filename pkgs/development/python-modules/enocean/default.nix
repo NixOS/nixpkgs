@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  beautifulsoup4,
-  pyserial,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, # build-system
+  setuptools
+, # dependencies
+  beautifulsoup4
+, pyserial
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDubPackage,
-  fetchFromGitHub,
+{ lib
+, buildDubPackage
+, fetchFromGitHub
+,
 }:
 
 buildDubPackage {

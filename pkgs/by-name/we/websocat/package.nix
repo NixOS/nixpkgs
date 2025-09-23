@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  bash,
-  fetchFromGitHub,
-  fetchpatch,
-  libiconv,
-  makeWrapper,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  versionCheckHook,
+{ lib
+, stdenv
+, bash
+, fetchFromGitHub
+, fetchpatch
+, libiconv
+, makeWrapper
+, openssl
+, pkg-config
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

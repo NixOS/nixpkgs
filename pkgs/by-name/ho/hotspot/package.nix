@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  binutils,
-  cmake,
-  patchelfUnstable,
-  elfutils,
-  fetchFromGitHub,
-  fetchpatch,
-  kddockwidgets,
-  kdePackages,
-  libelf,
-  perf,
-  qt6,
-  rustc-demangle,
-  zstd,
+{ lib
+, stdenv
+, binutils
+, cmake
+, patchelfUnstable
+, elfutils
+, fetchFromGitHub
+, fetchpatch
+, kddockwidgets
+, kdePackages
+, libelf
+, perf
+, qt6
+, rustc-demangle
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  gettext,
-  pkg-config,
-  intltool,
-  glib,
-  gnome,
-  gtk3,
-  gtk-doc,
-  gnupg,
-  gpgme,
-  dbus-glib,
-  libgnome-keyring,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, gettext
+, pkg-config
+, intltool
+, glib
+, gnome
+, gtk3
+, gtk-doc
+, gnupg
+, gpgme
+, dbus-glib
+, libgnome-keyring
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gobject-introspection,
-  intltool,
-  wrapGAppsHook3,
-  procps,
-  python3,
-  readline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gobject-introspection
+, intltool
+, wrapGAppsHook3
+, procps
+, python3
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  requests,
-  infotagger,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, requests
+, infotagger
+,
 }:
 
 buildKodiAddon rec {

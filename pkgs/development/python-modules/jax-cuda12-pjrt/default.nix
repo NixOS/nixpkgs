@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  addDriverRunpath,
-  autoPatchelfHook,
-  pypaInstallHook,
-  wheelUnpackHook,
-  cudaPackages,
-  python,
-  jaxlib,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, addDriverRunpath
+, autoPatchelfHook
+, pypaInstallHook
+, wheelUnpackHook
+, cudaPackages
+, python
+, jaxlib
+,
 }:
 let
   inherit (jaxlib) version;
@@ -46,14 +46,12 @@ buildPythonPackage rec {
       {
         x86_64-linux = "manylinux_2_27_x86_64";
         aarch64-linux = "manylinux2014_aarch64";
-      }
-      .${stdenv.hostPlatform.system};
+      }.${stdenv.hostPlatform.system};
     hash =
       {
         x86_64-linux = "sha256-quPn80WASloSKaxxSMvRNEUMgWGYu7/4WnYiGC7H9ko=";
         aarch64-linux = "sha256-f8QFBJYN5W4jL5MmMKJ1fs8/hzZlsTmDF9Jfa3RF1WA=";
-      }
-      .${stdenv.hostPlatform.system};
+      }.${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [

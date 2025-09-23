@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-
-  # build-system
-  pbr,
-
-  # dependencies
-  oslo-config,
-  oslo-log,
-  oslo-utils,
-  prometheus-client,
-
-  # tests
-  oslotest,
-  stestr,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, # build-system
+  pbr
+, # dependencies
+  oslo-config
+, oslo-log
+, oslo-utils
+, prometheus-client
+, # tests
+  oslotest
+, stestr
+,
 }:
 
 buildPythonPackage rec {

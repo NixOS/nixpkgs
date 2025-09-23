@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  makeWrapper,
-  boost,
-  xz,
-  libiconv,
-  withGog ? false,
-  unar ? null,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, makeWrapper
+, boost
+, xz
+, libiconv
+, withGog ? false
+, unar ? null
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,24 +1,24 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  pkgs,
-  stdenv,
-  # nativeBuildInputs
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  sphinx,
-  # buildInputs
-  boost,
-  # nativeCheckInputs
-  bash,
-  coreutils,
-  diffutils,
-  findutils,
-  glibcLocales,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, pkgs
+, stdenv
+, # nativeBuildInputs
+  gettext
+, meson
+, ninja
+, pkg-config
+, python3
+, sphinx
+, # buildInputs
+  boost
+, # nativeCheckInputs
+  bash
+, coreutils
+, diffutils
+, findutils
+, glibcLocales
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

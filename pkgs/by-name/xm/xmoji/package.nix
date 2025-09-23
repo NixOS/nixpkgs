@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  fontconfig,
-  harfbuzz,
-  libpng,
-  xcbutil,
-  libXcursor,
-  xcbutilimage,
-  libxkbcommon,
-  xcb-util-cursor,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, fontconfig
+, harfbuzz
+, libpng
+, xcbutil
+, libXcursor
+, xcbutilimage
+, libxkbcommon
+, xcb-util-cursor
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

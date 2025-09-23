@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  boost-histogram,
-  dask,
-  dask-awkward,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, hatch-vcs
+, # dependencies
+  boost-histogram
+, dask
+, dask-awkward
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,42 +1,43 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  cmake,
-  bash,
-  coreutils,
-  gnugrep,
-  perl,
-  ninja_1_11,
-  pkg-config,
-  clang,
-  bintools,
-  python312Packages,
-  git,
-  fetchpatch,
-  fetchpatch2,
-  makeWrapper,
-  gnumake,
-  file,
-  runCommand,
-  writeShellScriptBin,
-  # For lldb
-  libedit,
-  ncurses,
-  swig,
-  libxml2,
-  # Linux-specific
-  glibc,
-  libuuid,
-  # Darwin-specific
-  replaceVars,
-  fixDarwinDylibNames,
-  xcbuild,
-  cctools, # libtool
-  sigtool,
-  DarwinTools,
-  apple-sdk_13,
-  darwinMinVersionHook,
+{ lib
+, stdenv
+, callPackage
+, cmake
+, bash
+, coreutils
+, gnugrep
+, perl
+, ninja_1_11
+, pkg-config
+, clang
+, bintools
+, python312Packages
+, git
+, fetchpatch
+, fetchpatch2
+, makeWrapper
+, gnumake
+, file
+, runCommand
+, writeShellScriptBin
+, # For lldb
+  libedit
+, ncurses
+, swig
+, libxml2
+, # Linux-specific
+  glibc
+, libuuid
+, # Darwin-specific
+  replaceVars
+, fixDarwinDylibNames
+, xcbuild
+, cctools
+, # libtool
+  sigtool
+, DarwinTools
+, apple-sdk_13
+, darwinMinVersionHook
+,
 }:
 
 let
@@ -67,8 +68,7 @@ let
         #appletvsimulator
         #watchos
         #watchsimulator
-      }
-      .${targetPlatform.darwinPlatform}
+      }.${targetPlatform.darwinPlatform}
         or (throw "Cannot build Swift for target Darwin platform '${targetPlatform.darwinPlatform}'")
     else
       targetPlatform.parsed.kernel.name;

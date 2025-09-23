@@ -1,25 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  makeDesktopItem,
-  jdk,
-  ant,
-  stripJavaArchivesHook,
-  gtk3,
-  gsettings-desktop-schemas,
-  p7zip,
-  autoPatchelfHook,
-  libXxf86vm,
-  libGL,
-  copyDesktopItems,
-
-  pname,
-  version,
-  src,
-  meta,
-  patches,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, jdk
+, ant
+, stripJavaArchivesHook
+, gtk3
+, gsettings-desktop-schemas
+, p7zip
+, autoPatchelfHook
+, libXxf86vm
+, libGL
+, copyDesktopItems
+, pname
+, version
+, src
+, meta
+, patches
+,
 }:
 
 let
@@ -31,10 +30,12 @@ let
   installIcons =
     iconName: icons:
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (size: iconFile: ''
-        mkdir -p "$out/share/icons/hicolor/${size}/apps"
-        ln -s -T "${iconFile}" "$out/share/icons/hicolor/${size}/apps/${iconName}.${extensionOf iconFile}"
-      '') icons
+      lib.mapAttrsToList
+        (size: iconFile: ''
+          mkdir -p "$out/share/icons/hicolor/${size}/apps"
+          ln -s -T "${iconFile}" "$out/share/icons/hicolor/${size}/apps/${iconName}.${extensionOf iconFile}"
+        '')
+        icons
     );
 
   icons = {

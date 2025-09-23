@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPecl,
-  fetchFromGitHub,
-  libcouchbase,
-  zlib,
-  replaceVars,
-  php,
+{ lib
+, buildPecl
+, fetchFromGitHub
+, libcouchbase
+, zlib
+, replaceVars
+, php
+,
 }:
 let
   pname = "couchbase";

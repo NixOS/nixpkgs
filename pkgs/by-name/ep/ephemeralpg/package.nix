@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  postgresql,
-  getopt,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, postgresql
+, getopt
+, makeWrapper
+,
 }:
 stdenv.mkDerivation rec {
   pname = "ephemeralpg";

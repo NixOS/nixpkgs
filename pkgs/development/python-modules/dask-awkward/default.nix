@@ -1,27 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  awkward,
-  cachetools,
-  dask,
-  typing-extensions,
-
-  # optional-dependencies
-  pyarrow,
-
-  # tests
-  distributed,
-  hist,
-  pandas,
-  pytestCheckHook,
-  uproot,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  awkward
+, cachetools
+, dask
+, typing-extensions
+, # optional-dependencies
+  pyarrow
+, # tests
+  distributed
+, hist
+, pandas
+, pytestCheckHook
+, uproot
+,
 }:
 
 buildPythonPackage rec {

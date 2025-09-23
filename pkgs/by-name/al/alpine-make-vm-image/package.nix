@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  apk-tools,
-  coreutils,
-  dosfstools,
-  e2fsprogs,
-  findutils,
-  gnugrep,
-  gnused,
-  kmod,
-  qemu-utils,
-  rsync,
-  util-linux,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, apk-tools
+, coreutils
+, dosfstools
+, e2fsprogs
+, findutils
+, gnugrep
+, gnused
+, kmod
+, qemu-utils
+, rsync
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

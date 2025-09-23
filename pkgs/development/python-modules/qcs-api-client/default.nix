@@ -1,25 +1,25 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  httpx,
-  iso8601,
-  poetry-core,
-  pydantic,
-  pydantic-settings,
-  pyjwt,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dateutil,
-  pythonAtLeast,
-  pythonOlder,
-  tenacity,
-  respx,
-  retrying,
-  rfc3339,
-  toml,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, httpx
+, iso8601
+, poetry-core
+, pydantic
+, pydantic-settings
+, pyjwt
+, pytest-asyncio
+, pytestCheckHook
+, python-dateutil
+, pythonAtLeast
+, pythonOlder
+, tenacity
+, respx
+, retrying
+, rfc3339
+, toml
+,
 }:
 
 buildPythonPackage rec {

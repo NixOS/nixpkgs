@@ -7,10 +7,9 @@
   };
 
   nodes.machine =
-    {
-      pkgs,
-      lib,
-      ...
+    { pkgs
+    , lib
+    , ...
     }:
     {
       imports = [

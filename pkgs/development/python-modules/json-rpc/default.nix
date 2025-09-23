@@ -1,10 +1,10 @@
-{
-  lib,
-  isPy27,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  mock,
+{ lib
+, isPy27
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, mock
+,
 }:
 
 let

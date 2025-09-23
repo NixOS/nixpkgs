@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  buildGoModule,
-  nixosTests,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitea
+, buildGoModule
+, nixosTests
+, sqlite
+,
 }:
 
 buildGoModule rec {

@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gobject-introspection,
-  pkg-config,
-  cairo,
-  glib,
-  readline,
-  libsysprof-capture,
-  spidermonkey_128,
-  meson,
-  mesonEmulatorHook,
-  dbus,
-  ninja,
-  which,
-  libxml2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gobject-introspection
+, pkg-config
+, cairo
+, glib
+, readline
+, libsysprof-capture
+, spidermonkey_128
+, meson
+, mesonEmulatorHook
+, dbus
+, ninja
+, which
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

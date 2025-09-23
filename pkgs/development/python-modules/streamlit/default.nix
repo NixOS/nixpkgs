@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  altair,
-  blinker,
-  buildPythonPackage,
-  cachetools,
-  click,
-  fetchPypi,
-  gitpython,
-  numpy,
-  packaging,
-  pandas,
-  pillow,
-  protobuf,
-  pyarrow,
-  pydeck,
-  pythonOlder,
-  setuptools,
-  requests,
-  rich,
-  tenacity,
-  toml,
-  tornado,
-  typing-extensions,
-  watchdog,
+{ lib
+, stdenv
+, altair
+, blinker
+, buildPythonPackage
+, cachetools
+, click
+, fetchPypi
+, gitpython
+, numpy
+, packaging
+, pandas
+, pillow
+, protobuf
+, pyarrow
+, pydeck
+, pythonOlder
+, setuptools
+, requests
+, rich
+, tenacity
+, toml
+, tornado
+, typing-extensions
+, watchdog
+,
 }:
 
 buildPythonPackage rec {

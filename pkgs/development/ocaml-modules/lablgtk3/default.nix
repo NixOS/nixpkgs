@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  pkg-config,
-  buildDunePackage,
-  dune-configurator,
-  gtk3,
-  cairo2,
-  camlp-streams,
+{ lib
+, fetchurl
+, pkg-config
+, buildDunePackage
+, dune-configurator
+, gtk3
+, cairo2
+, camlp-streams
+,
 }:
 
 buildDunePackage rec {

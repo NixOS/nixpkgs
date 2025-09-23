@@ -1,28 +1,28 @@
-{
-  lib,
-  authlib,
-  buildPythonPackage,
-  deprecation,
-  fastapi,
-  fetchFromGitHub,
-  flask,
-  grpcio-health-checking,
-  grpcio-tools,
-  grpcio,
-  h5py,
-  httpx,
-  litestar,
-  numpy,
-  pandas,
-  polars,
-  pydantic,
-  pytest-asyncio,
-  pytest-httpserver,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools-scm,
-  validators,
+{ lib
+, authlib
+, buildPythonPackage
+, deprecation
+, fastapi
+, fetchFromGitHub
+, flask
+, grpcio-health-checking
+, grpcio-tools
+, grpcio
+, h5py
+, httpx
+, litestar
+, numpy
+, pandas
+, polars
+, pydantic
+, pytest-asyncio
+, pytest-httpserver
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools-scm
+, validators
+,
 }:
 
 buildPythonPackage rec {

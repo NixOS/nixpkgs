@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitLab,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitLab
+, nix-update-script
+,
 }:
 buildGoModule {
   pname = "conjure-tor";

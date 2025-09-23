@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glfw,
-  freetype,
-  openssl,
-  makeWrapper,
-  upx,
-  boehmgc,
-  xorg,
-  binaryen,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glfw
+, freetype
+, openssl
+, makeWrapper
+, upx
+, boehmgc
+, xorg
+, binaryen
+,
 }:
 
 let

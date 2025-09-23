@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  libusb1,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, libusb1
+,
 }:
 
 rustPlatform.buildRustPackage rec {

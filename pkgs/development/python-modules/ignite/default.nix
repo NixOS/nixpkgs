@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  pytest-xdist,
-  torchvision,
-  matplotlib,
-  mock,
-  packaging,
-  torch,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, pytestCheckHook
+, pytest-xdist
+, torchvision
+, matplotlib
+, mock
+, packaging
+, torch
+,
 }:
 
 buildPythonPackage rec {

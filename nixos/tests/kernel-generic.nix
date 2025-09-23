@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }@args:
 
 with pkgs.lib;
@@ -9,30 +9,32 @@ with pkgs.lib;
 let
   testsForLinuxPackages =
     linuxPackages:
-    (import ./make-test-python.nix (
-      { pkgs, ... }:
-      {
-        name = "kernel-${linuxPackages.kernel.version}";
-        meta = with pkgs.lib.maintainers; {
-          maintainers = [
-            nequissimus
-            atemu
-            ma27
-          ];
-        };
-
-        nodes.machine =
-          { ... }:
-          {
-            boot.kernelPackages = linuxPackages;
+    (import ./make-test-python.nix
+      (
+        { pkgs, ... }:
+        {
+          name = "kernel-${linuxPackages.kernel.version}";
+          meta = with pkgs.lib.maintainers; {
+            maintainers = [
+              nequissimus
+              atemu
+              ma27
+            ];
           };
 
-        testScript = ''
-          assert "Linux" in machine.succeed("uname -s")
-          assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
-        '';
-      }
-    ) args);
+          nodes.machine =
+            { ... }:
+            {
+              boot.kernelPackages = linuxPackages;
+            };
+
+          testScript = ''
+            assert "Linux" in machine.succeed("uname -s")
+            assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
+          '';
+        }
+      )
+      args);
   kernels = pkgs.linuxKernel.vanillaPackages // {
     inherit (pkgs.linuxKernel.packages)
       linux_6_12_hardened
@@ -49,7 +51,7 @@ let
 
 in
 mapAttrs (_: lP: testsForLinuxPackages lP) kernels
-// {
+  // {
   passthru = {
     inherit testsForLinuxPackages;
 

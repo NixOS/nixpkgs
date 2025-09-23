@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ant,
-  unzip,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, ant
+, unzip
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

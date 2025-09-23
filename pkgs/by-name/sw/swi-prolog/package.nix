@@ -1,53 +1,42 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-
-  libxcrypt,
-  zlib,
-  openssl,
-  gmp,
-  gperftools,
-  readline,
-  libedit,
-  libarchive,
-
-  # optional dependencies
-  withDb ? true,
-  db,
-
-  withJava ? true,
-  jdk,
-
-  withOdbc ? true,
-  unixODBC,
-
-  withPcre ? true,
-  pcre2,
-
-  withPython ? true,
-  python3,
-
-  withYaml ? true,
-  libyaml,
-
-  withGui ? false,
-  libXpm,
-  libXext,
-  libXft,
-  libXinerama,
-  libjpeg,
-  libXt,
-  libSM,
-  freetype,
-  fontconfig,
-
-  # gcc/g++ as runtime dependency
-  withNativeCompiler ? true,
-
-  # Packs must be installed from a local directory during the build, with dependencies
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, libxcrypt
+, zlib
+, openssl
+, gmp
+, gperftools
+, readline
+, libedit
+, libarchive
+, # optional dependencies
+  withDb ? true
+, db
+, withJava ? true
+, jdk
+, withOdbc ? true
+, unixODBC
+, withPcre ? true
+, pcre2
+, withPython ? true
+, python3
+, withYaml ? true
+, libyaml
+, withGui ? false
+, libXpm
+, libXext
+, libXft
+, libXinerama
+, libjpeg
+, libXt
+, libSM
+, freetype
+, fontconfig
+, # gcc/g++ as runtime dependency
+  withNativeCompiler ? true
+, # Packs must be installed from a local directory during the build, with dependencies
   # resolved manually, e.g. to install the 'julian' pack, which depends on the 'delay', 'list_util' and 'typedef' packs:
   #   julian = pkgs.fetchzip {
   #     name = "swipl-pack-julian";
@@ -72,8 +61,9 @@
   #   swi-prolog = pkgs.swi-prolog.override { extraPacks = map (dep-path: "'file://${dep-path}'") [
   #     julian delay list_util typedef
   #   ]; };
-  extraPacks ? [ ],
-  extraLibraries ? [ ], # removed option - see below
+  extraPacks ? [ ]
+, extraLibraries ? [ ]
+, # removed option - see below
 }:
 
 let

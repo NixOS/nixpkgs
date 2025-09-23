@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk2,
-  SDL,
-  nasm,
-  zlib,
-  libpng,
-  libGLU,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, SDL
+, nasm
+, zlib
+, libpng
+, libGLU
+, libGL
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libpulseaudio,
-  systemd,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libpulseaudio
+, systemd
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-audio-idle-inhibit";

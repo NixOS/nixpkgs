@@ -1,17 +1,16 @@
-{
-  lib,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchzip,
-
-  setuptools,
-  setuptools-scm,
-  cython,
-  cmake,
-  numpy,
-  oldest-supported-numpy,
-  tqdm,
+{ lib
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, fetchzip
+, setuptools
+, setuptools-scm
+, cython
+, cmake
+, numpy
+, oldest-supported-numpy
+, tqdm
+,
 }:
 
 let

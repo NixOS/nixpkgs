@@ -1,16 +1,16 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  libdrm,
-  libGL,
-  gst_all_1,
-  nv-codec-headers-11,
-  libva,
-  addDriverRunpath,
+{ stdenv
+, fetchFromGitHub
+, lib
+, meson
+, ninja
+, pkg-config
+, libdrm
+, libGL
+, gst_all_1
+, nv-codec-headers-11
+, libva
+, addDriverRunpath
+,
 }:
 
 stdenv.mkDerivation rec {

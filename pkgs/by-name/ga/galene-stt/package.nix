@@ -1,16 +1,16 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitUpdater,
-  writeShellApplication,
-  _experimental-update-script-combinators,
-  galene,
-  libopus,
-  nix,
-  pkg-config,
-  sd,
-  whisper-cpp,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitUpdater
+, writeShellApplication
+, _experimental-update-script-combinators
+, galene
+, libopus
+, nix
+, pkg-config
+, sd
+, whisper-cpp
+,
 }:
 
 buildGoModule (finalAttrs: {

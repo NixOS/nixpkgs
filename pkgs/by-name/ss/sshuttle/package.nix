@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  sphinx,
-  coreutils,
-  iptables,
-  net-tools,
-  openssh,
-  procps,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, sphinx
+, coreutils
+, iptables
+, net-tools
+, openssh
+, procps
+,
 }:
 
 python3Packages.buildPythonApplication rec {

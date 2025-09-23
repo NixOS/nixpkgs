@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  pkg-config,
-  glib,
-  gtk3,
-  iw,
-  makeWrapper,
-  qrencode,
-  hostapd,
-  getopt,
-  dnsmasq,
-  iproute2,
-  flock,
-  iptables,
-  gawk,
-  coreutils,
-  gnugrep,
-  gnused,
-  kmod,
-  networkmanager,
-  procps,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, pkg-config
+, glib
+, gtk3
+, iw
+, makeWrapper
+, qrencode
+, hostapd
+, getopt
+, dnsmasq
+, iproute2
+, flock
+, iptables
+, gawk
+, coreutils
+, gnugrep
+, gnused
+, kmod
+, networkmanager
+, procps
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

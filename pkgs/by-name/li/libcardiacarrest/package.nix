@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, glib
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

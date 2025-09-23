@@ -1,32 +1,32 @@
-{
-  fetchurl,
-  stdenv,
-  autoPatchelfHook,
-  makeWrapper,
-  lib,
-  makeDesktopItem,
-  copyDesktopItems,
-  dpkg,
-  # QQ Music dependencies
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libdbusmenu,
-  libglvnd,
-  libpulseaudio,
-  nspr,
-  nss,
-  pango,
-  pciutils,
-  udev,
-  xorg,
+{ fetchurl
+, stdenv
+, autoPatchelfHook
+, makeWrapper
+, lib
+, makeDesktopItem
+, copyDesktopItems
+, dpkg
+, # QQ Music dependencies
+  alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, libdbusmenu
+, libglvnd
+, libpulseaudio
+, nspr
+, nss
+, pango
+, pciutils
+, udev
+, xorg
+,
 }:
 ################################################################################
 # Mostly based on qqmusic-bin package from AUR:

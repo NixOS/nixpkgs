@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  unittestCheckHook,
-  boost,
-  numpy,
-  scipy,
-  simpleitk,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, unittestCheckHook
+, boost
+, numpy
+, scipy
+, simpleitk
+,
 }:
 
 buildPythonPackage rec {

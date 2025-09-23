@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cachecontrol,
-  fetchFromGitHub,
-  legacy-cgi,
-  lxml-html-clean,
-  pytestCheckHook,
-  pythonAtLeast,
-  requests,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, cachecontrol
+, fetchFromGitHub
+, legacy-cgi
+, lxml-html-clean
+, pytestCheckHook
+, pythonAtLeast
+, requests
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

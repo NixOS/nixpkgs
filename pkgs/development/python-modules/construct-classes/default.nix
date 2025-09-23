@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  construct,
-  fetchFromGitHub,
-  pytestCheckHook,
-  uv-build,
+{ lib
+, buildPythonPackage
+, construct
+, fetchFromGitHub
+, pytestCheckHook
+, uv-build
+,
 }:
 
 buildPythonPackage rec {

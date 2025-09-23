@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  dnspython,
-  fetchFromGitHub,
-  protobuf,
-  pythonOlder,
-  mysql80,
-  openssl,
-  pkgs,
+{ lib
+, buildPythonPackage
+, dnspython
+, fetchFromGitHub
+, protobuf
+, pythonOlder
+, mysql80
+, openssl
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

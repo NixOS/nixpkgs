@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  makeWrapper,
-  coreutils,
+{ lib
+, stdenv
+, fetchgit
+, makeWrapper
+, coreutils
+,
 }:
 
 stdenv.mkDerivation rec {

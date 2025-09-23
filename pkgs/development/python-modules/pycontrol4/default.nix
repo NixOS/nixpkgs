@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  xmltodict,
-  python-socketio-v4,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, xmltodict
+, python-socketio-v4
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nodejs,
-  python3,
-  removeReferencesTo,
-  pkg-config,
-  libsecret,
-  xcbuild,
-  fetchNpmDeps,
-  npmHooks,
-  electron,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nodejs
+, python3
+, removeReferencesTo
+, pkg-config
+, libsecret
+, xcbuild
+, fetchNpmDeps
+, npmHooks
+, electron
+,
 }:
 
 let

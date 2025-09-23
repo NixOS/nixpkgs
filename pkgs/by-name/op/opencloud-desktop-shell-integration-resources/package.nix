@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kdePackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation rec {

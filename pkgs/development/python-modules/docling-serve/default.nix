@@ -1,33 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  setuptools-scm,
-  # python dependencies
-  docling,
-  docling-jobkit,
-  docling-mcp,
-  fastapi,
-  httpx,
-  pydantic-settings,
-  python-multipart,
-  scalar-fastapi,
-  uvicorn,
-  websockets,
-  tesserocr,
-  typer,
-  rapidocr,
-  onnxruntime,
-  torch,
-  torchvision,
-  gradio,
-  nodejs,
-  which,
-  withUI ? false,
-  withTesserocr ? false,
-  withRapidocr ? false,
-  withCPU ? false,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, setuptools-scm
+, # python dependencies
+  docling
+, docling-jobkit
+, docling-mcp
+, fastapi
+, httpx
+, pydantic-settings
+, python-multipart
+, scalar-fastapi
+, uvicorn
+, websockets
+, tesserocr
+, typer
+, rapidocr
+, onnxruntime
+, torch
+, torchvision
+, gradio
+, nodejs
+, which
+, withUI ? false
+, withTesserocr ? false
+, withRapidocr ? false
+, withCPU ? false
+,
 }:
 
 buildPythonPackage rec {

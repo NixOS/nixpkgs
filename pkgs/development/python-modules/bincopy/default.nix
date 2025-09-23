@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  argparse-addons,
-  humanfriendly,
-  pyelftools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, argparse-addons
+, humanfriendly
+, pyelftools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

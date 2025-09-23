@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fftwSinglePrec,
-  freetype,
-  SDL,
-  SDL_ttf,
+{ lib
+, stdenv
+, fetchurl
+, fftwSinglePrec
+, freetype
+, SDL
+, SDL_ttf
+,
 }:
 
 stdenv.mkDerivation rec {

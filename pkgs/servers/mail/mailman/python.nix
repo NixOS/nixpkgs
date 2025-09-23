@@ -1,7 +1,7 @@
-{
-  python3,
-  lib,
-  overlay ? (_: _: { }),
+{ python3
+, lib
+, overlay ? (_: _: { })
+,
 }:
 
 lib.fix (

@@ -1,15 +1,15 @@
-{
-  lib,
-  nix-update-script,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  deprecated,
-  regex,
-  pytest-cov-stub,
-  pytest-forked,
-  pytest-random-order,
-  pytestCheckHook,
+{ lib
+, nix-update-script
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, deprecated
+, regex
+, pytest-cov-stub
+, pytest-forked
+, pytest-random-order
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  nix-update-script,
-  serve,
-  stdenv,
-  xsel,
-  yarn-berry_4,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, nix-update-script
+, serve
+, stdenv
+, xsel
+, yarn-berry_4
+,
 }:
 let
   yarn-berry = yarn-berry_4;

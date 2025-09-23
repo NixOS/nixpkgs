@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  expat,
-  gpgme,
-  libgcrypt,
-  libxml2,
-  libxslt,
-  curl,
-  docbook_xsl,
+{ lib
+, stdenv
+, fetchurl
+, expat
+, gpgme
+, libgcrypt
+, libxml2
+, libxslt
+, curl
+, docbook_xsl
+,
 }:
 
 stdenv.mkDerivation rec {

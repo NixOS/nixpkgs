@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  makeWrapper,
-  writeText,
-  makeDesktopItem,
-  copyDesktopItems,
-  jre,
+{ stdenvNoCC
+, lib
+, fetchurl
+, makeWrapper
+, writeText
+, makeDesktopItem
+, copyDesktopItems
+, jre
+,
 }:
 let
   icon = fetchurl {

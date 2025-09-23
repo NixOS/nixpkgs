@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  fetchurl,
-  cmake,
-  libjack2,
-  alsa-lib,
-  libsndfile,
-  liblo,
-  lv2,
-  qt6,
-  xorg,
+{ stdenv
+, lib
+, pkg-config
+, fetchurl
+, cmake
+, libjack2
+, alsa-lib
+, libsndfile
+, liblo
+, lv2
+, qt6
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

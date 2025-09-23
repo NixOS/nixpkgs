@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  python3,
-  pkg-config,
-  xmlto,
-  docbook2x,
-  docbook_xsl,
-  docbook_xml_dtd_412,
+{ lib
+, stdenv
+, fetchFromGitLab
+, python3
+, pkg-config
+, xmlto
+, docbook2x
+, docbook_xsl
+, docbook_xml_dtd_412
+,
 }:
 
 stdenv.mkDerivation {

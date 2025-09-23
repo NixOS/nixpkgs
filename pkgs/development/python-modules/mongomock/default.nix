@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatch-vcs,
-  hatchling,
-  packaging,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  sentinels,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatch-vcs
+, hatchling
+, packaging
+, pytestCheckHook
+, pythonOlder
+, pytz
+, sentinels
+,
 }:
 
 buildPythonPackage rec {

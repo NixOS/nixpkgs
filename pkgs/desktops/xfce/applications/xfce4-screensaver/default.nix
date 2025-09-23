@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  docbook_xml_dtd_412,
-  docbook-xsl-ns,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  xmlto,
-  dbus-glib,
-  garcon,
-  glib,
-  gtk3,
-  libX11,
-  libXScrnSaver,
-  libXrandr,
-  libwnck,
-  libxfce4ui,
-  libxfce4util,
-  libxklavier,
-  pam,
-  python3,
-  systemd,
-  xfconf,
-  xfdesktop,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, docbook_xml_dtd_412
+, docbook-xsl-ns
+, gettext
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, xmlto
+, dbus-glib
+, garcon
+, glib
+, gtk3
+, libX11
+, libXScrnSaver
+, libXrandr
+, libwnck
+, libxfce4ui
+, libxfce4util
+, libxklavier
+, pam
+, python3
+, systemd
+, xfconf
+, xfdesktop
+, gitUpdater
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  openssl,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, openssl
+,
 }:
 
 buildGoModule rec {

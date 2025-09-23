@@ -1,23 +1,23 @@
-{
-  lib,
-  sway-unwrapped,
-  makeWrapper,
-  symlinkJoin,
-  writeShellScriptBin,
-  withBaseWrapper ? true,
-  extraSessionCommands ? "",
-  dbus,
-  withGtkWrapper ? false,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  extraOptions ? [ ], # E.g.: [ "--verbose" ]
+{ lib
+, sway-unwrapped
+, makeWrapper
+, symlinkJoin
+, writeShellScriptBin
+, withBaseWrapper ? true
+, extraSessionCommands ? ""
+, dbus
+, withGtkWrapper ? false
+, wrapGAppsHook3
+, gdk-pixbuf
+, glib
+, gtk3
+, extraOptions ? [ ]
+, # E.g.: [ "--verbose" ]
   # Used by the NixOS module:
-  isNixOS ? false,
-
-  enableXWayland ? true,
-  dbusSupport ? true,
+  isNixOS ? false
+, enableXWayland ? true
+, dbusSupport ? true
+,
 }:
 
 assert extraSessionCommands != "" -> withBaseWrapper;

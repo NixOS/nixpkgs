@@ -1,7 +1,7 @@
-{
-  stdenv,
-  writeText,
-  qbe,
+{ stdenv
+, writeText
+, qbe
+,
 }:
 
 # The hello world program available at https://c9x.me/compile/

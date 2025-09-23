@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  ell,
-  coreutils,
-  docutils,
-  readline,
-  openssl,
-  python3Packages,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, ell
+, coreutils
+, docutils
+, readline
+, openssl
+, python3Packages
+, gitUpdater
+,
 }:
 
 let

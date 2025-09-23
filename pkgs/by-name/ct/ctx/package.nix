@@ -1,17 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  SDL2,
-  alsa-lib,
-  babl,
-  bash,
-  curl,
-  libdrm, # Not documented
-  pkg-config,
-  xxd,
-  enableFb ? false,
-  nixosTests,
+{ lib
+, stdenv
+, fetchgit
+, SDL2
+, alsa-lib
+, babl
+, bash
+, curl
+, libdrm
+, # Not documented
+  pkg-config
+, xxd
+, enableFb ? false
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

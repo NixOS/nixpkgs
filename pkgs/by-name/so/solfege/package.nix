@@ -1,24 +1,24 @@
-{
-  lib,
-  alsa-utils,
-  autoconf,
-  automake,
-  csound,
-  fetchurl,
-  gdk-pixbuf,
-  gettext,
-  gobject-introspection,
-  gtk3,
-  librsvg,
-  lilypond,
-  mpg123,
-  pkg-config,
-  python3Packages,
-  texinfo,
-  timidity,
-  txt2man,
-  vorbis-tools,
-  wrapGAppsHook3,
+{ lib
+, alsa-utils
+, autoconf
+, automake
+, csound
+, fetchurl
+, gdk-pixbuf
+, gettext
+, gobject-introspection
+, gtk3
+, librsvg
+, lilypond
+, mpg123
+, pkg-config
+, python3Packages
+, texinfo
+, timidity
+, txt2man
+, vorbis-tools
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

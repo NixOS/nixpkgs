@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  docopt,
-  pyserial,
-  pyserial-asyncio-fast,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, docopt
+, pyserial
+, pyserial-asyncio-fast
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

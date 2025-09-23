@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  openssl,
-  ppp,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  withPpp ? stdenv.hostPlatform.isLinux,
-  versionCheckHook,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, openssl
+, ppp
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, withPpp ? stdenv.hostPlatform.isLinux
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

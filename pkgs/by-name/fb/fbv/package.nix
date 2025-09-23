@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  getopt,
-  libjpeg,
-  libpng12,
+{ lib
+, stdenv
+, fetchFromGitHub
+, getopt
+, libjpeg
+, libpng12
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

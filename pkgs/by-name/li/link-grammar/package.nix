@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  python3,
-  flex,
-  sqlite,
-  libedit,
-  runCommand,
-  dieHook,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, python3
+, flex
+, sqlite
+, libedit
+, runCommand
+, dieHook
+,
 }:
 
 let

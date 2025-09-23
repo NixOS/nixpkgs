@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  aiger,
+{ lib
+, stdenv
+, fetchFromGitHub
+, aiger
+,
 }:
 
 stdenv.mkDerivation {

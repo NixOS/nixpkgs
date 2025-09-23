@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -424,42 +423,42 @@ in
     ++ flatten (
       flip mapAttrsToList cfg.provision.organizations (
         orgName: org:
-        flip mapAttrsToList org.auths (
-          authName: auth: [
-            {
-              assertion =
-                1 == count (x: x) [
-                  auth.operator
-                  auth.allAccess
-                  (
-                    auth.readPermissions != [ ]
-                    || auth.writePermissions != [ ]
-                    || auth.readBuckets != [ ]
-                    || auth.writeBuckets != [ ]
-                  )
-                ];
-              message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: The `operator` and `allAccess` options are mutually exclusive with each other and the granular permission settings.";
-            }
-            (
-              let
-                unknownBuckets = subtractLists (attrNames org.buckets) auth.readBuckets;
-              in
+          flip mapAttrsToList org.auths (
+            authName: auth: [
               {
-                assertion = unknownBuckets == [ ];
-                message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in readBuckets: ${toString unknownBuckets}";
+                assertion =
+                  1 == count (x: x) [
+                    auth.operator
+                    auth.allAccess
+                    (
+                      auth.readPermissions != [ ]
+                        || auth.writePermissions != [ ]
+                        || auth.readBuckets != [ ]
+                        || auth.writeBuckets != [ ]
+                    )
+                  ];
+                message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: The `operator` and `allAccess` options are mutually exclusive with each other and the granular permission settings.";
               }
-            )
-            (
-              let
-                unknownBuckets = subtractLists (attrNames org.buckets) auth.writeBuckets;
-              in
-              {
-                assertion = unknownBuckets == [ ];
-                message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in writeBuckets: ${toString unknownBuckets}";
-              }
-            )
-          ]
-        )
+              (
+                let
+                  unknownBuckets = subtractLists (attrNames org.buckets) auth.readBuckets;
+                in
+                {
+                  assertion = unknownBuckets == [ ];
+                  message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in readBuckets: ${toString unknownBuckets}";
+                }
+              )
+              (
+                let
+                  unknownBuckets = subtractLists (attrNames org.buckets) auth.writeBuckets;
+                in
+                {
+                  assertion = unknownBuckets == [ ];
+                  message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in writeBuckets: ${toString unknownBuckets}";
+                }
+              )
+            ]
+          )
       )
     );
 
@@ -504,7 +503,7 @@ in
         ]
         ++ (lib.optionals cfg.provision.enable (
           [ provisioningScript ]
-          ++
+            ++
             # Only the restarter runs with elevated privileges
             optional anyAuthDefined "+${restarterScript}"
         ));
@@ -527,9 +526,9 @@ in
                   # For each contained token that has a token file
                   (
                     _: org:
-                    flip mapAttrsToList (filterAttrs (_: x: x.tokenFile != null) org.auths)
-                      # Collect id -> tokenFile for the mapping
-                      (_: auth: nameValuePair auth.id auth.tokenFile)
+                      flip mapAttrsToList (filterAttrs (_: x: x.tokenFile != null) org.auths)
+                        # Collect id -> tokenFile for the mapping
+                        (_: auth: nameValuePair auth.id auth.tokenFile)
                   )
               )
           );

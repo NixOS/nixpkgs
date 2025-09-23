@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  vulkan-headers,
-  llvmPackages,
+{ lib
+, fetchFromGitHub
+, cmake
+, vulkan-headers
+, llvmPackages
+,
 }:
 
 llvmPackages.stdenv.mkDerivation rec {

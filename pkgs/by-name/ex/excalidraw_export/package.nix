@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  cairo,
-  pango,
-  pkg-config,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, cairo
+, pango
+, pkg-config
+,
 }:
 
 buildNpmPackage {

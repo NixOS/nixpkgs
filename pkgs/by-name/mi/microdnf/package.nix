@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gettext,
-  libdnf,
-  pkg-config,
-  glib,
-  libpeas,
-  util-linux,
-  help2man,
-  zchunk,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, libdnf
+, pkg-config
+, glib
+, libpeas
+, util-linux
+, help2man
+, zchunk
+, pcre2
+,
 }:
 
 stdenv.mkDerivation rec {

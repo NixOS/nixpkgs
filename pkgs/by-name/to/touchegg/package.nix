@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
-  systemd,
-  libinput,
-  pugixml,
-  cairo,
-  xorg,
-  gtk3-x11,
-  pkg-config,
-  cmake,
-  withPantheon ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, systemd
+, libinput
+, pugixml
+, cairo
+, xorg
+, gtk3-x11
+, pkg-config
+, cmake
+, withPantheon ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

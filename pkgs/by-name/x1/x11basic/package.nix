@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  autoreconfHook,
-  fig2dev,
-  readline,
-  libX11,
-  bluez,
-  SDL2,
+{ lib
+, stdenv
+, fetchFromGitea
+, autoreconfHook
+, fig2dev
+, readline
+, libX11
+, bluez
+, SDL2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,26 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  joblib,
-  lxml,
-  nibabel,
-  numpy,
-  pandas,
-  requests,
-  scikit-learn,
-  scipy,
-  packaging,
-
-  pytestCheckHook,
-  pytest-timeout,
-  numpydoc,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  joblib
+, lxml
+, nibabel
+, numpy
+, pandas
+, requests
+, scikit-learn
+, scipy
+, packaging
+, pytestCheckHook
+, pytest-timeout
+, numpydoc
+,
 }:
 
 buildPythonPackage rec {

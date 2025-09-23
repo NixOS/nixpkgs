@@ -1,26 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  pkg-config,
-  meson,
-  ninja,
-  wayland-scanner,
-  wayland,
-  pixman,
-  wayland-protocols,
-  libxkbcommon,
-  scdoc,
-  tllist,
-  fcft,
-  enableCairo ? true,
-  pngSupport ? true,
-  svgSupport ? true,
-  svgBackend ? "nanosvg", # alternative: "librsvg"
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, wayland-scanner
+, wayland
+, pixman
+, wayland-protocols
+, libxkbcommon
+, scdoc
+, tllist
+, fcft
+, enableCairo ? true
+, pngSupport ? true
+, svgSupport ? true
+, svgBackend ? "nanosvg"
+, # alternative: "librsvg"
   # Optional dependencies
-  cairo,
-  libpng,
-  librsvg,
+  cairo
+, libpng
+, librsvg
+,
 }:
 
 assert (svgSupport && svgBackend == "nanosvg") -> enableCairo;

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  extra-cmake-modules,
-  plasma-framework,
-  kwindowsystem,
-  redshift,
-  fetchFromGitHub,
-  fetchpatch,
+{ lib
+, stdenv
+, cmake
+, extra-cmake-modules
+, plasma-framework
+, kwindowsystem
+, redshift
+, fetchFromGitHub
+, fetchpatch
+,
 }:
 
 let

@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  jax,
-  jaxtyping,
-  typing-extensions,
-  wadler-lindig,
-
-  # tests
-  beartype,
-  optax,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, # build-system
+  hatchling
+, # dependencies
+  jax
+, jaxtyping
+, typing-extensions
+, wadler-lindig
+, # tests
+  beartype
+, optax
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

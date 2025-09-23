@@ -1,52 +1,37 @@
-{
-  lib,
-  stdenv,
-  lndir,
-  buildEnv,
-
-  maintainers,
-  teams,
-
-  version,
-
-  nix-util,
-  nix-util-c,
-  nix-util-tests,
-
-  nix-store,
-  nix-store-c,
-  nix-store-tests,
-
-  nix-fetchers,
-  nix-fetchers-c,
-  nix-fetchers-tests,
-
-  nix-expr,
-  nix-expr-c,
-  nix-expr-tests,
-
-  nix-flake,
-  nix-flake-c,
-  nix-flake-tests,
-
-  nix-main,
-  nix-main-c,
-
-  nix-cmd,
-
-  nix-cli,
-
-  nix-functional-tests,
-
-  nix-manual,
-  nix-internal-api-docs,
-  nix-external-api-docs,
-
-  nix-perl-bindings,
-
-  testers,
-
-  patchedSrc ? null,
+{ lib
+, stdenv
+, lndir
+, buildEnv
+, maintainers
+, teams
+, version
+, nix-util
+, nix-util-c
+, nix-util-tests
+, nix-store
+, nix-store-c
+, nix-store-tests
+, nix-fetchers
+, nix-fetchers-c
+, nix-fetchers-tests
+, nix-expr
+, nix-expr-c
+, nix-expr-tests
+, nix-flake
+, nix-flake-c
+, nix-flake-tests
+, nix-main
+, nix-main-c
+, nix-cmd
+, nix-cli
+, nix-functional-tests
+, nix-manual
+, nix-internal-api-docs
+, nix-external-api-docs
+, nix-perl-bindings
+, testers
+, patchedSrc ? null
+,
 }:
 
 let
@@ -72,14 +57,14 @@ let
       ;
   }
   //
-    lib.optionalAttrs
-      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      {
-        # Currently fails in static build
-        inherit
-          nix-perl-bindings
-          ;
-      };
+  lib.optionalAttrs
+    (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    {
+      # Currently fails in static build
+      inherit
+        nix-perl-bindings
+        ;
+    };
 
   devdoc = buildEnv {
     name = "nix-${nix-cli.version}-devdoc";
@@ -146,12 +131,12 @@ stdenv.mkDerivation (finalAttrs: {
     nix-functional-tests
   ]
   ++
-    lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      [
-        # Perl currently fails in static build
-        # TODO: Split out tests into a separate derivation?
-        nix-perl-bindings
-      ];
+  lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    [
+      # Perl currently fails in static build
+      # TODO: Split out tests into a separate derivation?
+      nix-perl-bindings
+    ];
 
   nativeBuildInputs = [
     lndir

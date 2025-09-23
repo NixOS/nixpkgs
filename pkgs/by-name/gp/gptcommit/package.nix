@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  nix-update-script,
-  openssl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, nix-update-script
+, openssl
+,
 }:
 
 let

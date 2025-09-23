@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocplib-endian,
-  alcotest,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocplib-endian
+, alcotest
+,
 }:
 
 buildDunePackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  lua,
-  melpaBuild,
-  pkg-config,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ lib
+, lua
+, melpaBuild
+, pkg-config
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 
 melpaBuild {

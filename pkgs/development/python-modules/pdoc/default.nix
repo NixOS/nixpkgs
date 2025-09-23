@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  jinja2,
-  pdoc-pyo3-sample-library,
-  pygments,
-  markupsafe,
-  pytestCheckHook,
-  hypothesis,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, jinja2
+, pdoc-pyo3-sample-library
+, pygments
+, markupsafe
+, pytestCheckHook
+, hypothesis
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

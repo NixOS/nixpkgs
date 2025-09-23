@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  azure-core,
-  azure-identity,
-  opencensus,
-  psutil,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, azure-core
+, azure-identity
+, opencensus
+, psutil
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

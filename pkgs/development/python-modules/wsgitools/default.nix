@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  legacy-cgi,
-  pyasyncore,
-  pythonAtLeast,
-  setuptools,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, legacy-cgi
+, pyasyncore
+, pythonAtLeast
+, setuptools
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

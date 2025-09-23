@@ -1,10 +1,10 @@
-{
-  aiohttp,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
+{ aiohttp
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

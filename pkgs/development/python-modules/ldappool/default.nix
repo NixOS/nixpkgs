@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pbr,
-  python-ldap,
-  prettytable,
-  six,
-  unittestCheckHook,
-  fixtures,
-  testresources,
-  testtools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pbr
+, python-ldap
+, prettytable
+, six
+, unittestCheckHook
+, fixtures
+, testresources
+, testtools
+,
 }:
 
 buildPythonPackage rec {

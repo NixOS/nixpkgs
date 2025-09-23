@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  wrapQtAppsHook,
-  dpkg,
-  autoPatchelfHook,
-  qtserialport,
-  qtwebsockets,
-  openssl,
-  libredirect,
-  makeWrapper,
-  gzip,
-  gnutar,
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, wrapQtAppsHook
+, dpkg
+, autoPatchelfHook
+, qtserialport
+, qtwebsockets
+, openssl
+, libredirect
+, makeWrapper
+, gzip
+, gnutar
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

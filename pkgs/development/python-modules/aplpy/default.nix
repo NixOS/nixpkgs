@@ -1,20 +1,20 @@
-{
-  lib,
-  astropy,
-  buildPythonPackage,
-  fetchPypi,
-  matplotlib,
-  numpy,
-  pillow,
-  pyavm,
-  pyregion,
-  pytest-astropy,
-  pytestCheckHook,
-  reproject,
-  scikit-image,
-  setuptools,
-  setuptools-scm,
-  shapely,
+{ lib
+, astropy
+, buildPythonPackage
+, fetchPypi
+, matplotlib
+, numpy
+, pillow
+, pyavm
+, pyregion
+, pytest-astropy
+, pytestCheckHook
+, reproject
+, scikit-image
+, setuptools
+, setuptools-scm
+, shapely
+,
 }:
 
 buildPythonPackage rec {

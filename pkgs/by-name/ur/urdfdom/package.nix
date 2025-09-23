@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  validatePkgConfig,
-  tinyxml-2,
-  console-bridge,
-  urdfdom-headers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, validatePkgConfig
+, tinyxml-2
+, console-bridge
+, urdfdom-headers
+,
 }:
 
 stdenv.mkDerivation rec {

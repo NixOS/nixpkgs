@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  callPackage,
+{ lib
+, stdenv
+, fetchurl
+, callPackage
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ynetd";

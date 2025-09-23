@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  intltool,
-  autoreconfHook,
-  pkg-config,
-  libqalculate,
-  gtk3,
-  curl,
-  wrapGAppsHook3,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, intltool
+, autoreconfHook
+, pkg-config
+, libqalculate
+, gtk3
+, curl
+, wrapGAppsHook3
+, desktopToDarwinBundle
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

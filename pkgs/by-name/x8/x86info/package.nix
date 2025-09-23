@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pciutils,
-  pkg-config,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pciutils
+, pkg-config
+, python3
+,
 }:
 
 stdenv.mkDerivation {

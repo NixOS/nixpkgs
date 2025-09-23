@@ -1,13 +1,13 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  gitlab-ci-local,
-  testers,
-  makeBinaryWrapper,
-  rsync,
-  gitMinimal,
+{ buildNpmPackage
+, fetchFromGitHub
+, lib
+, nix-update-script
+, gitlab-ci-local
+, testers
+, makeBinaryWrapper
+, rsync
+, gitMinimal
+,
 }:
 
 buildNpmPackage rec {

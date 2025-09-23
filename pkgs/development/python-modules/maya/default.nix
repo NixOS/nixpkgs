@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  dateparser,
-  fetchFromGitHub,
-  freezegun,
-  humanize,
-  pendulum,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  setuptools,
-  snaptime,
-  tzlocal,
+{ lib
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, freezegun
+, humanize
+, pendulum
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+, snaptime
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

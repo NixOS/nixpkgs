@@ -1,43 +1,39 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  black,
-  docstring-to-markdown,
-  jedi,
-  pluggy,
-  python-lsp-jsonrpc,
-  setuptools,
-  ujson,
-
-  # optional-dependencies
-  autopep8,
-  flake8,
-  mccabe,
-  pycodestyle,
-  pydocstyle,
-  pyflakes,
-  pylint,
-  rope,
-  toml,
-  whatthepatch,
-  yapf,
-
-  # tests
-  flaky,
-  matplotlib,
-  numpy,
-  pandas,
-  pytest-cov-stub,
-  pytestCheckHook,
-  websockets,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  black
+, docstring-to-markdown
+, jedi
+, pluggy
+, python-lsp-jsonrpc
+, setuptools
+, ujson
+, # optional-dependencies
+  autopep8
+, flake8
+, mccabe
+, pycodestyle
+, pydocstyle
+, pyflakes
+, pylint
+, rope
+, toml
+, whatthepatch
+, yapf
+, # tests
+  flaky
+, matplotlib
+, numpy
+, pandas
+, pytest-cov-stub
+, pytestCheckHook
+, websockets
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

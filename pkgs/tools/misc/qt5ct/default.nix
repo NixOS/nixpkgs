@@ -1,11 +1,11 @@
-{
-  mkDerivation,
-  lib,
-  fetchurl,
-  qtbase,
-  qtsvg,
-  qttools,
-  qmake,
+{ mkDerivation
+, lib
+, fetchurl
+, qtbase
+, qtsvg
+, qttools
+, qmake
+,
 }:
 
 let

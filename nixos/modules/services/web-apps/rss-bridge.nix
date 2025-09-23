@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -21,16 +20,16 @@ let
   cfgEnv = lib.pipe cfg.config [
     (lib.mapAttrsRecursive (
       path: value:
-      lib.optionalAttrs (value != null) {
-        name = lib.toUpper "RSSBRIDGE_${lib.concatStringsSep "_" path}";
-        value =
-          if lib.isList value then
-            lib.concatStringsSep "," value
-          else if lib.isBool value then
-            lib.boolToString value
-          else
-            toString value;
-      }
+        lib.optionalAttrs (value != null) {
+          name = lib.toUpper "RSSBRIDGE_${lib.concatStringsSep "_" path}";
+          value =
+            if lib.isList value then
+              lib.concatStringsSep "," value
+            else if lib.isBool value then
+              lib.boolToString value
+            else
+              toString value;
+        }
     ))
     (lib.collect (x: lib.isString x.name or false && lib.isString x.value or false))
     lib.listToAttrs

@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  lib,
-  fetchbzr,
-  python3,
-  rtmpdump,
+{ mkDerivation
+, lib
+, fetchbzr
+, python3
+, rtmpdump
+,
 }:
 
 let

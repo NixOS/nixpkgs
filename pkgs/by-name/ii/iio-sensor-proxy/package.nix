@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch2,
-  glib,
-  cmake,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  libgudev,
-  systemd,
-  polkit,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch2
+, glib
+, cmake
+, libxml2
+, meson
+, ninja
+, pkg-config
+, libgudev
+, systemd
+, polkit
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  config,
-  callPackage,
-  stdenv,
-  fetchFromGitHub,
-  asio,
-  cmake,
-  libcpr,
-  onnxruntime,
-  opencv,
-  isBeta ? false,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
+{ lib
+, config
+, callPackage
+, stdenv
+, fetchFromGitHub
+, asio
+, cmake
+, libcpr
+, onnxruntime
+, opencv
+, isBeta ? false
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+,
 }:
 
 let

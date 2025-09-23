@@ -4,11 +4,10 @@ import ../make-test-python.nix (
     name = "kerberos_server-mit";
 
     nodes.machine =
-      {
-        config,
-        libs,
-        pkgs,
-        ...
+      { config
+      , libs
+      , pkgs
+      , ...
       }:
       {
         services.kerberos_server = {

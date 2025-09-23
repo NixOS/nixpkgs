@@ -1,27 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-  cython,
-  py-cpuinfo,
-
-  # dependencies
-  deprecated,
-  numpy,
-
-  # optional-dependencies
-  crc32c,
-
-  # tests
-  msgpack,
-  pytestCheckHook,
-  importlib-metadata,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, setuptools-scm
+, cython
+, py-cpuinfo
+, # dependencies
+  deprecated
+, numpy
+, # optional-dependencies
+  crc32c
+, # tests
+  msgpack
+, pytestCheckHook
+, importlib-metadata
+,
 }:
 
 buildPythonPackage rec {

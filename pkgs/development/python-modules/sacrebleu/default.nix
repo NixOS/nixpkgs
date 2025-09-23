@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # Propagated build inputs
-  portalocker,
-  regex,
-  tabulate,
-  numpy,
-  colorama,
-  lxml,
-
-  # Check inputs
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # Propagated build inputs
+  portalocker
+, regex
+, tabulate
+, numpy
+, colorama
+, lxml
+, # Check inputs
+  pytestCheckHook
+,
 }:
 let
   pname = "sacrebleu";

@@ -1,13 +1,13 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  testers,
-  symfony-cli,
-  nssTools,
-  makeBinaryWrapper,
-  installShellFiles,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nix-update-script
+, testers
+, symfony-cli
+, nssTools
+, makeBinaryWrapper
+, installShellFiles
+,
 }:
 
 buildGoModule (finalAttrs: {

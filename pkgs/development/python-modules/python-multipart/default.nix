@@ -1,18 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
-  mock,
-  pyyaml,
-
-  # for passthru.tests
-  asgi-csrf,
-  connexion,
-  fastapi,
-  gradio,
-  starlette,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pytestCheckHook
+, mock
+, pyyaml
+, # for passthru.tests
+  asgi-csrf
+, connexion
+, fastapi
+, gradio
+, starlette
+,
 }:
 
 buildPythonPackage rec {

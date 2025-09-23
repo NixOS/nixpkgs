@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  qthttpserver,
-  qtsvg,
-  qtwebchannel,
-  qtwebengine,
-  kitemmodels,
+{ mkKdeDerivation
+, qthttpserver
+, qtsvg
+, qtwebchannel
+, qtwebengine
+, kitemmodels
+,
 }:
 mkKdeDerivation {
   pname = "arianna";

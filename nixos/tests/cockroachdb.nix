@@ -53,12 +53,11 @@ let
   # the cluster node specified at that address.
   makeNode =
     locality: myAddr: joinNode:
-    {
-      nodes,
-      pkgs,
-      lib,
-      config,
-      ...
+    { nodes
+    , pkgs
+    , lib
+    , config
+    , ...
     }:
     {
       # Bank/TPC-C benchmarks take some memory to complete

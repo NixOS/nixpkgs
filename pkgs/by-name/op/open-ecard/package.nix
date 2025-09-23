@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  pcsclite,
-  makeDesktopItem,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, pcsclite
+, makeDesktopItem
+, makeWrapper
+,
 }:
 
 let

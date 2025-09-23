@@ -1,9 +1,9 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchurl,
-  struct,
-  libpq,
+{ buildOctavePackage
+, lib
+, fetchurl
+, struct
+, libpq
+,
 }:
 
 buildOctavePackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  callPackage,
-  runCommand,
-  makeWrapper,
-  coq,
-  imagemagick,
-  python312,
+{ lib
+, callPackage
+, runCommand
+, makeWrapper
+, coq
+, imagemagick
+, python312
+,
 }:
 
 # Jupyter console:

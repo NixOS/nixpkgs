@@ -1,15 +1,15 @@
-{
-  autoreconfHook,
-  cups,
-  fetchFromGitHub,
-  ghostscript,
-  lib,
-  libcupsfilters,
-  libz,
-  mupdf,
-  pkg-config,
-  poppler-utils,
-  stdenv,
+{ autoreconfHook
+, cups
+, fetchFromGitHub
+, ghostscript
+, lib
+, libcupsfilters
+, libz
+, mupdf
+, pkg-config
+, poppler-utils
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

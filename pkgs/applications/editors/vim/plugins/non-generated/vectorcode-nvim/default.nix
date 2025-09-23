@@ -1,8 +1,8 @@
-{
-  lib,
-  vimUtils,
-  vectorcode,
-  vimPlugins,
+{ lib
+, vimUtils
+, vectorcode
+, vimPlugins
+,
 }:
 let
   inherit (vectorcode) src version;

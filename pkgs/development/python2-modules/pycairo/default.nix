@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  meson,
-  ninja,
-  buildPythonPackage,
-  pytest,
-  pkg-config,
-  cairo,
-  python,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, buildPythonPackage
+, pytest
+, pkg-config
+, cairo
+, python
+,
 }:
 
 buildPythonPackage rec {

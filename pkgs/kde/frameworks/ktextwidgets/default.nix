@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtspeech,
-  qttools,
+{ mkKdeDerivation
+, qtspeech
+, qttools
+,
 }:
 mkKdeDerivation {
   pname = "ktextwidgets";

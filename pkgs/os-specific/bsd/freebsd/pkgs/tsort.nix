@@ -1,11 +1,11 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  groff,
+{ mkDerivation
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, install
+, mandoc
+, groff
+,
 }:
 
 mkDerivation {

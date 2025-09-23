@@ -1,5 +1,5 @@
-{
-  punes,
+{ punes
+,
 }:
 
 punes.override {

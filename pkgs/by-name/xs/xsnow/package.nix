@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libxml2,
-  wrapGAppsHook3,
-  gtk3-x11,
-  xorg,
-  libxkbcommon,
-  gsl,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxml2
+, wrapGAppsHook3
+, gtk3-x11
+, xorg
+, libxkbcommon
+, gsl
+,
 }:
 stdenv.mkDerivation rec {
   pname = "xsnow";

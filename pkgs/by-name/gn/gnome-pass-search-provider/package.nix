@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  wrapGAppsHook3,
-  gtk3,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, wrapGAppsHook3
+, gtk3
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

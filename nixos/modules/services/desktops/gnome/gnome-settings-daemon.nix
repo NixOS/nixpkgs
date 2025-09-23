@@ -1,10 +1,9 @@
 # GNOME Settings Daemon
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

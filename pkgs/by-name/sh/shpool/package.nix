@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  linux-pam,
-  testers,
-  shpool,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, linux-pam
+, testers
+, shpool
+,
 }:
 
 rustPlatform.buildRustPackage rec {

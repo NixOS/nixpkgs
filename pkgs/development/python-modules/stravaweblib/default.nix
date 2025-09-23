@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-
-  # setuptools
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  stravalib,
-  beautifulsoup4,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, # setuptools
+  setuptools
+, setuptools-scm
+, # dependencies
+  stravalib
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

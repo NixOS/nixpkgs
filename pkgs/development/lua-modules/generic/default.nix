@@ -1,19 +1,18 @@
-{
-  lua,
-  writeText,
-  toLuaModule,
+{ lua
+, writeText
+, toLuaModule
+,
 }:
 
-{
-  propagatedBuildInputs ? [ ],
-  makeFlags ? [ ],
-  ...
+{ propagatedBuildInputs ? [ ]
+, makeFlags ? [ ]
+, ...
 }@attrs:
 
 toLuaModule (
   lua.stdenv.mkDerivation (
     attrs
-    // {
+      // {
       name = "lua${lua.luaversion}-" + attrs.pname + "-" + attrs.version;
 
       makeFlags = [

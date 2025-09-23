@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  gettext,
-  python3,
-  ncurses,
-  swig,
-  glib,
-  util-linux,
-  cryptsetup,
-  nss,
-  gpgme,
-  buildPackages,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, gettext
+, python3
+, ncurses
+, swig
+, glib
+, util-linux
+, cryptsetup
+, nss
+, gpgme
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

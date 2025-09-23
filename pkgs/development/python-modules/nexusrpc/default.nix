@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  nix-update-script,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, nix-update-script
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

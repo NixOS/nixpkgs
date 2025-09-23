@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  gtkmm4,
-  gtk4-layer-shell,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, gtkmm4
+, gtk4-layer-shell
+,
 }:
 stdenv.mkDerivation {
   pname = "syspower";

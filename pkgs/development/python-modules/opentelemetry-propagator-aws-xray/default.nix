@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  opentelemetry-instrumentation-botocore,
-  opentelemetry-test-utils,
-  pytestCheckHook,
-  requests,
-  pytest-benchmark,
+{ lib
+, buildPythonPackage
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-semantic-conventions
+, opentelemetry-instrumentation-botocore
+, opentelemetry-test-utils
+, pytestCheckHook
+, requests
+, pytest-benchmark
+,
 }:
 
 buildPythonPackage {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  clingo,
-  catch2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, clingo
+, catch2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

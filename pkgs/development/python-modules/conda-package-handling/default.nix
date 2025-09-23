@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  conda-package-streaming,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, conda-package-streaming
+,
 }:
 buildPythonPackage rec {
   pname = "conda-package-handling";

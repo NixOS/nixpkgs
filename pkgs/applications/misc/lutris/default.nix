@@ -1,62 +1,58 @@
-{
-  buildPythonApplication,
-  lib,
-  fetchFromGitHub,
-
-  # build inputs
-  atk,
-  file,
-  glib,
-  gdk-pixbuf,
-  glib-networking,
-  gnome-desktop,
-  gobject-introspection,
-  gst_all_1,
-  gtk3,
-  libnotify,
-  pango,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  meson,
-  ninja,
-
-  # check inputs
-  xvfb-run,
-  nose2,
-  flake8,
-
-  # python dependencies
-  certifi,
-  dbus-python,
-  distro,
-  evdev,
-  lxml,
-  pillow,
-  pygobject3,
-  pypresence,
-  pyyaml,
-  requests,
-  protobuf,
-  moddb,
-
-  # commands that lutris needs
-  xrandr,
-  pciutils,
-  psmisc,
-  mesa-demos,
-  vulkan-tools,
-  pulseaudio,
-  p7zip,
-  xgamma,
-  gettext,
-  libstrangle,
-  fluidsynth,
-  xorgserver,
-  xorg,
-  util-linux,
-  pkg-config,
-  desktop-file-utils,
-  appstream-glib,
+{ buildPythonApplication
+, lib
+, fetchFromGitHub
+, # build inputs
+  atk
+, file
+, glib
+, gdk-pixbuf
+, glib-networking
+, gnome-desktop
+, gobject-introspection
+, gst_all_1
+, gtk3
+, libnotify
+, pango
+, webkitgtk_4_1
+, wrapGAppsHook3
+, meson
+, ninja
+, # check inputs
+  xvfb-run
+, nose2
+, flake8
+, # python dependencies
+  certifi
+, dbus-python
+, distro
+, evdev
+, lxml
+, pillow
+, pygobject3
+, pypresence
+, pyyaml
+, requests
+, protobuf
+, moddb
+, # commands that lutris needs
+  xrandr
+, pciutils
+, psmisc
+, mesa-demos
+, vulkan-tools
+, pulseaudio
+, p7zip
+, xgamma
+, gettext
+, libstrangle
+, fluidsynth
+, xorgserver
+, xorg
+, util-linux
+, pkg-config
+, desktop-file-utils
+, appstream-glib
+,
 }:
 
 let

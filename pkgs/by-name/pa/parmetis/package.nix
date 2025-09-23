@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gklib,
-  metis,
-  mpi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gklib
+, metis
+, mpi
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  pkg-config,
-  glib,
-  gettext,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, pkg-config
+, glib
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

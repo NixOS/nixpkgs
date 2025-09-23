@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  yojson,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, yojson
+,
 }:
 
 buildDunePackage rec {

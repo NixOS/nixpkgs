@@ -1,9 +1,9 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  lib,
-  versionCheckHook,
+{ buildNpmPackage
+, fetchFromGitHub
+, gitUpdater
+, lib
+, versionCheckHook
+,
 }:
 
 buildNpmPackage rec {

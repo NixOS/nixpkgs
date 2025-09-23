@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  coreutils,
-  curl,
-  diffutils,
-  gawk,
-  gnugrep,
-  gnused,
-  hexdump,
-  openssl,
-  makeWrapper,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, stdenv
+, coreutils
+, curl
+, diffutils
+, gawk
+, gnugrep
+, gnused
+, hexdump
+, openssl
+, makeWrapper
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 stdenv.mkDerivation rec {
   pname = "dehydrated";

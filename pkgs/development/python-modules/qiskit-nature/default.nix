@@ -1,27 +1,25 @@
-{
-  lib,
-  pythonOlder,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # Python Inputs
-  h5py,
-  numpy,
-  psutil,
-  qiskit-terra,
-  rustworkx,
-  scikit-learn,
-  scipy,
-  withPyscf ? false,
-  pyscf,
-  # Check Inputs
-  pytestCheckHook,
-  ddt,
-  pylatexenc,
-  qiskit-aer,
+{ lib
+, pythonOlder
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # Python Inputs
+  h5py
+, numpy
+, psutil
+, qiskit-terra
+, rustworkx
+, scikit-learn
+, scipy
+, withPyscf ? false
+, pyscf
+, # Check Inputs
+  pytestCheckHook
+, ddt
+, pylatexenc
+, qiskit-aer
+,
 }:
 
 buildPythonPackage rec {

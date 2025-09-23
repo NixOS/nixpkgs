@@ -1,14 +1,14 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-api-python-client,
-  google-auth,
-  lib,
-  mashumaro,
-  pytest-aiohttp,
-  pytestCheckHook,
-  setuptools,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, google-api-python-client
+, google-auth
+, lib
+, mashumaro
+, pytest-aiohttp
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

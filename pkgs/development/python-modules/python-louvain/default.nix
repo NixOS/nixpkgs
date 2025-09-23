@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  fetchpatch,
-  networkx,
-  pandas,
-  scipy,
-  numpy,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
+, networkx
+, pandas
+, scipy
+, numpy
+,
 }:
 
 buildPythonPackage rec {

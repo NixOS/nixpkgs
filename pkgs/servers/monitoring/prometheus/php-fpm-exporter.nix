@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  installShellFiles,
-  getent,
-  nix-update-script,
-  testers,
-  prometheus-php-fpm-exporter,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, getent
+, nix-update-script
+, testers
+, prometheus-php-fpm-exporter
+,
 }:
 
 buildGoModule rec {

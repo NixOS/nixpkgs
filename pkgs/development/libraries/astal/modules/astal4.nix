@@ -1,8 +1,8 @@
-{
-  buildAstalModule,
-  gtk4,
-  gtk4-layer-shell,
-  io,
+{ buildAstalModule
+, gtk4
+, gtk4-layer-shell
+, io
+,
 }:
 buildAstalModule {
   name = "astal4";

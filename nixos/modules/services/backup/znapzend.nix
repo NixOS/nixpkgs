@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -278,50 +277,52 @@ let
 
   mkDestAttrs =
     dst:
-    with dst;
-    lib.mapAttrs' (n: v: lib.nameValuePair "dst_${label}${n}" v) (
-      {
-        "" = lib.optionalString (host != null) "${host}:" + dataset;
-        _plan = plan;
-      }
-      // lib.optionalAttrs (presend != null) {
-        _precmd = presend;
-      }
-      // lib.optionalAttrs (postsend != null) {
-        _pstcmd = postsend;
-      }
-    );
+      with dst;
+      lib.mapAttrs' (n: v: lib.nameValuePair "dst_${label}${n}" v) (
+        {
+          "" = lib.optionalString (host != null) "${host}:" + dataset;
+          _plan = plan;
+        }
+        // lib.optionalAttrs (presend != null) {
+          _precmd = presend;
+        }
+        // lib.optionalAttrs (postsend != null) {
+          _pstcmd = postsend;
+        }
+      );
 
   mkSrcAttrs =
     srcCfg:
-    with srcCfg;
-    {
-      enabled = onOff enable;
-      # mbuffer is not referenced by its full path to accommodate non-NixOS systems or differing mbuffer versions between source and target
-      mbuffer =
-        with mbuffer;
-        if enable then "mbuffer" + lib.optionalString (port != null) ":${toString port}" else "off";
-      mbuffer_size = mbuffer.size;
-      post_znap_cmd = nullOff postsnap;
-      pre_znap_cmd = nullOff presnap;
-      recursive = onOff recursive;
-      src = dataset;
-      src_plan = plan;
-      tsformat = timestampFormat;
-      zend_delay = toString sendDelay;
-    }
-    // lib.foldr (a: b: a // b) { } (map mkDestAttrs (builtins.attrValues destinations));
+      with srcCfg;
+      {
+        enabled = onOff enable;
+        # mbuffer is not referenced by its full path to accommodate non-NixOS systems or differing mbuffer versions between source and target
+        mbuffer =
+          with mbuffer;
+          if enable then "mbuffer" + lib.optionalString (port != null) ":${toString port}" else "off";
+        mbuffer_size = mbuffer.size;
+        post_znap_cmd = nullOff postsnap;
+        pre_znap_cmd = nullOff presnap;
+        recursive = onOff recursive;
+        src = dataset;
+        src_plan = plan;
+        tsformat = timestampFormat;
+        zend_delay = toString sendDelay;
+      }
+      // lib.foldr (a: b: a // b) { } (map mkDestAttrs (builtins.attrValues destinations));
 
-  files = lib.mapAttrs' (
-    n: srcCfg:
-    let
-      fileText = attrsToFile (mkSrcAttrs srcCfg);
-    in
-    {
-      name = srcCfg.dataset;
-      value = pkgs.writeText (stripSlashes srcCfg.dataset) fileText;
-    }
-  ) cfg.zetup;
+  files = lib.mapAttrs'
+    (
+      n: srcCfg:
+        let
+          fileText = attrsToFile (mkSrcAttrs srcCfg);
+        in
+        {
+          name = srcCfg.dataset;
+          value = pkgs.writeText (stripSlashes srcCfg.dataset) fileText;
+        }
+    )
+    cfg.zetup;
 
 in
 {
@@ -487,10 +488,12 @@ in
               | xargs -I{} ${pkgs.znapzend}/bin/znapzendzetup delete "{}"
           ''
           + lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (dataset: config: ''
-              echo Importing znapzend zetup ${config} for dataset ${dataset}
-              ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config} &
-            '') files
+            lib.mapAttrsToList
+              (dataset: config: ''
+                echo Importing znapzend zetup ${config} for dataset ${dataset}
+                ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config} &
+              '')
+              files
           )
           + ''
             wait
@@ -513,9 +516,10 @@ in
                 (lib.optionalString cfg.noDestroy "--nodestroy")
                 (lib.optionalString cfg.autoCreation "--autoCreation")
                 (lib.optionalString (cfg.mailErrorSummaryTo != "") "--mailErrorSummaryTo=${cfg.mailErrorSummaryTo}")
-                (lib.optionalString (
-                  enabledFeatures != [ ]
-                ) "--features=${lib.concatStringsSep "," enabledFeatures}")
+                (lib.optionalString
+                  (
+                    enabledFeatures != [ ]
+                  ) "--features=${lib.concatStringsSep "," enabledFeatures}")
               ];
             in
             "${pkgs.znapzend}/bin/znapzend ${args}";

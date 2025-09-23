@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchzip,
-  pkg-config,
-  copyDesktopItems,
-  makeDesktopItem,
-  desktopToDarwinBundle,
-  wayland,
-  libxkbcommon,
-  vulkan-headers,
-  libGL,
-  xorg,
-  buildPackages,
+{ lib
+, stdenv
+, buildGoModule
+, fetchzip
+, pkg-config
+, copyDesktopItems
+, makeDesktopItem
+, desktopToDarwinBundle
+, wayland
+, libxkbcommon
+, vulkan-headers
+, libGL
+, xorg
+, buildPackages
+,
 }:
 
 buildGoModule (finalAttrs: {

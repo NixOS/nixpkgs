@@ -1,48 +1,50 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  replaceVars,
-  coreutils,
-  curl,
-  gnugrep,
-  gnused,
-  xdg-utils,
-  dbus,
-  libGL,
-  libX11,
-  hwdata,
-  mangohud32,
-  addDriverRunpath,
-  appstream,
-  glslang,
-  python3Packages,
-  meson,
-  ninja,
-  pkg-config,
-  unzip,
-  wayland,
-  libXNVCtrl,
-  nlohmann_json,
-  spdlog,
-  libxkbcommon,
-  glew,
-  glfw,
-  libXrandr,
-  x11Support ? true,
-  waylandSupport ? true,
-  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
-  gamescopeSupport ? true,
-  mangoappSupport ? gamescopeSupport,
-  mangohudctlSupport ? gamescopeSupport,
-  lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, replaceVars
+, coreutils
+, curl
+, gnugrep
+, gnused
+, xdg-utils
+, dbus
+, libGL
+, libX11
+, hwdata
+, mangohud32
+, addDriverRunpath
+, appstream
+, glslang
+, python3Packages
+, meson
+, ninja
+, pkg-config
+, unzip
+, wayland
+, libXNVCtrl
+, nlohmann_json
+, spdlog
+, libxkbcommon
+, glew
+, glfw
+, libXrandr
+, x11Support ? true
+, waylandSupport ? true
+, nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl
+, gamescopeSupport ? true
+, mangoappSupport ? gamescopeSupport
+, mangohudctlSupport ? gamescopeSupport
+, lowerBitnessSupport ? stdenv.hostPlatform.isx86_64
+, # Support 32 bit on 64bit
+  nix-update-script
+,
 }:
 
-assert lib.assertMsg (
-  x11Support || waylandSupport
-) "either x11Support or waylandSupport should be enabled";
+assert lib.assertMsg
+  (
+    x11Support || waylandSupport
+  ) "either x11Support or waylandSupport should be enabled";
 
 assert lib.assertMsg (nvidiaSupport -> x11Support) "nvidiaSupport requires x11Support";
 assert lib.assertMsg (mangoappSupport -> x11Support) "mangoappSupport requires x11Support";
@@ -225,8 +227,8 @@ stdenv.mkDerivation (finalAttrs: {
       layerPlatform = archMap."${stdenv.hostPlatform.system}" or null;
     in
     # We need to give the different layers separate names or else the loader
-    # might try the 32-bit one first, fail and not attempt to load the 64-bit
-    # layer under the same name.
+      # might try the 32-bit one first, fail and not attempt to load the 64-bit
+      # layer under the same name.
     lib.optionalString (layerPlatform != null) ''
       substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
         --replace-fail "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"

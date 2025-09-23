@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  django,
-  python-ipware,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, python-ipware
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

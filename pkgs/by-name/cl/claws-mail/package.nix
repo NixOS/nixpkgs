@@ -1,89 +1,86 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  wrapGAppsHook3,
-  autoreconfHook,
-  bison,
-  flex,
-  curl,
-  gtk3,
-  pkg-config,
-  python3,
-  shared-mime-info,
-  glib-networking,
-  gsettings-desktop-schemas,
-
-  # Package compatibility: old parameters whose name were not directly derived
-  enablePgp ? true,
-  enablePluginNotificationDialogs ? true,
-  enablePluginNotificationSounds ? true,
-  enablePluginPdf ? true,
-  enablePluginRavatar ? true,
-  enableSpellcheck ? true,
-
-  # Arguments to include external libraries
-  enableLibSM ? true,
-  xorg,
-  enableGnuTLS ? true,
-  gnutls,
-  enableEnchant ? enableSpellcheck,
-  enchant,
-  enableDbus ? true,
-  dbus,
-  dbus-glib,
-  enableLdap ? true,
-  openldap,
-  enableNetworkManager ? true,
-  networkmanager,
-  enableLibetpan ? true,
-  libetpan,
-  enableValgrind ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind,
-  valgrind,
-  enableSvg ? true,
-  librsvg,
-
-  # Configure claws-mail's plugins
-  enablePluginAcpiNotifier ? true,
-  enablePluginAddressKeeper ? true,
-  enablePluginArchive ? true,
-  libarchive,
-  enablePluginAttRemover ? true,
-  enablePluginAttachWarner ? true,
-  enablePluginBogofilter ? true,
-  enablePluginBsfilter ? true,
-  enablePluginClamd ? true,
-  enablePluginDillo ? true,
-  enablePluginFancy ? true,
-  webkitgtk_4_1,
-  enablePluginFetchInfo ? true,
-  enablePluginKeywordWarner ? true,
-  enablePluginLibravatar ? enablePluginRavatar,
-  enablePluginLitehtmlViewer ? true,
-  gumbo,
-  enablePluginMailmbox ? true,
-  enablePluginManageSieve ? true,
-  enablePluginNewMail ? true,
-  enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds),
-  libcanberra-gtk3,
-  libnotify,
-  enablePluginPdfViewer ? enablePluginPdf,
-  poppler,
-  enablePluginPerl ? true,
-  perl,
-  enablePluginPython ? true,
-  enablePluginPgp ? enablePgp,
-  gnupg,
-  gpgme,
-  enablePluginRssyl ? true,
-  libxml2,
-  enablePluginSmime ? true,
-  enablePluginSpamassassin ? true,
-  enablePluginSpamReport ? true,
-  enablePluginTnefParse ? true,
-  libytnef,
-  enablePluginVcalendar ? true,
-  libical,
+{ stdenv
+, lib
+, fetchurl
+, wrapGAppsHook3
+, autoreconfHook
+, bison
+, flex
+, curl
+, gtk3
+, pkg-config
+, python3
+, shared-mime-info
+, glib-networking
+, gsettings-desktop-schemas
+, # Package compatibility: old parameters whose name were not directly derived
+  enablePgp ? true
+, enablePluginNotificationDialogs ? true
+, enablePluginNotificationSounds ? true
+, enablePluginPdf ? true
+, enablePluginRavatar ? true
+, enableSpellcheck ? true
+, # Arguments to include external libraries
+  enableLibSM ? true
+, xorg
+, enableGnuTLS ? true
+, gnutls
+, enableEnchant ? enableSpellcheck
+, enchant
+, enableDbus ? true
+, dbus
+, dbus-glib
+, enableLdap ? true
+, openldap
+, enableNetworkManager ? true
+, networkmanager
+, enableLibetpan ? true
+, libetpan
+, enableValgrind ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+, valgrind
+, enableSvg ? true
+, librsvg
+, # Configure claws-mail's plugins
+  enablePluginAcpiNotifier ? true
+, enablePluginAddressKeeper ? true
+, enablePluginArchive ? true
+, libarchive
+, enablePluginAttRemover ? true
+, enablePluginAttachWarner ? true
+, enablePluginBogofilter ? true
+, enablePluginBsfilter ? true
+, enablePluginClamd ? true
+, enablePluginDillo ? true
+, enablePluginFancy ? true
+, webkitgtk_4_1
+, enablePluginFetchInfo ? true
+, enablePluginKeywordWarner ? true
+, enablePluginLibravatar ? enablePluginRavatar
+, enablePluginLitehtmlViewer ? true
+, gumbo
+, enablePluginMailmbox ? true
+, enablePluginManageSieve ? true
+, enablePluginNewMail ? true
+, enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds)
+, libcanberra-gtk3
+, libnotify
+, enablePluginPdfViewer ? enablePluginPdf
+, poppler
+, enablePluginPerl ? true
+, perl
+, enablePluginPython ? true
+, enablePluginPgp ? enablePgp
+, gnupg
+, gpgme
+, enablePluginRssyl ? true
+, libxml2
+, enablePluginSmime ? true
+, enablePluginSpamassassin ? true
+, enablePluginSpamReport ? true
+, enablePluginTnefParse ? true
+, libytnef
+, enablePluginVcalendar ? true
+, libical
+,
 }:
 
 let
@@ -327,9 +324,11 @@ stdenv.mkDerivation rec {
     "--disable-compface" # Missing compface library
     "--disable-jpilot" # Missing jpilot library
   ]
-  ++ (map (
-    feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags
-  ) features);
+  ++ (map
+    (
+      feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags
+    )
+    features);
 
   enableParallelBuilding = true;
 

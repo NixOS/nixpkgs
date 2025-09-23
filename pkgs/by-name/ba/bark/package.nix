@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  alsa-lib,
-  libopus,
-  soxr,
-  cmake,
-  pkg-config,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, alsa-lib
+, libopus
+, soxr
+, cmake
+, pkg-config
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (final: {
   pname = "bark";

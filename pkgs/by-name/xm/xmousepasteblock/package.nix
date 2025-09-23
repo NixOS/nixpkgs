@@ -1,10 +1,10 @@
-{
-  xorg,
-  lib,
-  stdenv,
-  libev,
-  fetchFromGitHub,
-  pkg-config,
+{ xorg
+, lib
+, stdenv
+, libev
+, fetchFromGitHub
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

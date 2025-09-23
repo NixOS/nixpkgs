@@ -1,21 +1,21 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  buildPythonPackage,
-  certifi,
-  ciso8601,
-  fetchFromGitHub,
-  frozenlist,
-  mashumaro,
-  poetry-core,
-  pyjwt,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  yarl,
+{ lib
+, aiohttp
+, aresponses
+, buildPythonPackage
+, certifi
+, ciso8601
+, fetchFromGitHub
+, frozenlist
+, mashumaro
+, poetry-core
+, pyjwt
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, yarl
+,
 }:
 
 buildPythonPackage rec {

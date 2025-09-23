@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openblas,
-  xtensor,
-  xtl,
-  doctest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openblas
+, xtensor
+, xtl
+, doctest
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

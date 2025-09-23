@@ -1,9 +1,8 @@
-{
-  lib,
-  mkNode,
-  package,
-  testScriptSetup,
-  ...
+{ lib
+, mkNode
+, package
+, testScriptSetup
+, ...
 }:
 let
   extraSettings =

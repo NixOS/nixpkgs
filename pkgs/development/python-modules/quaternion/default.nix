@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  numpy,
-  setuptools,
-
-  # dependencies
-  scipy,
-
-  # tests
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, numpy
+, setuptools
+, # dependencies
+  scipy
+, # tests
+  pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

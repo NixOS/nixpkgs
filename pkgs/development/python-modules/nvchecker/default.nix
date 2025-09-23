@@ -1,24 +1,24 @@
-{
-  lib,
-  platformdirs,
-  buildPythonPackage,
-  docutils,
-  fetchFromGitHub,
-  nix-update-script,
-  flaky,
-  installShellFiles,
-  pycurl,
-  pytest-asyncio,
-  pytest-httpbin,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  structlog,
-  tomli,
-  tornado,
-  awesomeversion,
-  packaging,
-  lxml,
+{ lib
+, platformdirs
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, nix-update-script
+, flaky
+, installShellFiles
+, pycurl
+, pytest-asyncio
+, pytest-httpbin
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, structlog
+, tomli
+, tornado
+, awesomeversion
+, packaging
+, lxml
+,
 }:
 
 buildPythonPackage rec {

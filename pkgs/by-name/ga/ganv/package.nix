@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  graphviz,
-  gtk2,
-  gtkmm2,
-  meson,
-  ninja,
-  cmake,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitLab
+, graphviz
+, gtk2
+, gtkmm2
+, meson
+, ninja
+, cmake
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

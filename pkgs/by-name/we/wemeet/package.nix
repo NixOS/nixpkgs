@@ -1,46 +1,46 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-  nss,
-  xorg,
-  desktop-file-utils,
-  libpulseaudio,
-  libgcrypt,
-  dbus,
-  systemd,
-  udev,
-  libGL,
-  fontconfig,
-  freetype,
-  openssl,
-  wayland,
-  libdrm,
-  harfbuzz,
-  openldap,
-  curl,
-  nghttp2,
-  libunwind,
-  alsa-lib,
-  libidn2,
-  rtmpdump,
-  libpsl,
-  libkrb5,
-  xkeyboard_config,
-  libsForQt5,
-  pkg-config,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  wireplumber,
-  libportal,
-  xdg-desktop-portal,
-  opencv4WithoutCuda,
-  pipewire,
-  fetchgit,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, nss
+, xorg
+, desktop-file-utils
+, libpulseaudio
+, libgcrypt
+, dbus
+, systemd
+, udev
+, libGL
+, fontconfig
+, freetype
+, openssl
+, wayland
+, libdrm
+, harfbuzz
+, openldap
+, curl
+, nghttp2
+, libunwind
+, alsa-lib
+, libidn2
+, rtmpdump
+, libpsl
+, libkrb5
+, xkeyboard_config
+, libsForQt5
+, pkg-config
+, fetchFromGitHub
+, cmake
+, ninja
+, wireplumber
+, libportal
+, xdg-desktop-portal
+, opencv4WithoutCuda
+, pipewire
+, fetchgit
+,
 }:
 let
   wemeet-wayland-screenshare = stdenv.mkDerivation {
@@ -128,8 +128,8 @@ let
   };
   selectSystem =
     attrs:
-    attrs.${stdenv.hostPlatform.system}
-      or (throw "wemeet: ${stdenv.hostPlatform.system} is not supported");
+      attrs.${stdenv.hostPlatform.system}
+        or (throw "wemeet: ${stdenv.hostPlatform.system} is not supported");
 in
 stdenv.mkDerivation {
   pname = "wemeet";

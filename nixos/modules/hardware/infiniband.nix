@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -22,14 +21,16 @@ let
     };
   }
   // (builtins.listToAttrs (
-    map (guid: {
-      name = "opensm@${guid}";
-      value = {
-        enable = true;
-        wantedBy = [ "machines.target" ];
-        overrideStrategy = "asDropin";
-      };
-    }) cfg.guids
+    map
+      (guid: {
+        name = "opensm@${guid}";
+        value = {
+          enable = true;
+          wantedBy = [ "machines.target" ];
+          overrideStrategy = "asDropin";
+        };
+      })
+      cfg.guids
   ));
 
 in

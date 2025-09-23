@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  libsigrok,
-  libsigrokdecode,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, glib
+, libsigrok
+, libsigrokdecode
+,
 }:
 
 stdenv.mkDerivation {

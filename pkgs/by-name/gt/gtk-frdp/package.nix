@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gobject-introspection,
-  glib,
-  gtk3,
-  freerdp,
-  fuse3,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, vala
+, gobject-introspection
+, glib
+, gtk3
+, freerdp
+, fuse3
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

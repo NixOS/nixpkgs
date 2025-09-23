@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  gevent,
-  preggy,
-  python,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gevent
+, preggy
+, python
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

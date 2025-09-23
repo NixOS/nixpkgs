@@ -1,24 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  huggingface-hub,
-  loguru,
-  mmh3,
-  numpy,
-  onnxruntime,
-  pillow,
-  py-rust-stemmers,
-  pystemmer,
-  requests,
-  snowballstemmer,
-  tokenizers,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  huggingface-hub
+, loguru
+, mmh3
+, numpy
+, onnxruntime
+, pillow
+, py-rust-stemmers
+, pystemmer
+, requests
+, snowballstemmer
+, tokenizers
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, pythonAtLeast
+, # build-system
+  setuptools
+,
 }:
 
 buildPythonPackage {

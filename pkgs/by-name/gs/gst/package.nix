@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitMinimal,
-  ghq,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitMinimal
+, ghq
+,
 }:
 
 buildGoModule rec {

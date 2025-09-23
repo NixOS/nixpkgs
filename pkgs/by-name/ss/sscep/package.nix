@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  openssl,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, openssl
+, autoreconfHook
+, pkg-config
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sscep";

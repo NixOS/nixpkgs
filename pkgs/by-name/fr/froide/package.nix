@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  makeWrapper,
-  gdal,
-  geos,
-  pnpm,
-  nodejs,
-  postgresql,
-  postgresqlTestHook,
-  playwright-driver,
+{ stdenv
+, lib
+, python3Packages
+, fetchFromGitHub
+, makeWrapper
+, gdal
+, geos
+, pnpm
+, nodejs
+, postgresql
+, postgresqlTestHook
+, playwright-driver
+,
 }:
 let
 

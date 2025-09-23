@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  tzdata,
-  replaceVars,
-  iana-etc,
-  mailcap,
-  buildPackages,
-  pkgsBuildTarget,
-  targetPackages,
-  testers,
-  skopeo,
-  buildGo124Module,
+{ lib
+, stdenv
+, fetchurl
+, tzdata
+, replaceVars
+, iana-etc
+, mailcap
+, buildPackages
+, pkgsBuildTarget
+, targetPackages
+, testers
+, skopeo
+, buildGo124Module
+,
 }:
 
 let

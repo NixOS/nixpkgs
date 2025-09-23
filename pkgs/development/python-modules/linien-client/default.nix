@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  linien-common,
-  setuptools,
-  fabric,
-  typing-extensions,
-  numpy,
-  scipy,
+{ lib
+, buildPythonPackage
+, linien-common
+, setuptools
+, fabric
+, typing-extensions
+, numpy
+, scipy
+,
 }:
 
 buildPythonPackage rec {

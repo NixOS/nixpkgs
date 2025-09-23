@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  adal,
-  buildPythonPackage,
-  certifi,
-  durationpy,
-  fetchFromGitHub,
-  google-auth,
-  mock,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pyyaml,
-  requests,
-  requests-oauthlib,
-  setuptools,
-  six,
-  urllib3,
-  websocket-client,
+{ lib
+, stdenv
+, adal
+, buildPythonPackage
+, certifi
+, durationpy
+, fetchFromGitHub
+, google-auth
+, mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pyyaml
+, requests
+, requests-oauthlib
+, setuptools
+, six
+, urllib3
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jdk17,
-  which,
-  coreutils,
-  openssh,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jdk17
+, which
+, coreutils
+, openssh
+, writeScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

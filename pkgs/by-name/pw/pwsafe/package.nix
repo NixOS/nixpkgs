@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  zip,
-  gettext,
-  perl,
-  wxGTK32,
-  libXext,
-  libXi,
-  libXt,
-  libXtst,
-  xercesc,
-  qrencode,
-  libuuid,
-  libyubikey,
-  yubikey-personalization,
-  curl,
-  openssl,
-  file,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zip
+, gettext
+, perl
+, wxGTK32
+, libXext
+, libXi
+, libXt
+, libXtst
+, xercesc
+, qrencode
+, libuuid
+, libyubikey
+, yubikey-personalization
+, curl
+, openssl
+, file
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  chardet,
-  docutils,
-  fetchPypi,
-  pbr,
-  pygments,
-  pytestCheckHook,
-  pythonOlder,
-  restructuredtext-lint,
-  setuptools-scm,
-  stevedore,
-  wheel,
+{ lib
+, buildPythonPackage
+, chardet
+, docutils
+, fetchPypi
+, pbr
+, pygments
+, pytestCheckHook
+, pythonOlder
+, restructuredtext-lint
+, setuptools-scm
+, stevedore
+, wheel
+,
 }:
 
 buildPythonPackage rec {

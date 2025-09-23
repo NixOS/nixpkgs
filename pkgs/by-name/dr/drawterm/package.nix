@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFrom9Front,
-  unstableGitUpdater,
-  installShellFiles,
-  makeWrapper,
-  apple-sdk_13,
-  xorg,
-  pkg-config,
-  wayland-scanner,
-  pipewire,
-  wayland,
-  wayland-protocols,
-  libxkbcommon,
-  libdecor,
-  pulseaudio,
-  nixosTests,
-  withWayland ? false,
+{ stdenv
+, lib
+, fetchFrom9Front
+, unstableGitUpdater
+, installShellFiles
+, makeWrapper
+, apple-sdk_13
+, xorg
+, pkg-config
+, wayland-scanner
+, pipewire
+, wayland
+, wayland-protocols
+, libxkbcommon
+, libdecor
+, pulseaudio
+, nixosTests
+, withWayland ? false
+,
 }:
 let
   withXorg = !(withWayland || stdenv.hostPlatform.isDarwin);

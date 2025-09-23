@@ -1,14 +1,14 @@
-{
-  fetchurl,
-  hdf5,
-  lib,
-  matio,
-  nix-update-script,
-  pkgconf,
-  stdenv,
-  testers,
-  validatePkgConfig,
-  zlib,
+{ fetchurl
+, hdf5
+, lib
+, matio
+, nix-update-script
+, pkgconf
+, stdenv
+, testers
+, validatePkgConfig
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

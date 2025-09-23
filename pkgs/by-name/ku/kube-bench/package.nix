@@ -1,11 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-
-  installShellFiles,
-
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

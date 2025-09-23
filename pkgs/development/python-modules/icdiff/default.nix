@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  pkgs,
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+, pkgs
+,
 }:
 let
   inherit (pkgs) bash git less;

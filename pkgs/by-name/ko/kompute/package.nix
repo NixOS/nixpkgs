@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  vulkan-headers,
-  vulkan-loader,
-  fmt_10,
-  spdlog,
-  glslang,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, vulkan-headers
+, vulkan-loader
+, fmt_10
+, spdlog
+, glslang
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

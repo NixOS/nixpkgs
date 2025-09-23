@@ -1,21 +1,21 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  djvulibre,
-  docbook-xsl-ns,
-  glibcLocales,
-  libxml2,
-  libxml2Python,
-  libxslt,
-  pkg-config,
-  tesseract5,
-  withCuneiform ? false,
-  cuneiform,
-  withGocr ? false,
-  gocr,
-  withOcrad ? false,
-  ocrad,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, djvulibre
+, docbook-xsl-ns
+, glibcLocales
+, libxml2
+, libxml2Python
+, libxslt
+, pkg-config
+, tesseract5
+, withCuneiform ? false
+, cuneiform
+, withGocr ? false
+, gocr
+, withOcrad ? false
+, ocrad
+,
 }:
 
 python3Packages.buildPythonApplication rec {

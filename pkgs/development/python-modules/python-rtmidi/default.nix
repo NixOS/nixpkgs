@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  alabaster,
-  alsa-lib,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  flake8,
-  libjack2,
-  meson-python,
-  ninja,
-  pkg-config,
-  pythonOlder,
-  tox,
-  wheel,
+{ lib
+, stdenv
+, alabaster
+, alsa-lib
+, buildPythonPackage
+, cython
+, fetchPypi
+, flake8
+, libjack2
+, meson-python
+, ninja
+, pkg-config
+, pythonOlder
+, tox
+, wheel
+,
 }:
 
 buildPythonPackage rec {

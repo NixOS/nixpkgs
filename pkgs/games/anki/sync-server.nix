@@ -1,11 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  anki,
-
-  openssl,
-  pkg-config,
-  buildPackages,
+{ lib
+, rustPlatform
+, anki
+, openssl
+, pkg-config
+, buildPackages
+,
 }:
 
 rustPlatform.buildRustPackage {

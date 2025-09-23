@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  scipy,
-  sympy,
-  setuptools,
-  pytestCheckHook,
-  cython,
-  fetchpatch2,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, scipy
+, sympy
+, setuptools
+, pytestCheckHook
+, cython
+, fetchpatch2
+,
 }:
 
 buildPythonPackage rec {

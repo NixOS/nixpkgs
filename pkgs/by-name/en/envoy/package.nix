@@ -1,36 +1,34 @@
-{
-  lib,
-  bazel_7,
-  bazel-gazelle,
-  buildBazelPackage,
-  fetchFromGitHub,
-  applyPatches,
-  stdenv,
-  cacert,
-  cargo,
-  rustc,
-  rustPlatform,
-  cmake,
-  gn,
-  go,
-  jdk,
-  ninja,
-  patchelf,
-  python312,
-  linuxHeaders,
-  nixosTests,
-  runCommandLocal,
-  gnutar,
-  gnugrep,
-  envoy,
-  git,
-
-  # v8 (upstream default), wavm, wamr, wasmtime, disabled
-  wasmRuntime ? "wasmtime",
-
-  # Allows overriding the deps hash used for building - you will likely need to
+{ lib
+, bazel_7
+, bazel-gazelle
+, buildBazelPackage
+, fetchFromGitHub
+, applyPatches
+, stdenv
+, cacert
+, cargo
+, rustc
+, rustPlatform
+, cmake
+, gn
+, go
+, jdk
+, ninja
+, patchelf
+, python312
+, linuxHeaders
+, nixosTests
+, runCommandLocal
+, gnutar
+, gnugrep
+, envoy
+, git
+, # v8 (upstream default), wavm, wamr, wasmtime, disabled
+  wasmRuntime ? "wasmtime"
+, # Allows overriding the deps hash used for building - you will likely need to
   # set this if you have changed the 'wasmRuntime' setting.
-  depsHash ? null,
+  depsHash ? null
+,
 }:
 
 let
@@ -52,8 +50,7 @@ let
       {
         x86_64-linux = "sha256-pih2EaVFDSTaCDpqkVSt39wBFGc4MFrhc1BioeHBp+w=";
         aarch64-linux = "sha256-RpgZSsDJctTzqm8M3u0+jyEi51HaNC2RZH0Hrelovo8=";
-      }
-      .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+      }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
 

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  alsa-utils,
-  installShellFiles,
+{ lib
+, stdenv
+, alsa-utils
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

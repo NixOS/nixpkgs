@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  numpy,
-  pandas,
-  packaging,
-
-  astropy,
-  pytestCheckHook,
-  pytest-doctestplus,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  numpy
+, pandas
+, packaging
+, astropy
+, pytestCheckHook
+, pytest-doctestplus
+,
 }:
 
 buildPythonPackage rec {

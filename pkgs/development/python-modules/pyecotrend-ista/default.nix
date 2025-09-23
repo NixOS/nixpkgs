@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  dataclasses-json,
-  requests,
-  pytestCheckHook,
-  pytest-xdist,
-  requests-mock,
-  syrupy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, dataclasses-json
+, requests
+, pytestCheckHook
+, pytest-xdist
+, requests-mock
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

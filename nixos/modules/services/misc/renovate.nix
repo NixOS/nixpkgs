@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -16,23 +15,25 @@ let
   cfg = config.services.renovate;
   generateValidatedConfig =
     name: value:
-    pkgs.callPackage (
-      { runCommand, jq }:
-      runCommand name
-        {
-          nativeBuildInputs = [
-            jq
-            cfg.package
-          ];
-          value = builtins.toJSON value;
-          passAsFile = [ "value" ];
-          preferLocalBuild = true;
-        }
-        ''
-          jq . "$valuePath"> $out
-          renovate-config-validator $out
-        ''
-    ) { };
+    pkgs.callPackage
+      (
+        { runCommand, jq }:
+        runCommand name
+          {
+            nativeBuildInputs = [
+              jq
+              cfg.package
+            ];
+            value = builtins.toJSON value;
+            passAsFile = [ "value" ];
+            preferLocalBuild = true;
+          }
+          ''
+            jq . "$valuePath"> $out
+            renovate-config-validator $out
+          ''
+      )
+      { };
   generateConfig = if cfg.validateSettings then generateValidatedConfig else json.generate;
 in
 {

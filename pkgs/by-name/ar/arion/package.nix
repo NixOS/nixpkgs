@@ -1,10 +1,10 @@
-{
-  pkgs,
-  lib,
-  haskellPackages,
-  haskell,
-  runCommand,
-  buildPackages,
+{ pkgs
+, lib
+, haskellPackages
+, haskell
+, runCommand
+, buildPackages
+,
 }:
 
 let

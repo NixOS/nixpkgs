@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  deadbeef,
-  gtk3,
-  perl,
-  libdbusmenu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, deadbeef
+, gtk3
+, perl
+, libdbusmenu
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  orjson,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  respx,
-  rich,
-  syrupy,
-  tenacity,
-  typer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, orjson
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, respx
+, rich
+, syrupy
+, tenacity
+, typer
+,
 }:
 
 buildPythonPackage rec {

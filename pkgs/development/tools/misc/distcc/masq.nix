@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  gccRaw,
-  binutils,
+{ lib
+, stdenv
+, gccRaw
+, binutils
+,
 }:
 
 stdenv.mkDerivation {

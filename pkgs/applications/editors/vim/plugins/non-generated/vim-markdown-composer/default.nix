@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  vimUtils,
+{ fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, vimUtils
+,
 }:
 let
   version = "0-unstable-2022-06-14";

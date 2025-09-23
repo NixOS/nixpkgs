@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchFromGitHub,
-  cmake,
-  git,
-  asio,
-  catch2,
-  spdlog,
-  udev,
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, cmake
+, git
+, asio
+, catch2
+, spdlog
+, udev
+,
 }:
 
 stdenv.mkDerivation rec {

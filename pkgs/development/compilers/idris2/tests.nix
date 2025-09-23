@@ -1,21 +1,21 @@
-{
-  stdenv,
-  runCommand,
-  lib,
-  pname,
-  idris2,
-  idris2Packages,
-  zsh,
-  tree,
+{ stdenv
+, runCommand
+, lib
+, pname
+, idris2
+, idris2Packages
+, zsh
+, tree
+,
 }:
 
 let
   testCompileAndRun =
-    {
-      testName,
-      code,
-      want,
-      packages ? [ ],
+    { testName
+    , code
+    , want
+    , packages ? [ ]
+    ,
     }:
     let
       packageString = builtins.concatStringsSep " " (map (p: "--package " + p) packages);
@@ -52,13 +52,13 @@ let
       '';
 
   testBuildIdris =
-    {
-      testName,
-      buildIdrisArgs,
-      # function that takes result of `buildIdris` and transforms it (commonly
+    { testName
+    , buildIdrisArgs
+    , # function that takes result of `buildIdris` and transforms it (commonly
       # by calling `.executable` or `.library {}` upon it):
-      transformBuildIdrisOutput,
-      expectedTree,
+      transformBuildIdrisOutput
+    , expectedTree
+    ,
     }:
     let
       idrisPkg = transformBuildIdrisOutput (idris2Packages.buildIdris buildIdrisArgs);

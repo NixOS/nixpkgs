@@ -1,10 +1,10 @@
 { stdenv, undmg }:
 
-{
-  pname,
-  version,
-  src,
-  meta,
+{ pname
+, version
+, src
+, meta
+,
 }:
 stdenv.mkDerivation {
   inherit

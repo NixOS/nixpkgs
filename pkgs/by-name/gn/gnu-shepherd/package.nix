@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  guile,
-  pkg-config,
-  guile-fibers,
+{ stdenv
+, lib
+, fetchurl
+, guile
+, pkg-config
+, guile-fibers
+,
 }:
 
 stdenv.mkDerivation rec {

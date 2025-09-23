@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  cython,
-  ninja,
-  scikit-build-core,
-  rapidfuzz-cpp,
-  rapidfuzz,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, cython
+, ninja
+, scikit-build-core
+, rapidfuzz-cpp
+, rapidfuzz
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

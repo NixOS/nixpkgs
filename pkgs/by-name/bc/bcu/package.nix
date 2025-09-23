@@ -1,14 +1,14 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  libftdi1,
-  libusb1,
-  libyaml,
-  ncurses,
-  nix-update-script,
-  pkg-config,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, lib
+, libftdi1
+, libusb1
+, libyaml
+, ncurses
+, nix-update-script
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

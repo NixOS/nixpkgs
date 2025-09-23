@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  ffmpeg-headless,
-  nixosTests,
-  replaceVars,
-  providers ? [ ],
+{ lib
+, python3
+, fetchFromGitHub
+, ffmpeg-headless
+, nixosTests
+, replaceVars
+, providers ? [ ]
+,
 }:
 
 let
@@ -34,15 +34,17 @@ let
 
   providerPackages = (import ./providers.nix).providers;
   providerNames = lib.attrNames providerPackages;
-  providerDependencies = lib.concatMap (
-    provider: (providerPackages.${provider} python.pkgs)
-  ) providers;
+  providerDependencies = lib.concatMap
+    (
+      provider: (providerPackages.${provider} python.pkgs)
+    )
+    providers;
 
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
 assert
-  (lib.elem "airplay" providers)
+(lib.elem "airplay" providers)
   -> throw "music-assistant: airplay support is missing libraop, a library we will not package because it depends on OpenSSL 1.1.";
 
 python.pkgs.buildPythonApplication rec {

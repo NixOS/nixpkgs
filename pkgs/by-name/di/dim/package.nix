@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  buildNpmPackage,
-  makeWrapper,
-  ffmpeg,
-  git,
-  pkg-config,
-  sqlite,
-  libvaSupport ? stdenv.hostPlatform.isLinux,
-  libva,
-  fetchpatch,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, buildNpmPackage
+, makeWrapper
+, ffmpeg
+, git
+, pkg-config
+, sqlite
+, libvaSupport ? stdenv.hostPlatform.isLinux
+, libva
+, fetchpatch
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

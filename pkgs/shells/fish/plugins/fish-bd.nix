@@ -1,8 +1,8 @@
-{
-  lib,
-  buildFishPlugin,
-  fetchFromGitHub,
-  gitUpdater,
+{ lib
+, buildFishPlugin
+, fetchFromGitHub
+, gitUpdater
+,
 }:
 buildFishPlugin rec {
   pname = "fish-bd";

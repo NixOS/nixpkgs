@@ -1,16 +1,16 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  gawk,
-  hyprland,
-  jq,
-  lib,
-  libnotify,
-  makeWrapper,
-  scdoc,
-  stdenvNoCC,
-  util-linux,
-  withHyprland ? true,
+{ coreutils
+, fetchFromGitHub
+, gawk
+, hyprland
+, jq
+, lib
+, libnotify
+, makeWrapper
+, scdoc
+, stdenvNoCC
+, util-linux
+, withHyprland ? true
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

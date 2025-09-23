@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  nss,
-  nspr,
-  pkg-config,
+{ fetchurl
+, lib
+, stdenv
+, nss
+, nspr
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

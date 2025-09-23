@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  undmg,
-  appimageTools,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, undmg
+, appimageTools
+, makeWrapper
+,
 }:
 
 let
@@ -23,8 +23,7 @@ let
           url = "https://github.com/ransome1/sleek/releases/download/v${version}/sleek-2.0.14.AppImage";
           hash = "sha256-d2fLsCI7peuNBtjgHs1qumgPAF9eJeBYiIIffoSv9Jk=";
         };
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = {
     description = "Todo manager based on todo.txt syntax";
@@ -40,7 +39,8 @@ let
   appimageContents = appimageTools.extract { inherit pname version src; };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

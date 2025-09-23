@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDartApplication,
+{ lib
+, fetchFromGitHub
+, buildDartApplication
+,
 }:
 let
   pname = "melos";

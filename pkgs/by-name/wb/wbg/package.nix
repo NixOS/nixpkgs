@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  pkg-config,
-  meson,
-  ninja,
-  pixman,
-  tllist,
-  wayland,
-  wayland-scanner,
-  wayland-protocols,
-  libjxl,
-  enablePNG ? true,
-  enableJPEG ? true,
-  enableWebp ? true,
-  # Optional dependencies
-  libpng,
-  libjpeg,
-  libwebp,
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, pixman
+, tllist
+, wayland
+, wayland-scanner
+, wayland-protocols
+, libjxl
+, enablePNG ? true
+, enableJPEG ? true
+, enableWebp ? true
+, # Optional dependencies
+  libpng
+, libjpeg
+, libwebp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  appimageTools,
-  desktop-file-utils,
-  fetchurl,
-  lib,
-  nix-update-script,
+{ appimageTools
+, desktop-file-utils
+, fetchurl
+, lib
+, nix-update-script
+,
 }:
 let
   pname = "heynote";

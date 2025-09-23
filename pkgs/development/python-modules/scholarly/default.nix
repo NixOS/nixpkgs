@@ -1,22 +1,22 @@
-{
-  lib,
-  arrow,
-  beautifulsoup4,
-  bibtexparser,
-  buildPythonPackage,
-  deprecated,
-  fake-useragent,
-  fetchFromGitHub,
-  free-proxy,
-  httpx,
-  python-dotenv,
-  requests,
-  selenium,
-  setuptools,
-  sphinx-rtd-theme,
-  stem,
-  typing-extensions,
-  wheel,
+{ lib
+, arrow
+, beautifulsoup4
+, bibtexparser
+, buildPythonPackage
+, deprecated
+, fake-useragent
+, fetchFromGitHub
+, free-proxy
+, httpx
+, python-dotenv
+, requests
+, selenium
+, setuptools
+, sphinx-rtd-theme
+, stem
+, typing-extensions
+, wheel
+,
 }:
 
 buildPythonPackage rec {

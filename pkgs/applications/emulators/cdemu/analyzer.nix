@@ -1,16 +1,16 @@
-{
-  cmake,
-  pkg-config,
-  callPackage,
-  gobject-introspection,
-  wrapGAppsHook3,
-  python3Packages,
-  libxml2,
-  gnuplot,
-  adwaita-icon-theme,
-  gdk-pixbuf,
-  intltool,
-  libmirage,
+{ cmake
+, pkg-config
+, callPackage
+, gobject-introspection
+, wrapGAppsHook3
+, python3Packages
+, libxml2
+, gnuplot
+, adwaita-icon-theme
+, gdk-pixbuf
+, intltool
+, libmirage
+,
 }:
 python3Packages.buildPythonApplication {
 

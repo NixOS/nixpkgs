@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  intltool,
-  autoreconfHook,
-  gtk3,
-  glib,
-  curl,
-  goocanvas2,
-  gpsd,
-  hamlib_4,
-  wrapGAppsHook3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, intltool
+, autoreconfHook
+, gtk3
+, glib
+, curl
+, goocanvas2
+, gpsd
+, hamlib_4
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

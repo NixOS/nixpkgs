@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  writeText,
-  replaceVars,
-  meson,
-  pkg-config,
-  ninja,
-  docbook-xsl-nons,
-  gettext,
-  libxslt,
-  gtk3,
-  libdrm,
-  libevdev,
-  libpng,
-  libxkbcommon,
-  pango,
-  systemd,
-  xorg,
-  fontconfig,
+{ lib
+, stdenv
+, fetchFromGitLab
+, writeText
+, replaceVars
+, meson
+, pkg-config
+, ninja
+, docbook-xsl-nons
+, gettext
+, libxslt
+, gtk3
+, libdrm
+, libevdev
+, libpng
+, libxkbcommon
+, pango
+, systemd
+, xorg
+, fontconfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

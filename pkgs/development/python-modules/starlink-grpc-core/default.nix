@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  grpcio,
-  protobuf,
-  yagrc,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, grpcio
+, protobuf
+, yagrc
+,
 }:
 
 buildPythonPackage rec {

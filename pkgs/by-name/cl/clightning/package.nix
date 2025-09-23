@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  cctools,
-  darwin,
-  fetchurl,
-  autoconf,
-  autogen,
-  automake,
-  gettext,
-  libtool,
-  lowdown-unsandboxed,
-  protobuf,
-  unzip,
-  which,
-  gmp,
-  libsodium,
-  python3,
-  sqlite,
-  zlib,
-  jq,
-  libpq,
+{ lib
+, stdenv
+, cctools
+, darwin
+, fetchurl
+, autoconf
+, autogen
+, automake
+, gettext
+, libtool
+, lowdown-unsandboxed
+, protobuf
+, unzip
+, which
+, gmp
+, libsodium
+, python3
+, sqlite
+, zlib
+, jq
+, libpq
+,
 }:
 let
   py3 = python3.withPackages (p: [
@@ -92,9 +92,10 @@ stdenv.mkDerivation rec {
   # workaround for build issue, happens only x86_64-darwin, not aarch64-darwin
   # ccan/ccan/fdpass/fdpass.c:16:8: error: variable length array folded to constant array as an extension [-Werror,-Wgnu-folding-constant]
   #                 char buf[CMSG_SPACE(sizeof(fd))];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "-Wno-error=gnu-folding-constant";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+    ) "-Wno-error=gnu-folding-constant";
 
   meta = with lib; {
     description = "Bitcoin Lightning Network implementation in C";

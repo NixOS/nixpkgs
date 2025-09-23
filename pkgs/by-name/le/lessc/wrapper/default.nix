@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  lessc,
-  plugins ? [ ],
+{ lib
+, stdenv
+, makeWrapper
+, lessc
+, plugins ? [ ]
+,
 }:
 
 stdenv.mkDerivation {

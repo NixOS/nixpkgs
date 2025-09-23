@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "parse";

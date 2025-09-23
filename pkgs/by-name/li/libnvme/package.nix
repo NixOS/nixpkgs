@@ -1,20 +1,20 @@
-{
-  fetchFromGitHub,
-  bash,
-  json_c,
-  keyutils,
-  lib,
-  meson,
-  ninja,
-  openssl,
-  perl,
-  pkg-config,
-  python3,
-  stdenv,
-  swig,
-  systemd,
-  # ImportError: cannot import name 'mlog' from 'mesonbuild'
-  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ fetchFromGitHub
+, bash
+, json_c
+, keyutils
+, lib
+, meson
+, ninja
+, openssl
+, perl
+, pkg-config
+, python3
+, stdenv
+, swig
+, systemd
+, # ImportError: cannot import name 'mlog' from 'mesonbuild'
+  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

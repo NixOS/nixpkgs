@@ -1,14 +1,14 @@
-{
-  lib,
-  bitstruct,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  jsonschema,
-  lark,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, bitstruct
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, jsonschema
+, lark
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

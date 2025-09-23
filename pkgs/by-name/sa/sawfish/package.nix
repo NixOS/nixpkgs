@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gdk-pixbuf-xlib,
-  gettext,
-  gtk2-x11,
-  libICE,
-  libSM,
-  libxcrypt,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  librep,
-  makeWrapper,
-  pango,
-  pkg-config,
-  rep-gtk,
-  texinfo,
-  which,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gdk-pixbuf-xlib
+, gettext
+, gtk2-x11
+, libICE
+, libSM
+, libxcrypt
+, libXinerama
+, libXrandr
+, libXtst
+, librep
+, makeWrapper
+, pango
+, pkg-config
+, rep-gtk
+, texinfo
+, which
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

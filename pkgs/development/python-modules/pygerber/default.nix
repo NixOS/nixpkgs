@@ -1,36 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # build-system
-  poetry-core,
-
-  # dependencies
-  numpy,
-  click,
-  pillow,
-  pydantic,
-  pyparsing,
-  typing-extensions,
-
-  # optional dependencies
-  pygls,
-  lsprotocol,
-  drawsvg,
-  pygments,
-  shapely,
-
-  # test
-  filelock,
-  dulwich,
-  tzlocal,
-  pytest-xdist,
-  pytest-lsp,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # dependencies
+  numpy
+, click
+, pillow
+, pydantic
+, pyparsing
+, typing-extensions
+, # optional dependencies
+  pygls
+, lsprotocol
+, drawsvg
+, pygments
+, shapely
+, # test
+  filelock
+, dulwich
+, tzlocal
+, pytest-xdist
+, pytest-lsp
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,6 +1,6 @@
-{
-  vimPlugins,
-  vimUtils,
+{ vimPlugins
+, vimUtils
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "vim2nix";

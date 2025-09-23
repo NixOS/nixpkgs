@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  oldest-supported-numpy,
-  setuptools,
-  ansitable,
-  matplotlib,
-  numpy,
-  scipy,
-  typing-extensions,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, oldest-supported-numpy
+, setuptools
+, ansitable
+, matplotlib
+, numpy
+, scipy
+, typing-extensions
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  pkg-config,
-  libsecret,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, pkg-config
+, libsecret
+,
 }:
 
 buildNpmPackage {

@@ -1,10 +1,10 @@
-{
-  cmake,
-  fetchFromGitHub,
-  gitUpdater,
-  lib,
-  ninja,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, gitUpdater
+, lib
+, ninja
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  vala,
-  wrapGAppsHook3,
-  lightdm,
-  gtk3,
-  pixman,
-  libcanberra,
-  libgnomekbd,
-  libX11,
-  libXext,
-  linkFarm,
-  lightdm-slick-greeter,
-  numlockx,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook3
+, lightdm
+, gtk3
+, pixman
+, libcanberra
+, libgnomekbd
+, libX11
+, libXext
+, linkFarm
+, lightdm-slick-greeter
+, numlockx
+,
 }:
 
 stdenv.mkDerivation rec {

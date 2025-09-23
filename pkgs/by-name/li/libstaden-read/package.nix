@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  bzip2,
-  xz,
-  zlib,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, bzip2
+, xz
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

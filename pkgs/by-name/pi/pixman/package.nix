@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  libpng,
-  glib, # just passthru
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, libpng
+, glib
+, # just passthru
 
   # for passthru.tests
-  cairo,
-  qemu,
-  scribus,
-  tigervnc,
-  wlroots_0_17,
-  wlroots_0_18,
-  xwayland,
-
-  gitUpdater,
-  testers,
-
-  __flattenIncludeHackHook,
+  cairo
+, qemu
+, scribus
+, tigervnc
+, wlroots_0_17
+, wlroots_0_18
+, xwayland
+, gitUpdater
+, testers
+, __flattenIncludeHackHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

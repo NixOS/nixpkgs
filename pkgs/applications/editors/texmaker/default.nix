@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
-  poppler,
-  qtbase,
-  qttools,
-  qtwebengine,
-  qt5compat,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, poppler
+, qtbase
+, qttools
+, qtwebengine
+, qt5compat
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

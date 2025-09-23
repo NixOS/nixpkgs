@@ -1,20 +1,20 @@
-{
-  lib,
-  asn1crypto,
-  azure-identity,
-  azure-keyvault-keys,
-  boto3,
-  botocore,
-  buildPythonPackage,
-  cryptography,
-  ed25519,
-  fetchFromGitHub,
-  google-cloud-kms,
-  hatchling,
-  pynacl,
-  pyspx,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, asn1crypto
+, azure-identity
+, azure-keyvault-keys
+, boto3
+, botocore
+, buildPythonPackage
+, cryptography
+, ed25519
+, fetchFromGitHub
+, google-cloud-kms
+, hatchling
+, pynacl
+, pyspx
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

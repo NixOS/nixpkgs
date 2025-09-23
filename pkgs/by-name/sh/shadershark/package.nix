@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchhg,
-  libepoxy,
-  xorg,
-  libGLU,
-  glm,
-  pkg-config,
-  imagemagick,
-  makeWrapper,
-  installShellFiles,
-  genericUpdater,
-  writeShellScript,
+{ stdenv
+, lib
+, fetchhg
+, libepoxy
+, xorg
+, libGLU
+, glm
+, pkg-config
+, imagemagick
+, makeWrapper
+, installShellFiles
+, genericUpdater
+, writeShellScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

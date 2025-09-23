@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  protobuf,
-  pkg-config,
-  rustc,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, protobuf
+, pkg-config
+, rustc
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kclvm";

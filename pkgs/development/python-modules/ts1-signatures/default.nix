@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  dpkt,
-  pyyaml,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dpkt
+, pyyaml
+, pythonOlder
+, pytestCheckHook
+,
 }:
 buildPythonPackage {
   pname = "ts1-signatures";

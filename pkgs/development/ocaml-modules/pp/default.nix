@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ppx_expect,
-  version ? "2.0.0",
+{ lib
+, buildDunePackage
+, fetchurl
+, ppx_expect
+, version ? "2.0.0"
+,
 }:
 
 buildDunePackage rec {
@@ -16,8 +16,7 @@ buildDunePackage rec {
       {
         "2.0.0" = "sha256-hlE1FRiwkrSi3vTggXHCdhUvkvtqhKixm2uSnM20RBk=";
         "1.2.0" = "sha256-pegiVzxVr7Qtsp7FbqzR8qzY9lzy3yh44pHeN0zmkJw=";
-      }
-      ."${version}";
+      }."${version}";
   };
 
   minimalOCamlVersion = "4.08";

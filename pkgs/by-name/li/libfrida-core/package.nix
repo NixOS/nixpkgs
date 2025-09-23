@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
+{ lib
+, stdenvNoCC
+, fetchurl
+,
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
@@ -16,8 +16,7 @@ let
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-arm64.tar.xz";
         hash = "sha256-jk8BKmp3VNvCYK6kgGouFOBECoDaGiWQ8EzZvBwL7cc=";
       };
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libfrida-core";

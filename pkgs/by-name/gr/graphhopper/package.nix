@@ -1,14 +1,12 @@
-{
-  fetchFromGitHub,
-  fetchurl,
-  lib,
-  stdenv,
-  testers,
-
-  jre,
-  makeWrapper,
-  maven,
-  ...
+{ fetchFromGitHub
+, fetchurl
+, lib
+, stdenv
+, testers
+, jre
+, makeWrapper
+, maven
+, ...
 }:
 let
   version = builtins.fromTOML (builtins.readFile ./version.toml);

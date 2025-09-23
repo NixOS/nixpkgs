@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  charset-normalizer,
-  fetchPypi,
-  freetype,
-  pillow,
-  setuptools,
-  python,
-  isPyPy,
+{ lib
+, buildPythonPackage
+, charset-normalizer
+, fetchPypi
+, freetype
+, pillow
+, setuptools
+, python
+, isPyPy
+,
 }:
 
 let

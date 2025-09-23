@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  cryptography,
-  python-ldap,
-  requests,
-  six,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, cryptography
+, python-ldap
+, requests
+, six
+,
 }:
 
 buildPythonPackage rec {

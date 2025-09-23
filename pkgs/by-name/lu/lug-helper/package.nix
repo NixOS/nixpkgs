@@ -1,17 +1,17 @@
-{
-  stdenvNoCC,
-  lib,
-  makeDesktopItem,
-  makeWrapper,
-  copyDesktopItems,
-  coreutils,
-  findutils,
-  zenity,
-  unzip,
-  cabextract,
-  libnotify,
-  fetchFromGitHub,
-  nix-update-script,
+{ stdenvNoCC
+, lib
+, makeDesktopItem
+, makeWrapper
+, copyDesktopItems
+, coreutils
+, findutils
+, zenity
+, unzip
+, cabextract
+, libnotify
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "lug-helper";

@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  lib,
-  utils,
-  ...
+{ config
+, pkgs
+, lib
+, utils
+, ...
 }:
 
 let
@@ -123,9 +122,10 @@ in
           (lib.escapeShellArgs startCLIList)
           (utils.escapeSystemdExecArgs cfg.extraArgs)
         ];
-        LoadCredential = lib.optional (
-          cfg.remoteWrite.basicAuthPasswordFile != null
-        ) "remote_write_basic_auth_password:${cfg.remoteWrite.basicAuthPasswordFile}";
+        LoadCredential = lib.optional
+          (
+            cfg.remoteWrite.basicAuthPasswordFile != null
+          ) "remote_write_basic_auth_password:${cfg.remoteWrite.basicAuthPasswordFile}";
       };
     };
   };

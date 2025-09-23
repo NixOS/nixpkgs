@@ -1,7 +1,7 @@
-{
-  buildGoModule,
-  authentik,
-  vendorHash,
+{ buildGoModule
+, authentik
+, vendorHash
+,
 }:
 
 buildGoModule {

@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPackages,
-  stdenv,
-  mkMesonExecutable,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPackages
+, stdenv
+, mkMesonExecutable
+, writableTmpDirAsHomeHook
+, nix-flake
+, nix-flake-c
+, nix-expr-test-support
+, rapidcheck
+, gtest
+, runCommand
+, # Configuration Options
 
-  nix-flake,
-  nix-flake-c,
-  nix-expr-test-support,
-
-  rapidcheck,
-  gtest,
-  runCommand,
-
-  # Configuration Options
-
-  version,
-  resolvePath,
+  version
+, resolvePath
+,
 }:
 
 mkMesonExecutable (finalAttrs: {
@@ -44,12 +41,14 @@ mkMesonExecutable (finalAttrs: {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
             buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          (''
-            export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-            export NIX_CONFIG="extra-experimental-features = flakes"
-            ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-            touch $out
-          '');
+          (
+            ''
+              export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
+              export NIX_CONFIG="extra-experimental-features = flakes"
+              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              touch $out
+            ''
+          );
     };
   };
 

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  gfortran,
-  pkg-config,
-  blas,
-  lapack,
-  fftw,
-  hdf5,
-  libctl,
-  guile,
-  perl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, gfortran
+, pkg-config
+, blas
+, lapack
+, fftw
+, hdf5
+, libctl
+, guile
+, perl
+,
 }:
 
 assert !blas.isILP64;

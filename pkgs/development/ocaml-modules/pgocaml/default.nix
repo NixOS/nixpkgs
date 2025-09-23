@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  calendar,
-  camlp-streams,
-  csv,
-  hex,
-  ppx_deriving,
-  ppx_sexp_conv,
-  re,
-  rresult,
-  sexplib,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, calendar
+, camlp-streams
+, csv
+, hex
+, ppx_deriving
+, ppx_sexp_conv
+, re
+, rresult
+, sexplib
+,
 }:
 
 buildDunePackage rec {

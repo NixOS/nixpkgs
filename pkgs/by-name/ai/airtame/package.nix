@@ -1,34 +1,34 @@
-{
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  makeBinaryWrapper,
-  libgcc,
-  glib,
-  nss,
-  nspr,
-  at-spi2-atk,
-  cups,
-  libdrm,
-  gtk3,
-  pango,
-  cairo,
-  libgbm,
-  expat,
-  libxkbcommon,
-  alsa-lib,
-  libva-minimal,
-  pulseaudio,
-  libGL,
-  vulkan-loader,
-  curlWithGnuTls,
-  xorg,
-  lib,
-  libnotify,
-  libappindicator-gtk3,
-  systemd,
-  pciutils,
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, makeBinaryWrapper
+, libgcc
+, glib
+, nss
+, nspr
+, at-spi2-atk
+, cups
+, libdrm
+, gtk3
+, pango
+, cairo
+, libgbm
+, expat
+, libxkbcommon
+, alsa-lib
+, libva-minimal
+, pulseaudio
+, libGL
+, vulkan-loader
+, curlWithGnuTls
+, xorg
+, lib
+, libnotify
+, libappindicator-gtk3
+, systemd
+, pciutils
+,
 }:
 let
   xorgDeps = with xorg; [

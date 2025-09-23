@@ -30,7 +30,7 @@ in
         receivers = [
           {
             name = "test";
-            webhook_configs = [ { url = "http://127.0.0.1:${toString ports.alertmanager-ntfy}/hook"; } ];
+            webhook_configs = [{ url = "http://127.0.0.1:${toString ports.alertmanager-ntfy}/hook"; }];
           }
         ];
       };
@@ -62,11 +62,13 @@ in
       lib.mkForce "0.0.0.0:${toString ports.alertmanager-ntfy}";
     services.ntfy-sh.settings.listen-http = lib.mkForce "0.0.0.0:${toString ports.ntfy-sh}";
     networking.firewall.enable = false;
-    virtualisation.forwardPorts = lib.mapAttrsToList (_: port: {
-      from = "host";
-      host = { inherit port; };
-      guest = { inherit port; };
-    }) ports;
+    virtualisation.forwardPorts = lib.mapAttrsToList
+      (_: port: {
+        from = "host";
+        host = { inherit port; };
+        guest = { inherit port; };
+      })
+      ports;
   };
 
   testScript = ''

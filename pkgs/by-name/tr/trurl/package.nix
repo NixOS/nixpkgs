@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  python3,
-  perl,
-  trurl,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, python3
+, perl
+, trurl
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

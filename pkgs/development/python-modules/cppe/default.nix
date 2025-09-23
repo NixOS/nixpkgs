@@ -1,19 +1,19 @@
-{
-  buildPythonPackage,
-  lib,
-  stdenv,
-  cmake,
-  cppe,
-  eigen,
-  pybind11,
-  numpy,
-  h5py,
-  numba,
-  scipy,
-  pandas,
-  polarizationsolver,
-  pytest,
-  llvmPackages,
+{ buildPythonPackage
+, lib
+, stdenv
+, cmake
+, cppe
+, eigen
+, pybind11
+, numpy
+, h5py
+, numba
+, scipy
+, pandas
+, polarizationsolver
+, pytest
+, llvmPackages
+,
 }:
 
 buildPythonPackage {

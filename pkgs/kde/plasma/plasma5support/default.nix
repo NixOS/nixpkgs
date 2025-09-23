@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  gpsd,
+{ mkKdeDerivation
+, pkg-config
+, gpsd
+,
 }:
 mkKdeDerivation {
   pname = "plasma5support";

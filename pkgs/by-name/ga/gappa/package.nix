@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  mpfr,
-  boost,
-  version ? "1.6.0",
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, mpfr
+, boost
+, version ? "1.6.0"
+,
 }:
 
 stdenv.mkDerivation {

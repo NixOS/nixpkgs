@@ -39,8 +39,7 @@
 
     client =
       { ... }:
-      {
-      };
+      { };
   };
 
   testScript = ''

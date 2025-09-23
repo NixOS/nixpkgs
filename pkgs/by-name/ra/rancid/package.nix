@@ -1,20 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  writeShellScriptBin,
-  autoreconfHook,
-  libtool,
-  makeBinaryWrapper,
-  coreutils,
-  expect,
-  git,
-  gnugrep,
-  inetutils, # for telnet
-  gnused,
-  openssh,
-  perl,
-  runtimeShell,
+{ stdenv
+, lib
+, fetchFromGitHub
+, writeShellScriptBin
+, autoreconfHook
+, libtool
+, makeBinaryWrapper
+, coreutils
+, expect
+, git
+, gnugrep
+, inetutils
+, # for telnet
+  gnused
+, openssh
+, perl
+, runtimeShell
+,
 }:
 
 # we cannot use resholve.mkDerivation yet - the scripts are too hairy, although it might be possible
@@ -124,12 +125,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = concatStringsSep "\n" (
-    mapAttrsToList (n: v: ''
-      mkdir -p $out/libexec
-      mv $out/bin/${n} $out/libexec/
-      makeWrapper $out/libexec/${n} $out/bin/${n} \
-        --prefix PATH : ${makeBinPath v}
-    '') needsBin
+    mapAttrsToList
+      (n: v: ''
+        mkdir -p $out/libexec
+        mv $out/bin/${n} $out/libexec/
+        makeWrapper $out/libexec/${n} $out/bin/${n} \
+          --prefix PATH : ${makeBinPath v}
+      '')
+      needsBin
   );
 
   meta = with lib; {

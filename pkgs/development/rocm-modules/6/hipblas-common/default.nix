@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  rocm-cmake,
-  rocmUpdateScript,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, rocm-cmake
+, rocmUpdateScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas-common";

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  confluent-kafka,
-  msgpack,
-  swh-core,
-  swh-model,
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, confluent-kafka
+, msgpack
+, swh-core
+, swh-model
+, pytestCheckHook
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

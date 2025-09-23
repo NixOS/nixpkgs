@@ -1,35 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  znc,
-  cmake,
-  pkg-config,
-  python3,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, znc
+, cmake
+, pkg-config
+, python3
+, which
+,
 }:
 
 let
   zncDerivation =
-    a@{
-      pname,
-      src,
-      module_name,
-      buildPhase ? ''
+    a@{ pname
+    , src
+    , module_name
+    , buildPhase ? ''
         runHook preBuild
 
         ${znc}/bin/znc-buildmod ${module_name}.cpp
 
         runHook postBuild
-      '',
-      installPhase ? ''
+      ''
+    , installPhase ? ''
         runHook preInstall
 
         install -D ${module_name}.so $out/lib/znc/${module_name}.so
 
         runHook postInstall
-      '',
-      ...
+      ''
+    , ...
     }:
     stdenv.mkDerivation (
       a

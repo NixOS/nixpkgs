@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  udev,
-  freebsd,
-  runtimeShellPackage,
-  runtimeShell,
-  nixosTests,
-  # Always tries to do dynamic linking for udev.
-  withUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
-  enablePrivSep ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, udev
+, freebsd
+, runtimeShellPackage
+, runtimeShell
+, nixosTests
+, # Always tries to do dynamic linking for udev.
+  withUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic
+, enablePrivSep ? false
+,
 }:
 
 stdenv.mkDerivation rec {

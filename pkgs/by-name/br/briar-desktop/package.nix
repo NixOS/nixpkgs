@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openjdk,
-  libnotify,
-  makeWrapper,
-  tor,
-  p7zip,
-  bash,
-  writeScript,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, openjdk
+, libnotify
+, makeWrapper
+, tor
+, p7zip
+, bash
+, writeScript
+, libGL
+,
 }:
 let
 

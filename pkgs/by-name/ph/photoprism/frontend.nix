@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNpmPackage,
-  src,
-  version,
+{ lib
+, buildNpmPackage
+, src
+, version
+,
 }:
 
 buildNpmPackage {

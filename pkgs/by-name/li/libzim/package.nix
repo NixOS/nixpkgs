@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  icu,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  xapian,
-  xz,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, icu
+, meson
+, ninja
+, pkg-config
+, python3
+, xapian
+, xz
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

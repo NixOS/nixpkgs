@@ -1,24 +1,24 @@
-{
-  alsa-lib,
-  cargo,
-  dbus,
-  fetchFromGitHub,
-  gamescope,
-  godot_4_4,
-  hwdata,
-  lib,
-  libGL,
-  libpulseaudio,
-  mesa-demos,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  udev,
-  upower,
-  vulkan-loader,
-  xorg,
-  withDebug ? false,
+{ alsa-lib
+, cargo
+, dbus
+, fetchFromGitHub
+, gamescope
+, godot_4_4
+, hwdata
+, lib
+, libGL
+, libpulseaudio
+, mesa-demos
+, nix-update-script
+, pkg-config
+, rustPlatform
+, stdenv
+, udev
+, upower
+, vulkan-loader
+, xorg
+, withDebug ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

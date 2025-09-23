@@ -1,27 +1,26 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchurl,
-  runtimeShell,
-  pkgsBuildHost,
-  usePam ? !isStatic,
-  pam ? null,
-  isStatic ? stdenv.hostPlatform.isStatic,
-  go,
-  withGo ? lib.meta.availableOn stdenv.buildPlatform go && stdenv.hostPlatform.go.GOARCH != null,
-
-  # passthru.tests
-  bind,
-  chrony,
-  htop,
-  libgcrypt,
-  libvirt,
-  ntp,
-  qemu,
-  squid,
-  tor,
-  uwsgi,
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, runtimeShell
+, pkgsBuildHost
+, usePam ? !isStatic
+, pam ? null
+, isStatic ? stdenv.hostPlatform.isStatic
+, go
+, withGo ? lib.meta.availableOn stdenv.buildPlatform go && stdenv.hostPlatform.go.GOARCH != null
+, # passthru.tests
+  bind
+, chrony
+, htop
+, libgcrypt
+, libvirt
+, ntp
+, qemu
+, squid
+, tor
+, uwsgi
+,
 }:
 
 assert usePam -> pam != null;

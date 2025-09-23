@@ -1,16 +1,16 @@
-{
-  lib,
-  SDL,
-  fetchFromGitHub,
-  giflib,
-  libXpm,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  pkg-config,
-  stdenv,
-  unstableGitUpdater,
+{ lib
+, SDL
+, fetchFromGitHub
+, giflib
+, libXpm
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, pkg-config
+, stdenv
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

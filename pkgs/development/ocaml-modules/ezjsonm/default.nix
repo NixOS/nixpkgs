@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  jsonm,
-  hex,
-  sexplib0,
+{ lib
+, fetchurl
+, buildDunePackage
+, jsonm
+, hex
+, sexplib0
+,
 }:
 
 buildDunePackage rec {

@@ -1,6 +1,6 @@
-{
-  stdenv,
-  xdg-user-dirs,
+{ stdenv
+, xdg-user-dirs
+,
 }:
 
 { version, src, ... }:

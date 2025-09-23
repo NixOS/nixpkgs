@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  flit-core,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, flit-core
+,
 }:
 buildPythonPackage rec {
   pname = "handy-archives";

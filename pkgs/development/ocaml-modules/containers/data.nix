@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  containers,
-  ocaml,
-  dune-configurator,
-  gen,
-  iter,
-  qcheck-core,
-  mdx,
+{ buildDunePackage
+, containers
+, ocaml
+, dune-configurator
+, gen
+, iter
+, qcheck-core
+, mdx
+,
 }:
 
 buildDunePackage {

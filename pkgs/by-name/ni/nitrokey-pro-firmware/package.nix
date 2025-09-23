@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeShellScriptBin,
-  python3,
-  srecord,
-  gcc-arm-embedded,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeShellScriptBin
+, python3
+, srecord
+, gcc-arm-embedded
+,
 }:
 
 let

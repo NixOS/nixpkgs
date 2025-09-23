@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  vala,
-  avahi,
-  gdk-pixbuf,
-  gst_all_1,
-  glib,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  gobject-introspection,
-  libsoup_3,
-  withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ stdenv
+, lib
+, fetchFromGitLab
+, autoconf
+, automake
+, libtool
+, pkg-config
+, vala
+, avahi
+, gdk-pixbuf
+, gst_all_1
+, glib
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gobject-introspection
+, libsoup_3
+, withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 stdenv.mkDerivation rec {

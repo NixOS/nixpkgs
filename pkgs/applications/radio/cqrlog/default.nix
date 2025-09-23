@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fpc,
-  lazarus,
-  atk,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk2-x11,
-  libX11,
-  pango,
-  hamlib,
-  mariadb,
-  tqsl,
-  xdg-utils,
-  xplanet,
-  autoPatchelfHook,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fpc
+, lazarus
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gtk2-x11
+, libX11
+, pango
+, hamlib
+, mariadb
+, tqsl
+, xdg-utils
+, xplanet
+, autoPatchelfHook
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

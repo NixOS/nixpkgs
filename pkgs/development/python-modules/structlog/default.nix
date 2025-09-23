@@ -1,19 +1,19 @@
-{
-  lib,
-  better-exceptions,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  greenlet,
-  hatch-fancy-pypi-readme,
-  hatch-vcs,
-  hatchling,
-  pretend,
-  pytest-asyncio,
-  pytestCheckHook,
-  rich,
-  simplejson,
-  twisted,
+{ lib
+, better-exceptions
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, greenlet
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, pretend
+, pytest-asyncio
+, pytestCheckHook
+, rich
+, simplejson
+, twisted
+,
 }:
 
 buildPythonPackage rec {

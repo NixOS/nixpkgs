@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  pkg-config,
-  bzip2,
-  libX11,
-  mkDerivation,
-  qtbase,
-  qttools,
-  qtmultimedia,
-  qtscript,
-  libiconv,
-  pcre-cpp,
-  libidn,
-  lua5,
-  miniupnpc,
-  aspell,
-  gettext,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, pkg-config
+, bzip2
+, libX11
+, mkDerivation
+, qtbase
+, qttools
+, qtmultimedia
+, qtscript
+, libiconv
+, pcre-cpp
+, libidn
+, lua5
+, miniupnpc
+, aspell
+, gettext
+, perl
+,
 }:
 
 mkDerivation rec {

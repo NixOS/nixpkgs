@@ -1,7 +1,7 @@
-{
-  lib,
-  buildPythonPackage,
-  i2c-tools,
+{ lib
+, buildPythonPackage
+, i2c-tools
+,
 }:
 
 buildPythonPackage {

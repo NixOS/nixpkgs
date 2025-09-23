@@ -1,57 +1,60 @@
-{
-  lib,
-  stdenv,
-  targetPackages,
-  fetchurl,
-  fetchpatch,
-  noSysDirs,
-  langC ? true,
-  langCC ? true,
-  langFortran ? false,
-  langAda ? false,
-  langObjC ? stdenv.targetPlatform.isDarwin,
-  langObjCpp ? stdenv.targetPlatform.isDarwin,
-  langGo ? false,
-  reproducibleBuild ? true,
-  profiledCompiler ? false,
-  langJit ? false,
-  langRust ? false,
-  cargo,
-  staticCompiler ? false,
-  enableShared ? stdenv.targetPlatform.hasSharedLibraries,
-  enableLTO ? stdenv.hostPlatform.hasSharedLibraries,
-  texinfo ? null,
-  perl ? null, # optional, for texi2pod (then pod2man)
-  gmp,
-  mpfr,
-  libmpc,
-  gettext,
-  which,
-  patchelf,
-  binutils,
-  isl ? null, # optional, for the Graphite optimization framework.
-  zlib ? null,
-  libucontext ? null,
-  gnat-bootstrap ? null,
-  enableMultilib ? false,
-  enablePlugin ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), # Whether to support user-supplied plug-ins
-  name ? "gcc",
-  libcCross ? null,
-  threadsCross ? { }, # for MinGW
-  withoutTargetLibc ? stdenv.targetPlatform.libc == null,
-  flex,
-  gnused ? null,
-  buildPackages,
-  pkgsBuildTarget,
-  libxcrypt,
-  disableGdbPlugin ?
-    !enablePlugin
-    || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
-  nukeReferences,
-  callPackage,
-  majorMinorVersion,
-  apple-sdk,
-  darwin,
+{ lib
+, stdenv
+, targetPackages
+, fetchurl
+, fetchpatch
+, noSysDirs
+, langC ? true
+, langCC ? true
+, langFortran ? false
+, langAda ? false
+, langObjC ? stdenv.targetPlatform.isDarwin
+, langObjCpp ? stdenv.targetPlatform.isDarwin
+, langGo ? false
+, reproducibleBuild ? true
+, profiledCompiler ? false
+, langJit ? false
+, langRust ? false
+, cargo
+, staticCompiler ? false
+, enableShared ? stdenv.targetPlatform.hasSharedLibraries
+, enableLTO ? stdenv.hostPlatform.hasSharedLibraries
+, texinfo ? null
+, perl ? null
+, # optional, for texi2pod (then pod2man)
+  gmp
+, mpfr
+, libmpc
+, gettext
+, which
+, patchelf
+, binutils
+, isl ? null
+, # optional, for the Graphite optimization framework.
+  zlib ? null
+, libucontext ? null
+, gnat-bootstrap ? null
+, enableMultilib ? false
+, enablePlugin ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
+, # Whether to support user-supplied plug-ins
+  name ? "gcc"
+, libcCross ? null
+, threadsCross ? { }
+, # for MinGW
+  withoutTargetLibc ? stdenv.targetPlatform.libc == null
+, flex
+, gnused ? null
+, buildPackages
+, pkgsBuildTarget
+, libxcrypt
+, disableGdbPlugin ? !enablePlugin
+    || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+, nukeReferences
+, callPackage
+, majorMinorVersion
+, apple-sdk
+, darwin
+,
 }:
 
 let
@@ -104,13 +107,15 @@ let
   # Cross-gcc settings (build == host != target)
   crossMingw = (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
   stageNameAddon = optionalString withoutTargetLibc "-nolibc";
-  crossNameAddon = optionalString (
-    !lib.systems.equals targetPlatform hostPlatform
-  ) "${targetPlatform.config}${stageNameAddon}-";
+  crossNameAddon = optionalString
+    (
+      !lib.systems.equals targetPlatform hostPlatform
+    ) "${targetPlatform.config}${stageNameAddon}-";
 
-  targetPrefix = lib.optionalString (
-    !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString
+    (
+      !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
+    ) "${stdenv.targetPlatform.config}-";
 
   callFile = callPackageWith {
     # lets
@@ -289,12 +294,14 @@ pipe
           )
         )
       )
-      + optionalString targetPlatform.isAvr (''
-        makeFlagsArray+=(
-           '-s' # workaround for hitting hydra log limit
-           'LIMITS_H_TEST=false'
-        )
-      '');
+      + optionalString targetPlatform.isAvr (
+        ''
+          makeFlagsArray+=(
+             '-s' # workaround for hitting hydra log limit
+             'LIMITS_H_TEST=false'
+          )
+        ''
+      );
 
       inherit
         noSysDirs
@@ -334,11 +341,12 @@ pipe
         let
           target =
             optionalString (profiledCompiler) "profiled"
-            + optionalString (
-              (lib.systems.equals targetPlatform hostPlatform)
-              && (lib.systems.equals hostPlatform buildPlatform)
-              && !disableBootstrap
-            ) "bootstrap";
+            + optionalString
+              (
+                (lib.systems.equals targetPlatform hostPlatform)
+                && (lib.systems.equals hostPlatform buildPlatform)
+                && !disableBootstrap
+              ) "bootstrap";
         in
         optional (target != "") target;
 
@@ -397,9 +405,10 @@ pipe
           ;
         isGNU = true;
         hardeningUnsupportedFlags =
-          optional (
-            !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")
-          ) "shadowstack"
+          optional
+            (
+              !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")
+            ) "shadowstack"
           ++ optional (!(targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
           ++ optionals (langFortran) [
             "fortify"
@@ -423,7 +432,7 @@ pipe
           ;
       };
     }
-    // optionalAttrs enableMultilib {
+      // optionalAttrs enableMultilib {
       dontMoveLib64 = true;
     }
   ))

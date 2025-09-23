@@ -1,16 +1,16 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  nixosTests,
-  opentelemetry-collector-builder,
-  pkgs,
-  go,
-  git,
-  cacert,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, nixosTests
+, opentelemetry-collector-builder
+, pkgs
+, go
+, git
+, cacert
+, stdenv
+,
 }:
 let
   # This is the tool OTEL uses to build their distributions.
@@ -34,9 +34,9 @@ let
   #
   # The output depends on which release.
   mkDistributionSource =
-    {
-      name,
-      hash,
+    { name
+    , hash
+    ,
     }:
     stdenv.mkDerivation {
       inherit name;
@@ -77,11 +77,11 @@ let
 
   # Then, finally, we build the project as a normal go module package.
   mkDistribution =
-    {
-      name,
-      sourceHash,
-      vendorHash,
-      proxyVendor ? false,
+    { name
+    , sourceHash
+    , vendorHash
+    , proxyVendor ? false
+    ,
     }:
     let
       package = buildGoModule {

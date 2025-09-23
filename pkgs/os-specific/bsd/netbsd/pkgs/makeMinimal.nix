@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  make,
-  make-rules,
+{ mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, make
+, make-rules
+,
 }:
 
 mkDerivation {

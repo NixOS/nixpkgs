@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -154,11 +153,10 @@ in
         ];
         relevantExtractions = filter (x: x.relevant) extractions;
         extract =
-          {
-            root,
-            peer,
-            key,
-            ...
+          { root
+          , peer
+          , key
+          , ...
           }:
           filter (x: x != null) (flatten (concatMap (x: (map key (peer x))) (attrValues root)));
         configuredKeys = flatten (map extract relevantExtractions);

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  html5tagger,
-  setuptools,
-  python,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, html5tagger
+, setuptools
+, python
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

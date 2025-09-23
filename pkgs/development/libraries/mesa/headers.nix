@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
+{ lib
+, stdenv
+, fetchFromGitLab
+,
 }:
 
 let

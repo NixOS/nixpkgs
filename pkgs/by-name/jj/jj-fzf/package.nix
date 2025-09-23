@@ -1,14 +1,14 @@
-{
-  lib,
-  bashInteractive,
-  coreutils,
-  fetchFromGitHub,
-  fzf,
-  gawk,
-  gnused,
-  jujutsu,
-  makeWrapper,
-  stdenv,
+{ lib
+, bashInteractive
+, coreutils
+, fetchFromGitHub
+, fzf
+, gawk
+, gnused
+, jujutsu
+, makeWrapper
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

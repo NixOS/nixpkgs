@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  cmake,
-  python3,
-  gtest,
-  withAnimation ? true,
-  withTranscoder ? true,
-  eigen,
-  ghc_filesystem,
-  tinygltf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, python3
+, gtest
+, withAnimation ? true
+, withTranscoder ? true
+, eigen
+, ghc_filesystem
+, tinygltf
+,
 }:
 
 let

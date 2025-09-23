@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiofiles,
-  aiohttp,
-  importlib-metadata,
-  nest-asyncio,
-  psutil,
-  pyyaml,
-  torch,
-  typing-extensions,
-
-  # tests
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiofiles
+, aiohttp
+, importlib-metadata
+, nest-asyncio
+, psutil
+, pyyaml
+, torch
+, typing-extensions
+, # tests
+  pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

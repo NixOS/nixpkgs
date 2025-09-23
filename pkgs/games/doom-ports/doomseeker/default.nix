@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromBitbucket,
-  wrapQtAppsHook,
-  pkg-config,
-  qtbase,
-  qttools,
-  qtmultimedia,
-  zlib,
-  bzip2,
-  xxd,
+{ lib
+, stdenv
+, cmake
+, fetchFromBitbucket
+, wrapQtAppsHook
+, pkg-config
+, qtbase
+, qttools
+, qtmultimedia
+, zlib
+, bzip2
+, xxd
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml,
-  landmarks,
-  ppxlib,
+{ lib
+, buildDunePackage
+, ocaml
+, landmarks
+, ppxlib
+,
 }:
 
 buildDunePackage {

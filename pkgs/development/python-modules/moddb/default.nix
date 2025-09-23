@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  beautifulsoup4,
-  pyrate-limiter,
-  requests,
-  toolz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, beautifulsoup4
+, pyrate-limiter
+, requests
+, toolz
+,
 }:
 
 buildPythonPackage rec {

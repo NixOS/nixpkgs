@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  libpcap,
+{ stdenv
+, fetchurl
+, lib
+, libpcap
+,
 }:
 stdenv.mkDerivation (final: {
   name = "tcptrace";

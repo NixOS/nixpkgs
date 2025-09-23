@@ -1,19 +1,19 @@
-{
-  lib,
-  buildDunePackage,
-  mirage-crypto,
-  dune-configurator,
-  pkg-config,
-  mirage-crypto-rng,
-  alcotest,
-  asn1-combinators,
-  ohex,
-  ounit2,
-  ppx_deriving_yojson,
-  ppx_deriving,
-  yojson,
-  withFreestanding ? false,
-  ocaml-freestanding,
+{ lib
+, buildDunePackage
+, mirage-crypto
+, dune-configurator
+, pkg-config
+, mirage-crypto-rng
+, alcotest
+, asn1-combinators
+, ohex
+, ounit2
+, ppx_deriving_yojson
+, ppx_deriving
+, yojson
+, withFreestanding ? false
+, ocaml-freestanding
+,
 }:
 
 buildDunePackage {

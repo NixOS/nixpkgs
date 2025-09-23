@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jalali-core,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jalali-core
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

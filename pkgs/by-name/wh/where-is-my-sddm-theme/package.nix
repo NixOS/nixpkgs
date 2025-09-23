@@ -1,13 +1,12 @@
-{
-  lib,
-  formats,
-  stdenvNoCC,
-  fetchFromGitHub,
-  qt6,
-  libsForQt5,
-  variants ? [ "qt6" ],
-  /*
-    An example of how you can override the background on the NixOS logo
+{ lib
+, formats
+, stdenvNoCC
+, fetchFromGitHub
+, qt6
+, libsForQt5
+, variants ? [ "qt6" ]
+, /*
+  An example of how you can override the background on the NixOS logo
 
       environment.systemPackages = [
         (pkgs.where-is-my-sddm-theme.override {
@@ -18,7 +17,8 @@
         })
       ];
   */
-  themeConfig ? null,
+  themeConfig ? null
+,
 }:
 
 let

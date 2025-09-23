@@ -1,16 +1,16 @@
-{
-  lib,
-  coreutils,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  getopt,
-  libcap,
-  gnused,
-  nixosTests,
-  testers,
-  autoreconfHook,
-  po4a,
+{ lib
+, coreutils
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, getopt
+, libcap
+, gnused
+, nixosTests
+, testers
+, autoreconfHook
+, po4a
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

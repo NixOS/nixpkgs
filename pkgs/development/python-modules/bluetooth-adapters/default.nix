@@ -1,23 +1,23 @@
-{
-  lib,
-  aiohttp,
-  aiooui,
-  async-timeout,
-  bleak,
-  buildPythonPackage,
-  dbus-fast,
-  fetchFromGitHub,
-  mac-vendor-lookup,
-  myst-parser,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  sphinx-rtd-theme,
-  sphinxHook,
-  uart-devices,
-  usb-devices,
+{ lib
+, aiohttp
+, aiooui
+, async-timeout
+, bleak
+, buildPythonPackage
+, dbus-fast
+, fetchFromGitHub
+, mac-vendor-lookup
+, myst-parser
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, sphinx-rtd-theme
+, sphinxHook
+, uart-devices
+, usb-devices
+,
 }:
 
 buildPythonPackage rec {

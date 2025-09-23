@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  aiodns,
-  aiohttp,
-  flask,
-  mock,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-instrumentation-requests,
-  opentelemetry-sdk,
-  pytest,
-  pytest-asyncio,
-  pytest-trio,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  six,
-  trio,
-  typing-extensions,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, aiodns
+, aiohttp
+, flask
+, mock
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-instrumentation-requests
+, opentelemetry-sdk
+, pytest
+, pytest-asyncio
+, pytest-trio
+, pytestCheckHook
+, requests
+, setuptools
+, six
+, trio
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  callPackage,
-  nix-gitignore,
-  python3Packages,
+{ callPackage
+, nix-gitignore
+, python3Packages
+,
 }:
 let
   helpers = callPackage ./helpers.nix { };

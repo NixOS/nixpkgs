@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  monitoring-plugins,
-  perlPackages,
-  stdenv,
-  txt2man,
-  wmic-bin ? null,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, monitoring-plugins
+, perlPackages
+, stdenv
+, txt2man
+, wmic-bin ? null
+,
 }:
 
 stdenv.mkDerivation rec {

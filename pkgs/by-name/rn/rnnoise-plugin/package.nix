@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  freetype,
-  gtk3-x11,
-  pcre,
-  pkg-config,
-  webkitgtk_4_1,
-  xorg,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, freetype
+, gtk3-x11
+, pcre
+, pkg-config
+, webkitgtk_4_1
+, xorg
+,
 }:
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";

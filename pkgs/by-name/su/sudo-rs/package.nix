@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  nixosTests,
-  versionCheckHook,
-  pam,
-  rustPlatform,
-  tzdata,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, nixosTests
+, versionCheckHook
+, pam
+, rustPlatform
+, tzdata
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

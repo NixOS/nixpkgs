@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  lwt,
-  mirage-net,
-  cstruct,
-  ipaddr,
-  macaddr,
-  duration,
-  logs,
+{ lib
+, buildDunePackage
+, fetchurl
+, lwt
+, mirage-net
+, cstruct
+, ipaddr
+, macaddr
+, duration
+, logs
+,
 }:
 
 buildDunePackage rec {

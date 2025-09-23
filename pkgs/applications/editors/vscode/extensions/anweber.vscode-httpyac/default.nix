@@ -1,7 +1,7 @@
-{
-  lib,
-  vscode-utils,
-  httpyac,
+{ lib
+, vscode-utils
+, httpyac
+,
 }:
 
 let

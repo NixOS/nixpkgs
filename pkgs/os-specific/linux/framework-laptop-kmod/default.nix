@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  kernel,
-  kernelModuleMakeFlags,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, kernel
+, kernelModuleMakeFlags
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

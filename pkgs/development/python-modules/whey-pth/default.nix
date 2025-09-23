@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  dom-toml,
-  whey,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, dom-toml
+, whey
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

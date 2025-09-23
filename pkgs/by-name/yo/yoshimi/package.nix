@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  boost,
-  cairo,
-  cmake,
-  fftwSinglePrec,
-  fltk,
-  libGLU,
-  libjack2,
-  libsndfile,
-  libXdmcp,
-  lv2,
-  minixml,
-  pcre,
-  pkg-config,
-  readline,
-  xorg,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, boost
+, cairo
+, cmake
+, fftwSinglePrec
+, fltk
+, libGLU
+, libjack2
+, libsndfile
+, libXdmcp
+, lv2
+, minixml
+, pcre
+, pkg-config
+, readline
+, xorg
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

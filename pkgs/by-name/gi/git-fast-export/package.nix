@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitMinimal,
-  mercurial,
-  makeWrapper,
-  nix-update-script,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitMinimal
+, mercurial
+, makeWrapper
+, nix-update-script
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

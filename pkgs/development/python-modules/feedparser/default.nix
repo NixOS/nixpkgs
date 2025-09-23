@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  pythonOlder,
-  setuptools,
-  sgmllib3k,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pythonOlder
+, setuptools
+, sgmllib3k
+,
 }:
 
 buildPythonPackage rec {

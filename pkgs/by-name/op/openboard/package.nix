@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qt6Packages,
-  libGL,
-  fontconfig,
-  openssl,
-  poppler,
-  ffmpeg,
-  libva,
-  alsa-lib,
-  SDL,
-  x264,
-  libvpx,
-  libvorbis,
-  libtheora,
-  libogg,
-  libopus,
-  lame,
-  fdk_aac,
-  libass,
-  libXext,
-  libXfixes,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt6Packages
+, libGL
+, fontconfig
+, openssl
+, poppler
+, ffmpeg
+, libva
+, alsa-lib
+, SDL
+, x264
+, libvpx
+, libvorbis
+, libtheora
+, libogg
+, libopus
+, lame
+, fdk_aac
+, libass
+, libXext
+, libXfixes
+,
 }:
 
 let

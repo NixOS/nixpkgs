@@ -1,26 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gpm,
-  openssl,
-  pkg-config,
-  libev, # Misc.
-  libpng,
-  libjpeg,
-  libtiff,
-  librsvg,
-  libavif, # graphic formats
-  bzip2,
-  zlib,
-  xz, # Transfer encodings
-  enableFB ? (!stdenv.hostPlatform.isDarwin),
-  enableDirectFB ? false,
-  directfb,
-  enableX11 ? (!stdenv.hostPlatform.isDarwin),
-  libX11,
-  libXt,
-  libXau, # GUI support
+{ lib
+, stdenv
+, fetchurl
+, gpm
+, openssl
+, pkg-config
+, libev
+, # Misc.
+  libpng
+, libjpeg
+, libtiff
+, librsvg
+, libavif
+, # graphic formats
+  bzip2
+, zlib
+, xz
+, # Transfer encodings
+  enableFB ? (!stdenv.hostPlatform.isDarwin)
+, enableDirectFB ? false
+, directfb
+, enableX11 ? (!stdenv.hostPlatform.isDarwin)
+, libX11
+, libXt
+, libXau
+, # GUI support
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,6 +1,6 @@
-{
-  runTest,
-  php,
+{ runTest
+, php
+,
 }:
 
 let

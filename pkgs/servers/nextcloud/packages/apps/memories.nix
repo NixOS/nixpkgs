@@ -1,14 +1,13 @@
-{
-  stdenv,
-  buildGoModule,
-  exiftool,
-  fetchurl,
-  ffmpeg-headless,
-  fetchFromGitHub,
-  lib,
-  replaceVars,
-
-  ncVersion,
+{ stdenv
+, buildGoModule
+, exiftool
+, fetchurl
+, ffmpeg-headless
+, fetchFromGitHub
+, lib
+, replaceVars
+, ncVersion
+,
 }:
 let
   latestVersionForNc = {

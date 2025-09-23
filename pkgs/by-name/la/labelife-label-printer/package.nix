@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  cups,
-  autoPatchelfHook,
-  detox,
+{ lib
+, stdenv
+, fetchzip
+, cups
+, autoPatchelfHook
+, detox
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,8 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
       armv7l-linux = "armhf";
       i686-linux = "i386";
       x86_64-linux = "x86_64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchzip {
     url = "https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  sphinx,
-  pre-commit,
-  ipython,
-  myst-parser,
-  sphinx-book-theme,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, sphinx
+, pre-commit
+, ipython
+, myst-parser
+, sphinx-book-theme
+, pytest
+,
 }:
 
 buildPythonPackage rec {

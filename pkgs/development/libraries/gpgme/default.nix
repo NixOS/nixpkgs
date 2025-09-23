@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  libgpg-error,
-  gnupg,
-  pkg-config,
-  glib,
-  pth,
-  libassuan,
-  which,
-  texinfo,
-  buildPackages,
-  qtbase ? null,
-  # only for passthru.tests
-  libsForQt5,
-  qt6Packages,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, libgpg-error
+, gnupg
+, pkg-config
+, glib
+, pth
+, libassuan
+, which
+, texinfo
+, buildPackages
+, qtbase ? null
+, # only for passthru.tests
+  libsForQt5
+, qt6Packages
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

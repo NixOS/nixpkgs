@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-openai-plugin,
-  openai,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-recording,
-  syrupy,
-  cogapp,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-openai-plugin
+, openai
+, pytestCheckHook
+, pytest-asyncio
+, pytest-recording
+, syrupy
+, cogapp
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage rec {
   pname = "llm-openai-plugin";

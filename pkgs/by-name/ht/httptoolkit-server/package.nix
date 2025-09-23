@@ -1,15 +1,15 @@
-{
-  lib,
-  nodejs_20,
-  buildNpmPackage,
-  fetchFromGitHub,
-  writeShellScriptBin,
-  nss,
-  cmake,
-  pkg-config,
-  openssl,
-  libdatachannel,
-  plog,
+{ lib
+, nodejs_20
+, buildNpmPackage
+, fetchFromGitHub
+, writeShellScriptBin
+, nss
+, cmake
+, pkg-config
+, openssl
+, libdatachannel
+, plog
+,
 }:
 
 let

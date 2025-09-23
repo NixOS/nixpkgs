@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+,
 }:
 
 #This python library is auto-generated. It should be possible to rebuild it from upstream, but seems unnecessary

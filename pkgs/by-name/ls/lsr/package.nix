@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  installShellFiles,
-  fetchgit,
-  zig_0_14,
-  callPackage,
-  versionCheckHook,
+{ lib
+, stdenv
+, installShellFiles
+, fetchgit
+, zig_0_14
+, callPackage
+, versionCheckHook
+,
 }:
 
 let

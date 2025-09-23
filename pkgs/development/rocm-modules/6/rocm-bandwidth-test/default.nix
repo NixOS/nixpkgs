@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmPackages,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmPackages
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

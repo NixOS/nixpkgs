@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  scikit-learn,
-  numpy,
-  scipy,
-  colorama,
-  packaging,
-
-  # tests
-  jupyter,
-  matplotlib,
-  nbconvert,
-  nbformat,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  scikit-learn
+, numpy
+, scipy
+, colorama
+, packaging
+, # tests
+  jupyter
+, matplotlib
+, nbconvert
+, nbformat
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

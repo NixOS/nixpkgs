@@ -1,18 +1,18 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  dictdiffer,
-  diskcache,
-  dvc-objects,
-  fetchFromGitHub,
-  fsspec,
-  orjson,
-  pygtrie,
-  pythonOlder,
-  setuptools-scm,
-  sqltrie,
-  tqdm,
+{ lib
+, attrs
+, buildPythonPackage
+, dictdiffer
+, diskcache
+, dvc-objects
+, fetchFromGitHub
+, fsspec
+, orjson
+, pygtrie
+, pythonOlder
+, setuptools-scm
+, sqltrie
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

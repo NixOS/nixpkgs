@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  binutils,
-  busybox,
-  bootstrapTools,
-  hello,
+{ lib
+, stdenv
+, binutils
+, busybox
+, bootstrapTools
+, hello
+,
 }:
 
 builtins.derivation {

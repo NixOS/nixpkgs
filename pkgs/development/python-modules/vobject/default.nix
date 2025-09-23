@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPyPy,
-  setuptools,
-  python-dateutil,
-  pytz,
-  six,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPyPy
+, setuptools
+, python-dateutil
+, pytz
+, six
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

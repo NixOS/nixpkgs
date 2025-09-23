@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  autoPatchelfHook,
-  buildFHSEnv,
-  dpkg,
-  fetchurl,
-  glib,
-  gst_all_1,
-  libGL,
-  libgudev,
-  libudev-zero,
-  libxcb,
-  libxkbfile,
-  libxml2_13,
-  libxslt,
-  openal,
-  qt6Packages,
-  wayland,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+{ stdenv
+, lib
+, autoPatchelfHook
+, buildFHSEnv
+, dpkg
+, fetchurl
+, glib
+, gst_all_1
+, libGL
+, libgudev
+, libudev-zero
+, libxcb
+, libxkbfile
+, libxml2_13
+, libxslt
+, openal
+, qt6Packages
+, wayland
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, xcbutilwm
+,
 }:
 let
   version = "6.0.3";

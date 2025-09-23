@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  version,
-  src,
-  liboggSupport ? true,
-  libogg ? null, # if disabled only the library will be built
-  prePatch ? "",
-  ...
+{ lib
+, stdenv
+, version
+, src
+, liboggSupport ? true
+, libogg ? null
+, # if disabled only the library will be built
+  prePatch ? ""
+, ...
 }:
 
 # The celt codec has been deprecated and is now a part of the opus codec

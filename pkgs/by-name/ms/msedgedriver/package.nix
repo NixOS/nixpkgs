@@ -1,12 +1,12 @@
-{
-  autoPatchelfHook,
-  fetchzip,
-  glib,
-  lib,
-  libxcb,
-  nspr,
-  nss,
-  stdenvNoCC,
+{ autoPatchelfHook
+, fetchzip
+, glib
+, lib
+, libxcb
+, nspr
+, nss
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

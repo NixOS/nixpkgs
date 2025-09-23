@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  lowdown-unsandboxed,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, lowdown-unsandboxed
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

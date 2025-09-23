@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  unzip,
-  pythonOlder,
-  libGL,
-  libGLU,
-  xorg,
-  pytestCheckHook,
-  glibc,
-  gtk2-x11,
-  gdk-pixbuf,
-  fontconfig,
-  freetype,
-  ffmpeg-full,
-  openal,
-  libpulseaudio,
-  harfbuzz,
-  mesa,
-  apple-sdk,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, unzip
+, pythonOlder
+, libGL
+, libGLU
+, xorg
+, pytestCheckHook
+, glibc
+, gtk2-x11
+, gdk-pixbuf
+, fontconfig
+, freetype
+, ffmpeg-full
+, openal
+, libpulseaudio
+, harfbuzz
+, mesa
+, apple-sdk
+,
 }:
 
 buildPythonPackage rec {

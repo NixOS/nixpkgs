@@ -1,8 +1,8 @@
-{
-  stdenv,
-  kernel,
-  kernelModuleMakeFlags,
-  libajantv2,
+{ stdenv
+, kernel
+, kernelModuleMakeFlags
+, libajantv2
+,
 }:
 stdenv.mkDerivation {
   name = "ajantv2-module-${libajantv2.version}-${kernel.version}";

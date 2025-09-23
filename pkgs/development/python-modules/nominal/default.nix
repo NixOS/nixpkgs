@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  requests,
-  nominal-api,
-  nominal-api-protos,
-  python-dateutil,
-  conjure-python-client,
-  pandas,
-  typing-extensions,
-  click,
-  pyyaml,
-  tabulate,
-  ffmpeg-python,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, requests
+, nominal-api
+, nominal-api-protos
+, python-dateutil
+, conjure-python-client
+, pandas
+, typing-extensions
+, click
+, pyyaml
+, tabulate
+, ffmpeg-python
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  fetchzip,
-  appimageTools,
-  makeWrapper,
-  nativeWayland ? false,
+{ lib
+, stdenvNoCC
+, fetchurl
+, fetchzip
+, appimageTools
+, makeWrapper
+, nativeWayland ? false
+,
 }:
 
 let
@@ -28,8 +28,7 @@ let
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
         hash = "sha256-73UY3RJp0pFfbxRWX8qSnLeoZB/BRGtucmQClJP7Qwg=";
       };
-    }
-    .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
+    }.${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
 
   meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
@@ -56,7 +55,8 @@ let
   passthru.updateScript = ./update.sh;
 in
 if stdenvNoCC.hostPlatform.isDarwin then
-  stdenvNoCC.mkDerivation {
+  stdenvNoCC.mkDerivation
+  {
     inherit
       pname
       version

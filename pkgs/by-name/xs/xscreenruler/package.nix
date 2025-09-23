@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xorg,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xorg
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

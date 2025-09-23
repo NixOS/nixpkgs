@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  setuptools,
-  aiocache,
-  aiohttp,
-  aiounittest,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, setuptools
+, aiocache
+, aiohttp
+, aiounittest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  nixosTests,
-  nix-update-script,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  gtk3,
-  libayatana-appindicator,
-  libX11,
-  libXcursor,
-  libXxf86vm,
-  versionCheckHook,
-  netbird-management,
-  netbird-relay,
-  netbird-signal,
-  netbird-ui,
-  netbird-upload,
-  componentName ? "client",
-  needsUpdateScript ? componentName == "client",
+{ stdenv
+, lib
+, nixosTests
+, nix-update-script
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, gtk3
+, libayatana-appindicator
+, libX11
+, libXcursor
+, libXxf86vm
+, versionCheckHook
+, netbird-management
+, netbird-relay
+, netbird-signal
+, netbird-ui
+, netbird-upload
+, componentName ? "client"
+, needsUpdateScript ? componentName == "client"
+,
 }:
 let
   /*
@@ -117,14 +117,14 @@ buildGoModule (finalAttrs: {
       mv $out/bin/${builtBinaryName} $out/bin/${component.binaryName}
     ''
     +
-      lib.optionalString
-        (stdenv.buildPlatform.canExecute stdenv.hostPlatform && (component.hasCompletion or false))
-        ''
-          installShellCompletion --cmd ${component.binaryName} \
-            --bash <($out/bin/${component.binaryName} completion bash) \
-            --fish <($out/bin/${component.binaryName} completion fish) \
-            --zsh <($out/bin/${component.binaryName} completion zsh)
-        ''
+    lib.optionalString
+      (stdenv.buildPlatform.canExecute stdenv.hostPlatform && (component.hasCompletion or false))
+      ''
+        installShellCompletion --cmd ${component.binaryName} \
+          --bash <($out/bin/${component.binaryName} completion bash) \
+          --fish <($out/bin/${component.binaryName} completion fish) \
+          --zsh <($out/bin/${component.binaryName} completion zsh)
+      ''
     # assemble & adjust netbird.desktop files for the GUI
     + lib.optionalString (stdenv.hostPlatform.isLinux && componentName == "ui") ''
       install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/pixmaps/netbird.png"

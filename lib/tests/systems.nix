@@ -255,35 +255,35 @@ lib.runTests (
     };
   }
 
-  # Generate test cases to assert that a change in any non-function attribute makes a platform unequal
-  //
-    lib.concatMapAttrs
-      (platformAttrName: origValue: {
+    # Generate test cases to assert that a change in any non-function attribute makes a platform unequal
+    //
+  lib.concatMapAttrs
+    (platformAttrName: origValue: {
 
-        ${"test_equals_unequal_${platformAttrName}"} =
-          let
-            modified =
-              assert origValue != arbitraryValue;
-              lib.systems.elaborate "x86_64-linux" // { ${platformAttrName} = arbitraryValue; };
-            arbitraryValue = x: "<<modified>>";
-          in
-          {
-            expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") modified;
-            expected =
-              {
-                # Changes in these attrs are not detectable because they're function.
-                # The functions should be derived from the data, so this is not a problem.
-                canExecute = null;
-                emulator = null;
-                emulatorAvailable = null;
-                staticEmulatorAvailable = null;
-                isCompatible = null;
-              } ? ${platformAttrName};
-          };
+      ${"test_equals_unequal_${platformAttrName}"} =
+        let
+          modified =
+            assert origValue != arbitraryValue;
+            lib.systems.elaborate "x86_64-linux" // { ${platformAttrName} = arbitraryValue; };
+          arbitraryValue = x: "<<modified>>";
+        in
+        {
+          expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") modified;
+          expected =
+            {
+              # Changes in these attrs are not detectable because they're function.
+              # The functions should be derived from the data, so this is not a problem.
+              canExecute = null;
+              emulator = null;
+              emulatorAvailable = null;
+              staticEmulatorAvailable = null;
+              isCompatible = null;
+            } ? ${platformAttrName};
+        };
 
-      })
-      (
-        lib.systems.elaborate "x86_64-linux" # arbitrary choice, just to get all the elaborated attrNames
-      )
+    })
+    (
+      lib.systems.elaborate "x86_64-linux" # arbitrary choice, just to get all the elaborated attrNames
+    )
 
 )

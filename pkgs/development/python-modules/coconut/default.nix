@@ -1,20 +1,20 @@
-{
-  lib,
-  anyio,
-  async-generator,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cpyparsing,
-  ipykernel,
-  mypy,
-  pexpect,
-  pygments,
-  pytestCheckHook,
-  pythonAtLeast,
-  prompt-toolkit,
-  setuptools,
-  tkinter,
-  watchdog,
+{ lib
+, anyio
+, async-generator
+, buildPythonPackage
+, fetchFromGitHub
+, cpyparsing
+, ipykernel
+, mypy
+, pexpect
+, pygments
+, pytestCheckHook
+, pythonAtLeast
+, prompt-toolkit
+, setuptools
+, tkinter
+, watchdog
+,
 }:
 
 buildPythonPackage rec {

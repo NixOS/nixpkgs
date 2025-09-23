@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  cryptography,
-  python-dateutil,
-  six,
-  pbr,
-  coverage,
-  oslotest,
-  stestr,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, cryptography
+, python-dateutil
+, six
+, pbr
+, coverage
+, oslotest
+, stestr
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,22 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
 
   cfg = config.services.salt.master;
 
-  fullConfig = lib.recursiveUpdate {
-    # Provide defaults for some directories to allow an immutable config dir
+  fullConfig = lib.recursiveUpdate
+    {
+      # Provide defaults for some directories to allow an immutable config dir
 
-    # Default is equivalent to /etc/salt/master.d/*.conf
-    default_include = "/var/lib/salt/master.d/*.conf";
-    # Default is in /etc/salt/pki/master
-    pki_dir = "/var/lib/salt/pki/master";
-  } cfg.configuration;
+      # Default is equivalent to /etc/salt/master.d/*.conf
+      default_include = "/var/lib/salt/master.d/*.conf";
+      # Default is in /etc/salt/pki/master
+      pki_dir = "/var/lib/salt/pki/master";
+    }
+    cfg.configuration;
 
 in
 

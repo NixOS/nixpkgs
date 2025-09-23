@@ -1,32 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  openssl,
-  pkgsCross,
-  buildPackages,
-
-  # Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, openssl
+, pkgsCross
+, buildPackages
+, # Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
   # privilege level EL3, which is above both the kernel and the
   # hypervisor.
   #
   # This parameter applies only to platforms which are believed to use
   # hdcp.bin. On all other platforms, or if unfreeIncludeHDCPBlob=false,
   # hdcp.bin will be deleted before building.
-  unfreeIncludeHDCPBlob ? true,
+  unfreeIncludeHDCPBlob ? true
+,
 }:
 
 let
   buildArmTrustedFirmware = lib.makeOverridable (
-    {
-      filesToInstall,
-      installDir ? "$out",
-      platform ? null,
-      platformCanUseHDCPBlob ? false, # set this to true if the platform is able to use hdcp.bin
-      extraMakeFlags ? [ ],
-      extraMeta ? { },
-      ...
+    { filesToInstall
+    , installDir ? "$out"
+    , platform ? null
+    , platformCanUseHDCPBlob ? false
+    , # set this to true if the platform is able to use hdcp.bin
+      extraMakeFlags ? [ ]
+    , extraMeta ? { }
+    , ...
     }@args:
 
     # delete hdcp.bin if either: the platform is thought to

@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  aiomqtt,
-  aioresponses,
-  async-timeout,
-  buildPythonPackage,
-  click,
-  construct,
-  dacite,
-  fetchFromGitHub,
-  freezegun,
-  paho-mqtt,
-  poetry-core,
-  pycryptodome,
-  pycryptodomex,
-  pyrate-limiter,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  vacuum-map-parser-roborock,
-  pyshark,
-  pyyaml,
-  click-shell,
-  syrupy,
+{ lib
+, stdenv
+, aiohttp
+, aiomqtt
+, aioresponses
+, async-timeout
+, buildPythonPackage
+, click
+, construct
+, dacite
+, fetchFromGitHub
+, freezegun
+, paho-mqtt
+, poetry-core
+, pycryptodome
+, pycryptodomex
+, pyrate-limiter
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, vacuum-map-parser-roborock
+, pyshark
+, pyyaml
+, click-shell
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  fetchYarnDeps,
-
-  cargo,
-  cargo-tauri_1,
-  cmake,
-  jq,
-  moreutils,
-  nodejs-slim,
-  pkg-config,
-  rustc,
-  rustPlatform,
-  yarnConfigHook,
-
-  cyrus_sasl,
-  freetype,
-  libsoup_2_4,
-  openssl,
-  webkitgtk_4_0,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, cargo
+, cargo-tauri_1
+, cmake
+, jq
+, moreutils
+, nodejs-slim
+, pkg-config
+, rustc
+, rustPlatform
+, yarnConfigHook
+, cyrus_sasl
+, freetype
+, libsoup_2_4
+, openssl
+, webkitgtk_4_0
+,
 }:
 
 stdenv.mkDerivation rec {

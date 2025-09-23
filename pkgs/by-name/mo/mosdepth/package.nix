@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 buildNimPackage (finalAttrs: {

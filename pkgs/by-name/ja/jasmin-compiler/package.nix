@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  ocamlPackages,
-  mpfr,
-  ppl,
+{ stdenv
+, lib
+, fetchurl
+, ocamlPackages
+, mpfr
+, ppl
+,
 }:
 
 stdenv.mkDerivation rec {

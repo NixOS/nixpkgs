@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiohttp,
-  isPy27,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, isPy27
+,
 }:
 
 buildPythonPackage rec {

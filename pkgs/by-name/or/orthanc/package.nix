@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchhg,
-  boost,
-  charls,
-  civetweb,
-  cmake,
-  curl,
-  dcmtk,
-  gtest,
-  jsoncpp,
-  libjpeg,
-  libpng,
-  libuuid,
-  log4cplus,
-  lua,
-  openssl,
-  protobuf,
-  pugixml,
-  python3,
-  sqlite,
-  unzip,
-  versionCheckHook,
-  nixosTests,
-  orthanc-framework,
+{ lib
+, stdenv
+, fetchhg
+, boost
+, charls
+, civetweb
+, cmake
+, curl
+, dcmtk
+, gtest
+, jsoncpp
+, libjpeg
+, libpng
+, libuuid
+, log4cplus
+, lua
+, openssl
+, protobuf
+, pugixml
+, python3
+, sqlite
+, unzip
+, versionCheckHook
+, nixosTests
+, orthanc-framework
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

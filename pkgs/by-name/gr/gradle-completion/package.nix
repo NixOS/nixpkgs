@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  installShellFiles,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, installShellFiles
+, gitUpdater
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gprbuild,
-  which,
-  gnat,
-  xmlada,
-  gnatcoll-core,
-  gnatcoll-iconv,
-  gnatcoll-gmp,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  # kb database source, if null assume it is pregenerated
-  gpr2kbdir ? null,
+{ lib
+, stdenv
+, fetchurl
+, gprbuild
+, which
+, gnat
+, xmlada
+, gnatcoll-core
+, gnatcoll-iconv
+, gnatcoll-gmp
+, enableShared ? !stdenv.hostPlatform.isStatic
+, # kb database source, if null assume it is pregenerated
+  gpr2kbdir ? null
+,
 }:
 
 stdenv.mkDerivation rec {

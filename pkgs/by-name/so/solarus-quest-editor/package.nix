@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  qlementine,
-  cmake,
-  ninja,
-  luajit,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  physfs,
-  openal,
-  libmodplug,
-  libvorbis,
-  solarus,
-  glm,
-  qt6,
+{ lib
+, stdenv
+, qlementine
+, cmake
+, ninja
+, luajit
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, physfs
+, openal
+, libmodplug
+, libvorbis
+, solarus
+, glm
+, qt6
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

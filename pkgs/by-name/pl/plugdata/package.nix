@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ensureNewerSourcesForZipFilesHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  freetype,
-  webkitgtk_4_1,
-  zenity,
-  curl,
-  xorg,
-  python3,
-  libsysprof-capture,
-  pcre2,
-  util-linux,
-  libselinux,
-  libsepol,
-  libthai,
-  libxkbcommon,
-  libdatrie,
-  libepoxy,
-  libGL,
-  libjack2,
-  lerc,
-  sqlite,
-  expat,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ensureNewerSourcesForZipFilesHook
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, pkg-config
+, alsa-lib
+, freetype
+, webkitgtk_4_1
+, zenity
+, curl
+, xorg
+, python3
+, libsysprof-capture
+, pcre2
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libxkbcommon
+, libdatrie
+, libepoxy
+, libGL
+, libjack2
+, lerc
+, sqlite
+, expat
+, makeWrapper
+, nix-update-script
+,
 }:
 let
   version = "0.9.1";

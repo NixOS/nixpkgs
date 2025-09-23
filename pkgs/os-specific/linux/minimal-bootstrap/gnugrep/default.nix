@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
+{ lib
+, fetchurl
+, bash
+, tinycc
+, gnumake
+,
 }:
 let
   pname = "gnugrep";
@@ -22,30 +22,30 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/grep --version
-        mkdir ''${out}
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/grep --version
+      mkdir ''${out}
+    '';
 
-    meta = with lib; {
-      description = "GNU implementation of the Unix grep command";
-      homepage = "https://www.gnu.org/software/grep";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "grep";
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU implementation of the Unix grep command";
+    homepage = "https://www.gnu.org/software/grep";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    mainProgram = "grep";
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     ungz --file ${src} --output grep.tar

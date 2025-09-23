@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pylint-plugin-utils,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pylint-plugin-utils
+, pytestCheckHook
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "pylint-odoo";

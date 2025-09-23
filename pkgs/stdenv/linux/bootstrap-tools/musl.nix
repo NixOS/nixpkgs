@@ -1,7 +1,7 @@
-{
-  system,
-  bootstrapFiles,
-  extraAttrs,
+{ system
+, bootstrapFiles
+, extraAttrs
+,
 }:
 
 derivation (
@@ -32,5 +32,5 @@ derivation (
       "trivialautovarinit"
     ];
   }
-  // extraAttrs
+    // extraAttrs
 )

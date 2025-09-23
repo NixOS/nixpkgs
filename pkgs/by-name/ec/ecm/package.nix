@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  m4,
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, m4
+,
 }:
 
 let
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
     "-enable-gmp-cflags=false"
   ]
   ++
-    # See https://trac.sagemath.org/ticket/19233
-    lib.optional stdenv.hostPlatform.isDarwin "--disable-asm-redc";
+  # See https://trac.sagemath.org/ticket/19233
+  lib.optional stdenv.hostPlatform.isDarwin "--disable-asm-redc";
 
   buildInputs = [
     m4

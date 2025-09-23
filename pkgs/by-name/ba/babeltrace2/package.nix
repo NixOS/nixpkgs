@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  elfutils,
-  bison,
-  flex,
-  asciidoc,
-  xmlto,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  enablePython ? false,
-  python ? null,
-  pythonPackages ? null,
-  swig,
-  ensureNewerSourcesForZipFilesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, glib
+, elfutils
+, bison
+, flex
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, enablePython ? false
+, python ? null
+, pythonPackages ? null
+, swig
+, ensureNewerSourcesForZipFilesHook
+,
 }:
 
 stdenv.mkDerivation rec {

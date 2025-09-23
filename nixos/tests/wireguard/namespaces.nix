@@ -1,7 +1,6 @@
-{
-  lib,
-  kernelPackages ? null,
-  ...
+{ lib
+, kernelPackages ? null
+, ...
 }:
 let
   listenPort = 12345;

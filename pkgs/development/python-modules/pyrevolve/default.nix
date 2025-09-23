@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  contexttimer,
-  setuptools,
-  versioneer,
-  cython_0,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, contexttimer
+, setuptools
+, versioneer
+, cython_0
+, numpy
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

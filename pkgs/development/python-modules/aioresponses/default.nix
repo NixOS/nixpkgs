@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  pbr,
-  setuptools,
-
-  # dependencies
-  aiohttp,
-
-  # tests
-  ddt,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  pbr
+, setuptools
+, # dependencies
+  aiohttp
+, # tests
+  ddt
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

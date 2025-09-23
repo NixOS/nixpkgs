@@ -1,10 +1,9 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  nixosTests,
-
-  defaultSpecificationFile ? null,
+{ lib
+, python3
+, fetchPypi
+, nixosTests
+, defaultSpecificationFile ? null
+,
 }:
 
 let

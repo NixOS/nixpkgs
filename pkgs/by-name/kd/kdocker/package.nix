@@ -1,12 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libX11,
-  libxcb,
-  perl, # For pod2man
-  qt6,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libX11
+, libxcb
+, perl
+, # For pod2man
+  qt6
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

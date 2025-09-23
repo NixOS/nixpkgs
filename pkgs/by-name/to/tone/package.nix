@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  ffmpeg-full,
-  dotnetCorePackages,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, ffmpeg-full
+, dotnetCorePackages
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildDotnetModule rec {

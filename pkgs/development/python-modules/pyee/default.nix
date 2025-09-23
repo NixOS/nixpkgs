@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  pytest-asyncio_0,
-  pytest-trio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  twisted,
-  typing-extensions,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytest-asyncio_0
+, pytest-trio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, twisted
+, typing-extensions
+, wheel
+,
 }:
 
 buildPythonPackage rec {

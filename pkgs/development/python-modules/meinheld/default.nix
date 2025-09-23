@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  pythonAtLeast,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  greenlet,
+{ lib
+, stdenv
+, pythonAtLeast
+, fetchPypi
+, buildPythonPackage
+, setuptools
+, greenlet
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  cffi,
-  setuptools,
-  ukkonen,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, cffi
+, setuptools
+, ukkonen
+,
 }:
 
 buildPythonPackage rec {

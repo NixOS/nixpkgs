@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  feedparser,
-  requests,
-  pillow,
-  tldextract,
-  lxml,
-  lxml-html-clean,
-  beautifulsoup4,
-  python-dateutil,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, feedparser
+, requests
+, pillow
+, tldextract
+, lxml
+, lxml-html-clean
+, beautifulsoup4
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchurl,
-  fetchpatch,
-  cython,
-  setuptools,
-  alsa-lib,
-  ffmpeg,
-  libopus,
-  libuuid,
-  libv4l,
-  libvpx,
-  opencore-amr,
-  openssl,
-  pkg-config,
-  sqlite,
-  x264,
-  python3-application,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, cython
+, setuptools
+, alsa-lib
+, ffmpeg
+, libopus
+, libuuid
+, libv4l
+, libvpx
+, opencore-amr
+, openssl
+, pkg-config
+, sqlite
+, x264
+, python3-application
+,
 }:
 
 let
@@ -56,10 +56,12 @@ let
   applyPatchesWhenAvailable =
     extDep: dir:
     lib.optionalString (extDep ? patches) (
-      lib.strings.concatMapStringsSep "\n" (patch: ''
-        echo "Applying patch ${patch}"
-        patch -p1 -d ${dir} < ${patch}
-      '') extDep.patches
+      lib.strings.concatMapStringsSep "\n"
+        (patch: ''
+          echo "Applying patch ${patch}"
+          patch -p1 -d ${dir} < ${patch}
+        '')
+        extDep.patches
     );
 in
 buildPythonPackage rec {

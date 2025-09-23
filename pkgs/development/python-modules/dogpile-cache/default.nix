@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  mako,
-  decorator,
-  stevedore,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, pytestCheckHook
+, mako
+, decorator
+, stevedore
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

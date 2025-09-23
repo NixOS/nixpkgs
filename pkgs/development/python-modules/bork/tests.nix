@@ -1,10 +1,9 @@
-{
-  testers,
-
-  bork,
-  cacert,
-  git,
-  pytest,
+{ testers
+, bork
+, cacert
+, git
+, pytest
+,
 }:
 {
   # a.k.a. `tests.testers.runCommand.bork`

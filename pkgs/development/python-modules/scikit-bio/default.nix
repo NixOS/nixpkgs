@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  cython,
-  oldest-supported-numpy,
-
-  requests,
-  decorator,
-  natsort,
-  numpy,
-  pandas,
-  scipy,
-  h5py,
-  biom-format,
-  statsmodels,
-  patsy,
-
-  python,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cython
+, oldest-supported-numpy
+, requests
+, decorator
+, natsort
+, numpy
+, pandas
+, scipy
+, h5py
+, biom-format
+, statsmodels
+, patsy
+, python
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

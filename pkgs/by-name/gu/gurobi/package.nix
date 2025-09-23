@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  python3,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, python3
+,
 }:
 
 let
@@ -11,8 +11,7 @@ let
     {
       aarch64-linux = "armlinux64";
       x86_64-linux = "linux64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation rec {
   pname = "gurobi";
@@ -24,8 +23,7 @@ stdenv.mkDerivation rec {
       {
         aarch64-linux = "sha256-NrHyudaioPE34qulwQNe3RFk4KnjFTGmLRj8B9jGRu4=";
         x86_64-linux = "sha256-Ib2ruq+Dzi2kKk8T7N56H9F7buxNdMl7rYoFGIfRECE=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   sourceRoot = "gurobi${builtins.replaceStrings [ "." ] [ "" ] version}/${platform}";

@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  gettext,
-  libapparmor,
-  lomiri-action-api,
-  lomiri-content-hub,
-  lomiri-ui-extras,
-  lomiri-ui-toolkit,
-  mesa,
-  pkg-config,
-  qqc2-suru-style,
-  qtbase,
-  qtdeclarative,
-  qtquickcontrols2,
-  qtsystems,
-  qttools,
-  qtwebengine,
-  wrapQtAppsHook,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, cmake
+, gettext
+, libapparmor
+, lomiri-action-api
+, lomiri-content-hub
+, lomiri-ui-extras
+, lomiri-ui-toolkit
+, mesa
+, pkg-config
+, qqc2-suru-style
+, qtbase
+, qtdeclarative
+, qtquickcontrols2
+, qtsystems
+, qttools
+, qtwebengine
+, wrapQtAppsHook
+, xvfb-run
+,
 }:
 
 let

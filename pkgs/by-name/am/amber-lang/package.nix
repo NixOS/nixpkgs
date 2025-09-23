@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  bc,
-  util-linux,
-  gnused,
-  makeWrapper,
-  installShellFiles,
-  stdenv,
-  runCommand,
-  amber-lang,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, bc
+, util-linux
+, gnused
+, makeWrapper
+, installShellFiles
+, stdenv
+, runCommand
+, amber-lang
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

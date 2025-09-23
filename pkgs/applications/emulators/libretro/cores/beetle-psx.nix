@@ -1,10 +1,10 @@
-{
-  lib,
-  libGL,
-  libGLU,
-  fetchFromGitHub,
-  mkLibretroCore,
-  withHw ? false,
+{ lib
+, libGL
+, libGLU
+, fetchFromGitHub
+, mkLibretroCore
+, withHw ? false
+,
 }:
 mkLibretroCore {
   core = "mednafen-psx" + lib.optionalString withHw "-hw";

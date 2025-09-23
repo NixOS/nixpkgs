@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  six,
-  pytestCheckHook,
-  pyopenssl,
-  pyspnego,
-  namedlist,
-  pydes,
-  cryptography,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, six
+, pytestCheckHook
+, pyopenssl
+, pyspnego
+, namedlist
+, pydes
+, cryptography
+,
 }:
 
 buildPythonPackage rec {

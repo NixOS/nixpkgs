@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  # dependencies
-  eth-typing,
-  eth-utils,
-  parsimonious,
-  # nativeCheckInputs
-  hypothesis,
-  pytestCheckHook,
-  pytest-xdist,
-  eth-hash,
-  pydantic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # dependencies
+  eth-typing
+, eth-utils
+, parsimonious
+, # nativeCheckInputs
+  hypothesis
+, pytestCheckHook
+, pytest-xdist
+, eth-hash
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

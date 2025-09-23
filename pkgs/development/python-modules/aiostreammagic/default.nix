@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mashumaro,
-  orjson,
-  poetry-core,
-  pythonOlder,
-  yarl,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, mashumaro
+, orjson
+, poetry-core
+, pythonOlder
+, yarl
+,
 }:
 
 buildPythonPackage rec {

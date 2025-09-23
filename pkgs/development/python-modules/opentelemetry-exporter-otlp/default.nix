@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-grpc,
-  opentelemetry-exporter-otlp-proto-http,
-  opentelemetry-test-utils,
-  pytestCheckHook,
+{ buildPythonPackage
+, pythonOlder
+, hatchling
+, opentelemetry-api
+, opentelemetry-exporter-otlp-proto-grpc
+, opentelemetry-exporter-otlp-proto-http
+, opentelemetry-test-utils
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

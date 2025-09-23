@@ -1,13 +1,13 @@
-{
-  autoPatchelfHook,
-  buildFHSEnv,
-  dpkg,
-  fetchurl,
-  inotify-tools,
-  lib,
-  stdenvNoCC,
-  sysctl,
-  writeScript,
+{ autoPatchelfHook
+, buildFHSEnv
+, dpkg
+, fetchurl
+, inotify-tools
+, lib
+, stdenvNoCC
+, sysctl
+, writeScript
+,
 }:
 
 let

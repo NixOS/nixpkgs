@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, zlib
+,
 }:
 stdenv.mkDerivation rec {
   version = "0.5.3";

@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchgit,
-  gitUpdater,
+{ lib
+, python3Packages
+, fetchgit
+, gitUpdater
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  unzip,
-  openjdk21,
-  openjfx21,
-  glib,
-  gsettings-desktop-schemas,
-  gtk3,
-  wrapGAppsHook3,
-  imagemagick,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, unzip
+, openjdk21
+, openjfx21
+, glib
+, gsettings-desktop-schemas
+, gtk3
+, wrapGAppsHook3
+, imagemagick
+, nix-update-script
+,
 }:
 let
   openjdk = openjdk21.override {

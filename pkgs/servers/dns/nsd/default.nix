@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libevent,
-  openssl,
-  pkg-config,
-  systemdMinimal,
-  nixosTests,
-  bind8Stats ? false,
-  checking ? false,
-  ipv6 ? true,
-  mmap ? false,
-  minimalResponses ? true,
-  nsec3 ? true,
-  ratelimit ? false,
-  recvmmsg ? false,
-  rootServer ? false,
-  rrtypes ? false,
-  zoneStats ? false,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-
-  configFile ? "/etc/nsd/nsd.conf",
+{ lib
+, stdenv
+, fetchurl
+, libevent
+, openssl
+, pkg-config
+, systemdMinimal
+, nixosTests
+, bind8Stats ? false
+, checking ? false
+, ipv6 ? true
+, mmap ? false
+, minimalResponses ? true
+, nsec3 ? true
+, ratelimit ? false
+, recvmmsg ? false
+, rootServer ? false
+, rrtypes ? false
+, zoneStats ? false
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+, configFile ? "/etc/nsd/nsd.conf"
+,
 }:
 
 stdenv.mkDerivation rec {

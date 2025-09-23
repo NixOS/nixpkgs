@@ -1,31 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  langchain-core,
-  langgraph-checkpoint,
-
-  # tests
-  langgraph-checkpoint-postgres,
-  langgraph-checkpoint-sqlite,
-  postgresql,
-  postgresqlTestHook,
-  psycopg,
-  psycopg-pool,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  syrupy,
-  xxhash,
-
-  # passthru
-  gitUpdater,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  langchain-core
+, langgraph-checkpoint
+, # tests
+  langgraph-checkpoint-postgres
+, langgraph-checkpoint-sqlite
+, postgresql
+, postgresqlTestHook
+, psycopg
+, psycopg-pool
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, syrupy
+, xxhash
+, # passthru
+  gitUpdater
+,
 }:
 # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.

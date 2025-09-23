@@ -1,7 +1,7 @@
-{
-  valkey,
-  redisTestHook,
-  stdenv,
+{ valkey
+, redisTestHook
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

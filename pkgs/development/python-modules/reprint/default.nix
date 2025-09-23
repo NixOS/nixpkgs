@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  colorama,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, colorama
+, six
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  makeWrapper,
-  gh,
-  gnugrep,
-  fzf,
-  python3,
-  withDelta ? false,
-  delta,
-  withBat ? false,
-  bat,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, makeWrapper
+, gh
+, gnugrep
+, fzf
+, python3
+, withDelta ? false
+, delta
+, withBat ? false
+, bat
+,
 }:
 let
   binPath = lib.makeBinPath (

@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  openssl,
-  openvr,
-  openxr-loader,
-  pkg-config,
-  rustPlatform,
-  versionCheckHook,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, openssl
+, openvr
+, openxr-loader
+, pkg-config
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

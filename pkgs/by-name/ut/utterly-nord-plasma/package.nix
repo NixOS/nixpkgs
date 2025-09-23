@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kdePackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation {

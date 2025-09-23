@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildDunePackage,
-  fetchFromGitHub,
-  menhir,
-  menhirLib,
+{ lib
+, stdenv
+, buildDunePackage
+, fetchFromGitHub
+, menhir
+, menhirLib
+,
 }:
 
 buildDunePackage rec {

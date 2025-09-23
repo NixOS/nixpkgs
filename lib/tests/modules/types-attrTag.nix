@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  options,
-  ...
+{ lib
+, config
+, options
+, ...
 }:
 let
   inherit (lib) mkOption types;
@@ -125,11 +124,11 @@ in
       assert config.docs."submodules.<name>.qux".type == "string";
       assert config.docs."submodules.<name>.qux".declarations == [ __curPos.file ];
       assert
-        config.docs."submodules.<name>.qux".loc == [
-          "submodules"
-          "<name>"
-          "qux"
-        ];
+      config.docs."submodules.<name>.qux".loc == [
+        "submodules"
+        "<name>"
+        "qux"
+      ];
       assert config.docs."submodules.<name>.qux".name == "submodules.<name>.qux";
       assert config.docs."submodules.<name>.qux".description == "A qux for when you don't want a foo";
       assert config.docs."submodules.<name>.qux".readOnly == false;
@@ -140,27 +139,27 @@ in
       assert lib.length options.submodules.declarationPositions == 1;
       assert (lib.head options.submodules.declarationPositions).file == __curPos.file;
       assert
-        options.merged.declarations == [
-          __curPos.file
-          __curPos.file
-        ];
+      options.merged.declarations == [
+        __curPos.file
+        __curPos.file
+      ];
       assert lib.length options.merged.declarationPositions == 2;
       assert (lib.elemAt options.merged.declarationPositions 0).file == __curPos.file;
       assert (lib.elemAt options.merged.declarationPositions 1).file == __curPos.file;
       assert
-        (lib.elemAt options.merged.declarationPositions 0).line
-        != (lib.elemAt options.merged.declarationPositions 1).line;
+      (lib.elemAt options.merged.declarationPositions 0).line
+      != (lib.elemAt options.merged.declarationPositions 1).line;
       assert
-        mergedSubOption.declarations == [
-          __curPos.file
-          __curPos.file
-        ];
+      mergedSubOption.declarations == [
+        __curPos.file
+        __curPos.file
+      ];
       assert lib.length mergedSubOption.declarationPositions == 2;
       assert (lib.elemAt mergedSubOption.declarationPositions 0).file == __curPos.file;
       assert (lib.elemAt mergedSubOption.declarationPositions 1).file == __curPos.file;
       assert
-        (lib.elemAt mergedSubOption.declarationPositions 0).line
-        != (lib.elemAt mergedSubOption.declarationPositions 1).line;
+      (lib.elemAt mergedSubOption.declarationPositions 0).line
+      != (lib.elemAt mergedSubOption.declarationPositions 1).line;
       assert lib.length config.docs."merged.<name>.extensible".declarations == 2;
       true
     );

@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  dateparser,
-  fetchFromGitHub,
-  haversine,
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  xmltodict,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, haversine
+, mock
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

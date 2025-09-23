@@ -1,6 +1,6 @@
-{
-  symlinkJoin,
-  nickel,
+{ symlinkJoin
+, nickel
+,
 }:
 
 symlinkJoin {

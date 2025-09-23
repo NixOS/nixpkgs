@@ -1,10 +1,9 @@
 # /etc files related to networking, such as /etc/services.
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
 
@@ -231,10 +230,11 @@ in
     };
 
     networking.proxy.envVars =
-      lib.optionalAttrs (cfg.proxy.default != null) {
-        # other options already fallback to proxy.default
-        no_proxy = "127.0.0.1,localhost";
-      }
+      lib.optionalAttrs (cfg.proxy.default != null)
+        {
+          # other options already fallback to proxy.default
+          no_proxy = "127.0.0.1,localhost";
+        }
       // lib.optionalAttrs (cfg.proxy.httpProxy != null) {
         http_proxy = cfg.proxy.httpProxy;
       }

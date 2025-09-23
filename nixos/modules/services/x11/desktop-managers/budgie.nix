@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  utils,
-  ...
+{ lib
+, pkgs
+, config
+, utils
+, ...
 }:
 
 let
@@ -190,7 +189,8 @@ in
 
         # Default settings.
         nixos-gsettings-overrides
-      ] config.environment.budgie.excludePackages)
+      ]
+        config.environment.budgie.excludePackages)
       ++ cfg.sessionPath;
 
     # Both budgie-desktop-view and nemo defaults to this emulator.

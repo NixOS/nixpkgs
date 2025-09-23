@@ -1,11 +1,11 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, boto3
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 let
   toUnderscore = str: builtins.replaceStrings [ "-" ] [ "_" ] str;

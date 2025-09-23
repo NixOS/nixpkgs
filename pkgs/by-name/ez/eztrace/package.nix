@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  gfortran,
-  libelf,
-  libiberty,
-  libbfd,
-  libopcodes,
-  otf2,
-  ctestCheckHook,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, gfortran
+, libelf
+, libiberty
+, libbfd
+, libopcodes
+, otf2
+, ctestCheckHook
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

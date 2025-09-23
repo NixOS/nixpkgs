@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  sdl3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, sdl3
+,
 }:
 
 #TODO: tests

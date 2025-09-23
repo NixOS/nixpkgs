@@ -27,12 +27,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-{
-  lib,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  writeShellScriptBin,
+{ lib
+, pkg-config
+, rustPlatform
+, stdenv
+, writeShellScriptBin
+,
 }:
 
 # The idea behind: Use it mostly like rustPlatform.buildRustPackage and so
@@ -57,21 +57,20 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-    {
-      buildAndTestSubdir ? null,
-      buildType ? "release",
-      buildFeatures ? [ ],
-      cargoBuildFlags ? [ ],
-      cargoPgrxFlags ? [ ],
-      # pinned dependencies
-      cargo-pgrx,
-      postgresql,
-      # cargo-pgrx calls rustfmt on generated bindings, this is not strictly necessary, so we avoid the
+    { buildAndTestSubdir ? null
+    , buildType ? "release"
+    , buildFeatures ? [ ]
+    , cargoBuildFlags ? [ ]
+    , cargoPgrxFlags ? [ ]
+    , # pinned dependencies
+      cargo-pgrx
+    , postgresql
+    , # cargo-pgrx calls rustfmt on generated bindings, this is not strictly necessary, so we avoid the
       # dependency here. Set to false and provide rustfmt in nativeBuildInputs, if you need it, e.g.
       # if you include the generated code in the output via postInstall.
-      useFakeRustfmt ? true,
-      usePgTestCheckFeature ? true,
-      ...
+      useFakeRustfmt ? true
+    , usePgTestCheckFeature ? true
+    , ...
     }@args:
     let
       rustfmtInNativeBuildInputs = lib.lists.any (dep: lib.getName dep == "rustfmt") (
@@ -79,12 +78,14 @@ lib.extendMkDerivation {
       );
     in
 
-    assert lib.asserts.assertMsg (
-      (args.installPhase or "") == ""
-    ) "buildPgrxExtension overwrites the installPhase, so providing one does nothing";
-    assert lib.asserts.assertMsg (
-      (args.buildPhase or "") == ""
-    ) "buildPgrxExtension overwrites the buildPhase, so providing one does nothing";
+    assert lib.asserts.assertMsg
+      (
+        (args.installPhase or "") == ""
+      ) "buildPgrxExtension overwrites the installPhase, so providing one does nothing";
+    assert lib.asserts.assertMsg
+      (
+        (args.buildPhase or "") == ""
+      ) "buildPgrxExtension overwrites the buildPhase, so providing one does nothing";
     assert lib.asserts.assertMsg (useFakeRustfmt -> !rustfmtInNativeBuildInputs)
       "The parameter useFakeRustfmt is set to true, but rustfmt is included in nativeBuildInputs. Either set useFakeRustfmt to false or remove rustfmt from nativeBuildInputs.";
     assert lib.asserts.assertMsg (!useFakeRustfmt -> rustfmtInNativeBuildInputs)
@@ -112,13 +113,13 @@ lib.extendMkDerivation {
         cat > "$PGDATA/postgresql.conf" <<EOF
         listen_addresses = ''\''
         unix_socket_directories = '$PGHOST'
-        EOF
+      EOF
 
-        # This is primarily for Mac or other Nix systems that don't use the nixbld user.
-        export USER="$(whoami)"
-        pg_ctl start
-        createuser --superuser --createdb "$USER" || true
-        pg_ctl stop
+      # This is primarily for Mac or other Nix systems that don't use the nixbld user.
+      export USER="$(whoami)"
+      pg_ctl start
+      createuser --superuser --createdb "$USER" || true
+      pg_ctl stop
       '';
 
       cargoPgrxFlags' = lib.escapeShellArgs cargoPgrxFlags;
@@ -137,43 +138,43 @@ lib.extendMkDerivation {
         ++ lib.optionals useFakeRustfmt [ fakeRustfmt ];
 
       buildPhase = ''
-        runHook preBuild
+      runHook preBuild
 
-        echo "Executing cargo-pgrx buildPhase"
-        ${preBuildAndTest}
-        ${maybeEnterBuildAndTestSubdir}
+      echo "Executing cargo-pgrx buildPhase"
+      ${preBuildAndTest}
+      ${maybeEnterBuildAndTestSubdir}
 
-        PGRX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
-        ${lib.optionalString stdenv.hostPlatform.isDarwin ''RUSTFLAGS="''${RUSTFLAGS:+''${RUSTFLAGS} }-Clink-args=-Wl,-undefined,dynamic_lookup"''} \
-        cargo pgrx package \
-          ${cargoPgrxFlags'} \
-          --pg-config ${postgresql.pg_config}/bin/pg_config \
-          ${maybeDebugFlag} \
-          --features "${builtins.concatStringsSep " " buildFeatures}" \
-          --out-dir "$out"
+      PGRX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''RUSTFLAGS="''${RUSTFLAGS:+''${RUSTFLAGS} }-Clink-args=-Wl,-undefined,dynamic_lookup"''} \
+      cargo pgrx package \
+      ${cargoPgrxFlags'} \
+      --pg-config ${postgresql.pg_config}/bin/pg_config \
+      ${maybeDebugFlag} \
+      --features "${builtins.concatStringsSep " " buildFeatures}" \
+      --out-dir "$out"
 
-        ${maybeLeaveBuildAndTestSubdir}
+      ${maybeLeaveBuildAndTestSubdir}
 
-        runHook postBuild
+      runHook postBuild
       '';
 
       preCheck = preBuildAndTest + args.preCheck or "";
 
       installPhase = ''
-        runHook preInstall
+      runHook preInstall
 
-        echo "Executing buildPgrxExtension install"
+      echo "Executing buildPgrxExtension install"
 
-        ${maybeEnterBuildAndTestSubdir}
+      ${maybeEnterBuildAndTestSubdir}
 
-        cargo-pgrx pgrx stop all ${cargoPgrxFlags'}
+      cargo-pgrx pgrx stop all ${cargoPgrxFlags'}
 
-        mv $out/${postgresql}/* $out
-        rm -rf $out/nix
+      mv $out/${postgresql}/* $out
+      rm -rf $out/nix
 
-        ${maybeLeaveBuildAndTestSubdir}
+      ${maybeLeaveBuildAndTestSubdir}
 
-        runHook postInstall
+      runHook postInstall
       '';
 
       PGRX_PG_SYS_SKIP_BINDING_REWRITE = "1";
@@ -184,7 +185,7 @@ lib.extendMkDerivation {
       checkFeatures =
         (args.checkFeatures or [ ])
         ++ (lib.optionals usePgTestCheckFeature [ "pg_test" ])
-        ++ [ "pg${pgrxPostgresMajor}" ];
+        ++ [ "pg${pgrxPostgresMajor} " ];
 
       meta = (args.meta or { }) // {
         # See comment in postgresql's generic.nix doInstallCheck section
@@ -192,3 +193,4 @@ lib.extendMkDerivation {
       };
     };
 }
+

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  makeSetupHook,
-  callPackage,
-  config,
-  vimUtils,
-  vimPlugins,
-  nodejs,
-  neovim-unwrapped,
-  bundlerEnv,
-  ruby,
-  lua,
-  python3Packages,
-  wrapNeovimUnstable,
+{ lib
+, stdenv
+, makeSetupHook
+, callPackage
+, config
+, vimUtils
+, vimPlugins
+, nodejs
+, neovim-unwrapped
+, bundlerEnv
+, ruby
+, lua
+, python3Packages
+, wrapNeovimUnstable
+,
 }:
 let
   inherit (vimUtils) toVimPlugin;
@@ -71,12 +71,11 @@ let
     anymore, $MYVIMRC wont be set etc
   */
   makeNeovimConfig =
-    {
-      customRC ? "",
-      customLuaRC ? "",
-      # the function you would have passed to lua.withPackages
-      extraLuaPackages ? (_: [ ]),
-      ...
+    { customRC ? ""
+    , customLuaRC ? ""
+    , # the function you would have passed to lua.withPackages
+      extraLuaPackages ? (_: [ ])
+    , ...
     }@attrs:
     let
       luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
@@ -104,21 +103,21 @@ let
   # to keep backwards compatibility for people using neovim.override
   legacyWrapper =
     neovim:
-    {
-      extraMakeWrapperArgs ? "",
-      # the function you would have passed to python.withPackages
-      extraPythonPackages ? (_: [ ]),
-      # the function you would have passed to python.withPackages
-      withPython3 ? true,
-      extraPython3Packages ? (_: [ ]),
-      # the function you would have passed to lua.withPackages
-      extraLuaPackages ? (_: [ ]),
-      withNodeJs ? false,
-      withRuby ? false,
-      vimAlias ? false,
-      viAlias ? false,
-      configure ? { },
-      extraName ? "",
+    { extraMakeWrapperArgs ? ""
+    , # the function you would have passed to python.withPackages
+      extraPythonPackages ? (_: [ ])
+    , # the function you would have passed to python.withPackages
+      withPython3 ? true
+    , extraPython3Packages ? (_: [ ])
+    , # the function you would have passed to lua.withPackages
+      extraLuaPackages ? (_: [ ])
+    , withNodeJs ? false
+    , withRuby ? false
+    , vimAlias ? false
+    , viAlias ? false
+    , configure ? { }
+    , extraName ? ""
+    ,
     }:
     let
 
@@ -130,15 +129,17 @@ let
           lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or { }));
       genPlugin =
         packageName:
-        {
-          start ? [ ],
-          opt ? [ ],
+        { start ? [ ]
+        , opt ? [ ]
+        ,
         }:
         start
-        ++ (map (p: {
-          plugin = p;
-          optional = true;
-        }) opt);
+        ++ (map
+          (p: {
+            plugin = p;
+            optional = true;
+          })
+          opt);
 
       res = makeNeovimConfig {
         inherit withPython3;
@@ -174,14 +175,12 @@ let
     While the latter tells nvim that this provider is not available
   */
   generateProviderRc =
-    {
-      withPython3 ? true,
-      withNodeJs ? false,
-      withRuby ? true,
-      # Perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
-      withPerl ? false,
-
-      # so that we can pass the full neovim config while ignoring it
+    { withPython3 ? true
+    , withNodeJs ? false
+    , withRuby ? true
+    , # Perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
+      withPerl ? false
+    , # so that we can pass the full neovim config while ignoring it
       ...
     }:
     let
@@ -227,16 +226,19 @@ let
         (lib.replaceStrings [ "-" ] [ "_" ])
       ];
 
-      nvimGrammars = lib.mapAttrsToList (
-        name: value:
-        value.origGrammar
-          or (builtins.throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
-      ) vimPlugins.nvim-treesitter.grammarPlugins;
+      nvimGrammars = lib.mapAttrsToList
+        (
+          name: value:
+            value.origGrammar
+              or (builtins.throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+        )
+        vimPlugins.nvim-treesitter.grammarPlugins;
       isNvimGrammar = x: builtins.elem x nvimGrammars;
 
-      toNvimTreesitterGrammar = makeSetupHook {
-        name = "to-nvim-treesitter-grammar";
-      } ./to-nvim-treesitter-grammar.sh;
+      toNvimTreesitterGrammar = makeSetupHook
+        {
+          name = "to-nvim-treesitter-grammar";
+        } ./to-nvim-treesitter-grammar.sh;
     in
 
     (toVimPlugin (
@@ -311,6 +313,6 @@ in
 
   inherit buildNeovimPlugin;
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;
 }

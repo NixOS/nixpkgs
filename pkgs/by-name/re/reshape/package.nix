@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  postgresqlTestHook,
-  postgresql,
+{ lib
+, rustPlatform
+, fetchCrate
+, postgresqlTestHook
+, postgresql
+,
 }:
 
 rustPlatform.buildRustPackage rec {

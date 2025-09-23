@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  go-md2man,
-  coreutils,
-  replaceVars,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, go-md2man
+, coreutils
+, replaceVars
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

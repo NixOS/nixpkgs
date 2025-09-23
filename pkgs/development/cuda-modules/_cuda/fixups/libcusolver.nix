@@ -1,9 +1,9 @@
-{
-  cudaAtLeast,
-  lib,
-  libcublas,
-  libcusparse ? null,
-  libnvjitlink ? null,
+{ cudaAtLeast
+, lib
+, libcublas
+, libcusparse ? null
+, libnvjitlink ? null
+,
 }:
 prevAttrs: {
   buildInputs = prevAttrs.buildInputs or [ ] ++ [

@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  qtwebview,
-  pkg-config,
-  discount,
-  flatpak,
-  fwupd,
+{ mkKdeDerivation
+, qtwebview
+, pkg-config
+, discount
+, flatpak
+, fwupd
+,
 }:
 mkKdeDerivation {
   pname = "discover";

@@ -1,14 +1,14 @@
-{
-  erlang,
-  fetchFromGitHub,
-  fetchgit,
-  fetchHex,
-  rebar3Relx,
-  buildRebar3,
-  rebar3-proper,
-  stdenv,
-  writeScript,
-  lib,
+{ erlang
+, fetchFromGitHub
+, fetchgit
+, fetchHex
+, rebar3Relx
+, buildRebar3
+, rebar3-proper
+, stdenv
+, writeScript
+, lib
+,
 }:
 let
   version = "1.1.0";

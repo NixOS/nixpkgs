@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  pkg-config,
-  udev,
-  opencv,
-  clang,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, autoPatchelfHook
+, pkg-config
+, udev
+, opencv
+, clang
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tuicam";

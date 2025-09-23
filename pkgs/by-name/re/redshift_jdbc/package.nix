@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchMavenArtifact,
+{ lib
+, stdenv
+, fetchMavenArtifact
+,
 }:
 
 stdenv.mkDerivation rec {

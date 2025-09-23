@@ -1,41 +1,38 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  filelock,
-  fsspec,
-  hf-xet,
-  packaging,
-  pyyaml,
-  requests,
-  tqdm,
-  typing-extensions,
-
-  # optional-dependencies
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  filelock
+, fsspec
+, hf-xet
+, packaging
+, pyyaml
+, requests
+, tqdm
+, typing-extensions
+, # optional-dependencies
   # cli
-  inquirerpy,
-  # inference
-  aiohttp,
-  # torch
-  torch,
-  safetensors,
-  # hf_transfer
-  hf-transfer,
-  # fastai
-  toml,
-  fastai,
-  fastcore,
-  # tensorflow
-  tensorflow,
-  pydot,
-  graphviz,
-  # tensorflow-testing
-  keras,
+  inquirerpy
+, # inference
+  aiohttp
+, # torch
+  torch
+, safetensors
+, # hf_transfer
+  hf-transfer
+, # fastai
+  toml
+, fastai
+, fastcore
+, # tensorflow
+  tensorflow
+, pydot
+, graphviz
+, # tensorflow-testing
+  keras
+,
 }:
 
 buildPythonPackage rec {

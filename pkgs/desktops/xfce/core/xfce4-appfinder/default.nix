@@ -1,12 +1,12 @@
-{
-  lib,
-  mkXfceDerivation,
-  exo,
-  garcon,
-  gtk3,
-  libxfce4util,
-  libxfce4ui,
-  xfconf,
+{ lib
+, mkXfceDerivation
+, exo
+, garcon
+, gtk3
+, libxfce4util
+, libxfce4ui
+, xfconf
+,
 }:
 
 mkXfceDerivation {

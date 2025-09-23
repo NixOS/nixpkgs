@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pbr,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pbr
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "beconde-py";

@@ -1,27 +1,28 @@
-{
-  lib,
-  runCommand,
-  stdenv,
-  llvm,
-  lld,
-  version,
-  release_version,
+{ lib
+, runCommand
+, stdenv
+, llvm
+, lld
+, version
+, release_version
+,
 }:
 
 let
-  targetPrefix = lib.optionalString (
-    stdenv.hostPlatform != stdenv.targetPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString
+    (
+      stdenv.hostPlatform != stdenv.targetPlatform
+    ) "${stdenv.targetPlatform.config}-";
 in
 runCommand "llvm-binutils-${version}"
-  {
-    preferLocalBuild = true;
-    passthru = {
-      isLLVM = true;
-      inherit targetPrefix;
-      inherit llvm lld;
-    };
-  }
+{
+  preferLocalBuild = true;
+  passthru = {
+    isLLVM = true;
+    inherit targetPrefix;
+    inherit llvm lld;
+  };
+}
   ''
     mkdir -p $out/bin
     for prog in ${lld}/bin/*; do

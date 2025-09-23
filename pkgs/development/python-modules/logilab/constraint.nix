@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  importlib-metadata,
-  logilab-common,
-  pip,
-  six,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, importlib-metadata
+, logilab-common
+, pip
+, six
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

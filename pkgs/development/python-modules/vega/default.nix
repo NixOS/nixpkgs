@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  altair,
-  ipytablewidgets,
-  ipywidgets,
-  jupyter,
-  jupyter-core,
-  jupyterlab,
-  pandas,
-  poetry-core,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, altair
+, ipytablewidgets
+, ipywidgets
+, jupyter
+, jupyter-core
+, jupyterlab
+, pandas
+, poetry-core
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

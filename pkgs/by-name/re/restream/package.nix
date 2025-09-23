@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  lz4,
-  ffmpeg-full,
-  fetchFromGitHub,
-  openssh,
-  netcat,
+{ lib
+, stdenv
+, lz4
+, ffmpeg-full
+, fetchFromGitHub
+, openssh
+, netcat
+,
 }:
 
 stdenv.mkDerivation rec {

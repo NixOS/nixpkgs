@@ -1,33 +1,33 @@
-{
-  lib,
-  SDL2,
-  alsa-lib,
-  cmake,
-  fetchFromGitHub,
-  gtkmm3,
-  libGLX,
-  libX11,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXv,
-  libepoxy,
-  libpng,
-  libselinux,
-  minizip,
-  ninja,
-  pcre2,
-  pkg-config,
-  portaudio,
-  pulseaudio,
-  python3,
-  stdenv,
-  util-linuxMinimal,
-  wrapGAppsHook3,
-  zlib,
-  # Boolean flags
-  withGtk ? false,
+{ lib
+, SDL2
+, alsa-lib
+, cmake
+, fetchFromGitHub
+, gtkmm3
+, libGLX
+, libX11
+, libXdmcp
+, libXext
+, libXinerama
+, libXrandr
+, libXv
+, libepoxy
+, libpng
+, libselinux
+, minizip
+, ninja
+, pcre2
+, pkg-config
+, portaudio
+, pulseaudio
+, python3
+, stdenv
+, util-linuxMinimal
+, wrapGAppsHook3
+, zlib
+, # Boolean flags
+  withGtk ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

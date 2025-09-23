@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  networkx,
-  numpy,
-  pydot,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, networkx
+, numpy
+, pydot
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  groff,
-  less,
-  nix-update-script,
-  testers,
-  awscli,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, groff
+, less
+, nix-update-script
+, testers
+, awscli
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  xmltodict,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

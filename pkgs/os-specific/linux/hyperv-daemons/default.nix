@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  python3,
-  kernel,
-  makeWrapper,
-  writeText,
-  gawk,
-  iproute2,
+{ stdenv
+, lib
+, python3
+, kernel
+, makeWrapper
+, writeText
+, gawk
+, iproute2
+,
 }:
 
 let
@@ -16,7 +16,7 @@ let
     if lib.versionOlder kernel.version "6.10" then
       "fcopy"
     else
-      # The fcopy program is explicitly left out in the Makefile on aarch64
+    # The fcopy program is explicitly left out in the Makefile on aarch64
       (if stdenv.hostPlatform.isAarch64 then null else "fcopy_uio");
 
   daemons = stdenv.mkDerivation {

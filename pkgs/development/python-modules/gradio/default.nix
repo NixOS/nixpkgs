@@ -1,76 +1,71 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  writeShellScriptBin,
-  gradio,
-
-  # build-system
-  hatchling,
-  hatch-requirements-txt,
-  hatch-fancy-pypi-readme,
-
-  # web assets
-  zip,
-  nodejs,
-  pnpm_9,
-
-  # dependencies
-  setuptools,
-  aiofiles,
-  anyio,
-  brotli,
-  diffusers,
-  fastapi,
-  ffmpy,
-  gradio-client,
-  groovy,
-  httpx,
-  huggingface-hub,
-  importlib-resources,
-  jinja2,
-  markupsafe,
-  matplotlib,
-  numpy,
-  orjson,
-  packaging,
-  pandas,
-  pillow,
-  polars,
-  pydantic,
-  python-multipart,
-  pydub,
-  pyyaml,
-  safehttpx,
-  semantic-version,
-  typing-extensions,
-  uvicorn,
-  typer,
-  tomlkit,
-
-  # oauth
-  authlib,
-  itsdangerous,
-
-  # tests
-  pytestCheckHook,
-  hypothesis,
-  altair,
-  boto3,
-  docker,
-  gradio-pdf,
-  ffmpeg,
-  ipython,
-  mcp,
-  pytest-asyncio,
-  respx,
-  scikit-image,
-  torch,
-  tqdm,
-  transformers,
-  vega-datasets,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, writeShellScriptBin
+, gradio
+, # build-system
+  hatchling
+, hatch-requirements-txt
+, hatch-fancy-pypi-readme
+, # web assets
+  zip
+, nodejs
+, pnpm_9
+, # dependencies
+  setuptools
+, aiofiles
+, anyio
+, brotli
+, diffusers
+, fastapi
+, ffmpy
+, gradio-client
+, groovy
+, httpx
+, huggingface-hub
+, importlib-resources
+, jinja2
+, markupsafe
+, matplotlib
+, numpy
+, orjson
+, packaging
+, pandas
+, pillow
+, polars
+, pydantic
+, python-multipart
+, pydub
+, pyyaml
+, safehttpx
+, semantic-version
+, typing-extensions
+, uvicorn
+, typer
+, tomlkit
+, # oauth
+  authlib
+, itsdangerous
+, # tests
+  pytestCheckHook
+, hypothesis
+, altair
+, boto3
+, docker
+, gradio-pdf
+, ffmpeg
+, ipython
+, mcp
+, pytest-asyncio
+, respx
+, scikit-image
+, torch
+, tqdm
+, transformers
+, vega-datasets
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

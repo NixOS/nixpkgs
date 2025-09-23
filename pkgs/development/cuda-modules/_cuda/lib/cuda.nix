@@ -115,15 +115,17 @@
   */
   allowUnfreeCudaPredicate =
     package:
-    lib.all (
-      license:
-      license.free
-      || lib.elem license.shortName [
-        "CUDA EULA"
-        "cuDNN EULA"
-        "cuSPARSELt EULA"
-        "cuTENSOR EULA"
-        "NVidia OptiX EULA"
-      ]
-    ) (lib.toList package.meta.license);
+    lib.all
+      (
+        license:
+        license.free
+        || lib.elem license.shortName [
+          "CUDA EULA"
+          "cuDNN EULA"
+          "cuSPARSELt EULA"
+          "cuTENSOR EULA"
+          "NVidia OptiX EULA"
+        ]
+      )
+      (lib.toList package.meta.license);
 }

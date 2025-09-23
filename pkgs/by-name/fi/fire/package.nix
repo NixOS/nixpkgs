@@ -1,24 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  runCommand,
-  unstableGitUpdater,
-  catch2_3,
-  cmake,
-  fontconfig,
-  pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
-  freetype,
-  alsa-lib,
-
-  # Only able to test this myself in Linux
-  withStandalone ? stdenv.hostPlatform.isLinux,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, runCommand
+, unstableGitUpdater
+, catch2_3
+, cmake
+, fontconfig
+, pkg-config
+, libX11
+, libXrandr
+, libXinerama
+, libXext
+, libXcursor
+, freetype
+, alsa-lib
+, # Only able to test this myself in Linux
+  withStandalone ? stdenv.hostPlatform.isLinux
+,
 }:
 
 let
@@ -126,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
     x11Libs
-    ++ [
+      ++ [
       freetype
       alsa-lib
     ]
@@ -142,11 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
   ''
-  + lib.strings.concatMapStringsSep "\n" (entry: ''
-    mkdir -p ${entry.to}
-    # Exact path of the build artefact depends on used CMAKE_BUILD_TYPE
-    cp -r -t ${entry.to} Fire_artefacts/${finalAttrs.cmakeBuildType or "Release"}/${entry.from}/*
-  '') pathMappings
+  + lib.strings.concatMapStringsSep "\n"
+    (entry: ''
+      mkdir -p ${entry.to}
+      # Exact path of the build artefact depends on used CMAKE_BUILD_TYPE
+      cp -r -t ${entry.to} Fire_artefacts/${finalAttrs.cmakeBuildType or "Release"}/${entry.from}/*
+    '')
+    pathMappings
   + ''
 
     runHook postInstall

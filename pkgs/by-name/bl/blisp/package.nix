@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  argtable,
-  cmake,
-  libserialport,
-  pkg-config,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, argtable
+, cmake
+, libserialport
+, pkg-config
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  babashka,
+{ lib
+, stdenv
+, fetchFromGitHub
+, babashka
+,
 }:
 
 stdenv.mkDerivation rec {

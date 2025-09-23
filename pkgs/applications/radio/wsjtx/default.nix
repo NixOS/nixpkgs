@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  asciidoc,
-  asciidoctor,
-  cmake,
-  pkg-config,
-  fftw,
-  fftwFloat,
-  gfortran,
-  hamlib_4,
-  libtool,
-  libusb1,
-  qtbase,
-  qtmultimedia,
-  qtserialport,
-  qttools,
-  boost,
-  texinfo,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchgit
+, asciidoc
+, asciidoctor
+, cmake
+, pkg-config
+, fftw
+, fftwFloat
+, gfortran
+, hamlib_4
+, libtool
+, libusb1
+, qtbase
+, qtmultimedia
+, qtserialport
+, qttools
+, boost
+, texinfo
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

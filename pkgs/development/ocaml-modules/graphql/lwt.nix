@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  alcotest,
-  graphql,
-  ocaml_lwt,
+{ buildDunePackage
+, alcotest
+, graphql
+, ocaml_lwt
+,
 }:
 
 buildDunePackage {

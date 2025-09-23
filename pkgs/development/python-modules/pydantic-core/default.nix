@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  rustc,
-  libiconv,
-  typing-extensions,
-  pytestCheckHook,
-  hypothesis,
-  pytest-timeout,
-  pytest-mock,
-  dirty-equals,
-  pydantic,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
+, libiconv
+, typing-extensions
+, pytestCheckHook
+, hypothesis
+, pytest-timeout
+, pytest-mock
+, dirty-equals
+, pydantic
+,
 }:
 
 let

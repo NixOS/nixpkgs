@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  ronn,
-  mount,
+{ lib
+, stdenv
+, fetchgit
+, ronn
+, mount
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,10 +1,10 @@
-{
-  lib,
-  autoPatchelfHook,
-  fetchFromGitHub,
-  python3Packages,
-  wget,
-  zlib,
+{ lib
+, autoPatchelfHook
+, fetchFromGitHub
+, python3Packages
+, wget
+, zlib
+,
 }:
 
 python3Packages.buildPythonApplication rec {

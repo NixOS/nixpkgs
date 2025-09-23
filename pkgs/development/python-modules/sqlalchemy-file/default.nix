@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  fasteners,
-  libcloud,
-  pillow,
-  pytestCheckHook,
-  sqlalchemy,
-  sqlmodel,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, fasteners
+, libcloud
+, pillow
+, pytestCheckHook
+, sqlalchemy
+, sqlmodel
+,
 }:
 
 buildPythonPackage rec {

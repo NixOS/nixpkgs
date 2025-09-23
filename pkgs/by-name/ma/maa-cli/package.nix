@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  pkg-config,
-  openssl,
-  maa-assistant-arknights,
-  android-tools,
-  git,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pkg-config
+, openssl
+, maa-assistant-arknights
+, android-tools
+, git
+,
 }:
 
 rustPlatform.buildRustPackage rec {

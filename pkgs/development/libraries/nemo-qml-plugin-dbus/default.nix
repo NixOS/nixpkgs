@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitLab,
-  qmake,
-  qtbase,
+{ mkDerivation
+, lib
+, fetchFromGitLab
+, qmake
+, qtbase
+,
 }:
 
 mkDerivation rec {

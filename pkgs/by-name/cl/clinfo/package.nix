@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocl-icd,
-  opencl-headers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocl-icd
+, opencl-headers
+,
 }:
 
 stdenv.mkDerivation rec {

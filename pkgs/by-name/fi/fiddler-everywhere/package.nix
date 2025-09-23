@@ -1,9 +1,9 @@
-{
-  appimageTools,
-  fetchurl,
-  lib,
-  makeWrapper,
-  writeScript,
+{ appimageTools
+, fetchurl
+, lib
+, makeWrapper
+, writeScript
+,
 }:
 
 let

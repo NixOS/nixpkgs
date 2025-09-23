@@ -1,12 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-
-  # reverse dependencies
-  mashumaro,
-  pydantic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, # reverse dependencies
+  mashumaro
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  lzallright,
-  buildPythonPackage,
-  pytestCheckHook,
+{ lzallright
+, buildPythonPackage
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

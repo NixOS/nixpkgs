@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  buildNpmPackage,
+{ buildGoModule
+, lib
+, fetchFromGitHub
+, nix-update-script
+, buildNpmPackage
+,
 }:
 buildGoModule rec {
   pname = "beszel";

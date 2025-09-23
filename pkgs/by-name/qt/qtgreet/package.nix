@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  kdePackages,
-  qt6,
-  dfl-ipc,
-  dfl-utils,
-  dfl-applications,
-  dfl-login1,
-  mpvSupport ? true,
-  mpv,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, kdePackages
+, qt6
+, dfl-ipc
+, dfl-utils
+, dfl-applications
+, dfl-login1
+, mpvSupport ? true
+, mpv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

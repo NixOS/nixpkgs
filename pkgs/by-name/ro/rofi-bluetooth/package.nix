@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bc,
-  bluez,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bc
+, bluez
+,
 }:
 
 stdenv.mkDerivation {

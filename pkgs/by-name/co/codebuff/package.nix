@@ -1,7 +1,7 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchzip,
+{ lib
+, buildNpmPackage
+, fetchzip
+,
 }:
 
 buildNpmPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  pyhaversion,
-  nix-update-script,
-  # Test dependencies
-  pytestCheckHook,
-  pytest-homeassistant-custom-component,
-  aiohttp-cors,
-  paho-mqtt,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, pyhaversion
+, nix-update-script
+, # Test dependencies
+  pytestCheckHook
+, pytest-homeassistant-custom-component
+, aiohttp-cors
+, paho-mqtt
+,
 }:
 let
   version = "2.3.2";

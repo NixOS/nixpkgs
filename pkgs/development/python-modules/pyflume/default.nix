@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  pyjwt,
-  ratelimit,
-  requests,
-  requests-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, pyjwt
+, ratelimit
+, requests
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

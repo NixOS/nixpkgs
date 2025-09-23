@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  glib,
-  # These loosen security a bit, so we don't install them by default. See also:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, glib
+, # These loosen security a bit, so we don't install them by default. See also:
   # https://github.com/hardpixel/systemd-manager?tab=readme-ov-file#without-password-prompt
-  allowPolkitPolicy ? "none",
-  config,
-  systemd ? config.systemd.package,
+  allowPolkitPolicy ? "none"
+, config
+, systemd ? config.systemd.package
+,
 }:
 
 assert lib.elem allowPolkitPolicy [

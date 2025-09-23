@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  aspell,
-  which,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, aspell
+, which
+, writeScript
+,
 }:
 
 /*
@@ -12,25 +12,25 @@
 
   * Add some of these to your profile or systemPackages.
 
-    ~~~~
-    environment.systemPackages = [
+  ~~~~
+  environment.systemPackages = [
       aspell
       aspellDicts.en
       aspellDicts.en-computers
       aspellDicts.en-science
-    ];
-    ~~~~
+  ];
+  ~~~~
 
   * Rebuild and switch to the new profile.
   * Add something like
 
-    ~~~~
-    master en_US
-    extra-dicts en-computers.rws
-    add-extra-dicts en_US-science.rws
-    ~~~~
+  ~~~~
+  master en_US
+  extra-dicts en-computers.rws
+  add-extra-dicts en_US-science.rws
+  ~~~~
 
-    to `/etc/aspell.conf` or `~/.aspell.conf`.
+  to `/etc/aspell.conf` or `~/.aspell.conf`.
   * Check that `aspell -a` starts without errors.
   * (optional) Check your config with `aspell dump config | grep -vE '^(#|$)'`.
   * Enjoy.
@@ -72,13 +72,12 @@ let
     );
 
   buildOfficialDict =
-    {
-      language,
-      version,
-      filename,
-      fullName,
-      sha256,
-      ...
+    { language
+    , version
+    , filename
+    , fullName
+    , sha256
+    , ...
     }@args:
     let
       buildArgs = {
@@ -131,33 +130,33 @@ let
 
       }
       //
-        lib.optionalAttrs
-          (lib.elem language [
-            "is"
-            "nb"
-          ])
-          {
-            # These have Windows-1251 encoded non-ASCII characters,
-            # so need some special handling.
-            unpackPhase = ''
-              runHook preUnpack
+      lib.optionalAttrs
+        (lib.elem language [
+          "is"
+          "nb"
+        ])
+        {
+          # These have Windows-1251 encoded non-ASCII characters,
+          # so need some special handling.
+          unpackPhase = ''
+            runHook preUnpack
 
-              tar -xf $src --strip-components=1 || true
+            tar -xf $src --strip-components=1 || true
 
-              runHook postUnpack
+            runHook postUnpack
+          '';
+
+          postPatch = lib.getAttr language {
+            is = ''
+              cp icelandic.alias íslenska.alias
+              sed -i 's/ .slenska\.alias/ íslenska.alias/g' Makefile.pre
             '';
-
-            postPatch = lib.getAttr language {
-              is = ''
-                cp icelandic.alias íslenska.alias
-                sed -i 's/ .slenska\.alias/ íslenska.alias/g' Makefile.pre
-              '';
-              nb = ''
-                cp bokmal.alias bokmål.alias
-                sed -i 's/ bokm.l\.alias/ bokmål.alias/g' Makefile.pre
-              '';
-            };
-          }
+            nb = ''
+              cp bokmal.alias bokmål.alias
+              sed -i 's/ bokm.l\.alias/ bokmål.alias/g' Makefile.pre
+            '';
+          };
+        }
       // removeAttrs args [
         "language"
         "filename"
@@ -169,9 +168,8 @@ let
 
   # Function to compile txt dict files into Aspell dictionaries.
   buildTxtDict =
-    {
-      langInputs ? [ ],
-      ...
+    { langInputs ? [ ]
+    , ...
     }@args:
     buildDict (
       {

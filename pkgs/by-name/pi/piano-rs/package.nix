@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  pkg-config,
-  alsa-lib,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeBinaryWrapper
+, pkg-config
+, alsa-lib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

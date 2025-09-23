@@ -1,7 +1,6 @@
-{
-  lib,
-  pkgs ? import ../..,
-  ...
+{ lib
+, pkgs ? import ../..
+, ...
 }:
 let
   password = "test";

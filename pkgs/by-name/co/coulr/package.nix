@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  wrapGAppsHook4,
-  pkg-config,
-  meson,
-  ninja,
-  appstream-glib,
-  desktop-file-utils,
-  gobject-introspection,
-  libadwaita,
-  libportal-gtk4,
-  libnotify,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3
+, wrapGAppsHook4
+, pkg-config
+, meson
+, ninja
+, appstream-glib
+, desktop-file-utils
+, gobject-introspection
+, libadwaita
+, libportal-gtk4
+, libnotify
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

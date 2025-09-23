@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pyserial,
-  pytestCheckHook,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, pyserial
+, pytestCheckHook
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

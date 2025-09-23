@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libcosmicAppHook,
-  just,
-  pkg-config,
-  alsa-lib,
-  ffmpeg,
-  glib,
-  gst_all_1,
-  libglvnd,
-  libgbm,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libcosmicAppHook
+, just
+, pkg-config
+, alsa-lib
+, ffmpeg
+, glib
+, gst_all_1
+, libglvnd
+, libgbm
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

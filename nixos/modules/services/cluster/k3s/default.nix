@@ -1,20 +1,21 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.k3s;
   removeOption =
     config: instruction:
-    lib.mkRemovedOptionModule (
-      [
-        "services"
-        "k3s"
-      ]
-      ++ config
-    ) instruction;
+    lib.mkRemovedOptionModule
+      (
+        [
+          "services"
+          "k3s"
+        ]
+        ++ config
+      )
+      instruction;
 
   manifestDir = "/var/lib/rancher/k3s/server/manifests";
   chartDir = "/var/lib/rancher/k3s/server/static/charts";
@@ -64,11 +65,11 @@ let
 
   # Fetch a Helm chart from a public registry. This only supports a basic Helm pull.
   fetchHelm =
-    {
-      name,
-      repo,
-      version,
-      hash ? lib.fakeHash,
+    { name
+    , repo
+    , version
+    , hash ? lib.fakeHash
+    ,
     }:
     let
       isOci = lib.hasPrefix "oci://" repo;
@@ -113,20 +114,22 @@ let
       valuesContent = builtins.toJSON chartValues;
     in
     # merge with extraFieldDefinitions to allow setting advanced values and overwrite generated
-    # values
-    lib.recursiveUpdate {
-      apiVersion = "helm.cattle.io/v1";
-      kind = "HelmChart";
-      metadata = {
-        inherit name;
-        namespace = "kube-system";
-      };
-      spec = {
-        inherit valuesContent;
-        inherit (value) targetNamespace createNamespace;
-        chart = "https://%{KUBERNETES_API}%/static/charts/${name}.tgz";
-      };
-    } value.extraFieldDefinitions;
+      # values
+    lib.recursiveUpdate
+      {
+        apiVersion = "helm.cattle.io/v1";
+        kind = "HelmChart";
+        metadata = {
+          inherit name;
+          namespace = "kube-system";
+        };
+        spec = {
+          inherit valuesContent;
+          inherit (value) targetNamespace createNamespace;
+          chart = "https://%{KUBERNETES_API}%/static/charts/${name}.tgz";
+        };
+      }
+      value.extraFieldDefinitions;
 
   # Generate a HelmChart custom resource together with extraDeploy manifests. This
   # generates possibly a multi document YAML file that the auto deploy mechanism of k3s
@@ -142,10 +145,12 @@ let
       ]
       # alternate the YAML doc separator (---) and extraDeploy manifests to create
       # multi document YAMLs
-      ++ (lib.concatMap (x: [
-        yamlDocSeparator
-        (mkExtraDeployManifest x)
-      ]) value.extraDeploy)
+      ++ (lib.concatMap
+        (x: [
+          yamlDocSeparator
+          (mkExtraDeployManifest x)
+        ])
+        value.extraDeploy)
     );
   };
 
@@ -313,11 +318,10 @@ let
   );
 
   manifestModule = lib.types.submodule (
-    {
-      name,
-      config,
-      options,
-      ...
+    { name
+    , config
+    , options
+    , ...
     }:
     {
       options = {
@@ -365,12 +369,15 @@ let
             mkSource =
               value:
               if builtins.isList value then
-                pkgs.concatText name' (
-                  lib.concatMap (x: [
-                    yamlDocSeparator
-                    (yamlFormat.generate docName x)
-                  ]) value
-                )
+                pkgs.concatText name'
+                  (
+                    lib.concatMap
+                      (x: [
+                        yamlDocSeparator
+                        (yamlFormat.generate docName x)
+                      ])
+                      value
+                  )
               else
                 yamlFormat.generate name' value;
           in
@@ -778,12 +785,14 @@ in
       ++ (lib.optional (duplicateCharts != [ ])
         "k3s: The following auto deploying charts are overriden by charts of the same name: ${toString duplicateCharts}."
       )
-      ++ (lib.optional (
-        cfg.disableAgent && cfg.images != [ ]
-      ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node")
-      ++ (lib.optional (
-        cfg.role == "agent" && cfg.configPath == null && cfg.serverAddr == ""
-      ) "k3s: serverAddr or configPath (with 'server' key) should be set if role is 'agent'")
+      ++ (lib.optional
+        (
+          cfg.disableAgent && cfg.images != [ ]
+        ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node")
+      ++ (lib.optional
+        (
+          cfg.role == "agent" && cfg.configPath == null && cfg.serverAddr == ""
+        ) "k3s: serverAddr or configPath (with 'server' key) should be set if role is 'agent'")
       ++ (lib.optional
         (cfg.role == "agent" && cfg.configPath == null && cfg.tokenFile == null && cfg.token == "")
         "k3s: Token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"

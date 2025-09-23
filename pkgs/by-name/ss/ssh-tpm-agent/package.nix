@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  openssh,
-  openssl,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, openssh
+, openssl
+,
 }:
 
 buildGoModule rec {

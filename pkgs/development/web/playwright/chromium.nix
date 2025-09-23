@@ -1,38 +1,37 @@
-{
-  runCommand,
-  makeWrapper,
-  fontconfig_file,
-  chromium,
-  fetchzip,
-  revision,
-  suffix,
-  system,
-  throwSystem,
-  lib,
-  alsa-lib,
-  at-spi2-atk,
-  atk,
-  autoPatchelfHook,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  glib,
-  gobject-introspection,
-  libGL,
-  libgbm,
-  libgcc,
-  libxkbcommon,
-  nspr,
-  nss,
-  pango,
-  patchelf,
-  pciutils,
-  stdenv,
-  systemd,
-  vulkan-loader,
-  xorg,
-  ...
+{ runCommand
+, makeWrapper
+, fontconfig_file
+, chromium
+, fetchzip
+, revision
+, suffix
+, system
+, throwSystem
+, lib
+, alsa-lib
+, at-spi2-atk
+, atk
+, autoPatchelfHook
+, cairo
+, cups
+, dbus
+, expat
+, glib
+, gobject-introspection
+, libGL
+, libgbm
+, libgcc
+, libxkbcommon
+, nspr
+, nss
+, pango
+, patchelf
+, pciutils
+, stdenv
+, systemd
+, vulkan-loader
+, xorg
+, ...
 }:
 let
   chromium-linux = stdenv.mkDerivation {
@@ -43,8 +42,7 @@ let
         {
           x86_64-linux = "sha256-R7nMCVpUqgRwtB0syhfIK81maiTVWr8lYBLp4bR8VBg=";
           aarch64-linux = "sha256-4fc4X7QwBigktmEeseuqIyEeV70Dy3eO/femXrftMd0=";
-        }
-        .${system} or throwSystem;
+        }.${system} or throwSystem;
     };
 
     nativeBuildInputs = [
@@ -111,14 +109,12 @@ let
       {
         x86_64-darwin = "sha256-0u1AStbUTX+qgUmg2DvL59B4b265WywDaBV+MdSuaNE=";
         aarch64-darwin = "sha256-4pg4wmNTF8mw+APmdpvYlFxb9zc6OUh11oW5gCRKETY=";
-      }
-      .${system} or throwSystem;
+      }.${system} or throwSystem;
   };
 in
-{
-  x86_64-linux = chromium-linux;
-  aarch64-linux = chromium-linux;
-  x86_64-darwin = chromium-darwin;
-  aarch64-darwin = chromium-darwin;
-}
-.${system} or throwSystem
+  {
+    x86_64-linux = chromium-linux;
+    aarch64-linux = chromium-linux;
+    x86_64-darwin = chromium-darwin;
+    aarch64-darwin = chromium-darwin;
+  }.${system} or throwSystem

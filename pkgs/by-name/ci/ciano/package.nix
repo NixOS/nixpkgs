@@ -1,18 +1,18 @@
-{
-  lib,
-  desktop-file-utils,
-  fetchFromGitHub,
-  ffmpeg,
-  gtk3,
-  imagemagick,
-  meson,
-  ninja,
-  pantheon,
-  pkg-config,
-  python3,
-  stdenv,
-  vala,
-  wrapGAppsHook3,
+{ lib
+, desktop-file-utils
+, fetchFromGitHub
+, ffmpeg
+, gtk3
+, imagemagick
+, meson
+, ninja
+, pantheon
+, pkg-config
+, python3
+, stdenv
+, vala
+, wrapGAppsHook3
+,
 }:
 
 let

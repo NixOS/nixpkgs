@@ -1,19 +1,17 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
   eachBlockbook = config.services.blockbook-frontend;
 
   blockbookOpts =
-    {
-      config,
-      lib,
-      name,
-      ...
+    { config
+    , lib
+    , name
+    , ...
     }:
     {
 
@@ -215,87 +213,95 @@ in
 
   config = lib.mkIf (eachBlockbook != { }) {
 
-    systemd.services = lib.mapAttrs' (
-      blockbookName: cfg:
-      (lib.nameValuePair "blockbook-frontend-${blockbookName}" (
-        let
-          configFile =
-            if cfg.configFile != null then
-              cfg.configFile
-            else
-              pkgs.writeText "config.conf" (
-                builtins.toJSON (
-                  {
-                    coin_name = "${cfg.coinName}";
-                    rpc_user = "${cfg.rpc.user}";
-                    rpc_pass = "${cfg.rpc.password}";
-                    rpc_url = "${cfg.rpc.url}:${toString cfg.rpc.port}";
-                    message_queue_binding = "${cfg.messageQueueBinding}";
-                  }
-                  // cfg.extraConfig
-                )
-              );
-        in
-        {
-          description = "blockbook-frontend-${blockbookName} daemon";
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
-          preStart = ''
-            ln -sf ${cfg.templateDir} ${cfg.dataDir}/static/
-            ln -sf ${cfg.cssDir} ${cfg.dataDir}/static/
-            ${lib.optionalString (cfg.rpc.passwordFile != null && cfg.configFile == null) ''
-              CONFIGTMP=$(mktemp)
-              ${pkgs.jq}/bin/jq ".rpc_pass = \"$(cat ${cfg.rpc.passwordFile})\"" ${configFile} > $CONFIGTMP
-              mv $CONFIGTMP ${cfg.dataDir}/${blockbookName}-config.json
-            ''}
-          '';
-          serviceConfig = {
-            User = cfg.user;
-            Group = cfg.group;
-            ExecStart = ''
-              ${cfg.package}/bin/blockbook \
-              ${
-                if (cfg.rpc.passwordFile != null && cfg.configFile == null) then
-                  "-blockchaincfg=${cfg.dataDir}/${blockbookName}-config.json"
+    systemd.services = lib.mapAttrs'
+      (
+        blockbookName: cfg:
+          (lib.nameValuePair "blockbook-frontend-${blockbookName}" (
+            let
+              configFile =
+                if cfg.configFile != null then
+                  cfg.configFile
                 else
-                  "-blockchaincfg=${configFile}"
-              } \
-              -datadir=${cfg.dataDir} \
-              ${lib.optionalString (cfg.sync != false) "-sync"} \
-              ${lib.optionalString (cfg.certFile != null) "-certfile=${toString cfg.certFile}"} \
-              ${lib.optionalString (cfg.debug != false) "-debug"} \
-              ${lib.optionalString (cfg.internal != null) "-internal=${toString cfg.internal}"} \
-              ${lib.optionalString (cfg.public != null) "-public=${toString cfg.public}"} \
-              ${toString cfg.extraCmdLineOptions}
-            '';
-            Restart = "on-failure";
-            WorkingDirectory = cfg.dataDir;
-            LimitNOFILE = 65536;
-          };
-        }
-      ))
-    ) eachBlockbook;
+                  pkgs.writeText "config.conf" (
+                    builtins.toJSON (
+                      {
+                        coin_name = "${cfg.coinName}";
+                        rpc_user = "${cfg.rpc.user}";
+                        rpc_pass = "${cfg.rpc.password}";
+                        rpc_url = "${cfg.rpc.url}:${toString cfg.rpc.port}";
+                        message_queue_binding = "${cfg.messageQueueBinding}";
+                      }
+                      // cfg.extraConfig
+                    )
+                  );
+            in
+            {
+              description = "blockbook-frontend-${blockbookName} daemon";
+              after = [ "network.target" ];
+              wantedBy = [ "multi-user.target" ];
+              preStart = ''
+                ln -sf ${cfg.templateDir} ${cfg.dataDir}/static/
+                ln -sf ${cfg.cssDir} ${cfg.dataDir}/static/
+                ${lib.optionalString (cfg.rpc.passwordFile != null && cfg.configFile == null) ''
+                  CONFIGTMP=$(mktemp)
+                  ${pkgs.jq}/bin/jq ".rpc_pass = \"$(cat ${cfg.rpc.passwordFile})\"" ${configFile} > $CONFIGTMP
+                  mv $CONFIGTMP ${cfg.dataDir}/${blockbookName}-config.json
+                ''}
+              '';
+              serviceConfig = {
+                User = cfg.user;
+                Group = cfg.group;
+                ExecStart = ''
+                  ${cfg.package}/bin/blockbook \
+                  ${
+                    if (cfg.rpc.passwordFile != null && cfg.configFile == null) then
+                      "-blockchaincfg=${cfg.dataDir}/${blockbookName}-config.json"
+                    else
+                      "-blockchaincfg=${configFile}"
+                  } \
+                  -datadir=${cfg.dataDir} \
+                  ${lib.optionalString (cfg.sync != false) "-sync"} \
+                  ${lib.optionalString (cfg.certFile != null) "-certfile=${toString cfg.certFile}"} \
+                  ${lib.optionalString (cfg.debug != false) "-debug"} \
+                  ${lib.optionalString (cfg.internal != null) "-internal=${toString cfg.internal}"} \
+                  ${lib.optionalString (cfg.public != null) "-public=${toString cfg.public}"} \
+                  ${toString cfg.extraCmdLineOptions}
+                '';
+                Restart = "on-failure";
+                WorkingDirectory = cfg.dataDir;
+                LimitNOFILE = 65536;
+              };
+            }
+          ))
+      )
+      eachBlockbook;
 
     systemd.tmpfiles.rules = lib.flatten (
-      lib.mapAttrsToList (blockbookName: cfg: [
-        "d ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/static 0750 ${cfg.user} ${cfg.group} - -"
-      ]) eachBlockbook
+      lib.mapAttrsToList
+        (blockbookName: cfg: [
+          "d ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
+          "d ${cfg.dataDir}/static 0750 ${cfg.user} ${cfg.group} - -"
+        ])
+        eachBlockbook
     );
 
-    users.users = lib.mapAttrs' (
-      blockbookName: cfg:
-      (lib.nameValuePair "blockbook-frontend-${blockbookName}" {
-        name = cfg.user;
-        group = cfg.group;
-        home = cfg.dataDir;
-        isSystemUser = true;
-      })
-    ) eachBlockbook;
+    users.users = lib.mapAttrs'
+      (
+        blockbookName: cfg:
+          (lib.nameValuePair "blockbook-frontend-${blockbookName}" {
+            name = cfg.user;
+            group = cfg.group;
+            home = cfg.dataDir;
+            isSystemUser = true;
+          })
+      )
+      eachBlockbook;
 
-    users.groups = lib.mapAttrs' (
-      instanceName: cfg: (lib.nameValuePair "${cfg.group}" { })
-    ) eachBlockbook;
+    users.groups = lib.mapAttrs'
+      (
+        instanceName: cfg: (lib.nameValuePair "${cfg.group}" { })
+      )
+      eachBlockbook;
   };
 
   meta.maintainers = with lib.maintainers; [ _1000101 ];

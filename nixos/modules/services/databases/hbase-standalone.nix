@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.hbase-standalone;
@@ -12,12 +11,14 @@ let
   buildProperty =
     configAttr:
     (builtins.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: value: ''
-        <property>
-          <name>${name}</name>
-          <value>${builtins.toString value}</value>
-        </property>
-      '') configAttr
+      lib.mapAttrsToList
+        (name: value: ''
+          <property>
+            <name>${name}</name>
+            <value>${builtins.toString value}</value>
+          </property>
+        '')
+        configAttr
     ));
 
   configFile = pkgs.writeText "hbase-site.xml" ''

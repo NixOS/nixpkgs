@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  single ? false,
-  coq,
-  equations,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, single ? false
+, coq
+, equations
+, version ? null
+,
 }@args:
 
 let
@@ -27,7 +27,8 @@ let
       (case "8.19" "1.3.3-8.19")
       (case "8.20" "1.3.4-8.20")
       (case "9.0" "1.3.4-9.0")
-    ] null;
+    ]
+      null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";
     "1.0-beta2-8.12".sha256 = "sha256-I8gpmU9rUQJh0qfp5KOgDNscVvCybm5zX4TINxO1TVA=";
@@ -154,18 +155,18 @@ let
                 touch ${pkgpath}/metacoq-config
               ''
               +
-                lib.optionalString
-                  (lib.elem package [
-                    "erasure"
-                    "template-pcuic"
-                    "quotation"
-                    "safechecker-plugin"
-                    "erasure-plugin"
-                    "translations"
-                  ])
-                  ''
-                    echo  "-I ${template-coq}/lib/coq/${coq.coq-version}/user-contrib/MetaCoq/Template/" > ${pkgpath}/metacoq-config
-                  ''
+              lib.optionalString
+                (lib.elem package [
+                  "erasure"
+                  "template-pcuic"
+                  "quotation"
+                  "safechecker-plugin"
+                  "erasure-plugin"
+                  "translations"
+                ])
+                ''
+                  echo  "-I ${template-coq}/lib/coq/${coq.coq-version}/user-contrib/MetaCoq/Template/" > ${pkgpath}/metacoq-config
+                ''
               + lib.optionalString (package == "single") ''
                 ./configure.sh local
               '';

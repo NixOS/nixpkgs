@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  libXdamage,
-  libXrender,
-  libXcomposite,
-  libXext,
-  installShellFiles,
-  git,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libXdamage
+, libXrender
+, libXcomposite
+, libXext
+, installShellFiles
+, git
+,
 }:
 
 stdenv.mkDerivation rec {

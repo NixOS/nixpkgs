@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  libiconv,
-  nix-update-script,
-  pkg-config,
-  openssl,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, libiconv
+, nix-update-script
+, pkg-config
+, openssl
+,
 }:
 let
   canRunGitGr = stdenv.hostPlatform.emulatorAvailable buildPackages;

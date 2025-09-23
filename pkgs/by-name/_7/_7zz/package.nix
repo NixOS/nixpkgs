@@ -1,18 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-
-  # Only useful on Linux x86/x86_64, and brings in non‐free Open Watcom
-  uasm,
-  useUasm ? false,
-
-  # RAR code is under non-free unRAR license
+{ stdenv
+, lib
+, fetchzip
+, # Only useful on Linux x86/x86_64, and brings in non‐free Open Watcom
+  uasm
+, useUasm ? false
+, # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
-  enableUnfree ? false,
-
-  # For tests
-  testers,
+  enableUnfree ? false
+, # For tests
+  testers
+,
 }:
 
 let
@@ -23,8 +20,7 @@ let
       aarch64-linux = "../../cmpl_gcc_arm64.mak";
       i686-linux = "../../cmpl_gcc_x86.mak";
       x86_64-linux = "../../cmpl_gcc_x64.mak";
-    }
-    .${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
+    }.${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
@@ -36,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         free = "sha256-A1BBdSGepobpguzokL1zpjce5EOl0zqABYciv9zCOac=";
         unfree = "sha256-Jkj6T4tMols33uyJSOCcVmxh5iBYYCO/rq9dF4NDMko=";
-      }
-      .${if enableUnfree then "unfree" else "free"};
+      }.${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
@@ -130,9 +125,9 @@ stdenv.mkDerivation (finalAttrs: {
         bsd3
       ]
       ++
-        # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
-        # the unRAR compression code is disabled by default
-        lib.optionals enableUnfree [ unfree ];
+      # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
+      # the unRAR compression code is disabled by default
+      lib.optionals enableUnfree [ unfree ];
     maintainers = with lib.maintainers; [
       anna328p
       jk

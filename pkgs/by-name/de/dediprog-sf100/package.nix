@@ -1,10 +1,10 @@
-{
-  lib,
-  pkgs,
-  stdenv,
-  fetchFromGitHub,
-  libusb1,
-  pkg-config,
+{ lib
+, pkgs
+, stdenv
+, fetchFromGitHub
+, libusb1
+, pkg-config
+,
 }:
 
 let

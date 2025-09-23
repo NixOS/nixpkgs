@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.syncoid;
@@ -357,123 +356,125 @@ in
       };
     };
 
-    systemd.services = lib.mapAttrs' (
-      name: c:
-      lib.nameValuePair "syncoid-${escapeUnitName name}" (
-        lib.mkMerge [
-          {
-            description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
-            after = [ "zfs.target" ];
-            startAt = cfg.interval;
-            # syncoid may need zpool to get feature@extensible_dataset
-            path = [ "/run/booted-system/sw/bin/" ];
-            serviceConfig = {
-              ExecStartPre =
-                (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source))
-                ++ (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target));
-              ExecStopPost =
-                (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source))
-                ++ (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
-              ExecStart = lib.escapeShellArgs (
-                [ "${cfg.package}/bin/syncoid" ]
-                ++ lib.optionals c.useCommonArgs cfg.commonArgs
-                ++ lib.optional c.recursive "-r"
-                ++ lib.optionals (c.sshKey != null) [
-                  "--sshkey"
-                  c.sshKey
-                ]
-                ++ c.extraArgs
-                ++ [
-                  "--sendoptions"
-                  c.sendOptions
-                  "--recvoptions"
-                  c.recvOptions
-                  "--no-privilege-elevation"
-                  c.source
-                  c.target
-                ]
-              );
-              User = cfg.user;
-              Group = cfg.group;
-              StateDirectory = [ "syncoid" ];
-              StateDirectoryMode = "700";
-              # Prevent SSH control sockets of different syncoid services from interfering
-              PrivateTmp = true;
-              # Permissive access to /proc because syncoid
-              # calls ps(1) to detect ongoing `zfs receive`.
-              ProcSubset = "all";
-              ProtectProc = "default";
+    systemd.services = lib.mapAttrs'
+      (
+        name: c:
+          lib.nameValuePair "syncoid-${escapeUnitName name}" (
+            lib.mkMerge [
+              {
+                description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
+                after = [ "zfs.target" ];
+                startAt = cfg.interval;
+                # syncoid may need zpool to get feature@extensible_dataset
+                path = [ "/run/booted-system/sw/bin/" ];
+                serviceConfig = {
+                  ExecStartPre =
+                    (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source))
+                    ++ (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target));
+                  ExecStopPost =
+                    (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source))
+                    ++ (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
+                  ExecStart = lib.escapeShellArgs (
+                    [ "${cfg.package}/bin/syncoid" ]
+                    ++ lib.optionals c.useCommonArgs cfg.commonArgs
+                    ++ lib.optional c.recursive "-r"
+                    ++ lib.optionals (c.sshKey != null) [
+                      "--sshkey"
+                      c.sshKey
+                    ]
+                    ++ c.extraArgs
+                    ++ [
+                      "--sendoptions"
+                      c.sendOptions
+                      "--recvoptions"
+                      c.recvOptions
+                      "--no-privilege-elevation"
+                      c.source
+                      c.target
+                    ]
+                  );
+                  User = cfg.user;
+                  Group = cfg.group;
+                  StateDirectory = [ "syncoid" ];
+                  StateDirectoryMode = "700";
+                  # Prevent SSH control sockets of different syncoid services from interfering
+                  PrivateTmp = true;
+                  # Permissive access to /proc because syncoid
+                  # calls ps(1) to detect ongoing `zfs receive`.
+                  ProcSubset = "all";
+                  ProtectProc = "default";
 
-              # The following options are only for optimizing:
-              # systemd-analyze security | grep syncoid-'*'
-              AmbientCapabilities = "";
-              CapabilityBoundingSet = "";
-              DeviceAllow = [ "/dev/zfs" ];
-              LockPersonality = true;
-              MemoryDenyWriteExecute = true;
-              NoNewPrivileges = true;
-              PrivateDevices = true;
-              PrivateMounts = true;
-              PrivateNetwork = lib.mkDefault false;
-              PrivateUsers = false; # Enabling this breaks on zfs-2.2.0
-              ProtectClock = true;
-              ProtectControlGroups = true;
-              ProtectHome = true;
-              ProtectHostname = true;
-              ProtectKernelLogs = true;
-              ProtectKernelModules = true;
-              ProtectKernelTunables = true;
-              ProtectSystem = "strict";
-              RemoveIPC = true;
-              RestrictAddressFamilies = [
-                "AF_UNIX"
-                "AF_INET"
-                "AF_INET6"
-              ];
-              RestrictNamespaces = true;
-              RestrictRealtime = true;
-              RestrictSUIDSGID = true;
-              RootDirectory = "/run/syncoid/${escapeUnitName name}";
-              RootDirectoryStartOnly = true;
-              BindPaths = [ "/dev/zfs" ];
-              BindReadOnlyPaths = [
-                builtins.storeDir
-                "/etc"
-                "/run"
-                "/bin/sh"
-              ];
-              # Avoid useless mounting of RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
-              InaccessiblePaths = [ "-+/run/syncoid/${escapeUnitName name}" ];
-              MountAPIVFS = true;
-              # Create RootDirectory= in the host's mount namespace.
-              RuntimeDirectory = [ "syncoid/${escapeUnitName name}" ];
-              RuntimeDirectoryMode = "700";
-              SystemCallFilter = [
-                "@system-service"
-                # Groups in @system-service which do not contain a syscall listed by:
-                # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' syncoid …
-                # awk >perf.syscalls -F "," '$1 > 0 {sub("syscalls:sys_enter_","",$3); print $3}' perf.log
-                # systemd-analyze syscall-filter | grep -v -e '#' | sed -e ':loop; /^[^ ]/N; s/\n //; t loop' | grep $(printf ' -e \\<%s\\>' $(cat perf.syscalls)) | cut -f 1 -d ' '
-                "~@aio"
-                "~@chown"
-                "~@keyring"
-                "~@memlock"
-                "~@privileged"
-                "~@resources"
-                "~@setuid"
-                "~@timer"
-              ];
-              SystemCallArchitectures = "native";
-              # This is for BindPaths= and BindReadOnlyPaths=
-              # to allow traversal of directories they create in RootDirectory=.
-              UMask = "0066";
-            };
-          }
-          cfg.service
-          c.service
-        ]
+                  # The following options are only for optimizing:
+                  # systemd-analyze security | grep syncoid-'*'
+                  AmbientCapabilities = "";
+                  CapabilityBoundingSet = "";
+                  DeviceAllow = [ "/dev/zfs" ];
+                  LockPersonality = true;
+                  MemoryDenyWriteExecute = true;
+                  NoNewPrivileges = true;
+                  PrivateDevices = true;
+                  PrivateMounts = true;
+                  PrivateNetwork = lib.mkDefault false;
+                  PrivateUsers = false; # Enabling this breaks on zfs-2.2.0
+                  ProtectClock = true;
+                  ProtectControlGroups = true;
+                  ProtectHome = true;
+                  ProtectHostname = true;
+                  ProtectKernelLogs = true;
+                  ProtectKernelModules = true;
+                  ProtectKernelTunables = true;
+                  ProtectSystem = "strict";
+                  RemoveIPC = true;
+                  RestrictAddressFamilies = [
+                    "AF_UNIX"
+                    "AF_INET"
+                    "AF_INET6"
+                  ];
+                  RestrictNamespaces = true;
+                  RestrictRealtime = true;
+                  RestrictSUIDSGID = true;
+                  RootDirectory = "/run/syncoid/${escapeUnitName name}";
+                  RootDirectoryStartOnly = true;
+                  BindPaths = [ "/dev/zfs" ];
+                  BindReadOnlyPaths = [
+                    builtins.storeDir
+                    "/etc"
+                    "/run"
+                    "/bin/sh"
+                  ];
+                  # Avoid useless mounting of RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
+                  InaccessiblePaths = [ "-+/run/syncoid/${escapeUnitName name}" ];
+                  MountAPIVFS = true;
+                  # Create RootDirectory= in the host's mount namespace.
+                  RuntimeDirectory = [ "syncoid/${escapeUnitName name}" ];
+                  RuntimeDirectoryMode = "700";
+                  SystemCallFilter = [
+                    "@system-service"
+                    # Groups in @system-service which do not contain a syscall listed by:
+                    # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' syncoid …
+                    # awk >perf.syscalls -F "," '$1 > 0 {sub("syscalls:sys_enter_","",$3); print $3}' perf.log
+                    # systemd-analyze syscall-filter | grep -v -e '#' | sed -e ':loop; /^[^ ]/N; s/\n //; t loop' | grep $(printf ' -e \\<%s\\>' $(cat perf.syscalls)) | cut -f 1 -d ' '
+                    "~@aio"
+                    "~@chown"
+                    "~@keyring"
+                    "~@memlock"
+                    "~@privileged"
+                    "~@resources"
+                    "~@setuid"
+                    "~@timer"
+                  ];
+                  SystemCallArchitectures = "native";
+                  # This is for BindPaths= and BindReadOnlyPaths=
+                  # to allow traversal of directories they create in RootDirectory=.
+                  UMask = "0066";
+                };
+              }
+              cfg.service
+              c.service
+            ]
+          )
       )
-    ) cfg.commands;
+      cfg.commands;
   };
 
   meta.maintainers = with lib.maintainers; [

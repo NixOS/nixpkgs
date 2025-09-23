@@ -1,26 +1,26 @@
-{
-  lib,
-  cargo,
-  dbus,
-  desktop-file-utils,
-  fetchFromGitHub,
-  glib,
-  gst_all_1,
-  gtk4,
-  libadwaita,
-  libxml2,
-  meson,
-  ninja,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  python3,
-  python3Packages,
-  rustPlatform,
-  rustc,
-  sqlite,
-  stdenv,
-  wrapGAppsHook4,
+{ lib
+, cargo
+, dbus
+, desktop-file-utils
+, fetchFromGitHub
+, glib
+, gst_all_1
+, gtk4
+, libadwaita
+, libxml2
+, meson
+, ninja
+, nix-update-script
+, openssl
+, pkg-config
+, python3
+, python3Packages
+, rustPlatform
+, rustc
+, sqlite
+, stdenv
+, wrapGAppsHook4
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "resonance";

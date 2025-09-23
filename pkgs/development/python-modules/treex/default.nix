@@ -1,22 +1,22 @@
-{
-  buildPythonPackage,
-  cloudpickle,
-  dm-haiku,
-  einops,
-  fetchFromGitHub,
-  flax,
-  hypothesis,
-  jaxlib,
-  keras,
-  lib,
-  poetry-core,
-  pytestCheckHook,
-  pyyaml,
-  rich,
-  tensorflow,
-  treeo,
-  torchmetrics,
-  torch,
+{ buildPythonPackage
+, cloudpickle
+, dm-haiku
+, einops
+, fetchFromGitHub
+, flax
+, hypothesis
+, jaxlib
+, keras
+, lib
+, poetry-core
+, pytestCheckHook
+, pyyaml
+, rich
+, tensorflow
+, treeo
+, torchmetrics
+, torch
+,
 }:
 
 buildPythonPackage rec {

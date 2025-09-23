@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  libsecret,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, libsecret
+,
 }:
 
 buildGoModule rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pytestCheckHook,
-  pythonOlder,
-  trio,
+{ lib
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pytestCheckHook
+, pythonOlder
+, trio
+,
 }:
 
 buildPythonPackage rec {

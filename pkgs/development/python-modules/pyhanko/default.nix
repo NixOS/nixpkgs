@@ -1,40 +1,36 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  asn1crypto,
-  click,
-  cryptography,
-  pyhanko-certvalidator,
-  pyyaml,
-  qrcode,
-  requests,
-  tzlocal,
-
-  # optional-dependencies
-  oscrypto,
-  defusedxml,
-  fonttools,
-  uharfbuzz,
-  pillow,
-  python-barcode,
-  python-pkcs11,
-  aiohttp,
-  xsdata,
-
-  # tests
-  certomancer,
-  freezegun,
-  pytest-aiohttp,
-  pytestCheckHook,
-  python-pae,
-  requests-mock,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  asn1crypto
+, click
+, cryptography
+, pyhanko-certvalidator
+, pyyaml
+, qrcode
+, requests
+, tzlocal
+, # optional-dependencies
+  oscrypto
+, defusedxml
+, fonttools
+, uharfbuzz
+, pillow
+, python-barcode
+, python-pkcs11
+, aiohttp
+, xsdata
+, # tests
+  certomancer
+, freezegun
+, pytest-aiohttp
+, pytestCheckHook
+, python-pae
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  posix-base,
-  unix-errno,
+{ buildDunePackage
+, posix-base
+, unix-errno
+,
 }:
 
 buildDunePackage {

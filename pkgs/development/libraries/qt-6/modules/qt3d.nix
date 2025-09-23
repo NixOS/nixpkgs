@@ -1,10 +1,10 @@
-{
-  lib,
-  qtModule,
-  qtbase,
-  qtdeclarative,
-  qtmultimedia,
-  assimp,
+{ lib
+, qtModule
+, qtbase
+, qtdeclarative
+, qtmultimedia
+, assimp
+,
 }:
 
 qtModule {

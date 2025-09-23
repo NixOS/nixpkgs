@@ -1,35 +1,35 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  bison,
-  boost,
-  brotli,
-  cmake,
-  double-conversion,
-  fmt,
-  fuse3,
-  flac,
-  glog,
-  gtest,
-  howard-hinnant-date,
-  jemalloc,
-  libarchive,
-  libevent,
-  libunwind,
-  lz4,
-  openssl,
-  pkg-config,
-  python3,
-  range-v3,
-  ronn,
-  xxHash,
-  utf8cpp,
-  zstd,
-  parallel-hashmap,
-  nlohmann_json,
-  libdwarf,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, stdenv
+, bison
+, boost
+, brotli
+, cmake
+, double-conversion
+, fmt
+, fuse3
+, flac
+, glog
+, gtest
+, howard-hinnant-date
+, jemalloc
+, libarchive
+, libevent
+, libunwind
+, lz4
+, openssl
+, pkg-config
+, python3
+, range-v3
+, ronn
+, xxHash
+, utf8cpp
+, zstd
+, parallel-hashmap
+, nlohmann_json
+, libdwarf
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

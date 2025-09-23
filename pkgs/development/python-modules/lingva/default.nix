@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  chameleon,
-  click,
-  fetchFromGitHub,
-  polib,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, chameleon
+, click
+, fetchFromGitHub
+, polib
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

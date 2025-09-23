@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  appstream-glib,
-  dblatex,
-  desktop-file-utils,
-  graphene,
-  gtk3,
-  gtk-mac-integration-gtk3,
-  intltool,
-  libxml2,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  poppler,
-  python3,
-  wrapGAppsHook3,
-  # Building with docs are still failing in unstable-2023-09-28
-  withDocs ? false,
+{ lib
+, stdenv
+, fetchFromGitLab
+, appstream-glib
+, dblatex
+, desktop-file-utils
+, graphene
+, gtk3
+, gtk-mac-integration-gtk3
+, intltool
+, libxml2
+, libxslt
+, meson
+, ninja
+, pkg-config
+, poppler
+, python3
+, wrapGAppsHook3
+, # Building with docs are still failing in unstable-2023-09-28
+  withDocs ? false
+,
 }:
 
 stdenv.mkDerivation {

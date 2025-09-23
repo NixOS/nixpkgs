@@ -1,19 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  setuptools,
-
-  urllib3,
-  deprecation,
-  paho-mqtt,
-  requests,
-  requests-unixsocket2,
-  janus,
-  pysocks,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, urllib3
+, deprecation
+, paho-mqtt
+, requests
+, requests-unixsocket2
+, janus
+, pysocks
+, typing-extensions
+,
 }:
 buildPythonPackage rec {
   pname = "azure-iot-device";

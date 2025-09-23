@@ -1,17 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  protobuf,
-  openssl,
-  sqlite,
-  zstd,
-  cmake,
-
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, protobuf
+, openssl
+, sqlite
+, zstd
+, cmake
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

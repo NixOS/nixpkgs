@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  mslex,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, mslex
+,
 }:
 
 buildPythonPackage rec {

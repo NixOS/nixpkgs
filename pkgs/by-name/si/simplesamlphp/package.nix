@@ -1,7 +1,7 @@
-{
-  php,
-  fetchFromGitHub,
-  lib,
+{ php
+, fetchFromGitHub
+, lib
+,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "simplesamlphp";

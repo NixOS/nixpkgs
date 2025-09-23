@@ -1,13 +1,13 @@
-{
-  lib,
-  runCommand,
-  writeText,
+{ lib
+, runCommand
+, writeText
+,
 }:
 
-{
-  beforeDir,
-  afterDir,
-  evalSystem,
+{ beforeDir
+, afterDir
+, evalSystem
+,
 }:
 
 let
@@ -42,24 +42,30 @@ let
     {
       added = filterKeys (n: _: !(old ? ${n})) new;
       removed = filterKeys (n: _: !(new ? ${n})) old;
-      changed = filterKeys (
-        n: v:
-        # Filter out attributes that don't exist anymore
-        (new ? ${n})
+      changed = filterKeys
+        (
+          n: v:
+            # Filter out attributes that don't exist anymore
+            (new ? ${n})
 
-        # Filter out attributes that are the same as the new value
-        && (v != (new.${n}))
-      ) old;
+            # Filter out attributes that are the same as the new value
+            && (v != (new.${n}))
+        )
+        old;
       # A "rebuild" is every attrpath ...
-      rebuilds = filterKeys (
-        _: pkg:
-        # ... that has at least one output ...
-        lib.any (
-          output:
-          # ... which has not been built in "old" already.
-          !(oldOutputs ? ${output})
-        ) (lib.attrValues pkg)
-      ) new;
+      rebuilds = filterKeys
+        (
+          _: pkg:
+            # ... that has at least one output ...
+            lib.any
+              (
+                output:
+                # ... which has not been built in "old" already.
+                  !(oldOutputs ? ${output})
+              )
+              (lib.attrValues pkg)
+        )
+        new;
     };
 
   getAttrs =

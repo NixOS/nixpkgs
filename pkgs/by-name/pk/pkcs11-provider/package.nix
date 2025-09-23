@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  nss,
-  p11-kit,
-  opensc,
-  gnutls,
-  expect,
-  which,
-  meson,
-  ninja,
-  pkg-config,
-  valgrind,
-  python3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, nss
+, p11-kit
+, opensc
+, gnutls
+, expect
+, which
+, meson
+, ninja
+, pkg-config
+, valgrind
+, python3
+, nix-update-script
+,
 }:
 
 let

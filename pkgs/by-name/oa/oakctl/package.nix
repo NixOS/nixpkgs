@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libgcc,
-  autoPatchelfHook,
-  testers,
-  oakctl,
+{ lib
+, stdenv
+, fetchurl
+, libgcc
+, autoPatchelfHook
+, testers
+, oakctl
+,
 }:
 
 let

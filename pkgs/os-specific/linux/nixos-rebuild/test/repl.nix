@@ -1,12 +1,12 @@
-{
-  lib,
-  expect,
-  nix,
-  nixos-rebuild,
-  path,
-  runCommand,
-  stdenv,
-  writeText,
+{ lib
+, expect
+, nix
+, nixos-rebuild
+, path
+, runCommand
+, stdenv
+, writeText
+,
 }:
 let
   # Arguably not true, but it holds up for now.
@@ -33,14 +33,14 @@ let
 
 in
 runCommand "test-nixos-rebuild-repl"
-  {
-    nativeBuildInputs = [
-      expect
-      nix
-      nixos-rebuild
-    ];
-    nixpkgs = if builtins.pathExists (path + "/.git") then lib.cleanSource path else path;
-  }
+{
+  nativeBuildInputs = [
+    expect
+    nix
+    nixos-rebuild
+  ];
+  nixpkgs = if builtins.pathExists (path + "/.git") then lib.cleanSource path else path;
+}
   ''
     export HOME=$(mktemp -d)
     export TEST_ROOT=$PWD/test-tmp

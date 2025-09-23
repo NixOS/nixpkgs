@@ -1,12 +1,12 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  dbus,
-  signal-cli,
-  xclip,
-  testers,
-  scli,
+{ lib
+, python3
+, fetchFromGitHub
+, dbus
+, signal-cli
+, xclip
+, testers
+, scli
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

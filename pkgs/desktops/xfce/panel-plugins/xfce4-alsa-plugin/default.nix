@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  vala,
-  pkg-config,
-  gettext,
-  ninja,
-  alsa-lib,
-  xfce4-panel,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, vala
+, pkg-config
+, gettext
+, ninja
+, alsa-lib
+, xfce4-panel
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  autoconf-archive,
-  ocamlPackages,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, ocamlPackages
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

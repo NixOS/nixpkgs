@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  attrs,
-  hyperlink,
-  incremental,
-  tubes,
-  twisted,
-  werkzeug,
-  zope-interface,
-
-  # tests
-  idna,
-  python,
-  treq,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  attrs
+, hyperlink
+, incremental
+, tubes
+, twisted
+, werkzeug
+, zope-interface
+, # tests
+  idna
+, python
+, treq
+,
 }:
 
 buildPythonPackage rec {

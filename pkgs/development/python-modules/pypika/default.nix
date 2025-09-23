@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  parameterized,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, parameterized
+, unittestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "pypika";

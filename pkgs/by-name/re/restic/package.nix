@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  nixosTests,
-  rclone,
-  python3,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, nixosTests
+, rclone
+, python3
+,
 }:
 
 buildGoModule rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchFromGitHub,
-  runCommandLocal,
-  # Build inputs
-  gfal2-python,
-  # For tests
-  xrootd, # pkgs.xrootd
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchFromGitHub
+, runCommandLocal
+, # Build inputs
+  gfal2-python
+, # For tests
+  xrootd
+, # pkgs.xrootd
 }:
 (buildPythonPackage rec {
   pname = "gfal2-util";

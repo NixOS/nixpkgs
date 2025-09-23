@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  typing-extensions,
-  pillow,
-  jinja2,
-  unidecode,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  typing-extensions
+, pillow
+, jinja2
+, unidecode
+,
 }:
 buildPythonPackage {
   pname = "plasTeX";

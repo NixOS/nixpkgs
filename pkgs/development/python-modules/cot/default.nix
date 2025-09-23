@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  colorlog,
-  fetchPypi,
-  mock,
-  pyopenssl,
-  pytest-mock,
-  pytestCheckHook,
-  pyvmomi,
-  qemu,
-  requests,
-  distutils,
-  setuptools,
-  stdenv,
-  verboselogs,
-  versioneer,
+{ lib
+, buildPythonPackage
+, colorlog
+, fetchPypi
+, mock
+, pyopenssl
+, pytest-mock
+, pytestCheckHook
+, pyvmomi
+, qemu
+, requests
+, distutils
+, setuptools
+, stdenv
+, verboselogs
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

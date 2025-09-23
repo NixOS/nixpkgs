@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  cloudpickle,
-  distributed,
-  multipledispatch,
-  scikit-learn,
-  scipy,
-  sparse,
-  dask,
-
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  cloudpickle
+, distributed
+, multipledispatch
+, scikit-learn
+, scipy
+, sparse
+, dask
+, # tests
+  pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

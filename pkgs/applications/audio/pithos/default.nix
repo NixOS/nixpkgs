@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  appstream-glib,
-  glib,
-  wrapGAppsHook3,
-  pythonPackages,
-  gtk3,
-  adwaita-icon-theme,
-  gobject-introspection,
-  libnotify,
-  libsecret,
-  gst_all_1,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, appstream-glib
+, glib
+, wrapGAppsHook3
+, pythonPackages
+, gtk3
+, adwaita-icon-theme
+, gobject-introspection
+, libnotify
+, libsecret
+, gst_all_1
+,
 }:
 
 pythonPackages.buildPythonApplication rec {

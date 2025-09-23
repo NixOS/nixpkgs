@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  makeWrapper,
-  fetchurl,
-  makeDesktopItem,
-  lttng-ust_2_12,
-  fontconfig,
-  openssl,
-  xorg,
-  zlib,
+{ lib
+, stdenv
+, autoPatchelfHook
+, makeWrapper
+, fetchurl
+, makeDesktopItem
+, lttng-ust_2_12
+, fontconfig
+, openssl
+, xorg
+, zlib
+,
 }:
 
 let

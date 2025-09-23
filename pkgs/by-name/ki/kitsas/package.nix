@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qt6,
-  poppler,
-  libzip,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qt6
+, poppler
+, libzip
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  fake-useragent,
-  faker,
-  fetchFromGitHub,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  scrapy,
+{ lib
+, buildPythonPackage
+, setuptools
+, fake-useragent
+, faker
+, fetchFromGitHub
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, scrapy
+,
 }:
 
 buildPythonPackage {

@@ -20,11 +20,10 @@ in
   ];
 
   nodes.ceph =
-    {
-      lib,
-      pkgs,
-      config,
-      ...
+    { lib
+    , pkgs
+    , config
+    , ...
     }:
     {
       # disks for bluestore
@@ -47,7 +46,7 @@ in
             enable = true;
             name = "lo";
             DHCP = "no";
-            addresses = [ { Address = "${ip}/128"; } ];
+            addresses = [{ Address = "${ip}/128"; }];
           };
         };
       };

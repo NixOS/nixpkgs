@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  bpp-core,
-  bpp-seq,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, bpp-core
+, bpp-seq
+,
 }:
 
 stdenv.mkDerivation rec {

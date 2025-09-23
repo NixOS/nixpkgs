@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  setuptools,
-  pymupdf,
-  numpy,
-  ipython,
-  texlive,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, setuptools
+, pymupdf
+, numpy
+, ipython
+, texlive
+,
 }:
 
 buildPythonPackage {

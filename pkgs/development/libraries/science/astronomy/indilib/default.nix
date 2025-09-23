@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  bash,
-  cmake,
-  cfitsio,
-  libusb1,
-  kmod,
-  zlib,
-  boost,
-  libev,
-  libnova,
-  curl,
-  libjpeg,
-  gsl,
-  fftw,
-  gtest,
-  udevCheckHook,
-  indi-full,
+{ stdenv
+, lib
+, fetchFromGitHub
+, bash
+, cmake
+, cfitsio
+, libusb1
+, kmod
+, zlib
+, boost
+, libev
+, libnova
+, curl
+, libjpeg
+, gsl
+, fftw
+, gtest
+, udevCheckHook
+, indi-full
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

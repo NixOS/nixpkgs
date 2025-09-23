@@ -1,15 +1,16 @@
-{
-  targetPackages,
-  lib,
-  makeSetupHook,
-  dieHook,
-  writeShellScript,
-  tests,
-  cc ? targetPackages.stdenv.cc,
-  sanitizers ? [ ],
+{ targetPackages
+, lib
+, makeSetupHook
+, dieHook
+, writeShellScript
+, tests
+, cc ? targetPackages.stdenv.cc
+, sanitizers ? [ ]
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "make-binary-wrapper-hook";
   propagatedBuildInputs = [ dieHook ];
 

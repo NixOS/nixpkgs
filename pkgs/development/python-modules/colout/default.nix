@@ -1,11 +1,11 @@
-{
-  lib,
-  babel,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pygments,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, babel
+, buildPythonPackage
+, fetchFromGitHub
+, pygments
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

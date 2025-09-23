@@ -1,7 +1,7 @@
-{
-  lib,
-  graphicsmagick,
-  stdenvNoCC,
+{ lib
+, graphicsmagick
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation {

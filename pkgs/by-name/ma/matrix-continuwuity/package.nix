@@ -1,22 +1,22 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  bzip2,
-  zstd,
-  stdenv,
-  rocksdb,
-  nix-update-script,
-  testers,
-  matrix-continuwuity,
-  enableBlurhashing ? true,
-  # upstream continuwuity enables jemalloc by default, so we follow suit
-  enableJemalloc ? true,
-  rust-jemalloc-sys-unprefixed,
-  enableLiburing ? stdenv.hostPlatform.isLinux,
-  liburing,
-  nixosTests,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, bzip2
+, zstd
+, stdenv
+, rocksdb
+, nix-update-script
+, testers
+, matrix-continuwuity
+, enableBlurhashing ? true
+, # upstream continuwuity enables jemalloc by default, so we follow suit
+  enableJemalloc ? true
+, rust-jemalloc-sys-unprefixed
+, enableLiburing ? stdenv.hostPlatform.isLinux
+, liburing
+, nixosTests
+,
 }:
 let
   rocksdb' =
@@ -53,7 +53,8 @@ let
               (lib.cmakeBool "USE_RTTI" true)
               # this doesn't exist in RocksDB
               (lib.cmakeBool "FORCE_SSE43" true)
-            ] old.cmakeFlags
+            ]
+              old.cmakeFlags
             ++ [
               # no real reason to have snappy, no one uses this
               (lib.cmakeBool "WITH_SNAPPY" false)

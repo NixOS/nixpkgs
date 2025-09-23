@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gettext,
-  libdvdread,
-  libdvdcss,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gettext
+, libdvdread
+, libdvdcss
+,
 }:
 
 stdenv.mkDerivation {

@@ -64,11 +64,12 @@
     ```
     :::
   */
-  _mkFailedAssertionsString = lib.foldl' (
-    failedAssertionsString:
-    { assertion, message }:
-    failedAssertionsString + lib.optionalString (!assertion) ("\n- " + message)
-  ) "";
+  _mkFailedAssertionsString = lib.foldl'
+    (
+      failedAssertionsString:
+      { assertion, message }:
+      failedAssertionsString + lib.optionalString (!assertion) ("\n- " + message)
+    ) "";
 
   /**
     Utility function to generate assertions for missing packages.

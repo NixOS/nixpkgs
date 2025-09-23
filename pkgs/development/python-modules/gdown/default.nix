@@ -1,17 +1,17 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  hatch-vcs,
-  hatch-fancy-pypi-readme,
-  filelock,
-  requests,
-  tqdm,
-  setuptools,
-  six,
-  pythonOlder,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, hatch-vcs
+, hatch-fancy-pypi-readme
+, filelock
+, requests
+, tqdm
+, setuptools
+, six
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

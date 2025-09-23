@@ -1,16 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cffi,
-  fetchFromGitHub,
-  glib,
-  pkg-config, # from pkgs
-  pkgconfig, # from pythonPackages
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  vips,
+{ lib
+, stdenv
+, buildPythonPackage
+, cffi
+, fetchFromGitHub
+, glib
+, pkg-config
+, # from pkgs
+  pkgconfig
+, # from pythonPackages
+  pytestCheckHook
+, pythonOlder
+, setuptools
+, vips
+,
 }:
 
 buildPythonPackage rec {

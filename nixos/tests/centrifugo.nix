@@ -16,45 +16,47 @@ in
   ];
 
   nodes = lib.listToAttrs (
-    lib.imap0 (index: name: {
-      inherit name;
-      value =
-        { config, ... }:
-        {
-          services.centrifugo = {
-            enable = true;
-            settings = {
-              node = {
-                inherit name;
-              };
-              http_server.port = centrifugoPort;
-              http_api.insecure = true;
-              usage_stats.disabled = true;
+    lib.imap0
+      (index: name: {
+        inherit name;
+        value =
+          { config, ... }:
+          {
+            services.centrifugo = {
+              enable = true;
+              settings = {
+                node = {
+                  inherit name;
+                };
+                http_server.port = centrifugoPort;
+                http_api.insecure = true;
+                usage_stats.disabled = true;
 
-              engine.type = "redis";
-              engine.redis.address =
-                let
-                  toRedisAddresses = map (name: "${name}:${toString redisPort}");
-                in
-                toRedisAddresses (lib.take index nodes)
-                ++ [
-                  "unix://${config.services.redis.servers.centrifugo.unixSocket}"
-                ]
-                ++ toRedisAddresses (lib.drop (index + 1) nodes);
+                engine.type = "redis";
+                engine.redis.address =
+                  let
+                    toRedisAddresses = map (name: "${name}:${toString redisPort}");
+                  in
+                  toRedisAddresses (lib.take index nodes)
+                  ++ [
+                    "unix://${config.services.redis.servers.centrifugo.unixSocket}"
+                  ]
+                  ++ toRedisAddresses (lib.drop (index + 1) nodes);
+              };
+              extraGroups = [
+                config.services.redis.servers.centrifugo.user
+              ];
             };
-            extraGroups = [
-              config.services.redis.servers.centrifugo.user
-            ];
+            services.redis.servers.centrifugo = {
+              enable = true;
+              bind = null; # all interfaces
+              port = redisPort;
+              openFirewall = true;
+              settings.protected-mode = false;
+            };
           };
-          services.redis.servers.centrifugo = {
-            enable = true;
-            bind = null; # all interfaces
-            port = redisPort;
-            openFirewall = true;
-            settings.protected-mode = false;
-          };
-        };
-    }) nodes
+      })
+      nodes
   );
 
   testScript = ''

@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  defusedxml,
-  fetchFromGitHub,
-  fetchpatch,
-  paste,
-  poetry-core,
-  pyasn1,
-  pymongo,
-  pyopenssl,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pytz,
-  repoze-who,
-  requests,
-  responses,
-  setuptools,
-  replaceVars,
-  xmlschema,
-  xmlsec,
-  zope-interface,
+{ lib
+, buildPythonPackage
+, cryptography
+, defusedxml
+, fetchFromGitHub
+, fetchpatch
+, paste
+, poetry-core
+, pyasn1
+, pymongo
+, pyopenssl
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, repoze-who
+, requests
+, responses
+, setuptools
+, replaceVars
+, xmlschema
+, xmlsec
+, zope-interface
+,
 }:
 
 buildPythonPackage rec {

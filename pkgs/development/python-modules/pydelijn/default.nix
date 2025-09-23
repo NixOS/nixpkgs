@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytz,
+{ lib
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytz
+,
 }:
 
 buildPythonPackage rec {

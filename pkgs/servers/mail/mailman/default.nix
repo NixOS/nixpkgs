@@ -1,7 +1,7 @@
-{
-  newScope,
-  lib,
-  python3,
+{ newScope
+, lib
+, python3
+,
 }:
 
 let
@@ -26,12 +26,12 @@ let
       web = callPackage ./web.nix { };
 
       buildEnvs =
-        {
-          web ? self.web,
-          mailman ? self.mailman,
-          mailman-hyperkitty ? self.mailman-hyperkitty,
-          withHyperkitty ? false,
-          withLDAP ? false,
+        { web ? self.web
+        , mailman ? self.mailman
+        , mailman-hyperkitty ? self.mailman-hyperkitty
+        , withHyperkitty ? false
+        , withLDAP ? false
+        ,
         }:
         {
           mailmanEnv = self.python3.withPackages (

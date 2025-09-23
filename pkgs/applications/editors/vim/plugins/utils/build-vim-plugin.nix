@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  rtpPath,
-  toVimPlugin,
+{ lib
+, stdenv
+, rtpPath
+, toVimPlugin
+,
 }:
 
 {
   addRtp = drv: lib.warn "`addRtp` is deprecated, does nothing." drv;
 
   buildVimPlugin =
-    {
-      name ? "${attrs.pname}-${attrs.version}",
-      src,
-      unpackPhase ? "",
-      configurePhase ? ":",
-      buildPhase ? ":",
-      preInstall ? "",
-      postInstall ? "",
-      path ? ".",
-      addonInfo ? null,
-      meta ? { },
-      ...
+    { name ? "${attrs.pname}-${attrs.version}"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ":"
+    , buildPhase ? ":"
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? "."
+    , addonInfo ? null
+    , meta ? { }
+    , ...
     }@attrs:
     let
       drv = stdenv.mkDerivation (

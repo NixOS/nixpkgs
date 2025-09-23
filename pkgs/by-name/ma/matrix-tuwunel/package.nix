@@ -1,22 +1,22 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  bzip2,
-  zstd,
-  stdenv,
-  rocksdb,
-  nix-update-script,
-  testers,
-  matrix-tuwunel,
-  enableBlurhashing ? true,
-  # upstream tuwunel enables jemalloc by default, so we follow suit
-  enableJemalloc ? true,
-  rust-jemalloc-sys,
-  enableLiburing ? stdenv.hostPlatform.isLinux,
-  liburing,
-  nixosTests,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, bzip2
+, zstd
+, stdenv
+, rocksdb
+, nix-update-script
+, testers
+, matrix-tuwunel
+, enableBlurhashing ? true
+, # upstream tuwunel enables jemalloc by default, so we follow suit
+  enableJemalloc ? true
+, rust-jemalloc-sys
+, enableLiburing ? stdenv.hostPlatform.isLinux
+, liburing
+, nixosTests
+,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -63,7 +63,8 @@ let
               "-DFORCE_SSE42=1"
               # PORTABLE will get set in main/default.nix
               "-DPORTABLE=1"
-            ] old.cmakeFlags
+            ]
+              old.cmakeFlags
             ++ [
               # no real reason to have snappy, no one uses this
               "-DWITH_SNAPPY=0"

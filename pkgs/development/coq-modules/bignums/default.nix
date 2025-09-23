@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, stdlib
+, version ? null
+,
 }:
 
 let
@@ -19,7 +19,8 @@ let
       lib.switch coq.coq-version [
         (case (range "8.13" "8.20") "9.0.0+coq${coq.coq-version}")
         (case (range "8.6" "8.17") "${coq.coq-version}.0")
-      ] null;
+      ]
+        null;
 
     release."9.0.0+coq8.20".sha256 = "sha256-pkvyDaMXRalc6Uu1eBTuiqTpRauRrzu946c6TavyTKY=";
     release."9.0.0+coq8.19".sha256 = "sha256-02uL+qWbUveHe67zKfc8w3U0iN3X2DKBsvP3pKpW8KQ=";
@@ -55,7 +56,8 @@ let
 in
 # this is just a wrapper for rocqPackages.bignums for Rocq >= 9.0
 if coq.rocqPackages ? bignums then
-  coq.rocqPackages.bignums.override {
+  coq.rocqPackages.bignums.override
+  {
     inherit version stdlib;
     inherit (coq.rocqPackages) rocq-core;
   }

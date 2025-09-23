@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  nix-update-script,
-  python3,
-
-  # for passthru.tests
-  ninja,
-  php,
-  spamassassin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, nix-update-script
+, python3
+, # for passthru.tests
+  ninja
+, php
+, spamassassin
+,
 }:
 
 stdenv.mkDerivation rec {

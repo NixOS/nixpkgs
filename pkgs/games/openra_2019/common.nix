@@ -2,24 +2,24 @@
   The reusable code, and package attributes, between OpenRA engine packages (engine.nix)
    and out-of-tree mod packages (mod.nix).
 */
-{
-  lib,
-  makeSetupHook,
-  curl,
-  unzip,
-  dos2unix,
-  pkg-config,
-  makeWrapper,
-  lua,
-  mono,
-  python3,
-  libGL,
-  freetype,
-  openal,
-  SDL2,
-  # It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
+{ lib
+, makeSetupHook
+, curl
+, unzip
+, dos2unix
+, pkg-config
+, makeWrapper
+, lua
+, mono
+, python3
+, libGL
+, freetype
+, openal
+, SDL2
+, # It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
   # rather than having to look to the logs why it is not starting.
-  zenity,
+  zenity
+,
 }:
 
 let
@@ -45,9 +45,10 @@ let
     openal
     SDL2
   ];
-  mkdirp = makeSetupHook {
-    name = "openra-mkdirp-hook";
-  } ./mkdirp.sh;
+  mkdirp = makeSetupHook
+    {
+      name = "openra-mkdirp-hook";
+    } ./mkdirp.sh;
 
 in
 {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  sphinx,
-  pytestCheckHook,
-  beautifulsoup4,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, sphinx
+, pytestCheckHook
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

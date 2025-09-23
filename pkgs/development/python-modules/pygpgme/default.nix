@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  gpgme,
-  isPyPy,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchurl
+, gpgme
+, isPyPy
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-
-  rust-jemalloc-sys,
-  buildPackages,
-  versionCheckHook,
-
-  # passthru
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, rust-jemalloc-sys
+, buildPackages
+, versionCheckHook
+, # passthru
+  nixosTests
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

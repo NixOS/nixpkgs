@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ssl,
-  lwt,
+{ lib
+, fetchurl
+, buildDunePackage
+, ssl
+, lwt
+,
 }:
 
 buildDunePackage rec {

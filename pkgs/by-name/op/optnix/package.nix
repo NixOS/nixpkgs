@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  installShellFiles,
-  nix-update-script,
-  scdoc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, nix-update-script
+, scdoc
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "optnix";

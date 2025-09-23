@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  docutils,
-  fetchPypi,
-  pythonOlder,
-  importlib-metadata,
-  importlib-resources,
-  setuptools,
-  packaging,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, docutils
+, fetchPypi
+, pythonOlder
+, importlib-metadata
+, importlib-resources
+, setuptools
+, packaging
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

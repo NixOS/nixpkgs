@@ -1,9 +1,9 @@
-{
-  lib,
-  nixosTests,
-  stdenvNoCC,
-  fetchurl,
-  crt ? stdenvNoCC.hostPlatform.libc,
+{ lib
+, nixosTests
+, stdenvNoCC
+, fetchurl
+, crt ? stdenvNoCC.hostPlatform.libc
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mingw_w64-headers";

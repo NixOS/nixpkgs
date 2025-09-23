@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  darwin,
-  fetchFromGitHub,
-  libusb1,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  solc,
-  versionCheckHook,
+{ lib
+, stdenv
+, darwin
+, fetchFromGitHub
+, libusb1
+, nix-update-script
+, pkg-config
+, rustPlatform
+, solc
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,8 +47,8 @@ rustPlatform.buildRustPackage rec {
   env = {
     SVM_RELEASES_LIST_JSON =
       if stdenv.hostPlatform.isDarwin then
-        # Confusingly, these are universal binaries, not amd64.
-        # See: https://github.com/ethereum/solidity/issues/12291#issuecomment-1974771433
+      # Confusingly, these are universal binaries, not amd64.
+      # See: https://github.com/ethereum/solidity/issues/12291#issuecomment-1974771433
         "${./svm-lists/macosx-amd64.json}"
       else
         "${./svm-lists/linux-amd64.json}";

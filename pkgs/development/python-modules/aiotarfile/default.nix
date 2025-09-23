@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  buildPythonPackage,
-  unittestCheckHook,
-  pythonOlder,
-  cargo,
-  rustc,
-  rustPlatform,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, buildPythonPackage
+, unittestCheckHook
+, pythonOlder
+, cargo
+, rustc
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

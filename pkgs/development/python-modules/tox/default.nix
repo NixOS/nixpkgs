@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  packaging,
-  pluggy,
-  py,
-  six,
-  virtualenv,
-  toml,
-  tomli,
-  filelock,
-  hatchling,
-  hatch-vcs,
-  platformdirs,
-  pyproject-api,
-  colorama,
-  chardet,
-  cachetools,
-  testers,
-  tox,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, packaging
+, pluggy
+, py
+, six
+, virtualenv
+, toml
+, tomli
+, filelock
+, hatchling
+, hatch-vcs
+, platformdirs
+, pyproject-api
+, colorama
+, chardet
+, cachetools
+, testers
+, tox
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jdk11_headless,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jdk11_headless
+, nixosTests
+,
 }:
 
 let
   common =
-    {
-      version,
-      hash,
-      jdk ? jdk11_headless,
-      tests,
+    { version
+    , hash
+    , jdk ? jdk11_headless
+    , tests
+    ,
     }:
     stdenv.mkDerivation rec {
       pname = "hbase";

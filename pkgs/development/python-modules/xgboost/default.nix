@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  cmake,
-  numpy,
-  scipy,
-  hatchling,
-  python,
-  stdenv,
-  xgboost,
+{ buildPythonPackage
+, pythonOlder
+, cmake
+, numpy
+, scipy
+, hatchling
+, python
+, stdenv
+, xgboost
+,
 }:
 
 let

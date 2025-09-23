@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  cmake,
-  ncurses,
-  libpulseaudio,
-  pandoc,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, cmake
+, ncurses
+, libpulseaudio
+, pandoc
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

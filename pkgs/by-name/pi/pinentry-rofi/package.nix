@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  autoconf-archive,
-  guile,
-  texinfo,
-  makeWrapper,
-  rofi,
-  coreutils,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, autoconf-archive
+, guile
+, texinfo
+, makeWrapper
+, rofi
+, coreutils
+,
 }:
 
 stdenv.mkDerivation rec {

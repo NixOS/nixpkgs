@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-  cmake,
-  pkg-config,
-  libconfig,
-  liquid-dsp,
-  fftwSinglePrec,
-  glib,
-  soapysdr-with-plugins,
-  sqlite,
-  zeromq,
-  gperftools,
-  libacars,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+, cmake
+, pkg-config
+, libconfig
+, liquid-dsp
+, fftwSinglePrec
+, glib
+, soapysdr-with-plugins
+, sqlite
+, zeromq
+, gperftools
+, libacars
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

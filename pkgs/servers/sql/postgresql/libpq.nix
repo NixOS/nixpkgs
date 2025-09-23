@@ -1,32 +1,28 @@
 {
   # utils
-  stdenv,
-  fetchFromGitHub,
-  lib,
-
-  # runtime dependencies
-  openssl,
-  tzdata,
-  zlib,
-
-  # build dependencies
-  bison,
-  flex,
-  makeWrapper,
-  perl,
-  pkg-config,
-
-  # passthru / meta
-  postgresql,
-  buildPackages,
-
-  # GSSAPI
-  gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
-  libkrb5,
-
-  # NLS
-  nlsSupport ? false,
-  gettext,
+  stdenv
+, fetchFromGitHub
+, lib
+, # runtime dependencies
+  openssl
+, tzdata
+, zlib
+, # build dependencies
+  bison
+, flex
+, makeWrapper
+, perl
+, pkg-config
+, # passthru / meta
+  postgresql
+, buildPackages
+, # GSSAPI
+  gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
+, libkrb5
+, # NLS
+  nlsSupport ? false
+, gettext
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

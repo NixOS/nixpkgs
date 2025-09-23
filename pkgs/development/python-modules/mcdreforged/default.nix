@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  colorama,
-  colorlog,
-  packaging,
-  parse,
-  prompt-toolkit,
-  psutil,
-  requests,
-  resolvelib,
-  ruamel-yaml,
-  typing-extensions,
-  pathspec,
-  pytestCheckHook,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, colorama
+, colorlog
+, packaging
+, parse
+, prompt-toolkit
+, psutil
+, requests
+, resolvelib
+, ruamel-yaml
+, typing-extensions
+, pathspec
+, pytestCheckHook
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

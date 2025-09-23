@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  makeBinaryWrapper,
-  alsa-lib,
-  e2fsprogs,
-  fontconfig,
-  gmp,
-  harfbuzz,
-  hicolor-icon-theme,
-  libdrm,
-  libGL,
-  libgpg-error,
-  libthai,
-  nss,
-  p11-kit,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, makeBinaryWrapper
+, alsa-lib
+, e2fsprogs
+, fontconfig
+, gmp
+, harfbuzz
+, hicolor-icon-theme
+, libdrm
+, libGL
+, libgpg-error
+, libthai
+, nss
+, p11-kit
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

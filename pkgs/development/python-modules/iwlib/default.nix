@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  wirelesstools,
-  cffi,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, wirelesstools
+, cffi
+, pytest
+,
 }:
 buildPythonPackage rec {
   pname = "iwlib";

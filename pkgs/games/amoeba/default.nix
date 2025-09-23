@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  amoeba-data,
-  alsa-lib,
-  expat,
-  freetype,
-  gtk3,
-  libvorbis,
-  libGLU,
-  xorg,
-  pkg-config,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchurl
+, amoeba-data
+, alsa-lib
+, expat
+, freetype
+, gtk3
+, libvorbis
+, libGLU
+, xorg
+, pkg-config
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

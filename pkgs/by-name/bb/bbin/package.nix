@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gitUpdater,
-  makeWrapper,
-  babashka-unwrapped,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, makeWrapper
+, babashka-unwrapped
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

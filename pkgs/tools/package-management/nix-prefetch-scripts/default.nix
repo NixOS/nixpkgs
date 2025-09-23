@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  buildEnv,
-  bash,
-  breezy,
-  cacert,
-  coreutils,
-  cvs,
-  darcs,
-  findutils,
-  gawk,
-  gitMinimal,
-  git-lfs,
-  gnused,
-  jq,
-  mercurial,
-  pijul,
-  subversion,
+{ lib
+, stdenv
+, makeWrapper
+, buildEnv
+, bash
+, breezy
+, cacert
+, coreutils
+, cvs
+, darcs
+, findutils
+, gawk
+, gitMinimal
+, git-lfs
+, gnused
+, jq
+, mercurial
+, pijul
+, subversion
+,
 }:
 
 let

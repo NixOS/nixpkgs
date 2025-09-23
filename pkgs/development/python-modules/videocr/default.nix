@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  levenshtein,
-  pytesseract,
-  opencv-python,
-  fuzzywuzzy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, levenshtein
+, pytesseract
+, opencv-python
+, fuzzywuzzy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
 
@@ -39,20 +38,20 @@ in
 
       mkService =
         dev:
-        assert dev != "";
-        let
-          dev' = utils.escapeSystemdPath dev;
-        in
-        lib.nameValuePair "freefall-${dev'}" {
-          description = "Free-fall protection for ${dev}";
-          after = [ "${dev'}.device" ];
-          wantedBy = [ "${dev'}.device" ];
-          serviceConfig = {
-            ExecStart = "${cfg.package}/bin/freefall ${dev}";
-            Restart = "on-failure";
-            Type = "forking";
+          assert dev != "";
+          let
+            dev' = utils.escapeSystemdPath dev;
+          in
+          lib.nameValuePair "freefall-${dev'}" {
+            description = "Free-fall protection for ${dev}";
+            after = [ "${dev'}.device" ];
+            wantedBy = [ "${dev'}.device" ];
+            serviceConfig = {
+              ExecStart = "${cfg.package}/bin/freefall ${dev}";
+              Restart = "on-failure";
+              Type = "forking";
+            };
           };
-        };
 
     in
     lib.mkIf cfg.enable {

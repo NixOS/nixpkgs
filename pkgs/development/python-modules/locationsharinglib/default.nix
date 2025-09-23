@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cachetools,
-  coloredlogs,
-  fetchPypi,
-  pythonOlder,
-  pytz,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cachetools
+, coloredlogs
+, fetchPypi
+, pythonOlder
+, pytz
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

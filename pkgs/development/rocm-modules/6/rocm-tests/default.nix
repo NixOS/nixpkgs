@@ -1,11 +1,11 @@
-{
-  clr,
-  ollama,
-  python3Packages,
-  rocmPackages,
-  magma-hip,
-  emptyDirectory,
-  stdenv,
+{ clr
+, ollama
+, python3Packages
+, rocmPackages
+, magma-hip
+, emptyDirectory
+, stdenv
+,
 }:
 # This package exists purely to have a bunch of passthru.tests attrs
 stdenv.mkDerivation {

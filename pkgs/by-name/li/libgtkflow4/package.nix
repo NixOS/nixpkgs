@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  vala,
-  meson,
-  ninja,
-  pkg-config,
-  fetchFromGitea,
-  gobject-introspection,
-  glib,
-  gtk4,
-  libgflow,
+{ stdenv
+, lib
+, vala
+, meson
+, ninja
+, pkg-config
+, fetchFromGitea
+, gobject-introspection
+, glib
+, gtk4
+, libgflow
+,
 }:
 
 stdenv.mkDerivation rec {

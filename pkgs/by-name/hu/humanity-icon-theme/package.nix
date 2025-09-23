@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  gtk3,
-  adwaita-icon-theme,
-  hicolor-icon-theme,
+{ lib
+, stdenvNoCC
+, fetchurl
+, gtk3
+, adwaita-icon-theme
+, hicolor-icon-theme
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

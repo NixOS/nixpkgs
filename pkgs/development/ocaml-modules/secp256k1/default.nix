@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  buildDunePackage,
-  base,
-  stdio,
-  dune-configurator,
-  secp256k1,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildDunePackage
+, base
+, stdio
+, dune-configurator
+, secp256k1
+,
 }:
 
 buildDunePackage rec {

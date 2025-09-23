@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  curl,
-  openssl,
-  nix-update-script,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchFromGitea
+, curl
+, openssl
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

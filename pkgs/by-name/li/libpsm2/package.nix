@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  numactl,
-  pkg-config,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, numactl
+, pkg-config
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

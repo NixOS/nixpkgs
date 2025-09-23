@@ -1,18 +1,18 @@
-{
-  lib,
-  bcrypt,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  gssapi,
-  icecream,
-  invoke,
-  mock,
-  pyasn1,
-  pynacl,
-  pytest-relaxed,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, bcrypt
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, gssapi
+, icecream
+, invoke
+, mock
+, pyasn1
+, pynacl
+, pytest-relaxed
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

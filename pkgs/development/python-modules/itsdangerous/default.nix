@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  flit-core,
-  freezegun,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, flit-core
+, freezegun
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

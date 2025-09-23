@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  graphviz-nox,
-  xdg-utils,
-  makeFontsConf,
-  freefont_ttf,
-  setuptools,
-  mock,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest7CheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, graphviz-nox
+, xdg-utils
+, makeFontsConf
+, freefont_ttf
+, setuptools
+, mock
+, pytest-cov-stub
+, pytest-mock
+, pytest7CheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

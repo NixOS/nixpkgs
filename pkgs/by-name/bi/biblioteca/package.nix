@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  desktop-file-utils,
-  glib,
-  gjs,
-  blueprint-compiler,
-  pkg-config,
-  gtk4,
-  gobject-introspection,
-  libadwaita,
-  webkitgtk,
-  coreutils,
-  makeShellWrapper,
-  wrapGAppsHook4,
-  glib-networking,
-  symlinkJoin,
-  nix-update-script,
-  extraDocsPackage ? [ ],
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, desktop-file-utils
+, glib
+, gjs
+, blueprint-compiler
+, pkg-config
+, gtk4
+, gobject-introspection
+, libadwaita
+, webkitgtk
+, coreutils
+, makeShellWrapper
+, wrapGAppsHook4
+, glib-networking
+, symlinkJoin
+, nix-update-script
+, extraDocsPackage ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,30 +1,30 @@
-{
-  lib,
-  cairo,
-  fetchFromGitHub,
-  gettext,
-  glib,
-  libdrm,
-  libinput,
-  libpng,
-  librsvg,
-  libsfdo,
-  libxcb,
-  libxkbcommon,
-  libxml2,
-  meson,
-  ninja,
-  pango,
-  pkg-config,
-  scdoc,
-  stdenv,
-  versionCheckHook,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots_0_19,
-  xcbutilwm,
-  xwayland,
+{ lib
+, cairo
+, fetchFromGitHub
+, gettext
+, glib
+, libdrm
+, libinput
+, libpng
+, librsvg
+, libsfdo
+, libxcb
+, libxkbcommon
+, libxml2
+, meson
+, ninja
+, pango
+, pkg-config
+, scdoc
+, stdenv
+, versionCheckHook
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlroots_0_19
+, xcbutilwm
+, xwayland
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

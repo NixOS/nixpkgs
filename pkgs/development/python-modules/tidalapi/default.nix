@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-dateutil,
-  poetry-core,
-  requests,
-  isodate,
-  ratelimit,
-  typing-extensions,
-  mpegdash,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-dateutil
+, poetry-core
+, requests
+, isodate
+, ratelimit
+, typing-extensions
+, mpegdash
+,
 }:
 buildPythonPackage rec {
   pname = "tidalapi";

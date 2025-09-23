@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  testers,
-  centrifugo,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, testers
+, centrifugo
+,
 }:
 let
   # Inspect build flags with `go version -m centrifugo`.

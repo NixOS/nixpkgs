@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  udev,
-  pciutils,
-  cmake,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, udev
+, pciutils
+, cmake
+,
 }:
 
 rustPlatform.buildRustPackage rec {

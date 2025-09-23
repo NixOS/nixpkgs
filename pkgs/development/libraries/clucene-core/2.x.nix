@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  boost,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, boost
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

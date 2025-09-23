@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  static3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, static3
+,
 }:
 
 buildPythonPackage rec {

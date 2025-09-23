@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  absl-py,
-  chex,
-  jax,
-  jaxlib,
-  numpy,
-  tensorflow-probability,
-
-  # tests
-  dm-haiku,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  absl-py
+, chex
+, jax
+, jaxlib
+, numpy
+, tensorflow-probability
+, # tests
+  dm-haiku
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

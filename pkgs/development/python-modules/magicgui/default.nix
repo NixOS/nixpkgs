@@ -1,17 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  docstring-parser,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  napari, # a reverse-dependency, for tests
-  psygnal,
-  pyside2,
-  pytestCheckHook,
-  pythonOlder,
-  superqt,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, docstring-parser
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, napari
+, # a reverse-dependency, for tests
+  psygnal
+, pyside2
+, pytestCheckHook
+, pythonOlder
+, superqt
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

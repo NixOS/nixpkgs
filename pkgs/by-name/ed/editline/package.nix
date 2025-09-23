@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  nix-update-script,
-  fetchpatch,
-  ncurses ? null,
-
-  # Enable `termcap` (`ncurses`) support.
-  enableTermcap ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, nix-update-script
+, fetchpatch
+, ncurses ? null
+, # Enable `termcap` (`ncurses`) support.
+  enableTermcap ? false
+,
 }:
 
-assert lib.assertMsg (
-  enableTermcap -> ncurses != null
-) "`ncurses` must be provided when `enableTermcap` is enabled";
+assert lib.assertMsg
+  (
+    enableTermcap -> ncurses != null
+  ) "`ncurses` must be provided when `enableTermcap` is enabled";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "editline";

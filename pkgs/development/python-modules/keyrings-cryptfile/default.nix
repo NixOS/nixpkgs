@@ -1,14 +1,14 @@
-{
-  lib,
-  argon2-cffi,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  keyring,
-  pycryptodome,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
+{ lib
+, argon2-cffi
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, keyring
+, pycryptodome
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,32 +1,32 @@
-{
-  lib,
-  SDL2,
-  SDL2_net,
-  alsa-lib,
-  fetchFromGitHub,
-  fluidsynth,
-  gitUpdater,
-  glib,
-  gtest,
-  iir1,
-  libGL,
-  libGLU,
-  libjack2,
-  libmt32emu,
-  libogg,
-  libpng,
-  libpulseaudio,
-  libslirp,
-  libsndfile,
-  makeWrapper,
-  meson,
-  ninja,
-  opusfile,
-  pkg-config,
-  speexdsp,
-  stdenv,
-  testers,
-  zlib-ng,
+{ lib
+, SDL2
+, SDL2_net
+, alsa-lib
+, fetchFromGitHub
+, fluidsynth
+, gitUpdater
+, glib
+, gtest
+, iir1
+, libGL
+, libGLU
+, libjack2
+, libmt32emu
+, libogg
+, libpng
+, libpulseaudio
+, libslirp
+, libsndfile
+, makeWrapper
+, meson
+, ninja
+, opusfile
+, pkg-config
+, speexdsp
+, stdenv
+, testers
+, zlib-ng
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,81 +1,79 @@
-{
-  lib,
-  stdenv,
-  pkgsCross,
-  appstream,
-  bison,
-  bubblewrap,
-  buildPackages,
-  bzip2,
-  coreutils,
-  curl,
-  dconf,
-  desktop-file-utils,
-  docbook-xsl-nons,
-  docbook_xml_dtd_45,
-  fetchurl,
-  fuse3,
-  gdk-pixbuf,
-  gettext,
-  glib,
-  glib-networking,
-  gobject-introspection,
-  gpgme,
-  gsettings-desktop-schemas,
-  gtk-doc,
-  gtk3,
-  hicolor-icon-theme,
-  json-glib,
-  libarchive,
-  libcap,
-  librsvg,
-  libseccomp,
-  libxml2,
-  libxslt,
-  malcontent,
-  meson,
-  ninja,
-  nix-update-script,
-  nixos-icons,
-  ostree,
-  p11-kit,
-  pkg-config,
-  polkit,
-  python3,
-  runCommand,
-  shared-mime-info,
-  socat,
-  replaceVars,
-  systemd,
-  testers,
-  valgrind,
-  validatePkgConfig,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wrapGAppsNoGuiHook,
-  xdg-dbus-proxy,
-  xmlto,
-  xorg,
-  zstd,
-  withAutoSideloading ? false,
-  withDconf ? lib.meta.availableOn stdenv.hostPlatform dconf,
-  withDocbookDocs ? true,
-  withGlibNetworking ? lib.meta.availableOn stdenv.hostPlatform glib-networking,
-  withGtkDoc ?
-    withDocbookDocs
+{ lib
+, stdenv
+, pkgsCross
+, appstream
+, bison
+, bubblewrap
+, buildPackages
+, bzip2
+, coreutils
+, curl
+, dconf
+, desktop-file-utils
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, fetchurl
+, fuse3
+, gdk-pixbuf
+, gettext
+, glib
+, glib-networking
+, gobject-introspection
+, gpgme
+, gsettings-desktop-schemas
+, gtk-doc
+, gtk3
+, hicolor-icon-theme
+, json-glib
+, libarchive
+, libcap
+, librsvg
+, libseccomp
+, libxml2
+, libxslt
+, malcontent
+, meson
+, ninja
+, nix-update-script
+, nixos-icons
+, ostree
+, p11-kit
+, pkg-config
+, polkit
+, python3
+, runCommand
+, shared-mime-info
+, socat
+, replaceVars
+, systemd
+, testers
+, valgrind
+, validatePkgConfig
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wrapGAppsNoGuiHook
+, xdg-dbus-proxy
+, xmlto
+, xorg
+, zstd
+, withAutoSideloading ? false
+, withDconf ? lib.meta.availableOn stdenv.hostPlatform dconf
+, withDocbookDocs ? true
+, withGlibNetworking ? lib.meta.availableOn stdenv.hostPlatform glib-networking
+, withGtkDoc ? withDocbookDocs
     && stdenv.buildPlatform.canExecute stdenv.hostPlatform
     # https://github.com/mesonbuild/meson/pull/14257
-    && !stdenv.hostPlatform.isStatic,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withMalcontent ? lib.meta.availableOn stdenv.hostPlatform malcontent,
-  withMan ? withDocbookDocs,
-  withP11Kit ? lib.meta.availableOn stdenv.hostPlatform p11-kit,
-  withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
-  withSELinuxModule ? false,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+    && !stdenv.hostPlatform.isStatic
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withMalcontent ? lib.meta.availableOn stdenv.hostPlatform malcontent
+, withMan ? withDocbookDocs
+, withP11Kit ? lib.meta.availableOn stdenv.hostPlatform p11-kit
+, withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit
+, withSELinuxModule ? false
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

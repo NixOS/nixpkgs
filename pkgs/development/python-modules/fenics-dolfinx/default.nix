@@ -1,47 +1,40 @@
-{
-  lib,
-  stdenv,
-  toPythonModule,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  scikit-build-core,
-  nanobind,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-  pkg-config,
-
-  # buildInputs
-  dolfinx,
-
-  # dependency
-  numpy,
-  cffi,
-  mpi4py,
-  petsc4py,
-  slepc4py,
-  adios2,
-  kahip,
-  fenics-ffcx,
-  fenics-basix,
-  fenics-ufl,
-
-  # nativeCheckInputs
-  scipy,
-  matplotlib,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  mpiCheckPhaseHook,
-
-  # custom options
-  withParmetis ? false,
-
-  # passthru.tests
-  fenics-dolfinx,
-  mpich,
+{ lib
+, stdenv
+, toPythonModule
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  scikit-build-core
+, nanobind
+, # nativeBuildInputs
+  cmake
+, ninja
+, pkg-config
+, # buildInputs
+  dolfinx
+, # dependency
+  numpy
+, cffi
+, mpi4py
+, petsc4py
+, slepc4py
+, adios2
+, kahip
+, fenics-ffcx
+, fenics-basix
+, fenics-ufl
+, # nativeCheckInputs
+  scipy
+, matplotlib
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+, mpiCheckPhaseHook
+, # custom options
+  withParmetis ? false
+, # passthru.tests
+  fenics-dolfinx
+, mpich
+,
 }:
 
 let

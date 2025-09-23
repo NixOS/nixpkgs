@@ -1,10 +1,10 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  makeWrapper,
-  gnugrep,
-  libinput,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, makeWrapper
+, gnugrep
+, libinput
+,
 }:
 
 bundlerApp {

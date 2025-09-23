@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  cmake,
-  pkg-config,
-  nlohmann_json,
-  spdlog,
-  argparse,
-  curl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, nlohmann_json
+, spdlog
+, argparse
+, curl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  SDL2,
-  autoreconfHook,
-  fetchFromGitHub,
-  freetype,
-  pango,
-  pkg-config,
-  stdenv,
+{ lib
+, SDL2
+, autoreconfHook
+, fetchFromGitHub
+, freetype
+, pango
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

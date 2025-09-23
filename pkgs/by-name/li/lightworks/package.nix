@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  buildFHSEnv,
-  gtk3,
-  gdk-pixbuf,
-  cairo,
-  libjpeg_original,
-  glib,
-  pango,
-  libGLU,
-  libGL,
-  nvidia_cg_toolkit,
-  zlib,
-  openssl,
-  libuuid,
-  alsa-lib,
-  udev,
-  libjack2,
-  freetype,
-  libva,
-  libvdpau,
-  twolame,
-  gmp,
-  libdrm,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, buildFHSEnv
+, gtk3
+, gdk-pixbuf
+, cairo
+, libjpeg_original
+, glib
+, pango
+, libGLU
+, libGL
+, nvidia_cg_toolkit
+, zlib
+, openssl
+, libuuid
+, alsa-lib
+, udev
+, libjack2
+, freetype
+, libva
+, libvdpau
+, twolame
+, gmp
+, libdrm
+, libpulseaudio
+,
 }:
 let
   fullPath = lib.makeLibraryPath [
@@ -62,10 +62,11 @@ let
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
-          sha256 = "sha256-opYbWzZYim5wqSaxDeGmc10XxFkkE521PDB8OULh7Jc=";
-        }
+        fetchurl
+          {
+            url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
+            sha256 = "sha256-opYbWzZYim5wqSaxDeGmc10XxFkkE521PDB8OULh7Jc=";
+          }
       else
         throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 

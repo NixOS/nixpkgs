@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  libiconv,
-  dirty-equals,
-  pytestCheckHook,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, rustPlatform
+, fetchFromGitHub
+, libiconv
+, dirty-equals
+, pytestCheckHook
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

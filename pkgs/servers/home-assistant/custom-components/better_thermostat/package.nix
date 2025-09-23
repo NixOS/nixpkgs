@@ -1,8 +1,8 @@
-{
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  lib,
-  gitUpdater,
+{ buildHomeAssistantComponent
+, fetchFromGitHub
+, lib
+, gitUpdater
+,
 }:
 
 buildHomeAssistantComponent rec {

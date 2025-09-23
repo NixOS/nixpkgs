@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  angstrom,
-  bigstringaf,
-  domain-name,
-  dune-site,
-  ipaddr,
-  logs,
-  lru,
-  lwt-dllist,
-  mtime,
-  ptime,
-  uri,
-  stdenv,
-  darwin,
+{ lib
+, fetchurl
+, buildDunePackage
+, angstrom
+, bigstringaf
+, domain-name
+, dune-site
+, ipaddr
+, logs
+, lru
+, lwt-dllist
+, mtime
+, ptime
+, uri
+, stdenv
+, darwin
+,
 }:
 
 buildDunePackage rec {

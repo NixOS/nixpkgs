@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  makeWrapper,
-  pkg-config,
-  SDL2,
-  libX11,
-  dbus,
-  libdecor,
-  libnotify,
-  dejavu_fonts,
-  zenity,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, makeWrapper
+, pkg-config
+, SDL2
+, libX11
+, dbus
+, libdecor
+, libnotify
+, dejavu_fonts
+, zenity
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

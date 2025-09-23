@@ -1,14 +1,14 @@
-{
-  cmake,
-  crocoddyl,
-  fetchFromGitHub,
-  lib,
-  llvmPackages,
-  pkg-config,
-  proxsuite,
-  python3Packages,
-  pythonSupport ? false,
-  stdenv,
+{ cmake
+, crocoddyl
+, fetchFromGitHub
+, lib
+, llvmPackages
+, pkg-config
+, proxsuite
+, python3Packages
+, pythonSupport ? false
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

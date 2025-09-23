@@ -1,16 +1,15 @@
-{
-  lib,
-  skawarePackages,
-  skalibs,
-  execline,
-  s6,
-  s6-dns,
-
-  # Whether to build the TLS/SSL tools and what library to use
+{ lib
+, skawarePackages
+, skalibs
+, execline
+, s6
+, s6-dns
+, # Whether to build the TLS/SSL tools and what library to use
   # acceptable values: "bearssl", "libressl", false
-  sslSupport ? "bearssl",
-  libressl,
-  bearssl,
+  sslSupport ? "bearssl"
+, libressl
+, bearssl
+,
 }:
 
 let

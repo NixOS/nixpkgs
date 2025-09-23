@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  curl,
-  gnunet,
-  jansson,
-  libgcrypt,
-  libmicrohttpd,
-  libnfc,
-  libsodium,
-  qrencode,
-  taler-exchange,
-  taler-merchant,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, curl
+, gnunet
+, jansson
+, libgcrypt
+, libmicrohttpd
+, libnfc
+, libsodium
+, qrencode
+, taler-exchange
+, taler-merchant
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-mdb";

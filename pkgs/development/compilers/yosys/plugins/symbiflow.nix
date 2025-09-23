@@ -1,14 +1,14 @@
-{
-  fetchFromGitHub,
-  gtest,
-  lib,
-  python3,
-  readline,
-  stdenv,
-  yosys,
-  zlib,
-  yosys-symbiflow,
-  pkg-config,
+{ fetchFromGitHub
+, gtest
+, lib
+, python3
+, readline
+, stdenv
+, yosys
+, zlib
+, yosys-symbiflow
+, pkg-config
+,
 }:
 let
 
@@ -92,9 +92,10 @@ lib.genAttrs plugins (
       (
         "NIX_YOSYS_PLUGIN_DIRS=\${NIX_BUILD_TOP}/source/${plugin}-plugin/build"
         # sdc and xdc plugins use design introspection for their tests
-        + (lib.optionalString (
-          plugin == "sdc" || plugin == "xdc"
-        ) ":${yosys-symbiflow.design_introspection}/share/yosys/plugins/")
+        + (lib.optionalString
+          (
+            plugin == "sdc" || plugin == "xdc"
+          ) ":${yosys-symbiflow.design_introspection}/share/yosys/plugins/")
       )
     ];
 

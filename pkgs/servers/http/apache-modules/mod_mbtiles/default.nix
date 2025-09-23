@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  apacheHttpd,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, apacheHttpd
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

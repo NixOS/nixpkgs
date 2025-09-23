@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 let
   cfg = config.services.gammu-smsd;
@@ -243,16 +242,17 @@ in
       preStart =
         with cfg.backend;
 
-        lib.optionalString (service == "files") (
-          with files;
-          ''
-            mkdir -m 755 -p ${inboxPath} ${outboxPath} ${sentSMSPath} ${errorSMSPath}
-            chown ${cfg.user} -R ${inboxPath}
-            chown ${cfg.user} -R ${outboxPath}
-            chown ${cfg.user} -R ${sentSMSPath}
-            chown ${cfg.user} -R ${errorSMSPath}
-          ''
-        )
+        lib.optionalString (service == "files")
+          (
+            with files;
+            ''
+              mkdir -m 755 -p ${inboxPath} ${outboxPath} ${sentSMSPath} ${errorSMSPath}
+              chown ${cfg.user} -R ${inboxPath}
+              chown ${cfg.user} -R ${outboxPath}
+              chown ${cfg.user} -R ${sentSMSPath}
+              chown ${cfg.user} -R ${errorSMSPath}
+            ''
+          )
         + lib.optionalString (service == "sql" && sql.driver == "sqlite") ''
           cat "${gammuPackage}/${initDBDir}/sqlite.sql" \
           | ${pkgs.sqlite.bin}/bin/sqlite3 ${sql.database}

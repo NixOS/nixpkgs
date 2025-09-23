@@ -1,11 +1,11 @@
-{
-  buildVimPlugin,
-  coc-basedpyright,
-  coc-clangd,
-  coc-css,
-  coc-diagnostic,
-  coc-pyright,
-  coc-toml,
+{ buildVimPlugin
+, coc-basedpyright
+, coc-clangd
+, coc-css
+, coc-diagnostic
+, coc-pyright
+, coc-toml
+,
 }:
 final: prev: {
   coc-basedpyright = buildVimPlugin {

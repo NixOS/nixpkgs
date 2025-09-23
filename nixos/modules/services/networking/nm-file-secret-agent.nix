@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.networking.networkmanager;
@@ -11,20 +10,22 @@ let
   enabled = (lib.length cfg.ensureProfiles.secrets.entries) > 0;
 
   nmFileSecretAgentConfig = {
-    entry = builtins.map (
-      i:
-      {
-        key = i.key;
-        file = i.file;
-      }
-      // lib.optionalAttrs (i.matchId != null) { match_id = i.matchId; }
-      // lib.optionalAttrs (i.matchUuid != null) { match_uuid = i.matchUuid; }
-      // lib.optionalAttrs (i.matchType != null) { match_type = i.matchType; }
-      // lib.optionalAttrs (i.matchIface != null) { match_iface = i.matchIface; }
-      // lib.optionalAttrs (i.matchSetting != null) {
-        match_setting = i.matchSetting;
-      }
-    ) cfg.ensureProfiles.secrets.entries;
+    entry = builtins.map
+      (
+        i:
+        {
+          key = i.key;
+          file = i.file;
+        }
+        // lib.optionalAttrs (i.matchId != null) { match_id = i.matchId; }
+        // lib.optionalAttrs (i.matchUuid != null) { match_uuid = i.matchUuid; }
+        // lib.optionalAttrs (i.matchType != null) { match_type = i.matchType; }
+        // lib.optionalAttrs (i.matchIface != null) { match_iface = i.matchIface; }
+        // lib.optionalAttrs (i.matchSetting != null) {
+          match_setting = i.matchSetting;
+        }
+      )
+      cfg.ensureProfiles.secrets.entries;
   };
   nmFileSecretAgentConfigFile = toml.generate "config.toml" nmFileSecretAgentConfig;
 in

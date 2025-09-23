@@ -1,27 +1,26 @@
-{
-  stdenv,
-  nixosTests,
-  lib,
-  edk2,
-  util-linux,
-  nasm,
-  acpica-tools,
-  llvmPackages,
-  fetchFromGitLab,
-  python3,
-  pexpect,
-  xorriso,
-  qemu,
-  dosfstools,
-  mtools,
-  fdSize2MB ? false,
-  fdSize4MB ? secureBoot,
-  secureBoot ? false,
-  systemManagementModeRequired ? secureBoot && stdenv.hostPlatform.isx86,
-  # Whether to create an nvram variables template
+{ stdenv
+, nixosTests
+, lib
+, edk2
+, util-linux
+, nasm
+, acpica-tools
+, llvmPackages
+, fetchFromGitLab
+, python3
+, pexpect
+, xorriso
+, qemu
+, dosfstools
+, mtools
+, fdSize2MB ? false
+, fdSize4MB ? secureBoot
+, secureBoot ? false
+, systemManagementModeRequired ? secureBoot && stdenv.hostPlatform.isx86
+, # Whether to create an nvram variables template
   # which includes the MSFT secure boot keys
-  msVarsTemplate ? false,
-  # When creating the nvram variables template with
+  msVarsTemplate ? false
+, # When creating the nvram variables template with
   # the MSFT keys, we also must provide a certificate
   # to use as the PK and first KEK for the keystore.
   #
@@ -30,35 +29,32 @@
   # own secure boot signing infrastructure.
   #
   # Ignored if msVarsTemplate is false.
-  vendorPkKek ? "$NIX_BUILD_TOP/debian/PkKek-1-Debian.pem",
-  httpSupport ? false,
-  tpmSupport ? false,
-  tlsSupport ? false,
-  debug ? false,
-  # Usually, this option is broken, do not use it except if you know what you are
+  vendorPkKek ? "$NIX_BUILD_TOP/debian/PkKek-1-Debian.pem"
+, httpSupport ? false
+, tpmSupport ? false
+, tlsSupport ? false
+, debug ? false
+, # Usually, this option is broken, do not use it except if you know what you are
   # doing.
-  sourceDebug ? false,
-  projectDscPath ?
-    {
-      i686 = "OvmfPkg/OvmfPkgIa32.dsc";
-      x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
-      aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
-      riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
-      loongarch64 = "OvmfPkg/LoongArchVirt/LoongArchVirtQemu.dsc";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  fwPrefix ?
-    {
-      i686 = "OVMF";
-      x86_64 = "OVMF";
-      aarch64 = "AAVMF";
-      riscv64 = "RISCV_VIRT";
-      loongarch64 = "LOONGARCH_VIRT";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  metaPlatforms ? edk2.meta.platforms,
+  sourceDebug ? false
+, projectDscPath ? {
+    i686 = "OvmfPkg/OvmfPkgIa32.dsc";
+    x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
+    aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
+    riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
+    loongarch64 = "OvmfPkg/LoongArchVirt/LoongArchVirtQemu.dsc";
+  }.${stdenv.hostPlatform.parsed.cpu.name}
+    or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}")
+, fwPrefix ? {
+    i686 = "OVMF";
+    x86_64 = "OVMF";
+    aarch64 = "AAVMF";
+    riscv64 = "RISCV_VIRT";
+    loongarch64 = "LOONGARCH_VIRT";
+  }.${stdenv.hostPlatform.parsed.cpu.name}
+    or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}")
+, metaPlatforms ? edk2.meta.platforms
+,
 }:
 
 let
@@ -224,16 +220,16 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     mkdir -vp $fd/FV
   ''
   +
-    lib.optionalString
-      (builtins.elem fwPrefix [
-        "OVMF"
-        "AAVMF"
-        "RISCV_VIRT"
-        "LOONGARCH_VIRT"
-      ])
-      ''
-        mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
-      ''
+  lib.optionalString
+    (builtins.elem fwPrefix [
+      "OVMF"
+      "AAVMF"
+      "RISCV_VIRT"
+      "LOONGARCH_VIRT"
+    ])
+    ''
+      mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
+    ''
   + lib.optionalString stdenv.hostPlatform.isx86 ''
     mv -v $out/FV/${fwPrefix}.fd $fd/FV
   ''

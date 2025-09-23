@@ -1,27 +1,27 @@
-{
-  cmake,
-  copyDesktopItems,
-  ebook_tools,
-  fetchFromGitHub,
-  freetype,
-  ghostscript,
-  gtk3,
-  installShellFiles,
-  lib,
-  libepoxy,
-  libpthreadstubs,
-  libXdmcp,
-  libxkbcommon,
-  libxml2,
-  libxshmfence,
-  man,
-  pcre,
-  pkg-config,
-  poppler,
-  stdenv,
-  testers,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
+{ cmake
+, copyDesktopItems
+, ebook_tools
+, fetchFromGitHub
+, freetype
+, ghostscript
+, gtk3
+, installShellFiles
+, lib
+, libepoxy
+, libpthreadstubs
+, libXdmcp
+, libxkbcommon
+, libxml2
+, libxshmfence
+, man
+, pcre
+, pkg-config
+, poppler
+, stdenv
+, testers
+, webkitgtk_4_1
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

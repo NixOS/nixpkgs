@@ -1,14 +1,14 @@
-{
-  buildEnv,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  pkg-config,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
-  R,
-  rPackages,
+{ buildEnv
+, fetchFromGitHub
+, lib
+, nix-update-script
+, pkg-config
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+, R
+, rPackages
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

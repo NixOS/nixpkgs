@@ -1,15 +1,15 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchzip,
-  autoPatchelfHook,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  gtk3,
-  xdg-user-dirs,
-  keybinder3,
-  libnotify,
+{ stdenvNoCC
+, lib
+, fetchzip
+, autoPatchelfHook
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, gtk3
+, xdg-user-dirs
+, keybinder3
+, libnotify
+,
 }:
 
 let
@@ -24,8 +24,7 @@ let
         hash = "sha256-+TXllfXtu+7X36XJQMydJzMaWeUkp4/TRD0a35GHuws=";
       };
       aarch64-darwin = x86_64-darwin;
-    }
-    ."${stdenvNoCC.hostPlatform.system}"
+    }."${stdenvNoCC.hostPlatform.system}"
       or (throw "appflowy: No source for system: ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {

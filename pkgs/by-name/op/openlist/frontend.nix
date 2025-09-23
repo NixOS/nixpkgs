@@ -1,11 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchzip,
-
-  nodejs,
-  pnpm_10,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchzip
+, nodejs
+, pnpm_10
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

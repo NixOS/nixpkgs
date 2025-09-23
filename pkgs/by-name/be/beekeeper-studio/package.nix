@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-  glibc,
-  gcc,
-  glib,
-  gtk3,
-  pango,
-  cairo,
-  dbus,
-  at-spi2-atk,
-  cups,
-  libdrm,
-  gdk-pixbuf,
-  nss,
-  nspr,
-  xorg,
-  alsa-lib,
-  expat,
-  libxkbcommon,
-  libgbm,
-  vulkan-loader,
-  systemd,
-  libGL,
-  krb5,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, glibc
+, gcc
+, glib
+, gtk3
+, pango
+, cairo
+, dbus
+, at-spi2-atk
+, cups
+, libdrm
+, gdk-pixbuf
+, nss
+, nspr
+, xorg
+, alsa-lib
+, expat
+, libxkbcommon
+, libgbm
+, vulkan-loader
+, systemd
+, libGL
+, krb5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

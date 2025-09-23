@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  future,
-  httplib2,
-  httpx,
-  pdm-backend,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, httplib2
+, httpx
+, pdm-backend
+, pytestCheckHook
+, pythonOlder
+, pytz
+, six
+,
 }:
 
 buildPythonPackage rec {

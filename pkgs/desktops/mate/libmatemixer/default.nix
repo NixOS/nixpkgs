@@ -1,18 +1,18 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  glib,
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  udev,
-  pulseaudioSupport ? config.pulseaudio or true,
-  libpulseaudio,
-  ossSupport ? false,
-  mateUpdateScript,
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, udev
+, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio
+, ossSupport ? false
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

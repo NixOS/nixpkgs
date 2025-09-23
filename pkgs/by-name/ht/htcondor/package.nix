@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libuuid,
-  expat,
-  curl,
-  pcre2,
-  sqlite,
-  python3,
-  boost,
-  libxml2,
-  libvirt,
-  munge,
-  voms,
-  perl,
-  scitokens-cpp,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libuuid
+, expat
+, curl
+, pcre2
+, sqlite
+, python3
+, boost
+, libxml2
+, libvirt
+, munge
+, voms
+, perl
+, scitokens-cpp
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

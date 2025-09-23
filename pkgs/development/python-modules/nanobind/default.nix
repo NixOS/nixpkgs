@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  ninja,
-  pathspec,
-  scikit-build-core,
-
-  # dependencies
-  eigen,
-
-  # tests
-  pytestCheckHook,
-  numpy,
-  scipy,
-  torch,
-  tensorflow-bin,
-  jax,
-  jaxlib,
-
-  nanobind,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, ninja
+, pathspec
+, scikit-build-core
+, # dependencies
+  eigen
+, # tests
+  pytestCheckHook
+, numpy
+, scipy
+, torch
+, tensorflow-bin
+, jax
+, jaxlib
+, nanobind
+,
 }:
 buildPythonPackage rec {
   pname = "nanobind";

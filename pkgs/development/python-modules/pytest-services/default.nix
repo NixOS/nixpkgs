@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  psutil,
-  pylibmc,
-  pytest,
-  pytestCheckHook,
-  requests,
-  setuptools-scm,
-  toml,
-  mysqlclient,
-  zc-lockfile,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, psutil
+, pylibmc
+, pytest
+, pytestCheckHook
+, requests
+, setuptools-scm
+, toml
+, mysqlclient
+, zc-lockfile
+,
 }:
 
 buildPythonPackage rec {

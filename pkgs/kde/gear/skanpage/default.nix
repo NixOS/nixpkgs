@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qtwebengine,
-  tesseractLanguages ? [ ],
-  tesseract5,
-  leptonica,
+{ mkKdeDerivation
+, qtwebengine
+, tesseractLanguages ? [ ]
+, tesseract5
+, leptonica
+,
 }:
 mkKdeDerivation {
   pname = "skanpage";

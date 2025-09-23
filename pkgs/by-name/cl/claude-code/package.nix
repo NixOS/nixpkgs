@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchzip,
-  nodejs_20,
+{ lib
+, buildNpmPackage
+, fetchzip
+, nodejs_20
+,
 }:
 
 buildNpmPackage rec {

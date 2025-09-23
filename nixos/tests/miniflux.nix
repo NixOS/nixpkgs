@@ -62,11 +62,10 @@ in
       };
 
     postgresTcp =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
+      { config
+      , pkgs
+      , lib
+      , ...
       }:
       {
         services.postgresql = {

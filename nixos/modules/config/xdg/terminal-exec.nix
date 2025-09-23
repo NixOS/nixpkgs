@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -51,13 +50,17 @@ in
     environment = {
       systemPackages = [ cfg.package ];
 
-      etc = lib.mapAttrs' (
-        desktop: terminals:
-        # map desktop name such as GNOME to `xdg/gnome-xdg-terminals.list`, default to `xdg/xdg-terminals.list`
-        lib.nameValuePair (
-          "xdg/${if desktop == "default" then "" else "${lib.toLower desktop}-"}xdg-terminals.list"
-        ) { text = lib.concatLines terminals; }
-      ) cfg.settings;
+      etc = lib.mapAttrs'
+        (
+          desktop: terminals:
+            # map desktop name such as GNOME to `xdg/gnome-xdg-terminals.list`, default to `xdg/xdg-terminals.list`
+            lib.nameValuePair
+              (
+                "xdg/${if desktop == "default" then "" else "${lib.toLower desktop}-"}xdg-terminals.list"
+              )
+              { text = lib.concatLines terminals; }
+        )
+        cfg.settings;
     };
   };
 }

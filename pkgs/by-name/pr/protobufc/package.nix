@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  protobuf_25,
-  zlib,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, protobuf_25
+, zlib
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

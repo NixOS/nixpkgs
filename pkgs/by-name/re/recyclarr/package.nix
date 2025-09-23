@@ -1,11 +1,11 @@
-{
-  lib,
-  openssl,
-  git,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  testers,
+{ lib
+, openssl
+, git
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, testers
+,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";

@@ -1,13 +1,13 @@
-{
-  writeShellScript,
-  writeText,
-  writers,
-  nix-prefetch-git,
-  formats,
-  lib,
-  coreutils,
-  curl,
-  xe,
+{ writeShellScript
+, writeText
+, writers
+, nix-prefetch-git
+, formats
+, lib
+, coreutils
+, curl
+, xe
+,
 }:
 
 # Grammar list:
@@ -520,13 +520,15 @@ let
   allGrammars =
     let
       treeSitterOrgaGrammars = lib.listToAttrs (
-        map (repo: {
-          name = repo;
-          value = {
-            orga = "tree-sitter";
-            inherit repo;
-          };
-        }) knownTreeSitterOrgGrammarRepos
+        map
+          (repo: {
+            name = repo;
+            value = {
+              orga = "tree-sitter";
+              inherit repo;
+            };
+          })
+          knownTreeSitterOrgGrammarRepos
       );
 
     in
@@ -550,9 +552,10 @@ let
           ;
       }
       (
-        writers.writePython3 "updateImpl" {
-          flakeIgnore = [ "E501" ];
-        } ./update_impl.py
+        writers.writePython3 "updateImpl"
+          {
+            flakeIgnore = [ "E501" ];
+          } ./update_impl.py
       );
 
   # Pass the given arguments to the command, in the ARGS environment variable.

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  expat,
-  ffmpeg,
-  freetype,
-  libarchive,
-  libjpeg,
-  libGLU,
-  sfml_2,
-  zlib,
-  openal,
-  fontconfig,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, expat
+, ffmpeg
+, freetype
+, libarchive
+, libjpeg
+, libGLU
+, sfml_2
+, zlib
+, openal
+, fontconfig
+,
 }:
 
 stdenv.mkDerivation {

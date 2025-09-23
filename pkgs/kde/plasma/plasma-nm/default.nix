@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  replaceVars,
-  pkg-config,
-  qtwebengine,
-  mobile-broadband-provider-info,
-  openconnect,
-  openvpn,
+{ mkKdeDerivation
+, replaceVars
+, pkg-config
+, qtwebengine
+, mobile-broadband-provider-info
+, openconnect
+, openvpn
+,
 }:
 mkKdeDerivation {
   pname = "plasma-nm";

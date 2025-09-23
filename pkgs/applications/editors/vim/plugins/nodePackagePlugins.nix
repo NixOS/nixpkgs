@@ -1,7 +1,7 @@
-{
-  lib,
-  buildVimPlugin,
-  nodePackages,
+{ lib
+, buildVimPlugin
+, nodePackages
+,
 }:
 final: prev:
 let

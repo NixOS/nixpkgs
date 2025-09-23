@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  which,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, which
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {

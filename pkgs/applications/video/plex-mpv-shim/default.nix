@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  fetchpatch,
-  python,
-  mpv,
-  requests,
-  python-mpv-jsonipc,
-  pystray,
-  tkinter,
-  wrapGAppsHook3,
-  gobject-introspection,
-  mpv-shim-default-shaders,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, fetchpatch
+, python
+, mpv
+, requests
+, python-mpv-jsonipc
+, pystray
+, tkinter
+, wrapGAppsHook3
+, gobject-introspection
+, mpv-shim-default-shaders
+,
 }:
 
 buildPythonApplication rec {

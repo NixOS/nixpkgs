@@ -1,9 +1,9 @@
-{
-  buildLua,
-  curl,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
+{ buildLua
+, curl
+, fetchFromGitHub
+, lib
+, nix-update-script
+,
 }:
 buildLua {
   pname = "twitch-chat";

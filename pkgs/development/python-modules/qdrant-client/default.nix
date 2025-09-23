@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fastembed,
-  fetchFromGitHub,
-  grpcio,
-  grpcio-tools,
-  httpx,
-  numpy,
-  poetry-core,
-  portalocker,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fastembed
+, fetchFromGitHub
+, grpcio
+, grpcio-tools
+, httpx
+, numpy
+, poetry-core
+, portalocker
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

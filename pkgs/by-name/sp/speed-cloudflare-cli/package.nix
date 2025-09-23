@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  nodejs,
+{ lib
+, fetchFromGitHub
+, stdenv
+, nodejs
+,
 }:
 stdenv.mkDerivation {
   pname = "speed-cloudflare-cli";

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  fuse,
-  curl,
-  pkg-config,
-  glib,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, fuse
+, curl
+, pkg-config
+, glib
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

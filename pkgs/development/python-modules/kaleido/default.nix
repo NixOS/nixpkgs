@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  callPackage,
-  fetchurl,
-  autoPatchelfHook,
-  bash,
-  dejavu_fonts,
-  expat,
-  fontconfig,
-  lato,
-  libGL,
-  makeWrapper,
-  nspr,
-  nss,
-  sbclPackages,
-  sqlite,
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, callPackage
+, fetchurl
+, autoPatchelfHook
+, bash
+, dejavu_fonts
+, expat
+, fontconfig
+, lato
+, libGL
+, makeWrapper
+, nspr
+, nss
+, sbclPackages
+, sqlite
+,
 }:
 
 buildPythonPackage rec {
@@ -43,8 +43,7 @@ buildPythonPackage rec {
         url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${version}-py2.py3-none-macosx_11_0_arm64.whl";
         hash = "sha256-u5pdH3EDV9XUMu4kDvZlim0STD5hCTWBe0tC2px4fAU=";
       };
-    }
-    ."${stdenv.hostPlatform.system}"
+    }."${stdenv.hostPlatform.system}"
       or (throw "Unsupported system for ${pname}: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = (lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]) ++ [

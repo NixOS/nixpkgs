@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gi-docgen,
-  glib,
-  gsettings-desktop-schemas,
-  gtk3,
-  enableGlade ? false,
-  glade,
-  xvfb-run,
-  gdk-pixbuf,
-  librsvg,
-  libxml2,
-  hicolor-icon-theme,
-  at-spi2-atk,
-  at-spi2-core,
-  gnome,
-  libhandy,
-  runCommand,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, glib
+, gsettings-desktop-schemas
+, gtk3
+, enableGlade ? false
+, glade
+, xvfb-run
+, gdk-pixbuf
+, librsvg
+, libxml2
+, hicolor-icon-theme
+, at-spi2-atk
+, at-spi2-core
+, gnome
+, libhandy
+, runCommand
+,
 }:
 
 stdenv.mkDerivation rec {

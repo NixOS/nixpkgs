@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  numpy,
-  pkgs,
-  pybind11,
+{ lib
+, buildPythonPackage
+, numpy
+, pkgs
+, pybind11
+,
 }:
 
 buildPythonPackage {

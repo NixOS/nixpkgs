@@ -1,7 +1,7 @@
-{
-  buildGoModule,
-  fetchFromGitLab,
-  lib,
+{ buildGoModule
+, fetchFromGitLab
+, lib
+,
 }:
 buildGoModule rec {
   pname = "gnss-share";

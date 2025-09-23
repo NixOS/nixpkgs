@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  packaging,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, packaging
+,
 }:
 let
   pname = "lazy-imports";

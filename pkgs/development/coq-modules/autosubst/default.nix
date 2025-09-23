@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  mathcomp-boot,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, mathcomp-boot
+, stdlib
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -26,7 +26,8 @@ mkCoqDerivation {
       (case (range "8.14" "9.1") "1.9")
       (case (range "8.14" "8.18") "1.8")
       (case (range "8.10" "8.13") "1.7")
-    ] null;
+    ]
+      null;
 
   propagatedBuildInputs = [
     mathcomp-boot

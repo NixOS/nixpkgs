@@ -1,17 +1,18 @@
 {
   # Basic
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # Build system
-  setuptools,
-  # Dependencies
-  click,
-  deprecated,
-  networkx,
-  tabulate,
-  # Test
-  pytestCheckHook,
+  lib
+, buildPythonPackage
+, fetchFromGitHub
+, # Build system
+  setuptools
+, # Dependencies
+  click
+, deprecated
+, networkx
+, tabulate
+, # Test
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

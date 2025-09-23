@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+,
 }:
 
 buildPythonPackage rec {

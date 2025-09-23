@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-aiohttp,
-  pytestCheckHook,
-  pythonOlder,
-  yarl,
+{ lib
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-aiohttp
+, pytestCheckHook
+, pythonOlder
+, yarl
+,
 }:
 
 buildPythonPackage rec {

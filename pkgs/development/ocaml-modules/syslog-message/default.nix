@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ptime,
-  qcheck,
+{ lib
+, buildDunePackage
+, fetchurl
+, ptime
+, qcheck
+,
 }:
 
 buildDunePackage rec {

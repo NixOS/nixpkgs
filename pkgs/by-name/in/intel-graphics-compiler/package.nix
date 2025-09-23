@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  git,
-  bison,
-  flex,
-  zlib,
-  intel-compute-runtime,
-  python3,
-  spirv-tools,
-  spirv-headers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, git
+, bison
+, flex
+, zlib
+, intel-compute-runtime
+, python3
+, spirv-tools
+, spirv-headers
+,
 }:
 
 stdenv.mkDerivation rec {

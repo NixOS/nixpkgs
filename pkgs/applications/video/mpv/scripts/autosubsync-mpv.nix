@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildLua,
-  ffsubsync,
+{ lib
+, fetchFromGitHub
+, buildLua
+, ffsubsync
+,
 }:
 
 buildLua {

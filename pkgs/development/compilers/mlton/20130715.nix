@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  patchelf,
-  gmp,
+{ lib
+, stdenv
+, fetchurl
+, patchelf
+, gmp
+,
 }:
 
 let

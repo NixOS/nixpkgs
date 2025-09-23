@@ -1,13 +1,13 @@
-{
-  lib,
-  channel ? "stable",
-  fetchurl,
-  installShellFiles,
-  makeBinaryWrapper,
-  terraform,
-  stdenvNoCC,
-  unzip,
-  nixosTests,
+{ lib
+, channel ? "stable"
+, fetchurl
+, installShellFiles
+, makeBinaryWrapper
+, terraform
+, stdenvNoCC
+, unzip
+, nixosTests
+,
 }:
 
 let
@@ -48,8 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             aarch64-linux = "linux_arm64";
             x86_64-darwin = "darwin_amd64";
             aarch64-darwin = "darwin_arm64";
-          }
-          .${system};
+          }.${system};
 
         ext =
           {
@@ -57,8 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             aarch64-linux = "tar.gz";
             x86_64-darwin = "zip";
             aarch64-darwin = "zip";
-          }
-          .${system};
+          }.${system};
       in
       "https://github.com/coder/coder/releases/download/v${finalAttrs.version}/coder_${finalAttrs.version}_${systemName}.${ext}";
   };

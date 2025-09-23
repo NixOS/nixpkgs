@@ -1,10 +1,10 @@
-{
-  lib,
-  libedit,
-  libutil,
-  mkAppleDerivation,
-  ncurses,
-  pkg-config,
+{ lib
+, libedit
+, libutil
+, mkAppleDerivation
+, ncurses
+, pkg-config
+,
 }:
 
 mkAppleDerivation {

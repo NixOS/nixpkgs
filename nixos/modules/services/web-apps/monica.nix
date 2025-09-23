@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib;
 let
@@ -407,19 +406,19 @@ in
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString =
                 v:
-                with builtins;
-                if isInt v then
-                  toString v
-                else if isString v then
-                  v
-                else if true == v then
-                  "true"
-                else if false == v then
-                  "false"
-                else if isSecret v then
-                  hashString "sha256" v._secret
-                else
-                  throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
+                  with builtins;
+                  if isInt v then
+                    toString v
+                  else if isString v then
+                    v
+                  else if true == v then
+                    "true"
+                  else if false == v then
+                    "false"
+                  else if isSecret v then
+                    hashString "sha256" v._secret
+                  else
+                    throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
             };
           };
           secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
@@ -433,13 +432,15 @@ in
             }
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (
-            _: v:
-            !elem v [
-              { }
-              null
-            ]
-          )) cfg.config;
+          filteredConfig = lib.converge
+            (lib.filterAttrsRecursive (
+              _: v:
+                !elem v [
+                  { }
+                  null
+                ]
+            ))
+            cfg.config;
           monicaEnv = pkgs.writeText "monica.env" (monicaEnvVars filteredConfig);
         in
         ''

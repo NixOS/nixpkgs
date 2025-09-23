@@ -1,23 +1,19 @@
-{
-  lib,
-  stdenv,
-  haskellPackages,
-  haskell,
-
-  # Which GHC versions this hls can support.
+{ lib
+, stdenv
+, haskellPackages
+, haskell
+, # Which GHC versions this hls can support.
   # These are looked up in nixpkgs as `pkgs.haskell.packages."ghc${version}`.
   # Run
   #  $ nix-instantiate --eval -E 'with import <nixpkgs> {}; builtins.attrNames pkgs.haskell.packages'
   # to list for your nixpkgs version.
   supportedGhcVersions ? [
     (lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor haskellPackages.ghc.version))
-  ],
-
-  # Whether to build hls with the dynamic run-time system.
+  ]
+, # Whether to build hls with the dynamic run-time system.
   # See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.
-  dynamic ? true,
-
-  # Which formatters are supported. Pass `[]` to remove all formatters.
+  dynamic ? true
+, # Which formatters are supported. Pass `[]` to remove all formatters.
   #
   # Maintainers: if a new formatter is added, add it here and down in knownFormatters
   supportedFormatters ? [
@@ -25,18 +21,20 @@
     "fourmolu"
     "floskell"
     "stylish-haskell"
-  ],
+  ]
+,
 }:
 
 # make sure the user only sets GHC versions that actually exist
 assert supportedGhcVersions != [ ];
-assert lib.asserts.assertEachOneOf "supportedGhcVersions" supportedGhcVersions (
-  lib.pipe haskell.packages [
-    lib.attrNames
-    (lib.filter (lib.hasPrefix "ghc"))
-    (map (lib.removePrefix "ghc"))
-  ]
-);
+assert lib.asserts.assertEachOneOf "supportedGhcVersions" supportedGhcVersions
+  (
+    lib.pipe haskell.packages [
+      lib.attrNames
+      (lib.filter (lib.hasPrefix "ghc"))
+      (map (lib.removePrefix "ghc"))
+    ]
+  );
 
 let
   # A mapping from formatter name to
@@ -72,9 +70,10 @@ let
 in
 
 # make sure any formatter that is set is actually supported by us
-assert lib.asserts.assertEachOneOf "supportedFormatters" supportedFormatters (
-  lib.attrNames knownFormatters
-);
+assert lib.asserts.assertEachOneOf "supportedFormatters" supportedFormatters
+  (
+    lib.attrNames knownFormatters
+  );
 
 #
 # The recommended way to override this package is
@@ -151,9 +150,11 @@ let
 
   makeSymlinks =
     version:
-    lib.concatMapStringsSep "\n" (
-      x: "ln -s ${tunedHls (getPackages version)}/bin/haskell-language-server $out/bin/${x}"
-    ) (targets version);
+    lib.concatMapStringsSep "\n"
+      (
+        x: "ln -s ${tunedHls (getPackages version)}/bin/haskell-language-server $out/bin/${x}"
+      )
+      (targets version);
 
 in
 stdenv.mkDerivation {

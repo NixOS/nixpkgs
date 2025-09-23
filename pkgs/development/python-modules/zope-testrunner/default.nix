@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zope-interface,
-  zope-exceptions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, zope-interface
+, zope-exceptions
+,
 }:
 
 buildPythonPackage rec {

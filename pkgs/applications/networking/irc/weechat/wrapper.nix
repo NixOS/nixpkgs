@@ -1,26 +1,25 @@
-{
-  lib,
-  runCommand,
-  writeScriptBin,
-  buildEnv,
-  python3Packages,
-  perlPackages,
-  runtimeShell,
+{ lib
+, runCommand
+, writeScriptBin
+, buildEnv
+, python3Packages
+, perlPackages
+, runtimeShell
+,
 }:
 
 weechat:
 
 let
   wrapper =
-    {
-      installManPages ? true,
-      configure ?
-        { availablePlugins, ... }:
+    { installManPages ? true
+    , configure ? { availablePlugins, ... }:
         {
           # Do not include PHP by default, because it bloats the closure, doesn't
           # build on Darwin, and there are no official PHP scripts.
           plugins = builtins.attrValues (builtins.removeAttrs availablePlugins [ "php" ]);
-        },
+        }
+    ,
     }:
 
     let
@@ -38,7 +37,7 @@ let
               pkgsFun:
               (
                 python
-                // {
+                  // {
                   extraEnv = ''
                     ${python.extraEnv}
                     export PYTHONHOME="${python3Packages.python.withPackages pkgsFun}"
@@ -54,7 +53,7 @@ let
               pkgsFun:
               (
                 perl
-                // {
+                  // {
                   extraEnv = ''
                     ${perl.extraEnv}
                     export PERL5LIB=${perlPackages.makeFullPerlPath (pkgsFun perlPackages)}

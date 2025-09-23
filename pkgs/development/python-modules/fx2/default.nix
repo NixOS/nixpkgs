@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  sdcc,
-  libusb1,
-  setuptools-scm,
-  crcmod,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, sdcc
+, libusb1
+, setuptools-scm
+, crcmod
+,
 }:
 
 buildPythonPackage rec {

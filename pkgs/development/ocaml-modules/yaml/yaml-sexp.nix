@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  yaml,
-  ppx_sexp_conv,
-  sexplib,
-  junit_alcotest,
+{ buildDunePackage
+, yaml
+, ppx_sexp_conv
+, sexplib
+, junit_alcotest
+,
 }:
 
 buildDunePackage {

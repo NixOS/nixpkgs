@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyasn1,
-  pythonOlder,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyasn1
+, pythonOlder
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

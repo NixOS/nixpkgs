@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  gtest,
-  prometheus-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, gtest
+, prometheus-cpp
+,
 }:
 
 stdenv.mkDerivation rec {

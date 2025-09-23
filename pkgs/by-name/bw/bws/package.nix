@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  oniguruma,
-  openssl,
-  stdenv,
-  python3,
-  perl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, oniguruma
+, openssl
+, stdenv
+, python3
+, perl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

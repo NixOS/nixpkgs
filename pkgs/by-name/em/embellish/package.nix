@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  blueprint-compiler,
-  gobject-introspection,
-  gtk4,
-  desktop-file-utils,
-  gettext,
-  wrapGAppsHook4,
-  libadwaita,
-  gjs,
-  gnome-autoar,
-  libsoup_3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, glib
+, blueprint-compiler
+, gobject-introspection
+, gtk4
+, desktop-file-utils
+, gettext
+, wrapGAppsHook4
+, libadwaita
+, gjs
+, gnome-autoar
+, libsoup_3
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "embellish";

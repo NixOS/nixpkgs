@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  distro,
-  fetchPypi,
-  fixtures,
-  libredirect,
-  packaging,
-  parsley,
-  pbr,
-  pytestCheckHook,
-  testtools,
+{ lib
+, buildPythonPackage
+, distro
+, fetchPypi
+, fixtures
+, libredirect
+, packaging
+, parsley
+, pbr
+, pytestCheckHook
+, testtools
+,
 }:
 
 buildPythonPackage rec {

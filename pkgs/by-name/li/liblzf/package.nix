@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchDebianPatch,
-  fetchpatch,
-  fetchurl,
-  pkg-config,
-  testers,
-  validatePkgConfig,
-  autoconf,
-  automake,
-  libtool,
+{ lib
+, stdenv
+, fetchDebianPatch
+, fetchpatch
+, fetchurl
+, pkg-config
+, testers
+, validatePkgConfig
+, autoconf
+, automake
+, libtool
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblzf";

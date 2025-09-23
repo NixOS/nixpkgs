@@ -1,31 +1,31 @@
-{
-  lib,
-  libGL,
-  stdenv,
-  fetchurl,
-  undmg,
-  dpkg,
-  autoPatchelfHook,
-  wrapGAppsHook3,
-  alsa-lib,
-  at-spi2-atk,
-  gdk-pixbuf,
-  nss,
-  udev,
-  gnome-keyring,
-  libgbm,
-  gtk3,
-  libusb1,
-  libsecret,
-  libappindicator,
-  xdotool,
-  libX11,
-  libXcomposite,
-  libXext,
-  libXrandr,
-  libXScrnSaver,
-  libXtst,
-  libxshmfence,
+{ lib
+, libGL
+, stdenv
+, fetchurl
+, undmg
+, dpkg
+, autoPatchelfHook
+, wrapGAppsHook3
+, alsa-lib
+, at-spi2-atk
+, gdk-pixbuf
+, nss
+, udev
+, gnome-keyring
+, libgbm
+, gtk3
+, libusb1
+, libsecret
+, libappindicator
+, xdotool
+, libX11
+, libXcomposite
+, libXext
+, libXrandr
+, libXScrnSaver
+, libXtst
+, libxshmfence
+,
 }:
 let
   pname = "keeweb";
@@ -83,7 +83,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

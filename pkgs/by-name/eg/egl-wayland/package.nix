@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  eglexternalplatform,
-  pkg-config,
-  meson,
-  ninja,
-  wayland-scanner,
-  libGL,
-  libX11,
-  libdrm,
-  wayland,
-  wayland-protocols,
+{ lib
+, stdenv
+, fetchFromGitHub
+, eglexternalplatform
+, pkg-config
+, meson
+, ninja
+, wayland-scanner
+, libGL
+, libX11
+, libdrm
+, wayland
+, wayland-protocols
+,
 }:
 
 stdenv.mkDerivation rec {

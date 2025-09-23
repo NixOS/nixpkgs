@@ -1,35 +1,35 @@
-{
-  clangStdenv,
-  rustPlatform,
-  lib,
-  linkFarm,
-  fetchgit,
-  fetchFromGitHub,
-  runCommand,
-  alsa-lib,
-  brotli,
-  cmake,
-  expat,
-  fontconfig,
-  freetype,
-  gn,
-  harfbuzz,
-  icu,
-  libglvnd,
-  libjpeg,
-  libxkbcommon,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-  makeWrapper,
-  ninja,
-  pkg-config,
-  python3,
-  removeReferencesTo,
-  wayland,
-  zlib,
+{ clangStdenv
+, rustPlatform
+, lib
+, linkFarm
+, fetchgit
+, fetchFromGitHub
+, runCommand
+, alsa-lib
+, brotli
+, cmake
+, expat
+, fontconfig
+, freetype
+, gn
+, harfbuzz
+, icu
+, libglvnd
+, libjpeg
+, libxkbcommon
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXrandr
+, makeWrapper
+, ninja
+, pkg-config
+, python3
+, removeReferencesTo
+, wayland
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
@@ -81,10 +81,12 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         # The externals for skia are taken from skia/DEPS
         # Reduced to only what's necessary
         externals = linkFarm "skia-externals" (
-          lib.mapAttrsToList (name: value: {
-            inherit name;
-            path = fetchgit value;
-          }) (lib.importJSON ./skia-externals.json)
+          lib.mapAttrsToList
+            (name: value: {
+              inherit name;
+              path = fetchgit value;
+            })
+            (lib.importJSON ./skia-externals.json)
         );
       in
       runCommand "source" { } ''

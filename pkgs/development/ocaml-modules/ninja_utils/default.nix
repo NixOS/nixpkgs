@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchzip,
-  buildDunePackage,
-  re,
+{ lib
+, fetchzip
+, buildDunePackage
+, re
+,
 }:
 
 buildDunePackage rec {

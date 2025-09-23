@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  testers,
-  nix-update-script,
-  act,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, testers
+, nix-update-script
+, act
+,
 }:
 
 let

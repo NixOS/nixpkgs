@@ -4,23 +4,23 @@
 # often change with updating of git or cgit.
 # stripLen acts as the -p parameter when applying a patch.
 
-{
-  lib,
-  fetchurl,
-  patchutils,
+{ lib
+, fetchurl
+, patchutils
+,
 }:
 
-{
-  relative ? null,
-  stripLen ? 0,
-  decode ? "cat", # custom command to decode patch e.g. base64 -d
-  extraPrefix ? null,
-  excludes ? [ ],
-  includes ? [ ],
-  revert ? false,
-  postFetch ? "",
-  nativeBuildInputs ? [ ],
-  ...
+{ relative ? null
+, stripLen ? 0
+, decode ? "cat"
+, # custom command to decode patch e.g. base64 -d
+  extraPrefix ? null
+, excludes ? [ ]
+, includes ? [ ]
+, revert ? false
+, postFetch ? ""
+, nativeBuildInputs ? [ ]
+, ...
 }@args:
 let
   args' =
@@ -106,7 +106,7 @@ lib.throwIfNot (excludes == [ ] || includes == [ ])
       ''
       + postFetch;
     }
-    // builtins.removeAttrs args [
+      // builtins.removeAttrs args [
       "relative"
       "stripLen"
       "decode"

@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
-  openssl,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, writableTmpDirAsHomeHook
+, openssl
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,8 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  pkgs,
-  handleTestOn,
-  ...
+{ system ? builtins.currentSystem
+, pkgs
+, handleTestOn
+, ...
 }:
 let
   supportedSystems = [

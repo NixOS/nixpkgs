@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  gmp,
-  mpfr,
-  libmpc,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, gmp
+, mpfr
+, libmpc
+,
 }:
 
 rustPlatform.buildRustPackage rec {

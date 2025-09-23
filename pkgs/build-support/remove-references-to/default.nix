@@ -3,11 +3,11 @@
 # non-existent path (/nix/store/eeee...).  This is useful for getting rid of
 # dependencies that you know are not actually needed at runtime.
 
-{
-  lib,
-  stdenvNoCC,
-  signingUtils,
-  shell ? stdenvNoCC.shell,
+{ lib
+, stdenvNoCC
+, signingUtils
+, shell ? stdenvNoCC.shell
+,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -26,9 +26,11 @@ stdenvNoCC.mkDerivation {
   env = {
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
-    signingUtils = lib.optionalString (
-      stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
-    ) signingUtils;
+    signingUtils = lib.optionalString
+      (
+        stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
+      )
+      signingUtils;
   };
 
   meta.mainProgram = "remove-references-to";

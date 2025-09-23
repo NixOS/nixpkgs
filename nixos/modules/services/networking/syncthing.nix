@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 with lib;
@@ -35,41 +34,47 @@ let
     else
       "${cfg.guiAddress}${path}";
 
-  devices = mapAttrsToList (
-    _: device:
-    device
-    // {
-      deviceID = device.id;
-    }
-  ) cfg.settings.devices;
+  devices = mapAttrsToList
+    (
+      _: device:
+        device
+        // {
+          deviceID = device.id;
+        }
+    )
+    cfg.settings.devices;
 
   anyAutoAccept = builtins.any (dev: dev.autoAcceptFolders) devices;
 
-  folders = mapAttrsToList (
-    _: folder:
-    folder
-    //
-      throwIf (folder ? rescanInterval || folder ? watch || folder ? watchDelay)
-        ''
-          The options services.syncthing.settings.folders.<name>.{rescanInterval,watch,watchDelay}
-          were removed. Please use, respectively, {rescanIntervalS,fsWatcherEnabled,fsWatcherDelayS} instead.
-        ''
-        {
-          devices =
-            let
-              folderDevices = folder.devices;
-            in
-            map (
-              device:
-              if builtins.isString device then
-                { deviceId = cfg.settings.devices.${device}.id; }
-              else if builtins.isAttrs device then
-                { deviceId = cfg.settings.devices.${device.name}.id; } // device
-              else
-                throw "Invalid type for devices in folder '${folderName}'; expected list or attrset."
-            ) folderDevices;
-        }
-  ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
+  folders = mapAttrsToList
+    (
+      _: folder:
+        folder
+        //
+        throwIf (folder ? rescanInterval || folder ? watch || folder ? watchDelay)
+          ''
+            The options services.syncthing.settings.folders.<name>.{rescanInterval,watch,watchDelay}
+            were removed. Please use, respectively, {rescanIntervalS,fsWatcherEnabled,fsWatcherDelayS} instead.
+          ''
+          {
+            devices =
+              let
+                folderDevices = folder.devices;
+              in
+              map
+                (
+                  device:
+                  if builtins.isString device then
+                    { deviceId = cfg.settings.devices.${device}.id; }
+                  else if builtins.isAttrs device then
+                    { deviceId = cfg.settings.devices.${device.name}.id; } // device
+                  else
+                    throw "Invalid type for devices in folder '${folderName}'; expected list or attrset."
+                )
+                folderDevices;
+          }
+    )
+    (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
   jq = "${pkgs.jq}/bin/jq";
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (
@@ -95,35 +100,35 @@ let
     ''
     +
 
-      /*
+    /*
         Syncthing's rest API for the folders and devices is almost identical.
         Hence we iterate them using lib.pipe and generate shell commands for both at
         the same time.
       */
-      (lib.pipe
-        {
-          # The attributes below are the only ones that are different for devices /
-          # folders.
-          devs = {
-            new_conf_IDs = map (v: v.id) devices;
-            GET_IdAttrName = "deviceID";
-            override = cfg.overrideDevices;
-            conf = devices;
-            baseAddress = curlAddressArgs "/rest/config/devices";
-          };
-          dirs = {
-            new_conf_IDs = map (v: v.id) folders;
-            GET_IdAttrName = "id";
-            override = cfg.overrideFolders;
-            conf = folders;
-            baseAddress = curlAddressArgs "/rest/config/folders";
-          };
-        }
-        [
-          # Now for each of these attributes, write the curl commands that are
-          # identical to both folders and devices.
-          (mapAttrs (
-            conf_type: s:
+    (lib.pipe
+      {
+        # The attributes below are the only ones that are different for devices /
+        # folders.
+        devs = {
+          new_conf_IDs = map (v: v.id) devices;
+          GET_IdAttrName = "deviceID";
+          override = cfg.overrideDevices;
+          conf = devices;
+          baseAddress = curlAddressArgs "/rest/config/devices";
+        };
+        dirs = {
+          new_conf_IDs = map (v: v.id) folders;
+          GET_IdAttrName = "id";
+          override = cfg.overrideFolders;
+          conf = folders;
+          baseAddress = curlAddressArgs "/rest/config/folders";
+        };
+      }
+      [
+        # Now for each of these attributes, write the curl commands that are
+        # identical to both folders and devices.
+        (mapAttrs (
+          conf_type: s:
             # We iterate the `conf` list now, and run a curl -X POST command for each, that
             # should update that device/folder only.
             lib.pipe s.conf [
@@ -186,25 +191,28 @@ let
                           #       end
                           #     )
                           #   '
-                          jqUpdates = map (device: ''
-                            .devices[] |= (
-                              if .deviceId == "${device.deviceId}" then
-                                del(.encryptionPasswordFile) |
-                                .encryptionPassword = ''$${device.variableName}
-                              else
-                                .
-                              end
+                          jqUpdates = map
+                            (device: ''
+                              .devices[] |= (
+                                if .deviceId == "${device.deviceId}" then
+                                  del(.encryptionPasswordFile) |
+                                  .encryptionPassword = ''$${device.variableName}
+                                else
+                                  .
+                                end
+                              )
+                            '')
+                            devicesWithSecrets;
+                          jqRawFiles = map
+                            (
+                              device: "--rawfile ${device.variableName} ${lib.escapeShellArg device.secretPath}"
                             )
-                          '') devicesWithSecrets;
-                          jqRawFiles = map (
-                            device: "--rawfile ${device.variableName} ${lib.escapeShellArg device.secretPath}"
-                          ) devicesWithSecrets;
+                            devicesWithSecrets;
                         in
                         "${jq} ${lib.concatStringsSep " " jqRawFiles} ${
                           lib.escapeShellArg (lib.concatStringsSep "|" ([ "." ] ++ jqUpdates))
                         }";
-                    }
-                    .${conf_type};
+                    }.${conf_type};
                 in
                 ''
                   ${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}
@@ -228,29 +236,29 @@ let
                 curl -X DELETE ${s.baseAddress}/$id
               done
             ''
-          ))
-          builtins.attrValues
-          (lib.concatStringsSep "\n")
-        ]
-      )
+        ))
+        builtins.attrValues
+        (lib.concatStringsSep "\n")
+      ]
+    )
     +
-      /*
+    /*
         Now we update the other settings defined in cleanedConfig which are not
         "folders" or "devices".
       */
-      (lib.pipe cleanedConfig [
-        builtins.attrNames
-        (lib.subtractLists [
-          "folders"
-          "devices"
-        ])
-        (map (subOption: ''
-          curl -X PUT -d ${
-            lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})
-          } ${curlAddressArgs "/rest/config/${subOption}"}
-        ''))
-        (lib.concatStringsSep "\n")
+    (lib.pipe cleanedConfig [
+      builtins.attrNames
+      (lib.subtractLists [
+        "folders"
+        "devices"
       ])
+      (map (subOption: ''
+        curl -X PUT -d ${
+          lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})
+        } ${curlAddressArgs "/rest/config/${subOption}"}
+      ''))
+      (lib.concatStringsSep "\n")
+    ])
     + ''
       # restart Syncthing if required
       if curl ${curlAddressArgs "/rest/config/restart-required"} |
@@ -814,17 +822,17 @@ in
     )
   ]
   ++
-    map
-      (o: mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ])
-      [
-        "cert"
-        "key"
-        "devices"
-        "folders"
-        "overrideDevices"
-        "overrideFolders"
-        "extraOptions"
-      ];
+  map
+    (o: mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ])
+    [
+      "cert"
+      "key"
+      "devices"
+      "folders"
+      "overrideDevices"
+      "overrideFolders"
+      "extraOptions"
+    ];
 
   ###### implementation
 

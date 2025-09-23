@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  libsecret,
-  git,
-  git-credential-manager,
-  gnupg,
-  pass,
-  testers,
-  withLibsecretSupport ? true,
-  withGpgSupport ? true,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, libsecret
+, git
+, git-credential-manager
+, gnupg
+, pass
+, testers
+, withLibsecretSupport ? true
+, withGpgSupport ? true
+,
 }:
 
 buildDotnetModule rec {

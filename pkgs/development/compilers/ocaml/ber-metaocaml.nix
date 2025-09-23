@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  libX11,
-  xorgproto,
-  buildEnv,
-  useX11 ? stdenv.hostPlatform.isx86,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, libX11
+, xorgproto
+, buildEnv
+, useX11 ? stdenv.hostPlatform.isx86
+,
 }:
 
 let

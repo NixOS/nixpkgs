@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  protobuf,
-  icu,
-  csdr,
-  codecserver,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, protobuf
+, icu
+, csdr
+, codecserver
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

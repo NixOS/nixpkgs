@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jdk,
-  gradle_8,
-  jre,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  testers,
-  z3,
-  cvc5,
-  key,
-  substitute,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk
+, gradle_8
+, jre
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, testers
+, z3
+, cvc5
+, key
+, substitute
+,
 }:
 
 let

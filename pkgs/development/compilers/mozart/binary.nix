@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  boost,
-  gmp,
-  tcl-8_5,
-  tk-8_5,
-  emacs,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, boost
+, gmp
+, tcl-8_5
+, tk-8_5
+, emacs
+,
 }:
 
 let

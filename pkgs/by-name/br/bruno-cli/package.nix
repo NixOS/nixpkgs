@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  bruno,
-  pkg-config,
-  pango,
-  testers,
-  bruno-cli,
+{ lib
+, buildNpmPackage
+, bruno
+, pkg-config
+, pango
+, testers
+, bruno-cli
+,
 }:
 
 let

@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  flatbuffers,
-  libjpeg_turbo,
-  mbedtls,
-  mdns,
-  pipewire,
-  qt6Packages,
-  qmqtt,
-  xz,
-  sdbus-cpp_2,
-  plutovg,
-  lunasvg,
-  nanopb,
-  linalg,
-  stb,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsa-lib
+, flatbuffers
+, libjpeg_turbo
+, mbedtls
+, mdns
+, pipewire
+, qt6Packages
+, qmqtt
+, xz
+, sdbus-cpp_2
+, plutovg
+, lunasvg
+, nanopb
+, linalg
+, stb
+,
 }:
 
 let

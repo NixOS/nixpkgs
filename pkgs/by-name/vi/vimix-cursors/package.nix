@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  cairosvg,
-  inkscape,
-  xcursorgen,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, cairosvg
+, inkscape
+, xcursorgen
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "vimix-cursors";

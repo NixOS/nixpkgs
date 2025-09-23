@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  buildLuarocksPackage,
-  lua,
-  pkg-config,
-  lib,
-  replaceVars,
-  zenity,
+{ fetchFromGitHub
+, buildLuarocksPackage
+, lua
+, pkg-config
+, lib
+, replaceVars
+, zenity
+,
 }:
 
 buildLuarocksPackage {

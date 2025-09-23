@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  fetchFromSourcehut,
-  lib,
-  xorg,
+{ buildGoModule
+, fetchFromSourcehut
+, lib
+, xorg
+,
 }:
 
 buildGoModule {

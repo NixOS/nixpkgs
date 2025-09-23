@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  c-ares,
-  curlHTTP3,
-  libev,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, c-ares
+, curlHTTP3
+, libev
+,
 }:
 
 let

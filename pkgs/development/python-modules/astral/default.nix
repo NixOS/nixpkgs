@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build
-  poetry-core,
-
-  # tests
-  pytestCheckHook,
-  freezegun,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build
+  poetry-core
+, # tests
+  pytestCheckHook
+, freezegun
+,
 }:
 
 buildPythonPackage rec {

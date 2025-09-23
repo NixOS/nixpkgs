@@ -1,20 +1,20 @@
-{
-  lib,
-  writeShellScriptBin,
-  buildGoModule,
-  makeWrapper,
-  darwin,
-  fetchFromGitHub,
-  coreutils,
-  net-tools,
-  util-linux,
-  stdenv,
-  dmidecode,
-  bashInteractive,
-  nix-update-script,
-  nixosTests,
-  testers,
-  amazon-ssm-agent,
+{ lib
+, writeShellScriptBin
+, buildGoModule
+, makeWrapper
+, darwin
+, fetchFromGitHub
+, coreutils
+, net-tools
+, util-linux
+, stdenv
+, dmidecode
+, bashInteractive
+, nix-update-script
+, nixosTests
+, testers
+, amazon-ssm-agent
+,
 }:
 
 let

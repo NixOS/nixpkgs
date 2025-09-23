@@ -1,33 +1,33 @@
-{
-  anndata,
-  array-api-compat,
-  awkward,
-  boltons,
-  buildPythonPackage,
-  dask,
-  distributed,
-  fetchFromGitHub,
-  filelock,
-  h5py,
-  hatch-vcs,
-  hatchling,
-  joblib,
-  lib,
-  legacy-api-wrap,
-  natsort,
-  numba,
-  numpy,
-  openpyxl,
-  pandas,
-  pyarrow,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  scanpy,
-  scikit-learn,
-  scipy,
-  stdenv,
-  zarr,
+{ anndata
+, array-api-compat
+, awkward
+, boltons
+, buildPythonPackage
+, dask
+, distributed
+, fetchFromGitHub
+, filelock
+, h5py
+, hatch-vcs
+, hatchling
+, joblib
+, lib
+, legacy-api-wrap
+, natsort
+, numba
+, numpy
+, openpyxl
+, pandas
+, pyarrow
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, scanpy
+, scikit-learn
+, scipy
+, stdenv
+, zarr
+,
 }:
 
 buildPythonPackage rec {

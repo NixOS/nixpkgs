@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
+{ lib
+, stdenv
+, fetchgit
+,
 }:
 
 let
   mkDictFromChromium =
-    {
-      shortName,
-      dictFileName,
-      shortDescription,
+    { shortName
+    , dictFileName
+    , shortDescription
+    ,
     }:
     stdenv.mkDerivation {
       pname = "hunspell-dict-${shortName}-chromium";

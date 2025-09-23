@@ -1,15 +1,15 @@
-{
-  lib,
-  wrapGAppsHook3,
-  glib,
-  stdenv,
-  xorg,
-  wingpanel,
-  wingpanelIndicators,
-  switchboard-with-plugs,
-  indicators ? null,
-  # Only useful to disable for development testing.
-  useDefaultIndicators ? true,
+{ lib
+, wrapGAppsHook3
+, glib
+, stdenv
+, xorg
+, wingpanel
+, wingpanelIndicators
+, switchboard-with-plugs
+, indicators ? null
+, # Only useful to disable for development testing.
+  useDefaultIndicators ? true
+,
 }:
 
 let

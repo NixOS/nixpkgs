@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, stdlib
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -94,7 +94,8 @@ mkCoqDerivation {
         case = "8.5";
         out = "8.5.0";
       }
-    ] null;
+    ]
+      null;
 
   mlPlugin = true;
 

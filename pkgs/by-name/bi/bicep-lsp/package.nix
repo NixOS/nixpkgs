@@ -1,14 +1,14 @@
-{
-  autoPatchelfHook,
-  buildDotnetModule,
-  coreutils,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  icu,
-  lib,
-  libkrb5,
-  openssl,
-  stdenv,
+{ autoPatchelfHook
+, buildDotnetModule
+, coreutils
+, dotnetCorePackages
+, fetchFromGitHub
+, icu
+, lib
+, libkrb5
+, openssl
+, stdenv
+,
 }:
 
 buildDotnetModule rec {

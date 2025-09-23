@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   settingsFormat = pkgs.formats.yaml { };
@@ -13,10 +12,12 @@ let
   prefixColon =
     s:
     lib.listToAttrs (
-      map (attrName: {
-        name = ":${attrName}";
-        value = if lib.isAttrs s.${attrName} then prefixColon s."${attrName}" else s."${attrName}";
-      }) (lib.attrNames s)
+      map
+        (attrName: {
+          name = ":${attrName}";
+          value = if lib.isAttrs s.${attrName} then prefixColon s."${attrName}" else s."${attrName}";
+        })
+        (lib.attrNames s)
     );
 
   # parse the port number out of the tcp://ip:port bind setting string

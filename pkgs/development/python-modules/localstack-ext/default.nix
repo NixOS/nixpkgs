@@ -1,23 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  dill,
-  dnslib,
-  dnspython,
-  plux,
-  pyaes,
-  pyjwt,
-  pyotp,
-  python-jose,
-  requests,
-  python-dateutil,
-  tabulate,
-
-  # use for testing promoted localstack
-  pkgs,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, dill
+, dnslib
+, dnspython
+, plux
+, pyaes
+, pyjwt
+, pyotp
+, python-jose
+, requests
+, python-dateutil
+, tabulate
+, # use for testing promoted localstack
+  pkgs
+,
 }:
 
 buildPythonPackage rec {

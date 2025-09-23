@@ -1,33 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-
-  # build-system
-  hatch-fancy-pypi-readme,
-  hatchling,
-
-  # dependencies
-  anyio,
-  distro,
-  httpx,
-  jiter,
-  pydantic,
-  sniffio,
-  tokenizers,
-  typing-extensions,
-
-  # optional dependencies
-  google-auth,
-
-  # test
-  dirty-equals,
-  nest-asyncio,
-  pytest-asyncio,
-  pytest-xdist,
-  pytestCheckHook,
-  respx,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, # build-system
+  hatch-fancy-pypi-readme
+, hatchling
+, # dependencies
+  anyio
+, distro
+, httpx
+, jiter
+, pydantic
+, sniffio
+, tokenizers
+, typing-extensions
+, # optional dependencies
+  google-auth
+, # test
+  dirty-equals
+, nest-asyncio
+, pytest-asyncio
+, pytest-xdist
+, pytestCheckHook
+, respx
+,
 }:
 
 buildPythonPackage rec {

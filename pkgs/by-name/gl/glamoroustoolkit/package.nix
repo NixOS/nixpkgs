@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  wrapGAppsHook3,
-  cairo,
-  copyDesktopItems,
-  dbus,
-  fontconfig,
-  freetype,
-  glib,
-  gtk3,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
-  libxkbcommon,
-  libgit2,
-  libglvnd,
-  libuuid,
-  libxcb,
-  makeDesktopItem,
-  harfbuzz,
-  libsoup_3,
-  webkitgtk_4_1,
-  zenity,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, wrapGAppsHook3
+, cairo
+, copyDesktopItems
+, dbus
+, fontconfig
+, freetype
+, glib
+, gtk3
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXrandr
+, libXrender
+, libxkbcommon
+, libgit2
+, libglvnd
+, libuuid
+, libxcb
+, makeDesktopItem
+, harfbuzz
+, libsoup_3
+, webkitgtk_4_1
+, zenity
+,
 }:
 let
   gkIcon = fetchurl {

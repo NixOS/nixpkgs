@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  readline,
-  compat ? false,
-  makeWrapper,
-  self,
-  packageOverrides ? (final: prev: { }),
-  replaceVars,
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsHostHost,
-  pkgsTargetTarget,
-  version,
-  hash,
-  passthruFun,
-  patches ? [ ],
-  postConfigure ? null,
-  postBuild ? null,
-  staticOnly ? stdenv.hostPlatform.isStatic,
-  luaAttr ? "lua${lib.versions.major version}_${lib.versions.minor version}",
+{ lib
+, stdenv
+, fetchurl
+, readline
+, compat ? false
+, makeWrapper
+, self
+, packageOverrides ? (final: prev: { })
+, replaceVars
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, version
+, hash
+, passthruFun
+, patches ? [ ]
+, postConfigure ? null
+, postBuild ? null
+, staticOnly ? stdenv.hostPlatform.isStatic
+, luaAttr ? "lua${lib.versions.major version}_${lib.versions.minor version}"
+,
 }@inputs:
 
 stdenv.mkDerivation (

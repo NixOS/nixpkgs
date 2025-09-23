@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  pkgs,
+{ lib
+, stdenv
+, pkgs
+,
 }:
 
 # since the tests are using a early stdenv, the stdenv will have dontPatchShebangs=1, so it has to be unset

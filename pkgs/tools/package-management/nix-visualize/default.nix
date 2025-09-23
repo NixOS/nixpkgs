@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix,
-  python,
-  matplotlib,
-  networkx,
-  pandas,
-  pygraphviz,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, nix
+, python
+, matplotlib
+, networkx
+, pandas
+, pygraphviz
+, setuptools
+,
 }:
 
 python.pkgs.buildPythonApplication {

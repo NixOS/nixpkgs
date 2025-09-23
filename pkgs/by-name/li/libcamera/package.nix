@@ -1,28 +1,30 @@
-{
-  stdenv,
-  fetchgit,
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  makeFontsConf,
-  openssl,
-  libdrm,
-  libevent,
-  libyaml,
-  gst_all_1,
-  gtest,
-  graphviz,
-  doxygen,
-  python3,
-  python3Packages,
-  udev,
-  libpisp,
-  withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
-  lttng-ust, # withTracing
-  withQcam ? false,
-  qt6, # withQcam
-  libtiff, # withQcam
+{ stdenv
+, fetchgit
+, lib
+, meson
+, ninja
+, pkg-config
+, makeFontsConf
+, openssl
+, libdrm
+, libevent
+, libyaml
+, gst_all_1
+, gtest
+, graphviz
+, doxygen
+, python3
+, python3Packages
+, udev
+, libpisp
+, withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
+, lttng-ust
+, # withTracing
+  withQcam ? false
+, qt6
+, # withQcam
+  libtiff
+, # withQcam
 }:
 
 stdenv.mkDerivation rec {

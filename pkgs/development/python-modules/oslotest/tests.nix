@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  oslo-config,
-  oslotest,
-  stestr,
+{ buildPythonPackage
+, oslo-config
+, oslotest
+, stestr
+,
 }:
 
 buildPythonPackage {

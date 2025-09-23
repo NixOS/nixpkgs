@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ruby,
-  gnugrep,
-  diffutils,
-  git,
-  darcs,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ruby
+, gnugrep
+, diffutils
+, git
+, darcs
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

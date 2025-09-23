@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenvNoCC,
-  subversion,
-  sshSupport ? true,
-  openssh ? null,
-  expect,
+{ lib
+, stdenvNoCC
+, subversion
+, sshSupport ? true
+, openssh ? null
+, expect
+,
 }:
-{
-  username,
-  password,
-  url,
-  rev ? "HEAD",
-  outputHash ? lib.fakeHash,
-  outputHashAlgo ? null,
+{ username
+, password
+, url
+, rev ? "HEAD"
+, outputHash ? lib.fakeHash
+, outputHashAlgo ? null
+,
 }:
 
 lib.fetchers.withNormalizedHash { } (

@@ -1,14 +1,14 @@
-{
-  autoconf,
-  automake,
-  cunit,
-  fetchFromGitHub,
-  fftw,
-  lib,
-  libtool,
-  llvmPackages,
-  stdenv,
-  bash,
+{ autoconf
+, automake
+, cunit
+, fetchFromGitHub
+, fftw
+, lib
+, libtool
+, llvmPackages
+, stdenv
+, bash
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

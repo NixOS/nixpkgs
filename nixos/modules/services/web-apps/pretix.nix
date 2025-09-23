@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -54,9 +53,11 @@ let
         (toPythonModule finalPackage)
         gunicorn
       ]
-      ++ lib.optionals (
-        cfg.settings.memcached.location != null
-      ) cfg.package.optional-dependencies.memcached;
+      ++ lib.optionals
+        (
+          cfg.settings.memcached.location != null
+        )
+        cfg.package.optional-dependencies.memcached;
   };
 
   withRedis = cfg.settings.redis.location != null;

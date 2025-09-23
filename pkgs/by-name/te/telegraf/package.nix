@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  stdenv,
-  testers,
-  telegraf,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, stdenv
+, testers
+, telegraf
+,
 }:
 
 buildGoModule rec {

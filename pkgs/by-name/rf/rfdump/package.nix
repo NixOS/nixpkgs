@@ -1,14 +1,14 @@
-{
-  autoreconfHook,
-  expat,
-  fetchpatch,
-  fetchurl,
-  glib,
-  gtk3-x11,
-  lib,
-  pkg-config,
-  stdenv,
-  zlib,
+{ autoreconfHook
+, expat
+, fetchpatch
+, fetchurl
+, glib
+, gtk3-x11
+, lib
+, pkg-config
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

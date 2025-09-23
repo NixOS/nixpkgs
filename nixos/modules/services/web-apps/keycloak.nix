@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  pkgs,
-  lib,
-  ...
+{ config
+, options
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -492,13 +491,15 @@ in
       };
 
       isSecret = v: isAttrs v && v ? _secret && isString v._secret;
-      filteredConfig = lib.converge (lib.filterAttrsRecursive (
-        _: v:
-        !elem v [
-          { }
-          null
-        ]
-      )) cfg.settings;
+      filteredConfig = lib.converge
+        (lib.filterAttrsRecursive (
+          _: v:
+            !elem v [
+              { }
+              null
+            ]
+        ))
+        cfg.settings;
       confFile = pkgs.writeText "keycloak.conf" (keycloakConfig filteredConfig);
       keycloakBuild = cfg.package.override {
         inherit confFile;
@@ -675,12 +676,14 @@ in
               name = if lib.hasSuffix ".json" baseName then baseName else "${baseName}.json";
             in
             "/run/keycloak/data/import/${name}";
-          settingsList = map (f: {
-            name = mkTarget f;
-            value = {
-              "L+".argument = "${f}";
-            };
-          }) cfg.realmFiles;
+          settingsList = map
+            (f: {
+              name = mkTarget f;
+              value = {
+                "L+".argument = "${f}";
+              };
+            })
+            cfg.realmFiles;
         in
         builtins.listToAttrs settingsList;
 

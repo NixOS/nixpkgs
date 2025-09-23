@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  qttools,
-  wrapQtAppsHook,
-  qtbase,
-  qtwayland,
-  qtsvg,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, qttools
+, wrapQtAppsHook
+, qtbase
+, qtwayland
+, qtsvg
+,
 }:
 
 stdenv.mkDerivation rec {

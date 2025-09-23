@@ -1,19 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  nix-update-script,
-  writers,
-  baseUrl ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, nix-update-script
+, writers
+, baseUrl ? null
+,
 }:
 
-assert lib.asserts.assertMsg (
-  baseUrl == null
-) "The baseUrl parameter is deprecated, please use .withConfig instead";
+assert lib.asserts.assertMsg
+  (
+    baseUrl == null
+  ) "The baseUrl parameter is deprecated, please use .withConfig instead";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "synapse-admin-etkecc";

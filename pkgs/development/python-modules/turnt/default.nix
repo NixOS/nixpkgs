@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  click,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, click
+, tomli
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  shfmt,
-  stdenvNoCC,
+{ lib
+, shfmt
+, stdenvNoCC
+,
 }:
 # See https://nixos.org/manual/nixpkgs/unstable/#tester-shfmt
 # or doc/build-helpers/testers.chapter.md
-{
-  name,
-  src,
-  indent ? 2,
+{ name
+, src
+, indent ? 2
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;

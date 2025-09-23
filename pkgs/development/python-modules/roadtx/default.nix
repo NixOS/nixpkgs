@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pycryptodomex,
-  pyotp,
-  pythonOlder,
-  requests,
-  roadlib,
-  selenium,
-  selenium-wire,
-  setuptools,
-  signxml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pycryptodomex
+, pyotp
+, pythonOlder
+, requests
+, roadlib
+, selenium
+, selenium-wire
+, setuptools
+, signxml
+,
 }:
 
 buildPythonPackage rec {

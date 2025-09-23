@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libglut,
-  lapack,
-  libusb1,
-  blas,
-  zlib,
-  eigen,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libglut
+, lapack
+, libusb1
+, blas
+, zlib
+, eigen
+,
 }:
 
 stdenv.mkDerivation rec {

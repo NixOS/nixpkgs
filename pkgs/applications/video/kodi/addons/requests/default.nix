@@ -1,13 +1,13 @@
-{
-  lib,
-  rel,
-  buildKodiAddon,
-  fetchzip,
-  addonUpdateScript,
-  certifi,
-  chardet,
-  idna,
-  urllib3,
+{ lib
+, rel
+, buildKodiAddon
+, fetchzip
+, addonUpdateScript
+, certifi
+, chardet
+, idna
+, urllib3
+,
 }:
 buildKodiAddon rec {
   pname = "requests";

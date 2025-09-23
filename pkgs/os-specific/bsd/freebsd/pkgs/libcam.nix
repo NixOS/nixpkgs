@@ -1,7 +1,7 @@
-{
-  lib,
-  libsbuf,
-  mkDerivation,
+{ lib
+, libsbuf
+, mkDerivation
+,
 }:
 mkDerivation {
   path = "lib/libcam";

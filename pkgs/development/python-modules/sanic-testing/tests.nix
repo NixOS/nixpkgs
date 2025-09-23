@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  pytest-asyncio,
-  pytestCheckHook,
-  sanic-testing,
-  setuptools,
+{ buildPythonPackage
+, pytest-asyncio
+, pytestCheckHook
+, sanic-testing
+, setuptools
+,
 }:
 
 buildPythonPackage {

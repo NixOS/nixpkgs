@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  backoff,
-  domain-local-await,
-  mtime,
-  multicore-magic,
-  yojson,
+{ lib
+, buildDunePackage
+, fetchurl
+, backoff
+, domain-local-await
+, mtime
+, multicore-magic
+, yojson
+,
 }:
 
 buildDunePackage rec {

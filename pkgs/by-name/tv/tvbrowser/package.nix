@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  fetchzip,
-  ant,
-  jdk,
-  makeWrapper,
-  stripJavaArchivesHook,
-  callPackage,
+{ lib
+, fetchurl
+, stdenv
+, fetchzip
+, ant
+, jdk
+, makeWrapper
+, stripJavaArchivesHook
+, callPackage
+,
 }:
 
 let

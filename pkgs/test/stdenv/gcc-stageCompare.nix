@@ -8,10 +8,10 @@
 # must remember to do the check.
 #
 
-{
-  stdenv,
-  pkgs,
-  lib,
+{ stdenv
+, pkgs
+, lib
+,
 }:
 
 with pkgs;

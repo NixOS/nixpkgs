@@ -1,28 +1,28 @@
-{
-  lib,
-  awesomeversion,
-  bellows,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  pyserial,
-  pyserial-asyncio,
-  pyserial-asyncio-fast,
-  pytest-asyncio_0,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  python-slugify,
-  pythonOlder,
-  setuptools,
-  universal-silabs-flasher,
-  wheel,
-  zha-quirks,
-  zigpy,
-  zigpy-deconz,
-  zigpy-xbee,
-  zigpy-zigate,
-  zigpy-znp,
+{ lib
+, awesomeversion
+, bellows
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, pyserial
+, pyserial-asyncio
+, pyserial-asyncio-fast
+, pytest-asyncio_0
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, python-slugify
+, pythonOlder
+, setuptools
+, universal-silabs-flasher
+, wheel
+, zha-quirks
+, zigpy
+, zigpy-deconz
+, zigpy-xbee
+, zigpy-zigate
+, zigpy-znp
+,
 }:
 
 buildPythonPackage rec {

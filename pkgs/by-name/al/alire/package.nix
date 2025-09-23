@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gprbuild,
-  gnat,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gprbuild
+, gnat
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

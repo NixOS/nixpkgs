@@ -7,20 +7,20 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  python312,
-  openssl,
-  jq,
-  callPackage,
-  installShellFiles,
-  with-gce ? false,
-  # NumPy is an optional runtime dependency and only needed for IAP TCP forwarding
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, python312
+, openssl
+, jq
+, callPackage
+, installShellFiles
+, with-gce ? false
+, # NumPy is an optional runtime dependency and only needed for IAP TCP forwarding
   # https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
-  with-numpy ? true,
+  with-numpy ? true
+,
 }:
 
 let
@@ -44,16 +44,16 @@ let
 
   pythonEnv = pythonCustom.withPackages (
     p:
-    with p;
-    [
-      cffi
-      cryptography
-      pyopenssl
-      crcmod
-      grpcio
-    ]
-    ++ lib.optional (with-gce) google-compute-engine
-    ++ lib.optional (with-numpy) numpy
+      with p;
+      [
+        cffi
+        cryptography
+        pyopenssl
+        crcmod
+        grpcio
+      ]
+      ++ lib.optional (with-gce) google-compute-engine
+      ++ lib.optional (with-numpy) numpy
   );
 
   data = import ./data.nix { };

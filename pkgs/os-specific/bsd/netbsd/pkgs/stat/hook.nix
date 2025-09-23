@@ -1,7 +1,7 @@
-{
-  makeSetupHook,
-  writeText,
-  stat,
+{ makeSetupHook
+, writeText
+, stat
+,
 }:
 
 # stat isn't in POSIX, and NetBSD stat supports a completely

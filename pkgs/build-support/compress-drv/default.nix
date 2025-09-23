@@ -12,21 +12,21 @@
   `extraFindOperands` (String)
 
   : Extra command line parameters to pass to the find command.
-    This can be used to exclude certain files.
-    For example: `-not -iregex ".*(\/apps\/.*\/l10n\/).*"`
+  This can be used to exclude certain files.
+  For example: `-not -iregex ".*(\/apps\/.*\/l10n\/).*"`
 
   `compressors` ( { ${fileExtension} :: String })
 
   : Map a desired extension (e.g. `gz`) to a compress program.
 
-    The compressor program that will be executed to get the `COMPRESSOR` extension.
-    The program should have a single " {}", which will be the replaced with the
-    target filename.
+  The compressor program that will be executed to get the `COMPRESSOR` extension.
+  The program should have a single " {}", which will be the replaced with the
+  target filename.
 
-    Compressor must:
+  Compressor must:
 
-    - read symlinks (thus --force is needed to gzip, zstd, xz).
-    - keep the original file in place (--keep).
+  - read symlinks (thus --force is needed to gzip, zstd, xz).
+  - keep the original file in place (--keep).
 
   # Type
 
@@ -39,10 +39,10 @@
   ## `pkgs.compressDrv` usage example
   ```
   compressDrv pkgs.spdx-license-list-data.json {
-    formats = ["json"];
-    compressors = {
+  formats = ["json"];
+  compressors = {
       gz = "${zopfli}/bin/zopfli --keep {}";
-    };
+  };
   }
   =>
   «derivation /nix/store/...-spdx-license-list-data-3.24.0-compressed.drv»
@@ -53,10 +53,10 @@
   :::
 */
 drv:
-{
-  formats,
-  compressors,
-  extraFindOperands ? "",
+{ formats
+, compressors
+, extraFindOperands ? ""
+,
 }:
 let
   validProg =
@@ -64,16 +64,17 @@ let
     let
       matches = (builtins.length (builtins.split "\\{}" prog) - 1) / 2;
     in
-    lib.assertMsg (
-      matches == 1
-    ) "compressor ${ext} needs to have exactly one '{}', found ${builtins.toString matches}";
+    lib.assertMsg
+      (
+        matches == 1
+      ) "compressor ${ext} needs to have exactly one '{}', found ${builtins.toString matches}";
   mkCmd =
     ext: prog:
-    assert validProg ext prog;
-    ''
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' ${extraFindOperands} -print0 \
-        | xargs -0 -P$NIX_BUILD_CORES -I{} ${prog}
-    '';
+      assert validProg ext prog;
+      ''
+        find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' ${extraFindOperands} -print0 \
+          | xargs -0 -P$NIX_BUILD_CORES -I{} ${prog}
+      '';
   formatsPipe = lib.concatStringsSep "|" formats;
 in
 runCommand "${drv.name}-compressed"
@@ -81,7 +82,7 @@ runCommand "${drv.name}-compressed"
     (lib.optionalAttrs (drv ? pname) { inherit (drv) pname; })
     // (lib.optionalAttrs (drv ? version) { inherit (drv) version; })
     // (lib.optionalAttrs (drv ? passthru) { inherit (drv) passthru; })
-    // (lib.optionalAttrs (drv ? meta) { inherit (drv) meta; })
+      // (lib.optionalAttrs (drv ? meta) { inherit (drv) meta; })
   )
   ''
     mkdir $out

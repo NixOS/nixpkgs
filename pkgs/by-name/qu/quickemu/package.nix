@@ -1,34 +1,34 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  stdenv,
-  makeWrapper,
-  gitUpdater,
-  cdrtools,
-  curl,
-  gawk,
-  mesa-demos,
-  gnugrep,
-  gnused,
-  jq,
-  pciutils,
-  procps,
-  python3,
-  qemu,
-  socat,
-  spice-gtk,
-  swtpm,
-  usbutils,
-  util-linux,
-  unzip,
-  xdg-user-dirs,
-  xrandr,
-  zsync,
-  OVMF,
-  OVMFFull,
-  testers,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, stdenv
+, makeWrapper
+, gitUpdater
+, cdrtools
+, curl
+, gawk
+, mesa-demos
+, gnugrep
+, gnused
+, jq
+, pciutils
+, procps
+, python3
+, qemu
+, socat
+, spice-gtk
+, swtpm
+, usbutils
+, util-linux
+, unzip
+, xdg-user-dirs
+, xrandr
+, zsync
+, OVMF
+, OVMFFull
+, testers
+, installShellFiles
+,
 }:
 let
   runtimePaths = [

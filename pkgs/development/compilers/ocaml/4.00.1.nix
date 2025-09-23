@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  ncurses,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, ncurses
+, libX11
+,
 }:
 
 let

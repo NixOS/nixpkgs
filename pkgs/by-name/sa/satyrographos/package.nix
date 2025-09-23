@@ -1,7 +1,7 @@
-{
-  ocamlPackages,
-  fetchFromGitHub,
-  lib,
+{ ocamlPackages
+, fetchFromGitHub
+, lib
+,
 }:
 
 let

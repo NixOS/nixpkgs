@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xcbuild,
-  apple-sdk_11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xcbuild
+, apple-sdk_11
+,
 }:
 
 stdenv.mkDerivation rec {

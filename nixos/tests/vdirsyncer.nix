@@ -78,11 +78,11 @@ let
   dtstamp = "20231129T194743Z";
 
   writeICS =
-    {
-      uid,
-      summary,
-      dtstart,
-      dtend,
+    { uid
+    , summary
+    , dtstart
+    , dtend
+    ,
     }:
     writeLines "${uid}.ics" "\r\n" [
       "BEGIN:VCALENDAR"
@@ -113,11 +113,11 @@ let
   };
 
   writeVCF =
-    {
-      uid,
-      name,
-      displayName,
-      email,
+    { uid
+    , name
+    , displayName
+    , email
+    ,
     }:
     writeLines "${uid}.vcf" "\r\n" [
       # One of the tools enforces this order of fields.

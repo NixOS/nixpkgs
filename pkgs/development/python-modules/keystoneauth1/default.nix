@@ -1,28 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  betamax,
-  fixtures,
-  hacking,
-  iso8601,
-  lxml,
-  oauthlib,
-  os-service-types,
-  oslo-config,
-  oslo-utils,
-  pbr,
-  pycodestyle,
-  pyyaml,
-  requests,
-  requests-kerberos,
-  requests-mock,
-  setuptools,
-  stestr,
-  stevedore,
-  testresources,
-  testtools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, betamax
+, fixtures
+, hacking
+, iso8601
+, lxml
+, oauthlib
+, os-service-types
+, oslo-config
+, oslo-utils
+, pbr
+, pycodestyle
+, pyyaml
+, requests
+, requests-kerberos
+, requests-mock
+, setuptools
+, stestr
+, stevedore
+, testresources
+, testtools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

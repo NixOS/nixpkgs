@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  stdenv,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  importlib-metadata,
-
-  # optional-dependencies
-  lxml,
-  cairosvg,
-
-  # tests
-  pyquery,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, stdenv
+, # build-system
+  setuptools
+, # dependencies
+  importlib-metadata
+, # optional-dependencies
+  lxml
+, cairosvg
+, # tests
+  pyquery
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

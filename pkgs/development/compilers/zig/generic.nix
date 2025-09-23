@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  llvmPackages,
-  xcbuild,
-  targetPackages,
-  libxml2,
-  ninja,
-  zlib,
-  coreutils,
-  callPackage,
-  version,
-  hash,
-  overrideCC,
-  wrapCCWith,
-  wrapBintoolsWith,
-  ...
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, llvmPackages
+, xcbuild
+, targetPackages
+, libxml2
+, ninja
+, zlib
+, coreutils
+, callPackage
+, version
+, hash
+, overrideCC
+, wrapCCWith
+, wrapBintoolsWith
+, ...
 }@args:
 
 stdenv.mkDerivation (finalAttrs: {

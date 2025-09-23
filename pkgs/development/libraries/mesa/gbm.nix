@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libglvnd,
-  bison,
-  flex,
-  meson,
-  pkg-config,
-  ninja,
-  python3Packages,
-  libdrm,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libglvnd
+, bison
+, flex
+, meson
+, pkg-config
+, ninja
+, python3Packages
+, libdrm
+,
 }:
 
 let

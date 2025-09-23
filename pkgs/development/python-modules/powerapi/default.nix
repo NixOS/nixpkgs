@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  influxdb-client,
-  kubernetes,
-  mock,
-  prometheus-client,
-  pymongo,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  pyzmq,
-  setproctitle,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, influxdb-client
+, kubernetes
+, mock
+, prometheus-client
+, pymongo
+, pytest-cov-stub
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, pyzmq
+, setproctitle
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

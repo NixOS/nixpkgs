@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-dateutil,
-  celery,
-  redis,
-  tenacity,
-  pytestCheckHook,
-  pytz,
-  fakeredis,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-dateutil
+, celery
+, redis
+, tenacity
+, pytestCheckHook
+, pytz
+, fakeredis
+, mock
+,
 }:
 
 buildPythonPackage rec {

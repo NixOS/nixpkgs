@@ -1,11 +1,11 @@
-{
-  bash,
-  coreutils,
-  gnused,
-  goss,
-  lib,
-  resholve,
-  which,
+{ bash
+, coreutils
+, gnused
+, goss
+, lib
+, resholve
+, which
+,
 }:
 
 resholve.mkDerivation rec {

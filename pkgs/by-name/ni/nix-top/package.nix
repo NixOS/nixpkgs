@@ -1,14 +1,17 @@
-{
-  binutils-unwrapped, # strings
-  coreutils,
-  getent, # /etc/passwd
-  fetchFromGitHub,
-  findutils,
-  lib,
-  makeWrapper,
-  ncurses, # tput
-  ruby,
-  stdenv,
+{ binutils-unwrapped
+, # strings
+  coreutils
+, getent
+, # /etc/passwd
+  fetchFromGitHub
+, findutils
+, lib
+, makeWrapper
+, ncurses
+, # tput
+  ruby
+, stdenv
+,
 }:
 
 # No gems used, so mkDerivation is fine.

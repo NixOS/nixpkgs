@@ -1,30 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  absl-py,
-  mujoco,
-  pyparsing,
-  setuptools,
-
-  # dependencies
-  dm-env,
-  dm-tree,
-  fsspec,
-  glfw,
-  h5py,
-  lxml,
-  mock,
-  numpy,
-  pillow,
-  protobuf,
-  pyopengl,
-  requests,
-  scipy,
-  tqdm,
-  etils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  absl-py
+, mujoco
+, pyparsing
+, setuptools
+, # dependencies
+  dm-env
+, dm-tree
+, fsspec
+, glfw
+, h5py
+, lxml
+, mock
+, numpy
+, pillow
+, protobuf
+, pyopengl
+, requests
+, scipy
+, tqdm
+, etils
+,
 }:
 
 buildPythonPackage rec {

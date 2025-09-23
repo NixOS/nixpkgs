@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  libiconv,
-  pandas,
-  python,
-  pythonOlder,
-  readstat,
-  setuptools,
-  zlib,
+{ lib
+, stdenv
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, libiconv
+, pandas
+, python
+, pythonOlder
+, readstat
+, setuptools
+, zlib
+,
 }:
 
 buildPythonPackage rec {

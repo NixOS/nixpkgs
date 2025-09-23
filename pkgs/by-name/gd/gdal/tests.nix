@@ -1,9 +1,9 @@
-{
-  runCommand,
-  gdal,
-  jdk,
-  lib,
-  testers,
+{ runCommand
+, gdal
+, jdk
+, lib
+, testers
+,
 }:
 
 let

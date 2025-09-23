@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

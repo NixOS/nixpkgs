@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  ansi2html,
-  libtmux,
-  weasyprint,
-  dataclass-wizard,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, ansi2html
+, libtmux
+, weasyprint
+, dataclass-wizard
+,
 }:
 
 buildPythonPackage rec {

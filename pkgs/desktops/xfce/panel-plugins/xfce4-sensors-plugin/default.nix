@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  libX11,
-  libXext,
-  libxfce4ui,
-  libxfce4util,
-  xfce4-panel,
-  libnotify,
-  lm_sensors,
-  libXNVCtrl,
-  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchurl
+, gettext
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, glib
+, gtk3
+, libX11
+, libXext
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, libnotify
+, lm_sensors
+, libXNVCtrl
+, nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

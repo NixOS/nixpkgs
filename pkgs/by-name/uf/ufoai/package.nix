@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libtheora,
-  xvidcore,
-  libGLU,
-  libGL,
-  SDL,
-  SDL_ttf,
-  SDL_mixer,
-  curl,
-  libjpeg,
-  libpng,
-  gettext,
-  cunit,
-  enableEditor ? false,
+{ lib
+, stdenv
+, fetchurl
+, libtheora
+, xvidcore
+, libGLU
+, libGL
+, SDL
+, SDL_ttf
+, SDL_mixer
+, curl
+, libjpeg
+, libpng
+, gettext
+, cunit
+, enableEditor ? false
+,
 }:
 
 stdenv.mkDerivation rec {

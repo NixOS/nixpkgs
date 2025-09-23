@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
-  h5py,
-  numpy,
-  dill,
-  astropy,
-  scipy,
-  pandas,
-  pytestCheckHook,
-  pytest-cov-stub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, h5py
+, numpy
+, dill
+, astropy
+, scipy
+, pandas
+, pytestCheckHook
+, pytest-cov-stub
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

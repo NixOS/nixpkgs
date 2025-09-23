@@ -1,25 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  click,
-  langgraph,
-  langgraph-runtime-inmem,
-  langgraph-sdk,
-  python-dotenv,
-
-  # testing
-  pytest-asyncio,
-  pytestCheckHook,
-  docker-compose,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  click
+, langgraph
+, langgraph-runtime-inmem
+, langgraph-sdk
+, python-dotenv
+, # testing
+  pytest-asyncio
+, pytestCheckHook
+, docker-compose
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

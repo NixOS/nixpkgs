@@ -1,49 +1,47 @@
-{
-  fetchFromGitHub,
-  fetchurl,
-  fetchzip,
-  stdenv,
-  cmake,
-  python3,
-  jdk,
-  git,
-  rsync,
-  lib,
-  ant,
-  ninja,
-  strip-nondeterminism,
-  stripJavaArchivesHook,
-
-  debugBuild ? false,
-
-  glib,
-  nss,
-  nspr,
-  atk,
-  at-spi2-atk,
-  libdrm,
-  libGL,
-  expat,
-  libxcb,
-  libxkbcommon,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libgbm,
-  gtk3,
-  pango,
-  cairo,
-  alsa-lib,
-  dbus,
-  at-spi2-core,
-  cups,
-  libxshmfence,
-  udev,
-  boost,
-  thrift,
+{ fetchFromGitHub
+, fetchurl
+, fetchzip
+, stdenv
+, cmake
+, python3
+, jdk
+, git
+, rsync
+, lib
+, ant
+, ninja
+, strip-nondeterminism
+, stripJavaArchivesHook
+, debugBuild ? false
+, glib
+, nss
+, nspr
+, atk
+, at-spi2-atk
+, libdrm
+, libGL
+, expat
+, libxcb
+, libxkbcommon
+, libX11
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, libgbm
+, gtk3
+, pango
+, cairo
+, alsa-lib
+, dbus
+, at-spi2-core
+, cups
+, libxshmfence
+, udev
+, boost
+, thrift
+,
 }:
 
 let
@@ -81,8 +79,7 @@ let
     {
       "aarch64-linux" = "linuxarm64";
       "x86_64-linux" = "linux64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   arches =
     {
       "linuxarm64" = {
@@ -95,8 +92,7 @@ let
         projectArch = "x86_64";
         targetArch = "x86_64";
       };
-    }
-    .${platform};
+    }.${platform};
   inherit (arches) depsArch projectArch targetArch;
 
 in
@@ -142,8 +138,7 @@ stdenv.mkDerivation rec {
         {
           "linuxarm64" = "sha256-wABtvz0JHitlkkB748I7yr02Oxs5lXvqDfrBAQiKWHU=";
           "linux64" = "sha256-qlutM0IsE1emcMe/3p7kwMIK7ou1rZGvpUkrSMVPnCc=";
-        }
-        .${platform};
+        }.${platform};
       urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] name;
     in
     fetchzip {

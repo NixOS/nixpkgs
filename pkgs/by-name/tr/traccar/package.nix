@@ -1,8 +1,8 @@
-{
-  fetchzip,
-  lib,
-  pkgs,
-  stdenvNoCC,
+{ fetchzip
+, lib
+, pkgs
+, stdenvNoCC
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "traccar";

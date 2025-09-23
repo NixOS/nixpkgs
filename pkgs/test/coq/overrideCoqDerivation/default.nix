@@ -1,8 +1,8 @@
-{
-  lib,
-  coq,
-  mkCoqPackages,
-  runCommand,
+{ lib
+, coq
+, mkCoqPackages
+, runCommand
+,
 }:
 
 let
@@ -22,14 +22,16 @@ let
   #
   # Here, we override the defaultVersion and release arguments to
   # mkCoqDerivation.
-  overriddenQuickChick = coqPackages.lib.overrideCoqDerivation {
-    defaultVersion = "9999";
-    release."9999".sha256 = lib.fakeSha256;
-  } coqPackages.QuickChick;
+  overriddenQuickChick = coqPackages.lib.overrideCoqDerivation
+    {
+      defaultVersion = "9999";
+      release."9999".sha256 = lib.fakeSha256;
+    }
+    coqPackages.QuickChick;
 in
 
 runCommand "coq-overrideCoqDerivation-test-0.1"
-  { meta.maintainers = with lib.maintainers; [ cdepillabout ]; }
+{ meta.maintainers = with lib.maintainers; [ cdepillabout ]; }
   ''
     # Confirm that the computed version number for the overridden QuickChick does
     # actually become 9999, as set above.

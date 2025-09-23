@@ -1,49 +1,47 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  runCommand,
-  biber,
-
-  # nativeBuildInputs
-  bison,
-  cmake,
-  curl,
-  flex,
-  fop,
-  libxslt,
-  pkg-config,
-  writableTmpDirAsHomeHook,
-
-  # buildInputs
-  apr,
-  aprutil,
-  boost,
-  bzip2,
-  cairo,
-  expat,
-  fontconfig,
-  freetype,
-  fribidi,
-  gd,
-  gmp,
-  graphite2,
-  harfbuzzFull,
-  hunspell,
-  libjpeg,
-  log4cxx,
-  xz,
-  mpfr,
-  mpfi,
-  libmspack,
-  libressl,
-  pixman,
-  libpng,
-  popt,
-  uriparser,
-  zziplib,
-  qt6Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, runCommand
+, biber
+, # nativeBuildInputs
+  bison
+, cmake
+, curl
+, flex
+, fop
+, libxslt
+, pkg-config
+, writableTmpDirAsHomeHook
+, # buildInputs
+  apr
+, aprutil
+, boost
+, bzip2
+, cairo
+, expat
+, fontconfig
+, freetype
+, fribidi
+, gd
+, gmp
+, graphite2
+, harfbuzzFull
+, hunspell
+, libjpeg
+, log4cxx
+, xz
+, mpfr
+, mpfi
+, libmspack
+, libressl
+, pixman
+, libpng
+, popt
+, uriparser
+, zziplib
+, qt6Packages
+,
 }:
 let
   # This is needed for some bootstrap packages.

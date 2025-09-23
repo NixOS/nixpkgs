@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  qt6,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, qt6
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "labelle";

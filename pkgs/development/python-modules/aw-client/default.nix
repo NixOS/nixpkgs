@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  poetry-core,
-  aw-core,
-  requests,
-  persist-queue,
-  click,
-  tabulate,
-  typing-extensions,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, poetry-core
+, aw-core
+, requests
+, persist-queue
+, click
+, tabulate
+, typing-extensions
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

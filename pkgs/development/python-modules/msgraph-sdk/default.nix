@@ -1,17 +1,17 @@
-{
-  lib,
-  azure-identity,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  microsoft-kiota-abstractions,
-  microsoft-kiota-authentication-azure,
-  microsoft-kiota-http,
-  microsoft-kiota-serialization-form,
-  microsoft-kiota-serialization-json,
-  microsoft-kiota-serialization-multipart,
-  microsoft-kiota-serialization-text,
-  msgraph-core,
+{ lib
+, azure-identity
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, microsoft-kiota-abstractions
+, microsoft-kiota-authentication-azure
+, microsoft-kiota-http
+, microsoft-kiota-serialization-form
+, microsoft-kiota-serialization-json
+, microsoft-kiota-serialization-multipart
+, microsoft-kiota-serialization-text
+, msgraph-core
+,
 }:
 
 buildPythonPackage rec {

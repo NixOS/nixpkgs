@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  rustPlatform,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, rustPlatform
+,
 }:
 buildPythonPackage rec {
   pname = "lazrs";

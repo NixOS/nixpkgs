@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  gettext,
-  pkg-config,
-  perlPackages,
-  libidn2,
-  zlib,
-  pcre2,
-  libuuid,
-  libiconv,
-  libintl,
-  nukeReferences,
-  python3,
-  lzip,
-
-  withLibpsl ? false,
-  libpsl,
-
-  withOpenssl ? true,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, pkg-config
+, perlPackages
+, libidn2
+, zlib
+, pcre2
+, libuuid
+, libiconv
+, libintl
+, nukeReferences
+, python3
+, lzip
+, withLibpsl ? false
+, libpsl
+, withOpenssl ? true
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

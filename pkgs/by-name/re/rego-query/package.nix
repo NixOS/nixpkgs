@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromSourcehut,
-  which,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromSourcehut
+, which
+,
 }:
 
 buildGoModule (finalAttrs: {

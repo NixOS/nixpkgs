@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk3,
-  gtkdatabox,
-  fftw,
-  gnum4,
-  comedilib,
-  alsa-lib,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, gtk3
+, gtkdatabox
+, fftw
+, gnum4
+, comedilib
+, alsa-lib
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

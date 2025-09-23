@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildEnv,
-  writeShellScriptBin,
-  fetchurl,
-  vscode,
-  unzip,
-  jq,
-  vscode-extension-update-script,
+{ stdenv
+, lib
+, buildEnv
+, writeShellScriptBin
+, fetchurl
+, vscode
+, unzip
+, jq
+, vscode-extension-update-script
+,
 }:
 let
   buildVscodeExtension = lib.extendMkDerivation {
@@ -17,26 +17,26 @@ let
     ];
     extendDrvArgs =
       finalAttrs:
-      {
-        pname ? null, # Only optional for backward compatibility.
+      { pname ? null
+      , # Only optional for backward compatibility.
         # Same as "Unique Identifier" on the extension's web page.
         # For the moment, only serve as unique extension dir.
-        vscodeExtPublisher,
-        vscodeExtName,
-        vscodeExtUniqueId,
-        configurePhase ? ''
+        vscodeExtPublisher
+      , vscodeExtName
+      , vscodeExtUniqueId
+      , configurePhase ? ''
           runHook preConfigure
           runHook postConfigure
-        '',
-        buildPhase ? ''
+        ''
+      , buildPhase ? ''
           runHook preBuild
           runHook postBuild
-        '',
-        dontPatchELF ? true,
-        dontStrip ? true,
-        nativeBuildInputs ? [ ],
-        passthru ? { },
-        ...
+        ''
+      , dontPatchELF ? true
+      , dontStrip ? true
+      , nativeBuildInputs ? [ ]
+      , passthru ? { }
+      , ...
       }@args:
       {
         pname = "vscode-extension-${pname}";
@@ -88,23 +88,22 @@ let
     ];
     extendDrvArgs =
       finalAttrs:
-      {
-        name ? "",
-        src ? null,
-        vsix ? null,
-        mktplcRef,
-        ...
+      { name ? ""
+      , src ? null
+      , vsix ? null
+      , mktplcRef
+      , ...
       }:
-      assert "" == name;
-      assert null == src;
-      {
-        inherit (mktplcRef) version;
-        pname = "${mktplcRef.publisher}-${mktplcRef.name}";
-        src = if (vsix != null) then vsix else fetchVsixFromVscodeMarketplace mktplcRef;
-        vscodeExtPublisher = mktplcRef.publisher;
-        vscodeExtName = mktplcRef.name;
-        vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
-      };
+        assert "" == name;
+        assert null == src;
+        {
+          inherit (mktplcRef) version;
+          pname = "${mktplcRef.publisher}-${mktplcRef.name}";
+          src = if (vsix != null) then vsix else fetchVsixFromVscodeMarketplace mktplcRef;
+          vscodeExtPublisher = mktplcRef.publisher;
+          vscodeExtName = mktplcRef.name;
+          vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
+        };
   };
 
   mktplcRefAttrList = [

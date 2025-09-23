@@ -1,10 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "lazyhetzner";

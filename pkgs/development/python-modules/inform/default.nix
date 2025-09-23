@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  arrow,
-  six,
-  hypothesis,
-  num2words,
-  pytestCheckHook,
-  pythonOlder,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, arrow
+, six
+, hypothesis
+, num2words
+, pytestCheckHook
+, pythonOlder
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitHub,
-  gitUpdater,
-  curl,
-  wl-clipboard,
-  xclip,
+{ lib
+, buildLua
+, fetchFromGitHub
+, gitUpdater
+, curl
+, wl-clipboard
+, xclip
+,
 }:
 
 buildLua rec {

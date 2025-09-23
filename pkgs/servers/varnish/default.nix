@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch2,
-  pcre,
-  pcre2,
-  jemalloc,
-  libunwind,
-  libxslt,
-  groff,
-  ncurses,
-  pkg-config,
-  readline,
-  libedit,
-  coreutils,
-  python3,
-  makeWrapper,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, pcre
+, pcre2
+, jemalloc
+, libunwind
+, libxslt
+, groff
+, ncurses
+, pkg-config
+, readline
+, libedit
+, coreutils
+, python3
+, makeWrapper
+, nixosTests
+,
 }:
 
 let
   common =
-    {
-      version,
-      hash,
-      extraNativeBuildInputs ? [ ],
+    { version
+    , hash
+    , extraNativeBuildInputs ? [ ]
+    ,
     }:
     stdenv.mkDerivation rec {
       pname = "varnish";

@@ -1,12 +1,12 @@
-{
-  lib,
-  libretro,
-  makeBinaryWrapper,
-  retroarch-bare,
-  runCommand,
-  symlinkJoin,
-  cores ? [ ],
-  settings ? { },
+{ lib
+, libretro
+, makeBinaryWrapper
+, retroarch-bare
+, runCommand
+, symlinkJoin
+, cores ? [ ]
+, settings ? { }
+,
 }:
 
 let
@@ -25,10 +25,12 @@ let
   coresPath = lib.lists.unique (map (c: c.libretroCore) cores);
   wrapperArgs = lib.strings.escapeShellArgs (
     (lib.lists.flatten (
-      map (p: [
-        "--add-flags"
-        "-L ${placeholder "out" + p}"
-      ]) coresPath
+      map
+        (p: [
+          "--add-flags"
+          "-L ${placeholder "out" + p}"
+        ])
+        coresPath
     ))
     ++ [
       "--add-flags"

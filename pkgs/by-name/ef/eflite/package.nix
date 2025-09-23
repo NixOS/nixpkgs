@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  flite,
-  alsa-lib,
-  debug ? false,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, flite
+, alsa-lib
+, debug ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

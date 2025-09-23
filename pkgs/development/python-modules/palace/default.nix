@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromSourcehut,
-  pythonOlder,
-  cmake,
-  cython_0,
-  setuptools,
-  alure2,
+{ lib
+, buildPythonPackage
+, fetchFromSourcehut
+, pythonOlder
+, cmake
+, cython_0
+, setuptools
+, alure2
+,
 }:
 
 buildPythonPackage rec {

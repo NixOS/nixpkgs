@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  stdcompat,
-  ppxlib,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, stdcompat
+, ppxlib
+,
 }:
 
 buildDunePackage rec {

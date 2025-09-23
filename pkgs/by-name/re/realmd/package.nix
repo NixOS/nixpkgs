@@ -1,16 +1,16 @@
-{
-  autoreconfHook,
-  fetchFromGitLab,
-  glib,
-  lib,
-  libkrb5,
-  nix-update-script,
-  openldap,
-  pkg-config,
-  polkit,
-  samba,
-  stdenv,
-  systemdLibs,
+{ autoreconfHook
+, fetchFromGitLab
+, glib
+, lib
+, libkrb5
+, nix-update-script
+, openldap
+, pkg-config
+, polkit
+, samba
+, stdenv
+, systemdLibs
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

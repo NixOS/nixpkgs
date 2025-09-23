@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  c-ares,
-  cmake,
-  crc32c,
-  curl,
-  gbenchmark,
-  grpc,
-  gtest,
-  ninja,
-  nlohmann_json,
-  openssl,
-  pkg-config,
-  protobuf_31,
-  pkgsBuildHost,
-  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
-  apis ? [ "*" ],
-  staticOnly ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, c-ares
+, cmake
+, crc32c
+, curl
+, gbenchmark
+, grpc
+, gtest
+, ninja
+, nlohmann_json
+, openssl
+, pkg-config
+, protobuf_31
+, pkgsBuildHost
+, # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
+  apis ? [ "*" ]
+, staticOnly ? stdenv.hostPlatform.isStatic
+,
 }:
 let
   # defined in cmake/GoogleapisConfig.cmake

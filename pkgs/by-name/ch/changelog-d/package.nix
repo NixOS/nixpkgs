@@ -1,8 +1,8 @@
-{
-  callPackage,
-  lib,
-  haskell,
-  haskellPackages,
+{ callPackage
+, lib
+, haskell
+, haskellPackages
+,
 }:
 
 let

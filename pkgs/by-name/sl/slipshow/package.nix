@@ -1,10 +1,10 @@
-{
-  lib,
-  ocamlPackages,
-  fetchFromGitHub,
-  versionCheckHook,
-  nixosTests,
-  nix-update-script,
+{ lib
+, ocamlPackages
+, fetchFromGitHub
+, versionCheckHook
+, nixosTests
+, nix-update-script
+,
 }:
 
 ocamlPackages.buildDunePackage rec {

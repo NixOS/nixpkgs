@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -42,10 +41,12 @@ let
       bevalue = a: lib.escapeShellArg (generators.mkValueStringDefault { } a);
     in
     lib.concatStringsSep " " (
-      lib.attrsets.foldlAttrs (
-        acc: k: v:
-        acc ++ lib.optional (v != null) "--${k}=${bevalue v}"
-      ) [ ] cfg.podConfig
+      lib.attrsets.foldlAttrs
+        (
+          acc: k: v:
+            acc ++ lib.optional (v != null) "--${k}=${bevalue v}"
+        ) [ ]
+        cfg.podConfig
     );
 
   package =
@@ -65,94 +66,96 @@ let
     in
     p.overrideAttrs (
       finalAttrs: prevAttrs:
-      let
-        appDir = "$out/share/php/${finalAttrs.pname}";
+        let
+          appDir = "$out/share/php/${finalAttrs.pname}";
 
-        stateDirectories = # sh
-          ''
-            # Symlinking in our state directories
-            rm -rf $out/{.env,cache} ${appDir}/{log,public/cache}
-            ln -s ${cfg.dataDir}/.env ${appDir}/.env
-            ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
-            ln -s ${cfg.logDir} ${appDir}/log
-            ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
-          '';
+          stateDirectories = # sh
+            ''
+              # Symlinking in our state directories
+              rm -rf $out/{.env,cache} ${appDir}/{log,public/cache}
+              ln -s ${cfg.dataDir}/.env ${appDir}/.env
+              ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
+              ln -s ${cfg.logDir} ${appDir}/log
+              ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
+            '';
 
-        exposeComposer = # sh
-          ''
-            # Expose PHP Composer for scripts
-            mkdir -p $out/bin
-            echo "#!${lib.getExe pkgs.dash}" > $out/bin/movim-composer
-            echo "${finalAttrs.php.packages.composer}/bin/composer --working-dir="${appDir}" \"\$@\"" >> $out/bin/movim-composer
-            chmod +x $out/bin/movim-composer
-          '';
+          exposeComposer = # sh
+            ''
+              # Expose PHP Composer for scripts
+              mkdir -p $out/bin
+              echo "#!${lib.getExe pkgs.dash}" > $out/bin/movim-composer
+              echo "${finalAttrs.php.packages.composer}/bin/composer --working-dir="${appDir}" \"\$@\"" >> $out/bin/movim-composer
+              chmod +x $out/bin/movim-composer
+            '';
 
-        podConfigInputDisableReplace = lib.optionalString (podConfigFlags != "") (
-          lib.concatStringsSep "\n" (
-            lib.attrsets.foldlAttrs (
-              acc: k: v:
-              acc
-              ++
-                lib.optional (v != null)
-                  # Disable all Admin panel options that were set in the
-                  # `cfg.podConfig` to prevent confusing situtions where the
-                  # values are rewritten on server reboot
-                  # sh
-                  ''
-                    substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
-                      --replace-warn 'name="${k}"' 'name="${k}" readonly'
-                  ''
-            ) [ ] cfg.podConfig
-          )
-        );
-
-        precompressStaticFilesJobs =
-          let
-            inherit (cfg.precompressStaticFiles) brotli gzip;
-
-            findTextFileNames = lib.concatStringsSep " -o " (
-              builtins.map (n: ''-iname "*.${n}"'') [
-                "css"
-                "ini"
-                "js"
-                "json"
-                "manifest"
-                "mjs"
-                "svg"
-                "webmanifest"
-              ]
-            );
-          in
-          lib.concatStringsSep "\n" [
-            (lib.optionalString brotli.enable # sh
-              ''
-                echo -n "Precompressing static files with Brotli …"
-                find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output={}.br {}
-                echo " done."
-              ''
+          podConfigInputDisableReplace = lib.optionalString (podConfigFlags != "") (
+            lib.concatStringsSep "\n" (
+              lib.attrsets.foldlAttrs
+                (
+                  acc: k: v:
+                    acc
+                    ++
+                    lib.optional (v != null)
+                      # Disable all Admin panel options that were set in the
+                      # `cfg.podConfig` to prevent confusing situtions where the
+                      # values are rewritten on server reboot
+                      # sh
+                      ''
+                        substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
+                          --replace-warn 'name="${k}"' 'name="${k}" readonly'
+                      ''
+                ) [ ]
+                cfg.podConfig
             )
-            (lib.optionalString gzip.enable # sh
-              ''
-                echo -n "Precompressing static files with Gzip …"
-                find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} {} > {}.gz
-                echo " done."
-              ''
-            )
+          );
+
+          precompressStaticFilesJobs =
+            let
+              inherit (cfg.precompressStaticFiles) brotli gzip;
+
+              findTextFileNames = lib.concatStringsSep " -o " (
+                builtins.map (n: ''-iname "*.${n}"'') [
+                  "css"
+                  "ini"
+                  "js"
+                  "json"
+                  "manifest"
+                  "mjs"
+                  "svg"
+                  "webmanifest"
+                ]
+              );
+            in
+            lib.concatStringsSep "\n" [
+              (lib.optionalString brotli.enable # sh
+                ''
+                  echo -n "Precompressing static files with Brotli …"
+                  find ${appDir}/public -type f ${findTextFileNames} -print0 \
+                    | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                        ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output={}.br {}
+                  echo " done."
+                ''
+              )
+              (lib.optionalString gzip.enable # sh
+                ''
+                  echo -n "Precompressing static files with Gzip …"
+                  find ${appDir}/public -type f ${findTextFileNames} -print0 \
+                    | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                        ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} {} > {}.gz
+                  echo " done."
+                ''
+              )
+            ];
+        in
+        {
+          postInstall = lib.concatStringsSep "\n\n" [
+            prevAttrs.postInstall
+            stateDirectories
+            exposeComposer
+            podConfigInputDisableReplace
+            precompressStaticFilesJobs
           ];
-      in
-      {
-        postInstall = lib.concatStringsSep "\n\n" [
-          prevAttrs.postInstall
-          stateDirectories
-          exposeComposer
-          podConfigInputDisableReplace
-          precompressStaticFilesJobs
-        ];
-      }
+        }
     );
 
   configFile = pipe cfg.settings [
@@ -169,8 +172,7 @@ let
     {
       "postgresql" = "postgresql.target";
       "mariadb" = "mysql.service";
-    }
-    .${cfg.database.type};
+    }.${cfg.database.type};
 
   # exclusivity asserted in `assertions`
   webServerService =
@@ -621,8 +623,7 @@ in
               {
                 "postgresql" = "pgsql";
                 "mariadb" = "mysql";
-              }
-              .${cfg.database.type};
+              }.${cfg.database.type};
             DB_HOST = "localhost";
             DB_PORT = config.services.${cfg.database.type}.settings.port;
             DB_DATABASE = cfg.database.name;
@@ -856,40 +857,40 @@ in
         };
 
         script = # sh
-        ''
-          # Env vars
-          rm -f ${cfg.dataDir}/.env
-          cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env
-          echo -e '\n' >> ${cfg.dataDir}/.env
-          if [[ -f "$CREDENTIALS_DIRECTORY/env-secrets"  ]]; then
-            cat "$CREDENTIALS_DIRECTORY/env-secrets" >> ${cfg.dataDir}/.env
+          ''
+            # Env vars
+            rm -f ${cfg.dataDir}/.env
+            cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env
             echo -e '\n' >> ${cfg.dataDir}/.env
-          fi
+            if [[ -f "$CREDENTIALS_DIRECTORY/env-secrets"  ]]; then
+              cat "$CREDENTIALS_DIRECTORY/env-secrets" >> ${cfg.dataDir}/.env
+              echo -e '\n' >> ${cfg.dataDir}/.env
+            fi
 
-          # Caches, logs
-          mkdir -p ${cfg.dataDir}/public/cache ${cfg.logDir} ${cfg.runtimeDir}/cache
-          chmod -R ug+rw ${cfg.dataDir}/public/cache
-          chmod -R ug+rw ${cfg.logDir}
-          chmod -R ug+rwx ${cfg.runtimeDir}/cache
+            # Caches, logs
+            mkdir -p ${cfg.dataDir}/public/cache ${cfg.logDir} ${cfg.runtimeDir}/cache
+            chmod -R ug+rw ${cfg.dataDir}/public/cache
+            chmod -R ug+rw ${cfg.logDir}
+            chmod -R ug+rwx ${cfg.runtimeDir}/cache
 
-          # Migrations
-          MOVIM_VERSION="${package.version}"
-          if [[ ! -f "${cfg.dataDir}/.migration-version" ]] || [[ "$MOVIM_VERSION" != "$(<${cfg.dataDir}/.migration-version)" ]]; then
-            ${package}/bin/movim-composer movim:migrate && echo $MOVIM_VERSION > ${cfg.dataDir}/.migration-version
-          fi
-        ''
-        + lib.optionalString (podConfigFlags != "") (
-          let
-            flags = lib.concatStringsSep " " (
-              [ "--no-interaction" ]
-              ++ lib.optional cfg.debug "-vvv"
-              ++ lib.optional (!cfg.debug && cfg.verbose) "-v"
-            );
-          in
+            # Migrations
+            MOVIM_VERSION="${package.version}"
+            if [[ ! -f "${cfg.dataDir}/.migration-version" ]] || [[ "$MOVIM_VERSION" != "$(<${cfg.dataDir}/.migration-version)" ]]; then
+              ${package}/bin/movim-composer movim:migrate && echo $MOVIM_VERSION > ${cfg.dataDir}/.migration-version
+            fi
           ''
-            ${lib.getExe package} config ${podConfigFlags}
-          ''
-        );
+          + lib.optionalString (podConfigFlags != "") (
+            let
+              flags = lib.concatStringsSep " " (
+                [ "--no-interaction" ]
+                ++ lib.optional cfg.debug "-vvv"
+                ++ lib.optional (!cfg.debug && cfg.verbose) "-v"
+              );
+            in
+            ''
+              ${lib.getExe package} config ${podConfigFlags}
+            ''
+          );
       };
 
       services.${phpExecutionUnit} = {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  python3Packages,
-  makeWrapper,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, python3
+, python3Packages
+, makeWrapper
+, installShellFiles
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  popt,
-  bluezSupport ? stdenv.hostPlatform.isLinux,
-  bluez,
-  readlineSupport ? true,
-  readline,
-  enableConduits ? true,
-  bison,
-  enableLibpng ? true,
-  libpng,
-  enableLibusb ? true,
-  libusb-compat-0_1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, popt
+, bluezSupport ? stdenv.hostPlatform.isLinux
+, bluez
+, readlineSupport ? true
+, readline
+, enableConduits ? true
+, bison
+, enableLibpng ? true
+, libpng
+, enableLibusb ? true
+, libusb-compat-0_1
+,
 }:
 
 stdenv.mkDerivation {

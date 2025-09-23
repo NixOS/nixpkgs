@@ -1,23 +1,23 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  gjs,
-  glib-networking,
-  gnome-bluetooth,
-  gtk-layer-shell,
-  libpulseaudio,
-  libsoup_3,
-  networkmanager,
-  upower,
-  typescript,
-  wrapGAppsHook3,
-  linux-pam,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, gjs
+, glib-networking
+, gnome-bluetooth
+, gtk-layer-shell
+, libpulseaudio
+, libsoup_3
+, networkmanager
+, upower
+, typescript
+, wrapGAppsHook3
+, linux-pam
+, nix-update-script
+,
 }:
 
 buildNpmPackage (finalAttrs: {

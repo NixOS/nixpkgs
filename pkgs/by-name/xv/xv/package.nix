@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  xorg,
-  libpng,
-  libwebp,
-  libtiff,
-  jasper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, xorg
+, libpng
+, libwebp
+, libtiff
+, jasper
+,
 }:
 
 stdenv.mkDerivation rec {

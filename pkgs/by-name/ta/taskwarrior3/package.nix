@@ -1,26 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  rustPlatform,
-  rustc,
-  cargo,
-  installShellFiles,
-
-  # buildInputs
-  libuuid,
-
-  # passthru.tests
-  nixosTests,
-
-  # nativeCheckInputs
-  python3,
-
-  # nativeInstallCheckInputs
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, rustPlatform
+, rustc
+, cargo
+, installShellFiles
+, # buildInputs
+  libuuid
+, # passthru.tests
+  nixosTests
+, # nativeCheckInputs
+  python3
+, # nativeInstallCheckInputs
+  versionCheckHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";

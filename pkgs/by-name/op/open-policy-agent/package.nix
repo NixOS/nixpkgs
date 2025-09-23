@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-
-  enableWasmEval ? false,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, enableWasmEval ? false
+,
 }:
 
 assert
-  enableWasmEval && stdenv.hostPlatform.isDarwin
+enableWasmEval && stdenv.hostPlatform.isDarwin
   -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule (finalAttrs: {
@@ -35,11 +34,12 @@ buildGoModule (finalAttrs: {
   ];
 
   tags = lib.optional enableWasmEval (
-    builtins.trace (
-      "Warning: enableWasmEval breaks reproducability, "
-      + "ensure you need wasm evaluation. "
-      + "`opa build` does not need this feature."
-    ) "opa_wasm"
+    builtins.trace
+      (
+        "Warning: enableWasmEval breaks reproducability, "
+        + "ensure you need wasm evaluation. "
+        + "`opa build` does not need this feature."
+      ) "opa_wasm"
   );
 
   checkFlags =

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  python3,
-  fetchzip,
-  testers,
-  valgrind,
-  librandombytes,
-  libcpucycles,
+{ stdenv
+, lib
+, python3
+, fetchzip
+, testers
+, valgrind
+, librandombytes
+, libcpucycles
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib25519";

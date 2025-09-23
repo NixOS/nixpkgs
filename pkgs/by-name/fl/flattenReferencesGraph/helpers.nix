@@ -1,7 +1,7 @@
-{
-  bash,
-  writers,
-  python3Packages,
+{ bash
+, writers
+, python3Packages
+,
 }:
 let
   writeCheckedBashBin =
@@ -9,10 +9,11 @@ let
     let
       interpreter = "${bash}/bin/bash";
     in
-    writers.makeScriptWriter {
-      inherit interpreter;
-      check = "${interpreter} -n $1";
-    } "/bin/${name}";
+    writers.makeScriptWriter
+      {
+        inherit interpreter;
+        check = "${interpreter} -n $1";
+      } "/bin/${name}";
 
   # Helpers used during build/development.
   lint = writeCheckedBashBin "lint" ''

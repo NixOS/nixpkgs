@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  dmidecode,
-  fetchPypi,
-  poetry-core,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, dmidecode
+, fetchPypi
+, poetry-core
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

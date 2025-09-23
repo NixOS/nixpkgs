@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  grpcio,
-  hatchling,
-  llama-index-core,
-  pythonOlder,
-  qdrant-client,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, grpcio
+, hatchling
+, llama-index-core
+, pythonOlder
+, qdrant-client
+,
 }:
 
 buildPythonPackage rec {

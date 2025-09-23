@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  datasets,
-  dill,
-  fsspec,
-  huggingface-hub,
-  importlib-metadata,
-  multiprocess,
-  numpy,
-  packaging,
-  pandas,
-  requests,
-  setuptools,
-  tqdm,
-  xxhash,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, datasets
+, dill
+, fsspec
+, huggingface-hub
+, importlib-metadata
+, multiprocess
+, numpy
+, packaging
+, pandas
+, requests
+, setuptools
+, tqdm
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

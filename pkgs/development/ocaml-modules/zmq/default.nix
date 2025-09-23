@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  dune-configurator,
-  czmq,
+{ lib
+, fetchurl
+, buildDunePackage
+, dune-configurator
+, czmq
+,
 }:
 
 buildDunePackage rec {

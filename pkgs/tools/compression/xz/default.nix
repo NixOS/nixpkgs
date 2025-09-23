@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, enableStatic ? stdenv.hostPlatform.isStatic
+, writeScript
+, testers
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

@@ -1,18 +1,19 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  doCheck ? false, # cyclic dependency with pymodbus
-  fetchFromGitHub,
-  lib,
-  poetry-core,
-  prompt-toolkit,
-  pygments,
-  pymodbus,
-  pymodbus-repl,
-  pytest-cov-stub,
-  pytestCheckHook,
-  tabulate,
-  typer,
+{ aiohttp
+, buildPythonPackage
+, doCheck ? false
+, # cyclic dependency with pymodbus
+  fetchFromGitHub
+, lib
+, poetry-core
+, prompt-toolkit
+, pygments
+, pymodbus
+, pymodbus-repl
+, pytest-cov-stub
+, pytestCheckHook
+, tabulate
+, typer
+,
 }:
 
 buildPythonPackage rec {

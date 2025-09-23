@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  gtk2,
-  cmake,
-  pkg-config,
-  libXdamage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gtk2
+, cmake
+, pkg-config
+, libXdamage
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,11 @@
-{
-  stdenv,
-  which,
-  callPackage,
-
-  # apparmor deps
-  libapparmor,
-  apparmor-parser,
-  apparmor-utils,
+{ stdenv
+, which
+, callPackage
+, # apparmor deps
+  libapparmor
+, apparmor-parser
+, apparmor-utils
+,
 }:
 stdenv.mkDerivation {
   pname = "apparmor-profiles";

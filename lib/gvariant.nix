@@ -145,9 +145,11 @@ rec {
       v
     else if builtins.isInt v then
       let
-        validConstructors = builtins.filter (
-          { min, max, ... }: (min == null || min <= v) && (max == null || v <= max)
-        ) intConstructors;
+        validConstructors = builtins.filter
+          (
+            { min, max, ... }: (min == null || min <= v) && (max == null || v <= max)
+          )
+          intConstructors;
       in
       throw ''
         The GVariant type for number “${builtins.toString v}” is unclear.
@@ -192,9 +194,11 @@ rec {
     elems:
     let
       vs = map mkValue (lib.throwIf (elems == [ ]) "Please create empty array with mkEmptyArray." elems);
-      elemType = lib.throwIfNot (lib.all (t: (head vs).type == t) (
-        map (v: v.type) vs
-      )) "Elements in a list should have same type." (head vs).type;
+      elemType = lib.throwIfNot
+        (lib.all (t: (head vs).type == t) (
+          map (v: v.type) vs
+        )) "Elements in a list should have same type."
+        (head vs).type;
     in
     mkPrimitive (type.arrayOf elemType) vs
     // {

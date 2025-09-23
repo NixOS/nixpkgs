@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  gperf,
-  imagemagick,
-  makeWrapper,
-  pkg-config,
-  SDL2,
-  cairo,
-  freetype,
-  fribidi,
-  libimagequant,
-  libpaper,
-  libpng,
-  librsvg,
-  libxml2,
-  pango,
-  SDL2_gfx,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_Pango,
-  SDL2_ttf,
-  netpbm,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, gperf
+, imagemagick
+, makeWrapper
+, pkg-config
+, SDL2
+, cairo
+, freetype
+, fribidi
+, libimagequant
+, libpaper
+, libpng
+, librsvg
+, libxml2
+, pango
+, SDL2_gfx
+, SDL2_image
+, SDL2_mixer
+, SDL2_Pango
+, SDL2_ttf
+, netpbm
+,
 }:
 
 let

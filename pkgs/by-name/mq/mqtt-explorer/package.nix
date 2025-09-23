@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  electron,
-  yarn,
-  fixup-yarn-lock,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  typescript,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, electron
+, yarn
+, fixup-yarn-lock
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, typescript
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 # NOTE mqtt-explorer has 3 yarn subpackages and uses relative links
 # between them, which makes it hard to package them via 3 `mkYarnPackage`

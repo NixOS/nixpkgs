@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  intltool,
-  pkg-config,
-  qt6,
-  libqalculate,
+{ lib
+, stdenv
+, fetchFromGitHub
+, intltool
+, pkg-config
+, qt6
+, libqalculate
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

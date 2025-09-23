@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nanoemoji,
-  python3Packages,
-  woff2,
-  xmlstarlet,
-  # available color formats: ["cbdt" "glyf_colr_0" "glyf_colr_1" "sbix" "picosvgz" "untouchedsvgz"]
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nanoemoji
+, python3Packages
+, woff2
+, xmlstarlet
+, # available color formats: ["cbdt" "glyf_colr_0" "glyf_colr_1" "sbix" "picosvgz" "untouchedsvgz"]
   # available black formats: ["glyf"]
   fontFormats ? [
     "glyf"
     "cbdt"
     "glyf_colr_0"
     "glyf_colr_1"
-  ],
-  # when at least one of the glyf_colr_0/1 formats is specified, whether to build maximum color fonts
+  ]
+, # when at least one of the glyf_colr_0/1 formats is specified, whether to build maximum color fonts
   # "none" to not build any, "svg" to build colr+svg, "bitmap" to build cbdt+colr+svg fonts
-  buildMaximumColorFonts ? "bitmap",
+  buildMaximumColorFonts ? "bitmap"
+,
 }:
 let
   # all available methods

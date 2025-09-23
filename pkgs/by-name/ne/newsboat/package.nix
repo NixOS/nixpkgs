@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  stfl,
-  sqlite,
-  curl,
-  gettext,
-  pkg-config,
-  libxml2,
-  json_c,
-  ncurses,
-  asciidoctor,
-  libiconv,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, stfl
+, sqlite
+, curl
+, gettext
+, pkg-config
+, libxml2
+, json_c
+, ncurses
+, asciidoctor
+, libiconv
+, makeWrapper
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

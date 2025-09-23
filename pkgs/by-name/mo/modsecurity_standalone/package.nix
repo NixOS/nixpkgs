@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  curl,
-  apacheHttpd,
-  pcre,
-  apr,
-  aprutil,
-  libxml2,
-  luaSupport ? false,
-  lua5,
-  perl,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, curl
+, apacheHttpd
+, pcre
+, apr
+, aprutil
+, libxml2
+, luaSupport ? false
+, lua5
+, perl
+, versionCheckHook
+,
 }:
 
 let

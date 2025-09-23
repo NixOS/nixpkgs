@@ -1,12 +1,12 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchPypi,
-  pytest7CheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchPypi
+, pytest7CheckHook
+, pythonOlder
+, requests
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

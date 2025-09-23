@@ -10,10 +10,9 @@
   };
 
   nodes.machine =
-    {
-      pkgs,
-      lib,
-      ...
+    { pkgs
+    , lib
+    , ...
     }:
     let
       # We create a custom Qtile configuration file that adds a widget from

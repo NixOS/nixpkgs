@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  boost,
-  curl,
-  SDL2,
-  SDL2_image,
-  libSM,
-  libXext,
-  libpng,
-  freetype,
-  libGLU,
-  libGL,
-  glew,
-  glm,
-  openal,
-  libogg,
-  libvorbis,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, boost
+, curl
+, SDL2
+, SDL2_image
+, libSM
+, libXext
+, libpng
+, freetype
+, libGLU
+, libGL
+, glew
+, glm
+, openal
+, libogg
+, libvorbis
+,
 }:
 
 stdenv.mkDerivation rec {

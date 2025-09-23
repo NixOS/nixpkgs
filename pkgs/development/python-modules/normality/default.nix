@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  hatchling,
-  charset-normalizer,
-  chardet,
-  banal,
-  pyicu,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, hatchling
+, charset-normalizer
+, chardet
+, banal
+, pyicu
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

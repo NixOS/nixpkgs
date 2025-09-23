@@ -1,27 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # buildInputs
-  boost,
-  blas,
-  eigen,
-  gtest,
-  pybind11,
-
-  # build-system
-  cmake,
-  setuptools,
-
-  # dependencies
-  dask,
-  numpy,
-  xarray,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # buildInputs
+  boost
+, blas
+, eigen
+, gtest
+, pybind11
+, # build-system
+  cmake
+, setuptools
+, # dependencies
+  dask
+, numpy
+, xarray
+, # tests
+  pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "pyinterp";

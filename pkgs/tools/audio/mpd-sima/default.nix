@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitLab,
-  python-musicpd,
-  requests,
-  sphinxHook,
+{ lib
+, buildPythonApplication
+, fetchFromGitLab
+, python-musicpd
+, requests
+, sphinxHook
+,
 }:
 
 buildPythonApplication rec {

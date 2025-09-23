@@ -1,9 +1,9 @@
-{
-  lib,
-  bluepy,
-  buildPythonPackage,
-  fetchPypi,
-  pycryptodomex,
+{ lib
+, bluepy
+, buildPythonPackage
+, fetchPypi
+, pycryptodomex
+,
 }:
 
 buildPythonPackage rec {

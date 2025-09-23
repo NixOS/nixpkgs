@@ -1,19 +1,19 @@
-{
-  lib,
-  arabic-reshaper,
-  buildPythonPackage,
-  fetchFromGitHub,
-  html5lib,
-  pillow,
-  pyhanko,
-  pyhanko-certvalidator,
-  pypdf,
-  pytestCheckHook,
-  python-bidi,
-  pythonOlder,
-  reportlab,
-  setuptools,
-  svglib,
+{ lib
+, arabic-reshaper
+, buildPythonPackage
+, fetchFromGitHub
+, html5lib
+, pillow
+, pyhanko
+, pyhanko-certvalidator
+, pypdf
+, pytestCheckHook
+, python-bidi
+, pythonOlder
+, reportlab
+, setuptools
+, svglib
+,
 }:
 
 buildPythonPackage rec {

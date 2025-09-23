@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  clang,
-  # dependencies
-  pyyaml,
-  blst,
-  # checkPhase dependencies
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, clang
+, # dependencies
+  pyyaml
+, blst
+, # checkPhase dependencies
+  python
+,
 }:
 
 buildPythonPackage rec {

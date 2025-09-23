@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  ssdpy,
-  appdirs,
-  pygobject3,
-  gobject-introspection,
-  gtk3,
-  wrapGAppsHook3,
-  buildPythonPackage,
-  buildApplication ? false,
+{ lib
+, fetchFromGitHub
+, setuptools
+, requests
+, ssdpy
+, appdirs
+, pygobject3
+, gobject-introspection
+, gtk3
+, wrapGAppsHook3
+, buildPythonPackage
+, buildApplication ? false
+,
 }:
 
 buildPythonPackage rec {

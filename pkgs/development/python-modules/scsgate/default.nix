@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyserial,
-  pyyaml,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+, pyyaml
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

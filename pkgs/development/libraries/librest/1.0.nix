@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gi-docgen,
-  glib,
-  json-glib,
-  libsoup_3,
-  libxml2,
-  gobject-introspection,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gi-docgen
+, glib
+, json-glib
+, libsoup_3
+, libxml2
+, gobject-introspection
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

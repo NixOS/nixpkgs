@@ -1,14 +1,13 @@
-{
-  serverName,
-  group,
-  baseModule,
-  domain,
+{ serverName
+, group
+, baseModule
+, domain
+,
 }:
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 {
   name = serverName;

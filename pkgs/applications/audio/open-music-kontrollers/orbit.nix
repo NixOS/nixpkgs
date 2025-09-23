@@ -2,7 +2,7 @@
 
 callPackage ./generic.nix (
   args
-  // rec {
+    // rec {
     pname = "orbit";
     version = "unstable-2021-04-13";
     url = "https://git.open-music-kontrollers.ch/lv2/${pname}.lv2/snapshot/${pname}.lv2-f4aa620fc8d77418856581a6a955192af15b3860.tar.xz";

@@ -1,8 +1,8 @@
-{
-  lib,
-  mkTclDerivation,
-  fetchFromGitHub,
-  curl,
+{ lib
+, mkTclDerivation
+, fetchFromGitHub
+, curl
+,
 }:
 
 mkTclDerivation rec {

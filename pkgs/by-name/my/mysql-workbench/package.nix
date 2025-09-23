@@ -1,43 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  replaceVars,
-
-  cmake,
-  jre,
-  ninja,
-  pkg-config,
-  swig,
-  wrapGAppsHook3,
-
-  bash,
-  coreutils,
-  glibc,
-  sudo,
-
-  python3Packages,
-
-  cairo,
-  mysql,
-  libiodbc,
-  proj,
-
-  antlr4_13,
-  boost,
-  gdal,
-  gtkmm3,
-  libmysqlconnectorcpp,
-  libsecret,
-  libssh,
-  libuuid,
-  libxml2,
-  libzip,
-  openssl,
-  rapidjson,
-  vsqlite,
-  zstd,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, replaceVars
+, cmake
+, jre
+, ninja
+, pkg-config
+, swig
+, wrapGAppsHook3
+, bash
+, coreutils
+, glibc
+, sudo
+, python3Packages
+, cairo
+, mysql
+, libiodbc
+, proj
+, antlr4_13
+, boost
+, gdal
+, gtkmm3
+, libmysqlconnectorcpp
+, libsecret
+, libssh
+, libuuid
+, libxml2
+, libzip
+, openssl
+, rapidjson
+, vsqlite
+, zstd
+,
 }:
 
 let

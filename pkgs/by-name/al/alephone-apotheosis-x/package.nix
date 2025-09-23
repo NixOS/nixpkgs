@@ -1,7 +1,7 @@
-{
-  lib,
-  alephone,
-  requireFile,
+{ lib
+, alephone
+, requireFile
+,
 }:
 
 alephone.makeWrapper {

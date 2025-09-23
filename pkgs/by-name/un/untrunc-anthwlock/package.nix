@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ffmpeg,
-  libui,
-  unstableGitUpdater,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ffmpeg
+, libui
+, unstableGitUpdater
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

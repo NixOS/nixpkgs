@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  anyio,
-  asyncio-rlock,
-  asyncio-throttle,
-  ircstates,
-  async-stagger,
-  async-timeout,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, anyio
+, asyncio-rlock
+, asyncio-throttle
+, ircstates
+, async-stagger
+, async-timeout
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  desktopToDarwinBundle,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+, wrapQtAppsHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

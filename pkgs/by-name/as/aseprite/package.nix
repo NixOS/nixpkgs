@@ -1,35 +1,35 @@
-{
-  clangStdenv,
-  cmake,
-  cmark,
-  curl,
-  fetchFromGitHub,
-  fetchpatch,
-  fmt,
-  fontconfig,
-  freetype,
-  giflib,
-  gitUpdater,
-  glib,
-  harfbuzzFull,
-  lib,
-  libGL,
-  libjpeg,
-  libpng,
-  libwebp,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXxf86vm,
-  libxcb,
-  ninja,
-  pcre2,
-  pixman,
-  pkg-config,
-  skia-aseprite,
-  tinyxml-2,
-  zlib,
+{ clangStdenv
+, cmake
+, cmark
+, curl
+, fetchFromGitHub
+, fetchpatch
+, fmt
+, fontconfig
+, freetype
+, giflib
+, gitUpdater
+, glib
+, harfbuzzFull
+, lib
+, libGL
+, libjpeg
+, libpng
+, libwebp
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXxf86vm
+, libxcb
+, ninja
+, pcre2
+, pixman
+, pkg-config
+, skia-aseprite
+, tinyxml-2
+, zlib
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

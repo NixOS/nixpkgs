@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libmilter,
-  berkeleydb,
-  py3dns,
-  pyasyncore,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, libmilter
+, berkeleydb
+, py3dns
+, pyasyncore
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  cbor-diag,
-  cbor2,
-  cryptography,
-  dtlssocket,
-  fetchFromGitHub,
-  filelock,
-  ge25519,
-  pygments,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools,
-  termcolor,
-  websockets,
+{ lib
+, buildPythonPackage
+, cbor-diag
+, cbor2
+, cryptography
+, dtlssocket
+, fetchFromGitHub
+, filelock
+, ge25519
+, pygments
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+, termcolor
+, websockets
+,
 }:
 
 buildPythonPackage rec {

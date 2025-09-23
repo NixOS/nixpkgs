@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchzip,
-  gst_all_1,
-  gtkmm3,
-  hidapi,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  udev,
-  udevCheckHook,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, buildGoModule
+, fetchzip
+, gst_all_1
+, gtkmm3
+, hidapi
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, python3
+, udev
+, udevCheckHook
+, wrapGAppsHook3
+,
 }:
 
 let

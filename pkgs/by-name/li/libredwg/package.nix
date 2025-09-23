@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  writeShellScript,
-  pkg-config,
-  texinfo,
-  pcre2,
-  swig,
-  libxml2,
-  ncurses,
-  enablePython ? false,
-  python ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, writeShellScript
+, pkg-config
+, texinfo
+, pcre2
+, swig
+, libxml2
+, ncurses
+, enablePython ? false
+, python ? null
+,
 }:
 let
   isPython3 = enablePython && python.pythonAtLeast "3";

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libdrm,
-  json_c,
-  pciutils,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libdrm
+, json_c
+, pciutils
+, meson
+, ninja
+, pkg-config
+, scdoc
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

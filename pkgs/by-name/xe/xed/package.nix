@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  llvmPackages,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, llvmPackages
+, installShellFiles
+, nix-update-script
+,
 }:
 
 let

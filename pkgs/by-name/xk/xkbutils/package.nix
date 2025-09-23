@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libxaw,
-  libxt,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libx11
+, libxaw
+, libxt
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkbutils";

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  fetchNpmDeps,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, fetchNpmDeps
+,
 }:
 
 buildNpmPackage rec {

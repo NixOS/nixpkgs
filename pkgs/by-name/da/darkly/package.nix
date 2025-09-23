@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  kdePackages,
-  qtPackages ? kdePackages,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, kdePackages
+, qtPackages ? kdePackages
+, gitUpdater
+,
 }:
 let
   qtMajorVersion = lib.versions.major qtPackages.qtbase.version;

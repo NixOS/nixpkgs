@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiohttp,
-  osrparse,
-  requests,
-  requests-oauthlib,
-  setuptools,
-  typing-utils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, osrparse
+, requests
+, requests-oauthlib
+, setuptools
+, typing-utils
+,
 }:
 
 buildPythonPackage rec {

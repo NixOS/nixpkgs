@@ -1,19 +1,19 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jsonschema,
-  parameterized,
-  pydantic,
-  pytest-env,
-  pytest-rerunfailures,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  typing-extensions,
+{ lib
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, jsonschema
+, parameterized
+, pydantic
+, pytest-env
+, pytest-rerunfailures
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

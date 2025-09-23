@@ -1,37 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  greenlet,
-
-  # optionals
-  aiomysql,
-  aiosqlite,
-  asyncmy,
-  asyncpg,
-  cx-oracle,
-  mariadb,
-  mypy,
-  mysql-connector,
-  mysqlclient,
-  pg8000,
-  psycopg2,
-  psycopg2cffi,
-  # TODO: pymssql
-  pymysql,
-  pyodbc,
-  # TODO: sqlcipher3
-  typing-extensions,
-
-  # tests
-  mock,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  greenlet
+, # optionals
+  aiomysql
+, aiosqlite
+, asyncmy
+, asyncpg
+, cx-oracle
+, mariadb
+, mypy
+, mysql-connector
+, mysqlclient
+, pg8000
+, psycopg2
+, psycopg2cffi
+, # TODO: pymssql
+  pymysql
+, pyodbc
+, # TODO: sqlcipher3
+  typing-extensions
+, # tests
+  mock
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

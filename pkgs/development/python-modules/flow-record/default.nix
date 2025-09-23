@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  duckdb,
-  elastic-transport,
-  elasticsearch,
-  fastavro,
-  fetchFromGitHub,
-  httpx,
-  lz4,
-  maxminddb,
-  msgpack,
-  pytest7CheckHook,
-  pythonOlder,
-  pytz,
-  setuptools-scm,
-  setuptools,
-  zstandard,
+{ lib
+, buildPythonPackage
+, duckdb
+, elastic-transport
+, elasticsearch
+, fastavro
+, fetchFromGitHub
+, httpx
+, lz4
+, maxminddb
+, msgpack
+, pytest7CheckHook
+, pythonOlder
+, pytz
+, setuptools-scm
+, setuptools
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

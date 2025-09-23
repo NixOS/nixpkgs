@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  p7zip,
-  virtio-win,
+{ lib
+, stdenv
+, fetchurl
+, p7zip
+, virtio-win
+,
 }:
 
 let

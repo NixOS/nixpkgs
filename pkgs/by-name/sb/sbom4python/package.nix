@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  sbom2dot,
-  sbom4files,
-  versionCheckHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, sbom2dot
+, sbom4files
+, versionCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

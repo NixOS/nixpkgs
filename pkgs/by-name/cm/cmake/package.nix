@@ -1,36 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  buildPackages,
-  bzip2,
-  curlMinimal,
-  expat,
-  libarchive,
-  libuv,
-  ncurses,
-  openssl,
-  pkg-config,
-  ps,
-  rhash,
-  sphinx,
-  texinfo,
-  xz,
-  zlib,
-  isBootstrap ? null,
-  isMinimalBuild ? (
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, buildPackages
+, bzip2
+, curlMinimal
+, expat
+, libarchive
+, libuv
+, ncurses
+, openssl
+, pkg-config
+, ps
+, rhash
+, sphinx
+, texinfo
+, xz
+, zlib
+, isBootstrap ? null
+, isMinimalBuild ? (
     if isBootstrap != null then
       lib.warn "isBootstrap argument is deprecated and will be removed; use isMinimalBuild instead" isBootstrap
     else
       false
-  ),
-  useOpenSSL ? !isMinimalBuild,
-  useSharedLibraries ? (!isMinimalBuild && !stdenv.hostPlatform.isCygwin),
-  uiToolkits ? [ ], # can contain "ncurses" and/or "qt5"
-  buildDocs ? !(isMinimalBuild || (uiToolkits == [ ])),
-  libsForQt5,
-  gitUpdater,
+  )
+, useOpenSSL ? !isMinimalBuild
+, useSharedLibraries ? (!isMinimalBuild && !stdenv.hostPlatform.isCygwin)
+, uiToolkits ? [ ]
+, # can contain "ncurses" and/or "qt5"
+  buildDocs ? !(isMinimalBuild || (uiToolkits == [ ]))
+, libsForQt5
+, gitUpdater
+,
 }:
 
 let

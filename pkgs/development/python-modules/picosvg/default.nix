@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  absl-py,
-  lxml,
-  skia-pathops,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, absl-py
+, lxml
+, skia-pathops
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "picosvg";

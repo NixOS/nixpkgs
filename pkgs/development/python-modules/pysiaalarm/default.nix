@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  dataclasses-json,
-  pycryptodome,
-  setuptools-scm,
-  pytest-asyncio_0,
-  pytest-cases,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pytz,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, dataclasses-json
+, pycryptodome
+, setuptools-scm
+, pytest-asyncio_0
+, pytest-cases
+, pytest-cov-stub
+, pytestCheckHook
+, pytz
+,
 }:
 
 buildPythonPackage rec {

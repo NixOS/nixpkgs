@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  cmake,
-  pkg-config,
-  fetchFromGitHub,
-  fmt,
-  libpsl,
-  cxxopts,
-  kdePackages,
+{ stdenv
+, lib
+, cmake
+, pkg-config
+, fetchFromGitHub
+, fmt
+, libpsl
+, cxxopts
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

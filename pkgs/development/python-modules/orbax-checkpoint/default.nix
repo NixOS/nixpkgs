@@ -1,37 +1,34 @@
-{
-  lib,
-  stdenv,
-  absl-py,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  aiofiles,
-  etils,
-  humanize,
-  importlib-resources,
-  jax,
-  msgpack,
-  nest-asyncio,
-  numpy,
-  protobuf,
-  pyyaml,
-  simplejson,
-  tensorstore,
-  typing-extensions,
-
-  # tests
-  chex,
-  google-cloud-logging,
-  mock,
-  optax,
-  portpicker,
-  pytest-xdist,
-  pytestCheckHook,
-  safetensors,
+{ lib
+, stdenv
+, absl-py
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  aiofiles
+, etils
+, humanize
+, importlib-resources
+, jax
+, msgpack
+, nest-asyncio
+, numpy
+, protobuf
+, pyyaml
+, simplejson
+, tensorstore
+, typing-extensions
+, # tests
+  chex
+, google-cloud-logging
+, mock
+, optax
+, portpicker
+, pytest-xdist
+, pytestCheckHook
+, safetensors
+,
 }:
 
 buildPythonPackage rec {

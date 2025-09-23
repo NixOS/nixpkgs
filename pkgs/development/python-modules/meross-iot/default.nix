@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  paho-mqtt,
-  pycryptodomex,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, paho-mqtt
+, pycryptodomex
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

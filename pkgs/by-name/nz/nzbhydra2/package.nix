@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  openjdk17,
-  python3,
-  unzip,
-  nixosTests,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, openjdk17
+, python3
+, unzip
+, nixosTests
+,
 }:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";

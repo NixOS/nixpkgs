@@ -9,9 +9,11 @@ let
 
   warnAfterVersion =
     ver: pkg:
-    lib.warnIf (lib.versionOlder ver
-      super.${pkg.pname}.version
-    ) "override for haskell.packages.ghc910.${pkg.pname} may no longer be needed" pkg;
+    lib.warnIf
+      (lib.versionOlder ver
+        super.${pkg.pname}.version
+      ) "override for haskell.packages.ghc910.${pkg.pname} may no longer be needed"
+      pkg;
 
 in
 
@@ -90,7 +92,8 @@ in
     self.silently
     self.syb
     self.HUnit
-  ] super.ghc-exactprint_1_9_0_0;
+  ]
+    super.ghc-exactprint_1_9_0_0;
 
   #
   # Jailbreaks

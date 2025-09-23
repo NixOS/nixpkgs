@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  gdb,
-  eventlet,
-  flask-compress,
-  flask-socketio,
-  pygdbmi,
-  pygments,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, gdb
+, eventlet
+, flask-compress
+, flask-socketio
+, pygdbmi
+, pygments
+,
 }:
 
 buildPythonApplication rec {

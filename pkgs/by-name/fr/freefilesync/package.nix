@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  fetchDebianPatch,
-  fetchFromGitHub,
-  copyDesktopItems,
-  pkg-config,
-  wrapGAppsHook3,
-  unzip,
-  curl,
-  glib,
-  gtk3,
-  libidn2,
-  libssh2,
-  openssl,
-  wxGTK32,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, fetchDebianPatch
+, fetchFromGitHub
+, copyDesktopItems
+, pkg-config
+, wrapGAppsHook3
+, unzip
+, curl
+, glib
+, gtk3
+, libidn2
+, libssh2
+, openssl
+, wxGTK32
+, makeDesktopItem
+,
 }:
 
 let
@@ -36,7 +36,8 @@ let
       configureFlags = lib.subtractLists [
         "--disable-compat28"
         "--enable-unicode"
-      ] previousAttrs.configureFlags;
+      ]
+        previousAttrs.configureFlags;
     }
   );
 in

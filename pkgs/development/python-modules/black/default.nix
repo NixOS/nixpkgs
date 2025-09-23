@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
-  pytestCheckHook,
-  aiohttp,
-  click,
-  colorama,
-  hatch-fancy-pypi-readme,
-  hatch-vcs,
-  hatchling,
-  ipython,
-  mypy-extensions,
-  packaging,
-  pathspec,
-  parameterized,
-  platformdirs,
-  tokenize-rt,
-  tomli,
-  typing-extensions,
-  uvloop,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, pytestCheckHook
+, aiohttp
+, click
+, colorama
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, ipython
+, mypy-extensions
+, packaging
+, pathspec
+, parameterized
+, platformdirs
+, tokenize-rt
+, tomli
+, typing-extensions
+, uvloop
+,
 }:
 
 buildPythonPackage rec {

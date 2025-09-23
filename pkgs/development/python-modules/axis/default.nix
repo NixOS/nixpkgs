@@ -1,17 +1,17 @@
-{
-  lib,
-  async-timeout,
-  attrs,
-  buildPythonPackage,
-  faust-cchardet,
-  fetchFromGitHub,
-  httpx,
-  orjson,
-  packaging,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-  xmltodict,
+{ lib
+, async-timeout
+, attrs
+, buildPythonPackage
+, faust-cchardet
+, fetchFromGitHub
+, httpx
+, orjson
+, packaging
+, pythonOlder
+, setuptools
+, typing-extensions
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

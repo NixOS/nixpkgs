@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  matplotlib,
-  legacy-cgi,
-  python-snap7,
-  opencv4,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, pytestCheckHook
+, matplotlib
+, legacy-cgi
+, python-snap7
+, opencv4
+,
 }:
 
 buildPythonPackage rec {

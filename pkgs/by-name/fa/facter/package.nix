@@ -1,20 +1,20 @@
-{
-  bundlerApp,
-  bundlerUpdateScript,
-  coreutils,
-  facter,
-  gnugrep,
-  iproute2,
-  lib,
-  makeWrapper,
-  net-tools,
-  pciutils,
-  procps,
-  stdenv,
-  testers,
-  util-linux,
-  virt-what,
-  zfs,
+{ bundlerApp
+, bundlerUpdateScript
+, coreutils
+, facter
+, gnugrep
+, iproute2
+, lib
+, makeWrapper
+, net-tools
+, pciutils
+, procps
+, stdenv
+, testers
+, util-linux
+, virt-what
+, zfs
+,
 }:
 
 bundlerApp {

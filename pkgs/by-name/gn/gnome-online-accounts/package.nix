@@ -1,33 +1,33 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  vala,
-  glib,
-  meson,
-  ninja,
-  libxslt,
-  gtk4,
-  enableBackend ? stdenv.hostPlatform.isLinux,
-  json-glib,
-  keyutils,
-  libadwaita,
-  librest_1_0,
-  libxml2,
-  libsecret,
-  gobject-introspection,
-  gettext,
-  gi-docgen,
-  glib-networking,
-  libsoup_3,
-  docbook-xsl-nons,
-  gnome,
-  gcr_4,
-  libkrb5,
-  gvfs,
-  dbus,
-  wrapGAppsHook4,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, vala
+, glib
+, meson
+, ninja
+, libxslt
+, gtk4
+, enableBackend ? stdenv.hostPlatform.isLinux
+, json-glib
+, keyutils
+, libadwaita
+, librest_1_0
+, libxml2
+, libsecret
+, gobject-introspection
+, gettext
+, gi-docgen
+, glib-networking
+, libsoup_3
+, docbook-xsl-nons
+, gnome
+, gcr_4
+, libkrb5
+, gvfs
+, dbus
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

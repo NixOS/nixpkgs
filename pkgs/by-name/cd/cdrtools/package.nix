@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  m4,
-  acl,
-  libcap,
+{ lib
+, stdenv
+, fetchurl
+, m4
+, acl
+, libcap
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

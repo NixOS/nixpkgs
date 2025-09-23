@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  gettext,
-  freebsd,
-  netbsd,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, gettext
+, freebsd
+, netbsd
+,
 }:
 
 stdenv.mkDerivation rec {

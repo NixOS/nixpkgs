@@ -1,67 +1,67 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  wrapGAppsHook3,
-  readline,
-  ncurses,
-  zlib,
-  gsl,
-  openmp,
-  graphicsmagick,
-  fftw,
-  fftwFloat,
-  fftwLongDouble,
-  proj,
-  shapelib,
-  expat,
-  udunits,
-  eigen,
-  pslib,
-  libpng,
-  plplot,
-  libtiff,
-  libgeotiff,
-  libjpeg,
-  qhull,
-  # eccodes is broken on darwin
-  enableGRIB ? stdenv.hostPlatform.isLinux,
-  eccodes,
-  enableGLPK ? stdenv.hostPlatform.isLinux,
-  glpk,
-  # We enable it in hdf4 and use libtirpc as a dependency here from the passthru
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, wrapGAppsHook3
+, readline
+, ncurses
+, zlib
+, gsl
+, openmp
+, graphicsmagick
+, fftw
+, fftwFloat
+, fftwLongDouble
+, proj
+, shapelib
+, expat
+, udunits
+, eigen
+, pslib
+, libpng
+, plplot
+, libtiff
+, libgeotiff
+, libjpeg
+, qhull
+, # eccodes is broken on darwin
+  enableGRIB ? stdenv.hostPlatform.isLinux
+, eccodes
+, enableGLPK ? stdenv.hostPlatform.isLinux
+, glpk
+, # We enable it in hdf4 and use libtirpc as a dependency here from the passthru
   # of hdf4
-  enableLibtirpc ? stdenv.hostPlatform.isLinux,
-  python3,
-  enableMPI ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  # Choose MPICH over OpenMPI because it currently builds on AArch and Darwin
-  mpi,
-  # Unfree optional dependency for hdf4 and hdf5
-  enableSzip ? false,
-  szip,
-  enableHDF4 ? true,
-  hdf4,
-  hdf4-forced ? null,
-  enableHDF5 ? true,
-  # HDF5 format version (API version) 1.10 and 1.12 is not fully compatible
+  enableLibtirpc ? stdenv.hostPlatform.isLinux
+, python3
+, enableMPI ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+, # Choose MPICH over OpenMPI because it currently builds on AArch and Darwin
+  mpi
+, # Unfree optional dependency for hdf4 and hdf5
+  enableSzip ? false
+, szip
+, enableHDF4 ? true
+, hdf4
+, hdf4-forced ? null
+, enableHDF5 ? true
+, # HDF5 format version (API version) 1.10 and 1.12 is not fully compatible
   # Specify if the API version should default to 1.10
   # netcdf currently depends on hdf5 with `usev110Api=true`
   # If you wish to use HDF5 API version 1.12 (`useHdf5v110Api=false`),
   # you will need to turn NetCDF off.
-  useHdf5v110Api ? true,
-  hdf5,
-  hdf5-forced ? null,
-  enableNetCDF ? true,
-  netcdf,
-  netcdf-forced ? null,
-  plplot-forced ? null,
-  # wxWidgets is preferred over X11 for this project but we only have it on Linux
+  useHdf5v110Api ? true
+, hdf5
+, hdf5-forced ? null
+, enableNetCDF ? true
+, netcdf
+, netcdf-forced ? null
+, plplot-forced ? null
+, # wxWidgets is preferred over X11 for this project but we only have it on Linux
   # and Darwin.
-  enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  wxGTK32,
-  # X11: OFF by default for platform consistency. Use X where WX is not available
-  enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin),
+  enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+, wxGTK32
+, # X11: OFF by default for platform consistency. Use X where WX is not available
+  enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin)
+,
 }:
 
 let

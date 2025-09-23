@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  perlPackages,
-  makeWrapper,
+{ stdenv
+, lib
+, perlPackages
+, makeWrapper
+,
 }:
 
 let

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildGoModule,
-  buildFHSEnv,
-  binutils,
-  dejavu_fonts,
-  pkg-config,
-  fetchFromGitHub,
-  roboto,
-  xorg,
-  libglvnd,
-  addDriverRunpath,
-  makeWrapper,
-  gcc,
-  go,
-  flutter,
+{ lib
+, buildGoModule
+, buildFHSEnv
+, binutils
+, dejavu_fonts
+, pkg-config
+, fetchFromGitHub
+, roboto
+, xorg
+, libglvnd
+, addDriverRunpath
+, makeWrapper
+, gcc
+, go
+, flutter
+,
 }:
 
 let

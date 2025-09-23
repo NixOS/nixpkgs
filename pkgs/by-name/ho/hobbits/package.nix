@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  pffft,
-  libpcap,
-  libusb1,
-  python3,
-  qt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, pffft
+, libpcap
+, libusb1
+, python3
+, qt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

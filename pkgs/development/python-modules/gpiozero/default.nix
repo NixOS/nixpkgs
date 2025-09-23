@@ -1,22 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # docs
-  sphinx-rtd-theme,
-  sphinxHook,
-
-  # dependencies
-  colorzero,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # docs
+  sphinx-rtd-theme
+, sphinxHook
+, # dependencies
+  colorzero
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

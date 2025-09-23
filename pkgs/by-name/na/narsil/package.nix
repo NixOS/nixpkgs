@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  nix-update-script,
-  ncurses,
-  enableSdl2 ? true,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, nix-update-script
+, ncurses
+, enableSdl2 ? true
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+,
 }:
 stdenv.mkDerivation rec {
   pname = "narsil";

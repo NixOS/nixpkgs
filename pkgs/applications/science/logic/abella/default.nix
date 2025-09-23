@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  rsync,
-  ocamlPackages,
+{ lib
+, stdenv
+, fetchurl
+, rsync
+, ocamlPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

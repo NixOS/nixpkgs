@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libax25,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libax25
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

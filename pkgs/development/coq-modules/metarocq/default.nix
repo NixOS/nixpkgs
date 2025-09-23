@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  single ? false,
-  coq,
-  equations,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, single ? false
+, coq
+, equations
+, version ? null
+,
 }@args:
 
 let
@@ -16,7 +16,8 @@ let
     in
     lib.switch coq.coq-version [
       (case ("9.0") "1.4-9.0")
-    ] null;
+    ]
+      null;
   release = {
     "1.4-9.0".sha256 = "sha256-5QecDAMkvgfDPZ7/jDfnOgcE+Eb1LTAozP7nz6nkuxg=";
   };
@@ -108,18 +109,18 @@ let
               touch ${pkgpath}/metarocq-config
             ''
             +
-              lib.optionalString
-                (lib.elem package [
-                  "erasure"
-                  "template-pcuic"
-                  "quotation"
-                  "safechecker-plugin"
-                  "erasure-plugin"
-                  "translations"
-                ])
-                ''
-                  echo  "-I ${template-rocq}/lib/coq/${coq.coq-version}/user-contrib/MetaRocq/Template/" > ${pkgpath}/metarocq-config
-                ''
+            lib.optionalString
+              (lib.elem package [
+                "erasure"
+                "template-pcuic"
+                "quotation"
+                "safechecker-plugin"
+                "erasure-plugin"
+                "translations"
+              ])
+              ''
+                echo  "-I ${template-rocq}/lib/coq/${coq.coq-version}/user-contrib/MetaRocq/Template/" > ${pkgpath}/metarocq-config
+              ''
             + lib.optionalString (package == "single") ''
               ./configure.sh local
             '';

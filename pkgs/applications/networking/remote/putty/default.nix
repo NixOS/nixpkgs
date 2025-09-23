@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  perl,
-  pkg-config,
-  gtk3,
-  ncurses,
-  copyDesktopItems,
-  makeDesktopItem,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, perl
+, pkg-config
+, gtk3
+, ncurses
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

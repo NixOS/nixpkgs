@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  pyloggermanager,
-  requests,
-  pym3u8downloader, # For package tests
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, pyloggermanager
+, requests
+, pym3u8downloader
+, # For package tests
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  django,
-  django-configurations,
-  djangorestframework,
-  joserfc,
-  mozilla-django-oidc,
-  pyjwt,
-  requests,
-  requests-toolbelt,
-  factory-boy,
-  pytest-django,
-  responses,
-  celery,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, django
+, django-configurations
+, djangorestframework
+, joserfc
+, mozilla-django-oidc
+, pyjwt
+, requests
+, requests-toolbelt
+, factory-boy
+, pytest-django
+, responses
+, celery
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  cmake,
-  libspecbleach,
-  lv2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, cmake
+, libspecbleach
+, lv2
+,
 }:
 
 stdenv.mkDerivation rec {

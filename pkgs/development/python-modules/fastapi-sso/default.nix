@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  email-validator,
-  fastapi,
-  fetchFromGitHub,
-  httpx,
-  oauthlib,
-  poetry-core,
-  pydantic,
-  pyjwt,
-  pytest-cov-stub,
-  pytest-asyncio,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, email-validator
+, fastapi
+, fetchFromGitHub
+, httpx
+, oauthlib
+, poetry-core
+, pydantic
+, pyjwt
+, pytest-cov-stub
+, pytest-asyncio
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  biome,
-  moreutils,
-  vscode-extension-update-script,
+{ lib
+, vscode-utils
+, jq
+, biome
+, moreutils
+, vscode-extension-update-script
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

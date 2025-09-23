@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-  chromaprint,
-  makeWrapper,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitea
+, chromaprint
+, makeWrapper
+, versionCheckHook
+,
 }:
 
 buildGoModule rec {

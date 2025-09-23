@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  makeWrapper,
-  glew,
-  SDL2,
-  writeShellScript,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, makeWrapper
+, glew
+, SDL2
+, writeShellScript
+,
 }:
 
 let

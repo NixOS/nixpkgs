@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  asciidoctor,
-  ninja,
-  gperf,
-  gawk,
-  pkg-config,
-  boost,
-  luajit_openresty,
-  fmt,
-  meson,
-  emilua,
-  qt6Packages,
-  openssl,
-  liburing,
-  gitUpdater,
-  runCommand,
-  xvfb-run,
-  qt6, # this
+{ lib
+, stdenv
+, fetchFromGitLab
+, asciidoctor
+, ninja
+, gperf
+, gawk
+, pkg-config
+, boost
+, luajit_openresty
+, fmt
+, meson
+, emilua
+, qt6Packages
+, openssl
+, liburing
+, gitUpdater
+, runCommand
+, xvfb-run
+, qt6
+, # this
 }:
 
 stdenv.mkDerivation rec {

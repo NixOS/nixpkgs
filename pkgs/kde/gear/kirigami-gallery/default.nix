@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qttools,
+{ mkKdeDerivation
+, qtsvg
+, qttools
+,
 }:
 mkKdeDerivation {
   pname = "kirigami-gallery";

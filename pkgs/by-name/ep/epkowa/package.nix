@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  makeWrapper,
-  symlinkJoin,
-  pkg-config,
-  libtool,
-  gtk2,
-  libxml2,
-  libxslt,
-  libusb-compat-0_1,
-  sane-backends,
-  rpm,
-  cpio,
-  getopt,
-  autoPatchelfHook,
-  gcc,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, makeWrapper
+, symlinkJoin
+, pkg-config
+, libtool
+, gtk2
+, libxml2
+, libxslt
+, libusb-compat-0_1
+, sane-backends
+, rpm
+, cpio
+, getopt
+, autoPatchelfHook
+, gcc
+,
 }:
 let
   common_meta = {
@@ -27,12 +27,12 @@ let
   };
 in
 ############################
-#
-#  PLUGINS
-#
-############################
+  #
+  #  PLUGINS
+  #
+  ############################
 
-# adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
+  # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
 let
   plugins = {
     v330 = stdenv.mkDerivation rec {
@@ -596,10 +596,12 @@ stdenv.mkDerivation rec {
     registry=$out/bin/iscan-registry;
   ''
   + lib.concatStrings (
-    lib.mapAttrsToList (name: value: ''
-      plugin=${value};
-      ${value.passthru.registrationCommand}
-    '') plugins
+    lib.mapAttrsToList
+      (name: value: ''
+        plugin=${value};
+        ${value.passthru.registrationCommand}
+      '')
+      plugins
   );
   meta = common_meta // {
     description = "sane-epkowa backend for some epson scanners";

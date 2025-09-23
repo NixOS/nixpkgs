@@ -5,36 +5,33 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{
-  lib,
-  repoRevToNameMaybe,
-  fetchurl,
-  withUnzip ? true,
-  unzip,
-  glibcLocalesUtf8,
+{ lib
+, repoRevToNameMaybe
+, fetchurl
+, withUnzip ? true
+, unzip
+, glibcLocalesUtf8
+,
 }:
 
-{
-  url ? "",
-  urls ? [ ],
-  name ? repoRevToNameMaybe (if url != "" then url else builtins.head urls) null "unpacked",
-  nativeBuildInputs ? [ ],
-  postFetch ? "",
-  extraPostFetch ? "",
-
-  # Optionally move the contents of the unpacked tree up one level.
-  stripRoot ? true,
-  # Allows to set the extension for the intermediate downloaded
+{ url ? ""
+, urls ? [ ]
+, name ? repoRevToNameMaybe (if url != "" then url else builtins.head urls) null "unpacked"
+, nativeBuildInputs ? [ ]
+, postFetch ? ""
+, extraPostFetch ? ""
+, # Optionally move the contents of the unpacked tree up one level.
+  stripRoot ? true
+, # Allows to set the extension for the intermediate downloaded
   # file. This can be used as a hint for the unpackCmdHooks to select
   # an appropriate unpacking tool.
-  extension ? null,
-
-  # the rest are given to fetchurl as is
+  extension ? null
+, # the rest are given to fetchurl as is
   ...
 }@args:
 
 assert
-  (extraPostFetch != "")
+(extraPostFetch != "")
   -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." true;
 
 let
@@ -99,7 +96,7 @@ fetchurl (
     # ^ Remove non-owner write permissions
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
   }
-  // removeAttrs args [
+    // removeAttrs args [
     "stripRoot"
     "extraPostFetch"
     "postFetch"

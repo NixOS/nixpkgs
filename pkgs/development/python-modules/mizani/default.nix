@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  matplotlib,
-  palettable,
-  pandas,
-  scipy,
-
-  # tests
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  matplotlib
+, palettable
+, pandas
+, scipy
+, # tests
+  pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

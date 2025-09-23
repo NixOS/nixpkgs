@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  glib,
-  gnome-shell,
-  gettext,
-  jq,
-  intltool,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, glib
+, gnome-shell
+, gettext
+, jq
+, intltool
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

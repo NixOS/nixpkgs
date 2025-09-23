@@ -1,12 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy3k,
-  lib,
-
-  # pythonPackages
-  coverage,
-  pytest,
+{ buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, lib
+, # pythonPackages
+  coverage
+, pytest
+,
 }:
 
 buildPythonPackage rec {

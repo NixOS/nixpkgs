@@ -1,10 +1,10 @@
 # builder for Emacs packages built for packages.el
 
-{
-  lib,
-  stdenv,
-  emacs,
-  texinfo,
+{ lib
+, stdenv
+, emacs
+, texinfo
+,
 }:
 
 let
@@ -24,11 +24,10 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
 
-    {
-      pname,
-      dontUnpack ? true,
-      meta ? { },
-      ...
+    { pname
+    , dontUnpack ? true
+    , meta ? { }
+    , ...
     }@args:
 
     {

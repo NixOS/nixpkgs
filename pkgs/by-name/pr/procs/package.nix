@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  libiconv,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, libiconv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

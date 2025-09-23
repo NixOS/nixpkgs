@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs
+, nix-update-script
+, versionCheckHook
+,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";

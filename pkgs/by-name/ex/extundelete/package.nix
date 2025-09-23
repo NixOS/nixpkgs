@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  e2fsprogs,
+{ lib
+, stdenv
+, fetchurl
+, e2fsprogs
+,
 }:
 
 stdenv.mkDerivation {

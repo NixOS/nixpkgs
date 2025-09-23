@@ -1,13 +1,13 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  beautifulsoup4,
-  icalendar,
-  icalevents,
-  lxml,
-  pycryptodome,
-  pypdf,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, beautifulsoup4
+, icalendar
+, icalevents
+, lxml
+, pycryptodome
+, pypdf
+,
 }:
 
 buildHomeAssistantComponent rec {

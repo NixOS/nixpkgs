@@ -1,21 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml-crunch,
-  angstrom,
-  async,
-  camlzip,
-  cohttp,
-  cohttp_static_handler ? null,
-  core,
-  core_unix ? null,
-  fzf,
-  owee,
-  ppx_jane,
-  re,
-  shell ? null,
-  zstandard ? null,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml-crunch
+, angstrom
+, async
+, camlzip
+, cohttp
+, cohttp_static_handler ? null
+, core
+, core_unix ? null
+, fzf
+, owee
+, ppx_jane
+, re
+, shell ? null
+, zstandard ? null
+,
 }:
 
 buildDunePackage rec {

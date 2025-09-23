@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  procps,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, procps
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mackup";

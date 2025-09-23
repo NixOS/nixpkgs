@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qtbase,
-  qtdeclarative,
-  cmake,
-  ninja,
-  dfVersions,
-
-  # see: https://github.com/Dwarf-Therapist/Dwarf-Therapist/releases
-  version ? dfVersions.therapist.version,
-  maxDfVersion ? dfVersions.therapist.maxDfVersion,
-  hash ? dfVersions.therapist.git.outputHash,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qtbase
+, qtdeclarative
+, cmake
+, ninja
+, dfVersions
+, # see: https://github.com/Dwarf-Therapist/Dwarf-Therapist/releases
+  version ? dfVersions.therapist.version
+, maxDfVersion ? dfVersions.therapist.maxDfVersion
+, hash ? dfVersions.therapist.git.outputHash
+,
 }:
 
 stdenv.mkDerivation rec {

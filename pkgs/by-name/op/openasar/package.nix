@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  nodejs,
-  asar,
-  unzip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, nodejs
+, asar
+, unzip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

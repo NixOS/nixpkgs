@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nixosTests,
-  nix-update-script,
-  protobuf,
-  rust-jemalloc-sys,
-  nodejs,
-  yarn,
-  fetchYarnDeps,
-  fixup-yarn-lock,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, nixosTests
+, nix-update-script
+, protobuf
+, rust-jemalloc-sys
+, nodejs
+, yarn
+, fetchYarnDeps
+, fixup-yarn-lock
+,
 }:
 
 let

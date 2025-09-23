@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  stdenv,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, stdenv
+,
 }:
 
 buildDotnetModule {

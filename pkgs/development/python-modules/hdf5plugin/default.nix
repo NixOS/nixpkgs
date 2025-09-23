@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  py-cpuinfo,
-  h5py,
-  pkgconfig,
-  c-blosc2,
-  charls,
-  lz4,
-  zlib,
-  zstd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, py-cpuinfo
+, h5py
+, pkgconfig
+, c-blosc2
+, charls
+, lz4
+, zlib
+, zstd
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  nix-update-script,
-  testers,
-  python3,
-  curl,
-  jq,
-  p7zip,
-  dsq,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, nix-update-script
+, testers
+, python3
+, curl
+, jq
+, p7zip
+, dsq
+,
 }:
 
 buildGoModule rec {

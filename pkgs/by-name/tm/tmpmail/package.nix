@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  w3m,
-  curl,
-  jq,
-  makeWrapper,
-  installShellFiles,
-  xclip,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, w3m
+, curl
+, jq
+, makeWrapper
+, installShellFiles
+, xclip
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

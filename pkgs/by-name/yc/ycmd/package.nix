@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  python3,
-  withGodef ? true,
-  godef,
-  withGopls ? true,
-  gopls,
-  withRustAnalyzer ? true,
-  rust-analyzer,
-  withTypescript ? true,
-  typescript,
-  abseil-cpp,
-  boost,
-  llvmPackages,
-  fixDarwinDylibNames,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, python3
+, withGodef ? true
+, godef
+, withGopls ? true
+, gopls
+, withRustAnalyzer ? true
+, rust-analyzer
+, withTypescript ? true
+, typescript
+, abseil-cpp
+, boost
+, llvmPackages
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation {

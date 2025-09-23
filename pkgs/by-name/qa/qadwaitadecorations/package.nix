@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt5,
-  qt6,
-  wayland,
-  nix-update-script,
-  useQt6 ? false,
-
-  # Shadows support on Qt5 requires the feature backported from Qt6:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt5
+, qt6
+, wayland
+, nix-update-script
+, useQt6 ? false
+, # Shadows support on Qt5 requires the feature backported from Qt6:
   # https://src.fedoraproject.org/rpms/qt5-qtwayland/blob/rawhide/f/qtwayland-decoration-support-backports-from-qt6.patch
-  qt5ShadowsSupport ? false,
+  qt5ShadowsSupport ? false
+,
 }:
 
 let

@@ -1,36 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm_10,
-  python3,
-  nodejs,
-  node-gyp,
-  runCommand,
-  nixosTests,
-  immich-machine-learning,
-  # build-time deps
-  pkg-config,
-  makeWrapper,
-  curl,
-  cacert,
-  unzip,
-  # runtime deps
-  cairo,
-  exiftool,
-  giflib,
-  jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
-  imagemagick,
-  libjpeg,
-  libpng,
-  libraw,
-  libheif,
-  librsvg,
-  pango,
-  perl,
-  pixman,
-  vips,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm_10
+, python3
+, nodejs
+, node-gyp
+, runCommand
+, nixosTests
+, immich-machine-learning
+, # build-time deps
+  pkg-config
+, makeWrapper
+, curl
+, cacert
+, unzip
+, # runtime deps
+  cairo
+, exiftool
+, giflib
+, jellyfin-ffmpeg
+, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
+  imagemagick
+, libjpeg
+, libpng
+, libraw
+, libheif
+, librsvg
+, pango
+, perl
+, pixman
+, vips
+, buildPackages
+,
 }:
 let
   pnpm = pnpm_10;

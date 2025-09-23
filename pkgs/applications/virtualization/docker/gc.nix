@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  docker,
-  coreutils,
-  procps,
-  gnused,
-  findutils,
-  gnugrep,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, docker
+, coreutils
+, procps
+, gnused
+, findutils
+, gnugrep
+,
 }:
 stdenv.mkDerivation {
   pname = "docker-gc";

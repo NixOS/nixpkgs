@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  makeWrapper,
-  nodejs ? pkgs.nodejs_20,
+{ pkgs
+, lib
+, makeWrapper
+, nodejs ? pkgs.nodejs_20
+,
 }:
 
 let

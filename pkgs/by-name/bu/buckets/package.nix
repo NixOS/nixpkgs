@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  appimageTools,
-  lib,
-  makeWrapper,
-  stdenv,
+{ fetchurl
+, appimageTools
+, lib
+, makeWrapper
+, stdenv
+,
 }:
 
 let
@@ -14,8 +14,7 @@ let
     {
       x86_64-linux = "amd64";
       aarch64-linux = "arm64";
-    }
-    .${system};
+    }.${system};
 
   # Get hash in sri format
   # nix-prefetch-url <url> | xargs nix --extra-experimental-features nix-command hash convert --hash-algo sha256
@@ -23,8 +22,7 @@ let
     {
       x86_64-linux = "sha256-DK5+VT4+OCcJ4Bbv6GGs6R332GMsD1gNEmcz0iaJb1c=";
       aarch64-linux = "sha256-Qu2YHGu0EPFaXjlUwJ7On8tOA9rqX/k8UnwADuRxoUk=";
-    }
-    .${system};
+    }.${system};
 
   pname = "buckets";
   version = "0.80.0";

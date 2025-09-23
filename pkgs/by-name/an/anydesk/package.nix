@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  makeDesktopItem,
-  genericUpdater,
-  writeShellScript,
-  atk,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  dbus,
-  harfbuzz,
-  libz,
-  libGLU,
-  libGL,
-  pango,
-  xorg,
-  minizip,
-  lsb-release,
-  freetype,
-  fontconfig,
-  polkit,
-  polkit_gnome,
-  pciutils,
-  copyDesktopItems,
-  pulseaudio,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, genericUpdater
+, writeShellScript
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gtk3
+, dbus
+, harfbuzz
+, libz
+, libGLU
+, libGL
+, pango
+, xorg
+, minizip
+, lsb-release
+, freetype
+, fontconfig
+, polkit
+, polkit_gnome
+, pciutils
+, copyDesktopItems
+, pulseaudio
+,
 }:
 
 let

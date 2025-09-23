@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  net-tools,
-  iproute2,
-  judy,
+{ lib
+, stdenv
+, fetchurl
+, net-tools
+, iproute2
+, judy
+,
 }:
 
 stdenv.mkDerivation rec {

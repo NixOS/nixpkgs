@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  rustPlatform,
-  makeWrapper,
-  protobuf,
-  imagemagick,
-  ffmpeg,
-  exiftool,
-  nixosTests,
+{ stdenv
+, lib
+, fetchFromGitea
+, rustPlatform
+, makeWrapper
+, protobuf
+, imagemagick
+, ffmpeg
+, exiftool
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -2,15 +2,15 @@
 #
 # Checkout ./README.md for more information.
 
-{
-  config,
-  lib,
-  mkAzExtension,
-  mycli,
-  python3Packages,
-  autoPatchelfHook,
-  python3,
-  openssl_1_1,
+{ config
+, lib
+, mkAzExtension
+, mycli
+, python3Packages
+, autoPatchelfHook
+, python3
+, openssl_1_1
+,
 }:
 
 {
@@ -148,7 +148,7 @@
     meta.maintainers = with lib.maintainers; [ ];
   };
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   # Removed extensions
   adp = throw "The 'adp' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8038
   akshybrid = throw "The 'akshybrid' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/8955

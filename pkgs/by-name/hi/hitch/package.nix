@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  docutils,
-  libev,
-  openssl,
-  pkg-config,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, docutils
+, libev
+, openssl
+, pkg-config
+, nixosTests
+,
 }:
 stdenv.mkDerivation rec {
   version = "1.8.0";

@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  buildPackages,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  stdenv,
-  versionCheckHook,
+{ buildGoModule
+, buildPackages
+, fetchFromGitHub
+, installShellFiles
+, lib
+, stdenv
+, versionCheckHook
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "nelm";

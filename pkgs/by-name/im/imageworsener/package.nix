@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  autoreconfHook,
-  zlib,
-  libpng,
-  libjpeg,
-  libwebp,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, autoreconfHook
+, zlib
+, libpng
+, libjpeg
+, libwebp
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

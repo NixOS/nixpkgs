@@ -1,48 +1,43 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cymem,
-  cython,
-  murmurhash,
-  numpy,
-  preshed,
-  thinc,
-
-  # dependencies
-  catalogue,
-  jinja2,
-  langcodes,
-  packaging,
-  pydantic,
-  requests,
-  setuptools,
-  spacy-legacy,
-  spacy-loggers,
-  srsly,
-  tqdm,
-  typer,
-  wasabi,
-  weasel,
-
-  # optional-dependencies
-  spacy-transformers,
-  spacy-lookups-data,
-
-  # tests
-  pytestCheckHook,
-  hypothesis,
-  mock,
-
-  # passthru
-  writeScript,
-  git,
-  nix,
-  nix-update,
-  callPackage,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cymem
+, cython
+, murmurhash
+, numpy
+, preshed
+, thinc
+, # dependencies
+  catalogue
+, jinja2
+, langcodes
+, packaging
+, pydantic
+, requests
+, setuptools
+, spacy-legacy
+, spacy-loggers
+, srsly
+, tqdm
+, typer
+, wasabi
+, weasel
+, # optional-dependencies
+  spacy-transformers
+, spacy-lookups-data
+, # tests
+  pytestCheckHook
+, hypothesis
+, mock
+, # passthru
+  writeScript
+, git
+, nix
+, nix-update
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

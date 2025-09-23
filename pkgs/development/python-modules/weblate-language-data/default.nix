@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  translate-toolkit,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, translate-toolkit
+,
 }:
 
 buildPythonPackage rec {

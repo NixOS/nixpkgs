@@ -1,9 +1,9 @@
-{
-  lib,
-  makeImpureTest,
-  clinfo,
-  clr,
-  rocm-smi,
+{ lib
+, makeImpureTest
+, clinfo
+, clr
+, rocm-smi
+,
 }:
 
 makeImpureTest {

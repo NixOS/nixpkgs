@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  gitUpdater,
-  fetchFromGitHub,
-  cmake,
-  pkgsCross,
+{ lib
+, stdenv
+, gitUpdater
+, fetchFromGitHub
+, cmake
+, pkgsCross
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-epic-integration";

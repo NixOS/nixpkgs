@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  cvs,
-  perl,
-  net-tools,
-  findutils,
-  rsync,
-  coreutils,
-  diffutils,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, cvs
+, perl
+, net-tools
+, findutils
+, rsync
+, coreutils
+, diffutils
+,
 }:
 
 stdenv.mkDerivation rec {

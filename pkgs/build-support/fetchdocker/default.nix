@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  coreutils,
-  bash,
-  gnutar,
-  writeText,
+{ stdenv
+, lib
+, coreutils
+, bash
+, gnutar
+, writeText
+,
 }:
 let
   stripScheme = builtins.replaceStrings [ "https://" "http://" ] [ "" "" ];
   stripNixStore = s: lib.removePrefix "${builtins.storeDir}/" s;
 in
-{
-  name,
-  registry ? "https://registry-1.docker.io/v2/",
-  repository ? "library",
-  imageName,
-  tag,
-  imageLayers,
-  imageConfig,
-  image ? "${stripScheme registry}/${repository}/${imageName}:${tag}",
+{ name
+, registry ? "https://registry-1.docker.io/v2/"
+, repository ? "library"
+, imageName
+, tag
+, imageLayers
+, imageConfig
+, image ? "${stripScheme registry}/${repository}/${imageName}:${tag}"
+,
 }:
 
 # Make sure there are *no* slashes in the repository or container

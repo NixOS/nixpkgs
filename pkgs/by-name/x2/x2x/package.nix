@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  libX11,
-  libXtst,
-  libXext,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libXi,
+{ lib
+, stdenv
+, libX11
+, libXtst
+, libXext
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libXi
+,
 }:
 
 stdenv.mkDerivation {

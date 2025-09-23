@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

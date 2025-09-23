@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  copyDesktopItems,
-  iconConvTools,
-  makeDesktopItem,
-  makeWrapper,
-  jdk11,
-  maven,
+{ lib
+, fetchFromGitHub
+, copyDesktopItems
+, iconConvTools
+, makeDesktopItem
+, makeWrapper
+, jdk11
+, maven
+,
 }:
 
 maven.buildMavenPackage rec {

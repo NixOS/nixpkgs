@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

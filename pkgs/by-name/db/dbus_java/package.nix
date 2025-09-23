@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  jdk8,
-  libmatthew_java,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, jdk8
+, libmatthew_java
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  tbb_2022,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, tbb_2022
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

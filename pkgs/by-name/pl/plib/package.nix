@@ -1,17 +1,17 @@
-{
-  fetchurl,
-  fetchpatch,
-  lib,
-  stdenv,
-  libGLU,
-  libGL,
-  libglut,
-  SDL,
-  libXi,
-  libSM,
-  libXmu,
-  libXext,
-  libX11,
+{ fetchurl
+, fetchpatch
+, lib
+, stdenv
+, libGLU
+, libGL
+, libglut
+, SDL
+, libXi
+, libSM
+, libXmu
+, libXext
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

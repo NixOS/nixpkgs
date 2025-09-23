@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.sshguard;
@@ -176,9 +175,10 @@ in
                 "-a ${toString cfg.attack_threshold}"
                 "-p ${toString cfg.blocktime}"
                 "-s ${toString cfg.detection_time}"
-                (lib.optionalString (
-                  cfg.blacklist_threshold != null
-                ) "-b ${toString cfg.blacklist_threshold}:${cfg.blacklist_file}")
+                (lib.optionalString
+                  (
+                    cfg.blacklist_threshold != null
+                  ) "-b ${toString cfg.blacklist_threshold}:${cfg.blacklist_file}")
               ]
               ++ (map (name: "-w ${lib.escapeShellArg name}") cfg.whitelist)
             );

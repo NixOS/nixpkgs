@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -335,9 +334,11 @@ in
         RuntimeDirectoryPreserve = "yes";
         ConfigurationDirectory = "bind";
         ReadWritePaths = [
-          (lib.mapAttrsToList (
-            name: config: if (lib.hasPrefix "/" config.file) then ("-${dirOf config.file}") else ""
-          ) cfg.zones)
+          (lib.mapAttrsToList
+            (
+              name: config: if (lib.hasPrefix "/" config.file) then ("-${dirOf config.file}") else ""
+            )
+            cfg.zones)
           cfg.directory
         ];
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";

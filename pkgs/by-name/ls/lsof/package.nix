@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  perl,
-  which,
-  ncurses,
-  nukeReferences,
-  freebsd,
-  ed,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, perl
+, which
+, ncurses
+, nukeReferences
+, freebsd
+, ed
+,
 }:
 
 let

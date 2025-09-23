@@ -1,7 +1,7 @@
-{
-  clangStdenv,
-  objfw,
-  writeTextDir,
+{ clangStdenv
+, objfw
+, writeTextDir
+,
 }:
 
 clangStdenv.mkDerivation {

@@ -1,7 +1,7 @@
-{
-  buildAstalModule,
-  json-glib,
-  appmenu-glib-translator,
+{ buildAstalModule
+, json-glib
+, appmenu-glib-translator
+,
 }:
 buildAstalModule {
   name = "tray";

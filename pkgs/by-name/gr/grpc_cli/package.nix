@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  automake,
-  cmake,
-  autoconf,
-  curl,
-  numactl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, automake
+, cmake
+, autoconf
+, curl
+, numactl
+,
 }:
 
 stdenv.mkDerivation rec {

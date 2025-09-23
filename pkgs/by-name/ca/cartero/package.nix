@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  meson,
-  ninja,
-  pkg-config,
-  cargo,
-  rustc,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libxml2,
-  libadwaita,
-  gtksourceview5,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, meson
+, ninja
+, pkg-config
+, cargo
+, rustc
+, blueprint-compiler
+, wrapGAppsHook4
+, desktop-file-utils
+, libxml2
+, libadwaita
+, gtksourceview5
+, openssl
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartero";

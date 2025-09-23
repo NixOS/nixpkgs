@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
+{ lib
+, stdenvNoCC
+, fetchurl
+,
 }:
 
 let
@@ -24,14 +24,13 @@ let
   convertLicense = import ./convert-license.nix lib;
 
   makeNerdFont =
-    {
-      caskName,
-      description,
-      folderName,
-      licenseId,
-      patchedName,
-      version,
-      ...
+    { caskName
+    , description
+    , folderName
+    , licenseId
+    , patchedName
+    , version
+    , ...
     }:
     stdenvNoCC.mkDerivation {
       pname = "nerd-fonts-" + lib.strings.toLower caskName;

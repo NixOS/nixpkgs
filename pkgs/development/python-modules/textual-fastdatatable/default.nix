@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pyarrow,
-  pytz,
-  textual,
-  tzdata,
-  pythonOlder,
-  polars,
-  pytest-asyncio,
-  pytest-textual-snapshot,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pyarrow
+, pytz
+, textual
+, tzdata
+, pythonOlder
+, polars
+, pytest-asyncio
+, pytest-textual-snapshot
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

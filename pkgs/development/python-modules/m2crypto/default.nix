@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  fetchurl,
-  openssl,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  swig,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchurl
+, openssl
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, swig
+,
 }:
 
 buildPythonPackage rec {

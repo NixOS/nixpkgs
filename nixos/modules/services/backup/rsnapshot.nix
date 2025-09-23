@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.rsnapshot;
@@ -70,9 +69,11 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        services.cron.systemCronJobs = lib.mapAttrsToList (
-          interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot -c ${cfgfile} ${interval}"
-        ) cfg.cronIntervals;
+        services.cron.systemCronJobs = lib.mapAttrsToList
+          (
+            interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot -c ${cfgfile} ${interval}"
+          )
+          cfg.cronIntervals;
       }
       (lib.mkIf cfg.enableManualRsnapshot {
         environment.systemPackages = [ pkgs.rsnapshot ];

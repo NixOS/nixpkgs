@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  callPackage,
-  libjpeg,
+{ fetchFromGitHub
+, callPackage
+, libjpeg
+,
 }:
 
 (callPackage ./common.nix { }).overrideAttrs (previousAttrs: {

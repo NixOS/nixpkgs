@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  click,
-  dawg-python,
-  docopt,
-  pytestCheckHook,
-  pymorphy3-dicts-ru,
-  pymorphy3-dicts-uk,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, click
+, dawg-python
+, docopt
+, pytestCheckHook
+, pymorphy3-dicts-ru
+, pymorphy3-dicts-uk
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsndfile,
-  libsamplerate,
-  liblo,
-  libjack2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsndfile
+, libsamplerate
+, liblo
+, libjack2
+,
 }:
 
 stdenv.mkDerivation {

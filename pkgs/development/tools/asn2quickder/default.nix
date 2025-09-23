@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitLab,
-  makeWrapper,
-  cmake,
-  six,
-  pyparsing,
-  asn1ate,
-  colored,
+{ lib
+, buildPythonApplication
+, fetchFromGitLab
+, makeWrapper
+, cmake
+, six
+, pyparsing
+, asn1ate
+, colored
+,
 }:
 
 buildPythonApplication rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  coreutils,
-  gnumake,
-  gnupatch,
-  gnused,
-  gnugrep,
-  gawk,
-  diffutils,
-  gnutar,
-  xz,
-  tinycc,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, coreutils
+, gnumake
+, gnupatch
+, gnused
+, gnugrep
+, gawk
+, diffutils
+, gnutar
+, xz
+, tinycc
+,
 }:
 
 let
@@ -52,36 +52,36 @@ let
   ];
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-      gnused
-      gnugrep
-      gawk
-      diffutils
-      gnutar
-      xz
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnupatch
+    gnused
+    gnugrep
+    gawk
+    diffutils
+    gnutar
+    xz
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/ld --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/ld --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "Tools for manipulating binaries (linker, assembler, etc.)";
-      homepage = "https://www.gnu.org/software/binutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "Tools for manipulating binaries (linker, assembler, etc.)";
+    homepage = "https://www.gnu.org/software/binutils";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     cp ${src} binutils.tar.xz

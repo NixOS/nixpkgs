@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk3,
-  libxml2,
-  gettext,
-  libical,
-  libnotify,
-  libarchive,
-  gspell,
-  webkitgtk_4_1,
-  libgringotts,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk3
+, libxml2
+, gettext
+, libical
+, libnotify
+, libarchive
+, gspell
+, webkitgtk_4_1
+, libgringotts
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

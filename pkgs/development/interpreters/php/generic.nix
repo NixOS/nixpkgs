@@ -3,67 +3,63 @@
 
 let
   generic =
-    {
-      callPackage,
-      lib,
-      stdenv,
-      nixosTests,
-      tests,
-      fetchurl,
-      makeBinaryWrapper,
-      symlinkJoin,
-      writeText,
-      autoconf,
-      automake,
-      bison,
-      flex,
-      libtool,
-      pkg-config,
-      re2c,
-      apacheHttpd,
-      libargon2,
-      libxml2,
-      pcre2,
-      systemdLibs,
-      system-sendmail,
-      valgrind,
-      xcbuild,
-      writeShellScript,
-      common-updater-scripts,
-      curl,
-      jq,
-      coreutils,
-      formats,
-
-      version,
-      phpSrc ? null,
-      hash ? null,
-      extraPatches ? [ ],
-      packageOverrides ? (final: prev: { }),
-      phpAttrsOverrides ? (final: prev: { }),
-      pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { }),
-
-      # Sapi flags
-      cgiSupport ? true,
-      cliSupport ? true,
-      fpmSupport ? true,
-      pearSupport ? true,
-      pharSupport ? true,
-      phpdbgSupport ? true,
-
-      # Misc flags
-      apxs2Support ? false,
-      argon2Support ? true,
-      cgotoSupport ? false,
-      embedSupport ? false,
-      staticSupport ? false,
-      ipv6Support ? true,
-      zendSignalsSupport ? true,
-      zendMaxExecutionTimersSupport ? false,
-      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-      valgrindSupport ?
-        !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind,
-      ztsSupport ? apxs2Support,
+    { callPackage
+    , lib
+    , stdenv
+    , nixosTests
+    , tests
+    , fetchurl
+    , makeBinaryWrapper
+    , symlinkJoin
+    , writeText
+    , autoconf
+    , automake
+    , bison
+    , flex
+    , libtool
+    , pkg-config
+    , re2c
+    , apacheHttpd
+    , libargon2
+    , libxml2
+    , pcre2
+    , systemdLibs
+    , system-sendmail
+    , valgrind
+    , xcbuild
+    , writeShellScript
+    , common-updater-scripts
+    , curl
+    , jq
+    , coreutils
+    , formats
+    , version
+    , phpSrc ? null
+    , hash ? null
+    , extraPatches ? [ ]
+    , packageOverrides ? (final: prev: { })
+    , phpAttrsOverrides ? (final: prev: { })
+    , pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { })
+    , # Sapi flags
+      cgiSupport ? true
+    , cliSupport ? true
+    , fpmSupport ? true
+    , pearSupport ? true
+    , pharSupport ? true
+    , phpdbgSupport ? true
+    , # Misc flags
+      apxs2Support ? false
+    , argon2Support ? true
+    , cgotoSupport ? false
+    , embedSupport ? false
+    , staticSupport ? false
+    , ipv6Support ? true
+    , zendSignalsSupport ? true
+    , zendMaxExecutionTimersSupport ? false
+    , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+    , valgrindSupport ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    , ztsSupport ? apxs2Support
+    ,
     }@args:
 
     let
@@ -78,10 +74,9 @@ let
       mkBuildEnv =
         prevArgs: prevExtensionFunctions:
         lib.makeOverridable (
-          {
-            extensions ? ({ enabled, ... }: enabled),
-            extraConfig ? "",
-            ...
+          { extensions ? ({ enabled, ... }: enabled)
+          , extraConfig ? ""
+          , ...
           }@innerArgs:
           let
             allArgs = args // prevArgs // innerArgs;
@@ -98,13 +93,15 @@ let
                 packageOverrides;
 
             allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
-            enabledExtensions = builtins.foldl' (
-              enabled: f:
-              f {
-                inherit enabled;
-                all = php-packages.extensions;
-              }
-            ) [ ] allExtensionFunctions;
+            enabledExtensions = builtins.foldl'
+              (
+                enabled: f:
+                  f {
+                    inherit enabled;
+                    all = php-packages.extensions;
+                  }
+              ) [ ]
+              allExtensionFunctions;
 
             getExtName = ext: ext.extensionName;
 
@@ -124,18 +121,20 @@ let
             # another plugin is placed before its dependency, it will
             # fail to load.
             extensionTexts = lib.listToAttrs (
-              map (
-                ext:
-                let
-                  extName = getExtName ext;
-                  phpDeps = (ext.internalDeps or [ ]) ++ (ext.peclDeps or [ ]);
-                  type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
-                in
-                lib.nameValuePair extName {
-                  text = "${type}=${ext}/lib/php/extensions/${extName}.so";
-                  deps = map getExtName phpDeps;
-                }
-              ) (enabledExtensions ++ (getDepsRecursively enabledExtensions))
+              map
+                (
+                  ext:
+                  let
+                    extName = getExtName ext;
+                    phpDeps = (ext.internalDeps or [ ]) ++ (ext.peclDeps or [ ]);
+                    type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
+                  in
+                  lib.nameValuePair extName {
+                    text = "${type}=${ext}/lib/php/extensions/${extName}.so";
+                    deps = map getExtName phpDeps;
+                  }
+                )
+                (enabledExtensions ++ (getDepsRecursively enabledExtensions))
             );
 
             extNames = map getExtName enabledExtensions;

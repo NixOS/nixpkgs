@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  zlib,
-  libpng,
-  cmake,
-  python3,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, glib
+, zlib
+, libpng
+, cmake
+, python3
+, python3Packages
+,
 }:
 
 let

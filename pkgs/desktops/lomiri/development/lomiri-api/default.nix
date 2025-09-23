@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  makeFontsConf,
-  testers,
-  cmake,
-  cmake-extras,
-  dbus,
-  doxygen,
-  glib,
-  graphviz,
-  gtest,
-  libqtdbustest,
-  pkg-config,
-  python3,
-  qtbase,
-  qtdeclarative,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, makeFontsConf
+, testers
+, cmake
+, cmake-extras
+, dbus
+, doxygen
+, glib
+, graphviz
+, gtest
+, libqtdbustest
+, pkg-config
+, python3
+, qtbase
+, qtdeclarative
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  future,
-  packbits,
-  pillow,
-  pyusb,
-  click,
-  attrs,
-  jsons,
-  lib,
+{ fetchPypi
+, buildPythonPackage
+, setuptools
+, future
+, packbits
+, pillow
+, pyusb
+, click
+, attrs
+, jsons
+, lib
+,
 }:
 
 buildPythonPackage rec {

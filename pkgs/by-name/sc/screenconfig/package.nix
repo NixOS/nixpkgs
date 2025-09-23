@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  xrandr,
-  srandrd,
-  feh,
+{ lib
+, python3
+, fetchFromGitHub
+, xrandr
+, srandrd
+, feh
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

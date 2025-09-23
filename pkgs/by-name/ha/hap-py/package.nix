@@ -1,21 +1,21 @@
-{
-  autoconf,
-  bcftools,
-  boost,
-  bzip2,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  htslib,
-  lib,
-  makeWrapper,
-  perl,
-  python3,
-  rtg-tools,
-  samtools,
-  stdenv,
-  xz,
-  zlib,
+{ autoconf
+, bcftools
+, boost
+, bzip2
+, cmake
+, curl
+, fetchFromGitHub
+, htslib
+, lib
+, makeWrapper
+, perl
+, python3
+, rtg-tools
+, samtools
+, stdenv
+, xz
+, zlib
+,
 }:
 
 let

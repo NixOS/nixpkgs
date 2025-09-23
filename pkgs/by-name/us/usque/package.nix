@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  nix-update-script,
-  buildPackages,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, nix-update-script
+, buildPackages
+, installShellFiles
+, versionCheckHook
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "usque";

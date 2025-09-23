@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -387,14 +386,16 @@ in
         message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
       }
     ]
-    ++ map (
-      name:
-      mkCertOwnershipAssertion {
-        cert = certs.${name};
-        groups = config.users.groups;
-        services = [ config.systemd.services.caddy ];
-      }
-    ) vhostCertNames;
+    ++ map
+      (
+        name:
+        mkCertOwnershipAssertion {
+          cert = certs.${name};
+          groups = config.users.groups;
+          services = [ config.systemd.services.caddy ];
+        }
+      )
+      vhostCertNames;
 
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
@@ -469,13 +470,15 @@ in
 
     security.acme.certs =
       let
-        certCfg = map (
-          certName:
-          nameValuePair certName {
-            group = mkDefault cfg.group;
-            reloadServices = [ "caddy.service" ];
-          }
-        ) vhostCertNames;
+        certCfg = map
+          (
+            certName:
+            nameValuePair certName {
+              group = mkDefault cfg.group;
+              reloadServices = [ "caddy.service" ];
+            }
+          )
+          vhostCertNames;
       in
       listToAttrs certCfg;
 

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  squashfsTools,
-  autoPatchelfHook,
-  copyDesktopItems,
-  pango,
-  gtk3,
-  alsa-lib,
-  nss,
-  libXdamage,
-  libdrm,
-  libgbm,
-  libxshmfence,
-  makeDesktopItem,
-  makeWrapper,
-  wrapGAppsHook3,
-  gcc-unwrapped,
-  udev,
+{ stdenv
+, lib
+, fetchurl
+, squashfsTools
+, autoPatchelfHook
+, copyDesktopItems
+, pango
+, gtk3
+, alsa-lib
+, nss
+, libXdamage
+, libdrm
+, libgbm
+, libxshmfence
+, makeDesktopItem
+, makeWrapper
+, wrapGAppsHook3
+, gcc-unwrapped
+, udev
+,
 }:
 
 stdenv.mkDerivation rec {

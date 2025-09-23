@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.i18n.inputMethod;
@@ -105,12 +104,16 @@ in
     environment.systemPackages = [
       cfg.package
     ]
-    ++ lib.optional (
-      cfg.enableGtk2 && (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages)
-    ) gtk2_cache
-    ++ lib.optional (
-      cfg.enableGtk3 && (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages)
-    ) gtk3_cache;
+    ++ lib.optional
+      (
+        cfg.enableGtk2 && (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages)
+      )
+      gtk2_cache
+    ++ lib.optional
+      (
+        cfg.enableGtk3 && (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages)
+      )
+      gtk3_cache;
   };
 
   meta = {

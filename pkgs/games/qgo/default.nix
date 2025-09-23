@@ -1,11 +1,11 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qttools,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, qtbase
+, qtmultimedia
+, qttools
+,
 }:
 
 mkDerivation {

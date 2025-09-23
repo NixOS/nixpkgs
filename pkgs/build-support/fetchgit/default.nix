@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  git,
-  git-lfs,
-  cacert,
+{ lib
+, stdenvNoCC
+, git
+, git-lfs
+, cacert
+,
 }:
 
 let
   urlToName =
-    {
-      url,
-      rev,
-      append,
+    { url
+    , rev
+    , append
+    ,
     }:
     let
       shortRev = lib.sources.shortRev rev;
@@ -24,46 +24,46 @@ lib.makeOverridable (
   lib.fetchers.withNormalizedHash { } (
     # NOTE Please document parameter additions or changes in
     #   ../../../doc/build-helpers/fetchers.chapter.md
-    {
-      url,
-      tag ? null,
-      rev ? null,
-      name ? urlToName {
+    { url
+    , tag ? null
+    , rev ? null
+    , name ? urlToName {
         inherit url;
         rev = lib.revOrTag rev tag;
         # when rootDir is specified, avoid invalidating the result when rev changes
         append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
-      },
-      leaveDotGit ? deepClone || fetchTags,
-      outputHash ? lib.fakeHash,
-      outputHashAlgo ? null,
-      fetchSubmodules ? true,
-      deepClone ? false,
-      branchName ? null,
-      sparseCheckout ? lib.optional (rootDir != "") rootDir,
-      nonConeMode ? rootDir != "",
-      nativeBuildInputs ? [ ],
-      # Shell code executed before the file has been fetched.  This, in
+      }
+    , leaveDotGit ? deepClone || fetchTags
+    , outputHash ? lib.fakeHash
+    , outputHashAlgo ? null
+    , fetchSubmodules ? true
+    , deepClone ? false
+    , branchName ? null
+    , sparseCheckout ? lib.optional (rootDir != "") rootDir
+    , nonConeMode ? rootDir != ""
+    , nativeBuildInputs ? [ ]
+    , # Shell code executed before the file has been fetched.  This, in
       # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
       # run operations between the checkout completing and deleting the .git
       # directory.
-      preFetch ? "",
-      # Shell code executed after the file has been fetched
+      preFetch ? ""
+    , # Shell code executed after the file has been fetched
       # successfully. This can do things like check or transform the file.
-      postFetch ? "",
-      preferLocalBuild ? true,
-      fetchLFS ? false,
-      # Shell code to build a netrc file for BASIC auth
-      netrcPhase ? null,
-      # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
+      postFetch ? ""
+    , preferLocalBuild ? true
+    , fetchLFS ? false
+    , # Shell code to build a netrc file for BASIC auth
+      netrcPhase ? null
+    , # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
       # needed for netrcPhase
-      netrcImpureEnvVars ? [ ],
-      meta ? { },
-      allowedRequisites ? null,
-      # fetch all tags after tree (useful for git describe)
-      fetchTags ? false,
-      # make this subdirectory the root of the result
-      rootDir ? "",
+      netrcImpureEnvVars ? [ ]
+    , meta ? { }
+    , allowedRequisites ? null
+    , # fetch all tags after tree (useful for git describe)
+      fetchTags ? false
+    , # make this subdirectory the root of the result
+      rootDir ? ""
+    ,
     }:
 
     /*
@@ -106,12 +106,12 @@ lib.makeOverridable (
           assert (otherIsNull tag);
           rev
         else
-          # FIXME fetching HEAD if no rev or tag is provided is problematic at best
+        # FIXME fetching HEAD if no rev or tag is provided is problematic at best
           "HEAD";
     in
 
     if builtins.isString sparseCheckout then
-      # Changed to throw on 2023-06-04
+    # Changed to throw on 2023-06-04
       throw
         "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
     else

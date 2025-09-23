@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  isa-l,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, isa-l
+, zlib
+,
 }:
 stdenv.mkDerivation (self: {
   pname = "strobealign";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  utilmacros,
-  libX11,
-  libXaw,
-  libXmu,
-  libXt,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, utilmacros
+, libX11
+, libXaw
+, libXmu
+, libXt
+,
 }:
 
 stdenv.mkDerivation rec {

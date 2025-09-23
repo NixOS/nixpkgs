@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib;
 let
@@ -255,9 +254,11 @@ in
       in
       { }
       # Module packages
-      // (mapAttrs' (
-        k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }
-      ) cfg.modulePackages)
+      // (mapAttrs'
+        (
+          k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }
+        )
+        cfg.modulePackages)
       # Built-in modules
       // doModule "doc"
       // doModule "migrate"

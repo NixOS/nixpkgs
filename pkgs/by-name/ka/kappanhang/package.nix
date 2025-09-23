@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  pulseaudio,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, pulseaudio
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

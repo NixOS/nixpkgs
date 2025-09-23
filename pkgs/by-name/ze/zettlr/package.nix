@@ -1,8 +1,8 @@
-{
-  appimageTools,
-  lib,
-  fetchurl,
-  makeWrapper,
+{ appimageTools
+, lib
+, fetchurl
+, makeWrapper
+,
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.

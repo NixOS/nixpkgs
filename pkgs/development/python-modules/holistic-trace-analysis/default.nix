@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  jupyterlab,
-  lib,
-  numpy,
-  pandas,
-  plotly,
-  pydot,
-  pytestCheckHook,
-  setuptools,
-  torch,
+{ buildPythonPackage
+, fetchFromGitHub
+, jupyterlab
+, lib
+, numpy
+, pandas
+, plotly
+, pydot
+, pytestCheckHook
+, setuptools
+, torch
+,
 }:
 
 buildPythonPackage rec {

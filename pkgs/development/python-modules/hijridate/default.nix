@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-fancy-pypi-readme,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-fancy-pypi-readme
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

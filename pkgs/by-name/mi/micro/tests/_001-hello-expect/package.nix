@@ -1,7 +1,7 @@
-{
-  expect,
-  micro,
-  runCommand,
+{ expect
+, micro
+, runCommand
+,
 }:
 
 let
@@ -11,12 +11,12 @@ let
   };
 in
 runCommand "micro-expect-hello-world"
-  {
-    nativeBuildInputs = [
-      expect
-      micro
-    ];
-  }
+{
+  nativeBuildInputs = [
+    expect
+    micro
+  ];
+}
   # Micro needs a writable $HOME for throwing its configuration
   ''
     export HOME=$(pwd)

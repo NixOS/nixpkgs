@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -88,16 +87,18 @@ in
           # For SSL certificates, and the resolv.conf
           "/etc"
         ]
-        ++ lib.optional (
-          config.services.postgresql.enable
-          && cfg.databaseUrl != null
-          && lib.strings.hasPrefix "postgres://" cfg.databaseUrl
-        ) "/run/postgresql"
-        ++ lib.optional (
-          config.services.mysql.enable
-          && cfg.databaseUrl != null
-          && lib.strings.hasPrefix "mysql://" cfg.databaseUrl
-        ) "/var/run/mysqld";
+        ++ lib.optional
+          (
+            config.services.postgresql.enable
+              && cfg.databaseUrl != null
+              && lib.strings.hasPrefix "postgres://" cfg.databaseUrl
+          ) "/run/postgresql"
+        ++ lib.optional
+          (
+            config.services.mysql.enable
+              && cfg.databaseUrl != null
+              && lib.strings.hasPrefix "mysql://" cfg.databaseUrl
+          ) "/var/run/mysqld";
 
         CapabilityBoundingSet = "";
 

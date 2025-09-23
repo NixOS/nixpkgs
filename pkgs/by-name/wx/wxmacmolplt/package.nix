@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  wxGTK32,
-  libGL,
-  libGLU,
-  pkg-config,
-  xorg,
-  autoreconfHook,
-  wrapGAppsHook4,
+{ stdenv
+, lib
+, fetchFromGitHub
+, wxGTK32
+, libGL
+, libGLU
+, pkg-config
+, xorg
+, autoreconfHook
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

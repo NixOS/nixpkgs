@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  less,
-  xdg-utils,
-  testers,
-  stackit-cli,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, less
+, xdg-utils
+, testers
+, stackit-cli
+,
 }:
 
 buildGoModule rec {

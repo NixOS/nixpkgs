@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -24,16 +23,18 @@ let
 
   linesForAttrs =
     attrs:
-    lib.concatMap (
-      name:
-      let
-        value = attrs.${name};
-      in
-      if lib.isAttrs value then
-        map (line: name + "." + line) (linesForAttrs value)
-      else
-        [ "${name}=${toStr value}" ]
-    ) (lib.attrNames attrs);
+    lib.concatMap
+      (
+        name:
+        let
+          value = attrs.${name};
+        in
+        if lib.isAttrs value then
+          map (line: name + "." + line) (linesForAttrs value)
+        else
+          [ "${name}=${toStr value}" ]
+      )
+      (lib.attrNames attrs);
 
   configFile = pkgs.writeText "davmail.properties" (
     lib.concatStringsSep "\n" (linesForAttrs cfg.config)

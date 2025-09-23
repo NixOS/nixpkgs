@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  python3,
-  coreutils,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchgit
+, python3
+, coreutils
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

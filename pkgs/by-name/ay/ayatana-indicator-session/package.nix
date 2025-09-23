@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  dbus,
-  glib,
-  gnome-settings-daemon,
-  gsettings-desktop-schemas,
-  gtest,
-  intltool,
-  libayatana-common,
-  librda,
-  lomiri,
-  mate,
-  pkg-config,
-  systemd,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, cmake
+, dbus
+, glib
+, gnome-settings-daemon
+, gsettings-desktop-schemas
+, gtest
+, intltool
+, libayatana-common
+, librda
+, lomiri
+, mate
+, pkg-config
+, systemd
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

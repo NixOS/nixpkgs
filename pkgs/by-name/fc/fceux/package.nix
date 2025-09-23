@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  SDL2,
-  cmake,
-  fetchFromGitHub,
-  ffmpeg,
-  libX11,
-  libXdmcp,
-  libxcb,
-  lua5_1,
-  minizip,
-  pkg-config,
-  qt5,
-  qt6,
-  x264,
-  # Configurable options
-  ___qtVersion ? "5",
+{ lib
+, stdenv
+, SDL2
+, cmake
+, fetchFromGitHub
+, ffmpeg
+, libX11
+, libXdmcp
+, libxcb
+, lua5_1
+, minizip
+, pkg-config
+, qt5
+, qt6
+, x264
+, # Configurable options
+  ___qtVersion ? "5"
+,
 }:
 
 let

@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream-glib,
-  biblesync,
-  cmake,
-  dbus-glib,
-  desktop-file-utils,
-  docbook2x,
-  docbook_xml_dtd_412,
-  glib,
-  gtkhtml,
-  icu,
-  intltool,
-  itstool,
-  libuuid,
-  libxslt,
-  minizip,
-  pkg-config,
-  sword,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  yelp-tools,
-  zip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, biblesync
+, cmake
+, dbus-glib
+, desktop-file-utils
+, docbook2x
+, docbook_xml_dtd_412
+, glib
+, gtkhtml
+, icu
+, intltool
+, itstool
+, libuuid
+, libxslt
+, minizip
+, pkg-config
+, sword
+, webkitgtk_4_1
+, wrapGAppsHook3
+, yelp-tools
+, zip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  autoconf,
-  automake,
-  cython,
-  pkg-config,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, autoconf
+, automake
+, cython
+, pkg-config
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

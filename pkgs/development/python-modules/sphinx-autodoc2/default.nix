@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  flit-core,
-
-  astroid,
-  typing-extensions,
-  typer,
-
-  pytestCheckHook,
-  pytest-regressions,
-  sphinx,
-  defusedxml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, flit-core
+, astroid
+, typing-extensions
+, typer
+, pytestCheckHook
+, pytest-regressions
+, sphinx
+, defusedxml
+,
 }:
 
 buildPythonPackage rec {

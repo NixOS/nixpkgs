@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, python3
+, versionCheckHook
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

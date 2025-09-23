@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gcc-arm-embedded-13,
-  pkg-config,
-  meson,
-  ninja,
-  hidapi,
-  libftdi1,
-  libusb1,
-  libgpiod_1,
-  versionCheckHook,
-  udevCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gcc-arm-embedded-13
+, pkg-config
+, meson
+, ninja
+, hidapi
+, libftdi1
+, libusb1
+, libgpiod_1
+, versionCheckHook
+, udevCheckHook
+,
 }:
 let
   libopencm3Src = fetchFromGitHub {

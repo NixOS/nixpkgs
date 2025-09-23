@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  lib,
-  fetchurl,
-  pkg-config,
-  polkit,
-  glib,
+{ mkKdeDerivation
+, lib
+, fetchurl
+, pkg-config
+, polkit
+, glib
+,
 }:
 mkKdeDerivation rec {
   pname = "polkit-qt-1";

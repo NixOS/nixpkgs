@@ -5,44 +5,41 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{
-  name ? "",
-  lib,
-  stdenvNoCC,
-  runtimeShell,
-  bintools ? null,
-  libc ? null,
-  coreutils ? null,
-  gnugrep ? null,
-  apple-sdk ? null,
-  netbsd ? null,
-  sharedLibraryLoader ?
-    if libc == null then
-      null
-    else if stdenvNoCC.targetPlatform.isNetBSD then
-      if !(targetPackages ? netbsd) then
-        netbsd.ld_elf_so
-      else if libc != targetPackages.netbsd.headers then
-        targetPackages.netbsd.ld_elf_so
-      else
-        null
+{ name ? ""
+, lib
+, stdenvNoCC
+, runtimeShell
+, bintools ? null
+, libc ? null
+, coreutils ? null
+, gnugrep ? null
+, apple-sdk ? null
+, netbsd ? null
+, sharedLibraryLoader ? if libc == null then
+    null
+  else if stdenvNoCC.targetPlatform.isNetBSD then
+    if !(targetPackages ? netbsd) then
+      netbsd.ld_elf_so
+    else if libc != targetPackages.netbsd.headers then
+      targetPackages.netbsd.ld_elf_so
     else
-      lib.getLib libc,
-  nativeTools,
-  noLibc ? false,
-  nativeLibc,
-  nativePrefix ? "",
-  propagateDoc ? bintools != null && bintools ? man,
-  extraPackages ? [ ],
-  extraBuildCommands ? "",
-  isGNU ? bintools.isGNU or false,
-  isLLVM ? bintools.isLLVM or false,
-  isCCTools ? bintools.isCCTools or false,
-  expand-response-params,
-  targetPackages ? { },
-  wrapGas ? false,
-
-  # Note: the hardening flags are part of the bintools-wrapper, rather than
+      null
+  else
+    lib.getLib libc
+, nativeTools
+, noLibc ? false
+, nativeLibc
+, nativePrefix ? ""
+, propagateDoc ? bintools != null && bintools ? man
+, extraPackages ? [ ]
+, extraBuildCommands ? ""
+, isGNU ? bintools.isGNU or false
+, isLLVM ? bintools.isLLVM or false
+, isCCTools ? bintools.isCCTools or false
+, expand-response-params
+, targetPackages ? { }
+, wrapGas ? false
+, # Note: the hardening flags are part of the bintools-wrapper, rather than
   # the cc-wrapper, because a few of them are handled by the linker.
   defaultHardeningFlags ? [
     "bindnow"
@@ -56,23 +53,25 @@
     "strictoverflow"
     "zerocallusedregs"
   ]
-  ++ lib.optional (
-    with stdenvNoCC;
-    lib.any (x: x) [
-      # OpenBSD static linking requires PIE
-      (with targetPlatform; isOpenBSD && isStatic)
-      (lib.all (x: x) [
-        # Musl-based platforms will keep "pie", other platforms will not.
-        # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
-        # in the nixpkgs manual to inform users about the defaults.
-        (targetPlatform.libc == "musl")
-        # Except when:
-        #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-        #    - static armv7l, where compilation fails.
-        (!(targetPlatform.isAarch && targetPlatform.isStatic))
-      ])
-    ]
-  ) "pie",
+  ++ lib.optional
+    (
+      with stdenvNoCC;
+      lib.any (x: x) [
+        # OpenBSD static linking requires PIE
+        (with targetPlatform; isOpenBSD && isStatic)
+        (lib.all (x: x) [
+          # Musl-based platforms will keep "pie", other platforms will not.
+          # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
+          # in the nixpkgs manual to inform users about the defaults.
+          (targetPlatform.libc == "musl")
+          # Except when:
+          #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+          #    - static armv7l, where compilation fails.
+          (!(targetPlatform.isAarch && targetPlatform.isStatic))
+        ])
+      ]
+    ) "pie"
+,
 }:
 
 assert propagateDoc -> bintools ? man;
@@ -299,54 +298,55 @@ stdenvNoCC.mkDerivation {
     ##
     ## General libc support
     ##
-    optionalString (libc != null) (
-      ''
-        touch "$out/nix-support/libc-ldflags"
-        echo "-L${libc_lib}${libc.libdir or "/lib"}" >> $out/nix-support/libc-ldflags
+    optionalString (libc != null)
+      (
+        ''
+          touch "$out/nix-support/libc-ldflags"
+          echo "-L${libc_lib}${libc.libdir or "/lib"}" >> $out/nix-support/libc-ldflags
 
-        echo "${libc_lib}" > $out/nix-support/orig-libc
-        echo "${libc_dev}" > $out/nix-support/orig-libc-dev
-      ''
+          echo "${libc_lib}" > $out/nix-support/orig-libc
+          echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+        ''
 
-      ##
-      ## Dynamic linker support
-      ##
-      + optionalString (sharedLibraryLoader != null) ''
-        if [[ -z ''${dynamicLinker+x} ]]; then
-          echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
-          local dynamicLinker="${sharedLibraryLoader}/lib/ld*.so.?"
-        fi
-      ''
+        ##
+        ## Dynamic linker support
+        ##
+        + optionalString (sharedLibraryLoader != null) ''
+          if [[ -z ''${dynamicLinker+x} ]]; then
+            echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
+            local dynamicLinker="${sharedLibraryLoader}/lib/ld*.so.?"
+          fi
+        ''
 
-      # Expand globs to fill array of options
-      + ''
-        dynamicLinker=($dynamicLinker)
+        # Expand globs to fill array of options
+        + ''
+          dynamicLinker=($dynamicLinker)
 
-        case ''${#dynamicLinker[@]} in
-          0) echo "No dynamic linker found for platform '${targetPlatform.config}'." >&2;;
-          1) echo "Using dynamic linker: '$dynamicLinker'" >&2;;
-          *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
-        esac
+          case ''${#dynamicLinker[@]} in
+            0) echo "No dynamic linker found for platform '${targetPlatform.config}'." >&2;;
+            1) echo "Using dynamic linker: '$dynamicLinker'" >&2;;
+            *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
+          esac
 
-        if [ -n "''${dynamicLinker-}" ]; then
-          echo $dynamicLinker > $out/nix-support/dynamic-linker
+          if [ -n "''${dynamicLinker-}" ]; then
+            echo $dynamicLinker > $out/nix-support/dynamic-linker
 
-          ${
-            if targetPlatform.isDarwin then
-              ''
-                printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
-              ''
-            else
-              optionalString (sharedLibraryLoader != null) ''
-                if [ -e ${sharedLibraryLoader}/lib/32/ld-linux.so.2 ]; then
-                  echo ${sharedLibraryLoader}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
-                fi
-                touch $out/nix-support/ld-set-dynamic-linker
-              ''
-          }
-        fi
-      ''
-    )
+            ${
+              if targetPlatform.isDarwin then
+                ''
+                  printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
+                ''
+              else
+                optionalString (sharedLibraryLoader != null) ''
+                  if [ -e ${sharedLibraryLoader}/lib/32/ld-linux.so.2 ]; then
+                    echo ${sharedLibraryLoader}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+                  fi
+                  touch $out/nix-support/ld-set-dynamic-linker
+                ''
+            }
+          fi
+        ''
+      )
 
     ##
     ## User env support
@@ -408,11 +408,11 @@ stdenvNoCC.mkDerivation {
 
     # TODO(@sternenseemann): make a generic strip wrapper?
     +
-      optionalString (bintools.isGNU or false || bintools.isLLVM or false || bintools.isCCTools or false)
-        ''
-          wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
-            "${bintools_bin}/bin/${targetPrefix}strip"
-        ''
+    optionalString (bintools.isGNU or false || bintools.isLLVM or false || bintools.isCCTools or false)
+      ''
+        wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
+          "${bintools_bin}/bin/${targetPrefix}strip"
+      ''
 
     ###
     ### Remove certain timestamps from final binaries

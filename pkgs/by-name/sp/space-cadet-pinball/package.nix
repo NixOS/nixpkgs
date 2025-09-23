@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  cmake,
-  SDL2,
-  SDL2_mixer,
-  unrar,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, cmake
+, SDL2
+, SDL2_mixer
+, unrar
+,
 }:
 
 let

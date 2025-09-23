@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  click-odoo,
-  fetchPypi,
-  importlib-resources,
-  lib,
-  manifestoo-core,
-  nix-update-script,
-  pythonOlder,
-  setuptools-scm,
+{ buildPythonPackage
+, click-odoo
+, fetchPypi
+, importlib-resources
+, lib
+, manifestoo-core
+, nix-update-script
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

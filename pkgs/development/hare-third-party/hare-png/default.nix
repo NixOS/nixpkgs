@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  hareHook,
-  hareThirdParty,
-  fetchFromSourcehut,
+{ lib
+, stdenv
+, hareHook
+, hareThirdParty
+, fetchFromSourcehut
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

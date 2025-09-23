@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  colorlog,
-  dataclasses-json,
-  fetchPypi,
-  nltk-data,
-  numpy,
-  pandas,
-  poetry-core,
-  pydantic,
-  pydateinfer,
-  python-dateutil,
-  pythonOlder,
-  scipy,
-  symlinkJoin,
-  type-infer,
+{ lib
+, buildPythonPackage
+, colorlog
+, dataclasses-json
+, fetchPypi
+, nltk-data
+, numpy
+, pandas
+, poetry-core
+, pydantic
+, pydateinfer
+, python-dateutil
+, pythonOlder
+, scipy
+, symlinkJoin
+, type-infer
+,
 }:
 let
   testNltkData = symlinkJoin {

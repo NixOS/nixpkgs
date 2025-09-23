@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtsvg,
-  flatpak,
+{ mkKdeDerivation
+, pkg-config
+, qtsvg
+, flatpak
+,
 }:
 mkKdeDerivation {
   pname = "flatpak-kcm";

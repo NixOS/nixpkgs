@@ -1,17 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  libcosmicAppHook,
-  just,
-
-  # buildInputs
-  openssl,
-
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  libcosmicAppHook
+, just
+, # buildInputs
+  openssl
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage {

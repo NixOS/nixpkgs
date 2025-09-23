@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  elementpath,
-  fetchFromGitHub,
-  jinja2,
-  lxml,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, elementpath
+, fetchFromGitHub
+, jinja2
+, lxml
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

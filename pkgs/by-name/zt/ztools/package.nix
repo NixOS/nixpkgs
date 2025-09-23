@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unixtools,
-  groff,
+{ lib
+, stdenv
+, fetchurl
+, unixtools
+, groff
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ztools";

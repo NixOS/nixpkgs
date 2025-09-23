@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchpatch,
-  autoreconfHook,
-  boost,
-  fcgi,
-  openssl,
-  opensaml-cpp,
-  log4shib,
-  pkg-config,
-  xercesc,
-  xml-security-c,
-  xml-tooling-c,
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, autoreconfHook
+, boost
+, fcgi
+, openssl
+, opensaml-cpp
+, log4shib
+, pkg-config
+, xercesc
+, xml-security-c
+, xml-tooling-c
+,
 }:
 
 stdenv.mkDerivation rec {

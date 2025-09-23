@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  qt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, qt5
+,
 }:
 
 let

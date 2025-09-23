@@ -1,35 +1,32 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  git,
-  apple-sdk_11,
-  ninja,
-  fetchFromGitHub,
-  SDL2,
-  wget,
-  which,
-  autoAddDriverRunpath,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, cmake
+, git
+, apple-sdk_11
+, ninja
+, fetchFromGitHub
+, SDL2
+, wget
+, which
+, autoAddDriverRunpath
+, makeWrapper
+, nix-update-script
+, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+, coreMLSupport ? stdenv.hostPlatform.isDarwin && false
+, # FIXME currently broken
 
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-  coreMLSupport ? stdenv.hostPlatform.isDarwin && false, # FIXME currently broken
-
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
-
-  rocmSupport ? config.rocmSupport,
-  rocmPackages ? { },
-  rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets,
-
-  vulkanSupport ? false,
-  shaderc,
-  vulkan-headers,
-  vulkan-loader,
-
-  withSDL ? true,
+  config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+, rocmSupport ? config.rocmSupport
+, rocmPackages ? { }
+, rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets
+, vulkanSupport ? false
+, shaderc
+, vulkan-headers
+, vulkan-loader
+, withSDL ? true
+,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;

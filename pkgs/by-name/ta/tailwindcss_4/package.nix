@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  versionCheckHook,
-  autoPatchelfHook,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, versionCheckHook
+, autoPatchelfHook
+, makeWrapper
+,
 }:
 let
   version = "4.1.13";
@@ -17,8 +17,7 @@ let
       aarch64-linux = "linux-arm64";
       x86_64-darwin = "macos-x64";
       x86_64-linux = "linux-x64";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   hash =
     {
@@ -26,8 +25,7 @@ let
       aarch64-linux = "sha256-yQUpR1o5itvzMViYchwPn+hfQ0orPqPq+tpohnZBgZo=";
       x86_64-darwin = "sha256-w7Iwvb+qRslMrY20TaH4J3PxC6xU9W+hlsiXfYGcCeQ=";
       x86_64-linux = "sha256-ue2fj2QNMyNxH59oYIqiZt/zrbxC6GfDjqLQCblzvhE=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 in
 stdenv.mkDerivation {
   inherit version;

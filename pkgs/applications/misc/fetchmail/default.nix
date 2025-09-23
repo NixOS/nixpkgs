@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  pytestCheckHook,
-  numpy,
-  scipy,
-  bumps,
-  docutils,
-  matplotlib,
-  opencl-headers,
-  pycuda,
-  pyopencl,
-  pythonOlder,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, pytestCheckHook
+, numpy
+, scipy
+, bumps
+, docutils
+, matplotlib
+, opencl-headers
+, pycuda
+, pyopencl
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libsForQt5,
-  sqlcipher,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libsForQt5
+, sqlcipher
+,
 }:
 
 let

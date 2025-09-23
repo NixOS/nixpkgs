@@ -1,27 +1,27 @@
-{
-  sparqlwrapper,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gremlinpython,
-  jsonpath-ng,
-  lib,
-  moto,
-  openpyxl,
-  opensearch-py,
-  pandas,
-  pg8000,
-  poetry-core,
-  progressbar2,
-  pyarrow,
-  pymysql,
-  pyodbc,
-  pyparsing,
-  pytestCheckHook,
-  pythonOlder,
-  redshift-connector,
-  requests-aws4auth,
-  setuptools,
+{ sparqlwrapper
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, gremlinpython
+, jsonpath-ng
+, lib
+, moto
+, openpyxl
+, opensearch-py
+, pandas
+, pg8000
+, poetry-core
+, progressbar2
+, pyarrow
+, pymysql
+, pyodbc
+, pyparsing
+, pytestCheckHook
+, pythonOlder
+, redshift-connector
+, requests-aws4auth
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

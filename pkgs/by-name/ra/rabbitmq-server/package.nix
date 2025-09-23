@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  erlang,
-  elixir,
-  python3,
-  libxml2,
-  libxslt,
-  xmlto,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  zip,
-  unzip,
-  rsync,
-  getconf,
-  socat,
-  procps,
-  coreutils,
-  gnused,
-  systemd,
-  glibcLocales,
-  nixosTests,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, erlang
+, elixir
+, python3
+, libxml2
+, libxslt
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, zip
+, unzip
+, rsync
+, getconf
+, socat
+, procps
+, coreutils
+, gnused
+, systemd
+, glibcLocales
+, nixosTests
+, which
+,
 }:
 
 let

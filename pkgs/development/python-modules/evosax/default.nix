@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  chex,
-  dotmap,
-  flax,
-  jax,
-  jaxlib,
-  matplotlib,
-  numpy,
-  pyyaml,
-
-  # tests
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  chex
+, dotmap
+, flax
+, jax
+, jaxlib
+, matplotlib
+, numpy
+, pyyaml
+, # tests
   # brax, (unpackaged)
   # gymnax, (unpackaged)
-  pytestCheckHook,
-  torch,
-  torchvision,
-  writableTmpDirAsHomeHook,
+  pytestCheckHook
+, torch
+, torchvision
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

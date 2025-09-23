@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libsForQt5,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

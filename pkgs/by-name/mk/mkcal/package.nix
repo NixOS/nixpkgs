@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  cmake,
-  doxygen,
-  extra-cmake-modules,
-  graphviz,
-  libsForQt5,
-  perl,
-  pkg-config,
-  tzdata,
-  ctestCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, testers
+, cmake
+, doxygen
+, extra-cmake-modules
+, graphviz
+, libsForQt5
+, perl
+, pkg-config
+, tzdata
+, ctestCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

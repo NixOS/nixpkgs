@@ -1,12 +1,11 @@
 # Tests in: ../../../../tests/modular-service-etc/test.nix
 # This file is a function that returns a module.
 pkgs:
-{
-  lib,
-  name,
-  config,
-  options,
-  ...
+{ lib
+, name
+, config
+, options
+, ...
 }:
 let
   inherit (lib) mkOption types;

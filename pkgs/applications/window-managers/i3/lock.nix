@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libxcb,
-  xcbutilkeysyms,
-  xcbutilimage,
-  xcbutilxrm,
-  pam,
-  libX11,
-  libev,
-  cairo,
-  libxkbcommon,
-  libxkbfile,
-  xorg,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libxcb
+, xcbutilkeysyms
+, xcbutilimage
+, xcbutilxrm
+, pam
+, libX11
+, libev
+, cairo
+, libxkbcommon
+, libxkbfile
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

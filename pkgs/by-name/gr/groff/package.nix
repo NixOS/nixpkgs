@@ -1,28 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  enableGhostscript ? false,
-  ghostscript,
-  gawk,
-  libX11,
-  libXaw,
-  libXt,
-  libXmu, # for postscript and html output
-  enableHtml ? false,
-  psutils,
-  netpbm, # for html output
-  enableIconv ? false,
-  iconv,
-  enableLibuchardet ? false,
-  libuchardet, # for detecting input file encoding in preconv(1)
-  buildPackages,
-  autoreconfHook,
-  pkg-config,
-  texinfo,
-  bison,
-  bashNonInteractive,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, enableGhostscript ? false
+, ghostscript
+, gawk
+, libX11
+, libXaw
+, libXt
+, libXmu
+, # for postscript and html output
+  enableHtml ? false
+, psutils
+, netpbm
+, # for html output
+  enableIconv ? false
+, iconv
+, enableLibuchardet ? false
+, libuchardet
+, # for detecting input file encoding in preconv(1)
+  buildPackages
+, autoreconfHook
+, pkg-config
+, texinfo
+, bison
+, bashNonInteractive
+,
 }:
 
 stdenv.mkDerivation rec {

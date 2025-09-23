@@ -1,23 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  nix-update-script,
-
-  bash,
-  bashInteractive,
-  coreutils,
-  findutils,
-  gawk,
-  getopt,
-  gnugrep,
-  gnused,
-
-  # tests
-  adr-tools,
-  runCommand,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, nix-update-script
+, bash
+, bashInteractive
+, coreutils
+, findutils
+, gawk
+, getopt
+, gnugrep
+, gnused
+, # tests
+  adr-tools
+, runCommand
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  buildPackages,
-  coreutils,
-  fetchFromGitHub,
-  jansson,
-  libiconv,
-  perl,
-  pkg-config,
-  python3,
-  libseccomp,
-  libyaml,
-  pcre2,
-  libxml2,
+{ lib
+, stdenv
+, autoreconfHook
+, buildPackages
+, coreutils
+, fetchFromGitHub
+, jansson
+, libiconv
+, perl
+, pkg-config
+, python3
+, libseccomp
+, libyaml
+, pcre2
+, libxml2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

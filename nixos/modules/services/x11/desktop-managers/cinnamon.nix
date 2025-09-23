@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 with lib;
@@ -211,7 +210,8 @@ in
             mint-x-icons
             mint-y-icons
             xapp # provides some xapp-* icons
-          ] config.environment.cinnamon.excludePackages
+          ]
+            config.environment.cinnamon.excludePackages
         );
 
       xdg.mime.enable = true;
@@ -269,7 +269,8 @@ in
           gnome-calculator
           gnome-calendar
           gnome-screenshot
-        ] config.environment.cinnamon.excludePackages;
+        ]
+          config.environment.cinnamon.excludePackages;
     })
   ];
 }

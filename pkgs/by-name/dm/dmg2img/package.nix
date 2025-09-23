@@ -1,11 +1,11 @@
-{
-  bzip2,
-  fetchFromGitHub,
-  lib,
-  openssl,
-  stdenv,
-  unstableGitUpdater,
-  zlib,
+{ bzip2
+, fetchFromGitHub
+, lib
+, openssl
+, stdenv
+, unstableGitUpdater
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

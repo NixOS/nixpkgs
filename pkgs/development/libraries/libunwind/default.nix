@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  buildPackages,
-  xz,
-  testers,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, buildPackages
+, xz
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

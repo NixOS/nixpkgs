@@ -1,6 +1,6 @@
-{
-  callPackage,
-  wolfram-engine,
+{ callPackage
+, wolfram-engine
+,
 }:
 
 # Jupyter console:

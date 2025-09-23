@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  autoconf,
-  autoconf-archive,
-  automake,
-  gettext,
-  intltool,
-  libtool,
-  pkg-config,
-  libICE,
-  libSM,
-  libXScrnSaver,
-  libXtst,
-  gobject-introspection,
-  glib,
-  glibmm,
-  gtkmm3,
-  atk,
-  pango,
-  pangomm,
-  cairo,
-  cairomm,
-  dbus,
-  dbus-glib,
-  gst_all_1,
-  libsigcxx,
-  boost,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook3
+, autoconf
+, autoconf-archive
+, automake
+, gettext
+, intltool
+, libtool
+, pkg-config
+, libICE
+, libSM
+, libXScrnSaver
+, libXtst
+, gobject-introspection
+, glib
+, glibmm
+, gtkmm3
+, atk
+, pango
+, pangomm
+, cairo
+, cairomm
+, dbus
+, dbus-glib
+, gst_all_1
+, libsigcxx
+, boost
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation rec {

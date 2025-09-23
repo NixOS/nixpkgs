@@ -1,8 +1,7 @@
 import ../make-test-python.nix (
-  {
-    pkgs,
-    version ? 4,
-    ...
+  { pkgs
+  , version ? 4
+  , ...
   }:
 
   let

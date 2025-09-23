@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  audioop-lts,
-  standard-chunk,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, audioop-lts
+, standard-chunk
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

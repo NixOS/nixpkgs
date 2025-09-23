@@ -1,14 +1,14 @@
-{
-  aiohttp,
-  bleak,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-regex-commit,
-  hatchling,
-  lib,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ aiohttp
+, bleak
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-regex-commit
+, hatchling
+, lib
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

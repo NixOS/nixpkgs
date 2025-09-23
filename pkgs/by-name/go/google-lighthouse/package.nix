@@ -1,14 +1,15 @@
-{
-  stdenv,
-  lib,
-  chromium, # Can be overwritten to be (potentially) any Chromium implementation
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
-  makeWrapper,
+{ stdenv
+, lib
+, chromium
+, # Can be overwritten to be (potentially) any Chromium implementation
+  fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
+, makeWrapper
+,
 }:
 stdenv.mkDerivation rec {
   pname = "google-lighthouse";

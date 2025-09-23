@@ -1,12 +1,12 @@
-{
-  lib,
-  gccStdenv,
-  cudaPackages,
-  fetchFromGitLab,
-  config,
-  cudaSupport ? config.cudaSupport,
-  pkg-config,
-  versionCheckHook,
+{ lib
+, gccStdenv
+, cudaPackages
+, fetchFromGitLab
+, config
+, cudaSupport ? config.cudaSupport
+, pkg-config
+, versionCheckHook
+,
 }:
 
 let

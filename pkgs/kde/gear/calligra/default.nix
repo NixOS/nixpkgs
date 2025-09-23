@@ -1,26 +1,26 @@
-{
-  mkKdeDerivation,
-  lib,
-  boost,
-  eigen,
-  gsl,
-  imath,
-  libetonyek,
-  libgit2,
-  libodfgen,
-  librevenge,
-  libvisio,
-  libwpd,
-  libwpg,
-  libwps,
-  okular,
-  perl,
-  pkg-config,
-  poppler,
-  qtkeychain,
-  qtsvg,
-  qtwebengine,
-  shared-mime-info,
+{ mkKdeDerivation
+, lib
+, boost
+, eigen
+, gsl
+, imath
+, libetonyek
+, libgit2
+, libodfgen
+, librevenge
+, libvisio
+, libwpd
+, libwpg
+, libwps
+, okular
+, perl
+, pkg-config
+, poppler
+, qtkeychain
+, qtsvg
+, qtwebengine
+, shared-mime-info
+,
 }:
 
 mkKdeDerivation {

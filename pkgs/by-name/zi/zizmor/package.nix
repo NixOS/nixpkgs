@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  rustPlatform,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

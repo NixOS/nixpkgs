@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libuuid,
-  curl,
-  sqlite,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libuuid
+, curl
+, sqlite
+, openssl
+,
 }:
 
 stdenv.mkDerivation {

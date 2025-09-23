@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  paho-mqtt,
-  pytest-cov-stub,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  weconnect,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, paho-mqtt
+, pytest-cov-stub
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, weconnect
+,
 }:
 
 buildPythonPackage rec {

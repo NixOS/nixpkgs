@@ -1,14 +1,14 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  nodejs,
-  cmake,
-  pkg-config,
-  openssl,
-  libdatachannel,
-  plog,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, gitUpdater
+, nodejs
+, cmake
+, pkg-config
+, openssl
+, libdatachannel
+, plog
+,
 }:
 
 let

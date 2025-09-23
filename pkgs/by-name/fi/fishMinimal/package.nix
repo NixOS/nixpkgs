@@ -1,5 +1,5 @@
-{
-  fish,
+{ fish
+,
 }:
 
 fish.override {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  wrapGAppsHook3,
-  jre,
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, wrapGAppsHook3
+, jre
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

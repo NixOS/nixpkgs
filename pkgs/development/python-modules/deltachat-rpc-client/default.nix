@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  deltachat-rpc-server,
-  imap-tools,
-  lib,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, deltachat-rpc-server
+, imap-tools
+, lib
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

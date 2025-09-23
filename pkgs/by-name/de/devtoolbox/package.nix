@@ -1,22 +1,22 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  gtksourceview5,
-  webkitgtk_6_0,
-  gcr_4,
-  gdk-pixbuf,
-  autoPatchelfHook,
-  appstream,
-  libxml2,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, blueprint-compiler
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, gtksourceview5
+, webkitgtk_6_0
+, gcr_4
+, gdk-pixbuf
+, autoPatchelfHook
+, appstream
+, libxml2
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "devtoolbox";

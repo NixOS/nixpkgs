@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  protobuf,
-  pkg-config,
-  openssl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, protobuf
+, pkg-config
+, openssl
+,
 }:
 let
   pname = "teller";

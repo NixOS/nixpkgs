@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  buildPackages,
-  installShellFiles,
-  versionCheckHook,
-  makeWrapper,
-  enableCmount ? true,
-  fuse,
-  fuse3,
-  macfuse-stubs,
-  librclone,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, buildPackages
+, installShellFiles
+, versionCheckHook
+, makeWrapper
+, enableCmount ? true
+, fuse
+, fuse3
+, macfuse-stubs
+, librclone
+, nix-update-script
+,
 }:
 
 buildGoModule rec {
@@ -77,13 +77,13 @@ buildGoModule rec {
       ln -s $out/bin/rclone $out/bin/mount.rclone
     ''
     +
-      lib.optionalString (enableCmount && !stdenv.hostPlatform.isDarwin)
-        # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount3,
-        # as the setuid wrapper is required as non-root on NixOS.
-        ''
-          wrapProgram $out/bin/rclone \
-            --suffix PATH : "${lib.makeBinPath [ fuse3 ]}"
-        '';
+    lib.optionalString (enableCmount && !stdenv.hostPlatform.isDarwin)
+      # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount3,
+      # as the setuid wrapper is required as non-root on NixOS.
+      ''
+        wrapProgram $out/bin/rclone \
+          --suffix PATH : "${lib.makeBinPath [ fuse3 ]}"
+      '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

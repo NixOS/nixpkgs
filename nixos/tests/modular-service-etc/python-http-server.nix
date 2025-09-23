@@ -1,9 +1,8 @@
 # Tests in: ./test.nix
 # This module provides a basic web server based on the python built-in http.server package.
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 let
   inherit (lib) mkOption types;

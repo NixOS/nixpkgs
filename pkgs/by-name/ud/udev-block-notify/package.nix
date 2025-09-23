@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  multimarkdown,
-  libnotify,
-  udev,
-  systemdLibs,
-  glib,
-  pkg-config,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, multimarkdown
+, libnotify
+, udev
+, systemdLibs
+, glib
+, pkg-config
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "udev-block-notify";

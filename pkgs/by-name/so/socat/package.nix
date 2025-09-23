@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  net-tools,
-  openssl,
-  readline,
-  stdenv,
-  which,
-  buildPackages,
+{ lib
+, fetchurl
+, net-tools
+, openssl
+, readline
+, stdenv
+, which
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

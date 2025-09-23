@@ -1,15 +1,15 @@
-{
-  lib,
-  astral,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  num2words,
-  pdm-backend,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  syrupy,
+{ lib
+, astral
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, num2words
+, pdm-backend
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  libiconv,
-  makeWrapper,
-  imagemagick,
-  makeFontsConf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, libiconv
+, makeWrapper
+, imagemagick
+, makeFontsConf
+,
 }:
 stdenv.mkDerivation {
   pname = "sgfutils";

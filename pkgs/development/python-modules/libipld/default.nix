@@ -1,19 +1,17 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  pythonOlder,
-  rustPlatform,
-  nix-update-script,
-
-  # build-system
-  maturin,
-
-  # nativeCheckInputs
-  pytestCheckHook,
-  pytest-benchmark,
-  pytest-codspeed,
-  pytest-xdist,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, rustPlatform
+, nix-update-script
+, # build-system
+  maturin
+, # nativeCheckInputs
+  pytestCheckHook
+, pytest-benchmark
+, pytest-codspeed
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

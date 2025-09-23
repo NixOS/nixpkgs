@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  holos,
-  kubectl,
-  kustomize,
-  kubernetes-helm,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, holos
+, kubectl
+, kustomize
+, kubernetes-helm
+,
 }:
 buildGoModule rec {
   pname = "holos";

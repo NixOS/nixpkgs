@@ -1,15 +1,15 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  nix-update-script,
-  alsa-lib,
-  libGL,
-  libxkbcommon,
-  vulkan-headers,
-  wayland,
-  xorg,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, pkg-config
+, nix-update-script
+, alsa-lib
+, libGL
+, libxkbcommon
+, vulkan-headers
+, wayland
+, xorg
+,
 }:
 
 buildGoModule {

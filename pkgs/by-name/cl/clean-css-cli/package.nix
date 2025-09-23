@@ -1,7 +1,7 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "clean-css-cli";

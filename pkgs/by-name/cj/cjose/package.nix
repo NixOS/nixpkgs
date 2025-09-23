@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  doxygen,
-  check,
-  jansson,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, doxygen
+, check
+, jansson
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

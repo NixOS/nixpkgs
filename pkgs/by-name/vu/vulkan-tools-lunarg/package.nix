@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  jq,
-  expat,
-  jsoncpp,
-  libX11,
-  libXdmcp,
-  libXrandr,
-  libffi,
-  libxcb,
-  pkg-config,
-  wayland,
-  which,
-  xcbutilkeysyms,
-  xcbutilwm,
-  valijson,
-  vulkan-headers,
-  vulkan-loader,
-  vulkan-utility-libraries,
-  writeText,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, jq
+, expat
+, jsoncpp
+, libX11
+, libXdmcp
+, libXrandr
+, libffi
+, libxcb
+, pkg-config
+, wayland
+, which
+, xcbutilkeysyms
+, xcbutilwm
+, valijson
+, vulkan-headers
+, vulkan-loader
+, vulkan-utility-libraries
+, writeText
+, qt6
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  pkg-config,
-  boost186,
-  libsodium,
-  miniupnpc,
-  openssl,
-  python3,
-  randomx,
-  rapidjson,
-  readline,
-  unbound,
-  zeromq,
-
-  trezorSupport ? true,
-  hidapi,
-  libusb1,
-  protobuf_21,
-  udev,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, pkg-config
+, boost186
+, libsodium
+, miniupnpc
+, openssl
+, python3
+, randomx
+, rapidjson
+, readline
+, unbound
+, zeromq
+, trezorSupport ? true
+, hidapi
+, libusb1
+, protobuf_21
+, udev
+,
 }:
 
 let

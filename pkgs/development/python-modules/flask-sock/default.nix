@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pytestCheckHook,
-  pythonOlder,
-  fetchFromGitHub,
-  flask,
-  setuptools,
-  simple-websocket,
+{ lib
+, buildPythonPackage
+, pytestCheckHook
+, pythonOlder
+, fetchFromGitHub
+, flask
+, setuptools
+, simple-websocket
+,
 }:
 
 buildPythonPackage rec {

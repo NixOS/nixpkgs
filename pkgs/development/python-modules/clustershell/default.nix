@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  distutils,
-  pyyaml,
-  openssh,
-  unittestCheckHook,
-  installShellFiles,
-  bc,
-  hostname,
-  bash,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, distutils
+, pyyaml
+, openssh
+, unittestCheckHook
+, installShellFiles
+, bc
+, hostname
+, bash
+,
 }:
 
 buildPythonPackage rec {

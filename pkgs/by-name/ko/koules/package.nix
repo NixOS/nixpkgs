@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchzip,
-  copyDesktopItems,
-  gccmakedep,
-  imake,
-  installShellFiles,
-  libX11,
-  libXext,
-  makeDesktopItem,
+{ stdenv
+, lib
+, fetchurl
+, fetchzip
+, copyDesktopItems
+, gccmakedep
+, imake
+, installShellFiles
+, libX11
+, libXext
+, makeDesktopItem
+,
 }:
 
 let

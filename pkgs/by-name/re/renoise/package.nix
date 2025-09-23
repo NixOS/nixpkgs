@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  writeScript,
-  alsa-lib,
-  fetchurl,
-  libjack2,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  mpg123,
-  pipewire,
-  releasePath ? null,
+{ lib
+, stdenv
+, writeScript
+, alsa-lib
+, fetchurl
+, libjack2
+, libX11
+, libXcursor
+, libXext
+, libXinerama
+, libXrandr
+, libXtst
+, mpg123
+, pipewire
+, releasePath ? null
+,
 }:
 
 # To use the full release version:

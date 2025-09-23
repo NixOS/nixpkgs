@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  cacert,
-  deprecated,
-  eval-type-backport,
-  fetchFromGitHub,
-  griffe,
-  hatchling,
-  jinja2,
-  litellm,
-  platformdirs,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  redis,
+{ lib
+, buildPythonPackage
+, cacert
+, deprecated
+, eval-type-backport
+, fetchFromGitHub
+, griffe
+, hatchling
+, jinja2
+, litellm
+, platformdirs
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, redis
+,
 }:
 
 buildPythonPackage rec {

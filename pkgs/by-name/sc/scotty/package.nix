@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromSourcehut,
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromSourcehut
+, nix-update-script
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

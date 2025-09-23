@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  llama-index-core,
-  llama-parse,
-  hatchling,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, llama-index-core
+, llama-parse
+, hatchling
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

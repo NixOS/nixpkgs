@@ -1,10 +1,10 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  volkswagencarnet,
-  pytest-homeassistant-custom-component,
-  pytestCheckHook,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, volkswagencarnet
+, pytest-homeassistant-custom-component
+, pytestCheckHook
+,
 }:
 
 buildHomeAssistantComponent rec {

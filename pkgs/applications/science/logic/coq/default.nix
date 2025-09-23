@@ -5,30 +5,32 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchurl,
-  writeText,
-  pkg-config,
-  gnumake42,
-  customOCamlPackages ? null,
-  ocamlPackages_4_09,
-  ocamlPackages_4_10,
-  ocamlPackages_4_12,
-  ocamlPackages_4_14,
-  rocqPackages, # for versions >= 9.0 that are transition shims on top of Rocq
-  ncurses,
-  buildIde ? null, # default is true for Coq < 8.14 and false for Coq >= 8.14
-  glib,
-  adwaita-icon-theme,
-  wrapGAppsHook3,
-  makeDesktopItem,
-  copyDesktopItems,
-  csdp ? null,
-  version,
-  coq-version ? null,
+{ lib
+, stdenv
+, fetchzip
+, fetchurl
+, writeText
+, pkg-config
+, gnumake42
+, customOCamlPackages ? null
+, ocamlPackages_4_09
+, ocamlPackages_4_10
+, ocamlPackages_4_12
+, ocamlPackages_4_14
+, rocqPackages
+, # for versions >= 9.0 that are transition shims on top of Rocq
+  ncurses
+, buildIde ? null
+, # default is true for Coq < 8.14 and false for Coq >= 8.14
+  glib
+, adwaita-icon-theme
+, wrapGAppsHook3
+, makeDesktopItem
+, copyDesktopItems
+, csdp ? null
+, version
+, coq-version ? null
+,
 }@args:
 let
   lib = import ../../../../build-support/coq/extra-lib.nix { inherit (args) lib; };
@@ -96,9 +98,10 @@ let
     args.coq-version or (if version != "dev" then lib.versions.majorMinor version else "dev");
   coqAtLeast = v: coq-version == "dev" || lib.versionAtLeast coq-version v;
   buildIde = args.buildIde or (!coqAtLeast "8.14");
-  ideFlags = lib.optionalString (
-    buildIde && !coqAtLeast "8.10"
-  ) "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
+  ideFlags = lib.optionalString
+    (
+      buildIde && !coqAtLeast "8.10"
+    ) "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = lib.optionalString (csdp != null) ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
@@ -124,7 +127,8 @@ let
           case = lib.versions.range "8.7" "8.10";
           out = ocamlPackages_4_09;
         }
-      ] ocamlPackages_4_14;
+      ]
+        ocamlPackages_4_14;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
@@ -322,42 +326,44 @@ let
   };
 in
 if coqAtLeast "8.21" then
-  self.overrideAttrs (o: {
-    # coq-core is now a shim for rocq
-    propagatedBuildInputs = o.propagatedBuildInputs ++ [
-      rocqPackages.rocq-core
-    ];
-    buildPhase = ''
-      runHook preBuild
-      dune build -p coq-core,coqide-server${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-      dune install --prefix $out coq-core coqide-server${lib.optionalString buildIde " rocqide"}
-      # coq and rocq are now in different directories, which sometimes confuses coq_makefile
-      # which expects both in the same /nix/store/.../bin/ directory
-      # adding symlinks to content it
-      ROCQBIN=$(dirname ''$(command -v rocq))
-      for b in csdpcert ocamllibdep rocq rocq.byte rocqchk votour ; do
-        ln -s ''${ROCQBIN}/''${b} $out/bin/
-      done
-      runHook postInstall
-    '';
-  })
+  self.overrideAttrs
+    (o: {
+      # coq-core is now a shim for rocq
+      propagatedBuildInputs = o.propagatedBuildInputs ++ [
+        rocqPackages.rocq-core
+      ];
+      buildPhase = ''
+        runHook preBuild
+        dune build -p coq-core,coqide-server${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES
+        runHook postBuild
+      '';
+      installPhase = ''
+        runHook preInstall
+        dune install --prefix $out coq-core coqide-server${lib.optionalString buildIde " rocqide"}
+        # coq and rocq are now in different directories, which sometimes confuses coq_makefile
+        # which expects both in the same /nix/store/.../bin/ directory
+        # adding symlinks to content it
+        ROCQBIN=$(dirname ''$(command -v rocq))
+        for b in csdpcert ocamllibdep rocq rocq.byte rocqchk votour ; do
+          ln -s ''${ROCQBIN}/''${b} $out/bin/
+        done
+        runHook postInstall
+      '';
+    })
 else if coqAtLeast "8.17" then
-  self.overrideAttrs (_: {
-    buildPhase = ''
-      runHook preBuild
-      make dunestrap
-      dune build -p coq-core,coq-stdlib,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-      dune install --prefix $out coq-core coq-stdlib coqide-server${lib.optionalString buildIde " coqide"}
-      runHook postInstall
-    '';
-  })
+  self.overrideAttrs
+    (_: {
+      buildPhase = ''
+        runHook preBuild
+        make dunestrap
+        dune build -p coq-core,coq-stdlib,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+        runHook postBuild
+      '';
+      installPhase = ''
+        runHook preInstall
+        dune install --prefix $out coq-core coq-stdlib coqide-server${lib.optionalString buildIde " coqide"}
+        runHook postInstall
+      '';
+    })
 else
   self

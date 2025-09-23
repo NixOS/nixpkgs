@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  hexdump,
-  mkLibretroCore,
-  which,
+{ lib
+, fetchFromGitHub
+, hexdump
+, mkLibretroCore
+, which
+,
 }:
 mkLibretroCore {
   core = "sameboy";

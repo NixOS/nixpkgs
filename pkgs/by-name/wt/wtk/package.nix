@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  requireFile,
-  unzip,
-  xorg,
+{ lib
+, stdenv
+, requireFile
+, unzip
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

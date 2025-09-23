@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  autoconf,
-  automake,
-  fetchFromGitHub,
-  fetchpatch,
-  libjpeg_turbo,
-  libpng,
-  libtool,
-  libxml2,
-  pkg-config,
-  which,
-  xorg,
-  libtirpc,
+{ lib
+, stdenv
+, autoconf
+, automake
+, fetchFromGitHub
+, fetchpatch
+, libjpeg_turbo
+, libpng
+, libtool
+, libxml2
+, pkg-config
+, which
+, xorg
+, libtirpc
+,
 }:
 stdenv.mkDerivation rec {
   pname = "nx-libs";

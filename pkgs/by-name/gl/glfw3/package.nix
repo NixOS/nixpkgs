@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libGL,
-  vulkan-loader,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libX11,
-  libXi,
-  libXext,
-  libXxf86vm,
-  fixDarwinDylibNames,
-  wayland,
-  wayland-scanner,
-  wayland-protocols,
-  libxkbcommon,
-  libdecor,
-  withMinecraftPatch ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libGL
+, vulkan-loader
+, libXrandr
+, libXinerama
+, libXcursor
+, libX11
+, libXi
+, libXext
+, libXxf86vm
+, fixDarwinDylibNames
+, wayland
+, wayland-scanner
+, wayland-protocols
+, libxkbcommon
+, libdecor
+, withMinecraftPatch ? false
+,
 }:
 let
   version = "3.4";

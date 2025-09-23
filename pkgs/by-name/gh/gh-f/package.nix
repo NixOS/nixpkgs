@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  makeBinaryWrapper,
-  gh,
-  fzf,
-  coreutils,
-  gawk,
-  gnused,
-  withBat ? false,
-  bat,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, makeBinaryWrapper
+, gh
+, fzf
+, coreutils
+, gawk
+, gnused
+, withBat ? false
+, bat
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

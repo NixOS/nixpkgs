@@ -1,10 +1,9 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-
-  # pythonPackages
-  javaobj-py3,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, # pythonPackages
+  javaobj-py3
+,
 }:
 
 buildPythonPackage rec {

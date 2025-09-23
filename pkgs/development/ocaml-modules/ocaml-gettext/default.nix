@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  applyPatches,
-  buildDunePackage,
-  cppo,
-  gettext,
-  fileutils,
-  ounit2,
+{ lib
+, fetchurl
+, fetchpatch
+, applyPatches
+, buildDunePackage
+, cppo
+, gettext
+, fileutils
+, ounit2
+,
 }:
 
 buildDunePackage rec {

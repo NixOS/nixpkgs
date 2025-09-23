@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  robloxSupport ? true,
-  pkg-config,
-  openssl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, robloxSupport ? true
+, pkg-config
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

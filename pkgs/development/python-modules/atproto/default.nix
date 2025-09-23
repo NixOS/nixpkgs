@@ -1,28 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  nix-update-script,
-
-  # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
-
-  # dependencies
-  click,
-  cryptography,
-  dnspython,
-  httpx,
-  libipld,
-  pydantic,
-  typing-extensions,
-  websockets,
-
-  # nativeCheckInputs
-  pytestCheckHook,
-  pytest-asyncio,
-  coverage,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, nix-update-script
+, # build-system
+  poetry-core
+, poetry-dynamic-versioning
+, # dependencies
+  click
+, cryptography
+, dnspython
+, httpx
+, libipld
+, pydantic
+, typing-extensions
+, websockets
+, # nativeCheckInputs
+  pytestCheckHook
+, pytest-asyncio
+, coverage
+,
 }:
 
 buildPythonPackage rec {

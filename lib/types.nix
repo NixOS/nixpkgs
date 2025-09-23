@@ -97,7 +97,8 @@ let
       The deprecated `${lib.optionalString (loc != null) "type."}functor.wrapped` attribute ${
         lib.optionalString (loc != null) "of the option `${showOption loc}` "
       }is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
-    '' payload.elemType;
+    ''
+      payload.elemType;
 
   checkDefsForError =
     check: loc: defs:
@@ -139,25 +140,25 @@ let
         null
       else
 
-      if hasPayload then
+        if hasPayload then
         # Just return the payload if returning wrapped is deprecated
-        if f ? wrappedDeprecationMessage then
-          typeFromPayload
-        else if hasWrapped then
+          if f ? wrappedDeprecationMessage then
+            typeFromPayload
+          else if hasWrapped then
           # Has both wrapped and payload
-          throw ''
-            Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
+            throw ''
+              Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
 
-            Use either `functor.payload` or `functor.wrapped` but not both.
+              Use either `functor.payload` or `functor.wrapped` but not both.
 
-            If your code worked before remove either `functor.wrapped` or `functor.payload` from the type definition.
-          ''
+              If your code worked before remove either `functor.wrapped` or `functor.payload` from the type definition.
+            ''
+          else
+            typeFromPayload
+        else if hasWrapped then
+          typeFromWrapped
         else
-          typeFromPayload
-      else if hasWrapped then
-        typeFromWrapped
-      else
-        f.type;
+          f.type;
 
     # Default type functor
     defaultFunctor = name: {
@@ -173,10 +174,10 @@ let
       {
         # Human-readable representation of the type, should be equivalent to
         # the type function name.
-        name,
-        # Description of the type, defined recursively by embedding the wrapped type if any.
-        description ? null,
-        # A hint for whether or not this description needs parentheses. Possible values:
+        name
+      , # Description of the type, defined recursively by embedding the wrapped type if any.
+        description ? null
+      , # A hint for whether or not this description needs parentheses. Possible values:
         #  - "noun": a noun phrase
         #    Example description: "positive integer",
         #  - "conjunction": a phrase with a potentially ambiguous "or" connective
@@ -186,8 +187,8 @@ let
         #  - "nonRestrictiveClause": a noun followed by a comma and a clause
         #    Example description: "positive integer, meaning >0"
         # See the `optionDescriptionPhrase` function.
-        descriptionClass ? null,
-        # DO NOT USE WITHOUT KNOWING WHAT YOU ARE DOING!
+        descriptionClass ? null
+      , # DO NOT USE WITHOUT KNOWING WHAT YOU ARE DOING!
         # Function applied to each definition that must return false when a definition
         # does not match the type. It should not check more than the root of the value,
         # because checking nested values reduces laziness, leading to unnecessary
@@ -203,32 +204,32 @@ let
         # https://github.com/NixOS/nixpkgs/issues/191124 and
         # https://github.com/NixOS/nixos-search/issues/391 for what happens if you ignore
         # this disclaimer.
-        check ? (x: true),
-        # Merge a list of definitions together into a single value.
+        check ? (x: true)
+      , # Merge a list of definitions together into a single value.
         # This function is called with two arguments: the location of
         # the option in the configuration as a list of strings
         # (e.g. ["boot" "loader "grub" "enable"]), and a list of
         # definition values and locations (e.g. [ { file = "/foo.nix";
         # value = 1; } { file = "/bar.nix"; value = 2 } ]).
-        merge ? mergeDefaultOption,
-        # Whether this type has a value representing nothingness. If it does,
+        merge ? mergeDefaultOption
+      , # Whether this type has a value representing nothingness. If it does,
         # this should be a value of the form { value = <the nothing value>; }
         # If it doesn't, this should be {}
         # This may be used when a value is required for `mkIf false`. This allows the extra laziness in e.g. `lazyAttrsOf`.
-        emptyValue ? { },
-        # Return a flat attrset of sub-options.  Used to generate
+        emptyValue ? { }
+      , # Return a flat attrset of sub-options.  Used to generate
         # documentation.
-        getSubOptions ? prefix: { },
-        # List of modules if any, or null if none.
-        getSubModules ? null,
-        # Function for building the same option type with a different list of
+        getSubOptions ? prefix: { }
+      , # List of modules if any, or null if none.
+        getSubModules ? null
+      , # Function for building the same option type with a different list of
         # modules.
-        substSubModules ? m: null,
-        # Function that merge type declarations.
+        substSubModules ? m: null
+      , # Function that merge type declarations.
         # internal, takes a functor as argument and returns the merged type.
         # returning null means the type is not mergeable
-        typeMerge ? defaultTypeMerge functor,
-        # The type functor.
+        typeMerge ? defaultTypeMerge functor
+      , # The type functor.
         # internal, representation of the type as an attribute set.
         #   name: name of the type
         #   type: type function.
@@ -236,14 +237,15 @@ let
         #   payload: values of the type, two payloads of the same type must be
         #            combinable with the binOp binary operation.
         #   binOp: binary operation that merge two payloads of the same type.
-        functor ? defaultFunctor name,
-        # The deprecation message to display when this type is used by an option
+        functor ? defaultFunctor name
+      , # The deprecation message to display when this type is used by an option
         # If null, the type isn't deprecated
-        deprecationMessage ? null,
-        # The types that occur in the definition of this type. This is used to
+        deprecationMessage ? null
+      , # The types that occur in the definition of this type. This is used to
         # issue deprecation warnings recursively. Can also be used to reuse
         # nested types
-        nestedTypes ? { },
+        nestedTypes ? { }
+      ,
       }:
       {
         _type = "option-type";
@@ -331,13 +333,16 @@ let
 
             # Returns the common type of all definitions, throws an error if they
             # don't have the same type
-            commonType = foldl' (
-              type: def:
-              if getType def.value == type then
-                type
-              else
-                throw "The option `${showOption loc}' has conflicting option types in ${showFiles (getFiles defs)}"
-            ) (getType (head defs).value) defs;
+            commonType = foldl'
+              (
+                type: def:
+                  if getType def.value == type then
+                    type
+                  else
+                    throw "The option `${showOption loc}' has conflicting option types in ${showFiles (getFiles defs)}"
+              )
+              (getType (head defs).value)
+              defs;
 
             mergeFunction =
               {
@@ -348,14 +353,15 @@ let
                 lambda =
                   loc: defs: arg:
                   anything.merge (loc ++ [ "<function body>" ]) (
-                    map (def: {
-                      file = def.file;
-                      value = def.value arg;
-                    }) defs
+                    map
+                      (def: {
+                        file = def.file;
+                        value = def.value arg;
+                      })
+                      defs
                   );
                 # Otherwise fall back to only allowing all equal definitions
-              }
-              .${commonType} or mergeEqualOption;
+              }.${commonType} or mergeEqualOption;
           in
           mergeFunction loc defs;
       };
@@ -381,12 +387,15 @@ let
         check = isBool;
         merge =
           loc: defs:
-          foldl' (
-            result: def:
-            # Under the assumption that .check always runs before merge, we can assume that all defs.*.value
-            # have been forced, and therefore we assume we don't introduce order-dependent strictness here
-            result || def.value
-          ) false defs;
+          foldl'
+            (
+              result: def:
+              # Under the assumption that .check always runs before merge, we can assume that all defs.*.value
+              # have been forced, and therefore we assume we don't introduce order-dependent strictness here
+              result || def.value
+            )
+            false
+            defs;
       };
 
       int = mkOptionType {
@@ -403,12 +412,12 @@ let
           betweenDesc = lowest: highest: "${toString lowest} and ${toString highest} (both inclusive)";
           between =
             lowest: highest:
-            assert lib.assertMsg (lowest <= highest) "ints.between: lowest must be smaller than highest";
-            addCheck int (x: x >= lowest && x <= highest)
-            // {
-              name = "intBetween";
-              description = "integer between ${betweenDesc lowest highest}";
-            };
+              assert lib.assertMsg (lowest <= highest) "ints.between: lowest must be smaller than highest";
+              addCheck int (x: x >= lowest && x <= highest)
+              // {
+                name = "intBetween";
+                description = "integer between ${betweenDesc lowest highest}";
+              };
           ign =
             lowest: highest: name: docStart:
             between lowest highest
@@ -420,9 +429,10 @@ let
             bit: range: ign 0 (range - 1) "unsignedInt${toString bit}" "${toString bit} bit unsigned integer";
           sign =
             bit: range:
-            ign (0 - (range / 2)) (
-              range / 2 - 1
-            ) "signedInt${toString bit}" "${toString bit} bit signed integer";
+            ign (0 - (range / 2))
+              (
+                range / 2 - 1
+              ) "signedInt${toString bit}" "${toString bit} bit signed integer";
 
         in
         {
@@ -490,12 +500,12 @@ let
         {
           between =
             lowest: highest:
-            assert lib.assertMsg (lowest <= highest) "numbers.between: lowest must be smaller than highest";
-            addCheck number (x: x >= lowest && x <= highest)
-            // {
-              name = "numberBetween";
-              description = "integer or floating point number between ${betweenDesc lowest highest}";
-            };
+              assert lib.assertMsg (lowest <= highest) "numbers.between: lowest must be smaller than highest";
+              addCheck number (x: x >= lowest && x <= highest)
+              // {
+                name = "numberBetween";
+                description = "integer or floating point number between ${betweenDesc lowest highest}";
+              };
 
           nonnegative = addCheck number (x: x >= 0) // {
             name = "numberNonnegative";
@@ -639,14 +649,16 @@ let
         check = x: isDerivation x && hasAttr "shellPath" x;
       };
 
-      pkgs = addCheck (
-        unique { message = "A Nixpkgs pkgs set can not be merged with another pkgs set."; } attrs
-        // {
-          name = "pkgs";
-          descriptionClass = "noun";
-          description = "Nixpkgs package set";
-        }
-      ) (x: (x._type or null) == "pkgs");
+      pkgs = addCheck
+        (
+          unique { message = "A Nixpkgs pkgs set can not be merged with another pkgs set."; } attrs
+          // {
+            name = "pkgs";
+            descriptionClass = "noun";
+            description = "Nixpkgs package set";
+          }
+        )
+        (x: (x._type or null) == "pkgs");
 
       path = pathWith {
         absolute = true;
@@ -657,9 +669,9 @@ let
       };
 
       pathWith =
-        {
-          inStore ? null,
-          absolute ? null,
+        { inStore ? null
+        , absolute ? null
+        ,
         }:
         throwIf (inStore != null && absolute != null && inStore && !absolute)
           "In pathWith, inStore means the path must be absolute"
@@ -721,18 +733,22 @@ let
               let
                 evals = filter (x: x.optionalValue ? value) (
                   concatLists (
-                    imap1 (
-                      n: def:
-                      imap1 (
-                        m: def':
-                        (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
-                          {
-                            inherit (def) file;
-                            value = def';
-                          }
-                        ])
-                      ) def.value
-                    ) defs
+                    imap1
+                      (
+                        n: def:
+                          imap1
+                            (
+                              m: def':
+                                (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                                  {
+                                    inherit (def) file;
+                                    value = def';
+                                  }
+                                ])
+                            )
+                            def.value
+                      )
+                      defs
                   )
                 );
               in
@@ -786,10 +802,12 @@ let
           # Push down position info.
           pushPositions = map (
             def:
-            mapAttrs (n: v: {
-              inherit (def) file;
-              value = v;
-            }) def.value
+            mapAttrs
+              (n: v: {
+                inherit (def) file;
+                value = v;
+              })
+              def.value
           );
           binOp =
             lhs: rhs:
@@ -813,10 +831,10 @@ let
                 inherit elemType lazy placeholder;
               };
         in
-        {
-          elemType,
-          lazy ? false,
-          placeholder ? "name",
+        { elemType
+        , lazy ? false
+        , placeholder ? "name"
+        ,
         }:
         mkOptionType rec {
           name = if lazy then "lazyAttrsOf" else "attrsOf";
@@ -836,21 +854,23 @@ let
                   if lazy then
                     zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
                   else
-                    # Filtering makes the merge function more strict
-                    # Meaning it is less lazy
+                  # Filtering makes the merge function more strict
+                  # Meaning it is less lazy
                     filterAttrs (n: v: v.optionalValue ? value) (
                       zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
                     );
               in
               {
                 headError = checkDefsForError check loc defs;
-                value = mapAttrs (
-                  n: v:
-                  if lazy then
-                    v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
-                  else
-                    v.optionalValue.value
-                ) evals;
+                value = mapAttrs
+                  (
+                    n: v:
+                      if lazy then
+                        v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+                      else
+                        v.optionalValue.value
+                  )
+                  evals;
                 valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
               };
           };
@@ -896,13 +916,14 @@ let
           tags_ = tags;
         in
         let
-          tags = mapAttrs (
-            n: opt:
-            builtins.addErrorContext
-              "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}"
-              (
-                throwIf (opt._type or null != "option")
-                  "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
+          tags = mapAttrs
+            (
+              n: opt:
+                builtins.addErrorContext
+                  "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}"
+                  (
+                    throwIf (opt._type or null != "option")
+                      "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
                     if opt ? _type then
                       if opt._type == "option-type" then
                         "was a bare type, not wrapped in mkOption."
@@ -911,25 +932,26 @@ let
                     else
                       "was not."
                   }"
-                  opt
-                // {
-                  declarations =
-                    opt.declarations or (
-                      let
-                        pos = builtins.unsafeGetAttrPos n tags_;
-                      in
-                      if pos == null then [ ] else [ pos.file ]
-                    );
-                  declarationPositions =
-                    opt.declarationPositions or (
-                      let
-                        pos = builtins.unsafeGetAttrPos n tags_;
-                      in
-                      if pos == null then [ ] else [ pos ]
-                    );
-                }
-              )
-          ) tags_;
+                      opt
+                    // {
+                      declarations =
+                        opt.declarations or (
+                          let
+                            pos = builtins.unsafeGetAttrPos n tags_;
+                          in
+                          if pos == null then [ ] else [ pos.file ]
+                        );
+                      declarationPositions =
+                        opt.declarationPositions or (
+                          let
+                            pos = builtins.unsafeGetAttrPos n tags_;
+                          in
+                          if pos == null then [ ] else [ pos ]
+                        );
+                    }
+                  )
+            )
+            tags_;
           choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
         in
         mkOptionType {
@@ -943,17 +965,19 @@ let
             loc: defs:
             let
               choice = head (attrNames (head defs).value);
-              checkedValueDefs = map (
-                def:
-                assert (length (attrNames def.value)) == 1;
-                if (head (attrNames def.value)) != choice then
-                  throw "The option `${showOption loc}` is defined both as `${choice}` and `${head (attrNames def.value)}`, in ${showFiles (getFiles defs)}."
-                else
-                  {
-                    inherit (def) file;
-                    value = def.value.${choice};
-                  }
-              ) defs;
+              checkedValueDefs = map
+                (
+                  def:
+                    assert (length (attrNames def.value)) == 1;
+                    if (head (attrNames def.value)) != choice then
+                      throw "The option `${showOption loc}` is defined both as `${choice}` and `${head (attrNames def.value)}`, in ${showFiles (getFiles defs)}."
+                    else
+                      {
+                        inherit (def) file;
+                        value = def.value.${choice};
+                      }
+                )
+                defs;
             in
             if tags ? ${choice} then
               {
@@ -977,24 +1001,26 @@ let
               a: b: {
                 tags =
                   a.tags
-                  // b.tags
-                  // mapAttrs (
-                    tagName: bOpt:
-                    lib.mergeOptionDecls
-                      # FIXME: loc is not accurate; should include prefix
-                      #        Fortunately, it's only used for error messages, where a "relative" location is kinda ok.
-                      #        It is also returned though, but use of the attribute seems rare?
-                      [ tagName ]
-                      [
-                        (wrapOptionDecl a.tags.${tagName})
-                        (wrapOptionDecl bOpt)
-                      ]
-                    // {
-                      # mergeOptionDecls is not idempotent in these attrs:
-                      declarations = a.tags.${tagName}.declarations ++ bOpt.declarations;
-                      declarationPositions = a.tags.${tagName}.declarationPositions ++ bOpt.declarationPositions;
-                    }
-                  ) (builtins.intersectAttrs a.tags b.tags);
+                    // b.tags
+                    // mapAttrs
+                    (
+                      tagName: bOpt:
+                        lib.mergeOptionDecls
+                          # FIXME: loc is not accurate; should include prefix
+                          #        Fortunately, it's only used for error messages, where a "relative" location is kinda ok.
+                          #        It is also returned though, but use of the attribute seems rare?
+                          [ tagName ]
+                          [
+                            (wrapOptionDecl a.tags.${tagName})
+                            (wrapOptionDecl bOpt)
+                          ]
+                        // {
+                          # mergeOptionDecls is not idempotent in these attrs:
+                          declarations = a.tags.${tagName}.declarations ++ bOpt.declarations;
+                          declarationPositions = a.tags.${tagName}.declarationPositions ++ bOpt.declarationPositions;
+                        }
+                    )
+                    (builtins.intersectAttrs a.tags b.tags);
               };
           };
         };
@@ -1080,10 +1106,12 @@ let
             __functor =
               _: callerArgs:
               (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (
-                map (fn: {
-                  inherit (fn) file;
-                  value = fn.value callerArgs;
-                }) defs
+                map
+                  (fn: {
+                    inherit (fn) file;
+                    value = fn.value callerArgs;
+                  })
+                  defs
               )).mergedValue;
           };
           getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
@@ -1110,8 +1138,8 @@ let
       # `staticModules`' options will be added to the documentation, unlike
       # options declared via `config`.
       deferredModuleWith =
-        attrs@{
-          staticModules ? [ ],
+        attrs@{ staticModules ? [ ]
+        ,
         }:
         mkOptionType {
           name = "deferredModule";
@@ -1121,9 +1149,11 @@ let
           merge = loc: defs: {
             imports =
               staticModules
-              ++ map (
-                def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value
-              ) defs;
+              ++ map
+                (
+                  def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value
+                )
+                defs;
           };
           inherit (submoduleWith { modules = staticModules; })
             getSubOptions
@@ -1162,17 +1192,19 @@ let
             let
               # Prepares the type definitions for mergeOptionDecls, which
               # annotates submodules types with file locations
-              optionModules = map (
-                { value, file }:
-                {
-                  _file = file;
-                  # There's no way to merge types directly from the module system,
-                  # but we can cheat a bit by just declaring an option with the type
-                  options = lib.mkOption {
-                    type = value;
-                  };
-                }
-              ) defs;
+              optionModules = map
+                (
+                  { value, file }:
+                  {
+                    _file = file;
+                    # There's no way to merge types directly from the module system,
+                    # but we can cheat a bit by just declaring an option with the type
+                    options = lib.mkOption {
+                      type = value;
+                    };
+                  }
+                )
+                defs;
               # Merges all the types into a single one, including submodule merging.
               # This also propagates file information to all submodules
               mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
@@ -1181,31 +1213,33 @@ let
       };
 
       submoduleWith =
-        {
-          modules,
-          specialArgs ? { },
-          shorthandOnlyDefinesConfig ? false,
-          description ? null,
-          class ? null,
+        { modules
+        , specialArgs ? { }
+        , shorthandOnlyDefinesConfig ? false
+        , description ? null
+        , class ? null
+        ,
         }@attrs:
         let
           inherit (lib.modules) evalModules;
 
           allModules =
             defs:
-            map (
-              { value, file }:
-              if isAttrs value && shorthandOnlyDefinesConfig then
-                {
-                  _file = file;
-                  config = value;
-                }
-              else
-                {
-                  _file = file;
-                  imports = [ value ];
-                }
-            ) defs;
+            map
+              (
+                { value, file }:
+                if isAttrs value && shorthandOnlyDefinesConfig then
+                  {
+                    _file = file;
+                    config = value;
+                  }
+                else
+                  {
+                    _file = file;
+                    imports = [ value ];
+                  }
+              )
+              defs;
 
           base = evalModules {
             inherit class specialArgs;
@@ -1247,7 +1281,7 @@ let
               let
                 docsEval = base.extendModules { modules = [ noCheckForDocsModule ]; };
               in
-              docsEval._module.freeformType.description or name;
+                docsEval._module.freeformType.description or name;
           inherit check;
           merge = {
             __functor =
@@ -1257,7 +1291,7 @@ let
               { loc, defs }:
               let
                 configuration = base.extendModules {
-                  modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
+                  modules = [{ _module.args.name = last loc; }] ++ allModules defs;
                   prefix = loc;
                 };
               in
@@ -1402,7 +1436,7 @@ let
           name = "either";
           description =
             if t1.descriptionClass or null == "nonRestrictiveClause" then
-              # Plain, but add comma
+            # Plain, but add comma
               "${t1.description}, or ${
                 optionDescriptionPhrase (class: class == "noun" || class == "conjunction") t2
               }"
@@ -1458,7 +1492,8 @@ let
                         ${headError.message}
                         If `either`, `oneOf` or similar is used in freeformType, ensure that it is preceded by an 'attrsOf' such as: `freeformType = types.attrsOf (types.either t1 t2)`.
                         Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.06.
-                      '' (mergeOneOption loc defs);
+                      ''
+                        (mergeOneOption loc defs);
                     };
               in
               checkedAndMerged;
@@ -1494,67 +1529,71 @@ let
       # converted to `finalType` using `coerceFunc`.
       coercedTo =
         coercedType: coerceFunc: finalType:
-        assert lib.assertMsg (
-          coercedType.getSubModules == null
-        ) "coercedTo: coercedType must not have submodules (it’s a ${coercedType.description})";
-        mkOptionType rec {
-          name = "coercedTo";
-          description = "${optionDescriptionPhrase (class: class == "noun") finalType} or ${
+          assert lib.assertMsg
+            (
+              coercedType.getSubModules == null
+            ) "coercedTo: coercedType must not have submodules (it’s a ${coercedType.description})";
+          mkOptionType rec {
+            name = "coercedTo";
+            description = "${optionDescriptionPhrase (class: class == "noun") finalType} or ${
             optionDescriptionPhrase (class: class == "noun") coercedType
           } convertible to it";
-          check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
-          merge = {
-            __functor =
-              self: loc: defs:
-              (self.v2 { inherit loc defs; }).value;
-            v2 =
-              { loc, defs }:
-              let
-                finalDefs = (
-                  map (
-                    def:
-                    def
-                    // {
-                      value =
-                        let
-                          merged = coercedType.merge.v2 {
-                            inherit loc;
-                            defs = [ def ];
-                          };
-                        in
-                        if coercedType.merge ? v2 then
-                          if merged.headError == null then coerceFunc def.value else def.value
-                        else if coercedType.check def.value then
-                          coerceFunc def.value
-                        else
-                          def.value;
+            check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
+            merge = {
+              __functor =
+                self: loc: defs:
+                (self.v2 { inherit loc defs; }).value;
+              v2 =
+                { loc, defs }:
+                let
+                  finalDefs = (
+                    map
+                      (
+                        def:
+                        def
+                        // {
+                          value =
+                            let
+                              merged = coercedType.merge.v2 {
+                                inherit loc;
+                                defs = [ def ];
+                              };
+                            in
+                            if coercedType.merge ? v2 then
+                              if merged.headError == null then coerceFunc def.value else def.value
+                            else if coercedType.check def.value then
+                              coerceFunc def.value
+                            else
+                              def.value;
+                        }
+                      )
+                      defs
+                  );
+                in
+                if finalType.merge ? v2 then
+                  finalType.merge.v2
+                    {
+                      inherit loc;
+                      defs = finalDefs;
                     }
-                  ) defs
-                );
-              in
-              if finalType.merge ? v2 then
-                finalType.merge.v2 {
-                  inherit loc;
-                  defs = finalDefs;
-                }
-              else
-                {
-                  value = finalType.merge loc finalDefs;
-                  valueMeta = { };
-                  headError = checkDefsForError check loc defs;
-                };
+                else
+                  {
+                    value = finalType.merge loc finalDefs;
+                    valueMeta = { };
+                    headError = checkDefsForError check loc defs;
+                  };
+            };
+            emptyValue = finalType.emptyValue;
+            getSubOptions = finalType.getSubOptions;
+            getSubModules = finalType.getSubModules;
+            substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
+            typeMerge = t: null;
+            functor = (defaultFunctor name) // {
+              wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
+            };
+            nestedTypes.coercedType = coercedType;
+            nestedTypes.finalType = finalType;
           };
-          emptyValue = finalType.emptyValue;
-          getSubOptions = finalType.getSubOptions;
-          getSubModules = finalType.getSubModules;
-          substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
-          typeMerge = t: null;
-          functor = (defaultFunctor name) // {
-            wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
-          };
-          nestedTypes.coercedType = coercedType;
-          nestedTypes.finalType = finalType;
-        };
 
       /**
         Augment the given type with an additional type check function.
@@ -1632,11 +1671,11 @@ let
     */
     mergeTypes =
       a: b:
-      assert isOptionType a && isOptionType b;
-      let
-        merged = a.typeMerge b.functor;
-      in
-      if merged == null then setType "merge-error" { error = "Cannot merge types"; } else merged;
+        assert isOptionType a && isOptionType b;
+        let
+          merged = a.typeMerge b.functor;
+        in
+        if merged == null then setType "merge-error" { error = "Cannot merge types"; } else merged;
   };
 
 in

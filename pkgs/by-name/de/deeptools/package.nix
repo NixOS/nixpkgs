@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  addBinToPathHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, addBinToPathHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

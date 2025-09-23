@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  cmake,
-  fontconfig,
-  libGL,
-  xorg,
-  libxkbcommon,
-  wayland,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, cmake
+, fontconfig
+, libGL
+, xorg
+, libxkbcommon
+, wayland
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-lsp";

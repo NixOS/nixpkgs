@@ -1,16 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  libxml2,
-  libxslt,
-  docbook-xsl,
-  docbook_xml_dtd_44,
-  perlPackages,
-  makeWrapper,
-  perl, # for pod2man
-  cctools,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, libxml2
+, libxslt
+, docbook-xsl
+, docbook_xml_dtd_44
+, perlPackages
+, makeWrapper
+, perl
+, # for pod2man
+  cctools
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

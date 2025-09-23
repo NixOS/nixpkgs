@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

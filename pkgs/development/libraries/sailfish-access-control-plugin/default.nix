@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  qmake,
-  qtbase,
-  qtdeclarative,
-  sailfish-access-control,
+{ stdenv
+, lib
+, pkg-config
+, qmake
+, qtbase
+, qtdeclarative
+, sailfish-access-control
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

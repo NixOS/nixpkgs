@@ -1,9 +1,9 @@
-{
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
+{ stdenv
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, lib
+,
 }:
 let
   version = "1.2.3";

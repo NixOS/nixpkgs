@@ -1,31 +1,31 @@
-{
-  stdenv,
-  runCommand,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  flex,
-  bison,
-  systemd,
-  boost186,
-  libedit,
-  openssl,
-  patchelf,
-  mariadb-connector-c,
-  libpq,
-  zlib,
-  tzdata,
-  # Databases
-  withMysql ? true,
-  withPostgresql ? false,
-  # Features
-  withChecker ? true,
-  withCompat ? false,
-  withLivestatus ? false,
-  withNotification ? true,
-  withPerfdata ? true,
-  withIcingadb ? true,
-  nameSuffix ? "",
+{ stdenv
+, runCommand
+, lib
+, fetchFromGitHub
+, cmake
+, flex
+, bison
+, systemd
+, boost186
+, libedit
+, openssl
+, patchelf
+, mariadb-connector-c
+, libpq
+, zlib
+, tzdata
+, # Databases
+  withMysql ? true
+, withPostgresql ? false
+, # Features
+  withChecker ? true
+, withCompat ? false
+, withLivestatus ? false
+, withNotification ? true
+, withPerfdata ? true
+, withIcingadb ? true
+, nameSuffix ? ""
+,
 }:
 
 stdenv.mkDerivation rec {

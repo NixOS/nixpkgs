@@ -1,24 +1,24 @@
-{
-  stdenv,
-  alsa-lib,
-  autoPatchelfHook,
-  dpkg,
-  evince,
-  fetchurl,
-  flac,
-  lib,
-  libmicrohttpd,
-  libogg,
-  libusb-compat-0_1,
-  llvmPackages,
-  mpfr,
-  qtcharts,
-  qtdeclarative,
-  qtwayland,
-  qtwebengine,
-  qtwebview,
-  wavpack,
-  wrapQtAppsHook,
+{ stdenv
+, alsa-lib
+, autoPatchelfHook
+, dpkg
+, evince
+, fetchurl
+, flac
+, lib
+, libmicrohttpd
+, libogg
+, libusb-compat-0_1
+, llvmPackages
+, mpfr
+, qtcharts
+, qtdeclarative
+, qtwayland
+, qtwebengine
+, qtwebview
+, wavpack
+, wrapQtAppsHook
+,
 }:
 
 let

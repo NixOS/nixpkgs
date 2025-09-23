@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  # doc: https://github.com/bdwgc/bdwgc/blob/v8.2.8/doc/README.macros (LARGE_CONFIG)
-  enableLargeConfig ? false,
-  enableMmap ? true,
-  enableStatic ? false,
-  # Allows derivation users to increase the initial mark stack size to avoid stack overflows,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, # doc: https://github.com/bdwgc/bdwgc/blob/v8.2.8/doc/README.macros (LARGE_CONFIG)
+  enableLargeConfig ? false
+, enableMmap ? true
+, enableStatic ? false
+, # Allows derivation users to increase the initial mark stack size to avoid stack overflows,
   # since these inhibit parallel marking (see `GC_mark_some()` in `mark.c`.)
   #
   # Run Nix with the `GC_PRINT_STATS=1` environment set to check if the mark stack is too small.
@@ -15,8 +14,9 @@
   # `Grew mark stack to ... frames`.
   #
   # If this parameter is set to `null`, the default from upstream is used, which is 4096 as of 8.2.8
-  initialMarkStackSize ? null,
-  nixVersions,
+  initialMarkStackSize ? null
+, nixVersions
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

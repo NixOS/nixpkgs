@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  packaging,
-  requests,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  packaging
+, requests
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

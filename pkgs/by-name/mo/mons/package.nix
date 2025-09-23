@@ -1,14 +1,14 @@
-{
-  lib,
-  bash,
-  coreutils,
-  fetchFromGitHub,
-  gawk,
-  gnugrep,
-  gnused,
-  help2man,
-  resholve,
-  xrandr,
+{ lib
+, bash
+, coreutils
+, fetchFromGitHub
+, gawk
+, gnugrep
+, gnused
+, help2man
+, resholve
+, xrandr
+,
 }:
 
 resholve.mkDerivation {

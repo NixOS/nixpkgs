@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  braintree,
-  cryptography,
-  django,
-  django-phonenumber-field,
-  fetchFromGitHub,
-  mercadopago,
-  pythonOlder,
-  requests,
-  setuptools,
-  setuptools-scm,
-  stripe,
-  suds-community,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, braintree
+, cryptography
+, django
+, django-phonenumber-field
+, fetchFromGitHub
+, mercadopago
+, pythonOlder
+, requests
+, setuptools
+, setuptools-scm
+, stripe
+, suds-community
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  updateAutotoolsGnuConfigScriptsHook,
-  ncurses,
-  pkg-config,
-  abiVersion ? "6",
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt,
-  mouseSupport ? false,
-  gpm,
-  withTermlib ? false,
-  unicodeSupport ? true,
-  testers,
-  binlore,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, updateAutotoolsGnuConfigScriptsHook
+, ncurses
+, pkg-config
+, abiVersion ? "6"
+, enableStatic ? stdenv.hostPlatform.isStatic
+, withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
+, mouseSupport ? false
+, gpm
+, withTermlib ? false
+, unicodeSupport ? true
+, testers
+, binlore
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

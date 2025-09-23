@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  qtbase,
-  qttools,
-  spdlog,
-  ffmpeg,
-  taglib,
-  wrapQtAppsHook,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, qtbase
+, qttools
+, spdlog
+, ffmpeg
+, taglib
+, wrapQtAppsHook
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation rec {

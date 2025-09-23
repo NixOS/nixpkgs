@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  pytest-cov-stub,
-  vcrpy,
-  citeproc-py,
-  looseversion,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, pytestCheckHook
+, pytest-cov-stub
+, vcrpy
+, citeproc-py
+, looseversion
+, requests
+,
 }:
 
 buildPythonPackage rec {

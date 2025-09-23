@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  gobject-introspection,
-  libadwaita,
-  wrapGAppsHook4,
-  meson,
-  ninja,
-  desktop-file-utils,
-  pkg-config,
-  appstream,
-  libsecret,
-  libportal,
-  gtk4,
-  gtksourceview5,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, gobject-introspection
+, libadwaita
+, wrapGAppsHook4
+, meson
+, ninja
+, desktop-file-utils
+, pkg-config
+, appstream
+, libsecret
+, libportal
+, gtk4
+, gtksourceview5
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "errands";

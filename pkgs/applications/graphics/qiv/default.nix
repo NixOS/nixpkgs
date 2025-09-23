@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk2,
-  imlib2,
-  file,
-  lcms2,
-  libexif,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, imlib2
+, file
+, lcms2
+, libexif
+,
 }:
 
 stdenv.mkDerivation (rec {

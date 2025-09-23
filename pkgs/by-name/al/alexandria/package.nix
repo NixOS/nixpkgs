@@ -1,18 +1,18 @@
-{
-  rustPlatform,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  webkitgtk_4_0,
-  openssl,
-  nodejs,
-  npmHooks,
-  fetchNpmDeps,
-  gtk3,
-  wrapGAppsHook3,
-  cargo-tauri_1,
-  librsvg,
-  libappindicator-gtk3,
+{ rustPlatform
+, lib
+, fetchFromGitHub
+, pkg-config
+, webkitgtk_4_0
+, openssl
+, nodejs
+, npmHooks
+, fetchNpmDeps
+, gtk3
+, wrapGAppsHook3
+, cargo-tauri_1
+, librsvg
+, libappindicator-gtk3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

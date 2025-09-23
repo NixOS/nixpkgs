@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  bzip2,
-  glib,
-  curl,
-  libxml2,
-  python3,
-  rpm,
-  openssl,
-  sqlite,
-  file,
-  xz,
-  bash-completion,
-  zstd,
-  zchunk,
-  libmodulemd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, bzip2
+, glib
+, curl
+, libxml2
+, python3
+, rpm
+, openssl
+, sqlite
+, file
+, xz
+, bash-completion
+, zstd
+, zchunk
+, libmodulemd
+,
 }:
 
 stdenv.mkDerivation rec {

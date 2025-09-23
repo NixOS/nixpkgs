@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  writeScript,
-  callPackage,
+{ lib
+, stdenvNoCC
+, fetchurl
+, writeScript
+, callPackage
+,
 }:
 
 let
@@ -14,8 +14,8 @@ let
     let
       selectSystem =
         attrs:
-        attrs.${stdenvNoCC.hostPlatform.system}
-          or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+          attrs.${stdenvNoCC.hostPlatform.system}
+            or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
       system = selectSystem {
         aarch64-darwin = "osx_arm64";
         aarch64-linux = "linuxarm64";
@@ -74,7 +74,8 @@ let
 in
 
 if stdenvNoCC.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit
       pname
       version

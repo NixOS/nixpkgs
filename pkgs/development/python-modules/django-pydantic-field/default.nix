@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  dj-database-url,
-  inflection,
-  pydantic,
-  pytestCheckHook,
-  pytest-django,
-  djangorestframework,
-  pyyaml,
-  setuptools,
-  syrupy,
-  uritemplate,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, dj-database-url
+, inflection
+, pydantic
+, pytestCheckHook
+, pytest-django
+, djangorestframework
+, pyyaml
+, setuptools
+, syrupy
+, uritemplate
+,
 }:
 
 buildPythonPackage rec {

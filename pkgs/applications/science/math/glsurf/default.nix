@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocamlPackages,
-  makeWrapper,
-  libGLU,
-  libGL,
-  libglut,
-  mpfr,
-  gmp,
-  pkgsHostTarget,
+{ lib
+, stdenv
+, fetchurl
+, ocamlPackages
+, makeWrapper
+, libGLU
+, libGL
+, libglut
+, mpfr
+, gmp
+, pkgsHostTarget
+,
 }:
 
 let

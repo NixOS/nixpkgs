@@ -1,7 +1,6 @@
-{
-  latestKernel,
-  lib,
-  ...
+{ latestKernel
+, lib
+, ...
 }:
 
 {

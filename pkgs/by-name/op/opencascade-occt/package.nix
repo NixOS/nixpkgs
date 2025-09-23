@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  ninja,
-  rapidjson,
-  tcl,
-  tk,
-  libGL,
-  libGLU,
-  libXext,
-  libXmu,
-  libXi,
-  vtk,
-  withVtk ? false,
-
-  # used in passthru.tests
-  opencascade-occt,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, ninja
+, rapidjson
+, tcl
+, tk
+, libGL
+, libGLU
+, libXext
+, libXmu
+, libXi
+, vtk
+, withVtk ? false
+, # used in passthru.tests
+  opencascade-occt
+,
 }:
 stdenv.mkDerivation rec {
   pname = "opencascade-occt";

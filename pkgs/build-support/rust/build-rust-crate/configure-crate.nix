@@ -1,47 +1,49 @@
-{
-  lib,
-  stdenv,
-  echo_colored,
-  noisily,
-  mkRustcDepArgs,
-  mkRustcFeatureArgs,
+{ lib
+, stdenv
+, echo_colored
+, noisily
+, mkRustcDepArgs
+, mkRustcFeatureArgs
+,
 }:
-{
-  build,
-  buildDependencies,
-  codegenUnits,
-  colors,
-  completeBuildDeps,
-  completeDeps,
-  crateAuthors,
-  crateDescription,
-  crateFeatures,
-  crateHomepage,
-  crateLicense,
-  crateLicenseFile,
-  crateLinks,
-  crateName,
-  crateType,
-  crateReadme,
-  crateRenames,
-  crateRepository,
-  crateRustVersion,
-  crateVersion,
-  extraLinkFlags,
-  extraRustcOptsForBuildRs,
-  libName,
-  libPath,
-  release,
-  verbose,
-  workspace_member,
+{ build
+, buildDependencies
+, codegenUnits
+, colors
+, completeBuildDeps
+, completeDeps
+, crateAuthors
+, crateDescription
+, crateFeatures
+, crateHomepage
+, crateLicense
+, crateLicenseFile
+, crateLinks
+, crateName
+, crateType
+, crateReadme
+, crateRenames
+, crateRepository
+, crateRustVersion
+, crateVersion
+, extraLinkFlags
+, extraRustcOptsForBuildRs
+, libName
+, libPath
+, release
+, verbose
+, workspace_member
+,
 }:
 let
   version_ = lib.splitString "-" crateVersion;
   versionPre = lib.optionalString (lib.tail version_ != [ ]) (lib.elemAt version_ 1);
   version = lib.splitVersion (lib.head version_);
-  rustcOpts = lib.foldl' (opts: opt: opts + " " + opt) (
-    if release then "-C opt-level=3" else "-C debuginfo=2"
-  ) ([ "-C codegen-units=${toString codegenUnits}" ] ++ extraRustcOptsForBuildRs);
+  rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
+    (
+      if release then "-C opt-level=3" else "-C debuginfo=2"
+    )
+    ([ "-C codegen-units=${toString codegenUnits}" ] ++ extraRustcOptsForBuildRs);
   buildDeps = mkRustcDepArgs buildDependencies crateRenames;
   authors = lib.concatStringsSep ":" crateAuthors;
   optLevel = if release then 3 else 0;

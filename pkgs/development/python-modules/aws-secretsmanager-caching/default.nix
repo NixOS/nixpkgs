@@ -1,14 +1,14 @@
-{
-  lib,
-  botocore,
-  buildPythonPackage,
-  fetchPypi,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, botocore
+, buildPythonPackage
+, fetchPypi
+, pytest-cov-stub
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

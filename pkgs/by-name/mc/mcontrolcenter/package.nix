@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  qt6,
-  makeDesktopItem,
-  copyDesktopItems,
-  fetchFromGitHub,
-  cmake,
-  kmod,
+{ lib
+, stdenv
+, qt6
+, makeDesktopItem
+, copyDesktopItems
+, fetchFromGitHub
+, cmake
+, kmod
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

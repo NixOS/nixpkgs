@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  bzip2,
-  libarchive,
-  libconfuse,
-  libsodium,
-  xz,
-  zlib,
-  coreutils,
-  dosfstools,
-  mtools,
-  unzip,
-  zip,
-  which,
-  xdelta,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, bzip2
+, libarchive
+, libconfuse
+, libsodium
+, xz
+, zlib
+, coreutils
+, dosfstools
+, mtools
+, unzip
+, zip
+, which
+, xdelta
+,
 }:
 
 stdenv.mkDerivation rec {

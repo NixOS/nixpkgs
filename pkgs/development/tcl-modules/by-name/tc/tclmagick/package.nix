@@ -1,9 +1,9 @@
-{
-  lib,
-  mkTclDerivation,
-  fetchzip,
-  graphicsmagick,
-  tk,
+{ lib
+, mkTclDerivation
+, fetchzip
+, graphicsmagick
+, tk
+,
 }:
 
 mkTclDerivation rec {

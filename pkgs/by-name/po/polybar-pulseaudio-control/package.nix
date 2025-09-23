@@ -1,14 +1,14 @@
-{
-  lib,
-  bash,
-  coreutils,
-  fetchFromGitHub,
-  gnused,
-  gnugrep,
-  gawk,
-  makeWrapper,
-  pulseaudio,
-  stdenv,
+{ lib
+, bash
+, coreutils
+, fetchFromGitHub
+, gnused
+, gnugrep
+, gawk
+, makeWrapper
+, pulseaudio
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

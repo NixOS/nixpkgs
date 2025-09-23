@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  python3,
-  pkg-config,
-  audiofile,
-  SDL2,
-  libGL,
-  hexdump,
-  sm64baserom,
-  region ? "us",
-  _60fps ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, python3
+, pkg-config
+, audiofile
+, SDL2
+, libGL
+, hexdump
+, sm64baserom
+, region ? "us"
+, _60fps ? true
+,
 }:
 let
   baseRom = (sm64baserom.override { inherit region; }).romPath;

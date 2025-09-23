@@ -1,16 +1,16 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 
 let
   generic =
-    {
-      pname,
-      packageToBuild,
-      description,
+    { pname
+    , packageToBuild
+    , description
+    ,
     }:
     buildGoModule rec {
       inherit pname;

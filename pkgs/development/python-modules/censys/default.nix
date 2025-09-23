@@ -1,21 +1,21 @@
-{
-  lib,
-  argcomplete,
-  backoff,
-  buildPythonPackage,
-  fetchFromGitHub,
-  importlib-metadata,
-  parameterized,
-  poetry-core,
-  pytest-mock,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  responses,
-  rich,
-  writableTmpDirAsHomeHook,
+{ lib
+, argcomplete
+, backoff
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-metadata
+, parameterized
+, poetry-core
+, pytest-mock
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, responses
+, rich
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

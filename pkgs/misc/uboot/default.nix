@@ -1,36 +1,36 @@
-{
-  stdenv,
-  lib,
-  bc,
-  bison,
-  dtc,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  flex,
-  gnutls,
-  installShellFiles,
-  libuuid,
-  meson-tools,
-  ncurses,
-  openssl,
-  rkbin,
-  swig,
-  which,
-  python3,
-  perl,
-  armTrustedFirmwareAllwinner,
-  armTrustedFirmwareAllwinnerH6,
-  armTrustedFirmwareAllwinnerH616,
-  armTrustedFirmwareRK3328,
-  armTrustedFirmwareRK3399,
-  armTrustedFirmwareRK3568,
-  armTrustedFirmwareRK3588,
-  armTrustedFirmwareS905,
-  opensbi,
-  buildPackages,
-  callPackages,
-  darwin,
+{ stdenv
+, lib
+, bc
+, bison
+, dtc
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, flex
+, gnutls
+, installShellFiles
+, libuuid
+, meson-tools
+, ncurses
+, openssl
+, rkbin
+, swig
+, which
+, python3
+, perl
+, armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH6
+, armTrustedFirmwareAllwinnerH616
+, armTrustedFirmwareRK3328
+, armTrustedFirmwareRK3399
+, armTrustedFirmwareRK3568
+, armTrustedFirmwareRK3588
+, armTrustedFirmwareS905
+, opensbi
+, buildPackages
+, callPackages
+, darwin
+,
 }@pkgs:
 
 let
@@ -50,20 +50,19 @@ let
   ];
 
   buildUBoot = lib.makeOverridable (
-    {
-      version ? null,
-      src ? null,
-      filesToInstall,
-      pythonScriptsToInstall ? { },
-      installDir ? "$out",
-      defconfig,
-      extraConfig ? "",
-      extraPatches ? [ ],
-      extraMakeFlags ? [ ],
-      extraMeta ? { },
-      crossTools ? false,
-      stdenv ? pkgs.stdenv,
-      ...
+    { version ? null
+    , src ? null
+    , filesToInstall
+    , pythonScriptsToInstall ? { }
+    , installDir ? "$out"
+    , defconfig
+    , extraConfig ? ""
+    , extraPatches ? [ ]
+    , extraMakeFlags ? [ ]
+    , extraMeta ? { }
+    , crossTools ? false
+    , stdenv ? pkgs.stdenv
+    , ...
     }@args:
     stdenv.mkDerivation (
       {

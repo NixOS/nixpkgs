@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  librsvg,
-  pkg-config,
-  gtk3,
-  gtk-layer-shell,
-  wrapGAppsHook3,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, librsvg
+, pkg-config
+, gtk3
+, gtk-layer-shell
+, wrapGAppsHook3
+,
 }:
 
 buildGoModule rec {

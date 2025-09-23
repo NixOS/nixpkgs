@@ -1,12 +1,12 @@
-{
-  _cuda,
-  cudaOlder,
-  cudaPackages,
-  cudaMajorMinorVersion,
-  lib,
-  patchelf,
-  requireFile,
-  stdenv,
+{ _cuda
+, cudaOlder
+, cudaPackages
+, cudaMajorMinorVersion
+, lib
+, patchelf
+, requireFile
+, stdenv
+,
 }:
 let
   inherit (lib)
@@ -115,7 +115,7 @@ finalAttrs: prevAttrs: {
   meta = prevAttrs.meta or { } // {
     badPlatforms =
       prevAttrs.meta.badPlatforms or [ ]
-      ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
+        ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
     maintainers = prevAttrs.meta.maintainers or [ ] ++ [ maintainers.aidalgol ];
     teams = prevAttrs.meta.teams or [ ];

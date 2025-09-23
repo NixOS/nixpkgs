@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
-  fetchFromGitHub,
-  fetchpatch2,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  py,
-  pytest,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, fetchFromGitHub
+, fetchpatch2
+, setuptools
+, setuptools-scm
+, wheel
+, py
+, pytest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

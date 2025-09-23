@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  imlib2,
-  libX11,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, imlib2
+, libX11
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  asciidoctor,
-  coreutils,
-  gawk,
-  glibc,
-  util-linux,
-  bash,
-  makeBinaryWrapper,
-  doas-sudo-shim,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, asciidoctor
+, coreutils
+, gawk
+, glibc
+, util-linux
+, bash
+, makeBinaryWrapper
+, doas-sudo-shim
+,
 }:
 
 stdenv.mkDerivation rec {

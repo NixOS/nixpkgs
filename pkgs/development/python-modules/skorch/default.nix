@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  numpy,
-  scikit-learn,
-  scipy,
-  setuptools,
-  tabulate,
-  torch,
-  tqdm,
-  flaky,
-  llvmPackages,
-  pandas,
-  pytest-cov-stub,
-  pytestCheckHook,
-  safetensors,
-  transformers,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, numpy
+, scikit-learn
+, scipy
+, setuptools
+, tabulate
+, torch
+, tqdm
+, flaky
+, llvmPackages
+, pandas
+, pytest-cov-stub
+, pytestCheckHook
+, safetensors
+, transformers
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

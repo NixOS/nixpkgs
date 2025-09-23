@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  udev,
-  util-linux,
-  mountPath ? "/media/",
+{ lib
+, stdenv
+, fetchgit
+, udev
+, util-linux
+, mountPath ? "/media/"
+,
 }:
 
 assert mountPath != "";

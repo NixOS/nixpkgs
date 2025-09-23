@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  xmltodict,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

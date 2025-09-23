@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  requests,
-  zstandard,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, requests
+, zstandard
+,
 }:
 buildPythonPackage rec {
   pname = "conda-package-streaming";

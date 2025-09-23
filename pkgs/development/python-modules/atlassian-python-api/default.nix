@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  beautifulsoup4,
-  deprecated,
-  jmespath,
-  lxml,
-  oauthlib,
-  requests,
-  requests-kerberos,
-  requests-oauthlib,
-  six,
-  typing-extensions,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, beautifulsoup4
+, deprecated
+, jmespath
+, lxml
+, oauthlib
+, requests
+, requests-kerberos
+, requests-oauthlib
+, six
+, typing-extensions
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

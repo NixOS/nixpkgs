@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  clr,
-  gfortran,
-  hipblas-common,
-  rocblas,
-  rocsolver,
-  rocsparse,
-  rocprim,
-  gtest,
-  lapack-reference,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  buildSamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, clr
+, gfortran
+, hipblas-common
+, rocblas
+, rocsolver
+, rocsparse
+, rocprim
+, gtest
+, lapack-reference
+, buildTests ? false
+, buildBenchmarks ? false
+, buildSamples ? false
+,
 }:
 
 # Can also use cuBLAS

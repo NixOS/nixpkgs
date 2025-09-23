@@ -1,7 +1,7 @@
-{
-  tectonic-unwrapped,
-  fetchFromGitHub,
-  rustPlatform,
+{ tectonic-unwrapped
+, fetchFromGitHub
+, rustPlatform
+,
 }:
 
 tectonic-unwrapped.overrideAttrs (

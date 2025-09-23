@@ -1,22 +1,22 @@
-{
-  newScope,
-  lib,
-  stdenv,
-  generateSplicesForMkScope,
-  makeScopeWithSplicing',
-  fetchurl,
-  fetchpatch2,
-  makeSetupHook,
-  makeWrapper,
-  runCommand,
-  gst_all_1,
-  libglvnd,
-  darwin,
-  apple-sdk_15,
-  darwinMinVersionHook,
-  buildPackages,
-  python3,
-  config,
+{ newScope
+, lib
+, stdenv
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
+, fetchurl
+, fetchpatch2
+, makeSetupHook
+, makeWrapper
+, runCommand
+, gst_all_1
+, libglvnd
+, darwin
+, apple-sdk_15
+, darwinMinVersionHook
+, buildPackages
+, python3
+, config
+,
 }:
 
 let
@@ -67,57 +67,59 @@ let
         inherit (srcs.qtbase) src version;
       };
       env = callPackage ./qt-env.nix { };
-      full = callPackage (
-        { env, qtbase }:
-        env "qt-full-${qtbase.version}"
-          # `with self` is ok to use here because having these spliced is unnecessary
-          (
-            with self;
-            [
-              qt3d
-              qt5compat
-              qtcharts
-              qtconnectivity
-              qtdatavis3d
-              qtdeclarative
-              qtdoc
-              qtgraphs
-              qtgrpc
-              qthttpserver
-              qtimageformats
-              qtlanguageserver
-              qtlocation
-              qtlottie
-              qtmultimedia
-              qtmqtt
-              qtnetworkauth
-              qtpositioning
-              qtsensors
-              qtserialbus
-              qtserialport
-              qtshadertools
-              qtspeech
-              qtquick3d
-              qtquick3dphysics
-              qtquickeffectmaker
-              qtquicktimeline
-              qtremoteobjects
-              qtsvg
-              qtscxml
-              qttools
-              qttranslations
-              qtvirtualkeyboard
-              qtwebchannel
-              qtwebengine
-              qtwebsockets
-              qtwebview
-            ]
-            ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-              qtwayland
-              libglvnd
-            ]
-          )
-      ) { };
+      full = callPackage
+        (
+          { env, qtbase }:
+          env "qt-full-${qtbase.version}"
+            # `with self` is ok to use here because having these spliced is unnecessary
+            (
+              with self;
+              [
+                qt3d
+                qt5compat
+                qtcharts
+                qtconnectivity
+                qtdatavis3d
+                qtdeclarative
+                qtdoc
+                qtgraphs
+                qtgrpc
+                qthttpserver
+                qtimageformats
+                qtlanguageserver
+                qtlocation
+                qtlottie
+                qtmultimedia
+                qtmqtt
+                qtnetworkauth
+                qtpositioning
+                qtsensors
+                qtserialbus
+                qtserialport
+                qtshadertools
+                qtspeech
+                qtquick3d
+                qtquick3dphysics
+                qtquickeffectmaker
+                qtquicktimeline
+                qtremoteobjects
+                qtsvg
+                qtscxml
+                qttools
+                qttranslations
+                qtvirtualkeyboard
+                qtwebchannel
+                qtwebengine
+                qtwebsockets
+                qtwebview
+              ]
+              ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+                qtwayland
+                libglvnd
+              ]
+            )
+        )
+        { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
@@ -174,45 +176,54 @@ let
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix { };
 
-      wrapQtAppsHook = callPackage (
-        {
-          makeBinaryWrapper,
-          qtwayland,
-          qtbase,
-        }:
-        makeSetupHook {
-          name = "wrap-qt6-apps-hook";
-          propagatedBuildInputs = [ makeBinaryWrapper ];
-          depsTargetTargetPropagated = [
-            (onlyPluginsAndQml qtbase)
-          ]
-          ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
-            (onlyPluginsAndQml qtwayland)
-          ];
-        } ./hooks/wrap-qt-apps-hook.sh
-      ) { };
+      wrapQtAppsHook = callPackage
+        (
+          { makeBinaryWrapper
+          , qtwayland
+          , qtbase
+          ,
+          }:
+          makeSetupHook
+            {
+              name = "wrap-qt6-apps-hook";
+              propagatedBuildInputs = [ makeBinaryWrapper ];
+              depsTargetTargetPropagated = [
+                (onlyPluginsAndQml qtbase)
+              ]
+              ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
+                (onlyPluginsAndQml qtwayland)
+              ];
+            } ./hooks/wrap-qt-apps-hook.sh
+        )
+        { };
 
-      wrapQtAppsNoGuiHook = callPackage (
-        { makeBinaryWrapper, qtbase }:
-        makeSetupHook {
-          name = "wrap-qt6-apps-no-gui-hook";
-          propagatedBuildInputs = [ makeBinaryWrapper ];
-          depsTargetTargetPropagated = [
-            (onlyPluginsAndQml qtbase)
-          ];
-        } ./hooks/wrap-qt-apps-hook.sh
-      ) { };
+      wrapQtAppsNoGuiHook = callPackage
+        (
+          { makeBinaryWrapper, qtbase }:
+          makeSetupHook
+            {
+              name = "wrap-qt6-apps-no-gui-hook";
+              propagatedBuildInputs = [ makeBinaryWrapper ];
+              depsTargetTargetPropagated = [
+                (onlyPluginsAndQml qtbase)
+              ];
+            } ./hooks/wrap-qt-apps-hook.sh
+        )
+        { };
 
-      qmake = callPackage (
-        { qtbase }:
-        makeSetupHook {
-          name = "qmake6-hook";
-          propagatedBuildInputs = [ qtbase.dev ];
-          substitutions = {
-            fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
-          };
-        } ./hooks/qmake-hook.sh
-      ) { };
+      qmake = callPackage
+        (
+          { qtbase }:
+          makeSetupHook
+            {
+              name = "qmake6-hook";
+              propagatedBuildInputs = [ qtbase.dev ];
+              substitutions = {
+                fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
+              };
+            } ./hooks/qmake-hook.sh
+        )
+        { };
     };
 
   baseScope = makeScopeWithSplicing' {

@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-
-  pkg-config,
-  cmake,
-  ninja,
-  spirv-tools,
-  qt6,
-  breakpad,
-  jemalloc,
-  cli11,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xorg,
-  libdrm,
-  libgbm,
-  pipewire,
-  pam,
+{ lib
+, stdenv
+, fetchFromGitea
+, pkg-config
+, cmake
+, ninja
+, spirv-tools
+, qt6
+, breakpad
+, jemalloc
+, cli11
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xorg
+, libdrm
+, libgbm
+, pipewire
+, pam
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickshell";

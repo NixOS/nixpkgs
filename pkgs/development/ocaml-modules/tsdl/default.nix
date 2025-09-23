@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  topkg,
-  ctypes,
-  ctypes-foreign,
-  result,
-  SDL2,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, ctypes
+, ctypes-foreign
+, result
+, SDL2
+, pkg-config
+,
 }:
 
 if lib.versionOlder ocaml.version "4.03" then

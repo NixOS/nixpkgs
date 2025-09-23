@@ -1,10 +1,12 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchurl,
-  io, # >= 2.2.7
-  geometry, # >= 4.0.0
-  gdal,
+{ buildOctavePackage
+, lib
+, fetchurl
+, io
+, # >= 2.2.7
+  geometry
+, # >= 4.0.0
+  gdal
+,
 }:
 
 buildOctavePackage rec {

@@ -1,21 +1,19 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-
-  jq,
-  moreutils,
-  pnpm_10,
-  nodejs,
-  cargo-tauri,
-  pkg-config,
-  wrapGAppsHook3,
-
-  glib-networking,
-  libsoup_3,
-  openssl,
-  webkitgtk_4_1,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, jq
+, moreutils
+, pnpm_10
+, nodejs
+, cargo-tauri
+, pkg-config
+, wrapGAppsHook3
+, glib-networking
+, libsoup_3
+, openssl
+, webkitgtk_4_1
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libusb1,
-  rsa,
-  pycryptodome,
-  pytest,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, libusb1
+, rsa
+, pycryptodome
+, pytest
+, mock
+,
 }:
 buildPythonPackage {
   pname = "adb-homeassistant";

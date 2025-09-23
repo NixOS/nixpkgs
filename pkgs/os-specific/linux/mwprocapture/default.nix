@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  kernel,
-  alsa-lib,
+{ lib
+, stdenv
+, fetchurl
+, kernel
+, alsa-lib
+,
 }:
 
 let

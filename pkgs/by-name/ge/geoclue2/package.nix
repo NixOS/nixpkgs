@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  intltool,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_412,
-  glib,
-  json-glib,
-  libsoup_3,
-  libnotify,
-  gdk-pixbuf,
-  modemmanager,
-  avahi,
-  glib-networking,
-  python3,
-  wrapGAppsHook3,
-  gobject-introspection,
-  vala,
-  withDemoAgent ? false,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitLab
+, intltool
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_412
+, glib
+, json-glib
+, libsoup_3
+, libnotify
+, gdk-pixbuf
+, modemmanager
+, avahi
+, glib-networking
+, python3
+, wrapGAppsHook3
+, gobject-introspection
+, vala
+, withDemoAgent ? false
+, nix-update-script
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

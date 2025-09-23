@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  ocl-icd,
-  opencl-headers,
-  lyra,
-  nlohmann_json,
-  ronn,
-  doctest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, ocl-icd
+, opencl-headers
+, lyra
+, nlohmann_json
+, ronn
+, doctest
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  glib,
-  libevdev,
-  libgee,
-  udev,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, glib
+, libevdev
+, libgee
+, udev
+, testers
+, nix-update-script
+,
 }:
 
 let

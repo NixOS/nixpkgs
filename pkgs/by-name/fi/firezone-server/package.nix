@@ -1,15 +1,14 @@
-{
-  lib,
-  nixosTests,
-  fetchFromGitHub,
-  beamPackages,
-  gitMinimal,
-  pnpm_9,
-  nodejs,
-  tailwindcss_3,
-  esbuild,
-
-  mixReleaseName ? "domain", # "domain" "web" or "api"
+{ lib
+, nixosTests
+, fetchFromGitHub
+, beamPackages
+, gitMinimal
+, pnpm_9
+, nodejs
+, tailwindcss_3
+, esbuild
+, mixReleaseName ? "domain"
+, # "domain" "web" or "api"
 }:
 
 beamPackages.mixRelease rec {

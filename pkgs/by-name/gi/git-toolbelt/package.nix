@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  git,
-  fzf,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, git
+, fzf
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

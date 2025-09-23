@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  installShellFiles,
-  scdoc,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, installShellFiles
+, scdoc
+,
 }:
 
 buildGoModule rec {

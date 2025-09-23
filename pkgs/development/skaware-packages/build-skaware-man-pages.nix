@@ -1,26 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
+{ lib
+, stdenv
+, fetchFromSourcehut
+,
 }:
 
 {
   # : string
-  pname,
-  # : string
-  version,
-  # : string
-  sha256,
-  # : string
-  description,
-  # : list Maintainer
-  maintainers,
-  # : license
-  license ? lib.licenses.isc,
-  # : string
-  owner ? "~flexibeast",
-  # : string
-  rev ? "v${version}",
+  pname
+, # : string
+  version
+, # : string
+  sha256
+, # : string
+  description
+, # : list Maintainer
+  maintainers
+, # : license
+  license ? lib.licenses.isc
+, # : string
+  owner ? "~flexibeast"
+, # : string
+  rev ? "v${version}"
+,
 }:
 
 let

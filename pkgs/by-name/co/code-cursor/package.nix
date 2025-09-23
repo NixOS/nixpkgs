@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  vscode-generic,
-  fetchurl,
-  appimageTools,
-  undmg,
-  commandLineArgs ? "",
-  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, callPackage
+, vscode-generic
+, fetchurl
+, appimageTools
+, undmg
+, commandLineArgs ? ""
+, useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 let
@@ -54,10 +54,11 @@ in
 
   src =
     if hostPlatform.isLinux then
-      appimageTools.extract {
-        inherit pname version;
-        src = source;
-      }
+      appimageTools.extract
+        {
+          inherit pname version;
+          src = source;
+        }
     else
       source;
 

@@ -1,10 +1,10 @@
-{
-  lib,
-  clojure-lsp,
-  jq,
-  moreutils,
-  vscode-utils,
-  vscode-extension-update-script,
+{ lib
+, clojure-lsp
+, jq
+, moreutils
+, vscode-utils
+, vscode-extension-update-script
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

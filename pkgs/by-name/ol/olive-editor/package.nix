@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  which,
-  frei0r,
-  opencolorio,
-  ffmpeg_6,
-  cmake,
-  openimageio,
-  openexr,
-  portaudio,
-  imath,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, which
+, frei0r
+, opencolorio
+, ffmpeg_6
+, cmake
+, openimageio
+, openexr
+, portaudio
+, imath
+, qt6
+,
 }:
 
 let

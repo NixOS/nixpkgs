@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -73,33 +72,35 @@ in
       }
     ];
 
-    systemd.services = lib.mapAttrs' (netname: netcfg: {
-      name = "zeronsd-${netname}";
-      value = {
-        description = "ZeroTier DNS server for Network ${netname}";
+    systemd.services = lib.mapAttrs'
+      (netname: netcfg: {
+        name = "zeronsd-${netname}";
+        value = {
+          description = "ZeroTier DNS server for Network ${netname}";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [
-          "network.target"
-          "zerotierone.service"
-        ];
-        wants = [ "network-online.target" ];
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "zerotierone.service"
+          ];
+          wants = [ "network-online.target" ];
 
-        serviceConfig =
-          let
-            configFile = pkgs.writeText "zeronsd.json" (builtins.toJSON netcfg.settings);
-          in
-          {
-            ExecStart = "${netcfg.package}/bin/zeronsd start --config ${configFile} --config-type json ${netname}";
-            Restart = "on-failure";
-            RestartSec = 2;
-            TimeoutStopSec = 5;
-            User = "zeronsd";
-            Group = "zeronsd";
-            AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-          };
-      };
-    }) cfg.servedNetworks;
+          serviceConfig =
+            let
+              configFile = pkgs.writeText "zeronsd.json" (builtins.toJSON netcfg.settings);
+            in
+            {
+              ExecStart = "${netcfg.package}/bin/zeronsd start --config ${configFile} --config-type json ${netname}";
+              Restart = "on-failure";
+              RestartSec = 2;
+              TimeoutStopSec = 5;
+              User = "zeronsd";
+              Group = "zeronsd";
+              AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+            };
+        };
+      })
+      cfg.servedNetworks;
 
     systemd.tmpfiles.rules = [
       "a+ /var/lib/zerotier-one - - - - mask::x,u:zeronsd:x"

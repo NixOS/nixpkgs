@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  aws-error-utils,
-  boto3,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, aws-error-utils
+, boto3
+,
 }:
 
 buildPythonPackage rec {

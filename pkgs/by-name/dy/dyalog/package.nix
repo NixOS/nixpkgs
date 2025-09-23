@@ -1,33 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  config,
-  acceptLicense ? config.dyalog.acceptLicense or false,
-
-  autoPatchelfHook,
-  dpkg,
-  makeWrapper,
-  ncurses5,
-
-  dotnetCorePackages,
-  dotnetSupport ? false,
-
-  alsa-lib,
-  gtk3,
-  libdrm,
-  libGL,
-  libgbm,
-  nss,
-  htmlRendererSupport ? false,
-
-  unixODBC,
-  sqaplSupport ? false,
-
-  zeroFootprintRideSupport ? false,
-
-  enableDocs ? false,
+{ lib
+, stdenv
+, fetchurl
+, config
+, acceptLicense ? config.dyalog.acceptLicense or false
+, autoPatchelfHook
+, dpkg
+, makeWrapper
+, ncurses5
+, dotnetCorePackages
+, dotnetSupport ? false
+, alsa-lib
+, gtk3
+, libdrm
+, libGL
+, libgbm
+, nss
+, htmlRendererSupport ? false
+, unixODBC
+, sqaplSupport ? false
+, zeroFootprintRideSupport ? false
+, enableDocs ? false
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPackages,
-  fetchFromGitHub,
-  pkg-config,
+{ lib
+, rustPackages
+, fetchFromGitHub
+, pkg-config
+,
 }:
 
 rustPackages.rustPlatform.buildRustPackage (finalAttrs: {

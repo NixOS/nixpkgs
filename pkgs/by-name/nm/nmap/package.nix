@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  versionCheckHook,
-  libpcap,
-  pkg-config,
-  openssl,
-  lua5_4,
-  pcre2,
-  liblinear,
-  libssh2,
-  zlib,
-  withLua ? true,
+{ lib
+, stdenv
+, fetchurl
+, versionCheckHook
+, libpcap
+, pkg-config
+, openssl
+, lua5_4
+, pcre2
+, liblinear
+, libssh2
+, zlib
+, withLua ? true
+,
 }:
 
 stdenv.mkDerivation rec {

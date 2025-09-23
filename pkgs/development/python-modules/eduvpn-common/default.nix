@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  libeduvpn-common,
-  selenium,
-  setuptools,
+{ buildPythonPackage
+, libeduvpn-common
+, selenium
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

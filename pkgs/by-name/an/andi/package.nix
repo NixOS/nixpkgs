@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  gsl,
-  libdivsufsort,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, glib
+, gsl
+, libdivsufsort
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

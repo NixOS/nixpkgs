@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  spglib,
-  numpy,
-  scipy,
-  matplotlib,
-  ase,
-  netcdf4,
-  pythonOlder,
-  cython,
-  cmake,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, spglib
+, numpy
+, scipy
+, matplotlib
+, ase
+, netcdf4
+, pythonOlder
+, cython
+, cmake
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

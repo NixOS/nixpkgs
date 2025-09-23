@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  doxygen,
-  numactl,
-  rdma-core,
-  libbfd,
-  libiberty,
-  perl,
-  zlib,
-  symlinkJoin,
-  pkg-config,
-  config,
-  autoAddDriverRunpath,
-  enableCuda ? config.cudaSupport,
-  cudaPackages,
-  enableRocm ? config.rocmSupport,
-  rocmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, numactl
+, rdma-core
+, libbfd
+, libiberty
+, perl
+, zlib
+, symlinkJoin
+, pkg-config
+, config
+, autoAddDriverRunpath
+, enableCuda ? config.cudaSupport
+, cudaPackages
+, enableRocm ? config.rocmSupport
+, rocmPackages
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  gccStdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  fuse,
+{ lib
+, gccStdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, fuse
+,
 }:
 
 gccStdenv.mkDerivation rec {

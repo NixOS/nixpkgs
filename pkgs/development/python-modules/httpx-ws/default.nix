@@ -1,18 +1,18 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  httpcore,
-  httpx,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  starlette,
-  trio,
-  uvicorn,
-  wsproto,
+{ lib
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, httpcore
+, httpx
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, starlette
+, trio
+, uvicorn
+, wsproto
+,
 }:
 
 buildPythonPackage rec {

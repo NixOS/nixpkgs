@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  lib,
-  hatchling,
+{ buildPythonPackage
+, lib
+, hatchling
+,
 }:
-{
-  pname,
-  version,
-  dependencies ? [ ],
-  optional-dependencies ? { },
-  passthru ? { },
-  meta ? { },
+{ pname
+, version
+, dependencies ? [ ]
+, optional-dependencies ? { }
+, passthru ? { }
+, meta ? { }
+,
 }:
 
 # Create a "fake" meta package to satisfy a dependency on a package, but don't actually build it.

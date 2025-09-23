@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  googleapis-common-protos,
-  grpcio,
-  protobuf,
-  semver,
-  pygments,
-  pyopenssl,
-  typing-extensions,
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, googleapis-common-protos
+, grpcio
+, protobuf
+, semver
+, pygments
+, pyopenssl
+, typing-extensions
+, pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

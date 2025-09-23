@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  sassc,
-  hyperkitty,
-  postorius,
-  nixosTests,
+{ lib
+, python3
+, fetchPypi
+, sassc
+, hyperkitty
+, postorius
+, nixosTests
+,
 }:
 
 with python3.pkgs;

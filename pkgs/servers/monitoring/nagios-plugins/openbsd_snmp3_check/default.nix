@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  openbsd_snmp3_check,
-  python3Packages,
-  testers,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, openbsd_snmp3_check
+, python3Packages
+, testers
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "openbsd_snmp3_check";

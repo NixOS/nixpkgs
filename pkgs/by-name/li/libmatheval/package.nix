@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  guile,
-  flex,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, guile
+, flex
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

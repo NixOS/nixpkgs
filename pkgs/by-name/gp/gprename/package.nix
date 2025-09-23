@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  moreutils,
-  perlPackages,
-  gtk3,
-  pango,
-  harfbuzz,
-  gdk-pixbuf,
-  at-spi2-atk,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, moreutils
+, perlPackages
+, gtk3
+, pango
+, harfbuzz
+, gdk-pixbuf
+, at-spi2-atk
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gprename";

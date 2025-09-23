@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  stdenv,
-  makeWrapper,
-  python3,
-  nix,
-  unstableGitUpdater,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, stdenv
+, makeWrapper
+, python3
+, nix
+, unstableGitUpdater
+,
 }:
 
 let

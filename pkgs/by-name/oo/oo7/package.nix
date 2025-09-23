@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  oo7,
-  pkg-config,
-  rustPlatform,
-  testers,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, oo7
+, pkg-config
+, rustPlatform
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

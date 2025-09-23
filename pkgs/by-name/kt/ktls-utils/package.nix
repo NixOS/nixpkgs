@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gnutls,
-  keyutils,
-  glib,
-  libnl,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gnutls
+, keyutils
+, glib
+, libnl
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

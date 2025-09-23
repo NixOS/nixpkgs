@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  nixosTests,
-  unstableGitUpdater,
+{ lib
+, python3
+, fetchFromGitHub
+, nixosTests
+, unstableGitUpdater
+,
 }:
 let
   python = python3.override {

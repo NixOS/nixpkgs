@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  django,
-  pydantic,
-  typing-extensions,
-
-  # tests
-  django-stubs,
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  hatchling
+, # dependencies
+  django
+, pydantic
+, typing-extensions
+, # tests
+  django-stubs
+, pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

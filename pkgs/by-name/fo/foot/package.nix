@@ -1,29 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  fetchurl,
-  runCommand,
-  fcft,
-  freetype,
-  pixman,
-  libxkbcommon,
-  fontconfig,
-  wayland,
-  meson,
-  ninja,
-  ncurses,
-  scdoc,
-  tllist,
-  wayland-protocols,
-  wayland-scanner,
-  pkg-config,
-  utf8proc,
-  allowPgo ? !stdenv.hostPlatform.isMusl,
-  python3, # for PGO
+{ stdenv
+, lib
+, fetchFromGitea
+, fetchurl
+, runCommand
+, fcft
+, freetype
+, pixman
+, libxkbcommon
+, fontconfig
+, wayland
+, meson
+, ninja
+, ncurses
+, scdoc
+, tllist
+, wayland-protocols
+, wayland-scanner
+, pkg-config
+, utf8proc
+, allowPgo ? !stdenv.hostPlatform.isMusl
+, python3
+, # for PGO
   # for clang stdenv check
-  foot,
-  llvmPackages,
+  foot
+, llvmPackages
+,
 }:
 
 let
@@ -76,8 +77,7 @@ let
     {
       "clang" = "-O3 -Wno-ignored-optimization-argument";
       "gcc" = "-O3";
-    }
-    ."${compilerName}";
+    }."${compilerName}";
 
   # ar with lto support
   ar =
@@ -86,8 +86,7 @@ let
       "clang" = "llvm-ar";
       "gcc" = "gcc-ar";
       "unknown" = "ar";
-    }
-    ."${compilerName}";
+    }."${compilerName}";
 
   # PGO only makes sense if we are not cross compiling and
   # using a compiler which foot's PGO build supports (clang or gcc)

@@ -1,11 +1,11 @@
-{
-  mkDerivation,
-  lib,
-  qtbase,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  unstableGitUpdater,
+{ mkDerivation
+, lib
+, qtbase
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, unstableGitUpdater
+,
 }:
 
 mkDerivation rec {

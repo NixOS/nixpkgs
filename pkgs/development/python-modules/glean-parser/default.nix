@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  diskcache,
-  fetchPypi,
-  hatchling,
-  hatch-vcs,
-  jinja2,
-  jsonschema,
-  platformdirs,
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, click
+, diskcache
+, fetchPypi
+, hatchling
+, hatch-vcs
+, jinja2
+, jsonschema
+, platformdirs
+, pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

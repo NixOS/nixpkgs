@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  callPackage,
-  boost,
-  clhep,
-  cmake,
-  coin3d,
-  expat,
-  libGL,
-  libGLU,
-  libGLX,
-  libX11,
-  libXext,
-  libXmu,
-  libXpm,
-  motif,
-  python3,
-  qt5,
-  soxt,
-  xercesc,
-  zlib,
-  enableMultiThreading ? true,
-  enableInventor ? false,
-  enableQt ? false,
-  enableXM ? false,
-  enableOpenGLX11 ? !stdenv.hostPlatform.isDarwin,
-  enablePython ? false,
-  enableRaytracerX11 ? false,
+{ lib
+, stdenv
+, fetchurl
+, callPackage
+, boost
+, clhep
+, cmake
+, coin3d
+, expat
+, libGL
+, libGLU
+, libGLX
+, libX11
+, libXext
+, libXmu
+, libXpm
+, motif
+, python3
+, qt5
+, soxt
+, xercesc
+, zlib
+, enableMultiThreading ? true
+, enableInventor ? false
+, enableQt ? false
+, enableXM ? false
+, enableOpenGLX11 ? !stdenv.hostPlatform.isDarwin
+, enablePython ? false
+, enableRaytracerX11 ? false
+,
 }:
 
 let

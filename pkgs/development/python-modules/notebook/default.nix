@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  nodejs,
-  yarn-berry_3,
-  distutils,
-
-  # build-system
-  hatch-jupyter-builder,
-  hatchling,
-  jupyterlab,
-
-  # dependencies
-  jupyter-server,
-  jupyterlab-server,
-  notebook-shim,
-  tornado,
-
-  # tests
-  pytest-jupyter,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  nodejs
+, yarn-berry_3
+, distutils
+, # build-system
+  hatch-jupyter-builder
+, hatchling
+, jupyterlab
+, # dependencies
+  jupyter-server
+, jupyterlab-server
+, notebook-shim
+, tornado
+, # tests
+  pytest-jupyter
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

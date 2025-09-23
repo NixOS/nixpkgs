@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  darwin,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  openapi-python-client,
+{ lib
+, stdenv
+, darwin
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, testers
+, openapi-python-client
+,
 }:
 
 python3Packages.buildPythonApplication rec {

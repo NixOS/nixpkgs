@@ -1,17 +1,17 @@
-{
-  lib,
-  backports-datetime-fromisoformat,
-  buildPythonPackage,
-  charset-normalizer,
-  dateparser,
-  faust-cchardet,
-  fetchFromGitHub,
-  lxml,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  urllib3,
+{ lib
+, backports-datetime-fromisoformat
+, buildPythonPackage
+, charset-normalizer
+, dateparser
+, faust-cchardet
+, fetchFromGitHub
+, lxml
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

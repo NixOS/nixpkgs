@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  funcy,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  reflink,
-  setuptools-scm,
-  shortuuid,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, funcy
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, reflink
+, setuptools-scm
+, shortuuid
+,
 }:
 
 buildPythonPackage rec {

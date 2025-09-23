@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  django,
-  social-auth-core,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, django
+, social-auth-core
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

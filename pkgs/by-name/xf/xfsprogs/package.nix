@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  autoreconfHook,
-  gettext,
-  pkg-config,
-  icu,
-  libuuid,
-  readline,
-  inih,
-  liburcu,
-  nixosTests,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, autoreconfHook
+, gettext
+, pkg-config
+, icu
+, libuuid
+, readline
+, inih
+, liburcu
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

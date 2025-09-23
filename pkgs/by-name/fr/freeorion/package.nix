@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  graphviz,
-  makeWrapper,
-  boost,
-  SDL2,
-  python3,
-  freetype,
-  openal,
-  libogg,
-  libvorbis,
-  zlib,
-  libpng,
-  libtiff,
-  libjpeg,
-  libGLU,
-  libGL,
-  glew,
-  libxslt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, graphviz
+, makeWrapper
+, boost
+, SDL2
+, python3
+, freetype
+, openal
+, libogg
+, libvorbis
+, zlib
+, libpng
+, libtiff
+, libjpeg
+, libGLU
+, libGL
+, glew
+, libxslt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

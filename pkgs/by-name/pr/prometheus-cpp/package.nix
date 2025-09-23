@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  civetweb,
-  curl,
-  gbenchmark,
-  gtest,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, civetweb
+, curl
+, gbenchmark
+, gtest
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

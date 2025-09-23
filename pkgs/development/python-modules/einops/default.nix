@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  jupyter,
-  nbconvert,
-  numpy,
-  parameterized,
-  pillow,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  pythonOlder,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, jupyter
+, nbconvert
+, numpy
+, parameterized
+, pillow
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+, pythonOlder
+, torch
+,
 }:
 
 buildPythonPackage rec {

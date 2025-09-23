@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  python3,
-  ghostscript,
-  qpdf,
-  poppler-utils,
-  makeBinaryWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, ghostscript
+, qpdf
+, poppler-utils
+, makeBinaryWrapper
+,
 }:
 
 let

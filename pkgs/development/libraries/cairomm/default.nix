@@ -1,14 +1,14 @@
-{
-  fetchurl,
-  stdenv,
-  lib,
-  pkg-config,
-  boost,
-  cairo,
-  fontconfig,
-  libsigcxx,
-  meson,
-  ninja,
+{ fetchurl
+, stdenv
+, lib
+, pkg-config
+, boost
+, cairo
+, fontconfig
+, libsigcxx
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  callPackage,
-  test,
-  stubs,
-  should,
+{ callPackage
+, test
+, stubs
+, should
+,
 }:
 let
   bundlerEnv = callPackage ./default.nix stubs // {

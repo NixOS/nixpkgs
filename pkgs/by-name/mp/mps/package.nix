@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  sqlite,
-  xcbuildHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, sqlite
+, xcbuildHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

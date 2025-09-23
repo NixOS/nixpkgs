@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  perl,
-  gdb,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, perl
+, gdb
+, writeScript
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # nativeBuildInputs
-  asciidoc,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  installShellFiles,
-  libxml2,
-  libxslt,
-  makeWrapper,
-
-  # wrapper
-  coreutils,
-  gawk,
-  gitMinimal,
-  gnugrep,
-  gnused,
-  jq,
-  nix,
-
-  versionCheckHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, # nativeBuildInputs
+  asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, installShellFiles
+, libxml2
+, libxslt
+, makeWrapper
+, # wrapper
+  coreutils
+, gawk
+, gitMinimal
+, gnugrep
+, gnused
+, jq
+, nix
+, versionCheckHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

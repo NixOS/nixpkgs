@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  autopage,
-  cmd2,
-  importlib-metadata,
-  openstackdocstheme,
-  pbr,
-  prettytable,
-  pyparsing,
-  pyyaml,
-  setuptools,
-  stevedore,
-  sphinxHook,
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, autopage
+, cmd2
+, importlib-metadata
+, openstackdocstheme
+, pbr
+, prettytable
+, pyparsing
+, pyyaml
+, setuptools
+, stevedore
+, sphinxHook
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

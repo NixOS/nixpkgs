@@ -1,10 +1,10 @@
-{
-  lib,
-  bleak,
-  click,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+{ lib
+, bleak
+, click
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

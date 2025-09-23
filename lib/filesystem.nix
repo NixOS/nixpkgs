@@ -58,23 +58,23 @@ in
   */
   pathType =
     builtins.readFileType or
-    # Nix <2.14 compatibility shim
-    (
-      path:
-      if
-        !pathExists path
-      # Fail irrecoverably to mimic the historic behavior of this function and
-      # the new builtins.readFileType
-      then
-        abort "lib.filesystem.pathType: Path ${toString path} does not exist."
-      # The filesystem root is the only path where `dirOf / == /` and
-      # `baseNameOf /` is not valid. We can detect this and directly return
-      # "directory", since we know the filesystem root can't be anything else.
-      else if dirOf path == path then
-        "directory"
-      else
-        (readDir (dirOf path)).${baseNameOf path}
-    );
+      # Nix <2.14 compatibility shim
+      (
+        path:
+        if
+          !pathExists path
+        # Fail irrecoverably to mimic the historic behavior of this function and
+        # the new builtins.readFileType
+        then
+          abort "lib.filesystem.pathType: Path ${toString path} does not exist."
+        # The filesystem root is the only path where `dirOf / == /` and
+        # `baseNameOf /` is not valid. We can detect this and directly return
+        # "directory", since we know the filesystem root can't be anything else.
+        else if dirOf path == path then
+          "directory"
+        else
+          (readDir (dirOf path)).${baseNameOf path}
+      );
 
   /**
     Whether a path exists and is a directory.
@@ -167,14 +167,18 @@ in
       # Files in the root
       root-files = builtins.attrNames (builtins.readDir root);
       # Files with their full paths
-      root-files-with-paths = map (file: {
-        name = file;
-        value = root + "/${file}";
-      }) root-files;
+      root-files-with-paths = map
+        (file: {
+          name = file;
+          value = root + "/${file}";
+        })
+        root-files;
       # Subdirectories of the root with a cabal file.
-      cabal-subdirs = builtins.filter (
-        { name, value }: builtins.pathExists (value + "/${name}.cabal")
-      ) root-files-with-paths;
+      cabal-subdirs = builtins.filter
+        (
+          { name, value }: builtins.pathExists (value + "/${name}.cabal")
+        )
+        root-files-with-paths;
     in
     builtins.listToAttrs cabal-subdirs;
   /**
@@ -241,13 +245,15 @@ in
   listFilesRecursive =
     dir:
     lib.flatten (
-      lib.mapAttrsToList (
-        name: type:
-        if type == "directory" then
-          lib.filesystem.listFilesRecursive (dir + "/${name}")
-        else
-          dir + "/${name}"
-      ) (builtins.readDir dir)
+      lib.mapAttrsToList
+        (
+          name: type:
+          if type == "directory" then
+            lib.filesystem.listFilesRecursive (dir + "/${name}")
+          else
+            dir + "/${name}"
+        )
+        (builtins.readDir dir)
     );
 
   /**
@@ -391,66 +397,69 @@ in
       #  to prevent accidentally using its parameters.
       processDir =
         { callPackage, directory, ... }@args:
-        concatMapAttrs (
-          name: type:
-          # for each directory entry
-          let
-            path = directory + "/${name}";
-          in
-          if type == "directory" then
-            {
-              # recurse into directories
-              "${name}" = packagesFromDirectoryRecursive (
-                args
-                // {
-                  directory = path;
-                }
-              );
-            }
-          else if type == "regular" && hasSuffix ".nix" name then
-            {
-              # call .nix files
-              "${removeSuffix ".nix" name}" = callPackage path { };
-            }
-          else if type == "regular" then
-            {
-              # ignore non-nix files
-            }
-          else
-            throw ''
-              lib.filesystem.packagesFromDirectoryRecursive: Unsupported file type ${type} at path ${toString path}
-            ''
-        ) (builtins.readDir directory);
+        concatMapAttrs
+          (
+            name: type:
+            # for each directory entry
+            let
+              path = directory + "/${name}";
+            in
+            if type == "directory" then
+              {
+                # recurse into directories
+                "${name}" = packagesFromDirectoryRecursive (
+                  args
+                  // {
+                    directory = path;
+                  }
+                );
+              }
+            else if type == "regular" && hasSuffix ".nix" name then
+              {
+                # call .nix files
+                "${removeSuffix ".nix" name}" = callPackage path { };
+              }
+            else if type == "regular" then
+              {
+                # ignore non-nix files
+              }
+            else
+              throw ''
+                lib.filesystem.packagesFromDirectoryRecursive: Unsupported file type ${type} at path ${toString path}
+              ''
+          )
+          (builtins.readDir directory);
     in
-    {
-      callPackage,
-      newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args",
-      directory,
+    { callPackage
+    , newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args"
+    , directory
+    ,
     }@args:
     let
       defaultPath = directory + "/package.nix";
     in
     if pathExists defaultPath then
-      # if `${directory}/package.nix` exists, call it directly
+    # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath { }
     else if args ? newScope then
-      # Create a new scope and mark it `recurseForDerivations`.
-      # This lets the packages refer to each other.
-      # See:
-      #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
-      #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
-      recurseIntoAttrs (
-        makeScope newScope (
-          self:
-          # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
-          processDir (
-            args
-            // {
-              inherit (self) callPackage newScope;
-            }
+    # Create a new scope and mark it `recurseForDerivations`.
+    # This lets the packages refer to each other.
+    # See:
+    #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
+    #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
+      recurseIntoAttrs
+        (
+          makeScope newScope (
+            self:
+            # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+            processDir (
+              args
+              // {
+                inherit (self) callPackage newScope;
+              }
+            )
           )
         )
-      )
     else
       processDir args;
 
@@ -490,8 +499,8 @@ in
     if pathIsDirectory v then
       v + "/default.nix"
     else if lib.isString v && hasSuffix "/" v then
-      # A path ending in `/` can only refer to a directory, so we take the hint, even if we can't verify the validity of the path's `/` assertion.
-      # A `/` is already present, so we don't add another one.
+    # A path ending in `/` can only refer to a directory, so we take the hint, even if we can't verify the validity of the path's `/` assertion.
+    # A `/` is already present, so we don't add another one.
       v + "default.nix"
     else
       v;

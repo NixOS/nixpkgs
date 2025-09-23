@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-slugify,
-  jinja2,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-slugify
+, jinja2
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

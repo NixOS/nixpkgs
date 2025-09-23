@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  fetchurl,
-  cups,
-  cups-filters,
-  jbigkit,
-  zlib,
+{ lib
+, stdenv
+, fetchsvn
+, fetchurl
+, cups
+, cups-filters
+, jbigkit
+, zlib
+,
 }:
 
 let

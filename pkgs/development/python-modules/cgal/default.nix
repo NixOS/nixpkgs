@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  boost,
-  cgal,
-  cmake,
-  gmp,
-  tbb,
-  LAStools,
-  eigen,
-  mpfr,
-  numpy,
-  swig,
-  zlib,
-  withLAS ? false, # unfree
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, boost
+, cgal
+, cmake
+, gmp
+, tbb
+, LAStools
+, eigen
+, mpfr
+, numpy
+, swig
+, zlib
+, withLAS ? false
+, # unfree
 }:
 
 buildPythonPackage rec {

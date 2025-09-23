@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  m4,
-  camlp-streams,
-  core_kernel,
-  ounit,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, m4
+, camlp-streams
+, core_kernel
+, ounit
+,
 }:
 
 buildDunePackage rec {

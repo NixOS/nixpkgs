@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  requests,
-  requests-toolbelt,
-  pyparsing,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, requests
+, requests-toolbelt
+, pyparsing
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  rustPlatform,
-  lib,
-  fetchFromSourcehut,
-  pam,
-  scdoc,
-  installShellFiles,
-  nix-update-script,
-  # legacy passthrus
-  gtkgreet,
-  qtgreet,
-  regreet,
-  tuigreet,
-  wlgreet,
+{ rustPlatform
+, lib
+, fetchFromSourcehut
+, pam
+, scdoc
+, installShellFiles
+, nix-update-script
+, # legacy passthrus
+  gtkgreet
+, qtgreet
+, regreet
+, tuigreet
+, wlgreet
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -49,15 +49,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     let
       warnPassthru = name: lib.warnOnInstantiate "`greetd.${name}` was renamed to `${name}`";
     in
-    lib.mapAttrs warnPassthru {
-      inherit
-        gtkgreet
-        qtgreet
-        regreet
-        tuigreet
-        wlgreet
-        ;
-    }
+    lib.mapAttrs warnPassthru
+      {
+        inherit
+          gtkgreet
+          qtgreet
+          regreet
+          tuigreet
+          wlgreet
+          ;
+      }
     // {
       greetd = warnPassthru "greetd" finalAttrs.finalPackage;
       updateScript = nix-update-script { };

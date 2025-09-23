@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  testers,
-  arcanechat-tui,
+{ lib
+, python3
+, fetchFromGitHub
+, testers
+, arcanechat-tui
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

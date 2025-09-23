@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-
-  openssl,
-  pkg-config,
-  installShellFiles,
-  buildPackages,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, pkg-config
+, installShellFiles
+, buildPackages
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

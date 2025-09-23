@@ -1,24 +1,24 @@
-{
-  lib,
-  buildDotnetModule,
-  copyDesktopItems,
-  coreutils,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  gtk3,
-  jq,
-  libappindicator,
-  libevdev,
-  libnotify,
-  libX11,
-  libXrandr,
-  makeDesktopItem,
-  nixosTests,
-  udev,
-  wrapGAppsHook3,
-  versionCheckHook,
-  nix-update-script,
-  udevCheckHook,
+{ lib
+, buildDotnetModule
+, copyDesktopItems
+, coreutils
+, dotnetCorePackages
+, fetchFromGitHub
+, gtk3
+, jq
+, libappindicator
+, libevdev
+, libnotify
+, libX11
+, libXrandr
+, makeDesktopItem
+, nixosTests
+, udev
+, wrapGAppsHook3
+, versionCheckHook
+, nix-update-script
+, udevCheckHook
+,
 }:
 
 buildDotnetModule (finalAttrs: {

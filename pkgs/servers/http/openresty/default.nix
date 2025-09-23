@@ -1,13 +1,12 @@
-{
-  callPackage,
-  runCommand,
-  lib,
-  fetchurl,
-  perl,
-  libpq,
-  nixosTests,
-  withPostgres ? true,
-  ...
+{ callPackage
+, runCommand
+, lib
+, fetchurl
+, perl
+, libpq
+, nixosTests
+, withPostgres ? true
+, ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {

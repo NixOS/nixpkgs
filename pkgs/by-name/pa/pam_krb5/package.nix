@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pam,
-  libkrb5,
+{ lib
+, stdenv
+, fetchurl
+, pam
+, libkrb5
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  cmake,
-  fetchFromGitHub,
-  fetchpatch2,
-  glibcLocales,
-  lib,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  stdenv,
-  testers,
+{ cmake
+, fetchFromGitHub
+, fetchpatch2
+, glibcLocales
+, lib
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

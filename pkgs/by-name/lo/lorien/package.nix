@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-
-  godot3-export-templates,
-  godot3-headless,
-
-  alsa-lib,
-  libGL,
-  libGLU,
-  libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  zlib,
-  udev, # for libudev
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoPatchelfHook
+, copyDesktopItems
+, makeDesktopItem
+, godot3-export-templates
+, godot3-headless
+, alsa-lib
+, libGL
+, libGLU
+, libpulseaudio
+, libX11
+, libXcursor
+, libXext
+, libXfixes
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, zlib
+, udev
+, # for libudev
 }:
 
 let

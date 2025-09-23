@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  asciidoctor,
-  desktop-file-utils,
-  dmidecode,
-  ethtool,
-  fetchFromGitHub,
-  gawk,
-  gobject-introspection,
-  hdparm,
-  iproute2,
-  kmod,
-  nix-update-script,
-  nixosTests,
-  pkg-config,
-  powertop,
-  python3Packages,
-  tuna,
-  util-linux,
-  versionCheckHook,
-  virt-what,
-  wirelesstools,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, asciidoctor
+, desktop-file-utils
+, dmidecode
+, ethtool
+, fetchFromGitHub
+, gawk
+, gobject-introspection
+, hdparm
+, iproute2
+, kmod
+, nix-update-script
+, nixosTests
+, pkg-config
+, powertop
+, python3Packages
+, tuna
+, util-linux
+, versionCheckHook
+, virt-what
+, wirelesstools
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

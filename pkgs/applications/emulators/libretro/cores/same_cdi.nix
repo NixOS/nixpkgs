@@ -1,14 +1,14 @@
-{
-  lib,
-  alsa-lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  libGL,
-  libGLU,
-  mkLibretroCore,
-  portaudio,
-  python3,
-  xorg,
+{ lib
+, alsa-lib
+, fetchFromGitHub
+, fetchpatch2
+, libGL
+, libGLU
+, mkLibretroCore
+, portaudio
+, python3
+, xorg
+,
 }:
 mkLibretroCore {
   core = "same_cdi";

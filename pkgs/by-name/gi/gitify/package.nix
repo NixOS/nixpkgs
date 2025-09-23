@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm_10,
-  nodejs,
-  electron,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm_10
+, nodejs
+, electron
+, makeDesktopItem
+, copyDesktopItems
+, imagemagick
+, makeWrapper
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

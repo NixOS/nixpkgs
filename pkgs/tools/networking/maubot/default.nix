@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchPypi,
-  fetchpatch,
-  callPackage,
-  runCommand,
-  python,
-  encryptionSupport ? true,
-  sqliteSupport ? true,
+{ lib
+, fetchPypi
+, fetchpatch
+, callPackage
+, runCommand
+, python
+, encryptionSupport ? true
+, sqliteSupport ? true
+,
 }:
 
 let

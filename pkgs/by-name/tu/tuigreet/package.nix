@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  scdoc,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, scdoc
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuigreet";

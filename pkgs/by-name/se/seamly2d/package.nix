@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsForQt5,
-  addDriverRunpath,
-  poppler-utils,
-  libgbm,
-  xvfb-run,
-  fontconfig,
-  freetype,
-  xorg,
-  python3,
-  git,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsForQt5
+, addDriverRunpath
+, poppler-utils
+, libgbm
+, xvfb-run
+, fontconfig
+, freetype
+, xorg
+, python3
+, git
+,
 }:
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);

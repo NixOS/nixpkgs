@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  poetry-core,
-
-  # tests
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  poetry-core
+, # tests
+  pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

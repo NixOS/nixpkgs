@@ -1,18 +1,18 @@
-{
-  lib,
-  setuptools,
-  stdenv,
-  fetchPypi,
-  pkg-config,
-  libsForQt5,
-  darwin,
-  buildPythonPackage,
-  python,
-  isPy27,
-  pyqt5,
-  sip,
-  pyqt-builder,
-  mesa,
+{ lib
+, setuptools
+, stdenv
+, fetchPypi
+, pkg-config
+, libsForQt5
+, darwin
+, buildPythonPackage
+, python
+, isPy27
+, pyqt5
+, sip
+, pyqt-builder
+, mesa
+,
 }:
 
 let
@@ -102,7 +102,7 @@ buildPythonPackage (
       hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms mesa.meta.platforms;
     };
   }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
     # TODO: figure out why the env hooks aren't adding these inclusions automatically
     env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
       "-I${lib.getDev libsForQt5.qtbase}/include/QtPrintSupport/"

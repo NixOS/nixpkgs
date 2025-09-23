@@ -1,28 +1,28 @@
-{
-  autoreconfHook,
-  boost,
-  cargo,
-  coreutils,
-  curl,
-  cxx-rs,
-  db62,
-  fetchFromGitHub,
-  gitMinimal,
-  hexdump,
-  lib,
-  libevent,
-  libsodium,
-  makeWrapper,
-  rustc,
-  rustPlatform,
-  pkg-config,
-  stdenv,
-  testers,
-  tl-expected,
-  utf8cpp,
-  util-linux,
-  zcash,
-  zeromq,
+{ autoreconfHook
+, boost
+, cargo
+, coreutils
+, curl
+, cxx-rs
+, db62
+, fetchFromGitHub
+, gitMinimal
+, hexdump
+, lib
+, libevent
+, libsodium
+, makeWrapper
+, rustc
+, rustPlatform
+, pkg-config
+, stdenv
+, testers
+, tl-expected
+, utf8cpp
+, util-linux
+, zcash
+, zeromq
+,
 }:
 
 stdenv.mkDerivation rec {

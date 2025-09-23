@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  bash,
-  gnutar,
-  xz,
+{ lib
+, fetchurl
+, bash
+, gnutar
+, xz
+,
 }:
 let
   # WARNING: You probably don't want to use this package outside minimal-bootstrap
@@ -25,21 +25,21 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      gnutar
-      xz
-    ];
+  nativeBuildInputs = [
+    gnutar
+    xz
+  ];
 
-    meta = with lib; {
-      description = "Header files and scripts for Linux kernel";
-      license = licenses.gpl2Only;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.linux;
-    };
-  }
+  meta = with lib; {
+    description = "Header files and scripts for Linux kernel";
+    license = licenses.gpl2Only;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.linux;
+  };
+}
   ''
     # Unpack
     cp ${src} linux-headers.tar.xz

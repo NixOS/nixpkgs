@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  jdk17_headless,
-  lib,
-  makeWrapper,
-  stdenvNoCC,
-  unzip,
+{ fetchurl
+, jdk17_headless
+, lib
+, makeWrapper
+, stdenvNoCC
+, unzip
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

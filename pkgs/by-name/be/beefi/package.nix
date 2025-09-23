@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  binutils-unwrapped,
-  systemd,
+{ stdenv
+, lib
+, fetchFromGitHub
+, installShellFiles
+, binutils-unwrapped
+, systemd
+,
 }:
 
 stdenv.mkDerivation rec {

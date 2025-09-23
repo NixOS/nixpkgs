@@ -1,11 +1,11 @@
-{
-  mkDerivation,
-  base,
-  containers,
-  fetchgit,
-  lib,
-  mtl,
-  text,
+{ mkDerivation
+, base
+, containers
+, fetchgit
+, lib
+, mtl
+, text
+,
 }:
 mkDerivation {
   pname = "elm-format-markdown";

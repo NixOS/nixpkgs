@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  django,
-  fetchFromGitHub,
-  flask-unsign,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pycryptodome,
-  pyjwt,
-  requests,
-  viewstate,
+{ lib
+, buildPythonPackage
+, colorama
+, django
+, fetchFromGitHub
+, flask-unsign
+, poetry-core
+, poetry-dynamic-versioning
+, pycryptodome
+, pyjwt
+, requests
+, viewstate
+,
 }:
 
 buildPythonPackage rec {

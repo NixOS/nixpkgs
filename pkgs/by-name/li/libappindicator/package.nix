@@ -1,26 +1,26 @@
-{
-  stdenv,
-  fetchgit,
-  lib,
-  pkg-config,
-  autoreconfHook,
-  glib,
-  dbus-glib,
-  gtkVersion ? "3",
-  gtk2,
-  libindicator-gtk2,
-  libdbusmenu-gtk2,
-  gtk3,
-  libindicator-gtk3,
-  libdbusmenu-gtk3,
-  gtk-doc,
-  vala,
-  gobject-introspection,
-  monoSupport ? false,
-  mono,
-  gtk-sharp-2_0,
-  gtk-sharp-3_0,
-  testers,
+{ stdenv
+, fetchgit
+, lib
+, pkg-config
+, autoreconfHook
+, glib
+, dbus-glib
+, gtkVersion ? "3"
+, gtk2
+, libindicator-gtk2
+, libdbusmenu-gtk2
+, gtk3
+, libindicator-gtk3
+, libdbusmenu-gtk3
+, gtk-doc
+, vala
+, gobject-introspection
+, monoSupport ? false
+, mono
+, gtk-sharp-2_0
+, gtk-sharp-3_0
+, testers
+,
 }:
 
 let
@@ -64,8 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
         gtk3
         libdbusmenu-gtk3
       ];
-    }
-    .${gtkVersion} or throwBadGtkVersion;
+    }.${gtkVersion} or throwBadGtkVersion;
 
   buildInputs = [
     glib
@@ -73,16 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "2" = libindicator-gtk2;
       "3" = libindicator-gtk3;
-    }
-    .${gtkVersion} or throwBadGtkVersion
+    }.${gtkVersion} or throwBadGtkVersion
   ]
   ++ lib.optionals monoSupport [
     mono
     {
       "2" = gtk-sharp-2_0;
       "3" = gtk-sharp-3_0;
-    }
-    .${gtkVersion} or throwBadGtkVersion
+    }.${gtkVersion} or throwBadGtkVersion
   ];
 
   preAutoreconf = ''
@@ -116,8 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         "2" = [ "appindicator-0.1" ];
         "3" = [ "appindicator3-0.1" ];
-      }
-      .${gtkVersion} or throwBadGtkVersion;
+      }.${gtkVersion} or throwBadGtkVersion;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
     # TODO: Resolve the issues with the Mono bindings.

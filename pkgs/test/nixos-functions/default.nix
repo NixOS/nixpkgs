@@ -7,11 +7,10 @@
 
       nixpkgs$ nix-build -A tests.nixos-functions
 */
-{
-  pkgs,
-  lib,
-  stdenv,
-  ...
+{ pkgs
+, lib
+, stdenv
+, ...
 }:
 
 let

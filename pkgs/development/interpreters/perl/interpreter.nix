@@ -1,27 +1,27 @@
-{
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  buildPackages,
-  lib,
-  self,
-  version,
-  sha256,
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsHostHost,
-  pkgsTargetTarget,
-  zlib,
-  config,
-  passthruFun,
-  perlAttr ? "perl${lib.versions.major version}${lib.versions.minor version}",
-  enableThreading ? true,
-  coreutils,
-  makeWrapper,
-  enableCrypt ? true,
-  libxcrypt ? null,
-  overrides ? config.perlPackageOverrides or (p: { }), # TODO: (self: super: {}) like in python
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, buildPackages
+, lib
+, self
+, version
+, sha256
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, zlib
+, config
+, passthruFun
+, perlAttr ? "perl${lib.versions.major version}${lib.versions.minor version}"
+, enableThreading ? true
+, coreutils
+, makeWrapper
+, enableCrypt ? true
+, libxcrypt ? null
+, overrides ? config.perlPackageOverrides or (p: { })
+, # TODO: (self: super: {}) like in python
 }@inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -319,7 +319,7 @@ stdenv.mkDerivation (
       mainProgram = "perl";
     };
   }
-  // lib.optionalAttrs crossCompiling rec {
+    // lib.optionalAttrs crossCompiling rec {
     crossVersion = "1.6.2";
 
     perl-cross-src = fetchFromGitHub {

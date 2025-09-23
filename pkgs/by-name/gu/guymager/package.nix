@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libsForQt5,
-  dpkg,
-  parted,
-  udev,
-  libewf-legacy,
-  libbfio,
-  libguytools,
+{ lib
+, stdenv
+, fetchurl
+, libsForQt5
+, dpkg
+, parted
+, udev
+, libewf-legacy
+, libbfio
+, libguytools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

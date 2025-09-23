@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchzip,
-  ghostscript,
-  lib,
-  texliveMedium,
+{ stdenv
+, fetchzip
+, ghostscript
+, lib
+, texliveMedium
+,
 }:
 
 stdenv.mkDerivation rec {

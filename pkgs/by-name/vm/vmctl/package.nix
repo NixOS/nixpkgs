@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  openssh,
-  socat,
-  gawk,
-  cloud-utils,
-  cdrtools,
-  qemu,
-  qemu-utils,
-  coreutils,
-  getopt,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, openssh
+, socat
+, gawk
+, cloud-utils
+, cdrtools
+, qemu
+, qemu-utils
+, coreutils
+, getopt
+, makeWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation {

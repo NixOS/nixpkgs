@@ -1,10 +1,10 @@
-{
-  python3Packages,
-  nixosTests,
-  withUI ? false,
-  withTesserocr ? false,
-  withRapidocr ? false,
-  withCPU ? false,
+{ python3Packages
+, nixosTests
+, withUI ? false
+, withTesserocr ? false
+, withRapidocr ? false
+, withCPU ? false
+,
 }:
 
 (python3Packages.toPythonApplication (
@@ -17,7 +17,7 @@
       ;
   }
 ))
-// {
+  // {
   passthru.tests = {
     docling-serve = nixosTests.docling-serve;
   };

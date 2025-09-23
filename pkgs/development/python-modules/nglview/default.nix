@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  nodejs,
-  notebook,
-  ipywidgets,
-  ipykernel,
-  numpy,
-  runCommand,
-  jupyter-packaging,
-  jupyter-core,
-  notebook-shim,
-  setuptools-scm,
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  mock,
-  pillow,
-  ase,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, nodejs
+, notebook
+, ipywidgets
+, ipykernel
+, numpy
+, runCommand
+, jupyter-packaging
+, jupyter-core
+, notebook-shim
+, setuptools-scm
+, writableTmpDirAsHomeHook
+, pytestCheckHook
+, mock
+, pillow
+, ase
+,
 }:
 let
   nodeModules = runCommand "nglview-node-modules" { } ''

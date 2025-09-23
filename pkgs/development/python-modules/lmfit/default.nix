@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  asteval,
-  dill,
-  numpy,
-  scipy,
-  uncertainties,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-  matplotlib,
-  pandas,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  asteval
+, dill
+, numpy
+, scipy
+, uncertainties
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, matplotlib
+, pandas
+,
 }:
 
 buildPythonPackage rec {

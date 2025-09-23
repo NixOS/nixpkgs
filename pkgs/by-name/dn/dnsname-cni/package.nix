@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  dnsmasq,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
+{ buildGoModule
+, dnsmasq
+, fetchFromGitHub
+, lib
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libX11,
-  libXext,
-  libXft,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libX11
+, libXext
+, libXft
+,
 }:
 
 let

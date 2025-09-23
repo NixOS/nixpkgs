@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  autoSignDarwinBinariesHook,
-  cctools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, autoSignDarwinBinariesHook
+, cctools
+,
 }:
 # Like many google projects, shaderc doesn't gracefully support separately
 # compiled dependencies, so we can't easily use the versions of glslang and

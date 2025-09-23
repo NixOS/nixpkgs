@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libGL,
-  libX11,
-  libXext,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  freetype,
-  alsa-lib,
-  cmake,
-  pkg-config,
-  gcc-unwrapped,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libGL
+, libX11
+, libXext
+, libXrandr
+, libXinerama
+, libXcursor
+, freetype
+, alsa-lib
+, cmake
+, pkg-config
+, gcc-unwrapped
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,7 +1,7 @@
-{
-  lib,
-  mkTclDerivation,
-  fetchfossil,
+{ lib
+, mkTclDerivation
+, fetchfossil
+,
 }:
 
 mkTclDerivation rec {

@@ -1,20 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  # Configurable options
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, # Configurable options
   buildProduct ? # can be "client" or "daemon"
-    if buildClient != null then
-      lib.warn ''
-        buildClient is deprecated;
-        use buildProduct instead
-      '' (if buildClient then "client" else "daemon")
-    else
-      "client",
-  # Deprecated options
+  if buildClient != null then
+    lib.warn ''
+      buildClient is deprecated;
+      use buildProduct instead
+    ''
+      (if buildClient then "client" else "daemon")
+  else
+    "client"
+, # Deprecated options
   # Remove them before next version of either Nixpkgs or bsd-finger itself
-  buildClient ? null,
+  buildClient ? null
+,
 }:
 
 assert lib.elem buildProduct [
@@ -156,8 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
         {
           "client" = "finger";
           "daemon" = "fingerd";
-        }
-        .${buildProduct};
+        }.${buildProduct};
     in
     ''
       cd ${subdir}
@@ -169,15 +169,13 @@ stdenv.mkDerivation (finalAttrs: {
         {
           "client" = "bin";
           "daemon" = "sbin";
-        }
-        .${buildProduct};
+        }.${buildProduct};
 
       mandir =
         {
           "client" = "man1";
           "daemon" = "man8";
-        }
-        .${buildProduct};
+        }.${buildProduct};
     in
     ''
       mkdir -p $out/${bindir} $out/man/${mandir}
@@ -194,15 +192,13 @@ stdenv.mkDerivation (finalAttrs: {
       {
         "client" = "User information lookup program";
         "daemon" = "Remote user information server";
-      }
-      .${buildProduct};
+      }.${buildProduct};
     license = lib.licenses.bsdOriginal;
     mainProgram =
       {
         "client" = "finger";
         "daemon" = "fingerd";
-      }
-      .${buildProduct};
+      }.${buildProduct};
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };

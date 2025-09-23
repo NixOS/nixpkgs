@@ -100,37 +100,37 @@ in
 
   ebdb = super.ebdb.overrideAttrs (
     finalAttrs: previousAttrs:
-    let
-      applyOrgRoamMissingPatch = lib.versionOlder finalAttrs.version "0.8.22.0.20240205.070828";
-    in
-    {
-      dontUnpack = !applyOrgRoamMissingPatch;
-      patches =
-        if applyOrgRoamMissingPatch then
-          previousAttrs.patches or [ ]
-          ++ [
-            (pkgs.fetchpatch {
-              name = "fix-comilation-error-about-missing-org-roam.patch";
-              url = "https://github.com/girzel/ebdb/commit/058f30a996eb9074feac8f94db4eb49e85ae08f1.patch";
-              hash = "sha256-UI72N3lCgro6bG75sWnbw9truREToQHEzZ1TeQAIMjo=";
-            })
-          ]
-        else
-          previousAttrs.patches or null;
-      preBuild =
-        if applyOrgRoamMissingPatch then
-          previousAttrs.preBuild or ""
-          + "\n"
-          + ''
-            pushd ..
-            local content_directory=$ename-$version
-            src=$PWD/$content_directory.tar
-            tar --create --verbose --file=$src $content_directory
-            popd
-          ''
-        else
-          previousAttrs.preBuild or null;
-    }
+      let
+        applyOrgRoamMissingPatch = lib.versionOlder finalAttrs.version "0.8.22.0.20240205.070828";
+      in
+      {
+        dontUnpack = !applyOrgRoamMissingPatch;
+        patches =
+          if applyOrgRoamMissingPatch then
+            previousAttrs.patches or [ ]
+            ++ [
+              (pkgs.fetchpatch {
+                name = "fix-comilation-error-about-missing-org-roam.patch";
+                url = "https://github.com/girzel/ebdb/commit/058f30a996eb9074feac8f94db4eb49e85ae08f1.patch";
+                hash = "sha256-UI72N3lCgro6bG75sWnbw9truREToQHEzZ1TeQAIMjo=";
+              })
+            ]
+          else
+            previousAttrs.patches or null;
+        preBuild =
+          if applyOrgRoamMissingPatch then
+            previousAttrs.preBuild or ""
+            + "\n"
+            + ''
+              pushd ..
+              local content_directory=$ename-$version
+              src=$PWD/$content_directory.tar
+              tar --create --verbose --file=$src $content_directory
+              popd
+            ''
+          else
+            previousAttrs.preBuild or null;
+      }
   );
 
   eglot = super.eglot.overrideAttrs (

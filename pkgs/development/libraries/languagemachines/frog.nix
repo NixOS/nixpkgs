@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  automake,
-  autoconf,
-  bzip2,
-  libtar,
-  libtool,
-  pkg-config,
-  autoconf-archive,
-  libxml2,
-  icu,
-  languageMachines,
+{ lib
+, stdenv
+, fetchurl
+, automake
+, autoconf
+, bzip2
+, libtar
+, libtool
+, pkg-config
+, autoconf-archive
+, libxml2
+, icu
+, languageMachines
+,
 }:
 
 let

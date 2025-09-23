@@ -20,6 +20,6 @@ let
 
 in
 lib
-// {
+  // {
   inherit makePackageOverridable;
 }

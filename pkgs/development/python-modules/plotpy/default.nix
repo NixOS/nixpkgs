@@ -1,33 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # dependencies
-  guidata,
-  numpy,
-  pillow,
-  pythonqwt,
-  scikit-image,
-  scipy,
-  tifffile,
-
-  # tests
-  pytestCheckHook,
-  qt6,
-  pyqt6,
-
-  # passthru.tests
-  plotpy,
-  pyside6,
-  qt5,
-  pyqt5,
-  pyside2,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, setuptools
+, # dependencies
+  guidata
+, numpy
+, pillow
+, pythonqwt
+, scikit-image
+, scipy
+, tifffile
+, # tests
+  pytestCheckHook
+, qt6
+, pyqt6
+, # passthru.tests
+  plotpy
+, pyside6
+, qt5
+, pyqt5
+, pyside2
+,
 }:
 
 buildPythonPackage rec {

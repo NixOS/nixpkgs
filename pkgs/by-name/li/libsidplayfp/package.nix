@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeFontsConf,
-  nix-update-script,
-  testers,
-  autoreconfHook,
-  docSupport ? true,
-  doxygen,
-  graphviz,
-  libexsid,
-  libgcrypt,
-  perl,
-  pkg-config,
-  unittest-cpp,
-  xa,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeFontsConf
+, nix-update-script
+, testers
+, autoreconfHook
+, docSupport ? true
+, doxygen
+, graphviz
+, libexsid
+, libgcrypt
+, perl
+, pkg-config
+, unittest-cpp
+, xa
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  libuuid,
-  xorg,
-  curlMinimal,
-  openssl_3,
-  libsecret,
-  webkitgtk_4_1,
-  libsoup_3,
-  gtk3,
-  atk,
-  pango,
-  glib,
-  sqlite,
-  zlib,
-  systemd,
-  msalsdk-dbusclient,
-  pam,
-  p11-kit,
-  dbus,
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, libuuid
+, xorg
+, curlMinimal
+, openssl_3
+, libsecret
+, webkitgtk_4_1
+, libsoup_3
+, gtk3
+, atk
+, pango
+, glib
+, sqlite
+, zlib
+, systemd
+, msalsdk-dbusclient
+, pam
+, p11-kit
+, dbus
+, nixosTests
+,
 }:
 let
   curlMinimal_openssl_3 = curlMinimal.override {

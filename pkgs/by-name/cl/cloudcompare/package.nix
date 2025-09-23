@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  cmake,
-  boost,
-  cgal,
-  eigen,
-  flann,
-  gdal,
-  gmp,
-  laszip,
-  mpfr,
-  pcl,
-  libsForQt5,
-  tbb,
-  xercesc,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, boost
+, cgal
+, eigen
+, flann
+, gdal
+, gmp
+, laszip
+, mpfr
+, pcl
+, libsForQt5
+, tbb
+, xercesc
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

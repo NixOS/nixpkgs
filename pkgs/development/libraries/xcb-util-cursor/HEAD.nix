@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  xorg,
-  gnum4,
-  libxcb,
-  gperf,
+{ lib
+, stdenv
+, fetchgit
+, autoconf
+, automake
+, libtool
+, pkg-config
+, xorg
+, gnum4
+, libxcb
+, gperf
+,
 }:
 
 stdenv.mkDerivation {

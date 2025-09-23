@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  hexdump,
-  wxGTK32,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, hexdump
+, wxGTK32
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

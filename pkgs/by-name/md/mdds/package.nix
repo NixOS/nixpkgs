@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  boost,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, boost
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

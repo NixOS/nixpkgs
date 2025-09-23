@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gnum4,
-  glib,
-  libsigcxx,
-  gnome,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gnum4
+, glib
+, libsigcxx
+, gnome
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

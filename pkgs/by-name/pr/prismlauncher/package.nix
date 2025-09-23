@@ -1,54 +1,55 @@
-{
-  addDriverRunpath,
-  alsa-lib,
-  flite,
-  gamemode,
-  glfw3-minecraft,
-  jdk17,
-  jdk21,
-  jdk8,
-  kdePackages,
-  lib,
-  libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
-  libjack2,
-  libpulseaudio,
-  libusb1,
-  mesa-demos,
-  openal,
-  pciutils,
-  pipewire,
-  prismlauncher-unwrapped,
-  stdenv,
-  symlinkJoin,
-  udev,
-  vulkan-loader,
-  xrandr,
-
-  additionalLibs ? [ ],
-  additionalPrograms ? [ ],
-  controllerSupport ? stdenv.hostPlatform.isLinux,
-  gamemodeSupport ? stdenv.hostPlatform.isLinux,
-  jdks ? [
+{ addDriverRunpath
+, alsa-lib
+, flite
+, gamemode
+, glfw3-minecraft
+, jdk17
+, jdk21
+, jdk8
+, kdePackages
+, lib
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXrandr
+, libXxf86vm
+, libjack2
+, libpulseaudio
+, libusb1
+, mesa-demos
+, openal
+, pciutils
+, pipewire
+, prismlauncher-unwrapped
+, stdenv
+, symlinkJoin
+, udev
+, vulkan-loader
+, xrandr
+, additionalLibs ? [ ]
+, additionalPrograms ? [ ]
+, controllerSupport ? stdenv.hostPlatform.isLinux
+, gamemodeSupport ? stdenv.hostPlatform.isLinux
+, jdks ? [
     jdk21
     jdk17
     jdk8
-  ],
-  msaClientID ? null,
-  textToSpeechSupport ? stdenv.hostPlatform.isLinux,
+  ]
+, msaClientID ? null
+, textToSpeechSupport ? stdenv.hostPlatform.isLinux
+,
 }:
 
-assert lib.assertMsg (
-  controllerSupport -> stdenv.hostPlatform.isLinux
-) "controllerSupport only has an effect on Linux.";
+assert lib.assertMsg
+  (
+    controllerSupport -> stdenv.hostPlatform.isLinux
+  ) "controllerSupport only has an effect on Linux.";
 
-assert lib.assertMsg (
-  textToSpeechSupport -> stdenv.hostPlatform.isLinux
-) "textToSpeechSupport only has an effect on Linux.";
+assert lib.assertMsg
+  (
+    textToSpeechSupport -> stdenv.hostPlatform.isLinux
+  ) "textToSpeechSupport only has an effect on Linux.";
 
 let
   prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
@@ -65,9 +66,11 @@ symlinkJoin {
     kdePackages.qtbase
     kdePackages.qtsvg
   ]
-  ++ lib.optional (
-    lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
-  ) kdePackages.qtwayland;
+  ++ lib.optional
+    (
+      lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
+    )
+    kdePackages.qtwayland;
 
   postBuild = ''
     wrapQtAppsHook

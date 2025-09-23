@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  freetype,
+{ lib
+, stdenv
+, fetchFromGitHub
+, freetype
+,
 }:
 
 stdenv.mkDerivation rec {

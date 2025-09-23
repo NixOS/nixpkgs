@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  pyqt5,
-  pyqt3d,
-  pyqtchart,
-  pyqtdatavisualization,
-  pyqtwebengine,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, pyqt5
+, pyqt3d
+, pyqtchart
+, pyqtdatavisualization
+, pyqtwebengine
+,
 }:
 
 buildPythonPackage rec {

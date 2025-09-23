@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  cmocka,
-  fetchFromGitHub,
-  jansson,
-  libdict,
-  libpcap,
-  ncurses,
-  openssl,
+{ lib
+, stdenv
+, cmake
+, cmocka
+, fetchFromGitHub
+, jansson
+, libdict
+, libpcap
+, ncurses
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

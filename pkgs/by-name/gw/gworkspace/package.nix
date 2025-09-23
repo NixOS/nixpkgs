@@ -1,10 +1,10 @@
-{
-  lib,
-  clangStdenv,
-  fetchurl,
-  gnustep-back,
-  gnustep-systempreferences,
-  wrapGNUstepAppsHook,
+{ lib
+, clangStdenv
+, fetchurl
+, gnustep-back
+, gnustep-systempreferences
+, wrapGNUstepAppsHook
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

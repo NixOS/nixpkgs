@@ -1,22 +1,22 @@
-{
-  mkDerivation,
-  lib,
-  fetchurl,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  fftw,
-  flac,
-  lame,
-  libjack2,
-  libmad,
-  libpulseaudio,
-  libsamplerate,
-  libsndfile,
-  libvorbis,
-  portaudio,
-  qtbase,
-  wavpack,
+{ mkDerivation
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, alsa-lib
+, fftw
+, flac
+, lame
+, libjack2
+, libmad
+, libpulseaudio
+, libsamplerate
+, libsndfile
+, libvorbis
+, portaudio
+, qtbase
+, wavpack
+,
 }:
 mkDerivation {
   pname = "traverso";

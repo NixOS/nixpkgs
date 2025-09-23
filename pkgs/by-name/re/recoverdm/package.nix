@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitLab
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

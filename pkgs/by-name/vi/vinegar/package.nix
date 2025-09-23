@@ -1,27 +1,27 @@
-{
-  lib,
-  buildGoModule,
-  wine64Packages,
-  fetchpatch,
-  fetchFromGitHub,
-  glib,
-  makeBinaryWrapper,
-  pkg-config,
-  cairo,
-  gdk-pixbuf,
-  graphene,
-  gtk4,
-  libadwaita,
-  libGL,
-  libxkbcommon,
-  pango,
-  vulkan-headers,
-  vulkan-loader,
-  wayland,
-  winetricks,
-  xorg,
-  symlinkJoin,
-  nix-update-script,
+{ lib
+, buildGoModule
+, wine64Packages
+, fetchpatch
+, fetchFromGitHub
+, glib
+, makeBinaryWrapper
+, pkg-config
+, cairo
+, gdk-pixbuf
+, graphene
+, gtk4
+, libadwaita
+, libGL
+, libxkbcommon
+, pango
+, vulkan-headers
+, vulkan-loader
+, wayland
+, winetricks
+, xorg
+, symlinkJoin
+, nix-update-script
+,
 }:
 let
   wine =

@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  amqtt,
-  buildPythonPackage,
-  certifi,
-  docopt,
-  fetchFromGitHub,
-  fetchpatch,
-  geopy,
-  mock,
-  pytest-asyncio_0,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, amqtt
+, buildPythonPackage
+, certifi
+, docopt
+, fetchFromGitHub
+, fetchpatch
+, geopy
+, mock
+, pytest-asyncio_0
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

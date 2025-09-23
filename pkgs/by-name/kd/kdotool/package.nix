@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  dbus,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, dbus
+,
 }:
 
 rustPlatform.buildRustPackage rec {

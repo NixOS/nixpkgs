@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPythonPackage,
-  embree2,
-  cython,
-  numpy,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildPythonPackage
+, embree2
+, cython
+, numpy
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

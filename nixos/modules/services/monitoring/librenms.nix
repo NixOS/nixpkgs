@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -421,9 +420,11 @@ in
     }
     // (lib.optionalAttrs cfg.distributedPoller.enable {
       "distributed_poller" = true;
-      "distributed_poller_name" = lib.mkIf (
-        cfg.distributedPoller.name != null
-      ) cfg.distributedPoller.name;
+      "distributed_poller_name" = lib.mkIf
+        (
+          cfg.distributedPoller.name != null
+        )
+        cfg.distributedPoller.name;
       "distributed_poller_group" = cfg.distributedPoller.group;
       "distributed_billing" = cfg.distributedPoller.distributedBilling;
       "distributed_poller_memcached_host" = cfg.distributedPoller.memcachedHost;

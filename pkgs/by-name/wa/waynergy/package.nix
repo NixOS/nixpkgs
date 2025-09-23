@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  wayland-scanner,
-  libdrm,
-  wayland,
-  wayland-protocols,
-  wl-clipboard,
-  libxkbcommon,
-  libressl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, wayland-scanner
+, libdrm
+, wayland
+, wayland-protocols
+, wl-clipboard
+, libxkbcommon
+, libressl
+,
 }:
 stdenv.mkDerivation rec {
   pname = "waynergy";

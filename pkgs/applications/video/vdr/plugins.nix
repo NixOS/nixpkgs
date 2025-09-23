@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  vdr,
-  fetchFromGitHub,
-  graphicsmagick,
-  boost186,
-  libgcrypt,
-  ncurses,
-  callPackage,
+{ lib
+, stdenv
+, vdr
+, fetchFromGitHub
+, graphicsmagick
+, boost186
+, libgcrypt
+, ncurses
+, callPackage
+,
 }:
 let
   mkPlugin =
@@ -158,7 +158,7 @@ in
     };
   };
 }
-// (lib.genAttrs [
+  // (lib.genAttrs [
   "epgtableid0"
   "hello"
   "osddemo"
@@ -166,4 +166,5 @@ in
   "servicedemo"
   "status"
   "svdrpdemo"
-] mkPlugin)
+]
+  mkPlugin)

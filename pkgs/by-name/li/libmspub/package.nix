@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchpatch,
-  pkg-config,
-  boost,
-  doxygen,
-  icu,
-  librevenge,
-  zlib,
+{ lib
+, stdenv
+, fetchzip
+, fetchpatch
+, pkg-config
+, boost
+, doxygen
+, icu
+, librevenge
+, zlib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmspub";

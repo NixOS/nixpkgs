@@ -2,157 +2,131 @@ let
 
   generic =
     # utils
-    {
-      stdenv,
-      fetchFromGitHub,
-      fetchurl,
-      lib,
-      replaceVars,
-      writeShellScriptBin,
-
-      # source specification
-      hash,
-      muslPatches ? { },
-      rev,
-      version,
-
-      # runtime dependencies
-      darwin,
-      freebsd,
-      glibc,
-      libuuid,
-      libxml2,
-      lz4,
-      openssl,
-      readline,
-      tzdata,
-      zlib,
-      zstd,
-
-      # build dependencies
-      bison,
-      docbook-xsl-nons,
-      docbook_xml_dtd_45,
-      flex,
-      libxslt,
-      makeBinaryWrapper,
-      pkg-config,
-      removeReferencesTo,
-
-      # passthru
-      buildEnv,
-      buildPackages,
-      newScope,
-      nixosTests,
-      postgresqlTestHook,
-      self,
-      stdenvNoCC,
-      testers,
-
-      # Block size
+    { stdenv
+    , fetchFromGitHub
+    , fetchurl
+    , lib
+    , replaceVars
+    , writeShellScriptBin
+    , # source specification
+      hash
+    , muslPatches ? { }
+    , rev
+    , version
+    , # runtime dependencies
+      darwin
+    , freebsd
+    , glibc
+    , libuuid
+    , libxml2
+    , lz4
+    , openssl
+    , readline
+    , tzdata
+    , zlib
+    , zstd
+    , # build dependencies
+      bison
+    , docbook-xsl-nons
+    , docbook_xml_dtd_45
+    , flex
+    , libxslt
+    , makeBinaryWrapper
+    , pkg-config
+    , removeReferencesTo
+    , # passthru
+      buildEnv
+    , buildPackages
+    , newScope
+    , nixosTests
+    , postgresqlTestHook
+    , self
+    , stdenvNoCC
+    , testers
+    , # Block size
       # Changing the block size will break on-disk database compatibility. See:
       # https://www.postgresql.org/docs/current/install-make.html#CONFIGURE-OPTION-WITH-BLOCKSIZE
-      withBlocksize ? null,
-      withWalBlocksize ? null,
-
-      # bonjour
-      bonjourSupport ? false,
-
-      # Curl
-      curlSupport ?
-        lib.versionAtLeast version "18"
+      withBlocksize ? null
+    , withWalBlocksize ? null
+    , # bonjour
+      bonjourSupport ? false
+    , # Curl
+      curlSupport ? lib.versionAtLeast version "18"
         && lib.meta.availableOn stdenv.hostPlatform curl
         # Building statically fails with:
         # configure: error: library 'curl' does not provide curl_multi_init
         # https://www.postgresql.org/message-id/487dacec-6d8d-46c0-a36f-d5b8c81a56f1%40technowledgy.de
-        && !stdenv.hostPlatform.isStatic,
-      curl,
-
-      # GSSAPI
-      gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
-      libkrb5,
-
-      # icu
+        && !stdenv.hostPlatform.isStatic
+    , curl
+    , # GSSAPI
+      gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
+    , libkrb5
+    , # icu
       # Building with icu in pkgsStatic gives tons of "undefined reference" errors like this:
       #   /nix/store/452lkaak37d3mzzn3p9ak7aa3wzhdqaj-icu4c-74.2-x86_64-unknown-linux-musl/lib/libicuuc.a(chariter.ao):
       #    (.data.rel.ro._ZTIN6icu_7417CharacterIteratorE[_ZTIN6icu_7417CharacterIteratorE]+0x0):
       #    undefined reference to `vtable for __cxxabiv1::__si_class_type_info'
-      icuSupport ? !stdenv.hostPlatform.isStatic,
-      icu,
-
-      # JIT
-      jitSupport ?
-        stdenv.hostPlatform.canExecute stdenv.buildPlatform
+      icuSupport ? !stdenv.hostPlatform.isStatic
+    , icu
+    , # JIT
+      jitSupport ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
         # Building with JIT in pkgsStatic fails like this:
         #   fatal error: 'stdio.h' file not found
-        && !stdenv.hostPlatform.isStatic,
-      llvmPackages,
-      nukeReferences,
-      overrideCC,
-
-      # LDAP
-      ldapSupport ? false,
-      openldap,
-
-      # NLS
-      nlsSupport ? false,
-      gettext,
-
-      # NUMA
-      numaSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform numactl,
-      numactl,
-
-      # PAM
-      pamSupport ?
-        lib.meta.availableOn stdenv.hostPlatform linux-pam
+        && !stdenv.hostPlatform.isStatic
+    , llvmPackages
+    , nukeReferences
+    , overrideCC
+    , # LDAP
+      ldapSupport ? false
+    , openldap
+    , # NLS
+      nlsSupport ? false
+    , gettext
+    , # NUMA
+      numaSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform numactl
+    , numactl
+    , # PAM
+      pamSupport ? lib.meta.availableOn stdenv.hostPlatform linux-pam
         # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
         #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
         #     in function `pam_modutil_audit_write':(.text+0x571):
         #     undefined reference to `audit_close'
-        && !stdenv.hostPlatform.isStatic,
-      linux-pam,
-
-      # PL/Perl
-      perlSupport ?
-        lib.meta.availableOn stdenv.hostPlatform perl
+        && !stdenv.hostPlatform.isStatic
+    , linux-pam
+    , # PL/Perl
+      perlSupport ? lib.meta.availableOn stdenv.hostPlatform perl
         # Building with perl in pkgsStatic gives this error:
         #   configure: error: cannot build PL/Perl because libperl is not a shared library
         && !stdenv.hostPlatform.isStatic
         # configure tries to call the perl executable for the version
-        && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-      perl,
-
-      # PL/Python
-      pythonSupport ?
-        lib.meta.availableOn stdenv.hostPlatform python3
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    , perl
+    , # PL/Python
+      pythonSupport ? lib.meta.availableOn stdenv.hostPlatform python3
         # Building with python in pkgsStatic gives this error:
         #  checking how to link an embedded Python application... configure: error: could not find shared library for Python
         && !stdenv.hostPlatform.isStatic
         # configure tries to call the python executable
-        && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-      python3,
-
-      # PL/Tcl
-      tclSupport ?
-        lib.meta.availableOn stdenv.hostPlatform tcl
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    , python3
+    , # PL/Tcl
+      tclSupport ? lib.meta.availableOn stdenv.hostPlatform tcl
         # tcl is broken in pkgsStatic
         && !stdenv.hostPlatform.isStatic
         # configure fails with:
         #   configure: error: file 'tclConfig.sh' is required for Tcl
-        && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-      tcl,
-
-      # SELinux
-      selinuxSupport ? false,
-      libselinux,
-
-      # Systemd
-      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-      systemdLibs,
-
-      # Uring
-      uringSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform liburing,
-      liburing,
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    , tcl
+    , # SELinux
+      selinuxSupport ? false
+    , libselinux
+    , # Systemd
+      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+    , systemdLibs
+    , # Uring
+      uringSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform liburing
+    , liburing
+    ,
     }@args:
     let
       atLeast = lib.versionAtLeast version;
@@ -164,12 +138,13 @@ let
 
       stdenv' =
         if !stdenv.cc.isClang then
-          overrideCC llvmPackages.stdenv (
-            llvmPackages.stdenv.cc.override {
-              # LLVM bintools are not used by default, but are needed to make -flto work below.
-              bintools = llvmPackages.bintools;
-            }
-          )
+          overrideCC llvmPackages.stdenv
+            (
+              llvmPackages.stdenv.cc.override {
+                # LLVM bintools are not used by default, but are needed to make -flto work below.
+                bintools = llvmPackages.bintools;
+              }
+            )
         else
           stdenv;
     in
@@ -365,15 +340,15 @@ let
         # some version of this flag is required in all cross configurations
         # since it cannot be automatically detected
         ++
-          lib.optionals
-            (
-              (!stdenv'.hostPlatform.isDarwin)
-              && (!(stdenv'.buildPlatform.canExecute stdenv.hostPlatform))
-              && atLeast "16"
-            )
-            [
-              "LDFLAGS_EX_BE=-Wl,--export-dynamic"
-            ]
+        lib.optionals
+          (
+            (!stdenv'.hostPlatform.isDarwin)
+            && (!(stdenv'.buildPlatform.canExecute stdenv.hostPlatform))
+            && atLeast "16"
+          )
+          [
+            "LDFLAGS_EX_BE=-Wl,--export-dynamic"
+          ]
         ++ lib.optionals ldapSupport [ "--with-ldap" ]
         ++ lib.optionals tclSupport [ "--with-tcl" ]
         ++ lib.optionals selinuxSupport [ "--with-selinux" ]
@@ -535,23 +510,23 @@ let
       doInstallCheck =
         !(stdenv'.hostPlatform.isStatic)
         &&
-          # Tests currently can't be run on darwin, because of a Nix bug:
-          # https://github.com/NixOS/nix/issues/12548
-          # https://git.lix.systems/lix-project/lix/issues/691
-          # The error appears as this in the initdb logs:
-          #   FATAL:  could not create shared memory segment: Cannot allocate memory
-          # Don't let yourself be fooled when trying to remove this condition: Running
-          # the tests works fine most of the time. But once the tests (or any package using
-          # postgresqlTestHook) fails on the same machine for a few times, enough IPC objects
-          # will be stuck around, and any future builds with the tests enabled *will* fail.
-          !(stdenv'.hostPlatform.isDarwin)
+        # Tests currently can't be run on darwin, because of a Nix bug:
+        # https://github.com/NixOS/nix/issues/12548
+        # https://git.lix.systems/lix-project/lix/issues/691
+        # The error appears as this in the initdb logs:
+        #   FATAL:  could not create shared memory segment: Cannot allocate memory
+        # Don't let yourself be fooled when trying to remove this condition: Running
+        # the tests works fine most of the time. But once the tests (or any package using
+        # postgresqlTestHook) fails on the same machine for a few times, enough IPC objects
+        # will be stuck around, and any future builds with the tests enabled *will* fail.
+        !(stdenv'.hostPlatform.isDarwin)
         &&
-          # Regression tests currently fail in pkgsMusl because of a difference in EXPLAIN output.
-          !(stdenv'.hostPlatform.isMusl)
+        # Regression tests currently fail in pkgsMusl because of a difference in EXPLAIN output.
+        !(stdenv'.hostPlatform.isMusl)
         &&
-          # Modifying block sizes is expected to break regression tests.
-          # https://www.postgresql.org/message-id/E1TJOeZ-000717-Lg%40wrigleys.postgresql.org
-          (withBlocksize == null && withWalBlocksize == null);
+        # Modifying block sizes is expected to break regression tests.
+        # https://www.postgresql.org/message-id/E1TJOeZ-000717-Lg%40wrigleys.postgresql.org
+        (withBlocksize == null && withWalBlocksize == null);
       installCheckTarget = "check-world";
 
       passthru =
@@ -644,11 +619,11 @@ let
     });
 
   postgresqlWithPackages =
-    {
-      postgresql,
-      buildEnv,
-      lib,
-      makeBinaryWrapper,
+    { postgresql
+    , buildEnv
+    , lib
+    , makeBinaryWrapper
+    ,
     }:
     f:
     let
@@ -694,33 +669,39 @@ let
             };
           };
 
-          withJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: installedExtensions ++ [ postgresql.jit ]);
-          withoutJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: lib.remove postgresql.jit installedExtensions);
-
-          withPackages =
-            f':
-            postgresqlWithPackages {
+          withJIT = postgresqlWithPackages
+            {
               inherit
                 buildEnv
                 lib
                 makeBinaryWrapper
                 postgresql
                 ;
-            } (ps: installedExtensions ++ f' ps);
+            }
+            (_: installedExtensions ++ [ postgresql.jit ]);
+          withoutJIT = postgresqlWithPackages
+            {
+              inherit
+                buildEnv
+                lib
+                makeBinaryWrapper
+                postgresql
+                ;
+            }
+            (_: lib.remove postgresql.jit installedExtensions);
+
+          withPackages =
+            f':
+            postgresqlWithPackages
+              {
+                inherit
+                  buildEnv
+                  lib
+                  makeBinaryWrapper
+                  postgresql
+                  ;
+              }
+              (ps: installedExtensions ++ f' ps);
         };
       };
     in

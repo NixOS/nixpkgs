@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  libbfd,
-  SDL2,
-  libGL,
-  obs-studio,
-  looking-glass-client,
+{ lib
+, stdenv
+, cmake
+, libbfd
+, SDL2
+, libGL
+, obs-studio
+, looking-glass-client
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,28 +1,28 @@
-{
-  buildGo124Module,
-  cmake,
-  extra-cmake-modules,
-  fetchFromGitHub,
-  git,
-  go_1_24,
-  kconfig,
-  kcoreaddons,
-  kdbusaddons,
-  kguiaddons,
-  ki18n,
-  kirigami,
-  kirigami-addons,
-  knotifications,
-  kwindowsystem,
-  lib,
-  nlohmann_json,
-  qqc2-desktop-style,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qtwayland,
-  stdenv,
-  wrapQtAppsHook,
+{ buildGo124Module
+, cmake
+, extra-cmake-modules
+, fetchFromGitHub
+, git
+, go_1_24
+, kconfig
+, kcoreaddons
+, kdbusaddons
+, kguiaddons
+, ki18n
+, kirigami
+, kirigami-addons
+, knotifications
+, kwindowsystem
+, lib
+, nlohmann_json
+, qqc2-desktop-style
+, qtbase
+, qtdeclarative
+, qtsvg
+, qtwayland
+, stdenv
+, wrapQtAppsHook
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  toPythonModule,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  xtensor,
-  pybind11,
-  numpy,
+{ lib
+, stdenv
+, toPythonModule
+, fetchFromGitHub
+, cmake
+, gtest
+, xtensor
+, pybind11
+, numpy
+,
 }:
 
 toPythonModule (

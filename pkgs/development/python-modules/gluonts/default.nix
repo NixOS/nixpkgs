@@ -1,29 +1,26 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-
-  # dependencies
-  numpy,
-  pandas,
-  pydantic,
-  tqdm,
-  toolz,
-
-  # optional dependencies (torch)
-  torch,
-  lightning,
-  scipy,
-
-  # test
-  pytestCheckHook,
-  distutils,
-  matplotlib,
-  pyarrow,
-  statsmodels,
-  which,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # dependencies
+  numpy
+, pandas
+, pydantic
+, tqdm
+, toolz
+, # optional dependencies (torch)
+  torch
+, lightning
+, scipy
+, # test
+  pytestCheckHook
+, distutils
+, matplotlib
+, pyarrow
+, statsmodels
+, which
+,
 }:
 
 buildPythonPackage rec {

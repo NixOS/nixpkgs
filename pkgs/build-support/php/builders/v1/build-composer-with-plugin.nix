@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  writeText,
-  lib,
-  makeBinaryWrapper,
-  php,
-  cacert,
-  nix-update-script,
+{ stdenvNoCC
+, writeText
+, lib
+, makeBinaryWrapper
+, php
+, cacert
+, nix-update-script
+,
 }:
 
 let

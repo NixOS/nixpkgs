@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  daemonize,
-  dbus-python,
-  fetchFromGitHub,
-  gobject-introspection,
-  gtk3,
-  pygobject3,
-  pyudev,
-  setproctitle,
-  setuptools,
-  wrapGAppsNoGuiHook,
-  notify2,
-  glib,
-  libnotify,
+{ lib
+, buildPythonPackage
+, daemonize
+, dbus-python
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, pygobject3
+, pyudev
+, setproctitle
+, setuptools
+, wrapGAppsNoGuiHook
+, notify2
+, glib
+, libnotify
+,
 }:
 
 let
@@ -21,7 +21,7 @@ let
 in
 buildPythonPackage (
   common
-  // {
+    // {
     pname = "openrazer-daemon";
 
     outputs = [

@@ -1,31 +1,31 @@
-{
-  qtModule,
-  stdenv,
-  lib,
-  fetchurl,
-  qtbase,
-  qtdeclarative,
-  qtlocation,
-  qtmultimedia,
-  qtsensors,
-  qtwebchannel,
-  fontconfig,
-  libwebp,
-  libxml2,
-  libxslt,
-  sqlite,
-  systemd,
-  glib,
-  gst_all_1,
-  cmake,
-  bison,
-  flex,
-  gdb,
-  gperf,
-  perl,
-  pkg-config,
-  python3,
-  ruby,
+{ qtModule
+, stdenv
+, lib
+, fetchurl
+, qtbase
+, qtdeclarative
+, qtlocation
+, qtmultimedia
+, qtsensors
+, qtwebchannel
+, fontconfig
+, libwebp
+, libxml2
+, libxslt
+, sqlite
+, systemd
+, glib
+, gst_all_1
+, cmake
+, bison
+, flex
+, gdb
+, gperf
+, perl
+, pkg-config
+, python3
+, ruby
+,
 }:
 
 let
@@ -93,9 +93,10 @@ qtModule {
     ++ lib.optional stdenv.cc.isGNU "-Wno-class-memaccess"
     # with clang this warning blows the log over Hydra's limit
     ++ lib.optional stdenv.hostPlatform.isDarwin "-Wno-inconsistent-missing-override"
-    ++ lib.optional (
-      !stdenv.hostPlatform.isDarwin
-    ) ''-DNIXPKGS_LIBUDEV="${lib.getLib systemd}/lib/libudev"''
+    ++ lib.optional
+      (
+        !stdenv.hostPlatform.isDarwin
+      ) ''-DNIXPKGS_LIBUDEV="${lib.getLib systemd}/lib/libudev"''
   );
 
   doCheck = false; # fails 13 out of 13 tests (ctest)

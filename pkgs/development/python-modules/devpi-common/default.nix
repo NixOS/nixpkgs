@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  lazy,
-  packaging-legacy,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools-changelog-shortener,
-  setuptools,
-  tomli,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, lazy
+, packaging-legacy
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools-changelog-shortener
+, setuptools
+, tomli
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

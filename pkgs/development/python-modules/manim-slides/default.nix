@@ -1,39 +1,36 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # Build system
-  hatchling,
-  hatch-fancy-pypi-readme,
-
-  # Dependencies
-  ffmpeg,
-  beautifulsoup4,
-  click,
-  click-default-group,
-  jinja2,
-  lxml,
-  numpy,
-  pillow,
-  pydantic,
-  pydantic-extra-types,
-  python-pptx,
-  qtpy,
-  requests,
-  rich,
-  rtoml,
-  tqdm,
-
-  # Optional dependencies
-  ipython,
-  manim,
-  manimgl,
-  setuptools,
-  pyqt6,
-  pyside6,
-  docutils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # Build system
+  hatchling
+, hatch-fancy-pypi-readme
+, # Dependencies
+  ffmpeg
+, beautifulsoup4
+, click
+, click-default-group
+, jinja2
+, lxml
+, numpy
+, pillow
+, pydantic
+, pydantic-extra-types
+, python-pptx
+, qtpy
+, requests
+, rich
+, rtoml
+, tqdm
+, # Optional dependencies
+  ipython
+, manim
+, manimgl
+, setuptools
+, pyqt6
+, pyside6
+, docutils
+,
 }:
 buildPythonPackage rec {
   pname = "manim-slides";

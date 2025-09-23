@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  testers,
-  snyk,
-  nodejs_20,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, testers
+, snyk
+, nodejs_20
+,
 }:
 
 let

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  libuuid,
-  gettext,
-  texinfo,
-  withFuse ? stdenv.hostPlatform.isLinux,
-  fuse3,
-  shared ? !stdenv.hostPlatform.isStatic,
-  e2fsprogs,
-  runCommand,
-  libarchive,
-  bash,
-  bashNonInteractive,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, pkg-config
+, libuuid
+, gettext
+, texinfo
+, withFuse ? stdenv.hostPlatform.isLinux
+, fuse3
+, shared ? !stdenv.hostPlatform.isStatic
+, e2fsprogs
+, runCommand
+, libarchive
+, bash
+, bashNonInteractive
+,
 }:
 
 stdenv.mkDerivation rec {

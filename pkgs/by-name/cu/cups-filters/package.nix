@@ -1,35 +1,35 @@
-{
-  lib,
-  bc,
-  coreutils,
-  cups,
-  dbus,
-  dejavu_fonts,
-  fetchFromGitHub,
-  fontconfig,
-  gawk,
-  ghostscript,
-  gnugrep,
-  gnused,
-  ijs,
-  libcupsfilters,
-  libppd,
-  libexif,
-  libjpeg,
-  liblouis,
-  libpng,
-  makeWrapper,
-  autoreconfHook,
-  mupdf,
-  perl,
-  pkg-config,
-  poppler,
-  poppler-utils,
-  qpdf,
-  stdenv,
-  which,
-  withAvahi ? true,
-  glib,
+{ lib
+, bc
+, coreutils
+, cups
+, dbus
+, dejavu_fonts
+, fetchFromGitHub
+, fontconfig
+, gawk
+, ghostscript
+, gnugrep
+, gnused
+, ijs
+, libcupsfilters
+, libppd
+, libexif
+, libjpeg
+, liblouis
+, libpng
+, makeWrapper
+, autoreconfHook
+, mupdf
+, perl
+, pkg-config
+, poppler
+, poppler-utils
+, qpdf
+, stdenv
+, which
+, withAvahi ? true
+, glib
+,
 }:
 
 (

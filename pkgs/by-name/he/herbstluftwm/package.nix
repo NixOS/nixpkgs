@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  python3,
-  libX11,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXft,
-  libXrender,
-  libXdmcp,
-  libXfixes,
-  freetype,
-  asciidoc,
-  xdotool,
-  xorgserver,
-  xsetroot,
-  xterm,
-  runtimeShell,
-  fetchpatch,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, python3
+, libX11
+, libXext
+, libXinerama
+, libXrandr
+, libXft
+, libXrender
+, libXdmcp
+, libXfixes
+, freetype
+, asciidoc
+, xdotool
+, xorgserver
+, xsetroot
+, xterm
+, runtimeShell
+, fetchpatch
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

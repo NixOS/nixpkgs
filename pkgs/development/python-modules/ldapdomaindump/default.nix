@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  dnspython,
-  ldap3,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, dnspython
+, ldap3
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

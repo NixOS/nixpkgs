@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  nix-update-script,
-  setuptools,
-  paup-cli,
-  paupIntegration ? false,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, nix-update-script
+, setuptools
+, paup-cli
+, paupIntegration ? false
+,
 }:
 
 let

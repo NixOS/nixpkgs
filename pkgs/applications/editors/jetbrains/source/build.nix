@@ -1,38 +1,36 @@
-{
-  fetchFromGitHub,
-  fetchurl,
-  fetchzip,
-  lib,
-  linkFarm,
-  makeWrapper,
-  runCommand,
-  stdenv,
-  stdenvNoCC,
-  rustPlatform,
-
-  ant,
-  cmake,
-  fsnotifier,
-  glib,
-  glibc,
-  jetbrains,
-  kotlin,
-  libdbusmenu,
-  maven,
-  p7zip,
-  pkg-config,
-  xorg,
-
-  version,
-  buildNumber,
-  buildType,
-  ideaHash,
-  androidHash,
-  jpsHash,
-  restarterHash,
-  mvnDeps,
-  repositories,
-  kotlin-jps-plugin,
+{ fetchFromGitHub
+, fetchurl
+, fetchzip
+, lib
+, linkFarm
+, makeWrapper
+, runCommand
+, stdenv
+, stdenvNoCC
+, rustPlatform
+, ant
+, cmake
+, fsnotifier
+, glib
+, glibc
+, jetbrains
+, kotlin
+, libdbusmenu
+, maven
+, p7zip
+, pkg-config
+, xorg
+, version
+, buildNumber
+, buildType
+, ideaHash
+, androidHash
+, jpsHash
+, restarterHash
+, mvnDeps
+, repositories
+, kotlin-jps-plugin
+,
 }:
 
 let

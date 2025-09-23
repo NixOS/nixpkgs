@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  isPy3k,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, isPy3k
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

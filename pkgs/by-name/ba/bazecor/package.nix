@@ -1,8 +1,8 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  makeWrapper,
+{ lib
+, appimageTools
+, fetchurl
+, makeWrapper
+,
 }:
 let
   pname = "bazecor";

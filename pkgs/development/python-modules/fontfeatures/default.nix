@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  beziers,
-  fonttools,
-  fs,
-  glyphtools,
-  lxml,
-  pytestCheckHook,
-  youseedee,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, beziers
+, fonttools
+, fs
+, glyphtools
+, lxml
+, pytestCheckHook
+, youseedee
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

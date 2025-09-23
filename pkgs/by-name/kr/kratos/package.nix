@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  buildGoModule,
-  lib,
-  stdenv,
+{ fetchFromGitHub
+, buildGoModule
+, lib
+, stdenv
+,
 }:
 let
   pname = "kratos";

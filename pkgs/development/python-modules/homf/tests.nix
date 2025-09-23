@@ -1,19 +1,18 @@
-{
-  lib,
-  runCommand,
-  testers,
-
-  cacert,
-  homf,
+{ lib
+, runCommand
+, testers
+, cacert
+, homf
+,
 }:
 let
   # runs homf, putting the fetched artefacts in the drv output
   Homf =
     subcommand:
-    {
-      pkgName,
-      version,
-      hash,
+    { pkgName
+    , version
+    , hash
+    ,
     }:
     # testers.runCommand ensures we have an FOD, so the command has network access,
     #  yet the test is rerun whenever one of its inputs changes.

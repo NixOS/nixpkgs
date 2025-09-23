@@ -1,11 +1,11 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  pillow,
-  fnv-hash-fast,
-  psutil-home-assistant,
-  sqlalchemy,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, pillow
+, fnv-hash-fast
+, psutil-home-assistant
+, sqlalchemy
+,
 }:
 buildHomeAssistantComponent rec {
   owner = "frenck";

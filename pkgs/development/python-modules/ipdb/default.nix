@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-  pythonOlder,
-  decorator,
-  ipython,
-  isPyPy,
-  exceptiongroup,
-  tomli,
-  setuptools,
-  pytestCheckHook,
-  pytest-timeout,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, pythonOlder
+, decorator
+, ipython
+, isPyPy
+, exceptiongroup
+, tomli
+, setuptools
+, pytestCheckHook
+, pytest-timeout
+,
 }:
 
 buildPythonPackage rec {

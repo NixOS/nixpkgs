@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  libpg_query,
-  xxHash,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, libpg_query
+, xxHash
+,
 }:
 
 buildGoModule rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  pytest,
-  pytestCheckHook,
-  docutils,
-  pygments,
-  pytest-rerunfailures,
-  pytest-asyncio,
-  anyio,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, pytest
+, pytestCheckHook
+, docutils
+, pygments
+, pytest-rerunfailures
+, pytest-asyncio
+, anyio
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

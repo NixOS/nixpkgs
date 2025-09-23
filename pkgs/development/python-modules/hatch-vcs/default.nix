@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  gitMinimal,
-  hatchling,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, gitMinimal
+, hatchling
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

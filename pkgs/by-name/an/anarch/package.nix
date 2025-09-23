@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  SDL2,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitLab
+, SDL2
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

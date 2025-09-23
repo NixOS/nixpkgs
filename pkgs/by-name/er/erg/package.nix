@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  python3,
-  which,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, python3
+, which
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

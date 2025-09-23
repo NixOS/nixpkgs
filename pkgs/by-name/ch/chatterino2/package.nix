@@ -1,9 +1,9 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  boost186,
+{ lib
+, callPackage
+, fetchFromGitHub
+, gitUpdater
+, boost186
+,
 }:
 
 (callPackage ./common.nix {

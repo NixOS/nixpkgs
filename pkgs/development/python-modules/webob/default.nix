@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  legacy-cgi,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-
-  # for passthru.tests
-  pyramid,
-  routes,
-  tokenlib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, legacy-cgi
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, # for passthru.tests
+  pyramid
+, routes
+, tokenlib
+,
 }:
 
 buildPythonPackage rec {

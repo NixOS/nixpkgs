@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  ipykernel,
-  ipython,
-  jupyter-client,
-  jupyter-core,
-  prompt-toolkit,
-  pygments,
-  pyzmq,
-  traitlets,
-
-  # tests
-  flaky,
-  pexpect,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  ipykernel
+, ipython
+, jupyter-client
+, jupyter-core
+, prompt-toolkit
+, pygments
+, pyzmq
+, traitlets
+, # tests
+  flaky
+, pexpect
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

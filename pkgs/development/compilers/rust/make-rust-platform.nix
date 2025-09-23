@@ -1,21 +1,20 @@
-{
-  lib,
-  buildPackages,
-  callPackages,
-  cargo-auditable,
-  config,
-  stdenv,
-  runCommand,
-  generateSplicesForMkScope,
-  makeScopeWithSplicing',
+{ lib
+, buildPackages
+, callPackages
+, cargo-auditable
+, config
+, stdenv
+, runCommand
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
+,
 }@prev:
 
-{
-  rustc,
-  cargo,
-  cargo-auditable ? prev.cargo-auditable,
-  stdenv ? prev.stdenv,
-  ...
+{ rustc
+, cargo
+, cargo-auditable ? prev.cargo-auditable
+, stdenv ? prev.stdenv
+, ...
 }:
 
 (makeScopeWithSplicing' {
@@ -74,7 +73,7 @@
         ;
     };
 })
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   rust = {
     rustc = lib.warn "rustPlatform.rust.rustc is deprecated. Use rustc instead." rustc;
     cargo = lib.warn "rustPlatform.rust.cargo is deprecated. Use cargo instead." cargo;

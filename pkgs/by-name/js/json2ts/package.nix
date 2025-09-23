@@ -1,8 +1,8 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  lib,
-  jq,
+{ buildNpmPackage
+, fetchFromGitHub
+, lib
+, jq
+,
 }:
 buildNpmPackage {
   name = "json2ts";

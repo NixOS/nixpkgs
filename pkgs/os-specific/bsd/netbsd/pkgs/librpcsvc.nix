@@ -1,15 +1,15 @@
-{
-  lib,
-  mkDerivation,
-  defaultMakeFlags,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
-  rpcgen,
-  statHook,
+{ lib
+, mkDerivation
+, defaultMakeFlags
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+, rpcgen
+, statHook
+,
 }:
 
 mkDerivation {

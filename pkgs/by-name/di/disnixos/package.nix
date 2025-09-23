@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dysnomia,
-  disnix,
-  socat,
-  pkg-config,
-  getopt,
+{ lib
+, stdenv
+, fetchurl
+, dysnomia
+, disnix
+, socat
+, pkg-config
+, getopt
+,
 }:
 
 stdenv.mkDerivation rec {

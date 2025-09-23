@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  sys,
+{ lib
+, mkDerivation
+, sys
+,
 }:
 
 mkDerivation {

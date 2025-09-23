@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  jaraco-classes,
-  more-itertools,
-  pytestCheckHook,
-  setuptools-scm,
-  setuptools,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, jaraco-classes
+, more-itertools
+, pytestCheckHook
+, setuptools-scm
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

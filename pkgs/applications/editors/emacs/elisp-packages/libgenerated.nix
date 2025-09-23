@@ -8,9 +8,8 @@ let
   fetchers = lib.mapAttrs (_: fetcher: self.callPackage fetcher { }) {
     github =
       { fetchFromGitHub }:
-      {
-        repo ? null,
-        ...
+      { repo ? null
+      , ...
       }:
       { sha256, commit, ... }:
       let
@@ -26,9 +25,8 @@ let
 
     gitlab =
       { fetchFromGitLab }:
-      {
-        repo ? null,
-        ...
+      { repo ? null
+      , ...
       }:
       { sha256, commit, ... }:
       let
@@ -44,9 +42,8 @@ let
 
     git = (
       { fetchgit }:
-      {
-        url ? null,
-        ...
+      { url ? null
+      , ...
       }:
       { sha256, commit, ... }:
       (fetchgit {
@@ -60,9 +57,8 @@ let
 
     bitbucket =
       { fetchhg }:
-      {
-        repo ? null,
-        ...
+      { repo ? null
+      , ...
       }:
       { sha256, commit, ... }:
       fetchhg {
@@ -73,9 +69,8 @@ let
 
     hg =
       { fetchhg }:
-      {
-        url ? null,
-        ...
+      { url ? null
+      , ...
       }:
       { sha256, commit, ... }:
       fetchhg {
@@ -85,9 +80,8 @@ let
 
     sourcehut =
       { fetchzip }:
-      {
-        repo ? null,
-        ...
+      { repo ? null
+      , ...
       }:
       { sha256, commit, ... }:
       fetchzip {
@@ -97,9 +91,8 @@ let
 
     codeberg =
       { fetchzip }:
-      {
-        repo ? null,
-        ...
+      { repo ? null
+      , ...
       }:
       { sha256, commit, ... }:
       fetchzip {
@@ -113,12 +106,11 @@ in
 
   melpaDerivation =
     variant:
-    {
-      ename,
-      fetcher,
-      commit ? null,
-      sha256 ? null,
-      ...
+    { ename
+    , fetcher
+    , commit ? null
+    , sha256 ? null
+    , ...
     }@args:
     let
       sourceArgs = args.${variant};
@@ -130,40 +122,43 @@ in
       broken = error != null;
     in
     if hasSource then
-      lib.nameValuePair ename (
-        self.callPackage (
-          { melpaBuild, fetchurl, ... }@pkgargs:
-          melpaBuild {
-            inherit pname ename;
-            inherit (sourceArgs) commit;
-            version = lib.optionalString (version != null) (
-              lib.concatStringsSep "." (
-                map toString
-                  # Hack: Melpa archives contains versions with parse errors such as [ 4 4 -4 413 ] which should be 4.4-413
-                  # This filter method is still technically wrong, but it's computationally cheap enough and tapers over the issue
-                  (builtins.filter (n: n >= 0) version)
-              )
-            );
-            # TODO: Broken should not result in src being null (hack to avoid eval errors)
-            src = if (sha256 == null || broken) then null else fetchers.${fetcher} args sourceArgs;
-            recipe =
-              if commit == null then
-                null
-              else
-                fetchurl {
-                  name = pname + "-recipe";
-                  url = "https://raw.githubusercontent.com/melpa/melpa/${commit}/recipes/${ename}";
-                  inherit sha256;
+      lib.nameValuePair ename
+        (
+          self.callPackage
+            (
+              { melpaBuild, fetchurl, ... }@pkgargs:
+              melpaBuild {
+                inherit pname ename;
+                inherit (sourceArgs) commit;
+                version = lib.optionalString (version != null) (
+                  lib.concatStringsSep "." (
+                    map toString
+                      # Hack: Melpa archives contains versions with parse errors such as [ 4 4 -4 413 ] which should be 4.4-413
+                      # This filter method is still technically wrong, but it's computationally cheap enough and tapers over the issue
+                      (builtins.filter (n: n >= 0) version)
+                  )
+                );
+                # TODO: Broken should not result in src being null (hack to avoid eval errors)
+                src = if (sha256 == null || broken) then null else fetchers.${fetcher} args sourceArgs;
+                recipe =
+                  if commit == null then
+                    null
+                  else
+                    fetchurl {
+                      name = pname + "-recipe";
+                      url = "https://raw.githubusercontent.com/melpa/melpa/${commit}/recipes/${ename}";
+                      inherit sha256;
+                    };
+                packageRequires = lib.optionals (deps != null) (
+                  map (dep: pkgargs.${dep} or self.${dep} or null) deps
+                );
+                meta = (sourceArgs.meta or { }) // {
+                  inherit broken;
                 };
-            packageRequires = lib.optionals (deps != null) (
-              map (dep: pkgargs.${dep} or self.${dep} or null) deps
-            );
-            meta = (sourceArgs.meta or { }) // {
-              inherit broken;
-            };
-          }
-        ) { }
-      )
+              }
+            )
+            { }
+        )
     else
       null;
 

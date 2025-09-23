@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  openssl,
-  pkg-config,
-  stdenv,
-  buildPackages,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, pkg-config
+, stdenv
+, buildPackages
+, installShellFiles
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "utpm";

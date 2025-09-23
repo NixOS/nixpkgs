@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gobject-introspection,
-  apt,
-  iproute2,
-  setuptools,
-  networkmanager,
-  proton-core,
-  proton-vpn-api-core,
-  proton-vpn-local-agent,
-  pycairo,
-  pygobject3,
-  pyxdg,
-  pytest-asyncio,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gobject-introspection
+, apt
+, iproute2
+, setuptools
+, networkmanager
+, proton-core
+, proton-vpn-api-core
+, proton-vpn-local-agent
+, pycairo
+, pygobject3
+, pyxdg
+, pytest-asyncio
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

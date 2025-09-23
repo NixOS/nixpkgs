@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  mono,
-  makeWrapper,
-  icoutils,
-  replaceVars,
-  xsel,
-  xorg,
-  xdotool,
-  coreutils,
-  unixtools,
-  glib,
-  gtk2,
-  makeDesktopItem,
-  plugins ? [ ],
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, mono
+, makeWrapper
+, icoutils
+, replaceVars
+, xsel
+, xorg
+, xdotool
+, coreutils
+, unixtools
+, glib
+, gtk2
+, makeDesktopItem
+, plugins ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,9 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
       patchTemplate = readFile ./keepass-plugins.patch;
       loadTemplate = readFile ./keepass-plugins-load.patch;
       loads = concatStrings (
-        map (
-          p: replaceStrings [ "$PATH$" ] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate
-        ) plugins
+        map
+          (
+            p: replaceStrings [ "$PATH$" ] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate
+          )
+          plugins
       );
     in
     replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate;

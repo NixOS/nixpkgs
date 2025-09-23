@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  autoconf,
-  autoconf-archive,
-  autoreconfHook,
-  automake,
-  libogg,
-  libtool,
-  libvorbis,
-  libX11,
-  pkg-config,
-  zlib,
-  enableTools ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, autoconf
+, autoconf-archive
+, autoreconfHook
+, automake
+, libogg
+, libtool
+, libvorbis
+, libX11
+, pkg-config
+, zlib
+, enableTools ? false
+,
 }:
 
 stdenv.mkDerivation rec {

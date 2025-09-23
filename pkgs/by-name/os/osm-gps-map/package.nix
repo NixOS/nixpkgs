@@ -1,17 +1,17 @@
-{
-  cairo,
-  fetchpatch2,
-  fetchzip,
-  glib,
-  libsoup_3,
-  gnome-common,
-  gtk3,
-  gobject-introspection,
-  autoreconfHook,
-  gtk-doc,
-  pkg-config,
-  lib,
-  stdenv,
+{ cairo
+, fetchpatch2
+, fetchzip
+, glib
+, libsoup_3
+, gnome-common
+, gtk3
+, gobject-introspection
+, autoreconfHook
+, gtk-doc
+, pkg-config
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

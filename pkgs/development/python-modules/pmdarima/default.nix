@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  joblib,
-  matplotlib,
-  numpy,
-  pandas,
-  scikit-learn,
-  scipy,
-  statsmodels,
-  urllib3,
-  pythonOlder,
-  python,
-  pytest7CheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, joblib
+, matplotlib
+, numpy
+, pandas
+, scikit-learn
+, scipy
+, statsmodels
+, urllib3
+, pythonOlder
+, python
+, pytest7CheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

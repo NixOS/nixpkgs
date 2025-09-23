@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pythonOlder,
-  python,
-  py-multiaddr,
-  requests,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-dependency,
-  pytest-localserver,
-  pytest-mock,
-  pytest-order,
-  pytest-cid,
-  mock,
-  kubo,
-  httpx,
-  httpcore,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pythonOlder
+, python
+, py-multiaddr
+, requests
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-dependency
+, pytest-localserver
+, pytest-mock
+, pytest-order
+, pytest-cid
+, mock
+, kubo
+, httpx
+, httpcore
+,
 }:
 
 buildPythonPackage rec {

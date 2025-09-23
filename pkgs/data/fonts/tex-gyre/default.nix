@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
+{ lib
+, stdenv
+, fetchzip
+,
 }:
 
 let
   mkVariant =
     variant:
-    {
-      version,
-      abbreviation,
-      sha256,
-      outputHash,
+    { version
+    , abbreviation
+    , sha256
+    , outputHash
+    ,
     }:
     stdenv.mkDerivation {
       name = "tex-gyre-${variant}-${version}";

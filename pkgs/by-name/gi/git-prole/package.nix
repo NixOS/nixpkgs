@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  rustPlatform,
-  git,
-  nix-update-script,
-  installShellFiles,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, rustPlatform
+, git
+, nix-update-script
+, installShellFiles
+,
 }:
 let
   emulatorAvailable = stdenv.hostPlatform.emulatorAvailable buildPackages;

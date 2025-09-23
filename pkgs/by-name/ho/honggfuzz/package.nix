@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  clang,
-  llvm,
-  libbfd,
-  libopcodes,
-  libunwind,
-  libblocksruntime,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, clang
+, llvm
+, libbfd
+, libopcodes
+, libunwind
+, libblocksruntime
+,
 }:
 
 stdenv.mkDerivation rec {

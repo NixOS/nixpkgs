@@ -1,27 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  h5py,
-  numpy,
-  wasserstein,
-
-  # optional-dependencies
-  igraph,
-  scikit-learn,
-  tensorflow,
-
-  # tests
-  pot,
-  pytestCheckHook,
-  tf-keras,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  h5py
+, numpy
+, wasserstein
+, # optional-dependencies
+  igraph
+, scikit-learn
+, tensorflow
+, # tests
+  pot
+, pytestCheckHook
+, tf-keras
+,
 }:
 
 buildPythonPackage rec {

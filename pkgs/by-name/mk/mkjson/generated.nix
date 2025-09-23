@@ -1,26 +1,26 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  aeson,
-  base,
-  bytestring,
-  containers,
-  criterion,
-  doctest,
-  Glob,
-  mersenne-random-pure64,
-  mtl,
-  optparse-applicative,
-  parsec,
-  random,
-  regex-tdfa,
-  scientific,
-  text,
-  time,
-  unordered-containers,
-  uuid,
-  vector,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, aeson
+, base
+, bytestring
+, containers
+, criterion
+, doctest
+, Glob
+, mersenne-random-pure64
+, mtl
+, optparse-applicative
+, parsec
+, random
+, regex-tdfa
+, scientific
+, text
+, time
+, unordered-containers
+, uuid
+, vector
+,
 }:
 
 mkDerivation rec {

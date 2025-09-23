@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub ? null,
-  release_version ? null,
-  gitRelease ? null,
-  officialRelease ? null,
-  monorepoSrc' ? null,
-  version ? null,
+{ lib
+, fetchFromGitHub ? null
+, release_version ? null
+, gitRelease ? null
+, officialRelease ? null
+, monorepoSrc' ? null
+, version ? null
+,
 }@args:
 
 rec {
@@ -14,12 +14,12 @@ rec {
       with lib.licenses;
       [ ncsa ]
       ++
-        # Contributions after June 1st, 2024 are only licensed under asl20 and
-        # llvm-exception: https://github.com/llvm/llvm-project/pull/92394
-        lib.optionals (lib.versionAtLeast release_version "19") [
-          asl20
-          llvm-exception
-        ];
+      # Contributions after June 1st, 2024 are only licensed under asl20 and
+      # llvm-exception: https://github.com/llvm/llvm-project/pull/92394
+      lib.optionals (lib.versionAtLeast release_version "19") [
+        asl20
+        llvm-exception
+      ];
     teams = [ lib.teams.llvm ];
 
     # See llvm/cmake/config-ix.cmake.

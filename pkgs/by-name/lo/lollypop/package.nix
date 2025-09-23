@@ -1,29 +1,29 @@
-{
-  lib,
-  fetchFromGitLab,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  gtk3,
-  gst_all_1,
-  libhandy,
-  libsecret,
-  libsoup_3,
-  appstream-glib,
-  desktop-file-utils,
-  totem-pl-parser,
-  gobject-introspection,
-  glib-networking,
-  gdk-pixbuf,
-  glib,
-  pango,
-  kid3,
-  wrapGAppsHook3,
-  lastFMSupport ? true,
-  youtubeSupport ? true,
-  kid3Support ? true,
+{ lib
+, fetchFromGitLab
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, python3
+, gtk3
+, gst_all_1
+, libhandy
+, libsecret
+, libsoup_3
+, appstream-glib
+, desktop-file-utils
+, totem-pl-parser
+, gobject-introspection
+, glib-networking
+, gdk-pixbuf
+, glib
+, pango
+, kid3
+, wrapGAppsHook3
+, lastFMSupport ? true
+, youtubeSupport ? true
+, kid3Support ? true
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

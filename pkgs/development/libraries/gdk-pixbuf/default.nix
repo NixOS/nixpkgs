@@ -1,29 +1,28 @@
-{
-  stdenv,
-  fetchurl,
-  nixosTests,
-  fixDarwinDylibNames,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  python3,
-  docutils,
-  gi-docgen,
-  glib,
-  libtiff,
-  libjpeg,
-  libpng,
-  gnome,
-  doCheck ? false,
-  makeWrapper,
-  lib,
-  testers,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gobject-introspection,
+{ stdenv
+, fetchurl
+, nixosTests
+, fixDarwinDylibNames
+, meson
+, ninja
+, pkg-config
+, gettext
+, python3
+, docutils
+, gi-docgen
+, glib
+, libtiff
+, libjpeg
+, libpng
+, gnome
+, doCheck ? false
+, makeWrapper
+, lib
+, testers
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openjdk,
-  openjfx,
-  gradle_7,
-  makeDesktopItem,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openjdk
+, openjfx
+, gradle_7
+, makeDesktopItem
+, makeWrapper
+,
 }:
 let
   jdk = openjdk.override (

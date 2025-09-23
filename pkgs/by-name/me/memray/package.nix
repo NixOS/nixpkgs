@@ -1,11 +1,11 @@
-{
-  lib,
-  elfutils,
-  fetchFromGitHub,
-  libunwind,
-  lz4,
-  pkg-config,
-  python3Packages,
+{ lib
+, elfutils
+, fetchFromGitHub
+, libunwind
+, lz4
+, pkg-config
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

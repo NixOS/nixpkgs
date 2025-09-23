@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  libcMinimal,
+{ lib
+, mkDerivation
+, libcMinimal
+,
 }:
 
 mkDerivation {

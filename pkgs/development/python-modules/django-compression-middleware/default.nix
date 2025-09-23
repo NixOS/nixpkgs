@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  django,
-  zstandard,
-  brotli,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, django
+, zstandard
+, brotli
+,
 }:
 
 buildPythonPackage rec {

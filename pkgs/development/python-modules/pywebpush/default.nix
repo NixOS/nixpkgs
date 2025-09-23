@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  http-ece,
-  mock,
-  py-vapid,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  six,
+{ lib
+, aiohttp
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, http-ece
+, mock
+, py-vapid
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

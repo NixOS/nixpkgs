@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  graphviz,
-  python3,
+{ lib
+, fetchFromGitHub
+, graphviz
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

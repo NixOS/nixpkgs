@@ -1,17 +1,17 @@
-{
-  channel,
-  version,
-  hash,
+{ channel
+, version
+, hash
+,
 }:
 
-{
-  fetchFromGitHub,
-  gns3-gui,
-  lib,
-  python3Packages,
-  qt5,
-  testers,
-  wrapQtAppsHook,
+{ fetchFromGitHub
+, gns3-gui
+, lib
+, python3Packages
+, qt5
+, testers
+, wrapQtAppsHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

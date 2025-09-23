@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  pybind11,
-
-  # buildInputs
-  abseil-cpp,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  attrs,
-  numpy,
-  wrapt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, pybind11
+, # buildInputs
+  abseil-cpp
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, attrs
+, numpy
+, wrapt
+,
 }:
 buildPythonPackage rec {
   pname = "dm-tree";

@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  pkg-config,
-  buildPythonPackage,
-  isPy3k,
-  at-spi2-core,
-  pygobject3,
-  gnome,
-  python,
+{ lib
+, fetchurl
+, pkg-config
+, buildPythonPackage
+, isPy3k
+, at-spi2-core
+, pygobject3
+, gnome
+, python
+,
 }:
 
 buildPythonPackage rec {

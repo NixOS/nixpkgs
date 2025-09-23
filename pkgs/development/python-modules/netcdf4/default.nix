@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  cftime,
-  curl,
-  cython,
-  fetchFromGitHub,
-  hdf5,
-  isPyPy,
-  libjpeg,
-  netcdf,
-  numpy,
-  oldest-supported-numpy,
-  python,
-  pythonOlder,
-  setuptools-scm,
-  stdenv,
-  wheel,
-  zlib,
+{ lib
+, buildPythonPackage
+, certifi
+, cftime
+, curl
+, cython
+, fetchFromGitHub
+, hdf5
+, isPyPy
+, libjpeg
+, netcdf
+, numpy
+, oldest-supported-numpy
+, python
+, pythonOlder
+, setuptools-scm
+, stdenv
+, wheel
+, zlib
+,
 }:
 
 let

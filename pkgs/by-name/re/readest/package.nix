@@ -1,21 +1,21 @@
-{
-  rustPlatform,
-  pnpm_9,
-  cargo-tauri,
-  nodejs,
-  pkg-config,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  fetchFromGitHub,
-  gtk3,
-  librsvg,
-  openssl,
-  autoPatchelfHook,
-  lib,
-  nix-update-script,
-  moreutils,
-  jq,
-  gst_all_1,
+{ rustPlatform
+, pnpm_9
+, cargo-tauri
+, nodejs
+, pkg-config
+, webkitgtk_4_1
+, wrapGAppsHook3
+, fetchFromGitHub
+, gtk3
+, librsvg
+, openssl
+, autoPatchelfHook
+, lib
+, nix-update-script
+, moreutils
+, jq
+, gst_all_1
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

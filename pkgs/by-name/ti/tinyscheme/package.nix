@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dos2unix,
-  runCommand,
-  tinyscheme,
+{ lib
+, stdenv
+, fetchurl
+, dos2unix
+, runCommand
+, tinyscheme
+,
 }:
 
 stdenv.mkDerivation rec {

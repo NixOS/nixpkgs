@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  cmake,
-  libsodium,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, cmake
+, libsodium
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxeddsa";

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  replaceVars,
-  setuptools,
-  rich,
-  rclone,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, replaceVars
+, setuptools
+, rich
+, rclone
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  mkDerivation,
-  lib,
-  fetchurl,
-  cmake,
-  pkg-config,
-  qtbase,
-  qt5,
-  libGLU,
-  libGL,
-  libglut ? null,
-  openal ? null,
-  SDL2 ? null,
+{ mkDerivation
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, qtbase
+, qt5
+, libGLU
+, libGL
+, libglut ? null
+, openal ? null
+, SDL2 ? null
+,
 }:
 
 mkDerivation rec {

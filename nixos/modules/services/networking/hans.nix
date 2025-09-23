@@ -1,9 +1,8 @@
 # NixOS module for hans, ip over icmp daemon
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.hans;
@@ -125,11 +124,14 @@ in
           };
         };
       in
-      lib.listToAttrs (
-        lib.mapAttrsToList (
-          name: value: lib.nameValuePair "hans-${name}" (createHansClientService name value)
-        ) cfg.clients
-      )
+      lib.listToAttrs
+        (
+          lib.mapAttrsToList
+            (
+              name: value: lib.nameValuePair "hans-${name}" (createHansClientService name value)
+            )
+            cfg.clients
+        )
       // {
         hans = lib.mkIf (cfg.server.enable) {
           description = "hans, ip over icmp server daemon";

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  joblib,
-  matplotlib,
-  numpy,
-  pytestCheckHook,
-  scipy,
-  setuptools,
-  torch,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, joblib
+, matplotlib
+, numpy
+, pytestCheckHook
+, scipy
+, setuptools
+, torch
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

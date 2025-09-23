@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  halibut,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, halibut
+,
 }:
 
 stdenv.mkDerivation rec {

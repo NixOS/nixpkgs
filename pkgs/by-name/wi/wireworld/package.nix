@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  zip,
-  love,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  strip-nondeterminism,
+{ lib
+, stdenv
+, fetchFromGitLab
+, zip
+, love
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, strip-nondeterminism
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -38,34 +37,39 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  sieveScriptSettings = mapAttrs' (
-    to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
-  ) cfg.sieve.scripts;
+  sieveScriptSettings = mapAttrs'
+    (
+      to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
+    )
+    cfg.sieve.scripts;
   imapSieveMailboxSettings = listToAttrs (
     flatten (
-      imap1 (
-        idx: el:
-        singleton {
-          name = "imapsieve_mailbox${toString idx}_name";
-          value = el.name;
-        }
-        ++ optional (el.from != null) {
-          name = "imapsieve_mailbox${toString idx}_from";
-          value = el.from;
-        }
-        ++ optional (el.causes != [ ]) {
-          name = "imapsieve_mailbox${toString idx}_causes";
-          value = concatStringsSep "," el.causes;
-        }
-        ++ optional (el.before != null) {
-          name = "imapsieve_mailbox${toString idx}_before";
-          value = "file:${stateDir}/imapsieve/before/${baseNameOf el.before}";
-        }
-        ++ optional (el.after != null) {
-          name = "imapsieve_mailbox${toString idx}_after";
-          value = "file:${stateDir}/imapsieve/after/${baseNameOf el.after}";
-        }
-      ) cfg.imapsieve.mailbox
+      imap1
+        (
+          idx: el:
+            singleton
+              {
+                name = "imapsieve_mailbox${toString idx}_name";
+                value = el.name;
+              }
+            ++ optional (el.from != null) {
+              name = "imapsieve_mailbox${toString idx}_from";
+              value = el.from;
+            }
+            ++ optional (el.causes != [ ]) {
+              name = "imapsieve_mailbox${toString idx}_causes";
+              value = concatStringsSep "," el.causes;
+            }
+            ++ optional (el.before != null) {
+              name = "imapsieve_mailbox${toString idx}_before";
+              value = "file:${stateDir}/imapsieve/before/${baseNameOf el.before}";
+            }
+            ++ optional (el.after != null) {
+              name = "imapsieve_mailbox${toString idx}_after";
+              value = "file:${stateDir}/imapsieve/after/${baseNameOf el.after}";
+            }
+        )
+        cfg.imapsieve.mailbox
     )
   );
 
@@ -99,10 +103,12 @@ let
   );
 
   sievePipeBinScriptDirectory = pkgs.linkFarm "sieve-pipe-bins" (
-    map (el: {
-      name = builtins.unsafeDiscardStringContext (baseNameOf el);
-      path = el;
-    }) cfg.sieve.pipeBins
+    map
+      (el: {
+        name = builtins.unsafeDiscardStringContext (baseNameOf el);
+        path = el;
+      })
+      cfg.sieve.pipeBins
   );
 
   dovecotConf = concatStrings [
@@ -116,11 +122,13 @@ let
     ''
 
     (concatStringsSep "\n" (
-      mapAttrsToList (protocol: plugins: ''
-        protocol ${protocol} {
-          mail_plugins = $mail_plugins ${concatStringsSep " " plugins.enable}
-        }
-      '') cfg.mailPlugins.perProtocol
+      mapAttrsToList
+        (protocol: plugins: ''
+          protocol ${protocol} {
+            mail_plugins = $mail_plugins ${concatStringsSep " " plugins.enable}
+          }
+        '')
+        cfg.mailPlugins.perProtocol
     ))
 
     (
@@ -452,15 +460,19 @@ in
     mailboxes = mkOption {
       type =
         with types;
-        coercedTo (listOf unspecified) (
-          list:
-          listToAttrs (
-            map (entry: {
-              name = entry.name;
-              value = removeAttrs entry [ "name" ];
-            }) list
+        coercedTo (listOf unspecified)
+          (
+            list:
+            listToAttrs (
+              map
+                (entry: {
+                  name = entry.name;
+                  value = removeAttrs entry [ "name" ];
+                })
+                list
+            )
           )
-        ) (attrsOf (submodule mailboxes));
+          (attrsOf (submodule mailboxes));
       default = { };
       example = literalExpression ''
         {

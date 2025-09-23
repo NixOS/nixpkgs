@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  packaging,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, packaging
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  makeWrapper,
-  cmake,
-  libjpeg,
-  zlib,
-  libpng,
-  libGL,
-  libX11,
-  SDL2,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, cmake
+, libjpeg
+, zlib
+, libpng
+, libGL
+, libX11
+, SDL2
+, unstableGitUpdater
+,
 }:
 
 let

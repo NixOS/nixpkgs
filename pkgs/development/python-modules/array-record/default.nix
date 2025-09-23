@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
-  python,
-  fetchPypi,
-  absl-py,
-  etils,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, python
+, fetchPypi
+, absl-py
+, etils
+,
 }:
 
 buildPythonPackage rec {
@@ -33,8 +33,7 @@ buildPythonPackage rec {
           cp311 = "sha256-cUN9Ws8A1xIN/n+/oGfv3mGUfmlsojLS69iWRpA2meM=";
           cp312 = "sha256-S+cV0NhXXlOzSTr2ED1oUuk6U1gQA0ZXoGPaWxGp/ZQ=";
           cp313 = "sha256-C7UvwXV0/NXA5dhr7NbUCW/KeUWg5w5F18aN2oAUXAQ=";
-        }
-        .${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
+        }.${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
     };
 
   dependencies = [

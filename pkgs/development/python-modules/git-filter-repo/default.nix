@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchPypi,
-  installShellFiles,
-  pythonOlder,
-  setuptools-scm,
-  writeScript,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchPypi
+, installShellFiles
+, pythonOlder
+, setuptools-scm
+, writeScript
+,
 }:
 
 buildPythonPackage rec {

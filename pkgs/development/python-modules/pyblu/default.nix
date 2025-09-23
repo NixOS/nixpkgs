@@ -1,13 +1,13 @@
-{
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  lxml,
-  pytest-asyncio,
-  pytestCheckHook,
+{ aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, lib
+, lxml
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

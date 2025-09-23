@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  jdk,
-  makeWrapper,
-  installShellFiles,
-  coreutils,
-  testers,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, jdk
+, makeWrapper
+, installShellFiles
+, coreutils
+, testers
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  requests,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

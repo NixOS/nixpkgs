@@ -1,30 +1,30 @@
-{
-  jq,
-  lib,
-  python3,
-  runCommand,
-  writeText,
+{ jq
+, lib
+, python3
+, runCommand
+, writeText
+,
 }:
 
-{
-  closureRoots,
-  excludePaths ? [ ],
-  maxLayers ? 100,
-  fromImage ? null,
-  debug ? false,
+{ closureRoots
+, excludePaths ? [ ]
+, maxLayers ? 100
+, fromImage ? null
+, debug ? false
+,
 }:
 
 runCommand "layers.json"
-  {
-    __structuredAttrs = true;
-    exportReferencesGraph.graph = closureRoots;
-    inherit fromImage maxLayers;
-    nativeBuildInputs = [
-      jq
-      python3
-    ];
-    excludePathsFile = writeText "excludePaths" (lib.concatMapStrings (x: x + "\n") excludePaths);
-  }
+{
+  __structuredAttrs = true;
+  exportReferencesGraph.graph = closureRoots;
+  inherit fromImage maxLayers;
+  nativeBuildInputs = [
+    jq
+    python3
+  ];
+  excludePathsFile = writeText "excludePaths" (lib.concatMapStrings (x: x + "\n") excludePaths);
+}
   ''
     # Compute the number of layers that are already used by a potential
     # 'fromImage' as well as the customization layer. Ensure that there is

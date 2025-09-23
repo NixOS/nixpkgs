@@ -1,7 +1,7 @@
-{
-  lib,
-  python3Packages,
-  nixosTests,
+{ lib
+, python3Packages
+, nixosTests
+,
 }:
 
 python3Packages.buildPythonApplication rec {

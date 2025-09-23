@@ -1,30 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  gdal,
-  setuptools,
-
-  # dependencies
-  attrs,
-  certifi,
-  click,
-  click-plugins,
-  cligj,
-
-  # optional-dependencies
-  pyparsing,
-  shapely,
-  boto3,
-
-  # tests
-  fsspec,
-  pytestCheckHook,
-  pytz,
-  snuggs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, gdal
+, setuptools
+, # dependencies
+  attrs
+, certifi
+, click
+, click-plugins
+, cligj
+, # optional-dependencies
+  pyparsing
+, shapely
+, boto3
+, # tests
+  fsspec
+, pytestCheckHook
+, pytz
+, snuggs
+,
 }:
 
 buildPythonPackage rec {

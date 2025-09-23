@@ -1,34 +1,34 @@
-{
-  lib,
-  bash,
-  buildPythonPackage,
-  cliff,
-  debtcollector,
-  defusedxml,
-  fetchPypi,
-  fixtures,
-  hacking,
-  jsonschema,
-  netaddr,
-  oslo-concurrency,
-  oslo-config,
-  oslo-log,
-  oslo-serialization,
-  oslo-utils,
-  oslotest,
-  paramiko,
-  pbr,
-  prettytable,
-  python,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  stestr,
-  stevedore,
-  subunit,
-  testscenarios,
-  testtools,
-  urllib3,
+{ lib
+, bash
+, buildPythonPackage
+, cliff
+, debtcollector
+, defusedxml
+, fetchPypi
+, fixtures
+, hacking
+, jsonschema
+, netaddr
+, oslo-concurrency
+, oslo-config
+, oslo-log
+, oslo-serialization
+, oslo-utils
+, oslotest
+, paramiko
+, pbr
+, prettytable
+, python
+, pythonOlder
+, pyyaml
+, setuptools
+, stestr
+, stevedore
+, subunit
+, testscenarios
+, testtools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

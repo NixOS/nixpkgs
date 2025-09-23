@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  unzip,
-  mpg123,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, unzip
+, mpg123
+,
 }:
 
 stdenv.mkDerivation rec {

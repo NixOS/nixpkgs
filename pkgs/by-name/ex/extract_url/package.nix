@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  perlPackages,
-  cursesSupport ? true,
-  uriFindSupport ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, perlPackages
+, cursesSupport ? true
+, uriFindSupport ? true
+,
 }:
 
 let

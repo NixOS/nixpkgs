@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  python3,
-  xmlto,
-  docbook-xsl-nons,
-  fetchFromGitLab,
-  installShellFiles,
+{ lib
+, stdenv
+, python3
+, xmlto
+, docbook-xsl-nons
+, fetchFromGitLab
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

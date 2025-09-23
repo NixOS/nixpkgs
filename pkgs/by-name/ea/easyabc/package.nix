@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  replaceVars,
-  python3,
-  fluidsynth,
-  soundfont-fluid,
-  wrapGAppsHook3,
-  abcmidi,
-  abcm2ps,
-  ghostscript,
+{ lib
+, fetchFromGitHub
+, replaceVars
+, python3
+, fluidsynth
+, soundfont-fluid
+, wrapGAppsHook3
+, abcmidi
+, abcm2ps
+, ghostscript
+,
 }:
 
 python3.pkgs.buildPythonApplication {

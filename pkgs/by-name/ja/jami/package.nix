@@ -1,63 +1,60 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  fetchFromGitLab,
-  gitUpdater,
-  ffmpeg_6,
-
-  # for daemon
-  autoreconfHook,
-  perl, # for pod2man
-  alsa-lib,
-  asio,
-  dbus,
-  sdbus-cpp,
-  fmt,
-  gmp,
-  gnutls,
-  llhttp,
-  jsoncpp,
-  libarchive,
-  libgit2,
-  libjack2,
-  libnatpmp,
-  libpulseaudio,
-  libupnp,
-  msgpack-cxx,
-  openssl,
-  restinio,
-  secp256k1,
-  speex,
-  udev,
-  webrtc-audio-processing_0_3,
-  yaml-cpp,
-  zlib,
-
-  # for dhtnet
-  expected-lite,
-
-  # for client
-  cmake,
-  git,
-  networkmanager, # for libnm
-  python3,
-  libnotify,
-  md4c,
-  html-tidy,
-  hunspell,
-  qrencode,
-  qt6Packages,
-  wrapGAppsHook3,
-  zxing-cpp,
-  withWebengine ? true,
-
-  # for pjsip
-  fetchFromGitHub,
-  pjsip,
-
-  # for opendht
-  opendht,
+{ stdenv
+, lib
+, pkg-config
+, fetchFromGitLab
+, gitUpdater
+, ffmpeg_6
+, # for daemon
+  autoreconfHook
+, perl
+, # for pod2man
+  alsa-lib
+, asio
+, dbus
+, sdbus-cpp
+, fmt
+, gmp
+, gnutls
+, llhttp
+, jsoncpp
+, libarchive
+, libgit2
+, libjack2
+, libnatpmp
+, libpulseaudio
+, libupnp
+, msgpack-cxx
+, openssl
+, restinio
+, secp256k1
+, speex
+, udev
+, webrtc-audio-processing_0_3
+, yaml-cpp
+, zlib
+, # for dhtnet
+  expected-lite
+, # for client
+  cmake
+, git
+, networkmanager
+, # for libnm
+  python3
+, libnotify
+, md4c
+, html-tidy
+, hunspell
+, qrencode
+, qt6Packages
+, wrapGAppsHook3
+, zxing-cpp
+, withWebengine ? true
+, # for pjsip
+  fetchFromGitHub
+, pjsip
+, # for opendht
+  opendht
+,
 }:
 
 stdenv.mkDerivation rec {

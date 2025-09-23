@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  setuptools-scm,
-  pythonOlder,
-  callPackage,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, setuptools-scm
+, pythonOlder
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

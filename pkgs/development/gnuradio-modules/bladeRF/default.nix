@@ -1,18 +1,18 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  boost,
-  doxygen,
-  gmp,
-  gnuradio,
-  libbladeRF,
-  mpir,
-  osmosdr,
-  python,
-  spdlog,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, doxygen
+, gmp
+, gnuradio
+, libbladeRF
+, mpir
+, osmosdr
+, python
+, spdlog
+,
 }:
 
 mkDerivation {

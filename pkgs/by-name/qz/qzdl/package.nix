@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  copyDesktopItems,
-  inih,
-  libsForQt5,
-  makeDesktopItem,
-  ninja,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, copyDesktopItems
+, inih
+, libsForQt5
+, makeDesktopItem
+, ninja
+, pkg-config
+,
 }:
 stdenv.mkDerivation {
   pname = "qzdl";

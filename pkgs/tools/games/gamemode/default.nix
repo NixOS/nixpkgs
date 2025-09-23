@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libgamemode32,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  dbus,
-  inih,
-  systemd,
-  appstream,
-  findutils,
-  gawk,
-  procps,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libgamemode32
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, dbus
+, inih
+, systemd
+, appstream
+, findutils
+, gawk
+, procps
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

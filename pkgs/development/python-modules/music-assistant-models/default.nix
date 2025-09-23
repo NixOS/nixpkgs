@@ -1,21 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  mashumaro,
-  orjson,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-
-  # reverse dependencies
-  music-assistant-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  mashumaro
+, orjson
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, # reverse dependencies
+  music-assistant-client
+,
 }:
 
 buildPythonPackage rec {

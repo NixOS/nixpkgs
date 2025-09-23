@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  libsForQt5,
-  gst_all_1,
-  wayland,
-  pkg-config,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, libsForQt5
+, gst_all_1
+, wayland
+, pkg-config
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

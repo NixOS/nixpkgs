@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  catch2,
-  cmake,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, catch2
+, cmake
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

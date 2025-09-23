@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  rustPlatform,
-  clang,
-  pkg-config,
-  elfutils,
-  rustfmt,
-  zlib,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, clang
+, pkg-config
+, elfutils
+, rustfmt
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

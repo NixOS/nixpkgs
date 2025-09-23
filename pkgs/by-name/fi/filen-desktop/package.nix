@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, makeDesktopItem
+,
 }:
 let
   pname = "filen-desktop";

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  intel-gmmlib,
-  intel-graphics-compiler,
-  level-zero,
-  libva,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, intel-gmmlib
+, intel-graphics-compiler
+, level-zero
+, libva
+,
 }:
 
 stdenv.mkDerivation rec {

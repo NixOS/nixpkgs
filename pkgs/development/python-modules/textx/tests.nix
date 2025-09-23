@@ -1,20 +1,20 @@
-{
-  buildPythonPackage,
-  attrs,
-  click,
-  gprof2dot,
-  html5lib,
-  jinja2,
-  memory-profiler,
-  psutil,
-  pytestCheckHook,
-  setuptools,
-  textx,
-  textx-data-dsl,
-  textx-example-project,
-  textx-flow-codegen,
-  textx-flow-dsl,
-  textx-types-dsl,
+{ buildPythonPackage
+, attrs
+, click
+, gprof2dot
+, html5lib
+, jinja2
+, memory-profiler
+, psutil
+, pytestCheckHook
+, setuptools
+, textx
+, textx-data-dsl
+, textx-example-project
+, textx-flow-codegen
+, textx-flow-dsl
+, textx-types-dsl
+,
 }:
 
 buildPythonPackage {

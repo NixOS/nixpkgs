@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pymodbus,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pymodbus
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

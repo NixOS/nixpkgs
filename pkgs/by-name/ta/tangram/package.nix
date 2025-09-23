@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  appstream-glib,
-  desktop-file-utils,
-  gdk-pixbuf,
-  gettext,
-  gjs,
-  glib,
-  glib-networking,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  gtk4,
-  libadwaita,
-  gst_all_1,
-  hicolor-icon-theme,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  python3,
-  webkitgtk_6_0,
-  blueprint-compiler,
-  wrapGAppsHook4,
+{ stdenv
+, lib
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, gdk-pixbuf
+, gettext
+, gjs
+, glib
+, glib-networking
+, gobject-introspection
+, gsettings-desktop-schemas
+, gtk4
+, libadwaita
+, gst_all_1
+, hicolor-icon-theme
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, python3
+, webkitgtk_6_0
+, blueprint-compiler
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

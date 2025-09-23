@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  callPackage,
-  ensureNewerSourcesForZipFilesHook,
-  python3,
-  makeWrapper,
-  # optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
-  extraTools ? [ ],
+{ lib
+, stdenv
+, fetchFromGitLab
+, callPackage
+, ensureNewerSourcesForZipFilesHook
+, python3
+, makeWrapper
+, # optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
+  extraTools ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,9 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase =
     let
-      extraToolsList = lib.optionalString (
-        extraTools != [ ]
-      ) "--tools=\"${lib.concatStringsSep "," extraTools}\"";
+      extraToolsList = lib.optionalString
+        (
+          extraTools != [ ]
+        ) "--tools=\"${lib.concatStringsSep "," extraTools}\"";
     in
     ''
       runHook preBuild

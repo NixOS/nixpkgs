@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  six,
-  unidecode,
-  pytest8_3CheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, six
+, unidecode
+, pytest8_3CheckHook
+,
 }:
 
 buildPythonPackage rec {

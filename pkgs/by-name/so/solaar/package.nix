@@ -1,14 +1,14 @@
-{
-  fetchFromGitHub,
-  lib,
-  gobject-introspection,
-  gtk3,
-  python3Packages,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  libappindicator,
-  librsvg,
-  udevCheckHook,
+{ fetchFromGitHub
+, lib
+, gobject-introspection
+, gtk3
+, python3Packages
+, wrapGAppsHook3
+, gdk-pixbuf
+, libappindicator
+, librsvg
+, udevCheckHook
+,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use

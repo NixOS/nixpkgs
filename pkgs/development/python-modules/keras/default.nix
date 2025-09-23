@@ -1,37 +1,34 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  distutils,
-  h5py,
-  ml-dtypes,
-  namex,
-  numpy,
-  tf2onnx,
-  onnxruntime,
-  optree,
-  packaging,
-  pythonAtLeast,
-  rich,
-  scikit-learn,
-  tensorflow,
-
-  # tests
-  dm-tree,
-  jax,
-  pandas,
-  pydot,
-  pytestCheckHook,
-  tf-keras,
-  torch,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, distutils
+, h5py
+, ml-dtypes
+, namex
+, numpy
+, tf2onnx
+, onnxruntime
+, optree
+, packaging
+, pythonAtLeast
+, rich
+, scikit-learn
+, tensorflow
+, # tests
+  dm-tree
+, jax
+, pandas
+, pydot
+, pytestCheckHook
+, tf-keras
+, torch
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

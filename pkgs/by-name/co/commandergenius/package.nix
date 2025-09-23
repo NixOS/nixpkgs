@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  SDL2,
-  SDL2_image,
-  pkg-config,
-  libvorbis,
-  libGL,
-  boost,
-  cmake,
-  zlib,
-  curl,
-  SDL2_mixer,
-  SDL2_ttf,
-  python3,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, SDL2
+, SDL2_image
+, pkg-config
+, libvorbis
+, libGL
+, boost
+, cmake
+, zlib
+, curl
+, SDL2_mixer
+, SDL2_ttf
+, python3
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

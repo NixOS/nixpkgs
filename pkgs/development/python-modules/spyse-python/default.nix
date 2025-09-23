@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  dataclasses-json,
-  fetchFromGitHub,
-  fetchpatch,
-  limiter,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
+{ lib
+, buildPythonPackage
+, dataclasses-json
+, fetchFromGitHub
+, fetchpatch
+, limiter
+, pythonOlder
+, requests
+, responses
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

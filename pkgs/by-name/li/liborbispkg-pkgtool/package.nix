@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+,
 }:
 buildDotnetModule {
   pname = "liborbispkg-pkgtool";

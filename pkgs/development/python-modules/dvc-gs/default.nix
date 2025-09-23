@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  dvc-objects,
-  fetchPypi,
-  gcsfs,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, dvc-objects
+, fetchPypi
+, gcsfs
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,37 +1,33 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  testers,
-  cmake,
-  libiconv,
-  zlib,
-  enableShared ? (!stdenv.hostPlatform.isStatic),
-
-  enableAudio ? true,
-  withWaveWrite ? true,
-  withWinMM ? stdenv.hostPlatform.isWindows,
-  withDirectSound ? stdenv.hostPlatform.isWindows,
-  withXAudio2 ? stdenv.hostPlatform.isWindows,
-  withWASAPI ? stdenv.hostPlatform.isWindows,
-  withOSS ? stdenv.hostPlatform.isFreeBSD,
-  withSADA ? stdenv.hostPlatform.isSunOS,
-  withALSA ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  withPulseAudio ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  withCoreAudio ? stdenv.hostPlatform.isDarwin,
-  withLibao ? true,
-  libao,
-
-  enableEmulation ? true,
-  withAllEmulators ? true,
-  emulators ? [ ],
-
-  enableLibplayer ? true,
-
-  enableTools ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, testers
+, cmake
+, libiconv
+, zlib
+, enableShared ? (!stdenv.hostPlatform.isStatic)
+, enableAudio ? true
+, withWaveWrite ? true
+, withWinMM ? stdenv.hostPlatform.isWindows
+, withDirectSound ? stdenv.hostPlatform.isWindows
+, withXAudio2 ? stdenv.hostPlatform.isWindows
+, withWASAPI ? stdenv.hostPlatform.isWindows
+, withOSS ? stdenv.hostPlatform.isFreeBSD
+, withSADA ? stdenv.hostPlatform.isSunOS
+, withALSA ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, withPulseAudio ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, withCoreAudio ? stdenv.hostPlatform.isDarwin
+, withLibao ? true
+, libao
+, enableEmulation ? true
+, withAllEmulators ? true
+, emulators ? [ ]
+, enableLibplayer ? true
+, enableTools ? false
+,
 }:
 
 assert enableTools -> enableAudio && enableEmulation && enableLibplayer;
@@ -88,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableEmulation (
     [ (lib.cmakeBool "SNDEMU__ALL" withAllEmulators) ]
-    ++ lib.optionals (!withAllEmulators) (
+      ++ lib.optionals (!withAllEmulators) (
       lib.lists.forEach emulators (x: (lib.cmakeBool "SNDEMU_${x}" true))
     )
   )

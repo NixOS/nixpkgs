@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  liquid-dsp,
-  soapysdr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, liquid-dsp
+, soapysdr
+,
 }:
 
 stdenv.mkDerivation rec {

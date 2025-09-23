@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  go,
-  buildGoModule,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, go
+, buildGoModule
+,
 }:
 
 rustPlatform.buildRustPackage {

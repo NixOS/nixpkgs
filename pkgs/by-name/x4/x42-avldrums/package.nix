@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cairo,
-  glib,
-  libGLU,
-  lv2,
-  pango,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cairo
+, glib
+, libGLU
+, lv2
+, pango
+,
 }:
 
 stdenv.mkDerivation rec {

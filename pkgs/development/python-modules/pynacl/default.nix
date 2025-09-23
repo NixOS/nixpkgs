@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-  pytestCheckHook,
-  sphinxHook,
-  pythonOlder,
-  libsodium,
-  cffi,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, pytestCheckHook
+, sphinxHook
+, pythonOlder
+, libsodium
+, cffi
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

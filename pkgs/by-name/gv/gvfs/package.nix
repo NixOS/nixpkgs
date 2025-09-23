@@ -1,49 +1,49 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  replaceVars,
-  gettext,
-  dbus,
-  glib,
-  udevSupport ? stdenv.hostPlatform.isLinux,
-  libgudev,
-  udisks2,
-  libgcrypt,
-  libcap,
-  polkit,
-  libgphoto2,
-  avahi,
-  libarchive,
-  fuse3,
-  libcdio,
-  libxml2,
-  libsoup_3,
-  libxslt,
-  docbook_xsl,
-  docbook_xml_dtd_42,
-  samba,
-  libmtp,
-  gnomeSupport ? false,
-  gnome,
-  gcr_4,
-  glib-networking,
-  gnome-online-accounts,
-  wrapGAppsHook3,
-  libimobiledevice,
-  libbluray,
-  libcdio-paranoia,
-  libnfs,
-  openssh,
-  libsecret,
-  libgdata,
-  libmsgraph,
-  python3,
-  gsettings-desktop-schemas,
-  googleSupport ? false, # dependency on vulnerable libsoup versions
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, replaceVars
+, gettext
+, dbus
+, glib
+, udevSupport ? stdenv.hostPlatform.isLinux
+, libgudev
+, udisks2
+, libgcrypt
+, libcap
+, polkit
+, libgphoto2
+, avahi
+, libarchive
+, fuse3
+, libcdio
+, libxml2
+, libsoup_3
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, samba
+, libmtp
+, gnomeSupport ? false
+, gnome
+, gcr_4
+, glib-networking
+, gnome-online-accounts
+, wrapGAppsHook3
+, libimobiledevice
+, libbluray
+, libcdio-paranoia
+, libnfs
+, openssh
+, libsecret
+, libgdata
+, libmsgraph
+, python3
+, gsettings-desktop-schemas
+, googleSupport ? false
+, # dependency on vulnerable libsoup versions
 }:
 
 assert googleSupport -> gnomeSupport;

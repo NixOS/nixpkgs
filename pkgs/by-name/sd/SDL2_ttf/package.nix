@@ -1,15 +1,15 @@
-{
-  lib,
-  SDL2,
-  fetchurl,
-  freetype,
-  harfbuzz,
-  libGL,
-  pkg-config,
-  stdenv,
-  testers,
-  # Boolean flags
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL2
+, fetchurl
+, freetype
+, harfbuzz
+, libGL
+, pkg-config
+, stdenv
+, testers
+, # Boolean flags
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

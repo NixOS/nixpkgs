@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoconf,
-  ncurses,
-  pcre2,
-  quilt,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, ncurses
+, pcre2
+, quilt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

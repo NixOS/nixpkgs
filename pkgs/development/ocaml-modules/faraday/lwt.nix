@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  faraday,
-  lwt,
+{ buildDunePackage
+, faraday
+, lwt
+,
 }:
 
 buildDunePackage {

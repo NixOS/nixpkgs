@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarnBuildHook,
-  yarnConfigHook,
-  textlint,
-  textlint-rule-preset-ja-spacing,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, yarnBuildHook
+, yarnConfigHook
+, textlint
+, textlint-rule-preset-ja-spacing
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  async_kernel,
-  async_unix,
-  caqti,
-  core_kernel,
+{ buildDunePackage
+, async_kernel
+, async_unix
+, caqti
+, core_kernel
+,
 }:
 
 buildDunePackage {

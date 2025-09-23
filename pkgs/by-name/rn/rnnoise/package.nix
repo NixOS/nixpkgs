@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchzip,
-  autoreconfHook,
-  writeScript,
-  fetchpatch,
-  modelUrl ? "",
-  modelHash ? "", # Allow overriding the model URL and hash
+{ stdenv
+, lib
+, fetchurl
+, fetchzip
+, autoreconfHook
+, writeScript
+, fetchpatch
+, modelUrl ? ""
+, modelHash ? ""
+, # Allow overriding the model URL and hash
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  libglut,
-  libGLU,
-  libGL,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, libglut
+, libGLU
+, libGL
+,
 }:
 
 stdenv.mkDerivation {

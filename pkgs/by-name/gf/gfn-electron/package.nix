@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  electron_35,
-  nix-update-script,
-  makeBinaryWrapper,
-  python3,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, electron_35
+, nix-update-script
+, makeBinaryWrapper
+, python3
+,
 }:
 let
   electron = electron_35;

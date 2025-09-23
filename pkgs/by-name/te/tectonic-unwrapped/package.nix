@@ -3,20 +3,20 @@
   the `tectonic` package is defined in `../tectonic/package.nix`, by wrapping
   - [`tectonic-unwrapped`](./package.nix) i.e. this package, and
   - [`biber-for-tectonic`](../../bi/biber-for-tectonic/package.nix),
-    which provides a compatible version of `biber`.
+  which provides a compatible version of `biber`.
 */
 
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  fontconfig,
-  harfbuzzFull,
-  openssl,
-  pkg-config,
-  icu,
-  fetchpatch2,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, rustPlatform
+, fontconfig
+, harfbuzzFull
+, openssl
+, pkg-config
+, icu
+, fetchpatch2
+,
 }:
 
 let

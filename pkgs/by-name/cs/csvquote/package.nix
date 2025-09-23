@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  patsh,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, patsh
+,
 }:
 
 stdenv.mkDerivation rec {

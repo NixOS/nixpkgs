@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtkmm3,
-  glibmm,
-  libappindicator,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtkmm3
+, glibmm
+, libappindicator
+,
 }:
 stdenv.mkDerivation {
   pname = "powermode-indicator";

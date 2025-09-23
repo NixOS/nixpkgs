@@ -1,14 +1,13 @@
-{
-  writeShellApplication,
-  coreutils,
-  gnused,
-  gnugrep,
-  which,
-
-  # apparmor deps
-  apparmor-parser,
-  apparmor-bin-utils,
-  libapparmor,
+{ writeShellApplication
+, coreutils
+, gnused
+, gnugrep
+, which
+, # apparmor deps
+  apparmor-parser
+, apparmor-bin-utils
+, libapparmor
+,
 }:
 writeShellApplication {
   name = "apparmor-teardown";

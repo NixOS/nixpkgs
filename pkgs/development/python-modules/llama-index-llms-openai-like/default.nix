@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  llama-index-core,
-  llama-index-llms-openai,
-  pythonOlder,
-  transformers,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, llama-index-core
+, llama-index-llms-openai
+, pythonOlder
+, transformers
+,
 }:
 
 buildPythonPackage rec {

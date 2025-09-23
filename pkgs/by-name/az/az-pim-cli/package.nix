@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, versionCheckHook
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "az-pim-cli";

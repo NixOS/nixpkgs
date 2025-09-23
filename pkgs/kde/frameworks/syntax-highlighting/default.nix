@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qttools,
-  perl,
+{ mkKdeDerivation
+, qtdeclarative
+, qttools
+, perl
+,
 }:
 mkKdeDerivation {
   pname = "syntax-highlighting";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  cryptopp,
-  protobuf,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, cryptopp
+, protobuf
+,
 }:
 
 stdenv.mkDerivation {

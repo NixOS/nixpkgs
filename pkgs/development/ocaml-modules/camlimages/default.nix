@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildDunePackage,
-  findlib,
-  dune-configurator,
-  cppo,
-  graphics,
-  lablgtk,
-  stdio,
+{ lib
+, fetchFromGitLab
+, buildDunePackage
+, findlib
+, dune-configurator
+, cppo
+, graphics
+, lablgtk
+, stdio
+,
 }:
 
 buildDunePackage rec {

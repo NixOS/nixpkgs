@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  pkg-config,
-  dbus,
-  efl,
-  python3Packages,
-  directoryListingUpdater,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, dbus
+, efl
+, python3Packages
+, directoryListingUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

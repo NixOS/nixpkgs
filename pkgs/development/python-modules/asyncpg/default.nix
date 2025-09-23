@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  async-timeout,
-  cython,
-  libpq,
-  uvloop,
-  postgresql,
-  pythonOlder,
-  pytest-xdist,
-  pytestCheckHook,
-  setuptools,
-  distro,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, async-timeout
+, cython
+, libpq
+, uvloop
+, postgresql
+, pythonOlder
+, pytest-xdist
+, pytestCheckHook
+, setuptools
+, distro
+,
 }:
 
 buildPythonPackage rec {

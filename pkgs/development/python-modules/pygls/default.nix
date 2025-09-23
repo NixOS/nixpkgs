@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lsprotocol,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  typeguard,
-  websockets,
-  nix-update-script,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, lsprotocol
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, typeguard
+, websockets
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

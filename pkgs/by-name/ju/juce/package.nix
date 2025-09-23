@@ -1,35 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # Native build inputs
-  cmake,
-  pkg-config,
-  makeWrapper,
-
-  # Dependencies
-  alsa-lib,
-  freetype,
-  curl,
-  libglvnd,
-  webkitgtk_4_1,
-  pcre2,
-  libsysprof-capture,
-  util-linuxMinimal,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libXdmcp,
-  lerc,
-  libxkbcommon,
-  libepoxy,
-  libXtst,
-  sqlite,
-  fontconfig,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # Native build inputs
+  cmake
+, pkg-config
+, makeWrapper
+, # Dependencies
+  alsa-lib
+, freetype
+, curl
+, libglvnd
+, webkitgtk_4_1
+, pcre2
+, libsysprof-capture
+, util-linuxMinimal
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libXdmcp
+, lerc
+, libxkbcommon
+, libepoxy
+, libXtst
+, sqlite
+, fontconfig
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

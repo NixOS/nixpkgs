@@ -1,13 +1,13 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jsonschema,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, jsonschema
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

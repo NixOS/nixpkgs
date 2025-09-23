@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  virtualglLib,
-  virtualglLib_i686 ? null,
-  makeWrapper,
-  vulkan-loader,
-  addDriverRunpath,
+{ stdenv
+, lib
+, virtualglLib
+, virtualglLib_i686 ? null
+, makeWrapper
+, vulkan-loader
+, addDriverRunpath
+,
 }:
 
 stdenv.mkDerivation {

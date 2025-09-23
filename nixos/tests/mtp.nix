@@ -107,8 +107,8 @@
       };
     in
     # Using >&2 allows the results of the scripts to be printed to the terminal
-    # when building this test with Nix. Scripts would otherwise complete
-    # silently.
+      # when building this test with Nix. Scripts would otherwise complete
+      # silently.
     ''
       start_all()
       client.wait_for_unit("multi-user.target")

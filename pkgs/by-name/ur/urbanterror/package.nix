@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchzip,
-  stdenv,
-  copyDesktopItems,
-  imagemagick,
-  libicns,
-  makeBinaryWrapper,
-  curl,
-  libGL,
-  libGLU,
-  openal,
-  libXxf86vm,
-  SDL,
-  makeDesktopItem,
+{ lib
+, fetchzip
+, stdenv
+, copyDesktopItems
+, imagemagick
+, libicns
+, makeBinaryWrapper
+, curl
+, libGL
+, libGLU
+, openal
+, libXxf86vm
+, SDL
+, makeDesktopItem
+,
 }:
 
 let

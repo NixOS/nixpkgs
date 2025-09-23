@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitea,
-  iproute2,
-  libbpf,
-  nixosTests,
-  withBpf ? false,
-  withConfigValidation ? true,
-  withShellColor ? false,
-  withWireguard ? true,
+{ lib
+, python3Packages
+, fetchFromGitea
+, iproute2
+, libbpf
+, nixosTests
+, withBpf ? false
+, withConfigValidation ? true
+, withShellColor ? false
+, withWireguard ? true
+,
 }:
 
 let

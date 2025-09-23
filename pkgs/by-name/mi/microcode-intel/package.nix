@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libarchive,
-  iucode-tool,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libarchive
+, iucode-tool
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  fetchpatch,
-  ppx_deriving,
-  ppxlib,
-  repr,
-  alcotest,
-  hex,
+{ lib
+, buildDunePackage
+, fetchpatch
+, ppx_deriving
+, ppxlib
+, repr
+, alcotest
+, hex
+,
 }:
 
 buildDunePackage {

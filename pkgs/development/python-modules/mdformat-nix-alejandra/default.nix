@@ -1,12 +1,12 @@
-{
-  lib,
-  alejandra,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mdformat,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, alejandra
+, buildPythonPackage
+, fetchFromGitHub
+, mdformat
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

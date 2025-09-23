@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  lua,
-  jemalloc,
-  pkg-config,
-  nixosTests,
-  tcl,
-  which,
-  ps,
-  getconf,
-  systemd,
-  openssl,
-  python3,
-  nix-update-script,
-  versionCheckHook,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  tlsSupport ? true,
-  # Using system jemalloc fixes cross-compilation and various setups.
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, lua
+, jemalloc
+, pkg-config
+, nixosTests
+, tcl
+, which
+, ps
+, getconf
+, systemd
+, openssl
+, python3
+, nix-update-script
+, versionCheckHook
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, tlsSupport ? true
+, # Using system jemalloc fixes cross-compilation and various setups.
   # However the experimental 'active defragmentation' feature of redis requires
   # their custom patched version of jemalloc.
-  useSystemJemalloc ? true,
+  useSystemJemalloc ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

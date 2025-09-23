@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  libxcrypt,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  libxkbcommon,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromGitea
+, libxcrypt
+, pkg-config
+, wayland
+, wayland-protocols
+, libxkbcommon
+, wayland-scanner
+,
 }:
 stdenv.mkDerivation {
   pname = "wlock";

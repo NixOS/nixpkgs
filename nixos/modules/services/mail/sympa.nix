@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.sympa;
@@ -371,21 +370,22 @@ in
   config = lib.mkIf cfg.enable {
 
     services.sympa.settings = (
-      lib.mapAttrs (_: v: lib.mkDefault v) {
-        domain = if cfg.mainDomain != null then cfg.mainDomain else lib.head fqdns;
-        listmaster = lib.concatStringsSep "," cfg.listMasters;
-        lang = cfg.lang;
+      lib.mapAttrs (_: v: lib.mkDefault v)
+        {
+          domain = if cfg.mainDomain != null then cfg.mainDomain else lib.head fqdns;
+          listmaster = lib.concatStringsSep "," cfg.listMasters;
+          lang = cfg.lang;
 
-        home = "${dataDir}/list_data";
-        arc_path = "${dataDir}/arc";
-        bounce_path = "${dataDir}/bounce";
+          home = "${dataDir}/list_data";
+          arc_path = "${dataDir}/arc";
+          bounce_path = "${dataDir}/bounce";
 
-        sendmail = "${pkgs.system-sendmail}/bin/sendmail";
+          sendmail = "${pkgs.system-sendmail}/bin/sendmail";
 
-        db_type = cfg.database.type;
-        db_name = cfg.database.name;
-        db_user = cfg.database.name;
-      }
+          db_type = cfg.database.type;
+          db_name = cfg.database.name;
+          db_user = cfg.database.name;
+        }
       // (lib.optionalAttrs (cfg.database.host != null) {
         db_host = cfg.database.host;
       })
@@ -418,7 +418,7 @@ in
     }
     // (lib.flip lib.mapAttrs' cfg.domains (
       fqdn: domain:
-      lib.nameValuePair "etc/${fqdn}/robot.conf" (lib.mkDefault { source = robotConfig fqdn domain; })
+        lib.nameValuePair "etc/${fqdn}/robot.conf" (lib.mkDefault { source = robotConfig fqdn domain; })
     ));
 
     environment = {
@@ -568,13 +568,14 @@ in
         host:
         {
           locations =
-            lib.genAttrs (hostLocations host) (loc: {
-              extraConfig = ''
-                include ${config.services.nginx.package}/conf/fastcgi_params;
+            lib.genAttrs (hostLocations host)
+              (loc: {
+                extraConfig = ''
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
 
-                fastcgi_pass unix:/run/sympa/wwsympa.socket;
-              '';
-            })
+                  fastcgi_pass unix:/run/sympa/wwsympa.socket;
+                '';
+              })
             // {
               "/static-sympa/".alias = "${dataDir}/static_content/";
             };

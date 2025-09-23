@@ -1,14 +1,14 @@
-{
-  lib,
-  dash,
-  editorconfig,
-  f,
-  fetchFromGitHub,
-  jsonrpc,
-  nodejs,
-  s,
-  melpaBuild,
-  copilot-language-server,
+{ lib
+, dash
+, editorconfig
+, f
+, fetchFromGitHub
+, jsonrpc
+, nodejs
+, s
+, melpaBuild
+, copilot-language-server
+,
 }:
 melpaBuild (finalAttrs: {
   pname = "copilot";

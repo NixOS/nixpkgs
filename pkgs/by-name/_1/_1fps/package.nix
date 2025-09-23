@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  xorg,
-  stdenv,
-  apple-sdk_14,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, xorg
+, stdenv
+, apple-sdk_14
+,
 }:
 buildGoModule rec {
   pname = "1fps";

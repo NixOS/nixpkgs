@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  python3,
-  nzportable,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, python3
+, nzportable
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "nzp-quakec";

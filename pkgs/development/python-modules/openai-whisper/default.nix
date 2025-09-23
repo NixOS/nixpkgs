@@ -1,29 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  replaceVars,
-
-  # build-system
-  setuptools,
-
-  # runtime
-  ffmpeg-headless,
-
-  # dependencies
-  more-itertools,
-  numba,
-  numpy,
-  triton,
-  tiktoken,
-  torch,
-  tqdm,
-
-  # tests
-  pytestCheckHook,
-  scipy,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, replaceVars
+, # build-system
+  setuptools
+, # runtime
+  ffmpeg-headless
+, # dependencies
+  more-itertools
+, numba
+, numpy
+, triton
+, tiktoken
+, torch
+, tqdm
+, # tests
+  pytestCheckHook
+, scipy
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

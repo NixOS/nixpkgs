@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  runtimeShell,
-  installShellFiles,
-  bc,
-  ncurses,
-  testers,
-  fzf,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, runtimeShell
+, installShellFiles
+, bc
+, ncurses
+, testers
+, fzf
+,
 }:
 
 buildGoModule rec {

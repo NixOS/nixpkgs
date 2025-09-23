@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  fixDarwinDylibNames,
-  zlib,
-  krb5,
-  openssl,
-  icu,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, fixDarwinDylibNames
+, zlib
+, krb5
+, openssl
+, icu
+, nixosTests
+,
 }:
 
 let
@@ -19,16 +19,14 @@ let
       x86_64-linux = "x64";
       aarch64-linux = "arm64";
       x86_64-darwin = "x64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash =
     {
       x64-linux_hash = "sha256-5pnHuYjT+O/mlGC+arIofwlAwOWOzyYa4/jK+fstkHs=";
       arm64-linux_hash = "sha256-yBZQuTNPIPCa2LqaRd9rFinJpPvJraAe4xo09mt8RD8=";
       x64-osx_hash = "sha256-VZTFsjB08/plpwv0ErwHbyIiSBGxsXAz92X2AdACN1E=";
-    }
-    ."${arch}-${os}_hash";
+    }."${arch}-${os}_hash";
 
 in
 stdenv.mkDerivation rec {

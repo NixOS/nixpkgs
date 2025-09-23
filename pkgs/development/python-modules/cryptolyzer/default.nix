@@ -1,21 +1,21 @@
-{
-  lib,
-  attrs,
-  beautifulsoup4,
-  buildPythonPackage,
-  certvalidator,
-  colorama,
-  cryptoparser,
-  dnspython,
-  fetchPypi,
-  pathlib2,
-  pyfakefs,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  setuptools,
-  setuptools-scm,
-  urllib3,
+{ lib
+, attrs
+, beautifulsoup4
+, buildPythonPackage
+, certvalidator
+, colorama
+, cryptoparser
+, dnspython
+, fetchPypi
+, pathlib2
+, pyfakefs
+, python-dateutil
+, pythonOlder
+, requests
+, setuptools
+, setuptools-scm
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

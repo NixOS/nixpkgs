@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  which,
-  zip,
-  wxGTK32,
-  gtk3,
-  sfml_2,
-  fluidsynth,
-  curl,
-  ftgl,
-  glew,
-  lua,
-  mpg123,
-  wrapGAppsHook3,
-  unstableGitUpdater,
-  libwebp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, which
+, zip
+, wxGTK32
+, gtk3
+, sfml_2
+, fluidsynth
+, curl
+, ftgl
+, glew
+, lua
+, mpg123
+, wrapGAppsHook3
+, unstableGitUpdater
+, libwebp
+,
 }:
 
 stdenv.mkDerivation {

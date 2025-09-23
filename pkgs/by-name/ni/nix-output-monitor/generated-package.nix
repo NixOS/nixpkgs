@@ -1,40 +1,40 @@
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh"
-{
-  mkDerivation,
-  ansi-terminal,
-  async,
-  attoparsec,
-  base,
-  bytestring,
-  cassava,
-  containers,
-  directory,
-  extra,
-  fetchzip,
-  filelock,
-  filepath,
-  hermes-json,
-  HUnit,
-  lib,
-  MemoTrie,
-  nix-derivation,
-  optics,
-  random,
-  relude,
-  safe,
-  safe-exceptions,
-  stm,
-  streamly-core,
-  strict,
-  strict-types,
-  terminal-size,
-  text,
-  time,
-  transformers,
-  typed-process,
-  unix,
-  word8,
+{ mkDerivation
+, ansi-terminal
+, async
+, attoparsec
+, base
+, bytestring
+, cassava
+, containers
+, directory
+, extra
+, fetchzip
+, filelock
+, filepath
+, hermes-json
+, HUnit
+, lib
+, MemoTrie
+, nix-derivation
+, optics
+, random
+, relude
+, safe
+, safe-exceptions
+, stm
+, streamly-core
+, strict
+, strict-types
+, terminal-size
+, text
+, time
+, transformers
+, typed-process
+, unix
+, word8
+,
 }:
 mkDerivation {
   pname = "nix-output-monitor";

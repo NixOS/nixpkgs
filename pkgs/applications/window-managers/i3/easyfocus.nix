@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  xorgproto,
-  libxcb,
-  xcbutilkeysyms,
-  xorg,
-  i3ipc-glib,
-  glib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, xorgproto
+, libxcb
+, xcbutilkeysyms
+, xorg
+, i3ipc-glib
+, glib
+,
 }:
 
 stdenv.mkDerivation {

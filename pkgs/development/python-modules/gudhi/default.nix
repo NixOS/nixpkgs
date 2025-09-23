@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  cmake,
-  setuptools,
-  boost,
-  eigen,
-  gmp,
-  cgal,
-  mpfr,
-  tbb,
-  numpy,
-  cython,
-  pybind11,
-  matplotlib,
-  scipy,
-  pytest,
-  enableTBB ? false,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, cmake
+, setuptools
+, boost
+, eigen
+, gmp
+, cgal
+, mpfr
+, tbb
+, numpy
+, cython
+, pybind11
+, matplotlib
+, scipy
+, pytest
+, enableTBB ? false
+,
 }:
 
 buildPythonPackage rec {

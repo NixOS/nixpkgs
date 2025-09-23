@@ -7,21 +7,21 @@
   be almost as much code as the function itself.
 */
 
-{
-  config,
-  stdenv,
-  lib,
-  buildPackages,
-  pkgs,
-  fetchurl,
-  fetchpatch,
-  fetchpatch2,
-  fetchDebianPatch,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  perl,
-  shortenPerlShebang,
-  nixosTests,
+{ config
+, stdenv
+, lib
+, buildPackages
+, pkgs
+, fetchurl
+, fetchpatch
+, fetchpatch2
+, fetchDebianPatch
+, fetchFromGitHub
+, fetchFromGitLab
+, perl
+, shortenPerlShebang
+, nixosTests
+,
 }:
 
 self:
@@ -39389,7 +39389,7 @@ with self;
   };
 
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
   constant = null; # part of Perl 5.22

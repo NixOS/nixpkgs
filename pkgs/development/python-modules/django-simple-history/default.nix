@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatchling,
-  hatch-vcs,
-  python,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatchling
+, hatch-vcs
+, python
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

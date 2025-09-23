@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  alsa-lib,
-  glib,
-  glib-networking,
-  gsettings-desktop-schemas,
-  gtk3,
-  libsecret,
-  openjdk,
-  sqlite,
-  unixODBC,
-  gtk2,
-  xorg,
-  glibcLocales,
-  releasePath ? null,
+{ lib
+, stdenv
+, autoPatchelfHook
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, alsa-lib
+, glib
+, glib-networking
+, gsettings-desktop-schemas
+, gtk3
+, libsecret
+, openjdk
+, sqlite
+, unixODBC
+, gtk2
+, xorg
+, glibcLocales
+, releasePath ? null
+,
 }:
 
 # To use this package, you need to download your own cplex installer from IBM

@@ -1,10 +1,10 @@
-{
-  coq,
-  mkCoqDerivation,
-  mathcomp-ssreflect,
-  mathcomp-fingroup,
-  lib,
-  version ? null,
+{ coq
+, mkCoqDerivation
+, mathcomp-ssreflect
+, mathcomp-fingroup
+, lib
+, version ? null
+,
 }@args:
 
 mkCoqDerivation {

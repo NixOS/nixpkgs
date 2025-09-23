@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  desktop-file-utils,
-  itstool,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  libgtop,
-  dnsutils,
-  iputils,
-  nmap,
-  inetutils,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, desktop-file-utils
+, itstool
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook3
+, glib
+, gtk3
+, libgtop
+, dnsutils
+, iputils
+, nmap
+, inetutils
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

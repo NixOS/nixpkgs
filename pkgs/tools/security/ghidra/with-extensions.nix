@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  symlinkJoin,
-  makeBinaryWrapper,
-  desktopToDarwinBundle,
-  ghidra,
+{ lib
+, stdenv
+, callPackage
+, symlinkJoin
+, makeBinaryWrapper
+, desktopToDarwinBundle
+, ghidra
+,
 }:
 
 let

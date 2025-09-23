@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  zlib,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, zlib
+,
 }:
 
 buildGoModule rec {

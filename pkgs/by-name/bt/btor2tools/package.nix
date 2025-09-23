@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation {

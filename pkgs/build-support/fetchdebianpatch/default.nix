@@ -1,14 +1,14 @@
 { lib, fetchpatch }:
 
 lib.makeOverridable (
-  {
-    pname,
-    version,
-    debianRevision ? null,
-    area ? "main",
-    patch,
-    name ? patch,
-    hash,
+  { pname
+  , version
+  , debianRevision ? null
+  , area ? "main"
+  , patch
+  , name ? patch
+  , hash
+  ,
   }:
   let
     inherit (lib.strings) hasPrefix substring;

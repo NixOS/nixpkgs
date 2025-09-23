@@ -1,16 +1,16 @@
-{
-  lib,
-  config,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  removeReferencesTo,
-  autoAddDriverRunpath,
-  apple-sdk_15,
-  versionCheckHook,
-  rocmPackages,
-  cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
+{ lib
+, config
+, stdenv
+, fetchFromGitHub
+, cmake
+, removeReferencesTo
+, autoAddDriverRunpath
+, apple-sdk_15
+, versionCheckHook
+, rocmPackages
+, cudaSupport ? config.cudaSupport
+, rocmSupport ? config.rocmSupport
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  segger-jlink-headless,
-  libxshmfence,
+{ lib
+, fetchurl
+, appimageTools
+, segger-jlink-headless
+, libxshmfence
+,
 }:
 
 let

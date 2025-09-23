@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  withFzf ? true,
-  fzf,
-  installShellFiles,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, withFzf ? true
+, fzf
+, installShellFiles
+, libiconv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

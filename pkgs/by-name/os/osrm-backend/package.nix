@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  bzip2,
-  libxml2,
-  libzip,
-  boost,
-  lua,
-  luabind,
-  tbb_2022,
-  expat,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, bzip2
+, libxml2
+, libzip
+, boost
+, lua
+, luabind
+, tbb_2022
+, expat
+, nixosTests
+,
 }:
 
 let

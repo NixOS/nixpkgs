@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGhidraExtension,
-  z3,
-  gradle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGhidraExtension
+, z3
+, gradle
+,
 }:
 let
   ghidraPlatformName =
@@ -13,8 +13,7 @@ let
       aarch64-linux = "linux_x86_64";
       x86_64-darwin = "mac_x86_64";
       aarch64-darwin = "mac_arm_64";
-    }
-    .${stdenv.hostPlatform.system}
+    }.${stdenv.hostPlatform.system}
       or (throw "${stdenv.hostPlatform.system} is an unsupported platform");
 
   z3_lib = (

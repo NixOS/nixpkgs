@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  faker,
-  fetchFromGitHub,
-  pytest-aiohttp,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, buildPythonPackage
+, faker
+, fetchFromGitHub
+, pytest-aiohttp
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

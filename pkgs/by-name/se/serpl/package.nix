@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  ast-grep,
-  ripgrep,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, ast-grep
+, ripgrep
+, versionCheckHook
+,
 }:
 let
   pname = "serpl";

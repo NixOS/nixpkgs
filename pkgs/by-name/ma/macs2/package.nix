@@ -1,8 +1,8 @@
-{
-  lib,
-  python311,
-  fetchpatch,
-  fetchPypi,
+{ lib
+, python311
+, fetchpatch
+, fetchPypi
+,
 }:
 
 # pin python311 because macs2 does not support python 3.12

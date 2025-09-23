@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  expat,
-  fontconfig,
-  freetype,
-  harfbuzzFull,
-  icu,
-  gn,
-  libGL,
-  libjpeg,
-  libwebp,
-  libX11,
-  ninja,
-  python3,
-  testers,
-  vulkan-headers,
-  vulkan-memory-allocator,
-  xcbuild,
-  cctools,
-  zlib,
-  fixDarwinDylibNames,
-
-  enableVulkan ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchgit
+, expat
+, fontconfig
+, freetype
+, harfbuzzFull
+, icu
+, gn
+, libGL
+, libjpeg
+, libwebp
+, libX11
+, ninja
+, python3
+, testers
+, vulkan-headers
+, vulkan-memory-allocator
+, xcbuild
+, cctools
+, zlib
+, fixDarwinDylibNames
+, enableVulkan ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -82,8 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
-        }
-        .${stdenv.hostPlatform.parsed.cpu.name};
+        }.${stdenv.hostPlatform.parsed.cpu.name};
     in
     [
       # Build in release mode

@@ -1,12 +1,12 @@
-{
-  lib,
-  bcrypt,
-  buildPythonPackage,
-  dvc-objects,
-  fetchPypi,
-  setuptools-scm,
-  sshfs,
-  pythonOlder,
+{ lib
+, bcrypt
+, buildPythonPackage
+, dvc-objects
+, fetchPypi
+, setuptools-scm
+, sshfs
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

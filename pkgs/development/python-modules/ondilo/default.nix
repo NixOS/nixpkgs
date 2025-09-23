@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  oauthlib,
-  pythonOlder,
-  requests,
-  requests-oauthlib,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, oauthlib
+, pythonOlder
+, requests
+, requests-oauthlib
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

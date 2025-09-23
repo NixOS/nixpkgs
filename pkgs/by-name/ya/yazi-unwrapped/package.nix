@@ -1,10 +1,9 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-
-  installShellFiles,
-  rust-jemalloc-sys,
+{ rustPlatform
+, fetchFromGitHub
+, lib
+, installShellFiles
+, rust-jemalloc-sys
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yazi";

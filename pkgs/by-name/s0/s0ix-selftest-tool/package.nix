@@ -1,21 +1,21 @@
-{
-  acpica-tools,
-  bc,
-  coreutils,
-  fetchFromGitHub,
-  gawk,
-  gnugrep,
-  gnused,
-  linuxPackages,
-  lib,
-  pciutils,
-  powertop,
-  makeWrapper,
-  stdenv,
-  unstableGitUpdater,
-  util-linux,
-  xorg,
-  xxd,
+{ acpica-tools
+, bc
+, coreutils
+, fetchFromGitHub
+, gawk
+, gnugrep
+, gnused
+, linuxPackages
+, lib
+, pciutils
+, powertop
+, makeWrapper
+, stdenv
+, unstableGitUpdater
+, util-linux
+, xorg
+, xxd
+,
 }:
 
 let

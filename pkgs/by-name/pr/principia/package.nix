@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wrapGAppsHook3,
-
-  curl,
-  freetype,
-  glew,
-  gtk3,
-  libGL,
-  libjpeg,
-  libpng,
-  SDL2,
-  SDL2_gfx,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook3
+, curl
+, freetype
+, glew
+, gtk3
+, libGL
+, libjpeg
+, libpng
+, SDL2
+, SDL2_gfx
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

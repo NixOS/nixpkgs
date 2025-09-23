@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  jdk,
-  jre,
-  zip,
-  makeWrapper,
-  desktop-file-utils,
-  spleen,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, jdk
+, jre
+, zip
+, makeWrapper
+, desktop-file-utils
+, spleen
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

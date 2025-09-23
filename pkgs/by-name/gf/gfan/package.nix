@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  gmp,
-  mpir,
-  cddlib,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, gmp
+, mpir
+, cddlib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "gfan";

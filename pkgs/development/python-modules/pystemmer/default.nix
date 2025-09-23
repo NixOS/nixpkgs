@@ -1,12 +1,12 @@
-{
-  lib,
-  python,
-  fetchFromGitHub,
-  fetchpatch2,
-  buildPythonPackage,
-  cython,
-  setuptools,
-  libstemmer,
+{ lib
+, python
+, fetchFromGitHub
+, fetchpatch2
+, buildPythonPackage
+, cython
+, setuptools
+, libstemmer
+,
 }:
 
 buildPythonPackage rec {

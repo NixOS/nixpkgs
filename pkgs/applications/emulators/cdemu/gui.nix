@@ -1,15 +1,15 @@
-{
-  callPackage,
-  cmake,
-  pkg-config,
-  wrapGAppsHook3,
-  gobject-introspection,
-  python3Packages,
-  libnotify,
-  intltool,
-  adwaita-icon-theme,
-  gdk-pixbuf,
-  libappindicator-gtk3,
+{ callPackage
+, cmake
+, pkg-config
+, wrapGAppsHook3
+, gobject-introspection
+, python3Packages
+, libnotify
+, intltool
+, adwaita-icon-theme
+, gdk-pixbuf
+, libappindicator-gtk3
+,
 }:
 python3Packages.buildPythonApplication {
 

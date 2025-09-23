@@ -1,55 +1,55 @@
-{
-  dri-pkgconfig-stub,
-  egl-wayland,
-  bash,
-  libepoxy,
-  fetchurl,
-  fontutil,
-  lib,
-  libdecor,
-  libgbm,
-  libei,
-  libGL,
-  libGLU,
-  libX11,
-  libXau,
-  libXaw,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXfont2,
-  libXmu,
-  libXpm,
-  libXrender,
-  libXres,
-  libXt,
-  libdrm,
-  libtirpc,
-  # Disable withLibunwind as LLVM's libunwind will conflict and does not support the right symbols.
-  withLibunwind ? !(stdenv.hostPlatform.useLLVM or false),
-  libunwind,
-  libxcb,
-  libxkbfile,
-  libxshmfence,
-  libxcvt,
-  mesa-gl-headers,
-  meson,
-  ninja,
-  openssl,
-  pkg-config,
-  pixman,
-  stdenv,
-  systemd,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xkbcomp,
-  xkeyboard_config,
-  xorgproto,
-  xtrans,
-  zlib,
-  defaultFontPath ? "",
-  gitUpdater,
+{ dri-pkgconfig-stub
+, egl-wayland
+, bash
+, libepoxy
+, fetchurl
+, fontutil
+, lib
+, libdecor
+, libgbm
+, libei
+, libGL
+, libGLU
+, libX11
+, libXau
+, libXaw
+, libXdmcp
+, libXext
+, libXfixes
+, libXfont2
+, libXmu
+, libXpm
+, libXrender
+, libXres
+, libXt
+, libdrm
+, libtirpc
+, # Disable withLibunwind as LLVM's libunwind will conflict and does not support the right symbols.
+  withLibunwind ? !(stdenv.hostPlatform.useLLVM or false)
+, libunwind
+, libxcb
+, libxkbfile
+, libxshmfence
+, libxcvt
+, mesa-gl-headers
+, meson
+, ninja
+, openssl
+, pkg-config
+, pixman
+, stdenv
+, systemd
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xkbcomp
+, xkeyboard_config
+, xorgproto
+, xtrans
+, zlib
+, defaultFontPath ? ""
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

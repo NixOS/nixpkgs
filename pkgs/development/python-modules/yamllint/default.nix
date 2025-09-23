@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pathspec,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pathspec
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pybind11,
-  setuptools,
-  pytestCheckHook,
-  tzdata,
-  python,
-  pkgs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pybind11
+, setuptools
+, pytestCheckHook
+, tzdata
+, python
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

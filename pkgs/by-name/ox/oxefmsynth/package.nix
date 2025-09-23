@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libX11,
-  vst2-sdk,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libX11
+, vst2-sdk
+,
 }:
 stdenv.mkDerivation rec {
   pname = "oxefmsynth";

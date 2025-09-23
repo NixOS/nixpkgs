@@ -1,37 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  stdenv,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  decorator,
-  h11,
-  puremagic,
-  urllib3,
-
-  # optional-dependencies
-  xxhash,
-  pook,
-
-  # tests
-  aiohttp,
-  asgiref,
-  fastapi,
-  gevent,
-  httpx,
-  psutil,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  redis,
-  redisTestHook,
-  requests,
-  sure,
-
+{ lib
+, buildPythonPackage
+, stdenv
+, fetchPypi
+, # build-system
+  hatchling
+, # dependencies
+  decorator
+, h11
+, puremagic
+, urllib3
+, # optional-dependencies
+  xxhash
+, pook
+, # tests
+  aiohttp
+, asgiref
+, fastapi
+, gevent
+, httpx
+, psutil
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, redis
+, redisTestHook
+, requests
+, sure
+,
 }:
 
 buildPythonPackage rec {

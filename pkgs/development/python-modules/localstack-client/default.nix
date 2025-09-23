@@ -1,12 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  boto3,
-  pytestCheckHook,
-
-  # use for testing promoted localstack
-  pkgs,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, boto3
+, pytestCheckHook
+, # use for testing promoted localstack
+  pkgs
+,
 }:
 
 buildPythonPackage rec {

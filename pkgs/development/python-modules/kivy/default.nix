@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  cython,
-  docutils,
-  setuptools,
-  kivy-garden,
-  libGL,
-  libX11,
-  mtdev,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_mixer,
-  withGstreamer ? true,
-  gst_all_1,
-  pygments,
-  requests,
-  filetype,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, cython
+, docutils
+, setuptools
+, kivy-garden
+, libGL
+, libX11
+, mtdev
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, SDL2_mixer
+, withGstreamer ? true
+, gst_all_1
+, pygments
+, requests
+, filetype
+,
 }:
 
 buildPythonPackage rec {

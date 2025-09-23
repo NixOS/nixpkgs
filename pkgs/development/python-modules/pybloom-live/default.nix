@@ -1,13 +1,13 @@
-{
-  lib,
-  bitarray,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  wheel,
-  xxhash,
+{ lib
+, bitarray
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, wheel
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

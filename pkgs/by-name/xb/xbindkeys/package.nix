@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libX11,
-  guile,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libX11
+, guile
+,
 }:
 
 stdenv.mkDerivation rec {

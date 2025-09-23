@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  matplotlib,
-  numpy,
-  pandas,
-  pillow,
-  pytest,
-  pytest-datadir,
-  pytestCheckHook,
-  pyyaml,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, matplotlib
+, numpy
+, pandas
+, pillow
+, pytest
+, pytest-datadir
+, pytestCheckHook
+, pyyaml
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

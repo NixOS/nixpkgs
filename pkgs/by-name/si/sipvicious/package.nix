@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  python3,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

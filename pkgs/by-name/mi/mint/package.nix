@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal,
-  libxml2,
-  openssl,
+{ lib
+, fetchFromGitHub
+, crystal
+, libxml2
+, openssl
+,
 }:
 
 crystal.buildCrystalPackage rec {

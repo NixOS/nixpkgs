@@ -1,12 +1,12 @@
-{
-  python3Packages,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
-  gobject-introspection,
-  v4l-utils,
-  wrapGAppsHook3,
-  lib,
+{ python3Packages
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+, gobject-introspection
+, v4l-utils
+, wrapGAppsHook3
+, lib
+,
 }:
 
 python3Packages.buildPythonApplication {

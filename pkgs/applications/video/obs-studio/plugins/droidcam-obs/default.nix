@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  obs-studio,
-  ffmpeg,
-  libjpeg,
-  libimobiledevice,
-  libusbmuxd,
-  libplist,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, obs-studio
+, ffmpeg
+, libjpeg
+, libimobiledevice
+, libusbmuxd
+, libplist
+, pkg-config
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam-obs";

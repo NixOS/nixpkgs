@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  tdlib,
-  telegram-text,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, setuptools
+, tdlib
+, telegram-text
+,
 }:
 
 buildPythonPackage rec {

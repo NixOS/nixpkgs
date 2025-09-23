@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
-  setuptools,
-  prettytable,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pythonOlder
+, setuptools
+, prettytable
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  colorlog,
-  pyyaml,
-  fetchPypi,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, colorlog
+, pyyaml
+, fetchPypi
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qtmultimedia,
-  qtsvg,
-  extra-cmake-modules,
-  futuresql,
-  kcoreaddons,
-  kcrash,
-  ki18n,
-  kirigami-addons,
-  kirigami,
-  kwindowsystem,
-  purpose,
-  qcoro,
-  python3,
+{ mkKdeDerivation
+, qtdeclarative
+, qtmultimedia
+, qtsvg
+, extra-cmake-modules
+, futuresql
+, kcoreaddons
+, kcrash
+, ki18n
+, kirigami-addons
+, kirigami
+, kwindowsystem
+, purpose
+, qcoro
+, python3
+,
 }:
 let
   ps = python3.pkgs;

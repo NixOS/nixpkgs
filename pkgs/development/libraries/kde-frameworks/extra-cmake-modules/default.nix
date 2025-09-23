@@ -1,10 +1,10 @@
-{
-  mkDerivation,
-  lib,
-  fetchpatch,
-  bash,
-  cmake,
-  pkg-config,
+{ mkDerivation
+, lib
+, fetchpatch
+, bash
+, cmake
+, pkg-config
+,
 }:
 
 mkDerivation {

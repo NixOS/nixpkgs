@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  dbus,
-  libgcrypt,
-  pam,
-  python3,
-  glib,
-  libxslt,
-  gettext,
-  gcr,
-  libcap_ng,
-  libselinux,
-  p11-kit,
-  wrapGAppsNoGuiHook,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  gnome,
-  useWrappedDaemon ? true,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, dbus
+, libgcrypt
+, pam
+, python3
+, glib
+, libxslt
+, gettext
+, gcr
+, libcap_ng
+, libselinux
+, p11-kit
+, wrapGAppsNoGuiHook
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gnome
+, useWrappedDaemon ? true
+,
 }:
 
 stdenv.mkDerivation rec {

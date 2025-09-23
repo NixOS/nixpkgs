@@ -1,9 +1,9 @@
-{
-  lib,
-  writeScript,
-  python3Packages,
-  fetchFromGitHub,
-  cacert,
+{ lib
+, writeScript
+, python3Packages
+, fetchFromGitHub
+, cacert
+,
 }:
 
 python3Packages.buildPythonApplication rec {

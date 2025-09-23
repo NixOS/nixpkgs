@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  ncurses,
+{ stdenv
+, lib
+, fetchgit
+, ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

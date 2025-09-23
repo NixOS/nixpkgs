@@ -1,11 +1,11 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gtk3,
-  glib,
-  gsettings-desktop-schemas,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gtk3
+, glib
+, gsettings-desktop-schemas
+,
 }:
 
 python3Packages.buildPythonApplication rec {

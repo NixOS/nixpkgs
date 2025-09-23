@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  glib,
-  libsForQt5,
-  pkg-config,
-  qt6Packages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, testers
+, glib
+, libsForQt5
+, pkg-config
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

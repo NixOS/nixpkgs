@@ -1,30 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  cairo,
-  harfbuzz,
-  libintl,
-  libthai,
-  fribidi,
-  gnome,
-  gi-docgen,
-  makeFontsConf,
-  freefont_ttf,
-  meson,
-  ninja,
-  glib,
-  python3,
-  docutils,
-  x11Support ? !stdenv.hostPlatform.isDarwin,
-  libXft,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, cairo
+, harfbuzz
+, libintl
+, libthai
+, fribidi
+, gnome
+, gi-docgen
+, makeFontsConf
+, freefont_ttf
+, meson
+, ninja
+, glib
+, python3
+, docutils
+, x11Support ? !stdenv.hostPlatform.isDarwin
+, libXft
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

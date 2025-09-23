@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  aniso8601,
-  jsonschema,
-  flask,
-  importlib-resources,
-  werkzeug,
-  pytz,
-  faker,
-  mock,
-  blinker,
-  py,
-  pytest-flask,
-  pytest-mock,
-  pytest-benchmark,
-  pytest-vcr,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, aniso8601
+, jsonschema
+, flask
+, importlib-resources
+, werkzeug
+, pytz
+, faker
+, mock
+, blinker
+, py
+, pytest-flask
+, pytest-mock
+, pytest-benchmark
+, pytest-vcr
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

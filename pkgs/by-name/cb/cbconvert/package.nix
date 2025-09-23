@@ -1,14 +1,14 @@
-{
-  buildGoModule,
-  bzip2,
-  callPackage,
-  fetchFromGitHub,
-  lib,
-  libunarr,
-  mupdf-headless,
-  nix-update-script,
-  versionCheckHook,
-  zlib,
+{ buildGoModule
+, bzip2
+, callPackage
+, fetchFromGitHub
+, lib
+, libunarr
+, mupdf-headless
+, nix-update-script
+, versionCheckHook
+, zlib
+,
 }:
 
 buildGoModule rec {

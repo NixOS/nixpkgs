@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  curl,
-  zeromq,
-  czmq,
-  libsodium,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, curl
+, zeromq
+, czmq
+, libsodium
+,
 }:
 
 stdenv.mkDerivation rec {

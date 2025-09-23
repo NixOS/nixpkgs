@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libxml2,
-  glibmm,
-  perl,
-  gnome,
-  meson,
-  ninja,
-  docbook5,
-  docbook-xsl-ns,
-  doxygen,
-  libxslt,
-  fop,
-  dblatex,
-  graphviz,
-
-  withDocumentation ? false,
-  withManual ? false, # Broken due to not being allowed to fetch file from web
-  withPDF ? false,
-  withExamples ? false,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxml2
+, glibmm
+, perl
+, gnome
+, meson
+, ninja
+, docbook5
+, docbook-xsl-ns
+, doxygen
+, libxslt
+, fop
+, dblatex
+, graphviz
+, withDocumentation ? false
+, withManual ? false
+, # Broken due to not being allowed to fetch file from web
+  withPDF ? false
+, withExamples ? false
+,
 }:
 
 stdenv.mkDerivation rec {

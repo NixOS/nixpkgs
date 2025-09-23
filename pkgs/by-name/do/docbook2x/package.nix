@@ -1,19 +1,19 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  texinfo,
-  perlPackages,
-  groff,
-  libxml2,
-  libxslt,
-  gnused,
-  libiconv,
-  iconv,
-  opensp,
-  docbook_xml_dtd_43,
-  bash,
-  makeWrapper,
+{ fetchurl
+, lib
+, stdenv
+, texinfo
+, perlPackages
+, groff
+, libxml2
+, libxslt
+, gnused
+, libiconv
+, iconv
+, opensp
+, docbook_xml_dtd_43
+, bash
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

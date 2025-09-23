@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  intltool,
-  libxml2,
-  perlPackages,
-  goffice,
-  gnome,
-  adwaita-icon-theme,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  bison,
-  python3Packages,
-  itstool,
-  autoreconfHook,
-  gtk-doc,
-  fetchFromGitLab,
-  gettext,
-  yelp-tools,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, libxml2
+, perlPackages
+, goffice
+, gnome
+, adwaita-icon-theme
+, wrapGAppsHook3
+, glib
+, gtk3
+, bison
+, python3Packages
+, itstool
+, autoreconfHook
+, gtk-doc
+, fetchFromGitLab
+, gettext
+, yelp-tools
+,
 }:
 
 let

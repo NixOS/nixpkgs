@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  gtk3,
-  python3,
-  faba-icon-theme,
-  hicolor-icon-theme,
-  jdupes,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, meson
+, ninja
+, gtk3
+, python3
+, faba-icon-theme
+, hicolor-icon-theme
+, jdupes
+,
 }:
 
 stdenvNoCC.mkDerivation {

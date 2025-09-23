@@ -12,7 +12,7 @@ builtins.getAttr licenseString (
       listToAttrs
     ]
   )
-  // {
+    // {
     "Bitstream-Vera AND MIT" = with ls; [
       bitstreamVera
       mit

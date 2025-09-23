@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.virtualisation.virtualbox.host;
@@ -133,10 +132,12 @@ in
           in
           lib.mkIf cfg.enableHardening (
             builtins.listToAttrs (
-              map (x: {
-                name = x;
-                value = mkSuid x;
-              }) executables
+              map
+                (x: {
+                  name = x;
+                  value = mkSuid x;
+                })
+                executables
             )
           );
 

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  boost,
-  callPackage,
-  coreutils,
-  libspnav,
-  python3,
-  wrapGAppsHook3,
+{ stdenv
+, boost
+, callPackage
+, coreutils
+, libspnav
+, python3
+, wrapGAppsHook3
+,
 }:
 
 let

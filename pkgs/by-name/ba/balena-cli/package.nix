@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs_20,
-  versionCheckHook,
-  node-gyp,
-  python3,
-  udev,
-  cctools,
-  apple-sdk_12,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs_20
+, versionCheckHook
+, node-gyp
+, python3
+, udev
+, cctools
+, apple-sdk_12
+,
 }:
 
 let

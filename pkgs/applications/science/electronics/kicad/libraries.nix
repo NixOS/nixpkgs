@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  libSrc,
-  stepreduce,
-  parallel,
-  zip,
+{ lib
+, stdenv
+, cmake
+, libSrc
+, stepreduce
+, parallel
+, zip
+,
 }:
 let
   mkLib =

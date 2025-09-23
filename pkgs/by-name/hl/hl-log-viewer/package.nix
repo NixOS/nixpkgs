@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  installShellFiles,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, installShellFiles
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hl-log-viewer";

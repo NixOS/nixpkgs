@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  sdcc,
-  yosys,
-  icestorm,
-  nextpnr,
+{ lib
+, python3
+, fetchFromGitHub
+, sdcc
+, yosys
+, icestorm
+, nextpnr
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

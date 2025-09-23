@@ -1,19 +1,18 @@
-{
-  generateProtobufCode,
-  version,
-  zitadelRepo,
+{ generateProtobufCode
+, version
+, zitadelRepo
+,
 }:
 
-{
-  stdenv,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-
-  grpc-gateway,
-  protoc-gen-grpc-web,
-  protoc-gen-js,
+{ stdenv
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, grpc-gateway
+, protoc-gen-grpc-web
+, protoc-gen-js
+,
 }:
 
 let

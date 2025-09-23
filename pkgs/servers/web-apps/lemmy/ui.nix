@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  libsass,
-  nodejs,
-  pnpm_9,
-  fetchFromGitHub,
-  nixosTests,
-  vips,
+{ lib
+, stdenvNoCC
+, libsass
+, nodejs
+, pnpm_9
+, fetchFromGitHub
+, nixosTests
+, vips
+,
 }:
 
 let

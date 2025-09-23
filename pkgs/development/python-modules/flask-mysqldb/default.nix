@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  flask,
-  mysqlclient,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, flask
+, mysqlclient
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  bootstrapData,
-  db,
+{ lib
+, bootstrapData
+, db
+,
 }:
 
 bootstrapData
-// {
+  // {
   /**
     All CUDA capabilities, sorted by version.
 
@@ -59,7 +59,9 @@ bootstrapData
     cudaArchNameToCapabilities :: AttrSet NonEmptyStr (NonEmptyListOf CudaCapability)
     ```
   */
-  cudaArchNameToCapabilities = lib.groupBy (
-    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.archName
-  ) db.allSortedCudaCapabilities;
+  cudaArchNameToCapabilities = lib.groupBy
+    (
+      cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.archName
+    )
+    db.allSortedCudaCapabilities;
 }

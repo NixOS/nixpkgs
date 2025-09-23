@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchFromGitHub,
-  cmake,
-  vulkan-headers,
-  vulkan-loader,
-  glslang,
-  libwebp,
-  ncnn,
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, cmake
+, vulkan-headers
+, vulkan-loader
+, glslang
+, libwebp
+, ncnn
+,
 }:
 stdenv.mkDerivation rec {
   pname = "realcugan-ncnn-vulkan";

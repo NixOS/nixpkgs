@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  replaceVars,
-  buildPythonPackage,
-  isPy3k,
-  gnutls,
-  twisted,
-  pyopenssl,
-  service-identity,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, replaceVars
+, buildPythonPackage
+, isPy3k
+, gnutls
+, twisted
+, pyopenssl
+, service-identity
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

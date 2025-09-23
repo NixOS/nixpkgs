@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  pkg-config,
-  python3,
-  autoPatchelfHook,
-  autoAddDriverRunpath,
-
-  # buildInputs
-  libopus,
-  openssl,
-  sentencepiece,
-  alsa-lib,
-
-  # passthru
-  moshi,
-  nix-update-script,
-
-  config,
-  cudaPackages,
-  cudaCapability ? null,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  pkg-config
+, python3
+, autoPatchelfHook
+, autoAddDriverRunpath
+, # buildInputs
+  libopus
+, openssl
+, sentencepiece
+, alsa-lib
+, # passthru
+  moshi
+, nix-update-script
+, config
+, cudaPackages
+, cudaCapability ? null
+,
 }:
 
 let

@@ -1,21 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-
-  # for passthru.tests
-  distributed,
-  jupyter-server,
-  jupyterlab,
-  matplotlib,
-  mitmproxy,
-  pytest-tornado,
-  pytest-tornasync,
-  pyzmq,
-  sockjs-tornado,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, # for passthru.tests
+  distributed
+, jupyter-server
+, jupyterlab
+, matplotlib
+, mitmproxy
+, pytest-tornado
+, pytest-tornasync
+, pyzmq
+, sockjs-tornado
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

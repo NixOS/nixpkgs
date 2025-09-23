@@ -1,8 +1,8 @@
-{
-  stdenv,
-  libusb-compat-0_1,
-  fetchFromGitHub,
-  lib,
+{ stdenv
+, libusb-compat-0_1
+, fetchFromGitHub
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "micronucleus";

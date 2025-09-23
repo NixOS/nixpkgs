@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnupatch,
-  gnused,
-  gnugrep,
-  gnutar,
-  gzip,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnupatch
+, gnused
+, gnugrep
+, gnutar
+, gzip
+,
 }:
 
 let
@@ -68,19 +68,19 @@ let
   ];
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version meta;
+{
+  inherit pname version meta;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-      gnused
-      gnugrep
-      gnutar
-      gzip
-    ];
-  }
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnupatch
+    gnused
+    gnugrep
+    gnutar
+    gzip
+  ];
+}
   ''
     # Unpack
     tar xzf ${src}

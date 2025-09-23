@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qt5compat,
-  libarchive,
-  shared-mime-info,
+{ mkKdeDerivation
+, qt5compat
+, libarchive
+, shared-mime-info
+,
 }:
 mkKdeDerivation {
   pname = "kbackup";

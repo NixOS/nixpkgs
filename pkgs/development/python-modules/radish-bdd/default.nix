@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  colorful,
-  docopt,
-  fetchFromGitHub,
-  freezegun,
-  humanize,
-  lxml,
-  parse-type,
-  pysingleton,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  tag-expressions,
+{ lib
+, buildPythonPackage
+, colorful
+, docopt
+, fetchFromGitHub
+, freezegun
+, humanize
+, lxml
+, parse-type
+, pysingleton
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, tag-expressions
+,
 }:
 
 buildPythonPackage rec {

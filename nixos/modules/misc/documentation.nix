@@ -1,15 +1,14 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  utils,
-  modules,
-  baseModules,
-  extraModules,
-  modulesPath,
-  specialArgs,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, utils
+, modules
+, baseModules
+, extraModules
+, modulesPath
+, specialArgs
+, ...
 }:
 
 let
@@ -90,21 +89,23 @@ let
         };
         scrubDerivations =
           namePrefix: pkgSet:
-          mapAttrs (
-            name: value:
-            let
-              wholeName = "${namePrefix}.${name}";
-              guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
-            in
-            if isAttrs value then
-              scrubDerivations wholeName value
-              // optionalAttrs (isDerivation value) {
-                outPath = guard "\${${wholeName}}";
-                drvPath = guard value.drvPath;
-              }
-            else
-              value
-          ) pkgSet;
+          mapAttrs
+            (
+              name: value:
+              let
+                wholeName = "${namePrefix}.${name}";
+                guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
+              in
+              if isAttrs value then
+                scrubDerivations wholeName value
+                // optionalAttrs (isDerivation value) {
+                  outPath = guard "\${${wholeName}}";
+                  drvPath = guard value.drvPath;
+                }
+              else
+                value
+            )
+            pkgSet;
       in
       scrubbedEval.options;
 
@@ -112,9 +113,9 @@ let
       let
         filter = builtins.filterSource (
           n: t:
-          cleanSourceFilter n t
-          && (t == "directory" -> baseNameOf n != "tests")
-          && (t == "file" -> hasSuffix ".nix" n)
+            cleanSourceFilter n t
+            && (t == "directory" -> baseNameOf n != "tests")
+            && (t == "file" -> hasSuffix ".nix" n)
         );
         prefixRegex = "^" + lib.strings.escapeRegex (toString pkgs.path) + "($|/(modules|nixos)($|/.*))";
         filteredModules = builtins.path {

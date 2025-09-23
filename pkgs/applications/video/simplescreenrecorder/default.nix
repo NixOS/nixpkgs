@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  ffmpeg,
-  libjack2,
-  libX11,
-  libXext,
-  libXinerama,
-  qtx11extras,
-  libXfixes,
-  libGLU,
-  libGL,
-  pkg-config,
-  libpulseaudio,
-  libv4l,
-  pipewire,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
-  cmake,
-  ninja,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, ffmpeg
+, libjack2
+, libX11
+, libXext
+, libXinerama
+, qtx11extras
+, libXfixes
+, libGLU
+, libGL
+, pkg-config
+, libpulseaudio
+, libv4l
+, pipewire
+, qtbase
+, qttools
+, wrapQtAppsHook
+, cmake
+, ninja
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

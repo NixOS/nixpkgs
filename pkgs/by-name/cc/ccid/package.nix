@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flex,
-  libusb1,
-  meson,
-  ninja,
-  nix-update-script,
-  pcsclite,
-  perl,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, flex
+, libusb1
+, meson
+, ninja
+, nix-update-script
+, pcsclite
+, perl
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

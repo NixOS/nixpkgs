@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyusb,
-  tqdm,
-  libusb1,
-  setuptools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyusb
+, tqdm
+, libusb1
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

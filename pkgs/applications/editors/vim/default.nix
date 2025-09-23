@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  callPackage,
-  ncurses,
-  bash,
-  gawk,
-  gettext,
-  pkg-config,
-  # default vimrc
+{ lib
+, stdenv
+, fetchurl
+, callPackage
+, ncurses
+, bash
+, gawk
+, gettext
+, pkg-config
+, # default vimrc
   vimrc ? fetchurl {
     name = "default-vimrc";
     url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/68f6d131750aa778807119e03eed70286a17b1cb/trunk/archlinux.vim";
     sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
-  },
+  }
+,
 }:
 
 let

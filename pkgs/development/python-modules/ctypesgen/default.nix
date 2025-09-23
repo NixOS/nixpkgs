@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  toml,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools-scm
+, setuptools
+, toml
+, wheel
+,
 }:
 
 buildPythonPackage rec {

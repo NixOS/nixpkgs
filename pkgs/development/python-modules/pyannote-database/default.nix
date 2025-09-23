@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pandas,
-  pyannote-core,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  typer,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pandas
+, pyannote-core
+, pythonOlder
+, pyyaml
+, setuptools
+, typer
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

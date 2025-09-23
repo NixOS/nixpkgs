@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  makeWrapper,
-  pypy2Packages,
-  cvs,
-  subversion,
-  git,
-  breezy,
-  installShellFiles,
+{ lib
+, fetchurl
+, makeWrapper
+, pypy2Packages
+, cvs
+, subversion
+, git
+, breezy
+, installShellFiles
+,
 }:
 
 pypy2Packages.buildPythonApplication rec {

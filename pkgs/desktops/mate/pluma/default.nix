@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  perl,
-  itstool,
-  isocodes,
-  enchant,
-  libxml2,
-  python3,
-  gtksourceview4,
-  libpeas,
-  mate-desktop,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, perl
+, itstool
+, isocodes
+, enchant
+, libxml2
+, python3
+, gtksourceview4
+, libpeas
+, mate-desktop
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

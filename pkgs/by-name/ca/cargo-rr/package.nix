@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  rr,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, rr
+,
 }:
 
 rustPlatform.buildRustPackage rec {

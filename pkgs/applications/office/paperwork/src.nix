@@ -1,8 +1,8 @@
-{
-  fetchFromGitLab,
-  srcOnly,
-  fetchpatch,
-  stdenv,
+{ fetchFromGitLab
+, srcOnly
+, fetchpatch
+, stdenv
+,
 }:
 rec {
   version = "2.2.5";

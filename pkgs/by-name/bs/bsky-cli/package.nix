@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  libpcap,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, libpcap
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "bsky-cli";

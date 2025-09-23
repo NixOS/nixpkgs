@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  alsa-lib,
-  cmake,
-  gtk2,
-  libjack2,
-  libgnomecanvas,
-  libpthreadstubs,
-  libsamplerate,
-  libsndfile,
-  libtool,
-  libxml2,
-  pkg-config,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, alsa-lib
+, cmake
+, gtk2
+, libjack2
+, libgnomecanvas
+, libpthreadstubs
+, libsamplerate
+, libsndfile
+, libtool
+, libxml2
+, pkg-config
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

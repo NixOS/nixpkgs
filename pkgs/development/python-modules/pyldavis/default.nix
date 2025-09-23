@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  funcy,
-  ipython,
-  jinja2,
-  joblib,
-  numpy,
-  pandas,
-  scikit-learn,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, funcy
+, ipython
+, jinja2
+, joblib
+, numpy
+, pandas
+, scikit-learn
+, scipy
+,
 }:
 
 buildPythonPackage rec {

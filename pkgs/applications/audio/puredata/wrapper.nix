@@ -1,8 +1,8 @@
-{
-  symlinkJoin,
-  puredata,
-  makeWrapper,
-  plugins,
+{ symlinkJoin
+, puredata
+, makeWrapper
+, plugins
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  ddcutil,
-  fetchFromGitHub,
-  gtk4,
-  installShellFiles,
-  wrapGAppsHook4,
-  libadwaita,
-  nix-update-script,
-  pkg-config,
+{ lib
+, stdenv
+, ddcutil
+, fetchFromGitHub
+, gtk4
+, installShellFiles
+, wrapGAppsHook4
+, libadwaita
+, nix-update-script
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

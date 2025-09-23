@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitLab,
-  setuptools,
-  dill,
-  h5py,
-  nibabel,
-  numpy,
-  scipy,
-  indexed-gzip,
-  pillow,
-  rtree,
-  trimesh,
-  wxpython,
-  pytestCheckHook,
-  pytest-cov-stub,
-  tomli,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitLab
+, setuptools
+, dill
+, h5py
+, nibabel
+, numpy
+, scipy
+, indexed-gzip
+, pillow
+, rtree
+, trimesh
+, wxpython
+, pytestCheckHook
+, pytest-cov-stub
+, tomli
+,
 }:
 
 buildPythonPackage rec {

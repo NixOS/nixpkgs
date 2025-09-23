@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  libiff,
-  autoreconfHook,
-  pkg-config,
-  help2man,
+{ stdenv
+, fetchFromGitHub
+, lib
+, libiff
+, autoreconfHook
+, pkg-config
+, help2man
+,
 }:
 
 stdenv.mkDerivation {

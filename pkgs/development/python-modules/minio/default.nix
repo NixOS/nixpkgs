@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  argon2-cffi,
-  certifi,
-  urllib3,
-  pycryptodome,
-  typing-extensions,
-
-  # test
-  faker,
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  argon2-cffi
+, certifi
+, urllib3
+, pycryptodome
+, typing-extensions
+, # test
+  faker
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

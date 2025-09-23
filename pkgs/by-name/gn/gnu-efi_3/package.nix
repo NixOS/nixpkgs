@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  gnu-efi,
-  refind,
+{ fetchFromGitHub
+, gnu-efi
+, refind
+,
 }:
 
 gnu-efi.overrideAttrs (

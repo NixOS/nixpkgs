@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  nixosTests,
-  dotnetCorePackages,
-  buildDotnetModule,
-  jellyfin-ffmpeg,
-  fontconfig,
-  freetype,
-  jellyfin-web,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, nixosTests
+, dotnetCorePackages
+, buildDotnetModule
+, jellyfin-ffmpeg
+, fontconfig
+, freetype
+, jellyfin-web
+, sqlite
+,
 }:
 
 buildDotnetModule rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  python3,
-  fetchzip,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
-  qtsvg,
-  buildEnv,
-  aspellDicts,
-  # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
+{ lib
+, python3
+, fetchzip
+, fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qttools
+, qtsvg
+, buildEnv
+, aspellDicts
+, # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
   # available.
   enchantAspellDicts ? with aspellDicts; [
     en
     en-computers
-  ],
+  ]
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

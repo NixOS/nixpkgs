@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  python311,
-  python311Packages,
-  glibcLocales,
-  gobject-introspection,
-  wrapGAppsHook3,
-  gtk3,
-  keybinder3,
-  libnotify,
-  libutempter,
-  vte,
-  libwnck,
-  dconf,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python311
+, python311Packages
+, glibcLocales
+, gobject-introspection
+, wrapGAppsHook3
+, gtk3
+, keybinder3
+, libnotify
+, libutempter
+, vte
+, libwnck
+, dconf
+, nixosTests
+,
 }:
 
 python311Packages.buildPythonApplication rec {

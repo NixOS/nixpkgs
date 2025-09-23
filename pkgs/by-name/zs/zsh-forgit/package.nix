@@ -1,16 +1,16 @@
-{
-  stdenvNoCC,
-  lib,
-  bash,
-  coreutils,
-  findutils,
-  fetchFromGitHub,
-  fzf,
-  gawk,
-  git,
-  gnugrep,
-  gnused,
-  makeWrapper,
+{ stdenvNoCC
+, lib
+, bash
+, coreutils
+, findutils
+, fetchFromGitHub
+, fzf
+, gawk
+, git
+, gnugrep
+, gnused
+, makeWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

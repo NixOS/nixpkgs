@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  undmg,
-  autoPatchelfHook,
-  alsa-lib,
-  ncurses5,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, undmg
+, autoPatchelfHook
+, alsa-lib
+, ncurses5
+, xorg
+,
 }:
 
 let

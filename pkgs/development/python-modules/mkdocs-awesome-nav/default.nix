@@ -1,18 +1,17 @@
-{
-  lib,
-  gitMinimal,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  mkdocs,
-  mkdocs-exclude,
-  mkdocs-material,
-  natsort,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  wcmatch,
-
+{ lib
+, gitMinimal
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, mkdocs
+, mkdocs-exclude
+, mkdocs-material
+, natsort
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, wcmatch
+,
 }:
 buildPythonPackage rec {
   pname = "mkdocs-awesome-nav";

@@ -1,11 +1,11 @@
-{
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  html5lib,
-  lib,
-  lxml,
-  python,
+{ beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, html5lib
+, lib
+, lxml
+, python
+,
 }:
 
 buildPythonPackage rec {

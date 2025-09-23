@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  django,
-  django-ranged-response,
-  pillow,
-
-  # tests
-  flite,
-  pytest-django,
-  pytestCheckHook,
-  testfixtures,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  django
+, django-ranged-response
+, pillow
+, # tests
+  flite
+, pytest-django
+, pytestCheckHook
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

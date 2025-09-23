@@ -1,8 +1,8 @@
-{
-  lib,
-  mkKdeDerivation,
-  qttools,
-  graphviz,
+{ lib
+, mkKdeDerivation
+, qttools
+, graphviz
+,
 }:
 mkKdeDerivation {
   pname = "kcachegrind";

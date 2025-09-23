@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  setuptools,
-  setuptools-scm,
-  numpy,
-  pybind11,
-  wheel,
-  pytestCheckHook,
-  pythonOlder,
-  graphviz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, setuptools
+, setuptools-scm
+, numpy
+, pybind11
+, wheel
+, pytestCheckHook
+, pythonOlder
+, graphviz
+,
 }:
 
 buildPythonPackage rec {

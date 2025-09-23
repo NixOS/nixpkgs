@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  pkg-config,
-  gtk4,
-  libadwaita,
-  wrapGAppsHook4,
-  glib,
-  tzdata,
-  nix-update-script,
-  dbus,
-  cargo-gra,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, gtk4
+, libadwaita
+, wrapGAppsHook4
+, glib
+, tzdata
+, nix-update-script
+, dbus
+, cargo-gra
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  openbao,
-  yarn-berry_3,
-  nodejs,
+{ stdenvNoCC
+, openbao
+, yarn-berry_3
+, nodejs
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

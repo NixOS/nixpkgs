@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gtk3,
-  libexif,
-  libgee,
-  libhandy,
-  libportal-gtk3,
-  geocode-glib_2,
-  gexiv2,
-  libgphoto2,
-  granite,
-  gst_all_1,
-  libgudev,
-  libraw,
-  sqlite,
-  libwebp,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk3
+, libexif
+, libgee
+, libhandy
+, libportal-gtk3
+, geocode-glib_2
+, gexiv2
+, libgphoto2
+, granite
+, gst_all_1
+, libgudev
+, libraw
+, sqlite
+, libwebp
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

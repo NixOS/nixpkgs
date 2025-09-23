@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  fire,
-  tqdm,
-  intelhex,
-  libusb1,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, fire
+, tqdm
+, intelhex
+, libusb1
+,
 }:
 
 buildPythonPackage rec {

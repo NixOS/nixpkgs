@@ -1,43 +1,42 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  wrapGAppsHook3,
-  autoPatchelfHook,
-  dpkg,
-  xorg,
-  atk,
-  glib,
-  pango,
-  gdk-pixbuf,
-  cairo,
-  freetype,
-  fontconfig,
-  gtk3,
-  dbus,
-  nss,
-  nspr,
-  alsa-lib,
-  cups,
-  expat,
-  udev,
-  libnotify,
-  xdg-utils,
-  libgbm,
-  libglvnd,
-  libappindicator-gtk3,
+{ stdenv
+, lib
+, makeWrapper
+, wrapGAppsHook3
+, autoPatchelfHook
+, dpkg
+, xorg
+, atk
+, glib
+, pango
+, gdk-pixbuf
+, cairo
+, freetype
+, fontconfig
+, gtk3
+, dbus
+, nss
+, nspr
+, alsa-lib
+, cups
+, expat
+, udev
+, libnotify
+, xdg-utils
+, libgbm
+, libglvnd
+, libappindicator-gtk3
+,
 }:
 
 # Helper function for building a derivation for Franz and forks.
 
-{
-  pname,
-  name,
-  version,
-  src,
-  meta,
-  extraBuildInputs ? [ ],
-  ...
+{ pname
+, name
+, version
+, src
+, meta
+, extraBuildInputs ? [ ]
+, ...
 }@args:
 let
   cleanedArgs = builtins.removeAttrs args [
@@ -130,5 +129,5 @@ stdenv.mkDerivation (
         "''${gappsWrapperArgs[@]}"
     '';
   }
-  // cleanedArgs
+    // cleanedArgs
 )

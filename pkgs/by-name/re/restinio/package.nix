@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  asio,
-  boost,
-  expected-lite,
-  fmt,
-  llhttp,
-  openssl,
-  pcre2,
-  zlib,
-  catch2_3,
-  # Build with the asio library bundled in boost instead of the standalone asio package.
-  with_boost_asio ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, asio
+, boost
+, expected-lite
+, fmt
+, llhttp
+, openssl
+, pcre2
+, zlib
+, catch2_3
+, # Build with the asio library bundled in boost instead of the standalone asio package.
+  with_boost_asio ? false
+,
 }:
 
 assert with_boost_asio -> boost != null;

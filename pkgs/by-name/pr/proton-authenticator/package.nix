@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  glib-networking,
-  wrapGAppsHook4,
-  webkitgtk_4_1,
+{ lib
+, stdenvNoCC
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, glib-networking
+, wrapGAppsHook4
+, webkitgtk_4_1
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

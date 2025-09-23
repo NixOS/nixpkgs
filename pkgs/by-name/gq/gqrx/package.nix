@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  desktopToDarwinBundle,
-  pkg-config,
-  qt6Packages,
-  gnuradioMinimal,
-  thrift,
-  mpir,
-  fftwFloat,
-  alsa-lib,
-  libjack2,
-  wrapGAppsHook3,
-  # drivers (optional):
-  rtl-sdr,
-  hackrf,
-  stdenv,
-  pulseaudioSupport ? !stdenv.hostPlatform.isDarwin,
-  libpulseaudio,
-  portaudioSupport ? stdenv.hostPlatform.isDarwin,
-  portaudio,
+{ lib
+, fetchFromGitHub
+, cmake
+, desktopToDarwinBundle
+, pkg-config
+, qt6Packages
+, gnuradioMinimal
+, thrift
+, mpir
+, fftwFloat
+, alsa-lib
+, libjack2
+, wrapGAppsHook3
+, # drivers (optional):
+  rtl-sdr
+, hackrf
+, stdenv
+, pulseaudioSupport ? !stdenv.hostPlatform.isDarwin
+, libpulseaudio
+, portaudioSupport ? stdenv.hostPlatform.isDarwin
+, portaudio
+,
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;

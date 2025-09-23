@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  sqlcipher,
-  pkg-config,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, sqlcipher
+, pkg-config
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

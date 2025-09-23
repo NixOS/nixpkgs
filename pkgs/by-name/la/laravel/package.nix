@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  php,
-  nodejs,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, php
+, nodejs
+,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "laravel";

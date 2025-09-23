@@ -1,10 +1,10 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  jsoncpp,
-  libhdhomerun,
+{ lib
+, rel
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, jsoncpp
+, libhdhomerun
+,
 }:
 buildKodiBinaryAddon rec {
   pname = "pvr-hdhomerun";

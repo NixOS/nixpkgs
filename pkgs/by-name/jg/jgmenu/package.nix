@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  python3Packages,
-  pango,
-  librsvg,
-  libxml2,
-  menu-cache,
-  xorg,
-  makeWrapper,
-  enableXfcePanelApplet ? false,
-  xfce,
-  gtk3,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, python3Packages
+, pango
+, librsvg
+, libxml2
+, menu-cache
+, xorg
+, makeWrapper
+, enableXfcePanelApplet ? false
+, xfce
+, gtk3
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

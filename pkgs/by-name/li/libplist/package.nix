@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-
-  enablePython ? false,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, enablePython ? false
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

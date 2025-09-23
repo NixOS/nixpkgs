@@ -1,13 +1,13 @@
-{
-  mkDerivation,
-  include,
-  libcMinimal,
-  libgcc,
-  libkvm,
-  libprocstat,
-  libutil,
-  libelf,
-  csu,
+{ mkDerivation
+, include
+, libcMinimal
+, libgcc
+, libkvm
+, libprocstat
+, libutil
+, libelf
+, csu
+,
 }:
 
 mkDerivation {

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gettext,
-  vorbis-tools,
-  xmlstarlet,
-  doxygen,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gettext
+, vorbis-tools
+, xmlstarlet
+, doxygen
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

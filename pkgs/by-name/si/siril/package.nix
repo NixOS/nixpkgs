@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  meson,
-  ninja,
-  cmake,
-  git,
-  criterion,
-  gtk3,
-  libconfig,
-  gnuplot,
-  opencv,
-  json-glib,
-  fftwFloat,
-  cfitsio,
-  gsl,
-  exiv2,
-  librtprocess,
-  wcslib,
-  ffmpeg,
-  libraw,
-  libtiff,
-  libpng,
-  libjpeg,
-  libheif,
-  ffms,
-  wrapGAppsHook3,
-  curl,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, meson
+, ninja
+, cmake
+, git
+, criterion
+, gtk3
+, libconfig
+, gnuplot
+, opencv
+, json-glib
+, fftwFloat
+, cfitsio
+, gsl
+, exiv2
+, librtprocess
+, wcslib
+, ffmpeg
+, libraw
+, libtiff
+, libpng
+, libjpeg
+, libheif
+, ffms
+, wrapGAppsHook3
+, curl
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

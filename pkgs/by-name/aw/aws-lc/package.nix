@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  cmakeMinimal,
-  fetchFromGitHub,
-  ninja,
-  testers,
-  aws-lc,
-  useSharedLibraries ? !stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, cmakeMinimal
+, fetchFromGitHub
+, ninja
+, testers
+, aws-lc
+, useSharedLibraries ? !stdenv.hostPlatform.isStatic
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";

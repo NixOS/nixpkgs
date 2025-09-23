@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage {

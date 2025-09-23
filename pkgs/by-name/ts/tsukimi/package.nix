@@ -1,24 +1,24 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  mpv-unwrapped,
-  ffmpeg,
-  libadwaita,
-  gst_all_1,
-  openssl,
-  libepoxy,
-  wrapGAppsHook4,
-  nix-update-script,
-  stdenv,
-  meson,
-  ninja,
-  rustc,
-  cargo,
-  dbus,
-  desktop-file-utils,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, mpv-unwrapped
+, ffmpeg
+, libadwaita
+, gst_all_1
+, openssl
+, libepoxy
+, wrapGAppsHook4
+, nix-update-script
+, stdenv
+, meson
+, ninja
+, rustc
+, cargo
+, dbus
+, desktop-file-utils
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "tsukimi";

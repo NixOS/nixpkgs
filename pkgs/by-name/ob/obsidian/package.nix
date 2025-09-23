@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  makeWrapper,
-  electron,
-  makeDesktopItem,
-  imagemagick,
-  writeScript,
-  _7zz,
-  commandLineArgs ? "",
+{ stdenv
+, fetchurl
+, lib
+, makeWrapper
+, electron
+, makeDesktopItem
+, imagemagick
+, writeScript
+, _7zz
+, commandLineArgs ? ""
+,
 }:
 let
   pname = "obsidian";

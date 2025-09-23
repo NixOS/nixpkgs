@@ -1,9 +1,9 @@
-{
-  lib,
-  vscode-utils,
-  writeShellScript,
-  nix-update,
-  vscode-extension-update,
+{ lib
+, vscode-utils
+, writeShellScript
+, nix-update
+, vscode-extension-update
+,
 }:
 
 with vscode-utils;
@@ -11,10 +11,10 @@ with vscode-utils;
 let
 
   buildVscodeLanguagePack =
-    {
-      language,
-      version ? "1.103.2025080609",
-      hash,
+    { language
+    , version ? "1.103.2025080609"
+    , hash
+    ,
     }:
     buildVscodeMarketplaceExtension {
       mktplcRef = {

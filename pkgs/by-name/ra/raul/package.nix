@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation {

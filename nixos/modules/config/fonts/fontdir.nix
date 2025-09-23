@@ -1,42 +1,43 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
   cfg = config.fonts.fontDir;
 
-  x11Fonts = pkgs.callPackage (
-    {
-      runCommand,
-      gzip,
-      xorg,
-    }:
-    runCommand "X11-fonts"
-      {
-        preferLocalBuild = true;
-        nativeBuildInputs = [
-          gzip
-          xorg.mkfontscale
-          xorg.mkfontdir
-        ];
-      }
-      ''
-        mkdir -p "$out/share/X11/fonts"
-        font_regexp='.*\.\(ttf\|ttc\|otb\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-        find ${toString config.fonts.packages} -regex "$font_regexp" \
-          -exec ln -sf -t "$out/share/X11/fonts" '{}' \;
-        cd "$out/share/X11/fonts"
-        ${lib.optionalString cfg.decompressFonts ''
-          gunzip -f *.gz
-        ''}
-        mkfontscale
-        mkfontdir
-        cat $(find ${pkgs.xorg.fontalias}/ -name fonts.alias) >fonts.alias
-      ''
-  ) { };
+  x11Fonts = pkgs.callPackage
+    (
+      { runCommand
+      , gzip
+      , xorg
+      ,
+      }:
+      runCommand "X11-fonts"
+        {
+          preferLocalBuild = true;
+          nativeBuildInputs = [
+            gzip
+            xorg.mkfontscale
+            xorg.mkfontdir
+          ];
+        }
+        ''
+          mkdir -p "$out/share/X11/fonts"
+          font_regexp='.*\.\(ttf\|ttc\|otb\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+          find ${toString config.fonts.packages} -regex "$font_regexp" \
+            -exec ln -sf -t "$out/share/X11/fonts" '{}' \;
+          cd "$out/share/X11/fonts"
+          ${lib.optionalString cfg.decompressFonts ''
+            gunzip -f *.gz
+          ''}
+          mkfontscale
+          mkfontdir
+          cat $(find ${pkgs.xorg.fontalias}/ -name fonts.alias) >fonts.alias
+        ''
+    )
+    { };
 
 in
 

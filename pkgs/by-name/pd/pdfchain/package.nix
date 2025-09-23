@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchDebianPatch,
-  autoconf,
-  gtkmm3,
-  glib,
-  pdftk,
-  pkg-config,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, fetchDebianPatch
+, autoconf
+, gtkmm3
+, glib
+, pdftk
+, pkg-config
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  libpulseaudio,
-  alsa-lib,
-  libcap,
-  usePulseAudio,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, libpulseaudio
+, alsa-lib
+, libcap
+, usePulseAudio
+,
 }:
 
 stdenv.mkDerivation rec {

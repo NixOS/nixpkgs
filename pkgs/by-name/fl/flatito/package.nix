@@ -1,9 +1,9 @@
-{
-  lib,
-  ruby,
-  buildRubyGem,
-  bundlerEnv,
-  bundlerUpdateScript,
+{ lib
+, ruby
+, buildRubyGem
+, bundlerEnv
+, bundlerUpdateScript
+,
 }:
 let
   deps = bundlerEnv rec {

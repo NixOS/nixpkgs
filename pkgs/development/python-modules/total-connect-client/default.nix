@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pycryptodome,
-  pyjwt,
-  pytestCheckHook,
-  pythonOlder,
-  requests-mock,
-  requests-oauthlib,
-  setuptools,
-  zeep,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pycryptodome
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, requests-mock
+, requests-oauthlib
+, setuptools
+, zeep
+,
 }:
 
 buildPythonPackage rec {

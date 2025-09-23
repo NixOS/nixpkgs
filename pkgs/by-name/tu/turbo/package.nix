@@ -1,13 +1,13 @@
-{
-  lib,
-  symlinkJoin,
-  makeBinaryWrapper,
-  testers,
-  turbo,
-  turbo-unwrapped,
-  # https://turbo.build/repo/docs/telemetry
-  disableTelemetry ? true,
-  disableUpdateNotifier ? true,
+{ lib
+, symlinkJoin
+, makeBinaryWrapper
+, testers
+, turbo
+, turbo-unwrapped
+, # https://turbo.build/repo/docs/telemetry
+  disableTelemetry ? true
+, disableUpdateNotifier ? true
+,
 }:
 
 symlinkJoin {

@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  byacc,
-  flex,
+{ mkDerivation
+, byacc
+, flex
+,
 }:
 
 mkDerivation {

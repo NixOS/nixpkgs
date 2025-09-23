@@ -1,16 +1,16 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qt5compat,
-  qtsensors,
-  qttools,
-  qtwayland,
-  xorg,
-  libcanberra,
-  libdisplay-info,
-  libgbm,
-  lcms2,
-  python3,
+{ mkKdeDerivation
+, pkg-config
+, qt5compat
+, qtsensors
+, qttools
+, qtwayland
+, xorg
+, libcanberra
+, libdisplay-info
+, libgbm
+, lcms2
+, python3
+,
 }:
 mkKdeDerivation {
   pname = "kwin-x11";

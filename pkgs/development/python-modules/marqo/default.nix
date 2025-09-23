@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  requests,
-  packaging,
-  pydantic,
-  typing-extensions,
-  requests-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, requests
+, packaging
+, pydantic
+, typing-extensions
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

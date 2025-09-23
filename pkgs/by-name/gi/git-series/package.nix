@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  stdenv,
-  curl,
-  installShellFiles,
-  libgit2,
-  libssh2,
-  openssl,
-  zlib,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, curl
+, installShellFiles
+, libgit2
+, libssh2
+, openssl
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage {

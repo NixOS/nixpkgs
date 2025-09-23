@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  asn1crypto,
-  cbor2,
-  cryptography,
-  pythonOlder,
-  pyopenssl,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, asn1crypto
+, cbor2
+, cryptography
+, pythonOlder
+, pyopenssl
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

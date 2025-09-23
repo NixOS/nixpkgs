@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  ArchiSteamFarm,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, ArchiSteamFarm
+,
 }:
 
 buildNpmPackage rec {

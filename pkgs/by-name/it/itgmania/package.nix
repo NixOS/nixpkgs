@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  nasm,
-  pkg-config,
-  copyDesktopItems,
-  alsa-lib,
-  glew,
-  glib,
-  gtk3,
-  libmad,
-  libogg,
-  libpulseaudio,
-  libusb-compat-0_1,
-  libvorbis,
-  libXtst,
-  udev,
-  makeWrapper,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nasm
+, pkg-config
+, copyDesktopItems
+, alsa-lib
+, glew
+, glib
+, gtk3
+, libmad
+, libogg
+, libpulseaudio
+, libusb-compat-0_1
+, libvorbis
+, libXtst
+, udev
+, makeWrapper
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

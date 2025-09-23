@@ -1,11 +1,11 @@
-{
-  _7zz,
-  appimageTools,
-  fetchurl,
-  fetchzip,
-  lib,
-  stdenvNoCC,
-  xorg,
+{ _7zz
+, appimageTools
+, fetchurl
+, fetchzip
+, lib
+, stdenvNoCC
+, xorg
+,
 }:
 
 let

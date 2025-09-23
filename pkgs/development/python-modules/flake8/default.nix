@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  isPyPy,
-  fetchFromGitHub,
-  setuptools,
-  mccabe,
-  pycodestyle,
-  pyflakes,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, isPyPy
+, fetchFromGitHub
+, setuptools
+, mccabe
+, pycodestyle
+, pyflakes
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

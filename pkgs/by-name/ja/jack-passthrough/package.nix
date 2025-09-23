@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libjack2,
-  meson,
-  ninja,
-  fmt_9,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libjack2
+, meson
+, ninja
+, fmt_9
+,
 }:
 
 stdenv.mkDerivation {

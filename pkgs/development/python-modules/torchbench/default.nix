@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  numpy,
-  opencv4,
-  sotabenchapi,
-  torch,
-  torchvision,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, numpy
+, opencv4
+, sotabenchapi
+, torch
+, torchvision
+, tqdm
+,
 }:
 
 let

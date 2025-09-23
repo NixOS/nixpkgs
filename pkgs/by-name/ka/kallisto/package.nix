@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  cmake,
-  hdf5,
-  versionCheckHook,
-  zlib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, cmake
+, hdf5
+, versionCheckHook
+, zlib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

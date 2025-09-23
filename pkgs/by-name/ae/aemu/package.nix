@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitiles,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitiles
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

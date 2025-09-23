@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  cmake,
-  pkg-config,
-  wayland-scanner,
-  wayland,
-  libGL,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, cmake
+, pkg-config
+, wayland-scanner
+, wayland
+, libGL
+,
 }:
 stdenv.mkDerivation {
   pname = "shaderbg";

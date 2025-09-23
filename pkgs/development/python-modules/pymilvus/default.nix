@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  gitpython,
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  grpcio,
-  # milvus-lite, (unpackaged)
-  pandas,
-  protobuf,
-  python-dotenv,
-  ujson,
-
-  # tests
-  grpcio-testing,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  gitpython
+, setuptools
+, setuptools-scm
+, # dependencies
+  grpcio
+, # milvus-lite, (unpackaged)
+  pandas
+, protobuf
+, python-dotenv
+, ujson
+, # tests
+  grpcio-testing
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

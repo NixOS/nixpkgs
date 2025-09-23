@@ -1,24 +1,24 @@
-{
-  mkDerivation,
-  array,
-  base,
-  binary,
-  bitstring,
-  bytestring,
-  clock,
-  containers,
-  deepseq,
-  directory,
-  fetchzip,
-  filepath,
-  haskeline,
-  lib,
-  megaparsec,
-  mtl,
-  optparse-applicative,
-  process,
-  random,
-  time,
+{ mkDerivation
+, array
+, base
+, binary
+, bitstring
+, bytestring
+, clock
+, containers
+, deepseq
+, directory
+, fetchzip
+, filepath
+, haskeline
+, lib
+, megaparsec
+, mtl
+, optparse-applicative
+, process
+, random
+, time
+,
 }:
 mkDerivation {
   pname = "bruijn";

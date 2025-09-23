@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  testers,
-  conceal,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, testers
+, conceal
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

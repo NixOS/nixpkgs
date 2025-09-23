@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  pkg-config,
-  SDL2,
-  xorg,
-  libGL,
-  roboto,
-  imagemagick,
+{ lib
+, fetchFromGitHub
+, stdenv
+, pkg-config
+, SDL2
+, xorg
+, libGL
+, roboto
+, imagemagick
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

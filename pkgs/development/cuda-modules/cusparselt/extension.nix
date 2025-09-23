@@ -1,9 +1,9 @@
 # Support matrix can be found at
 # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-880/support-matrix/index.html
-{
-  cudaLib,
-  lib,
-  redistSystem,
+{ cudaLib
+, lib
+, redistSystem
+,
 }:
 let
   inherit (lib)
@@ -45,10 +45,12 @@ let
       # Un-nest the manifests attribute set.
       releaseGrabber = evaluatedModules: evaluatedModules.config.cusparselt.manifests;
     in
-    lists.map (trivial.flip trivial.pipe [
-      configEvaluator
-      releaseGrabber
-    ]) cusparseltVersions;
+    lists.map
+      (trivial.flip trivial.pipe [
+        configEvaluator
+        releaseGrabber
+      ])
+      cusparseltVersions;
 
   # platformIsSupported :: Manifests -> Boolean
   platformIsSupported =
@@ -56,7 +58,9 @@ let
     (attrsets.attrByPath [
       pname
       redistSystem
-    ] null feature) != null;
+    ]
+      null
+      feature) != null;
 
   # TODO(@connorbaker): With an auxiliary file keeping track of the CUDA versions each release supports,
   # we could filter out releases that don't support our CUDA version.

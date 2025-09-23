@@ -1,12 +1,12 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  hydra-battles,
-  gaia,
-  mathcomp-zify,
-  mathcomp,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, hydra-battles
+, gaia
+, mathcomp-zify
+, mathcomp
+, version ? null
+,
 }:
 
 mkCoqDerivation {

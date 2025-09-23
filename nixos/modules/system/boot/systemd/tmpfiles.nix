@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -199,32 +198,39 @@ in
           map (path: path.target) config.boot.initrd.systemd.storePaths
         );
       in
-      lib.optional (lib.length paths > 0) (
-        lib.concatStringsSep " " [
-          "Files inside /etc/tmpfiles.d in the initrd need to be created with"
-          "boot.initrd.systemd.tmpfiles.settings."
-          "Creating them by hand using boot.initrd.systemd.contents or"
-          "boot.initrd.systemd.storePaths will lead to errors in the future."
-          "Found these problematic files: ${lib.concatStringsSep ", " paths}"
-        ]
-      )
+      lib.optional (lib.length paths > 0)
+        (
+          lib.concatStringsSep " " [
+            "Files inside /etc/tmpfiles.d in the initrd need to be created with"
+            "boot.initrd.systemd.tmpfiles.settings."
+            "Creating them by hand using boot.initrd.systemd.contents or"
+            "boot.initrd.systemd.storePaths will lead to errors in the future."
+            "Found these problematic files: ${lib.concatStringsSep ", " paths}"
+          ]
+        )
       ++ (lib.flatten (
-        lib.mapAttrsToList (
-          name: paths:
-          lib.mapAttrsToList (
-            path: entries:
-            lib.mapAttrsToList (
-              type': entry:
-              lib.optional (lib.match ''.*\\([nrt]|x[0-9A-Fa-f]{2}).*'' entry.argument != null) (
-                lib.concatStringsSep " " [
-                  "The argument option of ${name}.${type'}.${path} appears to"
-                  "contain escape sequences, which will be escaped again."
-                  "Unescape them if this is not intended: \"${entry.argument}\""
-                ]
-              )
-            ) entries
-          ) paths
-        ) cfg.settings
+        lib.mapAttrsToList
+          (
+            name: paths:
+              lib.mapAttrsToList
+                (
+                  path: entries:
+                    lib.mapAttrsToList
+                      (
+                        type': entry:
+                          lib.optional (lib.match ''.*\\([nrt]|x[0-9A-Fa-f]{2}).*'' entry.argument != null) (
+                            lib.concatStringsSep " " [
+                              "The argument option of ${name}.${type'}.${path} appears to"
+                              "contain escape sequences, which will be escaped again."
+                              "Unescape them if this is not intended: \"${entry.argument}\""
+                            ]
+                          )
+                      )
+                      entries
+                )
+                paths
+          )
+          cfg.settings
       ));
 
     systemd.additionalUpstreamSystemUnits = [
@@ -297,12 +303,14 @@ in
               )
             done
           ''
-          + concatMapStrings (
-            name:
-            optionalString (hasPrefix "tmpfiles.d/" name) ''
-              rm -f $out/${removePrefix "tmpfiles.d/" name}
-            ''
-          ) config.system.build.etc.passthru.targets;
+          + concatMapStrings
+            (
+              name:
+              optionalString (hasPrefix "tmpfiles.d/" name) ''
+                rm -f $out/${removePrefix "tmpfiles.d/" name}
+              ''
+            )
+            config.system.build.etc.passthru.targets;
         })
         + "/*";
       "mtab" = {
@@ -341,9 +349,11 @@ in
         '';
       })
     ]
-    ++ (mapAttrsToList (
-      name: paths: pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (mkRuleFileContent paths)
-    ) cfg.settings);
+    ++ (mapAttrsToList
+      (
+        name: paths: pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (mkRuleFileContent paths)
+      )
+      cfg.settings);
 
     systemd.tmpfiles.rules = [
       "d  /run/lock                          0755 root root - -"
@@ -416,10 +426,12 @@ in
 
       contents."/etc/tmpfiles.d" = mkIf (initrdCfg.settings != { }) {
         source = pkgs.linkFarm "initrd-tmpfiles.d" (
-          mapAttrsToList (name: paths: {
-            name = "${name}.conf";
-            path = pkgs.writeText "${name}.conf" (mkRuleFileContent paths);
-          }) initrdCfg.settings
+          mapAttrsToList
+            (name: paths: {
+              name = "${name}.conf";
+              path = pkgs.writeText "${name}.conf" (mkRuleFileContent paths);
+            })
+            initrdCfg.settings
         );
       };
     };

@@ -1,21 +1,21 @@
-{
-  boost,
-  cmake,
-  expat,
-  fetchFromGitHub,
-  fontconfig,
-  freeimage,
-  freetype,
-  glfw3,
-  glm,
-  lib,
-  libGLU,
-  libGL,
-  libgbm,
-  opencl-clhpp,
-  pkg-config,
-  stdenv,
-  SDL2,
+{ boost
+, cmake
+, expat
+, fetchFromGitHub
+, fontconfig
+, freeimage
+, freetype
+, glfw3
+, glm
+, lib
+, libGLU
+, libGL
+, libgbm
+, opencl-clhpp
+, pkg-config
+, stdenv
+, SDL2
+,
 }:
 
 stdenv.mkDerivation rec {

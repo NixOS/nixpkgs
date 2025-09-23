@@ -1,28 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  matplotlib,
-
-  # optional-dependencies
-  arviz,
-  ipython,
-  myst-nb,
-  pandoc,
-  sphinx,
-  sphinx-book-theme,
-  pytest,
-  scipy,
-
-  # tests
-  pytestCheckHook,
-  corner,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  matplotlib
+, # optional-dependencies
+  arviz
+, ipython
+, myst-nb
+, pandoc
+, sphinx
+, sphinx-book-theme
+, pytest
+, scipy
+, # tests
+  pytestCheckHook
+, corner
+,
 }:
 
 buildPythonPackage rec {

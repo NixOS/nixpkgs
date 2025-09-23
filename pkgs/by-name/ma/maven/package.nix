@@ -1,11 +1,11 @@
-{
-  lib,
-  callPackage,
-  fetchurl,
-  jdk_headless,
-  makeWrapper,
-  stdenvNoCC,
-  testers,
+{ lib
+, callPackage
+, fetchurl
+, jdk_headless
+, makeWrapper
+, stdenvNoCC
+, testers
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";

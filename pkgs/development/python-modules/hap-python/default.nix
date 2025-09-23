@@ -1,20 +1,20 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  base36,
-  chacha20poly1305-reuseable,
-  cryptography,
-  fetchFromGitHub,
-  h11,
-  orjson,
-  pyqrcode,
-  pytest-asyncio,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  zeroconf,
+{ lib
+, async-timeout
+, buildPythonPackage
+, base36
+, chacha20poly1305-reuseable
+, cryptography
+, fetchFromGitHub
+, h11
+, orjson
+, pyqrcode
+, pytest-asyncio
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

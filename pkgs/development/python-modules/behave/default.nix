@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  buildPythonPackage,
-  python,
-  pythonOlder,
-  pytestCheckHook,
-  assertpy,
-  mock,
-  path,
-  pyhamcrest,
-  pytest-html,
-  colorama,
-  cucumber-tag-expressions,
-  parse,
-  parse-type,
-  setuptools,
-  six,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, buildPythonPackage
+, python
+, pythonOlder
+, pytestCheckHook
+, assertpy
+, mock
+, path
+, pyhamcrest
+, pytest-html
+, colorama
+, cucumber-tag-expressions
+, parse
+, parse-type
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

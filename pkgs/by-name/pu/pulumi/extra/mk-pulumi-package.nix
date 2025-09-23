@@ -1,19 +1,18 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  python3Packages,
+{ buildGoModule
+, fetchFromGitHub
+, python3Packages
+,
 }:
 let
   mkBasePackage =
-    {
-      pname,
-      src,
-      version,
-      vendorHash,
-      cmd,
-      extraLdflags,
-      env,
-      ...
+    { pname
+    , src
+    , version
+    , vendorHash
+    , cmd
+    , extraLdflags
+    , env
+    , ...
     }@args:
     buildGoModule (
       rec {
@@ -41,87 +40,87 @@ let
     );
 
   mkPythonPackage =
-    {
-      meta,
-      pname,
-      src,
-      version,
-      ...
+    { meta
+    , pname
+    , src
+    , version
+    , ...
     }:
-    python3Packages.callPackage (
-      {
-        buildPythonPackage,
-        pythonOlder,
-        parver,
-        pip,
-        pulumi,
-        semver,
-        setuptools,
-      }:
-      buildPythonPackage {
-        inherit
-          pname
-          meta
-          src
-          version
-          ;
-        format = "pyproject";
+    python3Packages.callPackage
+      (
+        { buildPythonPackage
+        , pythonOlder
+        , parver
+        , pip
+        , pulumi
+        , semver
+        , setuptools
+        ,
+        }:
+        buildPythonPackage {
+          inherit
+            pname
+            meta
+            src
+            version
+            ;
+          format = "pyproject";
 
-        disabled = pythonOlder "3.7";
+          disabled = pythonOlder "3.7";
 
-        sourceRoot = "${src.name}/sdk/python";
+          sourceRoot = "${src.name}/sdk/python";
 
-        propagatedBuildInputs = [
-          parver
-          pulumi
-          semver
-          setuptools
-        ];
+          propagatedBuildInputs = [
+            parver
+            pulumi
+            semver
+            setuptools
+          ];
 
-        postPatch = ''
-          if [[ -e "pyproject.toml" ]]; then
-            sed -i \
-              -e 's/^  version = .*/  version = "${version}"/g' \
-              pyproject.toml
-          else
-            sed -i \
-               -e 's/^VERSION = .*/VERSION = "${version}"/g' \
-               -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "${version}"/g' \
-               setup.py
-          fi
-        '';
+          postPatch = ''
+            if [[ -e "pyproject.toml" ]]; then
+              sed -i \
+                -e 's/^  version = .*/  version = "${version}"/g' \
+                pyproject.toml
+            else
+              sed -i \
+                 -e 's/^VERSION = .*/VERSION = "${version}"/g' \
+                 -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "${version}"/g' \
+                 setup.py
+            fi
+          '';
 
-        # Auto-generated; upstream does not have any tests.
-        # Verify that the version substitution works
-        checkPhase = ''
-          runHook preCheck
+          # Auto-generated; upstream does not have any tests.
+          # Verify that the version substitution works
+          checkPhase = ''
+            runHook preCheck
 
-          ${pip}/bin/pip show "${pname}" | grep "Version: ${version}" > /dev/null \
-            || (echo "ERROR: Version substitution seems to be broken"; exit 1)
+            ${pip}/bin/pip show "${pname}" | grep "Version: ${version}" > /dev/null \
+              || (echo "ERROR: Version substitution seems to be broken"; exit 1)
 
-          runHook postCheck
-        '';
+            runHook postCheck
+          '';
 
-        pythonImportsCheck = [
-          (builtins.replaceStrings [ "-" ] [ "_" ] pname)
-        ];
-      }
-    ) { };
+          pythonImportsCheck = [
+            (builtins.replaceStrings [ "-" ] [ "_" ] pname)
+          ];
+        }
+      )
+      { };
 in
-{
-  owner,
-  repo,
-  rev,
-  version,
-  hash,
-  vendorHash,
-  cmdGen,
-  cmdRes,
-  extraLdflags,
-  env ? { },
-  meta,
-  fetchSubmodules ? false,
-  ...
+{ owner
+, repo
+, rev
+, version
+, hash
+, vendorHash
+, cmdGen
+, cmdRes
+, extraLdflags
+, env ? { }
+, meta
+, fetchSubmodules ? false
+, ...
 }@args:
 let
   src = fetchFromGitHub {
@@ -184,5 +183,5 @@ mkBasePackage (
       pname = repo;
     };
   }
-  // args
+    // args
 )

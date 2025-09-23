@@ -1,24 +1,24 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  fetchpatch2,
-  qmake,
-  cmake,
-  pkg-config,
-  miniupnpc,
-  bzip2,
-  speex,
-  libmicrohttpd,
-  libxml2,
-  libxslt,
-  sqlcipher,
-  rapidjson,
-  libXScrnSaver,
-  qtbase,
-  qtx11extras,
-  qtmultimedia,
-  libgnome-keyring,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch2
+, qmake
+, cmake
+, pkg-config
+, miniupnpc
+, bzip2
+, speex
+, libmicrohttpd
+, libxml2
+, libxslt
+, sqlcipher
+, rapidjson
+, libXScrnSaver
+, qtbase
+, qtx11extras
+, qtmultimedia
+, libgnome-keyring
+,
 }:
 
 mkDerivation rec {

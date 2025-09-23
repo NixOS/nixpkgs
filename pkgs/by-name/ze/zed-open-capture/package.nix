@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  libusb1,
-  hidapi,
-  opencv,
-  cmake,
-  pkg-config,
-  fetchFromGitHub,
-  withExamples ? false,
+{ lib
+, stdenv
+, libusb1
+, hidapi
+, opencv
+, cmake
+, pkg-config
+, fetchFromGitHub
+, withExamples ? false
+,
 }:
 
 stdenv.mkDerivation {

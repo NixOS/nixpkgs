@@ -1,12 +1,12 @@
-{
-  buildDartApplication,
-  dart,
-  fetchFromGitHub,
-  lib,
-  runCommand,
-  testers,
-  unsure,
-  writeText,
+{ buildDartApplication
+, dart
+, fetchFromGitHub
+, lib
+, runCommand
+, testers
+, unsure
+, writeText
+,
 }:
 
 buildDartApplication rec {

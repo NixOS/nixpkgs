@@ -1,18 +1,15 @@
-{
-  buildPythonPackage,
-  lib,
-  callPackage,
-
-  isPy3k,
-  isPyPy,
-
-  openpaperwork-core,
-  pillow,
-  pygobject3,
-  distro,
-  setuptools-scm,
-
-  pkgs,
+{ buildPythonPackage
+, lib
+, callPackage
+, isPy3k
+, isPyPy
+, openpaperwork-core
+, pillow
+, pygobject3
+, distro
+, setuptools-scm
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  pkg-config,
-  libftdi1,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, pkg-config
+, libftdi1
+,
 }:
 
 stdenv.mkDerivation rec {

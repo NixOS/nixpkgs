@@ -1,52 +1,50 @@
-{
-  lib,
-  stdenv,
-  targetPackages,
-
-  # Build time
-  fetchurl,
-  pkg-config,
-  perl,
-  texinfo,
-  setupDebugInfoDirs,
-  buildPackages,
-
-  # Run time
-  ncurses,
-  readline,
-  gmp,
-  mpfr,
-  expat,
-  libipt,
-  zlib,
-  zstd,
-  xz,
-  dejagnu,
-  sourceHighlight,
-  libiconv,
-
-  pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin,
-  python3 ? null,
-  enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
-  elfutils,
-  guile ? null,
-  hostCpuOnly ? false,
-  enableSim ? false,
-  safePaths ? [
+{ lib
+, stdenv
+, targetPackages
+, # Build time
+  fetchurl
+, pkg-config
+, perl
+, texinfo
+, setupDebugInfoDirs
+, buildPackages
+, # Run time
+  ncurses
+, readline
+, gmp
+, mpfr
+, expat
+, libipt
+, zlib
+, zstd
+, xz
+, dejagnu
+, sourceHighlight
+, libiconv
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin
+, python3 ? null
+, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils
+, elfutils
+, guile ? null
+, hostCpuOnly ? false
+, enableSim ? false
+, safePaths ? [
     # $debugdir:$datadir/auto-load are whitelisted by default by GDB
     "$debugdir"
     "$datadir/auto-load"
     # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
     (lib.getLib targetPackages.stdenv.cc.cc)
-  ],
-  writeScript,
+  ]
+, writeScript
+,
 }:
 
 let
   basename = "gdb";
-  targetPrefix = lib.optionalString (
-    stdenv.targetPlatform != stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString
+    (
+      stdenv.targetPlatform != stdenv.hostPlatform
+    ) "${stdenv.targetPlatform.config}-";
 in
 
 assert pythonSupport -> python3 != null;
@@ -172,9 +170,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
   ++ lib.optional (!enableSim) "--disable-sim"
   # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
-  ++ lib.optional (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "--target=x86_64-apple-darwin";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+    ) "--target=x86_64-apple-darwin";
 
   postInstall = ''
     # Remove Info files already provided by Binutils and other packages.

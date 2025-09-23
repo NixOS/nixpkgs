@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3Packages,
+{ lib
+, fetchFromGitLab
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

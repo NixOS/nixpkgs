@@ -1,17 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # nativeBuildInputs
-  rustPlatform,
-  cmake,
-  nasm,
-
-  # tests
-  numpy,
-  pytestCheckHook,
-  torch,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # nativeBuildInputs
+  rustPlatform
+, cmake
+, nasm
+, # tests
+  numpy
+, pytestCheckHook
+, torch
+,
 }:
 
 buildPythonPackage rec {

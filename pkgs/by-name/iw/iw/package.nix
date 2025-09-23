@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  libnl,
-  pkg-config,
-  stdenv,
+{ lib
+, fetchurl
+, libnl
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

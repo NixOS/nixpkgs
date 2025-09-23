@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  v2ray-domain-list-community,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, v2ray-domain-list-community
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "sing-geosite";

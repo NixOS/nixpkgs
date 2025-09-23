@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  vim,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, vim
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

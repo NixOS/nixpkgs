@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
-  ninja,
-  versionCheckHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, installShellFiles
+, writableTmpDirAsHomeHook
+, ninja
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

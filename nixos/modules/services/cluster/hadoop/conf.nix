@@ -1,7 +1,7 @@
-{
-  cfg,
-  pkgs,
-  lib,
+{ cfg
+, pkgs
+, lib
+,
 }:
 let
   propertyXml =

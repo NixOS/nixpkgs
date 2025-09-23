@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-
-  # Dependencies
-  biothings-client,
-  pandas,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, # Dependencies
+  biothings-client
+, pandas
+, requests
+,
 }:
 buildPythonPackage rec {
   pname = "mygene";

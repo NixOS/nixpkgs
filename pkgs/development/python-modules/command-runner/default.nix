@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  psutil,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, psutil
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

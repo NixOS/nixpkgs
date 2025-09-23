@@ -1,9 +1,9 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  libGL,
+{ lib
+, rel
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, libGL
+,
 }:
 buildKodiBinaryAddon rec {
   pname = "pvr-vdr-vnsi";

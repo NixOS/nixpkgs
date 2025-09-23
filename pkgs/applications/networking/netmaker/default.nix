@@ -1,14 +1,14 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  libglvnd,
-  pkg-config,
-  subPackages ? [
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, libglvnd
+, pkg-config
+, subPackages ? [
     "."
     "netclient"
-  ],
-  xorg,
+  ]
+, xorg
+,
 }:
 
 buildGoModule rec {

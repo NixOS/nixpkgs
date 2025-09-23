@@ -1,22 +1,22 @@
-{
-  bzip2,
-  copyDesktopItems,
-  curl,
-  fetchFromGitHub,
-  fftwFloat,
-  jsoncpp,
-  lib,
-  libpng,
-  libX11,
-  lua,
-  luajit,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  SDL2,
-  stdenv,
-  zlib,
+{ bzip2
+, copyDesktopItems
+, curl
+, fetchFromGitHub
+, fftwFloat
+, jsoncpp
+, lib
+, libpng
+, libX11
+, lua
+, luajit
+, meson
+, ninja
+, pkg-config
+, python3
+, SDL2
+, stdenv
+, zlib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";

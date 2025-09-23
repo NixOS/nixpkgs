@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  freetype,
-  xorg,
-  curl,
-  libGL,
-  libjack2,
-  zenity,
-  pkg-config,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, freetype
+, xorg
+, curl
+, libGL
+, libjack2
+, zenity
+, pkg-config
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

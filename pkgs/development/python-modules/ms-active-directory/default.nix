@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  dnspython,
-  fetchFromGitHub,
-  ldap3,
-  pyasn1,
-  pycryptodome,
-  pythonOlder,
-  pytz,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, dnspython
+, fetchFromGitHub
+, ldap3
+, pyasn1
+, pycryptodome
+, pythonOlder
+, pytz
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

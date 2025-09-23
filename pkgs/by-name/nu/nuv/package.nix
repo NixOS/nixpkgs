@@ -1,17 +1,17 @@
-{
-  lib,
-  symlinkJoin,
-  callPackage,
-  fetchFromGitHub,
-  buildGoModule,
-  makeWrapper,
-  jq,
-  curl,
-  kubectl,
-  eksctl,
-  kind,
-  k3sup,
-  coreutils,
+{ lib
+, symlinkJoin
+, callPackage
+, fetchFromGitHub
+, buildGoModule
+, makeWrapper
+, jq
+, curl
+, kubectl
+, eksctl
+, kind
+, k3sup
+, coreutils
+,
 }:
 
 let

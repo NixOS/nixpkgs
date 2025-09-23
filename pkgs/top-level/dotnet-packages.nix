@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  pkgs,
-  buildDotnetPackage,
-  buildDotnetModule,
-  fetchurl,
-  fetchFromGitHub,
-  fetchNuGet,
-  glib,
-  mono,
-  overrides ? { },
-  boogie,
-  nuget,
+{ stdenv
+, lib
+, pkgs
+, buildDotnetPackage
+, buildDotnetModule
+, fetchurl
+, fetchFromGitHub
+, fetchNuGet
+, glib
+, mono
+, overrides ? { }
+, boogie
+, nuget
+,
 }:
 
 let

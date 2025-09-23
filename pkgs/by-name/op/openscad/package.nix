@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libsForQt5,
-  bison,
-  flex,
-  eigen,
-  boost,
-  libGLU,
-  libGL,
-  glew,
-  opencsg,
-  cgal_5,
-  mpfr,
-  gmp,
-  glib,
-  pkg-config,
-  harfbuzz,
-  gettext,
-  freetype,
-  fontconfig,
-  double-conversion,
-  lib3mf,
-  libzip,
-  spacenavSupport ? stdenv.hostPlatform.isLinux,
-  libspnav,
-  wayland,
-  wayland-protocols,
-  wrapGAppsHook3,
-  cairo,
-  openscad,
-  runCommand,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libsForQt5
+, bison
+, flex
+, eigen
+, boost
+, libGLU
+, libGL
+, glew
+, opencsg
+, cgal_5
+, mpfr
+, gmp
+, glib
+, pkg-config
+, harfbuzz
+, gettext
+, freetype
+, fontconfig
+, double-conversion
+, lib3mf
+, libzip
+, spacenavSupport ? stdenv.hostPlatform.isLinux
+, libspnav
+, wayland
+, wayland-protocols
+, wrapGAppsHook3
+, cairo
+, openscad
+, runCommand
+,
 }:
 
 stdenv.mkDerivation rec {

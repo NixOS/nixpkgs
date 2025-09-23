@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  gtk3,
-  itstool,
-  libxml2,
-  brasero,
-  libcanberra-gtk3,
-  gnome,
-  adwaita-icon-theme,
-  gst_all_1,
-  libmusicbrainz,
-  libdiscid,
-  isocodes,
-  gsettings-desktop-schemas,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, glib
+, gtk3
+, itstool
+, libxml2
+, brasero
+, libcanberra-gtk3
+, gnome
+, adwaita-icon-theme
+, gst_all_1
+, libmusicbrainz
+, libdiscid
+, isocodes
+, gsettings-desktop-schemas
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

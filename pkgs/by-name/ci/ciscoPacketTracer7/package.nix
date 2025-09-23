@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenvNoCC,
-  requireFile,
-  autoPatchelfHook,
-  dpkg,
-  makeWrapper,
-  alsa-lib,
-  dbus,
-  expat,
-  fontconfig,
-  glib,
-  libdrm,
-  libglvnd,
-  libpulseaudio,
-  libudev0-shim,
-  libxkbcommon,
-  libxml2_13,
-  libxslt,
-  nspr,
-  nss,
-  xorg,
-  buildFHSEnv,
-  copyDesktopItems,
-  makeDesktopItem,
-  packetTracerSource ? null,
+{ lib
+, stdenvNoCC
+, requireFile
+, autoPatchelfHook
+, dpkg
+, makeWrapper
+, alsa-lib
+, dbus
+, expat
+, fontconfig
+, glib
+, libdrm
+, libglvnd
+, libpulseaudio
+, libudev0-shim
+, libxkbcommon
+, libxml2_13
+, libxslt
+, nspr
+, nss
+, xorg
+, buildFHSEnv
+, copyDesktopItems
+, makeDesktopItem
+, packetTracerSource ? null
+,
 }:
 
 let

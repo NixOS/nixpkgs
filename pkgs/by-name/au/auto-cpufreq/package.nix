@@ -1,13 +1,13 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  replaceVars,
-  gobject-introspection,
-  wrapGAppsHook3,
-  gtk3,
-  getent,
-  nixosTests,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, replaceVars
+, gobject-introspection
+, wrapGAppsHook3
+, gtk3
+, getent
+, nixosTests
+,
 }:
 
 python3Packages.buildPythonPackage rec {

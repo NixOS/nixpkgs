@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  curl,
-  git,
-  ncurses,
-  tzdata,
-  unzip,
-
-  # Version-specific attributes
-  version,
-  src,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, curl
+, git
+, ncurses
+, tzdata
+, unzip
+, # Version-specific attributes
+  version
+, src
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

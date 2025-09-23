@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cheroot,
-  fetchPypi,
-  jaraco-collections,
-  more-itertools,
-  objgraph,
-  path,
-  portend,
-  pyopenssl,
-  pytest-cov-stub,
-  pytest-forked,
-  pytest-services,
-  pytestCheckHook,
-  python-memcached,
-  pythonAtLeast,
-  pythonOlder,
-  requests-toolbelt,
-  routes,
-  setuptools-scm,
-  simplejson,
-  zc-lockfile,
+{ lib
+, stdenv
+, buildPythonPackage
+, cheroot
+, fetchPypi
+, jaraco-collections
+, more-itertools
+, objgraph
+, path
+, portend
+, pyopenssl
+, pytest-cov-stub
+, pytest-forked
+, pytest-services
+, pytestCheckHook
+, python-memcached
+, pythonAtLeast
+, pythonOlder
+, requests-toolbelt
+, routes
+, setuptools-scm
+, simplejson
+, zc-lockfile
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  mitschemeX11,
+{ stdenv
+, fetchurl
+, lib
+, mitschemeX11
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "scmutils";

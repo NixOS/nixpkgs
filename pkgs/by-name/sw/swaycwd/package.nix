@@ -1,15 +1,15 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitLab,
-  enableShells ? [
+{ lib
+, buildNimPackage
+, fetchFromGitLab
+, enableShells ? [
     "bash"
     "zsh"
     "fish"
     "sh"
     "posh"
     "codium"
-  ],
+  ]
+,
 }:
 
 buildNimPackage (finalAttrs: {

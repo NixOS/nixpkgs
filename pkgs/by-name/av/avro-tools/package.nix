@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
-  lib,
+{ stdenv
+, fetchurl
+, makeWrapper
+, jre
+, lib
+,
 }:
 let
   pname = "avro-tools";

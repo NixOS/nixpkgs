@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  reason,
-  console,
-  ppxlib,
+{ lib
+, buildDunePackage
+, reason
+, console
+, ppxlib
+,
 }:
 
 buildDunePackage {

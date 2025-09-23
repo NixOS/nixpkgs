@@ -1,18 +1,17 @@
-{
-  lib,
-  atpublic,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-
-  # for passthru.tests
-  django,
-  aiosmtplib,
+{ lib
+, atpublic
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+, # for passthru.tests
+  django
+, aiosmtplib
+,
 }:
 
 buildPythonPackage rec {

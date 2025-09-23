@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  replaceVars,
-  meson,
-  ninja,
-  nixosTests,
-  pkg-config,
-  glib,
-  gettext,
-  makeWrapper,
-  gnutls,
-  libproxy,
-  gnome,
-  gsettings-desktop-schemas,
-  bash,
+{ stdenv
+, lib
+, fetchurl
+, replaceVars
+, meson
+, ninja
+, nixosTests
+, pkg-config
+, glib
+, gettext
+, makeWrapper
+, gnutls
+, libproxy
+, gnome
+, gsettings-desktop-schemas
+, bash
+,
 }:
 
 stdenv.mkDerivation rec {

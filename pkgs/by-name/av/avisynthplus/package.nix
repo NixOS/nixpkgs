@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  testers,
-  cmake,
-  pkg-config,
-  gitUpdater,
-  soundtouch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, cmake
+, pkg-config
+, gitUpdater
+, soundtouch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

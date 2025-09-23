@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  flex,
-  bison,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, flex
+, bison
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

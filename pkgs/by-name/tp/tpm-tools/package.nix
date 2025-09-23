@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  trousers,
-  openssl,
-  opencryptoki,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, trousers
+, openssl
+, opencryptoki
+, perl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

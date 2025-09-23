@@ -1,42 +1,42 @@
-{
-  lib,
-  alsa-lib,
-  boost,
-  meson,
-  config,
-  expat,
-  fetchFromGitHub,
-  ffmpeg,
-  ffms,
-  fftw,
-  fontconfig,
-  freetype,
-  fribidi,
-  harfbuzz,
-  hunspell,
-  icu,
-  intltool,
-  libGL,
-  libass,
-  libpulseaudio,
-  libuchardet,
-  luajit,
-  ninja,
-  openal,
-  pkg-config,
-  portaudio,
-  python3,
-  stdenv,
-  wrapGAppsHook3,
-  wxGTK32,
-  zlib,
-  # Boolean guard flags
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  openalSupport ? true,
-  portaudioSupport ? true,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  spellcheckSupport ? true,
-  useBundledLuaJIT ? false,
+{ lib
+, alsa-lib
+, boost
+, meson
+, config
+, expat
+, fetchFromGitHub
+, ffmpeg
+, ffms
+, fftw
+, fontconfig
+, freetype
+, fribidi
+, harfbuzz
+, hunspell
+, icu
+, intltool
+, libGL
+, libass
+, libpulseaudio
+, libuchardet
+, luajit
+, ninja
+, openal
+, pkg-config
+, portaudio
+, python3
+, stdenv
+, wrapGAppsHook3
+, wxGTK32
+, zlib
+, # Boolean guard flags
+  alsaSupport ? stdenv.hostPlatform.isLinux
+, openalSupport ? true
+, portaudioSupport ? true
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, spellcheckSupport ? true
+, useBundledLuaJIT ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

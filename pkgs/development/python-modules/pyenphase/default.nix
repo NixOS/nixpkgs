@@ -1,23 +1,23 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  awesomeversion,
-  buildPythonPackage,
-  envoy-utils,
-  fetchFromGitHub,
-  lxml,
-  orjson,
-  poetry-core,
-  pyjwt,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  respx,
-  syrupy,
-  tenacity,
+{ lib
+, aiohttp
+, aioresponses
+, awesomeversion
+, buildPythonPackage
+, envoy-utils
+, fetchFromGitHub
+, lxml
+, orjson
+, poetry-core
+, pyjwt
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, respx
+, syrupy
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

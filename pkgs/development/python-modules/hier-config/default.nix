@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pydantic
+, pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

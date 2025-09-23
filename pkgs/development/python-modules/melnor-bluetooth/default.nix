@@ -1,20 +1,20 @@
-{
-  lib,
-  aioconsole,
-  bleak-retry-connector,
-  bleak,
-  buildPythonPackage,
-  deprecated,
-  fetchFromGitHub,
-  freezegun,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  syrupy,
-  tzdata,
-  tzlocal,
+{ lib
+, aioconsole
+, bleak-retry-connector
+, bleak
+, buildPythonPackage
+, deprecated
+, fetchFromGitHub
+, freezegun
+, poetry-core
+, poetry-dynamic-versioning
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, syrupy
+, tzdata
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

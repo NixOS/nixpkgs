@@ -1,18 +1,18 @@
-{
-  lib,
-  argcomplete,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  installShellFiles,
-  packaging,
-  platformdirs,
-  pytestCheckHook,
-  pythonOlder,
-  tomli,
-  userpath,
-  git,
+{ lib
+, argcomplete
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, installShellFiles
+, packaging
+, platformdirs
+, pytestCheckHook
+, pythonOlder
+, tomli
+, userpath
+, git
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  patchelfUnstable,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, patchelfUnstable
+, openssl
+,
 }:
 
 # Use techniques described in https://web.archive.org/web/20220904051329/https://tapesoftware.net/replace-symbol/

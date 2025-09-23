@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  autoPatchelfHook,
-  curl,
-  gfortran,
-  zlib,
+{ lib
+, stdenvNoCC
+, fetchurl
+, autoPatchelfHook
+, curl
+, gfortran
+, zlib
+,
 }:
 
 stdenvNoCC.mkDerivation {

@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cargo,
-  dbus,
-  desktop-file-utils,
-  gdk-pixbuf,
-  gettext,
-  gitMinimal,
-  glib,
-  gst_all_1,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  sqlite,
-  wrapGAppsHook4,
-  libshumate,
-  libseccomp,
-  lcms2,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cargo
+, dbus
+, desktop-file-utils
+, gdk-pixbuf
+, gettext
+, gitMinimal
+, glib
+, gst_all_1
+, gtk4
+, libadwaita
+, meson
+, ninja
+, openssl
+, pkg-config
+, rustPlatform
+, rustc
+, sqlite
+, wrapGAppsHook4
+, libshumate
+, libseccomp
+, lcms2
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

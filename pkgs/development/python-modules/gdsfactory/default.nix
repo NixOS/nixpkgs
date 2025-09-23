@@ -1,48 +1,45 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  jinja2,
-  loguru,
-  matplotlib,
-  numpy,
-  orjson,
-  pandas,
-  pydantic,
-  pydantic-settings,
-  pydantic-extra-types,
-  pyyaml,
-  qrcode,
-  rectpack,
-  rich,
-  scipy,
-  shapely,
-  toolz,
-  types-pyyaml,
-  typer,
-  kfactory,
-  watchdog,
-  freetype-py,
-  mapbox-earcut,
-  networkx,
-  scikit-image,
-  trimesh,
-  ipykernel,
-  attrs,
-  graphviz,
-  pyglet,
-  typing-extensions,
-
-  # tests
-  jsondiff,
-  jsonschema,
-  pytest-regressions,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  jinja2
+, loguru
+, matplotlib
+, numpy
+, orjson
+, pandas
+, pydantic
+, pydantic-settings
+, pydantic-extra-types
+, pyyaml
+, qrcode
+, rectpack
+, rich
+, scipy
+, shapely
+, toolz
+, types-pyyaml
+, typer
+, kfactory
+, watchdog
+, freetype-py
+, mapbox-earcut
+, networkx
+, scikit-image
+, trimesh
+, ipykernel
+, attrs
+, graphviz
+, pyglet
+, typing-extensions
+, # tests
+  jsondiff
+, jsonschema
+, pytest-regressions
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "gdsfactory";

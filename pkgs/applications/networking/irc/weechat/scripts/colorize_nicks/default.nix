@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  weechat,
+{ stdenv
+, lib
+, fetchurl
+, weechat
+,
 }:
 
 stdenv.mkDerivation {

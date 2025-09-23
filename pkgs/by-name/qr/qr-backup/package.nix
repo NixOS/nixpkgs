@@ -1,13 +1,13 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  pkgs,
-  installShellFiles,
-  nix-update-script,
-  versionCheckHook,
-  dejavu_fonts,
-  fetchpatch,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, pkgs
+, installShellFiles
+, nix-update-script
+, versionCheckHook
+, dejavu_fonts
+, fetchpatch
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "qr-backup";

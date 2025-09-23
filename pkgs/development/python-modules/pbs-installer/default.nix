@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pdm-backend,
-  httpx,
-  zstandard,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pdm-backend
+, httpx
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

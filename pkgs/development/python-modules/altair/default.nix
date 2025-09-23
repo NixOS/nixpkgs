@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  ipython,
-  ipywidgets,
-  jinja2,
-  jsonschema,
-  narwhals,
-  numpy,
-  packaging,
-  pandas,
-  polars,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  toolz,
-  typing-extensions,
-  vega-datasets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, ipython
+, ipywidgets
+, jinja2
+, jsonschema
+, narwhals
+, numpy
+, packaging
+, pandas
+, polars
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, toolz
+, typing-extensions
+, vega-datasets
+,
 }:
 
 buildPythonPackage rec {

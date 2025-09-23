@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  cargo,
-  makeWrapper,
-  rustPlatform,
-  rustc,
-  asNightly ? false,
+{ lib
+, stdenv
+, cargo
+, makeWrapper
+, rustPlatform
+, rustc
+, asNightly ? false
+,
 }:
 
 rustPlatform.buildRustPackage {

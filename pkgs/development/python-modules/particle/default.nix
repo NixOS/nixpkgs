@@ -1,16 +1,16 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  deprecated,
-  fetchPypi,
-  hatch-vcs,
-  hatchling,
-  hepunits,
-  pandas,
-  pytestCheckHook,
-  pythonOlder,
-  tabulate,
+{ lib
+, attrs
+, buildPythonPackage
+, deprecated
+, fetchPypi
+, hatch-vcs
+, hatchling
+, hepunits
+, pandas
+, pytestCheckHook
+, pythonOlder
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

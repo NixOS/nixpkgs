@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jdk_headless,
-  aapt,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jdk_headless
+, aapt
+,
 }:
 
 stdenv.mkDerivation rec {

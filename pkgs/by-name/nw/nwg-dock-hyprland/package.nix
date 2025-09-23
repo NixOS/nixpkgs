@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gtk-layer-shell,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook3
+, gobject-introspection
+, gtk-layer-shell
+,
 }:
 
 buildGoModule rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.hardware.display;
@@ -120,9 +119,10 @@ in
             modelines = lib.trivial.pipe modelines [
               (lib.mapAttrsToList (
                 name: value:
-                lib.throwIfNot (
-                  builtins.stringLength name <= 12
-                ) "Modeline name must be 12 characters or less" ''Modeline "${name}" ${value}''
+                  lib.throwIfNot
+                    (
+                      builtins.stringLength name <= 12
+                    ) "Modeline name must be 12 characters or less" ''Modeline "${name}" ${value}''
               ))
               (builtins.map (line: "${line}\n"))
               (lib.strings.concatStringsSep "")

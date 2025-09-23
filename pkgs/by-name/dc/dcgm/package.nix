@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoAddDriverRunpath,
-  catch2_3,
-  cmake,
-  ctestCheckHook,
-  coreutils,
-  mpi,
-  mpiCheckPhaseHook,
-  ninja,
-  cudaPackages_12,
-  boost186,
-  fmt_10,
-  git,
-  jsoncpp,
-  libevent,
-  lshw,
-  plog,
-  python3,
-  replaceVars,
-  symlinkJoin,
-  tclap_1_4,
-  util-linux,
-  yaml-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoAddDriverRunpath
+, catch2_3
+, cmake
+, ctestCheckHook
+, coreutils
+, mpi
+, mpiCheckPhaseHook
+, ninja
+, cudaPackages_12
+, boost186
+, fmt_10
+, git
+, jsoncpp
+, libevent
+, lshw
+, plog
+, python3
+, replaceVars
+, symlinkJoin
+, tclap_1_4
+, util-linux
+, yaml-cpp
+,
 }:
 let
   # DCGM can depend on multiple versions of CUDA at the same time.

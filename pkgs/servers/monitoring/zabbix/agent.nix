@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libiconv,
-  openssl,
-  pcre,
-  pcre2,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libiconv
+, openssl
+, pcre
+, pcre2
+,
 }:
 
 import ./versions.nix (

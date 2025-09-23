@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  imgui,
-  ninja,
-  withEmscripten ? false,
-  emscripten,
-  withCurl ? (!withEmscripten),
-  curl,
-  withNcurses ? (!withEmscripten),
-  ncurses,
-  static ? withEmscripten,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, imgui
+, ninja
+, withEmscripten ? false
+, emscripten
+, withCurl ? (!withEmscripten)
+, curl
+, withNcurses ? (!withEmscripten)
+, ncurses
+, static ? withEmscripten
+,
 }:
 
 stdenv.mkDerivation rec {

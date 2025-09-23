@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # dependencies
-  typing-extensions,
-
-  # optional-dependencies
-  python-dotenv,
-  email-validator,
-
-  # tests
-  distutils,
-  pytest-mock,
-  pytest7CheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, setuptools
+, # dependencies
+  typing-extensions
+, # optional-dependencies
+  python-dotenv
+, email-validator
+, # tests
+  distutils
+, pytest-mock
+, pytest7CheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,30 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  pkg-config,
-  ninja,
-  gtest,
-
-  curl,
-  freetype,
-  giflib,
-  libjpeg,
-  libpng,
-  libwebp,
-  libarchive,
-  libX11,
-  pixman,
-  tinyxml-2,
-  xorg,
-  zlib,
-  SDL2,
-  SDL2_image,
-  lua,
-
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ninja
+, gtest
+, curl
+, freetype
+, giflib
+, libjpeg
+, libpng
+, libwebp
+, libarchive
+, libX11
+, pixman
+, tinyxml-2
+, xorg
+, zlib
+, SDL2
+, SDL2_image
+, lua
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

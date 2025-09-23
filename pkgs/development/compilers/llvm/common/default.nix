@@ -1,44 +1,46 @@
-{
-  lowPrio,
-  newScope,
-  pkgs,
-  targetPackages,
-  lib,
-  stdenv,
-  libxcrypt,
-  substitute,
-  replaceVars,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchpatch2,
-  overrideCC,
-  wrapCCWith,
-  wrapBintoolsWith,
-  buildPackages,
-  buildLlvmTools, # tools, but from the previous stage, for cross
-  targetLlvmLibraries, # libraries, but from the next stage, for cross
-  targetLlvm,
-  # This is the default binutils, but with *this* version of LLD rather
+{ lowPrio
+, newScope
+, pkgs
+, targetPackages
+, lib
+, stdenv
+, libxcrypt
+, substitute
+, replaceVars
+, fetchFromGitHub
+, fetchpatch
+, fetchpatch2
+, overrideCC
+, wrapCCWith
+, wrapBintoolsWith
+, buildPackages
+, buildLlvmTools
+, # tools, but from the previous stage, for cross
+  targetLlvmLibraries
+, # libraries, but from the next stage, for cross
+  targetLlvm
+, # This is the default binutils, but with *this* version of LLD rather
   # than the default LLVM version's, if LLD is the choice. We use these for
   # the `useLLVM` bootstrapping below.
-  bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
-  bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
-  darwin,
-  gitRelease ? null,
-  officialRelease ? null,
-  monorepoSrc ? null,
-  version ? null,
-  patchesFn ? lib.id,
-  # Allows passthrough to packages via newScope. This makes it possible to
+  bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc
+, bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools
+, darwin
+, gitRelease ? null
+, officialRelease ? null
+, monorepoSrc ? null
+, version ? null
+, patchesFn ? lib.id
+, # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
   ...
 }@args:
 
-assert lib.assertMsg (lib.xor (gitRelease != null) (officialRelease != null)) (
-  "must specify `gitRelease` or `officialRelease`"
-  + (lib.optionalString (gitRelease != null) " — not both")
-);
+assert lib.assertMsg (lib.xor (gitRelease != null) (officialRelease != null))
+  (
+    "must specify `gitRelease` or `officialRelease`"
+      + (lib.optionalString (gitRelease != null) " — not both")
+  );
 
 let
   monorepoSrc' = monorepoSrc;
@@ -86,10 +88,10 @@ let
 
             constraints = patches."${p}" or null;
             matchConstraint =
-              {
-                before ? null,
-                after ? null,
-                path,
+              { before ? null
+              , after ? null
+              , path
+              ,
               }:
               let
                 check = fn: value: if value == null then true else fn release_version value;
@@ -153,8 +155,7 @@ let
       bintools' = if bootBintools == null then tools.bintools else bootBintools;
     in
     {
-      libllvm = callPackage ./llvm {
-      };
+      libllvm = callPackage ./llvm { };
 
       # `llvm` historically had the binaries.  When choosing an output explicitly,
       # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
@@ -174,8 +175,7 @@ let
         ];
       };
 
-      libclang = callPackage ./clang {
-      };
+      libclang = callPackage ./clang { };
 
       clang-unwrapped = tools.libclang;
 
@@ -222,8 +222,7 @@ let
         extraBuildCommands = mkExtraBuildCommands cc;
       };
 
-      lld = callPackage ./lld {
-      };
+      lld = callPackage ./lld { };
 
       lldbPlugins = lib.makeExtensible (
         lldbPlugins:
@@ -274,18 +273,21 @@ let
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
         ]
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-        ) "--unwindlib=libunwind"
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm
-          && !stdenv.targetPlatform.isFreeBSD
-          && stdenv.targetPlatform.useLLVM or false
-        ) "-lunwind"
+        ++ lib.optional
+          (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+          ) "--unwindlib=libunwind"
+        ++ lib.optional
+          (
+            !stdenv.targetPlatform.isWasm
+            && !stdenv.targetPlatform.isFreeBSD
+            && stdenv.targetPlatform.useLLVM or false
+          ) "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-        nixSupport.cc-ldflags = lib.optionals (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-        ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+        nixSupport.cc-ldflags = lib.optionals
+          (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
       };
 
       clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
@@ -296,31 +298,34 @@ let
           targetLlvmLibraries.compiler-rt-no-libc
         ]
         ++
-          lib.optionals
-            (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-            )
-            [
-              targetLlvmLibraries.libunwind
-            ];
+        lib.optionals
+          (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+          )
+          [
+            targetLlvmLibraries.libunwind
+          ];
         extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
         nixSupport.cc-cflags = [
           "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
         ]
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-        ) "--unwindlib=libunwind"
-        ++ lib.optional (
-          !stdenv.targetPlatform.isWasm
-          && !stdenv.targetPlatform.isFreeBSD
-          && stdenv.targetPlatform.useLLVM or false
-        ) "-lunwind"
+        ++ lib.optional
+          (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+          ) "--unwindlib=libunwind"
+        ++ lib.optional
+          (
+            !stdenv.targetPlatform.isWasm
+            && !stdenv.targetPlatform.isFreeBSD
+            && stdenv.targetPlatform.useLLVM or false
+          ) "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-        nixSupport.cc-ldflags = lib.optionals (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-        ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+        nixSupport.cc-ldflags = lib.optionals
+          (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
       };
 
       clangWithLibcAndBasicRt = wrapCCWith rec {
@@ -363,13 +368,14 @@ let
       # This is an "oddly ordered" bootstrap just for Darwin. Probably
       # don't want it otherwise.
       clangNoCompilerRtWithLibc =
-        wrapCCWith rec {
-          cc = tools.clang-unwrapped;
-          libcxx = null;
-          bintools = bintools';
-          extraPackages = [ ];
-          extraBuildCommands = mkExtraBuildCommands0 cc;
-        }
+        wrapCCWith
+          rec {
+            cc = tools.clang-unwrapped;
+            libcxx = null;
+            bintools = bintools';
+            extraPackages = [ ];
+            extraBuildCommands = mkExtraBuildCommands0 cc;
+          }
         # FIXME: This should be inside the `wrapCCWith` call.
         // lib.optionalAttrs stdenv.targetPlatform.isWasm {
           nixSupport.cc-cflags = [ "-fno-exceptions" ];
@@ -383,8 +389,7 @@ let
       mlir = callPackage ./mlir { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
-      bolt = callPackage ./bolt {
-      };
+      bolt = callPackage ./bolt { };
     }
     // lib.optionalAttrs (lib.versionOlder metadata.release_version "22") {
       libclc = callPackage ./libclc { };
@@ -467,8 +472,7 @@ let
           stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
         };
 
-        openmp = callPackage ./openmp {
-        };
+        openmp = callPackage ./openmp { };
       }
       // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
         libc-overlay = callPackage ./libc {
@@ -504,4 +508,4 @@ in
   inherit (metadata) release_version;
 }
 // (noExtend libraries)
-// (noExtend tools)
+  // (noExtend tools)

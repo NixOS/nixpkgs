@@ -1,10 +1,10 @@
-{
-  stdenv,
-  libsForQt5,
-  fetchFromGitLab,
-  makeDesktopItem,
-  lib,
-  copyDesktopItems,
+{ stdenv
+, libsForQt5
+, fetchFromGitLab
+, makeDesktopItem
+, lib
+, copyDesktopItems
+,
 }:
 
 let

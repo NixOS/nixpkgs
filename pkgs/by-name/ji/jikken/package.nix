@@ -1,12 +1,12 @@
-{
-  apple-sdk_15,
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  openssl,
+{ apple-sdk_15
+, stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, openssl
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jikken";

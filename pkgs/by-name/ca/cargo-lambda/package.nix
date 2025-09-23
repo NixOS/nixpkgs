@@ -1,15 +1,15 @@
-{
-  lib,
-  cacert,
-  curl,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  openssl,
-  stdenv,
-  zig_0_13,
-  nix-update-script,
+{ lib
+, cacert
+, curl
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, openssl
+, stdenv
+, zig_0_13
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

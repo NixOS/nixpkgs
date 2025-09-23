@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  docutils,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gupnp_1_6,
-  gupnp-av,
-  gupnp-dlna,
+{ stdenv
+, lib
+, docutils
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gupnp_1_6
+, gupnp-av
+, gupnp-dlna
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

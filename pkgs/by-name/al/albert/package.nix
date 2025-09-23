@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kdePackages,
-  qt6,
-  cmake,
-  libqalculate,
-  muparser,
-  libarchive,
-  python3Packages,
-  nix-update-script,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kdePackages
+, qt6
+, cmake
+, libqalculate
+, muparser
+, libarchive
+, python3Packages
+, nix-update-script
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

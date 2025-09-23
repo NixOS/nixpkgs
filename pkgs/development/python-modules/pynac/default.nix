@@ -1,7 +1,7 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
+{ lib
+, buildPythonPackage
+, fetchurl
+,
 }:
 
 buildPythonPackage {

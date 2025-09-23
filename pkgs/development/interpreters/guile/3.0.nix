@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  boehmgc,
-  buildPackages,
-  coverageAnalysis ? null,
-  gawk,
-  gmp,
-  libffi,
-  libtool,
-  libunistring,
-  libxcrypt,
-  makeWrapper,
-  pkg-config,
-  autoreconfHook,
-  pkgsBuildBuild,
-  readline,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, boehmgc
+, buildPackages
+, coverageAnalysis ? null
+, gawk
+, gmp
+, libffi
+, libtool
+, libunistring
+, libxcrypt
+, makeWrapper
+, pkg-config
+, autoreconfHook
+, pkgsBuildBuild
+, readline
+, writeScript
+,
 }:
 
 let
@@ -43,9 +43,11 @@ builder rec {
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ]
-  ++ lib.optional (
-    !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
-  ) pkgsBuildBuild.guile_3_0;
+  ++ lib.optional
+    (
+      !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
+    )
+    pkgsBuildBuild.guile_3_0;
 
   nativeBuildInputs = [
     makeWrapper

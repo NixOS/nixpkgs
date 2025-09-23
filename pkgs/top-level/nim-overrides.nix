@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  getdns,
-  htslib,
-  libsass,
-  openssl,
-  pkg-config,
-  raylib,
-  SDL2,
-  tkrzw,
-  xorg,
+{ lib
+, stdenv
+, getdns
+, htslib
+, libsass
+, openssl
+, pkg-config
+, raylib
+, SDL2
+, tkrzw
+, xorg
+,
 }:
 
 # The following is list of overrides that take two arguments each:
@@ -18,9 +18,8 @@
 {
   jester =
     lockAttrs:
-    {
-      buildInputs ? [ ],
-      ...
+    { buildInputs ? [ ]
+    , ...
     }:
     {
       buildInputs = buildInputs ++ [ openssl ];
@@ -28,9 +27,8 @@
 
   hts =
     lockAttrs:
-    {
-      buildInputs ? [ ],
-      ...
+    { buildInputs ? [ ]
+    , ...
     }:
     {
       buildInputs = buildInputs ++ [ htslib ];
@@ -38,10 +36,9 @@
 
   getdns =
     lockAttrs:
-    {
-      nativeBuildInputs ? [ ],
-      buildInputs ? [ ],
-      ...
+    { nativeBuildInputs ? [ ]
+    , buildInputs ? [ ]
+    , ...
     }:
     {
       nativeBuildInputs = nativeBuildInputs ++ [ pkg-config ];
@@ -58,9 +55,8 @@
 
   nimraylib_now =
     lockAttrs:
-    {
-      buildInputs ? [ ],
-      ...
+    { buildInputs ? [ ]
+    , ...
     }:
     {
       buildInputs = buildInputs ++ [ raylib ];
@@ -68,9 +64,8 @@
 
   sass =
     lockAttrs:
-    {
-      buildInputs ? [ ],
-      ...
+    { buildInputs ? [ ]
+    , ...
     }:
     {
       buildInputs = buildInputs ++ [ libsass ];
@@ -78,9 +73,8 @@
 
   sdl2 =
     lockAttrs:
-    {
-      buildInputs ? [ ],
-      ...
+    { buildInputs ? [ ]
+    , ...
     }:
     {
       buildInputs = buildInputs ++ [ SDL2 ];
@@ -88,10 +82,9 @@
 
   tkrzw =
     lockAttrs:
-    {
-      nativeBuildInputs ? [ ],
-      buildInputs ? [ ],
-      ...
+    { nativeBuildInputs ? [ ]
+    , buildInputs ? [ ]
+    , ...
     }:
     {
       nativeBuildInputs = nativeBuildInputs ++ [ pkg-config ];
@@ -100,9 +93,8 @@
 
   x11 =
     lockAttrs:
-    {
-      buildInputs ? [ ],
-      ...
+    { buildInputs ? [ ]
+    , ...
     }:
     {
       buildInputs =
@@ -116,9 +108,8 @@
 
   zippy =
     lockAttrs:
-    {
-      nimFlags ? [ ],
-      ...
+    { nimFlags ? [ ]
+    , ...
     }:
     {
       nimFlags =

@@ -10,12 +10,11 @@
 # domains (including extraDomainNames) to their parent nodes in the test suite.
 # This negates the need for a DNS server for most testing. You can still specify
 # a custom nameserver/resolver if necessary for other reasons.
-{
-  config,
-  pkgs,
-  lib,
-  nodes ? { },
-  ...
+{ config
+, pkgs
+, lib
+, nodes ? { }
+, ...
 }:
 let
   testCerts = import ./snakeoil-certs.nix;
@@ -75,32 +74,36 @@ in
 
       # Extend /etc/hosts to resolve all configured certificates to their hosts.
       # This way, no DNS server will be needed to validate HTTP-01 certs.
-      hosts = lib.attrsets.concatMapAttrs (
-        _: node:
-        let
-          inherit (node.networking) primaryIPAddress primaryIPv6Address;
-          ips = builtins.filter (ip: ip != "") [
-            primaryIPAddress
-            primaryIPv6Address
-          ];
-          names = lib.lists.unique (
-            lib.lists.flatten (
-              lib.lists.concatMap
-                (
-                  cfg:
-                  lib.attrsets.mapAttrsToList (
-                    domain: cfg:
-                    builtins.map (builtins.replaceStrings [ "*." ] [ "" ]) ([ domain ] ++ cfg.extraDomainNames)
-                  ) cfg.configuration.security.acme.certs
+      hosts = lib.attrsets.concatMapAttrs
+        (
+          _: node:
+            let
+              inherit (node.networking) primaryIPAddress primaryIPv6Address;
+              ips = builtins.filter (ip: ip != "") [
+                primaryIPAddress
+                primaryIPv6Address
+              ];
+              names = lib.lists.unique (
+                lib.lists.flatten (
+                  lib.lists.concatMap
+                    (
+                      cfg:
+                      lib.attrsets.mapAttrsToList
+                        (
+                          domain: cfg:
+                            builtins.map (builtins.replaceStrings [ "*." ] [ "" ]) ([ domain ] ++ cfg.extraDomainNames)
+                        )
+                        cfg.configuration.security.acme.certs
+                    )
+                    # A specialisation's config is nested under its configuration attribute.
+                    # For ease of use, nest the root node's configuration similarly.
+                    ([{ configuration = node; }] ++ (builtins.attrValues node.specialisation))
                 )
-                # A specialisation's config is nested under its configuration attribute.
-                # For ease of use, nest the root node's configuration similarly.
-                ([ { configuration = node; } ] ++ (builtins.attrValues node.specialisation))
-            )
-          );
-        in
-        builtins.listToAttrs (builtins.map (ip: lib.attrsets.nameValuePair ip names) ips)
-      ) nodes;
+              );
+            in
+            builtins.listToAttrs (builtins.map (ip: lib.attrsets.nameValuePair ip names) ips)
+        )
+        nodes;
     };
 
     systemd.services = {

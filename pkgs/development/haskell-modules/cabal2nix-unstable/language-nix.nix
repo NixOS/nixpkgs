@@ -1,15 +1,15 @@
 # This file defines language-nix-unstable, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh.
-{
-  mkDerivation,
-  base,
-  deepseq,
-  fetchzip,
-  hspec,
-  lens,
-  lib,
-  parsec-class,
-  pretty,
-  QuickCheck,
+{ mkDerivation
+, base
+, deepseq
+, fetchzip
+, hspec
+, lens
+, lib
+, parsec-class
+, pretty
+, QuickCheck
+,
 }:
 mkDerivation {
   pname = "language-nix";

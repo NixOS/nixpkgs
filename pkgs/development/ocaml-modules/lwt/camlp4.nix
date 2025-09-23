@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  camlp4,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, camlp4
+,
 }:
 
 buildDunePackage rec {

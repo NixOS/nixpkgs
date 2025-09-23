@@ -1,35 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  pkg-config,
-  ninja,
-  python3,
-  makeWrapper,
-
-  backward-cpp,
-  curl,
-  enet,
-  freetype,
-  glm,
-  gtest,
-  libbfd,
-  libdwarf,
-  libjpeg,
-  libuuid,
-  libuv,
-  libX11,
-  lua5_4,
-  lzfse,
-  opencl-headers,
-  SDL2,
-  SDL2_mixer,
-  wayland-protocols,
-
-  callPackage,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ninja
+, python3
+, makeWrapper
+, backward-cpp
+, curl
+, enet
+, freetype
+, glm
+, gtest
+, libbfd
+, libdwarf
+, libjpeg
+, libuuid
+, libuv
+, libX11
+, lua5_4
+, lzfse
+, opencl-headers
+, SDL2
+, SDL2_mixer
+, wayland-protocols
+, callPackage
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -97,11 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
         ln -s $out/Applications/vengi-voxconvert.app/Contents/MacOS/vengi-voxconvert $out/bin/vengi-voxconvert
       ''
     else
-      # Set the data directory for each executable. We cannot set it at build time
-      # with the PKGDATADIR cmake variable because each executable needs a specific
-      # one.
-      # This is not needed on darwin, since on that platform data files are saved
-      # in *.app/Contents/Resources/ too, and are picked up automatically.
+    # Set the data directory for each executable. We cannot set it at build time
+    # with the PKGDATADIR cmake variable because each executable needs a specific
+    # one.
+    # This is not needed on darwin, since on that platform data files are saved
+    # in *.app/Contents/Resources/ too, and are picked up automatically.
       ''
         for prog in $out/bin/*; do
           wrapProgram "$prog" \

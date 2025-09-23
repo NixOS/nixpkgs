@@ -23,16 +23,15 @@ in
   name = "systemd-escaping";
 
   nodes.machine =
-    {
-      pkgs,
-      lib,
-      utils,
-      ...
+    { pkgs
+    , lib
+    , utils
+    , ...
     }:
     {
       systemd.services.echo =
         assert !(builtins.tryEval (utils.escapeSystemdExecArgs [ [ ] ])).success;
-        assert !(builtins.tryEval (utils.escapeSystemdExecArgs [ { } ])).success;
+        assert !(builtins.tryEval (utils.escapeSystemdExecArgs [{ }])).success;
         assert !(builtins.tryEval (utils.escapeSystemdExecArgs [ null ])).success;
         assert !(builtins.tryEval (utils.escapeSystemdExecArgs [ false ])).success;
         assert !(builtins.tryEval (utils.escapeSystemdExecArgs [ (_: _) ])).success;

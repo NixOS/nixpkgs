@@ -1,25 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-
-  # build-system
-  cffi,
-  cython,
-  cmake,
-  ninja,
-  packaging,
-  pathspec,
-  scikit-build-core,
-
-  # checks
-  pytestCheckHook,
-  pythonOlder,
-  tornado,
-  libsodium,
-  zeromq,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, # build-system
+  cffi
+, cython
+, cmake
+, ninja
+, packaging
+, pathspec
+, scikit-build-core
+, # checks
+  pytestCheckHook
+, pythonOlder
+, tornado
+, libsodium
+, zeromq
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

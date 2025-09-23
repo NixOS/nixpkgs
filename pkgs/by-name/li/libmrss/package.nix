@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  libnxml,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, libnxml
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 let
   inherit (builtins) isList elem;
@@ -38,10 +37,10 @@ let
       toString value;
 
   initScript =
-    {
-      program,
-      shell,
-      flags ? [ ],
+    { program
+    , shell
+    , flags ? [ ]
+    ,
     }:
     if (shell != "fish") then
       ''
@@ -54,10 +53,11 @@ let
 
   shellInit =
     shell:
-    optionalString (elem pkgs.bat-extras.batpipe cfg.extraPackages) (initScript {
-      program = pkgs.bat-extras.batpipe;
-      inherit shell;
-    })
+    optionalString (elem pkgs.bat-extras.batpipe cfg.extraPackages)
+      (initScript {
+        program = pkgs.bat-extras.batpipe;
+        inherit shell;
+      })
     + optionalString (elem pkgs.bat-extras.batman cfg.extraPackages) (initScript {
       program = pkgs.bat-extras.batman;
       inherit shell;

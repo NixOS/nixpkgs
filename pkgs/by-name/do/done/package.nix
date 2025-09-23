@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
-  gdk-pixbuf,
-  gtk4,
-  libadwaita,
-  libsecret,
-  openssl,
-  sqlite,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, glib
+, meson
+, ninja
+, pkg-config
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+, gdk-pixbuf
+, gtk4
+, libadwaita
+, libsecret
+, openssl
+, sqlite
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

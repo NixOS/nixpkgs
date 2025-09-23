@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  pbr,
-  setuptools,
-
-  # dependencies
-  testtools,
-
-  # tests
-  python,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  pbr
+, setuptools
+, # dependencies
+  testtools
+, # tests
+  python
+,
 }:
 
 buildPythonPackage rec {

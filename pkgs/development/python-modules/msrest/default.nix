@@ -1,21 +1,21 @@
-{
-  lib,
-  aiodns,
-  aiohttp,
-  azure-core,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  httpretty,
-  isodate,
-  pytest-aiohttp,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  requests,
-  requests-oauthlib,
-  setuptools,
-  trio,
+{ lib
+, aiodns
+, aiohttp
+, azure-core
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, httpretty
+, isodate
+, pytest-aiohttp
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests
+, requests-oauthlib
+, setuptools
+, trio
+,
 }:
 
 buildPythonPackage {

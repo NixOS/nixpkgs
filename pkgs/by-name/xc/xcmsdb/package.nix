@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libx11,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libx11
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcmsdb";

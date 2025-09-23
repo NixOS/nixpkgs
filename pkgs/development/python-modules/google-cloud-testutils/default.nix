@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  google-auth,
-  packaging,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, google-auth
+, packaging
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

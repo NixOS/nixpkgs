@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  zlib,
-  ninja,
-  meson,
-  pkg-config,
-  cmake,
-  libpng,
+{ lib
+, fetchFromGitHub
+, stdenv
+, zlib
+, ninja
+, meson
+, pkg-config
+, cmake
+, libpng
+,
 }:
 
 stdenv.mkDerivation rec {

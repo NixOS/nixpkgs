@@ -1,10 +1,9 @@
 # GNOME Initial Setup.
 
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let

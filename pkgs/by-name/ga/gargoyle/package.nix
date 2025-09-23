@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchDebianPatch,
-  cmake,
-  pkg-config,
-  fluidsynth,
-  fmt,
-  freetype,
-  libjpeg,
-  libopenmpt,
-  libpng,
-  libsndfile,
-  libvorbis,
-  mpg123,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchDebianPatch
+, cmake
+, pkg-config
+, fluidsynth
+, fmt
+, freetype
+, libjpeg
+, libopenmpt
+, libpng
+, libsndfile
+, libvorbis
+, mpg123
+, qt6
+,
 }:
 
 stdenv.mkDerivation rec {

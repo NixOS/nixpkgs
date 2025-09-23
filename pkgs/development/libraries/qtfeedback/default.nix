@@ -1,10 +1,10 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  perl,
-  qmake,
-  qtdeclarative,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, perl
+, qmake
+, qtdeclarative
+,
 }:
 
 mkDerivation {

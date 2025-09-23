@@ -1,33 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  anytree,
-  cgen,
-  cloudpickle,
-  codepy,
-  llvmPackages,
-  multidict,
-  numpy,
-  packaging,
-  psutil,
-  py-cpuinfo,
-  sympy,
-
-  # tests
-  click,
-  gcc,
-  matplotlib,
-  pytest-xdist,
-  pytestCheckHook,
-  scipy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  anytree
+, cgen
+, cloudpickle
+, codepy
+, llvmPackages
+, multidict
+, numpy
+, packaging
+, psutil
+, py-cpuinfo
+, sympy
+, # tests
+  click
+, gcc
+, matplotlib
+, pytest-xdist
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

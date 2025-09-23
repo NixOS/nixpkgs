@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  pkg-config,
-  zip,
-  imagemagick,
-  qt5,
-  taglib,
-  gst_all_1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, pkg-config
+, zip
+, imagemagick
+, qt5
+, taglib
+, gst_all_1
+,
 }:
 
 stdenv.mkDerivation rec {

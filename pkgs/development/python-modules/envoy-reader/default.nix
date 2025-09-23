@@ -1,17 +1,17 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  envoy-utils,
-  fetchFromGitHub,
-  setuptools,
-  httpx,
-  pyjwt,
-  pytest-asyncio,
-  pytestCheckHook,
-  pytest-raises,
-  pythonOlder,
-  respx,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, envoy-utils
+, fetchFromGitHub
+, setuptools
+, httpx
+, pyjwt
+, pytest-asyncio
+, pytestCheckHook
+, pytest-raises
+, pythonOlder
+, respx
+,
 }:
 
 buildPythonPackage rec {

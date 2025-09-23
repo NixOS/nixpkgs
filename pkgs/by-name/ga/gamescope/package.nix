@@ -1,43 +1,43 @@
-{
-  stdenv,
-  buildPackages,
-  v4l-utils,
-  fetchFromGitHub,
-  fetchpatch,
-  meson,
-  pkg-config,
-  ninja,
-  cmake,
-  xorg,
-  libdrm,
-  libei,
-  vulkan-loader,
-  vulkan-headers,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  libxkbcommon,
-  glm,
-  gbenchmark,
-  libcap,
-  libavif,
-  SDL2,
-  pipewire,
-  pixman,
-  python3,
-  libinput,
-  glslang,
-  hwdata,
-  stb,
-  wlroots,
-  libdecor,
-  lcms,
-  lib,
-  luajit,
-  makeBinaryWrapper,
-  nix-update-script,
-  enableExecutable ? true,
-  enableWsi ? true,
+{ stdenv
+, buildPackages
+, v4l-utils
+, fetchFromGitHub
+, fetchpatch
+, meson
+, pkg-config
+, ninja
+, cmake
+, xorg
+, libdrm
+, libei
+, vulkan-loader
+, vulkan-headers
+, wayland
+, wayland-protocols
+, wayland-scanner
+, libxkbcommon
+, glm
+, gbenchmark
+, libcap
+, libavif
+, SDL2
+, pipewire
+, pixman
+, python3
+, libinput
+, glslang
+, hwdata
+, stb
+, wlroots
+, libdecor
+, lcms
+, lib
+, luajit
+, makeBinaryWrapper
+, nix-update-script
+, enableExecutable ? true
+, enableWsi ? true
+,
 }:
 let
   frogShaders = fetchFromGitHub {
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableExecutable (
     wlroots.buildInputs
-    ++ [
+      ++ [
       # gamescope uses a custom wlroots branch
       xorg.libXcomposite
       xorg.libXcursor

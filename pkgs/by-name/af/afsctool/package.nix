@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  git,
-  zlib,
-  sparsehash,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, git
+, zlib
+, sparsehash
+,
 }:
 
 stdenv.mkDerivation rec {

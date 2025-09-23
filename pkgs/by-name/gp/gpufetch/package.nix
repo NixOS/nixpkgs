@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  config,
-  pciutils,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  installShellFiles,
-  autoAddDriverRunpath,
-  gitUpdater,
-  versionCheckHook,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, config
+, pciutils
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+, installShellFiles
+, autoAddDriverRunpath
+, gitUpdater
+, versionCheckHook
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

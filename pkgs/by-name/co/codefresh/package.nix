@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnInstallHook,
-  nodejs,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnInstallHook
+, nodejs
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

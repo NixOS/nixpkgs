@@ -1,42 +1,42 @@
-{
-  lib,
-  stdenv,
-  recurseIntoAttrs,
-  fetchgit,
-  pkg-config,
-  autoreconfHook,
-  autoconf,
-  automake,
-  libiconv,
-  libtool,
-  texinfo,
-  gettext,
-  gawk,
-  rapidjson,
-  gd,
-  libharu,
-  lmdb,
-  gmp,
-  glibcLocales,
-  mpfr,
-  more,
-  libpq,
-  hiredis,
-  expat,
-  tre,
+{ lib
+, stdenv
+, recurseIntoAttrs
+, fetchgit
+, pkg-config
+, autoreconfHook
+, autoconf
+, automake
+, libiconv
+, libtool
+, texinfo
+, gettext
+, gawk
+, rapidjson
+, gd
+, libharu
+, lmdb
+, gmp
+, glibcLocales
+, mpfr
+, more
+, libpq
+, hiredis
+, expat
+, tre
+,
 }:
 
 let
   buildExtension = lib.makeOverridable (
-    {
-      name,
-      gawkextlib,
-      extraBuildInputs ? [ ],
-      doCheck ? true,
-      patches ? [ ],
-      extraPostPatch ? "",
-      env ? { },
-      broken ? null,
+    { name
+    , gawkextlib
+    , extraBuildInputs ? [ ]
+    , doCheck ? true
+    , patches ? [ ]
+    , extraPostPatch ? ""
+    , env ? { }
+    , broken ? null
+    ,
     }:
     let
       is_extension = gawkextlib != null;
@@ -214,7 +214,7 @@ let
 in
 recurseIntoAttrs (
   libs
-  // {
+    // {
     inherit gawkextlib buildExtension;
     full = builtins.attrValues libs;
   }

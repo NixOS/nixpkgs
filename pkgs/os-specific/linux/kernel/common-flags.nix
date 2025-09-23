@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  extraMakeFlags ? [ ],
+{ lib
+, stdenv
+, buildPackages
+, extraMakeFlags ? [ ]
+,
 }:
 # Absolute paths for compilers avoid any PATH-clobbering issues.
 [

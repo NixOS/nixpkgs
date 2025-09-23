@@ -1,7 +1,7 @@
-{
-  stdenvNoCC,
-  coreutils,
-  jq,
+{ stdenvNoCC
+, coreutils
+, jq
+,
 }:
 
 /**
@@ -9,7 +9,7 @@
 
   1. Total NAR size in `$out/total-nar-size`.
   2. Registration, suitable for `nix-store --load-db`, in `$out/registration`.
-     Can also be used with `nix-store --register-validity --hash-given`.
+   Can also be used with `nix-store --register-validity --hash-given`.
   3. All store paths for the closure in `$out/store-paths`.
 
   # Inputs
@@ -29,7 +29,7 @@
   ## `pkgs.closureInfo` usage example
   ```
   pkgs.closureInfo {
-    rootPaths = [ pkgs.hello pkgs.bc pkgs.dwarf2json ];
+  rootPaths = [ pkgs.hello pkgs.bc pkgs.dwarf2json ];
   }
   =>
   «derivation /nix/store/...-closure-info.drv»

@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  git,
-  breezy,
-  subversion,
+{ lib
+, python3Packages
+, fetchPypi
+, git
+, breezy
+, subversion
+,
 }:
 
 with python3Packages;

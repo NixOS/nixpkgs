@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  glib,
-  libxklavier,
-  libcanberra-gtk3,
-  libnotify,
-  libmatekbd,
-  libmatemixer,
-  nss,
-  polkit,
-  dconf,
-  gtk3,
-  mate-desktop,
-  pulseaudioSupport ? stdenv.config.pulseaudio or true,
-  libpulseaudio,
-  wrapGAppsHook3,
-  mateUpdateScript,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, libxklavier
+, libcanberra-gtk3
+, libnotify
+, libmatekbd
+, libmatemixer
+, nss
+, polkit
+, dconf
+, gtk3
+, mate-desktop
+, pulseaudioSupport ? stdenv.config.pulseaudio or true
+, libpulseaudio
+, wrapGAppsHook3
+, mateUpdateScript
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

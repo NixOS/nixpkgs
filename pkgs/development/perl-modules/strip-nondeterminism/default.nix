@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  file,
-  fetchFromGitLab,
-  buildPerlPackage,
-  ArchiveZip,
-  ArchiveCpio,
-  SubOverride,
-  shortenPerlShebang,
-  gitUpdater,
+{ lib
+, stdenv
+, file
+, fetchFromGitLab
+, buildPerlPackage
+, ArchiveZip
+, ArchiveCpio
+, SubOverride
+, shortenPerlShebang
+, gitUpdater
+,
 }:
 
 buildPerlPackage rec {

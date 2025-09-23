@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  boost,
-  asio,
-  openssl,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, boost
+, asio
+, openssl
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

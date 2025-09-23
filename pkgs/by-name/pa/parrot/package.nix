@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  ffmpeg,
-  libopus,
-  makeBinaryWrapper,
-  unstableGitUpdater,
-  openssl,
-  pkg-config,
-  yt-dlp,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, ffmpeg
+, libopus
+, makeBinaryWrapper
+, unstableGitUpdater
+, openssl
+, pkg-config
+, yt-dlp
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "parrot";

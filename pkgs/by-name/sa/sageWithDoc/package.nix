@@ -1,5 +1,5 @@
-{
-  sage,
+{ sage
+,
 }:
 
 sage.override {

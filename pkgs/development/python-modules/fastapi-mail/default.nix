@@ -1,21 +1,21 @@
-{
-  lib,
-  aiosmtplib,
-  blinker,
-  buildPythonPackage,
-  email-validator,
-  fakeredis,
-  fetchFromGitHub,
-  httpx,
-  jinja2,
-  poetry-core,
-  pydantic-settings,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
-  starlette,
+{ lib
+, aiosmtplib
+, blinker
+, buildPythonPackage
+, email-validator
+, fakeredis
+, fetchFromGitHub
+, httpx
+, jinja2
+, poetry-core
+, pydantic-settings
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, redis
+, starlette
+,
 }:
 
 buildPythonPackage rec {

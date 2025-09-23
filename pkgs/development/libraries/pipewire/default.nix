@@ -1,71 +1,72 @@
-{
-  stdenv,
-  lib,
-  testers,
-  buildPackages,
-  fetchFromGitLab,
-  python3,
-  meson,
-  ninja,
-  freebsd,
-  elogind,
-  libinotify-kqueue,
-  epoll-shim,
-  systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.qyliss.
-  pkg-config,
-  docutils,
-  doxygen,
-  graphviz,
-  glib,
-  dbus,
-  alsa-lib,
-  libjack2,
-  libusb1,
-  udev,
-  libsndfile,
-  vulkanSupport ? true,
-  vulkan-headers,
-  vulkan-loader,
-  webrtc-audio-processing,
-  ncurses,
-  readline, # meson can't find <7 as those versions don't have a .pc file
-  lilv,
-  makeFontsConf,
-  nixosTests,
-  valgrind,
-  libcamera,
-  libdrm,
-  gst_all_1,
-  ffmpeg,
-  fftwFloat,
-  bluezSupport ? stdenv.hostPlatform.isLinux,
-  bluez,
-  sbc,
-  libfreeaptx,
-  liblc3,
-  fdk_aac,
-  libopus,
-  ldacbt,
-  modemmanager,
-  libpulseaudio,
-  zeroconfSupport ? true,
-  avahi,
-  raopSupport ? true,
-  openssl,
-  rocSupport ? true,
-  roc-toolkit,
-  x11Support ? true,
-  libcanberra,
-  xorg,
-  libmysofa,
-  ffadoSupport ?
-    x11Support
+{ stdenv
+, lib
+, testers
+, buildPackages
+, fetchFromGitLab
+, python3
+, meson
+, ninja
+, freebsd
+, elogind
+, libinotify-kqueue
+, epoll-shim
+, systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, # enableSystemd=false maintained by maintainers.qyliss.
+  pkg-config
+, docutils
+, doxygen
+, graphviz
+, glib
+, dbus
+, alsa-lib
+, libjack2
+, libusb1
+, udev
+, libsndfile
+, vulkanSupport ? true
+, vulkan-headers
+, vulkan-loader
+, webrtc-audio-processing
+, ncurses
+, readline
+, # meson can't find <7 as those versions don't have a .pc file
+  lilv
+, makeFontsConf
+, nixosTests
+, valgrind
+, libcamera
+, libdrm
+, gst_all_1
+, ffmpeg
+, fftwFloat
+, bluezSupport ? stdenv.hostPlatform.isLinux
+, bluez
+, sbc
+, libfreeaptx
+, liblc3
+, fdk_aac
+, libopus
+, ldacbt
+, modemmanager
+, libpulseaudio
+, zeroconfSupport ? true
+, avahi
+, raopSupport ? true
+, openssl
+, rocSupport ? true
+, roc-toolkit
+, x11Support ? true
+, libcanberra
+, xorg
+, libmysofa
+, ffadoSupport ? x11Support
     && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
-    && lib.meta.availableOn stdenv.hostPlatform ffado,
-  ffado,
-  libselinux,
-  libebur128,
+    && lib.meta.availableOn stdenv.hostPlatform ffado
+, ffado
+, libselinux
+, libebur128
+,
 }:
 
 let

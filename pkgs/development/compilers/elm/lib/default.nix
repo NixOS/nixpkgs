@@ -1,8 +1,8 @@
-{
-  writeScriptBin,
-  stdenv,
-  lib,
-  elm,
+{ writeScriptBin
+, stdenv
+, lib
+, elm
+,
 }:
 let
   patchNpmElm =

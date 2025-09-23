@@ -1,11 +1,11 @@
-{
-  pkgspath ? ../../..,
-  test-pkgspath ? pkgspath,
-  localSystem ? {
+{ pkgspath ? ../../..
+, test-pkgspath ? pkgspath
+, localSystem ? {
     system = builtins.currentSystem;
-  },
-  crossSystem ? null,
-  bootstrapFiles ? null,
+  }
+, crossSystem ? null
+, bootstrapFiles ? null
+,
 }:
 
 let

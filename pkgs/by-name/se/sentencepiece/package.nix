@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  cmake,
-  gperftools,
-
-  withGPerfTools ? true,
+{ lib
+, fetchFromGitHub
+, stdenv
+, cmake
+, gperftools
+, withGPerfTools ? true
+,
 }:
 
 stdenv.mkDerivation rec {

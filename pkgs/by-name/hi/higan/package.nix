@@ -1,24 +1,24 @@
-{
-  lib,
-  SDL2,
-  alsa-lib,
-  fetchFromGitHub,
-  gtk3,
-  gtksourceview3,
-  libGL,
-  libGLU,
-  libX11,
-  libXv,
-  libao,
-  libicns,
-  libpulseaudio,
-  openal,
-  installShellFiles,
-  pkg-config,
-  runtimeShell,
-  stdenv,
-  udev,
-  unstableGitUpdater,
+{ lib
+, SDL2
+, alsa-lib
+, fetchFromGitHub
+, gtk3
+, gtksourceview3
+, libGL
+, libGLU
+, libX11
+, libXv
+, libao
+, libicns
+, libpulseaudio
+, openal
+, installShellFiles
+, pkg-config
+, runtimeShell
+, stdenv
+, udev
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

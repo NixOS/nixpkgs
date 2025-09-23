@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, numpy
+,
 }:
 
 buildPythonPackage rec {

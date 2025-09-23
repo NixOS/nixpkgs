@@ -1,36 +1,36 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  jdk,
-  ant,
-  stripJavaArchivesHook,
-  libusb-compat-0_1,
-  libusb1,
-  unzip,
-  zlib,
-  ncurses,
-  readline,
-  withGui ? false,
-  gtk3,
-  wrapGAppsHook3,
-  withTeensyduino ? false,
-  # Packages needed for Teensyduino
-  upx,
-  fontconfig,
-  xorg,
-  gcc,
-  atk,
-  glib,
-  pango,
-  gdk-pixbuf,
-  gtk2,
-  libpng12,
-  expat,
-  freetype,
-  cairo,
-  udev,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, jdk
+, ant
+, stripJavaArchivesHook
+, libusb-compat-0_1
+, libusb1
+, unzip
+, zlib
+, ncurses
+, readline
+, withGui ? false
+, gtk3
+, wrapGAppsHook3
+, withTeensyduino ? false
+, # Packages needed for Teensyduino
+  upx
+, fontconfig
+, xorg
+, gcc
+, atk
+, glib
+, pango
+, gdk-pixbuf
+, gtk2
+, libpng12
+, expat
+, freetype
+, cairo
+, udev
+,
 }:
 
 assert withTeensyduino -> withGui;
@@ -42,10 +42,11 @@ let
   };
   # Some .so-files are later copied from .jar-s to $HOME, so patch them beforehand
   patchelfInJars =
-    lib.optional (stdenv.hostPlatform.system == "aarch64-linux") {
-      jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar";
-      file = "libs/linux/libjSSC-2.8_aarch64.so";
-    }
+    lib.optional (stdenv.hostPlatform.system == "aarch64-linux")
+      {
+        jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar";
+        file = "libs/linux/libjSSC-2.8_aarch64.so";
+      }
     ++ lib.optional (builtins.match "armv[67]l-linux" stdenv.hostPlatform.system != null) {
       jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar";
       file = "libs/linux/libjSSC-2.8_armhf.so";
@@ -116,8 +117,7 @@ stdenv.mkDerivation rec {
         linux32 = "sha256-DlRPOtDxmMPv2Qzhib7vNZdKNZCxmm9YmVNnwUKXK/E=";
         linuxarm = "sha256-d+DbpER/4lFPcPDFeMG5f3WaUGn8pFchdIDo7Hm0XWs=";
         linuxaarch64 = "sha256-8keQzhWq7QlAGIbfHEe3lfxpJleMMvBORuPaNrLmM6Y=";
-      }
-      .${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
+      }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
@@ -128,8 +128,7 @@ stdenv.mkDerivation rec {
         linux32 = "sha256-wSxtx3BqXMQCeWQDK8PHkWLlQqQM1Csao8bIk98FrFg=";
         linuxarm = "sha256-lJ/R1ePq7YtDk3bvloFcn8jswrJH+L63tvH5QpTqfXs=";
         linuxaarch64 = "sha256-gm8cDjLKNfpcaeO7fw6Kyv1TnWV/ZmH4u++nun9X6jo=";
-      }
-      .${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
+      }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
 
   # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,

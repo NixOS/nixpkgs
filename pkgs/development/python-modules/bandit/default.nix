@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  gitpython,
-  pbr,
-  pyyaml,
-  rich,
-  stevedore,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, gitpython
+, pbr
+, pyyaml
+, rich
+, stevedore
+,
 }:
 
 buildPythonPackage rec {

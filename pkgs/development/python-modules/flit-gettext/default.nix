@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-
-  # build-system
-  flit-scm,
-  wheel,
-
-  # dependencies
-  flit-core,
-  gettext,
-
-  # tests
-  build,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, # build-system
+  flit-scm
+, wheel
+, # dependencies
+  flit-core
+, gettext
+, # tests
+  build
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

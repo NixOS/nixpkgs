@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  writeScript,
-  callPackages,
-  fetchurl,
-  installShellFiles,
-  nodejs,
-  testers,
-  withNode ? true,
-  version,
-  hash,
-  buildPackages,
+{ lib
+, stdenvNoCC
+, writeScript
+, callPackages
+, fetchurl
+, installShellFiles
+, nodejs
+, testers
+, withNode ? true
+, version
+, hash
+, buildPackages
+,
 }:
 let
   majorVersion = lib.versions.major version;

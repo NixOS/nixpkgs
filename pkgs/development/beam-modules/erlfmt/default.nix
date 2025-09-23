@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  lib,
-  rebar3Relx,
+{ fetchFromGitHub
+, lib
+, rebar3Relx
+,
 }:
 
 rebar3Relx rec {

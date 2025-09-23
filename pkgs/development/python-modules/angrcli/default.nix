@@ -1,15 +1,15 @@
-{
-  lib,
-  angr,
-  buildPythonPackage,
-  cmd2,
-  coreutils,
-  fetchFromGitHub,
-  pygments,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  stdenv,
+{ lib
+, angr
+, buildPythonPackage
+, cmd2
+, coreutils
+, fetchFromGitHub
+, pygments
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

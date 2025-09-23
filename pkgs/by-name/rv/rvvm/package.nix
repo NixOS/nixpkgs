@@ -1,28 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  SDL2,
-
-  libX11,
-  libXext,
-
-  guiBackend ? "sdl",
-
-  enableSDL ? guiBackend == "sdl",
-  enableX11 ? guiBackend == "x11",
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, libX11
+, libXext
+, guiBackend ? "sdl"
+, enableSDL ? guiBackend == "sdl"
+, enableX11 ? guiBackend == "x11"
+,
 }:
 
-assert lib.assertMsg (builtins.elem guiBackend [
-  "sdl"
-  "x11"
-  "none"
-]) "Unsupported GUI backend";
+assert lib.assertMsg
+  (builtins.elem guiBackend [
+    "sdl"
+    "x11"
+    "none"
+  ]) "Unsupported GUI backend";
 assert lib.assertMsg (!(enableSDL && enableX11)) "RVVM can have only one GUI backend at a time";
-assert lib.assertMsg (
-  stdenv.hostPlatform.isDarwin -> !enableX11
-) "macOS supports only SDL GUI backend";
+assert lib.assertMsg
+  (
+    stdenv.hostPlatform.isDarwin -> !enableX11
+  ) "macOS supports only SDL GUI backend";
 
 stdenv.mkDerivation rec {
   pname = "rvvm";

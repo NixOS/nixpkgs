@@ -1,48 +1,45 @@
 lib:
-{
-  rke2Version,
-  rke2Commit,
-  rke2TarballHash,
-  rke2VendorHash,
-  updateScript,
-  k8sImageTag,
-  etcdVersion,
-  pauseVersion,
-  ccmVersion,
-  dockerizedVersion,
-  imagesVersions,
+{ rke2Version
+, rke2Commit
+, rke2TarballHash
+, rke2VendorHash
+, updateScript
+, k8sImageTag
+, etcdVersion
+, pauseVersion
+, ccmVersion
+, dockerizedVersion
+, imagesVersions
+,
 }:
 
 # Build dependencies
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  go,
-  makeWrapper,
-  fetchzip,
-  fetchurl,
-
-  # Runtime dependencies
-  procps,
-  coreutils,
-  util-linux,
-  ethtool,
-  socat,
-  iptables,
-  bridge-utils,
-  iproute2,
-  kmod,
-  lvm2,
-
-  # Killall Script dependencies
-  systemd,
-  gnugrep,
-  gnused,
-
-  # Testing dependencies
-  nixosTests,
-  testers,
+{ lib
+, stdenv
+, buildGoModule
+, go
+, makeWrapper
+, fetchzip
+, fetchurl
+, # Runtime dependencies
+  procps
+, coreutils
+, util-linux
+, ethtool
+, socat
+, iptables
+, bridge-utils
+, iproute2
+, kmod
+, lvm2
+, # Killall Script dependencies
+  systemd
+, gnugrep
+, gnused
+, # Testing dependencies
+  nixosTests
+, testers
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "rke2";

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  isPy27,
-  fetchPypi,
-  replaceVars,
-  pkgs,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, replaceVars
+, pkgs
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  sqlite,
-  tcl,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, sqlite
+, tcl
+,
 }:
 
 let
   archiveVersion = import ./archive-version.nix lib;
   mkTool =
-    {
-      pname,
-      makeTarget,
-      description,
-      homepage,
-      mainProgram,
+    { pname
+    , makeTarget
+    , description
+    , homepage
+    , mainProgram
+    ,
     }:
     stdenv.mkDerivation rec {
       inherit pname;

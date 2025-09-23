@@ -1,9 +1,9 @@
-{
-  lib,
-  vimUtils,
-  fetchFromGitea,
-  nix-update-script,
-  vimPlugins,
+{ lib
+, vimUtils
+, fetchFromGitea
+, nix-update-script
+, vimPlugins
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "cmp-async-path";

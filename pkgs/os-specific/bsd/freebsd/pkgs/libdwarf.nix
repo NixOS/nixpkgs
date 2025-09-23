@@ -1,8 +1,8 @@
-{
-  mkDerivation,
-  m4,
-  compatIfNeeded,
-  zlib,
+{ mkDerivation
+, m4
+, compatIfNeeded
+, zlib
+,
 }:
 
 mkDerivation {

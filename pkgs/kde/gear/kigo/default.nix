@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  _7zz,
-  qtsvg,
+{ mkKdeDerivation
+, _7zz
+, qtsvg
+,
 }:
 mkKdeDerivation {
   pname = "kigo";

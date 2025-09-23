@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch2,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_412,
-  docbook_xml_dtd_45,
-  glib,
-  gssdp,
-  libsoup_2_4,
-  libxml2,
-  libuuid,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch2
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, docbook_xml_dtd_45
+, glib
+, gssdp
+, libsoup_2_4
+, libxml2
+, libuuid
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

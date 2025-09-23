@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  openssl,
-  rustPlatform,
-  stdenv,
+{ fetchFromGitHub
+, lib
+, openssl
+, rustPlatform
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "taskchampion-sync-server";

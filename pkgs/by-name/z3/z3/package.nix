@@ -1,29 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  fixDarwinDylibNames,
-  nix-update-script,
-  versionCheckHook,
-
-  javaBindings ? false,
-  ocamlBindings ? false,
-  pythonBindings ? (!stdenv.hostPlatform.isStatic),
-  jdk ? null,
-  ocaml ? null,
-  findlib ? null,
-  zarith ? null,
-  cmake,
-  ninja,
-  testers,
-  useCmakeBuild ? (!ocamlBindings), # TODO: remove gnu make build once cmake supports ocaml
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, fixDarwinDylibNames
+, nix-update-script
+, versionCheckHook
+, javaBindings ? false
+, ocamlBindings ? false
+, pythonBindings ? (!stdenv.hostPlatform.isStatic)
+, jdk ? null
+, ocaml ? null
+, findlib ? null
+, zarith ? null
+, cmake
+, ninja
+, testers
+, useCmakeBuild ? (!ocamlBindings)
+, # TODO: remove gnu make build once cmake supports ocaml
 }:
 
 assert pythonBindings -> !stdenv.hostPlatform.isStatic;
 assert javaBindings -> jdk != null && (!stdenv.hostPlatform.isStatic);
 assert
-  ocamlBindings
+ocamlBindings
   -> ocaml != null && findlib != null && zarith != null && (!stdenv.hostPlatform.isStatic);
 
 stdenv.mkDerivation (finalAttrs: {
@@ -113,25 +112,26 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall =
-    lib.optionalString (!useCmakeBuild) (
-      ''
-        mkdir -p $dev $lib
-        mv $out/lib $lib/lib
-        mv $out/include $dev/include
-      ''
-      + lib.optionalString pythonBindings ''
-        mkdir -p $python/lib
-        mv $lib/lib/python* $python/lib/
+    lib.optionalString (!useCmakeBuild)
+      (
+        ''
+          mkdir -p $dev $lib
+          mv $out/lib $lib/lib
+          mv $out/include $dev/include
+        ''
+        + lib.optionalString pythonBindings ''
+          mkdir -p $python/lib
+          mv $lib/lib/python* $python/lib/
 
-        # need to delete the lib folder to properly link the actual lib output
-        rm -rf $python/${python3Packages.python.sitePackages}/z3/lib
-      ''
-      + lib.optionalString javaBindings ''
-        mkdir -p $java/share/java $java/lib
-        mv $lib/lib/com.microsoft.z3.jar $java/share/java
-        mv $lib/lib/libz3java* $java/lib
-      ''
-    )
+          # need to delete the lib folder to properly link the actual lib output
+          rm -rf $python/${python3Packages.python.sitePackages}/z3/lib
+        ''
+        + lib.optionalString javaBindings ''
+          mkdir -p $java/share/java $java/lib
+          mv $lib/lib/com.microsoft.z3.jar $java/share/java
+          mv $lib/lib/libz3java* $java/lib
+        ''
+      )
     + lib.optionalString pythonBindings ''
       ln -sf $lib/lib $python/${python3Packages.python.sitePackages}/z3/lib
     '';

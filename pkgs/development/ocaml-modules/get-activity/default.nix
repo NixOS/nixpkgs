@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  get-activity-lib,
-  ppx_expect,
-  cmdliner,
-  dune-build-info,
-  fmt,
-  logs,
-  alcotest,
+{ lib
+, buildDunePackage
+, get-activity-lib
+, ppx_expect
+, cmdliner
+, dune-build-info
+, fmt
+, logs
+, alcotest
+,
 }:
 
 buildDunePackage rec {

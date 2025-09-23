@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, stdenv
+, meson
+, ninja
+, fetchFromGitHub
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

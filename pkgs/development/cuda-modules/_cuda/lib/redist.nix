@@ -52,10 +52,13 @@
   */
   _redistSystemIsSupported =
     redistSystem: redistSystems:
-    lib.findFirst (
-      redistSystem':
-      redistSystem' == redistSystem || redistSystem' == "linux-all" || redistSystem' == "source"
-    ) null redistSystems != null;
+    lib.findFirst
+      (
+        redistSystem':
+        redistSystem' == redistSystem || redistSystem' == "linux-all" || redistSystem' == "source"
+      )
+      null
+      redistSystems != null;
 
   /**
     Maps a NVIDIA redistributable system to Nix systems.

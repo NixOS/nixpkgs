@@ -1,8 +1,7 @@
-{
-  testers,
-  fetchzip,
-  runCommand,
-  ...
+{ testers
+, fetchzip
+, runCommand
+, ...
 }:
 
 let

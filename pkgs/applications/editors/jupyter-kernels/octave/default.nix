@@ -1,11 +1,11 @@
-{
-  stdenv,
-  callPackage,
-  runCommand,
-  makeWrapper,
-  octave,
-  imagemagick,
-  python3,
+{ stdenv
+, callPackage
+, runCommand
+, makeWrapper
+, octave
+, imagemagick
+, python3
+,
 }:
 
 # Jupyter console:

@@ -1,63 +1,59 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  cython,
-  meson-python,
-  meson,
-  pkg-config,
-  versioneer,
-  wheel,
-
-  # propagates
-  numpy,
-  python-dateutil,
-  pytz,
-  tzdata,
-
-  # optionals
-  beautifulsoup4,
-  bottleneck,
-  blosc2,
-  fsspec,
-  gcsfs,
-  html5lib,
-  jinja2,
-  lxml,
-  matplotlib,
-  numba,
-  numexpr,
-  odfpy,
-  openpyxl,
-  psycopg2,
-  pyarrow,
-  pymysql,
-  pyqt5,
-  pyreadstat,
-  qtpy,
-  s3fs,
-  scipy,
-  sqlalchemy,
-  tables,
-  tabulate,
-  xarray,
-  xlrd,
-  xlsxwriter,
-  zstandard,
-
-  # tests
-  adv_cmds,
-  glibc,
-  hypothesis,
-  pytestCheckHook,
-  pytest-xdist,
-  pytest-asyncio,
-  python,
-  runtimeShell,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  cython
+, meson-python
+, meson
+, pkg-config
+, versioneer
+, wheel
+, # propagates
+  numpy
+, python-dateutil
+, pytz
+, tzdata
+, # optionals
+  beautifulsoup4
+, bottleneck
+, blosc2
+, fsspec
+, gcsfs
+, html5lib
+, jinja2
+, lxml
+, matplotlib
+, numba
+, numexpr
+, odfpy
+, openpyxl
+, psycopg2
+, pyarrow
+, pymysql
+, pyqt5
+, pyreadstat
+, qtpy
+, s3fs
+, scipy
+, sqlalchemy
+, tables
+, tabulate
+, xarray
+, xlrd
+, xlsxwriter
+, zstandard
+, # tests
+  adv_cmds
+, glibc
+, hypothesis
+, pytestCheckHook
+, pytest-xdist
+, pytest-asyncio
+, python
+, runtimeShell
+,
 }:
 
 let

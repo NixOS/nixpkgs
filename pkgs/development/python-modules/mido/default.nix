@@ -1,29 +1,23 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  packaging,
-
-  # native dependencies
-  portmidi,
-
-  # optional-dependencies
-  pygame,
-  python-rtmidi,
-  rtmidi-python,
-
-  # tests
-  pytestCheckHook,
-  pythonOlder,
-
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  packaging
+, # native dependencies
+  portmidi
+, # optional-dependencies
+  pygame
+, python-rtmidi
+, rtmidi-python
+, # tests
+  pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rust-jemalloc-sys,
-  rustPlatform,
-  sqlite,
-  stdenv,
-  versionCheckHook,
-  zstd,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, openssl
+, pkg-config
+, rust-jemalloc-sys
+, rustPlatform
+, sqlite
+, stdenv
+, versionCheckHook
+, zstd
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

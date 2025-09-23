@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  pyparsing,
-  typing-extensions,
-  pytestCheckHook,
-  setuptools,
-  cython,
-  numpy,
-  fonttools,
-  pillow,
-  pyside6,
-  matplotlib,
-  pymupdf,
-  pyqt5,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pyparsing
+, typing-extensions
+, pytestCheckHook
+, setuptools
+, cython
+, numpy
+, fonttools
+, pillow
+, pyside6
+, matplotlib
+, pymupdf
+, pyqt5
+,
 }:
 
 buildPythonPackage rec {

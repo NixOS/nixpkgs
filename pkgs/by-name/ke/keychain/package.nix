@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  coreutils,
-  openssh,
-  gnupg,
-  perl,
-  procps,
-  gnugrep,
-  gawk,
-  findutils,
-  gnused,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, coreutils
+, openssh
+, gnupg
+, perl
+, procps
+, gnugrep
+, gawk
+, findutils
+, gnused
+,
 }:
 
 stdenv.mkDerivation rec {

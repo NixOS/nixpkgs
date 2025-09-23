@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  udev,
-  libusb1,
-  segger-jlink,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, udev
+, libusb1
+, segger-jlink
+,
 }:
 
 let

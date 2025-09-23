@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cliff,
-  fixtures,
-  flit-core,
-  subunit,
-  testtools,
-  tomlkit,
-  voluptuous,
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cliff
+, fixtures
+, flit-core
+, subunit
+, testtools
+, tomlkit
+, voluptuous
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

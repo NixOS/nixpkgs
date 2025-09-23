@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  bitlbee,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, stdenv
+, bitlbee
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

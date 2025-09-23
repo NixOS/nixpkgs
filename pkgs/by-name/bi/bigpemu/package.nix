@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  SDL2,
-  glui,
-  libGLU,
-  libGL,
-  buildFHSEnv,
+{ lib
+, stdenv
+, fetchurl
+, SDL2
+, glui
+, libGLU
+, libGL
+, buildFHSEnv
+,
 }:
 let
   bigpemu-unwrapped = stdenv.mkDerivation rec {

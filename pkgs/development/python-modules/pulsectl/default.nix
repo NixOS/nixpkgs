@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  libpulseaudio,
-  glibc,
-  replaceVars,
-  stdenv,
-  pulseaudio,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libpulseaudio
+, glibc
+, replaceVars
+, stdenv
+, pulseaudio
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

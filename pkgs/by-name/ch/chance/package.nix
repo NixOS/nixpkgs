@@ -1,18 +1,18 @@
-{
-  lib,
-  blueprint-compiler,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitLab,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  stdenv,
-  wrapGAppsHook4,
+{ lib
+, blueprint-compiler
+, cargo
+, desktop-file-utils
+, fetchFromGitLab
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, rustPlatform
+, rustc
+, stdenv
+, wrapGAppsHook4
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "chance";

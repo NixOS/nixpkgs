@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchhg,
-  pkg-config,
-  makeBinaryWrapper,
-  SDL2,
-  glew,
-  gtk3,
-  testers,
+{ lib
+, stdenv
+, fetchhg
+, pkg-config
+, makeBinaryWrapper
+, SDL2
+, glew
+, gtk3
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

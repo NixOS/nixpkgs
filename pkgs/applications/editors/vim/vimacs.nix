@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  config,
-  vim-full,
-  macvim,
-  vimPlugins,
-  useMacvim ? stdenv.hostPlatform.isDarwin && (config.vimacs.macvim or true),
-  vimacsExtraArgs ? "",
+{ lib
+, stdenv
+, config
+, vim-full
+, macvim
+, vimPlugins
+, useMacvim ? stdenv.hostPlatform.isDarwin && (config.vimacs.macvim or true)
+, vimacsExtraArgs ? ""
+,
 }:
 
 stdenv.mkDerivation rec {

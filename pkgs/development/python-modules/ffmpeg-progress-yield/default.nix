@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  tqdm,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  ffmpeg,
-  procps,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, tqdm
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, ffmpeg
+, procps
+,
 }:
 
 buildPythonPackage rec {

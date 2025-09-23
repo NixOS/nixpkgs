@@ -1,20 +1,20 @@
-{
-  composefs,
-  curl,
-  dbus,
-  fetchFromGitHub,
-  glib,
-  json-glib,
-  lib,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  stdenv,
-  meson,
-  ninja,
-  util-linux,
-  libnl,
-  systemd,
+{ composefs
+, curl
+, dbus
+, fetchFromGitHub
+, glib
+, json-glib
+, lib
+, nix-update-script
+, openssl
+, pkg-config
+, stdenv
+, meson
+, ninja
+, util-linux
+, libnl
+, systemd
+,
 }:
 
 stdenv.mkDerivation rec {

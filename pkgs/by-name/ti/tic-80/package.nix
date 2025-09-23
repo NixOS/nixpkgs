@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  pkg-config,
-  python3,
-  rake,
-  curl,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  libX11,
-  janet,
-  lua5_3_compat,
-  quickjs,
-  SDL2,
-  # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
+{ lib
+, stdenv
+, cmake
+, pkg-config
+, python3
+, rake
+, curl
+, fetchFromGitHub
+, libGL
+, libGLU
+, libX11
+, janet
+, lua5_3_compat
+, quickjs
+, SDL2
+, # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
   # that enables some additional features. It is, however, fully open source.
-  withPro ? false,
+  withPro ? false
+,
 }:
 let
   # git rev-list HEAD --count

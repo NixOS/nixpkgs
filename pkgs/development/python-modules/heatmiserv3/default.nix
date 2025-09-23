@@ -1,14 +1,14 @@
-{
-  appdirs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  importlib-resources,
-  lib,
-  poetry-core,
-  pyserial,
-  pyserial-asyncio,
-  pytestCheckHook,
-  pyyaml,
+{ appdirs
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-resources
+, lib
+, poetry-core
+, pyserial
+, pyserial-asyncio
+, pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  nix-update-script,
-  fetchFromGitHub,
-  rustPlatform,
-  udev,
-  pkg-config,
-  installShellFiles,
-  udevCheckHook,
-  versionCheckHook,
+{ lib
+, nix-update-script
+, fetchFromGitHub
+, rustPlatform
+, udev
+, pkg-config
+, installShellFiles
+, udevCheckHook
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  versionCheckHook,
-  withLocaleSupport ? true,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, versionCheckHook
+, withLocaleSupport ? true
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biff";

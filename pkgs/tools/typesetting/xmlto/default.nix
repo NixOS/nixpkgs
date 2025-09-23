@@ -1,23 +1,23 @@
-{
-  autoreconfHook,
-  bash,
-  coreutils,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  docbook-xsl-nons,
-  fetchgit,
-  findutils,
-  flex,
-  getopt,
-  gnugrep,
-  gnused,
-  lib,
-  libxml2,
-  libxslt,
-  makeWrapper,
-  stdenv,
-  testers,
-  w3m,
+{ autoreconfHook
+, bash
+, coreutils
+, docbook_xml_dtd_45
+, docbook_xsl
+, docbook-xsl-nons
+, fetchgit
+, findutils
+, flex
+, getopt
+, gnugrep
+, gnused
+, lib
+, libxml2
+, libxslt
+, makeWrapper
+, stdenv
+, testers
+, w3m
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

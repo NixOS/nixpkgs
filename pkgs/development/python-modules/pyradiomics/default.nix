@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  numpy,
-  pykwalify,
-  pywavelets,
-  setuptools,
-  simpleitk,
-  six,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, numpy
+, pykwalify
+, pywavelets
+, setuptools
+, simpleitk
+, six
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

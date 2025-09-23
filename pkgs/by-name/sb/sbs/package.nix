@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  imlib2,
-  libXinerama,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, imlib2
+, libXinerama
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

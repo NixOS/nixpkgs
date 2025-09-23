@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  copyDesktopItems,
-  imagemagick,
-  xdg-utils,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, copyDesktopItems
+, imagemagick
+, xdg-utils
+, makeDesktopItem
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

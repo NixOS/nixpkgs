@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  mypy,
-  pytestCheckHook,
-  python-lsp-server,
-  tomli,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  mypy
+, pytestCheckHook
+, python-lsp-server
+, tomli
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pycryptodome,
-  python-kasa,
-  pythonOlder,
-  requests,
-  rtp,
-  setuptools,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pycryptodome
+, python-kasa
+, pythonOlder
+, requests
+, rtp
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

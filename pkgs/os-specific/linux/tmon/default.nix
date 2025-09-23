@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  kernel,
-  ncurses,
+{ lib
+, stdenv
+, kernel
+, ncurses
+,
 }:
 
 stdenv.mkDerivation {

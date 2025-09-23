@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  vale,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, rustPlatform
+, pkg-config
+, openssl
+, vale
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

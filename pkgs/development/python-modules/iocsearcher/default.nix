@@ -1,23 +1,23 @@
-{
-  lib,
-  base58,
-  beautifulsoup4,
-  bech32,
-  buildPythonPackage,
-  cashaddress,
-  cbor,
-  docx2python,
-  eth-hash,
-  fetchFromGitHub,
-  intervaltree,
-  langdetect,
-  lxml,
-  pdfminer-six,
-  phonenumbers,
-  python-magic,
-  pythonOlder,
-  readabilipy,
-  setuptools,
+{ lib
+, base58
+, beautifulsoup4
+, bech32
+, buildPythonPackage
+, cashaddress
+, cbor
+, docx2python
+, eth-hash
+, fetchFromGitHub
+, intervaltree
+, langdetect
+, lxml
+, pdfminer-six
+, phonenumbers
+, python-magic
+, pythonOlder
+, readabilipy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

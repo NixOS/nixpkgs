@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  fuse3,
-  pcre,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, fuse3
+, pcre
+,
 }:
 
 stdenv.mkDerivation {

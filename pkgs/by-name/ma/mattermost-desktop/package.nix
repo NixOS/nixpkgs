@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  electron_37,
-  makeWrapper,
-  testers,
-  mattermost-desktop,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, electron_37
+, makeWrapper
+, testers
+, mattermost-desktop
+, nix-update-script
+,
 }:
 
 let

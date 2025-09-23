@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  grpcio-tools,
-  lib,
-  mypy-protobuf,
-  protobuf,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  testers,
-  types-protobuf,
+{ buildPythonPackage
+, fetchPypi
+, grpcio-tools
+, lib
+, mypy-protobuf
+, protobuf
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, testers
+, types-protobuf
+,
 }:
 
 buildPythonPackage rec {

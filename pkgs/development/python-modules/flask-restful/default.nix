@@ -1,17 +1,17 @@
-{
-  lib,
-  aniso8601,
-  blinker,
-  buildPythonPackage,
-  fetchPypi,
-  flask,
-  fetchpatch2,
-  mock,
-  pytest8_3CheckHook,
-  pythonOlder,
-  pytz,
-  six,
-  werkzeug,
+{ lib
+, aniso8601
+, blinker
+, buildPythonPackage
+, fetchPypi
+, flask
+, fetchpatch2
+, mock
+, pytest8_3CheckHook
+, pythonOlder
+, pytz
+, six
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

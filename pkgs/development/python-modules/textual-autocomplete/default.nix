@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  textual,
-  typing-extensions,
-  hatchling,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, textual
+, typing-extensions
+, hatchling
+,
 }:
 buildPythonPackage rec {
   pname = "textual-autocomplete";

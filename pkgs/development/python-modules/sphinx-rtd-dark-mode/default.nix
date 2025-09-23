@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  setuptools,
-  sphinx,
-  sphinx-rtd-theme,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, setuptools
+, sphinx
+, sphinx-rtd-theme
+,
 }:
 
 buildPythonPackage rec {

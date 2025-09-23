@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  rustPlatform,
-  makeWrapper,
-  pkg-config,
-  curl,
-  gnutar,
-  gzip,
-  testers,
-  fetchurl,
-  cacert,
-  prefetch-npm-deps,
-  fetchNpmDeps,
+{ lib
+, stdenvNoCC
+, rustPlatform
+, makeWrapper
+, pkg-config
+, curl
+, gnutar
+, gzip
+, testers
+, fetchurl
+, cacert
+, prefetch-npm-deps
+, fetchNpmDeps
+,
 }:
 
 {
@@ -62,12 +62,12 @@
           };
 
         makeTest =
-          {
-            name,
-            src,
-            hash,
-            forceGitDeps ? false,
-            forceEmptyCache ? false,
+          { name
+          , src
+          , hash
+          , forceGitDeps ? false
+          , forceEmptyCache ? false
+          ,
           }:
           testers.invalidateFetcherByDrvHash fetchNpmDeps {
             inherit
@@ -186,13 +186,12 @@
   };
 
   fetchNpmDeps =
-    {
-      name ? "npm-deps",
-      hash ? "",
-      forceGitDeps ? false,
-      forceEmptyCache ? false,
-      nativeBuildInputs ? [ ],
-      ...
+    { name ? "npm-deps"
+    , hash ? ""
+    , forceGitDeps ? false
+    , forceEmptyCache ? false
+    , nativeBuildInputs ? [ ]
+    , ...
     }@args:
     let
       hash_ =

@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  dbus,
-  ffmpeg,
-  x264,
-  libva,
-  gst_all_1,
-  xorg,
-  libdrm,
-  pkg-config,
-  pango,
-  pipewire,
-  cmake,
-  git,
-  autoconf,
-  libtool,
-  typescript,
-  wayland,
-  libxkbcommon,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, dbus
+, ffmpeg
+, x264
+, libva
+, gst_all_1
+, xorg
+, libdrm
+, pkg-config
+, pango
+, pipewire
+, cmake
+, git
+, autoconf
+, libtool
+, typescript
+, wayland
+, libxkbcommon
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  configargparse,
-  hatchling,
-  rbw,
-
-  waylandSupport ? false,
-  wl-clipboard,
-  wtype,
-
-  x11Support ? false,
-  xclip,
-  xdotool,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, configargparse
+, hatchling
+, rbw
+, waylandSupport ? false
+, wl-clipboard
+, wtype
+, x11Support ? false
+, xclip
+, xdotool
+,
 }:
 
 buildPythonApplication rec {

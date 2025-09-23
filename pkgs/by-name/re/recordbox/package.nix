@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  appstream-glib,
-  blueprint-compiler,
-  cargo,
-  dbus,
-  desktop-file-utils,
-  fetchFromGitea,
-  glib,
-  glycin-loaders,
-  gst_all_1,
-  gtk4,
-  hicolor-icon-theme,
-  lcms2,
-  libadwaita,
-  libseccomp,
-  libxml2,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  sqlite,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, appstream-glib
+, blueprint-compiler
+, cargo
+, dbus
+, desktop-file-utils
+, fetchFromGitea
+, glib
+, glycin-loaders
+, gst_all_1
+, gtk4
+, hicolor-icon-theme
+, lcms2
+, libadwaita
+, libseccomp
+, libxml2
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, rustPlatform
+, rustc
+, sqlite
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

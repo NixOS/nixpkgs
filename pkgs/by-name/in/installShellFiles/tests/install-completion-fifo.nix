@@ -1,14 +1,14 @@
-{
-  lib,
-  installShellFiles,
-  runCommandLocal,
+{ lib
+, installShellFiles
+, runCommandLocal
+,
 }:
 
 runCommandLocal "install-shell-files--install-completion-fifo"
-  {
-    nativeBuildInputs = [ installShellFiles ];
-    meta.platforms = lib.platforms.all;
-  }
+{
+  nativeBuildInputs = [ installShellFiles ];
+  meta.platforms = lib.platforms.all;
+}
   ''
     installShellCompletion \
       --bash --name foo.bash <(echo foo) \

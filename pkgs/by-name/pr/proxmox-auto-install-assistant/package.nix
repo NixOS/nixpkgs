@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchgit,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  versionCheckHook,
+{ lib
+, fetchgit
+, rustPlatform
+, pkg-config
+, openssl
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage {

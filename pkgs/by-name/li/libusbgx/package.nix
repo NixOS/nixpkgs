@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  libconfig,
-  autoreconfHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, libconfig
+, autoreconfHook
+,
 }:
 stdenv.mkDerivation {
   pname = "libusbgx";

@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  cloudscraper,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, cloudscraper
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

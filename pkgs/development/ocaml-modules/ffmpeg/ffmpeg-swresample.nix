@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  dune-configurator,
-  pkg-config,
-  callPackage,
-  ffmpeg-base ? callPackage ./base.nix { },
-  ffmpeg-avutil,
-  ffmpeg-avcodec,
-  ffmpeg,
+{ buildDunePackage
+, dune-configurator
+, pkg-config
+, callPackage
+, ffmpeg-base ? callPackage ./base.nix { }
+, ffmpeg-avutil
+, ffmpeg-avcodec
+, ffmpeg
+,
 }:
 
 buildDunePackage {

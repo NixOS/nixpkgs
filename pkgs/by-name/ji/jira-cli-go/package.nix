@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  jira-cli-go,
-  less,
-  more,
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, jira-cli-go
+, less
+, more
+, nix-update-script
+, testers
+,
 }:
 
 buildGoModule rec {

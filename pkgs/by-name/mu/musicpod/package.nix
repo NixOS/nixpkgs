@@ -1,16 +1,16 @@
-{
-  lib,
-  flutter332,
-  fetchFromGitHub,
-  alsa-lib,
-  mpv-unwrapped,
-  libass,
-  pulseaudio,
-  musicpod,
-  runCommand,
-  _experimental-update-script-combinators,
-  yq,
-  gitUpdater,
+{ lib
+, flutter332
+, fetchFromGitHub
+, alsa-lib
+, mpv-unwrapped
+, libass
+, pulseaudio
+, musicpod
+, runCommand
+, _experimental-update-script-combinators
+, yq
+, gitUpdater
+,
 }:
 
 flutter332.buildFlutterApplication rec {

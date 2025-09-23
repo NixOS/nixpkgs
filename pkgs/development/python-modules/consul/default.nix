@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  requests,
-  six,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, six
+, pytest
+,
 }:
 
 buildPythonPackage rec {

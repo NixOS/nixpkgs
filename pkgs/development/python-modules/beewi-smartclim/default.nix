@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  btlewrap,
-  bluepy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, btlewrap
+, bluepy
+,
 }:
 
 buildPythonPackage rec {

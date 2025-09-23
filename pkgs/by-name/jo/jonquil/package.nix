@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  buildType ? "meson",
-  meson,
-  ninja,
-  cmake,
-  pkg-config,
-  test-drive,
-  toml-f,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, buildType ? "meson"
+, meson
+, ninja
+, cmake
+, pkg-config
+, test-drive
+, toml-f
+,
 }:
 
 assert (

@@ -1,11 +1,11 @@
-{
-  src,
-  version,
-  stdenv,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs-slim,
-  fetchYarnDeps,
+{ src
+, version
+, stdenv
+, yarnConfigHook
+, yarnBuildHook
+, nodejs-slim
+, fetchYarnDeps
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

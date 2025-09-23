@@ -1,11 +1,11 @@
-{
-  abseil-cpp,
-  cmake,
-  fetchFromGitHub,
-  stdenv,
-  lib,
-  pkg-config,
-  openssl,
+{ abseil-cpp
+, cmake
+, fetchFromGitHub
+, stdenv
+, lib
+, pkg-config
+, openssl
+,
 }:
 
 let

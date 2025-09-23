@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchFromGitHub,
-  git,
-  cmake,
-  gfortran,
-  pkg-config,
-  fftw,
-  blas,
-  lapack,
-  scalapack,
-  wannier90,
-  hdf5,
-  libmbd,
-  libxc,
-  enableMpi ? true,
-  mpi,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchFromGitHub
+, git
+, cmake
+, gfortran
+, pkg-config
+, fftw
+, blas
+, lapack
+, scalapack
+, wannier90
+, hdf5
+, libmbd
+, libxc
+, enableMpi ? true
+, mpi
+,
 }:
 
 assert !blas.isILP64;

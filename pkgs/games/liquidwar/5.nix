@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  allegro,
+{ lib
+, stdenv
+, fetchurl
+, allegro
+,
 }:
 stdenv.mkDerivation rec {
   version = "5.6.5";

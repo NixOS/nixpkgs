@@ -51,11 +51,10 @@ in
 
     # The server that actually serves our zones, this tests unbounds authoriative mode
     authoritative =
-      {
-        lib,
-        pkgs,
-        config,
-        ...
+      { lib
+      , pkgs
+      , config
+      , ...
       }:
       {
         imports = [ common ];
@@ -166,11 +165,10 @@ in
 
     # machine that runs a local unbound that will be reconfigured during test execution
     local_resolver =
-      {
-        lib,
-        nodes,
-        config,
-        ...
+      { lib
+      , nodes
+      , config
+      , ...
       }:
       {
         imports = [ common ];

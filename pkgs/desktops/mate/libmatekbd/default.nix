@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  gtk3-x11,
-  gobject-introspection,
-  libxklavier,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, glib
+, gtk3-x11
+, gobject-introspection
+, libxklavier
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

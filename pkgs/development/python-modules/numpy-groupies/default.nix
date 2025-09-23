@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  numpy,
-  numba,
-  pandas,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, numpy
+, numba
+, pandas
+,
 }:
 
 buildPythonPackage rec {

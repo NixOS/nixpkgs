@@ -1,35 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  babel,
-  commonmark,
-  css-inline,
-  faicons,
-  htmltools,
-  importlib-metadata,
-  importlib-resources,
-  numpy,
-  typing-extensions,
-
-  # tests
-  ipykernel,
-  ipython,
-  pandas,
-  polars,
-  pyarrow,
-  pytestCheckHook,
-  pytest-cov-stub,
-  requests,
-  selenium,
-  shiny,
-  syrupy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  babel
+, commonmark
+, css-inline
+, faicons
+, htmltools
+, importlib-metadata
+, importlib-resources
+, numpy
+, typing-extensions
+, # tests
+  ipykernel
+, ipython
+, pandas
+, polars
+, pyarrow
+, pytestCheckHook
+, pytest-cov-stub
+, requests
+, selenium
+, shiny
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

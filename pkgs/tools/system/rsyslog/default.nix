@@ -1,63 +1,63 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  autoreconfHook,
-  libestr,
-  json_c,
-  zlib,
-  docutils,
-  fastJson,
-  withKrb5 ? true,
-  libkrb5,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  withJemalloc ? true,
-  jemalloc,
-  withMysql ? true,
-  libmysqlclient,
-  withPostgres ? true,
-  libpq,
-  withDbi ? true,
-  libdbi,
-  withNetSnmp ? true,
-  net-snmp,
-  withUuid ? true,
-  libuuid,
-  withCurl ? true,
-  curl,
-  withGnutls ? true,
-  gnutls,
-  withGcrypt ? true,
-  libgcrypt,
-  withLognorm ? true,
-  liblognorm,
-  withMaxminddb ? true,
-  libmaxminddb,
-  withOpenssl ? true,
-  openssl,
-  withRelp ? true,
-  librelp,
-  withKsi ? true,
-  libksi,
-  withLogging ? true,
-  liblogging,
-  withNet ? true,
-  libnet,
-  withHadoop ? true,
-  hadoop,
-  withRdkafka ? true,
-  rdkafka,
-  withMongo ? true,
-  mongoc,
-  withCzmq ? true,
-  czmq,
-  withRabbitmq ? true,
-  rabbitmq-c,
-  withHiredis ? true,
-  hiredis,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, libestr
+, json_c
+, zlib
+, docutils
+, fastJson
+, withKrb5 ? true
+, libkrb5
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, withJemalloc ? true
+, jemalloc
+, withMysql ? true
+, libmysqlclient
+, withPostgres ? true
+, libpq
+, withDbi ? true
+, libdbi
+, withNetSnmp ? true
+, net-snmp
+, withUuid ? true
+, libuuid
+, withCurl ? true
+, curl
+, withGnutls ? true
+, gnutls
+, withGcrypt ? true
+, libgcrypt
+, withLognorm ? true
+, liblognorm
+, withMaxminddb ? true
+, libmaxminddb
+, withOpenssl ? true
+, openssl
+, withRelp ? true
+, librelp
+, withKsi ? true
+, libksi
+, withLogging ? true
+, liblogging
+, withNet ? true
+, libnet
+, withHadoop ? true
+, hadoop
+, withRdkafka ? true
+, rdkafka
+, withMongo ? true
+, mongoc
+, withCzmq ? true
+, czmq
+, withRabbitmq ? true
+, rabbitmq-c
+, withHiredis ? true
+, hiredis
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

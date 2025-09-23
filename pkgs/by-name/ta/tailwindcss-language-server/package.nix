@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nodejs,
-  pnpm_9,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nodejs
+, pnpm_9
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

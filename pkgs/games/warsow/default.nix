@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  warsow-engine,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, warsow-engine
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  rustPlatform,
+{ lib
+, fetchFromGitHub
+, makeBinaryWrapper
+, rustPlatform
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "wl-crosshair";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoLibc,
-  buildPackages,
-  fetchurl,
-  gitUpdater,
-  linuxHeaders,
-  libiconvReal,
-  extraConfig ? "",
+{ lib
+, stdenvNoLibc
+, buildPackages
+, fetchurl
+, gitUpdater
+, linuxHeaders
+, libiconvReal
+, extraConfig ? ""
+,
 }:
 
 let

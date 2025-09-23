@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  pinentry-tty,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, pinentry-tty
+,
 }:
 
 buildGoModule {

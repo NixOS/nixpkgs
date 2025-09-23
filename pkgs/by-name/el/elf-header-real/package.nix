@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  lib,
-  glibc,
-  musl,
+{ stdenvNoCC
+, lib
+, glibc
+, musl
+,
 }:
 
 let

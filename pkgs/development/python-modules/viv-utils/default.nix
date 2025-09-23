@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  funcy,
-  intervaltree,
-  pefile,
-  pytest-sugar,
-  pytestCheckHook,
-  python-flirt,
-  pythonOlder,
-  setuptools-scm,
-  typing-extensions,
-  vivisect,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, funcy
+, intervaltree
+, pefile
+, pytest-sugar
+, pytestCheckHook
+, python-flirt
+, pythonOlder
+, setuptools-scm
+, typing-extensions
+, vivisect
+,
 }:
 
 buildPythonPackage rec {

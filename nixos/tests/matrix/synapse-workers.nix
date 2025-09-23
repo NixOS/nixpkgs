@@ -7,10 +7,9 @@
 
   nodes = {
     homeserver =
-      {
-        pkgs,
-        nodes,
-        ...
+      { pkgs
+      , nodes
+      , ...
       }:
       {
         services.postgresql = {

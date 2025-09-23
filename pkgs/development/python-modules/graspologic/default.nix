@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pytestCheckHook,
-  testfixtures,
-  anytree,
-  beartype,
-  gensim,
-  graspologic-native,
-  hyppo,
-  joblib,
-  matplotlib,
-  networkx,
-  numpy,
-  pot,
-  scikit-learn,
-  scipy,
-  seaborn,
-  statsmodels,
-  typing-extensions,
-  umap-learn,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
+, pytestCheckHook
+, testfixtures
+, anytree
+, beartype
+, gensim
+, graspologic-native
+, hyppo
+, joblib
+, matplotlib
+, networkx
+, numpy
+, pot
+, scikit-learn
+, scipy
+, seaborn
+, statsmodels
+, typing-extensions
+, umap-learn
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  python3,
+{ fetchFromGitHub
+, lib
+, nixosTests
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

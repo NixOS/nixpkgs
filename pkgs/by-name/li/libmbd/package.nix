@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  mpi,
-  blas,
-  lapack,
-  scalapack,
-  gfortran,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, mpi
+, blas
+, lapack
+, scalapack
+, gfortran
+,
 }:
 
 assert !blas.isILP64;

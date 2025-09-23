@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  makeDesktopItem,
-  jdk17,
-  gradle_8,
-  which,
-  copyDesktopItems,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeBinaryWrapper
+, makeDesktopItem
+, jdk17
+, gradle_8
+, which
+, copyDesktopItems
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  textlint,
-  textlint-rule-stop-words,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, textlint
+, textlint-rule-stop-words
+,
 }:
 
 buildNpmPackage rec {

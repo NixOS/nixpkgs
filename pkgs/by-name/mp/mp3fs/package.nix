@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flac,
-  fuse,
-  lame,
-  libid3tag,
-  libvorbis,
-  autoreconfHook,
-  pkg-config,
-  pandoc,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, flac
+, fuse
+, lame
+, libid3tag
+, libvorbis
+, autoreconfHook
+, pkg-config
+, pandoc
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

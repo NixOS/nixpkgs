@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchzip
+, gitUpdater
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

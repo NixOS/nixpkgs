@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pylint,
-  pytest,
-  pytestCheckHook,
-  pythonOlder,
-  toml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pylint
+, pytest
+, pytestCheckHook
+, pythonOlder
+, toml
+,
 }:
 
 buildPythonPackage rec {

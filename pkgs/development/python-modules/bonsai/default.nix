@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cyrus_sasl,
-  openldap,
-  gevent,
-  tornado,
-  trio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cyrus_sasl
+, openldap
+, gevent
+, tornado
+, trio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

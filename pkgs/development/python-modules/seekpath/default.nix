@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  scipy,
-  spglib,
-  glibcLocales,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, scipy
+, spglib
+, glibcLocales
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

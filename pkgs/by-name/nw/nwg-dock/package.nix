@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  gtk3,
-  gtk-layer-shell,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, gtk3
+, gtk-layer-shell
+,
 }:
 
 buildGoModule rec {

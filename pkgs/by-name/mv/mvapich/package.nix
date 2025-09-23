@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  bison,
-  numactl,
-  libxml2,
-  perl,
-  gfortran,
-  slurm,
-  openssh,
-  hwloc,
-  zlib,
-  makeWrapper,
-  # InfiniBand dependencies
-  opensm,
-  rdma-core,
-  # OmniPath dependencies
-  libpsm2,
-  libfabric,
-  # Compile with slurm as a process manager
-  useSlurm ? false,
-  # Network type for MVAPICH2
-  network ? "ethernet",
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, bison
+, numactl
+, libxml2
+, perl
+, gfortran
+, slurm
+, openssh
+, hwloc
+, zlib
+, makeWrapper
+, # InfiniBand dependencies
+  opensm
+, rdma-core
+, # OmniPath dependencies
+  libpsm2
+, libfabric
+, # Compile with slurm as a process manager
+  useSlurm ? false
+, # Network type for MVAPICH2
+  network ? "ethernet"
+,
 }:
 
 assert builtins.elem network [

@@ -1,9 +1,8 @@
-{
-  pkgs,
-  config,
-  lib,
-  utils,
-  ...
+{ pkgs
+, config
+, lib
+, utils
+, ...
 }:
 
 let
@@ -17,18 +16,19 @@ let
     (mapAttrs (
       name:
       { acl, ... }:
-      lib.concatMapStringsSep "\n" (
-        {
-          principal,
-          access,
-          target,
-          ...
-        }:
-        if target != "*" && target != "" then
-          "${principal}\t${lib.concatStringsSep "," (lib.toList access)}\t${target}"
-        else
-          "${principal}\t${lib.concatStringsSep "," (lib.toList access)}"
-      ) acl
+      lib.concatMapStringsSep "\n"
+        (
+          { principal
+          , access
+          , target
+          , ...
+          }:
+          if target != "*" && target != "" then
+            "${principal}\t${lib.concatStringsSep "," (lib.toList access)}\t${target}"
+          else
+            "${principal}\t${lib.concatStringsSep "," (lib.toList access)}"
+        )
+        acl
     ))
     (lib.mapAttrsToList (
       name: text: {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  gettext,
-  gtk-layer-shell,
-  gtk3,
-  libnotify,
-  libxml2,
-  libexif,
-  exempi,
-  mate-desktop,
-  hicolor-icon-theme,
-  wayland,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, gettext
+, gtk-layer-shell
+, gtk3
+, libnotify
+, libxml2
+, libexif
+, exempi
+, mate-desktop
+, hicolor-icon-theme
+, wayland
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

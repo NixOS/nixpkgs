@@ -118,23 +118,24 @@ runTests (unionOfDisjoints [
     };
 
     testOptionalArg = {
-      expr = withNormalizedHash { } (
-        {
-          outputHash ? "",
-          outputHashAlgo ? null,
-          ...
-        }@args:
-        args
-      ) { author = "Jacques Rouxel"; };
+      expr = withNormalizedHash { }
+        (
+          { outputHash ? ""
+          , outputHashAlgo ? null
+          , ...
+          }@args:
+          args
+        )
+        { author = "Jacques Rouxel"; };
       expected.author = "Jacques Rouxel";
     };
 
     testOptionalArgMetadata = {
       expr = functionArgs (
         withNormalizedHash { } (
-          {
-            outputHash ? "",
-            outputHashAlgo ? null,
+          { outputHash ? ""
+          , outputHashAlgo ? null
+          ,
           }:
           { }
         )
@@ -145,10 +146,10 @@ runTests (unionOfDisjoints [
     testPreservesArgsMetadata = {
       expr = functionArgs (
         withNormalizedHash { } (
-          {
-            outputHash,
-            outputHashAlgo,
-            pumping ? true,
+          { outputHash
+          , outputHashAlgo
+          , pumping ? true
+          ,
           }:
           { }
         )

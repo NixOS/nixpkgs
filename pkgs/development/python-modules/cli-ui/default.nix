@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  poetry-core,
-  colorama,
-  tabulate,
-  unidecode,
-  buildPythonPackage,
+{ lib
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, poetry-core
+, colorama
+, tabulate
+, unidecode
+, buildPythonPackage
+,
 }:
 buildPythonPackage rec {
   pname = "cli-ui";

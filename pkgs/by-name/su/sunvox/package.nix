@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  alsa-lib,
-  autoPatchelfHook,
-  libglvnd,
-  libjack2,
-  libX11,
-  libXi,
-  makeWrapper,
-  SDL2,
+{ lib
+, stdenv
+, fetchzip
+, alsa-lib
+, autoPatchelfHook
+, libglvnd
+, libjack2
+, libX11
+, libXi
+, makeWrapper
+, SDL2
+,
 }:
 
 let

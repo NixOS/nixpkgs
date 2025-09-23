@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkgsBuildBuild,
-  stdenv,
-  zlib,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkgsBuildBuild
+, stdenv
+, zlib
+, writableTmpDirAsHomeHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

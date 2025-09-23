@@ -1,13 +1,13 @@
-{
-  pnpm_9,
-  nodejs,
-  stdenv,
-  clang,
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  _experimental-update-script-combinators,
-  nix-update-script,
+{ pnpm_9
+, nodejs
+, stdenv
+, clang
+, buildGoModule
+, fetchFromGitHub
+, lib
+, _experimental-update-script-combinators
+, nix-update-script
+,
 }:
 
 let

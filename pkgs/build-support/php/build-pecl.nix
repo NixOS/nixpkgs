@@ -1,41 +1,42 @@
-{
-  stdenv,
-  lib,
-  php,
-  autoreconfHook,
-  fetchurl,
-  re2c,
-  nix-update-script,
+{ stdenv
+, lib
+, php
+, autoreconfHook
+, fetchurl
+, re2c
+, nix-update-script
+,
 }:
 
-{
-  pname,
-  version,
-  internalDeps ? [ ],
-  peclDeps ? [ ],
-  buildInputs ? [ ],
-  nativeBuildInputs ? [ ],
-  postPhpize ? "",
-  makeFlags ? [ ],
-  src ? fetchurl (
+{ pname
+, version
+, internalDeps ? [ ]
+, peclDeps ? [ ]
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, postPhpize ? ""
+, makeFlags ? [ ]
+, src ? fetchurl (
     {
       url = "https://pecl.php.net/get/${pname}-${version}.tgz";
     }
-    // lib.filterAttrs (
-      attrName: _:
-      lib.elem attrName [
-        "sha256"
-        "hash"
-      ]
-    ) args
-  ),
-  passthru ? { },
-  ...
+    // lib.filterAttrs
+      (
+        attrName: _:
+          lib.elem attrName [
+            "sha256"
+            "hash"
+          ]
+      )
+      args
+  )
+, passthru ? { }
+, ...
 }@args:
 
 stdenv.mkDerivation (
   args
-  // {
+    // {
     name = "php-${pname}-${version}";
     extensionName = pname;
 

@@ -1,15 +1,15 @@
-{
-  lib,
-  adb-shell,
-  aiofiles,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mock,
-  pure-python-adb,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, adb-shell
+, aiofiles
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, pure-python-adb
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

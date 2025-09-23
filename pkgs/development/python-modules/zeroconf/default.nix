@@ -1,18 +1,18 @@
-{
-  lib,
-  cython,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ifaddr,
-  poetry-core,
-  pytest-asyncio,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pytest-timeout,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, cython
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, ifaddr
+, poetry-core
+, pytest-asyncio
+, pytest-codspeed
+, pytest-cov-stub
+, pytest-timeout
+, pythonOlder
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  tkinter,
-  darkdetect,
-  packaging,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, tkinter
+, darkdetect
+, packaging
+, typing-extensions
+,
 }:
 let
   pname = "customtkinter";

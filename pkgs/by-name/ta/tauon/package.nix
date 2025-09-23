@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchPypi,
-  kissfft,
-  miniaudio,
-  pkg-config,
-  python3Packages,
-  gobject-introspection,
-  flac,
-  game-music-emu,
-  gtk3,
-  libappindicator,
-  libnotify,
-  libopenmpt,
-  librsvg,
-  libsamplerate,
-  libvorbis,
-  xorg,
-  mpg123,
-  opusfile,
-  pango,
-  pipewire,
-  wavpack,
-  ffmpeg,
-  pulseaudio,
-  withDiscordRPC ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchPypi
+, kissfft
+, miniaudio
+, pkg-config
+, python3Packages
+, gobject-introspection
+, flac
+, game-music-emu
+, gtk3
+, libappindicator
+, libnotify
+, libopenmpt
+, librsvg
+, libsamplerate
+, libvorbis
+, xorg
+, mpg123
+, opusfile
+, pango
+, pipewire
+, wavpack
+, ffmpeg
+, pulseaudio
+, withDiscordRPC ? true
+,
 }:
 
 let

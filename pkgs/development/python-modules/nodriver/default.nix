@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  deprecated,
-  mss,
-  websockets,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, deprecated
+, mss
+, websockets
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

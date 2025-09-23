@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  dnspython,
-  greenlet,
-  isPyPy,
-  six,
-
-  # tests
-  iana-etc,
-  pytestCheckHook,
-  libredirect,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  dnspython
+, greenlet
+, isPyPy
+, six
+, # tests
+  iana-etc
+, pytestCheckHook
+, libredirect
+,
 }:
 
 buildPythonPackage rec {

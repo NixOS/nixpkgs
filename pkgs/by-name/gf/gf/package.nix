@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  fetchFromGitHub,
-  libX11,
-  pkg-config,
-  gdb,
-  freetype,
-  nix-update-script,
-  freetypeSupport ? true,
-  withExtensions ? true,
-  extraFlags ? "",
-  pluginsFile ? null,
+{ lib
+, stdenv
+, makeWrapper
+, fetchFromGitHub
+, libX11
+, pkg-config
+, gdb
+, freetype
+, nix-update-script
+, freetypeSupport ? true
+, withExtensions ? true
+, extraFlags ? ""
+, pluginsFile ? null
+,
 }:
 
 stdenv.mkDerivation {

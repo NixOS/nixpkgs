@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  writeText,
-  writeShellScript,
-  sqlite,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, python3
+, writeText
+, writeShellScript
+, sqlite
+, nixosTests
+,
 }:
 let
   pypkgs = python3.pkgs;

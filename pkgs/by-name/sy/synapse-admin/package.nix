@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nodejs,
-  yarn-berry,
-  cacert,
-  nix-update-script,
-  formats,
-  baseUrl ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nodejs
+, yarn-berry
+, cacert
+, nix-update-script
+, formats
+, baseUrl ? null
+,
 }:
 
 let

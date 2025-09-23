@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchPypi,
-  certifi,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchPypi
+, certifi
+, pythonOlder
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

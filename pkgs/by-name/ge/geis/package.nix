@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  python3Packages,
-  wrapGAppsHook3,
-  atk,
-  dbus,
-  evemu,
-  frame,
-  gdk-pixbuf,
-  gobject-introspection,
-  grail,
-  gtk3,
-  xorg,
-  pango,
-  xorgserver,
-  testers,
-  validatePkgConfig,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, python3Packages
+, wrapGAppsHook3
+, atk
+, dbus
+, evemu
+, frame
+, gdk-pixbuf
+, gobject-introspection
+, grail
+, gtk3
+, xorg
+, pango
+, xorgserver
+, testers
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

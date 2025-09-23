@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -17,13 +16,15 @@ let
   toCommandsString =
     commands:
     lib.concatStringsSep ", " (
-      map (
-        command:
-        if (lib.isString command) then
-          command
-        else
-          "${toCommandOptionsString command.options}${command.command}"
-      ) commands
+      map
+        (
+          command:
+          if (lib.isString command) then
+            command
+          else
+            "${toCommandOptionsString command.options}${command.command}"
+        )
+        commands
     );
 
 in
@@ -218,10 +219,10 @@ in
     security.sudo-rs.extraRules =
       let
         defaultRule =
-          {
-            users ? [ ],
-            groups ? [ ],
-            opts ? [ ],
+          { users ? [ ]
+          , groups ? [ ]
+          , opts ? [ ]
+          ,
           }:
           [
             {
@@ -259,12 +260,16 @@ in
         (lib.pipe cfg.extraRules [
           (lib.filter (rule: lib.length rule.commands != 0))
           (map (rule: [
-            (map (
-              user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
-            ) rule.users)
-            (map (
-              group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
-            ) rule.groups)
+            (map
+              (
+                user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
+              )
+              rule.users)
+            (map
+              (
+                group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
+              )
+              rule.groups)
           ]))
           lib.flatten
           (lib.concatStringsSep "\n")
@@ -324,10 +329,11 @@ in
     };
 
     environment.etc.sudoers = {
-      source = pkgs.runCommand "sudoers" {
-        src = pkgs.writeText "sudoers-in" cfg.configFile;
-        preferLocalBuild = true;
-      } "${pkgs.buildPackages.sudo-rs}/bin/visudo -f $src -c && cp $src $out";
+      source = pkgs.runCommand "sudoers"
+        {
+          src = pkgs.writeText "sudoers-in" cfg.configFile;
+          preferLocalBuild = true;
+        } "${pkgs.buildPackages.sudo-rs}/bin/visudo -f $src -c && cp $src $out";
       mode = "0440";
     };
 

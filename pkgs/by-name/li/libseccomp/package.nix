@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  getopt,
-  util-linuxMinimal,
-  which,
-  gperf,
-  nix-update-script,
-  python3Packages,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, getopt
+, util-linuxMinimal
+, which
+, gperf
+, nix-update-script
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation rec {

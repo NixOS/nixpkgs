@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle_8,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  jre,
-  libGL,
-  libX11,
-  libXtst,
-  libxkbcommon,
-  libxcb,
-  libXt,
-  libXinerama,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle_8
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, jre
+, libGL
+, libX11
+, libXtst
+, libxkbcommon
+, libxcb
+, libXt
+, libXinerama
+,
 }:
 
 let

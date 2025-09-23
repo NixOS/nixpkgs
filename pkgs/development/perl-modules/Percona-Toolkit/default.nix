@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPerlPackage,
-  shortenPerlShebang,
-  DBDmysql,
-  DBI,
-  IOSocketSSL,
-  TermReadKey,
-  go,
-  buildGoModule,
-  git,
+{ lib
+, fetchFromGitHub
+, buildPerlPackage
+, shortenPerlShebang
+, DBDmysql
+, DBI
+, IOSocketSSL
+, TermReadKey
+, go
+, buildGoModule
+, git
+,
 }:
 
 let

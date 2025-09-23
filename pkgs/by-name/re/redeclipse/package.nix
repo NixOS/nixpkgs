@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  curl,
-  ed,
-  pkg-config,
-  freetype,
-  zlib,
-  libGL,
-  libX11,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
+{ lib
+, stdenv
+, fetchurl
+, curl
+, ed
+, pkg-config
+, freetype
+, zlib
+, libGL
+, libX11
+, SDL2
+, SDL2_image
+, SDL2_mixer
+,
 }:
 
 stdenv.mkDerivation rec {

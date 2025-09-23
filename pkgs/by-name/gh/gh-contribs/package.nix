@@ -1,11 +1,11 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  gh,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  stdenvNoCC,
+{ coreutils
+, fetchFromGitHub
+, gh
+, lib
+, makeWrapper
+, nix-update-script
+, stdenvNoCC
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "gh-contribs";

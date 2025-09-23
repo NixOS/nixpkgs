@@ -1,30 +1,29 @@
-{
-  stdenv,
-  writeText,
-  erlang,
-  perl,
-  which,
-  gitMinimal,
-  wget,
-  lib,
+{ stdenv
+, writeText
+, erlang
+, perl
+, which
+, gitMinimal
+, wget
+, lib
+,
 }:
 
-{
-  name,
-  version,
-  src,
-  setupHook ? null,
-  buildInputs ? [ ],
-  beamDeps ? [ ],
-  postPatch ? "",
-  compilePorts ? false,
-  installPhase ? null,
-  buildPhase ? null,
-  configurePhase ? null,
-  meta ? { },
-  enableDebugInfo ? false,
-  buildFlags ? [ ],
-  ...
+{ name
+, version
+, src
+, setupHook ? null
+, buildInputs ? [ ]
+, beamDeps ? [ ]
+, postPatch ? ""
+, compilePorts ? false
+, installPhase ? null
+, buildPhase ? null
+, configurePhase ? null
+, meta ? { }
+, enableDebugInfo ? false
+, buildFlags ? [ ]
+, ...
 }@attrs:
 
 let

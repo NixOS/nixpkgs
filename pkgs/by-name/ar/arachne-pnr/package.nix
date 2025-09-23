@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  icestorm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, icestorm
+,
 }:
 
 stdenv.mkDerivation rec {

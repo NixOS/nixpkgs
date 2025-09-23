@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  ant,
-  jdk11,
-  git,
-  xmlstarlet,
-  stripJavaArchivesHook,
-  xcbuild,
-  udev,
-  xorg,
-  libgbm,
-  coreutils,
+{ lib
+, stdenv
+, fetchgit
+, ant
+, jdk11
+, git
+, xmlstarlet
+, stripJavaArchivesHook
+, xcbuild
+, udev
+, xorg
+, libgbm
+, coreutils
+,
 }:
 
 let

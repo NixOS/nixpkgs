@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  cabextract,
-  fontforge,
+{ lib
+, stdenvNoCC
+, fetchurl
+, cabextract
+, fontforge
+,
 }:
 
 stdenvNoCC.mkDerivation {

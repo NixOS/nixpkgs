@@ -1,8 +1,8 @@
-{
-  symlinkJoin,
-  deadbeef,
-  makeWrapper,
-  plugins,
+{ symlinkJoin
+, deadbeef
+, makeWrapper
+, plugins
+,
 }:
 
 symlinkJoin {

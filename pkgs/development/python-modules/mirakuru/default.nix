@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  pytest-rerunfailures,
-  setuptools,
-  psutil,
-  netcat,
-  ps,
-  python-daemon,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, pytest-rerunfailures
+, setuptools
+, psutil
+, netcat
+, ps
+, python-daemon
+,
 }:
 
 buildPythonPackage rec {

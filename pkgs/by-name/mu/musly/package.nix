@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  eigen,
-  ffmpeg,
-  libresample,
-  kissfft,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, eigen
+, ffmpeg
+, libresample
+, kissfft
+,
 }:
 
 stdenv.mkDerivation {

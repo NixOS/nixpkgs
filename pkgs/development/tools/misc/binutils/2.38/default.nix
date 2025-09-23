@@ -1,26 +1,25 @@
-{
-  stdenv,
-  autoreconfHook,
-  autoconf269,
-  automake,
-  libtool,
-  bison,
-  buildPackages,
-  fetchFromGitHub,
-  fetchurl,
-  flex,
-  gettext,
-  lib,
-  noSysDirs,
-  perl,
-  substitute,
-  texinfo,
-  zlib,
-
-  enableGold ? stdenv.targetPlatform.isElf,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  # WARN: Enabling all targets increases output size to a multiple.
-  withAllTargets ? false,
+{ stdenv
+, autoreconfHook
+, autoconf269
+, automake
+, libtool
+, bison
+, buildPackages
+, fetchFromGitHub
+, fetchurl
+, flex
+, gettext
+, lib
+, noSysDirs
+, perl
+, substitute
+, texinfo
+, zlib
+, enableGold ? stdenv.targetPlatform.isElf
+, enableShared ? !stdenv.hostPlatform.isStatic
+, # WARN: Enabling all targets increases output size to a multiple.
+  withAllTargets ? false
+,
 }:
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
@@ -88,12 +87,13 @@ stdenv.mkDerivation {
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
   ++
-    lib.optional stdenv.targetPlatform.isMips64n64
-      # this patch is from debian:
-      # https://sources.debian.org/data/main/b/binutils/2.38-3/debian/patches/mips64-default-n64.diff
-      (
-        if stdenv.targetPlatform.isMusl then
-          substitute {
+  lib.optional stdenv.targetPlatform.isMips64n64
+    # this patch is from debian:
+    # https://sources.debian.org/data/main/b/binutils/2.38-3/debian/patches/mips64-default-n64.diff
+    (
+      if stdenv.targetPlatform.isMusl then
+        substitute
+          {
             src = ./mips64-default-n64.patch;
             substitutions = [
               "--replace"
@@ -101,9 +101,9 @@ stdenv.mkDerivation {
               "muslabi64"
             ];
           }
-        else
-          ./mips64-default-n64.patch
-      )
+      else
+        ./mips64-default-n64.patch
+    )
   # On PowerPC, when generating assembly code, GCC generates a `.machine`
   # custom instruction which instructs the assembler to generate code for this
   # machine. However, some GCC versions generate the wrong one, or make it

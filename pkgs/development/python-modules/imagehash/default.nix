@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
-  pywavelets,
-  scipy,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pillow
+, pytestCheckHook
+, pythonOlder
+, pywavelets
+, scipy
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

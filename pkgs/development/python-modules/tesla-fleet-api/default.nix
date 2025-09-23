@@ -1,16 +1,16 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  aiolimiter,
-  bleak,
-  bleak-retry-connector,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  protobuf,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiofiles
+, aiohttp
+, aiolimiter
+, bleak
+, bleak-retry-connector
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, protobuf
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

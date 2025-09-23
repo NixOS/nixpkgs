@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  undmg,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, undmg
+,
 }:
 
 let
@@ -25,8 +25,7 @@ let
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
           hash = "sha256-MXLBvYyLzftb57al6hk/59fEvh5k0S9iTrp2FtiCiVs=";
         };
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   passthru.updateScript = ./update.sh;
 
@@ -53,7 +52,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

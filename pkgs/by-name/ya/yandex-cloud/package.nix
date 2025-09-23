@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeBinaryWrapper,
-  installShellFiles,
-  buildPackages,
-  withShellCompletions ? stdenv.hostPlatform.emulatorAvailable buildPackages,
-  # update script
-  writers,
-  python3Packages,
-  nix,
-  # tests
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, makeBinaryWrapper
+, installShellFiles
+, buildPackages
+, withShellCompletions ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, # update script
+  writers
+, python3Packages
+, nix
+, # tests
+  testers
+,
 }:
 let
   pname = "yandex-cloud";
@@ -32,9 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  emulator = lib.optionalString (
-    withShellCompletions && !stdenv.buildPlatform.canExecute stdenv.hostPlatform
-  ) (stdenv.hostPlatform.emulator buildPackages);
+  emulator = lib.optionalString
+    (
+      withShellCompletions && !stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    )
+    (stdenv.hostPlatform.emulator buildPackages);
 
   installPhase = ''
     runHook preInstall
@@ -57,15 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = writers.writePython3 "${pname}-updater" {
-      libraries = with python3Packages; [ requests ];
-      makeWrapperArgs = [
-        "--prefix"
-        "PATH"
-        ":"
-        (lib.makeBinPath [ nix ])
-      ];
-    } ./update.py;
+    updateScript = writers.writePython3 "${pname}-updater"
+      {
+        libraries = with python3Packages; [ requests ];
+        makeWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          (lib.makeBinPath [ nix ])
+        ];
+      } ./update.py;
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 

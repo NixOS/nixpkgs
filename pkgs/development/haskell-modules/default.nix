@@ -1,21 +1,21 @@
-{
-  pkgs,
-  stdenv,
-  lib,
-  haskellLib,
-  ghc,
-  all-cabal-hashes,
-  buildHaskellPackages,
-  compilerConfig ? (self: super: { }),
-  packageSetConfig ? (self: super: { }),
-  overrides ? (self: super: { }),
-  initialPackages ? import ./initial-packages.nix,
-  nonHackagePackages ? import ./non-hackage-packages.nix,
-  configurationCommon ? import ./configuration-common.nix,
-  configurationNix ? import ./configuration-nix.nix,
-  configurationArm ? import ./configuration-arm.nix,
-  configurationDarwin ? import ./configuration-darwin.nix,
-  configurationJS ? import ./configuration-ghcjs-9.x.nix,
+{ pkgs
+, stdenv
+, lib
+, haskellLib
+, ghc
+, all-cabal-hashes
+, buildHaskellPackages
+, compilerConfig ? (self: super: { })
+, packageSetConfig ? (self: super: { })
+, overrides ? (self: super: { })
+, initialPackages ? import ./initial-packages.nix
+, nonHackagePackages ? import ./non-hackage-packages.nix
+, configurationCommon ? import ./configuration-common.nix
+, configurationNix ? import ./configuration-nix.nix
+, configurationArm ? import ./configuration-arm.nix
+, configurationDarwin ? import ./configuration-darwin.nix
+, configurationJS ? import ./configuration-ghcjs-9.x.nix
+,
 }:
 
 let

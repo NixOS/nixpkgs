@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  premake5,
-  doxygen,
-  libsodium,
-  mbedtls_2,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, premake5
+, doxygen
+, libsodium
+, mbedtls_2
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

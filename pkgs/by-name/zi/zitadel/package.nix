@@ -1,18 +1,17 @@
-{
-  stdenv,
-  buildGoModule,
-  callPackage,
-  fetchFromGitHub,
-  lib,
-
-  buf,
-  cacert,
-  grpc-gateway,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  protoc-gen-validate,
-  sass,
-  statik,
+{ stdenv
+, buildGoModule
+, callPackage
+, fetchFromGitHub
+, lib
+, buf
+, cacert
+, grpc-gateway
+, protoc-gen-go
+, protoc-gen-go-grpc
+, protoc-gen-validate
+, sass
+, statik
+,
 }:
 
 let
@@ -53,14 +52,14 @@ let
   # can download what it needs, and output the relevant generated code for use
   # during the main build.
   generateProtobufCode =
-    {
-      pname,
-      version,
-      nativeBuildInputs ? [ ],
-      bufArgs ? "",
-      workDir ? ".",
-      outputPath,
-      hash,
+    { pname
+    , version
+    , nativeBuildInputs ? [ ]
+    , bufArgs ? ""
+    , workDir ? "."
+    , outputPath
+    , hash
+    ,
     }:
     stdenv.mkDerivation {
       pname = "${pname}-buf-generated";
@@ -145,9 +144,11 @@ buildGoModule rec {
   '';
 
   passthru = {
-    console = callPackage (import ./console.nix {
-      inherit generateProtobufCode version zitadelRepo;
-    }) { };
+    console = callPackage
+      (import ./console.nix {
+        inherit generateProtobufCode version zitadelRepo;
+      })
+      { };
   };
 
   meta = with lib; {

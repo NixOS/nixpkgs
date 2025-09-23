@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  fetchPypi,
-  python3,
+{ fetchFromGitHub
+, fetchPypi
+, python3
+,
 }:
 
 let
@@ -101,7 +101,7 @@ let
   };
 in
 # See note in ./python-package.nix for
-# instructions on manually testing the web UI
+  # instructions on manually testing the web UI
 with python.pkgs;
 (toPythonApplication apache-airflow).overrideAttrs (previousAttrs: {
   # Provide access to airflow's modified python package set

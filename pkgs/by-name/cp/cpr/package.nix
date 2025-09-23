@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  openssl,
-  curl,
-  zlib,
-  gtest,
-  cppcheck,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, openssl
+, curl
+, zlib
+, gtest
+, cppcheck
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

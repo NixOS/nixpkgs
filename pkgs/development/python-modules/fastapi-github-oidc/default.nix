@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  fastapi,
-  pyjwt,
-  httpx,
-  requests,
-  pytestCheckHook,
-  lib,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, fastapi
+, pyjwt
+, httpx
+, requests
+, pytestCheckHook
+, lib
+,
 }:
 buildPythonPackage rec {
   pname = "fastapi-github-oidc";

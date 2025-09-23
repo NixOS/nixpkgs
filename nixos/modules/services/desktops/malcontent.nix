@@ -1,9 +1,8 @@
 # Malcontent daemon.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 {
 

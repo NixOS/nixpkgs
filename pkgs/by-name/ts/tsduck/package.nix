@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  # build and doc tooling
-  asciidoctor-with-extensions,
-  doxygen,
-  graphviz,
-  python3,
-  ruby,
-  qpdf,
-  udevCheckHook,
-  # build deps
-  curl,
-  glibcLocales,
-  jdk,
-  libedit,
-  librist,
-  openssl,
-  srt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # build and doc tooling
+  asciidoctor-with-extensions
+, doxygen
+, graphviz
+, python3
+, ruby
+, qpdf
+, udevCheckHook
+, # build deps
+  curl
+, glibcLocales
+, jdk
+, libedit
+, librist
+, openssl
+, srt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

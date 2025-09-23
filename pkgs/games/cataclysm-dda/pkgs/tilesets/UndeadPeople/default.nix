@@ -1,7 +1,7 @@
-{
-  lib,
-  buildTileSet,
-  fetchFromGitHub,
+{ lib
+, buildTileSet
+, fetchFromGitHub
+,
 }:
 
 buildTileSet {

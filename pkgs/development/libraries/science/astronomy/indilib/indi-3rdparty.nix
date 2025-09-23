@@ -1,44 +1,44 @@
-{
-  stdenv,
-  lib,
-  autoPatchelfHook,
-  aravis,
-  bash,
-  boost,
-  cmake,
-  coreutils,
-  cfitsio,
-  fetchFromGitHub,
-  fetchpatch,
-  gtest,
-  libusb1,
-  libusb-compat-0_1,
-  zlib,
-  libnova,
-  curl,
-  libjpeg,
-  gsl,
-  indilib,
-  libcamera,
-  libdc1394,
-  libdrm,
-  libexif,
-  libftdi1,
-  libgphoto2,
-  libgpiod_1,
-  libpng,
-  libraw,
-  ninja,
-  nut,
-  glib,
-  systemd,
-  urjtag,
-  gpsd,
-  ffmpeg-headless,
-  limesuite,
-  pkg-config,
-  zeromq,
-  udevCheckHook,
+{ stdenv
+, lib
+, autoPatchelfHook
+, aravis
+, bash
+, boost
+, cmake
+, coreutils
+, cfitsio
+, fetchFromGitHub
+, fetchpatch
+, gtest
+, libusb1
+, libusb-compat-0_1
+, zlib
+, libnova
+, curl
+, libjpeg
+, gsl
+, indilib
+, libcamera
+, libdc1394
+, libdrm
+, libexif
+, libftdi1
+, libgphoto2
+, libgpiod_1
+, libpng
+, libraw
+, ninja
+, nut
+, glib
+, systemd
+, urjtag
+, gpsd
+, ffmpeg-headless
+, limesuite
+, pkg-config
+, zeromq
+, udevCheckHook
+,
 }:
 
 let
@@ -51,17 +51,16 @@ let
   };
 
   buildIndi3rdParty =
-    args@{
-      pname,
-      nativeBuildInputs ? [ ],
-      propagatedBuildInputs ? [ ],
-      cmakeFlags ? [ ],
-      postInstall ? "",
-      doCheck ? true,
-      version ? indilib.version,
-      src ? src-3rdparty,
-      meta ? { },
-      ...
+    args@{ pname
+    , nativeBuildInputs ? [ ]
+    , propagatedBuildInputs ? [ ]
+    , cmakeFlags ? [ ]
+    , postInstall ? ""
+    , doCheck ? true
+    , version ? indilib.version
+    , src ? src-3rdparty
+    , meta ? { }
+    , ...
     }:
     stdenv.mkDerivation (
       args

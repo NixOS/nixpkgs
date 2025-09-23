@@ -1,13 +1,13 @@
-{
-  aiosqlite,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  flask,
-  flit-core,
-  lib,
-  pytestCheckHook,
-  sqlalchemy,
+{ aiosqlite
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, flask
+, flit-core
+, lib
+, pytestCheckHook
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

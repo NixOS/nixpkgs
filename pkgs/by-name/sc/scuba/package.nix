@@ -1,8 +1,8 @@
-{
-  lib,
-  pkgsStatic,
-  fetchFromGitHub,
-  python3Packages,
+{ lib
+, pkgsStatic
+, fetchFromGitHub
+, python3Packages
+,
 }:
 
 let

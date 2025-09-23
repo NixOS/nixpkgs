@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDunePackage,
-  ringo,
+{ lib
+, buildDunePackage
+, ringo
+,
 }:
 
 buildDunePackage {

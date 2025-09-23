@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  autoPatchelfHook,
-  versionCheckHook,
-  copyDesktopItems,
-  desktop-file-utils,
-  dbus,
-  dpkg,
-  fetchurl,
-  gtk3,
-  libpcap,
-  makeDesktopItem,
-  makeWrapper,
-  nftables,
-  nss,
-  openssl,
-  writeShellApplication,
-  curl,
-  jq,
-  ripgrep,
-  common-updater-scripts,
-  headless ? false,
+{ stdenv
+, lib
+, autoPatchelfHook
+, versionCheckHook
+, copyDesktopItems
+, desktop-file-utils
+, dbus
+, dpkg
+, fetchurl
+, gtk3
+, libpcap
+, makeDesktopItem
+, makeWrapper
+, nftables
+, nss
+, openssl
+, writeShellApplication
+, curl
+, jq
+, ripgrep
+, common-updater-scripts
+, headless ? false
+,
 }:
 
 let

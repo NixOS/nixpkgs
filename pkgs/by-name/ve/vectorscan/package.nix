@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  ragel,
-  util-linux,
-  python3,
-  boost,
-  sqlite,
-  pcre,
-  enableShared ? !stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ragel
+, util-linux
+, python3
+, boost
+, sqlite
+, pcre
+, enableShared ? !stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -85,8 +85,8 @@ stdenv.mkDerivation rec {
           ]
         else
           [ "-DFAT_RUNTIME=OFF" ]
-          ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
-          ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
+            ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
+            ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
       )
   );
 

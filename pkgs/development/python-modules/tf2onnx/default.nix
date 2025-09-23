@@ -1,20 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  flatbuffers,
-  numpy,
-  onnx,
-  onnxruntime,
-  protobuf,
-  requests,
-  six,
-  tensorflow,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  flatbuffers
+, numpy
+, onnx
+, onnxruntime
+, protobuf
+, requests
+, six
+, tensorflow
+,
 }:
 
 buildPythonPackage rec {

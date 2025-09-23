@@ -1,12 +1,12 @@
-{
-  stdenv,
-  cmake,
-  nix-update-script,
-  blas,
-  lapack,
-  lib,
-  fetchFromGitHub,
-  qt6,
+{ stdenv
+, cmake
+, nix-update-script
+, blas
+, lapack
+, lib
+, fetchFromGitHub
+, qt6
+,
 }:
 
 stdenv.mkDerivation rec {

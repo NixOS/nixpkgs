@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gradle,
-  temurin-bin-21,
-  kotlin,
-  nix-update-script,
-  replaceVars,
-  makeWrapper,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gradle
+, temurin-bin-21
+, kotlin
+, nix-update-script
+, replaceVars
+, makeWrapper
+,
 }:
 let
   jdk = temurin-bin-21;

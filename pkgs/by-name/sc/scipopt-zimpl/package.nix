@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  bison,
-  flex,
-  gmp,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, bison
+, flex
+, gmp
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

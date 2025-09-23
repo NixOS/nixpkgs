@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  sassc,
-  vala,
-  wrapGAppsHook4,
-  gnome-settings-daemon,
-  gtk4,
-  pango,
-  pantheon,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, sassc
+, vala
+, wrapGAppsHook4
+, gnome-settings-daemon
+, gtk4
+, pango
+, pantheon
+,
 }:
 
 stdenv.mkDerivation rec {

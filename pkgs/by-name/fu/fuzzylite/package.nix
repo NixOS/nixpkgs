@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  useFloat ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, useFloat ? false
+,
 }:
 
 stdenv.mkDerivation rec {

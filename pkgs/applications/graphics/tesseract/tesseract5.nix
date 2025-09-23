@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  autoreconfHook,
-  pkg-config,
-  curl,
-  leptonica,
-  libarchive,
-  libpng,
-  libtiff,
-  icu,
-  pango,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, pkg-config
+, curl
+, leptonica
+, libarchive
+, libpng
+, libtiff
+, icu
+, pango
+,
 }:
 
 stdenv.mkDerivation rec {

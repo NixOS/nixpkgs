@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  terraform,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, terraform
+,
 }:
 
 buildGoModule (finalAttrs: {

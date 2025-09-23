@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  courier-unicode,
-  pcre2,
-  libidn2,
-  perl,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, courier-unicode
+, pcre2
+, libidn2
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

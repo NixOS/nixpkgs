@@ -1,33 +1,33 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  aws-sdk-cpp,
-  bzip2,
-  cmake,
-  ninja,
-  zlib,
-  openssl,
-  curl,
-  glew,
-  geos,
-  boost,
-  spdlog,
-  stb,
-  libcpr,
-  libpng,
-  libSM,
-  geographiclib,
-  howard-hinnant-date,
-  re2,
-  gtest,
-  glm,
-  qt6,
-  tbb_2022,
-  tracy,
-  replaceVars,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, aws-sdk-cpp
+, bzip2
+, cmake
+, ninja
+, zlib
+, openssl
+, curl
+, glew
+, geos
+, boost
+, spdlog
+, stb
+, libcpr
+, libpng
+, libSM
+, geographiclib
+, howard-hinnant-date
+, re2
+, gtest
+, glm
+, qt6
+, tbb_2022
+, tracy
+, replaceVars
+, python3
+,
 }:
 let
   gtestSkip = [

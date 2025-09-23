@@ -1,18 +1,18 @@
-{
-  cmake,
-  fetchFromGitHub,
-  glib,
-  gtk3,
-  lib,
-  libsoup_3,
-  networkmanager,
-  pkg-config,
-  rustPlatform,
-  versionCheckHook,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  xdotool,
-  nix-update-script,
+{ cmake
+, fetchFromGitHub
+, glib
+, gtk3
+, lib
+, libsoup_3
+, networkmanager
+, pkg-config
+, rustPlatform
+, versionCheckHook
+, webkitgtk_4_1
+, wrapGAppsHook3
+, xdotool
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rmenu";

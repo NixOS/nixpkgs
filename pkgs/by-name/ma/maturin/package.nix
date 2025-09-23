@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libiconv,
-  testers,
-  nix-update-script,
-  maturin,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+, testers
+, nix-update-script
+, maturin
+, python3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

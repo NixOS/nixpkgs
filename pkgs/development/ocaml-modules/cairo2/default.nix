@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  dune-configurator,
-  pkg-config,
-  cairo,
+{ stdenv
+, lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, dune-configurator
+, pkg-config
+, cairo
+,
 }:
 
 buildDunePackage rec {

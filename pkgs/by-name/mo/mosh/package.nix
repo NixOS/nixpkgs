@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
-  protobuf,
-  ncurses,
-  pkg-config,
-  makeWrapper,
-  perl,
-  openssl,
-  autoreconfHook,
-  openssh,
-  bash-completion,
-  fetchpatch,
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
-  libutempter,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, protobuf
+, ncurses
+, pkg-config
+, makeWrapper
+, perl
+, openssl
+, autoreconfHook
+, openssh
+, bash-completion
+, fetchpatch
+, withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
+, libutempter
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  installShellFiles,
-  libnitrokey,
-  poetry-core,
-  cffi,
-  click,
-  cryptography,
-  fido2,
-  hidapi,
-  intelhex,
-  nkdfu,
-  pyusb,
-  requests,
-  tqdm,
-  tlv8,
-  semver,
-  nethsm,
-  nitrokey,
-  pyscard,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, installShellFiles
+, libnitrokey
+, poetry-core
+, cffi
+, click
+, cryptography
+, fido2
+, hidapi
+, intelhex
+, nkdfu
+, pyusb
+, requests
+, tqdm
+, tlv8
+, semver
+, nethsm
+, nitrokey
+, pyscard
+,
 }:
 
 let

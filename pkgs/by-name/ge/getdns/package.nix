@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  doxygen,
-  libidn2,
-  openssl,
-  unbound,
-  yq,
-
-  enableStubOnly ? false,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, doxygen
+, libidn2
+, openssl
+, unbound
+, yq
+, enableStubOnly ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

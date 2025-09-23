@@ -1,9 +1,9 @@
-{
-  autoPatchelfHook,
-  cups,
-  lib,
-  requireFile,
-  stdenv,
+{ autoPatchelfHook
+, cups
+, lib
+, requireFile
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

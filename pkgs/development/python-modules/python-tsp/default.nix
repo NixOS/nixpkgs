@@ -1,17 +1,18 @@
 {
   # Basic
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # Build system
-  poetry-core,
-  # Dependencies
-  numpy,
-  requests,
-  tsplib95,
-  # Test
-  pytestCheckHook,
-  mock,
+  lib
+, buildPythonPackage
+, fetchFromGitHub
+, # Build system
+  poetry-core
+, # Dependencies
+  numpy
+, requests
+, tsplib95
+, # Test
+  pytestCheckHook
+, mock
+,
 }:
 
 buildPythonPackage rec {

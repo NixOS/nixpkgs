@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  graalvm-ce,
-  makeWrapper,
-  zlib,
-  libxcrypt-legacy,
-  # extra params
-  product,
-  extraBuildInputs ? [ ],
-  extraNativeBuildInputs ? [ ],
-  ...
+{ lib
+, stdenv
+, autoPatchelfHook
+, graalvm-ce
+, makeWrapper
+, zlib
+, libxcrypt-legacy
+, # extra params
+  product
+, extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
+, ...
 }@args:
 
 let
@@ -90,5 +89,5 @@ stdenv.mkDerivation (
       // (args.meta or { })
     );
   }
-  // extraArgs
+    // extraArgs
 )

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsNoGuiHook,
-  glib,
-  coreutils,
-  accountsservice,
-  dbus,
-  pam,
-  polkit,
-  glib-testing,
-  python3,
-  nixosTests,
-  malcontent-ui,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsNoGuiHook
+, glib
+, coreutils
+, accountsservice
+, dbus
+, pam
+, polkit
+, glib-testing
+, python3
+, nixosTests
+, malcontent-ui
+,
 }:
 
 stdenv.mkDerivation rec {

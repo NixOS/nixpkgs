@@ -1,25 +1,25 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  hatchling,
-  hatch-fancy-pypi-readme,
-  h11,
-  h2,
-  pproxy,
-  pytest-asyncio,
-  pytest-httpbin,
-  pytest-trio,
-  pytestCheckHook,
-  pythonOlder,
-  socksio,
-  trio,
-  # for passthru.tests
-  httpx,
-  httpx-socks,
-  respx,
+{ lib
+, anyio
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, hatchling
+, hatch-fancy-pypi-readme
+, h11
+, h2
+, pproxy
+, pytest-asyncio
+, pytest-httpbin
+, pytest-trio
+, pytestCheckHook
+, pythonOlder
+, socksio
+, trio
+, # for passthru.tests
+  httpx
+, httpx-socks
+, respx
+,
 }:
 
 buildPythonPackage rec {

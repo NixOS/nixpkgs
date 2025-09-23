@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-
-  cmake,
-
-  curl,
-  ffmpeg,
-  libmediainfo,
-  libzen,
-  libsForQt5,
-  qt6Packages,
-
-  qtVersion ? 6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, curl
+, ffmpeg
+, libmediainfo
+, libzen
+, libsForQt5
+, qt6Packages
+, qtVersion ? 6
+,
 }:
 
 let

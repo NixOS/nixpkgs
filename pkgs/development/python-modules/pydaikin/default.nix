@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  netifaces,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  urllib3,
-  setuptools,
-  tenacity,
+{ lib
+, aiohttp
+, aresponses
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, netifaces
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, urllib3
+, setuptools
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

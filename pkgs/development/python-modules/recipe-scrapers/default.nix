@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  beautifulsoup4,
-  extruct,
-  isodate,
-  language-tags,
-  regex,
-  requests,
-  pytestCheckHook,
-  responses,
-  setuptools,
-  pythonOlder,
-  nixosTests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, beautifulsoup4
+, extruct
+, isodate
+, language-tags
+, regex
+, requests
+, pytestCheckHook
+, responses
+, setuptools
+, pythonOlder
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {

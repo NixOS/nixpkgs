@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  zlib,
-  pcre2,
-  utf8proc,
-  expat,
-  sqlite,
-  openssl,
-  unixODBC,
-  libmysqlclient,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, zlib
+, pcre2
+, utf8proc
+, expat
+, sqlite
+, openssl
+, unixODBC
+, libmysqlclient
+, writableTmpDirAsHomeHook
+,
 }:
 
 stdenv.mkDerivation rec {

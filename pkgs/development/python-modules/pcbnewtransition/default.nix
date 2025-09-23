@@ -1,10 +1,10 @@
-{
-  pythonOlder,
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  kicad,
-  versioneer,
+{ pythonOlder
+, buildPythonPackage
+, fetchPypi
+, lib
+, kicad
+, versioneer
+,
 }:
 buildPythonPackage rec {
   pname = "pcbnewtransition";

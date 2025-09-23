@@ -1,8 +1,8 @@
-{
-  cctools,
-  darwin,
-  fetchFromGitHub,
-  makeWrapper,
+{ cctools
+, darwin
+, fetchFromGitHub
+, makeWrapper
+,
 }:
 
 darwin.sigtool.overrideAttrs (old: {

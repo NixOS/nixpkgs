@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qt6,
-  qt6Packages,
-  icu,
-  icoextract,
-  icoutils,
-  umu-launcher,
-  winetricks,
-  curl,
-  mangohud,
-  gamescope,
-  gamemode,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt6
+, qt6Packages
+, icu
+, icoextract
+, icoutils
+, umu-launcher
+, winetricks
+, curl
+, mangohud
+, gamescope
+, gamemode
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nero-umu";

@@ -1,18 +1,18 @@
-{
-  faad2,
-  fetchFromGitHub,
-  flac,
-  lame,
-  lib,
-  makeWrapper,
-  monkeysAudio,
-  nixosTests,
-  perlPackages,
-  sox,
-  stdenv,
-  wavpack,
-  zlib,
-  enableUnfreeFirmware ? false,
+{ faad2
+, fetchFromGitHub
+, flac
+, lame
+, lib
+, makeWrapper
+, monkeysAudio
+, nixosTests
+, perlPackages
+, sox
+, stdenv
+, wavpack
+, zlib
+, enableUnfreeFirmware ? false
+,
 }:
 
 let

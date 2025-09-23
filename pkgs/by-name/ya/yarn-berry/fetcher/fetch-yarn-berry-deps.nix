@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  yarn-berry-fetcher,
-  nix-prefetch-git,
-  cacert,
-  berryVersion,
+{ lib
+, stdenv
+, yarn-berry-fetcher
+, nix-prefetch-git
+, cacert
+, berryVersion
+,
 }:
 
-{
-  src ? null,
-  hash ? "",
-  sha256 ? "",
-  ...
+{ src ? null
+, hash ? ""
+, sha256 ? ""
+, ...
 }@args:
 
 let
@@ -65,7 +64,7 @@ stdenv.mkDerivation (
     };
   }
   // hash_
-  // (removeAttrs args (
+    // (removeAttrs args (
     [
       "name"
       "pname"

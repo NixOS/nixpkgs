@@ -1,21 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo,
-  rustc,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  appstream-glib,
-  blueprint-compiler,
-  dbus,
-  gtk4,
-  libadwaita,
-  bluez,
-  libpulseaudio,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, rustc
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, desktop-file-utils
+, appstream-glib
+, blueprint-compiler
+, dbus
+, gtk4
+, libadwaita
+, bluez
+, libpulseaudio
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "overskride";

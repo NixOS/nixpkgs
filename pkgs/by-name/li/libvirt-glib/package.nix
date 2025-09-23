@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  vala,
-  libcap_ng,
-  libvirt,
-  libxml2,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gobject-introspection,
-  withDocs ? stdenv.hostPlatform == stdenv.buildPlatform,
-  gtk-doc,
-  docbook-xsl-nons,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, gettext
+, vala
+, libcap_ng
+, libvirt
+, libxml2
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+, withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
+, gtk-doc
+, docbook-xsl-nons
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  imagemagick,
-  jhead,
-  meson,
-  ninja,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, imagemagick
+, jhead
+, meson
+, ninja
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

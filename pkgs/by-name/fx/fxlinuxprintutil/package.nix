@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  replaceVars,
-  dpkg,
-  autoPatchelfHook,
-  cups,
-  tcl,
-  tk,
-  xorg,
-  makeWrapper,
+{ stdenv
+, lib
+, fetchzip
+, replaceVars
+, dpkg
+, autoPatchelfHook
+, cups
+, tcl
+, tk
+, xorg
+, makeWrapper
+,
 }:
 let
   debPlatform =

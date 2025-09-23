@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  pkgsi686Linux,
-  fetchurl,
-  cups,
-  dpkg,
-  gnused,
-  makeWrapper,
-  ghostscript,
-  file,
-  a2ps,
-  coreutils,
-  gawk,
+{ lib
+, stdenvNoCC
+, pkgsi686Linux
+, fetchurl
+, cups
+, dpkg
+, gnused
+, makeWrapper
+, ghostscript
+, file
+, a2ps
+, coreutils
+, gawk
+,
 }:
 
 let

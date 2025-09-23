@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gobject-introspection,
-  gtk4,
-  libadwaita,
-  libsecret,
-  libsoup_3,
-  meson,
-  ninja,
-  nix-update-script,
-  pantheon,
-  pkg-config,
-  python3,
-  vala,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, desktop-file-utils
+, fetchFromGitHub
+, gobject-introspection
+, gtk4
+, libadwaita
+, libsecret
+, libsoup_3
+, meson
+, ninja
+, nix-update-script
+, pantheon
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation {

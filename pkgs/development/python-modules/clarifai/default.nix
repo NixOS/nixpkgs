@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  clarifai-grpc,
-  clarifai-protocol,
-  click,
-  fetchFromGitHub,
-  fsspec,
-  inquirerpy,
-  numpy,
-  pillow,
-  pycocotools,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  rich,
-  schema,
-  setuptools,
-  tabulate,
-  tqdm,
-  tritonclient,
+{ lib
+, buildPythonPackage
+, clarifai-grpc
+, clarifai-protocol
+, click
+, fetchFromGitHub
+, fsspec
+, inquirerpy
+, numpy
+, pillow
+, pycocotools
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, rich
+, schema
+, setuptools
+, tabulate
+, tqdm
+, tritonclient
+,
 }:
 
 buildPythonPackage rec {

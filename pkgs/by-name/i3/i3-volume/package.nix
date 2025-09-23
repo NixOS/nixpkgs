@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  coreutils,
-  bash,
-  gawk,
-  libpulseaudio,
-  alsa-lib,
-  libnotify,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, coreutils
+, bash
+, gawk
+, libpulseaudio
+, alsa-lib
+, libnotify
+,
 }:
 
 stdenv.mkDerivation rec {

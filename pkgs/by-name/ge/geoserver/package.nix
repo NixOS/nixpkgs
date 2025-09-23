@@ -1,12 +1,12 @@
-{
-  lib,
-  callPackage,
-  fetchurl,
-  makeWrapper,
-  nixosTests,
-  stdenv,
-  jre,
-  unzip,
+{ lib
+, callPackage
+, fetchurl
+, makeWrapper
+, nixosTests
+, stdenv
+, jre
+, unzip
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "geoserver";

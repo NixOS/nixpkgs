@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  importlib-metadata,
-  importlib-resources,
-  jinja2,
-  mkdocs,
-  pyparsing,
-  pyyaml,
-  pyyaml-env-tag,
-  verspec,
-  versionCheckHook,
-  pytestCheckHook,
-  git,
-  shtab,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, importlib-metadata
+, importlib-resources
+, jinja2
+, mkdocs
+, pyparsing
+, pyyaml
+, pyyaml-env-tag
+, verspec
+, versionCheckHook
+, pytestCheckHook
+, git
+, shtab
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

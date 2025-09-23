@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  boltons,
-  libmambapy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, boltons
+, libmambapy
+,
 }:
 buildPythonPackage rec {
   pname = "conda-libmamba-solver";

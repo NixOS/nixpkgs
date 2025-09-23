@@ -1,12 +1,12 @@
-{
-  lib,
-  beancount,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  regex,
-  setuptools-scm,
+{ lib
+, beancount
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, regex
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

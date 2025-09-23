@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  ntpd-rs,
-  installShellFiles,
-  pandoc,
-  nixosTests,
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, ntpd-rs
+, installShellFiles
+, pandoc
+, nixosTests
+, nix-update-script
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

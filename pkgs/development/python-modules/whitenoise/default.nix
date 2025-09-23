@@ -1,12 +1,12 @@
-{
-  lib,
-  brotli,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  pytestCheckHook,
-  requests,
-  setuptools,
+{ lib
+, brotli
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, pytestCheckHook
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

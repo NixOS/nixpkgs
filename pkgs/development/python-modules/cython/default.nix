@@ -1,17 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gdb,
-  isPyPy,
-  ncurses,
-  numpy,
-  pkg-config,
-  pygame-ce,
-  python,
-  sage, # Reverse dependency
-  setuptools,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gdb
+, isPyPy
+, ncurses
+, numpy
+, pkg-config
+, pygame-ce
+, python
+, sage
+, # Reverse dependency
+  setuptools
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm_9,
-  nodejs_22,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm_9
+, nodejs_22
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

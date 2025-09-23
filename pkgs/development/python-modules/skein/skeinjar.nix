@@ -1,10 +1,10 @@
-{
-  fetchPypi,
-  unzip,
-  stdenv,
-  pname,
-  version,
-  jarHash,
+{ fetchPypi
+, unzip
+, stdenv
+, pname
+, version
+, jarHash
+,
 }:
 
 stdenv.mkDerivation rec {

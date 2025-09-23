@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  perl,
-  cracklib,
-  enablePAM ? stdenv.hostPlatform.isLinux,
-  pam,
-  enablePython ? false,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, perl
+, cracklib
+, enablePAM ? stdenv.hostPlatform.isLinux
+, pam
+, enablePython ? false
+, python3
+,
 }:
 
 # python binding generates a shared library which are unavailable with musl build
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
         "--with-pythonsitedir=\"${python3.sitePackages}\""
       ]
     else
-      # change to `--enable-python-bindings=no` in the future
-      # leave for now to avoid rebuilds on !enablePython before 24.11 fully lands
+    # change to `--enable-python-bindings=no` in the future
+    # leave for now to avoid rebuilds on !enablePython before 24.11 fully lands
       [ "--disable-python-bindings" ];
 
   meta = with lib; {

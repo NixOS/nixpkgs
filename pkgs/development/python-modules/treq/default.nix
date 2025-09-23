@@ -1,21 +1,18 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-
-  # build-system
-  incremental,
-  hatchling,
-
-  # dependencies
-  attrs,
-  hyperlink,
-  multipart,
-  requests,
-  twisted,
-
-  # tests
-  httpbin,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, # build-system
+  incremental
+, hatchling
+, # dependencies
+  attrs
+, hyperlink
+, multipart
+, requests
+, twisted
+, # tests
+  httpbin
+,
 }:
 
 buildPythonPackage rec {

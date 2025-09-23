@@ -1,35 +1,35 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  ayatana-indicator-messages,
-  cmake,
-  dbus,
-  dbus-test-runner,
-  evolution-data-server,
-  extra-cmake-modules,
-  glib,
-  gst_all_1,
-  gtest,
-  intltool,
-  libaccounts-glib,
-  libayatana-common,
-  libical,
-  mkcal,
-  libnotify,
-  libsForQt5,
-  libuuid,
-  lomiri,
-  pkg-config,
-  properties-cpp,
-  python3,
-  systemd,
-  tzdata,
-  wrapGAppsHook3,
-  # Generates a different indicator
-  enableLomiriFeatures ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, ayatana-indicator-messages
+, cmake
+, dbus
+, dbus-test-runner
+, evolution-data-server
+, extra-cmake-modules
+, glib
+, gst_all_1
+, gtest
+, intltool
+, libaccounts-glib
+, libayatana-common
+, libical
+, mkcal
+, libnotify
+, libsForQt5
+, libuuid
+, lomiri
+, pkg-config
+, properties-cpp
+, python3
+, systemd
+, tzdata
+, wrapGAppsHook3
+, # Generates a different indicator
+  enableLomiriFeatures ? false
+,
 }:
 
 let
@@ -178,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
         "''${qtWrapperArgs[@]}"
       ''
     else
-      # schema is already added automatically by wrapper, EDS needs to be added explicitly
+    # schema is already added automatically by wrapper, EDS needs to be added explicitly
       ''
         --prefix XDG_DATA_DIRS : "${edsDataDir}"
       ''

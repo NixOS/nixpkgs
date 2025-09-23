@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  jsonschema,
-  numpy,
-  pydicom,
-  simpleitk,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  poetry-core
+, # dependencies
+  jsonschema
+, numpy
+, pydicom
+, simpleitk
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,85 +1,85 @@
-{
-  stdenv,
-  lib,
-  src,
-  version,
-  bison,
-  flex,
-  gperf,
-  lndir,
-  perl,
-  pkg-config,
-  which,
-  cmake,
-  ninja,
-  libproxy,
-  xorg,
-  zstd,
-  double-conversion,
-  util-linux,
-  systemd,
-  systemdSupport ? stdenv.hostPlatform.isLinux,
-  libb2,
-  md4c,
-  mtdev,
-  lksctp-tools,
-  libselinux,
-  libsepol,
-  vulkan-headers,
-  vulkan-loader,
-  libthai,
-  libdrm,
-  libdatrie,
-  lttng-ust,
-  libepoxy,
-  dbus,
-  fontconfig,
-  freetype,
-  glib,
-  harfbuzz,
-  icu,
-  libX11,
-  libXcomposite,
-  libXext,
-  libXi,
-  libXrender,
-  libjpeg,
-  libpng,
-  libxcb,
-  libxkbcommon,
-  libxml2,
-  libxslt,
-  openssl,
-  pcre2,
-  sqlite,
-  udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
-  zlib,
-  at-spi2-core,
-  unixODBC,
-  unixODBCDrivers,
-  libGL,
-  # darwin
-  moltenvk,
-  moveBuildTree,
-  darwinVersionInputs,
-  xcbuild,
-  # mingw
-  pkgsBuildBuild,
-  # optional dependencies
-  cups,
-  libmysqlclient,
-  libpq,
-  withGtk3 ? false,
-  gtk3,
-  withLibinput ? false,
-  libinput,
-  # options
-  qttranslations ? null,
+{ stdenv
+, lib
+, src
+, version
+, bison
+, flex
+, gperf
+, lndir
+, perl
+, pkg-config
+, which
+, cmake
+, ninja
+, libproxy
+, xorg
+, zstd
+, double-conversion
+, util-linux
+, systemd
+, systemdSupport ? stdenv.hostPlatform.isLinux
+, libb2
+, md4c
+, mtdev
+, lksctp-tools
+, libselinux
+, libsepol
+, vulkan-headers
+, vulkan-loader
+, libthai
+, libdrm
+, libdatrie
+, lttng-ust
+, libepoxy
+, dbus
+, fontconfig
+, freetype
+, glib
+, harfbuzz
+, icu
+, libX11
+, libXcomposite
+, libXext
+, libXi
+, libXrender
+, libjpeg
+, libpng
+, libxcb
+, libxkbcommon
+, libxml2
+, libxslt
+, openssl
+, pcre2
+, sqlite
+, udev
+, xcbutil
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, xcbutilwm
+, zlib
+, at-spi2-core
+, unixODBC
+, unixODBCDrivers
+, libGL
+, # darwin
+  moltenvk
+, moveBuildTree
+, darwinVersionInputs
+, xcbuild
+, # mingw
+  pkgsBuildBuild
+, # optional dependencies
+  cups
+, libmysqlclient
+, libpq
+, withGtk3 ? false
+, gtk3
+, withLibinput ? false
+, libinput
+, # options
+  qttranslations ? null
+,
 }:
 
 let
@@ -278,9 +278,10 @@ stdenv.mkDerivation rec {
     "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
     "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
   ]
-  ++ lib.optional (
-    qttranslations != null && !isCrossBuild
-  ) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
+  ++ lib.optional
+    (
+      qttranslations != null && !isCrossBuild
+    ) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 

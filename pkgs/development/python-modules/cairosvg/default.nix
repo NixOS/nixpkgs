@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cairocffi,
-  cssselect2,
-  defusedxml,
-  pillow,
-  tinycss2,
-
-  # testing
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  cairocffi
+, cssselect2
+, defusedxml
+, pillow
+, tinycss2
+, # testing
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

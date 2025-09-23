@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  icu,
-  zlib,
-  gmp,
-  lib,
-  nqp,
-  removeReferencesTo,
+{ stdenv
+, fetchFromGitHub
+, perl
+, icu
+, zlib
+, gmp
+, lib
+, nqp
+, removeReferencesTo
+,
 }:
 
 stdenv.mkDerivation rec {

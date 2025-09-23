@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  nixosTests,
-  testers,
-  temporal,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, nixosTests
+, testers
+, temporal
+,
 }:
 
 buildGoModule rec {

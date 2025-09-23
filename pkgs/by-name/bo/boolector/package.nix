@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  python3,
-  fetchpatch,
-  cmake,
-  lingeling,
-  btor2tools,
-  gtest,
-  gmp,
+{ stdenv
+, fetchFromGitHub
+, lib
+, python3
+, fetchpatch
+, cmake
+, lingeling
+, btor2tools
+, gtest
+, gmp
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       var = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     # tests modelgen and modelgensmt2 spawn boolector in another processes and
-    # macOS strips DYLD_LIBRARY_PATH, hardcode it for testing
+      # macOS strips DYLD_LIBRARY_PATH, hardcode it for testing
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       cp -r bin bin.back
       install_name_tool -change libboolector.dylib $(pwd)/lib/libboolector.dylib bin/boolector

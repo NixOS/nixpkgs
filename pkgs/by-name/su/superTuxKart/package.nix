@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchsvn,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  SDL2,
-  glew,
-  openal,
-  libvorbis,
-  libogg,
-  curl,
-  freetype,
-  libjpeg,
-  libpng,
-  libX11,
-  harfbuzz,
-  mcpp,
-  wiiuse,
-  angelscript,
-  libopenglrecorder,
-  sqlite,
-  libsamplerate,
-  shaderc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchsvn
+, cmake
+, pkg-config
+, makeWrapper
+, SDL2
+, glew
+, openal
+, libvorbis
+, libogg
+, curl
+, freetype
+, libjpeg
+, libpng
+, libX11
+, harfbuzz
+, mcpp
+, wiiuse
+, angelscript
+, libopenglrecorder
+, sqlite
+, libsamplerate
+, shaderc
+,
 }:
 let
   assets = fetchsvn {

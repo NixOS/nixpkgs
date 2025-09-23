@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  families ? [ ],
+{ lib
+, stdenvNoCC
+, fetchzip
+, families ? [ ]
+,
 }:
 let
   version = import ./version.nix;
@@ -18,13 +18,15 @@ stdenvNoCC.mkDerivation {
   pname = "ibm-plex";
   inherit version;
 
-  srcs = builtins.map (
-    family:
-    fetchzip {
-      url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";
-      hash = availableFamilies.${family};
-    }
-  ) selectedFamilies;
+  srcs = builtins.map
+    (
+      family:
+      fetchzip {
+        url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";
+        hash = availableFamilies.${family};
+      }
+    )
+    selectedFamilies;
 
   dontUnpack = true;
   sourceRoot = ".";

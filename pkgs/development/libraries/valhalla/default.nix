@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  boost,
-  curl,
-  cxxopts,
-  gdal,
-  geos,
-  libspatialite,
-  luajit,
-  lz4,
-  prime-server,
-  protobuf,
-  python3,
-  rapidjson,
-  sqlite,
-  zeromq,
-  zlib,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, curl
+, cxxopts
+, gdal
+, geos
+, libspatialite
+, luajit
+, lz4
+, prime-server
+, protobuf
+, python3
+, rapidjson
+, sqlite
+, zeromq
+, zlib
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

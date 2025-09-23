@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  bidict,
-  packaging,
-  typing-extensions,
-  dbus-fast,
-  rubicon-objc,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, bidict
+, packaging
+, typing-extensions
+, dbus-fast
+, rubicon-objc
+,
 }:
 
 buildPythonPackage rec {

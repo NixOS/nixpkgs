@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  qt6,
-  ffmpeg,
-  cmake,
-  ninja,
-  v4l-utils,
-  grim,
-  wf-recorder,
-  libdbusmenu,
-  playerctl,
-  xorg,
-  iio-sensor-proxy,
-  inotify-tools,
-  bluez,
-  networkmanager,
-  connman,
-  redshift,
-  gawk,
-  polkit,
-  libnotify,
-  systemd,
-  xdg-utils,
-  libcprime,
-  libcsys,
+{ lib
+, stdenv
+, fetchFromGitLab
+, qt6
+, ffmpeg
+, cmake
+, ninja
+, v4l-utils
+, grim
+, wf-recorder
+, libdbusmenu
+, playerctl
+, xorg
+, iio-sensor-proxy
+, inotify-tools
+, bluez
+, networkmanager
+, connman
+, redshift
+, gawk
+, polkit
+, libnotify
+, systemd
+, xdg-utils
+, libcprime
+, libcsys
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

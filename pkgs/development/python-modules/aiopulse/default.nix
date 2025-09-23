@@ -1,10 +1,10 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  hatchling,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatchling
+,
 }:
 
 buildPythonPackage rec {

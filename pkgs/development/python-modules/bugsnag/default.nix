@@ -1,13 +1,13 @@
-{
-  lib,
-  blinker,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  pythonOlder,
-  setuptools,
-  webob,
-  pytestCheckHook,
+{ lib
+, blinker
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, pythonOlder
+, setuptools
+, webob
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

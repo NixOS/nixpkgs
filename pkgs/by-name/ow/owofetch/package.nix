@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  rustPlatform,
-  fetchFromGitHub,
+{ lib
+, stdenvNoCC
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage rec {

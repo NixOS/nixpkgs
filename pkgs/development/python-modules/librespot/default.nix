@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  protobuf,
-  pycryptodomex,
-  pyogg,
-  pythonOlder,
-  requests,
-  setuptools,
-  websocket-client,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, protobuf
+, pycryptodomex
+, pyogg
+, pythonOlder
+, requests
+, setuptools
+, websocket-client
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

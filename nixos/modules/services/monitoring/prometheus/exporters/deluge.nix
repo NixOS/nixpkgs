@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -86,9 +85,10 @@ in
       ++ lib.optionals cfg.exportPerTorrentMetrics [
         "PER_TORRENT_METRICS=1"
       ];
-      EnvironmentFile = lib.optionalString (
-        cfg.delugePasswordFile != null
-      ) "/etc/deluge-exporter/password";
+      EnvironmentFile = lib.optionalString
+        (
+          cfg.delugePasswordFile != null
+        ) "/etc/deluge-exporter/password";
     };
   };
 }

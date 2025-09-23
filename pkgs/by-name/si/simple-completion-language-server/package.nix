@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  withCitation ? true,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, withCitation ? true
+,
 }:
 
 rustPlatform.buildRustPackage {

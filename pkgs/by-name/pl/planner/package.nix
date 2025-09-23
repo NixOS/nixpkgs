@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  desktop-file-utils,
-  gsettings-desktop-schemas,
-  glib,
-  gtk3,
-  libgda5,
-  libxml2,
-  libxslt,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  shared-mime-info,
+{ lib
+, stdenv
+, fetchFromGitLab
+, desktop-file-utils
+, gsettings-desktop-schemas
+, glib
+, gtk3
+, libgda5
+, libxml2
+, libxslt
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, shared-mime-info
+,
 }:
 
 stdenv.mkDerivation rec {

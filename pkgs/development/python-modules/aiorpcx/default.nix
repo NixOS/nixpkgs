@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  websockets,
-  pytest-asyncio_0,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, websockets
+, pytest-asyncio_0
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

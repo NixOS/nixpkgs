@@ -1,24 +1,25 @@
-{
-  lib,
-  stdenv,
-  coreutils,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  cmake,
-  llvm_18, # does not build with 19+ due to API changes
-  emscripten,
-  openssl,
-  libsndfile,
-  libmicrohttpd,
-  gnutls,
-  libtasn1,
-  libxml2,
-  p11-kit,
-  vim,
-  which,
-  ncurses,
-  fetchpatch,
+{ lib
+, stdenv
+, coreutils
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, cmake
+, llvm_18
+, # does not build with 19+ due to API changes
+  emscripten
+, openssl
+, libsndfile
+, libmicrohttpd
+, gnutls
+, libtasn1
+, libxml2
+, p11-kit
+, vim
+, which
+, ncurses
+, fetchpatch
+,
 }:
 
 let
@@ -149,11 +150,10 @@ let
 
   # Default values for faust2appl.
   faust2ApplBase =
-    {
-      baseName,
-      dir ? "tools/faust2appls",
-      scripts ? [ baseName ],
-      ...
+    { baseName
+    , dir ? "tools/faust2appls"
+    , scripts ? [ baseName ]
+    , ...
     }@args:
 
     args
@@ -206,10 +206,9 @@ let
   # The build input 'faust' is automatically added to the
   # propagatedBuildInputs.
   wrapWithBuildEnv =
-    {
-      baseName,
-      propagatedBuildInputs ? [ ],
-      ...
+    { baseName
+    , propagatedBuildInputs ? [ ]
+    , ...
     }@args:
 
     stdenv.mkDerivation (
@@ -257,10 +256,9 @@ let
   #
   # The build input 'faust' is automatically added to the PATH.
   wrap =
-    {
-      baseName,
-      runtimeInputs ? [ ],
-      ...
+    { baseName
+    , runtimeInputs ? [ ]
+    , ...
     }@args:
 
     let

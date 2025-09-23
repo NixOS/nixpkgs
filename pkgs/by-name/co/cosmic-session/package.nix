@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  bash,
-  rustPlatform,
-  just,
-  dbus,
-  stdenv,
-  xdg-desktop-portal-cosmic,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, bash
+, rustPlatform
+, just
+, dbus
+, stdenv
+, xdg-desktop-portal-cosmic
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

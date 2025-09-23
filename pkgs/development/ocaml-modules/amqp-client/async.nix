@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  async,
-  uri,
-  amqp-client,
-  ezxmlm,
+{ buildDunePackage
+, async
+, uri
+, amqp-client
+, ezxmlm
+,
 }:
 
 buildDunePackage {

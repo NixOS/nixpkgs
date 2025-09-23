@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  gobject-introspection,
-  wrapGAppsHook3,
-  gtk-layer-shell,
-  gtk3,
-  wl-clipboard,
-  cliphist,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, gobject-introspection
+, wrapGAppsHook3
+, gtk-layer-shell
+, gtk3
+, wl-clipboard
+, cliphist
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonPackage rec {

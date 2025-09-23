@@ -1,11 +1,11 @@
-{
-  lib,
-  bleak,
-  bleak-retry-connector,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
+{ lib
+, bleak
+, bleak-retry-connector
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

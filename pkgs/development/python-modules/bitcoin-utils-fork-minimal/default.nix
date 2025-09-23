@@ -1,10 +1,10 @@
-{
-  lib,
-  base58,
-  buildPythonPackage,
-  ecdsa,
-  fetchPypi,
-  sympy,
+{ lib
+, base58
+, buildPythonPackage
+, ecdsa
+, fetchPypi
+, sympy
+,
 }:
 
 buildPythonPackage rec {

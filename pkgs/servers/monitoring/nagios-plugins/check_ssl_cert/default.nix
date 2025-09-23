@@ -1,19 +1,19 @@
-{
-  bc,
-  bind,
-  coreutils,
-  curl,
-  fetchFromGitHub,
-  file,
-  iproute2,
-  lib,
-  makeWrapper,
-  netcat-gnu,
-  nmap,
-  openssl,
-  python3,
-  stdenv,
-  which,
+{ bc
+, bind
+, coreutils
+, curl
+, fetchFromGitHub
+, file
+, iproute2
+, lib
+, makeWrapper
+, netcat-gnu
+, nmap
+, openssl
+, python3
+, stdenv
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

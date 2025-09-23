@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  ragel,
-  pkg-config,
-  wrapGAppsHook3,
-  lua,
-  fetchpatch,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, ragel
+, pkg-config
+, wrapGAppsHook3
+, lua
+, fetchpatch
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

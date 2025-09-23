@@ -1,8 +1,8 @@
-{
-  runCommand,
-  lib,
-  type ? "zstd",
-  zstd,
+{ runCommand
+, lib
+, type ? "zstd"
+, zstd
+,
 }:
 
 firmware:
@@ -20,8 +20,7 @@ let
         nativeBuildInputs = [ zstd ];
         cmd = file: target: ''zstd -T1 -19 --long --check -f "${file}" -o "${target}"'';
       };
-    }
-    .${type} or (throw "Unsupported compressor type for firmware.");
+    }.${type} or (throw "Unsupported compressor type for firmware.");
 
   args = {
     allowedRequisites = [ ];

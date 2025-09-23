@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  nix,
-  skopeo,
-  jq,
-  coreutils,
+{ lib
+, stdenv
+, makeWrapper
+, nix
+, skopeo
+, jq
+, coreutils
+,
 }:
 
 stdenv.mkDerivation {

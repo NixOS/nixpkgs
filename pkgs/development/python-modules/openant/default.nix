@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  pyusb,
-  influxdb-client,
-  pyserial,
-  pytestCheckHook,
-  udevCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, pyusb
+, influxdb-client
+, pyserial
+, pytestCheckHook
+, udevCheckHook
+,
 }:
 
 buildPythonPackage rec {

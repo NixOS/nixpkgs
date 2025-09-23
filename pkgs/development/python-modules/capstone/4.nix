@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  capstone_4,
-  stdenv,
-  setuptools,
-  fetchpatch,
+{ lib
+, buildPythonPackage
+, capstone_4
+, stdenv
+, setuptools
+, fetchpatch
+,
 }:
 
 buildPythonPackage {

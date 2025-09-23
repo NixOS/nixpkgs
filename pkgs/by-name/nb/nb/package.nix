@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  nix-update-script,
-  nb,
-  bashInteractive,
+{ stdenv
+, lib
+, fetchFromGitHub
+, installShellFiles
+, testers
+, nix-update-script
+, nb
+, bashInteractive
+,
 }:
 
 stdenv.mkDerivation rec {

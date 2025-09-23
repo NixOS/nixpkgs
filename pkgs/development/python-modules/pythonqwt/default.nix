@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  qtpy,
-
-  # tests
-  pyqt6,
-  qt6,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, qtpy
+, # tests
+  pyqt6
+, qt6
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  callPackage,
-  python27,
-  fetchFromGitHub,
-  installShellFiles,
-  rSrc,
-  version,
-  oildev,
-  configargparse,
-  gawk,
-  binlore,
-  resholve,
-  resholve-utils,
+{ lib
+, callPackage
+, python27
+, fetchFromGitHub
+, installShellFiles
+, rSrc
+, version
+, oildev
+, configargparse
+, gawk
+, binlore
+, resholve
+, resholve-utils
+,
 }:
 
 let

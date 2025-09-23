@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  fetchpatch2,
-  setuptools,
-  pytestCheckHook,
-  pytest-mock,
-  ffmpeg,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, fetchpatch2
+, setuptools
+, pytestCheckHook
+, pytest-mock
+, ffmpeg
+,
 }:
 
 buildPythonPackage {

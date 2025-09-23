@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  withRuffleTools ? false,
-  fetchFromGitHub,
-  jre_minimal,
-  pkg-config,
-  autoPatchelfHook,
-  alsa-lib,
-  wayland,
-  xorg,
-  vulkan-loader,
-  udev,
-  libxkbcommon,
-  openh264,
-  writeShellApplication,
-  curl,
-  jq,
-  nix-update,
+{ lib
+, stdenv
+, rustPlatform
+, withRuffleTools ? false
+, fetchFromGitHub
+, jre_minimal
+, pkg-config
+, autoPatchelfHook
+, alsa-lib
+, wayland
+, xorg
+, vulkan-loader
+, udev
+, libxkbcommon
+, openh264
+, writeShellApplication
+, curl
+, jq
+, nix-update
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
@@ -63,15 +63,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Prevents ruffle from downloading openh264 at runtime for Linux
   openh264-241 =
     if stdenv.hostPlatform.isLinux then
-      openh264.overrideAttrs (_: rec {
-        version = "2.4.1";
-        src = fetchFromGitHub {
-          owner = "cisco";
-          repo = "openh264";
-          tag = "v${version}";
-          hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
-        };
-      })
+      openh264.overrideAttrs
+        (_: rec {
+          version = "2.4.1";
+          src = fetchFromGitHub {
+            owner = "cisco";
+            repo = "openh264";
+            tag = "v${version}";
+            hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
+          };
+        })
     else
       null;
 

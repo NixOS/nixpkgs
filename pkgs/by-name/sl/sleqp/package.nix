@@ -1,18 +1,18 @@
-{
-  blas,
-  check,
-  cmake,
-  doxygen,
-  fetchFromGitHub,
-  highs,
-  lapack,
-  lib,
-  pkg-config,
-  pythonSupport ? false,
-  python3Packages,
-  suitesparse,
-  stdenv,
-  trlib,
+{ blas
+, check
+, cmake
+, doxygen
+, fetchFromGitHub
+, highs
+, lapack
+, lib
+, pkg-config
+, pythonSupport ? false
+, python3Packages
+, suitesparse
+, stdenv
+, trlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

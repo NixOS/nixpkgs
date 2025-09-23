@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  installShellFiles,
-  ncurses,
-  stdenv,
+{ lib
+, fetchurl
+, fetchpatch
+, installShellFiles
+, ncurses
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

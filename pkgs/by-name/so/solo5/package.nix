@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dosfstools,
-  libseccomp,
-  makeWrapper,
-  mtools,
-  parted,
-  pkg-config,
-  qemu_test,
-  syslinux,
-  util-linux,
+{ lib
+, stdenv
+, fetchurl
+, dosfstools
+, libseccomp
+, makeWrapper
+, mtools
+, parted
+, pkg-config
+, qemu_test
+, syslinux
+, util-linux
+,
 }:
 
 let

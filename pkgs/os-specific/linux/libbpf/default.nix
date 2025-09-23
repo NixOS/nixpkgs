@@ -1,16 +1,15 @@
-{
-  fetchFromGitHub,
-  elfutils,
-  pkg-config,
-  stdenv,
-  zlib,
-  lib,
-
-  # for passthru.tests
-  knot-dns,
-  nixosTests,
-  systemd,
-  tracee,
+{ fetchFromGitHub
+, elfutils
+, pkg-config
+, stdenv
+, zlib
+, lib
+, # for passthru.tests
+  knot-dns
+, nixosTests
+, systemd
+, tracee
+,
 }:
 
 stdenv.mkDerivation rec {

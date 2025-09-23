@@ -1,34 +1,34 @@
 { version, hash }:
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  coreutils,
-  libuuid,
-  libaio,
-  bash,
-  bashNonInteractive,
-  replaceVars,
-  enableCmdlib ? false,
-  enableDmeventd ? false,
-  udevSupport ? !stdenv.hostPlatform.isStatic,
-  udev,
-  udevCheckHook,
-  onlyLib ? stdenv.hostPlatform.isStatic,
-  # Otherwise we have a infinity recursion during static compilation
-  enableUtilLinux ? !stdenv.hostPlatform.isStatic,
-  util-linux,
-  enableVDO ? false,
-  vdo,
-  enableMdadm ? false,
-  mdadm,
-  enableMultipath ? false,
-  multipath-tools,
-  nixosTests,
-  buildFHSEnv,
-  recurseIntoAttrs,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, coreutils
+, libuuid
+, libaio
+, bash
+, bashNonInteractive
+, replaceVars
+, enableCmdlib ? false
+, enableDmeventd ? false
+, udevSupport ? !stdenv.hostPlatform.isStatic
+, udev
+, udevCheckHook
+, onlyLib ? stdenv.hostPlatform.isStatic
+, # Otherwise we have a infinity recursion during static compilation
+  enableUtilLinux ? !stdenv.hostPlatform.isStatic
+, util-linux
+, enableVDO ? false
+, vdo
+, enableMdadm ? false
+, mdadm
+, enableMultipath ? false
+, multipath-tools
+, nixosTests
+, buildFHSEnv
+, recurseIntoAttrs
+,
 }:
 
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well

@@ -1,22 +1,19 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # buildInputs
-  buildbox,
-  fuse3,
-  lzip,
-  patch,
-
-  # tests
-  addBinToPathHook,
-  gitMinimal,
-  versionCheckHook,
-
-  # Optional features
-  enableBuildstreamPlugins ? true,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, fetchpatch
+, # buildInputs
+  buildbox
+, fuse3
+, lzip
+, patch
+, # tests
+  addBinToPathHook
+, gitMinimal
+, versionCheckHook
+, # Optional features
+  enableBuildstreamPlugins ? true
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  withNotification ? false,
-  withYubikey ? false,
-  withStrictCaller ? false,
-  withAll ? false,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, withNotification ? false
+, withYubikey ? false
+, withStrictCaller ? false
+, withAll ? false
+,
 }:
 
 rustPlatform.buildRustPackage rec {

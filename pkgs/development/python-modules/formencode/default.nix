@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  setuptools-scm,
-  six,
-  dnspython,
-  legacy-cgi,
-  pycountry,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools-scm
+, six
+, dnspython
+, legacy-cgi
+, pycountry
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

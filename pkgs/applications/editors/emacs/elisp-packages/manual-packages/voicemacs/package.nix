@@ -1,20 +1,20 @@
-{
-  lib,
-  avy,
-  bind-key,
-  cl-lib,
-  company,
-  company-quickhelp,
-  default-text-scale,
-  f,
-  fetchFromGitHub,
-  helm,
-  json-rpc-server,
-  melpaBuild,
-  nav-flash,
-  porthole,
-  yasnippet,
-  el-patch,
+{ lib
+, avy
+, bind-key
+, cl-lib
+, company
+, company-quickhelp
+, default-text-scale
+, f
+, fetchFromGitHub
+, helm
+, json-rpc-server
+, melpaBuild
+, nav-flash
+, porthole
+, yasnippet
+, el-patch
+,
 }:
 
 melpaBuild {

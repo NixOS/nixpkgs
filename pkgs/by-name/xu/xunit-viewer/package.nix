@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  callPackage,
-  testers,
-  xunit-viewer,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, callPackage
+, testers
+, xunit-viewer
+,
 }:
 let
   version = "10.6.1";

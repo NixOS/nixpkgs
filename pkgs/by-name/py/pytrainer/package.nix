@@ -1,20 +1,20 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  adwaita-icon-theme,
-  gpsbabel,
-  glib-networking,
-  glibcLocales,
-  gobject-introspection,
-  gtk3,
-  perl,
-  sqlite,
-  tzdata,
-  webkitgtk_4_0,
-  wrapGAppsHook3,
-  xvfb-run,
+{ lib
+, python3
+, fetchFromGitHub
+, gdk-pixbuf
+, adwaita-icon-theme
+, gpsbabel
+, glib-networking
+, glibcLocales
+, gobject-introspection
+, gtk3
+, perl
+, sqlite
+, tzdata
+, webkitgtk_4_0
+, wrapGAppsHook3
+, xvfb-run
+,
 }:
 
 let

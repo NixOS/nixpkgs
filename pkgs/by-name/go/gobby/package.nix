@@ -1,20 +1,21 @@
-{
-  avahiSupport ? false, # build support for Avahi in libinfinity
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  pkg-config,
-  wrapGAppsHook3,
-  yelp-tools,
-  gtkmm3,
-  gsasl,
-  gtksourceview3,
-  libxmlxx,
-  libinfinity,
-  intltool,
-  itstool,
+{ avahiSupport ? false
+, # build support for Avahi in libinfinity
+  lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, wrapGAppsHook3
+, yelp-tools
+, gtkmm3
+, gsasl
+, gtksourceview3
+, libxmlxx
+, libinfinity
+, intltool
+, itstool
+,
 }:
 
 let

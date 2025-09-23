@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  curl,
-  unrar-wrapper,
+{ lib
+, stdenvNoCC
+, curl
+, unrar-wrapper
+,
 }:
 
 stdenvNoCC.mkDerivation {

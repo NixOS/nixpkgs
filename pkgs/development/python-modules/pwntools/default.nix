@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  debugger,
-  fetchPypi,
-  capstone,
-  colored-traceback,
-  intervaltree,
-  mako,
-  packaging,
-  paramiko,
-  psutil,
-  pyelftools,
-  pygments,
-  pyserial,
-  pysocks,
-  python-dateutil,
-  requests,
-  ropgadget,
-  rpyc,
-  setuptools,
-  six,
-  sortedcontainers,
-  unicorn,
-  unix-ar,
-  zstandard,
-  installShellFiles,
+{ lib
+, stdenv
+, buildPythonPackage
+, debugger
+, fetchPypi
+, capstone
+, colored-traceback
+, intervaltree
+, mako
+, packaging
+, paramiko
+, psutil
+, pyelftools
+, pygments
+, pyserial
+, pysocks
+, python-dateutil
+, requests
+, ropgadget
+, rpyc
+, setuptools
+, six
+, sortedcontainers
+, unicorn
+, unix-ar
+, zstandard
+, installShellFiles
+,
 }:
 
 let

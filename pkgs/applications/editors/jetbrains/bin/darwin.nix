@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenvNoCC,
-  undmg,
-  ...
+{ lib
+, stdenvNoCC
+, undmg
+, ...
 }:
 
-{
-  meta,
-  pname,
-  product,
-  productShort ? product,
-  src,
-  version,
-  plugins ? [ ],
-  buildNumber,
-  ...
+{ meta
+, pname
+, product
+, productShort ? product
+, src
+, version
+, plugins ? [ ]
+, buildNumber
+, ...
 }@args:
 
 let

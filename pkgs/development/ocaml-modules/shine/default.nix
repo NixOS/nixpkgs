@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  shine,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, shine
+,
 }:
 
 buildDunePackage rec {

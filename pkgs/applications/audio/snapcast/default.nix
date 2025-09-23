@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  asio,
-  avahi,
-  boost,
-  expat,
-  flac,
-  libogg,
-  libvorbis,
-  libopus,
-  soxr,
-  aixlog,
-  popl,
-  pulseaudioSupport ? false,
-  libpulseaudio,
-  nixosTests,
-  openssl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsa-lib
+, asio
+, avahi
+, boost
+, expat
+, flac
+, libogg
+, libvorbis
+, libopus
+, soxr
+, aixlog
+, popl
+, pulseaudioSupport ? false
+, libpulseaudio
+, nixosTests
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

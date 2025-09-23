@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  matplotlib,
-  numpy,
-  scipy,
-  shapely,
-  pytestCheckHook,
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, setuptools
+, matplotlib
+, numpy
+, scipy
+, shapely
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

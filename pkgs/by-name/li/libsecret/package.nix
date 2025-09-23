@@ -1,35 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  libxslt,
-  python3,
-  python3Packages,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  libgcrypt,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  vala,
-  gi-docgen,
-  gnome,
-  gjs,
-  libintl,
-  dbus,
-  withTpm2Tss ? false,
-  abrmdSupport ? false,
-  writeShellApplication,
-  tpm2-tss,
-  tpm2-abrmd,
-  libsecret,
+{ stdenv
+, lib
+, fetchurl
+, glib
+, meson
+, ninja
+, pkg-config
+, gettext
+, libxslt
+, python3
+, python3Packages
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, libgcrypt
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, vala
+, gi-docgen
+, gnome
+, gjs
+, libintl
+, dbus
+, withTpm2Tss ? false
+, abrmdSupport ? false
+, writeShellApplication
+, tpm2-tss
+, tpm2-abrmd
+, libsecret
+,
 }:
 
 assert abrmdSupport -> withTpm2Tss;

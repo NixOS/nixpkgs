@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  chardet,
-  fetchFromGitHub,
-  idna,
-  pythonOlder,
-  requests,
-  setuptools,
-  urllib3,
+{ lib
+, buildPythonPackage
+, certifi
+, chardet
+, fetchFromGitHub
+, idna
+, pythonOlder
+, requests
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

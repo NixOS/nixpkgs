@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nix-update-script,
-
-  pnpm_10,
-  nodejs,
-
-  rustPlatform,
-  cargo-tauri,
-  wrapGAppsHook4,
-  pkg-config,
-  glib-networking,
-  webkitgtk_4_1,
-  openssl,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nix-update-script
+, pnpm_10
+, nodejs
+, rustPlatform
+, cargo-tauri
+, wrapGAppsHook4
+, pkg-config
+, glib-networking
+, webkitgtk_4_1
+, openssl
+,
 }:
 
 let

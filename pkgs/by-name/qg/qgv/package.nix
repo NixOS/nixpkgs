@@ -1,11 +1,11 @@
-{
-  cmake,
-  fetchFromGitHub,
-  graphviz,
-  jrl-cmakemodules,
-  lib,
-  libsForQt5,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, graphviz
+, jrl-cmakemodules
+, lib
+, libsForQt5
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

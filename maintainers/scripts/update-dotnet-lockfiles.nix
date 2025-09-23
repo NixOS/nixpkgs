@@ -15,5 +15,5 @@ import ./update.nix (
     predicate = _: _: true;
     get-script = pkg: pkg.fetch-deps or null;
   }
-  // args
+    // args
 )

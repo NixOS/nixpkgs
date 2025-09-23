@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-
-  # Build the FMUs following the latest FMI standard
-  FMIVersion ? 3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, # Build the FMUs following the latest FMI standard
+  FMIVersion ? 3
+,
 }:
 
 # C.f. <https://fmi-standard.org/>
-assert lib.asserts.assertMsg (
-  FMIVersion >= 1 && FMIVersion <= 3
-) "FMIVersion must be a valid FMI specification standard: 1, 2, or 3; not ${toString FMIVersion}";
+assert lib.asserts.assertMsg
+  (
+    FMIVersion >= 1 && FMIVersion <= 3
+  ) "FMIVersion must be a valid FMI specification standard: 1, 2, or 3; not ${toString FMIVersion}";
 
 # NB: this derivation does not package the fmusim executables, only
 # the FMUs.

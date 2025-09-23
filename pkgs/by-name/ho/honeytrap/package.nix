@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+,
 }:
 buildGoModule {
   pname = "honeytrap";

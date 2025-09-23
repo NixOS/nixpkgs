@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchhg,
-  qt5,
+{ lib
+, stdenv
+, fetchhg
+, qt5
+,
 }:
 
 let

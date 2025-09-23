@@ -1,12 +1,13 @@
-{
-  callPackage,
-  makeSetupHook,
-  lib,
-  memcached,
-  netcat,
+{ callPackage
+, makeSetupHook
+, lib
+, memcached
+, netcat
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "memcached-test-hook";
   substitutions = {
     memcached = lib.getExe memcached;

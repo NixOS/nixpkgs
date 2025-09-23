@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  libdrm,
-  ffmpeg_6,
-  wayland,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, libdrm
+, ffmpeg_6
+, wayland
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

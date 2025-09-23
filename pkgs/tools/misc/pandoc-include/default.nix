@@ -1,12 +1,12 @@
-{
-  buildPythonApplication,
-  fetchFromGitHub,
-  lib,
-  natsort,
-  panflute,
-  lxml,
-  setuptools,
-  nix-update-script,
+{ buildPythonApplication
+, fetchFromGitHub
+, lib
+, natsort
+, panflute
+, lxml
+, setuptools
+, nix-update-script
+,
 }:
 
 buildPythonApplication rec {

@@ -1,16 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  makeWrapper,
-  bash,
-
-  git,
-  nix-prefetch-git,
-  rWrapper,
-  rPackages,
-
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitea
+, makeWrapper
+, bash
+, git
+, nix-prefetch-git
+, rWrapper
+, rPackages
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

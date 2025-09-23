@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  qt5compat,
-  qtsvg,
-  qttools,
-  qtdeclarative,
-  eigen,
+{ mkKdeDerivation
+, qt5compat
+, qtsvg
+, qttools
+, qtdeclarative
+, eigen
+,
 }:
 mkKdeDerivation {
   pname = "analitza";

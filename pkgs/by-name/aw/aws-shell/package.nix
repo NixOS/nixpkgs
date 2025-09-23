@@ -1,9 +1,9 @@
-{
-  python3Packages,
-  lib,
-  fetchFromGitHub,
-  awscli,
-  writableTmpDirAsHomeHook,
+{ python3Packages
+, lib
+, fetchFromGitHub
+, awscli
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  tls,
-  lwt,
-  mirage-crypto-rng,
+{ buildDunePackage
+, tls
+, lwt
+, mirage-crypto-rng
+,
 }:
 
 buildDunePackage {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  which,
-  autoconf,
-  automake,
-  flex,
-  bison,
-  kernel,
-  glibc,
-  perl,
-  libtool_2,
-  libkrb5,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, which
+, autoconf
+, automake
+, flex
+, bison
+, kernel
+, glibc
+, perl
+, libtool_2
+, libkrb5
+,
 }:
 
 let

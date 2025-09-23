@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonApplication,
+{ lib
+, fetchPypi
+, buildPythonApplication
+,
 }:
 
 buildPythonApplication rec {

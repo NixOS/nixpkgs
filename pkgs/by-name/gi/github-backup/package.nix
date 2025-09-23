@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  git,
-  git-lfs,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, git
+, git-lfs
+,
 }:
 
 python3Packages.buildPythonApplication rec {

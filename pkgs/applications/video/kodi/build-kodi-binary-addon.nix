@@ -1,22 +1,21 @@
-{
-  stdenv,
-  toKodiAddon,
-  addonDir,
-  cmake,
-  kodi,
-  kodi-platform,
-  libcec_platform,
+{ stdenv
+, toKodiAddon
+, addonDir
+, cmake
+, kodi
+, kodi-platform
+, libcec_platform
+,
 }:
-{
-  name ? "${attrs.pname}-${attrs.version}",
-  namespace,
-  version,
-  extraNativeBuildInputs ? [ ],
-  extraBuildInputs ? [ ],
-  extraRuntimeDependencies ? [ ],
-  extraCMakeFlags ? [ ],
-  extraInstallPhase ? "",
-  ...
+{ name ? "${attrs.pname}-${attrs.version}"
+, namespace
+, version
+, extraNativeBuildInputs ? [ ]
+, extraBuildInputs ? [ ]
+, extraRuntimeDependencies ? [ ]
+, extraCMakeFlags ? [ ]
+, extraInstallPhase ? ""
+, ...
 }@attrs:
 toKodiAddon (
   stdenv.mkDerivation (
@@ -61,6 +60,6 @@ toKodiAddon (
           runHook postInstall
         '';
     }
-    // attrs
+      // attrs
   )
 )

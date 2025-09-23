@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  pyzipper,
-  setuptools,
-  striprtf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, pyzipper
+, setuptools
+, striprtf
+,
 }:
 
 buildPythonPackage rec {

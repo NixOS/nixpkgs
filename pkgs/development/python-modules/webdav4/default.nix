@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  cheroot,
-  colorama,
-  fetchFromGitHub,
-  fsspec,
-  hatch-vcs,
-  hatchling,
-  httpx,
-  pytest-xdist,
-  pytestCheckHook,
-  pytest-cov-stub,
-  python-dateutil,
-  pythonOlder,
-  wsgidav,
+{ lib
+, buildPythonPackage
+, cheroot
+, colorama
+, fetchFromGitHub
+, fsspec
+, hatch-vcs
+, hatchling
+, httpx
+, pytest-xdist
+, pytestCheckHook
+, pytest-cov-stub
+, python-dateutil
+, pythonOlder
+, wsgidav
+,
 }:
 
 buildPythonPackage rec {

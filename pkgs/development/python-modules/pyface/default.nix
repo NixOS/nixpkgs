@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  importlib-metadata,
-  importlib-resources,
-  setuptools,
-  traits,
-  pythonOlder,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, importlib-metadata
+, importlib-resources
+, setuptools
+, traits
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

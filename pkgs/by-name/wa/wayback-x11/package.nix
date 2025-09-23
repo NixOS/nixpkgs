@@ -1,20 +1,20 @@
-{
-  fetchFromGitLab,
-  lib,
-  libxkbcommon,
-  makeWrapper,
-  meson,
-  ninja,
-  nix-update-script,
-  pixman,
-  pkg-config,
-  scdoc,
-  stdenv,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots_0_19,
-  xwayland,
+{ fetchFromGitLab
+, lib
+, libxkbcommon
+, makeWrapper
+, meson
+, ninja
+, nix-update-script
+, pixman
+, pkg-config
+, scdoc
+, stdenv
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlroots_0_19
+, xwayland
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

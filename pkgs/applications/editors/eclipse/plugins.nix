@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, unzip
+,
 }:
 
 rec {
@@ -11,11 +11,10 @@ rec {
   # A primitive builder of Eclipse plugins. This function is intended
   # to be used when building more advanced builders.
   buildEclipsePluginBase =
-    {
-      name,
-      buildInputs ? [ ],
-      passthru ? { },
-      ...
+    { name
+    , buildInputs ? [ ]
+    , passthru ? { }
+    , ...
     }@attrs:
     stdenv.mkDerivation (
       attrs
@@ -34,40 +33,39 @@ rec {
   # Helper for the common case where we have separate feature and
   # plugin JARs.
   buildEclipsePlugin =
-    {
-      name,
-      srcFeature,
-      srcPlugin ? null,
-      srcPlugins ? [ ],
-      ...
+    { name
+    , srcFeature
+    , srcPlugin ? null
+    , srcPlugins ? [ ]
+    , ...
     }@attrs:
-    assert srcPlugin == null -> srcPlugins != [ ];
-    assert srcPlugin != null -> srcPlugins == [ ];
+      assert srcPlugin == null -> srcPlugins != [ ];
+      assert srcPlugin != null -> srcPlugins == [ ];
 
-    let
+      let
 
-      pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
+        pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
 
-    in
+      in
 
-    buildEclipsePluginBase (
-      attrs
-      // {
-        srcs = [ srcFeature ] ++ pSrcs;
+      buildEclipsePluginBase (
+        attrs
+        // {
+          srcs = [ srcFeature ] ++ pSrcs;
 
-        buildCommand = ''
-          dropinDir="$out/eclipse/dropins/${name}"
+          buildCommand = ''
+            dropinDir="$out/eclipse/dropins/${name}"
 
-          mkdir -p $dropinDir/features
-          unzip ${srcFeature} -d $dropinDir/features/
+            mkdir -p $dropinDir/features
+            unzip ${srcFeature} -d $dropinDir/features/
 
-          mkdir -p $dropinDir/plugins
-          for plugin in ${toString pSrcs}; do
-            cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
-          done
-        '';
-      }
-    );
+            mkdir -p $dropinDir/plugins
+            for plugin in ${toString pSrcs}; do
+              cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
+            done
+          '';
+        }
+      );
 
   # Helper for the case where the build directory has the layout of an
   # Eclipse update site, that is, it contains the directories

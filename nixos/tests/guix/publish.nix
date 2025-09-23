@@ -32,11 +32,10 @@ import ../make-test-python.nix (
       in
       {
         server =
-          {
-            config,
-            lib,
-            pkgs,
-            ...
+          { config
+          , lib
+          , pkgs
+          , ...
           }:
           {
             imports = [ commonConfig ];
@@ -56,11 +55,10 @@ import ../make-test-python.nix (
           };
 
         client =
-          {
-            config,
-            lib,
-            pkgs,
-            ...
+          { config
+          , lib
+          , pkgs
+          , ...
           }:
           {
             imports = [ commonConfig ];

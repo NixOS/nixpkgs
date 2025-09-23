@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  mkDerivationWith,
-  fetchFromGitHub,
-  doxygen,
-  gtk3,
-  libopenshot,
-  python3,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  wayland,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, mkDerivationWith
+, fetchFromGitHub
+, doxygen
+, gtk3
+, libopenshot
+, python3
+, qtbase
+, qtsvg
+, qtwayland
+, wayland
+, waylandSupport ? stdenv.hostPlatform.isLinux
+, wrapGAppsHook3
+,
 }:
 
 let

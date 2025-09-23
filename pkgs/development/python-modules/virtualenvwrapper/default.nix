@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pbr,
-  pip,
-  pkgs,
-  stevedore,
-  virtualenv,
-  virtualenv-clone,
-  python,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pbr
+, pip
+, pkgs
+, stevedore
+, virtualenv
+, virtualenv-clone
+, python
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

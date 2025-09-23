@@ -1,8 +1,8 @@
-{
-  lib,
-  openssl,
-  stdenv,
-  fetchurl,
+{ lib
+, openssl
+, stdenv
+, fetchurl
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctf-ynetd";

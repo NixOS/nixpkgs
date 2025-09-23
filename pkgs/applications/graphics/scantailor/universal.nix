@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libsForQt5,
-  zlib,
-  openjpeg,
-  libjpeg_turbo,
-  libpng,
-  libtiff,
-  boost,
-  libcanberra,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libsForQt5
+, zlib
+, openjpeg
+, libjpeg_turbo
+, libpng
+, libtiff
+, boost
+, libcanberra
+,
 }:
 
 stdenv.mkDerivation rec {

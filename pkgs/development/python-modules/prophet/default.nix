@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-
-  cmdstanpy,
-  numpy,
-  matplotlib,
-  pandas,
-  holidays,
-  tqdm,
-  importlib-resources,
-
-  dask,
-  distributed,
-
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, cmdstanpy
+, numpy
+, matplotlib
+, pandas
+, holidays
+, tqdm
+, importlib-resources
+, dask
+, distributed
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

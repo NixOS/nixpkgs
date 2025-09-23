@@ -1,11 +1,9 @@
-{
-  lib,
-  stdenv,
-
-  chromedriver,
-  python3,
-
-  testers,
+{ lib
+, stdenv
+, chromedriver
+, python3
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

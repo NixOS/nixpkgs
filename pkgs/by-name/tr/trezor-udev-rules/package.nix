@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  nixosTests,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, nixosTests
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

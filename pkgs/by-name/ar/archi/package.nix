@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  jdk,
-  libsecret,
-  glib,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  _7zz,
-  nixosTests,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, jdk
+, libsecret
+, glib
+, webkitgtk_4_1
+, wrapGAppsHook3
+, _7zz
+, nixosTests
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
         url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-Silicon-${version}.dmg";
         hash = "sha256-a80QyJT+mizT4bxhJ/1rXnQGbq0Zxwmqb74n2QH4H3I=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   buildInputs = [
     libsecret

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  autoreconfHook,
-  dbus,
-  gettext,
-  gnutls,
-  libfilezilla,
-  libidn,
-  nettle,
-  pkg-config,
-  pugixml,
-  sqlite,
-  tinyxml,
-  boost,
-  wrapGAppsHook3,
-  wxGTK32,
-  gtk3,
-  xdg-utils,
+{ lib
+, stdenv
+, fetchsvn
+, autoreconfHook
+, dbus
+, gettext
+, gnutls
+, libfilezilla
+, libidn
+, nettle
+, pkg-config
+, pugixml
+, sqlite
+, tinyxml
+, boost
+, wrapGAppsHook3
+, wxGTK32
+, gtk3
+, xdg-utils
+,
 }:
 
 stdenv.mkDerivation {

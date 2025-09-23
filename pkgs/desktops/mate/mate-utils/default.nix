@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  itstool,
-  glib,
-  gtk-layer-shell,
-  gtk3,
-  libxml2,
-  libgtop,
-  libcanberra-gtk3,
-  inkscape,
-  udisks2,
-  mate-desktop,
-  mate-panel,
-  hicolor-icon-theme,
-  wayland,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, glib
+, gtk-layer-shell
+, gtk3
+, libxml2
+, libgtop
+, libcanberra-gtk3
+, inkscape
+, udisks2
+, mate-desktop
+, mate-panel
+, hicolor-icon-theme
+, wayland
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

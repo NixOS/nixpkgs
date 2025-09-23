@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  bluez,
-  libusb-compat-0_1,
-  cmake,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, bluez
+, libusb-compat-0_1
+, cmake
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  gcc13Stdenv,
-  lib,
-  makeWrapper,
-  fetchzip,
-  ocaml,
-  findlib,
-  tcl,
-  tk,
+{ stdenv
+, gcc13Stdenv
+, lib
+, makeWrapper
+, fetchzip
+, ocaml
+, findlib
+, tcl
+, tk
+,
 }:
 
 let
@@ -15,11 +15,11 @@ let
   params =
     let
       mkNewParam =
-        {
-          version,
-          sha256,
-          rev ? version,
-          stdenv ? defaultStdenv,
+        { version
+        , sha256
+        , rev ? version
+        , stdenv ? defaultStdenv
+        ,
         }:
         {
           inherit stdenv version;
@@ -84,7 +84,7 @@ let
     };
   param =
     params.${lib.versions.majorMinor ocaml.version}
-    or (throw "labltk is not available for OCaml ${ocaml.version}");
+      or (throw "labltk is not available for OCaml ${ocaml.version}");
 in
 
 param.stdenv.mkDerivation {

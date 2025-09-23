@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  coreutils,
-  installShellFiles,
-  makeWrapper,
-  gitMinimal,
-  writeShellScript,
-  curl,
-  jq,
-  common-updater-scripts,
+{ lib
+, stdenv
+, fetchzip
+, coreutils
+, installShellFiles
+, makeWrapper
+, gitMinimal
+, writeShellScript
+, curl
+, jq
+, common-updater-scripts
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

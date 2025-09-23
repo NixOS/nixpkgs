@@ -1,8 +1,8 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  zlib,
+{ callPackage
+, fetchFromGitHub
+, fetchpatch2
+, zlib
+,
 }:
 
 callPackage ./build.nix rec {

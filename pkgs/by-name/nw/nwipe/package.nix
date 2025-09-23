@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  makeWrapper,
-  fetchFromGitHub,
-  ncurses,
-  parted,
-  pkg-config,
-  libconfig,
-  hdparm,
-  smartmontools,
-  dmidecode,
+{ lib
+, stdenv
+, autoreconfHook
+, makeWrapper
+, fetchFromGitHub
+, ncurses
+, parted
+, pkg-config
+, libconfig
+, hdparm
+, smartmontools
+, dmidecode
+,
 }:
 
 stdenv.mkDerivation rec {

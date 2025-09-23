@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  intltool,
-  ntfs3g,
-  util-linux,
-  mediaDir ? "/media/",
-  lockDir ? "/var/lock/pmount",
-  whiteList ? "/etc/pmount.allow",
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, intltool
+, ntfs3g
+, util-linux
+, mediaDir ? "/media/"
+, lockDir ? "/var/lock/pmount"
+, whiteList ? "/etc/pmount.allow"
+,
 }:
 
 # constraint mention in the configure.ac

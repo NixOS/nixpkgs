@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  file,
-  pkg-config,
-  glib,
-  gtkVersion ? "3",
-  gtk2,
-  gtk3,
+{ stdenv
+, fetchurl
+, lib
+, file
+, pkg-config
+, glib
+, gtkVersion ? "3"
+, gtk2
+, gtk3
+,
 }:
 
 stdenv.mkDerivation rec {

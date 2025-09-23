@@ -1,21 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocprim,
-  clr,
-  gfortran,
-  git,
-  gtest,
-  boost,
-  python3Packages,
-  buildTests ? false,
-  buildBenchmarks ? false, # Seems to depend on tests
-  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocprim
+, clr
+, gfortran
+, git
+, gtest
+, boost
+, python3Packages
+, buildTests ? false
+, buildBenchmarks ? false
+, # Seems to depend on tests
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

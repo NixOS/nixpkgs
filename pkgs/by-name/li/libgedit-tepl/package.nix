@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  gobject-introspection,
-  gtk3,
-  icu,
-  libhandy,
-  libgedit-amtk,
-  libgedit-gfls,
-  libgedit-gtksourceview,
-  pkg-config,
-  gtk-doc,
-  docbook-xsl-nons,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, mesonEmulatorHook
+, ninja
+, gobject-introspection
+, gtk3
+, icu
+, libhandy
+, libgedit-amtk
+, libgedit-gfls
+, libgedit-gtksourceview
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

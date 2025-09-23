@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  pandoc,
-  makeWrapper,
-  testers,
-  ov,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pandoc
+, makeWrapper
+, testers
+, ov
+,
 }:
 
 buildGoModule rec {

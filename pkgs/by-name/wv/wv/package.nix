@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
-  imagemagick,
-  libpng,
-  glib,
-  pkg-config,
-  libgsf,
-  libxml2,
-  bzip2,
-  autoreconfHook,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, imagemagick
+, libpng
+, glib
+, pkg-config
+, libgsf
+, libxml2
+, bzip2
+, autoreconfHook
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

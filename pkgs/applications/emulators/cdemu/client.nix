@@ -1,11 +1,11 @@
-{
-  callPackage,
-  python3Packages,
-  cmake,
-  pkg-config,
-  intltool,
-  wrapGAppsNoGuiHook,
-  gobject-introspection,
+{ callPackage
+, python3Packages
+, cmake
+, pkg-config
+, intltool
+, wrapGAppsNoGuiHook
+, gobject-introspection
+,
 }:
 python3Packages.buildPythonApplication {
 

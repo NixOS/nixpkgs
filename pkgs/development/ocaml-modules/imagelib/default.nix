@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  decompress,
-  stdlib-shims,
-  alcotest,
+{ lib
+, fetchurl
+, buildDunePackage
+, decompress
+, stdlib-shims
+, alcotest
+,
 }:
 
 buildDunePackage rec {

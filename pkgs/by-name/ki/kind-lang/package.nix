@@ -1,6 +1,6 @@
-{
-  haskell,
-  lib,
+{ haskell
+, lib
+,
 }:
 
 let

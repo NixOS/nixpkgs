@@ -1,8 +1,8 @@
-{
-  buildPythonApplication,
-  fetchFromGitHub,
-  dnslib,
-  lib,
+{ buildPythonApplication
+, fetchFromGitHub
+, dnslib
+, lib
+,
 }:
 
 buildPythonApplication {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  gettext,
-  gtk-doc,
-  gobject-introspection,
-  python3,
-  gtk3,
-  cairo,
-  glib,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, gettext
+, gtk-doc
+, gobject-introspection
+, python3
+, gtk3
+, cairo
+, glib
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

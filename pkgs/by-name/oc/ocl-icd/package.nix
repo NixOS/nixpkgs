@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ruby,
-  opencl-headers,
-  autoreconfHook,
-  windows,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ruby
+, opencl-headers
+, autoreconfHook
+, windows
+,
 }:
 
 stdenv.mkDerivation rec {

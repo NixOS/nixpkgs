@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  gtk3,
-  pkg-config,
-  libgsf,
-  libofx,
-  autoreconfHook,
-  intltool,
-  wrapGAppsHook3,
-  adwaita-icon-theme,
-  nix-update-script,
+{ fetchFromGitHub
+, lib
+, stdenv
+, gtk3
+, pkg-config
+, libgsf
+, libofx
+, autoreconfHook
+, intltool
+, wrapGAppsHook3
+, adwaita-icon-theme
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

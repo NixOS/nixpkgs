@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  isPyPy,
-  fetchPypi,
-  hatchling,
-  hatch-vcs,
-  gevent,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, isPyPy
+, fetchPypi
+, hatchling
+, hatch-vcs
+, gevent
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

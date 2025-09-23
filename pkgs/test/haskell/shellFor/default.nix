@@ -1,8 +1,8 @@
-{
-  lib,
-  writeText,
-  haskellPackages,
-  cabal-install,
+{ lib
+, writeText
+, haskellPackages
+, cabal-install
+,
 }:
 
 (haskellPackages.shellFor {

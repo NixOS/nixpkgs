@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  prometheus-alertmanager,
-  runCommand,
-  prometheus-xmpp-alerts,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, prometheus-alertmanager
+, runCommand
+, prometheus-xmpp-alerts
+,
 }:
 
 python3Packages.buildPythonApplication rec {

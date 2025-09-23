@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libXtst,
-  libvorbis,
-  hunspell,
-  lzo,
-  xz,
-  bzip2,
-  libiconv,
-  qtbase,
-  qtsvg,
-  qtwebkit,
-  qtx11extras,
-  qttools,
-  qmake,
-  wrapQtAppsHook,
-  wrapGAppsHook3,
-  withCC ? true,
-  opencc,
-  withEpwing ? true,
-  libeb,
-  withExtraTiff ? true,
-  libtiff,
-  withFFmpeg ? true,
-  libao,
-  ffmpeg,
-  withMultimedia ? true,
-  withZim ? true,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libXtst
+, libvorbis
+, hunspell
+, lzo
+, xz
+, bzip2
+, libiconv
+, qtbase
+, qtsvg
+, qtwebkit
+, qtx11extras
+, qttools
+, qmake
+, wrapQtAppsHook
+, wrapGAppsHook3
+, withCC ? true
+, opencc
+, withEpwing ? true
+, libeb
+, withExtraTiff ? true
+, libtiff
+, withFFmpeg ? true
+, libao
+, ffmpeg
+, withMultimedia ? true
+, withZim ? true
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  gitpython,
-  tqdm,
-  # idyntree,
-  mujoco,
-  pinocchio,
-  pybullet,
-  pycollada,
-  # robomeshcat,
-  yourdfpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, gitpython
+, tqdm
+, # idyntree,
+  mujoco
+, pinocchio
+, pybullet
+, pycollada
+, # robomeshcat,
+  yourdfpy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  libglut,
-  glew,
-  libXNVCtrl,
-  libXext,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, libX11
+, libglut
+, glew
+, libXNVCtrl
+, libXext
+, lib
+,
 }:
 
 stdenv.mkDerivation {

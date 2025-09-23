@@ -1,23 +1,23 @@
-{
-  lib,
-  boost,
-  ceres-solver,
-  cgal,
-  cmake,
-  eigen,
-  fetchFromGitHub,
-  glfw,
-  gmp,
-  libjpeg,
-  libpng,
-  libtiff,
-  mpfr,
-  opencv,
-  openmp,
-  pkg-config,
-  stdenv,
-  vcg,
-  zstd,
+{ lib
+, boost
+, ceres-solver
+, cgal
+, cmake
+, eigen
+, fetchFromGitHub
+, glfw
+, gmp
+, libjpeg
+, libpng
+, libtiff
+, mpfr
+, opencv
+, openmp
+, pkg-config
+, stdenv
+, vcg
+, zstd
+,
 }:
 
 let

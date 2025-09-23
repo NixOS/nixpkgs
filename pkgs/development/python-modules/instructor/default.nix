@@ -1,34 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  aiohttp,
-  docstring-parser,
-  jinja2,
-  jiter,
-  openai,
-  pydantic,
-  requests,
-  rich,
-  tenacity,
-  typer,
-
-  # tests
-  anthropic,
-  diskcache,
-  fastapi,
-  google-genai,
-  google-generativeai,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dotenv,
-  redis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  hatchling
+, # dependencies
+  aiohttp
+, docstring-parser
+, jinja2
+, jiter
+, openai
+, pydantic
+, requests
+, rich
+, tenacity
+, typer
+, # tests
+  anthropic
+, diskcache
+, fastapi
+, google-genai
+, google-generativeai
+, pytest-asyncio
+, pytestCheckHook
+, python-dotenv
+, redis
+,
 }:
 
 buildPythonPackage rec {

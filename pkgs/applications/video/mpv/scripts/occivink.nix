@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  buildLua,
-  ffmpeg,
+{ lib
+, fetchFromGitHub
+, unstableGitUpdater
+, buildLua
+, ffmpeg
+,
 }:
 
 let

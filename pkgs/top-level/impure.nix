@@ -15,38 +15,32 @@ in
   # (build, in GNU Autotools parlance) platform.
   localSystem ? {
     system = args.system or builtins.currentSystem;
-  },
-
-  # These are needed only because nix's `--arg` command-line logic doesn't work
+  }
+, # These are needed only because nix's `--arg` command-line logic doesn't work
   # with unnamed parameters allowed by ...
-  system ? localSystem.system,
-  crossSystem ? localSystem,
-
-  # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
+  system ? localSystem.system
+, crossSystem ? localSystem
+, # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
-  config ?
-    let
-      configFile = builtins.getEnv "NIXPKGS_CONFIG";
-      configFile2 = homeDir + "/.config/nixpkgs/config.nix";
-      configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
-    in
-    if configFile != "" && builtins.pathExists configFile then
-      import configFile
-    else if homeDir != "" && builtins.pathExists configFile2 then
-      import configFile2
-    else if homeDir != "" && builtins.pathExists configFile3 then
-      import configFile3
-    else
-      { },
-
-  # Overlays are used to extend Nixpkgs collection with additional
+  config ? let
+    configFile = builtins.getEnv "NIXPKGS_CONFIG";
+    configFile2 = homeDir + "/.config/nixpkgs/config.nix";
+    configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
+  in
+  if configFile != "" && builtins.pathExists configFile then
+    import configFile
+  else if homeDir != "" && builtins.pathExists configFile2 then
+    import configFile2
+  else if homeDir != "" && builtins.pathExists configFile3 then
+    import configFile3
+  else
+    { }
+, # Overlays are used to extend Nixpkgs collection with additional
   # collections of packages.  These collection of packages are part of the
   # fix-point made by Nixpkgs.
-  overlays ? import ./impure-overlays.nix,
-
-  crossOverlays ? [ ],
-
-  ...
+  overlays ? import ./impure-overlays.nix
+, crossOverlays ? [ ]
+, ...
 }@args:
 
 # If `localSystem` was explicitly passed, legacy `system` should
@@ -56,7 +50,7 @@ assert args ? system -> !(args ? localSystem);
 
 import ./. (
   builtins.removeAttrs args [ "system" ]
-  // {
+    // {
     inherit config overlays localSystem;
   }
 )

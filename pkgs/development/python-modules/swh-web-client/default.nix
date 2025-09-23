@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  click,
-  dateutils,
-  requests,
-  swh-auth,
-  swh-core,
-  swh-model,
-  pytestCheckHook,
-  pytest-mock,
-  requests-mock,
-  types-python-dateutil,
-  types-pyyaml,
-  types-requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, click
+, dateutils
+, requests
+, swh-auth
+, swh-core
+, swh-model
+, pytestCheckHook
+, pytest-mock
+, requests-mock
+, types-python-dateutil
+, types-pyyaml
+, types-requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  curl,
-  libnotify,
-  gdk-pixbuf,
-  libnotifySupport ? stdenv.hostPlatform.isLinux,
-  debug ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, curl
+, libnotify
+, gdk-pixbuf
+, libnotifySupport ? stdenv.hostPlatform.isLinux
+, debug ? false
+,
 }:
 
 stdenv.mkDerivation rec {

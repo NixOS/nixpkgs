@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  nixosTests,
-  glib,
-  lndir,
-  lomiri-system-settings-unwrapped,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
-  plugins ? [ ],
+{ stdenvNoCC
+, lib
+, nixosTests
+, glib
+, lndir
+, lomiri-system-settings-unwrapped
+, wrapGAppsHook3
+, wrapQtAppsHook
+, plugins ? [ ]
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

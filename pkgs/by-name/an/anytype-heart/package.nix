@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  protoc-gen-grpc-web,
-  protoc-gen-js,
-  protobuf,
-  tantivy-go,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildGoModule
+, protoc-gen-grpc-web
+, protoc-gen-js
+, protobuf
+, tantivy-go
+,
 }:
 
 let
@@ -17,8 +17,7 @@ let
       aarch64-linux = "linux-arm64-musl";
       x86_64-darwin = "darwin-amd64";
       aarch64-darwin = "darwin-arm64";
-    }
-    .${stdenv.hostPlatform.system}
+    }.${stdenv.hostPlatform.system}
       or (throw "anytype-heart not supported on ${stdenv.hostPlatform.system}");
 in
 buildGoModule (finalAttrs: {

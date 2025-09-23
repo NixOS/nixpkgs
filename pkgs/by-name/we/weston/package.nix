@@ -1,50 +1,49 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch2,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wayland-scanner,
-  cairo,
-  libGL,
-  libdisplay-info,
-  libdrm,
-  libevdev,
-  libinput,
-  libxkbcommon,
-  libgbm,
-  seatd,
-  wayland,
-  wayland-protocols,
-  xcbutilcursor,
-
-  demoSupport ? true,
-  jpegSupport ? true,
-  libjpeg,
-  lcmsSupport ? true,
-  lcms2,
-  pangoSupport ? true,
-  pango,
-  pipewireSupport ? true,
-  pipewire,
-  rdpSupport ? true,
-  freerdp,
-  remotingSupport ? true,
-  gst_all_1,
-  vaapiSupport ? true,
-  libva,
-  vncSupport ? true,
-  aml,
-  neatvnc,
-  pam,
-  webpSupport ? true,
-  libwebp,
-  xwaylandSupport ? true,
-  libXcursor,
-  xwayland,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, meson
+, ninja
+, pkg-config
+, python3
+, wayland-scanner
+, cairo
+, libGL
+, libdisplay-info
+, libdrm
+, libevdev
+, libinput
+, libxkbcommon
+, libgbm
+, seatd
+, wayland
+, wayland-protocols
+, xcbutilcursor
+, demoSupport ? true
+, jpegSupport ? true
+, libjpeg
+, lcmsSupport ? true
+, lcms2
+, pangoSupport ? true
+, pango
+, pipewireSupport ? true
+, pipewire
+, rdpSupport ? true
+, freerdp
+, remotingSupport ? true
+, gst_all_1
+, vaapiSupport ? true
+, libva
+, vncSupport ? true
+, aml
+, neatvnc
+, pam
+, webpSupport ? true
+, libwebp
+, xwaylandSupport ? true
+, libXcursor
+, xwayland
+,
 }:
 
 stdenv.mkDerivation rec {

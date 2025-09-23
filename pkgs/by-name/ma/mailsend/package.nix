@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  openssl,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, openssl
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

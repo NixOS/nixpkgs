@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
-  bison,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, ncurses
+, bison
+, lib
+,
 }:
 stdenv.mkDerivation {
   pname = "sc";

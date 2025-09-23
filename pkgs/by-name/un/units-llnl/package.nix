@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-
-  # This is the baseType needed by scipp - the main package that depends on
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, # This is the baseType needed by scipp - the main package that depends on
   # this package.
-  baseType ? "uint64_t",
+  baseType ? "uint64_t"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

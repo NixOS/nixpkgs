@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  dict,
-  glibcLocales,
-  libfaketime,
+{ lib
+, stdenv
+, fetchurl
+, python3
+, dict
+, glibcLocales
+, libfaketime
+,
 }:
 
 stdenv.mkDerivation rec {

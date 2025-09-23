@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  pkg-config,
-  pkgconfig,
-  setuptools-scm,
-  libdeltachat,
-  cffi,
-  imap-tools,
-  requests,
-  pluggy,
-  pytestCheckHook,
+{ buildPythonPackage
+, pythonOlder
+, pkg-config
+, pkgconfig
+, setuptools-scm
+, libdeltachat
+, cffi
+, imap-tools
+, requests
+, pluggy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

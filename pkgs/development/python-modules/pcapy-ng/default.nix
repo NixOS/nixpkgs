@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  libpcap,
-  pkgconfig,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, libpcap
+, pkgconfig
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # propagates
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, pythonOlder
+, # build-system
+  poetry-core
+, # propagates
+  typing-extensions
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  linuxPackages,
-  git,
-  kernel ? linuxPackages.kernel,
-  kernelModuleMakeFlags,
+{ stdenv
+, lib
+, fetchFromGitHub
+, linuxPackages
+, git
+, kernel ? linuxPackages.kernel
+, kernelModuleMakeFlags
+,
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";

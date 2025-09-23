@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  doxygen,
-  glib,
-  libaccounts-glib,
-  pkg-config,
-  qmake,
-  qtbase,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, doxygen
+, glib
+, libaccounts-glib
+, pkg-config
+, qmake
+, qtbase
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

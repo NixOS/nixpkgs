@@ -1,12 +1,12 @@
-{
-  ballerina,
-  lib,
-  writeText,
-  runCommand,
-  makeWrapper,
-  fetchzip,
-  stdenv,
-  openjdk,
+{ ballerina
+, lib
+, writeText
+, runCommand
+, makeWrapper
+, fetchzip
+, stdenv
+, openjdk
+,
 }:
 let
   version = "2201.10.3";

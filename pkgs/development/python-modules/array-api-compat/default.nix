@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  numpy,
-  jaxlib,
-  jax,
-  torch,
-  dask,
-  sparse,
-  array-api-strict,
-  config,
-  cudaSupport ? config.cudaSupport,
-  cupy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, numpy
+, jaxlib
+, jax
+, torch
+, dask
+, sparse
+, array-api-strict
+, config
+, cudaSupport ? config.cudaSupport
+, cupy
+,
 }:
 
 buildPythonPackage rec {

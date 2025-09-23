@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  python3,
-  groff,
-  less,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  nix-update-script,
-  testers,
-  awscli2,
-  addBinToPathHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, python3
+, groff
+, less
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, nix-update-script
+, testers
+, awscli2
+, addBinToPathHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

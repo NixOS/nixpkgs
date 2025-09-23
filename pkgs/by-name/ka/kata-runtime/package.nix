@@ -1,13 +1,13 @@
 # Derived from https://github.com/colemickens/nixpkgs-kubernetes
-{
-  buildGoModule,
-  callPackage,
-  fetchFromGitHub,
-  lib,
-  qemu_kvm,
-  stdenv,
-  virtiofsd,
-  yq-go,
+{ buildGoModule
+, callPackage
+, fetchFromGitHub
+, lib
+, qemu_kvm
+, stdenv
+, virtiofsd
+, yq-go
+,
 }:
 
 let
@@ -19,8 +19,7 @@ let
     {
       "x86_64-linux" = "qemu-system-x86_64";
       "aarch64-linux" = "qemu-system-aarch64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
 buildGoModule rec {

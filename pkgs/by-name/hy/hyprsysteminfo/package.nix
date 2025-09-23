@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  pkg-config,
-  hyprutils,
-  pciutils,
-  hyprland-qt-support,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, pkg-config
+, hyprutils
+, pciutils
+, hyprland-qt-support
+,
 }:
 let
   inherit (lib.strings) makeBinPath;

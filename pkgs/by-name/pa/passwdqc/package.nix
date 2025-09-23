@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libxcrypt,
-  pam,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libxcrypt
+, pam
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,5 +1,5 @@
-{
-  pkgs ? (import ../../../../.. { }),
+{ pkgs ? (import ../../../../.. { })
+,
 }:
 
 let
@@ -33,21 +33,21 @@ let
 
   computeHash =
     fod:
-    runCommand "${fod.pname}-${fod.tlType}-fixed-hash" {
-      buildInputs = [ nix ];
-      inherit fod;
-    } ''echo -n "$(nix-hash --base32 --type sha256 "$fod")" >"$out"'';
+    runCommand "${fod.pname}-${fod.tlType}-fixed-hash"
+      {
+        buildInputs = [ nix ];
+        inherit fod;
+      } ''echo -n "$(nix-hash --base32 --type sha256 "$fod")" >"$out"'';
 
   hash = fod: fod.outputHash or (builtins.readFile (computeHash fod));
 
   hashes = fods: concatMapStrings ({ tlType, ... }@p: ''${tlType}="${hash p}";'') fods;
 
   hashLine =
-    {
-      pname,
-      revision,
-      extraRevision ? "",
-      ...
+    { pname
+    , revision
+    , extraRevision ? ""
+    , ...
     }@drv:
     let
       fods = getFods drv;

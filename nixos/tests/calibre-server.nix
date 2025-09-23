@@ -1,7 +1,6 @@
-{
-  pkgs,
-  runTest,
-  ...
+{ pkgs
+, runTest
+, ...
 }:
 
 let
@@ -71,52 +70,54 @@ let
     };
   };
 in
-mapAttrs (
-  test: testConfig:
-  (runTest (
-    let
-      nodeName = testConfig.nodeName or test;
-      calibreConfig = {
-        enable = true;
-        libraries = [ "/var/lib/calibre-server" ];
-      }
-      // testConfig.calibreConfig or { };
-      librariesInitScript = path: ''
-        ${nodeName}.execute("touch /tmp/test.epub")
-        ${nodeName}.execute("zip -r /tmp/test.zip /tmp/test.epub")
-        ${nodeName}.execute("mkdir -p ${path}")
-        ${nodeName}.execute("calibredb add -d --with-library ${path} /tmp/test.zip")
-      '';
-    in
-    {
-      name = "calibre-server-${test}";
-
-      nodes.${nodeName} = mkMerge [
-        {
-          environment.systemPackages = [ pkgs.zip ];
-          services.calibre-server = calibreConfig;
+mapAttrs
+  (
+    test: testConfig:
+    (runTest (
+      let
+        nodeName = testConfig.nodeName or test;
+        calibreConfig = {
+          enable = true;
+          libraries = [ "/var/lib/calibre-server" ];
         }
-        testConfig.calibreProvider or { }
-      ];
+        // testConfig.calibreConfig or { };
+        librariesInitScript = path: ''
+          ${nodeName}.execute("touch /tmp/test.epub")
+          ${nodeName}.execute("zip -r /tmp/test.zip /tmp/test.epub")
+          ${nodeName}.execute("mkdir -p ${path}")
+          ${nodeName}.execute("calibredb add -d --with-library ${path} /tmp/test.zip")
+        '';
+      in
+      {
+        name = "calibre-server-${test}";
 
-      testScript = ''
-        ${nodeName}.start()
-        ${concatStringsSep "\n" (map librariesInitScript calibreConfig.libraries)}
-        ${concatStringsSep "\n" (
-          map (
-            line:
-            if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")") then
-              line
-            else
-              "${nodeName}.${line}"
-          ) (splitString "\n" (removeSuffix "\n" testConfig.calibreScript))
-        )}
-        ${nodeName}.shutdown()
-      '';
+        nodes.${nodeName} = mkMerge [
+          {
+            environment.systemPackages = [ pkgs.zip ];
+            services.calibre-server = calibreConfig;
+          }
+          testConfig.calibreProvider or { }
+        ];
 
-      meta = with maintainers; {
-        maintainers = [ gaelreyrol ];
-      };
-    }
-  ))
-) tests
+        testScript = ''
+          ${nodeName}.start()
+          ${concatStringsSep "\n" (map librariesInitScript calibreConfig.libraries)}
+          ${concatStringsSep "\n" (
+            map (
+              line:
+              if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")") then
+                line
+              else
+                "${nodeName}.${line}"
+            ) (splitString "\n" (removeSuffix "\n" testConfig.calibreScript))
+          )}
+          ${nodeName}.shutdown()
+        '';
+
+        meta = with maintainers; {
+          maintainers = [ gaelreyrol ];
+        };
+      }
+    ))
+  )
+  tests

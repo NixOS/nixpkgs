@@ -1,13 +1,12 @@
-{
-  testers,
-  lib,
-  pkgs,
-  hello,
-  runCommand,
-  emptyFile,
-  emptyDirectory,
-  stdenvNoCC,
-  ...
+{ testers
+, lib
+, pkgs
+, hello
+, runCommand
+, emptyFile
+, emptyDirectory
+, stdenvNoCC
+, ...
 }:
 let
   pkgs-with-overlay = pkgs.extend (
@@ -93,7 +92,7 @@ lib.recurseIntoAttrs {
           { hi, lib, ... }:
           {
             config = {
-              assertions = [ { assertion = hi; } ];
+              assertions = [{ assertion = hi; }];
             };
             options = {
               itsProofYay = lib.mkOption { };

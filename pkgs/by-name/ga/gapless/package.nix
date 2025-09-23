@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  desktop-file-utils,
-  gitUpdater,
-  gobject-introspection,
-  gst_all_1,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitLab
+, desktop-file-utils
+, gitUpdater
+, gobject-introspection
+, gst_all_1
+, gtk4
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook4
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gapless";

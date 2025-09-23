@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
-
-  # dependencies
-  pytest,
-  ruff,
-
-  # tests
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, poetry-dynamic-versioning
+, # dependencies
+  pytest
+, ruff
+, # tests
+  pytestCheckHook
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  installShellFiles,
-  perl,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+, perl
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

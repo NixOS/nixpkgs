@@ -1,13 +1,13 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  go-rice,
-  lib,
-  nodejs,
-  stdenv,
-  yarnBuildHook,
-  yarnConfigHook,
+{ buildGoModule
+, fetchFromGitHub
+, fetchYarnDeps
+, go-rice
+, lib
+, nodejs
+, stdenv
+, yarnBuildHook
+, yarnConfigHook
+,
 }:
 let
   version = "0.93.0";

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  connman,
-  dmenu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, connman
+, dmenu
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  aiofiles,
-  aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dateutil,
-  python-slugify,
-  pythonOlder,
-  requests,
-  setuptools,
-  sortedcontainers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, aiofiles
+, aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, python-dateutil
+, python-slugify
+, pythonOlder
+, requests
+, setuptools
+, sortedcontainers
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  einops,
-  numpy,
-  torch,
-  torchaudio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  einops
+, numpy
+, torch
+, torchaudio
+,
 }:
 
 buildPythonPackage rec {

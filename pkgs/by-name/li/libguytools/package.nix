@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchurl
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

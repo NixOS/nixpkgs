@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  anyio,
-  httpx,
-  pytest-asyncio,
-  pytest-vcr,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, anyio
+, httpx
+, pytest-asyncio
+, pytest-vcr
+,
 }:
 
 buildPythonPackage rec {

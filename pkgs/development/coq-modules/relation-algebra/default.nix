@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  aac-tactics,
-  mathcomp-boot,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, aac-tactics
+, mathcomp-boot
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -43,7 +43,8 @@ mkCoqDerivation {
       (case (isEq "8.11") "1.7.3")
       (case (isEq "8.10") "1.7.2")
       (case (isEq "8.9") "1.7.1")
-    ] null;
+    ]
+      null;
 
   mlPlugin = true;
 

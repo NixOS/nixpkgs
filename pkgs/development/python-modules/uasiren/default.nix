@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build time
-  setuptools-scm,
-
-  # propagates
-  aiohttp,
-
-  # tests
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build time
+  setuptools-scm
+, # propagates
+  aiohttp
+, # tests
+  pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 let

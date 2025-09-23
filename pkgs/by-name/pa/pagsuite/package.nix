@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  unzip,
-  gmp,
-  scalp,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, unzip
+, gmp
+, scalp
+,
 }:
 
 stdenv.mkDerivation rec {

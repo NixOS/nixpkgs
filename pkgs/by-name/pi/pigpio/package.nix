@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  buildPythonPackage ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, buildPythonPackage ? null
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  buildEnv,
-  vscode,
-  vscode-utils,
-  makeWrapper,
-  writeTextFile,
-  vscodeExtensions ? [ ],
+{ lib
+, stdenv
+, runCommand
+, buildEnv
+, vscode
+, vscode-utils
+, makeWrapper
+, writeTextFile
+, vscodeExtensions ? [ ]
+,
 }:
 
 /*
@@ -72,13 +72,13 @@ let
 in
 
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
-  {
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ vscode ];
-    dontPatchELF = true;
-    dontStrip = true;
-    meta = vscode.meta;
-  }
+{
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ vscode ];
+  dontPatchELF = true;
+  dontStrip = true;
+  meta = vscode.meta;
+}
   (
     if stdenv.hostPlatform.isDarwin then
       ''

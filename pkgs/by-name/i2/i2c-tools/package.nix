@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  perl,
-  read-edid,
+{ lib
+, stdenv
+, fetchzip
+, perl
+, read-edid
+,
 }:
 
 stdenv.mkDerivation rec {

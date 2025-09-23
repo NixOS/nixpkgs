@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitea,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  renpy,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitea
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, renpy
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";

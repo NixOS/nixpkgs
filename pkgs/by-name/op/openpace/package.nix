@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  help2man,
-  gengetopt,
-  openssl,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, help2man
+, gengetopt
+, openssl
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "openpace";

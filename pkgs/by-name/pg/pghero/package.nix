@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bundlerEnv,
-  buildPackages,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nixosTests,
-  callPackage,
+{ lib
+, stdenv
+, bundlerEnv
+, buildPackages
+, fetchFromGitHub
+, makeBinaryWrapper
+, nixosTests
+, callPackage
+,
 }:
 stdenv.mkDerivation (
   finalAttrs:

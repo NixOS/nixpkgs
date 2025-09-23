@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchYarnDeps,
-
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
-  pkg-config,
-
-  vips,
-  sqlite,
-
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
+, pkg-config
+, vips
+, sqlite
+, nixosTests
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

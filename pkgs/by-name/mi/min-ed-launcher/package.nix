@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  git,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, git
+,
 }:
 buildDotnetModule rec {
   pname = "min-ed-launcher";

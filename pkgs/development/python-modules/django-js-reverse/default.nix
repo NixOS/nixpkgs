@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-  python,
-  django,
-  packaging,
-  nodejs,
-  six,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, python
+, django
+, packaging
+, nodejs
+, six
+,
 }:
 
 buildPythonPackage rec {

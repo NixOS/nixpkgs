@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libjack2,
-  libGL,
-  pkg-config,
-  xorg,
-  libsndfile,
-  libsamplerate,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libjack2
+, libGL
+, pkg-config
+, xorg
+, libsndfile
+, libsamplerate
+,
 }:
 
 stdenv.mkDerivation rec {

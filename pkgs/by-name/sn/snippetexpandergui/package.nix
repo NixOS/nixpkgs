@@ -1,15 +1,15 @@
-{
-  lib,
-  buildGoModule,
-  wrapGAppsHook3,
-  wails,
-  scdoc,
-  installShellFiles,
-  xorg,
-  gtk3,
-  webkitgtk_4_0,
-  snippetexpanderd,
-  snippetexpanderx,
+{ lib
+, buildGoModule
+, wrapGAppsHook3
+, wails
+, scdoc
+, installShellFiles
+, xorg
+, gtk3
+, webkitgtk_4_0
+, snippetexpanderd
+, snippetexpanderx
+,
 }:
 
 buildGoModule rec {

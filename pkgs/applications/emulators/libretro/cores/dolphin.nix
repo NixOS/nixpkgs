@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  gettext,
-  hidapi,
-  libGL,
-  libGLU,
-  libevdev,
-  mkLibretroCore,
-  pcre,
-  pkg-config,
-  sfml,
-  udev,
-  xorg,
+{ lib
+, fetchFromGitHub
+, cmake
+, curl
+, gettext
+, hidapi
+, libGL
+, libGLU
+, libevdev
+, mkLibretroCore
+, pcre
+, pkg-config
+, sfml
+, udev
+, xorg
+,
 }:
 mkLibretroCore {
   core = "dolphin";

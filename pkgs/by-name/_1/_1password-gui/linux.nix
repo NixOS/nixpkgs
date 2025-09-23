@@ -1,47 +1,46 @@
-{
-  lib,
-  stdenv,
-  pname,
-  version,
-  src,
-  meta,
-  makeShellWrapper,
-  wrapGAppsHook3,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libdrm,
-  libxcb,
-  libxkbcommon,
-  libxshmfence,
-  libGL,
-  libappindicator-gtk3,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  systemd,
-  udev,
-  xdg-utils,
-
-  # The 1Password polkit file requires a list of users for whom polkit
+{ lib
+, stdenv
+, pname
+, version
+, src
+, meta
+, makeShellWrapper
+, wrapGAppsHook3
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, libX11
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, libdrm
+, libxcb
+, libxkbcommon
+, libxshmfence
+, libGL
+, libappindicator-gtk3
+, libgbm
+, nspr
+, nss
+, pango
+, systemd
+, udev
+, xdg-utils
+, # The 1Password polkit file requires a list of users for whom polkit
   # integrations should be enabled. This should be a list of strings that
   # correspond to usernames.
-  polkitPolicyOwners ? [ ],
+  polkitPolicyOwners ? [ ]
+,
 }:
 let
   # Convert the polkitPolicyOwners variable to a polkit-compatible string for the polkit file.

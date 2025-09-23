@@ -1,8 +1,8 @@
-{
-  lib,
-  config,
-  python3,
-  emptyFile,
+{ lib
+, config
+, python3
+, emptyFile
+,
 }:
 
 let
@@ -30,27 +30,27 @@ let
 
     plugins =
       ps: _super:
-      with ps;
-      (
-        rec {
-          nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
-          nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
-          nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
-          nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
-          nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
+        with ps;
+        (
+          rec {
+            nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
+            nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
+            nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
+            nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
+            nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
 
-          # aliases for backwards compatibility
-          nixopsvbox = nixops-vbox;
-        }
-        // lib.optionalAttrs config.allowAliases rec {
-          nixops-aws = throw "nixops-aws was broken and was removed from nixpkgs";
-          nixops-gce = throw "nixops-gce was broken and was removed from nixpkgs";
-          nixops-libvirtd = throw "nixops-libvirtd was broken and was removed from nixpkgs";
-          nixops-hetzner = throw "nixops-hetzner was broken and was removed from nixpkgs";
-          nixops-hetznercloud = throw "nixops-hetznercloud was broken and was removed from nixpkgs";
-          nixops-virtd = nixops-libvirtd;
-        }
-      );
+            # aliases for backwards compatibility
+            nixopsvbox = nixops-vbox;
+          }
+          // lib.optionalAttrs config.allowAliases rec {
+            nixops-aws = throw "nixops-aws was broken and was removed from nixpkgs";
+            nixops-gce = throw "nixops-gce was broken and was removed from nixpkgs";
+            nixops-libvirtd = throw "nixops-libvirtd was broken and was removed from nixpkgs";
+            nixops-hetzner = throw "nixops-hetzner was broken and was removed from nixpkgs";
+            nixops-hetznercloud = throw "nixops-hetznercloud was broken and was removed from nixpkgs";
+            nixops-virtd = nixops-libvirtd;
+          }
+        );
 
     # We should not reapply the overlay, but it tends to work out. (It's been this way since poetry2nix was dropped.)
     availablePlugins = this.plugins this.python.pkgs this.python.pkgs;
@@ -95,13 +95,14 @@ let
           };
           commutative_addAvailablePlugins_withPlugins =
             assert
-              (this.public.addAvailablePlugins (self: super: { inherit emptyFile; })).withPlugins (ps: [
+            (this.public.addAvailablePlugins (self: super: { inherit emptyFile; })).withPlugins
+              (ps: [
                 emptyFile
               ]) ==
-              # Note that this value proves that the package is not instantiated until the end, where it's valid again.
-              (this.public.withPlugins (ps: [ emptyFile ])).addAvailablePlugins (
-                self: super: { inherit emptyFile; }
-              );
+            # Note that this value proves that the package is not instantiated until the end, where it's valid again.
+            (this.public.withPlugins (ps: [ emptyFile ])).addAvailablePlugins (
+              self: super: { inherit emptyFile; }
+            );
             emptyFile;
         }
         # Make sure we also test with a configuration that's been extended with a plugin.
@@ -136,13 +137,14 @@ let
     };
 
     package =
-      lib.lazyDerivation {
-        outputs = [
-          "out"
-          "dist"
-        ];
-        derivation = this.rawPackage;
-      }
+      lib.lazyDerivation
+        {
+          outputs = [
+            "out"
+            "dist"
+          ];
+          derivation = this.rawPackage;
+        }
       // this.extraPackageAttrs;
 
     public = this.package;

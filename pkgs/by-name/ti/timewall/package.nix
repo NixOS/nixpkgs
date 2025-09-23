@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  pkg-config,
-  libheif,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, pkg-config
+, libheif
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

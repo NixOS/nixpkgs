@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  protobuf,
-  rustPlatform,
-  fetchFromGitHub,
-  pkgsBuildHost,
-  openssl,
-  pkg-config,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  nix-update-script,
-  gurk-rs,
+{ stdenv
+, lib
+, protobuf
+, rustPlatform
+, fetchFromGitHub
+, pkgsBuildHost
+, openssl
+, pkg-config
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, nix-update-script
+, gurk-rs
+,
 }:
 
 rustPlatform.buildRustPackage rec {

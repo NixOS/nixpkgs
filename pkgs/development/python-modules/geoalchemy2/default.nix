@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  packaging,
-  setuptools,
-  setuptools-scm,
-  shapely,
-  sqlalchemy,
-  alembic,
-  pytest-benchmark,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, packaging
+, setuptools
+, setuptools-scm
+, shapely
+, sqlalchemy
+, alembic
+, pytest-benchmark
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  buildGoModule,
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
-  fetchpatch2,
+{ buildGoModule
+, lib
+, fetchFromGitHub
+, fetchYarnDeps
+, yarn
+, fixup-yarn-lock
+, nodejs
+, fetchpatch2
+,
 }:
 
 buildGoModule rec {

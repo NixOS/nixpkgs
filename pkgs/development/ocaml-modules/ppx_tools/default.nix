@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml,
-  findlib,
-  cppo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, findlib
+, cppo
+,
 }:
 
 if lib.versionAtLeast ocaml.version "5.2" then
@@ -57,8 +57,7 @@ else
         "4.14" = v6_6;
         "5.0" = v6_6;
         "5.1" = v6_6;
-      }
-      .${ocaml.meta.branch};
+      }.${ocaml.meta.branch};
   in
 
   let
@@ -77,7 +76,8 @@ else
     };
   in
   if lib.versionAtLeast param.version "6.0" then
-    buildDunePackage {
+    buildDunePackage
+    {
       inherit pname src meta;
       inherit (param) version buildInputs nativeBuildInputs;
     }

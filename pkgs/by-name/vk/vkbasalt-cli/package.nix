@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitLab,
-  vkbasalt,
+{ lib
+, python3Packages
+, fetchFromGitLab
+, vkbasalt
+,
 }:
 
 python3Packages.buildPythonApplication rec {

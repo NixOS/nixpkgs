@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  updateAutotoolsGnuConfigScriptsHook,
-  glibcLocales,
-  fetchurl,
-  pcre2,
-  libiconv,
-  perl,
-  runtimeShellPackage,
+{ lib
+, stdenv
+, updateAutotoolsGnuConfigScriptsHook
+, glibcLocales
+, fetchurl
+, pcre2
+, libiconv
+, perl
+, runtimeShellPackage
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

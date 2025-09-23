@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses6,
-  libxcrypt-legacy,
-  xz,
-  zstd,
+{ lib
+, stdenv
+, fetchurl
+, ncurses6
+, libxcrypt-legacy
+, xz
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
       aarch64-darwin = "darwin-arm64";
       aarch64-linux = "aarch64";
       x86_64-linux = "x86_64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://developer.arm.com/-/media/Files/downloads/gnu/${version}/binrel/arm-gnu-toolchain-${version}-${platform}-arm-none-eabi.tar.xz";
@@ -28,8 +27,7 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "30f4d08b219190a37cded6aa796f4549504902c53cfc3c7e044a8490b6eba1f7";
         aarch64-linux = "2d465847eb1d05f876270494f51034de9ace9abe87a4222d079f3360240184d3";
         x86_64-linux = "8f6903f8ceb084d9227b9ef991490413014d991874a1e34074443c2a72b14dbd";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   dontConfigure = true;

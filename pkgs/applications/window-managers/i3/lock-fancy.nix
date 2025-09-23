@@ -1,18 +1,17 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  fontconfig,
-  gawk,
-  getopt,
-  i3lock-color,
-  imagemagick,
-  installShellFiles,
-  lib,
-  makeWrapper,
-  scrot,
-  stdenv,
-
-  screenshotCommand ? "",
+{ coreutils
+, fetchFromGitHub
+, fontconfig
+, gawk
+, getopt
+, i3lock-color
+, imagemagick
+, installShellFiles
+, lib
+, makeWrapper
+, scrot
+, stdenv
+, screenshotCommand ? ""
+,
 }:
 
 stdenv.mkDerivation {

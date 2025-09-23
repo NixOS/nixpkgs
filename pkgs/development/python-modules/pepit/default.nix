@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cvxpy,
-  numpy,
-  pandas,
-  scipy,
-  matplotlib,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cvxpy
+, numpy
+, pandas
+, scipy
+, matplotlib
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

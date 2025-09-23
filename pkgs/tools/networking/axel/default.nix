@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  gettext,
-  libssl,
-  txt2man,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, gettext
+, libssl
+, txt2man
+,
 }:
 
 stdenv.mkDerivation rec {

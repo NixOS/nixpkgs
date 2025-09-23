@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  audiofile,
-  libtiff,
-  buildPackages,
-  fetchpatch,
-  autoreconfHook,
+{ lib
+, stdenv
+, audiofile
+, libtiff
+, buildPackages
+, fetchpatch
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,22 +1,22 @@
-{
-  config,
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  bash,
-  cmake,
-  opencv4,
-  gtest,
-  blas,
-  gomp,
-  llvmPackages,
-  perl,
-  # mxnet cuda support is turned off, but dependencies like opencv can still be built with cudaSupport
+{ config
+, stdenv
+, lib
+, fetchurl
+, fetchpatch
+, bash
+, cmake
+, opencv4
+, gtest
+, blas
+, gomp
+, llvmPackages
+, perl
+, # mxnet cuda support is turned off, but dependencies like opencv can still be built with cudaSupport
   # and fail to compile without the cudatoolkit
   # mxnet cuda support will not be available, as mxnet requires version <=11
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
+  cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+,
 }:
 
 # mxnet is not maintained, and other projects are migrating away from it.

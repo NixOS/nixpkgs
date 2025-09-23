@@ -1,26 +1,26 @@
-{
-  alsa-lib,
-  autoPatchelfHook,
-  buildFHSEnv,
-  elfutils,
-  extraEnv ? { },
-  fetchurl,
-  ffmpeg_6-headless,
-  lib,
-  libdrm,
-  libedit,
-  libpulseaudio,
-  libva,
-  libxkbcommon,
-  libxml2_13,
-  makeShellWrapper,
-  minizip,
-  nss,
-  squashfsTools,
-  stdenv,
-  writeShellScript,
-  xkeyboard_config,
-  xorg,
+{ alsa-lib
+, autoPatchelfHook
+, buildFHSEnv
+, elfutils
+, extraEnv ? { }
+, fetchurl
+, ffmpeg_6-headless
+, lib
+, libdrm
+, libedit
+, libpulseaudio
+, libva
+, libxkbcommon
+, libxml2_13
+, makeShellWrapper
+, minizip
+, nss
+, squashfsTools
+, stdenv
+, writeShellScript
+, xkeyboard_config
+, xorg
+,
 }:
 let
   pname = "plex-desktop";

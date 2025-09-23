@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  h5py,
-  numpy,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-  scipy,
-  tables,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  h5py
+, numpy
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, scipy
+, tables
+,
 }:
 
 buildPythonPackage rec {

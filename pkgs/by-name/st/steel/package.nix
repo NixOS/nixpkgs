@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  curl,
-  pkg-config,
-  makeBinaryWrapper,
-  installShellFiles,
-  libgit2,
-  oniguruma,
-  openssl,
-  sqlite,
-  zlib,
-
-  nix-update-script,
-  includeLSP ? true,
-  includeForge ? true,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, curl
+, pkg-config
+, makeBinaryWrapper
+, installShellFiles
+, libgit2
+, oniguruma
+, openssl
+, sqlite
+, zlib
+, nix-update-script
+, includeLSP ? true
+, includeForge ? true
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "steel";

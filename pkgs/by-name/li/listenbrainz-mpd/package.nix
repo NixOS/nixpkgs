@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  stdenv,
-  openssl,
-  libiconv,
-  sqlite,
-  installShellFiles,
-  asciidoctor,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, stdenv
+, openssl
+, libiconv
+, sqlite
+, installShellFiles
+, asciidoctor
+,
 }:
 
 rustPlatform.buildRustPackage rec {

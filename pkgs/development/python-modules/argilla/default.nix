@@ -1,69 +1,68 @@
-{
-  lib,
-  aiofiles,
-  aiosqlite,
-  alembic,
-  asyncpg,
-  backoff,
-  brotli-asgi,
-  buildPythonPackage,
-  cleanlab,
-  datasets,
-  elasticsearch8,
-  evaluate,
-  factory-boy,
-  faiss,
-  fastapi,
-  fetchFromGitHub,
-  flyingsquid,
-  greenlet,
-  httpx,
-  huggingface-hub,
-  luqum,
-  monotonic,
-  numpy,
-  openai,
-  opensearch-py,
-  packaging,
-  pandas,
-  passlib,
-  pdm-backend,
-  peft,
-  pgmpy,
-  pillow,
-  plotly,
-  prodict,
-  psutil,
-  psycopg2,
-  pydantic,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  python-jose,
-  python-multipart,
-  pythonOlder,
-  pyyaml,
-  rich,
-  schedule,
-  scikit-learn,
-  sentence-transformers,
-  seqeval,
-  smart-open,
-  snorkel,
-  spacy-transformers,
-  spacy,
-  sqlalchemy,
-  standardwebhooks,
-  tqdm,
-  transformers,
-  typer,
-  uvicorn,
-  wrapt,
-# , flair
-# , setfit
-# , spacy-huggingface-hub
-# , span_marker
-# , trl
+{ lib
+, aiofiles
+, aiosqlite
+, alembic
+, asyncpg
+, backoff
+, brotli-asgi
+, buildPythonPackage
+, cleanlab
+, datasets
+, elasticsearch8
+, evaluate
+, factory-boy
+, faiss
+, fastapi
+, fetchFromGitHub
+, flyingsquid
+, greenlet
+, httpx
+, huggingface-hub
+, luqum
+, monotonic
+, numpy
+, openai
+, opensearch-py
+, packaging
+, pandas
+, passlib
+, pdm-backend
+, peft
+, pgmpy
+, pillow
+, plotly
+, prodict
+, psutil
+, psycopg2
+, pydantic
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, python-jose
+, python-multipart
+, pythonOlder
+, pyyaml
+, rich
+, schedule
+, scikit-learn
+, sentence-transformers
+, seqeval
+, smart-open
+, snorkel
+, spacy-transformers
+, spacy
+, sqlalchemy
+, standardwebhooks
+, tqdm
+, transformers
+, typer
+, uvicorn
+, wrapt
+, # , flair
+  # , setfit
+  # , spacy-huggingface-hub
+  # , span_marker
+  # , trl
 }:
 
 buildPythonPackage rec {

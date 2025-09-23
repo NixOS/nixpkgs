@@ -1,7 +1,7 @@
-{
-  callPackage,
-  lib,
-  fetchurl,
+{ callPackage
+, lib
+, fetchurl
+,
 }:
 
 let

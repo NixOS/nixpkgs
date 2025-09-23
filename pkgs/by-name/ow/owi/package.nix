@@ -1,13 +1,13 @@
-{
-  lib,
-  ocaml-ng,
-  fetchFromGitHub,
-  llvmPackages,
-  rustc,
-  zig,
-  makeWrapper,
-  unstableGitUpdater,
-  nixosTests,
+{ lib
+, ocaml-ng
+, fetchFromGitHub
+, llvmPackages
+, rustc
+, zig
+, makeWrapper
+, unstableGitUpdater
+, nixosTests
+,
 }:
 
 let

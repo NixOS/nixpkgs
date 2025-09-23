@@ -1,34 +1,34 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  replaceVars,
-  meson,
-  ninja,
-  pkg-config,
-  gnome,
-  adwaita-icon-theme,
-  glib,
-  gtk3,
-  gsettings-desktop-schemas,
-  gnome-desktop,
-  gnome-settings-daemon,
-  gnome-shell,
-  dbus,
-  json-glib,
-  libICE,
-  xmlto,
-  docbook_xsl,
-  docbook_xml_dtd_412,
-  python3,
-  libxslt,
-  gettext,
-  makeWrapper,
-  systemd,
-  xorg,
-  libepoxy,
-  bash,
-  gnome-session-ctl,
+{ fetchurl
+, lib
+, stdenv
+, replaceVars
+, meson
+, ninja
+, pkg-config
+, gnome
+, adwaita-icon-theme
+, glib
+, gtk3
+, gsettings-desktop-schemas
+, gnome-desktop
+, gnome-settings-daemon
+, gnome-shell
+, dbus
+, json-glib
+, libICE
+, xmlto
+, docbook_xsl
+, docbook_xml_dtd_412
+, python3
+, libxslt
+, gettext
+, makeWrapper
+, systemd
+, xorg
+, libepoxy
+, bash
+, gnome-session-ctl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

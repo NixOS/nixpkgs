@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  maven,
-  makeWrapper,
-  stripJavaArchivesHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  jre,
+{ lib
+, fetchFromGitHub
+, maven
+, makeWrapper
+, stripJavaArchivesHook
+, makeDesktopItem
+, copyDesktopItems
+, jre
+,
 }:
 maven.buildMavenPackage rec {
   pname = "verapdf";

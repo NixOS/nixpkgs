@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  callPackage,
-  dpkg,
-  rocm-core,
+{ lib
+, stdenv
+, fetchurl
+, callPackage
+, dpkg
+, rocm-core
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

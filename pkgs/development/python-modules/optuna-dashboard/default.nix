@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  alembic,
-  boto3,
-  botorch,
-  bottle,
-  cmaes,
-  colorlog,
-  moto,
-  numpy,
-  optuna,
-  packaging,
-  plotly,
-  pytestCheckHook,
-  setuptools,
-  scikit-learn,
-  scipy,
-  streamlit,
-  tqdm,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, alembic
+, boto3
+, botorch
+, bottle
+, cmaes
+, colorlog
+, moto
+, numpy
+, optuna
+, packaging
+, plotly
+, pytestCheckHook
+, setuptools
+, scikit-learn
+, scipy
+, streamlit
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

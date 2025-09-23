@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  libgcrypt,
-  curl,
-  gnutls,
-  pkg-config,
-  libiconv,
-  libintl,
-  version,
-  src,
-  meta ? { },
+{ lib
+, stdenv
+, libgcrypt
+, curl
+, gnutls
+, pkg-config
+, libiconv
+, libintl
+, version
+, src
+, meta ? { }
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

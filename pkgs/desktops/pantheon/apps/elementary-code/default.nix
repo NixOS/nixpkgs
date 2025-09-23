@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  polkit,
-  vala,
-  wrapGAppsHook3,
-  editorconfig-core-c,
-  granite,
-  gsettings-desktop-schemas,
-  gtk3,
-  gtksourceview4,
-  gtkspell3,
-  libgee,
-  libgit2-glib,
-  libhandy,
-  libpeas2,
-  libsoup_3,
-  vte,
-  ctags,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, polkit
+, vala
+, wrapGAppsHook3
+, editorconfig-core-c
+, granite
+, gsettings-desktop-schemas
+, gtk3
+, gtksourceview4
+, gtkspell3
+, libgee
+, libgit2-glib
+, libhandy
+, libpeas2
+, libsoup_3
+, vte
+, ctags
+,
 }:
 
 stdenv.mkDerivation rec {

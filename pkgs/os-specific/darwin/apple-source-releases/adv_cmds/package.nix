@@ -1,13 +1,13 @@
-{
-  lib,
-  apple-sdk,
-  bison,
-  flex,
-  libxo,
-  mkAppleDerivation,
-  ncurses,
-  pkg-config,
-  stdenvNoCC,
+{ lib
+, apple-sdk
+, bison
+, flex
+, libxo
+, mkAppleDerivation
+, ncurses
+, pkg-config
+, stdenvNoCC
+,
 }:
 
 let

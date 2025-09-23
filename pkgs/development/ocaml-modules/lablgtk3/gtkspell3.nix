@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  gtkspell3,
-  lablgtk3,
+{ buildDunePackage
+, gtkspell3
+, lablgtk3
+,
 }:
 
 buildDunePackage {

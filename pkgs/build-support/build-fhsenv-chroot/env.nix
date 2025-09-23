@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  buildEnv,
-  writeText,
-  pkgs,
-  pkgsi686Linux,
+{ stdenv
+, lib
+, buildEnv
+, writeText
+, pkgs
+, pkgsi686Linux
+,
 }:
 
-{
-  name,
-  profile ? "",
-  targetPkgs ? pkgs: [ ],
-  multiPkgs ? pkgs: [ ],
-  nativeBuildInputs ? [ ],
-  extraBuildCommands ? "",
-  extraBuildCommandsMulti ? "",
-  extraOutputsToInstall ? [ ],
+{ name
+, profile ? ""
+, targetPkgs ? pkgs: [ ]
+, multiPkgs ? pkgs: [ ]
+, nativeBuildInputs ? [ ]
+, extraBuildCommands ? ""
+, extraBuildCommandsMulti ? ""
+, extraOutputsToInstall ? [ ]
+,
 }:
 
 # HOWTO:

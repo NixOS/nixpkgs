@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  gfortran,
-  perl,
-  version ? "6.2.2",
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, gfortran
+, perl
+, version ? "6.2.2"
+,
 }:
 
 let

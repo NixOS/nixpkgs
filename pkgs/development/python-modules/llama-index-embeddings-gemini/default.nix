@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  google-generativeai,
-  llama-index-core,
-  hatchling,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-generativeai
+, llama-index-core
+, hatchling
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

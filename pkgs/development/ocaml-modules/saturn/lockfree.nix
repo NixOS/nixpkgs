@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  backoff,
-  multicore-magic,
+{ lib
+, fetchurl
+, buildDunePackage
+, backoff
+, multicore-magic
+,
 }:
 
 buildDunePackage rec {

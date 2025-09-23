@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  scikit-learn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, scikit-learn
+,
 }:
 
 let

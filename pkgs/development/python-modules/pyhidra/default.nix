@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jpype1,
-  pytest-datadir,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jpype1
+, pytest-datadir
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

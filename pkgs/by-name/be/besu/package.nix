@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jemalloc,
-  jre,
-  runCommand,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jemalloc
+, jre
+, runCommand
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

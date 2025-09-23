@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  ppx_js_style,
-  ppx_yojson_conv_lib,
-  ppxlib,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ppx_js_style
+, ppx_yojson_conv_lib
+, ppxlib
+,
 }:
 buildDunePackage rec {
   pname = "ppx_yojson_conv";

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  distutils,
-  ttfautohint,
-  fonttools,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, distutils
+, ttfautohint
+, fonttools
+,
 }:
 
 buildPythonPackage rec {

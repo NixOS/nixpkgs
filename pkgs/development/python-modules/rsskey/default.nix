@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  feedparser,
-  httpx,
-  loca,
-  markdownify,
-  trio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, feedparser
+, httpx
+, loca
+, markdownify
+, trio
+,
 }:
 
 buildPythonPackage rec {

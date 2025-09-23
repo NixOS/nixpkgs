@@ -1,23 +1,22 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  which,
-  makeWrapper,
-  rsync,
-  installShellFiles,
-  runtimeShell,
-  kubectl,
-  nixosTests,
-  nix-update-script,
-
-  components ? [
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, which
+, makeWrapper
+, rsync
+, installShellFiles
+, runtimeShell
+, kubectl
+, nixosTests
+, nix-update-script
+, components ? [
     "cmd/kubelet"
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "cmd/kube-scheduler"
-  ],
+  ]
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,26 +1,26 @@
-{
-  bc,
-  zip,
-  lib,
-  fetchFromGitHub,
-  bats,
-  buildPythonApplication,
-  pythonOlder,
-  callPackage,
-  kicad,
-  numpy,
-  click,
-  markdown2,
-  openscad,
-  pytestCheckHook,
-  commentjson,
-  wxpython,
-  pcbnewtransition,
-  pybars3,
-  versioneer,
-  shapely,
-  setuptools,
-  nix-update-script,
+{ bc
+, zip
+, lib
+, fetchFromGitHub
+, bats
+, buildPythonApplication
+, pythonOlder
+, callPackage
+, kicad
+, numpy
+, click
+, markdown2
+, openscad
+, pytestCheckHook
+, commentjson
+, wxpython
+, pcbnewtransition
+, pybars3
+, versioneer
+, shapely
+, setuptools
+, nix-update-script
+,
 }:
 let
   solidpython = callPackage ./solidpython { };

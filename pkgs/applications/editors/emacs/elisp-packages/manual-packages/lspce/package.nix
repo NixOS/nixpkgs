@@ -1,10 +1,10 @@
-{
-  lib,
-  callPackage,
-  f,
-  markdown-mode,
-  melpaBuild,
-  yasnippet,
+{ lib
+, callPackage
+, f
+, markdown-mode
+, melpaBuild
+, yasnippet
+,
 }:
 
 let

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  help2man,
-  gzip,
-  libXt,
-  openusd,
-  tbb,
-  vtk,
-  autoPatchelfHook,
-  python3Packages,
-  opencascade-occt,
-  assimp,
-  fontconfig,
-  withManual ? !stdenv.hostPlatform.isDarwin,
-  withPythonBinding ? false,
-  withUsd ? openusd.meta.available,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, help2man
+, gzip
+, libXt
+, openusd
+, tbb
+, vtk
+, autoPatchelfHook
+, python3Packages
+, opencascade-occt
+, assimp
+, fontconfig
+, withManual ? !stdenv.hostPlatform.isDarwin
+, withPythonBinding ? false
+, withUsd ? openusd.meta.available
+,
 }:
 
 stdenv.mkDerivation rec {

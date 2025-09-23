@@ -1,6 +1,6 @@
-{
-  mkDerivation,
-  openssl,
+{ mkDerivation
+, openssl
+,
 }:
 mkDerivation {
   path = "lib/libradius";

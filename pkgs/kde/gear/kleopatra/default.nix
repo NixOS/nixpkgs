@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  shared-mime-info,
-  akonadi-mime,
+{ mkKdeDerivation
+, shared-mime-info
+, akonadi-mime
+,
 }:
 mkKdeDerivation {
   pname = "kleopatra";

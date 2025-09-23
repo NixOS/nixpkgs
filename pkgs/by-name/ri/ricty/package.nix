@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  google-fonts,
-  migu,
-  fontforge,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, google-fonts
+, migu
+, fontforge
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

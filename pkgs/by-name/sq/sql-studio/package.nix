@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  buildNpmPackage,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  nix-update-script,
+{ lib
+, rustPlatform
+, buildNpmPackage
+, fetchFromGitHub
+, pkg-config
+, openssl
+, nix-update-script
+,
 }:
 let
   pname = "sql-studio";

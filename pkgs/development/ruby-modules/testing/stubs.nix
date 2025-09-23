@@ -1,9 +1,8 @@
-{
-  stdenv,
-  lib,
-  ruby,
-  callPackage,
-  ...
+{ stdenv
+, lib
+, ruby
+, callPackage
+, ...
 }:
 let
   mkDerivation =
@@ -12,13 +11,15 @@ let
       inherit name;
       text = (
         builtins.toJSON (
-          lib.filterAttrs (
-            n: v:
-            builtins.any (x: x == n) [
-              "name"
-              "system"
-            ]
-          ) argSet
+          lib.filterAttrs
+            (
+              n: v:
+                builtins.any (x: x == n) [
+                  "name"
+                  "system"
+                ]
+            )
+            argSet
         )
       );
       builder = stdenv.shell;
@@ -30,10 +31,9 @@ let
       passAsFile = [ "text" ];
     };
   fetchurl =
-    {
-      url ? "",
-      urls ? [ ],
-      ...
+    { url ? ""
+    , urls ? [ ]
+    , ...
     }:
     "fetchurl:${if urls == [ ] then url else builtins.head urls}";
 

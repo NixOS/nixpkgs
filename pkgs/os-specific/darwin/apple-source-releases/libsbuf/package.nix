@@ -1,10 +1,10 @@
-{
-  lib,
-  bootstrapStdenv,
-  fetchurl,
-  meson,
-  ninja,
-  stdenv,
+{ lib
+, bootstrapStdenv
+, fetchurl
+, meson
+, ninja
+, stdenv
+,
 }:
 
 # Apple ships libsbuf with macOS 14 but does not provide any source releases.

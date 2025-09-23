@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchurl,
-  gettext,
-  genPosixLockObjOnly ? false,
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, gettext
+, genPosixLockObjOnly ? false
+,
 }:
 let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
@@ -92,5 +92,5 @@ stdenv.mkDerivation (
       maintainers = with lib.maintainers; [ ];
     };
   }
-  // genPosixLockObjOnlyAttrs
+    // genPosixLockObjOnlyAttrs
 )

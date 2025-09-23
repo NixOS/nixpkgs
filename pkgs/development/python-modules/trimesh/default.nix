@@ -1,30 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  pythonOlder,
-  numpy,
-  lxml,
-  trimesh,
-
-  # optional deps
-  colorlog,
-  manifold3d,
-  charset-normalizer,
-  jsonschema,
-  networkx,
-  svg-path,
-  pycollada,
-  shapely,
-  xxhash,
-  rtree,
-  httpx,
-  scipy,
-  pillow,
-  mapbox-earcut,
-  embreex,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, pythonOlder
+, numpy
+, lxml
+, trimesh
+, # optional deps
+  colorlog
+, manifold3d
+, charset-normalizer
+, jsonschema
+, networkx
+, svg-path
+, pycollada
+, shapely
+, xxhash
+, rtree
+, httpx
+, scipy
+, pillow
+, mapbox-earcut
+, embreex
+,
 }:
 
 buildPythonPackage rec {

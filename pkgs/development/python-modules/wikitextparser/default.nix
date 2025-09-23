@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  lib,
-  setuptools,
-  pytestCheckHook,
-  regex,
-  wcwidth,
+{ buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, lib
+, setuptools
+, pytestCheckHook
+, regex
+, wcwidth
+,
 }:
 
 buildPythonPackage rec {

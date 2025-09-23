@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  portpicker,
-  pyserial,
-  pyyaml,
-  timeout-decorator,
-  typing-extensions,
-
-  # tests
-  procps,
-  pytestCheckHook,
-  pytz,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  portpicker
+, pyserial
+, pyyaml
+, timeout-decorator
+, typing-extensions
+, # tests
+  procps
+, pytestCheckHook
+, pytz
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  amazon-cloudwatch-agent,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  stdenv,
-  versionCheckHook,
+{ lib
+, amazon-cloudwatch-agent
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, stdenv
+, versionCheckHook
+,
 }:
 
 buildGoModule rec {

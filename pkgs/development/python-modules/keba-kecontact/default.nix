@@ -1,12 +1,12 @@
-{
-  lib,
-  asyncio-dgram,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  ifaddr,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, asyncio-dgram
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, ifaddr
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

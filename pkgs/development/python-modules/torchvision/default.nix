@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  torch,
-  apple-sdk_13,
-  buildPythonPackage,
-  darwinMinVersionHook,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  libpng,
-  ninja,
-  which,
-
-  # buildInputs
-  libjpeg_turbo,
-
-  # dependencies
-  numpy,
-  pillow,
-  scipy,
-
-  # tests
-  pytest,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, torch
+, apple-sdk_13
+, buildPythonPackage
+, darwinMinVersionHook
+, fetchFromGitHub
+, # nativeBuildInputs
+  libpng
+, ninja
+, which
+, # buildInputs
+  libjpeg_turbo
+, # dependencies
+  numpy
+, pillow
+, scipy
+, # tests
+  pytest
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

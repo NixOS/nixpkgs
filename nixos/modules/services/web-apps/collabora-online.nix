@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -168,10 +167,12 @@ in
       ];
 
       environment = builtins.listToAttrs (
-        lib.imap1 (n: ag: {
-          name = "aliasgroup${toString n}";
-          value = lib.concatStringsSep "," ([ ag.host ] ++ ag.aliases);
-        }) cfg.aliasGroups
+        lib.imap1
+          (n: ag: {
+            name = "aliasgroup${toString n}";
+            value = lib.concatStringsSep "," ([ ag.host ] ++ ag.aliases);
+          })
+          cfg.aliasGroups
       );
 
       serviceConfig = {

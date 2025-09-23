@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -141,9 +140,9 @@ in
 /*
   SYNERGY SERVER example configuration file
   section: screens
-    laptop:
-    dm:
-    win:
+  laptop:
+  dm:
+  win:
   end
   section: aliases
       laptop:
@@ -154,12 +153,12 @@ in
         192.168.5.54
   end
   section: links
-     laptop:
+   laptop:
          left = dm
-     dm:
+   dm:
          right = laptop
          left = win
-    win:
+  win:
         right = dm
   end
 */

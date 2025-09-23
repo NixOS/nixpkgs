@@ -1,68 +1,63 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchurl,
-
-  # build inputs
-  cargo,
-  openssl,
-  pkg-config,
-  protobuf,
-  rustc,
-  rustPlatform,
-  zstd-c,
-
-  # dependencies
-  bcrypt,
-  build,
-  fastapi,
-  grpcio,
-  httpx,
-  importlib-resources,
-  jsonschema,
-  kubernetes,
-  mmh3,
-  numpy,
-  onnxruntime,
-  opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-grpc,
-  opentelemetry-instrumentation-fastapi,
-  opentelemetry-sdk,
-  orjson,
-  overrides,
-  posthog,
-  pybase64,
-  pydantic,
-  pypika,
-  pyyaml,
-  requests,
-  tenacity,
-  tokenizers,
-  tqdm,
-  typer,
-  typing-extensions,
-  uvicorn,
-
-  # optional dependencies
-  chroma-hnswlib,
-
-  # tests
-  hnswlib,
-  hypothesis,
-  pandas,
-  psutil,
-  pytest-asyncio,
-  pytest-xdist,
-  pytestCheckHook,
-  sqlite,
-  starlette,
-  writableTmpDirAsHomeHook,
-
-  # passthru
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchurl
+, # build inputs
+  cargo
+, openssl
+, pkg-config
+, protobuf
+, rustc
+, rustPlatform
+, zstd-c
+, # dependencies
+  bcrypt
+, build
+, fastapi
+, grpcio
+, httpx
+, importlib-resources
+, jsonschema
+, kubernetes
+, mmh3
+, numpy
+, onnxruntime
+, opentelemetry-api
+, opentelemetry-exporter-otlp-proto-grpc
+, opentelemetry-instrumentation-fastapi
+, opentelemetry-sdk
+, orjson
+, overrides
+, posthog
+, pybase64
+, pydantic
+, pypika
+, pyyaml
+, requests
+, tenacity
+, tokenizers
+, tqdm
+, typer
+, typing-extensions
+, uvicorn
+, # optional dependencies
+  chroma-hnswlib
+, # tests
+  hnswlib
+, hypothesis
+, pandas
+, psutil
+, pytest-asyncio
+, pytest-xdist
+, pytestCheckHook
+, sqlite
+, starlette
+, writableTmpDirAsHomeHook
+, # passthru
+  nixosTests
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

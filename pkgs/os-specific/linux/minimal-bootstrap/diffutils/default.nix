@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnugrep,
-  gnused,
-  gawk,
-  gnutar,
-  xz,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnugrep
+, gnused
+, gawk
+, gnutar
+, xz
+,
 }:
 let
   pname = "diffutils";
@@ -23,34 +23,34 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnused
-      gnugrep
-      gawk
-      gnutar
-      xz
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnused
+    gnugrep
+    gawk
+    gnutar
+    xz
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/diff --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/diff --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "Commands for showing the differences between files (diff, cmp, etc.)";
-      homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
-      license = licenses.gpl3Only;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "Commands for showing the differences between files (diff, cmp, etc.)";
+    homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
+    license = licenses.gpl3Only;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     cp ${src} diffutils.tar.xz

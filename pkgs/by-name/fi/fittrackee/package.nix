@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  postgresql,
-  postgresqlTestHook,
-  python3Packages,
+{ fetchFromGitHub
+, lib
+, stdenv
+, postgresql
+, postgresqlTestHook
+, python3Packages
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";

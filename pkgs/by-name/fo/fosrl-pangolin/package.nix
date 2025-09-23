@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  esbuild,
-  buildNpmPackage,
-  makeWrapper,
-  formats,
-  inter,
-  databaseType ? "sqlite",
-  environmentVariables ? { },
+{ lib
+, fetchFromGitHub
+, esbuild
+, buildNpmPackage
+, makeWrapper
+, formats
+, inter
+, databaseType ? "sqlite"
+, environmentVariables ? { }
+,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [

@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  poetry-core,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  requests,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, poetry-core
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

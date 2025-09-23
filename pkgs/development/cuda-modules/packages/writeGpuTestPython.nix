@@ -1,13 +1,13 @@
-{
-  lib,
-  runCommand,
-  python3Packages,
-  makeWrapper,
+{ lib
+, runCommand
+, python3Packages
+, makeWrapper
+,
 }:
-{
-  feature ? "cuda",
-  name ? if feature == null then "cpu" else feature,
-  libraries ? [ ], # [PythonPackage] | (PackageSet -> [PythonPackage])
+{ feature ? "cuda"
+, name ? if feature == null then "cpu" else feature
+, libraries ? [ ]
+, # [PythonPackage] | (PackageSet -> [PythonPackage])
   ...
 }@args:
 
@@ -16,9 +16,10 @@ let
   librariesFun = if isFunction libraries then libraries else (_: libraries);
 in
 
-assert lib.assertMsg (
-  isFunction libraries || all (python3Packages.hasPythonModule) libraries
-) "writeGpuTestPython was passed `libraries` from the wrong python release";
+assert lib.assertMsg
+  (
+    isFunction libraries || all (python3Packages.hasPythonModule) libraries
+  ) "writeGpuTestPython was passed `libraries` from the wrong python release";
 
 content:
 

@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libxkbcommon,
-  wayland,
-  libGL,
-  dav1d,
-  installShellFiles,
-  scdoc,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libxkbcommon
+, wayland
+, libGL
+, dav1d
+, installShellFiles
+, scdoc
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

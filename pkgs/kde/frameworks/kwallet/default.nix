@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  libgcrypt,
-  libsecret,
-  kdoctools,
+{ mkKdeDerivation
+, pkg-config
+, libgcrypt
+, libsecret
+, kdoctools
+,
 }:
 mkKdeDerivation {
   pname = "kwallet";

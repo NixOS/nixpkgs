@@ -1,17 +1,17 @@
-{
-  autoPatchelfHook,
-  buildPythonPackage,
-  cmake,
-  cython,
-  fetchFromGitHub,
-  h3,
-  lib,
-  ninja,
-  numpy,
-  pytestCheckHook,
-  pytest-cov-stub,
-  scikit-build-core,
-  stdenv,
+{ autoPatchelfHook
+, buildPythonPackage
+, cmake
+, cython
+, fetchFromGitHub
+, h3
+, lib
+, ninja
+, numpy
+, pytestCheckHook
+, pytest-cov-stub
+, scikit-build-core
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

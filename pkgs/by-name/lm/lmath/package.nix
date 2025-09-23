@@ -1,9 +1,9 @@
-{
-  lib,
-  nix-update-script,
-  fetchurl,
-  appimageTools,
-  makeBinaryWrapper,
+{ lib
+, nix-update-script
+, fetchurl
+, appimageTools
+, makeBinaryWrapper
+,
 }:
 let
   pname = "lmath";

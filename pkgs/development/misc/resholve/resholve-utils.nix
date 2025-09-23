@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  resholve,
-  binlore,
-  writeTextFile,
+{ lib
+, stdenv
+, resholve
+, binlore
+, writeTextFile
+,
 }:
 
 rec {
@@ -102,11 +102,10 @@ rec {
 
   # Verify required arguments are present
   validateSolution =
-    {
-      scripts,
-      inputs,
-      interpreter,
-      ...
+    { scripts
+    , inputs
+    , interpreter
+    , ...
     }:
     true;
 
@@ -116,10 +115,9 @@ rec {
 
   # Pull out specific solution keys to build CLI argstring
   phraseArgs =
-    {
-      flags ? [ ],
-      scripts,
-      ...
+    { flags ? [ ]
+    , scripts
+    , ...
     }:
     spaces (flags ++ scripts);
 
@@ -137,7 +135,7 @@ rec {
   phraseInvocation =
     solution: value:
     if validateSolution value then
-      # we pass resholve a directory
+    # we pass resholve a directory
       "RESHOLVE_LORE=${binlore.collect (phraseBinloreArgs value)} ${phraseEnvs solution value} ${resholve}/bin/resholve --overwrite ${phraseArgs value}"
     else
       throw "invalid solution"; # shouldn't trigger for now
@@ -159,9 +157,9 @@ rec {
     Nix API is doing, makes nix-shell debugging easier, etc.
   */
   phraseContext =
-    {
-      invokable,
-      prep ? ''cd "$out"'',
+    { invokable
+    , prep ? ''cd "$out"''
+    ,
     }:
     ''
       (
@@ -226,13 +224,12 @@ rec {
       '';
     };
   mkDerivation =
-    {
-      pname,
-      src,
-      version,
-      passthru ? { },
-      solutions,
-      ...
+    { pname
+    , src
+    , version
+    , passthru ? { }
+    , solutions
+    , ...
     }@attrs:
     let
       inherit stdenv;
@@ -253,12 +250,12 @@ rec {
         )
       );
     in
-    /*
+      /*
       resholve in a separate derivation; some concerns:
       - we aren't keeping many of the user's args, so they
         can't readily set LOGLEVEL and such...
       - not sure how this affects multiple outputs
-    */
+      */
     lib.extendDerivation true passthru (
       stdenv.mkDerivation {
         src = unresholved;

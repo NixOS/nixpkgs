@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  validatePkgConfig,
-  expat,
-  minizip,
-  zlib,
-  libiconv,
+{ lib
+, stdenv
+, fetchurl
+, validatePkgConfig
+, expat
+, minizip
+, zlib
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

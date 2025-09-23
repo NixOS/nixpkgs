@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  libsecret,
-  testers,
-  docker-credential-helpers,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, libsecret
+, testers
+, docker-credential-helpers
+,
 }:
 
 buildGoModule rec {

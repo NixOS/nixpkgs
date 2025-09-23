@@ -1,34 +1,34 @@
-{
-  lib,
-  fetchFromGitHub,
-  sdl3,
-  cmake,
-  cubeb,
-  curl,
-  extra-cmake-modules,
-  ffmpeg,
-  gtk3,
-  libXrandr,
-  libaio,
-  libbacktrace,
-  libpcap,
-  libwebp,
-  llvmPackages,
-  lz4,
-  pkg-config,
-  qt6,
-  shaderc,
-  soundtouch,
-  strip-nondeterminism,
-  vulkan-headers,
-  vulkan-loader,
-  wayland,
-  wrapGAppsHook3,
-  zip,
-  zstd,
-  plutovg,
-  plutosvg,
-  kddockwidgets,
+{ lib
+, fetchFromGitHub
+, sdl3
+, cmake
+, cubeb
+, curl
+, extra-cmake-modules
+, ffmpeg
+, gtk3
+, libXrandr
+, libaio
+, libbacktrace
+, libpcap
+, libwebp
+, llvmPackages
+, lz4
+, pkg-config
+, qt6
+, shaderc
+, soundtouch
+, strip-nondeterminism
+, vulkan-headers
+, vulkan-loader
+, wayland
+, wrapGAppsHook3
+, zip
+, zstd
+, plutovg
+, plutosvg
+, kddockwidgets
+,
 }:
 
 let

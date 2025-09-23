@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  coqPackages,
-  coq,
-  which,
-  fetchzip,
-  fetchurl,
+{ lib
+, stdenv
+, coqPackages
+, coq
+, which
+, fetchzip
+, fetchurl
+,
 }@args:
 
 let
@@ -36,70 +36,71 @@ let
   isGitLabDomain = d: match "^gitlab.*" d != null;
 in
 
-{
-  pname,
-  version ? null,
-  fetcher ? null,
-  owner ? "coq-community",
-  domain ? "github.com",
-  repo ? pname,
-  defaultVersion ? null,
-  releaseRev ? (v: v),
-  displayVersion ? { },
-  release ? { },
-  buildInputs ? [ ],
-  nativeBuildInputs ? [ ],
-  extraBuildInputs ? [ ],
-  extraNativeBuildInputs ? [ ],
-  overrideBuildInputs ? [ ],
-  overrideNativeBuildInputs ? [ ],
-  namePrefix ? [ "coq" ],
-  enableParallelBuilding ? true,
-  extraInstallFlags ? [ ],
-  setCOQBIN ? true,
-  mlPlugin ? false,
-  useMelquiondRemake ? null,
-  dropAttrs ? [ ],
-  keepAttrs ? [ ],
-  dropDerivationAttrs ? [ ],
-  useDuneifVersion ? (x: false),
-  useDune ? false,
-  opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ])),
-  ...
+{ pname
+, version ? null
+, fetcher ? null
+, owner ? "coq-community"
+, domain ? "github.com"
+, repo ? pname
+, defaultVersion ? null
+, releaseRev ? (v: v)
+, displayVersion ? { }
+, release ? { }
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
+, overrideBuildInputs ? [ ]
+, overrideNativeBuildInputs ? [ ]
+, namePrefix ? [ "coq" ]
+, enableParallelBuilding ? true
+, extraInstallFlags ? [ ]
+, setCOQBIN ? true
+, mlPlugin ? false
+, useMelquiondRemake ? null
+, dropAttrs ? [ ]
+, keepAttrs ? [ ]
+, dropDerivationAttrs ? [ ]
+, useDuneifVersion ? (x: false)
+, useDune ? false
+, opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ]))
+, ...
 }@args:
 let
-  args-to-remove = foldl (flip remove) (
-    [
-      "version"
-      "fetcher"
-      "repo"
-      "owner"
-      "domain"
-      "releaseRev"
-      "displayVersion"
-      "defaultVersion"
-      "useMelquiondRemake"
-      "release"
-      "buildInputs"
-      "nativeBuildInputs"
-      "extraBuildInputs"
-      "extraNativeBuildInputs"
-      "overrideBuildInputs"
-      "overrideNativeBuildInputs"
-      "namePrefix"
-      "meta"
-      "useDuneifVersion"
-      "useDune"
-      "opam-name"
-      "extraInstallFlags"
-      "setCOQBIN"
-      "mlPlugin"
-      "dropAttrs"
-      "dropDerivationAttrs"
-      "keepAttrs"
-    ]
-    ++ dropAttrs
-  ) keepAttrs;
+  args-to-remove = foldl (flip remove)
+    (
+      [
+        "version"
+        "fetcher"
+        "repo"
+        "owner"
+        "domain"
+        "releaseRev"
+        "displayVersion"
+        "defaultVersion"
+        "useMelquiondRemake"
+        "release"
+        "buildInputs"
+        "nativeBuildInputs"
+        "extraBuildInputs"
+        "extraNativeBuildInputs"
+        "overrideBuildInputs"
+        "overrideNativeBuildInputs"
+        "namePrefix"
+        "meta"
+        "useDuneifVersion"
+        "useDune"
+        "opam-name"
+        "extraInstallFlags"
+        "setCOQBIN"
+        "mlPlugin"
+        "dropAttrs"
+        "dropDerivationAttrs"
+        "keepAttrs"
+      ]
+      ++ dropAttrs
+    )
+    keepAttrs;
   fetch =
     import ../coq/meta-fetch/default.nix
       {
@@ -180,74 +181,77 @@ let
 in
 
 stdenv.mkDerivation (
-  removeAttrs (
-    {
+  removeAttrs
+    (
+      {
 
-      name = prefix-name + (display-pkg pname "-" fetched.version);
+        name = prefix-name + (display-pkg pname "-" fetched.version);
 
-      inherit (fetched) version src;
+        inherit (fetched) version src;
 
-      nativeBuildInputs =
-        args.overrideNativeBuildInputs or (
-          [ which ]
-          ++ optional useDune coq.ocamlPackages.dune_3
-          ++ optionals (useDune || mlPlugin) [
-            coq.ocamlPackages.ocaml
-            coq.ocamlPackages.findlib
-          ]
-          ++ (args.nativeBuildInputs or [ ])
-          ++ extraNativeBuildInputs
-        );
-      buildInputs =
-        args.overrideBuildInputs or ([ coq ] ++ (args.buildInputs or [ ]) ++ extraBuildInputs);
-      inherit enableParallelBuilding;
+        nativeBuildInputs =
+          args.overrideNativeBuildInputs or (
+            [ which ]
+            ++ optional useDune coq.ocamlPackages.dune_3
+            ++ optionals (useDune || mlPlugin) [
+              coq.ocamlPackages.ocaml
+              coq.ocamlPackages.findlib
+            ]
+            ++ (args.nativeBuildInputs or [ ])
+            ++ extraNativeBuildInputs
+          );
+        buildInputs =
+          args.overrideBuildInputs or ([ coq ] ++ (args.buildInputs or [ ]) ++ extraBuildInputs);
+        inherit enableParallelBuilding;
 
-      meta =
-        (
-          {
-            platforms = coq.meta.platforms;
-          }
-          // (switch domain [
+        meta =
+          (
             {
-              case = pred.union isGitHubDomain isGitLabDomain;
-              out = {
-                homepage = "https://${domain}/${owner}/${repo}";
-              };
+              platforms = coq.meta.platforms;
             }
-          ] { })
-          // optionalAttrs (fetched.broken or false) {
-            coqFilter = true;
-            broken = true;
-          }
-        )
-        // (args.meta or { });
+            // (switch domain [
+              {
+                case = pred.union isGitHubDomain isGitLabDomain;
+                out = {
+                  homepage = "https://${domain}/${owner}/${repo}";
+                };
+              }
+            ]
+              { })
+            // optionalAttrs (fetched.broken or false) {
+              coqFilter = true;
+              broken = true;
+            }
+          )
+          // (args.meta or { });
 
-    }
-    // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
-    // (optionalAttrs (!args ? installPhase && !args ? useMelquiondRemake) {
-      installFlags = coqlib-flags ++ docdir-flags ++ extraInstallFlags;
-    })
-    // (optionalAttrs useDune {
-      buildPhase = ''
-        runHook preBuild
-        dune build -p ${opam-name} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-        runHook postBuild
-      '';
-      installPhase = ''
-        runHook preInstall
-        dune install --prefix=$out --libdir $OCAMLFIND_DESTDIR ${opam-name}
-        mkdir $out/lib/coq/
-        mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
-        runHook postInstall
-      '';
-    })
-    // (optionalAttrs (args ? useMelquiondRemake) rec {
-      COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
-      preConfigurePhases = [ "autoconf" ];
-      configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
-      buildPhase = "./remake -j$NIX_BUILD_CORES";
-      installPhase = "./remake install";
-    })
-    // (removeAttrs args args-to-remove)
-  ) dropDerivationAttrs
+      }
+      // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
+      // (optionalAttrs (!args ? installPhase && !args ? useMelquiondRemake) {
+        installFlags = coqlib-flags ++ docdir-flags ++ extraInstallFlags;
+      })
+      // (optionalAttrs useDune {
+        buildPhase = ''
+          runHook preBuild
+          dune build -p ${opam-name} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+          runHook postBuild
+        '';
+        installPhase = ''
+          runHook preInstall
+          dune install --prefix=$out --libdir $OCAMLFIND_DESTDIR ${opam-name}
+          mkdir $out/lib/coq/
+          mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
+          runHook postInstall
+        '';
+      })
+      // (optionalAttrs (args ? useMelquiondRemake) rec {
+        COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
+        preConfigurePhases = [ "autoconf" ];
+        configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
+        buildPhase = "./remake -j$NIX_BUILD_CORES";
+        installPhase = "./remake install";
+      })
+        // (removeAttrs args args-to-remove)
+    )
+    dropDerivationAttrs
 )

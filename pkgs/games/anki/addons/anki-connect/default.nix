@@ -1,8 +1,8 @@
-{
-  lib,
-  anki-utils,
-  fetchFromSourcehut,
-  nix-update-script,
+{ lib
+, anki-utils
+, fetchFromSourcehut
+, nix-update-script
+,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "anki-connect";

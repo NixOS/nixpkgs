@@ -1,22 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-
-  # dependencies
-  einops,
-  emoji,
-  flax,
-  ftfy,
-  jax,
-  jaxlib,
-  orbax-checkpoint,
-  pillow,
-  pydantic,
-  transformers,
-  unidecode,
-  wandb,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, # dependencies
+  einops
+, emoji
+, flax
+, ftfy
+, jax
+, jaxlib
+, orbax-checkpoint
+, pillow
+, pydantic
+, transformers
+, unidecode
+, wandb
+,
 }:
 
 buildPythonPackage rec {

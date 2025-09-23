@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  buildPackages,
-  mtools,
-  openssl,
-  perl,
-  xorriso,
-  xz,
-  syslinux,
-  embedScript ? null,
-  additionalTargets ? { },
-  additionalOptions ? [ ],
-  firmwareBinary ? "ipxe.efirom",
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, buildPackages
+, mtools
+, openssl
+, perl
+, xorriso
+, xz
+, syslinux
+, embedScript ? null
+, additionalTargets ? { }
+, additionalOptions ? [ ]
+, firmwareBinary ? "ipxe.efirom"
+,
 }:
 
 let

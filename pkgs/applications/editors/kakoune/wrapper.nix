@@ -1,10 +1,10 @@
-{
-  lib,
-  symlinkJoin,
-  makeWrapper,
-  kakoune,
-  plugins ? [ ],
-  configure ? { },
+{ lib
+, symlinkJoin
+, makeWrapper
+, kakoune
+, plugins ? [ ]
+, configure ? { }
+,
 }:
 
 let

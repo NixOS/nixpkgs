@@ -1,28 +1,34 @@
-{
-  lib,
-  steam-unwrapped,
-  buildFHSEnv,
-  writeShellScript,
-  extraPkgs ? pkgs: [ ], # extra packages to add to targetPkgs
-  extraLibraries ? pkgs: [ ], # extra packages to add to multiPkgs
-  extraProfile ? "", # string to append to profile
-  extraPreBwrapCmds ? "", # extra commands to run before calling bubblewrap
-  extraBwrapArgs ? [ ], # extra arguments to pass to bubblewrap (real default is at usage site)
-  extraArgs ? "", # arguments to always pass to steam
-  extraEnv ? { }, # Environment variables to pass to Steam
-  privateTmp ? true, # if the steam bubblewrap should isolate /tmp
+{ lib
+, steam-unwrapped
+, buildFHSEnv
+, writeShellScript
+, extraPkgs ? pkgs: [ ]
+, # extra packages to add to targetPkgs
+  extraLibraries ? pkgs: [ ]
+, # extra packages to add to multiPkgs
+  extraProfile ? ""
+, # string to append to profile
+  extraPreBwrapCmds ? ""
+, # extra commands to run before calling bubblewrap
+  extraBwrapArgs ? [ ]
+, # extra arguments to pass to bubblewrap (real default is at usage site)
+  extraArgs ? ""
+, # arguments to always pass to steam
+  extraEnv ? { }
+, # Environment variables to pass to Steam
+  privateTmp ? true
+, # if the steam bubblewrap should isolate /tmp
 }:
 let
   buildRuntimeEnv =
-    {
-      extraPkgs ? pkgs: [ ],
-      extraLibraries ? pkgs: [ ],
-      extraProfile ? "",
-      extraPreBwrapCmds ? "",
-      extraBwrapArgs ? [ ],
-      extraEnv ? { },
-      privateTmp ? true,
-      ...
+    { extraPkgs ? pkgs: [ ]
+    , extraLibraries ? pkgs: [ ]
+    , extraProfile ? ""
+    , extraPreBwrapCmds ? ""
+    , extraBwrapArgs ? [ ]
+    , extraEnv ? { }
+    , privateTmp ? true
+    , ...
     }@args:
     buildFHSEnv (
       (builtins.removeAttrs args [
@@ -43,54 +49,54 @@ let
         # https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/blob/main/docs/distro-assumptions.md#command-line-tools
         targetPkgs =
           pkgs:
-          with pkgs;
-          [
-            bash
-            coreutils
-            file
-            lsb-release # not documented, called from Big Picture
-            pciutils # not documented, complains about lspci on startup
-            glibc_multi.bin
-            xdg-utils # calls xdg-open occasionally
-            xz
-            zenity
+            with pkgs;
+            [
+              bash
+              coreutils
+              file
+              lsb-release # not documented, called from Big Picture
+              pciutils # not documented, complains about lspci on startup
+              glibc_multi.bin
+              xdg-utils # calls xdg-open occasionally
+              xz
+              zenity
 
-            # Steam expects it to be /sbin specifically
-            (pkgs.runCommand "sbin-ldconfig" { } ''
-              mkdir -p $out/sbin
-              ln -s /bin/ldconfig $out/sbin/ldconfig
-            '')
+              # Steam expects it to be /sbin specifically
+              (pkgs.runCommand "sbin-ldconfig" { } ''
+                mkdir -p $out/sbin
+                ln -s /bin/ldconfig $out/sbin/ldconfig
+              '')
 
-            # crashes on startup if it can't find libX11 locale files
-            (pkgs.runCommand "xorg-locale" { } ''
-              mkdir -p $out
-              ln -s ${xorg.libX11}/share $out/share
-            '')
-          ]
-          ++ extraPkgs pkgs;
+              # crashes on startup if it can't find libX11 locale files
+              (pkgs.runCommand "xorg-locale" { } ''
+                mkdir -p $out
+                ln -s ${xorg.libX11}/share $out/share
+              '')
+            ]
+            ++ extraPkgs pkgs;
 
         # https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/blob/main/docs/distro-assumptions.md#shared-libraries
         multiPkgs =
           pkgs:
-          with pkgs;
-          [
-            glibc
-            libxcrypt
-            libGL
+            with pkgs;
+            [
+              glibc
+              libxcrypt
+              libGL
 
-            libdrm
-            libgbm
-            udev
-            libudev0-shim
-            libva
-            vulkan-loader
+              libdrm
+              libgbm
+              udev
+              libudev0-shim
+              libva
+              vulkan-loader
 
-            networkmanager
-            # not documented, used for network status things in Big Picture
-            # FIXME: figure out how to only build libnm?
-            libcap # not documented, required by srt-bwrap
-          ]
-          ++ extraLibraries pkgs;
+              networkmanager
+              # not documented, used for network status things in Big Picture
+              # FIXME: figure out how to only build libnm?
+              libcap # not documented, required by srt-bwrap
+            ]
+            ++ extraLibraries pkgs;
 
         profile = ''
           # prevents log spam from SteamRT GTK trying to load host GIO modules

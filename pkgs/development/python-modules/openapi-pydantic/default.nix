@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pydantic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

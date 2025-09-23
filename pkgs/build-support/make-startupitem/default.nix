@@ -2,15 +2,18 @@
 # as autostart item.
 
 { stdenv, lib }:
-{
-  name, # name of the desktop file (without .desktop)
-  package, # package where the desktop file resides in
-  srcPrefix ? "", # additional prefix that the desktop file may have in the 'package'
-  after ? null,
-  condition ? null,
-  phase ? "2",
-  prependExtraArgs ? [ ],
-  appendExtraArgs ? [ ],
+{ name
+, # name of the desktop file (without .desktop)
+  package
+, # package where the desktop file resides in
+  srcPrefix ? ""
+, # additional prefix that the desktop file may have in the 'package'
+  after ? null
+, condition ? null
+, phase ? "2"
+, prependExtraArgs ? [ ]
+, appendExtraArgs ? [ ]
+,
 }:
 
 # the builder requires that

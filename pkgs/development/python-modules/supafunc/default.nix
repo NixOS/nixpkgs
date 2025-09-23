@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  httpx,
-  poetry-core,
-  strenum,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, httpx
+, poetry-core
+, strenum
+,
 }:
 
 buildPythonPackage rec {

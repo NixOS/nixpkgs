@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  diff-cover,
-  graphviz,
-  hatchling,
-  hatch-vcs,
-  packaging,
-  pytest-mock,
-  pytestCheckHook,
-  pip,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, diff-cover
+, graphviz
+, hatchling
+, hatch-vcs
+, packaging
+, pytest-mock
+, pytestCheckHook
+, pip
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

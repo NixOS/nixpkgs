@@ -1,19 +1,19 @@
-{
-  stdenv,
-  cmake,
-  ninja,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
-  libGLU,
-  ffmpeg,
-  ncurses,
+{ stdenv
+, cmake
+, ninja
+, lib
+, fetchFromGitHub
+, pkg-config
+, libX11
+, libXrandr
+, libXinerama
+, libXcursor
+, libXi
+, libXext
+, libGLU
+, ffmpeg
+, ncurses
+,
 }:
 stdenv.mkDerivation rec {
   pname = "glslviewer";

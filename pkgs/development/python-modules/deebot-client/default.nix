@@ -1,21 +1,21 @@
-{
-  lib,
-  aiohttp,
-  aiomqtt,
-  buildPythonPackage,
-  cachetools,
-  defusedxml,
-  docker,
-  fetchFromGitHub,
-  pkg-config,
-  pycountry,
-  pytest-asyncio,
-  pytest-codspeed,
-  pytestCheckHook,
-  pythonOlder,
-  rustPlatform,
-  testfixtures,
-  xz,
+{ lib
+, aiohttp
+, aiomqtt
+, buildPythonPackage
+, cachetools
+, defusedxml
+, docker
+, fetchFromGitHub
+, pkg-config
+, pycountry
+, pytest-asyncio
+, pytest-codspeed
+, pytestCheckHook
+, pythonOlder
+, rustPlatform
+, testfixtures
+, xz
+,
 }:
 
 buildPythonPackage rec {

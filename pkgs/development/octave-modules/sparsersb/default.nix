@@ -1,8 +1,8 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchurl,
-  librsb,
+{ buildOctavePackage
+, lib
+, fetchurl
+, librsb
+,
 }:
 
 buildOctavePackage rec {

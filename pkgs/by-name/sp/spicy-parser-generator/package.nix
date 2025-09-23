@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeWrapper,
-  python3,
-  bison,
-  flex,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, python3
+, bison
+, flex
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

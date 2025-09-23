@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libGL,
-  SDL,
-  which,
-  installTool ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libGL
+, SDL
+, which
+, installTool ? false
+,
 }:
 
 stdenv.mkDerivation rec {

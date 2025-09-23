@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  botan2,
-  sqlite,
+{ lib
+, stdenv
+, fetchurl
+, botan2
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

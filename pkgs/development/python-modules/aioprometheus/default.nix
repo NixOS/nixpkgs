@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  orjson,
-  quantile-python,
-  aiohttp,
-  aiohttp-basicauth,
-  starlette,
-  quart,
-  pytestCheckHook,
-  httpx,
-  fastapi,
-  uvicorn,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, orjson
+, quantile-python
+, aiohttp
+, aiohttp-basicauth
+, starlette
+, quart
+, pytestCheckHook
+, httpx
+, fastapi
+, uvicorn
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

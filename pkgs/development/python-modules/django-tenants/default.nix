@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  django,
-  psycopg,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, django
+, psycopg
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  llvmPackages_18,
-  libffi,
-  libxml2,
-  withLLVM ? true,
-  withSinglepass ? true,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, llvmPackages_18
+, libffi
+, libxml2
+, withLLVM ? true
+, withSinglepass ? true
+,
 }:
 
 rustPlatform.buildRustPackage rec {

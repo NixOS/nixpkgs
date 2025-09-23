@@ -1,26 +1,26 @@
-{
-  stdenv,
-  stdenvNoCC,
-  lib,
-  makeWrapper,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  autoPatchelfHook,
-  jdk23,
-  gtk3,
-  gsettings-desktop-schemas,
-  writeScript,
-  bash,
-  gnugrep,
-  tor,
-  zlib,
-  imagemagick,
-  gzip,
-  gnupg,
-  libusb1,
-  pcsclite,
-  udevCheckHook,
+{ stdenv
+, stdenvNoCC
+, lib
+, makeWrapper
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, autoPatchelfHook
+, jdk23
+, gtk3
+, gsettings-desktop-schemas
+, writeScript
+, bash
+, gnugrep
+, tor
+, zlib
+, imagemagick
+, gzip
+, gnupg
+, libusb1
+, pcsclite
+, udevCheckHook
+,
 }:
 
 let
@@ -33,8 +33,7 @@ let
     {
       x86_64-linux = "x86_64";
       aarch64-linux = "aarch64";
-    }
-    ."${stdenvNoCC.hostPlatform.system}";
+    }."${stdenvNoCC.hostPlatform.system}";
 
   # nixpkgs-update: no auto update
   src = fetchurl {
@@ -43,8 +42,7 @@ let
       {
         x86_64-linux = "sha256-MsERgfJGpxRkQm4Ww30Tc95kThjlgI+nO4bq2zNGdeU=";
         aarch64-linux = "sha256-31x4Ck/+Fa6CvBb6o9ncVH99Zeh0DUVv/hqVN31ysHk=";
-      }
-      ."${stdenvNoCC.hostPlatform.system}";
+      }."${stdenvNoCC.hostPlatform.system}";
 
     # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
     # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.

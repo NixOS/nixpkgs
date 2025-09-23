@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  google-api-core,
-  google-cloud-access-context-manager,
-  google-cloud-org-policy,
-  google-cloud-os-config,
-  google-cloud-testutils,
-  grpc-google-iam-v1,
-  libcst,
-  mock,
-  proto-plus,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, google-api-core
+, google-cloud-access-context-manager
+, google-cloud-org-policy
+, google-cloud-os-config
+, google-cloud-testutils
+, grpc-google-iam-v1
+, libcst
+, mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

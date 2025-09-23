@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  pytest,
-  jinja2,
-  matplotlib,
-  packaging,
-  pillow,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, pytest
+, jinja2
+, matplotlib
+, packaging
+, pillow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

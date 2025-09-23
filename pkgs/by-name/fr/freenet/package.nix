@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  jdk_headless,
-  jre,
-  gradle_8,
-  bash,
-  coreutils,
-  replaceVars,
-  nixosTests,
-  writeText,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, jdk_headless
+, jre
+, gradle_8
+, bash
+, coreutils
+, replaceVars
+, nixosTests
+, writeText
+,
 }:
 
 let

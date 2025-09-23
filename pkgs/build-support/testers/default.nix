@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPackages,
-  callPackage,
-  pkgs,
-  pkgsLinux,
-
-  diffoscopeMinimal,
-  runCommand,
-  runCommandWith,
-  stdenv,
-  stdenvNoCC,
-  replaceVars,
-  testers,
+{ lib
+, buildPackages
+, callPackage
+, pkgs
+, pkgsLinux
+, diffoscopeMinimal
+, runCommand
+, runCommandWith
+, stdenv
+, stdenvNoCC
+, replaceVars
+, testers
+,
 }:
 # Documentation is in doc/build-helpers/testers.chapter.md
 {
@@ -52,11 +51,11 @@
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
   # or doc/build-helpers/testers.chapter.md
   testEqualContents =
-    {
-      assertion,
-      actual,
-      expected,
-      postFailureMessage ? null,
+    { assertion
+    , actual
+    , expected
+    , postFailureMessage ? null
+    ,
     }:
     runCommand "equal-contents-${lib.strings.toLower assertion}"
       {
@@ -97,10 +96,10 @@
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
   # or doc/build-helpers/testers.chapter.md
   testVersion =
-    {
-      package,
-      command ? "${package.meta.mainProgram or package.pname or package.name} --version",
-      version ? package.version,
+    { package
+    , command ? "${package.meta.mainProgram or package.pname or package.name} --version"
+    , version ? package.version
+    ,
     }:
     runCommand "${package.name}-test-version"
       {
@@ -147,28 +146,29 @@
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-runCommand
   runCommand = testers.invalidateFetcherByDrvHash (
-    {
-      hash ? pkgs.emptyFile.outputHash,
-      name,
-      script,
-      stdenv ? stdenvNoCC,
-      ...
+    { hash ? pkgs.emptyFile.outputHash
+    , name
+    , script
+    , stdenv ? stdenvNoCC
+    , ...
     }@args:
 
-    runCommandWith {
-      inherit name stdenv;
+    runCommandWith
+      {
+        inherit name stdenv;
 
-      derivationArgs = {
-        outputHash = hash;
-        outputHashMode = "recursive";
+        derivationArgs = {
+          outputHash = hash;
+          outputHashMode = "recursive";
+        }
+        // lib.removeAttrs args [
+          "hash"
+          "name"
+          "script"
+          "stdenv"
+        ];
       }
-      // lib.removeAttrs args [
-        "hash"
-        "name"
-        "script"
-        "stdenv"
-      ];
-    } script
+      script
   );
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest

@@ -1,35 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  cudaSupport ? opencv.cudaSupport or false,
-
-  # build
-  scons,
-  addDriverRunpath,
-  autoPatchelfHook,
-  cmake,
-  git,
-  libarchive,
-  patchelf,
-  pkg-config,
-  python3Packages,
-  shellcheck,
-
-  # runtime
-  flatbuffers,
-  gflags,
-  level-zero,
-  libusb1,
-  libxml2,
-  ocl-icd,
-  opencv,
-  protobuf,
-  pugixml,
-  snappy,
-  tbb_2022,
-  cudaPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, cudaSupport ? opencv.cudaSupport or false
+, # build
+  scons
+, addDriverRunpath
+, autoPatchelfHook
+, cmake
+, git
+, libarchive
+, patchelf
+, pkg-config
+, python3Packages
+, shellcheck
+, # runtime
+  flatbuffers
+, gflags
+, level-zero
+, libusb1
+, libxml2
+, ocl-icd
+, opencv
+, protobuf
+, pugixml
+, snappy
+, tbb_2022
+, cudaPackages
+,
 }:
 
 let

@@ -1,25 +1,25 @@
-{
-  SDL2,
-  fetchFromGitHub,
-  flac,
-  glslang,
-  gzip,
-  lib,
-  libmpg123,
-  libopus,
-  libvorbis,
-  libX11,
-  makeWrapper,
-  meson,
-  moltenvk,
-  ninja,
-  opusfile,
-  pkg-config,
-  stdenv,
-  vulkan-headers,
-  vulkan-loader,
-  copyDesktopItems,
-  makeDesktopItem,
+{ SDL2
+, fetchFromGitHub
+, flac
+, glslang
+, gzip
+, lib
+, libmpg123
+, libopus
+, libvorbis
+, libX11
+, makeWrapper
+, meson
+, moltenvk
+, ninja
+, opusfile
+, pkg-config
+, stdenv
+, vulkan-headers
+, vulkan-loader
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";

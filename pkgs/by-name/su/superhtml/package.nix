@@ -1,9 +1,9 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  stdenv,
-  zig_0_13,
+{ lib
+, callPackage
+, fetchFromGitHub
+, stdenv
+, zig_0_13
+,
 }:
 stdenv.mkDerivation rec {
   pname = "superhtml";

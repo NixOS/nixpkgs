@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  fetchurl,
-  writeScriptBin,
-  appimageTools,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, stdenvNoCC
+, fetchurl
+, writeScriptBin
+, appimageTools
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+, wrapGAppsHook3
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

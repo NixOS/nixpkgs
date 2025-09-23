@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  appstream-glib,
-  blueprint-compiler,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gettext,
-  glib,
-  gst_all_1,
-  gtk4,
-  libadwaita,
-  libhandy,
-  libpulseaudio,
-  meson,
-  ninja,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, alsa-lib
+, appstream-glib
+, blueprint-compiler
+, cargo
+, desktop-file-utils
+, fetchFromGitHub
+, gettext
+, glib
+, gst_all_1
+, gtk4
+, libadwaita
+, libhandy
+, libpulseaudio
+, meson
+, ninja
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

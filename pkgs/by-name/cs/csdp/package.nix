@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  blas,
-  gfortran,
-  lapack,
+{ lib
+, stdenv
+, fetchurl
+, blas
+, gfortran
+, lapack
+,
 }:
 
 stdenv.mkDerivation rec {

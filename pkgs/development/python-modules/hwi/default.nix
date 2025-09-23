@@ -1,17 +1,17 @@
-{
-  lib,
-  bitbox02,
-  buildPythonPackage,
-  cbor,
-  ecdsa,
-  fetchFromGitHub,
-  hidapi,
-  libusb1,
-  mnemonic,
-  pyaes,
-  pyserial,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, bitbox02
+, buildPythonPackage
+, cbor
+, ecdsa
+, fetchFromGitHub
+, hidapi
+, libusb1
+, mnemonic
+, pyaes
+, pyserial
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

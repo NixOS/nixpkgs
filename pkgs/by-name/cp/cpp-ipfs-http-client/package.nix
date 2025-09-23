@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  cmake,
-  nlohmann_json,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, cmake
+, nlohmann_json
+,
 }:
 
 stdenv.mkDerivation {

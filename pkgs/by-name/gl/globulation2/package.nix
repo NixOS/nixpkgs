@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGLU,
-  libGL,
-  SDL,
-  scons,
-  SDL_ttf,
-  SDL_image,
-  zlib,
-  SDL_net,
-  speex,
-  libvorbis,
-  libogg,
-  boost,
-  fribidi,
-  bsdiff,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, libGLU
+, libGL
+, SDL
+, scons
+, SDL_ttf
+, SDL_image
+, zlib
+, SDL_net
+, speex
+, libvorbis
+, libogg
+, boost
+, fribidi
+, bsdiff
+, fetchpatch
+,
 }:
 let
   version = "0.9.4";

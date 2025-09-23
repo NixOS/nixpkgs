@@ -1,16 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openmpi,
-
-  # passthru
-  conduit,
-  python3Packages,
-  nix-update-script,
-
-  mpiSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openmpi
+, # passthru
+  conduit
+, python3Packages
+, nix-update-script
+, mpiSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

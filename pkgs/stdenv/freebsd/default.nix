@@ -1,22 +1,21 @@
 # afaik the longest dependency chain is stdenv -> stdenv-1#coreutils -> stdenv-1#gmp -> stdenv-0#libcxx -> stdenv-0#libc
 # this is only possible through aggressive hacking to make libcxx build with stdenv-0#libc instead of bootstrapTools.libc.
-{
-  lib,
-  localSystem,
-  crossSystem,
-  config,
-  overlays,
-  crossOverlays ? [ ],
-  bootstrapFiles ?
-    let
-      table = {
-        x86_64-freebsd = import ./bootstrap-files/x86_64-unknown-freebsd.nix;
-      };
-      files =
-        table.${localSystem.system}
-          or (throw "unsupported platform ${localSystem.system} for the pure FreeBSD stdenv");
-    in
-    files,
+{ lib
+, localSystem
+, crossSystem
+, config
+, overlays
+, crossOverlays ? [ ]
+, bootstrapFiles ? let
+    table = {
+      x86_64-freebsd = import ./bootstrap-files/x86_64-unknown-freebsd.nix;
+    };
+    files =
+      table.${localSystem.system}
+        or (throw "unsupported platform ${localSystem.system} for the pure FreeBSD stdenv");
+  in
+  files
+,
 }:
 
 assert crossSystem == localSystem;
@@ -357,12 +356,11 @@ let
   };
 
   mkStdenv =
-    {
-      name ? "freebsd",
-      overrides ?
-        prevStage: super: self:
-        { },
-      hascxx ? true,
+    { name ? "freebsd"
+    , overrides ? prevStage: super: self:
+        { }
+    , hascxx ? true
+    ,
     }:
     prevStage:
     let
@@ -471,89 +469,91 @@ let
 in
 [
   (
-    { }:
-    mkStdenv {
-      name = "freebsd-boot-0";
-      hascxx = false;
-      overrides = prevStage: self: super: {
-        # this one's goal is to build foundational libs like libc and libcxx. we want to override literally every possible bin package we can with bootstrap tools
-        # we CAN'T import LLVM because the compiler built here is used to build the final compiler and the final compiler must not be built by the bootstrap compiler
-        inherit (bootstrapTools)
-          patchelf
-          bashNonInteractive
-          curl
-          coreutils
-          diffutils
-          findutils
-          iconv
-          libiconv
-          patch
-          gnutar
-          gawk
-          gnumake
-          gnugrep
-          gnused
-          gzip
-          bzip2
-          xz
-          ;
-        binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
-        fetchurl = import ../../build-support/fetchurl {
-          inherit lib;
-          inherit (self) stdenvNoCC;
-          inherit (prevStage) curl;
-          inherit (config) rewriteURL;
-        };
-        gettext = super.gettext.overrideAttrs {
-          NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?
-        };
-        curlReal = super.curl;
-        tzdata = super.tzdata.overrideAttrs { NIX_CFLAGS_COMPILE = "-DHAVE_GETTEXT=0"; };
+    {}:
+    mkStdenv
+      {
+        name = "freebsd-boot-0";
+        hascxx = false;
+        overrides = prevStage: self: super: {
+          # this one's goal is to build foundational libs like libc and libcxx. we want to override literally every possible bin package we can with bootstrap tools
+          # we CAN'T import LLVM because the compiler built here is used to build the final compiler and the final compiler must not be built by the bootstrap compiler
+          inherit (bootstrapTools)
+            patchelf
+            bashNonInteractive
+            curl
+            coreutils
+            diffutils
+            findutils
+            iconv
+            libiconv
+            patch
+            gnutar
+            gawk
+            gnumake
+            gnugrep
+            gnused
+            gzip
+            bzip2
+            xz
+            ;
+          binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
+          fetchurl = import ../../build-support/fetchurl {
+            inherit lib;
+            inherit (self) stdenvNoCC;
+            inherit (prevStage) curl;
+            inherit (config) rewriteURL;
+          };
+          gettext = super.gettext.overrideAttrs {
+            NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?
+          };
+          curlReal = super.curl;
+          tzdata = super.tzdata.overrideAttrs { NIX_CFLAGS_COMPILE = "-DHAVE_GETTEXT=0"; };
 
-        # make it so libcxx/libunwind are built in this stdenv and not the next
-        freebsd = super.freebsd.overrideScope (
-          self': super': {
-            inherit (prevStage.freebsd) locales;
-            stdenvNoLibcxx = self.overrideCC (self.stdenv // { name = "stdenv-freebsd-boot-0.4"; }) (
-              self.stdenv.cc.override {
-                name = "freebsd-boot-0.4-cc";
-                libc = self.freebsd.libc;
-                bintools = self.stdenv.cc.bintools.override {
-                  name = "freebsd-boot-0.4-bintools";
-                  libc = self.freebsd.libc;
-                };
-              }
-            );
-          }
-        );
-        llvmPackages = super.llvmPackages // {
-          libcxx =
-            (super.llvmPackages.libcxx.override {
-              stdenv = self.overrideCC (self.stdenv // { name = "stdenv-freebsd-boot-0.5"; }) (
+          # make it so libcxx/libunwind are built in this stdenv and not the next
+          freebsd = super.freebsd.overrideScope (
+            self': super': {
+              inherit (prevStage.freebsd) locales;
+              stdenvNoLibcxx = self.overrideCC (self.stdenv // { name = "stdenv-freebsd-boot-0.4"; }) (
                 self.stdenv.cc.override {
-                  name = "freebsd-boot-0.5-cc";
+                  name = "freebsd-boot-0.4-cc";
                   libc = self.freebsd.libc;
                   bintools = self.stdenv.cc.bintools.override {
-                    name = "freebsd-boot-0.5-bintools";
+                    name = "freebsd-boot-0.4-bintools";
                     libc = self.freebsd.libc;
                   };
-                  extraPackages = [
-                    self.llvmPackages.compiler-rt
-                  ];
-                  extraBuildCommands = mkExtraBuildCommands self.llvmPackages.clang-unwrapped self.llvmPackages.compiler-rt;
                 }
               );
-            }).overrideAttrs
-              (
-                self': super': {
-                  NIX_CFLAGS_COMPILE = "-nostdlib++";
-                  NIX_LDFLAGS = "--allow-shlib-undefined";
-                  cmakeFlags = builtins.filter (x: x != "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib") super'.cmakeFlags;
-                }
-              );
+            }
+          );
+          llvmPackages = super.llvmPackages // {
+            libcxx =
+              (super.llvmPackages.libcxx.override {
+                stdenv = self.overrideCC (self.stdenv // { name = "stdenv-freebsd-boot-0.5"; }) (
+                  self.stdenv.cc.override {
+                    name = "freebsd-boot-0.5-cc";
+                    libc = self.freebsd.libc;
+                    bintools = self.stdenv.cc.bintools.override {
+                      name = "freebsd-boot-0.5-bintools";
+                      libc = self.freebsd.libc;
+                    };
+                    extraPackages = [
+                      self.llvmPackages.compiler-rt
+                    ];
+                    extraBuildCommands = mkExtraBuildCommands self.llvmPackages.clang-unwrapped self.llvmPackages.compiler-rt;
+                  }
+                );
+              }).overrideAttrs
+                (
+                  self': super': {
+                    NIX_CFLAGS_COMPILE = "-nostdlib++";
+                    NIX_LDFLAGS = "--allow-shlib-undefined";
+                    cmakeFlags = builtins.filter (x: x != "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib") super'.cmakeFlags;
+                  }
+                );
+          };
         };
-      };
-    } bootstrapTools
+      }
+      bootstrapTools
   )
   (mkStdenv {
     name = "freebsd-boot-1";

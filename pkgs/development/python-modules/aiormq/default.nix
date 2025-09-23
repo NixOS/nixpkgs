@@ -1,13 +1,13 @@
-{
-  lib,
-  aiomisc-pytest,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  pamqp,
-  yarl,
-  poetry-core,
+{ lib
+, aiomisc-pytest
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, pamqp
+, yarl
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

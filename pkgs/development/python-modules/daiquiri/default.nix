@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  python-json-logger,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, python-json-logger
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mrustc,
-  mrustc-minicargo,
-  #llvm_12,
-  libffi,
-  cmake,
-  perl,
-  python3,
-  zlib,
-  libxml2,
-  pkg-config,
-  curl,
-  which,
-  time,
+{ lib
+, stdenv
+, fetchurl
+, mrustc
+, mrustc-minicargo
+, #llvm_12,
+  libffi
+, cmake
+, perl
+, python3
+, zlib
+, libxml2
+, pkg-config
+, curl
+, which
+, time
+,
 }:
 
 let

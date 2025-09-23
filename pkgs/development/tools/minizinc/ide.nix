@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qtbase,
-  qmake,
-  qtwebsockets,
-  minizinc,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  imagemagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qtbase
+, qmake
+, qtwebsockets
+, minizinc
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, imagemagick
+,
 }:
 
 let

@@ -7,12 +7,11 @@
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 let
@@ -307,22 +306,23 @@ in
               desktopNames = if dm ? desktopNames then lib.concatStringsSep ";" dm.desktopNames else sessionName;
             in
             lib.optional (dm.name != "none" || wm.name != "none") (
-              pkgs.writeTextFile {
-                name = "${sessionName}-xsession";
-                destination = "/share/xsessions/${sessionName}.desktop";
-                # Desktop Entry Specification:
-                # - https://standards.freedesktop.org/desktop-entry-spec/latest/
-                # - https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
-                text = ''
-                  [Desktop Entry]
-                  Version=1.0
-                  Type=XSession
-                  TryExec=${script}
-                  Exec=${script}
-                  Name=${prettyName}
-                  DesktopNames=${desktopNames}
-                '';
-              }
+              pkgs.writeTextFile
+                {
+                  name = "${sessionName}-xsession";
+                  destination = "/share/xsessions/${sessionName}.desktop";
+                  # Desktop Entry Specification:
+                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/
+                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+                  text = ''
+                    [Desktop Entry]
+                    Version=1.0
+                    Type=XSession
+                    TryExec=${script}
+                    Exec=${script}
+                    Name=${prettyName}
+                    DesktopNames=${desktopNames}
+                  '';
+                }
               // {
                 providedSessions = [ sessionName ];
               }

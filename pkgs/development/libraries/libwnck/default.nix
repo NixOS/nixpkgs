@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_412,
-  libX11,
-  glib,
-  gtk3,
-  pango,
-  cairo,
-  libXres,
-  libXi,
-  libstartup_notification,
-  gettext,
-  gobject-introspection,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, libX11
+, glib
+, gtk3
+, pango
+, cairo
+, libXres
+, libXi
+, libstartup_notification
+, gettext
+, gobject-introspection
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

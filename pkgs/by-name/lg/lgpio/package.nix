@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  swig,
-  # If we build the python packages, these two are not null
-  buildPythonPackage ? null,
-  lgpioWithoutPython ? null,
-  # When building a python Packages, this specifies the python subproject - a
+{ lib
+, stdenv
+, fetchFromGitHub
+, swig
+, # If we build the python packages, these two are not null
+  buildPythonPackage ? null
+, lgpioWithoutPython ? null
+, # When building a python Packages, this specifies the python subproject - a
   # folder in the repository. The current options are:
   #
   # - <empty>
@@ -14,7 +13,8 @@
   # - PY_RGPIO
   #
   # Where an empty value means 'build the non python project'.
-  pyProject ? "",
+  pyProject ? ""
+,
 }:
 
 let

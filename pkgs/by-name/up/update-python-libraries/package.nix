@@ -1,24 +1,24 @@
-{
-  lib,
-  python3,
-  runCommand,
-  git,
-  nix,
-  nix-prefetch-git,
+{ lib
+, python3
+, runCommand
+, git
+, nix
+, nix-prefetch-git
+,
 }:
 
 runCommand "update-python-libraries"
-  {
-    buildInputs = [
-      (python3.withPackages (
-        ps: with ps; [
-          packaging
-          requests
-          toolz
-        ]
-      ))
-    ];
-  }
+{
+  buildInputs = [
+    (python3.withPackages (
+      ps: with ps; [
+        packaging
+        requests
+        toolz
+      ]
+    ))
+  ];
+}
   ''
     cp ${./update-python-libraries.py} $out
     patchShebangs $out

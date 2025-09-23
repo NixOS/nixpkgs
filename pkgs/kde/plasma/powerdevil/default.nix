@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  ddcutil,
-  qtwayland,
+{ mkKdeDerivation
+, pkg-config
+, ddcutil
+, qtwayland
+,
 }:
 mkKdeDerivation {
   pname = "powerdevil";

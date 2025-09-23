@@ -1,13 +1,11 @@
-{
-  buildNpmPackage,
-
-  libsecret,
-  python3,
-  pkg-config,
-
-  pname,
-  src,
-  version,
+{ buildNpmPackage
+, libsecret
+, python3
+, pkg-config
+, pname
+, src
+, version
+,
 }:
 buildNpmPackage {
   pname = "${pname}-node-deps";

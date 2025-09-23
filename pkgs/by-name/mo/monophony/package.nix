@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3Packages,
-  wrapGAppsHook4,
-  gst_all_1,
-  gobject-introspection,
-  yt-dlp,
-  libadwaita,
-  glib-networking,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, python3Packages
+, wrapGAppsHook4
+, gst_all_1
+, gobject-introspection
+, yt-dlp
+, libadwaita
+, glib-networking
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";

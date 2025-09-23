@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  oniguruma,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, oniguruma
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

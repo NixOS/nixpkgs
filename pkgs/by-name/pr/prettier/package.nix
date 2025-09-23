@@ -5,22 +5,22 @@
 
   ```nix
   pkgs.prettier.override {
-    plugins = with pkgs.nodePackages; [
+  plugins = with pkgs.nodePackages; [
       prettier-plugin-toml
       # ...
-    ];
+  ];
   }
   ```
 */
-{
-  fetchFromGitHub,
-  lib,
-  makeBinaryWrapper,
-  nodejs,
-  stdenv,
-  versionCheckHook,
-  yarn-berry,
-  plugins ? [ ],
+{ fetchFromGitHub
+, lib
+, makeBinaryWrapper
+, nodejs
+, stdenv
+, versionCheckHook
+, yarn-berry
+, plugins ? [ ]
+,
 }:
 let
   /**
@@ -76,9 +76,11 @@ let
           lib.attrByPath addressNext (recAttrByPath addressesRemaning default attrs) attrs;
     in
     packageJsonAttrs:
-    recAttrByPath nodeExportAttrAddresses (builtins.head (
-      lib.attrByPath [ "prettier" "plugins" ] [ "null" ] packageJsonAttrs
-    )) packageJsonAttrs;
+    recAttrByPath nodeExportAttrAddresses
+      (builtins.head (
+        lib.attrByPath [ "prettier" "plugins" ] [ "null" ] packageJsonAttrs
+      ))
+      packageJsonAttrs;
 
   /**
     # Example
@@ -121,7 +123,8 @@ let
         ${plugin.packageName}: error context, tried finding entry point under;
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
-      '' throw ''${plugin.packageName}: does not provide parse-able entry point'';
+      ''
+        throw ''${plugin.packageName}: does not provide parse-able entry point'';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";

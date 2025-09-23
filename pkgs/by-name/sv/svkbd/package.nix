@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  writeText,
-  pkg-config,
-  libX11,
-  libXft,
-  libXi,
-  libXinerama,
-  libXtst,
-  layout ? "mobile-intl",
-  conf ? null,
-  patches ? [ ],
+{ lib
+, stdenv
+, fetchurl
+, writeText
+, pkg-config
+, libX11
+, libXft
+, libXi
+, libXinerama
+, libXtst
+, layout ? "mobile-intl"
+, conf ? null
+, patches ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

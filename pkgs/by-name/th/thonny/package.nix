@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  makeDesktopItem,
-  copyDesktopItems,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

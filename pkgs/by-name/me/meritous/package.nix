@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  SDL,
-  SDL_image,
-  SDL_mixer,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, SDL
+, SDL_image
+, SDL_mixer
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

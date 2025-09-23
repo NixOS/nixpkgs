@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  safestringlib,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, safestringlib
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

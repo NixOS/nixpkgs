@@ -1,8 +1,8 @@
-{
-  appimageTools,
-  lib,
-  fetchurl,
-  makeWrapper,
+{ appimageTools
+, lib
+, fetchurl
+, makeWrapper
+,
 }:
 
 appimageTools.wrapType2 rec {

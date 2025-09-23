@@ -1,12 +1,11 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 
 let
@@ -290,9 +289,9 @@ in
   imports =
     let
       mkToolModule =
-        {
-          name,
-          package ? pkgs.${name},
+        { name
+        , package ? pkgs.${name}
+        ,
         }:
         { config, ... }:
         {

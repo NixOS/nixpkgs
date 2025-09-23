@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  circuitbreaker,
-  cryptography,
-  fetchFromGitHub,
-  pyopenssl,
-  python-dateutil,
-  pytz,
-  setuptools,
+{ lib
+, buildPythonPackage
+, certifi
+, circuitbreaker
+, cryptography
+, fetchFromGitHub
+, pyopenssl
+, python-dateutil
+, pytz
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

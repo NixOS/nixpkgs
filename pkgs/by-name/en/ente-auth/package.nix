@@ -1,14 +1,14 @@
-{
-  lib,
-  flutter324,
-  fetchFromGitHub,
-  webkitgtk_4_1,
-  sqlite,
-  libayatana-appindicator,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  jdk17_headless,
+{ lib
+, flutter324
+, fetchFromGitHub
+, webkitgtk_4_1
+, sqlite
+, libayatana-appindicator
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, jdk17_headless
+,
 }:
 let
   # fetch simple-icons directly to avoid cloning with submodules,

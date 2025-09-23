@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  reason,
-  cppo,
-  utop,
-  makeWrapper,
+{ buildDunePackage
+, reason
+, cppo
+, utop
+, makeWrapper
+,
 }:
 
 buildDunePackage {

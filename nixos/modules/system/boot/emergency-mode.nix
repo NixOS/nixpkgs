@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  options,
-  ...
+{ config
+, lib
+, options
+, ...
 }:
 {
 

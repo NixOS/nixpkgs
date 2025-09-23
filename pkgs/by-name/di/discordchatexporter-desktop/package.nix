@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  testers,
-  discordchatexporter-desktop,
+{ lib
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, testers
+, discordchatexporter-desktop
+,
 }:
 
 buildDotnetModule rec {

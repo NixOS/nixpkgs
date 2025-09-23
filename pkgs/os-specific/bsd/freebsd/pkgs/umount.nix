@@ -1,6 +1,6 @@
-{
-  lib,
-  mkDerivation,
+{ lib
+, mkDerivation
+,
 }:
 mkDerivation {
   path = "sbin/umount";

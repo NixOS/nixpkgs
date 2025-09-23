@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  rpclib,
-  lwt,
-  alcotest-lwt,
-  ppx_deriving_rpc,
-  yojson,
+{ buildDunePackage
+, rpclib
+, lwt
+, alcotest-lwt
+, ppx_deriving_rpc
+, yojson
+,
 }:
 
 buildDunePackage {

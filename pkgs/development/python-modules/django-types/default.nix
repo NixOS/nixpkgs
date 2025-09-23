@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  types-psycopg2,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, types-psycopg2
+,
 }:
 
 buildPythonPackage rec {

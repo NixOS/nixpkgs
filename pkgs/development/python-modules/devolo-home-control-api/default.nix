@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-freezer,
-  pytest-mock,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  requests-mock,
-  setuptools-scm,
-  setuptools,
-  syrupy,
-  websocket-client,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-freezer
+, pytest-mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, requests-mock
+, setuptools-scm
+, setuptools
+, syrupy
+, websocket-client
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

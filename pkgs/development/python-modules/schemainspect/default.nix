@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
-  sqlalchemy,
-  sqlbag,
-  setuptools,
-  poetry-core,
-  pytestCheckHook,
-  pytest-xdist,
-  pytest-sugar,
-  postgresql,
-  postgresqlTestHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, sqlalchemy
+, sqlbag
+, setuptools
+, poetry-core
+, pytestCheckHook
+, pytest-xdist
+, pytest-sugar
+, postgresql
+, postgresqlTestHook
+,
 }:
 buildPythonPackage {
   pname = "schemainspect";

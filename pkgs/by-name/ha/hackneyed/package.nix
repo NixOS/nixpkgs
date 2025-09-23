@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitLab,
-  imagemagick,
-  inkscape,
-  jq,
-  xcursorgen,
+{ lib
+, stdenvNoCC
+, fetchFromGitLab
+, imagemagick
+, inkscape
+, jq
+, xcursorgen
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

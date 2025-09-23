@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  sphinx,
-  glib,
-  ncurses,
-  libmpdclient,
-  gettext,
-  boost,
-  fmt,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, sphinx
+, glib
+, ncurses
+, libmpdclient
+, gettext
+, boost
+, fmt
+, pcre2
+,
 }:
 
 stdenv.mkDerivation rec {

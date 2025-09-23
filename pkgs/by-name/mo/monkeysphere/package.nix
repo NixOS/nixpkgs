@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  perl,
-  libassuan,
-  libgcrypt,
-  perlPackages,
-  lockfileProgs,
-  gnupg,
-  coreutils,
-  # For the tests:
-  openssh,
-  which,
-  socat,
-  cpio,
-  hexdump,
-  procps,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, perl
+, libassuan
+, libgcrypt
+, perlPackages
+, lockfileProgs
+, gnupg
+, coreutils
+, # For the tests:
+  openssh
+, which
+, socat
+, cpio
+, hexdump
+, procps
+, openssl
+,
 }:
 
 let
@@ -103,9 +103,10 @@ stdenv.mkDerivation rec {
             CryptOpenSSLBignum
           ]
         )
-        + lib.optionalString (
-          builtins.length runtimeDeps > 0
-        ) " --prefix PATH : ${lib.makeBinPath runtimeDeps}";
+        + lib.optionalString
+          (
+            builtins.length runtimeDeps > 0
+          ) " --prefix PATH : ${lib.makeBinPath runtimeDeps}";
       wrapMonkeysphere =
         runtimeDeps: program: "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
       wrapPrograms = runtimeDeps: programs: lib.concatMapStrings (wrapMonkeysphere runtimeDeps) programs;

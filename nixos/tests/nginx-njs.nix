@@ -3,11 +3,10 @@
   name = "nginx-njs";
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.nginx = {

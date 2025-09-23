@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  curl,
-  openssl,
-  versionCheckHook,
-  writeShellApplication,
-  common-updater-scripts,
-  gitMinimal,
-  jq,
-  nix-update,
-  pup,
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, curl
+, openssl
+, versionCheckHook
+, writeShellApplication
+, common-updater-scripts
+, gitMinimal
+, jq
+, nix-update
+, pup
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

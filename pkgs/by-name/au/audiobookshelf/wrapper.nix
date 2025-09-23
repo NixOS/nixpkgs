@@ -1,8 +1,8 @@
-{
-  stdenv,
-  ffmpeg-full,
-  nunicode,
-  getopt,
+{ stdenv
+, ffmpeg-full
+, nunicode
+, getopt
+,
 }:
 ''
   #!${stdenv.shell}

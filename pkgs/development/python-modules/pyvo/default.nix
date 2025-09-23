@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  astropy,
-  pillow,
-  pythonOlder,
-  pytestCheckHook,
-  pytest-astropy,
-  requests,
-  requests-mock,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, astropy
+, pillow
+, pythonOlder
+, pytestCheckHook
+, pytest-astropy
+, requests
+, requests-mock
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

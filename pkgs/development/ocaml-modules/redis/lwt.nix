@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  redis,
-  lwt,
+{ buildDunePackage
+, redis
+, lwt
+,
 }:
 
 buildDunePackage {

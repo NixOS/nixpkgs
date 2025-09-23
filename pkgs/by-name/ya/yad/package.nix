@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  intltool,
-  autoreconfHook,
-  wrapGAppsHook3,
-  gtk3,
-  hicolor-icon-theme,
-  netpbm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, intltool
+, autoreconfHook
+, wrapGAppsHook3
+, gtk3
+, hicolor-icon-theme
+, netpbm
+,
 }:
 
 stdenv.mkDerivation rec {

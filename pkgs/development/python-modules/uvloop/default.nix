@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  fetchpatch,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # native dependencies
-  libuv,
-
-  # tests
-  psutil,
-  pyopenssl,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, fetchpatch
+, # build-system
+  cython
+, setuptools
+, # native dependencies
+  libuv
+, # tests
+  psutil
+, pyopenssl
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

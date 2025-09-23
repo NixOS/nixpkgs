@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
-  pyyaml,
-  more-itertools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, hatchling
+, pyyaml
+, more-itertools
+, pytestCheckHook
+,
 }:
 let
   version = "3.2.1";

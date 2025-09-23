@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  runCommand,
-  mmdbctl,
-  dbip-country-lite,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, runCommand
+, mmdbctl
+, dbip-country-lite
+,
 }:
 
 buildGoModule rec {

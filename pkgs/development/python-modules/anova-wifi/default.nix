@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  poetry-core,
-  aiohttp,
-  sensor-state-data,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, poetry-core
+, aiohttp
+, sensor-state-data
+, pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

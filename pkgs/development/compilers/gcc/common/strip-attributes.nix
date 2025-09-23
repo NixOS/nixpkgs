@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  langJit,
+{ lib
+, stdenv
+, langJit
+,
 }:
 
 {

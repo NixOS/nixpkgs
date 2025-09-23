@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  camelot,
-  defusedxml,
-  fetchFromGitHub,
-  fonttools,
-  lxml,
-  pikepdf,
-  pillow,
-  pytest-cov-stub,
-  pytestCheckHook,
-  qrcode,
-  setuptools,
-  uharfbuzz,
+{ lib
+, buildPythonPackage
+, camelot
+, defusedxml
+, fetchFromGitHub
+, fonttools
+, lxml
+, pikepdf
+, pillow
+, pytest-cov-stub
+, pytestCheckHook
+, qrcode
+, setuptools
+, uharfbuzz
+,
 }:
 
 buildPythonPackage rec {

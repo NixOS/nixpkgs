@@ -1,7 +1,7 @@
-{
-  lib,
-  pkgs,
-  stdenv,
+{ lib
+, pkgs
+, stdenv
+,
 }:
 
 let
@@ -39,10 +39,10 @@ let
   '';
 
   testBuilder =
-    {
-      name,
-      commands ? [ ],
-      derivationArgs ? { },
+    { name
+    , commands ? [ ]
+    , derivationArgs ? { }
+    ,
     }:
     stdenv.mkDerivation (
       {
@@ -292,9 +292,9 @@ in
       '';
 
 }
-# These tests will break on platforms that do use symlink permissions, because even though this hook will be okay, later ones will error out.
-# They should be safe to run on other platforms, just to make sure the hook isn't completely broken. It won't have anything to report, though.
-// lib.optionalAttrs (!hasSymlinkPermissions) {
+  # These tests will break on platforms that do use symlink permissions, because even though this hook will be okay, later ones will error out.
+  # They should be safe to run on other platforms, just to make sure the hook isn't completely broken. It won't have anything to report, though.
+  // lib.optionalAttrs (!hasSymlinkPermissions) {
   pass-unreadable-symlink-relative-allowed = testBuilder {
     name = "pass-unreadable-symlink-relative-allowed";
     commands = [ (mkUnreadableSymlink false) ];

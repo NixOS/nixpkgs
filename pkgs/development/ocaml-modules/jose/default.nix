@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  containers,
-  junit_alcotest,
-  astring,
-  base64,
-  x509,
-  yojson,
-  zarith,
+{ lib
+, buildDunePackage
+, fetchurl
+, containers
+, junit_alcotest
+, astring
+, base64
+, x509
+, yojson
+, zarith
+,
 }:
 
 buildDunePackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  typish,
-  tzdata,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, typish
+, tzdata
+,
 }:
 
 buildPythonPackage rec {

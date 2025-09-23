@@ -1,9 +1,9 @@
 { runCommandLocal, racket }:
 
 runCommandLocal "racket-test-draw-crossing"
-  {
-    nativeBuildInputs = [ racket ];
-  }
+{
+  nativeBuildInputs = [ racket ];
+}
   ''
     racket -f - <<EOF
     (require racket/draw)

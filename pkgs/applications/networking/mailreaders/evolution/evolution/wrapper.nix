@@ -1,9 +1,9 @@
-{
-  lib,
-  makeWrapper,
-  symlinkJoin,
-  evolution-data-server,
-  plugins,
+{ lib
+, makeWrapper
+, symlinkJoin
+, evolution-data-server
+, plugins
+,
 }:
 
 symlinkJoin {

@@ -1,31 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  httpx,
-  langchain-core,
-  syrupy,
-  pytest-benchmark,
-  pytest-codspeed,
-  pytest-recording,
-  vcrpy,
-
-  # buildInputs
-  pytest,
-
-  # tests
-  numpy,
-  pytest-asyncio_0,
-  pytest-socket,
-  pytestCheckHook,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  httpx
+, langchain-core
+, syrupy
+, pytest-benchmark
+, pytest-codspeed
+, pytest-recording
+, vcrpy
+, # buildInputs
+  pytest
+, # tests
+  numpy
+, pytest-asyncio_0
+, pytest-socket
+, pytestCheckHook
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

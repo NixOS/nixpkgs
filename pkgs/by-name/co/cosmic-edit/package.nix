@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  cosmic-icons,
-  just,
-  pkg-config,
-  libglvnd,
-  libxkbcommon,
-  libinput,
-  fontconfig,
-  freetype,
-  libgbm,
-  wayland,
-  xorg,
-  vulkan-loader,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, makeBinaryWrapper
+, cosmic-icons
+, just
+, pkg-config
+, libglvnd
+, libxkbcommon
+, libinput
+, fontconfig
+, freetype
+, libgbm
+, wayland
+, xorg
+, vulkan-loader
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

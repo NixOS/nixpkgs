@@ -1,85 +1,81 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  atpublic,
-  parsy,
-  python-dateutil,
-  sqlglot,
-  toolz,
-  typing-extensions,
-  tzdata,
-
-  # tests
-  pytestCheckHook,
-  black,
-  filelock,
-  hypothesis,
-  pytest-benchmark,
-  pytest-httpserver,
-  pytest-mock,
-  pytest-randomly,
-  pytest-snapshot,
-  pytest-timeout,
-  pytest-xdist,
-  writableTmpDirAsHomeHook,
-
-  # optional-dependencies
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  atpublic
+, parsy
+, python-dateutil
+, sqlglot
+, toolz
+, typing-extensions
+, tzdata
+, # tests
+  pytestCheckHook
+, black
+, filelock
+, hypothesis
+, pytest-benchmark
+, pytest-httpserver
+, pytest-mock
+, pytest-randomly
+, pytest-snapshot
+, pytest-timeout
+, pytest-xdist
+, writableTmpDirAsHomeHook
+, # optional-dependencies
   # - athena
-  pyathena,
-  fsspec,
-  # - bigquery
-  db-dtypes,
-  google-cloud-bigquery,
-  google-cloud-bigquery-storage,
-  pyarrow,
-  pyarrow-hotfix,
-  pydata-google-auth,
-  numpy,
-  pandas,
-  rich,
-  # - clickhouse
-  clickhouse-connect,
-  # - databricks
+  pyathena
+, fsspec
+, # - bigquery
+  db-dtypes
+, google-cloud-bigquery
+, google-cloud-bigquery-storage
+, pyarrow
+, pyarrow-hotfix
+, pydata-google-auth
+, numpy
+, pandas
+, rich
+, # - clickhouse
+  clickhouse-connect
+, # - databricks
   # databricks-sql-connector-core, (unpackaged)
   # - datafusion
-  datafusion,
-  # - druid
-  pydruid,
-  # - duckdb
-  duckdb,
-  packaging,
-  # - flink
+  datafusion
+, # - druid
+  pydruid
+, # - duckdb
+  duckdb
+, packaging
+, # - flink
   # - geospatial
-  geopandas,
-  shapely,
-  # - mssql
-  pyodbc,
-  # - mysql
-  pymysql,
-  # - oracle
-  oracledb,
-  # - polars
-  polars,
-  # - postgres
-  psycopg2,
-  # - pyspark
-  pyspark,
-  # - snowflake
-  snowflake-connector-python,
-  # sqlite
-  regex,
-  # - trino
-  trino-python-client,
-  # - visualization
-  graphviz,
-  # examples
-  pins,
+  geopandas
+, shapely
+, # - mssql
+  pyodbc
+, # - mysql
+  pymysql
+, # - oracle
+  oracledb
+, # - polars
+  polars
+, # - postgres
+  psycopg2
+, # - pyspark
+  pyspark
+, # - snowflake
+  snowflake-connector-python
+, # sqlite
+  regex
+, # - trino
+  trino-python-client
+, # - visualization
+  graphviz
+, # examples
+  pins
+,
 }:
 let
   testBackends = [

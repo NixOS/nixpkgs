@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  beautifulsoup4,
-  html5lib,
-  requests,
-  fusepy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, beautifulsoup4
+, html5lib
+, requests
+, fusepy
+,
 }:
 
 buildPythonPackage rec {

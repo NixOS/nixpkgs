@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  btrfs-progs,
-  autoreconfHook,
-  pkg-config,
-  e2fsprogs,
-  libuuid,
-  zlib,
+{ lib
+, buildPythonPackage
+, btrfs-progs
+, autoreconfHook
+, pkg-config
+, e2fsprogs
+, libuuid
+, zlib
+,
 }:
 buildPythonPackage {
   pname = "btrfsutil";

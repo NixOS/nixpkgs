@@ -1,14 +1,14 @@
-{
-  lib,
-  rust,
-  stdenv,
-  rustPlatform,
-  fetchCrate,
-  cargo-c,
-  nasm,
-  nix-update-script,
-  testers,
-  rav1e,
+{ lib
+, rust
+, stdenv
+, rustPlatform
+, fetchCrate
+, cargo-c
+, nasm
+, nix-update-script
+, testers
+, rav1e
+,
 }:
 
 rustPlatform.buildRustPackage rec {

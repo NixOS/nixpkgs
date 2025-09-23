@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

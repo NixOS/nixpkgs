@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  config,
+{ lib
+, buildDunePackage
+, fetchurl
+, config
+,
 }:
 
 buildDunePackage rec {

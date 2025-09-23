@@ -1,16 +1,16 @@
-{
-  cudaPackages,
-  feature,
-  libraries,
-  versionAttr,
+{ cudaPackages
+, feature
+, libraries
+, versionAttr
+,
 }:
 
 cudaPackages.writeGpuTestPython
-  {
-    inherit feature;
-    inherit libraries;
-    name = "${feature}Available";
-  }
+{
+  inherit feature;
+  inherit libraries;
+  name = "${feature}Available";
+}
   ''
     import torch
     message = f"{torch.cuda.is_available()=} and {torch.version.${versionAttr}=}"

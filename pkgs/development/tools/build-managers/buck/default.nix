@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jdk8,
-  ant,
-  python3,
-  watchman,
-  bash,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk8
+, ant
+, python3
+, watchman
+, bash
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

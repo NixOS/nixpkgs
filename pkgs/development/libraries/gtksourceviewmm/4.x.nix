@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtkmm3,
-  glibmm,
-  gtksourceview4,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtkmm3
+, glibmm
+, gtksourceview4
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

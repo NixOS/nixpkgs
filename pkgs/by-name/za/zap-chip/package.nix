@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  electron,
-  fetchFromGitHub,
-  writers,
-  makeWrapper,
-  withGui ? false,
+{ lib
+, stdenv
+, buildNpmPackage
+, electron
+, fetchFromGitHub
+, writers
+, makeWrapper
+, withGui ? false
+,
 }:
 
 buildNpmPackage rec {

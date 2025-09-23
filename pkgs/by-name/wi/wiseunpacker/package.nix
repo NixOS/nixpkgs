@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  lib,
+{ fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, lib
+,
 }:
 let
   version = "1.3.3";

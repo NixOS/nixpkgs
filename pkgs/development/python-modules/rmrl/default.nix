@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  pdfrw,
-  reportlab,
-  rmscene,
-  setuptools,
-  svglib,
-  xdg,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, pdfrw
+, reportlab
+, rmscene
+, setuptools
+, svglib
+, xdg
+,
 }:
 
 buildPythonPackage {

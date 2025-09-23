@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cachecontrol,
-  filelock,
-  mypy,
-  pillow,
-  poetry-core,
-  requests,
-  ruff,
-  types-requests,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cachecontrol
+, filelock
+, mypy
+, pillow
+, poetry-core
+, requests
+, ruff
+, types-requests
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

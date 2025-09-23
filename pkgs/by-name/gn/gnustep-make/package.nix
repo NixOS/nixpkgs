@@ -1,9 +1,9 @@
-{
-  lib,
-  clangStdenv,
-  fetchurl,
-  gnustep-libobjc,
-  which,
+{ lib
+, clangStdenv
+, fetchurl
+, gnustep-libobjc
+, which
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

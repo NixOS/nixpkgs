@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gnupg,
-  keyring,
-  pass,
-  poetry-core,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gnupg
+, keyring
+, pass
+, poetry-core
+, pythonOlder
+,
 }:
 buildPythonPackage rec {
   pname = "keyring-pass";

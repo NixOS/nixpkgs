@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  fetchFromGitHub,
-  replaceVars,
-  ffmpeg,
-  libopus,
-  aiohttp,
-  aiodns,
-  audioop-lts,
-  brotli,
-  orjson,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pynacl,
-  typing-extensions,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, fetchFromGitHub
+, replaceVars
+, ffmpeg
+, libopus
+, aiohttp
+, aiodns
+, audioop-lts
+, brotli
+, orjson
+, poetry-core
+, poetry-dynamic-versioning
+, pynacl
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

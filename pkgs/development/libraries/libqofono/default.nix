@@ -1,13 +1,13 @@
-{
-  lib,
-  replaceVars,
-  mkDerivation,
-  fetchFromGitHub,
-  gitUpdater,
-  mobile-broadband-provider-info,
-  qmake,
-  qtbase,
-  qtdeclarative,
+{ lib
+, replaceVars
+, mkDerivation
+, fetchFromGitHub
+, gitUpdater
+, mobile-broadband-provider-info
+, qmake
+, qtbase
+, qtdeclarative
+,
 }:
 
 mkDerivation rec {

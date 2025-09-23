@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  desktop-file-utils,
-  dpkg,
-  makeWrapper,
-  libnotify,
-  libX11,
-  libXScrnSaver,
-  libXext,
-  libXtst,
-  libuuid,
-  libsecret,
-  xdg-utils,
-  xdg-utils-cxx,
-  at-spi2-atk,
-  # additional dependencies autoPatchelfHook discovered
-  gtk3,
-  alsa-lib,
-  e2fsprogs,
-  nss,
-  libgpg-error,
-  libjack2,
-  libgbm,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, desktop-file-utils
+, dpkg
+, makeWrapper
+, libnotify
+, libX11
+, libXScrnSaver
+, libXext
+, libXtst
+, libuuid
+, libsecret
+, xdg-utils
+, xdg-utils-cxx
+, at-spi2-atk
+, # additional dependencies autoPatchelfHook discovered
+  gtk3
+, alsa-lib
+, e2fsprogs
+, nss
+, libgpg-error
+, libjack2
+, libgbm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

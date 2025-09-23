@@ -1,39 +1,38 @@
-{
-  lib,
-  config,
-  ags,
-  astal,
-  bluez,
-  bluez-tools,
-  brightnessctl,
-  btop,
-  dart-sass,
-  fetchFromGitHub,
-  glib,
-  glib-networking,
-  gnome-bluetooth,
-  gpu-screen-recorder,
-  gpustat,
-  grimblast,
-  gtksourceview3,
-  gvfs,
-  hyprpicker,
-  libgtop,
-  libnotify,
-  libsoup_3,
-  matugen,
-  networkmanager,
-  nix-update-script,
-  python3,
-  pywal,
-  stdenv,
-  swww,
-  upower,
-  wireplumber,
-  wl-clipboard,
-  writeShellScript,
-
-  enableCuda ? config.cudaSupport,
+{ lib
+, config
+, ags
+, astal
+, bluez
+, bluez-tools
+, brightnessctl
+, btop
+, dart-sass
+, fetchFromGitHub
+, glib
+, glib-networking
+, gnome-bluetooth
+, gpu-screen-recorder
+, gpustat
+, grimblast
+, gtksourceview3
+, gvfs
+, hyprpicker
+, libgtop
+, libnotify
+, libsoup_3
+, matugen
+, networkmanager
+, nix-update-script
+, python3
+, pywal
+, stdenv
+, swww
+, upower
+, wireplumber
+, wl-clipboard
+, writeShellScript
+, enableCuda ? config.cudaSupport
+,
 }:
 ags.bundle {
   pname = "hyprpanel";
@@ -86,12 +85,12 @@ ags.bundle {
     wl-clipboard
     (python3.withPackages (
       ps:
-      with ps;
-      [
-        dbus-python
-        pygobject3
-      ]
-      ++ lib.optional enableCuda gpustat
+        with ps;
+        [
+          dbus-python
+          pygobject3
+        ]
+        ++ lib.optional enableCuda gpustat
     ))
   ]
   ++ (lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [ gpu-screen-recorder ]);

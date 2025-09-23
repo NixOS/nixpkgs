@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  urllib3,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, urllib3
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

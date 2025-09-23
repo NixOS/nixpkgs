@@ -1,18 +1,18 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatch-vcs,
-  hatchling,
-  idna,
-  pyasn1,
-  pyasn1-modules,
-  pytestCheckHook,
-  pythonOlder,
-  pyopenssl,
+{ lib
+, attrs
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, idna
+, pyasn1
+, pyasn1-modules
+, pytestCheckHook
+, pythonOlder
+, pyopenssl
+,
 }:
 
 buildPythonPackage rec {

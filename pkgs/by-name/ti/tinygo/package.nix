@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  llvmPackages_20,
-  go,
-  xar,
-  binaryen,
-  avrdude,
-  gdb,
-  openocd,
-  runCommand,
-  tinygoTests ? [ "smoketest" ],
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, llvmPackages_20
+, go
+, xar
+, binaryen
+, avrdude
+, gdb
+, openocd
+, runCommand
+, tinygoTests ? [ "smoketest" ]
+,
 }:
 
 let

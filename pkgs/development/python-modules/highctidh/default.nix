@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  pytestCheckHook,
-  fetchFromGitea,
+{ lib
+, buildPythonPackage
+, setuptools
+, pytestCheckHook
+, fetchFromGitea
+,
 }:
 buildPythonPackage rec {
   pname = "highctidh";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  alsa-lib,
-  libxmp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, alsa-lib
+, libxmp
+,
 }:
 
 stdenv.mkDerivation rec {

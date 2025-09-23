@@ -1,16 +1,16 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  docker,
-  fetchFromGitHub,
-  lib,
-  msgpack,
-  orjson,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  requests,
-  websockets,
+{ aiohttp
+, buildPythonPackage
+, docker
+, fetchFromGitHub
+, lib
+, msgpack
+, orjson
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, requests
+, websockets
+,
 }:
 
 buildPythonPackage rec {

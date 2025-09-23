@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  net-snmp,
-  nix-update-script,
-  stdenv,
-  versionCheckHook,
+{ fetchurl
+, lib
+, net-snmp
+, nix-update-script
+, stdenv
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "check_interfaces";

@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  versionCheckHook,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, versionCheckHook
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "terraform-mcp-server";

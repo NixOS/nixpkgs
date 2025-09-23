@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libowfat,
-  libcap,
-  zlib,
-  openssl,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchurl
+, libowfat
+, libcap
+, zlib
+, openssl
+, libxcrypt
+,
 }:
 
 let

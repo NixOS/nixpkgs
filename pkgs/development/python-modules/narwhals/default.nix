@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  dask,
-  duckdb,
-  fetchFromGitHub,
-  hatchling,
-  hypothesis,
-  ibis-framework,
-  packaging,
-  pandas,
-  polars,
-  pyarrow-hotfix,
-  pyarrow,
-  pyspark,
-  pytest-env,
-  pytestCheckHook,
-  rich,
-  sqlframe,
+{ lib
+, buildPythonPackage
+, dask
+, duckdb
+, fetchFromGitHub
+, hatchling
+, hypothesis
+, ibis-framework
+, packaging
+, pandas
+, polars
+, pyarrow-hotfix
+, pyarrow
+, pyspark
+, pytest-env
+, pytestCheckHook
+, rich
+, sqlframe
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  cjdns,
-  nodejs,
-  makeWrapper,
-  lib,
+{ stdenv
+, cjdns
+, nodejs
+, makeWrapper
+, lib
+,
 }:
 
 stdenv.mkDerivation {

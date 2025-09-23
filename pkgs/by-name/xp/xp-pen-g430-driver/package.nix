@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoPatchelfHook,
-  libusb1,
-  libX11,
-  libXtst,
-  qt5,
-  libglvnd,
+{ lib
+, stdenv
+, fetchzip
+, autoPatchelfHook
+, libusb1
+, libX11
+, libXtst
+, qt5
+, libglvnd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

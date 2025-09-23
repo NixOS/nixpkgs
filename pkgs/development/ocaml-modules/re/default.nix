@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  ounit,
-  ounit2,
-  seq,
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, ounit
+, ounit2
+, seq
+,
 }:
 
 let

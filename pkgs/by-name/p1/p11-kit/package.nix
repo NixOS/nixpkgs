@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libtasn1,
-  libxslt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  gettext,
-  libffi,
-  libintl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libtasn1
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gettext
+, libffi
+, libintl
+,
 }:
 
 stdenv.mkDerivation rec {

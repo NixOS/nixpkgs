@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  installShellFiles,
-  pkg-config,
-  zstd,
-  stdenv,
-  darwin,
-  gitMinimal,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, installShellFiles
+, pkg-config
+, zstd
+, stdenv
+, darwin
+, gitMinimal
+,
 }:
 
 let

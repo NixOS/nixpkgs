@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+,
 }:
 let
   pname = "stemming";

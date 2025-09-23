@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  libX11,
-  libXi,
-  libGL,
-  alsa-lib,
-  SDL2,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchzip
+, libX11
+, libXi
+, libGL
+, alsa-lib
+, SDL2
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation rec {

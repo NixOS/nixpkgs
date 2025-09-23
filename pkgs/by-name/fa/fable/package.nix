@@ -1,7 +1,7 @@
-{
-  buildDotnetGlobalTool,
-  lib,
-  testers,
+{ buildDotnetGlobalTool
+, lib
+, testers
+,
 }:
 
 buildDotnetGlobalTool (finalAttrs: {

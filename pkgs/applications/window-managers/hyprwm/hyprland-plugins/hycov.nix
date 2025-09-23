@@ -1,9 +1,9 @@
-{
-  lib,
-  mkHyprlandPlugin,
-  cmake,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, mkHyprlandPlugin
+, cmake
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 mkHyprlandPlugin (finalAttrs: {

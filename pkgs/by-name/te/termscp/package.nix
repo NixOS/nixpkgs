@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  dbus,
-  fetchFromGitHub,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  samba,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, dbus
+, fetchFromGitHub
+, openssl
+, pkg-config
+, rustPlatform
+, samba
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

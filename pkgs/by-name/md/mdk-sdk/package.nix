@@ -1,35 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  alsa-lib,
-  gcc-unwrapped,
-  libX11,
-  libcxx,
-  libdrm,
-  libgbm,
-  libglvnd,
-  libpulseaudio,
-  libxcb,
-  wayland,
-  xz,
-  zlib,
-  libva,
-  libvdpau,
-  addDriverRunpath,
-  freetype,
-  harfbuzz,
-  fontconfig,
-  fribidi,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, alsa-lib
+, gcc-unwrapped
+, libX11
+, libcxx
+, libdrm
+, libgbm
+, libglvnd
+, libpulseaudio
+, libxcb
+, wayland
+, xz
+, zlib
+, libva
+, libvdpau
+, addDriverRunpath
+, freetype
+, harfbuzz
+, fontconfig
+, fribidi
+,
 }:
 let
   arch =
     {
       aarch64-linux = "arm64";
       x86_64-linux = "amd64";
-    }
-    .${stdenv.hostPlatform.system};
+    }.${stdenv.hostPlatform.system};
 in
 stdenv.mkDerivation rec {
   pname = "mdk-sdk";

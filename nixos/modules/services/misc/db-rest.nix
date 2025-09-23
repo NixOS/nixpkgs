@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   inherit (lib)
@@ -132,9 +131,10 @@ in
             "AF_INET6"
           ];
           MemoryDenyWriteExecute = false;
-          LoadCredential = lib.optional (
-            cfg.redis.enable && cfg.redis.passwordFile != null
-          ) "REDIS_PASSWORD:${cfg.redis.passwordFile}";
+          LoadCredential = lib.optional
+            (
+              cfg.redis.enable && cfg.redis.passwordFile != null
+            ) "REDIS_PASSWORD:${cfg.redis.passwordFile}";
           ExecStart = mkDefault "${cfg.package}/bin/db-rest";
 
           RemoveIPC = true;

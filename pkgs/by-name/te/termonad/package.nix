@@ -1,9 +1,9 @@
-{
-  stdenv,
-  haskellPackages,
-  makeWrapper,
-  packages ? (pkgSet: [ ]),
-  nixosTests,
+{ stdenv
+, haskellPackages
+, makeWrapper
+, packages ? (pkgSet: [ ])
+, nixosTests
+,
 }:
 
 let

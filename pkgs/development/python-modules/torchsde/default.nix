@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  boltons,
-  numpy,
-  scipy,
-  torch,
-  trampoline,
-
-  # tests
-  pytest7CheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  boltons
+, numpy
+, scipy
+, torch
+, trampoline
+, # tests
+  pytest7CheckHook
+,
 }:
 
 buildPythonPackage rec {

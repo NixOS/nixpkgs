@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  sphinx,
-  mscgen,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, sphinx
+, mscgen
+,
 }:
 
 buildPythonPackage rec {

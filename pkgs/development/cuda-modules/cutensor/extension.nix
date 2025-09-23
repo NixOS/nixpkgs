@@ -12,11 +12,11 @@
 #
 # - Instead of providing different releases for each version of CUDA, CuTensor has multiple subdirectories in `lib`
 #   -- one for each version of CUDA.
-{
-  cudaLib,
-  cudaMajorMinorVersion,
-  lib,
-  redistSystem,
+{ cudaLib
+, cudaMajorMinorVersion
+, lib
+, redistSystem
+,
 }:
 let
   inherit (lib)
@@ -60,10 +60,12 @@ let
       # Un-nest the manifests attribute set.
       releaseGrabber = evaluatedModules: evaluatedModules.config.cutensor.manifests;
     in
-    lists.map (trivial.flip trivial.pipe [
-      configEvaluator
-      releaseGrabber
-    ]) cutensorVersions;
+    lists.map
+      (trivial.flip trivial.pipe [
+        configEvaluator
+        releaseGrabber
+      ])
+      cutensorVersions;
 
   # Our cudaMajorMinorVersion tells us which version of CUDA we're building against.
   # The subdirectories in lib/ tell us which versions of CUDA are supported.
@@ -84,7 +86,9 @@ let
     (attrsets.attrByPath [
       pname
       redistSystem
-    ] null feature) != null;
+    ]
+      null
+      feature) != null;
 
   # TODO(@connorbaker): With an auxiliary file keeping track of the CUDA versions each release supports,
   # we could filter out releases that don't support our CUDA version.

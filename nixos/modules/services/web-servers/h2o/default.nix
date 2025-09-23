@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 # TODO: Gems includes for Mruby
@@ -35,20 +34,22 @@ let
   };
 
   # Attrset with the virtual hosts relevant to ACME configuration
-  acmeEnabledHostsConfigs = lib.foldlAttrs (
-    acc: name: value:
-    if value.acme == null || (!value.acme.enable && value.acme.useHost == null) then
-      acc
-    else
-      let
-        names = getNames name value;
-        virtualHostConfig = value // {
-          serverName = names.server;
-          certName = names.cert;
-        };
-      in
-      acc ++ [ virtualHostConfig ]
-  ) [ ] cfg.hosts;
+  acmeEnabledHostsConfigs = lib.foldlAttrs
+    (
+      acc: name: value:
+        if value.acme == null || (!value.acme.enable && value.acme.useHost == null) then
+          acc
+        else
+          let
+            names = getNames name value;
+            virtualHostConfig = value // {
+              serverName = names.server;
+              certName = names.cert;
+            };
+          in
+          acc ++ [ virtualHostConfig ]
+    ) [ ]
+    cfg.hosts;
 
   # Attrset with the ACME certificate names split by whether or not they depend
   # on H2O serving challenges.
@@ -67,10 +68,12 @@ let
         else
           acc;
 
-      certNames = lib.lists.foldl partition {
-        dependent = [ ];
-        independent = [ ];
-      } acmeEnabledHostsConfigs;
+      certNames = lib.lists.foldl partition
+        {
+          dependent = [ ];
+          independent = [ ];
+        }
+        acmeEnabledHostsConfigs;
     in
     certNames
     // {
@@ -105,157 +108,161 @@ let
     else
       null;
 
-  hostsConfig = lib.concatMapAttrs (
-    name: value:
-    let
-      port = {
-        HTTP = lib.attrByPath [ "http" "port" ] cfg.defaultHTTPListenPort value;
-        TLS = lib.attrByPath [ "tls" "port" ] cfg.defaultTLSListenPort value;
-      };
-
-      names = getNames name value;
-
-      acmeSettings = lib.optionalAttrs (builtins.elem names.cert acmeCertNames.dependent) (
+  hostsConfig = lib.concatMapAttrs
+    (
+      name: value:
         let
-          acmePort = 80;
-          acmeChallengePath = "/.well-known/acme-challenge";
-        in
-        {
-          "${names.server}:${builtins.toString acmePort}" = {
-            listen.port = acmePort;
-            paths."${acmeChallengePath}/" = {
-              "file.dir" = value.acme.root + acmeChallengePath;
-            };
+          port = {
+            HTTP = lib.attrByPath [ "http" "port" ] cfg.defaultHTTPListenPort value;
+            TLS = lib.attrByPath [ "tls" "port" ] cfg.defaultTLSListenPort value;
           };
-        }
-      );
 
-      httpSettings =
-        lib.optionalAttrs (value.tls == null || value.tls.policy == "add") {
-          "${names.server}:${builtins.toString port.HTTP}" = value.settings // {
-            listen.port = port.HTTP;
-          };
-        }
-        // lib.optionalAttrs (value.tls != null && value.tls.policy == "force") {
-          "${names.server}:${builtins.toString port.HTTP}" = {
-            listen.port = port.HTTP;
-            paths."/" = {
-              redirect = {
-                status = value.tls.redirectCode;
-                url = "https://${names.server}:${builtins.toString port.TLS}";
+          names = getNames name value;
+
+          acmeSettings = lib.optionalAttrs (builtins.elem names.cert acmeCertNames.dependent) (
+            let
+              acmePort = 80;
+              acmeChallengePath = "/.well-known/acme-challenge";
+            in
+            {
+              "${names.server}:${builtins.toString acmePort}" = {
+                listen.port = acmePort;
+                paths."${acmeChallengePath}/" = {
+                  "file.dir" = value.acme.root + acmeChallengePath;
+                };
+              };
+            }
+          );
+
+          httpSettings =
+            lib.optionalAttrs (value.tls == null || value.tls.policy == "add")
+              {
+                "${names.server}:${builtins.toString port.HTTP}" = value.settings // {
+                  listen.port = port.HTTP;
+                };
+              }
+            // lib.optionalAttrs (value.tls != null && value.tls.policy == "force") {
+              "${names.server}:${builtins.toString port.HTTP}" = {
+                listen.port = port.HTTP;
+                paths."/" = {
+                  redirect = {
+                    status = value.tls.redirectCode;
+                    url = "https://${names.server}:${builtins.toString port.TLS}";
+                  };
+                };
               };
             };
-          };
-        };
 
-      tlsSettings =
-        lib.optionalAttrs
-          (
-            value.tls != null
-            && builtins.elem value.tls.policy [
-              "add"
-              "only"
-              "force"
-            ]
-          )
-          {
-            "${names.server}:${builtins.toString port.TLS}" =
-              let
-                tlsRecommendations = lib.attrByPath [ "tls" "recommendations" ] cfg.defaultTLSRecommendations value;
+          tlsSettings =
+            lib.optionalAttrs
+              (
+                value.tls != null
+                && builtins.elem value.tls.policy [
+                  "add"
+                  "only"
+                  "force"
+                ]
+              )
+              {
+                "${names.server}:${builtins.toString port.TLS}" =
+                  let
+                    tlsRecommendations = lib.attrByPath [ "tls" "recommendations" ] cfg.defaultTLSRecommendations value;
 
-                hasTLSRecommendations = tlsRecommendations != null && mozTLSRecs != null;
+                    hasTLSRecommendations = tlsRecommendations != null && mozTLSRecs != null;
 
-                # ATTENTION: Let’s Encrypt has sunset OCSP stapling.
-                tlsRecAttrs =
-                  # If using ACME, this module will disable H2O’s default OCSP
-                  # stapling.
-                  #
-                  # See: https://letsencrypt.org/2024/12/05/ending-ocsp/
-                  lib.optionalAttrs (builtins.elem names.cert acmeCertNames.all) {
-                    ocsp-update-interval = 0;
-                  }
-                  # Mozilla’s ssl-config-generator is at present still
-                  # recommending this setting as well, but this module will
-                  # skip setting a stapling value as Let’s Encrypt + ACME is
-                  # the most likely use case.
-                  #
-                  # See: https://github.com/mozilla/ssl-config-generator/issues/323
-                  // lib.optionalAttrs hasTLSRecommendations (
-                    let
-                      recs = mozTLSRecs.${tlsRecommendations};
-                    in
-                    {
-                      min-version = builtins.head recs.tls_versions;
-                      cipher-preference = "server";
-                      "cipher-suite-tls1.3" = recs.ciphersuites;
-                    }
-                    // lib.optionalAttrs (recs.ciphers.openssl != [ ]) {
-                      cipher-suite = lib.concatStringsSep ":" recs.ciphers.openssl;
-                    }
-                  );
+                    # ATTENTION: Let’s Encrypt has sunset OCSP stapling.
+                    tlsRecAttrs =
+                      # If using ACME, this module will disable H2O’s default OCSP
+                      # stapling.
+                      #
+                      # See: https://letsencrypt.org/2024/12/05/ending-ocsp/
+                      lib.optionalAttrs (builtins.elem names.cert acmeCertNames.all)
+                        {
+                          ocsp-update-interval = 0;
+                        }
+                      # Mozilla’s ssl-config-generator is at present still
+                      # recommending this setting as well, but this module will
+                      # skip setting a stapling value as Let’s Encrypt + ACME is
+                      # the most likely use case.
+                      #
+                      # See: https://github.com/mozilla/ssl-config-generator/issues/323
+                      // lib.optionalAttrs hasTLSRecommendations (
+                        let
+                          recs = mozTLSRecs.${tlsRecommendations};
+                        in
+                        {
+                          min-version = builtins.head recs.tls_versions;
+                          cipher-preference = "server";
+                          "cipher-suite-tls1.3" = recs.ciphersuites;
+                        }
+                        // lib.optionalAttrs (recs.ciphers.openssl != [ ]) {
+                          cipher-suite = lib.concatStringsSep ":" recs.ciphers.openssl;
+                        }
+                      );
 
-                headerRecAttrs =
-                  lib.optionalAttrs
-                    (
-                      hasTLSRecommendations
-                      && value.tls != null
-                      && builtins.elem value.tls.policy [
-                        "force"
-                        "only"
-                      ]
-                    )
-                    (
+                    headerRecAttrs =
+                      lib.optionalAttrs
+                        (
+                          hasTLSRecommendations
+                          && value.tls != null
+                          && builtins.elem value.tls.policy [
+                            "force"
+                            "only"
+                          ]
+                        )
+                        (
+                          let
+                            headerSet = value.settings."header.set" or [ ];
+                            recs = mozTLSRecs.${tlsRecommendations};
+                            hsts = "Strict-Transport-Security: max-age=${builtins.toString recs.hsts_min_age}; includeSubDomains; preload";
+                          in
+                          {
+                            "header.set" =
+                              if builtins.isString headerSet then
+                                [
+                                  headerSet
+                                  hsts
+                                ]
+                              else
+                                headerSet ++ [ hsts ];
+                          }
+                        );
+
+                    listen =
                       let
-                        headerSet = value.settings."header.set" or [ ];
-                        recs = mozTLSRecs.${tlsRecommendations};
-                        hsts = "Strict-Transport-Security: max-age=${builtins.toString recs.hsts_min_age}; includeSubDomains; preload";
+                        identity =
+                          value.tls.identity
+                          ++ lib.optional (builtins.elem names.cert acmeCertNames.all) {
+                            key-file = "${certs.${names.cert}.directory}/key.pem";
+                            certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
+                          };
+
+                        baseListen = {
+                          port = port.TLS;
+                          ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
+                            inherit identity;
+                          };
+                        }
+                        // lib.optionalAttrs (value.host != null) {
+                          host = value.host;
+                        };
+
+                        # QUIC, if used, will duplicate the TLS over TCP directive, but
+                        # append some extra QUIC-related settings
+                        quicListen = lib.optional (value.tls.quic != null) (baseListen // { inherit (value.tls) quic; });
                       in
                       {
-                        "header.set" =
-                          if builtins.isString headerSet then
-                            [
-                              headerSet
-                              hsts
-                            ]
-                          else
-                            headerSet ++ [ hsts ];
-                      }
-                    );
-
-                listen =
-                  let
-                    identity =
-                      value.tls.identity
-                      ++ lib.optional (builtins.elem names.cert acmeCertNames.all) {
-                        key-file = "${certs.${names.cert}.directory}/key.pem";
-                        certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
+                        listen = [ baseListen ] ++ quicListen;
                       };
-
-                    baseListen = {
-                      port = port.TLS;
-                      ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
-                        inherit identity;
-                      };
-                    }
-                    // lib.optionalAttrs (value.host != null) {
-                      host = value.host;
-                    };
-
-                    # QUIC, if used, will duplicate the TLS over TCP directive, but
-                    # append some extra QUIC-related settings
-                    quicListen = lib.optional (value.tls.quic != null) (baseListen // { inherit (value.tls) quic; });
                   in
-                  {
-                    listen = [ baseListen ] ++ quicListen;
-                  };
-              in
-              value.settings // headerRecAttrs // listen;
-          };
-    in
-    # With a high likelihood of HTTP & ACME challenges being on the same port,
-    # 80, do a recursive update to merge the 2 settings together
-    (lib.recursiveUpdate acmeSettings httpSettings) // tlsSettings
-  ) cfg.hosts;
+                  value.settings // headerRecAttrs // listen;
+              };
+        in
+        # With a high likelihood of HTTP & ACME challenges being on the same port,
+          # 80, do a recursive update to merge the 2 settings together
+        (lib.recursiveUpdate acmeSettings httpSettings) // tlsSettings
+    )
+    cfg.hosts;
 
   h2oConfig = settingsFormat.generate "h2o.yaml" (
     lib.recursiveUpdate { hosts = hostsConfig; } cfg.settings
@@ -384,22 +391,24 @@ in
       {
         assertion =
           !(builtins.hasAttr "hosts" h2oConfig)
-          || builtins.all (
-            host:
-            let
-              hasKeyPlusCert = attrs: (attrs.key-file or "") != "" && (attrs.certificate-file or "") != "";
-            in
-            # TLS not used
-            (lib.attrByPath [ "listen" "ssl" ] null host == null)
-            # TLS identity property
-            || (
-              builtins.hasAttr "identity" host
-              && builtins.length host.identity > 0
-              && builtins.all hasKeyPlusCert host.listen.ssl.identity
+            || builtins.all
+            (
+              host:
+              let
+                hasKeyPlusCert = attrs: (attrs.key-file or "") != "" && (attrs.certificate-file or "") != "";
+              in
+              # TLS not used
+              (lib.attrByPath [ "listen" "ssl" ] null host == null)
+                # TLS identity property
+                || (
+                builtins.hasAttr "identity" host
+                  && builtins.length host.identity > 0
+                  && builtins.all hasKeyPlusCert host.listen.ssl.identity
+              )
+                # TLS short-hand (was manually specified)
+                || (hasKeyPlusCert host.listen.ssl)
             )
-            # TLS short-hand (was manually specified)
-            || (hasKeyPlusCert host.listen.ssl)
-          ) (lib.attrValues h2oConfig.hosts);
+            (lib.attrValues h2oConfig.hosts);
         message = ''
           TLS support will require at least one non-empty certificate & key
           file. Use services.h2o.hosts.<name>.acme.enable,
@@ -409,17 +418,19 @@ in
         '';
       }
     ]
-    ++ builtins.map (
-      name:
-      mkCertOwnershipAssertion {
-        cert = certs.${name};
-        groups = config.users.groups;
-        services = [
-          config.systemd.services.h2o
-        ]
-        ++ lib.optional (acmeCertNames.all != [ ]) config.systemd.services.h2o-config-reload;
-      }
-    ) acmeCertNames.all;
+    ++ builtins.map
+      (
+        name:
+        mkCertOwnershipAssertion {
+          cert = certs.${name};
+          groups = config.users.groups;
+          services = [
+            config.systemd.services.h2o
+          ]
+          ++ lib.optional (acmeCertNames.all != [ ]) config.systemd.services.h2o-config-reload;
+        }
+      )
+      acmeCertNames.all;
 
     users = {
       users.${cfg.user} = {
@@ -499,9 +510,11 @@ in
         wantedBy = tlsServices ++ [ "multi-user.target" ];
         after = tlsServices;
         unitConfig = {
-          ConditionPathExists = map (
-            certName: "${certs.${certName}.directory}/fullchain.pem"
-          ) acmeCertNames.all;
+          ConditionPathExists = map
+            (
+              certName: "${certs.${certName}.directory}/fullchain.pem"
+            )
+            acmeCertNames.all;
           # Disable rate limiting for this since it may be triggered quickly
           # a bunch of times if a lot of certificates are renewed in quick
           # succession. The reload itself is cheap, so even doing a lot of them

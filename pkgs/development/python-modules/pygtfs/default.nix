@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  docopt,
-  fetchPypi,
-  pytz,
-  setuptools,
-  setuptools-scm,
-  six,
-  sqlalchemy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, docopt
+, fetchPypi
+, pytz
+, setuptools
+, setuptools-scm
+, six
+, sqlalchemy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

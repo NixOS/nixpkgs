@@ -1,22 +1,22 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml,
-  ocaml-crunch,
-  astring,
-  cmdliner,
-  cppo,
-  fpath,
-  result,
-  tyxml,
-  markup,
-  yojson,
-  sexplib0,
-  jq,
-  odoc-parser,
-  ppx_expect,
-  bash,
-  fmt,
+{ lib
+, buildDunePackage
+, ocaml
+, ocaml-crunch
+, astring
+, cmdliner
+, cppo
+, fpath
+, result
+, tyxml
+, markup
+, yojson
+, sexplib0
+, jq
+, odoc-parser
+, ppx_expect
+, bash
+, fmt
+,
 }:
 
 buildDunePackage rec {

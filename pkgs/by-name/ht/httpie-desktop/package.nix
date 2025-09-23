@@ -1,8 +1,8 @@
-{
-  appimageTools,
-  lib,
-  fetchurl,
-  stdenv,
+{ appimageTools
+, lib
+, fetchurl
+, stdenv
+,
 }:
 appimageTools.wrapType2 rec {
   pname = "httpie-desktop";
@@ -10,10 +10,11 @@ appimageTools.wrapType2 rec {
 
   src =
     if stdenv.hostPlatform.system == "aarch64-linux" then
-      fetchurl {
-        url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}-arm64.AppImage";
-        hash = "sha256-FBzjlYwgCULgjaJUPALlqqRj7fZMps7hybt5m5EkeAo=";
-      }
+      fetchurl
+        {
+          url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}-arm64.AppImage";
+          hash = "sha256-FBzjlYwgCULgjaJUPALlqqRj7fZMps7hybt5m5EkeAo=";
+        }
     else
       fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";

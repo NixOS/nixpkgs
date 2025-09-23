@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  fetchPypi,
-  bwa,
-  cffi,
-  zlib,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, fetchPypi
+, bwa
+, cffi
+, zlib
+,
 }:
 
 buildPythonPackage rec {

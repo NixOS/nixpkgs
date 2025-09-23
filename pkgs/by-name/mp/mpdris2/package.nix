@@ -1,14 +1,14 @@
-{
-  lib,
-  autoreconfHook,
-  fetchFromGitHub,
-  gettext,
-  glib,
-  gobject-introspection,
-  intltool,
-  libnotify,
-  python3Packages,
-  wrapGAppsHook3,
+{ lib
+, autoreconfHook
+, fetchFromGitHub
+, gettext
+, glib
+, gobject-introspection
+, intltool
+, libnotify
+, python3Packages
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

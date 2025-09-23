@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gobject-introspection,
-  pkg-config,
-  ninja,
-  desktop-file-utils,
-  shared-mime-info,
-  meson,
-  gtk4,
-  gst_all_1,
-  libGL,
-  libadwaita,
-  libsoup_3,
-  vala,
-  cmake,
-  libmicrodns,
-  glib-networking,
-  libpeas2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gobject-introspection
+, pkg-config
+, ninja
+, desktop-file-utils
+, shared-mime-info
+, meson
+, gtk4
+, gst_all_1
+, libGL
+, libadwaita
+, libsoup_3
+, vala
+, cmake
+, libmicrodns
+, glib-networking
+, libpeas2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

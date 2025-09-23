@@ -1,9 +1,9 @@
-{
-  python3Packages,
-  fetchFromGitHub,
-  lib,
-  jre,
-  qt5,
+{ python3Packages
+, fetchFromGitHub
+, lib
+, jre
+, qt5
+,
 }:
 
 python3Packages.buildPythonApplication rec {

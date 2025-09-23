@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -121,10 +120,12 @@ in
 
     environment.etc."ax25/axports" = {
       text = concatStringsSep "\n" (
-        mapAttrsToList (
-          portName: portCfg:
-          "${portName} ${portCfg.callsign} ${toString portCfg.baud} ${toString portCfg.paclen} ${toString portCfg.window} ${portCfg.description}"
-        ) enabledAxports
+        mapAttrsToList
+          (
+            portName: portCfg:
+              "${portName} ${portCfg.callsign} ${toString portCfg.baud} ${toString portCfg.paclen} ${toString portCfg.window} ${portCfg.description}"
+          )
+          enabledAxports
       );
       mode = "0644";
     };
@@ -133,21 +134,23 @@ in
       description = "AX.25 axports group target";
     };
 
-    systemd.services = mapAttrs' (portName: portCfg: {
-      name = "ax25-kissattach-${portName}";
-      value = {
-        description = "AX.25 KISS attached interface for ${portName}";
-        wantedBy = [ "multi-user.target" ];
-        before = [ "ax25-axports.target" ];
-        partOf = [ "ax25-axports.target" ];
-        serviceConfig = {
-          Type = "exec";
-          ExecStart = "${portCfg.package}/bin/kissattach ${portCfg.tty} ${portName}";
+    systemd.services = mapAttrs'
+      (portName: portCfg: {
+        name = "ax25-kissattach-${portName}";
+        value = {
+          description = "AX.25 KISS attached interface for ${portName}";
+          wantedBy = [ "multi-user.target" ];
+          before = [ "ax25-axports.target" ];
+          partOf = [ "ax25-axports.target" ];
+          serviceConfig = {
+            Type = "exec";
+            ExecStart = "${portCfg.package}/bin/kissattach ${portCfg.tty} ${portName}";
+          };
+          postStart = optionalString (portCfg.kissParams != null) ''
+            ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}
+          '';
         };
-        postStart = optionalString (portCfg.kissParams != null) ''
-          ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}
-        '';
-      };
-    }) enabledAxports;
+      })
+      enabledAxports;
   };
 }

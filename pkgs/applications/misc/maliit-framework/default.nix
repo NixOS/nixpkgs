@@ -1,29 +1,26 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-
-  qtbase,
-
-  at-spi2-atk,
-  at-spi2-core,
-  libepoxy,
-  gtk3,
-  libdatrie,
-  libselinux,
-  libsepol,
-  libthai,
-  pcre,
-  util-linux,
-  wayland,
-  xorg,
-
-  cmake,
-  doxygen,
-  pkg-config,
-  wayland-protocols,
-  wayland-scanner,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fetchpatch
+, qtbase
+, at-spi2-atk
+, at-spi2-core
+, libepoxy
+, gtk3
+, libdatrie
+, libselinux
+, libsepol
+, libthai
+, pcre
+, util-linux
+, wayland
+, xorg
+, cmake
+, doxygen
+, pkg-config
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 mkDerivation {

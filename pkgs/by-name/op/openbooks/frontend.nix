@@ -1,6 +1,6 @@
-{
-  buildNpmPackage,
-  callPackage,
+{ buildNpmPackage
+, callPackage
+,
 }:
 let
   common = callPackage ./common.nix { };

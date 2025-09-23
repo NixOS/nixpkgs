@@ -1,12 +1,12 @@
-{
-  lib,
-  swiftPackages,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, swiftPackages
+, swift
+, swiftpm
+, swiftpm2nix
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 let

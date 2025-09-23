@@ -1,10 +1,10 @@
-{
-  stdenv,
-  bc,
-  version,
-  src,
-  eulaDate,
-  outputHash ? null,
+{ stdenv
+, bc
+, version
+, src
+, eulaDate
+, outputHash ? null
+,
 }:
 stdenv.mkDerivation (
   {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (
 
     dontFixup = true;
   }
-  // (
+    // (
     if isNull outputHash then
       { }
     else

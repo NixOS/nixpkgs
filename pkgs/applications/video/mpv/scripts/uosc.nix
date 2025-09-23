@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  makeFontsConf,
-  buildLua,
-  buildGoModule,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, makeFontsConf
+, buildLua
+, buildGoModule
+,
 }:
 
 buildLua (finalAttrs: {

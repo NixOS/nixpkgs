@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  yt-dlp,
-  ffmpeg,
-  mpv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, yt-dlp
+, ffmpeg
+, mpv
+,
 }:
 
 buildGoModule rec {

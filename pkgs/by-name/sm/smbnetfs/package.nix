@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fuse,
-  samba,
-  pkg-config,
-  glib,
-  autoconf,
-  attr,
-  libsecret,
+{ lib
+, stdenv
+, fetchurl
+, fuse
+, samba
+, pkg-config
+, glib
+, autoconf
+, attr
+, libsecret
+,
 }:
 
 stdenv.mkDerivation rec {

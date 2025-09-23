@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  pcsclite,
-  libnfc-nci,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, pcsclite
+, libnfc-nci
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

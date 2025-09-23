@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  pycryptodome,
-  requests,
-  six,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, pycryptodome
+, requests
+, six
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

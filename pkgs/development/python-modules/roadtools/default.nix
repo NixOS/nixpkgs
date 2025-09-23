@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  roadrecon,
-  roadlib,
-  roadtx,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, roadrecon
+, roadlib
+, roadtx
+,
 }:
 
 buildPythonPackage rec {

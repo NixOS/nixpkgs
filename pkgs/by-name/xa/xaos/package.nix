@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qt6,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qt6
+, copyDesktopItems
+,
 }:
 
 let

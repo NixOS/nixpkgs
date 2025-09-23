@@ -1,15 +1,15 @@
-{
-  lib,
-  aioresponses,
-  buildPythonPackage,
-  orjson,
-  fetchFromGitHub,
-  propcache,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  aiohttp,
-  setuptools,
+{ lib
+, aioresponses
+, buildPythonPackage
+, orjson
+, fetchFromGitHub
+, propcache
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, aiohttp
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

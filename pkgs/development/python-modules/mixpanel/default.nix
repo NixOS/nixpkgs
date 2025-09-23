@@ -1,16 +1,14 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-
-  # Python Dependencies
-  six,
-  urllib3,
-  requests,
-
-  # tests
-  pytestCheckHook,
-  responses,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, # Python Dependencies
+  six
+, urllib3
+, requests
+, # tests
+  pytestCheckHook
+, responses
+,
 }:
 
 buildPythonPackage rec {

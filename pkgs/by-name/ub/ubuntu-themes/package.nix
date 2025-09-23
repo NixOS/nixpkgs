@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gnome-icon-theme,
-  adwaita-icon-theme,
-  gtk-engine-murrine,
-  gtk3,
-  hicolor-icon-theme,
-  humanity-icon-theme,
-  python3Packages,
+{ lib
+, stdenv
+, fetchurl
+, gnome-icon-theme
+, adwaita-icon-theme
+, gtk-engine-murrine
+, gtk3
+, hicolor-icon-theme
+, humanity-icon-theme
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation rec {

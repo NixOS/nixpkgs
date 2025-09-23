@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  ddt,
-  fetchFromGitHub,
-  mock-services,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  urllib3,
-  requests-toolbelt,
-  requests-unixsocket,
-  setuptools,
-  ws4py,
+{ lib
+, buildPythonPackage
+, cryptography
+, ddt
+, fetchFromGitHub
+, mock-services
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, urllib3
+, requests-toolbelt
+, requests-unixsocket
+, setuptools
+, ws4py
+,
 }:
 
 buildPythonPackage rec {

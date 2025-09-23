@@ -1,10 +1,10 @@
-{
-  lib,
-  pycryptodome,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, pycryptodome
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

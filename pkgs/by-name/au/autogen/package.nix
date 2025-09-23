@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  which,
-  pkg-config,
-  perl,
-  guile_2_2,
-  libxml2,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, which
+, pkg-config
+, perl
+, guile_2_2
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   patches =
     let
       dp =
-        {
-          ver ? "1%255.18.16-5",
-          name,
-          sha256,
+        { ver ? "1%255.18.16-5"
+        , name
+        , sha256
+        ,
         }:
         fetchurl {
           url =

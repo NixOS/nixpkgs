@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  flit,
-  click,
-  cryptography,
-  ecdsa,
-  fido2,
-  intelhex,
-  pyserial,
-  pyusb,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, flit
+, click
+, cryptography
+, ecdsa
+, fido2
+, intelhex
+, pyserial
+, pyusb
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cerberus,
-  fetchFromGitHub,
-  pythonOlder,
-  pyyaml,
-  ruamel-yaml,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cerberus
+, fetchFromGitHub
+, pythonOlder
+, pyyaml
+, ruamel-yaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

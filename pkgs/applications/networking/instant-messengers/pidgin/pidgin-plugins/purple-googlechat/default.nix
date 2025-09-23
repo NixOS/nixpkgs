@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pidgin,
-  glib,
-  json-glib,
-  protobuf,
-  protobufc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pidgin
+, glib
+, json-glib
+, protobuf
+, protobufc
+,
 }:
 
 stdenv.mkDerivation {

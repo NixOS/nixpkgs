@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  guile,
-  guile-gnutls,
-  texinfo,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, guile
+, guile-gnutls
+, texinfo
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

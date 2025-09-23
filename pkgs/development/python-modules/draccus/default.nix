@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  mergedeep,
-  pyyaml,
-  toml,
-  typing-inspect,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, # build-system
+  setuptools
+, # dependencies
+  mergedeep
+, pyyaml
+, toml
+, typing-inspect
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

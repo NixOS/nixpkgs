@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  transifex-cli,
-  babel,
-  click,
-  setuptools,
-  sphinx,
-  pytestCheckHook,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, transifex-cli
+, babel
+, click
+, setuptools
+, sphinx
+, pytestCheckHook
+, mock
+,
 }:
 
 buildPythonPackage rec {

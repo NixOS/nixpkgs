@@ -1,11 +1,11 @@
-{
-  mkDerivation,
-  lib,
-  libgeom,
-  libjail,
-  libzfs,
-  openssl,
-  zfs-data,
+{ mkDerivation
+, lib
+, libgeom
+, libjail
+, libzfs
+, openssl
+, zfs-data
+,
 }:
 mkDerivation {
   path = "cddl/sbin/zfs";

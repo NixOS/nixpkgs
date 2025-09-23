@@ -1,45 +1,47 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gettext,
-  makeWrapper,
-  tcl,
-  which,
-  ncurses,
-  perl,
-  cyrus_sasl,
-  gitUpdater,
-  gss,
-  gpgme,
-  libkrb5,
-  libidn2,
-  libxml2,
-  notmuch,
-  openssl,
-  lua,
-  lmdb,
-  libxslt,
-  docbook_xsl,
-  docbook_xml_dtd_42,
-  w3m,
-  mailcap,
-  sqlite,
-  zlib,
-  lndir,
-  pkg-config,
-  zstd,
-  enableZstd ? true,
-  enableMixmaster ? false,
-  enableLua ? false,
-  enableSmimeKeys ? true,
-  withContrib ? true,
-  withNotmuch ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, makeWrapper
+, tcl
+, which
+, ncurses
+, perl
+, cyrus_sasl
+, gitUpdater
+, gss
+, gpgme
+, libkrb5
+, libidn2
+, libxml2
+, notmuch
+, openssl
+, lua
+, lmdb
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, w3m
+, mailcap
+, sqlite
+, zlib
+, lndir
+, pkg-config
+, zstd
+, enableZstd ? true
+, enableMixmaster ? false
+, enableLua ? false
+, enableSmimeKeys ? true
+, withContrib ? true
+, withNotmuch ? true
+,
 }:
 
-assert lib.warnIf (
-  enableMixmaster
-) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
+assert lib.warnIf
+  (
+    enableMixmaster
+  ) "Support for mixmaster has been removed from neomutt since the 20241002 release"
+  true;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";

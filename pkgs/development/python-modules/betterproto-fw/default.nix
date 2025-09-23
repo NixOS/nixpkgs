@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  grpclib,
-  python-dateutil,
-  typing-extensions,
-
-  # optional dependencies
-  jinja2,
-  ruff,
-  betterproto-rust-codec,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  pdm-backend
+, # dependencies
+  grpclib
+, python-dateutil
+, typing-extensions
+, # optional dependencies
+  jinja2
+, ruff
+, betterproto-rust-codec
+,
 }:
 
 buildPythonPackage rec {

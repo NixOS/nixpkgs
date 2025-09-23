@@ -1,6 +1,5 @@
-{
-  pkgs,
-  ...
+{ pkgs
+, ...
 }:
 let
   qemu-img = pkgs.lib.getExe' pkgs.vmTools.qemu "qemu-img";

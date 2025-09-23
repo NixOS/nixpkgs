@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gmp,
-  python3,
-  tune ? false, # tune to hardware, impure
+{ stdenv
+, lib
+, fetchFromGitLab
+, gmp
+, python3
+, tune ? false
+, # tune to hardware, impure
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  qt5,
-  chmlib,
-  libzip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, qt5
+, chmlib
+, libzip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

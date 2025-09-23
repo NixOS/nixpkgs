@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-  pytestCheckHook,
-  cheroot,
-  legacy-cgi,
-  dbutils,
-  mysqlclient,
-  pymysql,
-  mysql-connector,
-  psycopg2,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, pytestCheckHook
+, cheroot
+, legacy-cgi
+, dbutils
+, mysqlclient
+, pymysql
+, mysql-connector
+, psycopg2
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  mkDerivation,
-  libxo,
-  libsbuf,
+{ lib
+, mkDerivation
+, libxo
+, libsbuf
+,
 }:
 mkDerivation {
   path = "usr.bin/procstat";

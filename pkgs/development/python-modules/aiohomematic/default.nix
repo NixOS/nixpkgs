@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  orjson,
-  pydevccu,
-  pytest-asyncio,
-  pytest-socket,
-  pytestCheckHook,
-  python-slugify,
-  setuptools,
-  voluptuous,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, orjson
+, pydevccu
+, pytest-asyncio
+, pytest-socket
+, pytestCheckHook
+, python-slugify
+, setuptools
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

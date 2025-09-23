@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  php,
-  nixosTests,
-  writeScript,
+{ lib
+, fetchFromGitLab
+, php
+, nixosTests
+, writeScript
+,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter327,
-  libayatana-appindicator,
-  copyDesktopItems,
-  makeDesktopItem,
-  runCommand,
-  yq,
-  alisthelper,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, flutter327
+, libayatana-appindicator
+, copyDesktopItems
+, makeDesktopItem
+, runCommand
+, yq
+, alisthelper
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 flutter327.buildFlutterApplication {

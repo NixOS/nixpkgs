@@ -1,15 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gnu-efi_3,
-  nixosTests,
-  efibootmgr,
-  openssl,
-  withSbsigntool ? false, # currently, cross compiling sbsigntool is broken, so default to false
-  sbsigntool,
-  makeWrapper,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchurl
+, gnu-efi_3
+, nixosTests
+, efibootmgr
+, openssl
+, withSbsigntool ? false
+, # currently, cross compiling sbsigntool is broken, so default to false
+  sbsigntool
+, makeWrapper
+, installShellFiles
+,
 }:
 
 let
@@ -30,8 +31,7 @@ let
 
   inherit
     (archids.${stdenv.hostPlatform.system}
-      or (throw "unsupported system: ${stdenv.hostPlatform.system}")
-    )
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}"))
     hostarch
     efiPlatform
     ;

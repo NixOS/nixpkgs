@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  libpng,
-  gd,
-  geoip,
-  db,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, libpng
+, gd
+, geoip
+, db
+,
 }:
 
 stdenv.mkDerivation rec {

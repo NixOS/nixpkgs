@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyserial,
-  pyserial-asyncio,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  zigpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+, pyserial-asyncio
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, zigpy
+,
 }:
 
 buildPythonPackage rec {

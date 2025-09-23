@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  ncurses,
-  readline,
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, ncurses
+, readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

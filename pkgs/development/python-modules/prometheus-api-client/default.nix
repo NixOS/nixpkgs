@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  dateparser,
-  httmock,
-  matplotlib,
-  numpy,
-  pandas,
-  setuptools,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, dateparser
+, httmock
+, matplotlib
+, numpy
+, pandas
+, setuptools
+, requests
+,
 }:
 
 buildPythonPackage rec {

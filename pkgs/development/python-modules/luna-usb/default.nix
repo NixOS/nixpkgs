@@ -1,22 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  amaranth,
-  libusb1,
-  pyserial,
-  pyusb,
-  pyvcd,
-  usb-protocol,
-
-  # tests
-  pytestCheckHook,
-  apollo-fpga,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  setuptools
+, # dependencies
+  amaranth
+, libusb1
+, pyserial
+, pyusb
+, pyvcd
+, usb-protocol
+, # tests
+  pytestCheckHook
+, apollo-fpga
+,
 }:
 buildPythonPackage rec {
   pname = "luna-usb";

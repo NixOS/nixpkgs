@@ -1,41 +1,41 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  python,
-  zlib,
-  libuv,
-  sqlite,
-  http-parser,
-  icu,
-  bash,
-  ninja,
-  pkgconf,
-  unixtools,
-  runCommand,
-  buildPackages,
-  testers,
-  # for `.pkgs` attribute
-  callPackage,
-  # Updater dependencies
-  writeScript,
-  coreutils,
-  gnugrep,
-  jq,
-  curl,
-  common-updater-scripts,
-  runtimeShell,
-  gnupg,
-  installShellFiles,
-  darwin,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, python
+, zlib
+, libuv
+, sqlite
+, http-parser
+, icu
+, bash
+, ninja
+, pkgconf
+, unixtools
+, runCommand
+, buildPackages
+, testers
+, # for `.pkgs` attribute
+  callPackage
+, # Updater dependencies
+  writeScript
+, coreutils
+, gnugrep
+, jq
+, curl
+, common-updater-scripts
+, runtimeShell
+, gnupg
+, installShellFiles
+, darwin
+,
 }:
 
-{
-  enableNpm ? true,
-  version,
-  sha256,
-  patches ? [ ],
+{ enableNpm ? true
+, version
+, sha256
+, patches ? [ ]
+,
 }@args:
 
 let
@@ -76,13 +76,15 @@ let
       platform = stdenv.hostPlatform;
     in
     if platform.isAarch32 && platform ? gcc.fpu then
-      lib.throwIfNot (builtins.elem platform.gcc.fpu [
-        "vfp"
-        "vfpv2"
-        "vfpv3"
-        "vfpv3-d16"
-        "neon"
-      ]) "unsupported ARM FPU ${platform.gcc.fpu}" platform.gcc.fpu
+      lib.throwIfNot
+        (builtins.elem platform.gcc.fpu [
+          "vfp"
+          "vfpv2"
+          "vfpv3"
+          "vfpv3-d16"
+          "neon"
+        ]) "unsupported ARM FPU ${platform.gcc.fpu}"
+        platform.gcc.fpu
     else
       null;
   destARMFloatABI =
@@ -90,11 +92,13 @@ let
       platform = stdenv.hostPlatform;
     in
     if platform.isAarch32 && platform ? gcc.float-abi then
-      lib.throwIfNot (builtins.elem platform.gcc.float-abi [
-        "soft"
-        "softfp"
-        "hard"
-      ]) "unsupported ARM float ABI ${platform.gcc.float-abi}" platform.gcc.float-abi
+      lib.throwIfNot
+        (builtins.elem platform.gcc.float-abi [
+          "soft"
+          "softfp"
+          "hard"
+        ]) "unsupported ARM float ABI ${platform.gcc.float-abi}"
+        platform.gcc.float-abi
     else
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
@@ -247,18 +251,20 @@ let
       ]
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
       ++ lib.optionals (!enableNpm) [ "--without-npm" ]
-      ++ lib.concatMap (name: [
-        "--shared-${name}"
-        "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
-        /**
+      ++ lib.concatMap
+        (name: [
+          "--shared-${name}"
+          "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
+          /**
           Closure notes: we explicitly avoid specifying --shared-*-includes,
           as that would put the paths into bin/nodejs.
           Including pkg-config in build inputs would also have the same effect!
 
           FIXME: the statement above is outdated, we have to include pkg-config
           in build inputs for system-icu.
-        */
-      ]) (builtins.attrNames sharedLibDeps);
+          */
+        ])
+        (builtins.attrNames sharedLibDeps);
 
       configurePlatforms = [ ];
 

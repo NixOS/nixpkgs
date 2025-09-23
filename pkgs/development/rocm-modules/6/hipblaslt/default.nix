@@ -1,30 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchFromGitHub,
-  cmake,
-  rocm-cmake,
-  clr,
-  gfortran,
-  gtest,
-  msgpack,
-  libxml2,
-  python3,
-  python3Packages,
-  openmp,
-  hipblas-common,
-  tensile,
-  lapack-reference,
-  ncurses,
-  libffi,
-  zlib,
-  zstd,
-  rocmUpdateScript,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  buildSamples ? false,
-  # hipblaslt supports only devices with MFMA or WMMA
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, cmake
+, rocm-cmake
+, clr
+, gfortran
+, gtest
+, msgpack
+, libxml2
+, python3
+, python3Packages
+, openmp
+, hipblas-common
+, tensile
+, lapack-reference
+, ncurses
+, libffi
+, zlib
+, zstd
+, rocmUpdateScript
+, buildTests ? false
+, buildBenchmarks ? false
+, buildSamples ? false
+, # hipblaslt supports only devices with MFMA or WMMA
   # WMMA on gfx1100 may be broken
   # MFMA on MI100 may be broken
   # MI200/MI300 known to work
@@ -35,7 +34,8 @@
       "gfx942"
       # "gfx1100" FIXME: confirm WMMA targets work
     ]
-  ),
+  )
+,
 }:
 
 stdenv.mkDerivation (

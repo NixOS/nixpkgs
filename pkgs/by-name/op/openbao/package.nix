@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
-  nixosTests,
-  callPackage,
-  stdenvNoCC,
-  withUi ? true,
-  withHsm ? stdenvNoCC.hostPlatform.isLinux,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+, nixosTests
+, callPackage
+, stdenvNoCC
+, withUi ? true
+, withHsm ? stdenvNoCC.hostPlatform.isLinux
+,
 }:
 
 buildGoModule (finalAttrs: {

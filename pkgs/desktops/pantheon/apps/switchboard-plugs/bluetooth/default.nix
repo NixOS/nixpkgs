@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  libadwaita,
-  libgee,
-  gettext,
-  granite7,
-  gtk4,
-  bluez,
-  elementary-bluetooth-daemon,
-  switchboard,
-  wingpanel-indicator-bluetooth,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, libadwaita
+, libgee
+, gettext
+, granite7
+, gtk4
+, bluez
+, elementary-bluetooth-daemon
+, switchboard
+, wingpanel-indicator-bluetooth
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,13 @@
 # implements https://github.com/scionproto/scion/blob/27983125bccac6b84d1f96f406853aab0e460405/doc/tutorials/deploy.rst
 { pkgs, ... }:
 let
-  trust-root-configuration-keys = pkgs.runCommand "generate-trc-keys.sh" {
-    buildInputs = [
-      pkgs.scion
-    ];
-  } (builtins.readFile ./bootstrap.sh);
+  trust-root-configuration-keys = pkgs.runCommand "generate-trc-keys.sh"
+    {
+      buildInputs = [
+        pkgs.scion
+      ];
+    }
+    (builtins.readFile ./bootstrap.sh);
 
   imports = hostId: [
     {

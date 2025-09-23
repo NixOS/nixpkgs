@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, wayland
+, wayland-protocols
+, wayland-scanner
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-bongocat";

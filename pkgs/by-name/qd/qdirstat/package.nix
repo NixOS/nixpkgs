@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  libsForQt5,
-  coreutils,
-  xdg-utils,
-  bash,
-  makeWrapper,
-  perlPackages,
-  util-linux,
+{ lib
+, fetchFromGitHub
+, stdenv
+, libsForQt5
+, coreutils
+, xdg-utils
+, bash
+, makeWrapper
+, perlPackages
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

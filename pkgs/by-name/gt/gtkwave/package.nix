@@ -1,19 +1,19 @@
-{
-  bzip2,
-  fetchurl,
-  glib,
-  gperf,
-  gtk3,
-  gtk-mac-integration,
-  judy,
-  lib,
-  pkg-config,
-  stdenv,
-  tcl,
-  tk,
-  wrapGAppsHook3,
-  xz,
-  desktopToDarwinBundle,
+{ bzip2
+, fetchurl
+, glib
+, gperf
+, gtk3
+, gtk-mac-integration
+, judy
+, lib
+, pkg-config
+, stdenv
+, tcl
+, tk
+, wrapGAppsHook3
+, xz
+, desktopToDarwinBundle
+,
 }:
 
 stdenv.mkDerivation rec {

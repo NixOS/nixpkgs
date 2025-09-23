@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchDebianPatch,
-  alsa-lib,
-  expat,
-  glib,
-  libjack2,
-  libXext,
-  libX11,
-  libpng,
-  libpthreadstubs,
-  libsmf,
-  libsndfile,
-  lv2,
-  pkg-config,
-  zita-resampler,
+{ lib
+, stdenv
+, fetchurl
+, fetchDebianPatch
+, alsa-lib
+, expat
+, glib
+, libjack2
+, libXext
+, libX11
+, libpng
+, libpthreadstubs
+, libsmf
+, libsndfile
+, lv2
+, pkg-config
+, zita-resampler
+,
 }:
 
 stdenv.mkDerivation rec {

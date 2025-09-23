@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  fetchFromGitLab,
-  gperf,
-  gawk,
-  gitUpdater,
-  pkg-config,
-  boost,
-  luajit_openresty,
-  asciidoctor,
-  emilua,
-  liburing,
-  openssl,
-  fmt,
-  cmake,
-  range-v3,
+{ lib
+, stdenv
+, meson
+, ninja
+, fetchFromGitLab
+, gperf
+, gawk
+, gitUpdater
+, pkg-config
+, boost
+, luajit_openresty
+, asciidoctor
+, emilua
+, liburing
+, openssl
+, fmt
+, cmake
+, range-v3
+,
 }:
 
 stdenv.mkDerivation rec {

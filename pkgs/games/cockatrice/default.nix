@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkDerivation,
-  cmake,
-  protobuf,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qtwebsockets,
-  wrapQtAppsHook,
+{ lib
+, fetchFromGitHub
+, mkDerivation
+, cmake
+, protobuf
+, qtbase
+, qtmultimedia
+, qttools
+, qtwebsockets
+, wrapQtAppsHook
+,
 }:
 
 mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, fetchCrate
+, rustPlatform
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "shellcheck-sarif";

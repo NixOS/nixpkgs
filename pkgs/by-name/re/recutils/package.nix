@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  bc,
-  check,
-  curl,
-
-  withEncryption ? true,
-  libgcrypt,
-  libgpg-error,
-
-  withUuid ? true,
-  libuuid,
-
-  withBashBuiltins ? true,
-  bash,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, bc
+, check
+, curl
+, withEncryption ? true
+, libgcrypt
+, libgpg-error
+, withUuid ? true
+, libuuid
+, withBashBuiltins ? true
+, bash
+,
 }:
 
 stdenv.mkDerivation rec {

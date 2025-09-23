@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  utils,
-  pkgs,
-  ...
+{ config
+, lib
+, utils
+, pkgs
+, ...
 }:
 let
   cfg = config.virtualisation.podman;
@@ -175,17 +174,17 @@ in
             extraRuntimes =
               cfg.extraRuntimes
               ++
-                lib.optionals
-                  (
-                    config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
-                    == "slirp4netns"
-                  )
-                  (
-                    with pkgs;
-                    [
-                      slirp4netns
-                    ]
-                  );
+              lib.optionals
+                (
+                  config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
+                  == "slirp4netns"
+                )
+                (
+                  with pkgs;
+                  [
+                    slirp4netns
+                  ]
+                );
           };
       };
 

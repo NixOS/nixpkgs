@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jellyfish,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jellyfish
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

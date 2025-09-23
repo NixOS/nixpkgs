@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  ptyprocess,
-  tornado,
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, ptyprocess
+, tornado
+, pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-
-  pythonPackages,
-  qmake,
-  qscintilla,
-  qtbase,
-  qtmacextras ? null,
+{ lib
+, stdenv
+, pythonPackages
+, qmake
+, qscintilla
+, qtbase
+, qtmacextras ? null
+,
 }:
 
 let

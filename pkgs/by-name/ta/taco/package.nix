@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  llvmPackages,
-  enablePython ? false,
-  python ? python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, python3
+, llvmPackages
+, enablePython ? false
+, python ? python3
+,
 }:
 
 let

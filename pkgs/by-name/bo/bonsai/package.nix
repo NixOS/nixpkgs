@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  gitUpdater,
-  hareHook,
-  hareThirdParty,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, gitUpdater
+, hareHook
+, hareThirdParty
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

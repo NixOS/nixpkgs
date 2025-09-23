@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  bash,
-  fetchFromGitHub,
-  gtk3,
-  pkg-config,
-  intltool,
-  libxslt,
-  makeWrapper,
-  coreutils,
-  zip,
-  unzip,
-  p7zip,
-  unar,
-  gnutar,
-  bzip2,
-  gzip,
-  lhasa,
-  wrapGAppsHook3,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, bash
+, fetchFromGitHub
+, gtk3
+, pkg-config
+, intltool
+, libxslt
+, makeWrapper
+, coreutils
+, zip
+, unzip
+, p7zip
+, unar
+, gnutar
+, bzip2
+, gzip
+, lhasa
+, wrapGAppsHook3
+, desktopToDarwinBundle
+,
 }:
 
 stdenv.mkDerivation rec {

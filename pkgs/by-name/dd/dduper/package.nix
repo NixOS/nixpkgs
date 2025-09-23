@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchFromGitHub,
-  btrfs-progs,
-  python3,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, btrfs-progs
+, python3
+, udevCheckHook
+,
 }:
 
 let

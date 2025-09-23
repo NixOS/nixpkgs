@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  einops,
-  fetchFromGitHub,
-  hyper-connections,
-  pytestCheckHook,
-  setuptools,
-  torch,
+{ lib
+, buildPythonPackage
+, einops
+, fetchFromGitHub
+, hyper-connections
+, pytestCheckHook
+, setuptools
+, torch
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,14 @@
-{
-  callPackage,
-  config,
-  lib,
-  cudaPackages,
-  cudaSupport ? config.cudaSupport,
-  lang ? "en",
-  webdoc ? false,
-  version ? null,
-  /*
-    If you wish to completely override the src, use:
-    my_mathematica = mathematica.override {
+{ callPackage
+, config
+, lib
+, cudaPackages
+, cudaSupport ? config.cudaSupport
+, lang ? "en"
+, webdoc ? false
+, version ? null
+, /*
+  If you wish to completely override the src, use:
+  my_mathematica = mathematica.override {
       source = pkgs.requireFile {
         name = "Mathematica_XX.X.X_BNDL_LINUX.sh";
         # Get this hash via a command similar to this:
@@ -22,27 +21,31 @@
         '';
         hashMode = "recursive";
       };
-    }
+  }
   */
-  source ? null,
+  source ? null
+,
 }:
 
 let
   versions = callPackage ./versions.nix { };
 
   matching-versions = lib.sort (v1: v2: lib.versionOlder v2.version v1.version) (
-    lib.filter (
-      v: v.lang == lang && (version == null || isMatching v.version version) && matchesDoc v
-    ) versions
+    lib.filter
+      (
+        v: v.lang == lang && (version == null || isMatching v.version version) && matchesDoc v
+      )
+      versions
   );
 
   found-version =
     if matching-versions == [ ] then
-      throw (
-        "No registered Mathematica version found to match"
-        + " version=${toString version} and language=${lang},"
-        + " ${if webdoc then "using web documentation" else "and with local documentation"}"
-      )
+      throw
+        (
+          "No registered Mathematica version found to match"
+          + " version=${toString version} and language=${lang},"
+          + " ${if webdoc then "using web documentation" else "and with local documentation"}"
+        )
     else
       lib.head matching-versions;
 

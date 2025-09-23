@@ -1,10 +1,10 @@
-{
-  lib,
-  libc,
-  config,
-  system,
-  bootstrapFiles,
-  isFromBootstrapFiles ? false,
+{ lib
+, libc
+, config
+, system
+, bootstrapFiles
+, isFromBootstrapFiles ? false
+,
 }:
 
 let

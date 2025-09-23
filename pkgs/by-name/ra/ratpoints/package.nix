@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  gmp,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, gmp
+,
 }:
 stdenv.mkDerivation rec {
   pname = "ratpoints";

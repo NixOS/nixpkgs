@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  qmake,
-  qtbase,
-  qtsvg,
-  qtx11extras ? null, # Qt 5 only
-  kwindowsystem,
-  qtwayland,
-  libX11,
-  libXext,
-  qttools,
-  wrapQtAppsHook,
-  gitUpdater,
-
-  qt6Kvantum ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, qmake
+, qtbase
+, qtsvg
+, qtx11extras ? null
+, # Qt 5 only
+  kwindowsystem
+, qtwayland
+, libX11
+, libXext
+, qttools
+, wrapQtAppsHook
+, gitUpdater
+, qt6Kvantum ? null
+,
 }:
 let
   isQt5 = lib.versionOlder qtbase.version "6";

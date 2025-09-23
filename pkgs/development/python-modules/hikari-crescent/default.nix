@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  hikari,
-  sigparse,
-  pytestCheckHook,
-  python-dotenv,
-  pytest-asyncio,
-  croniter,
-  pynacl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, hikari
+, sigparse
+, pytestCheckHook
+, python-dotenv
+, pytest-asyncio
+, croniter
+, pynacl
+,
 }:
 
 buildPythonPackage rec {

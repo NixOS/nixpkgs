@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  nix-update-script,
-  hatchling,
-  pypng,
-  unidata-blocks,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, nix-update-script
+, hatchling
+, pypng
+, unidata-blocks
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  beancount,
-  beautifulsoup4,
-  buildPythonPackage,
-  chardet,
-  click,
-  fetchFromGitHub,
-  lxml,
-  petl,
-  python-magic,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, beancount
+, beautifulsoup4
+, buildPythonPackage
+, chardet
+, click
+, fetchFromGitHub
+, lxml
+, petl
+, python-magic
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

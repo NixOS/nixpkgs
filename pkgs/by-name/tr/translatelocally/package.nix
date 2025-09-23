@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  libarchive,
-  pcre2,
-  protobuf,
-  gperftools,
-  blas,
-  runCommand,
-  translatelocally,
-  translatelocally-models,
-  buildArch ? "x86-64",
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, libarchive
+, pcre2
+, protobuf
+, gperftools
+, blas
+, runCommand
+, translatelocally
+, translatelocally-models
+, buildArch ? "x86-64"
+,
 }:
 
 let

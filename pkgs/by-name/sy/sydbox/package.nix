@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitLab,
-  libseccomp,
-  mandoc,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  scdoc,
-  testers,
+{ lib
+, fetchFromGitLab
+, libseccomp
+, mandoc
+, nix-update-script
+, pkg-config
+, rustPlatform
+, scdoc
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

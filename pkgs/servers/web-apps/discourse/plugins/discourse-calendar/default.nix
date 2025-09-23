@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDiscoursePlugin,
-  fetchFromGitHub,
+{ lib
+, mkDiscoursePlugin
+, fetchFromGitHub
+,
 }:
 
 mkDiscoursePlugin {

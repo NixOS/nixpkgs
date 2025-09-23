@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  jdk_headless,
-  makeWrapper,
-  buildPackages,
-  javaOpts ? "-XX:+UseZGC",
+{ lib
+, stdenvNoCC
+, fetchzip
+, jdk_headless
+, makeWrapper
+, buildPackages
+, javaOpts ? "-XX:+UseZGC"
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hentai-at-home";
@@ -23,9 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (
-    stdenvNoCC.buildPlatform.libc == "glibc"
-  ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString
+    (
+      stdenvNoCC.buildPlatform.libc == "glibc"
+    ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   makeFlags = [ "all" ];
   enableParallelBuilding = false;

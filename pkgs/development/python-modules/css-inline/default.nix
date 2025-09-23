@@ -1,18 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  rustPlatform,
-
-  # native darwin dependencies
-  libiconv,
-
-  # tests
-  pytestCheckHook,
-  hypothesis,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  rustPlatform
+, # native darwin dependencies
+  libiconv
+, # tests
+  pytestCheckHook
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

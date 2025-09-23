@@ -1,44 +1,41 @@
-{
-  lib,
-  fetchurl,
-  gettext,
-  wrapGAppsHook3,
-
-  # Native dependencies
-  python3,
-  gtk4,
-  gobject-introspection,
-  adwaita-icon-theme,
-  gtksourceview5,
-  glib-networking,
-  libadwaita,
-
-  # Test dependencies
-  xvfb-run,
-  dbus,
-
-  # Optional dependencies
-  enableJingle ? true,
-  farstream,
-  gstreamer,
-  gst-plugins-base,
-  gst-libav,
-  gst-plugins-good,
-  libnice,
-  enableE2E ? true,
-  enableSecrets ? true,
-  libsecret,
-  enableRST ? true,
-  docutils,
-  enableSpelling ? true,
-  gspell,
-  enableUPnP ? true,
-  gupnp-igd,
-  enableAppIndicator ? true,
-  libappindicator-gtk3,
-  enableSoundNotifications ? true,
-  gsound,
-  extraPythonPackages ? ps: [ ],
+{ lib
+, fetchurl
+, gettext
+, wrapGAppsHook3
+, # Native dependencies
+  python3
+, gtk4
+, gobject-introspection
+, adwaita-icon-theme
+, gtksourceview5
+, glib-networking
+, libadwaita
+, # Test dependencies
+  xvfb-run
+, dbus
+, # Optional dependencies
+  enableJingle ? true
+, farstream
+, gstreamer
+, gst-plugins-base
+, gst-libav
+, gst-plugins-good
+, libnice
+, enableE2E ? true
+, enableSecrets ? true
+, libsecret
+, enableRST ? true
+, docutils
+, enableSpelling ? true
+, gspell
+, enableUPnP ? true
+, gupnp-igd
+, enableAppIndicator ? true
+, libappindicator-gtk3
+, enableSoundNotifications ? true
+, gsound
+, extraPythonPackages ? ps: [ ]
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  ladspaH,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, ladspaH
+,
 }:
 
 buildDunePackage rec {

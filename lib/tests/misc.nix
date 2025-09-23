@@ -10,12 +10,12 @@
 
   To run these tests:
 
-    [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
+  [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
 
   If the resulting list is empty, all tests passed.
   Alternatively, to run all `lib` tests:
 
-    [nixpkgs]$ nix-build lib/tests/release.nix
+  [nixpkgs]$ nix-build lib/tests/release.nix
 */
 
 let
@@ -162,10 +162,10 @@ runTests {
   testFunctionArgsMakeOverridable = {
     expr = functionArgs (
       makeOverridable (
-        {
-          a,
-          b,
-          c ? null,
+        { a
+        , b
+        , c ? null
+        ,
         }:
         { }
       )
@@ -182,10 +182,10 @@ runTests {
       functionArgs
         (makeOverridable
           (
-            {
-              a,
-              b,
-              c ? null,
+            { a
+            , b
+            , c ? null
+            ,
             }:
             { }
           )
@@ -204,15 +204,18 @@ runTests {
   testCallPackageWithOverridePreservesArguments =
     let
       f =
-        {
-          a ? 0,
-          b,
+        { a ? 0
+        , b
+        ,
         }:
         { };
-      f' = callPackageWith {
-        a = 1;
-        b = 2;
-      } f { };
+      f' = callPackageWith
+        {
+          a = 1;
+          b = 2;
+        }
+        f
+        { };
     in
     {
       expr = functionArgs f'.override;
@@ -222,17 +225,20 @@ runTests {
   testCallPackagesWithOverridePreservesArguments =
     let
       f =
-        {
-          a ? 0,
-          b,
+        { a ? 0
+        , b
+        ,
         }:
         {
           nested = { };
         };
-      f' = callPackagesWith {
-        a = 1;
-        b = 2;
-      } f { };
+      f' = callPackagesWith
+        {
+          a = 1;
+          b = 2;
+        }
+        f
+        { };
     in
     {
       expr = functionArgs f'.nested.override;
@@ -657,13 +663,15 @@ runTests {
   };
 
   testSplitStringBySimpleDelimiter = {
-    expr = strings.splitStringBy (
-      prev: curr:
-      builtins.elem curr [
-        "."
-        "-"
-      ]
-    ) false "foo.bar-baz";
+    expr = strings.splitStringBy
+      (
+        prev: curr:
+          builtins.elem curr [
+            "."
+            "-"
+          ]
+      )
+      false "foo.bar-baz";
     expected = [
       "foo"
       "bar"
@@ -711,9 +719,11 @@ runTests {
   };
 
   testSplitStringByCaseTransition = {
-    expr = strings.splitStringBy (
-      prev: curr: builtins.match "[a-z]" prev != null && builtins.match "[A-Z]" curr != null
-    ) true "fooBarBaz";
+    expr = strings.splitStringBy
+      (
+        prev: curr: builtins.match "[a-z]" prev != null && builtins.match "[A-Z]" curr != null
+      )
+      true "fooBarBaz";
     expected = [
       "foo"
       "Bar"
@@ -727,13 +737,15 @@ runTests {
   };
 
   testSplitStringByComplexPredicate = {
-    expr = strings.splitStringBy (
-      prev: curr:
-      prev != ""
-      && curr != ""
-      && builtins.match "[0-9]" prev != null
-      && builtins.match "[a-z]" curr != null
-    ) true "123abc456def";
+    expr = strings.splitStringBy
+      (
+        prev: curr:
+          prev != ""
+          && curr != ""
+          && builtins.match "[0-9]" prev != null
+          && builtins.match "[a-z]" curr != null
+      )
+      true "123abc456def";
     expected = [
       "123"
       "abc456"
@@ -2028,7 +2040,8 @@ runTests {
         x = "foo";
         y = "baz";
       }
-    ] (s: lib.nameValuePair ("x_" + s.x) ("y_" + s.y));
+    ]
+      (s: lib.nameValuePair ("x_" + s.x) ("y_" + s.y));
     expected = {
       x_foo = "y_baz";
     };
@@ -2102,7 +2115,7 @@ runTests {
         foldlAttrs
           (
             acc: _name: _v:
-            acc
+              acc
           )
           3
           {
@@ -2114,7 +2127,7 @@ runTests {
         foldlAttrs
           (
             acc: _name: v:
-            acc * 10 + v
+              acc * 10 + v
           )
           1
           {
@@ -2165,19 +2178,21 @@ runTests {
   };
   testMergeAttrsListExampleMany =
     let
-      list = genList (
-        n:
-        listToAttrs (
-          genList (
-            m:
-            let
-              # Integer divide n by two to create duplicate attributes
-              str = "halfn${toString (n / 2)}m${toString m}";
-            in
-            nameValuePair str str
-          ) 100
-        )
-      ) 100;
+      list = genList
+        (
+          n:
+          listToAttrs (
+            genList
+              (
+                m:
+                let
+                  # Integer divide n by two to create duplicate attributes
+                  str = "halfn${toString (n / 2)}m${toString m}";
+                in
+                nameValuePair str str
+              ) 100
+          )
+        ) 100;
     in
     {
       expr = attrsets.mergeAttrsList list;
@@ -2190,7 +2205,7 @@ runTests {
       recursiveUpdateUntil
         (
           path: l: r:
-          path == [ "foo" ]
+            path == [ "foo" ]
         )
         {
           # first attribute set
@@ -2271,10 +2286,12 @@ runTests {
   };
 
   testOverrideExistingOverride = {
-    expr = overrideExisting {
-      a = 3;
-      b = 2;
-    } { a = 1; };
+    expr = overrideExisting
+      {
+        a = 3;
+        b = 2;
+      }
+      { a = 1; };
     expected = {
       a = 1;
       b = 2;
@@ -2527,10 +2544,8 @@ runTests {
 
   testToINIWithGlobalSectionEmpty = {
     expr = generators.toINIWithGlobalSection { } {
-      globalSection = {
-      };
-      sections = {
-      };
+      globalSection = { };
+      sections = { };
     };
     expected = '''';
   };
@@ -2685,9 +2700,9 @@ runTests {
         null_ = null;
         function = x: x;
         functionArgs =
-          {
-            arg ? 4,
-            foo,
+          { arg ? 4
+          , foo
+          ,
           }:
           arg;
         list = [
@@ -2730,10 +2745,12 @@ runTests {
     in
     {
       expr = generators.toPretty { } (
-        generators.withRecursion {
-          throwOnDepthLimit = false;
-          depthLimit = 2;
-        } a
+        generators.withRecursion
+          {
+            throwOnDepthLimit = false;
+            depthLimit = 2;
+          }
+          a
       );
       expected = "{\n  b = 1;\n  c = {\n    b = \"<unevaluated>\";\n    c = {\n      b = \"<unevaluated>\";\n      c = \"<unevaluated>\";\n    };\n  };\n}";
     };
@@ -2745,8 +2762,7 @@ runTests {
     in
     {
       expr =
-        (builtins.tryEval (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a)))
-        .success;
+        (builtins.tryEval (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
       expected = false;
     };
 
@@ -2763,10 +2779,12 @@ runTests {
     in
     {
       expr = generators.toPretty { } (
-        generators.withRecursion {
-          depthLimit = 1;
-          throwOnDepthLimit = false;
-        } a
+        generators.withRecursion
+          {
+            depthLimit = 1;
+            throwOnDepthLimit = false;
+          }
+          a
       );
       expected = "{\n  b = <function, args: {a, b}>;\n  c = {\n    d = \"<unevaluated>\";\n  };\n  value = \"<unevaluated>\";\n}";
     };
@@ -3361,7 +3379,7 @@ runTests {
 
   testCartesianProductOfEmptySet = {
     expr = cartesianProduct { };
-    expected = [ { } ];
+    expected = [{ }];
   };
 
   testCartesianProductOfOneSet = {
@@ -3619,10 +3637,10 @@ runTests {
     expr =
       mapCartesianProduct
         (
-          {
-            a,
-            b,
-            c,
+          { a
+          , b
+          , c
+          ,
           }:
           a + b + c
         )
@@ -3884,7 +3902,8 @@ runTests {
         ];
         update = old: "xy";
       }
-    ] { a.b.c = 0; };
+    ]
+      { a.b.c = 0; };
     expected = {
       a = {
         b = {
@@ -3944,7 +3963,8 @@ runTests {
         path = [ ];
         update = old: "untainted";
       }
-    ] (throw "start");
+    ]
+      (throw "start");
     expected = "untainted";
   };
 
@@ -4368,19 +4388,17 @@ runTests {
         [
           {
             value =
-              {
-                a,
-                b ? false,
-                ...
+              { a
+              , b ? false
+              , ...
               }:
               null;
           }
           {
             value =
-              {
-                b,
-                c ? false,
-                ...
+              { b
+              , c ? false
+              , ...
               }:
               null;
           }
@@ -4395,11 +4413,12 @@ runTests {
 
   # Meta
   testGetExe'Output = {
-    expr = getExe' {
-      type = "derivation";
-      out = "somelonghash";
-      bin = "somelonghash";
-    } "executable";
+    expr = getExe'
+      {
+        type = "derivation";
+        out = "somelonghash";
+        bin = "somelonghash";
+      } "executable";
     expected = "somelonghash/bin/executable";
   };
 
@@ -4442,8 +4461,8 @@ runTests {
   };
 
   testPlatformMatchAttrs = {
-    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux")
-    .parsed;
+    expr = meta.platformMatch (systems.elaborate "x86_64-linux")
+      (systems.elaborate "x86_64-linux").parsed;
     expected = true;
   };
 
@@ -4577,12 +4596,12 @@ runTests {
         lib.filterAttrsRecursive
           (
             name: value:
-            !lib.elem name [
-              "callPackage"
-              "newScope"
-              "overrideScope"
-              "packages"
-            ]
+              !lib.elem name [
+                "callPackage"
+                "newScope"
+                "overrideScope"
+                "packages"
+              ]
           )
           (packagesFromDirectoryRecursive {
             inherit (emptyScope) callPackage newScope;

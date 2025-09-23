@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   cfg = config.services.ergochat;
@@ -138,9 +137,11 @@ in
     environment.etc."ergo.yaml".source = cfg.configFile;
 
     # merge configured values with default values
-    services.ergochat.settings = lib.mapAttrsRecursive (
-      _: lib.mkDefault
-    ) options.services.ergochat.settings.default;
+    services.ergochat.settings = lib.mapAttrsRecursive
+      (
+        _: lib.mkDefault
+      )
+      options.services.ergochat.settings.default;
 
     systemd.services.ergochat = {
       description = "Ergo IRC daemon";

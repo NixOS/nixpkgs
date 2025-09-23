@@ -1,9 +1,9 @@
-{
-  stdenv,
-  gnat13,
-  gnat13Packages,
-  fetchFromGitHub,
-  lib,
+{ stdenv
+, gnat13
+, gnat13Packages
+, fetchFromGitHub
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

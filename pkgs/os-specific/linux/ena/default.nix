@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  kernel,
-  kernelModuleMakeFlags,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, kernel
+, kernelModuleMakeFlags
+,
 }:
 let
   rev-prefix = "ena_linux_";

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  nixosTests,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, nix-update-script
+,
 }:
 
 buildGoModule {

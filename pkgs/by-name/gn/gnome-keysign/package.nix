@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gtk3,
-  glib,
-  gst_all_1,
+{ lib
+, fetchFromGitLab
+, python3
+, wrapGAppsHook3
+, gobject-introspection
+, gtk3
+, glib
+, gst_all_1
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

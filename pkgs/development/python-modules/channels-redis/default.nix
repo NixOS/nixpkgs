@@ -1,14 +1,14 @@
-{
-  lib,
-  asgiref,
-  buildPythonPackage,
-  channels,
-  cryptography,
-  fetchFromGitHub,
-  msgpack,
-  pythonOlder,
-  redis,
-  setuptools,
+{ lib
+, asgiref
+, buildPythonPackage
+, channels
+, cryptography
+, fetchFromGitHub
+, msgpack
+, pythonOlder
+, redis
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

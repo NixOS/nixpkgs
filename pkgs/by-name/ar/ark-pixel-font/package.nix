@@ -1,8 +1,8 @@
-{
-  lib,
-  python312Packages,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, python312Packages
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 python312Packages.buildPythonPackage rec {

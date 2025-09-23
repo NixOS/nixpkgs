@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  wrapQtAppsHook,
-
-  # before that => zeal
-  sqlite,
-  json_c,
-  mecab,
-  libzip,
-  mpv,
-  yt-dlp,
-  # optional
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, wrapQtAppsHook
+, # before that => zeal
+  sqlite
+, json_c
+, mecab
+, libzip
+, mpv
+, yt-dlp
+, # optional
+  makeWrapper
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";

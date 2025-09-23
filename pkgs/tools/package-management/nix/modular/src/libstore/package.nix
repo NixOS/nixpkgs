@@ -1,25 +1,20 @@
-{
-  lib,
-  stdenv,
-  mkMesonLibrary,
+{ lib
+, stdenv
+, mkMesonLibrary
+, unixtools
+, nix-util
+, boost
+, curl
+, aws-sdk-cpp
+, libseccomp
+, nlohmann_json
+, sqlite
+, busybox-sandbox-shell ? null
+, # Configuration Options
 
-  unixtools,
-
-  nix-util,
-  boost,
-  curl,
-  aws-sdk-cpp,
-  libseccomp,
-  nlohmann_json,
-  sqlite,
-
-  busybox-sandbox-shell ? null,
-
-  # Configuration Options
-
-  version,
-
-  embeddedSandboxShell ? stdenv.hostPlatform.isStatic,
+  version
+, embeddedSandboxShell ? stdenv.hostPlatform.isStatic
+,
 }:
 
 mkMesonLibrary (finalAttrs: {
@@ -37,9 +32,11 @@ mkMesonLibrary (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
   # There have been issues building these dependencies
-  ++ lib.optional (
-    stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin)
-  ) aws-sdk-cpp;
+  ++ lib.optional
+    (
+      stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin)
+    )
+    aws-sdk-cpp;
 
   propagatedBuildInputs = [
     nix-util

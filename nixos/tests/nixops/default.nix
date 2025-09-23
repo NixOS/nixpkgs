@@ -27,12 +27,11 @@ let
       name = "nixops-legacy-network";
       nodes = {
         deployer =
-          {
-            config,
-            lib,
-            nodes,
-            pkgs,
-            ...
+          { config
+          , lib
+          , nodes
+          , pkgs
+          , ...
           }:
           {
             imports = [ ../../modules/installer/cd-dvd/channel.nix ];

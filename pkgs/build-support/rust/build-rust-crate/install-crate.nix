@@ -33,7 +33,7 @@ if !buildTests then
     runHook postInstall
   ''
 else
-  # for tests we just put them all in the output. No execution.
+# for tests we just put them all in the output. No execution.
   ''
     runHook preInstall
 

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarn,
-  fixup-yarn-lock,
-  prefetch-yarn-deps,
-  nodejs_20,
-  nodejs-slim_20,
-  yq-go,
-  settings ? { },
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarn
+, fixup-yarn-lock
+, prefetch-yarn-deps
+, nodejs_20
+, nodejs-slim_20
+, yq-go
+, settings ? { }
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";

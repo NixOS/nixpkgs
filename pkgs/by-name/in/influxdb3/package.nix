@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  protobuf,
-  python3,
-  rust-jemalloc-sys-unprefixed,
-  rustc,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, protobuf
+, python3
+, rust-jemalloc-sys-unprefixed
+, rustc
+, makeWrapper
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "influxdb3";

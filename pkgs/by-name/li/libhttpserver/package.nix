@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  gnutls,
-  libmicrohttpd,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, gnutls
+, libmicrohttpd
+,
 }:
 
 stdenv.mkDerivation rec {

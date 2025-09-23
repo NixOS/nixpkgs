@@ -1,27 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchpatch2,
-  patch_npm ? true,
-  patch_tools ? true,
-  patch_npm_catch_oserror ? patch_npm,
-  patch_tools_catch_oserror ? patch_tools,
-  patch_npm_regex_handling ? patch_npm && stdenv.buildPlatform.isDarwin,
-  patch_tools_regex_handling ? patch_tools && stdenv.buildPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchpatch2
+, patch_npm ? true
+, patch_tools ? true
+, patch_npm_catch_oserror ? patch_npm
+, patch_tools_catch_oserror ? patch_tools
+, patch_npm_regex_handling ? patch_npm && stdenv.buildPlatform.isDarwin
+, patch_tools_regex_handling ? patch_tools && stdenv.buildPlatform.isDarwin
+,
 }:
 let
   url = "https://github.com/nodejs/gyp-next/commit/8224deef984add7e7afe846cfb82c9d3fa6da1fb.patch?full_index=1";
   url_regex_handling = "https://github.com/nodejs/gyp-next/commit/b21ee3150eea9fc1a8811e910e5ba64f42e1fb77.patch?full_index=1";
 in
-lib.optionals patch_tools_catch_oserror ([
-  # Fixes builds with Nix sandbox on Darwin for gyp.
-  (fetchpatch2 {
-    inherit url;
-    hash = "sha256-kvCMpedjrY64BlaC1R0NVjk/vIVivYAGVgWwMEGeP6k=";
-    stripLen = 1;
-    extraPrefix = "tools/gyp/";
-  })
-])
+lib.optionals patch_tools_catch_oserror
+  ([
+    # Fixes builds with Nix sandbox on Darwin for gyp.
+    (fetchpatch2 {
+      inherit url;
+      hash = "sha256-kvCMpedjrY64BlaC1R0NVjk/vIVivYAGVgWwMEGeP6k=";
+      stripLen = 1;
+      extraPrefix = "tools/gyp/";
+    })
+  ])
 ++ lib.optionals patch_npm_catch_oserror ([
   (fetchpatch2 {
     inherit url;
@@ -47,7 +48,7 @@ lib.optionals patch_tools_catch_oserror ([
     extraPrefix = "deps/npm/node_modules/node-gyp/gyp/";
   })
 ])
-# TODO: remove the Darwin conditionals from this file
+  # TODO: remove the Darwin conditionals from this file
 ++ lib.optionals stdenv.buildPlatform.isDarwin ([
   ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
 ])

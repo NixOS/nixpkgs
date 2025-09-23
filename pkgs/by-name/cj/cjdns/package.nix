@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  rustPlatform,
-  nodejs,
-  which,
-  util-linux,
-  nixosTests,
-  libsodium,
-  pkg-config,
-  replaceVars,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, nodejs
+, which
+, util-linux
+, nixosTests
+, libsodium
+, pkg-config
+, replaceVars
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,8 +47,8 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ]
   ++
-    # for flock
-    lib.optional stdenv.hostPlatform.isLinux util-linux;
+  # for flock
+  lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   buildInputs = [ libsodium ];
 

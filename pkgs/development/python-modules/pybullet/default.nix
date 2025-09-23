@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  libGLU,
-  libGL,
-  xorg,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, libGLU
+, libGL
+, xorg
+, numpy
+,
 }:
 
 buildPythonPackage rec {

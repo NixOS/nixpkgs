@@ -1,13 +1,13 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytest-aiohttp,
-  pytest-asyncio_0,
-  pytest-cov-stub,
-  pytestCheckHook,
-  setuptools,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytest-aiohttp
+, pytest-asyncio_0
+, pytest-cov-stub
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  python3,
-  ruby,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qtxmlpatterns,
-  which,
-  perl,
-  libgit2,
-  stdenv,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, python3
+, ruby
+, qtbase
+, qtmultimedia
+, qttools
+, qtxmlpatterns
+, which
+, perl
+, libgit2
+, stdenv
+,
 }:
 
 mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  sqlite,
-  libmysqlclient,
-  libpq,
-  unixODBC,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, sqlite
+, libmysqlclient
+, libpq
+, unixODBC
+,
 }:
 
 stdenv.mkDerivation rec {

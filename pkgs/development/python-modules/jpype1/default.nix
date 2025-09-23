@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  ant,
-  openjdk,
-  packaging,
-  pyinstaller,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, ant
+, openjdk
+, packaging
+, pyinstaller
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

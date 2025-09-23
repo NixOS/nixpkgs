@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  systemdLibs,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, systemdLibs
+,
 }:
 
 buildGoModule rec {

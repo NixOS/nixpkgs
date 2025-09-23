@@ -1,11 +1,11 @@
-{
-  lib,
-  pythonOlder,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  cython,
-  slurm,
+{ lib
+, pythonOlder
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, cython
+, slurm
+,
 }:
 
 buildPythonPackage rec {

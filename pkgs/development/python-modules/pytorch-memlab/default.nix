@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  calmsize,
-  pandas,
-  torch,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, calmsize
+, pandas
+, torch
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

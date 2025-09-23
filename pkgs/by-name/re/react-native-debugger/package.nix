@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  cairo,
-  xorg,
-  gdk-pixbuf,
-  fontconfig,
-  pango,
-  atk,
-  at-spi2-atk,
-  at-spi2-core,
-  gtk3,
-  glib,
-  freetype,
-  dbus,
-  nss,
-  nspr,
-  alsa-lib,
-  cups,
-  expat,
-  udev,
-  makeDesktopItem,
-  libdrm,
-  libxkbcommon,
-  libgbm,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, cairo
+, xorg
+, gdk-pixbuf
+, fontconfig
+, pango
+, atk
+, at-spi2-atk
+, at-spi2-core
+, gtk3
+, glib
+, freetype
+, dbus
+, nss
+, nspr
+, alsa-lib
+, cups
+, expat
+, udev
+, makeDesktopItem
+, libdrm
+, libxkbcommon
+, libgbm
+, makeWrapper
+,
 }:
 
 let

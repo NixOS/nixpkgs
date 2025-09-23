@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openjdk11,
-  unzip,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  xdg-utils,
-  imagemagick,
-  maxMemoryAllocationPool ? "1000M",
+{ lib
+, stdenv
+, fetchurl
+, openjdk11
+, unzip
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, xdg-utils
+, imagemagick
+, maxMemoryAllocationPool ? "1000M"
+,
 }:
 
 stdenv.mkDerivation rec {

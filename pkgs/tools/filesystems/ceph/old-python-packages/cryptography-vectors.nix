@@ -1,9 +1,9 @@
 # This older version only exists because `ceph` needs it, see `cryptography.nix`.
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  cryptography,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, cryptography
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkgsBuildHost,
-  glslang,
-  meson,
-  ninja,
-  pkg-config,
-  windows,
-  spirv-headers,
-  vulkan-headers,
-  SDL2,
-  glfw,
-  gitUpdater,
-  sdl2Support ? (!stdenv.hostPlatform.isWindows),
-  glfwSupport ? (!stdenv.hostPlatform.isWindows),
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgsBuildHost
+, glslang
+, meson
+, ninja
+, pkg-config
+, windows
+, spirv-headers
+, vulkan-headers
+, SDL2
+, glfw
+, gitUpdater
+, sdl2Support ? (!stdenv.hostPlatform.isWindows)
+, glfwSupport ? (!stdenv.hostPlatform.isWindows)
+,
 }:
 
 assert stdenv.hostPlatform.isWindows -> !glfwSupport && !sdl2Support;

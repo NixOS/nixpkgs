@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  addDriverRunpath,
-  fetchFromGitHub,
-  pkg-config,
-  elfutils,
-  libcap,
-  libseccomp,
-  rpcsvc-proto,
-  libtirpc,
-  makeWrapper,
-  removeReferencesTo,
-  replaceVars,
-  applyPatches,
-  nvidia-modprobe,
-  go,
+{ stdenv
+, lib
+, addDriverRunpath
+, fetchFromGitHub
+, pkg-config
+, elfutils
+, libcap
+, libseccomp
+, rpcsvc-proto
+, libtirpc
+, makeWrapper
+, removeReferencesTo
+, replaceVars
+, applyPatches
+, nvidia-modprobe
+, go
+,
 }:
 let
   modprobeVersion = "550.54.14";

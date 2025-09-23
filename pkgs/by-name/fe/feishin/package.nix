@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  electron_36,
-  darwin,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, electron_36
+, darwin
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 let
   pname = "feishin";

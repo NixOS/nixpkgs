@@ -1,8 +1,8 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  mkLibretroCore,
+{ lib
+, cmake
+, fetchFromGitHub
+, mkLibretroCore
+,
 }:
 mkLibretroCore {
   core = "swanstation";

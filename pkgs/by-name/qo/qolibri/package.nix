@@ -1,10 +1,10 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  ninja,
-  qt6Packages,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, lib
+, ninja
+, qt6Packages
+, stdenv
+,
 }:
 stdenv.mkDerivation {
   pname = "qolibri";

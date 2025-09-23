@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  menhir,
-  menhirLib,
-  fmt,
-  hmap,
-  qcheck,
+{ lib
+, fetchurl
+, buildDunePackage
+, menhir
+, menhirLib
+, fmt
+, hmap
+, qcheck
+,
 }:
 
 buildDunePackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
-  mlton,
-  pkg-config,
-  getopt,
-  boehmgc,
-  darwin,
-  libbacktrace,
-  libpng,
-  ncurses,
-  readline,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromBitbucket
+, mlton
+, pkg-config
+, getopt
+, boehmgc
+, darwin
+, libbacktrace
+, libpng
+, ncurses
+, readline
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  meson,
-  ninja,
-  pkg-config,
-  pkgsCross,
-  appstream-glib,
-  desktop-file-utils,
-  gobject-introspection,
-  wrapGAppsHook4,
-  glib,
-  gtk4,
-  librsvg,
-  libadwaita,
-  glib-networking,
-  webkitgtk_6_0,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3
+, meson
+, ninja
+, pkg-config
+, pkgsCross
+, appstream-glib
+, desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook4
+, glib
+, gtk4
+, librsvg
+, libadwaita
+, glib-networking
+, webkitgtk_6_0
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

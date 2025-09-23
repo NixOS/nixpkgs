@@ -1,23 +1,23 @@
-{
-  assimp,
-  fetchFromGitHub,
-  ffmpeg,
-  freetype,
-  fribidi,
-  glew,
-  harfbuzz,
-  lib,
-  libGL,
-  libGLU,
-  libpng,
-  makeWrapper,
-  pkg-config,
-  python3,
-  SDL2,
-  stdenv,
-  versionCheckHook,
-  withoutSteam ? true,
-  zlib,
+{ assimp
+, fetchFromGitHub
+, ffmpeg
+, freetype
+, fribidi
+, glew
+, harfbuzz
+, lib
+, libGL
+, libGLU
+, libpng
+, makeWrapper
+, pkg-config
+, python3
+, SDL2
+, stdenv
+, versionCheckHook
+, withoutSteam ? true
+, zlib
+,
 }:
 
 let

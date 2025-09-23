@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  versionCheckHook,
-  meson,
-  pkg-config,
-  openssl,
-  ding-libs,
-  talloc,
-  popt,
-  help2man,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, versionCheckHook
+, meson
+, pkg-config
+, openssl
+, ding-libs
+, talloc
+, popt
+, help2man
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

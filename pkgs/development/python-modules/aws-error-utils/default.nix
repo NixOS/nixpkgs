@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  botocore,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, botocore
+,
 }:
 
 buildPythonPackage rec {

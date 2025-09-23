@@ -1,28 +1,26 @@
-{
-  lib,
-  pythonOlder,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # Python Inputs
-  fastdtw,
-  numpy,
-  pandas,
-  psutil,
-  qiskit-terra,
-  qiskit-optimization,
-  scikit-learn,
-  scipy,
-  quandl,
-  yfinance,
-  # Check Inputs
-  pytestCheckHook,
-  ddt,
-  pytest-timeout,
-  qiskit-aer,
+{ lib
+, pythonOlder
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # Python Inputs
+  fastdtw
+, numpy
+, pandas
+, psutil
+, qiskit-terra
+, qiskit-optimization
+, scikit-learn
+, scipy
+, quandl
+, yfinance
+, # Check Inputs
+  pytestCheckHook
+, ddt
+, pytest-timeout
+, qiskit-aer
+,
 }:
 
 buildPythonPackage rec {

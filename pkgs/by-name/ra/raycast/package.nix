@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  writeShellApplication,
-  cacert,
-  curl,
-  jq,
-  openssl,
-  undmg,
+{ lib
+, stdenvNoCC
+, fetchurl
+, writeShellApplication
+, cacert
+, curl
+, jq
+, openssl
+, undmg
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -26,8 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=x86_64";
         hash = "sha256-ds32HExl4UloN+68gM64cysu335BRZ25zGaPDao0AD0=";
       };
-    }
-    .${stdenvNoCC.system} or (throw "raycast: ${stdenvNoCC.system} is unsupported.");
+    }.${stdenvNoCC.system} or (throw "raycast: ${stdenvNoCC.system} is unsupported.");
 
   dontPatch = true;
   dontConfigure = true;

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  php,
-  writeShellScript,
-  curl,
-  jq,
-  common-updater-scripts,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, php
+, writeShellScript
+, curl
+, jq
+, common-updater-scripts
+,
 }:
 
 assert lib.assertMsg (!php.ztsSupport) "blackfire only supports non zts versions of PHP";
@@ -79,9 +79,10 @@ let
     };
 in
 
-assert lib.assertMsg (
-  hashes ? ${system}.hash.${phpMajor}
-) "blackfire does not support PHP version ${phpMajor} on ${system}.";
+assert lib.assertMsg
+  (
+    hashes ? ${system}.hash.${phpMajor}
+  ) "blackfire does not support PHP version ${phpMajor} on ${system}.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "php-blackfire";
@@ -144,12 +145,14 @@ stdenv.mkDerivation (finalAttrs: {
             })
           );
       in
-      lib.concatMapAttrs (
-        system:
-        { hash, ... }:
+      lib.concatMapAttrs
+        (
+          system:
+          { hash, ... }:
 
-        lib.mapAttrs' (phpMajor: _hash: createUpdateable { inherit phpMajor system; }) hash
-      ) hashes;
+          lib.mapAttrs' (phpMajor: _hash: createUpdateable { inherit phpMajor system; }) hash
+        )
+        hashes;
   };
 
   meta = {

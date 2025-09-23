@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  replaceVars,
-  git,
-  cargo,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
-  darwin,
-  nix-update-script,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, replaceVars
+, git
+, cargo
+, versionCheckHook
+, writableTmpDirAsHomeHook
+, darwin
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

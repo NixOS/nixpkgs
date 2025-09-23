@@ -10,18 +10,18 @@
   3. Run `git commit -m "nongnu-packages $(date -Idate)" -- nongnu-generated.nix`
 */
 
-{
-  lib,
-  pkgs,
-  buildPackages,
+{ lib
+, pkgs
+, buildPackages
+,
 }:
 
 self:
 let
 
   generateNongnu = lib.makeOverridable (
-    {
-      generated ? ./nongnu-generated.nix,
+    { generated ? ./nongnu-generated.nix
+    ,
     }:
     let
 

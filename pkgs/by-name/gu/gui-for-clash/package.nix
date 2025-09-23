@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  copyDesktopItems,
-  nodejs,
-  pkg-config,
-  pnpm_10,
-  wails,
-  webkitgtk_4_1,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, autoPatchelfHook
+, copyDesktopItems
+, nodejs
+, pkg-config
+, pnpm_10
+, wails
+, webkitgtk_4_1
+, makeDesktopItem
+, nix-update-script
+,
 }:
 
 let

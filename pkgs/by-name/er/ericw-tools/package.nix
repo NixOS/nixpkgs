@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  gtest,
-  fmt,
-  cmake,
-  ninja,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gtest
+, fmt
+, cmake
+, ninja
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

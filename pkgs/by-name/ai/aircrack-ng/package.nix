@@ -1,41 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  makeWrapper,
-  autoreconfHook,
-  pkg-config,
-  openssl,
-  libgcrypt,
-  cmocka,
-  expect,
-  sqlite,
-  pcre2,
-
-  # Linux
-  libpcap,
-  zlib,
-  wirelesstools,
-  iw,
-  ethtool,
-  pciutils,
-  libnl,
-  usbutils,
-  tcpdump,
-  hostapd,
-  wpa_supplicant,
-  screen,
-
-  # Cygwin
-  libiconv,
-
-  # options
-  enableExperimental ? true,
-  useGcrypt ? false,
-  enableAirolib ? true,
-  enableRegex ? true,
-  useAirpcap ? stdenv.hostPlatform.isCygwin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, makeWrapper
+, autoreconfHook
+, pkg-config
+, openssl
+, libgcrypt
+, cmocka
+, expect
+, sqlite
+, pcre2
+, # Linux
+  libpcap
+, zlib
+, wirelesstools
+, iw
+, ethtool
+, pciutils
+, libnl
+, usbutils
+, tcpdump
+, hostapd
+, wpa_supplicant
+, screen
+, # Cygwin
+  libiconv
+, # options
+  enableExperimental ? true
+, useGcrypt ? false
+, enableAirolib ? true
+, enableRegex ? true
+, useAirpcap ? stdenv.hostPlatform.isCygwin
+,
 }:
 let
   airpcap-sdk = fetchzip {

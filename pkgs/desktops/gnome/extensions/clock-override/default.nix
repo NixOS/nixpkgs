@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  gnome-shell,
-  gettext,
-  glib,
+{ lib
+, stdenv
+, fetchzip
+, gnome-shell
+, gettext
+, glib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  elixir,
-  fetchFromGitHub,
-  makeWrapper,
-  stdenv,
-  nix-update-script,
+{ lib
+, elixir
+, fetchFromGitHub
+, makeWrapper
+, stdenv
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

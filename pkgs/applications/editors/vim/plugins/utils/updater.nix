@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonApplication,
-  makeWrapper,
-  nix,
-  nix-prefetch-git,
-  nurl,
-  python3Packages,
-  vimPluginsUpdater,
-  writeShellScript,
-
-  # optional
-  neovim-unwrapped,
+{ lib
+, buildPythonApplication
+, makeWrapper
+, nix
+, nix-prefetch-git
+, nurl
+, python3Packages
+, vimPluginsUpdater
+, writeShellScript
+, # optional
+  neovim-unwrapped
+,
 }:
 buildPythonApplication {
   pname = "vim-plugins-updater";

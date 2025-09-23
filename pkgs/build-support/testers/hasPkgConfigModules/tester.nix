@@ -1,31 +1,32 @@
 # Static arguments
-{
-  lib,
-  runCommand,
-  pkg-config,
+{ lib
+, runCommand
+, pkg-config
+,
 }:
 
 # Tester arguments
-{
-  package,
-  moduleNames ? package.meta.pkgConfigModules,
-  testName ? "check-pkg-config-${package.pname or package.name}",
-  version ? package.version or null,
-  versionCheck ? false,
+{ package
+, moduleNames ? package.meta.pkgConfigModules
+, testName ? "check-pkg-config-${package.pname or package.name}"
+, version ? package.version or null
+, versionCheck ? false
+,
 }:
 
 runCommand testName
-  {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ package ];
-    inherit moduleNames version versionCheck;
-    meta = {
-      description = "Test whether ${package.name} exposes pkg-config modules ${lib.concatStringsSep ", " moduleNames}";
-    }
-    # Make sure licensing info etc is preserved, as this is a concern for e.g. cache.nixos.org,
-    # as hydra can't check this meta info in dependencies.
-    # The test itself is just Nixpkgs, with MIT license.
-    // builtins.intersectAttrs {
+{
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ package ];
+  inherit moduleNames version versionCheck;
+  meta = {
+    description = "Test whether ${package.name} exposes pkg-config modules ${lib.concatStringsSep ", " moduleNames}";
+  }
+  # Make sure licensing info etc is preserved, as this is a concern for e.g. cache.nixos.org,
+  # as hydra can't check this meta info in dependencies.
+  # The test itself is just Nixpkgs, with MIT license.
+  // builtins.intersectAttrs
+    {
       available = throw "unused";
       broken = throw "unused";
       insecure = throw "unused";
@@ -35,8 +36,9 @@ runCommand testName
       platforms = throw "unused";
       unfree = throw "unused";
       unsupported = throw "unused";
-    } package.meta;
-  }
+    }
+    package.meta;
+}
   ''
     touch "$out"
     notFound=0

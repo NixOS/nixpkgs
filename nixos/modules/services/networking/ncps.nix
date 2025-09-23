@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.ncps;
@@ -23,9 +22,10 @@ let
       [
         "--otel-enabled"
       ]
-      ++ (lib.optional (
-        cfg.openTelemetry.grpcURL != null
-      ) "--otel-grpc-url='${cfg.openTelemetry.grpcURL}'")
+      ++ (lib.optional
+        (
+          cfg.openTelemetry.grpcURL != null
+        ) "--otel-grpc-url='${cfg.openTelemetry.grpcURL}'")
     ))
     ++ (lib.optionals cfg.prometheus.enable [
       "--prometheus-enabled"

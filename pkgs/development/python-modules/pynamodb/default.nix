@@ -1,16 +1,16 @@
-{
-  lib,
-  blinker,
-  botocore,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  pytest-env,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, blinker
+, botocore
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, pytest-env
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGhidraExtension,
-  ghidra,
+{ lib
+, buildGhidraExtension
+, ghidra
+,
 }:
 
 buildGhidraExtension {

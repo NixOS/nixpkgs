@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  git,
-  mercurial,
+{ lib
+, python3
+, fetchPypi
+, git
+, mercurial
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

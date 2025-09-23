@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  autoPatchelfHook,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gdk-pixbuf,
-  jre,
-  android-tools,
+{ lib
+, stdenvNoCC
+, fetchzip
+, autoPatchelfHook
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, wrapGAppsHook3
+, gobject-introspection
+, gdk-pixbuf
+, jre
+, android-tools
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

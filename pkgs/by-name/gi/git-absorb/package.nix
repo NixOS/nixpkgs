@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  asciidoc,
-  fetchFromGitHub,
-  gitMinimal,
-  rustPlatform,
-  installShellFiles,
-  which,
+{ lib
+, stdenv
+, asciidoc
+, fetchFromGitHub
+, gitMinimal
+, rustPlatform
+, installShellFiles
+, which
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  perl,
-  pandoc,
-  fetchFromGitHub,
-  xdotool,
-  wmctrl,
-  xprop,
-  net-tools,
+{ stdenv
+, lib
+, perl
+, pandoc
+, fetchFromGitHub
+, xdotool
+, wmctrl
+, xprop
+, net-tools
+,
 }:
 
 stdenv.mkDerivation rec {

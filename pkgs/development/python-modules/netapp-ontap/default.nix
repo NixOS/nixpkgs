@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  marshmallow,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  setuptools,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, marshmallow
+, pythonOlder
+, requests
+, requests-toolbelt
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

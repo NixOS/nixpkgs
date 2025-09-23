@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  doxygen,
-  gperf,
-  pkg-config,
-  librevenge,
-  libxml2,
-  perl,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, doxygen
+, gperf
+, pkg-config
+, librevenge
+, libxml2
+, perl
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

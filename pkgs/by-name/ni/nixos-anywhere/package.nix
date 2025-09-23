@@ -1,19 +1,19 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  openssh,
-  gitMinimal,
-  nix,
-  coreutils,
-  curl,
-  gnugrep,
-  gawk,
-  findutils,
-  gnused,
-  lib,
-  makeWrapper,
-  sshpass,
-  gnutar,
+{ stdenv
+, fetchFromGitHub
+, openssh
+, gitMinimal
+, nix
+, coreutils
+, curl
+, gnugrep
+, gawk
+, findutils
+, gnused
+, lib
+, makeWrapper
+, sshpass
+, gnutar
+,
 }:
 let
   runtimeDeps = [

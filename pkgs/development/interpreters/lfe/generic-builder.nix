@@ -1,28 +1,28 @@
-{
-  config,
-  lib,
-  fetchFromGitHub,
-  erlang,
-  makeWrapper,
-  coreutils,
-  bash,
-  buildRebar3,
-  buildHex,
+{ config
+, lib
+, fetchFromGitHub
+, erlang
+, makeWrapper
+, coreutils
+, bash
+, buildRebar3
+, buildHex
+,
 }:
 
-{
-  baseName ? "lfe",
-  version,
-  maximumOTPVersion,
-  sha256 ? "",
-  hash ? "",
-  rev ? version,
-  src ? fetchFromGitHub {
+{ baseName ? "lfe"
+, version
+, maximumOTPVersion
+, sha256 ? ""
+, hash ? ""
+, rev ? version
+, src ? fetchFromGitHub {
     inherit hash rev sha256;
     owner = "lfe";
     repo = "lfe";
-  },
-  patches ? [ ],
+  }
+, patches ? [ ]
+,
 }:
 
 let
@@ -49,7 +49,7 @@ let
 
 in
 if !config.allowAliases && !maxAssert then
-  # Don't throw without aliases to not break CI.
+# Don't throw without aliases to not break CI.
   null
 else
   assert assertMsg maxAssert ''

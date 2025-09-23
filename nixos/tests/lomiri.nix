@@ -11,10 +11,10 @@ let
 
   # tmpfiles setup to make OCRing on terminal output more reliable
   terminalOcrTmpfilesSetup =
-    {
-      pkgs,
-      lib,
-      config,
+    { pkgs
+    , lib
+    , config
+    ,
     }:
     let
       white = "255, 255, 255";
@@ -122,13 +122,12 @@ let
   '';
 
   makeIndicatorTest =
-    {
-      name,
-      left,
-      ocr,
-      extraCheck ? null,
-
-      titleOcr,
+    { name
+    , left
+    , ocr
+    , extraCheck ? null
+    , titleOcr
+    ,
     }:
 
     makeTest (
@@ -206,34 +205,36 @@ let
     );
 
   makeIndicatorTests =
-    {
-      titles,
-      details,
+    { titles
+    , details
+    ,
     }:
     let
       titleOcr = "r\"(${builtins.concatStringsSep "|" titles})\"";
     in
     builtins.listToAttrs (
-      builtins.map (
-        {
-          name,
-          left,
-          ocr,
-          extraCheck ? null,
-        }:
-        {
-          name = "desktop-ayatana-indicator-${name}";
-          value = makeIndicatorTest {
-            inherit
-              name
-              left
-              ocr
-              extraCheck
-              titleOcr
-              ;
-          };
-        }
-      ) details
+      builtins.map
+        (
+          { name
+          , left
+          , ocr
+          , extraCheck ? null
+          ,
+          }:
+          {
+            name = "desktop-ayatana-indicator-${name}";
+            value = makeIndicatorTest {
+              inherit
+                name
+                left
+                ocr
+                extraCheck
+                titleOcr
+                ;
+            };
+          }
+        )
+        details
     );
 in
 {
@@ -763,7 +764,7 @@ in
       }
     );
 }
-// makeIndicatorTests {
+  // makeIndicatorTests {
   titles = [
     "Notifications" # messages
     "Rotation" # display

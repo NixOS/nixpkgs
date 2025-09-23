@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  pkg-config,
-  rrdtool,
+{ buildPecl
+, lib
+, pkg-config
+, rrdtool
+,
 }:
 
 buildPecl {

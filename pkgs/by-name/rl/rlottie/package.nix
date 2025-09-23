@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  ninja,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "-U__ARM_NEON__";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+    ) "-U__ARM_NEON__";
 
   meta = with lib; {
     homepage = "https://github.com/Samsung/rlottie";

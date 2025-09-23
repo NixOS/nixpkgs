@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  beautifulsoup4,
-  lxml,
-  cssutils,
-  nltk,
-  pytest-lazy-fixture,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, beautifulsoup4
+, lxml
+, cssutils
+, nltk
+, pytest-lazy-fixture
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

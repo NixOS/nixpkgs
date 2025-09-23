@@ -1,16 +1,16 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  aresponses,
-  buildPythonPackage,
-  ciso8601,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-freezegun,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiofiles
+, aiohttp
+, aresponses
+, buildPythonPackage
+, ciso8601
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-freezegun
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

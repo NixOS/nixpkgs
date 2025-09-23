@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  ddt,
-  fetchFromGitHub,
-  importlib-metadata,
-  jsonschema,
-  license-expression,
-  lxml,
-  packageurl-python,
-  py-serializable,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  requirements-parser,
-  sortedcontainers,
-  setuptools,
-  toml,
-  types-setuptools,
-  types-toml,
-  xmldiff,
+{ lib
+, buildPythonPackage
+, ddt
+, fetchFromGitHub
+, importlib-metadata
+, jsonschema
+, license-expression
+, lxml
+, packageurl-python
+, py-serializable
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, requirements-parser
+, sortedcontainers
+, setuptools
+, toml
+, types-setuptools
+, types-toml
+, xmldiff
+,
 }:
 
 buildPythonPackage rec {

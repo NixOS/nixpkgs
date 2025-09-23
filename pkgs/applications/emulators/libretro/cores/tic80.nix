@@ -1,9 +1,9 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  mkLibretroCore,
-  pkg-config,
+{ lib
+, cmake
+, fetchFromGitHub
+, mkLibretroCore
+, pkg-config
+,
 }:
 mkLibretroCore {
   core = "tic80";

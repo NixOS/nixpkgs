@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  gettext,
-  intltool,
-  pkg-config,
-  glib,
-  imagemagick,
-  libpng,
-  pstoedit,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, gettext
+, intltool
+, pkg-config
+, glib
+, imagemagick
+, libpng
+, pstoedit
+,
 }:
 
 stdenv.mkDerivation rec {

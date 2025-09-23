@@ -1,13 +1,13 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  perl,
-  openssh,
-  rsync,
-  logger,
-  versionCheckHook,
-  nix-update-script,
+{ fetchurl
+, lib
+, stdenv
+, perl
+, openssh
+, rsync
+, logger
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

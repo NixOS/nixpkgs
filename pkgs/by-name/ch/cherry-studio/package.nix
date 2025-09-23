@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  yarn-berry_4,
-  nodejs,
-  python3,
-  electron_37,
-  makeWrapper,
-  writableTmpDirAsHomeHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  commandLineArgs ? "",
+{ lib
+, stdenv
+, fetchFromGitHub
+, yarn-berry_4
+, nodejs
+, python3
+, electron_37
+, makeWrapper
+, writableTmpDirAsHomeHook
+, makeDesktopItem
+, copyDesktopItems
+, commandLineArgs ? ""
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  lib,
-  awsiotsdk,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  paho-mqtt,
-  requests,
-  urllib3,
+{ lib
+, awsiotsdk
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, paho-mqtt
+, requests
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

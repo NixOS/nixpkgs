@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeDesktopItem,
-  patsh,
-  coreutils,
-  xorg,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeDesktopItem
+, patsh
+, coreutils
+, xorg
+, nixosTests
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

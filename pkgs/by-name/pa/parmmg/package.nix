@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  cmake,
-  gfortran,
-  perl,
-  mpi,
-  metis,
-  mmg,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, cmake
+, gfortran
+, perl
+, mpi
+, metis
+, mmg
+,
 }:
 stdenv.mkDerivation {
   pname = "parmmg";

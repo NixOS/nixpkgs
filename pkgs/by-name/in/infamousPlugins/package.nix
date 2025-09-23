@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cairomm,
-  cmake,
-  lv2,
-  libpthreadstubs,
-  libXdmcp,
-  libXft,
-  ntk,
-  pcre,
-  fftwFloat,
-  zita-resampler,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cairomm
+, cmake
+, lv2
+, libpthreadstubs
+, libXdmcp
+, libXft
+, ntk
+, pcre
+, fftwFloat
+, zita-resampler
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,25 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  locket,
-  toolz,
-
-  # optional-dependencies
-  blosc2,
-  numpy,
-  pandas,
-  pyzmq,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  locket
+, toolz
+, # optional-dependencies
+  blosc2
+, numpy
+, pandas
+, pyzmq
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

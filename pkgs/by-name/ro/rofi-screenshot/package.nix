@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  libnotify,
-  slop,
-  ffcast,
-  ffmpeg,
-  xclip,
-  rofi,
-  coreutils,
-  gnused,
-  procps,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, libnotify
+, slop
+, ffcast
+, ffmpeg
+, xclip
+, rofi
+, coreutils
+, gnused
+, procps
+,
 }:
 
 stdenv.mkDerivation {

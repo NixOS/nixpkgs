@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  testers,
-  earthly,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, testers
+, earthly
+,
 }:
 
 buildGoModule rec {

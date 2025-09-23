@@ -1,13 +1,13 @@
-{
-  lib,
-  aiobotocore,
-  boto3,
-  buildPythonPackage,
-  dvc-objects,
-  fetchPypi,
-  flatten-dict,
-  s3fs,
-  setuptools-scm,
+{ lib
+, aiobotocore
+, boto3
+, buildPythonPackage
+, dvc-objects
+, fetchPypi
+, flatten-dict
+, s3fs
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

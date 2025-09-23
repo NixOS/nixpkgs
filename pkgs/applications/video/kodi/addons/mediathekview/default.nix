@@ -1,8 +1,8 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  myconnpy,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, myconnpy
+,
 }:
 
 buildKodiAddon rec {

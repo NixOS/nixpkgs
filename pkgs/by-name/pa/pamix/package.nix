@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  libpulseaudio,
-  ncurses,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, libpulseaudio
+, ncurses
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

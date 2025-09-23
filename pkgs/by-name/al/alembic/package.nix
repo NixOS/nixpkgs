@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openexr,
-  hdf5-threadsafe,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openexr
+, hdf5-threadsafe
+,
 }:
 
 stdenv.mkDerivation rec {

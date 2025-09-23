@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
-  numpy,
-  xarray,
-  xarray-dataclass,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, hatchling
+, pytestCheckHook
+, numpy
+, xarray
+, xarray-dataclass
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  makeWrapper,
-  symlinkJoin,
-  configFile ? null,
-  termite,
+{ makeWrapper
+, symlinkJoin
+, configFile ? null
+, termite
+,
 }:
 
 if configFile == null then

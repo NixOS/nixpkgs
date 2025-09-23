@@ -1,49 +1,44 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  arxiv,
-  beautifulsoup4,
-  bibtexparser,
-  click,
-  colorama,
-  dominate,
-  filetype,
-  habanero,
-  isbnlib,
-  lxml,
-  platformdirs,
-  prompt-toolkit,
-  pygments,
-  pyparsing,
-  python-doi,
-  python-slugify,
-  pyyaml,
-  requests,
-  stevedore,
-
-  # optional dependencies
-  chardet,
-  citeproc-py,
-  jinja2,
-  markdownify,
-  whoosh,
-
-  # switch for optional dependencies
-  withOptDeps ? false,
-
-  # tests
-  docutils,
-  git,
-  pytestCheckHook,
-  pytest-cov-stub,
-  sphinx,
-  sphinx-click,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  arxiv
+, beautifulsoup4
+, bibtexparser
+, click
+, colorama
+, dominate
+, filetype
+, habanero
+, isbnlib
+, lxml
+, platformdirs
+, prompt-toolkit
+, pygments
+, pyparsing
+, python-doi
+, python-slugify
+, pyyaml
+, requests
+, stevedore
+, # optional dependencies
+  chardet
+, citeproc-py
+, jinja2
+, markdownify
+, whoosh
+, # switch for optional dependencies
+  withOptDeps ? false
+, # tests
+  docutils
+, git
+, pytestCheckHook
+, pytest-cov-stub
+, sphinx
+, sphinx-click
+,
 }:
 buildPythonPackage rec {
   pname = "papis";

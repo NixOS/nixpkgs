@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  libtool,
-  pkg-config,
-  libxml2,
-  json_c,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, libtool
+, pkg-config
+, libxml2
+, json_c
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

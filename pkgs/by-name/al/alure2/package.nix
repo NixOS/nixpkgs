@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openal,
-  libvorbis,
-  opusfile,
-  libsndfile,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openal
+, libvorbis
+, opusfile
+, libsndfile
+,
 }:
 
 stdenv.mkDerivation {

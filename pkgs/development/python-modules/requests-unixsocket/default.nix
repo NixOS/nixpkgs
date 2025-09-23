@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  requests,
-  setuptools-scm,
-  setuptools,
-  waitress,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, requests
+, setuptools-scm
+, setuptools
+, waitress
+,
 }:
 
 buildPythonPackage rec {

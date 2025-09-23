@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glibc,
-  libX11,
-  runtimeShell,
-  libGLU,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, glibc
+, libX11
+, runtimeShell
+, libGLU
+, libGL
+,
 }:
 
 stdenv.mkDerivation rec {

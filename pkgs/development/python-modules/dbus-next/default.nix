@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  setuptools,
-  dbus,
-  pytest,
-  pytest-asyncio,
-  pytest-timeout,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, setuptools
+, dbus
+, pytest
+, pytest-asyncio
+, pytest-timeout
+,
 }:
 
 buildPythonPackage rec {

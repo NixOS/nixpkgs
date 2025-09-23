@@ -1,24 +1,24 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  resvg,
-  pngquant,
-  absl-py,
-  fonttools,
-  lxml,
-  ninja,
-  picosvg,
-  pillow,
-  regex,
-  toml,
-  tomlkit,
-  ufo2ft,
-  ufolib2,
-  zopfli,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, resvg
+, pngquant
+, absl-py
+, fonttools
+, lxml
+, ninja
+, picosvg
+, pillow
+, regex
+, toml
+, tomlkit
+, ufo2ft
+, ufolib2
+, zopfli
+,
 }:
 
 buildPythonPackage rec {

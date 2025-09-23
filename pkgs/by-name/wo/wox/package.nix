@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flutter332,
-  keybinder3,
-  nodejs,
-  pnpm_9,
-  python3Packages,
-  writableTmpDirAsHomeHook,
-  buildGo125Module,
-  pkg-config,
-  autoPatchelfHook,
-  xorg,
-  libxkbcommon,
-  libayatana-appindicator,
-  gtk3,
-  desktop-file-utils,
-  xdg-utils,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, flutter332
+, keybinder3
+, nodejs
+, pnpm_9
+, python3Packages
+, writableTmpDirAsHomeHook
+, buildGo125Module
+, pkg-config
+, autoPatchelfHook
+, xorg
+, libxkbcommon
+, libayatana-appindicator
+, gtk3
+, desktop-file-utils
+, xdg-utils
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 let

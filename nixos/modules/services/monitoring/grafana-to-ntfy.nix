@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -82,9 +81,10 @@ in
         LoadCredential = [
           "BAUTH_PASS_FILE:${cfg.settings.bauthPass}"
         ]
-        ++ lib.optional (
-          cfg.settings.ntfyBAuthPass != null
-        ) "NTFY_BAUTH_PASS_FILE:${cfg.settings.ntfyBAuthPass}";
+        ++ lib.optional
+          (
+            cfg.settings.ntfyBAuthPass != null
+          ) "NTFY_BAUTH_PASS_FILE:${cfg.settings.ntfyBAuthPass}";
 
         DynamicUser = true;
         CapabilityBoundingSet = [ "" ];

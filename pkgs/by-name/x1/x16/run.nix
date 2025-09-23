@@ -1,7 +1,7 @@
-{
-  runtimeShell,
-  symlinkJoin,
-  writeShellScriptBin,
+{ runtimeShell
+, symlinkJoin
+, writeShellScriptBin
+,
 }:
 
 { emulator, rom }:

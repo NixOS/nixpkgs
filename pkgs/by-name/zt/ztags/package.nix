@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  scdoc,
-  zig_0_13,
+{ lib
+, stdenv
+, fetchFromGitHub
+, scdoc
+, zig_0_13
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  copyDesktopItems,
-  fetchFromGitHub,
-  lib,
-  makeDesktopItem,
-  python3Packages,
-  qt6,
-  wrapGAppsHook3,
-  writeText,
-  xvfb-run,
-  udevCheckHook,
+{ copyDesktopItems
+, fetchFromGitHub
+, lib
+, makeDesktopItem
+, python3Packages
+, qt6
+, wrapGAppsHook3
+, writeText
+, xvfb-run
+, udevCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  unzip,
-  makeWrapper,
+{ stdenvNoCC
+, lib
+, fetchurl
+, unzip
+, makeWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  icalendar,
-  pytestCheckHook,
-  pytest-django,
-  python-dateutil,
-  pythonOlder,
-  pytz,
-  setuptools,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, icalendar
+, pytestCheckHook
+, pytest-django
+, python-dateutil
+, pythonOlder
+, pytz
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

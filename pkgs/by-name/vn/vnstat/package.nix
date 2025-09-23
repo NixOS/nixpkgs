@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gd,
-  ncurses,
-  sqlite,
-  check,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gd
+, ncurses
+, sqlite
+, check
+,
 }:
 
 stdenv.mkDerivation rec {

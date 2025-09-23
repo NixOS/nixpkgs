@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  llvmPackages,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  nixosTests,
+{ lib
+, stdenv
+, llvmPackages
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, nixosTests
+,
 }:
 
 let

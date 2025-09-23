@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  # build support
-  autoreconfHook,
-  flex,
-  gnulib,
-  pkg-config,
-  texinfo,
-  # libraries
-  brotli,
-  bzip2,
-  gpgme,
-  libhsts,
-  libidn2,
-  libpsl,
-  lzip,
-  nghttp2,
-  openssl,
-  pcre2,
-  sslSupport ? true,
-  xz,
-  zlib,
-  zstd,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, # build support
+  autoreconfHook
+, flex
+, gnulib
+, pkg-config
+, texinfo
+, # libraries
+  brotli
+, bzip2
+, gpgme
+, libhsts
+, libidn2
+, libpsl
+, lzip
+, nghttp2
+, openssl
+, pcre2
+, sslSupport ? true
+, xz
+, zlib
+, zstd
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

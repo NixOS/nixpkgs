@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  microsoft-kiota-abstractions,
-  microsoft-kiota-serialization-json,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, microsoft-kiota-abstractions
+, microsoft-kiota-serialization-json
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

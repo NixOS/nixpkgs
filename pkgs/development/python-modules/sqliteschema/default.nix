@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mbstrdecoder,
-  setuptools,
-  setuptools-scm,
-  simplesqlite,
-  sqliteschema,
-  tabledata,
-  typepy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mbstrdecoder
+, setuptools
+, setuptools-scm
+, simplesqlite
+, sqliteschema
+, tabledata
+, typepy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

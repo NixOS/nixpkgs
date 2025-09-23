@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  htslib,
-  perl,
-  ncurses ? null,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, htslib
+, perl
+, ncurses ? null
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,6 @@
-{
-  llama-swap,
-
-  buildNpmPackage,
+{ llama-swap
+, buildNpmPackage
+,
 }:
 
 buildNpmPackage (finalAttrs: {

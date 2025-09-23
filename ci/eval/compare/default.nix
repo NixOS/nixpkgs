@@ -1,12 +1,12 @@
-{
-  callPackage,
-  lib,
-  jq,
-  runCommand,
-  writeText,
-  python3,
-  stdenvNoCC,
-  makeWrapper,
+{ callPackage
+, lib
+, jq
+, runCommand
+, writeText
+, python3
+, stdenvNoCC
+, makeWrapper
+,
 }:
 let
   python = python3.withPackages (ps: [
@@ -45,11 +45,11 @@ let
     };
   };
 in
-{
-  combinedDir,
-  touchedFilesJson,
-  githubAuthorId,
-  byName ? false,
+{ combinedDir
+, touchedFilesJson
+, githubAuthorId
+, byName ? false
+,
 }:
 let
   # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
@@ -131,9 +131,11 @@ let
     let
       rebuildsByPlatform = groupByPlatform rebuildsPackagePlatformAttrs;
       rebuildsByKernel = groupByKernel rebuildsPackagePlatformAttrs;
-      rebuildCountByKernel = lib.mapAttrs (
-        kernel: kernelRebuilds: lib.length kernelRebuilds
-      ) rebuildsByKernel;
+      rebuildCountByKernel = lib.mapAttrs
+        (
+          kernel: kernelRebuilds: lib.length kernelRebuilds
+        )
+        rebuildsByKernel;
     in
     writeText "changed-paths.json" (
       builtins.toJSON {
@@ -146,16 +148,18 @@ let
         labels =
           getLabels rebuildCountByKernel
           # Sets "10.rebuild-*-stdenv" label to whether the "stdenv" attribute was changed.
-          // lib.mapAttrs' (
-            kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
-          ) rebuildsByKernel
+          // lib.mapAttrs'
+            (
+              kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
+            )
+            rebuildsByKernel
           // {
             "10.rebuild-nixos-tests" =
               lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds)
               &&
-                # Only set this label when no other label with indication for staging has been set.
-                # This avoids confusion whether to target staging or batch this with kernel updates.
-                lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
+              # Only set this label when no other label with indication for staging has been set.
+              # This avoids confusion whether to target staging or batch this with kernel updates.
+              lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
             # Set the "11.by: package-maintainer" label to whether all packages directly
             # changed are maintained by the PR's author.
             "11.by: package-maintainer" =
@@ -175,15 +179,15 @@ let
   };
 in
 runCommand "compare"
-  {
-    # Don't depend on -dev outputs to reduce closure size for CI.
-    nativeBuildInputs = map lib.getBin [
-      jq
-      cmp-stats
-    ];
-    maintainers = builtins.toJSON maintainers;
-    passAsFile = [ "maintainers" ];
-  }
+{
+  # Don't depend on -dev outputs to reduce closure size for CI.
+  nativeBuildInputs = map lib.getBin [
+    jq
+    cmp-stats
+  ];
+  maintainers = builtins.toJSON maintainers;
+  passAsFile = [ "maintainers" ];
+}
   ''
     mkdir $out
 

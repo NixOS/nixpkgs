@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  config,
-  wrapGAppsHook3,
-  autoPatchelfHook,
-  alsa-lib,
-  curl,
-  dbus-glib,
-  gtk3,
-  libXtst,
-  libva,
-  pciutils,
-  pipewire,
-  adwaita-icon-theme,
-  writeText,
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
+{ lib
+, stdenv
+, fetchurl
+, config
+, wrapGAppsHook3
+, autoPatchelfHook
+, alsa-lib
+, curl
+, dbus-glib
+, gtk3
+, libXtst
+, libva
+, pciutils
+, pipewire
+, adwaita-icon-theme
+, writeText
+, patchelfUnstable
+, # have to use patchelfUnstable to support --no-clobber-old-sections
 }:
 
 let
@@ -50,8 +50,7 @@ stdenv.mkDerivation {
         i686-linux = "sha256-hDB1bo5TCiahFGAOzWLRMxy6hc7whsGbfiJsNxhnXok=";
         x86_64-linux = "sha256-ijfsxA9XUZanPUXvOysouJNv7tUoclE1E4PoFOZP/EY=";
         aarch64-linux = "sha256-pB+AQropvNw7kCUqeDHPMkDVht4Dl/98tcaszlw3Qj8=";
-      }
-      .${stdenv.hostPlatform.system} or throwSystem;
+      }.${stdenv.hostPlatform.system} or throwSystem;
   };
 
   nativeBuildInputs = [

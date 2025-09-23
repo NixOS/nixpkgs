@@ -29,10 +29,12 @@ self: super:
     });
 
     # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-    hakyll = overrideCabal {
-      testToolDepends = [ ];
-      doCheck = false;
-    } super.hakyll;
+    hakyll = overrideCabal
+      {
+        testToolDepends = [ ];
+        doCheck = false;
+      }
+      super.hakyll;
 
     double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
@@ -42,12 +44,14 @@ self: super:
 
     # darwin doesn't have sub-second resolution
     # https://github.com/hspec/mockery/issues/11
-    mockery = overrideCabal (drv: {
-      preCheck = ''
-        export TRAVIS=true
-      ''
-      + (drv.preCheck or "");
-    }) super.mockery;
+    mockery = overrideCabal
+      (drv: {
+        preCheck = ''
+          export TRAVIS=true
+        ''
+        + (drv.preCheck or "");
+      })
+      super.mockery;
 
     # https://github.com/ndmitchell/shake/issues/206
     shake = dontCheck super.shake;
@@ -62,16 +66,18 @@ self: super:
     # issues finding libcharset.h without libiconv in buildInputs on darwin.
     with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
 
-    git-annex = overrideCabal (drv: {
-      # We can't use testFlags since git-annex side steps the Cabal test mechanism
-      preCheck = drv.preCheck or "" + ''
-        checkFlagsArray+=(
-          # The addurl test cases require security(1) to be in PATH which we can't
-          # provide from nixpkgs to my (@sternenseemann) knowledge.
-          "-p" "!/addurl/"
-        )
-      '';
-    }) super.git-annex;
+    git-annex = overrideCabal
+      (drv: {
+        # We can't use testFlags since git-annex side steps the Cabal test mechanism
+        preCheck = drv.preCheck or "" + ''
+          checkFlagsArray+=(
+            # The addurl test cases require security(1) to be in PATH which we can't
+            # provide from nixpkgs to my (@sternenseemann) knowledge.
+            "-p" "!/addurl/"
+          )
+        '';
+      })
+      super.git-annex;
 
     # on*Finish tests rely on a threadDelay timing differential of 0.1s.
     # You'd think that's plenty of time even though immediate rescheduling
@@ -90,24 +96,28 @@ self: super:
     # TODO(matthewbauer): If someone really needs this to work in sandboxes,
     # I think we can add a propagatedImpureHost dep here, but I’m hoping to
     # get a proper fix available soonish.
-    x509-system = overrideCabal (
-      drv:
-      lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
-        postPatch = ''
-          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-        ''
-        + (drv.postPatch or "");
-      }
-    ) super.x509-system;
-    crypton-x509-system = overrideCabal (
-      drv:
-      lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
-        postPatch = ''
-          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-        ''
-        + (drv.postPatch or "");
-      }
-    ) super.crypton-x509-system;
+    x509-system = overrideCabal
+      (
+        drv:
+        lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+          postPatch = ''
+            substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+          ''
+          + (drv.postPatch or "");
+        }
+      )
+      super.x509-system;
+    crypton-x509-system = overrideCabal
+      (
+        drv:
+        lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+          postPatch = ''
+            substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+          ''
+          + (drv.postPatch or "");
+        }
+      )
+      super.crypton-x509-system;
 
     # https://github.com/haskell-foundation/foundation/pull/412
     foundation = dontCheck super.foundation;
@@ -116,18 +126,20 @@ self: super:
     # https://github.com/fpco/haskell-filesystem/issues/37
     system-fileio = dontCheck super.system-fileio;
 
-    llvm-hs = overrideCabal (oldAttrs: {
-      # One test fails on darwin.
-      doCheck = false;
-      # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
-      # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
-      # when called from GHC, probably because clang is version 7, but we are
-      # using LLVM8.
-      preCompileBuildDriver = ''
-        substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
-      ''
-      + (oldAttrs.preCompileBuildDriver or "");
-    }) super.llvm-hs;
+    llvm-hs = overrideCabal
+      (oldAttrs: {
+        # One test fails on darwin.
+        doCheck = false;
+        # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
+        # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
+        # when called from GHC, probably because clang is version 7, but we are
+        # using LLVM8.
+        preCompileBuildDriver = ''
+          substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
+        ''
+        + (oldAttrs.preCompileBuildDriver or "");
+      })
+      super.llvm-hs;
 
     sym = markBroken super.sym;
 
@@ -140,19 +152,23 @@ self: super:
     hidapi = super.hidapi.override { systemd = null; };
 
     # Ensure the necessary frameworks are propagatedBuildInputs on darwin
-    OpenGLRaw = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends;
-      preConfigure = ''
-        frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
-        frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
-        configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
-      ''
-      + (drv.preConfigure or "");
-    }) super.OpenGLRaw;
-    bindings-GLFW = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-    }) super.bindings-GLFW;
+    OpenGLRaw = overrideCabal
+      (drv: {
+        librarySystemDepends = [ ];
+        libraryHaskellDepends = drv.libraryHaskellDepends;
+        preConfigure = ''
+          frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
+          frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
+          configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
+        ''
+        + (drv.preConfigure or "");
+      })
+      super.OpenGLRaw;
+    bindings-GLFW = overrideCabal
+      (drv: {
+        librarySystemDepends = [ ];
+      })
+      super.bindings-GLFW;
 
     # cabal2nix likes to generate dependencies on hinotify when hfsevents is
     # really required on darwin: https://github.com/NixOS/cabal2nix/issues/146.
@@ -162,55 +178,65 @@ self: super:
     # http://openradar.appspot.com/10207999 and similar issues.
     fsnotify = dontCheck super.fsnotify;
 
-    HTF = overrideCabal (drv: {
-      # GNU find is not prefixed in stdenv
-      postPatch = ''
-        substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
-      ''
-      + (drv.postPatch or "");
-    }) super.HTF;
+    HTF = overrideCabal
+      (drv: {
+        # GNU find is not prefixed in stdenv
+        postPatch = ''
+          substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
+        ''
+        + (drv.postPatch or "");
+      })
+      super.HTF;
 
     # conditional dependency via a cabal flag
-    cas-store = overrideCabal (drv: {
-      libraryHaskellDepends = [
-        self.kqueue
-      ]
-      ++ (drv.libraryHaskellDepends or [ ]);
-    }) super.cas-store;
+    cas-store = overrideCabal
+      (drv: {
+        libraryHaskellDepends = [
+          self.kqueue
+        ]
+        ++ (drv.libraryHaskellDepends or [ ]);
+      })
+      super.cas-store;
 
     # We are lacking pure pgrep at the moment for tests to work
     tmp-postgres = dontCheck super.tmp-postgres;
 
     # On darwin librt doesn't exist and will fail to link against,
     # however linking against it is also not necessary there
-    GLHUI = overrideCabal (drv: {
-      postPatch = ''
-        substituteInPlace GLHUI.cabal --replace " rt" ""
-      ''
-      + (drv.postPatch or "");
-    }) super.GLHUI;
+    GLHUI = overrideCabal
+      (drv: {
+        postPatch = ''
+          substituteInPlace GLHUI.cabal --replace " rt" ""
+        ''
+        + (drv.postPatch or "");
+      })
+      super.GLHUI;
 
-    SDL-image = overrideCabal (drv: {
-      # Prevent darwin-specific configuration code path being taken
-      # which doesn't work with nixpkgs' SDL libraries
-      postPatch = ''
-        substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-      ''
-      + (drv.postPatch or "");
-      patches = [
-        # Work around SDL_main.h redefining main to SDL_main
-        ./patches/SDL-image-darwin-hsc.patch
-      ];
-    }) super.SDL-image;
+    SDL-image = overrideCabal
+      (drv: {
+        # Prevent darwin-specific configuration code path being taken
+        # which doesn't work with nixpkgs' SDL libraries
+        postPatch = ''
+          substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+        ''
+        + (drv.postPatch or "");
+        patches = [
+          # Work around SDL_main.h redefining main to SDL_main
+          ./patches/SDL-image-darwin-hsc.patch
+        ];
+      })
+      super.SDL-image;
 
     # Prevent darwin-specific configuration code path being taken which
     # doesn't work with nixpkgs' SDL libraries
-    SDL-mixer = overrideCabal (drv: {
-      postPatch = ''
-        substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-      ''
-      + (drv.postPatch or "");
-    }) super.SDL-mixer;
+    SDL-mixer = overrideCabal
+      (drv: {
+        postPatch = ''
+          substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+        ''
+        + (drv.postPatch or "");
+      })
+      super.SDL-mixer;
 
     # Work around SDL_main.h redefining main to SDL_main
     SDL-ttf = appendPatch ./patches/SDL-ttf-darwin-hsc.patch super.SDL-ttf;
@@ -238,13 +264,15 @@ self: super:
     });
 
     # https://hydra.nixos.org/build/230964714/nixlog/1
-    inline-c-cpp = appendPatch (pkgs.fetchpatch {
-      url = "https://github.com/fpco/inline-c/commit/e8dc553b13bb847409fdced649a6a863323cff8a.patch";
-      name = "revert-use-system-cxx-std-lib.patch";
-      sha256 = "sha256-ql1/+8bvmWexyCdFR0VS4M4cY2lD0Px/9dHYLqlKyNA=";
-      revert = true;
-      stripLen = 1;
-    }) super.inline-c-cpp;
+    inline-c-cpp = appendPatch
+      (pkgs.fetchpatch {
+        url = "https://github.com/fpco/inline-c/commit/e8dc553b13bb847409fdced649a6a863323cff8a.patch";
+        name = "revert-use-system-cxx-std-lib.patch";
+        sha256 = "sha256-ql1/+8bvmWexyCdFR0VS4M4cY2lD0Px/9dHYLqlKyNA=";
+        revert = true;
+        stripLen = 1;
+      })
+      super.inline-c-cpp;
 
     # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
     zip = dontCheck super.zip;
@@ -273,35 +301,41 @@ self: super:
       __darwinAllowLocalNetworking = true;
     });
 
-    ghcjs-dom-hello = overrideCabal (drv: {
-      libraryHaskellDepends = with self; [
-        jsaddle
-        jsaddle-warp
-      ];
-      executableHaskellDepends = with self; [
-        ghcjs-dom
-        jsaddle-wkwebview
-      ];
-    }) super.ghcjs-dom-hello;
+    ghcjs-dom-hello = overrideCabal
+      (drv: {
+        libraryHaskellDepends = with self; [
+          jsaddle
+          jsaddle-warp
+        ];
+        executableHaskellDepends = with self; [
+          ghcjs-dom
+          jsaddle-wkwebview
+        ];
+      })
+      super.ghcjs-dom-hello;
 
-    jsaddle-hello = overrideCabal (drv: {
-      libraryHaskellDepends = with self; [
-        jsaddle
-        lens
-      ];
-      executableHaskellDepends = with self; [
-        jsaddle-warp
-        jsaddle-wkwebview
-      ];
-    }) super.jsaddle-hello;
+    jsaddle-hello = overrideCabal
+      (drv: {
+        libraryHaskellDepends = with self; [
+          jsaddle
+          lens
+        ];
+        executableHaskellDepends = with self; [
+          jsaddle-warp
+          jsaddle-wkwebview
+        ];
+      })
+      super.jsaddle-hello;
 
-    jsaddle-wkwebview = overrideCabal (drv: {
-      libraryHaskellDepends = with self; [
-        aeson
-        data-default
-        jsaddle
-      ]; # cabal2nix doesn't add darwin-only deps
-    }) super.jsaddle-wkwebview;
+    jsaddle-wkwebview = overrideCabal
+      (drv: {
+        libraryHaskellDepends = with self; [
+          aeson
+          data-default
+          jsaddle
+        ]; # cabal2nix doesn't add darwin-only deps
+      })
+      super.jsaddle-wkwebview;
 
     # cabal2nix doesn't add darwin-only deps
     reflex-dom = addBuildDepend self.jsaddle-wkwebview (
@@ -311,12 +345,14 @@ self: super:
     );
 
     # Remove a problematic assert, the length is sometimes 1 instead of 2 on darwin
-    di-core = overrideCabal (drv: {
-      preConfigure = ''
-        substituteInPlace test/Main.hs --replace \
-          "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
-      '';
-    }) super.di-core;
+    di-core = overrideCabal
+      (drv: {
+        preConfigure = ''
+          substituteInPlace test/Main.hs --replace \
+            "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
+        '';
+      })
+      super.di-core;
 
     # Require /usr/bin/security which breaks sandbox
     http-reverse-proxy = dontCheck super.http-reverse-proxy;
@@ -329,18 +365,20 @@ self: super:
     });
 
     # 2025-08-04: Some RNG tests fail only on Darwin
-    botan-low = overrideCabal (drv: {
-      testFlags =
-        drv.testFlags or [ ]
-        ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
-          # botan-low-rng-tests
-          "/rdrand/rngInit/"
-          "/rdrand/rngGet/"
-          "/rdrand/rngReseed/"
-          "/rdrand/rngReseedFromRNGCtx/"
-          "/rdrand/rngAddEntropy/"
-        ]);
-    }) super.botan-low;
+    botan-low = overrideCabal
+      (drv: {
+        testFlags =
+          drv.testFlags or [ ]
+          ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+            # botan-low-rng-tests
+            "/rdrand/rngInit/"
+            "/rdrand/rngGet/"
+            "/rdrand/rngReseed/"
+            "/rdrand/rngReseedFromRNGCtx/"
+            "/rdrand/rngAddEntropy/"
+          ]);
+      })
+      super.botan-low;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
@@ -354,24 +392,28 @@ self: super:
     # after verifying they are indeed erroneous (e.g. cabal2nix) or just disable
     # the check, sticking with the status quo. Ideally there'll be zero cases of
     # the latter in the future!
-    cabal2nix = overrideCabal (old: {
-      postInstall = ''
-        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
-        # Note: The `data` output is needed at runtime.
-        remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+    cabal2nix = overrideCabal
+      (old: {
+        postInstall = ''
+          remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+          # Note: The `data` output is needed at runtime.
+          remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
 
-        ${old.postInstall or ""}
-      '';
-    }) super.cabal2nix;
-    cabal2nix-unstable = overrideCabal (old: {
-      postInstall = ''
-        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
-        # Note: The `data` output is needed at runtime.
-        remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "$out/bin/hackage2nix"
+          ${old.postInstall or ""}
+        '';
+      })
+      super.cabal2nix;
+    cabal2nix-unstable = overrideCabal
+      (old: {
+        postInstall = ''
+          remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+          # Note: The `data` output is needed at runtime.
+          remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "$out/bin/hackage2nix"
 
-        ${old.postInstall or ""}
-      '';
-    }) super.cabal2nix-unstable;
+          ${old.postInstall or ""}
+        '';
+      })
+      super.cabal2nix-unstable;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;
@@ -380,23 +422,29 @@ self: super:
     # tests are fixed, we can remove this as well.
     #
     # We skip just the problematic tests by replacing 'it' with 'xit'.
-    rio = overrideCabal (drv: {
-      preConfigure = ''
-        sed -i 's/\bit /xit /g' test/RIO/FileSpec.hs
-      '';
-    }) super.rio;
+    rio = overrideCabal
+      (drv: {
+        preConfigure = ''
+          sed -i 's/\bit /xit /g' test/RIO/FileSpec.hs
+        '';
+      })
+      super.rio;
 
     # https://github.com/haskell-crypto/cryptonite/issues/360
     cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
 
     # Build segfaults unless `fixity-th` is disabled.
     # https://github.com/tweag/ormolu/issues/927
-    ormolu = overrideCabal (drv: {
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-    }) (disableCabalFlag "fixity-th" super.ormolu);
-    fourmolu = overrideCabal (drv: {
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-    }) (disableCabalFlag "fixity-th" super.fourmolu);
+    ormolu = overrideCabal
+      (drv: {
+        libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+      })
+      (disableCabalFlag "fixity-th" super.ormolu);
+    fourmolu = overrideCabal
+      (drv: {
+        libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+      })
+      (disableCabalFlag "fixity-th" super.fourmolu);
 
     Agda = lib.pipe super.Agda [
       # https://github.com/NixOS/nixpkgs/issues/149692
@@ -425,7 +473,7 @@ self: super:
     tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
 
   }
-  // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {
+    // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {
     # x86_64-darwin
 
     # tests appear to be failing to link or something:
@@ -437,11 +485,13 @@ self: super:
 
     # Greater floating point error on x86_64-darwin (!) for some reason
     # https://github.com/ekmett/ad/issues/113
-    ad = overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "-p"
-        "!/issue-108/"
-      ];
-    }) super.ad;
+    ad = overrideCabal
+      (drv: {
+        testFlags = drv.testFlags or [ ] ++ [
+          "-p"
+          "!/issue-108/"
+        ];
+      })
+      super.ad;
   }
 )

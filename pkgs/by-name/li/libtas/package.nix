@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  SDL2,
-  alsa-lib,
-  ffmpeg,
-  lua5_4,
-  qt5,
-  xorg,
-  file,
-  binutils,
-  makeDesktopItem,
-
-  # Forces libTAS to run in X11.
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, autoreconfHook
+, pkg-config
+, SDL2
+, alsa-lib
+, ffmpeg
+, lua5_4
+, qt5
+, xorg
+, file
+, binutils
+, makeDesktopItem
+, # Forces libTAS to run in X11.
   # Enabled by default because libTAS does not support Wayland.
-  withForceX11 ? true,
+  withForceX11 ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

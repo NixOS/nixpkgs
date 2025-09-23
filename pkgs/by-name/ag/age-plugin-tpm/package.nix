@@ -1,12 +1,12 @@
-{
-  lib,
-  callPackage,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  swtpm,
-  openssl,
-  age,
+{ lib
+, callPackage
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, swtpm
+, openssl
+, age
+,
 }:
 
 buildGoModule rec {

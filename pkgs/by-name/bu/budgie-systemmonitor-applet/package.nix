@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  budgie-desktop,
-  fetchFromGitHub,
-  glib,
-  gtk3,
-  libgee,
-  libgtop,
-  libpeas,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  vala,
+{ lib
+, stdenv
+, budgie-desktop
+, fetchFromGitHub
+, glib
+, gtk3
+, libgee
+, libgtop
+, libpeas
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, vala
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

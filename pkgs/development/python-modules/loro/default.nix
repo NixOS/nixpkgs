@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  rustPlatform,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, rustPlatform
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  udev,
-  ncurses,
-  pkg-config,
-  fetchFromGitHub,
-  autoreconfHook,
+{ lib
+, stdenv
+, udev
+, ncurses
+, pkg-config
+, fetchFromGitHub
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation {

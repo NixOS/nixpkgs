@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  testers,
-  stig,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, testers
+, stig
+,
 }:
 
 python3Packages.buildPythonApplication rec {

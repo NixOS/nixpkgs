@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  pillow,
-  svgwrite,
+{ lib
+, buildPythonPackage
+, fetchurl
+, pillow
+, svgwrite
+,
 }:
 
 buildPythonPackage rec {

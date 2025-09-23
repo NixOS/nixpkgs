@@ -1,34 +1,38 @@
-{
-  lib,
-  gccStdenv,
-  stdenv,
-  fetchurl,
-  cmake,
-  nasm,
-  fetchpatch2,
-
-  # NUMA support enabled by default on NUMA platforms:
+{ lib
+, gccStdenv
+, stdenv
+, fetchurl
+, cmake
+, nasm
+, fetchpatch2
+, # NUMA support enabled by default on NUMA platforms:
   numaSupport ? (
     stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)
-  ),
-  numactl,
-
-  # Multi bit-depth support (8bit+10bit+12bit):
+  )
+, numactl
+, # Multi bit-depth support (8bit+10bit+12bit):
   multibitdepthSupport ? (
     stdenv.hostPlatform.is64bit && !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
-  ),
-
-  # Other options:
-  cliSupport ? true, # Build standalone CLI application
-  custatsSupport ? false, # Internal profiling of encoder work
-  debugSupport ? false, # Run-time sanity checks (debugging)
-  ppaSupport ? false, # PPA profiling instrumentation
-  unittestsSupport ? stdenv.hostPlatform.isx86_64, # Unit tests - only testing x64 assembly
-  vtuneSupport ? false, # Vtune profiling instrumentation
-  werrorSupport ? false, # Warnings as errors
+  )
+, # Other options:
+  cliSupport ? true
+, # Build standalone CLI application
+  custatsSupport ? false
+, # Internal profiling of encoder work
+  debugSupport ? false
+, # Run-time sanity checks (debugging)
+  ppaSupport ? false
+, # PPA profiling instrumentation
+  unittestsSupport ? stdenv.hostPlatform.isx86_64
+, # Unit tests - only testing x64 assembly
+  vtuneSupport ? false
+, # Vtune profiling instrumentation
+  werrorSupport ? false
+, # Warnings as errors
   # NEON support is always enabled for aarch64
   # this flag is only needed for armv7.
-  neonSupport ? false, # force enable the NEON fpu support for arm v7 CPUs
+  neonSupport ? false
+, # force enable the NEON fpu support for arm v7 CPUs
 }:
 
 let
@@ -97,9 +101,10 @@ stdenv.mkDerivation rec {
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
   ]
   # Clang does not support the endfunc directive so use GCC.
-  ++ lib.optional (
-    stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
-  ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
+  ++ lib.optional
+    (
+      stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
+    ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
   # Neon support
   ++ lib.optionals (neonSupport && stdenv.hostPlatform.isAarch32) [
     "-DENABLE_NEON=ON"

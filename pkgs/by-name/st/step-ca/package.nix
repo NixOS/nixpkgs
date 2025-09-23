@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  buildGoModule,
-  coreutils,
-  pcsclite,
-  pkg-config,
-  hsmSupport ? true,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, buildGoModule
+, coreutils
+, pcsclite
+, pkg-config
+, hsmSupport ? true
+, nixosTests
+,
 }:
 
 buildGoModule rec {

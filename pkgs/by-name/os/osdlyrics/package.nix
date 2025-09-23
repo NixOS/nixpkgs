@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  autoreconfHook,
-  pkg-config,
-  intltool,
-
-  glib,
-  gtk2,
-  dbus-glib,
-  libappindicator-gtk2,
-  libnotify,
-  python3,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, intltool
+, glib
+, gtk2
+, dbus-glib
+, libappindicator-gtk2
+, libnotify
+, python3
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation rec {

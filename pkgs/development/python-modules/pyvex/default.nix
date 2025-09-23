@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  bitstring,
-  buildPythonPackage,
-  buildPackages,
-  cffi,
-  fetchPypi,
-  pycparser,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, bitstring
+, buildPythonPackage
+, buildPackages
+, cffi
+, fetchPypi
+, pycparser
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

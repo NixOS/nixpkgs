@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  writeScript,
-  ncurses5,
-  callPackage,
-  buildFHSEnv,
-  unwrapped ? callPackage ./runtime.nix { },
+{ lib
+, stdenv
+, writeScript
+, ncurses5
+, callPackage
+, buildFHSEnv
+, unwrapped ? callPackage ./runtime.nix { }
+,
 }:
 
 buildFHSEnv {
@@ -20,59 +20,59 @@ buildFHSEnv {
 
   targetPkgs =
     pkgs:
-    with pkgs;
-    [
-      libGLU
-      libGL
-      alsa-lib
-      fontconfig
-      zlib
-      libpng
-      dbus
-      nss
-      nspr
-      expat
-      pciutils
-      libdrm
-      libxkbcommon
-      libudev0-shim
-      tbb
-      xwayland
-      qt5.qtwayland
-      net-tools # needed by licensing tools
-      bintools # needed for ld and other tools, so ctypes can find/load sos from python
-      ocl-icd # needed for opencl
-      numactl # needed by hfs ocl backend
-      zstd # needed from 20.0
-    ]
-    ++ (with xorg; [
-      libICE
-      libSM
-      libXmu
-      libXi
-      libXt
-      libXext
-      libX11
-      libXrender
-      libXcursor
-      libXfixes
-      libXrender
-      libXcomposite
-      libXdamage
-      libXtst
-      libxcb
-      libXScrnSaver
-      libXrandr
-      libxcb
-      libxkbfile
-      libxshmfence
-      xcbutil
-      xcbutilimage
-      xcbutilrenderutil
-      xcbutilcursor
-      xcbutilkeysyms
-      xcbutilwm
-    ]);
+      with pkgs;
+      [
+        libGLU
+        libGL
+        alsa-lib
+        fontconfig
+        zlib
+        libpng
+        dbus
+        nss
+        nspr
+        expat
+        pciutils
+        libdrm
+        libxkbcommon
+        libudev0-shim
+        tbb
+        xwayland
+        qt5.qtwayland
+        net-tools # needed by licensing tools
+        bintools # needed for ld and other tools, so ctypes can find/load sos from python
+        ocl-icd # needed for opencl
+        numactl # needed by hfs ocl backend
+        zstd # needed from 20.0
+      ]
+      ++ (with xorg; [
+        libICE
+        libSM
+        libXmu
+        libXi
+        libXt
+        libXext
+        libX11
+        libXrender
+        libXcursor
+        libXfixes
+        libXrender
+        libXcomposite
+        libXdamage
+        libXtst
+        libxcb
+        libXScrnSaver
+        libXrandr
+        libxcb
+        libxkbfile
+        libxshmfence
+        xcbutil
+        xcbutilimage
+        xcbutilrenderutil
+        xcbutilcursor
+        xcbutilkeysyms
+        xcbutilwm
+      ]);
 
   passthru = {
     inherit unwrapped;

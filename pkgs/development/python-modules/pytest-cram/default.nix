@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-  setuptools,
-  pytest_7,
-  cram,
-  bash,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, setuptools
+, pytest_7
+, cram
+, bash
+,
 }:
 
 buildPythonPackage rec {

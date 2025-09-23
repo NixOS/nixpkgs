@@ -1,12 +1,12 @@
-{
-  lib,
-  runCommand,
-  package,
+{ lib
+, runCommand
+, package
+,
 }:
 runCommand "${package.pname}-tests"
-  {
-    HOME = "/tmp/home";
-  }
+{
+  HOME = "/tmp/home";
+}
   ''
     mkdir -p "''${HOME}/.aws"
     cat > "''${HOME}/.aws/config" <<'EOF'

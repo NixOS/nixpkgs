@@ -1,11 +1,11 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  libX11,
-  mkLibretroCore,
+{ lib
+, cmake
+, fetchFromGitHub
+, libGL
+, libGLU
+, libX11
+, mkLibretroCore
+,
 }:
 mkLibretroCore {
   core = "citra";

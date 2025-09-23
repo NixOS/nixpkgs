@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libbfd,
-  zlib,
-  libiberty,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libbfd
+, zlib
+, libiberty
+,
 }:
 
 stdenv.mkDerivation rec {

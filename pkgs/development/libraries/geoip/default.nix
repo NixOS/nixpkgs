@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  drvName ? "geoip",
-
-  # in geoipDatabase, you can insert a package defining
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, drvName ? "geoip"
+, # in geoipDatabase, you can insert a package defining
   # "${geoipDatabase}/share/GeoIP" e.g. geolite-legacy
-  geoipDatabase ? "/var/lib/geoip-databases",
+  geoipDatabase ? "/var/lib/geoip-databases"
+,
 }:
 
 let

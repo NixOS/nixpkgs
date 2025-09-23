@@ -1,31 +1,24 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-
-  gcc,
-  makeWrapper,
-  msbuild,
-  pkg-config,
-
-  curl,
-  gtk3,
-  libayatana-appindicator,
-
-  openssh,
-  openvpn,
-  stunnel,
-
-  gtk2,
-  libayatana-indicator,
-
-  mono,
-
-  versionCheckHook,
-
-  eddie,
-  testers,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, gcc
+, makeWrapper
+, msbuild
+, pkg-config
+, curl
+, gtk3
+, libayatana-appindicator
+, openssh
+, openvpn
+, stunnel
+, gtk2
+, libayatana-indicator
+, mono
+, versionCheckHook
+, eddie
+, testers
+,
 }:
 
 buildDotnetModule (finalAttrs: {

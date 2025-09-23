@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  cvxopt,
-  fetchPypi,
-  future,
-  numpy,
-  oldest-supported-numpy,
-  pytestCheckHook,
-  pythonOlder,
-  qdldl,
-  scipy,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, cmake
+, cvxopt
+, fetchPypi
+, future
+, numpy
+, oldest-supported-numpy
+, pytestCheckHook
+, pythonOlder
+, qdldl
+, scipy
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

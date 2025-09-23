@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  fastjet,
-  fixDarwinDylibNames,
-  hepmc,
-  lhapdf,
-  rsync,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, fastjet
+, fixDarwinDylibNames
+, hepmc
+, lhapdf
+, rsync
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

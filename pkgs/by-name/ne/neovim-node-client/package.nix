@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchNpmDeps,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchNpmDeps
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

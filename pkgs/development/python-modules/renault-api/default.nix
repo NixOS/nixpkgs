@@ -1,21 +1,21 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  click,
-  cryptography,
-  dateparser,
-  fetchFromGitHub,
-  marshmallow-dataclass,
-  poetry-core,
-  pyjwt,
-  pythonOlder,
-  pytest-asyncio,
-  pytestCheckHook,
-  syrupy,
-  tabulate,
-  typeguard,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, click
+, cryptography
+, dateparser
+, fetchFromGitHub
+, marshmallow-dataclass
+, poetry-core
+, pyjwt
+, pythonOlder
+, pytest-asyncio
+, pytestCheckHook
+, syrupy
+, tabulate
+, typeguard
+,
 }:
 
 buildPythonPackage rec {

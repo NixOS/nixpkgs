@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  medusa,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeBinaryWrapper
+, medusa
+,
 }:
 
 buildGoModule (finalAttrs: {

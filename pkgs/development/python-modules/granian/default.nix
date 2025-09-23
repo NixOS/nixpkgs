@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cacert,
-  buildPythonPackage,
-  uvloop,
-  click,
-  setproctitle,
-  watchfiles,
-  versionCheckHook,
-  pytestCheckHook,
-  pytest-asyncio,
-  websockets,
-  httpx,
-  sniffio,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cacert
+, buildPythonPackage
+, uvloop
+, click
+, setproctitle
+, watchfiles
+, versionCheckHook
+, pytestCheckHook
+, pytest-asyncio
+, websockets
+, httpx
+, sniffio
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

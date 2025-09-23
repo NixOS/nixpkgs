@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  windows,
-  autoreconfHook,
-  mingw_w64_headers,
-  crt ? stdenv.hostPlatform.libc,
+{ lib
+, stdenv
+, windows
+, autoreconfHook
+, mingw_w64_headers
+, crt ? stdenv.hostPlatform.libc
+,
 }:
 
 stdenv.mkDerivation {

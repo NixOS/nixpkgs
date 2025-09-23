@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 with lib;
@@ -400,32 +399,32 @@ let
 
   generateKeyServiceUnit =
     name: values:
-    assert values.generatePrivateKeyFile;
-    nameValuePair "wireguard-${name}-key" {
-      description = "WireGuard Tunnel - ${name} - Key Generator";
-      wantedBy = [ "wireguard-${name}.service" ];
-      requiredBy = [ "wireguard-${name}.service" ];
-      before = [ "wireguard-${name}.service" ];
-      path = [ wgPackages.${values.type} ];
+      assert values.generatePrivateKeyFile;
+      nameValuePair "wireguard-${name}-key" {
+        description = "WireGuard Tunnel - ${name} - Key Generator";
+        wantedBy = [ "wireguard-${name}.service" ];
+        requiredBy = [ "wireguard-${name}.service" ];
+        before = [ "wireguard-${name}.service" ];
+        path = [ wgPackages.${values.type} ];
 
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+
+        script = ''
+          set -e
+
+          # If the parent dir does not already exist, create it.
+          # Otherwise, does nothing, keeping existing permissions intact.
+          mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
+
+          if [ ! -f "${values.privateKeyFile}" ]; then
+            # Write private key file with atomically-correct permissions.
+            (set -e; umask 077; ${wgBins.${values.type}} genkey > "${values.privateKeyFile}")
+          fi
+        '';
       };
-
-      script = ''
-        set -e
-
-        # If the parent dir does not already exist, create it.
-        # Otherwise, does nothing, keeping existing permissions intact.
-        mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
-
-        if [ ! -f "${values.privateKeyFile}" ]; then
-          # Write private key file with atomically-correct permissions.
-          (set -e; umask 077; ${wgBins.${values.type}} genkey > "${values.privateKeyFile}")
-        fi
-      '';
-    };
 
   peerUnitServiceName =
     interfaceName: peerName: dynamicRefreshEnabled:
@@ -442,10 +441,10 @@ let
       interfaceCfg.dynamicEndpointRefreshSeconds;
 
   generatePeerUnit =
-    {
-      interfaceName,
-      interfaceCfg,
-      peer,
+    { interfaceName
+    , interfaceCfg
+    , peer
+    ,
     }:
     let
       psk =
@@ -514,18 +513,21 @@ let
             [ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
             ++ optional (psk != null) ''preshared-key "${psk}"''
             ++ optional (peer.endpoint != null) ''endpoint "${peer.endpoint}"''
-            ++ optional (
-              peer.persistentKeepalive != null
-            ) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
+            ++ optional
+              (
+                peer.persistentKeepalive != null
+              ) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
             ++ optional (peer.allowedIPs != [ ]) ''allowed-ips "${concatStringsSep "," peer.allowedIPs}"''
           );
           route_setup = optionalString interfaceCfg.allowedIPsAsRoutes (
-            concatMapStringsSep "\n" (
-              allowedIP:
-              ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}" ${
+            concatMapStringsSep "\n"
+              (
+                allowedIP:
+                ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}" ${
                 optionalString (interfaceCfg.metric != null) "metric ${toString interfaceCfg.metric}"
               }''
-            ) peer.allowedIPs
+              )
+              peer.allowedIPs
           );
         in
         ''
@@ -546,10 +548,12 @@ let
       postStop =
         let
           route_destroy = optionalString interfaceCfg.allowedIPsAsRoutes (
-            concatMapStringsSep "\n" (
-              allowedIP:
-              ''${ip} route delete "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
-            ) peer.allowedIPs
+            concatMapStringsSep "\n"
+              (
+                allowedIP:
+                ''${ip} route delete "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
+              )
+              peer.allowedIPs
           );
         in
         ''
@@ -613,9 +617,10 @@ let
           values.preSetup
           ''${ipPreMove} link add dev "${name}" type ${values.type}''
         ]
-        ++ optional (
-          values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace
-        ) ''${ipPreMove} link set "${name}" netns "${ns}"''
+        ++ optional
+          (
+            values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace
+          ) ''${ipPreMove} link set "${name}" netns "${ns}"''
         ++ optional (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''
         ++ (map (ip: ''${ipPostMove} address add "${ip}" dev "${name}"'') values.ips)
         ++ [
@@ -706,34 +711,42 @@ in
   config = mkIf cfg.enable (
     let
       all_peers = flatten (
-        mapAttrsToList (
-          interfaceName: interfaceCfg:
-          map (peer: { inherit interfaceName interfaceCfg peer; }) interfaceCfg.peers
-        ) cfg.interfaces
+        mapAttrsToList
+          (
+            interfaceName: interfaceCfg:
+              map (peer: { inherit interfaceName interfaceCfg peer; }) interfaceCfg.peers
+          )
+          cfg.interfaces
       );
     in
     {
 
       assertions =
         (attrValues (
-          mapAttrs (name: value: {
-            assertion = (value.privateKey != null) != (value.privateKeyFile != null);
-            message = "Either networking.wireguard.interfaces.${name}.privateKey or networking.wireguard.interfaces.${name}.privateKeyFile must be set.";
-          }) cfg.interfaces
+          mapAttrs
+            (name: value: {
+              assertion = (value.privateKey != null) != (value.privateKeyFile != null);
+              message = "Either networking.wireguard.interfaces.${name}.privateKey or networking.wireguard.interfaces.${name}.privateKeyFile must be set.";
+            })
+            cfg.interfaces
         ))
         ++ (attrValues (
-          mapAttrs (name: value: {
-            assertion = value.generatePrivateKeyFile -> (value.privateKey == null);
-            message = "networking.wireguard.interfaces.${name}.generatePrivateKeyFile must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
-          }) cfg.interfaces
+          mapAttrs
+            (name: value: {
+              assertion = value.generatePrivateKeyFile -> (value.privateKey == null);
+              message = "networking.wireguard.interfaces.${name}.generatePrivateKeyFile must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
+            })
+            cfg.interfaces
         ))
-        ++ map (
-          { interfaceName, peer, ... }:
-          {
-            assertion = (peer.presharedKey == null) || (peer.presharedKeyFile == null);
-            message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
-          }
-        ) all_peers;
+        ++ map
+          (
+            { interfaceName, peer, ... }:
+            {
+              assertion = (peer.presharedKey == null) || (peer.presharedKeyFile == null);
+              message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
+            }
+          )
+          all_peers;
 
       boot.extraModulePackages =
         optional (usingWg && (versionOlder kernel.kernel.version "5.6")) kernel.wireguard

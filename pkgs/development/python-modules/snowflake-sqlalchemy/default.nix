@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  snowflake-connector-python,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, snowflake-connector-python
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

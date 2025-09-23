@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zope-interface,
-  zope-schema,
-  zope-cachedescriptors,
-  pytz,
-  webtest,
-  beautifulsoup4,
-  soupsieve,
-  wsgiproxy2,
-  mock,
-  zope-testing,
-  zope-testrunner,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, zope-interface
+, zope-schema
+, zope-cachedescriptors
+, pytz
+, webtest
+, beautifulsoup4
+, soupsieve
+, wsgiproxy2
+, mock
+, zope-testing
+, zope-testrunner
+, python
+,
 }:
 
 buildPythonPackage rec {

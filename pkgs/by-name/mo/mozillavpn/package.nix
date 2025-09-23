@@ -1,23 +1,23 @@
-{
-  _experimental-update-script-combinators,
-  buildGoModule,
-  cargo,
-  cmake,
-  fetchFromGitHub,
-  go,
-  lib,
-  libcap,
-  libgcrypt,
-  libgpg-error,
-  libsecret,
-  nix-update-script,
-  pkg-config,
-  python3,
-  qt6,
-  rustPlatform,
-  rustc,
-  stdenv,
-  wireguard-tools,
+{ _experimental-update-script-combinators
+, buildGoModule
+, cargo
+, cmake
+, fetchFromGitHub
+, go
+, lib
+, libcap
+, libgcrypt
+, libgpg-error
+, libsecret
+, nix-update-script
+, pkg-config
+, python3
+, qt6
+, rustPlatform
+, rustc
+, stdenv
+, wireguard-tools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

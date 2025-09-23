@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  aiofiles,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, aiofiles
+, nix-update-script
+,
 }:
 
 buildHomeAssistantComponent rec {

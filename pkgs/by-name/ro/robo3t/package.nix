@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  curlWithGnuTls,
-  zlib,
-  glib,
-  xorg,
-  dbus,
-  fontconfig,
-  libGL,
-  freetype,
-  xkeyboard_config,
-  makeDesktopItem,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, curlWithGnuTls
+, zlib
+, glib
+, xorg
+, dbus
+, fontconfig
+, libGL
+, freetype
+, xkeyboard_config
+, makeDesktopItem
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

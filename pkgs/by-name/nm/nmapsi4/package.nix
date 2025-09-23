@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  dnsutils,
-  nmap,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, dnsutils
+, nmap
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  exiv2,
-  gettext,
-  gst_all_1,
-  libusermetrics,
-  lomiri-action-api,
-  lomiri-content-hub,
-  lomiri-ui-toolkit,
-  lomiri-thumbnailer,
-  pkg-config,
-  qtbase,
-  qtdeclarative,
-  qtmultimedia,
-  qtpositioning,
-  qtquickcontrols2,
-  qtsensors,
-  qzxing,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, cmake
+, exiv2
+, gettext
+, gst_all_1
+, libusermetrics
+, lomiri-action-api
+, lomiri-content-hub
+, lomiri-ui-toolkit
+, lomiri-thumbnailer
+, pkg-config
+, qtbase
+, qtdeclarative
+, qtmultimedia
+, qtpositioning
+, qtquickcontrols2
+, qtsensors
+, qzxing
+, wrapGAppsHook3
+, wrapQtAppsHook
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

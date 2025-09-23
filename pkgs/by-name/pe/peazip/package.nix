@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  qt6Packages,
-  fpc,
-  lazarus,
-  xorg,
-  runCommand,
-  _7zz,
-  brotli,
-  upx,
-  zpaq,
-  zstd,
-  writableTmpDirAsHomeHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, qt6Packages
+, fpc
+, lazarus
+, xorg
+, runCommand
+, _7zz
+, brotli
+, upx
+, zpaq
+, zstd
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

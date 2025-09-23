@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  version,
-  langC,
-  langCC,
-  langJit,
-  enableShared,
-  targetPlatform,
-  hostPlatform,
-  withoutTargetLibc,
-  libcCross,
+{ lib
+, stdenv
+, version
+, langC
+, langCC
+, langJit
+, enableShared
+, targetPlatform
+, hostPlatform
+, withoutTargetLibc
+, libcCross
+,
 }:
 
 assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;

@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  elfutils,
-  pkg-config,
-  stdenv,
-  zlib,
-  lib,
-  nixosTests,
+{ fetchFromGitHub
+, elfutils
+, pkg-config
+, stdenv
+, zlib
+, lib
+, nixosTests
+,
 }:
 
 # update bot does not seem to limit updates here to 0.8.x despite

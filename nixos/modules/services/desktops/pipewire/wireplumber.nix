@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -38,19 +37,25 @@ let
 
   mapConfigToFiles =
     config:
-    mapAttrsToList (
-      name: value: configSectionsToConfFile "share/wireplumber/wireplumber.conf.d/${name}.conf" value
-    ) config;
+    mapAttrsToList
+      (
+        name: value: configSectionsToConfFile "share/wireplumber/wireplumber.conf.d/${name}.conf" value
+      )
+      config;
 
   mapScriptsToFiles =
     scripts:
-    mapAttrsToList (
-      relativePath: value:
-      pkgs.writeTextDir (subpath.join [
-        "share/wireplumber/scripts"
-        relativePath
-      ]) value
-    ) scripts;
+    mapAttrsToList
+      (
+        relativePath: value:
+        pkgs.writeTextDir
+          (subpath.join [
+            "share/wireplumber/scripts"
+            relativePath
+          ])
+          value
+      )
+      scripts;
 in
 {
   meta.maintainers = [ maintainers.k900 ];

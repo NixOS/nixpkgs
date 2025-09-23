@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  wayland,
-  withNativeLibs ? false,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, wayland
+, withNativeLibs ? false
+,
 }:
 
 rustPlatform.buildRustPackage rec {

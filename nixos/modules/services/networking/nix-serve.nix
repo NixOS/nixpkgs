@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 with lib;
@@ -93,9 +92,10 @@ in
         User = "nix-serve";
         Group = "nix-serve";
         DynamicUser = true;
-        LoadCredential = lib.optionalString (
-          cfg.secretKeyFile != null
-        ) "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
+        LoadCredential = lib.optionalString
+          (
+            cfg.secretKeyFile != null
+          ) "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
       };
     };
 

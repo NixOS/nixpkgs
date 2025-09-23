@@ -1,35 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  ninja,
-  pybind11,
-  setuptools,
-
-  # buildInputs
-  SDL2,
-  opencv,
-  zlib,
-
-  # dependencies
-  importlib-resources,
-  numpy,
-  typing-extensions,
-  jax,
-
-  # tests
-  gymnasium,
-  opencv-python,
-  pytestCheckHook,
-
-  # Whether to enable recently added vector environments:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, ninja
+, pybind11
+, setuptools
+, # buildInputs
+  SDL2
+, opencv
+, zlib
+, # dependencies
+  importlib-resources
+, numpy
+, typing-extensions
+, jax
+, # tests
+  gymnasium
+, opencv-python
+, pytestCheckHook
+, # Whether to enable recently added vector environments:
   # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.11.0/docs/vector-environment.md
   # FIXME: Disabled by default as it mysteriously causes stable-baselines3's tests to hang indefinitely.
-  withVectorEnv ? false,
+  withVectorEnv ? false
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  xsel,
-  wl-clipboard,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, xsel
+, wl-clipboard
+,
 }:
 
 buildGoModule (finalAttrs: {

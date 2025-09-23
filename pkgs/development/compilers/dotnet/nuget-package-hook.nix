@@ -1,11 +1,12 @@
-{
-  makeSetupHook,
-  unzip,
-  zip,
-  xmlstarlet,
-  strip-nondeterminism,
+{ makeSetupHook
+, unzip
+, zip
+, xmlstarlet
+, strip-nondeterminism
+,
 }:
-makeSetupHook {
+makeSetupHook
+{
   name = "nuget-package-hook";
   substitutions = {
     inherit unzip zip xmlstarlet;

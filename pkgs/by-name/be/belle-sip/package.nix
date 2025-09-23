@@ -1,13 +1,13 @@
-{
-  bctoolbox,
-  belr,
-  cmake,
-  fetchFromGitLab,
-  lib,
-  libantlr3c,
-  mbedtls_2,
-  stdenv,
-  zlib,
+{ bctoolbox
+, belr
+, cmake
+, fetchFromGitLab
+, lib
+, libantlr3c
+, mbedtls_2
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,35 +1,35 @@
-{
-  pname,
-  version,
-  src,
-  gitSrc,
-  buildInputs ? [ ],
-  homepage,
-  description,
-  maintainers,
-  passthru ? { },
+{ pname
+, version
+, src
+, gitSrc
+, buildInputs ? [ ]
+, homepage
+, description
+, maintainers
+, passthru ? { }
+,
 }:
 
-{
-  lib,
-  stdenv,
-  openssl,
-  zlib,
-  asciidoc,
-  libxml2,
-  libxslt,
-  docbook_xsl,
-  pkg-config,
-  coreutils,
-  gnused,
-  groff,
-  docutils,
-  gzip,
-  bzip2,
-  lzip,
-  xz,
-  zstd,
-  python3Packages,
+{ lib
+, stdenv
+, openssl
+, zlib
+, asciidoc
+, libxml2
+, libxslt
+, docbook_xsl
+, pkg-config
+, coreutils
+, gnused
+, groff
+, docutils
+, gzip
+, bzip2
+, lzip
+, xz
+, zstd
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  makeWrapper,
-  pkg-config,
-  alsa-lib,
-  dbus,
-  libjack2,
-  python3Packages,
-  meson,
-  ninja,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitea
+, makeWrapper
+, pkg-config
+, alsa-lib
+, dbus
+, libjack2
+, python3Packages
+, meson
+, ninja
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

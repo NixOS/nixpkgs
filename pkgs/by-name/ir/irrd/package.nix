@@ -1,14 +1,14 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  fetchFromGitHub,
-  fetchpatch,
-  git,
-  postgresql,
-  postgresqlTestHook,
-  valkey,
-  redisTestHook,
+{ lib
+, python3
+, fetchPypi
+, fetchFromGitHub
+, fetchpatch
+, git
+, postgresql
+, postgresqlTestHook
+, valkey
+, redisTestHook
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  # darwin dependencies
-  libiconv,
-  curl,
-  # testing
-  testers,
-  cargo-geiger,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, # darwin dependencies
+  libiconv
+, curl
+, # testing
+  testers
+, cargo-geiger
+,
 }:
 
 rustPlatform.buildRustPackage rec {

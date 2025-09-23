@@ -1,14 +1,14 @@
-{
-  stdenv,
-  config,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  eigen,
-  onnxruntime,
-  opencv,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
+{ stdenv
+, config
+, lib
+, fetchFromGitHub
+, cmake
+, eigen
+, onnxruntime
+, opencv
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+,
 }@inputs:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glib,
-  xorg,
-  nspr,
-  nss,
-  autoPatchelfHook,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, glib
+, xorg
+, nspr
+, nss
+, autoPatchelfHook
+, unzip
+,
 }:
 
 version: hashes:

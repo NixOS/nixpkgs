@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  which,
-  ronn,
-  opencv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, ronn
+, opencv
+,
 }:
 
 stdenv.mkDerivation rec {

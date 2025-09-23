@@ -1,13 +1,13 @@
-{
-  depname,
-  version,
-  src,
-  sourceRoot,
-  stdenv,
-  lib,
-  patches ? [ ],
-  extraPostPatch ? "",
-  buildInputs ? [ ],
+{ depname
+, version
+, src
+, sourceRoot
+, stdenv
+, lib
+, patches ? [ ]
+, extraPostPatch ? ""
+, buildInputs ? [ ]
+,
 }:
 
 let

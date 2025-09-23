@@ -1,15 +1,15 @@
-{
-  lib,
-  aioconsole,
-  bleak,
-  buildPythonPackage,
-  dbus-next,
-  fetchFromGitHub,
-  numpy,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aioconsole
+, bleak
+, buildPythonPackage
+, dbus-next
+, fetchFromGitHub
+, numpy
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

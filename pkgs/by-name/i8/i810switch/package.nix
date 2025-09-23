@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  installShellFiles,
-  pciutils,
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+, pciutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  flutter329,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  runCommand,
-  yq,
-  gpt-box,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter329
+, fetchFromGitHub
+, autoPatchelfHook
+, copyDesktopItems
+, makeDesktopItem
+, runCommand
+, yq
+, gpt-box
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 flutter329.buildFlutterApplication rec {

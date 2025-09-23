@@ -1,15 +1,15 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  vips,
-  gobject-introspection,
-  wrapGAppsHook4,
-  gtk4,
-  gtk4-layer-shell,
-  nix-update-script,
-  libqalculate,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, vips
+, gobject-introspection
+, wrapGAppsHook4
+, gtk4
+, gtk4-layer-shell
+, nix-update-script
+, libqalculate
+,
 }:
 
 buildGoModule rec {

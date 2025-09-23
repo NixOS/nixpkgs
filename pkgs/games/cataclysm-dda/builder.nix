@@ -1,7 +1,7 @@
-{
-  stdenvNoCC,
-  lib,
-  type,
+{ stdenvNoCC
+, lib
+, type
+,
 }:
 
 assert lib.elem type [
@@ -10,16 +10,15 @@ assert lib.elem type [
   "tileset"
 ];
 
-{
-  modName,
-  version,
-  src,
-  ...
+{ modName
+, version
+, src
+, ...
 }@args:
 
 stdenvNoCC.mkDerivation (
   args
-  // rec {
+    // rec {
     pname = args.pname or "cataclysm-dda-${type}-${modName}";
 
     modRoot = args.modRoot or ".";
@@ -49,16 +48,15 @@ stdenvNoCC.mkDerivation (
             mod = "mods";
             soundpack = "sound";
             tileset = "gfx";
-          }
-          .${type};
+          }.${type};
       in
-      args.installPhase or ''
-        runHook preInstall
-        destdir="$out/share/cataclysm-dda/${baseDir}"
-        mkdir -p "$destdir"
-        cp -R "${modRoot}" "$destdir/${modName}"
-        runHook postInstall
-      '';
+        args.installPhase or ''
+          runHook preInstall
+          destdir="$out/share/cataclysm-dda/${baseDir}"
+          mkdir -p "$destdir"
+          cp -R "${modRoot}" "$destdir/${modName}"
+          runHook postInstall
+        '';
 
     passthru = {
       forTiles = true;

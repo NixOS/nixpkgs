@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  numpy,
-  opencv-python,
-  lxml,
-  xmljson,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, numpy
+, opencv-python
+, lxml
+, xmljson
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

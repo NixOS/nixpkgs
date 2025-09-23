@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  pcsclite,
-  nix-update-script,
-  testers,
-  rsop,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, pcsclite
+, nix-update-script
+, testers
+, rsop
+,
 }:
 
 rustPlatform.buildRustPackage rec {

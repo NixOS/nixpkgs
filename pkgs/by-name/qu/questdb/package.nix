@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  jdk17_headless,
-  lib,
-  makeBinaryWrapper,
-  stdenv,
+{ fetchurl
+, jdk17_headless
+, lib
+, makeBinaryWrapper
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

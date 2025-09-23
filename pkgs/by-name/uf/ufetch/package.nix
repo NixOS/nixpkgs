@@ -1,10 +1,10 @@
-{
-  stdenvNoCC,
-  fetchFromGitLab,
-  lib,
-  full ? true,
-  # see https://gitlab.com/jschx/ufetch for a list
-  osName ? "nixos",
+{ stdenvNoCC
+, fetchFromGitLab
+, lib
+, full ? true
+, # see https://gitlab.com/jschx/ufetch for a list
+  osName ? "nixos"
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

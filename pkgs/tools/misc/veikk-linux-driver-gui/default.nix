@@ -1,8 +1,8 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qmake,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+,
 }:
 
 mkDerivation rec {

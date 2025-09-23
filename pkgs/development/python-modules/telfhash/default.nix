@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  capstone,
-  packaging,
-  pyelftools,
-  tlsh,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, capstone
+, packaging
+, pyelftools
+, tlsh
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "telfhash";

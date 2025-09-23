@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+,
 }:
 
 let

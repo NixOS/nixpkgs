@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  lv2,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  libsndfile,
-  serd,
-  sord,
-  sratom,
-  gitUpdater,
-
-  # test derivations
-  pipewire,
+{ lib
+, stdenv
+, fetchurl
+, lv2
+, meson
+, ninja
+, pkg-config
+, python3
+, libsndfile
+, serd
+, sord
+, sratom
+, gitUpdater
+, # test derivations
+  pipewire
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,13 +54,13 @@ stdenv.mkDerivation rec {
   # The default values are from: https://github.com/lv2/lilv/blob/master/src/lilv_config.h
   ++ lib.optional stdenv.hostPlatform.isDarwin (
     lib.mesonOption "default_lv2_path" "~/.lv2:~/Library/Audio/Plug-Ins/LV2:"
-    + "/usr/local/lib/lv2:/usr/lib/lv2:"
-    + "/Library/Audio/Plug-Ins/LV2:"
-    + "~/.nix-profile/lib/lv2"
+      + "/usr/local/lib/lv2:/usr/lib/lv2:"
+      + "/Library/Audio/Plug-Ins/LV2:"
+      + "~/.nix-profile/lib/lv2"
   )
   ++ lib.optional stdenv.hostPlatform.isLinux (
     lib.mesonOption "default_lv2_path" "~/.lv2:/usr/local/lib/lv2:/usr/lib/lv2:"
-    + "~/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2"
+      + "~/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2"
   );
 
   passthru = {

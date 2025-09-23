@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  simde,
-  zlib,
-  enableSse4_1 ? stdenv.hostPlatform.sse4_1Support,
-  enableAvx ? stdenv.hostPlatform.avxSupport,
-  enablePython ? false,
-  python3Packages,
-  runCommand,
-  abpoa,
+{ lib
+, stdenv
+, fetchFromGitHub
+, simde
+, zlib
+, enableSse4_1 ? stdenv.hostPlatform.sse4_1Support
+, enableAvx ? stdenv.hostPlatform.avxSupport
+, enablePython ? false
+, python3Packages
+, runCommand
+, abpoa
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

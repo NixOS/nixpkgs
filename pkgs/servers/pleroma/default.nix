@@ -1,18 +1,17 @@
-{
-  lib,
-  beamPackages,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchHex,
-  file,
-  cmake,
-  nixosTests,
-  writeText,
-  vips,
-  pkg-config,
-  glib,
-  fetchpatch,
-  ...
+{ lib
+, beamPackages
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchHex
+, file
+, cmake
+, nixosTests
+, writeText
+, vips
+, pkg-config
+, glib
+, fetchpatch
+, ...
 }:
 
 beamPackages.mixRelease rec {

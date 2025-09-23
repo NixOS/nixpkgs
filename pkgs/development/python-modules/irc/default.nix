@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jaraco-collections,
-  jaraco-itertools,
-  jaraco-logging,
-  jaraco-stream,
-  jaraco-text,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  setuptools-scm,
-  importlib-resources,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jaraco-collections
+, jaraco-itertools
+, jaraco-logging
+, jaraco-stream
+, jaraco-text
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools-scm
+, importlib-resources
+,
 }:
 
 buildPythonPackage rec {

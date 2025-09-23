@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  gitMinimal,
-  installShellFiles,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, gitMinimal
+, installShellFiles
+, makeWrapper
+, nix-update-script
+,
 }:
 
 let

@@ -1,21 +1,21 @@
-{
-  stdenvNoCC,
-  lib,
-  nixosTests,
-  fetchFromGitHub,
-  applyPatches,
-  bundlerEnv,
-  callPackage,
-  procps,
-  ruby,
-  postgresql,
-  jq,
-  moreutils,
-  nodejs,
-  pnpm_9,
-  cacert,
-  valkey,
-  dataDir ? "/var/lib/zammad",
+{ stdenvNoCC
+, lib
+, nixosTests
+, fetchFromGitHub
+, applyPatches
+, bundlerEnv
+, callPackage
+, procps
+, ruby
+, postgresql
+, jq
+, moreutils
+, nodejs
+, pnpm_9
+, cacert
+, valkey
+, dataDir ? "/var/lib/zammad"
+,
 }:
 
 let

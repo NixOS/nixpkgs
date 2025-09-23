@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  more-itertools,
-  typeguard,
-
-  # checks
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  more-itertools
+, typeguard
+, # checks
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

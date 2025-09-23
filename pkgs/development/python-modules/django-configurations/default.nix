@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  dj-database-url,
-  dj-email-url,
-  dj-search-url,
-  django,
-  django-cache-url,
-  fetchPypi,
-  importlib-metadata,
-  mock,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, dj-database-url
+, dj-email-url
+, dj-search-url
+, django
+, django-cache-url
+, fetchPypi
+, importlib-metadata
+, mock
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

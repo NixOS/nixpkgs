@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  nodejs-slim,
-  pnpm_9,
-  versionCheckHook,
-  runCommand,
-  textlint,
-  textlint-plugin-latex2e,
-  textlint-rule-abbr-within-parentheses,
-  textlint-rule-alex,
-  textlint-rule-common-misspellings,
-  textlint-rule-diacritics,
-  textlint-rule-en-max-word-count,
-  textlint-rule-max-comma,
-  textlint-rule-no-start-duplicated-conjunction,
-  textlint-rule-period-in-list-item,
-  textlint-rule-preset-ja-spacing,
-  textlint-rule-preset-ja-technical-writing,
-  textlint-rule-prh,
-  textlint-rule-stop-words,
-  textlint-rule-terminology,
-  textlint-rule-unexpanded-acronym,
-  textlint-rule-write-good,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, nodejs-slim
+, pnpm_9
+, versionCheckHook
+, runCommand
+, textlint
+, textlint-plugin-latex2e
+, textlint-rule-abbr-within-parentheses
+, textlint-rule-alex
+, textlint-rule-common-misspellings
+, textlint-rule-diacritics
+, textlint-rule-en-max-word-count
+, textlint-rule-max-comma
+, textlint-rule-no-start-duplicated-conjunction
+, textlint-rule-period-in-list-item
+, textlint-rule-preset-ja-spacing
+, textlint-rule-preset-ja-technical-writing
+, textlint-rule-prh
+, textlint-rule-stop-words
+, textlint-rule-terminology
+, textlint-rule-unexpanded-acronym
+, textlint-rule-write-good
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -112,11 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
     testPackages =
-      {
-        rule,
-        testFile,
-        pname ? rule.pname,
-        plugin ? null,
+      { rule
+      , testFile
+      , pname ? rule.pname
+      , plugin ? null
+      ,
       }:
       let
         ruleName = lib.removePrefix "textlint-rule-" rule.pname;

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  matplotlib,
-  numpy,
-  pandas,
-  scipy,
-  seaborn,
-  statsmodels,
-  pytestCheckHook,
-  seaborn-data,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, matplotlib
+, numpy
+, pandas
+, scipy
+, seaborn
+, statsmodels
+, pytestCheckHook
+, seaborn-data
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   cfg = config.services.kubernetes;
@@ -74,14 +73,14 @@ let
   etcdEndpoints = [ "https://${cfg.masterAddress}:2379" ];
 
   mkCert =
-    {
-      name,
-      CN,
-      hosts ? [ ],
-      fields ? { },
-      action ? "",
-      privateKeyOwner ? "kubernetes",
-      privateKeyGroup ? "kubernetes",
+    { name
+    , CN
+    , hosts ? [ ]
+    , fields ? { }
+    , action ? ""
+    , privateKeyOwner ? "kubernetes"
+    , privateKeyGroup ? "kubernetes"
+    ,
     }:
     rec {
       inherit

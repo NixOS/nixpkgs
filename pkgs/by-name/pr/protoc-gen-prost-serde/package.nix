@@ -1,8 +1,8 @@
-{
-  fetchCrate,
-  lib,
-  rustPlatform,
-  nix-update-script,
+{ fetchCrate
+, lib
+, rustPlatform
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

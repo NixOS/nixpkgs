@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  db,
-  file,
-  libnsl,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+{ stdenv
+, fetchFromGitHub
+, lib
+, db
+, file
+, libnsl
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

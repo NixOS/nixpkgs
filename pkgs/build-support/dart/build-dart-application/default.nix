@@ -1,72 +1,65 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  runCommand,
-  writeText,
-  pub2nix,
-  dartHooks,
-  makeWrapper,
-  dart,
-  nodejs,
-  darwin,
-  jq,
-  yq,
+{ lib
+, stdenv
+, callPackage
+, runCommand
+, writeText
+, pub2nix
+, dartHooks
+, makeWrapper
+, dart
+, nodejs
+, darwin
+, jq
+, yq
+,
 }:
 
-{
-  src,
-  sourceRoot ? "source",
-  packageRoot ? (lib.removePrefix "/" (lib.removePrefix "source" sourceRoot)),
-  gitHashes ? { },
-  sdkSourceBuilders ? { },
-  customSourceBuilders ? { },
-
-  sdkSetupScript ? "",
-  extraPackageConfigSetup ? "",
-
-  # Output type to produce. Can be any kind supported by dart
+{ src
+, sourceRoot ? "source"
+, packageRoot ? (lib.removePrefix "/" (lib.removePrefix "source" sourceRoot))
+, gitHashes ? { }
+, sdkSourceBuilders ? { }
+, customSourceBuilders ? { }
+, sdkSetupScript ? ""
+, extraPackageConfigSetup ? ""
+, # Output type to produce. Can be any kind supported by dart
   # https://dart.dev/tools/dart-compile#types-of-output
   # If using jit, you might want to pass some arguments to `dartJitFlags`
-  dartOutputType ? "exe",
-  dartCompileCommand ? "dart compile",
-  dartCompileFlags ? [ ],
-  # These come at the end of the command, useful to pass flags to the jit run
-  dartJitFlags ? [ ],
-
-  # Attrset of entry point files to build and install.
+  dartOutputType ? "exe"
+, dartCompileCommand ? "dart compile"
+, dartCompileFlags ? [ ]
+, # These come at the end of the command, useful to pass flags to the jit run
+  dartJitFlags ? [ ]
+, # Attrset of entry point files to build and install.
   # Where key is the final binary path and value is the source file path
   # e.g. { "bin/foo" = "bin/main.dart";  }
   # Set to null to read executables from pubspec.yaml
-  dartEntryPoints ? null,
-  # Used when wrapping aot, jit, kernel, and js builds.
+  dartEntryPoints ? null
+, # Used when wrapping aot, jit, kernel, and js builds.
   # Set to null to disable wrapping.
-  dartRuntimeCommand ?
-    if dartOutputType == "aot-snapshot" then
-      "${dart}/bin/dartaotruntime"
-    else if (dartOutputType == "jit-snapshot" || dartOutputType == "kernel") then
-      "${dart}/bin/dart"
-    else if dartOutputType == "js" then
-      "${nodejs}/bin/node"
-    else
-      null,
-
-  runtimeDependencies ? [ ],
-  extraWrapProgramArgs ? "",
-
-  autoPubspecLock ? null,
-  pubspecLock ?
-    if autoPubspecLock == null then
-      throw "The pubspecLock argument is required. If import-from-derivation is allowed (it isn't in Nixpkgs), you can set autoPubspecLock to the path to a pubspec.lock instead."
-    else
-      assert lib.assertMsg (builtins.pathExists autoPubspecLock)
-        "The pubspec.lock file could not be found!";
-      lib.importJSON (
-        runCommand "${lib.getName args}-pubspec-lock-json" {
+  dartRuntimeCommand ? if dartOutputType == "aot-snapshot" then
+    "${dart}/bin/dartaotruntime"
+  else if (dartOutputType == "jit-snapshot" || dartOutputType == "kernel") then
+    "${dart}/bin/dart"
+  else if dartOutputType == "js" then
+    "${nodejs}/bin/node"
+  else
+    null
+, runtimeDependencies ? [ ]
+, extraWrapProgramArgs ? ""
+, autoPubspecLock ? null
+, pubspecLock ? if autoPubspecLock == null then
+    throw "The pubspecLock argument is required. If import-from-derivation is allowed (it isn't in Nixpkgs), you can set autoPubspecLock to the path to a pubspec.lock instead."
+  else
+    assert lib.assertMsg (builtins.pathExists autoPubspecLock)
+      "The pubspec.lock file could not be found!";
+    lib.importJSON (
+      runCommand "${lib.getName args}-pubspec-lock-json"
+        {
           nativeBuildInputs = [ yq ];
         } ''yq . '${autoPubspecLock}' > "$out"''
-      ),
-  ...
+    )
+, ...
 }@args:
 
 let
@@ -177,8 +170,8 @@ let
           darwin.sigtool
         ]
         ++
-          # Ensure that we inherit the propagated build inputs from the dependencies.
-          builtins.attrValues pubspecLockData.dependencySources;
+        # Ensure that we inherit the propagated build inputs from the dependencies.
+        builtins.attrValues pubspecLockData.dependencySources;
 
       preConfigure = args.preConfigure or "" + ''
         ln -sf "$pubspecLockFilePath" pubspec.lock
@@ -202,6 +195,6 @@ let
   );
 in
 assert
-  !(builtins.isString dartOutputType && dartOutputType != "")
+!(builtins.isString dartOutputType && dartOutputType != "")
   -> throw "dartOutputType must be a non-empty string";
 baseDerivation

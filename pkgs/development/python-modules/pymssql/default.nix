@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  freetds,
-  krb5-c,
-  openssl,
-  cython,
-  gevent,
-  psutil,
-  pytestCheckHook,
-  setuptools-scm,
-  sqlalchemy,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, freetds
+, krb5-c
+, openssl
+, cython
+, gevent
+, psutil
+, pytestCheckHook
+, setuptools-scm
+, sqlalchemy
+, tomli
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  enet,
-  yaml-cpp,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  zlib,
-  unstableGitUpdater,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, enet
+, yaml-cpp
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, zlib
+, unstableGitUpdater
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

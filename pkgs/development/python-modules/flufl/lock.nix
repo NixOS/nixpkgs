@@ -1,14 +1,14 @@
-{
-  lib,
-  atpublic,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  psutil,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  sybil,
+{ lib
+, atpublic
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, psutil
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, sybil
+,
 }:
 
 buildPythonPackage rec {

@@ -1,33 +1,33 @@
-{
-  libX11,
-  libxcb,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
-  stdenv,
-  lib,
-  alsa-lib,
-  at-spi2-atk,
-  atkmm,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  glib,
-  gtk3,
-  libdrm,
-  libglvnd,
-  libxkbcommon,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  systemd,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
+{ libX11
+, libxcb
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, stdenv
+, lib
+, alsa-lib
+, at-spi2-atk
+, atkmm
+, cairo
+, cups
+, dbus
+, expat
+, glib
+, gtk3
+, libdrm
+, libglvnd
+, libxkbcommon
+, libgbm
+, nspr
+, nss
+, pango
+, systemd
+, fetchurl
+, autoPatchelfHook
+, dpkg
+,
 }:
 let
   glLibs = [

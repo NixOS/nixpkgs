@@ -1,8 +1,8 @@
-{
-  openssl,
-  pkg-config,
-  rustPlatform,
-  wezterm,
+{ openssl
+, pkg-config
+, rustPlatform
+, wezterm
+,
 }:
 
 rustPlatform.buildRustPackage {

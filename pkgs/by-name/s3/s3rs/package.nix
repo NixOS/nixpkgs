@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  python3,
-  perl,
-  openssl,
-  fetchFromGitHub,
-  pkg-config,
+{ lib
+, rustPlatform
+, python3
+, perl
+, openssl
+, fetchFromGitHub
+, pkg-config
+,
 }:
 
 rustPlatform.buildRustPackage rec {

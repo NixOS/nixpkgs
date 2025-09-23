@@ -1,9 +1,8 @@
 # GeoClue 2 daemon.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.geoclue2;
@@ -47,12 +46,11 @@ let
 
   appConfigToINICompatible =
     _:
-    {
-      desktopID,
-      isAllowed,
-      isSystem,
-      users,
-      ...
+    { desktopID
+    , isAllowed
+    , isSystem
+    , users
+    , ...
     }:
     {
       name = desktopID;

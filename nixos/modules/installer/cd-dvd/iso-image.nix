@@ -1,22 +1,21 @@
 # This module creates a bootable ISO image containing the given NixOS
 # configuration.  The derivation for the ISO image will be placed in
 # config.system.build.isoImage.
-{
-  config,
-  lib,
-  utils,
-  pkgs,
-  ...
+{ config
+, lib
+, utils
+, pkgs
+, ...
 }:
 let
   # Builds a single menu entry
   menuBuilderGrub2 =
-    {
-      name,
-      class,
-      image,
-      params,
-      initrd,
+    { name
+    , class
+    , image
+    , params
+    , initrd
+    ,
     }:
     ''
       menuentry '${name}' --class ${class} {
@@ -30,9 +29,9 @@ let
 
   # Builds all menu entries
   buildMenuGrub2 =
-    {
-      cfg ? config,
-      params ? [ ],
+    { cfg ? config
+    , params ? [ ]
+    ,
     }:
     let
       menuConfig = {
@@ -144,10 +143,10 @@ let
   #     result in incorrect boot entries.
 
   menuBuilderIsolinux =
-    {
-      cfg ? config,
-      label,
-      params ? [ ],
+    { cfg ? config
+    , label
+    , params ? [ ]
+    ,
     }:
     ''
       ${lib.optionalString cfg.isoImage.showConfiguration ''
@@ -843,9 +842,11 @@ in
       }
       (
         let
-          badSpecs = lib.filterAttrs (
-            specName: specCfg: specCfg.configuration.isoImage.volumeID != config.isoImage.volumeID
-          ) config.specialisation;
+          badSpecs = lib.filterAttrs
+            (
+              specName: specCfg: specCfg.configuration.isoImage.volumeID != config.isoImage.volumeID
+            )
+            config.specialisation;
         in
         {
           assertion = badSpecs == { };
@@ -950,16 +951,17 @@ in
       let
         cfgFiles =
           cfg:
-          lib.optionals cfg.isoImage.showConfiguration ([
-            {
-              source = cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
-              target = "/boot/" + cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
-            }
-            {
-              source = cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
-              target = "/boot/" + cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
-            }
-          ])
+          lib.optionals cfg.isoImage.showConfiguration
+            ([
+              {
+                source = cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
+                target = "/boot/" + cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
+              }
+              {
+                source = cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
+                target = "/boot/" + cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
+              }
+            ])
           ++ lib.concatLists (
             lib.mapAttrsToList (_: { configuration, ... }: cfgFiles configuration) cfg.specialisation
           );

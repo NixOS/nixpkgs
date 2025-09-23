@@ -1,9 +1,9 @@
-{
-  cmake,
-  fetchFromGitLab,
-  lib,
-  python3,
-  stdenv,
+{ cmake
+, fetchFromGitLab
+, lib
+, python3
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

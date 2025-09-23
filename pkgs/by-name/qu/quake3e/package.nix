@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  curl,
-  libGL,
-  libX11,
-  libXxf86dga,
-  alsa-lib,
-  libXrandr,
-  libXxf86vm,
-  libXext,
-  SDL2,
-  glibc,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, curl
+, libGL
+, libX11
+, libXxf86dga
+, alsa-lib
+, libXrandr
+, libXxf86vm
+, libXext
+, SDL2
+, glibc
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x64" else stdenv.hostPlatform.parsed.cpu.name;

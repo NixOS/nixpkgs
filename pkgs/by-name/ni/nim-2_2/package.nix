@@ -1,14 +1,14 @@
 # When updating this package please check that all other versions of Nim
 # evaluate because they reuse definitions from the latest compiler.
-{
-  lib,
-  stdenv,
-  buildPackages,
-  darwin,
-  makeWrapper,
-  openssl,
-  pcre,
-  nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2,
+{ lib
+, stdenv
+, buildPackages
+, darwin
+, makeWrapper
+, openssl
+, pcre
+, nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2
+,
 }:
 
 let

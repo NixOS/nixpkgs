@@ -1,15 +1,14 @@
-{
-  lib,
-  buildBatExtrasPkg,
-  shfmt,
-  clang-tools,
-  prettier,
-  rustfmt,
-
-  withShFmt ? true,
-  withPrettier ? true,
-  withClangTools ? true,
-  withRustFmt ? true,
+{ lib
+, buildBatExtrasPkg
+, shfmt
+, clang-tools
+, prettier
+, rustfmt
+, withShFmt ? true
+, withPrettier ? true
+, withClangTools ? true
+, withRustFmt ? true
+,
 }:
 buildBatExtrasPkg {
   name = "prettybat";

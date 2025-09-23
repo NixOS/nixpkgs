@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  testers,
-  zabbix-cli,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, testers
+, zabbix-cli
+,
 }:
 
 python3Packages.buildPythonApplication rec {

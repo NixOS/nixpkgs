@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  c-ares,
-  cryptopp,
-  curl,
-  fetchFromGitHub,
-  ffmpeg,
-  freeimage,
-  gcc-unwrapped,
-  icu,
-  libmediainfo,
-  libraw,
-  libsodium,
-  libuv,
-  libzen,
-  pcre-cpp,
-  pkg-config,
-  readline,
-  sqlite,
-  withFreeImage ? false, # default to false because freeimage is insecure
+{ lib
+, stdenv
+, autoreconfHook
+, c-ares
+, cryptopp
+, curl
+, fetchFromGitHub
+, ffmpeg
+, freeimage
+, gcc-unwrapped
+, icu
+, libmediainfo
+, libraw
+, libsodium
+, libuv
+, libzen
+, pcre-cpp
+, pkg-config
+, readline
+, sqlite
+, withFreeImage ? false
+, # default to false because freeimage is insecure
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  requests,
-  vfs-libarchive,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, requests
+, vfs-libarchive
+,
 }:
 
 buildKodiAddon rec {

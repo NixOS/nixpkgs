@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libX11,
-  libXrandr,
-  linuxPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libX11
+, libXrandr
+, linuxPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

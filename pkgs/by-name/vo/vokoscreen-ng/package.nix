@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gst_all_1,
-  libX11,
-  pipewire,
-  pulseaudio,
-  qt6,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gst_all_1
+, libX11
+, pipewire
+, pulseaudio
+, qt6
+, wayland
+,
 }:
 
 stdenv.mkDerivation rec {

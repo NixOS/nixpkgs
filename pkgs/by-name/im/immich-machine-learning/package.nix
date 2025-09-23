@@ -1,9 +1,9 @@
-{
-  lib,
-  immich,
-  python3,
-  nixosTests,
-  stdenv,
+{ lib
+, immich
+, python3
+, nixosTests
+, stdenv
+,
 }:
 let
   python = python3.override {

@@ -1,22 +1,21 @@
-{
-  stdenv,
-  ghc,
-  pkg-config,
-  glibcLocales,
-  cacert,
-  stack,
-  makeSetupHook,
-  lib,
+{ stdenv
+, ghc
+, pkg-config
+, glibcLocales
+, cacert
+, stack
+, makeSetupHook
+, lib
+,
 }@depArgs:
 
-{
-  buildInputs ? [ ],
-  nativeBuildInputs ? [ ],
-  extraArgs ? [ ],
-  LD_LIBRARY_PATH ? [ ],
-  ghc ? depArgs.ghc,
-  stack ? depArgs.stack,
-  ...
+{ buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, extraArgs ? [ ]
+, LD_LIBRARY_PATH ? [ ]
+, ghc ? depArgs.ghc
+, stack ? depArgs.stack
+, ...
 }@args:
 
 let
@@ -25,14 +24,15 @@ let
 
   # Add all dependencies in buildInputs including propagated ones to
   # STACK_IN_NIX_EXTRA_ARGS.
-  stackHook = makeSetupHook {
-    name = "stack-hook";
-  } ./stack-hook.sh;
+  stackHook = makeSetupHook
+    {
+      name = "stack-hook";
+    } ./stack-hook.sh;
 
 in
 stdenv.mkDerivation (
   args
-  // {
+    // {
 
     # Doesn't work in the sandbox. Pass `--option sandbox relaxed` or
     # `--option sandbox false` to be able to build this

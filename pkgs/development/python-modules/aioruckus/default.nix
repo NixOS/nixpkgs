@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  xmltodict,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

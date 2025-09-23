@@ -1,6 +1,6 @@
-{
-  mkPythonMetaPackage,
-  opencv4,
+{ mkPythonMetaPackage
+, opencv4
+,
 }:
 
 mkPythonMetaPackage {

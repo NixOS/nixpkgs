@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  swig,
-  cython,
-  matplotlib,
-  numpy,
-  pandas,
-  pysam,
-  setuptools,
-  pytestCheckHook,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, swig
+, cython
+, matplotlib
+, numpy
+, pandas
+, pysam
+, setuptools
+, pytestCheckHook
+, nix-update-script
+,
 }:
 buildPythonPackage rec {
   pname = "htseq";

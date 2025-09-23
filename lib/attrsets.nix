@@ -240,8 +240,8 @@ rec {
         remainingPathIndex:
 
         if remainingPathIndex == lenAttrPath then
-          # All previously checked attributes exist, and no attr names left,
-          # so we return the whole path.
+        # All previously checked attributes exist, and no attr names left,
+        # so we return the whole path.
           attrPath
         else
           let
@@ -251,8 +251,8 @@ rec {
             getPrefixForSetAtIndex remainingSet.${attr} # advance from the set to the attribute value
               (remainingPathIndex + 1) # advance the path
           else
-            # The attribute doesn't exist, so we return the prefix up to the
-            # previously checked length.
+          # The attribute doesn't exist, so we return the prefix up to the
+          # previously checked length.
             take remainingPathIndex attrPath;
     in
     getPrefixForSetAtIndex v 0;
@@ -458,10 +458,10 @@ rec {
               if hasValue then
                 value
               else
-                # Throw an error if there is no value. This `head` call here is
-                # safe, but only in this branch since `go` could only be called
-                # with `hasValue == false` for nested updates, in which case
-                # it's also always called with at least one update
+              # Throw an error if there is no value. This `head` call here is
+              # safe, but only in this branch since `go` could only be called
+              # with `hasValue == false` for nested updates, in which case
+              # it's also always called with at least one update
                 let
                   updatePath = (head split.right).path;
                 in
@@ -472,26 +472,26 @@ rec {
                 )
             else
             # If there are nested modifications, try to apply them to the value
-            if !hasValue then
+              if !hasValue then
               # But if we don't have a value, just use an empty attribute set
               # as the value, but simplify the code a bit
-              mapAttrs (name: go (prefixLength + 1) false null) nested
-            else if isAttrs value then
+                mapAttrs (name: go (prefixLength + 1) false null) nested
+              else if isAttrs value then
               # If we do have a value and it's an attribute set, override it
               # with the nested modifications
-              value // mapAttrs (name: go (prefixLength + 1) (value ? ${name}) value.${name}) nested
-            else
+                value // mapAttrs (name: go (prefixLength + 1) (value ? ${name}) value.${name}) nested
+              else
               # However if it's not an attribute set, we can't apply the nested
               # modifications, throw an error
-              let
-                updatePath = (head split.wrong).path;
-              in
-              throw (
-                "updateManyAttrsByPath: Path '${showAttrPath updatePath}' needs to "
-                + "be updated, but path '${showAttrPath (take prefixLength updatePath)}' "
-                + "of the given value is not an attribute set, so we can't "
-                + "update an attribute inside of it."
-              );
+                let
+                  updatePath = (head split.wrong).path;
+                in
+                throw (
+                  "updateManyAttrsByPath: Path '${showAttrPath updatePath}' needs to "
+                  + "be updated, but path '${showAttrPath (take prefixLength updatePath)}' "
+                  + "of the given value is not an attribute set, so we can't "
+                  + "update an attribute inside of it."
+                );
 
           # We get the final result by applying all the updates on this level
           # after having applied all the nested updates
@@ -701,18 +701,20 @@ rec {
   filterAttrsRecursive =
     pred: set:
     listToAttrs (
-      concatMap (
-        name:
-        let
-          v = set.${name};
-        in
-        if pred name v then
-          [
-            (nameValuePair name (if isAttrs v then filterAttrsRecursive pred v else v))
-          ]
-        else
-          [ ]
-      ) (attrNames set)
+      concatMap
+        (
+          name:
+          let
+            v = set.${name};
+          in
+          if pred name v then
+            [
+              (nameValuePair name (if isAttrs v then filterAttrsRecursive pred v else v))
+            ]
+          else
+            [ ]
+        )
+        (attrNames set)
     );
 
   /**
@@ -833,9 +835,12 @@ rec {
   */
   foldAttrs =
     op: nul: list_of_attrs:
-    foldr (
-      n: a: foldr (name: o: o // { ${name} = op n.${name} (a.${name} or nul); }) a (attrNames n)
-    ) { } list_of_attrs;
+    foldr
+      (
+        n: a: foldr (name: o: o // { ${name} = op n.${name} (a.${name} or nul); }) a (attrNames n)
+      )
+      { }
+      list_of_attrs;
 
   /**
     Recursively collect sets that verify a given predicate named `pred`
@@ -915,12 +920,16 @@ rec {
   */
   cartesianProduct =
     attrsOfLists:
-    foldl' (
-      listOfAttrs: attrName:
-      concatMap (
-        attrs: map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
-      ) listOfAttrs
-    ) [ { } ] (attrNames attrsOfLists);
+    foldl'
+      (
+        listOfAttrs: attrName:
+        concatMap
+          (
+            attrs: map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
+          )
+          listOfAttrs
+      ) [{ }]
+      (attrNames attrsOfLists);
 
   /**
     Return the result of function f applied to the cartesian product of attribute set value combinations.
@@ -1520,10 +1529,12 @@ rec {
   zipAttrsWithNames =
     names: f: sets:
     listToAttrs (
-      map (name: {
-        inherit name;
-        value = f name (catAttrs name sets);
-      }) names
+      map
+        (name: {
+          inherit name;
+          value = f name (catAttrs name sets);
+        })
+        names
     );
 
   /**
@@ -1619,15 +1630,15 @@ rec {
         start: end:
         # assert start < end; # Invariant
         if end - start >= 2 then
-          # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
-          # The invariant is satisfied because each half will have at least 1 element
+        # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
+        # The invariant is satisfied because each half will have at least 1 element
           binaryMerge start (start + (end - start) / 2) // binaryMerge (start + (end - start) / 2) end
         else
-          # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
+        # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
           elemAt list start;
     in
     if list == [ ] then
-      # Calling binaryMerge as below would not satisfy its invariant
+    # Calling binaryMerge as below would not satisfy its invariant
       { }
     else
       binaryMerge 0 (length list);
@@ -1749,10 +1760,13 @@ rec {
   */
   recursiveUpdate =
     lhs: rhs:
-    recursiveUpdateUntil (
-      path: lhs: rhs:
-      !(isAttrs lhs && isAttrs rhs)
-    ) lhs rhs;
+    recursiveUpdateUntil
+      (
+        path: lhs: rhs:
+          !(isAttrs lhs && isAttrs rhs)
+      )
+      lhs
+      rhs;
 
   /**
     Recurse into every attribute set of the first argument and check that:
@@ -1788,21 +1802,23 @@ rec {
   */
   matchAttrs =
     pattern: attrs:
-    assert isAttrs pattern;
-    all (
-      # Compare equality between `pattern` & `attrs`.
-      attr:
-      # Missing attr, not equal.
-      attrs ? ${attr}
-      && (
-        let
-          lhs = pattern.${attr};
-          rhs = attrs.${attr};
-        in
-        # If attrset check recursively
-        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs else lhs == rhs
-      )
-    ) (attrNames pattern);
+      assert isAttrs pattern;
+      all
+        (
+          # Compare equality between `pattern` & `attrs`.
+          attr:
+          # Missing attr, not equal.
+          attrs ? ${attr}
+          && (
+            let
+              lhs = pattern.${attr};
+              rhs = attrs.${attr};
+            in
+            # If attrset check recursively
+            if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs else lhs == rhs
+          )
+        )
+        (attrNames pattern);
 
   /**
     Override only the attributes that are already present in the old set
@@ -2229,9 +2245,11 @@ rec {
     let
       intersection = builtins.intersectAttrs x y;
       collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
-      mask = builtins.mapAttrs (
-        name: value: builtins.throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
-      ) intersection;
+      mask = builtins.mapAttrs
+        (
+          name: value: builtins.throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
+        )
+        intersection;
     in
     (x // y) // mask;
 

@@ -1,87 +1,83 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-  fetchpatch,
-  symlinkJoin,
-  autoAddDriverRunpath,
-
-  # build system
-  cmake,
-  jinja2,
-  ninja,
-  packaging,
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  which,
-  torch,
-  outlines,
-  psutil,
-  ray,
-  pandas,
-  pyarrow,
-  sentencepiece,
-  numpy,
-  transformers,
-  xformers,
-  xgrammar,
-  numba,
-  fastapi,
-  uvicorn,
-  pydantic,
-  aioprometheus,
-  pynvml,
-  openai,
-  pyzmq,
-  tiktoken,
-  torchaudio,
-  torchvision,
-  py-cpuinfo,
-  lm-format-enforcer,
-  prometheus-fastapi-instrumentator,
-  cupy,
-  cbor2,
-  pybase64,
-  gguf,
-  einops,
-  importlib-metadata,
-  partial-json-parser,
-  compressed-tensors,
-  mistral-common,
-  msgspec,
-  numactl,
-  tokenizers,
-  oneDNN,
-  blake3,
-  depyf,
-  opencv-python-headless,
-  cachetools,
-  llguidance,
-  python-json-logger,
-  python-multipart,
-  llvmPackages,
-  opentelemetry-sdk,
-  opentelemetry-api,
-  opentelemetry-exporter-otlp,
-  bitsandbytes,
-  flashinfer,
-  py-libnuma,
-  setproctitle,
-  openai-harmony,
-
-  # internal dependency - for overriding in overlays
-  vllm-flash-attn ? null,
-
-  cudaSupport ? torch.cudaSupport,
-  cudaPackages ? { },
-  rocmSupport ? torch.rocmSupport,
-  rocmPackages ? { },
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, fetchpatch
+, symlinkJoin
+, autoAddDriverRunpath
+, # build system
+  cmake
+, jinja2
+, ninja
+, packaging
+, setuptools
+, setuptools-scm
+, # dependencies
+  which
+, torch
+, outlines
+, psutil
+, ray
+, pandas
+, pyarrow
+, sentencepiece
+, numpy
+, transformers
+, xformers
+, xgrammar
+, numba
+, fastapi
+, uvicorn
+, pydantic
+, aioprometheus
+, pynvml
+, openai
+, pyzmq
+, tiktoken
+, torchaudio
+, torchvision
+, py-cpuinfo
+, lm-format-enforcer
+, prometheus-fastapi-instrumentator
+, cupy
+, cbor2
+, pybase64
+, gguf
+, einops
+, importlib-metadata
+, partial-json-parser
+, compressed-tensors
+, mistral-common
+, msgspec
+, numactl
+, tokenizers
+, oneDNN
+, blake3
+, depyf
+, opencv-python-headless
+, cachetools
+, llguidance
+, python-json-logger
+, python-multipart
+, llvmPackages
+, opentelemetry-sdk
+, opentelemetry-api
+, opentelemetry-exporter-otlp
+, bitsandbytes
+, flashinfer
+, py-libnuma
+, setproctitle
+, openai-harmony
+, # internal dependency - for overriding in overlays
+  vllm-flash-attn ? null
+, cudaSupport ? torch.cudaSupport
+, cudaPackages ? { }
+, rocmSupport ? torch.rocmSupport
+, rocmPackages ? { }
+, gpuTargets ? [ ]
+,
 }:
 
 let
@@ -132,50 +128,52 @@ let
     '';
   };
 
-  vllm-flash-attn' = lib.defaultTo (stdenv.mkDerivation {
-    pname = "vllm-flash-attn";
-    # https://github.com/vllm-project/flash-attention/blob/${src.rev}/vllm_flash_attn/__init__.py
-    version = "2.7.4.post1";
+  vllm-flash-attn' = lib.defaultTo
+    (stdenv.mkDerivation {
+      pname = "vllm-flash-attn";
+      # https://github.com/vllm-project/flash-attention/blob/${src.rev}/vllm_flash_attn/__init__.py
+      version = "2.7.4.post1";
 
-    # grep for GIT_TAG in the following file
-    # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/vllm_flash_attn.cmake
-    src = fetchFromGitHub {
-      owner = "vllm-project";
-      repo = "flash-attention";
-      rev = "57b4e68b9f9d94750b46de8f8dbd2bfcc86edd4f";
-      hash = "sha256-c7L7WZVVEnXMOTPBoSp7jhkl9d4TA4sj11QvOSWTDIE=";
-    };
+      # grep for GIT_TAG in the following file
+      # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/vllm_flash_attn.cmake
+      src = fetchFromGitHub {
+        owner = "vllm-project";
+        repo = "flash-attention";
+        rev = "57b4e68b9f9d94750b46de8f8dbd2bfcc86edd4f";
+        hash = "sha256-c7L7WZVVEnXMOTPBoSp7jhkl9d4TA4sj11QvOSWTDIE=";
+      };
 
-    patches = [
-      # fix Hopper build failure
-      # https://github.com/Dao-AILab/flash-attention/pull/1719
-      # https://github.com/Dao-AILab/flash-attention/pull/1723
-      (fetchpatch {
-        url = "https://github.com/Dao-AILab/flash-attention/commit/dad67c88d4b6122c69d0bed1cebded0cded71cea.patch";
-        hash = "sha256-JSgXWItOp5KRpFbTQj/cZk+Tqez+4mEz5kmH5EUeQN4=";
-      })
-      (fetchpatch {
-        url = "https://github.com/Dao-AILab/flash-attention/commit/e26dd28e487117ee3e6bc4908682f41f31e6f83a.patch";
-        hash = "sha256-NkCEowXSi+tiWu74Qt+VPKKavx0H9JeteovSJKToK9A=";
-      })
-    ];
+      patches = [
+        # fix Hopper build failure
+        # https://github.com/Dao-AILab/flash-attention/pull/1719
+        # https://github.com/Dao-AILab/flash-attention/pull/1723
+        (fetchpatch {
+          url = "https://github.com/Dao-AILab/flash-attention/commit/dad67c88d4b6122c69d0bed1cebded0cded71cea.patch";
+          hash = "sha256-JSgXWItOp5KRpFbTQj/cZk+Tqez+4mEz5kmH5EUeQN4=";
+        })
+        (fetchpatch {
+          url = "https://github.com/Dao-AILab/flash-attention/commit/e26dd28e487117ee3e6bc4908682f41f31e6f83a.patch";
+          hash = "sha256-NkCEowXSi+tiWu74Qt+VPKKavx0H9JeteovSJKToK9A=";
+        })
+      ];
 
-    dontConfigure = true;
+      dontConfigure = true;
 
-    # vllm-flash-attn normally relies on `git submodule update` to fetch cutlass and composable_kernel
-    buildPhase = ''
-      rm -rf csrc/cutlass
-      ln -sf ${cutlass} csrc/cutlass
-    ''
-    + lib.optionalString (rocmSupport) ''
-      rm -rf csrc/composable_kernel;
-      ln -sf ${rocmPackages.composable_kernel} csrc/composable_kernel
-    '';
+      # vllm-flash-attn normally relies on `git submodule update` to fetch cutlass and composable_kernel
+      buildPhase = ''
+        rm -rf csrc/cutlass
+        ln -sf ${cutlass} csrc/cutlass
+      ''
+      + lib.optionalString (rocmSupport) ''
+        rm -rf csrc/composable_kernel;
+        ln -sf ${rocmPackages.composable_kernel} csrc/composable_kernel
+      '';
 
-    installPhase = ''
-      cp -rva . $out
-    '';
-  }) vllm-flash-attn;
+      installPhase = ''
+        cp -rva . $out
+      '';
+    })
+    vllm-flash-attn;
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
@@ -224,15 +222,17 @@ let
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
     supported: unsupported:
-    trivial.throwIf (supported == [ ]) (
-      "No supported GPU targets specified. Requested GPU targets: "
-      + strings.concatStringsSep ", " unsupported
-    ) supported;
+    trivial.throwIf (supported == [ ])
+      (
+        "No supported GPU targets specified. Requested GPU targets: "
+        + strings.concatStringsSep ", " unsupported
+      )
+      supported;
 
   # Create the gpuTargetString.
   gpuTargetString = strings.concatStringsSep ";" (
     if gpuTargets != [ ] then
-      # If gpuTargets is specified, it always takes priority.
+    # If gpuTargets is specified, it always takes priority.
       gpuTargets
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
@@ -442,10 +442,11 @@ buildPythonPackage rec {
   ];
 
   env =
-    lib.optionalAttrs cudaSupport {
-      VLLM_TARGET_DEVICE = "cuda";
-      CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
-    }
+    lib.optionalAttrs cudaSupport
+      {
+        VLLM_TARGET_DEVICE = "cuda";
+        CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
+      }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
       # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.

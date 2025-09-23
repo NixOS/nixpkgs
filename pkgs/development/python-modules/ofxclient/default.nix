@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ofxhome,
-  ofxparse,
-  beautifulsoup4,
-  lxml,
-  keyring,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ofxhome
+, ofxparse
+, beautifulsoup4
+, lxml
+, keyring
+,
 }:
 
 buildPythonPackage rec {

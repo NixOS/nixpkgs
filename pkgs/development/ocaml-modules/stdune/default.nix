@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  dune_3,
-  dyn,
-  ordering,
-  csexp,
+{ buildDunePackage
+, dune_3
+, dyn
+, ordering
+, csexp
+,
 }:
 
 buildDunePackage {

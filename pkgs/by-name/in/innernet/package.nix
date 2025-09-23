@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  sqlite,
-  installShellFiles,
-  libiconv,
-  innernet,
-  testers,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, sqlite
+, installShellFiles
+, libiconv
+, innernet
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

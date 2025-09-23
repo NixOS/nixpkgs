@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  fuse,
-  libmtp,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, fuse
+, libmtp
+,
 }:
 stdenv.mkDerivation rec {
   pname = "simple-mtpfs";

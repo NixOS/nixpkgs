@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  requireFile,
-  unzip,
-  makeDesktopItem,
-  SDL2,
-  SDL2_mixer,
-  libogg,
-  libvorbis,
+{ lib
+, stdenv
+, requireFile
+, unzip
+, makeDesktopItem
+, SDL2
+, SDL2_mixer
+, libogg
+, libvorbis
+,
 }:
 
 let

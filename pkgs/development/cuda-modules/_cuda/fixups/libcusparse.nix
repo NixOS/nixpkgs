@@ -1,7 +1,7 @@
-{
-  cudaAtLeast,
-  lib,
-  libnvjitlink ? null,
+{ cudaAtLeast
+, lib
+, libnvjitlink ? null
+,
 }:
 prevAttrs: {
   buildInputs = prevAttrs.buildInputs or [ ] ++ [ libnvjitlink ];

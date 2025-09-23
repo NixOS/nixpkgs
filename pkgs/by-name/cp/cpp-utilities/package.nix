@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  cppunit,
-  libiconv,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, cppunit
+, libiconv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

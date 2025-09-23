@@ -1,8 +1,8 @@
-{
-  lib,
-  gitUpdater,
-  python3Packages,
-  fetchFromGitHub,
+{ lib
+, gitUpdater
+, python3Packages
+, fetchFromGitHub
+,
 }:
 
 let

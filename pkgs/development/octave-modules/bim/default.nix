@@ -1,9 +1,9 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchFromGitHub,
-  fpl,
-  msh,
+{ buildOctavePackage
+, lib
+, fetchFromGitHub
+, fpl
+, msh
+,
 }:
 
 buildOctavePackage rec {

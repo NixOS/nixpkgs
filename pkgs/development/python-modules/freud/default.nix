@@ -1,33 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  scikit-build-core,
-  cython,
-  oldest-supported-numpy,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-
-  # buildInputs
-  tbb_2022,
-  nanobind,
-
-  # dependencies
-  numpy,
-  rowan,
-  scipy,
-  parsnip,
-
-  # tests
-  pytestCheckHook,
-  python,
-  gsd,
-  matplotlib,
-  sympy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  scikit-build-core
+, cython
+, oldest-supported-numpy
+, # nativeBuildInputs
+  cmake
+, ninja
+, # buildInputs
+  tbb_2022
+, nanobind
+, # dependencies
+  numpy
+, rowan
+, scipy
+, parsnip
+, # tests
+  pytestCheckHook
+, python
+, gsd
+, matplotlib
+, sympy
+,
 }:
 
 buildPythonPackage rec {

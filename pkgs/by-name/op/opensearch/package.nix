@@ -1,13 +1,13 @@
-{
-  coreutils,
-  fetchurl,
-  gnugrep,
-  jre_headless,
-  lib,
-  makeBinaryWrapper,
-  nixosTests,
-  stdenv,
-  stdenvNoCC,
+{ coreutils
+, fetchurl
+, gnugrep
+, jre_headless
+, lib
+, makeBinaryWrapper
+, nixosTests
+, stdenv
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

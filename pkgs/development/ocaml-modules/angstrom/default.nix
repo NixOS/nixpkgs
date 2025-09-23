@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml,
-  ocaml-syntax-shims,
-  alcotest,
-  bigstringaf,
-  ppx_let,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, ocaml-syntax-shims
+, alcotest
+, bigstringaf
+, ppx_let
+, gitUpdater
+,
 }:
 
 buildDunePackage rec {

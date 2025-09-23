@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  iw,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, iw
+,
 }:
 let
   pname = "netscanner";

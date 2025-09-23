@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchurl,
-  guile_1_8,
-  xmodmap,
-  which,
-  freetype,
-  libjpeg,
-  sqlite,
-  texliveSmall ? null,
-  aspell ? null,
-  git ? null,
-  python3 ? null,
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
-  xdg-utils,
-  qtbase,
-  qtsvg,
-  qtmacextras,
-  fetchpatch,
-  ghostscriptX ? null,
-  extraFonts ? false,
-  chineseFonts ? false,
-  japaneseFonts ? false,
-  koreanFonts ? false,
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, guile_1_8
+, xmodmap
+, which
+, freetype
+, libjpeg
+, sqlite
+, texliveSmall ? null
+, aspell ? null
+, git ? null
+, python3 ? null
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, xdg-utils
+, qtbase
+, qtsvg
+, qtmacextras
+, fetchpatch
+, ghostscriptX ? null
+, extraFonts ? false
+, chineseFonts ? false
+, japaneseFonts ? false
+, koreanFonts ? false
+,
 }:
 
 let

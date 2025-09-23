@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  copyDesktopItems,
-  buildNpmPackage,
-  electron_35,
-  fetchFromGitLab,
-  makeBinaryWrapper,
-  makeDesktopItem,
-  at-spi2-atk,
-  gtk3,
-  libappindicator-gtk3,
-  libnotify,
-  libsecret,
-  libuuid,
-  nss,
-  xdg-utils,
-  xorg,
+{ lib
+, stdenv
+, copyDesktopItems
+, buildNpmPackage
+, electron_35
+, fetchFromGitLab
+, makeBinaryWrapper
+, makeDesktopItem
+, at-spi2-atk
+, gtk3
+, libappindicator-gtk3
+, libnotify
+, libsecret
+, libuuid
+, nss
+, xdg-utils
+, xorg
+,
 }:
 let
   version = "2.250820.0";

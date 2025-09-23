@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  replaceVars,
-  installShellFiles,
-  testers,
-  org-stats,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, replaceVars
+, installShellFiles
+, testers
+, org-stats
+,
 }:
 
 buildGoModule rec {

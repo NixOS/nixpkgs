@@ -1,26 +1,27 @@
-{
-  lib,
-  boost,
-  ceres-solver,
-  cmake,
-  cminpack,
-  dlib,
-  fetchFromGitHub,
-  hdf5,
-  hmat-oss,
-  ipopt,
-  libxml2,
-  nlopt,
-  pagmo2,
-  primesieve,
-  python3Packages,
-  spectra,
-  stdenv,
-  swig,
-  tbb,
-  # Boolean flags
-  runTests ? false, # tests take an hour to build on a 48-core machine
-  enablePython ? false,
+{ lib
+, boost
+, ceres-solver
+, cmake
+, cminpack
+, dlib
+, fetchFromGitHub
+, hdf5
+, hmat-oss
+, ipopt
+, libxml2
+, nlopt
+, pagmo2
+, primesieve
+, python3Packages
+, spectra
+, stdenv
+, swig
+, tbb
+, # Boolean flags
+  runTests ? false
+, # tests take an hour to build on a 48-core machine
+  enablePython ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

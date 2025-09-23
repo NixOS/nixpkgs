@@ -1,13 +1,13 @@
-{
-  lib,
-  gnuradioMinimal,
-  thrift,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  fftwFloat,
-  qt5,
-  liquid-dsp,
+{ lib
+, gnuradioMinimal
+, thrift
+, fetchFromGitHub
+, pkg-config
+, cmake
+, fftwFloat
+, qt5
+, liquid-dsp
+,
 }:
 
 gnuradioMinimal.pkgs.mkDerivation rec {

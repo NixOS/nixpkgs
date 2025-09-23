@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitLab,
-  nix,
-  subversion,
-  makeWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitLab
+, nix
+, subversion
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

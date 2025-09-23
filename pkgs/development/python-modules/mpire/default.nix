@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  importlib-resources,
-  pygments,
-  tqdm,
-  flask,
-  multiprocess,
-  docutils,
-  sphinx,
-  sphinx-autodoc-typehints,
-  sphinx-rtd-theme,
-  sphinx-versions,
-  sphinxcontrib-images,
-  ipywidgets,
-  numpy,
-  rich,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, importlib-resources
+, pygments
+, tqdm
+, flask
+, multiprocess
+, docutils
+, sphinx
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
+, sphinx-versions
+, sphinxcontrib-images
+, ipywidgets
+, numpy
+, rich
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

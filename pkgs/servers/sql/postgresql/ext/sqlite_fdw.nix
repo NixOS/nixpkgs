@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
-  sqlite,
+{ fetchFromGitHub
+, lib
+, postgresql
+, postgresqlBuildExtension
+, sqlite
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
@@ -25,9 +25,11 @@ postgresqlBuildExtension (finalAttrs: {
     # PostgreSQL 18 support issue upstream: https://github.com/pgspider/sqlite_fdw/issues/117
     # Note: already fixed on `master` branch.
     # Check after next package update.
-    broken = lib.warnIf (
-      finalAttrs.version != "2.5.0"
-    ) "Is postgresql18Packages.sqlite_fdw still broken?" (lib.versionAtLeast postgresql.version "18");
+    broken = lib.warnIf
+      (
+        finalAttrs.version != "2.5.0"
+      ) "Is postgresql18Packages.sqlite_fdw still broken?"
+      (lib.versionAtLeast postgresql.version "18");
     description = "SQLite Foreign Data Wrapper for PostgreSQL";
     homepage = "https://github.com/pgspider/sqlite_fdw";
     changelog = "https://github.com/pgspider/sqlite_fdw/releases/tag/v${finalAttrs.version}";

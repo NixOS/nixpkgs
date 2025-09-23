@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  numpy,
-  pyqt5,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, numpy
+, pyqt5
+,
 }:
 
 buildPythonPackage rec {

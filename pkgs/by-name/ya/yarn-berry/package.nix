@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  nodejs,
-  stdenv,
-  testers,
-  yarn,
-  callPackage,
-  berryVersion ? 4,
+{ fetchFromGitHub
+, lib
+, nodejs
+, stdenv
+, testers
+, yarn
+, callPackage
+, berryVersion ? 4
+,
 }:
 
 let

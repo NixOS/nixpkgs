@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  libgeoip,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, libgeoip
+,
 }:
 
 buildPythonPackage rec {

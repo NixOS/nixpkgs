@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
-  nix-update-script,
-  boost,
-  zlib,
-  # File backends (for decoding and encoding)
-  withMp3 ? true,
-  lame,
-  withOgg ? true,
-  libvorbis,
-  withFlac ? true,
-  flac,
-  # Audio backends (for playback)
-  withOpenal ? false,
-  openal,
-  withSDL ? false,
-  SDL,
-  withOss ? false,
-  withAlsa ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  withPulse ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  # GUI audio player
-  withQt ? true,
-  qt5,
-  zip,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromBitbucket
+, nix-update-script
+, boost
+, zlib
+, # File backends (for decoding and encoding)
+  withMp3 ? true
+, lame
+, withOgg ? true
+, libvorbis
+, withFlac ? true
+, flac
+, # Audio backends (for playback)
+  withOpenal ? false
+, openal
+, withSDL ? false
+, SDL
+, withOss ? false
+, withAlsa ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, withPulse ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, # GUI audio player
+  withQt ? true
+, qt5
+, zip
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 let
   dlopenBuildInputs =

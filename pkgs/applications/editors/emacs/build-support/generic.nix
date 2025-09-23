@@ -1,11 +1,10 @@
 # generic builder for Emacs packages
 
-{
-  lib,
-  stdenv,
-  emacs,
-  texinfo,
-  ...
+{ lib
+, stdenv
+, emacs
+, texinfo
+, ...
 }:
 
 let
@@ -18,17 +17,16 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
 
-    {
-      buildInputs ? [ ],
-      nativeBuildInputs ? [ ],
-      packageRequires ? [ ],
-      propagatedBuildInputs ? [ ],
-      propagatedUserEnvPkgs ? [ ],
-      postInstall ? "",
-      meta ? { },
-      turnCompilationWarningToError ? false,
-      ignoreCompilationError ? false,
-      ...
+    { buildInputs ? [ ]
+    , nativeBuildInputs ? [ ]
+    , packageRequires ? [ ]
+    , propagatedBuildInputs ? [ ]
+    , propagatedUserEnvPkgs ? [ ]
+    , postInstall ? ""
+    , meta ? { }
+    , turnCompilationWarningToError ? false
+    , ignoreCompilationError ? false
+    , ...
     }@args:
 
     {

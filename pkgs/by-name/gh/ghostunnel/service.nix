@@ -2,11 +2,10 @@
 { writeScript, runtimeShell }:
 
 # Service module
-{
-  lib,
-  config,
-  options,
-  ...
+{ lib
+, config
+, options
+, ...
 }:
 let
   inherit (lib)
@@ -167,11 +166,11 @@ in
         '';
         assertion =
           cfg.disableAuthentication
-          || cfg.allowAll
-          || cfg.allowCN != [ ]
-          || cfg.allowOU != [ ]
-          || cfg.allowDNS != [ ]
-          || cfg.allowURI != [ ];
+            || cfg.allowAll
+            || cfg.allowCN != [ ]
+            || cfg.allowOU != [ ]
+            || cfg.allowDNS != [ ]
+            || cfg.allowURI != [ ];
       }
     ];
 
@@ -237,9 +236,9 @@ in
         DynamicUser = true;
         LoadCredential =
           optional (cfg.keystore != null) "keystore:${cfg.keystore}"
-          ++ optional (cfg.cert != null) "cert:${cfg.cert}"
-          ++ optional (cfg.key != null) "key:${cfg.key}"
-          ++ optional (cfg.cacert != null) "cacert:${cfg.cacert}";
+            ++ optional (cfg.cert != null) "cert:${cfg.cert}"
+            ++ optional (cfg.key != null) "key:${cfg.key}"
+            ++ optional (cfg.cacert != null) "cacert:${cfg.cacert}";
       };
     };
   };

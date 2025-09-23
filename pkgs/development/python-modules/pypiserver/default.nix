@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  distutils,
-  fetchFromGitHub,
-  passlib,
-  pip,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  twine,
-  watchdog,
-  webtest,
-  build,
-  importlib-resources,
+{ lib
+, buildPythonPackage
+, distutils
+, fetchFromGitHub
+, passlib
+, pip
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, twine
+, watchdog
+, webtest
+, build
+, importlib-resources
+,
 }:
 
 buildPythonPackage rec {

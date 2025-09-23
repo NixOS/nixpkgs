@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  docopt,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-vcr,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  vcrpy,
+{ lib
+, buildPythonPackage
+, docopt
+, fetchFromGitHub
+, poetry-core
+, pytest-vcr
+, pytestCheckHook
+, requests
+, setuptools
+, vcrpy
+,
 }:
 
 buildPythonPackage rec {

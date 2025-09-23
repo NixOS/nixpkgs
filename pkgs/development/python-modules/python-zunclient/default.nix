@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  docker,
-  fetchFromGitHub,
-  keystoneauth1,
-  openstackdocstheme,
-  osc-lib,
-  oslo-i18n,
-  oslo-log,
-  oslo-utils,
-  pbr,
-  prettytable,
-  pythonOlder,
-  setuptools,
-  sphinxHook,
-  stestr,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, docker
+, fetchFromGitHub
+, keystoneauth1
+, openstackdocstheme
+, osc-lib
+, oslo-i18n
+, oslo-log
+, oslo-utils
+, pbr
+, prettytable
+, pythonOlder
+, setuptools
+, sphinxHook
+, stestr
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

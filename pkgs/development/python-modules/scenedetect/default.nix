@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  av,
-  click,
-  numpy,
-  pytestCheckHook,
-  opencv-python,
-  platformdirs,
-  tqdm,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, av
+, click
+, numpy
+, pytestCheckHook
+, opencv-python
+, platformdirs
+, tqdm
+, versionCheckHook
+,
 }:
 let
   testsResources = fetchFromGitHub {

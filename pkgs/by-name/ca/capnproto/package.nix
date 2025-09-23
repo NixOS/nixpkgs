@@ -1,14 +1,14 @@
-{
-  binutils,
-  lib,
-  libucontext,
-  pkg-config,
-  clangStdenv,
-  fetchFromGitHub,
-  cmake,
-  openssl,
-  zlib,
-  nix-update-script,
+{ binutils
+, lib
+, libucontext
+, pkg-config
+, clangStdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, zlib
+, nix-update-script
+,
 }:
 
 let
@@ -27,10 +27,10 @@ let
 in
 
 # NOTE: This must be `clang` because `gcc` is known to miscompile or ICE while
-# compiling `capnproto` coroutines.
-#
-# See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102051
-# See: https://gerrit.lix.systems/c/lix/+/1874
+  # compiling `capnproto` coroutines.
+  #
+  # See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102051
+  # See: https://gerrit.lix.systems/c/lix/+/1874
 clangStdenv.mkDerivation rec {
   pname = "capnproto";
   version = "1.2.0";

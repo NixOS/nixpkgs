@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  bison,
-  flex,
-  dos2unix,
-  gperf,
-  adms,
-  withAdms ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, bison
+, flex
+, dos2unix
+, gperf
+, adms
+, withAdms ? false
+,
 }:
 
 stdenv.mkDerivation rec {

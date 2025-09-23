@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  raspberrypifw,
+{ lib
+, stdenvNoCC
+, raspberrypifw
+,
 }:
 
 stdenvNoCC.mkDerivation {

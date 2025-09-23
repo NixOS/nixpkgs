@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  grpc,
-  protobuf,
-  setuptools,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, grpc
+, protobuf
+, setuptools
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

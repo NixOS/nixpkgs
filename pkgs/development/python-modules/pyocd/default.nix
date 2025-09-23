@@ -1,32 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  capstone,
-  cmsis-pack-manager,
-  colorama,
-  importlib-metadata,
-  importlib-resources,
-  intelhex,
-  intervaltree,
-  lark,
-  natsort,
-  prettytable,
-  pyelftools,
-  pylink-square,
-  pyusb,
-  pyyaml,
-  typing-extensions,
-  hidapi,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  capstone
+, cmsis-pack-manager
+, colorama
+, importlib-metadata
+, importlib-resources
+, intelhex
+, intervaltree
+, lark
+, natsort
+, prettytable
+, pyelftools
+, pylink-square
+, pyusb
+, pyyaml
+, typing-extensions
+, hidapi
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

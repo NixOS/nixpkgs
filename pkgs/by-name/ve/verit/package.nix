@@ -1,11 +1,11 @@
-{
-  lib,
-  gccStdenv,
-  fetchurl,
-  autoreconfHook,
-  gmp,
-  flex,
-  bison,
+{ lib
+, gccStdenv
+, fetchurl
+, autoreconfHook
+, gmp
+, flex
+, bison
+,
 }:
 
 gccStdenv.mkDerivation {

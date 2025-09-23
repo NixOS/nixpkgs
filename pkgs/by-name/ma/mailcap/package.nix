@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  nixosTests,
-
-  # updater
-  git,
-  coreutils,
-  gawk,
-  gnused,
-  writeScript,
-  nix-update,
+{ lib
+, stdenv
+, fetchurl
+, nixosTests
+, # updater
+  git
+, coreutils
+, gawk
+, gnused
+, writeScript
+, nix-update
+,
 }:
 
 stdenv.mkDerivation rec {

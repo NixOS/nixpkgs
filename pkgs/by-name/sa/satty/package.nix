@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  gdk-pixbuf,
-  glib,
-  gtk4,
-  libadwaita,
-  libepoxy,
-  libGL,
-  copyDesktopItems,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, gdk-pixbuf
+, glib
+, gtk4
+, libadwaita
+, libepoxy
+, libGL
+, copyDesktopItems
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {

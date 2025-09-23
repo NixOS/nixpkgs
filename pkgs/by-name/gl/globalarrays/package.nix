@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  blas,
-  gfortran,
-  openssh,
-  mpi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, blas
+, gfortran
+, openssh
+, mpi
+,
 }:
 
 stdenv.mkDerivation rec {

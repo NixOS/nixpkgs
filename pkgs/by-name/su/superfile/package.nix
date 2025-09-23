@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
-  exiftool,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, writableTmpDirAsHomeHook
+, exiftool
+,
 }:
 let
   version = "1.3.3";

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  linux-pam,
-  libxcb,
-  makeBinaryWrapper,
-  zig_0_14,
-  callPackage,
-  nixosTests,
-  x11Support ? true,
+{ stdenv
+, lib
+, fetchFromGitea
+, linux-pam
+, libxcb
+, makeBinaryWrapper
+, zig_0_14
+, callPackage
+, nixosTests
+, x11Support ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

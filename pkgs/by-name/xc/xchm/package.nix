@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  wxGTK32,
-  chmlib,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wxGTK32
+, chmlib
+, desktopToDarwinBundle
+,
 }:
 
 stdenv.mkDerivation rec {

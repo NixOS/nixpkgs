@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  gfold,
-  lib,
-  rustPlatform,
-  testers,
+{ fetchFromGitHub
+, gfold
+, lib
+, rustPlatform
+, testers
+,
 }:
 
 let

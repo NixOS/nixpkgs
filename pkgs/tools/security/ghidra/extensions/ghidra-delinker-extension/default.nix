@@ -1,8 +1,8 @@
-{
-  lib,
-  ghidra,
-  gradle,
-  fetchFromGitHub,
+{ lib
+, ghidra
+, gradle
+, fetchFromGitHub
+,
 }:
 ghidra.buildGhidraExtension (finalAttrs: {
   pname = "ghidra-delinker-extension";

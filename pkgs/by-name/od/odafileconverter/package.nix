@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  dpkg,
-  fetchurl,
-  qt6,
-  libGL,
+{ lib
+, stdenv
+, dpkg
+, fetchurl
+, qt6
+, libGL
+,
 }:
 
 let

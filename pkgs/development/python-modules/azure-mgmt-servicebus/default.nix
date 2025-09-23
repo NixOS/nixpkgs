@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  msrest,
-  azure-common,
-  azure-mgmt-core,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, msrest
+, azure-common
+, azure-mgmt-core
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

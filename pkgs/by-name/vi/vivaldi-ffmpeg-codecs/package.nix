@@ -1,8 +1,8 @@
-{
-  fetchurl,
-  lib,
-  squashfsTools,
-  stdenv,
+{ fetchurl
+, lib
+, squashfsTools
+, stdenv
+,
 }:
 
 # This derivation roughly follows the update-ffmpeg script that ships with the official Vivaldi

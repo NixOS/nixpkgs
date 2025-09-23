@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  protobuf,
-  pytestCheckHook,
-  pythonOlder,
-  regex,
-  setuptools,
-  setuptools-scm,
-  uharfbuzz,
-  youseedee,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, protobuf
+, pytestCheckHook
+, pythonOlder
+, regex
+, setuptools
+, setuptools-scm
+, uharfbuzz
+, youseedee
+,
 }:
 
 buildPythonPackage rec {

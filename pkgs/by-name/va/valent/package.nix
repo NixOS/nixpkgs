@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  desktop-file-utils,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  vala,
-  evolution-data-server-gtk4,
-  gdk-pixbuf,
-  glib,
-  glib-networking,
-  gnutls,
-  gst_all_1,
-  json-glib,
-  libadwaita,
-  libpeas2,
-  libphonenumber,
-  libportal-gtk4,
-  pipewire,
-  pulseaudio,
-  tinysparql,
+{ lib
+, stdenv
+, fetchFromGitHub
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, vala
+, evolution-data-server-gtk4
+, gdk-pixbuf
+, glib
+, glib-networking
+, gnutls
+, gst_all_1
+, json-glib
+, libadwaita
+, libpeas2
+, libphonenumber
+, libportal-gtk4
+, pipewire
+, pulseaudio
+, tinysparql
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

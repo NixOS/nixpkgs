@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  go-crx3,
+{ lib
+, stdenv
+, fetchurl
+, go-crx3
+,
 }:
 
 let

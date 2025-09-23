@@ -1,38 +1,38 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  libidn,
-  openssl,
-  makeWrapper,
-  fetchhg,
-  buildPackages,
-  icu,
-  lua,
-  nixosTests,
-  withDBI ? true,
-  # use withExtraLibs to add additional dependencies of community modules
-  withExtraLibs ? [ ],
-  withExtraLuaPackages ? _: [ ],
-  withOnlyInstalledCommunityModules ? [ ],
-  withCommunityModules ? [ ],
+{ stdenv
+, fetchurl
+, lib
+, libidn
+, openssl
+, makeWrapper
+, fetchhg
+, buildPackages
+, icu
+, lua
+, nixosTests
+, withDBI ? true
+, # use withExtraLibs to add additional dependencies of community modules
+  withExtraLibs ? [ ]
+, withExtraLuaPackages ? _: [ ]
+, withOnlyInstalledCommunityModules ? [ ]
+, withCommunityModules ? [ ]
+,
 }:
 
 let
   luaEnv = lua.withPackages (
     p:
-    with p;
-    [
-      luasocket
-      luasec
-      luaexpat
-      luafilesystem
-      luabitop
-      luadbi-sqlite3
-      luaunbound
-    ]
-    ++ lib.optional withDBI p.luadbi
-    ++ withExtraLuaPackages p
+      with p;
+      [
+        luasocket
+        luasec
+        luaexpat
+        luafilesystem
+        luabitop
+        luadbi-sqlite3
+        luaunbound
+      ]
+      ++ lib.optional withDBI p.luadbi
+      ++ withExtraLuaPackages p
   );
 in
 stdenv.mkDerivation (finalAttrs: {

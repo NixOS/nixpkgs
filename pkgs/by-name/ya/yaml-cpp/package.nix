@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  gitUpdater,
-  cmake,
-  static ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gitUpdater
+, cmake
+, static ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {

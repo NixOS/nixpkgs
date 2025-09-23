@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  tkinter,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, tkinter
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchzip,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
+{ lib
+, fetchzip
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+,
 }:
 let
   rev = "26780de81b8c14d48fe8d757c642086f2af2a66b";

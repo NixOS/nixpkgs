@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nodejs,
-  typescript,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, nodejs
+, typescript
+,
 }:
 
 buildNpmPackage (finalAttrs: {

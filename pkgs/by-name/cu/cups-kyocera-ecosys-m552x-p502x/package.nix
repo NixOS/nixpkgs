@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  # can either be "EU" or "Global"; it's unclear what the difference is
-  region ? "Global",
+{ stdenv
+, lib
+, fetchzip
+, # can either be "EU" or "Global"; it's unclear what the difference is
+  region ? "Global"
+,
 }:
 
 stdenv.mkDerivation {

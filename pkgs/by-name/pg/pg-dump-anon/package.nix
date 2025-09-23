@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildGoModule,
-  nixosTests,
-  postgresql,
-  makeWrapper,
+{ lib
+, fetchFromGitLab
+, buildGoModule
+, nixosTests
+, postgresql
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

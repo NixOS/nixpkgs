@@ -1,55 +1,55 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchFromGitHub,
-  makeWrapper,
-  autoPatchelfHook,
-  patchelfUnstable,
-  fetchpatch,
-  libjxl,
-  brotli,
-  at-spi2-atk,
-  cairo,
-  flite,
-  fontconfig,
-  freetype,
-  glib,
-  glib-networking,
-  gst_all_1,
-  harfbuzz,
-  harfbuzzFull,
-  icu70,
-  lcms,
-  libavif,
-  libdrm,
-  libepoxy,
-  libevent,
-  libgcc,
-  libgcrypt,
-  libgpg-error,
-  libjpeg8,
-  libopus,
-  libpng,
-  libsoup_3,
-  libtasn1,
-  libvpx,
-  libwebp,
-  libwpe,
-  libwpe-fdo,
-  libxkbcommon,
-  libxml2,
-  libxslt,
-  libgbm,
-  sqlite,
-  systemdLibs,
-  wayland-scanner,
-  woff2,
-  zlib,
-  suffix,
-  revision,
-  system,
-  throwSystem,
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, makeWrapper
+, autoPatchelfHook
+, patchelfUnstable
+, fetchpatch
+, libjxl
+, brotli
+, at-spi2-atk
+, cairo
+, flite
+, fontconfig
+, freetype
+, glib
+, glib-networking
+, gst_all_1
+, harfbuzz
+, harfbuzzFull
+, icu70
+, lcms
+, libavif
+, libdrm
+, libepoxy
+, libevent
+, libgcc
+, libgcrypt
+, libgpg-error
+, libjpeg8
+, libopus
+, libpng
+, libsoup_3
+, libtasn1
+, libvpx
+, libwebp
+, libwpe
+, libwpe-fdo
+, libxkbcommon
+, libxml2
+, libxslt
+, libgbm
+, sqlite
+, systemdLibs
+, wayland-scanner
+, woff2
+, zlib
+, suffix
+, revision
+, system
+, throwSystem
+,
 }:
 let
   suffix' =
@@ -131,8 +131,7 @@ let
         {
           x86_64-linux = "sha256-OSVHFGdcQrzmhLPdXF61tKmip/6/D+uaQgSBBQiOIZI=";
           aarch64-linux = "sha256-b8XwVMCwSbujyqgkJKIPAVNX83Qmmsthprr2x9XSb10=";
-        }
-        .${system} or throwSystem;
+        }.${system} or throwSystem;
     };
 
     nativeBuildInputs = [
@@ -212,14 +211,12 @@ let
       {
         x86_64-darwin = "sha256-shjhozJS2VbBjpjJVlM9hwBzGWwgva1qhfEUhY8t9Bk=";
         aarch64-darwin = "sha256-ZRl86L/OOTNPWfZDl6JQfuXL41kI/Wir99/JIbf7T7M=";
-      }
-      .${system} or throwSystem;
+      }.${system} or throwSystem;
   };
 in
-{
-  x86_64-linux = webkit-linux;
-  aarch64-linux = webkit-linux;
-  x86_64-darwin = webkit-darwin;
-  aarch64-darwin = webkit-darwin;
-}
-.${system} or throwSystem
+  {
+    x86_64-linux = webkit-linux;
+    aarch64-linux = webkit-linux;
+    x86_64-darwin = webkit-darwin;
+    aarch64-darwin = webkit-darwin;
+  }.${system} or throwSystem

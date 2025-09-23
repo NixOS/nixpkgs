@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  python3,
-  libpthread-stubs,
-  libxau,
-  libxdmcp,
-  xcb-proto,
-  windows,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, python3
+, libpthread-stubs
+, libxau
+, libxdmcp
+, xcb-proto
+, windows
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcb";

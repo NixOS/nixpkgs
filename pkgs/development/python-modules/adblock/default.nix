@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPythonPackage,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  publicsuffix-list,
-  pythonOlder,
-  libiconv,
-  pytestCheckHook,
-  toml,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildPythonPackage
+, rustPlatform
+, pkg-config
+, openssl
+, publicsuffix-list
+, pythonOlder
+, libiconv
+, pytestCheckHook
+, toml
+,
 }:
 
 buildPythonPackage rec {

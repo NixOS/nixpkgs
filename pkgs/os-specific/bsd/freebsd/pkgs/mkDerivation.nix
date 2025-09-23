@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  stdenvNoLibs,
-  overrideCC,
-  buildPackages,
-  stdenvNoLibcxx ? overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx,
-  versionData,
-  patchesRoot,
-  compatIfNeeded,
-  freebsd-lib,
-  filterSource,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
-  mandoc,
-  groff,
+{ lib
+, stdenv
+, stdenvNoCC
+, stdenvNoLibs
+, overrideCC
+, buildPackages
+, stdenvNoLibcxx ? overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
+, versionData
+, patchesRoot
+, compatIfNeeded
+, freebsd-lib
+, filterSource
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+, mandoc
+, groff
+,
 }:
 
 lib.makeOverridable (
@@ -133,18 +133,18 @@ lib.makeOverridable (
         ++ attrs.patches or [ ];
     }
     //
-      lib.optionalAttrs
-        (!stdenv.hostPlatform.isStatic && !attrs.alwaysKeepStatic or false && stdenv.hostPlatform.isFreeBSD)
-        {
-          postInstall = (attrs.postInstall or "") + ''
-            rm -f $out/lib/*.a
-          '';
-        }
-    //
-      lib.optionalAttrs
-        ((stdenv.hostPlatform.isStatic || !stdenv.hostPlatform.isFreeBSD) && attrs ? outputs)
-        {
-          outputs = lib.lists.remove "debug" attrs.outputs;
-        }
+    lib.optionalAttrs
+      (!stdenv.hostPlatform.isStatic && !attrs.alwaysKeepStatic or false && stdenv.hostPlatform.isFreeBSD)
+      {
+        postInstall = (attrs.postInstall or "") + ''
+          rm -f $out/lib/*.a
+        '';
+      }
+      //
+    lib.optionalAttrs
+      ((stdenv.hostPlatform.isStatic || !stdenv.hostPlatform.isFreeBSD) && attrs ? outputs)
+      {
+        outputs = lib.lists.remove "debug" attrs.outputs;
+      }
   )
 )

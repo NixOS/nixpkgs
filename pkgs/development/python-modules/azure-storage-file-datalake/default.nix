@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  azure-core,
-  azure-storage-blob,
-  isodate,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, azure-core
+, azure-storage-blob
+, isodate
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  asciidoc,
-  libxcb,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, asciidoc
+, libxcb
+, xcbutil
+, xcbutilkeysyms
+, xcbutilwm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

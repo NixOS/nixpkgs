@@ -1,23 +1,23 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gexiv2,
-  gobject-introspection,
-  gtk3,
-  hicolor-icon-theme,
-  intltool,
-  libnotify,
-  librsvg,
-  runtimeShell,
-  wrapGAppsHook3,
-  fehSupport ? false,
-  feh,
-  imagemagickSupport ? true,
-  imagemagick,
-  appindicatorSupport ? true,
-  libayatana-appindicator,
-  bash,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gexiv2
+, gobject-introspection
+, gtk3
+, hicolor-icon-theme
+, intltool
+, libnotify
+, librsvg
+, runtimeShell
+, wrapGAppsHook3
+, fehSupport ? false
+, feh
+, imagemagickSupport ? true
+, imagemagick
+, appindicatorSupport ? true
+, libayatana-appindicator
+, bash
+,
 }:
 
 python3Packages.buildPythonApplication rec {

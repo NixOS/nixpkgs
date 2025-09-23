@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  python312,
-
-  # Override Python packages using
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, python312
+, # Override Python packages using
   # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
   # Applied after defaultOverrides
-  packageOverrides ? self: super: { },
+  packageOverrides ? self: super: { }
+,
 }:
 let
   defaultOverrides = [

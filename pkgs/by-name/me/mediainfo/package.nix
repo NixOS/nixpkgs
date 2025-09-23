@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libzen,
-  libmediainfo,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libzen
+, libmediainfo
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

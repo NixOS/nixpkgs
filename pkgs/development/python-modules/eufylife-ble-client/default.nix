@@ -1,12 +1,12 @@
-{
-  lib,
-  bleak,
-  bleak-retry-connector,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  poetry-core,
-  pythonOlder,
+{ lib
+, bleak
+, bleak-retry-connector
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, poetry-core
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

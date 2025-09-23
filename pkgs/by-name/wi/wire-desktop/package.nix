@@ -1,21 +1,21 @@
-{
-  autoPatchelfHook,
-  dpkg,
-  fetchurl,
-  makeDesktopItem,
-  makeWrapper,
-  stdenv,
-  lib,
-  udev,
-  buildPackages,
-  cpio,
-  xar,
-  libdbusmenu,
-  alsa-lib,
-  libgbm,
-  nss,
-  nspr,
-  systemd,
+{ autoPatchelfHook
+, dpkg
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, lib
+, udev
+, buildPackages
+, cpio
+, xar
+, libdbusmenu
+, alsa-lib
+, libgbm
+, nss
+, nspr
+, systemd
+,
 }:
 
 let
@@ -33,16 +33,14 @@ let
       x86_64-darwin = versions.macos.version;
       aarch64-darwin = versions.macos.version;
       x86_64-linux = versions.linux.version;
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   hash =
     {
       x86_64-darwin = versions.macos.hash;
       aarch64-darwin = versions.macos.hash;
       x86_64-linux = versions.linux.hash;
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   meta = with lib; {
     description = "Modern, secure messenger for everyone";

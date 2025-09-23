@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  elfutils,
-  zlib,
-  libbpf,
-  clangStdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, elfutils
+, zlib
+, libbpf
+, clangStdenv
+,
 }:
 let
   pname = "bpftop";

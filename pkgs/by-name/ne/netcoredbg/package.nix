@@ -1,14 +1,14 @@
-{
-  lib,
-  clangStdenv,
-  stdenv,
-  cmake,
-  autoPatchelfHook,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  buildDotnetModule,
-  netcoredbg,
-  testers,
+{ lib
+, clangStdenv
+, stdenv
+, cmake
+, autoPatchelfHook
+, fetchFromGitHub
+, dotnetCorePackages
+, buildDotnetModule
+, netcoredbg
+, testers
+,
 }:
 let
   pname = "netcoredbg";

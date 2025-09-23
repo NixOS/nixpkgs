@@ -1,10 +1,10 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  libsForQt5,
-  openscenegraph,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, lib
+, libsForQt5
+, openscenegraph
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

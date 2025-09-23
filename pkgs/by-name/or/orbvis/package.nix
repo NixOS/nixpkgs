@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gtk3,
-  curl,
-  libepoxy,
-  meson,
-  ninja,
-  wrapGAppsHook3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gtk3
+, curl
+, libepoxy
+, meson
+, ninja
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

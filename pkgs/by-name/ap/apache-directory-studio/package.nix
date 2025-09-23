@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jdk,
-  makeWrapper,
-  autoPatchelfHook,
-  makeDesktopItem,
-  glib,
-  libsecret,
-  webkitgtk_4_1,
+{ lib
+, stdenv
+, fetchurl
+, jdk
+, makeWrapper
+, autoPatchelfHook
+, makeDesktopItem
+, glib
+, libsecret
+, webkitgtk_4_1
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
-        sha256 = "19zdspzv4n3mfgb1g45s3wh0vbvn6a9zjd4xi5x2afmdjkzlwxi4";
-      }
+      fetchurl
+        {
+          url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
+          sha256 = "19zdspzv4n3mfgb1g45s3wh0vbvn6a9zjd4xi5x2afmdjkzlwxi4";
+        }
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
 

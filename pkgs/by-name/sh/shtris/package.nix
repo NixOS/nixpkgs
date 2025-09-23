@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shtris";

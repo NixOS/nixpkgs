@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  addDriverRunpath,
-  makeWrapper,
-  ocl-icd,
-  vulkan-loader,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, addDriverRunpath
+, makeWrapper
+, ocl-icd
+, vulkan-loader
+,
 }:
 
 let

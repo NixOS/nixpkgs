@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  busybox,
-  systemd,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, busybox
+, systemd
+,
 }:
 
 stdenv.mkDerivation rec {

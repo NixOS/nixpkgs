@@ -1,28 +1,28 @@
-{
-  lib,
-  dbus,
-  eudev,
-  fetchFromGitHub,
-  installShellFiles,
-  libdisplay-info,
-  libglvnd,
-  libinput,
-  libxkbcommon,
-  libgbm,
-  versionCheckHook,
-  nix-update-script,
-  pango,
-  pipewire,
-  pkg-config,
-  rustPlatform,
-  seatd,
-  stdenv,
-  systemd,
-  wayland,
-  withDbus ? true,
-  withDinit ? false,
-  withScreencastSupport ? true,
-  withSystemd ? true,
+{ lib
+, dbus
+, eudev
+, fetchFromGitHub
+, installShellFiles
+, libdisplay-info
+, libglvnd
+, libinput
+, libxkbcommon
+, libgbm
+, versionCheckHook
+, nix-update-script
+, pango
+, pipewire
+, pkg-config
+, rustPlatform
+, seatd
+, stdenv
+, systemd
+, wayland
+, withDbus ? true
+, withDinit ? false
+, withScreencastSupport ? true
+, withSystemd ? true
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

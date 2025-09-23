@@ -1,82 +1,79 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # nativeBuildInputs
-  cmake,
-  desktop-file-utils,
-  intltool,
-  llvmPackages,
-  ninja,
-  perl,
-  pkg-config,
-  wrapGAppsHook3,
-  saxon,
-
-  # buildInputs
-  SDL2,
-  adwaita-icon-theme,
-  alsa-lib,
-  cairo,
-  curl,
-  exiv2,
-  glib,
-  glib-networking,
-  gmic,
-  graphicsmagick,
-  gtk3,
-  icu,
-  ilmbase,
-  isocodes,
-  jasper,
-  json-glib,
-  lcms2,
-  lensfun,
-  lerc,
-  libaom,
-  libavif,
-  libdatrie,
-  libepoxy,
-  libexif,
-  libgcrypt,
-  libgpg-error,
-  libgphoto2,
-  libheif,
-  libjpeg,
-  libjxl,
-  libpng,
-  librsvg,
-  libsecret,
-  libsysprof-capture,
-  libthai,
-  libtiff,
-  libwebp,
-  libxml2,
-  lua,
-  util-linux,
-  openexr,
-  openjpeg,
-  osm-gps-map,
-  pcre2,
-  portmidi,
-  pugixml,
-  sqlite,
-  # Linux only
-  colord,
-  colord-gtk,
-  libselinux,
-  libsepol,
-  libX11,
-  libXdmcp,
-  libxkbcommon,
-  libXtst,
-  ocl-icd,
-  # Darwin only
-  gtk-mac-integration,
-
-  versionCheckHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, # nativeBuildInputs
+  cmake
+, desktop-file-utils
+, intltool
+, llvmPackages
+, ninja
+, perl
+, pkg-config
+, wrapGAppsHook3
+, saxon
+, # buildInputs
+  SDL2
+, adwaita-icon-theme
+, alsa-lib
+, cairo
+, curl
+, exiv2
+, glib
+, glib-networking
+, gmic
+, graphicsmagick
+, gtk3
+, icu
+, ilmbase
+, isocodes
+, jasper
+, json-glib
+, lcms2
+, lensfun
+, lerc
+, libaom
+, libavif
+, libdatrie
+, libepoxy
+, libexif
+, libgcrypt
+, libgpg-error
+, libgphoto2
+, libheif
+, libjpeg
+, libjxl
+, libpng
+, librsvg
+, libsecret
+, libsysprof-capture
+, libthai
+, libtiff
+, libwebp
+, libxml2
+, lua
+, util-linux
+, openexr
+, openjpeg
+, osm-gps-map
+, pcre2
+, portmidi
+, pugixml
+, sqlite
+, # Linux only
+  colord
+, colord-gtk
+, libselinux
+, libsepol
+, libX11
+, libXdmcp
+, libxkbcommon
+, libXtst
+, ocl-icd
+, # Darwin only
+  gtk-mac-integration
+, versionCheckHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

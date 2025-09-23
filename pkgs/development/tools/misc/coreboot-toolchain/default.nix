@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  callPackage,
+{ stdenv
+, lib
+, callPackage
+,
 }:
 let
   common =
     arch:
     callPackage (
-      {
-        bison,
-        callPackage,
-        curl,
-        fetchgit,
-        flex,
-        getopt,
-        git,
-        gnat14,
-        gcc14,
-        lib,
-        perl,
-        stdenvNoCC,
-        zlib,
-        withAda ? true,
+      { bison
+      , callPackage
+      , curl
+      , fetchgit
+      , flex
+      , getopt
+      , git
+      , gnat14
+      , gcc14
+      , lib
+      , perl
+      , stdenvNoCC
+      , zlib
+      , withAda ? true
+      ,
       }:
 
       stdenvNoCC.mkDerivation (finalAttrs: {

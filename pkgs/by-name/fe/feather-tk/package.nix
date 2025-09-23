@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  python3,
-  freetype,
-  glfw,
-  gtk3,
-  libGL,
-  libpng,
-  lunasvg,
-  nlohmann_json,
-  plutovg,
-  xorg,
-  zlib,
-  nativeFileDialog ? null,
-  python3Packages ? null,
-  enableNFD ? false,
-  enablePython ? false,
-  enableTests ? false,
-  enableExamples ? false,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, pkg-config
+, python3
+, freetype
+, glfw
+, gtk3
+, libGL
+, libpng
+, lunasvg
+, nlohmann_json
+, plutovg
+, xorg
+, zlib
+, nativeFileDialog ? null
+, python3Packages ? null
+, enableNFD ? false
+, enablePython ? false
+, enableTests ? false
+, enableExamples ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

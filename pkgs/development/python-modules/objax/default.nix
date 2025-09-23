@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jax,
-  jaxlib,
-  keras,
-  numpy,
-  parameterized,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
-  setuptools,
-  tensorboard,
-  tensorflow,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jax
+, jaxlib
+, keras
+, numpy
+, parameterized
+, pillow
+, pytestCheckHook
+, pythonOlder
+, scipy
+, setuptools
+, tensorboard
+, tensorflow
+,
 }:
 
 buildPythonPackage rec {

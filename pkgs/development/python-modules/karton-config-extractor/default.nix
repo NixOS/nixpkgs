@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  karton-core,
-  malduck,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, karton-core
+, malduck
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

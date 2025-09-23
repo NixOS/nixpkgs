@@ -1,16 +1,16 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  pexpect,
-  poetry,
-  poetry-core,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  shellingham,
-  darwin,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, stdenv
+, pexpect
+, poetry
+, poetry-core
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, shellingham
+, darwin
+,
 }:
 
 buildPythonPackage rec {

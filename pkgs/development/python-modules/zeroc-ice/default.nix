@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  bzip2,
-  openssl,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, bzip2
+, openssl
+,
 }:
 
 buildPythonPackage rec {

@@ -10,10 +10,10 @@
       nix-build -A tests.trivial-builders.foo
 */
 
-{
-  callPackage,
-  lib,
-  stdenv,
+{ callPackage
+, lib
+, stdenv
+,
 }:
 let
   inherit (lib) recurseIntoAttrs;

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  opam-installer,
-  ocamlPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, opam-installer
+, ocamlPackages
+,
 }:
 stdenv.mkDerivation rec {
   pname = "opam2json";

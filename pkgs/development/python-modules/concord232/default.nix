@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  stevedore,
-  prettytable,
-  pyserial,
-  flask,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, requests
+, stevedore
+, prettytable
+, pyserial
+, flask
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  calibre,
-  gitUpdater,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, calibre
+, gitUpdater
+,
 }:
 
 rustPlatform.buildRustPackage rec {

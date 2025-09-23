@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  poetry-core,
-  importlib-metadata,
-  importlib-resources,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, poetry-core
+, importlib-metadata
+, importlib-resources
+,
 }:
 
 buildPythonPackage rec {

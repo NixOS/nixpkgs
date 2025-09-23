@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  asciidoctor,
-  installShellFiles,
-  git,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, asciidoctor
+, installShellFiles
+, git
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

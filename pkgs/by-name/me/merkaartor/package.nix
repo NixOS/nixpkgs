@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gdal,
-  proj,
-  protobuf,
-  qt5,
-  withGeoimage ? true,
-  exiv2,
-  withGpsdlib ? (!stdenv.hostPlatform.isDarwin),
-  gpsd,
-  withLibproxy ? false,
-  libproxy,
-  withZbar ? false,
-  zbar,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gdal
+, proj
+, protobuf
+, qt5
+, withGeoimage ? true
+, exiv2
+, withGpsdlib ? (!stdenv.hostPlatform.isDarwin)
+, gpsd
+, withLibproxy ? false
+, libproxy
+, withZbar ? false
+, zbar
+,
 }:
 
 stdenv.mkDerivation rec {

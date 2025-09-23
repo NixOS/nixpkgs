@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  glib,
-  gettext,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, glib
+, gettext
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

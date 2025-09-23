@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  numpy,
-  scipy,
-  matplotlib,
-  setuptools,
-  setuptools-scm,
-  cvxopt,
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, numpy
+, scipy
+, matplotlib
+, setuptools
+, setuptools-scm
+, cvxopt
+, pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

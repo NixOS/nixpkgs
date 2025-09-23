@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  undmg,
-  nix-update-script,
-  versionCheckHook,
-  writeShellScript,
-  xcbuild,
+{ lib
+, stdenvNoCC
+, fetchurl
+, undmg
+, nix-update-script
+, versionCheckHook
+, writeShellScript
+, xcbuild
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

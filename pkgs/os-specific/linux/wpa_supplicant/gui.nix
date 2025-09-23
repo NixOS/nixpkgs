@@ -1,11 +1,11 @@
-{
-  lib,
-  mkDerivation,
-  qtbase,
-  qmake,
-  inkscape,
-  imagemagick,
-  wpa_supplicant,
+{ lib
+, mkDerivation
+, qtbase
+, qmake
+, inkscape
+, imagemagick
+, wpa_supplicant
+,
 }:
 
 mkDerivation {

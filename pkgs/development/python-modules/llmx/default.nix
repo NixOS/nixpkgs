@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  setuptools,
-  pythonOlder,
-  pydantic,
-  openai,
-  tiktoken,
-  diskcache,
-  cohere,
-  google-auth,
-  typer,
-  pyyaml,
-  transformers,
-  fastapi,
-  uvicorn,
-  accelerate,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, setuptools
+, pythonOlder
+, pydantic
+, openai
+, tiktoken
+, diskcache
+, cohere
+, google-auth
+, typer
+, pyyaml
+, transformers
+, fastapi
+, uvicorn
+, accelerate
+,
 }:
 
 buildPythonPackage rec {

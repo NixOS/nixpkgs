@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-aiohttp,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytest-aiohttp
+, pytest-cov-stub
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

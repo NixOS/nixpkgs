@@ -1,9 +1,8 @@
 # /etc files related to networking, such as /etc/services.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -159,7 +158,7 @@ in
     {
       environment.etc."resolvconf.conf".text =
         if !cfg.enable then
-          # Force-stop any attempts to use resolvconf
+        # Force-stop any attempts to use resolvconf
           ''
             echo "resolvconf is disabled on this system but was used anyway:" >&2
             echo "$0 $*" >&2

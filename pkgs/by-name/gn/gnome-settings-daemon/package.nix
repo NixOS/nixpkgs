@@ -1,45 +1,45 @@
-{
-  stdenv,
-  lib,
-  replaceVars,
-  buildPackages,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gnome,
-  perl,
-  gettext,
-  gtk3,
-  glib,
-  libnotify,
-  libgnomekbd,
-  libpulseaudio,
-  alsa-lib,
-  libcanberra-gtk3,
-  upower,
-  colord,
-  libgweather,
-  polkit,
-  gsettings-desktop-schemas,
-  geoclue2,
-  systemd,
-  libgudev,
-  libwacom,
-  libxslt,
-  libxml2,
-  modemmanager,
-  networkmanager,
-  gnome-desktop,
-  geocode-glib_2,
-  docbook_xsl,
-  wrapGAppsHook3,
-  python3,
-  tzdata,
-  gcr_4,
-  gnome-session-ctl,
-  udevCheckHook,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ stdenv
+, lib
+, replaceVars
+, buildPackages
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gnome
+, perl
+, gettext
+, gtk3
+, glib
+, libnotify
+, libgnomekbd
+, libpulseaudio
+, alsa-lib
+, libcanberra-gtk3
+, upower
+, colord
+, libgweather
+, polkit
+, gsettings-desktop-schemas
+, geoclue2
+, systemd
+, libgudev
+, libwacom
+, libxslt
+, libxml2
+, modemmanager
+, networkmanager
+, gnome-desktop
+, geocode-glib_2
+, docbook_xsl
+, wrapGAppsHook3
+, python3
+, tzdata
+, gcr_4
+, gnome-session-ctl
+, udevCheckHook
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libxcb,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libxcb
+, installShellFiles
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "magic-wormhole-rs";

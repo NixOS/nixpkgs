@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  faker,
-  fetchFromGitHub,
-  mock,
-  pytest-cov-stub,
-  pytestCheckHook,
-  python-memcached,
-  pythonOlder,
-  setuptools,
-  zstd,
-  stdenv,
+{ lib
+, buildPythonPackage
+, faker
+, fetchFromGitHub
+, mock
+, pytest-cov-stub
+, pytestCheckHook
+, python-memcached
+, pythonOlder
+, setuptools
+, zstd
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

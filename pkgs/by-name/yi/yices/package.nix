@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cudd,
-  gmp,
-  gperf,
-  autoreconfHook,
-  libpoly,
-  ncurses5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cudd
+, gmp
+, gperf
+, autoreconfHook
+, libpoly
+, ncurses5
+,
 }:
 
 let

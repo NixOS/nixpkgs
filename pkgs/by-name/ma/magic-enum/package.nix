@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  cmake,
-  nix-update-script,
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "magic-enum";

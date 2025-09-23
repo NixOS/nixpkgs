@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unzip,
-  meson,
-  ninja,
-  pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
-  icoutils,
-  copyDesktopItems,
-  makeDesktopItem,
-  luajit,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unzip
+, meson
+, ninja
+, pkg-config
+, qtbase
+, qttools
+, wrapQtAppsHook
+, icoutils
+, copyDesktopItems
+, makeDesktopItem
+, luajit
+,
 }:
 let
   data = stdenv.mkDerivation (finalAttrs: {

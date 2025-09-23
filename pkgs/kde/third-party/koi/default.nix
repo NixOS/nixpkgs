@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kconfig,
-  kcoreaddons,
-  kwidgetsaddons,
-  wrapQtAppsHook,
-  kdbusaddons,
-  kde-cli-tools,
-  plasma-workspace,
-  qtstyleplugin-kvantum,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kconfig
+, kcoreaddons
+, kwidgetsaddons
+, wrapQtAppsHook
+, kdbusaddons
+, kde-cli-tools
+, plasma-workspace
+, qtstyleplugin-kvantum
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "koi";

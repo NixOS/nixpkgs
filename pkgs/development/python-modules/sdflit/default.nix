@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  cargo,
-  rustPlatform,
-  rustc,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, cargo
+, rustPlatform
+, rustc
+,
 }:
 
 let

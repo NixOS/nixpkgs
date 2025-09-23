@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  squashfsTools,
-  autoPatchelfHook,
-  copyDesktopItems,
-  alsa-lib,
-  nss,
-  libdrm,
-  libgbm,
-  libGL,
-  libxkbcommon,
-  pcsclite,
-  makeDesktopItem,
-  makeWrapper,
-  wrapGAppsHook3,
-  udev,
+{ stdenv
+, lib
+, fetchurl
+, squashfsTools
+, autoPatchelfHook
+, copyDesktopItems
+, alsa-lib
+, nss
+, libdrm
+, libgbm
+, libGL
+, libxkbcommon
+, pcsclite
+, makeDesktopItem
+, makeWrapper
+, wrapGAppsHook3
+, udev
+,
 }:
 
 stdenv.mkDerivation rec {

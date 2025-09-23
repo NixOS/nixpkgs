@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchPypi,
-  jinja2,
-  pytestCheckHook,
-  poetry-core,
-  terminaltables,
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, jinja2
+, pytestCheckHook
+, poetry-core
+, terminaltables
+,
 }:
 
 buildPythonPackage rec {

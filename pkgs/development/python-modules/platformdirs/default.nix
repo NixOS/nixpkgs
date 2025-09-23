@@ -1,13 +1,13 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, appdirs
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

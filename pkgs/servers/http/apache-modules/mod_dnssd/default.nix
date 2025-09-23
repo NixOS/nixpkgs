@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  apacheHttpd,
-  apr,
-  avahi,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, apacheHttpd
+, apr
+, avahi
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  doxygen,
-  lxml,
-  setuptools,
-  six,
+{ buildPythonPackage
+, doxygen
+, lxml
+, setuptools
+, six
+,
 }:
 buildPythonPackage rec {
   format = "setuptools";

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  ply,
-  isPy3k,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, ply
+, isPy3k
+,
 }:
 buildPythonPackage rec {
   pname = "plyplus";

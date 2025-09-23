@@ -1,27 +1,23 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  protobuf,
-
-  # nativeBuildInputs
-  cmake,
-  openssl,
-  perl,
-  pkg-config,
-
-  # buildInputs
-  rdkafka,
-
-  # tests
-  cacert,
-  versionCheckHook,
-
-  # passthru
-  testers,
-  restate,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, protobuf
+, # nativeBuildInputs
+  cmake
+, openssl
+, perl
+, pkg-config
+, # buildInputs
+  rdkafka
+, # tests
+  cacert
+, versionCheckHook
+, # passthru
+  testers
+, restate
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";

@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  matplotlib,
-  numpy,
-  pyaudio,
-  pydub,
-  pythonOlder,
-  unittestCheckHook,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, matplotlib
+, numpy
+, pyaudio
+, pydub
+, pythonOlder
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

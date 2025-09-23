@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  gtk4,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, gtk4
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

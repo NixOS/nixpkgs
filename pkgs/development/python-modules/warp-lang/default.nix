@@ -1,36 +1,34 @@
-{
-  autoAddDriverRunpath,
-  buildPythonPackage,
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  fetchurl,
-  jax,
-  lib,
-  llvmPackages,
-  numpy,
-  pkgsBuildHost,
-  python,
-  replaceVars,
-  runCommand,
-  setuptools,
-  stdenv,
-  torch,
-  warp-lang, # Self-reference to this package for passthru.tests
-  writableTmpDirAsHomeHook,
-  writeShellApplication,
-
-  # Use standalone LLVM-based JIT compiler and CPU device support
-  standaloneSupport ? true,
-
-  # Use CUDA toolchain and GPU device support
-  cudaSupport ? config.cudaSupport,
-
-  # Build Warp with MathDx support (requires CUDA support)
+{ autoAddDriverRunpath
+, buildPythonPackage
+, config
+, cudaPackages
+, fetchFromGitHub
+, fetchurl
+, jax
+, lib
+, llvmPackages
+, numpy
+, pkgsBuildHost
+, python
+, replaceVars
+, runCommand
+, setuptools
+, stdenv
+, torch
+, warp-lang
+, # Self-reference to this package for passthru.tests
+  writableTmpDirAsHomeHook
+, writeShellApplication
+, # Use standalone LLVM-based JIT compiler and CPU device support
+  standaloneSupport ? true
+, # Use CUDA toolchain and GPU device support
+  cudaSupport ? config.cudaSupport
+, # Build Warp with MathDx support (requires CUDA support)
   # Most linear-algebra tile operations like tile_cholesky(), tile_fft(),
   # and tile_matmul() require Warp to be built with the MathDx library.
   # libmathdxSupport ? cudaSupport && stdenv.hostPlatform.isLinux,
-  libmathdxSupport ? cudaSupport,
+  libmathdxSupport ? cudaSupport
+,
 }@args:
 assert libmathdxSupport -> cudaSupport;
 let
@@ -75,13 +73,15 @@ let
           };
         };
       in
-      lib.mapNullable (
-        hash:
-        fetchurl {
-          inherit hash name;
-          url = "${baseURL}/cuda${cudaMajorVersion}/${name}.tar.gz";
-        }
-      ) (hashes.${cudaMajorVersion}.${effectiveStdenv.hostPlatform.system} or null);
+      lib.mapNullable
+        (
+          hash:
+          fetchurl {
+            inherit hash name;
+            url = "${baseURL}/cuda${cudaMajorVersion}/${name}.tar.gz";
+          }
+        )
+        (hashes.${cudaMajorVersion}.${effectiveStdenv.hostPlatform.system} or null);
 
     dontUnpack = true;
     dontConfigure = true;
@@ -325,9 +325,9 @@ buildPythonPackage {
     tests =
       let
         mkUnitTests =
-          {
-            cudaSupport,
-            libmathdxSupport,
+          { cudaSupport
+          , libmathdxSupport
+          ,
           }:
           let
             name =

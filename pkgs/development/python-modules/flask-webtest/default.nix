@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  flask,
-  webtest,
-  blinker,
-  flask-sqlalchemy,
-  greenlet,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, flask
+, webtest
+, blinker
+, flask-sqlalchemy
+, greenlet
+,
 }:
 
 buildPythonPackage rec {

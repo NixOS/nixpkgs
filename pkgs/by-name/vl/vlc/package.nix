@@ -1,98 +1,97 @@
-{
-  lib,
-  a52dec,
-  alsa-lib,
-  autoreconfHook,
-  avahi,
-  cairo,
-  curl,
-  dbus,
-  faad2,
-  fetchpatch,
-  fetchurl,
-  # Please unpin FFmpeg on the next upstream release.
-  ffmpeg_6,
-  flac,
-  fluidsynth,
-  fontconfig,
-  freefont_ttf,
-  freetype,
-  fribidi,
-  genericUpdater,
-  gnutls,
-  harfbuzz,
-  libGL,
-  libSM,
-  libXext,
-  libXinerama,
-  libXpm,
-  libarchive,
-  libass,
-  libbluray,
-  libcaca,
-  libcddb,
-  libdc1394,
-  libdvbpsi,
-  libdvdnav,
-  libebml,
-  libgcrypt,
-  libgpg-error,
-  libjack2,
-  libjpeg,
-  libkate,
-  libmad,
-  libmatroska,
-  libmicrodns,
-  libmodplug,
-  libmpeg2,
-  libmtp,
-  libogg,
-  libopus,
-  libplacebo_5,
-  libpng,
-  libpulseaudio,
-  librsvg,
-  libsForQt5,
-  libsamplerate,
-  libspatialaudio,
-  libssh2,
-  libtheora,
-  libtiger,
-  libupnp,
-  libv4l,
-  libva,
-  libvorbis,
-  libxml2,
-  live555,
-  lua5,
-  ncurses,
-  perl,
-  pkg-config,
-  pkgsBuildBuild,
-  protobuf,
-  removeReferencesTo,
-  samba,
-  schroedinger,
-  speex,
-  srt,
-  stdenv,
-  systemdLibs,
-  taglib_1,
-  unzip,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wrapGAppsHook3,
-  writeShellScript,
-  xcbutilkeysyms,
-  zlib,
-
-  chromecastSupport ? true,
-  jackSupport ? false,
-  onlyLibVLC ? false,
-  skins2Support ? !onlyLibVLC,
-  waylandSupport ? true,
-  withQt5 ? true,
+{ lib
+, a52dec
+, alsa-lib
+, autoreconfHook
+, avahi
+, cairo
+, curl
+, dbus
+, faad2
+, fetchpatch
+, fetchurl
+, # Please unpin FFmpeg on the next upstream release.
+  ffmpeg_6
+, flac
+, fluidsynth
+, fontconfig
+, freefont_ttf
+, freetype
+, fribidi
+, genericUpdater
+, gnutls
+, harfbuzz
+, libGL
+, libSM
+, libXext
+, libXinerama
+, libXpm
+, libarchive
+, libass
+, libbluray
+, libcaca
+, libcddb
+, libdc1394
+, libdvbpsi
+, libdvdnav
+, libebml
+, libgcrypt
+, libgpg-error
+, libjack2
+, libjpeg
+, libkate
+, libmad
+, libmatroska
+, libmicrodns
+, libmodplug
+, libmpeg2
+, libmtp
+, libogg
+, libopus
+, libplacebo_5
+, libpng
+, libpulseaudio
+, librsvg
+, libsForQt5
+, libsamplerate
+, libspatialaudio
+, libssh2
+, libtheora
+, libtiger
+, libupnp
+, libv4l
+, libva
+, libvorbis
+, libxml2
+, live555
+, lua5
+, ncurses
+, perl
+, pkg-config
+, pkgsBuildBuild
+, protobuf
+, removeReferencesTo
+, samba
+, schroedinger
+, speex
+, srt
+, stdenv
+, systemdLibs
+, taglib_1
+, unzip
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wrapGAppsHook3
+, writeShellScript
+, xcbutilkeysyms
+, zlib
+, chromecastSupport ? true
+, jackSupport ? false
+, onlyLibVLC ? false
+, skins2Support ? !onlyLibVLC
+, waylandSupport ? true
+, withQt5 ? true
+,
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.

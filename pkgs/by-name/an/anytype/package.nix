@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  pkg-config,
-  anytype-heart,
-  libsecret,
-  electron,
-  makeDesktopItem,
-  copyDesktopItems,
-  commandLineArgs ? "",
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, pkg-config
+, anytype-heart
+, libsecret
+, electron
+, makeDesktopItem
+, copyDesktopItems
+, commandLineArgs ? ""
+,
 }:
 
 buildNpmPackage (finalAttrs: {

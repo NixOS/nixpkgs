@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  installShellFiles,
-  e2fsprogs,
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+, e2fsprogs
+,
 }:
 
 let

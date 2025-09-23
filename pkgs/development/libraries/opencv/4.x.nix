@@ -1,93 +1,89 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  unzip,
-  zlib,
-  pcre2,
-  hdf5,
-  boost,
-  glib,
-  glog,
-  gflags,
-  protobuf,
-  config,
-  ocl-icd,
-  qimgv,
-  opencv4,
-
-  enableJPEG ? true,
-  libjpeg,
-  enablePNG ? true,
-  libpng,
-  enableTIFF ? true,
-  libtiff,
-  enableWebP ? true,
-  libwebp,
-  enableEXR ? !stdenv.hostPlatform.isDarwin,
-  openexr,
-  enableJPEG2000 ? true,
-  openjpeg,
-  enableEigen ? true,
-  eigen,
-  enableBlas ? true,
-  blas,
-  enableVA ? !stdenv.hostPlatform.isDarwin,
-  libva,
-  enableContrib ? true,
-
-  enableCuda ? config.cudaSupport,
-  enableCublas ? enableCuda,
-  enableCudnn ? false, # NOTE: CUDNN has a large impact on closure size so we disable it by default
-  enableCufft ? enableCuda,
-  cudaPackages,
-  nvidia-optical-flow-sdk,
-
-  enableLto ? true,
-  enableUnfree ? false,
-  enableIpp ? false,
-  enablePython ? false,
-  pythonPackages,
-  enableGtk2 ? false,
-  gtk2,
-  enableGtk3 ? false,
-  gtk3,
-  enableVtk ? false,
-  vtk,
-  enableFfmpeg ? true,
-  ffmpeg,
-  enableGStreamer ? true,
-  elfutils,
-  gst_all_1,
-  orc,
-  libunwind,
-  zstd,
-  enableTesseract ? false,
-  tesseract,
-  leptonica,
-  enableTbb ? false,
-  tbb,
-  enableOvis ? false,
-  ogre,
-  enableGPhoto2 ? false,
-  libgphoto2,
-  enableDC1394 ? false,
-  libdc1394,
-  enableDocs ? false,
-  doxygen,
-  graphviz-nox,
-
-  runAccuracyTests ? true,
-  runPerformanceTests ? false,
-  # Modules to enable via BUILD_LIST to build a customized opencv.
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, pkg-config
+, unzip
+, zlib
+, pcre2
+, hdf5
+, boost
+, glib
+, glog
+, gflags
+, protobuf
+, config
+, ocl-icd
+, qimgv
+, opencv4
+, enableJPEG ? true
+, libjpeg
+, enablePNG ? true
+, libpng
+, enableTIFF ? true
+, libtiff
+, enableWebP ? true
+, libwebp
+, enableEXR ? !stdenv.hostPlatform.isDarwin
+, openexr
+, enableJPEG2000 ? true
+, openjpeg
+, enableEigen ? true
+, eigen
+, enableBlas ? true
+, blas
+, enableVA ? !stdenv.hostPlatform.isDarwin
+, libva
+, enableContrib ? true
+, enableCuda ? config.cudaSupport
+, enableCublas ? enableCuda
+, enableCudnn ? false
+, # NOTE: CUDNN has a large impact on closure size so we disable it by default
+  enableCufft ? enableCuda
+, cudaPackages
+, nvidia-optical-flow-sdk
+, enableLto ? true
+, enableUnfree ? false
+, enableIpp ? false
+, enablePython ? false
+, pythonPackages
+, enableGtk2 ? false
+, gtk2
+, enableGtk3 ? false
+, gtk3
+, enableVtk ? false
+, vtk
+, enableFfmpeg ? true
+, ffmpeg
+, enableGStreamer ? true
+, elfutils
+, gst_all_1
+, orc
+, libunwind
+, zstd
+, enableTesseract ? false
+, tesseract
+, leptonica
+, enableTbb ? false
+, tbb
+, enableOvis ? false
+, ogre
+, enableGPhoto2 ? false
+, libgphoto2
+, enableDC1394 ? false
+, libdc1394
+, enableDocs ? false
+, doxygen
+, graphviz-nox
+, runAccuracyTests ? true
+, runPerformanceTests ? false
+, # Modules to enable via BUILD_LIST to build a customized opencv.
   # An empty lists means this setting is omitted which matches upstreams default.
-  enabledModules ? [ ],
-
-  bzip2,
-  callPackage,
+  enabledModules ? [ ]
+, bzip2
+, callPackage
+,
 }@inputs:
 
 let
@@ -137,12 +133,13 @@ let
   # See opencv/3rdparty/ippicv/ippicv.cmake
   ippicv = {
     src =
-      fetchFromGitHub {
-        owner = "opencv";
-        repo = "opencv_3rdparty";
-        rev = "7f55c0c26be418d494615afca15218566775c725";
-        hash = "sha256-XbmS+FXUL8MAG7kawbDkb2XHG9R0DpPhiYhq/18eTnY=";
-      }
+      fetchFromGitHub
+        {
+          owner = "opencv";
+          repo = "opencv_3rdparty";
+          rev = "7f55c0c26be418d494615afca15218566775c725";
+          hash = "sha256-XbmS+FXUL8MAG7kawbDkb2XHG9R0DpPhiYhq/18eTnY=";
+        }
       + "/ippicv";
     files =
       let
@@ -240,11 +237,10 @@ let
 
   # See opencv/cmake/OpenCVDownload.cmake
   installExtraFiles =
-    {
-      dst,
-      files,
-      src,
-      ...
+    { dst
+    , files
+    , src
+    , ...
     }:
     ''
       mkdir -p "${dst}"
@@ -257,12 +253,11 @@ let
       )
     );
   installExtraFile =
-    {
-      dst,
-      md5,
-      name,
-      src,
-      ...
+    { dst
+    , md5
+    , name
+    , src
+    , ...
     }:
     ''
       mkdir -p "${dst}"
@@ -494,10 +489,10 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "ENABLE_LTO" enableLto)
     (cmakeBool "ENABLE_THIN_LTO" (
       enableLto
-      && (
+        && (
         # Only clang supports thin LTO, so we must either be using clang through the effectiveStdenv,
         effectiveStdenv.cc.isClang
-        ||
+          ||
           # or through the backend effectiveStdenv.
           (enableCuda && effectiveStdenv.cc.isClang)
       )

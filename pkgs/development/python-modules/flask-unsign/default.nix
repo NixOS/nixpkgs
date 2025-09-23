@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  itsdangerous,
-  markupsafe,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, itsdangerous
+, markupsafe
+, pytestCheckHook
+, requests
+, setuptools
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

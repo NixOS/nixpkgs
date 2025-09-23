@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  cmake,
-  perl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, cmake
+, perl
+,
 }:
 stdenv.mkDerivation {
   pname = "mmg";

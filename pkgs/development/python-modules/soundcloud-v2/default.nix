@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  dacite,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, dacite
+, python-dateutil
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

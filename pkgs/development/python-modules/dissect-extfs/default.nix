@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  dissect-cstruct,
-  dissect-util,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, dissect-cstruct
+, dissect-util
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

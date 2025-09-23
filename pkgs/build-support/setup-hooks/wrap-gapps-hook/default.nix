@@ -1,20 +1,21 @@
-{
-  stdenv,
-  lib,
-  makeSetupHook,
-  makeWrapper,
-  gobject-introspection,
-  isGraphical ? false,
-  gtk3,
-  librsvg,
-  dconf,
-  withDconf ? !stdenv.targetPlatform.isDarwin && lib.meta.availableOn stdenv.targetPlatform dconf,
-  callPackage,
-  wrapGAppsHook3,
-  targetPackages,
+{ stdenv
+, lib
+, makeSetupHook
+, makeWrapper
+, gobject-introspection
+, isGraphical ? false
+, gtk3
+, librsvg
+, dconf
+, withDconf ? !stdenv.targetPlatform.isDarwin && lib.meta.availableOn stdenv.targetPlatform dconf
+, callPackage
+, wrapGAppsHook3
+, targetPackages
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "wrap-gapps-hook";
   propagatedBuildInputs = [
     # We use the wrapProgram function.

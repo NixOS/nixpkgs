@@ -1,7 +1,7 @@
-{
-  qtModule,
-  qtbase,
-  qtserialport,
+{ qtModule
+, qtbase
+, qtserialport
+,
 }:
 
 qtModule {

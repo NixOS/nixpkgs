@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  netcdf,
-  hdf5,
-  curl,
-  gfortran,
+{ lib
+, stdenv
+, fetchFromGitHub
+, netcdf
+, hdf5
+, curl
+, gfortran
+,
 }:
 stdenv.mkDerivation rec {
   pname = "netcdf-fortran";

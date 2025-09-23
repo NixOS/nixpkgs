@@ -1,20 +1,20 @@
-{
-  fetchFromGitea,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  gobject-introspection,
-  lib,
-  libayatana-appindicator,
-  libnotify,
-  python3Packages,
-  procps,
-  xset,
-  xautolock,
-  xscreensaver,
-  xfce,
-  wrapGAppsHook3,
+{ fetchFromGitea
+, meson
+, ninja
+, pkg-config
+, scdoc
+, gobject-introspection
+, lib
+, libayatana-appindicator
+, libnotify
+, python3Packages
+, procps
+, xset
+, xautolock
+, xscreensaver
+, xfce
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  mullvad,
+{ lib
+, buildGoModule
+, mullvad
+,
 }:
 buildGoModule {
   pname = "libwg";

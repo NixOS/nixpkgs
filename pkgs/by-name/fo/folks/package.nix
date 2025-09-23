@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  glib,
-  gnome,
-  gettext,
-  gobject-introspection,
-  vala,
-  sqlite,
-  dbus-glib,
-  dbus,
-  libgee,
-  evolution-data-server-gtk4,
-  python3,
-  readline,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  telepathy-glib,
-  telepathySupport ? false,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, glib
+, gnome
+, gettext
+, gobject-introspection
+, vala
+, sqlite
+, dbus-glib
+, dbus
+, libgee
+, evolution-data-server-gtk4
+, python3
+, readline
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, telepathy-glib
+, telepathySupport ? false
+,
 }:
 
 # TODO: enable more folks backends

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  vulkan-headers,
-  vulkan-loader,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, vulkan-headers
+, vulkan-loader
+,
 }:
 stdenv.mkDerivation {
   pname = "monado-vulkan-layers";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  jq,
-  gnupg,
-  gopass,
-  apple-sdk_14,
+{ lib
+, stdenv
+, makeWrapper
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, jq
+, gnupg
+, gopass
+, apple-sdk_14
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  lib,
-  newScope,
-  json-schema-catalog-rs,
-  jsonschema-cli,
+{ lib
+, newScope
+, json-schema-catalog-rs
+, jsonschema-cli
+,
 }:
 let
   inherit (lib) concatMapAttrs optionalAttrs;
@@ -14,12 +14,14 @@ let
       inherit ((self.callPackage ./lib.nix { }).lib) newCatalog;
       tests = self.callPackage ./tests.nix { };
     }
-    // concatMapAttrs (
-      k: v:
-      optionalAttrs (v == "regular" && hasSuffix ".nix" k) {
-        ${removeSuffix ".nix" k} = self.callPackage (./catalogs + "/${k}") { };
-      }
-    ) (builtins.readDir ./catalogs)
+    // concatMapAttrs
+      (
+        k: v:
+          optionalAttrs (v == "regular" && hasSuffix ".nix" k) {
+            ${removeSuffix ".nix" k} = self.callPackage (./catalogs + "/${k}") { };
+          }
+      )
+      (builtins.readDir ./catalogs)
   );
 in
 {

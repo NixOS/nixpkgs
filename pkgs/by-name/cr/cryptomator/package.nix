@@ -1,15 +1,15 @@
-{
-  autoPatchelfHook,
-  fetchFromGitHub,
-  fuse3,
-  glib,
-  jdk23,
-  lib,
-  libayatana-appindicator,
-  makeShellWrapper,
-  maven,
-  wrapGAppsHook3,
-  nix-update-script,
+{ autoPatchelfHook
+, fetchFromGitHub
+, fuse3
+, glib
+, jdk23
+, lib
+, libayatana-appindicator
+, makeShellWrapper
+, maven
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 let

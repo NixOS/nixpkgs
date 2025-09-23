@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fake-useragent,
-  fetchFromGitHub,
-  pytest-aiohttp,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  responses,
-  simplejson,
+{ lib
+, buildPythonPackage
+, fake-useragent
+, fetchFromGitHub
+, pytest-aiohttp
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, responses
+, simplejson
+,
 }:
 
 buildPythonPackage rec {

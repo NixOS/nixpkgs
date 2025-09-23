@@ -1,12 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  backblaze-b2,
-  # executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
-  execName ? "backblaze-b2",
+{ lib
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, testers
+, backblaze-b2
+, # executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
+  execName ? "backblaze-b2"
+,
 }:
 
 python3Packages.buildPythonApplication rec {

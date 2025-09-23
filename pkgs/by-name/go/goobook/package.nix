@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  docutils,
-  installShellFiles,
-  python3Packages,
+{ lib
+, fetchFromGitLab
+, docutils
+, installShellFiles
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

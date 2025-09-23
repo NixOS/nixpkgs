@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtbase,
-  qtsvg,
-  libsForQt5,
+{ mkKdeDerivation
+, qtbase
+, qtsvg
+, libsForQt5
+,
 }:
 mkKdeDerivation {
   pname = "breeze";

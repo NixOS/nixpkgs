@@ -1,32 +1,35 @@
-{
-  bdbSupport ? true, # build support for Berkeley DB repositories
-  httpServer ? false, # build Apache DAV module
-  httpSupport ? true, # client must support http
-  pythonBindings ? false,
-  perlBindings ? false,
-  javahlBindings ? false,
-  saslSupport ? false,
-  lib,
-  stdenv,
-  fetchurl,
-  apr,
-  aprutil,
-  zlib,
-  sqlite,
-  openssl,
-  lz4,
-  utf8proc,
-  autoconf,
-  libtool,
-  apacheHttpd ? null,
-  expat,
-  swig ? null,
-  jdk ? null,
-  python3 ? null,
-  py3c ? null,
-  perl ? null,
-  sasl ? null,
-  serf ? null,
+{ bdbSupport ? true
+, # build support for Berkeley DB repositories
+  httpServer ? false
+, # build Apache DAV module
+  httpSupport ? true
+, # client must support http
+  pythonBindings ? false
+, perlBindings ? false
+, javahlBindings ? false
+, saslSupport ? false
+, lib
+, stdenv
+, fetchurl
+, apr
+, aprutil
+, zlib
+, sqlite
+, openssl
+, lz4
+, utf8proc
+, autoconf
+, libtool
+, apacheHttpd ? null
+, expat
+, swig ? null
+, jdk ? null
+, python3 ? null
+, py3c ? null
+, perl ? null
+, sasl ? null
+, serf ? null
+,
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -36,10 +39,10 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
   common =
-    {
-      version,
-      sha256,
-      extraPatches ? [ ],
+    { version
+    , sha256
+    , extraPatches ? [ ]
+    ,
     }:
     stdenv.mkDerivation (
       rec {

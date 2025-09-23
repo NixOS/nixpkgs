@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  openssl,
-  mono,
-  nixosTests,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, openssl
+, mono
+, nixosTests
+,
 }:
 
 buildDotnetModule rec {

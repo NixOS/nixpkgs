@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jupyter-core,
-  hatchling,
-  python-dateutil,
-  pyzmq,
-  tornado,
-  traitlets,
-  pythonOlder,
-  importlib-metadata,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jupyter-core
+, hatchling
+, python-dateutil
+, pyzmq
+, tornado
+, traitlets
+, pythonOlder
+, importlib-metadata
+,
 }:
 
 buildPythonPackage rec {

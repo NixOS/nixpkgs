@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  xcffib,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, xcffib
+, pillow
+,
 }:
 
 buildPythonPackage rec {

@@ -92,11 +92,11 @@ in
       You must use this when the derivation has multiple outputs.
   */
   lazyDerivation =
-    args@{
-      derivation,
-      meta ? null,
-      passthru ? { },
-      outputs ? [ "out" ],
+    args@{ derivation
+    , meta ? null
+    , passthru ? { }
+    , outputs ? [ "out" ]
+    ,
     }:
     let
       # These checks are strict in `drv` and some `drv` attributes, but the

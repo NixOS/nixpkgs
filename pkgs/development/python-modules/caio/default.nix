@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  aiomisc,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-aiohttp,
-  pytest-asyncio_0,
-  pytest8_3CheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, aiomisc
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-aiohttp
+, pytest-asyncio_0
+, pytest8_3CheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

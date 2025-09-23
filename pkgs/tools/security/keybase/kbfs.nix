@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  keybase,
+{ lib
+, buildGoModule
+, keybase
+,
 }:
 
 buildGoModule {

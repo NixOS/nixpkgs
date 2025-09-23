@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  util-linux,
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
-  libX11,
-  openssl,
-  zlib,
-  which,
-  kdePackages,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, util-linux
+, SDL2
+, SDL2_ttf
+, SDL2_image
+, libX11
+, openssl
+, zlib
+, which
+, kdePackages
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

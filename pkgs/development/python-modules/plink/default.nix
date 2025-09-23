@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  sphinx,
-  tkinter,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, sphinx
+, tkinter
+,
 }:
 
 buildPythonPackage rec {

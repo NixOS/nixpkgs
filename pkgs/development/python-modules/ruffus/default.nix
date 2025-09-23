@@ -1,12 +1,12 @@
-{
-  gevent,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hostname,
-  pytest,
-  pythonAtLeast,
-  lib,
-  stdenv,
+{ gevent
+, buildPythonPackage
+, fetchFromGitHub
+, hostname
+, pytest
+, pythonAtLeast
+, lib
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

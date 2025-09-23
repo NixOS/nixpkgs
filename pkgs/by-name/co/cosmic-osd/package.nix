@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  sound-theme-freedesktop,
-  rustPlatform,
-  libcosmicAppHook,
-  pulseaudio,
-  udev,
-  nix-update-script,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, sound-theme-freedesktop
+, rustPlatform
+, libcosmicAppHook
+, pulseaudio
+, udev
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

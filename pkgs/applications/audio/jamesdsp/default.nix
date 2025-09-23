@@ -1,28 +1,29 @@
-{
-  copyDesktopItems,
-  fetchFromGitHub,
-  fetchpatch,
-  glibmm,
-  gst_all_1,
-  lib,
-  libarchive,
-  makeDesktopItem,
-  pipewire,
-  pkg-config,
-  pulseaudio,
-  qmake,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  stdenv,
-  usePipewire ? true,
-  usePulseaudio ? false,
-  wrapQtAppsHook,
+{ copyDesktopItems
+, fetchFromGitHub
+, fetchpatch
+, glibmm
+, gst_all_1
+, lib
+, libarchive
+, makeDesktopItem
+, pipewire
+, pkg-config
+, pulseaudio
+, qmake
+, qtbase
+, qtsvg
+, qtwayland
+, stdenv
+, usePipewire ? true
+, usePulseaudio ? false
+, wrapQtAppsHook
+,
 }:
 
-assert lib.asserts.assertMsg (
-  usePipewire != usePulseaudio
-) "You need to enable one and only one of pulseaudio or pipewire support";
+assert lib.asserts.assertMsg
+  (
+    usePipewire != usePulseaudio
+  ) "You need to enable one and only one of pulseaudio or pipewire support";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jamesdsp";

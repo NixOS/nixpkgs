@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appstream,
-  blueprint-compiler,
-  desktop-file-utils,
-  gjs,
-  gst_all_1,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  typescript,
-  wrapGAppsHook4,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, appstream
+, blueprint-compiler
+, desktop-file-utils
+, gjs
+, gst_all_1
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, typescript
+, wrapGAppsHook4
+, gnome
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "decibels";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  cmake,
-  libxslt,
-  docbook_xsl_ns,
-  libsForQt5,
-  libusb1,
-  yaml-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, cmake
+, libxslt
+, docbook_xsl_ns
+, libsForQt5
+, libusb1
+, yaml-cpp
+,
 }:
 
 let

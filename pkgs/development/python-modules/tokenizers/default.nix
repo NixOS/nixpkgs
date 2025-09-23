@@ -1,31 +1,27 @@
-{
-  lib,
-  linkFarm,
-  fetchurl,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cargo,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  setuptools-rust,
-
-  # buildInputs
-  openssl,
-
-  # dependencies
-  huggingface-hub,
-
-  # tests
-  datasets,
-  numpy,
-  pytest-asyncio,
-  pytestCheckHook,
-  requests,
-  tiktoken,
-  writableTmpDirAsHomeHook,
+{ lib
+, linkFarm
+, fetchurl
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  cargo
+, pkg-config
+, rustPlatform
+, rustc
+, setuptools-rust
+, # buildInputs
+  openssl
+, # dependencies
+  huggingface-hub
+, # tests
+  datasets
+, numpy
+, pytest-asyncio
+, pytestCheckHook
+, requests
+, tiktoken
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

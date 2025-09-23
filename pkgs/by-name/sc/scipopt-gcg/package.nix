@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  scipopt-scip,
-  cliquer,
-  gsl,
-  gmp,
-  bliss,
-  nauty,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, scipopt-scip
+, cliquer
+, gsl
+, gmp
+, bliss
+, nauty
+,
 }:
 
 stdenv.mkDerivation rec {

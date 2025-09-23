@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cairo,
-  fftwSinglePrec,
-  libX11,
-  libXft,
-  libclthreads,
-  libclxclient,
-  libjack2,
-  xorgproto,
-  zita-resampler,
+{ lib
+, stdenv
+, fetchurl
+, cairo
+, fftwSinglePrec
+, libX11
+, libXft
+, libclthreads
+, libclxclient
+, libjack2
+, xorgproto
+, zita-resampler
+,
 }:
 
 stdenv.mkDerivation rec {

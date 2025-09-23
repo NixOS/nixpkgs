@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-
-  fetchFromGitHub,
-  fetchNpmDeps,
-
-  cargo-tauri_1,
-  makeBinaryWrapper,
-  nodejs,
-  npmHooks,
-  pkg-config,
-  wrapGAppsHook3,
-
-  dbus,
-  freetype,
-  gtk3,
-  libsoup_2_4,
-  openssl,
-  parallel-disk-usage,
-  webkitgtk_4_0,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchNpmDeps
+, cargo-tauri_1
+, makeBinaryWrapper
+, nodejs
+, npmHooks
+, pkg-config
+, wrapGAppsHook3
+, dbus
+, freetype
+, gtk3
+, libsoup_2_4
+, openssl
+, parallel-disk-usage
+, webkitgtk_4_0
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  gssapi,
-  pyasn1,
-  pycryptodomex,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, gssapi
+, pyasn1
+, pycryptodomex
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

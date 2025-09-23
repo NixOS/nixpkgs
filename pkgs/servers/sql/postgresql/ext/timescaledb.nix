@@ -1,14 +1,13 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  libkrb5,
-  openssl,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
-
-  enableUnfree ? true,
+{ cmake
+, fetchFromGitHub
+, lib
+, libkrb5
+, openssl
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+, enableUnfree ? true
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
@@ -104,10 +103,10 @@ postgresqlBuildExtension (finalAttrs: {
     broken =
       lib.versionOlder postgresql.version "15"
       ||
-        # PostgreSQL 18 support issue upstream: https://github.com/timescale/timescaledb/issues/8233
-        # Check after next package update.
-        lib.warnIf (finalAttrs.version != "2.22.0") "Is postgresql18Packages.timescaledb still broken?" (
-          lib.versionAtLeast postgresql.version "18"
-        );
+      # PostgreSQL 18 support issue upstream: https://github.com/timescale/timescaledb/issues/8233
+      # Check after next package update.
+      lib.warnIf (finalAttrs.version != "2.22.0") "Is postgresql18Packages.timescaledb still broken?" (
+        lib.versionAtLeast postgresql.version "18"
+      );
   };
 })

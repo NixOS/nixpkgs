@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  gitUpdater,
-  alcotest,
-  crowbar,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, gitUpdater
+, alcotest
+, crowbar
+,
 }:
 
 buildDunePackage rec {

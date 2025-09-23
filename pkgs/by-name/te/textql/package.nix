@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  sqlite,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, sqlite
+,
 }:
 
 buildGoModule rec {

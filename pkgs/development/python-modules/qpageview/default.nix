@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  hatchling,
-  pyqt6,
-  poppler-qt5,
-  pycups,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, hatchling
+, pyqt6
+, poppler-qt5
+, pycups
+,
 }:
 
 buildPythonPackage rec {

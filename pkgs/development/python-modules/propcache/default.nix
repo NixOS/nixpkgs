@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  expandvars,
-  fetchFromGitHub,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cython
+, expandvars
+, fetchFromGitHub
+, pytest-codspeed
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

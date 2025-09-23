@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  autoreconfHook,
-  glib,
-  libticonv,
-  libtifiles2,
-  libticables2,
-  xz,
-  bzip2,
-  acl,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, autoreconfHook
+, glib
+, libticonv
+, libtifiles2
+, libticables2
+, xz
+, bzip2
+, acl
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  ncurses,
-  withNotmuch ? true,
-  notmuch,
-  scdoc,
-  python3Packages,
-  w3m,
-  dante,
-  gawk,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, ncurses
+, withNotmuch ? true
+, notmuch
+, scdoc
+, python3Packages
+, w3m
+, dante
+, gawk
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

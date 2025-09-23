@@ -1,8 +1,8 @@
-{
-  mkDerivation,
-  lib,
-  qmake,
-  fetchsvn,
+{ mkDerivation
+, lib
+, qmake
+, fetchsvn
+,
 }:
 
 mkDerivation rec {

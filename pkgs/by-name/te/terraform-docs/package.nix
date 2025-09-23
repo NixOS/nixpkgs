@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 buildGoModule rec {
   pname = "terraform-docs";

@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  gitUpdater,
-  cmake,
-  pkg-config,
-  python3,
-  SDL2,
-  fontconfig,
-  gtk3,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, gitUpdater
+, cmake
+, pkg-config
+, python3
+, SDL2
+, fontconfig
+, gtk3
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

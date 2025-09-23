@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+, stdenv
+, fetchurl
+,
 }:
 
 # libhdhomerun requires UDP port 65001 to be open in order to detect and communicate with tuners.

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  varnish,
-  docutils,
-  version,
-  sha256,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, varnish
+, docutils
+, version
+, sha256
+,
 }:
 
 stdenv.mkDerivation {

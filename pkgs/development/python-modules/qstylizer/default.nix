@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  pbr,
-  setuptools,
-
-  # dependencies
-  inflection,
-  tinycss2,
-
-  # checks
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  pbr
+, setuptools
+, # dependencies
+  inflection
+, tinycss2
+, # checks
+  pytestCheckHook
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitea,
-  just,
-  imagemagick,
-  makeWrapper,
-  bash,
-  dialog,
+{ stdenvNoCC
+, lib
+, fetchFromGitea
+, just
+, imagemagick
+, makeWrapper
+, bash
+, dialog
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

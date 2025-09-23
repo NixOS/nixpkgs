@@ -1,18 +1,18 @@
-{
-  bash,
-  binutils,
-  buildGoModule,
-  fetchFromGitHub,
-  kbd,
-  lib,
-  libfido2,
-  lvm2,
-  lz4,
-  makeWrapper,
-  mdadm,
-  unixtools,
-  xz,
-  zfs,
+{ bash
+, binutils
+, buildGoModule
+, fetchFromGitHub
+, kbd
+, lib
+, libfido2
+, lvm2
+, lz4
+, makeWrapper
+, mdadm
+, unixtools
+, xz
+, zfs
+,
 }:
 
 buildGoModule rec {

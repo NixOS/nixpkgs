@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  yarnConfigHook,
-  npmHooks,
-  nodejs,
-  git,
+{ lib
+, stdenv
+, fetchYarnDeps
+, fetchFromGitHub
+, yarnConfigHook
+, npmHooks
+, nodejs
+, git
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "auto-changelog";

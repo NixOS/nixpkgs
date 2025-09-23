@@ -1,33 +1,33 @@
-{
-  lib,
-  repoRevToNameMaybe,
-  fetchgit,
-  fetchzip,
+{ lib
+, repoRevToNameMaybe
+, fetchgit
+, fetchzip
+,
 }:
 
 lib.makeOverridable (
   # gitlab example
-  {
-    owner,
-    repo,
-    rev ? null,
-    tag ? null,
-    name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "gitlab",
-    protocol ? "https",
-    domain ? "gitlab.com",
-    group ? null,
-    fetchSubmodules ? false,
-    leaveDotGit ? false,
-    deepClone ? false,
-    forceFetchGit ? false,
-    sparseCheckout ? [ ],
-    ... # For hash agility
+  { owner
+  , repo
+  , rev ? null
+  , tag ? null
+  , name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "gitlab"
+  , protocol ? "https"
+  , domain ? "gitlab.com"
+  , group ? null
+  , fetchSubmodules ? false
+  , leaveDotGit ? false
+  , deepClone ? false
+  , forceFetchGit ? false
+  , sparseCheckout ? [ ]
+  , ... # For hash agility
   }@args:
 
   assert (
-    lib.assertMsg (lib.xor (tag == null) (
-      rev == null
-    )) "fetchFromGitLab requires one of either `rev` or `tag` to be provided (not both)."
+    lib.assertMsg
+      (lib.xor (tag == null) (
+        rev == null
+      )) "fetchFromGitLab requires one of either `rev` or `tag` to be provided (not both)."
   );
 
   let
@@ -91,7 +91,7 @@ lib.makeOverridable (
   in
 
   fetcher fetcherArgs
-  // {
+    // {
     meta.homepage = "${protocol}://${domain}/${slug}/";
     inherit
       tag

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  # for xargs
-  gettext,
-  libtool,
-  makeWrapper,
-  texinfo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, # for xargs
+  gettext
+, libtool
+, makeWrapper
+, texinfo
+,
 }:
 
 stdenv.mkDerivation rec {

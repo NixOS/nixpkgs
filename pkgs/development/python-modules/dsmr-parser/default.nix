@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  dlms-cosem,
-  fetchFromGitHub,
-  pyserial,
-  pyserial-asyncio-fast,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pytz,
-  setuptools,
-  tailer,
+{ lib
+, buildPythonPackage
+, dlms-cosem
+, fetchFromGitHub
+, pyserial
+, pyserial-asyncio-fast
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pytz
+, setuptools
+, tailer
+,
 }:
 
 buildPythonPackage rec {

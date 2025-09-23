@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libgit2,
-  oniguruma,
-  zlib,
-  gitMinimal,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, oniguruma
+, zlib
+, gitMinimal
+,
 }:
 
 rustPlatform.buildRustPackage rec {

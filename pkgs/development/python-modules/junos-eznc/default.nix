@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  lxml,
-  mock,
-  ncclient,
-  netaddr,
-  nose2,
-  ntc-templates,
-  paramiko,
-  pyparsing,
-  pyserial,
-  pythonOlder,
-  pyyaml,
-  scp,
-  setuptools,
-  pytestCheckHook,
-  six,
-  transitions,
-  yamlordereddictloader,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, lxml
+, mock
+, ncclient
+, netaddr
+, nose2
+, ntc-templates
+, paramiko
+, pyparsing
+, pyserial
+, pythonOlder
+, pyyaml
+, scp
+, setuptools
+, pytestCheckHook
+, six
+, transitions
+, yamlordereddictloader
+,
 }:
 
 buildPythonPackage rec {

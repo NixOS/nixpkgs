@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  lib,
-  fetchFromGitHub,
-  pnpm,
-  nodejs,
-  fetchpatch,
-  stdenv,
+{ buildGoModule
+, lib
+, fetchFromGitHub
+, pnpm
+, nodejs
+, fetchpatch
+, stdenv
+,
 }:
 
 buildGoModule rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitLab,
-  testers,
-  meson,
-  pkg-config,
-  ninja,
+{ lib
+, stdenvNoCC
+, fetchFromGitLab
+, testers
+, meson
+, pkg-config
+, ninja
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

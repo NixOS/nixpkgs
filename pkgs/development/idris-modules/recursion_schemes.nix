@@ -1,12 +1,12 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  free,
-  composition,
-  comonad,
-  bifunctors,
-  hezarfen,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, free
+, composition
+, comonad
+, bifunctors
+, hezarfen
+, lib
+,
 }:
 build-idris-package {
   pname = "recursion_schemes";

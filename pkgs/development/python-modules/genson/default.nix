@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  coverage,
-  fetchPypi,
-  jsonschema,
-  lib,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, coverage
+, fetchPypi
+, jsonschema
+, lib
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

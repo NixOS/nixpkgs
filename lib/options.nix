@@ -137,17 +137,17 @@ rec {
     :::
   */
   mkOption =
-    {
-      default ? null,
-      defaultText ? null,
-      example ? null,
-      description ? null,
-      relatedPackages ? null,
-      type ? null,
-      apply ? null,
-      internal ? null,
-      visible ? null,
-      readOnly ? null,
+    { default ? null
+    , defaultText ? null
+    , example ? null
+    , description ? null
+    , relatedPackages ? null
+    , type ? null
+    , apply ? null
+    , internal ? null
+    , visible ? null
+    , readOnly ? null
+    ,
     }@attrs:
     attrs // { _type = "option"; };
 
@@ -307,12 +307,12 @@ rec {
   */
   mkPackageOption =
     pkgs: name:
-    {
-      nullable ? false,
-      default ? name,
-      example ? null,
-      extraDescription ? "",
-      pkgsText ? "pkgs",
+    { nullable ? false
+    , default ? name
+    , example ? null
+    , extraDescription ? ""
+    , pkgsText ? "pkgs"
+    ,
     }:
     let
       name' = if isList name then last name else name;
@@ -471,13 +471,13 @@ rec {
     : 3\. Function argument
   */
   mergeUniqueOption =
-    args@{
-      message,
-      # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
+    args@{ message
+    , # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
       #   - type checked beyond what .check does (which should be very little; only on the value head; not attribute values, etc)
       #   - if you want attribute values to be checked, or list items
       #   - if you want coercedTo-like behavior to work
-      merge ? loc: defs: (head defs).value,
+      merge ? loc: defs: (head defs).value
+    ,
     }:
     loc: defs:
     if length defs == 1 then
@@ -509,18 +509,21 @@ rec {
     else if length defs == 1 then
       (head defs).value
     else
-      (foldl' (
-        first: def:
-        if def.value != first.value then
-          throw "The option `${showOption loc}' has conflicting definition values:${
+      (foldl'
+        (
+          first: def:
+          if def.value != first.value then
+            throw "The option `${showOption loc}' has conflicting definition values:${
             showDefs [
               first
               def
             ]
           }\n${prioritySuggestion}"
-        else
-          first
-      ) (head defs) (tail defs)).value;
+          else
+            first
+        )
+        (head defs)
+        (tail defs)).value;
 
   /**
     Extracts values of all "value" keys of the given list.
@@ -572,46 +575,49 @@ rec {
 
   optionAttrSetToDocList' =
     _: options:
-    concatMap (
-      opt:
-      let
-        name = showOption opt.loc;
-        visible = opt.visible or true;
-        docOption = {
-          loc = opt.loc;
-          inherit name;
-          description = opt.description or null;
-          declarations = filter (x: x != unknownModule) opt.declarations;
-          internal = opt.internal or false;
-          visible = if isBool visible then visible else visible == "shallow";
-          readOnly = opt.readOnly or false;
-          type = opt.type.description or "unspecified";
-        }
-        // optionalAttrs (opt ? example) {
-          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-            renderOptionValue opt.example
-          );
-        }
-        // optionalAttrs (opt ? defaultText || opt ? default) {
-          default = builtins.addErrorContext "while evaluating the ${
+    concatMap
+      (
+        opt:
+        let
+          name = showOption opt.loc;
+          visible = opt.visible or true;
+          docOption = {
+            loc = opt.loc;
+            inherit name;
+            description = opt.description or null;
+            declarations = filter (x: x != unknownModule) opt.declarations;
+            internal = opt.internal or false;
+            visible = if isBool visible then visible else visible == "shallow";
+            readOnly = opt.readOnly or false;
+            type = opt.type.description or "unspecified";
+          }
+          // optionalAttrs (opt ? example) {
+            example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+              renderOptionValue opt.example
+            );
+          }
+          // optionalAttrs (opt ? defaultText || opt ? default) {
+            default = builtins.addErrorContext "while evaluating the ${
             if opt ? defaultText then "defaultText" else "default value"
-          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-        }
-        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-          inherit (opt) relatedPackages;
-        };
+          } of option `${name}`"
+              (renderOptionValue (opt.defaultText or opt.default));
+          }
+          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+            inherit (opt) relatedPackages;
+          };
 
-        subOptions =
-          let
-            ss = opt.type.getSubOptions opt.loc;
-          in
-          if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
-        subOptionsVisible = if isBool visible then visible else visible == "transparent";
-      in
-      # To find infinite recursion in NixOS option docs:
-      # builtins.trace opt.loc
-      [ docOption ] ++ optionals subOptionsVisible subOptions
-    ) (collect isOption options);
+          subOptions =
+            let
+              ss = opt.type.getSubOptions opt.loc;
+            in
+            if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
+          subOptionsVisible = if isBool visible then visible else visible == "transparent";
+        in
+        # To find infinite recursion in NixOS option docs:
+          # builtins.trace opt.loc
+        [ docOption ] ++ optionals subOptionsVisible subOptions
+      )
+      (collect isOption options);
 
   /**
     This function recursively removes all derivation attributes from
@@ -663,10 +669,12 @@ rec {
       v
     else
       literalExpression (
-        lib.generators.toPretty {
-          multiline = true;
-          allowPrettyValues = true;
-        } v
+        lib.generators.toPretty
+          {
+            multiline = true;
+            allowPrettyValues = true;
+          }
+          v
       );
 
   /**
@@ -762,34 +770,38 @@ rec {
 
   showDefs =
     defs:
-    concatMapStrings (
-      def:
-      let
-        # Pretty print the value for display, if successful
-        prettyEval = builtins.tryEval (
-          lib.generators.toPretty { } (
-            lib.generators.withRecursion {
-              depthLimit = 10;
-              throwOnDepthLimit = false;
-            } def.value
-          )
-        );
-        # Split it into its lines
-        lines = filter (v: !isList v) (builtins.split "\n" prettyEval.value);
-        # Only display the first 5 lines, and indent them for better visibility
-        value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
-        result =
-          # Don't print any value if evaluating the value strictly fails
-          if !prettyEval.success then
-            ""
-          # Put it on a new line if it consists of multiple
-          else if length lines > 1 then
-            ":\n    " + value
-          else
-            ": " + value;
-      in
-      "\n- In `${def.file}'${result}"
-    ) defs;
+    concatMapStrings
+      (
+        def:
+        let
+          # Pretty print the value for display, if successful
+          prettyEval = builtins.tryEval (
+            lib.generators.toPretty { } (
+              lib.generators.withRecursion
+                {
+                  depthLimit = 10;
+                  throwOnDepthLimit = false;
+                }
+                def.value
+            )
+          );
+          # Split it into its lines
+          lines = filter (v: !isList v) (builtins.split "\n" prettyEval.value);
+          # Only display the first 5 lines, and indent them for better visibility
+          value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
+          result =
+            # Don't print any value if evaluating the value strictly fails
+            if !prettyEval.success then
+              ""
+            # Put it on a new line if it consists of multiple
+            else if length lines > 1 then
+              ":\n    " + value
+            else
+              ": " + value;
+        in
+        "\n- In `${def.file}'${result}"
+      )
+      defs;
 
   /**
     Pretty prints all option definition locations

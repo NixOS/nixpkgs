@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  flaky,
-  pyjwt,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, flaky
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, requests
+, responses
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  cxxfilt,
-  fetchPypi,
-  msgpack,
-  pyasn1,
-  pyasn1-modules,
-  pycparser,
-  pyqt5,
-  pyqtwebengine,
-  pythonOlder,
-  withGui ? false,
-  wrapQtAppsHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cxxfilt
+, fetchPypi
+, msgpack
+, pyasn1
+, pyasn1-modules
+, pycparser
+, pyqt5
+, pyqtwebengine
+, pythonOlder
+, withGui ? false
+, wrapQtAppsHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

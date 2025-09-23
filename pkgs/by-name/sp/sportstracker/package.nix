@@ -1,22 +1,23 @@
-{
-  lib,
-  jdk21,
-  openjfx21,
-  maven,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  wrapGAppsHook3,
-  gtk3,
+{ lib
+, jdk21
+, openjfx21
+, maven
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, wrapGAppsHook3
+, gtk3
+,
 }:
 
 let
   jdkWithJFX =
     if jdk21.pname == "openjdk" then
-      jdk21.override {
-        enableJavaFX = true;
-        openjfx21 = openjfx21.override { withWebKit = true; };
-      }
+      jdk21.override
+        {
+          enableJavaFX = true;
+          openjfx21 = openjfx21.override { withWebKit = true; };
+        }
     else
       throw "bad jdk variant";
 in

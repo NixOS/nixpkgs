@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchPypi,
-  pythonOlder,
-  buildPythonPackage,
-  pyvisa,
-  pyyaml,
-  stringparser,
-  typing-extensions,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  wheel,
+{ lib
+, fetchPypi
+, pythonOlder
+, buildPythonPackage
+, pyvisa
+, pyyaml
+, stringparser
+, typing-extensions
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, wheel
+,
 }:
 
 buildPythonPackage rec {

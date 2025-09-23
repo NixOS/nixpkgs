@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jwcrypto,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
-  requests,
-  simplejson,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, jwcrypto
+, numpy
+, pytestCheckHook
+, pythonOlder
+, redis
+, requests
+, simplejson
+,
 }:
 
 buildPythonPackage rec {

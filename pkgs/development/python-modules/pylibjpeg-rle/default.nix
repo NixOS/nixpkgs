@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  rustc,
-  numpy,
-  pydicom,
-  pylibjpeg-data,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
+, numpy
+, pydicom
+, pylibjpeg-data
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

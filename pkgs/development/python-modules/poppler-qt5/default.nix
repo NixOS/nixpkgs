@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  isPy3k,
-  fetchPypi,
-  sip,
-  qtbase,
-  qmake,
-  pyqt5,
-  pyqt-builder,
-  poppler,
-  pkg-config,
-  setuptools,
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchPypi
+, sip
+, qtbase
+, qmake
+, pyqt5
+, pyqt-builder
+, poppler
+, pkg-config
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

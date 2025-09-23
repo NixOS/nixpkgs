@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  email-validator,
-  fetchFromGitHub,
-  hatchling,
-  jinja2,
-  lxml,
-  ollama,
-  pydantic,
-  pytest-dotenv,
-  pytest-factoryboy,
-  pytest-mock,
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, email-validator
+, fetchFromGitHub
+, hatchling
+, jinja2
+, lxml
+, ollama
+, pydantic
+, pytest-dotenv
+, pytest-factoryboy
+, pytest-mock
+, pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

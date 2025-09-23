@@ -1,9 +1,9 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  jq,
-  lib,
-  nixosTests,
+{ buildNpmPackage
+, fetchFromGitHub
+, jq
+, lib
+, nixosTests
+,
 }:
 
 buildNpmPackage rec {

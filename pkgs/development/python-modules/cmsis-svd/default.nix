@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  six,
-  lxml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, six
+, lxml
+,
 }:
 
 buildPythonPackage {

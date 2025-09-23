@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDartApplication,
-  buf,
-  protoc-gen-dart,
-  writableTmpDirAsHomeHook,
-  testers,
-  dart-sass,
-  runCommand,
-  writeText,
+{ lib
+, fetchFromGitHub
+, buildDartApplication
+, buf
+, protoc-gen-dart
+, writableTmpDirAsHomeHook
+, testers
+, dart-sass
+, runCommand
+, writeText
+,
 }:
 
 let

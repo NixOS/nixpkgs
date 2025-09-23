@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  wrapGAppsHook3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  gtk3,
-  vte,
-  lua5_3,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, gtk3
+, vte
+, lua5_3
+, pcre2
+,
 }:
 
 stdenv.mkDerivation rec {

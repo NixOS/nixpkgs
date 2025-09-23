@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  serapi,
-  makeWrapper,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, serapi
+, makeWrapper
+, version ? null
+,
 }:
 
 (mkCoqDerivation rec {
@@ -49,7 +49,8 @@
         case = isEq "9.0";
         out = "0.2.3+9.0";
       }
-    ] null;
+    ]
+      null;
 
   nativeBuildInputs = [ makeWrapper ];
 

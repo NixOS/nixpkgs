@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qt5,
-  openssl,
-  protobuf,
-  pkg-config,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qt5
+, openssl
+, protobuf
+, pkg-config
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

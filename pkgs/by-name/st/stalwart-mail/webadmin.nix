@@ -1,18 +1,18 @@
-{
-  lib,
-  rustPlatform,
-  stalwart-mail,
-  fetchFromGitHub,
-  trunk,
-  tailwindcss_3,
-  fetchNpmDeps,
-  nix-update-script,
-  nodejs,
-  npmHooks,
-  llvmPackages,
-  wasm-bindgen-cli_0_2_93,
-  binaryen,
-  zip,
+{ lib
+, rustPlatform
+, stalwart-mail
+, fetchFromGitHub
+, trunk
+, tailwindcss_3
+, fetchNpmDeps
+, nix-update-script
+, nodejs
+, npmHooks
+, llvmPackages
+, wasm-bindgen-cli_0_2_93
+, binaryen
+, zip
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

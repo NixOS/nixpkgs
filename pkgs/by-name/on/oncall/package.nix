@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  fetchPypi,
-  oncall,
-  nixosTests,
-  fetchpatch,
+{ lib
+, python3
+, fetchFromGitHub
+, fetchPypi
+, oncall
+, nixosTests
+, fetchpatch
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "oncall";

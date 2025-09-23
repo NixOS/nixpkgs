@@ -1,29 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  emcee,
-  gstools-cython,
-  hankel,
-  meshio,
-  numpy,
-  pyevtk,
-  scipy,
-
-  # optional dependencies
-  matplotlib,
-  pyvista,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, hatch-vcs
+, hatchling
+, # dependencies
+  emcee
+, gstools-cython
+, hankel
+, meshio
+, numpy
+, pyevtk
+, scipy
+, # optional dependencies
+  matplotlib
+, pyvista
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

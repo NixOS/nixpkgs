@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gnome,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  gtk4,
-  libadwaita,
-  gettext,
-  glib,
-  udev,
-  upower,
-  itstool,
-  libxml2,
-  wrapGAppsHook4,
-  libnotify,
-  gsound,
-  gobject-introspection,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  python3,
-  gsettings-desktop-schemas,
+{ lib
+, stdenv
+, fetchurl
+, gnome
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gtk4
+, libadwaita
+, gettext
+, glib
+, udev
+, upower
+, itstool
+, libxml2
+, wrapGAppsHook4
+, libnotify
+, gsound
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, python3
+, gsettings-desktop-schemas
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

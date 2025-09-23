@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  gfortran,
-  blas,
-  lapack,
-  python3,
-  fetchFromGitHub,
-  fetchpatch,
+{ stdenv
+, lib
+, gfortran
+, blas
+, lapack
+, python3
+, fetchFromGitHub
+, fetchpatch
+,
 }:
 assert (!blas.isILP64);
 assert blas.isILP64 == lapack.isILP64;

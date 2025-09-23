@@ -1,17 +1,17 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  mock,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
-  twisted,
-  txi2p-tahoe,
-  txtorcon,
-  versioneer,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, mock
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+, twisted
+, txi2p-tahoe
+, txtorcon
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  rustPlatform,
-
-  # dependencies
-  typing-extensions,
-
-  # tests
-  numpy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  rustPlatform
+, # dependencies
+  typing-extensions
+, # tests
+  numpy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

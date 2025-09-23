@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  setuptools,
-  click,
-  numpy,
-  scipy,
-  rtree,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, setuptools
+, click
+, numpy
+, scipy
+, rtree
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glib,
-  gtk3,
-  libffcall,
-  pkg-config,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, glib
+, gtk3
+, libffcall
+, pkg-config
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

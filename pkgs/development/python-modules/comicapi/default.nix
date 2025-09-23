@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  importlib-metadata,
-  natsort,
-  pillow,
-  py7zr,
-  pycountry,
-  pyicu,
-  pytestCheckHook,
-  pythonOlder,
-  rapidfuzz,
-  rarfile,
-  setuptools,
-  setuptools-scm,
-  text2digits,
-  wheel,
-  wordninja,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-metadata
+, natsort
+, pillow
+, py7zr
+, pycountry
+, pyicu
+, pytestCheckHook
+, pythonOlder
+, rapidfuzz
+, rarfile
+, setuptools
+, setuptools-scm
+, text2digits
+, wheel
+, wordninja
+,
 }:
 
 buildPythonPackage rec {

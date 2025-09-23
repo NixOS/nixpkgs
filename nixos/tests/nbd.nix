@@ -3,9 +3,9 @@ let
   listenPort = 30123;
   testString = "It works!";
   mkCreateSmallFileService =
-    {
-      path,
-      loop ? false,
+    { path
+    , loop ? false
+    ,
     }:
     {
       script = ''

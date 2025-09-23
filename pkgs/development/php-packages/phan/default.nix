@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  php,
+{ lib
+, fetchFromGitHub
+, php
+,
 }:
 
 (php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject

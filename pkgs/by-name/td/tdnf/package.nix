@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  curl,
-  gpgme,
-  libsolv,
-  libxml2,
-  pkg-config,
-  python3,
-  rpm,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, curl
+, gpgme
+, libsolv
+, libxml2
+, pkg-config
+, python3
+, rpm
+, sqlite
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

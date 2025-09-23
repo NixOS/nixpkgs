@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 # openafsBin, openafsSrv, mkCellServDB
@@ -129,7 +128,7 @@ in
 
       cellServDB = mkOption {
         default = [ ];
-        type = with types; listOf (submodule [ { options = cellServDBConfig; } ]);
+        type = with types; listOf (submodule [{ options = cellServDBConfig; }]);
         description = "Definition of all cell-local database server machines.";
       };
 
@@ -227,7 +226,7 @@ in
 
           cellServDB = mkOption {
             default = [ ];
-            type = with types; listOf (submodule [ { options = cellServDBConfig; } ]);
+            type = with types; listOf (submodule [{ options = cellServDBConfig; }]);
             description = ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than

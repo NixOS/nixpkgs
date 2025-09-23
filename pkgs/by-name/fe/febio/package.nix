@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  replaceVars,
-  cmake,
-  ninja,
-  zlib,
-  mklSupport ? true,
-  mkl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, replaceVars
+, cmake
+, ninja
+, zlib
+, mklSupport ? true
+, mkl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

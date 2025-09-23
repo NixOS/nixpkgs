@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  coreutils,
-  ncurses,
-  gzip,
-  flex,
-  bison,
-  less,
-  buildPackages,
-  x11Mode ? false,
-  qtMode ? false,
-  libXaw,
-  libXext,
-  libXpm,
-  bdftopcf,
-  mkfontdir,
-  pkg-config,
-  qt5,
-  copyDesktopItems,
-  makeDesktopItem,
+{ stdenv
+, lib
+, fetchurl
+, coreutils
+, ncurses
+, gzip
+, flex
+, bison
+, less
+, buildPackages
+, x11Mode ? false
+, qtMode ? false
+, libXaw
+, libXext
+, libXpm
+, bdftopcf
+, mkfontdir
+, pkg-config
+, qt5
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 let

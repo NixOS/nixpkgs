@@ -1,13 +1,12 @@
-{
-  faust,
-  libjack2,
-  cargo,
-  binutils,
-  gcc,
-  gnumake,
-  openssl,
-  pkg-config,
-
+{ faust
+, libjack2
+, cargo
+, binutils
+, gcc
+, gnumake
+, openssl
+, pkg-config
+,
 }:
 
 faust.wrapWithBuildEnv {

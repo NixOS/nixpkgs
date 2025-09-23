@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  sbcl,
-  libX11,
-  libXpm,
-  libICE,
-  libSM,
-  libXt,
-  libXau,
-  libXdmcp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, sbcl
+, libX11
+, libXpm
+, libICE
+, libSM
+, libXt
+, libXau
+, libXdmcp
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+,
 }:
 stdenv.mkDerivation rec {
   pname = "fna3d";

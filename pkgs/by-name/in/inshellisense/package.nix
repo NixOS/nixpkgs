@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  cacert,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, cacert
+,
 }:
 
 buildNpmPackage rec {

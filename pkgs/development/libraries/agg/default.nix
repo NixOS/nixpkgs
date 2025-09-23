@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  freetype,
-  SDL,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, libtool
+, pkg-config
+, freetype
+, SDL
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

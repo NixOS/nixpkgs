@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  iana-etc,
-  libredirect,
-  nixosTests,
-  postgresql,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, iana-etc
+, libredirect
+, nixosTests
+, postgresql
+, stdenv
+,
 }:
 buildGoModule rec {
   pname = "headscale";

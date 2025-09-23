@@ -45,10 +45,9 @@
     };
 
   nodes.client =
-    {
-      pkgs,
-      nodes,
-      ...
+    { pkgs
+    , nodes
+    , ...
     }:
     let
       filesenderIP = (builtins.head (nodes.filesender.networking.interfaces.eth1.ipv4.addresses)).address;

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  asciidoctor,
-  txt2tags,
+{ stdenv
+, fetchFromGitHub
+, lib
+, asciidoctor
+, txt2tags
+,
 }:
 stdenv.mkDerivation rec {
   pname = "grml-zsh-config";

@@ -1,32 +1,32 @@
-{
-  lib,
-  asteroid-filterbanks,
-  buildPythonPackage,
-  einops,
-  fetchFromGitHub,
-  huggingface-hub,
-  hydra-core,
-  numpy,
-  omegaconf,
-  pyannote-core,
-  pyannote-database,
-  pyannote-metrics,
-  pyannote-pipeline,
-  pyscaffold,
-  pythonOlder,
-  pytorch-lightning,
-  pytorch-metric-learning,
-  rich,
-  semver,
-  setuptools,
-  soundfile,
-  speechbrain,
-  tensorboardx,
-  torch-audiomentations,
-  torch,
-  torchaudio,
-  torchmetrics,
-  typer,
+{ lib
+, asteroid-filterbanks
+, buildPythonPackage
+, einops
+, fetchFromGitHub
+, huggingface-hub
+, hydra-core
+, numpy
+, omegaconf
+, pyannote-core
+, pyannote-database
+, pyannote-metrics
+, pyannote-pipeline
+, pyscaffold
+, pythonOlder
+, pytorch-lightning
+, pytorch-metric-learning
+, rich
+, semver
+, setuptools
+, soundfile
+, speechbrain
+, tensorboardx
+, torch-audiomentations
+, torch
+, torchaudio
+, torchmetrics
+, typer
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-  autoreconfHook,
-  pkg-config,
-  libnl,
-  iptables,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, autoreconfHook
+, pkg-config
+, libnl
+, iptables
+,
 }:
 
 let

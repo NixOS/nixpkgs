@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  boost,
-  clang-tools,
-  cmake,
-  difftastic,
-  makeWrapper,
-  meson,
-  ninja,
-  nixVersions,
-  nlohmann_json,
-  pkg-config,
-  fetchFromGitHub,
+{ stdenv
+, lib
+, boost
+, clang-tools
+, cmake
+, difftastic
+, makeWrapper
+, meson
+, ninja
+, nixVersions
+, nlohmann_json
+, pkg-config
+, fetchFromGitHub
+,
 }:
 let
   # We pin the nix version to a known working one here as upgrades can likely break the build.

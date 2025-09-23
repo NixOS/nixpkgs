@@ -1,13 +1,13 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  qt5,
-  stdenv,
-  replaceVars,
-  unzip,
-  zip,
+{ lib
+, cmake
+, fetchFromGitHub
+, pkg-config
+, qt5
+, stdenv
+, replaceVars
+, unzip
+, zip
+,
 }:
 
 let

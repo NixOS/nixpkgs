@@ -2,10 +2,10 @@
 # If you just want a subset of plug-ins, you can specify them explicitly:
 # `gimp-with-plugins.override { plugins = with gimpPlugins; [ gap ]; }`.
 
-{
-  lib,
-  pkgs,
-  gimp,
+{ lib
+, pkgs
+, gimp
+,
 }:
 
 let

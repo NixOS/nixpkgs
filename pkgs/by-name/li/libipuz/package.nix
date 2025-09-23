@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  cargo,
-  fetchFromGitLab,
-  gi-docgen,
-  glib,
-  gobject-introspection,
-  json-glib,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
+{ lib
+, stdenv
+, cargo
+, fetchFromGitLab
+, gi-docgen
+, glib
+, gobject-introspection
+, json-glib
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, rustPlatform
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libipuz";

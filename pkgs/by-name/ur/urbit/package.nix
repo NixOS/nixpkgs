@@ -1,7 +1,7 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
+{ stdenv
+, lib
+, fetchzip
+,
 }:
 
 let
@@ -21,8 +21,7 @@ stdenv.mkDerivation rec {
         aarch64-linux = "sha256-imbzAsjjznLuxee9mWXpsG/dKEJxdEOTw+JFc4DbQ2Q=";
         x86_64-darwin = "sha256-0c1ewdrVsfSUivrcLwVuxZdcyrOAKXF7P9W+B7o5aNU=";
         aarch64-darwin = "sha256-j8PJ04zRz2sZdpetLyzwRasj0CkiRGY+GvzWXG90IaE=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
   postInstall = ''

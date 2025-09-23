@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  scdoc,
-  hare,
-  hareHook,
+{ lib
+, stdenv
+, scdoc
+, hare
+, hareHook
+,
 }:
 stdenv.mkDerivation {
   pname = "haredoc";

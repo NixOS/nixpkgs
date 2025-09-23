@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  gobject-introspection,
-  setuptools,
-  wrapGAppsHook3,
-  libnotify,
-  dbus-python,
-  packaging,
-  proton-core,
-  proton-keyring-linux,
-  proton-vpn-api-core,
-  proton-vpn-local-agent,
-  proton-vpn-network-manager,
-  pycairo,
-  pygobject3,
-  withIndicator ? true,
-  libappindicator-gtk3,
-  libayatana-appindicator,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, gobject-introspection
+, setuptools
+, wrapGAppsHook3
+, libnotify
+, dbus-python
+, packaging
+, proton-core
+, proton-keyring-linux
+, proton-vpn-api-core
+, proton-vpn-local-agent
+, proton-vpn-network-manager
+, pycairo
+, pygobject3
+, withIndicator ? true
+, libappindicator-gtk3
+, libayatana-appindicator
+,
 }:
 
 buildPythonApplication rec {

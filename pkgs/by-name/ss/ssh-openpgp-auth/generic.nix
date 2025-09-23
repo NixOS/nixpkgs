@@ -1,23 +1,23 @@
 # This file is based upon upstream's package.nix shared among both
 # "ssh-openpgp-auth" and "sshd-openpgpg-auth"
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  just,
-  rust-script,
-  installShellFiles,
-  nettle,
-  openssl,
-  sqlite,
-  openssh,
-  # Arguments not supplied by callPackage
-  pname,
-  version,
-  srcHash,
-  cargoHash,
-  metaDescription,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, just
+, rust-script
+, installShellFiles
+, nettle
+, openssl
+, sqlite
+, openssh
+, # Arguments not supplied by callPackage
+  pname
+, version
+, srcHash
+, cargoHash
+, metaDescription
+,
 }:
 
 rustPlatform.buildRustPackage {

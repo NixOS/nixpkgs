@@ -1,18 +1,18 @@
-{
-  lib,
-  black,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  gitpython,
-  jinja2,
-  platformdirs,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  tqdm,
-  writableTmpDirAsHomeHook,
+{ lib
+, black
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, gitpython
+, jinja2
+, platformdirs
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, tqdm
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

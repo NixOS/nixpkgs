@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  pkg-config,
-  libao,
-  json_c,
-  libgcrypt,
-  ffmpeg,
-  curl,
+{ fetchFromGitHub
+, lib
+, stdenv
+, pkg-config
+, libao
+, json_c
+, libgcrypt
+, ffmpeg
+, curl
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,18 +1,16 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   eachGeth = config.services.geth;
 
   gethOpts =
-    {
-      config,
-      lib,
-      name,
-      ...
+    { config
+    , lib
+    , name
+    , ...
     }:
     {
 
@@ -188,69 +186,73 @@ in
   config = lib.mkIf (eachGeth != { }) {
 
     environment.systemPackages = lib.flatten (
-      lib.mapAttrsToList (gethName: cfg: [
-        cfg.package
-      ]) eachGeth
+      lib.mapAttrsToList
+        (gethName: cfg: [
+          cfg.package
+        ])
+        eachGeth
     );
 
-    systemd.services = lib.mapAttrs' (
-      gethName: cfg:
-      let
-        stateDir = "goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}";
-        dataDir = "/var/lib/${stateDir}";
-      in
-      (lib.nameValuePair "geth-${gethName}" (
-        lib.mkIf cfg.enable {
-          description = "Go Ethereum node (${gethName})";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
+    systemd.services = lib.mapAttrs'
+      (
+        gethName: cfg:
+          let
+            stateDir = "goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}";
+            dataDir = "/var/lib/${stateDir}";
+          in
+          (lib.nameValuePair "geth-${gethName}" (
+            lib.mkIf cfg.enable {
+              description = "Go Ethereum node (${gethName})";
+              wantedBy = [ "multi-user.target" ];
+              after = [ "network.target" ];
 
-          serviceConfig = {
-            DynamicUser = true;
-            Restart = "always";
-            StateDirectory = stateDir;
+              serviceConfig = {
+                DynamicUser = true;
+                Restart = "always";
+                StateDirectory = stateDir;
 
-            # Hardening measures
-            PrivateTmp = "true";
-            ProtectSystem = "full";
-            NoNewPrivileges = "true";
-            PrivateDevices = "true";
-            MemoryDenyWriteExecute = "true";
-          };
+                # Hardening measures
+                PrivateTmp = "true";
+                ProtectSystem = "full";
+                NoNewPrivileges = "true";
+                PrivateDevices = "true";
+                MemoryDenyWriteExecute = "true";
+              };
 
-          script = ''
-            ${cfg.package}/bin/geth \
-              --nousb \
-              --ipcdisable \
-              ${lib.optionalString (cfg.network != null) ''--${cfg.network}''} \
-              --syncmode ${cfg.syncmode} \
-              --gcmode ${cfg.gcmode} \
-              --port ${toString cfg.port} \
-              --maxpeers ${toString cfg.maxpeers} \
-              ${lib.optionalString cfg.http.enable ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}''} \
-              ${
-                lib.optionalString (cfg.http.apis != null) ''--http.api ${lib.concatStringsSep "," cfg.http.apis}''
-              } \
-              ${lib.optionalString cfg.websocket.enable ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}''} \
-              ${
-                lib.optionalString (
-                  cfg.websocket.apis != null
-                ) ''--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}''
-              } \
-              ${lib.optionalString cfg.metrics.enable ''--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}''} \
-              --authrpc.addr ${cfg.authrpc.address} --authrpc.port ${toString cfg.authrpc.port} --authrpc.vhosts ${lib.concatStringsSep "," cfg.authrpc.vhosts} \
-              ${
-                if (cfg.authrpc.jwtsecret != "") then
-                  ''--authrpc.jwtsecret ${cfg.authrpc.jwtsecret}''
-                else
-                  ''--authrpc.jwtsecret ${dataDir}/geth/jwtsecret''
-              } \
-              ${lib.escapeShellArgs cfg.extraArgs} \
-              --datadir ${dataDir}
-          '';
-        }
-      ))
-    ) eachGeth;
+              script = ''
+                ${cfg.package}/bin/geth \
+                  --nousb \
+                  --ipcdisable \
+                  ${lib.optionalString (cfg.network != null) ''--${cfg.network}''} \
+                  --syncmode ${cfg.syncmode} \
+                  --gcmode ${cfg.gcmode} \
+                  --port ${toString cfg.port} \
+                  --maxpeers ${toString cfg.maxpeers} \
+                  ${lib.optionalString cfg.http.enable ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}''} \
+                  ${
+                    lib.optionalString (cfg.http.apis != null) ''--http.api ${lib.concatStringsSep "," cfg.http.apis}''
+                  } \
+                  ${lib.optionalString cfg.websocket.enable ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}''} \
+                  ${
+                    lib.optionalString (
+                      cfg.websocket.apis != null
+                    ) ''--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}''
+                  } \
+                  ${lib.optionalString cfg.metrics.enable ''--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}''} \
+                  --authrpc.addr ${cfg.authrpc.address} --authrpc.port ${toString cfg.authrpc.port} --authrpc.vhosts ${lib.concatStringsSep "," cfg.authrpc.vhosts} \
+                  ${
+                    if (cfg.authrpc.jwtsecret != "") then
+                      ''--authrpc.jwtsecret ${cfg.authrpc.jwtsecret}''
+                    else
+                      ''--authrpc.jwtsecret ${dataDir}/geth/jwtsecret''
+                  } \
+                  ${lib.escapeShellArgs cfg.extraArgs} \
+                  --datadir ${dataDir}
+              '';
+            }
+          ))
+      )
+      eachGeth;
 
   };
 

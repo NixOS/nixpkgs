@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  matplotlib,
-  pygments,
-  rich,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, matplotlib
+, pygments
+, rich
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

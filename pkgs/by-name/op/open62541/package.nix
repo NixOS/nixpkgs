@@ -1,34 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  check,
-  libxcrypt,
-  subunit,
-  python3Packages,
-  nix-update-script,
-
-  withDoc ? false,
-  graphviz-nox,
-
-  withExamples ? false,
-
-  withEncryption ? false, # or "openssl" or "mbedtls"
-  openssl,
-  mbedtls,
-
-  # for passthru.tests only
-  open62541,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, check
+, libxcrypt
+, subunit
+, python3Packages
+, nix-update-script
+, withDoc ? false
+, graphviz-nox
+, withExamples ? false
+, withEncryption ? false
+, # or "openssl" or "mbedtls"
+  openssl
+, mbedtls
+, # for passthru.tests only
+  open62541
+,
 }:
 
 let
   encryptionBackend =
     {
       inherit openssl mbedtls;
-    }
-    ."${withEncryption}" or (throw "Unsupported encryption backend: ${withEncryption}");
+    }."${withEncryption}" or (throw "Unsupported encryption backend: ${withEncryption}");
 in
 
 stdenv.mkDerivation (finalAttrs: {

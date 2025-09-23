@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  c-ares,
-  dbus,
-  glib,
-  libphonenumber,
-  libsoup_3,
-  meson,
-  mobile-broadband-provider-info,
-  modemmanager,
-  ninja,
-  pkg-config,
-  protobuf,
+{ lib
+, stdenv
+, fetchFromGitLab
+, c-ares
+, dbus
+, glib
+, libphonenumber
+, libsoup_3
+, meson
+, mobile-broadband-provider-info
+, modemmanager
+, ninja
+, pkg-config
+, protobuf
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

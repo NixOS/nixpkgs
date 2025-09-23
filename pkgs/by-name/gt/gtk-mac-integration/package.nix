@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  gtk-doc,
-  gtk ? gtk3,
-  gtk3,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, glib
+, gtk-doc
+, gtk ? gtk3
+, gtk3
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {

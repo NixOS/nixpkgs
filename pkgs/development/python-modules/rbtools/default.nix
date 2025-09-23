@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy3k,
-  setuptools,
-  colorama,
-  texttable,
-  tqdm,
-  certifi,
-  housekeeping,
-  puremagic,
-  pydiffx,
-  typing-extensions,
-  importlib-metadata,
-  importlib-resources,
-  packaging,
-  pytestCheckHook,
-  pytest-env,
-  kgb,
-  gitSetupHook,
-  gitFull,
-  subversion,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, setuptools
+, colorama
+, texttable
+, tqdm
+, certifi
+, housekeeping
+, puremagic
+, pydiffx
+, typing-extensions
+, importlib-metadata
+, importlib-resources
+, packaging
+, pytestCheckHook
+, pytest-env
+, kgb
+, gitSetupHook
+, gitFull
+, subversion
+,
 }:
 
 buildPythonPackage rec {

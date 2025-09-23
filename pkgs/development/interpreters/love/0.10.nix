@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  SDL2,
-  libGLU,
-  libGL,
-  openal,
-  luajit,
-  freetype,
-  physfs,
-  libmodplug,
-  mpg123,
-  libvorbis,
-  libogg,
-  libtheora,
-  which,
-  autoconf,
-  automake,
-  libtool,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, SDL2
+, libGLU
+, libGL
+, openal
+, luajit
+, freetype
+, physfs
+, libmodplug
+, mpg123
+, libvorbis
+, libogg
+, libtheora
+, which
+, autoconf
+, automake
+, libtool
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

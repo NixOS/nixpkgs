@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  bash,
-  fetchFromGitHub,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-protocols,
-  wayland-scanner,
-  grim,
-  inih,
-  libdrm,
-  libgbm,
-  pipewire,
-  scdoc,
-  slurp,
-  systemd,
-  wayland,
+{ lib
+, stdenv
+, bash
+, fetchFromGitHub
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, wayland-protocols
+, wayland-scanner
+, grim
+, inih
+, libdrm
+, libgbm
+, pipewire
+, scdoc
+, slurp
+, systemd
+, wayland
+,
 }:
 
 stdenv.mkDerivation rec {

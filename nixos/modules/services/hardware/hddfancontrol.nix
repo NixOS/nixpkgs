@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -168,9 +167,11 @@ in
       };
 
       services = lib.attrsets.mergeAttrsList [
-        (lib.attrsets.mapAttrs' (
-          name: cnf: lib.nameValuePair "hddfancontrol-${name}" (createService cnf)
-        ) cfg.settings)
+        (lib.attrsets.mapAttrs'
+          (
+            name: cnf: lib.nameValuePair "hddfancontrol-${name}" (createService cnf)
+          )
+          cfg.settings)
         {
           "hddfancontrol".enable = false;
         }

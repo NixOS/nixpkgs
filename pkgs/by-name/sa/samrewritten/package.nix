@@ -1,18 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-
-  # Deps
-  gdk-pixbuf,
-  glib,
-  graphene,
-  gtk4,
-  openssl,
-  pango,
-  pkg-config,
-  wrapGAppsHook4,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, # Deps
+  gdk-pixbuf
+, glib
+, graphene
+, gtk4
+, openssl
+, pango
+, pkg-config
+, wrapGAppsHook4
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samrewritten";

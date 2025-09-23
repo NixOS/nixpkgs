@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  bash,
-  coreutils,
-  curl,
-  fetchFromGitHub,
-  gnugrep,
-  gnused,
-  installShellFiles,
-  iproute2,
-  makeBinaryWrapper,
-  nix-update-script,
-  systemd,
-  udevCheckHook,
-  util-linuxMinimal,
+{ lib
+, stdenv
+, bash
+, coreutils
+, curl
+, fetchFromGitHub
+, gnugrep
+, gnused
+, installShellFiles
+, iproute2
+, makeBinaryWrapper
+, nix-update-script
+, systemd
+, udevCheckHook
+, util-linuxMinimal
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

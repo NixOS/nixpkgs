@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  arrow,
-  delorean,
-  pendulum,
-  pytestCheckHook,
-  pytz,
-  udatetime,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, arrow
+, delorean
+, pendulum
+, pytestCheckHook
+, pytz
+, udatetime
+,
 }:
 
 buildPythonPackage rec {

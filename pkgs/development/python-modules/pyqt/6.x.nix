@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchzip,
-  pkg-config,
-  dbus,
-  lndir,
-  dbus-python,
-  sip,
-  pyqt6-sip,
-  pyqt-builder,
-  qt6Packages,
-  pythonOlder,
-  mesa,
-  withMultimedia ? true,
-  withWebSockets ? true,
-  withLocation ? true,
-  # Not currently part of PyQt6
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchzip
+, pkg-config
+, dbus
+, lndir
+, dbus-python
+, sip
+, pyqt6-sip
+, pyqt-builder
+, qt6Packages
+, pythonOlder
+, mesa
+, withMultimedia ? true
+, withWebSockets ? true
+, withLocation ? true
+, # Not currently part of PyQt6
   #, withConnectivity ? true
-  withPrintSupport ? true,
-  withSerialPort ? false,
-  cups,
+  withPrintSupport ? true
+, withSerialPort ? false
+, cups
+,
 }:
 
 buildPythonPackage rec {

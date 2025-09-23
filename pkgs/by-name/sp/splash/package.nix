@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gfortran,
-  giza,
-  hdf5,
-  cairo,
-  freetype,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gfortran
+, giza
+, hdf5
+, cairo
+, freetype
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

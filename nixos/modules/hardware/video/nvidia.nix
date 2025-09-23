@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
@@ -484,17 +483,18 @@ in
           hardware.nvidia.prime.offload.enable = lib.mkDefault reverseSyncCfg.enable;
 
           services.xserver.drivers =
-            lib.optional primeEnabled {
-              name = igpuDriver;
-              display = offloadCfg.enable;
-              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
-              deviceSection = ''
-                BusID "${igpuBusId}"
-              ''
-              + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
-                Option "AccelMethod" "none"
-              '';
-            }
+            lib.optional primeEnabled
+              {
+                name = igpuDriver;
+                display = offloadCfg.enable;
+                modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
+                deviceSection = ''
+                  BusID "${igpuBusId}"
+                ''
+                + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
+                  Option "AccelMethod" "none"
+                '';
+              }
             ++ lib.singleton {
               name = "nvidia";
               modules = [ nvidia_x11.bin ];
@@ -536,7 +536,7 @@ in
             let
               gpuProviderName =
                 if igpuDriver == "amdgpu" then
-                  # find the name of the provider if amdgpu
+                # find the name of the provider if amdgpu
                   "`${lib.getExe pkgs.xorg.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
                 else
                   igpuDriver;
@@ -650,8 +650,8 @@ in
             "d /run/nvidia-xdriver 0770 root users"
           ]
           ++
-            lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-              "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+          lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+            "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
           boot = {
             extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
@@ -665,9 +665,10 @@ in
             # If requested enable modesetting via kernel parameters.
             kernelParams =
               lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-              ++ lib.optional (
-                (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
-              ) "nvidia-drm.fbdev=1"
+              ++ lib.optional
+                (
+                  (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
+                ) "nvidia-drm.fbdev=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
               ++ lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";

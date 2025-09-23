@@ -1,7 +1,7 @@
-{
-  fontbakery,
-  lib,
-  runCommand,
+{ fontbakery
+, lib
+, runCommand
+,
 }:
 
 let

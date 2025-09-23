@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, mock
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, six
+,
 }:
 
 buildPythonPackage rec {

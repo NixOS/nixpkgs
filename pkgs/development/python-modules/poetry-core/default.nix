@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  build,
-  gitMinimal,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  setuptools,
-  tomli-w,
-  trove-classifiers,
-  virtualenv,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, build
+, gitMinimal
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, setuptools
+, tomli-w
+, trove-classifiers
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

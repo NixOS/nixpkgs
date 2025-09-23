@@ -1,7 +1,7 @@
-{
-  stdenv,
-  fetchurl,
-  libiconv,
+{ stdenv
+, fetchurl
+, libiconv
+,
 }:
 
 let
@@ -11,7 +11,7 @@ stdenv.mkDerivation (
   finalAttrs:
   (
     (mecab-base finalAttrs)
-    // {
+      // {
       pname = "mecab-nodic";
     }
   )

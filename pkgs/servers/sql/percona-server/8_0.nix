@@ -1,44 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  gitUpdater,
-  bison,
-  cmake,
-  pkg-config,
-  boost,
-  icu,
-  libedit,
-  libevent,
-  lz4,
-  ncurses,
-  openssl,
-  perl,
-  protobuf,
-  re2,
-  readline,
-  zlib,
-  zstd,
-  libfido2,
-  numactl,
-  cctools,
-  developer_cmds,
-  libtirpc,
-  rpcsvc-proto,
-  curl,
-  DarwinTools,
-  nixosTests,
-  coreutils,
-  procps,
-  gnused,
-  gnugrep,
-  hostname,
-  makeWrapper,
-  # Percona-specific deps
-  cyrus_sasl,
-  gnumake,
-  openldap,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, gitUpdater
+, bison
+, cmake
+, pkg-config
+, boost
+, icu
+, libedit
+, libevent
+, lz4
+, ncurses
+, openssl
+, perl
+, protobuf
+, re2
+, readline
+, zlib
+, zstd
+, libfido2
+, numactl
+, cctools
+, developer_cmds
+, libtirpc
+, rpcsvc-proto
+, curl
+, DarwinTools
+, nixosTests
+, coreutils
+, procps
+, gnused
+, gnugrep
+, hostname
+, makeWrapper
+, # Percona-specific deps
+  cyrus_sasl
+, gnumake
+, openldap
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

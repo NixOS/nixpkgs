@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  libGLU,
-  libglut,
-  camlp-streams,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, libGLU
+, libglut
+, camlp-streams
+,
 }:
 
 if lib.versionOlder ocaml.version "4.06" then

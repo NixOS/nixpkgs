@@ -1,13 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  hwdata,
-  gtk3,
-  pkg-config,
-  gettext,
-  sqlite, # compile GUI
-  withGUI ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, hwdata
+, gtk3
+, pkg-config
+, gettext
+, sqlite
+, # compile GUI
+  withGUI ? false
+,
 }:
 
 stdenv.mkDerivation rec {

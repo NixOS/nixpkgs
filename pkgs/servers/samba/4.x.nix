@@ -1,67 +1,66 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  fetchpatch,
-  wafHook,
-  pkg-config,
-  bison,
-  flex,
-  perl,
-  libxslt,
-  docbook_xsl,
-  fixDarwinDylibNames,
-  docbook_xml_dtd_45,
-  readline,
-  popt,
-  dbus,
-  libbsd,
-  libarchive,
-  zlib,
-  liburing,
-  gnutls,
-  systemd,
-  samba,
-  talloc,
-  jansson,
-  ldb,
-  lmdb,
-  libtasn1,
-  tdb,
-  tevent,
-  libxcrypt,
-  cmocka,
-  rpcsvc-proto,
-  bash,
-  python3Packages,
-  nixosTests,
-  libiconv,
-  testers,
-  pkgsCross,
-
-  enableLDAP ? false,
-  openldap,
-  enablePrinting ? false,
-  cups,
-  enableProfiling ? true,
-  enableMDNS ? false,
-  avahi,
-  enableDomainController ? false,
-  gpgme,
-  enableRegedit ? true,
-  ncurses,
-  enableCephFS ? false,
-  ceph,
-  enableGlusterFS ? false,
-  glusterfs,
-  libuuid,
-  enableAcl ? stdenv.hostPlatform.isLinux,
-  acl,
-  enableLibunwind ? (!stdenv.hostPlatform.isDarwin),
-  libunwind,
-  enablePam ? (!stdenv.hostPlatform.isDarwin),
-  pam,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, wafHook
+, pkg-config
+, bison
+, flex
+, perl
+, libxslt
+, docbook_xsl
+, fixDarwinDylibNames
+, docbook_xml_dtd_45
+, readline
+, popt
+, dbus
+, libbsd
+, libarchive
+, zlib
+, liburing
+, gnutls
+, systemd
+, samba
+, talloc
+, jansson
+, ldb
+, lmdb
+, libtasn1
+, tdb
+, tevent
+, libxcrypt
+, cmocka
+, rpcsvc-proto
+, bash
+, python3Packages
+, nixosTests
+, libiconv
+, testers
+, pkgsCross
+, enableLDAP ? false
+, openldap
+, enablePrinting ? false
+, cups
+, enableProfiling ? true
+, enableMDNS ? false
+, avahi
+, enableDomainController ? false
+, gpgme
+, enableRegedit ? true
+, ncurses
+, enableCephFS ? false
+, ceph
+, enableGlusterFS ? false
+, glusterfs
+, libuuid
+, enableAcl ? stdenv.hostPlatform.isLinux
+, acl
+, enableLibunwind ? (!stdenv.hostPlatform.isDarwin)
+, libunwind
+, enablePam ? (!stdenv.hostPlatform.isDarwin)
+, pam
+,
 }:
 
 let
@@ -73,8 +72,7 @@ let
   answers =
     {
       x86_64-freebsd = ./answers-x86_64-freebsd;
-    }
-    .${stdenv.hostPlatform.system}
+    }.${stdenv.hostPlatform.system}
       or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -206,9 +204,10 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w answers
   '';
 
-  env.NIX_LDFLAGS = lib.optionalString (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env.NIX_LDFLAGS = lib.optionalString
+    (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) "--undefined-version";
 
   wafConfigureFlags = [
     "--with-static-modules=NONE"
@@ -314,9 +313,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  disallowedReferences = lib.optionals (
-    buildPackages.python3Packages.python != python3Packages.python
-  ) [ buildPackages.python3Packages.python ];
+  disallowedReferences = lib.optionals
+    (
+      buildPackages.python3Packages.python != python3Packages.python
+    ) [ buildPackages.python3Packages.python ];
 
   passthru.tests = {
     samba = nixosTests.samba;

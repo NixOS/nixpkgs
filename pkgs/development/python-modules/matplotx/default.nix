@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  matplotlib,
-  numpy,
-  networkx,
-  pypng,
-  scipy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, matplotlib
+, numpy
+, networkx
+, pypng
+, scipy
+,
 }:
 
 buildPythonPackage rec {

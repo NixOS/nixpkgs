@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  SDL2,
-  cmake,
-  libpng,
-  libzip,
-  openal,
-  pkg-config,
-  yaml-cpp,
-  fmt,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, SDL2
+, cmake
+, libpng
+, libzip
+, openal
+, pkg-config
+, yaml-cpp
+, fmt
+, xorg
+,
 }:
 let
   sfl-src = fetchFromGitHub {

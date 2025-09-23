@@ -1,13 +1,13 @@
-{
-  lib,
-  python3,
-  buildEnv,
-  runCommandCC,
-  stdenv,
-  runCommand,
-  vapoursynth,
-  makeWrapper,
-  withPlugins,
+{ lib
+, python3
+, buildEnv
+, runCommandCC
+, stdenv
+, runCommand
+, vapoursynth
+, makeWrapper
+, withPlugins
+,
 }:
 
 plugins:
@@ -17,13 +17,15 @@ let
   getRecursivePropagatedBuildInputs =
     pkgs:
     lib.flatten (
-      map (
-        pkg:
-        let
-          cleanPropagatedBuildInputs = lib.filter lib.isDerivation pkg.propagatedBuildInputs;
-        in
-        cleanPropagatedBuildInputs ++ (getRecursivePropagatedBuildInputs cleanPropagatedBuildInputs)
-      ) pkgs
+      map
+        (
+          pkg:
+          let
+            cleanPropagatedBuildInputs = lib.filter lib.isDerivation pkg.propagatedBuildInputs;
+          in
+          cleanPropagatedBuildInputs ++ (getRecursivePropagatedBuildInputs cleanPropagatedBuildInputs)
+        )
+        pkgs
     );
 
   deepPlugins = lib.unique (plugins ++ (getRecursivePropagatedBuildInputs plugins));
@@ -52,22 +54,23 @@ let
   ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 if stdenv.hostPlatform.isDarwin then
-  vapoursynth.overrideAttrs (previousAttrs: {
-    pname = "vapoursynth-with-plugins";
-    configureFlags = (previousAttrs.configureFlags or [ ]) ++ [
-      "--with-plugindir=${pluginsEnv}/lib/vapoursynth"
-    ];
-  })
+  vapoursynth.overrideAttrs
+    (previousAttrs: {
+      pname = "vapoursynth-with-plugins";
+      configureFlags = (previousAttrs.configureFlags or [ ]) ++ [
+        "--with-plugindir=${pluginsEnv}/lib/vapoursynth"
+      ];
+    })
 else
   runCommand "${vapoursynth.name}-with-plugins"
-    {
-      nativeBuildInputs = [ makeWrapper ];
-      passthru = {
-        inherit python3;
-        inherit (vapoursynth) src version;
-        withPlugins = plugins': withPlugins (plugins ++ plugins');
-      };
-    }
+  {
+    nativeBuildInputs = [ makeWrapper ];
+    passthru = {
+      inherit python3;
+      inherit (vapoursynth) src version;
+      withPlugins = plugins': withPlugins (plugins ++ plugins');
+    };
+  }
     ''
       mkdir -p \
         $out/bin \

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeText,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  coreutils,
-  gnome-desktop,
-  gnupg,
-  gtk3,
-  systemdMinimal,
-  udisks,
-  xz,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, glib
+, meson
+, ninja
+, pkg-config
+, python3
+, coreutils
+, gnome-desktop
+, gnupg
+, gtk3
+, systemdMinimal
+, udisks
+, xz
+,
 }:
 
 stdenv.mkDerivation rec {

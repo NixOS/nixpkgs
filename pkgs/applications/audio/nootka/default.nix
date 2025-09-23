@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  alsa-lib,
-  fftwSinglePrec,
-  libjack2,
-  libpulseaudio,
-  libvorbis,
-  soundtouch,
-  qtbase,
-  qtdeclarative,
-  qtgraphicaleffects,
-  qtquickcontrols2,
-  qttools,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, alsa-lib
+, fftwSinglePrec
+, libjack2
+, libpulseaudio
+, libvorbis
+, soundtouch
+, qtbase
+, qtdeclarative
+, qtgraphicaleffects
+, qtquickcontrols2
+, qttools
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

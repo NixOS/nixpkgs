@@ -12,16 +12,20 @@ rec {
     f: loc: config:
     f loc config
     ++ concatLists (
-      mapAttrsToList (
-        k: v:
-        flattenMapServicesConfigToList f (
-          loc
-          ++ [
-            "services"
-            k
-          ]
-        ) v
-      ) config.services
+      mapAttrsToList
+        (
+          k: v:
+          flattenMapServicesConfigToList f
+            (
+              loc
+              ++ [
+                "services"
+                k
+              ]
+            )
+            v
+        )
+        config.services
     );
 
   getWarnings = flattenMapServicesConfigToList (
@@ -30,10 +34,12 @@ rec {
 
   getAssertions = flattenMapServicesConfigToList (
     loc: config:
-    map (ass: {
-      message = "in ${showOption loc}: ${ass.message}";
-      assertion = ass.assertion;
-    }) config.assertions
+      map
+        (ass: {
+          message = "in ${showOption loc}: ${ass.message}";
+          assertion = ass.assertion;
+        })
+        config.assertions
   );
 
   /**
@@ -56,10 +62,10 @@ rec {
     `serviceSubmodule`: a Module System option type which is a `submodule` with the portable modules and this function's inputs loaded into it.
   */
   configure =
-    {
-      serviceManagerPkgs,
-      extraRootModules ? [ ],
-      extraRootSpecialArgs ? { },
+    { serviceManagerPkgs
+    , extraRootModules ? [ ]
+    , extraRootSpecialArgs ? { }
+    ,
     }:
     let
       modules = [

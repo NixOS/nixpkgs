@@ -1,9 +1,10 @@
-{
-  makeSetupHook,
-  waf,
+{ makeSetupHook
+, waf
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "waf-setup-hook";
 
   substitutions = {

@@ -1,13 +1,13 @@
-{
-  lib,
-  splicePackages,
-  nixDependencies,
-  pkgs,
-  maintainers,
-  teams,
-  otherSplices,
-  version,
-  src,
+{ lib
+, splicePackages
+, nixDependencies
+, pkgs
+, maintainers
+, teams
+, otherSplices
+, version
+, src
+,
 }:
 let
   officialRelease = true;

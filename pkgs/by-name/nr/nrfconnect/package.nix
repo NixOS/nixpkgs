@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  segger-jlink-headless,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, segger-jlink-headless
+,
 }:
 
 let

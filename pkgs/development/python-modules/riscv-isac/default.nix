@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  click,
-  colorlog,
-  gitpython,
-  pluggy,
-  pyelftools,
-  pytablewriter,
-  pytestCheckHook,
-  pyyaml,
-  ruamel-yaml,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, colorlog
+, gitpython
+, pluggy
+, pyelftools
+, pytablewriter
+, pytestCheckHook
+, pyyaml
+, ruamel-yaml
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

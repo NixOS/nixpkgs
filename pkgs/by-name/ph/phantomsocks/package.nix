@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  libpcap,
-  # Can't be build with both pcap and rawsocket tags
-  withPcap ? (!stdenv.hostPlatform.isLinux && !withRawsocket),
-  withRawsocket ? (stdenv.hostPlatform.isLinux && !withPcap),
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, libpcap
+, # Can't be build with both pcap and rawsocket tags
+  withPcap ? (!stdenv.hostPlatform.isLinux && !withRawsocket)
+, withRawsocket ? (stdenv.hostPlatform.isLinux && !withPcap)
+,
 }:
 
 buildGoModule {

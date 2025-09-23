@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cpio,
-  xar,
-  undmg,
-  libtapi,
+{ lib
+, stdenv
+, fetchurl
+, cpio
+, xar
+, undmg
+, libtapi
+,
 }:
 
 stdenv.mkDerivation rec {

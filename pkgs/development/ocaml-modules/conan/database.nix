@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  conan,
-  alcotest,
-  crowbar,
-  fmt,
-  rresult,
+{ buildDunePackage
+, conan
+, alcotest
+, crowbar
+, fmt
+, rresult
+,
 }:
 
 buildDunePackage {

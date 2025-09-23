@@ -1,7 +1,7 @@
-{
-  buildFishPlugin,
-  fetchFromGitHub,
-  lib,
+{ buildFishPlugin
+, fetchFromGitHub
+, lib
+,
 }:
 buildFishPlugin rec {
   pname = "nvm";

@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  gtk3,
-  getent,
-  papirus-icon-theme,
-  flavor ? "mocha",
-  accent ? "blue",
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, fetchurl
+, gtk3
+, getent
+, papirus-icon-theme
+, flavor ? "mocha"
+, accent ? "blue"
+,
 }:
 let
   validAccents = [
@@ -48,48 +48,48 @@ lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkL
   validFlavors
   [ flavor ]
   stdenvNoCC.mkDerivation
-  {
-    inherit pname;
-    version = "0-unstable-2024-08-06";
+{
+  inherit pname;
+  version = "0-unstable-2024-08-06";
 
-    src = fetchFromGitHub {
-      owner = "catppuccin";
-      repo = "papirus-folders";
-      rev = "f83671d17ea67e335b34f8028a7e6d78bca735d7";
-      sha256 = "sha256-FiZdwzsaMhS+5EYTcVU1LVax2H1FidQw97xZklNH2R4=";
-    };
+  src = fetchFromGitHub {
+    owner = "catppuccin";
+    repo = "papirus-folders";
+    rev = "f83671d17ea67e335b34f8028a7e6d78bca735d7";
+    sha256 = "sha256-FiZdwzsaMhS+5EYTcVU1LVax2H1FidQw97xZklNH2R4=";
+  };
 
-    # This takes a horribly long time, and there's nothing to fixup in
-    # this package.
-    dontFixup = true;
-    nativeBuildInputs = [
-      gtk3
-      getent
-    ];
+  # This takes a horribly long time, and there's nothing to fixup in
+  # this package.
+  dontFixup = true;
+  nativeBuildInputs = [
+    gtk3
+    getent
+  ];
 
-    postPatch = ''
-      cp ${papirus-folders-script} ./papirus-folders
-      patchShebangs ./papirus-folders
-    '';
+  postPatch = ''
+    cp ${papirus-folders-script} ./papirus-folders
+    patchShebangs ./papirus-folders
+  '';
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/share/icons
-      cp -r --no-preserve=mode ${papirus-icon-theme}/share/icons/Papirus* $out/share/icons
-      cp -r src/* $out/share/icons/Papirus
-      for theme in $out/share/icons/*; do
-          USER_HOME=$HOME DISABLE_UPDATE_ICON_CACHE=1 \
-            ./papirus-folders -t $theme -o -C cat-${flavor}-${accent}
-          gtk-update-icon-cache --force $theme
-      done
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/share/icons
+    cp -r --no-preserve=mode ${papirus-icon-theme}/share/icons/Papirus* $out/share/icons
+    cp -r src/* $out/share/icons/Papirus
+    for theme in $out/share/icons/*; do
+        USER_HOME=$HOME DISABLE_UPDATE_ICON_CACHE=1 \
+          ./papirus-folders -t $theme -o -C cat-${flavor}-${accent}
+        gtk-update-icon-cache --force $theme
+    done
+    runHook postInstall
+  '';
 
-    meta = with lib; {
-      description = "Soothing pastel theme for Papirus Icon Theme folders";
-      homepage = "https://github.com/catppuccin/papirus-folders";
-      license = licenses.mit;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ rubyowo ];
-    };
-  }
+  meta = with lib; {
+    description = "Soothing pastel theme for Papirus Icon Theme folders";
+    homepage = "https://github.com/catppuccin/papirus-folders";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rubyowo ];
+  };
+}

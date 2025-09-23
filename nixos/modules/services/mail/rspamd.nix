@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  pkgs,
-  lib,
-  ...
+{ config
+, options
+, pkgs
+, lib
+, ...
 }:
 
 with lib;
@@ -111,25 +110,27 @@ let
           ];
           apply =
             value:
-            map (
-              each:
-              if (isString each) then
-                if (isUnixSocket each) then
-                  {
-                    socket = each;
-                    owner = cfg.user;
-                    group = cfg.group;
-                    mode = "0644";
-                    rawEntry = "${each}";
-                  }
+            map
+              (
+                each:
+                if (isString each) then
+                  if (isUnixSocket each) then
+                    {
+                      socket = each;
+                      owner = cfg.user;
+                      group = cfg.group;
+                      mode = "0644";
+                      rawEntry = "${each}";
+                    }
+                  else
+                    {
+                      socket = each;
+                      rawEntry = "${each}";
+                    }
                 else
-                  {
-                    socket = each;
-                    rawEntry = "${each}";
-                  }
-              else
-                each
-            ) value;
+                  each
+              )
+              value;
         };
         count = mkOption {
           type = types.nullOr types.int;
@@ -231,14 +232,18 @@ let
 
   filterFiles = files: filterAttrs (n: v: v.enable) files;
   rspamdDir = pkgs.linkFarm "etc-rspamd-dir" (
-    (mapAttrsToList (name: file: {
-      name = "local.d/${name}";
-      path = file.source;
-    }) (filterFiles cfg.locals))
-    ++ (mapAttrsToList (name: file: {
-      name = "override.d/${name}";
-      path = file.source;
-    }) (filterFiles cfg.overrides))
+    (mapAttrsToList
+      (name: file: {
+        name = "local.d/${name}";
+        path = file.source;
+      })
+      (filterFiles cfg.locals))
+    ++ (mapAttrsToList
+      (name: file: {
+        name = "override.d/${name}";
+        path = file.source;
+      })
+      (filterFiles cfg.overrides))
     ++ (optional (cfg.localLuaRules != null) {
       name = "rspamd.local.lua";
       path = cfg.localLuaRules;
@@ -287,12 +292,14 @@ let
     };
 
   configOverrides =
-    (mapAttrs' (
-      n: v:
-      nameValuePair "worker-${if n == "rspamd_proxy" then "proxy" else n}.inc" {
-        text = v.extraConfig;
-      }
-    ) (filterAttrs (n: v: v.extraConfig != "") cfg.workers))
+    (mapAttrs'
+      (
+        n: v:
+          nameValuePair "worker-${if n == "rspamd_proxy" then "proxy" else n}.inc" {
+            text = v.extraConfig;
+          }
+      )
+      (filterAttrs (n: v: v.extraConfig != "") cfg.workers))
     // (lib.optionalAttrs (cfg.extraConfig != "") {
       "extra-config.inc".text = cfg.extraConfig;
     });

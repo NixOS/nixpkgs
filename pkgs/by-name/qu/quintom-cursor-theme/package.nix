@@ -1,7 +1,7 @@
-{
-  stdenvNoCC,
-  fetchFromGitLab,
-  lib,
+{ stdenvNoCC
+, fetchFromGitLab
+, lib
+,
 }:
 
 stdenvNoCC.mkDerivation {

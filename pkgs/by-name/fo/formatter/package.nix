@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  vala,
-  pkg-config,
-  pantheon,
-  python3,
-  replaceVars,
-  glib,
-  gtk3,
-  dosfstools,
-  e2fsprogs,
-  exfat,
-  hfsprogs,
-  ntfs3g,
-  libgee,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, vala
+, pkg-config
+, pantheon
+, python3
+, replaceVars
+, glib
+, gtk3
+, dosfstools
+, e2fsprogs
+, exfat
+, hfsprogs
+, ntfs3g
+, libgee
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

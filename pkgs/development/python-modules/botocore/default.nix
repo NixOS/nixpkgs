@@ -1,20 +1,17 @@
-{
-  lib,
-  awscrt,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jmespath,
-  python-dateutil,
-  urllib3,
-
-  # tests
-  jsonschema,
-  pytestCheckHook,
+{ lib
+, awscrt
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  jmespath
+, python-dateutil
+, urllib3
+, # tests
+  jsonschema
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

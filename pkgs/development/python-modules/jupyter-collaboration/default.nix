@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  jupyter-collaboration-ui,
-  jupyter-docprovider,
-  jupyter-server-ydoc,
-  jupyterlab,
-
-  # tests
-  dirty-equals,
-  httpx-ws,
-  pytest-jupyter,
-  pytest-timeout,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  jupyter-collaboration-ui
+, jupyter-docprovider
+, jupyter-server-ydoc
+, jupyterlab
+, # tests
+  dirty-equals
+, httpx-ws
+, pytest-jupyter
+, pytest-timeout
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

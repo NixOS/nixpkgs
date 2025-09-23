@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libsodium,
-  ncurses,
-  libopus,
-  libvpx,
-  check,
-  libconfig,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libsodium
+, ncurses
+, libopus
+, libvpx
+, check
+, libconfig
+, pkg-config
+,
 }:
 
 let

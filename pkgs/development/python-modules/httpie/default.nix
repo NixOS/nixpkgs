@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  charset-normalizer,
-  defusedxml,
-  fetchFromGitHub,
-  installShellFiles,
-  multidict,
-  pandoc,
-  pip,
-  pygments,
-  pytest-httpbin,
-  pytest-lazy-fixture,
-  pytest-mock,
-  pytestCheckHook,
-  requests-toolbelt,
-  requests,
-  responses,
-  rich,
-  setuptools,
-  werkzeug,
+{ lib
+, stdenv
+, buildPythonPackage
+, charset-normalizer
+, defusedxml
+, fetchFromGitHub
+, installShellFiles
+, multidict
+, pandoc
+, pip
+, pygments
+, pytest-httpbin
+, pytest-lazy-fixture
+, pytest-mock
+, pytestCheckHook
+, requests-toolbelt
+, requests
+, responses
+, rich
+, setuptools
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

@@ -1,25 +1,25 @@
-{
-  alsa-lib,
-  autoPatchelfHook,
-  copyDesktopItems,
-  fetchurl,
-  fetchzip,
-  lib,
-  libGL,
-  libXScrnSaver,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
-  libpulseaudio,
-  libudev0-shim,
-  makeDesktopItem,
-  nix-update-script,
-  stdenv,
-  vulkan-loader,
-  pname ? "daggerfall-unity",
-  includeUnfree ? false,
+{ alsa-lib
+, autoPatchelfHook
+, copyDesktopItems
+, fetchurl
+, fetchzip
+, lib
+, libGL
+, libXScrnSaver
+, libXcursor
+, libXi
+, libXinerama
+, libXrandr
+, libXxf86vm
+, libpulseaudio
+, libudev0-shim
+, makeDesktopItem
+, nix-update-script
+, stdenv
+, vulkan-loader
+, pname ? "daggerfall-unity"
+, includeUnfree ? false
+,
 }:
 let
   docFiles = [

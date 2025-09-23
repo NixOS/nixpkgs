@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  pandoc,
-  typst,
-  esbuild,
-  deno,
-  fetchurl,
-  dart-sass,
-  rWrapper,
-  rPackages,
-  extraRPackages ? [ ],
-  makeWrapper,
-  runCommand,
-  python3,
-  quarto,
-  extraPythonPackages ? ps: [ ],
-  sysctl,
-  which,
+{ stdenv
+, lib
+, pandoc
+, typst
+, esbuild
+, deno
+, fetchurl
+, dart-sass
+, rWrapper
+, rPackages
+, extraRPackages ? [ ]
+, makeWrapper
+, runCommand
+, python3
+, quarto
+, extraPythonPackages ? ps: [ ]
+, sysctl
+, which
+,
 }:
 
 let
@@ -29,12 +29,12 @@ let
 
   pythonWithPackages = python3.withPackages (
     ps:
-    with ps;
-    [
-      jupyter
-      ipython
-    ]
-    ++ (extraPythonPackages ps)
+      with ps;
+      [
+        jupyter
+        ipython
+      ]
+      ++ (extraPythonPackages ps)
   );
 in
 stdenv.mkDerivation (final: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mecab-nodic,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, mecab-nodic
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

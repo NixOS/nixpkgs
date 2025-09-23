@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  defcon,
-  fontmath,
-  unicodedata2,
-  fs,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, defcon
+, fontmath
+, unicodedata2
+, fs
+,
 }:
 
 buildPythonPackage rec {

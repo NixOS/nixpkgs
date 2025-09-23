@@ -1,7 +1,6 @@
-{
-  pkgs,
-  latestKernel ? false,
-  ...
+{ pkgs
+, latestKernel ? false
+, ...
 }:
 
 {

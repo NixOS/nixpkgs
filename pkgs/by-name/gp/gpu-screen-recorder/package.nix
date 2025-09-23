@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  makeWrapper,
-  meson,
-  ninja,
-  addDriverRunpath,
-  pkg-config,
-  libXcomposite,
-  libpulseaudio,
-  dbus,
-  ffmpeg,
-  wayland,
-  wayland-scanner,
-  vulkan-headers,
-  pipewire,
-  libdrm,
-  libva,
-  libglvnd,
-  libXdamage,
-  libXi,
-  libXrandr,
-  libXfixes,
-  wrapperDir ? "/run/wrappers/bin",
-  gitUpdater,
+{ stdenv
+, lib
+, fetchgit
+, makeWrapper
+, meson
+, ninja
+, addDriverRunpath
+, pkg-config
+, libXcomposite
+, libpulseaudio
+, dbus
+, ffmpeg
+, wayland
+, wayland-scanner
+, vulkan-headers
+, pipewire
+, libdrm
+, libva
+, libglvnd
+, libXdamage
+, libXi
+, libXrandr
+, libXfixes
+, wrapperDir ? "/run/wrappers/bin"
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

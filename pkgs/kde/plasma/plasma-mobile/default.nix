@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtsensors,
-  qtwayland,
-  plasma-workspace,
+{ mkKdeDerivation
+, pkg-config
+, qtsensors
+, qtwayland
+, plasma-workspace
+,
 }:
 mkKdeDerivation {
   pname = "plasma-mobile";

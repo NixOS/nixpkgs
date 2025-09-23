@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  jq,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, jq
+,
 }:
 
 buildNpmPackage (finalAttrs: {

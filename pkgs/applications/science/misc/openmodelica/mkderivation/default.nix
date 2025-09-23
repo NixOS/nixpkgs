@@ -1,16 +1,16 @@
 # mkOpenModelicaDerivation is an mkDerivation function for packages
 # from OpenModelica suite.
 
-{
-  stdenv,
-  lib,
-  fetchgit,
-  autoconf,
-  automake,
-  libtool,
-  cmake,
-  autoreconfHook,
-  symlinkJoin,
+{ stdenv
+, lib
+, fetchgit
+, autoconf
+, automake
+, libtool
+, cmake
+, autoreconfHook
+, symlinkJoin
+,
 }:
 pkg:
 let
@@ -100,7 +100,7 @@ let
 in
 stdenv.mkDerivation (
   pkg
-  // {
+    // {
     inherit
       omtarget
       postPatch

@@ -1,43 +1,43 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  fetchurl,
-  autoconf,
-  zlibSupport ? true,
-  zlib,
-  bzip2,
-  pkg-config,
-  lndir,
-  libffi,
-  sqlite,
-  openssl,
-  ncurses,
-  python,
-  expat,
-  tcl,
-  tk,
-  tclPackages,
-  libX11,
-  gdbm,
-  db,
-  xz,
-  python-setup-hook,
-  optimizationLevel ? "jit",
-  boehmgc,
-  # For the Python package set
-  hash,
-  self,
-  packageOverrides ? (self: super: { }),
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsHostHost,
-  pkgsTargetTarget,
-  sourceVersion,
-  pythonVersion,
-  passthruFun,
-  pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}",
+{ lib
+, stdenv
+, replaceVars
+, fetchurl
+, autoconf
+, zlibSupport ? true
+, zlib
+, bzip2
+, pkg-config
+, lndir
+, libffi
+, sqlite
+, openssl
+, ncurses
+, python
+, expat
+, tcl
+, tk
+, tclPackages
+, libX11
+, gdbm
+, db
+, xz
+, python-setup-hook
+, optimizationLevel ? "jit"
+, boehmgc
+, # For the Python package set
+  hash
+, self
+, packageOverrides ? (self: super: { })
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, sourceVersion
+, pythonVersion
+, passthruFun
+, pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
+,
 }:
 
 assert zlibSupport -> zlib != null;
@@ -110,26 +110,27 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++
-    lib.optionals
-      (lib.any (l: l == optimizationLevel) [
-        "0"
-        "1"
-        "2"
-        "3"
-      ])
-      [
-        boehmgc
-      ];
+  lib.optionals
+    (lib.any (l: l == optimizationLevel) [
+      "0"
+      "1"
+      "2"
+      "3"
+    ])
+    [
+      boehmgc
+    ];
 
   # Remove bootstrap python from closure
   dontPatchShebangs = true;
   disallowedReferences = [ python ];
 
   env =
-    lib.optionalAttrs stdenv.cc.isClang {
-      # fix compiler error in curses cffi module, where char* != const char*
-      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
-    }
+    lib.optionalAttrs stdenv.cc.isClang
+      {
+        # fix compiler error in curses cffi module, where char* != const char*
+        NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+      }
     // {
       C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
       LIBRARY_PATH = lib.makeLibraryPath buildInputs;

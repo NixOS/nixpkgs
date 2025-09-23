@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  copier,
-  corallium,
-  fetchFromGitHub,
-  lib,
-  poetry-core,
-  poetry-dynamic-versioning,
+{ buildPythonPackage
+, copier
+, corallium
+, fetchFromGitHub
+, lib
+, poetry-core
+, poetry-dynamic-versioning
+,
 }:
 buildPythonPackage rec {
   pname = "copier-template-tester";

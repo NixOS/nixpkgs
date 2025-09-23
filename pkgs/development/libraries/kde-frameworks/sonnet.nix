@@ -1,10 +1,10 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  aspell,
-  hunspell,
-  qtbase,
-  qttools,
+{ mkDerivation
+, extra-cmake-modules
+, aspell
+, hunspell
+, qtbase
+, qttools
+,
 }:
 
 mkDerivation {

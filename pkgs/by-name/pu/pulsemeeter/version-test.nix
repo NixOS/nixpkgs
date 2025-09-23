@@ -1,6 +1,6 @@
-{
-  pkgs,
-  version,
+{ pkgs
+, version
+,
 }:
 pkgs.testers.runNixOSTest {
   name = "pulsemeeter-version";

@@ -1,13 +1,13 @@
-{
-  callPackage,
-  stdenv,
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  ruby,
-  writeText,
-  licenseAccepted ? false,
-  meta,
+{ callPackage
+, stdenv
+, stdenvNoCC
+, lib
+, fetchurl
+, ruby
+, writeText
+, licenseAccepted ? false
+, meta
+,
 }:
 
 let
@@ -24,57 +24,62 @@ let
     repo: key: versions:
     lib.unique (map (parseVersion repo key) versions);
 in
-{
-  repoJson ? ./repo.json,
-  repoXmls ? null,
-  repo ? (
+{ repoJson ? ./repo.json
+, repoXmls ? null
+, repo ? (
     # Reads the repo JSON. If repoXmls is provided, will build a repo JSON into the Nix store.
     if repoXmls != null then
       let
         # Uses update.rb to create a repo spec.
         mkRepoJson =
-          {
-            packages ? [ ],
-            images ? [ ],
-            addons ? [ ],
+          { packages ? [ ]
+          , images ? [ ]
+          , addons ? [ ]
+          ,
           }:
-          let
-            mkRepoRuby = (
-              ruby.withPackages (
-                pkgs: with pkgs; [
-                  slop
-                  curb
-                  nokogiri
-                ]
-              )
-            );
-            mkRepoRubyArguments = lib.lists.flatten [
-              (map (package: [
-                "--packages"
-                "${package}"
-              ]) packages)
-              (map (image: [
-                "--images"
-                "${image}"
-              ]) images)
-              (map (addon: [
-                "--addons"
-                "${addon}"
-              ]) addons)
-            ];
-          in
-          stdenvNoCC.mkDerivation {
-            name = "androidenv-repo-json";
-            buildInputs = [ mkRepoRuby ];
-            preferLocalBuild = true;
-            unpackPhase = "true";
-            buildPhase = ''
-              env ruby -e 'load "${./update.rb}"' -- ${lib.escapeShellArgs mkRepoRubyArguments} --input /dev/null --output repo.json
-            '';
-            installPhase = ''
-              mv repo.json $out
-            '';
-          };
+            let
+              mkRepoRuby = (
+                ruby.withPackages (
+                  pkgs: with pkgs; [
+                    slop
+                    curb
+                    nokogiri
+                  ]
+                )
+              );
+              mkRepoRubyArguments = lib.lists.flatten [
+                (map
+                  (package: [
+                    "--packages"
+                    "${package}"
+                  ])
+                  packages)
+                (map
+                  (image: [
+                    "--images"
+                    "${image}"
+                  ])
+                  images)
+                (map
+                  (addon: [
+                    "--addons"
+                    "${addon}"
+                  ])
+                  addons)
+              ];
+            in
+            stdenvNoCC.mkDerivation {
+              name = "androidenv-repo-json";
+              buildInputs = [ mkRepoRuby ];
+              preferLocalBuild = true;
+              unpackPhase = "true";
+              buildPhase = ''
+                env ruby -e 'load "${./update.rb}"' -- ${lib.escapeShellArgs mkRepoRubyArguments} --input /dev/null --output repo.json
+              '';
+              installPhase = ''
+                mv repo.json $out
+              '';
+            };
         repoXmlSpec = {
           packages = repoXmls.packages or [ ];
           images = repoXmls.images or [ ];
@@ -84,60 +89,60 @@ in
       lib.importJSON "${mkRepoJson repoXmlSpec}"
     else
       lib.importJSON repoJson
-  ),
-  cmdLineToolsVersion ? "latest",
-  toolsVersion ? "latest",
-  platformToolsVersion ? "latest",
-  buildToolsVersions ? [ "latest" ],
-  includeEmulator ? false,
-  emulatorVersion ? "latest",
-  minPlatformVersion ? null,
-  maxPlatformVersion ? "latest",
-  numLatestPlatformVersions ? 1,
-  platformVersions ?
-    if minPlatformVersion != null && maxPlatformVersion != null then
-      let
-        minPlatformVersionInt = coerceInt (parseVersion repo "platforms" minPlatformVersion);
-        maxPlatformVersionInt = coerceInt (parseVersion repo "platforms" maxPlatformVersion);
-      in
-      lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
-        lib.max minPlatformVersionInt maxPlatformVersionInt
-      )
-    else
-      let
-        minPlatformVersionInt =
-          if minPlatformVersion == null then
-            1
-          else
-            coerceInt (parseVersion repo "platforms" minPlatformVersion);
-        latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceInt repo.latest.platforms);
-        firstPlatformVersionInt = lib.max minPlatformVersionInt (
-          latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
-        );
-      in
-      lib.range firstPlatformVersionInt latestPlatformVersionInt,
-  includeSources ? false,
-  includeSystemImages ? false,
-  systemImageTypes ? [
+  )
+, cmdLineToolsVersion ? "latest"
+, toolsVersion ? "latest"
+, platformToolsVersion ? "latest"
+, buildToolsVersions ? [ "latest" ]
+, includeEmulator ? false
+, emulatorVersion ? "latest"
+, minPlatformVersion ? null
+, maxPlatformVersion ? "latest"
+, numLatestPlatformVersions ? 1
+, platformVersions ? if minPlatformVersion != null && maxPlatformVersion != null then
+    let
+      minPlatformVersionInt = coerceInt (parseVersion repo "platforms" minPlatformVersion);
+      maxPlatformVersionInt = coerceInt (parseVersion repo "platforms" maxPlatformVersion);
+    in
+    lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
+      lib.max minPlatformVersionInt maxPlatformVersionInt
+    )
+  else
+    let
+      minPlatformVersionInt =
+        if minPlatformVersion == null then
+          1
+        else
+          coerceInt (parseVersion repo "platforms" minPlatformVersion);
+      latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceInt repo.latest.platforms);
+      firstPlatformVersionInt = lib.max minPlatformVersionInt (
+        latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
+      );
+    in
+    lib.range firstPlatformVersionInt latestPlatformVersionInt
+, includeSources ? false
+, includeSystemImages ? false
+, systemImageTypes ? [
     "google_apis"
     "google_apis_playstore"
-  ],
-  abiVersions ? [
+  ]
+, abiVersions ? [
     "x86"
     "x86_64"
     "armeabi-v7a"
     "arm64-v8a"
-  ],
-  # cmake has precompiles on x86_64 and Darwin platforms. Default to true there for compatibility.
-  includeCmake ? stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin,
-  cmakeVersions ? [ "latest" ],
-  includeNDK ? false,
-  ndkVersion ? "latest",
-  ndkVersions ? [ ndkVersion ],
-  useGoogleAPIs ? false,
-  useGoogleTVAddOns ? false,
-  includeExtras ? [ ],
-  extraLicenses ? [ ],
+  ]
+, # cmake has precompiles on x86_64 and Darwin platforms. Default to true there for compatibility.
+  includeCmake ? stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin
+, cmakeVersions ? [ "latest" ]
+, includeNDK ? false
+, ndkVersion ? "latest"
+, ndkVersions ? [ ndkVersion ]
+, useGoogleAPIs ? false
+, useGoogleTVAddOns ? false
+, includeExtras ? [ ]
+, extraLicenses ? [ ]
+,
 }:
 
 let
@@ -151,8 +156,7 @@ let
       x86_64-darwin = "macosx";
       aarch64-linux = "linux";
       aarch64-darwin = "macosx";
-    }
-    .${stdenv.hostPlatform.system} or "all";
+    }.${stdenv.hostPlatform.system} or "all";
 
   # Determine the Android arch identifier from Nix's system identifier
   arch =
@@ -161,51 +165,56 @@ let
       x86_64-darwin = "x64";
       aarch64-linux = "aarch64";
       aarch64-darwin = "aarch64";
-    }
-    .${stdenv.hostPlatform.system} or "all";
+    }.${stdenv.hostPlatform.system} or "all";
 
   # Converts all 'archives' keys in a repo spec to fetchurl calls.
   fetchArchives =
     attrSet:
-    lib.attrsets.mapAttrsRecursive (
-      path: value:
-      if (builtins.elemAt path (builtins.length path - 1)) == "archives" then
-        let
-          validArchives = builtins.filter (
-            archive:
-            let
-              isTargetOs =
-                if builtins.hasAttr "os" archive then archive.os == os || archive.os == "all" else true;
-              isTargetArch =
-                if builtins.hasAttr "arch" archive then archive.arch == arch || archive.arch == "all" else true;
-            in
-            isTargetOs && isTargetArch
-          ) value;
-          packageInfo = lib.attrByPath (lib.sublist 0 (builtins.length path - 1) path) null attrSet;
-        in
-        lib.optionals (builtins.length validArchives > 0) (
-          lib.last (
-            map (
-              archive:
-              (fetchurl {
-                inherit (archive) url sha1;
-                inherit meta;
-                passthru = {
-                  info = packageInfo;
-                };
-              }).overrideAttrs
-                (prev: {
-                  # fetchurl won't generate the correct filename if we specify pname and version,
-                  # and we still want the version attribute to show up in search, so specify these in an override
-                  pname = packageInfo.name;
-                  version = packageInfo.revision;
-                })
-            ) validArchives
+    lib.attrsets.mapAttrsRecursive
+      (
+        path: value:
+        if (builtins.elemAt path (builtins.length path - 1)) == "archives" then
+          let
+            validArchives = builtins.filter
+              (
+                archive:
+                let
+                  isTargetOs =
+                    if builtins.hasAttr "os" archive then archive.os == os || archive.os == "all" else true;
+                  isTargetArch =
+                    if builtins.hasAttr "arch" archive then archive.arch == arch || archive.arch == "all" else true;
+                in
+                isTargetOs && isTargetArch
+              )
+              value;
+            packageInfo = lib.attrByPath (lib.sublist 0 (builtins.length path - 1) path) null attrSet;
+          in
+          lib.optionals (builtins.length validArchives > 0) (
+            lib.last (
+              map
+                (
+                  archive:
+                  (fetchurl {
+                    inherit (archive) url sha1;
+                    inherit meta;
+                    passthru = {
+                      info = packageInfo;
+                    };
+                  }).overrideAttrs
+                    (prev: {
+                      # fetchurl won't generate the correct filename if we specify pname and version,
+                      # and we still want the version attribute to show up in search, so specify these in an override
+                      pname = packageInfo.name;
+                      version = packageInfo.revision;
+                    })
+                )
+                validArchives
+            )
           )
-        )
-      else
-        value
-    ) attrSet;
+        else
+          value
+      )
+      attrSet;
 
   # Converts the repo attrset into fetch calls.
   allArchives = {
@@ -219,13 +228,15 @@ let
   # and add recurseIntoAttrs to all of them.
   allPackages =
     let
-      liftedArchives = lib.attrsets.mapAttrsRecursiveCond (value: !(builtins.hasAttr "archives" value)) (
-        path: value:
-        if (value.archives or null) != null && (value.archives or [ ]) != [ ] then
-          lib.dontRecurseIntoAttrs value.archives
-        else
-          null
-      ) allArchives;
+      liftedArchives = lib.attrsets.mapAttrsRecursiveCond (value: !(builtins.hasAttr "archives" value))
+        (
+          path: value:
+            if (value.archives or null) != null && (value.archives or [ ]) != [ ] then
+              lib.dontRecurseIntoAttrs value.archives
+            else
+              null
+        )
+        allArchives;
 
       # Creates a version key from a name.
       # Converts things like 'extras;google;auto' to 'extras-google-auto'
@@ -239,10 +250,10 @@ let
 
       recurse = lib.mapAttrs' (
         name: value:
-        if builtins.isAttrs value && (value.recurseForDerivations or true) then
-          lib.nameValuePair (toVersionKey name) (lib.recurseIntoAttrs (recurse value))
-        else
-          lib.nameValuePair (toVersionKey name) value
+          if builtins.isAttrs value && (value.recurseForDerivations or true) then
+            lib.nameValuePair (toVersionKey name) (lib.recurseIntoAttrs (recurse value))
+          else
+            lib.nameValuePair (toVersionKey name) value
       );
     in
     lib.recurseIntoAttrs (recurse liftedArchives);
@@ -255,10 +266,12 @@ let
   mkLicenseTexts =
     licenseNames:
     lib.lists.flatten (
-      builtins.map (
-        licenseName:
-        builtins.map (licenseText: "--- ${licenseName} ---\n${licenseText}") (mkLicenses licenseName)
-      ) licenseNames
+      builtins.map
+        (
+          licenseName:
+          builtins.map (licenseText: "--- ${licenseName} ---\n${licenseText}") (mkLicenses licenseName)
+        )
+        licenseNames
     );
 
   # Converts a license name to a list of license hashes.
@@ -296,26 +309,26 @@ let
   # Returns true if we should link the specified plugins.
   shouldLink =
     check: packages:
-    assert builtins.isList packages;
-    if check == true then
-      true
-    else if check == false then
-      false
-    else if check == "if-supported" then
-      let
-        hasSrc =
-          package: package.src != null && (builtins.isList package.src -> builtins.length package.src > 0);
-      in
-      packages != [ ] && lib.all hasSrc packages
-    else
-      throw "Invalid argument ${toString check}; use true, false, or if-supported";
+      assert builtins.isList packages;
+      if check == true then
+        true
+      else if check == false then
+        false
+      else if check == "if-supported" then
+        let
+          hasSrc =
+            package: package.src != null && (builtins.isList package.src -> builtins.length package.src > 0);
+        in
+        packages != [ ] && lib.all hasSrc packages
+      else
+        throw "Invalid argument ${toString check}; use true, false, or if-supported";
 
   # Function that automatically links all plugins for which multiple versions can coexist
   linkPlugins =
-    {
-      name,
-      plugins,
-      check ? true,
+    { name
+    , plugins
+    , check ? true
+    ,
     }:
     lib.optionalString (shouldLink check plugins) ''
       mkdir -p ${name}
@@ -326,11 +339,11 @@ let
 
   # Function that automatically links all NDK plugins.
   linkNdkPlugins =
-    {
-      name,
-      plugins,
-      rootName ? name,
-      check ? true,
+    { name
+    , plugins
+    , rootName ? name
+    , check ? true
+    ,
     }:
     lib.optionalString (shouldLink check plugins) ''
       mkdir -p ${rootName}
@@ -341,10 +354,10 @@ let
 
   # Function that automatically links the default NDK plugin.
   linkNdkPlugin =
-    {
-      name,
-      plugin,
-      check,
+    { name
+    , plugin
+    , check
+    ,
     }:
     lib.optionalString (shouldLink check [ plugin ]) ''
       ln -s ${plugin}/libexec/android-sdk/${name} ${name}
@@ -352,10 +365,10 @@ let
 
   # Function that automatically links a plugin for which only one version exists
   linkPlugin =
-    {
-      name,
-      plugin,
-      check ? true,
+    { name
+    , plugin
+    , check ? true
+    ,
     }:
     lib.optionalString (shouldLink check [ plugin ]) ''
       ln -s ${plugin}/libexec/android-sdk/${name} ${name}
@@ -375,10 +388,10 @@ let
 
   # Links all plugins related to a requested platform
   linkPlatformPlugins =
-    {
-      name,
-      plugins,
-      check,
+    { name
+    , plugins
+    , check
+    ,
     }:
     lib.optionalString (shouldLink check plugins) ''
       mkdir -p ${name}
@@ -401,12 +414,11 @@ lib.recurseIntoAttrs rec {
   };
 
   deployAndroidPackage = (
-    {
-      package,
-      buildInputs ? [ ],
-      patchInstructions ? "",
-      meta ? { },
-      ...
+    { package
+    , buildInputs ? [ ]
+    , patchInstructions ? ""
+    , meta ? { }
+    , ...
     }@args:
     let
       extraParams = removeAttrs args [
@@ -465,26 +477,28 @@ lib.recurseIntoAttrs rec {
     '';
   };
 
-  build-tools = map (
-    version:
-    callPackage ./build-tools.nix {
-      inherit
-        deployAndroidPackage
-        os
-        arch
-        meta
-        ;
-      package = checkVersion allArchives.packages "build-tools" version;
+  build-tools = map
+    (
+      version:
+      callPackage ./build-tools.nix {
+        inherit
+          deployAndroidPackage
+          os
+          arch
+          meta
+          ;
+        package = checkVersion allArchives.packages "build-tools" version;
 
-      postInstall = ''
-        ${linkPlugin {
-          name = "tools";
-          plugin = tools;
-          check = toolsVersion != null;
-        }}
-      '';
-    }
-  ) (parseVersions repo "build-tools" buildToolsVersions);
+        postInstall = ''
+          ${linkPlugin {
+            name = "tools";
+            plugin = tools;
+            check = toolsVersion != null;
+          }}
+        '';
+      }
+    )
+    (parseVersions repo "build-tools" buildToolsVersions);
 
   emulator = callPackage ./emulator.nix {
     inherit
@@ -507,74 +521,88 @@ lib.recurseIntoAttrs rec {
 
   platformVersions = platformVersions';
 
-  platforms = map (
-    version:
-    deployAndroidPackage {
-      package = checkVersion allArchives.packages "platforms" version;
-    }
-  ) platformVersions';
+  platforms = map
+    (
+      version:
+      deployAndroidPackage {
+        package = checkVersion allArchives.packages "platforms" version;
+      }
+    )
+    platformVersions';
 
-  sources = map (
-    version:
-    deployAndroidPackage {
-      package = checkVersion allArchives.packages "sources" version;
-    }
-  ) platformVersions';
+  sources = map
+    (
+      version:
+      deployAndroidPackage {
+        package = checkVersion allArchives.packages "sources" version;
+      }
+    )
+    platformVersions';
 
   system-images = lib.flatten (
-    map (
-      apiVersion:
-      map (
-        type:
-        # Deploy all system images with the same  systemImageType in one derivation to avoid the `null` problem below
-        # with avdmanager when trying to create an avd!
-        #
-        # ```
-        # $ yes "" | avdmanager create avd --force --name testAVD --package 'system-images;android-33;google_apis;x86_64'
-        # Error: Package path is not valid. Valid system image paths are:
-        # null
-        # ```
-        let
-          availablePackages =
-            map (abiVersion: allArchives.system-images.${toString apiVersion}.${type}.${abiVersion})
-              (
-                builtins.filter (
-                  abiVersion: lib.hasAttrByPath [ (toString apiVersion) type abiVersion ] allArchives.system-images
-                ) abiVersions
-              );
+    map
+      (
+        apiVersion:
+        map
+          (
+            type:
+            # Deploy all system images with the same  systemImageType in one derivation to avoid the `null` problem below
+            # with avdmanager when trying to create an avd!
+            #
+            # ```
+            # $ yes "" | avdmanager create avd --force --name testAVD --package 'system-images;android-33;google_apis;x86_64'
+            # Error: Package path is not valid. Valid system image paths are:
+            # null
+            # ```
+            let
+              availablePackages =
+                map (abiVersion: allArchives.system-images.${toString apiVersion}.${type}.${abiVersion})
+                  (
+                    builtins.filter
+                      (
+                        abiVersion: lib.hasAttrByPath [ (toString apiVersion) type abiVersion ] allArchives.system-images
+                      )
+                      abiVersions
+                  );
 
-          instructions = builtins.listToAttrs (
-            map (package: {
-              name = package.name;
-              value = lib.optionalString (lib.hasPrefix "google_apis" type) ''
-                # Patch 'google_apis' system images so they're recognized by the sdk.
-                # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
-                # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
-                sed -i '/^Addon.Vendor/d' source.properties
-              '';
-            }) availablePackages
-          );
-        in
-        lib.optionals (availablePackages != [ ]) (deployAndroidPackages {
-          packages = availablePackages;
-          patchesInstructions = instructions;
-        })
-      ) systemImageTypes
-    ) platformVersions'
+              instructions = builtins.listToAttrs (
+                map
+                  (package: {
+                    name = package.name;
+                    value = lib.optionalString (lib.hasPrefix "google_apis" type) ''
+                      # Patch 'google_apis' system images so they're recognized by the sdk.
+                      # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
+                      # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
+                      sed -i '/^Addon.Vendor/d' source.properties
+                    '';
+                  })
+                  availablePackages
+              );
+            in
+            lib.optionals (availablePackages != [ ]) (deployAndroidPackages {
+              packages = availablePackages;
+              patchesInstructions = instructions;
+            })
+          )
+          systemImageTypes
+      )
+      platformVersions'
   );
 
-  cmake = map (
-    version:
-    callPackage ./cmake.nix {
-      inherit
-        deployAndroidPackage
-        os
-        arch
-        meta
-        ;
-      package = checkVersion allArchives.packages "cmake" version;
-    }
-  ) (parseVersions repo "cmake" cmakeVersions);
+  cmake = map
+    (
+      version:
+      callPackage ./cmake.nix {
+        inherit
+          deployAndroidPackage
+          os
+          arch
+          meta
+          ;
+        package = checkVersion allArchives.packages "cmake" version;
+      }
+    )
+    (parseVersions repo "cmake" cmakeVersions);
 
   # All NDK bundles.
   ndk-bundles =
@@ -594,35 +622,41 @@ lib.recurseIntoAttrs rec {
         };
     in
     lib.flatten (
-      map (
-        version:
-        let
-          package = makeNdkBundle (
-            allArchives.packages.ndk-bundle.${version} or allArchives.packages.ndk.${version}
-          );
-        in
-        lib.optional (shouldLink includeNDK [ package ]) package
-      ) (parseVersions repo "ndk" ndkVersions)
+      map
+        (
+          version:
+          let
+            package = makeNdkBundle (
+              allArchives.packages.ndk-bundle.${version} or allArchives.packages.ndk.${version}
+            );
+          in
+          lib.optional (shouldLink includeNDK [ package ]) package
+        )
+        (parseVersions repo "ndk" ndkVersions)
     );
 
   # The "default" NDK bundle.
   ndk-bundle = if ndk-bundles == [ ] then null else lib.head ndk-bundles;
 
   # Makes a Google API bundle from supported versions.
-  google-apis = map (
-    version:
-    deployAndroidPackage {
-      package = (checkVersion allArchives "addons" version).google_apis;
-    }
-  ) (lib.filter (hasVersion allArchives "addons") platformVersions');
+  google-apis = map
+    (
+      version:
+      deployAndroidPackage {
+        package = (checkVersion allArchives "addons" version).google_apis;
+      }
+    )
+    (lib.filter (hasVersion allArchives "addons") platformVersions');
 
   # Makes a Google TV addons bundle from supported versions.
-  google-tv-addons = map (
-    version:
-    deployAndroidPackage {
-      package = (checkVersion allArchives "addons" version).google_tv_addon;
-    }
-  ) (lib.filter (hasVersion allArchives "addons") platformVersions');
+  google-tv-addons = map
+    (
+      version:
+      deployAndroidPackage {
+        package = (checkVersion allArchives "addons" version).google_tv_addon;
+      }
+    )
+    (lib.filter (hasVersion allArchives "addons") platformVersions');
 
   cmdline-tools-package = checkVersion allArchives.packages "cmdline-tools" (
     parseVersion repo "cmdline-tools" cmdLineToolsVersion

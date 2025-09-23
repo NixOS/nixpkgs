@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 let
@@ -1748,7 +1748,7 @@ let
     unpoller = {
       nodeName = "unpoller";
       exporterConfig.enable = true;
-      exporterConfig.controllers = [ { } ];
+      exporterConfig.controllers = [{ }];
       exporterTest = ''
         wait_until_succeeds(
             'journalctl -eu prometheus-unpoller-exporter.service -o cat | grep "Connection Error"'
@@ -1925,45 +1925,47 @@ let
     };
   };
 in
-mapAttrs (
-  exporter: testConfig:
-  (makeTest (
-    let
-      nodeName = testConfig.nodeName or exporter;
+mapAttrs
+  (
+    exporter: testConfig:
+    (makeTest (
+      let
+        nodeName = testConfig.nodeName or exporter;
 
-    in
-    {
-      name = "prometheus-${exporter}-exporter";
+      in
+      {
+        name = "prometheus-${exporter}-exporter";
 
-      nodes.${nodeName} = mkMerge [
-        {
-          services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
-        }
-        testConfig.metricProvider or { }
-      ];
+        nodes.${nodeName} = mkMerge [
+          {
+            services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
+          }
+          testConfig.metricProvider or { }
+        ];
 
-      testScript = ''
-        ${nodeName}.start()
-        ${concatStringsSep "\n" (
-          map (
-            line:
-            if
-              builtins.any (b: b) [
-                (builtins.match "^[[:space:]]*$" line != null)
-                (builtins.substring 0 1 line == "#")
-                (builtins.substring 0 1 line == " ")
-                (builtins.substring 0 1 line == ")")
-              ]
-            then
-              line
-            else
-              "${nodeName}.${line}"
-          ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest))
-        )}
-        ${nodeName}.shutdown()
-      '';
+        testScript = ''
+          ${nodeName}.start()
+          ${concatStringsSep "\n" (
+            map (
+              line:
+              if
+                builtins.any (b: b) [
+                  (builtins.match "^[[:space:]]*$" line != null)
+                  (builtins.substring 0 1 line == "#")
+                  (builtins.substring 0 1 line == " ")
+                  (builtins.substring 0 1 line == ")")
+                ]
+              then
+                line
+              else
+                "${nodeName}.${line}"
+            ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest))
+          )}
+          ${nodeName}.shutdown()
+        '';
 
-      meta.maintainers = [ ];
-    }
-  ))
-) exporterTests
+        meta.maintainers = [ ];
+      }
+    ))
+  )
+  exporterTests

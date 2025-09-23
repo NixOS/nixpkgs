@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fst-pso,
-  numpy,
-  pandas,
-  pythonOlder,
-  scipy,
-  setuptools,
-  simpful,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fst-pso
+, numpy
+, pandas
+, pythonOlder
+, scipy
+, setuptools
+, simpful
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

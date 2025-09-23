@@ -1,8 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  pyindego,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, pyindego
+,
 }:
 
 buildHomeAssistantComponent rec {

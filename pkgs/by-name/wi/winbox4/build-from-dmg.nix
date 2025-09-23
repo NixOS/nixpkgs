@@ -1,11 +1,11 @@
-{
-  pname,
-  version,
-  hash,
-  fetchurl,
-  stdenvNoCC,
-  undmg,
-  metaCommon ? { },
+{ pname
+, version
+, hash
+, fetchurl
+, stdenvNoCC
+, undmg
+, metaCommon ? { }
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

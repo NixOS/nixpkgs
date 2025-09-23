@@ -1,15 +1,14 @@
-{
-  haskell,
-  haskellPackages,
-  lib,
-
-  # The following are only needed for the passthru.tests:
-  spago,
-  cacert,
-  git,
-  nodejs,
-  purescript,
-  runCommand,
+{ haskell
+, haskellPackages
+, lib
+, # The following are only needed for the passthru.tests:
+  spago
+, cacert
+, git
+, nodejs
+, purescript
+, runCommand
+,
 }:
 
 lib.pipe haskellPackages.spago [

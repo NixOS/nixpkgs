@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  dash,
-  freetype,
-  libpng,
-  libGLU,
-  pkg-config,
-  SDL2,
-  which,
-  zlib,
-  nasm,
-  vulkan-loader,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, dash
+, freetype
+, libpng
+, libGLU
+, pkg-config
+, SDL2
+, which
+, zlib
+, nasm
+, vulkan-loader
+,
 }:
 
 stdenv.mkDerivation rec {

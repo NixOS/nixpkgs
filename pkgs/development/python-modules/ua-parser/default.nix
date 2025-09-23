@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-re2,
-  pyyaml,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  ua-parser-builtins,
-  ua-parser-rs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, google-re2
+, pyyaml
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, ua-parser-builtins
+, ua-parser-rs
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  buildPythonApplication,
-  colorclass,
-  fetchPypi,
-  fetchurl,
-  installShellFiles,
-  lib,
-  linode-metadata,
-  openapi3,
-  packaging,
-  pyyaml,
-  requests,
-  rich,
-  setuptools,
-  terminaltables,
+{ buildPythonApplication
+, colorclass
+, fetchPypi
+, fetchurl
+, installShellFiles
+, lib
+, linode-metadata
+, openapi3
+, packaging
+, pyyaml
+, requests
+, rich
+, setuptools
+, terminaltables
+,
 }:
 
 let

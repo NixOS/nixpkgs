@@ -1,26 +1,26 @@
-{
-  bctoolbox,
-  bzrtp,
-  cmake,
-  fetchFromGitLab,
-  fetchpatch2,
-  ffmpeg,
-  glew,
-  gsm,
-  lib,
-  libX11,
-  libXext,
-  libopus,
-  libpulseaudio,
-  libv4l,
-  libvpx,
-  ortp,
-  python3,
-  qtbase,
-  qtdeclarative,
-  speex,
-  srtp,
-  stdenv,
+{ bctoolbox
+, bzrtp
+, cmake
+, fetchFromGitLab
+, fetchpatch2
+, ffmpeg
+, glew
+, gsm
+, lib
+, libX11
+, libXext
+, libopus
+, libpulseaudio
+, libv4l
+, libvpx
+, ortp
+, python3
+, qtbase
+, qtdeclarative
+, speex
+, srtp
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

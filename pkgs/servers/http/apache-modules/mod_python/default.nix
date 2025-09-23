@@ -1,12 +1,12 @@
-{
-  apacheHttpd,
-  ensureNewerSourcesForZipFilesHook,
-  fetchFromGitHub,
-  lib,
-  libintl,
-  nix-update-script,
-  python3,
-  stdenv,
+{ apacheHttpd
+, ensureNewerSourcesForZipFilesHook
+, fetchFromGitHub
+, lib
+, libintl
+, nix-update-script
+, python3
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

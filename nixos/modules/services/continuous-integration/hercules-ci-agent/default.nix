@@ -4,11 +4,10 @@
   Code that is shared with nix-darwin goes in common.nix.
 */
 
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 let
   inherit (lib) mkIf mkDefault;

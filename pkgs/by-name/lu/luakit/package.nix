@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  glib-networking,
-  gst_all_1,
-  gtk3,
-  help2man,
-  luajit,
-  luajitPackages,
-  pkg-config,
-  sqlite,
-  stdenv,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitHub
+, glib-networking
+, gst_all_1
+, gtk3
+, help2man
+, luajit
+, luajitPackages
+, pkg-config
+, sqlite
+, stdenv
+, webkitgtk_4_1
+, wrapGAppsHook3
+,
 }:
 let
   inherit (luajitPackages) luafilesystem;

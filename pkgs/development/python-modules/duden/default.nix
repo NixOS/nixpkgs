@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  crayons,
-  fetchFromGitHub,
-  poetry-core,
-  pyxdg,
-  pyyaml,
-  requests,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, crayons
+, fetchFromGitHub
+, poetry-core
+, pyxdg
+, pyyaml
+, requests
+, setuptools
+, pytestCheckHook
+,
 }:
 
 let

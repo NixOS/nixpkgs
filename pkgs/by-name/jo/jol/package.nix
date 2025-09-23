@@ -1,10 +1,10 @@
-{
-  maven,
-  lib,
-  fetchFromGitHub,
-  jre_minimal,
-  makeWrapper,
-  nix-update-script,
+{ maven
+, lib
+, fetchFromGitHub
+, jre_minimal
+, makeWrapper
+, nix-update-script
+,
 }:
 maven.buildMavenPackage rec {
   pname = "jol";

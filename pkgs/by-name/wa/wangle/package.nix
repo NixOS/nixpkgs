@@ -1,23 +1,18 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-
-  folly,
-  fizz,
-  openssl,
-  glog,
-  gflags,
-  libevent,
-  double-conversion,
-
-  gtest,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, folly
+, fizz
+, openssl
+, glog
+, gflags
+, libevent
+, double-conversion
+, gtest
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

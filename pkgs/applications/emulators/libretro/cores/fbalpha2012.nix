@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  runCommand,
-  zlib,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, runCommand
+, zlib
+,
 }:
 mkLibretroCore rec {
   core = "fbalpha2012";

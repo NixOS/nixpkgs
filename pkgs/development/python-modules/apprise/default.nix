@@ -1,23 +1,23 @@
-{
-  lib,
-  apprise,
-  babel,
-  buildPythonPackage,
-  click,
-  cryptography,
-  fetchPypi,
-  gntp,
-  installShellFiles,
-  markdown,
-  paho-mqtt,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  requests-oauthlib,
-  setuptools,
-  testers,
+{ lib
+, apprise
+, babel
+, buildPythonPackage
+, click
+, cryptography
+, fetchPypi
+, gntp
+, installShellFiles
+, markdown
+, paho-mqtt
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, requests-oauthlib
+, setuptools
+, testers
+,
 }:
 
 buildPythonPackage rec {

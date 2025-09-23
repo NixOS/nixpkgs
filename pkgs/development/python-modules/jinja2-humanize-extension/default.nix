@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  humanize,
-  jinja2,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, humanize
+, jinja2
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

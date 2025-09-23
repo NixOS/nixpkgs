@@ -1,33 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # Dependencies
-  setuptools,
-  boto3,
-  click,
-  fastapi,
-  loguru,
-  pathspec,
-  prometheus-client,
-  pydantic,
-  python-dotenv,
-  sentry-sdk,
-  slowapi,
-  starlette,
-  tiktoken,
-  tomli,
-  uvicorn,
-
-  # Tests
-  httpx,
-  jinja2,
-  gitMinimal,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  python-multipart,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # Dependencies
+  setuptools
+, boto3
+, click
+, fastapi
+, loguru
+, pathspec
+, prometheus-client
+, pydantic
+, python-dotenv
+, sentry-sdk
+, slowapi
+, starlette
+, tiktoken
+, tomli
+, uvicorn
+, # Tests
+  httpx
+, jinja2
+, gitMinimal
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, python-multipart
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  bundlerEnv,
-  bundlerUpdateScript,
-  defaultGemConfig,
-  ronin,
-  testers,
-  yasm,
+{ lib
+, bundlerEnv
+, bundlerUpdateScript
+, defaultGemConfig
+, ronin
+, testers
+, yasm
+,
 }:
 
 bundlerEnv rec {

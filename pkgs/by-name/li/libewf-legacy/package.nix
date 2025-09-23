@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  zlib,
-  openssl,
-  libuuid,
-  pkg-config,
-  bzip2,
+{ lib
+, fetchurl
+, stdenv
+, zlib
+, openssl
+, libuuid
+, pkg-config
+, bzip2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

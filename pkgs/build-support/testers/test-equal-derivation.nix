@@ -1,8 +1,8 @@
-{
-  lib,
-  runCommand,
-  emptyFile,
-  nix-diff,
+{ lib
+, runCommand
+, emptyFile
+, nix-diff
+,
 }:
 
 assertion: a: b:
@@ -19,10 +19,10 @@ if drvA == drvB then
   emptyFile
 else
   runCommand name
-    {
-      inherit assertion drvA drvB;
-      nativeBuildInputs = [ nix-diff ];
-    }
+  {
+    inherit assertion drvA drvB;
+    nativeBuildInputs = [ nix-diff ];
+  }
     ''
       echo "$assertion"
       echo "However, the derivations differ:"

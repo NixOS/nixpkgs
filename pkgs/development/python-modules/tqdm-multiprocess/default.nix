@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  tqdm,
-  colorama,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, tqdm
+, colorama
+,
 }:
 
 buildPythonPackage {

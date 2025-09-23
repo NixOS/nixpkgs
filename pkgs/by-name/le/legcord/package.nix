@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm,
-  nodejs,
-  electron,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  autoPatchelfHook,
-  pipewire,
-  libpulseaudio,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm
+, nodejs
+, electron
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, autoPatchelfHook
+, pipewire
+, libpulseaudio
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";

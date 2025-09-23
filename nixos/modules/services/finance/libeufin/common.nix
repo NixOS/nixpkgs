@@ -1,10 +1,9 @@
 # TODO: create a common module generator for Taler and Libeufin?
 libeufinComponent:
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 {
   options.services.libeufin.${libeufinComponent} = {
@@ -77,18 +76,20 @@ libeufinComponent:
             # For example, if the bank's currency conversion is enabled, it's
             # required that the exchange account is registered before the
             # service starts.
-            initialAccountRegistration = lib.concatMapStringsSep "\n" (
-              account:
-              let
-                args = lib.cli.toGNUCommandLineShell { } {
-                  c = configFile;
-                  inherit (account) username password name;
-                  payto_uri = "payto://x-taler-bank/${bankHost}/${account.username}?receiver-name=${account.name}";
-                  exchange = lib.toLower account.username == "exchange";
-                };
-              in
-              "${lib.getExe' cfg.package "libeufin-bank"} create-account ${args}"
-            ) cfg.initialAccounts;
+            initialAccountRegistration = lib.concatMapStringsSep "\n"
+              (
+                account:
+                let
+                  args = lib.cli.toGNUCommandLineShell { } {
+                    c = configFile;
+                    inherit (account) username password name;
+                    payto_uri = "payto://x-taler-bank/${bankHost}/${account.username}?receiver-name=${account.name}";
+                    exchange = lib.toLower account.username == "exchange";
+                  };
+                in
+                "${lib.getExe' cfg.package "libeufin-bank"} create-account ${args}"
+              )
+              cfg.initialAccounts;
 
             args = lib.cli.toGNUCommandLineShell { } {
               c = configFile;

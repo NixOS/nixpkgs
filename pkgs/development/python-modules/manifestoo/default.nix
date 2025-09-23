@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  hatch-vcs,
-  lib,
-  manifestoo-core,
-  nix-update-script,
-  pytestCheckHook,
-  textual,
-  typer,
+{ buildPythonPackage
+, fetchPypi
+, hatch-vcs
+, lib
+, manifestoo-core
+, nix-update-script
+, pytestCheckHook
+, textual
+, typer
+,
 }:
 
 buildPythonPackage rec {

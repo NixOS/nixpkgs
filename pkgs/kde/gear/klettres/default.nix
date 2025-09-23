@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtmultimedia,
-  qtsvg,
+{ mkKdeDerivation
+, qtmultimedia
+, qtsvg
+,
 }:
 mkKdeDerivation {
   pname = "klettres";

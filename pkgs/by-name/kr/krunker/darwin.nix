@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  makeBinaryWrapper,
-  undmg,
+{ stdenvNoCC
+, fetchurl
+, makeBinaryWrapper
+, undmg
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

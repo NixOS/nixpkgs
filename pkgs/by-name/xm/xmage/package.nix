@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jdk8,
-  unzrip,
+{ lib
+, stdenv
+, fetchurl
+, jdk8
+, unzrip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

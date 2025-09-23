@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  help2man,
-  libjack2,
-  libsamplerate,
-  dbus,
-  qt6,
-  meson,
-  python3,
-  rtaudio,
-  ninja,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, help2man
+, libjack2
+, libsamplerate
+, dbus
+, qt6
+, meson
+, python3
+, rtaudio
+, ninja
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  looseversion,
-  mmtf-python,
-  numpy,
-  pandas,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, looseversion
+, mmtf-python
+, numpy
+, pandas
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

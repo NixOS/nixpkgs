@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  elasticsearch-dsl,
-  django,
-  pythonOlder,
-  elastic-transport,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, elasticsearch-dsl
+, django
+, pythonOlder
+, elastic-transport
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

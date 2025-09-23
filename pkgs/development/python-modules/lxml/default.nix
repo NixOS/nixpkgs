@@ -1,18 +1,16 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # native dependencies
-  libxml2,
-  libxslt,
-  zlib,
-  xcodebuild,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, setuptools
+, # native dependencies
+  libxml2
+, libxslt
+, zlib
+, xcodebuild
+,
 }:
 
 buildPythonPackage rec {

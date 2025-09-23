@@ -1,42 +1,38 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  langchain-core,
-  langgraph-checkpoint,
-  langgraph-prebuilt,
-  langgraph-sdk,
-  pydantic,
-  xxhash,
-
-  # tests
-  aiosqlite,
-  dataclasses-json,
-  fakeredis,
-  grandalf,
-  httpx,
-  langgraph-checkpoint-postgres,
-  langgraph-checkpoint-sqlite,
-  langsmith,
-  psycopg,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-repeat,
-  pytest-xdist,
-  pytestCheckHook,
-  syrupy,
-  postgresql,
-  postgresqlTestHook,
-  redisTestHook,
-
-  # passthru
-  nix-update-script,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  langchain-core
+, langgraph-checkpoint
+, langgraph-prebuilt
+, langgraph-sdk
+, pydantic
+, xxhash
+, # tests
+  aiosqlite
+, dataclasses-json
+, fakeredis
+, grandalf
+, httpx
+, langgraph-checkpoint-postgres
+, langgraph-checkpoint-sqlite
+, langsmith
+, psycopg
+, pytest-asyncio
+, pytest-mock
+, pytest-repeat
+, pytest-xdist
+, pytestCheckHook
+, syrupy
+, postgresql
+, postgresqlTestHook
+, redisTestHook
+, # passthru
+  nix-update-script
+,
 }:
 buildPythonPackage rec {
   pname = "langgraph";

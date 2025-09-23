@@ -1,39 +1,38 @@
-{
-  clangStdenv,
-  lib,
-  fetchurl,
-  dotnetCorePackages,
-  jq,
-  curl,
-  git,
-  cmake,
-  pkg-config,
-  llvm,
-  zlib,
-  icu,
-  lttng-ust_2_12,
-  krb5,
-  glibcLocales,
-  ensureNewerSourcesForZipFilesHook,
-  darwin,
-  xcbuild,
-  swiftPackages,
-  apple-sdk_13,
-  openssl,
-  getconf,
-  python3,
-  xmlstarlet,
-  nodejs,
-  cpio,
-  callPackage,
-  unzip,
-  yq,
-  installShellFiles,
-
-  baseName ? "dotnet",
-  bootstrapSdk,
-  releaseManifestFile,
-  tarballHash,
+{ clangStdenv
+, lib
+, fetchurl
+, dotnetCorePackages
+, jq
+, curl
+, git
+, cmake
+, pkg-config
+, llvm
+, zlib
+, icu
+, lttng-ust_2_12
+, krb5
+, glibcLocales
+, ensureNewerSourcesForZipFilesHook
+, darwin
+, xcbuild
+, swiftPackages
+, apple-sdk_13
+, openssl
+, getconf
+, python3
+, xmlstarlet
+, nodejs
+, cpio
+, callPackage
+, unzip
+, yq
+, installShellFiles
+, baseName ? "dotnet"
+, bootstrapSdk
+, releaseManifestFile
+, tarballHash
+,
 }:
 
 let

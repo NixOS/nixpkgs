@@ -1,14 +1,14 @@
-{
-  mkDerivation,
-  fetchurl,
-  lib,
-  extra-cmake-modules,
-  kdoctools,
-  knotifyconfig,
-  kidletime,
-  kwindowsystem,
-  ktextwidgets,
-  kcrash,
+{ mkDerivation
+, fetchurl
+, lib
+, extra-cmake-modules
+, kdoctools
+, knotifyconfig
+, kidletime
+, kwindowsystem
+, ktextwidgets
+, kcrash
+,
 }:
 
 mkDerivation rec {

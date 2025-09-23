@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  # Python deps
-  blockfrost-python,
-  cachetools,
-  cbor2,
-  cose,
-  docker,
-  ecpy,
-  frozendict,
-  frozenlist,
-  mnemonic,
-  ogmios,
-  poetry-core,
-  pprintpp,
-  pynacl,
-  requests,
-  setuptools,
-  typeguard,
-  websocket-client,
-  websockets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, # Python deps
+  blockfrost-python
+, cachetools
+, cbor2
+, cose
+, docker
+, ecpy
+, frozendict
+, frozenlist
+, mnemonic
+, ogmios
+, poetry-core
+, pprintpp
+, pynacl
+, requests
+, setuptools
+, typeguard
+, websocket-client
+, websockets
+,
 }:
 
 let

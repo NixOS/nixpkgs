@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  pkg-config,
-  rustPlatform,
-  libiconv,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, pkg-config
+, rustPlatform
+, libiconv
+, nixosTests
+,
 }:
 
 let

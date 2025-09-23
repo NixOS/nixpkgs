@@ -5,14 +5,14 @@
 # when linked with other C++ libraries.
 # E.g. for cudaPackages_12_9 we use gcc14 with gcc's libstdc++
 # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
-{
-  config,
-  _cuda,
-  cudaMajorMinorVersion,
-  lib,
-  pkgs,
-  stdenv,
-  stdenvAdapters,
+{ config
+, _cuda
+, cudaMajorMinorVersion
+, lib
+, pkgs
+, stdenv
+, stdenvAdapters
+,
 }:
 let
   inherit (builtins) toJSON;
@@ -30,17 +30,23 @@ let
 
   # NOTE: By virtue of processing a sorted list (allSortedCudaCapabilities), our groups will be sorted.
 
-  architectureSpecificCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isArchitectureSpecific
-  ) allSortedCudaCapabilities;
+  architectureSpecificCudaCapabilities = filter
+    (
+      cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isArchitectureSpecific
+    )
+    allSortedCudaCapabilities;
 
-  familySpecificCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isFamilySpecific
-  ) allSortedCudaCapabilities;
+  familySpecificCudaCapabilities = filter
+    (
+      cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isFamilySpecific
+    )
+    allSortedCudaCapabilities;
 
-  jetsonCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isJetson
-  ) allSortedCudaCapabilities;
+  jetsonCudaCapabilities = filter
+    (
+      cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isJetson
+    )
+    allSortedCudaCapabilities;
 
   passthruExtra = {
     nvccHostCCMatchesStdenvCC = backendStdenv.cc == stdenv.cc;
@@ -57,17 +63,21 @@ let
     cudaForwardCompat = config.cudaForwardCompat or true;
 
     # CUDA capabilities which are supported by the current CUDA version.
-    supportedCudaCapabilities = filter (
-      cudaCapability:
-      _cudaCapabilityIsSupported cudaMajorMinorVersion cudaCapabilityToInfo.${cudaCapability}
-    ) allSortedCudaCapabilities;
+    supportedCudaCapabilities = filter
+      (
+        cudaCapability:
+        _cudaCapabilityIsSupported cudaMajorMinorVersion cudaCapabilityToInfo.${cudaCapability}
+      )
+      allSortedCudaCapabilities;
 
     # Find the default set of capabilities for this CUDA version using the list of supported capabilities.
     # Includes only baseline capabilities.
-    defaultCudaCapabilities = filter (
-      cudaCapability:
-      _cudaCapabilityIsDefault cudaMajorMinorVersion cudaCapabilityToInfo.${cudaCapability}
-    ) passthruExtra.supportedCudaCapabilities;
+    defaultCudaCapabilities = filter
+      (
+        cudaCapability:
+        _cudaCapabilityIsDefault cudaMajorMinorVersion cudaCapabilityToInfo.${cudaCapability}
+      )
+      passthruExtra.supportedCudaCapabilities;
 
     # The resolved requested or default CUDA capabilities.
     cudaCapabilities =
@@ -128,11 +138,13 @@ let
         message =
           let
             # Find the capabilities which are not Jetson capabilities.
-            requestedNonJetsonCudaCapabilities = subtractLists (
-              passthruExtra.requestedJetsonCudaCapabilities
-              ++ passthruExtra.requestedArchitectureSpecificCudaCapabilities
-              ++ passthruExtra.requestedFamilySpecificCudaCapabilities
-            ) passthruExtra.cudaCapabilities;
+            requestedNonJetsonCudaCapabilities = subtractLists
+              (
+                passthruExtra.requestedJetsonCudaCapabilities
+                ++ passthruExtra.requestedArchitectureSpecificCudaCapabilities
+                ++ passthruExtra.requestedFamilySpecificCudaCapabilities
+              )
+              passthruExtra.cudaCapabilities;
           in
           "${jetsonMesssagePrefix} cannot be specified with non-Jetson capabilities "
           + "(${toJSON requestedNonJetsonCudaCapabilities})";

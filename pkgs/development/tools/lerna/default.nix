@@ -1,6 +1,6 @@
-{
-  lib,
-  callPackage,
+{ lib
+, callPackage
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  just,
-  libcosmicAppHook,
-  expat,
-  fontconfig,
-  freetype,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, just
+, libcosmicAppHook
+, expat
+, fontconfig
+, freetype
+,
 }:
 
 rustPlatform.buildRustPackage {

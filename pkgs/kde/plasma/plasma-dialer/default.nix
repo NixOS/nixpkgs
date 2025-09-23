@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtwayland,
-  callaudiod,
-  libphonenumber,
-  protobuf,
+{ mkKdeDerivation
+, pkg-config
+, qtwayland
+, callaudiod
+, libphonenumber
+, protobuf
+,
 }:
 mkKdeDerivation {
   pname = "plasma-dialer";

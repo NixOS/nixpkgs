@@ -4,11 +4,10 @@
   meta.maintainers = with pkgs.lib.maintainers; [ zopieux ];
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.pykms.enable = true;

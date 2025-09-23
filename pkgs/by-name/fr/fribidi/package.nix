@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  fixDarwinDylibNames,
-  python3,
-  testers,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, fixDarwinDylibNames
+, python3
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

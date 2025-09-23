@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  libjack2,
-  pkg-config,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, libjack2
+, pkg-config
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

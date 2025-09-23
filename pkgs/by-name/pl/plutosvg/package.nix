@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
-  validatePkgConfig,
-  testers,
-  cmake,
-  ninja,
-  plutovg,
-  enableFreetype ? false,
-  freetype,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, validatePkgConfig
+, testers
+, cmake
+, ninja
+, plutovg
+, enableFreetype ? false
+, freetype
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plutosvg";

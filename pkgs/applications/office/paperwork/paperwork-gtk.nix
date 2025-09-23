@@ -1,23 +1,23 @@
-{
-  lib,
-  callPackage,
-  python3Packages,
-  gtk3,
-  cairo,
-  adwaita-icon-theme,
-  librsvg,
-  xvfb-run,
-  dbus,
-  libnotify,
-  wrapGAppsHook3,
-  which,
-  gettext,
-  gobject-introspection,
-  gdk-pixbuf,
-  texliveSmall,
-  imagemagick,
-  perlPackages,
-  writeScript,
+{ lib
+, callPackage
+, python3Packages
+, gtk3
+, cairo
+, adwaita-icon-theme
+, librsvg
+, xvfb-run
+, dbus
+, libnotify
+, wrapGAppsHook3
+, which
+, gettext
+, gobject-introspection
+, gdk-pixbuf
+, texliveSmall
+, imagemagick
+, perlPackages
+, writeScript
+,
 }:
 
 let

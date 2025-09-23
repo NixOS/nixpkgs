@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  wayland,
-  wayland-protocols,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, wayland
+, wayland-protocols
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

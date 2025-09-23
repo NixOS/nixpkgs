@@ -1,10 +1,10 @@
-{
-  autoreconfHook,
-  lib,
-  pkg-config,
-  stdenv,
-  fetchFromGitLab,
-  gitUpdater,
+{ autoreconfHook
+, lib
+, pkg-config
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";

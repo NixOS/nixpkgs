@@ -1,21 +1,19 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  writeTextFile,
-
-  curl,
-  hexdump,
-  python3,
-  SDL2,
-  stdenv,
-  zlib,
-  libGL,
-
-  sm64baserom,
-  enableCoopNet ? true,
-  enableDiscord ? true,
-  enableTextureFix ? true,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, writeTextFile
+, curl
+, hexdump
+, python3
+, SDL2
+, stdenv
+, zlib
+, libGL
+, sm64baserom
+, enableCoopNet ? true
+, enableDiscord ? true
+, enableTextureFix ? true
+,
 }:
 let
   libc_hack = writeTextFile {

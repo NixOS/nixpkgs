@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenvNoCC,
-  nix-update-script,
-  nodejs,
-  pnpm_9,
-  typescript,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, stdenvNoCC
+, nix-update-script
+, nodejs
+, pnpm_9
+, typescript
+, versionCheckHook
+,
 }:
 
 let

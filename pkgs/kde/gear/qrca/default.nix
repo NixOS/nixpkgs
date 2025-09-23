@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtmultimedia,
+{ mkKdeDerivation
+, pkg-config
+, qtmultimedia
+,
 }:
 mkKdeDerivation {
   pname = "qrca";

@@ -1,12 +1,12 @@
-{
-  lib,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-autorun,
-  pytestCheckHook,
-  runCommand,
+{ lib
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-autorun
+, pytestCheckHook
+, runCommand
+,
 }:
 
 buildPythonPackage rec {

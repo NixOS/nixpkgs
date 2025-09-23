@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  buildGoModule,
-  makeWrapper,
-  fetchFromGitHub,
-  pythonPackages,
-  pkg-config,
-  systemd,
-  hostname,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  withDocker ? true,
-  extraTags ? [ ],
-  testers,
-  datadog-agent,
+{ lib
+, stdenv
+, cmake
+, buildGoModule
+, makeWrapper
+, fetchFromGitHub
+, pythonPackages
+, pkg-config
+, systemd
+, hostname
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, withDocker ? true
+, extraTags ? [ ]
+, testers
+, datadog-agent
+,
 }:
 
 let

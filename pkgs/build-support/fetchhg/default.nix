@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  mercurial,
+{ lib
+, stdenvNoCC
+, mercurial
+,
 }:
 
 lib.extendMkDerivation {
@@ -9,14 +9,14 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-    {
-      name ? null,
-      url,
-      rev ? null,
-      sha256 ? null,
-      hash ? null,
-      fetchSubrepos ? false,
-      preferLocalBuild ? true,
+    { name ? null
+    , url
+    , rev ? null
+    , sha256 ? null
+    , hash ? null
+    , fetchSubrepos ? false
+    , preferLocalBuild ? true
+    ,
     }:
     # TODO: statically check if mercurial as the https support if the url starts with https.
     {

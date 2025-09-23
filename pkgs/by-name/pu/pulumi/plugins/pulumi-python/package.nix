@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  callPackage,
-  pulumi,
-  bash,
-  python3,
+{ lib
+, buildGoModule
+, callPackage
+, pulumi
+, bash
+, python3
+,
 }:
 buildGoModule rec {
   pname = "pulumi-python";

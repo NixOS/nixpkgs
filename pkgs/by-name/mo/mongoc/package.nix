@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  openssl,
-  zlib,
-  zstd,
-  icu,
-  cyrus_sasl,
-  snappy,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, openssl
+, zlib
+, zstd
+, icu
+, cyrus_sasl
+, snappy
+,
 }:
 
 stdenv.mkDerivation rec {

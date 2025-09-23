@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  kernel,
-  kmod,
-  patchutils,
-  perlPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, kernel
+, kmod
+, patchutils
+, perlPackages
+,
 }:
 let
 

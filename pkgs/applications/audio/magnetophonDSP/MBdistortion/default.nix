@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  faust2jaqt,
-  faust2lv2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, faust2jaqt
+, faust2lv2
+,
 }:
 stdenv.mkDerivation rec {
   pname = "MBdistortion";

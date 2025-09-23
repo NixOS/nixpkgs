@@ -1,27 +1,24 @@
-{
-  lib,
-  stdenv,
-  llvmPackages_19,
-  fetchFromGitHub,
-
-  gtest,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-
-  curl,
-  libarchive,
-  libossp_uuid,
-  libpkgconf,
-  libuuid,
-  nlohmann_json,
-  pkgsStatic,
-
-  mesonlsp,
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, llvmPackages_19
+, fetchFromGitHub
+, gtest
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, python3
+, curl
+, libarchive
+, libossp_uuid
+, libpkgconf
+, libuuid
+, nlohmann_json
+, pkgsStatic
+, mesonlsp
+, nix-update-script
+, testers
+,
 }:
 
 let

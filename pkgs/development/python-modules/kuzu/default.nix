@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  cmake,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, cmake
+,
 }:
 
 buildPythonPackage rec {

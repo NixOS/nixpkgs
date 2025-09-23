@@ -1,15 +1,14 @@
-{
-  lib,
-  python3Packages,
-  qt6,
-  fetchFromGitHub,
-  writeText,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  onedrive,
-
-  nix-update-script,
+{ lib
+, python3Packages
+, qt6
+, fetchFromGitHub
+, writeText
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, onedrive
+, nix-update-script
+,
 }:
 
 let

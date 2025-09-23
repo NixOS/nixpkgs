@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  ffmpeg-headless,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeBinaryWrapper
+, ffmpeg-headless
+,
 }:
 
 buildGoModule rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  bibtool,
-  pybtex,
-  pymupdf,
-  pynvim,
-  pyperclip,
-  roman,
-  pdfrw,
-  pagelabels,
-  setuptools,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, bibtool
+, pybtex
+, pymupdf
+, pynvim
+, pyperclip
+, roman
+, pdfrw
+, pagelabels
+, setuptools
+,
 }:
 
 buildPythonApplication {

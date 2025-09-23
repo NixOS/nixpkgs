@@ -1,43 +1,40 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchurl,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  azure-identity,
-  azure-monitor-ingestion,
-  boto3,
-  dateparser,
-  dnspython,
-  elastic-transport,
-  elasticsearch-dsl,
-  elasticsearch,
-  expiringdict,
-  geoip2,
-  google-api-core,
-  google-api-python-client,
-  google-auth-httplib2,
-  google-auth-oauthlib,
-  google-auth,
-  imapclient,
-  kafka-python-ng,
-  lxml,
-  mailsuite,
-  msgraph-core,
-  nixosTests,
-  opensearch-py,
-  publicsuffixlist,
-  pygelf,
-  requests,
-  tqdm,
-  xmltodict,
-
-  # test
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchurl
+, # build-system
+  hatchling
+, # dependencies
+  azure-identity
+, azure-monitor-ingestion
+, boto3
+, dateparser
+, dnspython
+, elastic-transport
+, elasticsearch-dsl
+, elasticsearch
+, expiringdict
+, geoip2
+, google-api-core
+, google-api-python-client
+, google-auth-httplib2
+, google-auth-oauthlib
+, google-auth
+, imapclient
+, kafka-python-ng
+, lxml
+, mailsuite
+, msgraph-core
+, nixosTests
+, opensearch-py
+, publicsuffixlist
+, pygelf
+, requests
+, tqdm
+, xmltodict
+, # test
+  unittestCheckHook
+,
 }:
 
 let

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  yarn-berry_4,
-  nodejs,
-  meson,
-  ninja,
-  blueprint-compiler,
-  gtksourceview5,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  pkg-config,
-  writableTmpDirAsHomeHook,
-  gjs,
-  libadwaita,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, yarn-berry_4
+, nodejs
+, meson
+, ninja
+, blueprint-compiler
+, gtksourceview5
+, wrapGAppsHook4
+, desktop-file-utils
+, pkg-config
+, writableTmpDirAsHomeHook
+, gjs
+, libadwaita
+, nix-update-script
+,
 }:
 
 let

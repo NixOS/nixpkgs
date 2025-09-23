@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  musl-fts,
-  musl-obstack,
-  m4,
-  zlib,
-  zstd,
-  bzip2,
-  bison,
-  flex,
-  gettext,
-  xz,
-  setupDebugInfoDirs,
-  argp-standalone,
-  enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform libarchive,
-  sqlite,
-  curl,
-  json_c,
-  libmicrohttpd,
-  libarchive,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, musl-fts
+, musl-obstack
+, m4
+, zlib
+, zstd
+, bzip2
+, bison
+, flex
+, gettext
+, xz
+, setupDebugInfoDirs
+, argp-standalone
+, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform libarchive
+, sqlite
+, curl
+, json_c
+, libmicrohttpd
+, libarchive
+, gitUpdater
+,
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.

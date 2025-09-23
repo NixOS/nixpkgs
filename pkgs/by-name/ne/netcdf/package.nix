@@ -1,18 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  hdf5,
-  bzip2,
-  libzip,
-  zstd,
-  szipSupport ? false,
-  szip,
-  libxml2,
-  m4,
-  curl, # for DAP
-  removeReferencesTo,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, hdf5
+, bzip2
+, libzip
+, zstd
+, szipSupport ? false
+, szip
+, libxml2
+, m4
+, curl
+, # for DAP
+  removeReferencesTo
+,
 }:
 
 let

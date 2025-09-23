@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  dateparser,
-  fetchFromGitHub,
-  pycryptodome,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  requests-mock,
-  requests,
-  six,
-  ujson,
-  setuptools,
-  websockets,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, pycryptodome
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests-mock
+, requests
+, six
+, ujson
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

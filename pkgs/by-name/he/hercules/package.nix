@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  libtool,
-  cmake,
-  zlib,
-  bzip2,
-  enableRexx ? stdenv.hostPlatform.isLinux,
-  regina,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, libtool
+, cmake
+, zlib
+, bzip2
+, enableRexx ? stdenv.hostPlatform.isLinux
+, regina
+,
 }:
 let
   herculesCpu = if stdenv.hostPlatform.isx86 then "x86" else stdenv.hostPlatform.qemuArch;

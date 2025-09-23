@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  expandvars,
-  setuptools,
-  idna,
-  multidict,
-  propcache,
-  hypothesis,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, expandvars
+, setuptools
+, idna
+, multidict
+, propcache
+, hypothesis
+, pytest-codspeed
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

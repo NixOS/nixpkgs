@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  gitUpdater,
-  jre,
-  lib,
-  nixosTests,
-  stdenvNoCC,
-  testers,
+{ fetchurl
+, gitUpdater
+, jre
+, lib
+, nixosTests
+, stdenvNoCC
+, testers
+,
 }:
 
 let

@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  niapy,
-  nltk,
-  numpy,
-  pandas,
-  plotly,
-  scikit-learn,
-  pythonOlder,
-  tomli,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  niapy
+, nltk
+, numpy
+, pandas
+, plotly
+, scikit-learn
+, pythonOlder
+, tomli
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

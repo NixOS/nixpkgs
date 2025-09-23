@@ -1,49 +1,49 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gitUpdater,
-  bison,
-  cmake,
-  pkg-config,
-  boost,
-  icu,
-  libedit,
-  libevent,
-  lz4,
-  ncurses,
-  openssl,
-  perl,
-  protobuf,
-  re2,
-  readline,
-  zlib,
-  zstd,
-  libfido2,
-  numactl,
-  cctools,
-  developer_cmds,
-  libtirpc,
-  rpcsvc-proto,
-  curl,
-  DarwinTools,
-  nixosTests,
-  coreutils,
-  procps,
-  gnused,
-  gnugrep,
-  hostname,
-  makeWrapper,
-  systemd,
-  # Percona-specific deps
-  cyrus_sasl,
-  gnumake,
-  openldap,
-  # optional: different malloc implementations
-  withJemalloc ? false,
-  withTcmalloc ? false,
-  jemalloc,
-  gperftools,
+{ lib
+, stdenv
+, fetchurl
+, gitUpdater
+, bison
+, cmake
+, pkg-config
+, boost
+, icu
+, libedit
+, libevent
+, lz4
+, ncurses
+, openssl
+, perl
+, protobuf
+, re2
+, readline
+, zlib
+, zstd
+, libfido2
+, numactl
+, cctools
+, developer_cmds
+, libtirpc
+, rpcsvc-proto
+, curl
+, DarwinTools
+, nixosTests
+, coreutils
+, procps
+, gnused
+, gnugrep
+, hostname
+, makeWrapper
+, systemd
+, # Percona-specific deps
+  cyrus_sasl
+, gnumake
+, openldap
+, # optional: different malloc implementations
+  withJemalloc ? false
+, withTcmalloc ? false
+, jemalloc
+, gperftools
+,
 }:
 
 assert !(withJemalloc && withTcmalloc);

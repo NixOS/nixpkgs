@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  unicrypto,
-  asyauth,
-  asysocks,
-  asn1crypto,
-  winacl,
-  prompt-toolkit,
-  tqdm,
-  wcwidth,
-  tabulate,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, unicrypto
+, asyauth
+, asysocks
+, asn1crypto
+, winacl
+, prompt-toolkit
+, tqdm
+, wcwidth
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

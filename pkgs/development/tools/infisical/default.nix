@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  testers,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchurl
+, testers
+, installShellFiles
+,
 }:
 
 # this expression is mostly automated, and you are STRONGLY
@@ -34,8 +34,7 @@ let
           x86_64-darwin = "darwin_amd64";
           aarch64-linux = "linux_arm64";
           aarch64-darwin = "darwin_arm64";
-        }
-        ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+        }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
       name = "infisical_${version}_${suffix}.tar.gz";
       hash = buildHashes."${stdenv.hostPlatform.system}";

@@ -1,9 +1,9 @@
-{
-  lib,
-  kaem,
-  ln-boot,
-  mes,
-  mes-libc,
+{ lib
+, kaem
+, ln-boot
+, mes
+, mes-libc
+,
 }:
 let
   pname = "mes-libc";
@@ -22,21 +22,21 @@ let
   lastLibc = lib.drop 100 libc_gnu_SOURCES;
 in
 kaem.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [ ln-boot ];
+  nativeBuildInputs = [ ln-boot ];
 
-    passthru.CFLAGS = "-DHAVE_CONFIG_H=1 -I${mes-libc}/include -I${mes-libc}/include/linux/x86";
+  passthru.CFLAGS = "-DHAVE_CONFIG_H=1 -I${mes-libc}/include -I${mes-libc}/include/linux/x86";
 
-    meta = with lib; {
-      description = "Mes C Library";
-      homepage = "https://www.gnu.org/software/mes";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = [ "i686-linux" ];
-    };
-  }
+  meta = with lib; {
+    description = "Mes C Library";
+    homepage = "https://www.gnu.org/software/mes";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = [ "i686-linux" ];
+  };
+}
   ''
     cd ${mes.srcPrefix}
 

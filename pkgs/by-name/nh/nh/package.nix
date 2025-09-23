@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  installShellFiles,
-  makeBinaryWrapper,
-  fetchFromGitHub,
-  nix-update-script,
-  nix-output-monitor,
-  buildPackages,
+{ stdenv
+, lib
+, rustPlatform
+, installShellFiles
+, makeBinaryWrapper
+, fetchFromGitHub
+, nix-update-script
+, nix-output-monitor
+, buildPackages
+,
 }:
 let
   runtimeDeps = [

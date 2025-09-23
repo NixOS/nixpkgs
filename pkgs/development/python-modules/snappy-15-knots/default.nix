@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  snappy-manifolds,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, snappy-manifolds
+,
 }:
 
 buildPythonPackage rec {

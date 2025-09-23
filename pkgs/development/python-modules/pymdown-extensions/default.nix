@@ -1,18 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
-  markdown,
-  pyyaml,
-  pygments,
-
-  # for passthru.tests
-  mkdocstrings,
-  mkdocs-material,
-  mkdocs-mermaid2-plugin,
-  hydrus,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pytestCheckHook
+, markdown
+, pyyaml
+, pygments
+, # for passthru.tests
+  mkdocstrings
+, mkdocs-material
+, mkdocs-mermaid2-plugin
+, hydrus
+,
 }:
 
 let

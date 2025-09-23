@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  libmysqlclient,
-  # Excerpt from glpk's INSTALL file:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libmysqlclient
+, # Excerpt from glpk's INSTALL file:
   # This feature allows the exact simplex solver to use the GNU MP
   # bignum library. If it is disabled, the exact simplex solver uses the
   # GLPK bignum module, which provides the same functionality as GNU MP,
   # however, it is much less efficient.
-  withGmp ? true,
-  gmp,
+  withGmp ? true
+, gmp
+,
 }:
 
 assert withGmp -> gmp != null;

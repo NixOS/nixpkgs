@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  removeReferencesTo,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  gitMinimal,
-  perl,
-  python3,
-  flex,
-  hwloc,
-  libevent,
-  zlib,
-  pmix,
+{ lib
+, stdenv
+, removeReferencesTo
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, gitMinimal
+, perl
+, python3
+, flex
+, hwloc
+, libevent
+, zlib
+, pmix
+,
 }:
 
 stdenv.mkDerivation rec {

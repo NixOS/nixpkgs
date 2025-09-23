@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  unzip,
-  makeDesktopItem,
-  jre8,
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, makeDesktopItem
+, jre8
+,
 }:
 
 let

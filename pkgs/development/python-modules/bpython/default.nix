@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  curtsies,
-  cwcwidth,
-  greenlet,
-  jedi,
-  pygments,
-  pytestCheckHook,
-  pyperclip,
-  pyxdg,
-  requests,
-  setuptools,
-  urwid,
-  watchdog,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, curtsies
+, cwcwidth
+, greenlet
+, jedi
+, pygments
+, pytestCheckHook
+, pyperclip
+, pyxdg
+, requests
+, setuptools
+, urwid
+, watchdog
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

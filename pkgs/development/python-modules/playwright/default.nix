@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  auditwheel,
-  buildPythonPackage,
-  gitMinimal,
-  greenlet,
-  fetchFromGitHub,
-  pyee,
-  python,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  playwright-driver,
-  nixosTests,
-  nodejs,
+{ lib
+, stdenv
+, auditwheel
+, buildPythonPackage
+, gitMinimal
+, greenlet
+, fetchFromGitHub
+, pyee
+, python
+, pythonOlder
+, setuptools
+, setuptools-scm
+, playwright-driver
+, nixosTests
+, nodejs
+,
 }:
 
 let

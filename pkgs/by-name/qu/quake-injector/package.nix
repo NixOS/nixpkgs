@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  jre,
-  makeWrapper,
-  jdk,
-  makeDesktopItem,
-  copyDesktopItems,
-  fetchzip,
-  fetchurl,
+{ lib
+, stdenv
+, jre
+, makeWrapper
+, jdk
+, makeDesktopItem
+, copyDesktopItems
+, fetchzip
+, fetchurl
+,
 }:
 let
   icon = fetchurl {

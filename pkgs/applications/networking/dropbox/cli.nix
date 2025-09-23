@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  autoreconfHook,
-  pkg-config,
-  fetchurl,
-  python3,
-  dropbox,
-  gtk4,
-  nautilus,
-  gdk-pixbuf,
-  gobject-introspection,
+{ lib
+, stdenv
+, replaceVars
+, autoreconfHook
+, pkg-config
+, fetchurl
+, python3
+, dropbox
+, gtk4
+, nautilus
+, gdk-pixbuf
+, gobject-introspection
+,
 }:
 
 let

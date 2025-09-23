@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  doxygen,
-  fetchFromGitHub,
-  glib,
-  glib-networking,
-  gnutls,
-  gpgme,
-  hiredis,
-  libgcrypt,
-  libnet,
-  libpcap,
-  libssh,
-  libuuid,
-  libxcrypt,
-  libxml2,
-  openldap,
-  paho-mqtt-c,
-  pkg-config,
-  radcli,
-  zlib,
+{ lib
+, stdenv
+, cmake
+, doxygen
+, fetchFromGitHub
+, glib
+, glib-networking
+, gnutls
+, gpgme
+, hiredis
+, libgcrypt
+, libnet
+, libpcap
+, libssh
+, libuuid
+, libxcrypt
+, libxml2
+, openldap
+, paho-mqtt-c
+, pkg-config
+, radcli
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

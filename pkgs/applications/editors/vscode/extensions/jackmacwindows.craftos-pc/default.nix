@@ -1,9 +1,9 @@
-{
-  vscode-utils,
-  craftos-pc,
-  jq,
-  lib,
-  moreutils,
+{ vscode-utils
+, craftos-pc
+, jq
+, lib
+, moreutils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

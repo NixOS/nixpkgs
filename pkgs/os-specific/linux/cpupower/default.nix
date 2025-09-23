@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  kernel,
-  pciutils,
-  gettext,
-  which,
+{ lib
+, stdenv
+, buildPackages
+, kernel
+, pciutils
+, gettext
+, which
+,
 }:
 
 stdenv.mkDerivation {

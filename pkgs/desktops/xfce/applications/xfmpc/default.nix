@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook3,
-  libxfce4util,
-  libxfce4ui,
-  gtk3,
-  glib,
-  libmpd,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gettext
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook3
+, libxfce4util
+, libxfce4ui
+, gtk3
+, glib
+, libmpd
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

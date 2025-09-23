@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fetchFromGitLab,
-  glfw,
-  glm,
-  spdlog,
-  cereal_1_3_2,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fetchFromGitLab
+, glfw
+, glm
+, spdlog
+, cereal_1_3_2
+, python3Packages
+,
 }:
 
 let

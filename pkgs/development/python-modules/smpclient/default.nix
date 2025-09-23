@@ -1,16 +1,16 @@
-{
-  lib,
-  async-timeout,
-  bleak,
-  buildPythonPackage,
-  fetchFromGitHub,
-  intelhex,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pyserial,
-  pytest-asyncio,
-  pytestCheckHook,
-  smp,
+{ lib
+, async-timeout
+, bleak
+, buildPythonPackage
+, fetchFromGitHub
+, intelhex
+, poetry-core
+, poetry-dynamic-versioning
+, pyserial
+, pytest-asyncio
+, pytestCheckHook
+, smp
+,
 }:
 
 buildPythonPackage rec {

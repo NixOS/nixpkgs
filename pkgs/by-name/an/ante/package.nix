@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  zlib,
-  libffi,
-  libxml2,
-  llvmPackages_18,
-  ncurses,
-  darwin,
-  rustPlatform,
+{ stdenv
+, fetchFromGitHub
+, lib
+, zlib
+, libffi
+, libxml2
+, llvmPackages_18
+, ncurses
+, darwin
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage {

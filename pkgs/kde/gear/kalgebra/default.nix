@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qtwebengine,
-  ncurses,
-  readline,
+{ mkKdeDerivation
+, qtsvg
+, qtwebengine
+, ncurses
+, readline
+,
 }:
 mkKdeDerivation {
   pname = "kalgebra";

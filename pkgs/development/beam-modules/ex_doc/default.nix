@@ -1,14 +1,13 @@
-{
-  lib,
-  elixir,
-  fetchFromGitHub,
-  fetchMixDeps,
-  mixRelease,
-  nix-update-script,
-
-  # for tests
-  beam27Packages,
-  beam28Packages,
+{ lib
+, elixir
+, fetchFromGitHub
+, fetchMixDeps
+, mixRelease
+, nix-update-script
+, # for tests
+  beam27Packages
+, beam28Packages
+,
 }:
 # Based on ../elixir-ls/default.nix
 

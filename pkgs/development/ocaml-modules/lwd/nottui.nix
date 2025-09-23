@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  lwd,
-  notty,
+{ lib
+, buildDunePackage
+, lwd
+, notty
+,
 }:
 
 buildDunePackage {

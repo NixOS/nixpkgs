@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  pkgs,
-  testers,
-  afew,
+{ lib
+, python3Packages
+, fetchPypi
+, pkgs
+, testers
+, afew
+,
 }:
 
 python3Packages.buildPythonApplication rec {

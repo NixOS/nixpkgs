@@ -1,25 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  boto3,
-  langchain-core,
-  numpy,
-  pydantic,
-
-  # tests
-  langchain-tests,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  boto3
+, langchain-core
+, numpy
+, pydantic
+, # tests
+  langchain-tests
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

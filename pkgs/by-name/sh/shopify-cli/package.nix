@@ -1,8 +1,8 @@
-{
-  buildNpmPackage,
-  lib,
-  testers,
-  shopify-cli,
+{ buildNpmPackage
+, lib
+, testers
+, shopify-cli
+,
 }:
 let
   version = "3.83.3";

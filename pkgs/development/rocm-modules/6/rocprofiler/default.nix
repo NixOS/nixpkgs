@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  symlinkJoin,
-  cmake,
-  clang,
-  clr,
-  rocm-core,
-  rocm-runtime,
-  rocm-device-libs,
-  roctracer,
-  rocdbgapi,
-  numactl,
-  libpciaccess,
-  libxml2,
-  elfutils,
-  mpi,
-  systemd,
-  gtest,
-  git,
-  python3Packages,
-  gpuTargets ? clr.gpuTargets,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, symlinkJoin
+, cmake
+, clang
+, clr
+, rocm-core
+, rocm-runtime
+, rocm-device-libs
+, roctracer
+, rocdbgapi
+, numactl
+, libpciaccess
+, libxml2
+, elfutils
+, mpi
+, systemd
+, gtest
+, git
+, python3Packages
+, gpuTargets ? clr.gpuTargets
+,
 }:
 
 let

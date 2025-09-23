@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter327,
-  runCommand,
-  yq,
-  sly,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, flutter327
+, runCommand
+, yq
+, sly
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 flutter327.buildFlutterApplication rec {

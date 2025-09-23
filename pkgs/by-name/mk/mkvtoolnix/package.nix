@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  pkg-config,
-  autoreconfHook,
-  rake,
-  boost,
-  cmark,
-  docbook_xsl,
-  expat,
-  file,
-  flac,
-  fmt,
-  gettext,
-  gmp,
-  gtest,
-  libdvdread,
-  libebml,
-  libiconv,
-  libmatroska,
-  libogg,
-  libvorbis,
-  libxslt,
-  nlohmann_json,
-  pugixml,
-  qt6,
-  utf8cpp,
-  xdg-utils,
-  zlib,
-  nix-update-script,
-  withGUI ? true,
+{ lib
+, stdenv
+, fetchFromGitea
+, pkg-config
+, autoreconfHook
+, rake
+, boost
+, cmark
+, docbook_xsl
+, expat
+, file
+, flac
+, fmt
+, gettext
+, gmp
+, gtest
+, libdvdread
+, libebml
+, libiconv
+, libmatroska
+, libogg
+, libvorbis
+, libxslt
+, nlohmann_json
+, pugixml
+, qt6
+, utf8cpp
+, xdg-utils
+, zlib
+, nix-update-script
+, withGUI ? true
+,
 }:
 
 let

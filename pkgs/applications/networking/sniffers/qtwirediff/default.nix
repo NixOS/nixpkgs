@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qtbase,
-  qmake,
-  qtwayland,
-  wrapQtAppsHook,
-  wireshark-cli,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qtbase
+, qmake
+, qtwayland
+, wrapQtAppsHook
+, wireshark-cli
+,
 }:
 
 stdenv.mkDerivation {

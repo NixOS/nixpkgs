@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ffmpeg,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ffmpeg
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

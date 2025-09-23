@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-
-  # buildInputs
-  SDL2,
-  boost,
-  bullet,
-  ffmpeg_6,
-  glm,
-  libGL,
-  libGLU,
-  libmad,
-  libX11,
-  openal,
-
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, ninja
+, # buildInputs
+  SDL2
+, boost
+, bullet
+, ffmpeg_6
+, glm
+, libGL
+, libGLU
+, libmad
+, libX11
+, openal
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

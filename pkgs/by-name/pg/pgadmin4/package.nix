@@ -1,21 +1,21 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  zlib,
-  nixosTests,
-  postgresqlTestHook,
-  postgresql,
-  yarn-berry_4,
-  nodejs,
-  autoconf,
-  automake,
-  libtool,
-  libpng,
-  nasm,
-  pkg-config,
-  stdenv,
-  server-mode ? true,
+{ lib
+, python3
+, fetchFromGitHub
+, zlib
+, nixosTests
+, postgresqlTestHook
+, postgresql
+, yarn-berry_4
+, nodejs
+, autoconf
+, automake
+, libtool
+, libpng
+, nasm
+, pkg-config
+, stdenv
+, server-mode ? true
+,
 }:
 
 let

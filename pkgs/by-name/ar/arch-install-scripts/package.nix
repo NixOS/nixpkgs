@@ -1,24 +1,24 @@
-{
-  lib,
-  resholve,
-  fetchFromGitLab,
-  asciidoc,
-  bash,
-  coreutils,
-  gawk,
-  gnugrep,
-  gnum4,
-  gnused,
-  pacman,
-  util-linux,
-  chrootPath ? [
+{ lib
+, resholve
+, fetchFromGitLab
+, asciidoc
+, bash
+, coreutils
+, gawk
+, gnugrep
+, gnum4
+, gnused
+, pacman
+, util-linux
+, chrootPath ? [
     "/usr/local/sbin"
     "/usr/local/bin"
     "/usr/bin"
     "/usr/bin/site_perl"
     "/usr/bin/vendor_perl"
     "/usr/bin/core_perl"
-  ],
+  ]
+,
 }:
 
 resholve.mkDerivation rec {

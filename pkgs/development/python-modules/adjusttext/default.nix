@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  matplotlib,
-  numpy,
-  packaging,
-  pythonOlder,
-  scipy,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, matplotlib
+, numpy
+, packaging
+, pythonOlder
+, scipy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

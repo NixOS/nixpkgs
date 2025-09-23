@@ -1,17 +1,18 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  enableGUI ? false, # upstream working in progress
-  pkg-config,
-  glfw,
-  xorg,
-  libXcursor,
-  libXrandr,
-  libXinerama,
-  xinput,
-  libXi,
-  libXxf86vm,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, enableGUI ? false
+, # upstream working in progress
+  pkg-config
+, glfw
+, xorg
+, libXcursor
+, libXrandr
+, libXinerama
+, xinput
+, libXi
+, libXxf86vm
+,
 }:
 buildGoModule rec {
   pname = "bepass";

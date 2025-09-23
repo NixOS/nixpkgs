@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitLab,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  wayland,
-  autoPatchelfHook,
-  libxkbcommon,
-  libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  stdenv,
-  makeWrapper,
-  zenity,
+{ lib
+, fetchFromGitLab
+, rustPlatform
+, pkg-config
+, openssl
+, wayland
+, autoPatchelfHook
+, libxkbcommon
+, libGL
+, libX11
+, libXcursor
+, libXi
+, stdenv
+, makeWrapper
+, zenity
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "surfer";

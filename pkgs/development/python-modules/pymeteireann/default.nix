@@ -1,12 +1,12 @@
-{
-  lib,
-  setuptools,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytz,
-  xmltodict,
+{ lib
+, setuptools
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pytz
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

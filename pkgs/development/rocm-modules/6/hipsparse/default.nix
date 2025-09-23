@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocsparse,
-  clr,
-  gfortran,
-  git,
-  gtest,
-  openmp,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  buildSamples ? false,
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocsparse
+, clr
+, gfortran
+, git
+, gtest
+, openmp
+, buildTests ? false
+, buildBenchmarks ? false
+, buildSamples ? false
+, gpuTargets ? [ ]
+,
 }:
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE

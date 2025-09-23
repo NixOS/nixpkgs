@@ -1,10 +1,10 @@
-{
-  lib,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
+{ lib
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

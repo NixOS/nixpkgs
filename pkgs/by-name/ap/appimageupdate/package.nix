@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  qt5,
-  zsync2,
-  libcpr,
-  libgcrypt,
-  libappimage,
-  argagg,
-  nlohmann_json,
-  gpgme,
-  appimageupdate-qt,
-  withQtUI ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, qt5
+, zsync2
+, libcpr
+, libgcrypt
+, libappimage
+, argagg
+, nlohmann_json
+, gpgme
+, appimageupdate-qt
+, withQtUI ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

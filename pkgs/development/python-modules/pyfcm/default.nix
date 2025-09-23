@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  requests,
-  urllib3,
-  google-auth,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, requests
+, urllib3
+, google-auth
+,
 }:
 
 buildPythonPackage rec {

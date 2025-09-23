@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  beautifulsoup4,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  flit-core,
-  lxml,
-  pyjwt,
-  pythonOlder,
+{ lib
+, aiohttp
+, beautifulsoup4
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, flit-core
+, lxml
+, pyjwt
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

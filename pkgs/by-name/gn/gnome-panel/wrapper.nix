@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildEnv,
-  gnome-panel,
-  gnome-flashback,
-  xorg,
-  glib,
-  wrapGAppsHook3,
-  panelModulePackages ? [ ],
+{ stdenv
+, lib
+, buildEnv
+, gnome-panel
+, gnome-flashback
+, xorg
+, glib
+, wrapGAppsHook3
+, panelModulePackages ? [ ]
+,
 }:
 
 let

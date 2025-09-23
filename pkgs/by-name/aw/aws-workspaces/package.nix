@@ -1,15 +1,15 @@
-{
-  callPackage,
-  writeShellApplication,
-  buildFHSEnv,
-  webkitgtk_4_1,
-  gtk3,
-  pango,
-  atk,
-  cairo,
-  gdk-pixbuf,
-  protobufc,
-  cyrus_sasl,
+{ callPackage
+, writeShellApplication
+, buildFHSEnv
+, webkitgtk_4_1
+, gtk3
+, pango
+, atk
+, cairo
+, gdk-pixbuf
+, protobufc
+, cyrus_sasl
+,
 }:
 
 let

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  cmark,
-  git,
-  libssh2,
-  lua5_4,
-  hunspell,
-  ninja,
-  openssl,
-  pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmark
+, git
+, libssh2
+, lua5_4
+, hunspell
+, ninja
+, openssl
+, pkg-config
+, qtbase
+, qttools
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

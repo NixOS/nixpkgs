@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nodejs,
-  npmHooks,
-  pnpm_9,
-  systemdMinimal,
-  nixosTests,
-  nix-update-script,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nodejs
+, npmHooks
+, pnpm_9
+, systemdMinimal
+, nixosTests
+, nix-update-script
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  python3Packages,
-  zlib,
-  curl,
-  libdeflate,
-  bash,
-  coreutils,
-  addBinToPathHook,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+, zlib
+, curl
+, libdeflate
+, bash
+, coreutils
+, addBinToPathHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

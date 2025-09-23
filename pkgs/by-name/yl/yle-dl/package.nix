@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  ffmpeg,
-  wget,
-  versionCheckHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, ffmpeg
+, wget
+, versionCheckHook
+,
 }:
 
 let

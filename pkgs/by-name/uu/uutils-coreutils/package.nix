@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo,
-  python3Packages,
-  versionCheckHook,
-  nix-update-script,
-
-  prefix ? "uutils-",
-  buildMulticallBinary ? true,
-
-  selinuxSupport ? false,
-  libselinux,
-
-  acl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, python3Packages
+, versionCheckHook
+, nix-update-script
+, prefix ? "uutils-"
+, buildMulticallBinary ? true
+, selinuxSupport ? false
+, libselinux
+, acl
+,
 }:
 
 assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;

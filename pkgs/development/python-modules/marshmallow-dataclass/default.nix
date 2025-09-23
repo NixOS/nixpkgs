@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  marshmallow,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools,
-  typeguard,
-  typing-extensions,
-  typing-inspect,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, marshmallow
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+, typeguard
+, typing-extensions
+, typing-inspect
+,
 }:
 
 buildPythonPackage rec {

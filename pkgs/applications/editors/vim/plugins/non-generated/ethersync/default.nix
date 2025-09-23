@@ -1,6 +1,6 @@
-{
-  vimUtils,
-  ethersync,
+{ vimUtils
+, ethersync
+,
 }:
 vimUtils.buildVimPlugin rec {
   inherit (ethersync)

@@ -1,8 +1,8 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  asar,
+{ lib
+, appimageTools
+, fetchurl
+, asar
+,
 }:
 
 let

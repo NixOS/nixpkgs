@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  numpy,
-  absl-py,
-  mock,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, numpy
+, absl-py
+, mock
+,
 }:
 
 buildPythonPackage rec {

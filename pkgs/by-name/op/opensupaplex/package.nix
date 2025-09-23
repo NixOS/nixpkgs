@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  testers,
-  opensupaplex,
-  SDL2,
-  SDL2_mixer,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, testers
+, opensupaplex
+, SDL2
+, SDL2_mixer
+,
 }:
 
 let

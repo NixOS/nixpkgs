@@ -1,9 +1,9 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  cmake,
-  robin-map,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, cmake
+, robin-map
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchzip,
-  fetchurl,
-  stdenv,
-  makeDesktopItem,
+{ lib
+, fetchzip
+, fetchurl
+, stdenv
+, makeDesktopItem
+,
 }:
 
 let

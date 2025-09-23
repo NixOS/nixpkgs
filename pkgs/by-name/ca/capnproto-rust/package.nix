@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  capnproto,
-  nix-update-script,
+{ lib
+, fetchCrate
+, rustPlatform
+, capnproto
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

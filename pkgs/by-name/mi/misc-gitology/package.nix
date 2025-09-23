@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  perl,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, perl
+, python3
+,
 }:
 stdenv.mkDerivation {
   pname = "misc-gitology";

@@ -1,20 +1,17 @@
-{
-  dhall,
-  dhall-docs,
-  haskell,
-  lib,
-  lndir,
-  runCommand,
-  writeText,
+{ dhall
+, dhall-docs
+, haskell
+, lib
+, lndir
+, runCommand
+, writeText
+,
 }:
 
-{
-  name,
-
-  # Expressions to add to the cache before interpreting the code
-  dependencies ? [ ],
-
-  # A Dhall expression
+{ name
+, # Expressions to add to the cache before interpreting the code
+  dependencies ? [ ]
+, # A Dhall expression
   #
   # Carefully note that the following expression must be devoid of uncached HTTP
   # imports.  This is because the expression will be evaluated using an
@@ -24,9 +21,8 @@
   #
   # You can add a dependency to the cache using the preceding `dependencies`
   # option
-  code,
-
-  # `buildDhallPackage` can include both a "source distribution" in
+  code
+, # `buildDhallPackage` can include both a "source distribution" in
   # `source.dhall` and a "binary distribution" in `binary.dhall`:
   #
   # * `source.dhall` is a dependency-free αβ-normalized Dhall expression
@@ -39,19 +35,18 @@
   # By default, `buildDhallPackage` only includes "binary.dhall" to conserve
   # space within the Nix store, but if you set the following `source` option to
   # `true` then the package will also include `source.dhall`.
-  source ? false,
-
-  # Directory to generate documentation for (i.e. as the `--input` option to the
+  source ? false
+, # Directory to generate documentation for (i.e. as the `--input` option to the
   # `dhall-docs` command.)
   #
   # If `null`, then no documentation is generated.
-  documentationRoot ? null,
-
-  # Base URL prepended to paths copied to the clipboard
+  documentationRoot ? null
+, # Base URL prepended to paths copied to the clipboard
   #
   # This is used in conjunction with `documentationRoot`, and is unused if
   # `documentationRoot` is `null`.
-  baseImportUrl ? null,
+  baseImportUrl ? null
+,
 }:
 
 let

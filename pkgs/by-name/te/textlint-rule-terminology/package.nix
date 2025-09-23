@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  textlint,
-  textlint-rule-terminology,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, textlint
+, textlint-rule-terminology
+,
 }:
 
 buildNpmPackage rec {

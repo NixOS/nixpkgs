@@ -1,7 +1,7 @@
 #!/usr/bin/env -S nix-instantiate --eval --strict --json --arg unused true
 # Unused argument to trigger nix-instantiate calling this function with the default arguments.
-{
-  pinnedJson ? ./pinned.json,
+{ pinnedJson ? ./pinned.json
+,
 }:
 let
   pinned = (builtins.fromJSON (builtins.readFile pinnedJson)).pins;

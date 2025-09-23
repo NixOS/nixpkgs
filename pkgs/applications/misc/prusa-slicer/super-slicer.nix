@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  makeDesktopItem,
-  wxGTK31,
-  prusa-slicer,
-  libspnav,
-  opencascade-occt_7_6,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, makeDesktopItem
+, wxGTK31
+, prusa-slicer
+, libspnav
+, opencascade-occt_7_6
+,
 }:
 let
   appname = "SuperSlicer";
@@ -67,11 +67,10 @@ let
   };
 
   override =
-    {
-      version,
-      hash,
-      patches ? [ ],
-      ...
+    { version
+    , hash
+    , patches ? [ ]
+    , ...
     }:
     super: {
       inherit version pname patches;
@@ -143,9 +142,11 @@ let
   prusa-slicer-deps-override = prusa-slicer.override {
     opencascade-override = opencascade-occt_7_6;
   };
-  allVersions = builtins.mapAttrs (
-    _name: version:
-    (prusa-slicer-deps-override.override (version.overrides or { })).overrideAttrs (override version)
-  ) versions;
+  allVersions = builtins.mapAttrs
+    (
+      _name: version:
+        (prusa-slicer-deps-override.override (version.overrides or { })).overrideAttrs (override version)
+    )
+    versions;
 in
 allVersions.stable

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  texliveMedium,
-  buildDocs ? false,
+{ lib
+, stdenv
+, fetchzip
+, texliveMedium
+, buildDocs ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
-{
-  buildPecl,
-  lib,
-  pcre2,
+{ buildPecl
+, lib
+, pcre2
+,
 }:
 
 buildPecl {

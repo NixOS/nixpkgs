@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  testName,
-  enableAutologin,
-  enableXWayland,
-  ...
+{ config
+, lib
+, testName
+, enableAutologin
+, enableXWayland
+, ...
 }:
 
 {

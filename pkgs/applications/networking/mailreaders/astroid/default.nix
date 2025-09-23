@@ -1,30 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  adwaita-icon-theme,
-  gmime3,
-  webkitgtk_4_1,
-  ronn,
-  libsass,
-  notmuch,
-  boost,
-  wrapGAppsHook3,
-  glib-networking,
-  protobuf,
-  gtkmm3,
-  libpeas,
-  gsettings-desktop-schemas,
-  gobject-introspection,
-  python3,
-
-  # vim to be used, should support the GUI mode.
-  vim,
-
-  # additional python3 packages to be available within plugins
-  extraPythonPackages ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, adwaita-icon-theme
+, gmime3
+, webkitgtk_4_1
+, ronn
+, libsass
+, notmuch
+, boost
+, wrapGAppsHook3
+, glib-networking
+, protobuf
+, gtkmm3
+, libpeas
+, gsettings-desktop-schemas
+, gobject-introspection
+, python3
+, # vim to be used, should support the GUI mode.
+  vim
+, # additional python3 packages to be available within plugins
+  extraPythonPackages ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

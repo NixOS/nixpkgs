@@ -1,15 +1,15 @@
-{
-  cmake,
-  fetchFromGitHub,
-  makeWrapper,
-  opencv4,
-  lib,
-  stdenv,
-  ocl-icd,
-  opencl-headers,
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudatoolkit ? null,
+{ cmake
+, fetchFromGitHub
+, makeWrapper
+, opencv4
+, lib
+, stdenv
+, ocl-icd
+, opencl-headers
+, config
+, cudaSupport ? config.cudaSupport
+, cudatoolkit ? null
+,
 }:
 
 stdenv.mkDerivation rec {

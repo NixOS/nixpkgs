@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flask,
-  mock,
-  flit-core,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flask
+, mock
+, flit-core
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

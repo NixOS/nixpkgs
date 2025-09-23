@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  nix-update-script,
-  darwin,
+{ buildGoModule
+, lib
+, fetchFromGitHub
+, stdenv
+, nix-update-script
+, darwin
+,
 }:
 
 buildGoModule rec {

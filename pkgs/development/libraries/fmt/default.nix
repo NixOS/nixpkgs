@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-
-  # tests
-  mpd,
-  openimageio,
-  fcitx5,
-  spdlog,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, enableShared ? !stdenv.hostPlatform.isStatic
+, # tests
+  mpd
+, openimageio
+, fcitx5
+, spdlog
+,
 }:
 
 let
   generic =
-    {
-      version,
-      hash,
-      patches ? [ ],
+    { version
+    , hash
+    , patches ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       pname = "fmt";

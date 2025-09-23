@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  isPy27,
-  pyserial,
-  srp,
-  lib,
+{ buildPythonPackage
+, fetchPypi
+, isPy27
+, pyserial
+, srp
+, lib
+,
 }:
 
 buildPythonPackage rec {

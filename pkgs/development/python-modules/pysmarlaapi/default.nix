@@ -1,11 +1,11 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  jsonpickle,
-  lib,
-  pysignalr,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, jsonpickle
+, lib
+, pysignalr
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
-  pkgs,
-  yarn,
-  stdenv,
-  makeWrapper,
-  callPackage,
-  go,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, nodejs
+, pkgs
+, yarn
+, stdenv
+, makeWrapper
+, callPackage
+, go
+,
 }:
 
 let

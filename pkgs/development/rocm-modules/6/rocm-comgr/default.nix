@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  cmake,
-  python3,
-  rocm-merged-llvm,
-  rocm-device-libs,
-  zlib,
-  zstd,
-  libxml2,
+{ lib
+, stdenv
+, fetchpatch
+, cmake
+, python3
+, rocm-merged-llvm
+, rocm-device-libs
+, zlib
+, zstd
+, libxml2
+,
 }:
 
 let

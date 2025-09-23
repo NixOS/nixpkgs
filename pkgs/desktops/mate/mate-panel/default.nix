@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf-archive,
-  autoreconfHook,
-  pkg-config,
-  gettext,
-  gtk-doc,
-  itstool,
-  glib,
-  gtk-layer-shell,
-  gtk3,
-  libmateweather,
-  libwnck,
-  librsvg,
-  libxml2,
-  dconf,
-  dconf-editor,
-  mate-common,
-  mate-desktop,
-  mate-menus,
-  hicolor-icon-theme,
-  wayland,
-  gobject-introspection,
-  wrapGAppsHook3,
-  yelp-tools,
-  marco,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf-archive
+, autoreconfHook
+, pkg-config
+, gettext
+, gtk-doc
+, itstool
+, glib
+, gtk-layer-shell
+, gtk3
+, libmateweather
+, libwnck
+, librsvg
+, libxml2
+, dconf
+, dconf-editor
+, mate-common
+, mate-desktop
+, mate-menus
+, hicolor-icon-theme
+, wayland
+, gobject-introspection
+, wrapGAppsHook3
+, yelp-tools
+, marco
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

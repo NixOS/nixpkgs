@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bash-completion,
-  bison,
-  cdrkit,
-  cpio,
-  curl,
-  flex,
-  getopt,
-  glib,
-  gnupg,
-  hivex,
-  jansson,
-  libguestfs-with-appliance,
-  libosinfo,
-  libvirt,
-  libxml2,
-  makeWrapper,
-  ncurses,
-  ocamlPackages,
-  openssl,
-  pcre2,
-  perlPackages,
-  pkg-config,
-  qemu,
-  xz,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, bash-completion
+, bison
+, cdrkit
+, cpio
+, curl
+, flex
+, getopt
+, glib
+, gnupg
+, hivex
+, jansson
+, libguestfs-with-appliance
+, libosinfo
+, libvirt
+, libxml2
+, makeWrapper
+, ncurses
+, ocamlPackages
+, openssl
+, pcre2
+, perlPackages
+, pkg-config
+, qemu
+, xz
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

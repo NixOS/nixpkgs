@@ -1,8 +1,7 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  ...
+{ lib
+, stdenv
+, callPackage
+, ...
 }@args:
 
 let

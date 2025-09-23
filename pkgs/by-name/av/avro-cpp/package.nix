@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  boost,
-  python3,
-  fmt,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, boost
+, python3
+, fmt
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

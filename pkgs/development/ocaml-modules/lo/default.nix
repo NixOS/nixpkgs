@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchpatch,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  liblo,
+{ lib
+, fetchpatch
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, liblo
+,
 }:
 
 buildDunePackage rec {

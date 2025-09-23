@@ -1,12 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  setuptools,
-
-  spylls,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, spylls
+,
 }:
 
 buildPythonPackage rec {

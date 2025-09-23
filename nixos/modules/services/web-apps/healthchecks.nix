@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  buildEnv,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, buildEnv
+, ...
 }:
 
 with lib;

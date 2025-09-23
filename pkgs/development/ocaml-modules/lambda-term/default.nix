@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml,
-  zed,
-  lwt_log,
-  lwt_react,
-  mew_vi,
-  uucp,
-  logs,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, zed
+, lwt_log
+, lwt_react
+, mew_vi
+, uucp
+, logs
+,
 }:
 
 let

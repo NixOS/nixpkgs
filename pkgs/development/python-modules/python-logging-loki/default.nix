@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  rfc3339,
-  requests,
-  freezegun,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, rfc3339
+, requests
+, freezegun
+,
 }:
 
 buildPythonPackage rec {

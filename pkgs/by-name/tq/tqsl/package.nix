@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  expat,
-  openssl,
-  zlib,
-  lmdb,
-  curl,
-  sqlite,
-  wxGTK32,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, expat
+, openssl
+, zlib
+, lmdb
+, curl
+, sqlite
+, wxGTK32
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

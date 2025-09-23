@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  testers,
-  boost,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-test-runner,
-  withDocumentation ? true,
-  doxygen,
-  glog,
-  graphviz,
-  gtest,
-  libapparmor,
-  lomiri-api,
-  pkg-config,
-  python3,
-  qtbase,
-  qtdeclarative,
-  qttools,
-  validatePkgConfig,
-  wrapQtAppsHook,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, testers
+, boost
+, cmake
+, cmake-extras
+, dbus
+, dbus-test-runner
+, withDocumentation ? true
+, doxygen
+, glog
+, graphviz
+, gtest
+, libapparmor
+, lomiri-api
+, pkg-config
+, python3
+, qtbase
+, qtdeclarative
+, qttools
+, validatePkgConfig
+, wrapQtAppsHook
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

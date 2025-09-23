@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  installShellFiles,
-  coreutils,
-  findutils,
-  gawk,
-  rosenpass,
-  wireguard-tools,
+{ lib
+, stdenv
+, makeWrapper
+, installShellFiles
+, coreutils
+, findutils
+, gawk
+, rosenpass
+, wireguard-tools
+,
 }:
 stdenv.mkDerivation {
   inherit (rosenpass) version src;

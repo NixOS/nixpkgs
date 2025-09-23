@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  bc,
-  nukeReferences,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, bc
+, nukeReferences
+,
 }:
 
 stdenv.mkDerivation {

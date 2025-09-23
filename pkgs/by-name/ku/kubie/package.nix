@@ -1,10 +1,10 @@
-{
-  lib,
-  kubectl,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
+{ lib
+, kubectl
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+,
 }:
 
 rustPlatform.buildRustPackage rec {

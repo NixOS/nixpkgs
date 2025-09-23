@@ -1,8 +1,8 @@
-{
-  lib,
-  python312,
-  fetchPypi,
-  qt5,
+{ lib
+, python312
+, fetchPypi
+, qt5
+,
 }:
 
 python312.pkgs.buildPythonApplication rec {

@@ -1,14 +1,14 @@
-{
-  cctools,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  node-gyp,
-  nodejs,
-  pnpm_9,
-  python3,
-  stdenv,
-  xcbuild,
+{ cctools
+, fetchFromGitHub
+, lib
+, makeWrapper
+, node-gyp
+, nodejs
+, pnpm_9
+, python3
+, stdenv
+, xcbuild
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  lib,
-  config,
-  fetchFromGitHub,
-  python3Packages,
-  wmctrl,
-  qtbase,
-  mkDerivationWith,
+{ lib
+, config
+, fetchFromGitHub
+, python3Packages
+, wmctrl
+, qtbase
+, mkDerivationWith
+,
 }:
 
 {
@@ -58,6 +58,6 @@
       '';
     };
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
 }

@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  symlinkJoin,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, symlinkJoin
+,
 }:
 let
   generic =
@@ -49,13 +49,14 @@ let
     vendorHash = "sha256-OVyfPmLTHV5RFdLgRHEH/GqxuG5MnGt9Koz0DxpSg+4=";
   };
 in
-symlinkJoin {
-  name = "bird-lg-${bird-lg-frontend.version}";
-  paths = [
-    bird-lg-frontend
-    bird-lg-proxy
-  ];
-}
-// {
+symlinkJoin
+  {
+    name = "bird-lg-${bird-lg-frontend.version}";
+    paths = [
+      bird-lg-frontend
+      bird-lg-proxy
+    ];
+  }
+  // {
   inherit (bird-lg-frontend) version meta;
 }

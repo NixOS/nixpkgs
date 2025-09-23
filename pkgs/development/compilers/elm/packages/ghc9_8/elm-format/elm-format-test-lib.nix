@@ -1,21 +1,21 @@
-{
-  mkDerivation,
-  avh4-lib,
-  base,
-  containers,
-  fetchgit,
-  filepath,
-  hspec,
-  hspec-core,
-  hspec-golden,
-  lib,
-  mtl,
-  split,
-  tasty,
-  tasty-discover,
-  tasty-hspec,
-  tasty-hunit,
-  text,
+{ mkDerivation
+, avh4-lib
+, base
+, containers
+, fetchgit
+, filepath
+, hspec
+, hspec-core
+, hspec-golden
+, lib
+, mtl
+, split
+, tasty
+, tasty-discover
+, tasty-hspec
+, tasty-hunit
+, text
+,
 }:
 mkDerivation {
   pname = "elm-format-test-lib";

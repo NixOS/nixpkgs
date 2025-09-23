@@ -1,27 +1,25 @@
-{
-  fetchurl,
-  fetchzip,
-  applyPatches,
-  lib,
-  ...
+{ fetchurl
+, fetchzip
+, applyPatches
+, lib
+, ...
 }:
-{
-  name ?
-    if appName == null || appVersion == null then null else "nextcloud-app-${appName}-${appVersion}",
-  url,
-  hash ? "",
-  sha256 ? "",
-  sha512 ? "",
-  appName ? null,
-  appVersion ? null,
-  license,
-  patches ? [ ],
-  description ? null,
-  longDescription ? description,
-  homepage ? null,
-  maintainers ? [ ],
-  teams ? [ ],
-  unpack ? false, # whether to use fetchzip rather than fetchurl
+{ name ? if appName == null || appVersion == null then null else "nextcloud-app-${appName}-${appVersion}"
+, url
+, hash ? ""
+, sha256 ? ""
+, sha512 ? ""
+, appName ? null
+, appVersion ? null
+, license
+, patches ? [ ]
+, description ? null
+, longDescription ? description
+, homepage ? null
+, maintainers ? [ ]
+, teams ? [ ]
+, unpack ? false
+, # whether to use fetchzip rather than fetchurl
 }:
 applyPatches {
   ${if name == null then null else "name"} = name;

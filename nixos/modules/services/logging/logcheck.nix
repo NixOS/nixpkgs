@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.logcheck;
@@ -48,12 +47,11 @@ let
 
   writeIgnoreCronRule =
     name:
-    {
-      level,
-      user,
-      regex,
-      cmdline,
-      ...
+    { level
+    , user
+    , regex
+    , cmdline
+    , ...
     }:
     let
       escapeRegex = lib.escape (lib.stringToCharacters "\\[]{}()^$?*+|.");
@@ -266,11 +264,10 @@ in
         withTime = name: { timeArgs, ... }: timeArgs != null;
         mkCron =
           name:
-          {
-            user,
-            cmdline,
-            timeArgs,
-            ...
+          { user
+          , cmdline
+          , timeArgs
+          , ...
           }:
           ''
             ${timeArgs} ${user} ${cmdline}

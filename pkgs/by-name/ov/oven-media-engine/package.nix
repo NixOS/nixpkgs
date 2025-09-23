@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  srt,
-  bc,
-  pkg-config,
-  perl,
-  openssl,
-  zlib,
-  ffmpeg,
-  libvpx,
-  libopus,
-  libuuid,
-  srtp,
-  jemalloc,
-  pcre2,
-  hiredis,
+{ lib
+, stdenv
+, fetchFromGitHub
+, srt
+, bc
+, pkg-config
+, perl
+, openssl
+, zlib
+, ffmpeg
+, libvpx
+, libopus
+, libuuid
+, srtp
+, jemalloc
+, pcre2
+, hiredis
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoconf-archive,
-  autoreconfHook,
-  bison,
-  gettext,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf-archive
+, autoreconfHook
+, bison
+, gettext
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

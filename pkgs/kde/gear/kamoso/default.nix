@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  gst_all_1,
-  frei0r,
+{ mkKdeDerivation
+, pkg-config
+, gst_all_1
+, frei0r
+,
 }:
 mkKdeDerivation {
   pname = "kamoso";

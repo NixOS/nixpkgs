@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  ninja,
-  pkg-config,
-  pandoc,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qttools,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, ninja
+, pkg-config
+, pandoc
+, wrapQtAppsHook
+, qtbase
+, qtmultimedia
+, qttools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

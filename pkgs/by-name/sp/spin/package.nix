@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  bison,
-  gcc,
-  tk,
-  swarm,
-  graphviz,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, bison
+, gcc
+, tk
+, swarm
+, graphviz
+,
 }:
 
 let

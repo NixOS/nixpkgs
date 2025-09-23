@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-chrony-exporter";

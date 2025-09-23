@@ -1,35 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  unzip,
-
-  SDL2,
-  cmake,
-  curl,
-  discord-rpc,
-  duktape,
-  expat,
-  flac,
-  fontconfig,
-  freetype,
-  gbenchmark,
-  icu,
-  innoextract,
-  jansson,
-  libGLU,
-  libiconv,
-  libogg,
-  libpng,
-  libpthreadstubs,
-  libvorbis,
-  libzip,
-  nlohmann_json,
-  openssl,
-  pkg-config,
-  speexdsp,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, unzip
+, SDL2
+, cmake
+, curl
+, discord-rpc
+, duktape
+, expat
+, flac
+, fontconfig
+, freetype
+, gbenchmark
+, icu
+, innoextract
+, jansson
+, libGLU
+, libiconv
+, libogg
+, libpng
+, libpthreadstubs
+, libvorbis
+, libzip
+, nlohmann_json
+, openssl
+, pkg-config
+, speexdsp
+, zlib
+,
 }:
 
 let

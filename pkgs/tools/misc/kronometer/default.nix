@@ -1,12 +1,12 @@
-{
-  mkDerivation,
-  fetchurl,
-  lib,
-  extra-cmake-modules,
-  kdoctools,
-  kconfig,
-  kcrash,
-  kinit,
+{ mkDerivation
+, fetchurl
+, lib
+, extra-cmake-modules
+, kdoctools
+, kconfig
+, kcrash
+, kinit
+,
 }:
 
 mkDerivation rec {

@@ -1,18 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  legacy ? false,
-  libinput,
-
-  pkg-config,
-  makeWrapper,
-
-  openal,
-  alure,
-  libXtst,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, legacy ? false
+, libinput
+, pkg-config
+, makeWrapper
+, openal
+, alure
+, libXtst
+, libX11
+,
 }:
 
 let

@@ -1,11 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pkgs, # Only for pkgs.plantuml,
-  setuptools,
-  httplib2,
-  mkdocs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pkgs
+, # Only for pkgs.plantuml,
+  setuptools
+, httplib2
+, mkdocs
+,
 }:
 
 buildPythonPackage rec {

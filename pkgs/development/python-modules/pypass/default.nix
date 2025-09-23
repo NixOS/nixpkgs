@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  click,
-  colorama,
-  fetchPypi,
-  gitMinimal,
-  gnugrep,
-  gnupg,
-  pbr,
-  pexpect,
-  pythonAtLeast,
-  pytestCheckHook,
-  setuptools,
-  replaceVars,
-  tree,
-  xclip,
+{ stdenv
+, lib
+, buildPythonPackage
+, click
+, colorama
+, fetchPypi
+, gitMinimal
+, gnugrep
+, gnupg
+, pbr
+, pexpect
+, pythonAtLeast
+, pytestCheckHook
+, setuptools
+, replaceVars
+, tree
+, xclip
+,
 }:
 
 # Use the `pypass` top-level attribute, if you're interested in the

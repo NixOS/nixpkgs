@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.keyd;
@@ -106,18 +105,20 @@ in
 
   config = lib.mkIf cfg.enable {
     # Creates separate files in the `/etc/keyd/` directory for each key in the dictionary
-    environment.etc = lib.mapAttrs' (
-      name: options:
-      lib.nameValuePair "keyd/${name}.conf" {
-        text = ''
-          [ids]
-          ${lib.concatStringsSep "\n" options.ids}
+    environment.etc = lib.mapAttrs'
+      (
+        name: options:
+          lib.nameValuePair "keyd/${name}.conf" {
+            text = ''
+              [ids]
+              ${lib.concatStringsSep "\n" options.ids}
 
-          ${lib.generators.toINI { } options.settings}
-          ${options.extraConfig}
-        '';
-      }
-    ) cfg.keyboards;
+              ${lib.generators.toINI { } options.settings}
+              ${options.extraConfig}
+            '';
+          }
+      )
+      cfg.keyboards;
 
     hardware.uinput.enable = lib.mkDefault true;
 
@@ -127,9 +128,11 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      restartTriggers = lib.mapAttrsToList (
-        name: options: config.environment.etc."keyd/${name}.conf".source
-      ) cfg.keyboards;
+      restartTriggers = lib.mapAttrsToList
+        (
+          name: options: config.environment.etc."keyd/${name}.conf".source
+        )
+        cfg.keyboards;
 
       # this is configurable in 2.4.2, later versions seem to remove this option.
       # post-2.4.2 may need to set makeFlags in the derivation:

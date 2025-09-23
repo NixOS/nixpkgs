@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
-  alsa-lib,
-  flac,
-  libjack2,
-  libogg,
-  libvorbis,
-  qtsvg,
-  qtwayland,
-  rtmidi,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, qmake
+, qttools
+, wrapQtAppsHook
+, alsa-lib
+, flac
+, libjack2
+, libogg
+, libvorbis
+, qtsvg
+, qtwayland
+, rtmidi
+,
 }:
 
 stdenv.mkDerivation rec {

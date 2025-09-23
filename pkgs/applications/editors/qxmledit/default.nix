@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtxmlpatterns,
-  qtsvg,
-  qtscxml,
-  libGLU,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtbase
+, qtxmlpatterns
+, qtsvg
+, qtscxml
+, libGLU
+,
 }:
 
 stdenv.mkDerivation rec {

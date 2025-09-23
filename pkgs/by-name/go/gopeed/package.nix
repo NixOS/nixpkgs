@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter327,
-  autoPatchelfHook,
-  buildGoModule,
-  libayatana-appindicator,
+{ lib
+, fetchFromGitHub
+, flutter327
+, autoPatchelfHook
+, buildGoModule
+, libayatana-appindicator
+,
 }:
 
 let

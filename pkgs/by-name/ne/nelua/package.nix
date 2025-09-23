@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  luaPackages,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, luaPackages
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

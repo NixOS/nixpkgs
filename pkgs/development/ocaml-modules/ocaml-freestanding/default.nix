@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  pkg-config,
-  solo5,
-  target ? "xen",
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, pkg-config
+, solo5
+, target ? "xen"
+,
 }:
 
 # note: this is not technically an ocaml-module,
@@ -71,13 +71,14 @@ else
       maintainers = [ maintainers.sternenseemann ];
       homepage = "https://github.com/mirage/ocaml-freestanding";
       platforms = builtins.map ({ arch, os }: "${arch}-${os}") (
-        cartesianProduct {
-          arch = [
-            "aarch64"
-            "x86_64"
-          ];
-          os = [ "linux" ];
-        }
+        cartesianProduct
+          {
+            arch = [
+              "aarch64"
+              "x86_64"
+            ];
+            os = [ "linux" ];
+          }
         ++ [
           {
             arch = "x86_64";

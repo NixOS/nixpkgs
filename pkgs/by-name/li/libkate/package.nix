@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  bison,
-  flex,
-  libogg,
-  libpng,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, bison
+, flex
+, libogg
+, libpng
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

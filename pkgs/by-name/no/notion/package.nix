@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontconfig,
-  gettext,
-  groff,
-  libSM,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
-  lua,
-  makeWrapper,
-  pkg-config,
-  readline,
-  which,
-  xmessage,
-  xterm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontconfig
+, gettext
+, groff
+, libSM
+, libX11
+, libXext
+, libXft
+, libXinerama
+, libXrandr
+, lua
+, makeWrapper
+, pkg-config
+, readline
+, which
+, xmessage
+, xterm
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libuuid,
-  libselinux,
-  e2fsprogs,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libuuid
+, libselinux
+, e2fsprogs
+,
 }:
 
 stdenv.mkDerivation rec {

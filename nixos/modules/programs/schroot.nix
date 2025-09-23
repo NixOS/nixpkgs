@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -102,19 +101,21 @@ in
 
         "schroot/schroot.conf".source = iniFmt.generate "schroot.conf" cfg.settings;
       }
-      // (lib.attrsets.concatMapAttrs (
-        name:
-        {
-          copyfiles,
-          fstab,
-          nssdatabases,
-        }:
-        {
-          "schroot/${name}/copyfiles".text = (lib.strings.concatStringsSep "\n" copyfiles) + "\n";
-          "schroot/${name}/fstab".source = fstab;
-          "schroot/${name}/nssdatabases".text = (lib.strings.concatStringsSep "\n" nssdatabases) + "\n";
-        }
-      ) cfg.profiles);
+      // (lib.attrsets.concatMapAttrs
+        (
+          name:
+          { copyfiles
+          , fstab
+          , nssdatabases
+          ,
+          }:
+          {
+            "schroot/${name}/copyfiles".text = (lib.strings.concatStringsSep "\n" copyfiles) + "\n";
+            "schroot/${name}/fstab".source = fstab;
+            "schroot/${name}/nssdatabases".text = (lib.strings.concatStringsSep "\n" nssdatabases) + "\n";
+          }
+        )
+        cfg.profiles);
     };
 
     security.wrappers.schroot = {

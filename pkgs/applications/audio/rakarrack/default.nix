@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib-with-plugins,
-  alsa-utils,
-  fltk,
-  libjack2,
-  libXft,
-  libXpm,
-  libjpeg,
-  libpng,
-  libsamplerate,
-  libsndfile,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib-with-plugins
+, alsa-utils
+, fltk
+, libjack2
+, libXft
+, libXpm
+, libjpeg
+, libpng
+, libsamplerate
+, libsndfile
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

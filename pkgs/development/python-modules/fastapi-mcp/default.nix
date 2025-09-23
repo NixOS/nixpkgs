@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  tomli,
-
-  # dependencies
-  fastapi,
-  httpx,
-  mcp,
-  pydantic,
-  pydantic-settings,
-  requests,
-  rich,
-  typer,
-  uvicorn,
-
-  # tests
-  coverage,
-  pytest-asyncio_0,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, tomli
+, # dependencies
+  fastapi
+, httpx
+, mcp
+, pydantic
+, pydantic-settings
+, requests
+, rich
+, typer
+, uvicorn
+, # tests
+  coverage
+, pytest-asyncio_0
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

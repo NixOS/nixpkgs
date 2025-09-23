@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  iconv,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, iconv
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "topiary";

@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  imagemagick,
-  nix-update-script,
-  nototools,
-  pngquant,
-  which,
-  zopfli,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, imagemagick
+, nix-update-script
+, nototools
+, pngquant
+, which
+, zopfli
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

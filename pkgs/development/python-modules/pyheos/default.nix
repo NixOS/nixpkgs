@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytest-asyncio,
-  pytestCheckHook,
-  stdenv,
-  syrupy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytest-asyncio
+, pytestCheckHook
+, stdenv
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

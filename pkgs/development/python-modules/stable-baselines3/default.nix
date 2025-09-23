@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cloudpickle,
-  gymnasium,
-  matplotlib,
-  numpy,
-  pandas,
-  torch,
-
-  # tests
-  ale-py,
-  pytestCheckHook,
-  rich,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  cloudpickle
+, gymnasium
+, matplotlib
+, numpy
+, pandas
+, torch
+, # tests
+  ale-py
+, pytestCheckHook
+, rich
+, tqdm
+,
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";

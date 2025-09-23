@@ -1,14 +1,14 @@
-{
-  lib,
-  flutter335,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  runCommand,
-  yq-go,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter335
+, fetchFromGitHub
+, autoPatchelfHook
+, copyDesktopItems
+, makeDesktopItem
+, runCommand
+, yq-go
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 let

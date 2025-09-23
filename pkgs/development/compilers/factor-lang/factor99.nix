@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  cairo,
-  curl,
-  fetchurl,
-  freealut,
-  gdk-pixbuf,
-  git,
-  glib,
-  gnome2,
-  graphviz,
-  gtk2-x11,
-  interpreter,
-  libGL,
-  libGLU,
-  libogg,
-  librsvg,
-  libvorbis,
-  makeWrapper,
-  ncurses,
-  openal,
-  openssl,
-  pango,
-  pcre,
-  runCommand,
-  runtimeShell,
-  tzdata,
-  udis86,
-  unzip,
-  writeScriptBin,
-  zlib,
+{ lib
+, stdenv
+, cairo
+, curl
+, fetchurl
+, freealut
+, gdk-pixbuf
+, git
+, glib
+, gnome2
+, graphviz
+, gtk2-x11
+, interpreter
+, libGL
+, libGLU
+, libogg
+, librsvg
+, libvorbis
+, makeWrapper
+, ncurses
+, openal
+, openssl
+, pango
+, pcre
+, runCommand
+, runtimeShell
+, tzdata
+, udis86
+, unzip
+, writeScriptBin
+, zlib
+,
 }:
 let
   runtimeLibs = [
@@ -53,10 +53,10 @@ let
   ];
 
   wrapFactorScript =
-    {
-      from,
-      to ? false,
-      runtimeLibs,
+    { from
+    , to ? false
+    , runtimeLibs
+    ,
     }:
     ''
       # Set Gdk pixbuf loaders file to the one from the build dependencies here

@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  buildGoModule,
-  installShellFiles,
-  nix-update-script,
+{ stdenv
+, fetchFromGitHub
+, lib
+, buildGoModule
+, installShellFiles
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

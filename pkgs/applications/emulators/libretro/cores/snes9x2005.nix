@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  withBlarggAPU ? false,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, withBlarggAPU ? false
+,
 }:
 mkLibretroCore {
   core = "snes9x2005" + lib.optionalString withBlarggAPU "-plus";

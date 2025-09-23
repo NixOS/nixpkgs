@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  intltool,
-  file,
-  desktop-file-utils,
-  enchant,
-  gtk3,
-  gtkmm3,
-  gst_all_1,
-  hicolor-icon-theme,
-  libsigcxx,
-  libxmlxx,
-  xdg-utils,
-  isocodes,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, intltool
+, file
+, desktop-file-utils
+, enchant
+, gtk3
+, gtkmm3
+, gst_all_1
+, hicolor-icon-theme
+, libsigcxx
+, libxmlxx
+, xdg-utils
+, isocodes
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

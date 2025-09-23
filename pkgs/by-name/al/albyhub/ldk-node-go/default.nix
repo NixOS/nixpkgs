@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  ldkNode,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, ldkNode
+,
 }:
 
 buildGoModule {

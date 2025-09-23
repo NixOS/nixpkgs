@@ -1,8 +1,8 @@
-{
-  beamPackages,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
+{ beamPackages
+, fetchFromGitHub
+, lib
+, nix-update-script
+,
 }:
 let
   inherit (beamPackages) mixRelease fetchMixDeps erlang;

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  yt-dlp,
-  python3Packages,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, yt-dlp
+, python3Packages
+,
 }:
 
 let

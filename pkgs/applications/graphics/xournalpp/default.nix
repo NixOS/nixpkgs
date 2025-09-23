@@ -1,31 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  gettext,
-  wrapGAppsHook3,
-  pkg-config,
-
-  adwaita-icon-theme,
-  alsa-lib,
-  binutils,
-  glib,
-  gsettings-desktop-schemas,
-  gtk3,
-  gtksourceview4,
-  librsvg,
-  libsndfile,
-  libxml2,
-  libzip,
-  pcre,
-  poppler,
-  portaudio,
-  zlib,
-  # plugins
-  withLua ? true,
-  lua,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, wrapGAppsHook3
+, pkg-config
+, adwaita-icon-theme
+, alsa-lib
+, binutils
+, glib
+, gsettings-desktop-schemas
+, gtk3
+, gtksourceview4
+, librsvg
+, libsndfile
+, libxml2
+, libzip
+, pcre
+, poppler
+, portaudio
+, zlib
+, # plugins
+  withLua ? true
+, lua
+,
 }:
 
 stdenv.mkDerivation rec {

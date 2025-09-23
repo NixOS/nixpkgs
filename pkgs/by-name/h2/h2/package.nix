@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  jre,
-  lib,
-  makeWrapper,
-  maven,
-  nix-update-script,
+{ fetchFromGitHub
+, jre
+, lib
+, makeWrapper
+, maven
+, nix-update-script
+,
 }:
 
 maven.buildMavenPackage rec {

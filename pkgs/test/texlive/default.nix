@@ -1,32 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildEnv,
-  runCommand,
-  fetchurl,
-  file,
-  texlive,
-  writeShellScript,
-  writeText,
-  texliveInfraOnly,
-  texliveConTeXt,
-  texliveSmall,
-  texliveMedium,
-  texliveFull,
+{ lib
+, stdenv
+, buildEnv
+, runCommand
+, fetchurl
+, file
+, texlive
+, writeShellScript
+, writeText
+, texliveInfraOnly
+, texliveConTeXt
+, texliveSmall
+, texliveMedium
+, texliveFull
+,
 }:
 
 rec {
 
   mkTeXTest = lib.makeOverridable (
-    {
-      name,
-      format,
-      text,
-      texLive ? texliveSmall,
-      options ? "-interaction=errorstopmode",
-      preTest ? "",
-      postTest ? "",
-      ...
+    { name
+    , format
+    , text
+    , texLive ? texliveSmall
+    , options ? "-interaction=errorstopmode"
+    , preTest ? ""
+    , postTest ? ""
+    , ...
     }@attrs:
     runCommand "texlive-test-tex-${name}"
       (
@@ -882,19 +881,21 @@ rec {
         echo "checking that all texlive scripts shebangs are in '$NIX_STORE'"
         declare -i scriptCount=0 invalidCount=0
       ''
-      + (lib.concatMapStrings (pkg: ''
-        for bin in '${pkg.outPath}'/bin/* ; do
-          grep -I -q . "$bin" || continue  # ignore binary files
-          [[ -x "$bin" ]] || continue # ignore non-executable files (such as context.lua)
-          scriptCount=$((scriptCount + 1))
-          read -r cmdline < "$bin"
-          read -r interp <<< "$cmdline"
-          if [[ "$interp" != "#!$NIX_STORE"/* && "$interp" != "#! $NIX_STORE"/* ]] ; then
-            echo "error: non-nix shebang '$interp' in script '$bin'"
-            invalidCount=$((invalidCount + 1))
-          fi
-        done
-      '') binPackages)
+      + (lib.concatMapStrings
+        (pkg: ''
+          for bin in '${pkg.outPath}'/bin/* ; do
+            grep -I -q . "$bin" || continue  # ignore binary files
+            [[ -x "$bin" ]] || continue # ignore non-executable files (such as context.lua)
+            scriptCount=$((scriptCount + 1))
+            read -r cmdline < "$bin"
+            read -r interp <<< "$cmdline"
+            if [[ "$interp" != "#!$NIX_STORE"/* && "$interp" != "#! $NIX_STORE"/* ]] ; then
+              echo "error: non-nix shebang '$interp' in script '$bin'"
+              invalidCount=$((invalidCount + 1))
+            fi
+          done
+        '')
+        binPackages)
       + ''
         echo "checked $scriptCount scripts, found $invalidCount non-nix shebangs"
         [[ $invalidCount -gt 0 ]] && exit 1
@@ -921,9 +922,11 @@ rec {
 
       correctLicenses =
         scheme:
-        builtins.foldl' (
-          acc: pkg: concatLicenses acc (lib.toList (pkg.meta.license or [ ]))
-        ) [ ] scheme.passthru.requiredTeXPackages;
+        builtins.foldl'
+          (
+            acc: pkg: concatLicenses acc (lib.toList (pkg.meta.license or [ ]))
+          ) [ ]
+          scheme.passthru.requiredTeXPackages;
       correctLicensesAttrNames = scheme: lib.sort lt (map licenseToAttrName (correctLicenses scheme));
 
       hasLicenseMismatch =
@@ -956,19 +959,24 @@ rec {
   # ease of testing
   fixedHashes =
     let
-      fods = lib.concatMap (
-        p:
-        lib.optional (p ? tex && lib.isDerivation p.tex) p.tex
-        ++ lib.optional (p ? texdoc) p.texdoc
-        ++ lib.optional (p ? texsource) p.texsource
-        ++ lib.optional (p ? tlpkg) p.tlpkg
-      ) (lib.attrValues texlive.pkgs);
-      errorText = lib.concatMapStrings (
-        p:
-        lib.optionalString (
-          !p ? outputHash
-        ) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n"
-      ) fods;
+      fods = lib.concatMap
+        (
+          p:
+          lib.optional (p ? tex && lib.isDerivation p.tex) p.tex
+          ++ lib.optional (p ? texdoc) p.texdoc
+          ++ lib.optional (p ? texsource) p.texsource
+          ++ lib.optional (p ? tlpkg) p.tlpkg
+        )
+        (lib.attrValues texlive.pkgs);
+      errorText = lib.concatMapStrings
+        (
+          p:
+          lib.optionalString
+            (
+              !p ? outputHash
+            ) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n"
+        )
+        fods;
     in
     runCommand "texlive-test-fixed-hashes"
       {

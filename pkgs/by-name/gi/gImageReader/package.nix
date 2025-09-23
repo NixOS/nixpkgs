@@ -1,39 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libuuid,
-  sane-backends,
-  podofo_0_10,
-  libjpeg,
-  djvulibre,
-  libxmlxx3,
-  libzip,
-  tesseract,
-  intltool,
-  poppler,
-  json-glib,
-  ninja,
-  python3,
-  doxygen,
-  enchant,
-
-  # Gtk deps
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libuuid
+, sane-backends
+, podofo_0_10
+, libjpeg
+, djvulibre
+, libxmlxx3
+, libzip
+, tesseract
+, intltool
+, poppler
+, json-glib
+, ninja
+, python3
+, doxygen
+, enchant
+, # Gtk deps
   # upstream gImagereader supports Qt too
-  gobject-introspection,
-  wrapGAppsHook3,
-  gtkmm3,
-  gtksourceview3,
-  gtksourceviewmm,
-  gtkspell3,
-  gtkspellmm,
-  cairomm,
-  kdePackages,
-  qt6Packages,
-  withQt6 ? false,
-  wrapQtAppsHook ? null,
+  gobject-introspection
+, wrapGAppsHook3
+, gtkmm3
+, gtksourceview3
+, gtksourceviewmm
+, gtkspell3
+, gtkspellmm
+, cairomm
+, kdePackages
+, qt6Packages
+, withQt6 ? false
+, wrapQtAppsHook ? null
+,
 }:
 
 let

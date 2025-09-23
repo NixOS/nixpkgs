@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-
-  # tests
-  argcomplete,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  hatchling
+, # tests
+  argcomplete
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

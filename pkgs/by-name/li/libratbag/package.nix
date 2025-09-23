@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsNoGuiHook,
-  gobject-introspection,
-  glib,
-  systemd,
-  udev,
-  libevdev,
-  gitMinimal,
-  check,
-  valgrind,
-  swig,
-  python3,
-  json-glib,
-  libunistring,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wrapGAppsNoGuiHook
+, gobject-introspection
+, glib
+, systemd
+, udev
+, libevdev
+, gitMinimal
+, check
+, valgrind
+, swig
+, python3
+, json-glib
+, libunistring
+,
 }:
 
 stdenv.mkDerivation rec {

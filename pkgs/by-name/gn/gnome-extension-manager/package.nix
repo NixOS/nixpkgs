@@ -1,26 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  appstream,
-  appstream-glib,
-  desktop-file-utils,
-  gettext,
-  glib,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-
-  blueprint-compiler,
-  gtk4,
-  json-glib,
-  libadwaita,
-  libbacktrace,
-  libsoup_3,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream
+, appstream-glib
+, desktop-file-utils
+, gettext
+, glib
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, blueprint-compiler
+, gtk4
+, json-glib
+, libadwaita
+, libbacktrace
+, libsoup_3
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

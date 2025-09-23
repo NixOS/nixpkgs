@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -12,23 +11,25 @@ let
     toString cfg.prependConfig
     + "\n"
     + builtins.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        key: option:
-        let
-          escape = s: lib.escape [ "\"" ] s;
-          quote = s: "\"${s}\"";
+      lib.mapAttrsToList
+        (
+          key: option:
+            let
+              escape = s: lib.escape [ "\"" ] s;
+              quote = s: "\"${s}\"";
 
-          toValue = x: quote (escape (toString x));
+              toValue = x: quote (escape (toString x));
 
-          value = (
-            if lib.isList option then
-              builtins.concatStringsSep " " (builtins.map (x: toValue x) option)
-            else
-              toValue option
-          );
-        in
-        "${key} ${value}"
-      ) cfg.settings
+              value = (
+                if lib.isList option then
+                  builtins.concatStringsSep " " (builtins.map (x: toValue x) option)
+                else
+                  toValue option
+              );
+            in
+            "${key} ${value}"
+        )
+        cfg.settings
     )
     + "\n"
     + toString cfg.appendConfig

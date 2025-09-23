@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nixosTests,
-  gitUpdater,
-  static ? false, # whether to build the static version of the font
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nixosTests
+, gitUpdater
+, static ? false
+, # whether to build the static version of the font
 }:
 
 stdenvNoCC.mkDerivation rec {

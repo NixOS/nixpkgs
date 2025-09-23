@@ -1,13 +1,13 @@
-{
-  lib,
-  bottle,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  pytestCheckHook,
-  pyyaml,
-  redis,
-  setuptools,
+{ lib
+, bottle
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pytestCheckHook
+, pyyaml
+, redis
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

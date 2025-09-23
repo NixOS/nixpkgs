@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.glance;
@@ -66,7 +65,7 @@ in
                 columns = [
                   {
                     size = "full";
-                    widgets = [ { type = "calendar"; } ];
+                    widgets = [{ type = "calendar"; }];
                   }
                 ];
               }

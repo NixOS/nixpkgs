@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  sqlite,
-  zlib,
-  perl,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, sqlite
+, zlib
+, perl
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

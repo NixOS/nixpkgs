@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  pythonOlder,
-  smbus2,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, pythonOlder
+, smbus2
+,
 }:
 
 buildPythonPackage rec {

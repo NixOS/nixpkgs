@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  aiomcache,
-  buildPythonPackage,
-  fetchFromGitHub,
-  marshmallow,
-  memcachedTestHook,
-  msgpack,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonAtLeast,
-  redis,
-  redisTestHook,
-  setuptools,
+{ lib
+, aiohttp
+, aiomcache
+, buildPythonPackage
+, fetchFromGitHub
+, marshmallow
+, memcachedTestHook
+, msgpack
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonAtLeast
+, redis
+, redisTestHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

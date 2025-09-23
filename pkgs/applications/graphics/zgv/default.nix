@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  SDL,
-  SDL_image,
-  libjpeg,
-  libpng,
-  libtiff,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, SDL
+, SDL_image
+, libjpeg
+, libpng
+, libtiff
+,
 }:
 
 stdenv.mkDerivation rec {

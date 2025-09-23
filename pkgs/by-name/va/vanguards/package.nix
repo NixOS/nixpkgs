@@ -1,7 +1,7 @@
-{
-  python312Packages,
-  fetchFromGitHub,
-  lib,
+{ python312Packages
+, fetchFromGitHub
+, lib
+,
 }:
 python312Packages.buildPythonApplication {
   pname = "vanguards";

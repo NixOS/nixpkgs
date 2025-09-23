@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs,
-  python3,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs
+, python3
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

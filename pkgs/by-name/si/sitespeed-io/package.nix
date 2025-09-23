@@ -1,29 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  systemdLibs,
-  coreutils,
-  ffmpeg-headless,
-  imagemagick_light,
-  procps,
-  python3,
-  xorg,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, systemdLibs
+, coreutils
+, ffmpeg-headless
+, imagemagick_light
+, procps
+, python3
+, xorg
+, nix-update-script
+, # chromedriver is more efficient than geckodriver, but is available on less platforms.
 
-  # chromedriver is more efficient than geckodriver, but is available on less platforms.
-
-  withChromium ? (lib.elem stdenv.hostPlatform.system chromedriver.meta.platforms),
-  chromedriver,
-  chromium,
-
-  withFirefox ? (lib.elem stdenv.hostPlatform.system geckodriver.meta.platforms),
-  geckodriver,
-  firefox,
+  withChromium ? (lib.elem stdenv.hostPlatform.system chromedriver.meta.platforms)
+, chromedriver
+, chromium
+, withFirefox ? (lib.elem stdenv.hostPlatform.system geckodriver.meta.platforms)
+, geckodriver
+, firefox
+,
 }:
 assert
-  (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
+(!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
 buildNpmPackage rec {
   pname = "sitespeed-io";
   version = "38.1.2";

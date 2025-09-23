@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  jre,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenvNoCC
+, fetchurl
+, jre
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

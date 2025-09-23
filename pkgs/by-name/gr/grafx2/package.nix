@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  SDL,
-  SDL_image,
-  SDL_ttf,
-  installShellFiles,
-  fontconfig,
-  libpng,
-  libtiff,
-  lua5,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, SDL_image
+, SDL_ttf
+, installShellFiles
+, fontconfig
+, libpng
+, libtiff
+, lua5
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

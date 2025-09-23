@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  hwloc,
-  fftw,
-  perl,
-  blas,
-  lapack,
-  llvmPackages,
-  mpi,
-  cudaPackages,
-  plumed,
-  singlePrec ? true,
-  config,
-  enableCuda ? config.cudaSupport,
-  enableMpi ? false,
-  enablePlumed ? false,
-  cpuAcceleration ? null,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, hwloc
+, fftw
+, perl
+, blas
+, lapack
+, llvmPackages
+, mpi
+, cudaPackages
+, plumed
+, singlePrec ? true
+, config
+, enableCuda ? config.cudaSupport
+, enableMpi ? false
+, enablePlumed ? false
+, cpuAcceleration ? null
+,
 }:
 
 # CUDA is only implemented for single precission

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  copyDesktopItems,
-  electron_37,
-  nodejs,
-  pnpm_10,
-  makeDesktopItem,
-  darwin,
-  nix-update-script,
-  _experimental-update-script-combinators,
-  writeShellApplication,
-  nix,
-  jq,
-  gnugrep,
-  podman,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, copyDesktopItems
+, electron_37
+, nodejs
+, pnpm_10
+, makeDesktopItem
+, darwin
+, nix-update-script
+, _experimental-update-script-combinators
+, writeShellApplication
+, nix
+, jq
+, gnugrep
+, podman
+,
 }:
 
 let

@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   inherit (lib)
@@ -124,17 +123,17 @@ let
       # Convert clientSecretFile options into the real counterpart
       augmentedAccounts = flip mapAttrs cfg.provision.accounts (
         accountName: account:
-        account
-        // {
-          auth = flip mapAttrs account.auth (
-            authName: auth:
-            recursiveUpdate auth (
-              optionalAttrs (auth.adapter_config.clientSecretFile != null) {
-                adapter_config.client_secret = "{env:AUTH_CLIENT_SECRET_${toUpper accountName}_${toUpper authName}}";
-              }
-            )
-          );
-        }
+          account
+          // {
+            auth = flip mapAttrs account.auth (
+              authName: auth:
+                recursiveUpdate auth (
+                  optionalAttrs (auth.adapter_config.clientSecretFile != null) {
+                    adapter_config.client_secret = "{env:AUTH_CLIENT_SECRET_${toUpper accountName}_${toUpper authName}}";
+                  }
+                )
+            );
+          }
       );
     in
     jsonFormat.generate "provision-state.json" {
@@ -894,18 +893,18 @@ in
       ++ concatLists (
         flip mapAttrsToList cfg.provision.accounts (
           accountName: accountCfg:
-          [
-            {
-              assertion = (builtins.match "^[[:lower:]_-]+$" accountName) != null;
-              message = "An account name must contain only lowercase characters and underscores, as it will be used as the URL slug for this account.";
-            }
-          ]
-          ++ flip mapAttrsToList accountCfg.auth (
-            authName: _: {
-              assertion = (builtins.match "^[[:alnum:]_-]+$" authName) != null;
-              message = "The authentication provider attribute key must contain only letters, numbers, underscores or dashes.";
-            }
-          )
+            [
+              {
+                assertion = (builtins.match "^[[:lower:]_-]+$" accountName) != null;
+                message = "An account name must contain only lowercase characters and underscores, as it will be used as the URL slug for this account.";
+              }
+            ]
+            ++ flip mapAttrsToList accountCfg.auth (
+              authName: _: {
+                assertion = (builtins.match "^[[:alnum:]_-]+$" authName) != null;
+                message = "The authentication provider attribute key must contain only letters, numbers, underscores or dashes.";
+              }
+            )
         )
       );
     }
@@ -1067,13 +1066,13 @@ in
       # Load client secrets from authentication providers
       services.firezone.server.settingsSecret = flip concatMapAttrs cfg.provision.accounts (
         accountName: accountCfg:
-        flip concatMapAttrs accountCfg.auth (
-          authName: authCfg:
-          optionalAttrs (authCfg.adapter_config.clientSecretFile != null) {
-            "AUTH_CLIENT_SECRET_${toUpper accountName}_${toUpper authName}" =
-              authCfg.adapter_config.clientSecretFile;
-          }
-        )
+          flip concatMapAttrs accountCfg.auth (
+            authName: authCfg:
+              optionalAttrs (authCfg.adapter_config.clientSecretFile != null) {
+                "AUTH_CLIENT_SECRET_${toUpper accountName}_${toUpper authName}" =
+                  authCfg.adapter_config.clientSecretFile;
+              }
+          )
       );
     })
     (mkIf (cfg.openClusterFirewall && cfg.domain.enable) {

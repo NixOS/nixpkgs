@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchzip,
-  clickgen,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchzip
+, clickgen
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  stdenv,
-  strip-nondeterminism,
-  zip,
+{ lib
+, fetchFromGitHub
+, python3
+, stdenv
+, strip-nondeterminism
+, zip
+,
 }:
 
 let

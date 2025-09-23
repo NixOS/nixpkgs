@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  appstream-glib,
-  gettext,
-  pkg-config,
-  wrapGAppsHook3,
-  gobject-introspection,
-  autoreconfHook,
-  gtk3,
-  ibus,
-  libhangul,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, appstream-glib
+, gettext
+, pkg-config
+, wrapGAppsHook3
+, gobject-introspection
+, autoreconfHook
+, gtk3
+, ibus
+, libhangul
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

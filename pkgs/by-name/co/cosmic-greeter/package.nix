@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libcosmicAppHook,
-  cmake,
-  just,
-  libinput,
-  linux-pam,
-  udev,
-  coreutils,
-  xkeyboard_config,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libcosmicAppHook
+, cmake
+, just
+, libinput
+, linux-pam
+, udev
+, coreutils
+, xkeyboard_config
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

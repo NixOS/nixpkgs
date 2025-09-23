@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  dbt-core,
-  fetchPypi,
-  pytestCheckHook,
-  hatchling,
-  snowflake-connector-python,
+{ lib
+, buildPythonPackage
+, dbt-core
+, fetchPypi
+, pytestCheckHook
+, hatchling
+, snowflake-connector-python
+,
 }:
 
 buildPythonPackage rec {

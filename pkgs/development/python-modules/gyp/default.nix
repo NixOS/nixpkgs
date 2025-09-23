@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitiles,
-  setuptools,
-  six,
-  python,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitiles
+, setuptools
+, six
+, python
+,
 }:
 
 buildPythonPackage {

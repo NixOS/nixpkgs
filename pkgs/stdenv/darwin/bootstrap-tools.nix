@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  bootstrapTools,
-  unpack,
+{ lib
+, stdenv
+, bootstrapTools
+, unpack
+,
 }:
 
 builtins.derivation {

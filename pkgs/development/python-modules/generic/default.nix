@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  exceptiongroup,
-  fetchPypi,
-  poetry-core,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, exceptiongroup
+, fetchPypi
+, poetry-core
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

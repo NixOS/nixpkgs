@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  incremental,
-  pythonOlder,
-  setuptools,
-  typer,
+{ lib
+, aiohttp
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, incremental
+, pythonOlder
+, setuptools
+, typer
+,
 }:
 
 buildPythonPackage rec {

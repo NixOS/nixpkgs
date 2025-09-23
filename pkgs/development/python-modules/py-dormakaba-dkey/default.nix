@@ -1,14 +1,14 @@
-{
-  lib,
-  bleak,
-  bleak-retry-connector,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
-  setuptools,
-  wheel,
+{ lib
+, bleak
+, bleak-retry-connector
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -15,26 +14,28 @@ let
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  configAttrs = lib.recursiveUpdate {
-    main = {
-      plugins = "keyfile";
-      inherit (cfg) dhcp dns;
-      # If resolvconf is disabled that means that resolv.conf is managed by some other module.
-      rc-manager = if config.networking.resolvconf.enable then "resolvconf" else "unmanaged";
-    };
-    keyfile = {
-      unmanaged-devices = if cfg.unmanaged == [ ] then null else lib.concatStringsSep ";" cfg.unmanaged;
-    };
-    logging = {
-      audit = config.security.audit.enable;
-      level = cfg.logLevel;
-    };
-    connection = cfg.connectionConfig;
-    device = {
-      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
-      "wifi.backend" = cfg.wifi.backend;
-    };
-  } cfg.settings;
+  configAttrs = lib.recursiveUpdate
+    {
+      main = {
+        plugins = "keyfile";
+        inherit (cfg) dhcp dns;
+        # If resolvconf is disabled that means that resolv.conf is managed by some other module.
+        rc-manager = if config.networking.resolvconf.enable then "resolvconf" else "unmanaged";
+      };
+      keyfile = {
+        unmanaged-devices = if cfg.unmanaged == [ ] then null else lib.concatStringsSep ";" cfg.unmanaged;
+      };
+      logging = {
+        audit = config.security.audit.enable;
+        level = cfg.logLevel;
+      };
+      connection = cfg.connectionConfig;
+      device = {
+        "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
+        "wifi.backend" = cfg.wifi.backend;
+      };
+    }
+    cfg.settings;
   configFile = ini.generate "NetworkManager.conf" configAttrs;
 
   /*
@@ -561,26 +562,30 @@ in
       '';
     }
     // builtins.listToAttrs (
-      map (
-        pkg:
-        nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
-          source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
-        }
-      ) cfg.plugins
+      map
+        (
+          pkg:
+          nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
+            source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
+          }
+        )
+        cfg.plugins
     )
     // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ]) {
       "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
     }
     // listToAttrs (
-      lib.imap1 (i: s: {
-        name = "NetworkManager/dispatcher.d/${
+      lib.imap1
+        (i: s: {
+          name = "NetworkManager/dispatcher.d/${
           dispatcherTypesSubdirMap.${s.type}
         }03userscript${lib.fixedWidthNumber 4 i}";
-        value = {
-          mode = "0544";
-          inherit (s) source;
-        };
-      }) cfg.dispatcherScripts
+          value = {
+            mode = "0544";
+            inherit (s) source;
+          };
+        })
+        cfg.dispatcherScripts
     );
 
     environment.systemPackages = packages;
@@ -657,9 +662,11 @@ in
         ''
           mkdir -p /run/NetworkManager/system-connections
         ''
-        + lib.concatMapStringsSep "\n" (profile: ''
-          ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
-        '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
+        + lib.concatMapStringsSep "\n"
+          (profile: ''
+            ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
+          '')
+          (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
         + ''
           ${cfg.package}/bin/nmcli connection reload
         '';

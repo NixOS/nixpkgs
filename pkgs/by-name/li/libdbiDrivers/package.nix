@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libdbi,
-  # TODO: migrate away from overriding packages to null
-  libmysqlclient ? null,
-  sqlite ? null,
-  libpq ? null,
+{ lib
+, stdenv
+, fetchurl
+, libdbi
+, # TODO: migrate away from overriding packages to null
+  libmysqlclient ? null
+, sqlite ? null
+, libpq ? null
+,
 }:
 
 stdenv.mkDerivation rec {

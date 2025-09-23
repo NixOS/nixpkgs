@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  zlib,
-  cmake,
-  enableJemalloc ? !stdenv.hostPlatform.isMusl,
-  jemalloc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, zlib
+, cmake
+, enableJemalloc ? !stdenv.hostPlatform.isMusl
+, jemalloc
+,
 }:
 
 stdenv.mkDerivation rec {

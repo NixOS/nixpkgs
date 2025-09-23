@@ -1,13 +1,12 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-
-  cmake,
-  pkg-config,
-  qtbase,
-  qttools,
-  qtx11extras,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qtbase
+, qttools
+, qtx11extras
+,
 }:
 
 mkDerivation rec {

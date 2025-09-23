@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  fetchzip,
-  autoPatchelfHook,
-  installShellFiles,
-  makeWrapper,
-  lib,
-  zlib,
-  testers,
+{ stdenvNoCC
+, fetchzip
+, autoPatchelfHook
+, installShellFiles
+, makeWrapper
+, lib
+, zlib
+, testers
+,
 }:
 let
   platform =
@@ -14,15 +14,13 @@ let
       x86_64-linux = "x86_64-pc-linux";
       x86_64-darwin = "x86_64-apple-darwin";
       aarch64-darwin = "arm64-apple-darwin";
-    }
-    ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
+    }."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
   hash =
     {
       x86_64-linux = "sha256-SGV0fEuwmGwpqmD42a+x0fIK50RWSHEYDesH4obgRhg=";
       x86_64-darwin = "sha256-fOeYUchUE1Jj4xSrYjljEUpGrW8cvev7d/qywc81vFo=";
       aarch64-darwin = "sha256-qL0hjEdfkN62NDvhlzVgW4TYWv0IReo2Fo5eVhUaOrI=";
-    }
-    ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
+    }."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bleep";

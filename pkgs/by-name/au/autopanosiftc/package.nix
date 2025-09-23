@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libpng,
-  libtiff,
-  libjpeg,
-  panotools,
-  libxml2,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libpng
+, libtiff
+, libjpeg
+, panotools
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

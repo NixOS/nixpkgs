@@ -1,9 +1,8 @@
 # Zeitgeist
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 {
 

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  build2,
-  fetchurl,
-  fixDarwinDylibNames,
-  libbutl,
-  libpkgconf,
-  buildPackages,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? !enableShared,
+{ stdenv
+, lib
+, build2
+, fetchurl
+, fixDarwinDylibNames
+, libbutl
+, libpkgconf
+, buildPackages
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? !enableShared
+,
 }:
 let
   configSharedStatic =

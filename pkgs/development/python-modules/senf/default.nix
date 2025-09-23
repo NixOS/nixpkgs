@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  hypothesis,
-  pytestCheckHook,
-  unstableGitUpdater,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, hypothesis
+, pytestCheckHook
+, unstableGitUpdater
+,
 }:
 
 buildPythonPackage {

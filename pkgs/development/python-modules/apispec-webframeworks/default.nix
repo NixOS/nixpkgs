@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  apispec,
-  bottle,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  flask,
-  mock,
-  pytestCheckHook,
-  pythonOlder,
-  tornado,
+{ lib
+, aiohttp
+, apispec
+, bottle
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, flask
+, mock
+, pytestCheckHook
+, pythonOlder
+, tornado
+,
 }:
 
 buildPythonPackage rec {

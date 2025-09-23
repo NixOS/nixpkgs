@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  prometheus-client,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, prometheus-client
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

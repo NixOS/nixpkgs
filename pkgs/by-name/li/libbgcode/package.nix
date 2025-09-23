@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  heatshrink,
-  zlib,
-  boost,
-  catch2_3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, heatshrink
+, zlib
+, boost
+, catch2_3
+,
 }:
 stdenv.mkDerivation {
   pname = "libbgcode";

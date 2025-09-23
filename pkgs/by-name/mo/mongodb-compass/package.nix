@@ -1,7 +1,7 @@
-{
-  stdenv,
-  callPackage,
-  lib,
+{ stdenv
+, callPackage
+, lib
+,
 }:
 
 let

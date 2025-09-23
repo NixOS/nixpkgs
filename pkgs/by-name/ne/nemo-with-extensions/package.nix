@@ -1,15 +1,15 @@
-{
-  symlinkJoin,
-  lib,
-  makeWrapper,
-  folder-color-switcher,
-  nemo,
-  nemo-emblems,
-  nemo-fileroller,
-  nemo-python,
-  python3,
-  extensions ? [ ],
-  useDefaultExtensions ? true,
+{ symlinkJoin
+, lib
+, makeWrapper
+, folder-color-switcher
+, nemo
+, nemo-emblems
+, nemo-fileroller
+, nemo-python
+, python3
+, extensions ? [ ]
+, useDefaultExtensions ? true
+,
 }:
 
 let

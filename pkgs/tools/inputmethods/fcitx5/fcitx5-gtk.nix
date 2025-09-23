@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  fcitx5,
-  gobject-introspection,
-  glib,
-  gtk2,
-  gtk3,
-  gtk4,
-  fmt,
-  pcre,
-  libuuid,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libXdmcp,
-  libxkbcommon,
-  libepoxy,
-  dbus,
-  at-spi2-core,
-  libXtst,
-  withGTK2 ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, fcitx5
+, gobject-introspection
+, glib
+, gtk2
+, gtk3
+, gtk4
+, fmt
+, pcre
+, libuuid
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libXdmcp
+, libxkbcommon
+, libepoxy
+, dbus
+, at-spi2-core
+, libXtst
+, withGTK2 ? false
+,
 }:
 
 stdenv.mkDerivation rec {

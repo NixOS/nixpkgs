@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libcap,
-  libseccomp,
-  openssl,
-  pam,
-  libxcrypt,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, libcap
+, libseccomp
+, openssl
+, pam
+, libxcrypt
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

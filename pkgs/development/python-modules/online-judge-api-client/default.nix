@@ -1,17 +1,17 @@
-{
-  lib,
-  appdirs,
-  beautifulsoup4,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  git,
-  jsonschema,
-  lxml,
-  markdown,
-  python,
-  requests,
-  toml,
+{ lib
+, appdirs
+, beautifulsoup4
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, git
+, jsonschema
+, lxml
+, markdown
+, python
+, requests
+, toml
+,
 }:
 
 let

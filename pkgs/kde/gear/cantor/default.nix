@@ -1,17 +1,14 @@
-{
-  mkKdeDerivation,
-
-  pkg-config,
-  shared-mime-info,
-
-  qtsvg,
-  qttools,
-  qtwebengine,
-
-  libqalculate,
-  libspectre,
-  luajit,
-  poppler,
+{ mkKdeDerivation
+, pkg-config
+, shared-mime-info
+, qtsvg
+, qttools
+, qtwebengine
+, libqalculate
+, libspectre
+, luajit
+, poppler
+,
 }:
 mkKdeDerivation {
   pname = "cantor";

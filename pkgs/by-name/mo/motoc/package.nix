@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  openxr-loader,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, openxr-loader
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

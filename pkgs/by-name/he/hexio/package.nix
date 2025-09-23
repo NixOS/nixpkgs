@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pcsclite,
-  pth,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pcsclite
+, pth
+, python3Packages
+,
 }:
 stdenv.mkDerivation rec {
   pname = "hexio";

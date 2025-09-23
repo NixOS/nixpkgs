@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  cairo,
-  cmake,
-  fetchzip,
-  freetype,
-  libffi,
-  libgit2,
-  libpng,
-  libuuid,
-  makeBinaryWrapper,
-  openssl,
-  pixman,
-  SDL2,
+{ lib
+, stdenv
+, cairo
+, cmake
+, fetchzip
+, freetype
+, libffi
+, libgit2
+, libpng
+, libuuid
+, makeBinaryWrapper
+, openssl
+, pixman
+, SDL2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

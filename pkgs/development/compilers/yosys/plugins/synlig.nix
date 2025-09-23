@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  antlr4,
-  capnproto,
-  readline,
-  surelog,
-  uhdm,
-  yosys,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, antlr4
+, capnproto
+, readline
+, surelog
+, uhdm
+, yosys
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

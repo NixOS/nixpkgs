@@ -1,6 +1,6 @@
-{
-  buildBatExtrasPkg,
-  less,
+{ buildBatExtrasPkg
+, less
+,
 }:
 buildBatExtrasPkg {
   name = "batpipe";

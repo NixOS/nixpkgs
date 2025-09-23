@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pytestCheckHook,
-  numpy,
-  libsndfile,
-  cffi,
-  isPyPy,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pytestCheckHook
+, numpy
+, libsndfile
+, cffi
+, isPyPy
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  npm-lockfile-fix,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, npm-lockfile-fix
+,
 }:
 
 buildNpmPackage rec {

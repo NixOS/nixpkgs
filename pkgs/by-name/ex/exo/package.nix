@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, gitUpdater
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exo";

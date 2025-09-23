@@ -1,52 +1,85 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  yasm,
-  vp8DecoderSupport ? true, # VP8 decoder
-  vp8EncoderSupport ? true, # VP8 encoder
-  vp9DecoderSupport ? true, # VP9 decoder
-  vp9EncoderSupport ? true, # VP9 encoder
-  extraWarningsSupport ? false, # emit non-fatal warnings
-  werrorSupport ? false, # treat warnings as errors (not available with all compilers)
-  debugSupport ? false, # debug mode
-  gprofSupport ? false, # gprof profiling instrumentation
-  gcovSupport ? false, # gcov coverage instrumentation
-  sizeLimitSupport ? true, # limit max size to allow in the decoder
-  optimizationsSupport ? true, # compiler optimization flags
-  runtimeCpuDetectSupport ? true, # detect cpu capabilities at runtime
-  thumbSupport ? false, # build arm assembly in thumb mode
-  examplesSupport ? true, # build examples (vpxdec & vpxenc are part of examples)
-  debugLibsSupport ? false, # include debug version of each library
-  postprocSupport ? true, # postprocessing
-  multithreadSupport ? true, # multithreaded decoding & encoding
-  internalStatsSupport ? false, # output of encoder internal stats for debug, if supported (encoders)
-  spatialResamplingSupport ? true, # spatial sampling (scaling)
-  realtimeOnlySupport ? false, # build for real-time encoding
-  ontheflyBitpackingSupport ? false, # on-the-fly bitpacking in real-time encoding
-  errorConcealmentSupport ? false, # decoder conceals losses
-  smallSupport ? false, # favor smaller binary over speed
-  postprocVisualizerSupport ? false, # macro block/block level visualizers
-  unitTestsSupport ? false,
-  curl ? null,
-  coreutils ? null, # unit tests
-  webmIOSupport ? true, # input from and output to webm container
-  libyuvSupport ? true, # libyuv
-  decodePerfTestsSupport ? false, # build decoder perf tests with unit tests
-  encodePerfTestsSupport ? false, # build encoder perf tests with unit tests
-  multiResEncodingSupport ? false, # multiple-resolution encoding
-  temporalDenoisingSupport ? true, # use temporal denoising instead of spatial denoising
-  coefficientRangeCheckingSupport ? false, # decoder checks if intermediate transform coefficients are in valid range
-  vp9HighbitdepthSupport ? true, # 10/12 bit color support in VP9
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, yasm
+, vp8DecoderSupport ? true
+, # VP8 decoder
+  vp8EncoderSupport ? true
+, # VP8 encoder
+  vp9DecoderSupport ? true
+, # VP9 decoder
+  vp9EncoderSupport ? true
+, # VP9 encoder
+  extraWarningsSupport ? false
+, # emit non-fatal warnings
+  werrorSupport ? false
+, # treat warnings as errors (not available with all compilers)
+  debugSupport ? false
+, # debug mode
+  gprofSupport ? false
+, # gprof profiling instrumentation
+  gcovSupport ? false
+, # gcov coverage instrumentation
+  sizeLimitSupport ? true
+, # limit max size to allow in the decoder
+  optimizationsSupport ? true
+, # compiler optimization flags
+  runtimeCpuDetectSupport ? true
+, # detect cpu capabilities at runtime
+  thumbSupport ? false
+, # build arm assembly in thumb mode
+  examplesSupport ? true
+, # build examples (vpxdec & vpxenc are part of examples)
+  debugLibsSupport ? false
+, # include debug version of each library
+  postprocSupport ? true
+, # postprocessing
+  multithreadSupport ? true
+, # multithreaded decoding & encoding
+  internalStatsSupport ? false
+, # output of encoder internal stats for debug, if supported (encoders)
+  spatialResamplingSupport ? true
+, # spatial sampling (scaling)
+  realtimeOnlySupport ? false
+, # build for real-time encoding
+  ontheflyBitpackingSupport ? false
+, # on-the-fly bitpacking in real-time encoding
+  errorConcealmentSupport ? false
+, # decoder conceals losses
+  smallSupport ? false
+, # favor smaller binary over speed
+  postprocVisualizerSupport ? false
+, # macro block/block level visualizers
+  unitTestsSupport ? false
+, curl ? null
+, coreutils ? null
+, # unit tests
+  webmIOSupport ? true
+, # input from and output to webm container
+  libyuvSupport ? true
+, # libyuv
+  decodePerfTestsSupport ? false
+, # build decoder perf tests with unit tests
+  encodePerfTestsSupport ? false
+, # build encoder perf tests with unit tests
+  multiResEncodingSupport ? false
+, # multiple-resolution encoding
+  temporalDenoisingSupport ? true
+, # use temporal denoising instead of spatial denoising
+  coefficientRangeCheckingSupport ? false
+, # decoder checks if intermediate transform coefficients are in valid range
+  vp9HighbitdepthSupport ? true
+, # 10/12 bit color support in VP9
   # Experimental features
-  experimentalSpatialSvcSupport ? false, # Spatial scalable video coding
-  experimentalFpMbStatsSupport ? false,
-  experimentalEmulateHardwareSupport ? false,
-
-  # for passthru.tests
-  ffmpeg,
-  gst_all_1,
+  experimentalSpatialSvcSupport ? false
+, # Spatial scalable video coding
+  experimentalFpMbStatsSupport ? false
+, experimentalEmulateHardwareSupport ? false
+, # for passthru.tests
+  ffmpeg
+, gst_all_1
+,
 }:
 
 let
@@ -214,14 +247,16 @@ stdenv.mkDerivation rec {
     (enableFeature encodePerfTestsSupport "encode-perf-tests")
     (enableFeature multiResEncodingSupport "multi-res-encoding")
     (enableFeature temporalDenoisingSupport "temporal-denoising")
-    (enableFeature (
-      temporalDenoisingSupport && (vp9DecoderSupport || vp9EncoderSupport)
-    ) "vp9-temporal-denoising")
+    (enableFeature
+      (
+        temporalDenoisingSupport && (vp9DecoderSupport || vp9EncoderSupport)
+      ) "vp9-temporal-denoising")
     (enableFeature coefficientRangeCheckingSupport "coefficient-range-checking")
     (enableFeature (vp9HighbitdepthSupport && is64bit) "vp9-highbitdepth")
-    (enableFeature (
-      experimentalSpatialSvcSupport || experimentalFpMbStatsSupport || experimentalEmulateHardwareSupport
-    ) "experimental")
+    (enableFeature
+      (
+        experimentalSpatialSvcSupport || experimentalFpMbStatsSupport || experimentalEmulateHardwareSupport
+      ) "experimental")
   ]
   ++ optionals (target != null) [
     "--target=${target}"

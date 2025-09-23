@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  ffmpeg,
-
-  # build-system
-  setuptools,
-
-  # checks
-  psutil,
-  pytestCheckHook,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, ffmpeg
+, # build-system
+  setuptools
+, # checks
+  psutil
+, pytestCheckHook
+, python
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  blas,
-  boost,
-  cmake,
-  gfortran,
-  lapack,
-  mpi,
-  suitesparse,
-  swig,
-  withMPI ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, blas
+, boost
+, cmake
+, gfortran
+, lapack
+, mpi
+, suitesparse
+, swig
+, withMPI ? false
+,
 }:
 
 # NOTE: Not all packages are enabled.  We specifically enable the ones

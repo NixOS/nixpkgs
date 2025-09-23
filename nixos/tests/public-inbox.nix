@@ -20,11 +20,10 @@ in
   meta.maintainers = with pkgs.lib.maintainers; [ julm ];
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      nodes,
-      ...
+    { config
+    , pkgs
+    , nodes
+    , ...
     }:
     let
       inherit (config.services) public-inbox;
@@ -101,13 +100,15 @@ in
               };
             };
         settings.coderepo = lib.listToAttrs (
-          map (
-            repositoryName:
-            lib.nameValuePair repositoryName {
-              dir = "/var/lib/public-inbox/repositories/${repositoryName}.git";
-              cgitUrl = "https://git.${domain}/${repositoryName}.git";
-            }
-          ) gitRepositories
+          map
+            (
+              repositoryName:
+              lib.nameValuePair repositoryName {
+                dir = "/var/lib/public-inbox/repositories/${repositoryName}.git";
+                cgitUrl = "https://git.${domain}/${repositoryName}.git";
+              }
+            )
+            gitRepositories
         );
       };
 

@@ -1,14 +1,12 @@
-{
-  lib,
-  python312Packages,
-  fetchFromGitHub,
-
-  chromaprint,
-  gettext,
-  qt5,
-
-  enablePlayback ? true,
-  gst_all_1,
+{ lib
+, python312Packages
+, fetchFromGitHub
+, chromaprint
+, gettext
+, qt5
+, enablePlayback ? true
+, gst_all_1
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitea,
-  installShellFiles,
-  pkg-config,
-  pcsclite,
-  dbus,
-  testers,
-  openpgp-card-tools,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitea
+, installShellFiles
+, pkg-config
+, pcsclite
+, dbus
+, testers
+, openpgp-card-tools
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  pkg-config,
-  mpi,
-  cgal_5,
-  boost,
-  gmp,
-  mpfr,
-  sparsehash,
-  imagemagick,
-  gtest,
-  ctestCheckHook,
-  mpiCheckPhaseHook,
-  withExamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, pkg-config
+, mpi
+, cgal_5
+, boost
+, gmp
+, mpfr
+, sparsehash
+, imagemagick
+, gtest
+, ctestCheckHook
+, mpiCheckPhaseHook
+, withExamples ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

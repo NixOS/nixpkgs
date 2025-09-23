@@ -1,9 +1,9 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchurl,
-  netcdf,
-  statistics,
+{ buildOctavePackage
+, lib
+, fetchurl
+, netcdf
+, statistics
+,
 }:
 
 buildOctavePackage rec {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  SDL2,
-  SDL2_mixer,
-  libGLU,
-  libconfig,
-  meson,
-  ninja,
-  pkg-config,
-  fetchFromGitHub,
-  fetchpatch,
+{ stdenv
+, lib
+, SDL2
+, SDL2_mixer
+, libGLU
+, libconfig
+, meson
+, ninja
+, pkg-config
+, fetchFromGitHub
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchgit,
-  writeShellScript,
-  unstableGitUpdater,
-  sd,
+{ lib
+, buildGoModule
+, fetchgit
+, writeShellScript
+, unstableGitUpdater
+, sd
+,
 }:
 
 buildGoModule rec {

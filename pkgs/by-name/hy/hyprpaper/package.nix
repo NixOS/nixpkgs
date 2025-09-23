@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  cairo,
-  bash,
-  expat,
-  file,
-  fribidi,
-  hyprlang,
-  libdatrie,
-  libGL,
-  libjpeg,
-  libjxl,
-  libselinux,
-  libsepol,
-  libthai,
-  libwebp,
-  libXdmcp,
-  pango,
-  pcre,
-  pcre2,
-  pkg-config,
-  util-linux,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  hyprwayland-scanner,
-  hyprutils,
-  hyprgraphics,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cairo
+, bash
+, expat
+, file
+, fribidi
+, hyprlang
+, libdatrie
+, libGL
+, libjpeg
+, libjxl
+, libselinux
+, libsepol
+, libthai
+, libwebp
+, libXdmcp
+, pango
+, pcre
+, pcre2
+, pkg-config
+, util-linux
+, wayland
+, wayland-protocols
+, wayland-scanner
+, hyprwayland-scanner
+, hyprutils
+, hyprgraphics
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

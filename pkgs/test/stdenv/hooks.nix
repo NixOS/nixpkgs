@@ -1,7 +1,7 @@
-{
-  stdenv,
-  pkgs,
-  lib,
+{ stdenv
+, pkgs
+, lib
+,
 }:
 
 # ordering should match defaultNativeBuildInputs

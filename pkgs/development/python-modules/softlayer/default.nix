@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  click,
-  prettytable,
-  prompt-toolkit,
-  pygments,
-  requests,
-  rich,
-  urllib3,
-
-  # tests
-  mock,
-  pytestCheckHook,
-  sphinx,
-  testtools,
-  tkinter,
-  writableTmpDirAsHomeHook,
-  zeep,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  click
+, prettytable
+, prompt-toolkit
+, pygments
+, requests
+, rich
+, urllib3
+, # tests
+  mock
+, pytestCheckHook
+, sphinx
+, testtools
+, tkinter
+, writableTmpDirAsHomeHook
+, zeep
+,
 }:
 
 buildPythonPackage rec {

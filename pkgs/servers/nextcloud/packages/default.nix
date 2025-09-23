@@ -2,14 +2,15 @@
 # Licensed under: MIT
 # Slightly modified
 
-{
-  lib,
-  pkgs,
-  newScope,
-  apps ? lib.importJSON (./. + "/${ncVersion}.json"), # Support out-of-tree overrides
-  callPackage,
-  ncVersion,
-  nextcloud-notify_push,
+{ lib
+, pkgs
+, newScope
+, apps ? lib.importJSON (./. + "/${ncVersion}.json")
+, # Support out-of-tree overrides
+  callPackage
+, ncVersion
+, nextcloud-notify_push
+,
 }:
 
 let
@@ -41,21 +42,25 @@ let
         };
 
     }
-    // lib.mapAttrs (
-      type: pkgs:
-      lib.makeExtensible (
-        _:
-        lib.mapAttrs (
-          pname: data:
-          self.mkNextcloudDerivation {
-            inherit pname data;
+    // lib.mapAttrs
+      (
+        type: pkgs:
+        lib.makeExtensible (
+          _:
+          lib.mapAttrs
+            (
+              pname: data:
+              self.mkNextcloudDerivation {
+                inherit pname data;
+              }
+            )
+            pkgs
+          // {
+            notify_push = nextcloud-notify_push.app;
           }
-        ) pkgs
-        // {
-          notify_push = nextcloud-notify_push.app;
-        }
+        )
       )
-    ) generatedJson;
+      generatedJson;
 
 in
 (lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (

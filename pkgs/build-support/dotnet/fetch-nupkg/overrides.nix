@@ -1,13 +1,13 @@
-{
-  autoPatchelfHook,
-  dotnetCorePackages,
-  fontconfig,
-  lib,
-  libICE,
-  libSM,
-  libX11,
-  stdenv,
-  writeText,
+{ autoPatchelfHook
+, dotnetCorePackages
+, fontconfig
+, lib
+, libICE
+, libSM
+, libX11
+, stdenv
+, writeText
+,
 }:
 {
   # e.g.

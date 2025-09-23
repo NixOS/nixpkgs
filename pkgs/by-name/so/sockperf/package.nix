@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  doxygen,
-  enableTool ? false,
-  enableTest ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, enableTool ? false
+, enableTest ? false
+,
 }:
 
 stdenv.mkDerivation rec {

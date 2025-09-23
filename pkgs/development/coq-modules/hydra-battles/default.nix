@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  equations,
-  LibHyps,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, equations
+, LibHyps
+, version ? null
+,
 }:
 
 (mkCoqDerivation {
@@ -26,7 +26,8 @@
     lib.switch coq.coq-version [
       (case (range "8.13" "8.16") "0.9")
       (case (range "8.11" "8.12") "0.4")
-    ] null;
+    ]
+      null;
 
   useDune = true;
 

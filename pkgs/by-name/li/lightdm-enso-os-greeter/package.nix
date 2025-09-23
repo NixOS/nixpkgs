@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  linkFarm,
-  lightdm-enso-os-greeter,
-  dbus,
-  pcre,
-  libepoxy,
-  xorg,
-  at-spi2-core,
-  libxklavier,
-  libxkbcommon,
-  gtk3,
-  vala,
-  cmake,
-  libgee,
-  lightdm,
-  gdk-pixbuf,
-  clutter-gtk,
-  wrapGAppsHook3,
-  librsvg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, linkFarm
+, lightdm-enso-os-greeter
+, dbus
+, pcre
+, libepoxy
+, xorg
+, at-spi2-core
+, libxklavier
+, libxkbcommon
+, gtk3
+, vala
+, cmake
+, libgee
+, lightdm
+, gdk-pixbuf
+, clutter-gtk
+, wrapGAppsHook3
+, librsvg
+,
 }:
 
 stdenv.mkDerivation {

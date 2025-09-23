@@ -1,11 +1,11 @@
-{
-  boring,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  stdenv,
-  testers,
+{ boring
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, stdenv
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  dist-meta,
-  dom-toml,
-  domdf-python-tools,
-  hatchling,
-  hatch-requirements-txt,
-  packaging,
-  typing-extensions,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, dist-meta
+, dom-toml
+, domdf-python-tools
+, hatchling
+, hatch-requirements-txt
+, packaging
+, typing-extensions
+,
 }:
 buildPythonPackage rec {
   pname = "shippinglabel";

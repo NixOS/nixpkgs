@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  tex,
-  extraFonts,
-  chineseFonts,
-  japaneseFonts,
-  koreanFonts,
+{ lib
+, fetchurl
+, tex
+, extraFonts
+, chineseFonts
+, japaneseFonts
+, koreanFonts
+,
 }:
 rec {
   extraFontsSrc = fetchurl {

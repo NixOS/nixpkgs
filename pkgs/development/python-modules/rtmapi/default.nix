@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromBitbucket,
-  setuptools,
-  httplib2,
+{ lib
+, buildPythonPackage
+, fetchFromBitbucket
+, setuptools
+, httplib2
+,
 }:
 
 buildPythonPackage rec {

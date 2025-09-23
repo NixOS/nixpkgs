@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  systemd,
-  libnotify,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, systemd
+, libnotify
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

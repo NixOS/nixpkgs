@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cloudpathlib,
-  confection,
-  packaging,
-  pydantic,
-  requests,
-  smart-open,
-  srsly,
-  typer,
-  wasabi,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  cloudpathlib
+, confection
+, packaging
+, pydantic
+, requests
+, smart-open
+, srsly
+, typer
+, wasabi
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

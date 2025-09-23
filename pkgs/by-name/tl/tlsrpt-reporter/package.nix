@@ -1,12 +1,12 @@
-{
-  lib,
-  asciidoctor,
-  automake,
-  installShellFiles,
-  python3,
-  fetchFromGitHub,
-  fetchpatch,
-  nixosTests,
+{ lib
+, asciidoctor
+, automake
+, installShellFiles
+, python3
+, fetchFromGitHub
+, fetchpatch
+, nixosTests
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

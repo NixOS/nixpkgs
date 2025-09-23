@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  testers,
-  cbfmt,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, testers
+, cbfmt
+,
 }:
 
 rustPlatform.buildRustPackage rec {

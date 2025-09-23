@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  docutils,
-  sphinx,
-  readthedocs-sphinx-ext,
-  sphinxcontrib-jquery,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, docutils
+, sphinx
+, readthedocs-sphinx-ext
+, sphinxcontrib-jquery
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

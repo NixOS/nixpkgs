@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  chardet,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, chardet
+, requests
+,
 }:
 
 buildPythonPackage rec {

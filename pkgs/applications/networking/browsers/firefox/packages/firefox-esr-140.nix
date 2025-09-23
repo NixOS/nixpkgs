@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  callPackage,
-  fetchurl,
-  nixosTests,
-  buildMozillaMach,
+{ stdenv
+, lib
+, callPackage
+, fetchurl
+, nixosTests
+, buildMozillaMach
+,
 }:
 
 buildMozillaMach rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  doxygen,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pcre2,
-  pkg-config,
-  python3,
-  serd,
-  zix,
+{ lib
+, stdenv
+, doxygen
+, fetchFromGitHub
+, meson
+, ninja
+, pcre2
+, pkg-config
+, python3
+, serd
+, zix
+,
 }:
 
 stdenv.mkDerivation rec {

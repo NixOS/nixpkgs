@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  poetry-core,
-  pyscard,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, poetry-core
+, pyscard
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

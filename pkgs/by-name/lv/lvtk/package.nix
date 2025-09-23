@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  gtkmm2,
-  lv2,
-  pkg-config,
-  python3,
-  meson,
-  pugl,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, gtkmm2
+, lv2
+, pkg-config
+, python3
+, meson
+, pugl
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

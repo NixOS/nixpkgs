@@ -1,30 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  botorch,
-  ipywidgets,
-  jinja2,
-  markdown,
-  pandas,
-  plotly,
-  pyre-extensions,
-  scikit-learn,
-  scipy,
-  sympy,
-
-  # tests
-  pyfakefs,
-  pytestCheckHook,
-  sqlalchemy,
-  tabulate,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  botorch
+, ipywidgets
+, jinja2
+, markdown
+, pandas
+, plotly
+, pyre-extensions
+, scikit-learn
+, scipy
+, sympy
+, # tests
+  pyfakefs
+, pytestCheckHook
+, sqlalchemy
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

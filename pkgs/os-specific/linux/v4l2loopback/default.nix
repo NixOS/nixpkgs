@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  kmod,
-  kernelModuleMakeFlags,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, kmod
+, kernelModuleMakeFlags
+,
 }:
 
 let

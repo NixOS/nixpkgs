@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 
 let
@@ -16,23 +15,23 @@ in
     let
       mkMatcherOptionType =
         field: description:
-        with lib.types;
-        listOf (submodule {
-          options = {
-            name = lib.mkOption {
-              type = str;
-              description = "Name to match.";
+          with lib.types;
+          listOf (submodule {
+            options = {
+              name = lib.mkOption {
+                type = str;
+                description = "Name to match.";
+              };
+              "${field}" = lib.mkOption {
+                type = int;
+                description = description;
+              };
+              location = lib.mkOption {
+                type = str;
+                description = "Location to match.";
+              };
             };
-            "${field}" = lib.mkOption {
-              type = int;
-              description = description;
-            };
-            location = lib.mkOption {
-              type = str;
-              description = "Location to match.";
-            };
-          };
-        });
+          });
     in
     {
       rtl433Flags = lib.mkOption {

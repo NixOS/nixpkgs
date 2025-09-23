@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  boost,
-  fetchFromGitHub,
-  installShellFiles,
-  muparser,
-  pkg-config,
-  qt5,
+{ lib
+, stdenv
+, boost
+, fetchFromGitHub
+, installShellFiles
+, muparser
+, pkg-config
+, qt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

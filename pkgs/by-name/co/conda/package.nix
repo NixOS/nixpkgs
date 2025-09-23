@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  runCommand,
-  makeWrapper,
-  buildFHSEnv,
-  libselinux,
-  libarchive,
-  libGL,
-  xorg,
-  zlib,
-  # Conda installs its packages and environments under this directory
-  installationPath ? "~/.conda",
-  # Conda manages most pkgs itself, but expects a few to be on the system.
+{ lib
+, stdenv
+, fetchurl
+, runCommand
+, makeWrapper
+, buildFHSEnv
+, libselinux
+, libarchive
+, libGL
+, xorg
+, zlib
+, # Conda installs its packages and environments under this directory
+  installationPath ? "~/.conda"
+, # Conda manages most pkgs itself, but expects a few to be on the system.
   condaDeps ? [
     stdenv.cc
     xorg.libSM
@@ -24,9 +23,10 @@
     libselinux
     libGL
     zlib
-  ],
-  # Any extra nixpkgs you'd like available in the FHS env for Conda to use
-  extraPkgs ? [ ],
+  ]
+, # Any extra nixpkgs you'd like available in the FHS env for Conda to use
+  extraPkgs ? [ ]
+,
 }:
 
 # How to use this package?
@@ -49,8 +49,8 @@ let
     let
       selectSystem =
         attrs:
-        attrs.${stdenv.hostPlatform.system}
-          or (throw "conda: ${stdenv.hostPlatform.system} is not supported");
+          attrs.${stdenv.hostPlatform.system}
+            or (throw "conda: ${stdenv.hostPlatform.system} is not supported");
       arch = selectSystem {
         x86_64-linux = "x86_64";
         aarch64-linux = "aarch64";

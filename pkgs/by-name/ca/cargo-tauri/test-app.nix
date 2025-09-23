@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  cargo-tauri,
-  glib-networking,
-  libayatana-appindicator,
-  nodejs,
-  openssl,
-  pkg-config,
-  pnpm_9,
-  rustPlatform,
-  webkitgtk_4_1,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, cargo-tauri
+, glib-networking
+, libayatana-appindicator
+, nodejs
+, openssl
+, pkg-config
+, pnpm_9
+, rustPlatform
+, webkitgtk_4_1
+, wrapGAppsHook4
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoreconfHook,
-  libnsl,
-  libtirpc,
-  libxcrypt,
-  pkg-config,
-  rpcbind,
-  systemdLibs,
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, libnsl
+, libtirpc
+, libxcrypt
+, pkg-config
+, rpcbind
+, systemdLibs
+,
 }:
 
 stdenv.mkDerivation rec {

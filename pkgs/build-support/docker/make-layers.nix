@@ -1,35 +1,35 @@
-{
-  coreutils,
-  flattenReferencesGraph,
-  lib,
-  jq,
-  runCommand,
+{ coreutils
+, flattenReferencesGraph
+, lib
+, jq
+, runCommand
+,
 }:
-{
-  closureRoots,
-  excludePaths ? [ ],
-  # This could be a path to (or a derivation producing a path to)
+{ closureRoots
+, excludePaths ? [ ]
+, # This could be a path to (or a derivation producing a path to)
   # a json file containing the pipeline
-  pipeline ? [ ],
-  debug ? false,
+  pipeline ? [ ]
+, debug ? false
+,
 }:
 if closureRoots == [ ] then
   builtins.toFile "docker-layers-empty" "[]"
 else
   runCommand "docker-layers"
-    {
-      __structuredAttrs = true;
-      # graph, exclude_paths and pipeline are expected by the
-      # flatten_references_graph executable.
-      exportReferencesGraph.graph = closureRoots;
-      exclude_paths = excludePaths;
-      inherit pipeline;
-      nativeBuildInputs = [
-        coreutils
-        flattenReferencesGraph
-        jq
-      ];
-    }
+  {
+    __structuredAttrs = true;
+    # graph, exclude_paths and pipeline are expected by the
+    # flatten_references_graph executable.
+    exportReferencesGraph.graph = closureRoots;
+    exclude_paths = excludePaths;
+    inherit pipeline;
+    nativeBuildInputs = [
+      coreutils
+      flattenReferencesGraph
+      jq
+    ];
+  }
     ''
       . .attrs.sh
 

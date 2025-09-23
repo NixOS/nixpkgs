@@ -1,11 +1,11 @@
-{
-  curl,
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  libxml2,
-  pkg-config,
-  stdenv,
+{ curl
+, fetchFromGitHub
+, fetchpatch
+, lib
+, libxml2
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

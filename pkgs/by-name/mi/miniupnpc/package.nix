@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  versionCheckHook,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, versionCheckHook
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

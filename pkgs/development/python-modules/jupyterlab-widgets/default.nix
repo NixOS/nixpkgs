@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  hatch-jupyter-builder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, hatch-jupyter-builder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  ncurses,
-  which,
-  cmake,
-  wrapQtAppsHook,
-  qtwebengine,
-  yaml-cpp,
-  libirc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, ncurses
+, which
+, cmake
+, wrapQtAppsHook
+, qtwebengine
+, yaml-cpp
+, libirc
+,
 }:
 
 stdenv.mkDerivation rec {

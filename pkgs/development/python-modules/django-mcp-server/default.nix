@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  django,
-  djangorestframework,
-  inflection,
-  mcp,
-  uritemplate,
-  poetry-core,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, django
+, djangorestframework
+, inflection
+, mcp
+, uritemplate
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

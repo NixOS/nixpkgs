@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  runCommandLocal,
-  netlistsvg,
-  yosys,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, runCommandLocal
+, netlistsvg
+, yosys
+,
 }:
 
 buildNpmPackage rec {

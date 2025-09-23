@@ -1,10 +1,10 @@
-{
-  lib,
-  meson,
-  fetchFromGitHub,
-  ninja,
-  mkHyprlandPlugin,
-  nix-update-script,
+{ lib
+, meson
+, fetchFromGitHub
+, ninja
+, mkHyprlandPlugin
+, nix-update-script
+,
 }:
 mkHyprlandPlugin (finalAttrs: {
   pluginName = "hyprsplit";

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  julius,
-  librosa,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  torch-pitch-shift,
-  torch,
-  torchaudio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, julius
+, librosa
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, torch-pitch-shift
+, torch
+, torchaudio
+,
 }:
 
 buildPythonPackage rec {

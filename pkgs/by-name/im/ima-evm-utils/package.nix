@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  openssl,
-  tpm2-tss,
-  keyutils,
-  asciidoc,
-  libxslt,
-  docbook_xsl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, openssl
+, tpm2-tss
+, keyutils
+, asciidoc
+, libxslt
+, docbook_xsl
+,
 }:
 
 stdenv.mkDerivation rec {

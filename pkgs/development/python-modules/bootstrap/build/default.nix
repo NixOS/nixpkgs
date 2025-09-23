@@ -1,13 +1,13 @@
-{
-  stdenv,
-  python,
-  build,
-  flit-core,
-  installer,
-  packaging,
-  pyproject-hooks,
-  tomli,
-  makeWrapper,
+{ stdenv
+, python
+, build
+, flit-core
+, installer
+, packaging
+, pyproject-hooks
+, tomli
+, makeWrapper
+,
 }:
 let
   buildBootstrapPythonModule =

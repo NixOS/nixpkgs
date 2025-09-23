@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  deprecated,
-  hopcroftkarp,
-  joblib,
-  matplotlib,
-  numpy,
-  scikit-learn,
-  scipy,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, deprecated
+, hopcroftkarp
+, joblib
+, matplotlib
+, numpy
+, scikit-learn
+, scipy
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

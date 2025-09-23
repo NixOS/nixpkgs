@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  autoPatchelfHook,
-  installShellFiles,
-  cpio,
-  xar,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, autoPatchelfHook
+, installShellFiles
+, cpio
+, xar
+, versionCheckHook
+,
 }:
 
 let

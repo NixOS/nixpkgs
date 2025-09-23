@@ -1,47 +1,47 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  flex,
-  bison,
-  perl,
-  pkg-config,
-  systemd,
-  openssl,
-  bzip2,
-  lz4,
-  zlib,
-  zstd,
-  xz,
-  inotify-tools,
-  pam,
-  libcap,
-  coreutils,
-  clucene_core_2,
-  icu75,
-  libexttextcat,
-  libsodium,
-  libstemmer,
-  cyrus_sasl,
-  nixosTests,
-  fetchpatch,
-  rpcsvc-proto,
-  libtirpc,
-  withApparmor ? false,
-  libapparmor,
-  withLDAP ? true,
-  openldap,
-  withUnwind ? false,
-  libunwind,
-  # Auth modules
-  withMySQL ? false,
-  libmysqlclient,
-  withPgSQL ? false,
-  libpq,
-  withSQLite ? true,
-  sqlite,
-  withLua ? false,
-  lua5_3,
+{ stdenv
+, lib
+, fetchurl
+, flex
+, bison
+, perl
+, pkg-config
+, systemd
+, openssl
+, bzip2
+, lz4
+, zlib
+, zstd
+, xz
+, inotify-tools
+, pam
+, libcap
+, coreutils
+, clucene_core_2
+, icu75
+, libexttextcat
+, libsodium
+, libstemmer
+, cyrus_sasl
+, nixosTests
+, fetchpatch
+, rpcsvc-proto
+, libtirpc
+, withApparmor ? false
+, libapparmor
+, withLDAP ? true
+, openldap
+, withUnwind ? false
+, libunwind
+, # Auth modules
+  withMySQL ? false
+, libmysqlclient
+, withPgSQL ? false
+, libpq
+, withSQLite ? true
+, sqlite
+, withLua ? false
+, lua5_3
+,
 }:
 
 stdenv.mkDerivation rec {

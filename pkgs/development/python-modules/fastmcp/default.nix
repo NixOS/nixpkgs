@@ -1,34 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
-
-  # build-system
-  hatchling,
-  uv-dynamic-versioning,
-
-  # dependencies
-  authlib,
-  cyclopts,
-  exceptiongroup,
-  httpx,
-  mcp,
-  openapi-core,
-  openapi-pydantic,
-  pydantic,
-  pyperclip,
-  python-dotenv,
-  rich,
-
-  # tests
-  dirty-equals,
-  email-validator,
-  fastapi,
-  pytest-asyncio,
-  pytest-httpx,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, writableTmpDirAsHomeHook
+, # build-system
+  hatchling
+, uv-dynamic-versioning
+, # dependencies
+  authlib
+, cyclopts
+, exceptiongroup
+, httpx
+, mcp
+, openapi-core
+, openapi-pydantic
+, pydantic
+, pyperclip
+, python-dotenv
+, rich
+, # tests
+  dirty-equals
+, email-validator
+, fastapi
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

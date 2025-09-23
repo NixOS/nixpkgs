@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  setuptools-scm,
-  fire,
-  fugashi,
-  jaconv,
-  loguru,
-  numpy,
-  pillow,
-  pyperclip,
-  torch,
-  transformers,
-  unidic-lite,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, setuptools-scm
+, fire
+, fugashi
+, jaconv
+, loguru
+, numpy
+, pillow
+, pyperclip
+, torch
+, transformers
+, unidic-lite
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkgsHostTarget,
-  haskellPackages,
-  cmake,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgsHostTarget
+, haskellPackages
+, cmake
+, makeWrapper
+,
 }:
 
 let

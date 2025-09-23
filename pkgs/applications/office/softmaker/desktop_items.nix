@@ -1,7 +1,7 @@
-{
-  makeDesktopItem,
-  pname,
-  suiteName,
+{ makeDesktopItem
+, pname
+, suiteName
+,
 }:
 
 {

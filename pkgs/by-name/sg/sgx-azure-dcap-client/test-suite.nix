@@ -1,8 +1,8 @@
-{
-  lib,
-  sgx-azure-dcap-client,
-  gtest,
-  makeWrapper,
+{ lib
+, sgx-azure-dcap-client
+, gtest
+, makeWrapper
+,
 }:
 sgx-azure-dcap-client.overrideAttrs (old: {
   nativeBuildInputs = old.nativeBuildInputs ++ [

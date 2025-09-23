@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  calendar,
-  caqti,
+{ buildDunePackage
+, calendar
+, caqti
+,
 }:
 
 buildDunePackage {

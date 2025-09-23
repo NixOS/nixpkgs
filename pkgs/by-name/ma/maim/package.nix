@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  zlib,
-  libpng,
-  libjpeg,
-  libwebp,
-  libGLU,
-  libGL,
-  glm,
-  libX11,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libXcomposite,
-  slop,
-  icu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, zlib
+, libpng
+, libjpeg
+, libwebp
+, libGLU
+, libGL
+, glm
+, libX11
+, libXext
+, libXfixes
+, libXrandr
+, libXcomposite
+, slop
+, icu
+,
 }:
 
 stdenv.mkDerivation rec {

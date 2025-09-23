@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  nixosTests,
-  fetchFromGitHub,
-  cmake,
-  asciidoc,
-  pkg-config,
-  db,
-  curl,
-  jemalloc,
-  boost186,
-  fmt,
-  fuse3,
-  spdlog,
-  yaml-cpp,
-  isa-l,
-  judy,
-  prometheus-cpp,
-  libz,
+{ lib
+, stdenv
+, nixosTests
+, fetchFromGitHub
+, cmake
+, asciidoc
+, pkg-config
+, db
+, curl
+, jemalloc
+, boost186
+, fmt
+, fuse3
+, spdlog
+, yaml-cpp
+, isa-l
+, judy
+, prometheus-cpp
+, libz
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,6 +1,6 @@
-{
-  libpass,
-  mkPythonMetaPackage,
+{ libpass
+, mkPythonMetaPackage
+,
 }:
 
 mkPythonMetaPackage {

@@ -1,22 +1,22 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  flac,
-  lib,
-  libGL,
-  libpng,
-  libpulseaudio,
-  lz4,
-  luajit,
-  meson,
-  minizip,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  SDL2,
-  SDL2_image,
-  tbb,
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, flac
+, lib
+, libGL
+, libpng
+, libpulseaudio
+, lz4
+, luajit
+, meson
+, minizip
+, ninja
+, nix-update-script
+, pkg-config
+, SDL2
+, SDL2_image
+, tbb
+,
 }:
 
 stdenv.mkDerivation rec {

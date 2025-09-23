@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  poetry-core,
-  dacite,
-  diskcache,
-  jsonschema,
-  pandas,
-  pyarrow,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, poetry-core
+, dacite
+, diskcache
+, jsonschema
+, pandas
+, pyarrow
+,
 }:
 
 buildPythonPackage rec {

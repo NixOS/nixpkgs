@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  lttng-tools,
-  libatomic_ops,
-  perl,
-  coreutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, lttng-tools
+, libatomic_ops
+, perl
+, coreutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

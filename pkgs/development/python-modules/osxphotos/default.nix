@@ -1,37 +1,35 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-
-  bitmath,
-  bpylist2,
-  click,
-  mako,
-  more-itertools,
-  objexplore,
-  packaging,
-  pathvalidate,
-  pip,
-  ptpython,
-  pytimeparse2,
-  pyyaml,
-  requests,
-  rich-theme-manager,
-  rich,
-  shortuuid,
-  strpdatetime,
-  tenacity,
-  textx,
-  toml,
-  tzdata,
-  wrapt,
-  wurlitzer,
-  xdg-base-dirs,
-
-  pytestCheckHook,
-  pytest-mock,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, bitmath
+, bpylist2
+, click
+, mako
+, more-itertools
+, objexplore
+, packaging
+, pathvalidate
+, pip
+, ptpython
+, pytimeparse2
+, pyyaml
+, requests
+, rich-theme-manager
+, rich
+, shortuuid
+, strpdatetime
+, tenacity
+, textx
+, toml
+, tzdata
+, wrapt
+, wurlitzer
+, xdg-base-dirs
+, pytestCheckHook
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

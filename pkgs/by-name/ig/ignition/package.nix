@@ -1,21 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  appstream,
-  blueprint-compiler,
-  desktop-file-utils,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  typescript,
-  wrapGAppsHook4,
-
-  gjs,
-  gtk4,
-  libadwaita,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream
+, blueprint-compiler
+, desktop-file-utils
+, gettext
+, meson
+, ninja
+, pkg-config
+, typescript
+, wrapGAppsHook4
+, gjs
+, gtk4
+, libadwaita
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

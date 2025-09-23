@@ -1,17 +1,17 @@
-{
-  borgbackup,
-  borgmatic,
-  coreutils,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  fetchPypi,
-  nix-update-script,
-  installShellFiles,
-  lib,
-  python3Packages,
-  stdenv,
-  systemd,
-  testers,
-  nixosTests,
+{ borgbackup
+, borgmatic
+, coreutils
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, fetchPypi
+, nix-update-script
+, installShellFiles
+, lib
+, python3Packages
+, stdenv
+, systemd
+, testers
+, nixosTests
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";

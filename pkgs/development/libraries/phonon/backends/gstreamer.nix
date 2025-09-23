@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  gst_all_1,
-  phonon,
-  pkg-config,
-  extra-cmake-modules,
-  qttools,
-  qtbase,
-  qtx11extras,
-  debug ? false,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, cmake
+, gst_all_1
+, phonon
+, pkg-config
+, extra-cmake-modules
+, qttools
+, qtbase
+, qtx11extras
+, debug ? false
+,
 }:
 
 stdenv.mkDerivation rec {

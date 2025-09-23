@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  libxml2,
-  glib,
-  shared-mime-info,
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gettext
+, libxml2
+, glib
+, shared-mime-info
+,
 }:
 
 stdenv.mkDerivation rec {

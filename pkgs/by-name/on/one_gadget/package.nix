@@ -1,9 +1,9 @@
-{
-  lib,
-  binutils,
-  bundlerApp,
-  bundlerUpdateScript,
-  makeWrapper,
+{ lib
+, binutils
+, bundlerApp
+, bundlerUpdateScript
+, makeWrapper
+,
 }:
 
 bundlerApp {

@@ -1,19 +1,19 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  spdlog,
-  nlohmann_json,
-  systemd,
-  libbpf,
-  elfutils,
-  bpftools,
-  pcre2,
-  zlib,
-  withBpf ? true,
+{ lib
+, clangStdenv
+, fetchFromGitLab
+, fetchpatch
+, cmake
+, pkg-config
+, spdlog
+, nlohmann_json
+, systemd
+, libbpf
+, elfutils
+, bpftools
+, pcre2
+, zlib
+, withBpf ? true
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

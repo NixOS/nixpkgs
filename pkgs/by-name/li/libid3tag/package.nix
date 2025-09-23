@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  cmake,
-  gperf,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitea
+, cmake
+, gperf
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

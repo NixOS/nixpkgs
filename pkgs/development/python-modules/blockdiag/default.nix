@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  docutils,
-  ephem,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchpatch2,
-  funcparserlib,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
-  reportlab,
-  setuptools,
-  webcolors,
+{ lib
+, buildPythonPackage
+, docutils
+, ephem
+, fetchFromGitHub
+, fetchpatch
+, fetchpatch2
+, funcparserlib
+, pillow
+, pytestCheckHook
+, pythonOlder
+, reportlab
+, setuptools
+, webcolors
+,
 }:
 
 buildPythonPackage rec {

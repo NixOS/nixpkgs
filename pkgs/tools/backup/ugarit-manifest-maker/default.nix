@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  eggDerivation,
-  fetchegg,
+{ pkgs
+, lib
+, eggDerivation
+, fetchegg
+,
 }:
 
 let

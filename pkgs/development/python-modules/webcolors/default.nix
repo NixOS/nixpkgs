@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  unittestCheckHook,
-  pdm-backend,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, unittestCheckHook
+, pdm-backend
+,
 }:
 
 buildPythonPackage rec {

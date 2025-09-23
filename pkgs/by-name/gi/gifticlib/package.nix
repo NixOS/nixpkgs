@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  expat,
-  nifticlib,
-  zlib,
-  ctestCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, nifticlib
+, zlib
+, ctestCheckHook
+,
 }:
 
 stdenv.mkDerivation {

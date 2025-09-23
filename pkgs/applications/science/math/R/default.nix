@@ -1,45 +1,45 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bzip2,
-  gfortran,
-  libX11,
-  libXmu,
-  libXt,
-  libjpeg,
-  libpng,
-  libtiff,
-  ncurses,
-  pango,
-  pcre2,
-  perl,
-  readline,
-  tcl,
-  texlive,
-  texliveSmall,
-  tk,
-  xz,
-  zlib,
-  less,
-  texinfo,
-  graphviz,
-  icu,
-  pkg-config,
-  bison,
-  which,
-  jdk,
-  blas,
-  lapack,
-  curl,
-  tzdata,
-  withRecommendedPackages ? true,
-  enableStrictBarrier ? false,
-  enableMemoryProfiling ? false,
-  # R as of writing does not support outputting both .so and .a files; it outputs:
+{ lib
+, stdenv
+, fetchurl
+, bzip2
+, gfortran
+, libX11
+, libXmu
+, libXt
+, libjpeg
+, libpng
+, libtiff
+, ncurses
+, pango
+, pcre2
+, perl
+, readline
+, tcl
+, texlive
+, texliveSmall
+, tk
+, xz
+, zlib
+, less
+, texinfo
+, graphviz
+, icu
+, pkg-config
+, bison
+, which
+, jdk
+, blas
+, lapack
+, curl
+, tzdata
+, withRecommendedPackages ? true
+, enableStrictBarrier ? false
+, enableMemoryProfiling ? false
+, # R as of writing does not support outputting both .so and .a files; it outputs:
   #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
-  static ? false,
-  testers,
+  static ? false
+, testers
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

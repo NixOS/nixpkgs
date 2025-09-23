@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bash,
-  procps,
-  iproute2,
-  iptables,
-  openresolv,
-  amneziawg-go,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bash
+, procps
+, iproute2
+, iptables
+, openresolv
+, amneziawg-go
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

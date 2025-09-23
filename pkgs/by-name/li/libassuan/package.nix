@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  gettext,
-  npth,
-  libgpg-error,
-  buildPackages,
-  gitUpdater,
+{ fetchurl
+, lib
+, stdenv
+, gettext
+, npth
+, libgpg-error
+, buildPackages
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

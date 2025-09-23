@@ -1,13 +1,13 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  libxslt,
-  gobject-introspection,
-  gtk3,
-  wrapGAppsHook3,
-  adwaita-icon-theme,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, libxslt
+, gobject-introspection
+, gtk3
+, wrapGAppsHook3
+, adwaita-icon-theme
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

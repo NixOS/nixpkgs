@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  asio,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, asio
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

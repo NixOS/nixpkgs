@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  setuptools-scm,
-
-  pillow,
-  qrcode,
-  python-barcode,
-  six,
-  appdirs,
-  pyyaml,
-  argcomplete,
-  importlib-resources,
-
-  pyusb,
-  pyserial,
-  pycups,
-
-  jaconv,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
-  scripttest,
-  mock,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, pillow
+, qrcode
+, python-barcode
+, six
+, appdirs
+, pyyaml
+, argcomplete
+, importlib-resources
+, pyusb
+, pyserial
+, pycups
+, jaconv
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+, scripttest
+, mock
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

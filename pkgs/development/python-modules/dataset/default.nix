@@ -1,12 +1,12 @@
-{
-  lib,
-  setuptools,
-  alembic,
-  banal,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  sqlalchemy_1_4,
+{ lib
+, setuptools
+, alembic
+, banal
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, sqlalchemy_1_4
+,
 }:
 
 buildPythonPackage rec {

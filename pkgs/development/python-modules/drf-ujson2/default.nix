@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  django,
-  djangorestframework,
-  ujson,
-
-  # tests
-  pytest-cov-stub,
-  pytest-django,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  django
+, djangorestframework
+, ujson
+, # tests
+  pytest-cov-stub
+, pytest-django
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

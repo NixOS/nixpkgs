@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gdal,
-  h5py,
-  noise,
-  numpy,
-  protobuf,
-  purepng,
-  pyplatec,
-  six,
-  isPy27,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gdal
+, h5py
+, noise
+, numpy
+, protobuf
+, purepng
+, pyplatec
+, six
+, isPy27
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarn,
-  yarnBuildHook,
-  yarnConfigHook,
-  nixosTests,
-  php,
+{ lib
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, yarn
+, yarnBuildHook
+, yarnConfigHook
+, nixosTests
+, php
+,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

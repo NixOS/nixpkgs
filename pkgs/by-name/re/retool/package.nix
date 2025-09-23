@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  qt6,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, qt6
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

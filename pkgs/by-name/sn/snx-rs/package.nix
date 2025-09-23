@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  glib,
-  gtk4,
-  kdePackages,
-  lib,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  wrapGAppsHook4,
-  graphene,
-  nix-update-script,
-  versionCheckHook,
+{ fetchFromGitHub
+, glib
+, gtk4
+, kdePackages
+, lib
+, openssl
+, pkg-config
+, rustPlatform
+, wrapGAppsHook4
+, graphene
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snx-rs";

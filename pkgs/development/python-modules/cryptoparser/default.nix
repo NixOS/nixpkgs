@@ -1,15 +1,15 @@
-{
-  lib,
-  asn1crypto,
-  attrs,
-  buildPythonPackage,
-  cryptodatahub,
-  fetchPypi,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  urllib3,
+{ lib
+, asn1crypto
+, attrs
+, buildPythonPackage
+, cryptodatahub
+, fetchPypi
+, python-dateutil
+, pythonOlder
+, setuptools
+, setuptools-scm
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

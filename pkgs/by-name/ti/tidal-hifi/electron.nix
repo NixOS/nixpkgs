@@ -1,6 +1,6 @@
-{
-  fetchzip,
-  lib,
+{ fetchzip
+, lib
+,
 }:
 let
   /*

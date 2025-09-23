@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  enablePython ? true,
-  addBinToPathHook,
-  python3Packages,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, enablePython ? true
+, addBinToPathHook
+, python3Packages
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

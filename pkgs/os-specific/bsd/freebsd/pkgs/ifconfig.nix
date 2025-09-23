@@ -1,10 +1,10 @@
-{
-  mkDerivation,
-  compatIfNeeded,
-  libifconfig,
-  lib80211,
-  libjail,
-  libnv,
+{ mkDerivation
+, compatIfNeeded
+, libifconfig
+, lib80211
+, libjail
+, libnv
+,
 }:
 mkDerivation {
   path = "sbin/ifconfig";

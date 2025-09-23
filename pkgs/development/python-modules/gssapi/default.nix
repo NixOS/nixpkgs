@@ -1,24 +1,22 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # dependencies
-  decorator,
-
-  # native dependencies
-  krb5-c, # C krb5 library, not PyPI krb5
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  cython
+, setuptools
+, # dependencies
+  decorator
+, # native dependencies
+  krb5-c
+, # C krb5 library, not PyPI krb5
 
   # tests
-  parameterized,
-  k5test,
-  pytestCheckHook,
+  parameterized
+, k5test
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

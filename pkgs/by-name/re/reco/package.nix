@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook4,
-  libgee,
-  live-chart,
-  ryokucha,
-  pantheon,
-  gst_all_1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook4
+, libgee
+, live-chart
+, ryokucha
+, pantheon
+, gst_all_1
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

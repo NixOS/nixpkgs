@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  libclang,
-  sphinx,
-  clang,
-  pytestCheckHook,
-  strictyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, libclang
+, sphinx
+, clang
+, pytestCheckHook
+, strictyaml
+,
 }:
 
 buildPythonPackage rec {

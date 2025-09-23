@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  version,
-  src,
-  replaceVars,
-  extraMeta ? { },
-  self,
-  packageOverrides ? (final: prev: { }),
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsHostHost,
-  pkgsTargetTarget,
-  passthruFun,
-  enableFFI ? true,
-  enableJIT ? true,
-  enableJITDebugModule ? enableJIT,
-  enableGC64 ? true,
-  enable52Compat ? false,
-  enableValgrindSupport ? false,
-  valgrind ? null,
-  enableGDBJITSupport ? false,
-  enableAPICheck ? false,
-  enableVMAssertions ? false,
-  enableRegisterAllocationRandomization ? false,
-  useSystemMalloc ? false,
-  # Upstream generates randomized string id's by default for security reasons
+{ lib
+, stdenv
+, buildPackages
+, version
+, src
+, replaceVars
+, extraMeta ? { }
+, self
+, packageOverrides ? (final: prev: { })
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, passthruFun
+, enableFFI ? true
+, enableJIT ? true
+, enableJITDebugModule ? enableJIT
+, enableGC64 ? true
+, enable52Compat ? false
+, enableValgrindSupport ? false
+, valgrind ? null
+, enableGDBJITSupport ? false
+, enableAPICheck ? false
+, enableVMAssertions ? false
+, enableRegisterAllocationRandomization ? false
+, useSystemMalloc ? false
+, # Upstream generates randomized string id's by default for security reasons
   # https://github.com/LuaJIT/LuaJIT/issues/626. Deterministic string id's should
   # never be needed for correctness (that should be fixed in the lua code),
   # but may be helpful when you want to embed jit-compiled raw lua blobs in
   # binaries that you want to be reproducible.
-  deterministicStringIds ? false,
-  luaAttr ? "luajit_${lib.versions.major version}_${lib.versions.minor version}",
+  deterministicStringIds ? false
+, luaAttr ? "luajit_${lib.versions.major version}_${lib.versions.minor version}"
+,
 }@inputs:
 assert enableJITDebugModule -> enableJIT;
 assert enableGDBJITSupport -> enableJIT;

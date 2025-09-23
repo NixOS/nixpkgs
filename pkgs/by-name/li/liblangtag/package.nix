@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  autoconf-archive,
-  gtk-doc,
-  gettext,
-  pkg-config,
-  glib,
-  libxml2,
-  gobject-introspection,
-  gnome-common,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, autoconf-archive
+, gtk-doc
+, gettext
+, pkg-config
+, glib
+, libxml2
+, gobject-introspection
+, gnome-common
+, unzip
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,9 +45,10 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "ac_cv_va_copy=1"
   ]
-  ++ lib.optional (
-    stdenv.hostPlatform.libc == "glibc"
-  ) "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform.libc == "glibc"
+    ) "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
 
   buildInputs = [
     gettext

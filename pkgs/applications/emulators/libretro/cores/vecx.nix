@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  mkLibretroCore,
+{ lib
+, fetchFromGitHub
+, libGL
+, libGLU
+, mkLibretroCore
+,
 }:
 mkLibretroCore {
   core = "vecx";

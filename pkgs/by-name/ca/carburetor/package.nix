@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitLab,
-  fetchpatch2,
-  python3Packages,
-  appstream,
-  desktop-file-utils,
-  gobject-introspection,
-  pkg-config,
-  meson,
-  wrapGAppsHook4,
-  libadwaita,
-  tractor,
+{ lib
+, fetchFromGitLab
+, fetchpatch2
+, python3Packages
+, appstream
+, desktop-file-utils
+, gobject-introspection
+, pkg-config
+, meson
+, wrapGAppsHook4
+, libadwaita
+, tractor
+,
 }:
 let
   # This package should be updated together with pkgs/by-name/tr/tractor/package.nix

@@ -1,23 +1,23 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  rustPlatform,
-  cmake,
-  ninja,
-  wrapGAppsHook4,
-  glib-networking,
-  gst_all_1,
-  libsysprof-capture,
-  libayatana-appindicator,
-  nodejs,
-  openssl,
-  pkg-config,
-  yq-go,
-  pnpm_9,
-  webkitgtk_4_1,
-  cargo-tauri,
-  desktop-file-utils,
+{ lib
+, fetchFromGitHub
+, fetchurl
+, rustPlatform
+, cmake
+, ninja
+, wrapGAppsHook4
+, glib-networking
+, gst_all_1
+, libsysprof-capture
+, libayatana-appindicator
+, nodejs
+, openssl
+, pkg-config
+, yq-go
+, pnpm_9
+, webkitgtk_4_1
+, cargo-tauri
+, desktop-file-utils
+,
 }:
 
 let

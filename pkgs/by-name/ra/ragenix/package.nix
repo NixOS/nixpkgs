@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix
+, installShellFiles
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ragenix";

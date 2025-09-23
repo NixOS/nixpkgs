@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  writeScriptBin,
-  fetchFromGitHub,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, writeScriptBin
+, fetchFromGitHub
+, meson
+, ninja
+,
 }:
 let
   dllTool = writeScriptBin "dlltool" ''

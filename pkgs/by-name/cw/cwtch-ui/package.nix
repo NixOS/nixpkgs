@@ -1,9 +1,9 @@
-{
-  cwtch,
-  fetchgit,
-  flutter329,
-  lib,
-  tor,
+{ cwtch
+, fetchgit
+, flutter329
+, lib
+, tor
+,
 }:
 let
   runtimeBinDependencies = [

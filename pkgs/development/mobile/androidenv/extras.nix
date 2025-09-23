@@ -1,13 +1,13 @@
-{
-  deployAndroidPackage,
-  lib,
-  package,
-  os,
-  arch,
-  autoPatchelfHook,
-  makeWrapper,
-  pkgs,
-  meta,
+{ deployAndroidPackage
+, lib
+, package
+, os
+, arch
+, autoPatchelfHook
+, makeWrapper
+, pkgs
+, meta
+,
 }:
 
 deployAndroidPackage {

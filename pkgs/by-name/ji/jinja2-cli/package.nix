@@ -1,14 +1,14 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  extras ? [
+{ lib
+, python3
+, fetchFromGitHub
+, extras ? [
     "hjson"
     "json5"
     "toml"
     "xml"
     "yaml"
-  ],
+  ]
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

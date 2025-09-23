@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  httmock,
-  lib,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  typing-extensions,
+{ buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, httmock
+, lib
+, pytestCheckHook
+, requests
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

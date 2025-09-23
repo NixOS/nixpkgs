@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  _7zz,
-  undmg,
+{ lib
+, stdenvNoCC
+, fetchurl
+, _7zz
+, undmg
+,
 }:
 
 let

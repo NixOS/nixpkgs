@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  wayland,
-  wayland-scanner,
-  wlr-protocols,
-  gtk3,
-  glib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, wayland
+, wayland-scanner
+, wlr-protocols
+, gtk3
+, glib
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pythonOlder,
-  plum-py,
-  pytestCheckHook,
-  baseline,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, pythonOlder
+, plum-py
+, pytestCheckHook
+, baseline
+,
 }:
 
 buildPythonPackage rec {

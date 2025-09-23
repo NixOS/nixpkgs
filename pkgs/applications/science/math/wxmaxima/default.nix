@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  cmake,
-  gettext,
-  maxima,
-  wxGTK,
-  adwaita-icon-theme,
-  glib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook3
+, cmake
+, gettext
+, maxima
+, wxGTK
+, adwaita-icon-theme
+, glib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

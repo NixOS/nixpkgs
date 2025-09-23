@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  obs-studio,
-  pkg-config,
-  libvncserver,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, obs-studio
+, pkg-config
+, libvncserver
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

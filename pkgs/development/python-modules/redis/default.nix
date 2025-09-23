@@ -1,25 +1,21 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  async-timeout,
-  deprecated,
-  packaging,
-  typing-extensions,
-
-  # extras: hiredis
-  hiredis,
-
-  # extras: ocsp
-  cryptography,
-  pyopenssl,
-  requests,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, # build-system
+  hatchling
+, # dependencies
+  async-timeout
+, deprecated
+, packaging
+, typing-extensions
+, # extras: hiredis
+  hiredis
+, # extras: ocsp
+  cryptography
+, pyopenssl
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  mkDerivation,
-  writeShellScript,
-  mtree,
-  make,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  mandoc,
-  groff,
-  compatIfNeeded,
-  fts,
-  stdenv,
+{ lib
+, mkDerivation
+, writeShellScript
+, mtree
+, make
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, mandoc
+, groff
+, compatIfNeeded
+, fts
+, stdenv
+,
 }:
 
 # HACK: to ensure parent directories exist. This emulates GNU

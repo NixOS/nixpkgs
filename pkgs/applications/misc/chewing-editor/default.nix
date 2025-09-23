@@ -1,12 +1,12 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libchewing,
-  qtbase,
-  qttools,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libchewing
+, qtbase
+, qttools
+,
 }:
 
 mkDerivation rec {

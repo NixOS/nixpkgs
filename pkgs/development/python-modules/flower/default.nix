@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  celery,
-  humanize,
-  pytz,
-  tornado,
-  prometheus-client,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, celery
+, humanize
+, pytz
+, tornado
+, prometheus-client
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

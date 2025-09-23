@@ -1,15 +1,15 @@
-{
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  makeWrapper,
-  pkg-config,
-  ocaml,
-  findlib,
-  libxml2,
-  augeas,
-  lib,
+{ stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, ocaml
+, findlib
+, libxml2
+, augeas
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

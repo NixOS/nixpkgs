@@ -1,13 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # tests
-  datafusion,
-  pyarrow,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # tests
+  datafusion
+, pyarrow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

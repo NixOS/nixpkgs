@@ -1,11 +1,11 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  stdenvNoCC,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
+{ lib
+, appimageTools
+, fetchurl
+, stdenvNoCC
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+,
 }:
 
 let

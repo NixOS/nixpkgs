@@ -1,17 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  libopus,
-  xorg,
-  pname,
-  releaseFile ? pname,
-  buildFlags,
-  buildInputs,
-  nativeBuildInputs ? [ ],
-  postFixup ? "",
-  description,
-  ...
+{ lib
+, fetchFromGitHub
+, stdenv
+, libopus
+, xorg
+, pname
+, releaseFile ? pname
+, buildFlags
+, buildInputs
+, nativeBuildInputs ? [ ]
+, postFixup ? ""
+, description
+, ...
 }:
 
 stdenv.mkDerivation {

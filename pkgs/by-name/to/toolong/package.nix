@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  testers,
-  toolong,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, testers
+, toolong
+,
 }:
 
 python3Packages.buildPythonApplication {

@@ -1,21 +1,21 @@
-{
-  pkgsBuildBuild,
-  go,
-  buildGoModule,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nixosTests,
-  autoSignDarwinBinariesHook,
-  nix-update-script,
+{ pkgsBuildBuild
+, go
+, buildGoModule
+, stdenv
+, lib
+, fetchFromGitHub
+, nixosTests
+, autoSignDarwinBinariesHook
+, nix-update-script
+,
 }:
 
 let
   common =
-    {
-      stname,
-      target,
-      postInstall ? "",
+    { stname
+    , target
+    , postInstall ? ""
+    ,
     }:
     buildGoModule rec {
       pname = stname;

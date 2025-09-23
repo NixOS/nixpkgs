@@ -1,30 +1,30 @@
-{
-  hash,
-  lts ? false,
-  patches ? [ ],
-  nixUpdateExtraArgs ? [ ],
-  vendorHash,
-  version,
+{ hash
+, lts ? false
+, patches ? [ ]
+, nixUpdateExtraArgs ? [ ]
+, vendorHash
+, version
+,
 }:
 
-{
-  callPackage,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  acl,
-  buildPackages,
-  cowsql,
-  incus-ui-canonical,
-  libcap,
-  lxc,
-  pkg-config,
-  sqlite,
-  udev,
-  udevCheckHook,
-  installShellFiles,
-  nix-update-script,
-  nixosTests,
+{ callPackage
+, lib
+, buildGoModule
+, fetchFromGitHub
+, acl
+, buildPackages
+, cowsql
+, incus-ui-canonical
+, libcap
+, lxc
+, pkg-config
+, sqlite
+, udev
+, udevCheckHook
+, installShellFiles
+, nix-update-script
+, nixosTests
+,
 }:
 
 let

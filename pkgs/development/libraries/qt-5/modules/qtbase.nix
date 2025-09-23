@@ -1,91 +1,87 @@
-{
-  stdenv,
-  lib,
-  src,
-  patches,
-  version,
-  qtCompatVersion,
-
-  coreutils,
-  bison,
-  flex,
-  gdb,
-  gperf,
-  lndir,
-  perl,
-  pkg-config,
-  python3,
-  which,
-  # darwin support
-  apple-sdk_14,
-  xcbuild,
-
-  dbus,
-  fontconfig,
-  freetype,
-  glib,
-  harfbuzz,
-  icu,
-  libdrm,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrender,
-  libjpeg,
-  libpng,
-  libxcb,
-  libxkbcommon,
-  libxml2,
-  libxslt,
-  openssl,
-  pcre2,
-  sqlite,
-  udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
-  zlib,
-  at-spi2-core,
-
-  # optional dependencies
-  cups ? null,
-  libpq ? null,
-  withGtk3 ? false,
-  dconf,
-  gtk3,
-  withQttranslation ? true,
-  qttranslations ? null,
-  withLibinput ? false,
-  libinput,
-
-  # options
-  libGLSupported ? !stdenv.hostPlatform.isDarwin,
-  libGL,
-  # qmake detection for libmysqlclient does not seem to work when cross compiling
-  mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
-  libmysqlclient,
-  buildExamples ? false,
-  buildTests ? false,
-  debug ? false,
-  developerBuild ? false,
-  decryptSslTraffic ? false,
-  testers,
-  buildPackages,
+{ stdenv
+, lib
+, src
+, patches
+, version
+, qtCompatVersion
+, coreutils
+, bison
+, flex
+, gdb
+, gperf
+, lndir
+, perl
+, pkg-config
+, python3
+, which
+, # darwin support
+  apple-sdk_14
+, xcbuild
+, dbus
+, fontconfig
+, freetype
+, glib
+, harfbuzz
+, icu
+, libdrm
+, libX11
+, libXcomposite
+, libXcursor
+, libXext
+, libXi
+, libXrender
+, libjpeg
+, libpng
+, libxcb
+, libxkbcommon
+, libxml2
+, libxslt
+, openssl
+, pcre2
+, sqlite
+, udev
+, xcbutil
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, xcbutilwm
+, zlib
+, at-spi2-core
+, # optional dependencies
+  cups ? null
+, libpq ? null
+, withGtk3 ? false
+, dconf
+, gtk3
+, withQttranslation ? true
+, qttranslations ? null
+, withLibinput ? false
+, libinput
+, # options
+  libGLSupported ? !stdenv.hostPlatform.isDarwin
+, libGL
+, # qmake detection for libmysqlclient does not seem to work when cross compiling
+  mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+, libmysqlclient
+, buildExamples ? false
+, buildTests ? false
+, debug ? false
+, developerBuild ? false
+, decryptSslTraffic ? false
+, testers
+, buildPackages
+,
 }:
 
 let
   debugSymbols = debug || developerBuild;
   qtPlatformCross =
     plat:
-    with plat;
-    if isLinux then
-      "linux-generic-g++"
-    else
-      throw "Please add a qtPlatformCross entry for ${plat.config}";
+      with plat;
+      if isLinux then
+        "linux-generic-g++"
+      else
+        throw "Please add a qtPlatformCross entry for ${plat.config}";
 
   # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
   darwinVersionInputs = [
@@ -357,7 +353,7 @@ stdenv.mkDerivation (
     // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
       configurePlatforms = [ ];
     }
-    // {
+      // {
       # TODO Remove obsolete and useless flags once the build will be totally mastered
       configureFlags = [
         "-plugindir $(out)/$(qtPluginPrefix)"

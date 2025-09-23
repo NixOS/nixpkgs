@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  ogg,
-  libtheora,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, ogg
+, libtheora
+,
 }:
 
 buildDunePackage {

@@ -1,20 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  catboost,
-  python,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  graphviz,
-  matplotlib,
-  numpy,
-  pandas,
-  plotly,
-  scipy,
-  six,
+{ lib
+, buildPythonPackage
+, catboost
+, python
+, # build-system
+  setuptools
+, # dependencies
+  graphviz
+, matplotlib
+, numpy
+, pandas
+, plotly
+, scipy
+, six
+,
 }:
 
 buildPythonPackage rec {

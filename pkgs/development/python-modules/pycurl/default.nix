@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  isPyPy,
-  fetchFromGitHub,
-  curl,
-  openssl,
-  bottle,
-  pytestCheckHook,
-  flaky,
-  flask,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, isPyPy
+, fetchFromGitHub
+, curl
+, openssl
+, bottle
+, pytestCheckHook
+, flaky
+, flask
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

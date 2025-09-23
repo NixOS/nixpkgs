@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk3,
-  kdePackages,
-  hicolor-icon-theme,
-  papirus-folders,
-  color ? null,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, kdePackages
+, hicolor-icon-theme
+, papirus-folders
+, color ? null
+, gitUpdater
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

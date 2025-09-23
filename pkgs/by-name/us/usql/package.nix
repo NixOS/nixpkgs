@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  unixODBC,
-  icu,
-  nix-update-script,
-  testers,
-  usql,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, unixODBC
+, icu
+, nix-update-script
+, testers
+, usql
+,
 }:
 
 buildGoModule rec {

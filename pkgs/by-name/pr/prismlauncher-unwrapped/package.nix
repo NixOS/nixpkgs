@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  cmark,
-  extra-cmake-modules,
-  fetchpatch2,
-  gamemode,
-  ghc_filesystem,
-  jdk17,
-  kdePackages,
-  ninja,
-  nix-update-script,
-  stripJavaArchivesHook,
-  tomlplusplus,
-  zlib,
-  msaClientID ? null,
-  gamemodeSupport ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmark
+, extra-cmake-modules
+, fetchpatch2
+, gamemode
+, ghc_filesystem
+, jdk17
+, kdePackages
+, ninja
+, nix-update-script
+, stripJavaArchivesHook
+, tomlplusplus
+, zlib
+, msaClientID ? null
+, gamemodeSupport ? stdenv.hostPlatform.isLinux
+,
 }:
 let
   libnbtplusplus = fetchFromGitHub {
@@ -26,9 +26,10 @@ let
     hash = "sha256-yy0q+bky80LtK1GWzz7qpM+aAGrOqLuewbid8WT1ilk=";
   };
 in
-assert lib.assertMsg (
-  gamemodeSupport -> stdenv.hostPlatform.isLinux
-) "gamemodeSupport is only available on Linux.";
+assert lib.assertMsg
+  (
+    gamemodeSupport -> stdenv.hostPlatform.isLinux
+  ) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
   version = "9.4";

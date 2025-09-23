@@ -1,16 +1,16 @@
-{
-  fetchurl,
-  makeWrapper,
-  patchelf,
-  lib,
-  stdenv,
-  libXft,
-  libX11,
-  freetype,
-  fontconfig,
-  libXrender,
-  libXScrnSaver,
-  libXext,
+{ fetchurl
+, makeWrapper
+, patchelf
+, lib
+, stdenv
+, libXft
+, libX11
+, freetype
+, fontconfig
+, libXrender
+, libXScrnSaver
+, libXext
+,
 }:
 
 stdenv.mkDerivation rec {

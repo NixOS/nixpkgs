@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  testers,
-  rustPlatform,
-  fetchFromGitHub,
-  inputmodule-control,
-  pkg-config,
-  libudev-zero,
-  udevCheckHook,
+{ lib
+, stdenv
+, testers
+, rustPlatform
+, fetchFromGitHub
+, inputmodule-control
+, pkg-config
+, libudev-zero
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

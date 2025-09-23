@@ -1,28 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  django,
-  pytz,
-
-  # optional-dependencies
-  coreapi,
-  coreschema,
-  django-guardian,
-  inflection,
-  psycopg2,
-  pygments,
-  pyyaml,
-
-  # tests
-  pytestCheckHook,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  django
+, pytz
+, # optional-dependencies
+  coreapi
+, coreschema
+, django-guardian
+, inflection
+, psycopg2
+, pygments
+, pyyaml
+, # tests
+  pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

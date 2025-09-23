@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  qemu,
-  setuptools,
-  fuseSupport ? false,
-  fusepy,
-  tuiSupport ? false,
-  urwid,
-  urwid-readline,
-  pygments,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, qemu
+, setuptools
+, fuseSupport ? false
+, fusepy
+, tuiSupport ? false
+, urwid
+, urwid-readline
+, pygments
+,
 }:
 
 buildPythonPackage {

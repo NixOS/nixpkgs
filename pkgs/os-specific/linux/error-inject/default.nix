@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  bison,
-  flex,
-  rasdaemon,
+{ lib
+, stdenv
+, fetchzip
+, bison
+, flex
+, rasdaemon
+,
 }:
 
 {

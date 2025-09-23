@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  openssl,
-  sgx-sdk,
-  sgx-psw,
-  which,
-  # "SIM" or "HW"
-  sgxMode,
+{ stdenv
+, lib
+, makeWrapper
+, openssl
+, sgx-sdk
+, sgx-psw
+, which
+, # "SIM" or "HW"
+  sgxMode
+,
 }:
 let
   isSimulation = sgxMode == "SIM";
@@ -118,7 +118,7 @@ in
   # # Requires SGX-patched openssl (sgxssl) build
   # sampleAttestedTLS = buildSample "SampleAttestedTLS";
 }
-// lib.optionalAttrs (!isSimulation) {
+  // lib.optionalAttrs (!isSimulation) {
   # # Requires kernel >= v6.2 && HW SGX
   # sampleAEXNotify = buildSample "SampleAEXNotify";
 

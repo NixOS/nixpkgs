@@ -1,15 +1,15 @@
-{
-  lib,
-  argp-standalone,
-  callPackage,
-  curl,
-  fetchFromGitHub,
-  gitUpdater,
-  meson,
-  ninja,
-  pkg-config,
-  stdenv,
-  zstd,
+{ lib
+, argp-standalone
+, callPackage
+, curl
+, fetchFromGitHub
+, gitUpdater
+, meson
+, ninja
+, pkg-config
+, stdenv
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  setuptools,
-  cffi,
-  libsodium,
-  libxeddsa,
-  pytestCheckHook,
-  pytest-cov-stub,
-  nix-update-script,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, setuptools
+, cffi
+, libsodium
+, libxeddsa
+, pytestCheckHook
+, pytest-cov-stub
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

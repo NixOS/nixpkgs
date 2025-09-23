@@ -1,28 +1,28 @@
-{
-  lib,
-  albumentations,
-  buildPythonPackage,
-  cython,
-  easydict,
-  fetchPypi,
-  insightface,
-  matplotlib,
-  mxnet,
-  numpy,
-  onnx,
-  onnxruntime,
-  opencv4,
-  pillow,
-  prettytable,
-  pythonOlder,
-  requests,
-  setuptools,
-  scipy,
-  scikit-image,
-  scikit-learn,
-  testers,
-  tqdm,
-  stdenv,
+{ lib
+, albumentations
+, buildPythonPackage
+, cython
+, easydict
+, fetchPypi
+, insightface
+, matplotlib
+, mxnet
+, numpy
+, onnx
+, onnxruntime
+, opencv4
+, pillow
+, prettytable
+, pythonOlder
+, requests
+, setuptools
+, scipy
+, scikit-image
+, scikit-learn
+, testers
+, tqdm
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  hackrf,
-  soapysdr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, hackrf
+, soapysdr
+,
 }:
 
 let

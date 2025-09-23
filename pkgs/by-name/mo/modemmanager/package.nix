@@ -1,33 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  glib,
-  libgudev,
-  ppp,
-  gettext,
-  pkg-config,
-  libxslt,
-  python3,
-  libmbim,
-  libqmi,
-  bash-completion,
-  meson,
-  ninja,
-  vala,
-  dbus,
-  bash,
-  gobject-introspection,
-  udevCheckHook,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  polkit,
-  withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, glib
+, libgudev
+, ppp
+, gettext
+, pkg-config
+, libxslt
+, python3
+, libmbim
+, libqmi
+, bash-completion
+, meson
+, ninja
+, vala
+, dbus
+, bash
+, gobject-introspection
+, udevCheckHook
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, polkit
+, withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 stdenv.mkDerivation rec {

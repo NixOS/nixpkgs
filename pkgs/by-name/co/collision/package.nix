@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  crystal,
-  wrapGAppsHook4,
-  desktopToDarwinBundle,
-  gobject-introspection,
-  nautilus-python,
-  python3,
-  libadwaita,
-  openssl,
-  libxml2,
-  pkg-config,
-  gitUpdater,
-  _experimental-update-script-combinators,
-  runCommand,
-  crystal2nix,
-  writeShellScript,
+{ stdenv
+, lib
+, fetchFromGitHub
+, crystal
+, wrapGAppsHook4
+, desktopToDarwinBundle
+, gobject-introspection
+, nautilus-python
+, python3
+, libadwaita
+, openssl
+, libxml2
+, pkg-config
+, gitUpdater
+, _experimental-update-script-combinators
+, runCommand
+, crystal2nix
+, writeShellScript
+,
 }:
 
 crystal.buildCrystalPackage rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  interface-meta,
-  narwhals,
-  numpy,
-  pandas,
-  scipy,
-  typing-extensions,
-  wrapt,
-  pyarrow,
-  polars,
-  sympy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, interface-meta
+, narwhals
+, numpy
+, pandas
+, scipy
+, typing-extensions
+, wrapt
+, pyarrow
+, polars
+, sympy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

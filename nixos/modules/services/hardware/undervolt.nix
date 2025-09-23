@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.undervolt;
@@ -12,9 +11,10 @@ let
     if (limit == null && window == null) then
       null
     else
-      assert lib.asserts.assertMsg (
-        limit != null && window != null
-      ) "Both power limit and window must be set";
+      assert lib.asserts.assertMsg
+        (
+          limit != null && window != null
+        ) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
   cliArgs = lib.cli.toGNUCommandLine { } {
     inherit (cfg)

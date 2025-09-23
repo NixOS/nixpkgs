@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  sbcl,
-  sqlite,
-  freetds,
-  libzip,
-  curl,
-  git,
-  cacert,
-  openssl,
-  sphinx,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, sbcl
+, sqlite
+, freetds
+, libzip
+, curl
+, git
+, cacert
+, openssl
+, sphinx
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgloader";

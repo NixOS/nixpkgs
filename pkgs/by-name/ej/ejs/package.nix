@@ -1,7 +1,7 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+,
 }:
 let
   version = "3.1.10";

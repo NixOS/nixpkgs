@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  prompt-toolkit,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, prompt-toolkit
+, setuptools
+,
 }:
 buildPythonPackage rec {
   name = "aiocmd";

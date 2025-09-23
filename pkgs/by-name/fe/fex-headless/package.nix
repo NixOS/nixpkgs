@@ -1,5 +1,5 @@
-{
-  fex,
+{ fex
+,
 }:
 
 fex.override {

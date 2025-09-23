@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  ocamlPackages,
-  gnome2,
-  pkg-config,
-  makeWrapper,
-  glib,
-  libtool,
-  libpng,
-  bison,
-  expat,
-  fontconfig,
-  gd,
-  pango,
-  libjpeg,
-  libwebp,
-  libX11,
-  libXaw,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, ocamlPackages
+, gnome2
+, pkg-config
+, makeWrapper
+, glib
+, libtool
+, libpng
+, bison
+, expat
+, fontconfig
+, gd
+, pango
+, libjpeg
+, libwebp
+, libX11
+, libXaw
+,
 }:
 # We need an old version of Graphviz for format compatibility reasons.
 # This version is vulnerable, but monotone-viz will never feed it bad input.

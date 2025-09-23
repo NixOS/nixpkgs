@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  glib,
-  gjs,
-  typescript,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, glib
+, gjs
+, typescript
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  callPackage,
-  jq,
-  moreutils,
-  cacert,
-  makeSetupHook,
-  pnpm,
-  yq,
+{ lib
+, stdenvNoCC
+, callPackage
+, jq
+, moreutils
+, cacert
+, makeSetupHook
+, pnpm
+, yq
+,
 }:
 
 let
@@ -20,15 +20,14 @@ let
 in
 {
   fetchDeps = lib.makeOverridable (
-    {
-      hash ? "",
-      pname,
-      pnpm ? pnpm',
-      pnpmWorkspaces ? [ ],
-      prePnpmInstall ? "",
-      pnpmInstallFlags ? [ ],
-      fetcherVersion ? null,
-      ...
+    { hash ? ""
+    , pname
+    , pnpm ? pnpm'
+    , pnpmWorkspaces ? [ ]
+    , prePnpmInstall ? ""
+    , pnpmInstallFlags ? [ ]
+    , fetcherVersion ? null
+    , ...
     }@args:
     let
       args' = builtins.removeAttrs args [
@@ -47,15 +46,18 @@ in
       filterFlags = lib.map (package: "--filter=${package}") pnpmWorkspaces;
     in
     # pnpmWorkspace was deprecated, so throw if it's used.
-    assert (lib.throwIf (args ? pnpmWorkspace)
+    assert
+    (lib.throwIf (args ? pnpmWorkspace)
       "pnpm.fetchDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
     ) true;
 
-    assert (lib.throwIf (fetcherVersion == null)
+    assert
+    (lib.throwIf (fetcherVersion == null)
       "pnpm.fetchDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
     ) true;
 
-    assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
+    assert
+    (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
       "pnpm.fetchDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (builtins.map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
     ) true;
 
@@ -164,12 +166,13 @@ in
     )
   );
 
-  configHook = makeSetupHook {
-    name = "pnpm-config-hook";
-    propagatedBuildInputs = [ pnpm ];
-    substitutions = {
-      npmArch = stdenvNoCC.targetPlatform.node.arch;
-      npmPlatform = stdenvNoCC.targetPlatform.node.platform;
-    };
-  } ./pnpm-config-hook.sh;
+  configHook = makeSetupHook
+    {
+      name = "pnpm-config-hook";
+      propagatedBuildInputs = [ pnpm ];
+      substitutions = {
+        npmArch = stdenvNoCC.targetPlatform.node.arch;
+        npmPlatform = stdenvNoCC.targetPlatform.node.platform;
+      };
+    } ./pnpm-config-hook.sh;
 }

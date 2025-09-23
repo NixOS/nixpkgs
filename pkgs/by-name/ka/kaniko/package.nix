@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  installShellFiles,
-  testers,
-  kaniko,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, testers
+, kaniko
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

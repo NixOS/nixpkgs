@@ -1,11 +1,11 @@
-{
-  stdenv,
-  buildPecl,
-  lib,
-  libiconv,
-  php,
-  fetchFromGitHub,
-  pcre2,
+{ stdenv
+, buildPecl
+, lib
+, libiconv
+, php
+, fetchFromGitHub
+, pcre2
+,
 }:
 
 buildPecl rec {

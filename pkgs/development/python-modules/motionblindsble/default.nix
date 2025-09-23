@@ -1,14 +1,14 @@
-{
-  lib,
-  bleak-retry-connector,
-  bleak,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pycryptodome,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, bleak-retry-connector
+, bleak
+, buildPythonPackage
+, fetchFromGitHub
+, pycryptodome
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

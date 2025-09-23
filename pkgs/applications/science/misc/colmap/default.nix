@@ -1,27 +1,27 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  ceres-solver,
-  eigen,
-  freeimage,
-  glog,
-  libGLU,
-  glew,
-  qtbase,
-  flann,
-  cgal,
-  gmp,
-  mpfr,
-  autoAddDriverRunpath,
-  config,
-  stdenv,
-  qt5,
-  xorg,
-  cudaSupport ? config.cudaSupport,
-  cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
-  cudaPackages,
+{ lib
+, fetchFromGitHub
+, cmake
+, boost
+, ceres-solver
+, eigen
+, freeimage
+, glog
+, libGLU
+, glew
+, qtbase
+, flann
+, cgal
+, gmp
+, mpfr
+, autoAddDriverRunpath
+, config
+, stdenv
+, qt5
+, xorg
+, cudaSupport ? config.cudaSupport
+, cudaCapabilities ? cudaPackages.flags.cudaCapabilities
+, cudaPackages
+,
 }:
 
 assert cudaSupport -> cudaPackages != { };

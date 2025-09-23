@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  scdoc,
-  coreutils,
-  grim,
-  hyprland,
-  hyprpicker,
-  jq,
-  libnotify,
-  slurp,
-  wl-clipboard,
-  bash,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, scdoc
+, coreutils
+, grim
+, hyprland
+, hyprpicker
+, jq
+, libnotify
+, slurp
+, wl-clipboard
+, bash
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

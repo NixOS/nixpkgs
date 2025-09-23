@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  stdenv,
-  libxkbcommon,
-  wayland,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, libxkbcommon
+, wayland
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  nix-update-script,
-
-  ncurses,
-  gnupg,
+{ lib
+, fetchFromGitHub
+, stdenv
+, nix-update-script
+, ncurses
+, gnupg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

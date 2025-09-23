@@ -1,10 +1,10 @@
-{
-  appimageTools,
-  fetchurl,
-  webkitgtk_4_1,
-  libsoup_3,
-  libpng,
-  lib,
+{ appimageTools
+, fetchurl
+, webkitgtk_4_1
+, libsoup_3
+, libpng
+, lib
+,
 }:
 let
   pname = "qidi-slicer";

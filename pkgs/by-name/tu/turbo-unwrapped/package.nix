@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  capnproto,
-  extra-cmake-modules,
-  fetchFromGitHub,
-  fontconfig,
-  installShellFiles,
-  llvmPackages,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  protobuf,
-  rust-jemalloc-sys,
-  rustPlatform,
-  zlib,
+{ lib
+, stdenv
+, capnproto
+, extra-cmake-modules
+, fetchFromGitHub
+, fontconfig
+, installShellFiles
+, llvmPackages
+, nix-update-script
+, openssl
+, pkg-config
+, protobuf
+, rust-jemalloc-sys
+, rustPlatform
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

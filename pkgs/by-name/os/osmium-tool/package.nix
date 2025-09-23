@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  installShellFiles,
-  pandoc,
-  boost,
-  bzip2,
-  expat,
-  libosmium,
-  lz4,
-  nlohmann_json,
-  protozero,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, installShellFiles
+, pandoc
+, boost
+, bzip2
+, expat
+, libosmium
+, lz4
+, nlohmann_json
+, protozero
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

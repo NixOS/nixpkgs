@@ -1,18 +1,17 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  lib,
+{ stdenvNoCC
+, fetchurl
+, unzip
+, lib
+,
 }:
 
-{
-  pname,
-  versionPrefix ? "",
-  version,
-  zipHash,
-  meta ? { },
-  passthru ? { },
-  ...
+{ pname
+, versionPrefix ? ""
+, version
+, zipHash
+, meta ? { }
+, passthru ? { }
+, ...
 }@args:
 let
   plat = stdenvNoCC.hostPlatform.system;
@@ -23,19 +22,19 @@ stdenvNoCC.mkDerivation (
 
     src =
       if lib.isAttrs zipHash then
-        fetchurl {
-          name = "${pname}-${versionPrefix}${version}-${plat}.zip";
-          hash = zipHash.${plat} or (throw "Unsupported system: ${plat}");
-          url =
-            "https://grafana.com/api/plugins/${pname}/versions/${versionPrefix}${version}/download"
-            + {
-              x86_64-linux = "?os=linux&arch=amd64";
-              aarch64-linux = "?os=linux&arch=arm64";
-              x86_64-darwin = "?os=darwin&arch=amd64";
-              aarch64-darwin = "?os=darwin&arch=arm64";
-            }
-            .${plat} or (throw "Unsupported system: ${plat}");
-        }
+        fetchurl
+          {
+            name = "${pname}-${versionPrefix}${version}-${plat}.zip";
+            hash = zipHash.${plat} or (throw "Unsupported system: ${plat}");
+            url =
+              "https://grafana.com/api/plugins/${pname}/versions/${versionPrefix}${version}/download"
+              + {
+                x86_64-linux = "?os=linux&arch=amd64";
+                aarch64-linux = "?os=linux&arch=arm64";
+                x86_64-darwin = "?os=darwin&arch=amd64";
+                aarch64-darwin = "?os=darwin&arch=arm64";
+              }.${plat} or (throw "Unsupported system: ${plat}");
+          }
       else
         fetchurl {
           name = "${pname}-${versionPrefix}${version}.zip";
@@ -64,7 +63,7 @@ stdenvNoCC.mkDerivation (
     }
     // meta;
   }
-  // (builtins.removeAttrs args [
+    // (builtins.removeAttrs args [
     "zipHash"
     "pname"
     "versionPrefix"

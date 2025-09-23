@@ -1,35 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  bison,
-  boost,
-  flex,
-  gputils,
-  texinfo,
-  zlib,
-  withGputils ? false,
-  excludePorts ? [ ],
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, bison
+, boost
+, flex
+, gputils
+, texinfo
+, zlib
+, withGputils ? false
+, excludePorts ? [ ]
+,
 }:
 
 assert
-  lib.subtractLists [
-    "ds390"
-    "ds400"
-    "gbz80"
-    "hc08"
-    "mcs51"
-    "pic14"
-    "pic16"
-    "r2k"
-    "r3ka"
-    "s08"
-    "stm8"
-    "tlcs90"
-    "z80"
-    "z180"
-  ] excludePorts == [ ];
+lib.subtractLists [
+  "ds390"
+  "ds400"
+  "gbz80"
+  "hc08"
+  "mcs51"
+  "pic14"
+  "pic16"
+  "r2k"
+  "r3ka"
+  "s08"
+  "stm8"
+  "tlcs90"
+  "z80"
+  "z180"
+]
+  excludePorts == [ ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdcc";
   version = "4.5.0";

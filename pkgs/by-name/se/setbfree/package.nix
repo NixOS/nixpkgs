@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  freetype,
-  ftgl,
-  libjack2,
-  libX11,
-  lv2,
-  libGLU,
-  libGL,
-  pkg-config,
-  ttf_bitstream_vera,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, freetype
+, ftgl
+, libjack2
+, libX11
+, lv2
+, libGLU
+, libGL
+, pkg-config
+, ttf_bitstream_vera
+, nix-update-script
+,
 }:
 let
   version = "0.8.13";

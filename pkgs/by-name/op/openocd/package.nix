@@ -1,20 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  hidapi,
-  tcl,
-  jimtcl,
-  libjaylink,
-  libusb1,
-  libgpiod_1,
-
-  enableFtdi ? true,
-  libftdi1,
-
-  # Allow selection the hardware targets (SBCs, JTAG Programmers, JTAG Adapters)
-  extraHardwareSupport ? [ ],
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, hidapi
+, tcl
+, jimtcl
+, libjaylink
+, libusb1
+, libgpiod_1
+, enableFtdi ? true
+, libftdi1
+, # Allow selection the hardware targets (SBCs, JTAG Programmers, JTAG Adapters)
+  extraHardwareSupport ? [ ]
+,
 }:
 let
 
@@ -45,8 +43,8 @@ stdenv.mkDerivation rec {
     libjaylink
   ]
   ++
-    # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
-    lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
+  # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
+  lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
 
   configureFlags = [
     "--disable-werror"

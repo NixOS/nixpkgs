@@ -1,24 +1,24 @@
-{
-  lib,
-  runCommand,
-  linkFarm,
-  fetchurl,
-  fetchgit,
-  dub,
+{ lib
+, runCommand
+, linkFarm
+, fetchurl
+, fetchgit
+, dub
+,
 }:
 
-{
-  pname,
-  version,
-  lock,
+{ pname
+, version
+, lock
+,
 }:
 
 let
   makeDubDep =
-    {
-      pname,
-      version,
-      sha256,
+    { pname
+    , version
+    , sha256
+    ,
     }:
     {
       inherit pname version;
@@ -30,11 +30,11 @@ let
     };
 
   makeGitDep =
-    {
-      pname,
-      version,
-      repository,
-      sha256,
+    { pname
+    , version
+    , repository
+    , sha256
+    ,
     }:
     {
       inherit pname version;
@@ -55,17 +55,19 @@ let
   # one big directory with all .zip files leads to version parsing errors
   # when the name of a package is a prefix of the name of another package
   dubRegistryBase = linkFarm "dub-registry-base" (
-    map (dep: {
-      name = "${dep.pname}/${dep.pname}-${dep.version}.zip";
-      path = dep.src;
-    }) dubDeps
+    map
+      (dep: {
+        name = "${dep.pname}/${dep.pname}-${dep.version}.zip";
+        path = dep.src;
+      })
+      dubDeps
   );
 
 in
 runCommand "${pname}-${version}-dub-deps"
-  {
-    nativeBuildInputs = [ dub ];
-  }
+{
+  nativeBuildInputs = [ dub ];
+}
   ''
     export DUB_HOME="$out/.dub"
     mkdir -p "$DUB_HOME"

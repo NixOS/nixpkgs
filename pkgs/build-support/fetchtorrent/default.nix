@@ -1,31 +1,30 @@
-{
-  lib,
-  runCommand,
-  transmission_3_noSystemd,
-  rqbit,
-  writeShellScript,
-  formats,
-  cacert,
-  rsync,
+{ lib
+, runCommand
+, transmission_3_noSystemd
+, rqbit
+, writeShellScript
+, formats
+, cacert
+, rsync
+,
 }:
 let
   urlRegexp = ''.*xt=urn:bt[im]h:([^&]{64}|[^&]{40}).*'';
 in
-{
-  url,
-  name ?
-    if (builtins.match urlRegexp url) == null then
-      "bittorrent"
-    else
-      "bittorrent-" + builtins.head (builtins.match urlRegexp url),
-  config ? { },
-  hash,
-  backend ? "transmission",
-  recursiveHash ? true,
-  flatten ? null,
-  postFetch ? "",
-  postUnpack ? "",
-  meta ? { },
+{ url
+, name ? if (builtins.match urlRegexp url) == null then
+    "bittorrent"
+  else
+    "bittorrent-" + builtins.head (builtins.match urlRegexp url)
+, config ? { }
+, hash
+, backend ? "transmission"
+, recursiveHash ? true
+, flatten ? null
+, postFetch ? ""
+, postUnpack ? ""
+, meta ? { }
+,
 }:
 let
   # Default to flattening if no flatten argument was specified.
@@ -90,28 +89,28 @@ assert lib.assertMsg (backend == "transmission" -> flatten') ''
   `flatten = false` is only supported by the rqbit backend for fetchtorrent
 '';
 runCommand name
-  {
-    inherit meta;
-    nativeBuildInputs = [
-      cacert
-    ]
-    ++ (
-      if (backend == "transmission") then
-        [ transmission_3_noSystemd ]
-      else if (backend == "rqbit") then
-        [ rqbit ]
-      else
-        throw "rqbit or transmission are the only available backends for fetchtorrent"
-    );
-    outputHashAlgo = if hash != "" then null else "sha256";
-    outputHash = hash;
-    outputHashMode = if recursiveHash then "recursive" else "flat";
+{
+  inherit meta;
+  nativeBuildInputs = [
+    cacert
+  ]
+  ++ (
+    if (backend == "transmission") then
+      [ transmission_3_noSystemd ]
+    else if (backend == "rqbit") then
+      [ rqbit ]
+    else
+      throw "rqbit or transmission are the only available backends for fetchtorrent"
+  );
+  outputHashAlgo = if hash != "" then null else "sha256";
+  outputHash = hash;
+  outputHashMode = if recursiveHash then "recursive" else "flat";
 
-    # url will be written to the derivation, meaning it can be parsed and utilized
-    # by external tools, such as tools that may want to seed fetchtorrent calls
-    # in nixpkgs
-    inherit url;
-  }
+  # url will be written to the derivation, meaning it can be parsed and utilized
+  # by external tools, such as tools that may want to seed fetchtorrent calls
+  # in nixpkgs
+  inherit url;
+}
   (
     if (backend == "transmission") then
       ''
@@ -167,7 +166,7 @@ runCommand name
         rm -v -rf $downloadedDirectory
         unset downloadedDirectory
       ''
-      + ''
+        + ''
         ${postFetch}
       ''
   )

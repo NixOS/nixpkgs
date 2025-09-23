@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  msrestazure,
-  azure-common,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, msrestazure
+, azure-common
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  black,
-  buildPythonPackage,
-  fetchPypi,
-  hypothesis,
-  lark,
-  libcst,
-  parso,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
-  pythonOlder,
-  setuptools,
+{ lib
+, black
+, buildPythonPackage
+, fetchPypi
+, hypothesis
+, lark
+, libcst
+, parso
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-xdist
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

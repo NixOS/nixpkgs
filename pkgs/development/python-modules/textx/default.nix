@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  fetchFromGitHub,
-  arpeggio,
-  click,
-  callPackage,
-  flit-core,
+{ lib
+, buildPythonPackage
+, python
+, fetchFromGitHub
+, arpeggio
+, click
+, callPackage
+, flit-core
+,
 }:
 
 let

@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # dependencies
-  coloredlogs,
-  numpy,
-  onnx,
-  packaging,
-  psutil,
-  py-cpuinfo,
-  py3nvml,
-  sympy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # dependencies
+  coloredlogs
+, numpy
+, onnx
+, packaging
+, psutil
+, py-cpuinfo
+, py3nvml
+, sympy
+,
 }:
 
 buildPythonPackage rec {

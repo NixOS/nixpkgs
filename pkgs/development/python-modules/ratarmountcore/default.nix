@@ -1,20 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  indexed-gzip,
-  indexed-zstd,
-  libarchive-c,
-  pytestCheckHook,
-  python-xz,
-  pythonOlder,
-  writableTmpDirAsHomeHook,
-  rapidgzip,
-  rarfile,
-  setuptools,
-  zstandard, # Python bindings
-  zstd, # System tool
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, indexed-gzip
+, indexed-zstd
+, libarchive-c
+, pytestCheckHook
+, python-xz
+, pythonOlder
+, writableTmpDirAsHomeHook
+, rapidgzip
+, rarfile
+, setuptools
+, zstandard
+, # Python bindings
+  zstd
+, # System tool
 }:
 
 buildPythonPackage rec {

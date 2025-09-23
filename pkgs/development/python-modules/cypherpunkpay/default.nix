@@ -1,31 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  apscheduler,
-  bitstring,
-  cffi,
-  ecdsa,
-  monero,
-  pypng,
-  pyqrcode,
-  pyramid,
-  pyramid-jinja2,
-  pysocks,
-  pytz,
-  requests,
-  tzlocal,
-  waitress,
-  yoyo-migrations,
-
-  # tests
-  pytestCheckHook,
-  webtest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  apscheduler
+, bitstring
+, cffi
+, ecdsa
+, monero
+, pypng
+, pyqrcode
+, pyramid
+, pyramid-jinja2
+, pysocks
+, pytz
+, requests
+, tzlocal
+, waitress
+, yoyo-migrations
+, # tests
+  pytestCheckHook
+, webtest
+,
 }:
 
 buildPythonPackage rec {

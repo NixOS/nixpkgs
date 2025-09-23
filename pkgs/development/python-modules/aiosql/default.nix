@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pg8000,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  sphinx-rtd-theme,
-  sphinxHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pg8000
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, sphinx-rtd-theme
+, sphinxHook
+,
 }:
 
 buildPythonPackage rec {

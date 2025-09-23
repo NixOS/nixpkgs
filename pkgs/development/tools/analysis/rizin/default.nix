@@ -1,29 +1,30 @@
-{
-  lib,
-  pkgs, # for passthru.plugins
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libusb-compat-0_1,
-  readline,
-  libewf,
-  perl,
-  pcre2,
-  zlib,
-  openssl,
-  file,
-  libmspack,
-  libzip,
-  lz4,
-  xxHash,
-  xz,
-  meson,
-  python3,
-  cmake,
-  ninja,
-  capstone,
-  tree-sitter,
-  zstd,
+{ lib
+, pkgs
+, # for passthru.plugins
+  stdenv
+, fetchurl
+, pkg-config
+, libusb-compat-0_1
+, readline
+, libewf
+, perl
+, pcre2
+, zlib
+, openssl
+, file
+, libmspack
+, libzip
+, lz4
+, xxHash
+, xz
+, meson
+, python3
+, cmake
+, ninja
+, capstone
+, tree-sitter
+, zstd
+,
 }:
 
 let

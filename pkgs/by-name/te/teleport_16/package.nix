@@ -1,9 +1,9 @@
-{
-  buildTeleport,
-  buildGoModule,
-  wasm-bindgen-cli_0_2_95,
-  withRdpClient ? true,
-  extPatches ? [ ],
+{ buildTeleport
+, buildGoModule
+, wasm-bindgen-cli_0_2_95
+, withRdpClient ? true
+, extPatches ? [ ]
+,
 }:
 buildTeleport rec {
   version = "16.5.15";

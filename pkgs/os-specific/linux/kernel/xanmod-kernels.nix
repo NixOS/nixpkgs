@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  buildLinux,
-  variant,
-  ...
+{ lib
+, stdenv
+, fetchFromGitLab
+, buildLinux
+, variant
+, ...
 }@args:
 
 let
@@ -27,11 +26,11 @@ let
   };
 
   xanmodKernelFor =
-    {
-      version,
-      suffix ? "xanmod1",
-      hash,
-      isLTS ? false,
+    { version
+    , suffix ? "xanmod1"
+    , hash
+    , isLTS ? false
+    ,
     }:
     buildLinux (
       args

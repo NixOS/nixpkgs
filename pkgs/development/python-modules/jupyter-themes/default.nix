@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lesscpy,
-  matplotlib,
-  notebook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, lesscpy
+, matplotlib
+, notebook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

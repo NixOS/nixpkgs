@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  buildPackages,
+{ lib
+, stdenv
+, callPackage
+, buildPackages
+,
 }:
 
 let
@@ -58,9 +58,9 @@ in
     meta = oldAttrs.meta // {
       platforms = lib.unique (
         x86_64-appimage.meta.platforms
-        ++ x86_64-dmg.meta.platforms
-        ++ aarch64-dmg.meta.platforms
-        ++ x86_64-windows.meta.platforms
+          ++ x86_64-dmg.meta.platforms
+          ++ aarch64-dmg.meta.platforms
+          ++ x86_64-windows.meta.platforms
       );
     };
   })

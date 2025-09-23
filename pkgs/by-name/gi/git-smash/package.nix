@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  makeWrapper,
-  fzf,
-  stdenv,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, makeWrapper
+, fzf
+, stdenv
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

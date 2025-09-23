@@ -1,10 +1,9 @@
-{
-  buildGoModule,
-
-  pname,
-  version,
-  src,
-  vendorHash,
+{ buildGoModule
+, pname
+, version
+, src
+, vendorHash
+,
 }:
 
 buildGoModule {

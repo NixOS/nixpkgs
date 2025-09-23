@@ -1,44 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-
-  pythonSupport ? false,
-  python3Packages,
-
-  # nativeBuildInputs
-  cmake,
-  doxygen,
-  pkg-config,
-
-  # propagatedBuildInputs
-  assimp,
-  blas,
-  boost,
-  bullet,
-  eigen,
-  fcl,
-  flann,
-  fmt,
-  libglut,
-  imgui,
-  ipopt,
-  lapack,
-  libGL,
-  libGLU,
-  libccd,
-  nlopt,
-  ode,
-  openscenegraph,
-  pagmo2,
-  tinyxml-2,
-  urdfdom,
-  urdfdom-headers,
-
-  # checkInputs
-  gbenchmark,
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pythonSupport ? false
+, python3Packages
+, # nativeBuildInputs
+  cmake
+, doxygen
+, pkg-config
+, # propagatedBuildInputs
+  assimp
+, blas
+, boost
+, bullet
+, eigen
+, fcl
+, flann
+, fmt
+, libglut
+, imgui
+, ipopt
+, lapack
+, libGL
+, libGLU
+, libccd
+, nlopt
+, ode
+, openscenegraph
+, pagmo2
+, tinyxml-2
+, urdfdom
+, urdfdom-headers
+, # checkInputs
+  gbenchmark
+, gtest
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

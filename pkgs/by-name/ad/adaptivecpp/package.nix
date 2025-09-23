@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  llvmPackages_18,
-  python3,
-  cmake,
-  boost,
-  libxml2,
-  libffi,
-  makeWrapper,
-  config,
-  cudaPackages,
-  rocmPackages_6,
-  ompSupport ? true,
-  openclSupport ? false,
-  rocmSupport ? config.rocmSupport,
-  cudaSupport ? config.cudaSupport,
-  autoAddDriverRunpath,
-  runCommand,
-  callPackage,
-  symlinkJoin,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, llvmPackages_18
+, python3
+, cmake
+, boost
+, libxml2
+, libffi
+, makeWrapper
+, config
+, cudaPackages
+, rocmPackages_6
+, ompSupport ? true
+, openclSupport ? false
+, rocmSupport ? config.rocmSupport
+, cudaSupport ? config.cudaSupport
+, autoAddDriverRunpath
+, runCommand
+, callPackage
+, symlinkJoin
+, nix-update-script
+,
 }:
 let
   inherit (llvmPackages) stdenv;

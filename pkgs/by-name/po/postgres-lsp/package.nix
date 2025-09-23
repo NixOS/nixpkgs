@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  rust-jemalloc-sys,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, rust-jemalloc-sys
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";

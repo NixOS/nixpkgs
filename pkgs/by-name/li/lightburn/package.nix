@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  p7zip,
-  nss,
-  nspr,
-  libusb1,
-  cups,
-  autoPatchelfHook,
-  libgpg-error,
-  e2fsprogs,
-  makeDesktopItem,
-  copyDesktopItems,
-  xorg,
-  libGL,
-  alsa-lib,
-  freetype,
-  fontconfig,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, p7zip
+, nss
+, nspr
+, libusb1
+, cups
+, autoPatchelfHook
+, libgpg-error
+, e2fsprogs
+, makeDesktopItem
+, copyDesktopItems
+, xorg
+, libGL
+, alsa-lib
+, freetype
+, fontconfig
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

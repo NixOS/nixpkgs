@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pysimplesoap,
-  pythonOlder,
-  setuptools,
-  distutils,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pysimplesoap
+, pythonOlder
+, setuptools
+, distutils
+,
 }:
 
 buildPythonPackage rec {

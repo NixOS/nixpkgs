@@ -1,12 +1,12 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  stdenv,
-  testers,
-  kubevela,
-  nix-update-script,
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, stdenv
+, testers
+, kubevela
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  oniguruma,
-  rust-jemalloc-sys,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, oniguruma
+, rust-jemalloc-sys
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mado";

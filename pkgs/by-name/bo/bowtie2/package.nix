@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  perl,
-  python3,
-  tbb,
-  zlib,
-  runCommand,
-  bowtie2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, python3
+, tbb
+, zlib
+, runCommand
+, bowtie2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

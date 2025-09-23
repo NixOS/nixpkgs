@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  pkg-config,
-  SDL2,
-  gtk2,
-  mpfr,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, SDL2
+, gtk2
+, mpfr
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "basiliskii";

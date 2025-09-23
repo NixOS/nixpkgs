@@ -1,19 +1,18 @@
-{
-  lib,
-  makeWrapper,
-  gawk,
-  perl,
-  bash,
-  stdenv,
-  which,
-  linuxHeaders ? stdenv.cc.libc.linuxHeaders,
-  python3Packages,
-  bashNonInteractive,
-  buildPackages,
-
-  # apparmor deps
-  apparmor-parser,
-  apparmor-teardown,
+{ lib
+, makeWrapper
+, gawk
+, perl
+, bash
+, stdenv
+, which
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, python3Packages
+, bashNonInteractive
+, buildPackages
+, # apparmor deps
+  apparmor-parser
+, apparmor-teardown
+,
 }:
 let
   inherit (python3Packages) libapparmor;

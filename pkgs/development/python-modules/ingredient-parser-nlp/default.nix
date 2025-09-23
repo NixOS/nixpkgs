@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
-  nltk,
-  numpy,
-  pint,
-  python-crfsuite,
-
-  pytestCheckHook,
-  nltk-data,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, nltk
+, numpy
+, pint
+, python-crfsuite
+, pytestCheckHook
+, nltk-data
+,
 }:
 buildPythonPackage rec {
   pname = "ingredient-parser-nlp";

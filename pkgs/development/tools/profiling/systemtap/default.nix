@@ -1,14 +1,14 @@
-{
-  lib,
-  runCommand,
-  makeWrapper,
-  systemtap-unwrapped,
-  elfutils,
-  kernel,
-  gnumake,
-  python3,
-  nixosTests,
-  withStap ? true, # avoid cyclic dependency with glib, reduce closure size substantially
+{ lib
+, runCommand
+, makeWrapper
+, systemtap-unwrapped
+, elfutils
+, kernel
+, gnumake
+, python3
+, nixosTests
+, withStap ? true
+, # avoid cyclic dependency with glib, reduce closure size substantially
 }:
 
 let
@@ -26,12 +26,12 @@ let
 
 in
 runCommand "systemtap-${systemtap-unwrapped.version}"
-  {
-    stapBuild = systemtap-unwrapped;
-    nativeBuildInputs = [ makeWrapper ];
-    passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
-    inherit (systemtap-unwrapped) meta;
-  }
+{
+  stapBuild = systemtap-unwrapped;
+  nativeBuildInputs = [ makeWrapper ];
+  passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
+  inherit (systemtap-unwrapped) meta;
+}
   (
     ''
       mkdir -p $out/bin
@@ -42,7 +42,7 @@ runCommand "systemtap-${systemtap-unwrapped.version}"
       makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
         --prefix PYTHONPATH : ${pypkgs}
     ''
-    + lib.optionalString withStap ''
+      + lib.optionalString withStap ''
       makeWrapper $stapBuild/bin/stap $out/bin/stap \
         --add-flags "--sysroot ${sysroot}" \
         --prefix PATH : ${

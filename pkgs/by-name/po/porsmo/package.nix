@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  alsa-lib,
-  testers,
-  porsmo,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, alsa-lib
+, testers
+, porsmo
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,22 +1,22 @@
-{
-  annexremote,
-  buildPythonPackage,
-  datalad,
-  datasalad,
-  fetchFromGitHub,
-  git-annex,
-  git,
-  humanize,
-  lib,
-  more-itertools,
-  openssh,
-  psutil,
-  pytestCheckHook,
-  pythonAtLeast,
-  setuptools,
-  unzip,
-  versioneer,
-  webdavclient3,
+{ annexremote
+, buildPythonPackage
+, datalad
+, datasalad
+, fetchFromGitHub
+, git-annex
+, git
+, humanize
+, lib
+, more-itertools
+, openssh
+, psutil
+, pytestCheckHook
+, pythonAtLeast
+, setuptools
+, unzip
+, versioneer
+, webdavclient3
+,
 }:
 
 buildPythonPackage rec {

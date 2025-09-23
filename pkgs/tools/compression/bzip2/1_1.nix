@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  python3,
-  ninja,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, python3
+, ninja
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

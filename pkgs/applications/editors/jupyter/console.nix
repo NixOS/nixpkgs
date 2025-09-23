@@ -1,14 +1,14 @@
-{
-  python3,
-  jupyter-kernel,
-  lib,
+{ python3
+, jupyter-kernel
+, lib
+,
 }:
 
 let
   mkConsole =
-    {
-      definitions ? jupyter-kernel.default,
-      kernel ? null,
+    { definitions ? jupyter-kernel.default
+    , kernel ? null
+    ,
     }:
     (python3.buildEnv.override {
       extraLibs = [ python3.pkgs.jupyter-console ];

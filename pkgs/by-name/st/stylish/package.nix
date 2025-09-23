@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  curl,
-  feh,
-  file,
-  jq,
-  util-linux,
-  wget,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, curl
+, feh
+, file
+, jq
+, util-linux
+, wget
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "stylish";

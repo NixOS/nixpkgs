@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  pkg-config,
-  addDriverRunpath,
-  desktop-file-utils,
-  makeWrapper,
-  meson,
-  ninja,
-  gtk3,
-  libayatana-appindicator,
-  libpulseaudio,
-  libdrm,
-  gpu-screen-recorder,
-  libglvnd,
-  libX11,
-  libXrandr,
-  wayland,
-  wrapGAppsHook3,
-  wrapperDir ? "/run/wrappers/bin",
-  gitUpdater,
+{ stdenv
+, lib
+, fetchgit
+, pkg-config
+, addDriverRunpath
+, desktop-file-utils
+, makeWrapper
+, meson
+, ninja
+, gtk3
+, libayatana-appindicator
+, libpulseaudio
+, libdrm
+, gpu-screen-recorder
+, libglvnd
+, libX11
+, libXrandr
+, wayland
+, wrapGAppsHook3
+, wrapperDir ? "/run/wrappers/bin"
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

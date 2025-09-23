@@ -1,20 +1,20 @@
 # Before adding a new extension, read ./README.md
 
-{
-  autoPatchelfHook,
-  callPackage,
-  config,
-  fetchurl,
-  jdk,
-  jq,
-  lib,
-  llvmPackages,
-  moreutils,
-  protobuf,
-  python3Packages,
-  stdenv,
-  vscode-utils,
-  zlib,
+{ autoPatchelfHook
+, callPackage
+, config
+, fetchurl
+, jdk
+, jq
+, lib
+, llvmPackages
+, moreutils
+, protobuf
+, python3Packages
+, stdenv
+, vscode-utils
+, zlib
+,
 }:
 
 let

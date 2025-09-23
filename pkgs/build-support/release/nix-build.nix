@@ -5,25 +5,24 @@
 # it turns on GCC's coverage analysis feature.  It then runs `make
 # check' and produces a coverage analysis report using `lcov'.
 
-{
-  buildOutOfSourceTree ? false,
-  preConfigure ? null,
-  doCoverageAnalysis ? false,
-  doClangAnalysis ? false,
-  doCoverityAnalysis ? false,
-  lcovFilter ? [ ],
-  lcovExtraTraceFiles ? [ ],
-  src,
-  lib,
-  stdenv,
-  name ? if doCoverageAnalysis then "nix-coverage" else "nix-build",
-  failureHook ? null,
-  prePhases ? [ ],
-  postPhases ? [ ],
-  buildInputs ? [ ],
-  preHook ? "",
-  postHook ? "",
-  ...
+{ buildOutOfSourceTree ? false
+, preConfigure ? null
+, doCoverageAnalysis ? false
+, doClangAnalysis ? false
+, doCoverityAnalysis ? false
+, lcovFilter ? [ ]
+, lcovExtraTraceFiles ? [ ]
+, src
+, lib
+, stdenv
+, name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
+, failureHook ? null
+, prePhases ? [ ]
+, postPhases ? [ ]
+, buildInputs ? [ ]
+, preHook ? ""
+, postHook ? ""
+, ...
 }@args:
 
 let
@@ -155,22 +154,22 @@ stdenv.mkDerivation (
 
   }
 
-  //
+    //
 
-    (lib.optionalAttrs buildOutOfSourceTree {
-      preConfigure =
-        # Build out of source tree and make the source tree read-only.  This
-        # helps catch violations of the GNU Coding Standards (info
-        # "(standards) Configuration"), like `make distcheck' does.
-        ''
-          mkdir "../build"
-          cd "../build"
-          configureScript="../$sourceRoot/configure"
-          chmod -R a-w "../$sourceRoot"
+  (lib.optionalAttrs buildOutOfSourceTree {
+    preConfigure =
+      # Build out of source tree and make the source tree read-only.  This
+      # helps catch violations of the GNU Coding Standards (info
+      # "(standards) Configuration"), like `make distcheck' does.
+      ''
+        mkdir "../build"
+        cd "../build"
+        configureScript="../$sourceRoot/configure"
+        chmod -R a-w "../$sourceRoot"
 
-          echo "building out of source tree, from \`$PWD'..."
+        echo "building out of source tree, from \`$PWD'..."
 
-          ${lib.optionalString (preConfigure != null) preConfigure}
-        '';
-    })
+        ${lib.optionalString (preConfigure != null) preConfigure}
+      '';
+  })
 )

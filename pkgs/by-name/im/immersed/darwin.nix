@@ -1,10 +1,10 @@
-{
-  stdenv,
-  pname,
-  version,
-  src,
-  meta,
-  undmg,
+{ stdenv
+, pname
+, version
+, src
+, meta
+, undmg
+,
 }:
 
 stdenv.mkDerivation {

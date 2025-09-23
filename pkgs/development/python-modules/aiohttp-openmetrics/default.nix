@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  aiohttp,
-  prometheus-client,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, prometheus-client
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

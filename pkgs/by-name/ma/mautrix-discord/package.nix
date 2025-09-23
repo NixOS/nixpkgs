@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  olm,
-  nix-update-script,
-  testers,
-  mautrix-discord,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, olm
+, nix-update-script
+, testers
+, mautrix-discord
+,
 }:
 
 buildGoModule rec {

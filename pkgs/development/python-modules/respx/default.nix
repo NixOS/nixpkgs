@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  httpcore,
-  httpx,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  starlette,
-  trio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, httpcore
+, httpx
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, starlette
+, trio
+,
 }:
 
 buildPythonPackage rec {

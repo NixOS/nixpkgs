@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  gettext,
-  glib,
-  libxml2,
-  perl,
-  python3,
-  libxslt,
-  libarchive,
-  bzip2,
-  xz,
-  json-glib,
-  libsoup_3,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, gettext
+, glib
+, libxml2
+, perl
+, python3
+, libxslt
+, libarchive
+, bzip2
+, xz
+, json-glib
+, libsoup_3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

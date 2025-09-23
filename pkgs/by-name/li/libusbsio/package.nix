@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  fixDarwinDylibNames,
-  libusb1,
-  systemdMinimal,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, fixDarwinDylibNames
+, libusb1
+, systemdMinimal
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  libadwaita,
-  libgee,
-  libgtop,
-  libgudev,
-  libsoup_3,
-  gettext,
-  glib,
-  granite7,
-  gtk4,
-  packagekit,
-  polkit,
-  switchboard,
-  udisks2,
-  fwupd,
-  appstream,
-  elementary-settings-daemon,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, libadwaita
+, libgee
+, libgtop
+, libgudev
+, libsoup_3
+, gettext
+, glib
+, granite7
+, gtk4
+, packagekit
+, polkit
+, switchboard
+, udisks2
+, fwupd
+, appstream
+, elementary-settings-daemon
+,
 }:
 
 stdenv.mkDerivation rec {

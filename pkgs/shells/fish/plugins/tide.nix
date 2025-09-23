@@ -1,7 +1,7 @@
-{
-  lib,
-  buildFishPlugin,
-  fetchFromGitHub,
+{ lib
+, buildFishPlugin
+, fetchFromGitHub
+,
 }:
 
 # Due to a quirk in tide breaking wrapFish, we need to add additional commands in the config.fish

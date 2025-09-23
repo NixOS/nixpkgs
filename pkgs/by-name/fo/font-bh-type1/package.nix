@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mkfontscale,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, mkfontscale
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "font-bh-type1";

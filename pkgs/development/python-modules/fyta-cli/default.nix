@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  mashumaro,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  syrupy,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, mashumaro
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

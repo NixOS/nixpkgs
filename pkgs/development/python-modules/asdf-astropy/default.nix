@@ -1,20 +1,20 @@
-{
-  lib,
-  asdf-coordinates-schemas,
-  asdf-standard,
-  asdf-transform-schemas,
-  asdf,
-  astropy,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  packaging,
-  pytest-astropy,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
-  setuptools-scm,
-  setuptools,
+{ lib
+, asdf-coordinates-schemas
+, asdf-standard
+, asdf-transform-schemas
+, asdf
+, astropy
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, packaging
+, pytest-astropy
+, pytestCheckHook
+, pythonOlder
+, scipy
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

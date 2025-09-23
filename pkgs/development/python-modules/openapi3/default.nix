@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  requests,
-  pyyaml,
-  setuptools,
-  pytestCheckHook,
-  pytest-asyncio,
-  uvloop,
-  hypercorn,
-  starlette,
-  pydantic,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, requests
+, pyyaml
+, setuptools
+, pytestCheckHook
+, pytest-asyncio
+, uvloop
+, hypercorn
+, starlette
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

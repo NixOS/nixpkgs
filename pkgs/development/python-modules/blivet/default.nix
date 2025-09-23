@@ -1,33 +1,33 @@
-{
-  lib,
-  pkgs,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pygobject3,
-  libblockdev,
-  bytesize,
-  pyudev,
-  dbus-python,
-  util-linux,
-  kmod,
-  libndctl,
-  nvme-cli,
-  dosfstools,
-  e2fsprogs,
-  hfsprogs,
-  xfsprogs,
-  f2fs-tools,
-  ntfs3g,
-  btrfs-progs,
-  reiserfsprogs,
-  mdadm,
-  lvm2,
-  gfs2-utils,
-  cryptsetup,
-  multipath-tools,
-  dracut,
-  stratisd,
+{ lib
+, pkgs
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, pygobject3
+, libblockdev
+, bytesize
+, pyudev
+, dbus-python
+, util-linux
+, kmod
+, libndctl
+, nvme-cli
+, dosfstools
+, e2fsprogs
+, hfsprogs
+, xfsprogs
+, f2fs-tools
+, ntfs3g
+, btrfs-progs
+, reiserfsprogs
+, mdadm
+, lvm2
+, gfs2-utils
+, cryptsetup
+, multipath-tools
+, dracut
+, stratisd
+,
 }:
 
 let

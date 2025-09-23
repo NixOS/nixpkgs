@@ -1,9 +1,9 @@
 { runCommand, cctools }:
-{
-  haskellPackages,
-  src,
-  deps ? p: [ ],
-  name,
+{ haskellPackages
+, src
+, deps ? p: [ ]
+, name
+,
 }:
 let
   inherit (haskellPackages) ghc ghcWithPackages;
@@ -11,12 +11,12 @@ let
   ghcName = "${ghc.targetPrefix}ghc";
 in
 runCommand name
-  {
-    buildInputs = [
-      with-env
-      cctools
-    ];
-  }
+{
+  buildInputs = [
+    with-env
+    cctools
+  ];
+}
   ''
     mkdir -p $out/lib
     mkdir -p $out/include

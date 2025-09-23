@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  installShellFiles,
-  stdenv,
-  testers,
-  kopia,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, installShellFiles
+, stdenv
+, testers
+, kopia
+,
 }:
 
 buildGoModule rec {

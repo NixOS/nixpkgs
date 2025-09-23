@@ -1,9 +1,9 @@
 # Run:
 #   nix-build -A tests.testers.shellcheck
 
-{
-  lib,
-  testers,
+{ lib
+, testers
+,
 }:
 lib.recurseIntoAttrs {
   example-dir = testers.testBuildFailure' {

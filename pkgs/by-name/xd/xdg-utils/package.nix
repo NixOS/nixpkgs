@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitLab,
-  runCommand,
-  writeText,
-  # docs deps
-  libxslt,
-  docbook_xml_dtd_412,
-  docbook_xml_dtd_43,
-  docbook_xsl,
-  xmlto,
-  # runtime deps
-  resholve,
-  bash,
-  coreutils,
-  dbus,
-  file,
-  gawk,
-  glib,
-  gnugrep,
-  gnused,
-  hostname,
-  jq,
-  procps,
-  which,
-  xdg-user-dirs,
-  shared-mime-info,
-  perl,
-  perlPackages,
-  withXdgOpenUsePortalPatch ? true,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitLab
+, runCommand
+, writeText
+, # docs deps
+  libxslt
+, docbook_xml_dtd_412
+, docbook_xml_dtd_43
+, docbook_xsl
+, xmlto
+, # runtime deps
+  resholve
+, bash
+, coreutils
+, dbus
+, file
+, gawk
+, glib
+, gnugrep
+, gnused
+, hostname
+, jq
+, procps
+, which
+, xdg-user-dirs
+, shared-mime-info
+, perl
+, perlPackages
+, withXdgOpenUsePortalPatch ? true
+,
 }:
 
 let

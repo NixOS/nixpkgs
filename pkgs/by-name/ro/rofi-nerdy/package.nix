@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  cairo,
-  pango,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, glib
+, cairo
+, pango
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rofi-nerdy";

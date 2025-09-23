@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -15,10 +14,12 @@ let
     if cfg.validateConfig then
       (
         content:
-        pkgs.writers.makeScriptWriter {
-          check = "${cfg.package}/bin/squid -k parse -f";
-          interpreter = "${cfg.package}/bin/squid";
-        } "squid.conf" content
+        pkgs.writers.makeScriptWriter
+          {
+            check = "${cfg.package}/bin/squid -k parse -f";
+            interpreter = "${cfg.package}/bin/squid";
+          } "squid.conf"
+          content
       )
     else
       (content: pkgs.writeText "squid.conf" content);

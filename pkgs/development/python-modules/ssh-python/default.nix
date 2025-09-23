@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cython,
-  openssl,
-  zlib,
-  libssh,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cython
+, openssl
+, zlib
+, libssh
+,
 }:
 
 buildPythonPackage rec {

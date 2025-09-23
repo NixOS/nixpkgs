@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  lazarus,
-  qmake,
-  qtbase,
-  # Not in Qt6 anymore
-  qtx11extras ? null,
+{ stdenv
+, lib
+, lazarus
+, qmake
+, qtbase
+, # Not in Qt6 anymore
+  qtx11extras ? null
+,
 }:
 
 let

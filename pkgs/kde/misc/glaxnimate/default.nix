@@ -1,15 +1,15 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchFromGitLab,
-  qttools,
-  potrace,
-  ffmpeg,
-  libarchive,
-  python3Packages,
-  testers,
-  glaxnimate,
-  xvfb-run,
+{ lib
+, mkKdeDerivation
+, fetchFromGitLab
+, qttools
+, potrace
+, ffmpeg
+, libarchive
+, python3Packages
+, testers
+, glaxnimate
+, xvfb-run
+,
 }:
 
 mkKdeDerivation rec {

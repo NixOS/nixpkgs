@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  opencv4,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, opencv4
+,
 }:
 
 stdenv.mkDerivation {

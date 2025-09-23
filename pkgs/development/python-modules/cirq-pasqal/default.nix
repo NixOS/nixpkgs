@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  cirq-core,
-  requests,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, cirq-core
+, requests
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

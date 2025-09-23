@@ -1,19 +1,19 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  flex,
-  bison,
-  libxml2,
-  pythonSupport ? stdenv.hostPlatform.hasSharedLibraries,
-  python3,
-  libusb1,
-  avahiSupport ? true,
-  avahi,
-  libaio,
-  runtimeShell,
-  lib,
-  pkg-config,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, flex
+, bison
+, libxml2
+, pythonSupport ? stdenv.hostPlatform.hasSharedLibraries
+, python3
+, libusb1
+, avahiSupport ? true
+, avahi
+, libaio
+, runtimeShell
+, lib
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

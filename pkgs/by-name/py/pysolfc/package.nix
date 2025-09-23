@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  python3Packages,
-  desktop-file-utils,
-  freecell-solver,
-  black-hole-solver,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, python3Packages
+, desktop-file-utils
+, freecell-solver
+, black-hole-solver
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 python3Packages.buildPythonApplication rec {

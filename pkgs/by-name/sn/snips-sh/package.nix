@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  sqlite,
-  libtensorflow,
-  withTensorflow ? false,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, sqlite
+, libtensorflow
+, withTensorflow ? false
+, nixosTests
+,
 }:
 buildGoModule rec {
   pname = "snips-sh";

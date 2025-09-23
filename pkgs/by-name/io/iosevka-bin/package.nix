@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  iosevka,
-  unzip,
-  variant ? "",
+{ stdenv
+, lib
+, fetchurl
+, iosevka
+, unzip
+, variant ? ""
+,
 }:
 
 let

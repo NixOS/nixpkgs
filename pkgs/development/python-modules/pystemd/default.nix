@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  systemd,
-  lxml,
-  psutil,
-  pytestCheckHook,
-  pkg-config,
-  cython,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, systemd
+, lxml
+, psutil
+, pytestCheckHook
+, pkg-config
+, cython
+,
 }:
 
 buildPythonPackage rec {

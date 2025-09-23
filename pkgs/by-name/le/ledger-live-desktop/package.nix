@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  makeWrapper,
-  imagemagick,
+{ lib
+, fetchurl
+, appimageTools
+, makeWrapper
+, imagemagick
+,
 }:
 
 let

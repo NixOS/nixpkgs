@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  libX11,
-  libGL,
-  liblo,
-  libjack2,
-  ladspaH,
-  lv2,
-  pkg-config,
-  rubberband,
-  libsndfile,
-  fftwFloat,
-  libsamplerate,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, libX11
+, libGL
+, liblo
+, libjack2
+, ladspaH
+, lv2
+, pkg-config
+, rubberband
+, libsndfile
+, fftwFloat
+, libsamplerate
+,
 }:
 
 stdenv.mkDerivation rec {

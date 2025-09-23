@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  python3,
-  meson,
-  ninja,
-  vala,
-  gtk3,
-  glib,
-  pantheon,
-  gtksourceview,
-  libgee,
-  nix-update-script,
-  webkitgtk_4_0,
-  libqalculate,
-  intltool,
-  gnuplot,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, python3
+, meson
+, ninja
+, vala
+, gtk3
+, glib
+, pantheon
+, gtksourceview
+, libgee
+, nix-update-script
+, webkitgtk_4_0
+, libqalculate
+, intltool
+, gnuplot
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

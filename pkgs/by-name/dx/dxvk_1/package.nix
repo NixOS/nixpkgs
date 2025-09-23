@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  glslang,
-  meson,
-  ninja,
-  windows,
-  enableMoltenVKCompat ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, glslang
+, meson
+, ninja
+, windows
+, enableMoltenVKCompat ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

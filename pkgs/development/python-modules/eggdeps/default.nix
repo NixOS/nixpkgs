@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  zope-interface,
-  zope-testing,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, zope-interface
+, zope-testing
+,
 }:
 
 buildPythonPackage rec {

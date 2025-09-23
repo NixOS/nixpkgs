@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  xvfb-run,
-  wrapGAppsHook3,
-  gobject-introspection,
-  pygobject3,
-  graphviz,
-  gtk3,
-  numpy,
-  packaging,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, xvfb-run
+, wrapGAppsHook3
+, gobject-introspection
+, pygobject3
+, graphviz
+, gtk3
+, numpy
+, packaging
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,24 +1,24 @@
-{
-  stdenv,
-  config,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libusb1,
-  nlohmann_json,
-  ninja,
-  pkg-config,
-  gcc,
-  libgbm,
-  gtk3,
-  glfw,
-  libGLU,
-  curl,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
-  enablePython ? false,
-  pythonPackages ? null,
-  enableGUI ? false,
+{ stdenv
+, config
+, lib
+, fetchFromGitHub
+, cmake
+, libusb1
+, nlohmann_json
+, ninja
+, pkg-config
+, gcc
+, libgbm
+, gtk3
+, glfw
+, libGLU
+, curl
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+, enablePython ? false
+, pythonPackages ? null
+, enableGUI ? false
+,
 }:
 
 assert cudaSupport -> (cudaPackages ? cudatoolkit && cudaPackages.cudatoolkit != null);

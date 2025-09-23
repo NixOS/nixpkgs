@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -205,10 +204,13 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        ReadWritePaths = lib.optional (hasAttrByPath [
-          "storage"
-          "filesystem_folder"
-        ] cfg.settings) cfg.settings.storage.filesystem_folder;
+        ReadWritePaths = lib.optional
+          (hasAttrByPath [
+            "storage"
+            "filesystem_folder"
+          ]
+            cfg.settings)
+          cfg.settings.storage.filesystem_folder;
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_INET"

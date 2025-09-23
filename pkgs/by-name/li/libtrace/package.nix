@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  bison,
-  flex,
-  zlib,
-  bzip2,
-  xz,
-  libpcap,
-  wandio,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, bison
+, flex
+, zlib
+, bzip2
+, xz
+, libpcap
+, wandio
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

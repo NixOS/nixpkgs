@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libbsd,
-  pkg-config,
-  libXrandr,
-  libXcursor,
-  libXft,
-  libXt,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libbsd
+, pkg-config
+, libXrandr
+, libXcursor
+, libXft
+, libXt
+, xcbutil
+, xcbutilkeysyms
+, xcbutilwm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

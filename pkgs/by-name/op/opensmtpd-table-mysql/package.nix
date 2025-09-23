@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libmysqlclient,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libmysqlclient
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd-table-mysql";

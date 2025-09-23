@@ -1,23 +1,23 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  wrapGAppsHook4,
-  appstream-glib,
-  desktop-file-utils,
-  gettext,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  jpegoptim,
-  libwebp,
-  optipng,
-  pngquant,
-  oxipng,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitHub
+, wrapGAppsHook4
+, appstream-glib
+, desktop-file-utils
+, gettext
+, gtk4
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, jpegoptim
+, libwebp
+, optipng
+, pngquant
+, oxipng
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

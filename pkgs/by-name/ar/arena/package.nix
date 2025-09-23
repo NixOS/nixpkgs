@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk2-x11,
-  glib,
-  pango,
-  cairo,
-  atk,
-  gdk-pixbuf,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, gtk2-x11
+, glib
+, pango
+, cairo
+, atk
+, gdk-pixbuf
+, libX11
+,
 }:
 
 # Arena is free software in the sense of "free beer" but not as in "free

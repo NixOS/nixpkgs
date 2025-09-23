@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  libsoup_3,
-  json-glib,
-  libsecret,
-  glib-networking,
-
-  # Per the upstream request. Key owned by Aleksana
-  lastfmKey ? "b5027c5178ca2abfcc31bd04397c3c0e",
-  lastfmSecret ? "8d375bdee925a2a35f241c04272bc862",
+{ lib
+, stdenv
+, fetchFromGitea
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, libsoup_3
+, json-glib
+, libsecret
+, glib-networking
+, # Per the upstream request. Key owned by Aleksana
+  lastfmKey ? "b5027c5178ca2abfcc31bd04397c3c0e"
+, lastfmSecret ? "8d375bdee925a2a35f241c04272bc862"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

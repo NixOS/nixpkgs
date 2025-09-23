@@ -1,10 +1,10 @@
-{
-  qtModule,
-  qtbase,
-  qtdeclarative,
-  qtserialport,
-  pkg-config,
-  openssl,
+{ qtModule
+, qtbase
+, qtdeclarative
+, qtserialport
+, pkg-config
+, openssl
+,
 }:
 
 qtModule {

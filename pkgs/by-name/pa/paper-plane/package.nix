@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gtk4,
-  libadwaita,
-  tdlib,
-  rlottie,
-  rustPlatform,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  cargo,
-  desktop-file-utils,
-  blueprint-compiler,
-  libxml2,
-  libshumate,
-  gst_all_1,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk4
+, libadwaita
+, tdlib
+, rlottie
+, rustPlatform
+, meson
+, ninja
+, pkg-config
+, rustc
+, cargo
+, desktop-file-utils
+, blueprint-compiler
+, libxml2
+, libshumate
+, gst_all_1
+, buildPackages
+,
 }:
 
 let
@@ -110,9 +110,10 @@ stdenv.mkDerivation {
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
-  ) "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+    ) "-Wno-error=incompatible-function-pointer-types";
 
   meta = {
     homepage = "https://github.com/paper-plane-developers/paper-plane";

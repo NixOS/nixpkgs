@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  nim-unwrapped-1,
-  nim-unwrapped-2_2,
+{ lib
+, fetchurl
+, nim-unwrapped-1
+, nim-unwrapped-2_2
+,
 }:
 
 nim-unwrapped-2_2.overrideAttrs (
@@ -13,15 +13,17 @@ nim-unwrapped-2_2.overrideAttrs (
       hash = "sha256-sucMbAEbVQcJMJCoiH+iUncyCP0EfuOPhWLiVp5cN4o=";
     };
     patches = lib.lists.unique (
-      builtins.filter (
-        p:
-        builtins.elem (builtins.baseNameOf p) [
-          "NIM_CONFIG_DIR.patch"
-          "nixbuild.patch"
-          "extra-mangling.patch"
-          "openssl.patch"
-        ]
-      ) (nim-unwrapped-1.patches ++ nim-unwrapped-2_2.patches)
+      builtins.filter
+        (
+          p:
+          builtins.elem (builtins.baseNameOf p) [
+            "NIM_CONFIG_DIR.patch"
+            "nixbuild.patch"
+            "extra-mangling.patch"
+            "openssl.patch"
+          ]
+        )
+        (nim-unwrapped-1.patches ++ nim-unwrapped-2_2.patches)
     );
   }
 )

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitLab,
-  unicode-emoji,
+{ lib
+, buildNimPackage
+, fetchFromGitLab
+, unicode-emoji
+,
 }:
 
 buildNimPackage (finalAttrs: {

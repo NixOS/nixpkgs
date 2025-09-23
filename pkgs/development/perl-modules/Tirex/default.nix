@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPerlPackage,
-  fetchFromGitHub,
-  GD,
-  IPCShareLite,
-  JSON,
-  LWP,
-  mapnik,
-  boost,
-  nix-update-script,
-  pkg-config,
+{ lib
+, buildPerlPackage
+, fetchFromGitHub
+, GD
+, IPCShareLite
+, JSON
+, LWP
+, mapnik
+, boost
+, nix-update-script
+, pkg-config
+,
 }:
 
 buildPerlPackage rec {

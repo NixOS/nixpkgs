@@ -1,20 +1,20 @@
-{
-  lib,
-  llvmPackages,
-  fetchFromGitHub,
-  writeShellScript,
-  bash,
-  meson,
-  ninja,
-  jq,
-  pkg-config,
-  bpftools,
-  elfutils,
-  zlib,
-  zstd,
-  scx-common,
-  protobuf,
-  libseccomp,
+{ lib
+, llvmPackages
+, fetchFromGitHub
+, writeShellScript
+, bash
+, meson
+, ninja
+, jq
+, pkg-config
+, bpftools
+, elfutils
+, zlib
+, zstd
+, scx-common
+, protobuf
+, libseccomp
+,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {

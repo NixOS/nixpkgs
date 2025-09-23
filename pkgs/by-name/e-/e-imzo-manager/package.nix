@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cargo,
-  desktop-file-utils,
-  gnome-desktop,
-  meson,
-  ninja,
-  pkg-config,
-  polkit,
-  rustc,
-  rustPlatform,
-  wrapGAppsHook4,
-  gdk-pixbuf,
-  glib,
-  adwaita-icon-theme,
-  gtk4,
-  libadwaita,
-  openssl,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cargo
+, desktop-file-utils
+, gnome-desktop
+, meson
+, ninja
+, pkg-config
+, polkit
+, rustc
+, rustPlatform
+, wrapGAppsHook4
+, gdk-pixbuf
+, glib
+, adwaita-icon-theme
+, gtk4
+, libadwaita
+, openssl
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "e-imzo-manager";

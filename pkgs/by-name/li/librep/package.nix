@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  gdbm,
-  gmp,
-  libffi,
-  pkg-config,
-  readline,
-  texinfo,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, gdbm
+, gmp
+, libffi
+, pkg-config
+, readline
+, texinfo
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

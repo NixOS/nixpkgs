@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  fuse,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, fuse
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

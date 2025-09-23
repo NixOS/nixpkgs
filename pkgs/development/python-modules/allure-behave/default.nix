@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  behave,
-  allure-python-commons,
-  setuptools-scm,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, behave
+, allure-python-commons
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

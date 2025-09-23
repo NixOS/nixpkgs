@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cargo,
-  desktop-file-utils,
-  itstool,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  wrapGAppsHook4,
-  gtk4,
-  lcms2,
-  libadwaita,
-  libgweather,
-  libseccomp,
-  glycin-loaders,
-  gnome,
-  common-updater-scripts,
-  _experimental-update-script-combinators,
-  rustPlatform,
+{ stdenv
+, lib
+, fetchurl
+, cargo
+, desktop-file-utils
+, itstool
+, meson
+, ninja
+, pkg-config
+, rustc
+, wrapGAppsHook4
+, gtk4
+, lcms2
+, libadwaita
+, libgweather
+, libseccomp
+, glycin-loaders
+, gnome
+, common-updater-scripts
+, _experimental-update-script-combinators
+, rustPlatform
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

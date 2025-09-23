@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  fcitx5,
-  gettext,
-  qtbase,
-  qtwayland,
-  wrapQtAppsHook,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, fcitx5
+, gettext
+, qtbase
+, qtwayland
+, wrapQtAppsHook
+, wayland
+,
 }:
 let
   majorVersion = lib.versions.major qtbase.version;

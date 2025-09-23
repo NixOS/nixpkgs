@@ -1,11 +1,11 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  dacite,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  pyjwt,
+{ aiohttp
+, buildPythonPackage
+, dacite
+, fetchFromGitHub
+, hatchling
+, lib
+, pyjwt
+,
 }:
 
 buildPythonPackage rec {

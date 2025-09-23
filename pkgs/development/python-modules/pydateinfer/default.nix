@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unittestCheckHook,
-  pytz,
-  pyyaml,
-  argparse,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unittestCheckHook
+, pytz
+, pyyaml
+, argparse
+,
 }:
 
 buildPythonPackage rec {

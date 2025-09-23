@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  pytestCheckHook,
-  setuptools,
-  numpy,
-  pandas,
-  xarray,
-  traitlets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, pytestCheckHook
+, setuptools
+, numpy
+, pandas
+, xarray
+, traitlets
+,
 }:
 
 buildPythonPackage {

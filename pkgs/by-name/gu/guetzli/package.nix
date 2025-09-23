@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  libpng,
-  fetchFromGitHub,
-  pkg-config,
+{ lib
+, stdenv
+, libpng
+, fetchFromGitHub
+, pkg-config
+,
 }:
 let
   version = "1.0.1";

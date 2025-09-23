@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  freetype,
-  juce,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libglvnd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, freetype
+, juce
+, libX11
+, libXcursor
+, libXext
+, libXinerama
+, libXrandr
+, libglvnd
+,
 }:
 
 stdenv.mkDerivation rec {

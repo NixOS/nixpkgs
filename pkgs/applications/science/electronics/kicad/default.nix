@@ -1,40 +1,37 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  newScope,
-  fetchFromGitLab,
-  makeWrapper,
-  symlinkJoin,
-  callPackage,
-  callPackages,
-
-  adwaita-icon-theme,
-  dconf,
-  gtk3,
-  wxGTK32,
-  librsvg,
-  cups,
-  gsettings-desktop-schemas,
-  hicolor-icon-theme,
-
-  unzip,
-  jq,
-
-  pname ? "kicad",
-  stable ? true,
-  testing ? false,
-  withNgspice ? !stdenv.hostPlatform.isDarwin,
-  libngspice,
-  withScripting ? true,
-  python3,
-  addons ? [ ],
-  debug ? false,
-  sanitizeAddress ? false,
-  sanitizeThreads ? false,
-  with3d ? true,
-  withI18n ? true,
-  srcs ? { },
+{ lib
+, stdenv
+, runCommand
+, newScope
+, fetchFromGitLab
+, makeWrapper
+, symlinkJoin
+, callPackage
+, callPackages
+, adwaita-icon-theme
+, dconf
+, gtk3
+, wxGTK32
+, librsvg
+, cups
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, unzip
+, jq
+, pname ? "kicad"
+, stable ? true
+, testing ? false
+, withNgspice ? !stdenv.hostPlatform.isDarwin
+, libngspice
+, withScripting ? true
+, python3
+, addons ? [ ]
+, debug ? false
+, sanitizeAddress ? false
+, sanitizeThreads ? false
+, with3d ? true
+, withI18n ? true
+, srcs ? { }
+,
 }:
 
 # `addons`: https://dev-docs.kicad.org/en/addons/
@@ -281,11 +278,13 @@ stdenv.mkDerivation rec {
       (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
 
       # wrap each of the directly usable tools
-      (map (
-        tool:
-        "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
-        + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
-      ) tools)
+      (map
+        (
+          tool:
+          "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
+          + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
+        )
+        tools)
 
       # link in the CLI utils
       (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)

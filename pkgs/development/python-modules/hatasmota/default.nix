@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  voluptuous,
+{ lib
+, aiohttp
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

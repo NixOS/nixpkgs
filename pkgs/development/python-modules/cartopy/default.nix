@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  fontconfig,
-  gdal,
-  geos,
-  matplotlib,
-  numpy,
-  owslib,
-  pillow,
-  proj,
-  pyproj,
-  pyshp,
-  pytest-mpl,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
-  setuptools-scm,
-  shapely,
+{ lib
+, buildPythonPackage
+, cython
+, fetchPypi
+, fontconfig
+, gdal
+, geos
+, matplotlib
+, numpy
+, owslib
+, pillow
+, proj
+, pyproj
+, pyshp
+, pytest-mpl
+, pytestCheckHook
+, pythonOlder
+, scipy
+, setuptools-scm
+, shapely
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # propagates
-  python-dateutil,
-
-  # tests
-  django-extensions,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # propagates
+  python-dateutil
+, # tests
+  django-extensions
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

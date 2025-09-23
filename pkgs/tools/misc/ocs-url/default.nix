@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchgit
+, libsForQt5
+,
 }:
 
 let

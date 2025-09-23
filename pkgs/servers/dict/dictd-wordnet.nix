@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3,
-  wordnet,
-  writeScript,
-  libfaketime,
+{ lib
+, stdenv
+, python3
+, wordnet
+, writeScript
+, libfaketime
+,
 }:
 
 stdenv.mkDerivation rec {

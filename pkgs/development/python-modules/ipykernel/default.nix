@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  callPackage,
-  fetchPypi,
-  hatchling,
-  pythonOlder,
-  appnope,
-  comm,
-  ipython,
-  jupyter-client,
-  jupyter-core,
-  matplotlib-inline,
-  nest-asyncio,
-  packaging,
-  psutil,
-  pyzmq,
-  tornado,
-  traitlets,
-
-  # Reverse dependency
-  sage,
+{ lib
+, stdenv
+, buildPythonPackage
+, callPackage
+, fetchPypi
+, hatchling
+, pythonOlder
+, appnope
+, comm
+, ipython
+, jupyter-client
+, jupyter-core
+, matplotlib-inline
+, nest-asyncio
+, packaging
+, psutil
+, pyzmq
+, tornado
+, traitlets
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

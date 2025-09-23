@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  boost,
-  gd,
-  libsndfile,
-  libmad,
-  libid3tag,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, boost
+, gd
+, libsndfile
+, libmad
+, libid3tag
+,
 }:
 
 stdenv.mkDerivation rec {

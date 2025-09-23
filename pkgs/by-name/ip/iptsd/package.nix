@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  meson,
-  ninja,
-  pkg-config,
-  cli11,
-  eigen,
-  hidrd,
-  inih,
-  microsoft-gsl,
-  spdlog,
-  systemd,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, meson
+, ninja
+, pkg-config
+, cli11
+, eigen
+, hidrd
+, inih
+, microsoft-gsl
+, spdlog
+, systemd
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

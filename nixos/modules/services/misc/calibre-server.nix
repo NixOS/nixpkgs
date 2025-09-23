@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -13,14 +12,15 @@ let
 
   execFlags = (
     lib.concatStringsSep " " (
-      lib.mapAttrsToList (k: v: "${k} ${toString v}") (
-        lib.filterAttrs (name: value: value != null) {
-          "--listen-on" = cfg.host;
-          "--port" = cfg.port;
-          "--auth-mode" = cfg.auth.mode;
-          "--userdb" = cfg.auth.userDb;
-        }
-      )
+      lib.mapAttrsToList (k: v: "${k} ${toString v}")
+        (
+          lib.filterAttrs (name: value: value != null) {
+            "--listen-on" = cfg.host;
+            "--port" = cfg.port;
+            "--auth-mode" = cfg.auth.mode;
+            "--userdb" = cfg.auth.userDb;
+          }
+        )
       ++ [ (lib.optionalString (cfg.auth.enable == true) "--enable-auth") ]
       ++ cfg.extraFlags
     )

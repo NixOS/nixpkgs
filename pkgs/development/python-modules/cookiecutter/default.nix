@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  bash,
-  setuptools,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
-  freezegun,
-  git,
-  jinja2,
-  binaryornot,
-  click,
-  jinja2-time,
-  requests,
-  python-slugify,
-  pyyaml,
-  arrow,
-  rich,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, bash
+, setuptools
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+, freezegun
+, git
+, jinja2
+, binaryornot
+, click
+, jinja2-time
+, requests
+, python-slugify
+, pyyaml
+, arrow
+, rich
+,
 }:
 
 buildPythonPackage rec {

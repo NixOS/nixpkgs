@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3Packages,
-  python3,
-  fetchPypi,
-  apksigner,
-  installShellFiles,
+{ lib
+, fetchFromGitLab
+, python3Packages
+, python3
+, fetchPypi
+, apksigner
+, installShellFiles
+,
 }:
 
 python3Packages.buildPythonApplication rec {

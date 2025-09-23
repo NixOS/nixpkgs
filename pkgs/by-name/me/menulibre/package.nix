@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  gnome-menus,
-  gtk3,
-  intltool,
-  gobject-introspection,
-  wrapGAppsHook3,
-  nix-update-script,
-  testers,
-  menulibre,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, gnome-menus
+, gtk3
+, intltool
+, gobject-introspection
+, wrapGAppsHook3
+, nix-update-script
+, testers
+, menulibre
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

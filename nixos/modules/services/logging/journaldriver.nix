@@ -9,11 +9,10 @@
 # For further information please consult the documentation in the
 # upstream repository at: https://github.com/tazjin/journaldriver/
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;

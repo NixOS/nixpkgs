@@ -1,10 +1,10 @@
-{
-  stdenv,
-  cmake,
-  fetchFromGitLab,
-  lib,
-  kdePackages,
-  qt6,
+{ stdenv
+, cmake
+, fetchFromGitLab
+, lib
+, kdePackages
+, qt6
+,
 }:
 
 stdenv.mkDerivation {

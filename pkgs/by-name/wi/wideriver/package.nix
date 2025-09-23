@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  wayland,
-  wayland-scanner,
-  pkg-config,
+{ stdenv
+, fetchFromGitHub
+, lib
+, wayland
+, wayland-scanner
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

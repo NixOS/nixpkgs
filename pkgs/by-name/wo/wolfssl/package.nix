@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  util-linux,
-  openssl,
-  cacert,
-  # The primary --enable-XXX variant. 'all' enables most features, but causes build-errors for some software,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, util-linux
+, openssl
+, cacert
+, # The primary --enable-XXX variant. 'all' enables most features, but causes build-errors for some software,
   # requiring to build a special variant for that software. Example: 'haproxy'
-  variant ? "all",
-  extraConfigureFlags ? [ ],
-  enableARMCryptoExtensions ?
-    stdenv.hostPlatform.isAarch64
-    && ((builtins.match "^.*\\+crypto.*$" stdenv.hostPlatform.gcc.arch) != null),
-  enableLto ? !(stdenv.hostPlatform.isStatic || stdenv.cc.isClang),
+  variant ? "all"
+, extraConfigureFlags ? [ ]
+, enableARMCryptoExtensions ? stdenv.hostPlatform.isAarch64
+    && ((builtins.match "^.*\\+crypto.*$" stdenv.hostPlatform.gcc.arch) != null)
+, enableLto ? !(stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";

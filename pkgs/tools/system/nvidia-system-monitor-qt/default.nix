@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  qtbase,
-  wrapQtAppsHook,
-  makeDesktopItem,
-  copyDesktopItems,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, wrapQtAppsHook
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

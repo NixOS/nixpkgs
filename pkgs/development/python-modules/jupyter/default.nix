@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ipykernel,
-  ipywidgets,
-  jupyter-console,
-  jupyterlab,
-  nbconvert,
-  notebook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, ipykernel
+, ipywidgets
+, jupyter-console
+, jupyterlab
+, nbconvert
+, notebook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  opencv-python,
-  torch,
-  onnx,
-  onnxruntime,
-  pillow,
-  pywavelets,
-  numpy,
-  callPackage,
-  withOnnx ? false, # Enables the rivaGan en- and decoding method
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, opencv-python
+, torch
+, onnx
+, onnxruntime
+, pillow
+, pywavelets
+, numpy
+, callPackage
+, withOnnx ? false
+, # Enables the rivaGan en- and decoding method
 }:
 
 buildPythonPackage rec {
@@ -58,16 +58,18 @@ buildPythonPackage rec {
         "dwtDctSvd"
         "rivaGan"
       ];
-      testCases = builtins.concatMap (method: [
-        {
-          method = method;
-          withOnnx = true;
-        }
-        {
-          method = method;
-          withOnnx = false;
-        }
-      ]) methods;
+      testCases = builtins.concatMap
+        (method: [
+          {
+            method = method;
+            withOnnx = true;
+          }
+          {
+            method = method;
+            withOnnx = false;
+          }
+        ])
+        methods;
       createTest =
         { method, withOnnx }:
         let

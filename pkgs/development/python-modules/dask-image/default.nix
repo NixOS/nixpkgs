@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  dask,
-  numpy,
-  scipy,
-  pandas,
-  pims,
-
-  # tests
-  pyarrow,
-  pytestCheckHook,
-  scikit-image,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  dask
+, numpy
+, scipy
+, pandas
+, pims
+, # tests
+  pyarrow
+, pytestCheckHook
+, scikit-image
+,
 }:
 
 buildPythonPackage rec {

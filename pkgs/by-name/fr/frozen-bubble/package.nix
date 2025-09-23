@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchurl,
-  perlPackages,
-  pkg-config,
-  SDL,
-  SDL_mixer,
-  SDL_Pango,
-  glib,
-  copyDesktopItems,
-  makeDesktopItem,
-  fetchpatch,
+{ lib
+, fetchurl
+, perlPackages
+, pkg-config
+, SDL
+, SDL_mixer
+, SDL_Pango
+, glib
+, copyDesktopItems
+, makeDesktopItem
+, fetchpatch
+,
 }:
 
 perlPackages.buildPerlModule {

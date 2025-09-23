@@ -1,7 +1,7 @@
-{
-  lib,
-  skawarePackages,
-  skalibs,
+{ lib
+, skawarePackages
+, skalibs
+,
 }:
 
 skawarePackages.buildPackage {

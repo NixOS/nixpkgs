@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  commonmark,
-  fetchFromGitHub,
-  markdown,
-  pydash,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  recommonmark,
-  setuptools,
-  sphinx,
-  unify,
-  yapf,
+{ lib
+, buildPythonPackage
+, commonmark
+, fetchFromGitHub
+, markdown
+, pydash
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, recommonmark
+, setuptools
+, sphinx
+, unify
+, yapf
+,
 }:
 
 buildPythonPackage {

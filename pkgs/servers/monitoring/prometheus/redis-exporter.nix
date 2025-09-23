@@ -1,11 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-
-  # Test dependencies
-  redisTestHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, # Test dependencies
+  redisTestHook
+,
 }:
 
 buildGoModule rec {

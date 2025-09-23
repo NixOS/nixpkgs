@@ -1,62 +1,62 @@
-{
-  lib,
-  SDL2,
-  callPackage,
-  fetchpatch2,
-  cmake,
-  espeak-ng,
-  ffmpeg,
-  file,
-  freetype,
-  glib,
-  gumbo,
-  harfbuzz,
-  jbig2dec,
-  leptonica,
-  libGL,
-  libX11,
-  libXau,
-  libXcomposite,
-  libXdmcp,
-  libXfixes,
-  libdrm,
-  libffi,
-  libjpeg,
-  libusb1,
-  libuvc,
-  libvlc,
-  libvncserver,
-  libxcb,
-  libxkbcommon,
-  makeWrapper,
-  libgbm,
-  mupdf,
-  openal,
-  openjpeg,
-  pcre2,
-  pkg-config,
-  ruby,
-  sqlite,
-  stdenv,
-  tesseract,
-  valgrind,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xcbutil,
-  xcbutilwm,
-  xz,
-  # Boolean flags
-  buildManPages ? true,
-  useBuiltinLua ? true,
-  useEspeak ? !stdenv.hostPlatform.isDarwin,
-  useStaticLibuvc ? true,
-  useStaticOpenAL ? true,
-  useStaticSqlite ? true,
-  # For debugging only, disabled by upstream
-  useTracy ? false,
-  # Configurable options
-  sources ? callPackage ./sources.nix { },
+{ lib
+, SDL2
+, callPackage
+, fetchpatch2
+, cmake
+, espeak-ng
+, ffmpeg
+, file
+, freetype
+, glib
+, gumbo
+, harfbuzz
+, jbig2dec
+, leptonica
+, libGL
+, libX11
+, libXau
+, libXcomposite
+, libXdmcp
+, libXfixes
+, libdrm
+, libffi
+, libjpeg
+, libusb1
+, libuvc
+, libvlc
+, libvncserver
+, libxcb
+, libxkbcommon
+, makeWrapper
+, libgbm
+, mupdf
+, openal
+, openjpeg
+, pcre2
+, pkg-config
+, ruby
+, sqlite
+, stdenv
+, tesseract
+, valgrind
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xcbutil
+, xcbutilwm
+, xz
+, # Boolean flags
+  buildManPages ? true
+, useBuiltinLua ? true
+, useEspeak ? !stdenv.hostPlatform.isDarwin
+, useStaticLibuvc ? true
+, useStaticOpenAL ? true
+, useStaticSqlite ? true
+, # For debugging only, disabled by upstream
+  useTracy ? false
+, # Configurable options
+  sources ? callPackage ./sources.nix { }
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

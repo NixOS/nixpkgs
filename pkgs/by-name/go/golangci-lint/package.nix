@@ -4,12 +4,13 @@
   # rather than buildGoLatestModule.
   # This can be bumped when the release notes of golangci-lint detail support for
   # new version of go.
-  buildGo125Module,
-  buildPackages,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  stdenv,
+  buildGo125Module
+, buildPackages
+, fetchFromGitHub
+, installShellFiles
+, lib
+, stdenv
+,
 }:
 
 buildGo125Module (finalAttrs: {

@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  ffmpeg,
-  python3Packages,
-  meson,
-  yt-dlp,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  ninja,
-  gobject-introspection,
-  glib,
-  pkg-config,
-  gtk4,
-  librsvg,
-  libadwaita,
+{ lib
+, fetchFromGitHub
+, ffmpeg
+, python3Packages
+, meson
+, yt-dlp
+, wrapGAppsHook4
+, desktop-file-utils
+, ninja
+, gobject-introspection
+, glib
+, pkg-config
+, gtk4
+, librsvg
+, libadwaita
+,
 }:
 
 python3Packages.buildPythonApplication rec {

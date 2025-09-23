@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  makeWrapper,
-  callPackage,
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, makeWrapper
+, callPackage
+, nixosTests
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

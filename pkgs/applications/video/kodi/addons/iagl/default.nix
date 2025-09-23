@@ -1,14 +1,14 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  dateutil,
-  requests,
-  routing,
-  vfs-libarchive,
-  archive_tool,
-  youtube,
-  infotagger,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, dateutil
+, requests
+, routing
+, vfs-libarchive
+, archive_tool
+, youtube
+, infotagger
+,
 }:
 
 buildKodiAddon rec {

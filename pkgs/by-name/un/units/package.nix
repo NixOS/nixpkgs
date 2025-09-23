@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  python3,
-  readline,
-  stdenv,
-  enableCurrenciesUpdater ? true,
+{ lib
+, fetchurl
+, python3
+, readline
+, stdenv
+, enableCurrenciesUpdater ? true
+,
 }:
 
 let

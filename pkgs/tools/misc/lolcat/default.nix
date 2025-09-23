@@ -1,8 +1,8 @@
-{
-  lib,
-  bundlerApp,
-  ruby_3_4,
-  bundlerUpdateScript,
+{ lib
+, bundlerApp
+, ruby_3_4
+, bundlerUpdateScript
+,
 }:
 
 (bundlerApp.override { ruby = ruby_3_4; }) {

@@ -1,19 +1,19 @@
-{
-  lib,
-  aiodns,
-  aiohttp,
-  aiosqlite,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  moto,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  sqlalchemy,
-  websocket-client,
-  websockets,
-  writableTmpDirAsHomeHook,
+{ lib
+, aiodns
+, aiohttp
+, aiosqlite
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, moto
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, sqlalchemy
+, websocket-client
+, websockets
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

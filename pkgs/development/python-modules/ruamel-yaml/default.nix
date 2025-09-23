@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ruamel-base,
-  ruamel-yaml-clib,
-  isPyPy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, ruamel-base
+, ruamel-yaml-clib
+, isPyPy
+,
 }:
 
 buildPythonPackage rec {

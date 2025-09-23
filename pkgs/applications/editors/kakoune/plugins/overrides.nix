@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchgit,
-  buildKakounePluginFrom2Nix,
-  kakoune-lsp,
-  parinfer-rust,
-  rep,
-  fzf,
-  git,
-  guile,
-  kakoune-unwrapped,
-  lua5_3,
-  plan9port,
-  rustPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchgit
+, buildKakounePluginFrom2Nix
+, kakoune-lsp
+, parinfer-rust
+, rep
+, fzf
+, git
+, guile
+, kakoune-unwrapped
+, lua5_3
+, plan9port
+, rustPlatform
+,
 }:
 
 self: super: {

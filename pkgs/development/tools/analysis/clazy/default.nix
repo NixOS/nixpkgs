@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  llvmPackages,
-  cmake,
-  makeWrapper,
-  versionCheckHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvmPackages
+, cmake
+, makeWrapper
+, versionCheckHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

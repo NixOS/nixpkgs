@@ -1,20 +1,20 @@
-{
-  mkKdeDerivation,
-  qt5compat,
-  qtsvg,
-  pkg-config,
-  samba,
-  libssh,
-  libmtp,
-  libimobiledevice,
-  gperf,
-  libtirpc,
-  openexr,
-  taglib,
-  shared-mime-info,
-  libappimage,
-  xorg,
-  kio,
+{ mkKdeDerivation
+, qt5compat
+, qtsvg
+, pkg-config
+, samba
+, libssh
+, libmtp
+, libimobiledevice
+, gperf
+, libtirpc
+, openexr
+, taglib
+, shared-mime-info
+, libappimage
+, xorg
+, kio
+,
 }:
 mkKdeDerivation {
   pname = "kio-extras";

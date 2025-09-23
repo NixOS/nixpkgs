@@ -1,62 +1,59 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-  # build-system
-  hatchling,
-  scikit-build-core,
-  hatch-vcs,
-  nanobind,
-  # deps
-  antlr4-python3-runtime,
-  atopile-easyeda2kicad,
-  black,
-  case-converter,
-  cookiecutter,
-  dataclasses-json,
-  deprecated,
-  fastapi-github-oidc,
-  freetype-py,
-  gitpython,
-  kicad-python,
-  kicadcliwrapper,
-  matplotlib,
-  mcp,
-  more-itertools,
-  natsort,
-  numpy,
-  ordered-set,
-  pathvalidate,
-  pint,
-  posthog,
-  psutil,
-  pydantic-settings,
-  pygls,
-  questionary,
-  requests,
-  rich,
-  ruamel-yaml,
-  ruff,
-  semver,
-  sexpdata,
-  shapely,
-  typer,
-  urllib3,
-  zstd,
-  pythonOlder,
-
-  # tests
-  pytestCheckHook,
-
-  pytest-benchmark,
-  pytest-timeout,
-  pytest-datafiles,
-  pytest-xdist,
-  hypothesis,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, ninja
+, # build-system
+  hatchling
+, scikit-build-core
+, hatch-vcs
+, nanobind
+, # deps
+  antlr4-python3-runtime
+, atopile-easyeda2kicad
+, black
+, case-converter
+, cookiecutter
+, dataclasses-json
+, deprecated
+, fastapi-github-oidc
+, freetype-py
+, gitpython
+, kicad-python
+, kicadcliwrapper
+, matplotlib
+, mcp
+, more-itertools
+, natsort
+, numpy
+, ordered-set
+, pathvalidate
+, pint
+, posthog
+, psutil
+, pydantic-settings
+, pygls
+, questionary
+, requests
+, rich
+, ruamel-yaml
+, ruff
+, semver
+, sexpdata
+, shapely
+, typer
+, urllib3
+, zstd
+, pythonOlder
+, # tests
+  pytestCheckHook
+, pytest-benchmark
+, pytest-timeout
+, pytest-datafiles
+, pytest-xdist
+, hypothesis
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

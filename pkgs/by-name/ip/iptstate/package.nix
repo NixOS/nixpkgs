@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libnetfilter_conntrack,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, libnetfilter_conntrack
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

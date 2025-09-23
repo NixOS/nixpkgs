@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gitUpdater,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  glib,
-  check,
-  python3,
-  vala,
-  gtk-doc,
-  glibcLocales,
-  libxml2,
-  libxslt,
-  pkg-config,
-  sqlite,
-  docbook_xsl,
-  docbook_xml_dtd_43,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+, meson
+, mesonEmulatorHook
+, ninja
+, glib
+, check
+, python3
+, vala
+, gtk-doc
+, glibcLocales
+, libxml2
+, libxslt
+, pkg-config
+, sqlite
+, docbook_xsl
+, docbook_xml_dtd_43
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  writeScript,
-  curl,
-  jq,
-  common-updater-scripts,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, writeScript
+, curl
+, jq
+, common-updater-scripts
+,
 }:
 
 # The raw package that fetches and extracts the Plex RPM. Override the source
@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
   # Fetch the source
   src =
     if stdenv.hostPlatform.system == "aarch64-linux" then
-      fetchurl {
-        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-        sha256 = "f10c635b17a8aedc3f3a3d5d6cad8dff9e7fb534384d601eb832a3e3de91b0e7";
-      }
+      fetchurl
+        {
+          url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
+          sha256 = "f10c635b17a8aedc3f3a3d5d6cad8dff9e7fb534384d601eb832a3e3de91b0e7";
+        }
     else
       fetchurl {
         url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";

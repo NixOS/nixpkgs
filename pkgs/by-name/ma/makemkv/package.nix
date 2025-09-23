@@ -1,20 +1,19 @@
-{
-  autoPatchelfHook,
-  common-updater-scripts,
-  curl,
-  fetchurl,
-  ffmpeg,
-  lib,
-  stdenv,
-  qt5,
-  openssl,
-  pkg-config,
-  rubyPackages,
-  writeShellApplication,
-  zlib,
-
-  withJava ? true,
-  jre_headless,
+{ autoPatchelfHook
+, common-updater-scripts
+, curl
+, fetchurl
+, ffmpeg
+, lib
+, stdenv
+, qt5
+, openssl
+, pkg-config
+, rubyPackages
+, writeShellApplication
+, zlib
+, withJava ? true
+, jre_headless
+,
 }:
 
 let

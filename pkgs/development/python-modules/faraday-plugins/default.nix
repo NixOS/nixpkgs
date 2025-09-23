@@ -1,22 +1,22 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  click,
-  colorama,
-  fetchFromGitHub,
-  html2text,
-  lxml,
-  markdown,
-  pandas,
-  pytestCheckHook,
-  python-dateutil,
-  pytz,
-  requests,
-  setuptools,
-  simplejson,
-  tabulate,
-  tldextract,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, click
+, colorama
+, fetchFromGitHub
+, html2text
+, lxml
+, markdown
+, pandas
+, pytestCheckHook
+, python-dateutil
+, pytz
+, requests
+, setuptools
+, simplejson
+, tabulate
+, tldextract
+,
 }:
 
 buildPythonPackage rec {

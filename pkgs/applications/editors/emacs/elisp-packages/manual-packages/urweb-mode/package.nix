@@ -1,9 +1,9 @@
-{
-  lib,
-  melpaBuild,
-  urweb,
-  cl-lib,
-  flycheck,
+{ lib
+, melpaBuild
+, urweb
+, cl-lib
+, flycheck
+,
 }:
 
 melpaBuild {

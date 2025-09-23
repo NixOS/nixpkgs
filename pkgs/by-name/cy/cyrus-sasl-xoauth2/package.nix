@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  libtool,
-  automake,
-  cyrus_sasl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, libtool
+, automake
+, cyrus_sasl
+,
 }:
 
 stdenv.mkDerivation rec {

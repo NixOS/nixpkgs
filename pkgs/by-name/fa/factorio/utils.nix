@@ -38,12 +38,12 @@ in
 
   modDrv =
     { allRecommendedMods, allOptionalMods }:
-    {
-      src,
-      name ? null,
-      deps ? [ ],
-      optionalDeps ? [ ],
-      recommendedDeps ? [ ],
+    { src
+    , name ? null
+    , deps ? [ ]
+    , optionalDeps ? [ ]
+    , recommendedDeps ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
 

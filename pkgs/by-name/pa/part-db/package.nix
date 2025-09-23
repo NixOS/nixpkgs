@@ -1,16 +1,16 @@
-{
-  stdenv,
-  php,
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  envLocalPath ? "/var/lib/part-db/env.local",
-  cachePath ? "/var/cache/part-db/",
-  logPath ? "/var/log/part-db/",
+{ stdenv
+, php
+, lib
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, envLocalPath ? "/var/lib/part-db/env.local"
+, cachePath ? "/var/cache/part-db/"
+, logPath ? "/var/log/part-db/"
+,
 }:
 let
   pname = "part-db";

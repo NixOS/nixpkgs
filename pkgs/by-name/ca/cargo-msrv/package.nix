@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  rustup,
-  openssl,
-  stdenv,
-  makeWrapper,
-  gitUpdater,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, rustup
+, openssl
+, stdenv
+, makeWrapper
+, gitUpdater
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  wrapQtAppsHook,
-  qt6Packages,
-  bison,
-  flex,
-  which,
-  alsa-lib,
-  libsndfile,
-  libpulseaudio,
-  libjack2,
-  audioBackend ? "pulse", # "pulse", "alsa", or "jack"
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, wrapQtAppsHook
+, qt6Packages
+, bison
+, flex
+, which
+, alsa-lib
+, libsndfile
+, libpulseaudio
+, libjack2
+, audioBackend ? "pulse"
+, # "pulse", "alsa", or "jack"
 }:
 
 stdenv.mkDerivation (finalAttrs: {

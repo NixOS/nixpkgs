@@ -1,16 +1,17 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.certmgr;
 
-  specs = lib.mapAttrsToList (n: v: rec {
-    name = n + ".json";
-    path = if lib.isAttrs v then pkgs.writeText name (builtins.toJSON v) else v;
-  }) cfg.specs;
+  specs = lib.mapAttrsToList
+    (n: v: rec {
+      name = n + ".json";
+      path = if lib.isAttrs v then pkgs.writeText name (builtins.toJSON v) else v;
+    })
+    cfg.specs;
 
   allSpecs = pkgs.linkFarm "certmgr.d" specs;
 
@@ -26,13 +27,15 @@ let
   );
 
   specPaths = map dirOf (
-    lib.concatMap (
-      spec:
-      if lib.isAttrs spec then
-        lib.collect lib.isString (lib.filterAttrsRecursive (n: v: lib.isAttrs v || n == "path") spec)
-      else
-        [ spec ]
-    ) (lib.attrValues cfg.specs)
+    lib.concatMap
+      (
+        spec:
+        if lib.isAttrs spec then
+          lib.collect lib.isString (lib.filterAttrsRecursive (n: v: lib.isAttrs v || n == "path") spec)
+        else
+          [ spec ]
+      )
+      (lib.attrValues cfg.specs)
   );
 
   preStart = ''
@@ -198,10 +201,12 @@ in
       }
       {
         assertion =
-          !lib.any (lib.hasAttrByPath [
-            "authority"
-            "auth_key"
-          ]) (lib.attrValues cfg.specs);
+          !lib.any
+            (lib.hasAttrByPath [
+              "authority"
+              "auth_key"
+            ])
+            (lib.attrValues cfg.specs);
         message = ''
           Inline services.certmgr.specs are added to the Nix store rendering them world readable.
           Specify paths as specs, if you want to use include auth_key - or use the auth_key_file option."

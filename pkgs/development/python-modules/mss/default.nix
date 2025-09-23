@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  stdenv,
-  replaceVars,
-
-  # build-system
-  hatchling,
-
-  # native dependencies
-  xorg,
-
-  # tests
-  lsof,
-  pillow,
-  pytest-cov-stub,
-  pytest,
-  pyvirtualdisplay,
-  xvfb-run,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, stdenv
+, replaceVars
+, # build-system
+  hatchling
+, # native dependencies
+  xorg
+, # tests
+  lsof
+, pillow
+, pytest-cov-stub
+, pytest
+, pyvirtualdisplay
+, xvfb-run
+,
 }:
 
 buildPythonPackage rec {

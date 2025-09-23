@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-
-  # for passthru.tests
-  gst_all_1,
-  mpd,
-  ocamlPackages,
-  vlc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, # for passthru.tests
+  gst_all_1
+, mpd
+, ocamlPackages
+, vlc
+,
 }:
 
 stdenv.mkDerivation rec {

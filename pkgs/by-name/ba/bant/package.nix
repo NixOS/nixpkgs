@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildBazelPackage,
-  fetchFromGitHub,
-  bazel_7,
-  jdk,
-  nix-update-script,
-  cctools,
+{ lib
+, stdenv
+, buildBazelPackage
+, fetchFromGitHub
+, bazel_7
+, jdk
+, nix-update-script
+, cctools
+,
 }:
 
 let
@@ -47,8 +47,7 @@ buildBazelPackage rec {
         aarch64-linux = "sha256-1iy2S0mmXksfwucks+HOZ2/HUGaVBqk7VlR+kO6iYZE=";
         x86_64-linux = "sha256-YOIwwlCYlNINlYbm/vq3Jjhe+/zgrtECdMRl+vE8FgI=";
         aarch64-darwin = "sha256-7g1deAihrjpwAxNbG7rv9dDs3FjOCuRIFieLbENKmbw=";
-      }
-      .${system} or (throw "No hash for system: ${system}");
+      }.${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [

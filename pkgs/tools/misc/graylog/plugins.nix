@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  graylogPackage,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, graylogPackage
+,
 }:
 
 let
@@ -15,14 +15,13 @@ let
     ;
 
   glPlugin =
-    a@{
-      pluginName,
-      version,
-      installPhase ? ''
+    a@{ pluginName
+    , version
+    , installPhase ? ''
         mkdir -p $out/bin
         cp $src $out/bin/${pluginName}-${version}.jar
-      '',
-      ...
+      ''
+    , ...
     }:
     stdenv.mkDerivation (
       a

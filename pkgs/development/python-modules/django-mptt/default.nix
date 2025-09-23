@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  django,
-  django-js-asset,
-  model-bakery,
-  pytestCheckHook,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, django
+, django-js-asset
+, model-bakery
+, pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

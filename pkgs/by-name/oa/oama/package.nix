@@ -1,13 +1,14 @@
-{
-  haskell,
-  lib,
-  stdenv,
-  coreutils,
-  libsecret,
-  gnupg,
-  makeBinaryWrapper,
-  withLibsecret ? true, # default oama config uses libsecret
-  withGpg ? false,
+{ haskell
+, lib
+, stdenv
+, coreutils
+, libsecret
+, gnupg
+, makeBinaryWrapper
+, withLibsecret ? true
+, # default oama config uses libsecret
+  withGpg ? false
+,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;

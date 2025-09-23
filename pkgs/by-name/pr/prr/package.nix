@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  openssl,
-  pkg-config,
-  cacert,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, openssl
+, pkg-config
+, cacert
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "prr";

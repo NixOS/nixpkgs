@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  fetchYarnDeps,
-  nodejs,
-  fixup-yarn-lock,
-  yarn,
-  yarnConfigHook,
-  yarnBuildHook,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, stdenv
+, fetchYarnDeps
+, nodejs
+, fixup-yarn-lock
+, yarn
+, yarnConfigHook
+, yarnBuildHook
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

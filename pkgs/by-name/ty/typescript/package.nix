@@ -1,15 +1,15 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchurl,
-  versionCheckHook,
-  writeShellApplication,
-  nodejs,
-  gnutar,
-  jq,
-  moreutils,
-  nix-update,
-  prefetch-npm-deps,
+{ lib
+, buildNpmPackage
+, fetchurl
+, versionCheckHook
+, writeShellApplication
+, nodejs
+, gnutar
+, jq
+, moreutils
+, nix-update
+, prefetch-npm-deps
+,
 }:
 
 buildNpmPackage (finalAttrs: {

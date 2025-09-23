@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  love,
-  lovely-injector,
-  p7zip,
-  copyDesktopItems,
-  makeWrapper,
-  makeDesktopItem,
-  requireFile,
-  withMods ? true,
-  withLinuxPatch ? true,
+{ stdenv
+, lib
+, love
+, lovely-injector
+, p7zip
+, copyDesktopItems
+, makeWrapper
+, makeDesktopItem
+, requireFile
+, withMods ? true
+, withLinuxPatch ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "balatro";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  guile,
-  libffi,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, guile
+, libffi
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

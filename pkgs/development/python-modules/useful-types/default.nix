@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, typing-extensions
+,
 }:
 buildPythonPackage rec {
   pname = "useful-types";

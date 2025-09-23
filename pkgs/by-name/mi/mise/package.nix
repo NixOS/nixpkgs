@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  nix-update-script,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  coreutils,
-  bash,
-  direnv,
-  git,
-  pkg-config,
-  openssl,
-  cacert,
-  usage,
-  mise,
-  testers,
-  runCommand,
-  jq,
+{ stdenv
+, lib
+, nix-update-script
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, coreutils
+, bash
+, direnv
+, git
+, pkg-config
+, openssl
+, cacert
+, usage
+, mise
+, testers
+, runCommand
+, jq
+,
 }:
 
 rustPlatform.buildRustPackage rec {

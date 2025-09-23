@@ -1,7 +1,7 @@
-{
-  stdenv,
-  callPackage,
-  commandLineArgs ? "",
+{ stdenv
+, callPackage
+, commandLineArgs ? ""
+,
 }:
 if stdenv.hostPlatform.system == "aarch64-linux" then
   callPackage ./signal-desktop-aarch64.nix { inherit commandLineArgs; }

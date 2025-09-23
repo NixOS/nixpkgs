@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  nodejs,
-  pnpm_9,
-  prisma-engines,
-  jq,
-  makeWrapper,
-  moreutils,
-  callPackage,
+{ lib
+, fetchFromGitHub
+, stdenv
+, nodejs
+, pnpm_9
+, prisma-engines
+, jq
+, makeWrapper
+, moreutils
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

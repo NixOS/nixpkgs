@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  libiconv,
-  fetchurl,
-  m4,
-  expat,
-  libX11,
-  libXt,
-  libXaw,
-  libXmu,
-  bdftopcf,
-  mkfontdir,
-  fontadobe100dpi,
-  fontadobeutopia100dpi,
-  fontbh100dpi,
-  fontbhlucidatypewriter100dpi,
-  fontbitstream100dpi,
-  tcl,
-  ncurses,
-  openssl,
-  python3,
-  readline,
+{ stdenv
+, lib
+, libiconv
+, fetchurl
+, m4
+, expat
+, libX11
+, libXt
+, libXaw
+, libXmu
+, bdftopcf
+, mkfontdir
+, fontadobe100dpi
+, fontadobeutopia100dpi
+, fontbh100dpi
+, fontbhlucidatypewriter100dpi
+, fontbitstream100dpi
+, tcl
+, ncurses
+, openssl
+, python3
+, readline
+,
 }:
 let
   majorVersion = "4";

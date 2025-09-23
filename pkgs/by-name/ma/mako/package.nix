@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  systemdMinimal,
-  pango,
-  cairo,
-  gdk-pixbuf,
-  jq,
-  bash,
-  wayland,
-  wayland-scanner,
-  wayland-protocols,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, systemdMinimal
+, pango
+, cairo
+, gdk-pixbuf
+, jq
+, bash
+, wayland
+, wayland-scanner
+, wayland-protocols
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

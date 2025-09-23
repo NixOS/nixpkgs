@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libsndfile,
-  libsamplerate,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libsndfile
+, libsamplerate
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

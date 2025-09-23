@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-  setuptools-git-versioning,
-
-  # dependencies
-  icalendar,
-  pandas,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, setuptools-git-versioning
+, # dependencies
+  icalendar
+, pandas
+,
 }:
 
 buildPythonPackage rec {

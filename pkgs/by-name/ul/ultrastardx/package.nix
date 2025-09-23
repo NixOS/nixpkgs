@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  pkg-config,
-  lua,
-  fpc,
-  portaudio,
-  freetype,
-  libpng,
-  SDL2,
-  SDL2_image,
-  SDL2_gfx,
-  SDL2_mixer,
-  SDL2_net,
-  SDL2_ttf,
-  ffmpeg,
-  sqlite,
-  zlib,
-  libX11,
-  libGLU,
-  libGL,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, pkg-config
+, lua
+, fpc
+, portaudio
+, freetype
+, libpng
+, SDL2
+, SDL2_image
+, SDL2_gfx
+, SDL2_mixer
+, SDL2_net
+, SDL2_ttf
+, ffmpeg
+, sqlite
+, zlib
+, libX11
+, libGLU
+, libGL
+,
 }:
 
 let

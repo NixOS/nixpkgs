@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  libsndfile,
-  libtool,
-  pkg-config,
-  libuuid,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, libsndfile
+, libtool
+, pkg-config
+, libuuid
+,
 }:
 
 stdenv.mkDerivation rec {

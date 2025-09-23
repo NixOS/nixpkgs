@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # build-system
-  setuptools,
-  #dependencies
-  colcon,
-  pyaml,
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-repeat,
-  pytest-rerunfailures,
-  scspell,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, #dependencies
+  colcon
+, pyaml
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, pytest-repeat
+, pytest-rerunfailures
+, scspell
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage rec {
   pname = "colcon-defaults";

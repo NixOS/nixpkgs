@@ -1,48 +1,44 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  deepdiff,
-  gymnasium,
-  h5py,
-  matplotlib,
-  numba,
-  numpy,
-  overrides,
-  packaging,
-  pandas,
-  pettingzoo,
-  sensai-utils,
-  tensorboard,
-  torch,
-  tqdm,
-
-  # optional-dependencies
-  docstring-parser,
-  jsonargparse,
-  ale-py,
-  opencv,
-  shimmy,
-  pybox2d,
-  pygame,
-  swig,
-  mujoco,
-  imageio,
-  cython,
-  pybullet,
-  joblib,
-  scipy,
-
-  # tests
-  pymunk,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  deepdiff
+, gymnasium
+, h5py
+, matplotlib
+, numba
+, numpy
+, overrides
+, packaging
+, pandas
+, pettingzoo
+, sensai-utils
+, tensorboard
+, torch
+, tqdm
+, # optional-dependencies
+  docstring-parser
+, jsonargparse
+, ale-py
+, opencv
+, shimmy
+, pybox2d
+, pygame
+, swig
+, mujoco
+, imageio
+, cython
+, pybullet
+, joblib
+, scipy
+, # tests
+  pymunk
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

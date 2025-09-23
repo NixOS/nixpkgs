@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  poetry-core,
-  nixops,
-  python-digitalocean,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unstableGitUpdater
+, poetry-core
+, nixops
+, python-digitalocean
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

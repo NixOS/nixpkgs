@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  makeWrapper,
-  fetchzip,
-  nix-update-script,
-  nodejs,
-
-  testers,
+{ lib
+, stdenvNoCC
+, makeWrapper
+, fetchzip
+, nix-update-script
+, nodejs
+, testers
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";

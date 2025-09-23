@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  bc,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, bc
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

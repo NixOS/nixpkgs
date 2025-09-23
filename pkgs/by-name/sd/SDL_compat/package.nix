@@ -1,25 +1,25 @@
-{
-  lib,
-  sdl2-compat,
-  cmake,
-  darwin,
-  fetchFromGitHub,
-  libGLU,
-  libiconv,
-  libX11,
-  mesa,
-  pkg-config,
-  pkg-config-unwrapped,
-  stdenv,
-  testers,
-  dosbox,
-  SDL_image,
-  SDL_ttf,
-  SDL_mixer,
-  SDL_sound,
-  # Boolean flags
-  libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
-  openglSupport ? libGLSupported,
+{ lib
+, sdl2-compat
+, cmake
+, darwin
+, fetchFromGitHub
+, libGLU
+, libiconv
+, libX11
+, mesa
+, pkg-config
+, pkg-config-unwrapped
+, stdenv
+, testers
+, dosbox
+, SDL_image
+, SDL_ttf
+, SDL_mixer
+, SDL_sound
+, # Boolean flags
+  libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms
+, openglSupport ? libGLSupported
+,
 }:
 
 let

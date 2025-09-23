@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  testers,
-  libtree,
-  runCommand,
-  coreutils,
-  dieHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, libtree
+, runCommand
+, coreutils
+, dieHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

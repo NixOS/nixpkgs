@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit,
-  setuptools,
-
-  # dependencies
-  dask,
-  numpy,
-  odc-geo,
-  rasterio,
-  xarray,
-
-  # optional-dependencies
-  botocore,
-  zarr,
-
-  # tests
-  geopandas,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit
+, setuptools
+, # dependencies
+  dask
+, numpy
+, odc-geo
+, rasterio
+, xarray
+, # optional-dependencies
+  botocore
+, zarr
+, # tests
+  geopandas
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

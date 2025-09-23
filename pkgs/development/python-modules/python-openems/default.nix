@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cython_0,
-  openems,
-  csxcad,
-  boost,
-  python-csxcad,
-  numpy,
-  h5py,
+{ lib
+, buildPythonPackage
+, cython_0
+, openems
+, csxcad
+, boost
+, python-csxcad
+, numpy
+, h5py
+,
 }:
 
 buildPythonPackage rec {

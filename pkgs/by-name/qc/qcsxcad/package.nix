@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  csxcad,
-  tinyxml,
-  vtkWithQt6,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, csxcad
+, tinyxml
+, vtkWithQt6
+, qt6
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

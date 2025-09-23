@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  dvc-objects,
-  fetchPypi,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  webdav4,
+{ lib
+, buildPythonPackage
+, dvc-objects
+, fetchPypi
+, pythonOlder
+, setuptools-scm
+, setuptools
+, webdav4
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,10 @@
-{
-  callPackages,
-  isDeclaredArray,
-  makeSetupHook,
+{ callPackages
+, isDeclaredArray
+, makeSetupHook
+,
 }:
-makeSetupHook {
+makeSetupHook
+{
   name = "sortArray";
   propagatedBuildInputs = [ isDeclaredArray ];
   passthru.tests = callPackages ./tests.nix { };

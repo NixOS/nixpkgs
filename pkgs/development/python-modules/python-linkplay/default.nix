@@ -1,16 +1,16 @@
-{
-  aiofiles,
-  aiohttp,
-  appdirs,
-  async-timeout,
-  async-upnp-client,
-  buildPythonPackage,
-  deprecated,
-  fetchFromGitHub,
-  lib,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
+{ aiofiles
+, aiohttp
+, appdirs
+, async-timeout
+, async-upnp-client
+, buildPythonPackage
+, deprecated
+, fetchFromGitHub
+, lib
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

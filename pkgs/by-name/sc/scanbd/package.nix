@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  dbus,
-  libconfuse,
-  libjpeg,
-  sane-backends,
-  systemd,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, dbus
+, libconfuse
+, libjpeg
+, sane-backends
+, systemd
+,
 }:
 
 stdenv.mkDerivation rec {

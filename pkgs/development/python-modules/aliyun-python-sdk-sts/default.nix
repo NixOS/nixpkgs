@@ -1,9 +1,9 @@
-{
-  lib,
-  aliyun-python-sdk-core,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+{ lib
+, aliyun-python-sdk-core
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

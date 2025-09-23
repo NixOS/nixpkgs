@@ -1,35 +1,35 @@
-{
-  lib,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  runCommand,
-  hatchling,
-  argostranslate,
-  flask,
-  flask-swagger,
-  flask-swagger-ui,
-  flask-limiter,
-  flask-babel,
-  flask-session,
-  waitress,
-  expiringdict,
-  langdetect,
-  lexilang,
-  libretranslate,
-  ltpycld2,
-  morfessor,
-  appdirs,
-  apscheduler,
-  translatehtml,
-  argos-translate-files,
-  requests,
-  redis,
-  prometheus-client,
-  polib,
-  python,
-  xorg,
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, runCommand
+, hatchling
+, argostranslate
+, flask
+, flask-swagger
+, flask-swagger-ui
+, flask-limiter
+, flask-babel
+, flask-session
+, waitress
+, expiringdict
+, langdetect
+, lexilang
+, libretranslate
+, ltpycld2
+, morfessor
+, appdirs
+, apscheduler
+, translatehtml
+, argos-translate-files
+, requests
+, redis
+, prometheus-client
+, polib
+, python
+, xorg
+,
 }:
 
 buildPythonPackage rec {

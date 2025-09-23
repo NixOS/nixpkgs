@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  meson,
-  ninja,
-  pkg-config,
-  libmnl,
-  libuecc,
-  libsodium,
-  libcap,
-  json_c,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, meson
+, ninja
+, pkg-config
+, libmnl
+, libuecc
+, libsodium
+, libcap
+, json_c
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

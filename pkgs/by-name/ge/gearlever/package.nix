@@ -1,24 +1,24 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  stdenv,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  file,
-  _7zz,
-  which,
-  appimage-run,
-  gtk4,
-  bintools,
-  libnotify,
-  dwarfs,
-  squashfsTools,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, stdenv
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, file
+, _7zz
+, which
+, appimage-run
+, gtk4
+, bintools
+, libnotify
+, dwarfs
+, squashfsTools
+,
 }:
 
 python3Packages.buildPythonApplication rec {

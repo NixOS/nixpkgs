@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  vips,
-  pkg-config,
-  src,
-  version,
-  nixosTests,
+{ lib
+, buildNpmPackage
+, vips
+, pkg-config
+, src
+, version
+, nixosTests
+,
 }:
 
 buildNpmPackage {

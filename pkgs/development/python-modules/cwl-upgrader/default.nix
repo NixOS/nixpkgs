@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mypy-extensions,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  ruamel-yaml,
-  schema-salad,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mypy-extensions
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, ruamel-yaml
+, schema-salad
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-  pytestCheckHook,
-  iso8601,
-  pytest-lazy-fixture,
-  pytz,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, hatchling
+, pytestCheckHook
+, iso8601
+, pytest-lazy-fixture
+, pytz
+,
 }:
 
 buildPythonPackage rec {

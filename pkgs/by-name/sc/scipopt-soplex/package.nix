@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  gmp,
-  mpfr,
-  zlib,
-  boost,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, cmake
+, gmp
+, mpfr
+, zlib
+, boost
+, fetchFromGitHub
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

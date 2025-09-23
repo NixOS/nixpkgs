@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  radixtarget,
-  regex,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, poetry-core
+, poetry-dynamic-versioning
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, radixtarget
+, regex
+,
 }:
 
 buildPythonPackage rec {

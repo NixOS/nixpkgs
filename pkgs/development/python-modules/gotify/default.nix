@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  nix-update-script,
-  httpx,
-  websockets,
-  pytestCheckHook,
-  pytest-asyncio,
-  typeguard,
-  gotify-server,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, nix-update-script
+, httpx
+, websockets
+, pytestCheckHook
+, pytest-asyncio
+, typeguard
+, gotify-server
+,
 }:
 
 buildPythonPackage rec {

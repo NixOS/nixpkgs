@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchPypi,
-  platformdirs,
-  cryptography,
-  dogpile-cache,
-  jmespath,
-  jsonpatch,
-  keystoneauth1,
-  munch,
-  openstackdocstheme,
-  os-service-types,
-  pbr,
-  psutil,
-  pyyaml,
-  requestsexceptions,
-  setuptools,
-  sphinxHook,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchPypi
+, platformdirs
+, cryptography
+, dogpile-cache
+, jmespath
+, jsonpatch
+, keystoneauth1
+, munch
+, openstackdocstheme
+, os-service-types
+, pbr
+, psutil
+, pyyaml
+, requestsexceptions
+, setuptools
+, sphinxHook
+,
 }:
 
 buildPythonPackage rec {

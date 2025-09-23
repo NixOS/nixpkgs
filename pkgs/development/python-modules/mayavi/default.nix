@@ -1,19 +1,19 @@
-{
-  lib,
-  apptools,
-  buildPythonPackage,
-  envisage,
-  fetchPypi,
-  numpy,
-  packaging,
-  pyface,
-  pygments,
-  pyqt5,
-  pythonOlder,
-  pythonAtLeast,
-  traitsui,
-  vtk,
-  wrapQtAppsHook,
+{ lib
+, apptools
+, buildPythonPackage
+, envisage
+, fetchPypi
+, numpy
+, packaging
+, pyface
+, pygments
+, pyqt5
+, pythonOlder
+, pythonAtLeast
+, traitsui
+, vtk
+, wrapQtAppsHook
+,
 }:
 
 buildPythonPackage rec {

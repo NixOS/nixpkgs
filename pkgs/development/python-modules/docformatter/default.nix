@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  charset-normalizer,
-  untokenize,
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, charset-normalizer
+, untokenize
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

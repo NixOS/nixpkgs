@@ -1,15 +1,15 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtspeech,
-  qtsvg,
-  poppler,
-  libtiff,
-  libspectre,
-  libzip,
-  djvulibre,
-  ebook_tools,
-  discount,
+{ mkKdeDerivation
+, pkg-config
+, qtspeech
+, qtsvg
+, poppler
+, libtiff
+, libspectre
+, libzip
+, djvulibre
+, ebook_tools
+, discount
+,
 }:
 mkKdeDerivation {
   pname = "okular";

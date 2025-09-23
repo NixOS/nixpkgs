@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  fetchFromGitLab,
-  re2c,
-  gperf,
-  gawk,
-  pkg-config,
-  boost,
-  fmt,
-  luajit_openresty,
-  ncurses,
-  serd,
-  sord,
-  libcap,
-  liburing,
-  openssl,
-  cereal,
-  cmake,
-  asciidoctor,
-  makeWrapper,
-  versionCheckHook,
-  gitUpdater,
-  enableIoUring ? false,
-  emilua, # this package
+{ lib
+, stdenv
+, meson
+, ninja
+, fetchFromGitLab
+, re2c
+, gperf
+, gawk
+, pkg-config
+, boost
+, fmt
+, luajit_openresty
+, ncurses
+, serd
+, sord
+, libcap
+, liburing
+, openssl
+, cereal
+, cmake
+, asciidoctor
+, makeWrapper
+, versionCheckHook
+, gitUpdater
+, enableIoUring ? false
+, emilua
+, # this package
 }:
 
 stdenv.mkDerivation (finalAttrs: {

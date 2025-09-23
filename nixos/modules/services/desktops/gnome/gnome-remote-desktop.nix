@@ -1,9 +1,8 @@
 # Remote desktop daemon using Pipewire.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 {

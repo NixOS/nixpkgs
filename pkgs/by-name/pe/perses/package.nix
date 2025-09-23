@@ -1,25 +1,27 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  fetchurl,
-  buildGoModule,
-  npmHooks,
-  nodejs,
-  turbo,
-  linkFarm,
+{ lib
+, fetchFromGitHub
+, fetchNpmDeps
+, fetchurl
+, buildGoModule
+, npmHooks
+, nodejs
+, turbo
+, linkFarm
+,
 }:
 
 let
   # Create a plugins-archive to be embedded into the perses package similar to
   # what $src/scripts/install_plugin.go does
   pluginsArchive = linkFarm "perses-plugin-archive" (
-    lib.mapAttrsToList (name: plugin: {
-      name = "${name}-${plugin.version}.tar.gz";
-      path = fetchurl {
-        inherit (plugin) url hash;
-      };
-    }) (import ./plugins.nix)
+    lib.mapAttrsToList
+      (name: plugin: {
+        name = "${name}-${plugin.version}.tar.gz";
+        path = fetchurl {
+          inherit (plugin) url hash;
+        };
+      })
+      (import ./plugins.nix)
   );
 
 in

@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  isPyPy,
-  cython,
-  distlib,
-  fetchPypi,
-  filelock,
-  flaky,
-  hatch-vcs,
-  hatchling,
-  importlib-metadata,
-  platformdirs,
-  pytest-freezegun,
-  pytest-mock,
-  pytest-timeout,
-  pytestCheckHook,
-  time-machine,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, isPyPy
+, cython
+, distlib
+, fetchPypi
+, filelock
+, flaky
+, hatch-vcs
+, hatchling
+, importlib-metadata
+, platformdirs
+, pytest-freezegun
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
+, time-machine
+,
 }:
 
 buildPythonPackage rec {

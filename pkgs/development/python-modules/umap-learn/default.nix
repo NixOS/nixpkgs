@@ -1,35 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numba,
-  numpy,
-  pynndescent,
-  scikit-learn,
-  scipy,
-  tqdm,
-
-  # optional-dependencies
-  bokeh,
-  colorcet,
-  dask,
-  datashader,
-  holoviews,
-  matplotlib,
-  pandas,
-  scikit-image,
-  seaborn,
-  tensorflow,
-  tensorflow-probability,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numba
+, numpy
+, pynndescent
+, scikit-learn
+, scipy
+, tqdm
+, # optional-dependencies
+  bokeh
+, colorcet
+, dask
+, datashader
+, holoviews
+, matplotlib
+, pandas
+, scikit-image
+, seaborn
+, tensorflow
+, tensorflow-probability
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

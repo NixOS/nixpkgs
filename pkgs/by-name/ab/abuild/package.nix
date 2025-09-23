@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gitUpdater,
-  makeWrapper,
-  pkg-config,
-  file,
-  scdoc,
-  openssl,
-  zlib,
-  busybox,
-  apk-tools,
-  perl,
-  findutils,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+, makeWrapper
+, pkg-config
+, file
+, scdoc
+, openssl
+, zlib
+, busybox
+, apk-tools
+, perl
+, findutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

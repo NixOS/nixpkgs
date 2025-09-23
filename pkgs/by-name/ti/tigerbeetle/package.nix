@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  testers,
-  tigerbeetle,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchzip
+, testers
+, tigerbeetle
+, nix-update-script
+,
 }:
 let
   platform =

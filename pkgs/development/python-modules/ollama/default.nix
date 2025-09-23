@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  httpx,
-  pydantic,
-  pillow,
-  pytest-asyncio,
-  pytest-httpserver,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, httpx
+, pydantic
+, pillow
+, pytest-asyncio
+, pytest-httpserver
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

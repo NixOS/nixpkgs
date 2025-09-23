@@ -1,9 +1,9 @@
-{
-  ocamlPackages,
-  fetchFromGitea,
-  ocaml-crunch,
-  seppo,
-  lib,
+{ ocamlPackages
+, fetchFromGitea
+, ocaml-crunch
+, seppo
+, lib
+,
 }:
 
 let

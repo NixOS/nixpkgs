@@ -1,7 +1,7 @@
-{
-  lib,
-  buildLua,
-  mpv-unwrapped,
+{ lib
+, buildLua
+, mpv-unwrapped
+,
 }:
 
 let
@@ -11,18 +11,20 @@ let
       srcPath = "TOOLS/lua/${name}.lua";
     in
     buildLua (
-      lib.attrsets.recursiveUpdate rec {
-        inherit (mpv-unwrapped) src version;
-        pname = "mpv-${name}";
+      lib.attrsets.recursiveUpdate
+        rec {
+          inherit (mpv-unwrapped) src version;
+          pname = "mpv-${name}";
 
-        dontUnpack = true;
-        scriptPath = "${src}/${srcPath}";
+          dontUnpack = true;
+          scriptPath = "${src}/${srcPath}";
 
-        meta = with lib; {
-          inherit (mpv-unwrapped.meta) license;
-          homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${srcPath}";
-        };
-      } args
+          meta = with lib; {
+            inherit (mpv-unwrapped.meta) license;
+            homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${srcPath}";
+          };
+        }
+        args
     );
 in
 lib.recurseIntoAttrs (

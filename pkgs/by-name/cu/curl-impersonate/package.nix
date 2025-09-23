@@ -1,7 +1,7 @@
-{
-  symlinkJoin,
-  callPackage,
-  nixosTests,
+{ symlinkJoin
+, callPackage
+, nixosTests
+,
 }:
 symlinkJoin rec {
   pname = "curl-impersonate";

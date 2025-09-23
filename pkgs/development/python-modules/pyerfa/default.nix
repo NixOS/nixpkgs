@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jinja2,
-  setuptools,
-  setuptools-scm,
-  liberfa,
-  packaging,
-  numpy,
-  pytestCheckHook,
-  pytest-doctestplus,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jinja2
+, setuptools
+, setuptools-scm
+, liberfa
+, packaging
+, numpy
+, pytestCheckHook
+, pytest-doctestplus
+,
 }:
 
 buildPythonPackage rec {

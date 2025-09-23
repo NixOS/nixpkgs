@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel ? false,
-  kernelModuleMakeFlags ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel ? false
+, kernelModuleMakeFlags ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

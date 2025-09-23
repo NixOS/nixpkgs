@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatch-requirements-txt,
-  hatchling,
-  gradio,
-  gradio-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatch-requirements-txt
+, hatchling
+, gradio
+, gradio-client
+,
 }:
 
 buildPythonPackage {

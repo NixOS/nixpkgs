@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, versionCheckHook
+,
 }:
 let
   os = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
@@ -21,8 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "sha256-GjR0zLGLvfZJMQgq9Hq3NQp7Y8QSXU4kW9cUIe5MxyM=";
         x86_64-darwin = "sha256-pQjLwahjtw+lgLJbRpgGM4lbAfZCDtgJSVcqS6TDwug=";
         aarch64-darwin = "sha256-by4reE2OH1Qz+Wn40QMVNZm2JsJHkoZ05OZZEnxGChI=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [ makeWrapper ];

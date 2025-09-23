@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, requests
+,
 }:
 
 let

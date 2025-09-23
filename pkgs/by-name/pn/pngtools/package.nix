@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  libpng12,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, libpng12
+, fetchFromGitHub
+,
 }:
 
 stdenv.mkDerivation {

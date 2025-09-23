@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  bsd-finger,
-  withAbook ? true,
-  abook,
-  withGnupg ? true,
-  gnupg,
-  withGoobook ? true,
-  goobook,
-  withKhard ? true,
-  khard,
-  withMu ? true,
-  mu,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, bsd-finger
+, withAbook ? true
+, abook
+, withGnupg ? true
+, gnupg
+, withGoobook ? true
+, goobook
+, withKhard ? true
+, khard
+, withMu ? true
+, mu
+,
 }:
 
 let

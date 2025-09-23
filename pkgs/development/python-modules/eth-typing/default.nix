@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  # dependencies
-  typing-extensions,
-  # nativeCheckInputs
-  pytestCheckHook,
-  pytest-xdist,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # dependencies
+  typing-extensions
+, # nativeCheckInputs
+  pytestCheckHook
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

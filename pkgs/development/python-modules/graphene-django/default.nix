@@ -1,23 +1,21 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  graphene,
-  graphql-core,
-  django,
-  djangorestframework,
-  promise,
-  text-unidecode,
-
-  django-filter,
-  mock,
-  py,
-  pytest-django,
-  pytest-random-order,
-  pytest7CheckHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, graphene
+, graphql-core
+, django
+, djangorestframework
+, promise
+, text-unidecode
+, django-filter
+, mock
+, py
+, pytest-django
+, pytest-random-order
+, pytest7CheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  aiofiles,
-  aiohttp,
-  backports-datetime-fromisoformat,
-  click,
-  click-log,
-  emoji,
-  glom,
-  jinja2,
-  pyyaml,
-  freezegun,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, aiofiles
+, aiohttp
+, backports-datetime-fromisoformat
+, click
+, click-log
+, emoji
+, glom
+, jinja2
+, pyyaml
+, freezegun
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

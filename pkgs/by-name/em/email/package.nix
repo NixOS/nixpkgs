@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  openssl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, openssl
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPackages,
-  pkgsCross,
-  rustPlatform,
-  stdenv,
-  glibcLocales,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, buildPackages
+, pkgsCross
+, rustPlatform
+, stdenv
+, glibcLocales
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 
 let

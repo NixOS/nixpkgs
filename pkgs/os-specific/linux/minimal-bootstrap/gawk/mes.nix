@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnupatch,
-  gnused,
-  gnugrep,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnupatch
+, gnused
+, gnugrep
+,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
@@ -27,24 +27,24 @@ let
   ];
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version meta;
+{
+  inherit pname version meta;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-      gnused
-      gnugrep
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnupatch
+    gnused
+    gnugrep
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/awk --version
-        mkdir $out
-      '';
-  }
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/awk --version
+      mkdir $out
+    '';
+}
   ''
     # Unpack
     ungz --file ${src} --output gawk.tar

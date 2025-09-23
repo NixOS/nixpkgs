@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  testers,
-  # dbus-cpp not compatible with Boost 1.87
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, testers
+, # dbus-cpp not compatible with Boost 1.87
   # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
-  boost186,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-cpp,
-  doxygen,
-  gettext,
-  glog,
-  graphviz,
-  gtest,
-  libapparmor,
-  newt,
-  pkg-config,
-  process-cpp,
-  properties-cpp,
-  qtbase,
-  qtdeclarative,
-  validatePkgConfig,
+  boost186
+, cmake
+, cmake-extras
+, dbus
+, dbus-cpp
+, doxygen
+, gettext
+, glog
+, graphviz
+, gtest
+, libapparmor
+, newt
+, pkg-config
+, process-cpp
+, properties-cpp
+, qtbase
+, qtdeclarative
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

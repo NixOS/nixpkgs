@@ -1,25 +1,25 @@
-{
-  buildPythonPackage,
-  colormath,
-  cycler,
-  fetchPypi,
-  h5py,
-  joblib,
-  lib,
-  more-itertools,
-  numpy,
-  pandas,
-  pint,
-  pyarrow,
-  pytest,
-  pyyaml,
-  reprint,
-  requests,
-  scikit-rf,
-  scipy,
-  semver,
-  setuptools,
-  verilogae,
+{ buildPythonPackage
+, colormath
+, cycler
+, fetchPypi
+, h5py
+, joblib
+, lib
+, more-itertools
+, numpy
+, pandas
+, pint
+, pyarrow
+, pytest
+, pyyaml
+, reprint
+, requests
+, scikit-rf
+, scipy
+, semver
+, setuptools
+, verilogae
+,
 }:
 
 buildPythonPackage rec {

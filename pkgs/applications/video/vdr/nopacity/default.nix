@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  vdr,
-  graphicsmagick,
+{ stdenv
+, lib
+, fetchFromGitLab
+, vdr
+, graphicsmagick
+,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-skin-nopacity";

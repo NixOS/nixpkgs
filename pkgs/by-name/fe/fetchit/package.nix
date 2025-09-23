@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lvm2,
-  pkg-config,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lvm2
+, pkg-config
+,
 }:
 
 buildGoModule rec {

@@ -1,10 +1,10 @@
-{
-  buildNpmPackage,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  chromium,
-  nix-update-script,
+{ buildNpmPackage
+, lib
+, stdenv
+, fetchFromGitHub
+, chromium
+, nix-update-script
+,
 }:
 let
   version = "11.6.0";

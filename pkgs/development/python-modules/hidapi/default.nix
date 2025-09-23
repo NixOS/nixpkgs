@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pkg-config,
-  xcbuild,
-  cython,
-  setuptools,
-  hidapi,
-  libusb1,
-  udev,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pkg-config
+, xcbuild
+, cython
+, setuptools
+, hidapi
+, libusb1
+, udev
+,
 }:
 
 buildPythonPackage rec {

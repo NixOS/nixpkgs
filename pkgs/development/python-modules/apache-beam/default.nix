@@ -1,64 +1,61 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  distlib,
-  grpcio-tools,
-  jinja2,
-  jsonpickle,
-  jsonschema,
-  mypy-protobuf,
-  redis,
-  setuptools,
-  yapf,
-
-  # dependencies
-  crcmod,
-  dill,
-  fastavro,
-  fasteners,
-  grpcio,
-  hdfs,
-  httplib2,
-  numpy,
-  objsize,
-  orjson,
-  proto-plus,
-  protobuf,
-  pyarrow,
-  pydot,
-  pymilvus,
-  pymongo,
-  python-dateutil,
-  pytz,
-  regex,
-  requests,
-  typing-extensions,
-  zstandard,
-
-  # tests
-  python,
-  docstring-parser,
-  freezegun,
-  hypothesis,
-  mock,
-  pandas,
-  parameterized,
-  psycopg2,
-  pyhamcrest,
-  pytest-xdist,
-  pytestCheckHook,
-  pyyaml,
-  requests-mock,
-  scikit-learn,
-  sqlalchemy,
-  tenacity,
-  testcontainers,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, distlib
+, grpcio-tools
+, jinja2
+, jsonpickle
+, jsonschema
+, mypy-protobuf
+, redis
+, setuptools
+, yapf
+, # dependencies
+  crcmod
+, dill
+, fastavro
+, fasteners
+, grpcio
+, hdfs
+, httplib2
+, numpy
+, objsize
+, orjson
+, proto-plus
+, protobuf
+, pyarrow
+, pydot
+, pymilvus
+, pymongo
+, python-dateutil
+, pytz
+, regex
+, requests
+, typing-extensions
+, zstandard
+, # tests
+  python
+, docstring-parser
+, freezegun
+, hypothesis
+, mock
+, pandas
+, parameterized
+, psycopg2
+, pyhamcrest
+, pytest-xdist
+, pytestCheckHook
+, pyyaml
+, requests-mock
+, scikit-learn
+, sqlalchemy
+, tenacity
+, testcontainers
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

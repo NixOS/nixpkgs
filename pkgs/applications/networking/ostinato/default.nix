@@ -1,20 +1,20 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  fetchurl,
-  qmake,
-  makeDesktopItem,
-  qtbase,
-  qtscript,
-  protobuf,
-  libpcap,
-  wireshark,
-  gzip,
-  diffutils,
-  gawk,
-  libnl,
-  copyDesktopItems,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchurl
+, qmake
+, makeDesktopItem
+, qtbase
+, qtscript
+, protobuf
+, libpcap
+, wireshark
+, gzip
+, diffutils
+, gawk
+, libnl
+, copyDesktopItems
+,
 }:
 
 mkDerivation rec {

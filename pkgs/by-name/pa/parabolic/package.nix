@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gettext,
-  itstool,
-  ninja,
-  yelp-tools,
-  desktop-file-utils,
-  pkg-config,
-  libnick,
-  boost,
-  glib,
-  shared-mime-info,
-  gtk4,
-  libadwaita,
-  wrapGAppsHook4,
-  libxmlxx5,
-  blueprint-compiler,
-  yt-dlp,
-  ffmpeg,
-  aria2,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, itstool
+, ninja
+, yelp-tools
+, desktop-file-utils
+, pkg-config
+, libnick
+, boost
+, glib
+, shared-mime-info
+, gtk4
+, libadwaita
+, wrapGAppsHook4
+, libxmlxx5
+, blueprint-compiler
+, yt-dlp
+, ffmpeg
+, aria2
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

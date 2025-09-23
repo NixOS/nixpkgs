@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  autoreconfHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  fetchpatch,
-  fetchurl,
-  libX11,
-  libXpm,
-  libXt,
-  motif,
+{ stdenv
+, lib
+, autoreconfHook
+, makeDesktopItem
+, copyDesktopItems
+, fetchpatch
+, fetchurl
+, libX11
+, libXpm
+, libXt
+, motif
+,
 }:
 
 stdenv.mkDerivation rec {

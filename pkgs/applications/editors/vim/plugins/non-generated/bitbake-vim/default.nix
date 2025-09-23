@@ -1,6 +1,6 @@
-{
-  vimUtils,
-  fetchFromGitHub,
+{ vimUtils
+, fetchFromGitHub
+,
 }:
 vimUtils.buildVimPlugin rec {
   pname = "bitbake-vim";

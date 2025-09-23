@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  importlib-metadata,
-  numpy,
-  rpyc,
-  scipy,
-  appdirs,
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, importlib-metadata
+, numpy
+, rpyc
+, scipy
+, appdirs
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

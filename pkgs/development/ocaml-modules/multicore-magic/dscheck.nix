@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  dscheck,
-  multicore-magic,
+{ lib
+, buildDunePackage
+, dscheck
+, multicore-magic
+,
 }:
 
 buildDunePackage {

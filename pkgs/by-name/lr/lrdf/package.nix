@@ -1,13 +1,13 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  librdf_raptor2,
-  doCheck ? config.doCheckByDefault or false,
-  ladspaPlugins,
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, librdf_raptor2
+, doCheck ? config.doCheckByDefault or false
+, ladspaPlugins
+,
 }:
 
 stdenv.mkDerivation rec {

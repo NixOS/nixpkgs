@@ -1,15 +1,15 @@
-{
-  cmake,
-  fetchFromGitHub,
-  fftw,
-  gettext,
-  lib,
-  libintl,
-  ncurses,
-  nix-update-script,
-  openssl,
-  stdenv,
-  testers,
+{ cmake
+, fetchFromGitHub
+, fftw
+, gettext
+, lib
+, libintl
+, ncurses
+, nix-update-script
+, openssl
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

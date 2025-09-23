@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  testers,
-  callPackage,
-  writeText,
-  # nativeBuildInputs
-  shellcheck-minimal,
-  # Samples
-  samples ? cleanSamples (callPackage ./samples.nix { }),
-  # Filter out the non-string-like attributes such as <pkg>.override added by
+{ lib
+, stdenvNoCC
+, testers
+, callPackage
+, writeText
+, # nativeBuildInputs
+  shellcheck-minimal
+, # Samples
+  samples ? cleanSamples (callPackage ./samples.nix { })
+, # Filter out the non-string-like attributes such as <pkg>.override added by
   # callPackage.
-  cleanSamples ? lib.filterAttrs (n: lib.isStringLike),
-  # Test targets
-  writeDirectReferencesToFile,
-  writeClosure,
+  cleanSamples ? lib.filterAttrs (n: lib.isStringLike)
+, # Test targets
+  writeDirectReferencesToFile
+, writeClosure
+,
 }:
 
 # -------------------------------------------------------------------------- #
@@ -109,11 +109,10 @@ testers.runNixOSTest (
   {
     name = "nixpkgs-trivial-builders-references";
     nodes.machine =
-      {
-        config,
-        lib,
-        pkgs,
-        ...
+      { config
+      , lib
+      , pkgs
+      , ...
       }:
       {
         virtualisation.writableStore = true;

@@ -1,12 +1,12 @@
-{
-  lib,
-  pythonOlder,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-  setuptools,
-  pyserial,
-  openpyxl,
+{ lib
+, pythonOlder
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, setuptools
+, pyserial
+, openpyxl
+,
 }:
 
 buildPythonPackage rec {

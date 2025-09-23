@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  matplotlib,
-  numpy,
-  pillow,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, cython
+, fetchPypi
+, matplotlib
+, numpy
+, pillow
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

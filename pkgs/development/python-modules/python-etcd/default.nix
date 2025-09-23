@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  urllib3,
-  dnspython,
-  pytestCheckHook,
-  etcd_3_4,
-  mock,
-  pyopenssl,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, urllib3
+, dnspython
+, pytestCheckHook
+, etcd_3_4
+, mock
+, pyopenssl
+,
 }:
 
 buildPythonPackage {

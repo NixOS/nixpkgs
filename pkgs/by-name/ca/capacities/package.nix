@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  appimageTools,
-  makeWrapper,
-  imagemagick,
-  lib,
+{ fetchurl
+, appimageTools
+, makeWrapper
+, imagemagick
+, lib
+,
 }:
 let
   pname = "capacities";

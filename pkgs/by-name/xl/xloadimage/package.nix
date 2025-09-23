@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  libX11,
-  libXt,
-  autoreconfHook,
-  quilt,
-
-  libjpeg ? null,
-  libpng ? null,
-  libtiff ? null,
-
-  withJpegSupport ? true,
-  withPngSupport ? true,
-  withTiffSupport ? true,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, libX11
+, libXt
+, autoreconfHook
+, quilt
+, libjpeg ? null
+, libpng ? null
+, libtiff ? null
+, withJpegSupport ? true
+, withPngSupport ? true
+, withTiffSupport ? true
+,
 }:
 
 assert withJpegSupport -> libjpeg != null;

@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  isPyPy,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  lxml,
-  brotli,
-  brotlicffi,
-  zopfli,
-  unicodedata2,
-  lz4,
-  scipy,
-  munkres,
-  pycairo,
-  matplotlib,
-  sympy,
-  xattr,
-  skia-pathops,
-  uharfbuzz,
-  pytest7CheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, isPyPy
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, lxml
+, brotli
+, brotlicffi
+, zopfli
+, unicodedata2
+, lz4
+, scipy
+, munkres
+, pycairo
+, matplotlib
+, sympy
+, xattr
+, skia-pathops
+, uharfbuzz
+, pytest7CheckHook
+,
 }:
 
 buildPythonPackage rec {
@@ -73,17 +73,19 @@ buildPythonPackage rec {
     pytest7CheckHook
   ]
   ++ lib.concatLists (
-    lib.attrVals (
-      [
-        "woff"
-        # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
-        "ufo"
-      ]
-      ++ lib.optionals (!skia-pathops.meta.broken) [
-        "pathops" # broken
-      ]
-      ++ [ "repacker" ]
-    ) optional-dependencies
+    lib.attrVals
+      (
+        [
+          "woff"
+          # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
+          "ufo"
+        ]
+        ++ lib.optionals (!skia-pathops.meta.broken) [
+          "pathops" # broken
+        ]
+        ++ [ "repacker" ]
+      )
+      optional-dependencies
   );
 
   pythonImportsCheck = [ "fontTools" ];

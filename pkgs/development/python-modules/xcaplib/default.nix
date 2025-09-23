@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  lxml,
-  twisted,
-  python3-application,
-  unstableGitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, lxml
+, twisted
+, python3-application
+, unstableGitUpdater
+,
 }:
 
 buildPythonPackage rec {

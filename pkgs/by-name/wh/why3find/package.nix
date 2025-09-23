@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  ocamlPackages,
-  why3,
+{ lib
+, fetchurl
+, ocamlPackages
+, why3
+,
 }:
 
 with ocamlPackages;

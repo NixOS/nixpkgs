@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  mpdecimal,
-  php,
+{ buildPecl
+, lib
+, mpdecimal
+, php
+,
 }:
 let
   version = "1.5.0";

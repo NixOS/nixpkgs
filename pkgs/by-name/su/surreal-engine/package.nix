@@ -1,20 +1,20 @@
-{
-  alsa-lib,
-  cmake,
-  dbus,
-  fetchFromGitHub,
-  lib,
-  libffi,
-  makeWrapper,
-  openal,
-  pkg-config,
-  SDL2,
-  libX11,
-  stdenv,
-  vulkan-loader,
-  wayland,
-  waylandpp,
-  libxkbcommon,
+{ alsa-lib
+, cmake
+, dbus
+, fetchFromGitHub
+, lib
+, libffi
+, makeWrapper
+, openal
+, pkg-config
+, SDL2
+, libX11
+, stdenv
+, vulkan-loader
+, wayland
+, waylandpp
+, libxkbcommon
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

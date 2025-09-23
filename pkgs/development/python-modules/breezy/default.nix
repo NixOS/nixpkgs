@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cargo,
-  configobj,
-  cython,
-  dulwich,
-  fastbencode,
-  fastimport,
-  pygithub,
-  libiconv,
-  merge3,
-  patiencediff,
-  pyyaml,
-  tzlocal,
-  urllib3,
-  breezy,
-  launchpadlib,
-  testtools,
-  pythonOlder,
-  installShellFiles,
-  rustPlatform,
-  rustc,
-  setuptools-gettext,
-  setuptools-rust,
-  testers,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, cargo
+, configobj
+, cython
+, dulwich
+, fastbencode
+, fastimport
+, pygithub
+, libiconv
+, merge3
+, patiencediff
+, pyyaml
+, tzlocal
+, urllib3
+, breezy
+, launchpadlib
+, testtools
+, pythonOlder
+, installShellFiles
+, rustPlatform
+, rustc
+, setuptools-gettext
+, setuptools-rust
+, testers
+,
 }:
 
 buildPythonPackage rec {

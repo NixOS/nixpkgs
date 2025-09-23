@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  texinfo,
-  texliveBasic,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, texinfo
+, texliveBasic
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-intro-and-ref";

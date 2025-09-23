@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchurl,
-  gdk-pixbuf,
-  gobject-introspection,
-  gtk3,
-  mcomix,
-  python312, # TODO: Revert to python3 when upgrading past 3.1.0
-  testers,
-  wrapGAppsHook3,
-
-  # Recommended Dependencies:
-  p7zip,
-  unrar,
-  chardetSupport ? true,
-  pdfSupport ? true,
-  unrarSupport ? false, # unfree software
+{ lib
+, fetchurl
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, mcomix
+, python312
+, # TODO: Revert to python3 when upgrading past 3.1.0
+  testers
+, wrapGAppsHook3
+, # Recommended Dependencies:
+  p7zip
+, unrar
+, chardetSupport ? true
+, pdfSupport ? true
+, unrarSupport ? false
+, # unfree software
 }:
 
 python312.pkgs.buildPythonApplication rec {

@@ -9,11 +9,11 @@
       cd nixpkgs
       nix-build -A tests.trivial-builders.writeTextFile.foo
 */
-{
-  lib,
-  runCommand,
-  runtimeShell,
-  writeTextFile,
+{ lib
+, runCommand
+, runtimeShell
+, writeTextFile
+,
 }:
 let
   veryWeirdName = ''here's a name with some "bad" characters, like spaces and quotes'';

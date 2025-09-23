@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  fetchpatch,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, fetchpatch
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bootspec-lix";

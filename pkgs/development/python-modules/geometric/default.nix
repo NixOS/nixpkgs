@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  networkx,
-  numpy,
-  scipy,
-  six,
-  pytestCheckHook,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, networkx
+, numpy
+, scipy
+, six
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

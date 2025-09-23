@@ -1,47 +1,44 @@
-{
-  lib,
-  stdenv,
+{ lib
+, stdenv
+, server ? false
+, # build server version
 
-  server ? false, # build server version
-
-  fetchFromGitHub,
-  fetchNpmDeps,
-  fetchYarnDeps,
-  fetchzip,
-  replaceVars,
-  runCommand,
-
-  ant,
-  cacert,
-  cmake,
-  git,
-  jdk,
-  makeWrapper,
-  nodejs,
-  npmHooks,
-  xcbuild,
-  yarn,
-  yarnConfigHook,
-  zip,
-
-  apple-sdk_11,
-  boost187,
-  electron_37,
-  fontconfig,
-  gnumake,
-  hunspellDicts,
-  libuuid,
-  llvmPackages,
-  openssl,
-  pam,
-  pandoc,
-  quarto,
-  R,
-  soci,
-  sqlite,
-  zlib,
-
-  nixosTests,
+  fetchFromGitHub
+, fetchNpmDeps
+, fetchYarnDeps
+, fetchzip
+, replaceVars
+, runCommand
+, ant
+, cacert
+, cmake
+, git
+, jdk
+, makeWrapper
+, nodejs
+, npmHooks
+, xcbuild
+, yarn
+, yarnConfigHook
+, zip
+, apple-sdk_11
+, boost187
+, electron_37
+, fontconfig
+, gnumake
+, hunspellDicts
+, libuuid
+, llvmPackages
+, openssl
+, pam
+, pandoc
+, quarto
+, R
+, soci
+, sqlite
+, zlib
+, nixosTests
+,
 }:
 
 let
@@ -73,9 +70,11 @@ let
   # These dicts contain identically-named dict files, so we only keep the
   # -large versions in case of clashes
   largeDicts = lib.filter (d: lib.hasInfix "-large-wordlist" d.name) hunspellDictionaries;
-  otherDicts = lib.filter (
-    d: !(lib.hasAttr "dictFileName" d && lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts))
-  ) hunspellDictionaries;
+  otherDicts = lib.filter
+    (
+      d: !(lib.hasAttr "dictFileName" d && lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts))
+    )
+    hunspellDictionaries;
   dictionaries = largeDicts ++ otherDicts;
 
   # rstudio assumes quarto bundles pandoc into bin/tools/

@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  python3Packages,
-
-  # tests
-  firefox-unwrapped,
-  firefox-esr-unwrapped,
-  mesa,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, python3Packages
+, # tests
+  firefox-unwrapped
+, firefox-esr-unwrapped
+, mesa
+,
 }:
 
 rustPlatform.buildRustPackage rec {

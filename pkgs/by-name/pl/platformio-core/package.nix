@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  git,
-  spdx-license-list-data,
-  replaceVars,
-  writableTmpDirAsHomeHook,
-  udevCheckHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, git
+, spdx-license-list-data
+, replaceVars
+, writableTmpDirAsHomeHook
+, udevCheckHook
+,
 }:
 
 with python3Packages;

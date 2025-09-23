@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  dict,
-  libfaketime,
+{ stdenv
+, lib
+, dict
+, libfaketime
+,
 }:
 (
-  {
-    dictlist,
-    allowList ? [ "127.0.0.1" ],
-    denyList ? [ ],
+  { dictlist
+  , allowList ? [ "127.0.0.1" ]
+  , denyList ? [ ]
+  ,
   }:
 
   /*

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  cmake,
-  codec2,
-  sox,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, cmake
+, codec2
+, sox
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

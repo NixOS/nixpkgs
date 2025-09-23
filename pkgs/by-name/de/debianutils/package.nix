@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  perl,
-  po4a,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, perl
+, po4a
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

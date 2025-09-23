@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  desktop-file-utils,
-  fetchurl,
-  elfutils,
-  gettext,
-  glib,
-  gtk4,
-  json-glib,
-  itstool,
-  libadwaita,
-  libdex,
-  libpanel,
-  libunwind,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  polkit,
-  shared-mime-info,
-  systemd,
-  wrapGAppsHook4,
-  gnome,
+{ stdenv
+, lib
+, desktop-file-utils
+, fetchurl
+, elfutils
+, gettext
+, glib
+, gtk4
+, json-glib
+, itstool
+, libadwaita
+, libdex
+, libpanel
+, libunwind
+, libxml2
+, meson
+, ninja
+, pkg-config
+, polkit
+, shared-mime-info
+, systemd
+, wrapGAppsHook4
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

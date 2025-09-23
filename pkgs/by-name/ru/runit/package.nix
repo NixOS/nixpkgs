@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # Build runit-init as a static binary
-  static ? false,
+{ lib
+, stdenv
+, fetchurl
+, # Build runit-init as a static binary
+  static ? false
+,
 }:
 
 stdenv.mkDerivation rec {

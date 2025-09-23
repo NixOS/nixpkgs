@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  autoreconfHook,
-  ffmpeg,
-  fluidsynth,
-  freetype,
-  glib,
-  libicns,
-  libpcap,
-  libpng,
-  libslirp,
-  libxkbfile,
-  libXrandr,
-  makeWrapper,
-  ncurses,
-  pkg-config,
-  python3,
-  SDL2,
-  SDL2_net,
-  testers,
-  yad,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, autoreconfHook
+, ffmpeg
+, fluidsynth
+, freetype
+, glib
+, libicns
+, libpcap
+, libpng
+, libslirp
+, libxkbfile
+, libXrandr
+, makeWrapper
+, ncurses
+, pkg-config
+, python3
+, SDL2
+, SDL2_net
+, testers
+, yad
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  libxcb,
-  lndir,
-  makeBinaryWrapper,
-  spotify,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libxcb
+, lndir
+, makeBinaryWrapper
+, spotify
+,
 }:
 stdenv.mkDerivation {
   pname = "spotifywm";

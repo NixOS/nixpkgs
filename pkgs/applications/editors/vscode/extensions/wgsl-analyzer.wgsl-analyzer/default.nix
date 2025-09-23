@@ -1,9 +1,9 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  moreutils,
-  wgsl-analyzer,
+{ lib
+, vscode-utils
+, jq
+, moreutils
+, wgsl-analyzer
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

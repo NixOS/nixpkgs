@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  gradle,
-  lib,
-  REAndroidLibrary,
+{ fetchFromGitHub
+, gradle
+, lib
+, REAndroidLibrary
+,
 }:
 
 let

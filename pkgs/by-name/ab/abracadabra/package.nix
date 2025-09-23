@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  faad2,
-  mpg123,
-  portaudio,
-  libusb1,
-  rtl-sdr,
-  airspy,
-  soapysdr-with-plugins,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, faad2
+, mpg123
+, portaudio
+, libusb1
+, rtl-sdr
+, airspy
+, soapysdr-with-plugins
+,
 }:
 
 stdenv.mkDerivation rec {

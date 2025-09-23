@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
-  pulseaudio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+, pulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
+{ stdenv
+, fetchFromGitHub
+, lib
+, nixosTests
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "filesender";

@@ -1,16 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  makeWrapper,
-
-  chromium,
-  python3,
-  undetected-chromedriver,
-  xorg,
-
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, chromium
+, python3
+, undetected-chromedriver
+, xorg
+, nixosTests
+,
 }:
 
 let

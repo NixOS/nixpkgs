@@ -1,7 +1,6 @@
-{
-  lib,
-  extendModules,
-  ...
+{ lib
+, extendModules
+, ...
 }:
 
 let
@@ -18,10 +17,9 @@ in
       options.sub = mkOption {
         default = { };
         type = types.submodule (
-          {
-            config,
-            extendModules,
-            ...
+          { config
+          , extendModules
+          , ...
           }:
           {
             options.value = mkOption {

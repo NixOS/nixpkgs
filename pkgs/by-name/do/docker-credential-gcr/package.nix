@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  docker-credential-gcr,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  testers,
+{ buildGoModule
+, docker-credential-gcr
+, fetchFromGitHub
+, lib
+, nix-update-script
+, testers
+,
 }:
 
 buildGoModule rec {

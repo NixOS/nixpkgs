@@ -1,12 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  ffmpeg-full,
-  gtk3,
-  pango,
-  gobject-introspection,
-  wrapGAppsHook3,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, ffmpeg-full
+, gtk3
+, pango
+, gobject-introspection
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -41,7 +40,8 @@ in
       package = lib.mkPackageOption pkgs [
         "tailscale"
         "derper"
-      ] { };
+      ]
+        { };
 
       stunPort = lib.mkOption {
         type = lib.types.port;

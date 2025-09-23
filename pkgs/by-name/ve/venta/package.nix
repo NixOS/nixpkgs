@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  gtk-engine-murrine,
-  gtk_engines,
-  librsvg,
-  marwaita,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gdk-pixbuf
+, gtk-engine-murrine
+, gtk_engines
+, librsvg
+, marwaita
+,
 }:
 
 stdenv.mkDerivation rec {

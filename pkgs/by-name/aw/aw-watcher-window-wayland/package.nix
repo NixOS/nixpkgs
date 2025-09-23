@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  unstableGitUpdater,
-  wayland,
+{ fetchFromGitHub
+, lib
+, openssl
+, pkg-config
+, rustPlatform
+, unstableGitUpdater
+, wayland
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "aw-watcher-window-wayland";

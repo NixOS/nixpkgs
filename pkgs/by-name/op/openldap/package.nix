@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # dependencies
-  cyrus_sasl,
-  groff,
-  libsodium,
-  libtool,
-  openssl,
-  systemdMinimal,
-  libxcrypt,
-
-  # options
-  withModules ? !stdenv.hostPlatform.isStatic,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-
-  # passthru
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, # dependencies
+  cyrus_sasl
+, groff
+, libsodium
+, libtool
+, openssl
+, systemdMinimal
+, libxcrypt
+, # options
+  withModules ? !stdenv.hostPlatform.isStatic
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+, # passthru
+  nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

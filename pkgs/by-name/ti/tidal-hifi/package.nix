@@ -1,49 +1,48 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  callPackage,
-  makeShellWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  stdenv,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  gtk4,
-  at-spi2-atk,
-  libdrm,
-  libgbm,
-  libxkbcommon,
-  libxshmfence,
-  libGL,
-  vulkan-loader,
-  alsa-lib,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  gdk-pixbuf,
-  nss,
-  nspr,
-  libX11,
-  libxcb,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libxkbfile,
-  pango,
-  systemd,
-  pciutils,
-  libnotify,
-  pipewire,
-  libsecret,
-  libpulseaudio,
-  speechd-minimal,
-
-  castlabs-electron ? callPackage ./electron.nix { },
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, callPackage
+, makeShellWrapper
+, copyDesktopItems
+, makeDesktopItem
+, stdenv
+, wrapGAppsHook3
+, glib
+, gtk3
+, gtk4
+, at-spi2-atk
+, libdrm
+, libgbm
+, libxkbcommon
+, libxshmfence
+, libGL
+, vulkan-loader
+, alsa-lib
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, nss
+, nspr
+, libX11
+, libxcb
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, libxkbfile
+, pango
+, systemd
+, pciutils
+, libnotify
+, pipewire
+, libsecret
+, libpulseaudio
+, speechd-minimal
+, castlabs-electron ? callPackage ./electron.nix { }
+,
 }:
 
 let

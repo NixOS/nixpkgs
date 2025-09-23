@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  SDL,
-  autoconf,
-  automake,
-  libtool,
-  gtk2,
-  m4,
-  pkg-config,
-  libGLU,
-  libGL,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, SDL
+, autoconf
+, automake
+, libtool
+, gtk2
+, m4
+, pkg-config
+, libGLU
+, libGL
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  buildNpmPackage,
-  frigate,
-  src,
-  version,
+{ buildNpmPackage
+, frigate
+, src
+, version
+,
 }:
 
 buildNpmPackage {

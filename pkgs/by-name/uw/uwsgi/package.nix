@@ -1,27 +1,27 @@
-{
-  stdenv,
-  nixosTests,
-  lib,
-  pkg-config,
-  jansson,
-  pcre2,
-  libxcrypt,
-  expat,
-  zlib,
-  # plugins: list of strings, eg. [ "python3" ]
-  plugins ? [ ],
-  pam,
-  withPAM ? stdenv.hostPlatform.isLinux,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  libcap,
-  withCap ? stdenv.hostPlatform.isLinux,
-  python3,
-  ncurses,
-  ruby,
-  php,
-  makeWrapper,
-  fetchFromGitHub,
+{ stdenv
+, nixosTests
+, lib
+, pkg-config
+, jansson
+, pcre2
+, libxcrypt
+, expat
+, zlib
+, # plugins: list of strings, eg. [ "python3" ]
+  plugins ? [ ]
+, pam
+, withPAM ? stdenv.hostPlatform.isLinux
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, libcap
+, withCap ? stdenv.hostPlatform.isLinux
+, python3
+, ncurses
+, ruby
+, php
+, makeWrapper
+, fetchFromGitHub
+,
 }:
 
 let

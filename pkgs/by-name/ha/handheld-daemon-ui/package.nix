@@ -1,7 +1,7 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
+{ lib
+, appimageTools
+, fetchurl
+,
 }:
 let
   pname = "handheld-daemon-ui";

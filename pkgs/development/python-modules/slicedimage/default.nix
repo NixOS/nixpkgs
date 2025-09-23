@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  boto3,
-  diskcache,
-  packaging,
-  numpy,
-  requests,
-  scikit-image,
-  six,
-  pytestCheckHook,
-  tifffile,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, boto3
+, diskcache
+, packaging
+, numpy
+, requests
+, scikit-image
+, six
+, pytestCheckHook
+, tifffile
+,
 }:
 
 buildPythonPackage rec {

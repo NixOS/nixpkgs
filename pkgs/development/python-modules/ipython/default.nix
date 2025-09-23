@@ -1,37 +1,32 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-  pythonOlder,
-
-  # Build dependencies
-  setuptools,
-
-  # Runtime dependencies
-  decorator,
-  ipython-pygments-lexers,
-  jedi,
-  matplotlib-inline,
-  pexpect,
-  prompt-toolkit,
-  pygments,
-  stack-data,
-  traitlets,
-  typing-extensions,
-
-  # Optional dependencies
-  matplotlib,
-
-  # Reverse dependency
-  sage,
-
-  # Test dependencies
-  pickleshare,
-  pytest-asyncio,
-  pytestCheckHook,
-  testpath,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, pythonOlder
+, # Build dependencies
+  setuptools
+, # Runtime dependencies
+  decorator
+, ipython-pygments-lexers
+, jedi
+, matplotlib-inline
+, pexpect
+, prompt-toolkit
+, pygments
+, stack-data
+, traitlets
+, typing-extensions
+, # Optional dependencies
+  matplotlib
+, # Reverse dependency
+  sage
+, # Test dependencies
+  pickleshare
+, pytest-asyncio
+, pytestCheckHook
+, testpath
+,
 }:
 
 buildPythonPackage rec {

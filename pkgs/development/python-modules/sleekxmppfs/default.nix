@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  dnspython,
-  pyasn1,
-  pyasn1-modules,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dnspython
+, pyasn1
+, pyasn1-modules
+,
 }:
 
 buildPythonPackage rec {

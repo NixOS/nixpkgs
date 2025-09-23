@@ -1,11 +1,11 @@
-{
-  lib,
-  makeWrapper,
-  fetchFromGitHub,
-  rustPackages,
-  pkg-config,
-  elfutils,
-  zlib,
+{ lib
+, makeWrapper
+, fetchFromGitHub
+, rustPackages
+, pkg-config
+, elfutils
+, zlib
+,
 }:
 let
   inherit (rustPackages.rustc) llvmPackages;

@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  lib,
-  protobuf,
-  pycryptodome,
-  requests,
-  protobuf_27,
-  setuptools,
+{ buildPythonPackage
+, cryptography
+, fetchPypi
+, lib
+, protobuf
+, pycryptodome
+, requests
+, protobuf_27
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

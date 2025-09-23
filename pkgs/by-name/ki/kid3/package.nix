@@ -1,29 +1,29 @@
-{
-  lib,
-  chromaprint,
-  cmake,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  fetchurl,
-  ffmpeg,
-  flac,
-  id3lib,
-  kdePackages,
-  libogg,
-  libvorbis,
-  libxslt,
-  mp4v2,
-  pkg-config,
-  python3,
-  qt6,
-  readline,
-  stdenv,
-  taglib,
-  zlib,
-  # Boolean flags
-  withCLI ? true,
-  withKDE ? true,
-  withQt ? false,
+{ lib
+, chromaprint
+, cmake
+, docbook_xml_dtd_45
+, docbook_xsl
+, fetchurl
+, ffmpeg
+, flac
+, id3lib
+, kdePackages
+, libogg
+, libvorbis
+, libxslt
+, mp4v2
+, pkg-config
+, python3
+, qt6
+, readline
+, stdenv
+, taglib
+, zlib
+, # Boolean flags
+  withCLI ? true
+, withKDE ? true
+, withQt ? false
+,
 }:
 
 let

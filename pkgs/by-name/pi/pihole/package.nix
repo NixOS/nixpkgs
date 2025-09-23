@@ -1,32 +1,32 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  installShellFiles,
-  bash,
-  coreutils,
-  curl,
-  dig,
-  gawk,
-  getent,
-  glibc,
-  gnugrep,
-  gnused,
-  iproute2,
-  jq,
-  killall,
-  libidn2,
-  locale,
-  ncurses,
-  netcat,
-  net-tools,
-  pihole-ftl,
-  procps,
-  resholve,
-  sqlite,
-  systemd,
-  util-linux,
-  stateDir ? "/etc/pihole",
+{ lib
+, fetchFromGitHub
+, makeBinaryWrapper
+, installShellFiles
+, bash
+, coreutils
+, curl
+, dig
+, gawk
+, getent
+, glibc
+, gnugrep
+, gnused
+, iproute2
+, jq
+, killall
+, libidn2
+, locale
+, ncurses
+, netcat
+, net-tools
+, pihole-ftl
+, procps
+, resholve
+, sqlite
+, systemd
+, util-linux
+, stateDir ? "/etc/pihole"
+,
 }:
 
 (resholve.mkDerivation rec {

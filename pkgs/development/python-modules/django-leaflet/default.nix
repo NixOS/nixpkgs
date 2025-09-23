@@ -1,10 +1,10 @@
-{
-  pkgs,
-  buildPythonPackage,
-  django,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
+{ pkgs
+, buildPythonPackage
+, django
+, fetchPypi
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

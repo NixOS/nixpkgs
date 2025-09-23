@@ -1,12 +1,12 @@
-{
-  lib,
-  buildFHSEnv,
-  runCommand,
-  stdenv,
-  fetchurl,
-  dpkg,
-  glibc,
-  callPackage,
+{ lib
+, buildFHSEnv
+, runCommand
+, stdenv
+, fetchurl
+, dpkg
+, glibc
+, callPackage
+,
 }:
 
 let

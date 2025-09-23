@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  php81,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, php81
+, nix-update-script
+,
 }:
 
 php81.buildComposerProject2 (finalAttrs: {

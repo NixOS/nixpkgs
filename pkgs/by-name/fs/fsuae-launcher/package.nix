@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  fsuae,
-  gettext,
-  python3Packages,
-  stdenv,
-  libsForQt5,
+{ lib
+, fetchurl
+, fsuae
+, gettext
+, python3Packages
+, stdenv
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

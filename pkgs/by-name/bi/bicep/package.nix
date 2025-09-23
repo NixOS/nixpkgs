@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  mono,
-  jq,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, mono
+, jq
+,
 }:
 
 buildDotnetModule rec {

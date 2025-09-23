@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  cmake,
-  dbus,
-  libqtdbustest,
-  lomiri-api,
-  pkg-config,
-  qtbase,
-  qtdeclarative,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, cmake
+, dbus
+, libqtdbustest
+, lomiri-api
+, pkg-config
+, qtbase
+, qtdeclarative
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

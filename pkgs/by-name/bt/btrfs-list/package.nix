@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  btrfs-progs,
-  coreutils,
-  ncurses,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, btrfs-progs
+, coreutils
+, ncurses
+, perl
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-list";

@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  shared-mime-info,
-  qt5compat,
-  qtsvg,
+{ mkKdeDerivation
+, shared-mime-info
+, qt5compat
+, qtsvg
+,
 }:
 mkKdeDerivation {
   pname = "massif-visualizer";

@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qttools,
-  qtdeclarative,
-  libcanberra,
+{ mkKdeDerivation
+, qttools
+, qtdeclarative
+, libcanberra
+,
 }:
 mkKdeDerivation {
   pname = "knotifications";

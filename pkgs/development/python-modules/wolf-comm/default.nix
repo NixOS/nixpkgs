@@ -1,13 +1,13 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  lib,
-  lxml,
-  pkce,
-  setuptools,
-  shortuuid,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, lib
+, lxml
+, pkce
+, setuptools
+, shortuuid
+,
 }:
 
 buildPythonPackage rec {

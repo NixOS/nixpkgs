@@ -6,12 +6,12 @@
 # Of course, use of the driver in /usr/lib is highly impure.  But it
 # might actually work ;-)
 
-{
-  lib,
-  stdenv,
-  xorg,
-  expat,
-  libdrm,
+{ lib
+, stdenv
+, xorg
+, expat
+, libdrm
+,
 }:
 
 stdenv.mkDerivation {

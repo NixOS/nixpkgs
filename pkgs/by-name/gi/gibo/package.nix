@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPackages
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+, installShellFiles
+, writableTmpDirAsHomeHook
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "gibo";

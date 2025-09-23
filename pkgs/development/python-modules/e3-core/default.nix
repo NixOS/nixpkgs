@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  buildPythonPackage,
-  colorama,
-  distro,
-  fetchFromGitHub,
-  packaging,
-  psutil,
-  python-dateutil,
-  pythonOlder,
-  pyyaml,
-  requests-cache,
-  requests-toolbelt,
-  requests,
-  setuptools,
-  stevedore,
-  tqdm,
+{ lib
+, stdenv
+, autoPatchelfHook
+, buildPythonPackage
+, colorama
+, distro
+, fetchFromGitHub
+, packaging
+, psutil
+, python-dateutil
+, pythonOlder
+, pyyaml
+, requests-cache
+, requests-toolbelt
+, requests
+, setuptools
+, stevedore
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

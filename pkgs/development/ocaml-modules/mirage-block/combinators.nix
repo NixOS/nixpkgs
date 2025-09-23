@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  mirage-block,
-  logs,
+{ buildDunePackage
+, mirage-block
+, logs
+,
 }:
 
 buildDunePackage {

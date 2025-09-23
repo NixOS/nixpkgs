@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  # install requirements
-  six,
-  fido2,
-  keyring,
-  cryptography,
-  # test requirements
-  pytestCheckHook,
-  unittestCheckHook,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, # install requirements
+  six
+, fido2
+, keyring
+, cryptography
+, # test requirements
+  pytestCheckHook
+, unittestCheckHook
+, mock
+,
 }:
 
 let

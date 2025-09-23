@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildDunePackage,
-  ff-sig,
-  zarith,
+{ lib
+, fetchFromGitLab
+, buildDunePackage
+, ff-sig
+, zarith
+,
 }:
 
 buildDunePackage rec {

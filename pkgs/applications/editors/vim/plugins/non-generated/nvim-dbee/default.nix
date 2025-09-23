@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  arrow-cpp,
-  duckdb,
-  nix-update-script,
-  stdenv,
-  vimPlugins,
-  vimUtils,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, arrow-cpp
+, duckdb
+, nix-update-script
+, stdenv
+, vimPlugins
+, vimUtils
+,
 }:
 let
   version = "0.1.9";

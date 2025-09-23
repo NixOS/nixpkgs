@@ -1,21 +1,21 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  aioresponses,
-  aiozoneinfo,
-  asyncclick,
-  buildPythonPackage,
-  debugpy,
-  fetchFromGitHub,
-  hatchling,
-  pytest-asyncio,
-  pytest-freezer,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  syrupy,
-  voluptuous,
+{ lib
+, aiofiles
+, aiohttp
+, aioresponses
+, aiozoneinfo
+, asyncclick
+, buildPythonPackage
+, debugpy
+, fetchFromGitHub
+, hatchling
+, pytest-asyncio
+, pytest-freezer
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, syrupy
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

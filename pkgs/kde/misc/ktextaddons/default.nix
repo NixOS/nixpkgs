@@ -1,10 +1,10 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  qtspeech,
-  qttools,
-  kxmlgui,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, qtspeech
+, qttools
+, kxmlgui
+,
 }:
 mkKdeDerivation rec {
   pname = "ktextaddons";

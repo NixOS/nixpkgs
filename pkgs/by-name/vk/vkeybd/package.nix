@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  libX11,
-  makeWrapper,
-  tcl,
-  tk,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, libX11
+, makeWrapper
+, tcl
+, tk
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  waymore,
-  testers,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, waymore
+, testers
+,
 }:
 
 python3Packages.buildPythonApplication rec {

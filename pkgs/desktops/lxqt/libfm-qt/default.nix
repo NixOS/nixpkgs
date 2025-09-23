@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libXdmcp,
-  libexif,
-  libfm,
-  libpthreadstubs,
-  libxcb,
-  lxqt-build-tools,
-  lxqt-menu-data,
-  menu-cache,
-  pkg-config,
-  qttools,
-  wrapQtAppsHook,
-  gitUpdater,
-  version ? "2.2.0",
-  qtx11extras ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libXdmcp
+, libexif
+, libfm
+, libpthreadstubs
+, libxcb
+, lxqt-build-tools
+, lxqt-menu-data
+, menu-cache
+, pkg-config
+, qttools
+, wrapQtAppsHook
+, gitUpdater
+, version ? "2.2.0"
+, qtx11extras ? null
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
       {
         "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
         "2.2.0" = "sha256-xLXHwrcMJ8PObZ2qWVZTf9FREcjUi5qtcCJgNHj391Q=";
-      }
-      ."${version}";
+      }."${version}";
   };
 
   nativeBuildInputs = [

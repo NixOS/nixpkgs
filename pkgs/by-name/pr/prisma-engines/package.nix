@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  openssl,
-  pkg-config,
-  protobuf,
-  rustPlatform,
-  stdenv,
+{ fetchFromGitHub
+, lib
+, openssl
+, pkg-config
+, protobuf
+, rustPlatform
+, stdenv
+,
 }:
 
 # Updating this package will force an update for prisma. The

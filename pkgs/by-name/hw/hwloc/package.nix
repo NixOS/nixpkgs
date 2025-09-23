@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  expat,
-  ncurses,
-  pciutils,
-  numactl,
-  x11Support ? false,
-  libX11,
-  cairo,
-  config,
-  enableCuda ? config.cudaSupport,
-  cudaPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, expat
+, ncurses
+, pciutils
+, numactl
+, x11Support ? false
+, libX11
+, cairo
+, config
+, enableCuda ? config.cudaSupport
+, cudaPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

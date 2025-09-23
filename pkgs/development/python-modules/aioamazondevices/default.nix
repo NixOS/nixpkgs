@@ -1,16 +1,16 @@
-{
-  aiohttp,
-  beautifulsoup4,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  langcodes,
-  lib,
-  orjson,
-  poetry-core,
-  pytest-cov-stub,
-  pytestCheckHook,
-  yarl,
+{ aiohttp
+, beautifulsoup4
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, langcodes
+, lib
+, orjson
+, poetry-core
+, pytest-cov-stub
+, pytestCheckHook
+, yarl
+,
 }:
 
 buildPythonPackage rec {

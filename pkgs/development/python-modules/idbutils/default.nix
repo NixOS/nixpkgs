@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  sqlalchemy,
-  requests,
-  python-dateutil,
-  tqdm,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, sqlalchemy
+, requests
+, python-dateutil
+, tqdm
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

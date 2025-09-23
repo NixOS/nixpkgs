@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  alsa-lib,
-  at-spi2-atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  glib,
-  gtk3,
-  libGL,
-  libgbm,
-  libxkbcommon,
-  musl,
-  nspr,
-  nss,
-  pango,
-  udev,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, alsa-lib
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, expat
+, glib
+, gtk3
+, libGL
+, libgbm
+, libxkbcommon
+, musl
+, nspr
+, nss
+, pango
+, udev
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       selectSystem =
         attrs:
-        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       arch = selectSystem {
         x86_64-linux = "amd64";
         aarch64-linux = "arm64";

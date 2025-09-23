@@ -1,52 +1,44 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  hatch-fancy-pypi-readme,
-
-  # dependencies
-  anyio,
-  distro,
-  httpx,
-  jiter,
-  pydantic,
-  sniffio,
-  tqdm,
-  typing-extensions,
-
-  # optional-dependencies (aiohttp)
-  aiohttp,
-  httpx-aiohttp,
-
-  # optional-dependencies (datalib)
-  numpy,
-  pandas,
-  pandas-stubs,
-
-  # optional-dependencies (realtime)
-  websockets,
-
-  # optional-dependencies (voice-helpers)
-  sounddevice,
-
-  # check deps
-  pytestCheckHook,
-  dirty-equals,
-  inline-snapshot,
-  nest-asyncio,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-xdist,
-  respx,
-
-  # optional-dependencies toggle
-  withAiohttp ? true,
-  withDatalib ? false,
-  withRealtime ? true,
-  withVoiceHelpers ? true,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, hatch-fancy-pypi-readme
+, # dependencies
+  anyio
+, distro
+, httpx
+, jiter
+, pydantic
+, sniffio
+, tqdm
+, typing-extensions
+, # optional-dependencies (aiohttp)
+  aiohttp
+, httpx-aiohttp
+, # optional-dependencies (datalib)
+  numpy
+, pandas
+, pandas-stubs
+, # optional-dependencies (realtime)
+  websockets
+, # optional-dependencies (voice-helpers)
+  sounddevice
+, # check deps
+  pytestCheckHook
+, dirty-equals
+, inline-snapshot
+, nest-asyncio
+, pytest-asyncio
+, pytest-mock
+, pytest-xdist
+, respx
+, # optional-dependencies toggle
+  withAiohttp ? true
+, withDatalib ? false
+, withRealtime ? true
+, withVoiceHelpers ? true
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  lib,
-  pythonOlder,
-  setuptools,
-  tomli,
-  twisted,
+{ buildPythonPackage
+, click
+, fetchFromGitHub
+, lib
+, pythonOlder
+, setuptools
+, tomli
+, twisted
+,
 }:
 
 let

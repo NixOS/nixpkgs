@@ -5,9 +5,9 @@ with pkgs.lib;
 let
   makeKafkaTest =
     name:
-    {
-      kafkaPackage,
-      mode ? "kraft",
+    { kafkaPackage
+    , mode ? "kraft"
+    ,
     }:
     (import ../make-test-python.nix ({
       inherit name;

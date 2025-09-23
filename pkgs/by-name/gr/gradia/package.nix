@@ -1,24 +1,24 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  appstream,
-  gtksourceview5,
-  desktop-file-utils,
-  gobject-introspection,
-  wrapGAppsHook4,
-  blueprint-compiler,
-  pkg-config,
-  libadwaita,
-  libportal-gtk4,
-  gnome,
-  librsvg,
-  webp-pixbuf-loader,
-  libsoup_3,
-  bash,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, meson
+, ninja
+, appstream
+, gtksourceview5
+, desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook4
+, blueprint-compiler
+, pkg-config
+, libadwaita
+, libportal-gtk4
+, gnome
+, librsvg
+, webp-pixbuf-loader
+, libsoup_3
+, bash
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";

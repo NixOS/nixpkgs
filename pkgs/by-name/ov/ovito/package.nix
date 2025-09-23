@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchurl,
-  makeDesktopItem,
-  cmake,
-  boost,
-  bzip2,
-  ffmpeg,
-  fftwSinglePrec,
-  hdf5,
-  muparser,
-  netcdf,
-  openssl,
-  python3,
-  qt6Packages,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchurl
+, makeDesktopItem
+, cmake
+, boost
+, bzip2
+, ffmpeg
+, fftwSinglePrec
+, hdf5
+, muparser
+, netcdf
+, openssl
+, python3
+, qt6Packages
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation rec {

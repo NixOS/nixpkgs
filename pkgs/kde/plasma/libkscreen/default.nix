@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qtwayland,
-  qttools,
-  jq,
-  wayland,
+{ mkKdeDerivation
+, qtwayland
+, qttools
+, jq
+, wayland
+,
 }:
 mkKdeDerivation {
   pname = "libkscreen";

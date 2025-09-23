@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  protobuf,
-  pcre2,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, pkg-config
+, protobuf
+, pcre2
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

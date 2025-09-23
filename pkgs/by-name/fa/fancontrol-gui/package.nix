@@ -1,14 +1,14 @@
-{
-  cmake,
-  extra-cmake-modules,
-  fancontrol-gui,
-  fetchFromGitHub,
-  lib,
-  libgcc,
-  libsForQt5,
-  nix-update-script,
-  stdenv,
-  testers,
+{ cmake
+, extra-cmake-modules
+, fancontrol-gui
+, fetchFromGitHub
+, lib
+, libgcc
+, libsForQt5
+, nix-update-script
+, stdenv
+, testers
+,
 }:
 stdenv.mkDerivation rec {
   pname = "fancontrol-gui";

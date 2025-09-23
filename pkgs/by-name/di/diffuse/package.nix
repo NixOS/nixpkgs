@@ -1,18 +1,18 @@
-{
-  lib,
-  gitUpdater,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  gettext,
-  wrapGAppsHook3,
-  gobject-introspection,
-  pango,
-  gdk-pixbuf,
-  python3,
-  atk,
-  gtk3,
-  hicolor-icon-theme,
+{ lib
+, gitUpdater
+, fetchFromGitHub
+, meson
+, ninja
+, gettext
+, wrapGAppsHook3
+, gobject-introspection
+, pango
+, gdk-pixbuf
+, python3
+, atk
+, gtk3
+, hicolor-icon-theme
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

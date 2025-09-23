@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  runCommand,
-  which,
-  python3,
-  help2man,
-  makeWrapper,
-  ethtool,
-  inetutils,
-  iperf,
-  iproute2,
-  net-tools,
-  socat,
+{ stdenv
+, lib
+, fetchFromGitHub
+, runCommand
+, which
+, python3
+, help2man
+, makeWrapper
+, ethtool
+, inetutils
+, iperf
+, iproute2
+, net-tools
+, socat
+,
 }:
 
 let

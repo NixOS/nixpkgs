@@ -1,22 +1,22 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  intltool,
-  glib,
-  gtk3,
-  lasem,
-  libgsf,
-  libxml2,
-  libxslt,
-  cairo,
-  pango,
-  librsvg,
-  gnome,
-  autoreconfHook,
-  gtk-doc,
-  gnumeric,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, intltool
+, glib
+, gtk3
+, lasem
+, libgsf
+, libxml2
+, libxslt
+, cairo
+, pango
+, librsvg
+, gnome
+, autoreconfHook
+, gtk-doc
+, gnumeric
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

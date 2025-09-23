@@ -1,39 +1,39 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  nix-update-script,
-  cmake,
-  pkg-config,
-  git,
-  qt6Packages,
-  openal,
-  glew,
-  vulkan-headers,
-  vulkan-loader,
-  libpng,
-  libSM,
-  ffmpeg,
-  libevdev,
-  libusb1,
-  zlib,
-  curl,
-  wolfssl,
-  python3,
-  pugixml,
-  flatbuffers,
-  llvm_18,
-  cubeb,
-  opencv,
-  enableDiscordRpc ? false,
-  faudioSupport ? true,
-  faudio,
-  SDL2,
-  sdl3,
-  waylandSupport ? true,
-  wayland,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, nix-update-script
+, cmake
+, pkg-config
+, git
+, qt6Packages
+, openal
+, glew
+, vulkan-headers
+, vulkan-loader
+, libpng
+, libSM
+, ffmpeg
+, libevdev
+, libusb1
+, zlib
+, curl
+, wolfssl
+, python3
+, pugixml
+, flatbuffers
+, llvm_18
+, cubeb
+, opencv
+, enableDiscordRpc ? false
+, faudioSupport ? true
+, faudio
+, SDL2
+, sdl3
+, waylandSupport ? true
+, wayland
+, wrapGAppsHook3
+,
 }:
 
 let

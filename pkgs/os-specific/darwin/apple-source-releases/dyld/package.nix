@@ -1,14 +1,14 @@
-{
-  lib,
-  apple-sdk_12,
-  ld64,
-  mkAppleDerivation,
-  cmake,
-  llvmPackages,
-  openssl,
-  pkg-config,
-  stdenvNoCC,
-  fetchurl,
+{ lib
+, apple-sdk_12
+, ld64
+, mkAppleDerivation
+, cmake
+, llvmPackages
+, openssl
+, pkg-config
+, stdenvNoCC
+, fetchurl
+,
 }:
 
 let

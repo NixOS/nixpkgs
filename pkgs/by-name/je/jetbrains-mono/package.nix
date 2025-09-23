@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  python3Packages,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, python3Packages
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

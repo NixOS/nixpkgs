@@ -1,16 +1,16 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  orjson,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  schema,
-  setuptools,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, orjson
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, schema
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

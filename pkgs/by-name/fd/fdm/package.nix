@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  openssl,
-  tdb,
-  zlib,
-  flex,
-  bison,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, openssl
+, tdb
+, zlib
+, flex
+, bison
+,
 }:
 
 stdenv.mkDerivation rec {

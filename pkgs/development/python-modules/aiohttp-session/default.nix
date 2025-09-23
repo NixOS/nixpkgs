@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiohttp,
-
-  # optional-dependencies
-  aiomcache,
-  cryptography,
-  pynacl,
-  redis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiohttp
+, # optional-dependencies
+  aiomcache
+, cryptography
+, pynacl
+, redis
+,
 }:
 
 buildPythonPackage rec {

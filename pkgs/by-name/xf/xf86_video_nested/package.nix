@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  xorgproto,
-  libX11,
-  libXext,
-  pixman,
-  pkg-config,
-  utilmacros,
-  xorgserver,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, xorgproto
+, libX11
+, libXext
+, pixman
+, pkg-config
+, utilmacros
+, xorgserver
+,
 }:
 
 stdenv.mkDerivation {

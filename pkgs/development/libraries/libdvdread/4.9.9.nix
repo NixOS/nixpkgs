@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libdvdcss,
+{ lib
+, stdenv
+, fetchurl
+, libdvdcss
+,
 }:
 
 stdenv.mkDerivation rec {

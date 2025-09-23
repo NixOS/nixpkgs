@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  hatch-jupyter-builder,
-  hatch-nodejs-version,
-  ipywidgets,
-  jupyterlab,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, hatch-jupyter-builder
+, hatch-nodejs-version
+, ipywidgets
+, jupyterlab
+,
 }:
 
 buildPythonPackage rec {

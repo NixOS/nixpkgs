@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  hatchling,
-
-  # dependencies
-  aiosqlite,
-  langgraph-checkpoint,
-  sqlite-vec,
-
-  # testing
-  pytest-asyncio,
-  pytestCheckHook,
-  sqlite,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  hatchling
+, # dependencies
+  aiosqlite
+, langgraph-checkpoint
+, sqlite-vec
+, # testing
+  pytest-asyncio
+, pytestCheckHook
+, sqlite
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

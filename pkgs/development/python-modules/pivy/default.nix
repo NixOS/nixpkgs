@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pkgs,
-  qtbase,
-  qmake,
-  soqt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pkgs
+, qtbase
+, qmake
+, soqt
+,
 }:
 
 buildPythonPackage rec {

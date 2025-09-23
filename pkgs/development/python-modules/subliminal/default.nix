@@ -1,32 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  babelfish,
-  beautifulsoup4,
-  chardet,
-  click,
-  click-option-group,
-  dogpile-cache,
-  enzyme,
-  guessit,
-  srt,
-  pysubs2,
-  rarfile,
-  requests,
-  platformdirs,
-  setuptools,
-  stevedore,
-  tomli,
-
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
-  mypy,
-  sympy,
-  vcrpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, babelfish
+, beautifulsoup4
+, chardet
+, click
+, click-option-group
+, dogpile-cache
+, enzyme
+, guessit
+, srt
+, pysubs2
+, rarfile
+, requests
+, platformdirs
+, setuptools
+, stevedore
+, tomli
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-xdist
+, mypy
+, sympy
+, vcrpy
+,
 }:
 
 buildPythonPackage rec {

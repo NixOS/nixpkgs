@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildFHSEnv,
-  corefonts,
-  dejavu_fonts,
-  dpkg,
-  fetchurl,
-  gcc-unwrapped,
-  liberation_ttf_v1,
-  writeScript,
-  xorg,
+{ lib
+, stdenv
+, buildFHSEnv
+, corefonts
+, dejavu_fonts
+, dpkg
+, fetchurl
+, gcc-unwrapped
+, liberation_ttf_v1
+, writeScript
+, xorg
+,
 }:
 
 let
@@ -28,8 +28,7 @@ let
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
           sha256 = "sha256-zEI9R5AOkE1gMZHL209l6HOh/yfZgmEvMw8+hb9kC+s=";
         };
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
     );
 
     preferLocalBuild = true;

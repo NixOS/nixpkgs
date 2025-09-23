@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  fetchpatch,
-  cmake,
-  installShellFiles,
-  boost,
-  lua,
-  protobuf_21,
-  rapidjson,
-  shapelib,
-  sqlite,
-  zlib,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, fetchpatch
+, cmake
+, installShellFiles
+, boost
+, lua
+, protobuf_21
+, rapidjson
+, shapelib
+, sqlite
+, zlib
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

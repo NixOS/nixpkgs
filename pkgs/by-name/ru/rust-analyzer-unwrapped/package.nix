@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  libiconv,
-  useMimalloc ? false,
-  doCheck ? true,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, libiconv
+, useMimalloc ? false
+, doCheck ? true
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

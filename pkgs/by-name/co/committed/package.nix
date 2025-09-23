@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  versionCheckHook,
-  nix-update-script,
-  git,
-  libz,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, versionCheckHook
+, nix-update-script
+, git
+, libz
+,
 }:
 let
   version = "1.1.7";

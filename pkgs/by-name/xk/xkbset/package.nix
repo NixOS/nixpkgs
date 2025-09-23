@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, libX11
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

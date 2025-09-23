@@ -1,15 +1,15 @@
-{
-  lib,
-  kernel,
-  stdenv,
-  clang-tools,
-  llvmPackages,
-  elfutils,
-  flex,
-  bison,
-  bc,
-  opensnitch,
-  nixosTests,
+{ lib
+, kernel
+, stdenv
+, clang-tools
+, llvmPackages
+, elfutils
+, flex
+, bison
+, bc
+, opensnitch
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

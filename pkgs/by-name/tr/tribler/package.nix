@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  python312,
-  makeWrapper,
-  nix-update-script,
-  fetchFromGitHub,
-  rustPlatform,
-  buildNpmPackage,
-  nodejs_24,
-  wrapGAppsHook3,
-  libappindicator-gtk3,
+{ lib
+, stdenv
+, python312
+, makeWrapper
+, nix-update-script
+, fetchFromGitHub
+, rustPlatform
+, buildNpmPackage
+, nodejs_24
+, wrapGAppsHook3
+, libappindicator-gtk3
+,
 }:
 let
   version = "8.2.3";

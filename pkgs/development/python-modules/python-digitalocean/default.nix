@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jsonpickle,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jsonpickle
+, pytestCheckHook
+, pythonOlder
+, requests
+, responses
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

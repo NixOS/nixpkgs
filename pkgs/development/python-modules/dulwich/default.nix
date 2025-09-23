@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  cargo,
-  fastimport,
-  fetchFromGitHub,
-  gevent,
-  geventhttpclient,
-  git,
-  glibcLocales,
-  gnupg,
-  gpgme,
-  merge3,
-  paramiko,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
-  rustPlatform,
-  rustc,
-  setuptools,
-  setuptools-rust,
-  typing-extensions,
-  urllib3,
+{ lib
+, buildPythonPackage
+, cargo
+, fastimport
+, fetchFromGitHub
+, gevent
+, geventhttpclient
+, git
+, glibcLocales
+, gnupg
+, gpgme
+, merge3
+, paramiko
+, pytestCheckHook
+, pythonOlder
+, rich
+, rustPlatform
+, rustc
+, setuptools
+, setuptools-rust
+, typing-extensions
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

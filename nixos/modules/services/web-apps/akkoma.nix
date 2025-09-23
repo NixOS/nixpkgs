@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -100,14 +99,15 @@ let
     let
       elixirValue' =
         with types;
-        nullOr (oneOf [
-          bool
-          int
-          float
-          str
-          (attrsOf elixirValue')
-          (listOf elixirValue')
-        ])
+        nullOr
+          (oneOf [
+            bool
+            int
+            float
+            str
+            (attrsOf elixirValue')
+            (listOf elixirValue')
+          ])
         // {
           description = "Elixir value";
         };
@@ -141,7 +141,7 @@ let
   replaceSec =
     let
       replaceSec' =
-        { }@args:
+        {}@args:
         v:
         if isAttrs v then
           if v ? _secret then
@@ -193,15 +193,16 @@ let
             else
               mkRaw (erlAddr addr);
         }
-      ] cfg.config
+      ]
+        cfg.config
     )
   );
 
   writeShell =
-    {
-      name,
-      text,
-      runtimeInputs ? [ ],
+    { name
+    , text
+    , runtimeInputs ? [ ]
+    ,
     }:
     pkgs.writeShellApplication { inherit name text runtimeInputs; } + "/bin/${name}";
 
@@ -471,26 +472,27 @@ let
 
   socketScript =
     if isAbsolutePath web.http.ip then
-      writeShell {
-        name = "akkoma-socket";
-        runtimeInputs = with pkgs; [
-          coreutils
-          inotify-tools
-        ];
-        text = ''
-          coproc {
-            inotifywait -q -m -e create ${escapeShellArg (dirOf web.http.ip)}
-          }
+      writeShell
+        {
+          name = "akkoma-socket";
+          runtimeInputs = with pkgs; [
+            coreutils
+            inotify-tools
+          ];
+          text = ''
+            coproc {
+              inotifywait -q -m -e create ${escapeShellArg (dirOf web.http.ip)}
+            }
 
-          trap 'kill "$COPROC_PID"' EXIT TERM
+            trap 'kill "$COPROC_PID"' EXIT TERM
 
-          until test -S ${escapeShellArg web.http.ip}
-            do read -r -u "''${COPROC[0]}"
-          done
+            until test -S ${escapeShellArg web.http.ip}
+              do read -r -u "''${COPROC[0]}"
+            done
 
-          chmod 0666 ${escapeShellArg web.http.ip}
-        '';
-      }
+            chmod 0666 ${escapeShellArg web.http.ip}
+          '';
+        }
     else
       null;
 
@@ -982,13 +984,15 @@ in
 
               ":frontends" = mkOption {
                 type = elixirValue;
-                default = mapAttrs (
-                  key: val:
-                  mkMap {
-                    name = val.name;
-                    ref = val.ref;
-                  }
-                ) cfg.frontends;
+                default = mapAttrs
+                  (
+                    key: val:
+                      mkMap {
+                        name = val.name;
+                        ref = val.ref;
+                      }
+                  )
+                  cfg.frontends;
                 defaultText = literalExpression ''
                   lib.mapAttrs (key: val:
                     (pkgs.formats.elixirConf { }).lib.mkMap { name = val.name; ref = val.ref; })
@@ -1336,11 +1340,12 @@ in
           RestrictSUIDSGID = true;
           RemoveIPC = true;
 
-          CapabilityBoundingSet = mkIf (any (port: port > 0 && port < 1024) [
-            web.http.port
-            cfg.dist.epmdPort
-            cfg.dist.portMin
-          ]) [ "CAP_NET_BIND_SERVICE" ];
+          CapabilityBoundingSet = mkIf
+            (any (port: port > 0 && port < 1024) [
+              web.http.port
+              cfg.dist.epmdPort
+              cfg.dist.portMin
+            ]) [ "CAP_NET_BIND_SERVICE" ];
 
           NoNewPrivileges = true;
           SystemCallFilter = [

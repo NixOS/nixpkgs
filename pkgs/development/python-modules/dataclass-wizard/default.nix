@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-mock,
-  pytestCheckHook,
-  python-dotenv,
-  pythonAtLeast,
-  pythonOlder,
-  pytimeparse,
-  pyyaml,
-  setuptools,
-  typing-extensions,
-  tomli-w,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-mock
+, pytestCheckHook
+, python-dotenv
+, pythonAtLeast
+, pythonOlder
+, pytimeparse
+, pyyaml
+, setuptools
+, typing-extensions
+, tomli-w
+,
 }:
 
 buildPythonPackage rec {

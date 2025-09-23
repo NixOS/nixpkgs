@@ -1,79 +1,74 @@
-{
-  stdenv,
-  lib,
-  nixosTests,
-  pkgsCross,
-  testers,
-  fetchFromGitHub,
-  fetchzip,
-  buildPackages,
-  makeBinaryWrapper,
-  ninja,
-  meson,
-  m4,
-  pkg-config,
-  coreutils,
-  gperf,
-  getent,
-  glibcLocales,
-  autoPatchelfHook,
-  fetchpatch,
-
-  # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
-  glib,
-  gettext,
-  python3Packages,
-
-  # Mandatory dependencies
-  libcap,
-  util-linux,
-  kbd,
-  kmod,
-  libxcrypt,
-
-  # Optional dependencies
-  pam,
-  cryptsetup,
-  audit,
-  acl,
-  lz4,
-  openssl,
-  libgcrypt,
-  libgpg-error,
-  libidn2,
-  curl,
-  gnutar,
-  gnupg,
-  zlib,
-  xz,
-  zstd,
-  tpm2-tss,
-  libuuid,
-  libapparmor,
-  intltool,
-  bzip2,
-  pcre2,
-  elfutils,
-  linuxHeaders ? stdenv.cc.libc.linuxHeaders,
-  gnutls,
-  iptables,
-  withSelinux ? false,
-  libselinux,
-  withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
-  libseccomp,
-  withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools,
-  kexec-tools,
-  bash,
-  bashNonInteractive,
-  libmicrohttpd,
-  libfido2,
-  p11-kit,
-  libpwquality,
-  qrencode,
-  libarchive,
-  llvmPackages,
-
-  # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
+{ stdenv
+, lib
+, nixosTests
+, pkgsCross
+, testers
+, fetchFromGitHub
+, fetchzip
+, buildPackages
+, makeBinaryWrapper
+, ninja
+, meson
+, m4
+, pkg-config
+, coreutils
+, gperf
+, getent
+, glibcLocales
+, autoPatchelfHook
+, fetchpatch
+, # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
+  glib
+, gettext
+, python3Packages
+, # Mandatory dependencies
+  libcap
+, util-linux
+, kbd
+, kmod
+, libxcrypt
+, # Optional dependencies
+  pam
+, cryptsetup
+, audit
+, acl
+, lz4
+, openssl
+, libgcrypt
+, libgpg-error
+, libidn2
+, curl
+, gnutar
+, gnupg
+, zlib
+, xz
+, zstd
+, tpm2-tss
+, libuuid
+, libapparmor
+, intltool
+, bzip2
+, pcre2
+, elfutils
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnutls
+, iptables
+, withSelinux ? false
+, libselinux
+, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
+, libseccomp
+, withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
+, kexec-tools
+, bash
+, bashNonInteractive
+, libmicrohttpd
+, libfido2
+, p11-kit
+, libpwquality
+, qrencode
+, libarchive
+, llvmPackages
+, # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
   # be available during build time.
   # Only libbpf should be a runtime dependency.
   # Note: llvmPackages is explicitly taken from buildPackages instead of relying
@@ -84,46 +79,42 @@
   # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to
   # us. Working around this is important, because systemd is in the dependency
   # closure of GHC via emscripten and jdk.
-  bpftools,
-  libbpf,
-
-  # Needed to produce a ukify that works for cross compiling UKIs.
-  targetPackages,
-
-  withAcl ? true,
-  withAnalyze ? true,
-  withApparmor ? true,
-  withAudit ? true,
-  # compiles systemd-boot, assumes EFI is available.
-  withBootloader ?
-    withEfi
+  bpftools
+, libbpf
+, # Needed to produce a ukify that works for cross compiling UKIs.
+  targetPackages
+, withAcl ? true
+, withAnalyze ? true
+, withApparmor ? true
+, withAudit ? true
+, # compiles systemd-boot, assumes EFI is available.
+  withBootloader ? withEfi
     && !stdenv.hostPlatform.isMusl
     # "Unknown 64-bit data model"
-    && !stdenv.hostPlatform.isRiscV32,
-  # adds bzip2, lz4, xz and zstd
-  withCompression ? true,
-  withCoredump ? true,
-  withCryptsetup ? true,
-  withRepart ? true,
-  withDocumentation ? true,
-  withEfi ? stdenv.hostPlatform.isEfi,
-  withFido2 ? true,
-  withFirstboot ? true,
-  withGcrypt ? true,
-  withHomed ? !stdenv.hostPlatform.isMusl,
-  withHostnamed ? true,
-  withHwdb ? true,
-  withImportd ? !stdenv.hostPlatform.isMusl,
-  withKmod ? true,
-  withLibBPF ?
-    lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && !stdenv.hostPlatform.isRiscV32
+, # adds bzip2, lz4, xz and zstd
+  withCompression ? true
+, withCoredump ? true
+, withCryptsetup ? true
+, withRepart ? true
+, withDocumentation ? true
+, withEfi ? stdenv.hostPlatform.isEfi
+, withFido2 ? true
+, withFirstboot ? true
+, withGcrypt ? true
+, withHomed ? !stdenv.hostPlatform.isMusl
+, withHostnamed ? true
+, withHwdb ? true
+, withImportd ? !stdenv.hostPlatform.isMusl
+, withKmod ? true
+, withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     # assumes hard floats
     && (
-      stdenv.hostPlatform.isAarch
+    stdenv.hostPlatform.isAarch
       ->
-        stdenv.hostPlatform.parsed.cpu ? version
+      stdenv.hostPlatform.parsed.cpu ? version
         && lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6"
-    )
+  )
     # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
     && !stdenv.hostPlatform.isMips64
     # https://reviews.llvm.org/D43106#1019077
@@ -131,53 +122,52 @@
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
     # but we do it this way to avoid taking llvmPackages as an input, and
     # risking making it too easy to ignore the above comment about llvmPackages.
-    && lib.meta.availableOn stdenv.hostPlatform buildPackages.targetPackages.llvmPackages.compiler-rt,
-  withLibidn2 ? true,
-  withLocaled ? true,
-  withLogind ? true,
-  withMachined ? true,
-  withNetworkd ? true,
-  withNspawn ? !buildLibsOnly,
-  withNss ? !stdenv.hostPlatform.isMusl,
-  withOomd ? true,
-  withOpenSSL ? true,
-  withPam ? true,
-  withPasswordQuality ? true,
-  withPCRE2 ? true,
-  withPolkit ? true,
-  withPortabled ? !stdenv.hostPlatform.isMusl,
-  withQrencode ? true,
-  withRemote ? !stdenv.hostPlatform.isMusl,
-  withResolved ? true,
-  withShellCompletions ? true,
-  withSysusers ? true,
-  withSysupdate ? true,
-  withTimedated ? true,
-  withTimesyncd ? true,
-  withTpm2Tss ? true,
-  # adds python to closure which is too much by default
-  withUkify ? false,
-  withUserDb ? true,
-  withUtmp ? !stdenv.hostPlatform.isMusl,
-  withVmspawn ? true,
-  # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
+    && lib.meta.availableOn stdenv.hostPlatform buildPackages.targetPackages.llvmPackages.compiler-rt
+, withLibidn2 ? true
+, withLocaled ? true
+, withLogind ? true
+, withMachined ? true
+, withNetworkd ? true
+, withNspawn ? !buildLibsOnly
+, withNss ? !stdenv.hostPlatform.isMusl
+, withOomd ? true
+, withOpenSSL ? true
+, withPam ? true
+, withPasswordQuality ? true
+, withPCRE2 ? true
+, withPolkit ? true
+, withPortabled ? !stdenv.hostPlatform.isMusl
+, withQrencode ? true
+, withRemote ? !stdenv.hostPlatform.isMusl
+, withResolved ? true
+, withShellCompletions ? true
+, withSysusers ? true
+, withSysupdate ? true
+, withTimedated ? true
+, withTimesyncd ? true
+, withTpm2Tss ? true
+, # adds python to closure which is too much by default
+  withUkify ? false
+, withUserDb ? true
+, withUtmp ? !stdenv.hostPlatform.isMusl
+, withVmspawn ? true
+, # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
   # building disk images for non-NixOS systems. To save users from trying to use it
   # on their live NixOS system, we disable it by default.
-  withKernelInstall ? false,
-  withLibarchive ? true,
-  # tests assume too much system access for them to be feasible for us right now
-  withTests ? false,
-  # build only libudev and libsystemd
-  buildLibsOnly ? false,
-
-  # yes, pname is an argument here
-  pname ? "systemd",
-
-  libxslt,
-  docbook_xsl,
-  docbook_xml_dtd_42,
-  docbook_xml_dtd_45,
-  withLogTrace ? false,
+  withKernelInstall ? false
+, withLibarchive ? true
+, # tests assume too much system access for them to be feasible for us right now
+  withTests ? false
+, # build only libudev and libsystemd
+  buildLibsOnly ? false
+, # yes, pname is an argument here
+  pname ? "systemd"
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
+, withLogTrace ? false
+,
 }:
 
 assert withImportd -> withCompression;
@@ -364,12 +354,12 @@ stdenv.mkDerivation (finalAttrs: {
     bash
     (buildPackages.python3Packages.python.withPackages (
       ps:
-      with ps;
-      [
-        lxml
-        jinja2
-      ]
-      ++ lib.optional withEfi ps.pyelftools
+        with ps;
+        [
+          lxml
+          jinja2
+        ]
+        ++ lib.optional withEfi ps.pyelftools
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -718,19 +708,19 @@ stdenv.mkDerivation (finalAttrs: {
 
       # { replacement, search, where, ignore } -> List[str]
       mkSubstitute =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
+        { replacement
+        , search
+        , where
+        , ignore ? [ ]
+        ,
         }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
       mkEnsureSubstituted =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
+        { replacement
+        , search
+        , where
+        , ignore ? [ ]
+        ,
         }:
         let
           ignore' = lib.concatStringsSep "|" (
@@ -939,10 +929,12 @@ stdenv.mkDerivation (finalAttrs: {
         # not individual tests themselves. Let's gather them into one set.
         gatherNixosTestsFromCollection =
           prefix: collection:
-          lib.mapAttrs' (name: value: {
-            name = "${prefix}-${name}";
-            inherit value;
-          }) collection;
+          lib.mapAttrs'
+            (name: value: {
+              name = "${prefix}-${name}";
+              inherit value;
+            })
+            collection;
 
         # Here's all the nixosTests that are collections of tests, rather than individual tests.
         collectedNixosTests = lib.mergeAttrsList (
@@ -1019,11 +1011,13 @@ stdenv.mkDerivation (finalAttrs: {
         };
 
         # Finally, make an attrset we're fairly sure is just tests.
-        relevantNixosTests = lib.mapAttrs (
-          name: value:
-          assert lib.assertMsg (lib.isDerivation value) "${name} is not a derivation";
-          value
-        ) (individualNixosTests // collectedNixosTests);
+        relevantNixosTests = lib.mapAttrs
+          (
+            name: value:
+              assert lib.assertMsg (lib.isDerivation value) "${name} is not a derivation";
+              value
+          )
+          (individualNixosTests // collectedNixosTests);
       in
       relevantNixosTests
       // {

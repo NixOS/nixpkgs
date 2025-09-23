@@ -1,25 +1,25 @@
-{
-  fetchFromGitHub,
-  cargo-tauri,
-  fetchFromRadicle,
-  git,
-  glib,
-  gtk3,
-  fetchNpmDeps,
-  npmHooks,
-  lib,
-  libsoup_3,
-  nodejs,
-  openssh,
-  openssl,
-  pkg-config,
-  playwright-driver,
-  radicle-node,
-  rustPlatform,
-  webkitgtk_4_1,
-  wrapGAppsHook4,
-  rustfmt,
-  clippy,
+{ fetchFromGitHub
+, cargo-tauri
+, fetchFromRadicle
+, git
+, glib
+, gtk3
+, fetchNpmDeps
+, npmHooks
+, lib
+, libsoup_3
+, nodejs
+, openssh
+, openssl
+, pkg-config
+, playwright-driver
+, radicle-node
+, rustPlatform
+, webkitgtk_4_1
+, wrapGAppsHook4
+, rustfmt
+, clippy
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

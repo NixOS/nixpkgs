@@ -1,26 +1,26 @@
-{
-  lib,
-  autopep8,
-  buildPythonPackage,
-  django,
-  factory-boy,
-  fetchFromGitHub,
-  freezegun,
-  gprof2dot,
-  jinja2,
-  mock,
-  networkx,
-  pillow,
-  pydot,
-  pygments,
-  python,
-  python-dateutil,
-  pythonOlder,
-  pytz,
-  requests,
-  setuptools-scm,
-  simplejson,
-  sqlparse,
+{ lib
+, autopep8
+, buildPythonPackage
+, django
+, factory-boy
+, fetchFromGitHub
+, freezegun
+, gprof2dot
+, jinja2
+, mock
+, networkx
+, pillow
+, pydot
+, pygments
+, python
+, python-dateutil
+, pythonOlder
+, pytz
+, requests
+, setuptools-scm
+, simplejson
+, sqlparse
+,
 }:
 
 buildPythonPackage rec {

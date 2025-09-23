@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  python3,
-  meson,
-  ninja,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, python3
+, meson
+, ninja
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorgproto";

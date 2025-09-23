@@ -1,15 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  flask,
-  werkzeug,
-  pytestCheckHook,
-  setuptools,
-
-  # for passthru.tests
-  aiobotocore,
-  moto,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, flask
+, werkzeug
+, pytestCheckHook
+, setuptools
+, # for passthru.tests
+  aiobotocore
+, moto
+,
 }:
 
 buildPythonPackage rec {

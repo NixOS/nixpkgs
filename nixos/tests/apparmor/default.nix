@@ -16,9 +16,8 @@ in
   ];
 
   nodes.machine =
-    {
-      lib,
-      ...
+    { lib
+    , ...
     }:
     {
       security.apparmor = {

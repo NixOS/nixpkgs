@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -135,9 +134,10 @@ in
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
-    services.getty.helpLine = mkIf (
-      config.documentation.nixos.enable && config.documentation.doc.enable
-    ) "\nRun 'nixos-help' for the NixOS manual.";
+    services.getty.helpLine = mkIf
+      (
+        config.documentation.nixos.enable && config.documentation.doc.enable
+      ) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.additionalUpstreamSystemUnits = [
       "getty.target"

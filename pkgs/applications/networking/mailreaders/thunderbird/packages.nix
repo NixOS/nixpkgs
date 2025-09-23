@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildMozillaMach,
-  callPackage,
-  fetchurl,
-  icu73,
-  icu77,
-  fetchpatch2,
-  config,
+{ stdenv
+, lib
+, buildMozillaMach
+, callPackage
+, fetchurl
+, icu73
+, icu77
+, fetchpatch2
+, config
+,
 }:
 
 let
@@ -29,11 +29,11 @@ let
   icu77' = patchICU icu77;
 
   common =
-    {
-      version,
-      sha512,
-      updateScript,
-      applicationName ? "Thunderbird",
+    { version
+    , sha512
+    , updateScript
+    , applicationName ? "Thunderbird"
+    ,
     }:
     (buildMozillaMach rec {
       pname = "thunderbird";
@@ -138,7 +138,7 @@ rec {
     };
   };
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
   thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
 }

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPecl,
-  fetchFromGitHub,
-  pkg-config,
-  lua51Packages,
+{ lib
+, buildPecl
+, fetchFromGitHub
+, pkg-config
+, lua51Packages
+,
 }:
 
 buildPecl rec {

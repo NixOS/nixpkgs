@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  qttools,
-  perl,
-  cpp-utilities,
-  qtutilities,
-  qtbase,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qttools
+, perl
+, cpp-utilities
+, qtutilities
+, qtbase
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libgeneral,
-  libplist,
-  openssl,
-  lzfse,
-  git,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libgeneral
+, libplist
+, openssl
+, lzfse
+, git
+,
 }:
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "img4tool";

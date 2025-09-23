@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  buildPackages,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ stdenv
+, lib
+, buildGoModule
+, buildPackages
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "foxglove-cli";

@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  config,
-  utils,
-  ...
+{ pkgs
+, lib
+, config
+, utils
+, ...
 }:
 let
   cfg = config.services.nixseparatedebuginfod2;

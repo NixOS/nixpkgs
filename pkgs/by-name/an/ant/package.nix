@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  coreutils,
-  makeWrapper,
-  gitUpdater,
+{ fetchurl
+, lib
+, stdenv
+, coreutils
+, makeWrapper
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

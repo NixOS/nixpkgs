@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  libpwquality,
-  hicolor-icon-theme,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qt6,
-  kdePackages,
-  cryfs,
-  encfs,
-  fscrypt-experimental,
-  gocryptfs,
-  securefs,
-  sshfs,
-  libgcrypt,
-  libsecret,
-  withKWallet ? true,
-  withLibsecret ? true,
+{ lib
+, stdenv
+, libpwquality
+, hicolor-icon-theme
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt6
+, kdePackages
+, cryfs
+, encfs
+, fscrypt-experimental
+, gocryptfs
+, securefs
+, sshfs
+, libgcrypt
+, libsecret
+, withKWallet ? true
+, withLibsecret ? true
+,
 }:
 
 stdenv.mkDerivation rec {

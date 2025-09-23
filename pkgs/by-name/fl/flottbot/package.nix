@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  replaceVars,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, replaceVars
+,
 }:
 buildGoModule rec {
   pname = "flottbot";

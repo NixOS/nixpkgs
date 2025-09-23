@@ -1,22 +1,22 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  python3,
-  meson,
-  ninja,
-  git,
-  btor2tools,
-  symfpu,
-  gtest,
-  gmp,
-  cadical,
-  cryptominisat,
-  kissat,
-  zlib,
-  pkg-config,
-  cmake,
-  aiger,
+{ stdenv
+, fetchFromGitHub
+, lib
+, python3
+, meson
+, ninja
+, git
+, btor2tools
+, symfpu
+, gtest
+, gmp
+, cadical
+, cryptominisat
+, kissat
+, zlib
+, pkg-config
+, cmake
+, aiger
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

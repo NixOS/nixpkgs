@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  chameleon,
-  fetchFromGitHub,
-  importlib-metadata,
-  lingva,
-  polib,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, chameleon
+, fetchFromGitHub
+, importlib-metadata
+, lingva
+, polib
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

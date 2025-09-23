@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  babeltrace2,
-  popt,
-  libuuid,
-  liburcu,
-  lttng-ust,
-  kmod,
-  libxml2,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, babeltrace2
+, popt
+, libuuid
+, liburcu
+, lttng-ust
+, kmod
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

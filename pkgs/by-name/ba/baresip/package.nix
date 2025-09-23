@@ -1,33 +1,33 @@
-{
-  SDL2,
-  alsa-lib,
-  cairo,
-  celt,
-  cmake,
-  fetchFromGitHub,
-  ffmpeg,
-  glib,
-  gsm,
-  gst_all_1,
-  gtk3,
-  lib,
-  libre,
-  librem,
-  libsndfile,
-  libuuid,
-  libv4l,
-  libvpx,
-  mpg123,
-  openssl,
-  pipewire,
-  pkg-config,
-  portaudio,
-  spandsp3,
-  speex,
-  srtp,
-  stdenv,
-  zlib,
-  dbusSupport ? true,
+{ SDL2
+, alsa-lib
+, cairo
+, celt
+, cmake
+, fetchFromGitHub
+, ffmpeg
+, glib
+, gsm
+, gst_all_1
+, gtk3
+, lib
+, libre
+, librem
+, libsndfile
+, libuuid
+, libv4l
+, libvpx
+, mpg123
+, openssl
+, pipewire
+, pkg-config
+, portaudio
+, spandsp3
+, speex
+, srtp
+, stdenv
+, zlib
+, dbusSupport ? true
+,
 }:
 
 stdenv.mkDerivation rec {

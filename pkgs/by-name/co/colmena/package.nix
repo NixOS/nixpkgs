@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchpatch,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  makeBinaryWrapper,
-  nix-eval-jobs,
-  nix,
-  colmena,
-  testers,
+{ stdenv
+, lib
+, fetchpatch
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, makeBinaryWrapper
+, nix-eval-jobs
+, nix
+, colmena
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

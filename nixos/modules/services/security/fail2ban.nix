@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.fail2ban;
@@ -39,13 +38,15 @@ let
       );
       extraConfig = lib.concatStringsSep "\n" (
         lib.attrValues (
-          lib.mapAttrs (
-            name: def:
-            lib.optionalString (def != "") ''
-              [${name}]
-              ${def}
-            ''
-          ) strJails
+          lib.mapAttrs
+            (
+              name: def:
+                lib.optionalString (def != "") ''
+                  [${name}]
+                  ${def}
+                ''
+            )
+            strJails
         )
       );
 

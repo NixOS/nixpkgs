@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pbr,
-  setuptools,
-  importlib-metadata,
-  simplegeneric,
-  netaddr,
-  # Test inputs
-  flask,
-  flask-restful,
-  pecan,
-  sphinx,
-  transaction,
-  webtest,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pbr
+, setuptools
+, importlib-metadata
+, simplegeneric
+, netaddr
+, # Test inputs
+  flask
+, flask-restful
+, pecan
+, sphinx
+, transaction
+, webtest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

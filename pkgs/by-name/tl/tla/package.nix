@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchurl,
-  which,
-  diffutils,
-  gnupatch,
-  gnutar,
+{ stdenv
+, fetchurl
+, which
+, diffutils
+, gnupatch
+, gnutar
+,
 }:
 
 stdenv.mkDerivation rec {

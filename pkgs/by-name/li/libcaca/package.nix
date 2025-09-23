@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  imlib2,
-  xorg,
-  ncurses,
-  pkg-config,
-  zlib,
-  x11Support ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, imlib2
+, xorg
+, ncurses
+, pkg-config
+, zlib
+, x11Support ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation rec {

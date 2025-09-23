@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  future,
-  kinparse,
-  pyspice,
-  graphviz,
-  sexpdata,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, kinparse
+, pyspice
+, graphviz
+, sexpdata
+,
 }:
 buildPythonPackage rec {
   pname = "skidl";

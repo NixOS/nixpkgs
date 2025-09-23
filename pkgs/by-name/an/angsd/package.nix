@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  htslib,
-  zlib,
-  bzip2,
-  xz,
-  curl,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, htslib
+, zlib
+, bzip2
+, xz
+, curl
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

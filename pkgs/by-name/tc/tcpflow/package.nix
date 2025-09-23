@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  automake,
-  autoconf,
-  openssl,
-  zlib,
-  libpcap,
-  boost,
-  useCairo ? false,
-  cairo,
+{ stdenv
+, lib
+, fetchFromGitHub
+, automake
+, autoconf
+, openssl
+, zlib
+, libpcap
+, boost
+, useCairo ? false
+, cairo
+,
 }:
 
 stdenv.mkDerivation rec {

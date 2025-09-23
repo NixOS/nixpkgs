@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  samba,
-  pkg-config,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, samba
+, pkg-config
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

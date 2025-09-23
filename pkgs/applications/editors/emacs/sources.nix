@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchzip,
+{ lib
+, fetchFromGitHub
+, fetchzip
+,
 }:
 
 let
   mkArgs =
-    {
-      pname,
-      version,
-      variant,
-      patches ? _: [ ],
-      rev,
-      hash,
-      meta ? { },
+    { pname
+    , version
+    , variant
+    , patches ? _: [ ]
+    , rev
+    , hash
+    , meta ? { }
+    ,
     }:
     {
       inherit
@@ -38,19 +38,17 @@ let
               inherit rev hash;
             }
           );
-        }
-        .${variant};
+        }.${variant};
 
       meta = {
         homepage =
           {
             "mainline" = "https://www.gnu.org/software/emacs/";
             "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
-          }
-          .${variant};
+          }.${variant};
         description =
           "Extensible, customizable GNU text editor"
-          + lib.optionalString (variant == "macport") " - macport variant";
+            + lib.optionalString (variant == "macport") " - macport variant";
         longDescription = ''
           GNU Emacs is an extensible, customizable text editor—and more. At its core
           is an interpreter for Emacs Lisp, a dialect of the Lisp programming
@@ -76,8 +74,7 @@ let
           {
             "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
             "macport" = "https://github.com/jdtsmith/emacs-mac/blob/${rev}/NEWS-mac";
-          }
-          .${variant};
+          }.${variant};
         license = lib.licenses.gpl3Plus;
         maintainers =
           {
@@ -92,14 +89,12 @@ let
             "macport" = with lib.maintainers; [
               kfiz
             ];
-          }
-          .${variant};
+          }.${variant};
         platforms =
           {
             "mainline" = lib.platforms.all;
             "macport" = lib.platforms.darwin;
-          }
-          .${variant};
+          }.${variant};
         mainProgram = "emacs";
       }
       // meta;

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  hiredis,
-  http-parser,
-  jansson,
-  libevent,
+{ lib
+, stdenv
+, fetchFromGitHub
+, hiredis
+, http-parser
+, jansson
+, libevent
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

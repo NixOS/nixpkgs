@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_net,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_net
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,23 +1,23 @@
-{
-  autoreconfHook,
-  coreutils,
-  fetchFromGitHub,
-  gnugrep,
-  gnused,
-  lib,
-  makeWrapper,
-  perlPackages,
-  stdenv,
+{ autoreconfHook
+, coreutils
+, fetchFromGitHub
+, gnugrep
+, gnused
+, lib
+, makeWrapper
+, perlPackages
+, stdenv
+,
 }:
 
 let
   generic =
-    {
-      pname,
-      version,
-      src,
-      description,
-      buildInputs,
+    { pname
+    , version
+    , src
+    , description
+    , buildInputs
+    ,
     }:
     stdenv.mkDerivation {
       inherit pname version src;

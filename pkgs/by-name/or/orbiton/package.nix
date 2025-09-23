@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  pkg-config,
-  withGui ? true,
-  vte,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pkg-config
+, withGui ? true
+, vte
+,
 }:
 
 buildGoModule rec {

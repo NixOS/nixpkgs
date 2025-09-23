@@ -1,8 +1,8 @@
-{
-  pkgs ? import <nixpkgs> { },
-  nodejs ? pkgs.nodejs,
-  yarn ? pkgs.yarn,
-  allowAliases ? pkgs.config.allowAliases,
+{ pkgs ? import <nixpkgs> { }
+, nodejs ? pkgs.nodejs
+, yarn ? pkgs.yarn
+, allowAliases ? pkgs.config.allowAliases
+,
 }@inputs:
 
 let
@@ -52,9 +52,9 @@ rec {
 
   # Generates the yarn.nix from the yarn.lock file
   mkYarnNix =
-    {
-      yarnLock,
-      flags ? [ ],
+    { yarnLock
+    , flags ? [ ]
+    ,
     }:
     pkgs.runCommand "yarn.nix" { }
       "${yarn2nix}/bin/yarn2nix --lockfile ${yarnLock} --no-patch --builtin-fetchgit ${lib.escapeShellArgs flags} > $out";
@@ -75,23 +75,26 @@ rec {
   ];
 
   mkYarnModules =
-    {
-      name ? "${pname}-${version}", # safe name and version, e.g. testcompany-one-modules-1.0.0
-      pname, # original name, e.g @testcompany/one
-      version,
-      packageJSON,
-      yarnLock,
-      yarnNix ? mkYarnNix { inherit yarnLock; },
-      offlineCache ? importOfflineCache yarnNix,
-      yarnFlags ? [ ],
-      ignoreScripts ? true,
-      nodejs ? inputs.nodejs,
-      yarn ? inputs.yarn.override { inherit nodejs; },
-      pkgConfig ? { },
-      preBuild ? "",
-      postBuild ? "",
-      workspaceDependencies ? [ ], # List of yarn packages
-      packageResolutions ? { },
+    { name ? "${pname}-${version}"
+    , # safe name and version, e.g. testcompany-one-modules-1.0.0
+      pname
+    , # original name, e.g @testcompany/one
+      version
+    , packageJSON
+    , yarnLock
+    , yarnNix ? mkYarnNix { inherit yarnLock; }
+    , offlineCache ? importOfflineCache yarnNix
+    , yarnFlags ? [ ]
+    , ignoreScripts ? true
+    , nodejs ? inputs.nodejs
+    , yarn ? inputs.yarn.override { inherit nodejs; }
+    , pkgConfig ? { }
+    , preBuild ? ""
+    , postBuild ? ""
+    , workspaceDependencies ? [ ]
+    , # List of yarn packages
+      packageResolutions ? { }
+    ,
     }:
     let
       extraNativeBuildInputs = lib.concatMap (key: pkgConfig.${key}.nativeBuildInputs or [ ]) (
@@ -101,17 +104,19 @@ rec {
         builtins.attrNames pkgConfig
       );
 
-      postInstall = builtins.map (
-        key:
-        if (pkgConfig.${key} ? postInstall) then
-          ''
-            for f in $(find -L -path '*/node_modules/${key}' -type d); do
-              (cd "$f" && (${pkgConfig.${key}.postInstall}))
-            done
-          ''
-        else
-          ""
-      ) (builtins.attrNames pkgConfig);
+      postInstall = builtins.map
+        (
+          key:
+          if (pkgConfig.${key} ? postInstall) then
+            ''
+              for f in $(find -L -path '*/node_modules/${key}' -type d); do
+                (cd "$f" && (${pkgConfig.${key}.postInstall}))
+              done
+            ''
+          else
+            ""
+        )
+        (builtins.attrNames pkgConfig);
 
       # build-time JSON generation to avoid IFD
       # see https://wiki.nixos.org/wiki/Import_From_Derivation
@@ -131,10 +136,12 @@ rec {
             jq --slurpfile packageJSON "$packageJSON" '.resolutions = $packageJSON[0].resolutions + .resolutions' <"$baseJSONPath" >$out
           '';
 
-      workspaceDependencyLinks = lib.concatMapStringsSep "\n" (dep: ''
-        mkdir -p "deps/${dep.pname}"
-        ln -sf ${dep.packageJSON} "deps/${dep.pname}/package.json"
-      '') workspaceDependencies;
+      workspaceDependencyLinks = lib.concatMapStringsSep "\n"
+        (dep: ''
+          mkdir -p "deps/${dep.pname}"
+          ln -sf ${dep.packageJSON} "deps/${dep.pname}/package.json"
+        '')
+        workspaceDependencies;
 
     in
     stdenv.mkDerivation {
@@ -206,14 +213,13 @@ rec {
   '';
 
   mkYarnWorkspace =
-    {
-      src,
-      packageJSON ? src + "/package.json",
-      yarnLock ? src + "/yarn.lock",
-      nodejs ? inputs.nodejs,
-      yarn ? inputs.yarn.override { inherit nodejs; },
-      packageOverrides ? { },
-      ...
+    { src
+    , packageJSON ? src + "/package.json"
+    , yarnLock ? src + "/yarn.lock"
+    , nodejs ? inputs.nodejs
+    , yarn ? inputs.yarn.override { inherit nodejs; }
+    , packageOverrides ? { }
+    , ...
     }@attrs:
     let
       package = lib.importJSON packageJSON;
@@ -251,79 +257,82 @@ rec {
       packagePaths = lib.concatMap (expandGlob src) packageGlobs;
 
       packages = lib.listToAttrs (
-        map (
-          src:
-          let
-            packageJSON = src + "/package.json";
+        map
+          (
+            src:
+            let
+              packageJSON = src + "/package.json";
 
-            package = lib.importJSON packageJSON;
+              package = lib.importJSON packageJSON;
 
-            allDependencies = lib.foldl (a: b: a // b) { } (
-              map (field: lib.attrByPath [ field ] { } package) [
-                "dependencies"
-                "devDependencies"
-              ]
-            );
+              allDependencies = lib.foldl (a: b: a // b) { } (
+                map (field: lib.attrByPath [ field ] { } package) [
+                  "dependencies"
+                  "devDependencies"
+                ]
+              );
 
-            # { [name: String] : { pname : String, packageJSON : String, ... } } -> { [pname: String] : version } -> [{ pname : String, packageJSON : String, ... }]
-            getWorkspaceDependencies =
-              packages: allDependencies:
-              let
-                packageList = lib.attrValues packages;
-              in
-              composeAll [
-                (lib.filter (x: x != null))
-                (lib.mapAttrsToList (
-                  pname: _version: lib.findFirst (package: package.pname == pname) null packageList
-                ))
-              ] allDependencies;
+              # { [name: String] : { pname : String, packageJSON : String, ... } } -> { [pname: String] : version } -> [{ pname : String, packageJSON : String, ... }]
+              getWorkspaceDependencies =
+                packages: allDependencies:
+                let
+                  packageList = lib.attrValues packages;
+                in
+                composeAll [
+                  (lib.filter (x: x != null))
+                  (lib.mapAttrsToList (
+                    pname: _version: lib.findFirst (package: package.pname == pname) null packageList
+                  ))
+                ]
+                  allDependencies;
 
-            workspaceDependencies = getWorkspaceDependencies packages allDependencies;
+              workspaceDependencies = getWorkspaceDependencies packages allDependencies;
 
-            name = reformatPackageName package.name;
-          in
-          {
-            inherit name;
-            value = mkYarnPackage (
-              builtins.removeAttrs attrs [ "packageOverrides" ]
-              // {
-                inherit
-                  src
-                  packageJSON
-                  yarnLock
-                  nodejs
-                  yarn
-                  packageResolutions
-                  workspaceDependencies
-                  ;
-              }
-              // lib.attrByPath [ name ] { } packageOverrides
-            );
-          }
-        ) packagePaths
+              name = reformatPackageName package.name;
+            in
+            {
+              inherit name;
+              value = mkYarnPackage (
+                builtins.removeAttrs attrs [ "packageOverrides" ]
+                // {
+                  inherit
+                    src
+                    packageJSON
+                    yarnLock
+                    nodejs
+                    yarn
+                    packageResolutions
+                    workspaceDependencies
+                    ;
+                }
+                // lib.attrByPath [ name ] { } packageOverrides
+              );
+            }
+          )
+          packagePaths
       );
     in
     packages;
 
   mkYarnPackage =
-    {
-      name ? null,
-      src,
-      packageJSON ? src + "/package.json",
-      yarnLock ? src + "/yarn.lock",
-      yarnNix ? mkYarnNix { inherit yarnLock; },
-      offlineCache ? importOfflineCache yarnNix,
-      nodejs ? inputs.nodejs,
-      yarn ? inputs.yarn.override { inherit nodejs; },
-      yarnFlags ? [ ],
-      yarnPreBuild ? "",
-      yarnPostBuild ? "",
-      pkgConfig ? { },
-      extraBuildInputs ? [ ],
-      publishBinsFor ? null,
-      workspaceDependencies ? [ ], # List of yarnPackages
-      packageResolutions ? { },
-      ...
+    { name ? null
+    , src
+    , packageJSON ? src + "/package.json"
+    , yarnLock ? src + "/yarn.lock"
+    , yarnNix ? mkYarnNix { inherit yarnLock; }
+    , offlineCache ? importOfflineCache yarnNix
+    , nodejs ? inputs.nodejs
+    , yarn ? inputs.yarn.override { inherit nodejs; }
+    , yarnFlags ? [ ]
+    , yarnPreBuild ? ""
+    , yarnPostBuild ? ""
+    , pkgConfig ? { }
+    , extraBuildInputs ? [ ]
+    , publishBinsFor ? null
+    , workspaceDependencies ? [ ]
+    , # List of yarnPackages
+      packageResolutions ? { }
+    , ...
     }@attrs:
     let
       package = lib.importJSON packageJSON;
@@ -375,15 +384,17 @@ rec {
         }
       '';
 
-      workspaceDependencyCopy = lib.concatMapStringsSep "\n" (dep: ''
-        # ensure any existing scope directory is not a symlink
-        linkDirToDirLinks "$(dirname node_modules/${dep.package.name})"
-        mkdir -p "deps/${dep.package.name}"
-        tar -xf "${dep}/tarballs/${dep.name}.tgz" --directory "deps/${dep.package.name}" --strip-components=1
-        if [ ! -e "deps/${dep.package.name}/node_modules" ]; then
-          ln -s "${deps}/deps/${dep.package.name}/node_modules" "deps/${dep.package.name}/node_modules"
-        fi
-      '') workspaceDependenciesTransitive;
+      workspaceDependencyCopy = lib.concatMapStringsSep "\n"
+        (dep: ''
+          # ensure any existing scope directory is not a symlink
+          linkDirToDirLinks "$(dirname node_modules/${dep.package.name})"
+          mkdir -p "deps/${dep.package.name}"
+          tar -xf "${dep}/tarballs/${dep.name}.tgz" --directory "deps/${dep.package.name}" --strip-components=1
+          if [ ! -e "deps/${dep.package.name}/node_modules" ]; then
+            ln -s "${deps}/deps/${dep.package.name}/node_modules" "deps/${dep.package.name}/node_modules"
+          fi
+        '')
+        workspaceDependenciesTransitive;
 
     in
     stdenv.mkDerivation (
@@ -538,7 +549,7 @@ rec {
         patchShebangs $out
       '';
 }
-// lib.optionalAttrs allowAliases {
+  // lib.optionalAttrs allowAliases {
   # Aliases
   spdxLicense = getLicenseFromSpdxId; # added 2021-12-01
 }

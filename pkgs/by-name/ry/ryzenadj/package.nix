@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pciutils,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pciutils
+, cmake
+,
 }:
 stdenv.mkDerivation rec {
   pname = "ryzenadj";

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  fetchFromGitLab,
-  gobject-introspection,
-  idna,
-  libsoup_3,
-  packaging,
-  precis-i18n,
-  pygobject3,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchurl
+, fetchFromGitLab
+, gobject-introspection
+, idna
+, libsoup_3
+, packaging
+, precis-i18n
+, pygobject3
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

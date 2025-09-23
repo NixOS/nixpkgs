@@ -1,16 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-
-  cmake,
-  pkg-config,
-
-  fmt,
-  lzo,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, fmt
+, lzo
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

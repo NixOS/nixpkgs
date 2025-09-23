@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  flask,
-  pymongo,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, flask
+, pymongo
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

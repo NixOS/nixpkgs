@@ -7,11 +7,10 @@
   enableOCR = true;
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     let
       touch = "${lib.getBin pkgs.coreutils}/bin/touch";

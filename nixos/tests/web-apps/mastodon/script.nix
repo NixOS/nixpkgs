@@ -1,7 +1,7 @@
-{
-  pkgs,
-  extraInit ? "",
-  extraShutdown ? "",
+{ pkgs
+, extraInit ? ""
+, extraShutdown ? ""
+,
 }:
 
 ''

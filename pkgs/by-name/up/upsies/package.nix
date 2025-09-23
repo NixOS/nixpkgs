@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitea,
-  fetchpatch,
-  ffmpeg-headless,
-  mediainfo,
-  oxipng,
-  python3Packages,
+{ lib
+, fetchFromGitea
+, fetchpatch
+, ffmpeg-headless
+, mediainfo
+, oxipng
+, python3Packages
+,
 }:
 let
   # Taken from `docker/alpine/Dockerfile`

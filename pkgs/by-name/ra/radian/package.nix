@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  git,
-  R,
-  rPackages,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, git
+, R
+, rPackages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

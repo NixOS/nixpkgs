@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  attrs,
-  pexpect,
-  pyyaml,
-  requests,
-  termcolor,
-  jellyfish,
-  cryptography,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, attrs
+, pexpect
+, pyyaml
+, requests
+, termcolor
+, jellyfish
+, cryptography
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

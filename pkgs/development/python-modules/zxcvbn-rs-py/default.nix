@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  rustPlatform,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

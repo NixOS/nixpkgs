@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  installShellFiles,
-
-  x11Support ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isBSD,
-  xclip ? null,
-  xsel ? null,
-  preferXsel ? false, # if true and xsel is non-null, use it instead of xclip
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, rustPlatform
+, pkg-config
+, openssl
+, installShellFiles
+, x11Support ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isBSD
+, xclip ? null
+, xsel ? null
+, preferXsel ? false
+, # if true and xsel is non-null, use it instead of xclip
 }:
 
 let

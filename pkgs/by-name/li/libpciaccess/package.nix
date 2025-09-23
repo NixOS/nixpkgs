@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  testers,
-  writeScript,
-  pkg-config,
-  meson,
-  ninja,
-  zlib,
-  netbsd,
-  hwdata,
+{ lib
+, stdenv
+, fetchurl
+, testers
+, writeScript
+, pkg-config
+, meson
+, ninja
+, zlib
+, netbsd
+, hwdata
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

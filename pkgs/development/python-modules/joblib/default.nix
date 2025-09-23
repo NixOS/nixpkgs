@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  pythonAtLeast,
-  stdenv,
-
-  # build-system
-  setuptools,
-
-  # propagates (optional, but unspecified)
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, pythonAtLeast
+, stdenv
+, # build-system
+  setuptools
+, # propagates (optional, but unspecified)
   # https://github.com/joblib/joblib#dependencies
-  lz4,
-  psutil,
-
-  # tests
-  pytestCheckHook,
-  threadpoolctl,
+  lz4
+, psutil
+, # tests
+  pytestCheckHook
+, threadpoolctl
+,
 }:
 
 buildPythonPackage rec {

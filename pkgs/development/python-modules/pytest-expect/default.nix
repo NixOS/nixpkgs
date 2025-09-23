@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchPypi,
-  pytest,
-  u-msgpack-python,
-  six,
+{ buildPythonPackage
+, lib
+, fetchPypi
+, pytest
+, u-msgpack-python
+, six
+,
 }:
 
 buildPythonPackage rec {

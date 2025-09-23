@@ -17,112 +17,112 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  fetchpatch2,
-  writeScript,
-  ruby,
-  libkrb5,
-  libxml2,
-  libxslt,
-  python2,
-  stdenv,
-  which,
-  libiconv,
-  libpq,
-  nodejs,
-  clang,
-  sqlite,
-  zlib,
-  imagemagick,
-  lasem,
-  pkg-config,
-  ncurses,
-  xapian,
-  gpgme,
-  util-linux,
-  tzdata,
-  icu,
-  libffi,
-  libdeflate,
-  xz,
-  zstd,
-  libwebp,
-  cmake,
-  libssh2,
-  openssl,
-  openssl_1_1,
-  libmysqlclient,
-  git,
-  perl,
-  pcre2,
-  gecode_3,
-  curl,
-  libsodium,
-  snappy,
-  libossp_uuid,
-  lxc,
-  libpcap,
-  xorg,
-  gtk3,
-  lerc,
-  buildRubyGem,
-  cairo,
-  expat,
-  re2,
-  rake,
-  gobject-introspection,
-  gdk-pixbuf,
-  zeromq,
-  czmq,
-  graphicsmagick,
-  libcxx,
-  file,
-  libvirt,
-  glib,
-  vips,
-  taglib,
-  libopus,
-  linux-pam,
-  libidn,
-  protobuf,
-  fribidi,
-  harfbuzz,
-  bison,
-  flex,
-  pango,
-  python3,
-  patchelf,
-  binutils,
-  freetds,
-  wrapGAppsHook3,
-  atk,
-  bundler,
-  libsass,
-  dart-sass,
-  libexif,
-  libselinux,
-  libsepol,
-  shared-mime-info,
-  libthai,
-  libdatrie,
-  DarwinTools,
-  cctools,
-  libtool,
-  discount,
-  exiv2,
-  libepoxy,
-  libxkbcommon,
-  libmaxminddb,
-  libyaml,
-  cargo,
-  rustc,
-  rustPlatform,
-  libsysprof-capture,
-  imlib2,
-  autoSignDarwinBinariesHook,
+{ lib
+, fetchurl
+, fetchpatch
+, fetchpatch2
+, writeScript
+, ruby
+, libkrb5
+, libxml2
+, libxslt
+, python2
+, stdenv
+, which
+, libiconv
+, libpq
+, nodejs
+, clang
+, sqlite
+, zlib
+, imagemagick
+, lasem
+, pkg-config
+, ncurses
+, xapian
+, gpgme
+, util-linux
+, tzdata
+, icu
+, libffi
+, libdeflate
+, xz
+, zstd
+, libwebp
+, cmake
+, libssh2
+, openssl
+, openssl_1_1
+, libmysqlclient
+, git
+, perl
+, pcre2
+, gecode_3
+, curl
+, libsodium
+, snappy
+, libossp_uuid
+, lxc
+, libpcap
+, xorg
+, gtk3
+, lerc
+, buildRubyGem
+, cairo
+, expat
+, re2
+, rake
+, gobject-introspection
+, gdk-pixbuf
+, zeromq
+, czmq
+, graphicsmagick
+, libcxx
+, file
+, libvirt
+, glib
+, vips
+, taglib
+, libopus
+, linux-pam
+, libidn
+, protobuf
+, fribidi
+, harfbuzz
+, bison
+, flex
+, pango
+, python3
+, patchelf
+, binutils
+, freetds
+, wrapGAppsHook3
+, atk
+, bundler
+, libsass
+, dart-sass
+, libexif
+, libselinux
+, libsepol
+, shared-mime-info
+, libthai
+, libdatrie
+, DarwinTools
+, cctools
+, libtool
+, discount
+, exiv2
+, libepoxy
+, libxkbcommon
+, libmaxminddb
+, libyaml
+, cargo
+, rustc
+, rustPlatform
+, libsysprof-capture
+, imlib2
+, autoSignDarwinBinariesHook
+,
 }@args:
 
 let
@@ -447,17 +447,18 @@ in
 
   pg_query =
     attrs:
-    lib.optionalAttrs (attrs.version == "2.0.2") {
-      dontBuild = false;
-      postPatch = ''
-        sed -i "s;'https://codeload.github.com.*';'${
-          fetchurl {
-            url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
-            sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
-          }
-        }';" ext/pg_query/extconf.rb
-      '';
-    }
+    lib.optionalAttrs (attrs.version == "2.0.2")
+      {
+        dontBuild = false;
+        postPatch = ''
+          sed -i "s;'https://codeload.github.com.*';'${
+            fetchurl {
+              url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
+              sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
+            }
+          }';" ext/pg_query/extconf.rb
+        '';
+      }
     // lib.optionalAttrs (attrs.version == "1.3.0") {
       # Needed for gitlab
       dontBuild = false;
@@ -604,11 +605,13 @@ in
       pkg-config
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin cctools
-    ++ lib.optional (
-      lib.versionAtLeast attrs.version "1.53.0"
-      && stdenv.hostPlatform.isDarwin
-      && stdenv.hostPlatform.isAarch64
-    ) autoSignDarwinBinariesHook;
+    ++ lib.optional
+      (
+        lib.versionAtLeast attrs.version "1.53.0"
+          && stdenv.hostPlatform.isDarwin
+          && stdenv.hostPlatform.isAarch64
+      )
+      autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     env = lib.optionalAttrs (lib.versionOlder attrs.version "1.68.1") {

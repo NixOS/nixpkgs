@@ -1,14 +1,12 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitLab,
-
-  cmake,
-  extra-cmake-modules,
-
-  ki18n,
-  kirigami2,
-  qtquickcontrols2,
+{ lib
+, mkDerivation
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, ki18n
+, kirigami2
+, qtquickcontrols2
+,
 }:
 
 mkDerivation rec {

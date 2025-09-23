@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+, stdenv
+, fetchurl
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,11 +10,12 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        name = "linux32-${version}.tar.gz";
-        url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux32";
-        sha256 = "1ryngbjlw59x33rfd32bcz49r93a1q1g92jh7xmi9vydgqnzsifh";
-      }
+      fetchurl
+        {
+          name = "linux32-${version}.tar.gz";
+          url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux32";
+          sha256 = "1ryngbjlw59x33rfd32bcz49r93a1q1g92jh7xmi9vydgqnzsifh";
+        }
     else
       fetchurl {
         name = "linux64-${version}.tar.gz";

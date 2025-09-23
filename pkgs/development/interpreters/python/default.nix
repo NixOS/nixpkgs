@@ -1,12 +1,12 @@
-{
-  __splicedPackages,
-  callPackage,
-  config,
-  db,
-  lib,
-  makeScopeWithSplicing',
-  pythonPackagesExtensions,
-  stdenv,
+{ __splicedPackages
+, callPackage
+, config
+, db
+, lib
+, makeScopeWithSplicing'
+, pythonPackagesExtensions
+, stdenv
+,
 }@args:
 
 (
@@ -175,8 +175,7 @@
           x86_64-linux = "sha256-04RFUIwurxTrs4DZwd7TIcXr6uMcfmaAAXPYPLjd9CM=";
           aarch64-darwin = "sha256-KHgOC5CK1ttLTglvQjcSS+eezJcxlG2EDZyHSetnp1k=";
           x86_64-darwin = "sha256-a+KNRI2OZP/8WG2bCuTQkGSoPMrrW4BgxlHFzZrgaHg=";
-        }
-        .${stdenv.system};
+        }.${stdenv.system};
       pythonVersion = "2.7";
       inherit passthruFun;
     };
@@ -195,8 +194,7 @@
           x86_64-linux = "sha256-xzrCzCOArJIn/Sl0gr8qPheoBhi6Rtt1RNU1UVMh7B4=";
           aarch64-darwin = "sha256-PbigP8SWFkgBZGhE1/OxK6oK2zrZoLfLEkUhvC4WijY=";
           x86_64-darwin = "sha256-LF5cKjOsiCVR1/KLmNGdSGuJlapQgkpztO3Mau7DXGM=";
-        }
-        .${stdenv.system};
+        }.${stdenv.system};
       pythonVersion = "3.10";
       inherit passthruFun;
     };
@@ -215,13 +213,12 @@
           x86_64-linux = "sha256-kXfZ4LuRsF+SHGQssP9xoPNlO10ppC1A1qB4wVt1cg8=";
           aarch64-darwin = "sha256-dwTg1TAuU5INMtz+mv7rEENtTJQjPogwz2A6qVWoYcE=";
           x86_64-darwin = "sha256-okOfnTDf2ulqXpEBx9xUqKaLVsnXMU6jmbCiXT6H67I=";
-        }
-        .${stdenv.system};
+        }.${stdenv.system};
       pythonVersion = "3.11";
       inherit passthruFun;
     };
   }
-  // lib.optionalAttrs config.allowAliases {
+    // lib.optionalAttrs config.allowAliases {
     pypy39_prebuilt = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-03
   }
 )

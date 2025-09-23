@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  pandoc,
-  python3,
+{ fetchFromGitHub
+, fetchpatch
+, lib
+, pandoc
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

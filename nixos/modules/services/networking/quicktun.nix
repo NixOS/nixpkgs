@@ -1,9 +1,8 @@
-{
-  options,
-  config,
-  pkgs,
-  lib,
-  ...
+{ options
+, config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -168,32 +167,34 @@ in
     ];
 
     systemd.services = lib.mkMerge (
-      lib.mapAttrsToList (name: qtcfg: {
-        "quicktun-${name}" = {
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
-          environment = {
-            INTERFACE = name;
-            TUN_MODE = toString qtcfg.tunMode;
-            REMOTE_ADDRESS = qtcfg.remoteAddress;
-            LOCAL_ADDRESS = mkIf (qtcfg.localAddress != null) (qtcfg.localAddress);
-            LOCAL_PORT = toString qtcfg.localPort;
-            REMOTE_PORT = toString qtcfg.remotePort;
-            REMOTE_FLOAT = toString qtcfg.remoteFloat;
-            PRIVATE_KEY_FILE = mkIf (qtcfg.privateKeyFile != null) qtcfg.privateKeyFile;
-            PUBLIC_KEY = mkIf (qtcfg.publicKey != null) qtcfg.publicKey;
-            TIME_WINDOW = toString qtcfg.timeWindow;
-            TUN_UP_SCRIPT = mkIf (qtcfg.upScript != null) (
-              pkgs.writeScript "quicktun-${name}-up.sh" qtcfg.upScript
-            );
-            SUID = "nobody";
+      lib.mapAttrsToList
+        (name: qtcfg: {
+          "quicktun-${name}" = {
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network.target" ];
+            environment = {
+              INTERFACE = name;
+              TUN_MODE = toString qtcfg.tunMode;
+              REMOTE_ADDRESS = qtcfg.remoteAddress;
+              LOCAL_ADDRESS = mkIf (qtcfg.localAddress != null) (qtcfg.localAddress);
+              LOCAL_PORT = toString qtcfg.localPort;
+              REMOTE_PORT = toString qtcfg.remotePort;
+              REMOTE_FLOAT = toString qtcfg.remoteFloat;
+              PRIVATE_KEY_FILE = mkIf (qtcfg.privateKeyFile != null) qtcfg.privateKeyFile;
+              PUBLIC_KEY = mkIf (qtcfg.publicKey != null) qtcfg.publicKey;
+              TIME_WINDOW = toString qtcfg.timeWindow;
+              TUN_UP_SCRIPT = mkIf (qtcfg.upScript != null) (
+                pkgs.writeScript "quicktun-${name}-up.sh" qtcfg.upScript
+              );
+              SUID = "nobody";
+            };
+            serviceConfig = {
+              Type = "simple";
+              ExecStart = "${pkgs.quicktun}/bin/quicktun.${qtcfg.protocol}";
+            };
           };
-          serviceConfig = {
-            Type = "simple";
-            ExecStart = "${pkgs.quicktun}/bin/quicktun.${qtcfg.protocol}";
-          };
-        };
-      }) cfg
+        })
+        cfg
     );
   };
 }

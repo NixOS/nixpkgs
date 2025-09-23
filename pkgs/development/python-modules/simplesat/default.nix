@@ -1,15 +1,15 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mock,
-  okonomiyaki,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  six,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, okonomiyaki
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

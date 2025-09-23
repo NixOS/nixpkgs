@@ -1,18 +1,18 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  fetchPypi,
-  fsspec,
-  funcy,
-  google-api-python-client,
-  oauth2client,
-  pyopenssl,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  setuptools-scm,
-  tqdm,
+{ lib
+, appdirs
+, buildPythonPackage
+, fetchPypi
+, fsspec
+, funcy
+, google-api-python-client
+, oauth2client
+, pyopenssl
+, pythonOlder
+, pyyaml
+, setuptools
+, setuptools-scm
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

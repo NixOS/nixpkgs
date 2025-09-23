@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cython,
-  isPyPy,
-  ipython,
-  scikit-build,
-  cmake,
-  pythonOlder,
-  pytestCheckHook,
-  ubelt,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cython
+, isPyPy
+, ipython
+, scikit-build
+, cmake
+, pythonOlder
+, pytestCheckHook
+, ubelt
+,
 }:
 
 buildPythonPackage rec {

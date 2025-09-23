@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  aflplusplus,
+{ lib
+, stdenv
+, aflplusplus
+,
 }:
 
 stdenv.mkDerivation {

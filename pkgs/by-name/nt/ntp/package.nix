@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoreconfHook,
-  openssl,
-  perl,
-  pps-tools,
-  libcap,
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, openssl
+, perl
+, pps-tools
+, libcap
+,
 }:
 
 stdenv.mkDerivation rec {

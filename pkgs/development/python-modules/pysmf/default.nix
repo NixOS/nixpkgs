@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pkg-config,
-  libsmf,
-  glib,
-  pytest,
-  cython,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pkg-config
+, libsmf
+, glib
+, pytest
+, cython
+,
 }:
 
 buildPythonPackage rec {

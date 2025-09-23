@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  iptables,
-  nixosTests,
+{ lib
+, buildGoModule
+, buildNpmPackage
+, fetchFromGitHub
+, makeWrapper
+, iptables
+, nixosTests
+,
 }:
 
 buildGoModule rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  autoreconfHook,
-  fetchFromGitHub,
-  fltk,
-  libjpeg,
-  libpng,
-  libwebp,
-  libressl,
-  mbedtls,
-  openssl,
-  pkg-config,
-  stdenv,
-  which,
-  # Configurable options
-  tlsLibrary ? "libressl",
+{ lib
+, autoreconfHook
+, fetchFromGitHub
+, fltk
+, libjpeg
+, libpng
+, libwebp
+, libressl
+, mbedtls
+, openssl
+, pkg-config
+, stdenv
+, which
+, # Configurable options
+  tlsLibrary ? "libressl"
+,
 }:
 
 let
@@ -22,8 +22,7 @@ let
       "libressl" = libressl;
       "mbedtls" = mbedtls;
       "openssl" = openssl;
-    }
-    .${tlsLibrary} or (throw "Unrecognized tlsLibrary option: ${tlsLibrary}");
+    }.${tlsLibrary} or (throw "Unrecognized tlsLibrary option: ${tlsLibrary}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";

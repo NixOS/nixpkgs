@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  icu,
-  libkqueue,
-  libuuid,
-  tzdata,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, icu
+, libkqueue
+, libuuid
+, tzdata
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

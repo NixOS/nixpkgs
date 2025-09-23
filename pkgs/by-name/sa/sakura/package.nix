@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  glib,
-  gtk3,
-  gettext,
-  pango,
-  makeWrapper,
-  pcre2,
-  perl,
-  pkg-config,
-  vte,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, glib
+, gtk3
+, gettext
+, pango
+, makeWrapper
+, pcre2
+, perl
+, pkg-config
+, vte
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

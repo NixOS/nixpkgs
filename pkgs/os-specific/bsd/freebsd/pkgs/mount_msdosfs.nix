@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  libkiconv,
+{ lib
+, mkDerivation
+, libkiconv
+,
 }:
 mkDerivation {
   path = "sbin/mount_msdosfs";

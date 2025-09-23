@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  timeout-decorator,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, timeout-decorator
+,
 }:
 
 buildPythonPackage rec {

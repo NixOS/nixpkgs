@@ -1,16 +1,16 @@
-{
-  mkKdeDerivation,
-  qtmultimedia,
-  qtsvg,
-  qtwayland,
-  qtimageformats,
-  pkg-config,
-  cfitsio,
-  exiv2,
-  baloo,
-  kimageannotator,
-  lcms2,
-  libtiff,
+{ mkKdeDerivation
+, qtmultimedia
+, qtsvg
+, qtwayland
+, qtimageformats
+, pkg-config
+, cfitsio
+, exiv2
+, baloo
+, kimageannotator
+, lcms2
+, libtiff
+,
 }:
 mkKdeDerivation {
   pname = "gwenview";

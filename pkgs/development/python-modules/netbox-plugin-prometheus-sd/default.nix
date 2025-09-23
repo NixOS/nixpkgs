@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  netaddr,
-  netbox,
-  poetry-core,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, netaddr
+, netbox
+, poetry-core
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

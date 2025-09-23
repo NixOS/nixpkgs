@@ -1,19 +1,19 @@
-{
-  lib,
-  anysqlite,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatchling,
-  httpx,
-  moto,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  redis,
-  trio,
+{ lib
+, anysqlite
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatchling
+, httpx
+, moto
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, redis
+, trio
+,
 }:
 
 buildPythonPackage rec {

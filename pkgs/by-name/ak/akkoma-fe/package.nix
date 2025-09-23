@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  fetchYarnDeps,
-  writableTmpDirAsHomeHook,
-  fixup-yarn-lock,
-  yarn,
-  nodejs,
-  jpegoptim,
-  oxipng,
-  svgo,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitea
+, fetchYarnDeps
+, writableTmpDirAsHomeHook
+, fixup-yarn-lock
+, yarn
+, nodejs
+, jpegoptim
+, oxipng
+, svgo
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

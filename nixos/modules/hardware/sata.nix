@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -88,21 +87,23 @@ in
     services.udev.extraRules = lib.concatMapStringsSep "\n" buildRule cfg.drives;
 
     systemd.services = lib.listToAttrs (
-      map (
-        e:
-        lib.nameValuePair (unitName e) {
-          description = "SATA timeout for ${e.name}";
-          wantedBy = [ "sata-timeout.target" ];
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${startScript} '${devicePath e}'";
-            PrivateTmp = true;
-            PrivateNetwork = true;
-            ProtectHome = "tmpfs";
-            ProtectSystem = "strict";
-          };
-        }
-      ) cfg.drives
+      map
+        (
+          e:
+          lib.nameValuePair (unitName e) {
+            description = "SATA timeout for ${e.name}";
+            wantedBy = [ "sata-timeout.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = "${startScript} '${devicePath e}'";
+              PrivateTmp = true;
+              PrivateNetwork = true;
+              ProtectHome = "tmpfs";
+              ProtectSystem = "strict";
+            };
+          }
+        )
+        cfg.drives
     );
 
     systemd.targets.sata-timeout = {

@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  fetchFromGitHub,
-  joblib,
-  matplotlib,
-  ninja,
-  numpy,
-  pandas,
-  pathspec,
-  pyproject-metadata,
-  pybind11,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-build-core,
-  scipy,
+{ lib
+, buildPythonPackage
+, cmake
+, fetchFromGitHub
+, joblib
+, matplotlib
+, ninja
+, numpy
+, pandas
+, pathspec
+, pyproject-metadata
+, pybind11
+, pytestCheckHook
+, pythonOlder
+, scikit-build-core
+, scipy
+,
 }:
 
 buildPythonPackage rec {

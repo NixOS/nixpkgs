@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  pytestCheckHook,
-  buildPythonPackage,
-  cython,
-  mecab,
-  setuptools-scm,
-  ipadic,
-  unidic,
-  unidic-lite,
+{ lib
+, fetchFromGitHub
+, pytestCheckHook
+, buildPythonPackage
+, cython
+, mecab
+, setuptools-scm
+, ipadic
+, unidic
+, unidic-lite
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  packageurl-python,
-  pythonOlder,
-  rich,
-  setuptools,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, packageurl-python
+, pythonOlder
+, rich
+, setuptools
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

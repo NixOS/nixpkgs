@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  fmt,
-  gtk3,
-  iir1,
-  imgui,
-  imnodes,
-  implot,
-  openssl,
-  curl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, fmt
+, gtk3
+, iir1
+, imgui
+, imnodes
+, implot
+, openssl
+, curl
+,
 }:
 
 stdenv.mkDerivation {

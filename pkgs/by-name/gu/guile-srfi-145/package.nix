@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  guile,
-  guile-irregex,
+{ lib
+, stdenv
+, fetchFromGitea
+, guile
+, guile-irregex
+,
 }:
 stdenv.mkDerivation {
   pname = "guile-srfi-145";

@@ -1,44 +1,38 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  fetchpatch,
-  pythonOlder,
-  python,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # build-time dependencies
-  gettext,
-
-  # dependencies
-  asgiref,
-  django,
-
-  # optional-dependencies
-  fido2,
-  oauthlib,
-  python3-openid,
-  python3-saml,
-  requests,
-  requests-oauthlib,
-  pyjwt,
-  qrcode,
-
-  # tests
-  django-ninja,
-  djangorestframework,
-  pillow,
-  psycopg2,
-  pytest-asyncio,
-  pytest-django,
-  pytestCheckHook,
-  pyyaml,
-
-  # passthru tests
-  dj-rest-auth,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, fetchpatch
+, pythonOlder
+, python
+, # build-system
+  setuptools
+, setuptools-scm
+, # build-time dependencies
+  gettext
+, # dependencies
+  asgiref
+, django
+, # optional-dependencies
+  fido2
+, oauthlib
+, python3-openid
+, python3-saml
+, requests
+, requests-oauthlib
+, pyjwt
+, qrcode
+, # tests
+  django-ninja
+, djangorestframework
+, pillow
+, psycopg2
+, pytest-asyncio
+, pytest-django
+, pytestCheckHook
+, pyyaml
+, # passthru tests
+  dj-rest-auth
+,
 }:
 
 buildPythonPackage rec {

@@ -1,44 +1,41 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # build deps
-  cargo-deny,
-  cmake,
-  dbus,
-  git,
-  gnumake,
-  llvm,
-  llvmPackages,
-  m4,
-  makeWrapper,
-  perl,
-  pkg-config,
-  python311,
-  taplo,
-  uv,
-  which,
-  yasm,
-  zlib,
-
-  # runtime deps
-  apple-sdk_14,
-  fontconfig,
-  freetype,
-  gst_all_1,
-  harfbuzz,
-  libGL,
-  libunwind,
-  libxkbcommon,
-  udev,
-  vulkan-loader,
-  wayland,
-  xorg,
-
-  # tests
-  nixosTests,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # build deps
+  cargo-deny
+, cmake
+, dbus
+, git
+, gnumake
+, llvm
+, llvmPackages
+, m4
+, makeWrapper
+, perl
+, pkg-config
+, python311
+, taplo
+, uv
+, which
+, yasm
+, zlib
+, # runtime deps
+  apple-sdk_14
+, fontconfig
+, freetype
+, gst_all_1
+, harfbuzz
+, libGL
+, libunwind
+, libxkbcommon
+, udev
+, vulkan-loader
+, wayland
+, xorg
+, # tests
+  nixosTests
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mecab-ipadic,
-  libiconv,
+{ lib
+, stdenv
+, fetchurl
+, mecab-ipadic
+, libiconv
+,
 }:
 
 let
@@ -13,7 +13,7 @@ stdenv.mkDerivation (
   finalAttrs:
   (
     (mecab-base finalAttrs)
-    // {
+      // {
       pname = "mecab";
 
       postInstall = ''

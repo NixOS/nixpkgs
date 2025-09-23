@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

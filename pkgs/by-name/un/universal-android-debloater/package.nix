@@ -1,21 +1,21 @@
-{
-  android-tools,
-  clang,
-  expat,
-  fetchFromGitHub,
-  fontconfig,
-  freetype,
-  lib,
-  libglvnd,
-  libxkbcommon,
-  makeWrapper,
-  mold,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  wayland,
-  writableTmpDirAsHomeHook,
-  xorg,
+{ android-tools
+, clang
+, expat
+, fetchFromGitHub
+, fontconfig
+, freetype
+, lib
+, libglvnd
+, libxkbcommon
+, makeWrapper
+, mold
+, nix-update-script
+, pkg-config
+, rustPlatform
+, wayland
+, writableTmpDirAsHomeHook
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

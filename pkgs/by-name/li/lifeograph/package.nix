@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  meson,
-  ninja,
-  wrapGAppsHook4,
-  enchant,
-  gtkmm4,
-  libchamplain,
-  libgcrypt,
-  shared-mime-info,
-  libshumate,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, meson
+, ninja
+, wrapGAppsHook4
+, enchant
+, gtkmm4
+, libchamplain
+, libgcrypt
+, shared-mime-info
+, libshumate
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

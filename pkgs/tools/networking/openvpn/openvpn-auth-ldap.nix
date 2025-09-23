@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  autoreconfHook,
-  gnustep-base,
-  re2c,
-  openldap,
-  openssl,
-  openvpn,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, autoreconfHook
+, gnustep-base
+, re2c
+, openldap
+, openssl
+, openvpn
+,
 }:
 
 stdenv.mkDerivation rec {

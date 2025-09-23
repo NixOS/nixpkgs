@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  iso8601,
-  pytz,
-  paho-mqtt,
-  requests,
-  requests-toolbelt,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, iso8601
+, pytz
+, paho-mqtt
+, requests
+, requests-toolbelt
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

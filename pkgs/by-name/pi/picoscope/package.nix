@@ -1,18 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  mono,
-  gtk-sharp-3_0,
-  glib,
-  libusb1,
-  zlib,
-  gtk3-x11,
-  callPackage,
-  writeTextDir,
-  scopes ? [
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, makeWrapper
+, mono
+, gtk-sharp-3_0
+, glib
+, libusb1
+, zlib
+, gtk3-x11
+, callPackage
+, writeTextDir
+, scopes ? [
     "picocv"
     "ps2000"
     "ps2000a"
@@ -24,7 +23,8 @@
     "ps5000a"
     "ps6000"
     "ps6000a"
-  ],
+  ]
+,
 }:
 
 let
@@ -36,37 +36,39 @@ let
     license = lib.licenses.unfree;
   };
 
-  libpicoipp = callPackage (
-    {
-      stdenv,
-      lib,
-      fetchurl,
-      autoPatchelfHook,
-      dpkg,
-    }:
-    stdenv.mkDerivation {
-      pname = "libpicoipp";
-      inherit (sources.libpicoipp) version;
-      src = fetchurl { inherit (sources.libpicoipp) url sha256; };
-      nativeBuildInputs = [
-        dpkg
-        autoPatchelfHook
-      ];
-      buildInputs = [ (lib.getLib stdenv.cc.cc) ];
+  libpicoipp = callPackage
+    (
+      { stdenv
+      , lib
+      , fetchurl
+      , autoPatchelfHook
+      , dpkg
+      ,
+      }:
+      stdenv.mkDerivation {
+        pname = "libpicoipp";
+        inherit (sources.libpicoipp) version;
+        src = fetchurl { inherit (sources.libpicoipp) url sha256; };
+        nativeBuildInputs = [
+          dpkg
+          autoPatchelfHook
+        ];
+        buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/lib
-        cp -d opt/picoscope/lib/* $out/lib
-        install -Dt $out/usr/share/doc/libpicoipp usr/share/doc/libpicoipp/copyright
-        runHook postInstall
-      '';
-      meta = shared_meta lib // {
-        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        description = "Library for picotech oscilloscope software";
-      };
-    }
-  ) { };
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out/lib
+          cp -d opt/picoscope/lib/* $out/lib
+          install -Dt $out/usr/share/doc/libpicoipp usr/share/doc/libpicoipp/copyright
+          runHook postInstall
+        '';
+        meta = shared_meta lib // {
+          sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+          description = "Library for picotech oscilloscope software";
+        };
+      }
+    )
+    { };
 
   # If we don't have a platform available, put a dummy version here, so at
   # least evaluation succeeds.
@@ -75,10 +77,10 @@ let
 
   scopePkg =
     name:
-    {
-      url,
-      version,
-      sha256,
+    { url
+    , version
+    , sha256
+    ,
     }:
     stdenv.mkDerivation {
       pname = "lib${name}";

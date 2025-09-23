@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  testers,
-  stardust-xr-atmosphere,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, testers
+, stardust-xr-atmosphere
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage {

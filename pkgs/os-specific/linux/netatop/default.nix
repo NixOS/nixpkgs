@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  kernel,
-  kernelModuleMakeFlags,
-  kmod,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, kernel
+, kernelModuleMakeFlags
+, kmod
+, zlib
+,
 }:
 
 let

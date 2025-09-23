@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  h5py,
-  hdf5plugin,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
-  setuptools-scm,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, h5py
+, hdf5plugin
+, numpy
+, pytestCheckHook
+, pythonOlder
+, scipy
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

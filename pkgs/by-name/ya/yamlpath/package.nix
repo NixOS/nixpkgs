@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  hiera-eyaml,
-  python3,
+{ lib
+, fetchFromGitHub
+, hiera-eyaml
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

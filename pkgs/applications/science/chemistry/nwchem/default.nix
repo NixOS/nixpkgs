@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  mpiCheckPhaseHook,
-  which,
-  openssh,
-  gcc,
-  gfortran,
-  perl,
-  mpi,
-  blas,
-  lapack,
-  python3,
-  tcsh,
-  automake,
-  autoconf,
-  libtool,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, mpiCheckPhaseHook
+, which
+, openssh
+, gcc
+, gfortran
+, perl
+, mpi
+, blas
+, lapack
+, python3
+, tcsh
+, automake
+, autoconf
+, libtool
+, makeWrapper
+,
 }:
 
 assert blas.isILP64 == lapack.isILP64;

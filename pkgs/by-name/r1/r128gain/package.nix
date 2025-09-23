@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  replaceVars,
-  ffmpeg,
-  python3Packages,
-  sox,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, replaceVars
+, ffmpeg
+, python3Packages
+, sox
+,
 }:
 
 python3Packages.buildPythonApplication rec {

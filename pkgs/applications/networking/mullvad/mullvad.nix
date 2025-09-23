@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  makeWrapper,
-  git,
-  dbus,
-  libnftnl,
-  libmnl,
-  libwg,
-  darwin,
-  enableOpenvpn ? true,
-  openvpn-mullvad,
-  shadowsocks-rust,
-  installShellFiles,
-  writeShellScriptBin,
-  versionCheckHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, makeWrapper
+, git
+, dbus
+, libnftnl
+, libmnl
+, libwg
+, darwin
+, enableOpenvpn ? true
+, openvpn-mullvad
+, shadowsocks-rust
+, installShellFiles
+, writeShellScriptBin
+, versionCheckHook
+,
 }:
 let
   # NOTE(cole-h): This is necessary because wireguard-go-rs executes go in its build.rs (whose goal

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchzip,
-  testers,
-  wireguard-go,
+{ lib
+, buildGoModule
+, fetchzip
+, testers
+, wireguard-go
+,
 }:
 
 buildGoModule (

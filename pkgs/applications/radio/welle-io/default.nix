@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qtcharts,
-  qtmultimedia,
-  qt5compat,
-  faad2,
-  rtl-sdr,
-  soapysdr-with-plugins,
-  libusb-compat-0_1,
-  fftwSinglePrec,
-  lame,
-  mpg123,
-  unixtools,
-  withFlac ? true,
-  flac,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, qtbase
+, qtcharts
+, qtmultimedia
+, qt5compat
+, faad2
+, rtl-sdr
+, soapysdr-with-plugins
+, libusb-compat-0_1
+, fftwSinglePrec
+, lame
+, mpg123
+, unixtools
+, withFlac ? true
+, flac
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

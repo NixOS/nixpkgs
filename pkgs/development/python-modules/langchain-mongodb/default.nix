@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  langchain-core,
-  numpy,
-  pymongo,
-
-  freezegun,
-  httpx,
-  langchain,
-  pytest-asyncio,
-  pytestCheckHook,
-  pytest-mock,
-  syrupy,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  langchain-core
+, numpy
+, pymongo
+, freezegun
+, httpx
+, langchain
+, pytest-asyncio
+, pytestCheckHook
+, pytest-mock
+, syrupy
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

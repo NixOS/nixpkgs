@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  SDL,
-  ncurses,
-  libtcod,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, SDL
+, ncurses
+, libtcod
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

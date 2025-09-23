@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  lambda-term,
-  cppo,
-  makeWrapper,
-  buildDunePackage,
-  xdg,
-  zed,
-  logs,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, lambda-term
+, cppo
+, makeWrapper
+, buildDunePackage
+, xdg
+, zed
+, logs
+,
 }:
 
 buildDunePackage rec {

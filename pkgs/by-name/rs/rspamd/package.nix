@@ -1,37 +1,37 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  doctest,
-  fmt_11,
-  perl,
-  glib,
-  luajit,
-  openssl,
-  pcre,
-  pkg-config,
-  sqlite,
-  ragel,
-  fasttext,
-  icu,
-  hyperscan,
-  vectorscan,
-  jemalloc,
-  blas,
-  lapack,
-  lua,
-  libsodium,
-  xxHash,
-  zstd,
-  libarchive,
-  # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, doctest
+, fmt_11
+, perl
+, glib
+, luajit
+, openssl
+, pcre
+, pkg-config
+, sqlite
+, ragel
+, fasttext
+, icu
+, hyperscan
+, vectorscan
+, jemalloc
+, blas
+, lapack
+, lua
+, libsodium
+, xxHash
+, zstd
+, libarchive
+, # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
   # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
-  withBlas ? false,
-  withHyperscan ? false,
-  withLuaJIT ? stdenv.hostPlatform.isx86_64,
-  withVectorscan ? true,
-  nixosTests,
+  withBlas ? false
+, withHyperscan ? false
+, withLuaJIT ? stdenv.hostPlatform.isx86_64
+, withVectorscan ? true
+, nixosTests
+,
 }:
 
 assert withHyperscan -> stdenv.hostPlatform.isx86_64;

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  opam-format,
-  curl,
-  patch,
+{ lib
+, buildDunePackage
+, opam-format
+, curl
+, patch
+,
 }:
 
 buildDunePackage {

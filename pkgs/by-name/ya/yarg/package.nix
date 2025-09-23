@@ -1,27 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoPatchelfHook,
-  alsa-lib,
-  gtk3,
-  zlib,
-  dbus,
-  hidapi,
-  libGL,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libxkbcommon,
-  libXrandr,
-  libXScrnSaver,
-  libXxf86vm,
-  udev,
-  vulkan-loader,
-  wayland, # (not used by default, enable with SDL_VIDEODRIVER=wayland - doesn't support HiDPI)
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchzip
+, autoPatchelfHook
+, alsa-lib
+, gtk3
+, zlib
+, dbus
+, hidapi
+, libGL
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libxkbcommon
+, libXrandr
+, libXScrnSaver
+, libXxf86vm
+, udev
+, vulkan-loader
+, wayland
+, # (not used by default, enable with SDL_VIDEODRIVER=wayland - doesn't support HiDPI)
+  makeDesktopItem
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

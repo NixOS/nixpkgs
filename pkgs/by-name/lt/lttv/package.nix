@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  glib,
-  gtk2,
-  popt,
-  babeltrace,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, glib
+, gtk2
+, popt
+, babeltrace
+,
 }:
 
 stdenv.mkDerivation rec {

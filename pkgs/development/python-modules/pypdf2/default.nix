@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  lib,
-  pythonOlder,
-  typing-extensions,
+{ buildPythonPackage
+, fetchPypi
+, flit-core
+, lib
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

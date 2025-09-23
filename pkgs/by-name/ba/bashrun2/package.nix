@@ -1,17 +1,17 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  makeWrapper,
-  xorg,
-  ncurses,
-  coreutils,
-  bashInteractive,
-  gnused,
-  gnugrep,
-  glibc,
-  xterm,
-  util-linux,
+{ fetchFromGitHub
+, lib
+, stdenv
+, makeWrapper
+, xorg
+, ncurses
+, coreutils
+, bashInteractive
+, gnused
+, gnugrep
+, glibc
+, xterm
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

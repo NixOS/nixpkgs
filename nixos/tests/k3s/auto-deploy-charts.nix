@@ -1,11 +1,10 @@
 # Tests whether container images are imported and auto deploying Helm charts,
 # including the bundled traefik, work
 import ../make-test-python.nix (
-  {
-    k3s,
-    lib,
-    pkgs,
-    ...
+  { k3s
+  , lib
+  , pkgs
+  , ...
   }:
   let
     testImageEnv = pkgs.buildEnv {
@@ -83,7 +82,7 @@ import ../make-test-python.nix (
               # Remove unsafeDiscardStringContext workaround when Nix can convert a string to a path
               # https://github.com/NixOS/nix/issues/12407
               values = /.
-              + builtins.unsafeDiscardStringContext (
+                + builtins.unsafeDiscardStringContext (
                 builtins.toFile "k3s-test-chart-values.yaml" ''
                   runCommand: "echo 'Hello, file!'"
                   image:

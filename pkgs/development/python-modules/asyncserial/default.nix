@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyserial,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+,
 }:
 
 buildPythonPackage {

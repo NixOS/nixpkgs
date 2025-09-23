@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  backoff,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  reverse-geocode,
-  setuptools-scm,
-  yarl,
+{ lib
+, aiohttp
+, backoff
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, reverse-geocode
+, setuptools-scm
+, yarl
+,
 }:
 
 buildPythonPackage rec {

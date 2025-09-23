@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  incremental,
-  packaging,
-  systembridgemodels,
-  pytest-aiohttp,
-  pytest-socket,
-  pytestCheckHook,
-  syrupy,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, incremental
+, packaging
+, systembridgemodels
+, pytest-aiohttp
+, pytest-socket
+, pytestCheckHook
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

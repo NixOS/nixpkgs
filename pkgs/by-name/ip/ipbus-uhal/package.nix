@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  bash,
-  cacert,
-  boost186,
-  pugixml,
-  python3,
-  python3Packages,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, bash
+, cacert
+, boost186
+, pugixml
+, python3
+, python3Packages
+, fetchFromGitHub
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

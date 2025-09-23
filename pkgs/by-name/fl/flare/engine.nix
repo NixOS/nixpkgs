@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+,
 }:
 
 stdenv.mkDerivation rec {

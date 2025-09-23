@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  directoryListingUpdater,
+{ lib
+, stdenv
+, fetchurl
+, directoryListingUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

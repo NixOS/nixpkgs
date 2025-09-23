@@ -1,10 +1,10 @@
-{
-  lib,
-  SDL,
-  SDL_image,
-  autoreconfHook,
-  fetchFromGitHub,
-  stdenv,
+{ lib
+, SDL
+, SDL_image
+, autoreconfHook
+, fetchFromGitHub
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

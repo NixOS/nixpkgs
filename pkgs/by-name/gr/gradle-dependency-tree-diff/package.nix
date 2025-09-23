@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle,
-  makeBinaryWrapper,
-  jre_headless,
-  zulu11,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle
+, makeBinaryWrapper
+, jre_headless
+, zulu11
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gradle-dependency-tree-diff";

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.photoprism;
@@ -114,9 +113,10 @@ in
           cfg.storagePath
         ];
 
-        LoadCredential = lib.optionalString (
-          cfg.passwordFile != null
-        ) "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
+        LoadCredential = lib.optionalString
+          (
+            cfg.passwordFile != null
+          ) "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
 
         LockPersonality = true;
         PrivateDevices = true;

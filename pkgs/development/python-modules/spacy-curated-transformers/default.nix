@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  curated-tokenizers,
-  curated-transformers,
-  spacy,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, curated-tokenizers
+, curated-transformers
+, spacy
+, torch
+,
 }:
 
 buildPythonPackage rec {

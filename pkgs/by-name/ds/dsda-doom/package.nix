@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
-  SDL2_mixer,
-  SDL2_image,
-  fluidsynth,
-  portmidi,
-  libopenmpt,
-  libvorbis,
-  libmad,
-  libGLU,
-  libzip,
-  alsa-lib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+, SDL2_mixer
+, SDL2_image
+, fluidsynth
+, portmidi
+, libopenmpt
+, libvorbis
+, libmad
+, libGLU
+, libzip
+, alsa-lib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

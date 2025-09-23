@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  pandoc,
-  installShellFiles,
-  perl,
-  xorg,
-  libGLX,
-  coreutils,
-  unixtools,
-  runtimeShell,
-  targetPackages,
-  gnugrep,
-  gawk,
-  withGL ? true,
-  withX11perf ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, pandoc
+, installShellFiles
+, perl
+, xorg
+, libGLX
+, coreutils
+, unixtools
+, runtimeShell
+, targetPackages
+, gnugrep
+, gawk
+, withGL ? true
+, withX11perf ? true
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  cgal,
-  cmake,
-  gpp,
-  mpfr,
-  qt6Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cgal
+, cmake
+, gpp
+, mpfr
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

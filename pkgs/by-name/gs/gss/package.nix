@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  gtk-doc,
-  withShishi ? !stdenv.hostPlatform.isDarwin,
-  shishi,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, gtk-doc
+, withShishi ? !stdenv.hostPlatform.isDarwin
+, shishi
+,
 }:
 
 stdenv.mkDerivation rec {

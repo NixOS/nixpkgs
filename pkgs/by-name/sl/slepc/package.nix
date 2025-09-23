@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  python3Packages,
-  arpack-mpi,
-  petsc,
-  mpi,
-  mpiCheckPhaseHook,
-  pythonSupport ? false,
-  withExamples ? false,
-  withArpack ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitLab
+, python3Packages
+, arpack-mpi
+, petsc
+, mpi
+, mpiCheckPhaseHook
+, pythonSupport ? false
+, withExamples ? false
+, withArpack ? stdenv.hostPlatform.isLinux
+,
 }:
 assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;

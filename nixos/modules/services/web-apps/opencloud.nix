@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -220,9 +219,11 @@ in
             }
             // commonServiceConfig;
 
-            restartTriggers = lib.mapAttrsToList (
-              name: _: config.environment.etc."opencloud/${name}.yaml".source
-            ) cfg.settings;
+            restartTriggers = lib.mapAttrsToList
+              (
+                name: _: config.environment.etc."opencloud/${name}.yaml".source
+              )
+              cfg.settings;
           };
         };
     };
@@ -239,10 +240,12 @@ in
     };
 
     environment.etc =
-      (lib.mapAttrs' (name: value: {
-        name = "opencloud/${name}.yaml";
-        value.source = settingsFormat.generate "${name}.yaml" value;
-      }) cfg.settings)
+      (lib.mapAttrs'
+        (name: value: {
+          name = "opencloud/${name}.yaml";
+          value.source = settingsFormat.generate "${name}.yaml" value;
+        })
+        cfg.settings)
       // {
         # ensure /etc/opencloud gets created, so we can provision the config
         "opencloud/.keep".text = "";

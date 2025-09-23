@@ -1,31 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  rustPlatform,
-  cffi,
-
-  # native dependencies
-  libiconv,
-
-  # tests
-  numpy,
-  psutil,
-  pytestCheckHook,
-  python-dateutil,
-  pytz,
-  xxhash,
-
-  # for passthru.tests
-  falcon,
-  fastapi,
-  gradio,
-  mashumaro,
-  ufolib2,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  rustPlatform
+, cffi
+, # native dependencies
+  libiconv
+, # tests
+  numpy
+, psutil
+, pytestCheckHook
+, python-dateutil
+, pytz
+, xxhash
+, # for passthru.tests
+  falcon
+, fastapi
+, gradio
+, mashumaro
+, ufolib2
+,
 }:
 
 buildPythonPackage rec {

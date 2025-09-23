@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  makefun,
-  decopatch,
-  packaging,
-  pythonOlder,
-  pytest,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, makefun
+, decopatch
+, packaging
+, pythonOlder
+, pytest
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

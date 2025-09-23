@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cups,
-  fetchpatch,
-  dos2unix,
+{ lib
+, stdenv
+, fetchurl
+, cups
+, fetchpatch
+, dos2unix
+,
 }:
 
 let

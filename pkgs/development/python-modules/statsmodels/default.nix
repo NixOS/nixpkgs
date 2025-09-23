@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  numpy,
-  packaging,
-  pandas,
-  patsy,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  stdenv,
+{ lib
+, buildPythonPackage
+, cython
+, fetchPypi
+, numpy
+, packaging
+, pandas
+, patsy
+, scipy
+, setuptools
+, setuptools-scm
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

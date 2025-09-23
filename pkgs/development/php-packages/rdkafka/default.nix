@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  rdkafka,
-  pcre2,
+{ buildPecl
+, lib
+, rdkafka
+, pcre2
+,
 }:
 
 buildPecl {

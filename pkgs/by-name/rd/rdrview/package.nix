@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libxml2,
-  curl,
-  libseccomp,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libxml2
+, curl
+, libseccomp
+, installShellFiles
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

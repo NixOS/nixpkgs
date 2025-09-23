@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  SDL2_ttf,
-  ffmpeg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, SDL2_ttf
+, ffmpeg
+,
 }:
 
 stdenv.mkDerivation rec {

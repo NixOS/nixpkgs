@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  nodejs,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  fetchFromGitHub,
-  yarn-berry_4,
-  python3,
-  pkg-config,
-  pango,
-  cairo,
-  pixman,
-  libsecret,
-  electron_36,
-  xcbuild,
-  buildPackages,
-  callPackage,
-  runCommand,
-  libGL,
+{ lib
+, stdenv
+, nodejs
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, fetchFromGitHub
+, yarn-berry_4
+, python3
+, pkg-config
+, pango
+, cairo
+, pixman
+, libsecret
+, electron_36
+, xcbuild
+, buildPackages
+, callPackage
+, runCommand
+, libGL
+,
 }:
 
 let
@@ -71,13 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # allows overriding to disable building the plugins
   defaultPlugins = getDefaultPlugins (
-    lib.mapAttrsToList (
-      id: plugin:
-      plugin
-      // {
-        patches = [ (getPluginPatch finalAttrs.src id) ];
-      }
-    ) releaseData.plugins
+    lib.mapAttrsToList
+      (
+        id: plugin:
+          plugin
+          // {
+            patches = [ (getPluginPatch finalAttrs.src id) ];
+          }
+      )
+      releaseData.plugins
   );
 
   buildInputs = [

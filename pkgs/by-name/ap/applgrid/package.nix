@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gfortran,
-  hoppet,
-  lhapdf,
-  root,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, gfortran
+, hoppet
+, lhapdf
+, root
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

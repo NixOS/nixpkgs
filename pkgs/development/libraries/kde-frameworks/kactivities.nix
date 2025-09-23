@@ -1,13 +1,13 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  boost,
-  kconfig,
-  kcoreaddons,
-  kio,
-  kwindowsystem,
-  qtbase,
-  qtdeclarative,
+{ mkDerivation
+, extra-cmake-modules
+, boost
+, kconfig
+, kcoreaddons
+, kio
+, kwindowsystem
+, qtbase
+, qtdeclarative
+,
 }:
 
 mkDerivation {

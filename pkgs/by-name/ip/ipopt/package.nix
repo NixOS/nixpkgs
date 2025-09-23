@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  blas,
-  lapack,
-  gfortran,
-  enableAMPL ? true,
-  libamplsolver,
-  enableMUMPS ? true,
-  mumps,
-  mpi,
-  enableSPRAL ? true,
-  spral,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, blas
+, lapack
+, gfortran
+, enableAMPL ? true
+, libamplsolver
+, enableMUMPS ? true
+, mumps
+, mpi
+, enableSPRAL ? true
+, spral
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

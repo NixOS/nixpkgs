@@ -1,12 +1,12 @@
-{
-  replaceVarsWith,
-  perl,
-  shadow,
-  util-linux,
-  installShellFiles,
-  configurationDirectory ? "/etc/nixos-containers",
-  stateDirectory ? "/var/lib/nixos-containers",
-  nixosTests,
+{ replaceVarsWith
+, perl
+, shadow
+, util-linux
+, installShellFiles
+, configurationDirectory ? "/etc/nixos-containers"
+, stateDirectory ? "/var/lib/nixos-containers"
+, nixosTests
+,
 }:
 replaceVarsWith {
   name = "nixos-container";

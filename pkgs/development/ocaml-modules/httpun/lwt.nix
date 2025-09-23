@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  httpun,
-  lwt,
-  gluten,
-  gluten-lwt,
+{ buildDunePackage
+, httpun
+, lwt
+, gluten
+, gluten-lwt
+,
 }:
 
 buildDunePackage {

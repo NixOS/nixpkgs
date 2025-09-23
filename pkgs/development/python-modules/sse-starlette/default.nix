@@ -1,23 +1,23 @@
-{
-  lib,
-  anyio,
-  asgi-lifespan,
-  async-timeout,
-  buildPythonPackage,
-  fastapi,
-  fetchFromGitHub,
-  httpx,
-  portend,
-  psutil,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  starlette,
-  tenacity,
-  testcontainers,
-  uvicorn,
+{ lib
+, anyio
+, asgi-lifespan
+, async-timeout
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, httpx
+, portend
+, psutil
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, starlette
+, tenacity
+, testcontainers
+, uvicorn
+,
 }:
 
 buildPythonPackage rec {

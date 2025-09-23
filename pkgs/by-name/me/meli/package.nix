@@ -1,29 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  rustPlatform,
-
-  # native build inputs
-  pkg-config,
-  installShellFiles,
-  makeWrapper,
-  mandoc,
-  rustfmt,
-  file,
-  writableTmpDirAsHomeHook,
-
-  # build inputs
-  openssl,
-  dbus,
-  sqlite,
-
-  # runtime deps
-  gpgme,
-  gnum4,
-
-  withNotmuch ? true,
-  notmuch,
+{ stdenv
+, lib
+, fetchzip
+, rustPlatform
+, # native build inputs
+  pkg-config
+, installShellFiles
+, makeWrapper
+, mandoc
+, rustfmt
+, file
+, writableTmpDirAsHomeHook
+, # build inputs
+  openssl
+, dbus
+, sqlite
+, # runtime deps
+  gpgme
+, gnum4
+, withNotmuch ? true
+, notmuch
+,
 }:
 
 rustPlatform.buildRustPackage rec {

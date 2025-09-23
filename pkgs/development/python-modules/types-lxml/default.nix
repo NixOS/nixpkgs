@@ -1,21 +1,21 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  cssselect,
-  fetchFromGitHub,
-  html5lib,
-  hypothesis,
-  lxml,
-  mypy,
-  pdm-backend,
-  pook,
-  pyright,
-  pytestCheckHook,
-  typeguard,
-  types-html5lib,
-  typing-extensions,
-  urllib3,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, cssselect
+, fetchFromGitHub
+, html5lib
+, hypothesis
+, lxml
+, mypy
+, pdm-backend
+, pook
+, pyright
+, pytestCheckHook
+, typeguard
+, types-html5lib
+, typing-extensions
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

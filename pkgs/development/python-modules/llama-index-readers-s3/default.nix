@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  llama-index-core,
-  llama-index-readers-file,
-  hatchling,
-  pythonOlder,
-  s3fs,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, llama-index-core
+, llama-index-readers-file
+, hatchling
+, pythonOlder
+, s3fs
+,
 }:
 
 buildPythonPackage rec {

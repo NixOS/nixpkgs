@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  django,
-  psycopg2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, django
+, psycopg2
+,
 }:
 
 buildPythonPackage rec {

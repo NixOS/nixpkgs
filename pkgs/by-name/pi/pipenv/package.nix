@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  installShellFiles,
-  pipenv,
-  runCommand,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, installShellFiles
+, pipenv
+, runCommand
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 with python3.pkgs;
@@ -16,17 +16,17 @@ let
 
   runtimeDeps =
     ps:
-    with ps;
-    [
-      certifi
-      setuptools
-      pip
-      virtualenv
-      virtualenv-clone
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAndroid [
-      pyjnius
-    ];
+      with ps;
+      [
+        certifi
+        setuptools
+        pip
+        virtualenv
+        virtualenv-clone
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAndroid [
+        pyjnius
+      ];
 
   pythonEnv = python3.withPackages runtimeDeps;
 

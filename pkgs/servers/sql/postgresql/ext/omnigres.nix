@@ -1,19 +1,19 @@
-{
-  brotli,
-  clang_18,
-  cmake,
-  fetchFromGitHub,
-  flex,
-  lib,
-  netcat,
-  perl,
-  pkg-config,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
-  python3,
-  stdenv,
-  unstableGitUpdater,
+{ brotli
+, clang_18
+, cmake
+, fetchFromGitHub
+, flex
+, lib
+, netcat
+, perl
+, pkg-config
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+, python3
+, stdenv
+, unstableGitUpdater
+,
 }:
 
 let

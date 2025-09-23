@@ -3,23 +3,23 @@
 # contents of a directory that can be populated with commands. The
 # generated image is sized to only fit its contents, with the expectation
 # that a script resizes the filesystem at boot time.
-{
-  pkgs,
-  lib,
-  # List of derivations to be included
-  storePaths,
-  # Whether or not to compress the resulting image with zstd
-  compressImage ? false,
-  zstd,
-  # Shell commands to populate the ./files directory.
+{ pkgs
+, lib
+, # List of derivations to be included
+  storePaths
+, # Whether or not to compress the resulting image with zstd
+  compressImage ? false
+, zstd
+, # Shell commands to populate the ./files directory.
   # All files in that directory are copied to the root of the FS.
-  populateImageCommands ? "",
-  volumeLabel,
-  uuid ? "44444444-4444-4444-8888-888888888888",
-  e2fsprogs,
-  libfaketime,
-  perl,
-  fakeroot,
+  populateImageCommands ? ""
+, volumeLabel
+, uuid ? "44444444-4444-4444-8888-888888888888"
+, e2fsprogs
+, libfaketime
+, perl
+, fakeroot
+,
 }:
 
 let

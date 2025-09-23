@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  pycryptodomex,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pycryptodomex
+, pytestCheckHook
+, requests
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

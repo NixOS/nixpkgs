@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  gzip,
-  python3,
-  stdenvNoCC,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, gzip
+, python3
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation (self: {
@@ -22,10 +22,10 @@ stdenvNoCC.mkDerivation (self: {
     lib.mapAttrsToList
       (
         rev: hash:
-        fetchpatch {
-          url = "https://github.com/globalwordnet/english-wordnet/commit/${rev}.patch";
-          inherit hash;
-        }
+          fetchpatch {
+            url = "https://github.com/globalwordnet/english-wordnet/commit/${rev}.patch";
+            inherit hash;
+          }
       )
       {
         # Upstream commit bumping the version number, accidentally omitted from the tagged release

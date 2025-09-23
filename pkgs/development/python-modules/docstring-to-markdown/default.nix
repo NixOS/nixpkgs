@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  importlib-metadata,
-  pytestCheckHook,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-metadata
+, pytestCheckHook
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

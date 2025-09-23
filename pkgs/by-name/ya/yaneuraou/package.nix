@@ -1,39 +1,38 @@
-{
-  lib,
-  stdenv,
-  clangStdenv,
-  lld,
-  # Available labels: https://github.com/yaneurao/YaneuraOu/blob/59f6265cebbd4f03138091098059a881a021eefa/source/Makefile#L53-L92
-  targetLabel ?
-    with stdenv.hostPlatform;
-    if isDarwin then
-      if isAarch64 then
-        "APPLEM1"
-      else if avx2Support then
-        "APPLEAVX2"
-      else
-        "APPLESSE42"
-    else if isx86_64 then
-      if avx512Support then
-        "AVX512"
-      else if avx2Support then
-        "AVX2"
-      else if sse4_2Support then
-        "SSE42"
-      else if sse4_1Support then
-        "SSE41"
-      else if ssse3Support then
-        "SSSE3"
-      else
-        "SSE2"
-    else if isx86_32 then
-      "NO_SSE"
+{ lib
+, stdenv
+, clangStdenv
+, lld
+, # Available labels: https://github.com/yaneurao/YaneuraOu/blob/59f6265cebbd4f03138091098059a881a021eefa/source/Makefile#L53-L92
+  targetLabel ? with stdenv.hostPlatform;
+  if isDarwin then
+    if isAarch64 then
+      "APPLEM1"
+    else if avx2Support then
+      "APPLEAVX2"
     else
-      "OTHER",
-  fetchFromGitHub,
-  fetchurl,
-  _7zz,
-  nix-update-script,
+      "APPLESSE42"
+  else if isx86_64 then
+    if avx512Support then
+      "AVX512"
+    else if avx2Support then
+      "AVX2"
+    else if sse4_2Support then
+      "SSE42"
+    else if sse4_1Support then
+      "SSE41"
+    else if ssse3Support then
+      "SSSE3"
+    else
+      "SSE2"
+  else if isx86_32 then
+    "NO_SSE"
+  else
+    "OTHER"
+, fetchFromGitHub
+, fetchurl
+, _7zz
+, nix-update-script
+,
 }:
 
 # Use clangStdenv instead of the default stdenv because:

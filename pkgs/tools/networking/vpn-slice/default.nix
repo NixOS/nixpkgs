@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonApplication,
-  nix-update-script,
-  fetchFromGitHub,
-  dnspython,
-  iproute2,
-  iptables,
-  setproctitle,
-  setuptools,
-  unixtools,
+{ lib
+, stdenv
+, buildPythonApplication
+, nix-update-script
+, fetchFromGitHub
+, dnspython
+, iproute2
+, iptables
+, setproctitle
+, setuptools
+, unixtools
+,
 }:
 
 buildPythonApplication rec {

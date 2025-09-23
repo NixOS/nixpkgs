@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  imagemagick,
-  glew110,
-  SDL_compat,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, imagemagick
+, glew110
+, SDL_compat
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

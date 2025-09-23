@@ -1,36 +1,36 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  pkgconfig,
-  wrapGAppsHook3,
-  gettext,
-  gtk3,
-  glib,
-  dbus,
-  gobject-introspection,
-  xmodmap,
-  pygobject3,
-  setuptools,
-  evdev,
-  pydantic,
-  pydbus,
-  psutil,
-  procps,
-  gtksourceview4,
-  bash,
-  udevCheckHook,
-  nixosTests,
-  # Change the default log level to debug for easier debugging of package issues
-  withDebugLogLevel ? false,
-  # Xmodmap is an optional dependency
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, pkgconfig
+, wrapGAppsHook3
+, gettext
+, gtk3
+, glib
+, dbus
+, gobject-introspection
+, xmodmap
+, pygobject3
+, setuptools
+, evdev
+, pydantic
+, pydbus
+, psutil
+, procps
+, gtksourceview4
+, bash
+, udevCheckHook
+, nixosTests
+, # Change the default log level to debug for easier debugging of package issues
+  withDebugLogLevel ? false
+, # Xmodmap is an optional dependency
   # If you use Xmodmap to set keyboard mappings (or your DE does)
   # it is required to correctly map keys
-  withXmodmap ? true,
-  # Some tests are flakey under high CPU load and could cause intermittent
+  withXmodmap ? true
+, # Some tests are flakey under high CPU load and could cause intermittent
   # failures when building. Override this to true to run tests anyway
   # See upstream issue: https://github.com/sezanzeb/input-remapper/issues/306
-  withDoCheck ? false,
+  withDoCheck ? false
+,
 }:
 
 let

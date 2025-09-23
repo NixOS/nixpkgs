@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  cmake,
-  catch2_3,
-  fmt,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, cmake
+, catch2_3
+, fmt
+, python3
+,
 }:
 
 let

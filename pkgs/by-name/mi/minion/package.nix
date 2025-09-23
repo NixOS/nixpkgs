@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchzip,
-  openjfx21,
-  openjdk21,
-  makeDesktopItem,
-  wrapGAppsHook3,
-  makeBinaryWrapper,
+{ stdenvNoCC
+, lib
+, fetchzip
+, openjfx21
+, openjdk21
+, makeDesktopItem
+, wrapGAppsHook3
+, makeBinaryWrapper
+,
 }:
 
 let

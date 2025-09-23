@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  writeScript,
-  qt5,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  glibc,
-  cpio,
-  xar,
-  undmg,
-  gtk3,
-  pango,
-  libxcb,
+{ stdenv
+, lib
+, writeScript
+, qt5
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, glibc
+, cpio
+, xar
+, undmg
+, gtk3
+, pango
+, libxcb
+,
 }:
 let
   pname = "synology-drive-client";

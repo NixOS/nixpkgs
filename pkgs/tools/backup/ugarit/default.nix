@@ -1,8 +1,8 @@
-{
-  lib,
-  eggDerivation,
-  fetchegg,
-  z3,
+{ lib
+, eggDerivation
+, fetchegg
+, z3
+,
 }:
 
 let

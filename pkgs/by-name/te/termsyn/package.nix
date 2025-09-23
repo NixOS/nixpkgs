@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mkfontscale,
+{ lib
+, stdenv
+, fetchurl
+, mkfontscale
+,
 }:
 
 stdenv.mkDerivation rec {

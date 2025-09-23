@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  cmake,
-  file,
-  pkg-config,
-  python3,
-  SDL2,
-  SDL2_mixer,
-  cef-binary,
-  egl-wayland,
-  ffmpeg,
-  fftw,
-  glew,
-  glfw,
-  glm,
-  kissfftFloat,
-  libXau,
-  libXdmcp,
-  libXpm,
-  libXrandr,
-  libXxf86vm,
-  libdecor,
-  libffi,
-  libglut,
-  libpng,
-  libpulseaudio,
-  lz4,
-  mpv,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoPatchelfHook
+, cmake
+, file
+, pkg-config
+, python3
+, SDL2
+, SDL2_mixer
+, cef-binary
+, egl-wayland
+, ffmpeg
+, fftw
+, glew
+, glfw
+, glm
+, kissfftFloat
+, libXau
+, libXdmcp
+, libXpm
+, libXrandr
+, libXxf86vm
+, libdecor
+, libffi
+, libglut
+, libpng
+, libpulseaudio
+, lz4
+, mpv
+, wayland
+, wayland-protocols
+, wayland-scanner
+, zlib
+,
 }:
 
 let
@@ -46,8 +46,7 @@ let
       {
         aarch64-linux = "sha256-LK5JvtcmuwCavK7LnWmMF2UDpM5iIZOmsuZS/t9koDs=";
         x86_64-linux = "sha256-JKwZgOYr57GuosM31r1Lx3DczYs35HxtuUs5fxPsTcY=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   });
 in
 stdenv.mkDerivation (finalAttrs: {

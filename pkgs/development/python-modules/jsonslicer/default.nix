@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  pytestCheckHook,
-  unittestCheckHook,
-  setuptools,
-  pkg-config,
-  yajl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, pytestCheckHook
+, unittestCheckHook
+, setuptools
+, pkg-config
+, yajl
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cloudpickle,
-  cython,
-  hypothesis,
-  jinja2,
-  numpy,
-  nvidia-ml-py,
-  psutil,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
-  setuptools-scm,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, cloudpickle
+, cython
+, hypothesis
+, jinja2
+, numpy
+, nvidia-ml-py
+, psutil
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, rich
+, setuptools-scm
+, setuptools
+,
 }:
 
 let

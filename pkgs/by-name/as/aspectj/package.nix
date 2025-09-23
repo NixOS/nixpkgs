@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  jre,
+{ lib
+, stdenvNoCC
+, fetchurl
+, jre
+,
 }:
 
 let

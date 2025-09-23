@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtwebsockets,
-  kdeclarative,
-  kpackage,
+{ mkKdeDerivation
+, qtwebsockets
+, kdeclarative
+, kpackage
+,
 }:
 mkKdeDerivation {
   pname = "kunifiedpush";

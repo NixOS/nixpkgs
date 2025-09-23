@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  pkg-config,
-  ffmpeg-livepeer,
-  gnutls,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, pkg-config
+, ffmpeg-livepeer
+, gnutls
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

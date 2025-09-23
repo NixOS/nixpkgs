@@ -1,9 +1,9 @@
-{
-  lib,
-  apple-sdk,
-  libutil,
-  mkAppleDerivation,
-  pkg-config,
+{ lib
+, apple-sdk
+, libutil
+, mkAppleDerivation
+, pkg-config
+,
 }:
 
 mkAppleDerivation {

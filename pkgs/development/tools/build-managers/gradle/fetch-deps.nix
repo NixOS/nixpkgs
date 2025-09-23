@@ -1,27 +1,27 @@
-{
-  mitm-cache,
-  lib,
-  pkgs,
-  stdenv,
-  callPackage,
+{ mitm-cache
+, lib
+, pkgs
+, stdenv
+, callPackage
+,
 }:
 
 let
   getPkg = attrPath: lib.getAttrFromPath (lib.splitString "." (toString attrPath)) pkgs;
 in
 # the derivation to fetch/update deps for
-{
-  pkg ? getPkg attrPath,
-  pname ? null,
-  attrPath ? pname,
-  # bwrap flags for the update script (this will be put in bash as-is)
+{ pkg ? getPkg attrPath
+, pname ? null
+, attrPath ? pname
+, # bwrap flags for the update script (this will be put in bash as-is)
   # this is relevant for downstream users
-  bwrapFlags ? "--ro-bind \"$PWD\" \"$PWD\"",
-  # deps path (relative to the package directory, or absolute)
-  data,
-  # redirect stdout to stderr to allow the update script to be used with update script combinators
-  silent ? true,
-  useBwrap ? stdenv.hostPlatform.isLinux,
+  bwrapFlags ? "--ro-bind \"$PWD\" \"$PWD\""
+, # deps path (relative to the package directory, or absolute)
+  data
+, # redirect stdout to stderr to allow the update script to be used with update script combinators
+  silent ? true
+, useBwrap ? stdenv.hostPlatform.isLinux
+,
 }@attrs:
 
 let
@@ -169,9 +169,11 @@ let
                   sortedJarPomList = lib.sort sortByVersion jarPomList;
 
                   uniqueVersionFiles = builtins.map ({ i, x }: x) (
-                    builtins.filter (
-                      { i, x }: i == 0 || (builtins.elemAt sortedJarPomList (i - 1)).version != x.version
-                    ) (lib.imap0 (i: x: { inherit i x; }) sortedJarPomList)
+                    builtins.filter
+                      (
+                        { i, x }: i == 0 || (builtins.elemAt sortedJarPomList (i - 1)).version != x.version
+                      )
+                      (lib.imap0 (i: x: { inherit i x; }) sortedJarPomList)
                   );
                   uniqueVersions' = map (x: x.version) uniqueVersionFiles;
                   releaseVersions = map (x: x.version) (builtins.filter (x: !x.isSnapshot) uniqueVersionFiles);

@@ -1,26 +1,26 @@
-{
-  config,
-  stdenv,
-  lib,
-  fetchurl,
-  intltool,
-  pkg-config,
-  python3Packages,
-  bluez,
-  gtk3,
-  obex_data_server,
-  xdg-utils,
-  dnsmasq,
-  dhcpcd,
-  iproute2,
-  adwaita-icon-theme,
-  librsvg,
-  wrapGAppsHook3,
-  gobject-introspection,
-  networkmanager,
-  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  procps,
+{ config
+, stdenv
+, lib
+, fetchurl
+, intltool
+, pkg-config
+, python3Packages
+, bluez
+, gtk3
+, obex_data_server
+, xdg-utils
+, dnsmasq
+, dhcpcd
+, iproute2
+, adwaita-icon-theme
+, librsvg
+, wrapGAppsHook3
+, gobject-introspection
+, networkmanager
+, withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, libpulseaudio
+, procps
+,
 }:
 
 let

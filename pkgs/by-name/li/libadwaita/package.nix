@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gi-docgen,
-  meson,
-  ninja,
-  pkg-config,
-  sassc,
-  vala,
-  gobject-introspection,
-  appstream,
-  fribidi,
-  glib,
-  gtk4,
-  gnome,
-  adwaita-icon-theme,
-  gsettings-desktop-schemas,
-  desktop-file-utils,
-  xvfb-run,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gi-docgen
+, meson
+, ninja
+, pkg-config
+, sassc
+, vala
+, gobject-introspection
+, appstream
+, fribidi
+, glib
+, gtk4
+, gnome
+, adwaita-icon-theme
+, gsettings-desktop-schemas
+, desktop-file-utils
+, xvfb-run
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

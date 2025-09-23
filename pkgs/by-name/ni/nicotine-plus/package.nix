@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  wrapGAppsHook4,
-  gdk-pixbuf,
-  gettext,
-  gobject-introspection,
-  gtk4,
-  glib,
-  python3Packages,
-  libadwaita,
+{ lib
+, fetchFromGitHub
+, wrapGAppsHook4
+, gdk-pixbuf
+, gettext
+, gobject-introspection
+, gtk4
+, glib
+, python3Packages
+, libadwaita
+,
 }:
 let
 

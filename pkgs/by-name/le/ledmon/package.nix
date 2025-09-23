@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  udev,
-  sg3_utils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, udev
+, sg3_utils
+,
 }:
 
 stdenv.mkDerivation rec {

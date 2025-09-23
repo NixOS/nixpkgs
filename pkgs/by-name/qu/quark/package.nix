@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  patches ? null,
+{ lib
+, stdenv
+, fetchgit
+, patches ? null
+,
 }:
 
 stdenv.mkDerivation {

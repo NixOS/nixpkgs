@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  keyring,
-  pytestCheckHook,
-  pythonOlder,
-  playwright,
-  setuptools,
-  setuptools-scm,
+{ lib
+, stdenv
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, keyring
+, pytestCheckHook
+, pythonOlder
+, playwright
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

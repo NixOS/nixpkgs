@@ -1,10 +1,10 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  testers,
-  installShellFiles,
-  upsun,
+{ stdenvNoCC
+, lib
+, fetchurl
+, testers
+, installShellFiles
+, upsun
+,
 }:
 
 let

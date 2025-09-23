@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  git,
-  grype,
-  nix,
-  nix-visualize,
-  python3,
-  vulnix,
+{ lib
+, fetchFromGitHub
+, git
+, grype
+, nix
+, nix-visualize
+, python3
+, vulnix
+,
 }:
 
 let

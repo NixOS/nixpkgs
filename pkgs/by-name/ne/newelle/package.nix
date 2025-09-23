@@ -1,22 +1,22 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  gobject-introspection,
-  desktop-file-utils,
-  libadwaita,
-  vte-gtk4,
-  gsettings-desktop-schemas,
-  gtksourceview5,
-  webkitgtk_6_0,
-  lsb-release,
-  bash,
-  ffmpeg,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, gobject-introspection
+, desktop-file-utils
+, libadwaita
+, vte-gtk4
+, gsettings-desktop-schemas
+, gtksourceview5
+, webkitgtk_6_0
+, lsb-release
+, bash
+, ffmpeg
+, nix-update-script
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  libiconv,
-  testers,
+{ fetchurl
+, lib
+, stdenv
+, libiconv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

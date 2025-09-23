@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  testers,
-  mpack,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, testers
+, mpack
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  modemmanager,
+{ mkKdeDerivation
+, pkg-config
+, modemmanager
+,
 }:
 mkKdeDerivation {
   pname = "modemmanager-qt";

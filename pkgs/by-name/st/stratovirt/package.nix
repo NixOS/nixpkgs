@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchgit,
-  pkg-config,
-  pixman,
-  libcap_ng,
-  cyrus_sasl,
-  libpulseaudio,
-  gtk3,
-  libusbgx,
-  alsa-lib,
-  linuxHeaders,
-  libseccomp,
+{ lib
+, rustPlatform
+, fetchgit
+, pkg-config
+, pixman
+, libcap_ng
+, cyrus_sasl
+, libpulseaudio
+, gtk3
+, libusbgx
+, alsa-lib
+, linuxHeaders
+, libseccomp
+,
 }:
 
 rustPlatform.buildRustPackage rec {

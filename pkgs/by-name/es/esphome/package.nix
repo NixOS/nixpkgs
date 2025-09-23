@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
-  platformio,
-  esptool,
-  git,
-  inetutils,
-  versionCheckHook,
-  nixosTests,
+{ lib
+, stdenv
+, callPackage
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, platformio
+, esptool
+, git
+, inetutils
+, versionCheckHook
+, nixosTests
+,
 }:
 
 let

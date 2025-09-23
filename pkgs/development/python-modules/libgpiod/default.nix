@@ -1,7 +1,7 @@
-{
-  lib,
-  buildPythonPackage,
-  libgpiod,
+{ lib
+, buildPythonPackage
+, libgpiod
+,
 }:
 buildPythonPackage {
   inherit (libgpiod) pname version src;

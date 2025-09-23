@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.hardware.deviceTree;
@@ -206,11 +205,13 @@ in
           ]
         '';
         type = lib.types.listOf (
-          lib.types.coercedTo lib.types.path (path: {
-            name = baseNameOf path;
-            filter = null;
-            dtboFile = path;
-          }) overlayType
+          lib.types.coercedTo lib.types.path
+            (path: {
+              name = baseNameOf path;
+              filter = null;
+              dtboFile = path;
+            })
+            overlayType
         );
         description = ''
           List of overlays to apply to base device-tree (.dtb) files.

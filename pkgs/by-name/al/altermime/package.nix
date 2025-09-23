@@ -1,7 +1,7 @@
-{
-  lib,
-  gccStdenv,
-  fetchurl,
+{ lib
+, gccStdenv
+, fetchurl
+,
 }:
 
 gccStdenv.mkDerivation rec {

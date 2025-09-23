@@ -1,14 +1,14 @@
-{
-  lib,
-  commitizen,
-  fetchFromGitHub,
-  gitMinimal,
-  stdenv,
-  installShellFiles,
-  nix-update-script,
-  python3Packages,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, commitizen
+, fetchFromGitHub
+, gitMinimal
+, stdenv
+, installShellFiles
+, nix-update-script
+, python3Packages
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonPackage rec {

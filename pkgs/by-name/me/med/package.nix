@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  qt6,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  jsoncpp,
-  readline,
+{ stdenv
+, lib
+, qt6
+, fetchFromGitHub
+, cmake
+, pkg-config
+, jsoncpp
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {

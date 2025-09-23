@@ -1,17 +1,17 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  appstream,
-  desktop-file-utils,
-  gobject-introspection,
-  wrapGAppsHook4,
-  pkg-config,
-  libadwaita,
-  libportal-gtk4,
-  gnome,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, meson
+, ninja
+, appstream
+, desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook4
+, pkg-config
+, libadwaita
+, libportal-gtk4
+, gnome
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "netpeek";

@@ -1,9 +1,9 @@
-{
-  python3Packages,
-  fetchFromGitHub,
-  ffmpeg,
-  lib,
-  versionCheckHook,
+{ python3Packages
+, fetchFromGitHub
+, ffmpeg
+, lib
+, versionCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

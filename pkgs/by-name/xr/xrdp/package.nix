@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  applyPatches,
-  fetchFromGitHub,
-  pkg-config,
-  which,
-  perl,
-  autoconf,
-  automake,
-  libtool,
-  openssl,
-  systemd,
-  pam,
-  fuse3,
-  libdrm,
-  libjpeg,
-  libopus,
-  nasm,
-  xorg,
-  lame,
-  pixman,
-  libjpeg_turbo,
-  _experimental-update-script-combinators,
-  gitUpdater,
-  nixosTests,
+{ lib
+, stdenv
+, applyPatches
+, fetchFromGitHub
+, pkg-config
+, which
+, perl
+, autoconf
+, automake
+, libtool
+, openssl
+, systemd
+, pam
+, fuse3
+, libdrm
+, libjpeg
+, libopus
+, nasm
+, xorg
+, lame
+, pixman
+, libjpeg_turbo
+, _experimental-update-script-combinators
+, gitUpdater
+, nixosTests
+,
 }:
 
 let

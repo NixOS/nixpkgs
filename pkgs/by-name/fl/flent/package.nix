@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  procps,
-  qt5,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchPypi
+, procps
+, qt5
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "flent";

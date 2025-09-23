@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  ffmpeg,
-  libaom,
-  nasm,
-  nix-update-script,
-  pkg-config,
-  rav1e,
-  rustPlatform,
-  vapoursynth,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, ffmpeg
+, libaom
+, nasm
+, nix-update-script
+, pkg-config
+, rav1e
+, rustPlatform
+, vapoursynth
+,
 }:
 
 rustPlatform.buildRustPackage rec {

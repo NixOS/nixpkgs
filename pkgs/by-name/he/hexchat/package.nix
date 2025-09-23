@@ -1,24 +1,24 @@
-{
-  dbus-glib,
-  desktop-file-utils,
-  enchant2,
-  fetchFromGitHub,
-  gtk2,
-  isocodes,
-  lib,
-  libcanberra-gtk2,
-  libnotify,
-  libproxy,
-  lua,
-  makeWrapper,
-  meson,
-  ninja,
-  openssl,
-  pciutils,
-  perl,
-  pkg-config,
-  python3Packages,
-  stdenv,
+{ dbus-glib
+, desktop-file-utils
+, enchant2
+, fetchFromGitHub
+, gtk2
+, isocodes
+, lib
+, libcanberra-gtk2
+, libnotify
+, libproxy
+, lua
+, makeWrapper
+, meson
+, ninja
+, openssl
+, pciutils
+, perl
+, pkg-config
+, python3Packages
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

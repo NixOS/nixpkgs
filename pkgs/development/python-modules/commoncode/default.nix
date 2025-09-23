@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  attrs,
-  beautifulsoup4,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  saneyaml,
-  setuptools-scm,
-  text-unidecode,
+{ lib
+, stdenv
+, attrs
+, beautifulsoup4
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, requests
+, saneyaml
+, setuptools-scm
+, text-unidecode
+,
 }:
 
 buildPythonPackage rec {

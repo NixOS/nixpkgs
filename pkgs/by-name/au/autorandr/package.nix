@@ -1,12 +1,12 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  systemd,
-  xrandr,
-  installShellFiles,
-  desktop-file-utils,
-  udevCheckHook,
+{ lib
+, python3
+, fetchFromGitHub
+, systemd
+, xrandr
+, installShellFiles
+, desktop-file-utils
+, udevCheckHook
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

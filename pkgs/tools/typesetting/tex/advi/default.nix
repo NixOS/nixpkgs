@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  lib,
-  makeWrapper,
-  writeShellScriptBin,
-  ghostscriptX,
-  ocamlPackages,
-  texliveMedium,
-  which,
+{ fetchurl
+, lib
+, makeWrapper
+, writeShellScriptBin
+, ghostscriptX
+, ocamlPackages
+, texliveMedium
+, which
+,
 }:
 
 let

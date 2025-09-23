@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  expat,
-  fmt_11,
-  proj,
-  bzip2,
-  cli11,
-  zlib,
-  boost,
-  libpq,
-  python3,
-  withLuaJIT ? false,
-  lua,
-  luajit,
-  libosmium,
-  nlohmann_json,
-  opencv,
-  potrace,
-  protozero,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, fmt_11
+, proj
+, bzip2
+, cli11
+, zlib
+, boost
+, libpq
+, python3
+, withLuaJIT ? false
+, lua
+, luajit
+, libosmium
+, nlohmann_json
+, opencv
+, potrace
+, protozero
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

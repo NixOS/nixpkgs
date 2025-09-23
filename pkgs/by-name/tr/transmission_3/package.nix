@@ -1,35 +1,35 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  openssl,
-  curl,
-  libevent,
-  inotify-tools,
-  systemd,
-  zlib,
-  pcre,
-  libb64,
-  libutp,
-  miniupnpc,
-  dht,
-  libnatpmp,
-  libiconv,
-  # Build options
-  enableGTK3 ? false,
-  gtk3,
-  xorg,
-  wrapGAppsHook3,
-  enableQt ? false,
-  qt5,
-  nixosTests,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  enableDaemon ? true,
-  enableCli ? true,
-  installLib ? false,
-  apparmorRulesFromClosure,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, openssl
+, curl
+, libevent
+, inotify-tools
+, systemd
+, zlib
+, pcre
+, libb64
+, libutp
+, miniupnpc
+, dht
+, libnatpmp
+, libiconv
+, # Build options
+  enableGTK3 ? false
+, gtk3
+, xorg
+, wrapGAppsHook3
+, enableQt ? false
+, qt5
+, nixosTests
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, enableDaemon ? true
+, enableCli ? true
+, installLib ? false
+, apparmorRulesFromClosure
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

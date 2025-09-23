@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  importlib-metadata,
-  sphinx,
-  pyenchant,
-  setuptools,
-  setuptools-scm,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, importlib-metadata
+, sphinx
+, pyenchant
+, setuptools
+, setuptools-scm
+, wheel
+,
 }:
 
 buildPythonPackage rec {

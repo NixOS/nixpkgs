@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  kdePackages,
-  opencloud-desktop-shell-integration-resources,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, kdePackages
+, opencloud-desktop-shell-integration-resources
+,
 }:
 
 stdenv.mkDerivation rec {

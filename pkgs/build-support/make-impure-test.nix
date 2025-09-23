@@ -7,7 +7,7 @@
   The following example shows a test that accesses the GPU:
 
   Example:
-    makeImpureTest {
+  makeImpureTest {
       name = "opencl";
       testedPackage = "mypackage"; # Or testPath = "mypackage.impureTests.opencl.testDerivation"
 
@@ -16,32 +16,30 @@
       nixFlags = []; # (Optional) nix-build options for the runScript
 
       testScript = "...";
-    }
+  }
 
   Save as `test.nix` next to a package and reference it from the package:
-    passthru.impureTests = { opencl = callPackage ./test.nix {}; };
+  passthru.impureTests = { opencl = callPackage ./test.nix {}; };
 
   `makeImpureTest` will return here a script that contains the actual nix-build command including all necessary sandbox flags.
 
   It can be executed like this:
-    $(nix-build -A mypackage.impureTests)
+  $(nix-build -A mypackage.impureTests)
 
   Rerun an already cached test:
-    $(nix-build -A mypackage.impureTests) --check
+  $(nix-build -A mypackage.impureTests) --check
 */
-{
-  lib,
-  stdenv,
-  writeShellScript,
-
-  name,
-  testedPackage ? null,
-  testPath ? "${testedPackage}.impureTests.${name}.testDerivation",
-  sandboxPaths ? [ "/sys" ],
-  prepareRunCommands ? "",
-  nixFlags ? [ ],
-  testScript,
-  ...
+{ lib
+, stdenv
+, writeShellScript
+, name
+, testedPackage ? null
+, testPath ? "${testedPackage}.impureTests.${name}.testDerivation"
+, sandboxPaths ? [ "/sys" ]
+, prepareRunCommands ? ""
+, nixFlags ? [ ]
+, testScript
+, ...
 }@args:
 
 let

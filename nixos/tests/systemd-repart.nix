@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -14,9 +14,9 @@ let
   # as well an optional `sizeDiff` (defaulting to +32M), describing how should
   # be resized.
   useDiskImage =
-    {
-      machine,
-      sizeDiff ? "+32M",
+    { machine
+    , sizeDiff ? "+32M"
+    ,
     }:
     ''
       import os
@@ -42,11 +42,10 @@ let
     '';
 
   common =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     {
       virtualisation.useDefaultFilesystems = false;
@@ -120,11 +119,10 @@ in
     meta.maintainers = with maintainers; [ flokli ];
 
     nodes.machine =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
+      { config
+      , pkgs
+      , lib
+      , ...
       }:
       {
         imports = [ common ];
@@ -215,11 +213,10 @@ in
     meta.maintainers = with maintainers; [ nikstur ];
 
     nodes.machine =
-      {
-        config,
-        lib,
-        pkgs,
-        ...
+      { config
+      , lib
+      , pkgs
+      , ...
       }:
       {
         virtualisation.useDefaultFilesystems = false;

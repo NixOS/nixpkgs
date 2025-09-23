@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  ruamel-yaml,
-  attrs,
-  pythonOlder,
-  pytest7CheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, ruamel-yaml
+, attrs
+, pythonOlder
+, pytest7CheckHook
+, pytest-cov-stub
+, pytest-xdist
+, numpy
+,
 }:
 
 buildPythonPackage rec {

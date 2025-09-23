@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  makeWrapper,
-  coreutils,
-  findutils,
-  gnugrep,
-  jre,
-  openssl,
-  util-linux,
-  wget,
-  which,
-  zenity,
-  libGL,
-  libpulseaudio,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, makeWrapper
+, coreutils
+, findutils
+, gnugrep
+, jre
+, openssl
+, util-linux
+, wget
+, which
+, zenity
+, libGL
+, libpulseaudio
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

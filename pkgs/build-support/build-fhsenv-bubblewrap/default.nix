@@ -1,38 +1,37 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  runCommandLocal,
-  writeShellScript,
-  glibc,
-  pkgsHostTarget,
-  runCommandCC,
-  coreutils,
-  bubblewrap,
+{ lib
+, stdenv
+, callPackage
+, runCommandLocal
+, writeShellScript
+, glibc
+, pkgsHostTarget
+, runCommandCC
+, coreutils
+, bubblewrap
+,
 }:
 
-{
-  pname ? throw "You must provide either `name` or `pname`",
-  version ? throw "You must provide either `name` or `version`",
-  name ? "${pname}-${version}",
-  runScript ? "bash",
-  nativeBuildInputs ? [ ],
-  extraInstallCommands ? "",
-  executableName ? args.pname or name,
-  meta ? { },
-  passthru ? { },
-  extraPreBwrapCmds ? "",
-  extraBwrapArgs ? [ ],
-  unshareUser ? false,
-  unshareIpc ? false,
-  unsharePid ? false,
-  unshareNet ? false,
-  unshareUts ? false,
-  unshareCgroup ? false,
-  privateTmp ? false,
-  chdirToPwd ? true,
-  dieWithParent ? true,
-  ...
+{ pname ? throw "You must provide either `name` or `pname`"
+, version ? throw "You must provide either `name` or `version`"
+, name ? "${pname}-${version}"
+, runScript ? "bash"
+, nativeBuildInputs ? [ ]
+, extraInstallCommands ? ""
+, executableName ? args.pname or name
+, meta ? { }
+, passthru ? { }
+, extraPreBwrapCmds ? ""
+, extraBwrapArgs ? [ ]
+, unshareUser ? false
+, unshareIpc ? false
+, unsharePid ? false
+, unshareNet ? false
+, unshareUts ? false
+, unshareCgroup ? false
+, privateTmp ? false
+, chdirToPwd ? true
+, dieWithParent ? true
+, ...
 }@args:
 
 # NOTE:
@@ -59,14 +58,16 @@ let
   inherit (pkgsHostTarget) pkgsi686Linux;
 
   # we don't know which have been supplied, and want to avoid defaulting missing attrs to null. Passed into runCommandLocal
-  nameAttrs = lib.filterAttrs (
-    key: value:
-    builtins.elem key [
-      "name"
-      "pname"
-      "version"
-    ]
-  ) args;
+  nameAttrs = lib.filterAttrs
+    (
+      key: value:
+        builtins.elem key [
+          "name"
+          "pname"
+          "version"
+        ]
+    )
+    args;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
@@ -172,8 +173,8 @@ let
 
   indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd =
-    {
-      initArgs ? "",
+    { initArgs ? ""
+    ,
     }:
     ''
       ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
@@ -330,7 +331,7 @@ in
 runCommandLocal name
   (
     nameAttrs
-    // {
+      // {
       inherit nativeBuildInputs;
 
       passthru = passthru // {

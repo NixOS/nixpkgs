@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  fontconfig,
-  freetype,
-  libxkbcommon,
-  wayland,
-  SDL2,
-  SDL2_image,
-  SDL2_gfx,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, fontconfig
+, freetype
+, libxkbcommon
+, wayland
+, SDL2
+, SDL2_image
+, SDL2_gfx
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

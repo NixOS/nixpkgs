@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  cacert,
-  addBinToPathHook,
+{ lib
+, fetchFromGitHub
+, python3
+, cacert
+, addBinToPathHook
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

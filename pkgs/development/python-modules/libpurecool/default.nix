@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  netifaces,
-  paho-mqtt,
-  pycryptodome,
-  requests,
-  six,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, netifaces
+, paho-mqtt
+, pycryptodome
+, requests
+, six
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

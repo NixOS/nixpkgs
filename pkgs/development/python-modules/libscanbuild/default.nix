@@ -1,8 +1,8 @@
-{
-  lib,
-  llvmPackages,
-  buildPythonPackage,
-  libear,
+{ lib
+, llvmPackages
+, buildPythonPackage
+, libear
+,
 }:
 let
   inherit (llvmPackages) clang-unwrapped;

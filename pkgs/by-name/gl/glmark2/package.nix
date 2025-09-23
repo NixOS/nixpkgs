@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  meson,
-  ninja,
-  wayland-scanner,
-  libjpeg,
-  libpng,
-  libX11,
-  libGL,
-  libdrm,
-  udev,
-  wayland,
-  wayland-protocols,
-  libgbm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, meson
+, ninja
+, wayland-scanner
+, libjpeg
+, libpng
+, libX11
+, libGL
+, libdrm
+, udev
+, wayland
+, wayland-protocols
+, libgbm
+,
 }:
 
 stdenv.mkDerivation rec {

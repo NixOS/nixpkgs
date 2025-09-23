@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libev,
-  libX11,
-  libXext,
-  libXi,
-  libXfixes,
-  pkg-config,
-  asciidoc,
-  libxslt,
-  docbook_xsl,
-
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libev
+, libX11
+, libXext
+, libXi
+, libXfixes
+, pkg-config
+, asciidoc
+, libxslt
+, docbook_xsl
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

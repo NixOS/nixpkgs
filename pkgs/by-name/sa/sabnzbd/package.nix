@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  coreutils,
-  fetchFromGitHub,
-  fetchPypi,
-  python3,
-  par2cmdline-turbo,
-  unzip,
-  unrar,
-  p7zip,
-  util-linux,
-  makeWrapper,
-  nixosTests,
+{ lib
+, stdenv
+, coreutils
+, fetchFromGitHub
+, fetchPypi
+, python3
+, par2cmdline-turbo
+, unzip
+, unrar
+, p7zip
+, util-linux
+, makeWrapper
+, nixosTests
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libiconv,
-  dirty-equals,
-  pytest-benchmark,
-  pytestCheckHook,
-  pythonOlder,
-  rustPlatform,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, libiconv
+, dirty-equals
+, pytest-benchmark
+, pytestCheckHook
+, pythonOlder
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

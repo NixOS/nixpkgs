@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  gfortran,
-  mpi,
-  python3Packages,
-  ctestCheckHook,
-  mpiCheckPhaseHook,
-  mpiSupport ? true,
-  pythonSupport ? false,
-  fortranSupport ? false,
-
-  # passthru.tests
-  testers,
-  catalyst,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, gfortran
+, mpi
+, python3Packages
+, ctestCheckHook
+, mpiCheckPhaseHook
+, mpiSupport ? true
+, pythonSupport ? false
+, fortranSupport ? false
+, # passthru.tests
+  testers
+, catalyst
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,17 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs =
     # create meta package providing dist-info for python3Pacakges.catalyst that common cmake build does not do
-    lib.optional pythonSupport (
-      python3Packages.mkPythonMetaPackage {
-        inherit (finalAttrs) pname version meta;
-        dependencies =
-          with python3Packages;
-          [
-            numpy
-          ]
-          ++ lib.optional mpiSupport (mpi4py.override { inherit mpi; });
-      }
-    )
+    lib.optional pythonSupport
+      (
+        python3Packages.mkPythonMetaPackage {
+          inherit (finalAttrs) pname version meta;
+          dependencies =
+            with python3Packages;
+            [
+              numpy
+            ]
+            ++ lib.optional mpiSupport (mpi4py.override { inherit mpi; });
+        }
+      )
     ++ lib.optional mpiSupport mpi;
 
   cmakeFlags = [

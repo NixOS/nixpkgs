@@ -1,8 +1,8 @@
-{
-  nano,
-  expect,
-  runCommand,
-  writeScriptBin,
+{ nano
+, expect
+, runCommand
+, writeScriptBin
+,
 }:
 
 let
@@ -32,13 +32,13 @@ let
   '';
 in
 runCommand "nano-test-expect"
-  {
-    nativeBuildInputs = [
-      nano
-      expect
-    ];
-    passthru = { inherit expect-script; };
-  }
+{
+  nativeBuildInputs = [
+    nano
+    expect
+  ];
+  passthru = { inherit expect-script; };
+}
   ''
     expect -f ${expect-script}/bin/expect-script
     grep "Hello world!" file.txt

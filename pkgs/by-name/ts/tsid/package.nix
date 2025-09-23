@@ -1,16 +1,16 @@
-{
-  cmake,
-  doxygen,
-  eiquadprog,
-  fetchFromGitHub,
-  lib,
-  osqp-eigen,
-  pkg-config,
-  pinocchio,
-  proxsuite,
-  stdenv,
-  pythonSupport ? false,
-  python3Packages,
+{ cmake
+, doxygen
+, eiquadprog
+, fetchFromGitHub
+, lib
+, osqp-eigen
+, pkg-config
+, pinocchio
+, proxsuite
+, stdenv
+, pythonSupport ? false
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,16 +1,16 @@
-{
-  lib,
-  beautifultable,
-  buildPythonPackage,
-  click,
-  click-default-group,
-  fetchFromGitHub,
-  humanize,
-  keyring,
-  unittestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
+{ lib
+, beautifultable
+, buildPythonPackage
+, click
+, click-default-group
+, fetchFromGitHub
+, humanize
+, keyring
+, unittestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

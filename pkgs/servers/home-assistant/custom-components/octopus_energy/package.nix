@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  pytestCheckHook,
-  pytest-homeassistant-custom-component,
-  pydantic,
-  mock,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, pytestCheckHook
+, pytest-homeassistant-custom-component
+, pydantic
+, mock
+, nix-update-script
+,
 }:
 buildHomeAssistantComponent rec {
   owner = "BottlecapDave";

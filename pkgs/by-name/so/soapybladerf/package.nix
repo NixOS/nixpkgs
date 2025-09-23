@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libbladeRF,
-  soapysdr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libbladeRF
+, soapysdr
+,
 }:
 
 let

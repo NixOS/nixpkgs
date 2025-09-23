@@ -4,12 +4,11 @@
 # `config'. By default, the Nix store is shared read-only with the
 # host, which makes (re)building VMs very efficient.
 
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 
 with lib;
@@ -54,10 +53,10 @@ let
     };
 
   selectPartitionTableLayout =
-    {
-      useEFIBoot,
-      useDefaultFilesystems,
-      useBIOSBoot,
+    { useEFIBoot
+    , useDefaultFilesystems
+    , useBIOSBoot
+    ,
     }:
     if useDefaultFilesystems then
       if useEFIBoot then
@@ -71,11 +70,10 @@ let
 
   driveCmdline =
     idx:
-    {
-      file,
-      driveExtraOpts,
-      deviceExtraOpts,
-      ...
+    { file
+    , driveExtraOpts
+    , deviceExtraOpts
+    , ...
     }:
     let
       drvId = "drive${toString idx}";
@@ -1045,8 +1043,7 @@ in
             "ppc64-linux" = "tpm-spapr";
             "armv7-linux" = "tpm-tis-device";
             "aarch64-linux" = "tpm-tis-device";
-          }
-          .${pkgs.stdenv.hostPlatform.system} or (throw "Unsupported system for TPM2 emulation in QEMU")
+          }.${pkgs.stdenv.hostPlatform.system} or (throw "Unsupported system for TPM2 emulation in QEMU")
         );
         defaultText = ''
           Based on the guest platform Linux system:
@@ -1125,26 +1122,27 @@ in
   config = {
 
     assertions =
-      lib.concatLists (
-        lib.flip lib.imap cfg.forwardPorts (
-          i: rule: [
-            {
-              assertion = rule.from == "guest" -> rule.proto == "tcp";
-              message = ''
-                Invalid virtualisation.forwardPorts.<entry ${toString i}>.proto:
-                  Guest forwarding supports only TCP connections.
-              '';
-            }
-            {
-              assertion = rule.from == "guest" -> lib.hasPrefix "10.0.2." rule.guest.address;
-              message = ''
-                Invalid virtualisation.forwardPorts.<entry ${toString i}>.guest.address:
-                  The address must be in the default VLAN (10.0.2.0/24).
-              '';
-            }
-          ]
+      lib.concatLists
+        (
+          lib.flip lib.imap cfg.forwardPorts (
+            i: rule: [
+              {
+                assertion = rule.from == "guest" -> rule.proto == "tcp";
+                message = ''
+                  Invalid virtualisation.forwardPorts.<entry ${toString i}>.proto:
+                    Guest forwarding supports only TCP connections.
+                '';
+              }
+              {
+                assertion = rule.from == "guest" -> lib.hasPrefix "10.0.2." rule.guest.address;
+                message = ''
+                  Invalid virtualisation.forwardPorts.<entry ${toString i}>.guest.address:
+                    The address must be in the default VLAN (10.0.2.0/24).
+                '';
+              }
+            ]
+          )
         )
-      )
       ++ [
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
@@ -1239,11 +1237,11 @@ in
     virtualisation.qemu.networkingOptions =
       let
         forwardingOptions = flip concatMapStrings cfg.forwardPorts (
-          {
-            proto,
-            from,
-            host,
-            guest,
+          { proto
+          , from
+          , host
+          , guest
+          ,
           }:
           if from == "host" then
             "hostfwd=${proto}:${host.address}:${toString host.port}-"
@@ -1329,16 +1327,18 @@ in
           driveExtraOpts.format = "raw";
         }
       ])
-      (imap0 (
-        idx: imgCfg:
-        lib.mkMerge [
-          {
-            file = "$(pwd)/empty${toString idx}.qcow2";
-            driveExtraOpts.werror = "report";
-          }
-          imgCfg.driveConfig
-        ]
-      ) cfg.emptyDiskImages)
+      (imap0
+        (
+          idx: imgCfg:
+            lib.mkMerge [
+              {
+                file = "$(pwd)/empty${toString idx}.qcow2";
+                driveExtraOpts.werror = "report";
+              }
+              imgCfg.driveConfig
+            ]
+        )
+        cfg.emptyDiskImages)
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via

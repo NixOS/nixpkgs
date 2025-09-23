@@ -1,16 +1,16 @@
-{
-  lib,
-  mkDerivation,
-  libcMinimal,
-  bsdSetupHook,
-  openbsdSetupHook,
-  makeMinimal,
-  byacc,
-  install,
-  tsort,
-  lorder,
-  mandoc,
-  statHook,
+{ lib
+, mkDerivation
+, libcMinimal
+, bsdSetupHook
+, openbsdSetupHook
+, makeMinimal
+, byacc
+, install
+, tsort
+, lorder
+, mandoc
+, statHook
+,
 }:
 
 mkDerivation {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pcsclite,
-  boost,
-  pkg-config,
-  testers,
-  beidconnect,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcsclite
+, boost
+, pkg-config
+, testers
+, beidconnect
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "beidconnect";

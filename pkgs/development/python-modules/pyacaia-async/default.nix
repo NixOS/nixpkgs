@@ -1,11 +1,11 @@
-{
-  lib,
-  bleak,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  wheel,
+{ lib
+, bleak
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+,
 }:
 let
   python = python3.withPackages (

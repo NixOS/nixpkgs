@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  email-validator,
-  fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cryptography
+, email-validator
+, fetchFromGitHub
+, poetry-core
+, pydantic
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

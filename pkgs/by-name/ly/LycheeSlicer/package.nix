@@ -1,11 +1,11 @@
-{
-  appimageTools,
-  fetchurl,
-  makeDesktopItem,
-  lib,
-  xorg,
-  wayland,
-  wayland-protocols,
+{ appimageTools
+, fetchurl
+, makeDesktopItem
+, lib
+, xorg
+, wayland
+, wayland-protocols
+,
 }:
 let
   pname = "LycheeSlicer";

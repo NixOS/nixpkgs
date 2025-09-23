@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  testers,
-  cf-vault,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, testers
+, cf-vault
+,
 }:
 buildGoModule rec {
   pname = "cf-vault";

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  fetchpatch,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchzip
+, fetchpatch
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation {

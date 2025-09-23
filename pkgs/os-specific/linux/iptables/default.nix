@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  pruneLibtoolFiles,
-  flex,
-  bison,
-  libmnl,
-  libnetfilter_conntrack,
-  libnfnetlink,
-  libnftnl,
-  libpcap,
-  bash,
-  bashNonInteractive,
-  nftablesCompat ? true,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, pruneLibtoolFiles
+, flex
+, bison
+, libmnl
+, libnetfilter_conntrack
+, libnfnetlink
+, libnftnl
+, libpcap
+, bash
+, bashNonInteractive
+, nftablesCompat ? true
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,22 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-
-  npmHooks,
-  fetchNpmDeps,
-  nodejs,
-
-  rustPlatform,
-  cargo-tauri_1,
-
-  pkg-config,
-  wrapGAppsHook3,
-  libXtst,
-  libevdev,
-  udevCheckHook,
-  gtk3,
-  libsoup_2_4,
-  webkitgtk_4_0,
+{ lib
+, fetchFromGitHub
+, npmHooks
+, fetchNpmDeps
+, nodejs
+, rustPlatform
+, cargo-tauri_1
+, pkg-config
+, wrapGAppsHook3
+, libXtst
+, libevdev
+, udevCheckHook
+, gtk3
+, libsoup_2_4
+, webkitgtk_4_0
+,
 }:
 
 rustPlatform.buildRustPackage rec {

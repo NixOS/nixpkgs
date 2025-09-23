@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  gmp,
-  gcc,
-  openssl,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, gmp
+, gcc
+, openssl
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

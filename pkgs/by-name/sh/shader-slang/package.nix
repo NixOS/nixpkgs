@@ -1,29 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  python3,
-  miniz,
-  lz4,
-  libxml2,
-  libX11,
-  glslang,
-  unordered_dense,
-  llvmPackages,
-  versionCheckHook,
-  gitUpdater,
-
-  # Required for compiling to SPIR-V or GLSL
-  withGlslang ? true,
-  # Can be used for compiling shaders to CPU targets, see:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, python3
+, miniz
+, lz4
+, libxml2
+, libX11
+, glslang
+, unordered_dense
+, llvmPackages
+, versionCheckHook
+, gitUpdater
+, # Required for compiling to SPIR-V or GLSL
+  withGlslang ? true
+, # Can be used for compiling shaders to CPU targets, see:
   # https://github.com/shader-slang/slang/blob/master/docs/cpu-target.md
   # If `withLLVM` is disabled, Slang will fall back to the C++ compiler found
   # in the environment, if one exists.
-  withLLVM ? false,
-  # Dynamically link against libllvm and libclang++ (upstream defaults to static)
-  withSharedLLVM ? withLLVM,
+  withLLVM ? false
+, # Dynamically link against libllvm and libclang++ (upstream defaults to static)
+  withSharedLLVM ? withLLVM
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

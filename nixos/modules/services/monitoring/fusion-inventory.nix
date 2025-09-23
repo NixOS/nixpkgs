@@ -1,9 +1,8 @@
 # Fusion Inventory daemon.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.fusionInventory;

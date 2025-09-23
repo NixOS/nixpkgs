@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  camlp-streams,
-  decompress,
+{ lib
+, fetchurl
+, buildDunePackage
+, camlp-streams
+, decompress
+,
 }:
 
 buildDunePackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, stdlib
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -19,7 +19,8 @@ mkCoqDerivation {
         case = range "8.17" "8.19";
         out = "0.0.11";
       }
-    ] null;
+    ]
+      null;
   release = {
     "0.0.11".sha256 = "sha256-aYoO08nwItlOoE5BnKRGib2Zk4Fz4Ni/L4QaqkObPow=";
   };

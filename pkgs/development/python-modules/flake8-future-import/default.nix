@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  isPy38,
-  isPy39,
-  pythonAtLeast,
-  setuptools,
-  flake8,
-  six,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, isPy38
+, isPy39
+, pythonAtLeast
+, setuptools
+, flake8
+, six
+, python
+,
 }:
 
 buildPythonPackage rec {

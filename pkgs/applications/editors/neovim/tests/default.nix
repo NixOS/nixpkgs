@@ -7,18 +7,18 @@
   -e runs neovim in `:h Ex-mode` which returns an exit code != 0 when hitting an error
   -i NONE  gets rid of shada warnings
 */
-{
-  vimUtils,
-  writeText,
-  neovim,
-  vimPlugins,
-  neovimUtils,
-  wrapNeovimUnstable,
-  neovim-unwrapped,
-  fetchFromGitLab,
-  runCommandLocal,
-  testers,
-  pkgs,
+{ vimUtils
+, writeText
+, neovim
+, vimPlugins
+, neovimUtils
+, wrapNeovimUnstable
+, neovim-unwrapped
+, fetchFromGitLab
+, runCommandLocal
+, testers
+, pkgs
+,
 }:
 let
   inherit (neovimUtils) makeNeovimConfig;

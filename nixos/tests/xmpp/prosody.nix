@@ -46,10 +46,9 @@ in
       };
 
     client-b =
-      {
-        nodes,
-        pkgs,
-        ...
+      { nodes
+      , pkgs
+      , ...
       }:
       {
         security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];

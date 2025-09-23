@@ -1,9 +1,9 @@
-{
-  lib,
-  adv_cmds,
-  bmake,
-  fetchFromGitHub,
-  stdenvNoCC,
+{ lib
+, adv_cmds
+, bmake
+, fetchFromGitHub
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

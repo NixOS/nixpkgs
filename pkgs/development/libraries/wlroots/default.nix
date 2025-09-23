@@ -1,44 +1,43 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  libGL,
-  wayland,
-  wayland-protocols,
-  libinput,
-  libxkbcommon,
-  pixman,
-  libcap,
-  libgbm,
-  xorg,
-  hwdata,
-  seatd,
-  vulkan-loader,
-  glslang,
-  libliftoff,
-  libdisplay-info,
-  lcms2,
-  nixosTests,
-  testers,
-
-  enableXWayland ? true,
-  xwayland ? null,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, libGL
+, wayland
+, wayland-protocols
+, libinput
+, libxkbcommon
+, pixman
+, libcap
+, libgbm
+, xorg
+, hwdata
+, seatd
+, vulkan-loader
+, glslang
+, libliftoff
+, libdisplay-info
+, lcms2
+, nixosTests
+, testers
+, enableXWayland ? true
+, xwayland ? null
+,
 }:
 
 let
   generic =
-    {
-      version,
-      hash,
-      extraBuildInputs ? [ ],
-      extraNativeBuildInputs ? [ ],
-      patches ? [ ],
-      postPatch ? "",
+    { version
+    , hash
+    , extraBuildInputs ? [ ]
+    , extraNativeBuildInputs ? [ ]
+    , patches ? [ ]
+    , postPatch ? ""
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "wlroots";

@@ -1,21 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  SDL,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  fmodex,
-  dwarf-fortress-unfuck,
-  autoPatchelfHook,
-
-  # Our own "unfuck" libs for macOS
-  ncurses,
-  gcc,
-
-  dfVersion,
-  dfVersions,
+{ stdenv
+, lib
+, fetchurl
+, SDL
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, fmodex
+, dwarf-fortress-unfuck
+, autoPatchelfHook
+, # Our own "unfuck" libs for macOS
+  ncurses
+, gcc
+, dfVersion
+, dfVersions
+,
 }:
 
 let

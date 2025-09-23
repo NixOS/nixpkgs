@@ -1,15 +1,15 @@
-{
-  lib,
-  asyncclick,
-  bleak,
-  bleak-retry-connector,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  tzlocal,
+{ lib
+, asyncclick
+, bleak
+, bleak-retry-connector
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

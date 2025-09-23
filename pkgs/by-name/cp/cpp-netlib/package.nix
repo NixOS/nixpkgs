@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost186,
-  openssl,
-  llvmPackages_18,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost186
+, openssl
+, llvmPackages_18
+,
 }:
 let
   # std::char_traits has been removed

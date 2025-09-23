@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  writeShellApplication,
-  curl,
-  common-updater-scripts,
-  unzip,
+{ lib
+, stdenvNoCC
+, fetchurl
+, writeShellApplication
+, curl
+, common-updater-scripts
+, unzip
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

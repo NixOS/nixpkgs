@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  clr,
-  gfortran,
-  rocblas,
-  rocsolver,
-  rocsparse,
-  suitesparse,
-  gtest,
-  lapack-reference,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  buildSamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, clr
+, gfortran
+, rocblas
+, rocsolver
+, rocsparse
+, suitesparse
+, gtest
+, lapack-reference
+, buildTests ? false
+, buildBenchmarks ? false
+, buildSamples ? false
+,
 }:
 
 # Can also use cuSOLVER

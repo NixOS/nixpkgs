@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  buildEnv,
-  fetchFromGitHub,
-  python3Packages,
+{ lib
+, stdenv
+, replaceVars
+, buildEnv
+, fetchFromGitHub
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation rec {

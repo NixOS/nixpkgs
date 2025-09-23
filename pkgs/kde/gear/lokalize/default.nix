@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  hunspell,
+{ mkKdeDerivation
+, pkg-config
+, hunspell
+,
 }:
 mkKdeDerivation {
   pname = "lokalize";

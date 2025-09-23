@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  dream-pure,
-  lwt_ppx,
-  httpun-ws,
+{ buildDunePackage
+, dream-pure
+, lwt_ppx
+, httpun-ws
+,
 }:
 
 buildDunePackage {

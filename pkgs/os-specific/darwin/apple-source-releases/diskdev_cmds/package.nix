@@ -1,10 +1,10 @@
-{
-  lib,
-  apple-sdk,
-  libutil,
-  mkAppleDerivation,
-  removefile,
-  stdenvNoCC,
+{ lib
+, apple-sdk
+, libutil
+, mkAppleDerivation
+, removefile
+, stdenvNoCC
+,
 }:
 
 let

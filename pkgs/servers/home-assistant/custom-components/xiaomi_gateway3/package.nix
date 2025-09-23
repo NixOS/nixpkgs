@@ -1,9 +1,9 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  zigpy,
-  nix-update-script,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, zigpy
+, nix-update-script
+,
 }:
 
 buildHomeAssistantComponent rec {

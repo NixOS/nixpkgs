@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  importlib-metadata,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  toml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, importlib-metadata
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, toml
+,
 }:
 
 buildPythonPackage rec {

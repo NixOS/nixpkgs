@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  audioop-lts,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, audioop-lts
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "standard-sunau";

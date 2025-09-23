@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
-
-  # dependencies
-  aiofile,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-randomly,
-  faker,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, poetry-dynamic-versioning
+, # dependencies
+  aiofile
+, typing-extensions
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytest-randomly
+, faker
+,
 }:
 
 buildPythonPackage rec {

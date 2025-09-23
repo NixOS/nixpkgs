@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  fetchpatch,
-  ocaml,
-  findlib,
-  pkg-config,
-  gtk2,
-  libgnomecanvas,
-  gtksourceview,
-  camlp-streams,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, ocaml
+, findlib
+, pkg-config
+, gtk2
+, libgnomecanvas
+, gtksourceview
+, camlp-streams
+,
 }:
 
 let

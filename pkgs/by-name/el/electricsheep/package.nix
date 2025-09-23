@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  wxGTK32,
-  ffmpeg,
-  lua5_1,
-  curl,
-  libpng,
-  xorg,
-  pkg-config,
-  flam3,
-  libgtop,
-  boost,
-  tinyxml,
-  libglut,
-  libGLU,
-  libGL,
-  glee,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wxGTK32
+, ffmpeg
+, lua5_1
+, curl
+, libpng
+, xorg
+, pkg-config
+, flam3
+, libgtop
+, boost
+, tinyxml
+, libglut
+, libGLU
+, libGL
+, glee
+,
 }:
 
 stdenv.mkDerivation {

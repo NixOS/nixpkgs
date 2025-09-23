@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
-  xcb-util-cursor,
+{ lib
+, stdenv
+, fetchFromBitbucket
+, xcbutil
+, xcbutilkeysyms
+, xcbutilwm
+, xcb-util-cursor
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

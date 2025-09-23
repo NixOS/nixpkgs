@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  lib,
-  cython,
-  libseccomp,
+{ buildPythonPackage
+, lib
+, cython
+, libseccomp
+,
 }:
 
 buildPythonPackage rec {

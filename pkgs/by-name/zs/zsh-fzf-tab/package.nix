@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  zsh,
-  ncurses,
-  autoconf,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, zsh
+, ncurses
+, autoconf
+, nix-update-script
+,
 }:
 
 let

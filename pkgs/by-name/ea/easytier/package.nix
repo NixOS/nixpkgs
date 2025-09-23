@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  protobuf,
-  nixosTests,
-  nix-update-script,
-  withQuic ? false, # with QUIC protocol support
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, protobuf
+, nixosTests
+, nix-update-script
+, withQuic ? false
+, # with QUIC protocol support
 }:
 
 rustPlatform.buildRustPackage rec {

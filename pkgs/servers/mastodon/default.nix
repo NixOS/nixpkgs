@@ -1,25 +1,24 @@
-{
-  lib,
-  stdenv,
-  nodejs-slim,
-  bundlerEnv,
-  nixosTests,
-  yarn-berry,
-  callPackage,
-  ruby,
-  writeShellScript,
-  brotli,
-  python3,
-
-  # Allow building a fork or custom version of Mastodon:
-  pname ? "mastodon",
-  version ? srcOverride.version,
-  patches ? [ ],
-  # src is a package
-  srcOverride ? callPackage ./source.nix { inherit patches; },
-  gemset ? ./. + "/gemset.nix",
-  yarnHash ? srcOverride.yarnHash,
-  yarnMissingHashes ? srcOverride.yarnMissingHashes,
+{ lib
+, stdenv
+, nodejs-slim
+, bundlerEnv
+, nixosTests
+, yarn-berry
+, callPackage
+, ruby
+, writeShellScript
+, brotli
+, python3
+, # Allow building a fork or custom version of Mastodon:
+  pname ? "mastodon"
+, version ? srcOverride.version
+, patches ? [ ]
+, # src is a package
+  srcOverride ? callPackage ./source.nix { inherit patches; }
+, gemset ? ./. + "/gemset.nix"
+, yarnHash ? srcOverride.yarnHash
+, yarnMissingHashes ? srcOverride.yarnMissingHashes
+,
 }:
 
 stdenv.mkDerivation rec {

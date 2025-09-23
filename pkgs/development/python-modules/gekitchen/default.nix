@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  bidict,
-  buildPythonPackage,
-  fetchFromGitHub,
-  humanize,
-  lxml,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  slixmpp,
-  websockets,
+{ lib
+, aiohttp
+, bidict
+, buildPythonPackage
+, fetchFromGitHub
+, humanize
+, lxml
+, pytestCheckHook
+, pythonOlder
+, requests
+, slixmpp
+, websockets
+,
 }:
 
 buildPythonPackage rec {

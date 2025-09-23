@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchFromGitHub,
-  brotli,
-  lz4,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchFromGitHub
+, brotli
+, lz4
+, setuptools
+,
 }:
 
 let

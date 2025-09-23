@@ -1,13 +1,13 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qtbase,
-  qtgraphicaleffects,
-  wrapQtAppsHook,
-  udevCheckHook,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qtbase
+, qtgraphicaleffects
+, wrapQtAppsHook
+, udevCheckHook
+,
 }:
 
 mkDerivation rec {

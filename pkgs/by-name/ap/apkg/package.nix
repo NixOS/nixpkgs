@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3Packages,
-  gitMinimal,
-  rpm,
-  dpkg,
-  fakeroot,
+{ lib
+, fetchFromGitLab
+, python3Packages
+, gitMinimal
+, rpm
+, dpkg
+, fakeroot
+,
 }:
 
 python3Packages.buildPythonApplication rec {

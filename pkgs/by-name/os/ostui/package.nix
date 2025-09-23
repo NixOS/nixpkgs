@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  pkg-config,
-  mpv-unwrapped,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, pkg-config
+, mpv-unwrapped
+, stdenv
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "ostui";

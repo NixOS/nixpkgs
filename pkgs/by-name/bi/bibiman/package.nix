@@ -1,9 +1,9 @@
-{
-  fetchFromGitea,
-  lib,
-  nix-update-script,
-  rustPlatform,
-  versionCheckHook,
+{ fetchFromGitea
+, lib
+, nix-update-script
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

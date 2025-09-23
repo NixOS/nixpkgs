@@ -1,7 +1,7 @@
-{
-  lib,
-  nix-update-script,
-  fetchFromGitHub,
+{ lib
+, nix-update-script
+, fetchFromGitHub
+,
 }:
 let
   originalDrv = fetchFromGitHub {

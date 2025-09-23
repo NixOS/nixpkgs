@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtdeclarative,
-  qtquickcontrols,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, qmake
+, qtbase
+, qtdeclarative
+, qtquickcontrols
+, wrapQtAppsHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "firebird-emu";

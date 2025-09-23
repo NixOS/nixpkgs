@@ -1,15 +1,15 @@
-{
-  buildFHSEnv,
-  dbus,
-  fetchzip,
-  fontconfig,
-  freetype,
-  glib,
-  lib,
-  libGL,
-  xkeyboard_config,
-  xorg,
-  zlib,
+{ buildFHSEnv
+, dbus
+, fetchzip
+, fontconfig
+, freetype
+, glib
+, lib
+, libGL
+, xkeyboard_config
+, xorg
+, zlib
+,
 }:
 
 let

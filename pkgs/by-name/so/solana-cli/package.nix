@@ -1,19 +1,18 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  udev,
-  protobuf,
-  installShellFiles,
-  pkg-config,
-  openssl,
-  nix-update-script,
-  versionCheckHook,
-  clang,
-  libclang,
-  rocksdb,
-  # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
+{ stdenv
+, fetchFromGitHub
+, lib
+, rustPlatform
+, udev
+, protobuf
+, installShellFiles
+, pkg-config
+, openssl
+, nix-update-script
+, versionCheckHook
+, clang
+, libclang
+, rocksdb
+, # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
   solanaPkgs ? [
     "cargo-build-sbf"
     "cargo-test-sbf"
@@ -33,7 +32,8 @@
     # XXX: Ensure `solana-genesis` is built LAST!
     # See https://github.com/solana-labs/solana/issues/5826
     "solana-genesis"
-  ],
+  ]
+,
 }:
 let
   version = "2.3.8";

@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  perl,
-  tcl,
-  tclPackages,
-  tk,
-  expat,
-  python3,
-  texliveTeTeX,
-  survex,
-  makeWrapper,
-  fmt,
-  proj,
-  wxGTK32,
-  vtk,
-  freetype,
-  libjpeg,
-  gettext,
-  libGL,
-  libGLU,
-  sqlite,
-  libtiff,
-  curl,
-  catch2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, perl
+, tcl
+, tclPackages
+, tk
+, expat
+, python3
+, texliveTeTeX
+, survex
+, makeWrapper
+, fmt
+, proj
+, wxGTK32
+, vtk
+, freetype
+, libjpeg
+, gettext
+, libGL
+, libGLU
+, sqlite
+, libtiff
+, curl
+, catch2
+,
 }:
 
 stdenv.mkDerivation rec {

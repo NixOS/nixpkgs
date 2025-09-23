@@ -1,13 +1,13 @@
-{
-  cmake,
-  fetchFromGitHub,
-  runCommand,
-  lib,
-  libGLU,
-  stdenv,
-  libX11,
-  tcsh,
-  tk,
+{ cmake
+, fetchFromGitHub
+, runCommand
+, lib
+, libGLU
+, stdenv
+, libX11
+, tcsh
+, tk
+,
 }:
 let
   csh = runCommand "csh" { } ''

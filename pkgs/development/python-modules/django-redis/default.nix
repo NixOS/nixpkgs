@@ -1,24 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  pythonOlder,
-  buildPythonPackage,
-  setuptools,
-
-  # propagated
-  django,
-  lz4,
-  msgpack,
-  pyzstd,
-  redis,
-
-  # testing
-  pytest-cov-stub,
-  pytest-django,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  redisTestHook,
+{ lib
+, fetchFromGitHub
+, pythonOlder
+, buildPythonPackage
+, setuptools
+, # propagated
+  django
+, lz4
+, msgpack
+, pyzstd
+, redis
+, # testing
+  pytest-cov-stub
+, pytest-django
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, redisTestHook
+,
 }:
 
 buildPythonPackage rec {

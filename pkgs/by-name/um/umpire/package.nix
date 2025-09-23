@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? null,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? null
+,
 }:
 
 assert cudaSupport -> cudaPackages != null;

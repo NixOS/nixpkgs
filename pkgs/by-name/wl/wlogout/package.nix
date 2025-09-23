@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  gtk-layer-shell,
-  gtk3,
-  libxkbcommon,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  stdenv,
-  wayland,
-  wayland-protocols,
-  # gtk-layer-shell fails to cross-compile due to a hard dependency
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, gtk-layer-shell
+, gtk3
+, libxkbcommon
+, meson
+, ninja
+, pkg-config
+, scdoc
+, stdenv
+, wayland
+, wayland-protocols
+, # gtk-layer-shell fails to cross-compile due to a hard dependency
   # on gobject-introspection.
   # Disable it when cross-compiling since it's an optional dependency.
   # This disables transparency support.
-  withGtkLayerShell ? (stdenv.buildPlatform == stdenv.hostPlatform),
+  withGtkLayerShell ? (stdenv.buildPlatform == stdenv.hostPlatform)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

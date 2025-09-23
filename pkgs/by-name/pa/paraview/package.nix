@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  ninja,
-  qt6Packages,
-  protobuf,
-  vtk-full,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, ninja
+, qt6Packages
+, protobuf
+, vtk-full
+, testers
+,
 }:
 let
   paraviewFilesUrl = "https://www.paraview.org/files";

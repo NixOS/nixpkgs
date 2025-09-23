@@ -1,33 +1,30 @@
-{
-  lib,
-  stdenv,
-
-  writableTmpDirAsHomeHook,
-  cargo,
-  fetchFromGitHub,
-  fetchurl,
-  installShellFiles,
-  lame,
-  mpv-unwrapped,
-  ninja,
-  callPackage,
-  nixosTests,
-  nodejs,
-  jq,
-  protobuf,
-  python3,
-  python3Packages,
-  qt6,
-  rsync,
-  rustPlatform,
-  uv,
-  writeShellScriptBin,
-  yarn,
-  yarn-berry_4,
-
-  swift,
-
-  mesa,
+{ lib
+, stdenv
+, writableTmpDirAsHomeHook
+, cargo
+, fetchFromGitHub
+, fetchurl
+, installShellFiles
+, lame
+, mpv-unwrapped
+, ninja
+, callPackage
+, nixosTests
+, nodejs
+, jq
+, protobuf
+, python3
+, python3Packages
+, qt6
+, rsync
+, rustPlatform
+, uv
+, writeShellScriptBin
+, yarn
+, yarn-berry_4
+, swift
+, mesa
+,
 }:
 
 let
@@ -40,10 +37,12 @@ let
   srcHash = "sha256-nWxRr55Hm40V3Ijw+WetBKNoreLpcvRscgbOZa0REcY=";
   cargoHash = "sha256-H/xwPPL6VupSZGLPEThhoeMcg12FvAX3fmNM6zYfqRQ=";
   yarnHash = "sha256-adHnV345oDm20R8zGdEiEW+8/mTQAz4oxraybRfmwew=";
-  pythonDeps = map (meta: {
-    url = meta.url;
-    path = toString (fetchurl meta);
-  }) (lib.importJSON ./uv-deps.json);
+  pythonDeps = map
+    (meta: {
+      url = meta.url;
+      path = toString (fetchurl meta);
+    })
+    (lib.importJSON ./uv-deps.json);
 
   src = fetchFromGitHub {
     owner = "ankitects";
@@ -92,11 +91,13 @@ let
       ln -vsf ${python3Packages.pyqt6-sip.dist}/*.whl $out
     ''
     + (lib.strings.concatStringsSep "\n" (
-      map (dep: ''
-        if ! [[ "${builtins.baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
-          ln -vsf ${dep.path} "$out/${builtins.baseNameOf dep.url}"
-        fi
-      '') pythonDeps
+      map
+        (dep: ''
+          if ! [[ "${builtins.baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
+            ln -vsf ${dep.path} "$out/${builtins.baseNameOf dep.url}"
+          fi
+        '')
+        pythonDeps
     ));
 
     installPhase = ''bash $installCommandPath'';

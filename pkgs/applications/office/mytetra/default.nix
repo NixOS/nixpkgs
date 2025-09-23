@@ -1,11 +1,11 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qmake,
-  qtsvg,
-  makeWrapper,
-  xdg-utils,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, qtsvg
+, makeWrapper
+, xdg-utils
+,
 }:
 
 mkDerivation rec {

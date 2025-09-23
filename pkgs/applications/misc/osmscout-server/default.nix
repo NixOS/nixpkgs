@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
-  boost,
-  kirigami2,
-  kyotocabinet,
-  libmicrohttpd,
-  libosmscout,
-  libpostal,
-  marisa,
-  osrm-backend,
-  protobuf,
-  qtquickcontrols2,
-  qtlocation,
-  sqlite,
-  valhalla,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, qmake
+, qttools
+, wrapQtAppsHook
+, boost
+, kirigami2
+, kyotocabinet
+, libmicrohttpd
+, libosmscout
+, libpostal
+, marisa
+, osrm-backend
+, protobuf
+, qtquickcontrols2
+, qtlocation
+, sqlite
+, valhalla
+,
 }:
 
 let

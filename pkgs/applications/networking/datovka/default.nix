@@ -1,14 +1,14 @@
-{
-  lib,
-  mkDerivation,
-  fetchurl,
-  libxml2,
-  libdatovka,
-  qmake,
-  qtbase,
-  qtwebsockets,
-  qtsvg,
-  pkg-config,
+{ lib
+, mkDerivation
+, fetchurl
+, libxml2
+, libdatovka
+, qmake
+, qtbase
+, qtwebsockets
+, qtsvg
+, pkg-config
+,
 }:
 
 mkDerivation rec {

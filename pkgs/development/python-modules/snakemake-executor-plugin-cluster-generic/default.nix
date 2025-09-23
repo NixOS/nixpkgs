@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  snakemake-interface-executor-plugins,
-  snakemake-interface-common,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, snakemake-interface-executor-plugins
+, snakemake-interface-common
+,
 }:
 
 buildPythonPackage rec {

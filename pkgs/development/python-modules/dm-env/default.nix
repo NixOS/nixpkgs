@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  dm-tree,
-  numpy,
-  absl-py,
-  pytestCheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, dm-tree
+, numpy
+, absl-py
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

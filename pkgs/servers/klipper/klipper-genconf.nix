@@ -1,8 +1,8 @@
-{
-  writeShellApplication,
-  klipper,
-  python3,
-  gnumake,
+{ writeShellApplication
+, klipper
+, python3
+, gnumake
+,
 }:
 writeShellApplication {
   name = "klipper-genconf";

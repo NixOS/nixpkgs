@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  metis,
-  p4est-sc,
-  mpi,
-  mpiCheckPhaseHook,
-  debug ? false,
-  withMetis ? true,
-  mpiSupport ? true,
-
-  # passthru.tests
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, metis
+, p4est-sc
+, mpi
+, mpiCheckPhaseHook
+, debug ? false
+, withMetis ? true
+, mpiSupport ? true
+, # passthru.tests
+  testers
+,
 }:
 let
   p4est-sc' = p4est-sc.override { inherit mpi mpiSupport debug; };

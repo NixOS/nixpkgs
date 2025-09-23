@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rust,
-  rustPlatform,
-  cargo-c,
-  python3,
-
-  # tests
-  testers,
-  vips,
-  libimagequant,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rust
+, rustPlatform
+, cargo-c
+, python3
+, # tests
+  testers
+, vips
+, libimagequant
+,
 }:
 
 rustPlatform.buildRustPackage rec {

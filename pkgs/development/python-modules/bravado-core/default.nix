@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  # build inputs
-  jsonref,
-  jsonschema,
-  python-dateutil,
-  pyyaml,
-  requests,
-  simplejson,
-  six,
-  swagger-spec-validator,
-  pytz,
-  msgpack,
-  # check inputs
-  pytestCheckHook,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, # build inputs
+  jsonref
+, jsonschema
+, python-dateutil
+, pyyaml
+, requests
+, simplejson
+, six
+, swagger-spec-validator
+, pytz
+, msgpack
+, # check inputs
+  pytestCheckHook
+, mock
+,
 }:
 
 buildPythonPackage rec {

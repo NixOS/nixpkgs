@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  gtk4,
-  gtk4-layer-shell,
-  dbus,
-  glib,
-  wayland,
-  openssl,
-  sqlite,
-  gdk-pixbuf,
-  librsvg,
-  nix-update-script,
-  wrapGAppsHook4,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, gtk4
+, gtk4-layer-shell
+, dbus
+, glib
+, wayland
+, openssl
+, sqlite
+, gdk-pixbuf
+, librsvg
+, nix-update-script
+, wrapGAppsHook4
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

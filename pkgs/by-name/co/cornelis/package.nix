@@ -1,11 +1,10 @@
-{
-  lib,
-  haskell,
-  haskellPackages,
-
-  # Test dependencies
-  cornelis,
-  runCommand,
+{ lib
+, haskell
+, haskellPackages
+, # Test dependencies
+  cornelis
+, runCommand
+,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;

@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # nativeBuildInputs
-  cmake,
-  extra-cmake-modules,
-  gettext,
-  gphoto2,
-  libgphoto2,
-  libsForQt5,
-  libv4l,
-  libxml2,
-  ninja,
-  pkg-config,
-
-  # buildInputs
-  guvcview,
-  pcre,
-  v4l-utils,
-
-  ffmpeg,
+{ lib
+, stdenv
+, fetchurl
+, # nativeBuildInputs
+  cmake
+, extra-cmake-modules
+, gettext
+, gphoto2
+, libgphoto2
+, libsForQt5
+, libv4l
+, libxml2
+, ninja
+, pkg-config
+, # buildInputs
+  guvcview
+, pcre
+, v4l-utils
+, ffmpeg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

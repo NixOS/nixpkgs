@@ -1,22 +1,20 @@
-{
-  fetchFromGitHub,
-  gradle_8,
-  jre,
-  lib,
-  makeWrapper,
-  stdenvNoCC,
-
-  gamemodeSupport ? stdenvNoCC.hostPlatform.isLinux,
-  textToSpeechSupport ? stdenvNoCC.hostPlatform.isLinux,
-  additionalLibs ? [ ],
-
-  # dependencies
-  flite,
-  gamemode,
-  libglvnd,
-  libpulseaudio,
-  udev,
-  xorg,
+{ fetchFromGitHub
+, gradle_8
+, jre
+, lib
+, makeWrapper
+, stdenvNoCC
+, gamemodeSupport ? stdenvNoCC.hostPlatform.isLinux
+, textToSpeechSupport ? stdenvNoCC.hostPlatform.isLinux
+, additionalLibs ? [ ]
+, # dependencies
+  flite
+, gamemode
+, libglvnd
+, libpulseaudio
+, udev
+, xorg
+,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

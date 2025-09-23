@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  gtk-doc,
-  xkeyboard_config,
-  libxml2,
-  xorg,
-  docbook_xsl,
-  glib,
-  isocodes,
-  gobject-introspection,
-  withDoc ? (stdenv.buildPlatform == stdenv.hostPlatform),
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, gtk-doc
+, xkeyboard_config
+, libxml2
+, xorg
+, docbook_xsl
+, glib
+, isocodes
+, gobject-introspection
+, withDoc ? (stdenv.buildPlatform == stdenv.hostPlatform)
+,
 }:
 
 stdenv.mkDerivation rec {

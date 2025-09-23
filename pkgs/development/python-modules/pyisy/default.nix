@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  python-dateutil,
-  requests,
-  setuptools-scm,
+{ lib
+, aiohttp
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, python-dateutil
+, requests
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  autoPatchelfHook,
-  fetchurl,
-  gmp,
-  less,
-  makeWrapper,
-  libb2,
-  ncurses6,
-  openssl,
-  stdenv,
-  zlib,
+{ lib
+, autoPatchelfHook
+, fetchurl
+, gmp
+, less
+, makeWrapper
+, libb2
+, ncurses6
+, openssl
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
         hash = "sha256-RizYZaNdaXCkfiFXblB34btqmu6xo3owKkSuOrgopIo=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 
   # The tarball is just the prebuilt binary, in the archive root.
   sourceRoot = ".";

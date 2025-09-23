@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+,
 }:
 let
   hostArch =

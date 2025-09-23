@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pymongo,
-  isPy27,
-  six,
-  blinker,
-  pytestCheckHook,
-  pillow,
-  coverage,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pymongo
+, isPy27
+, six
+, blinker
+, pytestCheckHook
+, pillow
+, coverage
+,
 }:
 
 buildPythonPackage rec {

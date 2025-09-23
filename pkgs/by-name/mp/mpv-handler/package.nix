@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  mpv,
-  yt-dlp,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, mpv
+, yt-dlp
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mpv-handler";

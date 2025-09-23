@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  docutils,
-  bison,
-  flex,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, docutils
+, bison
+, flex
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

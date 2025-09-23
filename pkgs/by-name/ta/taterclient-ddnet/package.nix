@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  cmake,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  curl,
-  freetype,
-  libGLU,
-  libnotify,
-  libogg,
-  libX11,
-  opusfile,
-  pcre,
-  python3,
-  SDL2,
-  sqlite,
-  wavpack,
-  ffmpeg,
-  x264,
-  vulkan-headers,
-  vulkan-loader,
-  glslang,
-  spirv-tools,
-  glew,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, cmake
+, ninja
+, pkg-config
+, rustPlatform
+, rustc
+, curl
+, freetype
+, libGLU
+, libnotify
+, libogg
+, libX11
+, opusfile
+, pcre
+, python3
+, SDL2
+, sqlite
+, wavpack
+, ffmpeg
+, x264
+, vulkan-headers
+, vulkan-loader
+, glslang
+, spirv-tools
+, glew
+,
 }:
 let
   clientExecutable = "TaterClient-DDNet";

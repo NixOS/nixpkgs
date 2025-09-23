@@ -1,19 +1,19 @@
-{
-  cmake,
-  cudatoolkit,
-  fetchFromGitHub,
-  gfortran,
-  lib,
-  llvmPackages,
-  python3Packages,
-  stdenv,
-  config,
-  enableCfp ? true,
-  enableCuda ? config.cudaSupport,
-  enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms,
-  enableOpenMP ? true,
-  enablePython ? true,
-  enableUtilities ? true,
+{ cmake
+, cudatoolkit
+, fetchFromGitHub
+, gfortran
+, lib
+, llvmPackages
+, python3Packages
+, stdenv
+, config
+, enableCfp ? true
+, enableCuda ? config.cudaSupport
+, enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms
+, enableOpenMP ? true
+, enablePython ? true
+, enableUtilities ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

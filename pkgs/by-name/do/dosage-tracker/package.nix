@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  blueprint-compiler,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gjs,
-  glib,
-  gtk4,
-  libadwaita,
-  libportal,
-  meson,
-  ninja,
-  nix-update-script,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, blueprint-compiler
+, desktop-file-utils
+, fetchFromGitHub
+, gjs
+, glib
+, gtk4
+, libadwaita
+, libportal
+, meson
+, ninja
+, nix-update-script
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

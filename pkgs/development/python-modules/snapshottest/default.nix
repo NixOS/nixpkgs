@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fastdiff,
-  six,
-  termcolor,
-  pytestCheckHook,
-  pytest-cov-stub,
-  django,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fastdiff
+, six
+, termcolor
+, pytestCheckHook
+, pytest-cov-stub
+, django
+,
 }:
 
 buildPythonPackage rec {

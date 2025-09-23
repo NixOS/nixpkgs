@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  versionCheckHook,
-  nix-update-script,
-  pico-sdk,
-
-  # Options
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, versionCheckHook
+, nix-update-script
+, pico-sdk
+, # Options
 
   # The submodules in the pico-sdk contain important additional functionality
   # such as tinyusb, but not all these libraries might be bsd3.
   # Off by default.
-  withSubmodules ? false,
+  withSubmodules ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

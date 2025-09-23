@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mercurial,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mercurial
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

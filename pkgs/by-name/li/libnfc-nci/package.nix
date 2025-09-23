@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  config,
-  debug ? config.libnfc-nci.debug or false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, config
+, debug ? config.libnfc-nci.debug or false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  psq,
-  qcheck-alcotest,
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, psq
+, qcheck-alcotest
+,
 }:
 
 buildDunePackage rec {

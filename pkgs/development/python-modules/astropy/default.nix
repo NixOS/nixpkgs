@@ -1,53 +1,48 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  pythonOlder,
-
-  # build time
-  stdenv,
-  cython,
-  extension-helpers,
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  astropy-iers-data,
-  numpy,
-  packaging,
-  pyerfa,
-  pyyaml,
-
-  # optional-dependencies
-  scipy,
-  matplotlib,
-  ipython,
-  ipywidgets,
-  ipykernel,
-  pandas,
-  certifi,
-  dask,
-  h5py,
-  pyarrow,
-  beautifulsoup4,
-  html5lib,
-  sortedcontainers,
-  pytz,
-  jplephem,
-  mpmath,
-  asdf,
-  asdf-astropy,
-  bottleneck,
-  fsspec,
-  s3fs,
-
-  # testing
-  pytestCheckHook,
-  pytest-xdist,
-  pytest-astropy-header,
-  pytest-astropy,
-  threadpoolctl,
-
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, # build time
+  stdenv
+, cython
+, extension-helpers
+, setuptools
+, setuptools-scm
+, # dependencies
+  astropy-iers-data
+, numpy
+, packaging
+, pyerfa
+, pyyaml
+, # optional-dependencies
+  scipy
+, matplotlib
+, ipython
+, ipywidgets
+, ipykernel
+, pandas
+, certifi
+, dask
+, h5py
+, pyarrow
+, beautifulsoup4
+, html5lib
+, sortedcontainers
+, pytz
+, jplephem
+, mpmath
+, asdf
+, asdf-astropy
+, bottleneck
+, fsspec
+, s3fs
+, # testing
+  pytestCheckHook
+, pytest-xdist
+, pytest-astropy-header
+, pytest-astropy
+, threadpoolctl
+,
 }:
 
 buildPythonPackage rec {

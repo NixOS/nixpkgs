@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  cython,
-  pdm-backend,
-  setuptools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, cython
+, pdm-backend
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

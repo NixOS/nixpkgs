@@ -1,9 +1,9 @@
-{
-  kernel,
-  kernelModuleMakeFlags,
-  stdenv,
-  basiliskii,
-  lib,
+{ kernel
+, kernelModuleMakeFlags
+, stdenv
+, basiliskii
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "sheep_net";

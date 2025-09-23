@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  jdk_headless,
-  jre_minimal,
-  makeBinaryWrapper,
-  curl,
-  jq,
-  yq,
-  dynamodb-local,
-  testers,
-  common-updater-scripts,
-  writeShellScript,
+{ lib
+, stdenvNoCC
+, fetchurl
+, jdk_headless
+, jre_minimal
+, makeBinaryWrapper
+, curl
+, jq
+, yq
+, dynamodb-local
+, testers
+, common-updater-scripts
+, writeShellScript
+,
 }:
 let
   jre = jre_minimal.override {

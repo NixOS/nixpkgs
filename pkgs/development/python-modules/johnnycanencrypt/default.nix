@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  libiconv,
-  nettle,
-  pcsclite,
-  pkg-config,
-  pytestCheckHook,
-  pythonOlder,
-  rustPlatform,
-  vcrpy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, libiconv
+, nettle
+, pcsclite
+, pkg-config
+, pytestCheckHook
+, pythonOlder
+, rustPlatform
+, vcrpy
+,
 }:
 
 buildPythonPackage rec {

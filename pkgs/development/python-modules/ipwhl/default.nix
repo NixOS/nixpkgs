@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromSourcehut,
-  kubo,
-  packaging,
-  tomli,
-  flit-core,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromSourcehut
+, kubo
+, packaging
+, tomli
+, flit-core
+,
 }:
 
 buildPythonPackage rec {

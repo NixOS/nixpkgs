@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-github-copilot,
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  pytest-vcr,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-github-copilot
+, writableTmpDirAsHomeHook
+, pytestCheckHook
+, pytest-vcr
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

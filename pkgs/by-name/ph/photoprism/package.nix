@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  darktable,
-  rawtherapee,
-  ffmpeg,
-  libheif,
-  exiftool,
-  imagemagick,
-  makeWrapper,
-  testers,
-  callPackage,
-  nixosTests,
-  librsvg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, darktable
+, rawtherapee
+, ffmpeg
+, libheif
+, exiftool
+, imagemagick
+, makeWrapper
+, testers
+, callPackage
+, nixosTests
+, librsvg
+,
 }:
 
 let

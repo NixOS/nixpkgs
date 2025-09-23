@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  wget,
-  unzip,
-  mawk,
-  sqlite,
-  which,
-  lua5_3,
-  installShellFiles,
-  makeWrapper,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, wget
+, unzip
+, mawk
+, sqlite
+, which
+, lua5_3
+, installShellFiles
+, makeWrapper
+,
 }:
 let
   luaEnv = lua5_3.withPackages (

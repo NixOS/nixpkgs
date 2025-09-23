@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnInstallHook,
-  nodejs,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchYarnDeps
+, yarnConfigHook
+, yarnInstallHook
+, nodejs
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

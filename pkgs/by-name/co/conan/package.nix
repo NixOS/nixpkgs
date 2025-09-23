@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  git,
-  pkg-config,
-  xcbuild,
-  python3Packages,
-  zlib,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, git
+, pkg-config
+, xcbuild
+, python3Packages
+, zlib
+, cmake
+,
 }:
 
 python3Packages.buildPythonApplication rec {

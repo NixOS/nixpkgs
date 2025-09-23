@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  autoreconfHook,
-  fetchFromGitHub,
-  autoconf-archive,
-  nix-update-script,
-  pkg-config,
-  openssl,
-  tpm2-tss,
+{ stdenv
+, lib
+, autoreconfHook
+, fetchFromGitHub
+, autoconf-archive
+, nix-update-script
+, pkg-config
+, openssl
+, tpm2-tss
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

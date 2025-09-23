@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  poetry-core,
-  pytestCheckHook,
-  pkgs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, poetry-core
+, pytestCheckHook
+, pkgs
+,
 }:
 
 let

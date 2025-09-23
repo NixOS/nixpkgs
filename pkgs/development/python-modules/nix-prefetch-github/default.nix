@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  lib,
-  buildPythonPackage,
-  git,
-  which,
-  pythonOlder,
-  unittestCheckHook,
-  sphinxHook,
-  sphinx-argparse,
-  parameterized,
-  setuptools,
-  nix,
+{ fetchFromGitHub
+, lib
+, buildPythonPackage
+, git
+, which
+, pythonOlder
+, unittestCheckHook
+, sphinxHook
+, sphinx-argparse
+, parameterized
+, setuptools
+, nix
+,
 }:
 
 buildPythonPackage rec {

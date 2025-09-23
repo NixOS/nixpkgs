@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  exempi,
-  extra-cmake-modules,
-  karchive,
-  kdoctools,
-  kfilemetadata,
-  kitemmodels,
-  knewstuff,
-  kxmlgui,
-  libcdio,
-  libkcddb,
-  libksane,
-  makeWrapper,
-  poppler,
-  qtcharts,
-  qtwebengine,
-  solid,
-  taglib,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, exempi
+, extra-cmake-modules
+, karchive
+, kdoctools
+, kfilemetadata
+, kitemmodels
+, knewstuff
+, kxmlgui
+, libcdio
+, libkcddb
+, libksane
+, makeWrapper
+, poppler
+, qtcharts
+, qtwebengine
+, solid
+, taglib
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

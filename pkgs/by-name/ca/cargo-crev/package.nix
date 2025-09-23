@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  perl,
-  pkg-config,
-  curl,
-  libiconv,
-  openssl,
-  gitMinimal,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, perl
+, pkg-config
+, curl
+, libiconv
+, openssl
+, gitMinimal
+,
 }:
 
 rustPlatform.buildRustPackage rec {

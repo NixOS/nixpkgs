@@ -1,22 +1,20 @@
-{
-  stdenv,
-  lib,
-  replaceVars,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-
-  # native dependencies
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
-  SDL2_gfx,
-  SDL2_mixer,
-
-  # tests
-  numpy,
-  pillow,
-  pytestCheckHook,
+{ stdenv
+, lib
+, replaceVars
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, # native dependencies
+  SDL2
+, SDL2_ttf
+, SDL2_image
+, SDL2_gfx
+, SDL2_mixer
+, # tests
+  numpy
+, pillow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  gccStdenv,
-  fetchgit,
-  ncurses,
+{ lib
+, gccStdenv
+, fetchgit
+, ncurses
+,
 }:
 
 gccStdenv.mkDerivation {

@@ -1,92 +1,94 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  gawk,
-  gnum4,
-  gnused,
-  libxml2,
-  libxslt,
-  ncurses,
-  nix-update-script,
-  openssl,
-  perl,
-  runtimeShell,
-  openjdk11 ? null, # javacSupport
-  unixODBC ? null, # odbcSupport
-  libGL ? null,
-  libGLU ? null,
-  wxGTK ? null,
-  xorg ? null,
-  parallelBuild ? false,
-  systemd,
-  wxSupport ? true,
-  # systemd support for epmd
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  wrapGAppsHook3,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, gawk
+, gnum4
+, gnused
+, libxml2
+, libxslt
+, ncurses
+, nix-update-script
+, openssl
+, perl
+, runtimeShell
+, openjdk11 ? null
+, # javacSupport
+  unixODBC ? null
+, # odbcSupport
+  libGL ? null
+, libGLU ? null
+, wxGTK ? null
+, xorg ? null
+, parallelBuild ? false
+, systemd
+, wxSupport ? true
+, # systemd support for epmd
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, wrapGAppsHook3
+, zlib
+,
 }:
-{
-  baseName ? "erlang",
-  version,
-  sha256 ? null,
-  rev ? "OTP-${version}",
-  src ? fetchFromGitHub {
+{ baseName ? "erlang"
+, version
+, sha256 ? null
+, rev ? "OTP-${version}"
+, src ? fetchFromGitHub {
     inherit rev sha256;
     owner = "erlang";
     repo = "otp";
-  },
-  enableHipe ? true,
-  enableDebugInfo ? false,
-  enableThreads ? true,
-  enableSmpSupport ? true,
-  enableKernelPoll ? true,
-  javacSupport ? false,
-  javacPackages ? [ openjdk11 ],
-  odbcSupport ? false,
-  odbcPackages ? [ unixODBC ],
-  opensslPackage ? openssl,
-  wxPackages ? [
+  }
+, enableHipe ? true
+, enableDebugInfo ? false
+, enableThreads ? true
+, enableSmpSupport ? true
+, enableKernelPoll ? true
+, javacSupport ? false
+, javacPackages ? [ openjdk11 ]
+, odbcSupport ? false
+, odbcPackages ? [ unixODBC ]
+, opensslPackage ? openssl
+, wxPackages ? [
     libGL
     libGLU
     wxGTK
     xorg.libX11
     wrapGAppsHook3
-  ],
-  preUnpack ? "",
-  postUnpack ? "",
-  patches ? [ ],
-  patchPhase ? "",
-  prePatch ? "",
-  postPatch ? "",
-  configureFlags ? [ ],
-  configurePhase ? "",
-  preConfigure ? "",
-  postConfigure ? "",
-  buildPhase ? "",
-  preBuild ? "",
-  postBuild ? "",
-  installPhase ? "",
-  preInstall ? "",
-  postInstall ? "",
-  checkPhase ? "",
-  preCheck ? "",
-  postCheck ? "",
-  fixupPhase ? "",
-  preFixup ? "",
-  postFixup ? "",
-  meta ? { },
+  ]
+, preUnpack ? ""
+, postUnpack ? ""
+, patches ? [ ]
+, patchPhase ? ""
+, prePatch ? ""
+, postPatch ? ""
+, configureFlags ? [ ]
+, configurePhase ? ""
+, preConfigure ? ""
+, postConfigure ? ""
+, buildPhase ? ""
+, preBuild ? ""
+, postBuild ? ""
+, installPhase ? ""
+, preInstall ? ""
+, postInstall ? ""
+, checkPhase ? ""
+, preCheck ? ""
+, postCheck ? ""
+, fixupPhase ? ""
+, preFixup ? ""
+, postFixup ? ""
+, meta ? { }
+,
 }:
 
 assert
-  wxSupport
+wxSupport
   -> (
-    if stdenv.hostPlatform.isDarwin then
-      wxGTK != null
-    else
-      libGL != null && libGLU != null && wxGTK != null && xorg != null
-  );
+  if stdenv.hostPlatform.isDarwin then
+    wxGTK != null
+  else
+    libGL != null && libGLU != null && wxGTK != null && xorg != null
+);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk11 != null;
@@ -249,5 +251,5 @@ stdenv.mkDerivation (
   // optionalAttrs (preInstall != "") { inherit preInstall; }
   // optionalAttrs (fixupPhase != "") { inherit fixupPhase; }
   // optionalAttrs (preFixup != "") { inherit preFixup; }
-  // optionalAttrs (postFixup != "") { inherit postFixup; }
+    // optionalAttrs (postFixup != "") { inherit postFixup; }
 )

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  which,
-  zlib,
-  openssl,
-  libarchive,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, zlib
+, openssl
+, libarchive
+,
 }:
 
 stdenv.mkDerivation rec {

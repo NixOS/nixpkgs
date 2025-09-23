@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  ncurses,
-  asciidoctor,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, ncurses
+, asciidoctor
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  symlinkJoin,
+{ lib
+, stdenvNoCC
+, fetchurl
+, symlinkJoin
+,
 }:
 
 let

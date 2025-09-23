@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
-  nix-update-script,
-  extraBuildEnv ? { },
-  # This package contains serveral sub-applications. This specifies which of them you want to build.
-  enteApp ? "photos",
-  # Accessing some apps (such as account) directly will result in a hardcoded redirect to ente.io.
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, yarnConfigHook
+, yarnBuildHook
+, nix-update-script
+, extraBuildEnv ? { }
+, # This package contains serveral sub-applications. This specifies which of them you want to build.
+  enteApp ? "photos"
+, # Accessing some apps (such as account) directly will result in a hardcoded redirect to ente.io.
   # To prevent users from accidentally logging in to ente.io instead of the selfhosted instance, you
   # can set this parameter to override these occurrences with your own url. Must include the schema.
   # Example: https://my-ente.example.com
-  enteMainUrl ? null,
+  enteMainUrl ? null
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

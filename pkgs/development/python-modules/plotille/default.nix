@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  poetry-core,
-  setuptools,
-  mock,
-  pendulum,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, poetry-core
+, setuptools
+, mock
+, pendulum
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

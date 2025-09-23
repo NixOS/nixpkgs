@@ -1,28 +1,28 @@
-{
-  lib,
-  rust,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  stdenvNoCC,
-  pkg-config,
-  openssl,
-  dbus,
-  zenity,
-  cargo-tauri,
-  gdk-pixbuf,
-  glib,
-  gobject-introspection,
-  gtk3,
-  kdePackages,
-  libsoup_3,
-  libayatana-appindicator,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  pnpm_9,
-  nodejs,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, rust
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, stdenvNoCC
+, pkg-config
+, openssl
+, dbus
+, zenity
+, cargo-tauri
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk3
+, kdePackages
+, libsoup_3
+, libayatana-appindicator
+, webkitgtk_4_1
+, wrapGAppsHook3
+, pnpm_9
+, nodejs
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 let
   version = "1.5.1";

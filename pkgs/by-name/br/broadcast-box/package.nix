@@ -1,9 +1,9 @@
-{
-  lib,
-  nixosTests,
-  fetchFromGitHub,
-  buildNpmPackage,
-  buildGoModule,
+{ lib
+, nixosTests
+, fetchFromGitHub
+, buildNpmPackage
+, buildGoModule
+,
 }:
 let
   name = "broadcast-box";

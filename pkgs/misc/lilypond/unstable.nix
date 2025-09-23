@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchzip,
-  lilypond,
+{ lib
+, fetchzip
+, lilypond
+,
 }:
 
 lilypond.overrideAttrs (oldAttrs: rec {

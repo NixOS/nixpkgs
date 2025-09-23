@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  replaceVars,
-  dbus-python,
-  distro,
-  jinja2,
-  keyring,
-  proton-client,
-  pygobject3,
-  pyxdg,
-  systemd,
-  ncurses,
-  networkmanager,
-  pkgs-systemd,
-  python,
-  xdg-utils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, replaceVars
+, dbus-python
+, distro
+, jinja2
+, keyring
+, proton-client
+, pygobject3
+, pyxdg
+, systemd
+, ncurses
+, networkmanager
+, pkgs-systemd
+, python
+, xdg-utils
+,
 }:
 
 buildPythonPackage rec {

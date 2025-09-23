@@ -3,16 +3,15 @@
 # Using steam under wine can involve both 32bit and 64bit process. All of which inherit the
 # same LD_LIBRARY_PATH.
 # Other distributions do the same.
-{
-  stdenv,
-  pkgsi686Linux,
-  lib,
-  primusLib,
-  writeScriptBin,
-  runtimeShell,
-  primusLib_i686 ?
-    if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null,
-  useNvidia ? true,
+{ stdenv
+, pkgsi686Linux
+, lib
+, primusLib
+, writeScriptBin
+, runtimeShell
+, primusLib_i686 ? if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null
+, useNvidia ? true
+,
 }:
 
 let

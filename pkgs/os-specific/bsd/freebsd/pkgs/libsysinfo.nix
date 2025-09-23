@@ -1,8 +1,8 @@
-{
-  lib,
-  mkDerivation,
-  fetchurl,
-  fetchFromGitHub,
+{ lib
+, mkDerivation
+, fetchurl
+, fetchFromGitHub
+,
 }:
 let
   pcFile = fetchurl {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  captcha,
-  fetchFromGitHub,
-  flask,
-  flask-session,
-  flask-sqlalchemy,
-  markupsafe,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, captcha
+, fetchFromGitHub
+, flask
+, flask-session
+, flask-sqlalchemy
+, markupsafe
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

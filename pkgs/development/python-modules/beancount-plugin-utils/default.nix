@@ -1,12 +1,12 @@
-{
-  lib,
-  beancount,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-bdd,
-  pytestCheckHook,
-  regex,
-  setuptools,
+{ lib
+, beancount
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-bdd
+, pytestCheckHook
+, regex
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

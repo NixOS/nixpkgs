@@ -1,37 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  yarnConfigHook,
-  fetchYarnDeps,
-  nodejs,
-
-  setuptools,
-
-  flask,
-  werkzeug,
-  plotly,
-  dash-html-components,
-  dash-core-components,
-  dash-table,
-  importlib-metadata,
-  typing-extensions,
-  requests,
-  retrying,
-  nest-asyncio,
-
-  celery,
-  redis,
-  diskcache,
-  multiprocess,
-  psutil,
-  flask-compress,
-
-  pytestCheckHook,
-  pytest-mock,
-  mock,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, yarnConfigHook
+, fetchYarnDeps
+, nodejs
+, setuptools
+, flask
+, werkzeug
+, plotly
+, dash-html-components
+, dash-core-components
+, dash-table
+, importlib-metadata
+, typing-extensions
+, requests
+, retrying
+, nest-asyncio
+, celery
+, redis
+, diskcache
+, multiprocess
+, psutil
+, flask-compress
+, pytestCheckHook
+, pytest-mock
+, mock
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

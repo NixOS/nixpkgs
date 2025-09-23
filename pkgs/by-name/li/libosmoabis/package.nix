@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  pkg-config,
-  libosmocore,
-  libosmo-netif,
-  ortp,
-  bctoolbox,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, pkg-config
+, libosmocore
+, libosmo-netif
+, ortp
+, bctoolbox
+,
 }:
 
 stdenv.mkDerivation rec {

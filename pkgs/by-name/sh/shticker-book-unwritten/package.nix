@@ -1,7 +1,7 @@
-{
-  buildFHSEnv,
-  callPackage,
-  lib,
+{ buildFHSEnv
+, callPackage
+, lib
+,
 }:
 let
 

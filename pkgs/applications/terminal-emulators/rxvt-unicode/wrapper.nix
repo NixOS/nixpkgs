@@ -1,18 +1,17 @@
-{
-  symlinkJoin,
-  makeWrapper,
-  lib,
-  rxvt-unicode-unwrapped,
-  rxvt-unicode-plugins,
-  perlPackages,
-  nixosTests,
-  configure ?
-    { availablePlugins, ... }:
+{ symlinkJoin
+, makeWrapper
+, lib
+, rxvt-unicode-unwrapped
+, rxvt-unicode-plugins
+, perlPackages
+, nixosTests
+, configure ? { availablePlugins, ... }:
     {
       plugins = builtins.attrValues availablePlugins;
       extraDeps = [ ];
       perlDeps = [ ];
-    },
+    }
+,
 }:
 
 let

@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  pkg-config,
-  ninja,
-  makeWrapper,
-  wgpu-native,
-  glfw,
-  wayland,
-  xorg,
-  vulkan-loader,
-
-  version,
-  src,
+{ lib
+, stdenv
+, cmake
+, pkg-config
+, ninja
+, makeWrapper
+, wgpu-native
+, glfw
+, wayland
+, xorg
+, vulkan-loader
+, version
+, src
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

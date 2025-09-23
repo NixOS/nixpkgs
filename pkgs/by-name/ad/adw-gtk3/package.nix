@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  dart-sass,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, dart-sass
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

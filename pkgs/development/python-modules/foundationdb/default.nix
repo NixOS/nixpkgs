@@ -1,7 +1,7 @@
-{
-  buildPythonPackage,
-  lib,
-  foundationdb,
+{ buildPythonPackage
+, lib
+, foundationdb
+,
 }:
 
 buildPythonPackage {

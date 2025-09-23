@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  wayland,
-  wayland-protocols,
-  json_c,
-  libxkbcommon,
-  fontconfig,
-  giflib,
-  libheif,
-  libjpeg,
-  libwebp,
-  libtiff,
-  librsvg,
-  libpng,
-  libjxl,
-  libexif,
-  libavif,
-  libsixel,
-  libraw,
-  libdrm,
-  openexr,
-  bash-completion,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, wayland
+, wayland-protocols
+, json_c
+, libxkbcommon
+, fontconfig
+, giflib
+, libheif
+, libjpeg
+, libwebp
+, libtiff
+, librsvg
+, libpng
+, libjxl
+, libexif
+, libavif
+, libsixel
+, libraw
+, libdrm
+, openexr
+, bash-completion
+, testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

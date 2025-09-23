@@ -1,15 +1,15 @@
-{
-  lib,
-  pnpm_9,
-  fetchFromGitHub,
-  stdenv,
-  makeWrapper,
-  nodejs_22,
-  python3,
-  python3Packages,
-  sqlite,
-  nix-update-script,
-  nixosTests,
+{ lib
+, pnpm_9
+, fetchFromGitHub
+, stdenv
+, makeWrapper
+, nodejs_22
+, python3
+, python3Packages
+, sqlite
+, nix-update-script
+, nixosTests
+,
 }:
 
 let

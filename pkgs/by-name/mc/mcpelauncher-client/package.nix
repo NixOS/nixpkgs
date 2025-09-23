@@ -1,26 +1,26 @@
-{
-  lib,
-  clangStdenv,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  openssl,
-  zlib,
-  libpng,
-  libglvnd,
-  xorg,
-  libevdev,
-  curl,
-  pulseaudio,
-  qt6,
-  glfw,
-  withQtWebview ? true,
-  withQtErrorWindow ? true,
-  fetchzip,
-  zenity,
-  xdg-utils,
-  sdl3,
+{ lib
+, clangStdenv
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, openssl
+, zlib
+, libpng
+, libglvnd
+, xorg
+, libevdev
+, curl
+, pulseaudio
+, qt6
+, glfw
+, withQtWebview ? true
+, withQtErrorWindow ? true
+, fetchzip
+, zenity
+, xdg-utils
+, sdl3
+,
 }:
 
 # Bionic libc part doesn't compile with GCC

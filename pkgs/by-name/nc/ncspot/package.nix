@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  config,
-  dbus,
-  fetchFromGitHub,
-  libpulseaudio,
-  libxcb,
-  ncurses,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  portaudio,
-  python3,
-  rustPlatform,
-  versionCheckHook,
-  ueberzug,
-  withALSA ? stdenv.hostPlatform.isLinux,
-  withClipboard ? true,
-  withCover ? false,
-  withCrossterm ? true,
-  withMPRIS ? stdenv.hostPlatform.isLinux,
-  withNcurses ? false,
-  withNotify ? true,
-  withPancurses ? false,
-  withPortAudio ? stdenv.hostPlatform.isDarwin,
-  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  withRodio ? false,
-  withShareSelection ? false,
-  withTermion ? false,
+{ lib
+, stdenv
+, alsa-lib
+, config
+, dbus
+, fetchFromGitHub
+, libpulseaudio
+, libxcb
+, ncurses
+, nix-update-script
+, openssl
+, pkg-config
+, portaudio
+, python3
+, rustPlatform
+, versionCheckHook
+, ueberzug
+, withALSA ? stdenv.hostPlatform.isLinux
+, withClipboard ? true
+, withCover ? false
+, withCrossterm ? true
+, withMPRIS ? stdenv.hostPlatform.isLinux
+, withNcurses ? false
+, withNotify ? true
+, withPancurses ? false
+, withPortAudio ? stdenv.hostPlatform.isDarwin
+, withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, withRodio ? false
+, withShareSelection ? false
+, withTermion ? false
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncspot";

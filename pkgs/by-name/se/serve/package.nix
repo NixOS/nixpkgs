@@ -1,10 +1,10 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  nodejs,
-  pnpm_9,
+{ buildNpmPackage
+, fetchFromGitHub
+, lib
+, makeWrapper
+, nodejs
+, pnpm_9
+,
 }:
 
 buildNpmPackage (finalAttrs: {

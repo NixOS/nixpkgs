@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  qt6,
-  libsForQt5,
-  fetchFromGitHub,
-  gst_all_1,
-  cmake,
-  libglvnd,
-  tbb,
-  ninja,
-  pkg-config,
+{ lib
+, stdenv
+, qt6
+, libsForQt5
+, fetchFromGitHub
+, gst_all_1
+, cmake
+, libglvnd
+, tbb
+, ninja
+, pkg-config
+,
 }:
 let
   inherit (libsForQt5) qcoro;

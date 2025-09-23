@@ -1,8 +1,8 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  effects,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, effects
+, lib
+,
 }:
 build-idris-package {
   pname = "farrp";

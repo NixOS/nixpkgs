@@ -1,13 +1,13 @@
-{
-  lib,
-  mkXfceDerivation,
-  glib,
-  gtk3,
-  libical,
-  libnotify,
-  libxfce4ui,
-  libxfce4util,
-  tzdata,
+{ lib
+, mkXfceDerivation
+, glib
+, gtk3
+, libical
+, libnotify
+, libxfce4ui
+, libxfce4util
+, tzdata
+,
 }:
 
 mkXfceDerivation {

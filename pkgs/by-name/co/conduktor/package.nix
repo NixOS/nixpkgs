@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  jdk11,
-  openjfx17,
-  gtk3,
-  glib,
-  pango,
-  cairo,
-  gdk-pixbuf,
-  xorg,
-  makeBinaryWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, jdk11
+, openjfx17
+, gtk3
+, glib
+, pango
+, cairo
+, gdk-pixbuf
+, xorg
+, makeBinaryWrapper
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

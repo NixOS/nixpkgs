@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream-glib,
-  blueprint-compiler,
-  desktop-file-utils,
-  gettext,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wrapGAppsHook4,
-  libzint,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, blueprint-compiler
+, desktop-file-utils
+, gettext
+, gtk4
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook4
+, libzint
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

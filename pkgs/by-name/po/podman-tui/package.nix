@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

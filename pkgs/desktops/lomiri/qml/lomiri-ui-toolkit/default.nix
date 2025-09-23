@@ -1,33 +1,33 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  replaceVars,
-  testers,
-  dbus-test-runner,
-  dpkg,
-  gdb,
-  glib,
-  lttng-ust,
-  mesa,
-  perl,
-  pkg-config,
-  python3,
-  qmake,
-  qtbase,
-  qtdeclarative,
-  qtfeedback,
-  qtgraphicaleffects,
-  qtpim,
-  qtquickcontrols2,
-  qtsvg,
-  qtsystems,
-  qttools,
-  suru-icon-theme,
-  validatePkgConfig,
-  wrapQtAppsHook,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, replaceVars
+, testers
+, dbus-test-runner
+, dpkg
+, gdb
+, glib
+, lttng-ust
+, mesa
+, perl
+, pkg-config
+, python3
+, qmake
+, qtbase
+, qtdeclarative
+, qtfeedback
+, qtgraphicaleffects
+, qtpim
+, qtquickcontrols2
+, qtsvg
+, qtsystems
+, qttools
+, suru-icon-theme
+, validatePkgConfig
+, wrapQtAppsHook
+, xvfb-run
+,
 }:
 
 let

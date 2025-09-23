@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  stdiomask,
-  writableTmpDirAsHomeHook,
+{ lib
+, aiohttp
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, stdiomask
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

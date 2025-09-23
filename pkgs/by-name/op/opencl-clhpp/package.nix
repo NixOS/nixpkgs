@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  ruby,
-  opencl-headers,
-  khronos-ocl-icd-loader,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, ruby
+, opencl-headers
+, khronos-ocl-icd-loader
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  aspell,
-  aspellDicts,
-  buildPythonPackage,
-  fetchPypi,
-  isPy27,
-  pytestCheckHook,
-  pythonAtLeast,
-  setuptools,
+{ lib
+, aspell
+, aspellDicts
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pytestCheckHook
+, pythonAtLeast
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

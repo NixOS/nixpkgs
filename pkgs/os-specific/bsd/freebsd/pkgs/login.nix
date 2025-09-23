@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  libutil,
-  libpam,
-  libbsm,
-  cap_mkdb,
+{ mkDerivation
+, libutil
+, libpam
+, libbsm
+, cap_mkdb
+,
 }:
 mkDerivation {
   path = "usr.bin/login";

@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  variants ? [ ],
-  suffix ? "",
-  longDescription ? ''
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, variants ? [ ]
+, suffix ? ""
+, longDescription ? ''
     When text is rendered by a computer, sometimes characters are
     displayed as “tofu”. They are little boxes to indicate your device
     doesn’t have a font to display the text.
@@ -15,7 +14,8 @@
     Google’s answer to tofu. The name noto is to convey the idea that
     Google’s goal is to see “no more tofu”.  Noto has multiple styles and
     weights, and freely available to all.
-  '',
+  ''
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

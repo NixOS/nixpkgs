@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  ansible,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3Packages
+, fetchPypi
+, ansible
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDubPackage,
-  fetchFromGitHub,
-  ncurses,
+{ lib
+, buildDubPackage
+, fetchFromGitHub
+, ncurses
+,
 }:
 
 buildDubPackage rec {

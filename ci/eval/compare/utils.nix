@@ -173,23 +173,25 @@ rec {
   getLabels =
     rebuildCountByKernel:
     lib.mergeAttrsList (
-      lib.mapAttrsToList (
-        kernel: rebuildCount:
-        let
-          range = from: to: from <= rebuildCount && (to == null || rebuildCount <= to);
-        in
-        lib.mapAttrs' (number: lib.nameValuePair "10.rebuild-${kernel}: ${number}") {
-          "0" = range 0 0;
-          "1" = range 1 1;
-          "1-10" = range 1 10;
-          "11-100" = range 11 100;
-          "101-500" = range 101 500;
-          "501-1000" = range 501 1000;
-          "501+" = range 501 null;
-          "1001-2500" = range 1001 2500;
-          "2501-5000" = range 2501 5000;
-          "5001+" = range 5001 null;
-        }
-      ) rebuildCountByKernel
+      lib.mapAttrsToList
+        (
+          kernel: rebuildCount:
+          let
+            range = from: to: from <= rebuildCount && (to == null || rebuildCount <= to);
+          in
+          lib.mapAttrs' (number: lib.nameValuePair "10.rebuild-${kernel}: ${number}") {
+            "0" = range 0 0;
+            "1" = range 1 1;
+            "1-10" = range 1 10;
+            "11-100" = range 11 100;
+            "101-500" = range 101 500;
+            "501-1000" = range 501 1000;
+            "501+" = range 501 null;
+            "1001-2500" = range 1001 2500;
+            "2501-5000" = range 2501 5000;
+            "5001+" = range 5001 null;
+          }
+        )
+        rebuildCountByKernel
     );
 }

@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  python3,
-  gtk4,
-  glib,
-  glibmm_2_68,
-  cairomm_1_16,
-  pangomm_2_48,
-  libepoxy,
-  gnome,
-  makeFontsConf,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, python3
+, gtk4
+, glib
+, glibmm_2_68
+, cairomm_1_16
+, pangomm_2_48
+, libepoxy
+, gnome
+, makeFontsConf
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
-  scim2-models,
-  pytestCheckHook,
-  portpicker,
-  pytest-httpserver,
-  pytest-asyncio,
-  scim2-server,
-  httpx,
-  werkzeug,
-  cacert,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, hatchling
+, scim2-models
+, pytestCheckHook
+, portpicker
+, pytest-httpserver
+, pytest-asyncio
+, scim2-server
+, httpx
+, werkzeug
+, cacert
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  nix-update-script,
-  stdenvNoCC,
-  lib,
-  php,
+{ nix-update-script
+, stdenvNoCC
+, lib
+, php
+,
 }:
 
 let

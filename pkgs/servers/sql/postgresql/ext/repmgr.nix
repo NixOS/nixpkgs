@@ -1,11 +1,11 @@
-{
-  curl,
-  fetchFromGitHub,
-  flex,
-  json_c,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
+{ curl
+, fetchFromGitHub
+, flex
+, json_c
+, lib
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

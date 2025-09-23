@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.jitsi-videobridge;
@@ -28,7 +27,7 @@ let
       };
       stats = {
         enabled = true;
-        transports = [ { type = "muc"; } ];
+        transports = [{ type = "muc"; }];
       };
       apis.xmpp-client.configs = lib.flip lib.mapAttrs cfg.xmppConfigs (
         name: xmppConfig: {
@@ -266,9 +265,11 @@ in
 
         script =
           (lib.concatStrings (
-            lib.mapAttrsToList (
-              name: xmppConfig: "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
-            ) cfg.xmppConfigs
+            lib.mapAttrsToList
+              (
+                name: xmppConfig: "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
+              )
+              cfg.xmppConfigs
           ))
           + ''
             ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge

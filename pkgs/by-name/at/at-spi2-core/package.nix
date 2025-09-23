@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gsettings-desktop-schemas,
-  makeWrapper,
-  dbus,
-  glib,
-  dconf,
-  libX11,
-  libxml2,
-  libXtst,
-  libXi,
-  libXext,
-  gnome,
-  systemdLibs,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gsettings-desktop-schemas
+, makeWrapper
+, dbus
+, glib
+, dconf
+, libX11
+, libxml2
+, libXtst
+, libXi
+, libXext
+, gnome
+, systemdLibs
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  gnused,
-  ncurses,
-  procps,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeBinaryWrapper
+, gnused
+, ncurses
+, procps
+,
 }:
 
 stdenvNoCC.mkDerivation {

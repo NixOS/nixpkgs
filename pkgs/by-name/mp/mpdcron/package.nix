@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  glib,
-  libdaemon,
-  libmpdclient,
-  curl,
-  sqlite,
-  bundlerEnv,
-  libnotify,
-  pandoc,
-  autoreconfHook,
-  bundlerUpdateScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, glib
+, libdaemon
+, libmpdclient
+, curl
+, sqlite
+, bundlerEnv
+, libnotify
+, pandoc
+, autoreconfHook
+, bundlerUpdateScript
+,
 }:
 
 let

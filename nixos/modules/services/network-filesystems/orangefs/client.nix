@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.orangefs.client;
@@ -92,15 +91,17 @@ in
       };
     };
 
-    systemd.mounts = map (fs: {
-      requires = [ "orangefs-client.service" ];
-      after = [ "orangefs-client.service" ];
-      bindsTo = [ "orangefs-client.service" ];
-      wantedBy = [ "remote-fs.target" ];
-      type = "pvfs2";
-      options = lib.concatStringsSep "," fs.options;
-      what = fs.target;
-      where = fs.mountPoint;
-    }) cfg.fileSystems;
+    systemd.mounts = map
+      (fs: {
+        requires = [ "orangefs-client.service" ];
+        after = [ "orangefs-client.service" ];
+        bindsTo = [ "orangefs-client.service" ];
+        wantedBy = [ "remote-fs.target" ];
+        type = "pvfs2";
+        options = lib.concatStringsSep "," fs.options;
+        what = fs.target;
+        where = fs.mountPoint;
+      })
+      cfg.fileSystems;
   };
 }

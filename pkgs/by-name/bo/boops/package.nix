@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  xorg,
-  cairo,
-  lv2,
-  libsndfile,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, xorg
+, cairo
+, lv2
+, libsndfile
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

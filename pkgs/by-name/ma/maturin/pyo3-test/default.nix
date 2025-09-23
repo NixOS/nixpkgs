@@ -1,14 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  rustPlatform,
-
-  # These are always passed as an override or as a callPackage option.
-  nativeBuildInputs,
-  buildAndTestSubdir,
-  format,
-  preConfigure,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, rustPlatform
+, # These are always passed as an override or as a callPackage option.
+  nativeBuildInputs
+, buildAndTestSubdir
+, format
+, preConfigure
+,
 }:
 
 buildPythonPackage rec {

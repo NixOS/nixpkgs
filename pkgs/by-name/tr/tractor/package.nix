@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitLab,
-  glib,
-  python3Packages,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  tor,
-  obfs4,
-  snowflake,
-  conjure-tor,
-  wrapGAppsHook4,
-  withObfs4 ? true,
-  withSnowflake ? true,
-  withConjure ? true,
+{ lib
+, fetchFromGitLab
+, glib
+, python3Packages
+, gobject-introspection
+, gsettings-desktop-schemas
+, tor
+, obfs4
+, snowflake
+, conjure-tor
+, wrapGAppsHook4
+, withObfs4 ? true
+, withSnowflake ? true
+, withConjure ? true
+,
 }:
 
 let

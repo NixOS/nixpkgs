@@ -1,9 +1,9 @@
-{
-  lib,
-  newScope,
-  fetchFromGitHub,
-  unzip,
-  stdenvNoCC,
+{ lib
+, newScope
+, fetchFromGitHub
+, unzip
+, stdenvNoCC
+,
 }:
 let
   base = {

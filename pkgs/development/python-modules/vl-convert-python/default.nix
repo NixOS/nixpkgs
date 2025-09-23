@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  protobuf,
-  libffi,
-  callPackage,
-  librusty_v8 ? callPackage ./librusty_v8.nix { },
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, protobuf
+, libffi
+, callPackage
+, librusty_v8 ? callPackage ./librusty_v8.nix { }
+, nix-update-script
+,
 }:
 buildPythonPackage rec {
   pname = "vl-convert-python";

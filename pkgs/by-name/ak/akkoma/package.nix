@@ -1,11 +1,11 @@
-{
-  lib,
-  beamPackages,
-  fetchFromGitea,
-  cmake,
-  file,
-  nixosTests,
-  nix-update-script,
+{ lib
+, beamPackages
+, fetchFromGitea
+, cmake
+, file
+, nixosTests
+, nix-update-script
+,
 }:
 
 beamPackages.mixRelease rec {

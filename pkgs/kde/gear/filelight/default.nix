@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  kirigami-addons,
-  kquickcharts,
-  kxmlgui,
+{ mkKdeDerivation
+, kirigami-addons
+, kquickcharts
+, kxmlgui
+,
 }:
 mkKdeDerivation {
   pname = "filelight";

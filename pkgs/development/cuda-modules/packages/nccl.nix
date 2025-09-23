@@ -1,15 +1,15 @@
 # NOTE: Though NCCL is called within the cudaPackages package set, we avoid passing in
 # the names of dependencies from that package set directly to avoid evaluation errors
 # in the case redistributable packages are not available.
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  which,
-  autoAddDriverRunpath,
-  cudaPackages,
-  # passthru.updateScript
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, python3
+, which
+, autoAddDriverRunpath
+, cudaPackages
+, # passthru.updateScript
+  gitUpdater
+,
 }:
 let
   inherit (cudaPackages)

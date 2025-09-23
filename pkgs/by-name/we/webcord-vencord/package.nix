@@ -1,10 +1,11 @@
 {
   # allow overriding electron
-  electron_36,
-  webcord,
-  replaceVars,
-  lib,
-  vencord-web-extension,
+  electron_36
+, webcord
+, replaceVars
+, lib
+, vencord-web-extension
+,
 }:
 
 # nixpkgs-update: no auto update

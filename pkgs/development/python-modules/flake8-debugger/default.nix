@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flake8,
-  pycodestyle,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flake8
+, pycodestyle
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

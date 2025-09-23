@@ -1,27 +1,26 @@
-{
-  lib,
-  fetchurl,
-  version ? "0.27.0",
-  astring,
-  base,
-  camlp-streams,
-  cmdliner_1_0,
-  cmdliner_1_1,
-  csexp,
-  dune-build-info,
-  either,
-  fix,
-  fpath,
-  menhirLib,
-  menhirSdk,
-  ocaml-version,
-  ocp-indent,
-  odoc-parser,
-  result,
-  stdio,
-  uuseg,
-  uutf,
-  ...
+{ lib
+, fetchurl
+, version ? "0.27.0"
+, astring
+, base
+, camlp-streams
+, cmdliner_1_0
+, cmdliner_1_1
+, csexp
+, dune-build-info
+, either
+, fix
+, fpath
+, menhirLib
+, menhirSdk
+, ocaml-version
+, ocp-indent
+, odoc-parser
+, result
+, stdio
+, uuseg
+, uutf
+, ...
 }:
 
 # The ocamlformat package have been split into two in version 0.25.1:
@@ -48,8 +47,7 @@ rec {
         "0.26.1" = "sha256-2gBuQn8VuexhL7gI1EZZm9m3w+4lq+s9VVdHpw10xtc=";
         "0.26.2" = "sha256-Lk9Za/eqNnqET+g7oPawvxSyplF53cCCNj/peT0DdcU=";
         "0.27.0" = "sha256-3b9ITAdtCPmUAO6Et5DsIx9cj8vV0zJKZADVOI6EbRU=";
-      }
-      ."${version}";
+      }."${version}";
   };
 
   inherit version;

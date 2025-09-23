@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  pkg-config,
-  glib,
-  readline,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, glib
+, readline
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

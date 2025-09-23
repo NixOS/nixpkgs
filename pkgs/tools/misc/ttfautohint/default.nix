@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  autoreconfHook,
-  perl,
-  freetype,
-  harfbuzz,
-  libsForQt5,
-  enableGUI ? true,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, autoreconfHook
+, perl
+, freetype
+, harfbuzz
+, libsForQt5
+, enableGUI ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

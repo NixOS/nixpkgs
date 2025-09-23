@@ -1,9 +1,9 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  makeWrapper,
-  gitUpdater,
+{ lib
+, appimageTools
+, fetchurl
+, makeWrapper
+, gitUpdater
+,
 }:
 
 appimageTools.wrapType2 rec {

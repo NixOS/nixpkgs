@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libdmtx,
-  imagemagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libdmtx
+, imagemagick
+,
 }:
 
 stdenv.mkDerivation rec {

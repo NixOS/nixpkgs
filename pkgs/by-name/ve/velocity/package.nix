@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle,
-  jdk17,
-  makeBinaryWrapper,
-  openssl,
-  libdeflate,
-  jre_headless,
-  writeScript,
-  nixosTests,
-
-  # native (openssl + libdeflate) compression and crypto implementations
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle
+, jdk17
+, makeBinaryWrapper
+, openssl
+, libdeflate
+, jre_headless
+, writeScript
+, nixosTests
+, # native (openssl + libdeflate) compression and crypto implementations
   withVelocityNative ? builtins.elem stdenv.hostPlatform.system [
     "x86_64-linux"
     "aarch64-linux"
-  ],
+  ]
+,
 }:
 let
   gradle_jdk17 = gradle.override {
@@ -25,8 +24,7 @@ let
     {
       x86_64-linux = "linux_x86_64";
       aarch64-linux = "linux_aarch64";
-    }
-    .${stdenv.hostPlatform.system} or (
+    }.${stdenv.hostPlatform.system} or (
       if withVelocityNative then
         throw "velocity native is not supported on ${stdenv.hostPlatform.system}"
       else

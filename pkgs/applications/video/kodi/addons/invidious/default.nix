@@ -1,13 +1,13 @@
-{
-  lib,
-  rel,
-  buildKodiAddon,
-  fetchzip,
-  addonUpdateScript,
-  infotagger,
-  requests,
-  inputstream-adaptive,
-  inputstreamhelper,
+{ lib
+, rel
+, buildKodiAddon
+, fetchzip
+, addonUpdateScript
+, infotagger
+, requests
+, inputstream-adaptive
+, inputstreamhelper
+,
 }:
 
 buildKodiAddon rec {

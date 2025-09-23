@@ -1,51 +1,46 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  fetchpatch,
-
-  # Required build tools
-  cmake,
-  makeWrapper,
-  pkg-config,
-
-  # Required dependencies
-  fftw,
-  liblo,
-  minixml,
-  zlib,
-
-  # Optional dependencies
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  dssiSupport ? false,
-  dssi,
-  ladspaH,
-  jackSupport ? true,
-  libjack2,
-  lashSupport ? false,
-  lash,
-  ossSupport ? true,
-  portaudioSupport ? true,
-  portaudio,
-  sndioSupport ? stdenv.hostPlatform.isOpenBSD,
-  sndio,
-
-  # Optional GUI dependencies
-  guiModule ? "off",
-  cairo,
-  fltk,
-  libGL,
-  libjpeg,
-  libX11,
-  libXpm,
-  ntk,
-
-  # Test dependencies
-  cxxtest,
-  ruby,
-  ctestCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, fetchpatch
+, # Required build tools
+  cmake
+, makeWrapper
+, pkg-config
+, # Required dependencies
+  fftw
+, liblo
+, minixml
+, zlib
+, # Optional dependencies
+  alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, dssiSupport ? false
+, dssi
+, ladspaH
+, jackSupport ? true
+, libjack2
+, lashSupport ? false
+, lash
+, ossSupport ? true
+, portaudioSupport ? true
+, portaudio
+, sndioSupport ? stdenv.hostPlatform.isOpenBSD
+, sndio
+, # Optional GUI dependencies
+  guiModule ? "off"
+, cairo
+, fltk
+, libGL
+, libjpeg
+, libX11
+, libXpm
+, ntk
+, # Test dependencies
+  cxxtest
+, ruby
+, ctestCheckHook
+,
 }:
 
 assert builtins.any (g: guiModule == g) [
@@ -61,8 +56,7 @@ let
       "fltk" = "FLTK";
       "ntk" = "NTK";
       "zest" = "Zyn-Fusion";
-    }
-    .${guiModule};
+    }.${guiModule};
 
   mruby-zest = callPackage ./mruby-zest { };
 in

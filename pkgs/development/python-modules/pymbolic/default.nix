@@ -1,21 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  immutabledict,
-  pytools,
-
-  # optional-dependencies
-  matchpy,
-  numpy,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  immutabledict
+, pytools
+, # optional-dependencies
+  matchpy
+, numpy
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

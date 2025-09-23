@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  netbox,
-  django,
-  netaddr,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, netbox
+, django
+, netaddr
+, python
+,
 }:
 buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";

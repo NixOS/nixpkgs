@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  apple-sdk,
-  cmake,
-  git,
-  llvm_18,
-  pkg-config,
-  python3,
+{ stdenv
+, lib
+, fetchgit
+, apple-sdk
+, cmake
+, git
+, llvm_18
+, pkg-config
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

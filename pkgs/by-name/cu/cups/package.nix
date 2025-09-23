@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  removeReferencesTo,
-  zlib,
-  libjpeg,
-  libpng,
-  libtiff,
-  pam,
-  dbus,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  acl,
-  gmp,
-  darwin,
-  libusb1 ? null,
-  gnutls ? null,
-  avahi ? null,
-  libpaper ? null,
-  coreutils,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, removeReferencesTo
+, zlib
+, libjpeg
+, libpng
+, libtiff
+, pam
+, dbus
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, acl
+, gmp
+, darwin
+, libusb1 ? null
+, gnutls ? null
+, avahi ? null
+, libpaper ? null
+, coreutils
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
       sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
   ''
   +
-    lib.optionalString
-      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12")
-      ''
-        substituteInPlace backend/usb-darwin.c \
-          --replace "kIOMainPortDefault" "kIOMasterPortDefault"
-      '';
+  lib.optionalString
+    (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12")
+    ''
+      substituteInPlace backend/usb-darwin.c \
+        --replace "kIOMainPortDefault" "kIOMasterPortDefault"
+    '';
 
   nativeBuildInputs = [
     pkg-config

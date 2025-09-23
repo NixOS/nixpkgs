@@ -3,12 +3,12 @@
 # path (/nix/store/eeee...).  This is useful for getting rid of
 # dependencies that you know are not actually needed at runtime.
 
-{
-  lib,
-  stdenvNoCC,
-  perl,
-  signingUtils,
-  shell ? stdenvNoCC.shell,
+{ lib
+, stdenvNoCC
+, perl
+, signingUtils
+, shell ? stdenvNoCC.shell
+,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -31,9 +31,11 @@ stdenvNoCC.mkDerivation {
     inherit perl;
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
-    signingUtils = lib.optionalString (
-      stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
-    ) signingUtils;
+    signingUtils = lib.optionalString
+      (
+        stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
+      )
+      signingUtils;
   };
 
   meta.mainProgram = "nuke-refs";

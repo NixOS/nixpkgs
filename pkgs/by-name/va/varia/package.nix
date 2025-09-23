@@ -1,16 +1,16 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  aria2,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  ffmpeg,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, aria2
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, ffmpeg
+,
 }:
 
 python3Packages.buildPythonApplication rec {

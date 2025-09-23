@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  faraday,
-  faraday-lwt,
-  lwt,
+{ buildDunePackage
+, faraday
+, faraday-lwt
+, lwt
+,
 }:
 
 buildDunePackage {

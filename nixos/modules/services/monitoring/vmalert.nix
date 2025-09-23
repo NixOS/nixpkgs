@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 with lib;
 let
@@ -171,33 +170,37 @@ in
 
   # implementation
   config = mkIf (enabledInstances != { }) {
-    environment.etc = lib.mapAttrs' (
-      name:
-      { rules, ... }:
-      lib.nameValuePair "${vmalertName name}/rules.yml" {
-        source = format.generate "rules.yml" rules;
-      }
-    ) enabledInstances;
+    environment.etc = lib.mapAttrs'
+      (
+        name:
+        { rules, ... }:
+        lib.nameValuePair "${vmalertName name}/rules.yml" {
+          source = format.generate "rules.yml" rules;
+        }
+      )
+      enabledInstances;
 
-    systemd.services = lib.mapAttrs' (
-      name:
-      { settings, ... }:
-      let
-        name' = vmalertName name;
-      in
-      lib.nameValuePair name' {
-        description = "vmalert service";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        reloadTriggers = [ config.environment.etc."${name'}/rules.yml".source ];
+    systemd.services = lib.mapAttrs'
+      (
+        name:
+        { settings, ... }:
+        let
+          name' = vmalertName name;
+        in
+        lib.nameValuePair name' {
+          description = "vmalert service";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          reloadTriggers = [ config.environment.etc."${name'}/rules.yml".source ];
 
-        serviceConfig = {
-          DynamicUser = true;
-          Restart = "on-failure";
-          ExecStart = "${cfg.package}/bin/vmalert ${mkConfOpts settings}";
-          ExecReload = ''${pkgs.coreutils}/bin/kill -SIGHUP "$MAINPID"'';
-        };
-      }
-    ) enabledInstances;
+          serviceConfig = {
+            DynamicUser = true;
+            Restart = "on-failure";
+            ExecStart = "${cfg.package}/bin/vmalert ${mkConfOpts settings}";
+            ExecReload = ''${pkgs.coreutils}/bin/kill -SIGHUP "$MAINPID"'';
+          };
+        }
+      )
+      enabledInstances;
   };
 }

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  setuptools,
-  standard-telnetlib,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, setuptools
+, standard-telnetlib
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

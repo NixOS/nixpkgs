@@ -1,14 +1,14 @@
-{
-  lib,
-  git,
-  dotnetCorePackages,
-  glibcLocales,
-  buildDotnetModule,
-  fetchFromGitHub,
-  bintools,
-  stdenv,
-  mono,
-  nix-update-script,
+{ lib
+, git
+, dotnetCorePackages
+, glibcLocales
+, buildDotnetModule
+, fetchFromGitHub
+, bintools
+, stdenv
+, mono
+, nix-update-script
+,
 }:
 let
   mainProgram = "EventStore.ClusterNode";

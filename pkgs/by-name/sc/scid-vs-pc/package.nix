@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  tcl,
-  tk,
-  libX11,
-  zlib,
-  makeWrapper,
-  which,
-  makeDesktopItem,
+{ lib
+, fetchurl
+, tcl
+, tk
+, libX11
+, zlib
+, makeWrapper
+, which
+, makeDesktopItem
+,
 }:
 
 tcl.mkTclDerivation rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  libufs,
+{ lib
+, mkDerivation
+, libufs
+,
 }:
 mkDerivation {
   path = "sbin/fsck_ffs";

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 # TODO: support munin-async
 # TODO: LWP/Pg perl libs aren't recognized
@@ -114,10 +113,12 @@ let
   # you can just refer to them by name rather than needing to include a copy
   # of munin-contrib in your nixos configuration.
   extraPluginDir = internAndFixPlugins "munin-extra-plugins.d" internOnePlugin (
-    lib.attrsets.mapAttrsToList (k: v: {
-      name = k;
-      path = v;
-    }) nodeCfg.extraPlugins
+    lib.attrsets.mapAttrsToList
+      (k: v: {
+        name = k;
+        path = v;
+      })
+      nodeCfg.extraPlugins
   );
 
   extraAutoPluginDir =

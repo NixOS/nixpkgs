@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  poetry-core,
-  regex,
-  langcodes,
-  ftfy,
-  msgpack,
-  mecab-python3,
-  jieba,
-  pytestCheckHook,
-  pythonOlder,
-  fetchFromGitHub,
+{ lib
+, buildPythonPackage
+, poetry-core
+, regex
+, langcodes
+, ftfy
+, msgpack
+, mecab-python3
+, jieba
+, pytestCheckHook
+, pythonOlder
+, fetchFromGitHub
+,
 }:
 
 buildPythonPackage rec {

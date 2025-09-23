@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  twisted,
-  python-pam,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, twisted
+, python-pam
+,
 }:
 
 buildPythonPackage rec {

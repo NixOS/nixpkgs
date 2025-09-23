@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unzip,
-  zip,
-  libiconv,
-  perl,
-  aspell,
-  dos2unix,
-  singleWordlist ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unzip
+, zip
+, libiconv
+, perl
+, aspell
+, dos2unix
+, singleWordlist ? null
+,
 }:
 
 stdenv.mkDerivation rec {

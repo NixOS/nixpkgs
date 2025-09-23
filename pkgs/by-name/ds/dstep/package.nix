@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDubPackage,
-  fetchFromGitHub,
-  clang,
-  ldc,
-  which,
+{ lib
+, buildDubPackage
+, fetchFromGitHub
+, clang
+, ldc
+, which
+,
 }:
 buildDubPackage rec {
   pname = "dstep";

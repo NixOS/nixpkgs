@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libxml2,
-  nettle,
-  withGTK3 ? !stdenv.hostPlatform.isStatic,
-  gtk3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libxml2
+, nettle
+, withGTK3 ? !stdenv.hostPlatform.isStatic
+, gtk3
+,
 }:
 
 stdenv.mkDerivation rec {

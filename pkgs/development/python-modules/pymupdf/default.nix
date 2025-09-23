@@ -1,34 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  python,
-  toPythonModule,
-
-  # build-system
-  libclang,
-  psutil,
-  setuptools,
-  swig,
-
-  # native dependencies
-  freetype,
-  harfbuzz,
-  openjpeg,
-  jbig2dec,
-  libjpeg_turbo,
-  gumbo,
-
-  # dependencies
-  mupdf,
-
-  # tests
-  pytestCheckHook,
-  fonttools,
-  pillow,
-  pymupdf-fonts,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, python
+, toPythonModule
+, # build-system
+  libclang
+, psutil
+, setuptools
+, swig
+, # native dependencies
+  freetype
+, harfbuzz
+, openjpeg
+, jbig2dec
+, libjpeg_turbo
+, gumbo
+, # dependencies
+  mupdf
+, # tests
+  pytestCheckHook
+, fonttools
+, pillow
+, pymupdf-fonts
+,
 }:
 
 let

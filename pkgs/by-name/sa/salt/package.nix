@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchpatch,
-  fetchPypi,
-  openssl,
-  # Many Salt modules require various Python modules to be installed,
+{ lib
+, stdenv
+, python3
+, fetchpatch
+, fetchPypi
+, openssl
+, # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
-  extraInputs ? [ ],
+  extraInputs ? [ ]
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

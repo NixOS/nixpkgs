@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  jdk8_headless,
-  jdk11_headless,
-  bash,
-  coreutils,
-  which,
-  bzip2,
-  cyrus_sasl,
-  protobuf,
-  snappy,
-  zlib,
-  zstd,
-  openssl,
-  nixosTests,
-  sparkSupport ? true,
-  spark,
-  libtirpc,
-  callPackage,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, jdk8_headless
+, jdk11_headless
+, bash
+, coreutils
+, which
+, bzip2
+, cyrus_sasl
+, protobuf
+, snappy
+, zlib
+, zstd
+, openssl
+, nixosTests
+, sparkSupport ? true
+, spark
+, libtirpc
+, callPackage
+,
 }:
 
 assert lib.elem stdenv.system [
@@ -32,11 +32,11 @@ assert lib.elem stdenv.system [
 
 let
   common =
-    {
-      pname,
-      platformAttrs,
-      jdk,
-      tests,
+    { pname
+    , platformAttrs
+    , jdk
+    , tests
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       inherit pname jdk;
@@ -141,26 +141,28 @@ let
 
       meta =
         with lib;
-        recursiveUpdate {
-          homepage = "https://hadoop.apache.org/";
-          description = "Framework for distributed processing of large data sets across clusters of computers";
-          license = licenses.asl20;
-          sourceProvenance = with sourceTypes; [ binaryBytecode ];
+        recursiveUpdate
+          {
+            homepage = "https://hadoop.apache.org/";
+            description = "Framework for distributed processing of large data sets across clusters of computers";
+            license = licenses.asl20;
+            sourceProvenance = with sourceTypes; [ binaryBytecode ];
 
-          longDescription = ''
-            The Apache Hadoop software library is a framework that allows for
-            the distributed processing of large data sets across clusters of
-            computers using a simple programming model. It is designed to
-            scale up from single servers to thousands of machines, each
-            offering local computation and storage. Rather than rely on
-            hardware to deliver high-avaiability, the library itself is
-            designed to detect and handle failures at the application layer,
-            so delivering a highly-availabile service on top of a cluster of
-            computers, each of which may be prone to failures.
-          '';
-          maintainers = with maintainers; [ illustris ];
-          platforms = attrNames platformAttrs;
-        } (attrByPath [ stdenv.system "meta" ] { } platformAttrs);
+            longDescription = ''
+              The Apache Hadoop software library is a framework that allows for
+              the distributed processing of large data sets across clusters of
+              computers using a simple programming model. It is designed to
+              scale up from single servers to thousands of machines, each
+              offering local computation and storage. Rather than rely on
+              hardware to deliver high-avaiability, the library itself is
+              designed to detect and handle failures at the application layer,
+              so delivering a highly-availabile service on top of a cluster of
+              computers, each of which may be prone to failures.
+            '';
+            maintainers = with maintainers; [ illustris ];
+            platforms = attrNames platformAttrs;
+          }
+          (attrByPath [ stdenv.system "meta" ] { } platformAttrs);
     });
 in
 {

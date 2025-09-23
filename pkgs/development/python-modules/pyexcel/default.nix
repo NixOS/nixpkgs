@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  chardet,
-  lml,
-  pyexcel-io,
-  texttable,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, chardet
+, lml
+, pyexcel-io
+, texttable
+,
 }:
 
 buildPythonPackage rec {

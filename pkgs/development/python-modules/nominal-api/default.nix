@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  conjure-python-client,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, conjure-python-client
+,
 }:
 
 buildPythonPackage rec {

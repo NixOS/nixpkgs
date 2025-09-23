@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  ipython,
-  matplotlib,
-  numpy,
-  pandas,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, ipython
+, matplotlib
+, numpy
+, pandas
+,
 }:
 
 buildPythonPackage rec {

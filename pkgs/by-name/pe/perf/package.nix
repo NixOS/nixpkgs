@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  linux_latest,
-  elfutils,
-  python3,
-  newt,
-  slang,
-  asciidoc,
-  xmlto,
-  makeWrapper,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  libxslt,
-  flex,
-  bison,
-  pkg-config,
-  libunwind,
-  binutils-unwrapped,
-  libiberty,
-  audit,
-  libopcodes,
-  libpfm,
-  libtraceevent,
-  openssl,
-  systemtap-unwrapped,
-  numactl,
-  zlib,
-  babeltrace,
-  withGtk ? false,
-  gtk2,
-  withZstd ? true,
-  zstd,
-  withLibcap ? true,
-  libcap,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, linux_latest
+, elfutils
+, python3
+, newt
+, slang
+, asciidoc
+, xmlto
+, makeWrapper
+, docbook_xsl
+, docbook_xml_dtd_45
+, libxslt
+, flex
+, bison
+, pkg-config
+, libunwind
+, binutils-unwrapped
+, libiberty
+, audit
+, libopcodes
+, libpfm
+, libtraceevent
+, openssl
+, systemtap-unwrapped
+, numactl
+, zlib
+, babeltrace
+, withGtk ? false
+, gtk2
+, withZstd ? true
+, zstd
+, withLibcap ? true
+, libcap
+, buildPackages
+,
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  openresolv,
-  coreutils,
-  systemd,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, openresolv
+, coreutils
+, systemd
+,
 }:
 
 let

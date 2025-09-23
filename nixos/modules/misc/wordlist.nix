@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   concatAndSort =
@@ -57,8 +56,10 @@ in
   };
 
   config = lib.mkIf config.environment.wordlist.enable {
-    environment.variables = lib.mapAttrs (
-      name: value: "${concatAndSort "wordlist-${name}" value}"
-    ) config.environment.wordlist.lists;
+    environment.variables = lib.mapAttrs
+      (
+        name: value: "${concatAndSort "wordlist-${name}" value}"
+      )
+      config.environment.wordlist.lists;
   };
 }

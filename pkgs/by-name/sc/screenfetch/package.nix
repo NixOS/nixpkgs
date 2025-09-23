@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  gawk,
-  procps,
-  gnused,
-  bc,
-  findutils,
-  xdpyinfo,
-  xprop,
-  gnugrep,
-  ncurses,
-  pciutils,
-  darwin,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, gawk
+, procps
+, gnused
+, bc
+, findutils
+, xdpyinfo
+, xprop
+, gnugrep
+, ncurses
+, pciutils
+, darwin
+,
 }:
 
 let

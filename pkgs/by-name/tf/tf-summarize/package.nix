@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  tf-summarize,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, tf-summarize
+,
 }:
 
 buildGoModule rec {

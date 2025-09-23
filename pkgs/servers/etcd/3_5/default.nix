@@ -1,12 +1,12 @@
-{
-  applyPatches,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  k3s,
-  lib,
-  nixosTests,
-  symlinkJoin,
+{ applyPatches
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, k3s
+, lib
+, nixosTests
+, symlinkJoin
+,
 }:
 
 let

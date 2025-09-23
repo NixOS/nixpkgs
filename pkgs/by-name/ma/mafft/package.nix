@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  runCommand,
-  mafft,
+{ lib
+, stdenv
+, fetchFromGitLab
+, runCommand
+, mafft
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

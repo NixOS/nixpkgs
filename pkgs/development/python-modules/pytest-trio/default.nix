@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  trio,
-  hypothesis,
-  outcome,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, trio
+, hypothesis
+, outcome
+, pytest
+,
 }:
 
 buildPythonPackage rec {

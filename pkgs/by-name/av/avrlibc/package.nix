@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoLibc,
-  fetchurl,
-  automake,
-  autoconf,
+{ lib
+, stdenvNoLibc
+, fetchurl
+, automake
+, autoconf
+,
 }:
 
 stdenvNoLibc.mkDerivation (finalAttrs: {

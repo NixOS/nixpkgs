@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  protobuf,
-  protobufc,
-  libsodium,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, protobuf
+, protobufc
+, libsodium
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

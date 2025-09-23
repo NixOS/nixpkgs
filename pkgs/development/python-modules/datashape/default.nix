@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  versioneer,
-
-  # dependencies
-  multipledispatch,
-  numpy,
-  python-dateutil,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, versioneer
+, # dependencies
+  multipledispatch
+, numpy
+, python-dateutil
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

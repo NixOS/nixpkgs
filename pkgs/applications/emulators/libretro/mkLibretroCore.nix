@@ -1,11 +1,12 @@
 {
   # Deps
-  lib,
-  stdenv,
-  makeWrapper,
-  retroarch-bare,
-  unstableGitUpdater,
-  zlib,
+  lib
+, stdenv
+, makeWrapper
+, retroarch-bare
+, unstableGitUpdater
+, zlib
+,
 }:
 
 lib.extendMkDerivation {
@@ -21,22 +22,21 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-    {
-      core,
-      enableParallelBuilding ? true,
-      extraBuildInputs ? [ ],
-      extraNativeBuildInputs ? [ ],
-      makeFlags ? [ ],
-      makefile ? "Makefile.libretro",
-      meta ? { },
-      passthru ? { },
-      strictDeps ? true,
-      ## Location of resulting RetroArch core on $out
-      libretroCore ? "/lib/retroarch/cores",
-      ## The core filename is derived from the core name
+    { core
+    , enableParallelBuilding ? true
+    , extraBuildInputs ? [ ]
+    , extraNativeBuildInputs ? [ ]
+    , makeFlags ? [ ]
+    , makefile ? "Makefile.libretro"
+    , meta ? { }
+    , passthru ? { }
+    , strictDeps ? true
+    , ## Location of resulting RetroArch core on $out
+      libretroCore ? "/lib/retroarch/cores"
+    , ## The core filename is derived from the core name
       ## Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
-      normalizeCore ? true,
-      ...
+      normalizeCore ? true
+    , ...
     }:
     let
       d2u = if normalizeCore then (lib.replaceStrings [ "-" ] [ "_" ]) else (x: x);

@@ -1,14 +1,14 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  meson,
-  ninja,
-  gobject-introspection,
-  clutter,
-  gtk3,
-  gnome,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, meson
+, ninja
+, gobject-introspection
+, clutter
+, gtk3
+, gnome
+,
 }:
 
 let

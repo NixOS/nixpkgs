@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fftw,
-  libsForQt5,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fftw
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation rec {

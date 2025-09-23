@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pkg-config,
-  libgphoto2,
-  pytestCheckHook,
-  setuptools,
-  toml,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pkg-config
+, libgphoto2
+, pytestCheckHook
+, setuptools
+, toml
+,
 }:
 
 buildPythonPackage rec {

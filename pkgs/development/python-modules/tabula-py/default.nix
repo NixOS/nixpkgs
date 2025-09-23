@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  distro,
-  fetchFromGitHub,
-  jre,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  jpype1,
+{ lib
+, buildPythonPackage
+, distro
+, fetchFromGitHub
+, jre
+, numpy
+, pandas
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, jpype1
+,
 }:
 
 buildPythonPackage rec {

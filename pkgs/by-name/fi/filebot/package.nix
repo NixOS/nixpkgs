@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  coreutils,
-  openjdk17,
-  makeWrapper,
-  autoPatchelfHook,
-  zlib,
-  libzen,
-  libmediainfo,
-  curlWithGnuTls,
-  libmms,
-  glib,
-  genericUpdater,
-  writeShellScript,
+{ lib
+, stdenv
+, fetchurl
+, coreutils
+, openjdk17
+, makeWrapper
+, autoPatchelfHook
+, zlib
+, libzen
+, libmediainfo
+, curlWithGnuTls
+, libmms
+, glib
+, genericUpdater
+, writeShellScript
+,
 }:
 
 let

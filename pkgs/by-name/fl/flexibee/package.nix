@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre
+,
 }:
 
 let

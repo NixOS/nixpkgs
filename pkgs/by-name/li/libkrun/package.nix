@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo,
-  pkg-config,
-  glibc,
-  openssl,
-  libepoxy,
-  libdrm,
-  pipewire,
-  virglrenderer,
-  libkrunfw,
-  rustc,
-  withBlk ? false,
-  withNet ? false,
-  withGpu ? false,
-  withSound ? false,
-  withTimesync ? false,
-  variant ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, pkg-config
+, glibc
+, openssl
+, libepoxy
+, libdrm
+, pipewire
+, virglrenderer
+, libkrunfw
+, rustc
+, withBlk ? false
+, withNet ? false
+, withGpu ? false
+, withSound ? false
+, withTimesync ? false
+, variant ? null
+,
 }:
 
 assert lib.elem variant [

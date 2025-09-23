@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  unzip,
-  jdk,
-  gradle,
-  ghidra,
+{ lib
+, stdenv
+, unzip
+, jdk
+, gradle
+, ghidra
+,
 }:
 
 let
@@ -25,11 +25,10 @@ let
     constructDrv = stdenv.mkDerivation;
     extendDrvArgs =
       finalAttrs:
-      {
-        pname,
-        nativeBuildInputs ? [ ],
-        meta ? { },
-        ...
+      { pname
+      , nativeBuildInputs ? [ ]
+      , meta ? { }
+      , ...
       }@args:
       {
         nativeBuildInputs = nativeBuildInputs ++ [
@@ -75,10 +74,9 @@ let
     constructDrv = stdenv.mkDerivation;
     extendDrvArgs =
       finalAttrs:
-      {
-        pname,
-        meta ? { },
-        ...
+      { pname
+      , meta ? { }
+      , ...
       }@args:
       {
         installPhase = ''

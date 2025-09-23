@@ -1,35 +1,35 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cairo,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  asciidoc,
-  wrapGAppsHook3,
-  glib,
-  libei,
-  libepoxy,
-  libdrm,
-  libva,
-  vulkan-loader,
-  shaderc,
-  nv-codec-headers-11,
-  pipewire,
-  systemd,
-  libsecret,
-  libnotify,
-  libopus,
-  libxkbcommon,
-  gdk-pixbuf,
-  freerdp,
-  fdk_aac,
-  tpm2-tss,
-  fuse3,
-  gnome,
-  polkit,
+{ stdenv
+, lib
+, fetchurl
+, cairo
+, meson
+, ninja
+, pkg-config
+, python3
+, asciidoc
+, wrapGAppsHook3
+, glib
+, libei
+, libepoxy
+, libdrm
+, libva
+, vulkan-loader
+, shaderc
+, nv-codec-headers-11
+, pipewire
+, systemd
+, libsecret
+, libnotify
+, libopus
+, libxkbcommon
+, gdk-pixbuf
+, freerdp
+, fdk_aac
+, tpm2-tss
+, fuse3
+, gnome
+, polkit
+,
 }:
 
 stdenv.mkDerivation rec {

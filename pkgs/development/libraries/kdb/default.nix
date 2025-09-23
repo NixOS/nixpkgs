@@ -1,16 +1,16 @@
-{
-  mkDerivation,
-  lib,
-  fetchurl,
-  fetchpatch,
-  extra-cmake-modules,
-  qtbase,
-  kcoreaddons,
-  python3,
-  sqlite,
-  libpq,
-  libmysqlclient,
-  qttools,
+{ mkDerivation
+, lib
+, fetchurl
+, fetchpatch
+, extra-cmake-modules
+, qtbase
+, kcoreaddons
+, python3
+, sqlite
+, libpq
+, libmysqlclient
+, qttools
+,
 }:
 
 mkDerivation rec {

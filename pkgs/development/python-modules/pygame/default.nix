@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  fontconfig,
-  python,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # nativeBuildInputs
-  SDL2,
-  pkg-config,
-
-  # buildInputs
-  freetype,
-  libjpeg,
-  libpng,
-  libX11,
-  portmidi,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, fontconfig
+, python
+, # build-system
+  cython
+, setuptools
+, # nativeBuildInputs
+  SDL2
+, pkg-config
+, # buildInputs
+  freetype
+, libjpeg
+, libpng
+, libX11
+, portmidi
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+,
 }:
 
 buildPythonPackage rec {
@@ -46,17 +43,21 @@ buildPythonPackage rec {
     # Patch pygame's dependency resolution to let it find build inputs
     (replaceVars ./fix-dependency-finding.patch {
       buildinputs_include = builtins.toJSON (
-        builtins.concatMap (dep: [
-          "${lib.getDev dep}/"
-          "${lib.getDev dep}/include"
-          "${lib.getDev dep}/include/SDL2"
-        ]) buildInputs
+        builtins.concatMap
+          (dep: [
+            "${lib.getDev dep}/"
+            "${lib.getDev dep}/include"
+            "${lib.getDev dep}/include/SDL2"
+          ])
+          buildInputs
       );
       buildinputs_lib = builtins.toJSON (
-        builtins.concatMap (dep: [
-          "${lib.getLib dep}/"
-          "${lib.getLib dep}/lib"
-        ]) buildInputs
+        builtins.concatMap
+          (dep: [
+            "${lib.getLib dep}/"
+            "${lib.getLib dep}/lib"
+          ])
+          buildInputs
       );
     })
 

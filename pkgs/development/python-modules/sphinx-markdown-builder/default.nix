@@ -1,34 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  fetchpatch2,
-
-  # build system
-  setuptools,
-  wheel,
-
-  # deps
-  docutils,
-  sphinx,
-  tabulate,
-
-  # tests
-  pytestCheckHook,
-
-  # optional deps
-  black,
-  bumpver,
-  coveralls,
-  flake8,
-  isort,
-  pip-tools,
-  pylint,
-  pytest,
-  pytest-cov,
-  sphinxcontrib-httpdomain,
-  sphinxcontrib-plantuml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, fetchpatch2
+, # build system
+  setuptools
+, wheel
+, # deps
+  docutils
+, sphinx
+, tabulate
+, # tests
+  pytestCheckHook
+, # optional deps
+  black
+, bumpver
+, coveralls
+, flake8
+, isort
+, pip-tools
+, pylint
+, pytest
+, pytest-cov
+, sphinxcontrib-httpdomain
+, sphinxcontrib-plantuml
+,
 }:
 
 buildPythonPackage rec {

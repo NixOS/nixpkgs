@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  django,
-  waitress,
+{ lib
+, buildPythonPackage
+, setuptools
+, django
+, waitress
+,
 }:
 
 buildPythonPackage {

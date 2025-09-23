@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  ant,
-  jdk8,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  strip-nondeterminism,
-  stripJavaArchivesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, ant
+, jdk8
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, strip-nondeterminism
+, stripJavaArchivesHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

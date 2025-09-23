@@ -1,23 +1,23 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  httpcore,
-  httpx,
-  hypercorn,
-  pytest-asyncio,
-  pytest-trio,
-  pytestCheckHook,
-  python-socks,
-  pythonOlder,
-  setuptools,
-  starlette,
-  tiny-proxy,
-  trio,
-  trustme,
-  yarl,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, httpcore
+, httpx
+, hypercorn
+, pytest-asyncio
+, pytest-trio
+, pytestCheckHook
+, python-socks
+, pythonOlder
+, setuptools
+, starlette
+, tiny-proxy
+, trio
+, trustme
+, yarl
+,
 }:
 
 buildPythonPackage rec {

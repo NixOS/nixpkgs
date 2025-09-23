@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  click,
-  pytestCheckHook,
-  pytest-click,
-  setuptools,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, pytestCheckHook
+, pytest-click
+, setuptools
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

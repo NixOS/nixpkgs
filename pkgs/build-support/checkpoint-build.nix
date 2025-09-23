@@ -1,7 +1,7 @@
-{
-  lib,
-  buildPackages,
-  config,
+{ lib
+, buildPackages
+, config
+,
 }:
 
 let
@@ -98,6 +98,6 @@ rec {
       doDist = false;
     });
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   mkCheckpointedBuild = lib.warn "`mkCheckpointedBuild` is deprecated, use `mkCheckpointBuild` instead!" mkCheckpointBuild;
 }

@@ -1,13 +1,13 @@
-{
-  fetchFromGitLab,
-  rustPlatform,
-  lib,
-  pnpm_9,
-  stdenvNoCC,
-  nodejs_22,
-  ffmpeg,
-  imagemagick,
-  makeWrapper,
+{ fetchFromGitLab
+, rustPlatform
+, lib
+, pnpm_9
+, stdenvNoCC
+, nodejs_22
+, ffmpeg
+, imagemagick
+, makeWrapper
+,
 }:
 let
   izzy = rustPlatform.buildRustPackage rec {

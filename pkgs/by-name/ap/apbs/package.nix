@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  blas,
-  superlu,
-  suitesparse,
-  python3,
-  libintl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, blas
+, superlu
+, suitesparse
+, python3
+, libintl
+,
 }:
 let
   # this is a fork version of fetk (http://www.fetk.org/)

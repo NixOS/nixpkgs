@@ -1,28 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  cloudpickle,
-  dill,
-  fasteners,
-  ipynbname,
-  ipywidgets,
-  notebook,
-  numpy,
-  odfpy,
-  plotly,
-  pyyaml,
-  qgrid,
-  scipy,
-  six,
-  tabulate,
-  tensorboard,
-
-  # tests
-  pytestCheckHook,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  cloudpickle
+, dill
+, fasteners
+, ipynbname
+, ipywidgets
+, notebook
+, numpy
+, odfpy
+, plotly
+, pyyaml
+, qgrid
+, scipy
+, six
+, tabulate
+, tensorboard
+, # tests
+  pytestCheckHook
+, torch
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  pkgs,
-  stdenv,
-  config,
+{ lib
+, fetchFromGitHub
+, pkgs
+, stdenv
+, config
+,
 }:
 
 let
@@ -20,19 +20,18 @@ let
     };
 
   mkTmuxPlugin =
-    a@{
-      pluginName,
-      rtpFilePath ? (builtins.replaceStrings [ "-" ] [ "_" ] pluginName) + ".tmux",
-      namePrefix ? "tmuxplugin-",
-      src,
-      unpackPhase ? "",
-      configurePhase ? ":",
-      buildPhase ? ":",
-      addonInfo ? null,
-      preInstall ? "",
-      postInstall ? "",
-      path ? lib.getName pluginName,
-      ...
+    a@{ pluginName
+    , rtpFilePath ? (builtins.replaceStrings [ "-" ] [ "_" ] pluginName) + ".tmux"
+    , namePrefix ? "tmuxplugin-"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ":"
+    , buildPhase ? ":"
+    , addonInfo ? null
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? lib.getName pluginName
+    , ...
     }:
     if lib.hasAttr "dependencies" a then
       throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
@@ -1147,6 +1146,6 @@ in
     };
   };
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 }

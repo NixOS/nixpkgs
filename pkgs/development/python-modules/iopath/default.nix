@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # build inputs
-  tqdm,
-  portalocker,
-  boto3,
-  # check inputs
-  pytestCheckHook,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build inputs
+  tqdm
+, portalocker
+, boto3
+, # check inputs
+  pytestCheckHook
+, torch
+,
 }:
 let
   pname = "iopath";

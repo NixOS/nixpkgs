@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  git,
-  awscli,
-  python3,
+{ lib
+, fetchFromGitHub
+, git
+, awscli
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication {

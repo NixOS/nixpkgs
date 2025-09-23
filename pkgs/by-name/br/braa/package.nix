@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  zlib,
+{ lib
+, stdenv
+, fetchzip
+, zlib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "braa";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  openvpn,
-  fetchpatch,
-  fetchurl,
-  libnl,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, openvpn
+, fetchpatch
+, fetchurl
+, libnl
+, autoreconfHook
+, pkg-config
+,
 }:
 
 openvpn.overrideAttrs (

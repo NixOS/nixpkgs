@@ -1,38 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libsForQt5,
-
-  apple-sdk_15,
-  asciidoctor,
-  botan3,
-  curl,
-  darwinMinVersionHook,
-  libXi,
-  libXtst,
-  libargon2,
-  libusb1,
-  minizip,
-  nix-update-script,
-  pcsclite,
-  pkg-config,
-  qrencode,
-  readline,
-  wrapGAppsHook3,
-  zlib,
-
-  withKeePassBrowser ? true,
-  withKeePassBrowserPasskeys ? true,
-  withKeePassFDOSecrets ? stdenv.hostPlatform.isLinux,
-  withKeePassKeeShare ? true,
-  withKeePassNetworking ? true,
-  withKeePassSSHAgent ? true,
-  withKeePassX11 ? true,
-  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
-
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libsForQt5
+, apple-sdk_15
+, asciidoctor
+, botan3
+, curl
+, darwinMinVersionHook
+, libXi
+, libXtst
+, libargon2
+, libusb1
+, minizip
+, nix-update-script
+, pcsclite
+, pkg-config
+, qrencode
+, readline
+, wrapGAppsHook3
+, zlib
+, withKeePassBrowser ? true
+, withKeePassBrowserPasskeys ? true
+, withKeePassFDOSecrets ? stdenv.hostPlatform.isLinux
+, withKeePassKeeShare ? true
+, withKeePassNetworking ? true
+, withKeePassSSHAgent ? true
+, withKeePassX11 ? true
+, withKeePassYubiKey ? stdenv.hostPlatform.isLinux
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

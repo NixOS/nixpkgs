@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gnome-shell,
-  gnome-themes-extra,
-  glib,
-  libxml2,
-  gtk-engine-murrine,
-  gdk-pixbuf,
-  librsvg,
-  bc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnome-shell
+, gnome-themes-extra
+, glib
+, libxml2
+, gtk-engine-murrine
+, gdk-pixbuf
+, librsvg
+, bc
+,
 }:
 
 stdenv.mkDerivation rec {

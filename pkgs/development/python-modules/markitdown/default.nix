@@ -1,31 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  beautifulsoup4,
-  defusedxml,
-  ffmpeg-headless,
-  magika,
-  mammoth,
-  markdownify,
-  numpy,
-  openai,
-  openpyxl,
-  pandas,
-  pathvalidate,
-  pdfminer-six,
-  puremagic,
-  pydub,
-  python-pptx,
-  requests,
-  speechrecognition,
-  youtube-transcript-api,
-  olefile,
-  xlrd,
-  lxml,
-  pytestCheckHook,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, beautifulsoup4
+, defusedxml
+, ffmpeg-headless
+, magika
+, mammoth
+, markdownify
+, numpy
+, openai
+, openpyxl
+, pandas
+, pathvalidate
+, pdfminer-six
+, puremagic
+, pydub
+, python-pptx
+, requests
+, speechrecognition
+, youtube-transcript-api
+, olefile
+, xlrd
+, lxml
+, pytestCheckHook
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

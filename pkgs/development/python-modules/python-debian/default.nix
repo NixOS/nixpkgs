@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  charset-normalizer,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, charset-normalizer
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

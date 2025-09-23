@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  llvmPackages,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, llvmPackages
+,
 }:
 
 rustPlatform.buildRustPackage {

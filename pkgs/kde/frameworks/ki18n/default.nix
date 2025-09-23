@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  python3,
-  gettext,
+{ mkKdeDerivation
+, qtdeclarative
+, python3
+, gettext
+,
 }:
 mkKdeDerivation {
   pname = "ki18n";

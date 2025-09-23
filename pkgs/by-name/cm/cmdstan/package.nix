@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  stanc,
-  buildPackages,
-  runtimeShell,
-  runCommandCC,
-  cmdstan,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, stanc
+, buildPackages
+, runtimeShell
+, runCommandCC
+, cmdstan
+,
 }:
 
 stdenv.mkDerivation rec {

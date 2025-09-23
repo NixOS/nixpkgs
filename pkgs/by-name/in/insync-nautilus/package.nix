@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  nautilus-python,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, nautilus-python
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

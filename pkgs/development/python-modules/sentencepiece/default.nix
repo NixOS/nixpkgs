@@ -1,8 +1,7 @@
-{
-  buildPythonPackage,
-
-  sentencepiece,
-  pkg-config,
+{ buildPythonPackage
+, sentencepiece
+, pkg-config
+,
 }:
 
 buildPythonPackage rec {

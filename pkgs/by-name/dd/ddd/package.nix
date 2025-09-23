@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  imagemagick,
-  desktopToDarwinBundle,
-  motif,
-  ncurses,
-  libX11,
-  libXt,
-  gdb,
+{ lib
+, stdenv
+, fetchurl
+, imagemagick
+, desktopToDarwinBundle
+, motif
+, ncurses
+, libX11
+, libXt
+, gdb
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitHub,
-  gitUpdater,
+{ lib
+, buildLua
+, fetchFromGitHub
+, gitUpdater
+,
 }:
 buildLua rec {
   pname = "simple-mpv-ui";

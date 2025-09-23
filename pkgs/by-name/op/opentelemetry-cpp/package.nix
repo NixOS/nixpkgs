@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  protobuf,
-  curl,
-  grpc,
-  prometheus-cpp,
-  nlohmann_json,
-  nix-update-script,
-  cxxStandard ? null,
-  enableHttp ? false,
-  enableGrpc ? false,
-  enablePrometheus ? false,
-  enableElasticSearch ? false,
-  enableZipkin ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, protobuf
+, curl
+, grpc
+, prometheus-cpp
+, nlohmann_json
+, nix-update-script
+, cxxStandard ? null
+, enableHttp ? false
+, enableGrpc ? false
+, enablePrometheus ? false
+, enableElasticSearch ? false
+, enableZipkin ? false
+,
 }:
 let
   opentelemetry-proto = fetchFromGitHub {

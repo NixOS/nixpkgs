@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  k8s-manifest-sigstore,
-  gitUpdater,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, k8s-manifest-sigstore
+, gitUpdater
+,
 }:
 
 buildGoModule rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  flex,
-  bison,
-  python3,
-  autoconf,
-  which,
-  help2man,
-  makeWrapper,
-  systemc,
-  git,
-  numactl,
-  coreutils,
-  gdb,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, flex
+, bison
+, python3
+, autoconf
+, which
+, help2man
+, makeWrapper
+, systemc
+, git
+, numactl
+, coreutils
+, gdb
+,
 }:
 
 stdenv.mkDerivation rec {

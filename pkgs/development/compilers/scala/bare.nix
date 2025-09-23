@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre
+, ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

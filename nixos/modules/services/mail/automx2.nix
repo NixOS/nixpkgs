@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -17,7 +16,8 @@ in
       package = lib.mkPackageOption pkgs [
         "python3Packages"
         "automx2"
-      ] { };
+      ]
+        { };
 
       domain = lib.mkOption {
         type = lib.types.str;

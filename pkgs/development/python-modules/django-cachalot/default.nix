@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  django-debug-toolbar,
-  psycopg2,
-  jinja2,
-  beautifulsoup4,
-  pytest-django,
-  pytestCheckHook,
-  python,
-  pytz,
-  redis,
-  redisTestHook,
-  setuptools,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, django-debug-toolbar
+, psycopg2
+, jinja2
+, beautifulsoup4
+, pytest-django
+, pytestCheckHook
+, python
+, pytz
+, redis
+, redisTestHook
+, setuptools
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

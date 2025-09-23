@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -125,13 +124,13 @@ let
 
   mkPassEnv =
     cfg:
-    with cfg.encryption;
-    if passCommand != null then
-      { BORG_PASSCOMMAND = passCommand; }
-    else if passphrase != null then
-      { BORG_PASSPHRASE = passphrase; }
-    else
-      { };
+      with cfg.encryption;
+      if passCommand != null then
+        { BORG_PASSCOMMAND = passCommand; }
+      else if passphrase != null then
+        { BORG_PASSPHRASE = passphrase; }
+      else
+        { };
 
   mkBackupService =
     name: cfg:
@@ -197,10 +196,10 @@ let
 
   # utility function around makeWrapper
   mkWrapperDrv =
-    {
-      original,
-      name,
-      set ? { },
+    { original
+    , name
+    , set ? { }
+    ,
     }:
     pkgs.runCommand "${name}-wrapper"
       {

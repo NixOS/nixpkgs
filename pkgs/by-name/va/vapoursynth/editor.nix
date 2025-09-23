@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchFromGitHub,
-  makeWrapper,
-  runCommand,
-  python3,
-  vapoursynth,
-  qmake,
-  qtbase,
-  qtwebsockets,
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, makeWrapper
+, runCommand
+, python3
+, vapoursynth
+, qmake
+, qtbase
+, qtwebsockets
+,
 }:
 
 let

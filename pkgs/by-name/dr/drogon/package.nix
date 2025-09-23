@@ -1,25 +1,25 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  jsoncpp,
-  libossp_uuid,
-  zlib,
-  lib,
-  # optional but of negligible size
-  openssl,
-  brotli,
-  c-ares,
-  # optional databases
-  sqliteSupport ? true,
-  sqlite,
-  postgresSupport ? false,
-  libpq,
-  redisSupport ? false,
-  hiredis,
-  mysqlSupport ? false,
-  libmysqlclient,
-  mariadb,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, jsoncpp
+, libossp_uuid
+, zlib
+, lib
+, # optional but of negligible size
+  openssl
+, brotli
+, c-ares
+, # optional databases
+  sqliteSupport ? true
+, sqlite
+, postgresSupport ? false
+, libpq
+, redisSupport ? false
+, hiredis
+, mysqlSupport ? false
+, libmysqlclient
+, mariadb
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

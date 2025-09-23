@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jinja2,
-  pythonAtLeast,
-  pyyaml,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jinja2
+, pythonAtLeast
+, pyyaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

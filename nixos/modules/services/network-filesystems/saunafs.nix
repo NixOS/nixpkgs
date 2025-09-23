@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -31,12 +30,13 @@ let
       type =
         let
           valueType =
-            lib.types.oneOf (
-              [
-                (lib.types.listOf valueType)
-              ]
-              ++ allowedTypes
-            )
+            lib.types.oneOf
+              (
+                [
+                  (lib.types.listOf valueType)
+                ]
+                ++ allowedTypes
+              )
             // {
               description = "Flat key-value file";
             };
@@ -270,11 +270,13 @@ in
 
         # Service definitions
         systemd.services.sfs-master = lib.mkIf cfg.master.enable (
-          systemdService "master" {
-            TimeoutStartSec = 1800;
-            TimeoutStopSec = 1800;
-            Restart = "no";
-          } masterCfg
+          systemdService "master"
+            {
+              TimeoutStartSec = 1800;
+              TimeoutStopSec = 1800;
+              Restart = "no";
+            }
+            masterCfg
         );
 
         systemd.services.sfs-metalogger = lib.mkIf cfg.metalogger.enable (

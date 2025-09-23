@@ -1,12 +1,12 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qtbase,
-  qtquickcontrols,
-  qmake,
-  makeDesktopItem,
+{ mkDerivation
+, lib
+, stdenv
+, fetchFromGitHub
+, qtbase
+, qtquickcontrols
+, qmake
+, makeDesktopItem
+,
 }:
 
 # we now have libqmatrixclient so a future version of tensor that supports it

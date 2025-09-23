@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  stdenvNoCC,
-  writableTmpDirAsHomeHook,
-  buf,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  grpc-gateway,
-  buildNpmPackage,
-  installShellFiles,
-  versionCheckHook,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, stdenvNoCC
+, writableTmpDirAsHomeHook
+, buf
+, protoc-gen-go
+, protoc-gen-go-grpc
+, grpc-gateway
+, buildNpmPackage
+, installShellFiles
+, versionCheckHook
+, nixosTests
+,
 }:
 
 buildGoModule (

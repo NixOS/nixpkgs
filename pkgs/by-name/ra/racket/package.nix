@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  racket-minimal,
-
-  cairo,
-  fontconfig,
-  glib,
-  glibcLocales,
-  gtk3,
-  libGL,
-  libiodbc,
-  libjpeg,
-  libpng,
-  makeFontsConf,
-  pango,
-  unixODBC,
-  wrapGAppsHook3,
-
-  disableDocs ? false,
-
-  callPackage,
+{ lib
+, stdenv
+, fetchurl
+, racket-minimal
+, cairo
+, fontconfig
+, glib
+, glibcLocales
+, gtk3
+, libGL
+, libiodbc
+, libjpeg
+, libpng
+, makeFontsConf
+, pango
+, unixODBC
+, wrapGAppsHook3
+, disableDocs ? false
+, callPackage
+,
 }:
 
 let
@@ -66,10 +63,10 @@ minimal.overrideAttrs (
       let
         libPathsVar = if isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
       in
-      /*
+        /*
         Makes FFIs available for setting up `main-distribution` and its
         dependencies, which is integrated into the build process of Racket
-      */
+        */
       ''
         for lib_path in $( \
             echo "$NIX_LDFLAGS" \

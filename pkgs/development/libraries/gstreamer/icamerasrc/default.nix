@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gst_all_1,
-  ipu6-camera-hal,
-  libdrm,
-  libva,
-  apple-sdk_gstreamer,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gst_all_1
+, ipu6-camera-hal
+, libdrm
+, libva
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation {

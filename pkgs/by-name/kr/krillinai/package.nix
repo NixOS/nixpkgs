@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  xorg,
-  libGL,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, xorg
+, libGL
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

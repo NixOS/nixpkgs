@@ -36,9 +36,9 @@ let
     // daemonConfig;
 
   generateHost =
-    {
-      cephConfig,
-      networkConfig,
+    { cephConfig
+    , networkConfig
+    ,
     }:
     { pkgs, ... }:
     {

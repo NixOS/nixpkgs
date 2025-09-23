@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  attrs,
-  pillow,
-  toml,
-  numpy,
-  pyyaml,
-  python,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, attrs
+, pillow
+, toml
+, numpy
+, pyyaml
+, python
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  zlib,
-  kssd,
-  runCommand,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, zlib
+, kssd
+, runCommand
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

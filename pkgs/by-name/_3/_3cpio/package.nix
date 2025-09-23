@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  lz4,
-  lzop,
-  nix-update-script,
-  rustPlatform,
+{ fetchFromGitHub
+, lib
+, lz4
+, lzop
+, nix-update-script
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # optional-dependencies
-  brotli,
-  brotlicffi,
-  pysocks,
-  zstandard,
-
-  # tests
-  pytestCheckHook,
-  pytest-timeout,
-  tornado,
-  trustme,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, # build-system
+  hatchling
+, hatch-vcs
+, # optional-dependencies
+  brotli
+, brotlicffi
+, pysocks
+, zstandard
+, # tests
+  pytestCheckHook
+, pytest-timeout
+, tornado
+, trustme
+,
 }:
 
 let

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  pkg-config,
-  zlib,
-  bzip2,
-  xz,
-  zstd,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, pkg-config
+, zlib
+, bzip2
+, xz
+, zstd
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

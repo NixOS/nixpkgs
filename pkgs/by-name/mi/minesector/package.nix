@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  libtiff,
-  libwebp,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_mixer,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, libtiff
+, libwebp
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, SDL2_mixer
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

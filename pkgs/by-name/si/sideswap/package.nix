@@ -1,17 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter332,
-  callPackage,
-  makeDesktopItem,
-  copyDesktopItems,
-
-  # Needed for update script.
-  _experimental-update-script-combinators,
-  gitUpdater,
-  runCommand,
-  sideswap,
-  yq,
+{ lib
+, fetchFromGitHub
+, flutter332
+, callPackage
+, makeDesktopItem
+, copyDesktopItems
+, # Needed for update script.
+  _experimental-update-script-combinators
+, gitUpdater
+, runCommand
+, sideswap
+, yq
+,
 }:
 
 let

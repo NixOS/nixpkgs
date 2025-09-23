@@ -1,37 +1,37 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  texliveSmall,
-  bison,
-  flex,
-  lapack,
-  blas,
-  autoreconfHook,
-  gmp,
-  mpfr,
-  pari,
-  ntl,
-  gsl,
-  mpfi,
-  ecm,
-  glpk,
-  nauty,
-  buildPackages,
-  readline,
-  gettext,
-  libpng,
-  libao,
-  gfortran,
-  perl,
-  enableGUI ? false,
-  libGL,
-  libGLU,
-  xorg,
-  fltk,
-  enableMicroPy ? false,
-  python3,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, texliveSmall
+, bison
+, flex
+, lapack
+, blas
+, autoreconfHook
+, gmp
+, mpfr
+, pari
+, ntl
+, gsl
+, mpfi
+, ecm
+, glpk
+, nauty
+, buildPackages
+, readline
+, gettext
+, libpng
+, libao
+, gfortran
+, perl
+, enableGUI ? false
+, libGL
+, libGLU
+, xorg
+, fltk
+, enableMicroPy ? false
+, python3
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

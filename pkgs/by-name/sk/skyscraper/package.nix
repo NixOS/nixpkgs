@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qt5,
-  p7zip,
-  python3,
-  installShellFiles,
-
-  # Whether to compile with XDG support
+{ lib
+, stdenv
+, fetchFromGitHub
+, qt5
+, p7zip
+, python3
+, installShellFiles
+, # Whether to compile with XDG support
   # (See: https://gemba.github.io/skyscraper/XDG/)
-  enableXdg ? false,
+  enableXdg ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  pkg-config,
-  boost,
-  readline,
-  libxml2,
-  openmodelica,
-  mkOpenModelicaDerivation,
-  fetchpatch,
+{ lib
+, pkg-config
+, boost
+, readline
+, libxml2
+, openmodelica
+, mkOpenModelicaDerivation
+, fetchpatch
+,
 }:
 
 mkOpenModelicaDerivation {

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
   inherit (lib)
@@ -20,17 +19,19 @@ let
 
   cfg = config.services.lasuite-meet;
 
-  pythonEnvironment = mapAttrs (
-    _: value:
-    if value == null then
-      "None"
-    else if value == true then
-      "True"
-    else if value == false then
-      "False"
-    else
-      toString value
-  ) cfg.settings;
+  pythonEnvironment = mapAttrs
+    (
+      _: value:
+        if value == null then
+          "None"
+        else if value == true then
+          "True"
+        else if value == false then
+          "False"
+        else
+          toString value
+    )
+    cfg.settings;
 
   commonServiceConfig = {
     RuntimeDirectory = "lasuite-meet";
@@ -382,8 +383,8 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [ (lib.getExe' cfg.backendPackage "celery") ]
-          ++ cfg.celery.extraArgs
-          ++ [
+            ++ cfg.celery.extraArgs
+            ++ [
             "--app=meet.celery_app"
             "worker"
           ]

@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 let
   inherit (lib)
@@ -21,12 +20,14 @@ let
     ;
   cfg = config.services.your_spotify;
 
-  configEnv = concatMapAttrs (
-    name: value:
-    optionalAttrs (value != null) {
-      ${name} = if isBool value then boolToString value else toString value;
-    }
-  ) cfg.settings;
+  configEnv = concatMapAttrs
+    (
+      name: value:
+        optionalAttrs (value != null) {
+          ${name} = if isBool value then boolToString value else toString value;
+        }
+    )
+    cfg.settings;
 
   configFile = pkgs.writeText "your_spotify.env" (
     concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv)

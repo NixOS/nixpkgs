@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -57,9 +56,10 @@ let
       Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
 
       # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
-      DefaultSession = optionalString (
-        config.services.displayManager.defaultSession != null
-      ) "${config.services.displayManager.defaultSession}.desktop";
+      DefaultSession = optionalString
+        (
+          config.services.displayManager.defaultSession != null
+        ) "${config.services.displayManager.defaultSession}.desktop";
 
       DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     }

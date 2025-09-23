@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  urllib3,
-  requests,
-  requests-toolbelt,
-  pyjwt,
-  importlib-metadata,
-  packaging,
-
-  # tests
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  urllib3
+, requests
+, requests-toolbelt
+, pyjwt
+, importlib-metadata
+, packaging
+, # tests
+  mock
+,
 }:
 
 let

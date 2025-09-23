@@ -1,8 +1,8 @@
-{
-  coq,
-  lib,
-  mkCoqDerivation,
-  version ? null,
+{ coq
+, lib
+, mkCoqDerivation
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -18,7 +18,8 @@ mkCoqDerivation {
         case = range "8.11" "8.20";
         out = "2022-02-15";
       }
-    ] null;
+    ]
+      null;
 
   release."2022-02-15" = {
     rev = "7c26f9a017395c240845184dfed23489d29dbae5";

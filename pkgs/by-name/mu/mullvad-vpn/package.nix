@@ -1,35 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  alsa-lib,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  pango,
-  nspr,
-  nss,
-  gtk3,
-  libgbm,
-  libGL,
-  wayland,
-  xorg,
-  autoPatchelfHook,
-  systemd,
-  libnotify,
-  libappindicator,
-  makeWrapper,
-  coreutils,
-  gnugrep,
-
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, alsa-lib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, pango
+, nspr
+, nss
+, gtk3
+, libgbm
+, libGL
+, wayland
+, xorg
+, autoPatchelfHook
+, systemd
+, libnotify
+, libappindicator
+, makeWrapper
+, coreutils
+, gnugrep
+, versionCheckHook
+,
 }:
 
 let
@@ -71,7 +70,7 @@ let
 
   selectSystem =
     attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   platform = selectSystem {
     x86_64-linux = "amd64";

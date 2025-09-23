@@ -1,15 +1,15 @@
-{
-  lib,
-  flutter329,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  webkitgtk_4_1,
-  glib-networking,
-  runCommand,
-  yq,
-  jhentai,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter329
+, fetchFromGitHub
+, autoPatchelfHook
+, webkitgtk_4_1
+, glib-networking
+, runCommand
+, yq
+, jhentai
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 flutter329.buildFlutterApplication rec {

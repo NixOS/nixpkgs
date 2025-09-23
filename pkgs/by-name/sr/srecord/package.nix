@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  libtool,
-  groff,
-  ghostscript,
-  libgcrypt ? null,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, libtool
+, groff
+, ghostscript
+, libgcrypt ? null
+,
 }:
 
 stdenv.mkDerivation rec {

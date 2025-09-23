@@ -1,32 +1,32 @@
-{
-  lib,
-  amqp,
-  azure-identity,
-  azure-servicebus,
-  azure-storage-queue,
-  boto3,
-  buildPythonPackage,
-  confluent-kafka,
-  fetchPypi,
-  google-cloud-pubsub,
-  google-cloud-monitoring,
-  hypothesis,
-  kazoo,
-  msgpack,
-  packaging,
-  pycurl,
-  pymongo,
-  #, pyro4
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  redis,
-  setuptools,
-  sqlalchemy,
-  typing-extensions,
-  tzdata,
-  urllib3,
-  vine,
+{ lib
+, amqp
+, azure-identity
+, azure-servicebus
+, azure-storage-queue
+, boto3
+, buildPythonPackage
+, confluent-kafka
+, fetchPypi
+, google-cloud-pubsub
+, google-cloud-monitoring
+, hypothesis
+, kazoo
+, msgpack
+, packaging
+, pycurl
+, pymongo
+, #, pyro4
+  pytestCheckHook
+, pythonOlder
+, pyyaml
+, redis
+, setuptools
+, sqlalchemy
+, typing-extensions
+, tzdata
+, urllib3
+, vine
+,
 }:
 
 buildPythonPackage rec {

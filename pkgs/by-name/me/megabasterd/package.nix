@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  jre,
-  makeWrapper,
-  maven,
+{ lib
+, fetchFromGitHub
+, jre
+, makeWrapper
+, maven
+,
 }:
 let
   version = "8.22";

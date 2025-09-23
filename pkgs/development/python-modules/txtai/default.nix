@@ -1,96 +1,92 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  faiss,
-  torch,
-  transformers,
-  huggingface-hub,
-  numpy,
-  pyyaml,
-  regex,
-
-  # optional-dependencies
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  faiss
+, torch
+, transformers
+, huggingface-hub
+, numpy
+, pyyaml
+, regex
+, # optional-dependencies
   # agent
-  mcpadapt,
-  smolagents,
-  # ann
-  annoy,
-  hnswlib,
-  pgvector,
-  sqlalchemy,
-  sqlite-vec-c,
-  # api
-  aiohttp,
-  fastapi,
-  fastapi-mcp,
-  httpx,
-  pillow,
-  python-multipart,
-  uvicorn,
-  # cloud
+  mcpadapt
+, smolagents
+, # ann
+  annoy
+, hnswlib
+, pgvector
+, sqlalchemy
+, sqlite-vec-c
+, # api
+  aiohttp
+, fastapi
+, fastapi-mcp
+, httpx
+, pillow
+, python-multipart
+, uvicorn
+, # cloud
   # apache-libcloud, (unpackaged)
-  fasteners,
-  # console
-  rich,
-  # database
-  duckdb,
-  # graph
+  fasteners
+, # console
+  rich
+, # database
+  duckdb
+, # graph
   # grand-cypher (unpackaged)
   # grand-graph (unpackaged)
-  networkx,
-  # model
-  onnx,
-  onnxruntime,
-  # pipeline-audio
+  networkx
+, # model
+  onnx
+, onnxruntime
+, # pipeline-audio
   # model2vec,
-  sounddevice,
-  soundfile,
-  scipy,
-  ttstokenizer,
-  webrtcvad,
-  # pipeline-data
-  beautifulsoup4,
-  nltk,
-  pandas,
-  tika,
-  # pipeline-image
-  imagehash,
-  timm,
-  # pipeline-llm
-  litellm,
-  # llama-cpp-python, (unpackaged)
+  sounddevice
+, soundfile
+, scipy
+, ttstokenizer
+, webrtcvad
+, # pipeline-data
+  beautifulsoup4
+, nltk
+, pandas
+, tika
+, # pipeline-image
+  imagehash
+, timm
+, # pipeline-llm
+  litellm
+, # llama-cpp-python, (unpackaged)
   # pipeline-text
-  gliner,
-  sentencepiece,
-  staticvectors,
-  # pipeline-train
-  accelerate,
-  bitsandbytes,
-  onnxmltools,
-  peft,
-  skl2onnx,
-  # vectors
-  fasttext,
-  # pymagnitude-lite, (unpackaged)
-  scikit-learn,
-  sentence-transformers,
-  skops,
-  # workflow
+  gliner
+, sentencepiece
+, staticvectors
+, # pipeline-train
+  accelerate
+, bitsandbytes
+, onnxmltools
+, peft
+, skl2onnx
+, # vectors
+  fasttext
+, # pymagnitude-lite, (unpackaged)
+  scikit-learn
+, sentence-transformers
+, skops
+, # workflow
   # apache-libcloud (unpackaged)
-  croniter,
-  openpyxl,
-  requests,
-  xmltodict,
-
-  # tests
-  msgpack,
-  pytestCheckHook,
+  croniter
+, openpyxl
+, requests
+, xmltodict
+, # tests
+  msgpack
+, pytestCheckHook
+,
 }:
 let
   version = "9.0.0";

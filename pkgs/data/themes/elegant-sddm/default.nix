@@ -1,11 +1,10 @@
-{
-  lib,
-  formats,
-  stdenvNoCC,
-  fetchFromGitHub,
-  qtgraphicaleffects,
-  /*
-    An example of how you can override the background with a NixOS wallpaper
+{ lib
+, formats
+, stdenvNoCC
+, fetchFromGitHub
+, qtgraphicaleffects
+, /*
+  An example of how you can override the background with a NixOS wallpaper
     *
     *  environment.systemPackages = [
     *    (pkgs.elegant-sddm.override {
@@ -15,7 +14,8 @@
     *    })
     *  ];
   */
-  themeConfig ? null,
+  themeConfig ? null
+,
 }:
 
 let

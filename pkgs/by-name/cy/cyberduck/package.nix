@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  makeBinaryWrapper,
-  versionCheckHook,
-  writeShellScript,
-  coreutils,
-  xcbuild,
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzip
+, makeBinaryWrapper
+, versionCheckHook
+, writeShellScript
+, coreutils
+, xcbuild
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cyberduck";

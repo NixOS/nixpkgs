@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  kdePackages,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, kdePackages
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "jetbrains-runner";

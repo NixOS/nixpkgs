@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  stdenvNoLibc,
-  buildPackages,
+{ stdenv
+, fetchFromGitHub
+, stdenvNoLibc
+, buildPackages
+,
 }:
 
 stdenvNoLibc.mkDerivation {

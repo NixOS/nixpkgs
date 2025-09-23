@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  filelock,
-  ghidra-bridge,
-  jfx-bridge,
-  networkx,
-  platformdirs,
-  prompt-toolkit,
-  psutil,
-  pycparser,
-  pyhidra,
-  pytestCheckHook,
-  setuptools,
-  toml,
-  tqdm,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, filelock
+, ghidra-bridge
+, jfx-bridge
+, networkx
+, platformdirs
+, prompt-toolkit
+, psutil
+, pycparser
+, pyhidra
+, pytestCheckHook
+, setuptools
+, toml
+, tqdm
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

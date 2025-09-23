@@ -1,15 +1,15 @@
-{
-  mkDerivation,
-  lib,
-  sysctl,
-  bash,
-  rcorder,
-  bin,
-  stat,
-  id,
-  protect,
-  mount,
-  fsck,
+{ mkDerivation
+, lib
+, sysctl
+, bash
+, rcorder
+, bin
+, stat
+, id
+, protect
+, mount
+, fsck
+,
 }:
 let
   rcDepsPath = lib.makeBinPath [
@@ -70,9 +70,11 @@ mkDerivation {
       sed -E -i -e "s|PATH=.*|PATH=${rcDepsPath}|g" ${scriptPaths}
     ''
     # replace executable absolute filepaths with PATH lookups
-    + lib.concatMapStringsSep "\n" (fname: ''
-      sed -E -i -e "s|${fname}|${lib.last (lib.splitString "/" fname)}|g" \
-        ${scriptPaths}'') bins
+    + lib.concatMapStringsSep "\n"
+      (fname: ''
+        sed -E -i -e "s|${fname}|${lib.last (lib.splitString "/" fname)}|g" \
+          ${scriptPaths}'')
+      bins
     + "\n"
   );
 

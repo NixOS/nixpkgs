@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  withProfile ? "accuracy",
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, withProfile ? "accuracy"
+,
 }:
 mkLibretroCore {
   core = "bsnes-mercury-${withProfile}";

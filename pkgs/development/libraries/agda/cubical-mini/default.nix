@@ -1,9 +1,9 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  ghc,
-  cabal-install,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, ghc
+, cabal-install
+,
 }:
 
 mkDerivation rec {

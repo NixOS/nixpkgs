@@ -1,33 +1,33 @@
-{
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  fetchurl,
-  lib,
-  replaceVars,
-  # Dependencies
-  boehmgc,
-  coreutils,
-  git,
-  gmp,
-  hostname,
-  libevent,
-  libiconv,
-  libxml2,
-  libyaml,
-  libffi,
-  llvmPackages_19,
-  llvmPackages_20,
-  llvmPackages_21,
-  makeWrapper,
-  openssl,
-  pcre2,
-  pkg-config,
-  installShellFiles,
-  readline,
-  tzdata,
-  which,
-  zlib,
+{ stdenv
+, callPackage
+, fetchFromGitHub
+, fetchurl
+, lib
+, replaceVars
+, # Dependencies
+  boehmgc
+, coreutils
+, git
+, gmp
+, hostname
+, libevent
+, libiconv
+, libxml2
+, libyaml
+, libffi
+, llvmPackages_19
+, llvmPackages_20
+, llvmPackages_21
+, makeWrapper
+, openssl
+, pcre2
+, pkg-config
+, installShellFiles
+, readline
+, tzdata
+, which
+, zlib
+,
 }:
 
 # We need to keep around at least the latest version released with a stable
@@ -61,10 +61,10 @@ let
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary =
-    {
-      version,
-      sha256s,
-      rel ? 1,
+    { version
+    , sha256s
+    , rel ? 1
+    ,
     }:
     stdenv.mkDerivation rec {
       pname = "crystal-binary";
@@ -85,18 +85,18 @@ let
     };
 
   generic =
-    {
-      version,
-      sha256,
-      binary,
-      llvmPackages,
-      doCheck ? true,
-      extraBuildInputs ? [ ],
-      buildFlags ? [
+    { version
+    , sha256
+    , binary
+    , llvmPackages
+    , doCheck ? true
+    , extraBuildInputs ? [ ]
+    , buildFlags ? [
         "all"
         "docs"
         "release=1"
-      ],
+      ]
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";

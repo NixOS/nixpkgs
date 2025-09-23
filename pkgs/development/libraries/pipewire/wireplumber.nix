@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  nix-update-script,
-  # base build deps
-  meson,
-  pkg-config,
-  ninja,
-  # docs build deps
-  python3,
-  doxygen,
-  graphviz,
-  # GI build deps
-  gobject-introspection,
-  # runtime deps
-  glib,
-  systemd,
-  lua5_4,
-  pipewire,
-  # options
-  enableDocs ? true,
-  enableGI ? true,
+{ lib
+, stdenv
+, fetchFromGitLab
+, nix-update-script
+, # base build deps
+  meson
+, pkg-config
+, ninja
+, # docs build deps
+  python3
+, doxygen
+, graphviz
+, # GI build deps
+  gobject-introspection
+, # runtime deps
+  glib
+, systemd
+, lua5_4
+, pipewire
+, # options
+  enableDocs ? true
+, enableGI ? true
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
     doxygen
     (python3.pythonOnBuildForHost.withPackages (
       ps:
-      with ps;
-      lib.optionals enableDocs [
-        sphinx
-        sphinx-rtd-theme
-        breathe
-      ]
-      ++ lib.optionals enableGI [ lxml ]
+        with ps;
+        lib.optionals enableDocs [
+          sphinx
+          sphinx-rtd-theme
+          breathe
+        ]
+        ++ lib.optionals enableGI [ lxml ]
     ))
   ];
 

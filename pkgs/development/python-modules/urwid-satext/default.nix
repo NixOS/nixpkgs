@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchhg,
-  setuptools,
-  urwid,
+{ lib
+, buildPythonPackage
+, fetchhg
+, setuptools
+, urwid
+,
 }:
 
 buildPythonPackage rec {

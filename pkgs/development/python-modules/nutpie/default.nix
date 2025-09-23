@@ -1,32 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # build-system
-  cargo,
-  rustc,
-
-  # dependencies
-  arviz,
-  pandas,
-  pyarrow,
-  xarray,
-
-  # tests
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # build-system
+  cargo
+, rustc
+, # dependencies
+  arviz
+, pandas
+, pyarrow
+, xarray
+, # tests
   # bridgestan, (not packaged)
-  equinox,
-  flowjax,
-  jax,
-  jaxlib,
-  numba,
-  pytest-timeout,
-  pymc,
-  pytestCheckHook,
-  setuptools,
-  writableTmpDirAsHomeHook,
+  equinox
+, flowjax
+, jax
+, jaxlib
+, numba
+, pytest-timeout
+, pymc
+, pytestCheckHook
+, setuptools
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

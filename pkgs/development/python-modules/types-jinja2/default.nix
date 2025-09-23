@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  types-markupsafe,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, types-markupsafe
+,
 }:
 
 buildPythonPackage rec {

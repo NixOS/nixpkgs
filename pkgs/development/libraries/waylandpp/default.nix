@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeFontsConf,
-  pkg-config,
-  pugixml,
-  wayland,
-  libGL,
-  libffi,
-  buildPackages,
-  docSupport ? true,
-  doxygen,
-  graphviz,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeFontsConf
+, pkg-config
+, pugixml
+, wayland
+, libGL
+, libffi
+, buildPackages
+, docSupport ? true
+, doxygen
+, graphviz
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

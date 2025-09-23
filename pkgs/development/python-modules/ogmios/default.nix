@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  setuptools,
-  # Python deps
-  cachetools,
-  cardano-tools,
-  coloredlogs,
-  orjson,
-  pydantic,
-  websockets,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, setuptools
+, # Python deps
+  cachetools
+, cardano-tools
+, coloredlogs
+, orjson
+, pydantic
+, websockets
+,
 }:
 
 buildPythonPackage rec {

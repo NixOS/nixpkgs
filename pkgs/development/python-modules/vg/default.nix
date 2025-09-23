@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  poetry-core,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, poetry-core
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

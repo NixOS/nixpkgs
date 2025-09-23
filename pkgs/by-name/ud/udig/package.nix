@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  unzip,
-  makeWrapper,
-  jre8,
-  libXtst,
-  gdal,
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, makeWrapper
+, jre8
+, libXtst
+, gdal
+,
 }:
 let
   pname = "udig";

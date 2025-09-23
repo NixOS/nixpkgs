@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  zlib,
-  libusb1,
-  segger-jlink-headless,
-  gcc,
-  autoPatchelfHook,
-  versionCheckHook,
+{ lib
+, stdenvNoCC
+, fetchurl
+, zlib
+, libusb1
+, segger-jlink-headless
+, gcc
+, autoPatchelfHook
+, versionCheckHook
+,
 }:
 
 let

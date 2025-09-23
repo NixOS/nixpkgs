@@ -1,18 +1,18 @@
 # Almost 1:1 copy of idris2's nix/package.nix. Some work done in their flake.nix
 # we do here instead.
-{
-  stdenv,
-  lib,
-  chez,
-  chez-racket,
-  clang,
-  gmp,
-  fetchFromGitHub,
-  makeWrapper,
-  gambit,
-  nodejs,
-  zsh,
-  callPackage,
+{ stdenv
+, lib
+, chez
+, chez-racket
+, clang
+, gmp
+, fetchFromGitHub
+, makeWrapper
+, gambit
+, nodejs
+, zsh
+, callPackage
+,
 }:
 
 # NOTICE: An `idris2WithPackages` is available at: https://github.com/claymager/idris2-pkgs

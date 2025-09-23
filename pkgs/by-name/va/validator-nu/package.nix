@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  git,
-  jdk_headless,
-  jre_headless,
-  makeWrapper,
-  python3,
-  stdenvNoCC,
-  lib,
-  testers,
+{ fetchFromGitHub
+, git
+, jdk_headless
+, jre_headless
+, makeWrapper
+, python3
+, stdenvNoCC
+, lib
+, testers
+,
 }:
 
 let

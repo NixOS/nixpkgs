@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNpmPackage,
-  gettext,
-  python3,
-  fetchFromGitHub,
-  fetchPypi,
-  plugins ? [ ],
-  nixosTests,
+{ lib
+, buildNpmPackage
+, gettext
+, python3
+, fetchFromGitHub
+, fetchPypi
+, plugins ? [ ]
+, nixosTests
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  installShellFiles,
-  scdoc,
-  ffmpeg,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, installShellFiles
+, scdoc
+, ffmpeg
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

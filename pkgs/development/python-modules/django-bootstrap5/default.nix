@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  hatchling,
-  jinja2,
-  pillow,
-  pytest-django,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, hatchling
+, jinja2
+, pillow
+, pytest-django
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

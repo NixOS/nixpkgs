@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  freetype,
-  fluidsynth,
-  SDL,
-  SDL_gfx,
-  SDL_ttf,
-  liblo,
-  libxml2,
-  alsa-lib,
-  libjack2,
-  libvorbis,
-  libSM,
-  libsndfile,
-  libogg,
-  libX11,
-  nettle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, freetype
+, fluidsynth
+, SDL
+, SDL_gfx
+, SDL_ttf
+, liblo
+, libxml2
+, alsa-lib
+, libjack2
+, libvorbis
+, libSM
+, libsndfile
+, libogg
+, libX11
+, nettle
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

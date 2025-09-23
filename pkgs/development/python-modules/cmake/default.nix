@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  flit-core,
-  cmake,
+{ lib
+, buildPythonPackage
+, flit-core
+, cmake
+,
 }:
 
 buildPythonPackage {

@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  go-md2man,
-  pkg-config,
-  openssl,
-  fuse3,
-  libcap,
-  python3,
-  which,
-  valgrind,
-  erofs-utils,
-  fsverity-utils,
-  nix-update-script,
-  testers,
-  nixosTests,
-
-  fuseSupport ? lib.meta.availableOn stdenv.hostPlatform fuse3,
-  enableValgrindCheck ? false,
-  installExperimentalTools ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, go-md2man
+, pkg-config
+, openssl
+, fuse3
+, libcap
+, python3
+, which
+, valgrind
+, erofs-utils
+, fsverity-utils
+, nix-update-script
+, testers
+, nixosTests
+, fuseSupport ? lib.meta.availableOn stdenv.hostPlatform fuse3
+, enableValgrindCheck ? false
+, installExperimentalTools ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";

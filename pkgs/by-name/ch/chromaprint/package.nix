@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchpatch2,
-  fetchurl,
-  cmake,
-  ninja,
-  ffmpeg-headless,
-  zlib,
-  testers,
-  validatePkgConfig,
-  nix-update-script,
-  withExamples ? true,
-  withTools ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fetchpatch2
+, fetchurl
+, cmake
+, ninja
+, ffmpeg-headless
+, zlib
+, testers
+, validatePkgConfig
+, nix-update-script
+, withExamples ? true
+, withTools ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

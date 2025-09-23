@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  pkg-config,
-  lib,
-  grpc,
+{ buildPecl
+, pkg-config
+, lib
+, grpc
+,
 }:
 
 buildPecl {

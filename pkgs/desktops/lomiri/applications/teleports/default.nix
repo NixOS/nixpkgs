@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  intltool,
-  lomiri-content-hub,
-  lomiri-indicator-network,
-  lomiri-push-qml,
-  lomiri-thumbnailer,
-  lomiri-ui-toolkit,
-  pkg-config,
-  qqc2-suru-style,
-  qtbase,
-  qtmultimedia,
-  qtpositioning,
-  qtquickcontrols2,
-  quazip,
-  quickflux,
-  rlottie,
-  rlottie-qml,
-  tdlib,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, nixosTests
+, cmake
+, intltool
+, lomiri-content-hub
+, lomiri-indicator-network
+, lomiri-push-qml
+, lomiri-thumbnailer
+, lomiri-ui-toolkit
+, pkg-config
+, qqc2-suru-style
+, qtbase
+, qtmultimedia
+, qtpositioning
+, qtquickcontrols2
+, quazip
+, quickflux
+, rlottie
+, rlottie-qml
+, tdlib
+, wrapQtAppsHook
+,
 }:
 
 let

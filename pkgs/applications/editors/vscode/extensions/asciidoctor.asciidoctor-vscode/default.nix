@@ -1,7 +1,7 @@
-{
-  asciidoctor,
-  lib,
-  vscode-utils,
+{ asciidoctor
+, lib
+, vscode-utils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

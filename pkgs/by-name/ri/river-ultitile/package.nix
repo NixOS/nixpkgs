@@ -1,14 +1,14 @@
-{
-  callPackage,
-  fetchFromSourcehut,
-  lib,
-  pandoc,
-  pkg-config,
-  stdenv,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  zig_0_14,
+{ callPackage
+, fetchFromSourcehut
+, lib
+, pandoc
+, pkg-config
+, stdenv
+, wayland
+, wayland-protocols
+, wayland-scanner
+, zig_0_14
+,
 }:
 
 let

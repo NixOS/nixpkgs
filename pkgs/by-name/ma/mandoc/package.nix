@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  perl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, perl
+, nixosTests
+,
 }:
 
 let

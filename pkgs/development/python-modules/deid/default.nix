@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  matplotlib,
-  pydicom,
-  python-dateutil,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, matplotlib
+, pydicom
+, python-dateutil
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 let

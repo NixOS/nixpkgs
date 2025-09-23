@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  xz,
-  pcre,
-  autoPatchelfHook,
-  bintools,
-  fixDarwinDylibNames,
-  darwin,
-  fontconfig,
-  libgdiplus,
-  libXrandr,
-  glib,
-  writeShellScriptBin,
-  blender,
-  openssl,
-  libkrb5,
-  icu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, xz
+, pcre
+, autoPatchelfHook
+, bintools
+, fixDarwinDylibNames
+, darwin
+, fontconfig
+, libgdiplus
+, libXrandr
+, glib
+, writeShellScriptBin
+, blender
+, openssl
+, libkrb5
+, icu
+,
 }:
 let
 

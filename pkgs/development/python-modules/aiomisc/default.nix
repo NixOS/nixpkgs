@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  aiocontextvars,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  colorlog,
-  croniter,
-  fastapi,
-  fetchPypi,
-  logging-journald,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  raven,
-  rich,
-  setproctitle,
-  typing-extensions,
-  uvloop,
+{ lib
+, stdenv
+, aiocontextvars
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, colorlog
+, croniter
+, fastapi
+, fetchPypi
+, logging-journald
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, raven
+, rich
+, setproctitle
+, typing-extensions
+, uvloop
+,
 }:
 
 buildPythonPackage rec {

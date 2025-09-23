@@ -1,23 +1,23 @@
-{
-  lib,
-  mkKdeDerivation,
-  replaceVars,
-  dbus,
-  fontconfig,
-  xorg,
-  lsof,
-  pkg-config,
-  spirv-tools,
-  qtlocation,
-  qtpositioning,
-  qtsvg,
-  qtwayland,
-  libcanberra,
-  libqalculate,
-  pipewire,
-  qttools,
-  qqc2-breeze-style,
-  gpsd,
+{ lib
+, mkKdeDerivation
+, replaceVars
+, dbus
+, fontconfig
+, xorg
+, lsof
+, pkg-config
+, spirv-tools
+, qtlocation
+, qtpositioning
+, qtsvg
+, qtwayland
+, libcanberra
+, libqalculate
+, pipewire
+, qttools
+, qqc2-breeze-style
+, gpsd
+,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";

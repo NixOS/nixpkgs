@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  hidapi,
-  pyusb,
-
-  # tests
-  click,
-  pytestCheckHook,
-  spsdk,
-  writableTmpDirAsHomeHook,
-
-  # passthru
-  spsdk-mcu-link,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  hidapi
+, pyusb
+, # tests
+  click
+, pytestCheckHook
+, spsdk
+, writableTmpDirAsHomeHook
+, # passthru
+  spsdk-mcu-link
+,
 }:
 
 buildPythonPackage rec {

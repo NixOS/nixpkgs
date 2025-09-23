@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  desktop-file-utils,
-  gtk3,
-  libpng,
-  exiv2,
-  lcms,
-  intltool,
-  gettext,
-  shared-mime-info,
-  glib,
-  gdk-pixbuf,
-  perl,
-  wrapGAppsHook3,
-  webp-pixbuf-loader,
-  gnome,
-  librsvg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, desktop-file-utils
+, gtk3
+, libpng
+, exiv2
+, lcms
+, intltool
+, gettext
+, shared-mime-info
+, glib
+, gdk-pixbuf
+, perl
+, wrapGAppsHook3
+, webp-pixbuf-loader
+, gnome
+, librsvg
+,
 }:
 
 stdenv.mkDerivation {

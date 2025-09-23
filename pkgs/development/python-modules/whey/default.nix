@@ -1,22 +1,22 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  attrs,
-  click,
-  consolekit,
-  dist-meta,
-  docutils,
-  dom-toml,
-  domdf-python-tools,
-  editables,
-  handy-archives,
-  natsort,
-  packaging,
-  pyproject-parser,
-  pytestCheckHook,
-  shippinglabel,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, attrs
+, click
+, consolekit
+, dist-meta
+, docutils
+, dom-toml
+, domdf-python-tools
+, editables
+, handy-archives
+, natsort
+, packaging
+, pyproject-parser
+, pytestCheckHook
+, shippinglabel
+,
 }:
 
 buildPythonPackage rec {

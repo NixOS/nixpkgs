@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  perl,
-  fribidi,
-  kbd,
-  xkbutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, perl
+, fribidi
+, kbd
+, xkbutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

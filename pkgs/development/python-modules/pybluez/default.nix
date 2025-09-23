@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  bluez,
-  gattlib,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, bluez
+, gattlib
+,
 }:
 
 buildPythonPackage {

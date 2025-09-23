@@ -1,8 +1,8 @@
-{
-  lib,
-  buildFishPlugin,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, buildFishPlugin
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 buildFishPlugin rec {

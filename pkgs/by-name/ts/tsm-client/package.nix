@@ -1,24 +1,28 @@
-{
-  lib,
-  callPackage,
-  nixosTests,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  rpmextract,
-  libxcrypt-legacy,
-  zlib,
-  lvm2, # LVM image backup and restore functions (optional)
-  acl, # EXT2/EXT3/XFS ACL support (optional)
-  gnugrep,
-  procps,
-  jdk, # Java GUI (needed for `enableGui`)
-  buildEnv,
-  makeWrapper,
-  enableGui ? false, # enables Java GUI `dsmj`
+{ lib
+, callPackage
+, nixosTests
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, rpmextract
+, libxcrypt-legacy
+, zlib
+, lvm2
+, # LVM image backup and restore functions (optional)
+  acl
+, # EXT2/EXT3/XFS ACL support (optional)
+  gnugrep
+, procps
+, jdk
+, # Java GUI (needed for `enableGui`)
+  buildEnv
+, makeWrapper
+, enableGui ? false
+, # enables Java GUI `dsmj`
   # path to `dsm.sys` configuration files
-  dsmSysCli ? "/etc/tsm-client/cli.dsm.sys",
-  dsmSysApi ? "/etc/tsm-client/api.dsm.sys",
+  dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
+, dsmSysApi ? "/etc/tsm-client/api.dsm.sys"
+,
 }:
 
 # For an explanation of optional packages

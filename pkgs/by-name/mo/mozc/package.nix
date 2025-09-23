@@ -1,17 +1,17 @@
-{
-  lib,
-  buildBazelPackage,
-  fetchFromGitHub,
-  qt6,
-  pkg-config,
-  protobuf_27,
-  bazel_7,
-  ibus,
-  unzip,
-  xdg-utils,
-  jp-zip-codes,
-  dictionaries ? [ ],
-  merge-ut-dictionaries,
+{ lib
+, buildBazelPackage
+, fetchFromGitHub
+, qt6
+, pkg-config
+, protobuf_27
+, bazel_7
+, ibus
+, unzip
+, xdg-utils
+, jp-zip-codes
+, dictionaries ? [ ]
+, merge-ut-dictionaries
+,
 }:
 
 let

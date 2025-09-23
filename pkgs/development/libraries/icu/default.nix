@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  fixDarwinDylibNames,
-  testers,
-  buildPackages,
-  updateAutotoolsGnuConfigScriptsHook,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, fixDarwinDylibNames
+, testers
+, buildPackages
+, updateAutotoolsGnuConfigScriptsHook
+,
 }:
 
 let

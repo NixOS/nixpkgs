@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenvNoCC,
-  callPackages,
-  cacert,
-  fetchFromGitHub,
-  buildGoModule,
-  bash,
-  chromedriver,
-  nodejs_24,
-  python312,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, callPackages
+, cacert
+, fetchFromGitHub
+, buildGoModule
+, bash
+, chromedriver
+, nodejs_24
+, python312
+, makeWrapper
+,
 }:
 
 let
@@ -50,8 +50,7 @@ let
       {
         "aarch64-linux" = "sha256-uJe1v43d3baBUESU+CQk6fYBdiNOBiT3Tt0vFIbI/HY=";
         "x86_64-linux" = "sha256-jVi+pgcz96Dj25T4e/s+SHqsZfonzXs1WZYe0lCI48Q=";
-      }
-      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
+      }.${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
     outputHashMode = "recursive";
 
@@ -121,8 +120,7 @@ let
       {
         "aarch64-linux" = "sha256-4JkNwQACS3tiiLuj41cGRWNspljVQxlsJvCM9KE2JrQ=";
         "x86_64-linux" = "sha256-LD+zXc8neRbEwq1mx9y7b+08p8hxvo/RW6QzsFQgaUs=";
-      }
-      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
+      }.${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
 
     nativeBuildInputs = [

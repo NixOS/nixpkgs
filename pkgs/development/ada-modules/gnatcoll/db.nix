@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gnat,
-  gprbuild,
-  which,
-  gnatcoll-core,
-  component,
-  # components built by this derivation other components depend on
-  gnatcoll-sql,
-  gnatcoll-sqlite,
-  gnatcoll-xref,
-  # component specific extra dependencies
-  gnatcoll-iconv,
-  gnatcoll-readline,
-  sqlite,
-  libpq,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gnat
+, gprbuild
+, which
+, gnatcoll-core
+, component
+, # components built by this derivation other components depend on
+  gnatcoll-sql
+, gnatcoll-sqlite
+, gnatcoll-xref
+, # component specific extra dependencies
+  gnatcoll-iconv
+, gnatcoll-readline
+, sqlite
+, libpq
+,
 }:
 
 let

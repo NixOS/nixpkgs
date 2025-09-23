@@ -1,12 +1,12 @@
-{
-  python,
-  lib,
-  stdenv,
-  pyside2,
-  cmake,
-  qt5,
-  libxcrypt,
-  llvmPackages,
+{ python
+, lib
+, stdenv
+, pyside2
+, cmake
+, qt5
+, libxcrypt
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation {

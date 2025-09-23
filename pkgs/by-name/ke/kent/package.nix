@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  writableTmpDirAsHomeHook,
-  libpng,
-  libuuid,
-  zlib,
-  bzip2,
-  xz,
-  openssl,
-  curl,
-  libmysqlclient,
-  bash,
-  fetchFromGitHub,
-  which,
-  writeShellScript,
-  jq,
-  nix-update,
+{ lib
+, stdenv
+, writableTmpDirAsHomeHook
+, libpng
+, libuuid
+, zlib
+, bzip2
+, xz
+, openssl
+, curl
+, libmysqlclient
+, bash
+, fetchFromGitHub
+, which
+, writeShellScript
+, jq
+, nix-update
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kent";

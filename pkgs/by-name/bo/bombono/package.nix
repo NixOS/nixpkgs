@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  fetchpatch,
-  fetchpatch2,
-  scons,
-  boost183,
-  dvdauthor,
-  dvdplusrwtools,
-  enca,
-  cdrkit,
-  ffmpeg_6,
-  gettext,
-  gtk2,
-  gtkmm2,
-  libdvdread,
-  libxmlxx,
-  mjpegtools,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, fetchpatch
+, fetchpatch2
+, scons
+, boost183
+, dvdauthor
+, dvdplusrwtools
+, enca
+, cdrkit
+, ffmpeg_6
+, gettext
+, gtk2
+, gtkmm2
+, libdvdread
+, libxmlxx
+, mjpegtools
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

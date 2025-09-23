@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  arduino-cli,
-  ruby,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, arduino-cli
+, ruby
+, python3
+,
 }:
 
 let

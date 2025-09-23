@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  distutils,
-  fetchPypi,
-  setuptools,
+{ lib
+, buildPythonPackage
+, distutils
+, fetchPypi
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "lottie";

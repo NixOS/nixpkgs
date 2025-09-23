@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  httpx,
-  pydantic,
-  typing-extensions,
-  anyio,
-  distro,
-  sniffio,
-  pythonOlder,
-  hatchling,
-  hatch-fancy-pypi-readme,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, httpx
+, pydantic
+, typing-extensions
+, anyio
+, distro
+, sniffio
+, pythonOlder
+, hatchling
+, hatch-fancy-pypi-readme
+,
 }:
 
 buildPythonPackage rec {

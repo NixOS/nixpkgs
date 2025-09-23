@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-  perl,
-  gnused,
-  ghostscript,
-  file,
-  coreutils,
-  gnugrep,
-  which,
+{ lib
+, stdenvNoCC
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, perl
+, gnused
+, ghostscript
+, file
+, coreutils
+, gnugrep
+, which
+,
 }:
 
 let
@@ -72,10 +72,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # delete unnecessary files for the current architecture
   ''
-  + lib.concatMapStrings (arch: ''
-    echo Deleting files for ${arch}
-    rm -r "$out/opt/brother/Printers/MFCL5750DW/lpd/${arch}"
-  '') (builtins.filter (arch: arch != stdenvNoCC.hostPlatform.linuxArch) arches)
+  + lib.concatMapStrings
+    (arch: ''
+      echo Deleting files for ${arch}
+      rm -r "$out/opt/brother/Printers/MFCL5750DW/lpd/${arch}"
+    '')
+    (builtins.filter (arch: arch != stdenvNoCC.hostPlatform.linuxArch) arches)
   + ''
     # bundled scripts don't understand the arch subdirectories for some reason
     ln -s \

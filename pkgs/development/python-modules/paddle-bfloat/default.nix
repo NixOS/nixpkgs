@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pythonAtLeast,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pythonAtLeast
+, numpy
+,
 }:
 let
   pname = "paddle-bfloat";

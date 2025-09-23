@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  makedepend,
-  perl,
-  pkg-config,
-  qt5,
-  alsa-lib,
-  dssi,
-  fftwSinglePrec,
-  flac,
-  glib,
-  ladspaH,
-  ladspaPlugins,
-  libjack2,
-  liblo,
-  libmpg123,
-  libopus,
-  libsamplerate,
-  libsndfile,
-  libsysprof-capture,
-  libvorbis,
-  lilv,
-  lv2,
-  lirc,
-  lrdf,
-  libogg,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, makedepend
+, perl
+, pkg-config
+, qt5
+, alsa-lib
+, dssi
+, fftwSinglePrec
+, flac
+, glib
+, ladspaH
+, ladspaPlugins
+, libjack2
+, liblo
+, libmpg123
+, libopus
+, libsamplerate
+, libsndfile
+, libsysprof-capture
+, libvorbis
+, lilv
+, lv2
+, lirc
+, lrdf
+, libogg
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -22,10 +21,12 @@ let
   guixBuildUsers =
     numberOfUsers:
     builtins.listToAttrs (
-      map (user: {
-        name = user.name;
-        value = user;
-      }) (builtins.genList guixBuildUser numberOfUsers)
+      map
+        (user: {
+          name = user.name;
+          value = user;
+        })
+        (builtins.genList guixBuildUser numberOfUsers)
     );
 
   # A set of Guix user profiles to be linked at activation. All of these should

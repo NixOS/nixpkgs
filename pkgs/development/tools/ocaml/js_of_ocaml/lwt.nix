@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  js_of_ocaml-ppx,
-  js_of_ocaml,
-  lwt,
-  lwt_log,
+{ buildDunePackage
+, js_of_ocaml-ppx
+, js_of_ocaml
+, lwt
+, lwt_log
+,
 }:
 
 buildDunePackage {

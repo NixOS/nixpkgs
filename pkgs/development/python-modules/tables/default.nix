@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchPypi,
-  buildPythonPackage,
-  pythonOlder,
-  blosc2,
-  bzip2,
-  c-blosc,
-  cython,
-  hdf5,
-  lzo,
-  numpy,
-  numexpr,
-  packaging,
-  setuptools,
-  sphinx,
-  typing-extensions,
-  # Test inputs
-  python,
-  pytest,
-  py-cpuinfo,
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, blosc2
+, bzip2
+, c-blosc
+, cython
+, hdf5
+, lzo
+, numpy
+, numexpr
+, packaging
+, setuptools
+, sphinx
+, typing-extensions
+, # Test inputs
+  python
+, pytest
+, py-cpuinfo
+,
 }:
 
 buildPythonPackage rec {

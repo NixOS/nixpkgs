@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
-  interegular,
-  pyyaml,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pydantic
+, interegular
+, pyyaml
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

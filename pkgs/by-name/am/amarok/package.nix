@@ -1,27 +1,27 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  kdePackages,
-  fftw,
-  curl,
-  ffmpeg,
-  gdk-pixbuf,
-  gst_all_1,
-  libaio,
-  libmtp,
-  libsysprof-capture,
-  libunwind,
-  loudmouth,
-  lzo,
-  lz4,
-  mariadb-embedded,
-  snappy,
-  taglib,
-  taglib_extras,
+{ stdenv
+, fetchurl
+, lib
+, cmake
+, extra-cmake-modules
+, pkg-config
+, kdePackages
+, fftw
+, curl
+, ffmpeg
+, gdk-pixbuf
+, gst_all_1
+, libaio
+, libmtp
+, libsysprof-capture
+, libunwind
+, loudmouth
+, lzo
+, lz4
+, mariadb-embedded
+, snappy
+, taglib
+, taglib_extras
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

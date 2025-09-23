@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  gettext,
-  meson,
-  ninja,
-  fetchurl,
-  pkg-config,
-  gtk4,
-  glib,
-  desktop-file-utils,
-  appstream-glib,
-  wrapGAppsHook4,
-  python3,
-  gnome,
-  libadwaita,
-  librsvg,
-  rustc,
-  cargo,
+{ lib
+, stdenv
+, rustPlatform
+, gettext
+, meson
+, ninja
+, fetchurl
+, pkg-config
+, gtk4
+, glib
+, desktop-file-utils
+, appstream-glib
+, wrapGAppsHook4
+, python3
+, gnome
+, libadwaita
+, librsvg
+, rustc
+, cargo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoconf,
-  automake,
-  libtool,
-  libsndfile,
-  libpulseaudio,
-  espeak-ng,
-  sonic,
-  utf8cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoconf
+, automake
+, libtool
+, libsndfile
+, libpulseaudio
+, espeak-ng
+, sonic
+, utf8cpp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

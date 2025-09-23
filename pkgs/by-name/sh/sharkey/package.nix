@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  nixosTests,
-  bash,
-  cairo,
-  cctools,
-  ffmpeg-headless,
-  jemalloc,
-  makeWrapper,
-  nix-update-script,
-  nodejs,
-  pango,
-  pixman,
-  pkg-config,
-  pnpm_9,
-  python3,
-  vips,
-  xcbuild,
+{ stdenv
+, lib
+, fetchFromGitLab
+, nixosTests
+, bash
+, cairo
+, cctools
+, ffmpeg-headless
+, jemalloc
+, makeWrapper
+, nix-update-script
+, nodejs
+, pango
+, pixman
+, pkg-config
+, pnpm_9
+, python3
+, vips
+, xcbuild
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

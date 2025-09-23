@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  libarchive,
-  openssl,
-  pkg-config,
-  bubblewrap,
-  elfutils,
-  nix,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libarchive
+, openssl
+, pkg-config
+, bubblewrap
+, elfutils
+, nix
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage rec {

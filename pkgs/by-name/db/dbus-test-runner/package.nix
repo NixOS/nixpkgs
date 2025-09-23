@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchbzr,
-  testers,
-  autoreconfHook,
-  bash,
-  dbus,
-  dbus-glib,
-  glib,
-  intltool,
-  pkg-config,
-  python3,
-  xvfb-run,
-  gettext,
+{ stdenv
+, lib
+, fetchbzr
+, testers
+, autoreconfHook
+, bash
+, dbus
+, dbus-glib
+, glib
+, intltool
+, pkg-config
+, python3
+, xvfb-run
+, gettext
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

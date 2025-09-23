@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  xpdf,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, xpdf
+,
 }:
 
 python3Packages.buildPythonApplication rec {

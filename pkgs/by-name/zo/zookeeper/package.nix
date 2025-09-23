@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jdk11_headless,
-  makeWrapper,
-  nixosTests,
-  bash,
-  coreutils,
+{ lib
+, stdenv
+, fetchurl
+, jdk11_headless
+, makeWrapper
+, nixosTests
+, bash
+, coreutils
+,
 }:
 let
   # Latest supported LTS JDK for Zookeeper 3.9:

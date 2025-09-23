@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  ITree,
-  simple-io,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, ITree
+, simple-io
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -20,7 +20,8 @@ mkCoqDerivation {
     in
     lib.switch coq.coq-version [
       (case (range "8.12" "8.19") "0.1.1")
-    ] null;
+    ]
+      null;
   release = {
     "0.1.1".sha256 = "sha256-IFwIj8dxW4jm2gvuUJ8LKZFSJeljp0bsn8fezxY6t2o=";
   };

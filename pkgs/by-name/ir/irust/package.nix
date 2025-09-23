@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  cargo,
-  rustfmt,
-  cargo-show-asm,
-  cargo-expand,
-  clang,
-  # Workaround to allow easily overriding runtime inputs
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, cargo
+, rustfmt
+, cargo-show-asm
+, cargo-expand
+, clang
+, # Workaround to allow easily overriding runtime inputs
   runtimeInputs ? [
     cargo
     rustfmt
     cargo-show-asm
     cargo-expand
     clang
-  ],
-  nix-update-script,
+  ]
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  incremental,
-  python-dateutil,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, incremental
+, python-dateutil
+, twisted
+,
 }:
 
 buildPythonPackage rec {

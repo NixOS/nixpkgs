@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  libseccomp,
-  libsodium,
-  pkg-config,
-  pkgs,
-  sqlite,
-  stdenv,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libseccomp
+, libsodium
+, pkg-config
+, pkgs
+, sqlite
+, stdenv
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {

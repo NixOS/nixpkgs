@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  sqlite,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
-  nixosTests,
-  # update script
-  writers,
-  python3Packages,
-  nix,
-  prefetch-yarn-deps,
-  fetchpatch,
-  applyPatches,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, sqlite
+, fetchYarnDeps
+, yarn
+, fixup-yarn-lock
+, nodejs
+, nixosTests
+, # update script
+  writers
+, python3Packages
+, nix
+, prefetch-yarn-deps
+, fetchpatch
+, applyPatches
+,
 }:
 let
   version = "2.0.5.5160";
@@ -143,19 +143,20 @@ buildDotnetModule {
       inherit (nixosTests) prowlarr;
     };
 
-    updateScript = writers.writePython3 "prowlarr-updater" {
-      libraries = with python3Packages; [ requests ];
-      flakeIgnore = [ "E501" ];
-      makeWrapperArgs = [
-        "--prefix"
-        "PATH"
-        ":"
-        (lib.makeBinPath [
-          nix
-          prefetch-yarn-deps
-        ])
-      ];
-    } ./update.py;
+    updateScript = writers.writePython3 "prowlarr-updater"
+      {
+        libraries = with python3Packages; [ requests ];
+        flakeIgnore = [ "E501" ];
+        makeWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          (lib.makeBinPath [
+            nix
+            prefetch-yarn-deps
+          ])
+        ];
+      } ./update.py;
   };
 
   meta = {

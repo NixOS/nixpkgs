@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  _7zz,
-  fetchurl,
-  makeBinaryWrapper,
+{ lib
+, stdenvNoCC
+, _7zz
+, fetchurl
+, makeBinaryWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

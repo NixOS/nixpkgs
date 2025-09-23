@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";

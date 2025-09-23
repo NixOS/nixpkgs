@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  poetry-core,
-  jsonpath-ng,
-  jsonschema,
-  jinja2,
-  python,
-  python-docx,
-  matplotlib,
-  pyyaml,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, poetry-core
+, jsonpath-ng
+, jsonschema
+, jinja2
+, python
+, python-docx
+, matplotlib
+, pyyaml
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

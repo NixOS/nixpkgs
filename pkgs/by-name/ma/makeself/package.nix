@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  zstd,
-  pbzip2,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, zstd
+, pbzip2
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

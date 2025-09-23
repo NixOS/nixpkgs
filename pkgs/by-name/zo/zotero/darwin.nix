@@ -1,10 +1,10 @@
-{
-  pname,
-  version,
-  meta,
-  stdenv,
-  fetchurl,
-  undmg,
+{ pname
+, version
+, meta
+, stdenv
+, fetchurl
+, undmg
+,
 }:
 
 stdenv.mkDerivation rec {

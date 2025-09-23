@@ -1,12 +1,12 @@
-{
-  lib,
-  mupdf,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  cmake,
-  qt6,
-  desktopToDarwinBundle,
+{ lib
+, mupdf
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, cmake
+, qt6
+, desktopToDarwinBundle
+,
 }:
 
 let

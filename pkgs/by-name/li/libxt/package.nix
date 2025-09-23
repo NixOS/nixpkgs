@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libsm,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkg-config
+, xorgproto
+, libx11
+, libsm
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxt";

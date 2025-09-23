@@ -1,16 +1,16 @@
 # Getdns and Stubby are released together, see https://getdnsapi.net/releases/
 # ../../ge/getdns/package.nix
 
-{
-  lib,
-  stdenv,
-  cmake,
-  getdns,
-  libyaml,
-  openssl,
-  systemd,
-  yq,
-  stubby,
+{ lib
+, stdenv
+, cmake
+, getdns
+, libyaml
+, openssl
+, systemd
+, yq
+, stubby
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

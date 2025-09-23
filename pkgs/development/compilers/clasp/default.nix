@@ -1,15 +1,15 @@
-{
-  lib,
-  llvmPackages_18,
-  fetchzip,
-  sbcl,
-  pkg-config,
-  fmt_9,
-  gmpxx,
-  libelf,
-  boost,
-  libunwind,
-  ninja,
+{ lib
+, llvmPackages_18
+, fetchzip
+, sbcl
+, pkg-config
+, fmt_9
+, gmpxx
+, libelf
+, boost
+, libunwind
+, ninja
+,
 }:
 
 let

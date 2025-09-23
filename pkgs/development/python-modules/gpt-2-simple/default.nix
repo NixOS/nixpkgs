@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  regex,
-  requests,
-  setuptools,
-  tqdm,
-  numpy,
-  toposort,
-  tensorflow,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, regex
+, requests
+, setuptools
+, tqdm
+, numpy
+, toposort
+, tensorflow
+,
 }:
 
 buildPythonPackage rec {

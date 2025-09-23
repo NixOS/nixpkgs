@@ -1,8 +1,8 @@
-{
-  lib,
-  mkDerivation,
-  libcMinimal,
-  defaultMakeFlags,
+{ lib
+, mkDerivation
+, libcMinimal
+, defaultMakeFlags
+,
 }:
 
 mkDerivation {

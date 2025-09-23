@@ -1,32 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPyPy,
-
-  # build-system
-  setuptools,
-
-  # native dependencies
-  libGL,
-
-  # dependencies
-  numpy,
-  pillow,
-
-  # optional-dependencies
-  astropy,
-  av,
-  imageio-ffmpeg,
-  pillow-heif,
-  psutil,
-  tifffile,
-
-  # tests
-  pytestCheckHook,
-  gitMinimal,
-  fsspec,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, isPyPy
+, # build-system
+  setuptools
+, # native dependencies
+  libGL
+, # dependencies
+  numpy
+, pillow
+, # optional-dependencies
+  astropy
+, av
+, imageio-ffmpeg
+, pillow-heif
+, psutil
+, tifffile
+, # tests
+  pytestCheckHook
+, gitMinimal
+, fsspec
+,
 }:
 
 let

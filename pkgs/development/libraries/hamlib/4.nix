@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  swig,
-  gd,
-  ncurses,
-  python311,
-  libxml2,
-  tcl,
-  libusb-compat-0_1,
-  pkg-config,
-  boost,
-  libtool,
-  pythonBindings ? true,
-  tclBindings ? true,
-  perlBindings ? stdenv.buildPlatform == stdenv.hostPlatform,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, swig
+, gd
+, ncurses
+, python311
+, libxml2
+, tcl
+, libusb-compat-0_1
+, pkg-config
+, boost
+, libtool
+, pythonBindings ? true
+, tclBindings ? true
+, perlBindings ? stdenv.buildPlatform == stdenv.hostPlatform
+, buildPackages
+,
 }:
 let
   python3 = python311; # needs distutils and imp

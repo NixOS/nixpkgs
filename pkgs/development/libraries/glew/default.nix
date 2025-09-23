@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  libGLU,
-  libXmu,
-  libXi,
-  libXext,
-  enableEGL ? (!stdenv.hostPlatform.isDarwin),
-  testers,
-  mesa,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, libGLU
+, libXmu
+, libXi
+, libXext
+, enableEGL ? (!stdenv.hostPlatform.isDarwin)
+, testers
+, mesa
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

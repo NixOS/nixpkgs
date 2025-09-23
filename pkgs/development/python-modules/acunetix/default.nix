@@ -1,10 +1,10 @@
-{
-  lib,
-  aiofiles,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  requests,
+{ lib
+, aiofiles
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage {

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 with lib;
@@ -29,15 +28,17 @@ let
   injectFakeKeys =
     keys:
     concatStrings (
-      mapAttrsToList (keyName: keyOptions: ''
-        fakeKey="$(${pkgs.bind}/bin/tsig-keygen -a ${
-          escapeShellArgs [
-            keyOptions.algorithm
-            keyName
-          ]
-        } | grep -oP "\s*secret \"\K.*(?=\";)")"
-        sed "s@^\s*include:\s*\"${stateDir}/private/${keyName}\"\$@secret: $fakeKey@" -i $out/nsd.conf
-      '') keys
+      mapAttrsToList
+        (keyName: keyOptions: ''
+          fakeKey="$(${pkgs.bind}/bin/tsig-keygen -a ${
+            escapeShellArgs [
+              keyOptions.algorithm
+              keyName
+            ]
+          } | grep -oP "\s*secret \"\K.*(?=\";)")"
+          sed "s@^\s*include:\s*\"${stateDir}/private/${keyName}\"\$@secret: $fakeKey@" -i $out/nsd.conf
+        '')
+        keys
     );
 
   nsdEnv = pkgs.buildEnv {
@@ -153,20 +154,24 @@ let
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
   keyConfigFile = concatStrings (
-    mapAttrsToList (keyName: keyOptions: ''
-      key:
-        name:      "${keyName}"
-        algorithm: "${keyOptions.algorithm}"
-        include:   "${stateDir}/private/${keyName}"
-    '') cfg.keys
+    mapAttrsToList
+      (keyName: keyOptions: ''
+        key:
+          name:      "${keyName}"
+          algorithm: "${keyOptions.algorithm}"
+          include:   "${stateDir}/private/${keyName}"
+      '')
+      cfg.keys
   );
 
   copyKeys = concatStrings (
-    mapAttrsToList (keyName: keyOptions: ''
-      secret=$(cat "${keyOptions.keyFile}")
-      dest="${stateDir}/private/${keyName}"
-      install -m 0400 -o "${username}" -g "${username}" <(echo "  secret: \"$secret\"") "$dest"
-    '') cfg.keys
+    mapAttrsToList
+      (keyName: keyOptions: ''
+        secret=$(cat "${keyOptions.keyFile}")
+        dest="${stateDir}/private/${keyName}"
+        install -m 0400 -o "${username}" -g "${username}" <(echo "  secret: \"$secret\"") "$dest"
+      '')
+      cfg.keys
   );
 
   # options are ordered alphanumerically by the nixos option name
@@ -206,9 +211,11 @@ let
     # fork -> pattern
     else
       zipAttrsWith (name: head) (
-        mapAttrsToList (
-          name: child: zoneConfigs' (parent // zone // { children = { }; }) name child
-        ) zone.children
+        mapAttrsToList
+          (
+            name: child: zoneConfigs' (parent // zone // { children = { }; }) name child
+          )
+          zone.children
       );
 
   # options are ordered alphanumerically

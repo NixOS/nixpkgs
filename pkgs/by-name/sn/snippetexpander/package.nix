@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  makeWrapper,
-  scdoc,
-  installShellFiles,
-  snippetexpanderd,
-  snippetexpanderx,
+{ lib
+, buildGoModule
+, makeWrapper
+, scdoc
+, installShellFiles
+, snippetexpanderd
+, snippetexpanderx
+,
 }:
 
 buildGoModule rec {

@@ -1,28 +1,28 @@
-{
-  lib,
-  aetcd,
-  buildPythonPackage,
-  coredis,
-  deprecated,
-  etcd3,
-  fetchFromGitHub,
-  flaky,
-  hiro,
-  importlib-resources,
-  motor,
-  packaging,
-  pymemcache,
-  pymongo,
-  pytest-asyncio,
-  pytest-benchmark,
-  pytest-cov-stub,
-  pytest-lazy-fixtures,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
-  setuptools,
-  typing-extensions,
-  valkey,
+{ lib
+, aetcd
+, buildPythonPackage
+, coredis
+, deprecated
+, etcd3
+, fetchFromGitHub
+, flaky
+, hiro
+, importlib-resources
+, motor
+, packaging
+, pymemcache
+, pymongo
+, pytest-asyncio
+, pytest-benchmark
+, pytest-cov-stub
+, pytest-lazy-fixtures
+, pytestCheckHook
+, pythonOlder
+, redis
+, setuptools
+, typing-extensions
+, valkey
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  wxGTK32,
-  coreutils,
-  SDL2,
-  openal,
-  alsa-lib,
-  pkg-config,
-  gtk3,
-  wrapGAppsHook3,
-  autoreconfHook,
-  withNetworking ? true,
-  withALSA ? true,
+{ stdenv
+, lib
+, fetchzip
+, wxGTK32
+, coreutils
+, SDL2
+, openal
+, alsa-lib
+, pkg-config
+, gtk3
+, wrapGAppsHook3
+, autoreconfHook
+, withNetworking ? true
+, withALSA ? true
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  setuptools,
-
-  # nativeBuildInputs
-  autoAddDriverRunpath,
-  cudaPackages,
-
-  # dependencies
-  numpy,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, setuptools
+, # nativeBuildInputs
+  autoAddDriverRunpath
+, cudaPackages
+, # dependencies
+  numpy
+, scipy
+,
 }:
 
 buildPythonPackage {

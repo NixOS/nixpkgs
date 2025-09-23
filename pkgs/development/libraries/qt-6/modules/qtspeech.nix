@@ -1,13 +1,13 @@
-{
-  qtModule,
-  lib,
-  stdenv,
-  qtbase,
-  qtmultimedia,
-  pkg-config,
-  flite,
-  alsa-lib,
-  speechd-minimal,
+{ qtModule
+, lib
+, stdenv
+, qtbase
+, qtmultimedia
+, pkg-config
+, flite
+, alsa-lib
+, speechd-minimal
+,
 }:
 
 qtModule {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  filelock,
-  poetry-core,
-  psycopg,
-  psycopg-pool,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-xdist,
-  redis,
-  redisTestHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, filelock
+, poetry-core
+, psycopg
+, psycopg-pool
+, pytestCheckHook
+, pytest-asyncio
+, pytest-xdist
+, redis
+, redisTestHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  withServer ? true,
-  withVlAgent ? false,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, withServer ? true
+, withVlAgent ? false
+,
 }:
 
 buildGoModule (finalAttrs: {

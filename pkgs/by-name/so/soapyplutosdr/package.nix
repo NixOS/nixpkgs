@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libad9361,
-  libiio,
-  libusb1,
-  soapysdr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libad9361
+, libiio
+, libusb1
+, soapysdr
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

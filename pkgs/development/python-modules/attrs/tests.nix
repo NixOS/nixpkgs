@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  pytestCheckHook,
-  attrs,
-  hypothesis,
+{ buildPythonPackage
+, pytestCheckHook
+, attrs
+, hypothesis
+,
 }:
 
 buildPythonPackage {

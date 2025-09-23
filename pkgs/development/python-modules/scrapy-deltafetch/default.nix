@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  scrapy,
-  setuptools,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, scrapy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

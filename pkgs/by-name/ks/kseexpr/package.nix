@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  extra-cmake-modules,
-  qt5,
-  libsForQt5,
-  bison,
-  flex,
-  llvm,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, qt5
+, libsForQt5
+, bison
+, flex
+, llvm
+,
 }:
 
 stdenv.mkDerivation rec {

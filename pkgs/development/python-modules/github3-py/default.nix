@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  requests,
-  uritemplate,
-  python-dateutil,
-  pyjwt,
-  pytest-xdist,
-  pytestCheckHook,
-  betamax,
-  betamax-matchers,
-  hatchling,
-  fetchpatch,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, uritemplate
+, python-dateutil
+, pyjwt
+, pytest-xdist
+, pytestCheckHook
+, betamax
+, betamax-matchers
+, hatchling
+, fetchpatch
+,
 }:
 
 buildPythonPackage rec {

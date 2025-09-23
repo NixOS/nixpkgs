@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gsasl,
-  gnutls,
-  pkg-config,
-  cmake,
-  zlib,
-  libtasn1,
-  libgcrypt,
-  gtk3,
-  # this will not work on non-nixos systems
-  sendmailPath ? "/run/wrappers/bin/sendmail",
+{ lib
+, stdenv
+, fetchFromGitHub
+, gsasl
+, gnutls
+, pkg-config
+, cmake
+, zlib
+, libtasn1
+, libgcrypt
+, gtk3
+, # this will not work on non-nixos systems
+  sendmailPath ? "/run/wrappers/bin/sendmail"
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  aml,
-  cyrus_sasl,
-  ffmpeg,
-  gnutls,
-  libGL,
-  libdrm,
-  libgcrypt,
-  libjpeg,
-  libpng,
-  libxkbcommon,
-  lzo,
-  libgbm,
-  meson,
-  ninja,
-  openssl,
-  pkg-config,
-  pixman,
-  wayland,
-  wayland-scanner,
-  zlib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, aml
+, cyrus_sasl
+, ffmpeg
+, gnutls
+, libGL
+, libdrm
+, libgcrypt
+, libjpeg
+, libpng
+, libxkbcommon
+, lzo
+, libgbm
+, meson
+, ninja
+, openssl
+, pkg-config
+, pixman
+, wayland
+, wayland-scanner
+, zlib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

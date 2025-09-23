@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  pythonOlder,
-
-  setuptools,
-  wheel,
-  cython,
-
-  numpy,
-  scipy,
-  scikit-learn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, pythonOlder
+, setuptools
+, wheel
+, cython
+, numpy
+, scipy
+, scikit-learn
+,
 }:
 
 buildPythonPackage rec {

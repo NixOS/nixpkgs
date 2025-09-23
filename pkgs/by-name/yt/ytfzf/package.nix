@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  curl,
-  dmenu,
-  fzf,
-  gnused,
-  jq,
-  mpv,
-  ueberzugpp,
-  yt-dlp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, curl
+, dmenu
+, fzf
+, gnused
+, jq
+, mpv
+, ueberzugpp
+, yt-dlp
+,
 }:
 
 stdenv.mkDerivation rec {

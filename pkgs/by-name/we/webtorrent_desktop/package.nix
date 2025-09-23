@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  electron,
-  buildNpmPackage,
-  fetchFromGitHub,
-  fetchpatch,
+{ lib
+, stdenv
+, electron
+, buildNpmPackage
+, fetchFromGitHub
+, fetchpatch
+,
 }:
 
 buildNpmPackage {

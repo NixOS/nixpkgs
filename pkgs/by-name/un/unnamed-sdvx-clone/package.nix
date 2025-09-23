@@ -1,27 +1,27 @@
-{
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  freetype,
-  pkg-config,
-  SDL2,
-  libpng,
-  libjpeg,
-  zlib,
-  libogg,
-  libvorbis,
-  libarchive,
-  iconv,
-  openssl,
-  curl,
-  libcpr,
-  rapidjson,
-  libX11,
-  libGL,
-  writeShellScriptBin,
-  makeDesktopItem,
-  lib,
-  copyDesktopItems,
+{ stdenv
+, cmake
+, fetchFromGitHub
+, freetype
+, pkg-config
+, SDL2
+, libpng
+, libjpeg
+, zlib
+, libogg
+, libvorbis
+, libarchive
+, iconv
+, openssl
+, curl
+, libcpr
+, rapidjson
+, libX11
+, libGL
+, writeShellScriptBin
+, makeDesktopItem
+, lib
+, copyDesktopItems
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unnamed-sdvx-clone";

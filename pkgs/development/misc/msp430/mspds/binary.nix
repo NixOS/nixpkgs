@@ -1,15 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  unzip,
-  autoPatchelfHook,
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, autoPatchelfHook
+,
 }:
 
 let
-  archPostfix = lib.optionalString (
-    stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isDarwin
-  ) "_64";
+  archPostfix = lib.optionalString
+    (
+      stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isDarwin
+    ) "_64";
 in
 stdenv.mkDerivation {
   pname = "msp-debug-stack-bin";

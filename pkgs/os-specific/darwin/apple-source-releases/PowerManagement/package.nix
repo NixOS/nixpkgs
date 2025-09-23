@@ -1,8 +1,8 @@
-{
-  lib,
-  apple-sdk,
-  mkAppleDerivation,
-  stdenvNoCC,
+{ lib
+, apple-sdk
+, mkAppleDerivation
+, stdenvNoCC
+,
 }:
 
 let

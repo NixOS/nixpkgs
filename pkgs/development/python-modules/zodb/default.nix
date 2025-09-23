@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  python,
-  setuptools,
-  zope-testing,
-  zope-testrunner,
-  transaction,
-  zope-interface,
-  zodbpickle,
-  zconfig,
-  persistent,
-  zc-lockfile,
-  btrees,
-  manuel,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, python
+, setuptools
+, zope-testing
+, zope-testrunner
+, transaction
+, zope-interface
+, zodbpickle
+, zconfig
+, persistent
+, zc-lockfile
+, btrees
+, manuel
+,
 }:
 
 buildPythonPackage rec {

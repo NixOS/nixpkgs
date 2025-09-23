@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  internetarchive,
-  fetchPypi,
-  yt-dlp,
-  docopt,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, setuptools
+, internetarchive
+, fetchPypi
+, yt-dlp
+, docopt
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

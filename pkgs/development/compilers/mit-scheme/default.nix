@@ -1,19 +1,19 @@
-{
-  fetchurl,
-  fetchDebianPatch,
-  lib,
-  stdenv,
-  makeWrapper,
-  gnum4,
-  texinfo,
-  texliveSmall,
-  automake,
-  autoconf,
-  libtool,
-  ghostscript,
-  ncurses,
-  enableX11 ? false,
-  libX11,
+{ fetchurl
+, fetchDebianPatch
+, lib
+, stdenv
+, makeWrapper
+, gnum4
+, texinfo
+, texliveSmall
+, automake
+, autoconf
+, libtool
+, ghostscript
+, ncurses
+, enableX11 ? false
+, libX11
+,
 }:
 
 let
@@ -34,10 +34,11 @@ stdenv.mkDerivation {
   # generated C code instead of those binaries.
   src =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 then
-      fetchurl {
-        url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-aarch64le.tar.gz";
-        sha256 = "12ra9bc93x8g07impbd8jr6djjzwpb9qvh9zhxvvrba3332zx3vh";
-      }
+      fetchurl
+        {
+          url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-aarch64le.tar.gz";
+          sha256 = "12ra9bc93x8g07impbd8jr6djjzwpb9qvh9zhxvvrba3332zx3vh";
+        }
     else
       fetchurl {
         url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";

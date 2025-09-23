@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -108,22 +107,26 @@ in
             mkdir $out
           ''
           + (lib.concatStrings (
-            lib.mapAttrsToList (
-              name: cfg:
-              (lib.concatStrings (
-                map (state: ''
-                  mkdir -p $out/${state}.d
-                  ln -s ${
-                    lib.getExe (
-                      pkgs.writeShellApplication {
-                        inherit name;
-                        text = cfg.script;
-                      }
-                    )
-                  } $out/${state}.d/${name}
-                '') cfg.onState
-              ))
-            ) cfg.rules
+            lib.mapAttrsToList
+              (
+                name: cfg:
+                  (lib.concatStrings (
+                    map
+                      (state: ''
+                        mkdir -p $out/${state}.d
+                        ln -s ${
+                          lib.getExe (
+                            pkgs.writeShellApplication {
+                              inherit name;
+                              text = cfg.script;
+                            }
+                          )
+                        } $out/${state}.d/${name}
+                      '')
+                      cfg.onState
+                  ))
+              )
+              cfg.rules
           ))
         );
       in

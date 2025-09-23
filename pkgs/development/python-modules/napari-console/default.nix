@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  ipykernel,
-  ipython,
-  qtconsole,
-  qtpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  ipykernel
+, ipython
+, qtconsole
+, qtpy
+,
 }:
 
 buildPythonPackage rec {

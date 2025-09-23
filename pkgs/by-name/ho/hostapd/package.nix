@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libnl,
-  openssl,
-  nixosTests,
-  sqlite ? null,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libnl
+, openssl
+, nixosTests
+, sqlite ? null
+,
 }:
 
 stdenv.mkDerivation rec {

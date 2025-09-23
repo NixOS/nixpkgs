@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  coreutils,
-  gawk,
-  gnugrep,
-  gnused,
-  openjdk17,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, coreutils
+, gawk
+, gnugrep
+, gnused
+, openjdk17
+,
 }:
 
 stdenv.mkDerivation rec {

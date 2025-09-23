@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  zlib,
-  readline,
-  openssl,
-  libiconv,
-  pcsclite,
-  libassuan,
-  libXt,
-  docbook_xsl,
-  libxslt,
-  docbook_xml_dtd_412,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, zlib
+, readline
+, openssl
+, libiconv
+, pcsclite
+, libassuan
+, libXt
+, docbook_xsl
+, libxslt
+, docbook_xml_dtd_412
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
   ]
   ++
-    lib.optional (!stdenv.hostPlatform.isDarwin)
-      "--with-pcsc-provider=${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}";
+  lib.optional (!stdenv.hostPlatform.isDarwin)
+    "--with-pcsc-provider=${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   installFlags = [
     "sysconfdir=$(out)/etc"

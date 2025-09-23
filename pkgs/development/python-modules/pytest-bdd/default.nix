@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mako,
-  parse,
-  parse-type,
-  poetry-core,
-  pytest,
-  pytest7CheckHook,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mako
+, parse
+, parse-type
+, poetry-core
+, pytest
+, pytest7CheckHook
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

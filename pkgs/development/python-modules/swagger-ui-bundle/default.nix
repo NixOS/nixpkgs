@@ -1,16 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  importlib-resources,
-  jinja2,
-
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  poetry-core
+, # dependencies
+  importlib-resources
+, jinja2
+,
 }:
 
 buildPythonPackage rec {

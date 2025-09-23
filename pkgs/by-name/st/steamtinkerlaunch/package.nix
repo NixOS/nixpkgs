@@ -1,21 +1,21 @@
-{
-  bash,
-  fetchFromGitHub,
-  gawk,
-  git,
-  lib,
-  procps,
-  stdenvNoCC,
-  unixtools,
-  unstableGitUpdater,
-  unzip,
-  usbutils,
-  util-linux,
-  wget,
-  writeShellApplication,
-  xdotool,
-  xorg,
-  yad,
+{ bash
+, fetchFromGitHub
+, gawk
+, git
+, lib
+, procps
+, stdenvNoCC
+, unixtools
+, unstableGitUpdater
+, unzip
+, usbutils
+, util-linux
+, wget
+, writeShellApplication
+, xdotool
+, xorg
+, yad
+,
 }:
 
 stdenvNoCC.mkDerivation {

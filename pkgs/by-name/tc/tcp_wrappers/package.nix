@@ -1,8 +1,8 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  libnsl,
+{ fetchurl
+, lib
+, stdenv
+, libnsl
+,
 }:
 
 let

@@ -1,25 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-
-  autoreconfHook,
-  bzip2,
-  cfitsio,
-  exiv2,
-  gettext,
-  gtk2,
-  gtkimageview,
-  lcms2,
-  lensfun,
-  libjpeg,
-  libtiff,
-  perl,
-  pkg-config,
-  zlib,
-
-  addThumbnailer ? false,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, bzip2
+, cfitsio
+, exiv2
+, gettext
+, gtk2
+, gtkimageview
+, lcms2
+, lensfun
+, libjpeg
+, libtiff
+, perl
+, pkg-config
+, zlib
+, addThumbnailer ? false
+,
 }:
 
 stdenv.mkDerivation rec {

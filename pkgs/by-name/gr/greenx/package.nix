@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  cmake,
-  pkg-config,
-  blas,
-  lapack,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, cmake
+, pkg-config
+, blas
+, lapack
+,
 }:
 
 stdenv.mkDerivation rec {

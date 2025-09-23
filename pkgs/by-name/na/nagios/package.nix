@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  php,
-  gd,
-  libpng,
-  openssl,
-  zlib,
-  unzip,
-  nixosTests,
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, php
+, gd
+, libpng
+, openssl
+, zlib
+, unzip
+, nixosTests
+, nix-update-script
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

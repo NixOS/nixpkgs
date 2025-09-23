@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  qtbase,
-  qtsvg,
-  qmake,
-  pkg-config,
-  boost,
-  wirelesstools,
-  iw,
-  qwt6_1,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchurl
+, qtbase
+, qtsvg
+, qmake
+, pkg-config
+, boost
+, wirelesstools
+, iw
+, qwt6_1
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

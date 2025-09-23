@@ -1,12 +1,12 @@
-{
-  mkKdeDerivation,
-  qttools,
-  qtsvg,
-  pkg-config,
-  eigen,
-  shared-mime-info,
-  gsl,
-  libqalculate,
+{ mkKdeDerivation
+, qttools
+, qtsvg
+, pkg-config
+, eigen
+, shared-mime-info
+, gsl
+, libqalculate
+,
 }:
 mkKdeDerivation {
   pname = "step";

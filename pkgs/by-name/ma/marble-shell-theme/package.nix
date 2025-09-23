@@ -1,13 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  python3,
-  gnome-shell,
-  dconf,
-  writableTmpDirAsHomeHook,
-  colors ? [ "all" ], # Default to install all available colors
-  additionalInstallationTweaks ? [ ], # Additional installation tweaks
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, python3
+, gnome-shell
+, dconf
+, writableTmpDirAsHomeHook
+, colors ? [ "all" ]
+, # Default to install all available colors
+  additionalInstallationTweaks ? [ ]
+, # Additional installation tweaks
 }:
 
 assert lib.assertMsg (colors != [ ]) "The `colors` list can not be empty";

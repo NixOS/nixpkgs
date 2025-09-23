@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  groff,
-  pkg-config,
-  guile,
-  gtk2,
-  flex,
-  gawk,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, groff
+, pkg-config
+, guile
+, gtk2
+, flex
+, gawk
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

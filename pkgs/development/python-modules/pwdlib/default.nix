@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-regex-commit,
-  pytestCheckHook,
-  pytest-cov-stub,
-  argon2-cffi,
-  bcrypt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-regex-commit
+, pytestCheckHook
+, pytest-cov-stub
+, argon2-cffi
+, bcrypt
+,
 }:
 
 buildPythonPackage rec {

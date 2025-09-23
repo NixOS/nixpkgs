@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  pkg-config,
-  cmake,
-  meson,
-  ninja,
-  faust,
-  fontconfig,
-  glew,
-  libvterm-neovim,
-  lv2,
-  lv2lint,
-  sord,
-  xorg,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, pkg-config
+, cmake
+, meson
+, ninja
+, faust
+, fontconfig
+, glew
+, libvterm-neovim
+, lv2
+, lv2lint
+, sord
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

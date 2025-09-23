@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-error-for-skips,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  syrupy,
-  tenacity,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-error-for-skips
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, syrupy
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

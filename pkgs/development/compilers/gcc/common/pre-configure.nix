@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  version,
-  buildPlatform,
-  hostPlatform,
-  targetPlatform,
-  gnat-bootstrap ? null,
-  langAda ? false,
-  langFortran,
-  langJit ? false,
-  langGo,
-  withoutTargetLibc,
-  enableShared,
-  enableMultilib,
-  pkgsBuildTarget,
+{ lib
+, stdenv
+, version
+, buildPlatform
+, hostPlatform
+, targetPlatform
+, gnat-bootstrap ? null
+, langAda ? false
+, langFortran
+, langJit ? false
+, langGo
+, withoutTargetLibc
+, enableShared
+, enableMultilib
+, pkgsBuildTarget
+,
 }:
 
 assert langAda -> gnat-bootstrap != null;
@@ -34,17 +34,17 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # which is built alongside gfortran in this configuration doesn't
 # meet that need: it runs on the hostPlatform.
 +
-  lib.optionalString
-    (
-      langFortran
-      && (
-        with stdenv;
-        (!lib.systems.equals buildPlatform hostPlatform) && (lib.systems.equals hostPlatform targetPlatform)
-      )
+lib.optionalString
+  (
+    langFortran
+    && (
+      with stdenv;
+      (!lib.systems.equals buildPlatform hostPlatform) && (lib.systems.equals hostPlatform targetPlatform)
     )
-    ''
-      export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
-    ''
+  )
+  ''
+    export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
+  ''
 
 # In order to properly install libgccjit on macOS Catalina, strip(1)
 # upon installation must not remove external symbols, otherwise the
@@ -58,11 +58,11 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # actually different we need to convince the configure script that it
 # is in fact building a cross compiler although it doesn't believe it.
 +
-  lib.optionalString
-    (targetPlatform.config == hostPlatform.config && (!lib.systems.equals targetPlatform hostPlatform))
-    ''
-      substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
-    ''
+lib.optionalString
+  (targetPlatform.config == hostPlatform.config && (!lib.systems.equals targetPlatform hostPlatform))
+  ''
+    substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
+  ''
 
 # Normally (for host != target case) --without-headers automatically
 # enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
@@ -70,16 +70,18 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # ! lib.systems.equals hostPlatform targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
 +
-  lib.optionalString
-    (
-      (!lib.systems.equals targetPlatform hostPlatform)
-      && withoutTargetLibc
-      && targetPlatform.config == hostPlatform.config
-    )
-    ''
-      export inhibit_libc=true
-    ''
+lib.optionalString
+  (
+    (!lib.systems.equals targetPlatform hostPlatform)
+    && withoutTargetLibc
+    && targetPlatform.config == hostPlatform.config
+  )
+  ''
+    export inhibit_libc=true
+  ''
 
-+ lib.optionalString (
-  (!lib.systems.equals targetPlatform hostPlatform) && withoutTargetLibc && enableShared
-) (import ./libgcc-buildstuff.nix { inherit lib stdenv; })
+  + lib.optionalString
+  (
+    (!lib.systems.equals targetPlatform hostPlatform) && withoutTargetLibc && enableShared
+  )
+  (import ./libgcc-buildstuff.nix { inherit lib stdenv; })

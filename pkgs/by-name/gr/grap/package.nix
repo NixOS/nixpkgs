@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost183,
-  libseccomp,
-  flex,
-  swig,
-  bison,
-  cmake,
-  python3Packages,
-  makeShellWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost183
+, libseccomp
+, flex
+, swig
+, bison
+, cmake
+, python3Packages
+, makeShellWrapper
+,
 }:
 
 python3Packages.buildPythonApplication rec {

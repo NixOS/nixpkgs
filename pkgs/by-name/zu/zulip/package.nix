@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  python3,
-  electron_37,
-  makeDesktopItem,
-  makeShellWrapper,
-  copyDesktopItems,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, python3
+, electron_37
+, makeDesktopItem
+, makeShellWrapper
+, copyDesktopItems
+,
 }:
 
 buildNpmPackage rec {

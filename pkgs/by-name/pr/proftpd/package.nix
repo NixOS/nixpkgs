@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libcap,
-  libsodium,
-  openssl,
-  zlib,
-  perl,
-  ncurses,
-  libxcrypt-legacy,
-  removeReferencesTo,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libcap
+, libsodium
+, openssl
+, zlib
+, perl
+, ncurses
+, libxcrypt-legacy
+, removeReferencesTo
+,
 }:
 
 let

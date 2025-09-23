@@ -1,17 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  kernel,
-  pahole,
+{ lib
+, stdenv
+, fetchurl
+, kernel
+, pahole
+,
 }:
 
 stdenv.mkDerivation (
-  import ./common.nix {
-    inherit fetchurl lib;
-    pname = "linux-gpib-kernel";
-  }
-  // {
+  import ./common.nix
+    {
+      inherit fetchurl lib;
+      pname = "linux-gpib-kernel";
+    }
+    // {
 
     postPatch = ''
       sed -i 's@/sbin/depmod -A@@g' Makefile

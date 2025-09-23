@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  db62,
-  xercesc,
-  xqilla,
+{ lib
+, stdenv
+, fetchurl
+, db62
+, xercesc
+, xqilla
+,
 }:
 
 stdenv.mkDerivation rec {

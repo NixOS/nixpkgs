@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  fontconfig,
-  obs-studio,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, fontconfig
+, obs-studio
+, pkg-config
+,
 }:
 
 rustPlatform.buildRustPackage rec {

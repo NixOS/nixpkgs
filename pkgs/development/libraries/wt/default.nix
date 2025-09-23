@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  pkg-config,
-  doxygen,
-  qtbase,
-  libharu,
-  pango,
-  fcgi,
-  firebird,
-  libmysqlclient,
-  libpq,
-  graphicsmagick,
-  glew,
-  openssl,
-  harfbuzz,
-  icu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, pkg-config
+, doxygen
+, qtbase
+, libharu
+, pango
+, fcgi
+, firebird
+, libmysqlclient
+, libpq
+, graphicsmagick
+, glew
+, openssl
+, harfbuzz
+, icu
+,
 }:
 
 let

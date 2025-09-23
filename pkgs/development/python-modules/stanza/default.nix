@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  emoji,
-  fetchFromGitHub,
-  networkx,
-  numpy,
-  peft,
-  protobuf,
-  pythonOlder,
-  requests,
-  six,
-  toml,
-  torch,
-  tqdm,
-  transformers,
+{ lib
+, buildPythonPackage
+, emoji
+, fetchFromGitHub
+, networkx
+, numpy
+, peft
+, protobuf
+, pythonOlder
+, requests
+, six
+, toml
+, torch
+, tqdm
+, transformers
+,
 }:
 
 buildPythonPackage rec {

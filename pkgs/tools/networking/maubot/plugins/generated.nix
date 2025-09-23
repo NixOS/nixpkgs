@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchgit,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchFromGitea,
-  python3,
-  poetry,
-  buildMaubotPlugin,
+{ lib
+, fetchgit
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchFromGitea
+, python3
+, poetry
+, buildMaubotPlugin
+,
 }:
 
 let
@@ -20,17 +20,19 @@ lib.flip builtins.mapAttrs json (
 
     resolveDeps =
       deps:
-      map (
-        name:
-        let
-          packageName = builtins.head (builtins.match "([^~=<>@]*).*" name);
-          lower = lib.toLower packageName;
-          dash = builtins.replaceStrings [ "_" ] [ "-" ] packageName;
-          lowerDash = builtins.replaceStrings [ "_" ] [ "-" ] lower;
-        in
-        python3.pkgs.${packageName} or python3.pkgs.${lower} or python3.pkgs.${dash}
-          or python3.pkgs.${lowerDash} or null
-      ) (builtins.filter (x: x != "maubot" && x != null) deps);
+      map
+        (
+          name:
+          let
+            packageName = builtins.head (builtins.match "([^~=<>@]*).*" name);
+            lower = lib.toLower packageName;
+            dash = builtins.replaceStrings [ "_" ] [ "-" ] packageName;
+            lowerDash = builtins.replaceStrings [ "_" ] [ "-" ] lower;
+          in
+            python3.pkgs.${packageName} or python3.pkgs.${lower} or python3.pkgs.${dash}
+              or python3.pkgs.${lowerDash} or null
+        )
+        (builtins.filter (x: x != "maubot" && x != null) deps);
 
     reqDeps = resolveDeps (lib.toList (manifest.dependencies or null));
     optDeps = resolveDeps (lib.toList (manifest.soft_dependencies or null));
@@ -72,7 +74,7 @@ lib.flip builtins.mapAttrs json (
         broken = builtins.any (x: x == null) reqDeps;
       };
     }
-    // lib.optionalAttrs (entry.isPoetry or false) {
+      // lib.optionalAttrs (entry.isPoetry or false) {
       nativeBuildInputs = [
         poetry
         (python3.withPackages (

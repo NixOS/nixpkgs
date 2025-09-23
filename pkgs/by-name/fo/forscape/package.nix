@@ -1,17 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  qt6,
-  python3,
-
-  # buildInputs
-  eigen,
-  parallel-hashmap,
-  readerwriterqueue,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, qt6
+, python3
+, # buildInputs
+  eigen
+, parallel-hashmap
+, readerwriterqueue
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  metaFetch,
-  coq,
-  lib,
-  glib,
-  adwaita-icon-theme,
-  wrapGAppsHook3,
-  version ? null,
+{ metaFetch
+, coq
+, lib
+, glib
+, adwaita-icon-theme
+, wrapGAppsHook3
+, version ? null
+,
 }:
 
 let
@@ -20,7 +20,8 @@ let
       (case (range "8.18" "8.20") "2.2.1")
       (case (range "8.18" "8.19") "2.1.2")
       (case (isEq "8.18") "2.0.3+coq8.18")
-    ] null;
+    ]
+      null;
   location = {
     domain = "github.com";
     owner = "coq-community";

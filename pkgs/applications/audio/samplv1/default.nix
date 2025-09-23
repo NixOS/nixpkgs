@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libjack2,
-  alsa-lib,
-  liblo,
-  libsndfile,
-  lv2,
-  qtbase,
-  qttools,
-  rubberband,
-  wrapQtAppsHook,
-  cmake,
-  qtsvg,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libjack2
+, alsa-lib
+, liblo
+, libsndfile
+, lv2
+, qtbase
+, qttools
+, rubberband
+, wrapQtAppsHook
+, cmake
+, qtsvg
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter329,
-  libappindicator,
+{ lib
+, fetchFromGitHub
+, flutter329
+, libappindicator
+,
 }:
 
 flutter329.buildFlutterApplication rec {

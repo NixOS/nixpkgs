@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zenoh-c,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zenoh-c
+,
 }:
 
 stdenv.mkDerivation rec {

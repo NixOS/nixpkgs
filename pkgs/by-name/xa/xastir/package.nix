@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  bashNonInteractive,
-  curl,
-  db,
-  gnused,
-  libgeotiff,
-  libtiff,
-  xorg,
-  motif,
-  pcre2,
-  perl,
-  proj,
-  graphicsmagick,
-  shapelib,
-  libax25,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, bashNonInteractive
+, curl
+, db
+, gnused
+, libgeotiff
+, libtiff
+, xorg
+, motif
+, pcre2
+, perl
+, proj
+, graphicsmagick
+, shapelib
+, libax25
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  fetchzip,
-  lib,
-  stdenv,
-  nix-update-script,
+{ fetchzip
+, lib
+, stdenv
+, nix-update-script
+,
 }:
 
 let

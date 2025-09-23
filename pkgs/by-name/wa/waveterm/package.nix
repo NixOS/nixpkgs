@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  atk,
-  at-spi2-atk,
-  cups,
-  libdrm,
-  gtk3,
-  pango,
-  cairo,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libgbm,
-  expat,
-  libxcb,
-  alsa-lib,
-  nss,
-  nspr,
-  vips,
-  udev,
-  libGL,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, atk
+, at-spi2-atk
+, cups
+, libdrm
+, gtk3
+, pango
+, cairo
+, libX11
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, libgbm
+, expat
+, libxcb
+, alsa-lib
+, nss
+, nspr
+, vips
+, udev
+, libGL
+, unzip
+,
 }:
 let
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system};

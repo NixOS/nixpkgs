@@ -1,9 +1,9 @@
-{
-  lib,
-  makeWrapper,
-  symlinkJoin,
-  tinycc,
-  kak-tree-sitter-unwrapped,
+{ lib
+, makeWrapper
+, symlinkJoin
+, tinycc
+, kak-tree-sitter-unwrapped
+,
 }:
 
 symlinkJoin rec {

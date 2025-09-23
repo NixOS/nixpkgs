@@ -1,9 +1,9 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  pkg-config,
-  pulseaudio,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, pkg-config
+, pulseaudio
+,
 }:
 mkKdeDerivation rec {
   pname = "pulseaudio-qt";

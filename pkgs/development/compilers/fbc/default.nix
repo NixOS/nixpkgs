@@ -1,16 +1,16 @@
-{
-  stdenv,
-  buildPackages,
-  lib,
-  fetchzip,
-  gpm,
-  libffi,
-  libGL,
-  libX11,
-  libXext,
-  libXpm,
-  libXrandr,
-  ncurses,
+{ stdenv
+, buildPackages
+, lib
+, fetchzip
+, gpm
+, libffi
+, libGL
+, libX11
+, libXext
+, libXpm
+, libXrandr
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

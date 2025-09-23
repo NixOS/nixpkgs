@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  pkg-config,
-  meson,
-  ninja,
-  wayland,
-  gtk3,
-  wrapGAppsHook3,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, pkg-config
+, meson
+, ninja
+, wayland
+, gtk3
+, wrapGAppsHook3
+, installShellFiles
+,
 }:
 stdenv.mkDerivation rec {
   pname = "wofi";

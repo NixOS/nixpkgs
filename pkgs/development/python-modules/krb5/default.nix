@@ -1,14 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  k5test,
-  krb5-c, # C krb5 library
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, cython
+, fetchPypi
+, k5test
+, krb5-c
+, # C krb5 library
+  pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

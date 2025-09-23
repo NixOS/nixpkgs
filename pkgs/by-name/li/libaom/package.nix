@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  yasm,
-  perl,
-  cmake,
-  pkg-config,
-  python3,
-  enableVmaf ? true,
-  libvmaf,
-  gitUpdater,
-
-  # for passthru.tests
-  ffmpeg,
-  libavif,
-  libheif,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, yasm
+, perl
+, cmake
+, pkg-config
+, python3
+, enableVmaf ? true
+, libvmaf
+, gitUpdater
+, # for passthru.tests
+  ffmpeg
+, libavif
+, libheif
+,
 }:
 
 let

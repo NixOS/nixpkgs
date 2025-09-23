@@ -1,41 +1,40 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  rocmUpdateScript,
-  runCommand,
-  pkg-config,
-  cmake,
-  rocm-cmake,
-  rocblas,
-  rocmlir,
-  rocrand,
-  rocm-runtime,
-  rocm-merged-llvm,
-  hipblas-common,
-  hipblas,
-  hipblaslt,
-  clr,
-  composable_kernel,
-  frugally-deep,
-  rocm-docs-core,
-  half,
-  boost,
-  sqlite,
-  bzip2,
-  lbzip2,
-  nlohmann_json,
-  texliveSmall,
-  doxygen,
-  sphinx,
-  zlib,
-  gtest,
-  rocm-comgr,
-  roctracer,
-  python3Packages,
-  # FIXME: should be able to use all clr targets
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, fetchpatch
+, rocmUpdateScript
+, runCommand
+, pkg-config
+, cmake
+, rocm-cmake
+, rocblas
+, rocmlir
+, rocrand
+, rocm-runtime
+, rocm-merged-llvm
+, hipblas-common
+, hipblas
+, hipblaslt
+, clr
+, composable_kernel
+, frugally-deep
+, rocm-docs-core
+, half
+, boost
+, sqlite
+, bzip2
+, lbzip2
+, nlohmann_json
+, texliveSmall
+, doxygen
+, sphinx
+, zlib
+, gtest
+, rocm-comgr
+, roctracer
+, python3Packages
+, # FIXME: should be able to use all clr targets
   gpuTargets ? [
     "gfx900"
     "gfx906"
@@ -46,10 +45,13 @@
     "gfx1100"
     "gfx1101"
     "gfx1102"
-  ], # clr.gpuTargets
-  buildDocs ? false, # Needs internet because of rocm-docs-core
-  buildTests ? false,
-  withComposableKernel ? composable_kernel.anyGfx9Target,
+  ]
+, # clr.gpuTargets
+  buildDocs ? false
+, # Needs internet because of rocm-docs-core
+  buildTests ? false
+, withComposableKernel ? composable_kernel.anyGfx9Target
+,
 }:
 
 let

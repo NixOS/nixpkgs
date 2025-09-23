@@ -1,29 +1,30 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitLab,
-  writeTextFile,
-  fetchurl,
-  blas,
-  lapack,
-  mpi,
-  fftw,
-  scalapack,
-  libxc,
-  libvdwxc,
-  which,
-  ase,
-  numpy,
-  scipy,
-  pyyaml,
-  inetutils,
+{ buildPythonPackage
+, lib
+, fetchFromGitLab
+, writeTextFile
+, fetchurl
+, blas
+, lapack
+, mpi
+, fftw
+, scalapack
+, libxc
+, libvdwxc
+, which
+, ase
+, numpy
+, scipy
+, pyyaml
+, inetutils
+,
 }:
 
 assert lib.asserts.assertMsg (!blas.isILP64) "A 32 bit integer implementation of BLAS is required.";
 
-assert lib.asserts.assertMsg (
-  !lapack.isILP64
-) "A 32 bit integer implementation of LAPACK is required.";
+assert lib.asserts.assertMsg
+  (
+    !lapack.isILP64
+  ) "A 32 bit integer implementation of LAPACK is required.";
 
 let
   gpawConfig = writeTextFile {

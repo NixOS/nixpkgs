@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pydantic,
-  pytest-examples,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pydantic
+, pytest-examples
+, pytestCheckHook
+, pythonOlder
+, pytz
+,
 }:
 
 let

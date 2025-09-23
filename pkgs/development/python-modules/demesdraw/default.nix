@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  demes,
-  matplotlib,
-  numpy,
-  scipy,
-  pythonOlder,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
-  mpmath,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, demes
+, matplotlib
+, numpy
+, scipy
+, pythonOlder
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-xdist
+, mpmath
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  yubikey-manager,
-  gitUpdater,
-  cacert,
+{ lib
+, fetchFromGitHub
+, python3
+, yubikey-manager
+, gitUpdater
+, cacert
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

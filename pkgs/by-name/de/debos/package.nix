@@ -1,14 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  dpkg,
-  pkg-config,
-  glib,
-  ostree,
-  qemu,
-  unzip,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, dpkg
+, pkg-config
+, glib
+, ostree
+, qemu
+, unzip
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

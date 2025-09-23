@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-opnsense-exporter";

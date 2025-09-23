@@ -1,18 +1,18 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiobotocore,
-  aiohttp,
-  lib,
-  poetry-core,
-  pycognito,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  syrupy,
-  tenacity,
-  yarl,
+{ buildPythonPackage
+, fetchFromGitHub
+, aiobotocore
+, aiohttp
+, lib
+, poetry-core
+, pycognito
+, pytest-aiohttp
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, syrupy
+, tenacity
+, yarl
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  docopt,
-  fetchPypi,
-  pythonOlder,
-  pyyaml,
+{ lib
+, aiohttp
+, buildPythonPackage
+, docopt
+, fetchPypi
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

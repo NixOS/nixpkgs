@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  dissect-cstruct,
-  dissect-util,
-  fetchFromGitHub,
-  setuptools-scm,
-  setuptools,
+{ lib
+, buildPythonPackage
+, dissect-cstruct
+, dissect-util
+, fetchFromGitHub
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

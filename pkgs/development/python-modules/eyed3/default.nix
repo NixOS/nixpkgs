@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPyPy,
-  setuptools,
-  filetype,
-  deprecation,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPyPy
+, setuptools
+, filetype
+, deprecation
+,
 }:
 
 buildPythonPackage rec {

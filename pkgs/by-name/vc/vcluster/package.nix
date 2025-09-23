@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  go,
-  nix-update-script,
-  testers,
-  vcluster,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, go
+, nix-update-script
+, testers
+, vcluster
+,
 }:
 
 buildGoModule rec {

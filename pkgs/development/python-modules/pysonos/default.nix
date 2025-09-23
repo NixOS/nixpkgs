@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy3k,
-  xmltodict,
-  ifaddr,
-  requests,
-
-  # Test dependencies
-  pytestCheckHook,
-  mock,
-  requests-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, xmltodict
+, ifaddr
+, requests
+, # Test dependencies
+  pytestCheckHook
+, mock
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fish,
-  installShellFiles,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  nodejs,
-  npmHooks,
-  stdenv,
-  which,
-  yarnBuildHook,
-  yarnConfigHook,
+{ fetchFromGitHub
+, fetchYarnDeps
+, fish
+, installShellFiles
+, lib
+, makeWrapper
+, nix-update-script
+, nodejs
+, npmHooks
+, stdenv
+, which
+, yarnBuildHook
+, yarnConfigHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";

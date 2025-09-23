@@ -21,19 +21,20 @@
 # related packages that are managed in the GHC source tree. Its main job is to
 # expose all possible compile time customization in a common interface and
 # take care of all differences between Hadrian versions.
-{
-  bootPkgs,
-  lib,
+{ bootPkgs
+, lib
+,
 }:
 
 {
   # GHC source tree and version to build hadrian & friends from.
   # These are passed on to the actual package expressions.
-  ghcSrc,
-  ghcVersion,
-  # Contents of a non-default UserSettings.hs to use when building hadrian, if any.
+  ghcSrc
+, ghcVersion
+, # Contents of a non-default UserSettings.hs to use when building hadrian, if any.
   # Should be a string or null.
-  userSettings ? null,
+  userSettings ? null
+,
 }:
 
 let
@@ -62,7 +63,7 @@ callPackage' ./hadrian.nix (
     # in ./hadrian.nix without requiring intervention here.)
     inherit ghc-platform ghc-toolchain;
   }
-  // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.11") {
+    // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.11") {
     # See https://gitlab.haskell.org/ghc/ghc/-/commit/145a6477854d4003a07573d5e7ffa0c9a64ae29c
     Cabal = bootPkgs.Cabal_3_14_2_0;
   }

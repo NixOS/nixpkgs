@@ -1,9 +1,9 @@
-{
-  lib,
-  appimageTools,
-  callPackage,
-  fetchurl,
-  stdenv,
+{ lib
+, appimageTools
+, callPackage
+, fetchurl
+, stdenv
+,
 }:
 let
   pname = "immersed";
@@ -40,14 +40,15 @@ in
 
 (
   if stdenv.hostPlatform.isDarwin then
-    callPackage ./darwin.nix {
-      inherit
-        pname
-        version
-        src
-        meta
-        ;
-    }
+    callPackage ./darwin.nix
+      {
+        inherit
+          pname
+          version
+          src
+          meta
+          ;
+      }
   else
     callPackage ./linux.nix {
       inherit
@@ -58,7 +59,7 @@ in
         ;
     }
 )
-// {
+  // {
   passthru = {
     inherit sources;
   };

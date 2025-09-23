@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  patches ? [ ],
-  pkgsBuildHost,
-  enableStatic ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, patches ? [ ]
+, pkgsBuildHost
+, enableStatic ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation {

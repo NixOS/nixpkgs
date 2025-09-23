@@ -1,13 +1,13 @@
-{
-  ahocorapy,
-  buildPythonPackage,
-  construct,
-  fetchFromGitHub,
-  lib,
-  pybluez,
-  pytestCheckHook,
-  setuptools,
-  stdenv,
+{ ahocorapy
+, buildPythonPackage
+, construct
+, fetchFromGitHub
+, lib
+, pybluez
+, pytestCheckHook
+, setuptools
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

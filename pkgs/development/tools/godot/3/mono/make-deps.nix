@@ -1,7 +1,6 @@
-{
-  godot3-mono,
-  nuget-to-json,
-
+{ godot3-mono
+, nuget-to-json
+,
 }:
 
 godot3-mono.overrideAttrs (

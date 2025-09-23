@@ -1,18 +1,18 @@
-{
-  lib,
-  ctags,
-  writeTextFile,
-  runtimeShell,
-  ctagsWrapped,
-  name ? "${ctags.name}-wrapped",
-  args ? lib.concatLists [
+{ lib
+, ctags
+, writeTextFile
+, runtimeShell
+, ctagsWrapped
+, name ? "${ctags.name}-wrapped"
+, args ? lib.concatLists [
     ctagsWrapped.defaultArgs
     ctagsWrapped.phpLang
     ctagsWrapped.jsLang
     ctagsWrapped.nixLang
     ctagsWrapped.asLang
     ctagsWrapped.rubyLang
-  ],
+  ]
+,
 }:
 
 # Define a ctags wrapper derivation adding support for some not-that-common languages customization.

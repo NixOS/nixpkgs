@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  libGL,
-  xorg,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, libGL
+, xorg
+,
 }:
 
 buildGoModule rec {

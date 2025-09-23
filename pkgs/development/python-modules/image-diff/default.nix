@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pillow,
-  click,
-  click-default-group,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pillow
+, click
+, click-default-group
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

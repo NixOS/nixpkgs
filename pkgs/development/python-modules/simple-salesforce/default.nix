@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  more-itertools,
-  pendulum,
-  pyjwt,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  requests,
-  responses,
-  setuptools,
-  typing-extensions,
-  zeep,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, more-itertools
+, pendulum
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, pytz
+, requests
+, responses
+, setuptools
+, typing-extensions
+, zeep
+,
 }:
 
 buildPythonPackage rec {

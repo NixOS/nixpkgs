@@ -1,12 +1,12 @@
-{
-  pkgs,
-  stdenv,
-  lib,
-  jre,
-  fetchFromGitHub,
-  writeShellScript,
-  runCommand,
-  imagemagick,
+{ pkgs
+, stdenv
+, lib
+, jre
+, fetchFromGitHub
+, writeShellScript
+, runCommand
+, imagemagick
+,
 }:
 
 # Jupyter console:

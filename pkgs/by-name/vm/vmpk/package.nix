@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  pkg-config,
-  qt6,
-  qt6Packages,
-  docbook-xsl-nons,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, qt6
+, qt6Packages
+, docbook-xsl-nons
+,
 }:
 
 stdenv.mkDerivation rec {

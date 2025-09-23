@@ -1,12 +1,12 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  shared-mime-info,
-  qtwayland,
-  libssh,
-  libvncserver,
-  freerdp,
-  fuse3,
+{ mkKdeDerivation
+, pkg-config
+, shared-mime-info
+, qtwayland
+, libssh
+, libvncserver
+, freerdp
+, fuse3
+,
 }:
 mkKdeDerivation {
   pname = "krdc";

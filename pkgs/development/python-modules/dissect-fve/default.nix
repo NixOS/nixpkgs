@@ -1,16 +1,16 @@
-{
-  lib,
-  argon2-cffi,
-  buildPythonPackage,
-  dissect-cstruct,
-  dissect-util,
-  dissect-target,
-  fetchFromGitHub,
-  pycryptodome,
-  pythonOlder,
-  rich,
-  setuptools-scm,
-  setuptools,
+{ lib
+, argon2-cffi
+, buildPythonPackage
+, dissect-cstruct
+, dissect-util
+, dissect-target
+, fetchFromGitHub
+, pycryptodome
+, pythonOlder
+, rich
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

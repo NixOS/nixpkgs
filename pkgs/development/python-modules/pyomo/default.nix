@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  parameterized,
-  ply,
-  pybind11,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, parameterized
+, ply
+, pybind11
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  replaceVars,
-  bcrypt,
-  pyopenssl,
-  python-gnupg,
-  pytestCheckHook,
-  requests,
-  openssl,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, replaceVars
+, bcrypt
+, pyopenssl
+, python-gnupg
+, pytestCheckHook
+, requests
+, openssl
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  alcotest,
-  lwt,
-  logs,
-  mirage-clock,
-  duration,
+{ lib
+, buildDunePackage
+, alcotest
+, lwt
+, logs
+, mirage-clock
+, duration
+,
 }:
 
 buildDunePackage {

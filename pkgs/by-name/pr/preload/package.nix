@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoconf,
-  automake,
-  pkg-config,
-  glib,
+{ lib
+, stdenv
+, fetchzip
+, autoconf
+, automake
+, pkg-config
+, glib
+,
 }:
 
 stdenv.mkDerivation rec {

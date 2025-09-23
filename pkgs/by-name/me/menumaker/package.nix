@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchurl,
-  python3Packages,
+{ lib
+, fetchurl
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

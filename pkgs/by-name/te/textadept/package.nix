@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  cmake,
-  withQt ? true,
-  libsForQt5,
-  withCurses ? false,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, cmake
+, withQt ? true
+, libsForQt5
+, withCurses ? false
+, ncurses
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   version = "12.8";
@@ -36,9 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   ''
   + lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (
-      name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
-    ) (import ./deps.nix)
+    lib.mapAttrsToList
+      (
+        name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
+      )
+      (import ./deps.nix)
   );
 
   meta = {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  hackrf,
-  libbladeRF,
-  libusb1,
-  limesuite,
-  ncurses,
-  rtl-sdr,
-  soapysdr-with-plugins,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, hackrf
+, libbladeRF
+, libusb1
+, limesuite
+, ncurses
+, rtl-sdr
+, soapysdr-with-plugins
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

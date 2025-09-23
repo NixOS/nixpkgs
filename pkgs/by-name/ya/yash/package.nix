@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gettext,
-  ncurses,
-  asciidoc,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gettext
+, ncurses
+, asciidoc
+,
 }:
 
 stdenv.mkDerivation rec {

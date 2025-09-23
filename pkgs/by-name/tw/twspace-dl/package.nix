@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  ffmpeg-headless,
+{ lib
+, python3Packages
+, fetchPypi
+, ffmpeg-headless
+,
 }:
 
 python3Packages.buildPythonApplication rec {

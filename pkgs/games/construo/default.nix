@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libX11,
-  zlib,
-  xorgproto,
-  libGL ? null,
-  libGLU ? null,
-  libglut ? null,
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, zlib
+, xorgproto
+, libGL ? null
+, libGLU ? null
+, libglut ? null
+,
 }:
 
 stdenv.mkDerivation rec {

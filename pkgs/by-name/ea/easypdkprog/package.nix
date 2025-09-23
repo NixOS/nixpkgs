@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  udevCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

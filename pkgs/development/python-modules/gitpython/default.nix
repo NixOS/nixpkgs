@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  ddt,
-  fetchFromGitHub,
-  gitdb,
-  pkgs,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, ddt
+, fetchFromGitHub
+, gitdb
+, pkgs
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  ecl,
-  coreutils,
-  fetchurl,
-  ps,
-  strace,
-  texinfo,
-  which,
-  writableTmpDirAsHomeHook,
-  writeText,
-  zstd,
-  version,
-  # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
+{ lib
+, stdenv
+, callPackage
+, ecl
+, coreutils
+, fetchurl
+, ps
+, strace
+, texinfo
+, which
+, writableTmpDirAsHomeHook
+, writeText
+, zstd
+, version
+, # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
   # SBCL, because you can use your existing stock SBCL as a bootstrap.  On Hydra
   # of course we can’t do that because SBCL hasn’t been built yet, so we use
   # ECL but that’s much slower.
-  bootstrapLisp ? null,
+  bootstrapLisp ? null
+,
 }:
 
 let
@@ -128,18 +128,18 @@ stdenv.mkDerivation (self: {
   disabledTestFiles =
     lib.optionals (lib.versionOlder "2.5.2" self.version) [ "debug.impure.lisp" ]
     ++
-      lib.optionals
-        (builtins.elem stdenv.hostPlatform.system [
-          "x86_64-linux"
-          "aarch64-linux"
-        ])
-        [
-          "foreign-stack-alignment.impure.lisp"
-          # Floating point tests are fragile
-          # https://sourceforge.net/p/sbcl/mailman/message/58728554/
-          "compiler.pure.lisp"
-          "float.pure.lisp"
-        ]
+    lib.optionals
+      (builtins.elem stdenv.hostPlatform.system [
+        "x86_64-linux"
+        "aarch64-linux"
+      ])
+      [
+        "foreign-stack-alignment.impure.lisp"
+        # Floating point tests are fragile
+        # https://sourceforge.net/p/sbcl/mailman/message/58728554/
+        "compiler.pure.lisp"
+        "float.pure.lisp"
+      ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # This is failing on aarch64-linux on ofBorg. Not on my local machine nor on
       # a VM on my laptop. Not sure what’s wrong.
@@ -197,9 +197,10 @@ stdenv.mkDerivation (self: {
   preConfigurePhases = "sbclPatchPhase";
 
   enableFeatures =
-    assert lib.assertMsg (
-      self.markRegionGC -> self.threadSupport
-    ) "SBCL mark region GC requires thread support";
+    assert lib.assertMsg
+      (
+        self.markRegionGC -> self.threadSupport
+      ) "SBCL mark region GC requires thread support";
     lib.optional self.threadSupport "sb-thread"
     ++ lib.optional self.linkableRuntime "sb-linkable-runtime"
     ++ lib.optional self.coreCompression "sb-core-compression"

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  writeShellApplication,
-  curl,
-  cacert,
-  gnugrep,
-  common-updater-scripts,
-  versionCheckHook,
-  writeShellScript,
-  xcbuild,
-  coreutils,
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzip
+, writeShellApplication
+, curl
+, cacert
+, gnugrep
+, common-updater-scripts
+, versionCheckHook
+, writeShellScript
+, xcbuild
+, coreutils
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

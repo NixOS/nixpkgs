@@ -1,19 +1,19 @@
-{
-  buildDunePackage,
-  dns,
-  dns-client,
-  lwt,
-  mirage-sleep,
-  mirage-mtime,
-  mirage-ptime,
-  mirage-crypto-rng,
-  domain-name,
-  ipaddr,
-  ca-certs-nss,
-  happy-eyeballs,
-  happy-eyeballs-mirage,
-  tcpip,
-  tls-mirage,
+{ buildDunePackage
+, dns
+, dns-client
+, lwt
+, mirage-sleep
+, mirage-mtime
+, mirage-ptime
+, mirage-crypto-rng
+, domain-name
+, ipaddr
+, ca-certs-nss
+, happy-eyeballs
+, happy-eyeballs-mirage
+, tcpip
+, tls-mirage
+,
 }:
 
 buildDunePackage {

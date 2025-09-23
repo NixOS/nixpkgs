@@ -1,38 +1,36 @@
-{
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  bison,
-  flex,
-  python3,
-  glib,
-  makeWrapper,
-  libcap,
-  elfutils, # for libdw
-  bash-completion,
-  lib,
-  testers,
-  rustc,
-  withRust ?
-    lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms
-    && lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  libunwind,
-  withLibunwind ?
-    lib.meta.availableOn stdenv.hostPlatform libunwind
-    && lib.elem "libunwind" libunwind.meta.pkgConfigModules or [ ],
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, bison
+, flex
+, python3
+, glib
+, makeWrapper
+, libcap
+, elfutils
+, # for libdw
+  bash-completion
+, lib
+, testers
+, rustc
+, withRust ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms
+    && lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, libunwind
+, withLibunwind ? lib.meta.availableOn stdenv.hostPlatform libunwind
+    && lib.elem "libunwind" libunwind.meta.pkgConfigModules or [ ]
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, directoryListingUpdater
+, apple-sdk_gstreamer
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gnutls,
-  openssl,
-  gsasl,
-  libidn,
-  pkg-config,
-  nlsSupport ? true,
-  idnSupport ? true,
-  gsaslSupport ? true,
-  sslLibrary ? "gnutls",
+{ lib
+, stdenv
+, fetchurl
+, gnutls
+, openssl
+, gsasl
+, libidn
+, pkg-config
+, nlsSupport ? true
+, idnSupport ? true
+, gsaslSupport ? true
+, sslLibrary ? "gnutls"
+,
 }:
 assert lib.assertOneOf "sslLibrary" sslLibrary [
   "gnutls"

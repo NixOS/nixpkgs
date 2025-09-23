@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle_8,
-  makeWrapper,
-  jdk,
-  gsettings-desktop-schemas,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle_8
+, makeWrapper
+, jdk
+, gsettings-desktop-schemas
+,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

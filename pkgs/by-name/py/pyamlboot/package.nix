@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  testers,
-  pyamlboot,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, testers
+, pyamlboot
+,
 }:
 
 python3Packages.buildPythonApplication rec {

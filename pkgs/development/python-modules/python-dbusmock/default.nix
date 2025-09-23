@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  runCommand,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  dbus-python,
-
-  # checks
-  dbus,
-  gobject-introspection,
-  pygobject3,
-  bluez,
-  networkmanager,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, runCommand
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  dbus-python
+, # checks
+  dbus
+, gobject-introspection
+, pygobject3
+, bluez
+, networkmanager
+, pytestCheckHook
+,
 }:
 
 let

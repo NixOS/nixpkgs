@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  jre8,
-  curl,
-  ccid,
-  pcsclite,
-  pcsc-tools,
-  writeShellScript,
+{ lib
+, stdenvNoCC
+, fetchurl
+, jre8
+, curl
+, ccid
+, pcsclite
+, pcsc-tools
+, writeShellScript
+,
 }:
 let
   exec = writeShellScript "e-imzo" ''

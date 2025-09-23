@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -239,23 +238,27 @@ in
   };
 
   config = mkIf ((lib.length config.swapDevices) != 0) {
-    assertions = lib.map (sw: {
-      assertion =
-        sw.randomEncryption.enable -> builtins.match "/dev/disk/by-(uuid|label)/.*" sw.device == null;
-      message = ''
-        You cannot use swap device "${sw.device}" with randomEncryption enabled.
-        The UUIDs and labels will get erased on every boot when the partition is encrypted.
-        Use /dev/disk/by-partuuid/… instead.
-      '';
-    }) config.swapDevices;
+    assertions = lib.map
+      (sw: {
+        assertion =
+          sw.randomEncryption.enable -> builtins.match "/dev/disk/by-(uuid|label)/.*" sw.device == null;
+        message = ''
+          You cannot use swap device "${sw.device}" with randomEncryption enabled.
+          The UUIDs and labels will get erased on every boot when the partition is encrypted.
+          Use /dev/disk/by-partuuid/… instead.
+        '';
+      })
+      config.swapDevices;
 
-    warnings = lib.concatMap (
-      sw:
-      if sw.size != null && lib.hasPrefix "/dev/" sw.device then
-        [ "Setting the swap size of block device ${sw.device} has no effect" ]
-      else
-        [ ]
-    ) config.swapDevices;
+    warnings = lib.concatMap
+      (
+        sw:
+        if sw.size != null && lib.hasPrefix "/dev/" sw.device then
+          [ "Setting the swap size of block device ${sw.device} has no effect" ]
+        else
+          [ ]
+      )
+      config.swapDevices;
 
     system.requiredKernelConfig = [
       (config.lib.kernelConfig.isYes "SWAP")

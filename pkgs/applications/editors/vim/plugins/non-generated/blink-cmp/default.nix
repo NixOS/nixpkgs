@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  vimUtils,
-  nix-update-script,
-  gitMinimal,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, vimUtils
+, nix-update-script
+, gitMinimal
+,
 }:
 let
   version = "1.7.0";

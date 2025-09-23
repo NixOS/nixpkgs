@@ -1,19 +1,17 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-
-  # propagates
-  click,
-  dlib,
-  face-recognition-models,
-  numpy,
-  pillow,
-
-  # tests
-  pytestCheckHook,
-  config,
-  cudaSupport ? config.cudaSupport,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, # propagates
+  click
+, dlib
+, face-recognition-models
+, numpy
+, pillow
+, # tests
+  pytestCheckHook
+, config
+, cudaSupport ? config.cudaSupport
+,
 }:
 
 buildPythonPackage rec {

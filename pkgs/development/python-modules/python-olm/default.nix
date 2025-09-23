@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  isPy3k,
-  olm,
-  setuptools,
-  cffi,
-  aspectlib,
-  pytest-benchmark,
-  pytestCheckHook,
+{ buildPythonPackage
+, isPy3k
+, olm
+, setuptools
+, cffi
+, aspectlib
+, pytest-benchmark
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

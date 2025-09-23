@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  cstruct,
-  dune-configurator,
-  fetchurl,
-  fmt,
-  optint,
-  mdx,
+{ lib
+, buildDunePackage
+, cstruct
+, dune-configurator
+, fetchurl
+, fmt
+, optint
+, mdx
+,
 }:
 
 buildDunePackage rec {

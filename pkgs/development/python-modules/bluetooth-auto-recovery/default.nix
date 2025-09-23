@@ -1,17 +1,17 @@
-{
-  lib,
-  async-timeout,
-  bluetooth-adapters,
-  btsocket,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pyric,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  usb-devices,
+{ lib
+, async-timeout
+, bluetooth-adapters
+, btsocket
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pyric
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, usb-devices
+,
 }:
 
 buildPythonPackage rec {

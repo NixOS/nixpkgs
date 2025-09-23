@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  pykerberos,
-  pytestCheckHook,
-  pythonOlder,
-  requests-credssp,
-  requests-ntlm,
-  requests,
-  setuptools,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pykerberos
+, pytestCheckHook
+, pythonOlder
+, requests-credssp
+, requests-ntlm
+, requests
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

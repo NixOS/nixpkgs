@@ -1,14 +1,14 @@
-{
-  lib,
-  installShellFiles,
-  runCommandLocal,
+{ lib
+, installShellFiles
+, runCommandLocal
+,
 }:
 
 runCommandLocal "install-shell-files--install-bin"
-  {
-    nativeBuildInputs = [ installShellFiles ];
-    meta.platforms = lib.platforms.all;
-  }
+{
+  nativeBuildInputs = [ installShellFiles ];
+  meta.platforms = lib.platforms.all;
+}
   ''
     mkdir -p bin
     echo "echo hello za warudo" > bin/hello

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  clippy,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, fetchCrate
+, rustPlatform
+, clippy
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clippy-sarif";

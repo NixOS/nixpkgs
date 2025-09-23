@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qttools,
-  packagekit,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qttools
+, packagekit
+,
 }:
 
 stdenv.mkDerivation rec {

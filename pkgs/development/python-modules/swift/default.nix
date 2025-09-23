@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  boto3,
-  cryptography,
-  eventlet,
-  greenlet,
-  iana-etc,
-  installShellFiles,
-  libredirect,
-  lxml,
-  mock,
-  pastedeploy,
-  pbr,
-  pyeclib,
-  requests,
-  setuptools,
-  six,
-  stestr,
-  swiftclient,
-  xattr,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, boto3
+, cryptography
+, eventlet
+, greenlet
+, iana-etc
+, installShellFiles
+, libredirect
+, lxml
+, mock
+, pastedeploy
+, pbr
+, pyeclib
+, requests
+, setuptools
+, six
+, stestr
+, swiftclient
+, xattr
+,
 }:
 
 buildPythonPackage rec {

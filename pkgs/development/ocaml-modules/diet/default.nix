@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ocaml,
-  stdlib-shims,
-  ounit,
+{ lib
+, buildDunePackage
+, fetchurl
+, ocaml
+, stdlib-shims
+, ounit
+,
 }:
 
 buildDunePackage rec {

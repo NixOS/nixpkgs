@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  acl,
-  librsync,
-  ncurses,
-  openssl_legacy,
-  zlib,
-  uthash,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, acl
+, librsync
+, ncurses
+, openssl_legacy
+, zlib
+, uthash
+,
 }:
 
 stdenv.mkDerivation rec {

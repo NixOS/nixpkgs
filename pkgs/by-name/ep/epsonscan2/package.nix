@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  boost186,
-  cmake,
-  copyDesktopItems,
-  imagemagick,
-  fetchpatch,
-  fetchzip,
-  killall,
-  libjpeg,
-  libpng,
-  libtiff,
-  libtool,
-  libusb1,
-  makeDesktopItem,
-  qt5,
-
-  withGui ? true,
-  withNonFreePlugins ? false,
+{ lib
+, stdenv
+, autoPatchelfHook
+, boost186
+, cmake
+, copyDesktopItems
+, imagemagick
+, fetchpatch
+, fetchzip
+, killall
+, libjpeg
+, libpng
+, libtiff
+, libtool
+, libusb1
+, makeDesktopItem
+, qt5
+, withGui ? true
+, withNonFreePlugins ? false
+,
 }:
 
 let
@@ -43,8 +42,7 @@ let
         url = "https://download3.ebz.epson.net/dsc/f/03/00/16/14/38/7b1780ace96e2c6033bbb667c7f3ed281e4e9f38/epsonscan2-bundle-6.7.70.0.x86_64.deb.tar.gz";
         hash = "sha256-fPNNFgW/VU/YG+jjmSvPZ0WsHibsXY1TNp164GxLHKw=";
       };
-    }
-    ."${system}" or (throw "Unsupported system: ${system}");
+    }."${system}" or (throw "Unsupported system: ${system}");
 
 in
 stdenv.mkDerivation {

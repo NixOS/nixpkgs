@@ -1,24 +1,24 @@
-{
-  aha,
-  clinfo,
-  dmidecode,
-  iproute2,
-  lib,
-  libdisplay-info,
-  libusb1,
-  lm_sensors,
-  mesa-demos,
-  mkKdeDerivation,
-  pkg-config,
-  pciutils,
-  pulseaudio,
-  qttools,
-  replaceVars,
-  systemsettings,
-  util-linux,
-  vulkan-tools,
-  wayland-utils,
-  xdpyinfo,
+{ aha
+, clinfo
+, dmidecode
+, iproute2
+, lib
+, libdisplay-info
+, libusb1
+, lm_sensors
+, mesa-demos
+, mkKdeDerivation
+, pkg-config
+, pciutils
+, pulseaudio
+, qttools
+, replaceVars
+, systemsettings
+, util-linux
+, vulkan-tools
+, wayland-utils
+, xdpyinfo
+,
 }:
 let
   tools = {

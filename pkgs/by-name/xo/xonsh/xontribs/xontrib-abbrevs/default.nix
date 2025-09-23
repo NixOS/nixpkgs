@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  setuptools-scm,
-  poetry-core,
-  prompt-toolkit,
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  xonsh,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, poetry-core
+, prompt-toolkit
+, writableTmpDirAsHomeHook
+, pytestCheckHook
+, xonsh
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

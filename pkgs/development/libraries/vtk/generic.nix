@@ -1,99 +1,91 @@
-{
-  version,
-  sourceSha256,
-  patches ? [ ],
+{ version
+, sourceSha256
+, patches ? [ ]
+,
 }:
-{
-  lib,
-  newScope,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-
-  # common dependencies
-  tk,
-  mpi,
-  python3Packages,
-  catalyst,
-  cli11,
-  boost,
-  eigen,
-  verdict,
-  double-conversion,
-
-  # common data libraries
-  lz4,
-  xz,
-  zlib,
-  pugixml,
-  expat,
-  jsoncpp,
-  libxml2,
-  exprtk,
-  utf8cpp,
-  libarchive,
-  nlohmann_json,
-
-  # filters
-  openturns,
-  openslide,
-
-  # io modules
-  cgns,
-  adios2,
-  libLAS,
-  libgeotiff,
-  laszip_2,
-  gdal,
-  pdal,
-  alembic,
-  imath,
-  openvdb,
-  c-blosc,
-  unixODBC,
-  libpq,
-  libmysqlclient,
-  ffmpeg,
-  libjpeg,
-  libpng,
-  libtiff,
-  proj,
-  sqlite,
-  libogg,
-  libharu,
-  libtheora,
-  hdf5,
-  netcdf,
-  opencascade-occt,
-
-  # threading
-  tbb,
-  llvmPackages,
-
-  # rendering
-  viskores,
-  freetype,
-  fontconfig,
-  libX11,
-  libXfixes,
-  libXrender,
-  libXcursor,
-  gl2ps,
-  libGL,
-  qt6,
-
-  # custom options
-  withQt6 ? false,
-  # To avoid conflicts between the propagated vtkPackages.hdf5
+{ lib
+, newScope
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, pkg-config
+, # common dependencies
+  tk
+, mpi
+, python3Packages
+, catalyst
+, cli11
+, boost
+, eigen
+, verdict
+, double-conversion
+, # common data libraries
+  lz4
+, xz
+, zlib
+, pugixml
+, expat
+, jsoncpp
+, libxml2
+, exprtk
+, utf8cpp
+, libarchive
+, nlohmann_json
+, # filters
+  openturns
+, openslide
+, # io modules
+  cgns
+, adios2
+, libLAS
+, libgeotiff
+, laszip_2
+, gdal
+, pdal
+, alembic
+, imath
+, openvdb
+, c-blosc
+, unixODBC
+, libpq
+, libmysqlclient
+, ffmpeg
+, libjpeg
+, libpng
+, libtiff
+, proj
+, sqlite
+, libogg
+, libharu
+, libtheora
+, hdf5
+, netcdf
+, opencascade-occt
+, # threading
+  tbb
+, llvmPackages
+, # rendering
+  viskores
+, freetype
+, fontconfig
+, libX11
+, libXfixes
+, libXrender
+, libXcursor
+, gl2ps
+, libGL
+, qt6
+, # custom options
+  withQt6 ? false
+, # To avoid conflicts between the propagated vtkPackages.hdf5
   # and the input hdf5 used by most downstream packages,
   # we set mpiSupport to false by default.
-  mpiSupport ? false,
-  pythonSupport ? false,
-
-  # passthru.tests
-  testers,
+  mpiSupport ? false
+, pythonSupport ? false
+, # passthru.tests
+  testers
+,
 }:
 let
   vtkPackages = lib.makeScope newScope (self: {
@@ -135,9 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.python
     python3Packages.pythonRecompileBytecodeHook
   ]
-  ++ lib.optional (
-    pythonSupport && stdenv.buildPlatform == stdenv.hostPlatform
-  ) python3Packages.pythonImportsCheckHook;
+  ++ lib.optional
+    (
+      pythonSupport && stdenv.buildPlatform == stdenv.hostPlatform
+    )
+    python3Packages.pythonImportsCheckHook;
 
   buildInputs = [
     libLAS

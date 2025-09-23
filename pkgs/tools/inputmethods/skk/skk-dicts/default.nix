@@ -1,22 +1,23 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nix-update-script,
-  nkf,
-  skktools,
-  useUtf8 ? false,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nix-update-script
+, nkf
+, skktools
+, useUtf8 ? false
+,
 }:
 
 let
   suffix = lib.optionalString useUtf8 ".utf8";
 
   mkDictNameValue =
-    {
-      name,
-      description,
-      license, # it's written in the beginning of each file
-      files ? [ "SKK-JISYO.${name}" ],
+    { name
+    , description
+    , license
+    , # it's written in the beginning of each file
+      files ? [ "SKK-JISYO.${name}" ]
+    ,
     }:
     {
       name = lib.toLower (builtins.replaceStrings [ "." ] [ "_" ] name);
@@ -38,11 +39,13 @@ let
         buildPhase = ''
           runHook preBuild
         ''
-        + lib.concatMapStrings (file: ''
-          nkf -w ${file} \
-            | LC_ALL=C sed 's/coding: [^ ]\{1,\}/coding: utf-8/' \
-            > ${file + suffix}
-        '') (lib.optionals useUtf8 (map lib.escapeShellArg files))
+        + lib.concatMapStrings
+          (file: ''
+            nkf -w ${file} \
+              | LC_ALL=C sed 's/coding: [^ ]\{1,\}/coding: utf-8/' \
+              > ${file + suffix}
+          '')
+          (lib.optionals useUtf8 (map lib.escapeShellArg files))
         + ''
           runHook postBuild
         '';
@@ -50,11 +53,13 @@ let
         installPhase = ''
           runHook preInstall
         ''
-        + lib.concatMapStrings (file: ''
-          install -Dm644 \
-            ${lib.escapeShellArg file} \
-            $out/share/skk/${lib.escapeShellArg (baseNameOf file)}
-        '') (map (file: file + suffix) files)
+        + lib.concatMapStrings
+          (file: ''
+            install -Dm644 \
+              ${lib.escapeShellArg file} \
+              $out/share/skk/${lib.escapeShellArg (baseNameOf file)}
+          '')
+          (map (file: file + suffix) files)
         + ''
           runHook postInstall
         '';

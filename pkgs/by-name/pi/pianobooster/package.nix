@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  ftgl,
-  libGLU,
-  rtmidi,
-  libjack2,
-  fluidsynth,
-  soundfont-fluid,
-  unzip,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsa-lib
+, ftgl
+, libGLU
+, rtmidi
+, libjack2
+, fluidsynth
+, soundfont-fluid
+, unzip
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

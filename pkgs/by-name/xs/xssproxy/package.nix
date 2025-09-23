@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glib,
-  pkg-config,
-  xorg,
-  dbus,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glib
+, pkg-config
+, xorg
+, dbus
+,
 }:
 
 stdenv.mkDerivation rec {

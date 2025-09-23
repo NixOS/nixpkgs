@@ -1,10 +1,9 @@
-testModuleArgs@{
-  config,
-  lib,
-  hostPkgs,
-  nodes,
-  moduleType,
-  ...
+testModuleArgs@{ config
+, lib
+, hostPkgs
+, nodes
+, moduleType
+, ...
 }:
 let
   inherit (lib) mkOption types;
@@ -45,18 +44,21 @@ in
 
     testScriptString =
       if lib.isFunction config.testScript then
-        config.testScript {
-          nodes = lib.mapAttrs (
-            k: v:
-            if v.virtualisation.useNixStoreImage then
-              # prevent infinite recursion when testScript would
-              # reference v's toplevel
-              config.withoutTestScriptReferences.nodesCompat.${k}
-            else
-              # reuse memoized config
-              v
-          ) config.nodesCompat;
-        }
+        config.testScript
+          {
+            nodes = lib.mapAttrs
+              (
+                k: v:
+                  if v.virtualisation.useNixStoreImage then
+                  # prevent infinite recursion when testScript would
+                  # reference v's toplevel
+                    config.withoutTestScriptReferences.nodesCompat.${k}
+                  else
+                  # reuse memoized config
+                    v
+              )
+              config.nodesCompat;
+          }
       else
         config.testScript;
 

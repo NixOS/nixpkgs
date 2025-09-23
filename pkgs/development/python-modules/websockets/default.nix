@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unittestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools,
-  werkzeug,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, unittestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

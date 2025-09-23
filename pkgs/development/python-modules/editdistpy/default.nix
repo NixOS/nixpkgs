@@ -1,18 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  pytestCheckHook,
-
-  pythonOlder,
-
-  setuptools,
-  cython,
-
-  symspellpy,
-  numpy,
-  editdistpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, cython
+, symspellpy
+, numpy
+, editdistpy
+,
 }:
 
 buildPythonPackage rec {

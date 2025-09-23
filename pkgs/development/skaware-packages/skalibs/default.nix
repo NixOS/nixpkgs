@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  skawarePackages,
-  pkgs,
+{ lib
+, stdenv
+, skawarePackages
+, pkgs
+,
 }:
 
 skawarePackages.buildPackage {

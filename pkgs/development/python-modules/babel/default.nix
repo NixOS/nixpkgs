@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # tests
-  freezegun,
-  pytestCheckHook,
-  pytz,
-  tzdata,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, pythonOlder
+, # build-system
+  setuptools
+, # tests
+  freezegun
+, pytestCheckHook
+, pytz
+, tzdata
+,
 }:
 
 buildPythonPackage rec {

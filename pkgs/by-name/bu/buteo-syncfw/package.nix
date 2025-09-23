@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  dbus,
-  doxygen,
-  glib,
-  libsForQt5,
-  pkg-config,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, testers
+, dbus
+, doxygen
+, glib
+, libsForQt5
+, pkg-config
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

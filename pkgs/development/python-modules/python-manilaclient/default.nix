@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pbr,
-  openstackdocstheme,
-  oslo-config,
-  oslo-log,
-  oslo-serialization,
-  oslo-utils,
-  prettytable,
-  requests,
-  setuptools,
-  sphinxHook,
-  sphinxcontrib-programoutput,
-  babel,
-  osc-lib,
-  python-keystoneclient,
-  debtcollector,
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pbr
+, openstackdocstheme
+, oslo-config
+, oslo-log
+, oslo-serialization
+, oslo-utils
+, prettytable
+, requests
+, setuptools
+, sphinxHook
+, sphinxcontrib-programoutput
+, babel
+, osc-lib
+, python-keystoneclient
+, debtcollector
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

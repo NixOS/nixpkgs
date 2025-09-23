@@ -1,13 +1,13 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  repeated-test,
-  setuptools-scm,
-  sphinx,
-  unittestCheckHook,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchPypi
+, mock
+, repeated-test
+, setuptools-scm
+, sphinx
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

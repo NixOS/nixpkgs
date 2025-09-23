@@ -1,8 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-  lib ? pkgs.lib,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+, lib ? pkgs.lib
+,
 }:
 
 let
@@ -11,9 +11,9 @@ let
   makeTest = import ./../make-test-python.nix;
 
   makeAutobackupTest =
-    {
-      package,
-      name ? mkTestName package,
+    { package
+    , name ? mkTestName package
+    ,
     }:
     makeTest {
       name = "${name}-automysqlbackup";

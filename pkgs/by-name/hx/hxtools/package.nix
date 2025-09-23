@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  zstd,
-  libHX,
-  perl,
-  bash,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, zstd
+, libHX
+, perl
+, bash
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

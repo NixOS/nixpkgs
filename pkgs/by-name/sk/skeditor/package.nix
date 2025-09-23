@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  makeDesktopItem,
-  copyDesktopItems,
-  iconConvTools,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, makeDesktopItem
+, copyDesktopItems
+, iconConvTools
+,
 }:
 buildDotnetModule rec {
   pname = "skeditor";

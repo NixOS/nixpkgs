@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  ocamlPackages,
-  menhir,
+{ lib
+, fetchFromGitHub
+, ocamlPackages
+, menhir
+,
 }:
 
 ocamlPackages.buildDunePackage rec {

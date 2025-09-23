@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  makeWrapper,
-  curl,
-  ncurses,
-  rlwrap,
-  xsel,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, makeWrapper
+, curl
+, ncurses
+, rlwrap
+, xsel
+,
 }:
 
 stdenv.mkDerivation {

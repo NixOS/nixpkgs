@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  unzip,
-  util-linux,
-  libusb1,
-  evdi,
-  makeBinaryWrapper,
-  requireFile,
+{ stdenv
+, lib
+, unzip
+, util-linux
+, libusb1
+, evdi
+, makeBinaryWrapper
+, requireFile
+,
 }:
 
 let

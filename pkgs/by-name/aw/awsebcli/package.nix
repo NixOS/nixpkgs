@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  fetchPypi,
-  git,
+{ lib
+, python3
+, fetchFromGitHub
+, fetchPypi
+, git
+,
 }:
 
 let

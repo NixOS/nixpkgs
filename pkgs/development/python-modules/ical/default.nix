@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  emoji,
-  fetchFromGitHub,
-  freezegun,
-  tzdata,
-  pyparsing,
-  pydantic,
-  pytest-benchmark,
-  pytestCheckHook,
-  pythonOlder,
-  python-dateutil,
-  setuptools,
-  syrupy,
+{ lib
+, buildPythonPackage
+, emoji
+, fetchFromGitHub
+, freezegun
+, tzdata
+, pyparsing
+, pydantic
+, pytest-benchmark
+, pytestCheckHook
+, pythonOlder
+, python-dateutil
+, setuptools
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

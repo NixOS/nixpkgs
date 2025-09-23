@@ -1,49 +1,45 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  rustPlatform,
-  symlinkJoin,
-
-  # nativeBuildInputs
-  blueprint-compiler,
-  cargo,
-  makeWrapper,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  protobuf,
-  python3,
-  rustc,
-  wrapGAppsHook4,
-
-  # buildInputs
-  appstream-glib,
-  cairo,
-  cmake,
-  dbus,
-  desktop-file-utils,
-  gdk-pixbuf,
-  gettext,
-  glib,
-  graphene,
-  gtk4,
-  libadwaita,
-  libdrm,
-  libgbm,
-  pango,
-  sqlite,
-  udev,
-  wayland,
-
-  # magpie wrapper
-  addDriverRunpath,
-  libGL,
-  vulkan-loader,
-
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, rustPlatform
+, symlinkJoin
+, # nativeBuildInputs
+  blueprint-compiler
+, cargo
+, makeWrapper
+, libxml2
+, meson
+, ninja
+, pkg-config
+, protobuf
+, python3
+, rustc
+, wrapGAppsHook4
+, # buildInputs
+  appstream-glib
+, cairo
+, cmake
+, dbus
+, desktop-file-utils
+, gdk-pixbuf
+, gettext
+, glib
+, graphene
+, gtk4
+, libadwaita
+, libdrm
+, libgbm
+, pango
+, sqlite
+, udev
+, wayland
+, # magpie wrapper
+  addDriverRunpath
+, libGL
+, vulkan-loader
+, versionCheckHook
+,
 }:
 
 # UPDATE PROCESS:

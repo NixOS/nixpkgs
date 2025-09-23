@@ -1,41 +1,37 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  slack-sdk,
-
-  # optional-dependencies
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  slack-sdk
+, # optional-dependencies
   # - async
-  aiohttp,
-  websockets,
-  # - adapter
-  bottle,
-  chalice,
-  cherrypy,
-  django,
-  falcon,
-  fastapi,
-  flask,
-  gunicorn,
-  moto,
-  pyramid,
-  sanic,
-  sanic-testing,
-  starlette,
-  tornado,
-  uvicorn,
-  websocket-client,
-  werkzeug,
-
-  # tests
-  docker,
-  pytest-asyncio,
-  pytestCheckHook,
+  aiohttp
+, websockets
+, # - adapter
+  bottle
+, chalice
+, cherrypy
+, django
+, falcon
+, fastapi
+, flask
+, gunicorn
+, moto
+, pyramid
+, sanic
+, sanic-testing
+, starlette
+, tornado
+, uvicorn
+, websocket-client
+, werkzeug
+, # tests
+  docker
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

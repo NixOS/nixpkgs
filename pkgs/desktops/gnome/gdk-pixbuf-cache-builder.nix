@@ -1,13 +1,13 @@
-{
-  runCommand,
-  gdk-pixbuf,
-  lib,
-  stdenv,
-  buildPackages,
+{ runCommand
+, gdk-pixbuf
+, lib
+, stdenv
+, buildPackages
+,
 }:
 
-{
-  extraLoaders,
+{ extraLoaders
+,
 }:
 
 let
@@ -19,11 +19,11 @@ let
 in
 
 # Generate the cache file by running gdk-pixbuf-query-loaders for each
-# package and concatenating the results.
+  # package and concatenating the results.
 runCommand "gdk-pixbuf-loaders.cache"
-  {
-    preferLocalBuild = true;
-  }
+{
+  preferLocalBuild = true;
+}
   ''
     (
       for package in ${lib.escapeShellArgs loaderPackages}; do

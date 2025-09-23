@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  uv,
-  uv-build,
-  anyio,
-  pytestCheckHook,
+{ buildPythonPackage
+, uv
+, uv-build
+, anyio
+, pytestCheckHook
+,
 }:
 buildPythonPackage {
   pname = "built-by-uv";

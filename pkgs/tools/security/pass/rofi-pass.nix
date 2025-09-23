@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  unstableGitUpdater,
-  coreutils,
-  util-linuxMinimal,
-  gnugrep,
-  libnotify,
-  pwgen,
-  findutils,
-  gawk,
-  gnused,
-  rofi,
-  # wayland-only deps
-  pass-wayland,
-  wl-clipboard,
-  wtype,
-  # x11-only deps
-  pass,
-  xclip,
-  xdotool,
-  # backend selector
-  backend ? "x11",
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, unstableGitUpdater
+, coreutils
+, util-linuxMinimal
+, gnugrep
+, libnotify
+, pwgen
+, findutils
+, gawk
+, gnused
+, rofi
+, # wayland-only deps
+  pass-wayland
+, wl-clipboard
+, wtype
+, # x11-only deps
+  pass
+, xclip
+, xdotool
+, # backend selector
+  backend ? "x11"
+,
 }:
 
 assert lib.assertOneOf "backend" backend [

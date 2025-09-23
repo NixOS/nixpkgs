@@ -1,9 +1,9 @@
-{
-  stdenv,
-  bubblewrap,
-  mktemp,
-  writeShellScript,
-  bitwig-studio-unwrapped,
+{ stdenv
+, bubblewrap
+, mktemp
+, writeShellScript
+, bitwig-studio-unwrapped
+,
 }:
 stdenv.mkDerivation {
   inherit (bitwig-studio-unwrapped) version;

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchsvn,
-  makeWrapper,
-  unzip,
-  jre,
-  libXxf86vm,
-  extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true",
+{ lib
+, stdenv
+, fetchurl
+, fetchsvn
+, makeWrapper
+, unzip
+, jre
+, libXxf86vm
+, extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true"
+,
 }:
 let
   pname = "josm";

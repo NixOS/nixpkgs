@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  numpy,
-  pip,
-  termcolor,
-  pytestCheckHook,
-  torch,
-  fetchpatch2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, numpy
+, pip
+, termcolor
+, pytestCheckHook
+, torch
+, fetchpatch2
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  runCommand,
-  closureInfo,
-  lib,
+{ runCommand
+, closureInfo
+, lib
+,
 }:
 {
   # The store path of the derivation is given in $path
-  additionalRules ? [ ],
-  # TODO: factorize here some other common paths
+  additionalRules ? [ ]
+, # TODO: factorize here some other common paths
   # that may emerge from use cases.
   baseRules ? [
     "r $path"
@@ -21,8 +21,9 @@
     "r $path/lib64/**"
     # Internal executables
     "ixr $path/libexec/**"
-  ],
-  name ? "",
+  ]
+, name ? ""
+,
 }:
 rootPaths:
 runCommand ("apparmor-closure-rules" + lib.optionalString (name != "") "-${name}") { } ''

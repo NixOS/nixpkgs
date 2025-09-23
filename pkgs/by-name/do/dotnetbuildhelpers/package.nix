@@ -1,7 +1,7 @@
-{
-  runCommand,
-  mono,
-  pkg-config,
+{ runCommand
+, mono
+, pkg-config
+,
 }:
 runCommand "dotnetbuildhelpers" { preferLocalBuild = true; } ''
   target="$out/bin"

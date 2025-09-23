@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpq,
-  openssl,
-  libxcrypt,
-  withPam ? stdenv.hostPlatform.isLinux,
-  pam,
+{ lib
+, stdenv
+, fetchurl
+, libpq
+, openssl
+, libxcrypt
+, withPam ? stdenv.hostPlatform.isLinux
+, pam
+,
 }:
 
 stdenv.mkDerivation rec {

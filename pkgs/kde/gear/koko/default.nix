@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  mkKdeDerivation,
-  pkg-config,
-  qtmultimedia,
-  qtpositioning,
-  qtsvg,
-  exiv2,
+{ fetchurl
+, mkKdeDerivation
+, pkg-config
+, qtmultimedia
+, qtpositioning
+, qtsvg
+, exiv2
+,
 }:
 let
   # URLs snapshotted through

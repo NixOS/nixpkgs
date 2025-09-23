@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  libgit2,
-  openssl,
-  pkg-config,
-  makeWrapper,
-  git,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libgit2
+, openssl
+, pkg-config
+, makeWrapper
+, git
+,
 }:
 
 let

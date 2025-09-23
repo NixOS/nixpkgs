@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  six,
-  voluptuous,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, setuptools
+, six
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  stdenv,
-  cmake,
-  geant4,
+{ stdenv
+, cmake
+, geant4
+,
 }:
 
 {

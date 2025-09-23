@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  gcc,
-  binutils,
-  gnumake,
-  gnugrep,
-  gnused,
-  gnutar,
-  gzip,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, gcc
+, binutils
+, gnumake
+, gnugrep
+, gnused
+, gnutar
+, gzip
+,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) pname meta;
@@ -22,42 +22,42 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version meta;
+{
+  inherit pname version meta;
 
-    nativeBuildInputs = [
-      gcc
-      binutils
-      gnumake
-      gnused
-      gnugrep
-      gnutar
-      gzip
-    ];
+  nativeBuildInputs = [
+    gcc
+    binutils
+    gnumake
+    gnused
+    gnugrep
+    gnutar
+    gzip
+  ];
 
-    passthru.tests.hello-world =
-      result:
-      bash.runCommand "${pname}-simple-program-${version}"
-        {
-          nativeBuildInputs = [
-            gcc
-            binutils
-            result
-          ];
+  passthru.tests.hello-world =
+    result:
+    bash.runCommand "${pname}-simple-program-${version}"
+      {
+        nativeBuildInputs = [
+          gcc
+          binutils
+          result
+        ];
+      }
+      ''
+        cat <<EOF >> test.c
+        #include <stdio.h>
+        int main() {
+          printf("Hello World!\n");
+          return 0;
         }
-        ''
-          cat <<EOF >> test.c
-          #include <stdio.h>
-          int main() {
-            printf("Hello World!\n");
-            return 0;
-          }
-          EOF
-          musl-gcc -o test test.c
-          ./test
-          mkdir $out
-        '';
-  }
+        EOF
+        musl-gcc -o test test.c
+        ./test
+        mkdir $out
+      '';
+}
   ''
     # Unpack
     tar xzf ${src}

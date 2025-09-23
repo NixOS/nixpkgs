@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # optional
-  numpy,
-
-  # tests
-  hypothesis,
-  pytest-cov-stub,
-  pytestCheckHook,
-  sympy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, # build-system
+  cython
+, setuptools
+, # optional
+  numpy
+, # tests
+  hypothesis
+, pytest-cov-stub
+, pytestCheckHook
+, sympy
+,
 }:
 
 buildPythonPackage rec {

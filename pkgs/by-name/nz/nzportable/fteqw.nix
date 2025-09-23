@@ -1,43 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-  pkg-config,
-  makeWrapper,
-  zip,
-  gettext,
-
-  libpng,
-  zlib,
-  gnutls,
-  libGL,
-  xorg,
-  alsa-lib,
-  libjpeg,
-  libogg,
-  libvorbis,
-  libopus,
-  dbus,
-  fontconfig,
-  SDL2,
-  bullet,
-  openexr,
-  sqlite,
-  addDriverRunpath,
-
-  enableEGL ? true,
-  libglvnd,
-
-  enableVulkan ? true,
-  vulkan-headers,
-  vulkan-loader,
-
-  enableWayland ? true,
-  wayland,
-  libxkbcommon,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, makeWrapper
+, zip
+, gettext
+, libpng
+, zlib
+, gnutls
+, libGL
+, xorg
+, alsa-lib
+, libjpeg
+, libogg
+, libvorbis
+, libopus
+, dbus
+, fontconfig
+, SDL2
+, bullet
+, openexr
+, sqlite
+, addDriverRunpath
+, enableEGL ? true
+, libglvnd
+, enableVulkan ? true
+, vulkan-headers
+, vulkan-loader
+, enableWayland ? true
+, wayland
+, libxkbcommon
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzp-fteqw";

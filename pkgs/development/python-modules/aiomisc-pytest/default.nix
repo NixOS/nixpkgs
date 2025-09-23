@@ -1,11 +1,11 @@
-{
-  lib,
-  aiomisc,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  pytest,
-  pythonOlder,
+{ lib
+, aiomisc
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, pytest
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

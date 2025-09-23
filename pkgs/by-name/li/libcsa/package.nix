@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "csa";

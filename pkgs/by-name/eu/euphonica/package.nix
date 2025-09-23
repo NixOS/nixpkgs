@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
-  cairo,
-  dbus,
-  gdk-pixbuf,
-  glib,
-  gtk4,
-  libadwaita,
-  openssl,
-  pango,
-  pipewire,
-  sqlite,
-  desktop-file-utils,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cargo
+, meson
+, ninja
+, pkg-config
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+, cairo
+, dbus
+, gdk-pixbuf
+, glib
+, gtk4
+, libadwaita
+, openssl
+, pango
+, pipewire
+, sqlite
+, desktop-file-utils
+, libxml2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

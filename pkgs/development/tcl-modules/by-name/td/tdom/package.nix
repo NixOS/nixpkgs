@@ -1,10 +1,10 @@
-{
-  lib,
-  mkTclDerivation,
-  fetchzip,
-  expat,
-  gumbo,
-  pkg-config,
+{ lib
+, mkTclDerivation
+, fetchzip
+, expat
+, gumbo
+, pkg-config
+,
 }:
 
 mkTclDerivation rec {

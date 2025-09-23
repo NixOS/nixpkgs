@@ -1,35 +1,31 @@
-{
-  lib,
-  stdenv,
-
-  # sources
-  fetchurl,
-  fetchFromGitHub,
-  fetchDebianPatch,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-  pkg-config,
-
-  # buildInputs
-  curl,
-  freealut,
-  freetype,
-  glew,
-  libb2,
-  libepoxy,
-  libjpeg,
-  libogg,
-  libpng,
-  libvorbis,
-  openal,
-  readline,
-  SDL2,
-  tinyxml,
-
-  # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
-  enableSoundtrack ? false,
+{ lib
+, stdenv
+, # sources
+  fetchurl
+, fetchFromGitHub
+, fetchDebianPatch
+, # nativeBuildInputs
+  cmake
+, ninja
+, pkg-config
+, # buildInputs
+  curl
+, freealut
+, freetype
+, glew
+, libb2
+, libepoxy
+, libjpeg
+, libogg
+, libpng
+, libvorbis
+, openal
+, readline
+, SDL2
+, tinyxml
+, # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+  enableSoundtrack ? false
+,
 }:
 
 let

@@ -2,15 +2,15 @@
 # SPDX-FileCopyrightText: Lily Foster <lily@lily.flowers>
 # Portions of this code are adapted from nixos-cosmic
 # https://github.com/lilyinstarlight/nixos-cosmic
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  libcosmicAppHook,
-  just,
-  openssl,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libcosmicAppHook
+, just
+, openssl
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-ext-tweaks";

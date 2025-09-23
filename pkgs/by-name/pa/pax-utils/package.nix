@@ -1,19 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  buildPackages,
-  docbook_xml_dtd_44,
-  docbook_xsl,
-  withLibcap ? stdenv.hostPlatform.isLinux,
-  libcap,
-  pkg-config,
-  meson,
-  ninja,
-  xmlto,
-  python3,
-
-  gitUpdater,
+{ stdenv
+, lib
+, fetchgit
+, buildPackages
+, docbook_xml_dtd_44
+, docbook_xsl
+, withLibcap ? stdenv.hostPlatform.isLinux
+, libcap
+, pkg-config
+, meson
+, ninja
+, xmlto
+, python3
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

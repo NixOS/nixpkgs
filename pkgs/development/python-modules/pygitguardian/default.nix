@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  marshmallow-dataclass,
-  marshmallow,
-  pdm-backend,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
-  typing-extensions,
-  vcrpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, marshmallow-dataclass
+, marshmallow
+, pdm-backend
+, pytestCheckHook
+, pythonOlder
+, requests
+, responses
+, setuptools
+, typing-extensions
+, vcrpy
+,
 }:
 
 buildPythonPackage rec {

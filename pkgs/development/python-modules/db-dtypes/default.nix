@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  packaging,
-  pandas,
-  pyarrow,
-  pytest8_3CheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, packaging
+, pandas
+, pyarrow
+, pytest8_3CheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

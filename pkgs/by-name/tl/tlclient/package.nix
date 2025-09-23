@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  alsa-lib,
-  libX11,
-  pcsclite,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, alsa-lib
+, libX11
+, pcsclite
+, testers
+,
 }:
 
 let

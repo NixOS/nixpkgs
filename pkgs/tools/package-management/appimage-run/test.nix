@@ -1,10 +1,10 @@
-{
-  runCommand,
-  fetchurl,
-  appimage-run,
-  glibcLocales,
-  file,
-  xdg-utils,
+{ runCommand
+, fetchurl
+, appimage-run
+, glibcLocales
+, file
+, xdg-utils
+,
 }:
 let
   # any AppImage usable on cli, really
@@ -18,15 +18,15 @@ let
   };
 in
 runCommand "appimage-run-tests"
-  {
-    buildInputs = [
-      appimage-run
-      glibcLocales
-      file
-      xdg-utils
-    ];
-    meta.platforms = [ "x86_64-linux" ];
-  }
+{
+  buildInputs = [
+    appimage-run
+    glibcLocales
+    file
+    xdg-utils
+  ];
+  meta.platforms = [ "x86_64-linux" ];
+}
   ''
     export HOME=$(mktemp -d)
     set -x

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyaudio,
-  numpy,
-  libsndfile,
-  replaceVars,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyaudio
+, numpy
+, libsndfile
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  pkg-config,
-  xorgproto,
-  libpthread-stubs,
-  libxcb,
-  xtrans,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkg-config
+, xorgproto
+, libpthread-stubs
+, libxcb
+, xtrans
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libx11";

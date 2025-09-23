@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  python312Packages,
+{ lib
+, fetchFromGitHub
+, python312Packages
+,
 }:
 let
   version = "0.1.3";

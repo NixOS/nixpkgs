@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  gprbuild-boot,
-  which,
-  gnat,
-  xmlada,
+{ lib
+, stdenv
+, gprbuild-boot
+, which
+, gnat
+, xmlada
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,13 +1,13 @@
-{
-  mkDerivation,
-  makeMinimal,
-  bsdSetupHook,
-  openbsdSetupHook,
-  install,
-  rpcgen,
-  mtree,
-  pax,
-  buildPackages,
+{ mkDerivation
+, makeMinimal
+, bsdSetupHook
+, openbsdSetupHook
+, install
+, rpcgen
+, mtree
+, pax
+, buildPackages
+,
 }:
 mkDerivation {
   path = "include";

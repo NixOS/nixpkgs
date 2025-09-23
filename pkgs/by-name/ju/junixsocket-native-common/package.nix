@@ -1,7 +1,7 @@
-{
-  fetchMavenArtifact,
-  junixsocket-common,
-  lib,
+{ fetchMavenArtifact
+, junixsocket-common
+, lib
+,
 }:
 
 fetchMavenArtifact {

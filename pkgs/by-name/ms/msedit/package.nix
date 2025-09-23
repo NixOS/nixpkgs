@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  icu,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, icu
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "msedit";

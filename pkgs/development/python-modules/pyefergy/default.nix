@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
-  iso4217,
-  pythonOlder,
-  pytz,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
+, iso4217
+, pythonOlder
+, pytz
+,
 }:
 
 buildPythonPackage rec {

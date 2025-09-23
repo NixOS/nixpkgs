@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
-  texinfo,
-  texliveMedium,
-  perl,
-  ghostscript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+, texinfo
+, texliveMedium
+, perl
+, ghostscript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

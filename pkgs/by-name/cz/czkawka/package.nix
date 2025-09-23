@@ -1,21 +1,21 @@
-{
-  lib,
-  atk,
-  cairo,
-  callPackage,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  glib,
-  gobject-introspection,
-  gtk4,
-  pango,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  testers,
-  wrapGAppsHook4,
-  xvfb-run,
-  versionCheckHook,
+{ lib
+, atk
+, cairo
+, callPackage
+, fetchFromGitHub
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk4
+, pango
+, pkg-config
+, rustPlatform
+, stdenv
+, testers
+, wrapGAppsHook4
+, xvfb-run
+, versionCheckHook
+,
 }:
 
 let

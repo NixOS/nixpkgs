@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  libevdev,
-  libxkbcommon,
-  meson,
-  ninja,
-  pkg-config,
-  protobuf,
-  protobufc,
-  systemd,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, libevdev
+, libxkbcommon
+, meson
+, ninja
+, pkg-config
+, protobuf
+, protobufc
+, systemd
+, buildPackages
+,
 }:
 let
   munit = fetchFromGitHub {

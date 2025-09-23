@@ -1,26 +1,26 @@
-{
-  mkDerivation,
-  aeson,
-  avh4-lib,
-  base,
-  bimap,
-  binary,
-  bytestring,
-  containers,
-  elm-format-markdown,
-  elm-format-test-lib,
-  fetchgit,
-  hspec,
-  lib,
-  mtl,
-  optparse-applicative,
-  relude,
-  split,
-  tasty,
-  tasty-discover,
-  tasty-hspec,
-  tasty-hunit,
-  text,
+{ mkDerivation
+, aeson
+, avh4-lib
+, base
+, bimap
+, binary
+, bytestring
+, containers
+, elm-format-markdown
+, elm-format-test-lib
+, fetchgit
+, hspec
+, lib
+, mtl
+, optparse-applicative
+, relude
+, split
+, tasty
+, tasty-discover
+, tasty-hspec
+, tasty-hunit
+, text
+,
 }:
 mkDerivation {
   pname = "elm-format-lib";

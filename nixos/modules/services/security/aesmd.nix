@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  pkgs,
-  lib,
-  ...
+{ config
+, options
+, pkgs
+, lib
+, ...
 }:
 let
   inherit (lib)
@@ -34,8 +33,8 @@ let
         ++ optional (proxyType != null) "proxy type = ${proxyType}"
         ++ optional (defaultQuotingType != null) "default quoting type = ${defaultQuotingType}"
         ++
-          # Newline at end of file
-          [ "" ]
+        # Newline at end of file
+        [ "" ]
       )
     );
 in

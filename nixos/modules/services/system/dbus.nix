@@ -1,10 +1,9 @@
 # D-Bus configuration and system bus daemon.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

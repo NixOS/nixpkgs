@@ -1,21 +1,21 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtscript,
-  qtwebkit,
-  qtserialport,
-  qtsvg,
-  qtdeclarative,
-  qtquickcontrols2,
-  alsa-lib,
-  libsndfile,
-  flite,
-  openssl,
-  udev,
-  SDL2,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, qtbase
+, qtscript
+, qtwebkit
+, qtserialport
+, qtsvg
+, qtdeclarative
+, qtquickcontrols2
+, alsa-lib
+, libsndfile
+, flite
+, openssl
+, udev
+, SDL2
+,
 }:
 
 mkDerivation rec {

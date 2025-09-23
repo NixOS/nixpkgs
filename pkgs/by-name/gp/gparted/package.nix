@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  coreutils,
-  gnused,
-  adwaita-icon-theme,
-  gnugrep,
-  parted,
-  glib,
-  libuuid,
-  pkg-config,
-  gtkmm3,
-  libxml2,
-  gpart,
-  hdparm,
-  procps,
-  util-linuxMinimal,
-  polkit,
-  wrapGAppsHook3,
-  replaceVars,
-  mtools,
-  dosfstools,
-  xhost,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, coreutils
+, gnused
+, adwaita-icon-theme
+, gnugrep
+, parted
+, glib
+, libuuid
+, pkg-config
+, gtkmm3
+, libxml2
+, gpart
+, hdparm
+, procps
+, util-linuxMinimal
+, polkit
+, wrapGAppsHook3
+, replaceVars
+, mtools
+, dosfstools
+, xhost
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

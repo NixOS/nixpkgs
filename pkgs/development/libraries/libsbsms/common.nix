@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  pname,
-  version,
-  url,
-  sha256,
-  homepage,
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, pname
+, version
+, url
+, sha256
+, homepage
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml_gettext,
-  camomile,
-  ounit2,
+{ lib
+, buildDunePackage
+, ocaml_gettext
+, camomile
+, ounit2
+,
 }:
 
 buildDunePackage {

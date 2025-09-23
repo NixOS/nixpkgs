@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchCrate,
-  rustPlatform,
-  libz,
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, libz
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  flask,
-  visitor,
-  dominate,
-  pytestCheckHook,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, flask
+, visitor
+, dominate
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  pytestCheckHook,
-  git,
-  testers,
-  mu-repo,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, pytestCheckHook
+, git
+, testers
+, mu-repo
+,
 }:
 
 buildPythonApplication rec {

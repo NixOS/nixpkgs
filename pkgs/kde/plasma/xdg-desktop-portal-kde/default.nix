@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtwayland,
-  cups,
+{ mkKdeDerivation
+, pkg-config
+, qtwayland
+, cups
+,
 }:
 mkKdeDerivation {
   pname = "xdg-desktop-portal-kde";

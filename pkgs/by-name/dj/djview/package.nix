@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  djvulibre,
-  libsForQt5,
-  xorg,
-  libtiff,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, libtool
+, pkg-config
+, djvulibre
+, libsForQt5
+, xorg
+, libtiff
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  nixosTests,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchzip
+, nixosTests
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

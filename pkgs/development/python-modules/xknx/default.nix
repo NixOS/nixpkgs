@@ -1,15 +1,15 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cryptography,
-  ifaddr,
-  freezegun,
-  pytest-asyncio_0,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, cryptography
+, ifaddr
+, freezegun
+, pytest-asyncio_0
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

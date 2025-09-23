@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  gitMinimal,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, gitMinimal
+,
 }:
 let
   target = stdenv.hostPlatform.rust.cargoShortTarget;

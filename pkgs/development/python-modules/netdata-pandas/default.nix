@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pandas,
-  requests,
-  trio,
-  asks,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pandas
+, requests
+, trio
+, asks
+,
 }:
 
 buildPythonPackage rec {

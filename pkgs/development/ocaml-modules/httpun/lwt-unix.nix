@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  httpun-lwt,
-  gluten-lwt-unix,
+{ buildDunePackage
+, httpun-lwt
+, gluten-lwt-unix
+,
 }:
 
 buildDunePackage {

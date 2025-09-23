@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  stdenv,
-  buildPackages,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, stdenv
+, buildPackages
+, installShellFiles
+, nix-update-script
+,
 }:
 let
   version = "0.13.0";

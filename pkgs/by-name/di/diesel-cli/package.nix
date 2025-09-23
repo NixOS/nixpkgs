@@ -1,29 +1,30 @@
-{
-  lib,
-  stdenv,
-  diesel-cli,
-  fetchCrate,
-  installShellFiles,
-  libiconv,
-  libmysqlclient,
-  libpq,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  sqlite,
-  testers,
-  zlib,
-  sqliteSupport ? true,
-  postgresqlSupport ? true,
-  mysqlSupport ? true,
+{ lib
+, stdenv
+, diesel-cli
+, fetchCrate
+, installShellFiles
+, libiconv
+, libmysqlclient
+, libpq
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, sqlite
+, testers
+, zlib
+, sqliteSupport ? true
+, postgresqlSupport ? true
+, mysqlSupport ? true
+,
 }:
 
-assert lib.assertMsg (lib.elem true [
-  postgresqlSupport
-  mysqlSupport
-  sqliteSupport
-]) "support for at least one database must be enabled";
+assert lib.assertMsg
+  (lib.elem true [
+    postgresqlSupport
+    mysqlSupport
+    sqliteSupport
+  ]) "support for at least one database must be enabled";
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";

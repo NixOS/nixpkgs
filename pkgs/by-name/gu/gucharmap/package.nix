@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  intltool,
-  fetchFromGitLab,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  python3,
-  gtk3,
-  pcre2,
-  glib,
-  desktop-file-utils,
-  gtk-doc,
-  wrapGAppsHook3,
-  itstool,
-  libxml2,
-  yelp-tools,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  gsettings-desktop-schemas,
-  unzip,
-  unicode-character-database,
-  unihan-database,
-  runCommand,
-  symlinkJoin,
-  gobject-introspection,
-  gitUpdater,
+{ stdenv
+, lib
+, intltool
+, fetchFromGitLab
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, python3
+, gtk3
+, pcre2
+, glib
+, desktop-file-utils
+, gtk-doc
+, wrapGAppsHook3
+, itstool
+, libxml2
+, yelp-tools
+, docbook_xsl
+, docbook_xml_dtd_45
+, gsettings-desktop-schemas
+, unzip
+, unicode-character-database
+, unihan-database
+, runCommand
+, symlinkJoin
+, gobject-introspection
+, gitUpdater
+,
 }:
 
 let
@@ -107,8 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-    };
+    updateScript = gitUpdater { };
   };
 
   meta = with lib; {

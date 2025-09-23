@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  installShellFiles,
-  makeWrapper,
-  jre,
-  lib,
-  zlib,
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, installShellFiles
+, makeWrapper
+, jre
+, lib
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

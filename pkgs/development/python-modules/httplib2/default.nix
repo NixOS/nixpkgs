@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  mock,
-  pyparsing,
-  pytest-cov-stub,
-  pytest-forked,
-  pytest-randomly,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonAtLeast,
-  six,
+{ lib
+, stdenv
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, mock
+, pyparsing
+, pytest-cov-stub
+, pytest-forked
+, pytest-randomly
+, pytest-timeout
+, pytestCheckHook
+, pythonAtLeast
+, six
+,
 }:
 
 buildPythonPackage rec {

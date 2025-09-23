@@ -1,18 +1,18 @@
-{
-  lib,
-  pythonOlder,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  gmt,
-  numpy,
-  pandas,
-  packaging,
-  xarray,
-  pytest-mpl,
-  ipython,
-  ghostscript,
-  pytestCheckHook,
+{ lib
+, pythonOlder
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, gmt
+, numpy
+, pandas
+, packaging
+, xarray
+, pytest-mpl
+, ipython
+, ghostscript
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

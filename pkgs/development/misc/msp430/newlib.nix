@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  xorg,
-  newlib,
-  msp430GccSupport,
+{ stdenvNoCC
+, xorg
+, newlib
+, msp430GccSupport
+,
 }:
 
 stdenvNoCC.mkDerivation {

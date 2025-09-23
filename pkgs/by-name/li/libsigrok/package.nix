@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  libzip,
-  glib,
-  libusb1,
-  libftdi1,
-  check,
-  libserialport,
-  doxygen,
-  glibmm,
-  python3,
-  hidapi,
-  libieee1284,
-  bluez,
-  sigrok-firmware-fx2lafw,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, libzip
+, glib
+, libusb1
+, libftdi1
+, check
+, libserialport
+, doxygen
+, glibmm
+, python3
+, hidapi
+, libieee1284
+, bluez
+, sigrok-firmware-fx2lafw
+,
 }:
 
 stdenv.mkDerivation {

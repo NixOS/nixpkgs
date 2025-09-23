@@ -1,21 +1,21 @@
-{
-  mkDerivation,
-  base,
-  bytestring,
-  cabal-install-parsers,
-  Cabal-syntax,
-  containers,
-  directory,
-  fetchFromGitea,
-  filepath,
-  generic-lens-lite,
-  lib,
-  mtl,
-  optparse-applicative,
-  parsec,
-  pretty,
-  regex-applicative,
-  frontmatter,
+{ mkDerivation
+, base
+, bytestring
+, cabal-install-parsers
+, Cabal-syntax
+, containers
+, directory
+, fetchFromGitea
+, filepath
+, generic-lens-lite
+, lib
+, mtl
+, optparse-applicative
+, parsec
+, pretty
+, regex-applicative
+, frontmatter
+,
 }:
 mkDerivation rec {
   pname = "changelog-d";

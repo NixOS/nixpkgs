@@ -1,7 +1,7 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
+{ stdenv
+, lib
+, fetchzip
+,
 }:
 
 # Note that plugins are supposed to be installed as:

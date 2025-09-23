@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  SDL2,
-  libserialport,
+{ stdenv
+, fetchFromGitHub
+, lib
+, pkg-config
+, SDL2
+, libserialport
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

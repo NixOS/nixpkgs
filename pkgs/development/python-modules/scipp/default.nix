@@ -1,40 +1,35 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  scikit-build-core,
-  setuptools,
-  setuptools-scm,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-
-  # dependencies
-  numpy,
-  units-llnl,
-
-  # buildInputs
-  boost,
-  eigen,
-  gtest,
-  pybind11,
-  tbb_2022,
-
-  # tests
-  pytestCheckHook,
-  scipy,
-  beautifulsoup4,
-  ipython,
-  matplotlib,
-  pandas,
-  numba,
-  xarray,
-  h5py,
-  hypothesis,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  scikit-build-core
+, setuptools
+, setuptools-scm
+, # nativeBuildInputs
+  cmake
+, ninja
+, # dependencies
+  numpy
+, units-llnl
+, # buildInputs
+  boost
+, eigen
+, gtest
+, pybind11
+, tbb_2022
+, # tests
+  pytestCheckHook
+, scipy
+, beautifulsoup4
+, ipython
+, matplotlib
+, pandas
+, numba
+, xarray
+, h5py
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  betamax,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  requests-toolbelt,
-  setuptools,
+{ lib
+, betamax
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests-toolbelt
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

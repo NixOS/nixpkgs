@@ -1,15 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  pythonOlder,
-
-  unittestCheckHook,
-
-  hatchling,
-
-  khanaa,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, unittestCheckHook
+, hatchling
+, khanaa
+,
 }:
 
 buildPythonPackage rec {

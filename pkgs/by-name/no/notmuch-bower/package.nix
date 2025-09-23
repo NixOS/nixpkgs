@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mercury,
-  pandoc,
-  ncurses,
-  gpgme,
-  coreutils,
-  file,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mercury
+, pandoc
+, ncurses
+, gpgme
+, coreutils
+, file
+,
 }:
 
 stdenv.mkDerivation rec {

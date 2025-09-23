@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  variant ? "macchiato",
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, variant ? "macchiato"
+,
 }:
 
 let

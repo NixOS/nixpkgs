@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  unittestCheckHook,
-  hanzidentifier,
-  zhon,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, unittestCheckHook
+, hanzidentifier
+, zhon
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  vscode-utils,
-  autoPatchelfHook,
-  icu,
-  openssl,
-  libz,
-  glibc,
-  libkrb5,
-  coreutils,
-  jq,
-  patchelf,
+{ lib
+, stdenv
+, fetchzip
+, vscode-utils
+, autoPatchelfHook
+, icu
+, openssl
+, libz
+, glibc
+, libkrb5
+, coreutils
+, jq
+, patchelf
+,
 }:
 let
   extInfo = (
@@ -32,8 +32,7 @@ let
         arch = "darwin-arm64";
         hash = "sha256-fmWlcLVUUY6Ekx5mtsBYFrYFdXpSUg8PctDBUovETV4=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
   );
 
   # Get url from runtimeDependencies in package.json

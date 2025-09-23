@@ -1,10 +1,10 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  pytestCheckHook,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

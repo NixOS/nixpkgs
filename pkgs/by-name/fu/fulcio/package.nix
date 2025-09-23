@@ -1,16 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-
-  # required for completion and cross-compilation
-  installShellFiles,
-  buildPackages,
-  stdenv,
-
-  # required for testing
-  testers,
-  fulcio,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, # required for completion and cross-compilation
+  installShellFiles
+, buildPackages
+, stdenv
+, # required for testing
+  testers
+, fulcio
+,
 }:
 
 buildGoModule rec {

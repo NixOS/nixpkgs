@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  psutil,
-  pytestCheckHook,
-  pyyaml,
-  pyzmq,
-  tornado,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, psutil
+, pytestCheckHook
+, pyyaml
+, pyzmq
+, tornado
+,
 }:
 
 buildPythonPackage rec {

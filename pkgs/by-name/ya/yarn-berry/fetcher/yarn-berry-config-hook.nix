@@ -1,12 +1,13 @@
-{
-  makeSetupHook,
-  yarn-berry-offline,
-  srcOnly,
-  nodejs,
-  diffutils,
+{ makeSetupHook
+, yarn-berry-offline
+, srcOnly
+, nodejs
+, diffutils
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "yarn-berry-config-hook";
   substitutions = {
     # Specify `diff` by abspath to ensure that the user's build

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  autoPatchelfHook,
-  fetchurl,
-  makeWrapper,
-  jre,
-  fmt_9,
-  libusb1,
+{ stdenv
+, lib
+, autoPatchelfHook
+, fetchurl
+, makeWrapper
+, jre
+, fmt_9
+, libusb1
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "kryoflux";

@@ -1,31 +1,31 @@
-{
-  lib,
-  aiohttp,
-  aioitertools,
-  buildPythonPackage,
-  django,
-  falcon,
-  fastapi,
-  fetchFromGitHub,
-  flask,
-  httpx,
-  isodate,
-  jsonschema,
-  jsonschema-path,
-  more-itertools,
-  multidict,
-  openapi-schema-validator,
-  openapi-spec-validator,
-  parse,
-  poetry-core,
-  pytest-aiohttp,
-  pytest-cov-stub,
-  pytestCheckHook,
-  responses,
-  requests,
-  starlette,
-  webob,
-  werkzeug,
+{ lib
+, aiohttp
+, aioitertools
+, buildPythonPackage
+, django
+, falcon
+, fastapi
+, fetchFromGitHub
+, flask
+, httpx
+, isodate
+, jsonschema
+, jsonschema-path
+, more-itertools
+, multidict
+, openapi-schema-validator
+, openapi-spec-validator
+, parse
+, poetry-core
+, pytest-aiohttp
+, pytest-cov-stub
+, pytestCheckHook
+, responses
+, requests
+, starlette
+, webob
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

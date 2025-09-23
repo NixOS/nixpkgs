@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # build
-  cmake,
-  pkg-config,
-
-  # runtime
-  expat,
-  ipu6-camera-bins,
-  libtool,
-  gst_all_1,
-  libdrm,
-
-  # Pick one of
+{ lib
+, stdenv
+, fetchFromGitHub
+, # build
+  cmake
+, pkg-config
+, # runtime
+  expat
+, ipu6-camera-bins
+, libtool
+, gst_all_1
+, libdrm
+, # Pick one of
   # - ipu6 (Tiger Lake)
   # - ipu6ep (Alder Lake)
   # - ipu6epmtl (Meteor Lake)
-  ipuVersion ? "ipu6",
+  ipuVersion ? "ipu6"
+,
 }:
 let
   ipuTarget =
@@ -26,8 +23,7 @@ let
       "ipu6" = "ipu_tgl";
       "ipu6ep" = "ipu_adl";
       "ipu6epmtl" = "ipu_mtl";
-    }
-    .${ipuVersion};
+    }.${ipuVersion};
 in
 stdenv.mkDerivation {
   pname = "${ipuVersion}-camera-hal";

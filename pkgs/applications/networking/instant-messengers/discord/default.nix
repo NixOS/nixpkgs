@@ -1,9 +1,9 @@
-{
-  branch ? "stable",
-  callPackage,
-  fetchurl,
-  lib,
-  stdenv,
+{ branch ? "stable"
+, callPackage
+, fetchurl
+, lib
+, stdenv
+,
 }:
 let
   versions =
@@ -91,15 +91,15 @@ let
     builtins.mapAttrs
       (
         _: value:
-        callPackage package (
-          value
-          // {
-            inherit src version branch;
-            meta = meta // {
-              mainProgram = value.binaryName;
-            };
-          }
-        )
+          callPackage package (
+            value
+            // {
+              inherit src version branch;
+              meta = meta // {
+                mainProgram = value.binaryName;
+              };
+            }
+          )
       )
       {
         stable = {

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  libglut,
-  libXmu,
-  libXi,
-  libX11,
-  libICE,
-  libGLU,
-  libGL,
-  libSM,
-  libXext,
-  glibc,
-  lua,
-  luabind,
-  glfw,
-  libgccjit,
-  dialog,
-  makeWrapper,
+{ stdenv
+, lib
+, fetchzip
+, libglut
+, libXmu
+, libXi
+, libX11
+, libICE
+, libGLU
+, libGL
+, libSM
+, libXext
+, glibc
+, lua
+, luabind
+, glfw
+, libgccjit
+, dialog
+, makeWrapper
+,
 }:
 let
   lpath = lib.makeLibraryPath [
@@ -43,17 +43,19 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=amd64";
-        extension = "zip";
-        sha256 = "0rrnkqkhlsjclif5cjbf17qz64vs95ja49xarxjvq54wb4jhbs4l";
-      }
+      fetchzip
+        {
+          url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=amd64";
+          extension = "zip";
+          sha256 = "0rrnkqkhlsjclif5cjbf17qz64vs95ja49xarxjvq54wb4jhbs4l";
+        }
     else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchzip {
-        url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=i386";
-        extension = "zip";
-        sha256 = "0n2yyxzw0arkc70f0qli4n5chdlh9vc7aqizk4v7825mcglhwlyh";
-      }
+      fetchzip
+        {
+          url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=i386";
+          extension = "zip";
+          sha256 = "0n2yyxzw0arkc70f0qli4n5chdlh9vc7aqizk4v7825mcglhwlyh";
+        }
     else
       throw "Unsupported architecture";
 

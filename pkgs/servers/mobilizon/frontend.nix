@@ -1,8 +1,8 @@
-{
-  lib,
-  callPackage,
-  buildNpmPackage,
-  imagemagick,
+{ lib
+, callPackage
+, buildNpmPackage
+, imagemagick
+,
 }:
 
 let

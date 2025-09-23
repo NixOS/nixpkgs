@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  gevent,
-  pytestCheckHook,
-  setuptools,
-  pythonOlder,
-  watchdog,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gevent
+, pytestCheckHook
+, setuptools
+, pythonOlder
+, watchdog
+,
 }:
 
 buildPythonPackage rec {

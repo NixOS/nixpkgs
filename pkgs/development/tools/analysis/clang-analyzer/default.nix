@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  clang,
-  llvmPackages,
-  perl,
-  makeWrapper,
-  python3,
+{ lib
+, stdenv
+, clang
+, llvmPackages
+, perl
+, makeWrapper
+, python3
+,
 }:
 
 stdenv.mkDerivation {

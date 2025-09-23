@@ -1,40 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  pkgsHostHost,
-  pkg-config,
-  which,
-  makeWrapper,
-  zlib,
-  bzip2,
-  brotli,
-  libpng,
-  gnumake,
-  glib,
-
-  # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkgsHostHost
+, pkg-config
+, which
+, makeWrapper
+, zlib
+, bzip2
+, brotli
+, libpng
+, gnumake
+, glib
+, # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
   # This option allows it to be disabled. See http://www.freetype.org/patents.html.
-  useEncumberedCode ? true,
-
-  # for passthru.tests
-  cairo,
-  fontforge,
-  ghostscript,
-  graphicsmagick,
-  gtk3,
-  harfbuzz,
-  imagemagick,
-  pango,
-  poppler,
-  python3,
-  qt5,
-  texmacs,
-  ttfautohint,
-  testers,
-  __flattenIncludeHackHook,
+  useEncumberedCode ? true
+, # for passthru.tests
+  cairo
+, fontforge
+, ghostscript
+, graphicsmagick
+, gtk3
+, harfbuzz
+, imagemagick
+, pango
+, poppler
+, python3
+, qt5
+, texmacs
+, ttfautohint
+, testers
+, __flattenIncludeHackHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  ruby,
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  nixosTests,
+{ ruby
+, lib
+, bundlerApp
+, bundlerUpdateScript
+, nixosTests
+,
 }:
 
 bundlerApp {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
-  libxkbcommon,
-  makeWrapper,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  vulkan-loader,
-  wayland,
-  xorg,
-  alsa-lib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+, libxkbcommon
+, makeWrapper
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, vulkan-loader
+, wayland
+, xorg
+, alsa-lib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

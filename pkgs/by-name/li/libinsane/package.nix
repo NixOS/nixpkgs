@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  meson,
-  ninja,
-  fetchFromGitLab,
-  pkg-config,
-  glib,
-  docbook_xsl,
-  sane-backends,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  valgrind,
-  doxygen,
-  cunit,
+{ stdenv
+, lib
+, meson
+, ninja
+, fetchFromGitLab
+, pkg-config
+, glib
+, docbook_xsl
+, sane-backends
+, gobject-introspection
+, vala
+, gtk-doc
+, valgrind
+, doxygen
+, cunit
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xdg-utils,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xdg-utils
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

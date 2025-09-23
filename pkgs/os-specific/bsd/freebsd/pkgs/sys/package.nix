@@ -1,29 +1,29 @@
-{
-  lib,
-  mkDerivation,
-  writeText,
-  stdenv,
-  buildPackages,
-  freebsd-lib,
-  patchesRoot,
-  filterSource,
-  applyPatches,
-  baseConfig ? "GENERIC",
-  extraConfig ? null,
-  extraFlags ? { },
-  bsdSetupHook,
-  mandoc,
-  groff,
-  gawk,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  config,
-  rpcgen,
-  file2c,
-  bintrans,
-  xargs-j,
-  kldxref,
+{ lib
+, mkDerivation
+, writeText
+, stdenv
+, buildPackages
+, freebsd-lib
+, patchesRoot
+, filterSource
+, applyPatches
+, baseConfig ? "GENERIC"
+, extraConfig ? null
+, extraFlags ? { }
+, bsdSetupHook
+, mandoc
+, groff
+, gawk
+, freebsdSetupHook
+, makeMinimal
+, install
+, config
+, rpcgen
+, file2c
+, bintrans
+, xargs-j
+, kldxref
+,
 }:
 let
   baseConfigFile =

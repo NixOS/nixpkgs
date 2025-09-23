@@ -1,15 +1,15 @@
-{
-  lib,
-  zip,
-  love,
-  imagemagick,
-  strip-nondeterminism,
-  copyDesktopItems,
-  fetchFromGitHub,
-  fetchpatch2,
-  makeDesktopItem,
-  makeBinaryWrapper,
-  stdenv,
+{ lib
+, zip
+, love
+, imagemagick
+, strip-nondeterminism
+, copyDesktopItems
+, fetchFromGitHub
+, fetchpatch2
+, makeDesktopItem
+, makeBinaryWrapper
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

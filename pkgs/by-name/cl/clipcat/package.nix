@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  protobuf,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, protobuf
+, installShellFiles
+, writableTmpDirAsHomeHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  buildNpmPackage,
-  nodejs,
-  ffmpeg-full,
-  nunicode,
-  util-linux,
-  python3,
-  getopt,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, buildNpmPackage
+, nodejs
+, ffmpeg-full
+, nunicode
+, util-linux
+, python3
+, getopt
+, nixosTests
+,
 }:
 
 let

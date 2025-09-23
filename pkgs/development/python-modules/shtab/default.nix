@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  pytest-timeout,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  bashInteractive,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, pytest-timeout
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, bashInteractive
+,
 }:
 
 buildPythonPackage rec {

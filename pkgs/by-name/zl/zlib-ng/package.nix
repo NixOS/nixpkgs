@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtest,
-  withZlibCompat ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtest
+, withZlibCompat ? false
+,
 }:
 
 stdenv.mkDerivation rec {

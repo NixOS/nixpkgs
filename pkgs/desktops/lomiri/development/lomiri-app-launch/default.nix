@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  cmake,
-  cmake-extras,
-  curl,
-  dbus,
-  dbus-test-runner,
-  dpkg,
-  gobject-introspection,
-  gtest,
-  json-glib,
-  libxkbcommon,
-  lomiri-api,
-  lttng-ust,
-  pkg-config,
-  properties-cpp,
-  python3,
-  systemd,
-  ubports-click,
-  validatePkgConfig,
-  zeitgeist,
-  withDocumentation ? true,
-  doxygen,
-  python3Packages,
-  sphinx,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, cmake
+, cmake-extras
+, curl
+, dbus
+, dbus-test-runner
+, dpkg
+, gobject-introspection
+, gtest
+, json-glib
+, libxkbcommon
+, lomiri-api
+, lttng-ust
+, pkg-config
+, properties-cpp
+, python3
+, systemd
+, ubports-click
+, validatePkgConfig
+, zeitgeist
+, withDocumentation ? true
+, doxygen
+, python3Packages
+, sphinx
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

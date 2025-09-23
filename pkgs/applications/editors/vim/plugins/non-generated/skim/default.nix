@@ -1,6 +1,6 @@
-{
-  vimUtils,
-  skim,
+{ vimUtils
+, skim
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "skim";

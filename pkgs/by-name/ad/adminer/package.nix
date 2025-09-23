@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  php,
-  nix-update-script,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, php
+, nix-update-script
+, unzip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

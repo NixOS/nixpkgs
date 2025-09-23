@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  spirv-headers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, spirv-headers
+,
 }:
 
 stdenv.mkDerivation rec {

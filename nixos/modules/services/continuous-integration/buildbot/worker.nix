@@ -1,10 +1,9 @@
 # NixOS module for Buildbot Worker.
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   cfg = config.services.buildbot-worker;

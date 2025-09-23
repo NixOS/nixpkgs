@@ -1,17 +1,17 @@
-{
-  lib,
-  astor,
-  asttokens,
-  asyncstdlib,
-  buildPythonPackage,
-  deal,
-  dpcontracts,
-  fetchFromGitHub,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, astor
+, asttokens
+, asyncstdlib
+, buildPythonPackage
+, deal
+, dpcontracts
+, fetchFromGitHub
+, numpy
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  habitipy,
-  hatch-regex-commit,
-  hatchling,
-  mashumaro,
-  orjson,
-  pillow,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  syrupy,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, habitipy
+, hatch-regex-commit
+, hatchling
+, mashumaro
+, orjson
+, pillow
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  scons,
-  ragel,
-  gengetopt,
-  pkg-config,
-  libuv,
-  openfecSupport ? true,
-  openfec,
-  speexdsp,
-  libunwindSupport ? lib.meta.availableOn stdenv.hostPlatform libunwind,
-  libunwind,
-  pulseaudioSupport ? true,
-  libpulseaudio,
-  opensslSupport ? true,
-  openssl,
-  soxSupport ? true,
-  sox,
-  libsndfileSupport ? true,
-  libsndfile,
+{ stdenv
+, lib
+, fetchFromGitHub
+, scons
+, ragel
+, gengetopt
+, pkg-config
+, libuv
+, openfecSupport ? true
+, openfec
+, speexdsp
+, libunwindSupport ? lib.meta.availableOn stdenv.hostPlatform libunwind
+, libunwind
+, pulseaudioSupport ? true
+, libpulseaudio
+, opensslSupport ? true
+, openssl
+, soxSupport ? true
+, sox
+, libsndfileSupport ? true
+, libsndfile
+,
 }:
 
 stdenv.mkDerivation rec {

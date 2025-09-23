@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -179,18 +178,19 @@ in
       serviceConfig.EnvironmentFile = "";
 
       environment.EARLYOOM_ARGS =
-        lib.cli.toGNUCommandLineShell { } {
-          m =
-            "${toString cfg.freeMemThreshold}"
-            + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}";
-          s =
-            "${toString cfg.freeSwapThreshold}"
-            + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}";
-          r = "${toString cfg.reportInterval}";
-          d = cfg.enableDebugInfo;
-          n = cfg.enableNotifications;
-          N = if cfg.killHook != null then cfg.killHook else null;
-        }
+        lib.cli.toGNUCommandLineShell { }
+          {
+            m =
+              "${toString cfg.freeMemThreshold}"
+              + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}";
+            s =
+              "${toString cfg.freeSwapThreshold}"
+              + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}";
+            r = "${toString cfg.reportInterval}";
+            d = cfg.enableDebugInfo;
+            n = cfg.enableNotifications;
+            N = if cfg.killHook != null then cfg.killHook else null;
+          }
         + " "
         + lib.escapeShellArgs cfg.extraArgs;
     };

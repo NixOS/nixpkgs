@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  lazygit,
-  testers,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, lazygit
+, testers
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "lazygit";

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  openpam,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, openpam
+,
 }:
 
 buildGoModule {

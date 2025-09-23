@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  SDL2_image,
-  libX11,
-  rtaudio,
-  rtmidi,
-  glew,
-  alsa-lib,
-  angelscript,
-  cmake,
-  pkg-config,
-  zenity,
-  withEditor ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, SDL2_image
+, libX11
+, rtaudio
+, rtmidi
+, glew
+, alsa-lib
+, angelscript
+, cmake
+, pkg-config
+, zenity
+, withEditor ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "theforceengine";

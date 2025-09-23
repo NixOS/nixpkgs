@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk2,
-  glib,
-  pkg-config,
-  libGLU,
-  libGL,
-  wxGTK32,
-  libX11,
-  xorgproto,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchurl
+, gtk2
+, glib
+, pkg-config
+, libGLU
+, libGL
+, wxGTK32
+, libX11
+, xorgproto
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation rec {

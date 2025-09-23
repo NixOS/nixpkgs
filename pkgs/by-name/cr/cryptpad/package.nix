@@ -1,16 +1,16 @@
-{
-  bash,
-  buildNpmPackage,
-  coreutils,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  lib,
-  makeBinaryWrapper,
-  nixosTests,
-  nodejs,
-  rdfind,
-  unzip,
+{ bash
+, buildNpmPackage
+, coreutils
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, lib
+, makeBinaryWrapper
+, nixosTests
+, nodejs
+, rdfind
+, unzip
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  replaceVars,
-  ffmpeg,
-  installShellFiles,
+{ lib
+, python3
+, fetchPypi
+, replaceVars
+, ffmpeg
+, installShellFiles
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

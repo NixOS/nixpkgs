@@ -1,17 +1,17 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  file,
-  pkg-config,
-  autoconf,
-  glib,
-  dbus-glib,
-  json-glib,
-  gtk2,
-  libindicator-gtk2,
-  libdbusmenu-gtk2,
-  libappindicator-gtk2,
+{ stdenv
+, fetchurl
+, lib
+, file
+, pkg-config
+, autoconf
+, glib
+, dbus-glib
+, json-glib
+, gtk2
+, libindicator-gtk2
+, libdbusmenu-gtk2
+, libappindicator-gtk2
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  # dependencies
-  cached-property,
-  ckzg,
-  eth-bloom,
-  eth-keys,
-  eth-typing,
-  eth-utils,
-  lru-dict,
-  pydantic,
-  py-ecc,
-  rlp,
-  trie,
-  # nativeCheckInputs
-  factory-boy,
-  hypothesis,
-  pytestCheckHook,
-  pytest-xdist,
-  eth-hash,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # dependencies
+  cached-property
+, ckzg
+, eth-bloom
+, eth-keys
+, eth-typing
+, eth-utils
+, lru-dict
+, pydantic
+, py-ecc
+, rlp
+, trie
+, # nativeCheckInputs
+  factory-boy
+, hypothesis
+, pytestCheckHook
+, pytest-xdist
+, eth-hash
+,
 }:
 
 buildPythonPackage rec {

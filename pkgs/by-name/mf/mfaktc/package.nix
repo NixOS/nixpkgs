@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  autoAddDriverRunpath,
-  cudaPackages,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, stdenv
+, autoAddDriverRunpath
+, cudaPackages
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

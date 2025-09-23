@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  perl,
-  udev,
-  openssl,
-  gitMinimal,
-  writableTmpDirAsHomeHook,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, perl
+, udev
+, openssl
+, gitMinimal
+, writableTmpDirAsHomeHook
+, installShellFiles
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

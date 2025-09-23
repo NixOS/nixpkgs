@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qt5compat,
-  qttools,
-  acl,
-  attr,
+{ mkKdeDerivation
+, qt5compat
+, qttools
+, acl
+, attr
+,
 }:
 mkKdeDerivation {
   pname = "kio";

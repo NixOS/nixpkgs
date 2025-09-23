@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch2,
-  makeWrapper,
-  haskellPackages,
-  haskell,
-  which,
-  swi-prolog,
-  rlwrap,
-  tk,
-  curl,
-  git,
-  unzip,
-  gnutar,
-  coreutils,
-  sqlite,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, makeWrapper
+, haskellPackages
+, haskell
+, which
+, swi-prolog
+, rlwrap
+, tk
+, curl
+, git
+, unzip
+, gnutar
+, coreutils
+, sqlite
+,
 }:
 
 let

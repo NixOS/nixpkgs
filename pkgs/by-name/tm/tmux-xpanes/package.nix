@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

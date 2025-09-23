@@ -1,34 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build deps
-  setuptools,
-  docutils,
-
-  # dependencies
-  zipp,
-  importlib-metadata,
-  flask,
-  flask-compress,
-  flask-xml-rpc-re,
-  flask-restx,
-  requests,
-  ipy,
-  # indirect deps omitted: jinja2/markupsafe/werkzeug,
-  parsedatetime,
-  psutil,
-  psycopg2,
-  pyparsing,
-  python-dateutil,
-  pytz,
-  pyjwt,
-  tornado,
-
-  # optional deps
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build deps
+  setuptools
+, docutils
+, # dependencies
+  zipp
+, importlib-metadata
+, flask
+, flask-compress
+, flask-xml-rpc-re
+, flask-restx
+, requests
+, ipy
+, # indirect deps omitted: jinja2/markupsafe/werkzeug,
+  parsedatetime
+, psutil
+, psycopg2
+, pyparsing
+, python-dateutil
+, pytz
+, pyjwt
+, tornado
+, # optional deps
   ## ldap
-  python-ldap,
+  python-ldap
+,
 }:
 
 buildPythonPackage rec {

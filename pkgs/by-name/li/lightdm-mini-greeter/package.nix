@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  linkFarm,
-  lightdm-mini-greeter,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  lightdm,
-  gtk3,
-  glib,
-  gdk-pixbuf,
-  wrapGAppsHook3,
-  librsvg,
+{ lib
+, stdenv
+, linkFarm
+, lightdm-mini-greeter
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, lightdm
+, gtk3
+, glib
+, gdk-pixbuf
+, wrapGAppsHook3
+, librsvg
+,
 }:
 
 stdenv.mkDerivation rec {

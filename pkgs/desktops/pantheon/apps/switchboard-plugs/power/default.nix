@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  libadwaita,
-  libgee,
-  gettext,
-  gnome-settings-daemon,
-  granite7,
-  gtk4,
-  glib,
-  dbus,
-  polkit,
-  switchboard,
-  wingpanel-indicator-power,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, libadwaita
+, libgee
+, gettext
+, gnome-settings-daemon
+, granite7
+, gtk4
+, glib
+, dbus
+, polkit
+, switchboard
+, wingpanel-indicator-power
+,
 }:
 
 stdenv.mkDerivation rec {

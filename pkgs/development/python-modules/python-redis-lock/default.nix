@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  setuptools,
-  eventlet,
-  fetchPypi,
-  fetchpatch,
-  gevent,
-  pkgs,
-  process-tests,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
-  django-redis,
+{ lib
+, stdenv
+, buildPythonPackage
+, setuptools
+, eventlet
+, fetchPypi
+, fetchpatch
+, gevent
+, pkgs
+, process-tests
+, pytestCheckHook
+, pythonOlder
+, redis
+, django-redis
+,
 }:
 
 buildPythonPackage rec {

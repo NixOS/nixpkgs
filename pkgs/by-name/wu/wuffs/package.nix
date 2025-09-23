@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  makeBinaryWrapper,
-  replaceVars,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, makeBinaryWrapper
+, replaceVars
+, testers
+,
 }:
 let
   compiler =

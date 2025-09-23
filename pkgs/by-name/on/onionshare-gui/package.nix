@@ -1,12 +1,12 @@
-{
-  python3Packages,
-  onionshare,
-  replaceVars,
-  meek,
-  obfs4,
-  snowflake,
-  tor,
-  qt5,
+{ python3Packages
+, onionshare
+, replaceVars
+, meek
+, obfs4
+, snowflake
+, tor
+, qt5
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "onionshare";

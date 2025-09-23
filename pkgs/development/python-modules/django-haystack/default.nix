@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  elasticsearch,
-  fetchPypi,
-  geopy,
-  packaging,
-  pysolr,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  setuptools-scm,
-  setuptools,
-  stdenv,
-  whoosh,
+{ lib
+, buildPythonPackage
+, django
+, elasticsearch
+, fetchPypi
+, geopy
+, packaging
+, pysolr
+, python-dateutil
+, pythonOlder
+, requests
+, setuptools-scm
+, setuptools
+, stdenv
+, whoosh
+,
 }:
 
 buildPythonPackage rec {

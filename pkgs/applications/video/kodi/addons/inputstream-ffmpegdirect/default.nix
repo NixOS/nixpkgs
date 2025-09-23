@@ -1,11 +1,11 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  kodi,
-  bzip2,
-  zlib,
+{ lib
+, rel
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, kodi
+, bzip2
+, zlib
+,
 }:
 
 buildKodiBinaryAddon rec {

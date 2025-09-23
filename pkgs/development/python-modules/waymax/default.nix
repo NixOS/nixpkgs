@@ -1,22 +1,22 @@
-{
-  absl-py,
-  buildPythonPackage,
-  chex,
-  dm-env,
-  dm-tree,
-  fetchFromGitHub,
-  flax,
-  immutabledict,
-  jax,
-  lib,
-  matplotlib,
-  mediapy,
-  numpy,
-  pillow,
-  pytestCheckHook,
-  setuptools,
-  tensorflow,
-  tqdm,
+{ absl-py
+, buildPythonPackage
+, chex
+, dm-env
+, dm-tree
+, fetchFromGitHub
+, flax
+, immutabledict
+, jax
+, lib
+, matplotlib
+, mediapy
+, numpy
+, pillow
+, pytestCheckHook
+, setuptools
+, tensorflow
+, tqdm
+,
 }:
 
 buildPythonPackage {

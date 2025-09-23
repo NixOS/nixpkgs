@@ -1,13 +1,13 @@
-{
-  lib,
-  aiosqlite,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  six,
-  sqlalchemy,
-  pytestCheckHook,
+{ lib
+, aiosqlite
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pythonOlder
+, six
+, sqlalchemy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

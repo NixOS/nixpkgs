@@ -1,6 +1,6 @@
-{
-  python3,
-  fetchFromGitHub,
+{ python3
+, fetchFromGitHub
+,
 }:
 
 let

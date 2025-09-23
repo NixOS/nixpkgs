@@ -1,32 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  installShellFiles,
-  wheel,
-  setuptools,
-
-  # docs
-  sphinx,
-  sphinx-issues,
-
-  # checks
-  freezegun,
-  git,
-  mock,
-  scripttest,
-  virtualenv,
-  pretend,
-  proxy-py,
-  pytestCheckHook,
-  tomli-w,
-  werkzeug,
-
-  # coupled downstream dependencies
-  pip-tools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, # build-system
+  installShellFiles
+, wheel
+, setuptools
+, # docs
+  sphinx
+, sphinx-issues
+, # checks
+  freezegun
+, git
+, mock
+, scripttest
+, virtualenv
+, pretend
+, proxy-py
+, pytestCheckHook
+, tomli-w
+, werkzeug
+, # coupled downstream dependencies
+  pip-tools
+,
 }:
 
 let

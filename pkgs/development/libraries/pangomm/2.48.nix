@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  python3,
-  pango,
-  glibmm_2_68,
-  cairomm_1_16,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, python3
+, pango
+, glibmm_2_68
+, cairomm_1_16
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  qmake,
-  qttools,
-  qtbase,
-  qtserialport,
-  qtconnectivity,
-  qtcharts,
-  wrapQtAppsHook,
-  fetchpatch,
+{ stdenv
+, lib
+, fetchFromGitea
+, qmake
+, qttools
+, qtbase
+, qtserialport
+, qtconnectivity
+, qtcharts
+, wrapQtAppsHook
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

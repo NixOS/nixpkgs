@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  fcitx5,
-  anthy,
-  gettext,
-  zstd,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, extra-cmake-modules
+, pkg-config
+, fcitx5
+, anthy
+, gettext
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  testers,
-  mdbook-linkcheck,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, testers
+, mdbook-linkcheck
+,
 }:
 
 rustPlatform.buildRustPackage rec {

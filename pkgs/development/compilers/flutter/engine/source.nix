@@ -1,22 +1,22 @@
-{
-  lib,
-  callPackage,
-  fetchgit,
-  tools ? null,
-  curl,
-  pkg-config,
-  git,
-  python3,
-  runCommand,
-  writeText,
-  cacert,
-  flutterVersion,
-  version,
-  hashes,
-  url,
-  hostPlatform,
-  targetPlatform,
-  buildPlatform,
+{ lib
+, callPackage
+, fetchgit
+, tools ? null
+, curl
+, pkg-config
+, git
+, python3
+, runCommand
+, writeText
+, cacert
+, flutterVersion
+, version
+, hashes
+, url
+, hostPlatform
+, targetPlatform
+, buildPlatform
+,
 }@pkgs:
 let
   target-constants = callPackage ./constants.nix { platform = targetPlatform; };
@@ -26,66 +26,66 @@ let
   boolOption = value: if value then "True" else "False";
 in
 runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPlatform.system}"
-  {
-    pname = "flutter-engine-source";
-    inherit version;
+{
+  pname = "flutter-engine-source";
+  inherit version;
 
-    inherit (tools) depot_tools;
+  inherit (tools) depot_tools;
 
-    nativeBuildInputs = [
-      curl
-      pkg-config
-      git
-      tools.cipd
-      (python3.withPackages (
-        ps: with ps; [
-          httplib2
-          six
-        ]
-      ))
-    ];
-
-    gclient = writeText "flutter-engine-${version}.gclient" ''
-      solutions = [{
-        "managed": False,
-        "name": "${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") "engine/"}src/flutter",
-        "url": "${url}",
-        "custom_vars": {
-          "download_fuchsia_deps": False,
-          "download_android_deps": False,
-          "download_linux_deps": ${boolOption targetPlatform.isLinux},
-          "setup_githooks": False,
-          "download_esbuild": False,
-          "download_dart_sdk": False,
-          "host_cpu": "${build-constants.alt-arch}",
-          "host_os": "${build-constants.alt-os}",
-        },
-      }]
-
-      target_os_only = True
-      target_os = [
-        "${target-constants.alt-os}"
+  nativeBuildInputs = [
+    curl
+    pkg-config
+    git
+    tools.cipd
+    (python3.withPackages (
+      ps: with ps; [
+        httplib2
+        six
       ]
+    ))
+  ];
 
-      target_cpu_only = True
-      target_cpu = [
-        "${target-constants.alt-arch}"
-      ]
-    '';
+  gclient = writeText "flutter-engine-${version}.gclient" ''
+    solutions = [{
+      "managed": False,
+      "name": "${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") "engine/"}src/flutter",
+      "url": "${url}",
+      "custom_vars": {
+        "download_fuchsia_deps": False,
+        "download_android_deps": False,
+        "download_linux_deps": ${boolOption targetPlatform.isLinux},
+        "setup_githooks": False,
+        "download_esbuild": False,
+        "download_dart_sdk": False,
+        "host_cpu": "${build-constants.alt-arch}",
+        "host_os": "${build-constants.alt-os}",
+      },
+    }]
 
-    NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    DEPOT_TOOLS_UPDATE = "0";
-    DEPOT_TOOLS_COLLECT_METRICS = "0";
-    PYTHONDONTWRITEBYTECODE = "1";
+    target_os_only = True
+    target_os = [
+      "${target-constants.alt-os}"
+    ]
 
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash =
-      (hashes."${buildPlatform.system}" or { })."${targetPlatform.system}"
-        or (throw "Hash not set for ${targetPlatform.system} on ${buildPlatform.system}");
-  }
+    target_cpu_only = True
+    target_cpu = [
+      "${target-constants.alt-arch}"
+    ]
+  '';
+
+  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  DEPOT_TOOLS_UPDATE = "0";
+  DEPOT_TOOLS_COLLECT_METRICS = "0";
+  PYTHONDONTWRITEBYTECODE = "1";
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash =
+    (hashes."${buildPlatform.system}" or { })."${targetPlatform.system}"
+      or (throw "Hash not set for ${targetPlatform.system} on ${buildPlatform.system}");
+}
   (
     ''
       source ${../../../../build-support/fetchgit/deterministic-git}
@@ -116,7 +116,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
       cp -r engine/src/flutter/third_party/* engine/src/flutter/engine/src/flutter/third_party/
       mv engine/src/flutter/engine $out
     ''
-    + ''
+      + ''
       find $out -name '.git' -exec rm -rf {} \; || true
 
       rm -rf $out/src/{buildtools,fuchsia}

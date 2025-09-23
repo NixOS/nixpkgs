@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  apacheHttpd,
-  autoreconfHook,
-  fetchFromGitHub,
-  jdk,
+{ lib
+, stdenv
+, apacheHttpd
+, autoreconfHook
+, fetchFromGitHub
+, jdk
+,
 }:
 
 stdenv.mkDerivation rec {

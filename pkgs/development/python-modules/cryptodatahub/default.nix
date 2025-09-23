@@ -1,17 +1,17 @@
-{
-  lib,
-  asn1crypto,
-  attrs,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pyfakefs,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  unittestCheckHook,
-  urllib3,
+{ lib
+, asn1crypto
+, attrs
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitLab
+, pyfakefs
+, python-dateutil
+, pythonOlder
+, setuptools
+, setuptools-scm
+, unittestCheckHook
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

@@ -1,45 +1,40 @@
-{
-  version,
-  rev,
-  sha256,
+{ version
+, rev
+, sha256
+,
 }:
 
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  zlib,
-  libjpeg,
-  libpng,
-  fontconfig,
-  freetype,
-  libX11,
-  libXext,
-  libXinerama,
-  libXfixes,
-  libXcursor,
-  libXft,
-  libXrender,
-
-  withGL ? true,
-  libGL,
-  libGLU,
-  glew,
-
-  withCairo ? true,
-  cairo,
-
-  withPango ? (lib.strings.versionAtLeast version "1.4" && stdenv.hostPlatform.isLinux),
-  pango,
-
-  withDocs ? true,
-  doxygen,
-  graphviz,
-
-  withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
-  withShared ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zlib
+, libjpeg
+, libpng
+, fontconfig
+, freetype
+, libX11
+, libXext
+, libXinerama
+, libXfixes
+, libXcursor
+, libXft
+, libXrender
+, withGL ? true
+, libGL
+, libGLU
+, glew
+, withCairo ? true
+, cairo
+, withPango ? (lib.strings.versionAtLeast version "1.4" && stdenv.hostPlatform.isLinux)
+, pango
+, withDocs ? true
+, doxygen
+, graphviz
+, withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, withShared ? true
+,
 }:
 
 let

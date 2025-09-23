@@ -1,16 +1,16 @@
-{
-  desktop-file-utils,
-  fetchFromSourcehut,
-  gobject-introspection,
-  gtk3,
-  lib,
-  libhandy,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  stdenv,
-  wrapGAppsHook3,
+{ desktop-file-utils
+, fetchFromSourcehut
+, gobject-introspection
+, gtk3
+, lib
+, libhandy
+, meson
+, ninja
+, pkg-config
+, python3
+, stdenv
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

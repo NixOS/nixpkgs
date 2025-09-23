@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cython,
-  isPyPy,
-  ninja,
-  setuptools-scm,
-  setuptools,
-  fetchPypi,
-  gn,
-  pytestCheckHook,
-  cctools,
-  xcodebuild,
+{ lib
+, stdenv
+, buildPythonPackage
+, cython
+, isPyPy
+, ninja
+, setuptools-scm
+, setuptools
+, fetchPypi
+, gn
+, pytestCheckHook
+, cctools
+, xcodebuild
+,
 }:
 
 buildPythonPackage rec {
@@ -40,16 +40,16 @@ buildPythonPackage rec {
       --replace "defined(SK_CPU_ARM64)" "0"
   ''
   +
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) # old compiler?
-      ''
-        patch -p1 <<EOF
-        --- a/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
-        +++ b/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
-        @@ -492 +492 @@:
-        -    static constexpr int kMaxCapacity = SkToInt(std::min(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
-        +    static constexpr int kMaxCapacity = SkToInt(std::min<size_t>(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
-        EOF
-      '';
+  lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) # old compiler?
+    ''
+      patch -p1 <<EOF
+      --- a/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
+      +++ b/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
+      @@ -492 +492 @@:
+      -    static constexpr int kMaxCapacity = SkToInt(std::min(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
+      +    static constexpr int kMaxCapacity = SkToInt(std::min<size_t>(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
+      EOF
+    '';
 
   build-system = [
     cython

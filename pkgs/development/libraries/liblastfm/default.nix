@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  which,
-  cmake,
-  fftwSinglePrec,
-  libsamplerate,
-  qtbase,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, which
+, cmake
+, fftwSinglePrec
+, libsamplerate
+, qtbase
+,
 }:
 
 stdenv.mkDerivation {
@@ -41,9 +41,10 @@ stdenv.mkDerivation {
     qtbase
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11"
-  ) "-std=c++11";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11"
+    ) "-std=c++11";
 
   dontWrapQtApps = true;
 

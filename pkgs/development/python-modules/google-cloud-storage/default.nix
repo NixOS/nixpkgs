@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-auth,
-  google-cloud-core,
-  google-cloud-iam,
-  google-cloud-kms,
-  google-cloud-testutils,
-  google-resumable-media,
-  mock,
-  protobuf,
-  pytestCheckHook,
-  pytest-asyncio,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, google-auth
+, google-cloud-core
+, google-cloud-iam
+, google-cloud-kms
+, google-cloud-testutils
+, google-resumable-media
+, mock
+, protobuf
+, pytestCheckHook
+, pytest-asyncio
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

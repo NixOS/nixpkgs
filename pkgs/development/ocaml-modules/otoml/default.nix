@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  menhir,
-  menhirLib,
-  uutf,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, menhir
+, menhirLib
+, uutf
+,
 }:
 
 buildDunePackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyjwt,
-  aiohttp,
-  protobuf,
-  livekit-protocol,
-  pytestCheckHook,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyjwt
+, aiohttp
+, protobuf
+, livekit-protocol
+, pytestCheckHook
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

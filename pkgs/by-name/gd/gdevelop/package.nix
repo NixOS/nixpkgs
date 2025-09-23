@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  callPackage,
+{ lib
+, stdenv
+, callPackage
+,
 }:
 let
   version = "5.5.239";
@@ -22,7 +22,8 @@ let
   passthru.updateScript = ./update.sh;
 in
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit
       pname
       version

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  dateutils,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, dateutils
+,
 }:
 
 buildPythonPackage rec {

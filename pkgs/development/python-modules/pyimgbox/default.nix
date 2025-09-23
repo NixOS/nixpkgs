@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  beautifulsoup4,
-  httpx,
-  pytest-asyncio,
-  pytest-httpserver,
-  pytest-mock,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, beautifulsoup4
+, httpx
+, pytest-asyncio
+, pytest-httpserver
+, pytest-mock
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

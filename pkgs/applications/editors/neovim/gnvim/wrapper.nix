@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  gnvim-unwrapped,
-  neovim,
-  makeWrapper,
+{ lib
+, stdenv
+, gnvim-unwrapped
+, neovim
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  yarnBuildHook,
-  yarnConfigHook,
-  yarnInstallHook,
-  nodejs,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchYarnDeps
+, fetchFromGitHub
+, yarnBuildHook
+, yarnConfigHook
+, yarnInstallHook
+, nodejs
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "sql-formatter";

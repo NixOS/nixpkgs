@@ -1,10 +1,10 @@
-{
-  lib,
-  baseline,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, baseline
+, buildPythonPackage
+, fetchFromGitLab
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

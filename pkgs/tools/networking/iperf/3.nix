@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  fetchpatch,
-  lksctp-tools,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, fetchpatch
+, lksctp-tools
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  sqlite,
-  wxGTK32,
-  libusb1,
-  soapysdr,
-  mesa_glu,
-  libX11,
-  gnuplot,
-  fltk,
-  withGui ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, sqlite
+, wxGTK32
+, libusb1
+, soapysdr
+, mesa_glu
+, libX11
+, gnuplot
+, fltk
+, withGui ? false
+,
 }:
 
 stdenv.mkDerivation rec {

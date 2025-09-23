@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  configobj,
-  fetchFromGitHub,
-  numpy,
-  pandas,
-  pyface,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tables,
-  traits,
-  traitsui,
+{ lib
+, buildPythonPackage
+, configobj
+, fetchFromGitHub
+, numpy
+, pandas
+, pyface
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tables
+, traits
+, traitsui
+,
 }:
 
 buildPythonPackage rec {

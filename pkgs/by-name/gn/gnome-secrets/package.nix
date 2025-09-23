@@ -1,20 +1,20 @@
-{
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  fetchFromGitLab,
-  python3Packages,
-  wrapGAppsHook4,
-  gtk4,
-  glib,
-  gdk-pixbuf,
-  gobject-introspection,
-  desktop-file-utils,
-  appstream-glib,
-  libadwaita,
-  nix-update-script,
+{ lib
+, meson
+, ninja
+, pkg-config
+, gettext
+, fetchFromGitLab
+, python3Packages
+, wrapGAppsHook4
+, gtk4
+, glib
+, gdk-pixbuf
+, gobject-introspection
+, desktop-file-utils
+, appstream-glib
+, libadwaita
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  rclone,
+{ lib
+, stdenv
+, buildGoModule
+, rclone
+,
 }:
 
 let

@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  sqlalchemy,
-  sqlalchemy-utils,
-  six,
-  postgresql,
-  postgresqlTestHook,
-  psycopg2,
-  pytestCheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools
+, sqlalchemy
+, sqlalchemy-utils
+, six
+, postgresql
+, postgresqlTestHook
+, psycopg2
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

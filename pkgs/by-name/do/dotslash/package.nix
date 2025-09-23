@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  testers,
-  nix-update-script,
-  dotslash,
+{ lib
+, rustPlatform
+, fetchCrate
+, testers
+, nix-update-script
+, dotslash
+,
 }:
 
 rustPlatform.buildRustPackage rec {

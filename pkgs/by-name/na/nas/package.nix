@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  flex,
-  gccmakedep,
-  imake,
-  libXau,
-  libXaw,
-  libXext,
-  libXpm,
-  libXt,
-  xorgcffiles,
-  xorgproto,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, gccmakedep
+, imake
+, libXau
+, libXaw
+, libXext
+, libXpm
+, libXt
+, xorgcffiles
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

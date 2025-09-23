@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  openblas,
-  blas,
-  lapack,
-  icu,
-  cmake,
-  pkg-config,
-  fetchFromGitHub,
-  python3,
-  _experimental-update-script-combinators,
-  common-updater-scripts,
-  ripgrep,
-  unstableGitUpdater,
-  writeShellScript,
+{ lib
+, stdenv
+, openblas
+, blas
+, lapack
+, icu
+, cmake
+, pkg-config
+, fetchFromGitHub
+, python3
+, _experimental-update-script-combinators
+, common-updater-scripts
+, ripgrep
+, unstableGitUpdater
+, writeShellScript
+,
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";

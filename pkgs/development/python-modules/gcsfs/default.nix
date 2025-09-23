@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  google-auth,
-  google-auth-oauthlib,
-  google-cloud-storage,
-  requests,
-  decorator,
-  fsspec,
-  fusepy,
-  aiohttp,
-  crcmod,
-  pytest-timeout,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, google-auth
+, google-auth-oauthlib
+, google-cloud-storage
+, requests
+, decorator
+, fsspec
+, fusepy
+, aiohttp
+, crcmod
+, pytest-timeout
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

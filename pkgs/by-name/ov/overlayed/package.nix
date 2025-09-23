@@ -1,19 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-
-  cargo-tauri,
-  jq,
-  moreutils,
-  nodejs,
-  pkg-config,
-  pnpm_9,
-
-  libayatana-appindicator,
-  libsoup_3,
-  openssl,
-  webkitgtk_4_1,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cargo-tauri
+, jq
+, moreutils
+, nodejs
+, pkg-config
+, pnpm_9
+, libayatana-appindicator
+, libsoup_3
+, openssl
+, webkitgtk_4_1
+,
 }:
 
 rustPlatform.buildRustPackage rec {

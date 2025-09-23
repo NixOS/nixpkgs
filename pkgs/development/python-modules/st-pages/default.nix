@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  streamlit,
-  poetry-core,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, streamlit
+, poetry-core
+,
 }:
 buildPythonPackage rec {
   pname = "st-pages";

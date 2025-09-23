@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  meson,
-  ninja,
-  boost,
-  pandoc,
-  pkg-config,
-  xercesc,
-  xalanc,
-  qt6Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, meson
+, ninja
+, boost
+, pandoc
+, pkg-config
+, xercesc
+, xalanc
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

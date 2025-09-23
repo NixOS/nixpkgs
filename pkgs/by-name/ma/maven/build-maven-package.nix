@@ -1,29 +1,28 @@
-{
-  lib,
-  stdenv,
-  jdk,
-  jre-generate-cacerts,
-  maven,
-  perl,
-  writers,
+{ lib
+, stdenv
+, jdk
+, jre-generate-cacerts
+, maven
+, perl
+, writers
+,
 }:
 
-{
-  src,
-  sourceRoot ? null,
-  buildOffline ? false,
-  doCheck ? true,
-  patches ? [ ],
-  pname,
-  version,
-  mvnJdk ? jdk,
-  mvnHash ? "",
-  mvnFetchExtraArgs ? { },
-  mvnDepsParameters ? "",
-  manualMvnArtifacts ? [ ],
-  manualMvnSources ? [ ],
-  mvnParameters ? "",
-  ...
+{ src
+, sourceRoot ? null
+, buildOffline ? false
+, doCheck ? true
+, patches ? [ ]
+, pname
+, version
+, mvnJdk ? jdk
+, mvnHash ? ""
+, mvnFetchExtraArgs ? { }
+, mvnDepsParameters ? ""
+, manualMvnArtifacts ? [ ]
+, manualMvnSources ? [ ]
+, mvnParameters ? ""
+, ...
 }@args:
 
 # originally extracted from dbeaver
@@ -116,7 +115,7 @@ let
 in
 stdenv.mkDerivation (
   builtins.removeAttrs args [ "mvnFetchExtraArgs" ]
-  // {
+    // {
     inherit fetchedMavenDeps;
 
     nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [

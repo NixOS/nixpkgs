@@ -1,7 +1,7 @@
-{
-  lib,
-  buildFishPlugin,
-  fetchFromGitHub,
+{ lib
+, buildFishPlugin
+, fetchFromGitHub
+,
 }:
 let
   self = buildFishPlugin {

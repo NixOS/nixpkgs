@@ -4,12 +4,11 @@
   Platform-specific code is in the respective default.nix files.
 */
 
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   inherit (lib)

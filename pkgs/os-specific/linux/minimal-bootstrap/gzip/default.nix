@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnused,
-  gnugrep,
+{ lib
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnused
+, gnugrep
+,
 }:
 let
   pname = "gzip";
@@ -17,31 +17,31 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnused
-      gnugrep
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnused
+    gnugrep
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/gzip --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/gzip --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "GNU zip compression program";
-      homepage = "https://www.gnu.org/software/gzip";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU zip compression program";
+    homepage = "https://www.gnu.org/software/gzip";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     ungz --file ${src} --output gzip.tar

@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  cmake,
-  blas,
-  lapack,
-  gfortran,
-  gmm,
-  fltk,
-  libjpeg,
-  zlib,
-  libGL,
-  libGLU,
-  xorg,
-  opencascade-occt,
-  llvmPackages,
-  python3Packages,
-  enablePython ? false,
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, blas
+, lapack
+, gfortran
+, gmm
+, fltk
+, libjpeg
+, zlib
+, libGL
+, libGLU
+, xorg
+, opencascade-occt
+, llvmPackages
+, python3Packages
+, enablePython ? false
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -36,9 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     gfortran
   ]
-  ++ lib.optional (
-    enablePython && stdenv.buildPlatform == stdenv.hostPlatform
-  ) python3Packages.pythonImportsCheckHook
+  ++ lib.optional
+    (
+      enablePython && stdenv.buildPlatform == stdenv.hostPlatform
+    )
+    python3Packages.pythonImportsCheckHook
   ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [

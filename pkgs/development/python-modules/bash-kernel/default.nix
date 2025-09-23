@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  bashInteractive,
-  flit-core,
-  filetype,
-  ipykernel,
-  pexpect,
-  writableTmpDirAsHomeHook,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, bashInteractive
+, flit-core
+, filetype
+, ipykernel
+, pexpect
+, writableTmpDirAsHomeHook
+, python
+,
 }:
 
 buildPythonPackage rec {

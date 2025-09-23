@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchzip
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "0xproto";

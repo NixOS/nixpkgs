@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  sfml,
-  glm,
-  python3,
-  glew,
-  pkg-config,
-  SDL2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, sfml
+, glm
+, python3
+, glew
+, pkg-config
+, SDL2
+,
 }:
 
 stdenv.mkDerivation rec {

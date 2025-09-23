@@ -1,15 +1,15 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gtk3,
-  cava,
-  gst_all_1,
-  gobject-introspection,
-  wrapGAppsHook3,
-  copyDesktopItems,
-  makeDesktopItem,
-  fetchurl,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gtk3
+, cava
+, gst_all_1
+, gobject-introspection
+, wrapGAppsHook3
+, copyDesktopItems
+, makeDesktopItem
+, fetchurl
+,
 }:
 
 python3Packages.buildPythonApplication rec {

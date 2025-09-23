@@ -1,9 +1,9 @@
-{
-  replaceVarsWith,
-  lib,
-  runtimeShell,
-  coreutils,
-  getopt,
+{ replaceVarsWith
+, lib
+, runtimeShell
+, coreutils
+, getopt
+,
 }:
 
 replaceVarsWith {

@@ -1,9 +1,9 @@
 { runCommandLocal, racket }:
 
 runCommandLocal "racket-test-write-greeting"
-  {
-    nativeBuildInputs = [ racket ];
-  }
+{
+  nativeBuildInputs = [ racket ];
+}
   ''
     expectation="Hello, world!"
 

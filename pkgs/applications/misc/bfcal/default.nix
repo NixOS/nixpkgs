@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  meson,
-  ninja,
-  pkg-config,
-  wrapQtAppsHook,
-  qtbase,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, meson
+, ninja
+, pkg-config
+, wrapQtAppsHook
+, qtbase
+,
 }:
 
 stdenv.mkDerivation rec {

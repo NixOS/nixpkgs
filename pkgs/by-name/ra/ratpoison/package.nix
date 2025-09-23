@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  fontconfig,
-  freetype,
-  libX11,
-  libXft,
-  libXi,
-  libXpm,
-  libXrandr,
-  libXt,
-  libXtst,
-  perl,
-  pkg-config,
-  readline,
-  texinfo,
-  xorgproto,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, fontconfig
+, freetype
+, libX11
+, libXft
+, libXi
+, libXpm
+, libXrandr
+, libXt
+, libXtst
+, perl
+, pkg-config
+, readline
+, texinfo
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

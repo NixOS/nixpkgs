@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  libpng,
-  openjpeg,
-  zlib,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, libpng
+, openjpeg
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

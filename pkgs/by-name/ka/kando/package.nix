@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-
-  electron,
-  nodejs,
-
-  cmake,
-  zip,
-  makeWrapper,
-  wayland-scanner,
-  copyDesktopItems,
-  makeDesktopItem,
-
-  libxkbcommon,
-  libX11,
-  libXtst,
-  libXi,
-  wayland,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, electron
+, nodejs
+, cmake
+, zip
+, makeWrapper
+, wayland-scanner
+, copyDesktopItems
+, makeDesktopItem
+, libxkbcommon
+, libX11
+, libXtst
+, libXi
+, wayland
+,
 }:
 
 buildNpmPackage rec {

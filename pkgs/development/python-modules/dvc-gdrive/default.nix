@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  dvc,
-  fetchFromGitHub,
-  pydrive2,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, dvc
+, fetchFromGitHub
+, pydrive2
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

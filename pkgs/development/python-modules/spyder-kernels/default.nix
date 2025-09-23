@@ -1,35 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cloudpickle,
-  ipykernel,
-  ipython,
-  jupyter-client,
-  pyxdg,
-  pyzmq,
-  wurlitzer,
-
-  # tests
-  anyio,
-  django,
-  flaky,
-  h5py,
-  numpy,
-  pandas,
-  pillow,
-  polars,
-  pyarrow,
-  pydicom,
-  pytestCheckHook,
-  scipy,
-  writableTmpDirAsHomeHook,
-  xarray,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  cloudpickle
+, ipykernel
+, ipython
+, jupyter-client
+, pyxdg
+, pyzmq
+, wurlitzer
+, # tests
+  anyio
+, django
+, flaky
+, h5py
+, numpy
+, pandas
+, pillow
+, polars
+, pyarrow
+, pydicom
+, pytestCheckHook
+, scipy
+, writableTmpDirAsHomeHook
+, xarray
+,
 }:
 
 buildPythonPackage rec {

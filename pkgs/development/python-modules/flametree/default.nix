@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fontconfig,
-  matplotlib,
-  pandas,
-  pytestCheckHook,
-  setuptools,
-  weasyprint,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fontconfig
+, matplotlib
+, pandas
+, pytestCheckHook
+, setuptools
+, weasyprint
+,
 }:
 
 buildPythonPackage rec {

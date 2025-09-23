@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  kmod,
-  kernel,
+{ lib
+, stdenv
+, fetchzip
+, kmod
+, kernel
+,
 }:
 
 let

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 
 let
@@ -408,21 +407,27 @@ in
           "/run"
         ]
         ++ optional cfg.settings.incomplete-dir-enabled cfg.settings.incomplete-dir
-        ++ optional (
-          cfg.settings.watch-dir-enabled && cfg.settings.trash-original-torrent-files
-        ) cfg.settings.watch-dir;
+        ++ optional
+          (
+            cfg.settings.watch-dir-enabled && cfg.settings.trash-original-torrent-files
+          )
+          cfg.settings.watch-dir;
         BindReadOnlyPaths = [
           # No confinement done of /nix/store here like in systemd-confinement.nix,
           # an AppArmor profile is provided to get a confinement based upon paths and rights.
           builtins.storeDir
           "/etc"
         ]
-        ++ optional (
-          cfg.settings.script-torrent-done-enabled && cfg.settings.script-torrent-done-filename != null
-        ) cfg.settings.script-torrent-done-filename
-        ++ optional (
-          cfg.settings.watch-dir-enabled && !cfg.settings.trash-original-torrent-files
-        ) cfg.settings.watch-dir;
+        ++ optional
+          (
+            cfg.settings.script-torrent-done-enabled && cfg.settings.script-torrent-done-filename != null
+          )
+          cfg.settings.script-torrent-done-filename
+        ++ optional
+          (
+            cfg.settings.watch-dir-enabled && !cfg.settings.trash-original-torrent-files
+          )
+          cfg.settings.watch-dir;
         StateDirectory = [
           "transmission"
           "transmission/${settingsDir}"

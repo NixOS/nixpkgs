@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromSourcehut,
-  callPackage,
-  coreutils,
-  curl,
-  libarchive,
-  libpkgconf,
-  pkgconf,
-  samurai,
-  zlib,
-  embedSamurai ? false,
-  # docs
-  buildDocs ? true,
-  scdoc,
-  # tests
-  runTests ? false,
-  gettext,
-  muon,
-  nasm,
-  pkg-config,
-  python3,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromSourcehut
+, callPackage
+, coreutils
+, curl
+, libarchive
+, libpkgconf
+, pkgconf
+, samurai
+, zlib
+, embedSamurai ? false
+, # docs
+  buildDocs ? true
+, scdoc
+, # tests
+  runTests ? false
+, gettext
+, muon
+, nasm
+, pkg-config
+, python3
+, writableTmpDirAsHomeHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";

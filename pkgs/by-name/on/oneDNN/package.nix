@@ -1,9 +1,9 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  llvmPackages,
+{ cmake
+, fetchFromGitHub
+, lib
+, stdenv
+, llvmPackages
+,
 }:
 
 # This was originally called mkl-dnn, then it was renamed to dnnl, and it has

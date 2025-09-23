@@ -1,22 +1,22 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  prompt-toolkit,
-  pygments,
-  pymodbus-repl,
-  pyserial,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  redis,
-  setuptools,
-  sqlalchemy,
-  twisted,
-  typer,
+{ lib
+, aiohttp
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, prompt-toolkit
+, pygments
+, pymodbus-repl
+, pyserial
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, redis
+, setuptools
+, sqlalchemy
+, twisted
+, typer
+,
 }:
 
 buildPythonPackage rec {

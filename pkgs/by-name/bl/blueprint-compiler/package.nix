@@ -1,17 +1,17 @@
-{
-  dbus,
-  fetchFromGitLab,
-  gobject-introspection,
-  lib,
-  libadwaita,
-  meson,
-  ninja,
-  python3,
-  runCommand,
-  stdenv,
-  testers,
-  wrapGAppsNoGuiHook,
-  xvfb-run,
+{ dbus
+, fetchFromGitLab
+, gobject-introspection
+, lib
+, libadwaita
+, meson
+, ninja
+, python3
+, runCommand
+, stdenv
+, testers
+, wrapGAppsNoGuiHook
+, xvfb-run
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";

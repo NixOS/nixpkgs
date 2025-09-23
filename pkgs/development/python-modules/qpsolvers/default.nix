@@ -1,25 +1,24 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  unittestCheckHook,
-  flit-core,
-  numpy,
-  scipy,
-
-  # optional dependencies
-  clarabel,
-  cvxopt,
-  daqp,
-  ecos,
-  gurobipy,
-  jaxopt,
-  osqp,
-  quadprog,
-  scs,
-  highspy,
-  piqp,
-  proxsuite,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, unittestCheckHook
+, flit-core
+, numpy
+, scipy
+, # optional dependencies
+  clarabel
+, cvxopt
+, daqp
+, ecos
+, gurobipy
+, jaxopt
+, osqp
+, quadprog
+, scs
+, highspy
+, piqp
+, proxsuite
+,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";

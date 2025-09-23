@@ -1,8 +1,7 @@
-{
-  package,
-  lib,
-  pkgs,
-  ...
+{ package
+, lib
+, pkgs
+, ...
 }:
 {
   name = "odoo";

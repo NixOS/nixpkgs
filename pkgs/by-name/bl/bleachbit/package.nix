@@ -1,13 +1,13 @@
-{
-  lib,
-  python3Packages,
-  fetchurl,
-  gettext,
-  gobject-introspection,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  libnotify,
+{ lib
+, python3Packages
+, fetchurl
+, gettext
+, gobject-introspection
+, wrapGAppsHook3
+, glib
+, gtk3
+, libnotify
+,
 }:
 
 python3Packages.buildPythonApplication rec {

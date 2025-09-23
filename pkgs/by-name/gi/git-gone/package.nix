@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  asciidoctor,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, asciidoctor
+,
 }:
 
 rustPlatform.buildRustPackage rec {

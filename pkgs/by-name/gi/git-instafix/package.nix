@@ -1,10 +1,10 @@
-{
-  git,
-  lib,
-  libgit2,
-  rustPlatform,
-  stdenv,
-  fetchFromGitHub,
+{ git
+, lib
+, libgit2
+, rustPlatform
+, stdenv
+, fetchFromGitHub
+,
 }:
 let
   inherit (lib)

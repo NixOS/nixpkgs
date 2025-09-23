@@ -1,37 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  makeWrapper,
-  pkg-config,
-  libxslt,
-  meson,
-  ninja,
-  python3,
-  dbus,
-  umockdev,
-  libeatmydata,
-  gtk-doc,
-  docbook-xsl-nons,
-  udev,
-  libgudev,
-  libusb1,
-  glib,
-  gettext,
-  polkit,
-  nixosTests,
-  useIMobileDevice ? true,
-  libimobiledevice,
-  withDocs ? withIntrospection,
-  mesonEmulatorHook,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, makeWrapper
+, pkg-config
+, libxslt
+, meson
+, ninja
+, python3
+, dbus
+, umockdev
+, libeatmydata
+, gtk-doc
+, docbook-xsl-nons
+, udev
+, libgudev
+, libusb1
+, glib
+, gettext
+, polkit
+, nixosTests
+, useIMobileDevice ? true
+, libimobiledevice
+, withDocs ? withIntrospection
+, mesonEmulatorHook
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+,
 }:
 
 assert withDocs -> withIntrospection;

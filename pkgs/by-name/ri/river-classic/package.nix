@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitea,
-  libGL,
-  libX11,
-  libevdev,
-  libinput,
-  libxkbcommon,
-  pixman,
-  pkg-config,
-  scdoc,
-  udev,
-  versionCheckHook,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots_0_19,
-  xwayland,
-  zig_0_15,
-  withManpages ? true,
-  xwaylandSupport ? true,
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitea
+, libGL
+, libX11
+, libevdev
+, libinput
+, libxkbcommon
+, pixman
+, pkg-config
+, scdoc
+, udev
+, versionCheckHook
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlroots_0_19
+, xwayland
+, zig_0_15
+, withManpages ? true
+, xwaylandSupport ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

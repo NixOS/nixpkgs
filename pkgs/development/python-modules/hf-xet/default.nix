@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pkg-config,
-  rustPlatform,
-  openssl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pkg-config
+, rustPlatform
+, openssl
+,
 }:
 
 buildPythonPackage rec {

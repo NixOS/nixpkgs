@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  unar,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, unar
+,
 }:
 
 buildPythonApplication rec {

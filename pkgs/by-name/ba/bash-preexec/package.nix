@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  bats,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, bats
+,
 }:
 
 let

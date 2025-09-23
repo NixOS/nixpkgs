@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  ocaml,
-  buildDunePackage,
-  cppo,
-  ounit2,
+{ lib
+, fetchurl
+, ocaml
+, buildDunePackage
+, cppo
+, ounit2
+,
 }:
 
 buildDunePackage rec {

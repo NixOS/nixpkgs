@@ -3,11 +3,10 @@
   name = "boot-stage1";
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     {
       boot.extraModulePackages =
@@ -111,10 +110,10 @@
             '';
 
           mkCmdlineCanary =
-            {
-              name,
-              cmdline ? "",
-              source ? "",
+            { name
+            , cmdline ? ""
+            , source ? ""
+            ,
             }:
             (daemonize name ''
               char *argv[] = {"${cmdline}", NULL};

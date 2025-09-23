@@ -1,15 +1,14 @@
-{
-  lib,
-  fetchurl,
-  runCommand,
-  writeText,
+{ lib
+, fetchurl
+, runCommand
+, writeText
+,
 }:
 
-{
-  name ? "deps",
-  data,
-  dontFixup ? true,
-  ...
+{ name ? "deps"
+, data
+, dontFixup ? true
+, ...
 }@attrs:
 
 let
@@ -33,39 +32,42 @@ let
     cd "$out"
   ''
   + builtins.concatStringsSep "" (
-    lib.mapAttrsToList (
-      url: info:
-      let
-        key = builtins.head (builtins.attrNames info);
-        val = info.${key};
-        path = urlToPath url;
-        name = baseNameOf path;
-        source =
-          {
-            redirect = "$out/${urlToPath val}";
-            hash = fetchurl {
-              inherit url;
-              hash = val;
-            };
-            text = writeText name val;
-          }
-          .${key} or (throw "Unknown key: ${url}");
-      in
-      ''
-        mkdir -p "${dirOf path}"
-        ln -s "${source}" "${path}"
-      ''
-    ) data'
+    lib.mapAttrsToList
+      (
+        url: info:
+          let
+            key = builtins.head (builtins.attrNames info);
+            val = info.${key};
+            path = urlToPath url;
+            name = baseNameOf path;
+            source =
+              {
+                redirect = "$out/${urlToPath val}";
+                hash = fetchurl {
+                  inherit url;
+                  hash = val;
+                };
+                text = writeText name val;
+              }.${key} or (throw "Unknown key: ${url}");
+          in
+          ''
+            mkdir -p "${dirOf path}"
+            ln -s "${source}" "${path}"
+          ''
+      )
+      data'
   );
 in
-runCommand name (
-  builtins.removeAttrs attrs [
-    "name"
-    "data"
-  ]
-  // {
-    passthru = (attrs.passthru or { }) // {
-      data = writeText "deps.json" (builtins.toJSON data);
-    };
-  }
-) code
+runCommand name
+  (
+    builtins.removeAttrs attrs [
+      "name"
+      "data"
+    ]
+      // {
+      passthru = (attrs.passthru or { }) // {
+        data = writeText "deps.json" (builtins.toJSON data);
+      };
+    }
+  )
+  code

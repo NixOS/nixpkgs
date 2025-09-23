@@ -1,34 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  stdenv,
-  testers,
-
-  affine,
-  attrs,
-  boto3,
-  certifi,
-  click,
-  click-plugins,
-  cligj,
-  cython,
-  fsspec,
-  gdal,
-  hypothesis,
-  ipython,
-  matplotlib,
-  numpy,
-  packaging,
-  pytest-randomly,
-  setuptools,
-  shapely,
-  snuggs,
-  wheel,
-
-  rasterio, # required to run version test
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, stdenv
+, testers
+, affine
+, attrs
+, boto3
+, certifi
+, click
+, click-plugins
+, cligj
+, cython
+, fsspec
+, gdal
+, hypothesis
+, ipython
+, matplotlib
+, numpy
+, packaging
+, pytest-randomly
+, setuptools
+, shapely
+, snuggs
+, wheel
+, rasterio
+, # required to run version test
 }:
 
 buildPythonPackage rec {

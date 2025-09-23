@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  zorns-lemma,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, zorns-lemma
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -48,7 +48,8 @@ mkCoqDerivation {
         case = "8.6";
         out = "8.6.0";
       }
-    ] null;
+    ]
+      null;
 
   propagatedBuildInputs = [ zorns-lemma ];
 

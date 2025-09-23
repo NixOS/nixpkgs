@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  wrapCCWith,
-  overrideCC,
-  zig,
-  version,
-  src,
+{ lib
+, stdenv
+, wrapCCWith
+, overrideCC
+, zig
+, version
+, src
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "arocc";

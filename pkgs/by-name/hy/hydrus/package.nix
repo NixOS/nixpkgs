@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  qt6,
-  copyDesktopItems,
-  makeDesktopItem,
-  writableTmpDirAsHomeHook,
-  swftools,
-  ffmpeg,
-  miniupnpc,
-
-  enableSwftools ? false,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, qt6
+, copyDesktopItems
+, makeDesktopItem
+, writableTmpDirAsHomeHook
+, swftools
+, ffmpeg
+, miniupnpc
+, enableSwftools ? false
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  mandoc,
+{ lib
+, mkDerivation
+, mandoc
+,
 }:
 mkDerivation {
   path = "sbin/fdisk";

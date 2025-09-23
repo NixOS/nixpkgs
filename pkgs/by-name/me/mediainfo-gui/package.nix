@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libmediainfo,
-  wxGTK32,
-  desktop-file-utils,
-  libSM,
-  imagemagick,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libmediainfo
+, wxGTK32
+, desktop-file-utils
+, libSM
+, imagemagick
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

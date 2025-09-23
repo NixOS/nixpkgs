@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unordered-dense";

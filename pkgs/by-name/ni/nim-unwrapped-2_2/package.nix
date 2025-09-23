@@ -1,77 +1,77 @@
 # When updating this package please check that all other versions of Nim
 # evaluate because they reuse definitions from the latest compiler.
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boehmgc,
-  openssl,
-  pcre,
-  readline,
-  sqlite,
-  darwin,
+{ lib
+, stdenv
+, fetchurl
+, boehmgc
+, openssl
+, pcre
+, readline
+, sqlite
+, darwin
+,
 }:
 
 let
   parseCpu =
     platform:
-    with platform;
-    # Derive a Nim CPU identifier
-    if isAarch32 then
-      "arm"
-    else if isAarch64 then
-      "arm64"
-    else if isAlpha then
-      "alpha"
-    else if isAvr then
-      "avr"
-    else if isMips && is32bit then
-      "mips"
-    else if isMips && is64bit then
-      "mips64"
-    else if isMsp430 then
-      "msp430"
-    else if isPower && is32bit then
-      "powerpc"
-    else if isPower && is64bit then
-      "powerpc64"
-    else if isRiscV && is64bit then
-      "riscv64"
-    else if isSparc then
-      "sparc"
-    else if isx86_32 then
-      "i386"
-    else if isx86_64 then
-      "amd64"
-    else
-      throw "no Nim CPU support known for ${config}";
+      with platform;
+      # Derive a Nim CPU identifier
+      if isAarch32 then
+        "arm"
+      else if isAarch64 then
+        "arm64"
+      else if isAlpha then
+        "alpha"
+      else if isAvr then
+        "avr"
+      else if isMips && is32bit then
+        "mips"
+      else if isMips && is64bit then
+        "mips64"
+      else if isMsp430 then
+        "msp430"
+      else if isPower && is32bit then
+        "powerpc"
+      else if isPower && is64bit then
+        "powerpc64"
+      else if isRiscV && is64bit then
+        "riscv64"
+      else if isSparc then
+        "sparc"
+      else if isx86_32 then
+        "i386"
+      else if isx86_64 then
+        "amd64"
+      else
+        throw "no Nim CPU support known for ${config}";
 
   parseOs =
     platform:
-    with platform;
-    # Derive a Nim OS identifier
-    if isAndroid then
-      "Android"
-    else if isDarwin then
-      "MacOSX"
-    else if isFreeBSD then
-      "FreeBSD"
-    else if isGenode then
-      "Genode"
-    else if isLinux then
-      "Linux"
-    else if isNetBSD then
-      "NetBSD"
-    else if isNone then
-      "Standalone"
-    else if isOpenBSD then
-      "OpenBSD"
-    else if isWindows then
-      "Windows"
-    else if isiOS then
-      "iOS"
-    else
-      throw "no Nim OS support known for ${config}";
+      with platform;
+      # Derive a Nim OS identifier
+      if isAndroid then
+        "Android"
+      else if isDarwin then
+        "MacOSX"
+      else if isFreeBSD then
+        "FreeBSD"
+      else if isGenode then
+        "Genode"
+      else if isLinux then
+        "Linux"
+      else if isNetBSD then
+        "NetBSD"
+      else if isNone then
+        "Standalone"
+      else if isOpenBSD then
+        "OpenBSD"
+      else if isWindows then
+        "Windows"
+      else if isiOS then
+        "iOS"
+      else
+        throw "no Nim OS support known for ${config}";
 
   parsePlatform = p: {
     cpu = parseCpu p;

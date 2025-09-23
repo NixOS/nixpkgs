@@ -1,8 +1,8 @@
 # nix run ../../../../..#cabal2nix -- ./local
-{
-  mkDerivation,
-  base,
-  lib,
+{ mkDerivation
+, base
+, lib
+,
 }:
 mkDerivation {
   pname = "local";

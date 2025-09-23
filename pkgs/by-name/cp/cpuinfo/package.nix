@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  stdenv,
-  gtest,
-  nix-update-script,
-  testers,
+{ lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, stdenv
+, gtest
+, nix-update-script
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpuinfo";

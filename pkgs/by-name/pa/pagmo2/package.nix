@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  cmake,
-  eigen,
-  nlopt,
-  ipopt,
-  boost,
-  tbb,
-  # tests pass but take 30+ minutes
-  runTests ? false,
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, eigen
+, nlopt
+, ipopt
+, boost
+, tbb
+, # tests pass but take 30+ minutes
+  runTests ? false
+,
 }:
 
 stdenv.mkDerivation rec {

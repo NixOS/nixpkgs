@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  getmac,
-  requests,
-  semver,
-  pytestCheckHook,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, getmac
+, requests
+, semver
+, pytestCheckHook
+, responses
+,
 }:
 
 buildPythonPackage rec {

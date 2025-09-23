@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ldap3,
-  ldaptor,
-  matrix-synapse-unwrapped,
-  pytestCheckHook,
-  service-identity,
-  setuptools,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ldap3
+, ldaptor
+, matrix-synapse-unwrapped
+, pytestCheckHook
+, service-identity
+, setuptools
+, twisted
+,
 }:
 
 buildPythonPackage rec {

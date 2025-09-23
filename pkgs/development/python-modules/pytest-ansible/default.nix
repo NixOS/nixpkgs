@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  ansible-compat,
-  ansible-core,
-  buildPythonPackage,
-  coreutils,
-  fetchFromGitHub,
-  packaging,
-  pytest,
-  pytest-plus,
-  pytest-sugar,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, stdenv
+, ansible-compat
+, ansible-core
+, buildPythonPackage
+, coreutils
+, fetchFromGitHub
+, packaging
+, pytest
+, pytest-plus
+, pytest-sugar
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

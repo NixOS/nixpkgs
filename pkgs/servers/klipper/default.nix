@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3,
-  extraPythonPackages ? ps: [ ],
-  unstableGitUpdater,
-  makeWrapper,
-  writeShellScript,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+, extraPythonPackages ? ps: [ ]
+, unstableGitUpdater
+, makeWrapper
+, writeShellScript
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,17 +31,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     (python3.withPackages (
       p:
-      with p;
-      [
-        python-can
-        cffi
-        pyserial
-        greenlet
-        jinja2
-        markupsafe
-        numpy
-      ]
-      ++ extraPythonPackages p
+        with p;
+        [
+          python-can
+          cffi
+          pyserial
+          greenlet
+          jinja2
+          markupsafe
+          numpy
+        ]
+        ++ extraPythonPackages p
     ))
   ];
 

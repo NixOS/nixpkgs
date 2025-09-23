@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # runtime dependencies
-  layoutparser,
-  python-multipart,
-  huggingface-hub,
-  opencv-python,
-  onnxruntime,
-  transformers,
-  detectron2,
-  paddleocr,
-  # check inputs
-  pytestCheckHook,
-  coverage,
-  click,
-  httpx,
-  mypy,
-  pytest-cov-stub,
-  pdf2image,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # runtime dependencies
+  layoutparser
+, python-multipart
+, huggingface-hub
+, opencv-python
+, onnxruntime
+, transformers
+, detectron2
+, paddleocr
+, # check inputs
+  pytestCheckHook
+, coverage
+, click
+, httpx
+, mypy
+, pytest-cov-stub
+, pdf2image
+,
 }:
 
 buildPythonPackage rec {

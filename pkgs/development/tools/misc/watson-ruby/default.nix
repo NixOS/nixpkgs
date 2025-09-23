@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  bundlerEnv,
-  ruby,
-  bundlerUpdateScript,
+{ lib
+, stdenv
+, bundlerEnv
+, ruby
+, bundlerUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

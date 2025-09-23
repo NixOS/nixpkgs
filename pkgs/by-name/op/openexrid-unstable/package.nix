@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  re2,
-  openfx,
-  zlib,
-  ilmbase,
-  libGLU,
-  libGL,
-  openexr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, re2
+, openfx
+, zlib
+, ilmbase
+, libGLU
+, libGL
+, openexr
+,
 }:
 
 stdenv.mkDerivation {

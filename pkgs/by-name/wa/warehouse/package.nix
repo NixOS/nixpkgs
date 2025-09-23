@@ -1,21 +1,21 @@
-{
-  lib,
-  blueprint-compiler,
-  desktop-file-utils,
-  fetchFromGitHub,
-  flatpak,
-  flatpak-xdg-utils,
-  glib,
-  gobject-introspection,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  python3,
-  stdenv,
-  wrapGAppsHook4,
+{ lib
+, blueprint-compiler
+, desktop-file-utils
+, fetchFromGitHub
+, flatpak
+, flatpak-xdg-utils
+, glib
+, gobject-introspection
+, gtk4
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, python3
+, stdenv
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

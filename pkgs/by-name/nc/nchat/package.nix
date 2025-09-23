@@ -1,17 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  file, # for libmagic
-  ncurses,
-  openssl,
-  readline,
-  sqlite,
-  zlib,
-  cmake,
-  gperf,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, file
+, # for libmagic
+  ncurses
+, openssl
+, readline
+, sqlite
+, zlib
+, cmake
+, gperf
+, nix-update-script
+,
 }:
 
 let

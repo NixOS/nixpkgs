@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  elixir,
-  erlang,
+{ stdenv
+, lib
+, fetchFromGitHub
+, elixir
+, erlang
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  base58,
-  buildPythonPackage,
-  ecdsa,
-  fetchPypi,
-  hidapi,
-  noiseprotocol,
-  protobuf,
-  pythonOlder,
-  semver,
-  setuptools,
-  typing-extensions,
+{ lib
+, base58
+, buildPythonPackage
+, ecdsa
+, fetchPypi
+, hidapi
+, noiseprotocol
+, protobuf
+, pythonOlder
+, semver
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

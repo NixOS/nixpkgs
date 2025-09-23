@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  libX11,
-  libXi,
-  libXtst,
-  libevdev,
-  udevCheckHook,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, libX11
+, libXi
+, libXtst
+, libevdev
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

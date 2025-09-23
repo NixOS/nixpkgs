@@ -1,43 +1,38 @@
-{
-  lib,
-  autoAddDriverRunpath,
-  cmake,
-  fetchFromGitHub,
-  nix-update-script,
-  stdenv,
-
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
-
-  rocmSupport ? config.rocmSupport,
-  rocmPackages ? { },
-  rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets,
-
-  openclSupport ? false,
-  clblast,
-
-  blasSupport ? builtins.all (x: !x) [
+{ lib
+, autoAddDriverRunpath
+, cmake
+, fetchFromGitHub
+, nix-update-script
+, stdenv
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+, rocmSupport ? config.rocmSupport
+, rocmPackages ? { }
+, rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets
+, openclSupport ? false
+, clblast
+, blasSupport ? builtins.all (x: !x) [
     cudaSupport
     metalSupport
     openclSupport
     rocmSupport
     vulkanSupport
-  ],
-  blas,
-
-  pkg-config,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
-  vulkanSupport ? false,
-  rpcSupport ? false,
-  apple-sdk_14,
-  curl,
-  llama-cpp,
-  shaderc,
-  vulkan-headers,
-  vulkan-loader,
-  ninja,
-  git,
+  ]
+, blas
+, pkg-config
+, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport
+, vulkanSupport ? false
+, rpcSupport ? false
+, apple-sdk_14
+, curl
+, llama-cpp
+, shaderc
+, vulkan-headers
+, vulkan-loader
+, ninja
+, git
+,
 }:
 
 let

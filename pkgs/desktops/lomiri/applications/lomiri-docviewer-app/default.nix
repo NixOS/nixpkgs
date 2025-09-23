@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  gettext,
-  libreoffice-unwrapped,
-  lomiri-content-hub,
-  lomiri-ui-toolkit,
-  pkg-config,
-  poppler,
-  qtbase,
-  qtdeclarative,
-  qtsystems,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, cmake
+, gettext
+, libreoffice-unwrapped
+, lomiri-content-hub
+, lomiri-ui-toolkit
+, pkg-config
+, poppler
+, qtbase
+, qtdeclarative
+, qtsystems
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

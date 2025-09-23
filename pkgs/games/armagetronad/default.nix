@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoconf,
-  automake,
-  gnum4,
-  pkg-config,
-  bison,
-  python3,
-  which,
-  boost,
-  ftgl,
-  freetype,
-  glew,
-  SDL,
-  SDL_image,
-  SDL_mixer,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  libGL,
-  libGLU,
-  libpng,
-  libX11,
-  libxml2,
-  protobuf,
-  xvfb-run,
-  gnugrep,
-  nixosTests,
-  dedicatedServer ? false,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, automake
+, gnum4
+, pkg-config
+, bison
+, python3
+, which
+, boost
+, ftgl
+, freetype
+, glew
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, libGL
+, libGLU
+, libpng
+, libX11
+, libxml2
+, protobuf
+, xvfb-run
+, gnugrep
+, nixosTests
+, dedicatedServer ? false
+,
 }:
 
 let
@@ -238,9 +238,11 @@ let
           }
         else
           (lib.mapAttrs (name: value: mkArmagetron value dedicatedServer) (
-            lib.filterAttrs (
-              name: value: (value dedicatedServer).version != (srcs.${latestVersionMajor} dedicatedServer).version
-            ) srcs
+            lib.filterAttrs
+              (
+                name: value: (value dedicatedServer).version != (srcs.${latestVersionMajor} dedicatedServer).version
+              )
+              srcs
           ))
           // {
             # Allow both a "dedicated" passthru and a passthru for all the options other than the latest version, which this is.

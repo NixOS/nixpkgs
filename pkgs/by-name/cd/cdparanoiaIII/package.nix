@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  updateAutotoolsGnuConfigScriptsHook,
-  autoreconfHook,
-  freebsd,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, updateAutotoolsGnuConfigScriptsHook
+, autoreconfHook
+, freebsd
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -147,9 +147,10 @@ stdenv.mkDerivation rec {
   ];
 
   env =
-    lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
-      NIX_LDFLAGS = "-lcam";
-    }
+    lib.optionalAttrs stdenv.hostPlatform.isFreeBSD
+      {
+        NIX_LDFLAGS = "-lcam";
+      }
     // {
       BSD_INSTALL_PROGRAM = "install";
       BSD_INSTALL_LIB = "install";

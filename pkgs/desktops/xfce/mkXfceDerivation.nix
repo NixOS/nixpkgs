@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  xfce4-dev-tools,
-  hicolor-icon-theme,
-  xfce,
-  wrapGAppsHook3,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, xfce4-dev-tools
+, hicolor-icon-theme
+, xfce
+, wrapGAppsHook3
+, gitUpdater
+,
 }:
 
-{
-  category,
-  pname,
-  version,
-  attrPath ? "xfce.${pname}",
-  rev-prefix ? "${pname}-",
-  rev ? "${rev-prefix}${version}",
-  sha256,
-  odd-unstable ? true,
-  patchlevel-unstable ? true,
-  passthru ? { },
-  meta ? { },
-  ...
+{ category
+, pname
+, version
+, attrPath ? "xfce.${pname}"
+, rev-prefix ? "${pname}-"
+, rev ? "${rev-prefix}${version}"
+, sha256
+, odd-unstable ? true
+, patchlevel-unstable ? true
+, passthru ? { }
+, meta ? { }
+, ...
 }@args:
 
 let
@@ -94,7 +93,7 @@ in
 stdenv.mkDerivation (
   publicArgs
   // template
-  // concatAttrLists [
+    // concatAttrLists [
     template
     args
   ]

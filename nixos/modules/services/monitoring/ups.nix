@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 # TODO: This is not secure, have a look at the file docs/security.txt inside
 # the project sources.
@@ -22,12 +21,13 @@ let
       let
 
         singleAtom =
-          nullOr (oneOf [
-            bool
-            int
-            float
-            str
-          ])
+          nullOr
+            (oneOf [
+              bool
+              int
+              float
+              str
+            ])
           // {
             description = "atom (null, bool, int, float or string)";
           };
@@ -41,15 +41,17 @@ let
     generate =
       name: value:
       let
-        normalizedValue = lib.mapAttrs (
-          key: val:
-          if lib.isList val then
-            lib.forEach val (elem: if lib.isList elem then elem else [ elem ])
-          else if val == null then
-            [ ]
-          else
-            [ [ val ] ]
-        ) value;
+        normalizedValue = lib.mapAttrs
+          (
+            key: val:
+              if lib.isList val then
+                lib.forEach val (elem: if lib.isList elem then elem else [ elem ])
+              else if val == null then
+                [ ]
+              else
+                [ [ val ] ]
+          )
+          value;
 
         mkValueString = lib.concatMapStringsSep " " (
           v:
@@ -65,10 +67,12 @@ let
 
       in
       pkgs.writeText name (
-        lib.generators.toKeyValue {
-          mkKeyValue = lib.generators.mkKeyValueDefault { inherit mkValueString; } " ";
-          listsAsDuplicateKeys = true;
-        } normalizedValue
+        lib.generators.toKeyValue
+          {
+            mkKeyValue = lib.generators.mkKeyValueDefault { inherit mkValueString; } " ";
+            listsAsDuplicateKeys = true;
+          }
+          normalizedValue
       );
 
   };
@@ -610,9 +614,11 @@ in
           ExecStartPre = "${createUpsmonConf}";
           ExecStart = "${cfg.package}/sbin/upsmon -u ${cfg.upsmon.user}";
           ExecReload = "${cfg.package}/sbin/upsmon -c reload";
-          LoadCredential = lib.mapAttrsToList (
-            name: monitor: "upsmon_password_${name}:${monitor.passwordFile}"
-          ) cfg.upsmon.monitor;
+          LoadCredential = lib.mapAttrsToList
+            (
+              name: monitor: "upsmon_password_${name}:${monitor.passwordFile}"
+            )
+            cfg.upsmon.monitor;
           Slice = "system-ups.slice";
         };
         environment = envVars;
@@ -637,9 +643,11 @@ in
           # TODO: replace 'root' by another username.
           ExecStart = "${cfg.package}/sbin/upsd -u root";
           ExecReload = "${cfg.package}/sbin/upsd -c reload";
-          LoadCredential = lib.mapAttrsToList (
-            name: user: "upsdusers_password_${name}:${user.passwordFile}"
-          ) cfg.users;
+          LoadCredential = lib.mapAttrsToList
+            (
+              name: user: "upsdusers_password_${name}:${user.passwordFile}"
+            )
+            cfg.users;
           Slice = "system-ups.slice";
         };
         environment = envVars;

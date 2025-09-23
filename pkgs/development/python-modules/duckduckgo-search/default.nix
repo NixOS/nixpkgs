@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  primp,
-  lxml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, primp
+, lxml
+,
 }:
 
 buildPythonPackage rec {

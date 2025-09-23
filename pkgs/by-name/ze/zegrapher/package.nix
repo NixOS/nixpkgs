@@ -1,9 +1,9 @@
-{
-  lib,
-  boost186,
-  fetchFromGitHub,
-  qt5,
-  stdenv,
+{ lib
+, boost186
+, fetchFromGitHub
+, qt5
+, stdenv
+,
 }:
 
 let

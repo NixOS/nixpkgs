@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  _7zz,
-  cpio,
-  xar,
-  darwin,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchurl
+, _7zz
+, cpio
+, xar
+, darwin
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

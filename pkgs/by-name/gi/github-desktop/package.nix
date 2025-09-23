@@ -1,23 +1,23 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  buildPackages,
-  gnome-keyring,
-  libsecret,
-  git,
-  curl,
-  nss,
-  nspr,
-  xorg,
-  libdrm,
-  alsa-lib,
-  cups,
-  libgbm,
-  systemdLibs,
-  openssl,
-  libglvnd,
+{ stdenvNoCC
+, lib
+, fetchurl
+, autoPatchelfHook
+, buildPackages
+, gnome-keyring
+, libsecret
+, git
+, curl
+, nss
+, nspr
+, xorg
+, libdrm
+, alsa-lib
+, cups
+, libgbm
+, systemdLibs
+, openssl
+, libglvnd
+,
 }:
 
 let

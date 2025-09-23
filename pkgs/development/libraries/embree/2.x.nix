@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  ispc,
-  tbb_2020,
-  glfw,
-  openimageio,
-  libjpeg,
-  libpng,
-  libpthreadstubs,
-  libX11,
-  python3Packages,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ispc
+, tbb_2020
+, glfw
+, openimageio
+, libjpeg
+, libpng
+, libpthreadstubs
+, libX11
+, python3Packages
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

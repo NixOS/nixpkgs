@@ -1,16 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-
-  ant,
-  jdk,
-  makeWrapper,
-  stripJavaArchivesHook,
-
-  coreutils,
-  jre,
-  which,
+{ lib
+, stdenv
+, fetchgit
+, ant
+, jdk
+, makeWrapper
+, stripJavaArchivesHook
+, coreutils
+, jre
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  fetchurl,
-  raylib,
+{ buildDunePackage
+, fetchurl
+, raylib
+,
 }:
 
 buildDunePackage rec {

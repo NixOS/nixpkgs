@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  xorg,
-  imlib2Full,
-  libjpeg,
-  libpng,
-  curl,
-  libexif,
-  jpegexiforient,
-  perl,
-  enableAutoreload ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, xorg
+, imlib2Full
+, libjpeg
+, libpng
+, curl
+, libexif
+, jpegexiforient
+, perl
+, enableAutoreload ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

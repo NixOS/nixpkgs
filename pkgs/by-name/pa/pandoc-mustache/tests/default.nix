@@ -1,7 +1,7 @@
-{
-  pkgs,
-  pandoc-mustache,
-  runCommand,
+{ pkgs
+, pandoc-mustache
+, runCommand
+,
 }:
 let
   vars = pkgs.writeText "vars.yaml" ''
@@ -18,12 +18,12 @@ let
   '';
 in
 runCommand "pandoc-mustache-test"
-  {
-    nativeBuildInputs = [
-      pandoc-mustache
-      pkgs.pandoc
-    ];
-  }
+{
+  nativeBuildInputs = [
+    pandoc-mustache
+    pkgs.pandoc
+  ];
+}
   ''
     pandoc --filter pandoc-mustache ${markdown} --to plain | grep 'The temperature in Montreal was 7 degrees.' || exit 1
     touch $out

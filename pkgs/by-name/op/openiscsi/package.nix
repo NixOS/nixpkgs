@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  perl,
-  util-linux,
-  open-isns,
-  openssl,
-  kmod,
-  systemd,
-  runtimeShell,
-  nixosTests,
-  udevCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, perl
+, util-linux
+, open-isns
+, openssl
+, kmod
+, systemd
+, runtimeShell
+, nixosTests
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

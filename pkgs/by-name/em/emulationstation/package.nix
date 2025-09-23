@@ -1,19 +1,19 @@
-{
-  lib,
-  SDL2,
-  alsa-lib,
-  boost,
-  callPackage,
-  cmake,
-  curl,
-  freeimage,
-  freetype,
-  libGL,
-  libGLU,
-  libvlc,
-  pkg-config,
-  rapidjson,
-  stdenv,
+{ lib
+, SDL2
+, alsa-lib
+, boost
+, callPackage
+, cmake
+, curl
+, freeimage
+, freetype
+, libGL
+, libGLU
+, libvlc
+, pkg-config
+, rapidjson
+, stdenv
+,
 }:
 
 let

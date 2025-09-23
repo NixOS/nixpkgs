@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-  electron,
-  alsa-lib,
-  gtk3,
-  libxshmfence,
-  libgbm,
-  nss,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, electron
+, alsa-lib
+, gtk3
+, libxshmfence
+, libgbm
+, nss
+,
 }:
 
 stdenv.mkDerivation rec {

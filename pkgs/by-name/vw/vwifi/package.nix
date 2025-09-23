@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libnl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libnl
+, pkg-config
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vwifi";

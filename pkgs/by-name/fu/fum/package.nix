@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  openssl,
-  dbus,
-  pkg-config,
-  libgcc,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, autoPatchelfHook
+, openssl
+, dbus
+, pkg-config
+, libgcc
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "fum";

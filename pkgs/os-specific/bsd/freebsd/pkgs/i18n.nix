@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  mkcsmapper,
-  mkesdb,
+{ mkDerivation
+, mkcsmapper
+, mkesdb
+,
 }:
 
 mkDerivation {

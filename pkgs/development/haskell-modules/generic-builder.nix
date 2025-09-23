@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  buildHaskellPackages,
-  ghc,
-  jailbreak-cabal,
-  hscolour,
-  cpphs,
-  runCommandCC,
-  ghcWithHoogle,
-  ghcWithPackages,
-  nodejs,
+{ lib
+, stdenv
+, buildPackages
+, buildHaskellPackages
+, ghc
+, jailbreak-cabal
+, hscolour
+, cpphs
+, runCommandCC
+, ghcWithHoogle
+, ghcWithPackages
+, nodejs
+,
 }:
 
 let
@@ -38,153 +38,155 @@ let
 
 in
 
-{
-  pname,
-  dontStrip ? stdenv.hostPlatform.isGhcjs,
-  version,
-  revision ? null,
-  sha256 ? null,
-  src ? fetchurl {
+{ pname
+, dontStrip ? stdenv.hostPlatform.isGhcjs
+, version
+, revision ? null
+, sha256 ? null
+, src ? fetchurl {
     url = "mirror://hackage/${pname}-${version}.tar.gz";
     inherit sha256;
-  },
-  sourceRoot ? null,
-  setSourceRoot ? null,
-  # Extra environment variables to set during the build.
+  }
+, sourceRoot ? null
+, setSourceRoot ? null
+, # Extra environment variables to set during the build.
   # See: `../../../doc/languages-frameworks/haskell.section.md`
-  env ? { },
-  buildDepends ? [ ],
-  setupHaskellDepends ? [ ],
-  libraryHaskellDepends ? [ ],
-  executableHaskellDepends ? [ ],
-  buildTarget ? "",
-  buildTools ? [ ],
-  libraryToolDepends ? [ ],
-  executableToolDepends ? [ ],
-  testToolDepends ? [ ],
-  benchmarkToolDepends ? [ ],
-  configureFlags ? [ ],
-  buildFlags ? [ ],
-  haddockFlags ? [ ],
-  description ? null,
-  doCheck ? !isCross,
-  doBenchmark ? false,
-  doHoogle ? true,
-  doHaddockQuickjump ? doHoogle,
-  doInstallIntermediates ? false,
-  editedCabalFile ? null,
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs,
-  enableExecutableProfiling ? false,
-  profilingDetail ? "exported-functions",
-  # TODO enable shared libs for cross-compiling
-  enableSharedExecutables ? false,
-  enableSharedLibraries ?
-    !stdenv.hostPlatform.isStatic
+  env ? { }
+, buildDepends ? [ ]
+, setupHaskellDepends ? [ ]
+, libraryHaskellDepends ? [ ]
+, executableHaskellDepends ? [ ]
+, buildTarget ? ""
+, buildTools ? [ ]
+, libraryToolDepends ? [ ]
+, executableToolDepends ? [ ]
+, testToolDepends ? [ ]
+, benchmarkToolDepends ? [ ]
+, configureFlags ? [ ]
+, buildFlags ? [ ]
+, haddockFlags ? [ ]
+, description ? null
+, doCheck ? !isCross
+, doBenchmark ? false
+, doHoogle ? true
+, doHaddockQuickjump ? doHoogle
+, doInstallIntermediates ? false
+, editedCabalFile ? null
+, enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs
+, enableExecutableProfiling ? false
+, profilingDetail ? "exported-functions"
+, # TODO enable shared libs for cross-compiling
+  enableSharedExecutables ? false
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
     && (ghc.enableShared or false)
-    && !stdenv.hostPlatform.useAndroidPrebuilt, # TODO: figure out why /build leaks into RPATH
-  enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin), # TODO: use -dead_strip for darwin
+    && !stdenv.hostPlatform.useAndroidPrebuilt
+, # TODO: figure out why /build leaks into RPATH
+  enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin)
+, # TODO: use -dead_strip for darwin
   # Disabling this for JS prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
-  enableStaticLibraries ?
-    !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs),
-  enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows,
-  extraLibraries ? [ ],
-  librarySystemDepends ? [ ],
-  executableSystemDepends ? [ ],
-  # On macOS, statically linking against system frameworks is not supported;
+  enableStaticLibraries ? !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs)
+, enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows
+, extraLibraries ? [ ]
+, librarySystemDepends ? [ ]
+, executableSystemDepends ? [ ]
+, # On macOS, statically linking against system frameworks is not supported;
   # see https://developer.apple.com/library/content/qa/qa1118/_index.html
   # They must be propagated to the environment of any executable linking with the library
-  libraryFrameworkDepends ? [ ],
-  executableFrameworkDepends ? [ ],
-  homepage ? "https://hackage.haskell.org/package/${pname}",
-  platforms ? with lib.platforms; all, # GHC can cross-compile
-  badPlatforms ? lib.platforms.none,
-  hydraPlatforms ? null,
-  hyperlinkSource ? true,
-  isExecutable ? false,
-  isLibrary ? !isExecutable,
-  jailbreak ? false,
-  license,
-  enableParallelBuilding ? true,
-  maintainers ? null,
-  teams ? null,
-  changelog ? null,
-  mainProgram ? null,
-  doCoverage ? false,
-  doHaddock ? !(ghc.isHaLVM or false) && (ghc.hasHaddock or true),
-  doHaddockInterfaces ? doHaddock && lib.versionAtLeast ghc.version "9.0.1",
-  passthru ? { },
-  pkg-configDepends ? [ ],
-  libraryPkgconfigDepends ? [ ],
-  executablePkgconfigDepends ? [ ],
-  testPkgconfigDepends ? [ ],
-  benchmarkPkgconfigDepends ? [ ],
-  testDepends ? [ ],
-  testHaskellDepends ? [ ],
-  testSystemDepends ? [ ],
-  testFrameworkDepends ? [ ],
-  benchmarkDepends ? [ ],
-  benchmarkHaskellDepends ? [ ],
-  benchmarkSystemDepends ? [ ],
-  benchmarkFrameworkDepends ? [ ],
-  # testTarget is deprecated. Use testTargets instead.
-  testTarget ? "",
-  testTargets ? lib.strings.splitString " " testTarget,
-  testFlags ? [ ],
-  broken ? false,
-  preCompileBuildDriver ? null,
-  postCompileBuildDriver ? null,
-  preUnpack ? null,
-  postUnpack ? null,
-  patches ? null,
-  patchPhase ? null,
-  prePatch ? "",
-  postPatch ? "",
-  preConfigure ? null,
-  postConfigure ? null,
-  preBuild ? null,
-  postBuild ? null,
-  preHaddock ? null,
-  postHaddock ? null,
-  installPhase ? null,
-  preInstall ? null,
-  postInstall ? null,
-  checkPhase ? null,
-  preCheck ? null,
-  postCheck ? null,
-  preFixup ? null,
-  postFixup ? null,
-  shellHook ? "",
-  coreSetup ? false, # Use only core packages to build Setup.hs.
-  useCpphs ? false,
-  hardeningDisable ? null,
-  enableSeparateBinOutput ? false,
-  enableSeparateDataOutput ? false,
-  enableSeparateDocOutput ? doHaddock,
-  enableSeparateIntermediatesOutput ? false,
-  # Don't fail at configure time if there are multiple versions of the
+  libraryFrameworkDepends ? [ ]
+, executableFrameworkDepends ? [ ]
+, homepage ? "https://hackage.haskell.org/package/${pname}"
+, platforms ? with lib.platforms; all
+, # GHC can cross-compile
+  badPlatforms ? lib.platforms.none
+, hydraPlatforms ? null
+, hyperlinkSource ? true
+, isExecutable ? false
+, isLibrary ? !isExecutable
+, jailbreak ? false
+, license
+, enableParallelBuilding ? true
+, maintainers ? null
+, teams ? null
+, changelog ? null
+, mainProgram ? null
+, doCoverage ? false
+, doHaddock ? !(ghc.isHaLVM or false) && (ghc.hasHaddock or true)
+, doHaddockInterfaces ? doHaddock && lib.versionAtLeast ghc.version "9.0.1"
+, passthru ? { }
+, pkg-configDepends ? [ ]
+, libraryPkgconfigDepends ? [ ]
+, executablePkgconfigDepends ? [ ]
+, testPkgconfigDepends ? [ ]
+, benchmarkPkgconfigDepends ? [ ]
+, testDepends ? [ ]
+, testHaskellDepends ? [ ]
+, testSystemDepends ? [ ]
+, testFrameworkDepends ? [ ]
+, benchmarkDepends ? [ ]
+, benchmarkHaskellDepends ? [ ]
+, benchmarkSystemDepends ? [ ]
+, benchmarkFrameworkDepends ? [ ]
+, # testTarget is deprecated. Use testTargets instead.
+  testTarget ? ""
+, testTargets ? lib.strings.splitString " " testTarget
+, testFlags ? [ ]
+, broken ? false
+, preCompileBuildDriver ? null
+, postCompileBuildDriver ? null
+, preUnpack ? null
+, postUnpack ? null
+, patches ? null
+, patchPhase ? null
+, prePatch ? ""
+, postPatch ? ""
+, preConfigure ? null
+, postConfigure ? null
+, preBuild ? null
+, postBuild ? null
+, preHaddock ? null
+, postHaddock ? null
+, installPhase ? null
+, preInstall ? null
+, postInstall ? null
+, checkPhase ? null
+, preCheck ? null
+, postCheck ? null
+, preFixup ? null
+, postFixup ? null
+, shellHook ? ""
+, coreSetup ? false
+, # Use only core packages to build Setup.hs.
+  useCpphs ? false
+, hardeningDisable ? null
+, enableSeparateBinOutput ? false
+, enableSeparateDataOutput ? false
+, enableSeparateDocOutput ? doHaddock
+, enableSeparateIntermediatesOutput ? false
+, # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
-  allowInconsistentDependencies ? false,
-  maxBuildCores ? 16, # more cores usually don't improve performance: https://ghc.haskell.org/trac/ghc/ticket/9221
+  allowInconsistentDependencies ? false
+, maxBuildCores ? 16
+, # more cores usually don't improve performance: https://ghc.haskell.org/trac/ghc/ticket/9221
   # If set to true, this builds a pre-linked .o file for this Haskell library.
   # This can make it slightly faster to load this library into GHCi, but takes
   # extra disk space and compile time.
-  enableLibraryForGhci ? false,
-  # Set this to a previous build of this same package to reuse the intermediate
+  enableLibraryForGhci ? false
+, # Set this to a previous build of this same package to reuse the intermediate
   # build products from that prior build as a starting point for accelerating
   # this build
-  previousIntermediates ? null,
-  # References to these store paths are forbidden in the produced output.
-  disallowedRequisites ? [ ],
-  # Whether to allow the produced output to refer to `ghc`.
+  previousIntermediates ? null
+, # References to these store paths are forbidden in the produced output.
+  disallowedRequisites ? [ ]
+, # Whether to allow the produced output to refer to `ghc`.
   #
   # This is used by `haskell.lib.justStaticExecutables` to help prevent static
   # Haskell binaries from having erroneous dependencies on GHC.
   #
   # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
   # or its source doc/languages-frameworks/haskell.section.md
-  disallowGhcReference ? false,
-  # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
+  disallowGhcReference ? false
+, # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
   # Requires.private dependencies of pkg-config dependencies to be present in
   # PKG_CONFIG_PATH which is normally not the case in nixpkgs (except in pkgsStatic).
@@ -193,13 +195,14 @@ in
   # GHC >= 9.3 by default. This option allows overriding this behavior manually
   # if mismatching Cabal and GHC versions are used.
   # See also <https://github.com/haskell/cabal/issues/8455>.
-  __propagatePkgConfigDepends ? lib.versionAtLeast ghc.version "9.3",
-  # Propagation can easily lead to the argv limit being exceeded in linker or C
+  __propagatePkgConfigDepends ? lib.versionAtLeast ghc.version "9.3"
+, # Propagation can easily lead to the argv limit being exceeded in linker or C
   # compiler invocations. To work around this we can only propagate derivations
   # that are known to provide pkg-config modules, as indicated by the presence
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
-  __onlyPropagateKnownPkgConfigModules ? false,
+  __onlyPropagateKnownPkgConfigModules ? false
+,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
@@ -313,12 +316,14 @@ let
   ]
   ++ [
     "--package-db=$packageConfDir"
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isLinux
-    ) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isDarwin
-    ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
+    (optionalString
+      (
+        enableSharedExecutables && stdenv.hostPlatform.isLinux
+      ) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
+    (optionalString
+      (
+        enableSharedExecutables && stdenv.hostPlatform.isDarwin
+      ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding (makeGhcOptions [
       "-j$NIX_BUILD_CORES"
       "+RTS"
@@ -327,16 +332,17 @@ let
     ]))
     (optionalString useCpphs (
       "--with-cpphs=${cpphs}/bin/cpphs "
-      + (makeGhcOptions [
+        + (makeGhcOptions [
         "-cpp"
         "-pgmP${cpphs}/bin/cpphs"
         "-optP--cpp"
       ])
     ))
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString (
-      enableExecutableProfiling || enableLibraryProfiling
-    ) "--profiling-detail=${profilingDetail}")
+    (optionalString
+      (
+        enableExecutableProfiling || enableLibraryProfiling
+      ) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
     (enableFeature doCoverage "coverage")
@@ -394,24 +400,28 @@ let
         drvs:
         builtins.map (i: i.val) (
           builtins.genericClosure {
-            startSet = builtins.map (drv: {
-              key = drv.outPath;
-              val = drv;
-            }) (builtins.filter propagateValue drvs);
+            startSet = builtins.map
+              (drv: {
+                key = drv.outPath;
+                val = drv;
+              })
+              (builtins.filter propagateValue drvs);
             operator =
               { val, ... }:
-              builtins.concatMap (
-                drv:
-                if propagateValue drv then
-                  [
-                    {
-                      key = drv.outPath;
-                      val = drv;
-                    }
-                  ]
-                else
-                  [ ]
-              ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
+              builtins.concatMap
+                (
+                  drv:
+                  if propagateValue drv then
+                    [
+                      {
+                        key = drv.outPath;
+                        val = drv;
+                      }
+                    ]
+                  else
+                    [ ]
+                )
+                (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
           }
         );
     in
@@ -553,7 +563,7 @@ let
   // optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE =
       "-Wno-error=int-conversion"
-      + lib.optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
+        + lib.optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
   };
 
 in
@@ -591,9 +601,10 @@ lib.fix (
       propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
       env =
-        optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
-          LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-        }
+        optionalAttrs (stdenv.buildPlatform.libc == "glibc")
+          {
+            LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+          }
         // env';
 
       prePatch =
@@ -959,8 +970,8 @@ lib.fix (
         #   > nix-shell -E 'with (import <nixpkgs> {}); \
         #   >    haskellPackages.hello.envFunc { buildInputs = [ python ]; }'
         envFunc =
-          {
-            withHoogle ? false,
+          { withHoogle ? false
+          ,
           }:
           let
             name = "ghc-shell-for-${drv.name}";
@@ -982,47 +993,48 @@ lib.fix (
 
             ghcCommandCaps = lib.toUpper ghcCommand';
           in
-          runCommandCC name {
-            inherit shellHook;
+          runCommandCC name
+            {
+              inherit shellHook;
 
-            depsBuildBuild = lib.optional isCross ghcEnvForBuild;
-            nativeBuildInputs = [
-              ghcEnv
-            ]
-            ++ optional (allPkgconfigDepends != [ ]) pkg-config
-            ++ collectedToolDepends;
-            buildInputs = otherBuildInputsSystem;
+              depsBuildBuild = lib.optional isCross ghcEnvForBuild;
+              nativeBuildInputs = [
+                ghcEnv
+              ]
+              ++ optional (allPkgconfigDepends != [ ]) pkg-config
+              ++ collectedToolDepends;
+              buildInputs = otherBuildInputsSystem;
 
-            env = {
-              "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
-              "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
-              # TODO: is this still valid?
-              "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
-              "NIX_${ghcCommandCaps}_LIBDIR" =
-                if ghc.isHaLVM or false then "${ghcEnv}/lib/HaLVM-${ghc.version}" else "${ghcEnv}/${ghcLibdir}";
-            }
-            // optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
-              # TODO: Why is this written in terms of `buildPackages`, unlike
-              # the outer `env`?
-              #
-              # According to @sternenseemann [1]:
-              #
-              # > The condition is based on `buildPlatform`, so it needs to
-              # > match. `LOCALE_ARCHIVE` is set to accompany `LANG` which
-              # > concerns things we execute on the build platform like
-              # > `haddock`.
-              # >
-              # > Arguably the outer non `buildPackages` one is incorrect and
-              # > probably works by accident in most cases since the locale
-              # > archive is not platform specific (the trouble is that it
-              # > may sometimes be impossible to cross-compile). At least
-              # > that would be my assumption.
-              #
-              # [1]: https://github.com/NixOS/nixpkgs/pull/424368#discussion_r2202683378
-              LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
-            }
-            // env';
-          } "echo $nativeBuildInputs $buildInputs > $out";
+              env = {
+                "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
+                "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
+                # TODO: is this still valid?
+                "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
+                "NIX_${ghcCommandCaps}_LIBDIR" =
+                  if ghc.isHaLVM or false then "${ghcEnv}/lib/HaLVM-${ghc.version}" else "${ghcEnv}/${ghcLibdir}";
+              }
+              // optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
+                # TODO: Why is this written in terms of `buildPackages`, unlike
+                # the outer `env`?
+                #
+                # According to @sternenseemann [1]:
+                #
+                # > The condition is based on `buildPlatform`, so it needs to
+                # > match. `LOCALE_ARCHIVE` is set to accompany `LANG` which
+                # > concerns things we execute on the build platform like
+                # > `haddock`.
+                # >
+                # > Arguably the outer non `buildPackages` one is incorrect and
+                # > probably works by accident in most cases since the locale
+                # > archive is not platform specific (the trouble is that it
+                # > may sometimes be impossible to cross-compile). At least
+                # > that would be my assumption.
+                #
+                # [1]: https://github.com/NixOS/nixpkgs/pull/424368#discussion_r2202683378
+                LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+              }
+              // env';
+            } "echo $nativeBuildInputs $buildInputs > $out";
 
         env = envFunc { };
 
@@ -1066,7 +1078,7 @@ lib.fix (
     // optionalAttrs (args ? postFixup) { inherit postFixup; }
     // optionalAttrs (args ? dontStrip) { inherit dontStrip; }
     // optionalAttrs (postPhases != [ ]) { inherit postPhases; }
-    // optionalAttrs (disallowedRequisites != [ ] || disallowGhcReference) {
+      // optionalAttrs (disallowedRequisites != [ ] || disallowGhcReference) {
       disallowedRequisites = disallowedRequisites ++ (if disallowGhcReference then [ ghc ] else [ ]);
     }
   )

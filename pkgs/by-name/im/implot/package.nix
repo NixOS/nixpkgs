@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  cmake,
-  vcpkg,
-  imgui,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, cmake
+, vcpkg
+, imgui
+,
 }:
 
 stdenv.mkDerivation rec {

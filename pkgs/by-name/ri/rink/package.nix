@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  openssl,
-  pkg-config,
-  ncurses,
-  curl,
-  installShellFiles,
-  asciidoctor,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, pkg-config
+, ncurses
+, curl
+, installShellFiles
+, asciidoctor
+, libiconv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

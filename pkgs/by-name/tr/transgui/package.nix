@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  makeDesktopItem,
-  unzip,
-  fpc,
-  lazarus,
-  libX11,
-  glib,
-  gtk2,
-  gdk-pixbuf,
-  pango,
-  atk,
-  cairo,
-  openssl,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, makeDesktopItem
+, unzip
+, fpc
+, lazarus
+, libX11
+, glib
+, gtk2
+, gdk-pixbuf
+, pango
+, atk
+, cairo
+, openssl
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

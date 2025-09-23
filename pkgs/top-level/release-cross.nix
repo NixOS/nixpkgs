@@ -19,10 +19,10 @@
     "x86_64-linux"
     "aarch64-linux"
     "aarch64-darwin"
-  ],
-  # Strip most of attributes when evaluating to spare memory usage
-  scrubJobs ? true,
-  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  ]
+, # Strip most of attributes when evaluating to spare memory usage
+  scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
       allowAliases = false;
@@ -30,7 +30,8 @@
       inHydra = true;
     };
     __allowFileset = false;
-  },
+  }
+,
 }:
 
 let
@@ -296,8 +297,8 @@ in
       };
       mkBootstrapToolsJob =
         meta: drv:
-        assert elem drv.system supportedSystems;
-        hydraJob' (addMetaAttrs meta drv);
+          assert elem drv.system supportedSystems;
+          hydraJob' (addMetaAttrs meta drv);
       linux =
         mapAttrsRecursiveCond (as: !isDerivation as) (name: mkBootstrapToolsJob linuxMeta)
           # The `bootstrapTools.${platform}.bootstrapTools` derivation
@@ -308,17 +309,21 @@ in
           # as a special case.  We filter the "test" attribute (only from
           # *cross*-built bootstrapTools) for the same reason.
           (
-            mapAttrs (
-              _: v:
-              removeAttrs v [
-                "bootstrapTools"
-                "test"
-              ]
-            ) linuxTools
+            mapAttrs
+              (
+                _: v:
+                  removeAttrs v [
+                    "bootstrapTools"
+                    "test"
+                  ]
+              )
+              linuxTools
           );
-      freebsd = mapAttrsRecursiveCond (as: !isDerivation as) (
-        name: mkBootstrapToolsJob freebsdMeta
-      ) freebsdTools;
+      freebsd = mapAttrsRecursiveCond (as: !isDerivation as)
+        (
+          name: mkBootstrapToolsJob freebsdMeta
+        )
+        freebsdTools;
     in
     linux // freebsd;
 

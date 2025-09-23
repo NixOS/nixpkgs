@@ -1,31 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  withPython ? true,
-
-  cairo,
-  cmake,
-  curl,
-  fcgi,
-  freetype,
-  fribidi,
-  gdal,
-  geos,
-  giflib,
-  harfbuzz,
-  libjpeg,
-  libpng,
-  libpq,
-  librsvg,
-  libxml2,
-  pkg-config,
-  proj,
-  protobufc,
-  python3,
-  swig,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, withPython ? true
+, cairo
+, cmake
+, curl
+, fcgi
+, freetype
+, fribidi
+, gdal
+, geos
+, giflib
+, harfbuzz
+, libjpeg
+, libpng
+, libpq
+, librsvg
+, libxml2
+, pkg-config
+, proj
+, protobufc
+, python3
+, swig
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

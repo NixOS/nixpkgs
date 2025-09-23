@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libdaq,
-  libdnet,
-  flex,
-  hwloc,
-  luajit,
-  openssl,
-  libpcap,
-  pcre2,
-  pkg-config,
-  zlib,
-  xz,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libdaq
+, libdnet
+, flex
+, hwloc
+, luajit
+, openssl
+, libpcap
+, pcre2
+, pkg-config
+, zlib
+, xz
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

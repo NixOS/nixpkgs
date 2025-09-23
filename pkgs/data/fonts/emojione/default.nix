@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  inkscape,
-  imagemagick,
-  potrace,
-  svgo,
-  scfbuild,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, inkscape
+, imagemagick
+, potrace
+, svgo
+, scfbuild
+,
 }:
 
 stdenv.mkDerivation rec {

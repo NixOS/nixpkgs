@@ -34,7 +34,7 @@ import ./make-test-python.nix (
           builtins.mapAttrs
             (
               n: v:
-              pkgs.runCommand "test-exec-${n}" { src = pkgs.fetchurl v; } "mkdir -p $out;cd $out;tar -xzf $src"
+                pkgs.runCommand "test-exec-${n}" { src = pkgs.fetchurl v; } "mkdir -p $out;cd $out;tar -xzf $src"
             )
             {
               x86_64-linux.url = "https://github.com/rustic-rs/rustic/releases/download/v0.6.1/rustic-v0.6.1-x86_64-unknown-linux-gnu.tar.gz";

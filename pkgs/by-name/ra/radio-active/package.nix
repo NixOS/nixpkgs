@@ -1,25 +1,25 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  ffmpeg,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, ffmpeg
+,
 }:
 
 let
   ## https://github.com/deep5050/radio-active/blob/main/requirements.txt
   pyradios_1-0-2 = python3Packages.pyradios.overrideAttrs (
     finalAttrs: previousAttrs:
-    let
-      version = "1.0.2";
-    in
-    {
-      inherit version;
-
-      src = previousAttrs.src.override {
+      let
+        version = "1.0.2";
+      in
+      {
         inherit version;
-        hash = "sha256-O30ExmvWu4spwDytFVPWGjR8w3XSTaWd2Z0LGQibq9g=";
-      };
-    }
+
+        src = previousAttrs.src.override {
+          inherit version;
+          hash = "sha256-O30ExmvWu4spwDytFVPWGjR8w3XSTaWd2Z0LGQibq9g=";
+        };
+      }
   );
 
   pname = "radio-active";

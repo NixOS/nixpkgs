@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  impacket,
-  ldap3-bleeding-edge,
-  lxml,
-  pyasn1,
-  pycryptodome,
-  pythonOlder,
-  setuptools,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, impacket
+, ldap3-bleeding-edge
+, lxml
+, pyasn1
+, pycryptodome
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

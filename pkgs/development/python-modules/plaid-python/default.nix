@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  nulltype,
-  python-dateutil,
-  urllib3,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nulltype
+, python-dateutil
+, urllib3
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

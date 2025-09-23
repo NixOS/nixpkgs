@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  nixosTests,
-  fetchFromGitHub,
-  nodejs,
-  pnpm_10,
-  python3,
-  node-gyp,
-  cctools,
-  xcbuild,
-  libkrb5,
-  libmongocrypt,
-  libpq,
-  makeWrapper,
+{ stdenv
+, lib
+, nixosTests
+, fetchFromGitHub
+, nodejs
+, pnpm_10
+, python3
+, node-gyp
+, cctools
+, xcbuild
+, libkrb5
+, libmongocrypt
+, libpq
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

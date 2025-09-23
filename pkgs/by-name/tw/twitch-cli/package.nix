@@ -1,11 +1,11 @@
-{
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  testers,
-  twitch-cli,
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, testers
+, twitch-cli
+,
 }:
 
 buildGoModule rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  bzip2,
-  libxml2,
-  swig,
-  python ? null,
-  withPython ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, bzip2
+, libxml2
+, swig
+, python ? null
+, withPython ? false
+,
 }:
 stdenv.mkDerivation (attrs: {
   pname = "libsbml";

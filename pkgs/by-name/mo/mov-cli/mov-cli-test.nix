@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  pytubefix,
-  requests,
-  devgoldyutils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, pytubefix
+, requests
+, devgoldyutils
+,
 }:
 
 buildPythonPackage rec {

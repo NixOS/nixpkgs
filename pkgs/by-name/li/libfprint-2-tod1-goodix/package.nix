@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  libfprint-tod,
+{ stdenv
+, lib
+, fetchgit
+, libfprint-tod
+,
 }:
 
 stdenv.mkDerivation {

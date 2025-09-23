@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+,
 }:
 stdenv.mkDerivation {
   name = "ropebwt2";

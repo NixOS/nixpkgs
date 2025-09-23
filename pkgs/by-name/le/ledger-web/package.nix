@@ -1,11 +1,11 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  withPostgresql ? true,
-  libpq,
-  withSqlite ? false,
-  sqlite,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, withPostgresql ? true
+, libpq
+, withSqlite ? false
+, sqlite
+,
 }:
 
 bundlerApp {

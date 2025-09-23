@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  lazysql,
-  xorg ? null,
-  darwin ? null,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, testers
+, lazysql
+, xorg ? null
+, darwin ? null
+,
 }:
 
 buildGoModule rec {

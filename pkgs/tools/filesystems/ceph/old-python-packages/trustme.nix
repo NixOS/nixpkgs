@@ -1,14 +1,14 @@
 # This older version only exists because `ceph` needs it, see its package.
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  idna,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  service-identity,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, idna
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, service-identity
+,
 }:
 
 buildPythonPackage rec {

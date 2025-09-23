@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  pytestCheckHook,
-  aiohttp,
-  build,
-  mock,
-  opentelemetry-api,
-  pytest-asyncio,
-  pytest-cov-stub,
-  python-dateutil,
-  setuptools,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pytestCheckHook
+, aiohttp
+, build
+, mock
+, opentelemetry-api
+, pytest-asyncio
+, pytest-cov-stub
+, python-dateutil
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

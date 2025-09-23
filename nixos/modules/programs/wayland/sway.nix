@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -20,18 +19,19 @@ in
       "man 5 sway" for more information'';
 
     package =
-      lib.mkPackageOption pkgs "sway" {
-        nullable = true;
-        extraDescription = ''
-          If the package is not overridable with `extraSessionCommands`, `extraOptions`,
-          `withBaseWrapper`, `withGtkWrapper`, `enableXWayland` and `isNixOS`,
-          then the module options {option}`wrapperFeatures`, {option}`extraSessionCommands`,
-          {option}`extraOptions` and {option}`xwayland` will have no effect.
+      lib.mkPackageOption pkgs "sway"
+        {
+          nullable = true;
+          extraDescription = ''
+            If the package is not overridable with `extraSessionCommands`, `extraOptions`,
+            `withBaseWrapper`, `withGtkWrapper`, `enableXWayland` and `isNixOS`,
+            then the module options {option}`wrapperFeatures`, {option}`extraSessionCommands`,
+            {option}`extraOptions` and {option}`xwayland` will have no effect.
 
-          Set to `null` to not add any Sway package to your path.
-          This should be done if you want to use the Home Manager Sway module to install Sway.
-        '';
-      }
+            Set to `null` to not add any Sway package to your path.
+            This should be done if you want to use the Home Manager Sway module to install Sway.
+          '';
+        }
       // {
         apply =
           p:

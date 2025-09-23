@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  php,
-  writeShellApplication,
-  curl,
-  gnugrep,
-  common-updater-scripts,
+{ stdenvNoCC
+, lib
+, fetchurl
+, autoPatchelfHook
+, php
+, writeShellApplication
+, curl
+, gnugrep
+, common-updater-scripts
+,
 }:
 
 let
@@ -17,8 +17,7 @@ let
       "8.1" = "tideways-php-8.1.so";
       "8.2" = "tideways-php-8.2.so";
       "8.3" = "tideways-php-8.3.so";
-    }
-    .${lib.versions.majorMinor php.version} or (throw "Unsupported PHP version.");
+    }.${lib.versions.majorMinor php.version} or (throw "Unsupported PHP version.");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-php";

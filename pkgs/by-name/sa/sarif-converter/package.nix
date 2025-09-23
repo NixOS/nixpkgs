@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitLab,
-  nix-update-script,
-  sarif-converter,
-  testers,
+{ lib
+, buildGoModule
+, fetchFromGitLab
+, nix-update-script
+, sarif-converter
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

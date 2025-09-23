@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  rdma-core,
-  openssl,
-  zlib,
-  xz,
-  expat,
-  boost,
-  curl,
-  pkg-config,
-  libxml2,
-  pciutils,
-  busybox,
-  python3,
-  automake,
-  autoconf,
-  libtool,
-  git,
-  # use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
-  onlyFirmwareUpdater ? false,
-  # contains binary-only libraries
-  enableDPA ? true,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, rdma-core
+, openssl
+, zlib
+, xz
+, expat
+, boost
+, curl
+, pkg-config
+, libxml2
+, pciutils
+, busybox
+, python3
+, automake
+, autoconf
+, libtool
+, git
+, # use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
+  onlyFirmwareUpdater ? false
+, # contains binary-only libraries
+  enableDPA ? true
+,
 }:
 
 stdenv.mkDerivation rec {

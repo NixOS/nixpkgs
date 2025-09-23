@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  libpsl,
-  python3,
-  lzip,
+{ lib
+, stdenv
+, libpsl
+, python3
+, lzip
+,
 }:
 
 stdenv.mkDerivation {
@@ -34,9 +34,11 @@ stdenv.mkDerivation {
         find . \( -type f -o -type l \) -print0 | xargs -0 -I{} ln -s ${oldOutput}/{} ${newOutput}/{}
         cd -
       '';
-      links = lib.concatMapStrings (
-        output: linkOutput libpsl.${output} (builtins.placeholder output)
-      ) libpsl.outputs;
+      links = lib.concatMapStrings
+        (
+          output: linkOutput libpsl.${output} (builtins.placeholder output)
+        )
+        libpsl.outputs;
     in
     ''
       runHook preInstall

@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  ffmpeg,
-  frei0r,
-  sox,
-  gtk3,
-  python3,
-  ladspaPlugins,
-  gobject-introspection,
-  makeWrapper,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitHub
+, stdenv
+, ffmpeg
+, frei0r
+, sox
+, gtk3
+, python3
+, ladspaPlugins
+, gobject-introspection
+, makeWrapper
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

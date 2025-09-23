@@ -1,41 +1,38 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-
-  # dependencies
-  beancount-black,
-  beancount-parser,
-  beanhub-forms,
-  beanhub-import,
-  beanhub-inbox,
-  click,
-  fastapi,
-  jinja2,
-  pydantic-settings,
-  pydantic,
-  pyyaml,
-  rich,
-  starlette-wtf,
-  uvicorn,
-
-  # optional-dependencies
-  attrs,
-  cryptography,
-  httpx,
-  pynacl,
-  python-dateutil,
-  tomli-w,
-  tomli,
-
-  # tests
-  pytest-asyncio,
-  pytest-factoryboy,
-  pytest-httpx,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, hatchling
+, # dependencies
+  beancount-black
+, beancount-parser
+, beanhub-forms
+, beanhub-import
+, beanhub-inbox
+, click
+, fastapi
+, jinja2
+, pydantic-settings
+, pydantic
+, pyyaml
+, rich
+, starlette-wtf
+, uvicorn
+, # optional-dependencies
+  attrs
+, cryptography
+, httpx
+, pynacl
+, python-dateutil
+, tomli-w
+, tomli
+, # tests
+  pytest-asyncio
+, pytest-factoryboy
+, pytest-httpx
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

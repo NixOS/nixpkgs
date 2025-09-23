@@ -1,7 +1,7 @@
-{
-  lib,
-  attemptoClex,
-  callPackage,
+{ lib
+, attemptoClex
+, callPackage
+,
 }:
 
 callPackage ./. {

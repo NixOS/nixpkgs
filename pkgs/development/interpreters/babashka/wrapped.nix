@@ -1,22 +1,21 @@
-{
-  stdenvNoCC,
-  lib,
-  babashka-unwrapped,
-  callPackage,
-  makeWrapper,
-  installShellFiles,
-  rlwrap,
-  clojureToolsBabashka ? callPackage ./clojure-tools.nix { },
-  jdkBabashka ? clojureToolsBabashka.jdk,
-
-  # rlwrap is a small utility to allow the editing of keyboard input, see
+{ stdenvNoCC
+, lib
+, babashka-unwrapped
+, callPackage
+, makeWrapper
+, installShellFiles
+, rlwrap
+, clojureToolsBabashka ? callPackage ./clojure-tools.nix { }
+, jdkBabashka ? clojureToolsBabashka.jdk
+, # rlwrap is a small utility to allow the editing of keyboard input, see
   # https://book.babashka.org/#_repl
   #
   # NOTE In some cases, rlwrap prints some extra empty lines. That behavior can
   # break some babashka scripts. For this reason, it is disabled by default. See:
   # https://github.com/NixOS/nixpkgs/issues/246839
   # https://github.com/NixOS/nixpkgs/pull/248207
-  withRlwrap ? false,
+  withRlwrap ? false
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "babashka";

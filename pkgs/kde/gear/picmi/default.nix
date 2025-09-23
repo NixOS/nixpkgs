@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  _7zz,
+{ mkKdeDerivation
+, qtsvg
+, _7zz
+,
 }:
 mkKdeDerivation {
   pname = "picmi";

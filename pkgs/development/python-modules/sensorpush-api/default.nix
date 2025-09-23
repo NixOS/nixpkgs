@@ -1,13 +1,13 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pydantic,
-  pytestCheckHook,
-  python-dateutil,
-  setuptools,
-  urllib3,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pydantic
+, pytestCheckHook
+, python-dateutil
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

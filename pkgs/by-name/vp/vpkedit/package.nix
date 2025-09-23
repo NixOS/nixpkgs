@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchFromGitHub,
-  cmake,
-  openssl,
-  qt6,
-  zlib-ng,
-  bzip2,
-  xz,
-  zstd,
-  cryptopp,
-  pkg-config,
-  makeWrapper,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchgit
+, fetchFromGitHub
+, cmake
+, openssl
+, qt6
+, zlib-ng
+, bzip2
+, xz
+, zstd
+, cryptopp
+, pkg-config
+, makeWrapper
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

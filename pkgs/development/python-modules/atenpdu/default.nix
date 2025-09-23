@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  async-timeout,
-  pysnmp,
-  pythonOlder,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, async-timeout
+, pysnmp
+, pythonOlder
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

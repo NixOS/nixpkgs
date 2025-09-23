@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  icu,
-  clucene_core,
-
-  autoreconfHook,
-  bzip2,
-  curl,
-  xz,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, icu
+, clucene_core
+, autoreconfHook
+, bzip2
+, curl
+, xz
+,
 }:
 
 stdenv.mkDerivation (

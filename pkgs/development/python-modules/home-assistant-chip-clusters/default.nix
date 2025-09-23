@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  home-assistant-chip-wheels,
-  aenum,
-  dacite,
+{ lib
+, buildPythonPackage
+, home-assistant-chip-wheels
+, aenum
+, dacite
+,
 }:
 
 buildPythonPackage rec {

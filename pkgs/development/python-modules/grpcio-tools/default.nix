@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  protobuf,
-  grpcio,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, protobuf
+, grpcio
+, setuptools
+,
 }:
 
 # This package should be updated together with the main grpc package and other

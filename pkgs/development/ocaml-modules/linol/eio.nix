@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  eio,
-  linol,
-  yojson,
+{ buildDunePackage
+, eio
+, linol
+, yojson
+,
 }:
 
 buildDunePackage {

@@ -1,11 +1,11 @@
-{
-  buildDunePackage,
-  cohttp,
-  lwt,
-  uri,
-  ppx_sexp_conv,
-  logs,
-  sexplib0,
+{ buildDunePackage
+, cohttp
+, lwt
+, uri
+, ppx_sexp_conv
+, logs
+, sexplib0
+,
 }:
 
 buildDunePackage {

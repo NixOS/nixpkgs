@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  fuse,
-  util-linux,
-  xxHash,
-  lz4,
-  xz,
-  zlib,
-  zstd,
-  libdeflate,
-  libselinux,
-  fuseSupport ? stdenv.hostPlatform.isLinux,
-  selinuxSupport ? false,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, fuse
+, util-linux
+, xxHash
+, lz4
+, xz
+, zlib
+, zstd
+, libdeflate
+, libselinux
+, fuseSupport ? stdenv.hostPlatform.isLinux
+, selinuxSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

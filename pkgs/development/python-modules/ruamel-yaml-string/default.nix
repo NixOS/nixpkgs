@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ruamel-yaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, ruamel-yaml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jdk,
-  makeWrapper,
-  buildNativeImage ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk
+, makeWrapper
+, buildNativeImage ? false
+,
 }:
 
 stdenv.mkDerivation rec {

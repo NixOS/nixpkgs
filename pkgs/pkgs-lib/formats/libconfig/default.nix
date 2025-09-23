@@ -1,6 +1,6 @@
-{
-  lib,
-  pkgs,
+{ lib
+, pkgs
+,
 }:
 let
   inherit (pkgs) buildPackages callPackage;
@@ -27,9 +27,9 @@ let
 in
 {
   format =
-    {
-      generator ? libconfig-generator,
-      validator ? libconfig-validator,
+    { generator ? libconfig-generator
+    , validator ? libconfig-validator
+    ,
     }:
     {
       inherit generator;
@@ -80,11 +80,11 @@ in
         name: value:
         callPackage
           (
-            {
-              stdenvNoCC,
-              libconfig-generator,
-              libconfig-validator,
-              writeText,
+            { stdenvNoCC
+            , libconfig-generator
+            , libconfig-validator
+            , writeText
+            ,
             }:
             stdenvNoCC.mkDerivation rec {
               inherit name;

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  woff2,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, woff2
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchgit,
-  cmake,
-  pkgconfig,
-  python,
-  mpi ? null,
+{ lib
+, buildPythonPackage
+, fetchgit
+, cmake
+, pkgconfig
+, python
+, mpi ? null
+,
 }:
 
 let

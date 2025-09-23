@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  httpx,
-  pytest-aiohttp,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  respx,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, httpx
+, pytest-aiohttp
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, respx
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

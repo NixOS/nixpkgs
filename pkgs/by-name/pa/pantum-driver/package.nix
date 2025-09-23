@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  libusb1,
-  cups,
-  dpkg,
-  libjpeg8,
-  makeWrapper,
-  autoPatchelfHook,
-  enablePtqpdf ? false, # Pantum's version of qpdf
+{ lib
+, stdenv
+, fetchzip
+, libusb1
+, cups
+, dpkg
+, libjpeg8
+, makeWrapper
+, autoPatchelfHook
+, enablePtqpdf ? false
+, # Pantum's version of qpdf
 }:
 
 let
@@ -16,8 +16,7 @@ let
     {
       i686-linux = "i386";
       x86_64-linux = "amd64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation rec {
   pname = "pantum-driver";

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  rustPlatform,
-  makeWrapper,
-  pkg-config,
-  perl,
-  openssl,
-  rust-jemalloc-sys,
-  python3,
-  python3Packages,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
-  xdg-utils,
-  replaceVars,
-  buildNpmPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, makeWrapper
+, pkg-config
+, perl
+, openssl
+, rust-jemalloc-sys
+, python3
+, python3Packages
+, wrapQtAppsHook
+, qtbase
+, qtsvg
+, xdg-utils
+, replaceVars
+, buildNpmPackage
+,
 }:
 
 let

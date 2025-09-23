@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  installShellFiles,
-  versionCheckHook,
-  autoPatchelfHook,
-  zstd,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, installShellFiles
+, versionCheckHook
+, autoPatchelfHook
+, zstd
+,
 }:
 
 # NOTE (aseipp): buck2 uses a precompiled binary build for good reason — the
@@ -53,8 +53,7 @@ let
       aarch64-darwin = "aarch64-apple-darwin";
       x86_64-linux = "x86_64-unknown-linux-gnu";
       aarch64-linux = "aarch64-unknown-linux-gnu";
-    }
-    .${stdenv.hostPlatform.system};
+    }.${stdenv.hostPlatform.system};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "buck2";

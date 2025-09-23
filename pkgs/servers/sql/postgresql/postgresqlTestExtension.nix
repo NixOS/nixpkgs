@@ -1,16 +1,15 @@
-{
-  lib,
-  postgresql,
-  postgresqlTestHook,
-  stdenvNoCC,
+{ lib
+, postgresql
+, postgresqlTestHook
+, stdenvNoCC
+,
 }:
 
-{
-  asserts ? [ ],
-  finalPackage,
-  sql,
-  withPackages ? [ ],
-  ...
+{ asserts ? [ ]
+, finalPackage
+, sql
+, withPackages ? [ ]
+, ...
 }@extraArgs:
 stdenvNoCC.mkDerivation (
   {
@@ -25,18 +24,20 @@ stdenvNoCC.mkDerivation (
     passAsFile = [ "sql" ];
     sql =
       sql
-      + lib.concatMapStrings (
-        {
-          query,
-          expected,
-          description,
-        }:
-        ''
-          DO $$ BEGIN
-            ASSERT (${query}) = (${expected}), '${lib.replaceStrings [ "'" ] [ "''" ] description}';
-          END $$;
-        ''
-      ) asserts;
+      + lib.concatMapStrings
+        (
+          { query
+          , expected
+          , description
+          ,
+          }:
+          ''
+            DO $$ BEGIN
+              ASSERT (${query}) = (${expected}), '${lib.replaceStrings [ "'" ] [ "''" ] description}';
+            END $$;
+          ''
+        )
+        asserts;
     checkPhase = ''
       runHook preCheck
       psql -a -v ON_ERROR_STOP=1 -f "$sqlPath"
@@ -44,7 +45,7 @@ stdenvNoCC.mkDerivation (
     '';
     installPhase = "touch $out";
   }
-  // lib.removeAttrs extraArgs [
+    // lib.removeAttrs extraArgs [
     "asserts"
     "finalPackage"
     "sql"

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  fastrlock,
-  numpy,
-  pytestCheckHook,
-  mock,
-  setuptools,
-  cudaPackages,
-  addDriverRunpath,
-  symlinkJoin,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, fastrlock
+, numpy
+, pytestCheckHook
+, mock
+, setuptools
+, cudaPackages
+, addDriverRunpath
+, symlinkJoin
+,
 }:
 
 let

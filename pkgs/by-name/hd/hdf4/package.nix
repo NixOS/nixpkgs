@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  libjpeg,
-  uselibtirpc ? stdenv.hostPlatform.isLinux,
-  libtirpc,
-  zlib,
-  szipSupport ? false,
-  szip,
-  javaSupport ? false,
-  jdk,
-  fortranSupport ? false,
-  gfortran,
-  netcdfSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, libjpeg
+, uselibtirpc ? stdenv.hostPlatform.isLinux
+, libtirpc
+, zlib
+, szipSupport ? false
+, szip
+, javaSupport ? false
+, jdk
+, fortranSupport ? false
+, gfortran
+, netcdfSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  glib,
-  libgee,
-  libxml2,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, vala
+, glib
+, libgee
+, libxml2
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

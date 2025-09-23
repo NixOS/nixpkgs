@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  buildNpmPackage,
-  nix-update-script,
-  versionCheckHook,
-  fetchFromGitHub,
-  lib,
+{ buildGoModule
+, buildNpmPackage
+, nix-update-script
+, versionCheckHook
+, fetchFromGitHub
+, lib
+,
 }:
 let
   version = "0.11.3";

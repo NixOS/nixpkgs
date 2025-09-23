@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  flavor ? "mocha", # override with your chosen flavor
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, flavor ? "mocha"
+, # override with your chosen flavor
 }:
 let
   version = "1.0.0";

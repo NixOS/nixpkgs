@@ -1,22 +1,22 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  gettext,
-  glew,
-  python3,
-  SDL,
-  SDL_image,
-  SDL_gfx,
-  SDL_mixer,
-  libogg,
-  libvorbis,
-  lua5_3,
-  libjpeg,
-  libpng,
-  zlib,
-  libiconv,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, gettext
+, glew
+, python3
+, SDL
+, SDL_image
+, SDL_gfx
+, SDL_mixer
+, libogg
+, libvorbis
+, lua5_3
+, libjpeg
+, libpng
+, zlib
+, libiconv
+,
 }:
 
 let

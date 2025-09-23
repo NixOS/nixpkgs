@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gzip,
-  libvorbis,
-  libmad,
-  SDL2,
-  SDL2_mixer,
-  libpng,
-  alsa-lib,
-  gnutls,
-  zlib,
-  libjpeg,
-  vulkan-loader,
-  vulkan-headers,
-  speex,
-  libopus,
-  xorg,
-  libGL,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gzip
+, libvorbis
+, libmad
+, SDL2
+, SDL2_mixer
+, libpng
+, alsa-lib
+, gnutls
+, zlib
+, libjpeg
+, vulkan-loader
+, vulkan-headers
+, speex
+, libopus
+, xorg
+, libGL
+,
 }@attrs:
 {
   fteqw = import ./generic.nix (

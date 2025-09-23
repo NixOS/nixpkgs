@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  nodejs,
-  pnpm_9,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nodejs
+, pnpm_9
+,
 }:
 
 let

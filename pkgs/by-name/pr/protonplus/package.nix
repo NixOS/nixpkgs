@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  desktop-file-utils,
-  wrapGAppsHook4,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  glib,
-  glib-networking,
-  gtk4,
-  json-glib,
-  libadwaita,
-  libarchive,
-  libgee,
-  libsoup_3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, desktop-file-utils
+, wrapGAppsHook4
+, meson
+, ninja
+, pkg-config
+, vala
+, glib
+, glib-networking
+, gtk4
+, json-glib
+, libadwaita
+, libarchive
+, libgee
+, libsoup_3
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "protonplus";

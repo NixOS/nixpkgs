@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  port ? "1234",
+{ lib
+, stdenv
+, fetchFromSourcehut
+, port ? "1234"
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,6 +1,6 @@
-{
-  lib,
-  haskellPackages,
+{ lib
+, haskellPackages
+,
 }:
 
 let

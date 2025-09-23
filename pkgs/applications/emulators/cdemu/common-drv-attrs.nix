@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  pname,
-  version,
-  hash,
+{ lib
+, fetchurl
+, pname
+, version
+, hash
+,
 }:
 
 {

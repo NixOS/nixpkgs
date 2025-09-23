@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  nix-update-script,
-  python3,
-  git,
-  gnupg,
-  less,
-  openssh,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, nix-update-script
+, python3
+, git
+, gnupg
+, less
+, openssh
+,
 }:
 
 stdenv.mkDerivation rec {

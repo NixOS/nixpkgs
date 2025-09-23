@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  lv2,
-  alsa-lib,
-  libjack2,
-  freetype,
-  libX11,
-  gtk3,
-  pcre,
-  libpthreadstubs,
-  libXdmcp,
-  libxkbcommon,
-  libepoxy,
-  at-spi2-core,
-  dbus,
-  curl,
-  fftwFloat,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, lv2
+, alsa-lib
+, libjack2
+, freetype
+, libX11
+, gtk3
+, pcre
+, libpthreadstubs
+, libXdmcp
+, libxkbcommon
+, libepoxy
+, at-spi2-core
+, dbus
+, curl
+, fftwFloat
+,
 }:
 
 let

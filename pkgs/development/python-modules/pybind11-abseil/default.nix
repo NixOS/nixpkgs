@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  abseil-cpp,
-  pybind11,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, abseil-cpp
+, pybind11
+, python
+,
 }:
 
 buildPythonPackage rec {

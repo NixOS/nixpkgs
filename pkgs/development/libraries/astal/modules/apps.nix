@@ -1,6 +1,6 @@
-{
-  buildAstalModule,
-  json-glib,
+{ buildAstalModule
+, json-glib
+,
 }:
 buildAstalModule {
   name = "apps";

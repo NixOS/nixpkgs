@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -257,10 +256,12 @@ in
         };
       };
 
-      socketActivation = lib.mkEnableOption (''
-        socket-activation for starting incus.service. Enabling this option
-        will stop incus.service from starting automatically on boot.
-      '');
+      socketActivation = lib.mkEnableOption (
+        ''
+          socket-activation for starting incus.service. Enabling this option
+          will stop incus.service from starting automatically on boot.
+        ''
+      );
 
       startTimeout = lib.mkOption {
         type = lib.types.ints.unsigned;

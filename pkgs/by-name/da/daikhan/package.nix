@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  desktop-file-utils,
-  appstream,
-  appstream-glib,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  libadwaita,
-  gst_all_1,
-  xxHash,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, vala
+, desktop-file-utils
+, appstream
+, appstream-glib
+, blueprint-compiler
+, wrapGAppsHook4
+, libadwaita
+, gst_all_1
+, xxHash
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

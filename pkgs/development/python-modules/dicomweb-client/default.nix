@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  hatchling,
-  uv-dynamic-versioning,
-  pytestCheckHook,
-  pytest-localserver,
-  numpy,
-  pillow,
-  pydicom,
-  requests,
-  retrying,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, hatchling
+, uv-dynamic-versioning
+, pytestCheckHook
+, pytest-localserver
+, numpy
+, pillow
+, pydicom
+, requests
+, retrying
+,
 }:
 
 buildPythonPackage rec {

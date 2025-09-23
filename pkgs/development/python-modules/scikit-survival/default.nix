@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  ecos,
-  eigen,
-  joblib,
-  numexpr,
-  numpy,
-  osqp,
-  pandas,
-  setuptools-scm,
-  scikit-learn,
-  scipy,
-  pytestCheckHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, ecos
+, eigen
+, joblib
+, numexpr
+, numpy
+, osqp
+, pandas
+, setuptools-scm
+, scikit-learn
+, scipy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {
@@ -74,10 +74,10 @@ buildPythonPackage rec {
     "test_tree"
   ]
   ++
-    lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-      # floating point mismatch on aarch64
-      # 27079905.88052468 to far from 27079905.880496684
-      "test_coxnet";
+  lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    # floating point mismatch on aarch64
+    # 27079905.88052468 to far from 27079905.880496684
+    "test_coxnet";
 
   meta = with lib; {
     description = "Survival analysis built on top of scikit-learn";

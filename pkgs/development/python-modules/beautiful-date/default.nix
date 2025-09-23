@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  python-dateutil,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, python-dateutil
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

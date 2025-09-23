@@ -1,11 +1,11 @@
-{
-  fetchzip,
-  lib,
-  rustPlatform,
-  git,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+{ fetchzip
+, lib
+, rustPlatform
+, git
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (final: {

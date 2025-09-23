@@ -1,14 +1,14 @@
-{
-  lib,
-  mkKdeDerivation,
-  replaceVars,
-  procps,
-  xsettingsd,
-  pkg-config,
-  wrapGAppsHook3,
-  sass,
-  qtsvg,
-  gsettings-desktop-schemas,
+{ lib
+, mkKdeDerivation
+, replaceVars
+, procps
+, xsettingsd
+, pkg-config
+, wrapGAppsHook3
+, sass
+, qtsvg
+, gsettings-desktop-schemas
+,
 }:
 mkKdeDerivation {
   pname = "kde-gtk-config";

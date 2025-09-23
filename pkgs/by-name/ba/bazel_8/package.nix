@@ -1,37 +1,37 @@
-{
-  stdenv,
-  callPackage,
-  # nix tooling and utilities
-  darwin,
-  lib,
-  fetchzip,
-  fetchpatch,
-  makeWrapper,
-  writeTextFile,
-  replaceVars,
-  # native build inputs
-  runtimeShell,
-  zip,
-  unzip,
-  bash,
-  coreutils,
-  which,
-  gawk,
-  gnused,
-  gnutar,
-  gnugrep,
-  gzip,
-  findutils,
-  diffutils,
-  gnupatch,
-  file,
-  installShellFiles,
-  python3,
-  # Apple dependencies
-  cctools,
-  # Allow to independently override the jdks used to build and run respectively
-  jdk_headless,
-  version ? "8.4.1",
+{ stdenv
+, callPackage
+, # nix tooling and utilities
+  darwin
+, lib
+, fetchzip
+, fetchpatch
+, makeWrapper
+, writeTextFile
+, replaceVars
+, # native build inputs
+  runtimeShell
+, zip
+, unzip
+, bash
+, coreutils
+, which
+, gawk
+, gnused
+, gnutar
+, gnugrep
+, gzip
+, findutils
+, diffutils
+, gnupatch
+, file
+, installShellFiles
+, python3
+, # Apple dependencies
+  cctools
+, # Allow to independently override the jdks used to build and run respectively
+  jdk_headless
+, version ? "8.4.1"
+,
 }:
 
 let

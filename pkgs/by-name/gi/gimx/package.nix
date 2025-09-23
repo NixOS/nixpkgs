@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  curl,
-  libusb1,
-  bluez,
-  libxml2,
-  ncurses5,
-  libmhash,
-  xorg,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, curl
+, libusb1
+, bluez
+, libxml2
+, ncurses5
+, libmhash
+, xorg
+,
 }:
 
 let

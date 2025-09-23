@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  qttools,
+{ mkKdeDerivation
+, qttools
+,
 }:
 mkKdeDerivation {
   pname = "kglobalaccel";

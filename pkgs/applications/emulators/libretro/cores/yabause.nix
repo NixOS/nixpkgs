@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mkLibretroCore,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mkLibretroCore
+,
 }:
 mkLibretroCore {
   core = "yabause";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  libarchive,
-  xar,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchurl
+, libarchive
+, xar
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

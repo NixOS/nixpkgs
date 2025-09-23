@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  fonttools,
-  black,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, fonttools
+, black
+,
 }:
 
 buildPythonPackage rec {

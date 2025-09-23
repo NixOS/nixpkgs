@@ -1,31 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  cmake,
-  nanobind,
-  ninja,
-  numpy,
-  scikit-build-core,
-
-  # buildInputs
-  opencl-headers,
-  pybind11,
-  ocl-icd,
-
-  # dependencies
-  platformdirs,
-  pytools,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  mako,
-  pocl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  cmake
+, nanobind
+, ninja
+, numpy
+, scikit-build-core
+, # buildInputs
+  opencl-headers
+, pybind11
+, ocl-icd
+, # dependencies
+  platformdirs
+, pytools
+, typing-extensions
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+, mako
+, pocl
+,
 }:
 
 buildPythonPackage rec {

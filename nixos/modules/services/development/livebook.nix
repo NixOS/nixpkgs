@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.livebook;
@@ -108,9 +107,11 @@ in
         # stuck running a `cat /dev/urandom | tr | fold` pipeline.
         IgnoreSIGPIPE = false;
       };
-      environment = lib.mapAttrs (
-        name: value: if lib.isBool value then lib.boolToString value else toString value
-      ) cfg.environment;
+      environment = lib.mapAttrs
+        (
+          name: value: if lib.isBool value then lib.boolToString value else toString value
+        )
+        cfg.environment;
       path = [ pkgs.bash ] ++ cfg.extraPackages;
       wantedBy = [ "default.target" ];
     };

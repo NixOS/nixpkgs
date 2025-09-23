@@ -1,8 +1,8 @@
-{
-  lib,
-  vimUtils,
-  fetchFromGitLab,
-  nix-update-script,
+{ lib
+, vimUtils
+, fetchFromGitLab
+, nix-update-script
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "sonarlint.nvim";

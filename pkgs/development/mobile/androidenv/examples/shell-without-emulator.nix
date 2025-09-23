@@ -17,9 +17,9 @@
   # If you want to use the in-tree version of nixpkgs:
   pkgs ? import ../../../../.. {
     config.allowUnfree = true;
-  },
-
-  licenseAccepted ? pkgs.callPackage ../license.nix { },
+  }
+, licenseAccepted ? pkgs.callPackage ../license.nix { }
+,
 }:
 
 # Copy this file to your Android project.

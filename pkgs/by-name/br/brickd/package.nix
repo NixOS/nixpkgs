@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libusb1,
-  pkg-config,
-  pmutils,
-  udev,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libusb1
+, pkg-config
+, pmutils
+, udev
+,
 }:
 
 let

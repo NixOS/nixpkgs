@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  makeWrapper,
-  nodejs,
-  pnpm_8,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, makeWrapper
+, nodejs
+, pnpm_8
+,
 }:
 
 let

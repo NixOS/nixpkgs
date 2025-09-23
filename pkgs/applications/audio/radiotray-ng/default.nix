@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  # Transport
-  curl,
-  # Libraries
-  boost,
-  jsoncpp,
-  libbsd,
-  # GUI/Desktop
-  dbus,
-  glibmm,
-  gsettings-desktop-schemas,
-  hicolor-icon-theme,
-  libappindicator-gtk3,
-  libnotify,
-  libxdg_basedir,
-  wxGTK,
-  # GStreamer
-  glib-networking,
-  gst_all_1,
-  # User-agent info
-  lsb-release,
-  # rt2rtng
-  python3,
-  # Testing
-  gtest,
-  # Fixup
-  wrapGAppsHook3,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, # Transport
+  curl
+, # Libraries
+  boost
+, jsoncpp
+, libbsd
+, # GUI/Desktop
+  dbus
+, glibmm
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, libappindicator-gtk3
+, libnotify
+, libxdg_basedir
+, wxGTK
+, # GStreamer
+  glib-networking
+, gst_all_1
+, # User-agent info
+  lsb-release
+, # rt2rtng
+  python3
+, # Testing
+  gtest
+, # Fixup
+  wrapGAppsHook3
+, makeWrapper
+,
 }:
 
 let

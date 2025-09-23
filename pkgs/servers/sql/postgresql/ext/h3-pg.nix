@@ -1,12 +1,12 @@
-{
-  cmake,
-  fetchFromGitHub,
-  h3_4,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, h3_4
+, lib
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+, stdenv
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

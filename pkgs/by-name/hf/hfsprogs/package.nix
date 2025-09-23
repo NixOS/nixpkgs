@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libbsd,
-  libuuid,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libbsd
+, libuuid
+, openssl
+,
 }:
 stdenv.mkDerivation {
   pname = "hfsprogs";

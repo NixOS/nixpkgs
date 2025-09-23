@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.unpoller;
@@ -218,10 +217,12 @@ in
           sites = lib.mkOption {
             type =
               with lib.types;
-              either (enum [
-                "default"
-                "all"
-              ]) (listOf str);
+              either
+                (enum [
+                  "default"
+                  "all"
+                ])
+                (listOf str);
             default = "all";
             description = ''
               List of site names for which statistics should be exported.

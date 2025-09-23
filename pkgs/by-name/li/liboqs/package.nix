@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openssl,
-  fetchpatch,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, fetchpatch
+, enableStatic ? stdenv.hostPlatform.isStatic
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

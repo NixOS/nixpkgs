@@ -1,9 +1,9 @@
-{
-  build2,
-  fetchgit,
-  gccStdenv,
-  lib,
-  xercesc,
+{ build2
+, fetchgit
+, gccStdenv
+, lib
+, xercesc
+,
 }:
 
 gccStdenv.mkDerivation (finalAttrs: {

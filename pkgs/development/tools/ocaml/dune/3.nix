@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocaml-lsp,
-  dune-release,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, ocaml-lsp
+, dune-release
+,
 }:
 
 if lib.versionOlder ocaml.version "4.08" then

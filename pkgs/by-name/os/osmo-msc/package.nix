@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libosmocore,
-  sqlite,
-  libosmoabis,
-  libosmo-netif,
-  libosmo-sigtran,
-  osmo-mgw,
-  osmo-hlr,
-  lksctp-tools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libosmocore
+, sqlite
+, libosmoabis
+, libosmo-netif
+, libosmo-sigtran
+, osmo-mgw
+, osmo-hlr
+, lksctp-tools
+,
 }:
 
 stdenv.mkDerivation rec {

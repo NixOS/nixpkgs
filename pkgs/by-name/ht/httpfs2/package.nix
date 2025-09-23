@@ -1,15 +1,15 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  fuse,
-  openssl,
-  asciidoc,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  libxml2,
-  libxslt,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, fuse
+, openssl
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxml2
+, libxslt
+,
 }:
 
 stdenv.mkDerivation rec {

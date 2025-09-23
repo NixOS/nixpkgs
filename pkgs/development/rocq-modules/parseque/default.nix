@@ -1,9 +1,9 @@
-{
-  lib,
-  mkRocqDerivation,
-  stdlib,
-  rocq-core,
-  version ? null,
+{ lib
+, mkRocqDerivation
+, stdlib
+, rocq-core
+, version ? null
+,
 }:
 
 with lib;

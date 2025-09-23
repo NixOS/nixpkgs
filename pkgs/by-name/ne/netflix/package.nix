@@ -1,14 +1,13 @@
-{
-  fetchurl,
-  google-chrome,
-  lib,
-  makeDesktopItem,
-  runtimeShell,
-  symlinkJoin,
-  writeScriptBin,
-
-  # command line arguments which are always set e.g "--disable-gpu"
-  commandLineArgs ? [ ],
+{ fetchurl
+, google-chrome
+, lib
+, makeDesktopItem
+, runtimeShell
+, symlinkJoin
+, writeScriptBin
+, # command line arguments which are always set e.g "--disable-gpu"
+  commandLineArgs ? [ ]
+,
 }:
 
 let

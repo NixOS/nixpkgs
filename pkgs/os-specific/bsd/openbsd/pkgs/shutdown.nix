@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  reboot,
-  wall,
+{ mkDerivation
+, reboot
+, wall
+,
 }:
 mkDerivation {
   path = "sbin/shutdown";

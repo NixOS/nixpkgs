@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  makeWrapper,
-  stdenv,
-  xdg-utils,
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, makeWrapper
+, stdenv
+, xdg-utils
+,
 }:
 buildGoModule rec {
   pname = "aws-vault";

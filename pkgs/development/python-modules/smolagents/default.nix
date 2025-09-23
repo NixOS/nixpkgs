@@ -1,53 +1,49 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  huggingface-hub,
-  jinja2,
-  pillow,
-  python-dotenv,
-  requests,
-  rich,
-
-  # optional-dependencies
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  huggingface-hub
+, jinja2
+, pillow
+, python-dotenv
+, requests
+, rich
+, # optional-dependencies
   # audio
-  soundfile,
-  # bedrock
-  boto3,
-  # docker
-  docker,
-  websocket-client,
-  # gradio
-  gradio,
-  # litellm
-  litellm,
-  # mcp
-  mcp,
-  mcpadapt,
-  # openai
-  openai,
-  # toolkit
-  ddgs,
-  markdownify,
-  # torch
-  numpy,
-  torch,
-  torchvision,
-  # transformers
-  accelerate,
-  transformers,
-
-  # tests
-  ipython,
-  pytest-datadir,
-  pytestCheckHook,
-  wikipedia-api,
+  soundfile
+, # bedrock
+  boto3
+, # docker
+  docker
+, websocket-client
+, # gradio
+  gradio
+, # litellm
+  litellm
+, # mcp
+  mcp
+, mcpadapt
+, # openai
+  openai
+, # toolkit
+  ddgs
+, markdownify
+, # torch
+  numpy
+, torch
+, torchvision
+, # transformers
+  accelerate
+, transformers
+, # tests
+  ipython
+, pytest-datadir
+, pytestCheckHook
+, wikipedia-api
+,
 }:
 
 buildPythonPackage rec {

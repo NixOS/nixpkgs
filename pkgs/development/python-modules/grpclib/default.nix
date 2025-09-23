@@ -1,17 +1,17 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  certifi,
-  faker,
-  fetchFromGitHub,
-  googleapis-common-protos,
-  h2,
-  multidict,
-  pytest-asyncio_0,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, async-timeout
+, buildPythonPackage
+, certifi
+, faker
+, fetchFromGitHub
+, googleapis-common-protos
+, h2
+, multidict
+, pytest-asyncio_0
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

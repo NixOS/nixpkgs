@@ -1,22 +1,22 @@
-{
-  stdenv,
-  autoconf,
-  automake,
-  itstool,
-  intltool,
-  pkg-config,
-  fetchFromGitHub,
-  glib,
-  gettext,
-  sqlite,
-  mono,
-  stfl,
-  makeWrapper,
-  lib,
-  guiSupport ? true,
-  gtk-sharp-2_0,
-  gdk-pixbuf,
-  pango,
+{ stdenv
+, autoconf
+, automake
+, itstool
+, intltool
+, pkg-config
+, fetchFromGitHub
+, glib
+, gettext
+, sqlite
+, mono
+, stfl
+, makeWrapper
+, lib
+, guiSupport ? true
+, gtk-sharp-2_0
+, gdk-pixbuf
+, pango
+,
 }:
 
 stdenv.mkDerivation rec {

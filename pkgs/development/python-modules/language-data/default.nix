@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  marisa-trie,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, marisa-trie
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, # build-system
+  setuptools
+,
 }:
 
 buildPythonPackage rec {

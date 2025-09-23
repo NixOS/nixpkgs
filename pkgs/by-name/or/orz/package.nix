@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  rust-cbindgen,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, rust-cbindgen
+,
 }:
 
 rustPlatform.buildRustPackage {

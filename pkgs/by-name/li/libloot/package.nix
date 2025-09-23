@@ -1,24 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  rustPlatform,
-  rust-cbindgen,
-
-  cmake,
-  pkg-config,
-
-  withDocs ? true,
-  doxygen,
-  python3Packages,
-
-  boost,
-  fmt_11,
-  gtest,
-  icu,
-  spdlog,
-  tbb_2022,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, rust-cbindgen
+, cmake
+, pkg-config
+, withDocs ? true
+, doxygen
+, python3Packages
+, boost
+, fmt_11
+, gtest
+, icu
+, spdlog
+, tbb_2022
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

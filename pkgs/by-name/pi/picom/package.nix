@@ -1,37 +1,37 @@
-{
-  asciidoctor,
-  dbus,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  fetchFromGitHub,
-  lib,
-  libconfig,
-  libdrm,
-  libev,
-  libGL,
-  libepoxy,
-  libX11,
-  libxcb,
-  libxdg_basedir,
-  libXext,
-  libxml2,
-  libxslt,
-  makeWrapper,
-  meson,
-  ninja,
-  pcre2,
-  pixman,
-  pkg-config,
-  stdenv,
-  uthash,
-  xcbutil,
-  xcbutilimage,
-  xcbutilrenderutil,
-  xorgproto,
-  xwininfo,
-  withDebug ? false,
-  versionCheckHook,
-  nix-update-script,
+{ asciidoctor
+, dbus
+, docbook_xml_dtd_45
+, docbook_xsl
+, fetchFromGitHub
+, lib
+, libconfig
+, libdrm
+, libev
+, libGL
+, libepoxy
+, libX11
+, libxcb
+, libxdg_basedir
+, libXext
+, libxml2
+, libxslt
+, makeWrapper
+, meson
+, ninja
+, pcre2
+, pixman
+, pkg-config
+, stdenv
+, uthash
+, xcbutil
+, xcbutilimage
+, xcbutilrenderutil
+, xorgproto
+, xwininfo
+, withDebug ? false
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

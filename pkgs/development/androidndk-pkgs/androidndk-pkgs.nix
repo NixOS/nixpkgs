@@ -1,16 +1,16 @@
-{
-  config,
-  lib,
-  stdenv,
-  makeWrapper,
-  runCommand,
-  wrapBintoolsWith,
-  wrapCCWith,
-  autoPatchelfHook,
-  llvmPackages,
-  buildAndroidndk,
-  androidndk,
-  targetAndroidndkPkgs,
+{ config
+, lib
+, stdenv
+, makeWrapper
+, runCommand
+, wrapBintoolsWith
+, wrapCCWith
+, autoPatchelfHook
+, llvmPackages
+, buildAndroidndk
+, androidndk
+, targetAndroidndkPkgs
+,
 }:
 
 let
@@ -23,37 +23,35 @@ let
   #
   ndkBuildInfoFun =
     fallback:
-    {
-      x86_64-apple-darwin = {
-        double = "darwin-x86_64";
-      };
-      x86_64-unknown-linux-gnu = {
-        double = "linux-x86_64";
-      };
-    }
-    .${stdenv.buildPlatform.config} or fallback;
+      {
+        x86_64-apple-darwin = {
+          double = "darwin-x86_64";
+        };
+        x86_64-unknown-linux-gnu = {
+          double = "linux-x86_64";
+        };
+      }.${stdenv.buildPlatform.config} or fallback;
 
   ndkTargetInfoFun =
     fallback:
-    {
-      i686-unknown-linux-android = {
-        triple = "i686-linux-android";
-        arch = "x86";
-      };
-      x86_64-unknown-linux-android = {
-        triple = "x86_64-linux-android";
-        arch = "x86_64";
-      };
-      armv7a-unknown-linux-androideabi = {
-        arch = "arm";
-        triple = "arm-linux-androideabi";
-      };
-      aarch64-unknown-linux-android = {
-        arch = "arm64";
-        triple = "aarch64-linux-android";
-      };
-    }
-    .${stdenv.targetPlatform.config} or fallback;
+      {
+        i686-unknown-linux-android = {
+          triple = "i686-linux-android";
+          arch = "x86";
+        };
+        x86_64-unknown-linux-android = {
+          triple = "x86_64-linux-android";
+          arch = "x86_64";
+        };
+        armv7a-unknown-linux-androideabi = {
+          arch = "arm";
+          triple = "arm-linux-androideabi";
+        };
+        aarch64-unknown-linux-android = {
+          arch = "arm64";
+          triple = "aarch64-linux-android";
+        };
+      }.${stdenv.targetPlatform.config} or fallback;
 
   buildInfo = ndkBuildInfoFun (
     throw "Android NDK doesn't support building on ${stdenv.buildPlatform.config}, as far as we know"
@@ -80,7 +78,7 @@ let
 in
 
 if !config.allowAliases && (ndkBuildInfoFun null == null || ndkTargetInfoFun null == null) then
-  # Don't throw without aliases to not break CI.
+# Don't throw without aliases to not break CI.
   null
 else
   lib.recurseIntoAttrs rec {

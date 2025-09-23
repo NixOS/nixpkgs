@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  unixtools,
-  pkg-config,
-  alsa-lib,
-  xorg,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, unixtools
+, pkg-config
+, alsa-lib
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

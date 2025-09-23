@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  discordpy,
-  lib,
+{ buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, discordpy
+, lib
+,
 }:
 let
   pname = "reactionmenu";

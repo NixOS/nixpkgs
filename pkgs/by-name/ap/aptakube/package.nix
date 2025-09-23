@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  callPackage,
+{ lib
+, stdenv
+, callPackage
+,
 }:
 let
   pname = "aptakube";
@@ -16,7 +16,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit
       pname
       version

@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  # Native build inputs
-  cmake,
-  pkg-config,
-  # General build inputs
-  glib,
-  gtest,
-  json_c,
-  openldap,
-  # Plugin build inputs
-  cryptopp,
-  davix-copy,
-  dcap,
-  libssh2,
-  libuuid,
-  pugixml,
-  xrootd,
-  # For enablePluginStatus.https only
-  gsoap,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # Native build inputs
+  cmake
+, pkg-config
+, # General build inputs
+  glib
+, gtest
+, json_c
+, openldap
+, # Plugin build inputs
+  cryptopp
+, davix-copy
+, dcap
+, libssh2
+, libuuid
+, pugixml
+, xrootd
+, # For enablePluginStatus.https only
+  gsoap
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfal2";
@@ -110,12 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   cmakeFlags =
-    (map (
-      pluginName:
-      "-DPLUGIN_${lib.toUpper pluginName}=${
+    (map
+      (
+        pluginName:
+        "-DPLUGIN_${lib.toUpper pluginName}=${
         lib.toUpper (lib.boolToString finalAttrs.passthru.enablePluginStatus.${pluginName})
       }"
-    ) (lib.attrNames finalAttrs.passthru.enablePluginStatus))
+      )
+      (lib.attrNames finalAttrs.passthru.enablePluginStatus))
     ++ [ "-DSKIP_TESTS=${lib.toUpper (lib.boolToString (!finalAttrs.finalPackage.doCheck))}" ]
     ++ lib.optionals finalAttrs.finalPackage.doCheck [ "-DGTEST_INCLUDE_DIR=${gtest.dev}/include" ]
     ++ lib.optionals finalAttrs.passthru.enablePluginStatus.http [

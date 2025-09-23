@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  xz,
-  ipxe,
-  stdenv,
-  perl,
-  go-bindata,
-  fetchpatch,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, xz
+, ipxe
+, stdenv
+, perl
+, go-bindata
+, fetchpatch
+,
 }:
 
 let

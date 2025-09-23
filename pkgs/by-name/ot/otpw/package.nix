@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  coreutils,
-  fetchurl,
-  libxcrypt,
-  pam,
-  procps,
-  unixtools,
-  util-linux,
-  versionCheckHook,
+{ lib
+, stdenv
+, coreutils
+, fetchurl
+, libxcrypt
+, pam
+, procps
+, unixtools
+, util-linux
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

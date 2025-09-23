@@ -1,10 +1,10 @@
-{
-  lib,
-  pkg-config,
-  cmake,
-  libnotify,
-  rustPlatform,
-  fetchFromGitHub,
+{ lib
+, pkg-config
+, cmake
+, libnotify
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage rec {

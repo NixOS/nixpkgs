@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  lib,
-  pythonOlder,
+{ buildPythonPackage
+, fetchPypi
+, setuptools
+, lib
+, pythonOlder
+,
 }:
 buildPythonPackage rec {
   pname = "pwinput";

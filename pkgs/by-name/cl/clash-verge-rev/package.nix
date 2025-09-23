@@ -1,14 +1,14 @@
-{
-  lib,
-  mihomo,
-  callPackage,
-  fetchFromGitHub,
-  dbip-country-lite,
-  stdenv,
-  wrapGAppsHook3,
-  v2ray-geoip,
-  v2ray-domain-list-community,
-  libsoup,
+{ lib
+, mihomo
+, callPackage
+, fetchFromGitHub
+, dbip-country-lite
+, stdenv
+, wrapGAppsHook3
+, v2ray-geoip
+, v2ray-domain-list-community
+, libsoup
+,
 }:
 let
   pname = "clash-verge-rev";

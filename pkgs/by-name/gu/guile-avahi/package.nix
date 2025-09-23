@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  avahi,
-  gmp,
-  buildPackages,
-  autoreconfHook,
-  pkg-config,
-  texinfo,
-  guile,
+{ stdenv
+, lib
+, fetchgit
+, avahi
+, gmp
+, buildPackages
+, autoreconfHook
+, pkg-config
+, texinfo
+, guile
+,
 }:
 
 stdenv.mkDerivation rec {

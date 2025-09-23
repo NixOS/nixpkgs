@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  python,
-  pythonOlder,
-  astropy,
-  cloudpickle,
-  cython,
-  dask,
-  imageio,
-  lazy-loader,
-  matplotlib,
-  meson-python,
-  networkx,
-  numpy,
-  packaging,
-  pillow,
-  pooch,
-  pyamg,
-  pytestCheckHook,
-  numpydoc,
-  pythran,
-  pywavelets,
-  scikit-learn,
-  scipy,
-  setuptools,
-  simpleitk,
-  tifffile,
-  wheel,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, python
+, pythonOlder
+, astropy
+, cloudpickle
+, cython
+, dask
+, imageio
+, lazy-loader
+, matplotlib
+, meson-python
+, networkx
+, numpy
+, packaging
+, pillow
+, pooch
+, pyamg
+, pytestCheckHook
+, numpydoc
+, pythran
+, pywavelets
+, scikit-learn
+, scipy
+, setuptools
+, simpleitk
+, tifffile
+, wheel
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  imagemagickBig,
-  py,
-  pytestCheckHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, imagemagickBig
+, py
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

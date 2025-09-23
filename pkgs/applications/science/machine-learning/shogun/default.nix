@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  # build
-  cmake,
-  ctags,
-  python3Packages,
-  swig,
-  # math
-  eigen,
-  blas,
-  lapack,
-  glpk,
-  # data
-  protobuf,
-  json_c,
-  libxml2,
-  hdf5,
-  curl,
-  # compression
-  libarchive,
-  bzip2,
-  xz,
-  snappy,
-  lzo,
-  # more math
-  nlopt,
-  lp_solve,
-  colpack,
-  # extra support
-  pythonSupport ? false,
-  opencvSupport ? false,
-  opencv ? null,
-  withSvmLight ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, # build
+  cmake
+, ctags
+, python3Packages
+, swig
+, # math
+  eigen
+, blas
+, lapack
+, glpk
+, # data
+  protobuf
+, json_c
+, libxml2
+, hdf5
+, curl
+, # compression
+  libarchive
+, bzip2
+, xz
+, snappy
+, lzo
+, # more math
+  nlopt
+, lp_solve
+, colpack
+, # extra support
+  pythonSupport ? false
+, opencvSupport ? false
+, opencv ? null
+, withSvmLight ? false
+,
 }:
 
 assert pythonSupport -> python3Packages != null;

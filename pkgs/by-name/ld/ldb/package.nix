@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  pkg-config,
-  readline,
-  tdb,
-  talloc,
-  tevent,
-  popt,
-  libxslt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  cmocka,
-  wafHook,
-  buildPackages,
-  libxcrypt,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, python3
+, pkg-config
+, readline
+, tdb
+, talloc
+, tevent
+, popt
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, cmocka
+, wafHook
+, buildPackages
+, libxcrypt
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,9 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
   PYTHON_CONFIG = "/invalid";
 
   # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  NIX_LDFLAGS = lib.optional
+    (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) "--undefined-version";
 
   stripDebugList = [
     "bin"

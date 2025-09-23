@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  absl-py,
-  chex,
-  jax,
-  jaxlib,
-  numpy,
-
-  # tests
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  absl-py
+, chex
+, jax
+, jaxlib
+, numpy
+, # tests
+  callPackage
+,
 }:
 
 buildPythonPackage rec {

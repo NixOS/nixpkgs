@@ -1,12 +1,12 @@
-{
-  mkDerivation,
-  lib,
-  fetchurl,
-  pkg-config,
-  qtbase,
-  qttools,
-  alsa-lib,
-  libjack2,
+{ mkDerivation
+, lib
+, fetchurl
+, pkg-config
+, qtbase
+, qttools
+, alsa-lib
+, libjack2
+,
 }:
 
 mkDerivation rec {

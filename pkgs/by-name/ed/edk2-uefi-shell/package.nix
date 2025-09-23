@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  edk2,
-  llvmPackages,
-  util-linux,
-  nasm,
-  python3,
-  pkgsBuildHost,
+{ lib
+, stdenv
+, edk2
+, llvmPackages
+, util-linux
+, nasm
+, python3
+, pkgsBuildHost
+,
 }:
 edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
   pname = "edk2-uefi-shell";

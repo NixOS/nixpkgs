@@ -1,12 +1,12 @@
-{
-  self,
-  bash,
-  fetchpatch,
-  fzf,
-  lib,
-  openssl,
-  zstd,
-  krb5,
+{ self
+, bash
+, fetchpatch
+, fzf
+, lib
+, openssl
+, zstd
+, krb5
+,
 }:
 
 let

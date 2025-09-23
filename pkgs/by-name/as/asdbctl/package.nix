@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  udev,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, udev
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

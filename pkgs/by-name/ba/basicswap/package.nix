@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  linkFarm,
-  secp256k1,
-  particl-core,
-  bitcoind,
-  namecoind,
-  monero-cli,
-  wownero,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, linkFarm
+, secp256k1
+, particl-core
+, bitcoind
+, namecoind
+, monero-cli
+, wownero
+,
 }:
 
 let

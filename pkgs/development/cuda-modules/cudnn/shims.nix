@@ -1,9 +1,9 @@
 # Shims to mimic the shape of ../modules/generic/manifests/{feature,redistrib}/release.nix
-{
-  package,
-  # redistSystem :: String
+{ package
+, # redistSystem :: String
   # String is "unsupported" if the given architecture is unsupported.
-  redistSystem,
+  redistSystem
+,
 }:
 {
   featureRelease = {

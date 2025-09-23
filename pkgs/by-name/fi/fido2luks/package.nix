@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cryptsetup,
-  pkg-config,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cryptsetup
+, pkg-config
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "fido2luks";

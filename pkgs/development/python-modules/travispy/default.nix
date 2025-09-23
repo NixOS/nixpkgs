@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  pytestCheckHook,
-  pytest-rerunfailures,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, requests
+, pytestCheckHook
+, pytest-rerunfailures
+,
 }:
 
 buildPythonPackage rec {

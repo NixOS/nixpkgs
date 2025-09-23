@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  versioneer,
-
-  # dependencies
-  bidsschematools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, versioneer
+, # dependencies
+  bidsschematools
+,
 }:
 
 buildPythonPackage rec {

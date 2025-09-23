@@ -1,9 +1,9 @@
-{
-  appimageTools,
-  fetchurl,
-  pname,
-  commonMeta,
-  version,
+{ appimageTools
+, fetchurl
+, pname
+, commonMeta
+, version
+,
 }:
 
 appimageTools.wrapType2 rec {

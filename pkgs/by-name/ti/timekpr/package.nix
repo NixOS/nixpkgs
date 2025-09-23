@@ -1,14 +1,14 @@
-{
-  fetchgit,
-  gitUpdater,
-  glib,
-  gobject-introspection,
-  gtk3,
-  lib,
-  python3Packages,
-  sound-theme-freedesktop,
-  stdenv,
-  wrapGAppsHook4,
+{ fetchgit
+, gitUpdater
+, glib
+, gobject-introspection
+, gtk3
+, lib
+, python3Packages
+, sound-theme-freedesktop
+, stdenv
+, wrapGAppsHook4
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "timekpr";

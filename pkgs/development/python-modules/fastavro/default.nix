@@ -1,19 +1,19 @@
-{
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  isPy38,
-  lib,
-  lz4,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  python-dateutil,
-  cramjam,
-  pythonOlder,
-  setuptools,
-  zlib-ng,
-  zstandard,
+{ buildPythonPackage
+, cython
+, fetchFromGitHub
+, isPy38
+, lib
+, lz4
+, numpy
+, pandas
+, pytestCheckHook
+, python-dateutil
+, cramjam
+, pythonOlder
+, setuptools
+, zlib-ng
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

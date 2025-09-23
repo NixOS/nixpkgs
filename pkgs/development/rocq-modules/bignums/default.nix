@@ -1,9 +1,9 @@
-{
-  lib,
-  mkRocqDerivation,
-  rocq-core,
-  stdlib,
-  version ? null,
+{ lib
+, mkRocqDerivation
+, rocq-core
+, stdlib
+, version ? null
+,
 }:
 
 mkRocqDerivation {
@@ -17,7 +17,8 @@ mkRocqDerivation {
     with lib.versions;
     lib.switch rocq-core.rocq-version [
       (case (range "9.0" "9.1") "9.0.0+rocq${rocq-core.rocq-version}")
-    ] null;
+    ]
+      null;
 
   release."9.0.0+rocq9.0".sha256 = "sha256-ctnwpyNVhryEUA5YEsAImrcJsNMhtBgDSOz+z5Z4R78=";
   release."9.0.0+rocq9.1".sha256 = "sha256-MSjlfJs3JOakuShOj+isNlus0bKlZ+rkvzRoKZQK5RQ=";

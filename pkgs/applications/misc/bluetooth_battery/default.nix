@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonApplication,
-  pybluez,
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, pybluez
+,
 }:
 
 buildPythonApplication rec {

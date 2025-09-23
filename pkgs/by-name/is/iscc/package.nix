@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchurl,
-  innoextract,
-  runtimeShell,
-  wineWow64Packages,
-  lib,
+{ stdenv
+, fetchurl
+, innoextract
+, runtimeShell
+, wineWow64Packages
+, lib
+,
 }:
 
 let

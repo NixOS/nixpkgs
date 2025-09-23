@@ -1,23 +1,23 @@
-{
-  lib,
-  writeShellApplication,
-  klipper,
-  klipper-firmware,
-  avrdude,
-  dfu-util,
-  stm32flash,
-  mcu ? "mcu",
-  flashDevice ? "/dev/null",
-  firmwareConfig ? ./simulator.cfg,
+{ lib
+, writeShellApplication
+, klipper
+, klipper-firmware
+, avrdude
+, dfu-util
+, stm32flash
+, mcu ? "mcu"
+, flashDevice ? "/dev/null"
+, firmwareConfig ? ./simulator.cfg
+,
 }:
 let
   getConfigField =
     field:
-    with builtins;
-    let
-      matches = match ''^.*${field}="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
-    in
-    if matches != null then head matches else null;
+      with builtins;
+      let
+        matches = match ''^.*${field}="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
+      in
+      if matches != null then head matches else null;
   matchPlatform = getConfigField "CONFIG_BOARD_DIRECTORY";
   matchBoard = getConfigField "CONFIG_MCU";
 in
@@ -31,7 +31,7 @@ writeShellApplication {
       dfu-util
     ]
     ++ lib.optionals (matchPlatform == "lpc176x") [ dfu-util ]
-  # bossac, hid-flash and RP2040 flash binaries are built by klipper-firmware
+    # bossac, hid-flash and RP2040 flash binaries are built by klipper-firmware
   ;
   text =
     # generic USB script for most things with serial and bootloader (see MCU_TYPES in scripts/flash_usb.py)

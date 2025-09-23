@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ibm-cloud-sdk-core,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  python-dateutil,
-  python-dotenv,
-  pythonOlder,
-  requests,
-  setuptools,
-  responses,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ibm-cloud-sdk-core
+, pytest-rerunfailures
+, pytestCheckHook
+, python-dateutil
+, python-dotenv
+, pythonOlder
+, requests
+, setuptools
+, responses
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

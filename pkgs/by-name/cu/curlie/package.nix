@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  curlie,
-  testers,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, curlie
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

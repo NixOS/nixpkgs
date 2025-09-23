@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  idris2,
-  makeBinaryWrapper,
+{ stdenv
+, lib
+, idris2
+, makeBinaryWrapper
+,
 }:
 # Usage: let
 #          pkg = idris2Packages.buildIdris {
@@ -19,11 +19,12 @@
 #          bin = pkg.executable;
 #        }
 #
-{
-  src,
-  ipkgName, # ipkg filename without the extension
-  version ? "unversioned",
-  idrisLibraries, # Other libraries built with buildIdris
+{ src
+, ipkgName
+, # ipkg filename without the extension
+  version ? "unversioned"
+, idrisLibraries
+, # Other libraries built with buildIdris
   ...
 }@attrs:
 
@@ -31,17 +32,19 @@ let
   # loop over idrisLibraries and normalize them by turning any that are
   # direct outputs of the buildIdris function into the `.library {}`
   # property.
-  idrisLibraryLibs = map (
-    idrisLib:
-    if lib.isDerivation idrisLib then
-      idrisLib
-    else if builtins.isFunction idrisLib then
-      idrisLib { }
-    else if (builtins.isAttrs idrisLib && idrisLib ? "library") then
-      idrisLib.library { }
-    else
-      throw "Found an Idris2 library dependency that was not the result of the buildIdris function"
-  ) idrisLibraries;
+  idrisLibraryLibs = map
+    (
+      idrisLib:
+      if lib.isDerivation idrisLib then
+        idrisLib
+      else if builtins.isFunction idrisLib then
+        idrisLib { }
+      else if (builtins.isAttrs idrisLib && idrisLib ? "library") then
+        idrisLib.library { }
+      else
+        throw "Found an Idris2 library dependency that was not the result of the buildIdris function"
+    )
+    idrisLibraries;
 
   propagate =
     libs: lib.unique (lib.concatMap (nextLib: [ nextLib ] ++ nextLib.propagatedIdrisLibraries) libs);
@@ -162,8 +165,8 @@ in
   executable = mkExecutable false;
 
   library =
-    {
-      withSource ? false,
+    { withSource ? false
+    ,
     }:
     mkLibrary withSource;
 

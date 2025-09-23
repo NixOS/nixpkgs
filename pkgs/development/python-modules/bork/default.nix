@@ -1,19 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  setuptools,
-  build,
-  coloredlogs,
-  importlib-metadata,
-  packaging,
-  pip,
-  toml,
-  urllib3,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, build
+, coloredlogs
+, importlib-metadata
+, packaging
+, pip
+, toml
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

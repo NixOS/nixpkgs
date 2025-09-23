@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchurl,
-  writeScript,
-  autoPatchelfHook,
-  dpkg,
-  libz,
-  lib,
+{ stdenv
+, fetchurl
+, writeScript
+, autoPatchelfHook
+, dpkg
+, libz
+, lib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "cato-client";

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  unixtools,
-  dbus,
-  libcap,
-  polkit,
-  systemd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, unixtools
+, dbus
+, libcap
+, polkit
+, systemd
+,
 }:
 
 stdenv.mkDerivation {

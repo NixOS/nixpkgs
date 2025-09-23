@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  enableModTool ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, python3
+, enableModTool ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

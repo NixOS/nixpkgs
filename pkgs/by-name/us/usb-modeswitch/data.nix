@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  tcl,
-  usb-modeswitch,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, tcl
+, usb-modeswitch
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

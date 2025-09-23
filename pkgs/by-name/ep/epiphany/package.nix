@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  gettext,
-  fetchurl,
-  pkg-config,
-  gtk4,
-  glib,
-  icu,
-  wrapGAppsHook4,
-  gnome,
-  libportal-gtk4,
-  libxml2,
-  itstool,
-  webkitgtk_6_0,
-  libsoup_3,
-  glib-networking,
-  libsecret,
-  gnome-desktop,
-  libarchive,
-  p11-kit,
-  sqlite,
-  gcr_4,
-  isocodes,
-  desktop-file-utils,
-  nettle,
-  gdk-pixbuf,
-  gst_all_1,
-  json-glib,
-  libadwaita,
-  buildPackages,
-  withPantheon ? false,
-  pantheon,
+{ lib
+, stdenv
+, meson
+, ninja
+, gettext
+, fetchurl
+, pkg-config
+, gtk4
+, glib
+, icu
+, wrapGAppsHook4
+, gnome
+, libportal-gtk4
+, libxml2
+, itstool
+, webkitgtk_6_0
+, libsoup_3
+, glib-networking
+, libsecret
+, gnome-desktop
+, libarchive
+, p11-kit
+, sqlite
+, gcr_4
+, isocodes
+, desktop-file-utils
+, nettle
+, gdk-pixbuf
+, gst_all_1
+, json-glib
+, libadwaita
+, buildPackages
+, withPantheon ? false
+, pantheon
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

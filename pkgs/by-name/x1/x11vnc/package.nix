@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  zlib,
-  libjpeg,
-  xorg,
-  coreutils,
-  libvncserver,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, zlib
+, libjpeg
+, xorg
+, coreutils
+, libvncserver
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  lib,
-  nodejs,
+{ stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, lib
+, nodejs
+,
 }:
 
 (buildNpmPackage.override { inherit nodejs; }) rec {

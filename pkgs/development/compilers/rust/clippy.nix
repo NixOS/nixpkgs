@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  rustc,
+{ stdenv
+, lib
+, rustPlatform
+, rustc
+,
 }:
 
 rustPlatform.buildRustPackage {

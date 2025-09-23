@@ -1,14 +1,11 @@
-{
-  lib,
-  stdenv,
-
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-
-  callPackage,
-
-  nixosTests,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, callPackage
+, nixosTests
+,
 }:
 
 let

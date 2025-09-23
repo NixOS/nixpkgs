@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  libelf,
-  libpcap,
-  nix-update-script,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, libelf
+, libpcap
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

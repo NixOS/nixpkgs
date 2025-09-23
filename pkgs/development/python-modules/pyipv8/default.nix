@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cryptography,
-  libnacl,
-  aiohttp,
-  aiohttp-apispec,
-  pyopenssl,
-  pyasn1,
-  marshmallow,
-  typing-extensions,
-  packaging,
-  apispec,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchFromGitHub
+, cryptography
+, libnacl
+, aiohttp
+, aiohttp-apispec
+, pyopenssl
+, pyasn1
+, marshmallow
+, typing-extensions
+, packaging
+, apispec
+,
 }:
 
 buildPythonPackage rec {

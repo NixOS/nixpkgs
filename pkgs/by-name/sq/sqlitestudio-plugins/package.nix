@@ -1,9 +1,8 @@
-{
-  stdenv,
-  lib,
-  python3,
-
-  sqlitestudio,
+{ stdenv
+, lib
+, python3
+, sqlitestudio
+,
 }:
 stdenv.mkDerivation {
   pname = "sqlitestudio-plugins";

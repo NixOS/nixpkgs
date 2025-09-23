@@ -1,18 +1,17 @@
-{
-  lib,
-  ansi,
-  cl-generic,
-  cl-lib,
-  commander,
-
-  epl,
-  f,
-  fetchFromGitHub,
-  git,
-  melpaBuild,
-  package-build,
-  s,
-  shut-up,
+{ lib
+, ansi
+, cl-generic
+, cl-lib
+, commander
+, epl
+, f
+, fetchFromGitHub
+, git
+, melpaBuild
+, package-build
+, s
+, shut-up
+,
 }:
 
 melpaBuild (finalAttrs: {

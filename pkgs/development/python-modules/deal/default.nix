@@ -1,22 +1,22 @@
-{
-  lib,
-  astroid,
-  buildPythonPackage,
-  deal-solver,
-  docstring-parser,
-  fetchFromGitHub,
-  flit-core,
-  hypothesis,
-  marshmallow,
-  pygments,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  pythonAtLeast,
-  sphinx,
-  typeguard,
-  urllib3,
-  vaa,
+{ lib
+, astroid
+, buildPythonPackage
+, deal-solver
+, docstring-parser
+, fetchFromGitHub
+, flit-core
+, hypothesis
+, marshmallow
+, pygments
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, pythonAtLeast
+, sphinx
+, typeguard
+, urllib3
+, vaa
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  cmake,
-  doxygen,
-  fetchFromGitHub,
-  getopt,
-  ninja,
-  lib,
-  pkg-config,
-  stdenv,
+{ cmake
+, doxygen
+, fetchFromGitHub
+, getopt
+, ninja
+, lib
+, pkg-config
+, stdenv
+,
 }:
 stdenv.mkDerivation rec {
   pname = "ktx-tools";

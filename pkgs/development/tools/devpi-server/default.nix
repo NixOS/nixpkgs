@@ -1,34 +1,34 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonApplication,
-  gitUpdater,
-  pythonOlder,
-  aiohttp,
-  appdirs,
-  beautifulsoup4,
-  defusedxml,
-  devpi-common,
-  execnet,
-  itsdangerous,
-  nginx,
-  packaging,
-  passlib,
-  platformdirs,
-  pluggy,
-  py,
-  httpx,
-  pyramid,
-  pytest-asyncio,
-  pytestCheckHook,
-  repoze-lru,
-  setuptools,
-  strictyaml,
-  waitress,
-  webtest,
-  testers,
-  devpi-server,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, gitUpdater
+, pythonOlder
+, aiohttp
+, appdirs
+, beautifulsoup4
+, defusedxml
+, devpi-common
+, execnet
+, itsdangerous
+, nginx
+, packaging
+, passlib
+, platformdirs
+, pluggy
+, py
+, httpx
+, pyramid
+, pytest-asyncio
+, pytestCheckHook
+, repoze-lru
+, setuptools
+, strictyaml
+, waitress
+, webtest
+, testers
+, devpi-server
+, nixosTests
+,
 }:
 
 buildPythonApplication rec {

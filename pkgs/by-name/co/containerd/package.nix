@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  pkgsCross,
-  btrfs-progs,
-  buildGoModule,
-  fetchFromGitHub,
-  go-md2man,
-  kubernetes,
-  nix-update-script,
-  nixosTests,
-  util-linux,
-  btrfsSupport ? btrfs-progs != null,
-  withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ lib
+, stdenv
+, pkgsCross
+, btrfs-progs
+, buildGoModule
+, fetchFromGitHub
+, go-md2man
+, kubernetes
+, nix-update-script
+, nixosTests
+, util-linux
+, btrfsSupport ? btrfs-progs != null
+, withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 buildGoModule rec {

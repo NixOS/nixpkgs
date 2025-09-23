@@ -1,26 +1,26 @@
-{
-  atool,
-  bat,
-  catdoc,
-  chafa,
-  exiftool,
-  eza,
-  fetchFromGitHub,
-  ffmpegthumbnailer,
-  file,
-  glow,
-  gnumeric,
-  jq,
-  lib,
-  libcdio,
-  makeWrapper,
-  mediainfo,
-  odt2txt,
-  openssl,
-  p7zip,
-  poppler-utils,
-  stdenv,
-  w3m,
+{ atool
+, bat
+, catdoc
+, chafa
+, exiftool
+, eza
+, fetchFromGitHub
+, ffmpegthumbnailer
+, file
+, glow
+, gnumeric
+, jq
+, lib
+, libcdio
+, makeWrapper
+, mediainfo
+, odt2txt
+, openssl
+, p7zip
+, poppler-utils
+, stdenv
+, w3m
+,
 }:
 
 stdenv.mkDerivation {

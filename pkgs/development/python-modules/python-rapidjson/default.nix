@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rapidjson,
-  pytestCheckHook,
-  pytz,
-  setuptools,
-  replaceVars,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rapidjson
+, pytestCheckHook
+, pytz
+, setuptools
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

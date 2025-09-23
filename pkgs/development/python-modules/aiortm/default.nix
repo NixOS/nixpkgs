@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  ciso8601,
-  fetchFromGitHub,
-  mashumaro,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typer,
-  yarl,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, ciso8601
+, fetchFromGitHub
+, mashumaro
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typer
+, yarl
+,
 }:
 
 buildPythonPackage rec {

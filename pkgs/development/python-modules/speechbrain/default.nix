@@ -1,19 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  huggingface-hub,
-  hyperpyyaml,
-  joblib,
-  numpy,
-  packaging,
-  sentencepiece,
-  scipy,
-  torch,
-  torchaudio,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  huggingface-hub
+, hyperpyyaml
+, joblib
+, numpy
+, packaging
+, sentencepiece
+, scipy
+, torch
+, torchaudio
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

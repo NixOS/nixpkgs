@@ -1,12 +1,11 @@
-{
-  stdenvNoCC,
-  unzip,
-  makeWrapper,
-
-  pname,
-  version,
-  meta,
-  src,
+{ stdenvNoCC
+, unzip
+, makeWrapper
+, pname
+, version
+, meta
+, src
+,
 }:
 stdenvNoCC.mkDerivation {
   inherit

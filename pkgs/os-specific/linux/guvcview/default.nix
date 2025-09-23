@@ -1,30 +1,30 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  intltool,
-  pkg-config,
-  portaudio,
-  SDL2,
-  ffmpeg,
-  udev,
-  libusb1,
-  libv4l,
-  alsa-lib,
-  gsl,
-  libpng,
-  sfml_2,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  useQt ? false,
-  qtbase ? null,
-  wrapQtAppsHook ? null,
-  # can be turned off if used as a library
-  useGtk ? true,
-  gtk3,
-  wrapGAppsHook3 ? null,
+{ config
+, lib
+, stdenv
+, fetchurl
+, cmake
+, intltool
+, pkg-config
+, portaudio
+, SDL2
+, ffmpeg
+, udev
+, libusb1
+, libv4l
+, alsa-lib
+, gsl
+, libpng
+, sfml_2
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, libpulseaudio
+, useQt ? false
+, qtbase ? null
+, wrapQtAppsHook ? null
+, # can be turned off if used as a library
+  useGtk ? true
+, gtk3
+, wrapGAppsHook3 ? null
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

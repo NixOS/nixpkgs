@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  perl,
-  gnutar,
-  zlib,
-  bzip2,
-  xz,
-  zstd,
-  libmd,
-  makeWrapper,
-  coreutils,
-  autoreconfHook,
-  pkg-config,
-  diffutils,
-  glibc ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchgit
+, perl
+, gnutar
+, zlib
+, bzip2
+, xz
+, zstd
+, libmd
+, makeWrapper
+, coreutils
+, autoreconfHook
+, pkg-config
+, diffutils
+, glibc ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation rec {

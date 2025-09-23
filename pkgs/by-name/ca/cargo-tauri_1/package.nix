@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bzip2,
-  pkg-config,
-  rustPlatform,
-  xz,
-  zstd,
-  cargo-tauri,
+{ lib
+, stdenv
+, bzip2
+, pkg-config
+, rustPlatform
+, xz
+, zstd
+, cargo-tauri
+,
 }:
 
 cargo-tauri.overrideAttrs (

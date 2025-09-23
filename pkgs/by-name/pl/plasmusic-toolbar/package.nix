@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  kdePackages,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, kdePackages
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plasmusic-toolbar";

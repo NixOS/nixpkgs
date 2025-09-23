@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pidgin,
-  intltool,
-  libxml2,
-  gmime,
-  nss,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pidgin
+, intltool
+, libxml2
+, gmime
+, nss
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  swiftPackages,
-  swift,
-  swiftpm,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, swiftPackages
+, swift
+, swiftpm
+, nix-update-script
+,
 }:
 let
   stdenv = swiftPackages.stdenv;

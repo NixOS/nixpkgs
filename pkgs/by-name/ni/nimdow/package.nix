@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  nixosTests,
-  testers,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, nixosTests
+, testers
+,
 }:
 
 buildNimPackage (finalAttrs: {

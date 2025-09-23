@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pandoc,
-  pandocfilters,
-  poetry-core,
-  pythonOlder,
-  replaceVars,
-  texliveSmall,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pandoc
+, pandocfilters
+, poetry-core
+, pythonOlder
+, replaceVars
+, texliveSmall
+,
 }:
 
 buildPythonPackage rec {

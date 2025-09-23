@@ -1,15 +1,15 @@
-{
-  wrapGAppsHook4,
-  glib,
-  lib,
-  stdenv,
-  xorg,
-  switchboard,
-  switchboardPlugs,
-  plugs,
-  # Only useful to disable for development testing.
-  useDefaultPlugs ? true,
-  testName ? null,
+{ wrapGAppsHook4
+, glib
+, lib
+, stdenv
+, xorg
+, switchboard
+, switchboardPlugs
+, plugs
+, # Only useful to disable for development testing.
+  useDefaultPlugs ? true
+, testName ? null
+,
 }:
 
 let

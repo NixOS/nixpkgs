@@ -2,7 +2,7 @@
 
 callPackage ./generic.nix (
   args
-  // rec {
+    // rec {
     brand = "Midas";
     type = "M32";
     version = "4.4";

@@ -1,8 +1,8 @@
-{
-  fetchFromGitLab,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
+{ fetchFromGitLab
+, lib
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

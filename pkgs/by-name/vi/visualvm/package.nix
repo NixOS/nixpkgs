@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchzip,
-  lib,
-  makeWrapper,
-  makeDesktopItem,
-  jdk,
+{ stdenv
+, fetchzip
+, lib
+, makeWrapper
+, makeDesktopItem
+, jdk
+,
 }:
 
 stdenv.mkDerivation rec {

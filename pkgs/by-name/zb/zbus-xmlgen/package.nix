@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  makeBinaryWrapper,
-  rustfmt,
+{ lib
+, rustPlatform
+, fetchCrate
+, makeBinaryWrapper
+, rustfmt
+,
 }:
 
 rustPlatform.buildRustPackage rec {

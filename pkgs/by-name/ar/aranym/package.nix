@@ -1,12 +1,12 @@
-{
-  lib,
-  SDL2,
-  autoreconfHook,
-  fetchFromGitHub,
-  libGLU,
-  libX11,
-  pkg-config,
-  stdenv,
+{ lib
+, SDL2
+, autoreconfHook
+, fetchFromGitHub
+, libGLU
+, libX11
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

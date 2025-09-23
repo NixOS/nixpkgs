@@ -1,28 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build time
-  hatchling,
-  hatch-vcs,
-
-  # runtime
-  packaging,
-  tomli,
-
-  # docs
-  sphinxHook,
-  furo,
-  sphinx-autodoc-typehints,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
-  setuptools,
-  virtualenv,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build time
+  hatchling
+, hatch-vcs
+, # runtime
+  packaging
+, tomli
+, # docs
+  sphinxHook
+, furo
+, sphinx-autodoc-typehints
+, # tests
+  pytest-mock
+, pytestCheckHook
+, setuptools
+, virtualenv
+, wheel
+,
 }:
 
 buildPythonPackage rec {

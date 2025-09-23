@@ -1,18 +1,18 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  git,
-  bash,
-  coreutils,
-  compressDrvWeb,
-  gitea,
-  gzip,
-  openssh,
-  sqliteSupport ? true,
-  nixosTests,
-  buildNpmPackage,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, git
+, bash
+, coreutils
+, compressDrvWeb
+, gitea
+, gzip
+, openssh
+, sqliteSupport ? true
+, nixosTests
+, buildNpmPackage
+,
 }:
 
 let

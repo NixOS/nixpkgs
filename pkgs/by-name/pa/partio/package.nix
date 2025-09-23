@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unzip,
-  cmake,
-  libglut,
-  libGLU,
-  libGL,
-  zlib,
-  swig,
-  doxygen,
-  xorg,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unzip
+, cmake
+, libglut
+, libGLU
+, libGL
+, zlib
+, swig
+, doxygen
+, xorg
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

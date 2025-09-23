@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  testers,
-  nix-update-script,
-  rustPlatform,
-  rainfrog,
+{ lib
+, fetchFromGitHub
+, testers
+, nix-update-script
+, rustPlatform
+, rainfrog
+,
 }:
 let
   version = "0.3.7";

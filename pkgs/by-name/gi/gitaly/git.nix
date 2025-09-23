@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  gitaly,
-  fetchFromGitLab,
-  curl,
-  pcre2,
-  zlib,
-  git,
-  pkg-config,
-  openssl,
+{ stdenv
+, lib
+, gitaly
+, fetchFromGitLab
+, curl
+, pcre2
+, zlib
+, git
+, pkg-config
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

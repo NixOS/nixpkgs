@@ -1,17 +1,17 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  click,
-  click-log,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  voluptuous,
-  zigpy,
+{ lib
+, async-timeout
+, buildPythonPackage
+, click
+, click-log
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, voluptuous
+, zigpy
+,
 }:
 
 buildPythonPackage rec {

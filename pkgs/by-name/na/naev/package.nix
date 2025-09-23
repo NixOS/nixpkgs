@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  unzip,
-  pkg-config,
-  python3,
-  SDL2,
-  SDL2_image,
-  enet,
-  freetype,
-  glpk,
-  intltool,
-  libpng,
-  libunibreak,
-  libvorbis,
-  libwebp,
-  libxml2,
-  luajit,
-  meson,
-  ninja,
-  openal,
-  openblas,
-  pcre2,
-  physfs,
-  suitesparse,
-  libyaml,
-  cmark,
-  dbus,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, unzip
+, pkg-config
+, python3
+, SDL2
+, SDL2_image
+, enet
+, freetype
+, glpk
+, intltool
+, libpng
+, libunibreak
+, libvorbis
+, libwebp
+, libxml2
+, luajit
+, meson
+, ninja
+, openal
+, openblas
+, pcre2
+, physfs
+, suitesparse
+, libyaml
+, cmark
+, dbus
+,
 }:
 
 let

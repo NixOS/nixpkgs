@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream-glib,
-  desktop-file-utils,
-  gobject-introspection,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wrapGAppsHook4,
-  apx,
-  gnome-console,
-  vte-gtk4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, gobject-introspection
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook4
+, apx
+, gnome-console
+, vte-gtk4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

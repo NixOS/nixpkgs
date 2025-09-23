@@ -1,20 +1,20 @@
-{
-  lib,
-  boto3,
-  botocore,
-  buildPythonPackage,
-  cached-property,
-  click,
-  click-option-group,
-  fetchFromGitHub,
-  jinja2,
-  markdown,
-  policy-sentry,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  schema,
-  setuptools,
+{ lib
+, boto3
+, botocore
+, buildPythonPackage
+, cached-property
+, click
+, click-option-group
+, fetchFromGitHub
+, jinja2
+, markdown
+, policy-sentry
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, schema
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

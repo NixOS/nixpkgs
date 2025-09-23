@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  flit-core,
-  jinja2,
-  pytestCheckHook,
-  railroad-diagrams,
-  pyparsing,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, flit-core
+, jinja2
+, pytestCheckHook
+, railroad-diagrams
+, pyparsing
+,
 }:
 
 buildPythonPackage rec {

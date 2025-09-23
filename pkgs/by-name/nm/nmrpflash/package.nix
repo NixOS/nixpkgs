@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  libnl,
-  libpcap,
-  pkg-config,
-  stdenv,
+{ fetchFromGitHub
+, lib
+, libnl
+, libpcap
+, pkg-config
+, stdenv
+,
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";

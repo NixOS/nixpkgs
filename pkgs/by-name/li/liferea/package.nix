@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  intltool,
-  python3Packages,
-  wrapGAppsHook3,
-  glib,
-  libxml2,
-  libxslt,
-  sqlite,
-  libsoup_3,
-  webkitgtk_4_1,
-  json-glib,
-  gst_all_1,
-  libnotify,
-  gtk3,
-  gsettings-desktop-schemas,
-  libpeas2,
-  libsecret,
-  gobject-introspection,
-  glib-networking,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, python3Packages
+, wrapGAppsHook3
+, glib
+, libxml2
+, libxslt
+, sqlite
+, libsoup_3
+, webkitgtk_4_1
+, json-glib
+, gst_all_1
+, libnotify
+, gtk3
+, gsettings-desktop-schemas
+, libpeas2
+, libsecret
+, gobject-introspection
+, glib-networking
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

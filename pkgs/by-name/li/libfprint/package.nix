@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  meson,
-  python3,
-  ninja,
-  gusb,
-  pixman,
-  glib,
-  gobject-introspection,
-  cairo,
-  libgudev,
-  udevCheckHook,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, meson
+, python3
+, ninja
+, gusb
+, pixman
+, glib
+, gobject-introspection
+, cairo
+, libgudev
+, udevCheckHook
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

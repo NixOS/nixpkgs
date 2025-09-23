@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitLab,
-  ppxlib,
-  ppx_deriving,
-  result,
+{ lib
+, buildDunePackage
+, fetchFromGitLab
+, ppxlib
+, ppx_deriving
+, result
+,
 }:
 
 buildDunePackage rec {

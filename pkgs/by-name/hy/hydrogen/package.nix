@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  ladspa-sdk,
-  lash,
-  libarchive,
-  libjack2,
-  liblo,
-  libpulseaudio,
-  libsndfile,
-  lrdf,
-  qt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsa-lib
+, ladspa-sdk
+, lash
+, libarchive
+, libjack2
+, liblo
+, libpulseaudio
+, libsndfile
+, lrdf
+, qt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

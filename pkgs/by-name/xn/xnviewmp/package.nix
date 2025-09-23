@@ -1,13 +1,13 @@
-{
-  appimageTools,
-  fetchurl,
-  runCommand,
-  lib,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
-  writeShellScript,
-  nix-update,
+{ appimageTools
+, fetchurl
+, runCommand
+, lib
+, makeDesktopItem
+, copyDesktopItems
+, imagemagick
+, writeShellScript
+, nix-update
+,
 }:
 let
   icon =

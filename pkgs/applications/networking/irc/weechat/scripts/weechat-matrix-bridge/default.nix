@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  curl,
-  fetchFromGitHub,
-  cjson,
-  olm,
-  luaffi,
+{ lib
+, stdenv
+, curl
+, fetchFromGitHub
+, cjson
+, olm
+, luaffi
+,
 }:
 
 stdenv.mkDerivation {

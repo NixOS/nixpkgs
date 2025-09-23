@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gwenhywfar,
-  pcsclite,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gwenhywfar
+, pcsclite
+, zlib
+,
 }:
 
 let

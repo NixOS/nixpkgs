@@ -1,29 +1,29 @@
-{
-  lib,
-  accelerate,
-  aiohttp,
-  buildPythonPackage,
-  fastapi,
-  fetchFromGitHub,
-  flask,
-  numpy,
-  pg8000,
-  pillow,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
-  requests,
-  sentence-transformers,
-  setuptools,
-  sqlalchemy,
-  sqlitedict,
-  tenacity,
-  tiktoken,
-  torch,
-  transformers,
-  uvicorn,
-  xxhash,
+{ lib
+, accelerate
+, aiohttp
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, flask
+, numpy
+, pg8000
+, pillow
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, redis
+, requests
+, sentence-transformers
+, setuptools
+, sqlalchemy
+, sqlitedict
+, tenacity
+, tiktoken
+, torch
+, transformers
+, uvicorn
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  libpcap,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, libpcap
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

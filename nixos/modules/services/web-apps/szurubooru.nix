@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -61,7 +60,8 @@ in
         package = mkPackageOption pkgs [
           "szurubooru"
           "server"
-        ] { };
+        ]
+          { };
 
         port = mkOption {
           type = types.port;
@@ -188,7 +188,8 @@ in
         package = mkPackageOption pkgs [
           "szurubooru"
           "client"
-        ] { };
+        ]
+          { };
       };
 
       database = {

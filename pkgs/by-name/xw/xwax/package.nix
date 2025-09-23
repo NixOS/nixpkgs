@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  SDL,
-  SDL_ttf,
-  alsa-lib,
-  jack2,
-  libmpg123,
-  ffmpeg,
-  cdparanoia,
-  dejavu_fonts,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, SDL_ttf
+, alsa-lib
+, jack2
+, libmpg123
+, ffmpeg
+, cdparanoia
+, dejavu_fonts
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

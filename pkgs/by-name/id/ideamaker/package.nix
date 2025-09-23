@@ -1,28 +1,28 @@
-{
-  autoPatchelfHook,
-  common-updater-scripts,
-  copyDesktopItems,
-  curl,
-  dpkg,
-  e2fsprogs,
-  fetchurl,
-  gnutls,
-  gtk3,
-  jq,
-  lib,
-  libGLU,
-  libpsl,
-  libsForQt5,
-  libredirect,
-  libX11,
-  lz4,
-  makeDesktopItem,
-  makeWrapper,
-  nghttp2,
-  shared-mime-info,
-  stdenv,
-  writeShellApplication,
-  xkeyboardconfig,
+{ autoPatchelfHook
+, common-updater-scripts
+, copyDesktopItems
+, curl
+, dpkg
+, e2fsprogs
+, fetchurl
+, gnutls
+, gtk3
+, jq
+, lib
+, libGLU
+, libpsl
+, libsForQt5
+, libredirect
+, libX11
+, lz4
+, makeDesktopItem
+, makeWrapper
+, nghttp2
+, shared-mime-info
+, stdenv
+, writeShellApplication
+, xkeyboardconfig
+,
 }:
 let
   pname = "ideamaker";

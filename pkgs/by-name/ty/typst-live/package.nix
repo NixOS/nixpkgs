@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  makeWrapper,
-  typst,
+{ lib
+, rustPlatform
+, fetchCrate
+, makeWrapper
+, typst
+,
 }:
 
 rustPlatform.buildRustPackage rec {

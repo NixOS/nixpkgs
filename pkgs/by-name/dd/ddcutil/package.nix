@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  jansson,
-  udev,
-  libgudev,
-  libusb1,
-  libdrm,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, glib
+, jansson
+, udev
+, libgudev
+, libusb1
+, libdrm
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

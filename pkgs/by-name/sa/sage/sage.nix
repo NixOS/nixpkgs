@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  sage-tests,
-  sage-with-env,
-  jupyter-kernel-definition,
-  jupyter-kernel-specs,
-  sagedoc,
-  withDoc,
-  requireSageTests,
+{ lib
+, stdenv
+, makeWrapper
+, sage-tests
+, sage-with-env
+, jupyter-kernel-definition
+, jupyter-kernel-specs
+, sagedoc
+, withDoc
+, requireSageTests
+,
 }:
 
 # A wrapper that makes sure sage finds its docs (if they were build) and the

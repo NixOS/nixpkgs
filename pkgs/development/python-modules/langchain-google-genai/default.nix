@@ -1,30 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  filetype,
-  google-api-core,
-  google-auth,
-  google-generativeai,
-  langchain-core,
-  pydantic,
-
-  # tests
-  freezegun,
-  langchain-tests,
-  numpy,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  syrupy,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  filetype
+, google-api-core
+, google-auth
+, google-generativeai
+, langchain-core
+, pydantic
+, # tests
+  freezegun
+, langchain-tests
+, numpy
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, syrupy
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

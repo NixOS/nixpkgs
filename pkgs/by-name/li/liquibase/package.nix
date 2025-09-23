@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gitUpdater,
-  jre,
-  makeWrapper,
-  mysqlSupport ? true,
-  mysql_jdbc,
-  postgresqlSupport ? true,
-  postgresql_jdbc,
-  redshiftSupport ? true,
-  redshift_jdbc,
-  liquibase_redshift_extension,
+{ lib
+, stdenv
+, fetchurl
+, gitUpdater
+, jre
+, makeWrapper
+, mysqlSupport ? true
+, mysql_jdbc
+, postgresqlSupport ? true
+, postgresql_jdbc
+, redshiftSupport ? true
+, redshift_jdbc
+, liquibase_redshift_extension
+,
 }:
 
 let

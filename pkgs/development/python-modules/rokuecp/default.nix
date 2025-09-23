@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  awesomeversion,
-  backoff,
-  buildPythonPackage,
-  cachetools,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-freezegun,
-  pytestCheckHook,
-  pythonOlder,
-  xmltodict,
-  yarl,
+{ lib
+, aiohttp
+, aresponses
+, awesomeversion
+, backoff
+, buildPythonPackage
+, cachetools
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-freezegun
+, pytestCheckHook
+, pythonOlder
+, xmltodict
+, yarl
+,
 }:
 
 buildPythonPackage rec {

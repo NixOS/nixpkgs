@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  runCommand,
-  cbtemulator,
-  google-cloud-bigtable-tool,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, runCommand
+, cbtemulator
+, google-cloud-bigtable-tool
+,
 }:
 
 buildGoModule rec {

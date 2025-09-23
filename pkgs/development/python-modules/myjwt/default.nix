@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  click,
-  colorama,
-  cryptography,
-  exrex,
-  fetchFromGitHub,
-  poetry-core,
-  pyopenssl,
-  pyperclip,
-  pytest-mock,
-  pytestCheckHook,
-  questionary,
-  requests,
-  requests-mock,
+{ lib
+, stdenv
+, buildPythonPackage
+, click
+, colorama
+, cryptography
+, exrex
+, fetchFromGitHub
+, poetry-core
+, pyopenssl
+, pyperclip
+, pytest-mock
+, pytestCheckHook
+, questionary
+, requests
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

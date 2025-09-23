@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  libiconv,
-  openssl,
-  pkg-config,
-  cmake,
-  xclip,
-  nix-update-script,
-  fetchpatch,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libiconv
+, openssl
+, pkg-config
+, cmake
+, xclip
+, nix-update-script
+, fetchpatch
+,
 }:
 let
   pname = "gitui";

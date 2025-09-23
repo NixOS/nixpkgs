@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  which,
-  coreutils,
-  perl,
-  fetchurl,
-  makeWrapper,
-  diffutils,
-  writeScriptBin,
-  bzip2,
+{ lib
+, stdenv
+, which
+, coreutils
+, perl
+, fetchurl
+, makeWrapper
+, diffutils
+, writeScriptBin
+, bzip2
+,
 }:
 
 # quick usage:

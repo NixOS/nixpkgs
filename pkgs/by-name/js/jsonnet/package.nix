@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  jekyll,
-  cmake,
-  fetchFromGitHub,
-  gtest,
+{ stdenv
+, lib
+, jekyll
+, cmake
+, fetchFromGitHub
+, gtest
+,
 }:
 
 stdenv.mkDerivation rec {

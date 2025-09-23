@@ -1,12 +1,12 @@
-{
-  lib,
-  callPackage,
-  cling,
-  fetchurl,
-  jq,
-  makeWrapper,
-  python3,
-  stdenv,
+{ lib
+, callPackage
+, cling
+, fetchurl
+, jq
+, makeWrapper
+, python3
+, stdenv
+,
 }:
 
 # Jupyter console:

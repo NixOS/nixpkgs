@@ -1,33 +1,32 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  flex,
-  db4,
-  gettext,
-  ninja,
-  audit,
-  linuxHeaders,
-  libxcrypt,
-  bash,
-  bashNonInteractive,
-  nixosTests,
-  meson,
-  pkg-config,
-  systemdLibs,
-  docbook5,
-  libxslt,
-  libxml2,
-  w3m-batch,
-  findXMLCatalogs,
-  docbook_xsl_ns,
-  nix-update-script,
-  withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  withAudit ?
-    lib.meta.availableOn stdenv.hostPlatform audit
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, flex
+, db4
+, gettext
+, ninja
+, audit
+, linuxHeaders
+, libxcrypt
+, bash
+, bashNonInteractive
+, nixosTests
+, meson
+, pkg-config
+, systemdLibs
+, docbook5
+, libxslt
+, libxml2
+, w3m-batch
+, findXMLCatalogs
+, docbook_xsl_ns
+, nix-update-script
+, withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, withAudit ? lib.meta.availableOn stdenv.hostPlatform audit
     # cross-compilation only works from platforms with linux headers
-    && lib.meta.availableOn stdenv.buildPlatform linuxHeaders,
+    && lib.meta.availableOn stdenv.buildPlatform linuxHeaders
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

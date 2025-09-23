@@ -1,5 +1,5 @@
-{
-  hostPlatform,
+{ hostPlatform
+,
 }:
 
 rec {

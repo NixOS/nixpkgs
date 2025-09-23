@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, # build-system
+  hatchling
+, hatch-vcs
+, # dependencies
+  setuptools
+,
 }:
 
 buildPythonPackage rec {

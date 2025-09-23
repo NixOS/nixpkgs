@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dee,
-  gtk3,
-  intltool,
-  libdbusmenu-gtk3,
-  libunity,
-  pkg-config,
-  rsync,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, dee
+, gtk3
+, intltool
+, libdbusmenu-gtk3
+, libunity
+, pkg-config
+, rsync
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  applyPatches,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  k3s,
-  lib,
-  nixosTests,
-  stdenv,
-  symlinkJoin,
+{ applyPatches
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, k3s
+, lib
+, nixosTests
+, stdenv
+, symlinkJoin
+,
 }:
 
 let

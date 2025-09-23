@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -101,14 +100,16 @@ let
   # removes NixOS special and unused attributes
   sensorToConf =
     { type, query, ... }@args:
-    (lib.filterAttrs (
-      k: v:
-      v != null
-      && !(lib.elem k [
-        "type"
-        "query"
-      ])
-    ) args)
+    (lib.filterAttrs
+      (
+        k: v:
+        v != null
+        && !(lib.elem k [
+          "type"
+          "query"
+        ])
+      )
+      args)
     // {
       "${type}" = query;
     };

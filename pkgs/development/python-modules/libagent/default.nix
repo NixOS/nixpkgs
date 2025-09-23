@@ -1,23 +1,23 @@
-{
-  lib,
-  fetchFromGitHub,
-  backports-shutil-which,
-  bech32,
-  buildPythonPackage,
-  setuptools,
-  cryptography,
-  ed25519,
-  ecdsa,
-  gnupg,
-  semver,
-  mnemonic,
-  unidecode,
-  mock,
-  pytestCheckHook,
-  configargparse,
-  python-daemon,
-  pymsgbox,
-  pynacl,
+{ lib
+, fetchFromGitHub
+, backports-shutil-which
+, bech32
+, buildPythonPackage
+, setuptools
+, cryptography
+, ed25519
+, ecdsa
+, gnupg
+, semver
+, mnemonic
+, unidecode
+, mock
+, pytestCheckHook
+, configargparse
+, python-daemon
+, pymsgbox
+, pynacl
+,
 }:
 
 # When changing this package, please test packages {keepkey,ledger,onlykey,trezor}-agent

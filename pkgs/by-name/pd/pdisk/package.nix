@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  libbsd,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, libbsd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

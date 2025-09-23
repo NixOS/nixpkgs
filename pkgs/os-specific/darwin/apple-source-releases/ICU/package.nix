@@ -1,11 +1,11 @@
-{
-  lib,
-  bootstrapStdenv,
-  buildPackages,
-  fetchpatch2,
-  mkAppleDerivation,
-  python3,
-  testers,
+{ lib
+, bootstrapStdenv
+, buildPackages
+, fetchpatch2
+, mkAppleDerivation
+, python3
+, testers
+,
 }:
 
 # Based on:

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  electron,
-  dpkg,
-  makeWrapper,
-  commandLineArgs ? "",
+{ lib
+, stdenvNoCC
+, fetchurl
+, electron
+, dpkg
+, makeWrapper
+, commandLineArgs ? ""
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

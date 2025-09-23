@@ -1,27 +1,26 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchurl,
-  stdenv,
-
-  boost,
-  cairomm,
-  cgal,
-  expat,
-  gmp,
-  gobject-introspection,
-  gtk3,
-  llvmPackages,
-  matplotlib,
-  mpfr,
-  numpy,
-  pkg-config,
-  pycairo,
-  pygobject3,
-  python,
-  scipy,
-  sparsehash,
-  gitUpdater,
+{ buildPythonPackage
+, lib
+, fetchurl
+, stdenv
+, boost
+, cairomm
+, cgal
+, expat
+, gmp
+, gobject-introspection
+, gtk3
+, llvmPackages
+, matplotlib
+, mpfr
+, numpy
+, pkg-config
+, pycairo
+, pygobject3
+, python
+, scipy
+, sparsehash
+, gitUpdater
+,
 }:
 
 let

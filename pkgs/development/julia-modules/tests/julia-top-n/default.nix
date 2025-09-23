@@ -1,14 +1,14 @@
-{
-  mkDerivation,
-  aeson,
-  base,
-  filepath,
-  lib,
-  optparse-applicative,
-  sandwich,
-  text,
-  unliftio,
-  yaml,
+{ mkDerivation
+, aeson
+, base
+, filepath
+, lib
+, optparse-applicative
+, sandwich
+, text
+, unliftio
+, yaml
+,
 }:
 mkDerivation {
   pname = "julia-top-n";

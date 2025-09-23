@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  config,
-  alsa-lib,
-  apple-sdk_11,
-  cmake,
-  dbus,
-  fetchFromGitHub,
-  libjack2,
-  libpulseaudio,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  portaudio,
-  rustPlatform,
-  testers,
-  withALSA ? stdenv.hostPlatform.isLinux,
-  withJack ? stdenv.hostPlatform.isLinux,
-  withMpris ? stdenv.hostPlatform.isLinux,
-  withPortAudio ? stdenv.hostPlatform.isDarwin,
-  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, config
+, alsa-lib
+, apple-sdk_11
+, cmake
+, dbus
+, fetchFromGitHub
+, libjack2
+, libpulseaudio
+, nix-update-script
+, openssl
+, pkg-config
+, portaudio
+, rustPlatform
+, testers
+, withALSA ? stdenv.hostPlatform.isLinux
+, withJack ? stdenv.hostPlatform.isLinux
+, withMpris ? stdenv.hostPlatform.isLinux
+, withPortAudio ? stdenv.hostPlatform.isDarwin
+, withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

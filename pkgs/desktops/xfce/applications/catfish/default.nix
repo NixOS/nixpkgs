@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  python3,
-  xfconf,
-  shared-mime-info,
-  xdg-utils,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, glib
+, gtk3
+, python3
+, xfconf
+, shared-mime-info
+, xdg-utils
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

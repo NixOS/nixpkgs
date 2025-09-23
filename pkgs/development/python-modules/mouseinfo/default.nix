@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  pyperclip,
-  fetchFromGitHub,
-  xlib,
-  pillow,
+{ lib
+, buildPythonPackage
+, pyperclip
+, fetchFromGitHub
+, xlib
+, pillow
+,
 }:
 buildPythonPackage {
   pname = "mouseinfo";

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-  cmake,
-  pkg-config,
-  openssl,
-  qtbase,
-  qttools,
-  sphinx,
+{ stdenv
+, lib
+, fetchFromGitHub
+, wrapQtAppsHook
+, cmake
+, pkg-config
+, openssl
+, qtbase
+, qttools
+, sphinx
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

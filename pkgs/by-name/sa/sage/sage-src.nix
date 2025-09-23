@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchpatch2,
-  fetchurl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, fetchpatch2
+, fetchurl
+,
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.

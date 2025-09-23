@@ -1,22 +1,22 @@
-{
-  lib,
-  blessed,
-  browser-cookie3,
-  buildPythonPackage,
-  cloudscraper,
-  fetchPypi,
-  keyring,
-  keyrings-alt,
-  lxml,
-  measurement,
-  mock,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  rich,
-  setuptools,
-  typing-extensions,
+{ lib
+, blessed
+, browser-cookie3
+, buildPythonPackage
+, cloudscraper
+, fetchPypi
+, keyring
+, keyrings-alt
+, lxml
+, measurement
+, mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, rich
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

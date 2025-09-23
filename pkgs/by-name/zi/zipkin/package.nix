@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre
+,
 }:
 stdenv.mkDerivation rec {
   version = "1.28.1";

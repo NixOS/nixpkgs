@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  clr,
-  git,
-  rocfft,
-  gtest,
-  boost,
-  fftw,
-  fftwFloat,
-  openmp,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  buildSamples ? false,
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, clr
+, git
+, rocfft
+, gtest
+, boost
+, fftw
+, fftwFloat
+, openmp
+, buildTests ? false
+, buildBenchmarks ? false
+, buildSamples ? false
+, gpuTargets ? [ ]
+,
 }:
 
 # Can also use cuFFT

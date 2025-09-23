@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  zlib,
-  bzip2,
-  xz,
-  curl,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, zlib
+, bzip2
+, xz
+, curl
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pyyaml,
-  rich,
-
-  # tests
-  esptool,
-  jsonschema,
-  pytestCheckHook,
-  distutils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  pyyaml
+, rich
+, # tests
+  esptool
+, jsonschema
+, pytestCheckHook
+, distutils
+,
 }:
 
 buildPythonPackage rec {

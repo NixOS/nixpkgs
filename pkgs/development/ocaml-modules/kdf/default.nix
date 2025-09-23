@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  digestif,
-  mirage-crypto,
-  alcotest,
-  ohex,
+{ lib
+, buildDunePackage
+, fetchurl
+, digestif
+, mirage-crypto
+, alcotest
+, ohex
+,
 }:
 
 buildDunePackage rec {

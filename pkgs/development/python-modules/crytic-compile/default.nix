@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cbor2,
-  fetchFromGitHub,
-  pycryptodome,
-  pythonOlder,
-  setuptools,
-  solc-select,
-  toml,
+{ lib
+, buildPythonPackage
+, cbor2
+, fetchFromGitHub
+, pycryptodome
+, pythonOlder
+, setuptools
+, solc-select
+, toml
+,
 }:
 
 buildPythonPackage rec {

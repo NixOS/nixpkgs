@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  parso,
-
-  # tests
-  attrs,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  parso
+, # tests
+  attrs
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

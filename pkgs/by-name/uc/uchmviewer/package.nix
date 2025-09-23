@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  chmlib,
-  libzip,
-  qt6,
-  cmake,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, chmlib
+, libzip
+, qt6
+, cmake
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

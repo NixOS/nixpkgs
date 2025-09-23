@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  docutils,
-  glib,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  nixosTests,
-  pkg-config,
-  gettext,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  gi-docgen,
-  libxslt,
-  fixDarwinDylibNames,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, docutils
+, glib
+, meson
+, mesonEmulatorHook
+, ninja
+, nixosTests
+, pkg-config
+, gettext
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, gi-docgen
+, libxslt
+, fixDarwinDylibNames
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

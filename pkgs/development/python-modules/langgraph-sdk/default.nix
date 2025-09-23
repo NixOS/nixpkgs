@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  httpx,
-  httpx-sse,
-  orjson,
-  typing-extensions,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  httpx
+, httpx-sse
+, orjson
+, typing-extensions
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

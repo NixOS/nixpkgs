@@ -10,13 +10,12 @@
 # hardware problems with a new one.
 
 # Configuration
-{
-  lib,
-  stdenv,
-  version,
-  rustAvailable,
-
-  features ? { },
+{ lib
+, stdenv
+, version
+, rustAvailable
+, features ? { }
+,
 }:
 
 with lib.kernel;
@@ -26,13 +25,15 @@ let
   # configuration items have to be part of a subattrs
   flattenKConf =
     nested:
-    lib.mapAttrs (
-      name: values:
-      if lib.length values == 1 then
-        lib.head values
-      else
-        throw "duplicate kernel configuration option: ${name}"
-    ) (lib.zipAttrs (lib.attrValues nested));
+    lib.mapAttrs
+      (
+        name: values:
+        if lib.length values == 1 then
+          lib.head values
+        else
+          throw "duplicate kernel configuration option: ${name}"
+      )
+      (lib.zipAttrs (lib.attrValues nested));
 
   whenPlatformHasEBPFJit = lib.mkIf (
     stdenv.hostPlatform.isAarch32
@@ -98,9 +99,11 @@ let
       # Enable CPU lockup detection
       LOCKUP_DETECTOR = yes;
       SOFTLOCKUP_DETECTOR = yes;
-      HARDLOCKUP_DETECTOR = lib.mkIf (
-        with stdenv.hostPlatform; isPower || isx86 || lib.versionAtLeast version "6.5"
-      ) yes;
+      HARDLOCKUP_DETECTOR = lib.mkIf
+        (
+          with stdenv.hostPlatform; isPower || isx86 || lib.versionAtLeast version "6.5"
+        )
+        yes;
 
       # Enable streaming logs to a remote device over a network
       NETCONSOLE = module;
@@ -537,13 +540,15 @@ let
         DRM_AMD_ACP = yes;
 
         # Enable AMD secure display when available
-        DRM_AMD_SECURE_DISPLAY = lib.mkIf (
-          with stdenv.hostPlatform;
-          (lib.versionAtLeast version "5.13" && (isx86 || isPower64))
-          || (lib.versionAtLeast version "6.2" && isAarch64 && !stdenv.cc.isClang)
-          || (lib.versionAtLeast version "6.5" && isLoongArch64 && !stdenv.cc.isClang)
-          || (lib.versionAtLeast version "6.10" && isRiscV64 && !stdenv.cc.isClang)
-        ) yes;
+        DRM_AMD_SECURE_DISPLAY = lib.mkIf
+          (
+            with stdenv.hostPlatform;
+            (lib.versionAtLeast version "5.13" && (isx86 || isPower64))
+            || (lib.versionAtLeast version "6.2" && isAarch64 && !stdenv.cc.isClang)
+            || (lib.versionAtLeast version "6.5" && isLoongArch64 && !stdenv.cc.isClang)
+            || (lib.versionAtLeast version "6.10" && isRiscV64 && !stdenv.cc.isClang)
+          )
+          yes;
 
         # Enable AMD image signal processor
         DRM_AMD_ISP = whenAtLeast "6.11" yes;
@@ -612,40 +617,40 @@ let
       # Enable Sound Open Firmware support
     }
     //
-      lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" && lib.versionAtLeast version "5.5")
-        {
-          SND_SOC_INTEL_SOUNDWIRE_SOF_MACH = whenAtLeast "5.10" module;
-          SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
-          SND_SOC_SOF_INTEL_SOUNDWIRE_LINK = whenBetween "5.10" "5.11" yes; # dep of SOF_MACH
-          SND_SOC_SOF_TOPLEVEL = yes;
-          SND_SOC_SOF_ACPI = module;
-          SND_SOC_SOF_PCI = module;
-          SND_SOC_SOF_APOLLOLAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_APOLLOLAKE_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_CANNONLAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_CANNONLAKE_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_COFFEELAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_COFFEELAKE_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_COMETLAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_COMETLAKE_H_SUPPORT = whenOlder "5.8" yes;
-          SND_SOC_SOF_COMETLAKE_LP_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_ELKHARTLAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_ELKHARTLAKE_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_GEMINILAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_GEMINILAKE_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_HDA_AUDIO_CODEC = yes;
-          SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
-          SND_SOC_SOF_HDA_LINK = yes;
-          SND_SOC_SOF_ICELAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_ICELAKE_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_INTEL_TOPLEVEL = yes;
-          SND_SOC_SOF_JASPERLAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_JASPERLAKE_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_MERRIFIELD = whenAtLeast "5.12" module;
-          SND_SOC_SOF_MERRIFIELD_SUPPORT = whenOlder "5.12" yes;
-          SND_SOC_SOF_TIGERLAKE = whenAtLeast "5.12" module;
-          SND_SOC_SOF_TIGERLAKE_SUPPORT = whenOlder "5.12" yes;
-        };
+    lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" && lib.versionAtLeast version "5.5")
+      {
+        SND_SOC_INTEL_SOUNDWIRE_SOF_MACH = whenAtLeast "5.10" module;
+        SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
+        SND_SOC_SOF_INTEL_SOUNDWIRE_LINK = whenBetween "5.10" "5.11" yes; # dep of SOF_MACH
+        SND_SOC_SOF_TOPLEVEL = yes;
+        SND_SOC_SOF_ACPI = module;
+        SND_SOC_SOF_PCI = module;
+        SND_SOC_SOF_APOLLOLAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_APOLLOLAKE_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_CANNONLAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_CANNONLAKE_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_COFFEELAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_COFFEELAKE_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_COMETLAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_COMETLAKE_H_SUPPORT = whenOlder "5.8" yes;
+        SND_SOC_SOF_COMETLAKE_LP_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_ELKHARTLAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_ELKHARTLAKE_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_GEMINILAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_GEMINILAKE_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_HDA_AUDIO_CODEC = yes;
+        SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
+        SND_SOC_SOF_HDA_LINK = yes;
+        SND_SOC_SOF_ICELAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_ICELAKE_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_INTEL_TOPLEVEL = yes;
+        SND_SOC_SOF_JASPERLAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_JASPERLAKE_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_MERRIFIELD = whenAtLeast "5.12" module;
+        SND_SOC_SOF_MERRIFIELD_SUPPORT = whenOlder "5.12" yes;
+        SND_SOC_SOF_TIGERLAKE = whenAtLeast "5.12" module;
+        SND_SOC_SOF_TIGERLAKE_SUPPORT = whenOlder "5.12" yes;
+      };
 
     usb = {
       USB = yes; # compile USB core into kernel, so we can use USB_SERIAL_CONSOLE before modules
@@ -1074,11 +1079,13 @@ let
         # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
         KERNEL_XZ = lib.mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
-        KERNEL_ZSTD = lib.mkIf (
-          with stdenv.hostPlatform;
-          (isMips || isS390 || isx86 || (lib.versionAtLeast version "6.1" && isAarch64 || isLoongArch64))
-          && useZstd
-        ) yes;
+        KERNEL_ZSTD = lib.mkIf
+          (
+            with stdenv.hostPlatform;
+            (isMips || isS390 || isx86 || (lib.versionAtLeast version "6.1" && isAarch64 || isLoongArch64))
+            && useZstd
+          )
+          yes;
 
         HID_BATTERY_STRENGTH = yes;
         # enabled by default in x86_64 but not arm64, so we do that here
@@ -1375,89 +1382,89 @@ let
         WATCH_QUEUE = whenAtLeast "5.8" yes;
       }
       //
-        lib.optionalAttrs
-          (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")
-          {
-            # Enable CPU/memory hotplug support
-            # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
-            ACPI_HOTPLUG_CPU = yes;
-            ACPI_HOTPLUG_MEMORY = yes;
-            MEMORY_HOTPLUG = yes;
-            MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.14" yes;
-            MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.14" yes;
-            MEMORY_HOTREMOVE = yes;
-            HOTPLUG_CPU = yes;
-            MIGRATION = yes;
-            SPARSEMEM = yes;
+      lib.optionalAttrs
+        (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")
+        {
+          # Enable CPU/memory hotplug support
+          # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
+          ACPI_HOTPLUG_CPU = yes;
+          ACPI_HOTPLUG_MEMORY = yes;
+          MEMORY_HOTPLUG = yes;
+          MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.14" yes;
+          MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.14" yes;
+          MEMORY_HOTREMOVE = yes;
+          HOTPLUG_CPU = yes;
+          MIGRATION = yes;
+          SPARSEMEM = yes;
 
-            # Bump the maximum number of CPUs to support systems like EC2 x1.*
-            # instances and Xeon Phi.
-            NR_CPUS = freeform "384";
+          # Bump the maximum number of CPUs to support systems like EC2 x1.*
+          # instances and Xeon Phi.
+          NR_CPUS = freeform "384";
 
-            # Enable LEDS to display link-state status of PHY devices (i.e. eth lan/wan interfaces)
-            LED_TRIGGER_PHY = yes;
+          # Enable LEDS to display link-state status of PHY devices (i.e. eth lan/wan interfaces)
+          LED_TRIGGER_PHY = yes;
 
-            # Required for various hardware features on Chrome OS devices
-            CHROME_PLATFORMS = yes;
-            CHROMEOS_TBMC = module;
-            CROS_EC = module;
-            CROS_EC_I2C = module;
-            CROS_EC_SPI = module;
-            CROS_KBD_LED_BACKLIGHT = module;
-            TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
-          }
+          # Required for various hardware features on Chrome OS devices
+          CHROME_PLATFORMS = yes;
+          CHROMEOS_TBMC = module;
+          CROS_EC = module;
+          CROS_EC_I2C = module;
+          CROS_EC_SPI = module;
+          CROS_KBD_LED_BACKLIGHT = module;
+          TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
+        }
       //
-        lib.optionalAttrs
-          (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux")
-          {
-            # Enables support for the Allwinner Display Engine 2.0
-            SUN8I_DE2_CCU = yes;
+      lib.optionalAttrs
+        (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux")
+        {
+          # Enables support for the Allwinner Display Engine 2.0
+          SUN8I_DE2_CCU = yes;
 
-            # See comments on https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647
-            CRYPTO_AEGIS128_SIMD = no;
+          # See comments on https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647
+          CRYPTO_AEGIS128_SIMD = no;
 
-            # Distros should configure the default as a kernel option.
-            # We previously defined it on the kernel command line as cma=
-            # The kernel command line will override a platform-specific configuration from its device tree.
-            # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
-            CMA_SIZE_MBYTES = freeform "32";
+          # Distros should configure the default as a kernel option.
+          # We previously defined it on the kernel command line as cma=
+          # The kernel command line will override a platform-specific configuration from its device tree.
+          # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
+          CMA_SIZE_MBYTES = freeform "32";
 
-            # Add debug interfaces for CMA
-            CMA_DEBUGFS = yes;
-            CMA_SYSFS = whenAtLeast "5.13" yes;
+          # Add debug interfaces for CMA
+          CMA_DEBUGFS = yes;
+          CMA_SYSFS = whenAtLeast "5.13" yes;
 
-            # https://docs.kernel.org/arch/arm/mem_alignment.html
-            # tldr:
-            #  when buggy userspace code emits illegal misaligned LDM, STM,
-            #  LDRD and STRDs, the instructions trap, are caught, and then
-            #  are emulated by the kernel.
-            #
-            #  This is the default on armv7l, anyway, but it is explicitly
-            #  enabled here for the sake of providing context for the
-            #  aarch64 compat option which follows.
-            ALIGNMENT_TRAP = lib.mkIf (stdenv.hostPlatform.system == "armv7l-linux") yes;
+          # https://docs.kernel.org/arch/arm/mem_alignment.html
+          # tldr:
+          #  when buggy userspace code emits illegal misaligned LDM, STM,
+          #  LDRD and STRDs, the instructions trap, are caught, and then
+          #  are emulated by the kernel.
+          #
+          #  This is the default on armv7l, anyway, but it is explicitly
+          #  enabled here for the sake of providing context for the
+          #  aarch64 compat option which follows.
+          ALIGNMENT_TRAP = lib.mkIf (stdenv.hostPlatform.system == "armv7l-linux") yes;
 
-            # https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220701135322.3025321-1-ardb@kernel.org/
-            # tldr:
-            #  when encountering alignment faults under aarch64, this option
-            #  makes the kernel attempt to handle the fault by doing the
-            #  same style of misaligned emulation that is performed under
-            #  armv7l (see above option).
-            #
-            #  This minimizes the potential for aarch32 userspace to behave
-            #  differently when run under aarch64 kernels compared to when
-            #  it is run under an aarch32 kernel.
-            COMPAT_ALIGNMENT_FIXUPS = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") (
-              whenAtLeast "6.1" yes
-            );
+          # https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220701135322.3025321-1-ardb@kernel.org/
+          # tldr:
+          #  when encountering alignment faults under aarch64, this option
+          #  makes the kernel attempt to handle the fault by doing the
+          #  same style of misaligned emulation that is performed under
+          #  armv7l (see above option).
+          #
+          #  This minimizes the potential for aarch32 userspace to behave
+          #  differently when run under aarch64 kernels compared to when
+          #  it is run under an aarch32 kernel.
+          COMPAT_ALIGNMENT_FIXUPS = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") (
+            whenAtLeast "6.1" yes
+          );
 
-            # requirement for CP15_BARRIER_EMULATION
-            ARMV8_DEPRECATED = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
-            # emulate a specific armv7 instruction that was removed from armv8
-            # this instruction is required to build a native armv7 nodejs on an
-            # aarch64-linux builder, for example
-            CP15_BARRIER_EMULATION = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
-          }
+          # requirement for CP15_BARRIER_EMULATION
+          ARMV8_DEPRECATED = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
+          # emulate a specific armv7 instruction that was removed from armv8
+          # this instruction is required to build a native armv7 nodejs on an
+          # aarch64-linux builder, for example
+          CP15_BARRIER_EMULATION = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
+        }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
         CROS_EC_LPC = module;
         CROS_EC_ISHTP = module;

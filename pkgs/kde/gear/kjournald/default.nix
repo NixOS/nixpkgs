@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  pkg-config,
-  systemd,
+{ mkKdeDerivation
+, qtdeclarative
+, pkg-config
+, systemd
+,
 }:
 mkKdeDerivation {
   pname = "kjournald";

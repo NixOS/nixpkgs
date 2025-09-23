@@ -2,26 +2,28 @@
 
 let
 
-  testedSystems = lib.filterAttrs (
-    name: value:
-    let
-      platform = lib.systems.elaborate value;
-    in
-    platform.isLinux || platform.isWindows
-  ) lib.systems.examples;
+  testedSystems = lib.filterAttrs
+    (
+      name: value:
+        let
+          platform = lib.systems.elaborate value;
+        in
+        platform.isLinux || platform.isWindows
+    )
+    lib.systems.examples;
 
   getExecutable =
     pkgs: pkgFun: exec:
     "${pkgFun pkgs}${exec}${pkgs.stdenv.hostPlatform.extensions.executable}";
 
   compareTest =
-    {
-      emulator,
-      pkgFun,
-      hostPkgs,
-      crossPkgs,
-      exec,
-      args ? [ ],
+    { emulator
+    , pkgFun
+    , hostPkgs
+    , crossPkgs
+    , exec
+    , args ? [ ]
+    ,
     }:
     let
       pkgName = (pkgFun hostPkgs).name;
@@ -72,39 +74,42 @@ let
   mapMultiPlatformTest =
     crossSystemFun: test:
     lib.dontRecurseIntoAttrs (
-      lib.mapAttrs (
-        name: system:
-        lib.recurseIntoAttrs (test rec {
-          crossPkgs = import pkgs.path {
-            localSystem = { inherit (pkgs.stdenv.hostPlatform) config; };
-            crossSystem = crossSystemFun system;
-          };
+      lib.mapAttrs
+        (
+          name: system:
+          lib.recurseIntoAttrs (test rec {
+            crossPkgs = import pkgs.path {
+              localSystem = { inherit (pkgs.stdenv.hostPlatform) config; };
+              crossSystem = crossSystemFun system;
+            };
 
-          emulator = crossPkgs.stdenv.hostPlatform.emulator pkgs;
+            emulator = crossPkgs.stdenv.hostPlatform.emulator pkgs;
 
-          # Apply some transformation on windows to get dlls in the right
-          # place. Unfortunately mingw doesn’t seem to be able to do linking
-          # properly.
-          platformFun =
-            pkg:
-            if crossPkgs.stdenv.hostPlatform.isWindows then
-              pkgs.buildEnv {
-                name = "${pkg.name}-winlinks";
-                paths = [ pkg ] ++ pkg.buildInputs;
-              }
-            else
-              pkg;
-        })
-      ) testedSystems
+            # Apply some transformation on windows to get dlls in the right
+            # place. Unfortunately mingw doesn’t seem to be able to do linking
+            # properly.
+            platformFun =
+              pkg:
+              if crossPkgs.stdenv.hostPlatform.isWindows then
+                pkgs.buildEnv
+                  {
+                    name = "${pkg.name}-winlinks";
+                    paths = [ pkg ] ++ pkg.buildInputs;
+                  }
+              else
+                pkg;
+          })
+        )
+        testedSystems
     );
 
   tests = {
 
     file =
-      {
-        platformFun,
-        crossPkgs,
-        emulator,
+      { platformFun
+      , crossPkgs
+      , emulator
+      ,
       }:
       compareTest {
         inherit emulator crossPkgs;
@@ -118,10 +123,10 @@ let
       };
 
     hello =
-      {
-        platformFun,
-        crossPkgs,
-        emulator,
+      { platformFun
+      , crossPkgs
+      , emulator
+      ,
       }:
       compareTest {
         inherit emulator crossPkgs;
@@ -131,10 +136,10 @@ let
       };
 
     pkg-config =
-      {
-        platformFun,
-        crossPkgs,
-        emulator,
+      { platformFun
+      , crossPkgs
+      , emulator
+      ,
       }:
       crossPkgs.runCommand "test-pkg-config-${crossPkgs.stdenv.hostPlatform.config}"
         {

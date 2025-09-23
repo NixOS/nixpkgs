@@ -1,11 +1,11 @@
-{
-  mkDerivation,
-  lib,
-  libbsdxml,
-  libgeom,
-  openssl,
-  zfs-data,
-  zlib,
+{ mkDerivation
+, lib
+, libbsdxml
+, libgeom
+, openssl
+, zfs-data
+, zlib
+,
 }:
 # When I told you this was libzfs, I lied.
 # This is actually all the openzfs libs.

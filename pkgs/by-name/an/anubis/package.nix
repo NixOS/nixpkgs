@@ -1,16 +1,16 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  nixosTests,
-  stdenv,
-  npmHooks,
-  nodejs,
-  esbuild,
-  brotli,
-  zstd,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchNpmDeps
+, nixosTests
+, stdenv
+, npmHooks
+, nodejs
+, esbuild
+, brotli
+, zstd
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

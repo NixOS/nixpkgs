@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  vala,
-  gi-docgen,
-  gobject-introspection,
-  glib,
-  babl,
-  libpng,
-  llvmPackages,
-  cairo,
-  libjpeg,
-  librsvg,
-  lensfun,
-  libspiro,
-  maxflow,
-  netsurf,
-  pango,
-  poly2tri-c,
-  poppler,
-  bzip2,
-  json-glib,
-  gettext,
-  meson,
-  ninja,
-  libraw,
-  gexiv2,
-  libwebp,
-  luajit,
-  openexr,
-  suitesparse,
-  withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit,
-  gimp,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, vala
+, gi-docgen
+, gobject-introspection
+, glib
+, babl
+, libpng
+, llvmPackages
+, cairo
+, libjpeg
+, librsvg
+, lensfun
+, libspiro
+, maxflow
+, netsurf
+, pango
+, poly2tri-c
+, poppler
+, bzip2
+, json-glib
+, gettext
+, meson
+, ninja
+, libraw
+, gexiv2
+, libwebp
+, luajit
+, openexr
+, suitesparse
+, withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit
+, gimp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

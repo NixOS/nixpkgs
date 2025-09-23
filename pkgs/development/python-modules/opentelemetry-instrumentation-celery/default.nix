@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  opentelemetry-test-utils,
-  billiard,
-  celery,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-semantic-conventions
+, opentelemetry-test-utils
+, billiard
+, celery
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

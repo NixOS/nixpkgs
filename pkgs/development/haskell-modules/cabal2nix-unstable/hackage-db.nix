@@ -1,19 +1,19 @@
 # This file defines hackage-db-unstable, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh.
-{
-  mkDerivation,
-  aeson,
-  base,
-  bytestring,
-  Cabal,
-  containers,
-  directory,
-  exceptions,
-  fetchzip,
-  filepath,
-  lib,
-  tar,
-  time,
-  utf8-string,
+{ mkDerivation
+, aeson
+, base
+, bytestring
+, Cabal
+, containers
+, directory
+, exceptions
+, fetchzip
+, filepath
+, lib
+, tar
+, time
+, utf8-string
+,
 }:
 mkDerivation {
   pname = "hackage-db";

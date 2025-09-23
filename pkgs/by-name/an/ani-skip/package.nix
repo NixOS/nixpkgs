@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  gnugrep,
-  gnused,
-  curl,
-  fzf,
-  lib,
+{ stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, gnugrep
+, gnused
+, curl
+, fzf
+, lib
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-skip";

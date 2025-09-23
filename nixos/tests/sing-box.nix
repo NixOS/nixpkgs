@@ -9,10 +9,12 @@ let
     "${target_host}" = "1.1.1.1";
     "${server_host}" = "1.1.1.2";
   };
-  hostsEntries = lib.mapAttrs' (k: v: {
-    name = v;
-    value = lib.singleton k;
-  }) hosts;
+  hostsEntries = lib.mapAttrs'
+    (k: v: {
+      name = v;
+      value = lib.singleton k;
+    })
+    hosts;
 
   vmessPort = 1080;
   vmessUUID = "bf000d23-0752-40b4-affe-68f7707a9661";

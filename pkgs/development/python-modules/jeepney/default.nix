@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pythonOlder,
-  flit-core,
-  async-timeout,
-  dbus,
-  pytest,
-  pytest-trio,
-  pytest-asyncio,
-  testpath,
-  trio,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitLab
+, pythonOlder
+, flit-core
+, async-timeout
+, dbus
+, pytest
+, pytest-trio
+, pytest-asyncio
+, testpath
+, trio
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  copyPkgconfigItems,
-  makePkgconfigItem,
-  picosat,
+{ lib
+, stdenv
+, fetchFromGitHub
+, copyPkgconfigItems
+, makePkgconfigItem
+, picosat
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,7 @@
-{
-  lib,
-  testers,
-  fetchtorrent,
-  ...
+{ lib
+, testers
+, fetchtorrent
+, ...
 }:
 
 let

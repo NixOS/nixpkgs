@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  callPackage,
-  fetchurl,
-  perl,
-  libintl,
-  bashNonInteractive,
-  updateAutotoolsGnuConfigScriptsHook,
-  gawk,
-  freebsd,
-  libiconv,
-
-  # we are a dependency of gcc, this simplifies bootstrapping
-  interactive ? false,
-  ncurses,
-  procps,
+{ lib
+, stdenv
+, buildPackages
+, callPackage
+, fetchurl
+, perl
+, libintl
+, bashNonInteractive
+, updateAutotoolsGnuConfigScriptsHook
+, gawk
+, freebsd
+, libiconv
+, # we are a dependency of gcc, this simplifies bootstrapping
+  interactive ? false
+, ncurses
+, procps
+,
 }:
 
 let

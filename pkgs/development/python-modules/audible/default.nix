@@ -1,21 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  beautifulsoup4,
-  httpx,
-  pbkdf2,
-  pillow,
-  pyaes,
-  rsa,
-
-  # test dependencies
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  poetry-core
+, # dependencies
+  beautifulsoup4
+, httpx
+, pbkdf2
+, pillow
+, pyaes
+, rsa
+, # test dependencies
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  valgrind,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, valgrind
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

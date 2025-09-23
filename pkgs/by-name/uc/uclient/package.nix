@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  cmake,
-  pkg-config,
-  libubox,
+{ stdenv
+, lib
+, fetchgit
+, cmake
+, pkg-config
+, libubox
+,
 }:
 
 stdenv.mkDerivation {

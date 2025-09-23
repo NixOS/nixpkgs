@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pythonOlder,
-  pythonAtLeast,
-  argcomplete,
-  requests,
-  setuptools,
-  looseversion,
-  gnupg,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, pythonOlder
+, pythonAtLeast
+, argcomplete
+, requests
+, setuptools
+, looseversion
+, gnupg
+,
 }:
 
 buildPythonPackage rec {

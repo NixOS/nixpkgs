@@ -1,45 +1,40 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  pdm-backend,
-
-  # buildInputs
-  bash,
-
-  # dependencies
-  aiohttp,
-  async-timeout,
-  langchain-core,
-  langchain-text-splitters,
-  langsmith,
-  numpy,
-  pydantic,
-  pyyaml,
-  requests,
-  sqlalchemy,
-  tenacity,
-
-  # tests
-  blockbuster,
-  freezegun,
-  httpx,
-  lark,
-  pandas,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-socket,
-  pytestCheckHook,
-  requests-mock,
-  responses,
-  syrupy,
-  toml,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  pdm-backend
+, # buildInputs
+  bash
+, # dependencies
+  aiohttp
+, async-timeout
+, langchain-core
+, langchain-text-splitters
+, langsmith
+, numpy
+, pydantic
+, pyyaml
+, requests
+, sqlalchemy
+, tenacity
+, # tests
+  blockbuster
+, freezegun
+, httpx
+, lark
+, pandas
+, pytest-asyncio
+, pytest-mock
+, pytest-socket
+, pytestCheckHook
+, requests-mock
+, responses
+, syrupy
+, toml
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

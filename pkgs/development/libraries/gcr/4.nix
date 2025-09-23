@@ -1,30 +1,30 @@
-{
-  pkgs,
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  gettext,
-  gnupg,
-  p11-kit,
-  glib,
-  libgcrypt,
-  libtasn1,
-  gtk4,
-  pango,
-  libsecret,
-  openssh,
-  systemd,
-  gobject-introspection,
-  wrapGAppsHook4,
-  vala,
-  gi-docgen,
-  gnome,
-  python3,
-  shared-mime-info,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ pkgs
+, stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, gettext
+, gnupg
+, p11-kit
+, glib
+, libgcrypt
+, libtasn1
+, gtk4
+, pango
+, libsecret
+, openssh
+, systemd
+, gobject-introspection
+, wrapGAppsHook4
+, vala
+, gi-docgen
+, gnome
+, python3
+, shared-mime-info
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 let
   ini = pkgs.formats.ini { };

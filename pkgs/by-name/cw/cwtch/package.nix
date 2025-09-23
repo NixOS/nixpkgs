@@ -1,7 +1,7 @@
-{
-  buildGoModule,
-  fetchgit,
-  lib,
+{ buildGoModule
+, fetchgit
+, lib
+,
 }:
 buildGoModule rec {
   pname = "libcwtch";

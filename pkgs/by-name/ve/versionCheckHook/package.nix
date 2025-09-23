@@ -1,9 +1,10 @@
-{
-  lib,
-  makeSetupHook,
+{ lib
+, makeSetupHook
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "version-check-hook";
   substitutions = {
     storeDir = builtins.storeDir;

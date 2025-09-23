@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bmake,
-  docbook_xsl,
-  libxslt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bmake
+, docbook_xsl
+, libxslt
+,
 }:
 
 stdenv.mkDerivation rec {

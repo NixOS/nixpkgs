@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  gnome-themes-extra,
-  gtk-engine-murrine,
-  jdupes,
-  lib,
-  sassc,
-  stdenvNoCC,
+{ fetchFromGitHub
+, gnome-themes-extra
+, gtk-engine-murrine
+, jdupes
+, lib
+, sassc
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

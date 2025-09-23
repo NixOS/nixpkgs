@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libevent,
-  libressl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libevent
+, libressl
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd-table-ldap";

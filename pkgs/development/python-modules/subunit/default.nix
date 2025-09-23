@@ -1,20 +1,19 @@
-{
-  buildPythonPackage,
-  # pkgs dependencies
-  check,
-  cppunit,
-  pkg-config,
-  subunit,
-  pythonOlder,
-
-  # python dependencies
-  extras,
-  fixtures,
-  hypothesis,
-  pytestCheckHook,
-  setuptools,
-  testscenarios,
-  testtools,
+{ buildPythonPackage
+, # pkgs dependencies
+  check
+, cppunit
+, pkg-config
+, subunit
+, pythonOlder
+, # python dependencies
+  extras
+, fixtures
+, hypothesis
+, pytestCheckHook
+, setuptools
+, testscenarios
+, testtools
+,
 }:
 
 buildPythonPackage {

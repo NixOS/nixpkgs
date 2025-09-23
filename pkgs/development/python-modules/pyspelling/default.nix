@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  beautifulsoup4,
-  html5lib,
-  lxml,
-  markdown,
-  pyyaml,
-  soupsieve,
-  wcmatch,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, beautifulsoup4
+, html5lib
+, lxml
+, markdown
+, pyyaml
+, soupsieve
+, wcmatch
+,
 }:
 
 buildPythonPackage rec {

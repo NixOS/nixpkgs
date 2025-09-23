@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  imagemagick,
+{ lib
+, fetchurl
+, appimageTools
+, imagemagick
+,
 }:
 
 appimageTools.wrapAppImage rec {

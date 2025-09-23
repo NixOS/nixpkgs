@@ -1,23 +1,23 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  alsa-lib,
-  libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
-  go-licenses,
-  pkg-config,
-  zip,
-  advancecomp,
-  makeWrapper,
-  nixosTests,
-  strip-nondeterminism,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, alsa-lib
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libXxf86vm
+, go-licenses
+, pkg-config
+, zip
+, advancecomp
+, makeWrapper
+, nixosTests
+, strip-nondeterminism
+,
 }:
 
 buildGoModule rec {

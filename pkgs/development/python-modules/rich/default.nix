@@ -1,28 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  markdown-it-py,
-  pygments,
-
-  # optional-dependencies
-  ipywidgets,
-
-  # tests
-  attrs,
-  pytestCheckHook,
-  which,
-
-  # for passthru.tests
-  enrich,
-  httpie,
-  rich-rst,
-  textual,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  markdown-it-py
+, pygments
+, # optional-dependencies
+  ipywidgets
+, # tests
+  attrs
+, pytestCheckHook
+, which
+, # for passthru.tests
+  enrich
+, httpie
+, rich-rst
+, textual
+,
 }:
 
 buildPythonPackage rec {

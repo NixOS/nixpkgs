@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchbzr,
-  autoreconfHook,
-  texinfo,
-  help2man,
-  imagemagick,
-  pkg-config,
-  curl,
-  gnome2,
-  gpsd,
-  gtk2,
-  wrapGAppsHook3,
-  intltool,
-  libexif,
-  python3Packages,
-  sqlite,
+{ lib
+, stdenv
+, fetchbzr
+, autoreconfHook
+, texinfo
+, help2man
+, imagemagick
+, pkg-config
+, curl
+, gnome2
+, gpsd
+, gtk2
+, wrapGAppsHook3
+, intltool
+, libexif
+, python3Packages
+, sqlite
+,
 }:
 
 let

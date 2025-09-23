@@ -1,5 +1,5 @@
-{
-  runTestOn,
+{ runTestOn
+,
 }:
 let
   supportedSystems = [

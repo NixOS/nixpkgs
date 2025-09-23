@@ -1,18 +1,18 @@
-{
-  buildDunePackage,
-  paf,
-  cohttp-lwt,
-  domain-name,
-  h1,
-  ipaddr,
-  alcotest-lwt,
-  fmt,
-  logs,
-  mirage-crypto-rng,
-  tcpip,
-  uri,
-  lwt,
-  astring,
+{ buildDunePackage
+, paf
+, cohttp-lwt
+, domain-name
+, h1
+, ipaddr
+, alcotest-lwt
+, fmt
+, logs
+, mirage-crypto-rng
+, tcpip
+, uri
+, lwt
+, astring
+,
 }:
 
 buildDunePackage {

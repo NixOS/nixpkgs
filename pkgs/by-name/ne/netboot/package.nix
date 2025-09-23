@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  lzo,
-  db4,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, lzo
+, db4
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  hepmc2,
-  lhapdf,
-  pythia,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, hepmc2
+, lhapdf
+, pythia
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

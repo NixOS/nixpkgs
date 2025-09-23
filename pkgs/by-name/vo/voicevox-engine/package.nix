@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  voicevox-core,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, voicevox-core
+,
 }:
 
 python3Packages.buildPythonApplication rec {

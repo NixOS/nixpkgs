@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  autodock-vina,
-  swig,
-  setuptools,
-  numpy,
+{ lib
+, buildPythonPackage
+, autodock-vina
+, swig
+, setuptools
+, numpy
+,
 }:
 
 let

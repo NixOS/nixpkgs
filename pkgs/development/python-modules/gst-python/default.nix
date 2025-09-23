@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchurl,
-  fetchpatch,
-  meson,
-  ninja,
-
-  pkg-config,
-  python,
-  pygobject3,
-  gobject-introspection,
-  gst_all_1,
-  isPy3k,
-  directoryListingUpdater,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, python
+, pygobject3
+, gobject-introspection
+, gst_all_1
+, isPy3k
+, directoryListingUpdater
+,
 }:
 
 buildPythonPackage rec {

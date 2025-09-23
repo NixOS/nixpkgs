@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fmt,
-  lun,
-  ppxlib,
+{ lib
+, buildDunePackage
+, fmt
+, lun
+, ppxlib
+,
 }:
 
 buildDunePackage {

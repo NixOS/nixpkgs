@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  electron,
-  makeDesktopItem,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, electron
+, makeDesktopItem
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  buildPackages,
-  cmake,
-  pkg-config,
-  boost,
-  cairo,
-  freetype,
-  gdal,
-  harfbuzz,
-  icu,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  libxml2,
-  proj,
-  python3,
-  sqlite,
-  zlib,
-  catch2,
-  libpq,
-  protozero,
-  sparsehash,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, buildPackages
+, cmake
+, pkg-config
+, boost
+, cairo
+, freetype
+, gdal
+, harfbuzz
+, icu
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, libxml2
+, proj
+, python3
+, sqlite
+, zlib
+, catch2
+, libpq
+, protozero
+, sparsehash
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

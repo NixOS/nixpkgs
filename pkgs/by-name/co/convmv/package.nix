@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  perl,
-  perlPackages,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, perl
+, perlPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

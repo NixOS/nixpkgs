@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  conan-unix,
-  dune-site,
-  alcotest,
-  conan-database,
-  crowbar,
-  fmt,
-  rresult,
+{ buildDunePackage
+, conan-unix
+, dune-site
+, alcotest
+, conan-database
+, crowbar
+, fmt
+, rresult
+,
 }:
 
 buildDunePackage {

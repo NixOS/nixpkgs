@@ -1,12 +1,12 @@
-{
-  lib,
-  testers,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  cmake,
-  freedvSupport ? false,
-  lpcnet,
+{ lib
+, testers
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, cmake
+, freedvSupport ? false
+, lpcnet
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

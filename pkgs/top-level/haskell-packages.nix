@@ -1,11 +1,11 @@
-{
-  buildPackages,
-  pkgsBuildBuild,
-  pkgsBuildTarget,
-  pkgs,
-  newScope,
-  stdenv,
-  config,
+{ buildPackages
+, pkgsBuildBuild
+, pkgsBuildTarget
+, pkgs
+, newScope
+, stdenv
+, config
+,
 }:
 
 let
@@ -133,11 +133,11 @@ in
       ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
         bootPkgs =
           if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
+          # it seems like the GHC 9.6.* bindists are built with a different
+          # toolchain than we are using (which I'm guessing from the fact
+          # that 9.6.4 bindists pass linker flags our ld doesn't support).
+          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
+          # the clock package (probably a hsc2hs problem).
             bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
@@ -151,11 +151,11 @@ in
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
           if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
+          # it seems like the GHC 9.6.* bindists are built with a different
+          # toolchain than we are using (which I'm guessing from the fact
+          # that 9.6.4 bindists pass linker flags our ld doesn't support).
+          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
+          # the clock package (probably a hsc2hs problem).
             bb.packages.ghc963
           else
             bb.packages.ghc963Binary;
@@ -169,11 +169,11 @@ in
       ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
         bootPkgs =
           if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
+          # it seems like the GHC 9.6.* bindists are built with a different
+          # toolchain than we are using (which I'm guessing from the fact
+          # that 9.6.4 bindists pass linker flags our ld doesn't support).
+          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
+          # the clock package (probably a hsc2hs problem).
             bb.packages.ghc963
           else
             bb.packages.ghc963Binary;

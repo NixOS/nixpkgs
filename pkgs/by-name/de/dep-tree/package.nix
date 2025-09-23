@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  linkFarm,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, linkFarm
+,
 }:
 let
   testDeps = {

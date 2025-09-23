@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  pybind11,
-  tinyobjloader,
+{ lib
+, buildPythonPackage
+, pybind11
+, tinyobjloader
+,
 }:
 
 buildPythonPackage {

@@ -1,18 +1,18 @@
-{
-  lib,
-  boto3,
-  botocore,
-  buildPythonPackage,
-  fastparquet,
-  fetchPypi,
-  fsspec,
-  hatchling,
-  pandas,
-  pyarrow,
-  python-dateutil,
-  pythonOlder,
-  sqlalchemy,
-  tenacity,
+{ lib
+, boto3
+, botocore
+, buildPythonPackage
+, fastparquet
+, fetchPypi
+, fsspec
+, hatchling
+, pandas
+, pyarrow
+, python-dateutil
+, pythonOlder
+, sqlalchemy
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

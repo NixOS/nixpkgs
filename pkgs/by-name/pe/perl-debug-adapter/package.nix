@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  perl,
-  # Needed if you want to use it for a perl script with dependencies.
-  extraPerlPackages ? [ ],
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, perl
+, # Needed if you want to use it for a perl script with dependencies.
+  extraPerlPackages ? [ ]
+,
 }:
 
 let

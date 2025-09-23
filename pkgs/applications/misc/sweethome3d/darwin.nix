@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  makeBinaryWrapper,
-  zulu,
-  ant,
-  darwin,
-
-  pname,
-  version,
-  src,
-  meta,
-  patches,
+{ lib
+, stdenv
+, makeBinaryWrapper
+, zulu
+, ant
+, darwin
+, pname
+, version
+, src
+, meta
+, patches
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

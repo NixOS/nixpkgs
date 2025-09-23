@@ -1,21 +1,15 @@
-{
-  lib,
-  fetchurl,
-  buildPythonPackage,
-  pythonAtLeast,
-
-  pkg-config,
-
-  enlightenment,
-
-  packaging,
-  setuptools,
-
-  dbus-python,
-
-  pytestCheckHook,
-
-  directoryListingUpdater,
+{ lib
+, fetchurl
+, buildPythonPackage
+, pythonAtLeast
+, pkg-config
+, enlightenment
+, packaging
+, setuptools
+, dbus-python
+, pytestCheckHook
+, directoryListingUpdater
+,
 }:
 
 # Should be bumped along with EFL!

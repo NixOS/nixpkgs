@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -208,109 +207,114 @@ in
   # Implementation
   config = lib.mkIf (enabledNetworks != { }) {
     systemd.services = lib.mkMerge (
-      lib.mapAttrsToList (
-        netName: netCfg:
-        let
-          networkId = nameToId netName;
-          settings = lib.recursiveUpdate {
-            pki = {
-              ca = netCfg.ca;
-              cert = netCfg.cert;
-              key = netCfg.key;
-            };
-            static_host_map = netCfg.staticHostMap;
-            lighthouse = {
-              am_lighthouse = netCfg.isLighthouse;
-              hosts = netCfg.lighthouses;
-              serve_dns = netCfg.lighthouse.dns.enable;
-              dns.host = netCfg.lighthouse.dns.host;
-              dns.port = netCfg.lighthouse.dns.port;
-            };
-            relay = {
-              am_relay = netCfg.isRelay;
-              relays = netCfg.relays;
-              use_relays = true;
-            };
-            listen = {
-              host = netCfg.listen.host;
-              port = resolveFinalPort netCfg;
-            };
-            tun = {
-              disabled = netCfg.tun.disable;
-              dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
-            };
-            firewall = {
-              inbound = netCfg.firewall.inbound;
-              outbound = netCfg.firewall.outbound;
-            };
-          } netCfg.settings;
-          configFile = format.generate "nebula-config-${netName}.yml" (
-            lib.warnIf
-              ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
-              ''
-                Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
-                You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
-              ''
-              settings
-          );
-          capabilities =
+      lib.mapAttrsToList
+        (
+          netName: netCfg:
             let
-              nebulaPort = if !settings.tun.disabled then settings.listen.port else 0;
-              dnsPort = if settings.lighthouse.serve_dns then settings.lighthouse.dns.port else 0;
+              networkId = nameToId netName;
+              settings = lib.recursiveUpdate
+                {
+                  pki = {
+                    ca = netCfg.ca;
+                    cert = netCfg.cert;
+                    key = netCfg.key;
+                  };
+                  static_host_map = netCfg.staticHostMap;
+                  lighthouse = {
+                    am_lighthouse = netCfg.isLighthouse;
+                    hosts = netCfg.lighthouses;
+                    serve_dns = netCfg.lighthouse.dns.enable;
+                    dns.host = netCfg.lighthouse.dns.host;
+                    dns.port = netCfg.lighthouse.dns.port;
+                  };
+                  relay = {
+                    am_relay = netCfg.isRelay;
+                    relays = netCfg.relays;
+                    use_relays = true;
+                  };
+                  listen = {
+                    host = netCfg.listen.host;
+                    port = resolveFinalPort netCfg;
+                  };
+                  tun = {
+                    disabled = netCfg.tun.disable;
+                    dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
+                  };
+                  firewall = {
+                    inbound = netCfg.firewall.inbound;
+                    outbound = netCfg.firewall.outbound;
+                  };
+                }
+                netCfg.settings;
+              configFile = format.generate "nebula-config-${netName}.yml" (
+                lib.warnIf
+                  ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
+                  ''
+                    Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
+                    You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
+                  ''
+                  settings
+              );
+              capabilities =
+                let
+                  nebulaPort = if !settings.tun.disabled then settings.listen.port else 0;
+                  dnsPort = if settings.lighthouse.serve_dns then settings.lighthouse.dns.port else 0;
+                in
+                lib.concatStringsSep " " (
+                  # creation of tunnel interfaces
+                  lib.optional (!settings.tun.disabled) "CAP_NET_ADMIN"
+                  # binding to privileged ports
+                  ++ lib.optional
+                    (
+                      nebulaPort > 0 && nebulaPort < 1024 || dnsPort > 0 && dnsPort < 1024
+                    ) "CAP_NET_BIND_SERVICE"
+                );
             in
-            lib.concatStringsSep " " (
-              # creation of tunnel interfaces
-              lib.optional (!settings.tun.disabled) "CAP_NET_ADMIN"
-              # binding to privileged ports
-              ++ lib.optional (
-                nebulaPort > 0 && nebulaPort < 1024 || dnsPort > 0 && dnsPort < 1024
-              ) "CAP_NET_BIND_SERVICE"
-            );
-        in
-        {
-          # Create the systemd service for Nebula.
-          "nebula@${netName}" = {
-            description = "Nebula VPN service for ${netName}";
-            wants = [ "basic.target" ];
-            after = [
-              "basic.target"
-              "network.target"
-            ];
-            before = [ "sshd.service" ];
-            wantedBy = [ "multi-user.target" ];
-            serviceConfig = {
-              Type = "notify";
-              Restart = "always";
-              ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
-              ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
-              UMask = "0027";
-              CapabilityBoundingSet = capabilities;
-              AmbientCapabilities = capabilities;
-              LockPersonality = true;
-              NoNewPrivileges = true;
-              PrivateDevices = false; # needs access to /dev/net/tun (below)
-              DeviceAllow = "/dev/net/tun rw";
-              DevicePolicy = "closed";
-              PrivateTmp = true;
-              PrivateUsers = false; # CapabilityBoundingSet needs to apply to the host namespace
-              ProtectClock = true;
-              ProtectControlGroups = true;
-              ProtectHome = true;
-              ProtectHostname = true;
-              ProtectKernelLogs = true;
-              ProtectKernelModules = true;
-              ProtectKernelTunables = true;
-              ProtectProc = "invisible";
-              ProtectSystem = true;
-              RestrictNamespaces = true;
-              RestrictSUIDSGID = true;
-              User = networkId;
-              Group = networkId;
-            };
-            unitConfig.StartLimitIntervalSec = 0; # ensure Restart=always is always honoured (networks can go down for arbitrarily long)
-          };
-        }
-      ) enabledNetworks
+            {
+              # Create the systemd service for Nebula.
+              "nebula@${netName}" = {
+                description = "Nebula VPN service for ${netName}";
+                wants = [ "basic.target" ];
+                after = [
+                  "basic.target"
+                  "network.target"
+                ];
+                before = [ "sshd.service" ];
+                wantedBy = [ "multi-user.target" ];
+                serviceConfig = {
+                  Type = "notify";
+                  Restart = "always";
+                  ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
+                  ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
+                  UMask = "0027";
+                  CapabilityBoundingSet = capabilities;
+                  AmbientCapabilities = capabilities;
+                  LockPersonality = true;
+                  NoNewPrivileges = true;
+                  PrivateDevices = false; # needs access to /dev/net/tun (below)
+                  DeviceAllow = "/dev/net/tun rw";
+                  DevicePolicy = "closed";
+                  PrivateTmp = true;
+                  PrivateUsers = false; # CapabilityBoundingSet needs to apply to the host namespace
+                  ProtectClock = true;
+                  ProtectControlGroups = true;
+                  ProtectHome = true;
+                  ProtectHostname = true;
+                  ProtectKernelLogs = true;
+                  ProtectKernelModules = true;
+                  ProtectKernelTunables = true;
+                  ProtectProc = "invisible";
+                  ProtectSystem = true;
+                  RestrictNamespaces = true;
+                  RestrictSUIDSGID = true;
+                  User = networkId;
+                  Group = networkId;
+                };
+                unitConfig.StartLimitIntervalSec = 0; # ensure Restart=always is always honoured (networks can go down for arbitrarily long)
+              };
+            }
+        )
+        enabledNetworks
     );
 
     # Open the chosen ports for UDP.
@@ -322,19 +326,23 @@ in
 
     # Create the service users and groups.
     users.users = lib.mkMerge (
-      lib.mapAttrsToList (netName: netCfg: {
-        ${nameToId netName} = {
-          group = nameToId netName;
-          description = "Nebula service user for network ${netName}";
-          isSystemUser = true;
-        };
-      }) enabledNetworks
+      lib.mapAttrsToList
+        (netName: netCfg: {
+          ${nameToId netName} = {
+            group = nameToId netName;
+            description = "Nebula service user for network ${netName}";
+            isSystemUser = true;
+          };
+        })
+        enabledNetworks
     );
 
     users.groups = lib.mkMerge (
-      lib.mapAttrsToList (netName: netCfg: {
-        ${nameToId netName} = { };
-      }) enabledNetworks
+      lib.mapAttrsToList
+        (netName: netCfg: {
+          ${nameToId netName} = { };
+        })
+        enabledNetworks
     );
   };
 

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  installShellFiles,
-  testers,
-  kubelogin,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, testers
+, kubelogin
+,
 }:
 
 buildGoModule rec {

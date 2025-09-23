@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGLU,
-  libGL,
-  glew,
-  freetype,
-  fontconfig,
-  fribidi,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, libGLU
+, libGL
+, glew
+, freetype
+, fontconfig
+, fribidi
+, libX11
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quesoglc";

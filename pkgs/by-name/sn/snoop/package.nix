@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  python3,
-  meson,
-  ninja,
-  cmake,
-  vala,
-  gettext,
-  desktop-file-utils,
-  appstream-glib,
-  glib,
-  pkg-config,
-  libadwaita,
-  nix-update-script,
-  gtksourceview5,
-  wrapGAppsHook4,
+{ stdenv
+, lib
+, fetchFromGitLab
+, python3
+, meson
+, ninja
+, cmake
+, vala
+, gettext
+, desktop-file-utils
+, appstream-glib
+, glib
+, pkg-config
+, libadwaita
+, nix-update-script
+, gtksourceview5
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -8,15 +8,15 @@
 #
 # If you know you are doing a breaking API change, please ping the nixpkgs CI
 # maintainers and the Lix maintainers (`nix eval -f . lib.teams.lix`).
-{
-  callPackage,
-  lib,
-  runCommand,
-  writeShellScript,
-  symlinkJoin,
-  busybox,
-  jq,
-  nix,
+{ callPackage
+, lib
+, runCommand
+, writeShellScript
+, symlinkJoin
+, busybox
+, jq
+, nix
+,
 }:
 
 let
@@ -45,8 +45,8 @@ let
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
   attrpathsSuperset =
-    {
-      evalSystem,
+    { evalSystem
+    ,
     }:
     runCommand "attrpaths-superset.json"
       {
@@ -76,16 +76,16 @@ let
       # The system to evaluate.
       # Note that this is intentionally not called `system`,
       # because `--argstr system` would only be passed to the ci/default.nix file!
-      evalSystem ? builtins.currentSystem,
-      # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-
-      # Don't try to eval packages marked as broken.
-      includeBroken ? false,
-      # Whether to just evaluate a single chunk for quick testing
-      quickTest ? false,
+      evalSystem ? builtins.currentSystem
+    , # The path to the `paths.json` file from `attrpathsSuperset`
+      attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json"
+    , # The number of attributes per chunk, see ./README.md for more info.
+      chunkSize ? 5000
+    , # Don't try to eval packages marked as broken.
+      includeBroken ? false
+    , # Whether to just evaluate a single chunk for quick testing
+      quickTest ? false
+    ,
     }:
     let
       singleChunk = writeShellScript "single-chunk" ''
@@ -205,8 +205,8 @@ let
   diff = callPackage ./diff.nix { };
 
   combine =
-    {
-      diffDir,
+    { diffDir
+    ,
     }:
     runCommand "combined-eval"
       {
@@ -244,52 +244,58 @@ let
   baseline =
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
-      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-      quickTest ? false,
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems
+    , # The number of attributes per chunk, see ./README.md for more info.
+      chunkSize ? 5000
+    , quickTest ? false
+    ,
     }:
     symlinkJoin {
       name = "nixpkgs-eval-baseline";
-      paths = map (
-        evalSystem:
-        singleSystem {
-          inherit quickTest evalSystem chunkSize;
-        }
-      ) evalSystems;
+      paths = map
+        (
+          evalSystem:
+          singleSystem {
+            inherit quickTest evalSystem chunkSize;
+          }
+        )
+        evalSystems;
     };
 
   full =
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
-      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize ? 5000,
-      quickTest ? false,
-      baseline,
-      # Which maintainer should be considered the author?
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems
+    , # The number of attributes per chunk, see ./README.md for more info.
+      chunkSize ? 5000
+    , quickTest ? false
+    , baseline
+    , # Which maintainer should be considered the author?
       # Defaults to nixpkgs-ci which is not a maintainer and skips the check.
-      githubAuthorId ? "nixpkgs-ci",
-      # What files have been touched? Defaults to none; use the expression below to calculate it.
+      githubAuthorId ? "nixpkgs-ci"
+    , # What files have been touched? Defaults to none; use the expression below to calculate it.
       # ```
       # git diff --name-only --merge-base master HEAD \
       #   | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
       # ```
-      touchedFilesJson ? builtins.toFile "touched-files.json" "[ ]",
+      touchedFilesJson ? builtins.toFile "touched-files.json" "[ ]"
+    ,
     }:
     let
       diffs = symlinkJoin {
         name = "nixpkgs-eval-diffs";
-        paths = map (
-          evalSystem:
-          diff {
-            inherit evalSystem;
-            beforeDir = baseline;
-            afterDir = singleSystem {
-              inherit quickTest evalSystem chunkSize;
-            };
-          }
-        ) evalSystems;
+        paths = map
+          (
+            evalSystem:
+            diff {
+              inherit evalSystem;
+              beforeDir = baseline;
+              afterDir = singleSystem {
+                inherit quickTest evalSystem chunkSize;
+              };
+            }
+          )
+          evalSystems;
       };
       comparisonReport = compare {
         combinedDir = combine { diffDir = diffs; };

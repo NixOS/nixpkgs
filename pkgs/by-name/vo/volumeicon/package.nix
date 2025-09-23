@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  autoreconfHook,
-  intltool,
-  pkg-config,
-  gtk3,
-  alsa-lib,
-  gettext,
+{ fetchFromGitHub
+, lib
+, stdenv
+, autoreconfHook
+, intltool
+, pkg-config
+, gtk3
+, alsa-lib
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

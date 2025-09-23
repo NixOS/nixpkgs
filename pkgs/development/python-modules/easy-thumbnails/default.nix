@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  fetchpatch,
-  pillow,
-  pythonOlder,
-  reportlab,
-  svglib,
-  pytestCheckHook,
-  pytest-django,
-  setuptools,
-  testfixtures,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, fetchpatch
+, pillow
+, pythonOlder
+, reportlab
+, svglib
+, pytestCheckHook
+, pytest-django
+, setuptools
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

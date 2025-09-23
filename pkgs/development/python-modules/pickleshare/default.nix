@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  path,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, path
+,
 }:
 
 buildPythonPackage rec {

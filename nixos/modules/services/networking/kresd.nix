@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.kresd;
@@ -28,7 +27,7 @@ let
         if al_portOnly == null then "'${lib.head al}${lib.elemAt al 2}'" else "{'::', '0.0.0.0'}";
     in
     # freebind is set for compatibility with earlier kresd services;
-    # it could be configurable, for example.
+      # it could be configurable, for example.
     ''
       net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
     '';

@@ -1,9 +1,9 @@
-{
-  lib,
-  makeBinaryWrapper,
-  writeShellApplication,
-  bash,
-  stdenv,
+{ lib
+, makeBinaryWrapper
+, writeShellApplication
+, bash
+, stdenv
+,
 }:
 { defaultShellUtils }:
 let

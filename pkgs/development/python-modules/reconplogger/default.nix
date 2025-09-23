@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  logmatic-python,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  setuptools,
-  testfixtures,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, logmatic-python
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, setuptools
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

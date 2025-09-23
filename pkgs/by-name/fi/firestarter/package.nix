@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchzip,
-  addDriverRunpath,
-  cmake,
-  glibc_multi,
-  glibc,
-  git,
-  pkg-config,
-  cudaPackages ? { },
-  withCuda ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchzip
+, addDriverRunpath
+, cmake
+, glibc_multi
+, glibc
+, git
+, pkg-config
+, cudaPackages ? { }
+, withCuda ? false
+,
 }:
 
 let

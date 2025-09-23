@@ -1,6 +1,6 @@
-{
-  callPackage,
-  libsForQt5,
+{ callPackage
+, libsForQt5
+,
 }:
 
 let

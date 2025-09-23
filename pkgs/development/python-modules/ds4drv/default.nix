@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  evdev,
-  pyudev,
-  bluez,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, evdev
+, pyudev
+, bluez
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

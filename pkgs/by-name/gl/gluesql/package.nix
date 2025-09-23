@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, nix-update-script
+,
 }:
 
 let

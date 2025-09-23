@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  pyjwt,
-  pytest-asyncio,
-  pytest-httpx,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  time-machine,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, pyjwt
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, time-machine
+,
 }:
 
 buildPythonPackage rec {

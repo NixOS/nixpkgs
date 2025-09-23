@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  sphinx,
-  plantuml,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, sphinx
+, plantuml
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

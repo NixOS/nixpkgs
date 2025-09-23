@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  hunspell,
-  pkg-config,
-  qmake,
-  qtbase,
-  qtwebengine,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, cmake
+, curl
+, fetchFromGitHub
+, hunspell
+, pkg-config
+, qmake
+, qtbase
+, qtwebengine
+, wrapGAppsHook3
+, wrapQtAppsHook
+,
 }:
 let
   version = "2.0.0";

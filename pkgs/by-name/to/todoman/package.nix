@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  installShellFiles,
-  jq,
-  lib,
-  python3,
-  sphinxHook,
-  writableTmpDirAsHomeHook,
+{ fetchFromGitHub
+, installShellFiles
+, jq
+, lib
+, python3
+, sphinxHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

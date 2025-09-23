@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "makedepend";

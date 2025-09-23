@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchpatch,
-  fetchurl,
+{ lib
+, fetchpatch
+, fetchurl
+,
 }:
 
 {
@@ -47,10 +47,10 @@
     let
       mkPatch =
         kernelVersion:
-        {
-          version,
-          sha256,
-          patch,
+        { version
+        , sha256
+        , patch
+        ,
         }:
         let
           src = patch;

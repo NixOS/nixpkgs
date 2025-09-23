@@ -1,8 +1,8 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  addonUpdateScript,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, addonUpdateScript
+,
 }:
 buildKodiAddon rec {
   pname = "infotagger";

@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchurl,
-  ocaml,
-  version ? "1.0.0",
-  buildDunePackage,
-  backoff,
-  domain_shims,
-  dscheck,
-  mdx,
-  multicore-bench,
-  multicore-magic,
-  multicore-magic-dscheck,
-  qcheck,
-  qcheck-alcotest,
-  qcheck-stm,
+{ lib
+, fetchurl
+, ocaml
+, version ? "1.0.0"
+, buildDunePackage
+, backoff
+, domain_shims
+, dscheck
+, mdx
+, multicore-bench
+, multicore-magic
+, multicore-magic-dscheck
+, qcheck
+, qcheck-alcotest
+, qcheck-stm
+,
 }:
 
 buildDunePackage {

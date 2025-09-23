@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  stdenv,
-  build-asdf-system,
-  ...
+{ pkgs
+, lib
+, stdenv
+, build-asdf-system
+, ...
 }:
 
 let

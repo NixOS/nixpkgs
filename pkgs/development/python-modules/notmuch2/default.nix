@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  notmuch,
-  python,
-  cffi,
+{ lib
+, buildPythonPackage
+, notmuch
+, python
+, cffi
+,
 }:
 
 buildPythonPackage {

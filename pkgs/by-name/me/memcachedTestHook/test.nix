@@ -1,7 +1,7 @@
-{
-  memcachedTestHook,
-  netcat,
-  stdenv,
+{ memcachedTestHook
+, netcat
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

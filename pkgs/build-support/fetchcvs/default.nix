@@ -3,22 +3,22 @@
 # tag="<tagname>" (get version by tag name)
 # If you don't specify neither one date="NOW" will be used (get latest)
 
-{
-  stdenvNoCC,
-  cvs,
-  openssh,
-  lib,
+{ stdenvNoCC
+, cvs
+, openssh
+, lib
+,
 }:
 
 lib.makeOverridable (
   lib.fetchers.withNormalizedHash { } (
-    {
-      cvsRoot,
-      module,
-      tag ? null,
-      date ? null,
-      outputHash,
-      outputHashAlgo,
+    { cvsRoot
+    , module
+    , tag ? null
+    , date ? null
+    , outputHash
+    , outputHashAlgo
+    ,
     }:
 
     stdenvNoCC.mkDerivation {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  ncurses,
-  pkg-config,
-  texinfo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, ncurses
+, pkg-config
+, texinfo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

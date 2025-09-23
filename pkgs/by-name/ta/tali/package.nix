@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk3,
-  gnome,
-  adwaita-icon-theme,
-  gdk-pixbuf,
-  librsvg,
-  libgnome-games-support,
-  gettext,
-  itstool,
-  libxml2,
-  wrapGAppsHook3,
-  meson,
-  ninja,
-  python3,
-  desktop-file-utils,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk3
+, gnome
+, adwaita-icon-theme
+, gdk-pixbuf
+, librsvg
+, libgnome-games-support
+, gettext
+, itstool
+, libxml2
+, wrapGAppsHook3
+, meson
+, ninja
+, python3
+, desktop-file-utils
+,
 }:
 
 stdenv.mkDerivation rec {

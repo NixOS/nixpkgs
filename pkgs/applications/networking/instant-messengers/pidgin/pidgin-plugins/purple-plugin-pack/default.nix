@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pidgin,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pidgin
+,
 }:
 
 stdenv.mkDerivation {

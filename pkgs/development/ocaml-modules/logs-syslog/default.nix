@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  logs,
-  syslog-message,
-  ptime,
-  version ? "0.5.0",
+{ lib
+, fetchurl
+, buildDunePackage
+, logs
+, syslog-message
+, ptime
+, version ? "0.5.0"
+,
 }:
 
 buildDunePackage {

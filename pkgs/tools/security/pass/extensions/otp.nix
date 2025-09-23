@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  oath-toolkit,
+{ lib
+, stdenv
+, fetchFromGitHub
+, oath-toolkit
+,
 }:
 
 stdenv.mkDerivation rec {

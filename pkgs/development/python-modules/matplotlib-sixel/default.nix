@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  imagemagick,
-  matplotlib,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, imagemagick
+, matplotlib
+,
 }:
 
 buildPythonPackage rec {

@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeText,
-  cmake,
-  ninja,
-  curl,
-  git,
-  pandoc,
-  pkg-config,
-  unzip,
-  zip,
-  libGL,
-  libGLU,
-  freeimage,
-  freetype,
-  assimp,
-  catch2,
-  fmt,
-  glew,
-  miniz,
-  tinyxml-2,
-  xorg,
-  qt6,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, cmake
+, ninja
+, curl
+, git
+, pandoc
+, pkg-config
+, unzip
+, zip
+, libGL
+, libGLU
+, freeimage
+, freetype
+, assimp
+, catch2
+, fmt
+, glew
+, miniz
+, tinyxml-2
+, xorg
+, qt6
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,12 +57,14 @@ stdenv.mkDerivation rec {
       ];
 
       updates_vcpkg_file = writeText "update_vcpkg_trenchbroom" (
-        lib.concatMapStringsSep "\n" (name: ''
-          Package : ${name}
-          Architecture : ${vcpkg_target}
-          Version : 1.0
-          Status : is installed
-        '') vcpkg_pkgs
+        lib.concatMapStringsSep "\n"
+          (name: ''
+            Package : ${name}
+            Architecture : ${vcpkg_target}
+            Version : 1.0
+            Status : is installed
+          '')
+          vcpkg_pkgs
       );
     in
     ''

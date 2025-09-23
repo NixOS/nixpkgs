@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  flask,
-  flask-login,
-  flask-sqlalchemy,
-  psycopg2,
-  pymysql,
-  pytestCheckHook,
-  pythonOlder,
-  sqlalchemy,
-  sqlalchemy-i18n,
-  sqlalchemy-utils,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, flask
+, flask-login
+, flask-sqlalchemy
+, psycopg2
+, pymysql
+, pytestCheckHook
+, pythonOlder
+, sqlalchemy
+, sqlalchemy-i18n
+, sqlalchemy-utils
+,
 }:
 
 buildPythonPackage rec {

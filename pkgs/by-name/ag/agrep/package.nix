@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, stdenv
+,
 }:
 let
   # This repository has numbered versions, but not Git tags.

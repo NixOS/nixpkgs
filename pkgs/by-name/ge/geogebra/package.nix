@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGL,
-  xorg,
-  jre,
-  makeDesktopItem,
-  makeWrapper,
-  unzip,
-  language ? "en_US",
+{ lib
+, stdenv
+, fetchurl
+, libGL
+, xorg
+, jre
+, makeDesktopItem
+, makeWrapper
+, unzip
+, language ? "en_US"
+,
 }:
 let
   pname = "geogebra";

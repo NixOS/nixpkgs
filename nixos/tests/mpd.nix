@@ -27,10 +27,10 @@ let
   };
 
   musicService =
-    {
-      user,
-      group,
-      musicDirectory,
+    { user
+    , group
+    , musicDirectory
+    ,
     }:
     {
       description = "Sets up the music file(s) for MPD to use.";

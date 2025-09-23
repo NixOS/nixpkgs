@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  defusedxml,
-  fetchPypi,
-  packaging,
-  pytestCheckHook,
-  requests,
-  requests-mock,
-  setuptools,
-  typing-extensions,
-  versioneer,
+{ lib
+, buildPythonPackage
+, defusedxml
+, fetchPypi
+, packaging
+, pytestCheckHook
+, requests
+, requests-mock
+, setuptools
+, typing-extensions
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

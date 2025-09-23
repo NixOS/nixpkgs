@@ -1,22 +1,21 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  qmake,
-  pkg-config,
-  qtbase,
-  qtquickcontrols2,
-  qtwebsockets,
-  qtmultimedia,
-  gst_all_1,
-  wrapQtAppsHook,
-  makeDesktopItem,
-  copyDesktopItems,
-
-  withVLC ? true,
-  libvlc,
-  withMPV ? true,
-  mpv-unwrapped,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, qmake
+, pkg-config
+, qtbase
+, qtquickcontrols2
+, qtwebsockets
+, qtmultimedia
+, gst_all_1
+, wrapQtAppsHook
+, makeDesktopItem
+, copyDesktopItems
+, withVLC ? true
+, libvlc
+, withMPV ? true
+, mpv-unwrapped
+,
 }:
 
 mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wxGTK32,
-  libX11,
-  readline,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wxGTK32
+, libX11
+, readline
+, fetchpatch
+,
 }:
 
 let

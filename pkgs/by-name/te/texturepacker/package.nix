@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  qt6,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, qt6
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

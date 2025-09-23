@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  writers,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, writers
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

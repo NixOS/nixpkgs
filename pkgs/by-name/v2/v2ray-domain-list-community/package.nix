@@ -1,9 +1,9 @@
-{
-  stdenv,
-  pkgsBuildBuild,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
+{ stdenv
+, pkgsBuildBuild
+, fetchFromGitHub
+, lib
+, nix-update-script
+,
 }:
 
 let

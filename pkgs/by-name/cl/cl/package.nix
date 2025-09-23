@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rebar,
-  erlang,
-  opencl-headers,
-  ocl-icd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rebar
+, erlang
+, opencl-headers
+, ocl-icd
+,
 }:
 
 stdenv.mkDerivation rec {

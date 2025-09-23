@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
-  stdenv,
-  olm,
-  unstableGitUpdater,
-  withGoolm ? false,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, buildNpmPackage
+, stdenv
+, olm
+, unstableGitUpdater
+, withGoolm ? false
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pipInstallHook,
-  blessed,
-  docutils,
-  llvm,
-  pytestCheckHook,
-  typesentry,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pipInstallHook
+, blessed
+, docutils
+, llvm
+, pytestCheckHook
+, typesentry
+,
 }:
 
 buildPythonPackage rec {

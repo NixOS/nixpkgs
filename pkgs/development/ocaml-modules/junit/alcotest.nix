@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  lib,
-  ocaml,
-  junit,
-  alcotest,
+{ buildDunePackage
+, lib
+, ocaml
+, junit
+, alcotest
+,
 }:
 
 buildDunePackage {

@@ -1,16 +1,16 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  bash,
-  coreutils,
-  dosfstools,
-  makeWrapper,
-  mtools,
-  wget,
-  which,
-  xz,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, bash
+, coreutils
+, dosfstools
+, makeWrapper
+, mtools
+, wget
+, which
+, xz
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

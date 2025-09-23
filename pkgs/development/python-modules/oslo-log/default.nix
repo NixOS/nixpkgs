@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  debtcollector,
-  oslo-config,
-  oslo-context,
-  oslo-serialization,
-  oslo-utils,
-  pbr,
-  python-dateutil,
-  pyinotify,
-
-  # tests
-  eventlet,
-  oslotest,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  debtcollector
+, oslo-config
+, oslo-context
+, oslo-serialization
+, oslo-utils
+, pbr
+, python-dateutil
+, pyinotify
+, # tests
+  eventlet
+, oslotest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

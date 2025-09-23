@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter327,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, fetchFromGitHub
+, flutter327
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 flutter327.buildFlutterApplication rec {

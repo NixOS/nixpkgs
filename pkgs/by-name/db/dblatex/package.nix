@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python311,
-  libxslt,
-  texliveBasic,
-  enableAllFeatures ? false,
-  imagemagick,
-  fig2dev,
-  inkscape,
-  fontconfig,
-  ghostscript,
-
-  tex ? texliveBasic.withPackages (
+{ lib
+, stdenv
+, fetchurl
+, python311
+, libxslt
+, texliveBasic
+, enableAllFeatures ? false
+, imagemagick
+, fig2dev
+, inkscape
+, fontconfig
+, ghostscript
+, tex ? texliveBasic.withPackages (
     ps: with ps; [
       # satisfy all packages that ./configure mentions
       epstopdf
@@ -47,7 +45,8 @@
       helvetic
       ly1
     ]
-  ),
+  )
+,
 }:
 
 # NOTE: enableAllFeatures just purifies the expression, it doesn't actually
