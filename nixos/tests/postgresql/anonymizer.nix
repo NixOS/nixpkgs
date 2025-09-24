@@ -39,7 +39,7 @@ let
                   create table player(id serial, name text, points int);
                   insert into player(id,name,points) values (1,'Foo', 23);
                   insert into player(id,name,points) values (2,'Bar',42);
-                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name();';
+                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name()';
                   security label for anon on column player.points is 'MASKED WITH VALUE NULL';
                 ''}"
             )

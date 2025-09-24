@@ -9,12 +9,13 @@
 
 buildGoModule rec {
   pname = "pg-dump-anon";
-  version = "1.3.2";
+  version = "2.4.1";
+
   src = fetchFromGitLab {
     owner = "dalibo";
     repo = "postgresql_anonymizer";
     tag = version;
-    hash = "sha256-MGdGvd4P1fFKdd6wnS2V5Tdly6hJlAmSA4TspnO/6Tk=";
+    hash = "sha256-vAsKTkFx8HLKDdXIQt6fEF3l7EzzvcilGfqNtBa0AMM=";
   };
 
   sourceRoot = "${src.name}/pg_dump_anon";
