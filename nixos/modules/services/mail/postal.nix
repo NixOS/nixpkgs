@@ -254,7 +254,8 @@ in
 
             tls_enabled = mkOption {
               type = types.bool;
-              default = false;
+              default = cfg.settings.smtp_server.tls_private_key_path != null;
+              defaultText = literalExpression "cfg.settings.smtp_server.tls_private_key_path != null";
               description = "Enable TLS for the SMTP server (requires certificate)";
             };
 
