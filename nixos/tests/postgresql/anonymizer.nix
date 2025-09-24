@@ -61,7 +61,7 @@ let
                 COPY public.player ...
                 1,Shields,
                 2,Salazar,
-                \.
+                \\.
 
             in the given dump (the commas are tabs in case of pg_dump).
                   Extract the CSV lines and split by `sep`.
