@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.19.0";
-  sha256 = "0272acfce50ce9ad060288321b1092719a7f19966f81419835410c59c09daa46";
+  version = "22.20.0";
+  sha256 = "ff7a6a6e8a1312af5875e40058351c4f890d28ab64c32f12b2cc199afa22002d";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -47,9 +47,18 @@ buildNodejs {
     ++ [
       ./configure-armv6-vfpv2.patch
       ./disable-darwin-v8-system-instrumentation-node19.patch
-      ./bypass-darwin-xcrun-node16.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
+
+      # TODO: newer GYP versions have been patched to be more compatible with Nix sandbox. We need
+      # to adapt our patch to this newer version, see https://github.com/NixOS/nixpkgs/pull/434742.
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/886e4b3b534a9f3ad2facbc99097419e06615900.patch?full_index=1";
+        hash = "sha256-dg/wVkD3iFS7RNjmvMDGw+ONScEjynlkRXqVxdF45TM=";
+        includes = [ "tools/gyp/pylib/gyp/xcode_emulation.py" ];
+        revert = true;
+      })
+      ./bypass-darwin-xcrun-node16.patch
     ];
 }
