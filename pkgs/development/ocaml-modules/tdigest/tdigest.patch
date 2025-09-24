@@ -1,0 +1,17 @@
+diff --git a/src/cmap.ml b/src/cmap.ml
+index 69f447b..3afb2b6 100644
+--- a/src/cmap.ml
++++ b/src/cmap.ml
+@@ -173,6 +173,12 @@ end = struct
+   let of_list_with_key_multi list ~get_key =
+     Using_comparator.of_list_with_key_multi ~comparator list ~get_key
+ 
++  let of_list_with_key_fold list ~get_key ~init ~f =
++    failwith "Map.of_list_with_key_fold: not implemented yet"
++
++  let of_list_with_key_reduce list ~get_key ~f =
++    failwith "Map.of_list_with_key_reduce: not implemented yet"
++
+   let of_alist alist = Using_comparator.of_alist ~comparator alist
+ 
+   let of_alist_or_error alist = Using_comparator.of_alist_or_error ~comparator alist

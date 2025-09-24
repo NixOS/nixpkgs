@@ -1,0 +1,21 @@
+diff --git a/src/extensions.c b/src/extensions.c
+index 354f476..8d020a6 100644
+--- a/src/extensions.c
++++ b/src/extensions.c
+@@ -122,15 +122,7 @@ daemon_read_extension_directory (GHashTable  *ifaces,
+                         continue;
+                 }
+ 
+-                /* Ensure it looks like "../../dbus-1/interfaces/${name}" */
+-                const gchar * const prefix = "../../dbus-1/interfaces/";
+-                if (g_str_has_prefix (symlink, prefix) && g_str_equal (symlink + strlen (prefix), name)) {
+-                        daemon_read_extension_file (ifaces, filename);
+-                } else {
+-                        g_warning ("Found accounts service vendor extension symlink %s, but it must be exactly "
+-                                   "equal to '../../dbus-1/interfaces/%s' for forwards-compatibility reasons.",
+-                                   filename, name);
+-                }
++                daemon_read_extension_file (ifaces, filename);
+         }
+ 
+         g_dir_close (dir);

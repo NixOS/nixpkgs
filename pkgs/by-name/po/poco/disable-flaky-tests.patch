@@ -1,0 +1,18 @@
+diff --git a/Foundation/testsuite/src/ExpireLRUCacheTest.cpp b/Foundation/testsuite/src/ExpireLRUCacheTest.cpp
+--- a/Foundation/testsuite/src/ExpireLRUCacheTest.cpp
++++ b/Foundation/testsuite/src/ExpireLRUCacheTest.cpp
+@@ -336 +336 @@
+-	CppUnit_addTest(pSuite, ExpireLRUCacheTest, testExpireN);
++	// CppUnit_addTest(pSuite, ExpireLRUCacheTest, testExpireN);
+diff --git a/Foundation/testsuite/src/TimestampTest.cpp b/Foundation/testsuite/src/TimestampTest.cpp
+--- a/Foundation/testsuite/src/TimestampTest.cpp
++++ b/Foundation/testsuite/src/TimestampTest.cpp
+@@ -97 +97 @@
+-	CppUnit_addTest(pSuite, TimestampTest, testTimestamp);
++	// CppUnit_addTest(pSuite, TimestampTest, testTimestamp);
+diff --git a/Foundation/testsuite/src/UniqueExpireCacheTest.cpp b/Foundation/testsuite/src/UniqueExpireCacheTest.cpp
+--- a/Foundation/testsuite/src/UniqueExpireCacheTest.cpp
++++ b/Foundation/testsuite/src/UniqueExpireCacheTest.cpp
+@@ -248 +248 @@
+-	CppUnit_addTest(pSuite, UniqueExpireCacheTest, testExpireN);
++	// CppUnit_addTest(pSuite, UniqueExpireCacheTest, testExpireN);

@@ -1,0 +1,13 @@
+diff --git a/wee_slack.py b/wee_slack.py
+index e4716b4..f673b7c 100644
+--- a/wee_slack.py
++++ b/wee_slack.py
+@@ -31,6 +31,8 @@ import string
+ # See https://github.com/numpy/numpy/issues/11925
+ sys.modules["numpy"] = None
+ 
++sys.path.append('@env@')
++
+ from websocket import (  # noqa: E402
+     ABNF,
+     create_connection,

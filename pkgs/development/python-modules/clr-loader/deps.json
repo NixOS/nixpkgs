@@ -1,0 +1,32 @@
+[
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies",
+    "version": "1.0.0",
+    "hash": "sha256-6faPQ4jaFY3OGGVk3lZKW+DEZaIOBZ/wHqbiDTsRR1k="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net461",
+    "version": "1.0.0",
+    "hash": "sha256-oS7sUMzKBkLmhggqbI6eBqb1OPAipH0TDTaDaBixcwM="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net47",
+    "version": "1.0.0",
+    "hash": "sha256-Jh40dua+AQpSUGTOCQG493sJzbfqH+yIgyoA6+A1ZQM="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
+  },
+  {
+    "pname": "NXPorts",
+    "version": "1.0.0",
+    "hash": "sha256-kpqQDljgsCBRDqbuJkgwClG3dkgjrBAhtXoPZlJR+ws="
+  }
+]

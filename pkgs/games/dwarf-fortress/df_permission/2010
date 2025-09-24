@@ -1,0 +1,40 @@
+From tarn.adams@gmail.com Sat Oct 30 00:56:16 2010
+Date: Fri, 29 Oct 2010 16:56:15 -0800
+From: Tarn Adams <tarn.adams@gmail.com>
+To: roconnor@theorem.ca
+Subject: Re: Dwarf Fortress Redistribution for NixOS
+
+Sure, that redistribution is fine.  I think I've handled the movie
+issue for next time now.  Thanks for the heads up on that.
+
+Tarn
+
+On Fri, Oct 29, 2010 at 6:56 AM,  <roconnor@theorem.ca> wrote:
+> I'd like to distribute a *slightly* modified version of Dwarf Fortress which
+> is needed to run it under the NixOS distribution of Linux (see
+> <https://nixos.org/>
+>
+> Modification: The interpreter location /lib/ld-linux.so.2 in
+> lib/Dwarf_Fortress is replaced with the location of ld-linux.so.2 under the
+> NixOS distribution (which is currently
+> /nix/store/l8x3fdy1r6zf441vnqa87lzsvxrjbdz9-glibc-2.11.1/lib/ld-linux.so.2
+> but might change at a later date to something similar).
+>
+> I don't need you to recompile Dwarf Fortress.  I can patch the binary itself
+> using patchelf.  I just would like your permission to redistrubute this
+> modified binary.
+>
+> Thanks, I'm looking forward to trying out your game and letting other Nix
+> users try it out too.
+>
+> P.S. the inital_movies are open in read/write mode instead of read-only mode
+> which causes some issues under NixOS because the inital_movies are stored
+> read-only.  I have a workaround, but you may want to consider opening these
+> files in read-only mode.
+>
+> --
+> Russell O'Connor                                      <http://r6.ca/>
+> ``All talk about `theft,''' the general counsel of the American Graphophone
+> Company wrote, ``is the merest claptrap, for there exists no property in
+> ideas musical, literary or artistic, except as defined by statute.''
+>

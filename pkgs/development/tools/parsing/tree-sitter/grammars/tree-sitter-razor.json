@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/tree-sitter/tree-sitter-razor",
+  "rev": "60edbd8e798e416f5226a746396efa6a8614fa9b",
+  "date": "2016-07-08T15:17:50-07:00",
+  "path": "/nix/store/2vkxw48wc0xf07awi65r4rg2m1lpqq6c-tree-sitter-razor",
+  "sha256": "1ldsn9nxldxkxdy7irywx88d6a56q05f6907lypzass07piyqp2i",
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

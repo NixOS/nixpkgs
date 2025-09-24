@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/winglang/tree-sitter-wing",
+  "rev": "27b595f5ea1aa45b5f777f194c0bd121a7b0c8e3",
+  "date": "2024-09-03T18:25:03-04:00",
+  "path": "/nix/store/az77v8z742hkqm830lvhgnqi1zpx9v8d-tree-sitter-wing",
+  "sha256": "09h79hvi35riwypskhh97qz8wis2kkz27xj777fg8lldvfh5kgdh",
+  "hash": "sha256-sL1ZoNuNUvTcOUf2I/6cQkeOPj4Jwqmv5zGXETdMByY=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

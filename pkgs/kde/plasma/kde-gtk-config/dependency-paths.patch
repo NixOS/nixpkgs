@@ -1,0 +1,22 @@
+diff --git a/kded/config_editor/xsettings.cpp b/kded/config_editor/xsettings.cpp
+index 1f9fe5b..9824973 100644
+--- a/kded/config_editor/xsettings.cpp
++++ b/kded/config_editor/xsettings.cpp
+@@ -46,7 +46,7 @@ void replaceValueInXSettingsdContents(QString &xSettingsdContents, const QString
+ pid_t pidOfXSettingsd()
+ {
+     QProcess pgrep;
+-    pgrep.start(QStringLiteral("pgrep"),
++    pgrep.start(QStringLiteral("@pgrep@"),
+                 QStringList{
+                     QStringLiteral("-u"),
+                     QString::number(getuid()),
+@@ -67,7 +67,7 @@ reloadXSettingsd(void *)
+ {
+     pid_t xSettingsdPid = pidOfXSettingsd();
+     if (xSettingsdPid == 0) {
+-        QProcess::startDetached(QStandardPaths::findExecutable(QStringLiteral("xsettingsd")), QStringList());
++        QProcess::startDetached(QStringLiteral("@xsettingsd@"), QStringList());
+     } else {
+         kill(xSettingsdPid, SIGHUP);
+     }

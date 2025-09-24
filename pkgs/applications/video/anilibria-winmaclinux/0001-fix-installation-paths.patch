@@ -1,0 +1,24 @@
+diff --git a/AniLibria.pro b/AniLibria.pro
+index 3eb7213..ea571ff 100644
+--- a/AniLibria.pro
++++ b/AniLibria.pro
+@@ -271,17 +271,8 @@ QML_IMPORT_PATH =
+ # Additional import path used to resolve QML modules just for Qt Quick Designer
+ QML_DESIGNER_IMPORT_PATH =
+ 
+-# Default rules for deployment.
+-!flatpak{
+-    qnx: target.path = /tmp/$${TARGET}/bin
+-    else: unix:!android: target.path = /opt/$${TARGET}/bin
+-}else{
+-    target.path = $$PREFIX/bin
+-}
+-!isEmpty(target.path) {
+-    unix: INSTALLS += target desktop $${UNIX_ICONS}
+-    else:macx: INSTALLS += target
+-}
++target.path = $$PREFIX/bin
++INSTALLS += target $${UNIX_ICONS}
+ 
+ flatpak {
+     metadata.path = $$PREFIX/share/metainfo

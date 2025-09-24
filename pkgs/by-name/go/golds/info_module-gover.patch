@@ -1,0 +1,25 @@
+diff --git a/internal/server/info_module.go b/internal/server/info_module.go
+index d2513bd..ad2921e 100644
+--- a/internal/server/info_module.go
++++ b/internal/server/info_module.go
+@@ -8,6 +8,7 @@ import (
+ 	"io/ioutil"
+ 	"log"
+ 	"os"
++	"os/exec"
+ 	"path/filepath"
+ 	"regexp"
+ 	"strings"
+@@ -756,7 +757,11 @@ func findGoToolchainVersionFromGoRoot(goroot string) (string, error) {
+ 		versionData, err = ioutil.ReadFile(filepath.Join(goroot, "VERSION.cache"))
+ 	}
+ 	if err != nil {
+-		return "", fmt.Errorf("failed to get Go toolchain version in GOROOT (%s)", goroot)
++		cmd := exec.Command("go", "env", "GOVERSION")
++		versionData, err = cmd.Output()
++		if err != nil {
++			return "", fmt.Errorf("failed to get Go toolchain version in GOROOT (%s)", goroot)
++		}
+ 	}
+ 	matches := findGoVersionRegexp.FindSubmatch(versionData)
+ 	if len(matches) >= 1 {

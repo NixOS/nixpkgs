@@ -1,0 +1,58 @@
+diff --git a/Makefile b/Makefile
+index 8b54a8b..6522293 100644
+--- a/Makefile
++++ b/Makefile
+@@ -60,7 +60,6 @@ xdotool/libxdo.a: xdotool/.git
+ 	$(MAKE) -C xdotool libxdo.a
+ 
+ lib/configured:
+-	shards install --frozen
+ 	./bin/gi-crystal
+ # TODO: can be fixed in application code?
+ 	sed -i -E 's/private getter xdo_p/getter xdo_p/' lib/x_do/src/x_do.cr
+@@ -71,7 +70,7 @@ lib/configured:
+ test-appimage: ahk_x11.AppImage
+ 	./ahk_x11.AppImage tests.ahk
+ test-dev: bin/ahk_x11
+-	./bin/ahk_x11 tests.ahk
++	XDG_CACHE_HOME=${TMPDIR} HOME=${TMPDIR} xvfb-run --auto-display openbox --startup "./bin/ahk_x11 tests.ahk"
+ 
+ clean:
+ 	rm -rf ahk_x11.AppImage bin/ahk_x11 bin/ahk_x11.dev linuxdeploy-plugin-gtk.sh linuxdeploy-x86_64.AppImage lib
+diff --git a/src/ahk_x11.cr b/src/ahk_x11.cr
+index 16777d8..b4d96e1 100644
+--- a/src/ahk_x11.cr
++++ b/src/ahk_x11.cr
+@@ -67,14 +67,12 @@ version = {{ read_file("./shard.yml").split("\n")[1][9..] }}
+ lines = Compiler.new.extract.try &.split('\n')
+ is_compiled = !! lines
+ if ! lines
+-	# Only needed for installer script, this can't (yet) really be part of ahk code. TODO: rm on exit
+-	File.write("/tmp/tmp_ahk_x11_logo.png", logo_blob)
+ 	if ARGV[0]?
+ 		if ARGV[0] == "-v" || ARGV[0] == "--version"
+ 			puts "AHK_X11 version: #{version}\nTargets to partially implement Classic Windows AutoHotkey specification: v1.0.24 (2004). AutoHotkey is a scripting language."
+ 			::exit
+ 		elsif ARGV[0] == "-h" || ARGV[0] == "--help"
+-			puts "AHK_X11 is a Linux implementation for AutoHotkey classic version 1.0.24 (2004). Internal version: #{version}. Full up to date documentation can be found at https://phil294.github.io/AHK_X11/.\n\nPossible methods of invocation:\n\nahk_x11.AppImage \"path to script.ahk\"\nahk_x11.AppImage <<< $'MsgBox, 1\\nMsgBox, 2'\nahk_x11.AppImage --repl\nahk_x11.AppImage --windowspy\nahk_x11.AppImage --compile \"path to script.ahk\" \"optional: output executable file path\"\n\nAlternatively, just run the program without arguments to open the graphical installer. Once installed, you should be able to run and/or compile any .ahk file in your file manager by selecting it from the right click context menu."
++			puts "AHK_X11 is a Linux implementation for AutoHotkey classic version 1.0.24 (2004). Internal version: #{version}. Full up to date documentation can be found at https://phil294.github.io/AHK_X11/.\n\nPossible methods of invocation:\n\nahk_x11 \"path to script.ahk\"\nahk_x11 <<< $'MsgBox, 1\\nMsgBox, 2'\nahk_x11 --repl\nahk_x11 --windowspy\nahk_x11 --compile \"path to script.ahk\" \"optional: output executable file path\"\n\nAlternatively, you should be able to run and/or compile any .ahk file in your file manager by selecting it from the right click context menu."
+ 			::exit
+ 		elsif ARGV[0] == "--repl"
+ 			lines = ["#Persistent"]
+@@ -101,7 +99,8 @@ if ! lines
+ 		if stdin
+ 			lines = stdin.split('\n')
+ 		else
+-			lines = {{ read_file("./src/installer.ahk").split("\n") }}
++			puts "Use -h for help."
++			::exit 1
+ 		end
+ 	end
+ end
+@@ -120,4 +119,4 @@ rescue e : Run::RuntimeException
+ 	build_error e
+ end
+ 
+-sleep # exiting is completely handled in runner
+\ No newline at end of file
++sleep # exiting is completely handled in runner

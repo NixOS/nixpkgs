@@ -1,0 +1,12 @@
+diff -rupN discount-2.1.6-original/configure.inc discount-2.1.6/configure.inc
+--- discount-2.1.6-original/configure.inc	2014-10-10 15:34:24.158325345 +0100
++++ discount-2.1.6/configure.inc	2014-10-10 15:34:33.553325321 +0100
+@@ -32,7 +32,7 @@
+ # this preamble code is executed when this file is sourced and it picks
+ # interesting things off the command line.
+ #
+-ac_default_path="/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin"
++ac_default_path=$PATH
+ 
+ ac_standard="--src=DIR		where the source lives (.)
+ --prefix=DIR		where to install the final product (/usr/local)

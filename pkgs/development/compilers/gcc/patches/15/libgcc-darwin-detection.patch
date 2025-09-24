@@ -1,0 +1,11 @@
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -239,7 +239,7 @@ case ${host} in
+     x86_64-*-darwin2[0-2]*)
+       tmake_file="t-darwin-min-11 t-darwin-libgccs1 $tmake_file"
+       ;;
+-    *-*-darwin2*)
++    *-*-darwin2* | *-*-darwin)
+       tmake_file="t-darwin-min-11 $tmake_file"
+       ;;
+     *-*-darwin1[89]*)

@@ -1,0 +1,17 @@
+On nixpkgs /tmp/.X11-unix is not compatible with Xvfb requirement and the
+test fails.
+--- a/meson.build
++++ b/meson.build
+@@ -775,12 +775,6 @@ if get_option('enable-x11')
+         env: test_env,
+         is_parallel : false,
+     )
+-    test(
+-        'x11comp',
+-        executable('test-x11comp', 'test/x11comp.c', dependencies: x11_xvfb_test_dep),
+-        env: test_env,
+-        is_parallel : false,
+-    )
+ endif
+ if get_option('enable-xkbregistry')
+     test(

@@ -1,0 +1,13 @@
+diff --git a/Utility/FreeDesktop.hs b/Utility/FreeDesktop.hs
+index 896b89b991..6cbb4f90ae 100644
+--- a/Utility/FreeDesktop.hs
++++ b/Utility/FreeDesktop.hs
+@@ -106,7 +106,7 @@ desktopfile f = toOsPath $ f ++ ".desktop"
+ 
+ {- Directory used for installation of system wide data files.. -}
+ systemDataDir :: OsPath
+-systemDataDir = literalOsPath "/usr/share"
++systemDataDir = literalOsPath "/share"
+ 
+ {- Directory used for installation of system wide config files. -}
+ systemConfigDir :: OsPath

@@ -1,0 +1,26 @@
+diff --git a/cmake/Dependencies.cmake b/cmake/Dependencies.cmake
+index a93386c27f8..7c6b98006bf 100644
+--- a/cmake/Dependencies.cmake
++++ b/cmake/Dependencies.cmake
+@@ -967,7 +967,7 @@ endif()
+
+ # ---[ nvtx
+ if(USE_SYSTEM_NVTX)
+-  find_path(nvtx3_dir NAMES nvtx3 PATHS ${CUDA_INCLUDE_DIRS})
++  find_path(nvtx3_dir NAMES nvtx3/nvtx3.hpp PATHS ${CUDA_INCLUDE_DIRS})
+   find_package_handle_standard_args(nvtx3 DEFAULT_MSG nvtx3_dir)
+   if(NOT nvtx3_FOUND)
+     message(WARNING "Cannot find system NVTX3, find shipped NVTX3 instead")
+@@ -977,9 +977,10 @@ if(NOT TARGET CUDA::nvtx3)
+   add_library(CUDA::nvtx3 INTERFACE IMPORTED)
+ endif()
+ if(NOT nvtx3_dir)
+-  find_path(nvtx3_dir NAMES nvtx3 PATHS "${PROJECT_SOURCE_DIR}/third_party/NVTX/c/include" NO_DEFAULT_PATH)
+-  target_include_directories(CUDA::nvtx3 INTERFACE "${nvtx3_dir}")
++  find_path(nvtx3_dir NAMES nvtx3/nvtx3.hpp PATHS "${PROJECT_SOURCE_DIR}/third_party/NVTX/c/include" NO_DEFAULT_PATH)
+ endif()
++target_include_directories(CUDA::nvtx3 INTERFACE "${nvtx3_dir}")
++message(STATUS "Using NVTX3 include directory: ${nvtx3_dir}")
+
+
+ # ---[ HIP

@@ -1,0 +1,25 @@
+From 749d9451293f9d9f8a3f506401cae369003aeebf Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Sun, 13 Oct 2024 17:16:13 -0400
+Subject: [PATCH] Include db.h for nbdb compat mode
+
+---
+ lib/otp/otp_db.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/otp/otp_db.c b/lib/otp/otp_db.c
+index 036359c1d..32c04bc8c 100644
+--- a/lib/otp/otp_db.c
++++ b/lib/otp/otp_db.c
+@@ -39,7 +39,7 @@ RCSID("$Id$");
+ #include "otp_locl.h"
+ 
+ #if defined(HAVE_DB_NDBM)
+-# include <ndbm.h>
++# include <db.h>
+ #elif !defined(HAVE_NDBM)
+ # include "ndbm_wrap.h"
+ #endif
+-- 
+2.46.0
+
