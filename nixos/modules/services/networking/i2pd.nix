@@ -252,7 +252,14 @@ let
           ]
           ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
           ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
-          ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
+          ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList))
+          ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
+          ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
+          ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
+          ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
+          ++ (optionals (tun ? crypto.tagsToSend) (
+            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend
+          ));
         in
         lib.concatStringsSep "\n" inTunOpts;
 
