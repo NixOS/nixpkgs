@@ -23,7 +23,7 @@ let
 
   fpmCfgFile =
     pool: poolOpts:
-    pkgs.writeText "${poolOpts.systemdServiceName}.conf" ''
+    pkgs.writeText "phpfpm-${pool}.conf" ''
       [global]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings)}
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
@@ -154,20 +154,6 @@ let
             details on configuration directives.
           '';
         };
-
-        systemdServiceName = mkOption {
-          type = types.str;
-          default = "phpfpm-${name}";
-          example = "phpfpm-poolName";
-          description = ''
-            Name of the systemd service generated for this pool.
-
-            ::: {.note}
-            This option is read-only.
-            :::
-          '';
-          readOnly = true;
-        };
       };
 
       config = {
@@ -292,7 +278,7 @@ in
 
     systemd.services = mapAttrs' (
       pool: poolOpts:
-      nameValuePair poolOpts.systemdServiceName {
+      nameValuePair "phpfpm-${pool}" {
         description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
@@ -308,13 +294,12 @@ in
                 mount
               ];
               text = ''
+                # remount CREDENTIALS_DIRECTORY so that inside the service
+                # mount namespace the pool user/group are perceived as root
+                # within this mount, thus allowing phpfpm workers to access
+                # the credentials
                 if [ -v CREDENTIALS_DIRECTORY ]; then
-                  OLD_CREDENTIALS_DIRECTORY="$CREDENTIALS_DIRECTORY"
-                  export CREDENTIALS_DIRECTORY="/tmp''${CREDENTIALS_DIRECTORY}"
-                  mkdir -p "$CREDENTIALS_DIRECTORY"
-                  mount -t tmpfs -o size=1M,nodev,nosuid,noexec,mode=500,uid="$(id -u "${poolOpts.user}")",gid="$(id -g "${poolOpts.group}")" tmpfs "$CREDENTIALS_DIRECTORY"
-                  cp -r "$OLD_CREDENTIALS_DIRECTORY"/. "$CREDENTIALS_DIRECTORY"
-                  chown -R "${poolOpts.user}:${poolOpts.group}" "$CREDENTIALS_DIRECTORY"
+                  mount -o "remount,X-mount.idmap=u:$(id -u):$(id -u "${poolOpts.user}"):1 g:$(id -g):$(id -g "${poolOpts.group}"):1" "$CREDENTIALS_DIRECTORY"
                 fi
 
                 exec ${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}
