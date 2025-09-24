@@ -4,11 +4,9 @@
   fetchpatch,
   cmake,
   ninja,
-  libxml2,
   zlib,
   zstd,
-  ncurses,
-  rocm-merged-llvm,
+  llvm,
   python3,
 }:
 
@@ -21,22 +19,29 @@ let
     else
       throw "Unsupported ROCm LLVM platform";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-device-libs";
   # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
+  inherit (llvm.llvm) version;
+  src = llvm.llvm.monorepoSrc;
+  sourceRoot = "${finalAttrs.src.name}/amd/device-libs";
+  strictDeps = true;
+  __structuredAttrs = true;
 
-  postPatch = ''
-    cd amd/device-libs
-  '';
+  postPatch =
+    # Use our sysrooted toolchain instead of direct clang target
+    ''
+      substituteInPlace cmake/OCL.cmake \
+        --replace-fail '$<TARGET_FILE:clang>' "${llvm.rocm-toolchain}/bin/clang"
+    '';
 
   patches = [
     ./cmake.patch
     (fetchpatch {
       name = "cmake-4-compat-dont-set-cmp0053.patch";
       url = "https://github.com/ROCm/llvm-project/commit/a18cc4c7cb51f94182b6018c7c73acde1b8ebddb.patch";
-      hash = "sha256-LNT7srxd4gXDAJ6lSsJXKnRQKSepkAbHeRNH+eZYIFk=";
+      hash = "sha256-kp/Ld0IhjWgRbRR9R/CKdkI9ELvPkQSAMqPsAPFxzhM=";
+      relative = "amd/device-libs";
     })
   ];
 
@@ -44,18 +49,17 @@ stdenv.mkDerivation {
     cmake
     ninja
     python3
+    llvm.rocm-toolchain
   ];
 
   buildInputs = [
-    libxml2
+    llvm.llvm
+    llvm.clang-unwrapped
     zlib
     zstd
-    ncurses
-    rocm-merged-llvm
   ];
 
   cmakeFlags = [
-    "-DCMAKE_RELEASE_TYPE=Release"
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
   ];
 
@@ -67,4 +71,4 @@ stdenv.mkDerivation {
     teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
-}
+})

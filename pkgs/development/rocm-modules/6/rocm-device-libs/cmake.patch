@@ -1,7 +1,7 @@
 diff --git a/cmake/Packages.cmake b/cmake/Packages.cmake
 index 07c60eb..c736b3e 100644
---- a/amd/device-libs/cmake/Packages.cmake
-+++ b/amd/device-libs/cmake/Packages.cmake
+--- a/cmake/Packages.cmake
++++ b/cmake/Packages.cmake
 @@ -12,24 +12,29 @@ set_target_properties(${target} PROPERTIES
    IMPORTED_LOCATION \"${target_path}\")")
  endforeach()
