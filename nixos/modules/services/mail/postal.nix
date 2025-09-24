@@ -409,12 +409,6 @@ in
       cfg.settings.smtp_server.default_port
     ];
 
-    systemd.tmpfiles.settings."10-postal"."/run/postal".d = {
-      mode = "0750";
-      user = cfg.user;
-      group = config.users.users.${cfg.user}.group;
-    };
-
     users = optionalAttrs (cfg.user == "postal") {
       users.postal = {
         useDefaultShell = true;
@@ -498,7 +492,7 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          RootDirectory = "/run/postal";
+          RuntimeDirectory = "postal";
           SystemCallArchitectures = "native";
           SystemCallFilter = [
             "@system-service"
