@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell --pure -i bash
-#!nix-shell -p cacert curl git jq nix-prefetch-git
+#!nix-shell -p cacert curl git jq nix-prefetch-git nix
 # shellcheck shell=bash
 # vim: set tabstop=2 shiftwidth=2 expandtab:
 set -euo pipefail
