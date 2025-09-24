@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-S+cDnKOTPjLw+sNmWL3+Ay6+UM8poMadkyPSGd3hgnc=";
   };
 
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/verilator/verilator/blob/${src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage = "https://www.veripool.org/verilator";
     license = with licenses; [
