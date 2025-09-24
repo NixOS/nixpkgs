@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
   ];
 
-  # aws-c-common misuses cmake modules, so we need
-  # to manually add a MODULE_PATH to its consumers
-  setupHook = ./setup-hook.sh;
-
   # Prevent the execution of tests known to be flaky.
   preCheck =
     let
