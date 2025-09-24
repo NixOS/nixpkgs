@@ -4,33 +4,26 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  gfortran,
   mpiCheckPhaseHook,
   mpi,
   blas,
   lapack,
-  testers,
 }:
 
 assert blas.isILP64 == lapack.isILP64;
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "scalapack";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = "scalapack";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-KDMW/D7ubGaD2L7eTwULJ04fAYDPAKl8xKPZGZMkeik=";
   };
 
-  passthru = {
-    inherit (blas) isILP64;
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  passthru = { inherit (blas) isILP64; };
 
   __structuredAttrs = true;
 
@@ -44,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Required to activate ILP64.
   # See https://github.com/Reference-ScaLAPACK/scalapack/pull/19
-  postPatch = lib.optionalString finalAttrs.passthru.isILP64 ''
+  postPatch = lib.optionalString passthru.isILP64 ''
     sed -i 's/INTSZ = 4/INTSZ = 8/g'   TESTING/EIG/* TESTING/LIN/*
     sed -i 's/INTGSZ = 4/INTGSZ = 8/g' TESTING/EIG/* TESTING/LIN/*
 
@@ -57,35 +50,36 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    gfortran
-  ];
-
+  nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ mpiCheckPhaseHook ];
-
-  propagatedBuildInputs = [
+  buildInputs = [
     blas
     lapack
-    mpi
+  ];
+  propagatedBuildInputs = [ mpi ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+    "stackprotector"
   ];
 
   # xslu and xsllt tests seem to time out on x86_64-darwin.
   # this line is left so those who force installation on x86_64-darwin can still build
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
-  cmakeFlagsArray = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
-    (lib.cmakeFeature "BLAS_LIBRARIES" "-lblas")
-    (lib.cmakeFeature "CMAKE_C_FLAGS" "${lib.concatStringsSep " " [
-      "-Wno-implicit-function-declaration"
-      (lib.optionalString finalAttrs.passthru.isILP64 "-DInt=long")
-    ]}")
-  ]
-  ++ lib.optionals finalAttrs.passthru.isILP64 [
-    (lib.cmakeFeature "CMAKE_Fortran_FLAGS" "-fdefault-integer-8")
-  ];
+  preConfigure = ''
+    cmakeFlagsArray+=(
+      -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
+      -DLAPACK_LIBRARIES="-llapack"
+      -DBLAS_LIBRARIES="-lblas"
+      -DCMAKE_Fortran_COMPILER=${lib.getDev mpi}/bin/mpif90
+      -DCMAKE_C_FLAGS="${
+        lib.concatStringsSep " " [
+          "-Wno-implicit-function-declaration"
+          (lib.optionalString passthru.isILP64 "-DInt=long")
+        ]
+      }"
+      ${lib.optionalString passthru.isILP64 ''-DCMAKE_Fortran_FLAGS="-fdefault-integer-8"''}
+      )
+  '';
 
   # Increase individual test timeout from 1500s to 10000s because hydra's builds
   # sometimes fail due to this
@@ -95,17 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
     # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
     # cmake file will thus look for the library in the dev output instead of out.
     # Use the absolute path to $out instead to fix the issue.
-    substituteInPlace  $dev/lib/cmake/scalapack-${finalAttrs.version}/scalapack-targets-release.cmake \
+    substituteInPlace  $dev/lib/cmake/scalapack-${version}/scalapack-targets-release.cmake \
       --replace "\''${_IMPORT_PREFIX}" "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    pkgConfigModules = [ "scalapack" ];
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       costrouc
       markuskowa
       gdinh
@@ -113,4 +106,4 @@ stdenv.mkDerivation (finalAttrs: {
     # xslu and xsllt tests fail on x86 darwin
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
-})
+}

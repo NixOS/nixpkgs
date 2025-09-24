@@ -8,10 +8,9 @@
   yarn,
   fixup-yarn-lock,
   prefetch-yarn-deps,
-  nixosTests,
   nodejs_20,
   nodejs-slim_20,
-  remarshal_0_17,
+  yq-go,
   settings ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -27,20 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-r36w3Cz/V7E/xPYYpvfQsdk2QXfCVDYE9OxiFNyKP2s=";
   };
-
-  passthru.tests = {
-    dashy = nixosTests.dashy;
-  };
-
   # - If no settings are passed, use the default config provided by upstream
   # - Despite JSON being valid YAML (and the JSON passing the config validator),
   # there seem to be some issues with JSON in the final build - potentially due to
   # the way the client parses things
-  # - Instead, we use `remarshal` to convert it to yaml
+  # - Instead, we use `yq-go` to convert it to yaml
   # Config validation needs to happen after yarnConfigHook, since it's what sets the yarn offline cache
   preBuild = lib.optional (settings != { }) ''
     echo "Writing settings override..."
-    json2yaml '${builtins.toFile "conf.json" (builtins.toJSON settings)}' user-data/conf.yml
+    yq --output-format yml '${builtins.toFile "conf.json" ''${builtins.toJSON settings}''}' > user-data/conf.yml
     yarn validate-config --offline
   '';
   installPhase = ''
@@ -65,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     yarnBuildHook
     nodejs_20
-    # For yaml conversion
-    remarshal_0_17
+    # For yaml parsing
+    yq-go
   ];
   doDist = false;
   meta = {
