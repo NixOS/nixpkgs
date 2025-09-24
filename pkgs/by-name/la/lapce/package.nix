@@ -34,16 +34,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
     tag = "v${version}";
-    sha256 = "sha256-4f6+o1xOopmBZEcQfC6A9VS9lcntKiWsB1iAzdRxYno=";
+    sha256 = "sha256-0mF8JusW/oMjkAaCtL6ySazlWoR+76vRydyVXHbxNRM=";
   };
 
-  cargoHash = "sha256-hVV3zPGpCBTR56MiSpnMf/ESSHFdMQ0x0IKOa/qzUn8=";
+  cargoHash = "sha256-Jjul26YTcMSf8szuetX3rU4b1eVsD/SBe1UanIAS1Ew=";
 
   env = {
     # Get openssl-sys to use pkg-config
