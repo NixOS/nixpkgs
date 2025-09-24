@@ -6,6 +6,7 @@
   jq,
   cacert,
   nix,
+  closureInfo,
   ...
 }:
 {
@@ -114,6 +115,35 @@
     rootDir = "misc/systemd";
     sha256 = "sha256-UhxHk4SrXYq7ZDMtXLig5SigpbITrVgkpFTmryuvpcM=";
   };
+
+  # Make sure that if an expected hash is given and the corresponding store path exists already, no fetch is done
+  cached-prefetch-avoids-fetch =
+    let
+      name = "cached-prefetch-avoids-fetch";
+      url = "https://github.com/NixOS/nix";
+      rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+      sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+      fetched = fetchgit {
+        inherit
+          name
+          url
+          rev
+          sha256
+          ;
+      };
+    in
+    runCommand "cached-prefetch-avoids-fetch"
+      {
+        nativeBuildInputs = [
+          nix-prefetch-git
+          nix
+        ];
+      }
+      ''
+        export NIX_REMOTE=local?root=$(mktemp -d)
+        nix-store --load-db < ${closureInfo { rootPaths = fetched; }}/registration
+        nix-prefetch-git --name "${name}" "${url}" "${rev}" "${sha256}" > $out
+      '';
 
   prefetch-git-no-add-path =
     testers.invalidateFetcherByDrvHash
