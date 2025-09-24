@@ -199,6 +199,7 @@ python3.pkgs.buildPythonApplication rec {
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
+    mainProgram = "checkov";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       anhdle14

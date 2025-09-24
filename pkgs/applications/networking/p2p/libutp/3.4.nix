@@ -6,14 +6,14 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libutp";
   version = "0-unstable-2024-11-16";
 
   src = fetchFromGitHub {
     # Use transmission fork from post-3.4-transmission branch
     owner = "transmission";
-    repo = pname;
+    repo = "libutp";
     rev = "490874c44a2ecf914404b0a20e043c9755fff47b";
     hash = "sha256-ArUOr392s/rIplthSmHYXnqhO6i1PkkGV1jmQPQL7Yg=";
   };

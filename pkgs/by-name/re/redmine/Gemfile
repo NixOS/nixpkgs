@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '>= 3.1.0', '< 3.4.0'
 
-gem 'rails', '7.2.2.1'
+gem 'rails', '7.2.2.2'
 gem 'rouge', '~> 4.5'
 gem 'mini_mime', '~> 1.1.0'
 gem "actionpack-xml_parser"

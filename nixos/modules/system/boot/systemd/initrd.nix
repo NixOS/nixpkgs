@@ -562,7 +562,12 @@ in
         "${pkgs.glibc}/lib/libnss_files.so.2"
 
         # Resolving sysroot symlinks without code exec
-        "${pkgs.chroot-realpath}/bin/chroot-realpath"
+        "${config.system.nixos-init.package}/bin/chroot-realpath"
+        # Find the etc paths
+        "${config.system.nixos-init.package}/bin/find-etc"
+      ]
+      ++ lib.optionals config.system.nixos-init.enable [
+        "${config.system.nixos-init.package}/bin/initrd-init"
       ]
       ++ jobScripts
       ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
@@ -594,7 +599,7 @@ in
           ) cfg.automounts
         );
 
-      services.initrd-find-nixos-closure = {
+      services.initrd-find-nixos-closure = lib.mkIf (!config.system.nixos-init.enable) {
         description = "Find NixOS closure";
 
         unitConfig = {
@@ -615,7 +620,12 @@ in
         script = # bash
           ''
             set -uo pipefail
-            export PATH="/bin:${cfg.package.util-linux}/bin:${pkgs.chroot-realpath}/bin"
+            export PATH="/bin:${
+              lib.makeBinPath [
+                cfg.package.util-linux
+                config.system.nixos-init.package
+              ]
+            }"
 
             # Figure out what closure to boot
             closure=
@@ -670,7 +680,7 @@ in
         }
       ];
 
-      services.initrd-nixos-activation = {
+      services.initrd-nixos-activation = lib.mkIf (!config.system.nixos-init.enable) {
         after = [ "initrd-switch-root.target" ];
         requiredBy = [ "initrd-switch-root.service" ];
         before = [ "initrd-switch-root.service" ];
@@ -697,17 +707,46 @@ in
           '';
       };
 
-      # This will either call systemctl with the new init as the last parameter (which
-      # is the case when not booting a NixOS system) or with an empty string, causing
-      # systemd to bypass its verification code that checks whether the next file is a systemd
-      # and using its compiled-in value
-      services.initrd-switch-root.serviceConfig = {
-        EnvironmentFile = "-/etc/switch-root.conf";
-        ExecStart = [
-          ""
-          ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
-        ];
-      };
+      services.initrd-switch-root =
+        if config.system.nixos-init.enable then
+          {
+            path = [
+              cfg.package
+              cfg.package.util-linux
+              config.system.nixos-init.package
+            ];
+            environment = {
+              FIRMWARE = "${config.hardware.firmware}/lib/firmware";
+              MODPROBE_BINARY = "${pkgs.kmod}/bin/modprobe";
+              NIX_STORE_MOUNT_OPTS = lib.concatStringsSep "," config.boot.nixStoreMountOpts;
+            }
+            // lib.optionalAttrs (config.environment.usrbinenv != null) {
+              ENV_BINARY = config.environment.usrbinenv;
+            }
+            // lib.optionalAttrs (config.environment.binsh != null) {
+              SH_BINARY = config.environment.binsh;
+            };
+            serviceConfig = {
+              ExecStart = [
+                ""
+                "${config.system.nixos-init.package}/bin/initrd-init"
+              ];
+            };
+          }
+        else
+          # This will either call systemctl with the new init as the last parameter (which
+          # is the case when not booting a NixOS system) or with an empty string, causing
+          # systemd to bypass its verification code that checks whether the next file is a systemd
+          # and using its compiled-in value
+          {
+            serviceConfig = {
+              EnvironmentFile = "-/etc/switch-root.conf";
+              ExecStart = [
+                ""
+                ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
+              ];
+            };
+          };
 
       services.panic-on-fail = {
         wantedBy = [ "emergency.target" ];
