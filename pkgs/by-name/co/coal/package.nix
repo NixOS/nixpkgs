@@ -9,9 +9,8 @@
   jrl-cmakemodules,
   assimp,
   octomap,
+  pkg-config,
   qhull,
-  pythonSupport ? false,
-  python3Packages,
   zlib,
 }:
 
@@ -31,10 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     doxygen
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.numpy
-    python3Packages.pythonImportsCheckHook
+    pkg-config
   ];
 
   propagatedBuildInputs = [
@@ -43,28 +39,18 @@ stdenv.mkDerivation (finalAttrs: {
     octomap
     qhull
     zlib
-  ]
-  ++ lib.optionals (!pythonSupport) [
     boost
     eigen
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.boost
-    python3Packages.eigenpy
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL" true)
     (lib.cmakeBool "COAL_HAS_QHULL" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
   ];
 
   doCheck = true;
-  pythonImportsCheck = [
-    "coal"
-    "hppfcl"
-  ];
 
   outputs = [
     "dev"
