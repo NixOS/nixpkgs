@@ -9,8 +9,8 @@ buildGoModule rec {
   version = "0.7.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "helm-unittest";
+    repo = "helm-unittest";
     rev = "v${version}";
     hash = "sha256-RWucFZlyVYV5pHFGP7x5I+SILAJ9k12R7l5o7WKGS/c=";
   };
