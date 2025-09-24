@@ -799,6 +799,8 @@ self: super: with self; {
 
   appimage = callPackage ../development/python-modules/appimage { };
 
+  appium-python-client = callPackage ../development/python-modules/appium-python-client { };
+
   apple-weatherkit = callPackage ../development/python-modules/apple-weatherkit { };
 
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
@@ -1914,6 +1916,8 @@ self: super: with self; {
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
   binsync = callPackage ../development/python-modules/binsync { };
+
+  biocframe = callPackage ../development/python-modules/biocframe { };
 
   biocutils = callPackage ../development/python-modules/biocutils { };
 
@@ -3122,6 +3126,8 @@ self: super: with self; {
 
   crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
 
+  crypt4gh = callPackage ../development/python-modules/crypt4gh { };
+
   cryptg = callPackage ../development/python-modules/cryptg { };
 
   cryptodatahub = callPackage ../development/python-modules/cryptodatahub { };
@@ -3320,6 +3326,8 @@ self: super: with self; {
   dash-table = callPackage ../development/python-modules/dash-table { };
 
   dashing = callPackage ../development/python-modules/dashing { };
+
+  dashscope = callPackage ../development/python-modules/dashscope { };
 
   dask = callPackage ../development/python-modules/dask { };
 
@@ -3712,6 +3720,8 @@ self: super: with self; {
   dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
 
   dissect-cobaltstrike = callPackage ../development/python-modules/dissect-cobaltstrike { };
+
+  dissect-cramfs = callPackage ../development/python-modules/dissect-cramfs { };
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
@@ -7856,6 +7866,8 @@ self: super: with self; {
 
   knot-floer-homology = callPackage ../development/python-modules/knot-floer-homology { };
 
+  knowit = callPackage ../development/python-modules/knowit { };
+
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
   kokoro = callPackage ../development/python-modules/kokoro { };
@@ -8436,6 +8448,8 @@ self: super: with self; {
 
   linear-operator = callPackage ../development/python-modules/linear-operator { };
 
+  linearmodels = callPackage ../development/python-modules/linearmodels { };
+
   lineax = callPackage ../development/python-modules/lineax { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
@@ -8737,6 +8751,8 @@ self: super: with self; {
   lockfile = callPackage ../development/python-modules/lockfile { };
 
   locust = callPackage ../development/python-modules/locust { };
+
+  locust-cloud = callPackage ../development/python-modules/locust-cloud { };
 
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
@@ -13136,6 +13152,8 @@ self: super: with self; {
 
   pyhcl = callPackage ../development/python-modules/pyhcl { };
 
+  pyhdfe = callPackage ../development/python-modules/pyhdfe { };
+
   pyheck = callPackage ../development/python-modules/pyheck { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
@@ -15694,6 +15712,8 @@ self: super: with self; {
     };
   };
 
+  rds2py = callPackage ../development/python-modules/rds2py { };
+
   re-assert = callPackage ../development/python-modules/re-assert { };
 
   reactionmenu = callPackage ../development/python-modules/reactionmenu { };
@@ -16284,6 +16304,8 @@ self: super: with self; {
   sagemaker-core = callPackage ../development/python-modules/sagemaker-core { };
 
   sagemaker-mlflow = callPackage ../development/python-modules/sagemaker-mlflow { };
+
+  saiph = callPackage ../development/python-modules/saiph { };
 
   salib = callPackage ../development/python-modules/salib { };
 

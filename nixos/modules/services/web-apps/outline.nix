@@ -702,7 +702,6 @@ in
             FORCE_HTTPS = builtins.toString cfg.forceHttps;
             ENABLE_UPDATES = builtins.toString cfg.enableUpdateCheck;
             WEB_CONCURRENCY = builtins.toString cfg.concurrency;
-            MAXIMUM_IMPORT_SIZE = builtins.toString cfg.maximumImportSize;
             DEBUG = cfg.debugOutput;
             GOOGLE_ANALYTICS_ID = lib.optionalString (cfg.googleAnalyticsId != null) cfg.googleAnalyticsId;
             SENTRY_DSN = lib.optionalString (cfg.sentryDsn != null) cfg.sentryDsn;
@@ -715,6 +714,7 @@ in
             RATE_LIMITER_DURATION_WINDOW = builtins.toString cfg.rateLimiter.durationWindow;
 
             FILE_STORAGE = cfg.storage.storageType;
+            FILE_STORAGE_IMPORT_MAX_SIZE = builtins.toString cfg.maximumImportSize;
             FILE_STORAGE_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
             FILE_STORAGE_LOCAL_ROOT_DIR = cfg.storage.localRootDir;
           }

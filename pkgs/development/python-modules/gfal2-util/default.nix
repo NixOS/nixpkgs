@@ -11,13 +11,13 @@
 }:
 (buildPythonPackage rec {
   pname = "gfal2-util";
-  version = "1.8.1";
+  version = "1.9.0";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-util";
     rev = "v${version}";
-    hash = "sha256-3JbJgKD17aYkrB/aaww7IQU8fLFrTCh868KWlLPxmlk=";
+    hash = "sha256-BJR2fPj9nDXYU0X1HO2k3PiGMM2s8lU7+5SLadxw55Y=";
   };
 
   # Replace the ad-hoc python executable finding

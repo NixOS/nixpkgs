@@ -62,6 +62,6 @@ buildGoModule rec {
     description = "Tool for directly patching vulnerabilities in container images";
     license = lib.licenses.asl20;
     mainProgram = "copa";
-    maintainers = with lib.maintainers; [ bmanuel ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
