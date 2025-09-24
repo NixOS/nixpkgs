@@ -47,10 +47,7 @@ let
 
       rocm-cmake = self.callPackage ./rocm-cmake { stdenv = origStdenv; };
 
-      rocm-device-libs = self.callPackage ./rocm-device-libs {
-        stdenv = origStdenv;
-        inherit (llvm) rocm-merged-llvm;
-      };
+      rocm-device-libs = self.callPackage ./rocm-device-libs { };
 
       rocm-runtime = self.callPackage ./rocm-runtime {
         stdenv = origStdenv;
