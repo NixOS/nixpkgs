@@ -1404,6 +1404,8 @@ self: super: with self; {
 
   azure-mgmt-databoxedge = callPackage ../development/python-modules/azure-mgmt-databoxedge { };
 
+  azure-mgmt-databricks = callPackage ../development/python-modules/azure-mgmt-databricks { };
+
   azure-mgmt-datafactory = callPackage ../development/python-modules/azure-mgmt-datafactory { };
 
   azure-mgmt-datalake-analytics =
