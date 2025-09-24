@@ -2023,6 +2023,8 @@ self: super: with self; {
 
   blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
 
+  bloodhound-ce-py = callPackage ../development/python-modules/bloodhound-ce-py { };
+
   bloodhound-py = callPackage ../development/python-modules/bloodhound-py { };
 
   bloodyad = callPackage ../development/python-modules/bloodyad { };
