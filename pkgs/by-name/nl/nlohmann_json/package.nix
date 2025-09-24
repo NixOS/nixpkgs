@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 let
@@ -22,6 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # Musl does not support LC_NUMERIC, causing a test failure.
+    # Turn the error into a warning to make the test succeed.
+    # https://github.com/nlohmann/json/pull/4770
+    (fetchpatch {
+      url = "https://github.com/nlohmann/json/commit/0a8b48ac6a89131deaeb0d57047c9462a23b34a2.diff";
+      hash = "sha256-gOZfRyDRI6USdUIY+sH7cygPrSIKGIo8AWcjqc/GQNI=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
