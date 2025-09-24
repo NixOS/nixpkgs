@@ -21,117 +21,125 @@ let
     ;
 
   pname = "stash";
+in
+buildGoModule (
+  finalAttrs:
+  let
+    frontend = stdenv.mkDerivation (final: {
+      pname = "${finalAttrs.pname}-ui";
+      inherit (finalAttrs) version gitHash;
+      src = "${finalAttrs.src}/ui/v2.5";
 
-  src = fetchFromGitHub {
-    owner = "stashapp";
-    repo = "stash";
-    tag = "v${version}";
-    hash = srcHash;
-  };
+      yarnOfflineCache = fetchYarnDeps {
+        yarnLock = "${final.src}/yarn.lock";
+        hash = finalAttrs.yarnHash;
+      };
 
-  frontend = stdenv.mkDerivation (final: {
-    inherit version;
-    pname = "${pname}-ui";
-    src = "${src}/ui/v2.5";
+      nativeBuildInputs = [
+        yarnConfigHook
+        yarnBuildHook
+        # Needed for executing package.json scripts
+        nodejs
+      ];
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = "${final.src}/yarn.lock";
-      hash = yarnHash;
+      postPatch = ''
+        substituteInPlace codegen.ts \
+          --replace-fail "../../graphql/" "${finalAttrs.src}/graphql/"
+      '';
+
+      buildPhase = ''
+        runHook preBuild
+
+        export HOME=$(mktemp -d)
+        export VITE_APP_DATE='1970-01-01 00:00:00'
+        export VITE_APP_GITHASH=${finalAttrs.gitHash}
+        export VITE_APP_STASH_VERSION=v${finalAttrs.version}
+        export VITE_APP_NOLEGACY=true
+
+        yarn --offline run gqlgen
+        yarn --offline build
+
+        mv build $out
+
+        runHook postBuild
+      '';
+
+      dontInstall = true;
+      dontFixup = true;
+    });
+  in
+  {
+    inherit
+      pname
+      version
+      gitHash
+      yarnHash
+      vendorHash
+      ;
+
+    src = fetchFromGitHub {
+      owner = "stashapp";
+      repo = "stash";
+      tag = "v${finalAttrs.version}";
+      hash = srcHash;
     };
 
-    nativeBuildInputs = [
-      yarnConfigHook
-      yarnBuildHook
-      # Needed for executing package.json scripts
-      nodejs
+    ldflags = [
+      "-s"
+      "-w"
+      "-X 'github.com/stashapp/stash/internal/build.buildstamp=1970-01-01 00:00:00'"
+      "-X 'github.com/stashapp/stash/internal/build.githash=${finalAttrs.gitHash}'"
+      "-X 'github.com/stashapp/stash/internal/build.version=v${finalAttrs.version}'"
+      "-X 'github.com/stashapp/stash/internal/build.officialBuild=false'"
     ];
+    tags = [
+      "sqlite_stat4"
+      "sqlite_math_functions"
+    ];
+
+    subPackages = [ "cmd/stash" ];
 
     postPatch = ''
-      substituteInPlace codegen.ts \
-        --replace-fail "../../graphql/" "${src}/graphql/"
+      cp -a ${frontend} ui/v2.5/build
     '';
 
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$(mktemp -d)
-      export VITE_APP_DATE='1970-01-01 00:00:00'
-      export VITE_APP_GITHASH=${gitHash}
-      export VITE_APP_STASH_VERSION=v${version}
-      export VITE_APP_NOLEGACY=true
-
-      yarn --offline run gqlgen
-      yarn --offline build
-
-      mv build $out
-
-      runHook postBuild
+    preBuild = ''
+      # `go mod tidy` requires internet access and does nothing
+      echo "skip_mod_tidy: true" >> gqlgen.yml
+      # remove `-trimpath` fron `GOFLAGS` because `gqlgen` does not work with it
+      GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
     '';
 
-    dontInstall = true;
-    dontFixup = true;
-  });
-in
-buildGoModule {
-  inherit
-    pname
-    src
-    version
-    vendorHash
-    ;
+    strictDeps = true;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X 'github.com/stashapp/stash/internal/build.buildstamp=1970-01-01 00:00:00'"
-    "-X 'github.com/stashapp/stash/internal/build.githash=${gitHash}'"
-    "-X 'github.com/stashapp/stash/internal/build.version=v${version}'"
-    "-X 'github.com/stashapp/stash/internal/build.officialBuild=false'"
-  ];
-  tags = [
-    "sqlite_stat4"
-    "sqlite_math_functions"
-  ];
-
-  subPackages = [ "cmd/stash" ];
-
-  preBuild = ''
-    cp -a ${frontend} ui/v2.5/build
-    # `go mod tidy` requires internet access and does nothing
-    echo "skip_mod_tidy: true" >> gqlgen.yml
-    # remove `-trimpath` fron `GOFLAGS` because `gqlgen` does not work with it
-    GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
-  '';
-
-  strictDeps = true;
-
-  passthru = {
-    inherit frontend;
-    updateScript = ./update.py;
-    tests = {
-      inherit (nixosTests) stash;
-      version = testers.testVersion {
-        package = stash;
-        version = "v${version} (${gitHash}) - Unofficial Build - 1970-01-01 00:00:00";
+    passthru = {
+      inherit frontend;
+      updateScript = ./update.py;
+      tests = {
+        inherit (nixosTests) stash;
+        version = testers.testVersion {
+          package = stash;
+          version = "v${finalAttrs.version} (${finalAttrs.gitHash}) - Unofficial Build - 1970-01-01 00:00:00";
+        };
       };
     };
-  };
 
-  meta = {
-    mainProgram = "stash";
-    description = "Organizer for your adult videos/images";
-    license = lib.licenses.agpl3Only;
-    homepage = "https://stashapp.cc/";
-    changelog = "https://github.com/stashapp/stash/blob/v${version}/ui/v2.5/src/docs/en/Changelog/v${lib.versions.major version}${lib.versions.minor version}0.md";
-    maintainers = with lib.maintainers; [
-      Golo300
-      DrakeTDL
-    ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-  };
-}
+    meta = {
+      mainProgram = "stash";
+      description = "Organizer for your adult videos/images";
+      license = lib.licenses.agpl3Only;
+      homepage = "https://stashapp.cc/";
+      changelog = "https://github.com/stashapp/stash/blob/v${finalAttrs.version}/ui/v2.5/src/docs/en/Changelog/v${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}0.md";
+      maintainers = with lib.maintainers; [
+        Golo300
+        DrakeTDL
+      ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    };
+  }
+)

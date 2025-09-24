@@ -22924,6 +22924,12 @@
     githubId = 92817635;
     name = "Sanskar Gurdasani";
   };
+  santosh = {
+    email = "santoshxshrestha@gmail.com";
+    name = "Santosh Shrestha";
+    github = "santoshxshrestha";
+    githubId = 182977126;
+  };
   sarahec = {
     email = "seclark@nextquestion.net";
     github = "sarahec";
