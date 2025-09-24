@@ -29,10 +29,7 @@
           environmentFile = envFile;
           workers = 2;
           settings = {
-            postal = {
-              web_protocol = "http";
-              signing_key_path = ./common/acme/server/acme.test.key.pem;
-            };
+            postal.web_protocol = "http";
             smtp = {
               username = "username";
               from_address = "community@nixos.org";
