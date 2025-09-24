@@ -6,15 +6,12 @@
   rocmUpdateScript,
   pkg-config,
   cmake,
-  ninja,
   xxd,
   rocm-device-libs,
   elfutils,
   libdrm,
   numactl,
-  valgrind,
-  libxml2,
-  rocm-merged-llvm,
+  llvm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,22 +28,23 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;
   __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    ninja
-    xxd
-    rocm-merged-llvm
+    xxd # used by create_hsaco_ascii_file.sh
+    llvm.rocmcxx
   ];
 
   buildInputs = [
+    # FIXME: we're implicitly picking up this dep via rocmcxx
+    # depending directly will cause opencl-c-h.h to not be found
+    llvm.clang-unwrapped
+    llvm.llvm
     elfutils
     libdrm
     numactl
-    # without valgrind, additional work for "kCodeCopyAligned11" is done in the installPhase
-    valgrind
-    libxml2
   ];
 
   cmakeFlags = [

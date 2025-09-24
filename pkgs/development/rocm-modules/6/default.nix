@@ -51,7 +51,6 @@ let
 
       rocm-runtime = self.callPackage ./rocm-runtime {
         stdenv = origStdenv;
-        inherit (llvm) rocm-merged-llvm;
       };
 
       rocm-comgr = self.callPackage ./rocm-comgr { };
