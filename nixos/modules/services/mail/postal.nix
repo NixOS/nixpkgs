@@ -456,18 +456,17 @@ in
           EnvironmentFile = optionals (cfg.environmentFile != null) cfg.environmentFile;
 
           # hardening
-          BindReadOnlyPaths =
-            [
-              "/etc"
-              builtins.storeDir
-            ]
-            ++ optional config.services.mysql.enable "/run/mysqld/mysqld.sock"
-            ++ optional (
-              cfg.settings.smtp_server.tls_certificate_path != null
-            ) cfg.settings.smtp_server.tls_certificate_path
-            ++ optional (
-              cfg.settings.smtp_server.tls_private_key_path != null
-            ) cfg.settings.smtp_server.tls_private_key_path;
+          BindReadOnlyPaths = [
+            "/etc"
+            builtins.storeDir
+          ]
+          ++ optional config.services.mysql.enable "/run/mysqld/mysqld.sock"
+          ++ optional (
+            cfg.settings.smtp_server.tls_certificate_path != null
+          ) cfg.settings.smtp_server.tls_certificate_path
+          ++ optional (
+            cfg.settings.smtp_server.tls_private_key_path != null
+          ) cfg.settings.smtp_server.tls_private_key_path;
           CapabilityBoundingSet = "";
           DevicePolicy = "closed";
           LockPersonality = true;
