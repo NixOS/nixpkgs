@@ -15,6 +15,7 @@ let
   inherit (lib)
     mkIf
     mkOption
+    mkPackageOption
     literalExpression
     optional
     optionals
@@ -76,6 +77,8 @@ in
         Note that it won't open the ports for the healthcheck services or the web UI, which should be placed behind a web proxy.
       '';
     };
+
+    package = mkPackageOption pkgs "postal" { };
 
     workers = mkOption {
       type = types.ints.positive;
@@ -393,7 +396,7 @@ in
           ${lib.optionalString (
             cfg.environmentFile != null
           ) ''export "$(cat "${cfg.environmentFile}" | xargs)"''}
-          ${lib.getExe pkgs.postal} $@
+          ${lib.getExe cfg.package} $@
         '';
 
         postal = pkgs.writeShellScriptBin "postal" ''
@@ -513,13 +516,13 @@ in
           serviceConfig = serviceConfigDefaults // {
             Type = "oneshot";
             RemainAfterExit = true;
-            ExecStart = "${lib.getExe pkgs.postal} update";
+            ExecStart = "${lib.getExe cfg.package} update";
           };
         };
 
         postal-smtp = serviceDefaults // {
           serviceConfig = serviceConfigDefaults // {
-            ExecStart = "${lib.getExe pkgs.postal} smtp-server";
+            ExecStart = "${lib.getExe cfg.package} smtp-server";
             AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
             CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
           };
@@ -528,14 +531,14 @@ in
         postal-web = serviceDefaults // {
           serviceConfig = serviceConfigDefaults // {
             Type = "notify";
-            ExecStart = "${lib.getExe pkgs.postal} web-server";
+            ExecStart = "${lib.getExe cfg.package} web-server";
           };
         };
 
         "postal-worker@" = serviceDefaults // {
           serviceConfig = serviceConfigDefaults // {
             ExecStart = ''
-              ${lib.getExe pkgs.bash} -c "WORKER_DEFAULT_HEALTH_SERVER_PORT=$((%i - 1 + ${toString cfg.settings.worker.default_health_server_port})) ${pkgs.postal}/bin/postal worker"
+              ${lib.getExe pkgs.bash} -c "WORKER_DEFAULT_HEALTH_SERVER_PORT=$((%i - 1 + ${toString cfg.settings.worker.default_health_server_port})) ${lib.getExe cfg.package} worker"
             '';
           };
         };
