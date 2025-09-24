@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "i3-auto-layout";
   version = "unstable-2022-05-29";
 
   src = fetchFromGitHub {
     owner = "chmln";
-    repo = pname;
+    repo = "i3-auto-layout";
     rev = "9e41eb3891991c35b7d35c9558e788899519a983";
     sha256 = "sha256-gpVYVyh+2y4Tttvw1SuCf7mx/nxR330Ob2R4UmHZSJs=";
   };

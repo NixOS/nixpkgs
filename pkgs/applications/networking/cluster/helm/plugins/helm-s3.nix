@@ -36,9 +36,9 @@ buildGoModule rec {
   subPackages = [ "cmd/helm-s3" ];
 
   postInstall = ''
-    install -dm755 $out/${pname}
-    mv $out/bin $out/${pname}/
-    install -m644 -Dt $out/${pname} plugin.yaml
+    install -dm755 $out/helm-s3
+    mv $out/bin $out/helm-s3/
+    install -m644 -Dt $out/helm-s3 plugin.yaml
   '';
 
   meta = with lib; {
