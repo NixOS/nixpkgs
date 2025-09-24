@@ -10,17 +10,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "lightway";
-  version = "0-unstable-2025-09-04";
+  version = "0-unstable-2025-09-19";
 
   src = fetchFromGitHub {
     owner = "expressvpn";
     repo = "lightway";
-    rev = "4eb836158607c83d47226703de5a043519586782";
-    hash = "sha256-sNhTdJTxNxHMVswyzizgBfGbmJhYmMZY/5nVD7ScLjM=";
+    rev = "dac72eb8af0994de020d71d24114717ecfb9804d";
+    hash = "sha256-oHxHJ4D/Xg/zAFiI0bMX3Dc05HXIjk+ZHuGY03cwY+c=";
   };
 
-  cargoHash = "sha256-3/6yEyGntyxxCqrMy2M9dtV2pWiD4M0Rtnb52I4n9nU=";
-  cargoDepsName = "lightway";
+  patches = [ ./0001-Rewrite-let-chains-for-Rust-1.86.patch ];
+
+  cargoHash = "sha256-RFlac10XFJXT3Giayy31kZ3Nn1Q+YsPt/zCdkSV0Atk=";
 
   cargoBuildFlags = lib.cli.toGNUCommandLine { } {
     package = [
@@ -33,9 +34,10 @@ rustPlatform.buildRustPackage {
     ];
   };
 
-  # Some tests rely on debug_assert! and fail in release.
-  # https://github.com/expressvpn/lightway/issues/274
-  checkType = "debug";
+  # Enable ARM crypto extensions, overrides the default stdenv.hostPlatform.gcc.arch.
+  env.NIX_CFLAGS_COMPILE =
+    with stdenv.hostPlatform;
+    lib.optionalString (isAarch && isLinux) "-march=${gcc.arch}+crypto";
 
   # For wolfSSL.
   nativeBuildInputs = [
