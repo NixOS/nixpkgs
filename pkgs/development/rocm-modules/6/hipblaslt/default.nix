@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  writableTmpDirAsHomeHook,
   cmake,
   rocm-cmake,
   rocm-smi,

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   rocmUpdateScript,
-  writableTmpDirAsHomeHook,
   cmake,
   rocm-cmake,
   clr,
