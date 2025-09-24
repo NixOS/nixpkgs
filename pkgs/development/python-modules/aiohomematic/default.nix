@@ -60,6 +60,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/SukramJ/aiohomematic";
     changelog = "https://github.com/SukramJ/aiohomematic/blob/${src.tag}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      fab
+    ];
   };
 }
