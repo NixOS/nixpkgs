@@ -10,6 +10,7 @@
   gfortran,
   gtest,
   boost,
+  llvm,
   msgpack-cxx,
   amd-blis,
   libxml2,
@@ -135,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm.llvm
     clr
     rocm-cmake
     hipblas-common
