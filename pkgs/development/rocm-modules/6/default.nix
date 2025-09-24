@@ -177,7 +177,7 @@ let
 
       ck4inductor = pyPackages.callPackage ./composable_kernel/ck4inductor.nix {
         inherit (self) composable_kernel;
-        inherit (llvm) rocm-merged-llvm;
+        inherit (llvm) rocmcxx;
       };
 
       half = self.callPackage ./half { };
