@@ -341,5 +341,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ kalbasit ];
+  meta.maintainers = with lib.maintainers; [
+    kalbasit
+    aciceri
+  ];
 }
