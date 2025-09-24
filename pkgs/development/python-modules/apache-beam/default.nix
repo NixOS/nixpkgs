@@ -17,6 +17,7 @@
   yapf,
 
   # dependencies
+  beartype,
   crcmod,
   dill,
   fastavro,
@@ -31,7 +32,6 @@
   protobuf,
   pyarrow,
   pydot,
-  pymilvus,
   pymongo,
   python-dateutil,
   pytz,
@@ -63,14 +63,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.67.0";
+  version = "2.68.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-gHlbmPNtSKjYO4YPPtWnjul977APsHwe/2cq2UG4wuk=";
+    hash = "sha256-ENtvgu9qT1OPsDqFJQzKgIATE7F+S5I+AfoBT2iEL8M=";
   };
 
   sourceRoot = "${src.name}/sdks/python";
@@ -121,6 +121,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    beartype
     crcmod
     dill
     fastavro
@@ -135,7 +136,6 @@ buildPythonPackage rec {
     protobuf
     pyarrow
     pydot
-    pymilvus
     pymongo
     python-dateutil
     pytz
@@ -225,103 +225,6 @@ buildPythonPackage rec {
     "apache_beam/yaml/yaml_ml_test.py"
     "apache_beam/yaml/yaml_provider_unit_test.py"
 
-    # FIXME All those fails due to a single- AttributeError: 'MaybeReshuffle' object has no attribute 'side_inputs'
-    # Upstream issue https://github.com/apache/beam/issues/33854
-    "apache_beam/coders/row_coder_test.py"
-    "apache_beam/examples/avro_nyc_trips_test.py"
-    "apache_beam/examples/complete/autocomplete_test.py"
-    "apache_beam/examples/complete/estimate_pi_test.py"
-    "apache_beam/examples/complete/game/game_stats_test.py"
-    "apache_beam/examples/complete/game/hourly_team_score_test.py"
-    "apache_beam/examples/complete/game/leader_board_test.py"
-    "apache_beam/examples/complete/game/user_score_test.py"
-    "apache_beam/examples/complete/tfidf_test.py"
-    "apache_beam/examples/complete/top_wikipedia_sessions_test.py"
-    "apache_beam/examples/cookbook/bigquery_side_input_test.py"
-    "apache_beam/examples/cookbook/bigquery_tornadoes_test.py"
-    "apache_beam/examples/cookbook/coders_test.py"
-    "apache_beam/examples/cookbook/combiners_test.py"
-    "apache_beam/examples/cookbook/custom_ptransform_test.py"
-    "apache_beam/examples/cookbook/filters_test.py"
-    "apache_beam/examples/matrix_power_test.py"
-    "apache_beam/examples/snippets/snippets_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/approximatequantiles_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/approximateunique_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/batchelements_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/cogroupbykey_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/combineglobally_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/combineperkey_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/combinevalues_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/count_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/distinct_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/groupbykey_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/groupintobatches_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/latest_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/max_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/mean_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/min_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/sample_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/sum_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/tolist_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/top_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/filter_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/flatmap_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/keys_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/kvswap_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/map_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/pardo_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/partition_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/regex_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/tostring_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/values_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/withtimestamps_test.py"
-    "apache_beam/examples/snippets/transforms/other/create_test.py"
-    "apache_beam/examples/snippets/transforms/other/flatten_test.py"
-    "apache_beam/examples/snippets/transforms/other/window_test.py"
-    "apache_beam/examples/snippets/util_test.py"
-    "apache_beam/io/avroio_test.py"
-    "apache_beam/io/concat_source_test.py"
-    "apache_beam/io/filebasedsink_test.py"
-    "apache_beam/io/filebasedsource_test.py"
-    "apache_beam/io/fileio_test.py"
-    "apache_beam/io/mongodbio_test.py"
-    "apache_beam/io/parquetio_test.py"
-    "apache_beam/io/sources_test.py"
-    "apache_beam/io/textio_test.py"
-    "apache_beam/io/tfrecordio_test.py"
-    "apache_beam/metrics/metric_test.py"
-    "apache_beam/ml/inference/base_test.py"
-    "apache_beam/ml/inference/sklearn_inference_test.py"
-    "apache_beam/ml/inference/utils_test.py"
-    "apache_beam/ml/rag/chunking/base_test.py"
-    "apache_beam/ml/rag/ingestion/base_test.py"
-    "apache_beam/pipeline_test.py"
-    "apache_beam/runners/direct/direct_runner_test.py"
-    "apache_beam/runners/direct/sdf_direct_runner_test.py"
-    "apache_beam/runners/interactive/interactive_beam_test.py"
-    "apache_beam/runners/interactive/interactive_runner_test.py"
-    "apache_beam/runners/interactive/non_interactive_runner_test.py"
-    "apache_beam/runners/interactive/recording_manager_test.py"
-    "apache_beam/runners/portability/fn_api_runner/translations_test.py"
-    "apache_beam/runners/portability/fn_api_runner/trigger_manager_test.py"
-    "apache_beam/runners/portability/stager_test.py"
-    "apache_beam/testing/synthetic_pipeline_test.py"
-    "apache_beam/testing/test_stream_test.py"
-    "apache_beam/testing/util_test.py"
-    "apache_beam/transforms/combiners_test.py"
-    "apache_beam/transforms/core_test.py"
-    "apache_beam/transforms/create_test.py"
-    "apache_beam/transforms/deduplicate_test.py"
-    "apache_beam/transforms/periodicsequence_test.py"
-    "apache_beam/transforms/ptransform_test.py"
-    "apache_beam/transforms/sideinputs_test.py"
-    "apache_beam/transforms/stats_test.py"
-    "apache_beam/transforms/transforms_keyword_only_args_test.py"
-    "apache_beam/transforms/trigger_test.py"
-    "apache_beam/transforms/userstate_test.py"
-    "apache_beam/transforms/util_test.py"
-    "apache_beam/transforms/write_ptransform_test.py"
-
     # FIXME AttributeError: 'Namespace' object has no attribute 'test_pipeline_options'
     # Upstream issue https://github.com/apache/beam/issues/33853
     "apache_beam/runners/portability/prism_runner_test.py"
@@ -346,6 +249,39 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # RuntimeError: This pipeline runs with the pipeline option --update_compatibility_version=2.67.0 or earlier.
+    # When running with this option on SDKs 2.68.0 or later, you must ensure dill==0.3.1.1 is installed. Error
+    "test_reshuffle_custom_window_preserves_metadata_1"
+    "test_reshuffle_default_window_preserves_metadata_1"
+
+    # AttributeError: 'MaybeReshuffle' object has no attribute 'side_inputs'
+    # https://github.com/apache/beam/issues/33854
+    "test_runner_overrides_default_pickler"
+
+    # AssertionError: Lists differ
+    "test_default_resources"
+    "test_files_to_stage"
+    "test_main_session_not_staged_when_using_cloudpickle"
+    "test_no_main_session"
+    "test_populate_requirements_cache_with_local_files"
+    "test_requirements_cache_not_populated_when_cache_disabled"
+    "test_sdk_location_default"
+    "test_sdk_location_http"
+    "test_sdk_location_local_directory"
+    "test_sdk_location_local_source_file"
+    "test_sdk_location_local_wheel_file"
+    "test_sdk_location_remote_source_file"
+    "test_sdk_location_remote_wheel_file"
+    "test_with_extra_packages"
+    "test_with_jar_packages"
+    "test_with_main_session"
+    "test_with_pypi_requirements"
+    "test_with_requirements_file"
+    "test_with_requirements_file_and_cache"
+
+    # ValueError: SplitAtFraction test completed vacuously: no non-trivial split fractions found
+    "test_dynamic_work_rebalancing"
+
     # fixture 'self' not found
     "test_with_batched_input_exceeds_size_limit"
     "test_with_batched_input_splits_large_batch"
@@ -383,7 +319,7 @@ buildPythonPackage rec {
   meta = {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
-    changelog = "https://github.com/apache/beam/blob/release-${src.tag}/CHANGES.md";
+    changelog = "https://github.com/apache/beam/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };

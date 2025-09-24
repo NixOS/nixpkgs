@@ -274,7 +274,7 @@ in
               channel = mkOption {
                 default = 0;
                 example = 11;
-                type = types.ints.positive;
+                type = types.ints.unsigned;
                 description = ''
                   The channel to operate on. Use 0 to enable ACS (Automatic Channel Selection).
                   Beware that not every device supports ACS in which case {command}`hostapd`

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "iwmenu";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "e-tho";
     repo = "iwmenu";
     tag = "v${version}";
-    hash = "sha256-F1w2Lp0/iXUHh0PXAZ/wD78C2uVtAcWlEKqBI5I/hnE=";
+    hash = "sha256-Xge7olQxXrdLvtXrjOCEf4/maGmQa/OSQ38KqrOWvoY=";
   };
 
-  cargoHash = "sha256-NjA8n11pOytXsotEQurYxDHPhwXG5vpdlyscmVUIzfA=";
+  cargoHash = "sha256-yi42BrdcAVEbkvPOyi4VxWO6F0x7vbjLZ/hLqWdeIn0=";
 
   meta = {
     homepage = "https://github.com/e-tho/iwmenu";

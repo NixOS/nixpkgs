@@ -190,6 +190,7 @@ in
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
   activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-nix-channel = runTest ./activation/nix-channel.nix;
+  activation-nixos-init = runTest ./activation/nixos-init.nix;
   activation-perlless = runTest ./activation/perlless.nix;
   activation-var = runTest ./activation/var.nix;
   actual = runTest ./actual.nix;
@@ -429,6 +430,7 @@ in
   cyrus-imap = runTest ./cyrus-imap.nix;
   dae = runTest ./dae.nix;
   darling-dmg = runTest ./darling-dmg.nix;
+  dashy = runTest ./web-apps/dashy.nix;
   davis = runTest ./davis.nix;
   db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;

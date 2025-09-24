@@ -166,8 +166,8 @@ rec {
       "sha256-BZXrWhqf5gFrTW0fAsiyiydzc0cTv2lPj5DTRLrv+pI=";
 
   mypy-boto3-batch =
-    buildMypyBoto3Package "batch" "1.40.19"
-      "sha256-PZ3AtPJ1RultJXvzdRyGAfBMKTTMtQShCfWuDGrK+M8=";
+    buildMypyBoto3Package "batch" "1.40.36"
+      "sha256-pi8VVxFJ9z5+4yRP9Tug6nJI5Kj441juIsOKgjT0EQ4=";
 
   mypy-boto3-billingconductor =
     buildMypyBoto3Package "billingconductor" "1.40.0"
@@ -470,8 +470,8 @@ rec {
       "sha256-DQZUI72cnRt4YwHMQivMdL4y9B9EN2H7dIMmybcX/Uk=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.40.19"
-      "sha256-2LwmEEYeKrx5Ee/1ETxaQz29/dT+CPd88jJpPqBBcng=";
+    buildMypyBoto3Package "eks" "1.40.36"
+      "sha256-xlT0PW+10gO1jpddeCR82y+4+A9e1SNK756ph8/1Iik=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.36.0"
@@ -613,8 +613,8 @@ rec {
       "sha256-nOj8fkesQ6iVsoLwa/29LYl9X16UUL13k7M2rTEln0U=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.40.18"
-      "sha256-ESRTEa4C5wrITcd1KyZNVP8fUEgumSoQVpWDnoJz7lc=";
+    buildMypyBoto3Package "imagebuilder" "1.40.36"
+      "sha256-aOo29FyR1QdV3DCIQAM/rumH/LjbQozDfmisNyyCi4I=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.40.0"
