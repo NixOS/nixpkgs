@@ -6894,6 +6894,8 @@ self: super: with self; {
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
+  iamdata = callPackage ../development/python-modules/iamdata { };
+
   iammeter = callPackage ../development/python-modules/iammeter { };
 
   iapws = callPackage ../development/python-modules/iapws { };
