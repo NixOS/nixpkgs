@@ -89,10 +89,6 @@ let
 
       hipify = self.callPackage ./hipify {
         stdenv = origStdenv;
-        inherit (llvm)
-          clang
-          rocm-merged-llvm
-          ;
       };
 
       # hsakmt was merged into rocm-runtime
