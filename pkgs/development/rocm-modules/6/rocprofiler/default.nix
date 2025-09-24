@@ -16,6 +16,7 @@
   numactl,
   libpciaccess,
   libxml2,
+  llvm,
   elfutils,
   mpi,
   gtest,
@@ -65,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm.clang-unwrapped
+    llvm.llvm
     numactl
     libpciaccess
     libxml2
