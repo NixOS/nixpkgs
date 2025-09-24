@@ -13,7 +13,6 @@
   rocmlir,
   rocrand,
   rocm-runtime,
-  rocm-merged-llvm,
   hipblas-common,
   hipblas,
   hipblaslt,
@@ -172,7 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   env.ROCM_PATH = clr;
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [ rocm-runtime ];
-  env.HIP_CLANG_PATH = "${rocm-merged-llvm}/bin";
 
   nativeBuildInputs = [
     pkg-config
