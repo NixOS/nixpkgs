@@ -15878,6 +15878,12 @@
     githubId = 31626748;
     name = "Martin Ramm";
   };
+  marv963 = {
+    email = "dev+nix@ludwig.homes";
+    github = "Marv963";
+    githubId = 83866612;
+    name = "Marvin Ludwig";
+  };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
     github = "marzipankaiser";
