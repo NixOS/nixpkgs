@@ -71,7 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://google.github.io/draco/";
     changelog = "https://github.com/google/draco/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jansol ];
+    maintainers = with lib.maintainers; [
+      yzx9
+    ];
     platforms = lib.platforms.all;
   };
 })
