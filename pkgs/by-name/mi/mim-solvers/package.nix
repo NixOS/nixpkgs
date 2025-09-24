@@ -67,6 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails with osqp>=1.0.0
     # See https://github.com/machines-in-motion/mim_solvers/pull/66
     "py-test-clqr-osqp"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Several errors such as:
+    # /build/source/tests/test_solvers.cpp(296):
+    # error: in "test_SolverCSQP__PointMass1D_X-Ineq-All_U-Eq-All/boost__bind(&test_solver_convergence_ solver_type_ problem_type_ model_type_ x_cstr_type_ u_cstr_type)":
+    # check solver_cast->get_norm_dual() <= solver_cast->get_norm_dual_tolerance() has failed
+    # Reported upstream: https://github.com/machines-in-motion/mim_solvers/issues/69
+    "test_solvers"
   ];
   doCheck = true;
 
