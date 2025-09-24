@@ -36,12 +36,13 @@ let
     -----END PRIVATE KEY-----
   '';
 
-in {
+in
+{
   networking.firewall.allowedTCPPorts = [ 443 ];
 
   services.postal = {
     enable = true;
-    environmentFile = unsafeEnvFile;
+    environmentFile = unsafeEnvironmentFile;
     domain = "postal.example.com";
 
     # if you want to open the SMTP service port
@@ -52,7 +53,7 @@ in {
         signing_key_path = unsafeSigningKey;
       };
       smtp = {
-        host = "postal.example.com"
+        host = "postal.example.com";
         from_address = "postal@example.com";
       };
       smtp_server = {
@@ -79,7 +80,8 @@ in {
     virtualHosts.${config.services.postal.domain} = {
       enableACME = true;
       forceSSL = true;
-      locations."/".proxyPass = "http://localhost:${toString config.services.postal.settings.web_server.default_port}";
+      locations."/".proxyPass =
+        "http://localhost:${toString config.services.postal.settings.web_server.default_port}";
     };
   };
 
