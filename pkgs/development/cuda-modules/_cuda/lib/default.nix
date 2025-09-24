@@ -11,7 +11,7 @@
     ;
 
   # See ./cuda.nix for documentation.
-  inherit (import ./cuda.nix { inherit lib; })
+  inherit (import ./cuda.nix { inherit _cuda lib; })
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
     _mkCudaVariant

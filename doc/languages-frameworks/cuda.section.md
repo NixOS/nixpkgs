@@ -26,23 +26,9 @@ All CUDA package sets include common CUDA packages like `libcublas`, `cudnn`, `t
 CUDA support is not enabled by default in Nixpkgs. To enable CUDA support, make sure Nixpkgs is imported with a configuration similar to the following:
 
 ```nix
+{ pkgs }:
 {
-  allowUnfreePredicate =
-    let
-      ensureList = x: if builtins.isList x then x else [ x ];
-    in
-    package:
-    builtins.all (
-      license:
-      license.free
-      || builtins.elem license.shortName [
-        "CUDA EULA"
-        "cuDNN EULA"
-        "cuSPARSELt EULA"
-        "cuTENSOR EULA"
-        "NVidia OptiX EULA"
-      ]
-    ) (ensureList package.meta.license);
+  allowUnfreePredicate = pkgs._cuda.lib.allowUnfreeCudaPredicate;
   cudaCapabilities = [ <target-architectures> ];
   cudaForwardCompat = true;
   cudaSupport = true;
