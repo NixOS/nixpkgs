@@ -462,44 +462,6 @@ rec {
 
   clang = rocm-toolchain;
 
-  # Emulate a monolithic ROCm LLVM build to support building ROCm's in-tree LLVM projects
-  # TODO(@LunNova): destroy this
-  rocm-merged-llvm = symlinkJoin {
-    name = "rocm-llvm-merge";
-    paths = [
-      llvm
-      llvm.dev
-      lld
-      lld.lib
-      lld.dev
-      compiler-rt
-      compiler-rt.dev
-      rocmcxx
-    ]
-    ++ lib.optionals withLibcxx [
-      libcxx
-      libcxx.out
-      libcxx.dev
-    ];
-    postBuild = builtins.unsafeDiscardStringContext ''
-      found_files=$(find $out -name '*.cmake')
-      if [ -z "$found_files" ]; then
-          >&2 echo "Error: No CMake files found in $out"
-          exit 1
-      fi
-
-      for target in ${clang-unwrapped.out} ${clang-unwrapped.lib} ${clang-unwrapped.dev}; do
-        if grep "$target" $found_files; then
-            >&2 echo "Unexpected ref to $target (clang-unwrapped) found"
-            # exit 1
-            # # FIXME: enable this to reduce closure size
-        fi
-      done
-    '';
-    inherit version;
-    llvm-src = llvmSrc;
-  };
-
   rocmClangStdenv = overrideCC (
     if withLibcxx then llvmPackagesRocm.libcxxStdenv else llvmPackagesRocm.stdenv
   ) clang;

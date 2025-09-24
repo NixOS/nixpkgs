@@ -41,7 +41,7 @@ let
           inherit (self) rocm-device-libs;
         }
       );
-      inherit (self.llvm) rocm-merged-llvm clang openmp;
+      inherit (self.llvm) rocm-toolchain clang openmp;
 
       rocm-core = self.callPackage ./rocm-core { stdenv = origStdenv; };
 
