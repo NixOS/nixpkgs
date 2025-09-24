@@ -4,7 +4,6 @@
   boost,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   graphviz,
   igraph,
   llvmPackages,
@@ -23,32 +22,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.4.1";
+  version = "4.5.0";
   pname = "hal-hardware-analyzer";
 
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
-    rev = "v${version}";
-    sha256 = "sha256-8kmYeqsmqR7tY044rZb3KuEAVGv37IObX6k1qjXWG0A=";
+    tag = "v${version}";
+    hash = "sha256-4HLM/7JCDxWRWusGL4lUa8KXCn9pe3Vkr+lOxHOraNU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "de-vendor-nlohmann-json.patch";
-      # https://github.com/emsec/hal/pull/596
-      url = "https://github.com/emsec/hal/commit/f8337d554d80cfa2588512696696fd4c878dd7a3.patch";
-      hash = "sha256-QjgvcduwbFccC807JFOevlTfO3KiL9T3HSqYmh3sXAQ=";
-    })
-    (fetchpatch {
-      name = "fix-vendored-igraph-regression.patch";
-      # https://github.com/emsec/hal/pull/596
-      url = "https://github.com/emsec/hal/commit/fe1fe74719ab4fef873a22e2b28cce0c57d570e0.patch";
-      hash = "sha256-bjbW4pr04pP0TCuSdzPcV8h6LbLWMvdGSf61RL9Ju6E=";
-    })
-    ./4.4.1-newer-spdlog-fmt-compat.patch
-    ./resynthesis-fix-narrowing-conversion.patch
-  ];
 
   # make sure bundled dependencies don't get in the way - install also otherwise
   # copies them in full to the output, bloating the package
@@ -117,6 +99,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/emsec/hal/blob/${src.tag}/CHANGELOG.md";
     description = "Comprehensive reverse engineering and manipulation framework for gate-level netlists";
     mainProgram = "hal";
     homepage = "https://github.com/emsec/hal";
