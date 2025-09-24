@@ -2774,12 +2774,7 @@ self: super: with self; {
 
   co2signal = callPackage ../development/python-modules/co2signal { };
 
-  coal = toPythonModule (
-    pkgs.coal.override {
-      pythonSupport = true;
-      python3Packages = self;
-    }
-  );
+  coal = callPackage ../development/python-modules/coal { inherit (pkgs) coal;};
 
   coapthon3 = callPackage ../development/python-modules/coapthon3 { };
 
