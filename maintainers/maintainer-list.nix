@@ -13101,6 +13101,12 @@
     githubId = 66669;
     name = "Jeff Zellner";
   };
+  k2on = {
+    email = "max@koonindustries.com";
+    name = "Max Koon";
+    github = "k2on";
+    githubId = 22125083;
+  };
   k3a = {
     email = "git+nix@catmail.app";
     name = "Mario Hros";
