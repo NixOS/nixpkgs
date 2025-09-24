@@ -2392,7 +2392,7 @@ with pkgs;
   };
 
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
-  inherit (beetsPackages) beets beets-unstable;
+  inherit (beetsPackages) beets;
 
   binlore = callPackage ../development/tools/analysis/binlore { };
 

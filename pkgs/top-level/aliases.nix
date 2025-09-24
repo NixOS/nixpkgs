@@ -512,6 +512,7 @@ mapAliases {
   BeatSaberModManager = beatsabermodmanager; # Added 2024-06-12
   beam_nox = throw "beam_nox has been removed in favor of beam_minimal or beamMinimalPackages"; # Added 2025-04-01
   beatsabermodmanager = throw "'beatsabermodmanager' has been removed due to lack of upstream maintainenance. Consider using 'bs-manager' instead"; # Added 2025-03-18
+  inherit (beetsPackages) beets-unstable;
   betterbird = throw "betterbird has been removed as there were insufficient maintainer resources to keep up with security updates"; # Added 2024-10-25
   betterbird-unwrapped = throw "betterbird has been removed as there were insufficient maintainer resources to keep up with security updates"; # Added 2024-10-25
   bfc = throw "bfc has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
