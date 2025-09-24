@@ -460,6 +460,8 @@ in
 
         lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
+        mft = callPackage ../os-specific/linux/mft { mft-pkg = pkgs.mft; };
+
         mstflint_access = callPackage ../os-specific/linux/mstflint_access { };
 
         broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
