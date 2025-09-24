@@ -190,37 +190,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXres = super.libXres.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXp = super.libXp.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXpresent = super.libXpresent.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
   libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
     outputs = [
       "out"

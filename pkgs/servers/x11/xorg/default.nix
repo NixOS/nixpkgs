@@ -63,9 +63,13 @@
   libxft,
   libxi,
   libxmu,
+  libxp,
   libxpm,
+  libxpresent,
   libxrandr,
   libxrender,
+  libxres,
+  libxscrnsaver,
   libxt,
   libxv,
   libxvmc,
@@ -229,9 +233,13 @@ self: with self; {
   libXft = libxft;
   libXi = libxi;
   libXmu = libxmu;
+  libXp = libxp;
   libXpm = libxpm;
+  libXpresent = libxpresent;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXres = libxres;
+  libXScrnSaver = libxscrnsaver;
   libXt = libxt;
   libXv = libxv;
   libXvMC = libxvmc;
@@ -936,44 +944,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXScrnSaver = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXScrnSaver";
-      version = "1.2.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXScrnSaver-1.2.5.tar.xz";
-        sha256 = "004drphnsckx30g8xn554a1nr17p1zhl2547fpif0lvjhigkcmsh";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xscrnsaver" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXTrap = callPackage (
     {
       stdenv,
@@ -1046,126 +1016,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xinerama" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXp = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXau,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXp";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXp-1.0.4.tar.xz";
-        sha256 = "197iklxwyd4naryc6mzv0g5qi1dy1apxk9w9k3yshd1ax2wf668z";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXau
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xp" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXpresent = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      libXfixes,
-      libXrandr,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXpresent";
-      version = "1.0.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXpresent-1.0.2.tar.xz";
-        sha256 = "00knsc4hrxzq3rx7ff1h0k0h418p66p0cdh14fra81i2h6s22nsf";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-        libXfixes
-        libXrandr
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xpresent" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXres = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXres";
-      version = "1.2.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXres-1.2.3.tar.xz";
-        sha256 = "1p39xfpgckp22v60h36wvy2zbpmqgra585krja4nmj6n05a8zpnj";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xres" ];
         platforms = lib.platforms.unix;
       };
     })
