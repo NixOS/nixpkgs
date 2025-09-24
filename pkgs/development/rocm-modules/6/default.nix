@@ -80,10 +80,7 @@ let
 
       hip-common = self.callPackage ./hip-common { };
 
-      hipcc = self.callPackage ./hipcc {
-        stdenv = origStdenv;
-        inherit (llvm) rocm-merged-llvm;
-      };
+      hipcc = self.callPackage ./hipcc { stdenv = origStdenv; };
 
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr { };
