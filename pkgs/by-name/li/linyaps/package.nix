@@ -139,9 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "ll-cli";
-    maintainers = with lib.maintainers; [
-      wineee
-      hhr2020
-    ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 })

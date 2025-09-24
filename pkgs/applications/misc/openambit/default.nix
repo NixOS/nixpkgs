@@ -18,7 +18,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openambitproject";
-    repo = "openambit";
+    repo = pname;
     rev = version;
     sha256 = "1074kvkamwnlkwdajsw1799wddcfkjh2ay6l842r0s4cvrxrai85";
   };

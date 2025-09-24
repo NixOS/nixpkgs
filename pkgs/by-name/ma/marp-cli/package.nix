@@ -26,7 +26,7 @@ buildNpmPackage rec {
     description = "About A CLI interface for Marp and Marpit based converters";
     homepage = "https://github.com/marp-team/marp-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ GuillaumeDesforges ];
     platforms = nodejs.meta.platforms;
     mainProgram = "marp";
   };

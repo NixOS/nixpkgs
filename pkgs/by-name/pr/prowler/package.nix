@@ -21,14 +21,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "5.12.2";
+  version = "5.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = version;
-    hash = "sha256-HSMlWuwYc8m6WUNy0Ja5VuC2lbC3mbK2bPHNQY+nk0U=";
+    hash = "sha256-KcHHZPklJZ7o5cs30rL+vGaeST8LUdGfdhG7daZZzX0=";
   };
 
   pythonRelaxDeps = true;
@@ -40,29 +40,23 @@ py.pkgs.buildPythonApplication rec {
     awsipranges
     azure-identity
     azure-keyvault-keys
-    azure-mgmt-apimanagement
     azure-mgmt-applicationinsights
     azure-mgmt-authorization
     azure-mgmt-compute
     azure-mgmt-containerregistry
     azure-mgmt-containerservice
     azure-mgmt-cosmosdb
-    azure-mgmt-databricks
     azure-mgmt-keyvault
-    azure-mgmt-loganalytics
     azure-mgmt-monitor
     azure-mgmt-network
     azure-mgmt-rdbms
-    azure-mgmt-recoveryservices
-    azure-mgmt-recoveryservicesbackup
     azure-mgmt-resource
-    azure-mgmt-search
     azure-mgmt-security
+    azure-mgmt-search
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
     azure-mgmt-web
-    azure-monitor-query
     azure-storage-blob
     boto3
     botocore
@@ -71,7 +65,6 @@ py.pkgs.buildPythonApplication rec {
     dash
     dash-bootstrap-components
     detect-secrets
-    dulwich
     google-api-python-client
     google-auth-httplib2
     jsonschema
@@ -80,7 +73,6 @@ py.pkgs.buildPythonApplication rec {
     msgraph-sdk
     numpy
     pandas
-    py-iam-expand
     py-ocsf-models
     pydantic_1
     pygithub

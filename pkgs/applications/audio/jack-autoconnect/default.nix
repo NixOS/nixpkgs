@@ -7,7 +7,7 @@
   qtbase,
   libjack2,
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "jack_autoconnect";
 
   # It does not have any versions (yet?)
@@ -15,7 +15,7 @@ mkDerivation {
 
   src = fetchFromGitHub {
     owner = "kripton";
-    repo = "jack_autoconnect";
+    repo = pname;
     rev = "fe0c8f69149e30979e067646f80b9d326341c02b";
     sha256 = "sha256-imvNc498Q2W9RKmiOoNepSoJzIv2tGvFG6hx+seiifw=";
   };

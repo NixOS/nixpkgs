@@ -24,18 +24,21 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+let
   pname = "vector";
-  version = "0.50.0";
+  version = "0.49.0";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vyRvBCpWOKeI7Y+RbxCdVCAF45vWjC7ZD4PCS0QloPg=";
+    rev = "v${version}";
+    hash = "sha256-sow1BFJgwOOajJ7dTmoUNJ3OpI9/73Uigrcb1CIBOE8=";
   };
 
-  cargoHash = "sha256-4Nsq5Ta08wlHuevOfrr1mPi+qY+49q9S+AtbY35sfEM=";
+  cargoHash = "sha256-a7923ubtads5ZLjc+27RHtPFKmgv0aMOxiSrvIVr5VA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -60,6 +63,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     coreutils
     zlib
   ];
+
+  patches = [
+    (fetchpatch {
+      name = "1.89-mismatched-lifetime-syntaxes.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/vectordotdev/vector/pull/23645.patch";
+      hash = "sha256-2ADlF4/Z1uR3LR6608lA4tseh+MnHb097PACD/Nq6/0=";
+    })
+  ];
+
+  # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
+  # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
+  # TODO remove when upgrading Vector
+  RUSTFLAGS = "--allow dependency_on_unit_never_type_fallback --allow dead_code";
 
   # Without this, we get SIGSEGV failure
   RUST_MIN_STACK = 33554432;
@@ -122,7 +138,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = with lib; {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
-    changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [
       thoughtpolice
@@ -131,4 +146,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = with platforms; all;
     mainProgram = "vector";
   };
-})
+}

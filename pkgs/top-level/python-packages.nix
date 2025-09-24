@@ -122,8 +122,6 @@ self: super: with self; {
 
   affine = callPackage ../development/python-modules/affine { };
 
-  affine-gaps = callPackage ../development/python-modules/affine-gaps { };
-
   afsapi = callPackage ../development/python-modules/afsapi { };
 
   agate = callPackage ../development/python-modules/agate { };
@@ -1405,8 +1403,6 @@ self: super: with self; {
   azure-mgmt-cosmosdb = callPackage ../development/python-modules/azure-mgmt-cosmosdb { };
 
   azure-mgmt-databoxedge = callPackage ../development/python-modules/azure-mgmt-databoxedge { };
-
-  azure-mgmt-databricks = callPackage ../development/python-modules/azure-mgmt-databricks { };
 
   azure-mgmt-datafactory = callPackage ../development/python-modules/azure-mgmt-datafactory { };
 
@@ -6895,8 +6891,6 @@ self: super: with self; {
   i3-py = callPackage ../development/python-modules/i3-py { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
-
-  iamdata = callPackage ../development/python-modules/iamdata { };
 
   iammeter = callPackage ../development/python-modules/iammeter { };
 
@@ -12433,8 +12427,6 @@ self: super: with self; {
   py-evm = callPackage ../development/python-modules/py-evm { };
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
-
-  py-iam-expand = callPackage ../development/python-modules/py-iam-expand { };
 
   py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
 

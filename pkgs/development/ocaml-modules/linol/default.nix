@@ -9,7 +9,7 @@
   yojson,
 }:
 
-buildDunePackage (finalAttrs: {
+buildDunePackage rec {
   pname = "linol";
   version = "0.10";
 
@@ -18,7 +18,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "linol";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-G/5nTJd+MxPgNObKW2Hmmwn4HejQ81c3f4oVXjpNSZg=";
   };
 
@@ -33,11 +33,11 @@ buildDunePackage (finalAttrs: {
   meta = {
     description = "LSP server library";
     homepage = "https://github.com/c-cube/linol";
-    changelog = "https://raw.githubusercontent.com/c-cube/linol/refs/tags/v${finalAttrs.version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/c-cube/linol/refs/tags/v${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       stepbrobd
       ulrikstrid
     ];
   };
-})
+}
