@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
     # Musl does not support LC_NUMERIC, causing a test failure.
     # Turn the error into a warning to make the test succeed.
     # https://github.com/nlohmann/json/pull/4770
