@@ -51,7 +51,7 @@ derivationWithMeta {
           ]
         );
       }
-      // (builtins.removeAttrs env [ "nativeBuildInputs" ])
+      // (removeAttrs env [ "nativeBuildInputs" ])
     );
 
   meta = with lib; {

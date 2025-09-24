@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -r "$DESTDIR/''${!o}"
     done
     # Ensure the DESTDIR is removed.
-    rmdir "$DESTDIR/${builtins.storeDir}" "$DESTDIR/${builtins.dirOf builtins.storeDir}" "$DESTDIR"
+    rmdir "$DESTDIR/${builtins.storeDir}" "$DESTDIR/${dirOf builtins.storeDir}" "$DESTDIR"
   '';
 
   # HACK: We want to install configuration files to $out/etc

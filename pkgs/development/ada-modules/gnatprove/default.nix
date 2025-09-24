@@ -78,7 +78,7 @@ let
 
   thisSpark =
     spark2014.${gnat_version}
-      or (builtins.throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
+      or (throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
 stdenv.mkDerivation {

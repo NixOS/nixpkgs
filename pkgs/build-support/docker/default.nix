@@ -582,7 +582,7 @@ rec {
       ...
     }@args:
     let
-      stream = streamLayeredImage (builtins.removeAttrs args [ "compressor" ]);
+      stream = streamLayeredImage (removeAttrs args [ "compressor" ]);
       compress = compressorForImage compressor name;
     in
     runCommand "${baseNameOf name}.tar${compress.ext}" {
@@ -1043,8 +1043,8 @@ rec {
       );
 
       contentsList = if builtins.isList contents then contents else [ contents ];
-      bind-paths = builtins.toString (
-        builtins.map (path: "--bind=${path}:${path}!") [
+      bind-paths = toString (
+        map (path: "--bind=${path}:${path}!") [
           "/dev/"
           "/proc/"
           "/sys/"
@@ -1413,7 +1413,7 @@ rec {
       ...
     }@args:
     let
-      stream = streamNixShellImage (builtins.removeAttrs args [ "compressor" ]);
+      stream = streamNixShellImage (removeAttrs args [ "compressor" ]);
       compress = compressorForImage compressor drv.name;
     in
     runCommand "${drv.name}-env.tar${compress.ext}" {

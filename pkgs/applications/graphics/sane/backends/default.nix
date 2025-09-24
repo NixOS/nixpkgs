@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/share/sane/epjitsu
       ln -svT ${scanSnapDriversPackage} $out/share/sane/epjitsu
     ''
-    + lib.concatStrings (builtins.map installFirmware compatFirmware);
+    + lib.concatStrings (map installFirmware compatFirmware);
 
   # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
   # https://github.com/NixOS/nixpkgs/issues/224569

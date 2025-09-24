@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "fontPens"
   ]
-  ++ (builtins.map (s: "fontPens." + s) [
+  ++ (map (s: "fontPens." + s) [
     "angledMarginPen"
     "digestPointPen"
     "flattenPen"

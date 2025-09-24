@@ -104,7 +104,7 @@ let
             let
               roundUpToEven = num: num + lib.mod num 2;
             in
-            "${pname}_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
+            "${pname}_${lib.versions.major version}_${toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
           packageName = pname;
           freeze = true;
         };

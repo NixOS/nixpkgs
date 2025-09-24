@@ -22,7 +22,7 @@ buildPythonPackage {
       substituteInPlace python/uv/_find_uv.py \
         --replace-fail \
         'sysconfig.get_path("scripts", scheme=_user_scheme()),' \
-        'sysconfig.get_path("scripts", scheme=_user_scheme()), "${builtins.baseNameOf (lib.getExe uv)}",'
+        'sysconfig.get_path("scripts", scheme=_user_scheme()), "${baseNameOf (lib.getExe uv)}",'
     ''
     # Sidestep the maturin build system in favour of reusing the binary already built by nixpkgs,
     # to avoid rebuilding the uv binary for every active python package set.

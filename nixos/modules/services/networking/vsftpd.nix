@@ -321,7 +321,7 @@ in
       tmpfiles.rules =
         optional cfg.anonymousUser
           #Type Path                       Mode User   Gr    Age Arg
-          "d    '${builtins.toString cfg.anonymousUserHome}' 0555 'ftp'  'ftp' -   -";
+          "d    '${toString cfg.anonymousUserHome}' 0555 'ftp'  'ftp' -   -";
       services.vsftpd = {
         description = "Vsftpd Server";
 

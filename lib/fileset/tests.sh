@@ -1406,16 +1406,16 @@ echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > defaul
 git add .
 
 ## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
-expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./.).outPath'
+expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(fetchGit ./.).outPath'
 
 ## We can also evaluate when importing from fetched store paths
-storePath=$(expectStorePath 'builtins.fetchGit ./.')
+storePath=$(expectStorePath 'fetchGit ./.')
 expectEqual '(import '"$storePath"' { fs = lib.fileset; }).outPath' \""$storePath"\"
 
 ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
 expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*\) is a store path within a working tree of a Git repository.
 [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `fetchGit`.
 [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
 [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 
@@ -1429,24 +1429,24 @@ echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > sub/de
 git -C sub add .
 
 ## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
-expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit { url = ./.; submodules = true; }).outPath'
-expectEqual '(import ./sub { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./sub).outPath'
+expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(fetchGit { url = ./.; submodules = true; }).outPath'
+expectEqual '(import ./sub { fs = lib.fileset; }).outPath' '(fetchGit ./sub).outPath'
 
 ## We can also evaluate when importing from fetched store paths
-storePathWithSub=$(expectStorePath 'builtins.fetchGit { url = ./.; submodules = true; }')
+storePathWithSub=$(expectStorePath 'fetchGit { url = ./.; submodules = true; }')
 expectEqual '(import '"$storePathWithSub"' { fs = lib.fileset; }).outPath' \""$storePathWithSub"\"
-storePathSub=$(expectStorePath 'builtins.fetchGit ./sub')
+storePathSub=$(expectStorePath 'fetchGit ./sub')
 expectEqual '(import '"$storePathSub"' { fs = lib.fileset; }).outPath' \""$storePathSub"\"
 
 ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
 expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTrackedWith: The second argument \(.*\) is a store path within a working tree of a Git repository.
 [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `fetchGit`.
 [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
 [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 expectFailure 'import "${./.}/sub" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*/sub\) is a store path within a working tree of a Git repository.
 [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `fetchGit`.
 [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
 [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 rm -rf -- *

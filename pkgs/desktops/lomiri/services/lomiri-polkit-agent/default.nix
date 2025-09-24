@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Policy kit agent for the Lomiri desktop";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];
