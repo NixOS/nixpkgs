@@ -12432,6 +12432,8 @@ self: super: with self; {
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
 
+  py-iam-expand = callPackage ../development/python-modules/py-iam-expand { };
+
   py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
 
   py-libnuma = callPackage ../development/python-modules/py-libnuma { };
