@@ -224,7 +224,7 @@ let
         let
           outTunOpts = [
             (sec tun.name)
-            "type = client"
+            (intOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "destination" tun.destination)
           ]
@@ -246,7 +246,7 @@ let
         let
           inTunOpts = [
             (sec tun.name)
-            "type = server"
+            (intOpt "type" tun.type)
             (intOpt "port" tun.port)
             (strOpt "host" tun.address)
           ]
@@ -680,6 +680,14 @@ in
             { name, ... }:
             {
               options = {
+                type = mkOption {
+                  type = types.enum [
+                    "client"
+                    "udpclient"
+                  ];
+                  default = "client";
+                  description = "Tunnel type.";
+                };
                 destination = mkOption {
                   type = types.str;
                   description = "Remote endpoint, I2P hostname or b32.i2p address.";
@@ -709,6 +717,16 @@ in
             { name, ... }:
             {
               options = {
+                type = mkOption {
+                  type = types.enum [
+                    "server"
+                    "http"
+                    "irc"
+                    "udpserver"
+                  ];
+                  default = "server";
+                  description = "Tunnel type.";
+                };
                 inPort = mkOption {
                   type = types.port;
                   default = 0;
