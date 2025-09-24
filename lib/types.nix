@@ -719,27 +719,55 @@ let
             v2 =
               { loc, defs }:
               let
-                evals = filter (x: x.optionalValue ? value) (
-                  concatLists (
-                    imap1 (
-                      n: def:
-                      imap1 (
-                        m: def':
-                        (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
-                          {
-                            inherit (def) file;
-                            value = def';
-                          }
-                        ])
-                      ) def.value
-                    ) defs
-                  )
-                );
+                evals =
+                  foldl'
+                    (acc: def: {
+                      # Problem: definitions lists dont have equal lengths -> maintain a total counter, to avoid re-iterating
+                      # Can we do this better? Previously we used concatLists which is optimized
+                      # Repeated list concatentation might be slow
+                      res =
+                        acc.res
+                        ++ imap1 (
+                          m: def':
+                          (mergeDefinitions (loc ++ [ "[definition ${toString acc.i}-entry ${toString m}]" ]) elemType (
+                            [
+                              {
+                                inherit (def) file;
+                                value = def';
+                              }
+                            ]
+                            ++ lib.optionals (elemType.name or null == "submodule") [
+                              {
+                                file = "<internal>";
+                                value = {
+                                  _module.args.index = acc.total + m - 1;
+                                };
+                              }
+                            ]
+                          ))
+                        ) def.value;
+                      total = acc.total + length def.value;
+                      i = acc.i + 1;
+                    })
+                    {
+                      res = [ ];
+                      total = 0;
+                      i = 0;
+                    }
+                    defs;
               in
               {
                 headError = checkDefsForError check loc defs;
-                value = map (x: x.optionalValue.value or x.mergedValue) evals;
-                valueMeta.list = map (v: v.checkedAndMerged.valueMeta) evals;
+                # Filtering doesn't affect submodules.
+                # Because the root of a submodule cannot be used with mkIf.
+                # If this worked, filtering would introduces paradoxons, for example:
+                # [ (mkIf (index == 0) { }) { } ]
+                value = map (x: x.optionalValue.value or x.mergedValue) (
+                  filter (x: x.optionalValue ? value) evals.res
+                );
+                valueMeta.list = map (v: v.checkedAndMerged.valueMeta) (
+                  filter (x: x.optionalValue ? value) evals.res
+                );
               };
           };
           emptyValue = {
@@ -1227,6 +1255,7 @@ let
                 # would be used, and use of `<` and `>` would break the XML document.
                 # It shouldn't cause an issue since this is cosmetic for the manual.
                 _module.args.name = lib.mkOptionDefault "‹name›";
+                _module.args.index = lib.mkOptionDefault "‹index›";
               }
             ]
             ++ modules;
