@@ -5,10 +5,10 @@
   cl-generic,
   cl-lib,
   commander,
-
   epl,
   f,
   fetchFromGitHub,
+  installShellFiles,
   git,
   melpaBuild,
   package-build,
@@ -34,15 +34,17 @@ let
 in
 melpaBuild (finalAttrs: {
   pname = "cask";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     name = "cask-source-${finalAttrs.version}";
     owner = "cask";
     repo = "cask";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-91rJFsp2SLk/JY+v6G5JmXH5bg9QnT+qhI8ccNJlI4A=";
+    hash = "sha256-/vinpQ51AuaTbXW4L4MnVonyfzTMvHUF4HViSPBKZxs=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   patches = [
     # Uses LISPDIR substitution var
@@ -74,9 +76,8 @@ melpaBuild (finalAttrs: {
       --replace "@load-path-mod@" "${load-path-mod}"
   '';
 
-  # TODO: use installBin as soon as installBin arrives Master branch
   postInstall = ''
-    install -D -t $out/bin bin/cask
+    installBin bin/cask
   '';
 
   meta = {
