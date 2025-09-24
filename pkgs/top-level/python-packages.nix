@@ -2474,7 +2474,7 @@ self: super: with self; {
 
   cffconvert = callPackage ../development/python-modules/cffconvert { };
 
-  cffi = callPackage ../development/python-modules/cffi { };
+  cffi = if isPyPy then null else callPackage ../development/python-modules/cffi { };
 
   cffsubr = callPackage ../development/python-modules/cffsubr { };
 
