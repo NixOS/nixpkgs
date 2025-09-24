@@ -1,0 +1,48 @@
+diff --git a/cask-bootstrap.el b/cask-bootstrap.el
+--- a/cask-bootstrap.el
++++ b/cask-bootstrap.el
+@@ -27,8 +27,6 @@
+ 
+ ;;; Code:
+ 
+-(require 'package)
+-
+ (defvar cask-directory)
+ 
+ (defconst cask-bootstrap-dir
+@@ -37,31 +35,11 @@
+     (format ".cask/%s.%s/bootstrap" emacs-major-version emacs-minor-version)))
+   "Path to Cask bootstrap directory.")
+ 
+-;; Restore several package- variables and `load-path` after let-scope.
+-(let (package-alist
+-      package-archive-contents
+-      package--initialized
+-      (load-path (add-to-list
+-                  'load-path (expand-file-name "package-build" cask-directory)))
+-      (package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+-                          ("melpa" . "https://melpa.org/packages/")))
+-      (package-user-dir cask-bootstrap-dir)
+-      (deps '(s f commander git epl shut-up cl-lib cl-generic eieio ansi)))
+-  (package-initialize)
+-  (setq package-archive-contents nil) ;; force refresh, cask#573, cask#559
+-  (unless (package-installed-p 'cl-lib)
+-    ;; package-build depends on cl-lib
+-    (unless package-archive-contents
+-      (package-refresh-contents))
+-    (package-install 'cl-lib))
+-  (require 'package-build)
++;; Add nix store paths for dependencies to the load-path.
++@load-path-mod@
++(let ((deps '(@deps-mod@ cl-lib eieio)))
+   (dolist (pkg deps)
+-    (unless (featurep pkg)
+-      (unless (package-installed-p pkg)
+-        (unless package-archive-contents
+-          (package-refresh-contents))
+-        (package-install pkg))
+-      (require pkg))))
++    (require pkg)))
+ 
+ (provide 'cask-bootstrap)
+ 
