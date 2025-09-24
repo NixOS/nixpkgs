@@ -127,7 +127,6 @@ python3Packages.buildPythonApplication rec {
       googleapis-common-protos
       httpx
       iso-639
-      itsdangerous
       langchain
       langchain-community
       langdetect

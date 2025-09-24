@@ -770,7 +770,7 @@ in
           serviceConfig = {
             User = cfg.user;
             Group = cfg.group;
-            Type = "notify";
+            Type = "simple";
             RestartSec = 60;
             LimitNOFILE = 65536;
             NoNewPrivileges = true;

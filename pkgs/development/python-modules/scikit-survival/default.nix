@@ -51,9 +51,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "osqp"
-  ];
   dependencies = [
     ecos
     joblib
@@ -96,6 +93,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sebp/scikit-survival";
     changelog = "https://github.com/sebp/scikit-survival/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
   };
 }

@@ -30,7 +30,6 @@
   libnotify,
   libpulseaudio,
   libuuid,
-  libva,
   libX11,
   libXScrnSaver,
   libXcomposite,
@@ -156,7 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXcomposite
       libunity
       libuuid
-      libva
       libXcursor
       libXdamage
       libXext

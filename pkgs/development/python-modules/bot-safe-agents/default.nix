@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "bot-safe-agents";
-  version = "1.1";
+  version = "1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivan-sincek";
     repo = "bot-safe-agents";
     tag = "v${version}";
-    hash = "sha256-x+AoHg8JFq++qZIhxljIZp2pfxEd0jtETclttddN4sk=";
+    hash = "sha256-XO7iCZ7Dik7CmeFPwmMZf5K4COT5mRhDZMTsQxfR45c=";
   };
 
   build-system = [ setuptools ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.namesys.com/";
     description = "Support library for Reiser4";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ mglolenstine ];
     platforms = with lib.platforms; linux;
   };
 }
