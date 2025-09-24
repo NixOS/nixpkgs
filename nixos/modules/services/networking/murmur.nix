@@ -298,6 +298,13 @@ in
           ];
           description = "";
         };
+
+        useACMEHost = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "mumble.example.com";
+          description = "ACME name";
+        };
       };
 
       extraConfig = lib.mkOption {
@@ -350,6 +357,12 @@ in
         assertion = cfg.tls.dhParamsSource != "file" -> cfg.tls.dhParamsPath == null;
         message = "";
       }
+      {
+        assertion =
+          cfg.tls.useACMEHost != null
+          -> cfg.tls.certPath == null && cfg.tls.keyPath == null && cfg.tls.caPath == null;
+        message = "";
+      }
     ];
 
     users.users.murmur = lib.mkIf (cfg.user == "murmur") {
@@ -371,7 +384,11 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
+      wants = [ ] ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
       preStart = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
