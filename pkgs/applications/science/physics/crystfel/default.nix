@@ -173,7 +173,7 @@ let
     version = "0.1.0";
     src = fetchFromGitHub {
       owner = "nexusformat";
-      repo = pname;
+      repo = "HDF5-External-Filter-Plugins";
       rev = "49e3b65eca772bca77af13ba047d8b577673afba";
       hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
     };

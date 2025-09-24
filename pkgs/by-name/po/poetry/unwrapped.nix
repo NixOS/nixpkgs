@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-CI3+0P+eIFpdnyxy1zhaEMWAsX/R0qqdAvVEQ5fqnhk=";
+    hash = "sha256-oPHRDYci4lrZBY3MC4QU1juwbMJYFDJjARg1Y8us4FQ=";
   };
 
   build-system = [
