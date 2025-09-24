@@ -17,6 +17,7 @@
   roctracer,
   rocminfo,
   rocm-smi,
+  symlinkJoin,
   numactl,
   libffi,
   zstd,
@@ -34,7 +35,25 @@
 
 let
   inherit (rocm-core) ROCM_LIBPATCH_VERSION;
-  hipClang = llvm.rocmcxx;
+  hipClang = symlinkJoin {
+    name = "hipClang";
+    paths = with llvm; [
+      # Without lld.dev when triton calls HIP_CLANG_PATH's ld.lld
+      # -flavor gnu will be an "unrecognised argument"
+      # This is a runtime failure for triton, but a build time failure
+      # for aotriton so if in the future we want to try to fix this
+      # aotriton is a good testcase
+      lld.dev
+      # Some libraries assume llvm-mc and llvm-objcopy are available
+      # in HIP_CLANG_PATH
+      llvm.bintools.bintools
+      # Our main sysrooted toolchain
+      rocmcxx
+    ];
+    postBuild = ''
+      rm -rf $out/{include,lib,share,etc,nix-support,usr}
+    '';
+  };
   hipClangPath = "${hipClang}/bin";
   wrapperArgs = [
     "--prefix PATH : $out/bin"
@@ -101,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-comgr
     rocm-runtime
     rocminfo
+    hipClangPath
   ];
 
   cmakeBuildType = "RelWithDebInfo";
@@ -208,9 +228,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${rocm-core}/.info/ $out/.info
 
     ln -s ${hipClang} $out/llvm
-    ln -s ${hipClang}/bin/{clang-offload-bundler,clang,clang++} $out/bin/
-    ln -s ${llvm.bintools.bintools}/bin/llvm-objcopy $out/bin
-    ln -s ${llvm.lld}/bin/{ld.lld,lld} $out/bin
   '';
 
   disallowedRequisites = [
