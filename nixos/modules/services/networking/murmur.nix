@@ -47,6 +47,7 @@ let
     sslDHParams=${
       if cfg.tls.dhParamsSource == "file" then cfg.tls.dhParamsPath else cfg.tls.dhParamsSource
     }
+    sslCiphers=${lib.strings.concatStringsSep ":" cfg.tls.cipherSuites}
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -282,6 +283,19 @@ in
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/murmur/dhparams.pem";
+          description = "";
+        };
+
+        cipherSuites = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [
+            "EECDH+AESGCM"
+            "EDH+aRSA+AESGCM"
+            "DHE-RSA-AES256-SHA"
+            "DHE-RSA-AES128-SHA"
+            "AES256-SHA"
+            "AES128-SHA"
+          ];
           description = "";
         };
       };
