@@ -44,6 +44,9 @@ let
     ${lib.optionalString (cfg.tls.certPath != null) "sslCert=${cfg.tls.certPath}"}
     ${lib.optionalString (cfg.tls.keyPath != null) "sslKey=${cfg.tls.keyPath}"}
     ${lib.optionalString (cfg.tls.caPath != null) "sslCA=${cfg.tls.caPath}"}
+    sslDHParams=${
+      if cfg.tls.dhParamsSource == "file" then cfg.tls.dhParamsPath else cfg.tls.dhParamsSource
+    }
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -261,6 +264,26 @@ in
           default = null;
           description = "Path to your SSL CA certificate.";
         };
+
+        dhParamsSource = lib.mkOption {
+          type = lib.types.enum [
+            "@ffdhe2048"
+            "@ffdhe3072"
+            "@ffdhe4096"
+            "@ffdhe6144"
+            "@ffdhe8192"
+            "file"
+          ];
+          default = "@ffdhe2048";
+          description = "";
+        };
+
+        dhParamsPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          example = "/var/lib/murmur/dhparams.pem";
+          description = "";
+        };
       };
 
       extraConfig = lib.mkOption {
@@ -308,6 +331,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.tls.dhParamsSource != "file" -> cfg.tls.dhParamsPath == null;
+        message = "";
+      }
+    ];
+
     users.users.murmur = lib.mkIf (cfg.user == "murmur") {
       description = "Murmur Service user";
       home = cfg.stateDir;
