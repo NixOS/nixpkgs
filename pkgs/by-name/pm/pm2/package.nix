@@ -7,13 +7,13 @@
 
 buildNpmPackage rec {
   pname = "pm2";
-  version = "6.0.9";
+  version = "6.0.13";
 
   src = fetchFromGitHub {
     owner = "Unitech";
     repo = "pm2";
     rev = "v${version}";
-    hash = "sha256-lMKYQHtmoR2eehF8QR0pqwF1peGKDGH5eXQRfYoJt+0=";
+    hash = "sha256-Tvwx6yqNH1Ab30DCT18HtHAp/ruTJFult4bvFzKTy7Y=";
 
     # Requested patch upstream: https://github.com/Unitech/pm2/pull/5985
     postFetch = ''
@@ -21,7 +21,7 @@ buildNpmPackage rec {
     '';
   };
 
-  npmDepsHash = "sha256-Ko1Kki2NdLWQNqsqOCOB752XNVqLbFq9bUqgjrp9SfM=";
+  npmDepsHash = "sha256-2+onHdd8BvSTOavXw32vAId7Epd+1Y7OM95DBslcR2o=";
 
   dontNpmBuild = true;
 
