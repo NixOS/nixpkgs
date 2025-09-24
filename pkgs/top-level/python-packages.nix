@@ -4898,12 +4898,9 @@ self: super: with self; {
 
   ewmhlib = callPackage ../development/python-modules/ewmhlib { };
 
-  example-robot-data = toPythonModule (
-    pkgs.example-robot-data.override {
-      pythonSupport = true;
-      python3Packages = self;
-    }
-  );
+  example-robot-data = callPackage ../development/python-modules/example-robot-data {
+    inherit (pkgs) example-robot-data;
+  };
 
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
 
