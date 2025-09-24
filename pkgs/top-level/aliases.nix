@@ -2031,6 +2031,7 @@ mapAliases {
   plv8 = throw "'plv8' has been removed. Use 'postgresqlPackages.plv8' instead."; # Added 2025-07-19
   postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
   postgis = throw "'postgis' has been removed. Use 'postgresqlPackages.postgis' instead."; # Added 2025-07-19
+  t-rex = throw "'t-rex' has been removed due to being broken in nixpkgs and the maintainer upstream replacing it with `bbox`. See <https://www.bbox.earth/docs/tile-server/guides/#migration-from-t-rex>"; # Added 2025-09-24
   tegaki-zinnia-japanese = throw "'tegaki-zinnia-japanese' has been removed due to lack of maintenance"; # Added 2025-09-10
   tet = throw "'tet' has been removed for lack of maintenance"; # Added 2025-10-12
   tex-match = throw "'tex-match' has been removed due to lack of maintenance upstream. Consider using 'hieroglyphic' instead"; # Added 2024-09-24
