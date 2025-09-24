@@ -16,7 +16,7 @@ let
       nodes.machine =
         { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs.pg-dump-anon ];
+          environment.systemPackages = [ (pkgs.pg-dump-anon.override { postgresql = package; }) ];
           services.postgresql = {
             inherit package;
             enable = true;
