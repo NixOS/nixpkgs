@@ -1,5 +1,6 @@
 {
   lib,
+  nixosTests,
   fetchFromGitHub,
   makeBinaryWrapper,
   installShellFiles,
@@ -237,6 +238,8 @@
     platforms = lib.platforms.linux;
     mainProgram = "pihole";
   };
+
+  passthru.tests = nixosTests.pihole-ftl;
 
   passthru = {
     inherit stateDir;

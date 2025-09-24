@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-multi-modal-llms-openai";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_multi_modal_llms_openai";
     inherit version;
-    hash = "sha256-4YWvPQH5GevRVsmegIXU5AApt+nsMEj0DSDebWsPYR4=";
+    hash = "sha256-08taZAGV+qyLJ6T8o3gAY9UT9vbNM8T8U83/FqB6GPU=";
   };
 
   build-system = [ hatchling ];

@@ -3510,12 +3510,6 @@
     githubId = 52386117;
     name = "Blusk";
   };
-  bmanuel = {
-    name = "Benjamin Manuel";
-    email = "ben@benmanuel.com";
-    github = "bmanuel";
-    githubId = 3662307;
-  };
   bmilanov = {
     name = "Biser Milanov";
     email = "bmilanov11+nixpkgs@gmail.com";
@@ -4774,6 +4768,12 @@
     githubId = 5567402;
     name = "Alex Zero";
     keys = [ { fingerprint = "A0AA 4646 B8F6 9D45 4553  5A88 A515 50ED B450 302C"; } ];
+  };
+  cizniarova = {
+    email = "gabriel.hosquet@epitech.eu";
+    github = "Ciznia";
+    githubId = 114656678;
+    name = "Gabriel Hosquet";
   };
   cizra = {
     email = "todurov+nix@gmail.com";
@@ -15490,6 +15490,11 @@
     github = "maggesi";
     githubId = 1809783;
     name = "Marco Maggesi";
+  };
+  magicquark = {
+    name = "magicquark";
+    github = "magicquark";
+    githubId = 198001825;
   };
   magistau = {
     name = "Mg. Tau";
