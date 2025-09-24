@@ -50,6 +50,7 @@ let
     ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
     ++ (lib.forEach cfg.upstream.caches (url: "--upstream-cache='${url}'"))
     ++ (lib.forEach cfg.upstream.publicKeys (pk: "--upstream-public-key='${pk}'"))
+    ++ (lib.optional (cfg.netrcFile != null) "--netrc-file='${cfg.netrcFile}'")
   );
 
   isSqlite = lib.strings.hasPrefix "sqlite:" cfg.cache.databaseURL;
@@ -210,6 +211,16 @@ in
             signatures of store paths downloaded from upstream caches.
           '';
         };
+      };
+
+      netrcFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "/etc/nix/netrc";
+        description = ''
+          The path to netrc file for upstream authentication.
+          When unspecified ncps will look for ``$HOME/.netrc`.
+        '';
       };
     };
   };
