@@ -3,11 +3,12 @@
   pkgsBuildHost,
   stdenv,
   stdenvNoCC,
+  sdkVersion,
 }:
 
 let
   plists = import ./plists.nix {
-    inherit lib stdenvNoCC;
+    inherit lib stdenvNoCC sdkVersion;
     xcodePlatform = if stdenvNoCC.hostPlatform.isMacOS then "MacOSX" else "iPhoneOS";
   };
   inherit (pkgsBuildHost) darwin cctools xcbuild;
@@ -38,11 +39,15 @@ self: super: {
     # Include `libtool` in the toolchain, so `xcrun -find libtool` can find it without requiring `cctools.libtool`
     # as a `nativeBuildInput`.
     mkdir -p "$toolchainsPath/usr/bin"
-    ln -s '${cctools.libtool}/bin/${stdenv.cc.targetPrefix}libtool' "$toolchainsPath/usr/bin/libtool"
+    if [ -e '${cctools.libtool}/bin/${stdenv.cc.targetPrefix}libtool' ]; then
+      ln -s '${cctools.libtool}/bin/${stdenv.cc.targetPrefix}libtool' "$toolchainsPath/usr/bin/libtool"
+    fi
 
     # Include additional binutils required by some packages (such as Chromium).
     for tool in lipo nm otool size strip; do
-      ln -s '${darwin.binutils-unwrapped}/bin/${stdenv.cc.targetPrefix}'$tool "$toolchainsPath/usr/bin/$tool"
+      if [ -e '${darwin.binutils-unwrapped}/bin/${stdenv.cc.targetPrefix}'$tool ]; then
+        ln -s '${darwin.binutils-unwrapped}/bin/${stdenv.cc.targetPrefix}'$tool "$toolchainsPath/usr/bin/$tool"
+      fi
     done
   '';
 }
