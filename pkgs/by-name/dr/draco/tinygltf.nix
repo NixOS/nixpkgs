@@ -22,7 +22,9 @@ stdenv.mkDerivation (finalAttrss: {
     description = "Header only C++11 tiny glTF 2.0 library";
     homepage = "https://github.com/syoyo/tinygltf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jansol ];
+    maintainers = with lib.maintainers; [
+      yzx9
+    ];
     platforms = lib.platforms.all;
   };
 })
