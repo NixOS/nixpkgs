@@ -1711,6 +1711,7 @@ in
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
+  zellij = runTest ./zellij/default.nix;
   zenohd = runTest ./zenohd.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
   zfs = handleTest ./zfs.nix { };
