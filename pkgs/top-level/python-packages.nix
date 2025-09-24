@@ -5191,6 +5191,8 @@ self: super: with self; {
 
   findspark = callPackage ../development/python-modules/findspark { };
 
+  findus = callPackage ../development/python-modules/findus { };
+
   finetuning-scheduler = callPackage ../development/python-modules/finetuning-scheduler { };
 
   fingerprints = callPackage ../development/python-modules/fingerprints { };
