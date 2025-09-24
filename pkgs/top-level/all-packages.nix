@@ -3086,10 +3086,6 @@ with pkgs;
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
-  hal-hardware-analyzer =
-    libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer
-      { };
-
   halide = callPackage ../development/compilers/halide {
     llvmPackages = llvmPackages_19;
   };

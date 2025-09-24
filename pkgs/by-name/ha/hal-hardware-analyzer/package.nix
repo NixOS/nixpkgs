@@ -11,13 +11,10 @@
   nlohmann_json,
   pkg-config,
   python3Packages,
-  qtbase,
-  qtsvg,
-  quazip,
+  libsForQt5,
   rapidjson,
   spdlog,
   verilator,
-  wrapQtAppsHook,
   z3,
 }:
 
@@ -46,11 +43,11 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     boost
     rapidjson
     igraph
@@ -59,7 +56,7 @@ stdenv.mkDerivation rec {
     graphviz
     verilator
     z3
-    quazip
+    libsForQt5.quazip
   ]
   ++ (with python3Packages; [
     python
