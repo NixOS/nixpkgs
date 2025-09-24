@@ -3,9 +3,9 @@
   python,
   composable_kernel,
   lib,
+  rocm-toolchain,
   setuptools,
   setuptools-scm,
-  rocm-merged-llvm,
 }:
 buildPythonPackage {
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage {
   propagatedBuildInputs = [
     # At runtime will fail to compile anything with ck4inductor without this
     # can't easily use in checks phase because most of the compiler machinery is in torch
-    rocm-merged-llvm
+    rocm-toolchain
   ];
   checkPhase = ''
     if [ ! -d "$out/${python.sitePackages}/ck4inductor" ]; then
