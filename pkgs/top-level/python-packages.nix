@@ -13295,6 +13295,8 @@ self: super: with self; {
 
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
+  pydgraph = callPackage ../development/python-modules/pydgraph { };
+
   pydicom = callPackage ../development/python-modules/pydicom { };
 
   pydicom-seg = callPackage ../development/python-modules/pydicom-seg { };
