@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hawkauthlib";
-  version = "0.1.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "hawkauthlib";
     tag = "v${version}";
-    hash = "sha256-UW++gLQX1U4jFwccL+O5wl2r/d2OZ5Ug0wcnSfqtIVc=";
+    hash = "sha256-dFBGrk7vdZMNTuWvXXWXA4iF/vmiUnK9ds8edN2Yt10=";
   };
 
   postPatch = ''

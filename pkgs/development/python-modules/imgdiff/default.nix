@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "imgdiff";
-  version = "1.7.1";
+  version = "1.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "imgdiff";
     rev = version;
-    hash = "sha256-Y5nUnjihRpVVehhP1LUgfuJN5nCxEJu6P1w99Igpxjs=";
+    hash = "sha256-Ko2m6rLKUmRveHIeIylGWFXyDwlf3E7mkNHKxk7HBbA=";
   };
 
   propagatedBuildInputs = [ pillow ];
