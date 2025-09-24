@@ -6,7 +6,7 @@
   pkg-config,
 
   # Optional dependencies
-  enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic,
+  enableApp ? with stdenv.hostPlatform; !(isWindows || isCygwin) && !isStatic,
   c-aresMinimal,
   libev,
   openssl,
