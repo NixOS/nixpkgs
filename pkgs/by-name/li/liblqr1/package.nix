@@ -6,7 +6,7 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblqr-1";
   version = "0.4.2";
 
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "carlobaldassi";
     repo = "liblqr";
-    rev = "v${version}";
-    sha256 = "10mrl5k3l2hxjhz4w93n50xwywp6y890rw2vsjcgai8627x5f1df";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rgVX+hEGRfWY1FvwDBLy5nLPOyh2JE4+lB0KOmahuYI=";
   };
 
   # Fix build with gcc15
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ glib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://liblqr.wikidot.com";
     description = "Seam-carving C/C++ library called Liquid Rescaling";
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       gpl3
       lgpl3
     ];
   };
-}
+})
