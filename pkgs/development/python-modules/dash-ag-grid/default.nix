@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   dash,
   pytestCheckHook,
@@ -13,25 +13,25 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "plotly";
-    repo = "dash-ag-grid";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vSvWcqzrM92m8Yvv/Ehmzh5zkFUX2dR+L0ZE5CM/WBw=";
+  src = fetchPypi {
+    pname = "dash_ag_grid";
+    inherit (finalAttrs) version;
+    hash = "sha256-UH9dzPcjW/G5ryxZ1M0PEiBdsDw0ifYFlI8TxyvOzk8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ dash ];
 
-  # TODO
-  # ModuleNotFoundError: No module named 'dash_ag_grid._imports_'
   pythonImportsCheck = [ "dash_ag_grid" ];
+
+  # TODO
+  # ImportError: attempted relative import with no known parent package
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "High-performance and highly customizable component that wraps AG Grid, designed for creating rich datagrids";
     homepage = "https://github.com/plotly/dash-ag-grid";
-    changelog = "https://github.com/plotly/dash-ag-grid/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felbinger ];
   };
