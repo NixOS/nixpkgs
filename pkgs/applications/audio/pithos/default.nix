@@ -22,8 +22,8 @@ pythonPackages.buildPythonApplication rec {
   version = "1.6.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pithos";
+    repo = "pithos";
     tag = version;
     hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };

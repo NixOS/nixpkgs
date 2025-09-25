@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out ${pname}
+    dune install --prefix $out easycrypt
     rm $out/bin/ec-runtest
     wrapPythonProgramsIn "$out/lib/easycrypt/commands" "$pythonPath"
     runHook postInstall
