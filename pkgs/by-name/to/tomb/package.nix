@@ -13,7 +13,7 @@
   lib,
   libargon2,
   lsof,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   pinentry,
   stdenvNoCC,
@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-z7LkCes0wg+1bZrNXXy4Lh5VwMotCULJQy5DmCisu+Q=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
     pinentry
