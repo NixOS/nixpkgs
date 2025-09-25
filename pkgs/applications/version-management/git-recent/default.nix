@@ -24,8 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp git-recent $out/bin
+    runHook preInstall
+
+    install -D -m755 -t $out/bin git-recent
+
     wrapProgram $out/bin/git-recent \
       --prefix PATH : "${
         lib.makeBinPath [
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
           util-linuxMinimal
         ]
       }"
+
+    runHook postInstall
   '';
 
   meta = {
