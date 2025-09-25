@@ -14,7 +14,8 @@
   writableTmpDirAsHomeHook,
   gjs,
   libadwaita,
-  nix-update-script,
+  writeShellScript,
+  nix-update,
 }:
 
 let
@@ -70,7 +71,18 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = writeShellScript "update-learn6502" ''
+    ${lib.getExe nix-update} learn6502 || true
+    export HOME=$(mktemp -d)
+    src=$(nix build --no-link --print-out-paths .#learn6502.src)
+    WORKDIR=$(mktemp -d)
+    cp --recursive --no-preserve=mode $src/* $WORKDIR
+    missingHashes=$(nix eval --file . learn6502.missingHashes)
+    pushd $WORKDIR
+    ${lib.getExe yarn-berry.yarn-berry-fetcher} missing-hashes yarn.lock >$missingHashes
+    popd
+    ${lib.getExe nix-update} learn6502 --version skip
+  '';
 
   meta = {
     description = "Modern 6502 Assembly Learning Environment for GNOME";
