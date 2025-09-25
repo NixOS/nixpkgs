@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
+    "scripts"
   ];
 
   configureFlags = [
@@ -86,6 +87,10 @@ stdenv.mkDerivation rec {
   installFlags = [
     "CONFDIR=$(out)/etc/iproute2"
   ];
+
+  postInstall = ''
+    moveToOutput sbin/routel "$scripts"
+  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [
