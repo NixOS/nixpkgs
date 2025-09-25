@@ -140,16 +140,6 @@ self: super:
 
   mkfontdir = xorg.mkfontscale;
 
-  libXtst = super.libXtst.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      pkgConfigModules = [ "xtst" ];
-    };
-  });
-
-  libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
     preConfigure =
@@ -180,28 +170,6 @@ self: super:
     meta = attrs.meta // {
       mainProgram = "xdm";
     };
-  });
-
-  libXinerama = super.libXinerama.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
-  });
-
-  libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {

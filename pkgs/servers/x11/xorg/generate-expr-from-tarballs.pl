@@ -72,6 +72,8 @@ $pcMap{"xfont"} = "libXfont";
 $pcMap{"xfont2"} = "libXfont2";
 $pcMap{"xft"} = "libXft";
 $pcMap{"xi"} = "libXi";
+$pcMap{"xinerama"} = "libXinerama";
+$pcMap{"xkbfile"} = "libxkbfile";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
 $pcMap{"xp"} = "libXp";
@@ -81,8 +83,10 @@ $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
 $pcMap{"xres"} = "libXres";
 $pcMap{"xscrnsaver"} = "libXScrnSaver";
+$pcMap{"xshmfence"} = "libxshmfence";
 $pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
+$pcMap{"xtst"} = "libXtst";
 $pcMap{"xv"} = "libXv";
 $pcMap{"xvmc"} = "libXvMC";
 $pcMap{"xvmc-wrapper"} = "libXvMC";
@@ -367,6 +371,7 @@ print OUT <<EOF;
   libpciaccess,
   libpthread-stubs,
   libsm,
+  libwindowswm,
   libx11,
   libxau,
   libxaw,
@@ -389,6 +394,8 @@ print OUT <<EOF;
   libxfont_2,
   libxft,
   libxi,
+  libxinerama,
+  libxkbfile,
   libxmu,
   libxp,
   libxpm,
@@ -397,7 +404,9 @@ print OUT <<EOF;
   libxrender,
   libxres,
   libxscrnsaver,
+  libxshmfence,
   libxt,
+  libxtst,
   libxv,
   libxvmc,
   libxxf86dga,
@@ -474,6 +483,8 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    libxkbfile
+    libxshmfence
     listres
     lndir
     luit
@@ -554,6 +565,7 @@ self: with self; {
   libICE = libice;
   libpthreadstubs = libpthread-stubs;
   libSM = libsm;
+  libWindowsWM = libwindowswm;
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
@@ -567,6 +579,7 @@ self: with self; {
   libXfont = libxfont_1;
   libXft = libxft;
   libXi = libxi;
+  libXinerama = libxinerama;
   libXmu = libxmu;
   libXp = libxp;
   libXpm = libxpm;
@@ -576,6 +589,7 @@ self: with self; {
   libXres = libxres;
   libXScrnSaver = libxscrnsaver;
   libXt = libxt;
+  libXtst = libxtst;
   libXv = libxv;
   libXvMC = libxvmc;
   libXxf86dga = libxxf86dga;
