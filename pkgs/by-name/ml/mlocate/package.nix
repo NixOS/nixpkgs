@@ -17,11 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     "dbfile=/var/cache/locatedb"
   ];
 
-  meta = with lib; {
-    description = "Merging locate is an utility to index and quickly search for files";
+  meta = {
+    description = "Utility to index and quickly search for files";
     homepage = "https://pagure.io/mlocate";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 })
