@@ -203,8 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
     # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
     (strings.cmakeFeature "ROCM_CORE" "${rocmPackages.clr}")
-    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/clang")
-    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/clang++")
+    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clang}/bin/clang")
+    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clang}/bin/clang++")
   ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
