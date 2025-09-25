@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlocate";
   version = "0.26";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/mlocate/mlocate-${version}.tar.xz";
+    url = "https://releases.pagure.org/mlocate/mlocate-${finalAttrs.version}.tar.xz";
     sha256 = "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ ];
   };
-}
+})
