@@ -7,7 +7,10 @@
   karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
+  yq,
+  curl,
+  jq,
+  writeShellScript,
   writeShellScriptBin,
   withCmd ? false,
 }:
@@ -48,7 +51,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = writeShellScript "update-script-kanata" (
+      ''
+        PATH=$PATH:${
+          lib.makeBinPath [
+            curl
+            yq
+            jq
+          ]
+        }
+      ''
+      + builtins.readFile ./update.sh
+    );
+
     darwinDriver = lib.optional stdenv.hostPlatform.isDarwin (
       karabiner-dk.override {
         driver-version = finalAttrs.darwinDriverVersion;
