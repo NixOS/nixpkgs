@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
   pkgsStatic,
   python3,
@@ -146,7 +145,7 @@ let
 
       doCheck = true;
 
-      passthru.tests = lib.optionalAttrs (lib.versionAtLeast version "3") {
+      passthru.tests = {
         static = pkgsStatic.botan3;
       };
 
@@ -159,7 +158,7 @@ let
           thillux
           nikstur
         ];
-        platforms = platforms.unix ++ lib.optionals (lib.versionAtLeast version "3.0") platforms.windows;
+        platforms = platforms.unix ++ platforms.windows;
         license = licenses.bsd2;
       };
     });
@@ -168,18 +167,5 @@ in
   botan3 = common {
     version = "3.9.0";
     hash = "sha256-jD8oS1jd1C6OQ+n6hqcSnYfqfD93aoDT2mPsIHIrCIM=";
-  };
-
-  botan2 = common {
-    version = "2.19.5";
-    hash = "sha256-3+6g4KbybWckxK8B2pp7iEh62y2Bunxy/K9S21IsmtQ=";
-    patches = [
-      # Fix build with gcc15
-      (fetchpatch {
-        name = "botan2-add-include-cstdint-gcc15.patch";
-        url = "https://src.fedoraproject.org/rpms/botan2/raw/c3fb7a3800df117e7ef8a7617ac8eacb31a4464a/f/f765f0b312f2998498f629d93369babfb2c975b4.patch";
-        hash = "sha256-8Yhxd5TCgxUMtRiv3iq5sQaVjDF+b9slppm38/6l6lw=";
-      })
-    ];
   };
 }
