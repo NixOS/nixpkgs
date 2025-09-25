@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tracexec";
-  version = "0.13.0-unstable-2025-09-07";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "kxxt";

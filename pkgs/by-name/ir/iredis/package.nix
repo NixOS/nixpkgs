@@ -7,20 +7,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iredis";
-  version = "1.15.1";
+  version = "1.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laixintao";
     repo = "iredis";
     tag = "v${version}";
-    hash = "sha256-ZA4q2Z3X9zhzW/TH8aRliVij8UxqDVUamhKcfVxWb/c=";
+    hash = "sha256-g/gQb9QOyfa7kyHCUZf/kLZRO5IE8389BUCYz8Sqr8o=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'packaging = "^23.0"' 'packaging = "*"' \
-      --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"'
+      --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"' \
+      --replace-fail 'redis = "^5.0.0"' 'redis = "*"'
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -64,12 +65,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "iredis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
     changelog = "https://github.com/laixintao/iredis/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://iredis.xbin.io/";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "iredis";
   };
 }

@@ -56,9 +56,6 @@ stdenv.mkDerivation rec {
     description = "Multi-site simultaneous broadcast plugin for OBS Studio";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jk ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

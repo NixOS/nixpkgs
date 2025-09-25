@@ -118,12 +118,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.5.2";
+  version = "4.5.3";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6blXwp3DeWNM5Q6M5gWj4O+K/gFxEOj41lzlc5biEYQ=";
+    hash = "sha256-DNVZUZpysCyB/Xt8yB352gO+UK8Cd4aDFGYuUDKyIrs=";
   };
 
   postPatch =
@@ -142,6 +142,7 @@ stdenv'.mkDerivation (finalAttrs: {
     + (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+      substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
     '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
@@ -160,6 +161,7 @@ stdenv'.mkDerivation (finalAttrs: {
     "-DWITH_CODEC_FFMPEG=ON"
     "-DWITH_CODEC_SNDFILE=ON"
     "-DWITH_CPU_CHECK=OFF"
+    "-DWITH_CYCLES_DEVICE_HIP=${if hipSupport then "ON" else "OFF"}"
     "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
     "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
     "-DWITH_CYCLES_OSL=OFF"
@@ -189,20 +191,25 @@ stdenv'.mkDerivation (finalAttrs: {
     "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
     "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
   ]
+  ++ lib.optionals cudaSupport [
+    "-DOPTIX_ROOT_DIR=${optix}"
+    "-DWITH_CYCLES_CUDA_BINARIES=ON"
+  ]
+  ++ lib.optionals hipSupport [
+    "-DHIPRT_INCLUDE_DIR=${rocmPackages.hiprt}/include"
+    "-DWITH_CYCLES_DEVICE_HIPRT=ON"
+    "-DWITH_CYCLES_HIP_BINARIES=ON"
+  ]
   ++ lib.optionals waylandSupport [
     "-DWITH_GHOST_WAYLAND=ON"
     "-DWITH_GHOST_WAYLAND_DBUS=ON"
     "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
     "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
   ]
+  ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DLIBDIR=/does-not-exist"
     "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
-  ]
-  ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
-  ++ lib.optionals cudaSupport [
-    "-DOPTIX_ROOT_DIR=${optix}"
-    "-DWITH_CYCLES_CUDA_BINARIES=ON"
   ];
 
   preConfigure = ''
@@ -250,7 +257,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libsndfile
     libtiff
     libwebp
-    (manifold.override { tbb_2021 = tbb; })
+    manifold
     opencolorio
     openexr
     openimageio
@@ -267,6 +274,7 @@ stdenv'.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional embreeSupport embree
+  ++ lib.optional hipSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport tbb; })
   ++ (
     if (!stdenv.hostPlatform.isDarwin) then
@@ -350,7 +358,6 @@ stdenv'.mkDerivation (finalAttrs: {
   postFixup =
     lib.optionalString cudaSupport ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
-        isELF "$program" || continue
         addDriverRunpath "$program"
       done
     ''

@@ -28,14 +28,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-07-30";
+  version = "0-unstable-2025-08-14";
 
   src = fetchFromGitHub {
-    owner = "wez";
+    owner = "wezterm";
     repo = "wezterm";
-    rev = "6a493f88fab06a792308e0c704790390fd3c6232";
+    rev = "bf9a2aeebacec19fd07b55234d626f006b22d369";
     fetchSubmodules = true;
-    hash = "sha256-ilDUBkXKo3N83ew3I+Ic48SBjraCs3OyjVXlTItX0mU=";
+    hash = "sha256-cD0r+TchRc/A+G3HMu2PjjPm8m7Ue7GpH9F/PlfJcKE=";
   };
 
   postPatch = ''
@@ -156,7 +156,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
-    homepage = "https://wezfurlong.org/wezterm";
+    homepage = "https://wezterm.org";
     license = licenses.mit;
     mainProgram = "wezterm";
     maintainers = with maintainers; [

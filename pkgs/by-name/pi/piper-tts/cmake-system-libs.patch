@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 2db7493..c8464ff 100644
+index 2db7493..675c64b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -4,93 +4,129 @@
+@@ -4,93 +4,133 @@
  cmake_minimum_required(VERSION 3.26)
  project(piper LANGUAGES C CXX)
  
@@ -80,9 +80,6 @@ index 2db7493..c8464ff 100644
 -    target_compile_definitions(espeakbridge PRIVATE LIBESPEAK_NG_EXPORT)
  
 -    # Fix .dll suffix
--    set_target_properties(espeakbridge PROPERTIES
--        PREFIX ""
--        SUFFIX ".pyd"
 +if (ESPEAKNG_FOUND)
 +    message(STATUS "Found system espeak-ng via pkg-config")
 +
@@ -95,6 +92,11 @@ index 2db7493..c8464ff 100644
 +    target_link_libraries(espeakbridge PRIVATE
 +        ${ESPEAKNG_LIBRARIES}
 +        ${UCD_STATIC_LIB}
++    )
++
+     set_target_properties(espeakbridge PROPERTIES
+         PREFIX ""
+-        SUFFIX ".pyd"
      )
 +
 +    install(TARGETS espeakbridge

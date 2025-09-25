@@ -138,8 +138,6 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
-      # Not a library, but we do want it to be built for every qt version there
-      # is, to allow users to choose the right build if needed.
       sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =

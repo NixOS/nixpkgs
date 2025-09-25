@@ -1682,6 +1682,12 @@ This should be turned off or fixed for build errors such as:
 sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
 ```
 
+#### `glibcxxassertions` {#glibcxxassertions}
+
+Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on libstdc++ targets, and when defined, enables extra error checking in the form of precondition assertions, such as bounds checking in c++ strings and null pointer checks when dereferencing c++ smart pointers.
+
+These checks may have an impact on performance in some cases.
+
 #### `pacret` {#pacret}
 
 This flag adds the `-mbranch-protection=pac-ret` compiler option on aarch64-linux targets. This uses ARM v8.3's Pointer Authentication feature to sign function return pointers before adding them to the stack. The pointer's authenticity is then validated before returning to its destination. This dramatically increases the difficulty of ROP exploitation techniques.

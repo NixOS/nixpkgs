@@ -13,7 +13,7 @@
   libiconv,
   libstaden-read,
   pkg-config,
-  tbb_2021,
+  tbb_2022,
   xz,
   zlib,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
     libgff
     libstaden-read
-    tbb_2021
+    tbb_2022
     xz
     zlib
   ]

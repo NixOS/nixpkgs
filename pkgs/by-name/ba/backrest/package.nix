@@ -12,13 +12,13 @@
 }:
 let
   pname = "backrest";
-  version = "1.8.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-lpYny+5bXIxj+ZFhbSn200sBrDShISESZw+L5sy+X+Q=";
+    hash = "sha256-3lAWViC9K34R8la/z57kjGJmMmletGd8pJ1dDt+BeKQ=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 1;
-      hash = "sha256-q7VMQb/FRT953yT2cyGMxUPp8p8XkA9mvqGI7S7Eifg=";
+      hash = "sha256-vJgsU0OXyAKjUJsPOyIY8o3zfNW1BUZ5IL814wmJr3o=";
     };
 
     buildPhase = ''
@@ -62,7 +62,7 @@ buildGoModule {
       internal/resticinstaller/resticinstaller.go
   '';
 
-  vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
+  vendorHash = "sha256-oycV8JAJQF/PNc7mmYGzkZbpG8pMwxThmuys9e0+hcc=";
 
   nativeBuildInputs = [
     gzip
@@ -98,6 +98,10 @@ buildGoModule {
     export HOME=$(pwd)
   '';
 
+  # skip tests on darwin due to /etc/protocols failure
+  # `__darwinAllowLocalNetworking = true;` wasn't sufficient
+  doCheck = !stdenv.isDarwin;
+
   postInstall = ''
     wrapProgram $out/bin/backrest \
       --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
@@ -108,7 +112,7 @@ buildGoModule {
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };

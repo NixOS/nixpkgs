@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "django-htmx";
-  version = "1.23.2";
+  version = "1.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "adamchainz";
     repo = "django-htmx";
     rev = version;
-    hash = "sha256-fteFMwfHuQdAIn5OMbpc52/18pkh8+O11KhvnKH6Jj8=";
+    hash = "sha256-cJpZsjPAg1ss1dxhvjY+Xw29xAzuHzlVSDxUfAU9fgI=";
   };
 
   build-system = [ setuptools ];

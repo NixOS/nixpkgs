@@ -1,12 +1,11 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   fetchFromGitHub,
-  gradle_8,
+  gradle,
   jdk17,
   zenity,
 
@@ -39,31 +38,31 @@
 
 let
   pname = "mindustry";
-  version = "146";
+  version = "151.1";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
 
   Mindustry = fetchFromGitHub {
+    name = "Mindustry-source";
     owner = "Anuken";
     repo = "Mindustry";
-    rev = "v${version}";
-    hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
+    tag = "v${version}";
+    hash = "sha256-/WBO66Ii/1IuL3VaQNCTrcK43VWS8FVLYPxxtJMYKus=";
   };
   Arc = fetchFromGitHub {
+    name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
-    rev = "v${version}";
-    hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
+    tag = "v${version}";
+    hash = "sha256-jI9bvo8MEEe1guM8YuQmGOi/wP5eFH88dvsin7sAPY0=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's arc-core/build.gradle
-    rev = "v0.9";
-    hash = "sha256-6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
+    tag = "v0.11";
+    hash = "sha256-jybIILdK3cqyZ2LIuoWDfZWocVTbKszekKCLil0WXRY=";
   };
 
   desktopItem = makeDesktopItem {
@@ -95,40 +94,6 @@ stdenv.mkDerivation {
 
   patches = [
     ./0001-fix-include-path-for-SDL2-on-linux.patch
-    # Fix build with gradle 8.8, remove on next Arc release
-    (fetchpatch {
-      url = "https://github.com/Anuken/Arc/commit/2a91c51bf45d700091e397fd0b62384763901ae6.patch";
-      hash = "sha256-sSD78GmF14vBvNe+ajUJ4uIc4p857shTP/UkAK6Pyyg=";
-      extraPrefix = "Arc/";
-      stripLen = 1;
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Arc/commit/d7f8ea858c425410dbd43374271a703d4443b432.patch";
-      hash = "sha256-5LPgBOV0r/dUtpyxitTu3/9tMIqjeIKfGVJi3MEr7fQ=";
-      extraPrefix = "Arc/";
-      stripLen = 1;
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Mindustry/commit/695dad201fb4c2b4252f2ee5abde32e968169ba5.patch";
-      hash = "sha256-bbTjyfUl+XFG/dgD1XPddVKD/ImOP5ARAP3q0FPnt58=";
-      name = "always-use-local-arc-1.patch";
-      stripLen = 1;
-      extraPrefix = "Mindustry/";
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Mindustry/commit/f6082225e859c759c8d9c944250b6ecd490151ed.patch";
-      hash = "sha256-xFHdAUTS1EiHNQqw6qfzYk2LMr/DjeHoEzQfcfOUcFs=";
-      name = "always-use-local-arc-2.patch";
-      stripLen = 1;
-      extraPrefix = "Mindustry/";
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Mindustry/commit/e4eadbbb7f35db3093a0a3d13272bdfbedfaead3.patch";
-      hash = "sha256-L/XQAxh6UgKsTVTgQKDXNRIAdtVtaY4ameT/Yb/+1p8=";
-      name = "always-use-local-arc-3.patch";
-      stripLen = 1;
-      extraPrefix = "Mindustry/";
-    })
   ];
 
   postPatch = ''

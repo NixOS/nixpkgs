@@ -37,14 +37,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.x2goserver;
-      defaultText = literalExpression "pkgs.x2goserver";
-      description = ''
-        The x2goserver package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "x2goserver" { };
 
     superenicer = {
       enable = mkEnableOption "superenicer" // {

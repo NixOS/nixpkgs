@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.26";
+  version = "0.6.30";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-ourzYHwVSlM4nqEbkKf6PsNfNkW8quXdcBSW0p16pIg=";
+    hash = "sha256-0gQlzqHFVcayN1/Z5Ou1Gv1+VQMMwk7QrvVXV92EFp0=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,13 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.0";
+    pyodideVersion = "0.28.2";
     pyodide = fetchurl {
-      hash = "sha256-4YwDuhcWPYm40VKfOEqPeUSIRQl1DDAdXEUcMuzzU7o=";
+      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-xZtES8qZ7MTt/OviEqGmGO3D3BuOpMGHjnBuSsdFJgM=";
+    npmDepsHash = "sha256-AYChUMU8vLNaJPfIbX1SThx01uV3V6QpN6OjYrerg5U=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -107,12 +107,10 @@ python3Packages.buildPythonApplication rec {
       black
       boto3
       chromadb
-      colbert-ai
       cryptography
       ddgs
       docx2txt
       einops
-      elasticsearch
       extract-msg
       fake-useragent
       fastapi
@@ -129,6 +127,7 @@ python3Packages.buildPythonApplication rec {
       googleapis-common-protos
       httpx
       iso-639
+      itsdangerous
       langchain
       langchain-community
       langdetect
@@ -159,16 +158,12 @@ python3Packages.buildPythonApplication rec {
       peewee-migrate
       pgvector
       pillow
-      pinecone-client
-      playwright
-      posthog
       psutil
       pyarrow
       pycrdt
       pydub
       pyjwt
       pymdown-extensions
-      pymilvus
       pymysql
       pypandoc
       pypdf
@@ -179,7 +174,6 @@ python3Packages.buildPythonApplication rec {
       python-socketio
       pytube
       pyxlsb
-      qdrant-client
       rank-bm25
       rapidocr-onnxruntime
       redis
@@ -207,9 +201,16 @@ python3Packages.buildPythonApplication rec {
     ];
 
     all = [
+      colbert-ai
+      elasticsearch
       moto
       gcp-storage-emulator
+      playwright
+      oracledb
+      pinecone-client
+      pymilvus
       pymongo
+      qdrant-client
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;

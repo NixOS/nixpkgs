@@ -17,19 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.109.2";
+  version = "1.111.0";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-A5zrUZnKFb0FokG2Yy8jyb9nldOAEh4PZIEESMSqGco=";
+    hash = "sha256-Ot7z6ZGOUeezp4r8mbGIhkvtkyigma1nLfVydZTVoMg=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-7GQmAnIuHAQyoAcU55LdMiF78tHWM3lXCqH8VyIvwLM=";
+    fetcherVersion = 2;
+    hash = "sha256-uRdCxQENxAsQsYgxSVwVxpG8BhEd/VrYbNLNXCo9cRw=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
     shopt -s globstar

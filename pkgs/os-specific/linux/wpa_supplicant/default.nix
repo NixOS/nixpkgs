@@ -34,10 +34,16 @@ stdenv.mkDerivation rec {
       revert = true;
     })
     ./unsurprising-ext-password.patch
+    ./multiple-configs.patch
     (fetchpatch {
       name = "suppress-ctrl-event-signal-change.patch";
       url = "https://w1.fi/cgit/hostap/patch/?id=c330b5820eefa8e703dbce7278c2a62d9c69166a";
       hash = "sha256-5ti5OzgnZUFznjU8YH8Cfktrj4YBzsbbrEbNvec+ppQ=";
+    })
+    (fetchpatch {
+      name = "ensure-full-key-match";
+      url = "https://git.w1.fi/cgit/hostap/patch/?id=1ce37105da371c8b9cf3f349f78f5aac77d40836";
+      hash = "sha256-leCk0oexNBZyVK5Q5gR4ZcgWxa0/xt/aU+DssTa0UwE=";
     })
   ];
 

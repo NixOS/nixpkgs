@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  auth0-python,
   buildPythonPackage,
   fetchFromGitHub,
   requests,
@@ -9,20 +10,21 @@
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
     repo = "sharkiq";
     tag = "v${version}";
-    hash = "sha256-bojLyL16DOFgbU8rglzBRxcgsHwaTQQAsJQZCaXo5pw=";
+    hash = "sha256-XPqrEE/GwIn4sqbhETRPhBBPkH8Je+LKoDV+qDb3Ry8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    auth0-python
     requests
   ];
 

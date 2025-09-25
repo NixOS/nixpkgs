@@ -97,13 +97,23 @@ def is_encrypted(device: str) -> bool:
 def is_fs_type_supported(fs_type: str) -> bool:
     return fs_type.startswith('vfat')
 
+
+def get_dest_file(path: str) -> str:
+    package_id = os.path.basename(os.path.dirname(path))
+    suffix = os.path.basename(path)
+    return f'{package_id}-{suffix}'
+
+
+def get_dest_path(path: str, target: str) -> str:
+    dest_file = get_dest_file(path)
+    return os.path.join(str(limine_install_dir), target, dest_file)
+
+
 def get_copied_path_uri(path: str, target: str) -> str:
     result = ''
 
-    package_id = os.path.basename(os.path.dirname(path))
-    suffix = os.path.basename(path)
-    dest_file = f'{package_id}-{suffix}'
-    dest_path = os.path.join(str(limine_install_dir), target, dest_file)
+    dest_file = get_dest_file(path)
+    dest_path = get_dest_path(path, target)
 
     if not os.path.exists(dest_path):
         copy_file(path, dest_path)

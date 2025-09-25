@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "scipp";
-  version = "25.05.1";
+  version = "25.08.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     repo = "Scipp";
     # https://github.com/scipp/scipp/pull/3722
     tag = version;
-    hash = "sha256-AanXb+nF/YIZFuzG5UnoNPX97WScfPKuoSBY18uYt9k=";
+    hash = "sha256-nLccJlFnnVTpamph2oIaMxRD5ljrw6GlCnnTx7LfrO0=";
   };
   env = {
     SKIP_CONAN = "true";

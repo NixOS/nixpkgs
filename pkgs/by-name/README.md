@@ -62,16 +62,12 @@ The above expression is called using these arguments by default:
 ```
 
 But the package might need `pkgs.libbar_2` instead.
-While the function could be changed to take `libbar_2` directly as an argument,
-this would change the `.override` interface, breaking code like `.override { libbar = ...; }`.
-So instead it is preferable to use the same generic parameter name `libbar`
-and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-packages.nix):
+While the `libbar` argument could explicitly be overridden in `all-packages.nix` with `libbar_2`, this would hide important information about this package from its interface.
+The fact that the package requires a certain version of `libbar` to work should not be hidden in a separate place.
+It is preferable to use `libbar_2` as a argument name instead.
 
-```nix
-{
-  libfoo = callPackage ../by-name/so/some-package/package.nix { libbar = libbar_2; };
-}
-```
+This approach also has the benefit that, if the expectation of the package changes to require a different version of `libbar`, a downstream user with an override of this argument will receive an error.
+This is comparable to a merge conflict in git: It's much better to be forced to explicitly address the conflict instead of silently keeping the override - which might lead to a different problem that is likely much harder to debug.
 
 ## Manual migration guidelines
 

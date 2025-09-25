@@ -135,7 +135,7 @@ import ../make-test-python.nix (
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/advanced.yaml")
         # check that the timeout is set correctly, select only the first doc in advanced.yaml
         advancedManifest = json.loads(machine.succeed("yq -o json 'select(di == 0)' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
-        assert advancedManifest["spec"]["timeout"] == "69s", f"unexpected value for spec.timeout: {advancedManifest["spec"]["timeout"]}"
+        t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/values-file", timeout=180)
@@ -145,9 +145,9 @@ import ../make-test-python.nix (
         values_file_output = machine.succeed("kubectl logs -l batch.kubernetes.io/job-name=values-file")
         advanced_output = machine.succeed("kubectl -n test logs -l batch.kubernetes.io/job-name=advanced")
         # strip the output to remove trailing whitespaces
-        assert hello_output.rstrip() == "Hello, world!", f"unexpected output of hello job: {hello_output}"
-        assert values_file_output.rstrip() == "Hello, file!", f"unexpected output of values file job: {values_file_output}"
-        assert advanced_output.rstrip() == "advanced hello", f"unexpected output of advanced job: {advanced_output}"
+        t.assertEqual(hello_output.rstrip(), "Hello, world!", "unexpected output of hello job")
+        t.assertEqual(values_file_output.rstrip(), "Hello, file!", "unexpected output of values file job")
+        t.assertEqual(advanced_output.rstrip(), "advanced hello", "unexpected output of advanced job")
         # wait for bundled traefik deployment
         machine.wait_until_succeeds("kubectl -n kube-system rollout status deployment traefik", timeout=180)
       '';

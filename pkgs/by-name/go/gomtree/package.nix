@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gomtree";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vbatts";
     repo = "go-mtree";
     rev = "v${version}";
-    hash = "sha256-MDX16z4H1fyuV5atEsZHReJyvC+MRdeA54DORCFtpqI=";
+    hash = "sha256-SCjmyvZZGI/vQg2Ok4vw6v4Om8pNgdWDBwWVB/LIKaA=";
   };
 
   vendorHash = null;

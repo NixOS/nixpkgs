@@ -24,7 +24,7 @@ let
       libargon2,
       libxml2,
       pcre2,
-      systemd,
+      systemdLibs,
       system-sendmail,
       valgrind,
       xcbuild,
@@ -60,7 +60,7 @@ let
       ipv6Support ? true,
       zendSignalsSupport ? true,
       zendMaxExecutionTimersSupport ? false,
-      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
       valgrindSupport ?
         !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind,
       ztsSupport ? apxs2Support,
@@ -252,7 +252,7 @@ let
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
             ++ lib.optional argon2Support libargon2
-            ++ lib.optional systemdSupport systemd
+            ++ lib.optional systemdSupport systemdLibs
             ++ lib.optional valgrindSupport valgrind;
 
           CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
@@ -332,11 +332,15 @@ let
           '';
 
           postFixup = ''
-            mkdir -p $dev/bin $dev/share/man/man1
+            mkdir -p $dev/bin $dev/lib $dev/share/man/man1
             mv $out/bin/phpize $out/bin/php-config $dev/bin/
+            mv $out/lib/build $dev/lib/
             mv $out/share/man/man1/phpize.1.gz \
                $out/share/man/man1/php-config.1.gz \
                $dev/share/man/man1/
+
+            substituteInPlace $dev/bin/phpize \
+              --replace-fail "$out/lib" "$dev/lib"
           '';
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;

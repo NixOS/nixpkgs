@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-postgres";
-  version = "0.6.5";
+  version = "0.6.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_postgres";
     inherit version;
-    hash = "sha256-mRViARNZeVVMS8VzVBFz9d+FjsX+1M/bwnQeA1QR8mI=";
+    hash = "sha256-AwbZxv4ClJYNgeX4UydcOZcAb+8UUc34u/BNHUGSeiI=";
   };
 
   pythonRemoveDeps = [ "psycopg2-binary" ];

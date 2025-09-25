@@ -1,6 +1,7 @@
 {
   lib,
-  buildGo124Module,
+  stdenv,
+  buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
@@ -37,7 +38,7 @@ let
   };
 
 in
-buildGo124Module rec {
+buildGoModule rec {
   inherit version;
   pname = "glasskube";
 
@@ -67,7 +68,7 @@ buildGo124Module rec {
     cp -r ${web-bundle}/bundle internal/web/root/static/bundle
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # Completions
     installShellCompletion --cmd glasskube \
       --bash <($out/bin/glasskube completion bash) \

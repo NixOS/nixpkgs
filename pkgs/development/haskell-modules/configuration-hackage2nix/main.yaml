@@ -338,6 +338,9 @@ package-maintainers:
     - tz
     - weeder
     - witch
+  mikatammi:
+    - botan-bindings
+    - botan-low
   mpscholten:
     - ihp-hsx
     - push-notify-apn
@@ -711,7 +714,6 @@ unsupported-platforms:
   kmonad:                                       [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
-  large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ platforms.darwin ]
   libsystemd-journal:                           [ platforms.darwin ]
   libtelnet:                                    [ platforms.darwin ]

@@ -74,7 +74,7 @@ in
     };
 
     requestTimeout = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.unsigned;
       default = 5;
       description = ''
         Number of seconds to wait for the client to send a complete
@@ -83,7 +83,7 @@ in
     };
 
     responseTimeout = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.unsigned;
       default = 0;
       description = ''
         Number of seconds to wait for the client to send a complete

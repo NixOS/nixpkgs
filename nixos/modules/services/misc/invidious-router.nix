@@ -70,14 +70,7 @@ in
         for configuration options.
       '';
     };
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.invidious-router;
-      defaultText = lib.literalExpression "pkgs.invidious-router";
-      description = ''
-        The invidious-router package to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "invidious-router" { };
     nginx = {
       enable = lib.mkEnableOption ''
         Automatic nginx proxy configuration

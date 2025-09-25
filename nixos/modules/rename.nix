@@ -62,6 +62,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "goldwarden"
+    ] "'goldwarden' has been removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "pantheon-tweaks" ] ''
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
@@ -131,7 +135,6 @@ in
       "services"
       "deepin"
     ] "the Deepin desktop environment has been removed from nixpkgs due to lack of maintenance.")
-    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule [ "services" "dnscrypt-wrapper" ] ''
       The dnscrypt-wrapper module was removed since the project has been effectively unmaintained since 2018;
       moreover the NixOS module had to rely on an abandoned version of dnscrypt-proxy v1 for the rotation of keys.
@@ -369,6 +372,11 @@ in
     '')
     (mkRemovedOptionModule [ "services" "gateone" ] ''
       The gateone module was removed since the package was removed alongside much other obsolete python 2.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "lxd" ] ''
+      LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+      Consider migrating or switching to Incus, or remove from your configuration.
+      https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
     '')
     # Do NOT add any option renames here, see top of the file
   ];

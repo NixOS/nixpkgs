@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   docutils,
   meson,
   ninja,
@@ -120,6 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./paths.patch
     ./disable-test.patch
+    (fetchpatch {
+      name = "backport-test-sockopt-6.16-fix.patch";
+      url = "https://github.com/bus1/dbus-broker/commit/fd5c6e191bffcf5b3e6c9abb8b0b03479accc04b.patch";
+      hash = "sha256-+QgZzm/qRnVSr0wDNw9Np3LRreRKl6CQXJextLPy6fc=";
+    })
   ];
 
   nativeBuildInputs = [

@@ -110,9 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
       cxxPrefixForStdenv =
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
-      setBuild = "--set=target.\"${stdenv.buildPlatform.rust.rustcTarget}\"";
-      setHost = "--set=target.\"${stdenv.hostPlatform.rust.rustcTarget}\"";
-      setTarget = "--set=target.\"${stdenv.targetPlatform.rust.rustcTarget}\"";
+      setBuild = "--set=target.\"${stdenv.buildPlatform.rust.rustcTargetSpec}\"";
+      setHost = "--set=target.\"${stdenv.hostPlatform.rust.rustcTargetSpec}\"";
+      setTarget = "--set=target.\"${stdenv.targetPlatform.rust.rustcTargetSpec}\"";
       ccForBuild = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       cxxForBuild = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       ccForHost = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
@@ -291,11 +291,11 @@ stdenv.mkDerivation (finalAttrs: {
         runHook preInstall
 
         python ./x.py --keep-stage=0 --stage=1 install library/std
-        mkdir -v $out/bin $doc $man
-        ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
-        ln -s ${rustc.unwrapped}/libexec $out
+        mkdir -v $doc $man
+        ln -s ${rustc.unwrapped}/{bin,libexec} $out
         rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
         ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
+        ln -s ${rustc.unwrapped}/lib/rustlib/etc $out/lib/rustlib/
         echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
         lndir ${rustc.doc} $doc
         lndir ${rustc.man} $man

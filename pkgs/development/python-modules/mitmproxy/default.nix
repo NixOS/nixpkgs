@@ -52,6 +52,7 @@ buildPythonPackage rec {
     "cryptography"
     "flask"
     "h2"
+    "kaitaistruct"
     "passlib"
     "pyopenssl"
     "tornado"

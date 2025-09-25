@@ -597,8 +597,8 @@
       "dependency": "direct dev",
       "description": {
         "path": ".",
-        "ref": "v1.0.51",
-        "resolved-ref": "430672b7c7608b68ceda785533ec11e1ac3e9ca7",
+        "ref": "v1.0.52",
+        "resolved-ref": "38e7d41ccd71bf44e286d86b4ad656f05c5c2548",
         "url": "https://github.com/lppcg/fl_build.git"
       },
       "source": "git",
@@ -2292,8 +2292,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "v4.0.3",
-        "resolved-ref": "c64183346b924173eb7251800001a64771911185",
+        "ref": "v4.0.4",
+        "resolved-ref": "5747837cdb7b113ef733ce0104e4f2bfa1eb4a36",
         "url": "https://github.com/lollipopkit/xterm.dart"
       },
       "source": "git",

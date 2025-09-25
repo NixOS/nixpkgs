@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-authenticator";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "https://proton.me/download/authenticator/linux/ProtonAuthenticator_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-66OqxTlW0DsKH8+HcxzH7zettNm1eXP0ZjUp7ksYpXc=";
+    hash = "sha256-SoTeqnYDMgCoWLGaQZXaHiRKGreFn7FPSz5C0O88uWM=";
   };
 
   dontConfigure = true;

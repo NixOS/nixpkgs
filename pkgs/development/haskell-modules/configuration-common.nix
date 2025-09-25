@@ -171,12 +171,16 @@ with haskellLib;
         ];
 
         cabal2nix-unstable = super.cabal2nix-unstable.overrideScope cabalInstallOverlay;
+        distribution-nixpkgs-unstable = super.distribution-nixpkgs-unstable.overrideScope cabalInstallOverlay;
+        hackage-db-unstable = super.hackage-db-unstable.overrideScope cabalInstallOverlay;
       }
     )
     cabal-install
     cabal-install-solver
     guardian
     cabal2nix-unstable
+    distribution-nixpkgs-unstable
+    hackage-db-unstable
     ;
 
   # Expected test output for these accidentally checks the absolute location of the source directory

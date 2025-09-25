@@ -5,7 +5,6 @@
   pnpm_10,
   nodejs_24,
   makeWrapper,
-  prisma,
   prisma-engines,
   ffmpeg,
   openssl,
@@ -29,33 +28,17 @@ let
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
-
-  vips' = vips.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = "8.17.1";
-      src = fetchFromGitHub {
-        inherit (prevAttrs.src) owner repo;
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-Sc2BWdQIgL/dI0zfbEQVCs3+1QBrLE7BsE3uFHe9C/c=";
-        postFetch = ''
-          rm -r $out/test/test-suite/images/
-        '';
-      };
-      outputs = lib.remove "devdoc" prevAttrs.outputs;
-      mesonFlags = lib.remove (lib.mesonBool "gtk_doc" true) prevAttrs.mesonFlags;
-    }
-  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/UNSAvXfVeybFGFFQaVklAbKGT64pa37DmUilzo5ss4=";
+    hash = "sha256-tQRfgLU0Dvf3vhELsttprfzscvHUgI1u7k9RA4S4vqo=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -63,20 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  postPatch = ''
-    substituteInPlace src/lib/db/migration/index.ts \
-      --replace-fail "pnpm prisma" ${lib.getExe' prisma "prisma"}
-  '';
-
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-TCbtaxc8AEpFhaHpK+NIrLPR6dQ+iFIEfEfwKob61yI=";
+    hash = "sha256-zbr57RVBKGpnL5u0evbQAKGyMftHXj6cuntYBHiUxiM=";
   };
 
   buildInputs = [
     openssl
-    vips'
+    vips
   ];
 
   nativeBuildInputs = [
@@ -107,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    pnpm prune --prod
+    CI=true pnpm prune --prod
     find node_modules -xtype l -delete
 
     mkdir -p $out/{bin,share/zipline}
