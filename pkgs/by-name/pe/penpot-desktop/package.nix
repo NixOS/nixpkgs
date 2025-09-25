@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron,
+  electron_37,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
@@ -15,6 +15,7 @@ let
   description = "Unofficial desktop application for the open-source design tool, Penpot";
   icon = "penpot";
   nodejs = nodejs_24;
+  electron = electron_37;
 in
 buildNpmPackage rec {
   pname = "penpot-desktop";
