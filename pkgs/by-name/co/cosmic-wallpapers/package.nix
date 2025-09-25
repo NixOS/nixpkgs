@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchpatch,
+  wallpaper-compat-hook,
   nix-update-script,
 }:
 
@@ -20,12 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-XtNmV6fxKFlirXQvxxgAYSQveQs8RCTfcFd8SVdEXtE=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pop-os/cosmic-wallpapers/pull/2/commits/4d17ebe69335f8ffa80fd1c48baa7f3d3efa4dbe.patch";
-      hash = "sha256-4QRtX5dbN6C/ZKU3pvV7mTT7EDrMWvRCFB4004RMylM=";
-    })
-  ];
+  nativeBuildInputs = [ wallpaper-compat-hook ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
