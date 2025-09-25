@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildPhase = null;
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin
