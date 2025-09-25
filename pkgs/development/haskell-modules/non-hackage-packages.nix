@@ -41,6 +41,8 @@ self: super:
 
   ghc-settings-edit = self.callPackage ../tools/haskell/ghc-settings-edit { };
 
+  iserv-proxy = self.callPackage ../tools/haskell/iserv-proxy { };
+
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 

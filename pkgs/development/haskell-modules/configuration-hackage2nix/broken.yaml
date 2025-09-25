@@ -3697,7 +3697,6 @@ broken-packages:
   - libgit # failure in job https://hydra.nixos.org/build/252729283 at 2024-03-16
   - libhbb # failure in job https://hydra.nixos.org/build/233232186 at 2023-09-02
   - libinfluxdb # failure in job https://hydra.nixos.org/build/233199457 at 2023-09-02
-  - libiserv # failure in job https://hydra.nixos.org/build/307520003 at 2025-09-19
   - libjenkins # failure in job https://hydra.nixos.org/build/233198788 at 2023-09-02
   - libjwt-typed # failure in job https://hydra.nixos.org/build/233230163 at 2023-09-02
   - libltdl # failure in job https://hydra.nixos.org/build/233225728 at 2023-09-02
