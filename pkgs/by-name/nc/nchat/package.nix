@@ -12,6 +12,7 @@
   cmake,
   gperf,
   nix-update-script,
+  withWhatsApp ? (!stdenv.isDarwin), # macOS 12.0+ required
 }:
 
 let
@@ -89,7 +90,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "HAS_WHATSAPP" withWhatsApp)
   ];
 
   passthru = {
