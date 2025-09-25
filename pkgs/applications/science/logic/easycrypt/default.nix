@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "2025.08";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "easycrypt";
+    repo = "easycrypt";
     tag = "r${version}";
     hash = "sha256-WUms6hh7T5/gxRLFvbJQiT1ErLr8KFilFNOMTT/fIyY=";
   };
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out ${pname}
+    dune install --prefix $out easycrypt
     rm $out/bin/ec-runtest
     wrapPythonProgramsIn "$out/lib/easycrypt/commands" "$pythonPath"
     runHook postInstall

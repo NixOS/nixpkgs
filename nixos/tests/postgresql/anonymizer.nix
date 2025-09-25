@@ -16,7 +16,7 @@ let
       nodes.machine =
         { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs.pg-dump-anon ];
+          environment.systemPackages = [ (pkgs.pg-dump-anon.override { postgresql = package; }) ];
           services.postgresql = {
             inherit package;
             enable = true;
@@ -39,7 +39,7 @@ let
                   create table player(id serial, name text, points int);
                   insert into player(id,name,points) values (1,'Foo', 23);
                   insert into player(id,name,points) values (2,'Bar',42);
-                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name();';
+                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name()';
                   security label for anon on column player.points is 'MASKED WITH VALUE NULL';
                 ''}"
             )
@@ -61,7 +61,7 @@ let
                 COPY public.player ...
                 1,Shields,
                 2,Salazar,
-                \.
+                \\.
 
             in the given dump (the commas are tabs in case of pg_dump).
                   Extract the CSV lines and split by `sep`.

@@ -9,13 +9,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "apngasm";
   version = "3.1.10";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "apngasm";
+    repo = "apngasm";
     rev = "f105b2d6024ef3113bb407d68e27e476a17fa998";
     sha256 = "sha256-lTk2sTllKHRUaWPPEkC4qU5K10oRaLrdWBgN4MUGKeo=";
   };

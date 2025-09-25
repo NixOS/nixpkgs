@@ -3211,11 +3211,13 @@ with pkgs;
       isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
       isl_0_23 = callPackage ../development/libraries/isl/0.23.0.nix { };
       isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
+      isl_0_27 = callPackage ../development/libraries/isl/0.27.0.nix { };
     })
     isl
     isl_0_20
     isl_0_23
     isl_0_24
+    isl_0_27
     ;
 
   jackett = callPackage ../servers/jackett { };
@@ -5361,6 +5363,8 @@ with pkgs;
     withQt = true;
   };
 
+  lima-additional-guestagents = callPackage ../by-name/li/lima/additional-guestagents.nix { };
+
   lld = llvmPackages.lld;
 
   lldb = llvmPackages.lldb;
@@ -5585,6 +5589,7 @@ with pkgs;
     cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_6
     cargo-pgrx_0_14_1
+    cargo-pgrx_0_16_0
     cargo-pgrx
     ;
 

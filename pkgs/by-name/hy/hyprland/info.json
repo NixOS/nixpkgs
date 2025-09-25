@@ -1,7 +1,7 @@
 {
-  "branch": "main",
-  "commit_hash": "46174f78b374b6cea669c48880877a8bdcf7802f",
-  "commit_message": "version: bump to 0.51.0",
-  "date": "2025-09-10",
-  "tag": "v0.51.0"
+  "branch": "v0.51.1-b",
+  "commit_hash": "71a1216abcc7031776630a6d88f105605c4dc1c9",
+  "commit_message": "[gha] Nix: update inputs",
+  "date": "2025-09-22",
+  "tag": "v0.51.1"
 }

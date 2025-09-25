@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ebruck";
-    repo = pname;
+    repo = "radiotray-ng";
     tag = "v${version}";
     hash = "sha256-rRD/IfVnOxowr2mO2BB2hcHK5ByZSmTbcgYdULogYUs=";
   };
