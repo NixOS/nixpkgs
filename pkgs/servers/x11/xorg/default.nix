@@ -88,16 +88,20 @@
   transset,
   util-macros,
   viewres,
+  x11perf,
   xauth,
   xbacklight,
   xbitmaps,
+  xcalc,
   xcb-proto,
   xcmsdb,
+  xcompmgr,
   xconsole,
   xcursorgen,
   xcursor-themes,
   xdriinfo,
   xev,
+  xeyes,
   xfontsel,
   xfsinfo,
   xgamma,
@@ -153,14 +157,18 @@ self: with self; {
     smproxy
     transset
     viewres
+    x11perf
     xauth
     xbacklight
     xbitmaps
+    xcalc
     xcmsdb
+    xcompmgr
     xconsole
     xcursorgen
     xdriinfo
     xev
+    xeyes
     xfontsel
     xfsinfo
     xgamma
@@ -1214,94 +1222,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  x11perf = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      libXft,
-      libXmu,
-      xorgproto,
-      libXrender,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "x11perf";
-      version = "1.6.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/x11perf-1.6.1.tar.bz2";
-        sha256 = "0d3wh6z6znwhfdiv0zaggfj0xgish98xa10yy76b9517zj7hnzhw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        libXft
-        libXmu
-        xorgproto
-        libXrender
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcalc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXaw,
-      xorgproto,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcalc";
-      version = "1.1.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xcalc-1.1.2.tar.xz";
-        sha256 = "1m0wzhjvc88kmx12ykdml5rqlz9h2iki9mkfdngji53y8nhxyy45";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libX11
-        libXaw
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xclock = callPackage (
     {
       stdenv,
@@ -1344,50 +1264,6 @@ self: with self; {
         xorgproto
         libXrender
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcompmgr = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXcomposite,
-      libXdamage,
-      libXext,
-      libXfixes,
-      xorgproto,
-      libXrender,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcompmgr";
-      version = "1.1.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xcompmgr-1.1.10.tar.xz";
-        sha256 = "13xrn0ii8widz0pw31fbdy7x8paf729yqhkmxbm3497jqh4zf93q";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libXcomposite
-        libXdamage
-        libXext
-        libXfixes
-        xorgproto
-        libXrender
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -1506,54 +1382,6 @@ self: with self; {
         libXxf86dga
         libXxf86misc
         libXxf86vm
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xeyes = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libxcb,
-      libXext,
-      libXi,
-      libXmu,
-      xorgproto,
-      libXrender,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xeyes";
-      version = "1.3.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xeyes-1.3.0.tar.xz";
-        sha256 = "08rhfp5xlmdbyxkvxhgjxdn6vwzrbrjyd7jkk8b7wi1kpw0ccl09";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libxcb
-        libXext
-        libXi
-        libXmu
-        xorgproto
-        libXrender
-        libXt
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

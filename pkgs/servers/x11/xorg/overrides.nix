@@ -217,18 +217,6 @@ self: super:
 
   oclock = addMainProgram super.oclock { };
 
-  x11perf = super.x11perf.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [
-      freetype
-      fontconfig
-    ];
-    meta = attrs.meta // {
-      mainProgram = "x11perf";
-    };
-  });
-
-  xcalc = addMainProgram super.xcalc { };
-
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
       "out"
@@ -422,8 +410,6 @@ self: super:
       ];
     };
   });
-
-  xeyes = addMainProgram super.xeyes { };
 
   xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
     configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
@@ -732,7 +718,6 @@ self: super:
   });
 
   xclock = addMainProgram super.xclock { };
-  xcompmgr = addMainProgram super.xcompmgr { };
 
   xinit =
     (super.xinit.override {
