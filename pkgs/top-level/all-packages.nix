@@ -4547,6 +4547,8 @@ with pkgs;
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
+  temurin-bin-25 = javaPackages.compiler.temurin-bin.jdk-25;
+  temurin-jre-bin-25 = javaPackages.compiler.temurin-bin.jre-25;
 
   temurin-bin-24 = javaPackages.compiler.temurin-bin.jdk-24;
   temurin-jre-bin-24 = javaPackages.compiler.temurin-bin.jre-24;
