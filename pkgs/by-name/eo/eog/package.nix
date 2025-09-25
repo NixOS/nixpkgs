@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
           libjxl
           librsvg
           webp-pixbuf-loader
-          libheif.out
+          libheif.lib
         ];
       }
     }"
