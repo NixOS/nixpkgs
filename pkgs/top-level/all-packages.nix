@@ -11651,6 +11651,48 @@ with pkgs;
     (python3Packages.toPythonApplication python3Packages.manim-slides).overridePythonAttrs
       (oldAttrs: {
         dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.pyqt6-full;
+
+        passthru = {
+          tests = {
+            hello-world = testers.runCommand {
+              name = "hello-manim-slides";
+
+              nativeBuildInputs = [
+                pkgs.manim-slides
+              ];
+
+              script = ''
+                set -euo pipefail
+
+                cat > example.py <<- EOF
+                from manim import *  # or: from manimlib import *
+
+                from manim_slides import Slide
+
+
+                class BasicExample(Slide):
+                    def construct(self):
+                        circle = Circle(radius=3, color=BLUE)
+                        dot = Dot()
+
+                        self.play(GrowFromCenter(circle))
+                        self.next_slide()  # Waits user to press continue to go to the next slide
+
+                        self.next_slide(loop=True)  # Start loop
+                        self.play(MoveAlongPath(dot, circle), run_time=2, rate_func=linear)
+                        self.next_slide()  # This will start a new non-looping slide
+
+                        self.play(dot.animate.move_to(ORIGIN))
+                EOF
+
+                manim-slides render example.py
+                manim-slides present BasicExample
+
+                touch $out
+              '';
+            };
+          };
+        };
       });
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
