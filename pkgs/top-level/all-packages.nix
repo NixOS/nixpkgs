@@ -11739,10 +11739,6 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  meshlab = callPackage ../by-name/me/meshlab/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-  };
-
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
