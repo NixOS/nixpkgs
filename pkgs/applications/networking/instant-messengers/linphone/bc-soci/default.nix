@@ -51,7 +51,6 @@ stdenv.mkDerivation {
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      thibaultlemaire
       naxdy
     ];
   };
