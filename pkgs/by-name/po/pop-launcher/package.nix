@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pop-launcher";
-  version = "1.2.4";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "launcher";
     rev = version;
-    hash = "sha256-CLpquNgdtnGMlMpGLv72WZmizalvYPfMWlE/qLprVrs=";
+    hash = "sha256-4wPspv5bpqoG45uUkrtxJTvdbmFkpWv8QBZxsPbGu/M=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  cargoHash = "sha256-Htre2gzAlNfxBkBvMMtjYbUcuwNw+tB4DI18iBA+g34=";
+  cargoHash = "sha256-gc1YhIxHBqmMOE3Gu3T4gmGdAp0t+qiUXDcPYZE6utU=";
 
   cargoBuildFlags = [
     "--package"
