@@ -7,6 +7,7 @@
   newScope,
   overrideCC,
   stdenvNoLibc,
+  emptyDirectory,
 }:
 
 lib.makeScope newScope (
