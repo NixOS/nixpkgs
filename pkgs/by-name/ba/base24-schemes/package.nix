@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "All the color schemes for use in base24 packages";
-    homepage = "https://github.com/tinted-theming/schemes";
+    description = "";
+    homepage = "";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [fe2-Nyxar];
+    maintainers = with lib.maintainers; [ fe2-Nyxar ];
   };
 })
