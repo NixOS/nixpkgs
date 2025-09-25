@@ -282,6 +282,7 @@ in
               Type = "notify";
               Restart = "always";
               ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
+              ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
               UMask = "0027";
               CapabilityBoundingSet = capabilities;
               AmbientCapabilities = capabilities;

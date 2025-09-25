@@ -2,12 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  meson,
+  ninja,
   gettext,
   gtk2,
-  intltool,
-  libtool,
   ncurses,
   openssl,
   pkg-config,
@@ -18,21 +16,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gftp";
-  version = "2.9.1b";
+  version = "2.9.1b-unstable-2025-05-12";
 
   src = fetchFromGitHub {
     owner = "masneyb";
     repo = "gftp";
-    tag = finalAttrs.version;
-    hash = "sha256-0zdv2oYl24BXh61IGCWby/2CCkzNjLpDrAFc0J89Pw4=";
+    rev = "48114635f7b7b1f9a5eda985021ea53b10a7a030";
+    hash = "sha256-unTsd2xX8Y71ItE3gYHoxUPgViK/xhZdx0IQYvDPaEc=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    meson
+    ninja
     gettext
-    intltool
-    libtool
     pkg-config
   ];
 
@@ -43,22 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  # https://github.com/masneyb/gftp/issues/178
-  postPatch = ''
-    substituteInPlace lib/gftp.h \
-      --replace-fail "size_t remote_addr_len" "socklen_t remote_addr_len"
-  '';
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   hardeningDisable = [ "format" ];
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/masneyb/gftp";
@@ -66,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.haylin ];
     platforms = lib.platforms.unix;
+    mainProgram = "gftp";
   };
 })

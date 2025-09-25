@@ -31,7 +31,7 @@ in
       description = ''
         The user IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
     ids.gids = lib.mkOption {
@@ -39,7 +39,7 @@ in
       description = ''
         The group IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
   };
@@ -584,7 +584,6 @@ in
       #shout = 206; #unused
       #gateone = 207; #removed 2025-08-21
       namecoin = 208;
-      #lxd = 210; # unused
       #kibana = 211;
       xtreemfs = 212;
       calibre-server = 213;

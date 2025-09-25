@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "ghstack";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {

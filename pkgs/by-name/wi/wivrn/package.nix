@@ -37,7 +37,7 @@
   onnxruntime,
   opencomposite,
   openxr-loader,
-  ovrCompatSearchPaths ? "${opencomposite}/lib/opencomposite:${xrizer}/lib/xrizer",
+  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
   pipewire,
   pkg-config,
   python3,
@@ -53,13 +53,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.8";
+  version = "25.9";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x9nZyLk0A9eiZ9V700lc4To1cVJ875ZYR0GeqQ7qNpg=";
+    hash = "sha256-XP0bpXgtira2QIlS0fNEteNP48WnEjBYFM1Xmt2sm5I=";
   };
 
   monado = applyPatches {
@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "5c137fe28b232fe460f9b03defa7749adc32ee48";
-      hash = "sha256-4P/ejRAitrYn8hXZPaDOcx27utfm+aVLjtqL6JxZYAg=";
+      rev = "7a4018e2d89151e60e562fac79eba90ca7a328d8";
+      hash = "sha256-DPIvJb23bK7SDjZr9mK0Wt6Zbo3Ari3Ar8TtPe5QgKY=";
     };
 
     postPatch = ''
@@ -89,15 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
       return 1
     fi
   '';
-
-  patches = [
-    # Needed to allow WiVRn in-stream GUI to launch Steam games
-    (fetchpatch {
-      name = "wivrn-allow-launching-steam-games.patch";
-      url = "https://github.com/WiVRn/WiVRn/commit/30ceab5b3082cbc545acf8bc8ca4a24279e6f738.diff";
-      hash = "sha256-BD6MhCET7hdjog8rkl7G2l7/zGfVATpNAhNie0efOlA=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

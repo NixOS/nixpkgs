@@ -29,19 +29,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.15.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-UqgPAGDekM9bKx4kNH+IuB31ML/Jn4E6g86suVESRRU=";
+    hash = "sha256-kFhnlWiNCbs0arJfQRRWubnIrdXKrwyJNLAN1KlDHoc=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoHash = "sha256-7v+Ohll8k3YHKYoQZIWvV+YLHT62ygFb0kPEIXh0jP4=";
+  cargoHash = "sha256-3o/Ub452PbiicmgyW6z9BP2PaECfFYN+Tx24/Go2N2M=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml

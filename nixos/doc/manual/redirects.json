@@ -1,4 +1,19 @@
 {
+  "module-boot-plymouth-tpm2-totp": [
+    "index.html#module-boot-plymouth-tpm2-totp"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-check": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-check"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-configure": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-configure"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-enable": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],

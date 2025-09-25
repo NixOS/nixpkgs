@@ -97,7 +97,6 @@
   # compiles systemd-boot, assumes EFI is available.
   withBootloader ?
     withEfi
-    && !stdenv.hostPlatform.isMusl
     # "Unknown 64-bit data model"
     && !stdenv.hostPlatform.isRiscV32,
   # adds bzip2, lz4, xz and zstd
@@ -195,8 +194,6 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.8";
-
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
   # command:
@@ -207,14 +204,15 @@ let
   kbd' = if withPam then kbd else kbd.override { withVlock = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  inherit pname;
+  version = "257.8";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XQ+IyRar74qQij96CKClHXW0kkPnGeKUgA8ULiWh5YY=";
   };
 
@@ -254,16 +252,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isPower64) [
-    # Auto-detect ELF ABI instead of hardcoding ELFv2 for BPF build
-    # Fixes targeting ELFv1
-    # https://github.com/systemd/systemd/pull/38307#issuecomment-3120543119
-    (fetchpatch {
-      name = "0101-systemd-meson.build-Detect-ELF-ABI-version-for-bpf-build-on-ppc64.patch";
-      url = "https://github.com/systemd/systemd/commit/f9509192512a4c4b9e3915a096333d4b6b297956.patch";
-      hash = "sha256-OGUw+hRCKZm+1EcR64M67QJ9c/PbS2Lk/A+1B3q4Jzs=";
-    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl (
     let
@@ -307,6 +295,10 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/systemd/systemd/commit/34fcd3638817060c79e1186b370e46d9b3a7409f.patch";
         hash = "sha256-Uaewo3jPrZGJttlLcqO6cCj1w3IGZmvbur4+TBdIPxc=";
         excludes = [ "src/udev/udevd.c" ];
+      })
+      (fetchpatch {
+        url = "https://gitlab.postmarketos.org/postmarketOS/systemd/-/commit/5760be33bd26d7e7c66a7294c5f6fd6c7044683f.patch";
+        hash = "sha256-Om+OhGyZJfZNpbtMInm3vGagLbbtOY71fDMZXj6pbPY=";
       })
     ]
   );
@@ -456,7 +448,7 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    (lib.mesonOption "version-tag" version)
+    (lib.mesonOption "version-tag" finalAttrs.version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
@@ -491,7 +483,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sbat-distro-summary" "NixOS")
     (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
     (lib.mesonOption "sbat-distro-pkgname" pname)
-    (lib.mesonOption "sbat-distro-version" version)
+    (lib.mesonOption "sbat-distro-version" finalAttrs.version)
 
     # Users
     (lib.mesonOption "system-uid-max" "999")

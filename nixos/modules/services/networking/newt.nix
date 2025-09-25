@@ -6,39 +6,49 @@
 }:
 let
   cfg = config.services.newt;
+  type =
+    with lib.types;
+    attrsOf (
+      nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (listOf type)
+      ])
+    )
+    // {
+      description = "value coercible to CLI argument";
+    };
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "newt" "id" ] [ "services" "newt" "settings" "id" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "newt" "logLevel" ]
+      [ "services" "newt" "settings" "log-level" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "newt" "endpoint" ]
+      [ "services" "newt" "settings" "endpoint" ]
+    )
+  ];
+
   options = {
     services.newt = {
       enable = lib.mkEnableOption "Newt, user space tunnel client for Pangolin";
-      # needs to be changed when newt-go changes to fosrl-newt
-      package = lib.mkPackageOption pkgs "newt-go" { };
+      package = lib.mkPackageOption pkgs "fosrl-newt" { };
+      settings = lib.mkOption {
+        inherit type;
+        default = { };
+        example = {
+          endpoint = "pangolin.example.com";
+          id = "8yfsghj438a20ol";
+        };
+        description = "Settings for Newt module, see [Newt CLI docs](https://github.com/fosrl/newt?tab=readme-ov-file#cli-args) for more information.";
+      };
 
-      id = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          The Newt Id that will be used to communicate to Pangolin. This is generated on site creation in the dashboard.
-        '';
-      };
-      endpoint = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          The endpoint where both Gerbil and Pangolin reside in order to connect to the websocket. The url of your Pangolin dashboard.
-        '';
-      };
-      logLevel = lib.mkOption {
-        type = lib.types.enum [
-          "DEBUG"
-          "INFO"
-          "WARN"
-          "ERROR"
-          "FATAL"
-        ];
-        default = "INFO";
-        description = "The log level to use.";
-      };
       # provide path to file to keep secrets out of the nix store
       environmentFile = lib.mkOption {
         type = with lib.types; nullOr path;
@@ -72,17 +82,8 @@ in
         HOME = "/var/lib/private/newt";
       };
       # the flag values will all be overwritten if also defined in the env file
-      script = "
-        exec ${lib.getExe pkgs.newt-go} \\\n
-        ${lib.optionalString (
-                !isNull cfg.id
-              ) "--id ${cfg.id} \\\n"}
-        ${lib.optionalString (
-                !isNull cfg.endpoint
-              ) "--endpoint ${cfg.endpoint} \\\n"}
-        --log-level ${cfg.logLevel}
-      ";
       serviceConfig = {
+        ExecStart = "${lib.getExe cfg.package} ${lib.cli.toGNUCommandLineShell { } cfg.settings}";
         DynamicUser = true;
         StateDirectory = "newt";
         StateDirectoryMode = "0700";

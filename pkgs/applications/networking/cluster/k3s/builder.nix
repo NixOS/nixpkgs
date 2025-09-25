@@ -201,13 +201,9 @@ let
     sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
 
     # Let killall expect "containerd-shim" in the Nix store
-    to_replace="/data/\[\^/\]\*/bin/containerd-shim"
-    replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
-    changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
-    if [ -z "$changes" ]; then
-      echo "failed to replace \"$to_replace\" in k3s installer script (install.sh)"
-      exit 1
-    fi
+    substituteInPlace install.sh \
+      --replace-fail '/data/[^/]*/bin/containerd-shim' \
+        '/nix/store/.*k3s-containerd.*/bin/containerd-shim'
 
     remove_matching_line() {
       line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
@@ -453,12 +449,15 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    inherit airgap-images;
-    k3sCNIPlugins = k3sCNIPlugins;
-    k3sContainerd = k3sContainerd;
-    k3sRepo = k3sRepo;
-    k3sRoot = k3sRoot;
-    k3sBundle = k3sBundle;
+    inherit
+      airgap-images
+      k3sCNIPlugins
+      k3sContainerd
+      k3sRepo
+      k3sRoot
+      k3sBundle
+      updateScript
+      ;
     tests =
       let
         mkTests =
@@ -469,7 +468,6 @@ buildGoModule (finalAttrs: {
           lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
       in
       mkTests k3sVersion;
-    updateScript = updateScript;
     imagesList = throw "k3s.imagesList was removed";
     airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
     airgapImagesAmd64 = throw "k3s.airgapImagesAmd64 was renamed to k3s.airgap-images-amd64-tar-zst";

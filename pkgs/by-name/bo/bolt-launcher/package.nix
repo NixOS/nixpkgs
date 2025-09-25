@@ -67,7 +67,6 @@ let
     ];
 
     cmakeFlags = [
-      "-D CMAKE_BUILD_TYPE=Release"
       "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
       "-G Ninja"
     ]

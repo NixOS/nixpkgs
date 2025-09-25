@@ -21,19 +21,19 @@ let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.5.0";
-    hash = "sha256-PkG0npG3nKQwq6SxWdIliIQ/wrYAOG9qVb26IeVkBfc=";
+    rev = "v1.7.0";
+    hash = "sha256-3SFf/7fStrglxcpwEya7hDp8Sr3wBG9OYyBoR78IUgs=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ibLuHIg01wGYPhLRz+LVYA34WaWzlUlNtg7DSONLe9g=";
+    hash = "sha256-vprHCexKtXvbiHz7JfuTbVFyLy0VL1s4e/hNyaN3nY0=";
   };
 
   patches = [

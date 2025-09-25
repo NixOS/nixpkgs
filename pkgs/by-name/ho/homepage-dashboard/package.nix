@@ -6,6 +6,7 @@
   pnpm_10,
   python3,
   stdenv,
+  unixtools,
   cctools,
   lib,
   nixosTests,
@@ -89,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
       --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard \
-      --add-flags "$out/share/homepage/server.js"
+      --add-flags "$out/share/homepage/server.js" \
+      --set PATH "${lib.makeBinPath [ unixtools.ping ]}"
 
     ${if enableLocalIcons then installLocalIcons else ""}
 
@@ -111,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [ parthiv-krishna ];
     platforms = lib.platforms.all;
   };
 })

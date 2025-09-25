@@ -114,13 +114,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "airgeddon";
-  version = "11.51";
+  version = "11.52";
 
   src = fetchFromGitHub {
     owner = "v1s1t0r1sh3r3";
     repo = "airgeddon";
     tag = "v${version}";
-    hash = "sha256-PkP8sPpX/z3yjvTpsRYJ9fKzUaMsnCp+p6AAoTlcAA0=";
+    hash = "sha256-FQB348wOXi89CnjS32cwZwTewjkguTbhK5Izvh/74Q0=";
   };
 
   strictDeps = true;

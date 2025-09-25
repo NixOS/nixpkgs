@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   # Reliably fails to generate gedit-file-browser-enum-types.h in time
   enableParallelBuilding = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gedit/gedit";

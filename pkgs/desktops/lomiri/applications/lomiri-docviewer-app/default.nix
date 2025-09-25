@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-docviewer-app";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-docviewer-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wtNVLSrBR60NSCRemc2ccj8poUicR7kZIb69hItzjLM=";
+    hash = "sha256-1urXLoya/ht7Ax0aqb0jQfyiJm6Z4sIKJn67MSwyNeo=";
   };
 
   postPatch = ''

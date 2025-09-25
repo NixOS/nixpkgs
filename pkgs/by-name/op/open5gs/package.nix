@@ -1,7 +1,5 @@
 {
   stdenv,
-  nodejs,
-  buildNpmPackage,
   lib,
   fetchFromGitHub,
   meson,
@@ -62,21 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2k+S+OXfdskJPtDUFSxb/+2UZcUiOZzRSSGgsEJWolc=";
   };
 
-  webui = buildNpmPackage {
-    pname = finalAttrs.pname + "-webui";
-    inherit (finalAttrs) src version meta;
-
-    sourceRoot = "${finalAttrs.src.name}/webui";
-
-    npmDepsHash = "sha256-IpqineYa15GBqoPDJ7RpaDsq+MQIIDcdq7yhwmH4Lzo=";
-
-    installPhase = ''
-      rm -rf node_modules
-      mkdir $out
-      cp -r * $out
-    '';
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -113,9 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R --no-preserve=mode,ownership ${finalAttrs.diameter} subprojects/freeDiameter
     cp -R --no-preserve=mode,ownership ${finalAttrs.libtins} subprojects/libtins
     cp -R --no-preserve=mode,ownership ${finalAttrs.promc} subprojects/prometheus-client-c
-
-    rm -rf webui/*
-    cp -r ${finalAttrs.webui}/* webui/
   '';
 
   postInstall = ''

@@ -375,6 +375,8 @@ in
 
         bbswitch = callPackage ../os-specific/linux/bbswitch { };
 
+        bcachefs = callPackage ../os-specific/linux/bcachefs-kernel-module { };
+
         ch9344 = callPackage ../os-specific/linux/ch9344 { };
 
         chipsec = callPackage ../tools/security/chipsec {
@@ -819,7 +821,7 @@ in
       src,
       modDirVersion ? lib.versions.pad 3 version,
       configfile,
-      allowImportFromDerivation ? true,
+      allowImportFromDerivation ? false,
     }:
     recurseIntoAttrs (
       packagesFor (manualConfig {

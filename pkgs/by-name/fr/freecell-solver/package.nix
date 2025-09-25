@@ -6,7 +6,6 @@
   cmocka,
   gmp,
   gperf,
-  libtap,
   ninja,
   perl,
   pkg-config,
@@ -65,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmp
-    libtap
     rinutils
   ];
 

@@ -23,6 +23,22 @@
   bash,
 }:
 let
+  awg-vendored = amneziawg-go.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      name = "amneziawg-go";
+      version = "0.2.13";
+
+      src = fetchFromGitHub {
+        owner = "amnezia-vpn";
+        repo = "amneziawg-go";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-vXSPUGBMP37kXJ4Zn5TDLAzG8N+yO/IIj9nSKrZ+sFA=";
+      };
+
+      vendorHash = "sha256-9OtIb3UQXpAA0OzPhDIdb9lXZQHHiYCcmjHAU+vCtpk=";
+    }
+  );
+
   amnezia-tun2socks = tun2socks.overrideAttrs (
     finalAttrs: prevAttrs: {
       pname = "amnezia-tun2socks";
@@ -77,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace client/platforms/linux/daemon/wireguardutilslinux.cpp \
-      --replace-fail 'm_tunnel.start(appPath.filePath("../../client/bin/wireguard-go"), wgArgs);' 'm_tunnel.start("${amneziawg-go}/bin/amneziawg-go", wgArgs);'
+      --replace-fail 'm_tunnel.start(appPath.filePath("../../client/bin/wireguard-go"), wgArgs);' 'm_tunnel.start("${awg-vendored}/bin/amneziawg-go", wgArgs);'
     substituteInPlace client/utilities.cpp \
       --replace-fail 'return Utils::executable("../../client/bin/openvpn", true);' 'return Utils::executable("${openvpn}/bin/openvpn", false);' \
       --replace-fail 'return Utils::executable("../../client/bin/tun2socks", true);' 'return Utils::executable("${amnezia-tun2socks}/bin/amnezia-tun2socks", false);' \
@@ -146,13 +162,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit amnezia-tun2socks amnezia-xray;
+    inherit amnezia-tun2socks amnezia-xray awg-vendored;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
         "amnezia-tun2socks"
         "--subpackage"
         "amnezia-xray"
+        "--subpackage"
+        "awg-vendored"
       ];
     };
   };
@@ -164,6 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     mainProgram = "AmneziaVPN";
     maintainers = with maintainers; [ sund3RRR ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 })

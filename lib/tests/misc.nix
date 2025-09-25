@@ -3210,6 +3210,111 @@ runTests {
     ];
   };
 
+  testDocOptionVisiblity = {
+    expr =
+      let
+        submodule =
+          { lib, ... }:
+          {
+            freeformType = lib.types.attrsOf (
+              lib.types.submodule {
+                options.bar = lib.mkOption { };
+              }
+            );
+            options.foo = lib.mkOption { };
+          };
+
+        module =
+          { lib, ... }:
+          {
+            options = {
+              shallow = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "shallow";
+              };
+              transparent = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "transparent";
+              };
+              "true" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = true;
+              };
+              "false" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = false;
+              };
+              "internal" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                internal = true;
+              };
+            };
+          };
+
+        options =
+          (evalModules {
+            modules = [ module ];
+          }).options;
+      in
+      pipe options [
+        optionAttrSetToDocList
+        (filter (opt: !(builtins.elem "_module" opt.loc)))
+        (map (
+          opt:
+          nameValuePair opt.name {
+            inherit (opt) visible internal;
+          }
+        ))
+        listToAttrs
+      ];
+    expected = {
+      shallow = {
+        visible = true;
+        internal = false;
+      };
+      transparent = {
+        visible = false;
+        internal = false;
+      };
+      "transparent.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "transparent.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "true" = {
+        visible = true;
+        internal = false;
+      };
+      "true.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "true.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "false" = {
+        visible = false;
+        internal = false;
+      };
+      "internal" = {
+        visible = true;
+        internal = true;
+      };
+      "internal.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "internal.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+    };
+  };
+
   testAttrsWithName = {
     expr =
       let

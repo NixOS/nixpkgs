@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.50.1";
+  version = "0.50.2";
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -21,16 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dprint";
     repo = "dprint";
     tag = finalAttrs.version;
-    hash = "sha256-Lt6CzSzppu5ULhzYN5FTCWtWK3AA4/8jRzXgQkU4Tco=";
+    hash = "sha256-pBiMJ+S23J5W+nldW6WpqnvkODcQsEwM2IzDhe6TUlM=";
   };
 
-  cargoPatches = [
-    # Upgrade wasmer to 6.1.0-rc.3 to fix build failure with Rust ≥ 1.89.0
-    # https://github.com/dprint/dprint/pull/1021
-    ./upgrade-wasmer.patch
-  ];
-
-  cargoHash = "sha256-RUWyR1Yr9G2xBMigDa9+LQyaU5on85xkRQYTLH9JOPg=";
+  cargoHash = "sha256-doaZlr5B9XhOaEawLGgM3yWJjgJ5f6TLUiqb+Ze+v0I=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
+  espeak-ng,
   fetchpatch,
   ffmpeg,
   fontconfig,
@@ -18,6 +19,7 @@
   libusb1,
   libwebp,
   nix-update-script,
+  onnxruntime,
   optipng,
   piper-tts,
   pkg-config,
@@ -36,11 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.7.0";
+  version = "8.10.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LP5Yfjdz2GB/6LvvvNd7XPuBYSTKyJ5JE1PeuPL6kyQ=";
+    hash = "sha256-ByDUoF9C5FE8ZlQ/zP4H43b9+zUIsgah5/FO5mtXsMU=";
   };
 
   patches = [
@@ -68,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseQmakeConfigure = true;
   dontUseCmakeConfigure = true;
+  dontUseNinjaBuild = true;
 
   nativeBuildInputs = [
     cmake
@@ -78,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    espeak-ng
     ffmpeg
     fontconfig
     hunspell
@@ -90,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     libstemmer
     libuchardet
     libusb1
-    piper-tts
+    onnxruntime
     podofo_0_10
     poppler-utils
     qt6.qtbase
@@ -144,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
           ]
       ++ lib.optional unrarSupport unrardll
     ))
+    piper-tts
     xdg-utils
   ]
   ++ lib.optional speechSupport speechd-minimal;

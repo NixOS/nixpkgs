@@ -90,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [
       lib.maintainers.dotlambda
-      lib.maintainers.Madouura
       lib.maintainers.tobim
     ];
   };

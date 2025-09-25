@@ -1,5 +1,4 @@
 {
-  fetchpatch,
   mkKdeDerivation,
   pkg-config,
   qtquick3d,

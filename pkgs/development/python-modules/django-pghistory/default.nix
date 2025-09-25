@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-pghistory";
-  version = "3.8.0";
+  version = "3.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Opus10";
     repo = "django-pghistory";
     tag = version;
-    hash = "sha256-+8Irib0pAxu4rMKhMK3vdY5wIt7w7XlDKerz95XIMnE=";
+    hash = "sha256-zQqa4rBhjt2+kaCT4PvGXyTJ63JR3YM50GBQkqnWUKE=";
   };
 
   build-system = [

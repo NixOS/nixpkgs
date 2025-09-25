@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-3smmsco9xgOv+xCo9QIAudbHjZ1s3sKLEQmLXXaylYQ=";
+    hash = "sha256-wRLdxnAD9wZeIwWiX+x/j2gaVv1/iEsy3jYIeb3hWoo=";
   };
   vendorHash = null;
 
@@ -43,7 +43,7 @@ buildGoModule rec {
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rosa \
       --bash <($out/bin/rosa completion bash) \
       --fish <($out/bin/rosa completion fish) \

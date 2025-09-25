@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ip2location-c";
-  version = "8.6.1";
+  version = "8.7.0";
 
   src = fetchFromGitHub {
     owner = "chrislim2888";
     repo = "IP2Location-C-Library";
     rev = version;
-    sha256 = "sha256-3/cLoGV7go4S1ew73IJzJEMTlLnvM3adl+/Sb7mPrZY=";
+    sha256 = "sha256-kp0tNZPP9u2xxFOmBAdivsVLtyF66o38H6eRrs2/S/Y=";
   };
 
   nativeBuildInputs = [

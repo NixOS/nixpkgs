@@ -10,16 +10,16 @@
 }:
 buildGoModule rec {
   pname = "holos";
-  version = "0.104.2";
+  version = "0.105.0";
 
   src = fetchFromGitHub {
     owner = "holos-run";
     repo = "holos";
     rev = "v${version}";
-    hash = "sha256-FzePCxBnKyEEnJZaKjiignahkGlerdw/j2RfDunQnbc=";
+    hash = "sha256-6DUsJWD5dNMG0tCmnIdjgAaStfyLkySml1VwRCaqbrI=";
   };
 
-  vendorHash = "sha256-HbYFQG+iZMP/bcqz0UYduxeFNAAo+e3UUTubblhiNxk=";
+  vendorHash = "sha256-iK0jilQtbU+mlh6oxWTLgdMlTysGtusWe7jjrCYxN0M=";
 
   ldflags = [
     "-w"

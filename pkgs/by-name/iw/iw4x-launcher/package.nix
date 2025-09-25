@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iw4x-launcher";
-  version = "1.0.2-1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "iw4x";
     repo = "launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gZoKVQMr7pS00TXikmr4QLN154Bhe415S8Ep7aedyds=";
+    hash = "sha256-HALxUqfTGB7sQhp0G1vXAtxmh6CHRb143Wws6G6gvBY=";
   };
 
-  cargoHash = "sha256-6uHkfnNYtdcq16XBqhDEbTEVRrgsmjWf75U86nqIpwk=";
+  cargoHash = "sha256-LS+b3ViCIuSVaoaXqwuPrZsvWlntheScrVPf+wtP7Io=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Official launcher for the IW4x mod";
     longDescription = "IW4x allows you to relive Call of Duty: Modern Warfare 2 (2009) in a secure environment with expanded modding capabilites";
-    homepage = "https://iw4x.dev";
+    homepage = "https://iw4x.io";
     downloadPage = "https://github.com/iw4x/launcher";
     changelog = "https://github.com/iw4x/launcher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;

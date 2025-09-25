@@ -120,7 +120,6 @@ stdenv.mkDerivation {
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
     maintainers = with maintainers; [
-      Madouura
       delta231
     ];
     mainProgram = "v";
