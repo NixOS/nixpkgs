@@ -674,6 +674,7 @@ with lib.maintainers;
     members = [
       euank
       frederictobiasc
+      heywoodlh
       marcusramberg
       mic92
       rorosen
