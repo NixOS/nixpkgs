@@ -22504,17 +22504,17 @@
     github = "rudolfvesely";
     githubId = 13966949;
   };
-  Ruixi-rebirth = {
-    name = "Ruixi-rebirth";
-    email = "ruixirebirth@gmail.com";
-    github = "Ruixi-rebirth";
-    githubId = 75824585;
-  };
   ruiiiijiiiiang = {
     name = "Rui Jiang";
     email = "me@ruijiang.me";
     github = "ruiiiijiiiiang";
     githubId = 911199;
+  };
+  Ruixi-rebirth = {
+    name = "Ruixi-rebirth";
+    email = "ruixirebirth@gmail.com";
+    github = "Ruixi-rebirth";
+    githubId = 75824585;
   };
   rumpelsepp = {
     name = "Stefan Tatschner";
