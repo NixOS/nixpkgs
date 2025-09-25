@@ -1264,10 +1264,6 @@ with pkgs;
 
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
-  git-recent = callPackage ../applications/version-management/git-recent {
-    util-linux = if stdenv.hostPlatform.isLinux then util-linuxMinimal else util-linux;
-  };
-
   gitRepo = git-repo;
 
   gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
