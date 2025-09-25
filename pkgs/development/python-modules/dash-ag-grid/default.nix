@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   pytestCheckHook,
   dash,
@@ -12,11 +12,10 @@ buildPythonPackage rec {
   version = "32.3.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "plotly";
-    repo = "dash-ag-grid";
-    tag = "v${version}";
-    hash = "sha256-eLRIJkI2MWezCxbVrHafspecyKPXoYrlSGV1qXs3+4c=";
+  src = fetchPypi {
+    pname = "dash_ag_grid";
+    inherit version;
+    hash = "sha256-wxN7Zsc7Legto3nCqiOPT76bVVkTwzYeEdkwlqDmH1A=";
   };
 
   build-system = [
@@ -27,9 +26,8 @@ buildPythonPackage rec {
     dash
   ];
 
-  # TODO not working: ModuleNotFoundError: No module named 'dash_ag_grid._imports_'
-  #pythonImportsCheck = [ "dash_ag_grid" ];
-  #nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "dash_ag_grid" ];
+  #nativeCheckInputs = [ pytestCheckHook ];  # TODO
 
   meta = {
     description = "High-performance and highly customizable component that wraps AG Grid, designed for creating rich datagrids";
