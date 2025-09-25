@@ -225,6 +225,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
+    # https://github.com/systemd/systemd/pull/39069
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/b5fdfedf729712b9824a5cb457a07d5699d2946c.patch";
+      hash = "sha256-0SvAn9Dl4z80PRIvDbIVIjKp5DsT/IUoHa5IiH1HHFY=";
+    })
+
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
