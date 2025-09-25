@@ -63,7 +63,8 @@ in
         type = with lib.types; nullOr int;
         description = ''
           Maximum total amount of memory (in bytes) that can be stored in the zram
-          swap devices.
+          swap devices. If set, the smaller one of this option and memoryPercent would
+          be used.
           This doesn't define how much memory will be used by the zram swap devices.
         '';
       };

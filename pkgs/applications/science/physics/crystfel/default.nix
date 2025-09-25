@@ -140,7 +140,7 @@ let
     pname = "pinkindexer";
     version = "15caa21191e27e989b750b29566e4379bc5cd21a";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+      url = "https://gitlab.desy.de/thomas.white/pinkindexer/-/archive/${version}/pinkindexer-${version}.tar.gz";
       hash = "sha256-v/SCJiHAV05Lc905y/dE8uBXlW+lLX9wau4XORYdbQg=";
     };
 
@@ -168,7 +168,7 @@ let
     buildInputs = [ eigen ];
   };
 
-  hdf5-external-filter-plugins = stdenv.mkDerivation rec {
+  hdf5-external-filter-plugins = stdenv.mkDerivation {
     pname = "HDF5-External-Filter-Plugins";
     version = "0.1.0";
     src = fetchFromGitHub {

@@ -18,12 +18,12 @@
 }:
 
 let
-  version = "0-unstable-2024-03-19";
+  version = "1.11";
   src = fetchFromGitHub {
     owner = "OctopusET";
     repo = "sway-contrib";
-    rev = "5d33a290e3cac3f0fed38ff950939da28e3ebfd7";
-    hash = "sha256-2qYxkXowSSzVcpsPO4JoUqaH/VUkOOWu1RKFXp1CXGs=";
+    tag = version;
+    hash = "sha256-/gWL0hA8hDjpK5YJxuZqmvo0zuVRQkhAkgHlI4JzNP8=";
   };
 
   meta = with lib; {
@@ -54,10 +54,10 @@ in
     ];
     buildInputs = [ bash ];
     installPhase = ''
-      installManPage grimshot.1
-      installShellCompletion --cmd grimshot grimshot-completion.bash
+      installManPage grimshot/grimshot.1
+      installShellCompletion --cmd grimshot grimshot/grimshot-completion.bash
 
-      install -Dm 0755 grimshot $out/bin/grimshot
+      install -Dm 0755 grimshot/grimshot $out/bin/grimshot
       wrapProgram $out/bin/grimshot --set PATH \
         "${
           lib.makeBinPath [
