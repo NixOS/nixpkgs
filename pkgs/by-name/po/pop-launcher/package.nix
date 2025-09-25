@@ -10,14 +10,14 @@
   libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pop-launcher";
   version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "launcher";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4wPspv5bpqoG45uUkrtxJTvdbmFkpWv8QBZxsPbGu/M=";
   };
 
@@ -75,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pop-launcher";
     teams = [ lib.teams.cosmic ];
   };
-}
+})
