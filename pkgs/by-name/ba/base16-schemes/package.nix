@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
-  version = "0-unstable-2025-06-04";
+  version = "unstable-2025-9-25";
 
   src = fetchFromGitHub {
     owner = "tinted-theming";
     repo = "schemes";
-    rev = "de3eeb6add0a6051bfc717684e36c8c9a78a1812";
-    hash = "sha256-C8VZuwzaQfNYbQQcc0Fh4RS+1nqc6j+IOy80NGmV4IQ=";
+    rev = "317a5e10c35825a6c905d912e480dfe8e71c7559";
+    hash = "sha256-d4km8W7w2zCUEmPAPUoLk1NlYrGODuVa3P7St+UrqkM=";
   };
 
   installPhase = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "All the color schemes for use in base16 packages";
     homepage = "https://github.com/tinted-theming/schemes";
-    maintainers = [ lib.maintainers.DamienCassou ];
+    maintainers = with lib.maintainers; [ DamienCassou fe2-Nyxar ];
     license = lib.licenses.mit;
   };
 })
