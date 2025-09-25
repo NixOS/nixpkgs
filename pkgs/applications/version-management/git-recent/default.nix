@@ -1,12 +1,11 @@
 {
   lib,
   stdenv,
-  git,
-  less,
   fetchFromGitHub,
   makeBinaryWrapper,
-  # util-linuxMinimal is included because we need the column command
-  util-linux,
+  gitMinimal,
+  less,
+  util-linuxMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/git-recent \
       --prefix PATH : "${
         lib.makeBinPath [
-          git
+          gitMinimal
           less
-          util-linux
+          util-linuxMinimal
         ]
       }"
   '';
