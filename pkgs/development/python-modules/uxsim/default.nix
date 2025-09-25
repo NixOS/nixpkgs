@@ -55,6 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/toruseo/UXsim/releases/tag/${src.tag}";
     description = "Vehicular traffic flow simulator in road network, written in pure Python";
     homepage = "https://github.com/toruseo/UXsim";
     license = licenses.mit;
