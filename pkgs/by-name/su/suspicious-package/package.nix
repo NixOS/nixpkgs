@@ -4,19 +4,15 @@
   stdenv,
   undmg,
   versionCheckHook,
+  mrs-update-script,
 }:
 
-let
-  snapshot = "20250820185748";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "suspicious-package";
   version = "4.6";
 
   src = fetchurl {
-    # Use externally archived download URL because
-    # upstream does not provide stable URLs for versioned releases
-    url = "https://web.archive.org/web/${snapshot}/https://www.mothersruin.com/software/downloads/SuspiciousPackage.dmg";
+    url = "https://www.mothersruin.com/software/archives/SuspiciousPackage-${finalAttrs.version}.dmg";
     hash = "sha256-SJcXqQR/di3T8K3uNKv00QkLsmDGJNU9NQEIpDSqYJM=";
   };
 
@@ -27,9 +23,9 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications/Suspicious Package.app" $out/bin
-    cp -R . "$out/Applications/Suspicious Package.app"
-    ln -s "../Applications/Suspicious Package.app/Contents/SharedSupport/spkg" $out/bin
+    mkdir -p "$out/Applications/Suspicious Package.app" "$out/bin"
+    cp -R "." "$out/Applications/Suspicious Package.app"
+    ln -s "../Applications/Suspicious Package.app/Contents/SharedSupport/spkg" "$out/bin"
 
     runHook postInstall
   '';
@@ -41,6 +37,12 @@ stdenv.mkDerivation {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  passthru.updateScript.command = [
+    (lib.getExe mrs-update-script)
+    "SuspiciousPackage"
+    ./package.nix
+  ];
+
   meta = {
     description = "Toolkit for analysing macOS packages";
     homepage = "https://www.mothersruin.com/software/SuspiciousPackage/";
@@ -50,4 +52,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
