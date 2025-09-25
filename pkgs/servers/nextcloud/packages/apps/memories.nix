@@ -12,8 +12,7 @@
 }:
 let
   latestVersionForNc = {
-    "31" = latestVersionForNc."30";
-    "30" = {
+    "31" = {
       version = "7.6.1";
       appHash = "sha256-uRZBTwhdNr3OUw021WvTnEBcLd49EQbVr9bvU97zblc=";
       srcHash = "sha256-eKvdv3ng4YwPmFu7eapYvD8A2cliryAhPf6NDBJjX6c=";

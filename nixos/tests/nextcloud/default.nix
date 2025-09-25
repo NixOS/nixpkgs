@@ -139,7 +139,6 @@ let
 in
 listToAttrs (
   concatMap genTests [
-    30
     31
   ]
 )
