@@ -6,17 +6,17 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ortp";
-  version = "5.2.109";
+  version = "5.3.72";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "ortp";
-    rev = version;
-    hash = "sha256-EgUPICdKi8c/E6uonZB4DKyOZ3Od4JM5/bR2U6cq9ew=";
+    rev = finalAttrs.version;
+    hash = "sha256-xItIVweRenH9uSCg9E9BRG2uxem9wY8cKoJwBqHcBMo=";
   };
 
   # Do not build static libraries
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})
