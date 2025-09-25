@@ -14,11 +14,6 @@
       let
         inherit (lib) mkIf mkForce;
 
-        envFile = pkgs.writeText "env-file" ''
-          RAILS_SECRET_KEY=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-          SMTP_PASSWORD=password
-        '';
-
       in
       {
         virtualisation.memorySize = 1536;
@@ -26,7 +21,7 @@
         services.postal = {
           enable = true;
           domain = "localhost";
-          environmentFile = envFile;
+          nginx = { };
           workers = 2;
           settings = {
             postal.web_protocol = "http";
@@ -55,7 +50,7 @@
     machine.wait_for_open_port(10131)
 
     machine.succeed("""
-      curl -isSf http://localhost:5000 | grep Location | grep http://localhost:5000/login
+      curl -isSf http://localhost | grep Location | grep http://localhost/login
     """)
 
     machine.succeed("""
