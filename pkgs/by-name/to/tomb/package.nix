@@ -71,8 +71,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 tomb $out/bin/tomb
-    install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
+    install -D -m755 -t $out/bin tomb
+    install -D -m644 -t $out/share/man/man1/ doc/tomb.1
 
     wrapProgram $out/bin/tomb \
       --prefix PATH : $out/bin:${lib.makeBinPath runtimeDependencies}
