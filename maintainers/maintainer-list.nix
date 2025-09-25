@@ -20153,6 +20153,12 @@
     github = "philipwilk";
     githubId = 50517631;
   };
+  philocalyst = {
+    email = "milestheperson@posteo.net";
+    github = "philocalyst";
+    githubId = 114884788;
+    name = "Miles Wirht";
+  };
   philtaken = {
     email = "philipp.herzog@protonmail.com";
     github = "philtaken";
