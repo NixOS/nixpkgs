@@ -12304,13 +12304,6 @@ self: super: with self; {
     }
   );
 
-  proxsuite-nlp = toPythonModule (
-    pkgs.proxsuite-nlp.override {
-      pythonSupport = true;
-      python3Packages = self;
-    }
-  );
-
   proxy-db = callPackage ../development/python-modules/proxy-db { };
 
   proxy-py = callPackage ../development/python-modules/proxy-py { };
