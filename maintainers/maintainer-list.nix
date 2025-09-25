@@ -9398,6 +9398,11 @@
     githubId = 5549373;
     name = "Jochen Kiemes";
   };
+  ginkogruen = {
+    name = "Jasper Wolter";
+    github = "ginkogruen";
+    githubId = 93037574;
+  };
   giodamelio = {
     name = "Giovanni d'Amelio";
     email = "gio@damelio.net";
