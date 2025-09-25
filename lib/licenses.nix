@@ -64,6 +64,11 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    adobeDisplayPostScript = {
+      spdxId = "Adobe-Display-PostScript";
+      fullName = "Adobe Display PostScript License";
+    };
+
     adobeUtopia = {
       fullName = "Adobe Utopia Font License";
       spdxId = "Adobe-Utopia";
@@ -491,6 +496,11 @@ lib.mapAttrs mkLicense (
       fullName = "curl License";
     };
 
+    dec3Clause = {
+      spdxId = "DEC-3-Clause";
+      fullName = "DEC 3-Clause License";
+    };
+
     doc = {
       spdxId = "DOC";
       fullName = "DOC License";
@@ -707,6 +717,11 @@ lib.mapAttrs mkLicense (
       spdxId = "HPND-sell-variant";
     };
 
+    hpndSellMitDisclaimerXserver = {
+      fullName = "Historical Permission Notice and Disclaimer - sell xserver variant with MIT disclaimer";
+      spdxId = "HPND-sell-MIT-disclaimer-xserver";
+    };
+
     hpndDec = {
       fullName = "Historical Permission Notice and Disclaimer - DEC variant";
       spdxId = "HPND-DEC";
@@ -735,7 +750,7 @@ lib.mapAttrs mkLicense (
 
     icu = {
       spdxId = "ICU";
-      fullName = "ICU";
+      fullName = "ICU License";
     };
 
     ijg = {
@@ -1065,6 +1080,11 @@ lib.mapAttrs mkLicense (
     nposl3 = {
       spdxId = "NPOSL-3.0";
       fullName = "Non-Profit Open Software License 3.0";
+    };
+
+    ntp = {
+      spdxId = "NTP";
+      fullName = "NTP License";
     };
 
     nvidiaCuda = {
@@ -1457,6 +1477,11 @@ lib.mapAttrs mkLicense (
     x11 = {
       spdxId = "X11";
       fullName = "X11 License";
+    };
+
+    x11DistributeModifications = {
+      spdxId = "X11-distribute-modifications-variant";
+      fullName = "X11 License Distribution Modification Variant";
     };
 
     xfig = {
