@@ -1591,6 +1591,63 @@ let
           // {
             check = x: elemType.check x && check x;
           };
+
+      address =
+        let
+          isIpv4 =
+            x:
+            str.check x
+            &&
+              builtins.match "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$" x
+              != null;
+          isIpv6 =
+            x:
+            str.check x
+            &&
+              # This is a variation of the regex from https://stackoverflow.com/a/17871737
+              builtins.match (lib.concatStrings [
+                "^("
+                "([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|" # 1:2:3:4:5:6:7:8
+                "([0-9a-fA-F]{1,4}:){1,7}:|" # 1::, 1:2:3:4:5:6:7::
+                "([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|" # 1::8, 1:2:3:4:5:6::8
+                "([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|" # 1::7:8, 1:2:3:4:5::7:8, 1:2:3:4:5::8
+                "([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|" # 1::6:7:8, 1:2:3:4::6:7:8, 1:2:3:4::8
+                "([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|" # 1::5:6:7:8, 1:2:3::5:6:7:8, 1:2:3::8
+                "([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|" # 1::4:5:6:7:8, 1:2::4:5:6:7:8, 1:2::8
+                "[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|" # 1::3:4:5:6:7:8, 1::8
+                ":((:[0-9a-fA-F]{1,4}){1,7}|:)|" # ::2:3:4:5:6:7:8, ::8, ::
+                "::(ffff(:0{1,4}){0,1}:){0,1}" # IPv4-mapped/translated prefix
+                "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}"
+                "(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|" # ::255.255.255.255, ::ffff:255.255.255.255
+                "([0-9a-fA-F]{1,4}:){1,4}:" # IPv4-embedded prefix
+                "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}"
+                "(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])" # 2001:db8:3:4::192.0.2.33, 64:ff9b::192.0.2.33
+                ")$"
+              ]) x != null;
+        in
+        {
+          ipv4 = mkOptionType {
+            name = "IPv4 address";
+            description = "valid IPv4 address (a.b.c.d)";
+            descriptionClass = "noun";
+            check = isIpv4;
+            inherit (str) merge;
+          };
+          ipv6 = mkOptionType {
+            name = "IPv6 address";
+            description = "valid IPv6 address following rfc5952, rfc6052, and rfc2765";
+            descriptionClass = "noun";
+            check = isIpv6;
+            inherit (str) merge;
+          };
+          ip = mkOptionType {
+            name = "IP address";
+            description = "valid IPv4 or IPv6 address";
+            descriptionClass = "conjunction";
+            check = x: isIpv6 x || isIpv4 x;
+            inherit (str) merge;
+          };
+        };
     };
 
     /**
