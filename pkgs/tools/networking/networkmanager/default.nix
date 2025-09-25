@@ -52,7 +52,10 @@
   systemd,
   udev,
   udevCheckHook,
+  libnvme,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  # NBFT (NVMe Boot Firmware Table) support
+  withNbft ? libnvme != null,
 }:
 
 let
@@ -60,11 +63,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.52.1";
+  version = "1.54.1";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ixIsc0k6cvK65SfBJc69h3EWcbkDUtvisXiKupV1rG8=";
+    hash = "sha256-APPwvhKsTUhY6/FSQwuS3vFXSAP/YQf378dkoFbUxMc=";
   };
 
   outputs = [
@@ -107,6 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dnmtui=true"
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     "-Dqt=false"
+    # NBFT (NVMe Boot Firmware Table) support
+    (lib.mesonBool "nbft" withNbft)
 
     # Handlers
     "-Dresolvconf=${openresolv}/bin/resolvconf"
@@ -158,6 +163,9 @@ stdenv.mkDerivation (finalAttrs: {
     newt
     jansson
     dbus # used to get directory paths with pkg-config during configuration
+  ]
+  ++ lib.optionals withNbft [
+    libnvme
   ];
 
   propagatedBuildInputs = [
