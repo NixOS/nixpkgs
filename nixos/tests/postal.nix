@@ -46,19 +46,19 @@
     machine.wait_for_unit("postal-worker@2.service")
 
     machine.wait_for_open_port(9091)
-    machine.wait_for_open_port(10130)
-    machine.wait_for_open_port(10131)
+    machine.wait_for_open_port(33130)
+    machine.wait_for_open_port(33131)
 
     machine.succeed("""
       curl -isSf http://localhost | grep Location | grep http://localhost/login
     """)
 
     machine.succeed("""
-      curl -sSf http://localhost:10130 | grep worker
+      curl -sSf http://localhost:33130 | grep worker
     """)
 
     machine.succeed("""
-      curl -sSf http://localhost:10131 | grep worker
+      curl -sSf http://localhost:33131 | grep worker
     """)
 
     machine.succeed("""
