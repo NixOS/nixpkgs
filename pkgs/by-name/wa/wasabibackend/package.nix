@@ -59,6 +59,9 @@ buildDotnetModule rec {
       mmahut
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # contains binaries in WalletWasabi/Microservices/Binaries
+      fromSource
+    ];
   };
 }
