@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "1.8.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgnome-games-support/${lib.versions.majorMinor version}/libgnome-games-support-${version}.tar.xz";
     sha256 = "KENGBKewOHMawCMXMTiP8QT1ZbsjMMwk54zaBM/T730=";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgnome-games-support";
       versionPolicy = "odd-unstable";
       freeze = true;
     };

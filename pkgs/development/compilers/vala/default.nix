@@ -50,7 +50,7 @@ let
       };
 
       src = fetchurl {
-        url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+        url = "mirror://gnome/sources/vala/${lib.versions.majorMinor version}/vala-${version}.tar.xz";
         inherit hash;
       };
 
@@ -104,8 +104,8 @@ let
             let
               roundUpToEven = num: num + lib.mod num 2;
             in
-            "${pname}_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
-          packageName = pname;
+            "vala_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
+          packageName = "vala";
           freeze = true;
         };
       };
