@@ -3358,9 +3358,6 @@ with pkgs;
     withCloudUi = true;
   };
 
-  netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
-  netsurf-browser = netsurf.browser;
-
   nyxt = callPackage ../applications/networking/browsers/nyxt {
     sbcl = sbcl_2_4_6;
     inherit (gst_all_1)
@@ -3712,7 +3709,7 @@ with pkgs;
 
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
-  onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
+  onlykey = callPackage ../tools/security/onlykey { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli {
     jre = pkgs.jre_headless;

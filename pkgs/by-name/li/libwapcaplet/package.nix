@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  buildsystem,
+  netsurf-buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libwapcaplet";
+  pname = "libwapcaplet";
   version = "0.4.3";
 
   src = fetchurl {
@@ -14,11 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-myqh3W1mRfjpkrNpf9vYfwwOHaVyH6VO0ptITRMWDFw=";
   };
 
-  buildInputs = [ buildsystem ];
+  buildInputs = [ netsurf-buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
@@ -27,6 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.netsurf-browser.org/projects/libwapcaplet/";
     description = "String internment library for netsurf browser";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
