@@ -1485,6 +1485,7 @@
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
+  ./services/security/tsidp.nix
   ./services/security/usbguard.nix
   ./services/security/vault-agent.nix
   ./services/security/vault.nix
