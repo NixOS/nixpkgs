@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "symphony";
-  version = "5.7.2";
+  version = "5.7.3";
 
   outputs = [ "out" ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "coin-or";
     repo = "SYMPHONY";
     rev = "releases/${version}";
-    hash = "sha256-OdTUMG3iVhjhw5uKtUnsLCZ4DfMjYHm8+/ozfmw7J6c=";
+    hash = "sha256-f97LICRykxhiZiSsSBE9IJBLL/ApWV+utvlHuUhx1PI=";
   };
 
   nativeBuildInputs = [
