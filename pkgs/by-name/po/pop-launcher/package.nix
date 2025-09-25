@@ -73,5 +73,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ samhug ];
     mainProgram = "pop-launcher";
+    teams = [ teams.cosmic ];
   };
 }
