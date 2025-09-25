@@ -1288,12 +1288,12 @@ in
   };
   sx = handleTest ./sx.nix { };
   sympa = handleTest ./sympa.nix { };
-  syncthing = runTest ./syncthing.nix;
-  syncthing-folders = runTest ./syncthing-folders.nix;
-  syncthing-init = runTest ./syncthing-init.nix;
-  syncthing-many-devices = runTest ./syncthing-many-devices.nix;
-  syncthing-no-settings = runTest ./syncthing-no-settings.nix;
-  syncthing-relay = runTest ./syncthing-relay.nix;
+  syncthing = runTest ./syncthing/main.nix;
+  syncthing-folders = runTest ./syncthing/folders.nix;
+  syncthing-init = runTest ./syncthing/init.nix;
+  syncthing-many-devices = runTest ./syncthing/many-devices.nix;
+  syncthing-no-settings = runTest ./syncthing/no-settings.nix;
+  syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
   systemd = handleTest ./systemd.nix { };
