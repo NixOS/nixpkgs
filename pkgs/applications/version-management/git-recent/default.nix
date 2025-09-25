@@ -9,14 +9,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-recent";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-b6AWLEXCOza+lIHlvyYs3M6yHGr2StYXzl7OsA9gv/k=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.jlesquembre ];
     mainProgram = "git-recent";
   };
-}
+})
