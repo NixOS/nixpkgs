@@ -10,7 +10,6 @@
   libcanberra-gtk3,
   libgnomekbd,
   libnotify,
-  libxklavier,
   wrapGAppsHook3,
   pkg-config,
   lib,
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     libgnomekbd
     libnotify
-    libxklavier
     systemd
     upower
     dconf

@@ -15,7 +15,6 @@
   libxkbfile,
   cinnamon-menus,
   libgnomekbd,
-  libxklavier,
   networkmanager,
   libgudev,
   libwacom,
@@ -53,7 +52,6 @@ stdenv.mkDerivation rec {
     libxml2
     polkit
     libgnomekbd
-    libxklavier
     colord
     libgudev
     libwacom
