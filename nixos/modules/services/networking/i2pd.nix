@@ -397,7 +397,8 @@ in
 
       floodfill = mkEnableOption "floodfill" // {
         description = ''
-          If the router is declared to be unreachable and needs introduction nodes.
+          Makes your router a floodfill, that means what other routers will
+          publish and get LeaseSets and RouterInfos on your router.
         '';
       };
 
