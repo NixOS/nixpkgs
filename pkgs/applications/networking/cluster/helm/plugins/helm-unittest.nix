@@ -6,14 +6,17 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
-  pname = "helm-unittest";
+let
   version = "1.0.1";
+in
+buildGoModule {
+  pname = "helm-unittest";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "helm-unittest";
     repo = "helm-unittest";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bdLxW6dkA+jdn6UVOGngP3U0Do1zZt3Tnb9d6yVOGG0=";
   };
 
@@ -39,10 +42,10 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "BDD styled unit test framework for Kubernetes Helm charts as a Helm plugin";
     homepage = "https://github.com/helm-unittest/helm-unittest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yurrriq ];
   };
 }
