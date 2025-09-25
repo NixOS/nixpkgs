@@ -6,6 +6,8 @@
 
 buildDunePackage {
   pname = "xtmpl_ppx";
+  minimalOCamlVersion = "4.11";
+  duneVersion = "3";
 
   inherit (xtmpl) src version;
 

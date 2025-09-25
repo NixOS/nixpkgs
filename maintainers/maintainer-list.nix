@@ -10125,11 +10125,10 @@
     name = "Heisfer";
   };
   HeitorAugustoLN = {
-    email = "nixpkgs.woven713@passmail.net";
+    email = "IAm.HeitorALN@proton.me";
     github = "HeitorAugustoLN";
     githubId = 44377258;
     name = "Heitor Augusto";
-    matrix = "@heitoraugusto:matrix.org";
   };
   heitorPB = {
     email = "heitorpbittencourt@gmail.com";

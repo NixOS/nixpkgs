@@ -75,7 +75,7 @@ Here is a simple package example.
   ppx_let,
 }:
 
-buildDunePackage (finalAttrs: {
+buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
 
@@ -84,22 +84,20 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = "angstrom";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
   };
 
-  buildInputs = [ ocaml-syntax-shims ];
-
-  propagatedBuildInputs = [
-    bigstringaf
-    result
-  ];
-
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
   checkInputs = [
     alcotest
     ppx_let
   ];
+  buildInputs = [ ocaml-syntax-shims ];
+  propagatedBuildInputs = [
+    bigstringaf
+    result
+  ];
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
     homepage = "https://github.com/inhabitedtype/angstrom";
@@ -107,7 +105,7 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-})
+}
 ```
 
 Here is a second example, this time using a source archive generated with `dune-release`. It is a good idea to use this archive when it is available as it will usually contain substituted variables such as a `%%VERSION%%` field. This library does not depend on any other OCaml library and no tests are run after building it.
@@ -119,14 +117,14 @@ Here is a second example, this time using a source archive generated with `dune-
   buildDunePackage,
 }:
 
-buildDunePackage (finalAtts: {
+buildDunePackage rec {
   pname = "wtf8";
   version = "1.0.2";
 
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-wtf8/releases/download/v${finalAtts.version}/wtf8-v${finalAtts.version}.tbz";
+    url = "https://github.com/flowtype/ocaml-wtf8/releases/download/v${version}/wtf8-v${version}.tbz";
     hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 
@@ -136,7 +134,7 @@ buildDunePackage (finalAtts: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.eqyiel ];
   };
-})
+}
 ```
 
 The build will automatically fail if two distinct versions of the same library
