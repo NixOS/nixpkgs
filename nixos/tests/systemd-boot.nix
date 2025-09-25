@@ -1,10 +1,37 @@
 {
   runTest,
   runTestOn,
+  lib,
   ...
 }:
 
 let
+  testScriptPreamble =
+    # python
+    ''
+      def check_current_system(system_path):
+          machine.succeed(f'test $(readlink -f /run/current-system) = "{system_path}"')
+
+      def check_generation(generation: int, tries_left=0, tries_failed=0, specialisation=None) -> list[str]:
+          if specialisation:
+              title = f"NixOS ({specialisation})"
+          else:
+              title = "NixOS"
+
+          conf_files = machine.succeed(
+              f"grep --files-with-matches 'version Generation {generation} NixOS' /boot/loader/entries/nixos-*.conf | xargs grep --line-regexp --fixed-strings --files-with-matches 'title {title}'"
+          ).split("\n")
+
+          suffix = ""
+          if tries_left:
+              suffix += f"+{tries_left}"
+          if tries_failed:
+              suffix += f"-{tries_failed}"
+
+          assert conf_files[0].endswith(f"{suffix}.conf"), f"Expected {conf_files[0]} to end with {suffix}.conf"
+          return conf_files
+    '';
+
   common =
     { pkgs, ... }:
     {
@@ -70,28 +97,32 @@ let
       boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
     };
 
-  customDiskImage = nodes: ''
-    import os
-    import subprocess
-    import tempfile
+  customDiskImage =
+    nodes:
+    # python
+    ''
+      import os
+      import subprocess
+      import tempfile
 
-    tmp_disk_image = tempfile.NamedTemporaryFile()
+      tmp_disk_image = tempfile.NamedTemporaryFile()
 
-    subprocess.run([
-      "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
-      "create",
-      "-f",
-      "qcow2",
-      "-b",
-      "${nodes.machine.system.build.diskImage}/nixos.qcow2",
-      "-F",
-      "qcow2",
-      tmp_disk_image.name,
-    ])
+      subprocess.run([
+        "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
+        "create",
+        "-f",
+        "qcow2",
+        "-b",
+        "${nodes.machine.system.build.diskImage}/nixos.qcow2",
+        "-F",
+        "qcow2",
+        tmp_disk_image.name,
+      ])
 
-    # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
-    os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
-  '';
+      # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
+      os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+    '';
+
   # Check that we are booting the default entry and not the generation with largest version number
   defaultEntry =
     {
@@ -102,7 +133,7 @@ let
     }:
     runTest {
       name = "systemd-boot-default-entry" + lib.optionalString withBootCounting "-with-boot-counting";
-      meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+      meta.maintainers = with lib.maintainers; [ julienmalka ];
 
       nodes = {
         machine =
@@ -125,12 +156,10 @@ let
           orig = nodes.machine.system.build.toplevel;
           other = nodes.other_machine.system.build.toplevel;
         in
+        # python
         ''
           orig = "${orig}"
           other = "${other}"
-
-          def check_current_system(system_path):
-              machine.succeed(f'test $(readlink -f /run/current-system) = "{system_path}"')
 
           check_current_system(orig)
 
@@ -148,6 +177,7 @@ let
           check_current_system(orig)
         '';
     };
+
   garbage-collect-entry =
     {
       withBootCounting ? false,
@@ -168,6 +198,7 @@ let
               imports = [ common ];
 
               boot.loader.systemd-boot.bootCounting.enable = withBootCounting;
+              boot.loader.systemd-boot.memtest86.enable = true;
 
               # These are configs for different nodes, but we'll use them here in `machine`
               system.extraDependencies = [
@@ -181,22 +212,32 @@ let
           let
             baseSystem = nodes.common.system.build.toplevel;
           in
+          # python
           ''
+            ${testScriptPreamble}
+
             machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${baseSystem}")
             machine.succeed("nix-env -p /nix/var/nix/profiles/system --delete-generations 1")
+
+            conf_file = check_generation(1)[0]
+            new_conf_file = conf_file.replace(".conf", "-1+3.conf")
+
             # At this point generation 1 has already been marked as good so we reintroduce counters artificially
             ${lib.optionalString withBootCounting ''
-              machine.succeed("mv /boot/loader/entries/nixos-generation-1.conf /boot/loader/entries/nixos-generation-1+3.conf")
+              machine.succeed(f"mv {conf_file} {new_conf_file}")
             ''}
             machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
-            machine.fail("test -e /boot/loader/entries/nixos-generation-1*")
-            machine.succeed("test -e /boot/loader/entries/nixos-generation-2.conf")
+            machine.fail(
+              "grep --files-with-matches 'version Generation 1 NixOS' /boot/loader/entries/nixos-*.conf"
+            )
+            check_generation(2)
           '';
       }
     );
 in
 {
-  inherit defaultEntry;
+  inherit defaultEntry garbage-collect-entry;
+
   basic = runTest (
     { lib, ... }:
     {
@@ -208,25 +249,26 @@ in
 
       nodes.machine = common;
 
-      testScript = ''
-        machine.start()
-        machine.wait_for_unit("multi-user.target")
+      testScript = # python
+        ''
+          ${testScriptPreamble}
 
-        machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
-        out = machine.succeed("cat /boot/loader/entries/nixos-generation-1.conf")
-        print(out)
-        # our sort-key will uses r to sort before nixos
-        machine.succeed("grep 'sort-key nixor-default' /boot/loader/entries/nixos-generation-1.conf")
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
 
-        # Ensure we actually booted using systemd-boot
-        # Magic number is the vendor UUID used by systemd-boot.
-        machine.succeed(
-            "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
-        )
+          conf_file = check_generation(1)[0]
 
-        # "bootctl install" should have created an EFI entry
-        machine.succeed('efibootmgr | grep "Linux Boot Manager"')
-      '';
+          machine.succeed(f"grep 'sort-key nixos' {conf_file}")
+
+          # Ensure we actually booted using systemd-boot
+          # Magic number is the vendor UUID used by systemd-boot.
+          machine.succeed(
+              "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+          )
+
+          # "bootctl install" should have created an EFI entry
+          machine.succeed('efibootmgr | grep "Linux Boot Manager"')
+        '';
     }
   );
 
@@ -249,6 +291,7 @@ in
         let
           efiArch = pkgs.stdenv.hostPlatform.efiArch;
         in
+        #python
         ''
           machine.start(allow_reboot=True)
           machine.wait_for_unit("multi-user.target")
@@ -276,14 +319,17 @@ in
 
       testScript =
         { nodes, ... }:
+        #python
         ''
+          ${testScriptPreamble}
+
           ${customDiskImage nodes}
 
           machine.start()
           machine.wait_for_unit("multi-user.target")
 
           machine.succeed("test -e /efi/EFI/systemd/systemd-bootx64.efi")
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          check_generation(1)
 
           # Ensure we actually booted using systemd-boot
           # Magic number is the vendor UUID used by systemd-boot.
@@ -331,25 +377,28 @@ in
           };
         };
 
-      testScript = ''
-        machine.start()
-        machine.wait_for_unit("multi-user.target")
+      testScript =
+        # python
+        ''
+          ${testScriptPreamble}
 
-        machine.succeed(
-            "test -e /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
-        )
-        machine.succeed(
-            "grep -q 'title NixOS (something)' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
-        )
-        machine.succeed(
-            "grep 'sort-key something' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
-        )
-      ''
-      + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
-        machine.succeed(
-            r"grep 'devicetree /EFI/nixos/[a-z0-9]\{32\}.*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
-        )
-      '';
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
+
+          conf_files = check_generation(1, specialisation="something")
+          machine.succeed(
+              f"grep --fixed-strings --line-regexp 'sort-key something' {" ".join(conf_files)}"
+          )
+
+          ${lib.optionalString pkgs.stdenv.hostPlatform.isAarch64
+            #python
+            ''
+              machine.succeed(
+                  fr"grep 'devicetree /EFI/nixos/[a-z0-9]\{32\}.*dummy' {" ".join(conf_files)}"
+              )
+            ''
+          }
+        '';
     }
   );
 
@@ -370,21 +419,25 @@ in
           boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
         };
 
-      testScript = ''
-        machine.start()
-        machine.wait_for_unit("multi-user.target")
+      testScript =
+        # python
+        ''
+          ${testScriptPreamble}
 
-        machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
 
-        # Ensure we actually booted using systemd-boot
-        # Magic number is the vendor UUID used by systemd-boot.
-        machine.succeed(
-            "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
-        )
+          check_generation(1)
 
-        # "bootctl install" should _not_ have created an EFI entry
-        machine.fail('efibootmgr | grep "Linux Boot Manager"')
-      '';
+          # Ensure we actually booted using systemd-boot
+          # Magic number is the vendor UUID used by systemd-boot.
+          machine.succeed(
+              "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+          )
+
+          # "bootctl install" should _not_ have created an EFI entry
+          machine.fail('efibootmgr | grep "Linux Boot Manager"')
+        '';
     }
   );
 
@@ -399,35 +452,37 @@ in
 
       nodes.machine = common;
 
-      testScript = ''
-        machine.succeed("mount -o remount,rw /boot")
+      testScript =
+        # python
+        ''
+          machine.succeed("mount -o remount,rw /boot")
 
-        def switch():
-            # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
-            machine.succeed(
-              """
-              find /boot -iname '*boot*.efi' -print0 | \
-              xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
-              """
-            )
-            return machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
+          def switch():
+              # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
+              machine.succeed(
+                """
+                find /boot -iname '*boot*.efi' -print0 | \
+                xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
+                """
+              )
+              return machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
 
-        output = switch()
-        assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
-        assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
-        assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
+          output = switch()
+          assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+          assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
+          assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
 
-        with subtest("Test that updating works with lowercase bootx64.efi"):
-            machine.succeed(
-                # Move to tmp file name first, otherwise mv complains the new location is the same
-                "mv /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/BOOT/bootx64.efi.new",
-                "mv /boot/EFI/BOOT/bootx64.efi.new /boot/EFI/BOOT/bootx64.efi",
-            )
-            output = switch()
-            assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
-            assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
-            assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
-      '';
+          with subtest("Test that updating works with lowercase bootx64.efi"):
+              machine.succeed(
+                  # Move to tmp file name first, otherwise mv complains the new location is the same
+                  "mv /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/BOOT/bootx64.efi.new",
+                  "mv /boot/EFI/BOOT/bootx64.efi.new /boot/EFI/BOOT/bootx64.efi",
+              )
+              output = switch()
+              assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+              assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
+              assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
+        '';
     }
   );
 
@@ -442,10 +497,12 @@ in
         boot.loader.systemd-boot.memtest86.enable = true;
       };
 
-      testScript = ''
-        machine.succeed("test -e /boot/loader/entries/memtest86.conf")
-        machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
-      '';
+      testScript =
+        # python
+        ''
+          machine.succeed("test -e /boot/loader/entries/memtest86.conf")
+          machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
+        '';
     }
   );
 
@@ -460,10 +517,12 @@ in
         boot.loader.systemd-boot.netbootxyz.enable = true;
       };
 
-      testScript = ''
-        machine.succeed("test -e /boot/loader/entries/netbootxyz.conf")
-        machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
-      '';
+      testScript =
+        # python
+        ''
+          machine.succeed("test -e /boot/loader/entries/netbootxyz.conf")
+          machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
+        '';
     }
   );
 
@@ -480,10 +539,12 @@ in
           boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
         };
 
-      testScript = ''
-        machine.succeed("test -e /boot/loader/entries/edk2-uefi-shell.conf")
-        machine.succeed("test -e /boot/efi/edk2-uefi-shell/shell.efi")
-      '';
+      testScript =
+        # python
+        ''
+          machine.succeed("test -e /boot/loader/entries/edk2-uefi-shell.conf")
+          machine.succeed("test -e /boot/efi/edk2-uefi-shell/shell.efi")
+        '';
     }
   );
 
@@ -511,29 +572,31 @@ in
           };
         };
 
-      testScript = ''
-        machine.succeed("test -e /boot/efi/edk2-uefi-shell/shell.efi")
+      testScript =
+        # python
+        ''
+          machine.succeed("test -e /boot/efi/edk2-uefi-shell/shell.efi")
 
-        machine.succeed("test -e /boot/loader/entries/windows_7.conf")
-        machine.succeed("test -e /boot/loader/entries/windows_Ten.conf")
-        machine.succeed("test -e /boot/loader/entries/windows_11.conf")
+          machine.succeed("test -e /boot/loader/entries/windows_7.conf")
+          machine.succeed("test -e /boot/loader/entries/windows_Ten.conf")
+          machine.succeed("test -e /boot/loader/entries/windows_11.conf")
 
-        machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_7.conf")
-        machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_Ten.conf")
-        machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_11.conf")
+          machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_7.conf")
+          machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_Ten.conf")
+          machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_11.conf")
 
-        machine.succeed("grep 'HD0c1:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_7.conf")
-        machine.succeed("grep 'FS0:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_Ten.conf")
-        machine.succeed("grep 'HD0d4:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_11.conf")
+          machine.succeed("grep 'HD0c1:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_7.conf")
+          machine.succeed("grep 'FS0:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_Ten.conf")
+          machine.succeed("grep 'HD0d4:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_11.conf")
 
-        machine.succeed("grep 'sort-key before_all_others' /boot/loader/entries/windows_7.conf")
-        machine.succeed("grep 'sort-key o_windows_Ten' /boot/loader/entries/windows_Ten.conf")
-        machine.succeed("grep 'sort-key zzz' /boot/loader/entries/windows_11.conf")
+          machine.succeed("grep 'sort-key before_all_others' /boot/loader/entries/windows_7.conf")
+          machine.succeed("grep 'sort-key o_windows_Ten' /boot/loader/entries/windows_Ten.conf")
+          machine.succeed("grep 'sort-key zzz' /boot/loader/entries/windows_11.conf")
 
-        machine.succeed("grep 'title Windows 7' /boot/loader/entries/windows_7.conf")
-        machine.succeed("grep 'title Windows Ten' /boot/loader/entries/windows_Ten.conf")
-        machine.succeed('grep "title Title with-_-punctuation ...?!" /boot/loader/entries/windows_11.conf')
-      '';
+          machine.succeed("grep 'title Windows 7' /boot/loader/entries/windows_7.conf")
+          machine.succeed("grep 'title Windows Ten' /boot/loader/entries/windows_Ten.conf")
+          machine.succeed('grep "title Title with-_-punctuation ...?!" /boot/loader/entries/windows_11.conf')
+        '';
     }
   );
 
@@ -549,11 +612,13 @@ in
         boot.loader.systemd-boot.memtest86.sortKey = "apple";
       };
 
-      testScript = ''
-        machine.succeed("test -e /boot/loader/entries/memtest86.conf")
-        machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
-        machine.succeed("grep 'sort-key apple' /boot/loader/entries/memtest86.conf")
-      '';
+      testScript =
+        # python
+        ''
+          machine.succeed("test -e /boot/loader/entries/memtest86.conf")
+          machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
+          machine.succeed("grep 'sort-key apple' /boot/loader/entries/memtest86.conf")
+        '';
     }
   );
 
@@ -570,6 +635,7 @@ in
 
       testScript =
         { nodes, ... }:
+        # python
         ''
           ${customDiskImage nodes}
 
@@ -598,10 +664,12 @@ in
         };
       };
 
-      testScript = ''
-        machine.succeed("test -e /boot/loader/entries/banana.conf")
-        machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/banana.conf")
-      '';
+      testScript =
+        # python
+        ''
+          machine.succeed("test -e /boot/loader/entries/banana.conf")
+          machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/banana.conf")
+        '';
     }
   );
 
@@ -620,10 +688,12 @@ in
           };
         };
 
-      testScript = ''
-        machine.succeed("test -e /boot/efi/fruits/tomato.efi")
-        machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
-      '';
+      testScript =
+        # python
+        ''
+          machine.succeed("test -e /boot/efi/fruits/tomato.efi")
+          machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+        '';
     }
   );
 
@@ -664,6 +734,7 @@ in
           baseSystem = nodes.common.system.build.toplevel;
           finalSystem = nodes.with_netbootxyz.system.build.toplevel;
         in
+        # python
         ''
           machine.succeed("test -e /boot/efi/fruits/tomato.efi")
           machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
@@ -704,10 +775,12 @@ in
         boot.bootspec.enable = false;
       };
 
-      testScript = ''
-        machine.start()
-        machine.wait_for_unit("multi-user.target")
-      '';
+      testScript =
+        # python
+        ''
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
+        '';
     }
   );
 
@@ -715,21 +788,32 @@ in
     let
       baseConfig = {
         imports = [ common ];
-        boot.loader.systemd-boot.bootCounting.enable = true;
-        boot.loader.systemd-boot.bootCounting.trials = 2;
+
+        boot.loader.systemd-boot.bootCounting = {
+          enable = true;
+          tries = 2;
+        };
       };
     in
-    { pkgs, ... }:
     runTest {
       name = "systemd-boot-counting";
-      meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+      meta.maintainers = with lib.maintainers; [ julienmalka ];
 
       nodes = {
         machine =
           { nodes, ... }:
           {
             imports = [ baseConfig ];
-            system.extraDependencies = [ nodes.bad_machine.system.build.toplevel ];
+            system.extraDependencies = [
+              nodes.bad_machine.system.build.toplevel
+              nodes.unused_machine.system.build.toplevel
+            ];
+          };
+
+        unused_machine =
+          { nodes, ... }:
+          {
+            imports = [ baseConfig ];
           };
 
         bad_machine = {
@@ -748,13 +832,16 @@ in
         let
           orig = nodes.machine.system.build.toplevel;
           bad = nodes.bad_machine.system.build.toplevel;
+          unused = nodes.unused_machine.system.build.toplevel;
         in
+        # python
         ''
+          ${testScriptPreamble}
+
           orig = "${orig}"
           bad = "${bad}"
 
-          def check_current_system(system_path):
-              machine.succeed(f'test $(readlink -f /run/current-system) = "{system_path}"')
+          machine.start(allow_reboot=True)
 
           # Ensure we booted using an entry with counters enabled
           machine.succeed(
@@ -763,46 +850,103 @@ in
 
           # systemd-bless-boot should have already removed the "+2" suffix from the boot entry
           machine.wait_for_unit("systemd-bless-boot.service")
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          conf_file = check_generation(1)
           check_current_system(orig)
+
+          print(machine.succeed("cat /boot/loader/entries/*.conf"))
 
           # Switch to bad configuration
           machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${bad}")
+          # TODO: for some reason, systemd-boot in our test setup is not respecting
+          # the default boot order as configured in the EFI vars.
+          # This does work correctly in practice outside of the test framework though.
+          #machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${unused}")
           machine.succeed(f"{bad}/bin/switch-to-configuration boot")
 
           # Ensure new bootloader entry has initialized counter
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+2.conf")
-          machine.shutdown()
+          check_generation(1)
+          check_generation(2, 2)
 
-          machine.start()
+          machine.reboot()
+
           machine.wait_for_unit("multi-user.target")
           check_current_system(bad)
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+1-1.conf")
-          machine.shutdown()
+          check_generation(1)
+          check_generation(2, 1, 1)
 
-          machine.start()
+          machine.reboot()
+
           machine.wait_for_unit("multi-user.target")
           check_current_system(bad)
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+0-2.conf")
-          machine.shutdown()
+          check_generation(1)
+          check_generation(2, 0, 2)
 
+          machine.reboot()
+
+          machine.wait_for_unit("multi-user.target")
           # Should boot back into original configuration
-          machine.start()
           check_current_system(orig)
-          machine.wait_for_unit("multi-user.target")
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
-          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+0-2.conf")
-          machine.shutdown()
+          check_generation(1)
+          check_generation(2, 0, 2)
         '';
     };
+
+  bootCountingSpecialisation =
+    let
+      baseConfig = {
+        imports = [ common ];
+        boot.loader.systemd-boot.bootCounting = {
+          enable = true;
+          tries = 2;
+        };
+      };
+
+      specialisationName = "+something+-+that+-+breaks-parsing+-+";
+    in
+    runTest {
+      name = "systemd-boot-counting-specialisation";
+      meta.maintainers = with lib.maintainers; [ julienmalka ];
+
+      nodes = {
+        machine =
+          { nodes, lib, ... }:
+          {
+            imports = [ baseConfig ];
+            specialisation.${specialisationName}.configuration = {
+              boot.loader.systemd-boot.sortKey = "something";
+            };
+          };
+      };
+      testScript =
+        { nodes, ... }:
+        let
+          orig = nodes.machine.system.build.toplevel;
+        in
+        # python
+        ''
+          ${testScriptPreamble}
+
+          orig = "${orig}"
+
+          # Ensure we booted using an entry with counters enabled
+          machine.succeed(
+              "test -e /sys/firmware/efi/efivars/LoaderBootCountPath-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+          )
+
+          check_generation(1)
+          check_current_system(orig)
+
+          # Ensure the bootloader entry for the specialisation has initialized the boot counter
+          check_generation(1, 2, specialisation="${specialisationName}")
+        '';
+    };
+
   defaultEntryWithBootCounting =
     { lib, pkgs }:
     defaultEntry {
       inherit lib pkgs;
       withBootCounting = true;
     };
+
   garbageCollectEntryWithBootCounting = garbage-collect-entry { withBootCounting = true; };
 }
