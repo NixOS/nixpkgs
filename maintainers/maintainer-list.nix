@@ -20768,6 +20768,12 @@
     githubId = 20863431;
     name = "Prithak S.";
   };
+  priyaananthasankar = {
+    name = "Priya Ananthasankar";
+    github = "priyaananthasankar";
+    githubId = 10415876;
+    email = "priyagituniverse@gmail.com";
+  };
   ProducerMatt = {
     name = "Matthew Pherigo";
     email = "ProducerMatt42@gmail.com";
