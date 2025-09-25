@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://releases.pagure.org/mlocate/mlocate-${finalAttrs.version}.tar.xz";
-    sha256 = "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh";
+    hash = "sha256-MGPfef4Zj7lhjhgMVLrzEFsz2I/mAv8thXCq+UTxJj4=";
   };
 
   makeFlags = [
