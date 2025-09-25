@@ -29,6 +29,10 @@ buildGoModule rec {
     install -m644 -Dt $out/helm-unittest plugin.yaml
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "BDD styled unit test framework for Kubernetes Helm charts as a Helm plugin";
     homepage = "https://github.com/helm-unittest/helm-unittest";
