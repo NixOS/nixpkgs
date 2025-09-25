@@ -9782,12 +9782,6 @@
     githubId = 95086304;
     name = "Guilherme Lima";
   };
-  GuillaumeDesforges = {
-    email = "aceus02@gmail.com";
-    github = "GuillaumeDesforges";
-    githubId = 1882000;
-    name = "Guillaume Desforges";
-  };
   guillaumekoenig = {
     email = "guillaume.edward.koenig@gmail.com";
     github = "guillaumekoenig";
@@ -16584,13 +16578,6 @@
     github = "mgdm";
     githubId = 71893;
     name = "Michael Maclean";
-  };
-  mglolenstine = {
-    email = "mglolenstine@gmail.com";
-    github = "MGlolenstine";
-    githubId = 9406770;
-    matrix = "@mglolenstine:matrix.org";
-    name = "MGlolenstine";
   };
   mgregoire = {
     email = "gregoire@martinache.net";

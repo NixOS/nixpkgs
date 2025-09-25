@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.57.0";
+  version = "0.62.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
     repo = "zarf";
     tag = "v${version}";
-    hash = "sha256-KcBF3Iw3hiQ25UHaCCvsU5HOYWVE2b5RpeyprZ8omAA=";
+    hash = "sha256-mabp4G7LbtOmIVEmOK/YhjTX/RRM8ObAS6YXTJe2P/U=";
   };
 
-  vendorHash = "sha256-SgXOBLw2vtVsgLIcoYQTz1npQwzj99X/GnnqqSsmb10=";
+  vendorHash = "sha256-As7xDEo+bMslv9Xd6CbHTqvf2XaXmO6Gp3f9+xD3kNU=";
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
@@ -43,13 +43,17 @@ buildGoModule rec {
     "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export K9S_LOGS_DIR=$(mktemp -d)
-    installShellCompletion --cmd zarf \
-      --bash <($out/bin/zarf completion bash) \
-      --fish <($out/bin/zarf completion fish) \
-      --zsh  <($out/bin/zarf completion zsh)
-  '';
+  # Breaks with sandbox on Darwin because it wants to read /etc/protocols
+  postInstall =
+    lib.optionalString
+      ((stdenv.buildPlatform.canExecute stdenv.hostPlatform) && !stdenv.buildPlatform.isDarwin)
+      ''
+        export K9S_LOGS_DIR=$(mktemp -d)
+        installShellCompletion --cmd zarf \
+          --bash <($out/bin/zarf completion bash) \
+          --fish <($out/bin/zarf completion fish) \
+          --zsh  <($out/bin/zarf completion zsh)
+      '';
 
   meta = with lib; {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
