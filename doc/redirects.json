@@ -1181,7 +1181,8 @@
     "index.html#sec-purity-in-nixpkgs"
   ],
   "sec-hardening-in-nixpkgs": [
-    "index.html#sec-hardening-in-nixpkgs"
+    "index.html#sec-hardening-in-nixpkgs",
+    "index.html#pie"
   ],
   "sec-hardening-flags-enabled-by-default": [
     "index.html#sec-hardening-flags-enabled-by-default"
@@ -1215,9 +1216,6 @@
   ],
   "sec-hardening-flags-disabled-by-default": [
     "index.html#sec-hardening-flags-disabled-by-default"
-  ],
-  "pie": [
-    "index.html#pie"
   ],
   "shadowstack": [
     "index.html#shadowstack"
