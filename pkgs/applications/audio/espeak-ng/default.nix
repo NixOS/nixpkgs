@@ -28,6 +28,7 @@
   sonicSupport ? true,
   speechPlayerSupport ? true,
   ucdSupport ? false,
+  buildPackages,
 }:
 
 let
@@ -90,6 +91,10 @@ stdenv.mkDerivation rec {
     ronn
     makeWrapper
     which
+  ]
+  # Provide a native espeak-ng when cross compiling so intonations can be built
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    buildPackages.espeak-ng
   ];
 
   buildInputs =
@@ -105,6 +110,10 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "USE_LIBSONIC" sonicSupport)
     (lib.cmakeBool "USE_MBROLA" mbrolaSupport)
     (lib.cmakeBool "USE_SPEECHPLAYER" speechPlayerSupport)
+  ]
+  # Point CMake to the native build’s binary dir when cross compiling
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DNativeBuild_DIR=${buildPackages.espeak-ng}/bin/"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
