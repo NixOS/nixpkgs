@@ -12,7 +12,6 @@
   typing-extensions,
 
   # buildInputs
-  imath,
   isl,
 
   # tests
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    imath
     isl
   ];
 
@@ -49,7 +47,6 @@ buildPythonPackage rec {
 
   cmakeFlags = [
     "-DUSE_SHIPPED_ISL=OFF"
-    "-DUSE_SHIPPED_IMATH=OFF"
     "-DUSE_BARVINOK=OFF"
     "-DISL_INC_DIRS:LIST='${lib.getDev isl}/include'"
     "-DISL_LIB_DIRS:LIST='${lib.getLib isl}/lib'"
