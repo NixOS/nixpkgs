@@ -17,8 +17,8 @@
   nix-update-script,
   pinentry,
   stdenvNoCC,
-  testers,
   util-linux,
+  versionCheckHook,
   zsh,
 }:
 
@@ -80,11 +80,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "tomb -v";
-    };
     updateScript = nix-update-script { };
   };
 
