@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Super simple HTTP server that replies a fixed body with a fixed response code";
     homepage = "https://github.com/svenstaro/dummyhttp";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    maintainers = with maintainers; [ ];
     mainProgram = "dummyhttp";
   };
 }

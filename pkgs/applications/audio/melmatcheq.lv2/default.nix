@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "brummer10";
-    repo = pname;
+    repo = "MelMatchEQ.lv2";
     rev = "v${version}";
     sha256 = "1s805jgb9msxfq9047s7pxrngizb00w8sm4z94iii80ba65rd20x";
   };

@@ -1,8 +1,8 @@
-diff --git a/conda/base/context.py b/conda/base/context.py
-index 34a5e6495..ac017f48b 100644
---- a/conda/base/context.py
-+++ b/conda/base/context.py
-@@ -826,7 +826,7 @@ class Context(Configuration):
+diff --git i/conda/base/context.py w/conda/base/context.py
+index adf6d6e89..82f2c77f9 100644
+--- i/conda/base/context.py
++++ w/conda/base/context.py
+@@ -832,7 +832,7 @@ class Context(Configuration):
  
      @property
      def conda_prefix(self) -> PathType:
@@ -11,39 +11,52 @@ index 34a5e6495..ac017f48b 100644
  
      @property
      @deprecated(
-@@ -858,25 +858,17 @@ class Context(Configuration):
+@@ -864,35 +864,20 @@ class Context(Configuration):
          The vars can refer to each other if necessary since the dict is ordered.
          None means unset it.
          """
 -        if context.dev:
+-            if pythonpath := os.environ.get("PYTHONPATH", ""):
+-                pythonpath = os.pathsep.join((CONDA_SOURCE_ROOT, pythonpath))
+-            else:
+-                pythonpath = CONDA_SOURCE_ROOT
 -            return {
 -                "CONDA_EXE": sys.executable,
+-                "_CONDA_EXE": sys.executable,
 -                # do not confuse with os.path.join, we are joining paths with ; or : delimiters
--                "PYTHONPATH": os.pathsep.join(
--                    (CONDA_SOURCE_ROOT, os.environ.get("PYTHONPATH", ""))
--                ),
+-                "PYTHONPATH": pythonpath,
 -                "_CE_M": "-m",
 -                "_CE_CONDA": "conda",
 -                "CONDA_PYTHON_EXE": sys.executable,
+-                "_CONDA_ROOT": self.conda_prefix,
 -            }
 -        else:
--            exe = "conda.exe" if on_win else "conda"
+-            exe = os.path.join(
+-                self.conda_prefix,
+-                BIN_DIRECTORY,
+-                "conda.exe" if on_win else "conda",
+-            )
 -            return {
--                "CONDA_EXE": os.path.join(sys.prefix, BIN_DIRECTORY, exe),
+-                "CONDA_EXE": exe,
+-                "_CONDA_EXE": exe,
 -                "_CE_M": None,
 -                "_CE_CONDA": None,
 -                "CONDA_PYTHON_EXE": sys.executable,
+-                "_CONDA_ROOT": self.conda_prefix,
 -            }
 +        import sys
 +        return {
 +            "CONDA_EXE": sys.executable,
-+            # do not confuse with os.path.join, we are joining paths with ; or : delimiters
-+            "PYTHONPATH": os.pathsep.join(
-+                [CONDA_SOURCE_ROOT, os.environ.get("PYTHONPATH", "")] + [path for path in sys.path if "site-packages" in path]
-+            ),
-+            "_CE_M": "-m",
-+            "_CE_CONDA": "conda",
-+            "CONDA_PYTHON_EXE": sys.executable,
++            "_CONDA_EXE": sys.executable,
++             # do not confuse with os.path.join, we are joining paths with ; or : delimiters
++             "PYTHONPATH": os.pathsep.join(
++                 [CONDA_SOURCE_ROOT, os.environ.get("PYTHONPATH", "")] + [path for path in sys.path if "site-packages" in path]
++             ),
++
++              "_CE_M": "-m",
++              "_CE_CONDA": "conda",
++              "CONDA_PYTHON_EXE": sys.executable,
++              "_CONDA_ROOT": self.conda_prefix,
 +        }
  
      @memoizedproperty

@@ -16,7 +16,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mooltipass";
-    repo = pname;
+    repo = "moolticute";
     rev = "v${version}";
     sha256 = "sha256-S2Pnueo3opP1k6XBBHGAyRJpkNuI1Hotz7ypXa/96eQ=";
   };

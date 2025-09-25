@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "newsboat";
-  version = "2.40";
+  version = "2.41";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
-    rev = "r${finalAttrs.version}";
-    hash = "sha256-BxZq+y2MIIKAaXi7Z2P8JqTfHtX2BBY/ShUhGk7Cf/8=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-LhEhbK66OYwAD/pel81N7Hgh/xEvnFR8GlZzgqZIe5M=";
   };
 
-  cargoHash = "sha256-lIK7F52pxMMhrImtO+bAR/iGOvuhhe/g+oWn6iNA1mY=";
+  cargoHash = "sha256-CyhyzNw2LXwIVf/SX2rQRvEex5LmjZfZKgCe88jthz0=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -101,7 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://newsboat.org/";
-    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [
       dotlambda

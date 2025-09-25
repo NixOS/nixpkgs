@@ -37,5 +37,6 @@ buildGoModule rec {
       valodim
     ];
     mainProgram = "postfix-tlspol";
+    platforms = lib.platforms.linux;
   };
 }

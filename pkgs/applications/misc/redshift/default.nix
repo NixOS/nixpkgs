@@ -168,7 +168,7 @@ rec {
 
     src = fetchFromGitLab {
       owner = "chinstrap";
-      repo = pname;
+      repo = "gammastep";
       rev = "v${version}";
       hash = "sha256-c8JpQLHHLYuzSC9bdymzRTF6dNqOLwYqgwUOpKcgAEU=";
     };

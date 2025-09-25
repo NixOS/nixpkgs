@@ -430,6 +430,7 @@ in
   cyrus-imap = runTest ./cyrus-imap.nix;
   dae = runTest ./dae.nix;
   darling-dmg = runTest ./darling-dmg.nix;
+  dashy = runTest ./web-apps/dashy.nix;
   davis = runTest ./davis.nix;
   db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;
@@ -1585,6 +1586,7 @@ in
   vengi-tools = runTest ./vengi-tools.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
+  victoriatraces = import ./victoriatraces { inherit runTest; };
   vikunja = runTest ./vikunja.nix;
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };

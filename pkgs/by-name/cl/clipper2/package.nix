@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipper2";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "AngusJohnson";
     repo = "Clipper2";
     rev = "Clipper2_${version}";
-    hash = "sha256-6lvzU93+UnArEtRe2mJ4YB16+5sDCrBcPzljNAEFt8M=";
+    hash = "sha256-2vZXxT5hISz2xbWbvYNGTrq9QovTjNwUK103iVtz8ok=";
   };
 
   sourceRoot = "${src.name}/CPP";
@@ -27,6 +28,8 @@ stdenv.mkDerivation rec {
     "-DCLIPPER2_TESTS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Polygon Clipping and Offsetting - C++ Only";

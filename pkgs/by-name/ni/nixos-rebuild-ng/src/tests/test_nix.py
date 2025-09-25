@@ -385,7 +385,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
     ),
 )
 def test_get_build_image_variants_flake(mock_run: Mock) -> None:
-    flake = m.Flake(Path("/flake.nix"), "myAttr")
+    flake = m.Flake("/flake.nix", "myAttr")
     assert n.get_build_image_variants_flake(flake, {"eval_flag": True}) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
         "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
@@ -574,7 +574,7 @@ def test_repl(mock_run: Mock) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl_flake(mock_run: Mock) -> None:
-    n.repl_flake(m.Flake(Path("flake.nix"), "myAttr"), {"nix_flag": True})
+    n.repl_flake(m.Flake("flake.nix", "myAttr"), {"nix_flag": True})
     # See nixos-rebuild-ng.tests.repl for a better test,
     # this is mostly for sanity check
     assert mock_run.call_count == 1

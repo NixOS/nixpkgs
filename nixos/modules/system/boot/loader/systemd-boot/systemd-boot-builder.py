@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import warnings
 import json
 from typing import NamedTuple, Any, Sequence
@@ -64,7 +65,10 @@ class SystemIdentifier(NamedTuple):
 
 def copy_if_not_exists(source: Path, dest: Path) -> None:
     if not dest.exists():
-        shutil.copyfile(source, dest)
+        tmpfd, tmppath = tempfile.mkstemp(dir=dest.parent, prefix=dest.name, suffix='.tmp.')
+        shutil.copyfile(source, tmppath)
+        os.fsync(tmpfd)
+        shutil.move(tmppath, dest)
 
 
 def generation_dir(profile: str | None, generation: int) -> Path:

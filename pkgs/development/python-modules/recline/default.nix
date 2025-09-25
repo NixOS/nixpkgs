@@ -20,15 +20,6 @@ buildPythonPackage rec {
     sha256 = "sha256-WBMt5jDPCBmTgVdYDN662uU2HVjB1U3GYJwn0P56WsI=";
   };
 
-  patches = [
-    # based on https://github.com/NetApp/recline/pull/21
-    ./devendor.patch
-  ];
-
-  postPatch = ''
-    rm -r recline/vendor/argcomplete
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [ argcomplete ];
