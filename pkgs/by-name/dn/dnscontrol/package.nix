@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGo125Module,
   fetchFromGitHub,
   installShellFiles,
@@ -30,7 +31,7 @@ buildGo125Module rec {
     "-X=github.com/StackExchange/dnscontrol/v4/pkg/version.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dnscontrol \
       --bash <($out/bin/dnscontrol shell-completion bash) \
       --zsh <($out/bin/dnscontrol shell-completion zsh)

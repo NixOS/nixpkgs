@@ -706,12 +706,7 @@ in
         };
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.mastodon;
-        defaultText = lib.literalExpression "pkgs.mastodon";
-        description = "Mastodon package to use.";
-      };
+      package = lib.mkPackageOption pkgs "mastodon" { };
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;

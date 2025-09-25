@@ -182,7 +182,7 @@ in
 
       pbPort = lib.mkOption {
         default = 9989;
-        type = lib.types.either lib.types.str lib.types.int;
+        type = lib.types.either lib.types.str lib.types.port;
         example = "'tcp:9990:interface=127.0.0.1'";
         description = ''
           The buildmaster will listen on a TCP port of your choosing

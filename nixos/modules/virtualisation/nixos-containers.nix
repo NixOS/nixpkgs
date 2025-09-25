@@ -416,11 +416,11 @@ let
               description = "The protocol specifier for port forwarding between host and container";
             };
             hostPort = mkOption {
-              type = types.int;
+              type = types.port;
               description = "Source port of the external interface on host";
             };
             containerPort = mkOption {
-              type = types.nullOr types.int;
+              type = types.nullOr types.port;
               default = null;
               description = "Target port of container";
             };

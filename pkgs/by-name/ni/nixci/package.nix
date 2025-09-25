@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd nixci \
       --bash <($out/bin/nixci completion bash) \
       --fish <($out/bin/nixci completion fish) \

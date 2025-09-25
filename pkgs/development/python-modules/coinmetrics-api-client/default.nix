@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2025.9.9.13";
+  version = "2025.9.17.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "coinmetrics_api_client";
-    hash = "sha256-f5nMzx4oRHDkGAnexT6uamX2wGeEfrqCVBewq+2NxwA=";
+    hash = "sha256-Quupd3I5OM4VtTblHup0z0lX5fSy6h9U1dnbjocAziM=";
   };
 
   pythonRelaxDeps = [ "typer" ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "9.5.0";
+  version = "9.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
     tag = "v${version}";
-    hash = "sha256-3X0oSW1LdVzd9m6awUjqW+uI+0VijCjYYim0sH3wcSU=";
+    hash = "sha256-r8bzgDQK3csx3Myh90lVnv4Zs3cJq6B+PmpVAUCMRLs=";
   };
 
   build-system = [ setuptools ];

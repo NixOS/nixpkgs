@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
-  version = "4.6.6";
+  version = "4.6.10";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
-    repo = pname;
+    repo = "helm-secrets";
     rev = "v${version}";
-    hash = "sha256-sAGENuyg2t/H7BYF+Y+Nk3SB2/PA/V+L374iXmppkqc=";
+    hash = "sha256-hno6+kik+U9XA7Mr9OnuuVidfc/xoqWRjMbBMI6M3QA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -dm755 $out/${pname} $out/${pname}/scripts
-    install -m644 -Dt $out/${pname} plugin.yaml
-    cp -r scripts/* $out/${pname}/scripts
-    wrapProgram $out/${pname}/scripts/run.sh \
+    install -dm755 $out/helm-secrets $out/helm-secrets/scripts
+    install -m644 -Dt $out/helm-secrets plugin.yaml
+    cp -r scripts/* $out/helm-secrets/scripts
+    wrapProgram $out/helm-secrets/scripts/run.sh \
         --prefix PATH : ${
           lib.makeBinPath [
             coreutils
