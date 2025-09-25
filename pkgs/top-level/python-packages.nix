@@ -122,6 +122,8 @@ self: super: with self; {
 
   affine = callPackage ../development/python-modules/affine { };
 
+  affine-gaps = callPackage ../development/python-modules/affine-gaps { };
+
   afsapi = callPackage ../development/python-modules/afsapi { };
 
   agate = callPackage ../development/python-modules/agate { };

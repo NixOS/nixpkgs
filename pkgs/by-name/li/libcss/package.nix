@@ -5,13 +5,13 @@
   fetchpatch,
   perl,
   pkg-config,
-  buildsystem,
+  netsurf-buildsystem,
   libparserutils,
   libwapcaplet,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libcss";
+  pname = "libcss";
   version = "0.9.2";
 
   src = fetchurl {
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     perl
-    buildsystem
+    netsurf-buildsystem
     libparserutils
     libwapcaplet
   ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -67,6 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
       license.
     '';
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })

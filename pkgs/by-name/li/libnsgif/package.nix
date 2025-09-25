@@ -4,11 +4,11 @@
   fetchurl,
   pkg-config,
   buildPackages,
-  buildsystem,
+  netsurf-buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libnsgif";
+  pname = "libnsgif";
   version = "1.0.0";
 
   src = fetchurl {
@@ -20,11 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ buildsystem ];
+  buildInputs = [ netsurf-buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
     "BUILD_CC=$(CC_FOR_BUILD)"
   ];
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.netsurf-browser.org/projects/libnsgif/";
     description = "GIF Decoder for netsurf browser";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
