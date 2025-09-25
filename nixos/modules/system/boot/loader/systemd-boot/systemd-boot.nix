@@ -421,11 +421,22 @@ in
     };
 
     bootCounting = {
-      enable = mkEnableOption "automatic boot assessment";
+      enable = mkEnableOption ''
+        [Automatic Boot Assessment](https://systemd.io/AUTOMATIC_BOOT_ASSESSMENT/).
+
+        New boot entries are written with a boot counter in the file name. On
+        each boot, systemd-boot decrements the counter; once the booted system
+        reaches `boot-complete.target`, `systemd-bless-boot.service` removes the
+        counter and marks the entry as good. An entry whose counter reaches zero
+        is considered bad and will be skipped in favour of an older generation
+      '';
       tries = mkOption {
         default = 3;
-        type = types.int;
-        description = "number of tries each entry should start with";
+        type = types.ints.positive;
+        description = ''
+          Number of boot attempts a freshly written entry is given before it is
+          considered bad.
+        '';
       };
     };
 
