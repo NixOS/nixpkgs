@@ -81,6 +81,7 @@ buildPythonPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain";
     license = lib.licenses.mit;
