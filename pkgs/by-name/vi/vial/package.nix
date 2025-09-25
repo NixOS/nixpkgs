@@ -1,28 +1,62 @@
 {
   lib,
-  fetchurl,
-  appimageTools,
+  fetchFromGitHub,
+  python3Packages,
+  qt6,
 }:
+
 let
   version = "0.7.5";
   pname = "Vial";
 
-  src = fetchurl {
-    url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
-    hash = "sha256-sN8i/MOPhaLZ4iJNKz/MdpRIGTZVV/G5qD7o+ID8dAM=";
+  src = fetchFromGitHub {
+    owner = "vial-kb";
+    repo = "vial-gui";
+    tag = "v${version}";
+    hash = "sha256-TWcm+UgROpd5pX/EV0SMx52C9i9Ip9vT61OQhsTiRi8=";
   };
-
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
-appimageTools.wrapType2 {
+python3Packages.buildPythonApplication {
   inherit pname version src;
 
-  extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+  pyproject = false;
+
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+  ];
+
+  dependencies = with python3Packages; [
+    fbs
+    certifi
+    pyqt5
+    simpleeval
+    hidapi
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/libexec
+    cp -r . $out/libexec/vial
+
+    sed -i '1i#!/usr/bin/env python' $out/libexec/vial/src/main/python/main.py
+    chmod u+x $out/libexec/vial/src/main/python/main.py
+    ln -s $out/libexec/vial/src/main/python/main.py $out/bin/Vial
 
     mkdir -p $out/etc/udev/rules.d/ # https://get.vial.today/getting-started/linux-udev.html
     echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
+
+    runHook postInstall
+  '';
+
+  makeWrapperArgs = [ "--chdir $out/libexec/vial" ];
+
+  postFixup = ''
+    wrapPythonProgramsIn "$out/libexec/vial/src/main/python" "$out $pythonPath"
   '';
 
   meta = {
@@ -31,7 +65,6 @@ appimageTools.wrapType2 {
     license = lib.licenses.gpl2Plus;
     mainProgram = "Vial";
     maintainers = with lib.maintainers; [ kranzes ];
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
   };
 }
