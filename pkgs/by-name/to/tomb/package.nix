@@ -17,7 +17,7 @@
   nix-update-script,
   pinentry,
   stdenvNoCC,
-  util-linux,
+  util-linuxMinimal,
   versionCheckHook,
   zsh,
 }:
@@ -37,7 +37,7 @@ let
     libargon2
     lsof
     pinentry
-    util-linux
+    util-linuxMinimal
   ];
 
 in
