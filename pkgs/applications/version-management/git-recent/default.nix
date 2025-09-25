@@ -4,7 +4,7 @@
   git,
   less,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   # util-linuxMinimal is included because we need the column command
   util-linux,
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-b6AWLEXCOza+lIHlvyYs3M6yHGr2StYXzl7OsA9gv/k=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildPhase = null;
 
