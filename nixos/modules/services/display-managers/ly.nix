@@ -67,11 +67,11 @@ in
       settings = mkOption {
         type =
           with lib.types;
-          attrsOf (oneOf [
+          attrsOf (nullOr (oneOf [
             str
             int
             bool
-          ]);
+          ]));
         default = { };
         example = {
           load = false;
