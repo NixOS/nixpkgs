@@ -46,6 +46,9 @@ buildGoModule {
     description = "BDD styled unit test framework for Kubernetes Helm charts as a Helm plugin";
     homepage = "https://github.com/helm-unittest/helm-unittest";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yurrriq ];
+    maintainers = with lib.maintainers; [
+      booxter
+      yurrriq
+    ];
   };
 }
