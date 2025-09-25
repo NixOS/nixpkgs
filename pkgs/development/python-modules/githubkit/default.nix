@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.13.2";
+  version = "0.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-MxMzc6JMeQCJJ6rWQYofThJB1mUHTOj4ztD9zye84O4=";
+    hash = "sha256-4THc5BNQGSrpf3Y3OoFisywEdKp8ZgNjle4yvVLUy1A=";
   };
 
   pythonRelaxDeps = [ "hishel" ];

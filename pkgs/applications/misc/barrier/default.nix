@@ -19,7 +19,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "debauchee";
-    repo = pname;
+    repo = "barrier";
     rev = "v${version}";
     hash = "sha256-2tHqLF3zS3C4UnOVIZfpcuzaemC9++nC7lXgFnFSfKU=";
     fetchSubmodules = true;

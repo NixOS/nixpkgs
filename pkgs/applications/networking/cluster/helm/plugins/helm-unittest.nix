@@ -23,10 +23,10 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -dm755 $out/${pname}
-    mv $out/bin/helm-unittest $out/${pname}/untt
+    install -dm755 $out/helm-unittest
+    mv $out/bin/helm-unittest $out/helm-unittest/untt
     rmdir $out/bin
-    install -m644 -Dt $out/${pname} plugin.yaml
+    install -m644 -Dt $out/helm-unittest plugin.yaml
   '';
 
   meta = with lib; {
