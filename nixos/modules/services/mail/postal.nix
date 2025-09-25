@@ -174,11 +174,11 @@ in
           worker = {
             default_health_server_port = mkOption {
               type = types.port;
-              default = 10130;
+              default = 33130;
               description = ''
                 The default port for the worker health server to listen on.
                 If you have more than one worker, this port number will be
-                incremented for every additional worker (10131, 10132, ...).
+                incremented for every additional worker (33131, 33132, ...).
               '';
             };
 
