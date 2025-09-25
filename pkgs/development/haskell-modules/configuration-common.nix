@@ -262,10 +262,24 @@ with haskellLib;
         super
         // {
           # HLS 2.11: Too strict bound on Diff 1.0.
-          haskell-language-server = dontCheck (doJailbreak super.haskell-language-server);
+          haskell-language-server = lib.pipe super.haskell-language-server [
+            dontCheck
+            doJailbreak
+            (
+              if versionOlder self.ghc.version "9.10" || versionOlder "9.11" self.ghc.version then
+                addBuildDepends [
+                  self.apply-refact
+                  self.hlint
+                  self.refact
+                ]
+              else
+                lib.id
+            )
+          ];
         }
       )
     )
+    hlint
     fourmolu
     ormolu
     haskell-language-server

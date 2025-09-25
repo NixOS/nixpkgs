@@ -29,7 +29,6 @@
   runCommand,
   rust-bindgen,
   rust-cbindgen,
-  rustPlatform,
   rustc,
   spirv-llvm-translator,
   stdenv,
@@ -314,7 +313,6 @@ stdenv.mkDerivation {
     rustc
     rust-bindgen
     rust-cbindgen
-    rustPlatform.bindgenHook
     wayland-scanner
   ]
   ++ lib.optionals needNativeCLC [

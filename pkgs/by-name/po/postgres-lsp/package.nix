@@ -1,22 +1,21 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchgit,
   rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
-  version = "0.13.0";
+  version = "0.15.0";
 
-  src = fetchFromGitHub {
-    owner = "supabase-community";
-    repo = "postgres-language-server";
+  src = fetchgit {
+    url = "https://github.com/supabase-community/postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-0Q8MxKeh12STWIJ9441uTz+qQXEJjCESj21C4X8CBC4=";
+    hash = "sha256-ZintjrSeNsYR6A8tlEfSetse7d79jgLdCpdu+sMe3Zk=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-oIbS5BUpNOXwiRconqJI/jdXeX05FIZVNl2kYt+79wY=";
+  cargoHash = "sha256-x/Wbx3noH6YOQIis1sN8ylQApjhSy4/mrxX6jvZFs6A=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

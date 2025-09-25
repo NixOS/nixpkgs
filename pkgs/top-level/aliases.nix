@@ -1725,6 +1725,7 @@ mapAliases {
   mpris-discord-rpc = throw "'mpris-discord-rpc' has been renamed to 'music-discord-rpc'."; # Added 2025-09-14
   mq-cli = throw "'mq-cli' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   mrkd = throw "'mrkd' has been removed as it is unmaintained since 2021"; # Added 2024-12-21
+  mrxvt = throw "'mrxvt' has been removed due to lack of maintainence upstream"; # Added 2025-09-25
   msp430NewlibCross = msp430Newlib; # Added 2024-09-06
   msgpack = throw "msgpack has been split into msgpack-c and msgpack-cxx"; # Added 2025-09-14
   mumps_par = lib.warnOnInstantiate "mumps_par has been renamed to mumps-mpi" mumps-mpi; # Added 2025-05-07
@@ -2383,6 +2384,7 @@ mapAliases {
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19
   strelka = throw "strelka depends on Python 2.6+, and does not support Python 3."; # Added 2025-03-17
   subberthehut = throw "'subberthehut' has been removed as it was unmaintained upstream"; # Added 2025-05-17
+  sublime-music = throw "`sublime-music` has been removed because upstream has announced it is no longer maintained. Upstream suggests using `supersonic` instead."; # Added 2025-09-20
   substituteAll = throw "`substituteAll` has been removed. Use `replaceVars` instead."; # Added 2025-05-23
   substituteAllFiles = throw "`substituteAllFiles` has been removed. Use `replaceVars` for each file instead."; # Added 2025-05-23
   suidChroot = throw "'suidChroot' has been dropped as it was unmaintained, failed to build and had questionable security considerations"; # Added 2025-05-17
