@@ -1,18 +1,21 @@
---- interfaces/cc/aspell.h	2013-10-13 20:29:33.000000000 +0200
-+++ interfaces/cc/aspell.h	2013-10-13 20:30:01.000000000 +0200
-@@ -237,6 +237,7 @@
+Allow clang to build aspell
+--- a/interfaces/cc/aspell.h
++++ b/interfaces/cc/aspell.h
+@@ -245,7 +245,7 @@ void delete_aspell_can_have_error(struct AspellCanHaveError * ths);
+ 
  /******************************** errors ********************************/
  
- 
+-
 +#ifndef __cplusplus
  extern const struct AspellErrorInfo * const aerror_other;
  extern const struct AspellErrorInfo * const aerror_operation_not_supported;
  extern const struct AspellErrorInfo * const   aerror_cant_copy;
-@@ -322,6 +323,7 @@
+@@ -331,7 +331,7 @@ extern const struct AspellErrorInfo * const   aerror_missing_magic;
  extern const struct AspellErrorInfo * const   aerror_bad_magic;
  extern const struct AspellErrorInfo * const aerror_expression;
  extern const struct AspellErrorInfo * const   aerror_invalid_expression;
+-
 +#endif
  
- 
  /******************************* speller *******************************/
+ 

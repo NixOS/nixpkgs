@@ -7186,13 +7186,7 @@ with pkgs;
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
   asio = callPackage ../development/libraries/asio { };
 
-  aspell = callPackage ../development/libraries/aspell { };
-
-  aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix { });
-
-  aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix {
-    aspell = aspell.override { searchNixProfiles = false; };
-  };
+  aspellDicts = recurseIntoAttrs (callPackages ../by-name/as/aspell/dictionaries.nix { });
 
   astal = recurseIntoAttrs (lib.makeScope newScope (callPackage ../development/libraries/astal { }));
 
