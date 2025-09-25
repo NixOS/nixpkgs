@@ -7237,7 +7237,6 @@ with pkgs;
       # botan3 only sensibly works with libcxxStdenv when building static binaries
       stdenv = if stdenv.hostPlatform.isStatic then buildPackages.libcxxStdenv else stdenv;
     })
-    botan2
     botan3
     ;
 
