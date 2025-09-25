@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pychess";
-  version = "1.0.6";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pychess";
     repo = "pychess";
     rev = version;
-    hash = "sha256-1FJgwdZTyyZBswXFnUowSXlEXzL86C4uK2qDdseqzLs=";
+    hash = "sha256-MSz5RiPpmlySjljhDlkvXtO6t3UO58zx+uGsV9R6F1A=";
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "buggins";
-    repo = pname;
+    repo = "coolreader";
     rev = "cr${version}";
     sha256 = "sha256-ZfgaLCLvBU6xP7nx7YJTsJSpvpdQgLpSMWH+BsG8E1g=";
   };
