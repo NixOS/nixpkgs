@@ -1,3 +1,4 @@
+# mypy: disable-error-code=comparison-overlap
 from typing import Final
 
 # Build-time flags

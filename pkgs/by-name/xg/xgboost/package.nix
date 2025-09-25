@@ -47,12 +47,12 @@ effectiveStdenv.mkDerivation rec {
   #     xgb = xgboost.override{rLibrary = true; doCheck = false;}; \
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
-  pname = lib.optionalString rLibrary "r-" + pnameBase;
+  pname = lib.optionalString rLibrary "r-" + "xgboost";
   version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "dmlc";
-    repo = pnameBase;
+    repo = "xgboost";
     tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-khaD9gvKfUyWhkrIZXzGzKw/nfgeTcp9akCi5X3IORo=";
