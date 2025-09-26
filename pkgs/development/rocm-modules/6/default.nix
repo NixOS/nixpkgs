@@ -417,6 +417,16 @@ let
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      rocm-merged-llvm = throw ''
+        'rocm-merged-llvm' has been removed.
+        For 'libllvm' or 'libclang' use 'rocmPackages.llvm.libllvm/clang'.
+        For a ROCm compiler toolchain use 'rocmPackages.rocm-toolchain'.
+        If a package uses '$<TARGET_FILE:clang>' in CMake from 'libclang'
+        it may be necessary to convince it to use 'rocm-toolchain' instead.
+        'rocm-merged-llvm' avoided this at the cost of significantly bloating closure
+        size.
+      ''; # Added 2025-09-30
+
       hsa-amd-aqlprofile-bin = lib.warn ''
         'hsa-amd-aqlprofile-bin' has been replaced by 'aqlprofile'.
       '' self.aqlprofile; # Added 2025-08-27
