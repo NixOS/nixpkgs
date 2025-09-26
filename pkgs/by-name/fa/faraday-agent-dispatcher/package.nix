@@ -21,13 +21,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail '"pytest-runner",' ""
   '';
 
-  pythonRelaxDeps = [
-    "python-socketio"
-  ];
+  pythonRelaxDeps = [ "python-socketio" ];
 
-  build-system = with python3.pkgs; [
-    setuptools-scm
-  ];
+  build-system = with python3.pkgs; [ setuptools-scm ];
 
   dependencies = with python3.pkgs; [
     aiohttp
@@ -66,14 +62,12 @@ python3.pkgs.buildPythonApplication rec {
     "tests/unittests/test_import_official_executors.py"
   ];
 
-  pythonImportsCheck = [
-    "faraday_agent_dispatcher"
-  ];
+  pythonImportsCheck = [ "faraday_agent_dispatcher" ];
 
   meta = {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
-    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${version}";
+    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-dispatcher";
