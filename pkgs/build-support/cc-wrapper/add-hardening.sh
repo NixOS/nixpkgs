@@ -120,7 +120,7 @@ for flag in "${!hardeningEnableMap[@]}"; do
       hardeningCFlagsBefore+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
       ;;
     stackclashprotection)
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stack-clash-protection >&2; fi
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackclashprotection >&2; fi
       hardeningCFlagsBefore+=('-fstack-clash-protection')
       ;;
     nostrictaliasing)
