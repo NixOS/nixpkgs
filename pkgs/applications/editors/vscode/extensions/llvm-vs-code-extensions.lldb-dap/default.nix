@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "lldb-dap";
     publisher = "llvm-vs-code-extensions";
-    version = "0.2.16";
-    hash = "sha256-q0wBPSQHy/R8z5zb3iMdapzrn7c9y9X6Ow9CXY3lwtc=";
+    version = "0.2.18";
+    hash = "sha256-H2CSy+Zow6inLUgSW5VNHZBEmag1acslX3bkw3XYcKA=";
   };
 
   meta = {
