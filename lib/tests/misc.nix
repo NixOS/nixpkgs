@@ -69,6 +69,7 @@ let
     id
     ifilter0
     isStorePath
+    join
     lazyDerivation
     length
     lists
@@ -434,6 +435,15 @@ runTests {
   };
 
   # STRINGS
+
+  testJoin = {
+    expr = join "," [
+      "a"
+      "b"
+      "c"
+    ];
+    expected = "a,b,c";
+  };
 
   testConcatMapStrings = {
     expr = concatMapStrings (x: x + ";") [
