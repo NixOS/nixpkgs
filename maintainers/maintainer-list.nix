@@ -14395,6 +14395,12 @@
     githubId = 4701504;
     name = "James Robinson";
   };
+  leguteape = {
+    email = "workerap@protonmail.com";
+    github = "leguteape";
+    githubId = 45424904;
+    name = "Aashish P";
+  };
   leifhelm = {
     email = "jakob.leifhelm@gmail.com";
     github = "leifhelm";
