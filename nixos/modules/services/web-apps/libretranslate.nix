@@ -146,7 +146,7 @@ in
           Type = "simple";
           ExecStart = ''
             ${cfg.package}/bin/libretranslate ${
-              lib.cli.toGNUCommandLineShell { } (
+              lib.cli.toCommandLineShell lib.cli.gnuOptionFormat (
                 cfg.extraArgs
                 // {
                   inherit (cfg) host port threads;
