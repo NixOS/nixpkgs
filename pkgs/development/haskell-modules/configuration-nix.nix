@@ -1221,6 +1221,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ];
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.relocant;
 
   # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
@@ -1233,6 +1234,7 @@ builtins.intersectAttrs super {
       (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
       pkgs.postgresqlTestHook
     ];
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.haskell-pgmq;
 
   migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
@@ -1245,6 +1247,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
   ];
 
   postgresql-simple-migration = overrideCabal (drv: {
@@ -1257,12 +1260,16 @@ builtins.intersectAttrs super {
       pkgs.postgresqlTestHook
     ];
     jailbreak = true;
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.postgresql-simple-migration;
 
-  postgresql-simple = addTestToolDepends [
-    pkgs.postgresql
-    pkgs.postgresqlTestHook
-  ] super.postgresql-simple;
+  postgresql-simple = lib.pipe super.postgresql-simple [
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
 
   beam-postgres = lib.pipe super.beam-postgres [
     # Requires pg_ctl command during tests
@@ -1270,10 +1277,13 @@ builtins.intersectAttrs super {
     (dontCheckIf (!pkgs.postgresql.doInstallCheck || !self.testcontainers.doCheck))
   ];
 
-  users-postgresql-simple = addTestToolDepends [
-    pkgs.postgresql
-    pkgs.postgresqlTestHook
-  ] super.users-postgresql-simple;
+  users-postgresql-simple = lib.pipe super.users-postgresql-simple [
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
 
   esqueleto =
     overrideCabal
