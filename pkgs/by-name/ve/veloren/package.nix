@@ -9,10 +9,12 @@
   shaderc,
   libxcb,
   libxkbcommon,
+  autoPatchelfHook,
   libX11,
   libXi,
   libXcursor,
   libXrandr,
+  stdenv,
 }:
 
 let
@@ -51,12 +53,18 @@ rustPlatform.buildRustPackage {
     EOF
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+  ];
+
   buildInputs = [
     alsa-lib
     udev
     libxcb
     libxkbcommon
+    shaderc
+    stdenv.cc.cc # libgcc_s.so.1
   ];
 
   buildNoDefaultFeatures = true;
@@ -81,18 +89,17 @@ rustPlatform.buildRustPackage {
   # Some tests require internet access
   doCheck = false;
 
-  postFixup = ''
-    # Add required but not explicitly requested libraries
-    patchelf --add-rpath '${
-      lib.makeLibraryPath [
+  appendRunpaths = [
+    (lib.makeLibraryPath
+      [
         libX11
         libXi
         libXcursor
         libXrandr
         vulkan-loader
       ]
-    }' "$out/bin/veloren-voxygen"
-  '';
+    )
+  ];
 
   postInstall = ''
     # Icons
