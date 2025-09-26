@@ -277,11 +277,10 @@ let
         lib.optionalString (cfg.apiKeyFile != null) ''
           # apiKey is part of gui section. We need to merge it because
           # otherwise the other gui options would get cleared.
-          new_apiKey=$(cat ${lib.escapeShellArg cfg.apiKeyFile})
           initial_guiConfig=$(echo ${
             lib.escapeShellArg (builtins.toJSON (if cleanedConfig ? gui then cleanedConfig.gui else { }))
           })
-          updated_guiConfig=$(echo $initial_guiConfig | ${jq} ".apiKey = \"$new_apiKey\"")
+          updated_guiConfig=$(echo $initial_guiConfig | ${jq} --rawfile data ${lib.escapeShellArg cfg.apiKeyFile} '.apiKey = $data')
           curl -X PUT -d "$updated_guiConfig" ${curlAddressArgs "/rest/config/gui"}
         ''
       )
