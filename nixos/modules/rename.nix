@@ -34,6 +34,11 @@ in
       "fontconfig"
       "penultimate"
     ] "The corresponding package has removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "hardware"
+      "amdgpu"
+      "amdvlk"
+    ] "'amdvlk' has been removed. RADV, part of Mesa, is now officially supported by AMD.")
     (mkRemovedOptionModule [ "hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of
       brightnessctl don't require the udev rules anymore (they can use the

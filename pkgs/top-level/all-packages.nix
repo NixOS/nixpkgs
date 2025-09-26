@@ -7367,7 +7367,6 @@ with pkgs;
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
-      amdvlk
       intel-media-driver
       intel-vaapi-driver
       mesa
