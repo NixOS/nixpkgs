@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     tag = "v${version}";
-    hash = "sha256-LlWv4wWQWZsTB9JXS21O1WkIYhKkJwY5SM70hnzfnDQ=";
+    hash = "sha256-M+ojGXJOnrBipjSA9hd3++yTS70kCjPru9FG/rm7zI8=";
   };
 
   sourceRoot = "${src.name}/${pname}";
