@@ -69,6 +69,14 @@ checks:
     **start**ed, leaving socket activation to start the service when
     it's needed.
 
+## Unit failure handling {#sec-unit-failure-handling}
+
+When units fail to start during a configuration switch, the system will
+normally set the exit code to 4 to indicate failure. However, units can
+opt out of this behavior by setting `X-IgnoreStartFailure` to `true` in
+their `[Unit]` section. When this option is set, unit start failures will
+not cause the overall configuration switch to fail.
+
 ## Sysinit reactivation {#sec-sysinit-reactivation}
 
 [`sysinit.target`](https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html#sysinit.target)

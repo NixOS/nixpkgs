@@ -408,6 +408,16 @@ fn parse_systemd_bool(
     }
 }
 
+fn parse_ignore_start_failure(unit_file: &Path) -> Result<bool> {
+    // If the unit file doesn't exist, it's not a unit that we're managing
+    if !unit_file.exists() {
+        return Ok(false);
+    }
+
+    let unit_info = parse_unit(unit_file, unit_file)?;
+    Ok(parse_systemd_bool(Some(&unit_info), "Unit", "X-IgnoreStartFailure", false))
+}
+
 #[derive(Debug, PartialEq)]
 enum UnitComparison {
     Equal,
@@ -1940,6 +1950,9 @@ won't take effect until you reboot the system.
         match result.as_str() {
             "timeout" | "failed" | "dependency" => {
                 eprintln!("Failed to {job} {unit}");
+                if result == "failed" && parse_ignore_start_failure(&toplevel.join("etc/systemd/system").join(unit))? {
+                    continue;
+                }
                 exit_code = 4;
             }
             _ => {}
@@ -2032,11 +2045,16 @@ won't take effect until you reboot the system.
             .arg("status")
             .arg("--no-pager")
             .arg("--full")
-            .args(failed_units)
+            .args(&failed_units)
             .spawn()
             .map(|mut child| child.wait());
 
-        exit_code = 4;
+        for unit in failed_units {
+            if !parse_ignore_start_failure(&toplevel.join("etc/systemd/system").join(unit))? {
+                exit_code = 4;
+                break;
+            }
+        }
     }
 
     if exit_code == 0 {

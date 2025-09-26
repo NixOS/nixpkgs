@@ -156,6 +156,11 @@ in
             systemd.services.test.serviceConfig.ExecStart = lib.mkForce "${pkgs.coreutils}/bin/false";
           };
 
+          simpleServiceFailingIgnoreFailure.configuration = {
+            imports = [ simpleServiceFailing.configuration ];
+            systemd.services.test.unitConfig."X-IgnoreStartFailure" = true;
+          };
+
           autorestartService.configuration = {
             # A service that immediately goes into restarting (but without failing)
             systemd.services.autorestart = {
@@ -174,6 +179,11 @@ in
             systemd.services.autorestart.serviceConfig = {
               ExecStart = lib.mkForce "${pkgs.coreutils}/bin/false";
             };
+          };
+
+          autorestartServiceFailingIgnoreFailure.configuration = {
+            imports = [ autorestartServiceFailing.configuration ];
+            systemd.services.autorestart.unitConfig."X-IgnoreStartFailure" = true;
           };
 
           simpleServiceWithExtraSection.configuration = {
@@ -1039,6 +1049,18 @@ in
           assert_contains(out, "warning: the following units failed: test.service\n")
           assert_contains(out, "Main PID:")  # output of systemctl
 
+          # A unit that is configured to ignore failure does not cause the switch to fail
+          switch_to_specialisation("${machine}", "simpleServiceModified")
+          out = switch_to_specialisation("${machine}", "simpleServiceFailingIgnoreFailure")
+          assert_contains(out, "stopping the following units: test.service\n")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "reloading the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_contains(out, "\nstarting the following units: test.service\n")
+          assert_lacks(out, "the following new units were started:")
+          assert_contains(out, "warning: the following units failed: test.service\n")
+          assert_contains(out, "Main PID:")  # output of systemctl
+
           # A unit that gets into autorestart without failing is not treated as failed
           out = switch_to_specialisation("${machine}", "autorestartService")
           assert_lacks(out, "stopping the following units:")
@@ -1066,6 +1088,17 @@ in
           assert_lacks(out, "reloading the following units:")
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
+          assert_lacks(out, "the following new units were started:")
+          assert_contains(out, "warning: the following units failed: autorestart.service\n")
+          assert_contains(out, "Main PID:")  # output of systemctl
+
+          # If systemd thinks the unit has failed and is in autorestart but we ignore failure, then the switch should succeed
+          out = switch_to_specialisation("${machine}", "autorestartServiceFailingIgnoreFailure")
+          assert_contains(out, "stopping the following units: autorestart.service\n")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "reloading the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_contains(out, "\nstarting the following units: autorestart.service\n")
           assert_lacks(out, "the following new units were started:")
           assert_contains(out, "warning: the following units failed: autorestart.service\n")
           assert_contains(out, "Main PID:")  # output of systemctl
