@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     # cmake file will thus look for the library in the dev output instead of out.
     # Use the absolute path to $out instead to fix the issue.
     substituteInPlace  $dev/lib/cmake/scalapack-${finalAttrs.version}/scalapack-targets-release.cmake \
-      --replace "\''${_IMPORT_PREFIX}" "$out"
+      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
   '';
 
   meta = {
