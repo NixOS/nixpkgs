@@ -25,7 +25,9 @@
   withCairo ? true,
   cairo,
 
-  withPango ? withXorg,
+  # pango depends on Xft, and implicitly enables cairo.
+  # So only enable pango if cairo is enabled too.
+  withPango ? withXorg && withCairo,
   pango,
 
   withDocs ? true,
