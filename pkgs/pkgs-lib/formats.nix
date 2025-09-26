@@ -988,6 +988,14 @@ optionalAttrs allowAliases aliases
             };
         in
         attrsOf valueType;
+
+      lib = {
+        mkRaw = value: {
+          inherit value;
+          _type = "raw";
+        };
+      };
+
       generate =
         name: value:
         pkgs.callPackage (
@@ -1002,16 +1010,43 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              value = builtins.toJSON value;
+              imports = builtins.toJSON (value._imports or [ ]);
+              value = builtins.toJSON (removeAttrs value [ "_imports" ]);
               pythonGen = ''
                 import json
                 import os
 
+                def recursive_repr(value: any) -> str:
+                    if type(value) is list:
+                        return '\n'.join([
+                            "[",
+                            *[recursive_repr(x) + "," for x in value],
+                            "]",
+                        ])
+                    elif type(value) is dict and value.get("_type") == "raw":
+                        return value.get("value")
+                    elif type(value) is dict:
+                        return '\n'.join([
+                            "{",
+                            *[f"'{k.replace('\''', '\\\''')}': {recursive_repr(v)}," for k, v in value.items()],
+                            "}",
+                        ])
+                    else:
+                        return repr(value)
+
+                with open(os.environ["importsPath"], "r") as f:
+                    imports = json.load(f)
+                    if imports is not None:
+                        for i in imports:
+                            print(f"import {i}")
+                        print()
+
                 with open(os.environ["valuePath"], "r") as f:
                     for key, value in json.load(f).items():
-                        print(f"{key} = {repr(value)}")
+                        print(f"{key} = {recursive_repr(value)}")
               '';
               passAsFile = [
+                "imports"
                 "value"
                 "pythonGen"
               ];
