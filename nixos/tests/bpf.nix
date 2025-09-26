@@ -34,10 +34,7 @@
         "    printf(\"tgid: %d\\n\", ((struct task_struct*) curtask)->tgid); exit() "
         "}'"))
     # module BTF (bpftrace >= 0.17)
-    # test is currently disabled on aarch64 as kfunc does not work there yet
-    # https://github.com/iovisor/bpftrace/issues/2496
-    print(machine.succeed("uname -m | grep aarch64 || "
-        "bpftrace -e 'kfunc:nft_trans_alloc_gfp { "
+    print(machine.succeed("bpftrace -e 'fentry:nft_trans_alloc_gfp { "
         "    printf(\"portid: %d\\n\", args->ctx->portid); "
         "} BEGIN { exit() }'"))
     # glibc includes
