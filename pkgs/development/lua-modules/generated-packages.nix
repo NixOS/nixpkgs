@@ -880,8 +880,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lewis6991";
         repo = "gitsigns.nvim";
-        rev = "f780609807eca1f783a36a8a31c30a48fbe150c5";
-        hash = "sha256-L5WbNiFUn014hThvGfb5r858O6iLOBhOQHfVUdIlFI4=";
+        rev = "23ae90a2a52fdc9b8c50dc61d6c30ebb18521343";
+        hash = "sha256-8VIW+tPttYTn2vqiYJCZ5ckqFEBGc38rkfla/puYPUQ=";
       };
 
       disabled = lua.luaversion != "5.1";
