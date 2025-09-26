@@ -4,6 +4,7 @@
   # LLVM version closest to ROCm fork to override
   llvmPackages_19,
   overrideCC,
+  lndir,
   rocm-device-libs,
   fetchFromGitHub,
   runCommand,
@@ -142,7 +143,12 @@ let
     doCheck = false;
   });
   sysrootCompiler =
-    cc: name: paths:
+    {
+      cc,
+      name,
+      paths,
+      linkPaths,
+    }:
     let
       linked = symlinkJoin { inherit name paths; };
     in
@@ -152,29 +158,43 @@ let
         # nix why-depends --precise .#rocmPackages.llvm.rocmcxx.linked /store/path/its/not/allowed
         disallowedRequisites = disallowedRefsForToolchain;
         passthru.linked = linked;
+
+        linkPaths = linkPaths;
+        passAsFile = [ "linkPaths" ];
+
+        # TODO(@LunNova): Try to use --sysroot with clang in its original location instead of
+        # relying on copying the binary?
+        # $clang/bin/clang++ --sysroot=$rocmcxx is not equivalent
+        # to a clang copied to $rocmcxx/bin here, have not yet figured out why
       }
       ''
-        set -x
         mkdir -p $out/
         cp --reflink=auto -rL ${linked}/* $out/
         chmod -R +rw $out
         mkdir -p $out/usr
         ln -s $out/ $out/usr/local
-        mkdir -p $out/nix-support/
         # we don't need mixed 32 bit, the presence of lib64 is used by LLVM to decide it's a multilib sysroot
         rm -rf $out/lib64
-        echo 'export CC=clang' >> $out/nix-support/setup-hook
-        echo 'export CXX=clang++' >> $out/nix-support/setup-hook
+        rm -rf $out/lib/cmake
+        rm -rf $out/lib/lib*.a
         mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/linux/
         ln -s $out/lib/linux/libclang_rt.* $out/lib/clang/${llvmMajorVersion}/lib/linux/
 
         find $out -type f -exec sed -i "s|${cc.out}|$out|g" {} +
         find $out -type f -exec sed -i "s|${cc.dev}|$out|g" {} +
 
-        # our /include now has more than clang expects, so this specific dir still needs to point to cc.dev
-        # FIXME: could copy into a different subdir?
-        sed -i 's|set(CLANG_INCLUDE_DIRS.*$|set(CLANG_INCLUDE_DIRS "${cc.dev}/include")|g' $out/lib/cmake/clang/ClangConfig.cmake
-        ${lib.getExe rdfind} -makesymlinks true $out/ # create links *within* the sysroot to save space
+        ${lib.getExe rdfind} -makesymlinks true ${
+          builtins.concatStringsSep " " (map (x: "${x}/lib") paths)
+        } $out/ # create links *within* the sysroot to save space
+
+        for i in $(cat $linkPathsPath); do
+          if test -d $i; then
+            ${lndir}/bin/lndir -silent $i $out
+          fi
+        done
+
+        echo 'export CC=clang' >> $out/nix-support/setup-hook
+        echo 'export CXX=clang++' >> $out/nix-support/setup-hook
       '';
   # Removes patches which either aren't desired, or don't apply against ROCm LLVM
   removeInapplicablePatches =
@@ -323,6 +343,7 @@ rec {
     (
       (llvmPackagesRocm.clang-unwrapped.override {
         libllvm = llvm;
+        enableClangToolsExtra = false;
       }).overrideAttrs
       (
         old:
@@ -389,6 +410,16 @@ rec {
               "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
               "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
             ];
+          preFixup = ''
+            ${toString old.preFixup or ""}
+            moveToOutput "lib/lib*.a" "$dev"
+            moveToOutput "lib/cmake" "$dev"
+            mkdir -p $dev/lib/clang/
+            ln -s $lib/lib/clang/${llvmMajorVersion} $dev/lib/clang/
+            if [ -d $dev/lib/cmake/clang/ ]; then
+              sed -Ei "s|$lib/lib/(lib[^/]*)\.a|$dev/lib/\1.a|g" $dev/lib/cmake/clang/*.cmake
+            fi
+          '';
           postFixup = (old.postFixup or "") + ''
             find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm} {} +
             find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
@@ -396,6 +427,12 @@ rec {
             find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
             find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
             find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
+            find $dev -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm} {} +
+            find $dev -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
+            find $dev -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc.cc} {} +
+            find $dev -type f -exec remove-references-to -t ${stdenv.cc} {} +
+            find $dev -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
+            find $dev -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
           '';
           meta = old.meta // llvmMeta;
         }
@@ -408,24 +445,36 @@ rec {
   # in the right order
   # and expects its libc to be in the sysroot
   rocmcxx =
-    (sysrootCompiler clang-unwrapped "rocmcxx" (
-      listUsefulOutputs (
+    (sysrootCompiler {
+      cc = clang-unwrapped;
+      name = "rocmcxx";
+      paths = (
+        listUsefulOutputs (
+          [
+            clang-unwrapped.out
+            clang-unwrapped.lib
+            bintools
+            compiler-rt
+            openmp
+          ]
+          ++ (lib.optionals withLibcxx [
+            libcxx
+          ])
+          ++ (lib.optionals (!withLibcxx) [
+            glibc
+            glibc.dev
+          ])
+        )
+      );
+      linkPaths = listUsefulOutputs (
         [
-          clang-unwrapped
-          bintools
-          compiler-rt
-          openmp
+          bintools.bintools
         ]
-        ++ (lib.optionals withLibcxx [
-          libcxx
-        ])
-        ++ (lib.optionals (!withLibcxx) [
+        ++ lib.optionals (!withLibcxx) [
           gcc-include
-          glibc
-          glibc.dev
-        ])
-      )
-    ))
+        ]
+      );
+    })
     // {
       version = llvmMajorVersion;
       cc = rocmcxx;
