@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   # this line is left so those who force installation on x86_64-darwin can still build
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
-  cmakeFlagsArray = [
+  cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
     (lib.cmakeFeature "BLAS_LIBRARIES" "-lblas")
