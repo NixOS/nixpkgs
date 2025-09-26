@@ -1256,7 +1256,8 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ];
-  }) (doJailbreak super.postgresql-simple-migration);
+    jailbreak = true;
+  }) super.postgresql-simple-migration;
 
   postgresql-simple = addTestToolDepends [
     pkgs.postgresql
