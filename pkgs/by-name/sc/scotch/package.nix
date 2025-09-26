@@ -54,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.labri.fr/perso/pelegrin/scotch";
     license = lib.licenses.cecill-c;
-    maintainers = [ lib.maintainers.bzizou ];
+    maintainers = with lib.maintainers; [
+      bzizou
+      qbisi
+    ];
   };
 })
