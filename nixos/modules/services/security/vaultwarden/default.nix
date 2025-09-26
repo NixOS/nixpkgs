@@ -185,8 +185,9 @@ in
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
         should be passed to the service without adding them to the world-readable Nix store.
+        NB: If passing a relative path like `./env-file`, the file will be moved to the Nix store. Use [agenix](https://github.com/ryantm/agenix) or [sops-nix](https://github.com/Mic92/sops-nix) if you want to distribute secrets this way.
 
-        Note that these files needs to be available on the host on which `vaultwarden` is running.
+        When giving an absolute path, the files need to be available on the host on which `vaultwarden` is running.
 
         As a concrete example, to make the Admin UI available (from which new users can be invited initially),
         the secret {env}`ADMIN_TOKEN` needs to be defined as described
