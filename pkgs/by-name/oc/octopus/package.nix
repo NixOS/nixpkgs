@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-L97igB+bdZ19zpbffHi8DVSJXKtUyDqauUB+l5zzFwQ=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+    "testsuite"
+  ];
+
   nativeBuildInputs = [
     which
     perl
@@ -73,6 +79,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OCTOPUS_MPI" enableMpi)
     (lib.cmakeBool "OCTOPUS_ScaLAPACK" enableMpi)
     (lib.cmakeBool "OCTOPUS_OpenMP" true)
+    (lib.cmakeBool "OCTOPUS_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   nativeCheckInputs = lib.optional.enableMpi mpi;
