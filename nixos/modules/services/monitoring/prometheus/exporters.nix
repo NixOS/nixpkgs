@@ -124,6 +124,7 @@ let
         "snmp"
         "sql"
         "statsd"
+        "storagebox"
         "surfboard"
         "systemd"
         "tibber"

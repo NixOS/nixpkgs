@@ -1615,6 +1615,21 @@ let
       '';
     };
 
+    storagebox = {
+      exporterConfig = {
+        enable = true;
+        tokenFile = "/tmp/faketoken";
+      };
+      exporterTest = ''
+        succeed(
+          'echo faketoken > /tmp/faketoken'
+        )
+        wait_for_unit("prometheus-storagebox-exporter.service")
+        wait_for_open_port(9509)
+        succeed("curl -sSf localhost:9509/metrics | grep 'process_open_fds'")
+      '';
+    };
+
     snmp = {
       exporterConfig = {
         enable = true;

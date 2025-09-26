@@ -154,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_STEAM" true)
   ];
 
   # Help openxr-loader find this runtime

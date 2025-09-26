@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "1lab";
   version = "unstable-2025-07-01";
 
   src = fetchFromGitHub {
     owner = "the1lab";
-    repo = pname;
+    repo = "1lab";
     rev = "e9c2ad2b3ba9cefad36e72cb9d732117c68ac862";
     hash = "sha256-wKh77+xCdfMtnq9jMlpdnEptGO+/WVNlQFa1TDbdUGs=";
   };
@@ -27,7 +27,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/the1lab/1lab";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ncfavier ];
