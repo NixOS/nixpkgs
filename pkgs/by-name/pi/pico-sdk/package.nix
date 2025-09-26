@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pico-sdk";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
@@ -26,10 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = withSubmodules;
     hash =
       if withSubmodules then
-        "sha256-8ru1uGjs11S2yQ+aRAvzU53K8mreZ+CC3H+ijfctuqg="
+        "sha256-8ubZW6yQnUTYxQqYI6hi7s3kFVQhe5EaxVvHmo93vgk="
       else
-        "sha256-epO7yw6/21/ess3vMCkXvXEqAn6/4613zmH/hbaBbUw=";
+        "sha256-hQdEZD84/cnLSzP5Xr9vbOGROQz4BjeVOnvbyhe6rfM=";
   };
+
+  cmakeFlags = [
+    (lib.cmakeFeature "PIOASM_VERSION_STRING" finalAttrs.version)
+  ];
 
   nativeBuildInputs = [ cmake ];
 

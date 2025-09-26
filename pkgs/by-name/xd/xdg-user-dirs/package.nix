@@ -35,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     docbook_xsl
     docbook_xml_dtd_43
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-liconv" else null;
 

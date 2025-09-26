@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   jaxtyping,
@@ -56,9 +55,6 @@ buildPythonPackage rec {
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
   ];
-
-  # Testing is broken on Darwin due to a `scikit-learn` issue, see https://github.com/NixOS/nixpkgs/issues/423831
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "canonical";
-    repo = pname;
+    repo = "lightdm";
     rev = version;
     sha256 = "sha256-ttNlhWD0Ran4d3QvZ+PxbFbSUGMkfrRm+hJdQxIDJvM=";
   };
@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     libxklavier
     pam
     polkit
-  ] ++ lib.optional withQt5 qtbase;
+  ]
+  ++ lib.optional withQt5 qtbase;
 
   patches = [
     # Adds option to disable writing dmrc files
@@ -102,7 +103,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-tests"
     "--disable-dmrc"
-  ] ++ lib.optional withQt5 "--enable-liblightdm-qt5";
+  ]
+  ++ lib.optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"

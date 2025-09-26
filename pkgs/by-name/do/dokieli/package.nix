@@ -3,7 +3,7 @@
   fetchFromGitHub,
   makeWrapper,
   nix-update-script,
-  nodePackages,
+  serve,
   stdenv,
   xsel,
   yarn-berry_4,
@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2025-07-10";
+  version = "0-unstable-2025-08-04";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "fbd73c78f4690452e86a2758825cc5f5209b5322";
-    hash = "sha256-LpUK8Uv8Qt3DMu5n7MHqbUIABlYSNzkw61BijlPRr7s=";
+    rev = "64374c6b9a53b68ae7921604a1fbe231d3e4f067";
+    hash = "sha256-5baBKXmOxS0BOKNedMSbmw21rDBONZwmim9hlXn5OzQ=";
   };
 
   missingHashes = ./missing-hashes.json;
@@ -42,15 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
   ];
 
-  postFixup =
-    let
-      serve = lib.getExe' nodePackages.serve "serve";
-    in
-    ''
-      makeWrapper ${serve} $out/bin/dokieli \
-        --prefix PATH : ${lib.makeBinPath [ xsel ]} \
-        --chdir $out
-    '';
+  postFixup = ''
+    makeWrapper ${lib.getExe serve} $out/bin/dokieli \
+      --prefix PATH : ${lib.makeBinPath [ xsel ]} \
+      --chdir $out
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

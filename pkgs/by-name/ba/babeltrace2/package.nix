@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "babeltrace2";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "efficios";
     repo = "babeltrace";
     rev = "v${version}";
-    hash = "sha256-ppSPly4HR/oemsX069o6VqwSB1AU1mKRwRepwPORf7I=";
+    hash = "sha256-4vqeIwCWEAzsHTdM2S2grF7F4vPqiWTeTEZpxsqf2g8=";
   };
 
   outputs = [
@@ -37,28 +37,28 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-      glib
-      bison
-      flex
-      asciidoc
-      xmlto
-      docbook_xml_dtd_45
-      docbook_xsl
-    ]
-    ++ lib.optionals enablePython [
-      swig
-      pythonPackages.setuptools
-      ensureNewerSourcesForZipFilesHook
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    glib
+    bison
+    flex
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+  ]
+  ++ lib.optionals enablePython [
+    swig
+    pythonPackages.setuptools
+    ensureNewerSourcesForZipFilesHook
+  ];
 
   buildInputs = [
     glib
     elfutils
-  ] ++ lib.optional enablePython python;
+  ]
+  ++ lib.optional enablePython python;
 
   configureFlags = [
     (lib.enableFeature enablePython "python-bindings")

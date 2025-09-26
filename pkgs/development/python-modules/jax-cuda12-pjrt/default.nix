@@ -13,7 +13,6 @@
 }:
 let
   inherit (jaxlib) version;
-  inherit (cudaPackages) cudaAtLeast;
 
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
@@ -45,14 +44,14 @@ buildPythonPackage rec {
     dist = "py3";
     platform =
       {
-        x86_64-linux = "manylinux2014_x86_64";
-        aarch64-linux = "manylinux2014_aarch64";
+        x86_64-linux = "manylinux_2_27_x86_64";
+        aarch64-linux = "manylinux_2_27_aarch64";
       }
       .${stdenv.hostPlatform.system};
     hash =
       {
-        x86_64-linux = "sha256-jNnq15SOosd4pQj+9dEVnot6v0/MxwN8P+Hb/NlQEtw=";
-        aarch64-linux = "sha256-IvrwINLo98oeKRVjMkH333Z4tzxwePXwsvETJIM3994=";
+        x86_64-linux = "sha256-OXdyaiozKwvTSDG96ytWUzY0QvMBLCmW/IgICq9rO60=";
+        aarch64-linux = "sha256-2H1mbQxSP62q23GU58J03MWg5/j40dfig1NT7zK+8Bw=";
       }
       .${stdenv.hostPlatform.system};
   };
@@ -101,6 +100,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken = !(cudaAtLeast "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
 }

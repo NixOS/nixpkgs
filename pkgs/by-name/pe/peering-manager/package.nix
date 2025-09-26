@@ -9,38 +9,33 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.8.3";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "peering-manager";
     tag = "v${version}";
-    sha256 = "sha256-UV1zSX9C9y5faOBUQ7bfj2DT6ffhMW28MIT7SaYjMgw=";
+    sha256 = "sha256-lxelWtiMO6w8Tt7zK/NDdmc3PaKlGibKjSfhD+tGrCU=";
   };
 
   format = "other";
-
-  patches = [
-    # Fix compatibility with pyixapi 0.2.3
-    # https://github.com/peering-manager/peering-manager/commit/ee558ff66e467412942559a8a92252e3fc009920
-    ./fix-pyixapi-0.2.3-compatibility.patch
-  ];
 
   propagatedBuildInputs =
     with python3.pkgs;
     [
       django
-      djangorestframework
-      django-redis
       django-debug-toolbar
       django-filter
       django-postgresql-netfields
       django-prometheus
+      django-redis
       django-rq
       django-tables2
       django-taggit
+      djangorestframework
       drf-spectacular
       drf-spectacular-sidecar
+      dulwich
       jinja2
       markdown
       napalm
@@ -50,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       pynetbox
       pyyaml
       requests
+      social-auth-app-django
       tzdata
     ]
     ++ plugins python3.pkgs;

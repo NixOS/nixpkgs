@@ -44,21 +44,22 @@ let
         inherit sha256;
       };
 
-      propagatedBuildInputs =
-        [ spacy ]
-        ++ lib.optionals (lib.hasSuffix "_trf" pname) [ spacy-curated-transformers ]
-        ++ lib.optionals requires-transformers [ transformers ]
-        ++ lib.optionals (lang == "ja") [
-          sudachidict-core
-          sudachipy
-        ]
-        ++ lib.optionals (lang == "ru") [ pymorphy3 ]
-        ++ lib.optionals (lang == "uk") [
-          pymorphy3
-          pymorphy3-dicts-uk
-        ]
-        ++ lib.optionals (lang == "zh") [ spacy-pkuseg ]
-        ++ lib.optionals requires-sentencepiece [ sentencepiece ];
+      propagatedBuildInputs = [
+        spacy
+      ]
+      ++ lib.optionals (lib.hasSuffix "_trf" pname) [ spacy-curated-transformers ]
+      ++ lib.optionals requires-transformers [ transformers ]
+      ++ lib.optionals (lang == "ja") [
+        sudachidict-core
+        sudachipy
+      ]
+      ++ lib.optionals (lang == "ru") [ pymorphy3 ]
+      ++ lib.optionals (lang == "uk") [
+        pymorphy3
+        pymorphy3-dicts-uk
+      ]
+      ++ lib.optionals (lang == "zh") [ spacy-pkuseg ]
+      ++ lib.optionals requires-sentencepiece [ sentencepiece ];
 
       postPatch =
         lib.optionalString requires-protobuf ''

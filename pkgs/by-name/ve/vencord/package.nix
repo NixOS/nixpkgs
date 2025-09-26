@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.12.6";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-7JT8BMKUhIwYMkIwr2mD8IQLDpldcDtAKh6R1tbAKMw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MdbO74vAbsZyB6seOqxHvQL0HT4IdVnDjd+N3a9XAns=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -77,11 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Vencord web extension";
+    description = "Cutest Discord client mod";
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      donteatoreo
+      FlameFlag
       FlafyDev
       Gliczy
       NotAShelf

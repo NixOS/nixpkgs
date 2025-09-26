@@ -8,7 +8,7 @@
   alsa-lib,
   bzip2,
   zlib,
-  libsForQt5,
+  kdePackages,
   libgcc,
   makeWrapper,
   copyDesktopItems,
@@ -162,9 +162,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 alsa $out/bin/stereo_tool_gui
-    wrapProgram $out/bin/stereo_tool_gui --prefix PATH : ${lib.makeBinPath [ libsForQt5.kdialog ]}
+    wrapProgram $out/bin/stereo_tool_gui --prefix PATH : ${lib.makeBinPath [ kdePackages.kdialog ]}
     install -Dm755 jack $out/bin/stereo_tool_gui_jack
-    wrapProgram $out/bin/stereo_tool_gui_jack --prefix PATH : ${lib.makeBinPath [ libsForQt5.kdialog ]}
+    wrapProgram $out/bin/stereo_tool_gui_jack --prefix PATH : ${lib.makeBinPath [ kdePackages.kdialog ]}
     install -Dm755 cmd $out/bin/stereo_tool_cmd
     mkdir -p $out/share/icons/hicolor/48x48/apps
     cp stereo-tool-icon.png $out/share/icons/hicolor/48x48/apps/stereo-tool-icon.png

@@ -2,21 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pgsrip";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
+  disabled = python3Packages.pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "pgsrip";
-    rev = version;
-    hash = "sha256-H9gZXge+m/bCq25Fv91oFZ8Cq2SRNrKhOaDrLZkjazg=";
+    tag = version;
+    hash = "sha256-8UzElhMdhjZERdogtAbkcfw67blk9lOTQ09vjF5SXm4=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -34,16 +33,15 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "numpy"
+    "click"
+    "opencv-python"
     "setuptools"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rip your PGS subtitles";
     homepage = "https://github.com/ratoaq2/pgsrip";
-    changelog = "https://github.com/ratoaq2/pgsrip/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ratoaq2/pgsrip/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "pgsrip";

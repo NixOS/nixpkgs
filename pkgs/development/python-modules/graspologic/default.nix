@@ -73,14 +73,18 @@ buildPythonPackage rec {
     pytestCheckHook
     testfixtures
   ];
-  pytestFlagsArray = [
+
+  enabledTestPaths = [
     "tests"
-    "--ignore=docs"
-    "--ignore=tests/test_sklearn.py"
   ];
+
   disabledTests = [ "gridplot_outputs" ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    "docs"
+    "tests/test_sklearn.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # SIGABRT
     "tests/test_plot.py"
     "tests/test_plot_matrix.py"

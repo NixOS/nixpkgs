@@ -59,27 +59,25 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs =
-    [
-      libtpms
-      openssl
-      libtasn1
-      glib
-      json-glib
-      gnutls
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fuse
-      libseccomp
-    ];
+  buildInputs = [
+    libtpms
+    openssl
+    libtasn1
+    glib
+    json-glib
+    gnutls
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fuse
+    libseccomp
+  ];
 
-  configureFlags =
-    [
-      "--localstatedir=/var"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--with-cuse"
-    ];
+  configureFlags = [
+    "--localstatedir=/var"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--with-cuse"
+  ];
 
   postPatch = ''
     patchShebangs tests/*

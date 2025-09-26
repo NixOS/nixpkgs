@@ -68,7 +68,8 @@ lib.makeOverridable (
     # see pkgs/common-updater/combinators.nix
     derivationArgs.passthru = {
       supportedFeatures = lib.optional silent "silent";
-    } // lib.optionalAttrs (attrPath != null) { inherit attrPath; };
+    }
+    // lib.optionalAttrs (attrPath != null) { inherit attrPath; };
     text = ''
       #!${runtimeShell}
       set -eo pipefail

@@ -56,7 +56,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preConfigure = "./autogen.sh";
+  # don't rely on rigid autotools versions, instead preload whatever is in $PATH in the build environment.
+  # libmypaint 1.6.1 only officially supports autotools up to 1.16,
+  # 2.0.0 alphas support up to autotools 1.17.
+  # However, we are now on autotools 1.18, so this would otherwise break.
+  preConfigure = ''
+    export AUTOMAKE=automake
+    export ACLOCAL=aclocal
+    ./autogen.sh
+  '';
 
   meta = with lib; {
     homepage = "http://mypaint.org/";

@@ -62,24 +62,23 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # subprocess.CalledProcessError: Command '['git', 'diff', 'base', 'diff.ipynb']' returned non-zero exit status 128.
-      # git-nbdiffdriver diff: line 1: git-nbdiffdriver: command not found
-      # fatal: external diff died, stopping at diff.ipynb
-      "test_git_diffdriver"
+  disabledTests = [
+    # subprocess.CalledProcessError: Command '['git', 'diff', 'base', 'diff.ipynb']' returned non-zero exit status 128.
+    # git-nbdiffdriver diff: line 1: git-nbdiffdriver: command not found
+    # fatal: external diff died, stopping at diff.ipynb
+    "test_git_diffdriver"
 
-      # subprocess.CalledProcessError: Command '['git', 'merge', 'remote-no-conflict']' returned non-zero exit status 1.
-      "test_git_mergedriver"
+    # subprocess.CalledProcessError: Command '['git', 'merge', 'remote-no-conflict']' returned non-zero exit status 1.
+    "test_git_mergedriver"
 
-      # Require network access
-      "test_git_difftool"
-      "test_git_mergetool"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # OSError: Could not find system gitattributes location!
-      "test_locate_gitattributes_syste"
-    ];
+    # Require network access
+    "test_git_difftool"
+    "test_git_mergetool"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: Could not find system gitattributes location!
+    "test_locate_gitattributes_syste"
+  ];
 
   preCheck = ''
     git config --global user.email "janedoe@example.com"

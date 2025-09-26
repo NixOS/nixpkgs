@@ -26,23 +26,24 @@
   xdg-desktop-portal,
   libseccomp,
   glycin-loaders,
+  libwebp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "11.2";
+  version = "12.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     tag = finalAttrs.version;
-    hash = "sha256-UE0TRC9DeP+fl85fzuQ8/3ioIPdeSqsJWnW1olB1gmo=";
+    hash = "sha256-xeB6N4ljXGzysy5RnDRK1wPiIRUSDcl+5BIdp6NO5ZA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-I+1pGZWxn9Q/CL8D6VxsaO3H4EdBek4wyykvNgCNRZI=";
+    hash = "sha256-CHduzW++BYzasFv/x0Q1T7EaTlo1EqYY2gxQJv+ek0A=";
   };
 
   patches = [
@@ -75,27 +76,27 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      gtksourceview5
-      lcms2
-      libadwaita
-      openssl
-      pipewire
-      libshumate
-      sqlite
-      xdg-desktop-portal
-      libseccomp
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-rs
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    gtksourceview5
+    lcms2
+    libadwaita
+    openssl
+    pipewire
+    libshumate
+    sqlite
+    xdg-desktop-portal
+    libseccomp
+    libwebp
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(

@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-oM4nQUEc3iq1x4uRp8Kw5WtE/L5b6VlLOfElMT9Tk98=";
 
   passthru.updateScript = nix-update-script {

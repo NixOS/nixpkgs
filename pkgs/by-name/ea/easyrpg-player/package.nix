@@ -60,42 +60,41 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      flac # needed by libsndfile
-      fluidsynth
-      fmt
-      freetype
-      glib
-      harfbuzz
-      lhasa
-      liblcf
-      libpng
-      libsndfile
-      libsysprof-capture # needed by glib
-      libvorbis
-      libxmp
-      mpg123
-      nlohmann_json
-      opusfile
-      pcre2 # needed by glib
-      pixman
-      sdl3
-      speexdsp
-      wildmidi
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libXcursor
-      libXext
-      libXi
-      libXinerama
-      libXrandr
-      libXScrnSaver
-      libXxf86vm
-      libdecor
-    ];
+  buildInputs = [
+    flac # needed by libsndfile
+    fluidsynth
+    fmt
+    freetype
+    glib
+    harfbuzz
+    lhasa
+    liblcf
+    libpng
+    libsndfile
+    libsysprof-capture # needed by glib
+    libvorbis
+    libxmp
+    mpg123
+    nlohmann_json
+    opusfile
+    pcre2 # needed by glib
+    pixman
+    sdl3
+    speexdsp
+    wildmidi
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libXcursor
+    libXext
+    libXi
+    libXinerama
+    libXrandr
+    libXScrnSaver
+    libXxf86vm
+    libdecor
+  ];
 
   cmakeFlags = [
     "-DPLAYER_ENABLE_TESTS=${lib.boolToString doCheck}"

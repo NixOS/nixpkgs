@@ -2,17 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "scalingo";
-  version = "1.35.1";
+  version = "1.40.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "cli";
     rev = version;
-    hash = "sha256-cs7LyK9QyjuaLRvvC3M9T12faWSk8xADuYGxbzptY6Q=";
+    hash = "sha256-AY2Iy7MwZ0OmNdv9EPgJ79Ug8pDuxlVNtLRhlX+XCC4=";
   };
 
   vendorHash = null;
@@ -21,8 +22,12 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     rm $out/bin/dists
+    installShellCompletion --cmd scalingo \
+     --bash cmd/autocomplete/scripts/scalingo_complete.bash \
+     --zsh cmd/autocomplete/scripts/scalingo_complete.zsh
   '';
 
   meta = with lib; {

@@ -62,11 +62,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2506.0";
+  version = "8.2508.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-bW/QJXyV51Z2XU1YWoM9VN06Dl7rgwi4YqgbNop0u3s=";
+    hash = "sha256-yJsedNNtDKSpW3Shq+Nu0LH6rIt8i+RxqEFc+ndiBv0=";
   };
 
   nativeBuildInputs = [
@@ -75,37 +75,36 @@ stdenv.mkDerivation rec {
     docutils
   ];
 
-  buildInputs =
-    [
-      fastJson
-      libestr
-      json_c
-      zlib
-    ]
-    ++ lib.optional withKrb5 libkrb5
-    ++ lib.optional withJemalloc jemalloc
-    ++ lib.optional withPostgres libpq
-    ++ lib.optional withDbi libdbi
-    ++ lib.optional withNetSnmp net-snmp
-    ++ lib.optional withUuid libuuid
-    ++ lib.optional withCurl curl
-    ++ lib.optional withGnutls gnutls
-    ++ lib.optional withGcrypt libgcrypt
-    ++ lib.optional withLognorm liblognorm
-    ++ lib.optional withOpenssl openssl
-    ++ lib.optional withRelp librelp
-    ++ lib.optional withKsi libksi
-    ++ lib.optional withLogging liblogging
-    ++ lib.optional withNet libnet
-    ++ lib.optional withHadoop hadoop
-    ++ lib.optional withRdkafka rdkafka
-    ++ lib.optionals withMongo [ mongoc ]
-    ++ lib.optional withCzmq czmq
-    ++ lib.optional withRabbitmq rabbitmq-c
-    ++ lib.optional withHiredis hiredis
-    ++ lib.optional withMaxminddb libmaxminddb
-    ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [
+    fastJson
+    libestr
+    json_c
+    zlib
+  ]
+  ++ lib.optional withKrb5 libkrb5
+  ++ lib.optional withJemalloc jemalloc
+  ++ lib.optional withPostgres libpq
+  ++ lib.optional withDbi libdbi
+  ++ lib.optional withNetSnmp net-snmp
+  ++ lib.optional withUuid libuuid
+  ++ lib.optional withCurl curl
+  ++ lib.optional withGnutls gnutls
+  ++ lib.optional withGcrypt libgcrypt
+  ++ lib.optional withLognorm liblognorm
+  ++ lib.optional withOpenssl openssl
+  ++ lib.optional withRelp librelp
+  ++ lib.optional withKsi libksi
+  ++ lib.optional withLogging liblogging
+  ++ lib.optional withNet libnet
+  ++ lib.optional withHadoop hadoop
+  ++ lib.optional withRdkafka rdkafka
+  ++ lib.optionals withMongo [ mongoc ]
+  ++ lib.optional withCzmq czmq
+  ++ lib.optional withRabbitmq rabbitmq-c
+  ++ lib.optional withHiredis hiredis
+  ++ lib.optional withMaxminddb libmaxminddb
+  ++ lib.optional withMysql libmysqlclient
+  ++ lib.optional withSystemd systemd;
 
   configureFlags = [
     "--sysconfdir=/etc"

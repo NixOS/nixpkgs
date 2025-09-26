@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A collection of tools for manipulating and analyzing SVG Path objects and Bezier curves";
+    description = "Collection of tools for manipulating and analyzing SVG Path objects and Bezier curves";
     homepage = "https://github.com/mathandy/svgpathtools";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];

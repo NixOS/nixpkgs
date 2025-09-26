@@ -6,66 +6,37 @@
   nodejs,
   fixup-yarn-lock,
   yarn,
+  yarnConfigHook,
+  yarnBuildHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lasuite-docs-frontend";
-  version = "3.3.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-SLTNkK578YhsDtVBS4vH0E/rXx+rXZIyXMhqwr95QEA=";
+    hash = "sha256-8bD+rBEN0GEQz3tiPEQYmf/mpijPefFmQchGhYkVBVY=";
   };
 
   sourceRoot = "source/src/frontend";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/src/frontend/yarn.lock";
-    hash = "sha256-ei4xj+W2j5O675cpMAG4yCB3cPLeYwMhqKTacPWFjoo=";
+    hash = "sha256-b4JBjJUB1i9jYSy+RFkXKmq6rzp28xHLdPNSH0QO1Ek=";
   };
 
   nativeBuildInputs = [
     nodejs
     fixup-yarn-lock
     yarn
+    yarnConfigHook
+    yarnBuildHook
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
-
-    # Fixup what fixup-yarn-lock does not fix. Result in error if not fixed.
-    substituteInPlace yarn.lock \
-      --replace-fail '"@fastify/otel@https://codeload.github.com/getsentry/fastify-otel/tar.gz/ae3088d65e286bdc94ac5d722573537d6a6671bb"' '"@fastify/otel@^0.8.0"'
-
-    yarn install \
-        --frozen-lockfile \
-        --force \
-        --production=false \
-        --ignore-engines \
-        --ignore-platform \
-        --ignore-scripts \
-        --no-progress \
-        --non-interactive \
-        --offline
-
-    patchShebangs node_modules
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline app:build
-
-    runHook postBuild
-  '';
+  yarnBuildScript = "app:build";
 
   installPhase = ''
     runHook preInstall

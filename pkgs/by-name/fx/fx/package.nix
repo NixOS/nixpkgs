@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,22 +8,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "fx";
-  version = "37.0.0";
+  version = "39.1.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "fx";
     tag = finalAttrs.version;
-    hash = "sha256-rGwOYPH72Qy8aGQ8vf+vu584zKoB5nQXEtOI+JIiv4U=";
+    hash = "sha256-k8BrH3tRc6RM6PG93MRLR/uJGyo953vYH2v4eBBhPrI=";
   };
 
-  vendorHash = "sha256-cskcP87rTwY68x3M3xzH5d5X2aDqQtSkX8aXvgMl2Vk=";
+  vendorHash = "sha256-C4TqFRECIFzc6TyAJ2yj97t2BVHXBovIV3iIjNhm7ek=";
 
   ldflags = [ "-s" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fx \
       --bash <($out/bin/fx --comp bash) \
       --fish <($out/bin/fx --comp fish) \

@@ -8,13 +8,13 @@
   container-structure-test,
 }:
 buildGoModule rec {
-  version = "1.19.3";
+  version = "1.20.0";
   pname = "container-structure-test";
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "container-structure-test";
     rev = "v${version}";
-    sha256 = "sha256-KLLACXUn6dtVCI+gCMHU9hoAJBOAVyhfwxtzsopWS4U=";
+    sha256 = "sha256-7/RTWpj/W+W4mhQL2HX/6KuMbDFsjh9GGRCGZZ9sNHQ=";
   };
   vendorHash = "sha256-pBq76HJ+nluOMOs9nqBKp1mr1LuX2NERXo48g8ezE9k=";
 

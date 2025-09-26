@@ -56,15 +56,14 @@ let
           pygobject3
         ];
 
-      nativeBuildInputs =
-        [
-          intltool
-          glib
-        ]
-        ++ optionals withGUI [
-          gobject-introspection
-          wrapGAppsHook3
-        ];
+      nativeBuildInputs = [
+        intltool
+        glib
+      ]
+      ++ optionals withGUI [
+        gobject-introspection
+        wrapGAppsHook3
+      ];
 
       nativeCheckInputs = with pypkgs; [
         pytestCheckHook
@@ -77,24 +76,23 @@ let
 
       doCheck = false; # tests are not working at all
 
-      postInstall =
-        ''
-          install -Dm444 -t $out/lib/systemd/system packaging/systemd/*.service
-        ''
-        + (
-          if withGUI then
-            ''
-              mkdir -p $out/share
-              cp -R deluge/ui/data/{icons,pixmaps} $out/share/
-              install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
-            ''
-          else
-            ''
-              rm -r $out/bin/deluge-gtk
-              rm -r $out/${python3Packages.python.sitePackages}/deluge/ui/gtk3
-              rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
-            ''
-        );
+      postInstall = ''
+        install -Dm444 -t $out/lib/systemd/system packaging/systemd/*.service
+      ''
+      + (
+        if withGUI then
+          ''
+            mkdir -p $out/share
+            cp -R deluge/ui/data/{icons,pixmaps} $out/share/
+            install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
+          ''
+        else
+          ''
+            rm -r $out/bin/deluge-gtk
+            rm -r $out/${python3Packages.python.sitePackages}/deluge/ui/gtk3
+            rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
+          ''
+      );
 
       postFixup = ''
         for f in $out/lib/systemd/system/*; do

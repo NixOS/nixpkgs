@@ -89,7 +89,7 @@ in
       environment.HOME = "/var/lib/tsm-backup";
       serviceConfig = {
         # for exit status description see
-        # https://www.ibm.com/docs/en/storage-protect/8.1.25?topic=clients-client-return-codes
+        # https://www.ibm.com/docs/en/storage-protect/8.1.27?topic=clients-client-return-codes
         SuccessExitStatus = "4 8";
         # The `-se` option must come after the command.
         # The `-optfile` option suppresses a `dsm.opt`-not-found warning.

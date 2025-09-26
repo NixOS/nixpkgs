@@ -131,7 +131,8 @@ let
 
   registries = {
     "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
-  } // extraRegistries;
+  }
+  // extraRegistries;
 
   # Replaces values inherited by workspace members.
   replaceWorkspaceValues = writers.writePython3 "replace-workspace-values" {

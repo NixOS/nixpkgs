@@ -35,15 +35,15 @@ let
 
         src = fetchFromGitHub {
           owner = "hashicorp";
-          repo = pname;
+          repo = "nomad";
           rev = "v${version}";
           inherit hash;
         };
 
-        # Nomad requires Go 1.24.4, but nixpkgs doesn't have it in unstable yet.
+        # Nomad requires Go 1.24.6, but nixpkgs doesn't have it in unstable yet.
         postPatch = ''
           substituteInPlace go.mod \
-            --replace-warn "go 1.24.4" "go 1.24.3"
+            --replace-warn "go 1.24.6" "go 1.24.5"
         '';
 
         nativeBuildInputs = [ installShellFiles ];
@@ -71,7 +71,6 @@ let
           inherit license;
           maintainers = with maintainers; [
             rushmorem
-            pradeepchhetri
             techknowlogick
             cottand
           ];
@@ -91,9 +90,9 @@ rec {
 
   nomad_1_10 = generic {
     buildGoModule = buildGo124Module;
-    version = "1.10.3";
-    hash = "sha256-sDOo7b32H/d5OJ6CRyga1rZZk55bFTi4ynHL/aIH87w=";
-    vendorHash = "sha256-bpCnpeRk329vUd9e6x7iCh+1ouSGd4o4Hq79K0qchJ8=";
+    version = "1.10.5";
+    hash = "sha256-NFH++oYWb6vQN6cOPByscI/ZBWDNy4YbcLiBMO3/jVU=";
+    vendorHash = "sha256-QcTw9kKwoHIvXZoxfDohFG+sBs8OLvYPeygygDClsn8=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''

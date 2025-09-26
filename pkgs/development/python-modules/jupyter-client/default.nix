@@ -31,7 +31,8 @@ buildPythonPackage rec {
     pyzmq
     tornado
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "jupyter_client" ];
 

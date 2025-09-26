@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation {
   inherit pname;
-  version = "unstable-2014-04-06";
+  version = "0-unstable-2014-04-06";
 
   src = fetchFromGitHub {
     owner = "jdwhite";

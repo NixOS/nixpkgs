@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "simsimd";
-  version = "6.5.0";
+  version = "6.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
-    repo = "simsimd";
+    repo = "SimSIMD";
     tag = "v${version}";
-    hash = "sha256-un3Wyvj1vwhDiai2FSflkEYOpLbeH7aFznDilB7cupU=";
+    hash = "sha256-vEtMBpBoPbnBjGaxGw7ApGTJ8RFJ7vQcAH0DF4AOIEE=";
   };
 
   build-system = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/ashvardanian/SimSIMD/releases/tag/${src.tag}";
     description = "Portable mixed-precision BLAS-like vector math library for x86 and ARM";
-    homepage = "https://github.com/ashvardanian/simsimd";
+    homepage = "https://github.com/ashvardanian/SimSIMD";
     license = with lib.licenses; [
       asl20
       # or

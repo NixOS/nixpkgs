@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.4";
+  version = "2.1.5.1";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ceDuWnIeHTpXyQRXDEQxCDM1pdfz5rEDMyJIcCu6OaM=";
+    hash = "sha256-mbY3iDLRcQ+pis26u6pHzB43ureaKH7KYPkV0CwHU/E=";
   };
 
   nativeBuildInputs = [
@@ -49,15 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-    ]
-    ++ lib.optional finalAttrs.finalPackage.doCheck [
-      "-DINDI_BUILD_UNITTESTS=ON"
-      "-DINDI_BUILD_INTEGTESTS=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+  ]
+  ++ lib.optional finalAttrs.finalPackage.doCheck [
+    "-DINDI_BUILD_UNITTESTS=ON"
+    "-DINDI_BUILD_INTEGTESTS=ON"
+  ];
 
   checkInputs = [ gtest ];
 
@@ -88,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [
-      hjones2199
       sheepforce
       returntoreality
     ];

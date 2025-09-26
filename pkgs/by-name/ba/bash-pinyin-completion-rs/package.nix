@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bash-pinyin-completion-rs";
-  version = "0.2.3";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "bash-pinyin-completion-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h4l4plGMn5WMhU60+m60Uf45UfPNDb0X+E2LK3U3jxw=";
+    hash = "sha256-r+B11TgMOhwslqygv72S9uhF7v79MAzUu5XHlD/P3HY=";
   };
 
   strictDeps = true;
 
-  cargoHash = "sha256-SAegFsmn91xrWg0o7lHgk+vRqTQhabev9dP+Lbk/h5s=";
+  cargoHash = "sha256-IEtGulY6EqJ74ok1xLY64K1yKSZcmb/wyObtcaHYMRk=";
 
   postInstall = ''
     substituteInPlace scripts/bash_pinyin_completion \

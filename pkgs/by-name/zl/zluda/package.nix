@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage rec {
     clang
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-hDQWjzkx7YdkgSmNKTzCa2VhBFvn6P9QANV9hJ7UiT8=";
 
   # xtask doesn't support passing --target, but nix hooks expect the folder structure from when it's set
@@ -79,7 +78,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "ZLUDA - CUDA on non-Nvidia GPUs";
+    description = "CUDA on non-Nvidia GPUs";
     homepage = "https://github.com/vosen/ZLUDA";
     changelog = "https://github.com/vosen/ZLUDA/releases/tag/${src.rev}";
     license = lib.licenses.mit;

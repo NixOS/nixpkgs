@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.1297.3";
+  version = "1.1299.0";
 in
 buildNpmPackage {
   pname = "snyk";
@@ -18,10 +18,10 @@ buildNpmPackage {
     owner = "snyk";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-oyodfLDfgFKCmt8d4Bff/4SIEjyqX1pw5fp95uEmuf4=";
+    hash = "sha256-6fc67C5EbFwsknjM5uDLJFbUIpSaO0978ZCrHoDe2mU=";
   };
 
-  npmDepsHash = "sha256-SzrBhY7iWGlIPNB+5ROdaxAlQSetSKc3MPBp+4nNh+o=";
+  npmDepsHash = "sha256-WKVFg4rtm9UCWRbj1QCrDdQFpk0QZm3KKRUfOQfEJtg=";
 
   postPatch = ''
     substituteInPlace package.json \

@@ -58,16 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Dcppitertools_INSTALL_CMAKE_DIR=${finalAttrs.cmakeInstallDir}" ];
 
-  prePatch =
-    ''
-      # Mark the `.` install target as non-default.
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "  DIRECTORY ." "  DIRECTORY . EXCLUDE_FROM_ALL"
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      # Required for tests.
-      cp ${lib.getDev catch2}/include/catch2/catch.hpp test/
-    '';
+  prePatch = ''
+    # Mark the `.` install target as non-default.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "  DIRECTORY ." "  DIRECTORY . EXCLUDE_FROM_ALL"
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    # Required for tests.
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp test/
+  '';
 
   checkPhase = ''
     runHook preCheck

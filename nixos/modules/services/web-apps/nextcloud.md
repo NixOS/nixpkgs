@@ -38,7 +38,10 @@ A very basic configuration may look like this:
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }
 ```
 
@@ -62,14 +65,15 @@ The management command [`occ`](https://docs.nextcloud.com/server/stable/admin_ma
 invoked by using the `nextcloud-occ` wrapper that's globally available on a system with Nextcloud enabled.
 
 It requires elevated permissions to become the `nextcloud` user. Given the way the privilege
-escalation is implemented, parameters passed via the environment to Nextcloud (e.g. `OC_PASS`) are
-currently ignored.
+escalation is implemented, parameters passed via the environment to Nextcloud are
+currently ignored, except for `OC_PASS` and `NC_PASS`.
 
 Custom service units that need to run `nextcloud-occ` either need elevated privileges
 or the systemd configuration from `nextcloud-setup.service` (recommended):
 
 ```nix
-{ config, ... }: {
+{ config, ... }:
+{
   systemd.services.my-custom-service = {
     script = ''
       nextcloud-occ …
@@ -78,7 +82,8 @@ or the systemd configuration from `nextcloud-setup.service` (recommended):
       inherit (config.systemd.services.nextcloud-cron.serviceConfig)
         User
         LoadCredential
-        KillMode;
+        KillMode
+        ;
     };
   };
 }
@@ -208,7 +213,7 @@ release notes when upgrading.
     the cache size to zero:
 
     ```nix
-    services.nextcloud.phpOptions."realpath_cache_size" = "0";
+    { services.nextcloud.phpOptions."realpath_cache_size" = "0"; }
     ```
 
   - **Empty Files on chunked uploads**
@@ -231,13 +236,19 @@ settings `listen.owner` &amp; `listen.group` in the
 
 An exemplary configuration may look like this:
 ```nix
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   services.nginx.enable = false;
   services.nextcloud = {
     enable = true;
     hostName = "localhost";
 
-    /* further, required options */
+    # further, required options
   };
   services.phpfpm.pools.nextcloud.settings = {
     "listen.owner" = config.services.httpd.user;
@@ -285,10 +296,11 @@ When using this setting, apps can no longer be managed statefully because this c
 that are managed by Nix:
 
 ```nix
-{ config, pkgs, ... }: {
-  services.nextcloud.extraApps = with config.services.nextcloud.package.packages.apps; [
+{ config, pkgs, ... }:
+{
+  services.nextcloud.extraApps = with config.services.nextcloud.package.packages.apps; {
     inherit user_oidc calendar contacts;
-  ];
+  };
 }
 ```
 
@@ -336,7 +348,7 @@ in NixOS for a safe upgrade-path before removing those. In that case we should k
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/servers/nextcloud/default.nix>`):
 ```nix
-/* ... */
+# ...
 {
   nextcloud17 = generic {
     version = "17.0.x";

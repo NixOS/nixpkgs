@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "wheel";
     tag = version;
-    hash = "sha256-tgueGEWByS5owdA5rhXGn3qh1Vtf0HGYC6+BHfrnGAs=";
+    hash = "sha256-iyGfGr3pLVZSEIHetjsPbIIXkuXrmIPiSqqOw31l9Qw=";
   };
 
   nativeBuildInputs = [ flit-core ];

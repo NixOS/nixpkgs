@@ -9,19 +9,31 @@
 
 buildDotnetModule rec {
   pname = "roslyn";
-  version = "4.2.0";
+  version = "4.14.0";
 
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
-    rev = "v${version}";
-    hash = "sha256-4iXabFp0LqJ8TXOrqeD+oTAocg6ZTIfijfX3s3fMJuI=";
+    tag = "NET-SDK-9.0.304";
+    hash = "sha256-mj14bpJks7CcrbcEScPkl3feKUycGLiBYXs908GnGhg=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_9_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
 
   projectFile = [
-    "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj"
+    "src/NuGet/Microsoft.Net.Compilers.Toolset/Framework/Microsoft.Net.Compilers.Toolset.Framework.Package.csproj"
   ];
 
   nugetDeps = ./deps.json;
@@ -31,7 +43,8 @@ buildDotnetModule rec {
   nativeBuildInputs = [ unzip ];
 
   postPatch = ''
-    sed -i 's/latestPatch/latestFeature/' global.json
+    substituteInPlace global.json \
+      --replace-fail "patch" "latestFeature"
   '';
 
   buildPhase = ''
@@ -41,16 +54,18 @@ buildDotnetModule rec {
       -p:Configuration=Release \
       -p:RepositoryUrl="${meta.homepage}" \
       -p:RepositoryCommit="v${version}" \
-      src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj
+      src/NuGet/Microsoft.Net.Compilers.Toolset/Framework/Microsoft.Net.Compilers.Toolset.Framework.Package.csproj
 
     runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     pkg="$out/lib/dotnet/microsoft.net.compilers.toolset/${version}"
     mkdir -p "$out/bin" "$pkg"
 
-    unzip -q artifacts/packages/Release/Shipping/Microsoft.Net.Compilers.Toolset.${version}-dev.nupkg \
+    unzip -q artifacts/packages/Release/Shipping/Microsoft.Net.Compilers.Toolset.Framework.${version}-dev.nupkg \
       -d "$pkg"
     # nupkg has 0 permissions for a bunch of things
     chmod -R +rw "$pkg"
@@ -59,6 +74,8 @@ buildDotnetModule rec {
       --add-flags "$pkg/tasks/net472/csc.exe"
     makeWrapper ${mono}/bin/mono $out/bin/vbc \
       --add-flags "$pkg/tasks/net472/vbc.exe"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

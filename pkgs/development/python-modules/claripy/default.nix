@@ -39,7 +39,8 @@ buildPythonPackage rec {
     pysmt
     typing-extensions
     z3-solver
-  ] ++ z3-solver.requiredPythonModules;
+  ]
+  ++ z3-solver.requiredPythonModules;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

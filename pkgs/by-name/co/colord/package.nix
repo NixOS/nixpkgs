@@ -77,46 +77,44 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "udev_rules" (lib.elem "udev" udev.meta.pkgConfigModules))
   ];
 
-  nativeBuildInputs =
-    [
-      docbook_xml_dtd_412
-      docbook_xsl
-      docbook_xsl_ns
-      gettext
-      gobject-introspection
-      gtk-doc
-      libxslt
-      meson
-      ninja
-      pkg-config
-      shared-mime-info
-      vala
-      wrapGAppsNoGuiHook
-      udevCheckHook
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook_xml_dtd_412
+    docbook_xsl
+    docbook_xsl_ns
+    gettext
+    gobject-introspection
+    gtk-doc
+    libxslt
+    meson
+    ninja
+    pkg-config
+    shared-mime-info
+    vala
+    wrapGAppsNoGuiHook
+    udevCheckHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      argyllcms
-      bash-completion
-      dbus
-      glib
-      gusb
-      lcms2
-      libgudev
-      sane-backends
-      sqlite
-      udev
-    ]
-    ++ lib.optionals enableSystemd [
-      systemd
-    ]
-    ++ lib.optionals enableDaemon [
-      polkit
-    ];
+  buildInputs = [
+    argyllcms
+    bash-completion
+    dbus
+    glib
+    gusb
+    lcms2
+    libgudev
+    sane-backends
+    sqlite
+    udev
+  ]
+  ++ lib.optionals enableSystemd [
+    systemd
+  ]
+  ++ lib.optionals enableDaemon [
+    polkit
+  ];
 
   doInstallCheck = true;
 

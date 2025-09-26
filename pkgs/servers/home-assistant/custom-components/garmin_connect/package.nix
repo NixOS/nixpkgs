@@ -24,7 +24,7 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = with lib; {
-    description = "The Garmin Connect integration allows you to expose data from Garmin Connect to Home Assistant";
+    description = "Garmin Connect integration allows you to expose data from Garmin Connect to Home Assistant";
     homepage = "https://github.com/cyberjunky/home-assistant-garmin_connect";
     maintainers = with maintainers; [
       matthiasbeyer

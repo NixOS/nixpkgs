@@ -5,6 +5,7 @@
   dissect-btrfs,
   dissect-cim,
   dissect-clfs,
+  dissect-cramfs,
   dissect-cstruct,
   dissect-esedb,
   dissect-etl,
@@ -37,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.19";
+  version = "3.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-eEiWKblhJPkZuxJvwJnHtxwvJ9uhXIkS56CeRtmEfkU=";
+    hash = "sha256-Zc9NBrRDbSP5Yk3gJoMG+6nAGFxBHiPKvvfQLMcu+tk=";
   };
 
   pythonRelaxDeps = true;
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     dissect-btrfs
     dissect-cim
     dissect-clfs
+    dissect-cramfs
     dissect-cstruct
     dissect-esedb
     dissect-etl
@@ -85,7 +87,8 @@ buildPythonPackage rec {
     dissect-vmfs
     dissect-volume
     dissect-xfs
-  ] ++ dissect-target.optional-dependencies.full;
+  ]
+  ++ dissect-target.optional-dependencies.full;
 
   # Module has no tests
   doCheck = false;

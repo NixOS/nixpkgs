@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  sanitiseHeaderPathsHook,
 
   folly,
   gflags,
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    sanitiseHeaderPathsHook
   ];
 
   buildInputs = [
@@ -67,21 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
     "trivialautovarinit"
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
-      (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
 
-      (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
 
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Homebrew sets this, and the shared library build fails without
-      # it. I don‘t know, either. It scares me.
-      (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
-    ];
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Homebrew sets this, and the shared library build fails without
+    # it. I don‘t know, either. It scares me.
+    (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
+  ];
 
   __darwinAllowLocalNetworking = true;
 

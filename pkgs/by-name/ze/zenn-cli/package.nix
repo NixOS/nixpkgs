@@ -37,13 +37,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
-  version = "0.1.159";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "zenn-dev";
     repo = "zenn-editor";
     tag = finalAttrs.version;
-    hash = "sha256-q28XSsGf+Uz+FTRwyu1xg/8bnYxuL6Jt+t3mk0CcWGY=";
+    hash = "sha256-LFbC3GXYLCgBOYBdNJRdESGb37DuGBCEL8ak1Qf9DVA=";
     # turborepo requires .git directory
     leaveDotGit = true;
   };
@@ -60,14 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AjdXclrNl1AHJ4LXq9I5Rk6KGyDaWXW187o2uLwRy/o=";
   };
 
-  preBuild =
-    ''
-      echo VITE_EMBED_SERVER_ORIGIN="https://embed.zenn.studio" > packages/zenn-cli/.env
-    ''
-    # replace go-turbo since the existing one can't be executed
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp ${go-turbo}/bin/go-turbo node_modules/.pnpm/turbo-linux-*/node_modules/turbo-linux*/bin/go-turbo
-    '';
+  preBuild = ''
+    echo VITE_EMBED_SERVER_ORIGIN="https://embed.zenn.studio" > packages/zenn-cli/.env
+  ''
+  # replace go-turbo since the existing one can't be executed
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp ${go-turbo}/bin/go-turbo node_modules/.pnpm/turbo-linux-*/node_modules/turbo-linux*/bin/go-turbo
+  '';
 
   buildPhase = ''
     runHook preBuild

@@ -7,14 +7,14 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "windows-ai-studio";
     publisher = "ms-windows-ai-studio";
-    version = "0.16.1";
-    hash = "sha256-uhAUSXB7ULNmkRSHqfbo3T3AZ3TiUaIqEZL4YwkWxtY=";
+    version = "0.20.0";
+    hash = "sha256-oRbNML3+Ynnv7rQamv03TJphun3nAKVeDtVxRXTkoK0=";
   };
 
   meta = {
-    description = "A Visual Studio Code an extension to help developers and AI engineers to easily build AI apps through developing and testing with generative AI models locally or in the cloud";
+    description = "Visual Studio Code extension to help developers and AI engineers build AI apps";
     homepage = "https://github.com/Microsoft/windows-ai-studio";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

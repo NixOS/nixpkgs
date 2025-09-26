@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "bleak-esphome";
-  version = "2.16.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "bleak-esphome";
     tag = "v${version}";
-    hash = "sha256-1NqalsFUXTcVX0UVV4BMStX+EAcu0/3vEKpkq+z+KDE=";
+    hash = "sha256-1rsTXIWowwxycJYs2Aw2FXwQHSK1T7t2RODxqq1KxOs=";
   };
 
   postPatch = ''
@@ -54,6 +54,13 @@ buildPythonPackage rec {
     pytest-codspeed
     pytest-cov-stub
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # bleak_client.services.get_characteristic returns None
+    "test_client_get_services_and_read_write"
+    "test_bleak_client_get_services_and_read_write"
+    "test_bleak_client_cached_get_services_and_read_write"
   ];
 
   pythonImportsCheck = [ "bleak_esphome" ];

@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  ...
 }:
 buildGoModule (finalAttrs: {
   pname = "izrss";

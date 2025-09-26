@@ -33,14 +33,14 @@ let
 in
 buildPythonApplication rec {
   pname = "pipenv";
-  version = "2025.0.3";
+  version = "2025.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     tag = "v${version}";
-    hash = "sha256-3uf0nCTv6ebq4am4mqJpdkidx6dbO8jI4IMtjZQ+8Qc=";
+    hash = "sha256-yHbrxhRWo2iD9uBFBQzi5LqUVOc1vpLvXlORtAI32KA=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
@@ -100,7 +100,7 @@ buildPythonApplication rec {
     '';
   };
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pipenv \
       --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
       --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \

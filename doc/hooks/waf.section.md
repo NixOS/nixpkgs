@@ -18,7 +18,7 @@ If the file pointed by `wafPath` doesn't exist, then `waf` provided by Nixpkgs w
 
 #### `wafFlags` {#waf-flags}
 
-Controls the flags passed to waf tool during build and install phases. For settings specific to build or install phases, use `wafBuildFlags` or `wafInstallFlags` respectively.
+Controls the flags passed to waf tool during build and install phases. For settings specific to build or install phases, use `wafBuildFlags` or `wafInstallFlags`, respectively.
 
 #### `dontUseWafConfigure` {#dont-use-waf-configure}
 

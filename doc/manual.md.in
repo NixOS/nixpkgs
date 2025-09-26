@@ -11,6 +11,7 @@ lib.md
 stdenv.md
 toolchains.md
 build-helpers.md
+modules/index.md
 development.md
 contributing.md
 interoperability.md

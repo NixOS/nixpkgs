@@ -6,25 +6,62 @@
   version,
   getVersionFile,
   monorepoSrc ? null,
-  runCommand,
+  fetchpatch,
   autoreconfHook269,
+  runCommand,
   gettext,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstdcxx";
   inherit version;
 
-  src = monorepoSrc;
+  src = runCommand "libstdcxx-src-${version}" { src = monorepoSrc; } ''
+    runPhase unpackPhase
 
-  enableParallelBuilding = true;
+    mkdir -p "$out/gcc"
+    cp gcc/BASE-VER "$out/gcc"
+    cp gcc/DATESTAMP "$out/gcc"
 
-  nativeBuildInputs = [
-    autoreconfHook269
-    gettext
+    mkdir -p "$out/libgcc"
+    cp libgcc/gthr*.h "$out/libgcc"
+    cp libgcc/unwind-pe.h "$out/libgcc"
+
+    cp -r libstdc++-v3 "$out"
+
+    cp -r libiberty "$out"
+    cp -r include "$out"
+    cp -r contrib "$out"
+
+    cp -r config "$out"
+    cp -r multilib.am "$out"
+
+    cp config.guess "$out"
+    cp config.rpath "$out"
+    cp config.sub "$out"
+    cp config-ml.in "$out"
+    cp ltmain.sh "$out"
+    cp install-sh "$out"
+    cp mkinstalldirs "$out"
+
+    [[ -f MD5SUMS ]]; cp MD5SUMS "$out"
+  '';
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   patches = [
-    (getVersionFile "gcc/custom-threading-model.patch")
+    (fetchpatch {
+      name = "custom-threading-model.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250716204545.1063669-1-git@JohnEricson.me/raw";
+      hash = "sha256-jPP0+MoPLtCwWcW6doO6KHCppwAYK40qNVyriLXcGOg=";
+      includes = [
+        "config/*"
+        "libstdc++-v3/*"
+      ];
+    })
+    (getVersionFile "libstdcxx/force-regular-dirs.patch")
   ];
 
   postUnpack = ''
@@ -37,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     cd $sourceRoot
   '';
 
-  postPatch = ''
-    sed -i \
-      -e 's/AM_ENABLE_MULTILIB(/AM_ENABLE_MULTILIB(NOPE/' \
-      -e 's#glibcxx_toolexeclibdir=no#glibcxx_toolexeclibdir=${builtins.placeholder "out"}/libexec#' \
-      configure.ac
-  '';
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    autoreconfHook269
+    gettext
+  ];
 
   preConfigure = ''
     cd "$buildRoot"
@@ -50,9 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x "$configureScript"
   '';
 
+  configurePlatforms = [
+    "build"
+    "host"
+  ];
+
   configureFlags = [
     "--disable-dependency-tracking"
-    "--with-toolexeclibdir=${builtins.placeholder "out"}/lib"
     "gcc_cv_target_thread_file=posix"
     "cross_compiling=true"
     "--disable-multilib"
@@ -64,15 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-default-libstdcxx-abi=new"
   ];
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
   hardeningDisable = [
     # PATH_MAX
     "fortify"
   ];
+
+  postInstall = ''
+    moveToOutput lib/libstdc++.modules.json "$dev"
+  '';
 
   doCheck = true;
 

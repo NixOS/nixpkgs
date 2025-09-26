@@ -19,7 +19,7 @@
   applyPatches,
 }:
 let
-  version = "1.37.0.5076";
+  version = "2.0.5.5160";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -27,32 +27,11 @@ let
       owner = "Prowlarr";
       repo = "Prowlarr";
       tag = "v${version}";
-      hash = "sha256-uSdZaPq/aXehmRKMobwYNs5iYGPv5R76Ix9lCEVdLzM=";
+      hash = "sha256-xSAEDcBaItA+retaSKtEI6wlwj5Knfi4RwUN6GGYms0=";
     };
     postPatch = ''
       mv src/NuGet.config NuGet.Config
     '';
-    patches = lib.optionals (lib.versionOlder version "2.0") [
-      # See https://github.com/Prowlarr/Prowlarr/pull/2399
-      # Unfortunately, the .NET 8 upgrade will be merged into the v2 branch,
-      # and it may take some time for that to become stable.
-      # However, the patches cleanly apply to v1 as well.
-      (fetchpatch {
-        name = "dotnet8-compatibility";
-        url = "https://github.com/Prowlarr/Prowlarr/commit/21c408a7dac8abaac91c05958f18a556220b2304.patch";
-        hash = "sha256-Es7JEXycOJPMXN+Kgv4wRnJA+l6zltUdP2i/wVodTBs=";
-      })
-      (fetchpatch {
-        name = "dotnet8-darwin-compatibility";
-        url = "https://github.com/Prowlarr/Prowlarr/commit/7a1fca5e23a3e75a9a2b2e1073a33eaa2ce865fe.patch";
-        hash = "sha256-bReCHXC3RHgm1MYmE2kGqStt4fuBHowcupLIXT3fEes=";
-      })
-      (fetchpatch {
-        name = "bump-swashbuckle-version";
-        url = "https://github.com/Prowlarr/Prowlarr/commit/8eec321a0eaa396e2f964576e5883890c719b202.patch";
-        hash = "sha256-SOdzGvq8FFYa451zTOw8yD1CDvM++AiFYFHhFW5Soco=";
-      })
-    ];
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
@@ -128,19 +107,18 @@ buildDotnetModule {
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.
-  testFilters =
-    [
-      "TestCategory!=ManualTest"
-      "TestCategory!=IntegrationTest"
-      "TestCategory!=AutomationTest"
+  testFilters = [
+    "TestCategory!=ManualTest"
+    "TestCategory!=IntegrationTest"
+    "TestCategory!=AutomationTest"
 
-      # makes real HTTP requests
-      "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-    ]
-    ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-      # fails on macOS
-      "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-    ];
+    # makes real HTTP requests
+    "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # fails on macOS
+    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+  ];
 
   disabledTests = [
     # setgid tests

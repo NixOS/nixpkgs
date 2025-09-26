@@ -1,10 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchPypi,
-  setuptools,
+  legacy-cgi,
   pyasyncore,
+  pythonAtLeast,
+  setuptools,
   unittestCheckHook,
 }:
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   # the built-in asyncore library was removed in python 3.12
-  dependencies = lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
+  dependencies =
+    lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ]
+    ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
 
   pythonImportsCheck = [ "wsgitools" ];
 

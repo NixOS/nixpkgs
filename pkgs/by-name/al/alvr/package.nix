@@ -11,6 +11,7 @@
   bzip2,
   celt,
   ffmpeg,
+  gmp,
   jack2,
   lame,
   libX11,
@@ -37,21 +38,19 @@
   x264,
   xvidcore,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
-  version = "20.14.0";
+  version = "20.14.1";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
     tag = "v${version}";
     fetchSubmodules = true; # TODO devendor openvr
-    hash = "sha256-K1E8zeSjaUtJ17C9G+aKNw9bzKUzeezUunZc0MM1Rj4=";
+    hash = "sha256-9fckUhUPAbcmbqOdUO8RlwuK8/nf1fc7XQBrAu5YaR4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-GeI6YlpTa89W6dYmK/1Hq73R0QX67va9zL1UIyfwcv0=";
+  cargoHash = "sha256-OTCMWrlwnfpUhm6ssOE133e/3DaQFnOU+NunN2c1N+g=";
 
   patches = [
     (replaceVars ./fix-finding-libs.patch {
@@ -78,6 +77,11 @@ rustPlatform.buildRustPackage rec {
     "-Wl,--pop-state"
   ];
 
+  cargoBuildFlags = [
+    "--exclude alvr_xtask"
+    "--workspace"
+  ];
+
   nativeBuildInputs = [
     rust-cbindgen
     pkg-config
@@ -91,6 +95,7 @@ rustPlatform.buildRustPackage rec {
     bzip2
     celt
     ffmpeg
+    gmp
     jack2
     lame
     libX11

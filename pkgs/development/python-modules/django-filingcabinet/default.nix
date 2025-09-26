@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0.17-unstable-2025-07-01";
+  version = "0.17-unstable-2025-08-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,8 +45,8 @@ buildPythonPackage rec {
     repo = "django-filingcabinet";
     # No release tagged yet on GitHub
     # https://github.com/okfde/django-filingcabinet/issues/69
-    rev = "ff39722209acf70bc73fa7074c16ed8a787fceea";
-    hash = "sha256-9SrMWBTk7RQCbVPHOU5rB/pi286hb6UONaLmBOtx6X0=";
+    rev = "e1713921d6d14e0abc8b81315545d7fb6f08c39f";
+    hash = "sha256-R/JNI+PZb0H09ZoYCGV3nbAowkf/YlKia4xkgAgqoNM=";
   };
 
   postPatch = ''
@@ -125,13 +125,12 @@ buildPythonPackage rec {
     "test_document_viewer"
   ];
 
-  preCheck =
-    ''
-      export DJANGO_SETTINGS_MODULE="test_project.settings"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
-      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-    '';
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE="test_project.settings"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+  '';
 
   pythonImportsCheck = [ "filingcabinet" ];
 

@@ -32,22 +32,21 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      libevdev
-      xorg.libXtst
-    ]
-    ++ lib.optionals gtkSupport [
-      gtk3
-      pcre
-      glib
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals fltkSupport [ fltk ]
-    ++ lib.optionals qtSupport [
-      qt5.qtbase
-      qt5.wrapQtAppsHook
-    ];
+  buildInputs = [
+    libevdev
+    xorg.libXtst
+  ]
+  ++ lib.optionals gtkSupport [
+    gtk3
+    pcre
+    glib
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals fltkSupport [ fltk ]
+  ++ lib.optionals qtSupport [
+    qt5.qtbase
+    qt5.wrapQtAppsHook
+  ];
 
   meta = with lib; {
     description = "Autoclicker application, which enables you to automatically click the left mousebutton";

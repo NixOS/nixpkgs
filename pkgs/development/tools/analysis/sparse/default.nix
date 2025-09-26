@@ -1,6 +1,6 @@
 {
   callPackage,
-  fetchurl,
+  fetchgit,
   lib,
   stdenv,
   gtk3,
@@ -16,11 +16,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sparse";
-  version = "0.6.4";
+  version = "0.6.4-unstable-2024-02-03";
 
-  src = fetchurl {
-    url = "mirror://kernel/software/devel/sparse/dist/${pname}-${version}.tar.xz";
-    sha256 = "sha256-arKLSZG8au29c1UCkTYKpqs99B9ZIGqb3paQIIpuOHw=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git";
+    rev = "0196afe16a50c76302921b139d412e82e5be2349";
+    hash = "sha256-Fft3hm988Xw92WIwXEoVoX7xzzkDhKy+bn9YuQIOhSk=";
   };
 
   preConfigure = ''

@@ -2,15 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   bash,
+  bashNonInteractive,
   buildPackages,
   linuxHeaders,
   python3,
   swig,
   pkgsCross,
   libcap_ng,
+  installShellFiles,
 
   # Enabling python support while cross compiling would be possible, but the
   # configure script tries executing python to gather info instead of relying on
@@ -18,41 +19,28 @@
   enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
   nix-update-script,
   testers,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.0.5";
+  version = "4.1.1-unstable-2025-08-01";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-SgMt1MmcH7r7O6bmJCetRg3IdoZXAXjVJyeu0HRfyf8=";
+    rev = "bee5984843d0b38992a369825a87a65fb54b18fc"; # musl fixes, --disable-legacy-actions and --runstatedir support
+    hash = "sha256-l3JHWEHz2xGrYxEvfCUD29W8xm5llUnXwX5hLymRG74=";
   };
-
-  patches = [
-    # nix configures most stuff by symlinks, e.g. in /etc
-    # thus, for plugins to be picked up, symlinks must be allowed
-    # https://github.com/linux-audit/audit-userspace/pull/467
-    (fetchpatch {
-      url = "https://github.com/linux-audit/audit-userspace/pull/467/commits/dbefc642b3bd0cafe599fcd18c6c88cb672397ee.patch?full_index=1";
-      hash = "sha256-Ksn/qKBQYFAjvs1OVuWhgWCdf4Bdp9/a+MrhyJAT+Bw=";
-    })
-    (fetchpatch {
-      url = "https://github.com/linux-audit/audit-userspace/pull/467/commits/50094f56fefc0b9033ef65e8c4f108ed52ef5de5.patch?full_index=1";
-      hash = "sha256-CJKDLdlpsCd+bG6j5agcnxY1+vMCImHwHGN6BXURa4c=";
-    })
-    (fetchpatch {
-      url = "https://github.com/linux-audit/audit-userspace/pull/467/commits/5e75091abd297807b71b3cfe54345c2ef223939a.patch?full_index=1";
-      hash = "sha256-LPpO4PH/3MyCJq2xhmhhcnFeK3yh7LK6Mjypuvhacu4=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
       --replace-fail "/usr/include/linux/audit.h" \
                      "${linuxHeaders}/include/linux/audit.h"
   '';
+
+  # https://github.com/linux-audit/audit-userspace/issues/474
+  # building databuf_test fails otherwise, as that uses hidden symbols only available in the static builds
+  dontDisableStatic = true;
 
   outputs = [
     "bin"
@@ -68,14 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-    ]
-    ++ lib.optionals enablePython [
-      python3
-      swig
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    installShellFiles
+  ]
+  ++ lib.optionals enablePython [
+    python3
+    swig
+  ];
 
   buildInputs = [
     bash
@@ -86,13 +74,33 @@ stdenv.mkDerivation (finalAttrs: {
     # z/OS plugin is not useful on Linux, and pulls in an extra openldap
     # dependency otherwise
     "--disable-zos-remote"
+    # remove legacy start/stop scripts to remove a bash dependency in $lib
+    # People interested in logging auditd interactions (e.g. for compliance) can start/stop audit using `auditctl --signal`
+    # See also https://github.com/linux-audit/audit-userspace?tab=readme-ov-file#starting-and-stopping-the-daemon
+    "--disable-legacy-actions"
     "--with-arm"
     "--with-aarch64"
+    "--with-io_uring"
+    # allows putting audit files in /run/audit, which removes the requirement
+    # to wait for tmpfiles to set up the /var/run -> /run symlink
+    "--runstatedir=/run"
     # capability dropping, currently mostly for plugins as those get spawned as root
     # see auditd-plugins(5)
     "--with-libcap-ng=yes"
     (if enablePython then "--with-python" else "--without-python")
   ];
+
+  __structuredAttrs = true;
+
+  # lib output is part of the mandatory nixos system closure, so avoid bash here
+  outputChecks.lib.disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
+
+  postInstall = ''
+    installShellCompletion --bash init.d/audit.bash_completion
+  '';
 
   enableParallelBuilding = true;
 
@@ -101,13 +109,14 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       musl = pkgsCross.musl64.audit;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      audit = nixosTests.audit;
     };
   };
 
   meta = {
     homepage = "https://people.redhat.com/sgrubb/audit/";
     description = "Audit Library";
-    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v4.1.1";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ grimmauld ];
     pkgConfigModules = [

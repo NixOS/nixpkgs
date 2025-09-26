@@ -98,14 +98,14 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "10.5.0";
+  version = "10.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
     tag = version;
-    hash = "sha256-KJPl5bkD/tQlHY2k0b9zok5YCPekaXw7Y9z8P4AD3FQ=";
+    hash = "sha256-Uuqm9Exu/oK3BGBL4ViUOGArMWhVutUn1gFRj1I4vt4=";
   };
 
   build-system = [
@@ -137,13 +137,15 @@ buildPythonPackage rec {
     # `pytest.mark.xdist_group` in the ibis codebase
     pytest-xdist
     writableTmpDirAsHomeHook
-  ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+  ]
+  ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
-    "-m"
-    "'${lib.concatStringsSep " or " testBackends} or core'"
+    "-Wignore::FutureWarning"
   ];
+
+  enabledTestMarks = testBackends ++ [ "core" ];
 
   disabledTests = [
     # tries to download duckdb extensions
@@ -352,7 +354,7 @@ buildPythonPackage rec {
   meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
-    changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
+    changelog = "https://github.com/ibis-project/ibis/blob/${src.tag}/docs/release_notes.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cpcloud

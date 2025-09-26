@@ -68,15 +68,14 @@ stdenv.mkDerivation {
     patchShebangs documentation/make_*
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withDocs [
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withDocs [
+    doxygen
+    graphviz
+  ];
 
   buildInputs =
     lib.optionals (withGL && !stdenv.hostPlatform.isDarwin) [
@@ -90,28 +89,27 @@ stdenv.mkDerivation {
       fontconfig
     ];
 
-  propagatedBuildInputs =
-    [
-      zlib
-      libjpeg
-      libpng
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      freetype
-      libX11
-      libXext
-      libXinerama
-      libXfixes
-      libXcursor
-      libXft
-      libXrender
-    ]
-    ++ lib.optionals withCairo [
-      cairo
-    ]
-    ++ lib.optionals withPango [
-      pango
-    ];
+  propagatedBuildInputs = [
+    zlib
+    libjpeg
+    libpng
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    freetype
+    libX11
+    libXext
+    libXinerama
+    libXfixes
+    libXcursor
+    libXft
+    libXrender
+  ]
+  ++ lib.optionals withCairo [
+    cairo
+  ]
+  ++ lib.optionals withPango [
+    pango
+  ];
 
   cmakeFlags = [
     # Common

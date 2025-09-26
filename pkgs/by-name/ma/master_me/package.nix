@@ -16,22 +16,21 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trummerschlunk";
     repo = "master_me";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-eesMXxRcCgzhSQ+WUqM00EuKYhFxysjH+RWKHKGYzUM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libGL
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXext
-      libXrandr
-    ];
+  buildInputs = [
+    libGL
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXext
+    libXrandr
+  ];
 
   enableParallelBuilding = true;
 
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/trummerschlunk/master_me";
-    description = "automatic mastering plugin for live streaming, podcasts and internet radio";
+    description = "Automatic mastering plugin for live streaming, podcasts and internet radio";
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # error: no type or protocol named 'NSPasteboardType'

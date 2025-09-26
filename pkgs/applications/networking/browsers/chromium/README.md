@@ -11,7 +11,7 @@
   - `ungoogled-chromium`: A patch set for Chromium, that has its own entry in Chromium's `upstream-info.nix`.
   - `chromedriver`: Updated via Chromium's `upstream-info.nix` and not built
     from source. Must match Chromium's major version.
-  - `electron-source`: Various version of electron that are built from source using Chromium's
+  - `electron-source`: Various versions of electron that are built from source using Chromium's
     `-unwrapped` derivation, due to electron being based on Chromium.
 
 # Upstream links

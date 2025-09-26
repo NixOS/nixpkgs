@@ -38,44 +38,42 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.41";
+  version = "7.46";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-A4MM+hcpyhw6zE18fSSHBu38A0cYiXzjmM5wqj0Cgzk="
+        "sha256-uGWeaRl01rH7+RrMoqAv85EiKJ3/qUFiQVt1zILVJTQ="
       else
         {
-          x86_64-linux = "sha256-9M3WZijLTeKt2Asg3cE1OgS6tm1T4V0Cer9J4GPfTh4=";
-          aarch64-linux = "sha256-/Ir1UFUOZOEZPkTG3ykHy6PcOuDf/rbvxOeRt5iJzls=";
+          x86_64-linux = "sha256-8XEy7IXjjw7WbPxpxFP30ivMgi0/iWbtljuYCQ2BzDI=";
+          aarch64-linux = "sha256-H+lvnpaKESad0DI9l1AexFxgwPi9EidVR1Gh6oITjHQ=";
         }
         .${stdenv.hostPlatform.system};
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      which
-      autoPatchelfHook
-      xdg-utils # Required for desktop integration
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      undmg
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    which
+    autoPatchelfHook
+    xdg-utils # Required for desktop integration
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    undmg
+  ];
 
   sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Reaper.app";
 
-  buildInputs =
-    [
-      (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk3
-      alsa-lib
-    ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    alsa-lib
+  ];
 
   runtimeDependencies =
     lib.optionals stdenv.hostPlatform.isLinux [

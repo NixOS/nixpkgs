@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Graphical editor for ACLs and extended attributes";
     homepage = "https://rofi.roger-ferrer.org/eiciel/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ keysmashes ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "eiciel";
   };

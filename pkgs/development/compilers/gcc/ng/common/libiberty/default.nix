@@ -49,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--enable-install-libiberty"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   postInstall = ''
     cp pic/libiberty.a $out/lib/libiberty_pic.a

@@ -34,18 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      lhasa
-      libjack2
-      rtmidi
-      SDL2
-      zlib
-      zziplib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    lhasa
+    libjack2
+    rtmidi
+    SDL2
+    zlib
+    zziplib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop

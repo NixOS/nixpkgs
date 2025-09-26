@@ -1,4 +1,5 @@
 {
+  lib,
   fetchFromGitHub,
   buildDunePackage,
   lwt,

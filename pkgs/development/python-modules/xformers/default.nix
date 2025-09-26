@@ -31,7 +31,7 @@
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  version = "0.0.30";
+  version = "0.0.32.post2";
 in
 buildPythonPackage {
   pname = "xformers";
@@ -45,7 +45,7 @@ buildPythonPackage {
     repo = "xformers";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ozaw9z8qnGpZ28LQNtwmKeVnrn7KDWNeJKtT6g6Q/W0=";
+    hash = "sha256-B0rvV9EONWQBNhlQ0UTMZ+VtRO/YmMRRlLrVQHGftPE=";
   };
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
@@ -82,13 +82,12 @@ buildPythonPackage {
       ]
     );
 
-  nativeBuildInputs =
-    [
-      ninja
-      which
-    ]
-    ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ])
-    ++ lib.optional stdenv.hostPlatform.isDarwin openmp.dev;
+  nativeBuildInputs = [
+    ninja
+    which
+  ]
+  ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ])
+  ++ lib.optional stdenv.hostPlatform.isDarwin openmp.dev;
 
   dependencies = [
     numpy

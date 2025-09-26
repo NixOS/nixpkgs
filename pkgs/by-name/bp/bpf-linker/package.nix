@@ -3,38 +3,39 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  llvmPackages_20,
+  btfdump,
+  rustc,
   zlib,
-  ncurses,
   libxml2,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.9.14";
+  version = "0.9.15";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = "bpf-linker";
     tag = "v${version}";
-    hash = "sha256-accW1w0Mn9Mo9r2LrupQdgx+3850Dth8EfnnuzO+ZzM=";
+    hash = "sha256-5HXYtAn6KaFXsiA3Nt0IwmFLOXBhZWYrD8cMZ8rZ1fk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-D1N4zQjpllQg6Nn92+HWWsSmGsOon0mygErWg3X8Gx8=";
+  cargoHash = "sha256-coIcd6WjVQM/b51jwkG8It/wubXx6wuuPlzzelPFE38=";
 
   buildNoDefaultFeatures = true;
+  buildFeatures = [ "llvm-${lib.versions.major rustc.llvm.version}" ];
 
-  nativeBuildInputs = [ llvmPackages_20.llvm ];
+  nativeBuildInputs = [ rustc.llvm ];
+
   buildInputs = [
     zlib
-    ncurses
     libxml2
   ];
 
-  # fails with: couldn't find crate `core` with expected target triple bpfel-unknown-none
-  # rust-src and `-Z build-std=core` are required to properly run the tests
-  doCheck = false;
+  nativeCheckInputs = [
+    btfdump
+    rustc.llvmPackages.clang.cc
+  ];
 
   meta = {
     description = "Simple BPF static linker";

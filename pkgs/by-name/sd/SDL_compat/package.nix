@@ -36,27 +36,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ];
 
   # re-export PKG_CHECK_MODULES m4 macro used by sdl.m4
   propagatedNativeBuildInputs = [ pkg-config-unwrapped ];
 
-  buildInputs =
-    [
-      libX11
-      sdl2-compat
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals openglSupport [ libGLU ];
+  buildInputs = [
+    libX11
+    sdl2-compat
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals openglSupport [ libGLU ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

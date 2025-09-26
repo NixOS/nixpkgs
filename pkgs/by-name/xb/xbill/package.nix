@@ -62,8 +62,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  makeFlags = "-B";
+
   postInstall = ''
     install -Dm644 pixmaps/icon.xpm $out/share/pixmaps/xbill.xpm
+  '';
+
+  doInstallCheck = true;
+  postInstallCheck = ''
+    $out/bin/xbill --version
   '';
 
   meta = {

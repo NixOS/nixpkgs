@@ -13,17 +13,17 @@
 }:
 runCommand "gitwatch"
   rec {
-    version = "0.3";
+    version = "0.4";
     src = fetchFromGitHub {
       owner = "gitwatch";
       repo = "gitwatch";
       rev = "v${version}";
-      hash = "sha256-dKXKuqUQhFUXMwPs7Uilzn2yKH6DIlBTOFztKo+PqVU=";
+      hash = "sha256-DEHhwQvI8i+8ExAQvfY+zL5epmhOkht3a69XOn0cKqY=";
     };
     nativeBuildInputs = [ makeWrapper ];
 
     meta = {
-      description = "Watch a filesystem and automatically stage changes to a git.";
+      description = "Watch a filesystem and automatically stage changes to a git";
       mainProgram = "gitwatch";
       longDescription = ''
         A bash script to watch a file or folder and commit changes to a git repo.

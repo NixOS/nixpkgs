@@ -19,16 +19,16 @@ let
     }:
     buildGoModule rec {
       pname = stname;
-      version = "1.30.0";
+      version = "2.0.8";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         tag = "v${version}";
-        hash = "sha256-GKyzJ2kzs2h/tfb3StSleGBofiKk6FwVcSkCjsJRvRY=";
+        hash = "sha256-QkCLFztzaH9MvgP6HWUr5Z8yIrKlY6/t2VaZwai/H8Q=";
       };
 
-      vendorHash = "sha256-Soky/3wEmP1QRy8xfL68sTHi3CSl4nbCINmG0DY2Qys=";
+      vendorHash = "sha256-iYTAnEy0MqJaTz/cdpteealyviwVrpwDzVigo8nnXqs=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -96,30 +96,35 @@ in
     stname = "syncthing";
     target = "syncthing";
 
-    postInstall =
-      ''
-        # This installs man pages in the correct directory according to the suffix
-        # on the filename
-        for mf in man/*.[1-9]; do
-          mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
-          mandir="$out/share/man/man$mantype"
-          install -Dm644 "$mf" "$mandir/$(basename "$mf")"
-        done
+    postInstall = ''
+      # This installs man pages in the correct directory according to the suffix
+      # on the filename
+      for mf in man/*.[1-9]; do
+        mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
+        mandir="$out/share/man/man$mantype"
+        install -Dm644 "$mf" "$mandir/$(basename "$mf")"
+      done
 
-        install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+      install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+      install -Dm644 assets/logo-32.png   $out/share/icons/hicolor/32x32/apps/syncthing.png
+      install -Dm644 assets/logo-64.png   $out/share/icons/hicolor/64x64/apps/syncthing.png
+      install -Dm644 assets/logo-128.png  $out/share/icons/hicolor/128x128/apps/syncthing.png
+      install -Dm644 assets/logo-256.png  $out/share/icons/hicolor/256x256/apps/syncthing.png
+      install -Dm644 assets/logo-512.png  $out/share/icons/hicolor/512x512/apps/syncthing.png
+      install -Dm644 assets/logo-only.svg $out/share/icons/hicolor/scalable/apps/syncthing.svg
 
-      ''
-      + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-        mkdir -p $out/lib/systemd/{system,user}
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      mkdir -p $out/lib/systemd/{system,user}
 
-        substitute etc/linux-systemd/system/syncthing@.service \
-                   $out/lib/systemd/system/syncthing@.service \
-                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
+      substitute etc/linux-systemd/system/syncthing@.service \
+                 $out/lib/systemd/system/syncthing@.service \
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
 
-        substitute etc/linux-systemd/user/syncthing.service \
-                   $out/lib/systemd/user/syncthing.service \
-                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
-      '';
+      substitute etc/linux-systemd/user/syncthing.service \
+                 $out/lib/systemd/user/syncthing.service \
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
+    '';
   };
 
   syncthing-discovery = common {

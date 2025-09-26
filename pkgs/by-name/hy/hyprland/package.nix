@@ -41,13 +41,13 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  legacyRenderer ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
   # deprecated flags
   nvidiaPatches ? false,
   hidpiXWayland ? false,
   enableNvidiaPatches ? false,
+  legacyRenderer ? false,
 }:
 let
   inherit (builtins)
@@ -73,7 +73,9 @@ let
 
   # possibility to add more adapters in the future, such as keepDebugInfo,
   # which would be controlled by the `debug` flag
-  adapters = [
+  # Condition on darwin to avoid breaking eval for darwin in CI,
+  # even though darwin is not supported anyway.
+  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
@@ -83,17 +85,20 @@ assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed."
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
+assert assertMsg (
+  !legacyRenderer
+) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.49.0";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3RVRQr+2WKBflZSsoLym9RwyqHWPk/J5WRtuJ0hgA+g=";
+    hash = "sha256-TPlZf0urtvDH4Cb4By06szJmzR4sBlgQATuGQy8bH6U=";
   };
 
   postPatch = ''
@@ -180,7 +185,6 @@ customStdenv.mkDerivation (finalAttrs: {
   mesonFlags = concatLists [
     (mapAttrsToList mesonEnable {
       "xwayland" = enableXWayland;
-      "legacy_renderer" = legacyRenderer;
       "systemd" = withSystemd;
       "uwsm" = false;
       "hyprpm" = false;

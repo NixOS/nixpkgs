@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "48.beta2";
+  version = "48.0";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4vIgRVGNgWtG0wluCp075lTdggMBVGX8ck/okWrY70E=";
+    hash = "sha256-qh0KtfdDBKqjGYehgtQh1j8ZzgJGXXxkJpbjFhI+MKg=";
   };
 
   nativeBuildInputs = [
@@ -54,15 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  mesonFlags =
-    [
-      "-Dgtk_doc=true"
-      "-Dvapi=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # mremap does not exist on darwin
-      "-Dmmap-buffer-backend=false"
-    ];
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dvapi=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # mremap does not exist on darwin
+    "-Dmmap-buffer-backend=false"
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

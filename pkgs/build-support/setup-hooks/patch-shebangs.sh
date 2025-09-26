@@ -68,31 +68,6 @@ patchShebangs() {
         return 0
     fi
 
-    # like sponge from moreutils but in pure bash
-    _sponge() {
-        local content
-        local target
-        local restoreReadOnly
-        content=""
-        target="$1"
-
-        # Make file writable if it is read-only
-        if [[ ! -w "$target" ]]; then
-            chmod +w "$target"
-            restoreReadOnly=true
-        fi
-
-        while IFS= read -r line || [[ -n "$line" ]]; do
-            content+="$line"$'\n'
-        done
-        printf '%s' "$content" > "$target"
-
-        # Restore read-only if it was read-only before
-        if [[ -n "${restoreReadOnly:-}" ]]; then
-            chmod -w "$target"
-        fi
-    }
-
     local f
     while IFS= read -r -d $'\0' f; do
         isScript "$f" || continue
@@ -151,14 +126,31 @@ patchShebangs() {
 
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
                 timestamp=$(stat --printf "%y" "$f")
-                sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" | _sponge "$f"
+
+                # Manually create temporary file instead of using sed -i
+                # (sed -i on $out/x creates tmpfile /nix/store/x which fails on macos + sandbox)
+                tmpFile=$(mktemp -t patchShebangs.XXXXXXXXXX)
+                sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" > "$tmpFile"
+
+                # Make original file writable if it is read-only
+                local restoreReadOnly
+                if [[ ! -w "$f" ]]; then
+                    chmod +w "$f"
+                    restoreReadOnly=true
+                fi
+
+                # Replace the original file's content with the patched content
+                # (preserving permissions)
+                cat "$tmpFile" > "$f"
+                rm "$tmpFile"
+                if [[ -n "${restoreReadOnly:-}" ]]; then
+                    chmod -w "$f"
+                fi
 
                 touch --date "$timestamp" "$f"
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
-
-    unset -f _sponge
 }
 
 patchShebangsAuto () {

@@ -21,7 +21,7 @@ let
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
-  version = "unstable-2024-04-09";
+  version = "0-unstable-2024-04-09";
 
   strictDeps = true;
 

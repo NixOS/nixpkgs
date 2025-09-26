@@ -54,7 +54,8 @@ stdenv.mkDerivation (
       "out"
       "man"
       "devdoc"
-    ] ++ lib.optional crossCompiling "mini";
+    ]
+    ++ lib.optional crossCompiling "mini";
     setOutputFlags = false;
 
     # On FreeBSD, if Perl is built with threads support, having
@@ -70,25 +71,27 @@ stdenv.mkDerivation (
 
     disallowedReferences = [ stdenv.cc ];
 
-    patches =
-      [
-        ./CVE-2024-56406.patch
-        ./CVE-2025-40909.patch
-      ]
-      # Do not look in /usr etc. for dependencies.
-      ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
-      ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
+    patches = [
+      ./CVE-2024-56406.patch
+      ./CVE-2025-40909.patch
+    ]
+    # Do not look in /usr etc. for dependencies.
+    ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
+    ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
 
-      # Fix compilation on platforms with only a C locale: https://github.com/Perl/perl5/pull/22569
-      ++ lib.optional (version == "5.40.0") ./fix-build-with-only-C-locale-5.40.0.patch
+    # Fix compilation on platforms with only a C locale: https://github.com/Perl/perl5/pull/22569
+    ++ lib.optional (version == "5.40.0") ./fix-build-with-only-C-locale-5.40.0.patch
 
-      ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        ./cpp-precomp.patch
-        ./sw_vers.patch
-      ]
-      ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
-      ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
+    ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./cpp-precomp.patch
+      ./sw_vers.patch
+    ]
+    # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
+    # https://github.com/arsv/perl-cross/pull/159
+    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross-fdopendir.patch
+    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
+    ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -107,11 +110,11 @@ stdenv.mkDerivation (
           ''
       )
       +
-        # Perl's build system uses the src variable, and its value may end up in
-        # the output in some cases (when cross-compiling)
-        ''
-          unset src
-        '';
+      # Perl's build system uses the src variable, and its value may end up in
+      # the output in some cases (when cross-compiling)
+      ''
+        unset src
+      '';
 
     # Build a thread-safe Perl with a dynamic libperl.so.  We need the
     # "installstyle" option to ensure that modules are put under
@@ -125,6 +128,8 @@ stdenv.mkDerivation (
             "-Dlibpth=\"\""
             "-Dglibpth=\"\""
             "-Ddefault_inc_excludes_dot"
+            # https://github.com/arsv/perl-cross/issues/158
+            "-Dd_gnulibc=define"
           ]
         else
           (
@@ -191,42 +196,41 @@ stdenv.mkDerivation (
     # https://github.com/archlinux/svntogit-packages/blob/packages/perl/trunk/config.over
     # https://salsa.debian.org/perl-team/interpreter/perl/blob/debian-5.26/debian/config.over
     # A ticket has been opened upstream to possibly clean some of this up: https://rt.perl.org/Public/Bug/Display.html?id=133452
-    preConfigure =
-      ''
-        cat > config.over <<EOF
-        ${lib.optionalString (
-          stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
-        ) ''osvers="gnulinux"''}
-        myuname="nixpkgs"
-        myhostname="nixpkgs"
-        cf_by="nixpkgs"
-        cf_time="$(date -d "@$SOURCE_DATE_EPOCH")"
-        EOF
+    preConfigure = ''
+      cat > config.over <<EOF
+      ${lib.optionalString (
+        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
+      ) ''osvers="gnulinux"''}
+      myuname="nixpkgs"
+      myhostname="nixpkgs"
+      cf_by="nixpkgs"
+      cf_time="$(date -d "@$SOURCE_DATE_EPOCH")"
+      EOF
 
-        # Compress::Raw::Zlib should use our zlib package instead of the one
-        # included with the distribution
-        cat > ./cpan/Compress-Raw-Zlib/config.in <<EOF
-        BUILD_ZLIB   = False
-        INCLUDE      = ${zlib.dev}/include
-        LIB          = ${zlib.out}/lib
-        OLD_ZLIB     = False
-        GZIP_OS_CODE = AUTO_DETECT
-        USE_ZLIB_NG  = False
-      ''
-      + lib.optionalString (lib.versionAtLeast version "5.40.0") ''
-        ZLIB_INCLUDE = ${zlib.dev}/include
-        ZLIB_LIB     = ${zlib.out}/lib
-      ''
-      + ''
-        EOF
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
-      ''
-      + lib.optionalString (!enableThreading) ''
-        # We need to do this because the bootstrap doesn't have a static libpthread
-        sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
-      '';
+      # Compress::Raw::Zlib should use our zlib package instead of the one
+      # included with the distribution
+      cat > ./cpan/Compress-Raw-Zlib/config.in <<EOF
+      BUILD_ZLIB   = False
+      INCLUDE      = ${zlib.dev}/include
+      LIB          = ${zlib.out}/lib
+      OLD_ZLIB     = False
+      GZIP_OS_CODE = AUTO_DETECT
+      USE_ZLIB_NG  = False
+    ''
+    + lib.optionalString (lib.versionAtLeast version "5.40.0") ''
+      ZLIB_INCLUDE = ${zlib.dev}/include
+      ZLIB_LIB     = ${zlib.out}/lib
+    ''
+    + ''
+      EOF
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
+    ''
+    + lib.optionalString (!enableThreading) ''
+      # We need to do this because the bootstrap doesn't have a static libpthread
+      sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
+    '';
 
     # Default perl does not support --host= & co.
     configurePlatforms = [ ];
@@ -259,51 +263,50 @@ stdenv.mkDerivation (
     doCheck = false; # some tests fail, expensive
 
     # TODO: it seems like absolute paths to some coreutils is required.
-    postInstall =
-      ''
-        # Remove dependency between "out" and "man" outputs.
-        rm "$out"/lib/perl5/*/*/.packlist
+    postInstall = ''
+      # Remove dependency between "out" and "man" outputs.
+      rm "$out"/lib/perl5/*/*/.packlist
 
-        # Remove dependencies on glibc and gcc
-        sed "/ *libpth =>/c    libpth => ' '," \
-          -i "$out"/lib/perl5/*/*/Config.pm
-        # TODO: removing those paths would be cleaner than overwriting with nonsense.
-        substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
-          --replace "${libcInc}" /no-such-path \
-          --replace "${if stdenv.hasCC then stdenv.cc else "/no-such-path"}" /no-such-path \
-          --replace "${
-            if stdenv.hasCC && stdenv.cc.cc != null then stdenv.cc.cc else "/no-such-path"
-          }" /no-such-path \
-          --replace "${
-            if stdenv.hasCC && stdenv.cc.fallback_sdk or null != null then
-              stdenv.cc.fallback_sdk
-            else
-              "/no-such-path"
-          }" /no-such-path \
-          --replace "$man" /no-such-path
-      ''
-      + lib.optionalString crossCompiling ''
-        mkdir -p $mini/lib/perl5/cross_perl/${version}
-        for dir in cnf/{stub,cpan}; do
-          cp -r $dir/* $mini/lib/perl5/cross_perl/${version}
-        done
+      # Remove dependencies on glibc and gcc
+      sed "/ *libpth =>/c    libpth => ' '," \
+        -i "$out"/lib/perl5/*/*/Config.pm
+      # TODO: removing those paths would be cleaner than overwriting with nonsense.
+      substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
+        --replace "${libcInc}" /no-such-path \
+        --replace "${if stdenv.hasCC then stdenv.cc else "/no-such-path"}" /no-such-path \
+        --replace "${
+          if stdenv.hasCC && stdenv.cc.cc != null then stdenv.cc.cc else "/no-such-path"
+        }" /no-such-path \
+        --replace "${
+          if stdenv.hasCC && stdenv.cc.fallback_sdk or null != null then
+            stdenv.cc.fallback_sdk
+          else
+            "/no-such-path"
+        }" /no-such-path \
+        --replace "$man" /no-such-path
+    ''
+    + lib.optionalString crossCompiling ''
+      mkdir -p $mini/lib/perl5/cross_perl/${version}
+      for dir in cnf/{stub,cpan}; do
+        cp -r $dir/* $mini/lib/perl5/cross_perl/${version}
+      done
 
-        mkdir -p $mini/bin
-        install -m755 miniperl $mini/bin/perl
+      mkdir -p $mini/bin
+      install -m755 miniperl $mini/bin/perl
 
-        export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
-        # wrapProgram should use a runtime-native SHELL by default, but
-        # it actually uses a buildtime-native one. If we ever fix that,
-        # we'll need to fix this to use a buildtime-native one.
-        #
-        # Adding the arch-specific directory is morally incorrect, as
-        # miniperl can't load the native modules there. However, it can
-        # (and sometimes needs to) load and run some of the pure perl
-        # code there, so we add it anyway. When needed, stubs can be put
-        # into $mini/lib/perl5/cross_perl/${version}.
-        wrapProgram $mini/bin/perl --prefix PERL5LIB : \
-          "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
-      ''; # */
+      export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
+      # wrapProgram should use a runtime-native SHELL by default, but
+      # it actually uses a buildtime-native one. If we ever fix that,
+      # we'll need to fix this to use a buildtime-native one.
+      #
+      # Adding the arch-specific directory is morally incorrect, as
+      # miniperl can't load the native modules there. However, it can
+      # (and sometimes needs to) load and run some of the pure perl
+      # code there, so we add it anyway. When needed, stubs can be put
+      # into $mini/lib/perl5/cross_perl/${version}.
+      wrapProgram $mini/bin/perl --prefix PERL5LIB : \
+        "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
+    ''; # */
 
     meta = {
       homepage = "https://www.perl.org/";
@@ -326,11 +329,8 @@ stdenv.mkDerivation (
       rev = crossVersion;
       hash = "sha256-mG9ny+eXGBL4K/rXqEUPSbar+4Mq4IaQrGRFIHIyAAw=";
     };
-    patches = [
-      # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
-      # https://github.com/arsv/perl-cross/pull/159
-      ./cross-fdopendir.patch
-    ];
+
+    # Patches are above!!!
 
     depsBuildBuild = [
       buildPackages.stdenv.cc

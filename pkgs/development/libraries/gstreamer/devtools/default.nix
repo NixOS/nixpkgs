@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.26.0";
+  version = "1.26.5";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7/M9fcKSuwdKJ4jqiHtigzmP/e+vpJ+30I7+ZlimVkg=";
+    hash = "sha256-Y9Rqjv+ooiXiWkZLp1OKzoU/4NwecDZrJ8IIE15UAc4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -47,17 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
       cargoRoot
       ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-GLxevEwoTgS7kmDlul0AA2wIFRY7js8Ij4UIu1ZQf8I=";
+    hash = "sha256-gU+SBvxwmrGiyeKXF3SA2ohIHNTS4ZBC+elB0u1QKRE=";
   };
 
   patches = [
-    # Fix Requires in gstreamer-validate-1.0.pc
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8661
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/13c0f44dd546cd058c39f32101a361b3a7746f73.patch";
-      stripLen = 2;
-      hash = "sha256-CpBFTmdn+VO6ZeNe6NZR6ELvakZqQdaF3o3G5TSDuUU=";
-    })
     # dots-viewer: sort static files
     # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9208
     (fetchpatch {
@@ -71,29 +64,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      rustPlatform.cargoSetupHook
-      rustc
-      cargo
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      cairo
-      python3
-      json-glib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    cairo
+    python3
+    json-glib
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     gstreamer

@@ -49,16 +49,15 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "|^" skippedTests}" ];
 
-  postInstall =
-    ''
-      mv $out/bin/globalping-cli $out/bin/globalping
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd globalping \
-        --bash <($out/bin/globalping completion bash) \
-        --fish <($out/bin/globalping completion fish) \
-        --zsh <($out/bin/globalping completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/globalping-cli $out/bin/globalping
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd globalping \
+      --bash <($out/bin/globalping completion bash) \
+      --fish <($out/bin/globalping completion fish) \
+      --zsh <($out/bin/globalping completion zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 

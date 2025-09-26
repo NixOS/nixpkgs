@@ -6,22 +6,30 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron,
+  electron_37,
   httptoolkit-server,
 }:
 
+let
+  electron = electron_37;
+in
 buildNpmPackage rec {
   pname = "httptoolkit";
-  version = "1.20.1";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
     tag = "v${version}";
-    hash = "sha256-1m4okGTNrboyj+QiMFPT7Z0/+FxZtxrqqAbuAobRgvU=";
+    hash = "sha256-6iiXOBVtPLdW9MWUcu2Hggm7uPHudASebRPQ34JJTMQ=";
   };
 
-  npmDepsHash = "sha256-NH6Ppj6SsM0BXAgboMgp1ZPwN43ciLNBaHkz5yq8Ff8=";
+  patches = [
+    # generated via running: `npm update node-abi`
+    ./bump-node-abi.patch
+  ];
+
+  npmDepsHash = "sha256-WtnL9Gf1zGWnIjMifh0l3fwaeur+iI1l/Vwta+X6EAM=";
 
   makeCacheWritable = true;
 
@@ -33,7 +41,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   npmBuildScript = "build:src";
 

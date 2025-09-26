@@ -29,6 +29,8 @@
   armTrustedFirmwareS905,
   opensbi,
   buildPackages,
+  callPackages,
+  darwin,
 }@pkgs:
 
 let
@@ -96,8 +98,10 @@ let
           swig
           which # for scripts/dtc-version.sh
           perl # for oid build (secureboot)
-        ] ++ lib.optionals (!crossTools) toolsDeps;
-        depsBuildBuild = [ buildPackages.stdenv.cc ];
+        ]
+        ++ lib.optionals (!crossTools) toolsDeps
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]; # sw_vers command is needed on darwin
+        depsBuildBuild = [ buildPackages.gccStdenv.cc ]; # gccStdenv is needed for Darwin buildPlatform
         buildInputs = lib.optionals crossTools toolsDeps;
 
         hardeningDisable = [ "all" ];
@@ -107,14 +111,16 @@ let
         makeFlags = [
           "DTC=${lib.getExe buildPackages.dtc}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-        ] ++ extraMakeFlags;
+          "HOSTCFLAGS=-fcommon"
+        ]
+        ++ extraMakeFlags;
 
         passAsFile = [ "extraConfig" ];
 
         configurePhase = ''
           runHook preConfigure
 
-          make ${defconfig}
+          make -j$NIX_BUILD_CORES ${defconfig}
 
           cat $extraConfigPath >> .config
 
@@ -146,7 +152,6 @@ let
             description = "Boot loader for embedded systems";
             license = licenses.gpl2Plus;
             maintainers = with maintainers; [
-              bartsch
               dezgeg
               lopsided98
             ];
@@ -194,17 +199,22 @@ in
 
     filesToInstall = [
       "tools/dumpimage"
+      "tools/fdt_add_pubkey"
       "tools/fdtgrep"
       "tools/kwboot"
+      "tools/mkeficapsule"
       "tools/mkenvimage"
       "tools/mkimage"
       "tools/env/fw_printenv"
+      "tools/mkeficapsule"
     ];
 
     pythonScriptsToInstall = {
       "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
     };
   };
+
+  ubootPythonTools = lib.recurseIntoAttrs (callPackages ./python.nix { });
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
@@ -234,6 +244,12 @@ in
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+  };
+
+  ubootBananaPim2Zero = buildUBoot {
+    defconfig = "bananapi_m2_zero_defconfig";
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+    extraMeta.platforms = [ "armv7l-linux" ];
   };
 
   ubootBananaPim3 = buildUBoot {
@@ -310,10 +326,12 @@ in
         meta.license = lib.licenses.unfreeRedistributableFirmware;
       };
     in
-    assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
     buildUBoot {
       defconfig = "libretech-cc_defconfig";
-      extraMeta.platforms = [ "aarch64-linux" ];
+      extraMeta = {
+        broken = stdenv.buildPlatform.system != "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+        platforms = [ "aarch64-linux" ];
+      };
       filesToInstall = [ "u-boot.bin" ];
       postBuild = ''
         # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir
@@ -657,6 +675,18 @@ in
     ];
   };
 
+  ubootRadxaZero3W = buildUBoot {
+    defconfig = "radxa-zero-3-rk3566_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3566;
+    filesToInstall = [
+      "idbloader.img"
+      "u-boot.itb"
+      "u-boot-rockchip.bin"
+    ];
+  };
+
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = [ "armv6l-linux" ];
@@ -827,25 +857,15 @@ in
     # sf probe; sf update $loadaddr 0 80000
   };
 
-  ubootVisionFive2 =
-    let
-      opensbi_vf2 = opensbi.overrideAttrs (attrs: {
-        makeFlags = attrs.makeFlags ++ [
-          # Matches u-boot documentation: https://docs.u-boot.org/en/latest/board/starfive/visionfive2.html
-          "FW_TEXT_START=0x40000000"
-          "FW_OPTIONS=0"
-        ];
-      });
-    in
-    buildUBoot {
-      defconfig = "starfive_visionfive2_defconfig";
-      extraMeta.platforms = [ "riscv64-linux" ];
-      OPENSBI = "${opensbi_vf2}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
-      filesToInstall = [
-        "spl/u-boot-spl.bin.normal.out"
-        "u-boot.itb"
-      ];
-    };
+  ubootVisionFive2 = buildUBoot {
+    defconfig = "starfive_visionfive2_defconfig";
+    extraMeta.platforms = [ "riscv64-linux" ];
+    OPENSBI = "${opensbi}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
+    filesToInstall = [
+      "spl/u-boot-spl.bin.normal.out"
+      "u-boot.itb"
+    ];
+  };
 
   ubootWandboard = buildUBoot {
     defconfig = "wandboard_defconfig";

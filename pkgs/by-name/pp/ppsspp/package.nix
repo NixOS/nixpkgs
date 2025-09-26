@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableQt "-qt"
     + lib.optionalString (!enableQt) "-sdl"
     + lib.optionalString forceWayland "-wayland";
-  version = "1.19.2";
+  version = "1.19.3";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-HwZHV5x60V/H4wx5wgC6VAZY7zHjMt0ZVRDWAnXDvj4=";
+    hash = "sha256-71oIjUXYGFNyhcXQP65Bd2gYF6golrPR4USwS7bTxFQ=";
   };
 
   patches = lib.optionals useSystemFfmpeg [
@@ -65,31 +65,31 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  ]
+  ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      SDL2
-      libX11
-      glew
-      libzip
-      zlib
-    ]
-    ++ lib.optionals useSystemFfmpeg [
-      ffmpeg_6
-    ]
-    ++ lib.optionals useSystemSnappy [
-      snappy
-    ]
-    ++ lib.optionals enableQt [
-      qtbase
-      qtmultimedia
-    ]
-    ++ lib.optionals enableVulkan [ vulkan-loader ]
-    ++ lib.optionals vulkanWayland [
-      wayland
-      libffi
-    ];
+  buildInputs = [
+    SDL2
+    libX11
+    glew
+    libzip
+    zlib
+  ]
+  ++ lib.optionals useSystemFfmpeg [
+    ffmpeg_6
+  ]
+  ++ lib.optionals useSystemSnappy [
+    snappy
+  ]
+  ++ lib.optionals enableQt [
+    qtbase
+    qtmultimedia
+  ]
+  ++ lib.optionals enableVulkan [ vulkan-loader ]
+  ++ lib.optionals vulkanWayland [
+    wayland
+    libffi
+  ];
 
   dontWrapQtApps = true;
 

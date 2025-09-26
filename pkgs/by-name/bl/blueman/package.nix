@@ -45,18 +45,17 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      bluez
-      gtk3
-      pythonPackages.python
-      librsvg
-      adwaita-icon-theme
-      networkmanager
-      procps
-    ]
-    ++ pythonPath
-    ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs = [
+    bluez
+    gtk3
+    pythonPackages.python
+    librsvg
+    adwaita-icon-theme
+    networkmanager
+    procps
+  ]
+  ++ pythonPath
+  ++ lib.optional withPulseAudio libpulseaudio;
 
   postPatch = lib.optionalString withPulseAudio ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py
@@ -100,6 +99,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

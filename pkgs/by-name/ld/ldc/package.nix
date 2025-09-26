@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6LcpY3LSFK4KgEiGrFp/LONu5Vr+/+vI04wEEpF3s+s=";
     fetchSubmodules = true;
   };
@@ -45,42 +45,40 @@ stdenv.mkDerivation (finalAttrs: {
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  postPatch =
-    ''
-      patchShebangs runtime tools tests
+  postPatch = ''
+    patchShebangs runtime tools tests
 
-      rm tests/dmd/fail_compilation/mixin_gc.d
-      rm tests/dmd/runnable/xtest46_gc.d
-      rm tests/dmd/runnable/testptrref_gc.d
+    rm tests/dmd/fail_compilation/mixin_gc.d
+    rm tests/dmd/runnable/xtest46_gc.d
+    rm tests/dmd/runnable/testptrref_gc.d
 
-      # test depends on current year
-      rm tests/dmd/compilable/ddocYear.d
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace runtime/phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace runtime/phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
+    # test depends on current year
+    rm tests/dmd/compilable/ddocYear.d
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace runtime/phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace runtime/phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
 
-      # https://github.com/NixOS/nixpkgs/issues/34817
-      rm -r tests/plugins/addFuncEntryCall
-    '';
+    # https://github.com/NixOS/nixpkgs/issues/34817
+    rm -r tests/plugins/addFuncEntryCall
+  '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      ldcBootstrap
-      lit
-      lit.python
-      llvm_18.dev
-      makeWrapper
-      ninja
-      unzip
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
-      gdb
-    ];
+  nativeBuildInputs = [
+    cmake
+    ldcBootstrap
+    lit
+    lit.python
+    llvm_18.dev
+    makeWrapper
+    ninja
+    unzip
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
+    gdb
+  ];
 
   buildInputs = [
     curl

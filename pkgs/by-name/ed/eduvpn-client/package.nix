@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
-  version = "4.5.0";
+  version = "4.5.1";
   format = "pyproject";
 
   src = fetchFromGitea {
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     owner = "eduVPN";
     repo = "linux-app";
     rev = version;
-    hash = "sha256-cm1N/Z6/9zyhWBYUIUIYeB+KphHl+89MD4M9mO/tNMg=";
+    hash = "sha256-lDmPDM3BEiZ97m8jEtYrpmVrk0D7x01iKxOe/09T0zY=";
   };
 
   nativeBuildInputs = [

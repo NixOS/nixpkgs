@@ -19,32 +19,31 @@
 
 stdenv.mkDerivation rec {
   pname = "fldigi";
-  version = "4.2.07";
+  version = "4.2.09";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-9KpTh0fBqiVC901R1PdH2SEya32Ijl+jkxSSpFuhs6o=";
+    hash = "sha256-L+gj4DQyEOhPYAgOQuMtKf9RLzHJ4ACUHvGJcXDiLDc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libXinerama
-      gettext
-      hamlib
-      fltk13
-      libjpeg
-      libpng
-      portaudio
-      libsndfile
-      libsamplerate
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      libpulseaudio
-      alsa-lib
-      udev
-    ];
+  buildInputs = [
+    libXinerama
+    gettext
+    hamlib
+    fltk13
+    libjpeg
+    libpng
+    portaudio
+    libsndfile
+    libsamplerate
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    libpulseaudio
+    alsa-lib
+    udev
+  ];
 
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
 

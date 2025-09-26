@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.1.3";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-aMmYgFdQhgMd99atAtr5MD0yniaIi+QTPJ0rMI2jMxk=";
+    hash = "sha256-oPHRDYci4lrZBY3MC4QU1juwbMJYFDJjARg1Y8us4FQ=";
   };
 
   build-system = [
@@ -60,46 +60,44 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "dulwich"
     "keyring"
-    "virtualenv"
   ];
 
-  dependencies =
-    [
-      build
-      cachecontrol
-      cleo
-      dulwich
-      fastjsonschema
-      findpython
-      installer
-      keyring
-      packaging
-      pbs-installer
-      pkginfo
-      platformdirs
-      poetry-core
-      pyproject-hooks
-      requests
-      requests-toolbelt
-      shellingham
-      tomlkit
-      trove-classifiers
-      virtualenv
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      xattr
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ]
-    ++ cachecontrol.optional-dependencies.filecache
-    ++ pbs-installer.optional-dependencies.download
-    ++ pbs-installer.optional-dependencies.install;
+  dependencies = [
+    build
+    cachecontrol
+    cleo
+    dulwich
+    fastjsonschema
+    findpython
+    installer
+    keyring
+    packaging
+    pbs-installer
+    pkginfo
+    platformdirs
+    poetry-core
+    pyproject-hooks
+    requests
+    requests-toolbelt
+    shellingham
+    tomlkit
+    trove-classifiers
+    virtualenv
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    xattr
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ]
+  ++ cachecontrol.optional-dependencies.filecache
+  ++ pbs-installer.optional-dependencies.download
+  ++ pbs-installer.optional-dependencies.install;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd poetry \
       --bash <($out/bin/poetry completions bash) \
       --fish <($out/bin/poetry completions fish) \
@@ -145,10 +143,15 @@ buildPythonPackage rec {
     "test_threading_single_thread_safe"
     "test_threading_property_caching"
     "test_threading_atomic_cached_property_different_instances"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Sandbox violation:
+    # PermissionError: [Errno 1] Operation not permitted: '/Library/Frameworks/Python.framework/Versions'
+    "test_find_all"
   ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
+  disabledTestMarks = [
+    "network"
   ];
 
   # Allow for package to use pep420's native namespaces

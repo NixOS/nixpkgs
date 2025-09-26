@@ -79,9 +79,10 @@ buildPythonPackage rec {
     geopandas
     matplotlib
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # AttributeError (fixes: https://github.com/opendatacube/odc-geo/pull/202)

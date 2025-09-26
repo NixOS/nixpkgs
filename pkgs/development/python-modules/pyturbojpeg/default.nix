@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyturbojpeg";
-  version = "1.8.0";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
     tag = "v${version}";
-    hash = "sha256-4DPkzHjEsVjioRNLZii/5gZIEbj8A8rNkL8UXUQsgdY=";
+    hash = "sha256-zyLNIo7hQuzTlEgdvri3bSnAiRRKKup57tfCIxiBq24=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "turbojpeg" ];
 
   meta = with lib; {
-    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/v${version}";
+    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${src.tag}";
     description = "Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
     homepage = "https://github.com/lilohuang/PyTurboJPEG";
     license = licenses.mit;

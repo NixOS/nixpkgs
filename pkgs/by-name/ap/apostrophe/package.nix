@@ -48,18 +48,17 @@ python312Packages.buildPythonApplication {
   pname = "apostrophe";
   pyproject = false;
 
-  postPatch =
-    ''
-      substituteInPlace build-aux/meson_post_install.py \
-        --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
+  postPatch = ''
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
 
-      patchShebangs --build build-aux/meson_post_install.py
-    ''
-    # Use mathjax from nixpkgs to avoid loading from CDN
-    + ''
-      substituteInPlace apostrophe/preview_converter.py \
-        --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
-    '';
+    patchShebangs --build build-aux/meson_post_install.py
+  ''
+  # Use mathjax from nixpkgs to avoid loading from CDN
+  + ''
+    substituteInPlace apostrophe/preview_converter.py \
+      --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
+  '';
 
   # Should be done in postInstall, but meson checks this eagerly before build
   preConfigure = ''

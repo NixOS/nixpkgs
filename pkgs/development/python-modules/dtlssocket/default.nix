@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "dtlssocket";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TnbXFXJuDEbcCeNdqbZxewY8I4mwbBcj3sw7o4tzh/Q=";
+    hash = "sha256-8Gy+Mt+FYtu8y+J0qvJ9J3PoSSqGxBwzSzoKcKUAN88=";
   };
 
   build-system = [

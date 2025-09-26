@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "smartdeblur";
-  version = "unstable-2018-10-29";
+  version = "0-unstable-2018-10-29";
 
   src = fetchFromGitHub {
     owner = "Y-Vladimir";

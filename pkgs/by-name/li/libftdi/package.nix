@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "ac_cv_prog_HAVELIBUSB=${lib.getExe' (lib.getDev libusb-compat-0_1) "libusb-config"}"
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "--with-async-mode";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "--with-async-mode";
 
   # allow async mode. from ubuntu. see:
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff

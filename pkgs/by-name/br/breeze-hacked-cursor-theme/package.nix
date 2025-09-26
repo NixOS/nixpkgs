@@ -12,7 +12,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "breeze-hacked-cursor-theme";
-  version = "unstable-2024-1-28";
+  version = "0-unstable-2024-01-28";
 
   src = fetchFromGitHub {
     owner = "clayrisser";
@@ -21,25 +21,24 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-gm50qgHdbjDYMz/ksbDD8tMqY9AqJ23DKl4rPFNEDX8=";
   };
 
-  postPatch =
-    ''
-      patchShebangs build.sh recolor-cursor.sh
-      substituteInPlace Makefile \
-        --replace "~/.icons" "$out/share/icons"
-      ./recolor-cursor.sh \
-    ''
-    + lib.optionalString (accentColor != null) ''
-      --accent-color "${accentColor}" \
-    ''
-    + lib.optionalString (baseColor != null) ''
-      --base-color "${baseColor}" \
-    ''
-    + lib.optionalString (borderColor != null) ''
-      --border-color "${borderColor}" \
-    ''
-    + lib.optionalString (logoColor != null) ''
-      --logo-color "${logoColor}"
-    '';
+  postPatch = ''
+    patchShebangs build.sh recolor-cursor.sh
+    substituteInPlace Makefile \
+      --replace "~/.icons" "$out/share/icons"
+    ./recolor-cursor.sh \
+  ''
+  + lib.optionalString (accentColor != null) ''
+    --accent-color "${accentColor}" \
+  ''
+  + lib.optionalString (baseColor != null) ''
+    --base-color "${baseColor}" \
+  ''
+  + lib.optionalString (borderColor != null) ''
+    --border-color "${borderColor}" \
+  ''
+  + lib.optionalString (logoColor != null) ''
+    --logo-color "${logoColor}"
+  '';
 
   nativeBuildInputs = [
     inkscape

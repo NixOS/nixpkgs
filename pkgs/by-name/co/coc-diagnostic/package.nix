@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "diagnostic-languageserver extension for coc.nvim";
+    description = "Diagnostic-languageserver extension for coc.nvim";
     homepage = "https://github.com/iamcco/coc-diagnostic";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];

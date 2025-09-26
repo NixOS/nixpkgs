@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6XSedsTUjcZzFXaNitsXlUBpxC6TYVMCB+AfH3x7c5E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-vJd+4cZuDSGThnkUULhwEUFbHlkiIGyxT+1fWRUsIJk=";
 
   passthru.tests.version = testers.testVersion {
@@ -27,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "Weggli is a fast and robust semantic search tool for C and C++ codebases";
+    description = "Fast and robust semantic search tool for C and C++ codebases";
     homepage = "https://github.com/weggli-rs/weggli";
     changelog = "https://github.com/weggli-rs/weggli/releases/tag/v${version}";
     mainProgram = "weggli";

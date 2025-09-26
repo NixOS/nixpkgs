@@ -87,7 +87,6 @@ stdenv.mkDerivation {
     homepage = "http://www.warsow.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      abbradar
     ];
     platforms = platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;

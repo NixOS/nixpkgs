@@ -14,7 +14,7 @@
   frozendict,
   jsonschema,
   pyserial-asyncio,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.80.1";
+  version = "0.82.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-OHwX2bwM6XYPGs2n7X5OQ3lW1lsD0RaaPNSFXOX+C/Q=";
+    hash = "sha256-q93qJFQep+7M+R0t7n/qyOG81o5UKHs6DPwJK2BbZB4=";
   };
 
   postPatch = ''
@@ -54,24 +54,24 @@ buildPythonPackage rec {
     pyserial-asyncio
     typing-extensions
     voluptuous
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aioresponses
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
-      "test_quirks_v2"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      "test_periodic_scan_priority"
-    ];
+  disabledTests = [
+    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+    "test_quirks_v2"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    "test_periodic_scan_priority"
+  ];
 
   disabledTestPaths = [
     # Tests require network access

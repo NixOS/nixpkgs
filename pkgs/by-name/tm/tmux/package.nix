@@ -10,7 +10,8 @@
   runCommand,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
-  withUtf8proc ? true,
+  # broken on i686-linux https://github.com/tmux/tmux/issues/4597
+  withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
   withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
   libutempter,
@@ -50,36 +51,33 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
-  buildInputs =
-    [
-      ncurses
-      libevent
-    ]
-    ++ lib.optionals withSystemd [ systemd ]
-    ++ lib.optionals withUtf8proc [ utf8proc ]
-    ++ lib.optionals withUtempter [ libutempter ];
+  buildInputs = [
+    ncurses
+    libevent
+  ]
+  ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withUtf8proc [ utf8proc ]
+  ++ lib.optionals withUtempter [ libutempter ];
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-    ]
-    ++ lib.optionals withSystemd [ "--enable-systemd" ]
-    ++ lib.optionals withSixel [ "--enable-sixel" ]
-    ++ lib.optionals withUtempter [ "--enable-utempter" ]
-    ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ]
+  ++ lib.optionals withSystemd [ "--enable-systemd" ]
+  ++ lib.optionals withSixel [ "--enable-sixel" ]
+  ++ lib.optionals withUtempter [ "--enable-utempter" ]
+  ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
 
-  postInstall =
-    ''
-      mkdir -p $out/share/bash-completion/completions
-      cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/nix-support
-      echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
-    '';
+  postInstall = ''
+    mkdir -p $out/share/bash-completion/completions
+    cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/nix-support
+    echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+  '';
 
   passthru = {
     terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (

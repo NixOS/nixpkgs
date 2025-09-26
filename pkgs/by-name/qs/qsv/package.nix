@@ -11,7 +11,7 @@
 
 let
   pname = "qsv";
-  version = "5.1.0";
+  version = "7.1.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,11 +20,10 @@ rustPlatform.buildRustPackage {
     owner = "dathere";
     repo = "qsv";
     rev = version;
-    hash = "sha256-AQ7vpxrGa0CtFvKzT2iHmeoafpaWOVLqEL9eO3QeBEM=";
+    hash = "sha256-jo5hlNydHXNqSjYOC270fmIk7GOeFACIZ3aZEca1M28=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Kmcl7ifAFf7dJ3LESdH1xm7M3Wl/wMKUjN2ZcLkvUHE=";
+  cargoHash = "sha256-jfr5wrOLBhvkikjDAb0vMT/Zwc+aYrSWF5lIC7EGwME=";
 
   buildInputs = [
     file

@@ -3,16 +3,14 @@
   fetchFromGitHub,
   mkYaziPlugin,
 }:
-let
-  pname = "gitui.yazi";
-in
+
 mkYaziPlugin {
-  inherit pname;
+  pname = "gitui.yazi";
   version = "0-unstable-2025-05-26";
 
   src = fetchFromGitHub {
     owner = "gclarkjr5";
-    repo = pname;
+    repo = "gitui.yazi";
     rev = "397e9cf9cff536a43e746d72e0e81fd5c3050d2d";
     hash = "sha256-Bo16/5XuSxRhN6URwTBxuw0FTMHLF3nV1UDBQQJFHMM=";
   };

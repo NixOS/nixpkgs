@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.121.0";
+  version = "1.126.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hCZU6O3synVayg253Cbsonzad3ZBMx1B/yJwBJzU+X0=";
+    hash = "sha256-QVeg/F7oPPgSRTi5jcfTj15bD/7fQoPopahpUP9b0UA=";
   };
 
   vendorHash = null;
@@ -51,6 +51,10 @@ buildGoModule (finalAttrs: {
     # This appears to be some kind of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
 
+    # Allow older go versions
+    substituteInPlace go.mod \
+      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
       --replace-fail "time.After(10 " "time.After(120 " \
@@ -80,7 +84,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://victoriametrics.com/";
-    description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
+    description = "Fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp

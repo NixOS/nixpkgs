@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
   buildInputs = [
     zlib
     bzip2

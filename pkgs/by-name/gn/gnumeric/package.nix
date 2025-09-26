@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf,
-  automake,
   pkg-config,
   intltool,
   libxml2,
@@ -17,6 +15,11 @@
   bison,
   python3Packages,
   itstool,
+  autoreconfHook,
+  gtk-doc,
+  fetchFromGitLab,
+  gettext,
+  yelp-tools,
 }:
 
 let
@@ -26,16 +29,25 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
   version = "1.12.59";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnumeric/${lib.versions.majorMinor finalAttrs.version}/gnumeric-${finalAttrs.version}.tar.xz";
-    sha256 = "yzdQsXbWQflCPfchuDFljIKVV1UviIf+34pT2Qfs61E=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnumeric";
+    tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-7xCDOqPx3QLDHLoKG46e8te4smSFrLOgCcWkiJXGjDQ=";
   };
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   configureFlags = [ "--disable-component" ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
+    gettext
+    gtk-doc
+    yelp-tools
     pkg-config
     intltool
     bison
@@ -48,18 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # ToDo: optional libgda, introspection?
   # TODO: fix Perl plugin when cross-compiling
-  buildInputs =
-    [
-      goffice
-      gtk3
-      adwaita-icon-theme
-      python
-      pygobject3
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ]);
+  buildInputs = [
+    goffice
+    gtk3
+    adwaita-icon-theme
+    python
+    pygobject3
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
 
   enableParallelBuilding = true;
 
@@ -75,11 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vcunat ];
   };
 })

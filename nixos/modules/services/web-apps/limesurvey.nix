@@ -336,7 +336,8 @@ in
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
     systemd.services.phpfpm-limesurvey.serviceConfig = {
       ExecStartPre = pkgs.writeShellScript "limesurvey-phpfpm-exec-pre" ''
@@ -443,8 +444,7 @@ in
     };
 
     systemd.services.httpd.after =
-      optional mysqlLocal "mysql.service"
-      ++ optional pgsqlLocal "postgresql.target";
+      optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
 
     users.users.${user} = {
       group = group;

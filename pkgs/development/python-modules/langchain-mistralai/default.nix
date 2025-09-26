@@ -58,12 +58,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-mistralai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-mistralai==";
+    };
   };
 
   meta = {

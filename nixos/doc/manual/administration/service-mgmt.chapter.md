@@ -82,9 +82,7 @@ In order to enable a systemd *system* service with provided upstream
 package, use (e.g):
 
 ```nix
-{
-  systemd.packages = [ pkgs.packagekit ];
-}
+{ systemd.packages = [ pkgs.packagekit ]; }
 ```
 
 Usually NixOS modules written by the community do the above, plus take
@@ -126,17 +124,19 @@ in turn will not make the service / timer start on login.
 You can define services by adding them to `systemd.services`:
 
 ```nix
-systemd.services.myservice = {
-  after = [ "network-online.target" ];
-  requires = [ "network-online.target" ];
+{
+  systemd.services.myservice = {
+    after = [ "network-online.target" ];
+    requires = [ "network-online.target" ];
 
-  before = [ "multi-user.target" ];
-  wantedBy = [ "multi-user.target" ];
+    before = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
 
-  serviceConfig = {
-    ExecStart = "...";
+    serviceConfig = {
+      ExecStart = "...";
+    };
   };
-};
+}
 ```
 
 If you want to specify a multi-line script for `ExecStart`,

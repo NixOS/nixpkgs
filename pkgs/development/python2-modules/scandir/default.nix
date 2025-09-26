@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Better directory iterator and faster os.walk()";
     homepage = "https://github.com/benhoyt/scandir";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

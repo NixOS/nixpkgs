@@ -43,17 +43,16 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "rethinkdb" ];
 
-  buildInputs =
-    [
-      protobuf
-      boost
-      zlib
-      curl
-      openssl
-      icu
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) jemalloc
-    ++ lib.optional stdenv.hostPlatform.isDarwin libtool;
+  buildInputs = [
+    protobuf
+    boost
+    zlib
+    curl
+    openssl
+    icu
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) jemalloc
+  ++ lib.optional stdenv.hostPlatform.isDarwin libtool;
 
   nativeBuildInputs = [
     which

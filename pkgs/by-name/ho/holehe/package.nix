@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "holehe";
-  version = "unstable-2023-05-18";
+  version = "0-unstable-2023-05-18";
   format = "pyproject";
 
   src = fetchFromGitHub {

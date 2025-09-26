@@ -1,11 +1,17 @@
 {
   stdenv,
+  stdenvNoLibc,
   lib,
   fetchurl,
   linuxHeaders ? null,
   useBSDCompatHeaders ? true,
 }:
 let
+  stdenv' = if stdenv.hostPlatform != stdenv.buildPlatform then stdenvNoLibc else stdenv;
+in
+let
+  stdenv = stdenv';
+
   cdefs_h = fetchurl {
     name = "sys-cdefs.h";
     url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
@@ -91,7 +97,8 @@ stdenv.mkDerivation rec {
   ];
   CFLAGS = [
     "-fstack-protector-strong"
-  ] ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
   configureFlags = [
     "--enable-shared"
@@ -122,44 +129,43 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  postInstall =
-    ''
-      # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
-      # Apparently glibc provides scsi itself?
-      (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
+  postInstall = ''
+    # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
+    # Apparently glibc provides scsi itself?
+    (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
 
-      ${lib.optionalString (
-        stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32
-      ) "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"}
+    ${lib.optionalString (
+      stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32
+    ) "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"}
 
-      # Create 'ldd' symlink, builtin
-      ln -s $out/lib/libc.so $bin/bin/ldd
+    # Create 'ldd' symlink, builtin
+    ln -s $out/lib/libc.so $bin/bin/ldd
 
-      # (impure) cc wrapper around musl for interactive usuage
-      for i in musl-gcc musl-clang ld.musl-clang; do
-        moveToOutput bin/$i $dev
-      done
-      moveToOutput lib/musl-gcc.specs $dev
-      substituteInPlace $dev/bin/musl-gcc \
-        --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
+    # (impure) cc wrapper around musl for interactive usuage
+    for i in musl-gcc musl-clang ld.musl-clang; do
+      moveToOutput bin/$i $dev
+    done
+    moveToOutput lib/musl-gcc.specs $dev
+    substituteInPlace $dev/bin/musl-gcc \
+      --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
-      # provide 'iconv' utility, using just-built headers, libc/ldso
-      $CC ${iconv_c} -o $bin/bin/iconv \
-        -I$dev/include \
-        -L$out/lib -Wl,-rpath=$out/lib \
-        -lc \
-        -B $out/lib \
-        -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
-    ''
-    + lib.optionalString (arch != null) ''
-      # Create 'libc.musl-$arch' symlink
-      ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
-    ''
-    + lib.optionalString useBSDCompatHeaders ''
-      install -D ${queue_h} $dev/include/sys/queue.h
-      install -D ${cdefs_h} $dev/include/sys/cdefs.h
-      install -D ${tree_h} $dev/include/sys/tree.h
-    '';
+    # provide 'iconv' utility, using just-built headers, libc/ldso
+    $CC ${iconv_c} -o $bin/bin/iconv \
+      -I$dev/include \
+      -L$out/lib -Wl,-rpath=$out/lib \
+      -lc \
+      -B $out/lib \
+      -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
+  ''
+  + lib.optionalString (arch != null) ''
+    # Create 'libc.musl-$arch' symlink
+    ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
+  ''
+  + lib.optionalString useBSDCompatHeaders ''
+    install -D ${queue_h} $dev/include/sys/queue.h
+    install -D ${cdefs_h} $dev/include/sys/cdefs.h
+    install -D ${tree_h} $dev/include/sys/tree.h
+  '';
 
   passthru.linuxHeaders = linuxHeaders;
 
@@ -183,6 +189,7 @@ stdenv.mkDerivation rec {
       "mips64-linux"
       "mips64el-linux"
       "mipsel-linux"
+      "powerpc-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
       "riscv32-linux"

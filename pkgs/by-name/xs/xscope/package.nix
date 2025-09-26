@@ -4,7 +4,7 @@
   fetchFromGitLab,
   pkg-config,
   autoreconfHook,
-  xorg-autoconf,
+  util-macros,
   xorg,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    xorg-autoconf
+    util-macros
   ];
 
   buildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "program to monitor X11/Client conversations";
+    description = "Program to monitor X11/Client conversations";
     homepage = "https://cgit.freedesktop.org/xorg/app/xscope/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ crertel ];

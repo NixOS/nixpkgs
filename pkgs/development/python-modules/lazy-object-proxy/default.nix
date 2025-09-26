@@ -1,27 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.10.0";
-  format = "setuptools";
+  version = "1.11.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eCR7bUX0OlLvNcJbVYFFnoURciVAikEoo9r4v5ZIrGk=";
+  src = fetchFromGitHub {
+    owner = "ionelmc";
+    repo = "python-lazy-object-proxy";
+    tag = "v${version}";
+    hash = "sha256-iOftyGx5wLxIUwlmo1lY06MXqgxfZek6RR1S5UydOEs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace ",<6.0" ""
-    substituteInPlace setup.cfg --replace ",<6.0" ""
-  '';
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

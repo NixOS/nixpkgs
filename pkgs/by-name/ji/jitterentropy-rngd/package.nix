@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''A random number generator, which injects entropy to the kernel'';
+    description = "Random number generator, which injects entropy to the kernel";
     homepage = "https://github.com/smuellerDD/jitterentropy-rngd";
     changelog = "https://github.com/smuellerDD/jitterentropy-rngd/releases/tag/v${version}";
     license = [

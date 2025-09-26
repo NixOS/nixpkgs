@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -16,12 +17,12 @@
 let
   greenlet = buildPythonPackage rec {
     pname = "greenlet";
-    version = "3.2.2";
+    version = "3.2.3";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-rQU9NEIaLeu6Rao8w5rPRUrLzQJbP8Gp+KDe4jer1IU=";
+      hash = "sha256-iw3YrkwNb15U7lW6k17rPXNam1iooeW1y6tk4Bo582U=";
     };
 
     build-system = [ setuptools ];
@@ -34,6 +35,11 @@ let
       psutil
       unittestCheckHook
     ];
+
+    # https://github.com/python-greenlet/greenlet/issues/395
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (
+      stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isLoongArch64
+    ) "-fomit-frame-pointer";
 
     preCheck = ''
       pushd ${placeholder "out"}/${python.sitePackages}

@@ -14,7 +14,7 @@
     machine.succeed("localsend_app >&2 &")
     machine.wait_for_open_port(53317)
     machine.wait_for_window("LocalSend", 10)
-    machine.succeed("netstat --listening --program --tcp | grep -P 'tcp.*53317.*localsend'")
-    machine.succeed("netstat --listening --program --udp | grep -P 'udp.*53317.*localsend'")
+    machine.succeed("ss --listening --tcp --numeric --processes | grep -P '53317.*localsend'")
+    machine.succeed("ss --listening --udp --numeric --processes | grep -P '53317.*localsend'")
   '';
 }

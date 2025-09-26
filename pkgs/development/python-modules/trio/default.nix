@@ -56,7 +56,8 @@ buildPythonPackage rec {
     outcome
     sniffio
     sortedcontainers
-  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   # tests are failing on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

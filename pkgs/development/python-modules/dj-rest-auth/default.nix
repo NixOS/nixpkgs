@@ -56,13 +56,15 @@ buildPythonPackage rec {
 
   optional-dependencies.with_social = [
     django-allauth
-  ] ++ django-allauth.optional-dependencies.socialaccount;
+  ]
+  ++ django-allauth.optional-dependencies.socialaccount;
 
   nativeCheckInputs = [
     djangorestframework-simplejwt
     responses
     unittest-xml-reporting
-  ] ++ optional-dependencies.with_social;
+  ]
+  ++ optional-dependencies.with_social;
 
   checkInputs = [
     pytestCheckHook
@@ -79,6 +81,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Test connects to graph.facebook.com
     "TestSocialLoginSerializer"
+    # claim[user_id] is "1" (str) vs 1 (int)
+    "test_custom_jwt_claims"
+    "test_custom_jwt_claims_cookie_w_authentication"
   ];
 
   disabledTestPaths = [

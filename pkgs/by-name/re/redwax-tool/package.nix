@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redwax-tool";
-  version = "0.9.9";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://archive.redwax.eu/dist/rt/redwax-tool-${version}/redwax-tool-${version}.tar.gz";
-    hash = "sha256-gA9YWR3v66lSn4KkwG49l7V4/HUTrBXXl1uDCLr1tu8=";
+    hash = "sha256-KIVr0FnCmZUuxenXCvAlLxQVQJ5XndAidVaiGevENoM=";
   };
 
   nativeBuildInputs = [

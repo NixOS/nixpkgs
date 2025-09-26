@@ -30,18 +30,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2025.7";
+  version = "2025.9";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-q5RYgU7VlhTXAN0uQeHNTJ1eFCQZzymLo/eiKr805O8=";
+    hash = "sha256-BfWPFkNXGDV0ql2hBXh+3hjyn7+pUXL3XzH8w8aIfKw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-UUYAmNdzTthoWOIU5wr7Q059MAezpuRvCadGTjwoKGM=";
+  cargoHash = "sha256-kgtjLdTkCnLk27gYEjovPv5k5eHOqQdL8iERKhVDKNQ=";
 
   cargoBuildFlags = [
     "-p mullvad-daemon --bin mullvad-daemon"
@@ -97,14 +96,14 @@ rustPlatform.buildRustPackage rec {
       ln -s ${shadowsocks-rust}/bin/sslocal $out/share/mullvad
     ''
     +
-      # Set the directory where Mullvad will look for its resources by default to
-      # `$out/share`, so that we can avoid putting the files in `$out/bin` --
-      # Mullvad defaults to looking inside the directory its binary is located in
-      # for its resources.
-      ''
-        wrapProgram $out/bin/mullvad-daemon \
-          --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad"
-      '';
+    # Set the directory where Mullvad will look for its resources by default to
+    # `$out/share`, so that we can avoid putting the files in `$out/bin` --
+    # Mullvad defaults to looking inside the directory its binary is located in
+    # for its resources.
+    ''
+      wrapProgram $out/bin/mullvad-daemon \
+        --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad"
+    '';
 
   __darwinAllowLocalNetworking = true;
 

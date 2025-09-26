@@ -22,12 +22,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-pwdmltHDNwUMx1FNOoiXl5Pna0zlKqahmicBCN6UVSU=";
   };
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ (with libsForQt5; [
-      qmake
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    wrapQtAppsHook
+  ]);
 
   buildInputs = [ perlPackages.perl ];
 

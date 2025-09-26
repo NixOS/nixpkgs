@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.16.6";
+  version = "3.17.2";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-f6+FwYVwuG89IjEQMOepTJEgJGXp9nmQNuAGU4proq4=";
+    hash = "sha256-jBlQh5tHP+2LyFCnP0m/ud3nU40i5cWtUwSeM5auQX8=";
   };
 
   patches = [
@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '"''${SYSTEMD_USER_UNIT_DIR}"' "\"$out/lib/systemd/user\""
+
     for file in src/libsync/vfs/*/CMakeLists.txt; do
       substituteInPlace $file \
         --replace-fail "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
@@ -88,10 +91,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
     "-DMIRALL_VERSION_SUFFIX=" # remove git suffix from version
   ];
-
-  postBuild = ''
-    make doc-man
-  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

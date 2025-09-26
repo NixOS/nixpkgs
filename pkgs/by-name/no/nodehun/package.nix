@@ -32,7 +32,8 @@ buildNpmPackage {
   nativeBuildInputs = [
     node-gyp
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
   postInstall = ''
     # Only keep the necessary parts of build/Release to reduce closure size

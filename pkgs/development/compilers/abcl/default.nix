@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "JVM-based Common Lisp implementation";
     homepage = "https://common-lisp.net/project/armedbear/";
-    license = lib.licenses.gpl2Classpath;
+    license = with lib.licenses; [
+      gpl2
+      classpathException20
+    ];
     mainProgram = "abcl";
     teams = [ lib.teams.lisp ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

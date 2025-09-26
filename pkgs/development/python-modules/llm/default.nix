@@ -75,6 +75,7 @@ let
       llm-gemini ? false,
       llm-gguf ? false,
       llm-git ? false,
+      llm-github-copilot ? false,
       llm-grok ? false,
       llm-groq ? false,
       llm-hacker-news ? false,
@@ -164,7 +165,7 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.26";
+    version = "0.27.1";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -175,7 +176,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-KTlNajuZrR0kBX3LatepsNM3PfRVsQn+evEfXTu6juE=";
+      hash = "sha256-HWzuPhI+oiCKBeiHK7x9Sc54ZB88Py60FzprMLlZGrY=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
@@ -219,8 +220,11 @@ let
       cp ${llm-echo.src}/llm_echo.py llm_echo.py
     '';
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "-svv"
+    ];
+
+    enabledTestPaths = [
       "tests/"
     ];
 

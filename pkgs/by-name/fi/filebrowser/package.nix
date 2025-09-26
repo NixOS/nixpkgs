@@ -1,65 +1,61 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  buildGo123Module,
-
-  nodejs_22,
+  buildGoModule,
+  buildNpmPackage,
   pnpm_9,
-
+  nix-update-script,
   nixosTests,
 }:
 
 let
-  version = "2.36.0";
+  version = "2.42.5";
 
   pnpm = pnpm_9;
-  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-t3e4DBxGc3KWeNyqZrQRtySfECc+/lSZJFtOXTUPNk8=";
+    hash = "sha256-6AZwWdYQlaQ30Q5ohi9ovlUJZZ+u7Wqc5mfRW/3t7Zs=";
   };
 
-  frontend = stdenv.mkDerivation (finalAttrs: {
+  frontend = buildNpmPackage rec {
     pname = "filebrowser-frontend";
     inherit version src;
 
-    nativeBuildInputs = [
-      nodejs
-      pnpm.configHook
-    ];
+    sourceRoot = "${src.name}/frontend";
 
-    pnpmRoot = "frontend";
+    npmConfigHook = pnpm.configHook;
+    npmDeps = pnpmDeps;
 
     pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${src.name}/frontend";
-      fetcherVersion = 1;
-      hash = "sha256-vLOtVeGFeHXgQglvKsih4lj1uIs6wipwfo374viIq4I=";
+      inherit
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      fetcherVersion = 2;
+      hash = "sha256-uGEw6Wt6hXEcYQzXYzfgo3fcCX7Hj39bLHsT1rsGy74=";
     };
 
     installPhase = ''
       runHook preInstall
 
-      pnpm install -C frontend --frozen-lockfile
-      pnpm run -C frontend build
-
       mkdir $out
-      mv frontend/dist $out
+      mv dist $out
 
       runHook postInstall
     '';
-  });
+  };
 
 in
-buildGo123Module {
+buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-u5ybdo4Xe0ZIP90BymsdTxmCjoR4Mki+lYlp1wP+yrU=";
+  vendorHash = "sha256-aVtL64Cm+nqum/qHFvplpEawgMXM2S6l8QFrJBzLVtU=";
 
   excludedPackages = [ "tools" ];
 
@@ -72,6 +68,7 @@ buildGo123Module {
   ];
 
   passthru = {
+    updateScript = nix-update-script { };
     inherit frontend;
     tests = {
       inherit (nixosTests) filebrowser;
@@ -79,7 +76,7 @@ buildGo123Module {
   };
 
   meta = with lib; {
-    description = "Filebrowser is a web application for managing files and directories";
+    description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ oakenshield ];

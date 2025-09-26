@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Utilities for handling packages.";
+    description = "Utilities for handling packages";
     homepage = "https://github.com/domdfcoding/shippinglabel";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

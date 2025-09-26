@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drm_info";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "drm_info";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pgYhZtmyhuhxBiiTRdrEp/YsuwrD6KK/ahfO2L3mfM8=";
+    hash = "sha256-LtZ7JJmVNWMjJL2F6k+tcBpJ2v2fd+HNWyHAOvIi7Ko=";
   };
 
   strictDeps = true;

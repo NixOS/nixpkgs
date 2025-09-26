@@ -22,16 +22,15 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X github.com/arduino/arduino-language-server/version.versionString=${version}"
-      "-X github.com/arduino/arduino-language-server/version.commit=unknown"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-extldflags '-static'"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/arduino/arduino-language-server/version.versionString=${version}"
+    "-X github.com/arduino/arduino-language-server/version.commit=unknown"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-extldflags '-static'"
+  ];
 
   meta = {
     description = "Arduino Language Server based on Clangd to Arduino code autocompletion";

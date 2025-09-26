@@ -885,30 +885,29 @@ in
 
   config = mkMerge [
     {
-      assertions =
-        [
-          {
-            assertion = cfg.provision.enable -> cfg.domain.enable;
-            message = "Provisioning must be done on a machine running the firezone domain server";
-          }
-        ]
-        ++ concatLists (
-          flip mapAttrsToList cfg.provision.accounts (
-            accountName: accountCfg:
-            [
-              {
-                assertion = (builtins.match "^[[:lower:]_-]+$" accountName) != null;
-                message = "An account name must contain only lowercase characters and underscores, as it will be used as the URL slug for this account.";
-              }
-            ]
-            ++ flip mapAttrsToList accountCfg.auth (
-              authName: _: {
-                assertion = (builtins.match "^[[:alnum:]_-]+$" authName) != null;
-                message = "The authentication provider attribute key must contain only letters, numbers, underscores or dashes.";
-              }
-            )
+      assertions = [
+        {
+          assertion = cfg.provision.enable -> cfg.domain.enable;
+          message = "Provisioning must be done on a machine running the firezone domain server";
+        }
+      ]
+      ++ concatLists (
+        flip mapAttrsToList cfg.provision.accounts (
+          accountName: accountCfg:
+          [
+            {
+              assertion = (builtins.match "^[[:lower:]_-]+$" accountName) != null;
+              message = "An account name must contain only lowercase characters and underscores, as it will be used as the URL slug for this account.";
+            }
+          ]
+          ++ flip mapAttrsToList accountCfg.auth (
+            authName: _: {
+              assertion = (builtins.match "^[[:alnum:]_-]+$" authName) != null;
+              message = "The authentication provider attribute key must contain only letters, numbers, underscores or dashes.";
+            }
           )
-        );
+        )
+      );
     }
     # Enable all components if the main server is enabled
     (mkIf cfg.enable {
@@ -1142,28 +1141,27 @@ in
         '';
 
         path = [ pkgs.curl ];
-        postStart =
-          ''
-            # Wait for the firezone server to come online
-            count=0
-            while [[ "$(curl -s "http://localhost:${toString cfg.domain.settings.HEALTHZ_PORT}" 2>/dev/null || echo)" != '{"status":"ok"}' ]]
-            do
-              sleep 1
-              if [[ "$count" -eq 30 ]]; then
-                echo "Tried for at least 30 seconds, giving up..."
-                exit 1
-              fi
-              count=$((count++))
-            done
-          ''
-          + optionalString cfg.provision.enable ''
-            # Wait for server to fully come up. Not ideal to use sleep, but at least it works.
+        postStart = ''
+          # Wait for the firezone server to come online
+          count=0
+          while [[ "$(curl -s "http://localhost:${toString cfg.domain.settings.HEALTHZ_PORT}" 2>/dev/null || echo)" != '{"status":"ok"}' ]]
+          do
             sleep 1
+            if [[ "$count" -eq 30 ]]; then
+              echo "Tried for at least 30 seconds, giving up..."
+              exit 1
+            fi
+            count=$((count++))
+          done
+        ''
+        + optionalString cfg.provision.enable ''
+          # Wait for server to fully come up. Not ideal to use sleep, but at least it works.
+          sleep 1
 
-            ${loadSecretEnvironment "domain"}
-            ln -sTf ${provisionStateJson} provision-state.json
-            ${getExe cfg.domain.package} rpc 'Code.eval_file("${./provision.exs}")'
-          '';
+          ${loadSecretEnvironment "domain"}
+          ln -sTf ${provisionStateJson} provision-state.json
+          ${getExe cfg.domain.package} rpc 'Code.eval_file("${./provision.exs}")'
+        '';
 
         environment = collectEnvironment "domain";
         serviceConfig = commonServiceConfig;

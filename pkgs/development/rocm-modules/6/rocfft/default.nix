@@ -39,20 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
   # due to a long period with no terminal output
   buildInputs = [ sqlite ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_C_COMPILER=hipcc"
+    "-DCMAKE_CXX_COMPILER=hipcc"
+    "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ];
 
   passthru = {
     test = stdenv.mkDerivation {

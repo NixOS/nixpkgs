@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.5.1";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama-python";
     tag = "v${version}";
-    hash = "sha256-XCsBdU8dUJIcfbvwUB6UNP2AhAmBxnk0kiFkOYcd1zY=";
+    hash = "sha256-QpG8bo6tarhW4NpdD4MQ9DWR/w8KjT2zEQyirYtTjJ0=";
   };
 
   pythonRelaxDeps = [ "httpx" ];

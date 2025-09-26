@@ -39,7 +39,13 @@ in
 
 stdenv.mkDerivation {
   name = "tarball";
-  builder = ./make-system-tarball.sh;
+  __structuredAttrs = true;
+
+  # the tarball will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
+
+  buildCommandPath = ./make-system-tarball.sh;
   nativeBuildInputs = extraInputs;
 
   inherit
@@ -49,11 +55,9 @@ stdenv.mkDerivation {
     compressCommand
     ;
 
-  # !!! should use XML.
   sources = map (x: x.source) contents;
   targets = map (x: x.target) contents;
 
-  # !!! should use XML.
   inherit symlinks objects;
 
   closureInfo = closureInfo {

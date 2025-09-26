@@ -55,7 +55,7 @@ mkCoqDerivation {
   mlPlugin = true;
 
   meta = {
-    description = "A framework for extracting Coq programs to Rust";
+    description = "Framework for extracting Coq programs to Rust";
     maintainers = with maintainers; [ _4ever2 ];
     license = licenses.mit;
   };

@@ -36,27 +36,34 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-72KrCDUBe+xJjnSY/nnrNH92EP4tp71x1fadh0Pe0DM=";
-      x86_64-darwin = "sha256-Ua3oh0Hv0oiW15u3Rb0pSYu+JD8m1oYMAm5pEzXD6Rw=";
-      aarch64-linux = "sha256-5L0ZArj+7M5dhZDGzYj6NaxYYZEb8q89Vhngvjuw7wQ=";
-      aarch64-darwin = "sha256-uWOF/QGgXocKZAkFMN4Kh7HjiQTSIi+PVPy3V90wrAA=";
-      armv7l-linux = "sha256-FyGPvQeVz8yLhLjFGtCXPTVPvCB0/EX6pRe5RCAmXTU=";
+      x86_64-linux = "sha256-y0Bjrxmp7DYV4iUDnQGC0aIYrQNM3oPicajbeVuEtqc=";
+      x86_64-darwin = "sha256-6/BiMvVp955PW0hz22+NzdvC+IC+pNYjz25n3Op6V/k=";
+      aarch64-linux = "sha256-DF8QnqvVFqNyxjrphR6NaUXOKr8Koe34NitRa5mTBYs=";
+      aarch64-darwin = "sha256-v+m8AMpPph6CztUCjneBKC9txEOAKvcHsAXr/8KjIeA=";
+      armv7l-linux = "sha256-py1FZYd77YVNloQbXm36ou4HGowmteY8HzOiUioGD8Y=";
     }
     .${system} or throwSystem;
-in
-callPackage ./generic.nix rec {
+
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.101.2";
-  pname = "vscode" + lib.optionalString isInsiders "-insiders";
+  version = "1.104.1";
 
   # This is used for VS Code - Remote SSH test
-  rev = "2901c5ac6db8a986a5666c3af51ff804d05af0d4";
+  rev = "0f0d87fa9e96c856c5212fc86db137ac0d783365";
+in
+callPackage ./generic.nix {
+  pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
   longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
   shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-  inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
+  inherit
+    version
+    rev
+    commandLineArgs
+    useVSCodeRipgrep
+    sourceExecutableName
+    ;
 
   src = fetchurl {
     name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -75,7 +82,7 @@ callPackage ./generic.nix rec {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      hash = "sha256-Bocoiz8pxQNAZxmWdOgh+y44QTnqvDjcqFCodny7VoY=";
+      hash = "sha256-o0O/WDH+hr3R9np+WPLJo+/nIVBRjP8H2JVwa8volfg=";
     };
     stdenv = stdenvNoCC;
   };
@@ -92,17 +99,13 @@ callPackage ./generic.nix rec {
   hasVsceSign = true;
 
   meta = {
-    description = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS
-    '';
+    description = "Code editor developed by Microsoft";
     mainProgram = "code";
     longDescription = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS. It includes support for debugging, embedded Git
-      control, syntax highlighting, intelligent code completion, snippets,
-      and code refactoring. It is also customizable, so users can change the
-      editor's theme, keyboard shortcuts, and preferences
+      Code editor developed by Microsoft. It includes support for debugging,
+      embedded Git control, syntax highlighting, intelligent code completion,
+      snippets, and code refactoring. It is also customizable, so users can
+      change the editor's theme, keyboard shortcuts, and preferences
     '';
     homepage = "https://code.visualstudio.com/";
     downloadPage = "https://code.visualstudio.com/Updates";

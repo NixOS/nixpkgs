@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildRubyGem,
   bundlerEnv,
-  ruby,
+  ruby_3_4,
 }:
 
 let
@@ -21,12 +21,20 @@ let
     gemfile = "${src}/Gemfile";
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
+    inherit ruby;
   };
+
+  ruby = ruby_3_4;
 
 in
 buildRubyGem rec {
   name = "${gemName}-${version}";
-  inherit gemName version src;
+  inherit
+    gemName
+    version
+    src
+    ruby
+    ;
 
   doInstallCheck = true;
   dontBuild = false;

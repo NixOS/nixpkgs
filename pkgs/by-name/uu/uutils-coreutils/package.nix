@@ -21,19 +21,19 @@ assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.1.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-nKKjc6Bui7k50SR7BY09dRGt3Za1Ch/E+3KiCO5KtOg=";
+    hash = "sha256-VcwdCi40Tm8J3t0qFSFGvRwW6B5cCDj1wm+H3i20axo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "uutils-coreutils-${finalAttrs.version}";
-    hash = "sha256-PTIypl9uqFkp6GrF7Pp40AItbWFlXT2V2x/C8L2J8S0=";
+    hash = "sha256-/QNOrfqdMviOVP1Fzorc6RAsgLDSKtg/MXfXJEzxwMc=";
   };
 
   patches = [
@@ -54,31 +54,30 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.sphinx
   ];
 
-  makeFlags =
-    [
-      "CARGO=${lib.getExe cargo}"
-      "PREFIX=${placeholder "out"}"
-      "PROFILE=release"
-      "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
-      "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
-      # Explicitly enable acl, and if requested selinux.
-      # We cannot rely on SELINUX_ENABLED here since our explicit assignment
-      # overrides its effect in the makefile.
-      "BUILD_SPEC_FEATURE=${
-        lib.concatStringsSep "," (
-          # We can always enable acl, on non-Linux, libc provides the headers,
-          # only in Linux we need to add the acl lib to buildInputs.
-          [
-            "feat_acl"
-          ]
-          ++ (lib.optionals selinuxSupport [
-            "feat_selinux"
-          ])
-        )
-      }"
-    ]
-    ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-    ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  makeFlags = [
+    "CARGO=${lib.getExe cargo}"
+    "PREFIX=${placeholder "out"}"
+    "PROFILE=release"
+    "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
+    "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
+    # Explicitly enable acl, and if requested selinux.
+    # We cannot rely on SELINUX_ENABLED here since our explicit assignment
+    # overrides its effect in the makefile.
+    "BUILD_SPEC_FEATURE=${
+      lib.concatStringsSep "," (
+        # We can always enable acl, on non-Linux, libc provides the headers,
+        # only in Linux we need to add the acl lib to buildInputs.
+        [
+          "feat_acl"
+        ]
+        ++ (lib.optionals selinuxSupport [
+          "feat_selinux"
+        ])
+      )
+    }"
+  ]
+  ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   env = lib.optionalAttrs selinuxSupport {
     SELINUX_INCLUDE_DIR = ''${libselinux.dev}/include'';

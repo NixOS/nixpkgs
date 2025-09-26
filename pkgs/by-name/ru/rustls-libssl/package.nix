@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage {
   # NOTE: No longer necessary in the next release.
   sourceRoot = "source/rustls-libssl";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eVdcYJnJVduRk3zK9VQ1rE6AwjaXAG1h1g/fVHr4mqQ=";
 
   nativeBuildInputs = [

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "urlmatch";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jessepollak";
     repo = "urlmatch";
     tag = "v${version}";
-    hash = "sha256-vNt3SdIIno1XPO9zrTHXw6YSrE1oOWdkN3fszQnR8I0=";
+    hash = "sha256-01QkkdtSDBB3s+F7lC/0kZ+r1jxd/S7QA8LkweG9SZI=";
   };
 
   build-system = [

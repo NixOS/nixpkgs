@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tarlz";
-  version = "0.28";
+  version = "0.28.1";
   outputs = [
     "out"
     "man"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/tarlz/tarlz-${finalAttrs.version}.tar.lz";
-    sha256 = "sha256-6kE/UanxWMuqqidFGiA10ukyInXarPI39/aENHwJ8ik=";
+    sha256 = "sha256-qzySt/fxDJU5vHvmkfumSK8h1MieVdgexm12H43Ytak=";
   };
 
   enableParallelBuilding = true;
@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Massively parallel combined implementation of the tar archiver and the lzip compressor";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry ];
     mainProgram = "tarlz";
   };
 })

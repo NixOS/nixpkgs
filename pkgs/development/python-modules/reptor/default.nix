@@ -6,6 +6,7 @@
   deepl,
   django,
   fetchFromGitHub,
+  fetchpatch,
   gql,
   pytestCheckHook,
   pyyaml,
@@ -24,15 +25,23 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.31";
+  version = "0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
     tag = version;
-    hash = "sha256-AbrfQJQvKXpV4FrhkGZOLYX3px9dzr9whJZwzR/7UYM=";
+    hash = "sha256-nNG4rQHloOqcPZPnvw3hbw0+wCbB2XAdQ5/XnJtCHnE=";
   };
+
+  patches = [
+    # https://github.com/Syslifters/reptor/pull/221
+    (fetchpatch {
+      url = "https://github.com/Syslifters/reptor/commit/0fc43c246e2f99aaac9e78af818f360a3a951980.patch";
+      hash = "sha256-eakbI7hMJdshD0OA6n7dEO4+qPB21sYl09uZgepiWu0=";
+    })
+  ];
 
   pythonRelaxDeps = true;
 
@@ -60,7 +69,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -68,15 +78,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reptor" ];
 
-  disabledTestPaths = [
-    # Tests want to use pip install dependencies
-    "reptor/plugins/importers/GhostWriter/tests/test_ghostwriter.py"
-  ];
-
-  disabledTests = [
+  disabledTestMarks = [
     # Tests need network access
-    "TestDummy"
-    "TestIntegration"
+    "integration"
   ];
 
   meta = with lib; {

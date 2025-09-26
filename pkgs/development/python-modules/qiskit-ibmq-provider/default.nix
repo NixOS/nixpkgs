@@ -61,7 +61,8 @@ buildPythonPackage rec {
     requests-ntlm
     websocket-client
     websockets
-  ] ++ lib.optionals withVisualization visualizationPackages;
+  ]
+  ++ lib.optionals withVisualization visualizationPackages;
 
   postPatch = ''
     substituteInPlace setup.py --replace "websocket-client>=1.0.1" "websocket-client"
@@ -75,7 +76,8 @@ buildPythonPackage rec {
     pproxy
     qiskit-aer
     vcrpy
-  ] ++ lib.optionals (!withVisualization) visualizationPackages;
+  ]
+  ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
   disabledTests = [

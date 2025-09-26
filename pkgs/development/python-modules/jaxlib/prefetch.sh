@@ -10,7 +10,7 @@ prefetch() {
     echo
 }
 
-for py in "310" "311" "312" "313"; do
+for py in "311" "312" "313"; do
     prefetch "$py" "x86_64-linux" "jaxlib-bin"
     prefetch "$py" "aarch64-linux" "jaxlib-bin"
     prefetch "$py" "aarch64-darwin" "jaxlib-bin"

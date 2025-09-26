@@ -24,13 +24,13 @@
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-SY7Q8WlxE473An6/MntjPaIT3mFE/u9JJS6nb8BWiuQ=";
+    hash = "sha256-vVDr0KKfjFg282FLt23foYWoW5XSFdEgGfXgdiWrfk4=";
     fetchSubmodules = true;
   };
 
@@ -97,23 +97,22 @@ buildGoModule rec {
       --replace-fail '"errors"' ' '
   '';
 
-  postConfigure =
-    ''
-      sed -i '/git/d' Makefile
-      sed -i '/git/d' variables.mk
+  postConfigure = ''
+    sed -i '/git/d' Makefile
+    sed -i '/git/d' variables.mk
 
-      substituteInPlace Makefile \
-        --replace-fail '/bin/bash' '${lib.getExe bash}'
-    ''
-    + lib.optionalString withNonBTF ''
-      substituteInPlace variables.mk \
-        --replace-fail "-emit-llvm" "-emit-llvm -I${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include -Wno-error=implicit-function-declaration"
-      KERN_BUILD_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build KERN_SRC_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source make ebpf_noncore
-    ''
-    + ''
-      make ebpf
-      go-bindata -pkg assets -o "assets/ebpf_probe.go" $(find user/bytecode -name "*.o" -printf "./%p ")
-    '';
+    substituteInPlace Makefile \
+      --replace-fail '/bin/bash' '${lib.getExe bash}'
+  ''
+  + lib.optionalString withNonBTF ''
+    substituteInPlace variables.mk \
+      --replace-fail "-emit-llvm" "-emit-llvm -I${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include -Wno-error=implicit-function-declaration"
+    KERN_BUILD_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build KERN_SRC_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source make ebpf_noncore
+  ''
+  + ''
+    make ebpf
+    go-bindata -pkg assets -o "assets/ebpf_probe.go" $(find user/bytecode -name "*.o" -printf "./%p ")
+  '';
 
   checkFlags =
     let
@@ -123,7 +122,7 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-B2Jq6v1PibZ1P9OylFsVp/ULZa/ne5T+vCsBWWrjW/4=";
+  vendorHash = "sha256-cN6pCfc9LEItASCoZ4+BU1AOtwMmFaUEzOM/BZ13jcI=";
 
   passthru.updateScript = nix-update-script { };
 

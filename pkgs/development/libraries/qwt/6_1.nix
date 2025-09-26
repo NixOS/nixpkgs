@@ -36,7 +36,10 @@ stdenv.mkDerivation rec {
     description = "Qt widgets for technical applications";
     homepage = "http://qwt.sourceforge.net/";
     # LGPL 2.1 plus a few exceptions (more liberal)
-    license = licenses.qwt;
+    license = with lib.licenses; [
+      lgpl21Only
+      qwtException
+    ];
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };

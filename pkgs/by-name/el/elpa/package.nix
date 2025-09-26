@@ -28,13 +28,13 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
-  version = "2025.01.002";
+  version = "2025.06.001";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-j+vkCMWQuptEvYvOBGBf0bfalkr82P1fHOnt7LPQtl0=";
+    sha256 = "sha256-/usf6hq0qGcLjTJAdl7wragoBi737JtzXuy6KEhRXJQ=";
   };
 
   patches = [
@@ -60,19 +60,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     perl
-  ] ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
-    [
-      mpi
-      blas
-      lapack
-      scalapack
-    ]
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_cudart
-      cudaPackages.libcublas
-    ];
+  buildInputs = [
+    mpi
+    blas
+    lapack
+    scalapack
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+  ];
 
   preConfigure = ''
     export FC="mpifort"
@@ -91,23 +91,22 @@ stdenv.mkDerivation rec {
     export CFLAGS=$FCFLAGS
   '';
 
-  configureFlags =
-    [
-      "--with-mpi"
-      "--enable-openmp"
-      "--without-threading-support-check-during-build"
-    ]
-    ++ lib.optional blas.isILP64 "--enable-64bit-integer-math-support"
-    ++ lib.optional (!avxSupport) "--disable-avx"
-    ++ lib.optional (!avx2Support) "--disable-avx2"
-    ++ lib.optional (!avx512Support) "--disable-avx512"
-    ++ lib.optional (!stdenv.hostPlatform.isx86_64) "--disable-sse"
-    ++ lib.optional (!stdenv.hostPlatform.isx86_64) "--disable-sse-assembly"
-    ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-assembly"
-    ++ lib.optionals enableCuda [
-      "--enable-nvidia-gpu"
-      "--with-NVIDIA-GPU-compute-capability=${nvidiaArch}"
-    ];
+  configureFlags = [
+    "--with-mpi"
+    "--enable-openmp"
+    "--without-threading-support-check-during-build"
+  ]
+  ++ lib.optional blas.isILP64 "--enable-64bit-integer-math-support"
+  ++ lib.optional (!avxSupport) "--disable-avx"
+  ++ lib.optional (!avx2Support) "--disable-avx2"
+  ++ lib.optional (!avx512Support) "--disable-avx512"
+  ++ lib.optional (!stdenv.hostPlatform.isx86_64) "--disable-sse"
+  ++ lib.optional (!stdenv.hostPlatform.isx86_64) "--disable-sse-assembly"
+  ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-assembly"
+  ++ lib.optionals enableCuda [
+    "--enable-nvidia-gpu"
+    "--with-NVIDIA-GPU-compute-capability=${nvidiaArch}"
+  ];
 
   enableParallelBuilding = true;
 

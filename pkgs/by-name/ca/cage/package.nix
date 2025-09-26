@@ -14,7 +14,6 @@
   pixman,
   libxkbcommon,
   xcbutilwm,
-  systemd,
   libGL,
   libX11,
   xwayland ? null,
@@ -52,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libxkbcommon
     xcbutilwm
-    systemd
     libGL
     libX11
   ];

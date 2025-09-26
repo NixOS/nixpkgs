@@ -9,6 +9,7 @@
   click-default-group,
   click-repl,
   dict2xml,
+  hatchling,
   jinja2,
   more-itertools,
   requests,
@@ -20,8 +21,8 @@
 
 buildPythonPackage rec {
   pname = "greynoise";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -29,10 +30,14 @@ buildPythonPackage rec {
     owner = "GreyNoise-Intelligence";
     repo = "pygreynoise";
     tag = "v${version}";
-    hash = "sha256-17NieDQ57qVT2i4S26vLS9N6zALZ+eTtCCcBbhQ8fhQ=";
+    hash = "sha256-wJDO666HC3EohfR+LbG5F0Cp/eL7q4kXniWhJfc7C3s=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
     click
     ansimarkup
     cachetools
@@ -57,7 +62,7 @@ buildPythonPackage rec {
     description = "Python3 library and command line for GreyNoise";
     mainProgram = "greynoise";
     homepage = "https://github.com/GreyNoise-Intelligence/pygreynoise";
-    changelog = "https://github.com/GreyNoise-Intelligence/pygreynoise/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/GreyNoise-Intelligence/pygreynoise/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ mbalatsko ];
   };

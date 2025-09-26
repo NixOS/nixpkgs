@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   bison,
   cmake,
   pkg-config,
@@ -31,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.0.42";
+  version = "8.0.43";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XrIsIMILdlxYlMkBBIW9B9iptuv7YovP0wYHAXFVJv4=";
+    hash = "sha256-diUKgQFch49iUhz68w3/DqmyUJeNKx3/AHQIo5jV25M=";
   };
 
   nativeBuildInputs = [
@@ -43,17 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     protobuf
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
-    # Fix compilation with LLVM 19, adapted from https://github.com/mysql/mysql-server/commit/3a51d7fca76e02257f5c42b6a4fc0c5426bf0421
-    # in https://github.com/NixOS/nixpkgs/pull/374591#issuecomment-2615855076
-    ./libcpp-fixes.patch
-    (fetchpatch {
-      url = "https://github.com/mysql/mysql-server/commit/4a5c00d26f95faa986ffed7a15ee15e868e9dcf2.patch";
-      hash = "sha256-MEl1lQlDYtFjHk0+S02RQFnxMr+YeFxAyNjpDtVHyeE=";
-    })
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
@@ -63,30 +56,29 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/package_name.cmake --replace-fail "COMMAND sw_vers" "COMMAND ${DarwinTools}/bin/sw_vers"
   '';
 
-  buildInputs =
-    [
-      boost
-      (curl.override { inherit openssl; })
-      icu
-      libedit
-      libevent
-      lz4
-      ncurses
-      openssl
-      protobuf
-      re2
-      readline
-      zlib
-      zstd
-      libfido2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      numactl
-      libtirpc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      developer_cmds
-    ];
+  buildInputs = [
+    boost
+    (curl.override { inherit openssl; })
+    icu
+    libedit
+    libevent
+    lz4
+    ncurses
+    openssl
+    protobuf
+    re2
+    readline
+    zlib
+    zstd
+    libfido2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+    libtirpc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    developer_cmds
+  ];
 
   strictDeps = true;
 

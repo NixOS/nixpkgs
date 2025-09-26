@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
     autoreconfHook
     gettext
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   configureFlags = [ "--enable-compat-symlinks" ];
 

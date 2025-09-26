@@ -61,7 +61,7 @@ libretro.mkLibretroCore (finalAttrs: {
   passthru.updateScript = { };
 
   meta = {
-    description = "Fork of libretro's parallel-n64 core designed to be used with Parallel Launcher.";
+    description = "Fork of libretro's parallel-n64 core designed to be used with Parallel Launcher";
     homepage = "https://gitlab.com/parallel-launcher/parallel-n64";
     license = lib.licenses.gpl3Only;
     teams = [ ];

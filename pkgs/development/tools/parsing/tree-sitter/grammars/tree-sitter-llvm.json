@@ -1,13 +1,12 @@
 {
   "url": "https://github.com/benwilliamgraham/tree-sitter-llvm",
-  "rev": "1ac83114e71839fa67f4cce2f864ebbbdf6e2a4f",
-  "date": "2025-05-13T09:33:06+02:00",
-  "path": "/nix/store/yqc7r12pmy0y1bxad2cgpss5kpmd9vzr-tree-sitter-llvm",
-  "sha256": "00srqg073ml85zimmj1a1251nka18i04gm0m1jcpa6fmbbrx6knr",
-  "hash": "sha256-2U7T81rVGXWZDBXUR0BEQU0biggqyFrjL4jWccDDWQM=",
+  "rev": "c14cb839003348692158b845db9edda201374548",
+  "date": "2024-10-07T15:28:34-07:00",
+  "path": "/nix/store/aravnn08ip3zggkbww6ap73xb5zvrf6g-tree-sitter-llvm",
+  "sha256": "1fh5nq7war87zrphlv5v2g55gmsbhyv3385va7k1y8gh3czg0x9g",
+  "hash": "sha256-L3XwPhvwIR/mUbugMbaHS9dXyhO7bApv/gdlxQ+2Bbo=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "fetchTags": false,
   "leaveDotGit": false
 }

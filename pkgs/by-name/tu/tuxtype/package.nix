@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     mainProgram = "tuxtype";
     homepage = "https://github.com/tux4kids/tuxtype";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.aanderse ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

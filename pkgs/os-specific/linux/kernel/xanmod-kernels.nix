@@ -13,13 +13,16 @@ let
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
   variants = {
+    # ./update-xanmod.sh lts
     lts = {
-      version = "6.12.37";
-      hash = "sha256-VH5w802w6ugpMP5YPUuOJtf9TnrLZmFJUrGCQVH4n+s=";
+      version = "6.12.48";
+      hash = "sha256-2dtsMOAqTOgYE7FAMX6XDieI4IfXngnYcUg0JKoQrBs=";
+      isLTS = true;
     };
+    # ./update-xanmod.sh main
     main = {
-      version = "6.15.6";
-      hash = "sha256-ArhRHMHvScV1Xa0lgBbM0hYtCAXujSCHA3aKEZnZSwU=";
+      version = "6.16.8";
+      hash = "sha256-8CMzqXKbd605TU4XhPqUHVECrmW0OYbazZ4RpSji974=";
     };
   };
 
@@ -28,6 +31,7 @@ let
       version,
       suffix ? "xanmod1",
       hash,
+      isLTS ? false,
     }:
     buildLinux (
       args
@@ -69,6 +73,18 @@ let
           RCU_BOOST_DELAY = freeform "0";
           RCU_EXP_KTHREAD = yes;
         };
+
+        extraPassthru.updateScript = {
+          command = [
+            ./update-xanmod.sh
+            variant
+          ];
+          supportedFeatures = [
+            "commit"
+          ];
+        };
+
+        inherit isLTS;
 
         extraMeta = {
           branch = lib.versions.majorMinor version;

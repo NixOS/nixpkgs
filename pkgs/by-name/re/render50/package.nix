@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "render50";
-  version = "9.2.8";
+  version = "9.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "render50";
     tag = "v${version}";
-    hash = "sha256-ZCSd1Y7PPVkMQWkEgcaqh3Ypy8OrWxI9iM2HMVT/VeA=";
+    hash = "sha256-YaLLWrae8vgOYLmfFlPa6WkKGNlUj+n76NRpg0qm6QI=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     description = "Generate syntax-highlighted PDFs of source code";
     homepage = "https://cs50.readthedocs.io/render50/";
     downloadPage = "https://github.com/cs50/render50";
-    changelog = "https://github.com/cs50/render50/releases/tag/v${version}";
+    changelog = "https://github.com/cs50/render50/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];

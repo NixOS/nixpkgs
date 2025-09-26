@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.11.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     tag = "v${version}";
-    hash = "sha256-3RXkz+UQvLixfYYhm5y/5vu9r0ga6s3xKx1azbmKFgg=";
+    hash = "sha256-lwv6PHm41HFylt7b0d5LHCrCIXNWFNGg59VQvPXYtVc=";
   };
 
   build-system = [
@@ -47,7 +47,8 @@ buildPythonPackage rec {
     scikit-image
     toolz
     zarr
-  ] ++ fsspec.optional-dependencies.s3;
+  ]
+  ++ fsspec.optional-dependencies.s3;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -58,25 +59,28 @@ buildPythonPackage rec {
     "test_s3_info"
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # Fail with RecursionError
     # https://github.com/ome/ome-zarr-py/issues/352
-    "--deselect=tests/test_cli.py::TestCli::test_astronaut_download"
-    "--deselect=tests/test_cli.py::TestCli::test_astronaut_info"
-    "--deselect=tests/test_cli.py::TestCli::test_coins_info"
-    "--deselect=tests/test_emitter.py::test_close"
-    "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
-    "--deselect=tests/test_node.py::TestNode::test_image"
-    "--deselect=tests/test_node.py::TestNode::test_label"
-    "--deselect=tests/test_node.py::TestNode::test_labels"
-    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_download"
-    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_info"
-    "--deselect=tests/test_reader.py::TestReader::test_image"
-    "--deselect=tests/test_reader.py::TestReader::test_label"
-    "--deselect=tests/test_reader.py::TestReader::test_labels"
-    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_label"
-    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_labels"
-    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_top_level"
+    "tests/test_cli.py::TestCli::test_astronaut_download"
+    "tests/test_cli.py::TestCli::test_astronaut_info"
+    "tests/test_cli.py::TestCli::test_coins_info"
+    "tests/test_emitter.py::test_close"
+    "tests/test_emitter.py::test_create_wrong_encoding"
+    "tests/test_node.py::TestNode::test_image"
+    "tests/test_node.py::TestNode::test_label"
+    "tests/test_node.py::TestNode::test_labels"
+    "tests/test_ome_zarr.py::TestOmeZarr::test_download"
+    "tests/test_ome_zarr.py::TestOmeZarr::test_info"
+    "tests/test_reader.py::TestReader::test_image"
+    "tests/test_reader.py::TestReader::test_label"
+    "tests/test_reader.py::TestReader::test_labels"
+    "tests/test_starting_points.py::TestStartingPoints::test_label"
+    "tests/test_starting_points.py::TestStartingPoints::test_labels"
+    "tests/test_starting_points.py::TestStartingPoints::test_top_level"
+
+    # tries to access network:
+    "ome_zarr/io.py"
   ];
 
   pythonImportsCheck = [

@@ -38,6 +38,12 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional enableAvifSupport libavif;
 
+  preConfigure = ''
+    if [[ -f "$src/GIT_HASH" ]]; then
+      export GIT_HASH="$(cat $src/GIT_HASH)"
+    fi
+  '';
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_QT6" true)
     (lib.cmakeBool "USE_SYSTEM_QTKEYCHAIN" true)

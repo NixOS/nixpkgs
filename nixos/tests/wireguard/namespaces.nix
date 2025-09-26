@@ -1,3 +1,8 @@
+{
+  lib,
+  kernelPackages ? null,
+  ...
+}:
 let
   listenPort = 12345;
   socketNamespace = "foo";
@@ -10,27 +15,18 @@ let
       generatePrivateKeyFile = true;
     };
   };
-
 in
+{
+  name = "wireguard-with-namespaces";
+  meta.maintainers = with lib.maintainers; [ asymmetric ];
 
-import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    kernelPackages ? null,
-    ...
-  }:
-  {
-    name = "wireguard-with-namespaces";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ asymmetric ];
-    };
-
-    nodes = {
-      # interface should be created in the socketNamespace
-      # and not moved from there
-      peer0 = pkgs.lib.attrsets.recursiveUpdate node {
-        boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
+  nodes = {
+    # interface should be created in the socketNamespace
+    # and not moved from there
+    peer0 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
         networking.wireguard.interfaces.wg0 = {
           preSetup = ''
             ip netns add ${socketNamespace}
@@ -38,10 +34,12 @@ import ../make-test-python.nix (
           inherit socketNamespace;
         };
       };
-      # interface should be created in the init namespace
-      # and moved to the interfaceNamespace
-      peer1 = pkgs.lib.attrsets.recursiveUpdate node {
-        boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
+    # interface should be created in the init namespace
+    # and moved to the interfaceNamespace
+    peer1 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
         networking.wireguard.interfaces.wg0 = {
           preSetup = ''
             ip netns add ${interfaceNamespace}
@@ -50,10 +48,12 @@ import ../make-test-python.nix (
           inherit interfaceNamespace;
         };
       };
-      # interface should be created in the socketNamespace
-      # and moved to the interfaceNamespace
-      peer2 = pkgs.lib.attrsets.recursiveUpdate node {
-        boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
+    # interface should be created in the socketNamespace
+    # and moved to the interfaceNamespace
+    peer2 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
         networking.wireguard.interfaces.wg0 = {
           preSetup = ''
             ip netns add ${socketNamespace}
@@ -62,10 +62,12 @@ import ../make-test-python.nix (
           inherit socketNamespace interfaceNamespace;
         };
       };
-      # interface should be created in the socketNamespace
-      # and moved to the init namespace
-      peer3 = pkgs.lib.attrsets.recursiveUpdate node {
-        boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
+    # interface should be created in the socketNamespace
+    # and moved to the init namespace
+    peer3 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
         networking.wireguard.interfaces.wg0 = {
           preSetup = ''
             ip netns add ${socketNamespace}
@@ -74,18 +76,17 @@ import ../make-test-python.nix (
           interfaceNamespace = "init";
         };
       };
-    };
+  };
 
-    testScript = ''
-      start_all()
+  testScript = ''
+    start_all()
 
-      for machine in peer0, peer1, peer2, peer3:
-          machine.wait_for_unit("wireguard-wg0.service")
+    for machine in peer0, peer1, peer2, peer3:
+        machine.wait_for_unit("wireguard-wg0.service")
 
-      peer0.succeed("ip -n ${socketNamespace} link show wg0")
-      peer1.succeed("ip -n ${interfaceNamespace} link show wg0")
-      peer2.succeed("ip -n ${interfaceNamespace} link show wg0")
-      peer3.succeed("ip link show wg0")
-    '';
-  }
-)
+    peer0.succeed("ip -n ${socketNamespace} link show wg0")
+    peer1.succeed("ip -n ${interfaceNamespace} link show wg0")
+    peer2.succeed("ip -n ${interfaceNamespace} link show wg0")
+    peer3.succeed("ip link show wg0")
+  '';
+}

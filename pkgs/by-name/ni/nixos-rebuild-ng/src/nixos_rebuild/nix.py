@@ -13,7 +13,6 @@ from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
-from .constants import WITH_NIX_2_18
 from .models import (
     Action,
     BuildAttr,
@@ -228,18 +227,7 @@ def copy_closure(
         case (Remote(_) as host, None) | (None, Remote(_) as host):
             nix_copy_closure(host, to=bool(to_host))
         case (Remote(_), Remote(_)):
-            if WITH_NIX_2_18:
-                # With newer Nix, use `nix copy` instead of `nix-copy-closure`
-                # since it supports `--to` and `--from` at the same time
-                # TODO: once we drop Nix 2.3 from nixpkgs, remove support for
-                # `nix-copy-closure`
-                nix_copy(to_host, from_host)
-            else:
-                # With older Nix, we need to copy from to local and local to
-                # host. This means it is slower and need additional disk space
-                # in local
-                nix_copy_closure(from_host, to=False)
-                nix_copy_closure(to_host, to=True)
+            nix_copy(to_host, from_host)
 
 
 def edit() -> None:
@@ -557,7 +545,7 @@ def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
         flake=flake,
-        flake_path=flake.path.resolve() if isinstance(flake.path, Path) else flake.path,
+        flake_path=flake.resolve_path_if_exists(),
         flake_attr=flake.attr,
         bold="\033[1m",
         blue="\033[34;1m",

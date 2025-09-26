@@ -48,23 +48,22 @@ stdenv.mkDerivation {
     hash = "sha256-1uzkf7vkzfHdsWvWcXnUv279kgtzrHLU0hAPaTKRWI8=";
   };
 
-  buildInputs =
-    [
-      flac
-      libmad
-      libvorbis
-      mpg123
-    ]
-    ++ optional pulseSupport libpulseaudio
-    ++ optional alsaSupport alsa-lib
-    ++ optional portaudioSupport portaudio
+  buildInputs = [
+    flac
+    libmad
+    libvorbis
+    mpg123
+  ]
+  ++ optional pulseSupport libpulseaudio
+  ++ optional alsaSupport alsa-lib
+  ++ optional portaudioSupport portaudio
 
-    ++ optional faad2Support faad2
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional opusSupport opusfile
-    ++ optional resampleSupport soxr
-    ++ optional sslSupport openssl
-    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
+  ++ optional faad2Support faad2
+  ++ optional ffmpegSupport ffmpeg
+  ++ optional opusSupport opusfile
+  ++ optional resampleSupport soxr
+  ++ optional sslSupport openssl
+  ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
 
   enableParallelBuilding = true;
 
@@ -75,20 +74,19 @@ stdenv.mkDerivation {
 
   EXECUTABLE = binName;
 
-  OPTS =
-    [
-      "-DLINKALL"
-      "-DGPIO"
-    ]
-    ++ optional dsdSupport "-DDSD"
-    ++ optional (!faad2Support) "-DNO_FAAD"
-    ++ optional ffmpegSupport "-DFFMPEG"
-    ++ optional opusSupport "-DOPUS"
-    ++ optional portaudioSupport "-DPORTAUDIO"
-    ++ optional pulseSupport "-DPULSEAUDIO"
-    ++ optional resampleSupport "-DRESAMPLE"
-    ++ optional sslSupport "-DUSE_SSL"
-    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
+  OPTS = [
+    "-DLINKALL"
+    "-DGPIO"
+  ]
+  ++ optional dsdSupport "-DDSD"
+  ++ optional (!faad2Support) "-DNO_FAAD"
+  ++ optional ffmpegSupport "-DFFMPEG"
+  ++ optional opusSupport "-DOPUS"
+  ++ optional portaudioSupport "-DPORTAUDIO"
+  ++ optional pulseSupport "-DPULSEAUDIO"
+  ++ optional resampleSupport "-DRESAMPLE"
+  ++ optional sslSupport "-DUSE_SSL"
+  ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDADD = "-lportaudio -lpthread"; };
 

@@ -6,9 +6,9 @@
   replaceVars,
 
   cmake,
+  jre,
   ninja,
   pkg-config,
-  jre,
   swig,
   wrapGAppsHook3,
 
@@ -17,25 +17,27 @@
   glibc,
   sudo,
 
+  python3Packages,
+
   cairo,
   mysql,
   libiodbc,
   proj,
 
   antlr4_13,
-  gtkmm3,
-  libxml2,
-  libmysqlconnectorcpp,
-  vsqlite,
-  gdal,
   boost,
+  gdal,
+  gtkmm3,
+  libmysqlconnectorcpp,
+  libsecret,
   libssh,
+  libuuid,
+  libxml2,
+  libzip,
   openssl,
   rapidjson,
-  libuuid,
-  libzip,
-  libsecret,
-  python3Packages,
+  vsqlite,
+  zstd,
 }:
 
 let
@@ -51,11 +53,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.42";
+  version = "8.0.43";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-d4SnNALK76AXWEu0WHX0dZv4co6Q+oCMTYAVV3pd9gU=";
+    hash = "sha256-E9fn72r35WrGzIOoDouIvJFZdpfw9sgDNHwEe/0DdUI=";
   };
 
   patches = [
@@ -90,30 +92,35 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools/get_wb_version.sh
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
+    jre
     ninja
     pkg-config
-    jre
     swig_4_2
     wrapGAppsHook3
   ];
 
   buildInputs = [
     antlr4_13.runtime.cpp
-    gtkmm3
-    (libxml2.override { enableHttp = true; })
-    libmysqlconnectorcpp
-    vsqlite
-    gdal
     boost
+    gdal
+    gtkmm3
+    libiodbc
+    libmysqlconnectorcpp
+    libsecret
     libssh
+    libuuid
+    (libxml2.override { enableHttp = true; })
+    libzip
     openssl
     rapidjson
-    libuuid
-    libzip
-    libsecret
-    libiodbc
+    vsqlite
+    zstd
+
+    bash # for shebangs
 
     # python dependencies:
     paramiko

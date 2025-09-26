@@ -14,34 +14,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.12.2";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-nxBZIs7s/v465iV3m//I7otYr9Fk/+YjtXFXcYnEpRw=";
+    hash = "sha256-YYDYVZ0rMO3bEHcBBSOup0gieg96hqT6XUqWM9h4yeI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DDlHSSZiVbAGnowiuewgG1KwfyhfL7wnMjhEsrVMvvY=";
+  cargoHash = "sha256-hsyAa8rLd/usoArZKfO5+92nLh4/sq9X0fpJncN4Ik4=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
     "-p nickel-lang-lsp"
   ];
 
-  nativeBuildInputs =
-    [
-      python3
-      gitMinimal
-    ]
-    ++ lib.optionals enableNixImport [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    python3
+    gitMinimal
+  ]
+  ++ lib.optionals enableNixImport [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_24
+    nixVersions.nix_2_28
     boost
   ];
 

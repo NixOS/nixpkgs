@@ -9,19 +9,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sea-orm-cli";
-  version = "1.1.12";
+  version = "1.1.16";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-549ZThGMQ601q0nrzAD20MIrErANcghtB+DxYPUBUt4=";
+    hash = "sha256-L8x7+yz/d03yOoWKWCtV1U+37JkTb28sH9OMxzrIsE4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-pwOsuet1qV7175pso5tZm1VY4JznCx63XNcBX0Jh4F4=";
+  cargoHash = "sha256-efgzVuv9Lm8T+05Z0WAaux/l7hRdJdVPfpknKt22d50=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

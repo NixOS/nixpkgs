@@ -20,7 +20,7 @@
 
   # tests
   numpy,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-socket,
   pytestCheckHook,
 
@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.20";
+  version = "0.3.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-RMuxWA/n8d71FReFKO3Y/5P0MYk4aZ5WU2/TRxf9UuE=";
+    hash = "sha256-CufnUFhYTENuq4/32u0w3UZb7TdZxEpshyQqLH6NEZo=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   dependencies = [
     httpx
     langchain-core
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-benchmark
     pytest-codspeed
     pytest-recording
@@ -72,11 +72,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-tests==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-tests==";
+    };
   };
 
   meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain";
     license = lib.licenses.mit;

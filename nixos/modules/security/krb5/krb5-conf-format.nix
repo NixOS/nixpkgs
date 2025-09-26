@@ -124,39 +124,38 @@ rec {
     in
     submodule {
       freeformType = attrsOf sectionType;
-      options =
-        {
-          include = mkOption {
-            default = [ ];
-            description = ''
-              Files to include in the Kerberos configuration.
-            '';
-            type = coercedTo path singleton (listOf path);
-          };
-          includedir = mkOption {
-            default = [ ];
-            description = ''
-              Directories containing files to include in the Kerberos configuration.
-            '';
-            type = coercedTo path singleton (listOf path);
-          };
-          module = mkOption {
-            default = [ ];
-            description = ''
-              Modules to obtain Kerberos configuration from.
-            '';
-            type = coercedTo path singleton (listOf path);
-          };
+      options = {
+        include = mkOption {
+          default = [ ];
+          description = ''
+            Files to include in the Kerberos configuration.
+          '';
+          type = coercedTo path singleton (listOf path);
+        };
+        includedir = mkOption {
+          default = [ ];
+          description = ''
+            Directories containing files to include in the Kerberos configuration.
+          '';
+          type = coercedTo path singleton (listOf path);
+        };
+        module = mkOption {
+          default = [ ];
+          description = ''
+            Modules to obtain Kerberos configuration from.
+          '';
+          type = coercedTo path singleton (listOf path);
+        };
 
-        }
-        // (lib.optionalAttrs enableKdcACLEntries {
-          realms = mkOption {
-            type = attrsOf realm;
-            description = ''
-              The realm(s) to serve keys for.
-            '';
-          };
-        });
+      }
+      // (lib.optionalAttrs enableKdcACLEntries {
+        realms = mkOption {
+          type = attrsOf realm;
+          description = ''
+            The realm(s) to serve keys for.
+          '';
+        };
+      });
     };
 
   generate =

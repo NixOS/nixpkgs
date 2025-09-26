@@ -13,10 +13,10 @@
   callPackage,
   version,
   hash,
-  patches ? [ ],
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
+  ...
 }@args:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,27 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = args.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      (lib.getDev llvmPackages.llvm.dev)
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # provides xcode-select, which is required for SDK detection
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    cmake
+    (lib.getDev llvmPackages.llvm.dev)
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # provides xcode-select, which is required for SDK detection
+    xcbuild
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      zlib
-    ]
-    ++ (with llvmPackages; [
-      libclang
-      lld
-      llvm
-    ]);
+  buildInputs = [
+    libxml2
+    zlib
+  ]
+  ++ (with llvmPackages; [
+    libclang
+    lld
+    llvm
+  ]);
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
@@ -83,18 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-cache";
   '';
 
-  # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
-  # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch =
-    let
-      zigSystemPath =
-        if lib.versionAtLeast finalAttrs.version "0.12" then
-          "lib/std/zig/system.zig"
-        else
-          "lib/std/zig/system/NativeTargetInfo.zig";
-    in
+    # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
+    # work in Nix's sandbox. Use env from our coreutils instead.
     ''
-      substituteInPlace ${zigSystemPath} \
+      substituteInPlace lib/std/zig/system.zig \
         --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
     ''
     # Zig tries to access xcrun and xcode-select at the absolute system path to query the macOS SDK
@@ -114,24 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
       ''
-    else if lib.versionAtLeast finalAttrs.version "0.13" then
+    else
       ''
         stage3/bin/zig build langref
-      ''
-    else
-      ''
-        stage3/bin/zig run ../tools/docgen.zig -- ../doc/langref.html.in langref.html --zig $PWD/stage3/bin/zig
       '';
 
-  postInstall =
-    if lib.versionAtLeast finalAttrs.version "0.13" then
-      ''
-        install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
-      ''
-    else
-      ''
-        install -Dm444 langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
-      '';
+  postInstall = ''
+    install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -164,5 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;
+    # Zig 0.15.1 fails some tests on x86_64-darwin thus we mark it broken
+    # see https://github.com/ziglang/zig/issues/24974
+    broken =
+      stdenv.hostPlatform.system == "x86_64-darwin" && lib.versionAtLeast finalAttrs.version "0.15";
   };
 })

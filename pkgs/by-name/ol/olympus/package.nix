@@ -18,6 +18,7 @@
   loennWrapper ? null,
   miniinstallerWrapper ? null,
   skipHandlerCheck ? false, # whether to skip olympus xdg-mime check, true will override it
+  finderHints ? [ ],
 }:
 let
 
@@ -49,6 +50,12 @@ let
     else
       (wrapper-to-env miniinstallerWrapper);
 
+  finderHints' =
+    if lib.isList finderHints then
+      lib.concatMapStringsSep ":" (hint: "${hint}") finderHints
+    else
+      "${finderHints}";
+
 in
 symlinkJoin {
 
@@ -66,6 +73,7 @@ symlinkJoin {
       --set-default OLYMPUS_CELESTE_WRAPPER "${wrapper-to-env celesteWrapper}" \
       --set-default OLYMPUS_LOENN_WRAPPER "${wrapper-to-env loennWrapper}"  \
       --set-default OLYMPUS_MINIINSTALLER_WRAPPER "${miniinstaller-wrapper}" \
-      --set-default OLYMPUS_SKIP_SCHEME_HANDLER_CHECK "${if skipHandlerCheck then "1" else "0"}"
+      --set-default OLYMPUS_SKIP_SCHEME_HANDLER_CHECK "${if skipHandlerCheck then "1" else "0"}" \
+      --suffix OLYMPUS_FINDER_HINTS : "${finderHints'}"
   '';
 }

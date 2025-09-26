@@ -22,7 +22,7 @@ let
   mpiSupport = hdf5.mpiSupport;
 in
 buildPythonPackage rec {
-  version = "3.13.0";
+  version = "3.14.0";
   pname = "h5py";
   pyproject = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GHDkZRhyACPahdCJWhlg/yzjmMVnHqw7GkHsaWtxBcM=";
+    hash = "sha256-I3IRay4NXT5ecFt/Zj98jZb6eaQFLSUEhO+R0k1qCPQ=";
   };
 
   pythonRelaxDeps = [ "mpi4py" ];
@@ -67,13 +67,14 @@ buildPythonPackage rec {
 
   buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
 
-  dependencies =
-    [ numpy ]
-    ++ lib.optionals mpiSupport [
-      mpi4py
-      openssh
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  dependencies = [
+    numpy
+  ]
+  ++ lib.optionals mpiSupport [
+    mpi4py
+    openssh
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   nativeCheckInputs = [
     pytestCheckHook

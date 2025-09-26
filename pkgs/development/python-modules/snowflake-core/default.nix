@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-core";
-  version = "1.4.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "snowflake_core";
     inherit version;
-    hash = "sha256-3BzO3s5BtS/cuF+JwKuAG8Usca5oo79ffp33TXUP5E8=";
+    hash = "sha256-hlWpTCEa4E0dgD28h2JJ3m0/gCHMVzjWia6oQtG2an8=";
   };
 
   build-system = [ hatchling ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Subpackage providing Python access to Snowflake entity metadata.";
+    description = "Subpackage providing Python access to Snowflake entity metadata";
     homepage = "https://pypi.org/project/snowflake.core";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vtimofeenko ];

@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.31";
+  version = "1.0.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "dm_control";
     tag = version;
-    hash = "sha256-myrOrbKjBz+qN61WX54CqIaHsidUUBhgHezsdZvQFJA=";
+    hash = "sha256-AESUqrUw8EEUKNtZJ5M/dD7xDr+6VGi4yYacJw0q8Ls=";
   };
 
   build-system = [
@@ -70,7 +70,8 @@ buildPythonPackage rec {
     scipy
     setuptools
     tqdm
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "dm_control" ];
 

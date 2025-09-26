@@ -274,6 +274,18 @@ let
         }
       '';
     };
+
+    microsoftVisualStudioLicenseAccepted = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
+      description = ''
+        If the Microsoft Visual Studio license has been accepted.
+
+        Please read https://www.visualstudio.com/license-terms/mt644918/ and enable this config if you accept.
+      '';
+    };
   };
 
 in

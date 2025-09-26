@@ -29,16 +29,15 @@ buildNpmPackage (finalAttrs: {
 
   env.npm_config_build_from_source = "true";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config # for keytar
-    ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      # for utf-8-validate
-      # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
-      perl
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config # for keytar
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    # for utf-8-validate
+    # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
+    perl
+  ];
 
   # for keytar
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];

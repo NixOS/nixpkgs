@@ -57,17 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs doc/check-whitespace-in-args.py
   '';
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-      "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
-      # just <1MB; this is what you get when loading config fails for some reason
-      "--with-default-fonts=${dejavu_fonts.minimal}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
+    # just <1MB; this is what you get when loading config fails for some reason
+    "--with-default-fonts=${dejavu_fonts.minimal}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+  ];
 
   enableParallelBuilding = true;
 

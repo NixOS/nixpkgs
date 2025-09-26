@@ -76,41 +76,41 @@ vscode-utils.buildVscodeMarketplaceExtension {
     libkrb5
     zlib
     (lib.getLib stdenv.cc.cc)
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ lttng-ust ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ lttng-ust ];
 
   dontAutoPatchelf = isx86Linux || isDarwin;
 
-  postPatch =
-    ''
-      mv ./package.json ./package_orig.json
+  postPatch = ''
+    mv ./package.json ./package_orig.json
 
-      # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
-      # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
-      cat ./package_orig.json | \
-        jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
-        jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
-        ./package.json
+    # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
+    # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
+    cat ./package_orig.json | \
+      jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
+      jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
+      ./package.json
 
-      # Prevent download/install of extensions
-      touch "./install.lock"
+    # Prevent download/install of extensions
+    touch "./install.lock"
 
-      # Clang-format from nix package.
-      rm -rf ./LLVM
-      mkdir "./LLVM/"
-      find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
+    # Clang-format from nix package.
+    rm -rf ./LLVM
+    mkdir "./LLVM/"
+    find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
-      # Patching binaries
-      chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
-    ''
-    + lib.optionalString isx86Linux ''
-      chmod +x bin/libc.so
-    ''
-    + lib.optionalString isDarwin ''
-      chmod +x debugAdapters/lldb-mi/bin/lldb-mi
-    '';
+    # Patching binaries
+    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
+  ''
+  + lib.optionalString isx86Linux ''
+    chmod +x bin/libc.so
+  ''
+  + lib.optionalString isDarwin ''
+    chmod +x debugAdapters/lldb-mi/bin/lldb-mi
+  '';
 
   # On aarch64 the binaries are statically linked
   # but on x86 they are not.

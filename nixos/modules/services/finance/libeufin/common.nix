@@ -110,19 +110,18 @@ libeufinComponent:
               ${lib.getExe' cfg.package "libeufin-${libeufinComponent}"} dbinit ${args}
             '';
             # Grant DB permissions after schemas have been created
-            postStart =
-              ''
-                psql -U "${dbName}" -f "${dbScript}"
-              ''
-              + lib.optionalString ((!isNexus) && (cfg.initialAccounts != [ ])) ''
-                # only register initial accounts once
-                if [ ! -e /var/lib/libeufin-dbinit/init ]; then
-                  ${initialAccountRegistration}
+            postStart = ''
+              psql -U "${dbName}" -f "${dbScript}"
+            ''
+            + lib.optionalString ((!isNexus) && (cfg.initialAccounts != [ ])) ''
+              # only register initial accounts once
+              if [ ! -e /var/lib/libeufin-dbinit/init ]; then
+                ${initialAccountRegistration}
 
-                  touch /var/lib/libeufin-dbinit/init
-                  echo "Bank initialisation complete"
-                fi
-              '';
+                touch /var/lib/libeufin-dbinit/init
+                echo "Bank initialisation complete"
+              fi
+            '';
             requires = lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
             after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
           };

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runtimeShell,
   nixosTests,
   autoreconfHook,
   bison,
@@ -33,13 +32,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.17.4";
+  version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     rev = version;
-    hash = "sha256-HlSO1VCrMJtYlSL9/GvVw4mp/pEtuDju6V+6etrAAEk=";
+    hash = "sha256-M7We3JboNpr9H0ELbKcFtMvfmmVYaX9dYcsQ3sVX0lM=";
   };
 
   outputs = [
@@ -48,8 +47,6 @@ stdenv.mkDerivation rec {
     "dev"
     "man"
   ];
-
-  RUNTIME_SHELL = runtimeShell;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -63,23 +60,28 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ libxcrypt ]
-    ++ lib.optional (pam != null && stdenv.hostPlatform.isLinux) pam
-    ++ lib.optional withLibbsd libbsd
-    ++ lib.optional withTcb tcb;
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ lib.optional (pam != null && (lib.meta.availableOn stdenv.hostPlatform pam)) pam
+  ++ lib.optional withLibbsd libbsd
+  ++ lib.optional withTcb tcb;
 
   patches = [
     ./keep-path.patch
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
     ./respect-xml-catalog-files-var.patch
-    ./runtime-shell.patch
     ./fix-install-with-tcb.patch
   ];
 
-  # The nix daemon often forbids even creating set[ug]id files.
   postPatch = ''
+    # The nix daemon often forbids even creating set[ug]id files
     sed 's/^\(s[ug]idperms\) = [0-9]755/\1 = 0755/' -i src/Makefile.am
+
+    # The default shell is not defined at build time of the package. It is
+    # decided at build time of the NixOS configration. Thus, don't decide this
+    # here but just point to the location of the shell on the system.
+    substituteInPlace configure.ac --replace-fail '$SHELL' /bin/sh
   '';
 
   # `AC_FUNC_SETPGRP' is not cross-compilation capable.
@@ -88,16 +90,15 @@ stdenv.mkDerivation rec {
     export shadow_cv_logdir=/var/log
   '';
 
-  configureFlags =
-    [
-      "--enable-man"
-      "--with-group-name-max-length=32"
-      "--with-bcrypt"
-      "--with-yescrypt"
-      (lib.withFeature withLibbsd "libbsd")
-    ]
-    ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
-    ++ lib.optional withTcb "--with-tcb";
+  configureFlags = [
+    "--enable-man"
+    "--with-group-name-max-length=32"
+    "--with-bcrypt"
+    "--with-yescrypt"
+    (lib.withFeature withLibbsd "libbsd")
+  ]
+  ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
+  ++ lib.optional withTcb "--with-tcb";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
     substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc'.bin}/bin/nscd

@@ -132,7 +132,7 @@ A few notes about [Full example — `default.nix`](#ex-buildBowerComponentsDefau
 
 1. The result of `buildBowerComponents` is an input to the frontend build.
 2. Whether to symlink or copy the {file}`bower_components` directory depends on the build tool in use.
-   In this case a copy is used to avoid {command}`gulp` silliness with permissions.
+   In this case, a copy is used to avoid {command}`gulp` silliness with permissions.
 3. {command}`gulp` requires `HOME` to refer to a writeable directory.
 4. The actual build command in this example is {command}`gulp`. Other tools could be used instead.
 

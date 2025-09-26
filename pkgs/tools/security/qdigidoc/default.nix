@@ -1,7 +1,7 @@
 {
   lib,
-  mkDerivation,
-  fetchurl,
+  stdenv,
+  fetchFromGitHub,
   cmake,
   flatbuffers,
   gettext,
@@ -11,25 +11,27 @@
   openldap,
   openssl,
   pcsclite,
-  qtbase,
-  qtsvg,
-  qttools,
+  qt6,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.7.0";
+  version = "4.8.2";
 
-  src = fetchurl {
-    url = "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-XP7KqhIYriHQzQrw77zUp/I9nnh9EqK0m9+N+69Lh5c=";
+  src = fetchFromGitHub {
+    owner = "open-eid";
+    repo = "DigiDoc4-Client";
+    tag = "v${version}";
+    hash = "sha256-HxFH1vpXXPVSYnaMrPOJwYCt8Z0pnOLrpixQlDkTN5w=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     gettext
     pkg-config
-    qttools
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -39,8 +41,8 @@ mkDerivation rec {
     openldap
     openssl
     pcsclite
-    qtbase
-    qtsvg
+    qt6.qtbase
+    qt6.qtsvg
   ];
 
   # qdigidoc needs a (somewhat recent) config, as well as a TSL list for signing to work.

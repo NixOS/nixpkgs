@@ -30,32 +30,32 @@
   withShareSelection ? false,
   withTermion ? false,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncspot";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FSMQv2443oPQjMSv68ppfI2ZTUG79b+GcXmHNAmjPZk=";
+    hash = "sha256-bKwpvkaYIFK4USxAfx/Vudu7KlT3WP5rKQ1f5lQFbtc=";
   };
 
-  cargoHash = "sha256-Qjsn3U9KZr5qZliJ/vbudfkH1uOng1N5c8dAyH+Y5vQ=";
+  cargoHash = "sha256-FepaUgwOaQKW+0ugGDbqFmZmVPL7wqVaYyLk5UjND2o=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isLinux openssl
-    ++ lib.optional (withALSA || withRodio) alsa-lib
-    ++ lib.optional withClipboard libxcb
-    ++ lib.optional withCover ueberzug
-    ++ lib.optional (withMPRIS || withNotify) dbus
-    ++ lib.optional withNcurses ncurses
-    ++ lib.optional withPortAudio portaudio
-    ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux openssl
+  ++ lib.optional (withALSA || withRodio) alsa-lib
+  ++ lib.optional withClipboard libxcb
+  ++ lib.optional withCover ueberzug
+  ++ lib.optional (withMPRIS || withNotify) dbus
+  ++ lib.optional withNcurses ncurses
+  ++ lib.optional withPortAudio portaudio
+  ++ lib.optional withPulseAudio libpulseaudio;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DNCURSES_UNCTRL_H_incl";
 
@@ -94,6 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       liff
       getchoo
+      sodagunz
     ];
     mainProgram = "ncspot";
   };

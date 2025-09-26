@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   installShellFiles,
   stdenv,
   testers,
@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.20.1";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-hKtrHv7MQjA/AQ/frjP2tPT6zqVPPGnBxYuhWtUgIl0=";
+    hash = "sha256-0i8bKah3a7MrgzATysgFCsmDZxK9qH+4hmBMW+GR9/4=";
   };
 
-  vendorHash = "sha256-npNSNlS8gvbxtB4KeaiSsCUzxwJ0kwvnzDda/CZRVmM=";
+  vendorHash = "sha256-x5WIwYvQtbR72jqdD+O4Wg+4/qs24aqNeBuron/0ztk=";
 
   subPackages = [ "." ];
 
@@ -38,7 +38,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = nix-update-script { };
     tests = {
       kopia-version = testers.testVersion {
         package = kopia;
@@ -46,11 +46,16 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kopia.io";
+    changelog = "https://github.com/kopia/kopia/releases/tag/v${version}";
     description = "Cross-platform backup tool with fast, incremental backups, client-side end-to-end encryption, compression and data deduplication";
     mainProgram = "kopia";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      bbigras
+      blenderfreaky
+      nadir-ishiguro
+    ];
   };
 }

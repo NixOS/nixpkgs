@@ -9,6 +9,7 @@
   libGL,
   libxkbcommon,
   makeDesktopItem,
+  copyDesktopItems,
   openssl,
   pkg-config,
   rustPlatform,
@@ -17,6 +18,7 @@
   wayland-scanner,
   nix-update-script,
   libX11,
+  libxcb,
   libXcursor,
   libXi,
   libXrandr,
@@ -33,7 +35,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nv/NMLAka62u0WzvHMEW9XBVXpg9T8bNJiUegS/oj48=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
@@ -45,33 +46,33 @@ rustPlatform.buildRustPackage rec {
     "lang-cjk"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+    rustPlatform.bindgenHook
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      ffmpeg_6
-      fontconfig
-      libGL
-      libxkbcommon
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-    ];
+  buildInputs = [
+    SDL2
+    ffmpeg_6
+    fontconfig
+    libGL
+    libxkbcommon
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libX11
+    libxcb
+    libXcursor
+    libXi
+    libXrandr
+  ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)
   doCheck = false;
@@ -111,6 +112,7 @@ rustPlatform.buildRustPackage rec {
         "InstantMessaging"
       ];
       startupWMClass = "gossip";
+      mimeTypes = [ "x-scheme-handler/nostr" ];
     })
   ];
 

@@ -53,6 +53,7 @@ let
           build-system = with final; [
             setuptools
           ];
+          postPatch = null;
           src = prev.src.override {
             inherit version;
             hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
@@ -65,14 +66,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.49"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.30.6"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-fg4UMAsylJJ0Xy8s84Qr7OdiFrzMIP9RsAH+pYDThrU=";
+    hash = "sha256-enCI/yGnxf4/VYID/Di0ZhSiGp0ldgIKYmTnklGpjbc=";
   };
 
   postPatch = ''
@@ -81,7 +82,7 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
-      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
+      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
       --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0' \
 
     substituteInPlace requirements-base.txt \
@@ -118,6 +119,14 @@ py.pkgs.buildPythonApplication rec {
     less
   ];
 
+  # Prevent breakage when running in a Python environment: https://github.com/NixOS/nixpkgs/issues/47900
+  makeWrapperArgs = [
+    "--unset"
+    "NIX_PYTHONPATH"
+    "--unset"
+    "PYTHONPATH"
+  ];
+
   nativeCheckInputs = with py.pkgs; [
     addBinToPathHook
     jsonschema
@@ -126,15 +135,14 @@ py.pkgs.buildPythonApplication rec {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd aws \
-        --bash <(echo "complete -C $out/bin/aws_completer aws") \
-        --zsh $out/bin/aws_zsh_completer.sh
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      rm $out/bin/aws.cmd
-    '';
+  postInstall = ''
+    installShellCompletion --cmd aws \
+      --bash <(echo "complete -C $out/bin/aws_completer aws") \
+      --zsh $out/bin/aws_zsh_completer.sh
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    rm $out/bin/aws.cmd
+  '';
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
   # when used in nix-shell.
@@ -159,6 +167,12 @@ py.pkgs.buildPythonApplication rec {
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
+  ];
+
+  disabledTests = [
+    # Requires networking (socket binding not possible in sandbox)
+    "test_is_socket"
+    "test_is_special_file_warning"
   ];
 
   pythonImportsCheck = [

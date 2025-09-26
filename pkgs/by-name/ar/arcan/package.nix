@@ -75,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wayland-scanner
-  ] ++ lib.optionals buildManPages [ ruby ];
+  ]
+  ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [
     SDL2
@@ -115,7 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutil
     xcbutilwm
     xz
-  ] ++ lib.optionals useEspeak [ espeak-ng ];
+  ]
+  ++ lib.optionals useEspeak [ espeak-ng ];
 
   cmakeFlags = [
     # The upstream project recommends tagging the distribution

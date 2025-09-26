@@ -1,36 +1,70 @@
 {
+  stdenv,
   lib,
   python3,
   fetchFromGitHub,
   nixosTests,
+  fetchPypi,
+  fetchYarnDeps,
+  nodejs,
+  yarnBuildHook,
+  yarnConfigHook,
 }:
 let
   python = python3.override {
     self = python3;
     packageOverrides = self: super: {
       django = super.django_5_2;
+      django-csp = super.django-csp.overridePythonAttrs rec {
+        version = "4.0";
+        src = fetchPypi {
+          inherit version;
+          pname = "django_csp";
+          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
+        };
+      };
     };
+  };
+
+  version = "3.6.0";
+  src = fetchFromGitHub {
+    owner = "suitenumerique";
+    repo = "docs";
+    tag = "v${version}";
+    hash = "sha256-8bD+rBEN0GEQz3tiPEQYmf/mpijPefFmQchGhYkVBVY=";
+  };
+
+  mail-templates = stdenv.mkDerivation {
+    name = "lasuite-docs-${version}-mjml";
+    inherit src;
+
+    sourceRoot = "source/src/mail";
+
+    env.DOCS_DIR_MAILS = "${placeholder "out"}";
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/src/mail/yarn.lock";
+      hash = "sha256-oyLs7Df+KGzqCW8uF/7uzcL6ecMx8kHMzpuHSSywwfw=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      yarnConfigHook
+      yarnBuildHook
+    ];
+
+    dontInstall = true;
   };
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-docs";
-  version = "3.3.0";
   pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "suitenumerique";
-    repo = "docs";
-    tag = "v${version}";
-    hash = "sha256-SLTNkK578YhsDtVBS4vH0E/rXx+rXZIyXMhqwr95QEA=";
-  };
+  inherit version src;
 
   sourceRoot = "source/src/backend";
 
   patches = [
-    # Support for $ENVIRONMENT_VARIABLE_FILE to be able to pass secret files
-    # See: https://github.com/suitenumerique/docs/pull/912
-    ./environment_variables.patch
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
   ];
@@ -45,6 +79,7 @@ python.pkgs.buildPythonApplication rec {
     django-configurations
     django-cors-headers
     django-countries
+    django-csp
     django-extensions
     django-filter
     django-lasuite
@@ -101,6 +136,9 @@ python.pkgs.buildPythonApplication rec {
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
       makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
+
+      mkdir -p $out/${python.sitePackages}/core/templates
+      ln -sv ${mail-templates}/ $out/${python.sitePackages}/core/templates/mail
     '';
 
   passthru.tests = {

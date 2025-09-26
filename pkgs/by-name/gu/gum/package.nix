@@ -8,32 +8,31 @@
 
 buildGoModule rec {
   pname = "gum";
-  version = "0.16.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "gum";
     rev = "v${version}";
-    hash = "sha256-Qs7I9AdJx1FwQK+stgLJbXAIiL+zOYCDf1u+kT7u+Bg=";
+    hash = "sha256-TbheGevUrUKwT97JayW7rfAEgAfRnpOvHyvAxt27sIg=";
   };
 
-  vendorHash = "sha256-jCJUT7RXXPMgKgP48qip8MxcNB+EkrxUruOAj9WRSQA=";
+  vendorHash = "sha256-9vHlQuJA5g5sonfxe+whXDdkROuE3lZzOPYq74tJZtE=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X=main.Version=${version}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
-      "-linkmode=external"
-      "-extldflags"
-      "-static"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    "-linkmode=external"
+    "-extldflags"
+    "-static"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/gum man > gum.1

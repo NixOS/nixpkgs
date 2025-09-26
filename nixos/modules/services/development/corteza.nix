@@ -88,7 +88,8 @@ in
       environment = {
         HTTP_WEBAPP_BASE_DIR = "./webapp";
         HTTP_ADDR = "${cfg.address}:${toString cfg.port}";
-      } // cfg.settings;
+      }
+      // cfg.settings;
       path = [ pkgs.dart-sass ];
       serviceConfig = {
         WorkingDirectory = cfg.package;

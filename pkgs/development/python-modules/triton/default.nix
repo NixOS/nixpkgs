@@ -23,14 +23,14 @@
   torchWithRocm,
   zlib,
   cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
+  runCommand,
   rocmPackages,
   triton,
 }:
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   # Remember to bump triton-llvm as well!
@@ -38,43 +38,58 @@ buildPythonPackage rec {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${version}";
-    hash = "sha256-XLw7s5K0j4mfIvNMumlHkUpklSzVSTRyfGazZ4lLpn0=";
+    hash = "sha256-78s9ke6UV7Tnx3yCr0QZcVDqQELR4XoGgJY7olNJmjk=";
   };
 
-  patches =
-    [
-      (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
-        ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
-      })
-      (replaceVars ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch {
-        libhipDir = if rocmSupport then "${lib.getLib rocmPackages.clr}/lib" else null;
-        libcudaStubsDir =
-          if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
-      })
-    ]
-    ++ lib.optionals cudaSupport [
-      (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
-        cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
-      })
-      (replaceVars ./0004-nvidia-allow-static-ptxas-path.patch {
-        nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
-      })
-    ];
+  patches = [
+    (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
+      ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
+    })
+    (replaceVars ./0002-nvidia-driver-short-circuit-before-ldconfig.patch {
+      libcudaStubsDir =
+        if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
+    })
+    # Upstream PR: https://github.com/triton-lang/triton/pull/7959
+    ./0005-amd-search-env-paths.patch
+  ]
+  ++ lib.optionals cudaSupport [
+    (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
+      cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
+    })
+    (replaceVars ./0004-nvidia-allow-static-ptxas-path.patch {
+      nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
+    })
+  ];
 
-  postPatch = ''
+  postPatch =
+    # Avoid downloading dependencies remove any downloads
+    ''
+      substituteInPlace setup.py \
+        --replace-fail "[get_json_package_info()]" "[]" \
+        --replace-fail "[get_llvm_package_info()]" "[]" \
+        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
+        --replace-fail "curr_version.group(1) != version" "False"
+    ''
     # Use our `cmakeFlags` instead and avoid downloading dependencies
-    # remove any downloads
-    substituteInPlace python/setup.py \
-      --replace-fail "[get_json_package_info()]" "[]"\
-      --replace-fail "[get_llvm_package_info()]" "[]"\
-      --replace-fail 'packages += ["triton/profiler"]' "pass"\
-      --replace-fail "curr_version.group(1) != version" "False"
-
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "cmake_args.extend(thirdparty_cmake_args)" \
+          "cmake_args.extend(thirdparty_cmake_args + os.environ.get('cmakeFlags', \"\").split())"
+    ''
     # Don't fetch googletest
-    substituteInPlace cmake/AddTritonUnitTest.cmake \
-      --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
-      --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
-  '';
+    + ''
+      substituteInPlace cmake/AddTritonUnitTest.cmake \
+        --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
+        --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    ''
+    # Don't use FHS path for ROCm LLD
+    # Remove this after `[AMD] Use lld library API #7548` makes it into a release
+    + ''
+      substituteInPlace third_party/amd/backend/compiler.py \
+        --replace-fail 'lld = Path("/opt/rocm/llvm/bin/ld.lld")' \
+        "import os;lld = Path(os.getenv('HIP_PATH', '/opt/rocm/')"' + "/llvm/bin/ld.lld")'
+    '';
 
   build-system = [ setuptools ];
 
@@ -91,6 +106,10 @@ buildPythonPackage rec {
 
     # Upstream's setup.py tries to write cache somewhere in ~/
     writableTmpDirAsHomeHook
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
   ];
 
   buildInputs = [
@@ -114,37 +133,28 @@ buildPythonPackage rec {
     "-Wno-stringop-overread"
   ];
 
-  # Avoid GLIBCXX mismatch with other cuda-enabled python packages
-  preConfigure = ''
+  preConfigure =
     # Ensure that the build process uses the requested number of cores
-    export MAX_JOBS="$NIX_BUILD_CORES"
+    ''
+      export MAX_JOBS="$NIX_BUILD_CORES"
+    '';
 
-    # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
-    echo "
-    [build_ext]
-    base-dir=$PWD" >> python/setup.cfg
+  env = {
+    TRITON_BUILD_PROTON = "OFF";
+    TRITON_OFFLINE_BUILD = true;
+  }
+  // lib.optionalAttrs cudaSupport {
+    CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
+    CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
 
-    # The rest (including buildPhase) is relative to ./python/
-    cd python
-  '';
-
-  env =
-    {
-      TRITON_BUILD_PROTON = "OFF";
-      TRITON_OFFLINE_BUILD = true;
-    }
-    // lib.optionalAttrs cudaSupport {
-      CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
-      CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
-
-      # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
-      TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
-      TRITON_CUOBJDUMP_PATH = lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump";
-      TRITON_NVDISASM_PATH = lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm";
-      TRITON_CUDACRT_PATH = lib.getInclude cudaPackages.cuda_nvcc;
-      TRITON_CUDART_PATH = lib.getInclude cudaPackages.cuda_cudart;
-      TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
-    };
+    # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
+    TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+    TRITON_CUOBJDUMP_PATH = lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump";
+    TRITON_NVDISASM_PATH = lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm";
+    TRITON_CUDACRT_PATH = lib.getInclude cudaPackages.cuda_nvcc;
+    TRITON_CUDART_PATH = lib.getInclude cudaPackages.cuda_cudart;
+    TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
+  };
 
   pythonRemoveDeps = [
     # Circular dependency, cf. https://github.com/triton-lang/triton/issues/1374
@@ -202,6 +212,47 @@ buildPythonPackage rec {
   passthru.tests = {
     # Ultimately, torch is our test suite:
     inherit torchWithRocm;
+
+    # Test that _get_path_to_hip_runtime_dylib works when ROCm is available at runtime
+    rocm-libamdhip64-path =
+      runCommand "triton-rocm-libamdhip64-path-test"
+        {
+          buildInputs = [
+            triton
+            python
+            rocmPackages.clr
+          ];
+        }
+        ''
+          python -c "
+          import os
+          import triton
+          path = triton.backends.amd.driver._get_path_to_hip_runtime_dylib()
+          print(f'libamdhip64 path: {path}')
+          assert os.path.exists(path)
+          " && touch $out
+        '';
+
+    # Test that path_to_rocm_lld works when ROCm is available at runtime
+    # Remove this after `[AMD] Use lld library API #7548` makes it into a release
+    rocm-lld-path =
+      runCommand "triton-rocm-lld-test"
+        {
+          buildInputs = [
+            triton
+            python
+            rocmPackages.clr
+          ];
+        }
+        ''
+          python -c "
+          import os
+          import triton
+          path = triton.backends.backends['amd'].compiler.path_to_rocm_lld()
+          print(f'ROCm LLD path: {path}')
+          assert os.path.exists(path)
+          " && touch $out
+        '';
 
     # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
     # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
@@ -266,7 +317,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       SomeoneSerge
-      Madouura
       derdennisop
     ];
   };

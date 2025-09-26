@@ -119,78 +119,77 @@ stdenv.mkDerivation (finalAttrs: {
   # Default values taken from
   # Build fails without using them.
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/doc/os.md?plain=1#L183
-  mesonFlags =
-    [
-      (mesonBool "multilib" multilib)
-      (mesonBool "sanitize-bounds" sanitize-bounds)
-      (mesonBool "sanitize-trap-on-error" sanitize-trap-on-error)
-      (mesonBool "profile" profile)
-      (mesonBool "analyzer" analyzer)
-      (mesonBool "assert-verbose" assert-verbose)
-      (mesonBool "fast-strcmp" fast-strcmp)
+  mesonFlags = [
+    (mesonBool "multilib" multilib)
+    (mesonBool "sanitize-bounds" sanitize-bounds)
+    (mesonBool "sanitize-trap-on-error" sanitize-trap-on-error)
+    (mesonBool "profile" profile)
+    (mesonBool "analyzer" analyzer)
+    (mesonBool "assert-verbose" assert-verbose)
+    (mesonBool "fast-strcmp" fast-strcmp)
 
-      # Testing options
-      (mesonBool "picolib" picolib)
-      (mesonBool "semihost" semihost)
-      (mesonBool "use-stdlib" true)
+    # Testing options
+    (mesonBool "picolib" picolib)
+    (mesonBool "semihost" semihost)
+    (mesonBool "use-stdlib" true)
 
-      # Install options
-      (mesonOption "specsdir" "${placeholder "dev"}/lib")
+    # Install options
+    (mesonOption "specsdir" "${placeholder "dev"}/lib")
 
-      (mesonBool "tinystdio" tinystdio)
-      (mesonBool "io-c99-formats" io-c99-formats)
-      (mesonBool "io-long-long" io-long-long)
-      (mesonBool "io-pos-args" io-pos-args)
-      (mesonBool "io-long-double" io-long-double)
+    (mesonBool "tinystdio" tinystdio)
+    (mesonBool "io-c99-formats" io-c99-formats)
+    (mesonBool "io-long-long" io-long-long)
+    (mesonBool "io-pos-args" io-pos-args)
+    (mesonBool "io-long-double" io-long-double)
 
-      (mesonBool "io-float-exact" io-float-exact)
-      (mesonBool "atomic-ungetc" atomic-ungetc)
-      (mesonBool "posix-console" posix-console)
-      (mesonOption "format-default" format-default)
-      (mesonBool "printf-aliases" printf-aliases)
-      (mesonBool "io-percent-b" io-percent-b)
-      (mesonBool "printf-small-ultoa" printf-small-ultoa)
-      (mesonBool "printf-percent-n" printf-percent-n)
-      (mesonBool "minimal-io-long-long" minimal-io-long-long)
-      (mesonBool "fast-bufio" fast-bufio)
-      (mesonBool "io-wchar" io-wchar)
+    (mesonBool "io-float-exact" io-float-exact)
+    (mesonBool "atomic-ungetc" atomic-ungetc)
+    (mesonBool "posix-console" posix-console)
+    (mesonOption "format-default" format-default)
+    (mesonBool "printf-aliases" printf-aliases)
+    (mesonBool "io-percent-b" io-percent-b)
+    (mesonBool "printf-small-ultoa" printf-small-ultoa)
+    (mesonBool "printf-percent-n" printf-percent-n)
+    (mesonBool "minimal-io-long-long" minimal-io-long-long)
+    (mesonBool "fast-bufio" fast-bufio)
+    (mesonBool "io-wchar" io-wchar)
 
-      (mesonBool "mb-capable" mb-capable)
-      (mesonBool "mb-extended-charsets" mb-extended-charsets)
-      (mesonOption "mb-ucs-charsets" mb-ucs-charsets)
-      (mesonOption "mb-iso-charsets" mb-iso-charsets)
-      (mesonOption "mb-jis-charsets" mb-jis-charsets)
-      (mesonOption "mb-windows-charsets" mb-windows-charsets)
+    (mesonBool "mb-capable" mb-capable)
+    (mesonBool "mb-extended-charsets" mb-extended-charsets)
+    (mesonOption "mb-ucs-charsets" mb-ucs-charsets)
+    (mesonOption "mb-iso-charsets" mb-iso-charsets)
+    (mesonOption "mb-jis-charsets" mb-jis-charsets)
+    (mesonOption "mb-windows-charsets" mb-windows-charsets)
 
-      (mesonBool "picocrt" picocrt)
-      (mesonBool "picocrt-enable-mmu" picocrt-enable-mmu)
-      (mesonBool "picocrt-lib" picocrt-lib)
-      (mesonBool "picoexit" picoexit)
-      (mesonBool "newlib-initfini-array" initfini-array)
-      (mesonBool "crt-runtime-size" crt-runtime-size)
+    (mesonBool "picocrt" picocrt)
+    (mesonBool "picocrt-enable-mmu" picocrt-enable-mmu)
+    (mesonBool "picocrt-lib" picocrt-lib)
+    (mesonBool "picoexit" picoexit)
+    (mesonBool "newlib-initfini-array" initfini-array)
+    (mesonBool "crt-runtime-size" crt-runtime-size)
 
-      (mesonBool "newlib-atexit-dynamic-alloc" newlib-atexit-dynamic-alloc)
-      (mesonBool "newlib-global-atexit" newlib-global-atexit)
-      (mesonBool "newlib-register-fini" newlib-register-fini)
+    (mesonBool "newlib-atexit-dynamic-alloc" newlib-atexit-dynamic-alloc)
+    (mesonBool "newlib-global-atexit" newlib-global-atexit)
+    (mesonBool "newlib-register-fini" newlib-register-fini)
 
-      (mesonBool "newlib-nano-malloc" newlib-nano-malloc)
-      (mesonBool "nano-malloc-clear-freed" nano-malloc-clear-freed)
+    (mesonBool "newlib-nano-malloc" newlib-nano-malloc)
+    (mesonBool "nano-malloc-clear-freed" nano-malloc-clear-freed)
 
-      (mesonBool "newlib-multithread" (!single-thread))
+    (mesonBool "newlib-multithread" (!single-thread))
 
-      (mesonOption "thread-local-storage" thread-local-storage)
-      (mesonOption "tls-model" tls-model)
-      (mesonBool "newlib-global-errno" newlib-global-errno)
-      (mesonOption "errno-function" errno-function)
-      (mesonBool "tls-rp2040" tls-rp2040)
+    (mesonOption "thread-local-storage" thread-local-storage)
+    (mesonOption "tls-model" tls-model)
+    (mesonBool "newlib-global-errno" newlib-global-errno)
+    (mesonOption "errno-function" errno-function)
+    (mesonBool "tls-rp2040" tls-rp2040)
 
-      (mesonBool "want-math-errno" want-math-errno)
-    ]
-    ++ lib.optionals finalAttrs.doCheck [
-      (mesonBool "tests" true)
-      # Something is broken with this and I'm not sure what.
-      (mesonOption "tests-cdefs" "false")
-    ];
+    (mesonBool "want-math-errno" want-math-errno)
+  ]
+  ++ lib.optionals finalAttrs.doCheck [
+    (mesonBool "tests" true)
+    # Something is broken with this and I'm not sure what.
+    (mesonOption "tests-cdefs" "false")
+  ];
 
   doCheck = canExecute;
 

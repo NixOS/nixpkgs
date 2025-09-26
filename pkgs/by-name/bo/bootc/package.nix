@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bootc";
-  version = "1.4.0";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7Fn68bcm8ZyR5eALCMIdcXcZ595EnWFHKdnqI5vMso4=";
+  version = "1.6.0";
+
+  cargoHash = "sha256-KGwXQ6+/w3uHuPqSADsqJSip+SMdC104dfW7tNxGwnc=";
   doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "bootc-dev";
     repo = "bootc";
     rev = "v${version}";
-    hash = "sha256-FuU3rQtKpK+ScQ10GivisSJseY2GOFJ/y2HRKIiU0G8=";
+    hash = "sha256-TztsiC+DwD9yEAmjTuiuOi+Kf8WEYMsOVVnMKpSM3/g=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -47,6 +47,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_tar_write"
     "--skip=test_tar_write_tar_layer"
   ];
+
+  cargoBuildFlags = [ "-p bootc" ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

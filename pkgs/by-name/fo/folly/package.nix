@@ -8,7 +8,6 @@
   cmake,
   ninja,
   pkg-config,
-  sanitiseHeaderPathsHook,
 
   double-conversion,
   fast-float,
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    sanitiseHeaderPathsHook
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
@@ -79,16 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ];
 
-  propagatedBuildInputs =
-    [
-      # `folly-config.cmake` pulls these in.
-      boost
-      fmt_11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # jemalloc headers are required in include/folly/portability/Malloc.h
-      jemalloc
-    ];
+  propagatedBuildInputs = [
+    # `folly-config.cmake` pulls these in.
+    boost
+    fmt_11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # jemalloc headers are required in include/folly/portability/Malloc.h
+    jemalloc
+  ];
 
   checkInputs = [
     gtest
@@ -212,7 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     maintainers = with lib.maintainers; [
-      abbradar
       pierreis
       emily
       techknowlogick

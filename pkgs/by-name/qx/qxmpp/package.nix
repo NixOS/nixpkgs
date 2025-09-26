@@ -13,24 +13,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qxmpp";
-  version = "1.10.4";
+  version = "1.11.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "qxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iSsQKVfcH5AjX+bURYK7UPdZKWFX6WaFSrpeRC5IE/0=";
+    hash = "sha256-OR/rBp84pXv286Vd0I6IRzeUdC/+nnlRCZMAMXKgyxo=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      kdePackages.wrapQtAppsNoGuiHook
-    ]
-    ++ lib.optionals (withGstreamer || withOmemo) [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+    kdePackages.wrapQtAppsNoGuiHook
+  ]
+  ++ lib.optionals (withGstreamer || withOmemo) [
+    pkg-config
+  ];
   buildInputs =
     lib.optionals withGstreamer (
       with gst_all_1;
@@ -46,17 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
       kdePackages.qca
       libomemo-c
     ];
-  cmakeFlags =
-    [
-      "-DBUILD_EXAMPLES=false"
-      "-DBUILD_TESTS=false"
-    ]
-    ++ lib.optionals withGstreamer [
-      "-DWITH_GSTREAMER=ON"
-    ]
-    ++ lib.optionals withOmemo [
-      "-DBUILD_OMEMO=ON"
-    ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=false"
+    "-DBUILD_TESTS=false"
+  ]
+  ++ lib.optionals withGstreamer [
+    "-DWITH_GSTREAMER=ON"
+  ]
+  ++ lib.optionals withOmemo [
+    "-DBUILD_OMEMO=ON"
+  ];
 
   meta = {
     description = "Cross-platform C++ XMPP client and server library";

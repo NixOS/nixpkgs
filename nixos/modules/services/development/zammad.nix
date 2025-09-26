@@ -269,17 +269,16 @@ in
         # loading all the gems takes time
         TimeoutStartSec = 1200;
       };
-      after =
-        [
-          "network.target"
-          "systemd-tmpfiles-setup.service"
-        ]
-        ++ lib.optionals (cfg.database.createLocally) [
-          "postgresql.target"
-        ]
-        ++ lib.optionals cfg.redis.createLocally [
-          "redis-${cfg.redis.name}.service"
-        ];
+      after = [
+        "network.target"
+        "systemd-tmpfiles-setup.service"
+      ]
+      ++ lib.optionals (cfg.database.createLocally) [
+        "postgresql.target"
+      ]
+      ++ lib.optionals cfg.redis.createLocally [
+        "redis-${cfg.redis.name}.service"
+      ];
       requires = lib.optionals (cfg.database.createLocally) [
         "postgresql.target"
       ];

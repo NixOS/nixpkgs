@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.5";
+  version = "8.6";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    hash = "sha256-AAsBHTOcFBr5ZG1DKI9UMl/1xujTnW5IK3h7vGZUwmo=";
+    hash = "sha256-96v78O7V9XOrUb13pFjzLYL5hZxV6WifgZ2W/hQ3phk=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
@@ -46,15 +46,14 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      (lib.enableFeature enableNls "nls")
-      (lib.enableFeature enableTiny "tiny")
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "gl_cv_func_strcasecmp_works=yes"
-    ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (lib.enableFeature enableNls "nls")
+    (lib.enableFeature enableTiny "tiny")
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "gl_cv_func_strcasecmp_works=yes"
+  ];
 
   postInstall =
     if enableTiny then

@@ -107,36 +107,35 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
-      openal
-      glew
-      vulkan-headers
-      vulkan-loader
-      libpng
-      ffmpeg
-      libevdev
-      zlib
-      libusb1
-      curl
-      wolfssl
-      python3
-      pugixml
-      SDL2 # Still needed by FAudio's CMake
-      sdl3
-      flatbuffers
-      llvm_18
-      libSM
-      opencv.cxxdev
-      cubeb
-    ]
-    ++ lib.optional faudioSupport faudio
-    ++ lib.optionals waylandSupport [
-      wayland
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    openal
+    glew
+    vulkan-headers
+    vulkan-loader
+    libpng
+    ffmpeg
+    libevdev
+    zlib
+    libusb1
+    curl
+    wolfssl
+    python3
+    pugixml
+    SDL2 # Still needed by FAudio's CMake
+    sdl3
+    flatbuffers
+    llvm_18
+    libSM
+    opencv.cxxdev
+    cubeb
+  ]
+  ++ lib.optional faudioSupport faudio
+  ++ lib.optionals waylandSupport [
+    wayland
+    qtwayland
+  ];
 
   doInstallCheck = true;
 
@@ -155,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
     maintainers = with maintainers; [
-      abbradar
       neonfuz
       ilian
     ];

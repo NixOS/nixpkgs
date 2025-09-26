@@ -2,7 +2,6 @@
   lib,
   python313,
   fetchFromGitLab,
-  fetchpatch,
   fetchPypi,
   callPackage,
   stdenv,
@@ -69,6 +68,7 @@ let
       whitenoise
     ]
     ++ celery.optional-dependencies.redis
+    ++ django-allauth.optional-dependencies.headless-spec
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ django-redis.optional-dependencies.hiredis
@@ -84,24 +84,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.0.5";
+  version = "5.1.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7ulmrFOy14/Y/8LmKrmBzqrMPuwfdWOGMuhhhYI7+f4=";
+    hash = "sha256-P5J4nFXQHt+vP2W1bzdw4V9Pq+YnYsjgJPnU89RYofI=";
   };
-
-  patches = [
-    # update symbolic
-    (fetchpatch {
-      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/merge_requests/1642.patch";
-      excludes = [ "uv.lock" ];
-      hash = "sha256-6x1W/79DBPVQdAFWAozK2TXUoj/oArEuNMrARIeWtIY=";
-    })
-  ];
 
   propagatedBuildInputs = pythonPackages;
 

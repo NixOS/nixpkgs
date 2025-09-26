@@ -25,7 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "doc"
     "devdoc"
-  ] ++ lib.optional pythonSupport "py";
+  ]
+  ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
@@ -57,21 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  buildInputs =
-    [
-      libxml2.dev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gettext
-    ]
-    ++ lib.optionals pythonSupport [
-      libxml2.py
-      python3
-      ncurses
-    ]
-    ++ lib.optionals cryptoSupport [
-      libgcrypt
-    ];
+  buildInputs = [
+    libxml2.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gettext
+  ]
+  ++ lib.optionals pythonSupport [
+    libxml2.py
+    python3
+    ncurses
+  ]
+  ++ lib.optionals cryptoSupport [
+    libgcrypt
+  ];
 
   propagatedBuildInputs = [
     findXMLCatalogs
@@ -85,16 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postFixup =
-    ''
-      moveToOutput bin/xslt-config "$dev"
-      moveToOutput lib/xsltConf.sh "$dev"
-    ''
-    + lib.optionalString pythonSupport ''
-      mkdir -p $py/nix-support
-      echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-      moveToOutput ${python3.sitePackages} "$py"
-    '';
+  postFixup = ''
+    moveToOutput bin/xslt-config "$dev"
+    moveToOutput lib/xsltConf.sh "$dev"
+  ''
+  + lib.optionalString pythonSupport ''
+    mkdir -p $py/nix-support
+    echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
+    moveToOutput ${python3.sitePackages} "$py"
+  '';
 
   passthru = {
     inherit pythonSupport;

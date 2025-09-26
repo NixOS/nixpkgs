@@ -13,17 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-screenrec";
-  version = "0.1.7";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "russelltg";
     repo = "wl-screenrec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O3DNiLiZ1Rh5vesJX+cLv6cVcOVVUfWX914034R3ASQ=";
+    hash = "sha256-sLuhVeyzFp6sFKGK7Y7DPAPk7IdFAqAtjm56zhrX3fA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-shby6XE8xg5gqBoWlQn/Q0E+AmbyC8hFRp+EaBYS3Fs=";
+  cargoHash = "sha256-atfWEAo6tMLEzFtiLlxp8fyVKa1cF/4SZFMYStDYZwU=";
 
   nativeBuildInputs = [
     pkg-config

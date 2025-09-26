@@ -23,9 +23,9 @@
   rebuildMan ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cryptsetup";
-  version = "2.8.0";
+  version = "2.8.1";
 
   outputs = [
     "bin"
@@ -36,8 +36,10 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-zJ4tN8JahxzqN1ILKNUyIHsMFnD7EPxU1oBx9j9SQ6I=";
+    url =
+      "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor finalAttrs.version}/"
+      + "cryptsetup-${finalAttrs.version}.tar.xz";
+    hash = "sha256-LDN563ZZfcq1CRFEmwE+JpfEv/zHFtu/DZsOj7u0b7Q=";
   };
 
   patches = [
@@ -56,26 +58,25 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
-  configureFlags =
-    [
-      "--with-crypto_backend=openssl"
-      "--disable-ssh-token"
-      "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-    ]
-    ++ lib.optionals (!rebuildMan) [
-      "--disable-asciidoc"
-    ]
-    ++ lib.optionals (!withInternalArgon2) [
-      "--enable-libargon2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "--disable-external-tokens"
-      # We have to override this even though we're removing token
-      # support, because the path still gets included in the binary even
-      # though it isn't used.
-      "--with-luks2-external-tokens-path=/"
-    ]
-    ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
+  configureFlags = [
+    "--with-crypto_backend=openssl"
+    "--disable-ssh-token"
+    "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+  ]
+  ++ lib.optionals (!rebuildMan) [
+    "--disable-asciidoc"
+  ]
+  ++ lib.optionals (!withInternalArgon2) [
+    "--enable-libargon2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "--disable-external-tokens"
+    # We have to override this even though we're removing token
+    # support, because the path still gets included in the binary even
+    # though it isn't used.
+    "--with-luks2-external-tokens-path=/"
+  ]
+  ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   propagatedBuildInputs = [
@@ -84,7 +85,8 @@ stdenv.mkDerivation rec {
     openssl
     libuuid
     popt
-  ] ++ lib.optional (!withInternalArgon2) libargon2;
+  ]
+  ++ lib.optional (!withInternalArgon2) libargon2;
 
   enableParallelBuilding = true;
 
@@ -106,7 +108,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
-    changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
+    changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${finalAttrs.version}/docs/v${finalAttrs.version}-ReleaseNotes";
     license = lib.licenses.gpl2Plus;
     mainProgram = "cryptsetup";
     maintainers = with lib.maintainers; [
@@ -115,4 +117,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; linux;
   };
-}
+})

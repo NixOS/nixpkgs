@@ -336,7 +336,7 @@ in
                     };
 
                     localAnnouncePort = mkOption {
-                      type = types.nullOr types.int;
+                      type = types.nullOr types.port;
                       default = null;
                       description = ''
                         The port on which to listen and send IPv4 broadcast announcements to.
@@ -791,30 +791,30 @@ in
     };
   };
 
-  imports =
-    [
-      (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
-        This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
-        It can be enabled on a per-folder basis through the web interface.
-      '')
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "extraOptions" ]
-        [ "services" "syncthing" "settings" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "folders" ]
-        [ "services" "syncthing" "settings" "folders" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "devices" ]
-        [ "services" "syncthing" "settings" "devices" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "options" ]
-        [ "services" "syncthing" "settings" "options" ]
-      )
-    ]
-    ++ map
+  imports = [
+    (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
+      This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
+      It can be enabled on a per-folder basis through the web interface.
+    '')
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "extraOptions" ]
+      [ "services" "syncthing" "settings" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "folders" ]
+      [ "services" "syncthing" "settings" "folders" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "devices" ]
+      [ "services" "syncthing" "settings" "devices" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "options" ]
+      [ "services" "syncthing" "settings" "options" ]
+    )
+  ]
+  ++
+    map
       (o: mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ])
       [
         "cert"
@@ -874,7 +874,8 @@ in
           STNORESTART = "yes";
           STNOUPGRADE = "yes";
           inherit (cfg) all_proxy;
-        } // config.networking.proxy.envVars;
+        }
+        // config.networking.proxy.envVars;
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
@@ -893,14 +894,19 @@ in
                   install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart = ''
-            ${cfg.package}/bin/syncthing \
-              -no-browser \
-              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
-              ${escapeShellArgs cfg.extraFlags}
-          '';
+          ExecStart =
+            let
+              args = lib.escapeShellArgs (
+                (lib.cli.toGNUCommandLine { } {
+                  "no-browser" = true;
+                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+                  "config" = cfg.configDir;
+                  "data" = cfg.databaseDir;
+                })
+                ++ cfg.extraFlags
+              );
+            in
+            "${lib.getExe cfg.package} ${args}";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

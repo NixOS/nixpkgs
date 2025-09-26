@@ -31,19 +31,18 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  patches =
-    [
-      ./outputs.patch
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # This patch defines `_POSIX_C_SOURCE`, which breaks system headers
-      # on Darwin.
-      (fetchurl {
-        name = "musl.patch";
-        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";
-        hash = "sha256-6+u7GTxZcSNJgN7D+s+XAVwbMnULufkTcQ0s7l+Ydl0=";
-      })
-    ];
+  patches = [
+    ./outputs.patch
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # This patch defines `_POSIX_C_SOURCE`, which breaks system headers
+    # on Darwin.
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";
+      hash = "sha256-6+u7GTxZcSNJgN7D+s+XAVwbMnULufkTcQ0s7l+Ydl0=";
+    })
+  ];
 
   nativeBuildInputs = [
     yasm
@@ -74,30 +73,28 @@ stdenv.mkDerivation rec {
   # Configuration options:
   # https://aomedia.googlesource.com/aom/+/refs/heads/master/build/cmake/aom_config_defaults.cmake
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DENABLE_TESTS=OFF"
-    ]
-    ++ lib.optionals enableVmaf [
-      "-DCONFIG_TUNE_VMAF=1"
-    ]
-    ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
-      "-DCMAKE_ASM_COMPILER=${lib.getBin stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-      # armv7l-hf-multiplatform does not support NEON
-      # see lib/systems/platform.nix
-      "-DENABLE_NEON=0"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DENABLE_TESTS=OFF"
+  ]
+  ++ lib.optionals enableVmaf [
+    "-DCONFIG_TUNE_VMAF=1"
+  ]
+  ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
+    "-DCMAKE_ASM_COMPILER=${lib.getBin stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    # armv7l-hf-multiplatform does not support NEON
+    # see lib/systems/platform.nix
+    "-DENABLE_NEON=0"
+  ];
 
-  postFixup =
-    ''
-      moveToOutput lib/libaom.a "$static"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      ln -s $static $out
-    '';
+  postFixup = ''
+    moveToOutput lib/libaom.a "$static"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    ln -s $static $out
+  '';
 
   outputs = [
     "out"

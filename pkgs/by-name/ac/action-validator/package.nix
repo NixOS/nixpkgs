@@ -2,28 +2,24 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "action-validator";
-  version = "0.6.0-unstable-2025-02-16";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mpalmer";
     repo = "action-validator";
-    rev = "2f8be1d2066eb3687496a156d00b4f1b3ea7b028";
-    hash = "sha256-QDnikgAfkrvn7/vnmgTQ5J8Ro2HZ6SVkp9cPUYgejqM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-irBK27De9W5BSNIQynguOY8oPgA7K03dleE/0YvY75o=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FuJ5NzeZhfN312wK5Q1DgIXUAN6hqxu/1BhGqasbdS8=";
+  cargoHash = "sha256-w6qC4gJ06TfoQl2WD8lgOxSxUWyG6Z8ma9mUvvYlkTU=";
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-    branch = "main";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to validate GitHub Action and Workflow YAML files";
@@ -32,4 +28,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "action-validator";
     maintainers = with lib.maintainers; [ thiagokokada ];
   };
-}
+})

@@ -2,28 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
 buildGoModule rec {
   pname = "addlicense";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "addlicense";
     tag = "v${version}";
-    sha256 = "sha256-YMMHj6wctKtJi/rrcMIrLmNw/uvO6wCwokgYRQxcsFw=";
+    sha256 = "sha256-SM2fPfSqtc6LO+6Uk/sb/IMThXdE8yvk52jK3vF9EfE=";
   };
-
-  patches = [
-    # Add support for Nix files. Upstream is slow with responding to PRs,
-    # patch backported from PR https://github.com/google/addlicense/pull/153.
-    (fetchpatch {
-      url = "https://github.com/google/addlicense/commit/e0fb3f44cc7670dcc5cbcec2211c9ad238c5f9f1.patch";
-      hash = "sha256-XCAvL+HEa1hGc0GAnl+oYHKzBJ3I5ArS86vgABrP/Js=";
-    })
-  ];
 
   vendorHash = "sha256-2mncc21ecpv17Xp8PA9GIodoaCxNBacbbya/shU8T9Y=";
 

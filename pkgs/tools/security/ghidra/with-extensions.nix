@@ -27,21 +27,21 @@ let
       paths = (f allExtensions);
       nativeBuildInputs = [
         makeBinaryWrapper
-      ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
-      postBuild =
-        ''
-          # Prevent attempted creation of plugin lock files in the Nix store.
-          touch $out/lib/ghidra/Ghidra/.dbDirLock
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+      postBuild = ''
+        # Prevent attempted creation of plugin lock files in the Nix store.
+        touch $out/lib/ghidra/Ghidra/.dbDirLock
 
-          makeWrapper '${ghidra}/bin/ghidra' "$out/bin/ghidra" \
-            --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
-          makeWrapper '${ghidra}/bin/ghidra-analyzeHeadless' "$out/bin/ghidra-analyzeHeadless" \
-            --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
-          ln -s ${ghidra}/share $out/share
-        ''
-        + lib.optionalString stdenv.hostPlatform.isDarwin ''
-          convertDesktopFiles $prefix
-        '';
+        makeWrapper '${ghidra}/bin/ghidra' "$out/bin/ghidra" \
+          --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
+        makeWrapper '${ghidra}/bin/ghidra-analyzeHeadless' "$out/bin/ghidra-analyzeHeadless" \
+          --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
+        ln -s ${ghidra}/share $out/share
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        convertDesktopFiles $prefix
+      '';
       inherit (ghidra) meta;
     });
 in

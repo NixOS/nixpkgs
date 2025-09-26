@@ -10,7 +10,7 @@ grafanaPlugin {
     aarch64-darwin = "sha256-4IowlmyDGjxHBHvBD/eqZvouuOEvlad0nW8L0n8hf+g";
   };
   meta = with lib; {
-    description = "The GitHub datasource allows GitHub API data to be visually represented in Grafana dashboards.";
+    description = "Allows GitHub API data to be visually represented in Grafana dashboards";
     license = licenses.asl20;
     maintainers = with maintainers; [ nagisa ];
     platforms = platforms.unix;

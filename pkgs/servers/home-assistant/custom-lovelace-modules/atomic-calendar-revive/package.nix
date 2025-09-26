@@ -47,7 +47,7 @@ mkYarnPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/totaldebug/atomic-calendar-revive/releases/tag/v${src.rev}";
-    description = "An advanced calendar card for Home Assistant Lovelace";
+    description = "Advanced calendar card for Home Assistant Lovelace";
     homepage = "https://github.com/totaldebug/atomic-calendar-revive";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

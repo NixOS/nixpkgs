@@ -207,22 +207,21 @@ stdenv.mkDerivation rec {
   # In either case, OpenBLAS must only be used by trusted code--it is
   # inherently unsuitable for security-conscious applications--so there should
   # be no objection to disabling these hardening measures.
-  hardeningDisable =
-    [
-      # don't modify or move the stack
-      "stackprotector"
-      "pic"
-      # don't alter index arithmetic
-      "strictoverflow"
-      # don't interfere with dynamic target detection
-      "relro"
-      "bindnow"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # "__builtin_clear_padding not supported for variable length aggregates"
-      # in aarch64-specific code
-      "trivialautovarinit"
-    ];
+  hardeningDisable = [
+    # don't modify or move the stack
+    "stackprotector"
+    "pic"
+    # don't alter index arithmetic
+    "strictoverflow"
+    # don't interfere with dynamic target detection
+    "relro"
+    "bindnow"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # "__builtin_clear_padding not supported for variable length aggregates"
+    # in aarch64-specific code
+    "trivialautovarinit"
+  ];
 
   nativeBuildInputs = [
     perl
@@ -279,43 +278,42 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "tests";
 
-  postInstall =
-    ''
-          # Write pkgconfig aliases. Upstream report:
-          # https://github.com/OpenMathLib/OpenBLAS/issues/1740
-          for alias in blas cblas lapack; do
-            cat <<EOF > $out/lib/pkgconfig/$alias.pc
-      Name: $alias
-      Version: ${version}
-      Description: $alias provided by the OpenBLAS package.
-      Cflags: -I$dev/include
-      Libs: -L$out/lib -lopenblas
-      EOF
-          done
+  postInstall = ''
+        # Write pkgconfig aliases. Upstream report:
+        # https://github.com/OpenMathLib/OpenBLAS/issues/1740
+        for alias in blas cblas lapack; do
+          cat <<EOF > $out/lib/pkgconfig/$alias.pc
+    Name: $alias
+    Version: ${version}
+    Description: $alias provided by the OpenBLAS package.
+    Cflags: -I$dev/include
+    Libs: -L$out/lib -lopenblas
+    EOF
+        done
 
-          # Setup symlinks for blas / lapack
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      ln -s $out/bin/*.dll $out/lib
-    ''
-    + lib.optionalString enableShared ''
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
-    ''
-    + lib.optionalString enableStatic ''
-      ln -s $out/lib/libopenblas.a $out/lib/libblas.a
-      ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
-      ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
-      ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
-    '';
+        # Setup symlinks for blas / lapack
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    ln -s $out/bin/*.dll $out/lib
+  ''
+  + lib.optionalString enableShared ''
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
+  ''
+  + lib.optionalString enableStatic ''
+    ln -s $out/lib/libopenblas.a $out/lib/libblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
+  '';
 
   passthru.tests = {
     inherit (python3.pkgs) numpy scipy scikit-learn;

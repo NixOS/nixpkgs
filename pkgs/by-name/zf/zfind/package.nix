@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "CLI for file search with SQL like syntax.";
+    description = "CLI for file search with SQL like syntax";
     longDescription = ''
       zfind allows you to search for files, including inside tar, zip, 7z and rar archives.
       It makes finding files easy with a filter syntax that is similar to an SQL-WHERE clause.

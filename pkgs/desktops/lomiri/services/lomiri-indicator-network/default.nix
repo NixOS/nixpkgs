@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
     tag = finalAttrs.version;
-    hash = "sha256-R5W1MmT+H9i8NXrzOv2xaVu8TKPCRCAAswwM/tflkQ0=";
+    hash = "sha256-uLqPbbCBahUwj9ZG3Q7x+bXCl0yI6L7jBpg09DTrrpk=";
   };
 
   outputs = [

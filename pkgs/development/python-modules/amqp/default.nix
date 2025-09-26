@@ -30,15 +30,14 @@ buildPythonPackage rec {
     pytest-rerunfailures
   ];
 
-  disabledTests =
-    [
-      # Requires network access
-      "test_rmq.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Requires network access but fails on macos only
-      "test_connection.py"
-    ];
+  disabledTests = [
+    # Requires network access
+    "test_rmq.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Requires network access but fails on macos only
+    "test_connection.py"
+  ];
 
   pythonImportsCheck = [ "amqp" ];
 

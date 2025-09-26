@@ -46,6 +46,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # relies on the removed event_loop fixture
+  disabledTests = [ "test_udp_server_factory" ];
+
   pythonImportsCheck = [ "pytest_mockservers" ];
 
   meta = with lib; {

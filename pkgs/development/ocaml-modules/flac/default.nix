@@ -10,14 +10,7 @@
 
 buildDunePackage rec {
   pname = "flac";
-  version = "0.5.1";
-
-  src = fetchFromGitHub {
-    owner = "savonet";
-    repo = "ocaml-flac";
-    rev = "v${version}";
-    sha256 = "sha256-68zunpRIX4lrRsKJhDF3Sre6Rp3g+ntP19ObFqG57jE=";
-  };
+  inherit (ogg) version src;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];

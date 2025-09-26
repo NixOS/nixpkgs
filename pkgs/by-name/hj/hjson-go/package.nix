@@ -26,7 +26,6 @@ buildGoModule rec {
     description = "Utility to convert JSON to and from HJSON";
     homepage = "https://hjson.github.io/";
     changelog = "https://github.com/hjson/hjson-go/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ ehmry ];
     license = lib.licenses.mit;
     mainProgram = "hjson-cli";
   };

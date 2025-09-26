@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cognitiveservices";
-  version = "13.6.0";
+  version = "13.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_cognitiveservices";
     inherit version;
-    hash = "sha256-YS5W956CT4HVkM/wwJJTNYraBl1aYWnBOQX8NQZNm0A=";
+    hash = "sha256-SKWkTBXGdoutI4ARqqyDqAbOuKzhtRuAQ+NbOakWehk=";
   };
 
   build-system = [ setuptools ];

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gerbil";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "gerbil";
     tag = version;
-    hash = "sha256-6ZmnokXmn4KIfNZT9HrraYP4fjfY2C0sK+xAJyq/pkU=";
+    hash = "sha256-Pnti0agkohRBWQ42cqNOA5TnnSLP9JbOK1eyGf88cao=";
   };
 
-  vendorHash = "sha256-lYJjw+V94oxILu+akUnzGACtsU7CLGwljysRvyUk+yA=";
+  vendorHash = "sha256-Sz+49ViQUwJCy7wXDrQf7c76rOZbSGBCgB+Du8T6ug0=";
 
   # patch out the /usr/sbin/iptables
   postPatch = ''

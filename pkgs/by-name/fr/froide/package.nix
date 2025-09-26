@@ -39,14 +39,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide";
-  version = "0-unstable-2025-07-01";
+  version = "0-unstable-2025-09-10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
     repo = "froide";
-    rev = "362bddb5a8fdfe762d59cdebd29016568c9531b2";
-    hash = "sha256-c8I/FvXQSkAeacxMQJCpCMKFueNEnLI4R0ElqRbVbNg=";
+    rev = "826415bbc402c3b71c62477f5eed112787169c95";
+    hash = "sha256-K9TMtDfYP6v/lbL7SXeHBa6EngK+fsHgU13C1hat/K0=";
   };
 
   patches = [ ./django_42_storages.patch ];
@@ -177,17 +177,16 @@ python.pkgs.buildPythonApplication rec {
     "test_make_request_logged_out_with_existing_account"
   ];
 
-  preCheck =
-    ''
-      export PGUSER="froide"
-      export postgresqlEnableTCP=1
-      export postgresqlTestUserOptions="LOGIN SUPERUSER"
-      export GDAL_LIBRARY_PATH="${gdal}/lib/libgdal.so"
-      export GEOS_LIBRARY_PATH="${geos}/lib/libgeos_c.so"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
-      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-    '';
+  preCheck = ''
+    export PGUSER="froide"
+    export postgresqlEnableTCP=1
+    export postgresqlTestUserOptions="LOGIN SUPERUSER"
+    export GDAL_LIBRARY_PATH="${gdal}/lib/libgdal.so"
+    export GEOS_LIBRARY_PATH="${geos}/lib/libgeos_c.so"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+  '';
 
   # Playwright tests not supported on RiscV yet
   doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;

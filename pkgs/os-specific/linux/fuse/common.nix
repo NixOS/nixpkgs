@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "man"
-  ] ++ lib.optional isFuse3 "udev";
+  ]
+  ++ lib.optional isFuse3 "udev";
 
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
@@ -87,26 +88,25 @@ stdenv.mkDerivation rec {
   # $PATH, so it should also work on non-NixOS systems.
   env.NIX_CFLAGS_COMPILE = ''-DFUSERMOUNT_DIR="/run/wrappers/bin"'';
 
-  preConfigure =
-    ''
-      substituteInPlace lib/mount_util.c \
-        --replace-fail "/bin/mount" "${lib.getBin util-linux}/bin/mount" \
-        --replace-fail "/bin/umount" "${lib.getBin util-linux}/bin/umount"
-      substituteInPlace util/mount.fuse.c \
-        --replace-fail "/bin/sh" "${runtimeShell}"
-    ''
-    + lib.optionalString (!isFuse3) ''
-      export MOUNT_FUSE_PATH=$bin/bin
+  preConfigure = ''
+    substituteInPlace lib/mount_util.c \
+      --replace-fail "/bin/mount" "${lib.getBin util-linux}/bin/mount" \
+      --replace-fail "/bin/umount" "${lib.getBin util-linux}/bin/umount"
+    substituteInPlace util/mount.fuse.c \
+      --replace-fail "/bin/sh" "${runtimeShell}"
+  ''
+  + lib.optionalString (!isFuse3) ''
+    export MOUNT_FUSE_PATH=$bin/bin
 
-      # Do not install these files for fuse2 which are not useful for NixOS.
-      export INIT_D_PATH=$TMPDIR/etc/init.d
-      export UDEV_RULES_PATH=$TMPDIR/etc/udev/rules.d
+    # Do not install these files for fuse2 which are not useful for NixOS.
+    export INIT_D_PATH=$TMPDIR/etc/init.d
+    export UDEV_RULES_PATH=$TMPDIR/etc/udev/rules.d
 
-      # This is for `setuid=`, and needs root permission anyway.
-      # No need to use the SUID wrapper.
-      substituteInPlace util/mount.fuse.c \
-        --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
-    '';
+    # This is for `setuid=`, and needs root permission anyway.
+    # No need to use the SUID wrapper.
+    substituteInPlace util/mount.fuse.c \
+      --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
+  '';
 
   # v2: no tests, v3: all tests get skipped in a sandbox
   doCheck = false;

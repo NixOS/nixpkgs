@@ -41,7 +41,8 @@ let
             root_domain = ".web.garage";
             index = "index.html";
           };
-        } // extraSettings;
+        }
+        // extraSettings;
       };
       environment.systemPackages = [ pkgs.minio-client ];
 

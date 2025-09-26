@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.38.6";
+  version = "0.39.5";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = finalAttrs.version;
-    hash = "sha256-bgJzu7n/Qy0JAJ19VRXCvMtZBM/wZkQKT9AAXvIg5Ms=";
+    hash = "sha256-hgJD3cc+FbOuI2ZCuKDN2u9vMZngIvPGUqFRjpFE/zY=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -25,14 +25,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TVPI3394elxDzn/8S4hDkVounWI6bo6vpZeYJJzDOr4=";
+  cargoHash = "sha256-KLiE1lbgrWj8RYLTFLMqukeH1W9ipE1vYaId2/DJHrE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   cargoBuildFlags = [
     "--package ast-grep --bin ast-grep"
-  ] ++ lib.optionals enableLegacySg [ "--package ast-grep --bin sg" ];
+  ]
+  ++ lib.optionals enableLegacySg [ "--package ast-grep --bin sg" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ast-grep \

@@ -14,15 +14,18 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mup";
-  version = "6.8";
+  version = "7.2";
 
   src = fetchurl {
-    url = "http://www.arkkra.com/ftp/pub/unix/mup${
-      builtins.replaceStrings [ "." ] [ "" ] version
-    }src.tar.gz";
-    sha256 = "06bv5nyl8rcibyb83zzrfdq6x6f93g3rgnv47i5gsjcaw5w6l31y";
+    urls = [
+      # Since the original site is geo-blocked in the EU, we may revert to the archived version;
+      # please update both URLs during future updates!
+      "http://www.arkkra.com/ftp/pub/unix/mup72src.tar.gz"
+      "https://web.archive.org/web/20250907143445/http://www.arkkra.com/ftp/pub/unix/mup72src.tar.gz"
+    ];
+    hash = "sha256-XbfIsSzE7cwdK0DlOyS8PEJbBGc7Doa1HGLsVfx2ZaY=";
   };
 
   nativeBuildInputs = [
@@ -45,14 +48,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for f in Makefile.am doc/Makefile.am doc/htmldocs/Makefile.am src/mupmate/Preferences.C; do
-      substituteInPlace $f --replace doc/packages doc
+      substituteInPlace $f --replace-fail doc/packages doc
     done
-    substituteInPlace src/mupprnt/mupprnt --replace 'mup ' $out/bin/mup' '
-    substituteInPlace src/mupdisp/genfile.c --replace '"mup"' '"'$out/bin/mup'"'
+    substituteInPlace src/mupprnt/mupprnt \
+      --replace-fail 'mup ' $out/bin/mup' '
+    substituteInPlace src/mupdisp/genfile.c \
+      --replace-fail '"mup"' '"'$out/bin/mup'"'
     substituteInPlace src/mupmate/Preferences.C \
-      --replace '"mup"' '"'$out/bin/mup'"' \
-      --replace '"gv"' '"xdg-open"' \
-      --replace /usr/share/doc $out/share/doc
+      --replace-fail '"mup"' '"'$out/bin/mup'"' \
+      --replace-fail '"gv"' '"xdg-open"' \
+      --replace-fail /usr/share/doc $out/share/doc
   '';
 
   enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.

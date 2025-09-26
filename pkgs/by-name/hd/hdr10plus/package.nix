@@ -16,7 +16,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "hdr10plus";
-  version = "2.1.3";
+  # Version of the library, not the tool
+  # See https://github.com/quietvoid/hdr10plus_tool/blob/main/hdr10plus/Cargo.toml
+  version = "2.1.4";
 
   outputs = [
     "out"
@@ -61,10 +63,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
 
   configurePhase = ''
+    runHook preConfigure
+
     # let stdenv handle stripping
     export "CARGO_PROFILE_''${cargoBuildType@U}_STRIP"=false
 
     prependToVar cargoCFlags -j "$NIX_BUILD_CORES"
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

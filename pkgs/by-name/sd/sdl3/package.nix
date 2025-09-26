@@ -62,7 +62,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.16";
+  version = "3.2.20";
 
   outputs = [
     "lib"
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-xFWE/i4l3sU1KritwbqvN67kJ3/WUfNP3iScMfQUbwA=";
+    hash = "sha256-ESYjTN2prkAeHcTYurZaWeM3RgEKtwCZrt9gSMcOAe0=";
   };
 
   postPatch =
@@ -101,7 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ] ++ lib.optional waylandSupport wayland-scanner;
+  ]
+  ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
     finalAttrs.dlopenBuildInputs
@@ -146,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals x11Support [
       xorg.libX11
+      xorg.libxcb
       xorg.libXScrnSaver
       xorg.libXcursor
       xorg.libXext

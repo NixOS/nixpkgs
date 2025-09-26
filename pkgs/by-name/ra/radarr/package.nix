@@ -132,43 +132,41 @@ buildDotnetModule {
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.
-  testFilters =
-    [
-      "TestCategory!=ManualTest"
-      "TestCategory!=IntegrationTest"
-      "TestCategory!=AutomationTest"
+  testFilters = [
+    "TestCategory!=ManualTest"
+    "TestCategory!=IntegrationTest"
+    "TestCategory!=AutomationTest"
 
-      # makes real HTTP requests
-      "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-    ]
-    ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-      # fails on macOS
-      "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-    ];
+    # makes real HTTP requests
+    "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # fails on macOS
+    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+  ];
 
-  disabledTests =
-    [
-      # setgid tests
-      "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
-      "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
+  disabledTests = [
+    # setgid tests
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
 
-      # we do not set application data directory during tests (i.e. XDG data directory)
-      "NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
-      "NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
+    # we do not set application data directory during tests (i.e. XDG data directory)
+    "NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+    "NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
 
-      # attempts to read /etc/*release and fails since it does not exist
-      "NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
+    # attempts to read /etc/*release and fails since it does not exist
+    "NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
 
-      # fails to start test dummy because it cannot locate .NET runtime for some reason
-      "NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
-      "NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
-      "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
-    ]
-    ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-      # flaky on darwin
-      "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_add_collection_movie_if_valid_mediainfo"
-      "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_format_audio_channels_to_one_decimal_when_adding_collection_movie"
-    ];
+    # fails to start test dummy because it cannot locate .NET runtime for some reason
+    "NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # flaky on darwin
+    "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_add_collection_movie_if_valid_mediainfo"
+    "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_format_audio_channels_to_one_decimal_when_adding_collection_movie"
+  ];
 
   passthru = {
     tests = {

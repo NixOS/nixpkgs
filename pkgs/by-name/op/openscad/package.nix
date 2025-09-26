@@ -12,7 +12,7 @@
   libGL,
   glew,
   opencsg,
-  cgal,
+  cgal_5,
   mpfr,
   gmp,
   glib,
@@ -74,6 +74,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openscad/openscad/commit/cc49ad8dac24309f5452d5dea9abd406615a52d9.patch";
       hash = "sha256-B3i+o6lR5osRcVXTimDZUFQmm12JhmbFgG9UwOPebF4=";
     })
+    (fetchpatch {
+      name = "fix-application-icon-not-shown-on-wayland.patch";
+      url = "https://github.com/openscad/openscad/commit/5ea83e5117f5f3ac2197c63db69f523721b8fa85.patch";
+      hash = "sha256-nfeUv0R+J95fyqnVC0HNeBVZnxVoisY1pcdII82qUSU=";
+
+      # upstream's formatting conventions changed between 2021 and this patch
+      postFetch = ''
+        sed -i 's/& / \&/g;s/\*\*/\0 /g;s/^\(.\)  /\1\t/' "$out"
+      '';
+    })
   ];
 
   postPatch = ''
@@ -94,48 +104,46 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      eigen
-      boost
-      glew
-      opencsg
-      cgal
-      mpfr
-      gmp
-      glib
-      harfbuzz
-      lib3mf
-      libzip
-      double-conversion
-      freetype
-      fontconfig
-      libsForQt5.qtbase
-      libsForQt5.qtmultimedia
-      libsForQt5.qscintilla
-      cairo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGLU
-      libGL
-      wayland
-      wayland-protocols
-      libsForQt5.qtwayland
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin libsForQt5.qtmacextras
-    ++ lib.optional spacenavSupport libspnav;
+  buildInputs = [
+    eigen
+    boost
+    glew
+    opencsg
+    cgal_5
+    mpfr
+    gmp
+    glib
+    harfbuzz
+    lib3mf
+    libzip
+    double-conversion
+    freetype
+    fontconfig
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.qscintilla
+    cairo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGLU
+    libGL
+    wayland
+    wayland-protocols
+    libsForQt5.qtwayland
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libsForQt5.qtmacextras
+  ++ lib.optional spacenavSupport libspnav;
 
-  qmakeFlags =
-    [
-      "VERSION=${version}"
-      "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
-      "LIB3MF_LIBPATH=${lib3mf}/lib"
-    ]
-    ++ lib.optionals spacenavSupport [
-      "ENABLE_SPNAV=1"
-      "SPNAV_INCLUDEPATH=${libspnav}/include"
-      "SPNAV_LIBPATH=${libspnav}/lib"
-    ];
+  qmakeFlags = [
+    "VERSION=${version}"
+    "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
+    "LIB3MF_LIBPATH=${lib3mf}/lib"
+  ]
+  ++ lib.optionals spacenavSupport [
+    "ENABLE_SPNAV=1"
+    "SPNAV_INCLUDEPATH=${libspnav}/include"
+    "SPNAV_LIBPATH=${libspnav}/lib"
+  ];
 
   enableParallelBuilding = true;
 

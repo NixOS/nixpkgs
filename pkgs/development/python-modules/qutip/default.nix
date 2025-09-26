@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.2.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
     tag = "v${version}";
-    hash = "sha256-jH/kpiR0cTIJraMU/ddZe7xX3CMYIV93oyfHfaKxif4=";
+    hash = "sha256-iM+RptMvLFF51v7OJPESYFB4WaYF5HxnfpqjYWAjAKU=";
   };
 
   postPatch =
@@ -62,7 +62,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-rerunfailures
     writableTmpDirAsHomeHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.

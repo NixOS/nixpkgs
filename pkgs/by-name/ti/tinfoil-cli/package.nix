@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tinfoil-cli";
-  version = "0.0.24";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "tinfoilsh";
     repo = "tinfoil-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MQZdNSL7U5MNKJQCo3RKgOtpe+jA/GocB2lVOnY/tdg=";
+    hash = "sha256-yOFlQxMRxrdC1w8r8D9b0qrwGLjEflgcvLX5Q8ntMJY=";
   };
 
-  vendorHash = "sha256-asduIJH+nGDBZ4N3Y/4L8mnTae5yCfRtK26oXvRirhA=";
+  vendorHash = "sha256-L4wdnxm5fOtGymIZfr/YYTDnXpREgZmEthcZV1ploI4=";
 
   # The attestation test requires internet access
   checkFlags = [ "-skip=TestAttestationVerifySEV" ];

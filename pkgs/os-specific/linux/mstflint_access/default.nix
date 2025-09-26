@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
     "M=$(PWD)"
-  ] ++ makeFlags;
+  ]
+  ++ makeFlags;
 
   meta = with lib; {
     description = "Kernel module for Nvidia NIC firmware update";

@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "linuxkit";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxkit";
     repo = "linuxkit";
     rev = "v${version}";
-    sha256 = "sha256-G9Ao87sRbMcxB7VDvMaOPYCQg4l7EMEM2Mm9wl/N/5s=";
+    sha256 = "sha256-fXDFYVNf5ZedHNhzfjXXjtPfiRveA2rEsSw3nyIrrx8=";
   };
 
   vendorHash = null;

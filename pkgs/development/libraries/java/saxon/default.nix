@@ -44,28 +44,31 @@ let
 
         sourceRoot = ".";
 
-        installPhase =
-          ''
-            runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-            install -Dm444 -t $out/share/java/ *.jar
-            mv doc $out/share
+          install -Dm444 -t $out/share/java/ *.jar
+          mv doc $out/share
 
-            mkdir -p $out/bin
-            makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
-              --add-flags "-jar $out/share/java/${jar'}.jar"
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
-            mv lib $out/share/java
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
-            makeWrapper ${lib.getExe jre} $out/bin/transform \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+          mkdir -p $out/bin
+          makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+            --add-flags "-jar $out/share/java/${jar'}.jar"
 
-            makeWrapper ${lib.getExe jre} $out/bin/query \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
-          ''
-          + "runHook postInstall";
+          # Other distributions like debian distribute it as saxon*-xslt,
+          # this makes compilling packages that target other distros easier.
+          ln -s $out/bin/${mainProgram} $out/bin/${mainProgram}-xslt
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
+          mv lib $out/share/java
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
+          makeWrapper ${lib.getExe jre} $out/bin/transform \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+
+          makeWrapper ${lib.getExe jre} $out/bin/query \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
+        ''
+        + "runHook postInstall";
 
         passthru = lib.optionalAttrs (updateScript != null) {
           inherit updateScript;
@@ -186,11 +189,11 @@ in
 
   saxon_12-he = common rec {
     pname = "saxon-he";
-    version = "12.8";
+    version = "12.9";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      hash = "sha256-K6hRrseSW4giCBgsSMk2IwIF1VjjNWNrvkZia9gANZg=";
+      hash = "sha256-8olb7zeUESxlChWL4nw5qG6IwXF+u44OiAZ9HwdjXRI=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 3.1, and XQuery 3.1";

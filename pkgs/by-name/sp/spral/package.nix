@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spral";
-  version = "2025.05.20";
+  version = "2025.09.18";
 
   src = fetchFromGitHub {
     owner = "ralna";
     repo = "spral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9QEcAOFB3CtGNqr8LoDaj2vP3KMONlUVooeXECtGsxc=";
+    hash = "sha256-ftyA6zP+VX0fb7e9YKjPCAWYblNyjX/eVeni1tRQIxY=";
   };
 
   # Ignore a failing test on darwin
@@ -42,16 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
       "spral_tests += [['ssids', 'ssidst', files('ssids.f90')]]" ""
   '';
 
-  nativeBuildInputs =
-    [
-      gfortran
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+  ];
 
   propagatedBuildInputs = lib.optionals enableCuda [
     cudaPackages.cuda_cudart
@@ -63,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     (hwloc.override { inherit enableCuda; })
     lapack
     metis
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   mesonFlags = [ (lib.mesonBool "tests" true) ];
 

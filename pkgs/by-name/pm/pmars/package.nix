@@ -17,8 +17,7 @@ let
     "RWLIMIT"
   ];
   pkgConfigLibs =
-    lib.optionals enableXwinGraphics [ "x11" ]
-    ++ lib.optionals (!enableXwinGraphics) [ "ncurses" ];
+    lib.optionals enableXwinGraphics [ "x11" ] ++ lib.optionals (!enableXwinGraphics) [ "ncurses" ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmars";
@@ -61,8 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals (pkgConfigLibs != [ ]) [ pkg-config ];
 
   buildInputs =
-    lib.optionals enableXwinGraphics [ libX11 ]
-    ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
+    lib.optionals enableXwinGraphics [ libX11 ] ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
 
   preConfigure = ''
     cd src

@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openomf";
-  version = "0.8.3";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "omf2097";
     repo = "openomf";
     tag = finalAttrs.version;
-    hash = "sha256-9vd/LirurXFtmcG0U5SG8Oa66kcJ1EiaBmzfMxgnaqQ=";
+    hash = "sha256-5X8drQKMwYZ5M/i7hxyI25AysQGedQ5BLEYcNXWHgNk=";
   };
 
   nativeBuildInputs = [
@@ -67,20 +67,19 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  postInstall =
-    ''
-      mkdir -p $out/share/icons/hicolor/256x256/apps
-      unzip -j ${assets} -d $out/share/games/openomf
-      unzip -p ${icons} omf-logo/omf-256x256.png > $out/share/icons/hicolor/256x256/apps/org.openomf.OpenOMF.png
-      install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.desktop $out/share/applications/org.openomf.OpenOMF.desktop
-    ''
-    + lib.optionalString withRemix ''
-      ln -s ${remix} $out/share/games/openomf/ARENA2.ogg
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/resources
-      ln -s $out/share/games/openomf/* $out/resources
-    '';
+  postInstall = ''
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    unzip -j ${assets} -d $out/share/games/openomf
+    unzip -p ${icons} omf-logo/omf-256x256.png > $out/share/icons/hicolor/256x256/apps/org.openomf.OpenOMF.png
+    install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.desktop $out/share/applications/org.openomf.OpenOMF.desktop
+  ''
+  + lib.optionalString withRemix ''
+    ln -s ${remix} $out/share/games/openomf/ARENA2.ogg
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/resources
+    ln -s $out/share/games/openomf/* $out/resources
+  '';
 
   meta = {
     description = "One Must Fall 2097 Remake";

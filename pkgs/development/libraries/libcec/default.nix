@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     udev
     libcec_platform
-  ] ++ lib.optional withLibraspberrypi libraspberrypi;
+  ]
+  ++ lib.optional withLibraspberrypi libraspberrypi;
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DHAVE_LINUX_API=1"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DHAVE_LINUX_API=1"
+  ];
 
   meta = with lib; {
     description = "Allows you (with the right hardware) to control your device with your TV remote control using existing HDMI cabling";

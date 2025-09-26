@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "krillinai";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "krillinai";
     repo = "KlicStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cd+MrKXezcBKRSwmoRaD/2jiNT7r8R7IGweXHDZFhWE=";
+    hash = "sha256-CMeF24BCJ+wbiXCl0iJm0acNoggVxeOu3Q/cXJY8aQo=";
   };
 
   vendorHash = "sha256-bAKLNpt0K06egScyn7ImHV0csDsMQGUm92kU1PVQK+I=";
@@ -50,6 +50,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/krillinai/KlicStudio/releases/tag/v${finalAttrs.version}";
     mainProgram = "krillinai-desktop";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

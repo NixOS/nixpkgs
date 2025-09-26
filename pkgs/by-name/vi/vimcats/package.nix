@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "cli" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OGU7jwXOUf+tVECsyKwJQ9vRqTDoV8m/WOlAqTFdfUM=";
 
   passthru.tests.version = testers.testVersion { package = vimcats; };

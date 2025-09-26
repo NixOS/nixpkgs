@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "X color profile daemon";
     homepage = "https://github.com/agalakhov/xiccd";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "xiccd";
   };

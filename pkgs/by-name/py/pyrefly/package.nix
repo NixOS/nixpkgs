@@ -1,36 +1,26 @@
 {
   lib,
-  python3,
-  fetchPypi,
+  rustPlatform,
+  fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  rustPlatform,
-  maturin,
 }:
-python3.pkgs.buildPythonApplication rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "0.17.1";
-  pyproject = true;
+  version = "0.34.0";
 
-  # fetch from PyPI instead of GitHub, since source repo does not have Cargo.lock
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-w4ivRtmApXiXQT95GI4vvYBop7yxdbbkpW+YTyFtgXM=";
+  src = fetchFromGitHub {
+    owner = "facebook";
+    repo = "pyrefly";
+    tag = finalAttrs.version;
+    hash = "sha256-HPPDsvWEFfh/GNMUPiVjQr28YBBs2DACBGM3cxo5Nx4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-Op5ueVkzZTiJ1zeBGVi8oeLcfSzXMYfk5zEg4OGyA5g=";
-  };
+  buildAndTestSubdir = "pyrefly";
+  cargoHash = "sha256-46kcoBG/PWwf8VdlvLNzEhfYRTmmKi/uTjwFkl7Wozg=";
 
-  build-system = [ maturin ];
-
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ];
-
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   # requires unstable rust features
   env.RUSTC_BOOTSTRAP = 1;
@@ -48,4 +38,4 @@ python3.pkgs.buildPythonApplication rec {
       QuiNzX
     ];
   };
-}
+})

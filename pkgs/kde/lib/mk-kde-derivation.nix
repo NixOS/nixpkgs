@@ -123,30 +123,31 @@ let
       "out"
       "dev"
       "devtools"
-    ] ++ lib.optionals hasPythonBindings [ "python" ];
+    ]
+    ++ lib.optionals hasPythonBindings [ "python" ];
 
-    nativeBuildInputs =
-      [
-        cmake
-        ninja
-        qt6.wrapQtAppsHook
-        moveOutputsHook
-      ]
-      ++ lib.optionals hasPythonBindings [
-        python3Packages.shiboken6
-        (python3.withPackages (ps: [
-          ps.build
-          ps.setuptools
-        ]))
-      ]
-      ++ extraNativeBuildInputs;
+    nativeBuildInputs = [
+      cmake
+      ninja
+      qt6.wrapQtAppsHook
+      moveOutputsHook
+    ]
+    ++ lib.optionals hasPythonBindings [
+      python3Packages.shiboken6
+      (python3.withPackages (ps: [
+        ps.build
+        ps.setuptools
+      ]))
+    ]
+    ++ extraNativeBuildInputs;
 
-    buildInputs =
-      [ qt6.qtbase ]
-      ++ lib.optionals hasPythonBindings [
-        python3Packages.pyside6
-      ]
-      ++ extraBuildInputs;
+    buildInputs = [
+      qt6.qtbase
+    ]
+    ++ lib.optionals hasPythonBindings [
+      python3Packages.pyside6
+    ]
+    ++ extraBuildInputs;
 
     # FIXME: figure out what to propagate here
     propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
@@ -177,7 +178,8 @@ let
     teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-  } // (args.meta or { });
+  }
+  // (args.meta or { });
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 in

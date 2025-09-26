@@ -36,31 +36,30 @@ openvpn.overrideAttrs (
 
     buildInputs = oldAttrs.buildInputs or [ ] ++ optional stdenv.hostPlatform.isLinux [ libnl.dev ];
 
-    configureFlags =
-      [
-        # Assignment instead of appending to make sure to use exactly the flags required by mullvad
+    configureFlags = [
+      # Assignment instead of appending to make sure to use exactly the flags required by mullvad
 
-        # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L17
-        "--enable-static"
-        "--disable-shared"
-        "--disable-debug"
-        "--disable-plugin-down-root"
-        "--disable-management"
-        "--disable-port-share"
-        "--disable-systemd"
-        "--disable-dependency-tracking"
-        "--disable-pkcs11"
-        "--disable-plugin-auth-pam"
-        "--enable-plugins"
-        "--disable-lzo"
-        "--disable-lz4"
-        "--enable-comp-stub"
-      ]
-      ++ optional stdenv.hostPlatform.isLinux [
-        # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L35
-        "--enable-dco" # requires libnl
-        "--disable-iproute2"
-      ];
+      # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L17
+      "--enable-static"
+      "--disable-shared"
+      "--disable-debug"
+      "--disable-plugin-down-root"
+      "--disable-management"
+      "--disable-port-share"
+      "--disable-systemd"
+      "--disable-dependency-tracking"
+      "--disable-pkcs11"
+      "--disable-plugin-auth-pam"
+      "--enable-plugins"
+      "--disable-lzo"
+      "--disable-lz4"
+      "--enable-comp-stub"
+    ]
+    ++ optional stdenv.hostPlatform.isLinux [
+      # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L35
+      "--enable-dco" # requires libnl
+      "--disable-iproute2"
+    ];
 
     patches = oldAttrs.patches or [ ] ++ [
       # look at compare to find the relevant commits
@@ -103,11 +102,9 @@ openvpn.overrideAttrs (
         sha256 = "sha256-Eeci6U6go1ujmbVQvIVM/xa4GSambLPSaowVIvtYlzQ=";
       })
     ];
-    postPatch =
-      oldAttrs.postPatch or ""
-      + ''
-        rm ./configure
-      '';
+    postPatch = oldAttrs.postPatch or "" + ''
+      rm ./configure
+    '';
 
     meta = oldAttrs.meta or { } // {
       description = "OpenVPN with Mullvad-specific patches applied";

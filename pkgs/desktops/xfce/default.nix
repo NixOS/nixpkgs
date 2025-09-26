@@ -111,6 +111,8 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
+      xfce4-alsa-plugin = callPackage ./panel-plugins/xfce4-alsa-plugin { };
+
       xfce4-battery-plugin = callPackage ./panel-plugins/xfce4-battery-plugin { };
 
       xfce4-clipman-plugin = callPackage ./panel-plugins/xfce4-clipman-plugin { };

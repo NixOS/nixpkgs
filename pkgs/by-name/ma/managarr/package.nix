@@ -7,17 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "managarr";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Dark-Alex-17";
     repo = "managarr";
     tag = "v${version}";
-    hash = "sha256-VWlKfot6G97H7o1JhcAQgAjhYr2hvPrez1ZkeniWYBQ=";
+    hash = "sha256-qIT+kgum+2D8X3rw20B1b2YQCgV/3CEvOpYQeoi55Ew=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bddsQlPsVXrhKoitEmxb2fZIoq4ePsVCGBN1y5hMn2U=";
+  cargoHash = "sha256-7zFTR0NnN0Yd36aqdgiDzXt/0IAZC7fKtAz/mE89ubA=";
 
   nativeBuildInputs = [ perl ];
 

@@ -119,20 +119,19 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
-      # unconditionally build tests to catch linker errors as early as possible
-      # this adds a good chunk of time to the build
-      "-DBUILD_TESTING:BOOL=ON"
-      "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
-    ]
-    ++ lib.optionals (apis != [ "*" ]) [
-      "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
+    # unconditionally build tests to catch linker errors as early as possible
+    # this adds a good chunk of time to the build
+    "-DBUILD_TESTING:BOOL=ON"
+    "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+  ]
+  ++ lib.optionals (apis != [ "*" ]) [
+    "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
+  ];
 
   requiredSystemFeatures = [ "big-parallel" ];
 

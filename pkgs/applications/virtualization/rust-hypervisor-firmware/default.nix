@@ -12,14 +12,14 @@ let
 
 in
 
-assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
-
 let
   cross = import ../../../.. {
     system = stdenv.hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
       rust.rustcTarget = "${arch}-unknown-none";
-      rust.platform = lib.importJSON target;
+      rust.platform =
+        assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
+        lib.importJSON target;
     };
   };
 
@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-iLYmPBJH7I6EJ8VTUbR0+lZaebvbZlRv2KglbjKX76Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iqsU4t8Zz9UTtAu+a6kqwnPZ6qdGAriQ7hcU58KDQ8M=";
 
   # lld: error: unknown argument '-Wl,--undefined=AUDITABLE_VERSION_INFO'

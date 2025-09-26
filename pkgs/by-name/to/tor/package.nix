@@ -1,5 +1,8 @@
 {
   lib,
+  callPackage,
+  coreutils,
+  gnugrep,
   stdenv,
   fetchurl,
   pkg-config,
@@ -16,17 +19,7 @@
   nixosTests,
   writeShellScript,
   versionCheckHook,
-
-  # for update.nix
-  writeScript,
-  common-updater-scripts,
-  bash,
-  coreutils,
-  curl,
-  gnugrep,
-  gnupg,
-  gnused,
-  nix,
+  makeSetupHook,
 }:
 
 let
@@ -53,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.8.17";
+  version = "0.4.8.18";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ebRyXh1LiHueaP0JsNIkN3fVzjzUceU4WDvPb52M21Y=";
+    hash = "sha256-SupsEJ1O/06iuvuQWn5rCpZdFP6FYhSwL82QRrTZOvg=";
   };
 
   outputs = [
@@ -67,20 +60,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libevent
-      openssl
-      zlib
-      xz
-      zstd
-      scrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libseccomp
-      systemd
-      libcap
-    ];
+  buildInputs = [
+    libevent
+    openssl
+    zlib
+    xz
+    zstd
+    scrypt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libseccomp
+    systemd
+    libcap
+  ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
@@ -91,12 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     [ "--enable-gpl" ]
     ++
       # cross compiles correctly but needs the following
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
-    ++
-      # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
-      lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-        "--disable-seccomp"
-      ];
+      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -125,21 +112,21 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    tests.tor = nixosTests.tor;
-    updateScript = import ./update.nix {
-      inherit lib;
-      inherit
-        writeScript
-        common-updater-scripts
-        bash
-        coreutils
-        curl
-        gnupg
-        gnugrep
-        gnused
-        nix
-        ;
+    tests = {
+      inherit (nixosTests) tor;
+      proxyHook = callPackage ./proxy-hook-tests.nix {
+        tor = finalAttrs.finalPackage;
+      };
     };
+    updateScript = callPackage ./update.nix { };
+    proxyHook = makeSetupHook {
+      name = "tor-proxy-hook";
+      substitutions = {
+        grep = lib.getExe gnugrep;
+        tee = lib.getExe' coreutils "tee";
+        tor = lib.getExe finalAttrs.finalPackage;
+      };
+    } ./proxy-hook.sh;
   };
 
   meta = {

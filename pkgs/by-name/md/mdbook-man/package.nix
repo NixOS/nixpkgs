@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "mdbook-man";
-  version = "unstable-2022-11-05";
+  version = "0-unstable-2022-11-05";
 
   src = fetchFromGitHub {
     owner = "vv9k";
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ssAk60jnwYzAjseL26/3FaDv1vBAylgdE+vLhWZ8It4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+CD7+pYAoKRmkMZPpEru6lug9sBakrL0rLXs78e3tqk=";
 
   meta = with lib; {

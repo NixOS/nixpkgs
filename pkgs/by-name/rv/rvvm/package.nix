@@ -50,10 +50,11 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  makeFlags =
-    [ "PREFIX=$(out)" ]
-    ++ lib.optional enableSDL "USE_SDL=2" # Use SDL2 instead of SDL1
-    ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0";
+  makeFlags = [
+    "PREFIX=$(out)"
+  ]
+  ++ lib.optional enableSDL "USE_SDL=2" # Use SDL2 instead of SDL1
+  ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0";
 
   meta = with lib; {
     homepage = "https://github.com/LekKit/RVVM";

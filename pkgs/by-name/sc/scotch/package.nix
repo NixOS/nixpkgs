@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scotch";
-  version = "7.0.7";
+  version = "7.0.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "scotch";
     repo = "scotch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hjxEJCV6/L/oJnonpN5zj0Asnh6d7j0We1T29G1dhmQ=";
+    hash = "sha256-dbf18XdmDP0KgS4H4L7Wnam7kGF88yBcCvehYRRpHvA=";
   };
 
   outputs = [

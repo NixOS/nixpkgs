@@ -165,45 +165,43 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      pkg-config
-      vala
-      gobject-introspection
-      perl
-      elfutils # used to find jansson soname
-      # Docs
-      gtk-doc
-      libxslt
-      docbook_xsl
-      docbook_xml_dtd_412
-      docbook_xml_dtd_42
-      docbook_xml_dtd_43
-      pythonForDocs
-      udevCheckHook
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkg-config
+    vala
+    gobject-introspection
+    perl
+    elfutils # used to find jansson soname
+    # Docs
+    gtk-doc
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_412
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    pythonForDocs
+    udevCheckHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   doCheck = false; # requires /sys, the net
 
-  postPatch =
-    ''
-      patchShebangs ./tools
-      patchShebangs libnm/generate-setting-docs.py
+  postPatch = ''
+    patchShebangs ./tools
+    patchShebangs libnm/generate-setting-docs.py
 
-      # TODO: submit upstream
-      substituteInPlace meson.build \
-        --replace "'vala', req" "'vala', native: false, req"
-    ''
-    + lib.optionalString withSystemd ''
-      substituteInPlace data/NetworkManager.service.in \
-        --replace-fail /usr/bin/busctl ${systemd}/bin/busctl
-    '';
+    # TODO: submit upstream
+    substituteInPlace meson.build \
+      --replace "'vala', req" "'vala', native: false, req"
+  ''
+  + lib.optionalString withSystemd ''
+    substituteInPlace data/NetworkManager.service.in \
+      --replace-fail /usr/bin/busctl ${systemd}/bin/busctl
+  '';
 
   preBuild = ''
     # Our gobject-introspection patches make the shared library paths absolute

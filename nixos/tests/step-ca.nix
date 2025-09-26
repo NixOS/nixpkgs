@@ -137,17 +137,18 @@ import ./make-test-python.nix (
         caserver.wait_for_unit("step-ca.service")
         caserver.wait_until_succeeds("journalctl -o cat -u step-ca.service | grep '${pkgs.step-ca.version}'")
 
-        caclient.wait_for_unit("acme-finished-caclient.target")
-        catester.succeed("curl https://caclient/ | grep \"Welcome to nginx!\"")
+        caclient.wait_for_unit("acme-caclient.service")
+        # The order is run asynchonously, keep trying.
+        catester.wait_until_succeeds("curl https://caclient/ | grep \"Welcome to nginx!\"")
 
         caclientcaddy.wait_for_unit("caddy.service")
         # It’s hard to know when Caddy has finished the ACME dance with
         # step-ca, so we keep trying cURL until success.
         catester.wait_until_succeeds("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
 
-        caclienth2o.wait_for_unit("acme-finished-caclienth2o.target")
+        caclienth2o.wait_for_unit("acme-caclienth2o.service")
         caclienth2o.wait_for_unit("h2o.service")
-        catester.succeed("curl https://caclienth2o/ | grep \"Welcome to H2O!\"")
+        catester.wait_until_succeeds("curl https://caclienth2o/ | grep \"Welcome to H2O!\"")
       '';
   }
 )

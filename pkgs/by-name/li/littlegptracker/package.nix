@@ -27,10 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python
   ];
-  buildInputs =
-    [ SDL2 ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform alsa-lib) alsa-lib
-    ++ lib.optional stdenv.hostPlatform.isLinux jack2;
+  buildInputs = [
+    SDL2
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform alsa-lib) alsa-lib
+  ++ lib.optional stdenv.hostPlatform.isLinux jack2;
 
   preBuild = ''
     cd projects

@@ -11,6 +11,9 @@
 let
   jre11_minimal_headless = jre11_minimal.override {
     jdk = jdk11_headless;
+    modules = [
+      "java.logging"
+    ];
   };
 in
 stdenv.mkDerivation (finalAttrs: {

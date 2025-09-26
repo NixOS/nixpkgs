@@ -42,7 +42,6 @@ symlinkJoin {
     mainProgram = "etl";
     maintainers = with lib.maintainers; [
       ashleyghooper
-      drupol
     ];
     platforms = lib.platforms.linux;
   };

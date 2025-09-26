@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
-    repo = pname;
+    repo = "sonic-pi";
     rev = "v${version}";
     hash = "sha256-JMextQY0jLShWmqRQoVAbqIzDhA1mOzI7vfsG7+jjX0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit version;
-    pname = "mix-deps-${pname}";
+    pname = "mix-deps-sonic-pi";
     mixEnv = "test";
     src = "${src}/app/server/beam/tau";
     hash = "sha256-7wqFI3f0CRVrXK2IUguqHNANwKMmTak/Xh9nr624TXc=";
@@ -78,33 +78,32 @@ stdenv.mkDerivation rec {
     beamPackages.hex
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qttools
-      qtwayland
-      qwt
-      qscintilla
-      kissfftFloat
-      catch2_3
-      crossguid
-      reproc
-      platform-folders
-      ruby
-      alsa-lib
-      rtmidi
-      boost
-      aubio
-    ]
-    ++ lib.optionals withTauWidget [
-      qtwebengine
-    ]
-    ++ lib.optionals withImGui [
-      gl3w
-      SDL2
-      fmt
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
+    qwt
+    qscintilla
+    kissfftFloat
+    catch2_3
+    crossguid
+    reproc
+    platform-folders
+    ruby
+    alsa-lib
+    rtmidi
+    boost
+    aubio
+  ]
+  ++ lib.optionals withTauWidget [
+    qtwebengine
+  ]
+  ++ lib.optionals withImGui [
+    gl3w
+    SDL2
+    fmt
+  ];
 
   nativeCheckInputs = [
     parallel

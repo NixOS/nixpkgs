@@ -32,5 +32,6 @@ urxvt.section.md
 vcpkg.section.md
 weechat.section.md
 xorg.section.md
+uv.section.md
 build-support.md
 ```

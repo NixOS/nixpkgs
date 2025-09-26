@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "4.7.4";
+  version = "4.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "aiohue";
     tag = version;
-    hash = "sha256-+vvdv8/rAoMdtH6XN9tq4zOLboTuz3CqruN2KkEMv+c=";
+    hash = "sha256-RHWgjugWYJVbzAFhb1bOrm33jZ3MQjkFqUMH+27a6Zw=";
   };
 
   postPatch = ''

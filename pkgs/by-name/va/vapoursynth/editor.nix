@@ -40,25 +40,24 @@ let
 
     preConfigure = "cd pro";
 
-    preFixup =
-      ''
-        cd ../build/release*
-        mkdir -p $out/bin
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        mkdir -p $out/Applications
-        for bin in vsedit{,-job-server{,-watcher}}; do
-            mv $bin.app $out/Applications
-            makeQtWrapper $out/Applications/$bin.app/Contents/MacOS/$bin $out/bin/$bin
-            wrapQtApp $out/Applications/$bin.app/Contents/MacOS/$bin
-        done
-      ''
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        for bin in vsedit{,-job-server{,-watcher}}; do
-            mv $bin $out/bin
-            wrapQtApp $out/bin/$bin
-        done
-      '';
+    preFixup = ''
+      cd ../build/release*
+      mkdir -p $out/bin
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      for bin in vsedit{,-job-server{,-watcher}}; do
+          mv $bin.app $out/Applications
+          makeQtWrapper $out/Applications/$bin.app/Contents/MacOS/$bin $out/bin/$bin
+          wrapQtApp $out/Applications/$bin.app/Contents/MacOS/$bin
+      done
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      for bin in vsedit{,-job-server{,-watcher}}; do
+          mv $bin $out/bin
+          wrapQtApp $out/bin/$bin
+      done
+    '';
 
     passthru = {
       inherit withPlugins;

@@ -7,13 +7,13 @@
 
 buildNpmPackage rec {
   pname = "lasuite-meet-frontend";
-  version = "0.1.27";
+  version = "0.1.36";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-EMhsQPrONaQmNJ/FFoYlP5KKXT8vm7LwUHmEZd0oZeE=";
+    hash = "sha256-0GfbB1Kk2AdqQtwIiAdyfDS/V7le6DhmBugp1ukWRLc=";
   };
 
   sourceRoot = "source/src/frontend";
@@ -21,7 +21,7 @@ buildNpmPackage rec {
   npmDeps = fetchNpmDeps {
     inherit version src;
     sourceRoot = "source/src/frontend";
-    hash = "sha256-7wXzcn6aGAkRUOCI6MU0AlPGngBWJtdbAfnZZDaMWec=";
+    hash = "sha256-EHBfmP94hGx4gpvVZi4hHpJc7edq+cybkum3foL+dAk=";
   };
 
   buildPhase = ''

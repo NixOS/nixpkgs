@@ -38,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "ebooklib"
     "lxml"
     "pillow"
     "pypdf"

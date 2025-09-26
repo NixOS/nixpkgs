@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.4";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-chroma==${version}";
-    hash = "sha256-w4xvPPLYkPiQA34bimVHLe+vghMI9Pq36CHoE/EMnr8=";
+    hash = "sha256-HxoxxOgiDC/rf4hCA6uQBPmK11/fqddc5d4nMpIFxEw=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
@@ -64,8 +64,12 @@ buildPythonPackage rec {
     "test_chroma_update_document"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-chroma==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-chroma==";
+    };
   };
 
   meta = {

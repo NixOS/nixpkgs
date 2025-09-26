@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "llm-groq";
-  version = "0.8";
+  version = "0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angerman";
     repo = "llm-groq";
     tag = "v${version}";
-    hash = "sha256-sZ5d9w43NvypaPrebwZ5BLgRaCHAhd7gBU6uHEdUaF4=";
+    hash = "sha256-9obDB5xz/YFKdnqM/70SC4Ud1t62AsGzAkbGsZTL5Nc=";
   };
 
   build-system = [

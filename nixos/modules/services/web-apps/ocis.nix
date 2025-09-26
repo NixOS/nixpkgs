@@ -162,7 +162,8 @@ in
           OCIS_URL = cfg.url;
           OCIS_CONFIG_DIR = if (cfg.configDir == null) then "${cfg.stateDir}/config" else cfg.configDir;
           OCIS_BASE_DATA_PATH = cfg.stateDir;
-        } // cfg.environment;
+        }
+        // cfg.environment;
         serviceConfig = {
           Type = "simple";
           ExecStart = "${lib.getExe cfg.package} server";

@@ -89,7 +89,7 @@ let
 in
 buildPythonApplication rec {
   pname = "xpra";
-  version = "6.3";
+  version = "6.3.3";
   format = "setuptools";
 
   stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
@@ -98,7 +98,7 @@ buildPythonApplication rec {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-m0GafyzblXwLBBn/eoSmcsLz1r4nzFIQzCOXVXvQB8Q=";
+    hash = "sha256-hk+C6I/QS6ihwmuNlnoNFipJ98SW6LO+Qa3Uh1h1Ji8=";
   };
 
   patches = [
@@ -122,7 +122,8 @@ buildPythonApplication rec {
     wrapGAppsHook3
     pandoc
     udevCheckHook
-  ] ++ lib.optional withNvenc cudatoolkit;
+  ]
+  ++ lib.optional withNvenc cudatoolkit;
 
   buildInputs =
     with xorg;
@@ -215,64 +216,61 @@ buildPythonApplication rec {
   # error: 'import_cairo' defined but not used
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  setupPyBuildFlags =
-    [
-      "--with-Xdummy"
-      "--without-Xdummy_wrapper"
-      "--without-strict"
-      "--with-gtk3"
-      # Override these, setup.py checks for headers in /usr/* paths
-      "--with-pam"
-      "--with-vsock"
-    ]
-    ++ lib.optional withNvenc [
-      "--with-nvenc"
-      "--with-nvjpeg_encoder"
-    ];
+  setupPyBuildFlags = [
+    "--with-Xdummy"
+    "--without-Xdummy_wrapper"
+    "--without-strict"
+    "--with-gtk3"
+    # Override these, setup.py checks for headers in /usr/* paths
+    "--with-pam"
+    "--with-vsock"
+  ]
+  ++ lib.optional withNvenc [
+    "--with-nvenc"
+    "--with-nvjpeg_encoder"
+  ];
 
   dontWrapGApps = true;
 
-  preFixup =
-    ''
-      makeWrapperArgs+=(
-        "''${gappsWrapperArgs[@]}"
-        --set XPRA_INSTALL_PREFIX "$out"
-        --set XPRA_COMMAND "$out/bin/xpra"
-        --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
-        --set XORG_CONFIG_PREFIX ""
-        --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
-        --prefix PATH : ${
-          lib.makeBinPath [
-            getopt
-            xorgserver
-            xauth
-            which
-            util-linux
-            pulseaudioFull
-          ]
-        }
-    ''
-    + lib.optionalString withNvenc ''
-      --prefix LD_LIBRARY_PATH : ${nvidia_x11}/lib
-    ''
-    + ''
-      )
-    '';
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --set XPRA_INSTALL_PREFIX "$out"
+      --set XPRA_COMMAND "$out/bin/xpra"
+      --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set XORG_CONFIG_PREFIX ""
+      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
+      --prefix PATH : ${
+        lib.makeBinPath [
+          getopt
+          xorgserver
+          xauth
+          which
+          util-linux
+          pulseaudioFull
+        ]
+      }
+  ''
+  + lib.optionalString withNvenc ''
+    --prefix LD_LIBRARY_PATH : ${nvidia_x11}/lib
+  ''
+  + ''
+    )
+  '';
 
-  postInstall =
-    ''
-      # append module paths to xorg.conf
-      cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
-      cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
+  postInstall = ''
+    # append module paths to xorg.conf
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
-      # make application icon visible to desktop environemnts
-      icon_dir="$out/share/icons/hicolor/64x64/apps"
-      mkdir -p "$icon_dir"
-      ln -sr "$out/share/icons/xpra.png" "$icon_dir"
-    ''
-    + lib.optionalString withHtml ''
-      ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
-    '';
+    # make application icon visible to desktop environemnts
+    icon_dir="$out/share/icons/hicolor/64x64/apps"
+    mkdir -p "$icon_dir"
+    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
+  ''
+  + lib.optionalString withHtml ''
+    ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
+  '';
 
   # doCheck = false;
 

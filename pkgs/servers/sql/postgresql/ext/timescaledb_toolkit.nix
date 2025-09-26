@@ -21,7 +21,6 @@ buildPgrxExtension (finalAttrs: {
     hash = "sha256-gGGSNvvJprqLkVwPr7cfmGY1qEUTXMdqdvwPYIzXaTA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
   buildAndTestSubdir = "extension";
 
@@ -43,6 +42,12 @@ buildPgrxExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.tsl;
-    broken = lib.versionOlder postgresql.version "15";
+    broken =
+      lib.versionOlder postgresql.version "15"
+      ||
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "1.21.0")
+          "Is postgresql18Packages.timescaledb_toolkit still broken?"
+          (lib.versionAtLeast postgresql.version "18");
   };
 })

@@ -36,20 +36,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoRoot = "src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6cBGOdJ7jz+mOl2EEXxoLNeX9meW+ybQxAxnnHAplIc=";
 
   buildAndTestSubdir = cargoRoot;
 
-  nativeBuildInputs =
-    [
-      pnpm_9.configHook
-      nodejs
-      cargo-tauri_1.hook
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    pnpm_9.configHook
+    nodejs
+    cargo-tauri_1.hook
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
