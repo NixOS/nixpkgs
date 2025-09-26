@@ -1,17 +1,17 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
 
   format = pkgs.formats.yaml { };
 
   rootDir = "/var/lib/crowdsec";
-  stateDir = "${rootDir}/state";
+  dataDir = "${rootDir}/data";
   confDir = "/etc/crowdsec/";
-  hubDir = "${stateDir}/hub/";
+  confFile = "${confDir}/config.yaml";
+  hubDir = "${confDir}/hub/";
   notificationsDir = "${confDir}/notifications/";
   pluginDir = "${confDir}/plugins/";
   parsersDir = "${confDir}/parsers/";
@@ -64,6 +64,9 @@ in
     };
 
     localConfig = lib.mkOption {
+      description = ''
+        The configuration for a crowdsec security engine.
+      '';
       type = lib.types.submodule {
         options = {
           acquisitions = lib.mkOption {
@@ -326,13 +329,13 @@ in
           };
         };
       };
-      description = ''
-        The configuration for a crowdsec security engine.
-      '';
       default = { };
     };
 
     hub = lib.mkOption {
+      description = ''
+        Hub collections, parsers, AppSec rules, etc.
+      '';
       type = lib.types.submodule {
         options = {
           collections = lib.mkOption {
@@ -394,17 +397,17 @@ in
         };
       };
       default = { };
-      description = ''
-        Hub collections, parsers, AppSec rules, etc.
-      '';
     };
 
     settings = lib.mkOption {
+      description = ''
+        Config options for the main config file.
+      '';
       type = lib.types.submodule {
         options = {
           general = lib.mkOption {
             description = ''
-              Settings for the main CrowdSec configuration file.
+              Additional settings for the main CrowdSec configuration file.
 
               Refer to the defaults at <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
             '';
@@ -425,17 +428,19 @@ in
             type = lib.types.submodule {
               options = {
                 credentialsFile = lib.mkOption {
-                  type = lib.types.nullOr lib.types.path;
+                  type = lib.types.path;
                   example = "/run/crowdsec/lapi.yaml";
                   description = ''
                     The LAPI credential file to use.
                   '';
-                  default = null;
+                  default = "${confDir}/local_api_credentials.yaml";
                 };
               };
             };
             description = ''
-              LAPI Configuration attributes
+              LAPI Configuration attributes.
+
+              See <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#client> for more information.
             '';
             default = { };
           };
@@ -453,7 +458,9 @@ in
               };
             };
             description = ''
-              CAPI Configuration attributes
+              CAPI Configuration attributes.
+
+              See <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#server> for more information.
             '';
             default = { };
           };
@@ -489,15 +496,12 @@ in
           };
         };
       };
-      description = ''
-        Set of various configuration attributes
-      '';
     };
   };
   config =
     let
       cfg = config.services.crowdsec;
-      configFile = format.generate "crowdsec.yaml" cfg.settings.general;
+      configFile = format.generate "config.yaml" cfg.settings.general;
       simulationFile = format.generate "simulation.yaml" cfg.settings.simulation;
       consoleFile = format.generate "console.yaml" cfg.settings.console.configuration;
       patternsDir = pkgs.buildPackages.symlinkJoin {
@@ -630,17 +634,17 @@ in
         };
         config_paths = {
           config_dir = confDir;
-          data_dir = stateDir;
+          data_dir = dataDir;
           simulation_path = simulationFile;
           hub_dir = hubDir;
-          index_path = lib.strings.normalizePath "${stateDir}/hub/.index.json";
+          index_path = lib.strings.normalizePath "${confDir}/hub/.index.json";
           notification_dir = notificationsDir;
           plugin_dir = pluginDir;
           pattern_dir = patternsDir;
         };
         db_config = {
           type = lib.mkDefault "sqlite";
-          db_path = lib.mkDefault (lib.strings.normalizePath "${stateDir}/crowdsec.db");
+          db_path = lib.mkDefault (lib.strings.normalizePath "${dataDir}/crowdsec.db");
           use_wal = lib.mkDefault true;
         };
         crowdsec_service = {
@@ -652,7 +656,7 @@ in
             credentials_path = cfg.settings.lapi.credentialsFile;
           };
           server = {
-            enable = lib.mkDefault false;
+            enable = lib.mkDefault true;
             listen_uri = lib.mkDefault "127.0.0.1:8080";
 
             console_path = lib.mkDefault consoleFile;
@@ -669,7 +673,7 @@ in
           };
         };
         prometheus = {
-          enabled = lib.mkDefault true;
+          enabled = lib.mkDefault false;
           level = lib.mkDefault "full";
           listen_addr = lib.mkDefault "127.0.0.1";
           listen_port = lib.mkDefault 6060;
@@ -843,118 +847,133 @@ in
       systemd.tmpfiles.settings = {
         "10-crowdsec" =
 
-          builtins.listToAttrs (
+          builtins.listToAttrs
+            (
+              map
+                (dirName: {
+                  inherit cfg;
+                  name = lib.strings.normalizePath dirName;
+                  value = {
+                    d = {
+                      user = cfg.user;
+                      group = cfg.group;
+                      mode = "0750";
+                    };
+                  };
+                })
+                [
+                  dataDir
+                  hubDir
+                  confDir
+                  localScenariosDir
+                  localPostOverflowsDir
+                  localPostOverflowsS01WhitelistDir
+                  parsersDir
+                  localParsersS00RawDir
+                  localParsersS01ParseDir
+                  localParsersS02EnrichDir
+                  localContextsDir
+                  notificationsDir
+                  pluginDir
+                ]
+            )
+          // builtins.listToAttrs (
             map
-              (dirName: {
+              (scenarioFile: {
                 inherit cfg;
-                name = lib.strings.normalizePath dirName;
+                name = lib.strings.normalizePath "${localScenariosDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf scenarioFile)}";
                 value = {
-                  d = {
-                    user = cfg.user;
-                    group = cfg.group;
-                    mode = "0750";
+                  link = {
+                    type = "L+";
+                    argument = "${scenarioFile}";
                   };
                 };
               })
-              [
-                stateDir
-                hubDir
-                confDir
-                localScenariosDir
-                localPostOverflowsDir
-                localPostOverflowsS01WhitelistDir
-                parsersDir
-                localParsersS00RawDir
-                localParsersS01ParseDir
-                localParsersS02EnrichDir
-                localContextsDir
-                notificationsDir
-                pluginDir
-              ]
+              localScenariosMap
           )
           // builtins.listToAttrs (
-            map (scenarioFile: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localScenariosDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf scenarioFile)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${scenarioFile}";
+            map
+              (parser: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${parser}";
+                  };
                 };
-              };
-            }) localScenariosMap
+              })
+              localParsersS00RawMap
           )
           // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
+            map
+              (parser: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${parser}";
+                  };
                 };
-              };
-            }) localParsersS00RawMap
+              })
+              localParsersS01ParseMap
           )
           // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
+            map
+              (parser: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${parser}";
+                  };
                 };
-              };
-            }) localParsersS01ParseMap
+              })
+              localParsersS02EnrichMap
           )
           // builtins.listToAttrs (
-            map (parser: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${parser}";
+            map
+              (postoverflow: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf postoverflow)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${postoverflow}";
+                  };
                 };
-              };
-            }) localParsersS02EnrichMap
+              })
+              localPostOverflowsS01WhitelistMap
           )
           // builtins.listToAttrs (
-            map (postoverflow: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf postoverflow)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${postoverflow}";
+            map
+              (context: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${localContextsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf context)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${context}";
+                  };
                 };
-              };
-            }) localPostOverflowsS01WhitelistMap
+              })
+              localContextsMap
           )
           // builtins.listToAttrs (
-            map (context: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${localContextsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf context)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${context}";
+            map
+              (notification: {
+                inherit cfg;
+                name = lib.strings.normalizePath "${notificationsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf notification)}";
+                value = {
+                  link = {
+                    type = "L+";
+                    argument = "${notification}";
+                  };
                 };
-              };
-            }) localContextsMap
-          )
-          // builtins.listToAttrs (
-            map (notification: {
-              inherit cfg;
-              name = lib.strings.normalizePath "${notificationsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf notification)}";
-              value = {
-                link = {
-                  type = "L+";
-                  argument = "${notification}";
-                };
-              };
-            }) localNotificationsMap
+              })
+              localNotificationsMap
           );
       };
 
