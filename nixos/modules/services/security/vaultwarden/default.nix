@@ -70,6 +70,11 @@ in
 {
   imports = [
     (lib.mkRenamedOptionModule [ "services" "bitwarden_rs" ] [ "services" "vaultwarden" ])
+    (lib.mkChangedOptionModule
+      [ "services" "vaultwarden" "environmentFile" ]
+      [ "services" "vaultwarden" "environmentFiles" ]
+      (config: [ config.services.vaultwarden.environmentFile ])
+    )
   ];
 
   options.services.vaultwarden = {
@@ -166,22 +171,22 @@ in
         The available configuration options can be found in
         [the environment template file](https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template).
 
-        See [](#opt-services.vaultwarden.environmentFile) for how
+        See [](#opt-services.vaultwarden.environmentFiles) for how
         to set up access to the Admin UI to invite initial users.
       '';
     };
 
-    environmentFile = lib.mkOption {
-      type = with lib.types; nullOr path;
-      default = null;
-      example = "/var/lib/vaultwarden.env";
+    environmentFiles = lib.mkOption {
+      type = with lib.types; listOf path;
+      default = [ ];
+      example = "[ /var/lib/vaultwarden.env ]";
       description = ''
-        Additional environment file as defined in {manpage}`systemd.exec(5)`.
+        Additional environment files as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
         should be passed to the service without adding them to the world-readable Nix store.
 
-        Note that this file needs to be available on the host on which `vaultwarden` is running.
+        Note that these files needs to be available on the host on which `vaultwarden` is running.
 
         As a concrete example, to make the Admin UI available (from which new users can be invited initially),
         the secret {env}`ADMIN_TOKEN` needs to be defined as described
@@ -225,7 +230,7 @@ in
       serviceConfig = {
         User = user;
         Group = group;
-        EnvironmentFile = [ configFile ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = [ configFile ] ++ cfg.environmentFiles;
         ExecStart = lib.getExe vaultwarden;
         LimitNOFILE = "1048576";
         CapabilityBoundingSet = [ "" ];
