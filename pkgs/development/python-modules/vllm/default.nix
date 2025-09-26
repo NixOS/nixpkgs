@@ -266,7 +266,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.10.1.1";
+  version = "0.10.2";
   pyproject = true;
 
   # https://github.com/vllm-project/vllm/issues/12083
@@ -278,7 +278,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-lLNjBv5baER0AArX3IV4HWjDZ2jTGXyGIvnHupR8MGM=";
+    hash = "sha256-GA7vnaVTuRH0n4Jll/mkv7gqu5vpvJSgEmrLAXRTcH0=";
   };
 
   patches = [
