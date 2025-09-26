@@ -18973,6 +18973,12 @@
     email = "nyu@nyuku.ru";
     githubId = 97425873;
   };
+  nyxvectar = {
+    name = "Raye Lattice";
+    github = "nyxvectar";
+    email = "nyxvectar@proton.me";
+    githubId = 70339231;
+  };
   nzbr = {
     email = "nixos@nzbr.de";
     github = "nzbr";
