@@ -12501,7 +12501,7 @@
     email = "jokatzke@fastmail.com";
     github = "jokatzke";
     githubId = 46931073;
-    name = "Jonas Katzke";
+    name = "Josefine Katzke";
   };
   joko = {
     email = "ioannis.koutras@gmail.com";
