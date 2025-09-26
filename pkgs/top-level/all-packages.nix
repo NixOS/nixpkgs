@@ -4548,15 +4548,31 @@ with pkgs;
 
   temurin-bin-24 = javaPackages.compiler.temurin-bin.jdk-24;
   temurin-jre-bin-24 = javaPackages.compiler.temurin-bin.jre-24;
+  temurin-jfx-bin-24 = temurin-jfx-bin.override {
+    temurin-bin = temurin-bin-24;
+    openjfx = openjfx24;
+  };
 
   temurin-bin-23 = javaPackages.compiler.temurin-bin.jdk-23;
   temurin-jre-bin-23 = javaPackages.compiler.temurin-bin.jre-23;
+  temurin-jfx-bin-23 = temurin-jfx-bin.override {
+    temurin-bin = temurin-bin-23;
+    openjfx = openjfx23;
+  };
 
   temurin-bin-21 = javaPackages.compiler.temurin-bin.jdk-21;
   temurin-jre-bin-21 = javaPackages.compiler.temurin-bin.jre-21;
+  temurin-jfx-bin-21 = temurin-jfx-bin.override {
+    temurin-bin = temurin-bin-21;
+    openjfx = openjfx21;
+  };
 
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
   temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
+  temurin-jfx-bin-17 = temurin-jfx-bin.override {
+    temurin-bin = temurin-bin-17;
+    openjfx = openjfx17;
+  };
 
   temurin-bin-11 = javaPackages.compiler.temurin-bin.jdk-11;
   temurin-jre-bin-11 = javaPackages.compiler.temurin-bin.jre-11;
