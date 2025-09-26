@@ -4,8 +4,9 @@ This introduces fixes for 4 issues:
 
 1. When node-gyp is included as a dependency in a project, any scripts that run it will not use the copy included in Node. This is problematic because we patch node-gyp to work without xcbuild on Darwin, leading to these packages failing to build with a sandbox on Darwin.
 2. When a Git dependency contains install scripts, it has to be built just like any other package. Thus, we need to patch shebangs appropriately, just like in npmConfigHook.
-3. We get useless warnings that clog up logs when using a v1 lockfile, so we silence them.
-4. npm looks at a hidden lockfile to determine if files have binaries to link into `node_modules/.bin`. When using a v1 lockfile offline, this lockfile does not contain enough info, leading to binaries for packages such as Webpack not being available to scripts. We used to work around this by making npm ignore the hidden lockfile by creating a file, but now we just disable the code path entirely.
+3. A Git dependency with install scripts but no lockfile cannot be installed reproducibly, so we add a way to inject a lockfile from fetchNpmDeps.
+4. We get useless warnings that clog up logs when using a v1 lockfile, so we silence them.
+5. npm looks at a hidden lockfile to determine if files have binaries to link into `node_modules/.bin`. When using a v1 lockfile offline, this lockfile does not contain enough info, leading to binaries for packages such as Webpack not being available to scripts. We used to work around this by making npm ignore the hidden lockfile by creating a file, but now we just disable the code path entirely.
 
 To update:
 1. Run `git diff` from an npm checkout
@@ -42,26 +43,37 @@ diff --git a/deps/npm/node_modules/pacote/lib/git.js b/deps/npm/node_modules/pac
 index 1fa8b1f96..a026bb50d 100644
 --- a/deps/npm/node_modules/pacote/lib/git.js
 +++ b/deps/npm/node_modules/pacote/lib/git.js
-@@ -188,6 +188,24 @@ class GitFetcher extends Fetcher {
+@@ -188,6 +188,35 @@ class GitFetcher extends Fetcher {
        }
        noPrepare.push(this.resolved)
  
 +      if (process.env['NIX_NODEJS_BUILDNPMPACKAGE']) {
++        const fs = require('node:fs/promises')
++        const path = require('node:path')
 +        const spawn = require('@npmcli/promise-spawn')
 +
++        // allow injecting a package-lock.json file at this point for
++        // reproducibility.
++        const lockfile = process.env['NIX_NODEJS_BUILDNPMPACKAGE_LOCKFILE_' + this.resolved]
++        const copy = lockfile ?
++          fs.copyFile(lockfile, path.join(dir, 'package-lock.json')) :
++          Promise.resolve()
++
 +        const npmWithNixFlags = (args, cmd) => spawn('bash', ['-c', 'npm ' + args + ` $npm${cmd}Flags "$\{npm${cmd}FlagsArray[@]}" $npmFlags "$\{npmFlagsArray[@]}" || [ -n "$forceGitDeps" ]`], { cwd: dir, env: { ...process.env, _PACOTE_NO_PREPARE_: noPrepare.join('\n') } }, { message: `\`npm ${args}\` failed` })
-+        const patchShebangs = () => spawn('bash', ['-c', 'source $stdenv/setup; patchShebangs node_modules'], { cwd: dir })
++        const patchShebangs = path => spawn('bash', ['-c', 'source $stdenv/setup; patchShebangs ' + path], { cwd: dir })
 +
 +        // the DirFetcher will do its own preparation to run the prepare scripts
 +        // All we have to do is put the deps in place so that it can succeed.
 +        //
 +        // We ignore this.npmConfig to maintain an environment that's as close
 +        // to the rest of the build as possible.
-+        return spawn('bash', ['-c', '$prefetchNpmDeps --fixup-lockfile package-lock.json || [ -n "$forceGitDeps" ]'], { cwd: dir })
-+        .then(() => npmWithNixFlags('ci --ignore-scripts', 'Install'))
-+        .then(patchShebangs)
-+        .then(() => npmWithNixFlags('rebuild', 'Rebuild'))
-+        .then(patchShebangs)
++        return copy
++          .then(() => spawn('bash', ['-c', '$prefetchNpmDeps --fixup-lockfile package-lock.json || [ -n "$forceGitDeps" ]'], { cwd: dir }))
++          .then(() => patchShebangs('.'))
++          .then(() => npmWithNixFlags('ci --ignore-scripts', 'Install'))
++          .then(() => patchShebangs('node_modules'))
++          .then(() => npmWithNixFlags('rebuild', 'Rebuild'))
++          .then(() => patchShebangs('node_modules'))
 +      }
 +
        // the DirFetcher will do its own preparation to run the prepare scripts
