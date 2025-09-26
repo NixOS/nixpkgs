@@ -14,6 +14,7 @@
   libXi,
   libXcursor,
   libXrandr,
+  wayland,
   stdenv,
 }:
 
@@ -90,7 +91,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   appendRunpaths = [
-    (lib.makeLibraryPath
+    (lib.makeLibraryPath (
       [
         libX11
         libXi
@@ -98,7 +99,10 @@ rustPlatform.buildRustPackage {
         libXrandr
         vulkan-loader
       ]
-    )
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [
+        wayland
+      ]
+    ))
   ];
 
   postInstall = ''
