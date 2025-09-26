@@ -1729,6 +1729,12 @@ with haskellLib;
     unmarkBroken
   ];
 
+  # Requires jsaddle-webkit2gtk to build outside of pkgsCross.ghjs
+  # which requires a version of libsoup that's marked as insecure
+  reflex-dom = dontDistribute super.reflex-dom;
+  reflex-localize-dom = dontDistribute super.reflex-localize-dom;
+  trasa-reflex = dontDistribute super.trasa-reflex;
+
   # https://github.com/ghcjs/jsaddle/pull/160/
   jsaddle = appendPatch (fetchpatch {
     name = "fix-on-firefox.patch";
