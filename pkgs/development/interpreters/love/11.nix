@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
     "-DLIBLOVE_USE_SYSTEM_MODPLUG=ON"
     "-DLIBLOVE_USE_SYSTEM_MPG123=ON"
     # Lua 5.1 (Darwin lib name differs from Linux)
-    "-DLUA_INCLUDE_DIR=${lib.getDev lua5_1}/include"
+    "-DLUA_INCLUDE_DIR=${lua5_1.out}/include"
     "-DLUA_LIBRARIES=${
       if stdenv.isDarwin then
-        "${lib.getLib lua5_1}/lib/liblua.5.1.dylib"
+        "${lua5_1.out}/lib/liblua.5.1.dylib"
       else
-        "${lib.getLib lua5_1}/lib/liblua5.1.so"
+        "${lua5_1.out}/lib/liblua5.1.so"
     }"
   ]
   ++ lib.optionals stdenv.isDarwin [
