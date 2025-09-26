@@ -7,7 +7,7 @@
   rocm-cmake,
   rocm-runtime,
   busybox,
-  python3,
+  python3Minimal,
   gnugrep,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    python3
+    python3Minimal
   ];
 
   buildInputs = [ rocm-runtime ];

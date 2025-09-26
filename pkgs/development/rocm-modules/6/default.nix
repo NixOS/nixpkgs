@@ -41,26 +41,19 @@ let
           inherit (self) rocm-device-libs;
         }
       );
-      inherit (self.llvm) rocm-merged-llvm clang openmp;
+      inherit (self.llvm) clang openmp;
 
       rocm-core = self.callPackage ./rocm-core { stdenv = origStdenv; };
 
       rocm-cmake = self.callPackage ./rocm-cmake { stdenv = origStdenv; };
 
-      rocm-device-libs = self.callPackage ./rocm-device-libs {
-        stdenv = origStdenv;
-        inherit (llvm) rocm-merged-llvm;
-      };
+      rocm-device-libs = self.callPackage ./rocm-device-libs { };
 
       rocm-runtime = self.callPackage ./rocm-runtime {
         stdenv = origStdenv;
-        inherit (llvm) rocm-merged-llvm;
       };
 
-      rocm-comgr = self.callPackage ./rocm-comgr {
-        stdenv = origStdenv;
-        inherit (llvm) rocm-merged-llvm;
-      };
+      rocm-comgr = self.callPackage ./rocm-comgr { };
 
       rocminfo = self.callPackage ./rocminfo { stdenv = origStdenv; };
 
@@ -80,10 +73,7 @@ let
 
       hip-common = self.callPackage ./hip-common { };
 
-      hipcc = self.callPackage ./hipcc {
-        stdenv = origStdenv;
-        inherit (llvm) rocm-merged-llvm;
-      };
+      hipcc = self.callPackage ./hipcc { stdenv = origStdenv; };
 
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr { };
@@ -92,10 +82,6 @@ let
 
       hipify = self.callPackage ./hipify {
         stdenv = origStdenv;
-        inherit (llvm)
-          clang
-          rocm-merged-llvm
-          ;
       };
 
       # hsakmt was merged into rocm-runtime
@@ -180,7 +166,7 @@ let
 
       ck4inductor = pyPackages.callPackage ./composable_kernel/ck4inductor.nix {
         inherit (self) composable_kernel;
-        inherit (llvm) rocm-merged-llvm;
+        inherit (llvm) rocmcxx;
       };
 
       half = self.callPackage ./half { };

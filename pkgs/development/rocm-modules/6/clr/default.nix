@@ -17,6 +17,7 @@
   roctracer,
   rocminfo,
   rocm-smi,
+  symlinkJoin,
   numactl,
   libffi,
   zstd,
@@ -25,7 +26,7 @@
   libxml2,
   libX11,
   python3Packages,
-  rocm-merged-llvm,
+  llvm,
   khronos-ocl-icd-loader,
   gcc-unwrapped,
   writeShellScriptBin,
@@ -34,7 +35,25 @@
 
 let
   inherit (rocm-core) ROCM_LIBPATCH_VERSION;
-  hipClang = rocm-merged-llvm;
+  hipClang = symlinkJoin {
+    name = "hipClang";
+    paths = with llvm; [
+      # Without lld.dev when triton calls HIP_CLANG_PATH's ld.lld
+      # -flavor gnu will be an "unrecognised argument"
+      # This is a runtime failure for triton, but a build time failure
+      # for aotriton so if in the future we want to try to fix this
+      # aotriton is a good testcase
+      lld.dev
+      # Some libraries assume llvm-mc and llvm-objcopy are available
+      # in HIP_CLANG_PATH
+      llvm.bintools.bintools
+      # Our main sysrooted toolchain
+      rocmcxx
+    ];
+    postBuild = ''
+      rm -rf $out/{include,lib,share,etc,nix-support,usr}
+    '';
+  };
   hipClangPath = "${hipClang}/bin";
   wrapperArgs = [
     "--prefix PATH : $out/bin"
@@ -83,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm.llvm
     numactl
     libGL
     libxml2
@@ -100,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-comgr
     rocm-runtime
     rocminfo
+    hipClangPath
   ];
 
   cmakeBuildType = "RelWithDebInfo";
@@ -162,7 +183,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
-      --replace-fail "\''$LLVM_DIR/bin/clang" "${hipClangPath}/clang"
+      --replace-fail "\''$LLVM_DIR/bin/clang" "${hipClangPath}/clang" \
+      --replace-fail "\''$LLVM_DIR/bin/llvm-mc" "${lib.getExe' llvm.bintools.bintools "llvm-mc"}"
 
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
@@ -206,7 +228,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${rocm-core}/.info/ $out/.info
 
     ln -s ${hipClang} $out/llvm
-    ln -s ${hipClang}/bin/{ld.lld,lld,clang-offload-bundler,llvm-objcopy,clang,clang++} $out/bin/
   '';
 
   disallowedRequisites = [
