@@ -2134,7 +2134,7 @@
       "description": {
         "path": ".",
         "ref": "main",
-        "resolved-ref": "a32d483f4416628f1f6630592c0633f1f7c1d625",
+        "resolved-ref": "472980652e5d267bbddaa6f8d78c7bf1e4521498",
         "url": "https://github.com/Predidit/flutter-webview-windows.git"
       },
       "source": "git",
@@ -2223,6 +2223,6 @@
   },
   "sdks": {
     "dart": ">=3.8.0 <4.0.0",
-    "flutter": ">=3.35.3"
+    "flutter": ">=3.35.4"
   }
 }
