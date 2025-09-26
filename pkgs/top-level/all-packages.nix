@@ -345,6 +345,12 @@ with pkgs;
 
   cup-docker-noserver = cup-docker.override { withServer = false; };
 
+  inherit (callPackage ../by-name/de/depthai-core/package.nix { })
+    depthai-core
+    depthai-core-minimal
+    depthai-core-full
+    ;
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
