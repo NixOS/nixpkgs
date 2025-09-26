@@ -757,18 +757,7 @@ with haskellLib;
   migrant-core = doJailbreak super.migrant-core;
   migrant-sqlite-simple = doJailbreak super.migrant-sqlite-simple;
   migrant-hdbc = doJailbreak super.migrant-hdbc;
-  migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
-    (overrideCabal {
-      preCheck = ''
-        postgresqlTestUserOptions="LOGIN SUPERUSER"
-      '';
-    })
-    (addTestToolDepends [
-      pkgs.postgresql
-      pkgs.postgresqlTestHook
-    ])
-    doJailbreak
-  ];
+  migrant-postgresql-simple = doJailbreak super.migrant-postgresql-simple;
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
@@ -1574,33 +1563,6 @@ with haskellLib;
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  postgresql-simple-migration = overrideCabal (drv: {
-    preCheck = ''
-      PGUSER=test
-      PGDATABASE=test
-    '';
-    testToolDepends = drv.testToolDepends or [ ] ++ [
-      pkgs.postgresql
-      pkgs.postgresqlTestHook
-    ];
-  }) (doJailbreak super.postgresql-simple-migration);
-
-  postgresql-simple = addTestToolDepends [
-    pkgs.postgresql
-    pkgs.postgresqlTestHook
-  ] super.postgresql-simple;
-
-  beam-postgres = lib.pipe super.beam-postgres [
-    # Requires pg_ctl command during tests
-    (addTestToolDepends [ pkgs.postgresql ])
-    (dontCheckIf (!pkgs.postgresql.doInstallCheck || !self.testcontainers.doCheck))
-  ];
-
-  users-postgresql-simple = addTestToolDepends [
-    pkgs.postgresql
-    pkgs.postgresqlTestHook
-  ] super.users-postgresql-simple;
-
   gargoyle-postgresql-nix = addBuildTool [ pkgs.postgresql ] super.gargoyle-postgresql-nix;
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
@@ -1630,31 +1592,6 @@ with haskellLib;
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch ./patches/xattr-fix-build.patch super.xattr;
-
-  esqueleto =
-    overrideCabal
-      (drv: {
-        postPatch = drv.postPatch or "" + ''
-          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
-          sed -i test/PostgreSQL/Test.hs \
-            -e s^host=localhost^^
-        '';
-        # Match the test suite defaults (or hardcoded values?)
-        preCheck = drv.preCheck or "" + ''
-          PGUSER=esqutest
-          PGDATABASE=esqutest
-        '';
-        testFlags = drv.testFlags or [ ] ++ [
-          # We don't have a MySQL test hook yet
-          "--skip=/Esqueleto/MySQL"
-        ];
-        testToolDepends = drv.testToolDepends or [ ] ++ [
-          pkgs.postgresql
-          pkgs.postgresqlTestHook
-        ];
-      })
-      # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.esqueleto);
 
   # Requires API keys to run tests
   algolia = dontCheck super.algolia;
@@ -1714,27 +1651,6 @@ with haskellLib;
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
-  persistent-postgresql =
-    # TODO: move this override to configuration-nix.nix
-    overrideCabal
-      (drv: {
-        postPatch = drv.postPath or "" + ''
-          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
-          # NOTE: upstream host variable takes only two values...
-          sed -i test/PgInit.hs \
-            -e s^'host=" <> host <> "'^^
-        '';
-        preCheck = drv.preCheck or "" + ''
-          PGDATABASE=test
-          PGUSER=test
-        '';
-        testToolDepends = drv.testToolDepends or [ ] ++ [
-          pkgs.postgresql
-          pkgs.postgresqlTestHook
-        ];
-      })
-      # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
   dhall-lsp-server = appendPatches [
     # Add support for lsp >= 2.7
@@ -2877,20 +2793,6 @@ with haskellLib;
   # calls ghc in tests
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
-
-  postgres-websockets = lib.pipe super.postgres-websockets [
-    (addTestToolDepends [
-      pkgs.postgresql
-      pkgs.postgresqlTestHook
-    ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
-    (overrideCabal {
-      preCheck = ''
-        export postgresqlEnableTCP=1
-        export PGDATABASE=postgres_ws_test
-      '';
-    })
-  ];
 
   postgrest =
     lib.pipe
