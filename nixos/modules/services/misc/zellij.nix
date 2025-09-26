@@ -82,6 +82,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.web.ip != "127.0.0.1" -> (cfg.web.certificate != null && cfg.web.key != null);
+        message = "Cannot bind to non-loopback IP: 0.0.0.0 without an SSL certificate, please set `services.zellij.web.certificate` and `services.zellij.web.key`.";
+      }
+    ];
+
     programs.bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ''
       eval "$(${lib.getExe cfg.package} setup --generate-auto-start bash)"
     '';
