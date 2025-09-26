@@ -1,48 +1,47 @@
 {
   python3Packages,
   fetchurl,
-  anki,
+  qt6,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mnemosyne";
   version = "2.10.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
     sha256 = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
   };
 
-  nativeBuildInputs = with python3Packages; [ pyqtwebengine.wrapQtAppsHook ];
+  postPatch = ''
+    # fix wrong installation location
+    substituteInPlace setup.py \
+      --replace-fail "path.join(sys.exec_prefix," "path.join("
 
-  buildInputs = [ anki ];
+    substituteInPlace mnemosyne/libmnemosyne/gui_translators/gettext_gui_translator.py \
+      --replace-fail "path.join(sys.exec_prefix," "path.join('$out', "
+  '';
 
-  propagatedBuildInputs = with python3Packages; [
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+
+  buildInputs = [ qt6.qtbase ];
+
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     cheroot
-    cherrypy
-    googletrans
+    googletrans # we should be using google-trans-new instead, but it's currently unpackaged
     gtts
     matplotlib
-    pyopengl
     pyqt6
     pyqt6-webengine
     argon2-cffi
     webob
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace '("", ["/usr/local/bin/mplayer"])' ""
-  '';
-
   # No tests/ directory in tarball
   doCheck = false;
-
-  postInstall = ''
-    mkdir -p $out/share/applications
-    mv mnemosyne.desktop $out/share/applications
-  '';
 
   dontWrapQtApps = true;
 
