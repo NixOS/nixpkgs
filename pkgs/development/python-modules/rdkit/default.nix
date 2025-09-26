@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
@@ -26,10 +25,22 @@ let
       rev = "AvalonToolkit_2.0.5-pre.3";
       hash = "sha256-2MuFZgRIHXnkV7Nc1da4fa7wDx57VHUtwLthrmjk+5o=";
     };
+    maeparser = fetchFromGitHub {
+      owner = "schrodinger";
+      repo = "maeparser";
+      tag = "v1.3.3";
+      hash = "sha256-xRyf/n8ezmMPMhlQFapVpnT2LReLe7spXB9jFC+VPRA=";
+    };
+    coordgenlibs = fetchFromGitHub {
+      owner = "schrodinger";
+      repo = "coordgenlibs";
+      tag = "v3.0.2";
+      hash = "sha256-casFPNbPv9mkKpzfBENW7INClypuCO1L7clLGBXvSvI=";
+    };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "v2024.03.1";
+      rev = "v2025.03.1";
       hash = "sha256-rhR7Ev+9Fk/Ks7R2x2SjWu1L/48a4zHDHUBohx1Dw/M=";
     };
     freesasa = fetchFromGitHub {
@@ -49,7 +60,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2024.09.1";
+  version = "2025.03.6";
   pyproject = false;
 
   src =
@@ -60,7 +71,7 @@ buildPythonPackage rec {
       owner = "rdkit";
       repo = "rdkit";
       rev = "Release_${versionTag}";
-      hash = "sha256-UsyPlAJ8FISblF8szEmRqWansunIhW/gbEBZx13YM+A=";
+      hash = "sha256-DqnwfT+lX7OnArIcFlCBrDl+QDmNpbPO9u7OGwu8fJo=";
     };
 
   unpackPhase = ''
@@ -71,6 +82,12 @@ buildPythonPackage rec {
     # In buildPhase, CMake patches the file in this directory
     # see https://github.com/rdkit/rdkit/pull/5928
     cp -r ${external.avalon}/* External/AvalonTools/avalon
+
+    mkdir External/CoordGen/maeparser
+    cp -r ${external.maeparser}/* External/CoordGen/maeparser
+
+    mkdir External/CoordGen/coordgenlibs-3.0.2
+    cp -r ${external.coordgenlibs}/* External/CoordGen/coordgenlibs-3.0.2
 
     mkdir External/YAeHMOP/yaehmop
     ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop
@@ -144,13 +161,13 @@ buildPythonPackage rec {
     "rdkit.Chem.rdDetermineBonds"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for cheminformatics";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rmcgibbo
       natsukium
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.rdkit.org";
     changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };
