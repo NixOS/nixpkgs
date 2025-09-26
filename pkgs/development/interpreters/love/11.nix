@@ -19,6 +19,7 @@
   mpg123,
   lua5_1,
   libGL,
+  libGLU,
   libX11,
   libXext,
   libXrandr,
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.isLinux [
     libGL
+    libGLU
     libX11
     libXext
     libXrandr
