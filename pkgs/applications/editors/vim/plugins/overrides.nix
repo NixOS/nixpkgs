@@ -3904,9 +3904,6 @@ assertNoAdditions {
   };
 
   vim-isort = super.vim-isort.overrideAttrs {
-    # Code updated to find relative path at runtime
-    # https://github.com/fisadev/vim-isort/pull/41
-    dontCheckForBrokenSymlinks = true;
     postPatch = ''
       substituteInPlace autoload/vimisort.vim \
         --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
