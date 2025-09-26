@@ -5290,6 +5290,11 @@ with pkgs;
   jdk24 = openjdk24;
   jdk24_headless = openjdk24_headless;
 
+  openjdk25 = javaPackages.compiler.openjdk25;
+  openjdk25_headless = javaPackages.compiler.openjdk25.headless;
+  jdk25 = openjdk25;
+  jdk25_headless = openjdk25_headless;
+
   # default JDK
   jdk = jdk21;
   jdk_headless = jdk21_headless;
@@ -5315,6 +5320,10 @@ with pkgs;
   jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk21;
     jdkOnBuild = buildPackages.jdk21;
+  };
+  jre25_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk25;
+    jdkOnBuild = buildPackages.jdk25;
   };
   jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdkOnBuild = buildPackages.jdk;
