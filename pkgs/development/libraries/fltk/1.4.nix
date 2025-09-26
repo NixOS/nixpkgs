@@ -35,9 +35,6 @@
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
 }:
 
-let
-  onOff = value: if value then "ON" else "OFF";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fltk";
   version = "1.4.4";
@@ -103,43 +100,42 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Common
-    "-DFLTK_BUILD_SHARED_LIBS=${onOff (!stdenv.hostPlatform.isStatic)}"
-    "-DFLTK_USE_SYSTEM_LIBDECOR=ON"
-    "-DFLTK_USE_SYSTEM_LIBJPEG=ON"
-    "-DFLTK_USE_SYSTEM_LIBPNG=ON"
-    "-DFLTK_USE_SYSTEM_ZLIB=ON"
+    (lib.cmakeBool "FLTK_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "FLTK_USE_SYSTEM_LIBDECOR" true)
+    (lib.cmakeBool "FLTK_USE_SYSTEM_LIBJPEG" true)
+    (lib.cmakeBool "FLTK_USE_SYSTEM_LIBPNG" true)
+    (lib.cmakeBool "FLTK_USE_SYSTEM_ZLIB" true)
 
     # X11
-    "-DFLTK_USE_XINERAMA=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XFIXES=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XCURSOR=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XFT=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XRENDER=${onOff stdenv.hostPlatform.isLinux}"
+    (lib.cmakeBool "FLTK_USE_XINERAMA" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "FLTK_USE_XFIXES" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "FLTK_USE_XCURSOR" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "FLTK_USE_XFT" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "FLTK_USE_XRENDER" stdenv.hostPlatform.isLinux)
 
     # GL
-    "-DFLTK_BUILD_GL=${onOff withGL}"
-    "-DOpenGL_GL_PREFERENCE=GLVND"
+    (lib.cmakeBool "FLTK_BUILD_GL" withGL)
 
     # Cairo
-    "-DFLTK_OPTION_CAIRO_WINDOW=${onOff withCairo}"
-    "-DFLTK_OPTION_CAIRO_EXT=${onOff withCairo}"
+    (lib.cmakeBool "FLTK_OPTION_CAIRO_WINDOW" withCairo)
+    (lib.cmakeBool "FLTK_OPTION_CAIRO_EXT" withCairo)
 
     # Pango
-    "-DFLTK_USE_PANGO=${onOff withPango}"
+    (lib.cmakeBool "FLTK_USE_PANGO" withPango)
 
     # Examples & Tests
-    "-DFLTK_BUILD_EXAMPLES=${onOff withExamples}"
-    "-DFLTK_BUILD_TEST=${onOff withExamples}"
+    (lib.cmakeBool "FLTK_BUILD_EXAMPLES" withExamples)
+    (lib.cmakeBool "FLTK_BUILD_TEST" withExamples)
 
     # Docs
-    "-DFLTK_BUILD_HTML_DOCS=${onOff withDocs}"
-    "-DFLTK_BUILD_PDF_DOCS=OFF"
-    "-DFLTK_INSTALL_HTML_DOCS=${onOff withDocs}"
-    "-DFLTK_INSTALL_PDF_DOCS=OFF"
-    "-DFLTK_INCLUDE_DRIVER_DOCS=${onOff withDocs}"
+    (lib.cmakeBool "FLTK_BUILD_HTML_DOCS" withDocs)
+    (lib.cmakeBool "FLTK_INSTALL_HTML_DOCS" withDocs)
+    (lib.cmakeBool "FLTK_INCLUDE_DRIVER_DOCS" withDocs)
+    (lib.cmakeBool "FLTK_BUILD_PDF_DOCS" false)
+    (lib.cmakeBool "FLTK_INSTALL_PDF_DOCS" false)
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   postBuild = lib.optionalString withDocs ''

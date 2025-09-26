@@ -25,9 +25,6 @@
   withCairo ? true,
   cairo,
 
-  withPango ? false,
-  pango,
-
   withDocs ? true,
   doxygen,
   graphviz,
@@ -36,9 +33,6 @@
   withShared ? true,
 }:
 
-let
-  onOff = value: if value then "ON" else "OFF";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fltk";
   version = "1.3.8";
@@ -101,50 +95,44 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withCairo [
     cairo
-  ]
-  ++ lib.optionals withPango [
-    pango
   ];
 
   cmakeFlags = [
     # Common
-    "-DOPTION_BUILD_SHARED_LIBS=${onOff withShared}"
-    "-DOPTION_USE_SYSTEM_ZLIB=ON"
-    "-DOPTION_USE_SYSTEM_LIBJPEG=ON"
-    "-DOPTION_USE_SYSTEM_LIBPNG=ON"
+    (lib.cmakeBool "OPTION_BUILD_SHARED_LIBS" withShared)
+    (lib.cmakeBool "OPTION_USE_SYSTEM_ZLIB" true)
+    (lib.cmakeBool "OPTION_USE_SYSTEM_LIBJPEG" true)
+    (lib.cmakeBool "OPTION_USE_SYSTEM_LIBPNG" true)
 
     # X11
-    "-DOPTION_USE_XINERAMA=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XFIXES=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XCURSOR=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XFT=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XRENDER=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XDBE=${onOff stdenv.hostPlatform.isLinux}"
+    (lib.cmakeBool "OPTION_USE_XINERAMA" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "OPTION_USE_XFIXES" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "OPTION_USE_XCURSOR" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "OPTION_USE_XFT" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "OPTION_USE_XRENDER" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "OPTION_USE_XDBE" stdenv.hostPlatform.isLinux)
 
     # GL
-    "-DOPTION_USE_GL=${onOff withGL}"
+    (lib.cmakeBool "OPTION_USE_GL" withGL)
     "-DOpenGL_GL_PREFERENCE=GLVND"
 
     # Cairo
-    "-DOPTION_CAIRO=${onOff withCairo}"
-    "-DOPTION_CAIROEXT=${onOff withCairo}"
-
-    # Pango
-    "-DOPTION_USE_PANGO=${onOff withPango}"
+    (lib.cmakeBool "OPTION_CAIRO" withCairo)
+    (lib.cmakeBool "OPTION_CAIROEXT" withCairo)
 
     # Examples & Tests
-    "-DFLTK_BUILD_EXAMPLES=${onOff withExamples}"
-    "-DFLTK_BUILD_TEST=${onOff withExamples}"
+    (lib.cmakeBool "FLTK_BUILD_EXAMPLES" withExamples)
+    (lib.cmakeBool "FLTK_BUILD_TEST" withExamples)
 
     # Docs
-    "-DOPTION_BUILD_HTML_DOCUMENTATION=${onOff withDocs}"
-    "-DOPTION_BUILD_PDF_DOCUMENTATION=OFF"
-    "-DOPTION_INSTALL_HTML_DOCUMENTATION=${onOff withDocs}"
-    "-DOPTION_INSTALL_PDF_DOCUMENTATION=OFF"
-    "-DOPTION_INCLUDE_DRIVER_DOCUMENTATION=${onOff withDocs}"
+    (lib.cmakeBool "OPTION_BUILD_HTML_DOCUMENTATION" withDocs)
+    (lib.cmakeBool "OPTION_INSTALL_HTML_DOCUMENTATION" withDocs)
+    (lib.cmakeBool "OPTION_INCLUDE_DRIVER_DOCUMENTATION" withDocs)
+    (lib.cmakeBool "OPTION_BUILD_PDF_DOCUMENTATION" false)
+    (lib.cmakeBool "OPTION_INSTALL_PDF_DOCUMENTATION" false)
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   preBuild = lib.optionalString (withCairo && withShared && stdenv.hostPlatform.isDarwin) ''
