@@ -2883,6 +2883,8 @@ self: super: with self; {
 
   colout = callPackage ../development/python-modules/colout { };
 
+  comet-maths = callPackage ../development/python-modules/comet-maths { };
+
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
 
   comicapi = callPackage ../development/python-modules/comicapi { };
@@ -10771,6 +10773,8 @@ self: super: with self; {
 
   objsize = callPackage ../development/python-modules/objsize { };
 
+  obsarray = callPackage ../development/python-modules/obsarray { };
+
   obspy = callPackage ../development/python-modules/obspy { };
 
   oca-port = callPackage ../development/python-modules/oca-port { };
@@ -12347,6 +12351,8 @@ self: super: with self; {
   pulumi-hcloud = pkgs.pulumiPackages.pulumi-hcloud.sdks.python;
 
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
+
+  punpy = callPackage ../development/python-modules/punpy { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
