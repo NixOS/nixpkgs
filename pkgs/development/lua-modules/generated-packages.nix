@@ -1618,15 +1618,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lsp-progress.nvim";
-      version = "1.0.14-1";
+      version = "1.0.15-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lsp-progress.nvim-1.0.14-1.rockspec";
-          sha256 = "0b2fi0asrqhw7yiikg7ds8yjwqmsh1xl3qcqzkwabm5sxila5ai7";
+          url = "mirror://luarocks/lsp-progress.nvim-1.0.15-1.rockspec";
+          sha256 = "160l97hsq9574f1riq4kjwa66y39z2fgnjmnc7li1pf00dkh3fvq";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/linrongbin16/lsp-progress.nvim/archive/f61cb7a788e4695ed9ae5e1b6b01bfff8f136f8b.zip";
-        sha256 = "04bdnag8wnahfl0g1x3i9dgs5rd6rjhbyyrj48wjg5lyc58qgb2x";
+        url = "https://github.com/linrongbin16/lsp-progress.nvim/archive/ae52979ad412371ea6dc39ff70c8dfc681fb42b8.zip";
+        sha256 = "0c7s82fl5wamxykdlz63r0xclwdy9s658hp6zm5hmpgl3qyjdrir";
       };
 
       disabled = luaOlder "5.1";
