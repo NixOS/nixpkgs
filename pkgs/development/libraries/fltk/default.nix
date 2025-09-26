@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fltk";
-  version = "1.3.8";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "fltk";
     repo = "fltk";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-OQWyOV3EeyFhwFg/eOX66QtFUxaDR1x4ZyHnZHmzhN8=";
+    hash = "sha256-aN0WdHDjxb9O4OgTfBncIj12tRYfeltKev6pgSMu6/E=";
   };
 
   outputs = [ "out" ] ++ lib.optional withExamples "bin" ++ lib.optional withDocs "doc";
