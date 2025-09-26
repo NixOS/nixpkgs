@@ -269,6 +269,7 @@
   ./programs/nbd.nix
   ./programs/nekoray.nix
   ./programs/neovim.nix
+  ./programs/netextender.nix
   ./programs/nethoscope.nix
   ./programs/nexttrace.nix
   ./programs/nh.nix
