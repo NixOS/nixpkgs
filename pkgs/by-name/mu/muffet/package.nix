@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "muffet";
   version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "muffet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GfRR+9PdfY63Pzv2XZenKs8XXAKRr9qMzcHOVhl+hv4=";
   };
 
@@ -20,9 +20,9 @@ buildGoModule rec {
   meta = {
     description = "Website link checker which scrapes and inspects all pages in a website recursively";
     homepage = "https://github.com/raviqqe/muffet";
-    changelog = "https://github.com/raviqqe/muffet/releases/tag/v${version}";
+    changelog = "https://github.com/raviqqe/muffet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "muffet";
   };
-}
+})
