@@ -1,37 +1,29 @@
 {
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  sqlite,
-  libpq,
-  boost,
   lib,
   stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  libpq,
+  sqlite,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "soci";
-  version = "4.0.2";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "SOCI";
     repo = "soci";
-    rev = "v${version}";
-    sha256 = "sha256-NE0ApbX8HG2VAQ9cg9+kX3kJQ4PR1XvWL9BlT8NphmE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vdvvqPTODC0AMDLZa2pOy5/qkZ1IuJ0PEDTN6oMJAqg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-backend-search-path.patch";
-      url = "https://github.com/SOCI/soci/commit/56c93afc467bdba8ffbe68739eea76059ea62f7a.patch";
-      sha256 = "sha256-nC/39pn3Cv5e65GgIfF3l64/AbCsfZHPUPIWETZFZAY=";
-    })
-  ];
 
   # Do not build static libraries
   cmakeFlags = [
-    "-DSOCI_STATIC=OFF"
-    "-DCMAKE_CXX_STANDARD=11"
-    "-DSOCI_TESTS=off"
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "11")
+    (lib.cmakeBool "SOCI_STATIC" false)
+    (lib.cmakeBool "SOCI_TESTS" false)
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -41,11 +33,11 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Database access library for C++";
     homepage = "https://soci.sourceforge.net/";
-    license = licenses.boost;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})
