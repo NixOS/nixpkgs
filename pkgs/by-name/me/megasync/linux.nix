@@ -12,10 +12,8 @@
   unzip,
 
   # buildInputs
-  c-ares,
   cryptopp,
   curl,
-  ffmpeg,
   hicolor-icon-theme,
   icu,
   libmediainfo,
@@ -35,13 +33,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "5.15.0.1";
+  version = "5.16.0.2";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     tag = "v${finalAttrs.version}_Linux";
-    hash = "sha256-CqeR1UmwrwUjr8QM2LCkZ4RaEU2bU1fq+QLCN7yfIJk=";
+    hash = "sha256-Bkye2Is3GbdnYYaS//AkNfrt8ppWP9zE58obcmUm0wE=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -70,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./megasync-fix-cmake-install-bindir.patch
     ./dont-fetch-clang-format.patch
+    ./megasync-fix-zlib-link.patch
   ];
 
   postPatch = ''
@@ -91,10 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    c-ares
     cryptopp
     curl
-    ffmpeg
     hicolor-icon-theme
     icu
     libmediainfo
@@ -122,9 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "USE_PDFIUM" false) # PDFIUM is not in nixpkgs
     (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage is insecure
+    (lib.cmakeBool "USE_FFMPEG" false) # FFmpeg not needed without FreeImage
     (lib.cmakeBool "ENABLE_DESIGN_TOKENS_IMPORTER" false) # cannot be fetched
-    (lib.cmakeBool "USE_BREAKPAD" false)
-    (lib.cmakeBool "ENABLE_DESKTOP_APP_TESTS" false)
+    (lib.cmakeBool "USE_BREAKPAD" false) # Crash reporting disabled
+    (lib.cmakeBool "ENABLE_DESKTOP_APP_TESTS" false) # Skip desktop app tests
   ];
 
   preFixup = ''

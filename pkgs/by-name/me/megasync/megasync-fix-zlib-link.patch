@@ -1,0 +1,18 @@
+--- a/src/MEGASync/CMakeLists.txt
++++ b/src/MEGASync/CMakeLists.txt
+@@ -81,6 +81,7 @@ set_target_properties(MEGAsync
+ 
+ 
+ find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick QuickWidgets LinguistTools)
++find_package(ZLIB REQUIRED)
+ qt5_create_translation(QM_OUTPUT ${CMAKE_CURRENT_SOURCE_DIR} gui/translations/translation.source.ts
+     OPTIONS -locations none -no-ui-lines -no-obsolete)
+ 
+@@ -155,6 +156,7 @@ target_link_libraries(MEGAsync
+     Qt5::Qml
+     Qt5::Quick
+     Qt5::QuickWidgets
++    ZLIB::ZLIB
+ )
+ 
+ ## Adjust compilation flags for warnings and errors ##
