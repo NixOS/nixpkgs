@@ -8,27 +8,62 @@
   perl,
   installShellFiles,
   gnumake42,
+  fetchpatch,
+  pkg-config,
+  gtk2,
+  libpng,
+  texliveSmall,
+  openssl,
+  ghostscript,
+  rWrapper,
+  rPackages,
+  cpio,
+  debootstrap,
+  libeatmydata,
+  fakeroot,
+  fakechroot,
   doCheck ? true,
 }:
-stdenv.mkDerivation rec {
-
+let
+  allOrNothing = func: list: lib.optionals (lib.all func list) list;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "redo-apenwarr";
   version = "0.42d";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "apenwarr";
     repo = "redo";
-    rev = "${repo}-${version}";
-    sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
+    tag = "redo-${finalAttrs.version}";
+    hash = "sha256-/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
-  postPatch = ''
+  patches = [
+    (fetchpatch {
+      name = "posix-null-cd.patch";
+      url = "https://github.com/magistau/redo/commit/bbad2ed2892ab942796431c5d087c2854daa10d8.diff";
+      hash = "sha256-o4MVAzcJdAmB1eIcdjK9hZ1/wWfE1/Yf8jXmm8lFTAs=";
+    })
+    (fetchpatch {
+      name = "shebangs.patch";
+      url = "https://github.com/magistau/redo/commit/76214f67e782f9c0bc4926fc053edd1e33992006.diff";
+      hash = "sha256-LNuExO5YDYFP3BxPAH07VAPR3VK6D45rOKF/8XXfA5g=";
+    })
+    (fetchpatch {
+      name = "splitwords.patch";
+      url = "https://github.com/magistau/redo/commit/9e7a0341692340eac758497a9ec4730c6f91d3b9.diff";
+      hash = "sha256-srdMOMuBhZGaFCk+vkJZOOEeGwyxTNg+kpQ3Kan0IGY=";
+    })
+  ];
 
-    patchShebangs minimal/do
-
-  ''
-  + lib.optionalString doCheck ''
+  postPatch = lib.optionalString doCheck ''
     unset CC CXX
+
+    substituteInPlace ./do \
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
+
+    substituteInPlace minimal/do \
+      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
 
     substituteInPlace minimal/do.test \
       --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
@@ -42,17 +77,47 @@ stdenv.mkDerivation rec {
     substituteInPlace t/110-compile/hello.o.do \
       --replace-fail "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
 
-    substituteInPlace t/200-shell/nonshelltest.do \
-      --replace-fail "/usr/bin/env perl" "${perl}/bin/perl"
-
-    # See https://github.com/apenwarr/redo/pull/47
-    substituteInPlace minimal/do \
-      --replace-fail 'cd "$dodir"' 'cd "''${dodir:-.}"'
+    for recipe in t/200-shell/nonshelltest.do docs/cookbook/container/default.sha256.do; do
+      chmod u+x "$recipe"
+      patchShebangs "$recipe"
+      chmod u-x "$recipe"
+    done
+    patchShebangs docs/cookbook/container/
   '';
 
   inherit doCheck;
-
   checkTarget = "test";
+
+  checkInputs = [
+    gtk2
+    libpng
+    openssl
+  ];
+  # redo shouldn't fail to build jsut because certain tests require dependencies are not available for a platform
+  nativeCheckInputs = [
+    perl
+    pkg-config
+  ]
+  ++ lib.concatMap (allOrNothing (lib.meta.availableOn stdenv.buildPlatform)) [
+    [
+      texliveSmall
+      ghostscript
+      (rWrapper.override {
+        packages = [ rPackages.ggplot2 ];
+      })
+    ]
+    [
+      debootstrap
+      libeatmydata
+    ]
+    [
+      cpio
+    ]
+    [
+      fakeroot
+      fakechroot
+    ]
+  ];
 
   outputs = [
     "out"
@@ -65,11 +130,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    python3
-    (with python3.pkgs; [
-      beautifulsoup4
-      markdown
-    ])
+    (python3.withPackages (ps: [
+      ps.beautifulsoup4
+      ps.markdown
+    ]))
     which
     installShellFiles
     gnumake42 # fails with make 4.4
@@ -89,4 +153,4 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = python3.meta.platforms;
   };
-}
+})
