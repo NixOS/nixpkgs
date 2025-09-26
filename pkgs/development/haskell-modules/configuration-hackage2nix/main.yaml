@@ -141,14 +141,12 @@ package-maintainers:
     - generics-sop
     - ghcjs-base
     - ghcjs-dom
-    - ghcjs-dom-hello
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
     - haveibeenpwned
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
-    - jsaddle-hello
     - jsaddle-warp
     - jsaddle-wkwebview
     - json-sop
@@ -929,7 +927,9 @@ dont-distribute-packages:
   - yices-painless
 
   # These packages don’t build because they use deprecated libsoup 2.4 versions.
+  - jsaddle-hello
   - jsaddle-webkit2gtk
+  - ghcjs-dom-hello
   - gi-javascriptcore4
   - gi-soup2
   - gi-webkit2
