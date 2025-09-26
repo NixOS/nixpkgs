@@ -10,15 +10,15 @@
   libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pop-launcher";
-  version = "1.2.4";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "launcher";
-    rev = version;
-    hash = "sha256-CLpquNgdtnGMlMpGLv72WZmizalvYPfMWlE/qLprVrs=";
+    tag = finalAttrs.version;
+    hash = "sha256-4wPspv5bpqoG45uUkrtxJTvdbmFkpWv8QBZxsPbGu/M=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  cargoHash = "sha256-Htre2gzAlNfxBkBvMMtjYbUcuwNw+tB4DI18iBA+g34=";
+  cargoHash = "sha256-gc1YhIxHBqmMOE3Gu3T4gmGdAp0t+qiUXDcPYZE6utU=";
 
   cargoBuildFlags = [
     "--package"
@@ -66,12 +66,13 @@ rustPlatform.buildRustPackage rec {
         --replace-fail '/usr/bin/gnome-terminal' 'gnome-terminal'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular IPC-based desktop launcher service";
     homepage = "https://github.com/pop-os/launcher";
-    platforms = platforms.linux;
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ samhug ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ samhug ];
     mainProgram = "pop-launcher";
+    teams = [ lib.teams.cosmic ];
   };
-}
+})

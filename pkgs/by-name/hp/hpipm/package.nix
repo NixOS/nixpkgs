@@ -10,13 +10,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpipm";
   #version = "0.1.3";  not building, use master instead
-  version = "0-unstable-2024-07-30";
+  version = "0.1.3-unstable-2025-09-25";
 
   src = fetchFromGitHub {
     owner = "giaf";
     repo = "hpipm";
-    rev = "3ab7d6059d9d7da31ec9ff6a8ca84fd8ec5ab5e2";
-    hash = "sha256-TRNHjW2/YDfGJHTG9sy2nmHyk6+HlBGIabPm87TETE8=";
+    rev = "8f3a2d00f6d1bd7101fb651391fba79377915288";
+    hash = "sha256-XtnUs1RiB7zJOv7zdRzB31hnxDYaiH+Q4SLyE6/kuEg=";
   };
 
   nativeBuildInputs = [ cmake ];
