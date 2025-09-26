@@ -2760,6 +2760,7 @@ mapAliases {
   zinc = zincsearch; # Added 2023-05-28
   zint = zint-qt; # Added 2025-05-15
   zombietrackergps = throw "'zombietrackergps' has been dropped, as it depends on KDE Gear 5 and is unmaintained"; # Added 2025-08-20
+  zotify = throw "zotify has been removed due to lack of upstream maintenance"; # Added 2025-09-26
   zplugin = throw "'zplugin' has been renamed to/replaced by 'zinit'"; # Converted to throw 2024-10-17
   zk-shell = throw "zk-shell has been removed as it was broken and unmaintained"; # Added 2024-08-10
   zkg = throw "'zkg' has been replaced by 'zeek'"; # Added 2023-10-20
