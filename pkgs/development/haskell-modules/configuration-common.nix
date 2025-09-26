@@ -696,6 +696,16 @@ with haskellLib;
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
 
+  # Fix `mv` not working on directories
+  turtle = appendPatches [
+    (pkgs.fetchpatch {
+      name = "turtle-fix-mv.patch";
+      url = "https://github.com/Gabriella439/turtle/commit/b3975531f8d6345da54b005f226adab095085865.patch";
+      sha256 = "sha256-EqvMQpRz/7hbY6wJ0xG8Ou6oKhwWdpjzBv+NPW6tnSY=";
+      includes = [ "src/Turtle/Prelude.hs" ];
+    })
+  ] super.turtle;
+
   # Allow inspection-testing >= 0.6 in test suite
   algebraic-graphs =
     appendPatch
