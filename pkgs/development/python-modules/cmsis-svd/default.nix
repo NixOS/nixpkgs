@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "cmsis-svd";
-  version = "0.4-unstable-2024-01-25";
+  version = "python-0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
