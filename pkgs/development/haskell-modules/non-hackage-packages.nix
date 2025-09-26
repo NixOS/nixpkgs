@@ -46,7 +46,7 @@ self: super:
 
   # spago-legacy is not released to Hackage.
   # https://github.com/spacchetti/spago/issues/512
-  spago-legacy = self.callPackage ../tools/purescript/spago-legacy/spago-legacy.nix { };
+  spago-legacy = self.callPackage ../../by-name/sp/spago-legacy/spago-legacy.nix { };
 
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
