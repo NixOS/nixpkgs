@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soplex";
-  version = "713";
+  version = "715";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "soplex";
     rev = "release-${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
-    hash = "sha256-qI7VGPAm3ALzeiD/OgvlZ1w2GzHRYdBajTW5XdIN9pU=";
+    hash = "sha256-gtz2h5EszE77zYZ8m2UtkYnoquO8GJhAAzsvQW5b+3I=";
   };
 
   nativeBuildInputs = [ cmake ];
