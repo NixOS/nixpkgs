@@ -36,15 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./darwin.patch
   ];
 
-  postPatch =
-    lib.optionalString withDocumentation ''
-      patchShebangs doc/doxygen/gen-doxygen.py
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      # delete line containing os-wrappers-test, disables
-      # the building of os-wrappers-test
-      sed -i '/os-wrappers-test/d' tests/meson.build
-    '';
+  postPatch = lib.optionalString withDocumentation ''
+    patchShebangs doc/doxygen/gen-doxygen.py
+  '';
 
   outputs = [
     "out"
@@ -113,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin; # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
     maintainers = with maintainers; [
       codyopel
       qyliss

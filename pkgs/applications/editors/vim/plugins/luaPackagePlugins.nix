@@ -9,8 +9,10 @@ let
 
   luarocksPackageNames = [
     "fidget-nvim"
+    "fzf-lua"
     "gitsigns-nvim"
     "grug-far-nvim"
+    "haskell-tools-nvim"
     "image-nvim"
     "lsp-progress-nvim"
     "lualine-nvim"
@@ -34,6 +36,8 @@ let
     "plenary-nvim"
     "rest-nvim"
     "rocks-config-nvim"
+    "rocks-nvim"
+    "rustaceanvim"
     "rtp-nvim"
     "telescope-manix"
     "telescope-nvim"

@@ -56,8 +56,8 @@ invalidated most of its previous use cases:
 - psql >= 15 instead gives only the database owner create permissions
 - Even on psql < 15 (or databases migrated to >= 15), it is
   recommended to manually assign permissions along these lines
-  - https://www.postgresql.org/docs/release/15.0/
-  - https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV
+  - <https://www.postgresql.org/docs/release/15.0/>
+  - <https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV>
 
 ### Assigning ownership {#module-services-postgres-initializing-ownership}
 

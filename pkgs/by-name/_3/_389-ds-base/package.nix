@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoconf,
   automake,
   cargo,
@@ -48,6 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "389-ds-base-${finalAttrs.version}";
     hash = "sha256-hRTK9xBu8v8+SGa/3IB8Alh/aGUiRRn2LmYOvXy0Yd4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/389ds/389-ds-base/pull/6930
+      name = "389-ds-base-rustc-1_89.patch";
+      url = "https://github.com/389ds/389-ds-base/commit/1701419551c246e9dc21778b118220eeb2258125.patch";
+      hash = "sha256-trzY/fDH3rs66DWbWI+PY46tIC9ShuVqspMHqEEKZYA=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;

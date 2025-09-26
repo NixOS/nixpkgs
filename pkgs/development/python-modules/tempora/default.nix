@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.8.0";
+  version = "5.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,12 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "tempora";
     tag = "v${version}";
-    hash = "sha256-ojllPOmz+laxFMCobLcDnCVMvo1354vS5nBnO1mxokM=";
+    hash = "sha256-1Zeo8bUCHKPZ6I0HGT7bIh7IgbRL4j9Cv3t9FFiZ72s=";
   };
+
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
 
   build-system = [ setuptools-scm ];
 

@@ -2,29 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   normality,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fingerprints";
-  version = "1.2.3";
+  version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alephdata";
     repo = "fingerprints";
-    rev = version;
-    hash = "sha256-U2UslCy1OagVTtllCKsEBX4zI/qIczbxs2Cxzy+/Xys=";
+    tag = version;
+    hash = "sha256-Q+XCsuGMHPtOqB0SauVuYInR5FGMuG6aNhqiAwTJvSI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ normality ];
+  dependencies = [ normality ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

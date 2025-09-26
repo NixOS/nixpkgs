@@ -11,27 +11,9 @@
     with super;
     lib.mapAttrs (_: set: recurseIntoAttrs set) {
       inherit (super)
-        agdaPackages
-        apacheHttpdPackages
-        fusePackages
-        gns3Packages
-        haskellPackages
-        idrisPackages
-        nodePackages
-        nodePackages_latest
-        platformioPackages
         rPackages
-        roundcubePlugins
         sourceHanPackages
-        zabbix60
         ;
-
-      # Make sure haskell.compiler is included, so alternative GHC versions show up,
-      # but don't add haskell.packages.* since they contain the same packages (at
-      # least by name) as haskellPackages.
-      haskell = super.haskell // {
-        compiler = recurseIntoAttrs super.haskell.compiler;
-      };
 
       # emacsPackages is an alias for emacs.pkgs
       # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
@@ -42,5 +24,8 @@
       # show up in search results or repository tracking services that consume our
       # packages.json https://github.com/NixOS/nixpkgs/issues/244966
       minimal-bootstrap = { };
+
+      # This makes it so that tests are not appering on search.nixos.org
+      tests = { };
     };
 }

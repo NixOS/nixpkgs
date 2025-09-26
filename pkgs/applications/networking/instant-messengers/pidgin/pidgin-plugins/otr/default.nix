@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Plugin for Pidgin 2.x which implements OTR Messaging";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

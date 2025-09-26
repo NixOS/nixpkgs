@@ -10,7 +10,6 @@
   defaultPort ? 3000,
   # Where to find the Ollama service; this url gets baked into the Nix package
   ollamaUrl ? "http://127.0.0.1:11434",
-  ...
 }:
 
 let

@@ -4,11 +4,6 @@
     "minor": 1
   },
   "modules": {
-    "IL": {
-      "attrPath": [
-        "libdevil"
-      ]
-    },
     "ImageMagick": {
       "attrPath": [
         "imagemagick"

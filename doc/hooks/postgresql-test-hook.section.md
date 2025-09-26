@@ -53,9 +53,9 @@ Bash-only variables:
 
 ## Hooks {#sec-postgresqlTestHook-hooks}
 
-A number of additional hooks are ran in postgresqlTestHook
+A number of additional hooks are run in postgresqlTestHook
 
- - `postgresqlTestSetupPost`: ran after postgresql has been set up.
+ - `postgresqlTestSetupPost`: run after postgresql has been set up.
 
 ## TCP and the Nix sandbox {#sec-postgresqlTestHook-tcp}
 

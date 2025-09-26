@@ -5,33 +5,30 @@
   fetchFromGitHub,
   hishel,
   httpx,
-  poetry-core,
   pydantic,
   pyjwt,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.12.13";
+  version = "0.13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-TMn81YY44bXUyU6GHSGtLtQ7aC2/vA9nZf/PaGhBi0s=";
+    hash = "sha256-4THc5BNQGSrpf3Y3OoFisywEdKp8ZgNjle4yvVLUy1A=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
     hishel

@@ -38,7 +38,7 @@ in
 
         The environment file should NOT be stored in /nix/store as it contains passwords and/or keys in plain text.
 
-        Environment reference: https://github.com/prometheus-pve/prometheus-pve-exporter#authentication
+        Environment reference: <https://github.com/prometheus-pve/prometheus-pve-exporter#authentication>
       '';
     };
 
@@ -53,7 +53,7 @@ in
 
         If both configFile and environmentFile are provided, the configFile option will be ignored.
 
-        Configuration reference: https://github.com/prometheus-pve/prometheus-pve-exporter/#authentication
+        Configuration reference: <https://github.com/prometheus-pve/prometheus-pve-exporter/#authentication>
       '';
     };
 

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "jdd";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "mahyarmirrashed";
     repo = "jdd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JeF6dsExfQ+d5F8RWmfGbr7CIl6akOTlLI2jxx/dES0=";
+    hash = "sha256-3keJrKbR3+J3z22W8Xoabz9YhvjRRBBMo59l/eJo7Hs=";
   };
 
   vendorHash = "sha256-KEg5X2wHx7KPHEL1zJd/DeDnR69FyB6pajpHIYdep2k=";

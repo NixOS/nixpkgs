@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "fastcore";
-  version = "1.8.6";
+  version = "1.8.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "fastai";
     repo = "fastcore";
     tag = version;
-    hash = "sha256-m/22tTIysVFgNWUUWKC/1TV/dkEki8dDACb0XvKayAw=";
+    hash = "sha256-gqC5dVYWfWLNvum8ffIpT9qlm2yD6txPm3KQaP/rHao=";
   };
 
   build-system = [ setuptools ];

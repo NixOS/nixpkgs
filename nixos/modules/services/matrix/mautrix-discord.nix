@@ -19,14 +19,7 @@ in
     services.mautrix-discord = {
       enable = lib.mkEnableOption "Mautrix-Discord, a Matrix-Discord puppeting/relay-bot bridge";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.mautrix-discord;
-        defaultText = lib.literalExpression "pkgs.mautrix-discord";
-        description = ''
-          The mautrix-discord package to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "mautrix-discord" { };
 
       settings = lib.mkOption {
         type = lib.types.submodule {

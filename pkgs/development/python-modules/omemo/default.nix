@@ -10,20 +10,23 @@
 
   pytestCheckHook,
   oldmemo,
+  twomemo,
+  pytest-asyncio,
+  pytest-cov-stub,
 
   # passthru
   omemo,
 }:
 buildPythonPackage rec {
   pname = "omemo";
-  version = "1.2.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-omemo";
     tag = "v${version}";
-    hash = "sha256-egb4UFoF/gS3LKutArnJSXxDYH/xyBLOxWec98rOT9Y=";
+    hash = "sha256-uA8Nv8xT6ROlE9eM/Oz2j5HsYtvWzKEu7DSd/ws+WZY=";
   };
 
   build-system = [
@@ -40,6 +43,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     oldmemo
+    twomemo
+    pytest-asyncio
+    pytest-cov-stub
   ]
   ++ oldmemo.optional-dependencies.xml;
 

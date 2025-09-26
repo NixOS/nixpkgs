@@ -8,6 +8,7 @@
   asio,
   avahi,
   boost,
+  expat,
   flac,
   libogg,
   libvorbis,
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.30.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
     rev = "v${version}";
-    hash = "sha256-EJgpZz4PnXfge0rkVH1F7cah+i9AvDJVSUVqL7qChDM=";
+    hash = "sha256-YJwRY9OLoRiRRJVFnXw9AEsDo2W8elpH4LIUScKjpT0=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     boost
     asio
     avahi
+    expat
     flac
     libogg
     libvorbis
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
+
+  cmakeFlags = [ (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport) ];
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

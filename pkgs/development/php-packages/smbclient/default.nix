@@ -6,8 +6,8 @@
 }:
 buildPecl {
   pname = "smbclient";
-  version = "1.0.6";
-  sha256 = "sha256-ZsQzdDt6NLRWBsA75om9zkxSvB6zBsvvPhXJZrX/KNc=";
+  version = "1.1.2";
+  sha256 = "sha256-Hmp0RWOqxwCBXlca2YsRNahOhA1E5qxnmXSUx4Cpzec=";
 
   # TODO: remove this when upstream merges a fix - https://github.com/eduardok/libsmbclient-php/pull/66
   LIBSMBCLIENT_INCDIR = "${samba.dev}/include/samba-4.0";

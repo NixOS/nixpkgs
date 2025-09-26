@@ -400,7 +400,7 @@ in
       })
       // (lib.optionalAttrs (cfg.mta.type == "postfix") {
         sendmail_aliases = "${dataDir}/sympa_transport";
-        aliases_program = "${pkgs.postfix}/bin/postmap";
+        aliases_program = lib.getExe' config.services.postfix.package "postmap";
         aliases_db_type = "hash";
       })
       // (lib.optionalAttrs cfg.web.enable {
@@ -502,8 +502,8 @@ in
         ''}
 
         ${lib.optionalString (cfg.mta.type == "postfix") ''
-          ${pkgs.postfix}/bin/postmap hash:${dataDir}/virtual.sympa
-          ${pkgs.postfix}/bin/postmap hash:${dataDir}/transport.sympa
+          ${lib.getExe' config.services.postfix.package "postmap"} hash:${dataDir}/virtual.sympa
+          ${lib.getExe' config.services.postfix.package "postmap"} hash:${dataDir}/transport.sympa
         ''}
         ${pkg}/bin/sympa_newaliases.pl
         ${pkg}/bin/sympa.pl --health_check
@@ -585,44 +585,46 @@ in
 
     services.postfix = lib.mkIf (cfg.mta.type == "postfix") {
       enable = true;
-      recipientDelimiter = "+";
-      config = {
-        virtual_alias_maps = [ "hash:${dataDir}/virtual.sympa" ];
-        virtual_mailbox_maps = [
-          "hash:${dataDir}/transport.sympa"
-          "hash:${dataDir}/sympa_transport"
-          "hash:${dataDir}/virtual.sympa"
-        ];
-        virtual_mailbox_domains = [ "hash:${dataDir}/transport.sympa" ];
-        transport_maps = [
-          "hash:${dataDir}/transport.sympa"
-          "hash:${dataDir}/sympa_transport"
-        ];
-      };
-      masterConfig = {
-        "sympa" = {
-          type = "unix";
-          privileged = true;
-          chroot = false;
-          command = "pipe";
-          args = [
-            "flags=hqRu"
-            "user=${user}"
-            "argv=${pkg}/libexec/queue"
-            "\${nexthop}"
+      settings = {
+        main = {
+          recipient_delimiter = "+";
+          virtual_alias_maps = [ "hash:${dataDir}/virtual.sympa" ];
+          virtual_mailbox_maps = [
+            "hash:${dataDir}/transport.sympa"
+            "hash:${dataDir}/sympa_transport"
+            "hash:${dataDir}/virtual.sympa"
+          ];
+          virtual_mailbox_domains = [ "hash:${dataDir}/transport.sympa" ];
+          transport_maps = [
+            "hash:${dataDir}/transport.sympa"
+            "hash:${dataDir}/sympa_transport"
           ];
         };
-        "sympabounce" = {
-          type = "unix";
-          privileged = true;
-          chroot = false;
-          command = "pipe";
-          args = [
-            "flags=hqRu"
-            "user=${user}"
-            "argv=${pkg}/libexec/bouncequeue"
-            "\${nexthop}"
-          ];
+        master = {
+          "sympa" = {
+            type = "unix";
+            privileged = true;
+            chroot = false;
+            command = "pipe";
+            args = [
+              "flags=hqRu"
+              "user=${user}"
+              "argv=${pkg}/libexec/queue"
+              "\${nexthop}"
+            ];
+          };
+          "sympabounce" = {
+            type = "unix";
+            privileged = true;
+            chroot = false;
+            command = "pipe";
+            args = [
+              "flags=hqRu"
+              "user=${user}"
+              "argv=${pkg}/libexec/bouncequeue"
+              "\${nexthop}"
+            ];
+          };
         };
       };
     };

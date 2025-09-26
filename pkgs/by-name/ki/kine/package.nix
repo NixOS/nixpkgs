@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kine";
-  version = "0.13.17";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "k3s-io";
     repo = "kine";
     rev = "v${version}";
-    hash = "sha256-GkxQPv5SvKbu91NZKCY9w3aexaURHV3zjYkmcycntOQ=";
+    hash = "sha256-0qT5/kZ4jRBRxzsm7oC7ymRPtxOeAYt5IN66Qlby0XI=";
   };
 
-  vendorHash = "sha256-iSeWKtkFa79SH8l9pq8MGcb+Qww0SOu9sSsBpb/zCWs=";
+  vendorHash = "sha256-OgKwHh4+KRQUPdN6/DBfdxXqWLKGWT0++XvHTex+0EA=";
 
   ldflags = [
     "-s"
@@ -29,7 +29,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "Kine is an etcdshim that translates etcd API to RDMS";
+    description = "etcdshim that translates etcd API to RDMS";
     homepage = "https://github.com/k3s-io/kine";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ techknowlogick ];

@@ -1,0 +1,32 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index baae124..2b4bf01 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -1,6 +1,27 @@
+ """Minimal test configuration for refactored MCP-NixOS."""
+ 
+ 
++import pytest
++@pytest.fixture(autouse=True)
++def mock_get_channels(monkeypatch):
++    """Mock get_channels function to return fixed channels for all tests."""
++    def mock_channels():
++        return {
++            "unstable": "latest-43-nixos-unstable",
++            "25.05": "latest-43-nixos-25.05",
++            "25.11": "latest-43-nixos-25.11",
++            "24.11": "latest-43-nixos-24.11",
++            "stable": "latest-43-nixos-25.05",
++            "beta": "latest-43-nixos-25.05"
++        }
++
++    # Patch the function in the server module
++    monkeypatch.setattr('mcp_nixos.server.get_channels', mock_channels)
++
++    # Also patch any imported references in test modules
++    monkeypatch.setattr('tests.test_server.get_channels', mock_channels)
++
++
+ def pytest_addoption(parser):
+     """Add test filtering options."""
+     parser.addoption("--unit", action="store_true", help="Run unit tests only")

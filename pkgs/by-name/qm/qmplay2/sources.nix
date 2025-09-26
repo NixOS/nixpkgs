@@ -5,14 +5,29 @@
     let
       self = {
         pname = "qmplay2";
-        version = "25.01.19";
+        version = "25.06.27";
 
         src = fetchFromGitHub {
           owner = "zaps166";
           repo = "QMPlay2";
           tag = self.version;
-          hash = "sha256-Of/zEQ6o2J/wXfAoY10IPtCaMaSk8ux8L6MrimeMWVA=";
-          fetchSubmodules = true;
+          hash = "sha256-+kDaRKwXOHnHje1RntC9y9xiTaMzs8SGMLVoJ+6IDNk=";
+        };
+      };
+    in
+    self;
+
+  vulkan-headers-qmplay2 =
+    let
+      self = {
+        pname = "vulkan-headers";
+        version = "1.3.300";
+
+        src = fetchFromGitHub {
+          owner = "KhronosGroup";
+          repo = "Vulkan-Headers";
+          tag = "v${self.version}";
+          hash = "sha256-6J+6yvbEQXLY+Wkf1pWKtUAZGbe5Tc01uVh3Wqmk2+8=";
         };
       };
     in

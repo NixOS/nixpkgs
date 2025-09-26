@@ -75,7 +75,7 @@ nix-shell -p 'julia.withPackages ["Plots"]' --run julia
   different CPUs.
 
   Why? Julia will detect the CPU microarchitecture of the build machine and include this information in the precompiled
-  `*.ji` files. Starting in 1.10 Julia became more strict about checking the CPU target compatibility, so it may reject
+  `*.ji` files. Starting in 1.10, Julia became more strict about checking the CPU target compatibility, so it may reject
   your precompiled files if they were compiled on a different machine.
   A good option to provide wide compatibility is to set this to `"generic"`, although this may reduce performance.
   You can also set a semicolon-separated list of multiple different targets. See the Julia documentation for details.

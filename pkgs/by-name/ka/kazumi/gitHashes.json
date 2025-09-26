@@ -1,0 +1,12 @@
+{
+  "desktop_webview_window": "sha256-l5n57iKLgsH4TaBYRaTDEPznzljI0jfOGcvxyYcIW6M=",
+  "media_kit": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "media_kit_libs_android_video": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "media_kit_libs_ios_video": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "media_kit_libs_linux": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "media_kit_libs_macos_video": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "media_kit_libs_video": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "media_kit_libs_windows_video": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "media_kit_video": "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=",
+  "webview_windows": "sha256-9oWTvEoFeF7djEVA3PSM72rOmOMUhV8ZYuV6+RreNzE="
+}

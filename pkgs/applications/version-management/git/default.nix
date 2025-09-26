@@ -60,7 +60,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.50.1";
+  version = "2.51.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -89,25 +89,30 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-fj5sNt7L2PHu3RTULbZnS+A2ccIgSGS++ipBdWxcj8Q=";
+    hash = "sha256-YKfCJRzC5YjVzYe65WcmBhfG3gwi3KnNv8TH0riZC2I=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  hardeningDisable = [ "format" ];
-
   enableParallelBuilding = true;
   enableParallelInstalling = true;
 
   patches = [
+    # This patch does two things: (1) use the right name for `docbook2texi',
+    # and (2) make sure `gitman.info' isn't produced since it's broken
+    # (duplicate node names).
     ./docbook2texi.patch
+    # Fix references to gettext.sh at runtime: hard-code it to
+    # ${pkgs.gettext}/bin/gettext.sh instead of assuming gettext.sh is in $PATH
     ./git-sh-i18n.patch
+    # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
-    ./installCheck-path.patch
   ]
   ++ lib.optionals withSsh [
+    # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
+    # searching in $PATH
     ./ssh-path.patch
   ];
 
@@ -115,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
+    substituteInPlace contrib/credential/libsecret/Makefile \
+        --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
   + lib.optionalString doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
@@ -294,12 +301,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a contrib $out/share/git/
     mkdir -p $out/share/bash-completion/completions
     ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
-    # only readme, developed in another repo
-    rm -r contrib/hooks/multimail
-    mkdir -p $out/share/git-core/contrib
-    cp -a contrib/hooks/ $out/share/git-core/contrib/
-    substituteInPlace $out/share/git-core/contrib/hooks/pre-auto-gc-battery \
-      --replace ' grep' ' ${gnugrep}/bin/grep' \
 
     # grep is a runtime dependency, need to patch so that it's found
     substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -476,9 +477,6 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t1301-shared-repo
     # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
     disable_test t9902-completion
-
-    # Our patched gettext never fallbacks
-    disable_test t0201-gettext-fallbacks
   ''
   + lib.optionalString (!sendEmailSupport) ''
     # Disable sendmail tests

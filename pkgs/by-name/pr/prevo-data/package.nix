@@ -41,7 +41,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       das-g
-      ehmry
     ];
   };
 }

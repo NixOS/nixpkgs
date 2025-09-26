@@ -1,0 +1,12 @@
+{
+  "auto_orientation": "sha256-0QOEW8+0PpBIELmzilZ8+z7ozNRxKgI0BzuBS8c1Fng=",
+  "canvas_danmaku": "sha256-3cBsQCvXuc5XvSRNY4QX33+t8aF2AfOQhRt+MCQWdOA=",
+  "chat_bottom_container": "sha256-um9KwZUDxWBhFsGHfv00TjPzxDHmp43TLRF0GwuV1xs=",
+  "extended_nested_scroll_view": "sha256-5X8ghUlEO/lvz/3PmYuipCjcs+QrIciaH5wgWp9i+24=",
+  "floating": "sha256-TJ2i3hTOQ4euHWr+lfQU44L3vVehmWVdZuAzNyVaEfA=",
+  "flutter_sortable_wrap": "sha256-Qj9Lzh+pJy+vHznGt5M3xwoJtaVtt00fxm4JJXL4bFI=",
+  "material_design_icons_flutter": "sha256-KMwjnzJJj8nemCqUCSwYafPOwTYbtoHNenxstocJtz4=",
+  "media_kit_libs_android_video": "sha256-o5qsqJe4TjOhwtgnc20Ga1y4IyxdhC/VmeAsFMDoHuo=",
+  "media_kit_video": "sha256-TPYmT5Muv98wuZUO9evd40uIWp/XDk0+GIfEgd/m4mg=",
+  "webdav_client": "sha256-euNF7HdDtZ68BqSEq9BvO10BK09MxX2wWGoElFS0yeE="
+}

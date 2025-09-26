@@ -183,6 +183,10 @@ let
       orga = "stsewd";
       repo = "tree-sitter-rst";
     };
+    "tree-sitter-sml" = {
+      orga = "MatthewFluet";
+      repo = "tree-sitter-sml";
+    };
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
@@ -205,7 +209,7 @@ let
       repo = "tree-sitter-viml";
     };
     "tree-sitter-yaml" = {
-      orga = "ikatyang";
+      orga = "tree-sitter-grammars";
       repo = "tree-sitter-yaml";
     };
     "tree-sitter-zig" = {
@@ -277,7 +281,7 @@ let
       repo = "tree-sitter-scss";
     };
     "tree-sitter-erlang" = {
-      orga = "abstractmachineslab";
+      orga = "WhatsApp";
       repo = "tree-sitter-erlang";
     };
     "tree-sitter-elixir" = {
@@ -339,6 +343,10 @@ let
     "tree-sitter-gemini" = {
       orga = "blessanabraham";
       repo = "tree-sitter-gemini";
+    };
+    "tree-sitter-go-template" = {
+      orga = "ngalaiko";
+      repo = "tree-sitter-go-template";
     };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";

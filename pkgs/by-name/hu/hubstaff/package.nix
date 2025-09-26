@@ -29,9 +29,9 @@
 }:
 
 let
-  url = "https://app.hubstaff.com/download/9353-standard-linux-1-6-31-release/sh";
-  version = "1.6.31-a6da06ad";
-  sha256 = "sha256:07x8di08ln15mv3x7vp01wgs8zcd1rrzvmzygrl9anhx9zhgsr3b";
+  url = "https://app.hubstaff.com/download/10606-standard-linux-1-7-5-release/sh";
+  version = "1.7.5-a68a2738";
+  sha256 = "sha256:19rp5xldhfx48v8hdbvxbvv1j2n3wn5rymm82gryz620kfiandfb";
 
   rpath = lib.makeLibraryPath [
     libX11
@@ -131,7 +131,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [
       michalrus
-      srghma
     ];
   };
 }

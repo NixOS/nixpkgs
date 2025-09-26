@@ -141,8 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
           buildInputs = [ dataDerivation ] ++ finalAttrs.buildInputs;
           nativeBuildInputs = [ rsync ];
 
-          phases = [ "buildPhase" ];
-          buildPhase =
+          buildCommand =
             let
               Default_Data_Path =
                 if stdenv.hostPlatform.isDarwin then

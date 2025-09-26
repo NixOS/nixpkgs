@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clifm";
-  version = "1.25";
+  version = "1.26";
 
   src = fetchFromGitHub {
     owner = "leo-arch";
     repo = "clifm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q4BzkLclJJGybx6tnOhfRE3X5iFtuYTfbAvSLO7isX4=";
+    hash = "sha256-eNgghfK2NSSrzn0X1XNcaE+jErlLG5rhg4+RLjERsFU=";
   };
 
   buildInputs = [

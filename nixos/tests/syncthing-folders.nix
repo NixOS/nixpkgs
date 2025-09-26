@@ -4,7 +4,7 @@ let
     name:
     pkgs.runCommand "syncthing-test-certs-${name}" { } ''
       mkdir -p $out
-      ${pkgs.syncthing}/bin/syncthing generate --config=$out
+      ${pkgs.syncthing}/bin/syncthing generate --home=$out
       ${pkgs.libxml2}/bin/xmllint --xpath 'string(configuration/device/@id)' $out/config.xml > $out/id
     '';
   idA = genNodeId "a";

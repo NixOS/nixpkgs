@@ -5,13 +5,13 @@
   qmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qmarkdowntextedit";
   version = "unstable-2023-04-02";
 
   src = fetchFromGitHub {
     owner = "pbek";
-    repo = pname;
+    repo = "qmarkdowntextedit";
     rev = "a23cc53e7e40e9dcfd0f815b2b3b6a5dc7304405";
     hash = "sha256-EYBX2SJa8o4R/zEjSFbmFxhLI726WY21XmCkWIqPeFc=";
   };
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pbek/qmarkdowntextedit";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
   };
 }

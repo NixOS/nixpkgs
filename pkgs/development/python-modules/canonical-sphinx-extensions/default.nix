@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "canonical-sphinx-extensions";
-  version = "0.0.27";
+  version = "0.0.34";
   pyproject = true;
 
   src = fetchPypi {
     pname = "canonical_sphinx_extensions";
     inherit version;
-    hash = "sha256-ZorSmn+PAVS8xO7X3zk6u3W7pn3JB9w0PhFAXzv6l78=";
+    hash = "sha256-y9wiXj4FOkOt3Pt2EFbX5xO+f8V5eaI0G6LzuGbdY0o=";
   };
 
   build-system = [

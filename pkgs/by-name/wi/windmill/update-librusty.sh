@@ -1,14 +1,19 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gnugrep gnused nix
+#!nix-shell -i bash -p gnugrep gnused nix jq
 # shellcheck shell=bash
 
 set -eu -o pipefail
 
-# ASSUMES; The Cargo.lock file inside this directory holds the correct librusty version
+echo "librusty_v8: UPDATING"
+
+# ASSUMES; The Cargo.lock file is located at <REPO>/backend/Cargo.toml
+
+WINDMILL_LATEST_VERSION=$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --silent --fail --location "https://api.github.com/repos/windmill-labs/windmill/releases/latest" | jq --raw-output .tag_name)
+CARGO_LOCK=$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --silent --fail --location "https://github.com/windmill-labs/windmill/raw/$WINDMILL_LATEST_VERSION/backend/Cargo.lock")
 
 PACKAGE_DIR=$(dirname "$(readlink --canonicalize-existing "${BASH_SOURCE[0]}")")
 OUTPUT_FILE="$PACKAGE_DIR/librusty_v8.nix"
-NEW_VERSION="$(grep --after-context 5 'name = "v8"' "$PACKAGE_DIR/Cargo.lock" | grep 'version =' | sed -E 's/version = "//;s/"//')"
+NEW_VERSION=$(echo "$CARGO_LOCK" | grep --after-context 5 'name = "v8"' | grep 'version =' | sed -E 's/version = "//;s/"//')
 
 CURRENT_VERSION=""
 if [ -f "$OUTPUT_FILE" ]; then
@@ -36,3 +41,5 @@ fetchLibrustyV8 {
 EOF
 
 mv "$TEMP_FILE" "$OUTPUT_FILE"
+
+echo "librusty_v8: UPDATE DONE"

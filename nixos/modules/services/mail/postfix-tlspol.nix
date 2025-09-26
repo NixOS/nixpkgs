@@ -94,16 +94,13 @@ in
 
           dns = {
             address = mkOption {
-              type = types.str;
-              default = if config.networking.resolvconf.useLocalResolver then "127.0.0.1:53" else null;
-              defaultText = literalExpression ''
-                if config.networking.resolvconf.useLocalResolver then
-                  "127.0.0.1:53"
-                else
-                  null
-              '';
+              type = with types; nullOr str;
+              default = null;
+              example = "127.0.0.1:53";
               description = ''
-                IP and port to your DNS resolver
+                IP and port to your DNS resolver.
+
+                Uses resolvers from /etc/resolv.conf if unset.
 
                 ::: {.note}
                 The configured DNS resolver must validate DNSSEC signatures.
@@ -135,7 +132,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enable && config.services.postfix.enable && cfg.configurePostfix) {
       # https://github.com/Zuplu/postfix-tlspol#postfix-configuration
-      services.postfix.config = {
+      services.postfix.settings.main = {
         smtp_dns_support_level = "dnssec";
         smtp_tls_security_level = "dane";
         smtp_tls_policy_maps =

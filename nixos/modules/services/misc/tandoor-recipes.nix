@@ -184,7 +184,7 @@ in
       };
     };
 
-    services.paperless.settings = lib.mkIf cfg.database.createLocally {
+    services.tandoor-recipes.extraConfig = lib.mkIf cfg.database.createLocally {
       DB_ENGINE = "django.db.backends.postgresql";
       POSTGRES_HOST = "/run/postgresql";
       POSTGRES_USER = "tandoor_recipes";

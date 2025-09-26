@@ -15,16 +15,16 @@
 
 buildGoModule rec {
   pname = "xray";
-  version = "25.7.26";
+  version = "25.9.11";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
     rev = "v${version}";
-    hash = "sha256-oPB4OngMDUk+HURDoUhIZ6SGQ0gII740PjgjP2fUK/k=";
+    hash = "sha256-498Kf+V2g2i0hpQy+vAEzf3hVoPUAWfUyWcJmP3Bgb4=";
   };
 
-  vendorHash = "sha256-AmY9q0I0S7Xki9mgCJn/nV4Y9Ra6MDgnma2iPnoWQhg=";
+  vendorHash = "sha256-xhd4KGHGA82gacugM6rgYAz8gVdGWu0LHEiLeRnx3xQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 

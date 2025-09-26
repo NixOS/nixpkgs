@@ -27,7 +27,7 @@
         enable = true;
         settings = {
           default_session = {
-            command = "${pkgs.greetd.greetd}/bin/agreety --cmd bash";
+            command = "${pkgs.greetd}/bin/agreety --cmd bash";
           };
         };
       };

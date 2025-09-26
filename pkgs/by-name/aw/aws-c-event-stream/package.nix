@@ -15,13 +15,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
   # nixpkgs-update: no auto update
-  version = "0.5.0";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-event-stream";
     rev = "v${version}";
-    hash = "sha256-lg1qS/u5Fi8nt/tv2ekd8dgQ7rlrF3DrRxqidAoEywY=";
+    hash = "sha256-wVjpDKKwoksq5gFtvhH76c7ciP0XmMozhkWmzY6GwgU=";
   };
 
   nativeBuildInputs = [ cmake ];

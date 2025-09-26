@@ -52,6 +52,12 @@ rustPlatform.buildRustPackage {
     # See service.nix for reasons
     substituteInPlace src-tauri/src/core/service_ipc.rs \
       --replace-fail "/tmp/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
+    # Set verge-mihomo.sock path
+    # In service mode, use /run/clash-verge-rev
+    # In sidecar mode, use $XDG_RUNTIME_DIR or /run/user/$UID or /tmp
+    substituteInPlace src-tauri/src/utils/dirs.rs \
+      --replace-fail '"/var/tmp", "/tmp"' '"/run/clash-verge-rev", &std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string()))' \
+      --replace-fail 'base_dir.join("verge")' 'base_dir'
 
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"

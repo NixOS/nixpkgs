@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wf-shell";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wf-shell";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-J5KmUxM/mU5I1YfkfwZgbK7VxMTKKKGGvxYS5Rnbqnc=";
+    hash = "sha256-PLTeFGecxVwU2LdwnDwiWB1OcbaZjJemMpT0pcCFf/w=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       wucke13
-      rewine
+      wineee
     ];
     platforms = lib.platforms.unix;
   };

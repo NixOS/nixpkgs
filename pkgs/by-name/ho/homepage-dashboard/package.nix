@@ -6,6 +6,7 @@
   pnpm_10,
   python3,
   stdenv,
+  unixtools,
   cctools,
   lib,
   nixosTests,
@@ -28,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "1.3.2";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-45Z2XS+ij6J6WSCb9/oDQa2eC9wKu+D7ncYwcB6K5gQ=";
+    hash = "sha256-ug7cT/HMiOQF6CX6EEFlvgttXFZdRctSTqPAAkun2KU=";
   };
 
   # This patch ensures that the cache implementation respects the env
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     fetcherVersion = 1;
-    hash = "sha256-aPkXHKG3vDsfYqYx9q9+2wZhuFqmPcXdoBqOfAvW9oA=";
+    hash = "sha256-IYmAl4eHR0jVpQJfxQRlOBTIbrrjS+dnJpUsl8ee6y4=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
       --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard \
-      --add-flags "$out/share/homepage/server.js"
+      --add-flags "$out/share/homepage/server.js" \
+      --set PATH "${lib.makeBinPath [ unixtools.ping ]}"
 
     ${if enableLocalIcons then installLocalIcons else ""}
 
@@ -111,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [ parthiv-krishna ];
     platforms = lib.platforms.all;
   };
 })

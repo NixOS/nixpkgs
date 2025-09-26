@@ -23,15 +23,17 @@
   cmocka,
   tzdata,
   gitUpdater,
+  fstrm,
+  protobufc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.11";
+  version = "9.20.13";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TaLVMuZovCHog/bm2dPYF5TZ7GCxgVMDhWSaVvRu4Xo=";
+    hash = "sha256-FR+TdurTF+ZGpdDJ8BwGA4bYkRGNdDen+Cm7lyfHs0w=";
   };
 
   outputs = [
@@ -50,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    protobufc
     removeReferencesTo
   ];
   buildInputs = [
@@ -61,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     libuv
     nghttp2
     jemalloc
+    fstrm
+    protobufc
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libcap
   ++ lib.optional enableGSSAPI libkrb5
@@ -71,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--localstatedir=/var"
     "--without-lmdb"
+    "--enable-dnstap"
     "--with-libidn2"
   ]
   ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
@@ -102,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   doCheck = false;
   # TODO: investigate failures; see this and linked discussions:

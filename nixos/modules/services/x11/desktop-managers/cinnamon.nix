@@ -66,7 +66,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
@@ -114,7 +114,7 @@ in
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [
-        cinnamon-common
+        cinnamon
         cinnamon-screensaver
         nemo-with-extensions
         xapp
@@ -166,7 +166,7 @@ in
             desktop-file-utils
 
             # common-files
-            cinnamon-common
+            cinnamon
             cinnamon-session
             cinnamon-desktop
             cinnamon-menus
@@ -177,7 +177,7 @@ in
 
             # session requirements
             cinnamon-screensaver
-            # cinnamon-killer-daemon: provided by cinnamon-common
+            # cinnamon-killer-daemon: provided by cinnamon
             networkmanagerapplet # session requirement - also nm-applet not needed
 
             # packages
@@ -225,7 +225,7 @@ in
 
       services.orca.enable = mkDefault (notExcluded pkgs.orca);
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

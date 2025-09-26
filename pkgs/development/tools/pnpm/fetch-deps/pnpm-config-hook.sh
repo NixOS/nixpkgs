@@ -23,6 +23,8 @@ pnpmConfigHook() {
 
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
+    export npm_config_arch="@npmArch@"
+    export npm_config_platform="@npmPlatform@"
 
     cp -Tr "$pnpmDeps" "$STORE_PATH"
     chmod -R +w "$STORE_PATH"

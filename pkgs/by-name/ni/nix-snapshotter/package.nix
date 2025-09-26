@@ -6,13 +6,13 @@
 }:
 
 let
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "pdtpartners";
     repo = "nix-snapshotter";
     rev = "v${version}";
-    hash = "sha256-TCZdXCmnqCPsd3PjLv/LDSKJhTspLliL0DE+c/XP9BY=";
+    hash = "sha256-sE5/KCQfgMW1Mkgx8FaecY1f6dcjRfE3z4yYsQjhrRc=";
   };
 
   nix-snapshotter-lib = callPackage "${src}/package.nix" { };
@@ -21,7 +21,7 @@ in
 buildGoModule {
   pname = "nix-snapshotter";
   inherit version src;
-  vendorHash = "sha256-QBLePOnfsr6I19ddyZNSFDih6mCaZ/NV2Qz1B1pSHxs=";
+  vendorHash = "sha256-mWMkDALQ3QvDxgw1Nf0bgWYqeOFDUYKg3UNurNJdD9I=";
   passthru = { inherit (nix-snapshotter-lib) buildImage; };
 
   meta = {

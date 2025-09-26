@@ -26,13 +26,6 @@
 let
   minimal = racket-minimal.override { inherit disableDocs; };
 
-  makeLibPaths = lib.concatMapStringsSep " " (
-    lib.flip lib.pipe [
-      lib.getLib
-      (x: ''"${x}/lib"'')
-    ]
-  );
-
   manifest = lib.importJSON ./manifest.json;
   inherit (stdenv.hostPlatform) isDarwin;
 in
@@ -71,7 +64,6 @@ minimal.overrideAttrs (
 
     preBuild =
       let
-        libPaths = makeLibPaths finalAttrs.buildInputs;
         libPathsVar = if isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
       in
       /*
@@ -79,7 +71,13 @@ minimal.overrideAttrs (
         dependencies, which is integrated into the build process of Racket
       */
       ''
-        for lib_path in ${libPaths}; do
+        for lib_path in $( \
+            echo "$NIX_LDFLAGS" \
+              | tr ' ' '\n' \
+              | grep '^-L' \
+              | sed 's/^-L//' \
+              | awk '!seen[$0]++' \
+        ); do
             addToSearchPath ${libPathsVar} $lib_path
         done
       ''

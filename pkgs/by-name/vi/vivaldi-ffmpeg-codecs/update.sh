@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts coreutils grep jq squashfsTools
+#!nix-shell -i bash -p common-updater-scripts coreutils gnugrep jq squashfsTools
 
 set -eu -o pipefail
 
@@ -18,7 +18,7 @@ function update_source() {
   local url=$(echo $selectedRelease | jq -r '.download.url')
   source="$(nix-prefetch-url "$url")"
   hash=$(nix-hash --to-sri --type sha256 "$source")
-  update-source-version vivaldi-ffmpeg-codecs "$version" "$hash" "$url" --ignore-same-version --system=$platform --source-key="sources.$platform"
+  update-source-version vivaldi-ffmpeg-codecs "$version" "$hash" "$url" --ignore-same-version --system=$platform --source-key="sources.$platform" --file "package.nix"
 }
 
 x86Release="$(echo $STABLE_RELEASES | jq 'select(.channel.architecture=="amd64")')"
@@ -26,7 +26,7 @@ x86CodecVersion=$(max_version "$x86Release")
 arm64Release="$(echo $STABLE_RELEASES | jq -r 'select(.channel.architecture=="arm64")')"
 arm64CodecVersion=$(max_version "$arm64Release")
 
-currentVersion=$(nix-instantiate --eval -E "with import ./. {}; vivaldi-ffmpeg-codecs.version or (lib.getVersion vivaldi-ffmpeg-codecs)" | tr -d '"')
+currentVersion=$(grep 'version =' ./package.nix | cut -d '"' -f 2)
 
 if [[ "$currentVersion" == "$x86CodecVersion" ]]; then
   exit 0

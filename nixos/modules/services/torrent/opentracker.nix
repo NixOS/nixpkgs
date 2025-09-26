@@ -17,7 +17,7 @@ in
       type = lib.types.separatedString " ";
       description = ''
         Configuration Arguments for opentracker
-        See https://erdgeist.org/arts/software/opentracker/ for all params
+        See <https://erdgeist.org/arts/software/opentracker/> for all params
       '';
       default = "";
     };

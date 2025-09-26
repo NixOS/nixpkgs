@@ -11,7 +11,7 @@
   jupyterhub,
 
   # tests
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytestCheckHook,
 }:
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-cov-stub
     pytestCheckHook
   ];

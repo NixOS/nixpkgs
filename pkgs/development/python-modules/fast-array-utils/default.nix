@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "fast-array-utils";
-  version = "1.2.1";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "fast-array-utils";
     tag = "v${version}";
-    hash = "sha256-SQaumXgjFn2+/MqllEs0zRnl2t7m2JZyOd+39vZPU2U=";
+    hash = "sha256-uvTViDaLey+jxWyic9m542Ip4x8cCfGaNUfYp8cQPXo=";
   };
 
   # hatch-min-requirements tries to talk to PyPI by default. See https://github.com/tlambert03/hatch-min-requirements?tab=readme-ov-file#environment-variables.

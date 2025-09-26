@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "potentials";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "potentials";
     tag = "v${version}";
-    hash = "sha256-VDA3dQ34kvrs3XMfC0j3T63KrXlmOa/hPvOni/UkgP4=";
+    hash = "sha256-R6LGRmi6xeNp81qylXBAVdL62/SN87TvuyRqueQD6DA=";
   };
 
   build-system = [ setuptools ];

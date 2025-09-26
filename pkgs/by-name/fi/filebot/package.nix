@@ -18,17 +18,17 @@
 
 let
   lanterna = fetchurl {
-    url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
-    hash = "sha256-7zxCeXYW5v9ritnvkwRpPKdgSptCmkT3HJOaNgQHUmQ=";
+    url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.3/lanterna-3.1.3.jar";
+    hash = "sha256-4EeBz34i9+7iYwnx2IC74SQMLw6ThgNKJD8Hy6eMUOA=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.1.7";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-GpjWo2+AsT0hD3CJJ8Pf/K5TbWtG0ZE2tIpH/UEGTws=";
+    hash = "sha256-OcXXKaZcBuP584SJWeQB+aaxO0kih6Oiud0Vm8e9kPo=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -56,7 +56,23 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/opt $out/bin
     # Since FileBot has dependencies on relative paths between files, all required files are copied to the same location as is.
-    cp -r filebot.sh lib/ jar/ $out/opt/
+    cp -r filebot.sh jar/ $out/opt/
+    # Copy lib based on platform and force filebot to use libmediainfo.so from nix
+    local platformDir
+    case "${stdenv.hostPlatform.system}" in
+      "x86_64-linux")
+        platformDir="Linux-x86_64"
+        ;;
+      "aarch64-linux")
+        platformDir="Linux-aarch64"
+        ;;
+    esac
+    if [ -n "$platformDir" ]; then
+      mkdir -p "$out/opt/lib"
+      cp -r "lib/$platformDir" "$out/opt/lib/"
+      rm "$out/opt/lib/$platformDir/libmediainfo.so"
+      ln -s "${libmediainfo}/lib/libmediainfo.so" "$out/opt/lib/$platformDir/"
+    fi
     # Filebot writes to $APP_DATA, which fails due to read-only filesystem. Using current user .local directory instead.
     substituteInPlace $out/opt/filebot.sh \
       --replace 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \

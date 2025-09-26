@@ -75,10 +75,12 @@ buildPythonPackage rec {
     "test_nuts__without_device"
     "test_nuts__without_jit"
     "test_smc_waste_free__with_jit"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+
     # Numerical test (AssertionError)
+    # First report, when the failure was only happening on aarch64-linux:
     # https://github.com/blackjax-devs/blackjax/issues/668
+    # Second report, when the test started happening on x86_64-linux too after Jax was updated to 0.7.0
+    # https://github.com/blackjax-devs/blackjax/issues/795
     "test_chees_adaptation"
   ];
 

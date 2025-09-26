@@ -18,7 +18,7 @@
   xorg,
 }:
 let
-  version = "2.250507.0";
+  version = "2.250820.0";
   electron = electron_35;
 in
 buildNpmPackage (finalAttrs: {
@@ -29,10 +29,10 @@ buildNpmPackage (finalAttrs: {
     owner = "gridtracker.org";
     repo = "gridtracker2";
     tag = "v${version}";
-    hash = "sha256-8JFEVGy3Wz94FUK8V+JF+HHKBngT3VvwDBh+O2Bin6E=";
+    hash = "sha256-d40oq8UXNFaybjbbhqV8Gfkj8SEdTuF92Y0elW9dksY=";
   };
 
-  npmDepsHash = "sha256-ioocL1/k3aDmgVwxS09PFbMmteNrGncQz2yz7HUPX90=";
+  npmDepsHash = "sha256-q9QGNYMmeNCouPW9GFsVHSYK9T8N7H4hg6hkOtjmLAY=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

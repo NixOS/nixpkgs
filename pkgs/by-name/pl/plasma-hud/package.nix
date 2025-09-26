@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "plasma-hud";
-  version = "19.10.1";
+  version = "22.01.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "plasma-hud";
     rev = version;
-    hash = "sha256-1AQtgVlrmzBkim1kVZzTAwJHq0OH3YAPr6o5aUpgdKc=";
+    hash = "sha256-HEAvwQSROQtJAZdiDObu9qbpgJlkJdks2v95Xjh5520=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,6 @@
     { pkgs, lib, ... }:
     {
       system.disableInstallerTools = true;
-      boot.enableContainers = false;
       environment.defaultPackages = [ ];
     };
 

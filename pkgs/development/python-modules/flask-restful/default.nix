@@ -7,7 +7,7 @@
   flask,
   fetchpatch2,
   mock,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonOlder,
   pytz,
   six,
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     blinker
     mock
-    pytestCheckHook
+    pytest8_3CheckHook
   ];
 
   disabledTests = [

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard-plug-mouse-touchpad";
     rev = version;
     sha256 = "sha256-332y3D3T90G6bDVacRm3a1p4mLK3vsW8sBvre5lW/mk=";
   };

@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line utilities for working with Preserves documents";
     homepage = "https://preserves.dev/doc/preserves-tool.html";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "preserves-tool";
   };
 }

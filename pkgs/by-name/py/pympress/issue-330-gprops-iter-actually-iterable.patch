@@ -1,0 +1,11 @@
+--- i/pympress/builder.py
++++ w/pympress/builder.py
+@@ -76,7 +76,7 @@ class Builder(Gtk.Builder):
+         Args:
+             a_widget (:class:`~GObject.Object`): an object built by the builder, usually a widget
+         """
+-        for str_prop in (prop.name for prop in a_widget.props if prop.value_type == GObject.TYPE_STRING):
++        for str_prop in (prop.name for prop in list(a_widget.props) if prop.value_type == GObject.TYPE_STRING):
+             try:
+                 str_val = getattr(a_widget.props, str_prop)
+                 if str_val:

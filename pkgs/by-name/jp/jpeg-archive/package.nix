@@ -52,7 +52,6 @@ stdenv.mkDerivation {
     description = "Utilities for archiving photos for saving to long term storage or serving over the web";
     homepage = "https://github.com/danielgtaylor/jpeg-archive";
     license = licenses.mit;
-    maintainers = [ maintainers.srghma ];
     platforms = platforms.all;
   };
 }

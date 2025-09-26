@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/tHMt7TN8i7OMqpum1jCJFrxrQt3SD40ZraTryxX56Y=";
+    sha256 = "sha256-HH78pTeT/wW9dZggxcqRiZ3OqShU7B2uPWa4ya59LfA=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.arrl.org/tqsl-download";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.dpflug ];
+    maintainers = [ ];
   };
 }

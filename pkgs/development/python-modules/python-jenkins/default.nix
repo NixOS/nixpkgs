@@ -18,12 +18,13 @@
 
 buildPythonPackage rec {
   pname = "python-jenkins";
-  version = "1.8.2";
+  version = "1.8.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VufauwYHvbjh1vxtLUMBq+2+2RZdorIG+svTBxy27ss=";
+    pname = "python_jenkins";
+    inherit version;
+    hash = "sha256-j0dhw5GsEejB8j93EBCSDBBEBJdwWrcXXVI1j1oS3Jg=";
   };
 
   # test uses timeout mechanism unsafe for use with the "spawn"

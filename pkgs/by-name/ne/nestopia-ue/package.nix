@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nestopia";
-  version = "1.53.1";
+  version = "1.53.2";
 
   src = fetchFromGitHub {
     owner = "0ldsk00l";
     repo = "nestopia";
     rev = finalAttrs.version;
-    hash = "sha256-6r6o/2GDp1Rcp+OWaQVgIQGC6NAxtmx4lxDWWpwv8aQ=";
+    hash = "sha256-sKemwbmEr637KL951wsmDxLFDvWh+0K+exdDd0+Iq1c=";
   };
 
   buildInputs = [

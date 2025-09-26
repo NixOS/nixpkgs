@@ -10,7 +10,7 @@
   # Whether the derivation provides a Python module or not.
   toPythonModule,
   namePrefix,
-  update-python-libraries,
+  nix-update-script,
   setuptools,
   pypaBuildHook,
   pypaInstallHook,
@@ -377,8 +377,8 @@ let
       # Python packages don't have a checkPhase, only an installCheckPhase
       doCheck = false;
       doInstallCheck = attrs.doCheck or true;
-      nativeInstallCheckInputs = nativeCheckInputs;
-      installCheckInputs = checkInputs;
+      nativeInstallCheckInputs = nativeCheckInputs ++ attrs.nativeInstallCheckInputs or [ ];
+      installCheckInputs = checkInputs ++ attrs.installCheckInputs or [ ];
 
       inherit dontWrapPythonPrograms;
 
@@ -399,14 +399,7 @@ let
         inherit disabled;
       }
       // {
-        updateScript =
-          let
-            filename = head (splitString ":" finalAttrs.finalPackage.meta.position);
-          in
-          [
-            update-python-libraries
-            filename
-          ];
+        updateScript = nix-update-script { };
       }
       // optionalAttrs (dependencies != [ ]) {
         inherit dependencies;

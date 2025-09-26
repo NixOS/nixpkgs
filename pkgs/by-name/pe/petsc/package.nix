@@ -10,7 +10,6 @@
   bison,
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  python3,
   python3Packages,
 
   # Build options
@@ -78,7 +77,6 @@ let
   petscPackages = lib.makeScope newScope (self: {
     inherit
       mpi
-      python3
       python3Packages
       # global override options
       mpiSupport
@@ -111,20 +109,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
-  version = "3.23.4";
+  version = "3.23.6";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7UugWo3SzRap3Ed6NySRZOJgD+Wkb9J+QEGRUfLbOPI=";
+    hash = "sha256-sKXLYtOw6xom7c7ARpOY4dcsV5zR5KgbYrt1bnHF/Io=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    python3
     gfortran
     pkg-config
     bison
+    python3Packages.python
   ]
   ++ lib.optional mpiSupport mpi
   ++ lib.optionals pythonSupport [
@@ -154,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-petsc4py-install-prefix.patch {
-      PYTHON_SITEPACKAGES = python3.sitePackages;
+      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
     })
   ];
 
@@ -181,13 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
     "--with-fc=${lib.getDev mpi}/bin/mpif90"
   ]
-  ++ lib.optionals (!debug) [
-    "--with-debugging=0"
-    "COPTFLAGS=-O3"
-    "FOPTFLAGS=-O3"
-    "CXXOPTFLAGS=-O3"
-    "CXXFLAGS=-O3"
-  ]
+  ++ lib.optional (!debug) "--with-debugging=0"
   ++ lib.optional (!fortranSupport) "--with-fortran-bindings=0"
   ++ lib.optional pythonSupport "--with-petsc4py=1"
   ++ lib.optional withMetis "--with-metis=1"

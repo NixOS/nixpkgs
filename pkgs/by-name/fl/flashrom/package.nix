@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashrom";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://download.flashrom.org/releases/flashrom-v${finalAttrs.version}.tar.xz";
-    hash = "sha256-H5NLB27UnqziA2Vewkn8eGGmuOh/5K73MuR7bkhbYpM=";
+    hash = "sha256-i52zmH35tfyB5wGJ0BeQXdX2vh4UEDR/Imh6ttTJRCM=";
   };
 
   patches = [
@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "programmer" "auto")
     (lib.mesonEnable "man-pages" true)
     (lib.mesonEnable "tests" (!stdenv.buildPlatform.isDarwin))
+    (lib.mesonEnable "generate_authors_list" false)
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

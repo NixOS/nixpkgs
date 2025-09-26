@@ -37,7 +37,7 @@ in
 
           Note: You should keep it at 127.0.0.1 and only serve to the local
           network or internet from a (home) server behind a reverse-proxy and secured encryption.
-          See https://wiki.nixos.org/wiki/Nginx for instructions on how to set up a reverse-proxy.
+          See <https://wiki.nixos.org/wiki/Nginx> for instructions on how to set up a reverse-proxy.
         '';
       };
 

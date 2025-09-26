@@ -115,9 +115,7 @@ in
           flags=DRhu user=schleuder argv=/${pkgs.schleuder}/bin/schleuder work ''${recipient}
       '';
       transport = lib.mkIf (cfg.lists != [ ]) (postfixMap (lib.genAttrs cfg.lists (_: "schleuder:")));
-      extraConfig = ''
-        schleuder_destination_recipient_limit = 1
-      '';
+      settings.main.schleuder_destination_recipient_limit = 1;
       # review: does this make sense?
       localRecipients = lib.mkIf (cfg.lists != [ ]) cfg.lists;
     };

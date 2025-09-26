@@ -115,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "openarena";
     maintainers = with lib.maintainers; [
-      drupol
       wyvie
     ];
     platforms = lib.platforms.linux;

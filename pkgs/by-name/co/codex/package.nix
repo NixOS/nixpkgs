@@ -1,38 +1,58 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  makeBinaryWrapper,
   nix-update-script,
   pkg-config,
   openssl,
+  ripgrep,
   versionCheckHook,
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.4.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-rRe0JFEO5ixxrZYDL8kxXDOH0n7lqabkXNNaSlNnQDg=";
+    hash = "sha256-Dz+RE3Ejr7BcJBJq5+UMP2Pb6v8A2intn3LzozoWovE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-QIZ3V4NUo1VxJN3cwdQf3S0zwePnwdKKfch0jlIJacU=";
+  cargoHash = "sha256-0sCmo3/3kY+nCufATBySAif5Z/T89Le0UedVgCrZiW8=";
 
   nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
     pkg-config
   ];
-  buildInputs = [
-    openssl
-  ];
 
-  checkFlags = [
-    "--skip=keeps_previous_response_id_between_tasks" # Requires network access
-    "--skip=retries_on_early_close" # Requires network access
-  ];
+  buildInputs = [ openssl ];
+
+  # NOTE: part of the test suite requires access to networking, local shells,
+  # apple system configuration, etc. since this is a very fast moving target
+  # (for now), with releases happening every other day, constantly figuring out
+  # which tests need to be skipped, or finding workarounds, was too burdensome,
+  # and in practice not adding any real value. this decision may be reversed in
+  # the future once this software stabilizes.
+  doCheck = false;
+
+  postInstall = lib.optionalString installShellCompletions ''
+    installShellCompletion --cmd codex \
+      --bash <($out/bin/codex completion bash) \
+      --fish <($out/bin/codex completion fish) \
+      --zsh <($out/bin/codex completion zsh)
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/codex --prefix PATH : ${lib.makeBinPath [ ripgrep ]}
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

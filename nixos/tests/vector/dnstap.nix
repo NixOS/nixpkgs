@@ -268,17 +268,40 @@ in
       tableDDL = pkgs.writeText "table.sql" ''
         CREATE TABLE IF NOT EXISTS dnstap.records (
           timestamp DateTime64(6),
-          dataType LowCardinality(String),
-          dataTypeId UInt8,
-          messageType LowCardinality(String),
-          messageTypeId UInt8,
+          dataType Enum('Message' = 1),
+          messageType Enum(
+            'AuthQuery' = 1,
+            'AuthResponse' = 2,
+            'ResolverQuery' = 3,
+            'ResolverResponse' = 4,
+            'ClientQuery' = 5,
+            'ClientResponse' = 6,
+            'ForwarderQuery' = 7,
+            'ForwarderResponse' = 8,
+            'StubQuery' = 9,
+            'StubResponse' = 10,
+            'ToolQuery' = 11,
+            'ToolResponse' = 12,
+            'UpdateQuery' = 13,
+            'UpdateResponse' = 14
+          ),
+          queryZone Nullable(String),
           requestData Nullable(JSON),
+          responseAddress String,
           responseData Nullable(JSON),
           responsePort UInt16,
           serverId LowCardinality(String),
           serverVersion LowCardinality(String),
-          socketFamily LowCardinality(String),
-          socketProtocol LowCardinality(String),
+          socketFamily Enum('INET' = 1, 'INET6' = 2),
+          socketProtocol Enum(
+            'UDP' = 1,
+            'TCP' = 2,
+            'DOT' = 3,
+            'DOH' = 4,
+            'DNSCryptUDP' = 5,
+            'DNSCryptTCP' = 6,
+            'DOQ' = 7
+          ),
           sourceAddress String,
           sourcePort UInt16,
         )
@@ -304,7 +327,7 @@ in
           JSONExtractString(requestData.question[1]::String, 'domainName') as domain,
           JSONExtractString(requestData.question[1]::String, 'questionType') as record_type
         FROM dnstap.records
-        WHERE messageTypeId = 5 # ClientQuery
+        WHERE messageType = 'ClientQuery'
       '';
 
       selectDomainCountQuery = pkgs.writeText "select-domain-count.sql" ''
@@ -346,8 +369,7 @@ in
           "journalctl -o cat -u vector.service | grep 'component_type=dnstap' | grep 'Listening... path=\"${dnstapSocket}\"'"
         )
 
-        machine.wait_for_file("${dnstapSocket}")
-        machine.succeed("test 770 -eq $(stat -c '%a' ${dnstapSocket})")
+        machine.wait_for_open_unix_socket("${dnstapSocket}")
 
       dnsclient.systemctl("start network-online.target")
       dnsclient.wait_for_unit("network-online.target")

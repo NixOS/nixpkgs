@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "airportsdata";
-  version = "20250523";
+  version = "20250909.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mborsetti";
     repo = "airportsdata";
     tag = "v${version}";
-    hash = "sha256-hqKyWyzBQgD9jB8PuflOsyZxSyU8geBVfBS/dgUsTAE=";
+    hash = "sha256-c6OFzYI6YOIZvpEsYbzLqT6q0CYNczRcKLb+6cKy2fQ=";
   };
 
   build-system = [ setuptools ];

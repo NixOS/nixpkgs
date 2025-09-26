@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "25.05.1.1";
+  version = "25.05.3.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -50,18 +50,12 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-Lu/ebXI8U4XggYhQ+yyKmGXpgqtCeYMWB3o0+Ujzj0s=";
+    hash = "sha256-W/q9eN4Ov3pxp2qyr3b7G4ayDaNtFUPQeAcOHCB23Q8=";
   };
 
   outputs = [
     "out"
     "dev"
-  ];
-
-  patches = [
-    # increase string length to allow for full
-    # path of 'echo' in nix store
-    ./common-env-echo.patch
   ];
 
   prePatch = ''

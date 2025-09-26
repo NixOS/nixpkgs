@@ -35,7 +35,6 @@
   libXrandr,
   nix-update-script,
   onnxruntime,
-  opencv4,
   openhmd,
   openvr,
   orc,
@@ -125,7 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     onnxruntime
-    opencv4
+    # FIXME: OpenCV support causes a segfault on start. See https://github.com/NixOS/nixpkgs/issues/439075
+    # opencv4
     openhmd
     openvr
     orc
@@ -143,6 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals tracingSupport [
     tracy
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [
@@ -150,8 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_STEAM" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   # Help openxr-loader find this runtime
@@ -168,10 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
-      Scrumplex
-      prusnak
-    ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
     mainProgram = "monado-cli";
   };

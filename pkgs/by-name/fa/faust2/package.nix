@@ -28,7 +28,7 @@ let
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = version;
+    tag = version;
     hash = "sha256-Rn+Cjpk4vttxARrkDSnpKdBdSRtgElsit8zu1BA8Jd4=";
     fetchSubmodules = true;
   };

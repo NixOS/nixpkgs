@@ -6,7 +6,7 @@
   # Build-time dependencies:
   addDriverRunpath,
   autoAddDriverRunpath,
-  bazel_6,
+  bazel_7,
   binutils,
   buildBazelPackage,
   buildPythonPackage,
@@ -77,6 +77,9 @@ let
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
     platforms = platforms.linux;
+
+    # Needs update for Bazel 7.
+    broken = true;
   };
 
   # Bazel wants a merged cudnn at configuration time
@@ -221,7 +224,8 @@ let
     name = "bazel-build-${pname}-${version}";
 
     # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
-    bazel = bazel_6;
+    #bazel = bazel_6;
+    bazel = bazel_7;
 
     src = fetchFromGitHub {
       owner = "google";

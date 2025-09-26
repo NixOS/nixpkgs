@@ -64,8 +64,6 @@
 
   obs-noise = callPackage ./obs-noise.nix { };
 
-  obs-nvfbc = callPackage ./obs-nvfbc.nix { };
-
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
   obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
@@ -113,8 +111,6 @@
   obs-vnc = callPackage ./obs-vnc.nix { };
 
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
-
-  obs-webkitgtk = callPackage ./obs-webkitgtk.nix { };
 
   pixel-art = callPackage ./pixel-art.nix { };
 

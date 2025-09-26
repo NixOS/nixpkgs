@@ -1,49 +1,48 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
-  defusedxml,
-  pillow,
-  fonttools,
-
-  pytestCheckHook,
-  pytest-cov-stub,
-  qrcode,
   camelot,
-  uharfbuzz,
+  defusedxml,
+  fetchFromGitHub,
+  fonttools,
   lxml,
+  pikepdf,
+  pillow,
+  pytest-cov-stub,
+  pytestCheckHook,
+  qrcode,
+  setuptools,
+  uharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fpdf2";
-  version = "2.8.2";
+  version = "2.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
     tag = version;
-    hash = "sha256-NfHMmyFT+ZpqfRc41DetbFXs/twr12XagOkk3nGhrYk=";
+    hash = "sha256-MD1ci80FBX8pVspMPqAX2UaTjymWHReI3lA9J4ZiBio=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
-    pillow
     fonttools
+    pillow
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-    qrcode
     camelot
-    uharfbuzz
     lxml
+    pikepdf
+    pytest-cov-stub
+    pytestCheckHook
+    qrcode
+    uharfbuzz
   ];
 
   disabledTestPaths = [
@@ -63,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/py-pdf/fpdf2";
     description = "Simple PDF generation for Python";
-    changelog = "https://github.com/py-pdf/fpdf2/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/fpdf2/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jfvillablanca ];
   };

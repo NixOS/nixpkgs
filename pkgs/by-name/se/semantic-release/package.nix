@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "semantic-release";
-  version = "24.2.5";
+  version = "24.2.9";
 
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
     rev = "v${version}";
-    hash = "sha256-WS3hd84vDSH/u7AxtkPL8E1UutUKHzARSzVYOHLlKPU=";
+    hash = "sha256-6dR1wUkoUTRtyQliJFUYLC4eNW2ppIOqeUsL7rLCZiA=";
   };
 
-  npmDepsHash = "sha256-uQWQ+0Ub1piW/BATHrrWfzjv10/f2fyVL5JwDF1NdqM=";
+  npmDepsHash = "sha256-Frhb7bsY0z160EAKOWB5VCsrBMcrjKPE5OYtgX1Cmhs=";
 
   dontNpmBuild = true;
 
@@ -40,5 +40,7 @@ buildNpmPackage rec {
     homepage = "https://semantic-release.gitbook.io/semantic-release/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sestrella ];
+    # https://hydra.nixos.org/job/nixpkgs/trunk/semantic-release.aarch64-linux
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  crystal_1_11,
+  crystal,
   copyDesktopItems,
   gtk3,
   libxkbcommon,
@@ -11,6 +11,8 @@
   openbox,
   xvfb-run,
   xdotool,
+  nix-update-script,
+  versionCheckHook,
 
   buildDevTarget ? false, # the dev version prints debug info
 }:
@@ -18,7 +20,7 @@
 # NOTICE: AHK_X11 from this package does not support compiling scripts into portable executables.
 let
   pname = "ahk_x11";
-  version = "1.0.4-unstable-2025-01-30"; # 1.0.4 cannot build on Crystal 1.12 or below.
+  version = "1.0.6";
 
   inherit (xorg)
     libXinerama
@@ -27,9 +29,6 @@ let
     libXi
     ;
 
-  # See upstream README. Crystal 1.11 or below is needed to work around phil294/AHK_X11#89.
-  crystal = crystal_1_11;
-
 in
 crystal.buildCrystalPackage {
   inherit pname version;
@@ -37,8 +36,8 @@ crystal.buildCrystalPackage {
   src = fetchFromGitHub {
     owner = "phil294";
     repo = "AHK_X11";
-    rev = "66eb5208d95f4239822053c7d35f32bc62d57573"; # tag = version;
-    hash = "sha256-KzD5ExYPRYgsYO+/hlnoQpBJwokjaK5lYL2kobI2XQ0=";
+    tag = version;
+    hash = "sha256-t2fGUIG3T8azx22lFhFAkABHwkePv9uThhlH+fwDj8E=";
     fetchSubmodules = true;
   };
 
@@ -99,6 +98,11 @@ crystal.buildCrystalPackage {
   # https://github.com/phil294/AHK_X11?tab=readme-ov-file#accessibility
   # I don't know how to fix it for xvfb and openbox.
   doCheck = false;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "AutoHotkey for X11";

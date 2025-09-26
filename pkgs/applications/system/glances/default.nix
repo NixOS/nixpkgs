@@ -23,11 +23,12 @@
   uvicorn,
   requests,
   prometheus-client,
+  shtab,
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.3.1";
+  version = "4.3.3";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.9";
@@ -36,7 +37,7 @@ buildPythonApplication rec {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${version}";
-    hash = "sha256-KaH2dV9bOtBZkfbIGIgQS8vL39XwSyatSjclcXpeVGM=";
+    hash = "sha256-RmGbd8Aa2jJ2DMrBUUoa8mPBa6bGnQd0s0y3p/zP0ng=";
   };
 
   build-system = [ setuptools ];
@@ -66,6 +67,7 @@ buildPythonApplication rec {
     jinja2
     which
     prometheus-client
+    shtab
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 

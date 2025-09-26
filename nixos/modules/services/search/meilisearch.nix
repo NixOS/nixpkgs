@@ -237,6 +237,47 @@ in
         WorkingDirectory = "%S/meilisearch";
         RuntimeDirectory = "meilisearch";
         RuntimeDirectoryMode = "0700";
+
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        PrivateTmp = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        PrivateDevices = true;
+        RestrictRealtime = true;
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+
+        # Meilisearch needs to determine cgroup memory limits to set its own memory limits.
+        # This means this can't be set to "pid"
+        ProcSubset = "all";
+        ProtectProc = "invisible";
+
+        NoNewPrivileges = true;
+
+        # Meilisearch does not support listening on AF_UNIX sockets,
+        # so we currently restrict it to only AF_INET and AF_INET6.
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+
+        CapabilityBoundingSet = "";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
+
+        UMask = "0077";
       };
     };
   };

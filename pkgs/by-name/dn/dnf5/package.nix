@@ -15,7 +15,7 @@
   json_c,
   libmodulemd,
   librepo,
-  libsmartcols,
+  util-linux,
   libsolv,
   libxml2,
   libyaml,
@@ -25,7 +25,7 @@
   sphinx,
   sqlite,
   systemd,
-  testers,
+  versionCheckHook,
   toml11,
   zchunk,
   nix-update-script,
@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.15.0";
+  version = "5.2.17.0";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-WlQfvWDd9Eay9TPq2EfFlQGljEskJqL3xyNIJDdaNps=";
+    hash = "sha256-bVXmpoM2ymLgqjv8+3syYhkIKSyW68eKzKhUWRfR1vY=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     libmodulemd
     librepo
-    libsmartcols
+    util-linux
     libsolv
     libxml2
     libyaml
@@ -115,10 +115,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontFixCmake = true;
 
-  passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Next-generation RPM package management system";

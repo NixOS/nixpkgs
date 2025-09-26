@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -14,13 +15,13 @@ let
     }:
     buildGoModule rec {
       inherit pname;
-      version = "1.3.10";
+      version = "1.4.2";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        hash = "sha256-fxBLh7QrBBkUsVrONeFmrXtmRGNgkH7WnncMQ+E56Ok=";
+        hash = "sha256-ILHFITlcT/2szSOuPoQZkont8GRMYXCAmMwEqvMT/tE=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -33,7 +34,7 @@ let
         '';
       };
 
-      vendorHash = "sha256-2ddpzKzVlmOgxsBtLB28fKZ2o4QvtrNZC+1wOny3Amk=";
+      vendorHash = "sha256-JOpqNwIR2SCuOAVQnSqX1PLaQW+Eh7YR1wK56byj94w=";
 
       nativeBuildInputs = [ installShellFiles ];
 
@@ -52,7 +53,7 @@ let
         ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
       '';
 
-      postInstall = ''
+      postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         installShellCompletion --cmd ${pname} \
           --bash <($out/bin/${pname} completion bash) \
           --fish <($out/bin/${pname} completion fish) \

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "orgparse";
-  version = "0.4.20231004";
+  version = "0.4.20250520";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pOOK6tq/mYiw9npmrNCCedGCILy8QioSkGDCiQu6kaA=";
+    hash = "sha256-ZHL9Ft3Ku1I5GFBchlJjq/oFrIC1k+ZooInNopGxot4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

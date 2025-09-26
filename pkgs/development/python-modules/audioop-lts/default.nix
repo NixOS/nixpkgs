@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "audioop-lts";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "AbstractUmbra";
     repo = "audioop";
     tag = version;
-    hash = "sha256-tx5/dcyEfHlYRohfYW/t0UkLiZ9LJHmI8g3sC3+DGAE=";
+    hash = "sha256-C1z24kH5t0RSVqjT8SBdrilMtVs7pTI1vd+iwMk3RXE=";
   };
 
   build-system = [ setuptools ];

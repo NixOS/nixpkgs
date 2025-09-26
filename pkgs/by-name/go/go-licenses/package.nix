@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   go,
@@ -36,7 +37,7 @@ buildGoModule rec {
 
   allowGoReference = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd go-licenses \
       --bash <("$out/bin/go-licenses" completion bash) \
       --fish <("$out/bin/go-licenses" completion fish) \

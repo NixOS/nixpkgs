@@ -11,7 +11,7 @@
   gtest,
   pkg-config,
   lit,
-  llvmPackages_16,
+  llvmPackages,
 }:
 let
   # Old vendored package which has no other use than here, so not packaged in nixpkgs.
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DLIT_EXECUTABLE=${lit}/bin/lit"
-    "-DFILECHECK_EXECUTABLE=${llvmPackages_16.libllvm}/bin/FileCheck"
-    "-DYAML2OBJ_EXECUTABLE=${llvmPackages_16.libllvm}/bin/yaml2obj"
+    "-DFILECHECK_EXECUTABLE=${llvmPackages.libllvm}/bin/FileCheck"
+    "-DYAML2OBJ_EXECUTABLE=${llvmPackages.libllvm}/bin/yaml2obj"
   ];
 
   postPatch = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     capstone
     gtest
     lit
-    llvmPackages_16.libllvm
+    llvmPackages.libllvm
   ];
 
   doCheck = true;

@@ -270,9 +270,9 @@
     "hash": "sha256-nJm/yE6j3eRPLzQxD9AZaZC+P4cidSR6XEsuTDBV/Dw="
   },
   {
-    "pname": "JetBrains.Annotations",
-    "version": "2024.3.0",
-    "hash": "sha256-BQYhE7JDJ9Bw588KyWzOvQFvQTiRa0K9maVkI9lZgBc="
+    "pname": "JetBrains.Annotations.Sources",
+    "version": "2025.2.0",
+    "hash": "sha256-5mbTLcs1x0JtVeuN66t+0jvokYbMqFk6Bkhk+WOHlg4="
   },
   {
     "pname": "Markdig.Signed",
@@ -286,13 +286,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.OpenApi",
-    "version": "9.0.6",
-    "hash": "sha256-Kk1WNf1BS+9LjjXjBrYb1YCr+23W9PJ+B9Kv2OBv2Oc="
+    "version": "9.0.7",
+    "hash": "sha256-6W8haECWwvPnnUMlceAvSMuGzT7o5Nyz2478XXBjpoc="
   },
   {
     "pname": "Microsoft.CodeAnalysis.ResxSourceGenerator",
-    "version": "3.11.0-beta1.25173.3",
-    "hash": "sha256-AB7O5x6MmQ7lgPx8W8fYyOkEDnsxSoHjgpawV3/CGEc="
+    "version": "5.0.0-1.25277.114",
+    "hash": "sha256-FMlz2bLuz310+vF0WijBn1gufxIiht/Ggn2COVRkouk="
   },
   {
     "pname": "Microsoft.CodeCoverage",
@@ -351,11 +351,6 @@
   },
   {
     "pname": "Microsoft.Extensions.Diagnostics.Abstractions",
-    "version": "8.0.0",
-    "hash": "sha256-USD5uZOaahMqi6u7owNWx/LR4EDrOwqPrAAim7iRpJY="
-  },
-  {
-    "pname": "Microsoft.Extensions.Diagnostics.Abstractions",
     "version": "9.0.0",
     "hash": "sha256-wG1LcET+MPRjUdz3HIOTHVEnbG/INFJUqzPErCM79eY="
   },
@@ -391,11 +386,6 @@
   },
   {
     "pname": "Microsoft.Extensions.Logging.Configuration",
-    "version": "8.0.0",
-    "hash": "sha256-mzmstNsVjKT0EtQcdAukGRifD30T82BMGYlSu8k4K7U="
-  },
-  {
-    "pname": "Microsoft.Extensions.Logging.Configuration",
     "version": "9.0.0",
     "hash": "sha256-ysPjBq64p6JM4EmeVndryXnhLWHYYszzlVpPxRWkUkw="
   },
@@ -426,23 +416,23 @@
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "8.12.1",
-    "hash": "sha256-gG2S/1+fPV74J9EE3oI3FKG/bRX/F7ujRvGTgxZ4r1A="
+    "version": "8.13.0",
+    "hash": "sha256-B5PshNfnDfB36QjEOf0S3FQaC+9K7MR+y5KUiQDHfhg="
   },
   {
     "pname": "Microsoft.IdentityModel.JsonWebTokens",
-    "version": "8.12.1",
-    "hash": "sha256-NF1kPBAfiNEIsiyNSUSPwPJMEvdk6IMC+95PdqearuM="
+    "version": "8.13.0",
+    "hash": "sha256-i9CvrXUvYvtmuAQNHU9IvjItFh6x2/O8CAuEjeOOYyg="
   },
   {
     "pname": "Microsoft.IdentityModel.Logging",
-    "version": "8.12.1",
-    "hash": "sha256-zliqyeeJ9hvPUxm+rWCHGAH+aR+OeIxNhcKxM6G5AEc="
+    "version": "8.13.0",
+    "hash": "sha256-wg6jCW8tiXfwrKs/Hxo0M0Cyi2EPRlIa6+vfnVxsQ+M="
   },
   {
     "pname": "Microsoft.IdentityModel.Tokens",
-    "version": "8.12.1",
-    "hash": "sha256-brSDa39ISF1+N8u/b/x27IN3wiu+sTll2nMf+IqWPS0="
+    "version": "8.13.0",
+    "hash": "sha256-M1NZQyQt8q10MLai4BooKtzJebRVwHeQuq/UQiJl28c="
   },
   {
     "pname": "Microsoft.NET.Test.Sdk",
@@ -566,28 +556,23 @@
   },
   {
     "pname": "NLog",
-    "version": "5.5.0",
-    "hash": "sha256-WkuKGo3iEqJruQuRZXMksqIbAQjZbFIANcm0zZr/fYE="
+    "version": "6.0.2",
+    "hash": "sha256-sToQRwukDjUo3ytSmHXT5p4j6fTv1utHkQKeF48EWnQ="
   },
   {
     "pname": "NLog.Extensions.Logging",
-    "version": "5.5.0",
-    "hash": "sha256-gdhJP9V5lDHgRS8gpFDgW6CkkLKo+tACCqPvERLaZ68="
+    "version": "6.0.2",
+    "hash": "sha256-RqgckCP99RHolPk7dBn97zJzvDVoQobVuuBH4GBEOWk="
   },
   {
     "pname": "NLog.Web.AspNetCore",
-    "version": "5.5.0",
-    "hash": "sha256-1n8wzNMBIVoLjDlFUyNO7lsunz6E8LlBHpokDFrLjA8="
+    "version": "6.0.2",
+    "hash": "sha256-F6NLSfbhHDKZ6ApmObvKGEA6gLl4L3vmiegdYn1Kl2g="
   },
   {
     "pname": "OpenTelemetry",
     "version": "1.12.0",
     "hash": "sha256-WqUAXbwHyoksigzEgYnHNONl2TLd0ZM5MJ6jDsbYxas="
-  },
-  {
-    "pname": "OpenTelemetry",
-    "version": "1.9.0",
-    "hash": "sha256-QVV6ecnVk73bvi4Lw1RnTsaEUH/6CT0/zIJkYdg6CGg="
   },
   {
     "pname": "OpenTelemetry.Api",
@@ -600,14 +585,9 @@
     "hash": "sha256-HW5lCuHZgkh0SO94cJLcjfX3M0dJDV0xJIRV2pY0jXc="
   },
   {
-    "pname": "OpenTelemetry.Api.ProviderBuilderExtensions",
-    "version": "1.9.0",
-    "hash": "sha256-Yy3EcKBW7XH7nhLcvwQB0NIfxiGChuy6UPc7MJpxEbE="
-  },
-  {
     "pname": "OpenTelemetry.Exporter.Prometheus.AspNetCore",
-    "version": "1.9.0-beta.2",
-    "hash": "sha256-zV4sKZ3v2uSPPy0HLbAE6XwGt6r8R5UVdFJ/tVDiKWg="
+    "version": "1.12.0-beta.1",
+    "hash": "sha256-wskK4EFwQBKCwe7NKk1NnEsBcdc+GByU3dN6m7F5DkM="
   },
   {
     "pname": "OpenTelemetry.Extensions.Hosting",
@@ -641,8 +621,8 @@
   },
   {
     "pname": "Scalar.AspNetCore",
-    "version": "2.5.3",
-    "hash": "sha256-5rMpkchzxeO3/694RvaVzuQS9Xqd7YGDbBzqCkNyhFs="
+    "version": "2.6.4",
+    "hash": "sha256-OEj72jV42fBN6uFzmPEPA20c/g6eJRYOJvCLv6K54ME="
   },
   {
     "pname": "SteamKit2",
@@ -666,33 +646,33 @@
   },
   {
     "pname": "System.Composition",
-    "version": "9.0.6",
-    "hash": "sha256-p8Oa6kjNnwzUPiotQZaLKNd5HWyaLAUrXDEb9+qGe4c="
+    "version": "9.0.7",
+    "hash": "sha256-6Ytzb6Xew7wNHpcCO/IpGag7VJvg9OUZKdA2hANpJUs="
   },
   {
     "pname": "System.Composition.AttributedModel",
-    "version": "9.0.6",
-    "hash": "sha256-39rilNPGuizRbLS9uJf8xKUsJwP6OrwlIrC0b2n2ujI="
+    "version": "9.0.7",
+    "hash": "sha256-OJrJP8X/RVHEktcOeVCrSO1lKub3/zjeBkLAQ0tKvgc="
   },
   {
     "pname": "System.Composition.Convention",
-    "version": "9.0.6",
-    "hash": "sha256-/+Os5orfTZ45G+SSccBV21OGlbmqI71wZDTCbzvI3DI="
+    "version": "9.0.7",
+    "hash": "sha256-XK/WUSIiyAZJQUIrzzvJFWuELyYp1F9Fu3VkVmZfvTw="
   },
   {
     "pname": "System.Composition.Hosting",
-    "version": "9.0.6",
-    "hash": "sha256-krp3xyEOHtF/TRu7GPKaNXe+uKhDRhlNBWAD+eAfyYg="
+    "version": "9.0.7",
+    "hash": "sha256-gkaJ+yh97FpWRye4wDvZfkrPw2/hxlodbimhZslHVK4="
   },
   {
     "pname": "System.Composition.Runtime",
-    "version": "9.0.6",
-    "hash": "sha256-ou4oVkNKVFcHgBsiKxmBfwLCDRberIlwD1uvR2XfMT8="
+    "version": "9.0.7",
+    "hash": "sha256-NbAgMCVEbVdbriLMyBh4lcgj+qhe4FJpXvTbOavPE3A="
   },
   {
     "pname": "System.Composition.TypedParts",
-    "version": "9.0.6",
-    "hash": "sha256-2z3Pi2vu6Acyn988JeM2B5jKYxCg8LqV8p+4Z4e094g="
+    "version": "9.0.7",
+    "hash": "sha256-uqJHYn2f9bdGcSO6+NW+sPmU4orqPbapMg3ZeIdlUOQ="
   },
   {
     "pname": "System.Diagnostics.DiagnosticSource",
@@ -741,8 +721,8 @@
   },
   {
     "pname": "System.Security.Cryptography.ProtectedData",
-    "version": "9.0.6",
-    "hash": "sha256-WMa3KDeFuOLyIZduYd+9PCyx7usJMRu/q2x3eOw9MAQ="
+    "version": "9.0.7",
+    "hash": "sha256-e8mo6zKcAOUfh96LYeH60hm7xO/hOJHgHuQkDmW56Ss="
   },
   {
     "pname": "System.Security.Principal.Windows",

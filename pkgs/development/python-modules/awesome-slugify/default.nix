@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python flexible slugify function";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

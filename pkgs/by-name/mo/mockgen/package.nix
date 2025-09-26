@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "mockgen";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "mock";
     rev = "v${version}";
-    sha256 = "sha256-650GRaSlGg+ZszACtvn8pJPEnD9NUXM/liLNK7kte6c=";
+    sha256 = "sha256-gYUL+ucnKQncudQDcRt8aDqM7xE5XSKHh4X0qFrvfGs=";
   };
 
-  vendorHash = "sha256-0OnK5/e0juEYrNJuVkr+tK66btRW/oaHpJSDakB32Bc=";
+  vendorHash = "sha256-Cf7lKfMuPFT/I1apgChUNNCG2C7SrW7ncF8OusbUs+A=";
 
   env.CGO_ENABLED = 0;
 
@@ -40,7 +40,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "GoMock is a mocking framework for the Go programming language";
+    description = "Mocking framework for the Go programming language";
     homepage = "https://github.com/uber-go/mock";
     changelog = "https://github.com/uber-go/mock/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;

@@ -6,7 +6,6 @@
   patchelf,
   bintools,
   dpkg,
-
   # Linked dynamic libraries.
   alsa-lib,
   at-spi2-atk,
@@ -47,20 +46,15 @@
   pipewire,
   vulkan-loader,
   wayland, # ozone/wayland
-
   # Command line programs
   coreutils,
-
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
-
   # Will crash without.
   systemd,
-
   # Loaded at runtime.
   libexif,
   pciutils,
-
   # Additional dependencies according to other distros.
   ## Ubuntu
   curl,
@@ -79,34 +73,25 @@
   ## Gentoo
   bzip2,
   libcap,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
-
   adwaita-icon-theme,
   gsettings-desktop-schemas,
-
   # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
   libva,
   libvaSupport ? true,
-
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
-
   # For QT support
   qt6,
-
   # Edge AAD sync
   cacert,
   libsecret,
-
   # Edge Specific
   libuuid,
 }:
-
 let
-
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
   deps = [
@@ -175,14 +160,13 @@ let
   ++ lib.optionals pulseSupport [ libpulseaudio ]
   ++ lib.optionals libvaSupport [ libva ];
 in
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "138.0.3351.109";
+  version = "140.0.3485.94";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-RXHfoj9T9MGvEt7hNKLF7cprNwZEvpFZH6VM7KOd2uM=";
+    hash = "sha256-UvnAT87X9YMlyF1i9z7bBCWpz3CU2ZWe9hoABgGSXY8=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -293,6 +277,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       leleuvilela
       bricklou
       jonhermansen
+      iedame
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

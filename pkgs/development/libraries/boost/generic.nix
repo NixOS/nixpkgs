@@ -10,7 +10,6 @@
   fixDarwinDylibNames,
   libiconv,
   libxcrypt,
-  sanitiseHeaderPathsHook,
   makePkgconfigItem,
   copyPkgconfigItems,
   boost-build,
@@ -170,6 +169,7 @@ stdenv.mkDerivation {
       lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
     ) ./darwin-no-system-python.patch
     ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
+    ++ lib.optional (lib.versionAtLeast version "1.88") ./cmake-paths-188.patch
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
       relative = "include";
@@ -252,7 +252,6 @@ stdenv.mkDerivation {
     # will succeed, but packages depending on boost-context will fail with
     # a very cryptic error message.
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
-    maintainers = with maintainers; [ hjones2199 ];
     broken =
       enableNumpy && lib.versionOlder version "1.86" && lib.versionAtLeast python.pkgs.numpy.version "2";
   };
@@ -347,7 +346,6 @@ stdenv.mkDerivation {
     which
     boost-build
     copyPkgconfigItems
-    sanitiseHeaderPathsHook
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [
@@ -393,12 +391,6 @@ stdenv.mkDerivation {
     b2 ${b2Args} install
 
     runHook postInstall
-  '';
-
-  preFixup = ''
-    # Strip UTF‐8 BOMs for `sanitiseHeaderPathsHook`.
-    cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-      -exec sed '1s/^\xef\xbb\xbf//' -i '{}' \;
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''

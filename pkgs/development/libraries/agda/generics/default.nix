@@ -11,7 +11,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "flupe";
-    repo = pname;
+    repo = "generics";
     rev = "v${version}";
     sha256 = "sha256-B1eT6F0Dp2zto50ulf+K/KYMlMp8Pgc/tO9qkcqn+O8=";
   };
@@ -20,7 +20,10 @@ mkDerivation rec {
     standard-library
   ];
 
-  # everythingFile = "./README.agda";
+  # Agda expects a single .agda-lib file.
+  preBuild = ''
+    rm tests.agda-lib
+  '';
 
   meta = with lib; {
     description = "Library for datatype-generic programming in Agda";

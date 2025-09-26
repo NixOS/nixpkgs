@@ -1,8 +1,10 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
   objgraph,
+  psutil,
   pytestCheckHook,
   pytest-codspeed,
   pytest-cov-stub,
@@ -13,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.4.4";
+  version = "6.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
     tag = "v${version}";
-    hash = "sha256-crnWaThjymY0nbY4yvD+wX20vQcBkPrFAI+UkexNAbo=";
+    hash = "sha256-Ewxwz+0Y8pXJpHobLxrV7cuA9fsAaawWmW9XoEg7dxU=";
   };
 
   postPatch = ''
@@ -35,8 +37,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  env =
+    { }
+    // lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+    };
+
   nativeCheckInputs = [
     objgraph
+    psutil
     pytestCheckHook
     pytest-codspeed
     pytest-cov-stub

@@ -96,7 +96,7 @@ let
     in
     (mkCustomFlutter args).overrideAttrs (
       prev: next: {
-        passthru = next.passthru // rec {
+        passthru = next.passthru // {
           inherit wrapFlutter mkCustomFlutter mkFlutter;
           buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
             flutter = wrapFlutter (mkCustomFlutter args);

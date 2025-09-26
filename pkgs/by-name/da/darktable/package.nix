@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  runCommand,
 
   # nativeBuildInputs
   cmake,
@@ -80,24 +79,13 @@
   gitUpdater,
 }:
 
-let
-  # Create a wrapper for saxon to provide saxon-xslt command
-  saxon-xslt = runCommand "saxon-xslt" { } ''
-    mkdir -p $out/bin
-    cat > $out/bin/saxon-xslt << 'EOF'
-    #!/bin/sh
-    exec ${saxon}/bin/saxon "$@"
-    EOF
-    chmod +x $out/bin/saxon-xslt
-  '';
-in
 stdenv.mkDerivation rec {
-  version = "5.2.0";
+  version = "5.2.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-U6Rs1G73EYSFxKv0q0B8GBY5u4Y0JD7A7R98HoKZvsY=";
+    hash = "sha256-AvGqmuk5See8VMNO61/5LCuH+V0lR4Zd9VxgRnVk7hE=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +97,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     wrapGAppsHook3
-    saxon-xslt # Use Saxon instead of libxslt to fix XSLT generate-id() consistency issues
+    saxon # Use Saxon instead of libxslt to fix XSLT generate-id() consistency issues
   ];
 
   buildInputs = [

@@ -65,8 +65,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.virtualgl.org/";
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
-    license = licenses.wxWindows;
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

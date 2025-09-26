@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "15.1.3";
+  version = "15.1.5";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-L8UHjYBQf9iADvIs7QNZA/81FmVY/+gCwS73ff62dYc=";
+    hash = "sha256-dRO9QBQCIVJlFhNZjVZwoiEIesIBrkZWNSOwzgkOnkY=";
   };
 
   patches = [

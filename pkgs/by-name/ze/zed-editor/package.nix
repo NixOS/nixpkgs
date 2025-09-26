@@ -99,7 +99,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.196.6";
+  version = "0.204.5";
 
   outputs = [
     "out"
@@ -112,7 +112,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nwldwgTvOM511CkdRZcvBq3RBVapn+6jdwzrJLdpcZ8=";
+    hash = "sha256-P3mD4jaoQA4zWHjWtrvRBG25lgmudbkuFLP+Cy6xaDg=";
   };
 
   patches = [
@@ -136,9 +136,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # We rename it ourselves for now, until upstream fixes the issue
       substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
         --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
+
+      # The generate-licenses script wants a specific version of cargo-about eventhough
+      # newer versions work just as well.
+      substituteInPlace script/generate-licenses \
+        --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
     '';
 
-  cargoHash = "sha256-XxLHwlxPZPsGehSDGigrMEykjrFvl685skSU+9KXi9o=";
+  cargoHash = "sha256-Mlcpcp9/+ZoUdQUYpYX33uxNoAE4gAFh0twGFxi4tNw=";
 
   nativeBuildInputs = [
     cmake
@@ -228,10 +233,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # Flaky: unreliably fails on certain hosts (including Hydra)
     "--skip=zed::tests::test_window_edit_state_restoring_enabled"
+    # The following tests are flaky on at least x86_64-linux and aarch64-darwin,
+    # where they sometimes fail with: "database table is locked: workspaces".
+    "--skip=zed::tests::test_open_file_in_many_spaces"
+    "--skip=zed::tests::test_open_non_existing_file"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky: unreliably fails on certain hosts (including Hydra)
     "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
+    "--skip=zed::open_listener::tests::test_open_workspace_with_nonexistent_files"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Fails on certain hosts (including Hydra) for unclear reason
@@ -313,6 +323,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       extraArgs = [
         "--version-regex"
         "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+
+        # use github releases instead of git tags
+        # zed sometimes moves git tags, making them unreliable
+        # see: https://github.com/NixOS/nixpkgs/pull/439893#issuecomment-3250497178
+        "--use-github-releases"
       ];
     };
     fhs = fhs { zed-editor = finalAttrs.finalPackage; };

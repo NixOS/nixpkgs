@@ -31,7 +31,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/fiatjaf/jiq";
     license = licenses.mit;
-    description = "jid on jq - interactive JSON query tool using jq expressions";
+    description = "Interactive JSON query tool using jq expressions";
     mainProgram = "jiq";
     maintainers = [ ];
   };

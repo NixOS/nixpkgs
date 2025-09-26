@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  blueprint-compiler,
   bzip2,
   callPackage,
   fetchFromGitHub,
@@ -8,6 +9,7 @@
   freetype,
   glib,
   glslang,
+  gtk4-layer-shell,
   harfbuzz,
   libGL,
   libX11,
@@ -18,31 +20,64 @@
   pandoc,
   pkg-config,
   removeReferencesTo,
+  util-linux,
   versionCheckHook,
   wrapGAppsHook4,
-  zig_0_13,
+  writeShellApplication,
+  zig_0_14,
+
   # Usually you would override `zig.hook` with this, but we do that internally
   # since upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
   optimizeLevel ? "ReleaseFast",
-  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/build.zig#L106
-  withAdwaita ? true,
 }:
 let
-  zig_hook = zig_0_13.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
+  zig = zig_0_14;
+
+  # HACK:
+  # Work around a Zig bug where embedding a large enough file could crash
+  # the compiler when too many cores are used, which causes Hydra builds to
+  # reliably fail. See these links for more info:
+  #
+  #  * https://github.com/ziglang/zig/issues/25297
+  #  * https://github.com/ziglang/zig/issues/22867
+  #  * https://github.com/ghostty-org/ghostty/discussions/8676
+  #
+  # Note that the `-j` parameter does NOT fix this. It seems like the faulty
+  # intern pool logic always depends on the full amount of available cores
+  # instead of the value of `-j`, so we have to use `taskset` to trick Zig
+  # into thinking it only has access to a limited amount of cores.
+  zigWithLimitedCores = writeShellApplication {
+    name = "zig";
+    passthru = {
+      inherit (zig) version meta;
+    };
+    runtimeInputs = [
+      zig
+      util-linux
+    ];
+    text = ''
+      maxCores=$(nproc)
+      # 32 cores seem to be the upper limit through empiric testing
+      coreLimit=$((maxCores < 32 ? maxCores : 32))
+      # Also take NIX_BUILD_CORES into account so the build respects the `--cores` argument
+      effectiveCores=$((NIX_BUILD_CORES > coreLimit ? coreLimit : NIX_BUILD_CORES))
+      taskset -c "0-$((effectiveCores - 1))" zig "$@"
+    '';
   };
 
-  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/apprt.zig#L72-L76
-  appRuntime = if stdenv.hostPlatform.isLinux then "gtk" else "none";
-  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/font/main.zig#L94
-  fontBackend = if stdenv.hostPlatform.isDarwin then "coretext" else "fontconfig_freetype";
-  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/renderer.zig#L51-L52
-  renderer = if stdenv.hostPlatform.isDarwin then "metal" else "opengl";
+  zig_hook =
+    (zig.hook.override {
+      zig = zigWithLimitedCores;
+    }).overrideAttrs
+      {
+        zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
+      };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.1.3";
+  version = "1.2.0";
+
   outputs = [
     "out"
     "man"
@@ -55,12 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YHoyW+OFKxzKq4Ta/XUA9Xu0ieTfCcJo3khKpBGSnD4=";
+    hash = "sha256-Z6lndpkEqBwgsjIeZhmVIQ5D7YdQSH/fG6NCY+YWEAo=";
   };
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
-    zig = zig_0_13;
   };
 
   strictDeps = true;
@@ -71,20 +105,26 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     removeReferencesTo
     zig_hook
-  ]
-  ++ lib.optionals (appRuntime == "gtk") [
+
+    # GTK frontend
     glib # Required for `glib-compile-schemas`
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
-    glslang
     oniguruma
-  ]
-  ++ lib.optional (appRuntime == "gtk" && withAdwaita) libadwaita
-  ++ lib.optional (appRuntime == "gtk") libX11
-  ++ lib.optional (renderer == "opengl") libGL
-  ++ lib.optionals (fontBackend == "fontconfig_freetype") [
+
+    # GTK frontend
+    libadwaita
+    libX11
+    gtk4-layer-shell
+
+    # OpenGL renderer
+    glslang
+    libGL
+
+    # Font backend
     bzip2
     fontconfig
     freetype
@@ -95,11 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--system"
     "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
-
-    "-Dapp-runtime=${appRuntime}"
-    "-Dfont-backend=${fontBackend}"
-    "-Dgtk-adwaita=${lib.boolToString withAdwaita}"
-    "-Drenderer=${renderer}"
   ]
   ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
     inherit glslang;
@@ -187,8 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     outputsToInstall = [
       "out"
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    # Issues finding the SDK in the sandbox
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })

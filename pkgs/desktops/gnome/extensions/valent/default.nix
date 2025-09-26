@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-valent";
-  version = "1.0.0.alpha.47";
+  version = "1.0.0.alpha.48";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-valent";
     tag = "v${version}";
-    hash = "sha256-KynVbJtpGl4moIAlxzXouM+nxOGImIcCWdevveshbbo=";
+    hash = "sha256-j5590Emcga3Wp7/lC/ni2NpEC3bkR2/vT4Cq/m8GvBM=";
   };
 
   nativeBuildInputs = [

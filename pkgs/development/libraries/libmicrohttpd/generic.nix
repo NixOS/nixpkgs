@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  enableParallelBuilding = true;
+
   preCheck = ''
     # Since `localhost' can't be resolved in a chroot, work around it.
     sed -i -e 's/localhost/127.0.0.1/g' src/test*/*.[ch]

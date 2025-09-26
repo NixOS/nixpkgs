@@ -220,7 +220,7 @@ let
         };
 
         Port = lib.mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = ''
             If you set http proxy, waagent will use this proxy to access the Internet.
@@ -257,7 +257,7 @@ in
       type = settingsType;
       default = { };
       description = ''
-        The waagent.conf configuration, see https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux for documentation.
+        The waagent.conf configuration, see <https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux> for documentation.
       '';
     };
   };

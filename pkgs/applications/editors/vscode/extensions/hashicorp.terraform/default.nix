@@ -11,8 +11,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "terraform";
     publisher = "hashicorp";
-    version = "2.34.5";
-    hash = "sha256-t5ULeB0jvkt9a1m3gA5Du0Kl1FI1ZncqyAQlXBwyyfE=";
+    version = "2.37.2";
+    hash = "sha256-TT2n0C8MzERemz/4Hwzf45HoICYe0u3/mMJDhrI5UC8=";
   };
 
   postInstall = ''

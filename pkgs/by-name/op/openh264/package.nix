@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.platforms.aarch64
         ++ lib.platforms.loongarch64
         ++ lib.platforms.riscv64
+        ++ lib.platforms.power
       ) lib.platforms.unix;
   };
 })

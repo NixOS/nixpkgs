@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "st";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchzip {
     url = "https://dl.suckless.org/st/st-${finalAttrs.version}.tar.gz";
-    hash = "sha256-pFyK4XvV5Z4gBja8J996zF6wkdgQCNVccqUJ5+ejB/w=";
+    hash = "sha256-Xr1JtaOMVgn+zsD39LFjP/0dkYkvaAXbEcYb3ptgYLA=";
   };
 
   outputs = [

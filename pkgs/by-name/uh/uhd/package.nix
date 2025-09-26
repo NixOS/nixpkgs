@@ -27,6 +27,7 @@
   enableUsrp1 ? true,
   enableUsrp2 ? true,
   enableX300 ? true,
+  enableX400 ? true,
   enableN300 ? true,
   enableN320 ? true,
   enableE300 ? true,
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
   #
-  version = "4.8.0.0";
+  version = "4.9.0.0";
 
   outputs = [
     "out"
@@ -56,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-1HnXFeja4g1o64IPUkv/YyP/3upgYsjCVWal8t/hcuc=";
+    hash = "sha256-XA/ADJ0HjD6DxqFTVMwFa7tRgM56mHAEL+a0paWxKyM=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
-    sha256 = "0i5zagajj0hzdnavvzaixbn6nkh8p9aqw1lv1bj9lpbdh2wy4bk0";
+    sha256 = "194gsmvn7gmwj7b1lw9sq0d0y0babbd0q1229qbb3qjc6f6m0p0y";
   };
   # This are the minimum required Python dependencies, this attribute might
   # be useful if you want to build a development environment with a python
@@ -138,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_USRP1" enableUsrp1)
     (cmakeBool "ENABLE_USRP2" enableUsrp2)
     (cmakeBool "ENABLE_X300" enableX300)
+    (cmakeBool "ENABLE_X400" enableX400)
     (cmakeBool "ENABLE_N300" enableN300)
     (cmakeBool "ENABLE_N320" enableN320)
     (cmakeBool "ENABLE_E300" enableE300)
@@ -173,6 +175,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals (enableDpdk) [
       dpdk
     ];
+
+  patches = [
+    ./fix-pkg-config.patch
+  ];
 
   # many tests fails on darwin, according to ofborg
   doCheck = !stdenv.hostPlatform.isDarwin;

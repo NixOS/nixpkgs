@@ -3,11 +3,11 @@
   stdenv,
   python3,
   fetchFromGitHub,
-  qt5,
+  qt6,
   nix-update-script,
 }:
 let
-  version = "2.6.3";
+  version = "2.7.5";
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -17,32 +17,28 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "vkbo";
     repo = "novelWriter";
-    rev = "v${version}";
-    hash = "sha256-262YMVqxSZv8G82amdRnHiW/5gnxkYyFSQDiS5gOdBE=";
+    tag = "v${version}";
+    hash = "sha256-qCbtQwV+dU/ypnb5UruTsXas9XUqlJweaxnfqTHsT+I=";
   };
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  buildInputs = [ qt6.qtbase ];
 
   build-system = with python3.pkgs; [ setuptools ];
-
   dependencies = with python3.pkgs; [
-    pyqt5
+    pyqt6
     pyenchant
-    qt5.qtbase
-    qt5.qtwayland
+    qt6.qtsvg
   ];
 
-  preBuild = ''
-    export QT_QPA_PLATFORM_PLUGIN_PATH=${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins/platforms
-  '';
-
+  # See setup/debian/install
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/share/{icons,applications,pixmaps,mime/packages}
-
+    mkdir -p $out/share/icons
     cp -r setup/data/hicolor $out/share/icons
-    cp setup/data/novelwriter.desktop $out/share/applications
-    cp setup/data/novelwriter.png $out/share/pixmaps
-    cp setup/data/x-novelwriter-project.xml $out/share/mime/packages
+
+    install -Dm644 setup/data/novelwriter.png -t $out/share/pixmaps
+    install -Dm644 setup/data/novelwriter.desktop -t $out/share/applications
+    install -Dm644 setup/data/x-novelwriter-project.xml -t $out/share/mime/packages
   '';
 
   dontWrapQtApps = true;
@@ -63,7 +59,7 @@ python3.pkgs.buildPythonApplication {
     description = "Open source plain text editor designed for writing novels";
     homepage = "https://novelwriter.io";
     changelog = "https://github.com/vkbo/novelWriter/blob/main/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "novelwriter";
 

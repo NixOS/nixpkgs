@@ -230,8 +230,8 @@ let
         }
 
         ${
-          # --static is only available in Linux
-          lib.optionalString (stdenv.hostPlatform.isLinux && useMusl) ''
+          # --static is only available in x86_64 Linux
+          lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && useMusl) ''
             echo "Ahead-Of-Time compilation with --static and --libc=musl"
             $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
             ./helloworld | fgrep 'Hello World'
@@ -258,7 +258,8 @@ let
             description = "High-Performance Polyglot VM";
             license = with licenses; [
               upl
-              gpl2Classpath
+              gpl2
+              classpathException20
               bsd3
             ];
             sourceProvenance = with sourceTypes; [ binaryNativeCode ];

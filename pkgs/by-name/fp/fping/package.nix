@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fping";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchurl {
     url = "https://www.fping.org/dist/fping-${version}.tar.gz";
-    hash = "sha256-1XvQFBrqCC4638GYv8PbXf0SpwFMfCZV6X9hzVSQHQ4=";
+    hash = "sha256-vjIHcfB15H3X5XBLSF6b3H3REQeIQ0XA98GHSTV/Zo0=";
   };
 
   configureFlags = [

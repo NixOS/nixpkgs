@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-prefetch curl jq gawk gnused nixfmt-rfc-style
+#!nix-shell -I nixpkgs=./. -i bash -p bash nix-prefetch curl jq gawk gnused nixfmt
 
 set -euo pipefail
 
@@ -22,6 +22,9 @@ RELEASES=$(curl --silent https://gitlab.com/api/v4/projects/xanmod%2Flinux/relea
 RELEASE_URLS=$(echo "$RELEASES" | jq '.[].assets.links.[0].name')
 
 while IFS= read -r url; do
+    # Remove trailing slash
+    url="${url%/}"
+
     # Get variant, version and suffix from url fields:
     #                 8         9       NF
     #                 |         |       |
@@ -44,7 +47,7 @@ while IFS= read -r url; do
     fi
 done < <(echo "$RELEASE_URLS" | jq -r)
 
-echo "Updating Xanmod \"$VARIANT\" from $OLD_VERSION to $NEW_VERSION ($SUFFIX)"
+>&2 echo "Updating Xanmod \"$VARIANT\" from $OLD_VERSION to $NEW_VERSION ($SUFFIX)"
 
 URL="https://gitlab.com/api/v4/projects/xanmod%2Flinux/repository/archive.tar.gz?sha=$NEW_VERSION-$SUFFIX"
 HASH="$(nix-prefetch fetchzip --quiet --url "$URL")"
@@ -84,3 +87,12 @@ update_variant() {
 }
 
 update_variant "$FILE_PATH" "$VARIANT" "$NEW_VERSION" "$HASH" "$SUFFIX"
+
+# Customize commit
+# https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#supported-features
+COMMIT_BODY="
+- Changelog: https://dl.xanmod.org/changelog/${NEW_VERSION%.*}/ChangeLog-$NEW_VERSION-xanmod1.gz
+- Diff: https://gitlab.com/xanmod/linux/-/compare/$OLD_VERSION-xanmod1..$NEW_VERSION-xanmod1?from_project_id=51590166
+"
+
+jq -n --arg commitBody "$COMMIT_BODY" '[$ARGS.named]'

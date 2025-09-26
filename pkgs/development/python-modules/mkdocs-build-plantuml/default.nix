@@ -5,6 +5,7 @@
   pkgs, # Only for pkgs.plantuml,
   setuptools,
   httplib2,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   dependencies = [
     httplib2
+    mkdocs
   ];
 
   pythonImportsCheck = [ "mkdocs_build_plantuml_plugin" ];
@@ -40,6 +42,6 @@ buildPythonPackage rec {
     description = "MkDocs plugin to help generate your plantuml images locally or remotely as files (NOT inline)";
     homepage = "https://github.com/christo-ph/mkdocs_build_plantuml";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

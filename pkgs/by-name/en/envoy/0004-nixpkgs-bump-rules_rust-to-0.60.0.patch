@@ -9,10 +9,10 @@ Signed-off-by: Luke Granger-Brown <git@lukegb.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/bazel/repository_locations.bzl b/bazel/repository_locations.bzl
-index 6904bc93bdda3ee2308f13d61e62295fa11d799b..e4574878a566cceb4dc2343f3cade0350ea5e5ff 100644
+index 1293e432c815071ed55721760e583ac0e9f40108..664f8c8e2bf4641e7862e9321fd6f91d162c3c17 100644
 --- a/bazel/repository_locations.bzl
 +++ b/bazel/repository_locations.bzl
-@@ -1465,8 +1465,8 @@ REPOSITORY_LOCATIONS_SPEC = dict(
+@@ -1528,8 +1528,8 @@ REPOSITORY_LOCATIONS_SPEC = dict(
          project_name = "Bazel rust rules",
          project_desc = "Bazel rust rules (used by Wasm)",
          project_url = "https://github.com/bazelbuild/rules_rust",
@@ -23,7 +23,7 @@ index 6904bc93bdda3ee2308f13d61e62295fa11d799b..e4574878a566cceb4dc2343f3cade035
          # Note: rules_rust should point to the releases, not archive to avoid the hassle of bootstrapping in crate_universe.
          # This is described in https://bazelbuild.github.io/rules_rust/crate_universe.html#setup, otherwise bootstrap
          # is required which in turn requires a system CC toolchains, not the bazel controlled ones.
-@@ -1477,7 +1477,7 @@ REPOSITORY_LOCATIONS_SPEC = dict(
+@@ -1540,7 +1540,7 @@ REPOSITORY_LOCATIONS_SPEC = dict(
              "dataplane_ext",
          ],
          extensions = ["envoy.wasm.runtime.wasmtime"],

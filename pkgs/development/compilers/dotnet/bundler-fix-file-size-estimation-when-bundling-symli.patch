@@ -1,0 +1,47 @@
+From 8fa3570bf75c48bf68f42b74790bf8ba0f032a3f Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Thu, 14 Aug 2025 10:49:40 -0300
+Subject: [PATCH] bundler: fix file size estimation when bundling symlinks
+
+---
+ .../managed/Microsoft.NET.HostModel/Bundle/Bundler.cs  | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/src/runtime/src/installer/managed/Microsoft.NET.HostModel/Bundle/Bundler.cs b/src/runtime/src/installer/managed/Microsoft.NET.HostModel/Bundle/Bundler.cs
+index a5e8b593484..39f39334251 100644
+--- a/src/runtime/src/installer/managed/Microsoft.NET.HostModel/Bundle/Bundler.cs
++++ b/src/runtime/src/installer/managed/Microsoft.NET.HostModel/Bundle/Bundler.cs
+@@ -284,6 +284,12 @@ public string GenerateBundle(IReadOnlyList<FileSpec> fileSpecs)
+                 throw new ArgumentException("Invalid input specification: Must specify the host binary");
+             }
+ 
++            static long GetFileLength(string path)
++            {
++                var info = new FileInfo(path);
++                return ((FileInfo?)info.ResolveLinkTarget(true) ?? info).Length;
++            }
++
+             (FileSpec Spec, FileType Type)[] relativePathToSpec = GetFilteredFileSpecs(fileSpecs);
+             long bundledFilesSize = 0;
+             // Conservatively estimate the size of bundled files.
+@@ -293,7 +299,7 @@ public string GenerateBundle(IReadOnlyList<FileSpec> fileSpecs)
+             // We will memory map a larger file than needed, but we'll take that trade-off.
+             foreach (var (spec, type) in relativePathToSpec)
+             {
+-                bundledFilesSize += new FileInfo(spec.SourcePath).Length;
++                bundledFilesSize += GetFileLength(spec.SourcePath);
+                 if (type == FileType.Assembly)
+                 {
+                     // Alignment could be as much as AssemblyAlignment - 1 bytes.
+@@ -314,7 +320,7 @@ public string GenerateBundle(IReadOnlyList<FileSpec> fileSpecs)
+             {
+                 Directory.CreateDirectory(destinationDirectory);
+             }
+-            var hostLength = new FileInfo(hostSource).Length;
++            var hostLength = GetFileLength(hostSource);
+             var bundleManifestLength = Manifest.GetManifestLength(BundleManifest.BundleMajorVersion, relativePathToSpec.Select(x => x.Spec.BundleRelativePath));
+             long bundleTotalSize = hostLength + bundledFilesSize + bundleManifestLength;
+             if (_target.IsOSX && _macosCodesign)
+-- 
+2.50.1
+

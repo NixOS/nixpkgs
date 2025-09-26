@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
+  fetchpatch,
   cmake,
   pkg-config,
   SDL,
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # patch from debian to support libpng16 instead of libpng12
-    (fetchurl {
+    (fetchpatch {
       url = "https://salsa.debian.org/tux4kids-pkg-team/t4kcommon/raw/f7073fa384f5a725139f54844e59b57338b69dc7/debian/patches/libpng16.patch";
-      sha256 = "1lcpkdy5gvxgljg1vkrxych74amq0gramb1snj2831dam48is054";
+      hash = "sha256-auQ8VvOyvLE1PD2dfeHZJV+MzIt1OtUa7OcOqsXTAYI=";
     })
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Library of code shared between tuxmath and tuxtype";
     homepage = "https://github.com/tux4kids/t4kcommon";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.aanderse ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

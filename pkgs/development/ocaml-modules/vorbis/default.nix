@@ -7,18 +7,9 @@
   libvorbis,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "vorbis";
-  version = "0.8.0";
-
-  duneVersion = "3";
-
-  src = fetchFromGitHub {
-    owner = "savonet";
-    repo = "ocaml-vorbis";
-    rev = "v${version}";
-    hash = "sha256-iCoE7I70wAp4n4XfETVKeaob2811E97/e6144bY/nqk=";
-  };
+  inherit (ogg) version src;
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [

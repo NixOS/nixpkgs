@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mold";
-  version = "2.40.2";
+  version = "2.40.4";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Db2IxHCQWb6JdJROi+nOi0pV4zb+8/TcFrJWUCdH6N8=";
+    hash = "sha256-BiPeZJvMlLIC0TbsqBD1JSt/RE4xZ5wSRYujPXKb+RY=";
   };
 
   nativeBuildInputs = [
@@ -127,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/rui314/mold/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mold";
     maintainers = with lib.maintainers; [ azahi ];
   };

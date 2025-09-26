@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "5.0.0";
+  version = "5.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
     tag = "v${version}";
-    hash = "sha256-7HdeNyB3hMJEwHenN2hUEGG2MdQ++nF3nyAYJv7jhyA=";
+    hash = "sha256-n0ZP01BU/s9iJ+RP7rNlBjD11jNDj8A8Q/seekh56nA=";
   };
 
   build-system = [ setuptools ];
@@ -105,6 +105,14 @@ buildPythonPackage rec {
     # Assertion error: Sparse operations take too long
     # (namely, load-sensitive test)
     "test_performance_with_large_vectors"
+
+    # NameError: name 'ParallelismConfig' is not defined
+    "test_hf_argument_parser"
+    "test_hf_argument_parser_incorrect_string_arguments"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+    # These sparse tests also time out, on x86_64-darwin.
+    "sim_sparse"
   ];
 
   disabledTestPaths = [
@@ -123,10 +131,7 @@ buildPythonPackage rec {
     "tests/test_pretrained_stsb.py"
     "tests/test_sentence_transformer.py"
     "tests/test_train_stsb.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Segfault
-    "tests/test_sparse_tensor.py"
+    "tests/util/test_hard_negatives.py"
   ];
 
   # Sentence-transformer needs a writable hf_home cache

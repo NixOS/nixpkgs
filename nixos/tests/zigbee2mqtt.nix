@@ -1,19 +1,11 @@
 {
   lib,
-  package,
   pkgs,
   ...
 }:
 
-let
-  error =
-    if lib.versionOlder package.version "2" then
-      "Inappropriate ioctl for device, cannot set"
-    else
-      "No valid USB adapter found";
-in
 {
-  name = "zigbee2mqtt-${lib.versions.major package.version}.x";
+  name = "zigbee2mqtt";
   nodes.machine = {
     systemd.services.dummy-serial = {
       wantedBy = [
@@ -24,10 +16,7 @@ in
       };
     };
 
-    services.zigbee2mqtt = {
-      enable = true;
-      inherit package;
-    };
+    services.zigbee2mqtt.enable = true;
 
     systemd.services.zigbee2mqtt.serviceConfig.DevicePolicy = lib.mkForce "auto";
   };
@@ -36,7 +25,7 @@ in
     machine.wait_for_unit("multi-user.target")
     machine.wait_until_fails("systemctl status zigbee2mqtt.service")
     machine.succeed(
-        "journalctl -eu zigbee2mqtt | grep '${error}'"
+        "journalctl -eu zigbee2mqtt | grep 'No valid USB adapter found'"
     )
 
     machine.log(machine.succeed("systemd-analyze security zigbee2mqtt.service"))

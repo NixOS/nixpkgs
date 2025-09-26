@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   pypaBuildFlags = [
     # Disable platform guessing, which tries various FHS paths
-    "--config=setting=--disable-platform-guessing"
+    "--config-setting=--disable-platform-guessing"
   ];
 
   preConfigure =

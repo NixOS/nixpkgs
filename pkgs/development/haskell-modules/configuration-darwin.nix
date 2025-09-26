@@ -328,6 +328,19 @@ self: super:
       __darwinAllowLocalNetworking = true;
     });
 
+    # 2025-08-04: Some RNG tests fail only on Darwin
+    botan-low = overrideCabal (drv: {
+      testFlags =
+        drv.testFlags or [ ]
+        ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+          # botan-low-rng-tests
+          "/rdrand/rngInit/"
+          "/rdrand/rngGet/"
+          "/rdrand/rngReseed/"
+          "/rdrand/rngReseedFromRNGCtx/"
+          "/rdrand/rngAddEntropy/"
+        ]);
+    }) super.botan-low;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
@@ -341,22 +354,24 @@ self: super:
     # after verifying they are indeed erroneous (e.g. cabal2nix) or just disable
     # the check, sticking with the status quo. Ideally there'll be zero cases of
     # the latter in the future!
-    inherit
-      (lib.mapAttrs (
-        _:
-        overrideCabal (old: {
-          postInstall = ''
-            remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
-            # Note: The `data` output is needed at runtime.
-            remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+    cabal2nix = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
 
-            ${old.postInstall or ""}
-          '';
-        })
-      ) super)
-      cabal2nix
-      cabal2nix-unstable
-      ;
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix;
+    cabal2nix-unstable = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "$out/bin/hackage2nix"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix-unstable;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;
@@ -383,8 +398,12 @@ self: super:
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
     }) (disableCabalFlag "fixity-th" super.fourmolu);
 
-    # https://github.com/NixOS/nixpkgs/issues/149692
-    Agda = disableCabalFlag "optimise-heavily" super.Agda;
+    Agda = lib.pipe super.Agda [
+      # https://github.com/NixOS/nixpkgs/issues/149692
+      (disableCabalFlag "optimise-heavily")
+      # https://github.com/agda/agda/issues/8016
+      (appendConfigureFlag "--ghc-option=-Wwarn=deprecations")
+    ];
 
     # https://github.com/NixOS/nixpkgs/issues/198495
     eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;

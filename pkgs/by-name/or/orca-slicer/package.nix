@@ -9,7 +9,7 @@
   wrapGAppsHook3,
   boost186,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -34,8 +34,8 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021,
-  webkitgtk_4_0,
+  tbb_2022,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   libnoise,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     boost186.dev
     cereal
-    cgal
+    cgal_5
     curl
     dbus
     eigen
@@ -111,8 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2021
-    webkitgtk_4_0
+    tbb_2022
+    webkitgtk_4_1
     wxGTK'
     xorg.libX11
     opencv.cxxdev
@@ -210,6 +210,10 @@ stdenv.mkDerivation (finalAttrs: {
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     )
+  '';
+
+  postInstall = ''
+    rm $out/LICENSE.txt
   '';
 
   meta = {

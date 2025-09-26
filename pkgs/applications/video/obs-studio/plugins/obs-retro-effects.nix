@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-retro-effects";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-retro-effects";
     rev = "${version}";
-    sha256 = "sha256-+dg5ySleMb9abT9kIM7HvRSRx9V08B9XPjfoAVe+tWY=";
+    sha256 = "sha256-bWUGuCgCNAaSc0+NRRYsx/8EhrlWuPcipkuUlQZvWDk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,9 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FiniteSingularity/obs-retro-effects";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

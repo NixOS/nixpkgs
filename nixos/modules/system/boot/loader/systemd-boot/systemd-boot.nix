@@ -172,7 +172,7 @@ in
       description = ''
         Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
         For more information about systemd-boot:
-        https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
+        <https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/>
       '';
     };
 
@@ -182,7 +182,7 @@ in
       description = ''
         The sort key used for the NixOS bootloader entries.
         This key determines sorting relative to non-NixOS entries.
-        See also https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+        See also <https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting>
 
         This option can also be used to control the sorting of NixOS specialisations.
 
@@ -384,7 +384,7 @@ in
 
         To control the ordering of the entry in the boot menu, use the sort-key
         field, see
-        https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+        <https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting>
         and {option}`boot.loader.systemd-boot.sortKey`.
       '';
     };

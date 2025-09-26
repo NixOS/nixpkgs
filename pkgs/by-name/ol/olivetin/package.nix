@@ -48,8 +48,13 @@ buildGoModule (
         runHook postInstall
       '';
 
+      postFixup = ''
+        find $out -type f -name '*.go' -exec \
+          sed -i -E 's|//.*protoc-gen-go(-grpc)? +v.*$||' {} +
+      '';
+
       outputHashMode = "recursive";
-      outputHash = "sha256-4mmpiI2GhjMBp662/+DiM7SjEd1cPhF/A4YpyU04/Fs=";
+      outputHash = "sha256-wHqXsSV18mF/CfLQ0S4rGtT3QRcLnneYXAa8nXZaHpQ=";
     };
 
     webui = buildNpmPackage {

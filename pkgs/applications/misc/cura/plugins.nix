@@ -17,7 +17,7 @@ let
 
       src = fetchFromGitHub {
         owner = "fieldOfView";
-        repo = pname;
+        repo = "Cura-OctoPrintPlugin";
         rev = "7bd73946fbf22d18337dc900a81a011ece26bee0";
         sha256 = "057b2f5f49p96lkh2wsr9w6yh2003x4a85irqsgbzp6igmk8imdn";
       };
@@ -45,7 +45,7 @@ let
 
       src = fetchFromGitHub {
         owner = "smartavionics";
-        repo = pname;
+        repo = "RawMouse";
         rev = version;
         sha256 = "0hvi7qwd4xfnqnhbj9dgfjmvv9df7s42asf3fdfxv43n6nx74scw";
       };

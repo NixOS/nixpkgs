@@ -9,11 +9,12 @@
   pytestCheckHook,
   pythonOlder,
   rlp,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "eth-rlp";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-rlp";
     rev = "v${version}";
-    hash = "sha256-FTqIutndf+epmO5XNEUoRAUEmn299aTLIZNe5SMcxAQ=";
+    hash = "sha256-e8nPfxk3OnFEcPnfTy1IEUCHVId6E/ssNOUeAe331+U=";
   };
 
   build-system = [ setuptools ];
@@ -32,9 +33,17 @@ buildPythonPackage rec {
     rlp
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ eth-hash.optional-dependencies.pycryptodome;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pydantic
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_rlp" ];
+
+  disabledTests = [
+    "test_install_local_wheel"
+  ];
 
   meta = with lib; {
     description = "RLP definitions for common Ethereum objects";

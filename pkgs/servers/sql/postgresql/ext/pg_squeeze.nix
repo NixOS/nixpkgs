@@ -9,18 +9,18 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_squeeze";
-  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
-    lib.strings.removePrefix "REL" finalAttrs.src.rev
-  )}";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
-    tag = "REL1_7_0";
-    hash = "sha256-Kh1wSOvV5Rd1CG/na3yzbWzvaR8SJ6wmTZOnM+lbgik=";
+    tag = "REL${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-KbCS3kg2MoxKHl+35UOFCSF4kPPsIMeO7AfwfHZYZVg=";
   };
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=REL(.*)" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^REL(\\d+)_(\\d+)_(\\d+)$" ];
+  };
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
     postgresqlExtraSettings = ''

@@ -342,49 +342,56 @@ let
         '';
 
         # From: https://github.com/godotengine/godot/blob/4.2.2-stable/SConstruct
-        sconsFlags = mkSconsFlagsFromAttrSet {
-          # Options from 'SConstruct'
-          precision = withPrecision; # Floating-point precision level
-          production = true; # Set defaults to build Godot for use in production
-          platform = withPlatform;
-          inherit target;
-          debug_symbols = true;
+        sconsFlags = mkSconsFlagsFromAttrSet (
+          {
+            # Options from 'SConstruct'
+            precision = withPrecision; # Floating-point precision level
+            production = true; # Set defaults to build Godot for use in production
+            platform = withPlatform;
+            inherit target;
+            debug_symbols = true;
 
-          # Options from 'platform/linuxbsd/detect.py'
-          alsa = withAlsa;
-          dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
-          fontconfig = withFontconfig; # Use fontconfig for system fonts support
-          pulseaudio = withPulseaudio; # Use PulseAudio
-          speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
-          touch = withTouch; # Enable touch events
-          udev = withUdev; # Use udev for gamepad connection callbacks
-          wayland = withWayland; # Compile with Wayland support
-          x11 = withX11; # Compile with X11 support
+            # Options from 'platform/linuxbsd/detect.py'
+            alsa = withAlsa;
+            dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
+            fontconfig = withFontconfig; # Use fontconfig for system fonts support
+            pulseaudio = withPulseaudio; # Use PulseAudio
+            speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
+            touch = withTouch; # Enable touch events
+            udev = withUdev; # Use udev for gamepad connection callbacks
+            wayland = withWayland; # Compile with Wayland support
+            x11 = withX11; # Compile with X11 support
 
-          module_mono_enabled = withMono;
+            module_mono_enabled = withMono;
 
-          # aliasing bugs exist with hardening+LTO
-          # https://github.com/godotengine/godot/pull/104501
-          ccflags = "-fno-strict-aliasing";
-          linkflags = "-Wl,--build-id";
+            # aliasing bugs exist with hardening+LTO
+            # https://github.com/godotengine/godot/pull/104501
+            ccflags = "-fno-strict-aliasing";
+            linkflags = "-Wl,--build-id";
 
-          use_sowrap = false;
-        };
+            use_sowrap = false;
+          }
+          // lib.optionalAttrs (lib.versionAtLeast version "4.5") {
+            redirect_build_objects = false; # Avoid copying build objects to output
+          }
+        );
 
         enableParallelBuilding = true;
 
         strictDeps = true;
 
-        patches = lib.optionals (lib.versionOlder version "4.4") [
-          (fetchpatch {
-            name = "wayland-header-fix.patch";
-            url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
-            hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
-          })
-          # Fix a crash in the mono test project build. It no longer seems to
-          # happen in 4.4, but an existing fix couldn't be identified.
-          ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
-        ];
+        patches =
+          lib.optionals (lib.versionOlder version "4.4") [
+            (fetchpatch {
+              name = "wayland-header-fix.patch";
+              url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
+              hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
+            })
+            # Fix a crash in the mono test project build. It no longer seems to
+            # happen in 4.4, but an existing fix couldn't be identified.
+            ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
+          ]
+          ++ lib.optional (lib.versionAtLeast version "4.5") ./fix-freetype-link-error.patch;
 
         postPatch = ''
           # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE

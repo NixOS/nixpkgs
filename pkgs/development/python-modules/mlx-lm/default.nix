@@ -2,13 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   jinja2,
   mlx,
   numpy,
   protobuf,
   pyyaml,
   transformers,
+
+  # tests
+  lm-eval,
   sentencepiece,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -16,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "mlx-lm";
-  version = "0.26.0";
+  version = "0.26.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx-lm";
     tag = "v${version}";
-    hash = "sha256-J69XIqsjQ4sQqhx+EkjKcVXVlQ4A4PGJvICSiCfoSOA=";
+    hash = "sha256-O4wW7wvIqSeBv01LoUCHm0/CgcRc5RfFHjvwyccp6UM=";
   };
 
   build-system = [
@@ -40,9 +47,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    writableTmpDirAsHomeHook
+    lm-eval
     pytestCheckHook
     sentencepiece
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [
@@ -62,12 +70,14 @@ buildPythonPackage rec {
     "tests/test_prompt_cache.py::TestPromptCache::test_cache_with_generate"
     "tests/test_prompt_cache.py::TestPromptCache::test_trim_cache_with_generate"
     # RuntimeError: [metal_kernel] No GPU back-end.
+    "tests/test_losses.py"
     "tests/test_models.py::TestModels::test_bitnet"
   ];
 
   meta = {
     description = "Run LLMs with MLX";
     homepage = "https://github.com/ml-explore/mlx-lm";
+    changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = [
       "aarch64-darwin"

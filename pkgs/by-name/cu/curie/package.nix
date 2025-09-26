@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.0";
 
   src = fetchurl {
-    url = "https://github.com/NerdyPepper/curie/releases/download/v${version}/curie-v${version}.tar.gz";
+    url = "https://github.com/oppiliappan/curie/releases/download/v${version}/curie-v${version}.tar.gz";
     hash = "sha256-B89GNbOmm3lY/cRWQJEFu/5morCM/WrRQb/m6covbt8=";
   };
 
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "Upscaled version of scientifica";
-    homepage = "https://github.com/NerdyPepper/curie";
+    homepage = "https://github.com/oppiliappan/curie";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ moni ];

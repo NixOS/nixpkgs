@@ -42,20 +42,19 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "9.5.1";
+  version = "10.0.1";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
-    url = "https://github.com/limine-bootloader/limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-UgY8S+XGlSnO1k98JWBfSN0/IY3LANVFgJwI1kdPAcU=";
+    url = "https://codeberg.org/Limine/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
+    hash = "sha256-7P8N/HomleQBnoaX6S5V7KwX1GYVIY7XkUYU9Xo9jlk=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    llvmPackages.clang-unwrapped
     llvmPackages.libllvm
     llvmPackages.lld
   ]
@@ -79,19 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
     ++ lib.concatMap uefiFlags (
       if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
-    )
-    ++ [
-      "TOOLCHAIN_FOR_TARGET=llvm"
-      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
-      # still needs to be available
-      "CC=${lib.getExe stdenv.cc}"
-    ];
+    );
 
   passthru.tests = nixosTests.limine;
 
   meta = {
     homepage = "https://limine-bootloader.org/";
-    changelog = "https://raw.githubusercontent.com/limine-bootloader/limine/refs/tags/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://codeberg.org/Limine/Limine/raw/tag/v${finalAttrs.version}/ChangeLog";
     description = "Limine Bootloader";
     mainProgram = "limine";
     # The platforms on that the Limine binary and helper tools can run, not
@@ -102,11 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       asl20 # cc-runtime
       bsd0 # freestanding-headers, freestanding-toolchain
-      bsd2 # limine, flanterm, libfdt, nyu-efi
-      bsd2Patent # nyu-efi
-      bsd3 # nyu-efi
-      bsdAxisNoDisclaimerUnmodified # nyu-efi
-      mit # nyu-efi, stb_image
+      bsd2 # limine, flanterm, libfdt, PicoEFI
+      bsd2Patent # PicoEFI
+      bsd3 # PicoEFI
+      bsdAxisNoDisclaimerUnmodified # PicoEFI
+      mit # PicoEFI, stb_image
       zlib # tinf
     ];
     maintainers = with lib.maintainers; [

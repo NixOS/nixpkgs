@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.unfreeRedistributableFirmware;
     description = "Secure boot enabled boot loader for ODROID-XU{3,4}";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

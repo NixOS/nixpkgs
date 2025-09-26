@@ -18,27 +18,42 @@
   libpcap,
   libnl,
   elfutils,
+  fetchurl,
   jansson,
   ensureNewerSourcesForZipFilesHook,
+  runtimeShell,
 }:
 
+let
+
+  # downgrade dpdk because spdk refuses newer versions at runtime
+  # url: https://github.com/spdk/spdk/blob/3e3577a090ed9a084b5909aadcc8bc5fe93c0017/lib/env_dpdk/pci_dpdk.c#L77
+  dpdk' = dpdk.overrideAttrs (oldAttrs: rec {
+    version = "25.03";
+    src = fetchurl {
+      url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+      sha256 = "sha256-akCnMTKChuvXloWxj/pZkua3cME4Q9Zf0NEVfPzP9j0=";
+    };
+  });
+
+in
 stdenv.mkDerivation rec {
   pname = "spdk";
 
-  version = "24.09";
+  version = "25.05";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
-    rev = "v${version}";
-    hash = "sha256-27mbIycenOk51PLQrAfU1cZcjiWddNtxoyC6Q9wxqFg=";
+    tag = "v${version}";
+    hash = "sha256-Js78FLkLN4GpJlgO+h4jIiEdThciBugbLTB6elFi2TI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     python3
     python3.pkgs.pip
-    python3.pkgs.setuptools
+    python3.pkgs.hatchling
     python3.pkgs.wheel
     python3.pkgs.wrapPython
     pkg-config
@@ -47,7 +62,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cunit
-    dpdk
+    dpdk'
     fuse3
     jansson
     libaio
@@ -69,17 +84,38 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-
-    # can be removed again with next release, check is already in master
-    substituteInPlace module/scheduler/dpdk_governor/dpdk_governor.c \
-      --replace-fail "<rte_power.h>" " <rte_power_cpufreq.h>"
+    # Override pip install command to use hatchling directly without downloading dependencies
+    substituteInPlace python/Makefile \
+      --replace-fail "setup_cmd = pip install --prefix=\$(CONFIG_PREFIX)" \
+                     "setup_cmd = python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
   '';
 
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-dpdk=${dpdk}"
-  ];
+    "--with-dpdk=${dpdk'}"
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--with-shared";
+
+  # spdk does shenanigans with patchelf, so we need to stop them from messing with rpath
+  preInstall = ''
+    patchelf() { true; }
+    export -f patchelf
+  '';
+
+  postInstall = ''
+    unset patchelf
+
+    # SPDK scripts assume that they can read the includes also relative to the scripts.
+    # Therefore we are not copying them into $out/share.
+    mkdir $out/scripts
+    cp  ./scripts/common.sh ./scripts/setup.sh $out/scripts
+    cat > $out/bin/spdk-setup << EOF
+    #!${runtimeShell}
+    exec $out/scripts/setup.sh "\$@"
+    EOF
+    chmod +x  $out/bin/spdk-setup
+  '';
 
   postCheck = ''
     python3 -m spdk
@@ -87,11 +123,15 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapPythonPrograms
+    ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      # .pc files are not working properly with static linking and might just confuse other build systems
+      rm $out/lib/*.a
+    ''}
   '';
 
   env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
-  # otherwise does not find strncpy when compiling
-  env.NIX_LDFLAGS = "-lbsd";
+
+  passthru.dpdk = dpdk';
 
   meta = with lib; {
     description = "Set of libraries for fast user-mode storage";

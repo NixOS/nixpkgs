@@ -5,14 +5,14 @@
 }:
 buildGoModule rec {
   pname = "goplantuml";
-  version = "1.6.2";
+  version = "1.6.3";
   src = fetchFromGitHub {
     owner = "jfeliu007";
     repo = "goplantuml";
     tag = "v${version}";
-    hash = "sha256-OnCAqws27e7WsXKmw0clH9Qek+6LNeu2UGD9sKaV4+I=";
+    hash = "sha256-+8RvifAYJv6cxIZ9sNKWNVhSNzUotGjjRjGynGqbO6o=";
   };
-  vendorHash = null;
+  vendorHash = "sha256-IVuhzjPGzPVKHpPdkX/GWItbKaz4PLyUFQAQ7RQO9/M=";
   meta = {
     changelog = "https://github.com/jfeliu007/goplantuml/releases/tag/v${version}";
     description = "PlantUML Class Diagram Generator for golang projects";

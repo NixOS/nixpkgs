@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pycocotools";
-  version = "2.0.9";
+  version = "2.0.10";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uoLlUGcKoRgqkR+z5fDoM0VDIERDhwe9UsJRnNoWhyo=";
+    hash = "sha256-ekdgnN78leXhUTE8fZOmHPBuFdQse6mbYB47wPns4uE=";
   };
 
   propagatedBuildInputs = [

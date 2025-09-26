@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "uqbar";
-  version = "0.7.4";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q4p+ki5wA/gYGWnt2tzCiEakk4fBl9P96ONz2ZxlCCg=";
+    hash = "sha256-MHSnuPiJu2p3NiG/bV6qFUO90xQEFcyQrcxMY0hw8E8=";
   };
 
   postPatch = ''

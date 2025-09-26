@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "glfw";
-  version = "2.9.0";
+  version = "2.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
     tag = "v${version}";
-    hash = "sha256-MBITnzVNIl+PJ++RN4Dj6sYB1/bSMNHJTDamiG6pEfA=";
+    hash = "sha256-jZdM/rvPseQUsRv8+P3To2VCrQUiDHqr6XuXEBW0otM=";
   };
 
   # Patch path to GLFW shared object

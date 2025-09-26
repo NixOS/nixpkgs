@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "mod";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "marwan-at-work";
     repo = "mod";
     rev = "v${version}";
-    sha256 = "sha256-P0FE0Sl4IXH6DAETnlBwQ2CR0X0AP9Z0noW99By7mxU=";
+    sha256 = "sha256-s/i2S1BbIUEXclQlv0uXlzjEvrT+udo0uzec2Una0uY=";
   };
 
-  vendorHash = "sha256-GiE2RNAxbKpIekn54bfYlNvIcQo8D3ysmPSvxQhujYI=";
+  vendorHash = "sha256-drGfJFuEsJyZJ1x40ww0rFYsl0AkjLbznCWgluwOCYs=";
 
   doCheck = false;
 

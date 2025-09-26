@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   installShellFiles,
@@ -23,6 +24,16 @@
   withGui,
   withWallet ? true,
   enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
+  gnupg,
+  # Signatures from the following GPG public keys checked during verification of the source code.
+  # The list can be found at https://github.com/bitcoin-core/guix.sigs/tree/main/builder-keys
+  builderKeys ? [
+    "152812300785C96444D3334D17565732E08E5E41" # achow101.gpg
+    "9EDAFF80E080659604F4A76B2EBB056FD847F8A7" # Emzy.gpg
+    "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg
+    "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg
+    "D1DBF2C4B96F2DEBF4C16654410108112E7EA81F" # hebasto.gpg
+  ],
 }:
 
 let
@@ -34,20 +45,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "29.0";
+  version = "29.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "882c782c34a3bf2eacd1fae5cdc58b35b869883512f197f7d6dc8f195decfdaa";
+    sha256 = "067f624ae273b0d85a1554ffd7c098923351a647204e67034df6cc1dfacfa06b";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     installShellFiles
+    gnupg
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
@@ -69,6 +81,52 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qttools
   ];
+
+  preUnpack =
+    let
+      publicKeys = fetchFromGitHub {
+        owner = "bitcoin-core";
+        repo = "guix.sigs";
+        rev = "a788388207bd244d5ab07b31ecd6c126f213a6c6";
+        sha256 = "sha256-gbenuEWP6pqY9ywPd/yZy6QfWI7jvSObwto27DRXjGI=";
+      };
+
+      checksums = fetchurl {
+        url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS";
+        hash = "sha256-teQ02vm875Isks9sBC2HV3Zo78W+UkXGH9zgyNhOnQs=";
+      };
+
+      signatures = fetchurl {
+        url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS.asc";
+        hash = "sha256-hyk57QyGJnrjuuGRmvfOhVAx9Nru93e8bfah5fSVcmg=";
+      };
+
+      verifyBuilderKeys =
+        let
+          script = publicKey: ''
+            echo "Checking if public key ${publicKey} signed the checksum file..."
+            grep "^\[GNUPG:\] VALIDSIG .* ${publicKey}$" verify.log > /dev/null
+            echo "OK"
+          '';
+        in
+        builtins.concatStringsSep "\n" (builtins.map script builderKeys);
+    in
+    ''
+      pushd $(mktemp -d)
+      export GNUPGHOME=$PWD/gnupg
+      mkdir -m 700 -p $GNUPGHOME
+      gpg --no-autostart --batch --import ${publicKeys}/builder-keys/*
+      ln -s ${checksums} ./SHA256SUMS
+      ln -s ${signatures} ./SHA256SUMS.asc
+      ln -s $src ./bitcoin-${finalAttrs.version}.tar.gz
+      gpg --no-autostart --batch --verify --status-fd 1 SHA256SUMS.asc SHA256SUMS > verify.log
+      ${verifyBuilderKeys}
+      echo "Checking ${checksums} for bitcoin-${finalAttrs.version}.tar.gz..."
+      grep bitcoin-${finalAttrs.version}.tar.gz SHA256SUMS > SHA256SUMS.filtered
+      echo "Verifying the checksum of bitcoin-${finalAttrs.version}.tar.gz..."
+      sha256sum -c SHA256SUMS.filtered
+      popd
+    '';
 
   postInstall = ''
     cd ..

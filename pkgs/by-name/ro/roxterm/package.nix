@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roxterm";
-  version = "3.16.6";
+  version = "3.17.2";
 
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
     rev = finalAttrs.version;
-    hash = "sha256-T6xFExsgYGUVLgDS7sx5juoraMjzIYyfsXHvQUAm1fc=";
+    hash = "sha256-QMWxNgMbodkyUDG2o7nrnVZiWFpIYTdphU9yDEhzKNM=";
   };
 
   nativeBuildInputs = [

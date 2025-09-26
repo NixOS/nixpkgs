@@ -1,8 +1,8 @@
-diff --git a/webpack.config.js b/webpack.config.js
-index 469ffe1..3233c4b 100644
---- a/webpack.config.js
-+++ b/webpack.config.js
-@@ -1,11 +1,7 @@
+diff --git a/rspack.config.js b/rspack.config.js
+index 30b7568..dc10273 100644
+--- a/rspack.config.js
++++ b/rspack.config.js
+@@ -2,11 +2,7 @@
  const path = require('path');
  const { execSync } = require('child_process');
  

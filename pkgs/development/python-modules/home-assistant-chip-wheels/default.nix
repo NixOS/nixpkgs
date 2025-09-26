@@ -12,6 +12,7 @@
   cryptography,
   diskcache,
   fetchFromGitHub,
+  fetchpatch,
   glib,
   gn,
   googleapis-common-protos,
@@ -126,6 +127,19 @@ stdenv.mkDerivation rec {
     openssl
     glib
     libnl
+  ];
+
+  patches = [
+    (fetchpatch {
+      # Fix building with newer gn version
+      name = "pw_protobuf_compiler-Create-a-new-includes.txt-for-each-toolchain.patch";
+      # https://pigweed-review.googlesource.com/c/pigweed/pigweed/+/300272
+      url = "https://pigweed.googlesource.com/pigweed/pigweed/+/b66729b90fcb9df2ee4818f6d4fff59385cdbc80^!?format=TEXT";
+      decode = "base64 -d";
+      stripLen = 1;
+      extraPrefix = "connectedhomeip/third_party/pigweed/repo/";
+      hash = "sha256-6ss3j8j69w7EMio9mFP/EL2oPqQ2sLh67eWsJjHdDa8=";
+    })
   ];
 
   postPatch = ''

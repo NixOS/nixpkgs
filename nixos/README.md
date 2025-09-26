@@ -116,3 +116,5 @@ Sample template for a new module review is provided below.
 
 ##### Comments
 ```
+
+See also [./README-modular-services.md](./README-modular-services.md).

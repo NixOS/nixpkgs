@@ -29,7 +29,7 @@ buildPythonPackage rec {
     changelog = "https://chrisbuilds.github.io/terminaltexteffects/changeblog/";
     license = licenses.mit;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ qwqawawow ];
+    maintainers = with maintainers; [ eihqnh ];
     mainProgram = "tte";
   };
 }

@@ -26,11 +26,11 @@
   talloc,
   jansson,
   ldb,
+  lmdb,
   libtasn1,
   tdb,
   tevent,
   libxcrypt,
-  libxcrypt-legacy,
   cmocka,
   rpcsvc-proto,
   bash,
@@ -49,7 +49,6 @@
   avahi,
   enableDomainController ? false,
   gpgme,
-  lmdb,
   enableRegedit ? true,
   ncurses,
   enableCephFS ? false,
@@ -66,15 +65,6 @@
 }:
 
 let
-  # samba-tool requires libxcrypt-legacy algorithms
-  python = python3Packages.python.override {
-    self = python;
-    libxcrypt = libxcrypt-legacy;
-  };
-  wrapPython = python3Packages.wrapPython.override {
-    inherit python;
-  };
-
   inherit (lib) optional optionals;
 
   needsAnswers =
@@ -89,11 +79,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.20.8";
+  version = "4.22.3";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-db4OjTH0UBPpsmD+fPMEo20tgSg5GRR3JXchXsFzqAc=";
+    hash = "sha256-j9cJJimjWW2TXNdWfZNJeflCcpGOw6/9DMgHk07PIro=";
   };
 
   outputs = [
@@ -104,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./4.x-no-persistent-install.patch
-    ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
     ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
@@ -123,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3Packages.python
+    python3Packages.wrapPython
     wafHook
     pkg-config
     bison
@@ -148,8 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
-    wrapPython
-    python
+    python3Packages.python
     readline
     popt
     dbus
@@ -158,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     gnutls
     libtasn1
+    lmdb
     tdb
     libxcrypt
   ]
@@ -182,7 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableMDNS avahi
   ++ optionals enableDomainController [
     gpgme
-    lmdb
     python3Packages.dnspython
   ]
   ++ optional enableRegedit ncurses
@@ -230,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-rpath"
     # otherwise third_party/waf/waflib/Tools/python.py would
     # get the wrong pythondir from build platform python
-    "--pythondir=${placeholder "out"}/${python.sitePackages}"
+    "--pythondir=${placeholder "out"}/${python3Packages.python.sitePackages}"
     (lib.enableFeature enablePrinting "cups")
   ]
   ++ optional (!enableDomainController) "--without-ad-dc"
@@ -245,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableProfiling "--with-profiling-data"
   ++ optional (!enableAcl) "--without-acl-support"
   ++ optional (!enablePam) "--without-pam"
-  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
     "--cross-compile"
     (
@@ -254,7 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
       else
         "--cross-answers=answers"
     )
-  ])
+  ]
   ++ optionals stdenv.buildPlatform.is32bit [
     # By default `waf configure` spawns as many as available CPUs. On
     # 32-bit systems with many CPUs (like `i686` chroot on `x86_64`
@@ -321,7 +310,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Samba does its own shebang patching, but uses build Python
     find $out/bin -type f -executable | while read file; do
       isScript "$file" || continue
-      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python}^' "$file"
+      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python3Packages.python}^' "$file"
     done
   '';
 
@@ -349,17 +338,12 @@ stdenv.mkDerivation (finalAttrs: {
     broken = enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
     pkgConfigModules = [
-      "dcerpc_samr"
-      "dcerpc"
       "ndr_krb5pac"
       "ndr_nbt"
       "ndr_standard"
       "ndr"
       "netapi"
-      "samba-credentials"
-      "samba-hostconfig"
       "samba-util"
-      "samdb"
       "smbclient"
       "wbclient"
     ];

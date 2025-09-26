@@ -14,32 +14,31 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.5.3";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     tag = "v${version}";
-    hash = "sha256-vX+ZyCQsYqJjgYaufWJRnzX8retiFK5QHSP40bbBaCc=";
+    hash = "sha256-1OPFWmy9eDRnMJjYdzYubgfde7MNix8ZsSuN2ZHsvco=";
   };
+
+  patches = [
+    ./01-donate-button.patch
+    ./02-button-dpi.patch
+  ];
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
   nugetDeps = ./deps.json;
 
-  postPatch = ''
-    substituteInPlace NAPS2.Images.Gtk/NAPS2.Images.Gtk.csproj \
-      --replace-fail TargetFramework TargetFrameworks \
-  '';
-
   dotnetFlags = [
-    "-p:TargetFrameworks=net8"
-    "-p:EnablePreviewFeatures=true"
+    "-p:TargetFrameworks=net9"
   ];
 
   executables = [ "naps2" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
@@ -60,6 +59,14 @@ buildDotnetModule rec {
     install -D NAPS2.Lib/Icons/scanner-64-rev2.png $out/share/icons/hicolor/64x64/apps/com.naps2.Naps2.png
     install -D NAPS2.Lib/Icons/scanner-72-rev1.png $out/share/icons/hicolor/72x72/apps/com.naps2.Naps2.png
     install -D NAPS2.Lib/Icons/scanner-128.png $out/share/icons/hicolor/128x128/apps/com.naps2.Naps2.png
+    case "${stdenv.hostPlatform.system}" in
+      x86_64-linux)
+        chmod a+x $out/lib/naps2/_linux/tesseract
+        ;;
+      aarch64-linux)
+        chmod a+x $out/lib/naps2/_linuxarm/tesseract
+        ;;
+    esac
   '';
 
   meta = {

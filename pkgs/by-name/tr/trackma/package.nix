@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "z411";
     repo = "trackma";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "Hov9qdVabu1k3SIoUmvcRtSK8TcETqGPXI2RqN/bei4=";
     fetchSubmodules = true; # for anime-relations submodule
   };

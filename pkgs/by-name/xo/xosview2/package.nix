@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xosview2";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/xosview/xosview2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kEp6n9KmZ+6sTFyJr1V8Ssq9aZuh69c4U1YIiqvxIxw=";
+    hash = "sha256-tNBZdhCy8jpbTA19T8hxCO2c+wxy03EJ9ar3GAjOpcU=";
   };
 
   outputs = [

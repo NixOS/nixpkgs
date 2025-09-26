@@ -5,6 +5,8 @@
     "ghcr.io/devcontainers/features/nix:1": {
       // fails in the devcontainer sandbox, enable sandbox via config instead
       "multiUser": false,
+      // TODO: nixfmt-rfc-style → nixfmt (once it's in a stable release)
+      // https://github.com/NixOS/nixpkgs/issues/425583
       "packages": "nixpkgs.nixd,nixpkgs.nixfmt-rfc-style",
       "useAttributePath": true,
       "extraNixConfig": "experimental-features = nix-command flakes,sandbox = true"

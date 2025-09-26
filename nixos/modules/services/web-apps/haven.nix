@@ -48,9 +48,9 @@ in
 
     settings = lib.mkOption {
       default = defaultSettings;
-      defaultText = "See https://github.com/bitvora/haven/blob/master/.env.example";
+      defaultText = "See <https://github.com/bitvora/haven/blob/master/.env.example>";
       apply = lib.recursiveUpdate defaultSettings;
-      description = "See https://github.com/bitvora/haven for documentation.";
+      description = "See <https://github.com/bitvora/haven> for documentation.";
       example = lib.literalExpression ''
         {
           RELAY_URL = "relay.example.com";
@@ -63,7 +63,7 @@ in
       type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
-        Path to a file containing sensitive environment variables. See https://github.com/bitvora/haven for documentation.
+        Path to a file containing sensitive environment variables. See <https://github.com/bitvora/haven> for documentation.
         The file should contain environment-variable assignments like:
         S3_SECRET_KEY=mysecretkey
         S3_ACCESS_KEY_ID=myaccesskey

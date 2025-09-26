@@ -26,7 +26,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to enable Yandex-disk client. See https://disk.yandex.ru/
+          Whether to enable Yandex-disk client. See <https://disk.yandex.ru/>
         '';
       };
 

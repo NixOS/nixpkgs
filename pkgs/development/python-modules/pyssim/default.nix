@@ -6,14 +6,21 @@
   scipy,
   pillow,
   pywavelets,
-  fetchpatch,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyssim";
-  version = "0.7";
+  version = "0.7.1";
   pyproject = true;
+
+  # PyPI tarball doesn't contain test images so let's use GitHub
+  src = fetchFromGitHub {
+    owner = "jterrace";
+    repo = "pyssim";
+    tag = "v${version}";
+    hash = "sha256-6393EATaXg12pYXPaHty+8LepUM6kgtZ0zSjZ1Izytg=";
+  };
 
   build-system = [
     setuptools
@@ -24,22 +31,6 @@ buildPythonPackage rec {
     scipy
     pillow
     pywavelets
-  ];
-
-  # PyPI tarball doesn't contain test images so let's use GitHub
-  src = fetchFromGitHub {
-    owner = "jterrace";
-    repo = "pyssim";
-    tag = "v${version}";
-    sha256 = "sha256-LDNIugQeRqNsAZ5ZxS/NxHokEAwefpfRutTRpR0IcXk=";
-  };
-
-  patches = [
-    # "Use PyWavelets for continuous wavelet transform"; signal.cwt was removed and broke the build
-    (fetchpatch {
-      url = "https://github.com/jterrace/pyssim/commit/64a58687f261eb397e9c22609b5d48497ef02762.patch?full_index=1";
-      hash = "sha256-u6okuWZgGcYlf/SW0QLrAv0IYuJi7D8RHHEr8DeXKcw=";
-    })
   ];
 
   # Tests are copied from .github/workflows/python-package.yml

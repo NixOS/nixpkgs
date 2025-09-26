@@ -45,13 +45,15 @@ let
     n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
   );
 
-  # Old Darwin pattern stubs; remove these by 25.11.
+  # Old Darwin pattern stubs; converted to throws in 25.11.
 
-  mkStub = pkgs.callPackage ../os-specific/darwin/apple-sdk/mk-stub.nix { };
+  mkThrow =
+    name:
+    throw "darwin.${name} has been removed as it was a legacy compatibility stub; see <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks> for migration instructions";
 
-  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
+  apple_sdk_11_0 = mkThrow "apple_sdk_11_0";
 
-  apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
+  apple_sdk_12_3 = mkThrow "apple_sdk_12_3";
 
   apple_sdk = apple_sdk_11_0;
 
@@ -92,7 +94,7 @@ let
     "objc4"
     "ppp"
     "xnu"
-  ] (mkStub "darwin" "11.0");
+  ] mkThrow;
 in
 
 stubs
@@ -126,13 +128,9 @@ stubs
   ### L ###
 
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
-  libresolvHeaders = lib.warnOnInstantiate "darwin.libresolvHeaders: use `lib.getInclude darwin.libresolv`; this will be removed in 25.11" (
-    lib.getDev self.libresolv
-  ); # added 2025-04-20
+  libresolvHeaders = throw "darwin.libresolvHeaders has been removed; use `lib.getInclude darwin.libresolv`"; # converted to throw 2025-07-29
   libtapi = pkgs.libtapi; # 2024-08-16
-  libutilHeaders = lib.warnOnInstantiate "darwin.libutilHeaders: use `lib.getInclude darwin.libutil`; this will be removed in 25.11" (
-    lib.getDev self.libutil
-  ); # added 2025-04-20
+  libutilHeaders = throw "darwin.libutilHeaders has been removed; use `lib.getInclude darwin.libutil`"; # converted to throw 2025-07-29
 
   ### M ###
 
@@ -152,14 +150,7 @@ stubs
 
   ### S ###
 
-  stdenvNoCF =
-    lib.warnOnInstantiate
-      "darwin.stdenvNoCF: use `stdenv` or `stdenvNoCC`; this will be removed in 25.11"
-      (
-        pkgs.stdenv.override {
-          extraBuildInputs = [ ];
-        }
-      ); # added 2025-04-20
+  stdenvNoCF = throw "darwin.stdenvNoCF has been removed; use `stdenv` or `stdenvNoCC`"; # converted to throw 2025-07-29
   stubs = throw "'darwin.stubs.*' have been removed as they were unused"; # added 2025-04-20
   swift-corelibs-foundation = throw "'darwin.swift-corelibs-foundation' has been removed, as it was broken and is no longer used"; # added 2025-04-20
 })

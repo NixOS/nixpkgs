@@ -4,7 +4,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   buildNpmPackage,
-  electron_36,
+  electron_37,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -12,16 +12,15 @@
 }:
 let
   pname = "vrcx";
-  version = "2025.06.30";
+  version = "2025.09.10";
   dotnet = dotnetCorePackages.dotnet_9;
-  electron = electron_36;
+  electron = electron_37;
 
   src = fetchFromGitHub {
     owner = "vrcx-team";
     repo = "VRCX";
-    # v2025.06.30 tag didn't bump the version
-    rev = "4a630079d778069293a39e5b7f7fdb3f543590da";
-    hash = "sha256-GBSkwfi9uvmBg3crnE9CYKDWzekrPjhSq9kDJzmf3bM=";
+    rev = "b233bbc299fca9a956db387b83d90a4dbba61175";
+    hash = "sha256-7axYnsImG+VllQE1rhr8NmuMCm5t3bgNYGIIn9j2wMk=";
   };
 
   backend = buildDotnetModule {
@@ -37,7 +36,8 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r build/Electron $out
+      mkdir -p $out/build/Electron
+      cp -r build/Electron/* $out/build/Electron/
 
       runHook postInstall
     '';
@@ -46,7 +46,7 @@ in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-x84l1+gRH2qADofYwyrEOeE4WJwqTqVB0L3JRxbscmM=";
+  npmDepsHash = "sha256-VFYWXPhZrg3q2PW4kWfVr5/DY8W6Uf1mvnwfB4mVBrs=";
   npmFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
 
@@ -58,22 +58,25 @@ buildNpmPackage {
   buildPhase = ''
     runHook preBuild
 
+    # need to run vue-demi postinstall for pinia
+    node ./node_modules/vue-demi/scripts/postinstall.js
     env PLATFORM=linux npm exec webpack -- --config webpack.config.js --mode production
-    node src-electron/patch-package-version.js
+    node ./src-electron/patch-package-version.js
     npm exec electron-builder -- --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
-    node src-electron/patch-node-api-dotnet.js
+    node ./src-electron/patch-node-api-dotnet.js
 
     runHook postBuild
   '';
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out/share/vrcx"
     cp -r build/*-unpacked/resources "$out/share/vrcx/"
-    mkdir -p $out/share/vrcx/resources/app.asar.unpacked/build
-    cp -r ${backend} "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
+    mkdir -p "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
+    cp -r ${backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
       --add-flags "--ozone-platform-hint=auto"              \

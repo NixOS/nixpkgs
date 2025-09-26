@@ -7,8 +7,6 @@
   cuda_cccl ? null,
   cuda_cudart ? null,
   cuda_nvcc ? null,
-  cudaAtLeast,
-  cudaOlder,
   cudatoolkit,
   cusparselt ? null,
   cutensor ? null,
@@ -100,24 +98,15 @@ in
 
       sourceRoot = "${finalAttrs.src.name}/cuSPARSELt/matmul";
 
-      buildInputs = prevAttrs.buildInputs or [ ] ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ];
-
-      nativeBuildInputs =
-        prevAttrs.nativeBuildInputs or [ ]
-        ++ [
-          cmake
-          addDriverRunpath
-          (lib.getDev cusparselt)
-          (lib.getDev libcusparse)
-        ]
-        ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-        ++ lib.optionals (cudaAtLeast "11.4") [
-          cuda_nvcc
-          (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
-        ]
-        ++ lib.optionals (cudaAtLeast "12.0") [
-          cuda_cccl # <nv/target>
-        ];
+      nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [
+        cmake
+        addDriverRunpath
+        (lib.getDev cusparselt)
+        (lib.getDev libcusparse)
+        cuda_nvcc
+        (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
+        cuda_cccl # <nv/target>
+      ];
 
       postPatch = prevAttrs.postPatch or "" + ''
         substituteInPlace CMakeLists.txt \
@@ -137,11 +126,11 @@ in
       meta = prevAttrs.meta or { } // {
         broken =
           # Base dependencies
-          (cusparselt == null || libcusparse == null)
-          # CUDA 11.4+ dependencies
-          || (cudaAtLeast "11.4" && (cuda_nvcc == null || cuda_cudart == null))
-          # CUDA 12.0+ dependencies
-          || (cudaAtLeast "12.0" && cuda_cccl == null);
+          cusparselt == null
+          || libcusparse == null
+          || cuda_nvcc == null
+          || cuda_cudart == null
+          || cuda_cccl == null;
       };
     }
   );

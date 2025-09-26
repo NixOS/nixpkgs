@@ -7,7 +7,7 @@ record dependencies so they can be restored in a reproducible fashion.
 
 ## Building a Gradle package {#building-a-gradle-package}
 
-Here's how a typical derivation will look like:
+Here's how a typical derivation will look:
 
 ```nix
 stdenv.mkDerivation (finalAttrs: {
@@ -69,7 +69,7 @@ If your package can't be evaluated using a simple `pkgs.<pname>`
 expression (for example, if your package isn't located in nixpkgs, or if
 you want to override some of its attributes), you will usually have to
 pass `pkg` instead of `pname` to `gradle.fetchDeps`. There are two ways
-of doing it.
+of doing so.
 
 The first is to add the derivation arguments required for getting the
 package. Using the pdftk example above:

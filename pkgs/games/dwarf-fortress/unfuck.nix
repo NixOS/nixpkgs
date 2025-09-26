@@ -124,7 +124,6 @@ stdenv.mkDerivation {
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      abbradar
       numinit
     ];
   };

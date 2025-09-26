@@ -49,6 +49,7 @@ let
     version = release;
     revision = "release-${release}";
     prefix = modulesPath;
+    extraSources = [ (dirOf nixosPath) ];
   };
 in
 docs.optionsNix

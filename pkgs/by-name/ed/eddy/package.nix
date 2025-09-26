@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "obdasystems";
-    repo = pname;
+    repo = "eddy";
     tag = "v${version}";
     sha256 = "sha256-K8yd7A4D1LAgwuaJvxdF0oqACuMxX/CZ6yKbR7D+uEQ=";
   };

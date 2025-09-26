@@ -12,13 +12,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "cozette";
-  version = "1.29.0";
+  version = "1.30.0";
 
   src = fetchzip {
     url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts-v-${
       builtins.replaceStrings [ "." ] [ "-" ] version
     }.zip";
-    hash = "sha256-DHUnCzp6c3d57cfkO2kH+czXRiqRWn6DBTo9NVTghQ0=";
+    hash = "sha256-Njh6V5wTBKM/1QKmPwG1qiOYyAJSVQXLTBLN03V6DaE=";
   };
 
   nativeBuildInputs = [ bdf2psf ];

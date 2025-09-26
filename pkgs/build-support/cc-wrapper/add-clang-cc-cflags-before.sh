@@ -30,4 +30,8 @@ if $targetPassed && [[ "$targetValue" != "@defaultTarget@" ]] && (( "${NIX_CC_WR
     echo "Warning: supplying the --target $targetValue != @defaultTarget@ argument to a nix-wrapped compiler may not work correctly - cc-wrapper is currently not designed with multi-target compilers in mind. You may want to use an un-wrapped compiler instead." >&2
 elif [[ $0 != *cpp ]]; then
     extraBefore+=(-target @defaultTarget@ @machineFlags@)
+
+    if [[ "@explicitAbiValue@" != "" ]]; then
+        extraBefore+=(-mabi=@explicitAbiValue@)
+    fi
 fi

@@ -21,7 +21,7 @@
   withEGL ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? stdenv.hostPlatform.isDarwin,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libpng,
 }:
 
@@ -32,14 +32,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9qYPatpTT28H+fz77o7/Y3YVmiK0OCsiQT5QAYe93M0=";
     fetchSubmodules = true;
   };
 
   patches = [
     # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ./patches/0001-fix-assertion-using-hide-in-destroy.patch
+    ./0001-fix-assertion-using-hide-in-destroy.patch
+    # Add support for libwebkit2gtk-4.1 and libsoup-3.0, cherry-picked from
+    # https://github.com/SoftFever/Orca-deps-wxWidgets/commit/1b8664426603376b68f8ca3c54de97ec630e5940
+    ./0002-support-webkitgtk-41.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -58,7 +61,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCurl curl
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
+  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_1
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpng
   ];
@@ -123,7 +126,10 @@ stdenv.mkDerivation rec {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
-    license = licenses.wxWindows;
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with maintainers; [ tfmoraes ];
     platforms = platforms.unix;
   };

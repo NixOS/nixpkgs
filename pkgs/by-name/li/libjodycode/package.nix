@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjodycode";
-  version = "3.1.2";
+  version = "4.0.1";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jbruchon";
     repo = "libjodycode";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-doTGeIElftC4SAcn3MTQ+DffQFMv1Elo28i/MFxjFzk=";
+    hash = "sha256-9YdDw7xIuAArQtPYhDeT4AhSwi5fhVJeBl3R+J7PaCw=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;

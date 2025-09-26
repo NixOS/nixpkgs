@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/codefresh-io/cli/releases/tag/v${finalAttrs.version}";
-    description = "Codefresh CLI tool to interact with Codefresh services";
+    description = "CLI tool to interact with Codefresh services";
     homepage = "https://github.com/codefresh-io/cli";
     license = lib.licenses.mit;
     mainProgram = "codefresh";

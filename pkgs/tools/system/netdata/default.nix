@@ -47,24 +47,25 @@
   withDBengine ? true,
   withDebug ? false,
   withEbpf ? false,
-  withIpmi ? (stdenv.hostPlatform.isLinux),
+  withIpmi ? stdenv.hostPlatform.isLinux,
   withLibbacktrace ? true,
-  withNdsudo ? false,
-  withNetfilter ? (stdenv.hostPlatform.isLinux),
-  withNetworkViewer ? (stdenv.hostPlatform.isLinux),
-  withSsl ? true,
-  withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   withML ? true,
+  withNdsudo ? false,
+  withNetfilter ? stdenv.hostPlatform.isLinux,
+  withNetworkViewer ? stdenv.hostPlatform.isLinux,
+  withSsl ? true,
+  withSystemdJournal ? stdenv.hostPlatform.isLinux,
+  withSystemdUnits ? stdenv.hostPlatform.isLinux,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.3";
+  version = "2.6.3";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OdH6cQ2dYvbeLh9ljaqmdr02VN2qbvNUXbPNCEkNzxc=";
+    hash = "sha256-J6QHeukhtHHLx92NGtoOmPwq6gvL9eyVYBQiDD1cEDk=";
     fetchSubmodules = true;
   };
 
@@ -119,7 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     libnetfilter_acct
   ]
   ++ lib.optionals withSsl [ openssl ]
-  ++ lib.optionals withSystemdJournal [ systemd ];
+  ++ lib.optionals withSystemdJournal [ systemd ]
+  ++ lib.optionals withSystemdUnits [ systemd ];
 
   patches = [
     # Allow ndsudo to use non-hardcoded `PATH`
@@ -166,23 +168,27 @@ stdenv.mkDerivation (finalAttrs: {
        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
     mv $out/libexec/netdata/plugins.d/debugfs.plugin \
        $out/libexec/netdata/plugins.d/debugfs.plugin.org
-    ${lib.optionalString withSystemdJournal ''
-      mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
-         $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
-    ''}
     ${lib.optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
-    ''}
-    ${lib.optionalString withNetworkViewer ''
-      mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
-         $out/libexec/netdata/plugins.d/network-viewer.plugin.org
     ''}
     ${lib.optionalString withNdsudo ''
       mv $out/libexec/netdata/plugins.d/ndsudo \
         $out/libexec/netdata/plugins.d/ndsudo.org
 
       ln -s /var/lib/netdata/ndsudo/ndsudo $out/libexec/netdata/plugins.d/ndsudo
+    ''}
+    ${lib.optionalString withNetworkViewer ''
+      mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
+          $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+    ''}
+    ${lib.optionalString withSystemdJournal ''
+      mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
+          $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+    ''}
+    ${lib.optionalString withSystemdUnits ''
+      mv $out/libexec/netdata/plugins.d/systemd-units.plugin \
+          $out/libexec/netdata/plugins.d/systemd-units.plugin.org
     ''}
   '';
 
@@ -194,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
       --replace-fail \
         'GOPROXY=https://proxy.golang.org' \
-        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules}'
+        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules},file://${finalAttrs.passthru.nd-mcp}'
 
     # Prevent the path to be caught into the Nix store path.
     substituteInPlace CMakeLists.txt \
@@ -222,13 +228,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
     (lib.cmakeBool "ENABLE_JEMALLOC" true)
     (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
+    (lib.cmakeBool "ENABLE_ML" withML)
     (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
     (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
     (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
     (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
     (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
+    (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_UNITS" withSystemdUnits)
     (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
-    (lib.cmakeBool "ENABLE_ML" withML)
     # Suggested by upstream.
     "-G Ninja"
   ]
@@ -252,6 +259,32 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = rec {
+    nd-mcp =
+      (buildGoModule {
+        pname = "nd-mcp";
+        version = finalAttrs.version;
+        inherit (finalAttrs) src;
+
+        sourceRoot = "${finalAttrs.src.name}/src/web/mcp/bridges/stdio-golang";
+
+        vendorHash = "sha256-6JfHrBloJQ5wHyogIPTVDZjlITWZXbsv2m2lMlQmBUY=";
+
+        proxyVendor = true;
+        doCheck = false;
+
+        subPackages = [ "." ];
+
+        ldflags = [
+          "-s"
+          "-w"
+        ];
+
+        meta = {
+          description = "Netdata Model Context Protocol (MCP) Integration";
+          license = lib.licenses.gpl3Only;
+        };
+      }).goModules;
+
     netdata-go-modules =
       (buildGoModule {
         pname = "netdata-go-plugins";
@@ -259,7 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-N03IGTtF78PCo4kf0Sdtzv6f8z47ohg8g3YIXtINRjU=";
+        vendorHash = "sha256-aOFmfBcBjnTfFHfMNemSJHbnMnhBojYrGe21zDxPxME=";
         doCheck = false;
         proxyVendor = true;
 

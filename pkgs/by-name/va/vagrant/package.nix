@@ -1,10 +1,10 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   buildRubyGem,
   bundlerEnv,
-  ruby,
+  ruby_3_4,
   libarchive,
   libguestfs,
   qemu,
@@ -12,13 +12,19 @@
   withLibvirt ? stdenv.hostPlatform.isLinux,
   openssl,
 }:
-
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.4.3";
-  url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  hash = "sha256-ZQWdSCV5lBL8XUnOvCFwJAFk+tw30q2lRTHR93qeZ2I=";
+  version = "2.4.9";
+
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "vagrant";
+    rev = "v${version}";
+    hash = "sha256-xlL0YLY5yG9Q2L93Ag1pO/F8LOp+JdcgrvWyw+bZP/I=";
+  };
+
+  ruby = ruby_3_4;
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -32,10 +38,11 @@ let
       {
         vagrant = {
           source = {
-            type = "url";
-            inherit url hash;
+            type = "path";
+            path = src;
           };
           inherit version;
+          dontCheckForBrokenSymlinks = true;
         };
       }
       // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix)
@@ -54,16 +61,14 @@ let
       done
     '';
   };
-
 in
 buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
-  inherit version;
+  inherit ruby version src;
 
   doInstallCheck = true;
   dontBuild = false;
-  src = fetchurl { inherit url hash; };
 
   # Some reports indicate that some connection types, particularly
   # WinRM, suffer from "Digest initialization failed" errors. Adding
@@ -71,7 +76,6 @@ buildRubyGem rec {
   buildInputs = [ openssl ];
 
   patches = [
-    ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
     ./0001-Revert-Merge-pull-request-12225-from-chrisroberts-re.patch

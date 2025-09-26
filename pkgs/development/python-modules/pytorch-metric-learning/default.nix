@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-metric-learning";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
     repo = "pytorch-metric-learning";
     tag = "v${version}";
-    hash = "sha256-WO/gv8rKkxY3pR627WrEPVyvZnvUZIKMzOierIW8bJA=";
+    hash = "sha256-JKWE2wVXVx8xp2kpiX6CxvCKkrwYRW80A20K/UTxIaQ=";
   };
 
   build-system = [
@@ -108,7 +108,7 @@ buildPythonPackage rec {
   meta = {
     description = "Metric learning library for PyTorch";
     homepage = "https://github.com/KevinMusgrave/pytorch-metric-learning";
-    changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/v${version}";
+    changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

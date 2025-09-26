@@ -11,16 +11,18 @@
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "3.28.0";
+  version = "3.30.0";
 
   src = fetchFromGitHub {
     owner = "imgproxy";
     repo = "imgproxy";
-    hash = "sha256-aI+rWXt+tioHFGBJk/RkYeo7JaV+10jurx7YKX448Yk=";
+    hash = "sha256-vT+Nyjx2TTOCzosCV/EfMLEnyT6RCebBFNu0/IRuwak=";
     rev = "v${version}";
   };
 
-  vendorHash = "sha256-L18vxiFXBlKeipMm1N/c+F+zHDQYN5CHjYwa4xi9I3s=";
+  vendorHash = "sha256-0NIsaSMOBenDCGvnGdLB60sp08EaC/CezWogxTrcDdY=";
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     pkg-config

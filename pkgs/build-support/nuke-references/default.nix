@@ -11,12 +11,6 @@
   shell ? stdenvNoCC.shell,
 }:
 
-let
-  stdenv = stdenvNoCC;
-
-  darwinCodeSign = stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64;
-in
-
 stdenvNoCC.mkDerivation {
   name = "nuke-references";
 
@@ -32,17 +26,14 @@ stdenvNoCC.mkDerivation {
     chmod a+x $out/bin/nuke-refs
   '';
 
-  postFixup = lib.optionalString darwinCodeSign ''
-    mkdir -p $out/nix-support
-    substituteAll ${./darwin-sign-fixup.sh} $out/nix-support/setup-hooks.sh
-  '';
-
   # FIXME: get rid of perl dependency.
   env = {
     inherit perl;
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
-    signingUtils = lib.optionalString darwinCodeSign signingUtils;
+    signingUtils = lib.optionalString (
+      stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
+    ) signingUtils;
   };
 
   meta.mainProgram = "nuke-refs";

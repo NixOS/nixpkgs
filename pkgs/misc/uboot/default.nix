@@ -29,6 +29,7 @@
   armTrustedFirmwareS905,
   opensbi,
   buildPackages,
+  callPackages,
   darwin,
 }@pkgs:
 
@@ -198,17 +199,22 @@ in
 
     filesToInstall = [
       "tools/dumpimage"
+      "tools/fdt_add_pubkey"
       "tools/fdtgrep"
       "tools/kwboot"
+      "tools/mkeficapsule"
       "tools/mkenvimage"
       "tools/mkimage"
       "tools/env/fw_printenv"
+      "tools/mkeficapsule"
     ];
 
     pythonScriptsToInstall = {
       "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
     };
   };
+
+  ubootPythonTools = lib.recurseIntoAttrs (callPackages ./python.nix { });
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
@@ -238,6 +244,12 @@ in
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+  };
+
+  ubootBananaPim2Zero = buildUBoot {
+    defconfig = "bananapi_m2_zero_defconfig";
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+    extraMeta.platforms = [ "armv7l-linux" ];
   };
 
   ubootBananaPim3 = buildUBoot {
@@ -845,25 +857,15 @@ in
     # sf probe; sf update $loadaddr 0 80000
   };
 
-  ubootVisionFive2 =
-    let
-      opensbi_vf2 = opensbi.overrideAttrs (attrs: {
-        makeFlags = attrs.makeFlags ++ [
-          # Matches u-boot documentation: https://docs.u-boot.org/en/latest/board/starfive/visionfive2.html
-          "FW_TEXT_START=0x40000000"
-          "FW_OPTIONS=0"
-        ];
-      });
-    in
-    buildUBoot {
-      defconfig = "starfive_visionfive2_defconfig";
-      extraMeta.platforms = [ "riscv64-linux" ];
-      OPENSBI = "${opensbi_vf2}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
-      filesToInstall = [
-        "spl/u-boot-spl.bin.normal.out"
-        "u-boot.itb"
-      ];
-    };
+  ubootVisionFive2 = buildUBoot {
+    defconfig = "starfive_visionfive2_defconfig";
+    extraMeta.platforms = [ "riscv64-linux" ];
+    OPENSBI = "${opensbi}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
+    filesToInstall = [
+      "spl/u-boot-spl.bin.normal.out"
+      "u-boot.itb"
+    ];
+  };
 
   ubootWandboard = buildUBoot {
     defconfig = "wandboard_defconfig";

@@ -335,6 +335,8 @@ in
       }
     );
 
+    environment.corePackages = [ cfg.package ];
+
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
     environment.etc."ssh/ssh_config".text = ''

@@ -201,7 +201,7 @@ in
 
         description = ''
           Configuration for MCHPRS via `Config.toml`.
-          See https://github.com/MCHPR/MCHPRS/blob/master/README.md for documentation.
+          See <https://github.com/MCHPR/MCHPRS/blob/master/README.md> for documentation.
         '';
       };
 

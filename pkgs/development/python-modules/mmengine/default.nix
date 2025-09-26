@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -117,6 +118,18 @@ buildPythonPackage rec {
 
     # AttributeError: type object 'MagicMock' has no attribute ...
     "tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: attempt to insert nil object from objects[1]
+    "tests/test_visualizer/test_visualizer.py::TestVisualizer::test_draw_featmap"
+    "tests/test_visualizer/test_visualizer.py::TestVisualizer::test_show"
+
+    # AssertionError: torch.bfloat16 != torch.float32
+    "tests/test_runner/test_amp.py::TestAmp::test_autocast"
+
+    # ValueError: User specified autocast device_type must be cuda or cpu, but got mps
+    "tests/test_runner/test_runner.py::TestRunner::test_test"
+    "tests/test_runner/test_runner.py::TestRunner::test_val"
   ];
 
   disabledTests = [
@@ -133,7 +146,15 @@ buildPythonPackage rec {
 
     # AssertionError: os is not <module 'os' (frozen)>
     "test_lazy_module"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails when max-jobs is set to use fewer processes than cores
+    # for example `AssertionError: assert 14 == 4`
+    "test_setup_multi_processes"
   ];
+
+  # torch.distributed.DistNetworkError: The server socket has failed to bind.
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library for training deep learning models based on PyTorch";

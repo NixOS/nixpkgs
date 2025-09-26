@@ -12,6 +12,16 @@ with import ../lib;
     "aarch64-linux"
   ],
   configuration ? { },
+
+  # This flag, if set to true, causes the resulting tree of attributes
+  # to *not* have a ".${system}" suffixed upon every job name like Hydra
+  # expects. So far, this is only implemented for `tests`.
+  #
+  # This flag exists mainly for use by ci/eval/attrpaths.nix; see
+  # that file for full details.  The exact behavior of this flag
+  # may change; it should be considered an internal implementation
+  # detail of ci/eval.
+  attrNamesOnly ? false,
 }:
 
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
@@ -31,9 +41,14 @@ let
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = config: {
-        ${system} = hydraJob config.test;
-      };
+      callTest =
+        config:
+        if attrNamesOnly then
+          hydraJob config.test
+        else
+          {
+            ${system} = hydraJob config.test;
+          };
     }
     // {
       # for typechecking of the scripts and evaluation of
@@ -41,13 +56,20 @@ let
       allDrivers = import ./tests/all-tests.nix {
         inherit system;
         pkgs = import ./.. { inherit system; };
-        callTest = config: {
-          ${system} = hydraJob config.driver;
-        };
+        callTest =
+          config:
+          if attrNamesOnly then
+            hydraJob config.test
+          else
+            {
+              ${system} = hydraJob config.driver;
+            };
       };
     };
 
-  allTests = foldAttrs recursiveUpdate { } (map allTestsForSystem supportedSystems);
+  allTests = foldAttrs recursiveUpdate { } (
+    map allTestsForSystem (if attrNamesOnly then [ (head supportedSystems) ] else supportedSystems)
+  );
 
   pkgs = import ./.. { system = "x86_64-linux"; };
 
@@ -434,100 +456,6 @@ rec {
         )
       );
 
-  # An image that can be imported into lxd and used for container creation
-  lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
-    system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob (
-      (import lib/eval-config.nix {
-        inherit system;
-        modules = [
-          configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-container-image.nix
-        ];
-      }).config.system.build.tarball
-    )
-
-  );
-
-  lxdContainerImageSquashfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
-    system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob (
-      (import lib/eval-config.nix {
-        inherit system;
-        modules = [
-          configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-container-image.nix
-        ];
-      }).config.system.build.squashfs
-    )
-
-  );
-
-  # Metadata for the lxd image
-  lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
-    system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob (
-      (import lib/eval-config.nix {
-        inherit system;
-        modules = [
-          configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-container-image.nix
-        ];
-      }).config.system.build.metadata
-    )
-
-  );
-
-  # An image that can be imported into lxd and used for container creation
-  lxdVirtualMachineImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
-    system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob (
-      (import lib/eval-config.nix {
-        inherit system;
-        modules = [
-          configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
-        ];
-      }).config.system.build.qemuImage
-    )
-
-  );
-
-  # Metadata for the lxd image
-  lxdVirtualMachineImageMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
-    system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob (
-      (import lib/eval-config.nix {
-        inherit system;
-        modules = [
-          configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
-        ];
-      }).config.system.build.metadata
-    )
-
-  );
-
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (
     system:
@@ -594,7 +522,7 @@ rec {
       {
         services.xserver.enable = true;
         services.displayManager.sddm.enable = true;
-        services.xserver.desktopManager.plasma5.enable = true;
+        services.desktopManager.plasma6.enable = true;
       }
     );
 
@@ -619,16 +547,7 @@ rec {
       { ... }:
       {
         services.xserver.enable = true;
-        services.xserver.desktopManager.pantheon.enable = true;
-      }
-    );
-
-    deepin = makeClosure (
-      { ... }:
-      {
-        services.xserver.enable = true;
-        services.xserver.displayManager.lightdm.enable = true;
-        services.xserver.desktopManager.deepin.enable = true;
+        services.desktopManager.pantheon.enable = true;
       }
     );
 

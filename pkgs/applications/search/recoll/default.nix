@@ -75,11 +75,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.43.2";
+  version = "1.43.5";
 
   src = fetchurl {
     url = "https://www.recoll.org/${pname}-${version}.tar.gz";
-    hash = "sha256-FbDXknumjktcikOfAe4FKtPmggJGGHasq8dpD+8mNzE=";
+    hash = "sha256-Px3uK7I/MkrJbAOmV2ipVct/+p05SST6TLTYoDaLNdQ=";
   };
 
   mesonFlags = [
@@ -209,7 +209,6 @@ mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       jcumming
-      ehmry
     ];
 
     # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time

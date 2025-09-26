@@ -13,6 +13,7 @@
   dbt-adapters,
   dbt-common,
   dbt-extractor,
+  dbt-protos,
   dbt-semantic-interfaces,
   jinja2,
   logbook,
@@ -36,22 +37,15 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.10.0b2";
+  version = "1.10.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
     tag = "v${version}";
-    hash = "sha256-MTrdpbPqdakFDmLKRFJ23u9hLgGhZ5T+r4om9HPBjkw=";
+    hash = "sha256-qgfifygy+GY8LB+4pKYOH13cRaYNuMCSdCa++olgsBM=";
   };
-
-  postPatch = ''
-    substituteInPlace dbt/utils/artifact_upload.py \
-      --replace-fail \
-        "from pydantic import BaseSettings" \
-        "from pydantic_settings import BaseSettings"
-  '';
 
   sourceRoot = "${src.name}/core";
 
@@ -80,6 +74,7 @@ buildPythonPackage rec {
     dbt-adapters
     dbt-common
     dbt-extractor
+    dbt-protos
     dbt-semantic-interfaces
     jinja2
     logbook

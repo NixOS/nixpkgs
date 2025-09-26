@@ -34,14 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "3.1.2";
+  version = "3.1.4";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
     rev = finalAttrs.version;
-    hash = "sha256-Mz8WCOPdEVStH9WLmpHAN22bsn59h8eQoK0h7ssDQrQ=";
+    hash = "sha256-l0ZrtYUSX5CmzmtL+qXxvjGNNXG04RUuK9mu1/NJnq8=";
   };
 
   # cycle detection; lib can't be split

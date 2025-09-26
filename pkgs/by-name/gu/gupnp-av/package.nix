@@ -5,11 +5,9 @@
   meson,
   ninja,
   pkg-config,
+  gi-docgen,
   gobject-introspection,
   vala,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_412,
   glib,
   libxml2,
   gnome,
@@ -17,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-av";
-  version = "0.14.3";
+  version = "0.14.4";
 
   outputs = [
     "out"
@@ -27,18 +25,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp-av/${lib.versions.majorMinor version}/gupnp-av-${version}.tar.xz";
-    sha256 = "q+IEYEPmapUpNl2JBZvhIhnCGk7eDEdDcDsP2arxe7Q=";
+    sha256 = "Idl0sydctdz1uKodmj/IDn7cpwaTX2+9AEx5eHE4+Mc=";
   };
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    gi-docgen
     gobject-introspection
     vala
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_412
   ];
 
   propagatedBuildInputs = [
@@ -46,15 +48,16 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=deprecated-declarations"
-  ];
-
   mesonFlags = [
     "-Dgtk_doc=true"
   ];
 
   doCheck = true;
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc/gupnp-av-1.0" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

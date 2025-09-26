@@ -26,25 +26,21 @@ let
 
   pname = "wire-desktop";
 
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+
   version =
-    let
-      x86_64-darwin = "3.39.5211";
-    in
     {
-      inherit x86_64-darwin;
-      aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "3.39.3653";
+      x86_64-darwin = versions.macos.version;
+      aarch64-darwin = versions.macos.version;
+      x86_64-linux = versions.linux.version;
     }
     .${system} or throwSystem;
 
   hash =
-    let
-      x86_64-darwin = "sha256-k6CIqHt67AFL70zdK0/91aQcpbb00OIggk5TF7y1IOY=";
-    in
     {
-      inherit x86_64-darwin;
-      aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "sha256-BbY+7fGAWW5CR/z4GeoBl5aOewCRuWzQjpQX4x1rzls=";
+      x86_64-darwin = versions.macos.hash;
+      aarch64-darwin = versions.macos.hash;
+      x86_64-linux = versions.linux.hash;
     }
     .${system} or throwSystem;
 
@@ -75,8 +71,21 @@ let
     hydraPlatforms = [ ];
   };
 
+  passthru.updateScript = {
+    command = [
+      ./update.sh
+      ./.
+    ];
+    supportedFeatures = [ "commit" ];
+  };
+
   linux = stdenv.mkDerivation rec {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
@@ -151,7 +160,12 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${version}/Wire.pkg";

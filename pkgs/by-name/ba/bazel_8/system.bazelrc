@@ -1,0 +1,4 @@
+startup --server_javabase=@serverJavabase@
+
+# load default location for the system wide configuration
+try-import /etc/bazel.bazelrc

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "cogapp";
-  version = "3.5.0";
+  version = "3.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = "cog";
     tag = "v${version}";
-    hash = "sha256-jmHAHBzUw8VLCudT8slisCJ7yOUTVrrLiUbEiiTcfew=";
+    hash = "sha256-tUFqvG1SzoMc/cWAIOpNaf161KbRqscjNnxThg9slu8=";
   };
 
   build-system = [ setuptools ];

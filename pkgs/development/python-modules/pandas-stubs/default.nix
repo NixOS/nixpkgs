@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -36,16 +35,14 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.2.3.250308";
+  version = "2.3.2.250827";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
     tag = "v${version}";
-    hash = "sha256-93XVzdb3A2S+Exk33v3U8HDMg9vPKAEkWjLZnBaXMWQ=";
+    hash = "sha256-qjHnFT/ydK5n6QfUzAhnGJWVpqHQbMoqGkel3Pu7S78=";
   };
 
   build-system = [ poetry-core ];
@@ -99,10 +96,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations for Pandas";
     homepage = "https://github.com/pandas-dev/pandas-stubs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ malo ];
   };
 }

@@ -1,41 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools-scm,
   inflect,
   more-itertools,
-  six,
-  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-itertools";
-  version = "6.4.1";
-  format = "pyproject";
+  version = "6.4.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "jaraco.itertools";
-    inherit version;
-    hash = "sha256-MU/OVi67RepIIqmLvXsi5f6sfVEY28Gk8ess0Ea/+kc=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "jaraco.itertools";
+    tag = "v${version}";
+    hash = "sha256-LjWkyY9I8BBYpFm8TT3kq4vk63pNQrnZ15haJCQ5xlk=";
   };
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # downloads license texts at build time
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
+
+  dependencies = [
     inflect
     more-itertools
-    six
   ];
-  nativeCheckInputs = [ pytest ];
 
-  # tests no longer available through pypi
-  doCheck = false;
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jaraco.itertools" ];
 

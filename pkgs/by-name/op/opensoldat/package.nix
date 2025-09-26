@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Opensoldat is a unique 2D (side-view) multiplayer action game";
+    description = "Unique 2D (side-view) multiplayer action game";
     license = [
       licenses.mit
       base.meta.license

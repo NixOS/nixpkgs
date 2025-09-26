@@ -22,18 +22,27 @@
   gst_all_1,
   libnice,
   qt6Packages,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nheko";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    hash = "sha256-hQb+K8ogNj/s6ZO2kgS/sZZ35y4CwMeS3lVeMYNucYQ=";
+    hash = "sha256-WlWxe4utRSc9Tt2FsnhBwxzQsoDML2hvm3g5zRnDEiU=";
   };
+
+  patches = [
+    # Fixes rendering replies with QT 6.9.2
+    (fetchpatch {
+      url = "https://github.com/Nheko-Reborn/nheko/commit/2769642d3c7bd3c0d830b2f18ef6b3bf6a710bf4.patch";
+      hash = "sha256-y8aiS6h5CSJYBdsAH4jYhAyrFug7aH2H8L6rBfULnQQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc

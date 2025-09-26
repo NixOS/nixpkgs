@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -41,6 +42,7 @@
 
   # Build inputs
   apple-sdk_13,
+  openssl,
   numactl,
   llvmPackages,
 
@@ -72,13 +74,7 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ?
-    if cudaSupport then
-      triton-cuda
-    else if rocmSupport then
-      rocmPackages.triton
-    else
-      triton,
+  _tritonEffective ? if cudaSupport then triton-cuda else triton,
   triton-cuda,
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
@@ -122,7 +118,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.7.0/torch/utils/cpp_extension.py#L2343-L2345
+  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -148,8 +144,12 @@ let
         "10.0a"
         "10.1"
         "10.1a"
+        "10.3"
+        "10.3a"
         "12.0"
         "12.0a"
+        "12.1"
+        "12.1a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -181,12 +181,16 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
-      # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
-      # TODO: Retest after ROCm 6.4 or torch 2.8
       lib.lists.subtractLists [
+        # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
+        # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
+        # TODO: Retest after ROCm 6.4 or torch 2.8
         "gfx1010"
         "gfx1012"
+
+        # Strix Halo seems to be broken as well, see
+        # https://github.com/NixOS/nixpkgs/pull/440359.
+        "gfx1151"
       ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
     else
       throw "No GPU targets specified"
@@ -222,6 +226,7 @@ let
       rocm-comgr
       rocm-device-libs
       rocm-runtime
+      rocm-smi
       clr.icd
       hipify
     ];
@@ -269,7 +274,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.7.1";
+  version = "2.8.0";
   pyproject = true;
 
   stdenv = stdenv';
@@ -293,8 +298,24 @@ buildPythonPackage rec {
 
   patches = [
     ./clang19-template-warning.patch
+
+    # Do not override PYTHONPATH, otherwise, the build fails with:
+    # ModuleNotFoundError: No module named 'typing_extensions'
+    (fetchpatch {
+      name = "cmake-build-preserve-PYTHONPATH";
+      url = "https://github.com/pytorch/pytorch/commit/231c72240d80091f099c95e326d3600cba866eee.patch";
+      hash = "sha256-BBCjxzz2TUkx4nXRyRILA82kMwyb/4+C3eOtYqf5dhk=";
+    })
+
+    # Fixes GCC-14 compatibility on ARM
+    # Adapted from https://github.com/pytorch/pytorch/pull/157867
+    # TODO: remove at the next release
+    ./gcc-14-arm-compat.path
   ]
-  ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+  ++ lib.optionals cudaSupport [
+    ./fix-cmake-cuda-toolkit.patch
+    ./nvtx3-hpp-path-fix.patch
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Propagate CUPTI to Kineto by overriding the search path with environment variables.
     # https://github.com/pytorch/pytorch/pull/108847
@@ -308,11 +329,16 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # Prevent NCCL from being cloned during the configure phase
-    # TODO: remove when updating to the next release as it will not be needed anymore
-    substituteInPlace tools/build_pytorch_libs.py \
-      --replace-fail "  checkout_nccl()" "  "
-
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=62.3.0,<80.0" "setuptools"
+  ''
+  # Provide path to openssl binary for inductor code cache hash
+  # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
+  + ''
+    substituteInPlace torch/_inductor/codecache.py \
+      --replace-fail '"openssl"' '"${lib.getExe openssl}"'
+  ''
+  + ''
     substituteInPlace cmake/public/cuda.cmake \
       --replace-fail \
         'message(FATAL_ERROR "Found two conflicting CUDA' \
@@ -322,16 +348,20 @@ buildPythonPackage rec {
         "# Upstream: set(CUDAToolkit_ROOT"
     substituteInPlace third_party/gloo/cmake/Cuda.cmake \
       --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
-
-    # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
+  ''
+  # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
+  + ''
     sed -i -e "/from __future__ import/d" **.py
     substituteInPlace third_party/NNPACK/CMakeLists.txt \
       --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
-    # flag from cmakeFlags doesn't work, not clear why
-    # setting it at the top of NNPACK's own CMakeLists does
+  ''
+  # flag from cmakeFlags doesn't work, not clear why
+  # setting it at the top of NNPACK's own CMakeLists does
+  + ''
     sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
-
-    # Ensure that torch profiler unwind uses addr2line from nix
+  ''
+  # Ensure that torch profiler unwind uses addr2line from nix
+  + ''
     substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
       --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
   ''
@@ -340,20 +370,9 @@ buildPythonPackage rec {
     substituteInPlace third_party/gloo/cmake/Hipify.cmake \
       --replace-fail "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
 
-    # Replace hard-coded rocm paths
-    substituteInPlace caffe2/CMakeLists.txt \
-      --replace-fail "hcc/include" "hip/include" \
-      --replace-fail "rocblas/include" "include/rocblas" \
-      --replace-fail "hipsparse/include" "include/hipsparse"
-
     # Doesn't pick up the environment variable?
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
-
-    # Strangely, this is never set in cmake
-    substituteInPlace cmake/public/LoadHIP.cmake \
-      --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
-        "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitVersion rocmPackages.clr.version))})"
 
     # Use composable kernel as dependency, rather than built-in third-party
     substituteInPlace aten/src/ATen/CMakeLists.txt \
@@ -526,7 +545,9 @@ buildPythonPackage rec {
     blas
     blas.provider
   ]
-  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+  # Including openmp leads to two copies being used on ARM, which segfaults.
+  # https://github.com/pytorch/pytorch/issues/149201#issuecomment-2776842320
+  ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isAarch64) [ llvmPackages.openmp ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
@@ -550,10 +571,7 @@ buildPythonPackage rec {
       # Some platforms do not support NCCL (i.e., Jetson)
       nccl # Provides nccl.h AND a static copy of NCCL!
     ]
-    ++ lists.optionals (cudaOlder "11.8") [
-      cuda_nvprof # <cuda_profiler_api.h>
-    ]
-    ++ lists.optionals (cudaAtLeast "11.8") [
+    ++ [
       cuda_profiler_api # <cuda_profiler_api.h>
     ]
   )

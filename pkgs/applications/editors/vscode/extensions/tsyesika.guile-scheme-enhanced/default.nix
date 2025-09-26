@@ -24,6 +24,5 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=tsyesika.guile-scheme-enhanced";
     homepage = "https://codeberg.org/tsyesika/vscode-guile-scheme-enhanced";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tuynia ];
   };
 }

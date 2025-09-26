@@ -21,6 +21,7 @@ let
       extraPreBwrapCmds ? "",
       extraBwrapArgs ? [ ],
       extraEnv ? { },
+      privateTmp ? true,
       ...
     }@args:
     buildFHSEnv (
@@ -150,6 +151,7 @@ buildRuntimeEnv {
     extraPreBwrapCmds
     extraBwrapArgs
     extraEnv
+    privateTmp
     ;
 
   runScript = writeShellScript "steam-wrapped" ''
@@ -175,6 +177,7 @@ buildRuntimeEnv {
             extraPreBwrapCmds
             extraBwrapArgs
             extraEnv
+            privateTmp
             ;
 
           runScript = writeShellScript "steam-run" ''

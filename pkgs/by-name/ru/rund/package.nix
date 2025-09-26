@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dcompiler ];
   buildPhase = ''
-    for candidate in dmd ldmd2 gdmd; do
+    for candidate in dmd ldmd2; do
       echo Checking for DCompiler $candidate ...
       dc=$(type -P $candidate || echo "")
       if [ ! "$dc" == "" ]; then

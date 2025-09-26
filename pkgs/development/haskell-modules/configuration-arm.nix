@@ -37,7 +37,6 @@ self: super:
 
   # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
   happy = dontCheck super.happy;
-  happy_1_19_12 = doDistribute (dontCheck super.happy_1_19_12);
 
   # add arm specific library
   wiringPi = overrideCabal (

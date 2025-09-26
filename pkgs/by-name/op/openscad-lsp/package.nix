@@ -34,6 +34,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Leathong/openscad-LSP";
     changelog = "https://github.com/Leathong/openscad-LSP/releases/tag/${finalAttrs.src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ c-h-johnson ];
+    maintainers = with maintainers; [
+      c-h-johnson
+      curious
+    ];
   };
 })

@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/uutils/diffutils";
     license = lib.licenses.mit;
     mainProgram = "diffutils";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ defelo ];
     platforms = lib.platforms.unix;
   };
 })

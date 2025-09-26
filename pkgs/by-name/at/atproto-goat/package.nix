@@ -11,20 +11,18 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
-    repo = "indigo";
-    rev = "fd270fbccf0ca858ed2eccdeff246a303c0be045";
-    hash = "sha256-1WK3tMz8WbuIGTHYwD0or+9D0KVezhnv3EDdK11KKp8=";
+    repo = "goat";
+    rev = "e79169f1d8fba9838274b1106d74751fc54eeb9c";
+    hash = "sha256-cLS44J6MlSSti7NRd9vSsdWXoYiMGwt3odg5p60W6ew=";
   };
 
   postPatch = ''
-    substituteInPlace cmd/goat/main.go \
+    substituteInPlace main.go \
       --replace-fail "versioninfo.Short()" '"${version}"' \
-      --replace-fail '"github.com/carlmjohnson/versioninfo"' ""
+      --replace-fail '"github.com/earthboundkid/versioninfo/v2"' ""
   '';
 
-  vendorHash = "sha256-pGc29fgJFq8LP7n/pY1cv6ExZl88PAeFqIbFEhB3xXs=";
-
-  subPackages = [ "cmd/goat" ];
+  vendorHash = "sha256-l9oSdTAO1YxfrBjMWJDzlmhaZkbo90FGTk5LedjbZB8=";
 
   passthru.updateScript = unstableGitUpdater {
     hardcodeZeroVersion = true;
@@ -32,7 +30,7 @@ buildGoModule rec {
 
   meta = {
     description = "Go AT protocol CLI tool";
-    homepage = "https://github.com/bluesky-social/indigo/blob/main/cmd/goat/README.md";
+    homepage = "https://github.com/bluesky-social/goat/blob/main/README.md";
     license = with lib.licenses; [
       mit
       asl20

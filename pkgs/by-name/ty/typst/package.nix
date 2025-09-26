@@ -71,7 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "typst";
     maintainers = with lib.maintainers; [
-      drupol
       figsoda
       kanashimia
       RossSmyth

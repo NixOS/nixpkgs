@@ -300,7 +300,8 @@ in
             "multi-user.target"
           ];
           # https://github.com/rhasspy/wyoming-faster-whisper/issues/27
-          environment."HF_HUB_CACHE" = "/tmp";
+          # https://github.com/NixOS/nixpkgs/issues/429974
+          environment."HF_HOME" = "/tmp";
           serviceConfig = {
             DynamicUser = true;
             User = "wyoming-faster-whisper";

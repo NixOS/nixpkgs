@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   tradcpp,
   xorg-cf-files,
   pkg-config,
@@ -37,6 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     # ELF interpreter path. (Which arguably, is a bug in its own.)
     # (copied from the commit message on 0100b270694ecab8aaa13fa5f3d30639b50d7777)
     ./cc-wrapper-uberhack.patch
+    # Add support for RISC-V
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/util/imake/-/commit/a37ee515742f58359b4248742fa06d504f2dce1b.patch";
+      hash = "sha256-2aoXBm1JmNjS5vqGKEyX/qYUVJ8kYIzh/eq3WKU3uQ4=";
+    })
+    # Add support for LoongArch
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/util/imake/-/commit/b4d568b7aa2db5525f63b1bc9486dc5e2ed36bd0.patch";
+      hash = "sha256-m35H3v5IFslqx5QaszPFAJ+g2HfDYyxbX+h+7/8/59M=";
+    })
   ];
 
   strictDeps = true;

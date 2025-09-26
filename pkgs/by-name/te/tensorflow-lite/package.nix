@@ -42,7 +42,8 @@ buildBazelPackage rec {
     hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
   };
 
-  bazel = buildPackages.bazel_5;
+  #bazel = buildPackages.bazel_5;
+  bazel = buildPackages.bazel;
 
   nativeBuildInputs = [
     pythonEnv
@@ -120,5 +121,7 @@ buildBazelPackage rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    # Bazel 5 was removed.
+    broken = true;
   };
 }

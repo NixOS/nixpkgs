@@ -8,7 +8,7 @@
   glib,
   readline,
   libsysprof-capture,
-  spidermonkey_115,
+  spidermonkey_128,
   meson,
   mesonEmulatorHook,
   dbus,
@@ -19,13 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "6.4.0";
+  version = "128.0-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
-    rev = version;
-    hash = "sha256-2lkIWroOo3hxu9/L/Ty7CADzVrZ0ohyHVmm65NoNlD4=";
+    # Backport fixes to support GLib 2.86.0 typelibs
+    # nixpkgs-update: no auto update
+    # https://github.com/linuxmint/cjs/issues/130
+    rev = "1f39576bafe6bc05bce960e590dc743dd7990e39";
+    hash = "sha256-drKLaTZLIZfPIhcVcCAB48PdM2b0GNLe5xrHGBysVmM=";
   };
 
   outputs = [
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_115
+    spidermonkey_128
   ];
 
   propagatedBuildInputs = [

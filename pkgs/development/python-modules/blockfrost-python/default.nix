@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python SDK for the Blockfrost.io API";
     homepage = "https://github.com/blockfrost/blockfrost-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ t4ccer ];
+    maintainers = with maintainers; [ aciceri ];
   };
 }

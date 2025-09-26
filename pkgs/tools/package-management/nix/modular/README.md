@@ -13,5 +13,5 @@ Using filesets with a fetched source would require "IFD", as the fetching happen
 
 ### `workDir` attribute
 
-The Nixpkgs for Nix does inherit the `workDir` attribute that determines the location of the subproject to build.
+The Nixpkgs for Nix inherits the `workDir` attribute that determines the location of the subproject to build.
 It is compared to this directory to produce the correct relative path, similar to upstream.

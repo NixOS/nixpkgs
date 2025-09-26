@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "weechat-autosort";
   version = "3.9";
 
   src = fetchFromGitHub {
     owner = "de-vri-es";
-    repo = pname;
+    repo = "weechat-autosort";
     rev = "d62fa8633015ebc2676060fcdae88c402977be46";
     sha256 = "sha256-doYDRIWiuHam2i3r3J3BZuWEhopoN4jms/xPXGyypok=";
   };

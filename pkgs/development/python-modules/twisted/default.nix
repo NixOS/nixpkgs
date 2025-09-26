@@ -33,7 +33,7 @@
 
   # tests
   cython-test-exception-raiser,
-  git,
+  gitMinimal,
   glibcLocales,
   pyhamcrest,
   hypothesis,
@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "24.11.0";
+  version = "25.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-aV0FVtXsV53MRk0oVrY0iA7RMZ9FsQ0ZBD8rV+sBFbU=";
+    hash = "sha256-HesnI1jLa+Hj6PxvnIs2946w+nwiM9Lb4R7G/uBOoxY=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -194,7 +194,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     glibcLocales
   ]
   ++ optional-dependencies.test

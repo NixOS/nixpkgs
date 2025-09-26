@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://shottr.cc/";
     license = lib.licenses.unfree;
     mainProgram = "shottr";
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

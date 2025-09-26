@@ -33,6 +33,5 @@ buildGoModule rec {
     mainProgram = "bombadillo";
     homepage = "https://bombadillo.colorfield.space/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ehmry ];
   };
 }

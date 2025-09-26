@@ -34,7 +34,7 @@ in
       ];
     };
 
-    boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
+    boot.kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_hardened;
 
     nix.settings.allowed-users = mkDefault [ "@users" ];
 

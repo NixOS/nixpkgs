@@ -18,7 +18,7 @@
 
   # tests
   msgpack,
-  pytestCheckHook,
+  pytest7CheckHook,
   simple-websocket,
   uvicorn,
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     msgpack
-    pytestCheckHook
+    pytest7CheckHook
     uvicorn
     simple-websocket
   ]

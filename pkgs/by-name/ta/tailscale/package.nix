@@ -22,12 +22,9 @@
   tailscale-nginx-auth,
 }:
 
-let
-  version = "1.84.3";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "tailscale";
-  inherit version;
+  version = "1.86.5";
 
   outputs = [
     "out"
@@ -37,11 +34,11 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    rev = "v${version}";
-    hash = "sha256-0HvUNpyi6xzS3PtbgMvh6bLRhV77CZRrVSKGMr7JtbE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fEQsusnp/XtKyXQD+M3nAP7zpsnr/TD5rt1b366LtKw=";
   };
 
-  vendorHash = "sha256-QBYCMOWQOBCt+69NtJtluhTZIOiBWcQ78M9Gbki6bN0=";
+  vendorHash = "sha256-4QTSspHLYJfzlontQ7msXyOB5gzq7ZwSvWmKuYY5klA=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -63,24 +60,22 @@ buildGoModule {
   ];
 
   excludedPackages = [
-    # exlude integration tests which fail to work
-    # and require additional tooling
+    # Exclude integration tests which fail to work and require additional tooling
     "tstest/integration"
   ];
 
   ldflags = [
     "-w"
     "-s"
-    "-X tailscale.com/version.longStamp=${version}"
-    "-X tailscale.com/version.shortStamp=${version}"
+    "-X tailscale.com/version.longStamp=${finalAttrs.version}"
+    "-X tailscale.com/version.shortStamp=${finalAttrs.version}"
   ];
 
   tags = [
     "ts_include_cli"
   ];
 
-  # remove vendored tooling to ensure it's not used
-  # also avoids some unnecessary tests
+  # Remove vendored tooling to ensure it's not used; also avoids some unnecessary tests
   preBuild = ''
     rm -rf ./tool
   '';
@@ -151,6 +146,12 @@ buildGoModule {
 
         # flaky: https://github.com/tailscale/tailscale/issues/15348
         "TestSafeFuncHappyPath"
+
+        # Requires `go` to be installed with the `go tool` system which we don't use
+        "TestGoVersion"
+
+        # Fails because we vendor dependencies
+        "TestLicenseHeaders"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -165,6 +166,11 @@ buildGoModule {
 
         # Fails only on Darwin, succeeds on other tested platforms.
         "TestOnTailnetDefaultAutoUpdate"
+
+        # Fails due to UNIX domain socket path limits in the Nix build environment.
+        # Likely we could do something to make the paths shorter.
+        "TestProtocolQEMU"
+        "TestProtocolUnixDgram"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -214,15 +220,16 @@ buildGoModule {
   meta = {
     homepage = "https://tailscale.com";
     description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
-    changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
+    changelog = "https://tailscale.com/changelog#client";
     license = lib.licenses.bsd3;
     mainProgram = "tailscale";
     maintainers = with lib.maintainers; [
       mbaillie
       jk
       mfrw
+      philiptaron
       pyrox0
       ryan4yin
     ];
   };
-}
+})

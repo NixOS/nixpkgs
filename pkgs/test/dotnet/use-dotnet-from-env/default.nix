@@ -26,7 +26,7 @@ let
     '';
   });
 
-  runtimeVersion = lib.getVersion dotnet-runtime;
+  runtimeVersion = lib.head (lib.splitString "-" (lib.getVersion dotnet-runtime));
   runtimeVersionFile = builtins.toFile "dotnet-version.txt" runtimeVersion;
 in
 {

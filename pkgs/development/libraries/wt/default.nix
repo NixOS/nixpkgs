@@ -16,7 +16,6 @@
   graphicsmagick,
   glew,
   openssl,
-  pcre,
   harfbuzz,
   icu,
 }:
@@ -52,7 +51,6 @@ let
         graphicsmagick
         glew
         openssl
-        pcre
         harfbuzz
         icu
       ];
@@ -79,7 +77,7 @@ let
 in
 {
   wt4 = generic {
-    version = "4.11.4";
-    sha256 = "sha256-ynmOUONHo8VTq8nmD+/SpDPR7bHILw8mArvY2DZJ5Hk=";
+    version = "4.12.0";
+    sha256 = "sha256-/SM/iTp/TQU8nq647UAHexFb3S5n6pk3lDkra3AEjis=";
   };
 }

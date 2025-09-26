@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  desktop-file-utils,
   pantheon,
   meson,
   ninja,
-  python3,
   pkg-config,
   vala,
   gettext,
@@ -18,22 +18,22 @@
 
 stdenv.mkDerivation rec {
   pname = "agenda";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "dahenson";
     repo = "agenda";
-    rev = version;
-    sha256 = "sha256-tzGcqCxIkoBNskpadEqv289Sj5bij9u+LdYySiGdop8=";
+    tag = version;
+    hash = "sha256-CjlGkG43FFDdKGuwevBeCCazOzLcH114bqihMWTykC8=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     gettext
     glib # for glib-compile-schemas
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook3
   ];
@@ -45,13 +45,6 @@ stdenv.mkDerivation rec {
     pantheon.granite
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
-  doCheck = true;
-
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -62,7 +55,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xiorcale ];
     teams = [ teams.pantheon ];
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     mainProgram = "com.github.dahenson.agenda";
   };
 }

@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
-  version = "3.44.1";
+  version = "3.44.2";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "E2HRfpyAVkav5RAuWbr4ykUCOGAPyr0BWGxlS3i7MN8=";
+    sha256 = "llSWtuExTzRotIKl2ANA3DsDQKVALXeDytJBVK7nc5Y=";
   };
 
   nativeBuildInputs = [

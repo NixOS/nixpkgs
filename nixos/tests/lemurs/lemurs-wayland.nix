@@ -19,7 +19,7 @@
 
       services.displayManager.lemurs.enable = true;
 
-      programs.river.enable = true;
+      programs.river-classic.enable = true;
     };
 
   testScript = ''

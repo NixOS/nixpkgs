@@ -62,7 +62,7 @@ in
       description = ''
         Configuration included in `starship.toml`.
 
-        See https://starship.rs/config/#prompt for documentation.
+        See <https://starship.rs/config/#prompt> for documentation.
       '';
     };
 

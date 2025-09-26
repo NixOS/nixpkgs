@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   ncurses,
   libxcrypt,
@@ -17,13 +18,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-La429Ns3n/zRS2kVlrpuwYrDqeIrxHrCOXiatYQJhp0=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://file.savannah.gnu.org/file/0001-test-fix-unit-tests.patch?file_id=57558";
+      stripLen = 1;
+      hash = "sha256-q3jQQrzweLf2T/V5X9iL4ZZK342QEXLG5fZTaMOB4tY=";
+    })
+  ];
+
   configureFlags = [
     "--enable-telnet"
     "--enable-pam"
   ];
 
   # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -33,10 +42,6 @@ stdenv.mkDerivation rec {
     libxcrypt
     pam
   ];
-
-  # The test suite seems to have some glibc malloc hooks that don't exist/link on macOS
-  # With pkgsLLVM: tests/test-winmsgcond.c:53: assertion 'wmc_end(&wmc, pos + 1, &chg) == pos' failed
-  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.useLLVM;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";

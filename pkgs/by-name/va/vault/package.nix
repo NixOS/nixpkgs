@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.20.0";
+  version = "1.20.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    hash = "sha256-2583vthe9x2WylLOMJFDBswqT3cF7euHyVc05V887B4=";
+    hash = "sha256-q7Uz8gq092JU1v6sEQvraV6wxgBEGGnZFCBEw2f9GMw=";
   };
 
-  vendorHash = "sha256-re1GZ+B1dKKLrKt8lj0fUuBkcUY/B38Y4o7yJIN7sts=";
+  vendorHash = "sha256-504WH4KaL1ecsuwXlELKhpbHHK67IcaI+I4DvEQerwA=";
 
   proxyVendor = true;
 
@@ -75,7 +75,6 @@ buildGoModule rec {
       rushmorem
       lnl7
       offline
-      pradeepchhetri
       Chili-Man
       techknowlogick
     ];

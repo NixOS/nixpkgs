@@ -13,27 +13,26 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-07-18";
+    version = "0-unstable-2025-09-11";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "ff2e0ea2788a04ae5a13fc90b3725828a1ebc026";
-      hash = "sha256-Pxpozg3ecqGzwUCXL9zYsCivr9VpCVSYc/kjZn+V4xk=";
+      rev = "7c1ebc01489a5b96d4abb0ad9c1180701eb4456c";
+      hash = "sha256-nOIt4PyO6DALz7gw5Hh1w1ZDyEAsQAVp4O/eFOLYZ0A=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
-    pythonRemoveDeps = [
-      "typer-slim" # we use typer instead
-    ];
-
     pythonRelaxDeps = [
       "certifi"
+      "flask"
+      "flask-babel"
       "httpx-socks"
       "lxml"
-      "pygments"
+      "typer-slim"
+      "whitenoise"
     ];
 
     preBuild =
@@ -78,9 +77,10 @@ python.pkgs.toPythonModule (
         python-dateutil
         pyyaml
         setproctitle
-        typer
+        typer-slim
         uvloop
         valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;

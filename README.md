@@ -2,7 +2,7 @@
   <a href="https://nixos.org">
     <picture>
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos.svg">
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.svg">
       <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos.svg" width="500px" alt="NixOS logo">
     </picture>
   </a>
@@ -26,7 +26,6 @@ It also implements [NixOS](https://nixos.org/nixos/), a purely-functional Linux 
 
 * [Discourse Forum](https://discourse.nixos.org/)
 * [Matrix Chat](https://matrix.to/#/#space:nixos.org)
-* [NixOS Weekly](https://weekly.nixos.org/)
 * [Official wiki](https://wiki.nixos.org/)
 * [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
@@ -41,7 +40,7 @@ Here are some of the main ones:
 * [Nix RFCs](https://github.com/NixOS/rfcs) - the formal process for making substantial changes to the community
 * [NixOS homepage](https://github.com/NixOS/nixos-homepage) - the [NixOS.org](https://nixos.org) website
 * [hydra](https://github.com/NixOS/hydra) - our continuous integration system
-* [NixOS Artwork](https://github.com/NixOS/nixos-artwork) - NixOS artwork
+* [NixOS Branding](https://github.com/NixOS/branding) - NixOS branding
 
 # Continuous Integration and Distribution
 
@@ -79,7 +78,7 @@ You can donate to the NixOS foundation through [SEPA bank transfers](https://nix
 
 Nixpkgs is licensed under the [MIT License](COPYING).
 
-Note:
-MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
+> [!Note]
+> MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
 It also might not apply to patches included in Nixpkgs, which may be derivative works of the packages to which they apply.
 The aforementioned artifacts are all covered by the licenses of the respective packages.

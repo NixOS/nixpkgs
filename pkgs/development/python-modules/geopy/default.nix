@@ -4,7 +4,7 @@
   docutils,
   fetchFromGitHub,
   geographiclib,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonAtLeast,
   pythonOlder,
   pytz,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     docutils
-    pytestCheckHook
+    pytest7CheckHook
     pytz
   ];
 
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Python Geocoding Toolbox";
     changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    maintainers = with maintainers; [ ];
   };
 }

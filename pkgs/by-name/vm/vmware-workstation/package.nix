@@ -1,7 +1,7 @@
 {
   stdenv,
   buildFHSEnv,
-  requireFile,
+  fetchurl,
   lib,
   zlib,
   gdbm,
@@ -38,9 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "17.6.4";
   build = "24832109";
 
-  src = requireFile {
-    name = "VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
-    url = "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true";
+  src = fetchurl {
+    url = "https://archive.org/download/vmware-workstation-full-${finalAttrs.version}-${finalAttrs.build}.x86_64/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
     hash = "sha256-ZPv7rqzEiGVGgRQ2Kiu6rekRDMnoe8O9k4OWun8Zqb0=";
   };
 

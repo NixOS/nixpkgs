@@ -1,7 +1,7 @@
-From ab0650484cdd89afb5b60a0a046509ec5ae14375 Mon Sep 17 00:00:00 2001
-From: williamvds <william@williamvds.me>
-Date: Sun, 6 Apr 2025 23:01:30 +0100
-Subject: [PATCH 2/3] Remove unsupported commands
+From d72475d713a8eecd1476bc5bb4acfb0448d5abad Mon Sep 17 00:00:00 2001
+From: averyv <avery@averyv.me>
+Date: Sat, 6 Sep 2025 18:04:11 +0100
+Subject: [PATCH 2/2] Remove unsupported commands
 
 Remove some unsupported maintenance commands, particularly the ones which
 reinstall, update, and uninstall pihole. This is managed by NixOS, after all.
@@ -10,7 +10,7 @@ reinstall, update, and uninstall pihole. This is managed by NixOS, after all.
  1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/pihole b/pihole
-index 6afc48a..cce7c97 100755
+index b00617e..a3c2e20 100755
 --- a/pihole
 +++ b/pihole
 @@ -92,6 +92,7 @@ debugFunc() {
@@ -63,5 +63,5 @@ index 6afc48a..cce7c97 100755
  
  helpFunc() {
 -- 
-2.48.1
+2.50.1
 

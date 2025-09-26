@@ -53,6 +53,6 @@ buildPythonPackage rec {
     mainProgram = "demesdraw";
     homepage = "https://github.com/grahamgower/demesdraw";
     license = licenses.isc;
-    maintainers = with maintainers; [ alxsimon ];
+    maintainers = with maintainers; [ ];
   };
 }

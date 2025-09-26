@@ -4,7 +4,7 @@
   virtualbox,
 }:
 let
-  virtualboxExtPackVersion = "7.1.12";
+  virtualboxExtPackVersion = "7.2.0";
 in
 fetchurl rec {
   name = "Oracle_VirtualBox_Extension_Pack-${virtualboxExtPackVersion}.vbox-extpack";
@@ -14,7 +14,7 @@ fetchurl rec {
     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
     # Checksums can also be found at https://www.virtualbox.org/download/hashes/${version}/SHA256SUMS
     let
-      value = "c7ed97f4755988ecc05ec633475e299bbc1e0418cc3d143747a45c99df53abd3";
+      value = "8a44f3eeaf9bb71fab297bf4b3d38bd1bc55243f3c1a12bfb0e8d78170f949a0";
     in
     assert (builtins.stringLength value) == 64;
     value;

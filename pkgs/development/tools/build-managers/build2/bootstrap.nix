@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
     # which ld64 does not support.
-    (lib.getBin buildPackages.llvmPackages_16.lld)
+    (lib.getBin buildPackages.llvmPackages.lld)
   ];
 
   doCheck = true;

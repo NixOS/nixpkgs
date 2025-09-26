@@ -45,8 +45,11 @@ in
       "systemd-oomd.service"
       "systemd-oomd.socket"
     ];
-    # TODO: Added upstream in upcoming systemd release. Good to drop once we use v258 or later
-    systemd.services.systemd-oomd.after = [ "systemd-sysusers.service" ];
+
+    systemd.services.systemd-oomd.after = [
+      "swap.target" # TODO: drop after systemd v258
+      "systemd-sysusers.service" # TODO: drop after systemd v257.8
+    ];
     systemd.services.systemd-oomd.wantedBy = [ "multi-user.target" ];
 
     environment.etc."systemd/oomd.conf".text = lib.generators.toINI { } {

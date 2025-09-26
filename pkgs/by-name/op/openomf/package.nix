@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openomf";
-  version = "0.8.3";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "omf2097";
     repo = "openomf";
     tag = finalAttrs.version;
-    hash = "sha256-9vd/LirurXFtmcG0U5SG8Oa66kcJ1EiaBmzfMxgnaqQ=";
+    hash = "sha256-5X8drQKMwYZ5M/i7hxyI25AysQGedQ5BLEYcNXWHgNk=";
   };
 
   nativeBuildInputs = [
