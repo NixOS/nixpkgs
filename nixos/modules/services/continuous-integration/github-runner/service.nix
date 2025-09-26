@@ -17,6 +17,15 @@
           assertion = cfg.group == null || cfg.user != null;
           message = ''`services.github-runners.${name}`: Setting `group` while leaving `user` unset runs the service as `root`. If this is really what you want, set `user = "root"` explicitly'';
         }
+        {
+          assertion =
+            cfg.enableContainers
+            && !(
+              config.virtualisation.docker.enable
+              && builtins.elem "/run/docker.sock" config.virtualisation.docker.listenOptions
+            );
+          message = ''`services.github-runners.${name}`: Setting `enableContainers` requires Docker to be enabled with socket access. Please ensure `virtualisation.docker.enable = true` and that "/run/docker.sock" is in `virtualisation.docker.listenOptions`'';
+        }
       ]
     )
   );
@@ -50,11 +59,12 @@
         description = "GitHub Actions runner";
 
         wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" ];
+        wants = [ "network-online.target" ] ++ lib.optionals cfg.enableContainers [ "docker.service" ];
         after = [
           "network.target"
           "network-online.target"
-        ];
+        ]
+        ++ lib.optionals cfg.enableContainers [ "docker.service" ];
 
         environment = {
           HOME = workDir;
@@ -73,6 +83,7 @@
           ++ [
             config.nix.package
           ]
+          ++ lib.optionals cfg.enableContainers [ pkgs.docker ]
           ++ cfg.extraPackages;
 
         serviceConfig = lib.mkMerge [
@@ -329,6 +340,10 @@
           (lib.mkIf (cfg.group != null) {
             DynamicUser = false;
             Group = cfg.group;
+          })
+          (lib.mkIf cfg.enableContainers {
+            SupplementaryGroups = [ "docker" ];
+            ProtectProc = lib.mkOverride 500 "default";
           })
           cfg.serviceOverrides
         ];
