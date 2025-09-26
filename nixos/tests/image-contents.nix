@@ -19,7 +19,10 @@ let
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
         {
-          fileSystems."/".device = "/dev/disk/by-label/nixos";
+          fileSystems."/" = {
+            device = "/dev/disk/by-label/nixos";
+            fsType = "ext4";
+          };
           boot.loader.grub.device = "/dev/vda";
           boot.loader.timeout = 0;
           nixpkgs.pkgs = pkgs;
