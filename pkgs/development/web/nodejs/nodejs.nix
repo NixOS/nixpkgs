@@ -2,11 +2,35 @@
   lib,
   stdenv,
   fetchurl,
-  openssl,
+  fetchFromGitHub,
   python,
-  zlib,
+  ada,
+  brotli,
+  c-ares,
   libuv,
+  llhttp,
+  nghttp2,
+  nghttp3,
+  ngtcp2,
+  openssl,
+  simdjson,
+  simdutf,
+  simdutf_6 ? (
+    simdutf.overrideAttrs {
+      version = "6.5.0";
+
+      src = fetchFromGitHub {
+        owner = "simdutf";
+        repo = "simdutf";
+        rev = "v6.5.0";
+        hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
+      };
+    }
+  ),
   sqlite,
+  uvwasi,
+  zlib,
+  zstd,
   icu,
   bash,
   ninja,
@@ -98,14 +122,38 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedAdaAndSimd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.2";
+  useSharedSQLite = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.5";
+  useSharedZstd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.15";
 
-  sharedLibDeps = {
-    inherit openssl zlib libuv;
-  }
-  // (lib.optionalAttrs useSharedSQLite {
-    inherit sqlite;
-  });
+  sharedLibDeps =
+    (lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
+      inherit
+        brotli
+        c-ares
+        libuv
+        nghttp2
+        nghttp3
+        ngtcp2
+        openssl
+        uvwasi
+        zlib
+        ;
+      http-parser = llhttp;
+    })
+    // (lib.optionalAttrs useSharedAdaAndSimd {
+      inherit
+        ada
+        simdjson
+        ;
+      simdutf = simdutf_6;
+    })
+    // (lib.optionalAttrs useSharedSQLite {
+      inherit sqlite;
+    })
+    // (lib.optionalAttrs useSharedZstd {
+      inherit zstd;
+    });
 
   copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
     builtins.attrNames sharedLibDeps
@@ -182,13 +230,10 @@ let
       # wrappers over the corresponding JS scripts. There are some packages though
       # that use bash wrappers, e.g. polaris-web.
       buildInputs = [
-        zlib
-        libuv
-        openssl
-        icu
         bash
+        icu
       ]
-      ++ lib.optionals useSharedSQLite [ sqlite ];
+      ++ builtins.attrValues sharedLibDeps;
 
       nativeBuildInputs = [
         installShellFiles
@@ -241,8 +286,10 @@ let
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
       ++ lib.optionals (!enableNpm) [ "--without-npm" ]
       ++ lib.concatMap (name: [
-        "--shared-${name}"
-        "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
+        "--shared-${builtins.replaceStrings [ "c-ares" ] [ "cares" ] name}"
+        "--shared-${builtins.replaceStrings [ "c-ares" ] [ "cares" ] name}-libpath=${
+          lib.getLib sharedLibDeps.${name}
+        }/lib"
         /**
           Closure notes: we explicitly avoid specifying --shared-*-includes,
           as that would put the paths into bin/nodejs.
@@ -383,6 +430,10 @@ let
             ]
             ++ lib.optionals (!lib.versionAtLeast version "22") [
               "test-tls-multi-key"
+            ]
+            ++ lib.optionals useSharedAdaAndSimd [
+              # Different versions of Ada affect the WPT tests
+              "test-url"
             ]
             ++ lib.optionals stdenv.hostPlatform.is32bit [
               # utime (actually utimensat) fails with EINVAL on 2038 timestamp
