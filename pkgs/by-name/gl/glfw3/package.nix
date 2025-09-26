@@ -40,7 +40,11 @@ stdenv.mkDerivation {
     ./x11.patch
   ]
   ++ lib.optionals withMinecraftPatch [
-    ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
+    ./fix-key-modifiers.patch
+    ./fix-double-scroll.patch
+    ./implement-glfwSetCursorPosWayland.patch
+    ./fix-window-size-on-unfullscreen.patch
+    ./ignore-no-set-window-icon.patch
   ];
 
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];

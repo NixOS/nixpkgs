@@ -1,0 +1,22 @@
+From d463fb4a7694ef537279bce4e1653bc22bf260a1 Mon Sep 17 00:00:00 2001
+From: BoyOrigin <ahmadyasinfikri@gmail.com>
+Date: Mon, 18 Sep 2023 01:37:44 +0700
+Subject: [PATCH] Fix Window size on unset fullscreen
+
+
+diff --git a/src/wl_window.c b/src/wl_window.c
+index b1b280a7..9cc76c3e 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -2282,6 +2282,8 @@ void _glfwSetWindowSizeWayland(_GLFWwindow* window, int width, int height)
+             libdecor_state_free(frameState);
+         }
+ 
++        _glfwInputWindowSize(window, width, height);
++
+         if (window->wl.visible)
+             _glfwInputWindowDamage(window);
+     }
+-- 
+2.43.0
+
