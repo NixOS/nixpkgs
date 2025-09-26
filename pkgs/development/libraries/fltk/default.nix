@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/bin/fltk-config \
-      --replace "/$out/" "/"
+      --replace-fail "/$out/" "/"
   '';
 
   meta = {
