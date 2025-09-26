@@ -41,6 +41,8 @@
   wayland-scanner,
 
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
+
+  nix-update-script,
 }:
 
 # pango support depends on Xft
@@ -196,6 +198,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/bin/fltk-config \
       --replace-fail "/$out/" "/"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(1\\.4\\.[0-9.]+)"
+    ];
+  };
 
   meta = {
     description = "C++ cross-platform lightweight GUI library";

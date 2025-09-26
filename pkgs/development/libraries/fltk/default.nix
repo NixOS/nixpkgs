@@ -33,6 +33,8 @@
 
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
   withShared ? true,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -179,6 +181,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/bin/fltk-config \
       --replace-fail "/$out/" "/"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(1\\.3\\.[0-9.]+)"
+    ];
+  };
 
   meta = {
     description = "C++ cross-platform lightweight GUI library";
