@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     mpg123
     lua5_1
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     mesa
     xorg.libX11
   ];
@@ -78,22 +78,22 @@ stdenv.mkDerivation rec {
     # Lua 5.1 (Darwin lib name differs from Linux)
     "-DLUA_INCLUDE_DIR=${lua5_1.out}/include"
     "-DLUA_LIBRARIES=${
-      if stdenv.isDarwin then "${lua5_1.out}/lib/liblua.5.1.dylib" else "${lua5_1.out}/lib/liblua5.1.so"
+      if stdenv.hostPlatform.isDarwin then "${lua5_1.out}/lib/liblua.5.1.dylib" else "${lua5_1.out}/lib/liblua5.1.so"
     }"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
     # Make the installed binary find @rpath/*.dylib in $out/lib
     "-DCMAKE_MACOSX_RPATH=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib"
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_RPATH=\$ORIGIN/../lib"
   ];
 
   # Ensure common macOS frameworks are linked.
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo";
 
   # Upstream lacks install rules; install manually from the build dir.
   installPhase = ''
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   '';
 
   # On Darwin, make sure install_name IDs and rpaths are sane at runtime.
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Give the dylib an @rpath id so dependents resolve it via the binary's rpath
     if [ -f "$out/lib/libliblove.dylib" ]; then
       install_name_tool -id "@rpath/libliblove.dylib" "$out/lib/libliblove.dylib" || true
