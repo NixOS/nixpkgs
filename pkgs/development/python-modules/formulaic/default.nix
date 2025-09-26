@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "formulaic";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "matthewwardrop";
     repo = "formulaic";
     tag = "v${version}";
-    hash = "sha256-+MyMxtX3DCmluf+8dvo0uulc1AeKE6les1xiRGVWjPU=";
+    hash = "sha256-mZt+cwk/AaUmmeCj7aLu1QEBqlPUVUqQbYdgETMj/vY=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jodal";
     repo = "pykka";
     tag = "v${version}";
-    hash = "sha256-cxW6xKG0x7pPXvCanh0ZNMYRSdnCf8JrnJbjYgDUQSI=";
+    hash = "sha256-xCvWqWThsi78S9DW4ssz0gezb0RFGlqW2W8oMxkNc+E=";
   };
 
   build-system = [ hatchling ];

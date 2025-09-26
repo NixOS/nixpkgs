@@ -44,6 +44,8 @@ buildGoModule rec {
         ]
       )
     }
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/vhs man > vhs.1
     installManPage vhs.1
     installShellCompletion --cmd vhs \

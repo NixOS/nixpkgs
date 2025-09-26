@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "nampa" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Python implementation of the FLIRT technology";

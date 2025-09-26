@@ -337,6 +337,7 @@ mapAliases ({
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   hcs_utils = hcs-utils; # added 2024-01-06
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
+  heif-image-plugin = throw "heif-image-plugin has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   hglib = python-hglib; # added 2023-10-13
   hijri-converter = hijridate; # added 2025-08-07
   hkdf = throw "hkdf has been removed, as it is no longer maintained upstream."; # added 2024-10-04
@@ -577,6 +578,7 @@ mapAliases ({
   pygbm = throw "pygbm has been removed, since it is abandoned and broken"; # added 2023-06-20
   PyGithub = pygithub; # added 2023-02-19
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
+  pyheif = throw "pyheif has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pychef = throw "pychef has been removed because it's been archived upstream and abandoned since 2017."; # added 2022-11-14
   PyChromecast = pychromecast; # added 2023-02-19

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -24,7 +25,7 @@ buildGoModule {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd packwiz \
       --bash <($out/bin/packwiz completion bash) \
       --fish <($out/bin/packwiz completion fish) \

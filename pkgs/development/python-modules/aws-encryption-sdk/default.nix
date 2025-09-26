@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "4.0.2";
+  version = "4.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-encryption-sdk-python";
     tag = "v${version}";
-    hash = "sha256-yuehAxVEqnlNMMIqA0imAJaIjV5nzYbQk84l8STtBVo=";
+    hash = "sha256-SlYXob61YLl96NKnmsGZTIU10bfwKYbhLsHjC/tXGI4=";
   };
 
   build-system = [ setuptools ];

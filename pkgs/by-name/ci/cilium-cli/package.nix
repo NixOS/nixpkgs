@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   cilium-cli,
   fetchFromGitHub,
@@ -34,7 +35,7 @@ buildGoModule rec {
   # 2022/06/25 10:36:22 Unable to start gops: mkdir /homeless-shelter: permission denied
   HOME = "$TMPDIR";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cilium \
       --bash <($out/bin/cilium completion bash) \
       --fish <($out/bin/cilium completion fish) \

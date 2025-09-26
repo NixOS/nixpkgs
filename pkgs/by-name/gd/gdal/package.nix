@@ -3,7 +3,6 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -84,26 +83,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.11.0";
+  version = "3.11.4";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8HcbA9Cj2i6DuqcJGiwqd6GkqbJP9oLdmA34g7kc/ng=";
+    hash = "sha256-CFQF3vDhhXsAnIfUcn6oTQ4Xm+GH/36dqSGc0HvyEJ0=";
   };
-
-  patches = [
-    # https://github.com/OSGeo/gdal/issues/12511
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/1dd320b086606958fe970457a0640bdc4c4d494a.patch";
-      hash = "sha256-SXlNjgR4q7i3PrFfh/wzEFMrSGHQuB+ecXbGJgsROe0=";
-    })
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/6da26aec591656f97fd882b07d37c21aabd06373.patch";
-      hash = "sha256-s70j/S9YKGRqxwrabsV3ePeGSsnDh/ouGLtLEm+z0lU=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison

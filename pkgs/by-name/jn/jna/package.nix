@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jna";
-  version = "5.17.0";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "java-native-access";
     repo = "jna";
     rev = finalAttrs.version;
-    hash = "sha256-4i7iQaxH4wS35cIvMfcNf4kUGI+uIoHNpZkQrs4oAyk=";
+    hash = "sha256-7ErF/AQntDfxXdHr9HUCM4JoFBNX3sXhJvKE/kzrZZg=";
   };
 
   nativeBuildInputs = [

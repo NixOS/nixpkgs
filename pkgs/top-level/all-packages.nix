@@ -3211,11 +3211,13 @@ with pkgs;
       isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
       isl_0_23 = callPackage ../development/libraries/isl/0.23.0.nix { };
       isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
+      isl_0_27 = callPackage ../development/libraries/isl/0.27.0.nix { };
     })
     isl
     isl_0_20
     isl_0_23
     isl_0_24
+    isl_0_27
     ;
 
   jackett = callPackage ../servers/jackett { };
@@ -3370,9 +3372,6 @@ with pkgs;
   netdataCloud = netdata.override {
     withCloudUi = true;
   };
-
-  netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
-  netsurf-browser = netsurf.browser;
 
   nyxt = callPackage ../applications/networking/browsers/nyxt {
     sbcl = sbcl_2_4_6;
@@ -3725,7 +3724,7 @@ with pkgs;
 
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
-  onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
+  onlykey = callPackage ../tools/security/onlykey { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli {
     jre = pkgs.jre_headless;
@@ -4548,6 +4547,8 @@ with pkgs;
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
+  temurin-bin-25 = javaPackages.compiler.temurin-bin.jdk-25;
+  temurin-jre-bin-25 = javaPackages.compiler.temurin-bin.jre-25;
 
   temurin-bin-24 = javaPackages.compiler.temurin-bin.jdk-24;
   temurin-jre-bin-24 = javaPackages.compiler.temurin-bin.jre-24;
@@ -5361,6 +5362,8 @@ with pkgs;
     withQt = true;
   };
 
+  lima-additional-guestagents = callPackage ../by-name/li/lima/additional-guestagents.nix { };
+
   lld = llvmPackages.lld;
 
   lldb = llvmPackages.lldb;
@@ -5585,6 +5588,7 @@ with pkgs;
     cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_6
     cargo-pgrx_0_14_1
+    cargo-pgrx_0_16_0
     cargo-pgrx
     ;
 
@@ -6420,11 +6424,7 @@ with pkgs;
     electron-chromedriver_38
     ;
 
-  electron_35 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_35 then
-      electron-source.electron_35
-    else
-      electron_35-bin;
+  electron_35 = electron_35-bin;
   electron_36 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_36 then
       electron-source.electron_36
@@ -7527,8 +7527,6 @@ with pkgs;
   geoip = callPackage ../development/libraries/geoip { };
 
   geos = callPackage ../development/libraries/geos { };
-
-  geos_3_9 = callPackage ../development/libraries/geos/3.9.nix { };
 
   gettext = callPackage ../development/libraries/gettext { };
 
@@ -13857,14 +13855,6 @@ with pkgs;
   };
 
   liquidwar5 = callPackage ../games/liquidwar/5.nix { };
-
-  maptool = callPackage ../games/maptool {
-    # MapTool is fussy about which JRE it uses; OpenJDK will leave it hanging
-    # at launch in a class initialization deadlock. MapTool ships Temurin with
-    # their pre-built releases so we might as well use it too.
-    jre = temurin-bin-21;
-    openjfx = openjfx21;
-  };
 
   mindustry-wayland = callPackage ../by-name/mi/mindustry/package.nix {
     enableWayland = true;

@@ -30,13 +30,13 @@ in
       };
 
       fastcgi.shibAuthorizerPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 9100;
         description = "Port for shibauthorizer FastCGI process to bind to";
       };
 
       fastcgi.shibResponderPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 9101;
         description = "Port for shibauthorizer FastCGI process to bind to";
       };
