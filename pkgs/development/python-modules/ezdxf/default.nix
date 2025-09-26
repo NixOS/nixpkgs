@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.3.2";
+  version = "1.4.3b2";
   pname = "ezdxf";
 
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "ezdxf";
     tag = "v${version}";
-    hash = "sha256-BzdLl2GjLh2ABJzJ6bhdbic9jlSABIVR3XGrYiLJHa0=";
+    hash = "sha256-Qod9Ss1xxK51FUQCXyxl7hS0C0nu+aIYgN5SOMfG4F8=";
   };
 
   dependencies = [
