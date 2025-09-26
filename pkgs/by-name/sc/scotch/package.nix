@@ -1,15 +1,16 @@
 {
-  bison,
-  bzip2,
-  cmake,
-  fetchFromGitLab,
-  flex,
-  gfortran,
   lib,
-  mpi,
   stdenv,
-  zlib,
+  fetchFromGitLab,
+  cmake,
+  gfortran,
+  bison,
+  flex,
+  bzip2,
   xz,
+  zlib,
+  mpi,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,21 +31,35 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   nativeBuildInputs = [
     cmake
     gfortran
+    bison
+    flex
   ];
 
   buildInputs = [
-    bison
     bzip2
-    mpi
-    flex
     xz
     zlib
   ];
+
+  propagatedBuildInputs = [
+    mpi
+  ];
+
+  passthru = {
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "SCOTCH" ];
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
 
   meta = {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
