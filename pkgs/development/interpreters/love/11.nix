@@ -58,10 +58,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.isLinux [
     mesa
     xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libXcursor
   ];
 
   cmakeFlags = [
