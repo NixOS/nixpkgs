@@ -11686,6 +11686,8 @@ self: super: with self; {
 
   pgvector = callPackage ../development/python-modules/pgvector { };
 
+  phart = callPackage ../development/python-modules/phart { };
+
   phe = callPackage ../development/python-modules/phe { };
 
   phik = callPackage ../development/python-modules/phik { };
