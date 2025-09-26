@@ -4,7 +4,7 @@
   fetchzip,
   sbcl,
   pkg-config,
-  fmt_9,
+  fmt,
   gmpxx,
   libelf,
   boost,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     sbcl
     pkg-config
-    fmt_9
+    fmt
     gmpxx
     libelf
     boost
