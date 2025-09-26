@@ -55,7 +55,7 @@
   libnvme,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   # NBFT (NVMe Boot Firmware Table) support
-  withNbft ? libnvme != null,
+  withNbft ? false
 }:
 
 let
