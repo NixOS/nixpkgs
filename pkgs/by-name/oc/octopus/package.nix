@@ -31,19 +31,14 @@ assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "16.0";
+  version = "16.2";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
-    rev = version;
-    hash = "sha256-sByiRTgAntJtSeL4h+49Mi9Rcxw2wK/BvXvsePa77HE=";
+    tag = version;
+    hash = "sha256-L97igB+bdZ19zpbffHi8DVSJXKtUyDqauUB+l5zzFwQ=";
   };
-
-  patches = [
-    # Discover all MPI languages components to avoid scalpack discovery failure
-    ./scalapack-mpi-alias.patch
-  ];
 
   nativeBuildInputs = [
     which
