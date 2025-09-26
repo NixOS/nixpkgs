@@ -16988,4 +16988,6 @@ with pkgs;
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
   };
+
+  vips_8_17 = callPackage ../by-name/vi/vips/8_17.nix { };
 }
