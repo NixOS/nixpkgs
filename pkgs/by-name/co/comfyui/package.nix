@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "comfyui";
-  version = "0.3.59";
+  version = "0.3.60";
   # wrapping the source since it's designed to be ran by hand
   # as `python ./main.py`
   format = "other";
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "comfyanonymous";
     repo = "ComfyUI";
     rev = "v${version}";
-    hash = "sha256-ySh1nDMYPtV3OclODEPlq09VXEVO4DxDhRpKg6OMkkY=";
+    hash = "sha256-P4JR10gwxuA5PzfxXzkbbI0UfJfArPGevJ+/ukgYzW4=";
   };
 
   patches = [
