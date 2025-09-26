@@ -29,6 +29,8 @@
   doxygen,
   graphviz,
 
+  withXorg ? stdenv.hostPlatform.isLinux,
+
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
   withShared ? true,
 }:
@@ -85,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     freetype
+  ]
+  ++ lib.optionals withXorg [
     libX11
     libXext
     libXinerama
@@ -105,12 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OPTION_USE_SYSTEM_LIBPNG" true)
 
     # X11
-    (lib.cmakeBool "OPTION_USE_XINERAMA" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "OPTION_USE_XFIXES" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "OPTION_USE_XCURSOR" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "OPTION_USE_XFT" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "OPTION_USE_XRENDER" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "OPTION_USE_XDBE" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "OPTION_USE_XINERAMA" withXorg)
+    (lib.cmakeBool "OPTION_USE_XFIXES" withXorg)
+    (lib.cmakeBool "OPTION_USE_XCURSOR" withXorg)
+    (lib.cmakeBool "OPTION_USE_XFT" withXorg)
+    (lib.cmakeBool "OPTION_USE_XRENDER" withXorg)
+    (lib.cmakeBool "OPTION_USE_XDBE" withXorg)
 
     # GL
     (lib.cmakeBool "OPTION_USE_GL" withGL)

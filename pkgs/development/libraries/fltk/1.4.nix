@@ -25,15 +25,20 @@
   withCairo ? true,
   cairo,
 
-  withPango ? stdenv.hostPlatform.isLinux,
+  withPango ? withXorg,
   pango,
 
   withDocs ? true,
   doxygen,
   graphviz,
 
+  withXorg ? stdenv.hostPlatform.isLinux,
+
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
 }:
+
+# pango support depends on Xft
+assert withPango -> withXorg;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fltk";
@@ -83,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     freetype
+  ]
+  ++ lib.optionals withXorg [
     libX11
     libXext
     libXinerama
@@ -107,11 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FLTK_USE_SYSTEM_ZLIB" true)
 
     # X11
-    (lib.cmakeBool "FLTK_USE_XINERAMA" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "FLTK_USE_XFIXES" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "FLTK_USE_XCURSOR" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "FLTK_USE_XFT" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "FLTK_USE_XRENDER" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "FLTK_USE_XINERAMA" withXorg)
+    (lib.cmakeBool "FLTK_USE_XFIXES" withXorg)
+    (lib.cmakeBool "FLTK_USE_XCURSOR" withXorg)
+    (lib.cmakeBool "FLTK_USE_XFT" withXorg)
+    (lib.cmakeBool "FLTK_USE_XRENDER" withXorg)
 
     # GL
     (lib.cmakeBool "FLTK_BUILD_GL" withGL)
