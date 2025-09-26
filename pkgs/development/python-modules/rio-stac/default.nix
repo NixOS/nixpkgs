@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "rio-stac";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "rio-stac";
     tag = version;
-    hash = "sha256-N7P1kuUwT1r6eAx4TGbu3YmskvfR8N5GYrHqtpjab1Y=";
+    hash = "sha256-ynpyRYKHHvyoVFU/BgnHPrvRzixXNNw9oOQiOKxSjiI=";
   };
 
   build-system = [ flit ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Create STAC Items from raster datasets";
     homepage = "https://github.com/developmentseed/rio-stac";
-    changelog = "https://github.com/developmentseed/rio-stac/tag/${src.tag}";
+    changelog = "https://github.com/developmentseed/rio-stac/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
