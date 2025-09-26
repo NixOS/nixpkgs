@@ -17237,6 +17237,8 @@ self: super: with self; {
 
   sphinx-book-theme = callPackage ../development/python-modules/sphinx-book-theme { };
 
+  sphinx-bootstrap-theme = callPackage ../development/python-modules/sphinx-bootstrap-theme { };
+
   sphinx-click = callPackage ../development/python-modules/sphinx-click { };
 
   sphinx-codeautolink = callPackage ../development/python-modules/sphinx-codeautolink { };
