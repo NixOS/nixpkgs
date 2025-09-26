@@ -5064,8 +5064,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.24.1";
-          hash = "sha256-M0y6/9EPkcXTMxArqLpfSeVKpVF2SvjLtTWvLMIvauY=";
+          version = "0.25.2025092303";
+          hash = "sha256-GU33NuhgNZdTFGkRQ6aJHs9nbvoOuJlf323mYf6TPOs=";
         };
         meta = {
           license = lib.licenses.mit;
