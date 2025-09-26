@@ -9,16 +9,17 @@
   perl,
   texinfo,
   texinfo6,
-  yasm,
   nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
   version, # ffmpeg ABI version. Also declare this if you're overriding the source.
   hash ? "", # hash of the upstream source for the given ABI version
-  source ? fetchgit {
-    url = "https://git.ffmpeg.org/ffmpeg.git";
-    rev = "n${version}";
+  source ? fetchFromGitea {
+    domain = "code.ffmpeg.org";
+    owner = "FFmpeg";
+    repo = "FFmpeg";
+    tag = "n${version}";
     inherit hash;
   },
 
@@ -41,7 +42,7 @@
   # instead.
   withFullDeps ? ffmpegVariant == "full",
 
-  fetchgit,
+  fetchFromGitea,
   fetchpatch2,
 
   # Feature flags
@@ -834,8 +835,7 @@ stdenv.mkDerivation (
       perl
       pkg-config
     ]
-    # 8.0 is only compatible with nasm, and we don't want to rebuild all older ffmpeg builds at this moment.
-    ++ (if versionOlder version "8.0" then [ yasm ] else [ nasm ])
+    ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
     ++ optionals withCudaLLVM [ clang ]
