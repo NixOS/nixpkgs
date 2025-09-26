@@ -2027,6 +2027,8 @@ let
 
       Google.gemini-cli-vscode-ide-companion = callPackage ./Google.gemini-cli-vscode-ide-companion { };
 
+      Google.geminicodeassist = callPackage ./Google.geminicodeassist { };
+
       grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gc-excelviewer";
