@@ -80,6 +80,10 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    # Fatal Python error: Aborted
+    # gym/envs/classic_control/cartpole.py, line 250 in render
+    "test_record_video_using_default_trigger"
+
     # TypeError: Converting from sequence to b2Vec2, expected int/float arguments index 0
     "test_box_actions_out_of_bound"
     "test_env_determinism_rollout"
