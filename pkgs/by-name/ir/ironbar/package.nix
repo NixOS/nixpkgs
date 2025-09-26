@@ -62,8 +62,8 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals (hasFeature "cairo") [ luajit ]
   ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ]
   ++ lib.optionals (hasFeature "keyboard") [
-       libinput
-       libevdev
+    libinput
+    libevdev
   ];
 
   nativeBuildInputs = [
