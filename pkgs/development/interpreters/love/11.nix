@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, zlib
-, libpng
-, libjpeg
-, libwebp
-, freetype
-, physfs
-, openal
-, SDL2
-, libvorbis
-, libogg
-, libtheora
-, libmodplug
-, mpg123
-, lua5_1
-, libGL
-, libX11
-, libXext
-, libXrandr
-, libXi
-, libXcursor
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  zlib,
+  libpng,
+  libjpeg,
+  libwebp,
+  freetype,
+  physfs,
+  openal,
+  SDL2,
+  libvorbis,
+  libogg,
+  libtheora,
+  libmodplug,
+  mpg123,
+  lua5_1,
+  libGL,
+  libX11,
+  libXext,
+  libXrandr,
+  libXi,
+  libXcursor,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,19 +32,40 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "love2d";
-    repo  = "love";
-    rev   = version;
-    hash  = "sha256-sem36AKK79EC2oeV/RS5ikWxU8P93clz0xtK1PKwkME=";
+    repo = "love";
+    rev = version;
+    hash = "sha256-sem36AKK79EC2oeV/RS5ikWxU8P93clz0xtK1PKwkME=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
-    zlib libpng libjpeg libwebp freetype physfs openal SDL2
-    libvorbis libogg libtheora libmodplug mpg123 lua5_1
-  ] ++ lib.optionals stdenv.isLinux [
-    libGL libX11 libXext libXrandr libXi libXcursor
+    zlib
+    libpng
+    libjpeg
+    libwebp
+    freetype
+    physfs
+    openal
+    SDL2
+    libvorbis
+    libogg
+    libtheora
+    libmodplug
+    mpg123
+    lua5_1
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    libGL
+    libX11
+    libXext
+    libXrandr
+    libXi
+    libXcursor
   ];
 
   cmakeFlags = [
@@ -63,22 +85,26 @@ stdenv.mkDerivation rec {
     "-DLIBLOVE_USE_SYSTEM_MPG123=ON"
     # Lua 5.1 (Darwin lib name differs from Linux)
     "-DLUA_INCLUDE_DIR=${lib.getDev lua5_1}/include"
-    "-DLUA_LIBRARIES=${if stdenv.isDarwin
-        then "${lib.getLib lua5_1}/lib/liblua.5.1.dylib"
-        else "${lib.getLib lua5_1}/lib/liblua5.1.so"}"
-  ] ++ lib.optionals stdenv.isDarwin [
+    "-DLUA_LIBRARIES=${
+      if stdenv.isDarwin then
+        "${lib.getLib lua5_1}/lib/liblua.5.1.dylib"
+      else
+        "${lib.getLib lua5_1}/lib/liblua5.1.so"
+    }"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
     # Make the installed binary find @rpath/*.dylib in $out/lib
     "-DCMAKE_MACOSX_RPATH=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib"
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.isLinux [
     "-DCMAKE_INSTALL_RPATH=\$ORIGIN/../lib"
   ];
 
   # Ensure common macOS frameworks are linked.
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
-    "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo";
 
   # Upstream lacks install rules; install manually from the build dir.
   installPhase = ''
@@ -109,8 +135,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A framework for making 2D games in Lua";
-    homepage    = "https://love2d.org/";
-    license     = licenses.zlib;
-    platforms   = platforms.unix;
+    homepage = "https://love2d.org/";
+    license = licenses.zlib;
+    platforms = platforms.unix;
   };
 }
