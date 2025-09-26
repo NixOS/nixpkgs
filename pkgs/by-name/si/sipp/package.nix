@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   ncurses,
   libpcap,
   cmake,
@@ -11,14 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sipp";
-  version = "3.7.3-unstable-2025-01-22";
+  version = "3.7.5";
 
-  src = fetchFromGitHub {
-    owner = "SIPp";
-    repo = "sipp";
-    rev = "464cf74c7321069b51c10f0c37f19ba16c2e7138";
-    hash = "sha256-mloeBKgDXmsa/WAUhlDsgNdhK8dpisGf3ti5UQQchJ8=";
-    leaveDotGit = true;
+  src = fetchurl {
+    url = "https://github.com/SIPp/sipp/releases/download/v${finalAttrs.version}/sipp-${finalAttrs.version}.tar.gz";
+    hash = "sha256-DSAvVi/Mn1ruV41ek4P7Mhpp4bBPF4V1fsz7ovxe7v4=";
   };
 
   cmakeFlags = [
