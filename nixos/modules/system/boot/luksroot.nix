@@ -999,7 +999,6 @@ in
                   type = with types; listOf singleLineStr;
                   default = [ ];
                   example = [ "_netdev" ];
-                  visible = false;
                   description = ''
                     Only used with systemd stage 1.
 
