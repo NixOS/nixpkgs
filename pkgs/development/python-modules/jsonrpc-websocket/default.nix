@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
-  version = "3.1.5";
+  version = "3.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = "jsonrpc-websocket";
     tag = version;
-    hash = "sha256-CdYa4gcbG3EM1glxLU1hyqbNse87KJKjwSRQSFfDMM0=";
+    hash = "sha256-m2HiS03PZ6oiHJJ9Z2+5CfiHKIWJ1yzDqlZj22/JNAE=";
   };
 
   nativeBuildInputs = [ setuptools ];
