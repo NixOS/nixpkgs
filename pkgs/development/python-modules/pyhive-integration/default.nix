@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyhive-integration";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Pyhass";
     repo = "Pyhiveapi";
     tag = "v${version}";
-    hash = "sha256-lfBr889s6NHcos/kdzQa9HJEcQ4dfCEMjuLYiLzesfE=";
+    hash = "sha256-g3dEB41bYT2XygAIRqXpdCeYuh7IH9O3ZG1zr5Sm7+8=";
   };
 
   pythonRemoveDeps = [ "pre-commit" ];
