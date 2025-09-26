@@ -17,7 +17,8 @@
   gssSupport ?
     with stdenv.hostPlatform;
     (
-      !isWindows
+      # krb5 is broken on cygwin
+      !(isWindows || isCygwin)
       &&
         # disable gss because of: undefined reference to `k5_bcmp'
         # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
