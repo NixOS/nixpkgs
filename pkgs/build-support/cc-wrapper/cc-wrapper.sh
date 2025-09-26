@@ -140,6 +140,20 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     params=(${kept+"${kept[@]}"})
 fi
 
+# Darwin normally includes the libc++ headers in the SDK, but that’s not possible
+# in nixpkgs because it is separate (part of the stdenv). Since the SDK functions
+# as the default sysroot on Darwin, not having the libc++ headers causes them not
+# to be found when `clang` is used to compile C++ code. This happens with various
+# build systems such as Bazel and SwiftPM. It can also happen when Swift tries to
+# import code or headers that use C++ (because Swift will try to compile the code
+# with just `clang` instead of using `clang++`.
+if [[ "$isCxx" = 0 && "@darwinMinVersion@" ]]; then
+    # This duplicates the behavior of a native toolchain, which can find the
+    # libc++ headers but requires `-lc++` to be specified explicitly when linking.
+    isCxx=1
+    cxxLibrary=0
+fi
+
 if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
         #
