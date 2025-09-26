@@ -66,7 +66,7 @@ stdenv.mkDerivation {
       tests/zorbajsoniq/download.sh
   '';
 
-  preBuild = ''
+  preBuildPhase = ''
     mkdir -p import/{flre,synapse,pasdblstrutils} rcmdline internettools
     cp -R ${flreSrc}/. import/flre
     cp -R ${pasdblstrutilsSrc}/. import/pasdblstrutils
@@ -80,9 +80,9 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    runHook preBuild
+    runHook preBuildPhase
     ./build.sh
-    runHook postBuild
+    runHook postBuildPhase
   '';
 
   installPhase = ''
