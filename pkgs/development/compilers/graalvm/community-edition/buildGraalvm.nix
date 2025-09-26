@@ -161,6 +161,10 @@ let
             "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
             "-ENIX_APPLE_SDK_VERSION"
           ];
+          checkToolchainFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+            "-H:+UnlockExperimentalVMOptions"
+            "-H:-CheckToolchain"
+          ];
         in
         ''
           # jni.h expects jni_md.h to be in the header search path.
@@ -181,7 +185,7 @@ let
 
           wrapProgram $out/bin/native-image \
             --prefix PATH : ${binPath} \
-            --add-flags "${toString (cLibsFlags ++ preservedNixVarFlags)}"
+            --add-flags "${toString (cLibsFlags ++ preservedNixVarFlags ++ checkToolchainFlags)}"
         '';
 
       preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
@@ -216,7 +220,7 @@ let
         $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
         echo "Ahead-Of-Time compilation"
-        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
+        $out/bin/native-image -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
         ./helloworld | fgrep 'Hello World'
 
         ${
