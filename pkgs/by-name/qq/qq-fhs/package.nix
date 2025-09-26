@@ -3,7 +3,7 @@
   libuuid,
   cups,
   dpkg,
-  fetchurl,
+  qq,
   glib,
   libssh2,
   gtk3,
@@ -18,35 +18,40 @@
   libGL,
   nss,
   xorg,
-  systemd,
   stdenv,
+  nspr,
+  dbus,
+  libxext,
+  pango,
+  cairo,
+  libx11,
+  libxfixes,
+  libxrandr,
+  expat,
+  libxcb,
+  libxkbcommon,
   undmg,
+  systemdMinimal,
   vips,
   at-spi2-core,
-  autoPatchelfHook,
+  buildFHSEnv,
   makeShellWrapper,
   wrapGAppsHook3,
   commandLineArgs ? "",
 }:
 
 let
-  sources = import ./sources.nix { inherit fetchurl; };
+  sources = qq.passthru.sources;
   source =
     sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   pname = "qq";
   inherit (source) version src;
-  passthru = {
-    updateScript = ./update.sh;
-    sources = import ./sources.nix { inherit fetchurl; };
-  };
   meta = {
     homepage = "https://im.qq.com/index/";
     description = "Messaging app";
     platforms = [
-      "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     license = lib.licenses.unfree;
@@ -59,66 +64,25 @@ let
     ];
   };
 in
-if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+buildFHSEnv rec {
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
+  qq-unwrapped = stdenv.mkDerivation {
     inherit
       pname
       version
       src
-      passthru
-      meta
-      ;
-
-    nativeBuildInputs = [ undmg ];
-    sourceRoot = ".";
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/Applications
-      cp -a QQ.app $out/Applications
-
-      runHook postInstall
-    '';
-  }
-else
-  stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      src
-      passthru
       meta
       ;
 
     nativeBuildInputs = [
-      autoPatchelfHook
       makeShellWrapper
       wrapGAppsHook3
       dpkg
-    ];
-
-    buildInputs = [
-      alsa-lib
-      at-spi2-core
-      cups
-      glib
-      gtk3
-      libdrm
-      libpulseaudio
-      libgcrypt
-      libkrb5
-      libgbm
-      nss
-      vips
-      xorg.libXdamage
-    ];
-
-    dontWrapGApps = true;
-
-    runtimeDependencies = map lib.getLib [
-      systemd
-      libkrb5
     ];
 
     installPhase = ''
@@ -127,18 +91,9 @@ else
       mkdir -p $out/bin
       cp -r opt $out/opt
       cp -r usr/share $out/share
-      substituteInPlace $out/share/applications/qq.desktop \
-        --replace-fail "/opt/QQ/qq" "$out/bin/qq" \
-        --replace-fail "/usr/share" "$out/share"
       makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \
-        --prefix LD_LIBRARY_PATH : "${
-          lib.makeLibraryPath [
-            libGL
-            libuuid
-          ]
-        }" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs} \
         "''${gappsWrapperArgs[@]}"
@@ -158,4 +113,49 @@ else
 
       runHook postInstall
     '';
-  }
+
+    dontWrapGApps = true;
+  };
+
+  targetPkgs = pkgs: [
+    qq-unwrapped
+    alsa-lib
+    at-spi2-core
+    cups
+    nspr
+    glib
+    gtk3
+    pango
+    cairo
+    libdrm
+    libpulseaudio
+    libgcrypt
+    libkrb5
+    libgbm
+    nss
+    vips
+    xorg.libXcomposite
+    xorg.libXdamage
+    systemdMinimal
+    libx11
+    dbus
+    libxext
+    libkrb5
+    libxkbcommon
+    libxfixes
+    libxrandr
+    expat
+    libxcb
+    libGL
+    libuuid
+    libssh2
+  ];
+  runScript = "qq";
+  extraInstallCommands = ''
+    mkdir -p "$out/share"
+    cp -rf ${qq-unwrapped}/share/* $out/share/
+    substituteInPlace $out/share/applications/qq.desktop \
+      --replace-fail "/opt/QQ/qq" "$out/bin/qq" \
+      --replace-fail "/usr/share" "$out/share"
+  '';
+}
