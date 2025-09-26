@@ -63,6 +63,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://include-what-you-use.org";
     license = licenses.bsd3;
+    maintainers = [
+      maintainers.ja1den
+    ];
     platforms = platforms.unix;
   };
 }
