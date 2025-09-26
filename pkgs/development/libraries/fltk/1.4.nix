@@ -34,11 +34,20 @@
 
   withXorg ? stdenv.hostPlatform.isLinux,
 
+  withWayland ? stdenv.hostPlatform.isLinux && withCairo,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
+  wayland-scanner,
+
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
 }:
 
 # pango support depends on Xft
 assert withPango -> withXorg;
+
+# wayland support depends on cairo
+assert withWayland -> withCairo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fltk";
@@ -63,6 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ lib.optionals withWayland [
+    wayland-scanner
   ]
   ++ lib.optionals withDocs [
     doxygen
@@ -98,6 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libXrender
   ]
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-protocols
+    libxkbcommon
+  ]
   ++ lib.optionals withCairo [
     cairo
   ]
@@ -119,6 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FLTK_USE_XCURSOR" withXorg)
     (lib.cmakeBool "FLTK_USE_XFT" withXorg)
     (lib.cmakeBool "FLTK_USE_XRENDER" withXorg)
+
+    # Wayland
+    (lib.cmakeBool "FLTK_BACKEND_WAYLAND" withWayland)
 
     # GL
     (lib.cmakeBool "FLTK_BUILD_GL" withGL)
