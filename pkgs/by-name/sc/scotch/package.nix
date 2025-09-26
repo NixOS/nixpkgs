@@ -10,6 +10,7 @@
   xz,
   zlib,
   mpi,
+  withPtScotch ? false,
   testers,
 }:
 
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_PTSCOTCH" withPtScotch)
   ];
 
   nativeBuildInputs = [
@@ -48,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals withPtScotch [
     mpi
   ];
 

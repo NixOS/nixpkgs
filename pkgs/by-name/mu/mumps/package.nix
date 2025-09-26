@@ -20,6 +20,7 @@
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
 let
+  scotch' = scotch.override { inherit withPtScotch; };
   profile = if mpiSupport then "debian.PAR" else "debian.SEQ";
   LMETIS = toString ([ "-lmetis" ] ++ lib.optional withParmetis "-lparmetis");
   LSCOTCH = toString (
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       "LIBEXT_SHARED=.dylib"
     ]
     ++ [
-      "ISCOTCH=-I${lib.getDev scotch}/include"
+      "ISCOTCH=-I${lib.getDev scotch'}/include"
       "LMETIS=${LMETIS}"
       "LSCOTCH=${LSCOTCH}"
       "ORDERINGSF=${ORDERINGSF}"
@@ -115,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       blas
       lapack
       metis
-      scotch
+      scotch'
     ];
 
   doInstallCheck = true;
