@@ -19302,6 +19302,8 @@ self: super: with self; {
 
   types-mock = callPackage ../development/python-modules/types-mock { };
 
+  types-openpyxl = callPackage ../development/python-modules/types-openpyxl { };
+
   types-pillow = callPackage ../development/python-modules/types-pillow { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
