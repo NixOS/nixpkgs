@@ -3497,6 +3497,8 @@ let
         };
       };
 
+      msjsdiag.vscode-react-native = callPackage ./msjsdiag.vscode-react-native { };
+
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "one-dark-theme";
