@@ -80,7 +80,7 @@ index edb50ed..c0e4c23 100644
                    sources=glob(os.path.join('cpp', '*.cpp')),
                    include_dirs=[os.path.join('c'),
 -                                os.path.join('c', 'qdldl', 'include'),
-+                                "@qdldl@/include",
++                                os.path.join("@qdldl@", "include"),
                                  get_pybind_include(),
                                  get_pybind_include(user=False)],
                    language='c++',
