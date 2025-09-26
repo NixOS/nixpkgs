@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgnome-games-support";
       attrPath = "${pname}_2_0";
       versionPolicy = "odd-unstable";
     };

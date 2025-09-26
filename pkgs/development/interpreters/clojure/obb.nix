@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "babashka";
-    repo = pname;
+    repo = "obb";
     rev = "v${version}";
     sha256 = "1Gxh4IMtytQCuPS+BWOc5AgjEBxa43ebYfDsxLSPeY0=";
   };
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
+    simple = runCommand "obb-test" { } ''
       [ $(${obb}/bin/obb -e '(+ 1 2)') = '3' ]
       touch $out
     '';

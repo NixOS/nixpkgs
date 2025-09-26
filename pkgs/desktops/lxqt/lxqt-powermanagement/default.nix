@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-powermanagement";
     rev = version;
     hash = "sha256-Awk/NlYd8HldmEL0G/LUgj101Y1BTQBrDJfG56Y/aX4=";
   };

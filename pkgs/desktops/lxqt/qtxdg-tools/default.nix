@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "qtxdg-tools";
     rev = version;
     hash = "sha256-hVX1UfPWa1KHMhjazSopAc1/Kk3tnUQzwtG4P7K32eE=";
   };

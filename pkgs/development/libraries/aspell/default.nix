@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     uses-curses =
-      runCommand "${pname}-curses"
+      runCommand "aspell-curses"
         {
           buildInputs = [ glibc ];
         }
