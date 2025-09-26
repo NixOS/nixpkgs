@@ -224,7 +224,7 @@ let
           # -H:+StaticExecutableWithDynamicLibC is only available in Linux
           lib.optionalString (stdenv.hostPlatform.isLinux && !useMusl) ''
             echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
-            $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
+            $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility HelloWorld
             ./helloworld | fgrep 'Hello World'
           ''
         }
@@ -233,7 +233,7 @@ let
           # --static is only available in x86_64 Linux
           lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && useMusl) ''
             echo "Ahead-Of-Time compilation with --static and --libc=musl"
-            $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
+            $out/bin/native-image -march=compatibility --libc=musl --static HelloWorld
             ./helloworld | fgrep 'Hello World'
           ''
         }
