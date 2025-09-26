@@ -7,8 +7,12 @@
   alsa-lib,
   udev,
   shaderc,
-  xorg,
+  libxcb,
   libxkbcommon,
+  libX11,
+  libXi,
+  libXcursor,
+  libXrandr,
 }:
 
 let
@@ -51,7 +55,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     alsa-lib
     udev
-    xorg.libxcb
+    libxcb
     libxkbcommon
   ];
 
@@ -81,10 +85,10 @@ rustPlatform.buildRustPackage {
     # Add required but not explicitly requested libraries
     patchelf --add-rpath '${
       lib.makeLibraryPath [
-        xorg.libX11
-        xorg.libXi
-        xorg.libXcursor
-        xorg.libXrandr
+        libX11
+        libXi
+        libXcursor
+        libXrandr
         vulkan-loader
       ]
     }' "$out/bin/veloren-voxygen"
@@ -99,13 +103,13 @@ rustPlatform.buildRustPackage {
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open world, open source voxel RPG";
     homepage = "https://www.veloren.net";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     mainProgram = "veloren-voxygen";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       rnhmjoj
       tomodachi94
     ];
