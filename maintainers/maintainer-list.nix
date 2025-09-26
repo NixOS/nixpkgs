@@ -6910,6 +6910,12 @@
     githubId = 1544760;
     name = "Dominik Ritter";
   };
+  droid-hk47 = {
+    email = "battle.droid.hk47@gmail.com";
+    github = "Droid-HK47";
+    githubId = 167867789;
+    name = "HK47";
+  };
   drperceptron = {
     github = "drperceptron";
     githubId = 92106371;
