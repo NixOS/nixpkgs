@@ -75,7 +75,7 @@ rec {
 
     # Type
     ```
-    normalizeHash :: { hashTypes :: List String, required :: Bool } -> AttrSet -> AttrSet
+    normalizeHash :: { hashTypes :: List String, required :: Bool, fetcher :: String } -> AttrSet -> AttrSet
     ```
 
     # Arguments
@@ -85,10 +85,14 @@ rec {
 
     required
     : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
+
+    fetcher
+    : the name of the fetcher, possibly with other details such as the URL, for use in error messages and warnings
   */
   normalizeHash =
     {
       hashTypes ? [ "sha256" ],
+      fetcher ? "fetcher",
       required ? true,
     }:
     let
@@ -97,12 +101,15 @@ rec {
         head
         tail
         throwIf
+        warn
+        unique
         ;
       inherit (lib.attrsets)
         attrsToList
         intersectAttrs
         removeAttrs
         optionalAttrs
+        attrNames
         ;
 
       inherit (commonH hashTypes) hashNames hashSet;
@@ -112,6 +119,7 @@ rec {
       args
     else
       let
+        hashTypes' = unique ([ "hash" ] ++ hashTypes);
         # The argument hash, as a {name, value} pair
         h =
           # All hashes passed in arguments (possibly 0 or >1) as a list of {name, value} pairs
@@ -119,9 +127,11 @@ rec {
             hashesAsNVPairs = attrsToList (intersectAttrs hashSet args);
           in
           if hashesAsNVPairs == [ ] then
-            throwIf required "fetcher called without `hash`" null
+            throwIf required "${fetcher} called without a required hash argument (pass one of ${
+              concatMapStringsSep ", " (a: "`${a}`") hashTypes'
+            })" null
           else if tail hashesAsNVPairs != [ ] then
-            throw "fetcher called with mutually-incompatible arguments: ${
+            throw "${fetcher} called with mutually-incompatible arguments: ${
               concatMapStringsSep ", " (a: a.name) hashesAsNVPairs
             }"
           else
@@ -132,7 +142,14 @@ rec {
         outputHashAlgo = if h.name == "hash" then null else h.name;
         outputHash =
           if h.value == "" then
-            fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}")
+            let
+              fakeHash =
+                fakeH.${h.name}
+                  or (throw "${fetcher}: no “fake hash” defined for hash algorithm ${h.name}; pass in a real hash or try one of ${
+                    concatMapStringsSep ", " (a: "`${a}`") (attrNames fakeH)
+                  }");
+            in
+            warn "${fetcher}: found empty ${h.name}, assuming '${fakeHash}'" fakeHash
           else
             h.value;
       });
