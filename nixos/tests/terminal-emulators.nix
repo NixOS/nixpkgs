@@ -36,10 +36,6 @@ let
 
     darktile.pkg = p: p.darktile;
 
-    eterm.pkg = p: p.eterm;
-    eterm.executable = "Eterm";
-    eterm.pinkValue = "#D40055";
-
     germinal.pkg = p: p.germinal;
 
     ghostty.pkg = p: p.ghostty;
