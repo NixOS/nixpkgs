@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "comfyui-workflow-templates";
-  version = "0.1.75";
+  version = "0.1.86";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "workflow_templates";
     rev = "v${version}";
-    hash = "sha256-bRoNTH89DvxBWMOYaWdFfftFBlUXnMm8fkFTyOxxIvc=";
+    hash = "sha256-hMoo52yXcycDOQFtQjY/AFHeDgl7V2nsGILSeJ3hR5c=";
   };
 
   build-system = [ setuptools ];
