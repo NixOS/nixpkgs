@@ -78,7 +78,10 @@ stdenv.mkDerivation rec {
     # Lua 5.1 (Darwin lib name differs from Linux)
     "-DLUA_INCLUDE_DIR=${lua5_1.out}/include"
     "-DLUA_LIBRARIES=${
-      if stdenv.hostPlatform.isDarwin then "${lua5_1.out}/lib/liblua.5.1.dylib" else "${lua5_1.out}/lib/liblua5.1.so"
+      if stdenv.hostPlatform.isDarwin then
+        "${lua5_1.out}/lib/liblua.5.1.dylib"
+      else
+        "${lua5_1.out}/lib/liblua5.1.so"
     }"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
