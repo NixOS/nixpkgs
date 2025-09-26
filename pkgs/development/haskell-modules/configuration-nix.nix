@@ -456,9 +456,21 @@ builtins.intersectAttrs super {
   ];
 
   # Avoid compiling twice by providing executable as a separate output (with small closure size),
+  # add postgresqlTestHook to allow test executiion
   postgres-websockets = lib.pipe super.postgres-websockets [
     enableSeparateBinOutput
-    (overrideCabal { passthru.tests = pkgs.nixosTests.postgres-websockets; })
+    (overrideCabal {
+      passthru.tests = pkgs.nixosTests.postgres-websockets;
+      preCheck = ''
+        export postgresqlEnableTCP=1
+        export PGDATABASE=postgres_ws_test
+      '';
+    })
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
   ];
 
   # Test suite requires a running postgresql server,
@@ -1222,6 +1234,92 @@ builtins.intersectAttrs super {
       pkgs.postgresqlTestHook
     ];
   }) super.haskell-pgmq;
+
+  migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
+    (overrideCabal {
+      preCheck = ''
+        postgresqlTestUserOptions="LOGIN SUPERUSER"
+      '';
+    })
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+  ];
+
+  postgresql-simple-migration = overrideCabal (drv: {
+    preCheck = ''
+      PGUSER=test
+      PGDATABASE=test
+    '';
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ];
+  }) (doJailbreak super.postgresql-simple-migration);
+
+  postgresql-simple = addTestToolDepends [
+    pkgs.postgresql
+    pkgs.postgresqlTestHook
+  ] super.postgresql-simple;
+
+  beam-postgres = lib.pipe super.beam-postgres [
+    # Requires pg_ctl command during tests
+    (addTestToolDepends [ pkgs.postgresql ])
+    (dontCheckIf (!pkgs.postgresql.doInstallCheck || !self.testcontainers.doCheck))
+  ];
+
+  users-postgresql-simple = addTestToolDepends [
+    pkgs.postgresql
+    pkgs.postgresqlTestHook
+  ] super.users-postgresql-simple;
+
+  esqueleto =
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPatch or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          sed -i test/PostgreSQL/Test.hs \
+            -e s^host=localhost^^
+        '';
+        # Match the test suite defaults (or hardcoded values?)
+        preCheck = drv.preCheck or "" + ''
+          PGUSER=esqutest
+          PGDATABASE=esqutest
+        '';
+        testFlags = drv.testFlags or [ ] ++ [
+          # We don't have a MySQL test hook yet
+          "--skip=/Esqueleto/MySQL"
+        ];
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      # https://github.com/NixOS/nixpkgs/issues/198495
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.esqueleto);
+
+  persistent-postgresql =
+    # TODO: move this override to configuration-nix.nix
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPath or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          # NOTE: upstream host variable takes only two values...
+          sed -i test/PgInit.hs \
+            -e s^'host=" <> host <> "'^^
+        '';
+        preCheck = drv.preCheck or "" + ''
+          PGDATABASE=test
+          PGUSER=test
+        '';
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      # https://github.com/NixOS/nixpkgs/issues/198495
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
   # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
   haskell-bee-redis = overrideCabal (drv: {
