@@ -934,7 +934,6 @@ in
   moosefs = runTest ./moosefs.nix;
   mopidy = runTest ./mopidy.nix;
   morph-browser = runTest ./morph-browser.nix;
-  morty = runTest ./morty.nix;
   mosquitto = runTest ./mosquitto.nix;
   movim = import ./web-apps/movim { inherit recurseIntoAttrs runTest; };
   mpd = runTest ./mpd.nix;
