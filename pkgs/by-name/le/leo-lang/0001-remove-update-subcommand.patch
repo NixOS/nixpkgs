@@ -1,0 +1,29 @@
+diff --git a/errors/src/errors/cli/cli_errors.rs b/errors/src/errors/cli/cli_errors.rs
+index 22b51cb3e3..c248de2dcc 100644
+--- a/errors/src/errors/cli/cli_errors.rs
++++ b/errors/src/errors/cli/cli_errors.rs
+@@ -320,4 +320,11 @@ create_messages!(
+         msg: format!("Failed to render table.\nError: {error}"),
+         help: None,
+     }
++
++    @backtraced
++    nix_update_build_error {
++        args: (),
++        msg: format!("Self update is not supported on Nix."),
++        help: Some("Package must be updated via Nix".to_string()),
++    }
+ );
+diff --git a/leo/cli/cli.rs b/leo/cli/cli.rs
+index a2c14b69cc..c7b90ab5a2 100644
+--- a/leo/cli/cli.rs
++++ b/leo/cli/cli.rs
+@@ -151,7 +151,7 @@ pub fn run_with_args(cli: CLI) -> Result<()> {
+         Commands::Run { command } => command.try_execute(context),
+         Commands::Execute { command } => command.try_execute(context),
+         Commands::Remove { command } => command.try_execute(context),
+-        Commands::Update { command } => command.try_execute(context),
++        Commands::Update { .. } => Err(leo_errors::LeoError::CliError(leo_errors::CliError::nix_update_build_error())),
+     }
+ }
+ 
