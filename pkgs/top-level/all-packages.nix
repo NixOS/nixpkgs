@@ -5310,25 +5310,34 @@ with pkgs;
   jre = jdk;
   jre_headless = jdk_headless;
 
-  jre11_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk11;
-    jdkOnBuild = buildPackages.jdk11;
-  };
-  jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk17;
-    jdkOnBuild = buildPackages.jdk17;
-  };
-  jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk21;
-    jdkOnBuild = buildPackages.jdk21;
-  };
-  jre25_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk25;
-    jdkOnBuild = buildPackages.jdk25;
-  };
-  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdkOnBuild = buildPackages.jdk;
-  };
+  inherit
+    ({
+      jre11_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk11;
+        jdkOnBuild = buildPackages.jdk11;
+      };
+      jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk17;
+        jdkOnBuild = buildPackages.jdk17;
+      };
+      jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk21;
+        jdkOnBuild = buildPackages.jdk21;
+      };
+      jre25_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk25;
+        jdkOnBuild = buildPackages.jdk25;
+      };
+      jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdkOnBuild = buildPackages.jdk;
+      };
+    })
+    jre11_minimal
+    jre17_minimal
+    jre21_minimal
+    jre25_minimal
+    jre_minimal
+    ;
 
   openjdk = jdk;
   openjdk_headless = jdk_headless;
