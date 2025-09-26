@@ -48,24 +48,6 @@ let
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
     # nixpkgs uses for the respective system.
     defaultLibc = {
-      i686-linux = {
-        variantSuffix = "";
-        src = {
-          url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb10-linux.tar.xz";
-          sha256 = "e5efce16c654d5e702986258a87dd9531e1722b8051823c8ce1150ce3c5899ae";
-        };
-        exePathForLibraryCheck = "bin/ghc";
-        archSpecificLibraries = [
-          {
-            nixPackage = gmp;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = ncurses6;
-            fileToCheckFor = "libtinfo.so.6";
-          }
-        ];
-      };
       x86_64-linux = {
         variantSuffix = "";
         src = {
