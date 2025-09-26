@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "DirectX-Headers";
     rev = "v${version}";
-    hash = "sha256-A+nOH7/xDcjVTWKduJs2qWZOos/PxJTwKuqMdMsxaZ8=";
+    hash = "sha256-QicnDClO7bceU/aLHjrpUtCBU58PSAW6Ef3RG6qrZw0=";
   };
 
   nativeBuildInputs = [
