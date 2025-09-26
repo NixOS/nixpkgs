@@ -18,8 +18,7 @@
   libmodplug,
   mpg123,
   lua5_1,
-  libGL,
-  libGLU,
+  mesa,
   xorg,
 }:
 
@@ -57,8 +56,7 @@ stdenv.mkDerivation rec {
     lua5_1
   ]
   ++ lib.optionals stdenv.isLinux [
-    libGL
-    libGLU
+    mesa
     xorg.libX11
     xorg.libXext
     xorg.libXrandr
