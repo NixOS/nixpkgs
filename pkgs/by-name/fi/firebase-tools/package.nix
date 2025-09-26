@@ -21,10 +21,6 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-3voUCvmBqi9Lfpol1lMDe4gTmF6TevLMmxBoDS03K0o=";
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
-
   nativeBuildInputs = [
     python3
   ]

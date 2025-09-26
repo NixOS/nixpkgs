@@ -19,10 +19,6 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-XL4D7+hb0zOxAr/aRo2UOg4UOip3oewbffsnkFddmWw=";
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
-
   dontNpmBuild = true;
 
   meta = {

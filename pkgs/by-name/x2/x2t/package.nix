@@ -164,10 +164,6 @@ let
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
-    postPatch = ''
-      cp npm-shrinkwrap.json package-lock.json
-    '';
-
     npmDepsHash = "sha256-Hpf+z3RGqZ1LTdow6xP00hNmWf4xs+KnVBj4NbPW4uM=";
 
     dontNpmBuild = true;
