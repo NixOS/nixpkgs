@@ -431,6 +431,10 @@ in
     "abstractions/python" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/python"
     '';
+    "abstractions/golang" = ''
+      owner r @{PROC}/@{pid}/mountinfo,
+      owner r @{PROC}/@{pid}/cgroup,
+    '';
     "abstractions/qt5" = ''
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/qt5"
     ''
