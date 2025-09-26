@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "BUILD_PTSCOTCH" withPtScotch)
+    # Prefix Scotch version of MeTiS routines
+    (lib.cmakeBool "SCOTCH_METIS_PREFIX" true)
+    # building tests is broken with SCOTCH_METIS_PREFIX enabled in 7.0.9
+    (lib.cmakeBool "ENABLE_TESTS" false)
   ];
 
   nativeBuildInputs = [
@@ -62,6 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
   };
+
+  # SCOTCH provide compatibility with Metis/Parmetis interface.
+  # We install the metis compatible headers to subdirectory to
+  # avoid conflict with metis/parmetis.
+  postFixup = ''
+    mkdir -p $dev/include/scotch
+    mv $dev/include/{*metis,metisf}.h $dev/include/scotch
+  '';
 
   meta = {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
