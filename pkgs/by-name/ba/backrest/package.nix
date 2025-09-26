@@ -2,7 +2,9 @@
   buildGoModule,
   fetchFromGitHub,
   gzip,
+  iana-etc,
   lib,
+  libredirect,
   nodejs,
   pnpm_9,
   restic,
@@ -76,7 +78,10 @@ buildGoModule {
     go generate -skip="npm" ./...
   '';
 
-  nativeCheckInputs = [ util-linux ];
+  nativeCheckInputs = [
+    util-linux
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
   checkFlags =
     let
@@ -96,11 +101,12 @@ buildGoModule {
     # Use restic from nixpkgs, otherwise download fails in sandbox
     export BACKREST_RESTIC_COMMAND="${restic}/bin/restic"
     export HOME=$(pwd)
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
   '';
 
-  # skip tests on darwin due to /etc/protocols failure
-  # `__darwinAllowLocalNetworking = true;` wasn't sufficient
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   postInstall = ''
     wrapProgram $out/bin/backrest \
