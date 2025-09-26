@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-b7x6M2qt0OL5xBwmuOFcIS5MhlwUvA6cO5hOJ2ZiOrI=";
+    hash = "sha256-ioMj8+TuOFX3t9p3oVaywaOQPFBgvNcy7b/2WX/yvXA=";
   };
 
   build-system = [
