@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suru-icon-theme";
-  version = "2024.10.13";
+  version = "2025.05.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/suru-icon-theme";
     rev = finalAttrs.version;
-    hash = "sha256-rbhfcjca0vMBa0tJWGpXMRGGygZH1hmdQv/nLJWPS7s=";
+    hash = "sha256-6MyZTRcfCpiCXzwrwNiBP6J4L4oFbFtoymhke13tLy0=";
   };
 
   strictDeps = true;
