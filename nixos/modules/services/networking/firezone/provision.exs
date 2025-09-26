@@ -343,7 +343,7 @@ defmodule Provision do
           case Map.get(changes, {:account, slug}) do
             {:new, account} ->
               Logger.info("Creating everyone group for new account")
-              {:ok, actor_group} = Actors.create_managed_group(account, %{name: "Everyone", membership_rules: [%{operator: true}]})
+              {:ok, actor_group} = Actors.create_managed_group(account, %{name: "Everyone"})
               UuidMapping.update_entities(slug, "actor_groups", %{"everyone" => actor_group.id})
               {:ok, actor_group}
             {:existing, _account} ->
