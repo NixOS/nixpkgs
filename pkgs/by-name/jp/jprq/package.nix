@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "join public router. quickly.";
+    description = "join public router. quickly";
     homepage = "https://jprq.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmkamron ];
