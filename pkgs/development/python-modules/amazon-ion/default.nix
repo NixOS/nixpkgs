@@ -6,6 +6,7 @@
   fetchFromGitHub,
   jsonconversion,
   pytestCheckHook,
+  pytest_7,
   pythonOlder,
   setuptools,
   six,
@@ -43,7 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cbor2
     docopt
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     tabulate
   ];
 
