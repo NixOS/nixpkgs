@@ -6,7 +6,10 @@
   wrapGAppsHook4,
   gtk4,
   gtk4-layer-shell,
+  makeBinaryWrapper,
   hyprland,
+  gcc,
+  pixman,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     wrapGAppsHook4
+    makeBinaryWrapper
     pkg-config
   ];
 
@@ -31,6 +35,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk4
     gtk4-layer-shell
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/hyprshell \
+      --prefix PATH : ${lib.makeBinPath [ gcc ]} \
+      --prefix CPATH : ${
+        lib.makeIncludePath (
+          hyprland.buildInputs
+          ++ [
+            hyprland
+            pixman
+          ]
+        )
+      }
+  '';
 
   meta = {
     description = "Modern GTK4-based window switcher and application launcher for Hyprland";
