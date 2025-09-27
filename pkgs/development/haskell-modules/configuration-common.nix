@@ -1487,6 +1487,41 @@ with haskellLib;
 
   gargoyle-postgresql-nix = addBuildTool [ pkgs.postgresql ] super.gargoyle-postgresql-nix;
 
+  # Fix build with tasty >= 1.5
+  smtlib-backends-tests = overrideSrc {
+    version = "0.3-unstable-2025-08-13";
+    src = pkgs.fetchFromGitHub {
+      owner = "tweag";
+      repo = "smtlib-backends";
+      rev = "5191edfdf496140751ae969f0b56912563016237";
+      hash = "sha256-EuUh8O2KDJR3C9cW5GdivKt8c1qLeHV9y0MCkoWdJBI=";
+      rootDir = "smtlib-backends-tests";
+    };
+  } super.smtlib-backends-tests;
+
+  # Fix build: z3 is used in tests.
+  smtlib-backends-process = addTestToolDepends [ pkgs.z3 ] super.smtlib-backends-process;
+
+  # Fix build
+  liquid-fixpoint = overrideCabal (drv: {
+    # Fix "/bin/sh: fixpoint: not found" during tests
+    preCheck = (drv.preCheck or "") + ''
+      export PATH="$PWD/dist/build/fixpoint:$PATH"
+    '';
+    testFlags = (drv.testFlags or [ ]) ++ [
+      # Both tests cause  'crash: SMTLIB2 respSat = Error "Logic restricted in
+      # safe mode. Cannot handle assertion with term of kind STORE_ALL in this
+      # configuration. Try --arrays-exp."'
+      "-p"
+      "!/cvc5-pos.maps.fq/ && !/cvc5-pos.maps02.fq/"
+    ];
+    # Both used in tests
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.cvc5
+      pkgs.z3
+    ];
+  }) super.liquid-fixpoint;
+
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
   PortMidi = overrideCabal (drv: {
