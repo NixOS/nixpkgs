@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "llm-openai-plugin";
-  version = "0.5";
+  version = "0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-openai-plugin";
     tag = version;
-    hash = "sha256-xlJS+xAKOo40hZH751yrvIuXZw1HQsB7K2anFoMxthU=";
+    hash = "sha256-PDjrsuZMt4XpYyRg8VRyHZmAu4gD5lLl6aQezhavOvc=";
   };
 
   build-system = [ setuptools ];

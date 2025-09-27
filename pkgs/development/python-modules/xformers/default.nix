@@ -31,21 +31,22 @@
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  version = "0.0.32.post2";
+
+  # version 0.0.32.post2 was confirmed to break CUDA.
+  # Remove this note once the latest published revision "just works".
+  version = "0.0.30";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-B0rvV9EONWQBNhlQ0UTMZ+VtRO/YmMRRlLrVQHGftPE=";
+    hash = "sha256-ozaw9z8qnGpZ28LQNtwmKeVnrn7KDWNeJKtT6g6Q/W0=";
   };
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];

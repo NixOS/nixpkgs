@@ -6,7 +6,7 @@
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
-  jdk23,
+  zulu25,
   dpkg,
   writeShellScript,
   tor,
@@ -26,7 +26,7 @@
 let
   version = "2.1.7";
 
-  jdk = jdk23.override { enableJavaFX = true; };
+  jdk = zulu25.override { enableJavaFX = true; };
 
   bisq-launcher =
     args:
