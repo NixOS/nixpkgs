@@ -14,6 +14,7 @@
   sortedcontainers,
   toml,
   tqdm,
+  wordfreq,
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     sortedcontainers
     toml
     tqdm
+    wordfreq
   ];
 
   optional-dependencies = {
@@ -52,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Test tries to import angrmanagement
+    # Test tries to import angr-management
     "tests/test_angr_gui.py"
   ];
 
