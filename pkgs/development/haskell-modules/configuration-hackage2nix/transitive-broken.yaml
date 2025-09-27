@@ -1384,7 +1384,6 @@ dont-distribute-packages:
  - haskus-web
  - haslo
  - hasloGUI
- - hasmtlib
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
@@ -3183,7 +3182,6 @@ dont-distribute-packages:
  - smith-client
  - Smooth
  - smt
- - smtlib-backends-z3
  - smtlib2-debug
  - smtlib2-pipe
  - smtlib2-quickcheck
