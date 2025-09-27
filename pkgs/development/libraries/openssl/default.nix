@@ -295,6 +295,8 @@ let
           cat ${conf} > $etc/etc/ssl/openssl.cnf
         '';
 
+      allowedImpureDLLs = [ "CRYPT32.dll" ];
+
       postFixup =
         lib.optionalString (!stdenv.hostPlatform.isWindows) ''
           # Check to make sure the main output and the static runtime dependencies
