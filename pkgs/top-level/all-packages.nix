@@ -667,6 +667,10 @@ with pkgs;
     tests = pkgs.tests.fetchzip;
   };
 
+  fetchdmg = callPackage ../build-support/fetchdmg { };
+
+  fetchpkg = callPackage ../build-support/fetchpkg { };
+
   fetchDebianPatch = callPackage ../build-support/fetchdebianpatch { } // {
     tests = pkgs.tests.fetchDebianPatch;
   };

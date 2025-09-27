@@ -120,6 +120,9 @@ in
 
   # Additional packages needed as part of a fetch
   nativeBuildInputs ? [ ],
+
+  # Custom unpack command for fetchers based on fetchurl
+  unpackCmd ? null
 }@args:
 
 let
@@ -270,6 +273,7 @@ stdenvNoCC.mkDerivation (
     inherit curlOpts;
     curlOptsList = lib.escapeShellArgs curlOptsList;
     inherit
+      unpackCmd
       showURLs
       mirrorsFile
       postFetch
