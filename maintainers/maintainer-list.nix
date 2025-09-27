@@ -9866,6 +9866,13 @@
     github = "hacker1024";
     githubId = 20849728;
   };
+  hackeryarn = {
+    name = "Artem Chernyak";
+    email = "artem@smallercircles.net";
+    github = "hackeryarn";
+    githubId = 827709;
+    keys = [ { fingerprint = "1385 FB6A 82C2 4630 023E  9AE2 5F62 AEDC 40AE 8C1C"; } ];
+  };
   hadilq = {
     name = "Hadi Lashkari Ghouchani";
     email = "hadilq.dev@gmail.com";
