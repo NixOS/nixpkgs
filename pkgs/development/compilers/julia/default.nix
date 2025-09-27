@@ -31,12 +31,12 @@ in
   );
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.10.9";
+      version = "1.10.10";
       sha256 = {
-        x86_64-linux = "5a2d2c5224594b683c97e7304cb72407fbcf0be4a0187789cba1a2f73f0cbf09";
-        aarch64-linux = "be222882e3674f960f43b6842f7bbb52a369977e40d5dcd26498793e1cd2dfb6";
-        x86_64-darwin = "f80c93c30a18d8a5dc7f37d0cc94757fd3857651268e4a9e2d42d3b1ea3372f1";
-        aarch64-darwin = "e62e00b22408159cba3d669f2d9e8b60c1d23b5c2d1c22ec25f4957d15ca98ef";
+        x86_64-linux = "6a78a03a71c7ab792e8673dc5cedb918e037f081ceb58b50971dfb7c64c5bf81";
+        aarch64-linux = "a4b157ed68da10471ea86acc05a0ab61c1a6931ee592a9b236be227d72da50ff";
+        x86_64-darwin = "942b0d4accc9704861c7781558829b1d521df21226ad97bd01e1e43b1518d3e6";
+        aarch64-darwin = "52d3f82c50d9402e42298b52edc3d36e0f73e59f81fc8609d22fa094fbad18be";
       };
     }) { }
   );
@@ -62,8 +62,8 @@ in
   );
   julia_110 = wrapJulia (
     callPackage (import ./generic.nix {
-      version = "1.10.9";
-      hash = "sha256-u9by+X76fcXs+w159KTSvw43JeYwJ9Wvn0VyoEfniTM=";
+      version = "1.10.10";
+      hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
         # Revert https://github.com/JuliaLang/julia/pull/55354

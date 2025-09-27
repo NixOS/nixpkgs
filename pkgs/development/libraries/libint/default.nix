@@ -149,7 +149,7 @@ let
 
     src = fetchFromGitHub {
       owner = "evaleev";
-      repo = pname;
+      repo = "libint";
       rev = "v${version}";
       hash = "sha256-oV/RWWfD0Kf2egI40fV8z2atG+4Cs+9+Wvy0euNNjtM=";
     };
@@ -218,7 +218,7 @@ let
 
     installPhase = ''
       mkdir -p $out
-      cp ${pname}-${version}.tgz $out/.
+      cp libint-${version}.tgz $out/.
     '';
 
     enableParallelBuilding = true;
@@ -229,7 +229,7 @@ let
   codeComp = stdenv.mkDerivation {
     inherit pname version;
 
-    src = "${codeGen}/${pname}-${version}.tgz";
+    src = "${codeGen}/libint-${version}.tgz";
 
     nativeBuildInputs = [
       python3

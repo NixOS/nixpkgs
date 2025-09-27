@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gupnp";
       freeze = true;
     };
   };

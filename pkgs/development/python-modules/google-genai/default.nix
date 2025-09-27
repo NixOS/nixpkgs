@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "google-genai";
-  version = "1.35.0";
+  version = "1.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-genai";
     tag = "v${version}";
-    hash = "sha256-KJtnaL2XhTeAXmdIU2O7JkkN3LvOGA/aT3M3Wx9RapM=";
+    hash = "sha256-gJaLEpNKHl6n1MvQDIUW7ynsHYH2eEPGsYso5jSysNg=";
   };
 
   build-system = [

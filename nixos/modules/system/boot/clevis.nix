@@ -22,12 +22,7 @@ in
   options = {
     boot.initrd.clevis.enable = lib.mkEnableOption "Clevis in initrd";
 
-    boot.initrd.clevis.package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.clevis;
-      defaultText = "pkgs.clevis";
-      description = "Clevis package";
-    };
+    boot.initrd.clevis.package = lib.mkPackageOption pkgs "clevis" { };
 
     boot.initrd.clevis.devices = lib.mkOption {
       description = "Encrypted devices that need to be unlocked at boot using Clevis";

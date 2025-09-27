@@ -10,9 +10,6 @@ lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
   excludeDrvArgNames = [
     "overrideModAttrs"
-    # Compatibility layer to the directly-specified CGO_ENABLED.
-    # TODO(@ShamrockLee): Remove after Nixpkgs 25.05 branch-off
-    "CGO_ENABLED"
   ];
   extendDrvArgs =
     finalAttrs:
@@ -226,19 +223,7 @@ lib.extendMkDerivation {
         GO111MODULE = "on";
         GOTOOLCHAIN = "local";
 
-        CGO_ENABLED =
-          args.env.CGO_ENABLED or (
-            if args ? CGO_ENABLED then
-              # Compatibility layer to the CGO_ENABLED attribute not specified as env.CGO_ENABLED
-              # TODO(@ShamrockLee): Remove and convert to
-              # CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED
-              # after the Nixpkgs 25.05 branch-off.
-              lib.warn
-                "${finalAttrs.finalPackage.meta.position}: buildGoModule: specify CGO_ENABLED with env.CGO_ENABLED instead."
-                args.CGO_ENABLED
-            else
-              go.CGO_ENABLED
-          );
+        CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
       };
 
       GOFLAGS =

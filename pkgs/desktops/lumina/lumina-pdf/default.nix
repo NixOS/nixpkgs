@@ -14,7 +14,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
-    repo = pname;
+    repo = "lumina-pdf";
     rev = "v${version}";
     sha256 = "08caj4nashp79fbvj94rabn0iaa1hymifqmb782x03nb2vkn38r6";
   };

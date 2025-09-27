@@ -3,7 +3,7 @@
   lib,
   melpaBuild,
   fetchFromGitHub,
-  # Java Script dependency
+  # JavaScript dependency
   nodejs,
   fetchNpmDeps,
   npmHooks,

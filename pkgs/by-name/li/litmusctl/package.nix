@@ -4,6 +4,7 @@
   installShellFiles,
   kubectl,
   lib,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -27,7 +28,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-7FYOQ89aUFPX+5NCPYKg+YGCXstQ6j9DK4V2mCgklu0=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd litmusctl \
       --bash <($out/bin/litmusctl completion bash) \
       --fish <($out/bin/litmusctl completion fish) \

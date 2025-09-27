@@ -197,12 +197,7 @@ in
 
     package = lib.mkPackageOption pkgs "vaultwarden" { };
 
-    webVaultPackage = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.vaultwarden.webvault;
-      defaultText = lib.literalExpression "pkgs.vaultwarden.webvault";
-      description = "Web vault package to use.";
-    };
+    webVaultPackage = lib.mkPackageOption pkgs [ "vaultwarden" "webvault" ] { };
   };
 
   config = lib.mkIf cfg.enable {

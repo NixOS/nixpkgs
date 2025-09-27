@@ -1,86 +1,71 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pytestCheckHook,
-  stdenv,
-  pythonOlder,
-  setuptools,
+  fetchFromGitHub,
+  replaceVars,
+  cpu_features,
+
+  # build-system
   cmake,
   ninja,
-  wheel,
-  matio,
+  pybind11,
+  scikit-build-core,
+
+  # buildInputs
   eigen,
   gtest,
-  cpu_features,
-  pybind11,
-  python,
+  matio,
+
+  # tests
   numpy,
   scipy,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "piqp";
-  version = "0.6.0";
+  version = "0.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PREDICT-EPFL";
     repo = "piqp";
     tag = "v${version}";
-    hash = "sha256-hVUeDV2GrBAOIgaWhg+RV+8CFRIm8Kv6/wCs5bXs2aY=";
+    hash = "sha256-W9t7d+wV5WcphL54e6tpnKxiWFay9UrFmIRKsGk2yMM=";
   };
 
-  postPatch =
-    let
-      # E.g. 3.11.2 -> "311"
-      pythonVersionMajorMinor =
-        with lib.versions;
-        "${major python.pythonVersion}${minor python.pythonVersion}";
-
-      # E.g. "linux-aarch64"
-      platform =
-        with stdenv.hostPlatform;
-        (lib.optionalString (!isDarwin) "${parsed.kernel.name}-${parsed.cpu.name}")
-        + (lib.optionalString isDarwin "macosx-${darwinMinVersion}-${darwinArch}");
-    in
-    ''
-      build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}/${pname}.${pname}"
-      mkdir -p $build/_deps
-      ln -s ${cpu_features.src} $build/_deps/cpu_features-src
-    '';
-
-  patches = [ ./use-nix-packages.patch ];
+  patches = [
+    (replaceVars ./use-nix-packages.patch {
+      cpu_features_src = cpu_features.src;
+    })
+  ];
 
   build-system = [
-    setuptools
     cmake
     ninja
-    wheel
+    pybind11
+    scikit-build-core
   ];
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
-    matio
     eigen
     gtest
-    pybind11
+    matio
   ];
-
-  dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "piqp" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     numpy
+    pytestCheckHook
     scipy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proximal Interior Point Quadratic Programming solver";
     homepage = "https://github.com/PREDICT-EPFL/piqp";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ renesat ];
+    changelog = "https://github.com/PREDICT-EPFL/piqp/releases/tag/v${version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ renesat ];
   };
 }

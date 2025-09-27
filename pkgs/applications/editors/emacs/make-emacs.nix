@@ -357,6 +357,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withNS [
     librsvg
+  ]
+  ++ lib.optionals (variant == "macport") [
+    librsvg
   ];
 
   # Emacs needs to find movemail at run time, see info (emacs) Movemail

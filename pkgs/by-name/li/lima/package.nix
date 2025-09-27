@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
+  callPackage,
   installShellFiles,
   qemu,
   darwin,
@@ -22,16 +22,8 @@
 
 buildGoModule (finalAttrs: {
   pname = "lima";
-  version = "1.2.1";
 
-  src = fetchFromGitHub {
-    owner = "lima-vm";
-    repo = "lima";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-90fFsS5jidaovE2iqXfe4T2SgZJz6ScOwPPYxCsCk/k=";
-  };
-
-  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
+  inherit (callPackage ./source.nix { }) version src vendorHash;
 
   nativeBuildInputs = [
     makeWrapper
@@ -159,7 +151,12 @@ buildGoModule (finalAttrs: {
         };
       };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--override-filename"
+        ./source.nix
+      ];
+    };
   };
 
   meta = {

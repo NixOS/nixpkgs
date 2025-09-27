@@ -661,6 +661,12 @@ If you have any problems with formatting, please ping the [formatting team](http
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
+- Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
+  The purpose of this is:
+   - to avoid churn as contributors with different style preferences undo each other's changes,
+   - to ensure that style rules are written down and consistent (and can thus be followed when authoring changes, reducing review cycles),
+   - and to encourage reviews to focus on more impactful considerations.
+
 # Practical contributing advice
 
 To contribute effectively and efficiently, you need to be aware of how the process generally works.

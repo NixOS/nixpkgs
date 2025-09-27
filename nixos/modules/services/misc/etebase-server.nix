@@ -51,12 +51,7 @@ in
         '';
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.etebase-server;
-        defaultText = lib.literalExpression "pkgs.python3.pkgs.etebase-server";
-        description = "etebase-server package to use.";
-      };
+      package = lib.mkPackageOption pkgs "etebase-server" { };
 
       dataDir = lib.mkOption {
         type = lib.types.str;

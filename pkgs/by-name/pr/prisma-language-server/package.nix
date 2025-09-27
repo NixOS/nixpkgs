@@ -2,8 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  pkg-config,
-  libsecret,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -18,15 +16,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/language-server";
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsecret ];
-
   npmDepsHash = "sha256-UAGz/qCYf+jsgCWqvR52mW6Ze3WWP9EHuE4k9wCbnH0=";
-
-  npmPackFlags = [ "--ignore-scripts" ];
-
-  NODE_OPTIONS = "--openssl-legacy-provider";
 
   meta = {
     description = "Language server for Prisma";

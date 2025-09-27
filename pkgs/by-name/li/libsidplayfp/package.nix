@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   makeFontsConf,
-  nix-update-script,
+  gitUpdater,
   testers,
   autoreconfHook,
   docSupport ? true,
@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.15.0";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-rK7Il8WE4AJbn7GKn21fXr1o+DDdyOjfJ0saeqcZ5Pg=";
+    hash = "sha256-wnbQy0PHHpkgNm3SC7GZyxSAUYd5eexVY9Dg1oiCjRo=";
   };
 
   outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
@@ -85,7 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = {

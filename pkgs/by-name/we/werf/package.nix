@@ -83,7 +83,7 @@ buildGoModule (finalAttrs: {
 
   versionCheckProgramArg = "version";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
       installShellCompletion \
         --cmd werf \

@@ -134,6 +134,7 @@ let
       INCUS_LXC_HOOK = "${cfg.lxcPackage}/share/lxc/hooks";
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
+      INCUS_AGENT_PATH = "${cfg.package}/share/agent";
       PATH = lib.mkForce serverBinPath;
     }
     (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })

@@ -88,7 +88,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       therealansh
       _0x4A6F
       abbe
-      pyrox0
       matthiasbeyer
       ryan4yin
     ];

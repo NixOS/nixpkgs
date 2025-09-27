@@ -41,10 +41,14 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd easytier \
+    installShellCompletion --cmd easytier-cli \
       --bash <($out/bin/easytier-cli gen-autocomplete bash) \
       --fish <($out/bin/easytier-cli gen-autocomplete fish) \
       --zsh <($out/bin/easytier-cli gen-autocomplete zsh)
+    installShellCompletion --cmd easytier-core \
+      --bash <($out/bin/easytier-core --gen-autocomplete bash) \
+      --fish <($out/bin/easytier-core --gen-autocomplete fish) \
+      --zsh <($out/bin/easytier-core --gen-autocomplete zsh)
   '';
 
   doCheck = false; # tests failed due to heavy rely on network

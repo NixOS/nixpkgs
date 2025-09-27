@@ -97,7 +97,6 @@
   # compiles systemd-boot, assumes EFI is available.
   withBootloader ?
     withEfi
-    && !stdenv.hostPlatform.isMusl
     # "Unknown 64-bit data model"
     && !stdenv.hostPlatform.isRiscV32,
   # adds bzip2, lz4, xz and zstd
@@ -296,6 +295,10 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/systemd/systemd/commit/34fcd3638817060c79e1186b370e46d9b3a7409f.patch";
         hash = "sha256-Uaewo3jPrZGJttlLcqO6cCj1w3IGZmvbur4+TBdIPxc=";
         excludes = [ "src/udev/udevd.c" ];
+      })
+      (fetchpatch {
+        url = "https://gitlab.postmarketos.org/postmarketOS/systemd/-/commit/5760be33bd26d7e7c66a7294c5f6fd6c7044683f.patch";
+        hash = "sha256-Om+OhGyZJfZNpbtMInm3vGagLbbtOY71fDMZXj6pbPY=";
       })
     ]
   );

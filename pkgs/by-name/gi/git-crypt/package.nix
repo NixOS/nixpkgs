@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-crypt";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "AGWA";
     repo = "git-crypt";
     rev = version;
-    sha256 = "sha256-GcGCX6hoKL+sNLAeGEzZpaM+cdFjcNlwYExfOFEPi0I=";
+    sha256 = "sha256-d5nMDFQkJY+obYkhvr8yT9mjlGEBWFLN5xGizJ9kwHw=";
   };
 
   strictDeps = true;
