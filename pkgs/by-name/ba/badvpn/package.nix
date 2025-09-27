@@ -32,12 +32,11 @@ stdenv.mkDerivation rec {
     nspr
   ];
 
+  cmakeBuildType = if debug then "Debug" else "Release";
+
   preConfigure = ''
     find . -name '*.sh' -exec sed -e 's@#!/bin/sh@${stdenv.shell}@' -i '{}' ';'
     find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
-    cmakeFlagsArray=("-DCMAKE_BUILD_TYPE=" "-DCMAKE_C_FLAGS=-O3 ${
-      lib.optionalString (!debug) "-DNDEBUG"
-    }");
   '';
 
   meta = with lib; {
