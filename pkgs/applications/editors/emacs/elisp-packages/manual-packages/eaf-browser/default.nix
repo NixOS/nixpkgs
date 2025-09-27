@@ -5,7 +5,7 @@
   fetchFromGitHub,
   # Dependencies
   aria2,
-  # Java Script dependency
+  # JavaScript dependency
   nodejs,
   fetchNpmDeps,
   npmHooks,
