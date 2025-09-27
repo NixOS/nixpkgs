@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  python,
+  python3,
   pygobject3,
   pyatspi,
   pycairo,
@@ -35,38 +35,27 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
     gobject-introspection
-    glib
-    gtk3
+    wrapGAppsHook
     setuptools
   ];
 
   buildInputs = [
-    gobject-introspection
-    glib
     gtk3
+    glib
   ];
 
-  propagatedBuildInputs = [
-    gobject-introspection
+  propagatedBuildInputs = with python3.pkgs; [
     pygobject3
   ];
 
-  dependencies = [
-    at-spi2-core
-    pygobject3
-    pyatspi
-    pycairo
-  ];
+  strictDeps = false; # broken with gobject-introspection setup hook https://github.com/NixOS/nixpkgs/issues/56943
+  doCheck = false; # why?
+  dontWrapGApps = true; # prevent double wrapping
 
-  # Prevent double wrapping.
-  dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
-
-  doCheck = false;
-
-  strictDeps = false;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}") # prevent double wrapping
+  '';
 
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
