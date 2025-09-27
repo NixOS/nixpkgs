@@ -40,7 +40,10 @@ let
       homepage = "https://github.com/kalbasit/ncps";
       license = lib.licenses.mit;
       mainProgram = "ncps";
-      maintainers = [ lib.maintainers.kalbasit ];
+      maintainers = with lib.maintainers; [
+        kalbasit
+        aciceri
+      ];
     };
   };
 in
