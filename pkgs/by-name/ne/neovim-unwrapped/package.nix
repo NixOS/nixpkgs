@@ -24,6 +24,7 @@
   nodejs ? null,
   fish ? null,
   python3 ? null,
+  wasmtime_29,
 }:
 stdenv.mkDerivation (
   finalAttrs:
@@ -159,6 +160,7 @@ stdenv.mkDerivation (
       cmake
       gettext
       pkg-config
+      wasmtime_29
     ];
 
     # extra programs test via `make functionaltest`
@@ -177,8 +179,12 @@ stdenv.mkDerivation (
         pyEnv # for src/clint.py
       ];
 
+    # loosen the version requirement for wasmtime to use the nixpkgs version
+    postPatch = ''
+      sed -i -E 's/find_package\(Wasmtime [0-9.]+ EXACT REQUIRED\)/find_package\(Wasmtime REQUIRED\)/' ./src/nvim/CMakeLists.txt
+    ''
     # nvim --version output retains compilation flags and references to build tools
-    postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       sed -i runtime/CMakeLists.txt \
         -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
       sed -i src/nvim/po/CMakeLists.txt \
@@ -194,6 +200,7 @@ stdenv.mkDerivation (
       # third-party/CMakeLists.txt is not read at all.
       (lib.cmakeBool "USE_BUNDLED" false)
       (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
+      (lib.cmakeBool "ENABLE_WASMTIME" true)
     ]
     ++ (
       if lua.pkgs.isLuaJIT then
