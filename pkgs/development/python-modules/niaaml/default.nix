@@ -31,6 +31,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "numpy"
     "pandas"
+    "typer"
   ];
 
   nativeBuildInputs = [
