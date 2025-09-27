@@ -1,7 +1,7 @@
+bcachefs-tools:
 {
   lib,
   stdenv,
-  bcachefs-tools,
   kernelModuleMakeFlags,
   kernel,
 }:

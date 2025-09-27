@@ -114,6 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    # See NOTE in linux-kernels.nix
+    kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
+
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
