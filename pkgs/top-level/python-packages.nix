@@ -2841,6 +2841,10 @@ self: super: with self; {
     callPackage ../development/python-modules/colcon-ros-domain-id-coordinator
       { };
 
+  colcon-top-level-workspace =
+    callPackage ../development/python-modules/colcon-top-level-workspace
+      { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
