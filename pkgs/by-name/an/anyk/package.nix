@@ -135,6 +135,8 @@ stdenv.mkDerivation {
     ln -s $out/opt/abevjava.png $out/share/icons/anyk.png
   '';
 
+  passthru.updateScript = ./update.py;
+
   meta = with lib; {
     description = "Tool for filling forms for the Hungarian government";
     longDescription = ''
