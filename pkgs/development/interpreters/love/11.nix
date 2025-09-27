@@ -130,5 +130,10 @@ stdenv.mkDerivation rec {
     homepage = "https://love2d.org/";
     license = licenses.zlib;
     platforms = platforms.unix;
+    mainProgram = "love";
+    maintainers = with maintainers; [
+      raskin
+      dannydannydanny
+    ];
   };
 }
