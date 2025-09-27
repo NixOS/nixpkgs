@@ -112,14 +112,14 @@ in
 
         environment.HOME = if baseq3InStore then home else cfg.baseq3;
 
-        serviceConfig = with lib; {
+        serviceConfig = {
           Restart = "always";
           DynamicUser = true;
           WorkingDirectory = home;
 
           # It is possible to alter configuration files via RCON. To ensure reproducibility we have to prevent this
           ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
-          ExecStartPre = optionalString (
+          ExecStartPre = lib.optionalString (
             !baseq3InStore
           ) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 

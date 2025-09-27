@@ -4,17 +4,18 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) types;
+
   cfg = config.services.anki-sync-server;
   name = "anki-sync-server";
-  specEscape = replaceStrings [ "%" ] [ "%%" ];
-  usersWithIndexes = lists.imap1 (i: user: {
+  specEscape = lib.replaceStrings [ "%" ] [ "%%" ];
+  usersWithIndexes = lib.lists.imap1 (i: user: {
     i = i;
     user = user;
   }) cfg.users;
-  usersWithIndexesFile = filter (x: x.user.passwordFile != null) usersWithIndexes;
-  usersWithIndexesNoFile = filter (
+  usersWithIndexesFile = lib.filter (x: x.user.passwordFile != null) usersWithIndexes;
+  usersWithIndexesNoFile = lib.filter (
     x: x.user.passwordFile == null && x.user.password != null
   ) usersWithIndexes;
   anki-sync-server-run = pkgs.writeShellScript "anki-sync-server-run" ''
@@ -23,26 +24,26 @@ let
     # a file system exposed to the service. Here we read the passwords from
     # the credential files to pass them as environment variables to the Anki
     # sync server.
-    ${concatMapStringsSep "\n" (x: ''
-      read -r pass < "''${CREDENTIALS_DIRECTORY}/"${escapeShellArg x.user.username}
-      export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:"$pass"
+    ${lib.concatMapStringsSep "\n" (x: ''
+      read -r pass < "''${CREDENTIALS_DIRECTORY}/"${lib.escapeShellArg x.user.username}
+      export SYNC_USER${toString x.i}=${lib.escapeShellArg x.user.username}:"$pass"
     '') usersWithIndexesFile}
     # For users where services.anki-sync-server.users.password isn't set,
     # export passwords in environment variables in plaintext.
-    ${concatMapStringsSep "\n" (
+    ${lib.concatMapStringsSep "\n" (
       x:
-      ''export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:${escapeShellArg x.user.password}''
+      ''export SYNC_USER${toString x.i}=${lib.escapeShellArg x.user.username}:${lib.escapeShellArg x.user.password}''
     ) usersWithIndexesNoFile}
     exec ${lib.getExe cfg.package}
   '';
 in
 {
   options.services.anki-sync-server = {
-    enable = mkEnableOption "anki-sync-server";
+    enable = lib.mkEnableOption "anki-sync-server";
 
-    package = mkPackageOption pkgs "anki-sync-server" { };
+    package = lib.mkPackageOption pkgs "anki-sync-server" { };
 
-    address = mkOption {
+    address = lib.mkOption {
       type = types.str;
       default = "::1";
       description = ''
@@ -51,35 +52,34 @@ in
       '';
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       type = types.port;
       default = 27701;
       description = "Port number anki-sync-server listens to.";
     };
 
-    baseDirectory = mkOption {
+    baseDirectory = lib.mkOption {
       type = types.str;
       default = "%S/%N";
       description = "Base directory where user(s) synchronized data will be stored.";
     };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       default = false;
       type = types.bool;
       description = "Whether to open the firewall for the specified port.";
     };
 
-    users = mkOption {
-      type =
-        with types;
-        listOf (submodule {
+    users = lib.mkOption {
+      type = types.listOf (
+        types.submodule {
           options = {
-            username = mkOption {
-              type = str;
+            username = lib.mkOption {
+              type = types.str;
               description = "User name accepted by anki-sync-server.";
             };
-            password = mkOption {
-              type = nullOr str;
+            password = lib.mkOption {
+              type = types.nullOr types.str;
               default = null;
               description = ''
                 Password accepted by anki-sync-server for the associated username.
@@ -89,8 +89,8 @@ in
                 a more secure option.
               '';
             };
-            passwordFile = mkOption {
-              type = nullOr path;
+            passwordFile = lib.mkOption {
+              type = types.nullOr types.path;
               default = null;
               description = ''
                 File containing the password accepted by anki-sync-server for
@@ -99,19 +99,20 @@ in
               '';
             };
           };
-        });
+        }
+      );
       description = "List of user-password pairs to provide to the sync server.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (builtins.length usersWithIndexesFile) + (builtins.length usersWithIndexesNoFile) > 0;
         message = "At least one username-password pair must be set.";
       }
     ];
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.services.anki-sync-server = {
       description = "anki-sync-server: Anki sync server built into Anki";
@@ -138,7 +139,7 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ telotortium ];
+    maintainers = with lib.maintainers; [ telotortium ];
     doc = ./anki-sync-server.md;
   };
 }
