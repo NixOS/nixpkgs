@@ -152,6 +152,7 @@ python3Packages.buildPythonApplication {
       rarfile
       responses
       requests-mock
+      pillow
     ]
     ++ [
       writableTmpDirAsHomeHook
