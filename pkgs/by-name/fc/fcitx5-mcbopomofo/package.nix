@@ -13,14 +13,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-mcbopomofo";
   version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "openvanilla";
     repo = "fcitx5-mcbopomofo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2TWJsEScC5rMz5dowJOQHA2Mjzsq+d9n2lKXdEWiELU=";
   };
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openvanilla/fcitx5-mcbopomofo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shiphan ];
+    mainProgram = "fcitx5-mcbopomofo";
     platforms = lib.platforms.linux;
   };
-}
+})
