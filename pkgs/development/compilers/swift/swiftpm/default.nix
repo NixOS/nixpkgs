@@ -23,7 +23,7 @@
 
 let
 
-  inherit (swift) swiftOs swiftModuleSubdir swiftStaticModuleSubdir;
+  inherit (swift) swiftOs swiftArch swiftModuleSubdir swiftStaticModuleSubdir;
   sharedLibraryExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
   sources = callPackage ../sources.nix { };
@@ -341,7 +341,15 @@ let
     name = "swift-asn1";
     src = generated.sources.swift-asn1;
 
-    postInstall = cmakeGlue.SwiftASN1;
+    postInstall =
+      cmakeGlue.SwiftASN1
+      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+        # SwiftASN1 uses the full target triple as the name of the swiftmodule
+        # (https://github.com/apple/swift-asn1/pull/103)
+        mkdir -p $out/lib/swift/${swiftOs}/${swiftArch}/
+        mv $out/lib/swift/${swiftOs}/SwiftASN1.swiftmodule/*.swiftmodule $out/lib/swift/${swiftOs}/${swiftArch}/SwiftASN1.swiftmodule
+        mv $out/lib/swift/${swiftOs}/SwiftASN1.swiftmodule/*.swiftdoc $out/lib/swift/${swiftOs}/${swiftArch}/SwiftASN1.swiftdoc
+      '';
   };
 
   swift-certificates = mkBootstrapDerivation {
