@@ -1091,12 +1091,6 @@ with pkgs;
 
   makehuman = libsForQt5.callPackage ../applications/misc/makehuman { };
 
-  mcaselector = callPackage ../tools/games/minecraft/mcaselector {
-    jre = jre.override {
-      enableJavaFX = true;
-    };
-  };
-
   mkosi = callPackage ../tools/virtualization/mkosi { };
 
   mkosi-full = mkosi.override { withQemu = true; };
@@ -1125,10 +1119,6 @@ with pkgs;
   sdkmanager = with python3Packages; toPythonApplication sdkmanager;
 
   shaperglot = with python3Packages; toPythonApplication shaperglot;
-
-  slipstream = callPackage ../tools/games/slipstream {
-    jdk = jdk8;
-  };
 
   supermin = callPackage ../tools/virtualization/supermin {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
@@ -1694,14 +1684,6 @@ with pkgs;
   go2tv-lite = go2tv.override { withGui = false; };
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
-
-  gremlin-console = callPackage ../applications/misc/gremlin-console {
-    openjdk = openjdk11;
-  };
-
-  gremlin-server = callPackage ../applications/misc/gremlin-server {
-    openjdk = openjdk11;
-  };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
@@ -3228,11 +3210,6 @@ with pkgs;
 
   jello = with python3Packages; toPythonApplication jello;
 
-  jing = res.jing-trang;
-  jing-trang = callPackage ../tools/text/xml/jing-trang {
-    jdk_headless = jdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
   jl = haskellPackages.jl;
 
   joplin = nodePackages.joplin;
@@ -3279,10 +3256,6 @@ with pkgs;
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
-
-  keystore-explorer = callPackage ../applications/misc/keystore-explorer {
-    jdk = jdk11;
-  };
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
@@ -3722,10 +3695,6 @@ with pkgs;
 
   onlykey = callPackage ../tools/security/onlykey { };
 
-  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli {
-    jre = pkgs.jre_headless;
-  };
-
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
   open-interpreter = with python3Packages; toPythonApplication open-interpreter;
@@ -3744,8 +3713,6 @@ with pkgs;
     privsepUser = "ntp";
     privsepPath = "/var/empty";
   };
-
-  openrefine = callPackage ../applications/science/misc/openrefine { jdk = jdk17; };
 
   openrgb-with-all-plugins = openrgb.withPlugins [
     openrgb-plugin-effects
@@ -4138,10 +4105,6 @@ with pkgs;
 
   snapcast = callPackage ../applications/audio/snapcast {
     pulseaudioSupport = config.pulseaudio or stdenv.hostPlatform.isLinux;
-  };
-
-  soapui = callPackage ../applications/networking/soapui {
-    jdk = jdk11;
   };
 
   specup = haskellPackages.specup.bin;
@@ -4582,16 +4545,8 @@ with pkgs;
   adaptivecppWithCuda = adaptivecpp.override { cudaSupport = true; };
   adaptivecppWithRocm = adaptivecpp.override { rocmSupport = true; };
 
-  adoptopenjdk-icedtea-web = callPackage ../development/compilers/adoptopenjdk-icedtea-web {
-    jdk = jdk8;
-  };
-
   armips = callPackage ../by-name/ar/armips/package.nix {
     stdenv = clangStdenv;
-  };
-
-  ballerina = callPackage ../development/compilers/ballerina {
-    openjdk = openjdk17_headless;
   };
 
   binaryen = callPackage ../development/compilers/binaryen {
@@ -5608,9 +5563,6 @@ with pkgs;
     coursier = coursier.override { jre = jdk8; };
   };
 
-  scalafix = callPackage ../development/tools/scalafix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
   # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage ../development/compilers/smlnj { };
@@ -5856,10 +5808,7 @@ with pkgs;
     xeus-cling
     ;
 
-  clojure = callPackage ../development/interpreters/clojure {
-    # set this to an LTS version of java
-    jdk = jdk21;
-  };
+  clojure = callPackage ../development/interpreters/clojure { };
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
@@ -5949,11 +5898,6 @@ with pkgs;
   janet = callPackage ../development/interpreters/janet { };
 
   jpm = callPackage ../development/interpreters/janet/jpm.nix { };
-
-  davmail = callPackage ../applications/networking/davmail {
-    jre = jdk11.override { enableJavaFX = true; };
-    zulu = zulu11.override { enableJavaFX = true; };
-  };
 
   lambda-lisp-blc = lambda-lisp;
 
@@ -6835,13 +6779,6 @@ with pkgs;
     inochi-session
     ;
 
-  javacc = callPackage ../development/tools/parsing/javacc {
-    # Upstream doesn't support anything newer than Java 8.
-    # https://github.com/javacc/javacc/blob/c708628423b71ce8bc3b70143fa5b6a2b7362b3a/README.md#building-javacc-from-source
-    jdk = jdk8;
-    jre = jre8;
-  };
-
   jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
 
   kustomize = callPackage ../development/tools/kustomize { };
@@ -7138,10 +7075,6 @@ with pkgs;
 
   gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
 
-  jprofiler = callPackage ../development/tools/java/jprofiler {
-    jdk = jdk11;
-  };
-
   valgrind-light = (valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
     meta = oldAttrs.meta // {
       description = "${oldAttrs.meta.description} (without GDB)";
@@ -7176,10 +7109,6 @@ with pkgs;
   xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
 
   xxdiff-tip = xxdiff;
-
-  yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
-    jre = jdk21;
-  };
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
@@ -8161,10 +8090,6 @@ with pkgs;
   malcontent = callPackage ../development/libraries/malcontent { };
 
   malcontent-ui = callPackage ../development/libraries/malcontent/ui.nix { };
-
-  libmatthew_java = callPackage ../development/libraries/java/libmatthew-java {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
 
   inherit
     ({
@@ -9171,10 +9096,6 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
-  javaCup = callPackage ../development/libraries/java/cup {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
   saxonb = saxonb_8_8;
   saxon-he = saxon_12-he;
 
@@ -9247,11 +9168,7 @@ with pkgs;
 
   # Armed Bear Common Lisp
   abcl = wrapLisp {
-    pkg = callPackage ../development/compilers/abcl {
-      # https://armedbear.common-lisp.dev/ lists OpenJDK 17 as the highest
-      # supported JDK.
-      jdk = openjdk17;
-    };
+    pkg = callPackage ../development/compilers/abcl { };
     faslExt = "abcl";
   };
 
@@ -9571,10 +9488,6 @@ with pkgs;
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
-  envoy = callPackage ../by-name/en/envoy/package.nix {
-    jdk = openjdk11_headless;
-  };
-
   etcd = etcd_3_5;
   etcd_3_4 = callPackage ../servers/etcd/3_4 { };
   etcd_3_5 = callPackage ../servers/etcd/3_5 { };
@@ -9582,11 +9495,6 @@ with pkgs;
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [ ];
     withExtraLuaPackages = _: [ ];
-  };
-
-  elasticmq-server-bin = callPackage ../servers/elasticmq-server-bin {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   felix = callPackage ../servers/felix { };
@@ -11347,13 +11255,6 @@ with pkgs;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
-  greenfoot = callPackage ../applications/editors/greenfoot {
-    openjdk = openjdk21.override {
-      enableJavaFX = true;
-      openjfx_jdk = openjfx21.override { withWebKit = true; };
-    };
-  };
-
   input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
@@ -11392,12 +11293,6 @@ with pkgs;
   fritzing = qt6Packages.callPackage ../applications/science/electronics/fritzing { };
 
   fvwm = fvwm2;
-
-  ganttproject-bin = callPackage ../applications/misc/ganttproject-bin {
-    jre = openjdk17.override {
-      enableJavaFX = true;
-    };
-  };
 
   gaucheBootstrap = callPackage ../development/interpreters/gauche/boot.nix { };
 
@@ -11657,10 +11552,6 @@ with pkgs;
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
-
-  pattypan = callPackage ../applications/misc/pattypan {
-    jdk = jdk.override { enableJavaFX = true; };
-  };
 
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
@@ -11938,13 +11829,6 @@ with pkgs;
 
   jabcode-reader = callPackage ../development/libraries/jabcode {
     subproject = "reader";
-  };
-
-  jabref = callPackage ../applications/office/jabref {
-    jdk = jdk21.override {
-      enableJavaFX = true;
-      openjfx_jdk = openjfx23;
-    };
   };
 
   jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
@@ -12553,10 +12437,6 @@ with pkgs;
 
   qiv = callPackage ../applications/graphics/qiv {
     imlib2 = imlib2Full;
-  };
-
-  processing = callPackage ../applications/graphics/processing {
-    jdk = jdk17;
   };
 
   # perhaps there are better apps for this task? It's how I had configured my previous system.
@@ -14270,18 +14150,6 @@ with pkgs;
 
   raxml-mpi = raxml.override { useMpi = true; };
 
-  trimmomatic = callPackage ../applications/science/biology/trimmomatic {
-    jdk = pkgs.jdk21_headless;
-    # Reduce closure size
-    jre = pkgs.jre_minimal.override {
-      modules = [
-        "java.base"
-        "java.logging"
-      ];
-      jdk = pkgs.jdk21_headless;
-    };
-  };
-
   ### SCIENCE/MACHINE LEARNING
 
   streamlit = with python3Packages; toPythonApplication streamlit;
@@ -14998,10 +14866,6 @@ with pkgs;
       inherit (python3Packages) supervisor;
     }
   );
-
-  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService {
-    jdk = jdk8;
-  };
 
   lice = python3Packages.callPackage ../tools/misc/lice { };
 
