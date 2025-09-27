@@ -6,7 +6,7 @@
   ...
 }:
 {
-  meta = with lib; {
+  meta = {
     maintainers = with lib.maintainers; [ ];
   };
 
