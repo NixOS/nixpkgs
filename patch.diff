@@ -1,0 +1,73 @@
+diff --git i/pkgs/by-name/li/librevna/package.nix w/pkgs/by-name/li/librevna/package.nix
+index e6d607e36da7..1e830b003118 100644
+--- i/pkgs/by-name/li/librevna/package.nix
++++ w/pkgs/by-name/li/librevna/package.nix
+@@ -2,6 +2,8 @@
+   stdenv,
+   lib,
+   fetchFromGitHub,
++  apple-sdk_14,
++  pkg-config,
+   qt6,
+   libusb1,
+   udev,
+@@ -21,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
+   sourceRoot = "${finalAttrs.src.name}/Software/PC_Application/LibreVNA-GUI";
+
+   nativeBuildInputs = [
++    pkg-config
+     qt6.qmake
+     qt6.wrapQtAppsHook
+   ];
+@@ -28,17 +31,32 @@ stdenv.mkDerivation (finalAttrs: {
+   buildInputs = [
+     qt6.qtbase
+     libusb1
+-    udev
+-  ];
++  ]
++  ++ lib.optional stdenv.hostPlatform.isLinux udev
++  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
+
+-  installPhase = ''
+-    runHook preInstall
+-    install -Dm755 LibreVNA-GUI -t $out/bin
+-    install -Dm644 ../51-vna.rules -t $out/etc/udev/rules.d
+-    install -Dm644 resources/librevna.desktop -t $out/share/applications
+-    install -Dm644 resources/librevna.png -t $out/share/pixmaps
+-    runHook postInstall
+-  '';
++  installPhase =
++    if stdenv.hostPlatform.isDarwin then
++      ''
++        runHook preInstall
++
++        mkdir -p $out/{Applications,bin}
++        mv LibreVNA-GUI.app $out/Applications
++        ln -s $out/Applications/LibreVNA-GUI.app/Contents/MacOS/LibreVNA-GUI $out/bin/LibreVNA-GUI
++
++        runHook postInstall
++      ''
++    else
++      ''
++        runHook preInstall
++
++        install -Dm755 LibreVNA-GUI -t $out/bin
++        install -Dm644 ../51-vna.rules -t $out/etc/udev/rules.d
++        install -Dm644 resources/librevna.desktop -t $out/share/applications
++        install -Dm644 resources/librevna.png -t $out/share/pixmaps
++
++        runHook postInstall
++      '';
+
+   meta = {
+     changelog = "https://github.com/jankae/LibreVNA/releases/tag/v${finalAttrs.version}";
+@@ -46,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
+     description = "100kHz to 6GHz 2 port USB based VNA";
+     mainProgram = "LibreVNA-GUI";
+     license = lib.licenses.gpl3;
+-    platforms = lib.platforms.linux;
++    platforms = lib.platforms.unix;
+
+     maintainers = with lib.maintainers; [
+       dunxen
