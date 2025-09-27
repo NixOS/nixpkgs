@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "typr";
-  version = "1.0.1.21";
+  version = "1.0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DriftingOtter";
     repo = "Typr";
     tag = version;
-    hash = "sha256-49e5tnX/vea3xLJP62Sj2gCdjbfsulIU48X/AR/3IBI=";
+    hash = "sha256-p9+Xk5iUr4QjSXtdgYboRqZjPOmpKje6z6DEdOLDu3U=";
   };
 
   build-system = with python3Packages; [ setuptools ];
