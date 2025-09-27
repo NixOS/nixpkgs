@@ -61,6 +61,7 @@ let
     genList
     getExe
     getExe'
+    getFinalPassthruWith
     getLicenseFromSpdxIdOr
     groupBy
     groupBy'
@@ -118,6 +119,7 @@ let
     uniqueStrings
     updateManyAttrsByPath
     versions
+    warn
     xor
     ;
 
@@ -237,6 +239,49 @@ runTests {
     {
       expr = functionArgs f'.nested.override;
       expected = functionArgs f;
+    };
+
+  testGetFinalPassthruFallback =
+    let
+      finalAttrs = {
+        passthru = { };
+      };
+    in
+    {
+      expr = {
+        nullWithDefault = getFinalPassthruWith { handler = null; } finalAttrs "foo" "myDefaultValue";
+        throwWithDefault =
+          (builtins.tryEval (getFinalPassthruWith { handler = throw; } finalAttrs "foo" "myDefaultValue"))
+          .success;
+        throwWithoutDefault =
+          (builtins.tryEval (getFinalPassthruWith { handler = throw; } finalAttrs "foo")).success;
+      };
+      expected = {
+        nullWithDefault = "myDefaultValue";
+        throwWithDefault = false;
+        throwWithoutDefault = false;
+      };
+    };
+
+  testGetFinalPassthruSuccess =
+    let
+      finalAttrs = {
+        passthru = {
+          foo = "bar";
+        };
+      };
+    in
+    {
+      expr = {
+        nullWithDefault = getFinalPassthruWith { handler = null; } finalAttrs "foo" "myDefaultValue";
+        warnWithDefault = getFinalPassthruWith { handler = warn; } finalAttrs "foo" "myDefaultValue";
+        throwWithDefault = getFinalPassthruWith { handler = throw; } finalAttrs "foo" "myDefaultValue";
+      };
+      expected = {
+        nullWithDefault = "bar";
+        warnWithDefault = "bar";
+        throwWithDefault = "bar";
+      };
     };
 
   # TRIVIAL
