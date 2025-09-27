@@ -12,14 +12,14 @@
 
 let
   pname = "flclash";
-  version = "0.8.88";
+  version = "0.8.90";
 
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       tag = "v${version}";
-      hash = "sha256-yhIaYIlAyc2+oHkMRA9ybBQ+14URBY2kUp9wqTgFrwI=";
+      hash = "sha256-wEgWjzdP7HeWgDacaP9fYNczG9BrTN790AQ5aj9scwM=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -41,7 +41,7 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-ekNuZ3Uv6TDfyZ4hVvXA3Wft4fetaXzddKIpis4ER1g=";
+    vendorHash = "sha256-5oYJMcyKh8CpMLOLch5/svwa148hY4rnSR5inTRNK4M=";
 
     env.CGO_ENABLED = 0;
 
