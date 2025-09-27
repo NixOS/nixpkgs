@@ -11930,8 +11930,6 @@ with pkgs;
     lua = lua5_1;
   };
 
-  ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
-
   jabcode = callPackage ../development/libraries/jabcode { };
 
   jabcode-writer = callPackage ../development/libraries/jabcode {
@@ -12166,8 +12164,6 @@ with pkgs;
 
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
-
-  melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
     gconf = gnome2.GConf;
@@ -12960,8 +12956,6 @@ with pkgs;
   };
 
   tagainijisho = libsForQt5.callPackage ../applications/office/tagainijisho { };
-
-  tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
 
   telegram-desktop =
     kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop
