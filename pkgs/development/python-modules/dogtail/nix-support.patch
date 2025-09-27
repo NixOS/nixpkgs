@@ -1,35 +1,33 @@
+diff --git a/dogtail/distro.py b/dogtail/distro.py
+index 9533ed8..d931ab7 100644
 --- a/dogtail/distro.py
 +++ b/dogtail/distro.py
-@@ -233,6 +233,11 @@
-         PackageDb.__init__(self)
- 
+@@ -340,6 +340,9 @@ class _ArchPackageDb(PackageDb):
+         deps = self._pacman("d", packageName)
+         return [d for d in deps.split() if d != "None"]
  
 +class _NixPackageDb(PackageDb):  # pragma: no cover
 +    def __init__(self):
 +        PackageDb.__init__(self)
-+
-+
- class JhBuildPackageDb(PackageDb):  # pragma: no cover
-     def __init__(self):
-         PackageDb.__init__(self)
-@@ -324,6 +329,11 @@
-         self.packageDb = _SolarisPackageDb()
  
+ class Distro:
+     """
+@@ -409,6 +412,9 @@ class Arch(Distro):  # pragma: no cover
+     def __init__(self):
+         self.packageDb = _ArchPackageDb()
  
 +class Nix(Distro):  # pragma: no cover
 +    def __init__(self):
 +        self.packageDb = _NixPackageDb()
-+
-+
- class JHBuild(Distro):  # pragma: no cover
-     def __init__(self):
-         self.packageDb = JhBuildPackageDb()
-@@ -358,6 +368,8 @@
-     elif os.path.exists("/etc/release") and \
-             re.match(".*Solaris", open("/etc/release").readline()):  # pragma: no cover
-         distro = Solaris()  # pragma: no cover
+ 
+ def detectDistro():  # pragma: no cover
+     logger.log("Detecting distribution:", newline=False)
+@@ -440,6 +446,8 @@ def detectDistro():  # pragma: no cover
+     elif os.path.exists("/etc/os-release") and \
+             re.match(".*GNOME-Continuous", open("/etc/os-release").readline()):
+         distro = GnomeContinuous()
 +    elif os.path.exists("/nix/store"):  # pragma: no cover
 +        distro = Nix()  # pragma: no cover
-     elif os.path.exists("/etc/os-release") and \
-             re.match(".*GNOME-Continuous", open("/etc/os-release").readline()):  # pragma: no cover
-         distro = GnomeContinuous()  # pragma: no cover
+     else:
+         raise DistributionNotSupportedError("Unknown")
+     

@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  python3,
+  python,
   pygobject3,
   pyatspi,
   pycairo,
@@ -14,15 +14,12 @@
   xvfb-run,
   wrapGAppsHook3,
   fetchPypi,
-  gnome-ponytail-daemon,
-  glib,
-  setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dogtail";
   version = "1.0.7";
-  pyproject = true;
+  format = "setuptools";
 
   outputs = [
     "out"
@@ -34,24 +31,41 @@ buildPythonPackage rec {
     sha256 = "sha256-VURwc8li710YRdEZcuIayVeSQEkN6CtON3C5qMOk+zs=";
   };
 
+  patches = [ ./nix-support.patch ];
+
   nativeBuildInputs = [
     gobject-introspection
+    dbus
+    xvfb-run
     wrapGAppsHook3
-    setuptools
-  ];
-
-  buildInputs = [
+  ]; # for setup hooks
+  propagatedBuildInputs = [
+    at-spi2-core
     gtk3
-    glib
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
     pygobject3
+    pyatspi
+    pycairo
   ];
 
-  strictDeps = false; # broken with gobject-introspection setup hook https://github.com/NixOS/nixpkgs/issues/56943
-  doCheck = false; # why?
-  
+  checkPhase = ''
+    runHook preCheck
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS
+    # export NO_AT_BRIDGE=1
+    gsettings set org.gnome.desktop.interface toolkit-accessibility true
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus}/share/dbus-1/session.conf \
+      ${python.interpreter} nix_run_setup test
+    runHook postCheck
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  # TODO: Tests require accessibility
+  doCheck = false;
 
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
