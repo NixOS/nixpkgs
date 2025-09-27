@@ -91,6 +91,7 @@ in
           kio-admin # managing files as admin
           kio-extras # stuff for MTP, AFC, etc
           kio-fuse # fuse interface for KIO
+          knighttime # night mode switching daemon
           kpackage # provides kpackagetool tool
           kservice # provides kbuildsycoca6 tool
           kunifiedpush # provides a background service and a KCM
@@ -266,6 +267,7 @@ in
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;
+    services.geoclue2.enable = mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [
