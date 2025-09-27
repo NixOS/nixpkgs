@@ -14,12 +14,13 @@
   xvfb-run,
   wrapGAppsHook3,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dogtail";
   version = "1.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -31,6 +32,14 @@ buildPythonPackage rec {
     sha256 = "sha256-VURwc8li710YRdEZcuIayVeSQEkN6CtON3C5qMOk+zs=";
   };
 
+  patchPhase = ''
+    echo 'dependencies = [
+      "gi",
+      "pygobject3",
+    ]' >> pyproject.toml
+    cat pyproject.toml
+  '';
+
   patches = [ ./nix-support.patch ];
 
   nativeBuildInputs = [
@@ -38,6 +47,7 @@ buildPythonPackage rec {
     dbus
     xvfb-run
     wrapGAppsHook3
+    setuptools
   ]; # for setup hooks
   propagatedBuildInputs = [
     at-spi2-core
