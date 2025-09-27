@@ -73,6 +73,11 @@ buildPythonPackage rec {
   disabledTests = [
     "test_single_ns_all_tag_2"
     "test_default_ns"
+    # Tests require network access
+    "TestRelaxNGInput"
+    "TestXmldtdid"
+    "TestIddict"
+    "TestParseid"
   ];
 
   meta = with lib; {
