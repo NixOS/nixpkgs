@@ -152,13 +152,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.0.8";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-bve82WLP/mZrGZNW9JZFCnFiEy1QNB9M8+r3OVh9E3w=";
+    hash = "sha256-J1/Uup/HJP2COkUaDXg6pO6pKTq/44WKqWFqbv89bZk=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-f1nxATT2iJiqQiYc6qHrUvRscupvZa8R41W4fvrgj08=";
+    hash = "sha256-9neZKkuQSOPRrBmjYQ5HYHAORNIjSaSAGN+bDqxb4wk=";
   };
 
   patches = [
@@ -195,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/builtins/tests/test_tests.rs \
       --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
 
-    substituteInPlace src/tests/highlight.rs \
+    substituteInPlace src/highlight/tests.rs \
       --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
       --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
       --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
