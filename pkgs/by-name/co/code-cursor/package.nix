@@ -16,20 +16,20 @@ let
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/2f2737de9aa376933d975ae30290447c910fdf46/linux/x64/Cursor-1.5.11-x86_64.AppImage";
-      hash = "sha256-PlZPgcDe6KmEcQYDk1R4uXh1R34mKuPLBh/wbOAYrAY=";
+      url = "https://downloads.cursor.com/production/5911e9593196a000b1c00553aaf03b0b32042b93/linux/x64/Cursor-1.6.42-x86_64.AppImage";
+      hash = "sha256-kn60OC4LqZ0ifjnSCA+kypW8o5juwLkkVnsXNMv6iJo=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/2f2737de9aa376933d975ae30290447c910fdf46/linux/arm64/Cursor-1.5.11-aarch64.AppImage";
-      hash = "sha256-a1M9KumU8wLN5t6hrqMfkcbfPyt9maqCsAW8xTS+0BY=";
+      url = "https://downloads.cursor.com/production/5911e9593196a000b1c00553aaf03b0b32042b93/linux/arm64/Cursor-1.6.42-aarch64.AppImage";
+      hash = "sha256-TdLk9LU9BkdPGChkl+R0S5XjV7eJqDDFCUPTzT0WWQY=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/2f2737de9aa376933d975ae30290447c910fdf46/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-HotafPJPDywp9UAnQUsQurfxtfPepZWAegAmwNp9J2Q=";
+      url = "https://downloads.cursor.com/production/5911e9593196a000b1c00553aaf03b0b32042b93/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-HJiMilrtIOGnSOF5+3+o0Efs1D9ugF0O+qbUQBoiSnM=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/2f2737de9aa376933d975ae30290447c910fdf46/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-LZxahFX3e7YQtUPcjxKYsOrjZSuPKyPKyIrJxC5XYLw=";
+      url = "https://downloads.cursor.com/production/5911e9593196a000b1c00553aaf03b0b32042b93/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-qFY8+bBeceHGw7eZyGU94guLfGHPaRd00y3Yn8rRxRo=";
     };
   };
 
@@ -39,7 +39,7 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = finalCommandLineArgs;
 
-  version = "1.5.11";
+  version = "1.6.42";
   pname = "cursor";
 
   # You can find the current VSCode version in the About dialog:
