@@ -17,6 +17,7 @@
   llama-index,
   llama-stack-client,
   mcp,
+  mellea,
   ollama,
   pydantic-settings,
   pydantic,
@@ -40,21 +41,18 @@ buildPythonPackage rec {
     hash = "sha256-ktJ5K+1Qb7/lUHPkmv2FMnSe6PiIQ1BvWj5qIG8xfdE=";
   };
 
-  pythonRemoveDeps = [
-    # Disabled due to circular dependency
-    "mellea"
-  ];
-
   build-system = [ hatchling ];
 
   dependencies = [
     docling
     httpx
     mcp
+    mellea
     pydantic
     pydantic-settings
     python-dotenv
-  ];
+  ]
+  ++ mcp.optional-dependencies.cli;
 
   optional-dependencies = {
     llama-index-rag = [
