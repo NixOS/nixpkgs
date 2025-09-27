@@ -29,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-W0wQ4SXIAxIBjjk2z3sNTJjAYdY73dDaiPWDeUVWo/w=";
+    hash = "sha256-wpn79xY+Gsn48C5mYF1lryrgZZsr1YJayd+Rl0gbPXY=";
   };
 
-  cargoHash = "sha256-5votu/4MUusRvlZc4+vZQ/wbcI0XSZ8qkq5JaMGJHB8=";
+  cargoHash = "sha256-KAHLZS6BfRgPBlBW0LSdHwPP6sRUN9kksMo0KuDtb5s=";
 
   patches = [
     # Patch out the remote upgrade (deno update) check.
