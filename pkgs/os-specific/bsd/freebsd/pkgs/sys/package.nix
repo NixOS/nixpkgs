@@ -70,7 +70,7 @@ let
   // (lib.flip lib.mapAttrs' extraFlags (
     name: value: {
       name = "MK_${lib.toUpper name}";
-      value = if value then "yes" else "no";
+      value = lib.boolToYesNo value;
     }
   ));
 in
