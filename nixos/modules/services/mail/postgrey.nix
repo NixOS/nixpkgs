@@ -4,42 +4,42 @@
   pkgs,
   ...
 }:
-
-with lib;
 let
 
   cfg = config.services.postgrey;
 
-  socket =
-    with types;
-    addCheck (either (submodule unixSocket) (submodule inetSocket)) (x: x ? path || x ? port);
+  inherit (lib) types;
 
-  inetSocket = with types; {
+  socket = types.addCheck (types.either (types.submodule unixSocket) (types.submodule inetSocket)) (
+    x: x ? path || x ? port
+  );
+
+  inetSocket = {
     options = {
-      addr = mkOption {
-        type = nullOr str;
+      addr = lib.mkOption {
+        type = types.nullOr types.str;
         default = null;
         example = "127.0.0.1";
         description = "The address to bind to. Localhost if null";
       };
-      port = mkOption {
-        type = port;
+      port = lib.mkOption {
+        type = types.port;
         default = 10030;
         description = "Tcp port to bind to";
       };
     };
   };
 
-  unixSocket = with types; {
+  unixSocket = {
     options = {
-      path = mkOption {
-        type = path;
+      path = lib.mkOption {
+        type = types.path;
         default = "/run/postgrey.sock";
         description = "Path of the unix socket";
       };
 
-      mode = mkOption {
-        type = str;
+      mode = lib.mkOption {
+        type = types.str;
         default = "0777";
         description = "Mode of the unix socket";
       };
@@ -49,7 +49,7 @@ let
 in
 {
   imports = [
-    (mkMergedOptionModule
+    (lib.mkMergedOptionModule
       [
         [
           "services"
@@ -66,7 +66,7 @@ in
       (
         config:
         let
-          value = p: getAttrFromPath p config;
+          value = p: lib.getAttrFromPath p config;
           inetAddr = [
             "services"
             "postgrey"
@@ -90,13 +90,13 @@ in
   ];
 
   options = {
-    services.postgrey = with types; {
-      enable = mkOption {
-        type = bool;
+    services.postgrey = {
+      enable = lib.mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to run the Postgrey daemon";
       };
-      socket = mkOption {
+      socket = lib.mkOption {
         type = socket;
         default = {
           path = "/run/postgrey.sock";
@@ -108,76 +108,76 @@ in
         };
         description = "Socket to bind to";
       };
-      greylistText = mkOption {
-        type = str;
+      greylistText = lib.mkOption {
+        type = types.str;
         default = "Greylisted for %%s seconds";
         description = "Response status text for greylisted messages; use %%s for seconds left until greylisting is over and %%r for mail domain of recipient";
       };
-      greylistAction = mkOption {
-        type = str;
+      greylistAction = lib.mkOption {
+        type = types.str;
         default = "DEFER_IF_PERMIT";
         description = "Response status for greylisted messages (see {manpage}`access(5)`)";
       };
-      greylistHeader = mkOption {
-        type = str;
+      greylistHeader = lib.mkOption {
+        type = types.str;
         default = "X-Greylist: delayed %%t seconds by postgrey-%%v at %%h; %%d";
         description = "Prepend header to greylisted mails; use %%t for seconds delayed due to greylisting, %%v for the version of postgrey, %%d for the date, and %%h for the host";
       };
-      delay = mkOption {
-        type = ints.unsigned;
+      delay = lib.mkOption {
+        type = types.ints.unsigned;
         default = 300;
         description = "Greylist for N seconds";
       };
-      maxAge = mkOption {
-        type = ints.unsigned;
+      maxAge = lib.mkOption {
+        type = types.ints.unsigned;
         default = 35;
         description = "Delete entries from whitelist if they haven't been seen for N days";
       };
-      retryWindow = mkOption {
-        type = either str ints.unsigned;
+      retryWindow = lib.mkOption {
+        type = types.either types.str types.ints.unsigned;
         default = 2;
         example = "12h";
         description = "Allow N days for the first retry. Use string with appended 'h' to specify time in hours";
       };
-      lookupBySubnet = mkOption {
-        type = bool;
+      lookupBySubnet = lib.mkOption {
+        type = types.bool;
         default = true;
         description = "Strip the last N bits from IP addresses, determined by IPv4CIDR and IPv6CIDR";
       };
-      IPv4CIDR = mkOption {
-        type = ints.unsigned;
+      IPv4CIDR = lib.mkOption {
+        type = types.ints.unsigned;
         default = 24;
         description = "Strip N bits from IPv4 addresses if lookupBySubnet is true";
       };
-      IPv6CIDR = mkOption {
-        type = ints.unsigned;
+      IPv6CIDR = lib.mkOption {
+        type = types.ints.unsigned;
         default = 64;
         description = "Strip N bits from IPv6 addresses if lookupBySubnet is true";
       };
-      privacy = mkOption {
-        type = bool;
+      privacy = lib.mkOption {
+        type = types.bool;
         default = true;
         description = "Store data using one-way hash functions (SHA1)";
       };
-      autoWhitelist = mkOption {
-        type = nullOr ints.positive;
+      autoWhitelist = lib.mkOption {
+        type = types.nullOr types.ints.positive;
         default = 5;
         description = "Whitelist clients after successful delivery of N messages";
       };
-      whitelistClients = mkOption {
-        type = listOf path;
+      whitelistClients = lib.mkOption {
+        type = types.listOf types.path;
         default = [ ];
         description = "Client address whitelist files (see {manpage}`postgrey(8)`)";
       };
-      whitelistRecipients = mkOption {
-        type = listOf path;
+      whitelistRecipients = lib.mkOption {
+        type = types.listOf types.path;
         default = [ ];
         description = "Recipient address whitelist files (see {manpage}`postgrey(8)`)";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.postgrey ];
 
@@ -203,7 +203,7 @@ in
             "--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}"
           else
             ''--inet=${
-              optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")
+              lib.optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")
             }${toString cfg.socket.port}'';
       in
       {
@@ -227,15 +227,15 @@ in
                       --retry-window=${toString cfg.retryWindow} \
                       ${if cfg.lookupBySubnet then "--lookup-by-subnet" else "--lookup-by-host"} \
                       --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${toString cfg.IPv6CIDR} \
-                      ${optionalString cfg.privacy "--privacy"} \
+                      ${lib.optionalString cfg.privacy "--privacy"} \
                       --auto-whitelist-clients=${
                         toString (if cfg.autoWhitelist == null then 0 else cfg.autoWhitelist)
                       } \
                       --greylist-action=${cfg.greylistAction} \
                       --greylist-text="${cfg.greylistText}" \
                       --x-greylist-header="${cfg.greylistHeader}" \
-                      ${concatMapStringsSep " " (x: "--whitelist-clients=" + x) cfg.whitelistClients} \
-                      ${concatMapStringsSep " " (x: "--whitelist-recipients=" + x) cfg.whitelistRecipients}
+                      ${lib.concatMapStringsSep " " (x: "--whitelist-clients=" + x) cfg.whitelistClients} \
+                      ${lib.concatMapStringsSep " " (x: "--whitelist-recipients=" + x) cfg.whitelistRecipients}
           '';
           Restart = "always";
           RestartSec = 5;
