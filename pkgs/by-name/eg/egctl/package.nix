@@ -18,11 +18,10 @@ buildGoModule (finalAttrs: {
     hash = "sha256-glOnAnNuefdTq4BOd1NKpsadrWEqVOOc18jPx7lEwEQ=";
   };
 
-  vendorHash =
-    if stdenv.buildPlatform.isDarwin then
-      "sha256-GoaucckTuJIvaq1/3R1rPDr3Nm8q27OICisomKXYJ28="
-    else
-      "sha256-+RTnsUg2LNSQ6pB99ikAKxd3q6IRhp2LHdBznYrHm4o=";
+  vendorHash = "sha256-SNXnEutsDQwoGKiJN3uXxVrCl4gFcd62ZuX8GPyGliI=";
+  # Fix case-insensitive conflicts producing platform-dependent checksums
+  # https://github.com/microsoft/go-mssqldb/issues/234
+  proxyVendor = true;
 
   subPackages = [
     "cmd/egctl"
