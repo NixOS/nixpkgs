@@ -1011,7 +1011,7 @@ in
     defaults.services.ncps.cache.dataPath = "/path/to/ncps";
   };
   ndppd = runTest ./ndppd.nix;
-  nebula = runTest ./nebula.nix;
+  nebula.connectivity = runTest ./nebula/connectivity.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
