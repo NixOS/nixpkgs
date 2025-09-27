@@ -75,6 +75,10 @@
   enableGIL ? true,
   enableDebug ? false,
 
+  # Experimental JIT toggle. Defaults: before 3.14 -> "no"; from 3.14(gil) -> "yes-off"
+  # https://docs.python.org/3/using/configure.html#cmdoption-enable-experimental-jit
+  enableExperimentalJit ? null,
+
   # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
   enableOptimizations ? false,
@@ -129,6 +133,7 @@ let
     concatMapStringsSep
     concatStringsSep
     enableFeature
+    fix
     getDev
     getLib
     optionals
@@ -145,10 +150,40 @@ let
       # crypt module was removed in 3.13
       passthru.pythonOlder "3.13";
 
-  buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
   tzdataSupport = !withMinimalDeps && tzdata != null && passthru.pythonAtLeast "3.9";
+
+  enableExperimentalJitEffective =
+    if enableExperimentalJit != null then
+      enableExperimentalJit
+    else if passthru.pythonAtLeast "3.14" && !withMinimalDeps && enableGIL then
+      "yes-off"
+    else
+      "no";
+
+  pythonNoJitOverlay =
+    final: prev:
+    let
+      pythonNoJit = fix (
+        python:
+        prev.${pythonAttr}.override {
+          self = python;
+          enableExperimentalJit = "no";
+        }
+      );
+    in
+    {
+      ${pythonAttr} = pythonNoJit;
+      "${pythonAttr}Packages" = pythonNoJit.pkgs;
+    };
+
+  buildPackages = (
+    if enableExperimentalJitEffective == "no" then
+      pkgsBuildHost
+    else
+      pkgsBuildHost.extend pythonNoJitOverlay
+  );
 
   passthru =
     let
@@ -159,7 +194,7 @@ let
       # __splices as an arg and using the cache if populated.
       splices = {
         pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
-        pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
+        pythonOnBuildForHost = override buildPackages.${pythonAttr};
         pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
         pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
         pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (
@@ -217,6 +252,20 @@ let
       [
         pkg-config
       ]
+  ++ optionals (enableExperimentalJitEffective != "no") (
+    let
+      llvmPackages =
+        if passthru.pythonAtLeast "3.14" then
+          buildPackages.llvmPackages_19
+        else
+          buildPackages.llvmPackages_18;
+    in
+    [
+      llvmPackages.clang
+      llvmPackages.llvm
+      pythonOnBuildForHost
+    ]
+  )
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonOnBuildForHost
@@ -482,6 +531,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (pythonAtLeast "3.13") [
     (enableFeature enableGIL "gil")
+  ]
+  ++ optionals (enableExperimentalJitEffective != "no") [
+    "--enable-experimental-jit=${enableExperimentalJitEffective}"
   ]
   ++ optionals enableOptimizations [
     "--enable-optimizations"
@@ -808,7 +860,7 @@ stdenv.mkDerivation (finalAttrs: {
         mv $out/share/doc/* $out/share/doc/python${pythonVersion}-${version}
       '';
 
-      nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [
+      nativeBuildInputs = with buildPackages.python3.pkgs; [
         sphinxHook
         python-docs-theme
       ];
