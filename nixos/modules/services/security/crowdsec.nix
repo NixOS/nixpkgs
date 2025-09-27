@@ -833,7 +833,7 @@ in
             map
               (scenarioFile: {
                 inherit cfg;
-                name = lib.strings.normalizePath "${localScenariosDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf scenarioFile)}";
+                name = lib.strings.normalizePath "${localScenariosDir}/${builtins.baseNameOf scenarioFile}";
                 value = {
                   link = {
                     type = "L+";
@@ -847,7 +847,7 @@ in
             map
               (parser: {
                 inherit cfg;
-                name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.baseNameOf parser}";
                 value = {
                   link = {
                     type = "L+";
@@ -861,7 +861,7 @@ in
             map
               (parser: {
                 inherit cfg;
-                name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.baseNameOf parser}";
                 value = {
                   link = {
                     type = "L+";
@@ -875,7 +875,7 @@ in
             map
               (parser: {
                 inherit cfg;
-                name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+                name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.baseNameOf parser}";
                 value = {
                   link = {
                     type = "L+";
@@ -889,7 +889,7 @@ in
             map
               (postoverflow: {
                 inherit cfg;
-                name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf postoverflow)}";
+                name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.baseNameOf postoverflow}";
                 value = {
                   link = {
                     type = "L+";
@@ -903,7 +903,7 @@ in
             map
               (context: {
                 inherit cfg;
-                name = lib.strings.normalizePath "${localContextsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf context)}";
+                name = lib.strings.normalizePath "${localContextsDir}/${builtins.baseNameOf context}";
                 value = {
                   link = {
                     type = "L+";
@@ -917,7 +917,7 @@ in
             map
               (notification: {
                 inherit cfg;
-                name = lib.strings.normalizePath "${notificationsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf notification)}";
+                name = lib.strings.normalizePath "${notificationsDir}/${builtins.baseNameOf notification}";
                 value = {
                   link = {
                     type = "L+";
