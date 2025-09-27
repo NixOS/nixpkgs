@@ -10,13 +10,13 @@
 
 buildLua rec {
   pname = "mpvacious";
-  version = "0.40";
+  version = "0.41";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-PxLbv9aGVQV4Gea2H/GcWv/yuaRSqBRqbzRXu612kLE=";
+    sha256 = "sha256-bOW9hKDZ+S+/MJmZHN6N5rcZ9h6/s0bSPagYV7Zc2Yo=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
