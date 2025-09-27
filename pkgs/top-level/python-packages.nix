@@ -13555,6 +13555,8 @@ self: super: with self; {
 
   pymsteams = callPackage ../development/python-modules/pymsteams { };
 
+  pymultihash = callPackage ../development/python-modules/pymultihash { };
+
   pymumble = callPackage ../development/python-modules/pymumble { };
 
   pymunk = callPackage ../development/python-modules/pymunk { };
