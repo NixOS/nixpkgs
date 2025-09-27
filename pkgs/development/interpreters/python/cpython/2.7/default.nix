@@ -87,6 +87,10 @@ let
       pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
       pythonOnHostForHost = pkgsHostHost.${pythonAttr};
       pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
+      pythonABITags = [
+        "none"
+        "cp${sourceVersion.major}${sourceVersion.minor}"
+      ];
     }
     // {
       inherit ucsEncoding;
