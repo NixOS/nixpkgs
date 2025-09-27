@@ -5,7 +5,7 @@ let
     { config, ... }:
     {
       # We re-use the NixOS container option ...
-      boot.isContainer = true;
+      boot.isNspawnContainer = true;
       # ... and revert unwanted defaults
       networking.useHostResolvConf = false;
 
@@ -98,11 +98,6 @@ in
         serviceConfig.Environment = [
           # Disable tmpfs for /tmp
           "SYSTEMD_NSPAWN_TMPFS_TMP=0"
-
-          # force unified cgroup delegation, which would be the default
-          # if systemd could check the capabilities of the installed systemd.
-          # see also: https://github.com/NixOS/nixpkgs/pull/198526
-          "SYSTEMD_NSPAWN_UNIFIED_HIERARCHY=1"
         ];
         overrideStrategy = "asDropin";
       };
@@ -152,7 +147,7 @@ in
 
     # Test if systemd-nspawn provides a working environment for nix to build derivations
     # https://nixos.org/guides/nix-pills/07-working-derivation
-    machine.succeed('systemd-run --pty --wait -M ${containerName} /run/current-system/sw/bin/nix-instantiate --expr \'derivation { name = "myname"; builder = "/bin/sh"; args = [ "-c" "echo foo > $out" ]; system = "${pkgs.system}"; }\' --add-root /tmp/drv')
+    machine.succeed('systemd-run --pty --wait -M ${containerName} /run/current-system/sw/bin/nix-instantiate --expr \'derivation { name = "myname"; builder = "/bin/sh"; args = [ "-c" "echo foo > $out" ]; system = "${pkgs.stdenv.hostPlatform.system}"; }\' --add-root /tmp/drv')
     machine.succeed('systemd-run --pty --wait -M ${containerName} /run/current-system/sw/bin/nix-store --option substitute false --realize /tmp/drv')
 
     # Test nss_mymachines without nscd

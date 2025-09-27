@@ -40,6 +40,10 @@ in
         default = false;
         internal = true;
       };
+      options.boot.isNspawnContainer = lib.mkOption {
+        default = false;
+        internal = true;
+      };
     }
   ];
 
