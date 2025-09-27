@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "hushboard";
-  version = "unstable-2021-03-17";
+  version = "0-unstable-2024-04-28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
     repo = "hushboard";
-    rev = "c16611c539be111891116a737b02c5fb359ad1fc";
-    sha256 = "06jav6j0bsxhawrq31cnls8zpf80fpwk0cak5s82js6wl4vw2582";
+    rev = "13f5e62add99355f90798006742f62397be8be0c";
+    hash = "sha256-z5ZSqcdKUHWt7kgW7ISZJei2YzVZHJGOqJ2IXv3qiWQ=";
   };
 
   build-system = with python3Packages; [ setuptools ];
