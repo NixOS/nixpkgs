@@ -1,15 +1,17 @@
 {
-  bison,
-  bzip2,
-  cmake,
-  fetchFromGitLab,
-  flex,
-  gfortran,
   lib,
-  mpi,
   stdenv,
-  zlib,
+  fetchFromGitLab,
+  cmake,
+  gfortran,
+  bison,
+  flex,
+  bzip2,
   xz,
+  zlib,
+  mpi,
+  withPtScotch ? false,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,21 +32,48 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_PTSCOTCH" withPtScotch)
+    # Prefix Scotch version of MeTiS routines
+    (lib.cmakeBool "SCOTCH_METIS_PREFIX" true)
+    # building tests is broken with SCOTCH_METIS_PREFIX enabled in 7.0.9
+    (lib.cmakeBool "ENABLE_TESTS" false)
+  ];
 
   nativeBuildInputs = [
     cmake
     gfortran
+    bison
+    flex
   ];
 
   buildInputs = [
-    bison
     bzip2
-    mpi
-    flex
     xz
     zlib
   ];
+
+  propagatedBuildInputs = lib.optionals withPtScotch [
+    mpi
+  ];
+
+  passthru = {
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "SCOTCH" ];
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
+
+  # SCOTCH provide compatibility with Metis/Parmetis interface.
+  # We install the metis compatible headers to subdirectory to
+  # avoid conflict with metis/parmetis.
+  postFixup = ''
+    mkdir -p $dev/include/scotch
+    mv $dev/include/{*metis,metisf}.h $dev/include/scotch
+  '';
 
   meta = {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
@@ -54,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.labri.fr/perso/pelegrin/scotch";
     license = lib.licenses.cecill-c;
-    maintainers = [ lib.maintainers.bzizou ];
+    maintainers = with lib.maintainers; [
+      bzizou
+      qbisi
+    ];
   };
 })
