@@ -13120,6 +13120,11 @@ with pkgs;
     callPackage ../by-name/vs/vscode-extension-update/vscode-extension-update-script.nix
       { };
 
+  code-oss = callPackage ../by-name/co/code-oss/package.nix {
+    mkElectron = callPackage ../development/tools/electron/binary/generic.nix { };
+    vscode-generic = callPackage ../applications/editors/vscode/generic.nix;
+  };
+
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
