@@ -1,0 +1,13 @@
+diff --git a/build.gradle b/build.gradle
+index 86e720f11..2fce91742 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -51,7 +51,7 @@
+     // gradlew -q javaToolchains - see the list of detected toolchains.
+     java {
+         toolchain {
+-            languageVersion = JavaLanguageVersion.of(22)
++            languageVersion = JavaLanguageVersion.of(23)
+         }
+     }
+ 
