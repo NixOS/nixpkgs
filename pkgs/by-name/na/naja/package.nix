@@ -13,7 +13,7 @@
   sphinx,
   tbb_2022,
   buildPackages,
-  nix-update-script,
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "naja";
@@ -89,7 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Structural Netlist API (and more) for EDA post synthesis flow development";

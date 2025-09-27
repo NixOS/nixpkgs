@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   fetchpatch,
+  gitUpdater,
   cython,
   setuptools,
   alsa-lib,
@@ -64,13 +65,13 @@ let
 in
 buildPythonPackage rec {
   pname = "python3-sipsimple";
-  version = "5.3.3.2";
+  version = "5.3.3.2-mac";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-sipsimple";
-    tag = "${version}-mac";
+    tag = version;
     hash = "sha256-kDXVzLmgfXxm8phKrV7DvPuZ9O2iNFo1s6Lc0jcc/dM=";
   };
 
@@ -141,6 +142,7 @@ buildPythonPackage rec {
 
   passthru = {
     inherit extDeps;
+    updateScript = gitUpdater { };
   };
 
   meta = {

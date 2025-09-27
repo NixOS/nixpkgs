@@ -30,6 +30,8 @@ buildPythonPackage rec {
 
   # no pytest tests exist
 
+  passthru.updateScript = null;
+
   meta = {
     description = "Libervia temporary third party patches";
     longDescription = ''
