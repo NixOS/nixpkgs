@@ -42,7 +42,7 @@ in
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
   version = "4.5.0b1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
@@ -55,11 +55,10 @@ py.pkgs.buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail py-radix py-radix-sr
   '';
+
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   nativeCheckInputs = [
     git
@@ -76,7 +75,7 @@ py.pkgs.buildPythonPackage rec {
     httpx
   ]);
 
-  propagatedBuildInputs =
+  dependencies =
     with py.pkgs;
     [
       python-gnupg
