@@ -4298,7 +4298,7 @@
     name = "Claas Augner";
   };
   cawilliamson = {
-    email = "home@chrisaw.com";
+    email = "contact@chrisaw.io";
     github = "cawilliamson";
     githubId = 1141769;
     matrix = "@cawilliamson:nixos.dev";
