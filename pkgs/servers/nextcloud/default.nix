@@ -7,6 +7,7 @@
   caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
   nextcloud30Packages,
   nextcloud31Packages,
+  nextcloud32Packages,
 }:
 
 let
@@ -68,6 +69,12 @@ in
     version = "31.0.10";
     hash = "sha256-6FZxPwIo8+Ju6F72+ZFetNBYwNIYML1Y7l10K+3wpmk=";
     packages = nextcloud31Packages;
+  };
+
+  nextcloud32 = generic {
+    version = "32.0.0";
+    hash = "sha256-V0SNVdm4cQLxfDY0cyA0ahslj2AXxjuVjHie/ULjRaM=";
+    packages = nextcloud32Packages;
   };
 
   # tip: get the sha with:
