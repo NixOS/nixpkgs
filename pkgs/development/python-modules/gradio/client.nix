@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.11.0";
+  version = "1.13.3";
   pyproject = true;
 
   # no tests on pypi
@@ -39,9 +39,9 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
-    tag = "gradio_client@${version}";
+    rev = "43b567db952d105cbe23b38ab549909b3ad081ff";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-dj8hJPXUBbFG9awP3o0vgyPt+gcCgzKKEQTEHkrEimA=";
+    hash = "sha256-G0t8Xxup7IsuNHJqkhECG0TY/i6y12zuQNm7aOZiNWo=";
   };
 
   sourceRoot = "${src.name}/client/python";
