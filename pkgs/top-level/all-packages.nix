@@ -11931,8 +11931,6 @@ with pkgs;
     lua = lua5_1;
   };
 
-  ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
-
   jabcode = callPackage ../development/libraries/jabcode { };
 
   jabcode-writer = callPackage ../development/libraries/jabcode {
