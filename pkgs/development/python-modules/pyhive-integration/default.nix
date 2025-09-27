@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   unasync,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyhive-integration";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
     tag = "v${version}";
-    hash = "sha256-lfBr889s6NHcos/kdzQa9HJEcQ4dfCEMjuLYiLzesfE=";
+    hash = "sha256-g3dEB41bYT2XygAIRqXpdCeYuh7IH9O3ZG1zr5Sm7+8=";
   };
 
   pythonRemoveDeps = [ "pre-commit" ];
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhiveapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interface with the Hive API";
     homepage = "https://github.com/Pyhass/Pyhiveapi";
     changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
