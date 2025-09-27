@@ -23,9 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
-  ];
+  cmakeFlags =
+    if stdenv.hostPlatform.isStatic then
+      [
+        (lib.cmakeBool "ENABLE_SHARED_LIB" false)
+        (lib.cmakeBool "ENABLE_STATIC_LIB" true)
+      ]
+    else
+      [
+        (lib.cmakeBool "ENABLE_STATIC_LIB" false)
+      ];
 
   doCheck = true;
 
