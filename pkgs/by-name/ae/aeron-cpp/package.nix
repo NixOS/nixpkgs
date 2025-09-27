@@ -4,7 +4,8 @@
   cmake,
   fetchFromGitHub,
   fetchMavenArtifact,
-  jdk11,
+  jdk ? jdk17,
+  jdk17,
   lib,
   libbsd,
   libuuid,
@@ -12,6 +13,7 @@
   patchelf,
   stdenv,
   zlib,
+  ninja,
 }:
 
 let
@@ -24,10 +26,16 @@ let
     hash = "sha512-Ypsk8PbShFOxm49u1L+TTuApaW6ECTSee+hHEhmY/jNi5AymHXBWwDMBMkzC25aowiHLJS5EnzLk6hu9Lea93Q==";
   };
 
-  sbeAll = sbeAll_1_31_1;
+  sbeAll_1_34_1 = fetchMavenArtifact {
+    groupId = "uk.co.real-logic";
+    version = "1.34.1";
+    artifactId = "sbe-all";
+    hash = "sha512-Z0zBQrrqJSjfkUADhIANskIUb+FgOto5kr1+Y3Lw9RhSAxslaP+NdB705RdITC/kq7qTMlUstc2xM797dE/6BA==";
+  };
+
+  sbeAll = sbeAll_1_34_1;
 
 in
-
 stdenv.mkDerivation {
   pname = "aeron-cpp";
   inherit version;
@@ -56,8 +64,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
-    jdk11
+    jdk
     makeWrapper
+    ninja
     patchelf
   ];
 
@@ -68,7 +77,7 @@ stdenv.mkDerivation {
     (
       cd cppbuild/Release
       cmake \
-        -G "CodeBlocks - Unix Makefiles" \
+        -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
         -DAERON_TESTS=OFF \
         -DAERON_SYSTEM_TESTS=OFF \
@@ -88,8 +97,7 @@ stdenv.mkDerivation {
     mkdir --parents aeron-all/build/libs
     (
       cd cppbuild/Release
-
-      make -j $NIX_BUILD_CORES \
+      ninja -j $NIX_BUILD_CORES \
         aeron \
         aeron_archive_client \
         aeron_client_shared \
@@ -97,8 +105,7 @@ stdenv.mkDerivation {
         aeron_client \
         aeron_driver_static \
         aeronmd
-
-      make install
+      ninja install
     )
 
     runHook postBuild
