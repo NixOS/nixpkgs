@@ -11879,8 +11879,6 @@ with pkgs;
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
-  hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
-
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline {

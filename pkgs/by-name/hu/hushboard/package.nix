@@ -1,22 +1,17 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   gobject-introspection,
   gtk3,
   libappindicator,
   libpulseaudio,
   librsvg,
-  pycairo,
-  pygobject3,
-  six,
   wrapGAppsHook3,
-  xlib,
   nix-update-script,
-  setuptools,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "hushboard";
   version = "unstable-2021-03-17";
   pyproject = true;
@@ -28,7 +23,7 @@ buildPythonApplication {
     sha256 = "06jav6j0bsxhawrq31cnls8zpf80fpwk0cak5s82js6wl4vw2582";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -41,7 +36,7 @@ buildPythonApplication {
     libpulseaudio
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pycairo
     pygobject3
     six
