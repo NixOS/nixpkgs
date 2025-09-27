@@ -1075,6 +1075,7 @@ in
   ntpd = runTest ./ntpd.nix;
   ntpd-rs = runTest ./ntpd-rs.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
+  nvme-rs = runTest ./nvme-rs.nix;
   nvmetcfg = runTest ./nvmetcfg.nix;
   nyxt = runTest ./nyxt.nix;
   nzbget = runTest ./nzbget.nix;
