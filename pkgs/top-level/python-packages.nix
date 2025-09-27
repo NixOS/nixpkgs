@@ -18773,6 +18773,8 @@ self: super: with self; {
 
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
 
+  trio-typing = callPackage ../development/python-modules/trio-typing { };
+
   trio-websocket = callPackage ../development/python-modules/trio-websocket { };
 
   triton = callPackage ../development/python-modules/triton { llvm = pkgs.triton-llvm; };
