@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   # this line is left so those who force installation on x86_64-darwin can still build
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
-  cmakeFlagsArray = [
+  cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
     (lib.cmakeFeature "BLAS_LIBRARIES" "-lblas")
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     # cmake file will thus look for the library in the dev output instead of out.
     # Use the absolute path to $out instead to fix the issue.
     substituteInPlace  $dev/lib/cmake/scalapack-${finalAttrs.version}/scalapack-targets-release.cmake \
-      --replace "\''${_IMPORT_PREFIX}" "$out"
+      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
   '';
 
   meta = {
