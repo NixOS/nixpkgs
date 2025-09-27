@@ -9,8 +9,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "azimjohn";
-    repo = pname;
-    rev = "v${version}";
+    repo = "jprq";
+    tag = "v${version}";
     hash = "sha256-0+ope89NTODwFVNifXtq+yVLMMcf0bQT/XF3KyTfB0U=";
   };
 
