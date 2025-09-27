@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "autoray";
-    sha256 = "sha256-5a9sYrp8O+ijayqxnjRMcV80eNOaDkd1Wq02VXK8kPg=";
+    hash = "sha256-5a9sYrp8O+ijayqxnjRMcV80eNOaDkd1Wq02VXK8kPg=";
   };
 
   build-system = [
