@@ -7,36 +7,10 @@ ExtUtils::MakeMaker
 JSON::PP
 Data::Dumper
 
-Updated for perl v5.38.0 by stig@stig.io
+Updated for perl v5.40.0 by marcus@means.no
 
 ---
 
-diff --git a/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm b/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm
-index b0e83b0d2d..dab4907704 100644
---- a/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm
-+++ b/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm
-@@ -86,21 +86,7 @@ sub new {
- # from version::vpp
- sub _find_magic_vstring {
-   my $value = shift;
--  my $tvalue = '';
--  require B;
--  my $sv = B::svref_2object(\$value);
--  my $magic = ref($sv) eq 'B::PVMG' ? $sv->MAGIC : undef;
--  while ( $magic ) {
--    if ( $magic->TYPE eq 'V' ) {
--      $tvalue = $magic->PTR;
--      $tvalue =~ s/^v?(.+)$/v$1/;
--      last;
--    }
--    else {
--      $magic = $magic->MOREMAGIC;
--    }
--  }
--  return $tvalue;
-+  return version::->parse($value)->stringify;
- }
- 
  # safe if given an unblessed reference
 diff --git a/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm b/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm
 index 746abd63bc..c55d7cd2d0 100644
