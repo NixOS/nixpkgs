@@ -6,7 +6,7 @@
   flit-core,
   mock,
   pytestCheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-vcr,
   pythonOlder,
   requests,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     mock
     requests-toolbelt
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-vcr
     vcrpy
   ];
