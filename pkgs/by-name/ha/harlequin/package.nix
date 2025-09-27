@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     "textual"
     "tree-sitter"
     "tree-sitter-sql"
+    "rich-click"
   ];
 
   build-system = with python3Packages; [ poetry-core ];
@@ -35,6 +36,20 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ glibcLocales ];
 
   dependencies =
+    let
+      # Using textual 5.3.0 to avoid error at runtime
+      # https://github.com/tconbeer/harlequin/issues/841
+      textual_5_3_0 = python3Packages.textual.overrideAttrs {
+        version = "5.3.0";
+
+        src = fetchFromGitHub {
+          owner = "Textualize";
+          repo = "textual";
+          tag = "v${version}";
+          hash = "sha256-J7Sb4nv9wOl1JnR6Ky4XS9HZHABKtNKPB3uYfC/UGO4=";
+        };
+      };
+    in
     with python3Packages;
     [
       click
@@ -47,9 +62,9 @@ python3Packages.buildPythonApplication rec {
       questionary
       rich-click
       sqlfmt
-      textual
-      textual-fastdatatable
-      textual-textarea
+      textual_5_3_0
+      (textual-fastdatatable.override { textual = textual_5_3_0; })
+      (textual-textarea.override { textual = textual_5_3_0; })
       tomlkit
       tree-sitter-sql
     ]
