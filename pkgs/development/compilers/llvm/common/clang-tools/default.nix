@@ -5,6 +5,7 @@
   clang,
   libcxxClang,
   llvm_meta,
+  python3Packages,
   # enableLibcxx will use the c++ headers from clang instead of gcc.
   # This shouldn't have any effect on platforms that use clang as the default compiler already.
   enableLibcxx ? false,
@@ -12,16 +13,27 @@
 
 stdenv.mkDerivation {
   unwrapped = clang-unwrapped;
+  pyscripts = clang-unwrapped.python;
 
   pname = "clang-tools";
   version = lib.getVersion clang-unwrapped;
   dontUnpack = true;
   clang = if enableLibcxx then libcxxClang else clang;
 
+  nativeBuildInputs = [ python3Packages.wrapPython ];
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+
+    for script in $pyscripts/share/clang/*; do
+      if [[ -x "$script" ]]; then
+        cp $script $out/bin/$(basename "$script")
+      fi
+    done
+
+    wrapPythonPrograms
 
     for tool in $unwrapped/bin/clang-*; do
       tool=$(basename "$tool")
