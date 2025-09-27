@@ -40,10 +40,6 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
