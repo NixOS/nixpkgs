@@ -84,7 +84,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

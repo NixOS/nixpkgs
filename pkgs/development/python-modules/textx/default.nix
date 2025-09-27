@@ -62,7 +62,7 @@ let
       mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";
       license = licenses.mit;
-      maintainers = with maintainers; [ yuu ];
+      maintainers = with maintainers; [ ];
     };
   };
 

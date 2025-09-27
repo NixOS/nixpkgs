@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-file";
-  version = "0.4.11";
+  version = "0.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,13 +22,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_file";
     inherit version;
-    hash = "sha256-GyHLZteN1fYOhxZgfZpHzNgbs5EG1FlmW+HKd5npWXs=";
+    hash = "sha256-XnZvMll2IuZlKUZBAZFFSK1oN3CgpdK9ye6E6zoRAzI=";
   };
 
   pythonRelaxDeps = [
     "pymupdf"
     "pypdf"
     "striprtf"
+    "pandas"
   ];
 
   build-system = [ hatchling ];

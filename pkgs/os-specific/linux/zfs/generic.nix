@@ -221,10 +221,8 @@ let
           "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
           "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
         ]
-        ++ kernelModuleMakeFlags
+        ++ map (f: "KERNEL_${f}") kernelModuleMakeFlags
       );
-
-      makeFlags = optionals buildKernel kernelModuleMakeFlags;
 
       enableParallelBuilding = true;
 

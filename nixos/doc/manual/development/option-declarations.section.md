@@ -152,7 +152,7 @@ lib.mkPackageOption pkgs "hello" { }
 lib.mkPackageOption pkgs "GHC"
   {
     default = [ "ghc" ];
-    example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+    example = "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
   }
   # is like
   lib.mkOption
@@ -160,7 +160,7 @@ lib.mkPackageOption pkgs "GHC"
     type = lib.types.package;
     default = pkgs.ghc;
     defaultText = lib.literalExpression "pkgs.ghc";
-    example = lib.literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+    example = lib.literalExpression "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
     description = "The GHC package to use.";
   }
 ```

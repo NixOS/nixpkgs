@@ -82,6 +82,14 @@ let
     + ''
       runHook postInstall
     '';
+
+    postFixup = ''
+      # Link missing libfontconfig to fix font discovery
+      # https://github.com/warpdotdev/Warp/issues/5793
+      patchelf \
+        --add-needed libfontconfig.so.1 \
+        $out/opt/warpdotdev/warp-terminal/warp
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -113,7 +121,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
       imadnyc
-      donteatoreo
+      FlameFlag
       johnrtitor
     ];
     platforms = platforms.darwin ++ [

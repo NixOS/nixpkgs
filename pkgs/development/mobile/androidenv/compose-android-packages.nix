@@ -189,7 +189,7 @@ let
               archive:
               (fetchurl {
                 inherit (archive) url sha1;
-                preferLocalBuild = true;
+                inherit meta;
                 passthru = {
                   info = packageInfo;
                 };

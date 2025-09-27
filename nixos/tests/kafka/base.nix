@@ -131,5 +131,6 @@ with pkgs;
     mode = "zookeeper";
   };
   kafka_4_0 = makeKafkaTest "kafka_4_0" { kafkaPackage = apacheKafka_4_0; };
+  kafka_4_1 = makeKafkaTest "kafka_4_1" { kafkaPackage = apacheKafka_4_1; };
   kafka = makeKafkaTest "kafka" { kafkaPackage = apacheKafka; };
 }

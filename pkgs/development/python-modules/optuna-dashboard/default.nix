@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "optuna-dashboard";
-  version = "0.19.0";
+  version = "0.20.0b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna-dashboard";
     tag = "v${version}";
-    hash = "sha256-UTl3X0laEHyc9YjL2RPBeCle0WRKjOU7Bt58BMRXIlU=";
+    hash = "sha256-+mS9D71cwVkO0AqtU0pxK0PBvwCOxA6dPJyTVps4X+g=";
   };
 
   dependencies = [

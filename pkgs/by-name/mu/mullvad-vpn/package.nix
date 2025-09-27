@@ -163,7 +163,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       Br1ght0ne
       ymarkus
-      ataraxiasjel
     ];
   };
 }

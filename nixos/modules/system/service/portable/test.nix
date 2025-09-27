@@ -7,6 +7,12 @@ let
 
   portable-lib = import ./lib.nix { inherit lib; };
 
+  configured = portable-lib.configure {
+    serviceManagerPkgs = throw "do not use pkgs in this test";
+    extraRootModules = [ ];
+    extraRootSpecialArgs = { };
+  };
+
   dummyPkg =
     name:
     derivation {
@@ -79,23 +85,25 @@ let
     modules = [
       {
         options.services = mkOption {
-          type = types.attrsOf (
-            types.submoduleWith {
-              class = "service";
-              modules = [
-                ./service.nix
-              ];
-            }
-          );
+          type = types.attrsOf configured.serviceSubmodule;
         };
       }
       exampleConfig
     ];
   };
 
+  filterEval =
+    config:
+    lib.optionalAttrs (config ? process) {
+      inherit (config) assertions warnings process;
+    }
+    // {
+      services = lib.mapAttrs (k: filterEval) config.services;
+    };
+
   test =
     assert
-      exampleEval.config == {
+      filterEval exampleEval.config == {
         services = {
           service1 = {
             process = {

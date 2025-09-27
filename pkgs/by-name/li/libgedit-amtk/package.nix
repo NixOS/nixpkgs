@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";

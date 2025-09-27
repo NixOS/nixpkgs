@@ -13,7 +13,7 @@
   glib,
   glog,
   gflags,
-  protobuf_21,
+  protobuf,
   config,
   ocl-icd,
   qimgv,
@@ -103,7 +103,7 @@ let
     ;
   inherit (lib.trivial) flip;
 
-  version = "4.11.0";
+  version = "4.12.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -114,7 +114,7 @@ let
     owner = "opencv";
     repo = "opencv";
     tag = version;
-    hash = "sha256-oiU4CwoMfuUbpDtujJVTShMCzc5GsnIaprC4DzkSzEM=";
+    hash = "sha256-TZdEeZyBY3vCI53g4VDMzl3AASMuXAZKrSH/+XlxR7c=";
   };
 
   contribSrc = fetchFromGitHub {
@@ -332,7 +332,7 @@ effectiveStdenv.mkDerivation {
     glib
     glog
     pcre2
-    protobuf_21
+    protobuf
     zlib
   ]
   ++ optionals enablePython [
@@ -463,6 +463,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)
+    (cmakeFeature "CMAKE_CXX_STANDARD" "17") # required to enable protobuf
     (cmakeBool "WITH_PROTOBUF" true)
     (cmakeBool "PROTOBUF_UPDATE_FILES" true)
     (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)

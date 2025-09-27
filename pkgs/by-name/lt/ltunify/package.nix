@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://lekensteyn.nl/logitech-unifying.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "ltunify";
   };

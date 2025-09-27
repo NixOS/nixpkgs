@@ -34,6 +34,5 @@ buildDunePackage rec {
     description = "In-memory BLOCK device for MirageOS";
     homepage = "https://github.com/mirage/mirage-block-ramdisk";
     license = licenses.isc;
-    maintainers = with maintainers; [ ehmry ];
   };
 }

@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   pkg-config,
@@ -12,7 +12,7 @@
   xorg,
 }:
 
-buildGo123Module {
+buildGoModule {
   pname = "sointu";
   version = "0.4.1-unstable-2025-08-13";
 
@@ -47,7 +47,9 @@ buildGo123Module {
     "cmd/sointu-play"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Fork of 4klang that can target 386, amd64 and WebAssembly";

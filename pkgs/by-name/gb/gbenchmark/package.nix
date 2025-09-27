@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

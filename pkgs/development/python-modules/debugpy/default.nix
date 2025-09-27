@@ -2,12 +2,12 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
   replaceVars,
   gdb,
   lldb,
+  setuptools,
   pytestCheckHook,
   pytest-xdist,
   pytest-timeout,
@@ -25,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.16";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.8.17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-11P2L3/ePoKrqO2G65XJeDEB6lsC8h7oRyXzGRz18tg=";
+    hash = "sha256-U9WeWAX0qDusWcMsFaI1ct4YKlGQEHUYlKZfRiYhma0=";
   };
 
   patches = [
@@ -91,6 +89,8 @@ buildPythonPackage rec {
         }
       )'';
 
+  build-system = [ setuptools ];
+
   # Disable tests for unmaintained versions of python
   doCheck = pythonAtLeast "3.11";
 
@@ -136,17 +136,23 @@ buildPythonPackage rec {
     "test_systemexit"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # ConnectionResetError: [Errno 54] Connection reset by peer
+    "tests/debugpy/test_breakpoints.py::test_error_in_condition[program-attach_connect(cli)-]"
+    "tests/debugpy/test_breakpoints.py::test_error_in_condition[program-attach_connect(cli)-NameError]"
+  ];
+
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "debugpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
     changelog = "https://github.com/microsoft/debugpy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -12,11 +12,11 @@ Nixpkgs provides a number of CUDA package sets, each based on a different CUDA r
 - `cudaPackages_x`: A major-versioned alias to the major-minor-versioned CUDA package set with the latest widely supported major CUDA release.
 - `cudaPackages`: An unversioned alias to the major-versioned alias for the latest widely supported CUDA release. The package set referenced by this alias is also referred to as the "default" CUDA package set.
 
-It is recommended to use the unversioned `cudaPackages` attribute. While versioned package sets are available (e.g., `cudaPackages_12_2`), they are periodically removed.
+It is recommended to use the unversioned `cudaPackages` attribute. While versioned package sets are available (e.g., `cudaPackages_12_8`), they are periodically removed.
 
 Here are two examples to illustrate the naming conventions:
 
-- If `cudaPackages_12_8` is the latest release in the 12.x series, but core libraries like OpenCV or ONNX Runtime fail to build with it, `cudaPackages_12` may alias `cudaPackages_12_6` instead of `cudaPackages_12_8`.
+- If `cudaPackages_12_9` is the latest release in the 12.x series, but core libraries like OpenCV or ONNX Runtime fail to build with it, `cudaPackages_12` may alias `cudaPackages_12_8` instead of `cudaPackages_12_9`.
 - If `cudaPackages_13_1` is the latest release, but core libraries like PyTorch or Torch Vision fail to build with it, `cudaPackages` may alias `cudaPackages_12` instead of `cudaPackages_13`.
 
 All CUDA package sets include common CUDA packages like `libcublas`, `cudnn`, `tensorrt`, and `nccl`.
@@ -146,7 +146,7 @@ These settings ensure that the CUDA setup hooks function as intended.
 When using `callPackage`, you can choose to pass in a different variant, e.g. when a package requires a specific version of CUDA:
 
 ```nix
-{ mypkg = callPackage { cudaPackages = cudaPackages_12_2; }; }
+{ mypkg = callPackage { cudaPackages = cudaPackages_12_6; }; }
 ```
 
 ::: {.caution}
@@ -265,7 +265,7 @@ By default, the NVIDIA Container Toolkit will use the GPU index to identify spec
 
 #### Using docker-compose {#cuda-using-docker-compose}
 
-It's possible to expose GPU's to a `docker-compose` environment as well. With a `docker-compose.yaml` file like follows:
+It's possible to expose GPUs to a `docker-compose` environment as well. With a `docker-compose.yaml` file like follows:
 
 ```yaml
 services:

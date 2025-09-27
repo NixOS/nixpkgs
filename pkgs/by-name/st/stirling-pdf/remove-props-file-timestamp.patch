@@ -1,12 +1,12 @@
 diff --git a/build.gradle b/build.gradle
-index 3dba68da..fde06f16 100644
+index 2c151d1..4c03638 100644
 --- a/build.gradle
 +++ b/build.gradle
-@@ -75,6 +75,7 @@ tasks.register('writeVersion') {
-         def props = new Properties()
-         props.setProperty("version", version)
-         props.store(propsFile.newWriter(), null)
-+        propsFile.text = propsFile.readLines().tail().join('\n')
-     }
+@@ -69,7 +69,6 @@ allprojects {
+ tasks.register('writeVersion', WriteProperties) {
+     outputFile = layout.projectDirectory.file('app/common/src/main/resources/version.properties')
+     println "Writing version.properties to ${outputFile.path}"
+-    comment = "${new Date()}"
+     property 'version', project.provider { project.version.toString() }
  }
  

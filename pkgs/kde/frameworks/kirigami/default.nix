@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch,
   mkKdeDerivation,
   qtsvg,
   qttools,

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   # Dependencies
   aria2,
-  # Java Script dependency
+  # JavaScript dependency
   nodejs,
   fetchNpmDeps,
   npmHooks,
@@ -45,6 +45,7 @@ melpaBuild (finalAttrs: {
 
   postInstall = ''
     LISPDIR=$out/share/emacs/site-lisp/elpa/${finalAttrs.ename}-${finalAttrs.melpaVersion}
+    touch node_modules/.nosearch
     cp -r node_modules $LISPDIR/
   '';
 

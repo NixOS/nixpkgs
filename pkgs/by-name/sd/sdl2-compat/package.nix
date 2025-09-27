@@ -20,6 +20,8 @@
   SDL_compat,
   ffmpeg,
   qemu,
+
+  x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
 let
   # tray support on sdl3 pulls in gtk3, which is quite an expensive dependency.
@@ -44,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sdl3'
-    libX11
-  ];
+  ]
+  ++ lib.optional x11Support libX11;
 
   checkInputs = [ libGL ];
 

@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2025-05-19";
+  version = "2025-09-03";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-st9VLiuvKHKkokUToxw4KQ4aekGMqx8rfVBmmeddgVk=";
+    hash = "sha256-mQY5K0dBRWkZooeqRm5X0JXTuD4Xfzs9Vi5j+tbd1aw=";
   };
 
   nativeBuildInputs = [
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
 
-  passthru.tests = {
+  passthru.tests = lib.optionalAttrs doWrap {
     testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ]; } ''
       export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
       export VCPKG_ROOT=.

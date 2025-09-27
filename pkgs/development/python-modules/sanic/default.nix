@@ -69,8 +69,6 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.http3;
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   preCheck = ''
     # Some tests depends on sanic on PATH
     PATH="$out/bin:$PATH"
@@ -78,6 +76,11 @@ buildPythonPackage rec {
 
     # needed for relative paths for some packages
     cd tests
+  ''
+  # Work around "OSError: AF_UNIX path too long"
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace worker/test_socket.py \
+      --replace-fail '"./test.sock"' '"/tmp/test.sock"'
   '';
 
   disabledTests = [
@@ -91,6 +94,8 @@ buildPythonPackage rec {
     "test_input_is_dir"
     # Racy, e.g. Address already in use
     "test_logger_vhosts"
+    # Event loop is closed
+    "test_create_server_trigger_events"
   ];
 
   disabledTestPaths = [
@@ -100,6 +105,8 @@ buildPythonPackage rec {
     "typing/test_typing.py"
     # occasionally hangs
     "test_multiprocessing.py"
+    # Failed: async def functions are not natively supported.
+    "test_touchup.py"
   ];
 
   # Avoid usage of nixpkgs-review in darwin since tests will compete usage

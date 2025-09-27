@@ -414,7 +414,14 @@ in
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
       default = null;
-      description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
+      description = ''
+        If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot
+        be manually installed.
+
+        Keep in mind that this turns off drilldown: for this to work, you need to add
+        `grafana-metricsdrilldown-app`, `grafana-lokiexplore-app`, `grafana-exploretraces-app`
+        and `grafana-pyroscope-app` to this option.
+      '';
       example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
@@ -985,10 +992,13 @@ in
 
             x_xss_protection = mkOption {
               description = ''
-                Set to `false` to disable the `X-XSS-Protection` header,
+                Set to `true` to enable the `X-XSS-Protection` header,
                 which tells browsers to stop pages from loading when they detect reflected cross-site scripting (XSS) attacks.
+
+                __Note:__ this is the default in Grafana, it's turned off here
+                since it's [recommended to not use this header anymore](https://owasp.org/www-project-secure-headers/#x-xss-protection).
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 
@@ -1318,6 +1328,16 @@ in
                     description = "Config file version.";
                     default = 1;
                     type = types.int;
+                  };
+
+                  prune = mkOption {
+                    default = false;
+                    type = types.bool;
+                    description = ''
+                      When `true`, provisioned datasources from this file will be deleted
+                      automatically when removed from
+                      {option}`services.grafana.provision.datasources.settings.datasources`.
+                    '';
                   };
 
                   datasources = mkOption {

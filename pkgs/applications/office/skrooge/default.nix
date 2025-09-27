@@ -1,35 +1,35 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchurl,
   cmake,
   extra-cmake-modules,
+  pkg-config,
+  qtbase,
+  wrapQtAppsHook,
   qtwebengine,
-  qtscript,
   grantlee,
-  qtxmlpatterns,
   kxmlgui,
   kwallet,
   kparts,
   kdoctools,
   kjobwidgets,
-  kdesignerplugin,
   kiconthemes,
   knewstuff,
   sqlcipher,
-  qca-qt5,
-  kactivities,
+  qca,
+  plasma-activities,
   karchive,
   kguiaddons,
   knotifyconfig,
   krunner,
+  ktexttemplate,
   kwindowsystem,
   libofx,
   shared-mime-info,
-  qtquickcontrols2,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "skrooge";
   version = "25.4.0";
 
@@ -42,37 +42,38 @@ mkDerivation rec {
     cmake
     extra-cmake-modules
     kdoctools
+    pkg-config
     shared-mime-info
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    qtbase
     qtwebengine
-    qtscript
     grantlee
     kxmlgui
     kwallet
     kparts
-    qtxmlpatterns
     kjobwidgets
-    kdesignerplugin
     kiconthemes
     knewstuff
     sqlcipher
-    qca-qt5
-    kactivities
+    qca
+    plasma-activities
     karchive
     kguiaddons
     knotifyconfig
     krunner
+    ktexttemplate
     kwindowsystem
     libofx
-    qtquickcontrols2
   ];
 
-  # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
-  # This is needed ONLY for developers. So NOT NEEDED for end user.
-  # Source: https://forum.kde.org/viewtopic.php?f=210&t=143375#p393675
   cmakeFlags = [
+    "-DQT_MAJOR_VERSION=6"
+    # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
+    # This is needed ONLY for developers. So NOT NEEDED for end user.
+    # Source: https://forum.kde.org/viewtopic.php?f=210&t=143375#p393675
     "-DSKG_DESIGNER=OFF"
     "-DSKG_WEBENGINE=ON"
     "-DSKG_WEBKIT=OFF"

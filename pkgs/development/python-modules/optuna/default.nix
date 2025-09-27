@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.2.1";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     tag = "v${version}";
-    hash = "sha256-WLrdHrdfCtCZMW2J375N8vmod7FcKCMwQPGKicRA878=";
+    hash = "sha256-qaCOpqKRepm/a1Nh98PV6RcRkadLK5E429pn1zaWQDA=";
   };
 
   build-system = [
@@ -138,12 +138,14 @@ buildPythonPackage rec {
     "test_visualizations_with_single_objectives"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "optuna" ];
 
   meta = {
     description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
-    changelog = "https://github.com/optuna/optuna/releases/tag/${version}";
+    changelog = "https://github.com/optuna/optuna/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "optuna";

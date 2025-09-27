@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "python-zaqarclient";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-zaqarclient";
     tag = version;
-    hash = "sha256-oqfD9+9xNYAEjCy3DvpHOF9PeRGnwo7flpFQCSnpt7g=";
+    hash = "sha256-JzZc2g1L7Z26EcAIj5TIkle4WPut9YH6+wDUo4nYjyw=";
   };
 
   env.PBR_VERSION = version;

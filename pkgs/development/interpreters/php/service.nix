@@ -1,13 +1,18 @@
+# Tests in: nixos/tests/php/fpm-modular.nix
+
+# Non-module dependencies (importApply)
+{ formats, coreutils }:
+
+# Service module
 {
   options,
   config,
-  pkgs,
   lib,
   ...
 }:
 let
   cfg = config.php-fpm;
-  format = pkgs.formats.iniWithGlobalSection { };
+  format = formats.iniWithGlobalSection { };
   configFile = format.generate "php-fpm.conf" {
     globalSection = lib.filterAttrs (_: v: !lib.isAttrs v) cfg.settings;
     sections = lib.filterAttrs (_: lib.isAttrs) cfg.settings;
@@ -76,8 +81,11 @@ in
   _class = "service";
 
   options.php-fpm = {
-    package = lib.mkPackageOption pkgs "php" {
-      example = ''
+    package = lib.mkOption {
+      type = lib.types.package;
+      description = "PHP package to use for php-fpm";
+      defaultText = lib.literalMD ''The PHP package that provided this module.'';
+      example = lib.literalExpression ''
         php.buildEnv {
           extensions =
             { all, ... }:
@@ -163,7 +171,7 @@ in
 
       serviceConfig = {
         Type = "notify";
-        ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+        ExecReload = "${coreutils}/bin/kill -USR2 $MAINPID";
         RuntimeDirectory = "php-fpm";
         RuntimeDirectoryPreserve = true;
         Restart = "always";
@@ -175,7 +183,7 @@ in
 
     finit.service = {
       conditions = [ "service/syslogd/ready" ];
-      reload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+      reload = "${coreutils}/bin/kill -USR2 $MAINPID";
       notify = "systemd";
     };
   };

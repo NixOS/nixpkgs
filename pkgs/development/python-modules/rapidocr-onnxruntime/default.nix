@@ -21,13 +21,13 @@
   requests,
 }:
 let
-  version = "2.1.0";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
     tag = "v${version}";
-    hash = "sha256-4R2rOCfnhElII0+a5hnvbn+kKQLEtH1jBvfFdxpLEBk=";
+    hash = "sha256-x0VELDKOffxbV3v0aDFJFuDC4YfsGM548XWgINmRc3M=";
   };
 
   models =
@@ -63,11 +63,9 @@ buildPythonPackage {
 
   postPatch = ''
     mv setup_onnxruntime.py setup.py
-    mkdir -p rapidocr_onnxruntime/models
 
     ln -s ${models}/* rapidocr_onnxruntime/models
 
-    # Magic patch from upstream - what does this even do??
     echo "from .rapidocr_onnxruntime.main import RapidOCR, VisRes" > __init__.py
   '';
 
@@ -101,10 +99,25 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rapidocr_onnxruntime" ];
 
-  # As of version 2.1.0, 61 out of 70 tests require internet access.
-  # It's just not plausible to manually pick out ones that actually work
-  # in a hermetic build environment anymore :(
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
+
+  # These are tests for different backends.
+  disabledTestPaths = [
+    "tests/test_vino.py"
+    "tests/test_paddle.py"
+  ];
+
+  disabledTests = [
+    # Needs Internet access
+    "test_long_img"
+  ];
+
+  # rapidocr-onnxruntime has been renamed to rapidocr by upstream since 2.0.0. However, some packages like open-webui still requires rapidocr-onnxruntime 1.4.4. Therefore we set no auto update here.
+  # nixpkgs-update: no auto update
+  passthru.skipBulkUpdate = true;
 
   meta = {
     # This seems to be related to https://github.com/microsoft/onnxruntime/issues/10038
@@ -113,8 +126,8 @@ buildPythonPackage {
     changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wrvsrx ];
     mainProgram = "rapidocr_onnxruntime";
   };
 }

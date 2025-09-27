@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jay";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${version}";
-    sha256 = "sha256-lVdNilNMeVN27VaDufWiNVme0apnX+w0x9JeHkDzFH4=";
+    sha256 = "sha256-mm2bXxl9TaKwmeCwFz3IKznqjsfY8RKEVU/RK4zd63U=";
   };
 
-  cargoHash = "sha256-5j4ECjBCMSCmGfFUQ72nwER/vTvCiDl6f2CyNF3n1ek=";
+  cargoHash = "sha256-T7053eAH3IqkAxNZpYHdC6Z7JZtArrOqGMjoIccjemI=";
 
   SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 

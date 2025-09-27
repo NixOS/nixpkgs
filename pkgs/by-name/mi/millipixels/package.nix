@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   fetchpatch,
+  gitUpdater,
   glib,
   meson,
   ninja,
@@ -25,14 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "millipixels";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitLab {
     owner = "Librem5";
     repo = "millipixels";
     rev = "v${version}";
     domain = "source.puri.sm";
-    hash = "sha256-pRREQRYyD9+dpRvcfsNiNthFy08Yeup9xDn+x+RWDrE=";
+    hash = "sha256-Sj14t6LeZWNONcgrwJxN4J1/85m1SLgmmcRnHQUULHI=";
   };
   patches = [
     # fix for https://source.puri.sm/Librem5/millipixels/-/issues/87, can be removed with the next release (if there ever will be one)
@@ -73,6 +74,10 @@ stdenv.mkDerivation rec {
         ]
       }
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Camera application for the Librem 5";

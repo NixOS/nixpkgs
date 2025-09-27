@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     description = "C client library for the Riemann monitoring system";
     mainProgram = "riemann-client";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ pradeepchhetri ];
     platforms = platforms.linux;
   };
 }

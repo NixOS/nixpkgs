@@ -14,6 +14,7 @@
   systemd,
   xkeyboardconfig,
   nixosTests,
+  docutils,
 }:
 let
   isQt6 = lib.versions.major qtbase.version == "6";
@@ -28,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-r5mnEWham2WnoEqRh5tBj/6rn5mN62ENOCmsLv2Ht+w=";
   };
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     ./greeter-path.patch
@@ -44,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qttools
+    docutils
   ];
 
   buildInputs = [
@@ -61,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_QT6" isQt6)
+    (lib.cmakeBool "BUILD_MAN_PAGES" true)
     "-DCONFIG_FILE=/etc/sddm.conf"
     "-DCONFIG_DIR=/etc/sddm.conf.d"
 
@@ -97,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "QML based X11 display manager";
     homepage = "https://github.com/sddm/sddm";
     maintainers = with maintainers; [
-      abbradar
       ttuegel
       k900
     ];

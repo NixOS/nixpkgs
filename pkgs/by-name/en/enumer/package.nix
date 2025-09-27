@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "enumer";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "dmarkham";
     repo = "enumer";
     tag = "v${version}";
-    hash = "sha256-6K9xsJ9VmsfMDAUZZpQPtwZKzyITuRy2mmduwhya9EY=";
+    hash = "sha256-Motlnq1U40gUGhDdFtKgQ7ogGfm8RvittTnRWOqIhKU=";
   };
 
   vendorHash = "sha256-w9T9PWMJjBJP2MmhGC7e78zbszgCwtVrfO5AQlu/ugQ=";

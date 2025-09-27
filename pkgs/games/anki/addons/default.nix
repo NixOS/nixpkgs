@@ -16,5 +16,7 @@
 
   reviewer-refocus-card = callPackage ./reviewer-refocus-card { };
 
+  review-heatmap = callPackage ./review-heatmap { };
+
   yomichan-forvo-server = callPackage ./yomichan-forvo-server { };
 }

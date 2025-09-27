@@ -47,33 +47,29 @@ import ../make-test-python.nix (
         };
       };
 
-    testScript = ''
-      import json
+    testScript = # python
+      ''
+        import json
 
-      start_all()
-      machine.wait_for_unit("k3s")
-      # wait until the node is ready
-      machine.wait_until_succeeds(r"""kubectl get node ${nodeName} -ojson | jq -e '.status.conditions[] | select(.type == "Ready") | .status == "True"'""")
-      # test whether the kubelet registered an inhibitor lock
-      machine.succeed("systemd-inhibit --list --no-legend | grep \"kubelet.*k3s-server.*shutdown\"")
-      # run kubectl proxy in the background, close stdout through redirection to not wait for the command to finish
-      machine.execute("kubectl proxy --address 127.0.0.1 --port=8001 >&2 &")
-      machine.wait_until_succeeds("nc -z 127.0.0.1 8001")
-      # get the kubeletconfig
-      kubelet_config=json.loads(machine.succeed("curl http://127.0.0.1:8001/api/v1/nodes/${nodeName}/proxy/configz | jq '.kubeletconfig'"))
+        start_all()
+        machine.wait_for_unit("k3s")
+        # wait until the node is ready
+        machine.wait_until_succeeds(r"""kubectl get node ${nodeName} -ojson | jq -e '.status.conditions[] | select(.type == "Ready") | .status == "True"'""")
+        # test whether the kubelet registered an inhibitor lock
+        machine.succeed("systemd-inhibit --list --no-legend | grep \"kubelet.*k3s-server.*shutdown\"")
+        # run kubectl proxy in the background, close stdout through redirection to not wait for the command to finish
+        machine.execute("kubectl proxy --address 127.0.0.1 --port=8001 >&2 &")
+        machine.wait_until_succeeds("nc -z 127.0.0.1 8001")
+        # get the kubeletconfig
+        kubelet_config=json.loads(machine.succeed("curl http://127.0.0.1:8001/api/v1/nodes/${nodeName}/proxy/configz | jq '.kubeletconfig'"))
 
-      with subtest("Kubelet config values are set correctly"):
-        assert kubelet_config["shutdownGracePeriod"] == "${shutdownGracePeriod}", \
-          f"unexpected value for shutdownGracePeriod: {kubelet_config["shutdownGracePeriod"]}"
-        assert kubelet_config["shutdownGracePeriodCriticalPods"] == "${shutdownGracePeriodCriticalPods}", \
-          f"unexpected value for shutdownGracePeriodCriticalPods: {kubelet_config["shutdownGracePeriodCriticalPods"]}"
-        assert kubelet_config["podsPerCore"] == ${toString podsPerCore}, \
-          f"unexpected value for podsPerCore: {kubelet_config["podsPerCore"]}"
-        assert kubelet_config["memoryThrottlingFactor"] == ${toString memoryThrottlingFactor}, \
-          f"unexpected value for memoryThrottlingFactor: {kubelet_config["memoryThrottlingFactor"]}"
-        assert kubelet_config["containerLogMaxSize"] == "${containerLogMaxSize}", \
-          f"unexpected value for containerLogMaxSize: {kubelet_config["containerLogMaxSize"]}"
-    '';
+        with subtest("Kubelet config values are set correctly"):
+          t.assertEqual(kubelet_config["shutdownGracePeriod"], "${shutdownGracePeriod}")
+          t.assertEqual(kubelet_config["shutdownGracePeriodCriticalPods"], "${shutdownGracePeriodCriticalPods}")
+          t.assertEqual(kubelet_config["podsPerCore"], ${toString podsPerCore})
+          t.assertEqual(kubelet_config["memoryThrottlingFactor"], ${toString memoryThrottlingFactor})
+          t.assertEqual(kubelet_config["containerLogMaxSize"],"${containerLogMaxSize}")
+      '';
 
     meta.maintainers = lib.teams.k3s.members;
   }

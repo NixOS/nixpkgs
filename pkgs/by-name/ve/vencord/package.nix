@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.12.10";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-1id5efh9Zr2hpLnLAej2EMDQHpjdM7U5ZZBDE2p5Ljc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MdbO74vAbsZyB6seOqxHvQL0HT4IdVnDjd+N3a9XAns=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      donteatoreo
+      FlameFlag
       FlafyDev
       Gliczy
       NotAShelf

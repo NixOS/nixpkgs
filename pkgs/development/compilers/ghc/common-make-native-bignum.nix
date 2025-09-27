@@ -29,7 +29,6 @@
 
   libiconv ? null,
   ncurses,
-  glibcLocales ? null,
 
   # GHC can be built with system libffi or a bundled one.
   libffi ? null,
@@ -67,6 +66,10 @@
       || (stdenv.buildPlatform != stdenv.hostPlatform)
       || (stdenv.hostPlatform != stdenv.targetPlatform)
     ),
+
+  # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
+  numactl,
 
   # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
@@ -222,7 +225,10 @@ let
         }
         .${name};
     in
-    "${tools}/bin/${tools.targetPrefix}${name}";
+    getToolExe tools name;
+
+  # targetPrefix aware lib.getExe'
+  getToolExe = drv: name: lib.getExe' drv "${drv.targetPrefix or ""}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -261,6 +267,7 @@ let
       gmp
       libffi
       ncurses
+      numactl
       ;
   };
 
@@ -296,86 +303,15 @@ stdenv.mkDerivation (
         stripLen = 1;
         extraPrefix = "libraries/unix/";
       })
-    ]
-    ++ lib.optionals (lib.versionOlder version "9.4") [
-      # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
-      (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
-        sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
-        extraPrefix = "utils/haddock/";
-        stripLen = 1;
-      })
-    ]
 
-    ++ lib.optionals (lib.versionOlder version "9.4.6") [
-      # Fix docs build with sphinx >= 6.0
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
-      (fetchpatch {
-        name = "ghc-docs-sphinx-6.0.patch";
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
-        sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
-      })
-    ]
-
-    ++ [
       # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
       ./docs-sphinx-7.patch
-    ]
 
-    ++ lib.optionals (lib.versionOlder version "9.2.2") [
-      # Add flag that fixes C++ exception handling; opt-in. Merged in 9.4 and 9.2.2.
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7423
-      (fetchpatch {
-        name = "ghc-9.0.2-fcompact-unwind.patch";
-        # Note that the test suite is not packaged.
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/c6132c782d974a7701e7f6447bdcd2bf6db4299a.patch?merge_request_iid=7423";
-        sha256 = "sha256-b4feGZIaKDj/UKjWTNY6/jH4s2iate0wAgMxG3rAbZI=";
-      })
-    ]
-
-    ++ lib.optionals (lib.versionAtLeast version "9.2") [
-      # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
-      # Can be removed if the Cabal library included with ghc backports the linked fix
-      (fetchpatch {
-        url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
-        stripLen = 1;
-        extraPrefix = "libraries/Cabal/";
-        sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
-      })
-    ]
-
-    ++ lib.optionals (version == "9.4.6") [
-      # Work around a type not being defined when including Rts.h in bytestring's cbits
-      # due to missing feature macros. See https://gitlab.haskell.org/ghc/ghc/-/issues/23810.
-      ./9.4.6-bytestring-posix-source.patch
-    ]
-
-    ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
-      # Prevent the paths module from emitting symbols that we don't use
-      # when building with separate outputs.
-      #
-      # These cause problems as they're not eliminated by GHC's dead code
-      # elimination on aarch64-darwin. (see
-      # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-      (
-        if lib.versionAtLeast version "9.2" then
-          ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-        else
-          ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
-      )
-    ]
-
-    # Fixes stack overrun in rts which crashes an process whenever
-    # freeHaskellFunPtr is called with nixpkgs' hardening flags.
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
-    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
-    # TODO: patch doesn't apply for < 9.4, but may still be necessary?
-    ++ lib.optionals (lib.versionAtLeast version "9.4") [
-      (fetchpatch {
-        name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
-        sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
-      })
+      # Correctly record libnuma's library and include directories in the
+      # package db. This fixes linking whenever stdenv and propagation won't
+      # quite pass the correct -L flags to the linker, e.g. when using GHC
+      # outside of stdenv/nixpkgs or build->build compilation in pkgsStatic.
+      ./ghc-9.4-rts-package-db-libnuma-dirs.patch
     ]
 
     # Before GHC 9.6, GHC, when used to compile C sources (i.e. to drive the CC), would first
@@ -394,27 +330,54 @@ stdenv.mkDerivation (
     #
     # https://gitlab.haskell.org/ghc/ghc/-/issues/25608#note_622589
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6877
-    ++ (
-      if lib.versionAtLeast version "9.4" then
-        [
-          # Need to use this patch so the next one applies, passes file location info to the cc phase
-          (fetchpatch {
-            name = "ghc-add-location-to-cc-phase.patch";
-            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4a7256a75af2fc0318bef771a06949ffb3939d5a.patch";
-            hash = "sha256-DnTI+i1zMebeWvw75D59vMaEEBb2Nr9HusxTyhmdy2M=";
-          })
-          # Makes Cc phase directly generate object files instead of assembly
-          (fetchpatch {
-            name = "ghc-cc-directly-emit-object.patch";
-            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/96811ba491495b601ec7d6a32bef8563b0292109.patch";
-            hash = "sha256-G8u7/MK/tGOEN8Wxccxj/YIOP7mL2G9Co1WKdHXOo6I=";
-          })
-        ]
-      else
-        [
-          # TODO(@sternenseemann): backport changes to GHC < 9.4 if possible
-        ]
-    );
+    ++ [
+      # Need to use this patch so the next one applies, passes file location info to the cc phase
+      (fetchpatch {
+        name = "ghc-add-location-to-cc-phase.patch";
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4a7256a75af2fc0318bef771a06949ffb3939d5a.patch";
+        hash = "sha256-DnTI+i1zMebeWvw75D59vMaEEBb2Nr9HusxTyhmdy2M=";
+      })
+      # Makes Cc phase directly generate object files instead of assembly
+      (fetchpatch {
+        name = "ghc-cc-directly-emit-object.patch";
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/96811ba491495b601ec7d6a32bef8563b0292109.patch";
+        hash = "sha256-G8u7/MK/tGOEN8Wxccxj/YIOP7mL2G9Co1WKdHXOo6I=";
+      })
+    ]
+
+    ++ [
+      # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
+      # Can be removed if the Cabal library included with ghc backports the linked fix
+      (fetchpatch {
+        url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
+        stripLen = 1;
+        extraPrefix = "libraries/Cabal/";
+        sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
+      })
+    ]
+
+    # Fixes stack overrun in rts which crashes an process whenever
+    # freeHaskellFunPtr is called with nixpkgs' hardening flags.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
+    # TODO: patch doesn't apply for < 9.4, but may still be necessary?
+    ++ [
+      (fetchpatch {
+        name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
+        sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
+      })
+    ]
+
+    ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+      # Prevent the paths module from emitting symbols that we don't use
+      # when building with separate outputs.
+      #
+      # These cause problems as they're not eliminated by GHC's dead code
+      # elimination on aarch64-darwin. (see
+      # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+      ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+    ];
 
     postPatch = "patchShebangs .";
 
@@ -448,8 +411,8 @@ stdenv.mkDerivation (
       export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
     ''
     + lib.optionalString useLLVM ''
-      export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
-      export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
+      export LLC="${getToolExe buildTargetLlvmPackages.llvm "llc"}"
+      export OPT="${getToolExe buildTargetLlvmPackages.llvm "opt"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
@@ -463,7 +426,7 @@ stdenv.mkDerivation (
         if targetCC.isClang then
           toolPath "clang" targetCC
         else
-          "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+          getToolExe buildTargetLlvmPackages.clang "clang"
       }"
     ''
     + ''
@@ -473,12 +436,10 @@ stdenv.mkDerivation (
       export AR_STAGE0="$AR_FOR_BUILD"
 
       echo -n "${buildMK}" > mk/build.mk
-    ''
-    + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
       sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+    + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+      export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
@@ -486,7 +447,7 @@ stdenv.mkDerivation (
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "9.2") ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
 
       # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
       export XATTR=${lib.getBin xattr}/bin/xattr
@@ -510,13 +471,6 @@ stdenv.mkDerivation (
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-    ''
-    # HACK: allow bootstrapping with GHC 8.10 which works fine, as we don't have
-    # binary 9.0 packaged. Bootstrapping with 9.2 is broken without hadrian.
-    + lib.optionalString (lib.versions.majorMinor version == "9.4") ''
-      substituteInPlace configure --replace \
-        'MinBootGhcVersion="9.0"' \
-        'MinBootGhcVersion="8.10"'
     '';
 
     # Although it is usually correct to pass --host, we don't do that here because
@@ -563,6 +517,11 @@ stdenv.mkDerivation (
     ++ lib.optionals (disableLargeAddressSpace) [
       "--disable-large-address-space"
     ]
+    ++ lib.optionals enableNuma [
+      "--enable-numa"
+      "--with-libnuma-includes=${lib.getDev targetLibs.numactl}/include"
+      "--with-libnuma-libraries=${lib.getLib targetLibs.numactl}/lib"
+    ]
     ++ lib.optionals enableUnregisterised [
       "--enable-unregisterised"
     ];
@@ -589,11 +548,6 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals enableDocs [
       sphinx
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versions.majorMinor version == "9.0") [
-      # TODO(@sternenseemann): backport addition of XATTR env var like
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
-      xattr
     ];
 
     # Everything the stage0 compiler needs to build stage1: CC, bintools, extra libs.
@@ -618,8 +572,13 @@ stdenv.mkDerivation (
 
     buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
-    depsTargetTarget = map lib.getDev (libDeps targetPlatform);
-    depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
+    # stage1 GHC doesn't need to link against libnuma, so it's target specific
+    depsTargetTarget = map lib.getDev (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
+    depsTargetTargetPropagated = map (lib.getOutput "out") (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
 
     # required, because otherwise all symbols from HSffi.o are stripped, and
     # that in turn causes GHCi to abort
@@ -668,17 +627,14 @@ stdenv.mkDerivation (
     ''
     + lib.optionalString useLLVM ''
       ghc-settings-edit "$settingsFile" \
-        "LLVM llc command" "${lib.getBin llvmPackages.llvm}/bin/llc" \
-        "LLVM opt command" "${lib.getBin llvmPackages.llvm}/bin/opt"
+        "LLVM llc command" "${getToolExe llvmPackages.llvm "llc"}" \
+        "LLVM opt command" "${getToolExe llvmPackages.llvm "opt"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       ghc-settings-edit "$settingsFile" \
         "LLVM clang command" "${
           # See comment for CLANG in preConfigure
-          if installCC.isClang then
-            toolPath "clang" installCC
-          else
-            "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+          if installCC.isClang then toolPath "clang" installCC else getToolExe llvmPackages.clang "clang"
         }"
     ''
     + ''
@@ -713,6 +669,8 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
+      broken = useLLVM;
     };
 
   }

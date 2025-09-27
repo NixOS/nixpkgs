@@ -10,13 +10,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "wprs";
-  version = "0-unstable-2024-10-22";
+  version = "0-unstable-2025-09-05";
 
   src = fetchFromGitHub {
     owner = "wayland-transpositor";
     repo = "wprs";
-    rev = "6b993332c55568e66961b52bb6285e76d97d50df";
-    hash = "sha256-WrPr9b1r8As4Y5c+QCOYnHvY9x145+pL4OSmrGsYDpk=";
+    rev = "1eb482e0f80cc84a3ee55f7cda99df9bea6573af";
+    hash = "sha256-+m0gXQQa2NkUFNXfGPCwHTlyTFOw1nfjrUBgSD5iGMo=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,9 @@ rustPlatform.buildRustPackage {
     (python3.withPackages (pp: with pp; [ psutil ]))
   ];
 
-  cargoHash = "sha256-caf1d7SdAEc5RUDQCQkxlYw073gIUwlnvlVaX8gJGmc=";
+  cargoHash = "sha256-krrVgdoCcW3voSiQAoWsG+rPf1HYKbuGhplhn21as2c=";
+
+  RUSTFLAGS = "-C target-feature=+avx2"; # only works on x86 systems supporting AVX2
 
   preFixup = ''
     cp  wprs "$out/bin/wprs"

@@ -65,7 +65,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "platform";
     maintainers = with lib.maintainers; [
-      shyim
       spk
     ];
     platforms = [

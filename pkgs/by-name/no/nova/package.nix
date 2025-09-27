@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "nova";
-  version = "3.11.7";
+  version = "3.11.8";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "nova";
     rev = "v${version}";
-    hash = "sha256-5N4WHb5IWvUIg4i0XqSUWCLZM2rXPAiy2JVGlddvLFQ=";
+    hash = "sha256-2iFDTCjBnMf0FglHTZq9v+yyzCqvrT1vhDkpAL6yG6Y=";
   };
 
   vendorHash = "sha256-+cw2NclPLT9S1iakK2S5uc+nFE84MIl6QOH/L0kgoHE=";

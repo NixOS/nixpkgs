@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoreconfHook,
   libusb1,
-  ...
 }:
 
 stdenv.mkDerivation rec {

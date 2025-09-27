@@ -1,9 +1,0 @@
-# Trusted development branches:
-# These generally require PRs to update and are built by Hydra.
-# Keep this synced with the branches in .github/workflows/eval.yml
-master
-staging
-release-*
-staging-*
-haskell-updates
-python-updates

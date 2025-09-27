@@ -10,6 +10,7 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
+  pyyaml,
   requests,
   tqdm,
   typer,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2025.5.6.13";
+  version = "2025.9.17.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "coinmetrics_api_client";
-    hash = "sha256-EUxgT+LK0s7IV+EWrLKgkNMsuhZBOUfMN1PLjub9JWQ=";
+    hash = "sha256-Quupd3I5OM4VtTblHup0z0lX5fSy6h9U1dnbjocAziM=";
   };
 
   pythonRelaxDeps = [ "typer" ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   dependencies = [
     orjson
     python-dateutil
+    pyyaml
     requests
     typer
     tqdm

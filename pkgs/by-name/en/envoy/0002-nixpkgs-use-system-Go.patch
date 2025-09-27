@@ -10,14 +10,14 @@ Signed-off-by: Luke Granger-Brown <git@lukegb.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
-index aef33aa103dc1136e63e165fb9ee6a267f52ba54..c5aefca14b729b548c4e90857202eb82576b507d 100644
+index ecfe356b3f9c44dbc00877e57b72a675e9e5baf0..10be4b0b3f65e486c1dc8419337a5cf823431774 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -22,7 +22,7 @@ load("@rules_rust//rust:defs.bzl", "rust_common")
+@@ -24,7 +24,7 @@ load("@rules_rust//rust:defs.bzl", "rust_common")
  load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains", "rust_repository_set")
  
  # go version for rules_go
--GO_VERSION = "1.23.1"
+-GO_VERSION = "1.24.6"
 +GO_VERSION = "host"
  
  JQ_VERSION = "1.7"

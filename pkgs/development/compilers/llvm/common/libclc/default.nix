@@ -30,17 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (
-    ''
-      mkdir -p "$out"
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    ''
-    + ''
-      cp -r ${monorepoSrc}/libclc "$out"
-    ''
-  );
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/libclc "$out"
+  '');
 
   sourceRoot = "${finalAttrs.src.name}/libclc";
 
@@ -50,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./libclc-gnu-install-dirs.patch
+    (getVersionFile "libclc/gnu-install-dirs.patch")
   ]
   # LLVM 19 changes how host tools are looked up.
   # Need to remove NO_DEFAULT_PATH and the PATHS arguments for find_program
@@ -95,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
   ]
-  ++ lib.optional (lib.versionAtLeast release_version "19") [
+  ++ lib.optionals (lib.versionAtLeast release_version "19") [
     clang-only
     buildLlvmTools.llvm
     spirv-llvm-translator

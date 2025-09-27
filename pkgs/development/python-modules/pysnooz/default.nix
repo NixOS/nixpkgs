@@ -9,7 +9,7 @@
   freezegun,
   home-assistant-bluetooth,
   poetry-core,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-cov-stub
     pytest-mock
     pytestCheckHook

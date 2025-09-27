@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-language-pack";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   # Using the GitHub sources necessitates fetching the treesitter grammar parsers by using a vendored script.
@@ -28,17 +28,21 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tree_sitter_language_pack";
     inherit version;
-    hash = "sha256-kA6zvYLBvPXPIO2FKxtv3H6uieQKhg+l4iGnlmh8NZo=";
+    hash = "sha256-LaU5dR7MULnmu/yji1dQGjxV5nGGqTnVvxSdnLciCXQ=";
   };
 
-  # Upstream bumped the setuptools and typing-extensions dependencies, but we can still use older versions
-  # since the newer ones aren’t packaged in nixpkgs. We can't use pythonRelaxDepsHook here because it runs
-  # in postBuild, while the dependency check occurs during the build phase.
+  # Upstream bumped dependencies aggressively, but we can still use older
+  # versions since the newer ones aren’t packaged in nixpkgs. We can't use
+  # pythonRelaxDepsHook here because it runs in postBuild, while the dependency
+  # check occurs during the build phase.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=80.9.0" "setuptools>=78.1.0" \
-      --replace-fail "typing-extensions>=4.14.0" "typing-extensions>=4.13.2"
+      --replace-fail "typing-extensions>=4.15.0" "typing-extensions>=4.14.1"
   '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   build-system = [
     cython
@@ -53,8 +57,10 @@ buildPythonPackage rec {
     tree-sitter-yaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  pythonRelaxDeps = [
+    "tree-sitter"
+    "tree-sitter-embedded-template"
+    "tree-sitter-yaml"
   ];
 
   pythonImportsCheck = [
@@ -62,8 +68,8 @@ buildPythonPackage rec {
     "tree_sitter_language_pack.bindings"
   ];
 
+  # make sure import the built version, not the source one
   preCheck = ''
-    # make sure import the built version, not the source one
     rm -r tree_sitter_language_pack
   '';
 

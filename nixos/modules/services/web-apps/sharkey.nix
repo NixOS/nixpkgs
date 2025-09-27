@@ -33,7 +33,7 @@ in
           List of paths to files containing environment variables for Sharkey to use at runtime.
 
           This is useful for keeping secrets out of the Nix store. See
-          https://docs.joinsharkey.org/docs/install/configuration/ for how to configure Sharkey using environment
+          <https://docs.joinsharkey.org/docs/install/configuration/> for how to configure Sharkey using environment
           variables.
         '';
       };
@@ -57,7 +57,7 @@ in
           You need to ensure `services.meilisearch.masterKeyFile` is correctly configured for a working
           Meilisearch setup. You also need to configure Sharkey to use an API key obtained from Meilisearch with the
           `MK_CONFIG_MEILISEARCH_APIKEY` environment variable, and set `services.sharkey.settings.meilisearch.index` to
-          the created index. See https://docs.joinsharkey.org/docs/customisation/search/meilisearch/ for how to create
+          the created index. See <https://docs.joinsharkey.org/docs/customisation/search/meilisearch/> for how to create
           an API key and index.
         '';
       };
@@ -141,7 +141,7 @@ in
                 Which provider to use for full text search.
 
                 All options other than `sqlLike` require extra setup - see the comments in
-                https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/.config/example.yml for details.
+                <https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/.config/example.yml> for details.
 
                 If `sqlPgroonga` is set, and `services.sharkey.setupPostgres` is `true`, the pgroonga extension will
                 automatically be setup. You still need to create an index manually.
@@ -172,7 +172,7 @@ in
         description = ''
           Configuration options for Sharkey.
 
-          See https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/.config/example.yml for a list of all
+          See <https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/.config/example.yml> for a list of all
           available configuration options.
         '';
       };
@@ -296,5 +296,8 @@ in
       })
     ]);
 
-  meta.maintainers = with lib.maintainers; [ srxl ];
+  meta.maintainers = with lib.maintainers; [
+    srxl
+    tmarkus
+  ];
 }

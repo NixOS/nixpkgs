@@ -13,12 +13,6 @@
 }:
 
 let
-  opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-/s6eAI1VJ0kXrxP5yTi+jwNqHBCRcoltJC86AT7nVdI=";
-    "aarch64-linux" = "sha256-aG5e5HMcxO9P7ciZ9cg8uY1rxDpTOKdR31z0L2d9dxY=";
-    "x86_64-darwin" = "sha256-jkAFmTb+cTO/B7a7MgaKqOzZI3QPkM3uW2RULnBcxSI=";
-    "x86_64-linux" = "sha256-ql4qcMtuaRwSVVma3OeKkc9tXhe21PWMMko3W3JgpB0=";
-  };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
     "aarch64-linux" = "bun-linux-arm64";
@@ -28,12 +22,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.4.26";
+  version = "0.12.1";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sQ1le6/OJb22Kehjj4glUsavHE08u0e2I7h8lW9MO9E=";
+    hash = "sha256-ZpxHLZIc9bBzPJyvDHMjuaTEzZsHwafoBihKxe8Pr3U=";
   };
 
   tui = buildGoModule {
@@ -42,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     modRoot = "packages/tui";
 
-    vendorHash = "sha256-jINbGug/SPGBjsXNsC9X2r5TwvrOl5PJDL+lrOQP69Q=";
+    vendorHash = "sha256-H+TybeyyHTbhvTye0PCDcsWkcN8M34EJ2ddxyXEJkZI=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -83,11 +77,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
+       # Disable post-install scripts to avoid shebang issues
        bun install \
          --filter=opencode \
          --force \
-         --frozen-lockfile \
+         --ignore-scripts \
          --no-progress
+         # Remove `--frozen-lockfile` and `--production` — they erroneously report the lockfile needs updating even though `bun install` does not change it.
+         # Related to  https://github.com/oven-sh/bun/issues/19088
+         # --frozen-lockfile \
+         # --production
 
       runHook postBuild
     '';
@@ -104,7 +103,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = opencode-node-modules-hash.${stdenvNoCC.hostPlatform.system};
+    outputHash =
+      {
+        x86_64-linux = "sha256-YOTuzwo0ZjqVswW3bUu3pFJcmfl0X0Se8Z5jKg8/rQs=";
+        aarch64-linux = "sha256-pLtE1Cyv4jHYGFQlVHMeKZbQqC2SkxTu2KRHN4E1NPw=";
+        x86_64-darwin = "sha256-3JxXe889dL7TBuHPRYDsviUuwnp38XWAwFN3Te6JtDg=";
+        aarch64-darwin = "sha256-RHg55NvI52EGTWUCCJVrilXqr3qc+vqQoT/uIUjDVvg=";
+      }
+      .${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

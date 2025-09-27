@@ -4,7 +4,7 @@
   fetchpatch,
   fetchurl,
   unzip,
-  gdc,
+  ldc,
   libGL,
   libGLU,
   SDL,
@@ -17,7 +17,7 @@ let
     patchname: hash:
     fetchpatch {
       name = "${patchname}.patch";
-      url = "https://sources.debian.org/data/main/t/titanion/0.3.dfsg1-7/debian/patches/${patchname}";
+      url = "https://sources.debian.org/data/main/t/titanion/0.3.dfsg1-8/debian/patches/${patchname}";
       inherit hash;
     };
 
@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     (debianPatch "makefile.patch" "sha256-g0jDPmc0SWXkTLhiczeTse/WGCtgMUsbyPNZzwK3U+o=")
     (debianPatch "dlang_v2.patch" "sha256-tfTAAKlPFSjbfAK1EjeB3unj9tbMlNaajJ+VVSMMiYw=")
     (debianPatch "gdc-8.patch" "sha256-BxkPfSEymq7TDA+yjJHaYsjtGr0Tuu1/sWLwRBAMga4=")
+    (debianPatch "gcc12.patch" "sha256-Kqmb6hRn6lAHLJMoZ5nGCmHcqfbTUIDq5ahALI2f4a4=")
   ];
 
   postPatch = ''
@@ -52,11 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $f \
         --replace "/usr/" "$out/"
     done
+    # GDC → DMD/LDC flag compatibility
+    substituteInPlace Makefile \
+      --replace-fail "-o " -of= \
+      --replace-fail -Wdeprecated "" \
+      --replace-fail -l -L-l
   '';
 
   nativeBuildInputs = [
     unzip
-    gdc
+    ldc
   ];
 
   buildInputs = [
@@ -66,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_mixer
     bulletml
   ];
+
+  makeFlags = [ "GDC=ldc2" ];
 
   installPhase = ''
     runHook preInstall

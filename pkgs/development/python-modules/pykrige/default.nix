@@ -33,7 +33,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1,<2.3; python_version >= '3.9'" "numpy>=2.0.0";
+      --replace-fail "numpy>=2.0.0rc1,<2.3; python_version >= '3.9'" "numpy>=2.0.0" \
+      --replace-fail "Cython>=3.0.10,<3.1.0" "Cython>=3.1.0,<4.0.0"
   '';
 
   build-system = [

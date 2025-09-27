@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/trzsz/trzsz-ssh";
     changelog = "https://github.com/trzsz/trzsz-ssh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "trzsz-ssh";
   };
 })

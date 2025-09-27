@@ -6,9 +6,8 @@
   flit-core,
   mock,
   pytestCheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-vcr,
-  pythonOlder,
   requests,
   requests-toolbelt,
   testfixtures,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "asyncprawcore";
@@ -30,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-FDQdtnNjsbiEp9BUYdQFMC/hkyJDhCh2WHhQWSQwrFY=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     aiohttp
     yarl
@@ -43,7 +40,7 @@ buildPythonPackage rec {
     mock
     requests-toolbelt
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-vcr
     vcrpy
   ];

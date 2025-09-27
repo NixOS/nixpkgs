@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "9.3.0";
+  version = "9.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eeuJb58j9QrRbDvCBfaG9uAwrSRswwnGJ5okKxSv6dg=";
+    hash = "sha256-wDPG1OeRTD2XaKq+drvoe6HcZqkqBdtr+hEl2B8u4nA=";
   };
 
   build-system = [ setuptools ];

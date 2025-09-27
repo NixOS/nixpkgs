@@ -128,6 +128,7 @@ let
       json = callPackage ../development/coq-modules/json { };
       lemma-overloading = callPackage ../development/coq-modules/lemma-overloading { };
       LibHyps = callPackage ../development/coq-modules/LibHyps { };
+      libvalidsdp = self.validsdp.libvalidsdp;
       ltac2 = callPackage ../development/coq-modules/ltac2 { };
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
@@ -211,6 +212,7 @@ let
       topology = callPackage ../development/coq-modules/topology { };
       trakt = callPackage ../development/coq-modules/trakt { };
       unicoq = callPackage ../development/coq-modules/unicoq { };
+      validsdp = callPackage ../development/coq-modules/validsdp { };
       vcfloat = callPackage ../development/coq-modules/vcfloat (
         lib.optionalAttrs (lib.versions.range "8.16" "8.18" self.coq.version) {
           interval = self.interval.override { version = "4.9.0"; };
@@ -227,6 +229,10 @@ let
             version =
               with lib.versions;
               lib.switch self.coq.version [
+                {
+                  case = range "8.19" "8.20";
+                  out = "3.15";
+                }
                 {
                   case = range "8.15" "8.18";
                   out = "3.13.1";

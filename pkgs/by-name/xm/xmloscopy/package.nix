@@ -9,7 +9,7 @@
   coreutils,
   libxml2,
   libxslt,
-  jing,
+  jing-trang,
   findutils,
   gnugrep,
   gnused,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     coreutils
     libxml2
     libxslt
-    jing
+    jing-trang
     findutils
     gnugrep
     gnused

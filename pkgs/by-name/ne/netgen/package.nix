@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2504";
+  version = "6.2.2505";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N4mmh2H2qvc+3Pa9CHm38arViI76Qvwp8fOVGZbMv1M=";
+    hash = "sha256-MPnibhDzNjqmpW5C76KdeYoZGfKLU0KJ20EnjrK1S+Y=";
   };
 
   patches = [
@@ -114,11 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     ffmpeg
     mpi
+    python3Packages.pybind11
   ];
 
   propagatedBuildInputs = with python3Packages; [
     packaging
-    pybind11
     mpi4py
     numpy
   ];

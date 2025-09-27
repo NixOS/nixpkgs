@@ -32,6 +32,11 @@ stdenv.mkDerivation {
     sed -i '/depmod/d' Makefile
   '';
 
+  # Don't use makeFlags for this
+  postBuild = ''
+    make utils
+  '';
+
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
   postInstall = ''
@@ -46,6 +51,7 @@ stdenv.mkDerivation {
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "v4l2loopback.ko"
   ];
 
   meta = {

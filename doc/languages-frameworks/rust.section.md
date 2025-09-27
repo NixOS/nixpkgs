@@ -1,6 +1,6 @@
 # Rust {#rust}
 
-To install the rust compiler and cargo put
+To install the Rust compiler and cargo, put
 
 ```nix
 {
@@ -14,7 +14,7 @@ To install the rust compiler and cargo put
 into your `configuration.nix` or bring them into scope with `nix-shell -p rustc cargo`.
 
 For other versions such as daily builds (beta and nightly),
-use either `rustup` from nixpkgs (which will manage the rust installation in your home directory),
+use either `rustup` from Nixpkgs (which will manage the rust installation in your home directory),
 or use [community maintained Rust toolchains](#using-community-maintained-rust-toolchains).
 
 ## `buildRustPackage`: Compiling Rust applications with Cargo {#compiling-rust-applications-with-cargo}
@@ -65,10 +65,10 @@ hash using `nix-hash --to-sri --type sha256 "<original sha256>"`.
 { cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8="; }
 ```
 
-If this method does not work, you can resort to copying the `Cargo.lock` file into nixpkgs
+If this method does not work, you can resort to copying the `Cargo.lock` file into Nixpkgs
 and importing it as described in the [next section](#importing-a-cargo.lock-file).
 
-Both types of hashes are permitted when contributing to nixpkgs. The
+Both types of hashes are permitted when contributing to Nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
 expression and building the package once. The correct checksum can
 then be taken from the failed build. A fake hash can be used for
@@ -249,7 +249,7 @@ rustPlatform.buildRustPackage {
 ### Cross compilation {#cross-compilation}
 
 By default, Rust packages are compiled for the host platform, just like any
-other package is.  The `--target` passed to rust tools is computed from this.
+other package is. The `--target` passed to Rust tools is computed from this.
 By default, it takes the `stdenv.hostPlatform.config` and replaces components
 where they are known to differ. But there are ways to customize the argument:
 
@@ -417,7 +417,7 @@ Otherwise, some steps may fail because of the modified directory structure of `t
 ### Building a crate with an absent or out-of-date Cargo.lock file {#building-a-crate-with-an-absent-or-out-of-date-cargo.lock-file}
 
 `buildRustPackage` needs a `Cargo.lock` file to get all dependencies in the
-source code in a reproducible way. If it is missing or out-of-date one can use
+source code in a reproducible way. If it is missing or out of date, one can use
 the `cargoPatches` attribute to update or add it.
 
 ```nix
@@ -907,7 +907,7 @@ $ cargo test
 ## Using community maintained Rust toolchains {#using-community-maintained-rust-toolchains}
 
 ::: {.note}
-The following projects cannot be used within Nixpkgs since [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs.
+The following projects cannot be used within Nixpkgs, since [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs.
 To package things that require Rust nightly, `RUSTC_BOOTSTRAP = true;` can sometimes be used as a hack.
 :::
 
@@ -920,7 +920,7 @@ Despite their names, both projects provides a similar set of packages and overla
 Oxalica's overlay allows you to select a particular Rust version without you providing a hash or a flake input,
 but comes with a larger git repository than fenix.
 
-Fenix also provides rust-analyzer nightly in addition to the Rust toolchains.
+Fenix also provides `rust-analyzer` nightly in addition to the Rust toolchains.
 
 Both oxalica's overlay and fenix better integrate with nix and cache optimizations.
 Because of this and ergonomics, either of those community projects

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -64,7 +63,7 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
-    version = "2.2.3";
+    version = "2.3.1";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -73,16 +72,8 @@ let
       owner = "pandas-dev";
       repo = "pandas";
       tag = "v${version}";
-      hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
+      hash = "sha256-xvdiWjJ5uHfrzXB7c4cYjFjZ6ue5i7qzb4tAEPJMAV0=";
     };
-
-    patches = [
-      (fetchpatch {
-        name = "musl.patch";
-        url = "https://github.com/pandas-dev/pandas/commit/1e487982ff7501f07e2bba7a7d924fb92b3d5c7f.patch";
-        hash = "sha256-F1pVce1W951Ea82Ux198e5fBFH6kDOG+EeslDTYbjio=";
-      })
-    ];
 
     # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
     # 2.x are supported. However upstream wants to always build with Numpy 2,
@@ -97,12 +88,10 @@ let
     # that override globally the `numpy` attribute to point to `numpy_1`.
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace-fail "numpy>=2.0" numpy \
-        --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
-        --replace-fail "meson==1.2.1" "meson>=1.2.1"
+        --replace-fail "numpy>=2.0" numpy
     '';
 
-    nativeBuildInputs = [
+    build-system = [
       cython
       meson-python
       meson
@@ -115,7 +104,7 @@ let
 
     enableParallelBuilding = true;
 
-    propagatedBuildInputs = [
+    dependencies = [
       numpy
       python-dateutil
       pytz

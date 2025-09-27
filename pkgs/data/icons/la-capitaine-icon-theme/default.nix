@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "keeferrourke";
-    repo = pname;
+    repo = "la-capitaine-icon-theme";
     rev = "v${version}";
     sha256 = "0id2dddx6rl71472l47vafx968wnklmq6b980br68w82kcvqczzs";
   };

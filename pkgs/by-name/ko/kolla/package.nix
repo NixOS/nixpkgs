@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kolla";
-  version = "19.4.0";
+  version = "20.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    hash = "sha256-yVNMCqg6eAUhLg3iAjDkYpMoIKc6OksDri9jNpyaS7c=";
-    rev = version;
+    tag = version;
+    hash = "sha256-aqYEzBphzwB42Z0HmnCPQlV71dOi3yLKh+zL2dMTaB8=";
   };
 
   postPatch = ''

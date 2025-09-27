@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "25.7.2";
+  version = "25.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "pontos";
     tag = "v${version}";
-    hash = "sha256-WLU/FYiaVCbm/dlsI6aIGOV3EjW+Ijtq90JX2tePyT0=";
+    hash = "sha256-uQe21Yp1PYeU/NgbQMbC2yBqEA1yUUaCiKc7k/oeS7g=";
   };
 
   build-system = [ poetry-core ];

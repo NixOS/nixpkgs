@@ -1,7 +1,6 @@
 {
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   lib,
   makeWrapper,
@@ -14,26 +13,19 @@
 
 let
   # The version of ocaml fstar uses.
-  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
 
   fstarZ3 = callPackage ./z3 { };
 in
 ocamlPackages.buildDunePackage rec {
   pname = "fstar";
-  version = "2025.03.25";
+  version = "2025.08.07";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    hash = "sha256-PhjfThXF6fJlFHtNEURG4igCnM6VegWODypmRvnZPdA=";
-  };
-
-  # Compatibility with sedlex ≥ 3.5
-  patches = fetchpatch {
-    url = "https://github.com/FStarLang/FStar/commit/11aff952b955d2c9582515ee2d64ca6993ce1b73.patch";
-    hash = "sha256-HlppygegUAYYPDVSzFJvMHXdDSoug636bFa19v3TGkc=";
-    excludes = [ "fstar.opam" ];
+    hash = "sha256-IfwMLMbyC1+iPIG48zm6bzhKCHKPOpVaHdlLhU5g3co=";
   };
 
   nativeBuildInputs = [

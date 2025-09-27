@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knxd";
-  version = "0.14.71";
+  version = "0.14.73";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
     tag = finalAttrs.version;
-    hash = "sha256-623Q2OGGr4wVdmJytjidTPEkP3hs2Z+KukbXt+hlPgM=";
+    hash = "sha256-rBYvwNJ8rIXGv9Hz0xTn+4cUdptdoddCCv6JvF4f1+M=";
   };
 
   postPatch = ''

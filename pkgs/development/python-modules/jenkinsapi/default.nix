@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.14";
+  version = "0.3.15";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "jenkinsapi";
     tag = version;
-    hash = "sha256-s6yamzH+4tobO8gLFVn+5ZZUnmPja675FXQmIjAb/co=";
+    hash = "sha256-r6GOi/0ALJDy6R6cd/bECk+HVe/AyKZYG96sr9y9o/4=";
   };
 
   nativeBuildInputs = [

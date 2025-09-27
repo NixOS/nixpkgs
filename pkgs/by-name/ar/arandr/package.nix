@@ -1,6 +1,5 @@
 {
   lib,
-  fetchurl,
   fetchFromGitLab,
   python3Packages,
   gobject-introspection,
@@ -8,6 +7,7 @@
   gtk3,
   wrapGAppsHook3,
   xrandr,
+  nix-update-script,
 }:
 
 let
@@ -29,6 +29,22 @@ buildPythonApplication rec {
   patches = [ ./gzip-timestamp-fix.patch ];
   patchFlags = [ "-p0" ];
 
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    docutils
+    gsettings-desktop-schemas
+    gtk3
+  ];
+
+  propagatedBuildInputs = [
+    xrandr
+    pygobject3
+  ];
+
   preBuild = ''
     rm -rf data/po/*
   '';
@@ -36,25 +52,20 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  buildInputs = [
-    docutils
-    gsettings-desktop-schemas
-    gtk3
-  ];
-  nativeBuildInputs = [
-    gobject-introspection
-    wrapGAppsHook3
-  ];
-  propagatedBuildInputs = [
-    xrandr
-    pygobject3
-  ];
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=(\\d.*)"
+    ];
+  };
 
-  meta = with lib; {
-    homepage = "https://christian.amsuess.com/tools/arandr/";
+  meta = {
+    changelog = "https://gitlab.com/arandr/arandr/-/blob/${src.tag}/ChangeLog";
     description = "Simple visual front end for XRandR";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ gepbird ];
+    homepage = "https://christian.amsuess.com/tools/arandr/";
+    license = lib.licenses.gpl3;
     mainProgram = "arandr";
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
   };
 }

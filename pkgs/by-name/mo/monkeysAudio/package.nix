@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "11.30";
+  version = "11.53";
   pname = "monkeys-audio";
 
   src = fetchzip {
     url = "https://monkeysaudio.com/files/MAC_${builtins.concatStringsSep "" (lib.strings.splitString "." finalAttrs.version)}_SDK.zip";
-    hash = "sha256-GnC2w1hhQlvpxa254M15xOVsqKUuIjXfgUxwgA7zcxc=";
+    hash = "sha256-g1I63K67upEL0in1NceayLDTQgmx4LAHd0eA0MYEp44=";
     stripRoot = false;
   };
 

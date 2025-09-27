@@ -1,0 +1,53 @@
+From d8843c5fcaef79d209803849070e1a79ab380903 Mon Sep 17 00:00:00 2001
+From: Euan Kemp <euank@euank.com>
+Date: Sun, 24 Aug 2025 20:24:34 +0900
+Subject: [PATCH] Fix compilation under rust 1.89
+
+Rust 1.89 produces the following output:
+
+```
+error: unicode codepoint changing visible direction of text present in literal
+...
+warning: allow(text_direction_codepoint_in_literal) is ignored unless specified at crate level
+ --> rslib/i18n/src/generated.rs:7:10
+  |
+7 | #![allow(text_direction_codepoint_in_literal)]
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```
+
+This change fixes it.
+
+This ensures that some third-party crate that pulls in this code as
+library code (and thus isn't subject to the rust-toolchain file in this
+repo) doesn't hit this compilation error.
+---
+ rslib/i18n/src/generated.rs | 1 -
+ rslib/i18n/src/lib.rs       | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rslib/i18n/src/generated.rs b/rslib/i18n/src/generated.rs
+index f3526f79f..f3fa71ce8 100644
+--- a/rslib/i18n/src/generated.rs
++++ b/rslib/i18n/src/generated.rs
+@@ -4,6 +4,5 @@
+ // Include auto-generated content
+ 
+ #![allow(clippy::all)]
+-#![allow(text_direction_codepoint_in_literal)]
+ 
+ include!(concat!(env!("OUT_DIR"), "/strings.rs"));
+diff --git a/rslib/i18n/src/lib.rs b/rslib/i18n/src/lib.rs
+index bfd6f5ba2..f9dbb1948 100644
+--- a/rslib/i18n/src/lib.rs
++++ b/rslib/i18n/src/lib.rs
+@@ -1,6 +1,7 @@
+ // Copyright: Ankitects Pty Ltd and contributors
+ // License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
+ 
++#![allow(text_direction_codepoint_in_literal)]
+ mod generated;
+ 
+ use std::borrow::Cow;
+-- 
+2.50.1
+

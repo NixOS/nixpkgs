@@ -21,15 +21,14 @@
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "0-unstable-2023-11-06";
-  disabled = !python3.isPy3k;
+  version = "0-unstable-2025-06-16";
 
   # required for third_party directory creation
   src = fetchFromGitHub {
     owner = "ycm-core";
     repo = "ycmd";
-    rev = "0607eed2bc211f88f82657b7781f4fe66579855b";
-    hash = "sha256-SzEcMQ4lX7NL2/g9tuhA6CaZ8pX/DGs7Fla/gr+RcOU=";
+    rev = "9160b4eee67ea61c8501bad36d061bcec5340021";
+    hash = "sha256-MSzYX1vXuhd4TNxUfHWaRu7O0r89az1XjZBIZ6B3gBk=";
     fetchSubmodules = true;
   };
 
@@ -46,6 +45,7 @@ stdenv.mkDerivation {
       boost
       libllvm.all
       libclang.all
+      legacy-cgi
     ]
     ++ [
       jedi
@@ -84,6 +84,9 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
 
+    ## Work-around CMake/Nix naming of `.so` output
+    ln -s $out/lib/ycmd/ycm_core.cpython-[[:digit:]-][^[:space:]]*-gnu${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/ycmd/ycm_core.so
+
     # Copy everything: the structure of third_party has been known to change.
     # When linking our own libraries below, do so with '-f'
     # to clobber anything we may have copied here.
@@ -120,6 +123,15 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Code-completion and comprehension server";
+    longDescription = ''
+      Note if YouCompleteMe Vim plugin complains with;
+
+      > ImportError: Python version mismatch: module was compiled for Python 3.13, but the interpreter version is incompatible: 3.10.18
+
+      ...  then set something similar to following in `programs.vim.extraConfig`;
+
+          let g:ycm_server_python_interpreter = "${python3.interpreter}"
+    '';
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;
@@ -127,6 +139,7 @@ stdenv.mkDerivation {
       rasendubi
       lnl7
       mel
+      S0AndS0
     ];
     platforms = platforms.all;
   };

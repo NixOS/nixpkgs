@@ -29,12 +29,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "functions-framework-python";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TvC+URJtsquBX/5F5Z2Nw/4sD3hsvF2c/jlv87lGjfM=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "cloudevents"
+  ];
   dependencies = [
     click
     cloudevents
@@ -67,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "FaaS (Function as a service) framework for writing portable Python functions";
     homepage = "https://github.com/GoogleCloudPlatform/functions-framework-python";
-    changelog = "https://github.com/GoogleCloudPlatform/functions-framework-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/GoogleCloudPlatform/functions-framework-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -48,5 +48,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       cpcloud
     ];
+    teams = [ lib.teams.geospatial ];
   };
 }

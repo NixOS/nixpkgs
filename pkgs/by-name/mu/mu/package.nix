@@ -8,6 +8,8 @@
   pkg-config,
   python3,
   cld2,
+  cli11,
+  fmt_11,
   coreutils,
   emacs,
   glib,
@@ -16,9 +18,9 @@
   xapian,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mu";
-  version = "1.12.12";
+  version = "1.12.13";
 
   outputs = [
     "out"
@@ -28,8 +30,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
-    rev = "v${version}";
-    hash = "sha256-ZdVzyfzTsGn3DaeOEXZFA/wX8MxIeD45FaKYU6okr4Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rz0bxgJtz4qHrfHRjJhnvxtFFNM89A39YH9oJ2YGC5g=";
   };
 
   postPatch = ''
@@ -63,7 +65,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cld2
+    cli11
     emacs
+    fmt_11
     glib
     gmime3
     texinfo
@@ -71,9 +75,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dguile=disabled"
-    "-Dreadline=disabled"
-    "-Dlispdir=${placeholder "mu4e"}/share/emacs/site-lisp"
+    (lib.strings.mesonEnable "guile" false)
+    (lib.strings.mesonEnable "readline" false)
+    (lib.strings.mesonEnable "tests" finalAttrs.doCheck)
+    (lib.strings.mesonOption "lispdir" "${placeholder "mu4e"}/share/emacs/site-lisp")
   ];
 
   nativeBuildInputs = [
@@ -93,7 +98,7 @@ stdenv.mkDerivation rec {
     description = "Collection of utilities for indexing and searching Maildirs";
     license = lib.licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
-    changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
+    changelog = "https://github.com/djcb/mu/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       antono
       chvp
@@ -102,4 +107,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mu";
     platforms = lib.platforms.unix;
   };
-}
+})

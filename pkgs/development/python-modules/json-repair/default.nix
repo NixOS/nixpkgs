@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "json-repair";
-  version = "0.49.0";
+  version = "0.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mangiucugna";
     repo = "json_repair";
     tag = "v${version}";
-    hash = "sha256-we43E+2pGVDORWfC6t51Bxy4YLoEnVrysdBgpTdcYwE=";
+    hash = "sha256-XXbJwzvt2gQox1+vQsJ3ajVoFlJVG/z2eUECQkWOi64=";
   };
 
   build-system = [ setuptools ];

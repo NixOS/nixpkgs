@@ -1,9 +1,9 @@
 # This is what nvcc uses as a backend,
-# and it has to be an officially supported one (e.g. gcc11 for cuda11).
+# and it has to be an officially supported one (e.g. gcc14 for cuda12).
 #
 # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
 # when linked with other C++ libraries.
-# E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
+# E.g. for cudaPackages_12_9 we use gcc14 with gcc's libstdc++
 # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
 {
   config,

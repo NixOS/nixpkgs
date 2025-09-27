@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "7.1.1";
+  version = "7.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "browniebroke";
     repo = "deezer-python";
     tag = "v${version}";
-    hash = "sha256-3TYgOa8NWGhkVIT5HkDdpHGyj7FzP8n02a36KHW6IC4=";
+    hash = "sha256-j7FiZJX2YIYs03bKKu2e+ByElp5oYpmpUheVr8BVXZo=";
   };
 
   build-system = [ setuptools ];

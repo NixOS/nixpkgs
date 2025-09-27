@@ -74,7 +74,7 @@ Under the hood it adds `drm.edid_firmware` entry to `boot.kernelParams` NixOS op
 ## Pulling files from linuxhw/EDID database {#module-hardware-display-edid-linuxhw}
 
 `hardware.display.edid.linuxhw` utilizes `pkgs.linuxhw-edid-fetcher` to extract EDID files
-from https://github.com/linuxhw/EDID based on simple string/regexp search identifying exact entries:
+from <https://github.com/linuxhw/EDID> based on simple string/regexp search identifying exact entries:
 
 ```nix
 {

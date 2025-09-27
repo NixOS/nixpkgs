@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPackages,
-  runCommand,
   bc,
   bison,
   flex,
@@ -22,8 +21,8 @@
   kmod,
   ubootTools,
   fetchpatch,
-  rustc,
-  rust-bindgen,
+  rustc-unwrapped,
+  rust-bindgen-unwrapped,
   rustPlatform,
 }:
 
@@ -33,16 +32,18 @@ let
 
   readConfig =
     configfile:
-    import
-      (runCommand "config.nix" { } ''
-        echo "{" > "$out"
-        while IFS='=' read key val; do
-          [ "x''${key#CONFIG_}" != "x$key" ] || continue
-          no_firstquote="''${val#\"}";
-          echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-        done < "${configfile}"
-        echo "}" >> $out
-      '').outPath;
+    let
+      matchLine =
+        line:
+        let
+          match = lib.match "(CONFIG_[^=]+)=([ym])" line;
+        in
+        lib.optional (match != null) {
+          name = lib.elemAt match 0;
+          value = lib.elemAt match 1;
+        };
+    in
+    lib.listToAttrs (lib.concatMap matchLine (lib.splitString "\n" (builtins.readFile configfile)));
 in
 lib.makeOverridable (
   {
@@ -65,7 +66,9 @@ lib.makeOverridable (
     configfile,
     # Manually specified nixexpr representing the config
     # If unspecified, this will be autodetected from the .config
-    config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+    config ? lib.optionalAttrs (builtins.isPath configfile || allowImportFromDerivation) (
+      readConfig configfile
+    ),
     # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
     # automatically extended with extra per-version and per-config values.
     randstructSeed ? "",
@@ -169,8 +172,8 @@ lib.makeOverridable (
         ]
         ++ optional (lib.versionAtLeast version "5.13") zstd
         ++ optionals withRust [
-          rustc
-          rust-bindgen
+          rustc-unwrapped
+          rust-bindgen-unwrapped
         ];
 
       in
@@ -232,15 +235,17 @@ lib.makeOverridable (
           zlib
         ]
         ++ optionals withRust [
-          rustc
-          rust-bindgen
+          rustc-unwrapped
+          rust-bindgen-unwrapped
         ];
 
-        RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
+        env = {
+          RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
-        # avoid leaking Rust source file names into the final binary, which adds
-        # a false dependency on rust-lib-src on targets with uncompressed kernels
-        KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+          # avoid leaking Rust source file names into the final binary, which adds
+          # a false dependency on rust-lib-src on targets with uncompressed kernels
+          KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+        };
 
         patches =
           # kernelPatches can contain config changes and no actual patch
@@ -329,6 +334,7 @@ lib.makeOverridable (
           "KBUILD_BUILD_VERSION=1-NixOS"
           kernelConf.target
           "vmlinux" # for "perf" and things like that
+          "scripts_gdb"
         ]
         ++ optional isModular "modules"
         ++ optionals buildDTBs [
@@ -436,6 +442,10 @@ lib.makeOverridable (
         postInstall = optionalString isModular ''
           mkdir -p $dev
           cp vmlinux $dev/
+
+          mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
+          cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
+
           if [ -z "''${dontStrip-}" ]; then
             installFlags+=("INSTALL_MOD_STRIP=1")
           fi
@@ -461,6 +471,7 @@ lib.makeOverridable (
           # Keep some extra files on some arches (powerpc, aarch64)
           for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
             if [ -f "$buildRoot/$f" ]; then
+              mkdir -p "$(dirname $dev/lib/modules/${modDirVersion}/build/$f)"
               cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
             fi
           done
@@ -529,24 +540,25 @@ lib.makeOverridable (
             ]
             ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
           timeout = 14400; # 4 hours
+          identifiers.cpeParts = {
+            part = "o";
+            vendor = "linux";
+            product = "linux_kernel";
+            inherit version;
+            update = "*";
+          };
         }
         // extraMeta;
       };
 
-    # Absolute paths for compilers avoid any PATH-clobbering issues.
-    commonMakeFlags = [
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
-      # The wrapper for ld.lld breaks linking the kernel. We use the
-      # unwrapped linker as workaround. See:
-      #
-      # https://github.com/NixOS/nixpkgs/issues/321667
-      "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
-    ]
-    ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
-    ++ extraMakeFlags;
+    commonMakeFlags = import ./common-flags.nix {
+      inherit
+        lib
+        stdenv
+        buildPackages
+        extraMakeFlags
+        ;
+    };
   in
 
   stdenv.mkDerivation (

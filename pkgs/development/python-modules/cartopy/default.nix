@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AckQ1WNMaafv3sRuChfUc9Iyh2fwAdTcC1xLSOWFyL0=";
+    hash = "sha256-VfGjkOXz8HWyIcfZH7ECWK2XjbeGx5MOugbrRdKHU/4=";
   };
 
   build-system = [ setuptools-scm ];

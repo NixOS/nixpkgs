@@ -12,12 +12,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pysolfc";
-  version = "3.4.0";
+  version = "3.4.1";
   format = "setuptools";
 
   src = fetchzip {
     url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
-    hash = "sha256-xMZaRW6NDrKfBaWEZNcvZD/OPOcpL83WLvI8vEK9NFw=";
+    hash = "sha256-jijrrWhj80n/XFKMFLptDZCsclIhdJHiTrX6CGjVju8=";
   };
 
   cardsets = stdenv.mkDerivation rec {

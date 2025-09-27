@@ -3,16 +3,17 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   pythonAtLeast,
   pythonOlder,
   isPyPy,
 
   # build-system
+  pathspec,
   setuptools,
   types-psutil,
   types-setuptools,
-  wheel,
 
   # propagates
   mypy-extensions,
@@ -33,18 +34,27 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.15.0";
+  version = "1.17.1";
   pyproject = true;
 
   # relies on several CPython internals
-  disabled = pythonOlder "3.8" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-y67kt5i8mT9TcSbUGwnNuTAeqjy9apvWIbA2QD96LS4=";
+    hash = "sha256-FfONUCCMU1bJXHx3GHH46Tu+wYU5FLPOqeCSCi1bRSs=";
   };
+
+  patches = [
+    # Fix the build on Darwin with a case‐sensitive store.
+    # Remove on next release.
+    (fetchpatch {
+      url = "https://github.com/python/mypy/commit/7534898319cb7f16738c11e4bc1bdcef0eb13c38.patch";
+      hash = "sha256-5jD0JBRnirmoMlUz9+n8G4AqHqCi8BaUX5rEl9NnLts=";
+    })
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -52,16 +62,16 @@ buildPythonPackage rec {
 
   build-system = [
     mypy-extensions
+    pathspec
     setuptools
     types-psutil
     types-setuptools
     typing-extensions
-    wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   dependencies = [
     mypy-extensions
+    pathspec
     typing-extensions
   ]
   ++ lib.optionals (pythonOlder "3.11") [ tomli ];
@@ -135,6 +145,7 @@ buildPythonPackage rec {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
     changelog = "https://github.com/python/mypy/blob/${src.rev}/CHANGELOG.md";
+    downloadPage = "https://github.com/python/mypy";
     license = lib.licenses.mit;
     mainProgram = "mypy";
     maintainers = with lib.maintainers; [ lnl7 ];

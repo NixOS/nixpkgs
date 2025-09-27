@@ -133,12 +133,14 @@
     propagatedBuildInputs = [ python3Packages.mpd2 ];
     testPaths = [ ];
   };
+  musicbrainz = { };
   parentwork = { };
   permissions = { };
   play = { };
   playlist.propagatedBuildInputs = [ python3Packages.requests ];
   plexupdate = { };
   random = { };
+  replace = { };
   replaygain.wrapperBins = [
     aacgain
     ffmpeg

@@ -43,7 +43,7 @@ buildPythonApplication {
     description = "SVGinOT color font builder";
     homepage = "https://github.com/13rac1/scfbuild";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "scfbuild";
   };
 }

@@ -78,6 +78,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "'cp', 'src' / rust_target / meson.project_name(), '@OUTPUT@'," "'cp', 'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(), '@OUTPUT@',"
+  '';
+
+  # For https://gitlab.gnome.org/GNOME/gnome-user-share/-/blob/7ffb23dd5af0fda75c66f03756798dc10e253c36/src/meson.build#L47
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
   doCheck = true;
   strictDeps = true;
 

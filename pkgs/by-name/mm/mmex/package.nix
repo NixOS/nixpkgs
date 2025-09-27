@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "money-manager-ex";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-gpDwfRKXgp6hEpitflVIAIOU/k3Fx6hKKhyzQvLlog8=";
+    hash = "sha256-U8DvJPJwShbuKlKsWylH9kUEEw8/SY8KnYWNyInhE9k=";
   };
 
   postPatch = ''

@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
     export HOME="$(mktemp -d)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd temporal \
       --bash <($out/bin/temporal completion bash) \
       --fish <($out/bin/temporal completion fish) \
@@ -56,7 +56,12 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";

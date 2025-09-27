@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "chirpstack-fuota-server";
-  version = "3.0.0-test.4-unstable-2024-04-02";
+  version = "3.0.0-test.4-unstable-2025-08-26";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-fuota-server";
-    rev = "6e014688cb4b2a5dc658bf7876df69a1cf3e2176";
-    hash = "sha256-ShpBUnDGaW8vbt5y1wZbedwFHPJaggPuij71l2p0a6o=";
+    rev = "0d3ce7d8d50ab8d8747d2099a2a607b0ec4e86cb";
+    hash = "sha256-OprWgex8Yzx/vElL84NlnbFwayeXhQLNVl7koZUb3hU=";
   };
 
   vendorHash = "sha256-dTmHkauFelqMo5MpB/TyK5yVax5d4/+g9twjmsRG3e0=";

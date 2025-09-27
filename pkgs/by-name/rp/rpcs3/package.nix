@@ -154,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
     maintainers = with maintainers; [
-      abbradar
       neonfuz
       ilian
     ];

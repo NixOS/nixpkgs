@@ -26,12 +26,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.3";
+  version = "1.1.4";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-nIpktZyQsIJeVAqbj8udLZQsY2+BulAZnwaP3kTzTtg=";
+    hash = "sha256-NETwASrwRyOZ7q6Jp1i5xtxfMR9sZ6SJiPoWAPxLrIY=";
   };
 
   patches = [
@@ -75,7 +75,6 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests) firewall-nftables;
-    lxd-nftables = nixosTests.lxd.nftables;
     nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
   };
 

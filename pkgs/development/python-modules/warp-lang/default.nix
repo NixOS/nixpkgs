@@ -37,13 +37,13 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = builtins.throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.8.1";
+  version = "1.9.0";
 
   libmathdx = effectiveStdenv.mkDerivation (finalAttrs: {
     # NOTE: The version used should match the version Warp requires:
     # https://github.com/NVIDIA/warp/blob/${version}/deps/libmathdx-deps.packman.xml
     pname = "libmathdx";
-    version = "0.2.2";
+    version = "0.2.3";
 
     outputs = [
       "out"
@@ -52,27 +52,36 @@ let
 
     src =
       let
-        baseURL = "https://developer.download.nvidia.com/compute/cublasdx/redist/cublasdx";
+        baseURL = "https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx";
+        cudaMajorVersion = cudaPackages.cudaMajorVersion; # only 12, 13 supported
+        cudaVersion = "${cudaMajorVersion}.0"; # URL example: ${baseURL}/cuda12/${name}-${version}-cuda12.0.zip
         name = lib.concatStringsSep "-" [
           finalAttrs.pname
           "Linux"
           effectiveStdenv.hostPlatform.parsed.cpu.name
           finalAttrs.version
+          "cuda${cudaVersion}"
         ];
 
         # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
         hashes = {
-          aarch64-linux = "sha256-uadBl2HTWIzpYyUxHqnLZtqq42v13KYXSOJXz0Wgtrk=";
-          x86_64-linux = "sha256-YU26l3q+HH1fyBD96oMrl+e96gmiC/krzJv6VJss3mY=";
+          "12" = {
+            aarch64-linux = "sha256-d/aBC+zU2ciaw3isv33iuviXYaLGLdVDdzynGk9SFck=";
+            x86_64-linux = "sha256-CHIH0s4SnA67COtHBkwVCajW/3f0VxNBmuDLXy4LFIg=";
+          };
+          "13" = {
+            aarch64-linux = "sha256-TetJbMts8tpmj5PV4+jpnUHMcooDrXUEKL3aGWqilKI=";
+            x86_64-linux = "sha256-wLJLbRpQWa6QEm8ibm1gxt3mXvkWvu0vEzpnqTIvE1M=";
+          };
         };
       in
       lib.mapNullable (
         hash:
         fetchurl {
           inherit hash name;
-          url = "${baseURL}/${name}.tar.gz";
+          url = "${baseURL}/cuda${cudaMajorVersion}/${name}.tar.gz";
         }
-      ) (hashes.${effectiveStdenv.hostPlatform.system} or null);
+      ) (hashes.${cudaMajorVersion}.${effectiveStdenv.hostPlatform.system} or null);
 
     dontUnpack = true;
     dontConfigure = true;
@@ -139,7 +148,7 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-cSG8uncJMl4rbQ48L8XJY1Illr6usVX8no0jDhECwbo=";
+    hash = "sha256-OEg2mUsEdRKhgx0fIraqme4moKNh1RSdN7/yCT1V5+g=";
   };
 
   patches =
@@ -198,18 +207,6 @@ buildPythonPackage {
         --replace-fail \
           '-lmathdx_static' \
           '-lmathdx'
-    ''
-    # Broken tests on aarch64. Since unittest doesn't support disabling a
-    # single test, and pytest isn't compatible, we patch the test file directly
-    # instead.
-    #
-    # See: https://github.com/NVIDIA/warp/issues/552
-    + lib.optionalString effectiveStdenv.hostPlatform.isAarch64 ''
-      nixLog "patching $PWD/warp/tests/test_fem.py to disable broken tests on aarch64"
-      substituteInPlace "$PWD/warp/tests/test_fem.py" \
-        --replace-fail \
-          'add_function_test(TestFem, "test_integrate_gradient", test_integrate_gradient, devices=devices)' \
-          ""
     ''
     # AssertionError: 0.4082476496696472 != 0.40824246406555176 within 5 places
     + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
@@ -351,12 +348,6 @@ buildPythonPackage {
                 writableTmpDirAsHomeHook
               ];
               requiredSystemFeatures = lib.optionals cudaSupport [ "cuda" ];
-              # Many unit tests fail with segfaults on aarch64-linux, especially in the sim
-              # and grad modules. However, other functionality generally works, so we don't
-              # mark the package as broken.
-              #
-              # See: https://www.github.com/NVIDIA/warp/issues/{356,372,552}
-              meta.broken = effectiveStdenv.hostPlatform.isAarch64 && effectiveStdenv.hostPlatform.isLinux;
             }
             ''
               nixLog "running ${name}"

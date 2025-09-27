@@ -4,6 +4,7 @@
   pname,
   version,
   src,
+  passthru,
   meta,
 }:
 
@@ -12,6 +13,7 @@ stdenvNoCC.mkDerivation {
     pname
     version
     src
+    passthru
     meta
     ;
 

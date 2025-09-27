@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-docprovider";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_docprovider";
     inherit version;
-    hash = "sha256-ivZhxlMAM0V3+i4mpltghvv2Z01ilt3rv6/XTUGMlNM=";
+    hash = "sha256-cwPzUoU0d9ipbj3mEADzCpt97n98AjfVUsrupPRER3k=";
   };
 
   postPatch = ''

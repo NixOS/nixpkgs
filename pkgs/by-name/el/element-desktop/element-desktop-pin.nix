@@ -1,7 +1,7 @@
 {
-  "version" = "1.11.109";
+  "version" = "1.12.0";
   "hashes" = {
-    "desktopSrcHash" = "sha256-4M+1wOwyMVRdzXpgdBi9Fi4WM7MMypDHAOcifk3iejI=";
-    "desktopYarnHash" = "sha256-uff/bOv3Gs/fNk9oPbE0X7EjftrIr7p/wSLgv8SDzkg=";
+    "desktopSrcHash" = "sha256-Epkjv6tT0I65JTu4O5nHFRn0q18kE1+7joyTF1S3y+4=";
+    "desktopYarnHash" = "sha256-2zy2xNzamjTyGE+Vm/gacMnby5Z0KfIWbgkl5EI5zi4=";
   };
 }

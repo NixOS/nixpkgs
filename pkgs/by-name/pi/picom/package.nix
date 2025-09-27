@@ -131,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/yshui/picom";
     mainProgram = "picom";
     maintainers = with lib.maintainers; [
-      ertes
       gepbird
       thiagokokada
       twey

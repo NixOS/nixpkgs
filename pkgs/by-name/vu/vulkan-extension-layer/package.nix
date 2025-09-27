@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "1.4.321";
+  version = "1.4.321.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";

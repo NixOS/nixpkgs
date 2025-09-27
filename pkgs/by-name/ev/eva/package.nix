@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Calculator REPL, similar to bc";
-    homepage = "https://github.com/NerdyPepper/eva";
+    homepage = "https://github.com/oppiliappan/eva";
     license = licenses.mit;
     maintainers = with maintainers; [
       ma27

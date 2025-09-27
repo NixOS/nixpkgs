@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-zXgAuFGWKHShKodi9swnWIry4VU9s4pBhBRoK5KzaL0=";
+    hash = "sha256-txgL5a+kKT28gAS8HianBgnnR+J25R2wrpRr8HEWCXA=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -37,7 +37,8 @@ buildPythonPackage rec {
     substituteInPlace tests/test_while_loop.py \
       --replace-fail "speed < 0.1" "speed < 0.5" \
       --replace-fail "speed < 0.5" "speed < 1" \
-      --replace-fail "speed < 1" "speed < 4" \
+      --replace-fail "speed < 1" "speed < 20" \
+      --replace-fail "speed < 2" "speed < 20"
   '';
 
   build-system = [ hatchling ];

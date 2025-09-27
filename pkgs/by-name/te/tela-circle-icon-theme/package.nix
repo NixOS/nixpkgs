@@ -13,10 +13,7 @@
   colorVariants ? [ ], # default is standard
 }:
 
-let
-  pname = "tela-circle-icon-theme";
-in
-lib.checkListOfEnum "${pname}: color variants"
+lib.checkListOfEnum "tela-circle-icon-theme: color variants"
   [
     "standard"
     "black"
@@ -38,12 +35,12 @@ lib.checkListOfEnum "${pname}: color variants"
 
   stdenvNoCC.mkDerivation
   rec {
-    inherit pname;
+    pname = "tela-circle-icon-theme";
     version = "2025-02-10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "tela-circle-icon-theme";
       tag = version;
       hash = "sha256-5Kqf6QNM+/JGGp2H3Vcl69Vh1iZYPq3HJxhvSH6k+eQ=";
     };

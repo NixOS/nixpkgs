@@ -7,16 +7,16 @@
 
 buildGoModule {
   pname = "scion-apps";
-  version = "unstable-2024-04-05";
+  version = "unstable-2025-03-12";
 
   src = fetchFromGitHub {
     owner = "netsec-ethz";
     repo = "scion-apps";
-    rev = "cb0dc365082788bcc896f0b55c4807b72c2ac338";
-    hash = "sha256-RzWtnUpZfwryOfumgXHV5QMceLY51Zv3KI0K6WLz8rs=";
+    rev = "55667b489898af09ae9d8290410da0be176549f9";
+    hash = "sha256-Tj0vtdYDmKbMpcO+t9KrtFewqdjusr0JRXpX6gY69WM=";
   };
 
-  vendorHash = "sha256-bz4vtELxrDfebk+00w9AcEiK/4skO1mE3lBDU1GkOrk=";
+  vendorHash = "sha256-om6ArtnKC9Gm5BdAqW57BnE0BsOmSPAAIPDDrQ5ZmJA=";
 
   postPatch = ''
     substituteInPlace webapp/web/tests/health/scmpcheck.sh \

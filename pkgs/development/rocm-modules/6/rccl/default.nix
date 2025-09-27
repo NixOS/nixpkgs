@@ -11,6 +11,7 @@
   mscclpp,
   perl,
   hipify,
+  python3,
   gtest,
   chrpath,
   rocprofiler,
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     clr
     perl
     hipify
+    python3
     autoPatchelfHook # ASAN doesn't add rpath without this
   ];
 

@@ -19,6 +19,7 @@ buildPythonPackage {
     owner = "internetarchive";
     repo = "surt";
     # Has no git tag, https://github.com/internetarchive/surt/issues/26
+    # nixpkgs-update: no auto update
     rev = "6934c321b3e2f66af9c001d882475949f00570c5";
     hash = "sha256-pSMNpFfq2V0ANWNFPcb1DwPHccbfddo9P4xZ+ghwbz4=";
   };

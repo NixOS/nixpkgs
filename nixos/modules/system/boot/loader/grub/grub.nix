@@ -558,7 +558,7 @@ in
 
       theme = mkOption {
         type = types.nullOr types.path;
-        example = literalExpression ''"''${pkgs.libsForQt5.breeze-grub}/grub/themes/breeze"'';
+        example = literalExpression ''"''${pkgs.kdePackages.breeze-grub}/grub/themes/breeze"'';
         default = null;
         description = ''
           Path to the grub theme to be used.

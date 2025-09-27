@@ -52,6 +52,11 @@ buildGoModule (finalAttrs: {
     "cmd/go-away"
   ];
 
+  postInstall = ''
+    mkdir -p $out/lib/go-away
+    cp -rv examples/snippets $out/lib/go-away/
+  '';
+
   meta = {
     changelog = "https://git.gammaspectra.live/git/go-away/releases/tag/${finalAttrs.src.tag}";
     description = "Self-hosted abuse detection and rule enforcement against low-effort mass AI scraping and bots";

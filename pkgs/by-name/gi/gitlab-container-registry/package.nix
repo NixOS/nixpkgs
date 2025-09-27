@@ -1,12 +1,12 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitLab,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "gitlab-container-registry";
-  version = "4.26.0";
+  version = "4.28.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -14,16 +14,10 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-XACKJW5sRXNM4Q24DXEVtjzhVfxoBd+JWHJr1s01ocA=";
+    hash = "sha256-0v39mQ0wLq2VUYNeDU6E2M8Ny/e/A3VrE8+pmpwJgug=";
   };
 
-  patches = [
-    # https://gitlab.com/gitlab-org/container-registry/-/merge_requests/2447
-    # Can be removed with next released when merged
-    ./fix-broken-urlcache-tests.diff
-  ];
-
-  vendorHash = "sha256-J4p3vXLmDFYl/z6crqanlmG1FB4Dq04HLx9IhC3usQ4=";
+  vendorHash = "sha256-tCOXSZjJOWHTIdWYxdBaH6STKAwqlHsuDfhGd2KPx1Q=";
 
   checkFlags =
     let

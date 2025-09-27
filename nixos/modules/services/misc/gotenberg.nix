@@ -107,7 +107,7 @@ in
         package = mkPackageOption pkgs "chromium" { };
 
         maxQueueSize = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 0;
           description = "Maximum queue size for chromium-based conversions. Setting to 0 disables the limit.";
         };
@@ -115,7 +115,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = "Automatically start chromium when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
+          description = "Automatically start Chromium when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
         };
 
         disableJavascript = mkOption {
@@ -143,7 +143,7 @@ in
           description = "Deny accepting URLs from these domains in the `downloadFrom` API field. Accepts a regular expression.";
         };
         maxRetries = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 4;
           description = "The maximum amount of times to retry downloading a file specified with `downloadFrom`.";
         };
@@ -158,13 +158,13 @@ in
         package = mkPackageOption pkgs "libreoffice" { };
 
         restartAfter = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 10;
           description = "Restart LibreOffice after this many conversions. Setting to 0 disables this feature.";
         };
 
         maxQueueSize = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 0;
           description = "Maximum queue size for LibreOffice-based conversions. Setting to 0 disables the limit.";
         };
@@ -172,7 +172,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = "Automatically start LibreOffice when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
+          description = "Automatically start LibreOffice when Gotenberg starts. If false, LibreOffice will start on the first conversion request that uses it.";
         };
 
         disableRoutes = mkOption {
@@ -303,6 +303,7 @@ in
       };
       serviceConfig = {
         Type = "simple";
+        # NOTE: disable to debug chromium crashes or otherwise no coredump is created and forbidden syscalls are not being logged
         DynamicUser = true;
         ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs args}";
 
@@ -340,6 +341,8 @@ in
           "@sandbox"
           "@system-service"
           "@chown"
+          "@pkey" # required by chromium or it crashes
+          "mincore"
         ];
         SystemCallArchitectures = "native";
 

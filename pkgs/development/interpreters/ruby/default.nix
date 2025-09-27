@@ -4,7 +4,6 @@
   lib,
   fetchurl,
   fetchpatch,
-  fetchFromSavannah,
   zlib,
   gdbm,
   ncurses,
@@ -38,7 +37,6 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems {
     inherit
       stdenv
@@ -74,7 +72,6 @@ let
           lib,
           fetchurl,
           fetchpatch,
-          fetchFromSavannah,
           rubygemsSupport ? true,
           zlib,
           zlibSupport ? true,
@@ -229,10 +226,10 @@ let
             cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           '';
 
+          # Ruby >= 2.1.0 tries to download config.{guess,sub}; copy it from autoconf instead.
           postPatch = ''
             sed -i configure.ac -e '/config.guess/d'
-            cp --remove-destination ${config}/config.guess tool/
-            cp --remove-destination ${config}/config.sub tool/
+            cp --remove-destination ${autoconf}/share/autoconf/build-aux/config.{guess,sub} tool/
           '';
 
           configureFlags = [
@@ -419,14 +416,14 @@ in
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "8" "";
-    hash = "sha256-d6zdjPu+H45XO15lNuA8UQPfmJ3AX6aMcPARgzw1YHU=";
+    version = rubyVersion "3" "2" "9" "";
+    hash = "sha256-q7rZjbmusVJ3Ow01ho5QADuMRn89BhUld8Tf7Z2I7So=";
     cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "8" "";
-    hash = "sha256-WuKKh6WaPkrWa8KTHSMturlT0KqPa687xPj4CXfInKs=";
+    version = rubyVersion "3" "3" "9" "";
+    hash = "sha256-0ZkWkKThcjPsazx4RMHhJFwK3OPgDXE1UdBFhGe3J7E=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 

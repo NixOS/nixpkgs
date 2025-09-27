@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   fetchpatch,
   rocmUpdateScript,
@@ -297,6 +298,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.tests = {
+    # Ensure all .tn.model files can be loaded by whatever version of frugally-deep we have
+    # This is otherwise hard to verify as MIOpen will only use these models on specific,
+    # expensive Instinct GPUs
+    # If MIOpen stops embedding .tn.model files the test will also fail, and can be deleted,
+    # likely along with the frugally-deep dependency
+    can-load-models = callPackage ./test-frugally-deep-model-loading.nix {
+      inherit (finalAttrs) src version;
+      inherit frugally-deep nlohmann_json;
+    };
+  };
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
     inherit (finalAttrs.src) owner;

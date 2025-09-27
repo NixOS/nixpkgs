@@ -10,6 +10,7 @@
   XCTest,
   sqlite,
   ncurses,
+  clang,
   replaceVars,
 }:
 let
@@ -40,9 +41,10 @@ stdenv.mkDerivation {
   ];
 
   patches = [
-    ./patches/nix-resource-root.patch
     ./patches/disable-catalyst.patch
-    ./patches/linux-fix-linking.patch
+    (replaceVars ./patches/linux-fix-linking.patch {
+      inherit clang;
+    })
     # TODO: Replace with branch patch once merged:
     # https://github.com/apple/swift-driver/pull/1197
     (fetchpatch {

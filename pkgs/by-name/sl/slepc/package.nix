@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  python3,
   python3Packages,
   arpack-mpi,
   petsc,
@@ -16,20 +15,20 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.23.2";
+  version = "3.23.3";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nRY8ARc31Q2Qi8Tf7921vBf5nPpI4evSjmpTYUTUigQ=";
+    hash = "sha256-j0sUJet4eViFxOR0XOAxNSprnL+kN4OW1npGihT0Q4Y=";
   };
 
   postPatch = ''
     # Fix slepc4py install prefix
     substituteInPlace config/packages/slepc4py.py \
       --replace-fail "slepc.prefixdir,'lib'" \
-      "slepc.prefixdir,'${python3.sitePackages}'"
+      "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
 
     patchShebangs lib/slepc/bin
   '';
@@ -43,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    python3
+    python3Packages.python
   ]
   ++ lib.optionals pythonSupport [
     python3Packages.setuptools

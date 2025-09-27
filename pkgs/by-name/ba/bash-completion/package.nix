@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-M2m9XkGKdfuZCGOSWu1bQgOYrOuzIOxMAwaz6uI/EHo=";
   };
 
+  postPatch = ''
+    # fix `mount -t` tab completion
+    substituteInPlace bash_completion \
+      --replace-fail "/lib/modules" "/run/booted-system/kernel-modules/lib/modules"
+  '';
+
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 

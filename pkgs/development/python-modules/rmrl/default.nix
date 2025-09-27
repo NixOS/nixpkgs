@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  unstableGitUpdater,
   poetry-core,
   pdfrw,
   reportlab,
@@ -50,6 +51,8 @@ buildPythonPackage {
   doCheck = false;
 
   pythonImportsCheck = [ "rmrl" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Render reMarkable documents to PDF";

@@ -140,7 +140,7 @@ cfgpantheon = """  # Enable the X11 windowing system.
 
   # Enable the Pantheon Desktop Environment.
   services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.pantheon.enable = true;
+  services.desktopManager.pantheon.enable = true;
 
 """
 
@@ -198,15 +198,6 @@ cfgbudgie = """  # Enable the X11 windowing system.
   # Enable the Budgie Desktop environment.
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.budgie.enable = true;
-
-"""
-
-cfgdeepin = """  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the Deepin Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.deepin.enable = true;
 
 """
 
@@ -589,8 +580,6 @@ def run():
         cfg += cfglumina
     elif gs.value("packagechooser_packagechooser") == "budgie":
         cfg += cfgbudgie
-    elif gs.value("packagechooser_packagechooser") == "deepin":
-        cfg += cfgdeepin
 
     if (
         gs.value("keyboardLayout") is not None

@@ -36,6 +36,11 @@ rec {
     };
   };
 
+  ppc32 = {
+    config = "powerpc-unknown-linux-gnu";
+    rust.rustcTarget = "powerpc-unknown-linux-gnu";
+  };
+
   sheevaplug = {
     config = "armv5tel-unknown-linux-gnueabi";
   }
@@ -72,8 +77,8 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rust.rustcTarget = "armv7-linux-androideabi";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     useAndroidPrebuilt = true;
   }
   // platforms.armv7a-android;
@@ -81,15 +86,15 @@ rec {
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rust.rustcTarget = "aarch64-linux-android";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;

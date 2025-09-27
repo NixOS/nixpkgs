@@ -12,17 +12,17 @@ buildGoModule (finalAttrs: {
   pname = "go-mockery_2";
   # supported upstream until 2029-12-31
   # https://vektra.github.io/mockery/latest/v3/#v2-support-lifecycle
-  version = "2.53.3";
+  version = "2.53.5";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X0cHpv4o6pzgjg7+ULCuFkspeff95WFtJbVHqy4LxAg=";
+    hash = "sha256-Q+EiUg606JsTe9XsIVk/mktKF0+tXGNeOuvYk9iB+uY=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-AQY4x2bLqMwHIjoKHzEm1hebR29gRs3LJN8i00Uup5o=";
+  vendorHash = "sha256-5pMcAuWxKqWzSB+d28hFOP++P0JpqukSO3Z+1Hrwzk4=";
 
   ldflags = [
     "-s"

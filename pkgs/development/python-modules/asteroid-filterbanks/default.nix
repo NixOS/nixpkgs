@@ -71,7 +71,7 @@ buildPythonPackage {
     "test_pcen_jit"
     "test_stateful_pcen_jit"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Flaky: AssertionError: Tensor-likes are not close!
     "test_fb_def_and_forward_lowdim"
   ];

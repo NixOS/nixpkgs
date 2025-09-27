@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     sed -i -e 's/==.*"/"/' -e '/packages=\[/a "friture.playback",' pyproject.toml
+    sed -i -e 's/tostring/tobytes/' friture/spectrogram_image.py
   '';
 
   nativeBuildInputs =

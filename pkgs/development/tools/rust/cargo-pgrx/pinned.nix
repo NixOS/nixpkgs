@@ -17,4 +17,10 @@
     hash = "sha256-oMToAhKkRiCyC8JYS0gmo/XX3QVcVtF5mUV0aQjd+p8=";
     cargoHash = "sha256-RawGAQGtG2QVDCMbwjmUEaH6rDeRiBvvJsGCY8wySw0=";
   };
+
+  cargo-pgrx_0_16_0 = {
+    version = "0.16.0";
+    hash = "sha256-emNR7fXNVD9sY/Mdno7mwpH6l/7AD28cBUsFRn9je50=";
+    cargoHash = "sha256-3eyBDWDoCzSU0tbab8qbjSnBkkN0oOgd7YbuyHLEHYw=";
+  };
 }

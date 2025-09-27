@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.50.0";
+  version = "2.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openviess";
     repo = "PyViCare";
     tag = version;
-    hash = "sha256-RV82dsr3asZKlgURfUdcYoaLFqSvvvLJCvZiH0CYGpk=";
+    hash = "sha256-WKu9f59Fc0i4MoGGaTP8s94pD4cYNrQvDt2kyQZ+f1U=";
   };
 
   postPatch = ''

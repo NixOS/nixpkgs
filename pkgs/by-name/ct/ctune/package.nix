@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctune";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "An7ar35";
     repo = "ctune";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jiRUEUmcjuylJj23ZFJS0BNS4NIdzuVL4AmO6CNaxHY=";
+    hash = "sha256-36Y19CbUnv8NtvZjCMKod/Y/Ofjgr9BsxgMMdoMK+hU=";
   };
 
   nativeBuildInputs = [

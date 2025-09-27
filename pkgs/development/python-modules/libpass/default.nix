@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "libpass";
-  version = "1.9.1";
+  version = "1.9.1.post0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThirVondukr";
     repo = "passlib";
     tag = version;
-    hash = "sha256-G6Fu1RjVb+OPdxt2hWpgAzTefRA41S0zV4hSvvCEWEA=";
+    hash = "sha256-4J18UktqllRA8DVdHL4AJUuAkjZRdUjiql9a71XXhCA=";
   };
 
   build-system = [ hatchling ];

@@ -49,7 +49,7 @@ Its top-level directory must be one (or multiple) of `basis`, `core` or `extra`.
 `work` is routed to `/var/lib/factor` and is not shipped nor referenced in the nix store, see the section on [scaffolding](#ssec-factor-scaffolding).
 You should usually use `extra`, but you can use the other roots to overwrite built-in vocabularies.
 Be aware that vocabularies in `core` are part of the Factor image which the development environment is run from.
-This means the code in those vocabularies is not loaded from the sources, such that you need to call `refresh-all` to re-compile and load the changed definitions.
+This means the code in those vocabularies is not loaded from the sources, such that you need to call `refresh-all` to recompile and load the changed definitions.
 In these instances, it is advised to override the `factor-unwrapped` package directly, which compiles and packages the core Factor libraries into the default Factor
 image.
 
@@ -97,7 +97,7 @@ factorPackages.buildFactorVocab {
 ```
 
 The vocabulary goes to `lib/factor/extra`, extra files, like licenses etc. would go to `share/` as usual and could be added to the output via a `postInstall` phase.
-In case the vocabulary binds to a shared library or calls a binary that needs to be present in the runtime environment of its users, add `extraPaths` and `extraLibs` attributes respectively.
+In case the vocabulary binds to a shared library or calls a binary that needs to be present in the runtime environment of its users, add `extraPaths` and `extraLibs` attributes, respectively.
 They are then picked up by the `buildFactorApplication` function and added as runtime dependencies.
 
 ## Building Applications {#ssec-factor-applications}
@@ -175,7 +175,7 @@ factorPackages.buildFactorApplication (finalAttrs: {
 })
 ```
 
-The use of the `src.name` and`sourceRoot` attributes conveniently establish the necessary `painter` vocabulary directory that is needed for the deployment to work.
+The use of the `src.name` and `sourceRoot` attributes conveniently establish the necessary `painter` vocabulary directory that is needed for the deployment to work.
 
 It requires the packager to specify the full set of binaries to be made available at runtime.
 This enables the standard pattern for application packages to specify all runtime dependencies explicitly without the Factor runtime interfering.

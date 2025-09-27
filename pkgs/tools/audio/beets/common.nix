@@ -176,6 +176,8 @@ python3Packages.buildPythonApplication {
   disabledTests = disabledTests ++ [
     # https://github.com/beetbox/beets/issues/5880
     "test_reject_different_art"
+    # touches network
+    "test_merge_duplicate_album"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.

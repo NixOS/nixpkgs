@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-KSS8s6Hti1UfwQH3QLnw/gogKxFQJ2R89phQ1l/YjFI=";
   };
 
+  patches = [
+    # See: <https://github.com/RsyncProject/rsync/pull/790>
+    ./fix-tests-in-darwin-sandbox.patch
+  ];
+
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     perl
@@ -75,6 +80,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
@@ -85,5 +92,10 @@ stdenv.mkDerivation rec {
       ivan
     ];
     platforms = platforms.unix;
+    identifiers.cpeParts = {
+      vendor = "samba";
+      inherit version;
+      update = "-";
+    };
   };
 }

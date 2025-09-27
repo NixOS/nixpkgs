@@ -39,6 +39,8 @@ in
     scheduler = lib.mkOption {
       type = lib.types.enum [
         "scx_bpfland"
+        "scx_chaos"
+        "scx_cosmos"
         "scx_central"
         "scx_flash"
         "scx_flatcg"
@@ -46,14 +48,18 @@ in
         "scx_layered"
         "scx_mitosis"
         "scx_nest"
+        "scx_p2dq"
         "scx_pair"
+        "scx_prev"
         "scx_qmap"
         "scx_rlfifo"
         "scx_rustland"
         "scx_rusty"
         "scx_sdt"
         "scx_simple"
+        "scx_tickless"
         "scx_userland"
+        "scx_wd40"
       ];
       default = "scx_rustland";
       example = "scx_bpfland";
@@ -115,5 +121,7 @@ in
     ];
   };
 
-  meta.maintainers = with lib.maintainers; [ johnrtitor ];
+  meta = {
+    inherit (pkgs.scx.full.meta) maintainers;
+  };
 }

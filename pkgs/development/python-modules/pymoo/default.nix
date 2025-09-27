@@ -29,20 +29,20 @@ let
   pymoo_data = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo-data";
-    rev = "33f61a78182ceb211b95381dd6d3edee0d2fc0f3";
+    tag = "33f61a78182ceb211b95381dd6d3edee0d2fc0f3";
     hash = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
   };
 in
 buildPythonPackage rec {
   pname = "pymoo";
-  version = "0.6.1.3";
+  version = "0.6.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
     tag = version;
-    hash = "sha256-CbeJwv51lu4cABgGieqy/8DCDJCb8wOPPVqUHk8Jb7E=";
+    hash = "sha256-IRNYluK6fO1cQq0u9dIJYnI5HWqtTPLXARXNoHa4F0I=";
   };
 
   postPatch = ''

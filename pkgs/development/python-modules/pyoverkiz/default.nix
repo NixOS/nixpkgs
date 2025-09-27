@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.18.1";
+  version = "1.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     tag = "v${version}";
-    hash = "sha256-X/0cNMzNjDJqBRiP4kuua4oJVG+0oRbjoZVYP0D4f9M=";
+    hash = "sha256-kGcDZp1oLkjHy/+iAdnsAceSY+jX9+hw3mFxCaT18YA=";
   };
 
   build-system = [ hatchling ];

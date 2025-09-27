@@ -12,7 +12,7 @@
 
 let
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
 
   xplat = fetchurl {
     url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
@@ -83,7 +83,7 @@ mkPackage rec {
     # The provided libhostfxr.dylib is for x86_64-darwin, so we remove it
     rm artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/libhostfxr.dylib
 
-    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet -name libhostfxr${sharedLibrary}) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet/host -name libhostfxr${sharedLibrary}) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
 
     # overwrite the file
     echo "#!${stdenv.shell}" > eng/common/dotnet-install.sh
@@ -110,7 +110,7 @@ mkPackage rec {
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
 
-    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet/host -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
   '';
 
   doInstallCheck = true;

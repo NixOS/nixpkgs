@@ -26,6 +26,8 @@
   udev,
   SDL2,
   SDL2_mixer,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 buildDotnetModule rec {
@@ -40,10 +42,14 @@ buildDotnetModule rec {
     hash = "sha256-6BCDFd0nU96OgI5lqf4fbyNkG4PS5P4raHVbvBAhB5A=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin [
-    cctools
-    darwin.sigtool
-  ];
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      cctools
+      darwin.sigtool
+    ];
 
   enableParallelBuilding = false;
 
@@ -70,6 +76,7 @@ buildDotnetModule rec {
     libXext
     libXi
     libXrandr
+    gtk3
 
     # Headless executable
     libGL

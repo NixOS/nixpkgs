@@ -60,8 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_perplexity" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-perplexity==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-perplexity==";
+    };
   };
 
   meta = {

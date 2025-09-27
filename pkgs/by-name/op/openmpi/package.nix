@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   removeReferencesTo,
   gfortran,
   perl,
@@ -41,31 +40,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.6";
+  version = "5.0.8";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-vUGD/LxDR3wlR5m0Kd8abldsBC50otL4s31Tey/5gVc=";
+    sha256 = "sha256-UxMeGlfnJw9kVwf4sLZbpWBI9bWsP2j6q+0+sNcQ5Ek=";
   };
-
-  patches = [
-    # This patch can be removed with the next openmpi update (>5.0.6)
-    # See https://github.com/open-mpi/ompi/issues/12784 and https://github.com/open-mpi/ompi/pull/13003
-    # Fixes issue where the shared memory backing file cannot be created because directory trees are never created
-    (fetchpatch {
-      name = "fix-singletons-session-dir";
-      url = "https://github.com/open-mpi/ompi/commit/4d4f7212decd0d0ca719688b15dc9b3ee7553a52.patch";
-      hash = "sha256-Mb8qXtAUhAQ90v0SdL24BoTASsKRq2Gu8nYqoeSc9DI=";
-    })
-    # This patch can be removed with the next openmpi update (>5.0.6)
-    # See https://github.com/open-mpi/ompi/issues/12924 and https://github.com/open-mpi/ompi/pull/12934
-    # Fix the size_t/int parameter compile error in coll/cuda
-    (fetchpatch {
-      name = "fix-size-t-int-parameter";
-      url = "https://github.com/open-mpi/ompi/commit/399f69d68735839d379913a5433ea81dbdbd98bf.patch";
-      hash = "sha256-TbB73a419v5JGkiyBAwe/t+6g+pzaR15yAZhdbJIXG4=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./
@@ -90,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     USER = "nixbld";
     HOSTNAME = "localhost";
-    SOURCE_DATE_EPOCH = "0";
   };
 
   outputs = [

@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "klayout";
-  version = "0.30.3";
+  version = "0.30.4.post1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zyj5s2pHjgrk7/l2cqvcvqCvhdxh7dNG7tlLNGFlOX8=";
+    hash = "sha256-jQLVD3IsekQfO0P80miKOtyTyGldc2Vn/mJFfvvgMFo=";
   };
 
   build-system = [

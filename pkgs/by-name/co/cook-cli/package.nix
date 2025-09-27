@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cook-cli";
-  version = "0.12.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
     rev = "v${version}";
-    hash = "sha256-2vY68PUoHDyyH3hJ/Fvjxbof7RzWFWYTg1UhsjWNpww=";
+    hash = "sha256-jaAgmqUuqldcBlrwqXsausXPP35RZqM1VasYyA0pPO8=";
   };
 
-  cargoHash = "sha256-H4soSp9fDwrqcv3eL5WqGYHWAt07gyVLoEVp1VbYchQ=";
+  cargoHash = "sha256-JVWa5vQcskXEgOqAxr2CKQDMjYakA1HqinDbKfRp/Wo=";
 
   nativeBuildInputs = [
     pkg-config

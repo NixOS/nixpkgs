@@ -13,6 +13,7 @@
   gpsd,
   hamlib_4,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     gpsd
     hamlib_4
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Real time satellite tracking and orbit prediction";

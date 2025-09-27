@@ -126,7 +126,7 @@ in
           settings = mkOption {
             description = ''
               Configuration for `act_runner daemon`.
-              See https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml for an example configuration
+              See <https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml> for an example configuration
             '';
 
             type = types.submodule {

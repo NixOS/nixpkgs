@@ -587,6 +587,63 @@ let
       '';
     };
 
+    kafka = {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeTextFile {
+          name = "/tmp/prometheus-kafka-exporter.env";
+          text = ''
+            KAFKA_BROKERS="localhost:9092"
+          '';
+        };
+      };
+      metricProvider = {
+        services.apache-kafka = {
+          enable = true;
+
+          clusterId = "pHG8aWuXSfWAibHFDCnsCQ";
+
+          formatLogDirs = true;
+
+          settings = {
+            "node.id" = 1;
+            "process.roles" = [
+              "broker"
+              "controller"
+            ];
+            "listeners" = [
+              "PLAINTEXT://:9092"
+              "CONTROLLER://:9093"
+            ];
+            "listener.security.protocol.map" = [
+              "PLAINTEXT:PLAINTEXT"
+              "CONTROLLER:PLAINTEXT"
+            ];
+            "controller.quorum.voters" = [
+              "1@localhost:9093"
+            ];
+            "controller.listener.names" = [ "CONTROLLER" ];
+            "log.dirs" = [ "/var/lib/apache-kafka" ];
+          };
+        };
+
+        systemd.services.apache-kafka.serviceConfig.StateDirectory = "apache-kafka";
+      };
+      exporterTest = ''
+        wait_for_unit("apache-kafka")
+        wait_for_open_port(9092)
+        wait_for_open_port(9093)
+        wait_for_unit("prometheus-kafka-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+          "journalctl -o cat -u prometheus-kafka-exporter.service | grep '\"version\":\"${pkgs.kminion.version}\"'"
+        )
+        succeed(
+            "curl -sSf http://localhost:8080/metrics | grep 'kminion_exporter_up'"
+        )
+      '';
+    };
+
     knot = {
       exporterConfig = {
         enable = true;
@@ -1234,7 +1291,7 @@ let
         wait_for_file("/var/lib/postfix/queue/public/showq")
         wait_for_open_port(9154)
         wait_until_succeeds(
-            "curl -sSf http://localhost:9154/metrics | grep 'postfix_up{path=\"/var/lib/postfix/queue/public/showq\"} 1'"
+            "curl -sSf http://localhost:9154/metrics | grep 'postfix_up{path=\"unix:///var/lib/postfix/queue/public/showq\"} 1'"
         )
         succeed(
             "curl -sSf http://localhost:9154/metrics | grep 'postfix_smtpd_connects_total 0'"
@@ -1507,7 +1564,8 @@ let
         settings.scripts = [
           {
             name = "success";
-            script = "sleep 1";
+            command = [ "sleep" ];
+            args = [ "1" ];
           }
         ];
       };
@@ -1515,7 +1573,7 @@ let
         wait_for_unit("prometheus-script-exporter.service")
         wait_for_open_port(9172)
         wait_until_succeeds(
-            "curl -sSf 'localhost:9172/probe?name=success' | grep -q '{}'".format(
+            "curl -sSf 'localhost:9172/probe?script=success' | grep -q '{}'".format(
                 'script_success{script="success"} 1'
             )
         )
@@ -1546,14 +1604,29 @@ let
         wait_for_open_port(9374)
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}' | grep -v ' 0$'".format(
-                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source=""} '
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source="",tos="0"} '
             )
         )
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}'".format(
-                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source=""}'
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source="",tos="0"}'
             )
         )
+      '';
+    };
+
+    storagebox = {
+      exporterConfig = {
+        enable = true;
+        tokenFile = "/tmp/faketoken";
+      };
+      exporterTest = ''
+        succeed(
+          'echo faketoken > /tmp/faketoken'
+        )
+        wait_for_unit("prometheus-storagebox-exporter.service")
+        wait_for_open_port(9509)
+        succeed("curl -sSf localhost:9509/metrics | grep 'process_open_fds'")
       '';
     };
 

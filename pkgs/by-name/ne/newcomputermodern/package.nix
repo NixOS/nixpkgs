@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # equivalent to the LaTeX Project Public License (LPPL), version 1.3c or
     # later." - GUST website
     license = lib.licenses.lppl13c;
-    maintainers = [ lib.maintainers.drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

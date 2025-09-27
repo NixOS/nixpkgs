@@ -19,17 +19,18 @@ let
       networking.firewall.enable = false;
       services.glusterfs.enable = true;
 
-      # create a mount point for the volume
-      boot.initrd.postDeviceCommands = ''
-        ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
-      '';
-
-      virtualisation.emptyDiskImages = [ 1024 ];
+      virtualisation.emptyDiskImages = [
+        {
+          size = 1024;
+          driveConfig.deviceExtraOpts.serial = "data";
+        }
+      ];
 
       virtualisation.fileSystems = {
         "/data" = {
-          device = "/dev/disk/by-label/data";
+          device = "/dev/disk/by-id/virtio-data";
           fsType = "ext4";
+          autoFormat = true;
         };
       };
     };

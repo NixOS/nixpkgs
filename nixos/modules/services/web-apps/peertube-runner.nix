@@ -53,7 +53,7 @@ in
       description = ''
         Configuration for peertube-runner.
 
-        See available configuration options at https://docs.joinpeertube.org/maintain/tools#configuration.
+        See available configuration options at <https://docs.joinpeertube.org/maintain/tools#configuration>.
       '';
     };
     instancesToRegister = lib.mkOption {
@@ -72,7 +72,7 @@ in
               description = ''
                 Path to a file containing a registration token for the PeerTube instance.
 
-                See how to generate registration tokens at https://docs.joinpeertube.org/admin/remote-runners#manage-remote-runners.
+                See how to generate registration tokens at <https://docs.joinpeertube.org/admin/remote-runners#manage-remote-runners>.
               '';
             };
             runnerName = lib.mkOption {

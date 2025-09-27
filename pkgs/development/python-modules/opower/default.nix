@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.15.1";
+  version = "0.15.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "opower";
     tag = "v${version}";
-    hash = "sha256-FB9m1aFEqbqLYfg5cMhZMLvp9ENsudQqf5dXKnGtZkA=";
+    hash = "sha256-K0GYXubMKh2B7KYhZOaecBWArTBayl/Wq5Ha3jJyixE=";
   };
 
   build-system = [ setuptools ];
@@ -39,6 +39,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     python-dotenv
+  ];
+
+  disabledTestPaths = [
+    # network access
+    "tests/test_opower.py"
   ];
 
   pythonImportsCheck = [ "opower" ];

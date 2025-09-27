@@ -1,7 +1,6 @@
 {
   lib,
   mkHyprlandPlugin,
-  hyprland,
   fetchFromGitHub,
   cmake,
   doctest,
@@ -11,7 +10,7 @@
   nix-update-script,
 }:
 
-mkHyprlandPlugin hyprland {
+mkHyprlandPlugin {
   pluginName = "hyprgrass";
   version = "0.8.2-unstable-2025-05-08";
 

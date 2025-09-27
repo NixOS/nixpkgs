@@ -41,7 +41,7 @@ mkDerivation rec {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "linphone-desktop";
     rev = version;
     hash = "sha256-Pu2tGKe3C1uR4lzXkC5sJFu8iJBqF76UfWJXYjPwBkc=";
   };

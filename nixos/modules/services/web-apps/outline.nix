@@ -297,9 +297,9 @@ in
     discordAuthentication = lib.mkOption {
       description = ''
         To configure Discord auth, you'll need to create an application at
-        https://discord.com/developers/applications/
+        <https://discord.com/developers/applications/>
 
-        See https://docs.getoutline.com/s/hosting/doc/discord-g4JdWFFub6
+        See <https://docs.getoutline.com/s/hosting/doc/discord-g4JdWFFub6>
         for details on setting up your Discord app.
       '';
       default = null;
@@ -702,7 +702,6 @@ in
             FORCE_HTTPS = builtins.toString cfg.forceHttps;
             ENABLE_UPDATES = builtins.toString cfg.enableUpdateCheck;
             WEB_CONCURRENCY = builtins.toString cfg.concurrency;
-            MAXIMUM_IMPORT_SIZE = builtins.toString cfg.maximumImportSize;
             DEBUG = cfg.debugOutput;
             GOOGLE_ANALYTICS_ID = lib.optionalString (cfg.googleAnalyticsId != null) cfg.googleAnalyticsId;
             SENTRY_DSN = lib.optionalString (cfg.sentryDsn != null) cfg.sentryDsn;
@@ -715,6 +714,7 @@ in
             RATE_LIMITER_DURATION_WINDOW = builtins.toString cfg.rateLimiter.durationWindow;
 
             FILE_STORAGE = cfg.storage.storageType;
+            FILE_STORAGE_IMPORT_MAX_SIZE = builtins.toString cfg.maximumImportSize;
             FILE_STORAGE_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
             FILE_STORAGE_LOCAL_ROOT_DIR = cfg.storage.localRootDir;
           }

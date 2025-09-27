@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = "pylutron-caseta";
     tag = "v${version}";
-    hash = "sha256-67y/YaXWHklSppUxsJ44CDMsvBXLzKBGl00LXBWi4+g=";
+    hash = "sha256-VK53y4m86xVVGibAiWtxNge+kBYxQnltmc3mYpoGedw=";
   };
 
   build-system = [ hatchling ];

@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "OpenType implementation of STIX fonts with math support";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

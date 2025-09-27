@@ -4,12 +4,10 @@
   aiormq,
   buildPythonPackage,
   docker,
-  exceptiongroup,
   fetchFromGitHub,
   pamqp,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   shortuuid,
   testcontainers,
   wrapt,
@@ -18,23 +16,20 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.5.5";
+  version = "9.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
     tag = version;
-    hash = "sha256-Gs01y1VRVgk5i4JI+fqtRo6mOyzBzHM/2hJPVenc+3g=";
+    hash = "sha256-VpZgAAAt9d0NxSgTGnyBg5fu5GcT3Tg0qOieX7KqmyM=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiormq
-    exceptiongroup
     yarl
   ];
 

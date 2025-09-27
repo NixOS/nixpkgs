@@ -22,13 +22,12 @@ let
         preferLocalBuild = true;
         allowSubstitutes = false;
         buildInputs = [
-          pkgs.gtk2
           cfg.package
         ];
       }
       ''
         mkdir -p $out/etc/gtk-2.0/
-        GTK_PATH=${cfg.package}/lib/gtk-2.0/ gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules.cache
+        GTK_PATH=${cfg.package}/lib/gtk-2.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk2.dev "gtk-query-immodules-2.0"} > $out/etc/gtk-2.0/immodules.cache
       '';
 
   gtk3_cache =
@@ -37,13 +36,12 @@ let
         preferLocalBuild = true;
         allowSubstitutes = false;
         buildInputs = [
-          pkgs.gtk3
           cfg.package
         ];
       }
       ''
         mkdir -p $out/etc/gtk-3.0/
-        GTK_PATH=${cfg.package}/lib/gtk-3.0/ gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules.cache
+        GTK_PATH=${cfg.package}/lib/gtk-3.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk3.dev "gtk-query-immodules-3.0"} > $out/etc/gtk-3.0/immodules.cache
       '';
 
 in
@@ -107,8 +105,12 @@ in
     environment.systemPackages = [
       cfg.package
     ]
-    ++ lib.optional cfg.enableGtk2 gtk2_cache
-    ++ lib.optional cfg.enableGtk3 gtk3_cache;
+    ++ lib.optional (
+      cfg.enableGtk2 && (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages)
+    ) gtk2_cache
+    ++ lib.optional (
+      cfg.enableGtk3 && (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages)
+    ) gtk3_cache;
   };
 
   meta = {

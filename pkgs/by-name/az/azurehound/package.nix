@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "azurehound";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
     tag = "v${version}";
-    hash = "sha256-gyXra6MIDVDNA9ls5KLctSkG42vE6FkE/ILOipOoBzw=";
+    hash = "sha256-fCs9C86IO1aTzBFZiA7SaVlk0Zdm/ItWtLhE8Ii2W0A=";
   };
 
-  vendorHash = "sha256-Z8mF1etDiB8lavprf5Xpqk3cV41ezexWc/uZuu50DoA=";
+  vendorHash = "sha256-ScFHEIarDvxd9R6eUONdECmtK+5aZRdo71khljLz8c4=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

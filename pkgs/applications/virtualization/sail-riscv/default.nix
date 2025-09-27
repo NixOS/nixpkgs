@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "riscv";
-    repo = pname;
+    repo = "sail-riscv";
     rev = version;
     hash = "sha256-Keu96+yHWUEFO3rRLvF7rzcJmF3y/V/uyK7TIFj0Xw0=";
   };

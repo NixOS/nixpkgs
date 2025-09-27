@@ -8,6 +8,7 @@
   desktop-file-utils,
   fetchFromGitea,
   glib,
+  glycin-loaders,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
@@ -27,19 +28,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "edestcroix";
     repo = "Recordbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o2cKVRpuAwE+/TI5mwtSvkCFaXN349GP9dDlgdh3Luk=";
+    hash = "sha256-9rrVlD+ODl+U9bPzbXGLQBLkbnfAm4SmJHRcVife33A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0/tKL5UW1QuhsddivU/r8n3T3xyRaGLRVpKuXcc4fmU=";
+    hash = "sha256-W60X69/fEq/X6AK1sbT6rb+SsF/oPzfUvrar0fihr88=";
   };
 
   strictDeps = true;
@@ -83,6 +84,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   cargoCheckType = if (finalAttrs.mesonBuildType != "debug") then "release" else "debug";
+
+  # Workaround copied from https://github.com/NixOS/nixpkgs/blob/e39fe935fc7537bee0440935c12f5c847735a291/pkgs/by-name/lo/loupe/package.nix#L60-L74
+  preConfigure = ''
+    # Dirty approach to add patches after cargoSetupPostUnpackHook
+    # We should eventually use a cargo vendor patch hook instead
+    pushd ../$(stripHash $cargoDeps)/glycin-2.*
+      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+    popd
+  '';
+  preFixup = ''
+    # Needed for the glycin crate to find loaders.
+    # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
 
   checkPhase = ''
     runHook preCheck

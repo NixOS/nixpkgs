@@ -1,22 +1,21 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pycayennelpp";
   version = "2.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1cc6lz28aa57gs74767xyd3i370lwx046yb5a1nfch6fk3kf7xdx";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Patch setup.py to remove pytest-runner
   postPatch = ''

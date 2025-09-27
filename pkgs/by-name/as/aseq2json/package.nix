@@ -15,9 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "midi-dump-tools";
     rev = "8572e6313a0d7ec95492dcab04a46c5dd30ef33a";
-    sha256 = "LQ9LLVumi3GN6c9tuMSOd1Bs2pgrwrLLQbs5XF+NZeA=";
+    hash = "sha256-LQ9LLVumi3GN6c9tuMSOd1Bs2pgrwrLLQbs5XF+NZeA=";
   };
-  sourceRoot = "${finalAttrs.src.name}/aseq2json";
+  sourceRoot = "source/aseq2json";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D --target-directory "$out/bin" aseq2json
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Listens for MIDI events on the Alsa sequencer and outputs as JSON to stdout";
     mainProgram = "aseq2json";
     homepage = "https://github.com/google/midi-dump-tools";
-    license = licenses.asl20;
-    maintainers = [ maintainers.queezle ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ queezle ];
+    platforms = lib.platforms.linux;
   };
 })

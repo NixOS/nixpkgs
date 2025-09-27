@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.98.0";
+  version = "1.99.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     tag = "v${version}";
-    hash = "sha256-OfWH1V+F90ukVgan+eZKo00hrOMf/6x6HqxARzFiKHI=";
+    hash = "sha256-Y82qN2bmzE5Xqz2wSw9lWItsPbsRevLL7FlLN0FGKs0=";
   };
 
   postPatch = ''

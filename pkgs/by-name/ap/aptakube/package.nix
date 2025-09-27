@@ -2,11 +2,10 @@
   lib,
   stdenv,
   callPackage,
-  ...
 }:
 let
   pname = "aptakube";
-  version = "1.11.10";
+  version = "1.13.0";
   meta = {
     homepage = "https://aptakube.com/";
     description = "Modern, lightweight and multi-cluster Kubernetes GUI";

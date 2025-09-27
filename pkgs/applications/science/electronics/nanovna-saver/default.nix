@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
-    repo = pname;
+    repo = "nanovna-saver";
     tag = "v${version}";
     sha256 = "sha256-Asx4drb9W2NobdgOlbgdm1aAzB69hnIWvOM915F7sgA=";
   };

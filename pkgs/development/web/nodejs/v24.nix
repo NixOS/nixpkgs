@@ -14,11 +14,20 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches =
+    if stdenv.buildPlatform.isDarwin then
+      callPackage ./gyp-patches.nix { patch_tools_catch_oserror = false; }
+      ++ [
+        ./gyp-patches-set-fallback-value-for-CLT.patch
+      ]
+    else
+      [ ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.5.0";
-  sha256 = "f1ba96204724bd1c6de7758e08b3718ba0b45d87fb3bebd7e30097874ccc8130";
+  version = "24.8.0";
+  sha256 = "1c03b362ebf4740d4758b9a3d3087e3de989f54823650ec80b47090ef414b2e0";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -46,12 +55,12 @@ buildNodejs {
     ]
     ++ [
       ./configure-armv6-vfpv2.patch
-      ./disable-darwin-v8-system-instrumentation-node19.patch
-      ./bypass-darwin-xcrun-node16.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
+      ./use-nix-codesign.patch
     ]
+    ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts
       (fetchpatch2 {

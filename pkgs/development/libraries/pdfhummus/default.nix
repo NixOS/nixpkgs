@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pdfhummus.com";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
   };
 }

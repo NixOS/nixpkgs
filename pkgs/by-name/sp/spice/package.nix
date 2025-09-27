@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spice";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-bZ62EX8DkXRxxLwQAEq+z/SKefuF64WhxF8CM3cBW4E=";
+    sha256 = "sha256-Cm7JUo8FNxJhu7LUb/Nee1xF/4m7l1qZr5Wl8g/0cX0=";
   };
 
   patches = [
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    python3.pkgs.six
     python3.pkgs.pyparsing
   ];
 
@@ -85,9 +84,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs build-aux
-
-    # Forgotten in 0.15.2 tarball
-    sed -i /meson.add_dist_script/d meson.build
   '';
 
   postInstall = ''

@@ -1,4 +1,5 @@
 {
-  "x86_64": "sha256-s3iaz9SkV8H1j3rQ1ZWKe9I1o/42+buqxCnGAoA17j8=",
-  "x86": "sha256-ZiFms3GWhTrEcE6/nf3pUjpdux5PRI3AtOzxofk93pk="
+  "x86_64": "sha256-kp+xePTRZgqdAV3/BYhqKke3dXIkLWLM+IWFXtN2rHM=",
+  "x86": "sha256-xEXV+XBNoXpAO8R/oDj8gfGb5tICr9ps4DN8Q4lqK2k=",
+  "aarch64": "sha256-r0tTQUq3CePJ/7Vuzf4Zsy3Ebu0KiXNBwRHmrO3d15E="
 }

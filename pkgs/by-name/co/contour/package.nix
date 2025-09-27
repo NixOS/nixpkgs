@@ -20,8 +20,7 @@
   yaml-cpp,
   ncurses,
   file,
-  libutil,
-  sigtool,
+  darwin,
   nixosTests,
   installShellFiles,
   reflection-cpp,
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
     installShellFiles
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
     boxed-cpp
@@ -74,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libutil
+    darwin.libutil
   ];
 
   cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
