@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -57,6 +58,8 @@ buildGoModule rec {
   tags = [ "urfave_cli_no_docs" ];
 
   passthru.tests = { inherit (nixosTests) geth; };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";
