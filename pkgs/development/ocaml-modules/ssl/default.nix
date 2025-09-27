@@ -37,7 +37,10 @@ buildDunePackage rec {
   meta = {
     homepage = "http://savonet.rastageeks.org/";
     description = "OCaml bindings for libssl";
-    license = "LGPL+link exception";
+    license = with lib.licenses; [
+      lgpl21Plus
+      ocamlLgplLinkingException
+    ];
     maintainers = with lib.maintainers; [
       anmonteiro
       dandellion

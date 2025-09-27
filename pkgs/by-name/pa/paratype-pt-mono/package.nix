@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation {
     homepage = "http://www.paratype.ru/public/";
     description = "Open Paratype font";
 
-    license = "Open Paratype license";
+    license = lib.licenses.paratype;
     # no commercial distribution of the font on its own
     # must rename on modification
     # http://www.paratype.ru/public/pt_openlicense.asp
