@@ -19,16 +19,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringrtc";
-  version = "2.57.0";
+  version = "2.57.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "ringrtc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m73SXjTES1sHGbQRtn9CjurFd/Xby5Yyn6uLVLigfiU=";
+    hash = "sha256-U3sfNjJInT7QBqLLNK1j/0xzmwi/pfZZGOtL/JZ5gZM=";
   };
 
-  cargoHash = "sha256-LRCgK/w+GcYBCWUKjytErQCxDtS15EnsVOr5Uq6F8ww=";
+  cargoHash = "sha256-DcaZmOPVO/eAMZ9NsqmwnI2d7Vdz/aVmvI4COivvDBM=";
 
   cargoBuildFlags = [
     "-p"
