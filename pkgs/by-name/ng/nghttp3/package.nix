@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nghttp3";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://github.com/ngtcp2/nghttp3/releases/download/v${finalAttrs.version}/nghttp3-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-AAKlyoVtsFmqbcac9zL7sA2aHnPteISPXUjyYh8gyoo=";
+    hash = "sha256-KFl4NTevIT1npc5Cd923nIlBrUXtv6XM3VLZz0/6Qi0=";
   };
 
   outputs = [
