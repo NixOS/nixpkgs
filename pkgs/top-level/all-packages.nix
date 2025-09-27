@@ -290,6 +290,8 @@ with pkgs;
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
+  bloodhound-ce-py = with python3Packages; toPythonApplication bloodhound-ce-py;
+
   # Zip file format only allows times after year 1980, which makes e.g. Python
   # wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
