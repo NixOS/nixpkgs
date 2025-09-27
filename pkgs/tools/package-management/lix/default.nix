@@ -129,10 +129,19 @@ let
             inherit (self) nix-eval-jobs;
           };
 
-          nix-update = nix-update.override {
+          nix-update = (nix-update.override {
             nix = self.lix;
             inherit (self) nixpkgs-review;
-          };
+          }).overrideAttrs (old: {
+            # https://github.com/Mic92/nix-update/pull/433
+            # nix-update matches a whitespace or a colon
+            # but the colon always occur just after the `got` term.
+            # Therefore, there's no need to match a whitespace.
+            postPatch = (old.postPatch or "") + lib.optionalString (lib.versionAtLeast "1.13.0" nix-update.version) ''
+              substituteInPlace nix_update/dependency_hashes.py \
+                --replace-fail "got(:|\s)" "got:"
+            '';
+          });
         };
     };
 
