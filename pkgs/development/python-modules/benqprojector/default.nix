@@ -1,5 +1,6 @@
 {
   lib,
+  aiofiles,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -10,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "benqprojector";
-  version = "0.1.6";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rrooggiieerr";
     repo = "benqprojector.py";
     tag = version;
-    hash = "sha256-Ys2C44kr5gd6tXO51OFRx4YVKVRGLfFPCYDFGt+gN0c=";
+    hash = "sha256-BttaLpjiybjeoJhOXfo6Qlox4bRqf9auvNg/wtm9gMQ=";
   };
 
   build-system = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiofiles
     pyserial
     pyserial-asyncio-fast
   ];
@@ -38,7 +40,7 @@ buildPythonPackage rec {
   meta = rec {
     description = "Python library to control BenQ projectors";
     homepage = "https://github.com/rrooggiieerr/benqprojector.py";
-    changelog = "${homepage}/releases/tag/${version}";
+    changelog = "${homepage}/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sephalon ];
   };
