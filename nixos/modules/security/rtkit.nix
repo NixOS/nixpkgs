@@ -8,20 +8,16 @@
   utils,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.security.rtkit;
   package = pkgs.rtkit;
-
 in
 {
 
   options = {
 
-    security.rtkit.enable = mkOption {
-      type = types.bool;
+    security.rtkit.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable the RealtimeKit system service, which hands
@@ -31,8 +27,8 @@ in
       '';
     };
 
-    security.rtkit.args = mkOption {
-      type = types.listOf types.str;
+    security.rtkit.args = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Command-line options for `rtkit-daemon`.
@@ -45,7 +41,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     security.polkit.enable = true;
 

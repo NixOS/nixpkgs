@@ -85,17 +85,19 @@ in
       # upstream service config: https://github.com/jcorporation/myMPD/blob/master/contrib/initscripts/mympd.service.in
       after = [ "mpd.service" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = with lib; ''
+      preStart = ''
         config_dir="/var/lib/mympd/config"
         mkdir -p "$config_dir"
 
-        ${pipe cfg.settings [
-          (mapAttrsToList (
+        ${lib.pipe cfg.settings [
+          (lib.mapAttrsToList (
             name: value: ''
-              echo -n "${if isBool value then boolToString value else toString value}" > "$config_dir/${name}"
+              echo -n "${
+                if lib.isBool value then lib.boolToString value else toString value
+              }" > "$config_dir/${name}"
             ''
           ))
-          (concatStringsSep "\n")
+          (lib.concatStringsSep "\n")
         ]}
       '';
       unitConfig = {
