@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fzwoch";
-    repo = pname;
+    repo = "obs-vaapi";
     rev = version;
     hash = "sha256-ykiLsHL3hoe0ibxMxp4zrqeSeQfgnJfNg7Yb5i9HDJQ=";
   };
@@ -66,9 +66,6 @@ stdenv.mkDerivation rec {
       pedrohlc
     ];
     license = lib.licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

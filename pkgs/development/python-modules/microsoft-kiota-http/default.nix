@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-http";
-  version = "1.9.5";
+  version = "1.9.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-http-v${version}";
-    hash = "sha256-h0sZhBIGZyhzYtCvLHRAn73HspgyOAKU3p4xSn+uXFU=";
+    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
   };
 
   sourceRoot = "${src.name}/packages/http/httpx/";

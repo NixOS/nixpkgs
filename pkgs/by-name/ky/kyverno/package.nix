@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,13 +10,13 @@
 
 buildGoModule rec {
   pname = "kyverno";
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${version}";
-    hash = "sha256-tP+klX3FuVBci4SEr4IV0JnyMBnGUTXMsy1xjZ6eHSo=";
+    hash = "sha256-Mv01ILbWFLypXGl0zCUVa3kdSZGBQH8fAP3txyUArsE=";
   };
 
   ldflags = [
@@ -35,6 +36,8 @@ buildGoModule rec {
     # we have no integration between krew and kubectl
     # so better rename binary to kyverno and use as a standalone
     mv $out/bin/kubectl-kyverno $out/bin/kyverno
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kyverno \
       --bash <($out/bin/kyverno completion bash) \
       --zsh <($out/bin/kyverno completion zsh) \

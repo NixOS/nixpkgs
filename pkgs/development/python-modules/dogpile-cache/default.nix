@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dogpile-cache";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dogpile_cache";
     inherit version;
-    hash = "sha256-sAqeL0Cc+b9Iwuej4+aNrF+nWROsvxpi+CfIEtNfPQk=";
+    hash = "sha256-4lxg5nel4o/4YSR2X78YxTJXvNeDB0nNW6NQrOKhKYk=";
   };
 
   build-system = [ setuptools ];

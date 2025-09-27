@@ -1131,7 +1131,7 @@ let
     defsFinal' =
       let
         # Process mkMerge and mkIf properties.
-        defs' = concatMap (
+        defsNormalized = concatMap (
           m:
           map (
             value:
@@ -1146,19 +1146,19 @@ let
         ) defs;
 
         # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+        defsFiltered = filterOverrides' defsNormalized;
 
         # Sort mkOrder properties.
-        defs''' =
+        defsSorted =
           # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''.values then
-            sortProperties defs''.values
+          if any (def: def.value._type or "" == "order") defsFiltered.values then
+            sortProperties defsFiltered.values
           else
-            defs''.values;
+            defsFiltered.values;
       in
       {
-        values = defs''';
-        inherit (defs'') highestPrio;
+        values = defsSorted;
+        inherit (defsFiltered) highestPrio;
       };
     defsFinal = defsFinal'.values;
 

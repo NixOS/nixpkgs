@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dimtpap";
-    repo = pname;
+    repo = "obs-pipewire-audio-capture";
     rev = version;
     sha256 = "sha256-GrfogPsqpQ976Gcc4JVdslAAWTj49PdspwVp/JXYXSQ=";
   };
@@ -42,9 +42,6 @@ stdenv.mkDerivation rec {
       fazzi
     ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

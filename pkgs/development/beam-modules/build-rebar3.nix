@@ -91,7 +91,7 @@ let
 
         buildPhase = ''
           runHook preBuild
-          HOME=. rebar3 bare compile -path ""
+          HOME=. rebar3 bare compile --paths "."
           runHook postBuild
         '';
 

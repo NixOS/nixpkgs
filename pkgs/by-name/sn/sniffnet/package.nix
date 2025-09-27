@@ -1,32 +1,41 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   pkg-config,
+
+  # buildInputs
   libpcap,
-  libxkbcommon,
   openssl,
-  stdenv,
   alsa-lib,
   expat,
   fontconfig,
   vulkan-loader,
-  wayland,
   xorg,
+
+  # wrapper
+  libxkbcommon,
+  wayland,
+
+  # tests
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sniffnet";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
-    tag = "v${version}";
-    hash = "sha256-MWYCXLIv0euEHkfqZCxbfs1wFHkGIFk06wn7F8CIXx0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EgnFDF+K8qGjunWB20VA8bXLzNvyGzcIaim+smhW5fU=";
   };
 
-  cargoHash = "sha256-M7vIiGdH5+rdlqi603bfcXZavUAx2tU7+4sXb+QG+2g=";
+  cargoHash = "sha256-22P1EeZ2FqwIHjr23oJCKvg3ggT1Me93goELwZ/B9S4=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -51,6 +60,7 @@ rustPlatform.buildRustPackage rec {
   # requires internet access
   checkFlags = [
     "--skip=secondary_threads::check_updates::tests::fetch_latest_release_from_github"
+    "--skip=utils::check_updates::tests::fetch_latest_release_from_github"
   ];
 
   postInstall = ''
@@ -75,15 +85,22 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   meta = {
     description = "Cross-platform application to monitor your network traffic with ease";
     homepage = "https://github.com/gyulyvgc/sniffnet";
-    changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = with lib.maintainers; [ figsoda ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "sniffnet";
   };
-}
+})

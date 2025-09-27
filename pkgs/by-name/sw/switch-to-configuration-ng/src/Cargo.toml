@@ -5,6 +5,12 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+
+[profile.release]
+codegen-units = 1
+opt-level = 3
+lto = true
+
 [dependencies]
 anyhow = "1.0.82"
 dbus = "0.9.7"

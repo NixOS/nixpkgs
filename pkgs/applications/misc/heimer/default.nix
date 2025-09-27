@@ -13,7 +13,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "juzzlin";
-    repo = pname;
+    repo = "heimer";
     rev = version;
     hash = "sha256-eKnGCYxC3b7qd/g2IMDyZveBg+jvFA9s3tWEGeTPSkU=";
   };

@@ -4,7 +4,7 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonPackage rec {
   pname = "lesscpy";
   version = "0.15.1";
   format = "pyproject";

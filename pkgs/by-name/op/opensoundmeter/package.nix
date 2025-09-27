@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opensoundmeter";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "psmokotnin";
     repo = "osm";
     rev = "v${version}";
-    hash = "sha256-Yj/1XbQQtAWub+ZPFAtyFyAgjdjX+sCvIL7W2dnEc4s=";
+    hash = "sha256-jM9tkfNjPNHcPOG0n7NeohC/O3E6CUspOF3UTkQ2rs8=";
   };
 
   patches = [ ./build.patch ];

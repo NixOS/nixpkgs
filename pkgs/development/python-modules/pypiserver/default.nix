@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pypiserver";
     repo = "pypiserver";
     tag = "v${version}";
-    hash = "sha256-ODwDYAEAqel31+kR/BE1yBfgOZOtPz3iaCLg/d6jbb4=";
+    hash = "sha256-tbBSZdkZJGcas3PZ3dj7CqAYNH2Mt0a4aXl6t7E+wNY=";
   };
 
   postPatch = ''

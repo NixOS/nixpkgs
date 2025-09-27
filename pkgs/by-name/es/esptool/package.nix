@@ -3,18 +3,19 @@
   fetchFromGitHub,
   python3Packages,
   softhsm,
+  installShellFiles,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "esptool";
-  version = "5.0.2";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     tag = "v${version}";
-    hash = "sha256-oRvtEBp88tmgjjIuoQS5ySm4I0aD/Zs8VLRUZo0sh/I=";
+    hash = "sha256-pdkL/QfrrTs/NdXlsr+2Yo+r8UTFLkxw4E6XGDAt1yE=";
   };
 
   postPatch = ''
@@ -43,9 +44,35 @@ python3Packages.buildPythonApplication rec {
     hsm = [ python-pkcs11 ];
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   postInstall = ''
     rm -v $out/bin/*.py
-  '';
+  ''
+  +
+    lib.strings.concatMapStrings
+      (
+        cmd:
+        # Unfortunately, espsecure and espefuse do not run in cross-compilation
+        lib.optionalString
+          (
+            python3Packages.stdenv.buildPlatform.canExecute python3Packages.stdenv.hostPlatform
+            || cmd == "esptool"
+          )
+          ''
+            installShellCompletion --cmd ${cmd} \
+              --bash <(_${lib.toUpper cmd}_COMPLETE=bash_source $out/bin/${cmd}) \
+              --zsh <(_${lib.toUpper cmd}_COMPLETE=zsh_source $out/bin/${cmd}) \
+              --fish <(_${lib.toUpper cmd}_COMPLETE=fish_source $out/bin/${cmd})
+          ''
+      )
+      [
+        "esptool"
+        "espsecure"
+        "espefuse"
+      ];
 
   nativeCheckInputs =
     with python3Packages;

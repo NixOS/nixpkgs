@@ -13,7 +13,7 @@
   cairo,
   pixman,
   libsecret,
-  electron_35,
+  electron_36,
   xcbuild,
   buildPackages,
   callPackage,
@@ -22,7 +22,7 @@
 }:
 
 let
-  electron = electron_35;
+  electron = electron_36;
   yarn-berry = yarn-berry_4;
 
   releaseData = lib.importJSON ./release-data.json;

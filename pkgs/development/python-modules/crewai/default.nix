@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "crewai";
-  version = "0.175.0";
+  version = "0.186.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = version;
-    hash = "sha256-F1hw8MTQDA6eW9Rw+MdV3hJHiTuj1SHwu2c39KirPnI=";
+    hash = "sha256-rSVIbRATMq0cfMdgR/+/tNjij0Sk/ErWipy0m8hKvr4=";
   };
 
   build-system = [ hatchling ];
@@ -60,6 +60,7 @@ buildPythonPackage rec {
     "chromadb"
     "json-repair"
     "litellm"
+    "onnxruntime"
     "portalocker"
     "pyvis"
   ];

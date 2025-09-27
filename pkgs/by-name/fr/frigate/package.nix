@@ -9,6 +9,8 @@
   sqlite-vec,
   frigate,
   nixosTests,
+  fetchpatch,
+  protobuf_21,
 }:
 
 let
@@ -36,6 +38,11 @@ let
           tag = version;
           hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
         };
+      });
+      onnxruntime = super.onnxruntime.override (old: {
+        onnxruntime = old.onnxruntime.override (old: {
+          protobuf = protobuf_21;
+        });
       });
     };
   };
@@ -77,6 +84,11 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     ./constants.patch
+    # Fixes hardcoded path /media/frigate/clips/faces. Remove in next version.
+    (fetchpatch {
+      url = "https://github.com/blakeblackshear/frigate/commit/b86e6e484f64bd43b64d7adebe78671a7a426edb.patch";
+      hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
+    })
     ./ffmpeg.patch
   ];
 

@@ -6,18 +6,19 @@
   protobuf,
   nixosTests,
   nix-update-script,
+  installShellFiles,
   withQuic ? false, # with QUIC protocol support
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "easytier";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${version}";
-    hash = "sha256-0TuRNxf8xDhwUjBXJsv7dhgeYjr/voIt+/0tinImUhA=";
+    hash = "sha256-89uRsLeSNR2I+QX0k1VJ0sMrUYLbApEJClk3aFr0faY=";
   };
 
   # remove if rust 1.89 merged
@@ -28,15 +29,27 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'rust-version = "1.89.0"' ""
   '';
 
-  cargoHash = "sha256-FQC3JD051fEZQO9UriNzJPrxE0QcSQ8p3VTk3tQGPBc=";
+  cargoHash = "sha256-rioo3Eg5xGg4PI4beXWheeymVNq+zZP9uhbfU584u0g=";
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
+    installShellFiles
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
   buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd easytier-cli \
+      --bash <($out/bin/easytier-cli gen-autocomplete bash) \
+      --fish <($out/bin/easytier-cli gen-autocomplete fish) \
+      --zsh <($out/bin/easytier-cli gen-autocomplete zsh)
+    installShellCompletion --cmd easytier-core \
+      --bash <($out/bin/easytier-core --gen-autocomplete bash) \
+      --fish <($out/bin/easytier-core --gen-autocomplete fish) \
+      --zsh <($out/bin/easytier-core --gen-autocomplete zsh)
+  '';
 
   doCheck = false; # tests failed due to heavy rely on network
 

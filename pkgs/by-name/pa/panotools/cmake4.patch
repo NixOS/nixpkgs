@@ -1,0 +1,32 @@
+Subject: Vendor upstream patches (mercurial/sourceforge)
+Author: Andreas Metzler
+
+From:
+- https://sourceforge.net/p/panotools/libpano13/ci/698e20b4d296c1dbde9d010c3fb8d54050e56ddb/
+- https://sourceforge.net/p/panotools/libpano13/ci/6b0f2a5ef7a0490866fb224158d1dfbb8bf5896f/
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,8 +28,7 @@
+ ## may need to edit the wxWidgets version number below.
+ ##
+ 
+-# require at least cmake 3.0
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.12...4.0)
+ if(POLICY CMP0074)
+   cmake_policy(SET CMP0074 NEW)
+ endif()
+@@ -382,12 +382,12 @@
+ endif()
+ 
+ # create TAGS file
+-ADD_CUSTOM_COMMAND( OUTPUT ctags POST_BUILD
+-                   COMMAND ctags-exuberant -e *.c *.h tools/*.c
++ADD_CUSTOM_COMMAND( OUTPUT ${PROJECT_SOURCE_DIR}/TAGS
++                   COMMAND ctags -e *.c *.h tools/*.c
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/
+                    COMMENT "Build TAGS file"
+                  )
+-ADD_CUSTOM_TARGET( TAGS DEPENDS ctags)
++ADD_CUSTOM_TARGET( TAGS DEPENDS ${PROJECT_SOURCE_DIR}/TAGS)

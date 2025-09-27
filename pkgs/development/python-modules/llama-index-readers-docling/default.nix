@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-docling";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_docling";
     inherit version;
-    hash = "sha256-b9UxJWlh/KnfTIOcKe9jiWCD1VknqeJH2hQjrDNmsOg=";
+    hash = "sha256-Et17yfWK+SSeWZymN26J4PjKx4FimGaJmMZaXazq5B0=";
   };
 
   build-system = [ hatchling ];

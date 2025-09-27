@@ -28,13 +28,13 @@ let
     }).overrideAttrs
       (
         final: old: {
-          version = "10.4.2";
+          version = "10.5.1";
           src = fetchFromGitea {
             domain = "forgejo.ellis.link";
             owner = "continuwuation";
             repo = "rocksdb";
-            rev = "10.4.fb";
-            hash = "sha256-/Hvy1yTH/0D5aa7bc+/uqFugCQq4InTdwlRw88vA5IY=";
+            rev = "10.5.fb";
+            hash = "sha256-X4ApGLkHF9ceBtBg77dimEpu720I79ffLoyPa8JMHaU=";
           };
 
           patches = [ ];
@@ -77,22 +77,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.7";
+  version = "0.5.0-rc.8";
 
-  # Switch back to fetchFromGitea once archive download errors are fixed
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u1k1r95qBoEizeILR5rrM5lDFz2a2NjUwM9TTi0HNjw=";
+    hash = "sha256-5XjEwEYzWANm2k0GKFuHV3no65ReWPbCq+xMUH13zuI=";
   };
 
-  # Patch to fix linking issue caused by resolv-conf which needs to be incorporated
-  # into continuwuity upstream.
-  cargoPatches = [ ./cargolock.patch ];
-
-  cargoHash = "sha256-1ECD8RZ918TM1IX3jkTDNhCR5Zye0a3ii0zeIPy8jlI=";
+  cargoHash = "sha256-uMr1DLwiMwIKN5IeALwQfh2xmAGPyQtxvT/uM0gfPvA=";
 
   nativeBuildInputs = [
     pkg-config

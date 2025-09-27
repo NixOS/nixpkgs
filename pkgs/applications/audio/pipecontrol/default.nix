@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "portaloffreedom";
-    repo = pname;
+    repo = "pipecontrol";
     rev = "v${version}";
     sha256 = "sha256-WvQFmoEaxnkI61wPldSnMAoPAxNtI399hdHb/9bkPqc=";
   };

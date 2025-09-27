@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   buildRubyGem,
   bundlerEnv,
   ruby_3_4,
@@ -12,13 +12,17 @@
   withLibvirt ? stdenv.hostPlatform.isLinux,
   openssl,
 }:
-
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.4.8";
-  url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  hash = "sha256-AVagvZKbVT4RWrCJdskhABTunRM9tBb5+jovYM/VF+0=";
+  version = "2.4.9";
+
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "vagrant";
+    rev = "v${version}";
+    hash = "sha256-xlL0YLY5yG9Q2L93Ag1pO/F8LOp+JdcgrvWyw+bZP/I=";
+  };
 
   ruby = ruby_3_4;
 
@@ -34,8 +38,8 @@ let
       {
         vagrant = {
           source = {
-            type = "url";
-            inherit url hash;
+            type = "path";
+            path = src;
           };
           inherit version;
           dontCheckForBrokenSymlinks = true;
@@ -57,16 +61,14 @@ let
       done
     '';
   };
-
 in
 buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
-  inherit ruby version;
+  inherit ruby version src;
 
   doInstallCheck = true;
   dontBuild = false;
-  src = fetchurl { inherit url hash; };
 
   # Some reports indicate that some connection types, particularly
   # WinRM, suffer from "Digest initialization failed" errors. Adding

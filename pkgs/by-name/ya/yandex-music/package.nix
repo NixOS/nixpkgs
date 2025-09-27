@@ -34,7 +34,8 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
-    rev = "v${version}";
+    # tags are retagged for some bug fixes
+    rev = "066a6c7f503304d2181db04c5ed379a80f9137b8";
     hash = "sha256-z+gmUG0/7ykF42+OlFGZC268Tj8+vpfgZRYrW4otpfM=";
   };
 

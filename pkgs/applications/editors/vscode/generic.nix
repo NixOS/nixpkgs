@@ -1,6 +1,8 @@
 {
   stdenv,
   lib,
+  coreutils,
+  gnugrep,
   copyDesktopItems,
   makeDesktopItem,
   unzip,
@@ -310,10 +312,16 @@ stdenv.mkDerivation (
             lib.optionalString stdenv.hostPlatform.isLinux
               "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"
           }
-    ''
-    # Add gio to PATH so that moving files to the trash works when not using a desktop environment
-    + ''
-        --prefix PATH : ${glib.bin}/bin
+        --prefix PATH : ${
+          lib.makeBinPath [
+            # for moving files to trash
+            glib
+
+            # for launcher script
+            gnugrep
+            coreutils
+          ]
+        }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
       )

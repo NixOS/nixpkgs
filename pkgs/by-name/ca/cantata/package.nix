@@ -16,7 +16,7 @@
   withLame ? false,
   lame,
   withMusicbrainz ? false,
-  libmusicbrainz5,
+  libmusicbrainz,
 
   withTaglib ? true,
   taglib_1,
@@ -129,7 +129,7 @@ let
     {
       names = [ "MUSICBRAINZ" ];
       enable = withMusicbrainz;
-      pkgs = [ libmusicbrainz5 ];
+      pkgs = [ libmusicbrainz ];
     }
     {
       names = [ "ONLINE_SERVICES" ];

@@ -66,14 +66,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.28.1"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.30.6"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-TpyjYnLTBPU83g6/h+BrX4hd4dUbZUvDyJ6m/3v38+A=";
+    hash = "sha256-enCI/yGnxf4/VYID/Di0ZhSiGp0ldgIKYmTnklGpjbc=";
   };
 
   postPatch = ''
@@ -117,6 +117,14 @@ py.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = [
     groff
     less
+  ];
+
+  # Prevent breakage when running in a Python environment: https://github.com/NixOS/nixpkgs/issues/47900
+  makeWrapperArgs = [
+    "--unset"
+    "NIX_PYTHONPATH"
+    "--unset"
+    "PYTHONPATH"
   ];
 
   nativeCheckInputs = with py.pkgs; [

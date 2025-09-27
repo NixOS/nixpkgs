@@ -1,36 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-  python,
   django,
-  packaging,
+  fetchFromGitHub,
   nodejs,
+  packaging,
+  python,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "django-js-reverse";
-  version = "0.10.1-b1";
-  format = "setuptools";
+  version = "0.10.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "BITSOLVER";
+    owner = "vintasoftware";
     repo = "django-js-reverse";
-    rev = version;
-    hash = "sha256-i78UsxVwxyDAc8LrOVEXLG0tdidoQhvUx7GvPDaH0KY=";
+    tag = "v${version}";
+    hash = "sha256-0S1g8tLWaJVV2QGPeiBOevhz9f0ueINxA9HOcnXuyYg=";
   };
 
-  propagatedBuildInputs = [ django ] ++ lib.optionals (pythonAtLeast "3.7") [ packaging ];
+  build-system = [ setuptools ];
 
-  # Js2py is needed for tests but it's unmaintained and insecure
-  doCheck = false;
+  dependencies = [
+    django
+    packaging
+  ];
 
   nativeCheckInputs = [
     nodejs
     six
   ];
+
+  # Js2py is needed for tests but it's unmaintained and insecure
+  doCheck = false;
 
   checkPhase = ''
     ${python.interpreter} django_js_reverse/tests/unit_tests.py
@@ -39,8 +44,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "django_js_reverse" ];
 
   meta = with lib; {
-    description = "Javascript url handling for Django that doesn't hurt";
-    homepage = "https://django-js-reverse.readthedocs.io/en/latest/";
+    description = "Javascript URL handling for Django";
+    homepage = "https://django-js-reverse.readthedocs.io/";
+    changelog = "https://github.com/vintasoftware/django-js-reverse/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];
   };

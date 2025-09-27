@@ -67,11 +67,6 @@ let
     passthru = (oldAttrs.passthru or { }) // {
       unwrapped = xeus-cling-unwrapped;
     };
-
-    meta.badPlatforms = [
-      # fatal error: 'stdlib.h' file not found
-      lib.systems.inspect.patterns.isDarwin
-    ];
   });
 
   mkKernelSpec = std: {

@@ -12,22 +12,22 @@
 }:
 stdenv.mkDerivation (final: {
   pname = "splayer";
-  version = "3.0.0-beta.1";
+  version = "3.0.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${final.version}";
     fetchSubmodules = false;
-    hash = "sha256-Sw5L474gowpOVkIc3CHWVEzknMgJvBmtNXRCxzwY8BA=";
+    hash = "sha256-q4jMwIILuz9Uci/1m429Y5tHE2rkfxctu9QCA8jrJkk=";
   };
 
   pnpm = pnpm_10;
 
   pnpmDeps = final.pnpm.fetchDeps {
     inherit (final) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-mC1iJtkZpTd2Vte5DLI3ntZ7vSO5Gka2qOk7ihQd3Gs=";
+    fetcherVersion = 2;
+    hash = "sha256-lA08+i+SpMB95MAi/N5mxbcBed0FRchroT5e2nwnXuA=";
   };
 
   nativeBuildInputs = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation (final: {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Simple Netease Cloud Music player";

@@ -22,12 +22,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.8.0";
+  version = "0.12.1";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bpxb9BLMxF2z42Ok/yVxEvVmmKxh+WWY2kHyCAHrCx4=";
+    hash = "sha256-ZpxHLZIc9bBzPJyvDHMjuaTEzZsHwafoBihKxe8Pr3U=";
   };
 
   tui = buildGoModule {
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     modRoot = "packages/tui";
 
-    vendorHash = "sha256-de5FtS7iMrbmoLlIjdfrxs2OEI/f1dfU90GIJbvdO50=";
+    vendorHash = "sha256-H+TybeyyHTbhvTye0PCDcsWkcN8M34EJ2ddxyXEJkZI=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -81,10 +81,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        bun install \
          --filter=opencode \
          --force \
-         --frozen-lockfile \
          --ignore-scripts \
-         --no-progress \
-         --production
+         --no-progress
+         # Remove `--frozen-lockfile` and `--production` — they erroneously report the lockfile needs updating even though `bun install` does not change it.
+         # Related to  https://github.com/oven-sh/bun/issues/19088
+         # --frozen-lockfile \
+         # --production
 
       runHook postBuild
     '';
@@ -101,7 +103,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-PmLO0aU2E7NlQ7WtoiCQzLRw4oKdKxS5JI571lvbhHo=";
+    outputHash =
+      {
+        x86_64-linux = "sha256-YOTuzwo0ZjqVswW3bUu3pFJcmfl0X0Se8Z5jKg8/rQs=";
+        aarch64-linux = "sha256-pLtE1Cyv4jHYGFQlVHMeKZbQqC2SkxTu2KRHN4E1NPw=";
+        x86_64-darwin = "sha256-3JxXe889dL7TBuHPRYDsviUuwnp38XWAwFN3Te6JtDg=";
+        aarch64-darwin = "sha256-RHg55NvI52EGTWUCCJVrilXqr3qc+vqQoT/uIUjDVvg=";
+      }
+      .${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -135,7 +144,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --define OPENCODE_TUI_PATH="'${finalAttrs.tui}/bin/tui'" \
       --define OPENCODE_VERSION="'${finalAttrs.version}'" \
       --compile \
-      --compile-exec-argv="--" \
       --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
       --outfile=opencode \
       ./packages/opencode/src/index.ts \

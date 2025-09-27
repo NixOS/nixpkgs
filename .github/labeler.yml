@@ -393,7 +393,7 @@
       - changed-files:
           - any-glob-to-any-file:
               - nixos/modules/services/desktops/pantheon/**/*
-              - nixos/modules/services/x11/desktop-managers/pantheon.nix
+              - nixos/modules/services/desktop-managers/pantheon.nix
               - nixos/modules/services/x11/display-managers/lightdm-greeters/pantheon.nix
               - nixos/tests/pantheon.nix
               - pkgs/desktops/pantheon/**/*

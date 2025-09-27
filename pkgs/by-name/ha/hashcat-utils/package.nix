@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hashcat-utils";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "hashcat";
     repo = "hashcat-utils";
     rev = "v${version}";
-    sha256 = "0wgc6wv7i6cs95rgzzx3zqm14xxbjyajvcqylz8w97d8kk4x4wjr";
+    sha256 = "sha256-S2aRNTJMQO/YXdCHexKQ+gZnZp2vGvsvhD5O7t3tfhw=";
   };
 
   sourceRoot = "${src.name}/src";

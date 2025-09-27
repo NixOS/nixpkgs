@@ -6,7 +6,6 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 NIX_FILE="package.nix"
-RELEASE_ID="latest"
 
 GITHUB_REPO="$1"
 ASSET_NAME="$2"
@@ -14,10 +13,18 @@ REV_PREFIX="${3:-v}"
 
 CURRENT_VER="$(grep -oP 'version = "\K[^"]+' "${NIX_FILE}")"
 CURRENT_HASH="$(grep -oP 'hash = "\K[^"]+' "${NIX_FILE}")"
+
+JQ_FILTER='[.[] | select((.tag_name | test("preview|nightly")) | not)] |
+    first | .tag_name, (.assets[] | select(.name == $asset_name) | .digest)'
+
 {
     read -r LATEST_VER
     read -r ASSET_DIGEST
-} < <(curl --fail -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${GITHUB_REPO}/releases/${RELEASE_ID}" | jq -r ".tag_name, (.assets[] | select(.name == \"${ASSET_NAME}\") | .digest)")
+} < <(
+    curl --fail -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} \
+        "https://api.github.com/repos/${GITHUB_REPO}/releases" |
+        jq -r --arg asset_name "${ASSET_NAME}" "${JQ_FILTER}"
+)
 
 LATEST_VER="${LATEST_VER#"${REV_PREFIX}"}"
 

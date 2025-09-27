@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  nixosTests,
   fetchFromGitHub,
   pihole,
   pihole-ftl,
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = nixosTests.pihole-ftl;
 
   meta = {
     description = "Pi-hole web dashboard displaying stats and more";

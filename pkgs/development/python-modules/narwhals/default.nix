@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "2.0.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-NptQHnv0PoAbD0RIghBrtDPsYidq1k4LN/mUfz4n6G0=";
+    hash = "sha256-ReF/6UNxxeQd4RspzmauEUJGaI1kY3hMPNYSDg8ZP2w=";
   };
 
   build-system = [ hatchling ];
@@ -68,6 +68,11 @@ buildPythonPackage rec {
     # Timezone issue
     "test_to_datetime"
     "test_unary_two_elements"
+    # Test requires pyspark binary
+    "test_datetime_w_tz_pyspark"
+    "test_convert_time_zone_to_connection_tz_pyspark"
+    "test_replace_time_zone_to_connection_tz_pyspark"
+    "test_lazy"
   ];
 
   pytestFlags = [

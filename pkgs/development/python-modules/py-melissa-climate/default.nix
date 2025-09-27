@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "py-melissa-climate";
-  version = "2.1.2";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "py-melissa-climate";
-    tag = "V${version}";
-    hash = "sha256-Z1A0G3g8dyoG+zUxUTqI/OxczvUVy2kSI04YP0WeXso=";
+    tag = version;
+    hash = "sha256-zYr+nKdO+lCLLYGSvY16MUs8TxbWcyaoQk9cwNQ704Y=";
   };
 
   postPatch = ''

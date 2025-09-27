@@ -41,7 +41,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       hmenke
-      vanzef
     ];
     mainProgram = "pass-git-helper";
   };

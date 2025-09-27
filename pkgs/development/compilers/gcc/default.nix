@@ -419,6 +419,7 @@ pipe
           platforms
           teams
           mainProgram
+          identifiers
           ;
       };
     }

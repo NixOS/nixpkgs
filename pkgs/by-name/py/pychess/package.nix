@@ -7,20 +7,20 @@
   wrapGAppsHook3,
   gtk3,
   gst_all_1,
-  gtksourceview,
   writableTmpDirAsHomeHook,
+  gtksourceview4,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pychess";
-  version = "1.0.5";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pychess";
     repo = "pychess";
-    rev = "${version}";
-    hash = "sha256-hxc+vYvCeiM0+oOu1peI9qkZg5PeIsDMCiydJQAuzOk=";
+    rev = version;
+    hash = "sha256-MSz5RiPpmlySjljhDlkvXtO6t3UO58zx+uGsV9R6F1A=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     gst_all_1.gst-plugins-base
-    gtksourceview
+    gtksourceview4
   ];
 
   build-system = with python3Packages; [ setuptools ];
@@ -44,7 +44,6 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     pexpect
     psutil
-    standard-telnetlib
     websockets
     ptyprocess
   ];

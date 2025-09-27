@@ -3,6 +3,7 @@
   appimageTools,
   fetchurl,
   asar,
+  makeWrapper,
 }:
 
 let
@@ -38,6 +39,10 @@ appimageTools.wrapAppImage {
     substituteInPlace $out/share/applications/todoist.desktop \
       --replace-fail "Exec=AppRun" "Exec=todoist-electron --" \
       --replace-fail "Exec=todoist" "Exec=todoist-electron --"
+
+    . ${makeWrapper}/nix-support/setup-hook
+    wrapProgram $out/bin/todoist-electron \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   meta = {

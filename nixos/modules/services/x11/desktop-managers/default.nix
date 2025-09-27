@@ -33,7 +33,7 @@ in
     ./retroarch.nix
     ./kodi.nix
     ./mate.nix
-    ./pantheon.nix
+    ../../desktop-managers/pantheon.nix
     ./surf-display.nix
     ./cde.nix
     ./cinnamon.nix

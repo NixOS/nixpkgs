@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   cmake,
   gmp,
@@ -12,7 +13,6 @@
   readline,
   xxd,
   iproute2,
-  ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.settingsTemplate = ./pihole.toml;
+  passthru.tests = nixosTests.pihole-ftl;
 
   meta = {
     description = "Pi-hole FTL engine";

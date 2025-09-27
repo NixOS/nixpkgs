@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pysmarty2";
-  version = "0.10.2";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinssipenko";
     repo = "pysmarty2";
     tag = "v${version}";
-    hash = "sha256-vDm+ThPHb6O+CoBiRAVCA01O7yQqVLcmVb+Ca2JSljY=";
+    hash = "sha256-an66TysXGPfKq9bPozwLM3M9E2sq3CC1if/uc47Ns5w=";
   };
 
   build-system = [ setuptools ];

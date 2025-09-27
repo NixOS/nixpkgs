@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-contextmenus";
-  version = "1.4.8";
+  version = "1.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PieterL75";
     repo = "netbox_contextmenus";
     tag = "v${version}";
-    hash = "sha256-wK8IQ+vYFP9cWcazTOzP1eoKBU0YXwbQrtfM7tGNTXI=";
+    hash = "sha256-/y1t33nXaOes8pswhJhoQzChpJ5tenhMrTOdTTlSTkk=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     description = "Netbox plugin to add context buttons to the links, making navigating less clicky";
     homepage = "https://github.com/PieterL75/netbox_contextmenus/";
     changelog = "https://github.com/PieterL75/netbox_contextmenus/releases/tag/${src.tag}";
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felbinger ];
   };
 }

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel-indicator-network";
     rev = version;
     sha256 = "sha256-7zp/GwM+aSQie82asX6yFPSPUxtzeyxCwdr8DWc0LQk=";
   };

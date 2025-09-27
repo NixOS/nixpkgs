@@ -401,6 +401,25 @@ assertNoAdditions {
     ];
   };
 
+  claude-fzf-nvim = super.claude-fzf-nvim.overrideAttrs {
+    dependencies = with self; [
+      claudecode-nvim
+      fzf-lua
+    ];
+    # Failed to build help tags!
+    # E670: Mix of help file encodings within a language: doc/claude-fzf-zh.txt
+    # E154: Duplicate tag "claude-fzf-keymaps" in file doc/claude-fzf-en.txt
+    preInstall = ''
+      rm -r doc
+    '';
+  };
+
+  claude-fzf-history-nvim = super.claude-fzf-history-nvim.overrideAttrs {
+    dependencies = with self; [
+      fzf-lua
+    ];
+  };
+
   clighter8 = super.clighter8.overrideAttrs {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${lib.getLib llvmPackages.clang.cc}/lib/libclang.so')|" \
@@ -799,6 +818,8 @@ assertNoAdditions {
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
       "conjure-spec.client.fennel.nfnl_spec"
+      # No parser for fennel
+      "conjure.client.fennel.def-str-util"
     ];
   };
 
@@ -1565,6 +1586,7 @@ assertNoAdditions {
       # attempt to index global 'LazyVim' (a nil value)
       "lazyvim.config.keymaps"
       "lazyvim.plugins.extras.ai.tabnine"
+      "lazyvim.plugins.extras.ai.copilot-native"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
       "lazyvim.plugins.extras.coding.neogen"
@@ -1631,6 +1653,7 @@ assertNoAdditions {
     checkInputs = with self; [
       snacks-nvim
       telescope-nvim
+      mini-nvim
     ];
     dependencies = with self; [
       nui-nvim
@@ -1655,6 +1678,7 @@ assertNoAdditions {
       "leetcode.picker.question.init"
       "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
+      "leetcode.picker.question.mini"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
       "leetcode-plugins.cn.api"
@@ -2330,6 +2354,7 @@ assertNoAdditions {
       nvim-lspconfig
       telescope-nvim
       nvim-treesitter
+      nvchad-ui
     ];
     nvimSkipModules = [
       # Requires global config setup
@@ -2766,6 +2791,10 @@ assertNoAdditions {
     dependencies = with self; [
       plenary-nvim
     ];
+  };
+
+  oil-git-nvim = super.oil-git-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
   };
 
   oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
@@ -3875,11 +3904,8 @@ assertNoAdditions {
   };
 
   vim-isort = super.vim-isort.overrideAttrs {
-    # Code updated to find relative path at runtime
-    # https://github.com/fisadev/vim-isort/pull/41
-    dontCheckForBrokenSymlinks = true;
     postPatch = ''
-      substituteInPlace ftplugin/python_vimisort.vim \
+      substituteInPlace autoload/vimisort.vim \
         --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
     '';
   };

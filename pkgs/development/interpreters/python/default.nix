@@ -92,9 +92,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "rc2";
+        suffix = "rc3";
       };
-      hash = "sha256-vGKFTPIyNFvSLJCRpoRk4B4FbGRzo//6hFcsijQtplY=";
+      hash = "sha256-ZG3JReScc6FBiW3toS1D8/KT/WlCZ3TBb8Q0lhgOj80=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
@@ -150,10 +150,10 @@
       sourceVersion = {
         major = "7";
         minor = "3";
-        patch = "19";
+        patch = "20";
       };
 
-      hash = "sha256-SBfARLtGmjJ05gqjZFdw+B60+RZup/3E5sNRNFVUyNg=";
+      hash = "sha256-d4bdp2AAPi6nQJwQN+UCAMV47EJ84CRaxM11hxCyBvs=";
       pythonVersion = "3.11";
       db = db.override { dbmSupport = !stdenv.hostPlatform.isDarwin; };
       python = __splicedPackages.pypy27;

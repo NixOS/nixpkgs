@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
-    repo = pname;
+    repo = "openmoji";
     rev = version;
     hash = "sha256-4dYtLaABu88z25Ud/cuOECajxSJWR01qcTIZNWN7Fhw=";
   };

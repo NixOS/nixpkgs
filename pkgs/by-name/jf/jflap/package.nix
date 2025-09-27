@@ -67,7 +67,6 @@ stdenvNoCC.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [
       grnnja
-      yuu
     ];
     platforms = jre8.meta.platforms;
   };

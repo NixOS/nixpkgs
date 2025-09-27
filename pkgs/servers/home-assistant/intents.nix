@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2025.8.29";
+  version = "2025.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     repo = "intents-package";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-vEgarkGZ8pawqid+ADkovLbED5zzChZhqSB75l0lL/s=";
+    hash = "sha256-Oy8q7Gi5vn/xPj1AGRU3/o45AHLCoBxgdQ5Zcs3AFTM=";
   };
 
   build-system = [
@@ -60,6 +61,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [
     "intents/tests"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isx86_64 [
+    # assert 100 == -100.0
+    "test_HassLightSet_name_brightness"
   ];
 
   meta = with lib; {

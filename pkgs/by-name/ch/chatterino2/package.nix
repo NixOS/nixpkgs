@@ -12,13 +12,13 @@
   (
     finalAttrs: _: {
       pname = "chatterino2";
-      version = "2.5.3";
+      version = "2.5.4";
 
       src = fetchFromGitHub {
         owner = "Chatterino";
         repo = "chatterino2";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-XV8WhdjdnVrOg0PVyIhGfxC4sJ62oH03KchvGr1c2w8=";
+        hash = "sha256-eozT3Lfra4i+q3pCxH0Z1v/3Y/FB5yJc/88tA90hTzI=";
         fetchSubmodules = true;
         leaveDotGit = true;
         postFetch = ''

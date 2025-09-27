@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_QT5" false)
     (cmakeFeature "INDI_PREFIX" "${indi-full}")
     (cmakeFeature "XPLANET_PREFIX" "${xplanet}")
-    (cmakeFeature "DATA_INSTALL_DIR" "$out/share/kstars/")
+    (cmakeFeature "DATA_INSTALL_DIR" (placeholder "out") + "/share/kstars/")
   ];
 
   meta = with lib; {
@@ -89,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       timput
-      hjones2199
       returntoreality
     ];
   };

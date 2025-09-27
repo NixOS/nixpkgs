@@ -228,7 +228,6 @@
   ./programs/gnome-disks.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
-  ./programs/goldwarden.nix
   ./programs/gpaste.nix
   ./programs/gphoto2.nix
   ./programs/gpu-screen-recorder.nix
@@ -542,6 +541,7 @@
   ./services/databases/tigerbeetle.nix
   ./services/databases/victorialogs.nix
   ./services/databases/victoriametrics.nix
+  ./services/databases/victoriatraces.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/ayatana-indicators.nix
   ./services/desktops/bamf.nix
@@ -569,6 +569,7 @@
   ./services/desktops/gnome/sushi.nix
   ./services/desktops/gnome/tinysparql.nix
   ./services/desktops/gvfs.nix
+  ./services/desktops/linyaps.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix
   ./services/desktops/pipewire/pipewire.nix
@@ -1293,6 +1294,7 @@
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
+  ./services/networking/pangolin.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
@@ -1693,6 +1695,7 @@
   ./services/web-apps/sftpgo.nix
   ./services/web-apps/sharkey.nix
   ./services/web-apps/shiori.nix
+  ./services/web-apps/sillytavern.nix
   ./services/web-apps/silverbullet.nix
   ./services/web-apps/simplesamlphp.nix
   ./services/web-apps/slskd.nix
@@ -1801,6 +1804,7 @@
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
   ./system/activation/bootspec.nix
+  ./system/activation/nixos-init.nix
   ./system/activation/pre-switch-check.nix
   ./system/activation/specialisation.nix
   ./system/activation/switchable-system.nix
@@ -1830,6 +1834,7 @@
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
   ./system/boot/nix-store-veritysetup.nix
+  ./system/boot/plymouth-tpm2-totp.nix
   ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
   ./system/boot/shutdown.nix

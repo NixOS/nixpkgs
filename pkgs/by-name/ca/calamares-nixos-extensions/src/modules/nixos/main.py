@@ -140,7 +140,7 @@ cfgpantheon = """  # Enable the X11 windowing system.
 
   # Enable the Pantheon Desktop Environment.
   services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.pantheon.enable = true;
+  services.desktopManager.pantheon.enable = true;
 
 """
 

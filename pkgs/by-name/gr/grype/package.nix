@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -9,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.99.1";
+  version = "0.100.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LCwsQERYXoNBuN0w89c+9Yk6ICfCLcd8jW8juSnt2RA=";
+    hash = "sha256-POGGhZ2uTqWjUsl1zR4eirb+Daji+igTtUNwTte7gPA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -30,7 +31,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-Wh3u5imIOXAiSguKeRUz/qdz4Ox2Bucqqz5DYsxcdFA=";
+  vendorHash = "sha256-QGGY88CELV9e5UxtfDXKmShnKiP8i+0f8iA9pOTirzc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -111,7 +112,7 @@ buildGoModule (finalAttrs: {
     rm grype/db/v5/namespace/cpe/namespace_test.go
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd grype \
       --bash <($out/bin/grype completion bash) \
       --fish <($out/bin/grype completion fish) \

@@ -11,8 +11,8 @@
 }:
 
 let
-  version = "1.1.4.3";
-  rev = "fc6f51787ba0f1aa45afd494d3c5524f908d8631";
+  version = "1.1.4.4";
+  rev = "f0f52246777f2640025048f561e908cf1d3c3ead";
 
   description = "Third-party Bilibili client developed in Flutter";
 in
@@ -29,7 +29,7 @@ flutter335.buildFlutterApplication.override
       owner = "bggRGjQaUbCoE";
       repo = "PiliPlus";
       inherit rev;
-      hash = "sha256-jlbMKFShqrdGlVAutRSUVY+rGP/Sy7e454jahRRHkJk=";
+      hash = "sha256-5ISSlYMbP0SaSP0SLIHXC3VRXrVZ78kfl07ekgzFhNA=";
     };
 
     # Disable update check.

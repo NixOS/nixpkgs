@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jailer";
-  version = "16.7.1";
+  version = "16.9.1";
 
   src = fetchFromGitHub {
     owner = "Wisser";
     repo = "Jailer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-76l8f8CKUxbpR3xeWtbcUt67c44W/2Kv9tKDfvHBCLo=";
+    hash = "sha256-6lyPWzC3nE4wFYzcfXRIl8sr8rtCQ1wX5wZuMrQQHhI=";
   };
 
   nativeBuildInputs = [

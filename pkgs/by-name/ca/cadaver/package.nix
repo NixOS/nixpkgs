@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cadaver";
-  version = "0.27";
+  version = "0.28";
 
   src = fetchurl {
     url = "https://notroj.github.io/cadaver/cadaver-${version}.tar.gz";
-    hash = "sha256-Eq/GKyPhKRJw6V6CHcqw1XRrpEYcv8hNCMKuursqtU8=";
+    hash = "sha256-M+OlS9VLHrMltIMWp8rMJAR8Uz74jm75i4jfu2DhJzQ=";
   };
 
   configureFlags = [

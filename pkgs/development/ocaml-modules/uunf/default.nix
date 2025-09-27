@@ -9,7 +9,7 @@
   uutf,
   cmdliner,
   cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0",
 }:
 
 let
@@ -18,7 +18,7 @@ let
   hash =
     {
       "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
-      "16.0.0" = "sha256-iQNkT1av6ONJXn3yWbNbEVV8lKGYOKh/nPU0tkUdX64=";
+      "17.0.0" = "sha256-5XYZU8Ros2aiCy04xzLiwhN+v5kM9Y3twdVPQ8IY1GA=";
     }
     ."${version}";
 in

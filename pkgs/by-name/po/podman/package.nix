@@ -25,6 +25,8 @@
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
   util-linuxMinimal,
+  nftables,
+  iptables,
   iproute2,
   catatonit,
   gvproxy,
@@ -34,6 +36,8 @@
   vfkit,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  coreutils,
+  runtimeShell,
 }:
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -42,7 +46,9 @@ let
     lib.optionals stdenv.hostPlatform.isLinux [
       fuse-overlayfs
       util-linuxMinimal
+      iptables
       iproute2
+      nftables
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       vfkit
@@ -158,6 +164,9 @@ buildGoModule rec {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
+    substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
+      --replace-fail sleep '${coreutils}/bin/sleep' \
+      --replace-fail /bin/sh '${runtimeShell}'
   '';
 
   doInstallCheck = true;

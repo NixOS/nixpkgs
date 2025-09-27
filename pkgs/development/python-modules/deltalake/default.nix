@@ -22,17 +22,17 @@
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "1.1.2";
+  version = "1.1.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s/iWYoh2zARl3M+0DPdur5d8a1URl+jinaMPBFeruEE=";
+    hash = "sha256-LpeJUNQg4FC73LX2LjvpPTMctRarTJsWlM8aeIfGPiU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-JYstNjd/KC9xp2h72vkQfin/LXNTXeb0hLpGUiGgRlE=";
+    hash = "sha256-4VmNhUijQMC/Wazcx+uT7mQqD+wutXrBJ+HN3AyxQRw=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;

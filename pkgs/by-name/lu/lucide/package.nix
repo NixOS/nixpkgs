@@ -1,10 +1,10 @@
 { lib, fetchurl }:
 fetchurl rec {
   pname = "lucide";
-  version = "0.541.0";
+  version = "0.544.0";
 
   url = "https://unpkg.com/lucide-static@${version}/font/Lucide.ttf";
-  hash = "sha256-b6zAx9b89oYS1Vrm7XR8Uu0M6unmTfC3o9Q2ZAuCrjo=";
+  hash = "sha256-Cf4vv+f3ZUtXPED+PCHxvZZDMF5nWYa4iGFSDQtkquQ=";
 
   downloadToTemp = true;
   recursiveHash = true;

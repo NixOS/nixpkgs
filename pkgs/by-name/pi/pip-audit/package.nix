@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
   version = "2.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
@@ -15,6 +15,8 @@ python3.pkgs.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-j8ZKqE7PEwaCTUNnJunqM0A2eyuWfx8zG5i3nmZERow=";
   };
+
+  pythonRelaxDeps = [ "cyclonedx-python-lib" ];
 
   build-system = with python3.pkgs; [ flit-core ];
 

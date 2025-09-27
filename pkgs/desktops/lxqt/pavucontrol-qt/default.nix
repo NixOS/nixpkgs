@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "pavucontrol-qt";
     rev = version;
     hash = "sha256-D8x3CqzttlNqQgy6k4hfjJkD/MjAG4eeCn68TQA8NSM=";
   };

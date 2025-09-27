@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "firedrake-fiat";
-  version = "2025.4.1";
+  version = "2025.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "fiat";
     tag = version;
-    hash = "sha256-rN2JPXsauyBF6X2378kOmqHNB+1EqxiGnDaVoEXy4vw=";
+    hash = "sha256-SIi/4JW9L4kyFxEmbG9pqe0QtY80UMOh7LSFLmrHhZY=";
   };
 
   postPatch =

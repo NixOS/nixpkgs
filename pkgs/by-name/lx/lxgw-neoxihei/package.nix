@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lxgw-neoxihei";
-  version = "1.218.1";
+  version = "1.220";
 
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v${version}/LXGWNeoXiHei.ttf";
-    hash = "sha256-ZWotvGj2LpQbi3t6mVBL8kE19JC4X6VqkIXSQSuyjR0=";
+    hash = "sha256-rPZjNLysOYrOcGtDvXF3ok3bjtsN2/GDLWRRcXmq0zw=";
   };
 
   dontUnpack = true;

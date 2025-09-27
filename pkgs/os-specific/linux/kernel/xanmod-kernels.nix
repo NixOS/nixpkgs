@@ -15,14 +15,14 @@ let
   variants = {
     # ./update-xanmod.sh lts
     lts = {
-      version = "6.12.47";
-      hash = "sha256-jR1VqFE1jF5mTRAp+Xxswmh9bMIolJtCk4QgMHzIhao=";
+      version = "6.12.49";
+      hash = "sha256-j7sVP+Aqiwz8cBZZ95NL5FNVT8NizCox1JiibSmfsIo=";
       isLTS = true;
     };
     # ./update-xanmod.sh main
     main = {
-      version = "6.16.7";
-      hash = "sha256-/CFSGaDbK0pZgGGOOxixwOQgeD1OsbUhtRss4VbXHxE=";
+      version = "6.16.9";
+      hash = "sha256-Qu7P5l9Wz0gpptdloDUZRgOVeqXTJWq4q2AXNls6nBY=";
     };
   };
 
@@ -74,10 +74,16 @@ let
           RCU_EXP_KTHREAD = yes;
         };
 
-        extraPassthru.updateScript = [
-          ./update-xanmod.sh
-          variant
-        ];
+        extraPassthru.updateScript = {
+          command = [
+            ./update-xanmod.sh
+            variant
+          ];
+          supportedFeatures = [
+            "commit"
+          ];
+        };
+
         inherit isLTS;
 
         extraMeta = {

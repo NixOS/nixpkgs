@@ -310,6 +310,10 @@ let
             "-DWITHOUT_FEDERATED=1"
             "-DWITHOUT_TOKUDB=1"
           ]
+          ++ lib.optionals (lib.versionOlder version "11.4") [
+            # Fix the build with CMake 4.
+            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+          ]
           ++ lib.optionals withNuma [
             "-DWITH_NUMA=ON"
           ]

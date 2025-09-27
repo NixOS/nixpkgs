@@ -39,11 +39,11 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.7.33";
+  version = "1.7.34";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-ODO8pp940pZtP53HEM8R9JPfjAKxShVvyABjcHdrlew=";
+    hash = "sha256-3WsDCkS5Y9AflLlpa6y6ca/DF4621RqcwQUzK3fqa5o=";
   };
 
   patches = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation (final: {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source scientific and technical publishing system built on Pandoc";
     mainProgram = "quarto";
     longDescription = ''
@@ -104,14 +104,14 @@ stdenv.mkDerivation (final: {
       Quarto documents are authored using markdown, an easy to write plain text format.
     '';
     homepage = "https://quarto.org/";
-    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${final.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       minijackson
       mrtarantoga
     ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode
       binaryBytecode
     ];
