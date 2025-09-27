@@ -72,7 +72,14 @@ let
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) (
     recursiveUpdate customLovelaceModulesResources (cfg.config or { })
   );
-  configFile = renderYAMLFile "configuration.yaml" filteredConfig;
+  configFileInitial = builtins.readFile (renderYAMLFile "configurationInitial.yaml" filteredConfig);
+  configFile = pkgs.writeText "configuration.yaml" (
+    builtins.concatStringsSep "\n" [
+      configFileInitial
+      (if cfg.extraConfig != null then cfg.extraConfig else "")
+      ""
+    ]
+  );
 
   lovelaceConfigFile =
     if cfg.lovelaceConfig != null then
@@ -475,6 +482,14 @@ in
         Unless this option is explicitly set to `null`
         we assume your {file}`configuration.yaml` is
         managed through this module and thereby overwritten on startup.
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Extra configuration to add to {file}`configuration.yaml`.
       '';
     };
 
