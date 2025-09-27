@@ -430,14 +430,14 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging-next` | `staging` |
-| --- | --- | --- | --- |
-| Used for development | ✔️ | ❌ | ✔️ |
-| Built by Hydra | ✔️ | ✔️ | ❌ |
-| [Mass rebuilds][mass-rebuild] | ❌ | ⚠️  Only to fix Hydra builds | ✔️ |
-| Critical security fixes | ✔️ for non-mass-rebuilds | ✔️ for mass-rebuilds | ❌ |
-| Automatically merged into | `staging-next` | `staging` | - |
-| Manually merged into | - | `master` | `staging-next` |
+| branch | `master` | `staging-next` | `staging` | [`batch-with-kernel-updates`](#test-driver-rebuild) |
+| --- | --- | --- | --- | --- |
+| Used for development | ✔️ | ❌ | ✔️ | ✔️ |
+| Built by Hydra | ✔️ | ✔️ | ❌ | ❌ |
+| [Mass rebuilds][mass-rebuild] | ❌ | ⚠️  Only to fix Hydra builds | ✔️ | ❌ (except kernel changes) |
+| Critical security fixes | ✔️ for non-mass-rebuilds | ✔️ for mass-rebuilds | ❌ | ✔️ |
+| Automatically merged into | `staging-next` & `batch-with-kernel-updates` | `staging` | - | - |
+| Manually merged into | - | `master` | `staging-next` | `master` |
 
 The staging workflow is used for all stable branches with corresponding names:
 - `master`/`release-YY.MM`
@@ -494,6 +494,26 @@ Which changes cause mass rebuilds is not formally defined.
 In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
 As a rule of thumb, if the number of rebuilds is **500 or more**, consider targeting the `staging` branch instead of `master`; if the number is **1000 or more**, the pull request causes a mass rebuild, and should target the `staging` branch.
 See [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged) to get a sense for what changes are considered mass rebuilds.
+
+Please note that changes to the Linux kernel are an exception to this rule.
+These PRs go to `batch-with-kernel-updates`, see [the next section for more context](#changes-rebuilding-all-tests).
+
+### Changes rebuilding all NixOS tests
+[test-driver-rebuild]: #changes-rebuilding-all-tests
+
+Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
+These changes pose a significant impact on the build infrastructure.
+
+Hence, these PRs should either target a `staging`-branch or `batch-with-kernel-updates`, provided one of following conditions applies:
+
+* The label `10.rebuild-nixos-tests` is set, or
+* The PR is a change affecting the Linux kernel.
+
+The branch gets merged whenever mainline kernel updates or critical security fixes land on the branch.
+This usually happens on a weekly basis.
+
+Backports are not handled by such a branch.
+The relevant PRs from this branch must be backported manually.
 
 ## Commit conventions
 [commit-conventions]: #commit-conventions
