@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.30";
+  version = "0.6.31";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-0gQlzqHFVcayN1/Z5Ou1Gv1+VQMMwk7QrvVXV92EFp0=";
+    hash = "sha256-Pv+2+j5S4jokGYHGSewk33Vmf41XJj8CwyKYLMG2EWA=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-AYChUMU8vLNaJPfIbX1SThx01uV3V6QpN6OjYrerg5U=";
+    npmDepsHash = "sha256-HBmhRzWY7lIl3OScIlwSj/JJUlVcgFvXNHbw4jJRbl8=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -134,6 +134,7 @@ python3Packages.buildPythonApplication rec {
       ldap3
       loguru
       markdown
+      mcp
       nltk
       onnxruntime
       openai
@@ -183,6 +184,7 @@ python3Packages.buildPythonApplication rec {
       sentencepiece
       soundfile
       starlette-compress
+      starsessions
       tencentcloud-sdk-python
       tiktoken
       transformers
@@ -192,7 +194,8 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ pyjwt.optional-dependencies.crypto;
+    ++ pyjwt.optional-dependencies.crypto
+    ++ starsessions.optional-dependencies.redis;
 
   optional-dependencies = with python3Packages; rec {
     postgres = [
