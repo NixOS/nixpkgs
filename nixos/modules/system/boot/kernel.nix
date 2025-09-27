@@ -282,6 +282,45 @@ in
       '';
     };
 
+    boot.depmod.overrides =
+      let
+        overrides = types.submodule {
+          options = {
+            moduleName = mkOption {
+              type = types.strMatching "[A-Za-z0-9_-]+";
+              example = "vboxguest";
+              description = ''
+                Name of the kernel module that should be overriden
+              '';
+            };
+
+            modulePackage = mkOption {
+              type = types.package;
+              example = lib.literalExpression "\${config.boot.kernelPackages.virtualboxGuestAdditions.kernelModules}";
+              description = ''
+                Package containing the desired kernel module.
+                Note, the package has to be added to `boot.extraModulePackages` as well.
+              '';
+            };
+
+            modulePath = mkOption {
+              type = types.str;
+              example = lib.literalExpression "misc";
+              description = ''
+                Relative path to the desired folder containing the target module. The Path is relative to `<modulePackage>/lib/modules/<kernelVersion>/`.
+              '';
+            };
+          };
+        };
+      in
+      mkOption {
+        type = types.listOf overrides;
+        default = [ ];
+        description = ''
+          List of kernel modules that should be overridden.
+        '';
+      };
+
     system.modulesTree = mkOption {
       type = types.listOf types.path;
       internal = true;
@@ -296,7 +335,10 @@ in
         let
           kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
         in
-        modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
+        modules:
+        (pkgs.aggregateModules modules config.boot.kernelPackages.kernel.version config.boot.depmod)
+        .override
+          { name = kernel-name + "-modules"; };
     };
 
     system.requiredKernelConfig = mkOption {
