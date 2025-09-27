@@ -10,7 +10,6 @@
   # Emacs dependencies
   all-the-icons,
   # Other dependencies
-  git,
   nodejs,
   wmctrl,
   xdotool,
@@ -45,7 +44,6 @@ let
   otherPackageLists = [
     (
       [
-        git
         nodejs
         wmctrl
       ]
