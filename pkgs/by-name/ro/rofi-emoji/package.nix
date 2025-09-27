@@ -37,12 +37,7 @@ stdenv.mkDerivation (final: {
     ./0001-Patch-plugindir-to-output.patch
   ];
 
-  postPatch = ''
-    patchShebangs --host clipboard-adapter.sh
-  '';
-
   postFixup = ''
-    chmod +x $out/share/rofi-emoji/clipboard-adapter.sh
     wrapProgram $out/share/rofi-emoji/clipboard-adapter.sh \
      --prefix PATH ":" ${
        lib.makeBinPath (
