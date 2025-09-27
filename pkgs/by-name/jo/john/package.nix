@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     owner = "openwall";
     repo = "john";
     rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
+    hash = "sha256-XMT5Sbp2XrAnfTHxXyJdw0kA/ZtfOiYrX/flCFLHJ6s=";
   };
 
   patches = lib.optionals withOpenCL [
