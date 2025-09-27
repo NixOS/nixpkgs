@@ -3,19 +3,14 @@
   stdenvNoCC,
   fetchurl,
   nodejs,
-  gitUpdater,
+  nix-update-script,
 }:
-let
-  owner = "google-gemini";
-  repo = "gemini-cli";
-  asset = "gemini.js";
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
   version = "0.6.0";
 
   src = fetchurl {
-    url = "https://github.com/${owner}/${repo}/releases/download/v${finalAttrs.version}/${asset}";
+    url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
     hash = "sha256-jmZvL4Rst3238H2BdZ/bQuddFkFcFLRABJ1wTHm8qPM=";
   };
 
@@ -36,11 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = [
-    ./update-asset.sh
-    "${owner}/${repo}"
-    "${asset}"
-  ];
+  passthru.updateScript = nix-update-script {
+    # Ignore `preview` and `nightly` tags
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
