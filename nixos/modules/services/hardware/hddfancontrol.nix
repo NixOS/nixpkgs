@@ -42,6 +42,7 @@ in
 
   options = {
     services.hddfancontrol.enable = lib.mkEnableOption "hddfancontrol daemon";
+    services.hddfancontrol.package = lib.mkPackageOption pkgs "hddfancontrol" { };
 
     services.hddfancontrol.settings = lib.mkOption {
       type = lib.types.attrsWith {
@@ -152,7 +153,7 @@ in
         after = [ "hddtemp.service" ];
         wants = [ "hddtemp.service" ];
         serviceConfig = {
-          ExecStart = "${lib.getExe pkgs.hddfancontrol} -v ${cnf.logVerbosity} daemon ${lib.escapeShellArgs (args cnf)}";
+          ExecStart = "${lib.getExe cfg.package} -v ${cnf.logVerbosity} daemon ${lib.escapeShellArgs (args cnf)}";
 
           CPUSchedulingPolicy = "rr";
           CPUSchedulingPriority = 49;
@@ -177,7 +178,7 @@ in
       ];
     in
     {
-      systemd.packages = [ pkgs.hddfancontrol ];
+      systemd.packages = [ cfg.package ];
 
       hardware.sensor.hddtemp = {
         enable = true;
