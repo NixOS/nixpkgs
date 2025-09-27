@@ -4,24 +4,23 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
-  eachBitcoind = filterAttrs (bitcoindName: cfg: cfg.enable) config.services.bitcoind;
+  inherit (lib) types;
+
+  eachBitcoind = lib.filterAttrs (bitcoindName: cfg: cfg.enable) config.services.bitcoind;
 
   rpcUserOpts =
     { name, ... }:
     {
       options = {
-        name = mkOption {
+        name = lib.mkOption {
           type = types.str;
           example = "alice";
           description = ''
             Username for JSON-RPC connections.
           '';
         };
-        passwordHMAC = mkOption {
+        passwordHMAC = lib.mkOption {
           type = types.uniq (types.strMatching "[0-9a-f]+\\$[0-9a-f]{64}");
           example = "f7efda5c189b999524f151318c0c86$d5b51b3beffbc02b724e5d095828e0bc8b2456e9ac8757ae3211a5d9b16a22ae";
           description = ''
@@ -34,7 +33,7 @@ let
         };
       };
       config = {
-        name = mkDefault name;
+        name = lib.mkDefault name;
       };
     };
 
@@ -48,18 +47,18 @@ let
     {
       options = {
 
-        enable = mkEnableOption "Bitcoin daemon";
+        enable = lib.mkEnableOption "Bitcoin daemon";
 
-        package = mkPackageOption pkgs "bitcoind" { };
+        package = lib.mkPackageOption pkgs "bitcoind" { };
 
-        configFile = mkOption {
+        configFile = lib.mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/var/lib/${name}/bitcoin.conf";
           description = "The configuration file path to supply bitcoind.";
         };
 
-        extraConfig = mkOption {
+        extraConfig = lib.mkOption {
           type = types.lines;
           default = "";
           example = ''
@@ -70,33 +69,33 @@ let
           description = "Additional configurations to be appended to {file}`bitcoin.conf`.";
         };
 
-        dataDir = mkOption {
+        dataDir = lib.mkOption {
           type = types.path;
           default = "/var/lib/bitcoind-${name}";
           description = "The data directory for bitcoind.";
         };
 
-        user = mkOption {
+        user = lib.mkOption {
           type = types.str;
           default = "bitcoind-${name}";
           description = "The user as which to run bitcoind.";
         };
 
-        group = mkOption {
+        group = lib.mkOption {
           type = types.str;
           default = config.user;
           description = "The group as which to run bitcoind.";
         };
 
         rpc = {
-          port = mkOption {
+          port = lib.mkOption {
             type = types.nullOr types.port;
             default = null;
             description = "Override the default port on which to listen for JSON-RPC connections.";
           };
-          users = mkOption {
+          users = lib.mkOption {
             default = { };
-            example = literalExpression ''
+            example = lib.literalExpression ''
               {
                 alice.passwordHMAC = "f7efda5c189b999524f151318c0c86$d5b51b3beffbc02b724e5d095828e0bc8b2456e9ac8757ae3211a5d9b16a22ae";
                 bob.passwordHMAC = "b2dd077cb54591a2f3139e69a897ac$4e71f08d48b4347cf8eff3815c0e25ae2e9a4340474079f55705f40574f4ec99";
@@ -107,32 +106,32 @@ let
           };
         };
 
-        pidFile = mkOption {
+        pidFile = lib.mkOption {
           type = types.path;
           default = "${config.dataDir}/bitcoind.pid";
           description = "Location of bitcoind pid file.";
         };
 
-        testnet = mkOption {
+        testnet = lib.mkOption {
           type = types.bool;
           default = false;
           description = "Whether to use the testnet instead of mainnet.";
         };
 
-        port = mkOption {
+        port = lib.mkOption {
           type = types.nullOr types.port;
           default = null;
           description = "Override the default port on which to listen for connections.";
         };
 
-        dbCache = mkOption {
+        dbCache = lib.mkOption {
           type = types.nullOr (types.ints.between 4 16384);
           default = null;
           example = 4000;
           description = "Override the default database cache size in MiB.";
         };
 
-        prune = mkOption {
+        prune = lib.mkOption {
           type = types.nullOr (
             types.coercedTo (types.enum [
               "disable"
@@ -153,7 +152,7 @@ let
           '';
         };
 
-        extraCmdlineOptions = mkOption {
+        extraCmdlineOptions = lib.mkOption {
           type = types.listOf types.str;
           default = [ ];
           description = ''
@@ -167,17 +166,17 @@ in
 {
 
   options = {
-    services.bitcoind = mkOption {
+    services.bitcoind = lib.mkOption {
       type = types.attrsOf (types.submodule bitcoindOpts);
       default = { };
       description = "Specification of one or more bitcoind instances.";
     };
   };
 
-  config = mkIf (eachBitcoind != { }) {
+  config = lib.mkIf (eachBitcoind != { }) {
 
-    assertions = flatten (
-      mapAttrsToList (bitcoindName: cfg: [
+    assertions = lib.flatten (
+      lib.mapAttrsToList (bitcoindName: cfg: [
         {
           assertion =
             (cfg.prune != null)
@@ -204,23 +203,23 @@ in
       ]) eachBitcoind
     );
 
-    environment.systemPackages = flatten (
-      mapAttrsToList (bitcoindName: cfg: [
+    environment.systemPackages = lib.flatten (
+      lib.mapAttrsToList (bitcoindName: cfg: [
         cfg.package
       ]) eachBitcoind
     );
 
-    systemd.services = mapAttrs' (
+    systemd.services = lib.mapAttrs' (
       bitcoindName: cfg:
-      (nameValuePair "bitcoind-${bitcoindName}" (
+      (lib.nameValuePair "bitcoind-${bitcoindName}" (
         let
           configFile = pkgs.writeText "bitcoin.conf" ''
             # If Testnet is enabled, we need to add [test] section
             # otherwise, some options (e.g.: custom RPC port) will not work
-            ${optionalString cfg.testnet "[test]"}
+            ${lib.optionalString cfg.testnet "[test]"}
             # RPC users
-            ${concatMapStringsSep "\n" (rpcUser: "rpcauth=${rpcUser.name}:${rpcUser.passwordHMAC}") (
-              attrValues cfg.rpc.users
+            ${lib.concatMapStringsSep "\n" (rpcUser: "rpcauth=${rpcUser.name}:${rpcUser.passwordHMAC}") (
+              lib.attrValues cfg.rpc.users
             )}
             # Extra config options (from bitcoind nixos service)
             ${cfg.extraConfig}
@@ -239,11 +238,11 @@ in
               ${if (cfg.configFile != null) then "-conf=${cfg.configFile}" else "-conf=${configFile}"} \
               -datadir=${cfg.dataDir} \
               -pid=${cfg.pidFile} \
-              ${optionalString cfg.testnet "-testnet"}\
-              ${optionalString (cfg.port != null) "-port=${toString cfg.port}"}\
-              ${optionalString (cfg.prune != null) "-prune=${toString cfg.prune}"}\
-              ${optionalString (cfg.dbCache != null) "-dbcache=${toString cfg.dbCache}"}\
-              ${optionalString (cfg.rpc.port != null) "-rpcport=${toString cfg.rpc.port}"}\
+              ${lib.optionalString cfg.testnet "-testnet"}\
+              ${lib.optionalString (cfg.port != null) "-port=${toString cfg.port}"}\
+              ${lib.optionalString (cfg.prune != null) "-prune=${toString cfg.prune}"}\
+              ${lib.optionalString (cfg.dbCache != null) "-dbcache=${toString cfg.dbCache}"}\
+              ${lib.optionalString (cfg.rpc.port != null) "-rpcport=${toString cfg.rpc.port}"}\
               ${toString cfg.extraCmdlineOptions}
             '';
             Restart = "on-failure";
@@ -259,15 +258,15 @@ in
       ))
     ) eachBitcoind;
 
-    systemd.tmpfiles.rules = flatten (
-      mapAttrsToList (bitcoindName: cfg: [
+    systemd.tmpfiles.rules = lib.flatten (
+      lib.mapAttrsToList (bitcoindName: cfg: [
         "d '${cfg.dataDir}' 0770 '${cfg.user}' '${cfg.group}' - -"
       ]) eachBitcoind
     );
 
-    users.users = mapAttrs' (
+    users.users = lib.mapAttrs' (
       bitcoindName: cfg:
-      (nameValuePair "bitcoind-${bitcoindName}" {
+      (lib.nameValuePair "bitcoind-${bitcoindName}" {
         name = cfg.user;
         group = cfg.group;
         description = "Bitcoin daemon user";
@@ -276,10 +275,12 @@ in
       })
     ) eachBitcoind;
 
-    users.groups = mapAttrs' (bitcoindName: cfg: (nameValuePair "${cfg.group}" { })) eachBitcoind;
+    users.groups = lib.mapAttrs' (
+      bitcoindName: cfg: (lib.nameValuePair "${cfg.group}" { })
+    ) eachBitcoind;
 
   };
 
-  meta.maintainers = with maintainers; [ _1000101 ];
+  meta.maintainers = with lib.maintainers; [ _1000101 ];
 
 }

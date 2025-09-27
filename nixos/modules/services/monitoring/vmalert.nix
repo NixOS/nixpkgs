@@ -4,15 +4,18 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) types;
+
   cfg = config.services.vmalert;
 
   format = pkgs.formats.yaml { };
 
   mkConfOpts =
     settings:
-    concatStringsSep " \\\n" (mapAttrsToList mkLine (filterAttrs (_: v: v != false) settings));
+    lib.concatStringsSep " \\\n" (
+      lib.mapAttrsToList mkLine (lib.filterAttrs (_: v: v != false) settings)
+    );
   confType =
     with types;
     let
@@ -29,10 +32,10 @@ let
     key: value:
     if value == true then
       "-${key}"
-    else if isList value then
-      concatMapStringsSep " " (v: "-${key}=${escapeShellArg (toString v)}") value
+    else if lib.isList value then
+      lib.concatMapStringsSep " " (v: "-${key}=${lib.escapeShellArg (toString v)}") value
     else
-      "-${key}=${escapeShellArg (toString value)}";
+      "-${key}=${lib.escapeShellArg (toString value)}";
 
   vmalertName = name: "vmalert" + lib.optionalString (name != "") ("-" + name);
   enabledInstances = lib.filterAttrs (name: conf: conf.enable) config.services.vmalert.instances;
@@ -54,9 +57,9 @@ in
   ];
 
   # interface
-  options.services.vmalert.package = mkPackageOption pkgs "victoriametrics" { };
+  options.services.vmalert.package = lib.mkPackageOption pkgs "victoriametrics" { };
 
-  options.services.vmalert.instances = mkOption {
+  options.services.vmalert.instances = lib.mkOption {
     default = { };
 
     description = ''
@@ -78,12 +81,12 @@ in
               '';
             };
 
-            settings = mkOption {
+            settings = lib.mkOption {
               type = types.submodule {
                 freeformType = confType;
                 options = {
 
-                  "datasource.url" = mkOption {
+                  "datasource.url" = lib.mkOption {
                     type = types.nonEmptyStr;
                     example = "http://localhost:8428";
                     description = ''
@@ -91,8 +94,8 @@ in
                     '';
                   };
 
-                  "notifier.url" = mkOption {
-                    type = with types; listOf nonEmptyStr;
+                  "notifier.url" = lib.mkOption {
+                    type = types.listOf types.nonEmptyStr;
                     default = [ ];
                     example = [ "http://127.0.0.1:9093" ];
                     description = ''
@@ -100,8 +103,8 @@ in
                     '';
                   };
 
-                  "rule" = mkOption {
-                    type = with types; listOf path;
+                  "rule" = lib.mkOption {
+                    type = types.listOf types.path;
                     description = ''
                       Path to the files with alerting and/or recording rules.
 
@@ -131,7 +134,7 @@ in
               '';
             };
 
-            rules = mkOption {
+            rules = lib.mkOption {
               type = format.type;
               default = { };
               example = {
@@ -170,7 +173,7 @@ in
   };
 
   # implementation
-  config = mkIf (enabledInstances != { }) {
+  config = lib.mkIf (enabledInstances != { }) {
     environment.etc = lib.mapAttrs' (
       name:
       { rules, ... }:

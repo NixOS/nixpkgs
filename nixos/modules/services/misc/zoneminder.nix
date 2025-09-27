@@ -6,6 +6,8 @@
 }:
 
 let
+  inherit (lib) types;
+
   cfg = config.services.zoneminder;
   fpm = config.services.phpfpm.pools.zoneminder;
   pkg = pkgs.zoneminder;
@@ -76,7 +78,7 @@ let
 in
 {
   options = {
-    services.zoneminder = with lib; {
+    services.zoneminder = {
       enable = lib.mkEnableOption ''
         ZoneMinder.
 
@@ -88,7 +90,7 @@ in
         upgrading to a newer version
       '';
 
-      webserver = mkOption {
+      webserver = lib.mkOption {
         type = types.enum [
           "nginx"
           "none"
@@ -102,7 +104,7 @@ in
         '';
       };
 
-      hostname = mkOption {
+      hostname = lib.mkOption {
         type = types.str;
         default = "localhost";
         description = ''
@@ -110,7 +112,7 @@ in
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         type = types.port;
         default = 8095;
         description = ''
@@ -118,7 +120,7 @@ in
         '';
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -127,7 +129,7 @@ in
       };
 
       database = {
-        createLocally = mkOption {
+        createLocally = lib.mkOption {
           type = types.bool;
           default = false;
           description = ''
@@ -135,7 +137,7 @@ in
           '';
         };
 
-        host = mkOption {
+        host = lib.mkOption {
           type = types.str;
           default = "localhost";
           description = ''
@@ -143,7 +145,7 @@ in
           '';
         };
 
-        name = mkOption {
+        name = lib.mkOption {
           type = types.str;
           default = "zm";
           description = ''
@@ -151,7 +153,7 @@ in
           '';
         };
 
-        username = mkOption {
+        username = lib.mkOption {
           type = types.str;
           default = "zmuser";
           description = ''
@@ -159,7 +161,7 @@ in
           '';
         };
 
-        password = mkOption {
+        password = lib.mkOption {
           type = types.str;
           default = "zmpass";
           description = ''
@@ -169,7 +171,7 @@ in
         };
       };
 
-      cameras = mkOption {
+      cameras = lib.mkOption {
         type = types.int;
         default = 1;
         description = ''
@@ -177,7 +179,7 @@ in
         '';
       };
 
-      storageDir = mkOption {
+      storageDir = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/storage/tank";
@@ -187,7 +189,7 @@ in
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         type = types.lines;
         default = "";
         description = ''
