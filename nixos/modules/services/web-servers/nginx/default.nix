@@ -204,9 +204,11 @@ let
             ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
             ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
-            ${optionalString cfg.recommendedTlsSettings ''
-              # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
-
+            ${optionalString cfg.recommendedTlsSettings
+              # Everything from
+              # https://ssl-config.mozilla.org/#server=nginx&config=intermediate that
+              # isn't already handled by some other option.
+              ''
               ssl_ecdh_curve X25519:prime256v1:secp384r1;
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
@@ -447,6 +449,12 @@ let
               ''}
             '';
 
+        hstsValue =
+          concatStringsSep "; " (
+            [ "max-age=${toString vhost.strictTransportSecurity.seconds}" ]
+            ++ optional vhost.strictTransportSecurity.includeSubdomains "includeSubdomains"
+            ++ optional vhost.strictTransportSecurity.preload "preload"
+          );
       in
       ''
         ${optionalString vhost.forceSSL ''
@@ -481,6 +489,9 @@ let
           ''}
           ${optionalString vhost.rejectSSL ''
             ssl_reject_handshake on;
+          ''}
+          ${optionalString vhost.strictTransportSecurity.enable ''
+            add_header Strict-Transport-Security "${hstsValue}" always;
           ''}
           ${optionalString (hasSSL && vhost.kTLS) ''
             ssl_conf_command Options KTLS;
@@ -1272,6 +1283,7 @@ in
             "hydra.example.com" = {
               forceSSL = true;
               enableACME = true;
+              strictTransportSecurity.enable = true;
               locations."/" = {
                 proxyPass = "http://localhost:3000";
               };
