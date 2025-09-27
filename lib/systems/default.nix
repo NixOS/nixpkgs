@@ -420,61 +420,69 @@ let
           # values from args.rust.platform, so we can drop all the
           # "args ? rust" etc. checks, and merge args.rust.platform in
           # /after/.
-          platform = rust.platform or { } // {
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
-            arch =
-              if rust ? platform then
-                rust.platform.arch
-              else if final.isAarch32 then
-                "arm"
-              else if final.isMips64 then
-                "mips64" # never add "el" suffix
-              else if final.isPower64 then
-                "powerpc64" # never add "le" suffix
+          platform =
+            rust.platform or (
+              if lib.hasSuffix ".json" (rust.rustcTargetSpec or "") then
+                lib.importJSON rust.rustcTargetSpec
               else
-                final.parsed.cpu.name;
+                { }
+            )
+            // {
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
+              arch =
+                if rust ? platform then
+                  rust.platform.arch
+                else if final.isAarch32 then
+                  "arm"
+                else if final.isMips64 then
+                  "mips64" # never add "el" suffix
+                else if final.isPower64 then
+                  "powerpc64" # never add "le" suffix
+                else
+                  final.parsed.cpu.name;
 
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
-            os =
-              if rust ? platform then
-                rust.platform.os or "none"
-              else if final.isDarwin then
-                "macos"
-              else if final.isWasm && !final.isWasi then
-                "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
-              else
-                final.parsed.kernel.name;
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
+              os =
+                if rust ? platform then
+                  rust.platform.os or "none"
+                else if final.isDarwin then
+                  "macos"
+                else if final.isWasm && !final.isWasi then
+                  "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
+                else
+                  final.parsed.kernel.name;
 
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
-            target-family =
-              if args ? rust.platform.target-family then
-                args.rust.platform.target-family
-              else if args ? rustc.platform.target-family then
-                (
-                  # Since https://github.com/rust-lang/rust/pull/84072
-                  # `target-family` is a list instead of single value.
-                  let
-                    f = args.rustc.platform.target-family;
-                  in
-                  if isList f then f else [ f ]
-                )
-              else
-                optional final.isUnix "unix" ++ optional final.isWindows "windows" ++ optional final.isWasm "wasm";
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
+              target-family =
+                if args ? rust.platform.target-family then
+                  args.rust.platform.target-family
+                else if args ? rustc.platform.target-family then
+                  (
+                    # Since https://github.com/rust-lang/rust/pull/84072
+                    # `target-family` is a list instead of single value.
+                    let
+                      f = args.rustc.platform.target-family;
+                    in
+                    if isList f then f else [ f ]
+                  )
+                else
+                  optional final.isUnix "unix" ++ optional final.isWindows "windows" ++ optional final.isWasm "wasm";
 
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
-            vendor =
-              let
-                inherit (final.parsed) vendor;
-              in
-              rust.platform.vendor or {
-                "w64" = "pc";
-              }
-              .${vendor.name} or vendor.name;
-          };
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
+              vendor =
+                let
+                  inherit (final.parsed) vendor;
+                in
+                rust.platform.vendor or {
+                  "w64" = "pc";
+                }
+                .${vendor.name} or vendor.name;
+            };
 
-          # The name of the rust target, even if it is custom. Adjustments are
-          # because rust has slightly different naming conventions than we do.
-          rustcTarget =
+          # The name of the rust target if it is standard, or the json file
+          # containing the custom target spec. Adjustments are because rust has
+          # slightly different naming conventions than we do.
+          rustcTargetSpec =
             let
               inherit (final.parsed) cpu kernel abi;
               cpu_ =
@@ -488,28 +496,29 @@ let
                 }
                 .${cpu.name} or cpu.name;
               vendor_ = final.rust.platform.vendor;
+
+              inferred =
+                if final.isWasi then
+                  # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+                  # We cannot know which subversion does the user want, and
+                  # currently use WASI 0.1 as default for compatibility. Custom
+                  # users can set `rust.rustcTargetSpec` to override it.
+                  "${cpu_}-wasip1"
+                else
+                  "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
             in
             # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-            args.rust.rustcTarget or args.rustc.config or (
-              # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-              # We cannot know which subversion does the user want, and
-              # currently use WASI 0.1 as default for compatibility. Custom
-              # users can set `rust.rustcTarget` to override it.
-              if final.isWasi then
-                "${cpu_}-wasip1"
+            args.rust.rustcTargetSpec or args.rustc.config or (
+              if rust ? platform then
+                # TODO: This breaks cc-rs and thus std support, so maybe remove support?
+                builtins.toFile (rust.rustcTarget or inferred + ".json") (toJSON rust.platform)
               else
-                "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
+                args.rust.rustcTarget or inferred
             );
 
-          # The name of the rust target if it is standard, or the json file
-          # containing the custom target spec.
-          rustcTargetSpec =
-            rust.rustcTargetSpec or (
-              if rust ? platform then
-                builtins.toFile (final.rust.rustcTarget + ".json") (toJSON rust.platform)
-              else
-                final.rust.rustcTarget
-            );
+          # Do not use rustcTarget. Use rustcTargetSpec or cargoShortTarget.
+          # FIXME: Remove all in-tree usages
+          rustcTarget = rust.rustcTarget or final.rust.cargoShortTarget;
 
           # The name of the rust target if it is standard, or the
           # basename of the file containing the custom target spec,
