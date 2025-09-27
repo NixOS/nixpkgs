@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   python-multipart,
   starlette,
   syrupy,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   version = "0.26.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = "ariadne";
@@ -35,9 +32,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "graphql-core" ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     graphql-core
     starlette
     typing-extensions
