@@ -57,6 +57,7 @@
   pyyaml,
   questionary,
   rich,
+  rich-toolkit,
   schema,
   simple-di,
   starlette,
@@ -79,7 +80,7 @@
 }:
 
 let
-  version = "1.4.23";
+  version = "1.4.25";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -129,7 +130,7 @@ let
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-p9d8TyN09jJ2VotaAvbC9jxJ5kNC2S7VhkatzrDJ1TY=";
+    hash = "sha256-07LR0Q2inKRKn6NHHldv8kSFtCBcZvGd+VfEEhxc2Ac=";
   };
 in
 buildPythonPackage {
@@ -148,6 +149,7 @@ buildPythonPackage {
     "opentelemetry-sdk"
     "opentelemetry-semantic-conventions"
     "opentelemetry-util-http"
+    "rich-toolkit"
   ];
 
   build-system = [
@@ -195,6 +197,7 @@ buildPythonPackage {
     pyyaml
     questionary
     rich
+    rich-toolkit
     schema
     simple-di
     starlette
