@@ -1,0 +1,10 @@
+--- a/plugins/af_xdp/device.c    2025-09-13 07:41:51.520416000 -0500
++++ b/plugins/af_xdp/device.c   2025-09-13 07:57:19.620421900 -0500
+@@ -330,6 +330,7 @@
+   sock_config.rx_size = args->rxq_size;
+   sock_config.tx_size = args->txq_size;
+   sock_config.bind_flags = XDP_USE_NEED_WAKEUP;
++  sock_config.xdp_flags = XDP_FLAGS_SKB_MODE;
+   switch (args->mode)
+     {
+     case AF_XDP_MODE_AUTO:
