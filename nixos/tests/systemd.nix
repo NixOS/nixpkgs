@@ -244,7 +244,7 @@
           assert "0B read, 0B written" not in output
 
       with subtest("systemd per-unit accounting works"):
-          assert "IP traffic received: 84B sent: 84B" in output_ping
+          assert "IP Traffic: received 84B, sent 84B" in output_ping
 
       with subtest("systemd environment is properly set"):
           machine.systemctl("daemon-reexec")  # Rewrites /proc/1/environ

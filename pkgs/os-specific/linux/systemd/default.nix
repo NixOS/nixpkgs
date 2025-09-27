@@ -205,7 +205,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "257.9";
+  version = "258";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -213,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3Ig5TXhK99iOu41k4c5CgC4R3HhBftSAb9UbXvFY6lo=";
+    hash = "sha256-xtGZaVNsBNxkidgfVBu8xtvj0SxpY6OyJCUE+gq59qE=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -225,6 +225,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
+    # https://github.com/systemd/systemd/pull/39069
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/b5fdfedf729712b9824a5cb457a07d5699d2946c.patch";
+      hash = "sha256-0SvAn9Dl4z80PRIvDbIVIjKp5DsT/IUoHa5IiH1HHFY=";
+    })
+
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
@@ -418,7 +424,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSelinux libselinux
   ++ lib.optionals withRemote [
     libmicrohttpd
-    gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
@@ -854,7 +859,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (
       !buildLibsOnly
-    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+    ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
 
     runHook postInstallCheck
   '';
