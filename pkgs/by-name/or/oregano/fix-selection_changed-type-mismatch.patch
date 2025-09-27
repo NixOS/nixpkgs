@@ -1,0 +1,14 @@
+diff --git a/src/sheet/wire-item.c b/src/sheet/wire-item.c
+index 208710c..c97d13e 100644
+--- a/src/sheet/wire-item.c
++++ b/src/sheet/wire-item.c
+@@ -114,7 +114,7 @@ static void wire_item_class_init (WireItemClass *wire_item_class)
+ 	sheet_item_class->moved = wire_item_moved;
+ 	sheet_item_class->paste = wire_item_paste;
+ 	sheet_item_class->is_in_area = is_in_area;
+-	sheet_item_class->selection_changed = selection_changed;
++	sheet_item_class->selection_changed = (void (*)(SheetItem *item)) selection_changed;
+ 	sheet_item_class->place = wire_item_place;
+ 	sheet_item_class->place_ghost = wire_item_place_ghost;
+ }
+-- 
