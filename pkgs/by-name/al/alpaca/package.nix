@@ -15,19 +15,23 @@
   ollama,
   vte-gtk4,
   libspelling,
+  gst_all_1,
+  pipewire,
+  libportal,
+
   nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "6.1.7";
+  version = "7.7.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-9UXaJpkz9F2D490bMKU/xv+rgfrxstm1DuDwpMmydI0=";
+    hash = "sha256-GA6gBMltS37HBjAe5a6BxJnH592fn6Srf1gY7AdJvuo=";
   };
 
   nativeBuildInputs = [
@@ -45,24 +49,40 @@ python3Packages.buildPythonApplication rec {
     gtksourceview5
     vte-gtk4
     libspelling
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    pipewire
+    libportal
   ];
 
-  dependencies = with python3Packages; [
-    pygobject3
-    requests
-    pillow
-    html2text
-    youtube-transcript-api
-    pydbus
-    odfpy
-    pyicu
-    matplotlib
-    openai
-    markitdown
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      pygobject3
+      requests
+      pillow
+      html2text
+      youtube-transcript-api
+      pydbus
+      odfpy
+      pyicu
+      matplotlib
+      openai
+      markitdown
+      opencv4
+      duckduckgo-search
+      rembg
+    ]
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   optional-dependencies = {
-    speech-to-text = [ python3Packages.openai-whisper ];
+    speech-to-text = [
+      python3Packages.kokoro
+      python3Packages.openai-whisper
+      python3Packages.pyaudio
+      python3Packages.sounddevice
+      python3Packages.spacy-models.en_core_web_sm
+    ];
   };
 
   dontWrapGApps = true;
