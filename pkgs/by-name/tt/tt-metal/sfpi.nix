@@ -33,7 +33,7 @@ runCommand "sfpi-${version}"
       {
         aarch64-linux = fetchurl {
           url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi_${version}_aarch64.txz";
-          hash = "sha256-3DQrQewrKnbWNCBw3r7lkwylpKZnouLRG/QXcB6OhDU=";
+          hash = "sha256-MzI159hiitk1iyeGfQaDOQZhqGjfafpCMz6zmM3HrYs=";
         };
         x86_64-linux = fetchurl {
           url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi_${version}_x86_64.txz";
