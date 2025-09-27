@@ -15,6 +15,7 @@
   wrapGAppsHook3,
   fetchPypi,
   gnome-ponytail-daemon,
+  glib
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,12 @@ buildPythonPackage rec {
     dbus
     xvfb-run
     wrapGAppsHook3
+    gsettings-desktop-schemas
+    glib
+  ];
+
+  buildInputs = [
+    gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [
@@ -46,6 +53,7 @@ buildPythonPackage rec {
     pyatspi
     pycairo
     gnome-ponytail-daemon
+    gsettings-desktop-schemas
   ];
 
   dontWrapGApps = true;
@@ -54,7 +62,13 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  #doCheck = true;
+  doCheck = true;
+
+  installCheckPhase = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  XDG_DATA_DIRS = "${gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-48.0/";
 
   #checkPhase = ''
   #  python -c 'from dogtail.tree import root, Node'
