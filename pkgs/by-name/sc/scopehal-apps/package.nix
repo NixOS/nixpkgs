@@ -23,17 +23,22 @@
   ffts,
   moltenvk,
   llvmPackages,
+  hidapi,
 }:
 
-stdenv.mkDerivation {
+let
   pname = "scopehal-apps";
-  version = "0-unstable-2024-09-16";
+  version = "0.1";
+in
+stdenv.mkDerivation {
+  pname = "${pname}";
+  version = "${version}";
 
   src = fetchFromGitHub {
     owner = "ngscopeclient";
-    repo = "scopehal-apps";
-    rev = "d2a1a2f17e9398a3f60c99483dd2f6dbc2e62efc";
-    hash = "sha256-FQoaTuL6mEqnH8oNXwHpDcOEAPGExqj6lhrUhZ9VAQ4=";
+    repo = "${pname}";
+    tag = "v${version}";
+    hash = "sha256-AfO6JaWA9ECMI6FkMg/LaAG4QMeZmG9VxHiw0dSJYNM=";
     fetchSubmodules = true;
   };
 
@@ -61,6 +66,7 @@ stdenv.mkDerivation {
     vulkan-tools
     yaml-cpp
     zstd
+    hidapi
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     ffts
@@ -71,12 +77,6 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     moltenvk
   ];
-
-  # Targets InitializeSearchPaths
-  postPatch = ''
-    substituteInPlace lib/scopehal/scopehal.cpp \
-      --replace-fail '"/share/' '"/../share/'
-  '';
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_INSTALL_RPATH=${lib.strings.makeLibraryPath [ vulkan-loader ]}"
