@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   nodejs,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -17,6 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   phases = [
     "installPhase"
     "fixupPhase"
+    "installCheckPhase"
   ];
 
   strictDeps = true;
@@ -29,6 +31,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D "$src" "$out/bin/gemini"
 
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+  # versionCheckHook cannot be used because the reported version might be incorrect (e.g., 0.6.1 returns 0.6.0).
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    "$out/bin/gemini" -v
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = nix-update-script {
