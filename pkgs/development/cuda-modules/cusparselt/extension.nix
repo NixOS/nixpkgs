@@ -17,7 +17,7 @@ let
   pname = "libcusparse_lt";
 
   cusparseltVersions = [
-    "0.7.1"
+    "0.8.0"
   ];
 
   # Manifests :: { redistrib, feature }
