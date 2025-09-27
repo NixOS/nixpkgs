@@ -7,7 +7,6 @@
   meson,
   ninja,
   pkg-config,
-  runtimeShell,
   installShellFiles,
 
   android-tools,
@@ -17,12 +16,12 @@
 }:
 
 let
-  version = "3.3.2";
+  version = "3.3.3";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    hash = "sha256-LuXKCGPvRA9bfHWFa7R1xSg9CoNZyzcLHBYTFP0p39k=";
+    hash = "sha256-fnAyO6fyWWSd1KzOl6xP77roECssbZHi575hP9U1S+A=";
   };
 in
 stdenv.mkDerivation rec {
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     tag = "v${version}";
-    hash = "sha256-rwEsJlYlOIdgQfniAXdE2sg0WdI1ZxWxZV6MTFQoueg=";
+    hash = "sha256-1kCAqb/12fkKlp9MOsgw9ukp0lwJqTxD0gWN0IqvQJQ=";
   };
 
   #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
@@ -69,10 +68,6 @@ stdenv.mkDerivation rec {
 
     # runtime dep on `adb` to push the server
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $out/share/applications/scrcpy-console.desktop \
-      --replace "/bin/bash" "${runtimeShell}"
   '';
 
   meta = {
