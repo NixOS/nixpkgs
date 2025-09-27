@@ -6,14 +6,16 @@
   platformdirs,
   portalocker,
   pyparsing,
+  setuptools,
   sympy,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "qmake2cmake";
   version = "1.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchgit {
     url = "https://codereview.qt-project.org/qt/qmake2cmake";
@@ -25,7 +27,9 @@ buildPythonPackage rec {
     ./fix-locations.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     platformdirs
     portalocker
@@ -35,16 +39,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Tool to convert qmake .pro files to CMakeLists.txt";
     homepage = "https://wiki.qt.io/Qmake2cmake";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }
