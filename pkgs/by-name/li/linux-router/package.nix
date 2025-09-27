@@ -108,7 +108,6 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://github.com/garywill/linux-router/releases/tag/${version}";
     license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ x3ro ];
     platforms = lib.platforms.linux;
     mainProgram = "lnxrouter";
   };
