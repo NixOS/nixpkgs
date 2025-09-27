@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ethersync";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "ethersync";
     repo = "ethersync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Swh8C8FMjPdIFpHOsNb3W9W7JAZGzPXHXTwwnr1gFok=";
+    hash = "sha256-GPZD/TshZMr+WeCd4WRN/Ewu7zINSzPNPci52bjsV3E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/daemon";
 
-  cargoHash = "sha256-ZgbxaEtsaBQLl9PJbo1O2wA3OxEfPKRl3KkFvR4c97Q=";
+  cargoHash = "sha256-F2wVRha63TOdMCWW3KNaQ8kbYjuYbdY5yKmTHOJqODA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
