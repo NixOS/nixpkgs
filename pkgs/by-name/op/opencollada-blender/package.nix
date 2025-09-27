@@ -1,5 +1,6 @@
 {
   cmake,
+  dos2unix,
   fetchFromGitHub,
   lib,
   libxml2,
@@ -19,9 +20,20 @@ stdenv.mkDerivation {
     sha256 = "sha256-ctr+GjDzxOJxBfaMwjwayPkAOcF+FMsP1X72QCOwvTY=";
   };
 
+  # Fix freaky dos-style CLRF things
+  prePatch = ''
+    dos2unix CMakeLists.txt
+  '';
+
+  patches = [
+    # https://github.com/aras-p/OpenCOLLADA/pull/1
+    ./cmake4-compat.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
+    dos2unix
   ];
 
   propagatedBuildInputs = [
