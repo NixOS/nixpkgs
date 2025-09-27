@@ -37,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    CI=true pnpm prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
 
     # https://github.com/pnpm/pnpm/issues/3645

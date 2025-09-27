@@ -1202,6 +1202,7 @@ mapAliases {
   ipfs-migrator-unwrapped = kubo-migrator-unwrapped; # Added 2022-09-27
   ipfs-migrator = kubo-migrator; # Added 2022-09-27
   iproute = throw "'iproute' has been renamed to/replaced by 'iproute2'"; # Converted to throw 2024-10-17
+  ir.lv2 = ir-lv2; # Added 2025-09-37
   irrlichtmt = throw "irrlichtmt has been removed because it was moved into the Minetest repo"; # Added 2024-08-12
   isl_0_11 = throw "isl_0_11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   isl_0_14 = throw "isl_0_14 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
@@ -1224,6 +1225,7 @@ mapAliases {
   jd-cli = throw "jd-cli has been removed due to upstream being unmaintained since 2019. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
   jd-gui = throw "jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
   jikespg = throw "'jikespg' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
+  jing = jing-trang; # Added 2025-09-18
   jsawk = throw "'jsawk' has been removed because it is unmaintained upstream"; # Added 2024-08-07
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
 
@@ -1608,6 +1610,7 @@ mapAliases {
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   mailctl = throw "mailctl has been renamed to oama"; # Added 2024-08-19
   mailman-rss = throw "The mailman-rss package was dropped since it was unmaintained."; # Added 2024-06-21
+  melmatcheq.lv2 = melmatcheq-lv2; # Added 2025-09-27
   mariadb_105 = throw "'mariadb_105' has been removed because it reached its End of Life. Consider upgrading to 'mariadb_106'."; # Added 2025-04-26
   mariadb_110 = throw "mariadb_110 has been removed from nixpkgs, please switch to another version like mariadb_114"; # Added 2024-08-15
   mariadb-client = hiPrio mariadb.client; # added 2019.07.28
@@ -2437,6 +2440,7 @@ mapAliases {
   tabula = throw "tabula has been removed from nixpkgs, as it was broken"; # Added 2024-07-15
   tailor = throw "'tailor' has been removed from nixpkgs, as it was unmaintained upstream."; # Added 2024-11-02
   tangogps = throw "'tangogps' has been renamed to/replaced by 'foxtrotgps'"; # Converted to throw 2024-10-17
+  tamgamp.lv2 = tamgamp-lv2; # Added 2025-09-27
   taskwarrior = lib.warnOnInstantiate "taskwarrior was replaced by taskwarrior3, which requires manual transition from taskwarrior 2.6, read upstream's docs: https://taskwarrior.org/docs/upgrade-3/" taskwarrior2; # Added 2024-08-14
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
