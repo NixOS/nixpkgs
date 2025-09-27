@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "googlesans-code";
-  version = "6.000";
+  version = "6.001";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "googlesans-code";
     tag = "v${version}";
-    hash = "sha256-FPpxJGsx1uAen2QKhJmVBpFIlQk3ObieeZdrWIAR+oQ=";
+    hash = "sha256-ScFx+uty9x+VTWxw7NJm3M7AYr0C00bdSnJJmFW3Jy0=";
   };
 
   nativeBuildInputs = [
