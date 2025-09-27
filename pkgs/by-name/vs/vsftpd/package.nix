@@ -11,13 +11,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vsftpd";
   version = "3.0.5";
 
   src = fetchurl {
-    url = "https://security.appspot.com/downloads/vsftpd-${version}.tar.gz";
-    sha256 = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
+    url = "https://security.appspot.com/downloads/vsftpd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
   };
 
   buildInputs = [
@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) vsftpd; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Very secure FTP daemon";
     mainProgram = "vsftpd";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
-}
+})
