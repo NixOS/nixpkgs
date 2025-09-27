@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
@@ -26,6 +27,22 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-qIITlPym92wfq0byqjRxofpmYYg7vohbi1qPVEu6hRg=";
   };
+
+  patches = [
+    # Fix tests for GEOS 3.14
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/a561132c4e13c1fde597f56a8a7133c3c09b9928.patch";
+      hash = "sha256-a9gDfw2Dw+fd82T9f0BufYd/+gxE+ALvWyLm4vHygzU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/56e16e6eb27c54c6c24b9a251c12414e289fb7d0.patch";
+      hash = "sha256-JyjPVcJswEozF4C73QotKsPou55H41Ct9oVgkxhDhbk=";
+    })
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/19f807961da0a14ac707e4540c91b8d60d52dd08.patch";
+      hash = "sha256-3NHNiIOf9tbhFS/RAsRw1Yp/Bxy957WpsT+R5Vwp8uU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cython
