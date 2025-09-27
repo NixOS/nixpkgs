@@ -12,6 +12,24 @@
 
 let
   sources = {
+    "@isaacs/balanced-match-4.0.1" = {
+      name = "_at_isaacs_slash_balanced-match";
+      packageName = "@isaacs/balanced-match";
+      version = "4.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@isaacs/balanced-match/-/balanced-match-4.0.1.tgz";
+        sha512 = "yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==";
+      };
+    };
+    "@isaacs/brace-expansion-5.0.0" = {
+      name = "_at_isaacs_slash_brace-expansion";
+      packageName = "@isaacs/brace-expansion";
+      version = "5.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@isaacs/brace-expansion/-/brace-expansion-5.0.0.tgz";
+        sha512 = "ZT55BDLV0yv0RBm2czMiZ+SqCGO7AvmOM3G/w2xhVPH+te0aKgFjmBvGlL1dH+ql2tgGO3MVrbb3jCKyvpgnxA==";
+      };
+    };
     "accepts-1.0.7" = {
       name = "accepts";
       packageName = "accepts";
@@ -102,15 +120,6 @@ let
         sha512 = "94zhgPYkWLpOCB8BkGyGkXNFCBh0TsRWBGmmoXvR8imRe/hQiLIm0V5zVoKPKIjQ8y52hKtFchiPxJcz1QaH5Q==";
       };
     };
-    "balanced-match-1.0.2" = {
-      name = "balanced-match";
-      packageName = "balanced-match";
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz";
-        sha512 = "3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==";
-      };
-    };
     "base64-arraybuffer-0.1.2" = {
       name = "base64-arraybuffer";
       packageName = "base64-arraybuffer";
@@ -190,15 +199,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/body-parser/-/body-parser-1.6.7.tgz";
         sha512 = "J6HSnbgUPZMhDuqsTyGdpEy6PavO/05c7bKpqXVbYnLUBdH9oM1DvMTC27I3x9F0/tjfvbpuyedP/uUinj+Veg==";
-      };
-    };
-    "brace-expansion-2.0.1" = {
-      name = "brace-expansion";
-      packageName = "brace-expansion";
-      version = "2.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/brace-expansion/-/brace-expansion-2.0.1.tgz";
-        sha512 = "XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==";
       };
     };
     "buffer-crc32-0.2.3" = {
@@ -594,8 +594,8 @@ let
       version = "1.0.1";
       src = fetchurl {
         name = "emitter-1.0.1.tar.gz";
-        url = "https://codeload.github.com/component/emitter/tar.gz/refs/tags/1.0.1";
-        sha256 = "0eae744826723877457f7a7ac7f31d68a5a060673b3a883f6a8e325bf48f313d";
+        url = "https://codeload.github.com/sindresorhus/component-emitter/tar.gz/refs/tags/1.0.1";
+        sha256 = "017c2be5bb31d76e87a1910024d0e420e05aa7c1f4f0b0c792e15d0746ae77a6";
       };
     };
     "engine.io-1.3.1" = {
@@ -923,13 +923,13 @@ let
         sha512 = "echfutj/t5SoTL4WZpqjA1DCud1XO0WQF3/GJ48YBmc4ZMhCK77QA6Z/w6VTQERLKuJ4drze3kw2TUT8xZXVNw==";
       };
     };
-    "minimatch-9.0.0" = {
+    "minimatch-10.0.3" = {
       name = "minimatch";
       packageName = "minimatch";
-      version = "9.0.0";
+      version = "10.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minimatch/-/minimatch-9.0.0.tgz";
-        sha512 = "0jJj8AvgKqWN05mrwuqi8QYKx1WmYSUoKSxu5Qhs9prezTz10sxAHGNZe9J9cqIJzta8DWsleh2KaVaLl6Ru2w==";
+        url = "https://registry.npmjs.org/minimatch/-/minimatch-10.0.3.tgz";
+        sha512 = "IPZ167aShDZZUMdRk66cyQAW3qr0WzbHkPdMYa8bzZhlHhO3jALbKdxcaak7W9FfT2rZNpQuUu4Od7ILEpXSaw==";
       };
     };
     "minimist-0.0.10" = {
@@ -1580,13 +1580,13 @@ let
         sha512 = "7+QtWs9zioL/iQX61G+4h3EPyr3H+tINIp0IAV4EL32vdf7qmFyuW0BgRqWl7p5oZOsEQrlL0bY7m5D8tp7b1w==";
       };
     };
-    "underscore-1.13.6" = {
+    "underscore-1.13.7" = {
       name = "underscore";
       packageName = "underscore";
-      version = "1.13.6";
+      version = "1.13.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/underscore/-/underscore-1.13.6.tgz";
-        sha512 = "+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==";
+        url = "https://registry.npmjs.org/underscore/-/underscore-1.13.7.tgz";
+        sha512 = "GMXzWtsc57XAtguZgaQViUOzs0KTkk8ojr3/xAxXLITqf/3EMwxC0inyETfDFjH/Krbhuep0HNbbjI9i/q3F3g==";
       };
     };
     "utf8-2.0.0" = {
@@ -1670,13 +1670,13 @@ let
         sha512 = "BOuDjFFYvJdZO6e/N65AlaDItXo2TgyLjeyRYcqgAPkXpp5yTJcvkL2n+syO1r9Qc5g96tfBD2tuiMhYDmaGcA==";
       };
     };
-    "word-wrap-1.2.3" = {
+    "word-wrap-1.2.5" = {
       name = "word-wrap";
       packageName = "word-wrap";
-      version = "1.2.3";
+      version = "1.2.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.3.tgz";
-        sha512 = "Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==";
+        url = "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz";
+        sha512 = "BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==";
       };
     };
     "wordwrap-0.0.3" = {
@@ -1767,6 +1767,8 @@ in
         sha256 = "4494bada571057d86009f27470cc34f1e8a3b2c03b395cdba639c08d502a9bfe";
       };
       dependencies = [
+        sources."@isaacs/balanced-match-4.0.1"
+        sources."@isaacs/brace-expansion-5.0.0"
         sources."accepts-1.0.7"
         sources."adler-32-1.2.0"
         sources."after-0.8.1"
@@ -1775,7 +1777,6 @@ in
         sources."arraybuffer.slice-0.0.6"
         sources."async-0.2.10"
         sources."babyparse-0.2.1"
-        sources."balanced-match-1.0.2"
         sources."base64-arraybuffer-0.1.2"
         sources."base64-url-1.2.1"
         sources."base64id-0.1.0"
@@ -1792,7 +1793,6 @@ in
             ];
           }
         )
-        sources."brace-expansion-2.0.1"
         sources."buffer-crc32-0.2.3"
         sources."buffer-from-1.1.2"
         sources."bytes-1.0.0"
@@ -1953,7 +1953,7 @@ in
         sources."methods-1.1.0"
         sources."mime-1.2.11"
         sources."mime-types-1.0.2"
-        sources."minimatch-9.0.0"
+        sources."minimatch-10.0.3"
         sources."minimist-0.0.10"
         (
           sources."mkdirp-0.5.0"
@@ -2096,7 +2096,7 @@ in
         )
         sources."uglify-to-browserify-1.0.2"
         sources."uid-safe-1.1.0"
-        sources."underscore-1.13.6"
+        sources."underscore-1.13.7"
         sources."utf8-2.0.0"
         sources."util-deprecate-1.0.2"
         sources."utils-merge-1.0.0"
@@ -2104,7 +2104,7 @@ in
         sources."vary-1.1.2"
         sources."vhost-2.0.0"
         sources."voc-1.2.0"
-        sources."word-wrap-1.2.3"
+        sources."word-wrap-1.2.5"
         sources."wordwrap-0.0.3"
         (
           sources."ws-0.4.31"

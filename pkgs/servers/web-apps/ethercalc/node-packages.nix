@@ -5,7 +5,7 @@
     inherit system;
   },
   system ? builtins.currentSystem,
-  nodejs ? pkgs."nodejs_20",
+  nodejs ? pkgs."nodejs_14",
 }:
 
 let
@@ -13,12 +13,13 @@ let
     inherit (pkgs)
       stdenv
       lib
+      python2
       runCommand
       writeTextFile
       writeShellScript
       ;
     inherit pkgs nodejs;
-    libtool = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.cctools or pkgs.darwin.cctools else null;
+    libtool = if pkgs.stdenv.isDarwin then pkgs.cctools or pkgs.darwin.cctools else null;
   };
 in
 import ./node-packages-generated.nix {
