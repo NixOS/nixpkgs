@@ -7931,6 +7931,12 @@
     name = "Elis Hirwing";
     keys = [ { fingerprint = "67FE 98F2 8C44 CF22 1828  E12F D57E FA62 5C9A 925F"; } ];
   };
+  etwas = {
+    email = "ein@etwas.me";
+    github = "EinEtw4s";
+    githubId = 74488187;
+    name = "etwas";
+  };
   eu90h = {
     email = "stefan@eu90h.com";
     github = "eu90h";
