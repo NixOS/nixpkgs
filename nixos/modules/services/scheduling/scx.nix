@@ -118,6 +118,10 @@ in
         assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.12";
         message = "SCX is only supported on kernel version >= 6.12.";
       }
+      {
+        assertion = !(cfg.enable && config.services.scx_loader.enable);
+        message = "services.scx and services.scx_loader cannot be enabled simultaneously. Please enable only one.";
+      }
     ];
   };
 
