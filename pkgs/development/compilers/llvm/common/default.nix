@@ -267,6 +267,7 @@ let
         ]
         ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
           targetLlvmLibraries.libunwind
+          targetLlvmLibraries.llvm-libgcc
         ];
         extraBuildCommands = mkExtraBuildCommands cc;
         nixSupport.cc-cflags = [
@@ -426,7 +427,6 @@ let
         );
 
         compiler-rt-no-libc = callPackage ./compiler-rt {
-          doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
           stdenv =
             # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
             if stdenv.hostPlatform.isDarwin then
@@ -468,6 +468,14 @@ let
         };
 
         openmp = callPackage ./openmp {
+        };
+
+        llvm-libgcc = callPackage ./llvm-libgcc {
+          stdenv = overrideCC stdenv (
+            buildLlvmTools.libcxxClang.override {
+              bintools = buildLlvmTools.bintools;
+            }
+          );
         };
       }
       // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
