@@ -42,18 +42,27 @@ stdenv.mkDerivation rec {
     yaml-cpp
   ];
 
-  postPatch = lib.optionalString isLinux ''
-    substituteInPlace doc/docbook_man.debian.xsl \
-      --replace /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook\.xsl ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl
-  '';
+  postPatch =
+    let
+      file = "doc/docbook_man.${if isLinux then "debian" else "macports"}.xsl";
+      path =
+        if isLinux then
+          "/usr/share/xml/docbook/stylesheet/docbook-xsl"
+        else
+          "/opt/local/share/xsl/docbook-xsl-nons";
+    in
+    ''
+      substituteInPlace ${file} \
+        --replace ${path}/manpages/docbook\.xsl ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl
+    '';
 
   cmakeFlags = [
     "-DBUILD_MAN=ON"
+    "-DCMAKE_INSTALL_FULL_MANDIR=share/man"
     "-DINSTALL_UDEV_RULES=OFF"
   ];
 
-  postInstall = ''
-    installManPage doc/dmrconf.1 doc/qdmr.1
+  postInstall = lib.optionalString isLinux ''
     mkdir -p "$out/etc/udev/rules.d"
     cp ${src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
   '';
@@ -65,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://dm3mat.darc.de/qdmr/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ _0x4A6F ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
