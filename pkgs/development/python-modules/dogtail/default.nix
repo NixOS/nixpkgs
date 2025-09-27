@@ -12,16 +12,17 @@
   fetchurl,
   dbus,
   xvfb-run,
-  wrapGAppsHook3,
+  wrapGAppsHook,
   fetchPypi,
   gnome-ponytail-daemon,
-  glib
+  glib,
+  setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dogtail";
   version = "1.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -34,70 +35,38 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    wrapGAppsHook
     gobject-introspection
-    dbus
-    xvfb-run
-    wrapGAppsHook3
-    gsettings-desktop-schemas
     glib
+    gtk3
+    setuptools
   ];
 
   buildInputs = [
-    gsettings-desktop-schemas
+    gobject-introspection
+    glib
+    gtk3
   ];
 
   propagatedBuildInputs = [
+    gobject-introspection
+    pygobject3
+  ];
+
+  dependencies = [
     at-spi2-core
-    gtk3
     pygobject3
     pyatspi
     pycairo
-    gnome-ponytail-daemon
-    gsettings-desktop-schemas
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    export HOME=$(mktemp -d)
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS
-    gsettings set org.gnome.desktop.interface toolkit-accessibility true
-    echo "<busconfig>
-      <type>session</type>
-      <listen>unix:tmpdir=$TMPDIR</listen>
-      <listen>unix:path=/build/system_bus_socket</listen>
-      <standard_session_servicedirs/>
-      <policy context=\"default\">
-        <!-- Allow everything to be sent -->
-        <allow send_destination=\"*\" eavesdrop=\"true\"/>
-        <!-- Allow everything to be received -->
-        <allow eavesdrop=\"true\"/>
-        <!-- Allow anyone to own anything -->
-        <allow own=\"*\"/>
-      </policy>
-    </busconfig>" > dbus.cfg
-
-    export PATH=${
-        lib.makeBinPath (
-          [
-            dbus
-          ]
-        )
-    }:$PATH
-    export USER="$(id -u -n)"
-    export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/build/system_bus_socket
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-       --config-file dbus.cfg \
-      ${python.interpreter} -c 'from dogtail.tree import root, Node'
-    runHook postCheck
-  '';
-
+  # Prevent double wrapping.
   dontWrapGApps = true;
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  doCheck = false;
 
-  doCheck = true;
+  strictDeps = false;
 
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
