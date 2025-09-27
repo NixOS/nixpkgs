@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "azimjohn";
     repo = "jprq";
-    tag = "v${version}";
+    tag = version;
     hash = "sha256-0+ope89NTODwFVNifXtq+yVLMMcf0bQT/XF3KyTfB0U=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "join public router. quickly";
+    description = "Free and open tool for exposing local servers to public network";
     homepage = "https://jprq.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmkamron ];
