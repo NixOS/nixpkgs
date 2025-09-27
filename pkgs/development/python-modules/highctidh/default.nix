@@ -7,7 +7,7 @@
 }:
 buildPythonPackage rec {
   pname = "highctidh";
-  version = "1.0.2025051200";
+  version = "1.0.2024050500";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "vula";
     repo = "highctidh";
     tag = "v${version}";
-    hash = "sha256-wGJv9UHAFfCOpTrr8THVk0DC+JUtj3gYYOf6o3EaSqg=";
+    hash = "sha256-Ovdq1ICyMdTzmFUvVu+U0W6N/Q6IFfbsckMMYRzT3wg=";
   };
 
   sourceRoot = "${src.name}/src";
