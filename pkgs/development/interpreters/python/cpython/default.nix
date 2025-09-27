@@ -79,6 +79,12 @@
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
   enableOptimizations ? false,
 
+  # Enable CPython's tail-call interpreter when supported
+  # https://docs.python.org/3.14/using/configure.html#cmdoption-with-tail-call-interp
+  enableTailCallInterp ? (
+    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "19" && enableOptimizations
+  ),
+
   # improves performance, but remains reproducible
   enableNoSemanticInterposition ? true,
 
@@ -479,6 +485,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals enableOptimizations [
     "--enable-optimizations"
+  ]
+  ++ optionals (pythonAtLeast "3.14" && enableTailCallInterp) [
+    "--with-tail-call-interp"
   ]
   ++ optionals enableDebug [
     "--with-pydebug"
