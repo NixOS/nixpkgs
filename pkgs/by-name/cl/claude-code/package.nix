@@ -46,6 +46,7 @@ buildNpmPackage rec {
       malo
       markus1189
       omarjatoi
+      xiaoxiangmoe
     ];
     mainProgram = "claude";
   };
