@@ -72,8 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JN4GVx5rBfNBLaMpLcKgyd+CyNDafz85BXUcfg5kDXQ=";
   };
 
+  patches = [ ./fix-ldb-modules-path.patch ];
+
   postPatch = ''
     patchShebangs ./sbus_generate.sh.in
+
+    substituteInPlace src/confdb/confdb.c \
+      --replace "@out@" "${placeholder "out"}" \
+      --replace "@ldb@" "${ldb}"
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
@@ -101,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
+      --with-sssd-user=root
     )
   ''
   + lib.optionalString withSudo ''
