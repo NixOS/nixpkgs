@@ -1,7 +1,6 @@
 # Fixed-point arguments of build helpers {#chap-build-helpers-finalAttrs}
 
-As mentioned in the beginning of this part, `stdenv.mkDerivation` could alternatively accept a fixed-point function. The input of such function, typically named `finalAttrs`, is expected to be the final state of the attribute set.
-A build helper like this is said to accept **fixed-point arguments**.
+As mentioned in the beginning of this part, `stdenv.mkDerivation` could alternatively accept a fixed-point function. The input of this function, typically named `finalAttrs`, is expected to be the final state of the attribute set.  A build helper like this is said to accept **fixed-point arguments**.
 
 Build helpers don't always support fixed-point arguments yet, as support in [`stdenv.mkDerivation`](#mkderivation-recursive-attributes) was first included in Nixpkgs 22.05.
 
@@ -9,7 +8,7 @@ Build helpers don't always support fixed-point arguments yet, as support in [`st
 
 Developers can use the Nixpkgs library function [`lib.customisation.extendMkDerivation`](#function-library-lib.customisation.extendMkDerivation) to define a build helper supporting fixed-point arguments from an existing one with such support, with an attribute overlay similar to the one taken by [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
-Beside overriding, `lib.extendMkDerivation` also supports `excludeDrvArgNames` to optionally exclude some arguments in the input fixed-point arguments from passing down the base build helper (specified as `constructDrv`).
+Besides overriding, `lib.extendMkDerivation` also supports `excludeDrvArgNames` to optionally exclude some arguments in the input fixed-point arguments from passing down the base build helper (specified as `constructDrv`).
 
 :::{.example #ex-build-helpers-extendMkDerivation}
 
@@ -41,7 +40,7 @@ stdenv.mkDerivation (
 )
 ```
 
-we could define with `lib.extendMkDerivation` an attribute overlay to make the result build helper also accepts the the attribute set's fixed point passing to the underlying `stdenv.mkDerivation`, named `finalAttrs` here:
+we could define with `lib.extendMkDerivation` an attribute overlay to make the result build helper also accept the attribute set's fixed point passing to the underlying `stdenv.mkDerivation`, named `finalAttrs` here:
 
 ```nix
 lib.extendMkDerivation {

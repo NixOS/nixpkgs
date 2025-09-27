@@ -20,6 +20,7 @@
   enablePlugin,
   disableGdbPlugin ? !enablePlugin,
   enableShared,
+  enableDefaultPie,
   targetPrefix,
 
   langC,
@@ -278,6 +279,9 @@ let
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
+    ]
+    ++ lib.optionals enableDefaultPie [
+      "--enable-default-pie"
     ]
     ++ lib.optionals langJit [
       "--enable-host-shared"

@@ -8,7 +8,7 @@ Furthermore it also allows local evaluation using:
 nix-build ci -A eval.baseline
 ```
 
-The most important two arguments are:
+The two most important arguments are:
 - `--arg evalSystems`: The set of systems for which `nixpkgs` should be evaluated.
   Defaults to the four official platforms (`x86_64-linux`, `aarch64-linux`, `x86_64-darwin` and `aarch64-darwin`).
   Example: `--arg evalSystems '["x86_64-linux" "aarch64-darwin"]'`

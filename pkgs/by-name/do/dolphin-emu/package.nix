@@ -17,7 +17,7 @@
   curl,
   enet,
   ffmpeg,
-  fmt_10,
+  fmt,
   gtest,
   hidapi,
   libXdmcp,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     enet
     ffmpeg
-    fmt_10
+    fmt
     gtest
     hidapi
     libXdmcp

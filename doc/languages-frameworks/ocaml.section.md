@@ -52,7 +52,7 @@ Here is a simple package example.
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is
-  complete, but only if the OCaml version is at at least `"4.05"`.
+  complete, but only if the OCaml version is at least `"4.05"`.
 
 - It uses the package `ocaml-syntax-shims` as a build input, `alcotest` and
   `ppx_let` as check inputs (because they are needed to run the tests), and

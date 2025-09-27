@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     let
       ignoreTests = [
         "promise_test_multiple_waiters"
+        # Flaky test https://github.com/NixOS/nixpkgs/issues/443233
+        "test_memory_usage_maxrss"
       ];
     in
     ''

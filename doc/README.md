@@ -380,7 +380,7 @@ Though this is not shown in the rendered documentation on nixos.org.
 
 #### Footnotes
 
-To add a foonote explanation, use the following syntax:
+To add a footnote explanation, use the following syntax:
 
 ```markdown
 Sometimes it's better to add context [^context] in a footnote.
@@ -415,7 +415,7 @@ This syntax is taken from [CommonMark](https://spec.commonmark.org/0.30/#link-re
 #### Typographic replacements
 
 Typographic replacements are enabled.
-Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
+Check the [list of possible replacement patterns](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
 
 ## Getting help
 
