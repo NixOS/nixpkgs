@@ -42,6 +42,36 @@ rec {
     ;
 
   /**
+    Concatenates a list of strings with a separator between each element.
+
+    # Inputs
+
+    `sep`
+    : Separator to add between elements
+
+    `list`
+    : List of strings that will be joined
+
+    # Type
+
+    ```
+    join :: string -> [ string ] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.join` usage example
+
+    ```nix
+    join ", " ["foo" "bar"]
+    => "foo, bar"
+    ```
+
+    :::
+  */
+  join = builtins.concatStringsSep;
+
+  /**
     Concatenate a list of strings.
 
     # Type
