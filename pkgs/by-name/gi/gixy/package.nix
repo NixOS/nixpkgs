@@ -25,7 +25,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gixy";
-  version = "0.1.20";
+  version = "0.1.21";
   pyproject = true;
 
   # fetching from GitHub because the PyPi source is missing the tests
@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "yandex";
     repo = "gixy";
     rev = "v${version}";
-    sha256 = "14arz3fjidb8z37m08xcpih1391varj8s0v3gri79z3qb4zq5k6b";
+    sha256 = "sha256-Ak2UTP0gDKoac/rR2h1XCUKld1b41O466ogZNQ1yQN0=";
   };
 
   patches = [
