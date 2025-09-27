@@ -24,6 +24,11 @@
   pkg-config,
   python3,
   writableTmpDirAsHomeHook,
+  # tests.mpd
+  meson,
+  mpd,
+  muonStandalone,
+  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
@@ -208,6 +213,20 @@ stdenv.mkDerivation (finalAttrs: {
     embedSamurai = true;
     runTests = true;
   };
+
+  # try to build a meson + ninja derivation with muon + embedded samu instead
+  passthru.tests.mpd =
+    let
+      # replace meson+ninja with muonStandalone
+      mesonToMuon = inputs: (lib.subtractLists [ meson ninja ] inputs) ++ [ muonStandalone ];
+    in
+    mpd.overrideAttrs (prevAttrs: {
+      nativeBuildInputs = mesonToMuon prevAttrs.nativeBuildInputs;
+
+      # muon needs the meson attrs
+      muonAutoFeatures = prevAttrs.mesonAutoFeatures;
+      muonFlags = prevAttrs.mesonFlags;
+    });
 
   passthru.updateScript = callPackage ./update.nix { };
 
