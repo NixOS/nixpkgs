@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_JAVA" false)
     (lib.cmakeBool "STOP_BUILD_ON_WARNING" true)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
