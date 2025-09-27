@@ -5,9 +5,6 @@
   lib,
   ...
 }:
-
-with lib;
-
 {
   imports = [
     # Enable devices which are usually scanned, because we don't know the
@@ -28,10 +25,10 @@ with lib;
     system.nixos.variant_id = lib.mkDefault "installer";
 
     # Enable in installer, even if the minimal profile disables it.
-    documentation.enable = mkImageMediaOverride true;
+    documentation.enable = lib.mkImageMediaOverride true;
 
     # Show the manual.
-    documentation.nixos.enable = mkImageMediaOverride true;
+    documentation.nixos.enable = lib.mkImageMediaOverride true;
 
     # Use less privileged nixos user
     users.users.nixos = {
@@ -53,8 +50,8 @@ with lib;
 
     # Allow passwordless sudo from nixos user
     security.sudo = {
-      enable = mkDefault true;
-      wheelNeedsPassword = mkImageMediaOverride false;
+      enable = lib.mkDefault true;
+      wheelNeedsPassword = lib.mkImageMediaOverride false;
     };
 
     # Automatically log in at the virtual consoles.
@@ -70,7 +67,7 @@ with lib;
 
       To set up a wireless connection, run `nmtui`.
     ''
-    + optionalString config.services.xserver.enable ''
+    + lib.optionalString config.services.xserver.enable ''
 
       Type `sudo systemctl start display-manager' to
       start the graphical user interface.
@@ -82,8 +79,8 @@ with lib;
     # installation device for head-less systems i.e. arm boards by manually
     # mounting the storage in a different system.
     services.openssh = {
-      enable = mkDefault true;
-      settings.PermitRootLogin = mkDefault "yes";
+      enable = lib.mkDefault true;
+      settings.PermitRootLogin = lib.mkDefault "yes";
     };
 
     # Provide networkmanager for easy network configuration.
@@ -120,7 +117,7 @@ with lib;
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
-    networking.firewall.logRefusedConnections = mkDefault false;
+    networking.firewall.logRefusedConnections = lib.mkDefault false;
 
     # Prevent installation media from evacuating persistent storage, as their
     # var directory is not persistent and it would thus result in deletion of
