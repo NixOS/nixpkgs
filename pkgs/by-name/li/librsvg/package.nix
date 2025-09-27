@@ -64,6 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vBu81BkSCwmNsovqVTNdneJHDU5qn27pcge0EPwVhn0=";
   };
 
+  patches = [
+    # too_many_elements test fails with libxml 2.15.0
+    ./expect-fail-too-many-elements.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";

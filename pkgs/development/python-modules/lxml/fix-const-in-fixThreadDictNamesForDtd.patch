@@ -1,0 +1,34 @@
+diff --git a/src/lxml/proxy.pxi b/src/lxml/proxy.pxi
+index f7b47a73..333112b3 100644
+--- a/src/lxml/proxy.pxi
++++ b/src/lxml/proxy.pxi
+@@ -570,20 +570,20 @@ cdef void fixThreadDictNamesForDtd(tree.xmlDtd* c_dtd,
+         if c_node.type == tree.XML_ELEMENT_DECL:
+             c_element = <tree.xmlElement*>c_node
+             if c_element.content:
+-                _fixThreadDictPtr(&c_element.content.name, c_src_dict, c_dict)
+-                _fixThreadDictPtr(&c_element.content.prefix, c_src_dict, c_dict)
++                _fixThreadDictPtr(<const_xmlChar**>&c_element.content.name, c_src_dict, c_dict)
++                _fixThreadDictPtr(<const_xmlChar**>&c_element.content.prefix, c_src_dict, c_dict)
+             c_attribute = c_element.attributes
+             while c_attribute:
+-                _fixThreadDictPtr(&c_attribute.defaultValue, c_src_dict, c_dict)
+-                _fixThreadDictPtr(&c_attribute.name, c_src_dict, c_dict)
+-                _fixThreadDictPtr(&c_attribute.prefix, c_src_dict, c_dict)
+-                _fixThreadDictPtr(&c_attribute.elem, c_src_dict, c_dict)
++                _fixThreadDictPtr(<const_xmlChar**>&c_attribute.defaultValue, c_src_dict, c_dict)
++                _fixThreadDictPtr(<const_xmlChar**>&c_attribute.name, c_src_dict, c_dict)
++                _fixThreadDictPtr(<const_xmlChar**>&c_attribute.prefix, c_src_dict, c_dict)
++                _fixThreadDictPtr(<const_xmlChar**>&c_attribute.elem, c_src_dict, c_dict)
+                 c_attribute = c_attribute.nexth
+         elif c_node.type == tree.XML_ENTITY_DECL:
+             c_entity = <tree.xmlEntity*>c_node
+-            _fixThreadDictPtr(&c_entity.name, c_src_dict, c_dict)
+-            _fixThreadDictPtr(&c_entity.ExternalID, c_src_dict, c_dict)
+-            _fixThreadDictPtr(&c_entity.SystemID, c_src_dict, c_dict)
++            _fixThreadDictPtr(<const_xmlChar**>&c_entity.name, c_src_dict, c_dict)
++            _fixThreadDictPtr(<const_xmlChar**>&c_entity.ExternalID, c_src_dict, c_dict)
++            _fixThreadDictPtr(<const_xmlChar**>&c_entity.SystemID, c_src_dict, c_dict)
+             _fixThreadDictPtr(<const_xmlChar**>&c_entity.content, c_src_dict, c_dict)
+         c_node = c_node.next
+ 

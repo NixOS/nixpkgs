@@ -1,0 +1,13 @@
+diff --git a/src/xmltree.c b/src/xmltree.c
+index 27335537..29701eb1 100644
+--- a/src/xmltree.c
++++ b/src/xmltree.c
+@@ -705,7 +705,7 @@ int
+ xmlSecReplaceNodeBufferAndReturn(xmlNodePtr node, const xmlSecByte *buffer, xmlSecSize size, xmlNodePtr *replaced) {
+     xmlNodePtr results = NULL;
+     xmlNodePtr next = NULL;
+-    const xmlChar *oldenc;
++    xmlChar *oldenc;
+     int len;
+     xmlParserErrors ret;
+ 

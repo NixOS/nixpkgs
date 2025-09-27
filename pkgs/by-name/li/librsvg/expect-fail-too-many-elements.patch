@@ -1,0 +1,12 @@
+diff --git a/rsvg/tests/errors.rs b/rsvg/tests/errors.rs
+index 02b134bee..72f7a209e 100644
+--- a/rsvg/tests/errors.rs
++++ b/rsvg/tests/errors.rs
+@@ -14,6 +14,7 @@ use rsvg::{CairoRenderer, ImplementationLimit, Loader, LoadingError, RenderingEr
+ 
+ #[ignore]
+ #[test]
++#[should_panic]
+ fn too_many_elements() {
+     let name = "tests/fixtures/errors/bug515-too-many-elements.svgz";
+ 
