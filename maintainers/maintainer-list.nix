@@ -3709,6 +3709,11 @@
     githubId = 4621;
     name = "Brad Ediger";
   };
+  brady444 = {
+    github = "brady444";
+    githubId = 16694009;
+    name = "brady444";
+  };
   brahyerr = {
     name = "Bryant Pham";
     email = "bp@1829847@gmail.com";
