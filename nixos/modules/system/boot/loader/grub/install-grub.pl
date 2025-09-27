@@ -467,6 +467,13 @@ sub addEntry {
 
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
     my $initrd = copyToKernelsDir(Cwd::abs_path("$path/initrd"));
+    my $json_text = read_file("$path/boot.json");
+    my $data = decode_json($json_text);
+    my $devicetree;
+    if (exists $data->{"org.nixos.device-tree"} && exists $data->{"org.nixos.device-tree"}->{devicetree}) {
+        $devicetree = $data->{"org.nixos.device-tree"}->{devicetree};
+    }
+    my $fdtfile = defined $devicetree ? copyToKernelsDir(Cwd::abs_path("$devicetree")) : undef;
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
@@ -520,6 +527,7 @@ sub addEntry {
     $conf .= "  multiboot $xen $xenParams\n" if $xen;
     $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
     $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
+    $conf .= "  devicetree $fdtfile\n" if $fdtfile;
     $conf .= "}\n\n";
 }
 
