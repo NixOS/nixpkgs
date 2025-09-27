@@ -394,6 +394,11 @@ checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.p
 ## specialArgs should work
 checkConfigOutput '^"foo"$' config.submodule.foo ./declare-submoduleWith-special.nix
 
+## onlyDefinesConfig behaves as expected
+checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-onlydefinesconfig.nix ./define-submoduleWith-onlydefinesconfig.nix
+checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-onlydefinesconfig.nix ./define-submoduleWith-onlydefinesconfig-path.nix
+checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-onlydefinesconfig.nix ./define-submoduleWith-noshorthand.nix
+
 ## shorthandOnlyDefinesConfig behaves as expected
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
