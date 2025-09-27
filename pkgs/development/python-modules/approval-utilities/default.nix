@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   approvaltests,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -10,16 +9,15 @@
 buildPythonPackage {
   pname = "approval-utilities";
   inherit (approvaltests) version src;
-  disabled = pythonOlder "3.7";
   pyproject = true;
 
-  postPatch = ''
+  postPatch = approvaltests.postPatch or "" + ''
     mv setup.approval_utilities.py setup.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     # used in approval_utilities/utilities/time_utilities.py
     typing-extensions
   ];
