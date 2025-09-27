@@ -53,11 +53,20 @@ in
 
     networking.extraHosts = lib.mkOption {
       type = lib.types.lines;
+      # TODO: Remove this 26.05 to force people to migrate to networking.hosts
+      apply =
+        v:
+        lib.warnIf (v != "")
+          "networking.extraHosts has been deprecated in favor of networking.hosts and is set to be removed in 26.05"
+          v;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
         Additional verbatim entries to be appended to {file}`/etc/hosts`.
         For adding hosts from derivation results, use {option}`networking.hostFiles` instead.
+        ::: {.note}
+        This option has been deprecated in favor of {option}`networking.hosts`.
+        :::
       '';
     };
 
