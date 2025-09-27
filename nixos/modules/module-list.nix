@@ -207,7 +207,6 @@
   ./programs/extra-container.nix
   ./programs/fcast-receiver.nix
   ./programs/feedbackd.nix
-  ./programs/file-roller.nix
   ./programs/firefox.nix
   ./programs/firejail.nix
   ./programs/fish.nix
