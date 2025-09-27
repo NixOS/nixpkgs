@@ -3,6 +3,7 @@
   bison,
   buildGoModule,
   cmake,
+  corrosion,
   cups,
   curl,
   dlib,
@@ -35,6 +36,7 @@
   pkg-config,
   protobuf,
   replaceVars,
+  rustPlatform,
   snappy,
   stdenv,
   systemd,
@@ -53,19 +55,20 @@
   withNdsudo ? false,
   withNetfilter ? stdenv.hostPlatform.isLinux,
   withNetworkViewer ? stdenv.hostPlatform.isLinux,
+  withOtel ? true,
   withSsl ? true,
   withSystemdJournal ? stdenv.hostPlatform.isLinux,
   withSystemdUnits ? stdenv.hostPlatform.isLinux,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.6.3";
+  version = "2.7.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J6QHeukhtHHLx92NGtoOmPwq6gvL9eyVYBQiDD1cEDk=";
+    hash = "sha256-Qc6gwOiLdhCJJ3IfJn3UKYC89D78FUkwY1bdxB7KLwY=";
     fetchSubmodules = true;
   };
 
@@ -80,7 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
   ]
-  ++ lib.optionals withCups [ cups.dev ];
+  ++ lib.optionals withCups [ cups.dev ]
+  ++ lib.optionals withOtel [
+    corrosion
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals withSystemdJournal [
+    corrosion
+    rustPlatform.cargoSetupHook
+  ];
 
   # bash is only used to rewrite shebangs
   buildInputs = [
@@ -97,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libossp_uuid
   ]
-
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     libcap
     libuuid
@@ -129,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
     ./ndsudo-fix-path.patch
 
+    ./use-local-corrosion.patch
     ./use-local-libbacktrace.patch
   ]
   ++ lib.optional withCloudUi (
@@ -141,6 +152,13 @@ stdenv.mkDerivation (finalAttrs: {
       };
     }
   );
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    pname = "nd-jf";
+    inherit (finalAttrs) version src;
+    sourceRoot = "${finalAttrs.src.name}/src/crates/jf";
+    hash = "sha256-b3oTvb+g9xVTpFwJNPWvGjCpzU0UWA6AMySpMS9Z/pc=";
+  };
 
   # Guard against unused build-time development inputs in closure. Without
   # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
@@ -200,7 +218,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
       --replace-fail \
         'GOPROXY=https://proxy.golang.org' \
-        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules},file://${finalAttrs.passthru.nd-mcp}'
+        'GOPROXY=${
+          lib.concatStringsSep "," (
+            [ "file://${finalAttrs.passthru.netdata-go-modules}" ]
+            ++ lib.optional withML "file://${finalAttrs.passthru.nd-mcp}"
+          )
+        }'
 
     # Prevent the path to be caught into the Nix store path.
     substituteInPlace CMakeLists.txt \
@@ -233,6 +256,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
     (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
     (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+    (lib.cmakeBool "ENABLE_PLUGIN_OTEL" withOtel)
     (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
     (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_UNITS" withSystemdUnits)
     (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
@@ -262,13 +286,11 @@ stdenv.mkDerivation (finalAttrs: {
     nd-mcp =
       (buildGoModule {
         pname = "nd-mcp";
-        version = finalAttrs.version;
-        inherit (finalAttrs) src;
+        inherit (finalAttrs) version src;
 
         sourceRoot = "${finalAttrs.src.name}/src/web/mcp/bridges/stdio-golang";
 
-        vendorHash = "sha256-6JfHrBloJQ5wHyogIPTVDZjlITWZXbsv2m2lMlQmBUY=";
-
+        vendorHash = "sha256-jyCTp52Dc2IuRwzGT+sHFljO30oqAMfe3xVdEpV+R2c=";
         proxyVendor = true;
         doCheck = false;
 
@@ -292,7 +314,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-aOFmfBcBjnTfFHfMNemSJHbnMnhBojYrGe21zDxPxME=";
+        vendorHash = "sha256-TIR4c7VpMZ9R6P1z6NLR1oYHEu4OdP280ASmF1HoBHo=";
         doCheck = false;
         proxyVendor = true;
 
