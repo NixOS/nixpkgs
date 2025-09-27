@@ -12,7 +12,7 @@
   fetchurl,
   dbus,
   xvfb-run,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   fetchPypi,
   gnome-ponytail-daemon,
   glib,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     setuptools
   ];
 
@@ -51,11 +51,7 @@ buildPythonPackage rec {
 
   strictDeps = false; # broken with gobject-introspection setup hook https://github.com/NixOS/nixpkgs/issues/56943
   doCheck = false; # why?
-  dontWrapGApps = true; # prevent double wrapping
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}") # prevent double wrapping
-  '';
+  
 
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
