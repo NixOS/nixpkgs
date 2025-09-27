@@ -1,0 +1,51 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index d7a5aa7..4e25cca 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -502,7 +502,7 @@ dependencies = [
+  "camino",
+  "chrono",
+  "clap",
+- "cooklang 0.17.0 (git+https://github.com/cooklang/cooklang-rs.git?branch=feat%2Fbullets)",
++ "cooklang 0.17.0",
+  "cooklang-find",
+  "cooklang-import",
+  "cooklang-reports",
+@@ -535,28 +535,6 @@ dependencies = [
+  "yansi",
+ ]
+ 
+-[[package]]
+-name = "cooklang"
+-version = "0.17.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "471bfb28efa997330a7101c55a7914857d7de8daa4de4090b1babc713b4b2f39"
+-dependencies = [
+- "bitflags 2.9.1",
+- "codesnake",
+- "enum-map",
+- "finl_unicode",
+- "serde",
+- "serde_yaml",
+- "smallvec",
+- "strum",
+- "thiserror",
+- "toml 0.8.23",
+- "tracing",
+- "unicase",
+- "unicode-width 0.2.0",
+- "yansi",
+-]
+-
+ [[package]]
+ name = "cooklang"
+ version = "0.17.0"
+@@ -616,7 +594,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "139ad7cc4d2651fa6f7d821121f41ea121bef194b8f80ad6432e0bb265518ad1"
+ dependencies = [
+  "anyhow",
+- "cooklang 0.17.0 (registry+https://github.com/rust-lang/crates.io-index)",
++ "cooklang 0.17.0",
+  "cooklang-find",
+  "minijinja",
+  "serde",
