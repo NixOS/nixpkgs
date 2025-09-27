@@ -3,6 +3,7 @@
   mkKdeDerivation,
   replaceVars,
   openssl,
+  pam,
   pkg-config,
   qtwayland,
   freerdp,
@@ -19,6 +20,8 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtwayland
+
     freerdp
+    pam
   ];
 }
