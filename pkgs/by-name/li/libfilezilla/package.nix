@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation {
   pname = "libfilezilla";
-  version = "0.49.0";
+  version = "0.51.1";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/libfilezilla/trunk";
-    rev = "11192";
-    hash = "sha256-fm1cenGwYcPz0TtMzbPXrZA7nAzwo8toBNA9cW2Gnh0=";
+    rev = "11305";
+    hash = "sha256-s+KeMlKJMz88lQ6d3dpcgZhCkcPW0cHNHALteMWLhpk=";
   };
 
   nativeBuildInputs = [
