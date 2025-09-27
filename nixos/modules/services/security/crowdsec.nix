@@ -9,19 +9,19 @@ let
 
   rootDir = "/var/lib/crowdsec";
   dataDir = "${rootDir}/data";
-  confDir = "/etc/crowdsec/";
+  confDir = "/etc/crowdsec";
   confFile = "${confDir}/config.yaml";
-  hubDir = "${confDir}/hub/";
-  notificationsDir = "${confDir}/notifications/";
-  pluginDir = "${confDir}/plugins/";
-  parsersDir = "${confDir}/parsers/";
-  localPostOverflowsDir = "${confDir}/postoverflows/";
-  localPostOverflowsS01WhitelistDir = "${localPostOverflowsDir}/s01-whitelist/";
-  localScenariosDir = "${confDir}/scenarios/";
-  localParsersS00RawDir = "${parsersDir}/s00-raw/";
-  localParsersS01ParseDir = "${parsersDir}/s01-parse/";
-  localParsersS02EnrichDir = "${parsersDir}/s02-enrich/";
-  localContextsDir = "${confDir}/contexts/";
+  hubDir = "${confDir}/hub";
+  notificationsDir = "${confDir}/notifications";
+  pluginDir = "${confDir}/plugins";
+  parsersDir = "${confDir}/parsers";
+  localPostOverflowsDir = "${confDir}/postoverflows";
+  localPostOverflowsS01WhitelistDir = "${localPostOverflowsDir}/s01-whitelist";
+  localScenariosDir = "${confDir}/scenarios";
+  localParsersS00RawDir = "${parsersDir}/s00-raw";
+  localParsersS01ParseDir = "${parsersDir}/s01-parse";
+  localParsersS02EnrichDir = "${parsersDir}/s02-enrich";
+  localContextsDir = "${confDir}/contexts";
 
 in
 {
@@ -540,17 +540,17 @@ in
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
         }"
       ]
+      ++ lib.optionals (cfg.settings.general.api.server.online_client.credentials_path != null) [
+        ''
+          if ! ${lib.getExe pkgs.gnugrep} -q password "${cfg.settings.general.api.server.online_client.credentials_path}";  then
+            ${lib.getExe cscli} capi register
+          fi
+        ''
+      ]
       ++ lib.optionals (cfg.settings.general.api.server.enable) [
         ''
           if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
             ${lib.getExe cscli} machine add "${cfg.name}" --auto
-          fi
-        ''
-      ]
-      ++ lib.optionals (cfg.settings.general.api.server.online_client.credentials_path != null) [
-        ''
-          if ! ${lib.getExe pkgs.gnugrep} -q password "${cfg.settings.general.api.server.online_client.credentials_path}" ]; then
-            ${lib.getExe cscli} capi register
           fi
         ''
       ]
@@ -584,18 +584,18 @@ in
           log_media = "stdout";
         };
         config_paths = {
-          config_dir = lib.strings.normalizePath confDir;
-          data_dir = lib.strings.normalizePath dataDir;
+          config_dir = confDir;
+          data_dir = dataDir;
           simulation_path = simulationFile;
-          hub_dir = lib.strings.normalizePath hubDir;
-          index_path = lib.strings.normalizePath "${confDir}/hub/.index.json";
-          notification_dir = lib.strings.normalizePath notificationsDir;
-          plugin_dir = lib.strings.normalizePath pluginDir;
-          pattern_dir = lib.strings.normalizePath patternsDir;
+          hub_dir = hubDir;
+          index_path = "${confDir}/hub/.index.json";
+          notification_dir = notificationsDir;
+          plugin_dir = pluginDir;
+          pattern_dir = patternsDir;
         };
         db_config = {
           type = lib.mkDefault "sqlite";
-          db_path = lib.mkDefault (lib.strings.normalizePath "${dataDir}/crowdsec.db");
+          db_path = lib.mkDefault "${dataDir}/crowdsec.db";
           use_wal = lib.mkDefault true;
         };
         crowdsec_service = {
@@ -604,7 +604,7 @@ in
         };
         api = {
           client = {
-            credentials_path = lib.mkDefault (lib.strings.normalizePath "${confDir}/local_api_credentials.yaml");
+            credentials_path = lib.mkDefault "${confDir}/local_api_credentials.yaml";
           };
           server = {
             enable = lib.mkDefault true;
