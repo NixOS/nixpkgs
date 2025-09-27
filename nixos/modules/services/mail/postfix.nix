@@ -235,7 +235,7 @@ let
         ""
       ];
 
-      masterCf = lib.mapAttrsToList (lib.const (lib.getAttr "rawEntry")) cfg.settings.master;
+      masterCf = lib.mapAttrsToList (_: (lib.getAttr "rawEntry")) cfg.settings.master;
 
       # A list of the maximum width of the columns across all lines and labels
       maxWidths =
@@ -254,14 +254,14 @@ let
           ]
           ++ (map (l: lib.init l ++ [ "" ]) masterCf);
         in
-        lib.foldr foldLine (lib.genList (lib.const 0) (lib.length labels)) lines;
+        lib.foldr foldLine (lib.genList (_: 0) (lib.length labels)) lines;
 
       # Pad a string with spaces from the right (opposite of fixedWidthString).
       pad =
         width: str:
         let
           padWidth = width - lib.stringLength str;
-          padding = lib.concatStrings (lib.genList (lib.const " ") padWidth);
+          padding = lib.concatStrings (lib.genList (_: " ") padWidth);
         in
         str + lib.optionalString (padWidth > 0) padding;
 
@@ -272,7 +272,7 @@ let
 
       formattedLabels =
         let
-          sep = "# " + lib.concatStrings (lib.genList (lib.const "=") (fullWidth + 5));
+          sep = "# " + lib.concatStrings (lib.genList (_: "=") (fullWidth + 5));
           lines = [
             sep
             (formatLine labels)

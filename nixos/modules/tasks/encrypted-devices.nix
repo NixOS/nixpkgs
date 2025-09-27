@@ -23,7 +23,7 @@ let
     else
       filter (dev: dev.encrypted.keyFile == null) encDevs;
 
-  anyEncrypted = foldr (j: v: v || j.encrypted.enable) false encDevs;
+  anyEncrypted = any (j: j.encrypted.enable) encDevs;
 
   encryptedFSOptions = {
 

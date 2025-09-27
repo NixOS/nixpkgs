@@ -1246,7 +1246,7 @@ in
 
     boot.initrd.systemd.services =
       let
-        devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices;
+        devicesWithClevis = removeAttrs luks.devices (attrNames clevis.devices);
       in
       mkIf (clevis.enable && systemd.enable) (
         (mapAttrs' (

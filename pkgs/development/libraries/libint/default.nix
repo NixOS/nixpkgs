@@ -73,31 +73,19 @@ assert (eri2Deriv >= 0 && eri2Deriv <= 4);
 assert (eri3Deriv >= 0 && eri3Deriv <= 4);
 
 # Ensure valid arguments for generated angular momenta in ERI derivatives are used.
-assert (
-  builtins.length eriAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eriAm)
-);
-assert (
-  builtins.length eri3Am == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri3Am)
-);
-assert (
-  builtins.length eri2Am == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri2Am)
-);
+assert (builtins.length eriAm == eriDeriv + 1 && builtins.all (a: a <= maxAm && a >= 0) eriAm);
+assert (builtins.length eri3Am == eriDeriv + 1 && builtins.all (a: a <= maxAm && a >= 0) eri3Am);
+assert (builtins.length eri2Am == eriDeriv + 1 && builtins.all (a: a <= maxAm && a >= 0) eri2Am);
 
 # Ensure valid arguments for generated angular momenta in optimised ERI derivatives are used.
 assert (
-  builtins.length eriOptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eriOptAm)
+  builtins.length eriOptAm == eriDeriv + 1 && builtins.all (a: a <= maxAm && a >= 0) eriOptAm
 );
 assert (
-  builtins.length eri3OptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri3OptAm)
+  builtins.length eri3OptAm == eriDeriv + 1 && builtins.all (a: a <= maxAm && a >= 0) eri3OptAm
 );
 assert (
-  builtins.length eri2OptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri2OptAm)
+  builtins.length eri2OptAm == eriDeriv + 1 && builtins.all (a: a <= maxAm && a >= 0) eri2OptAm
 );
 
 # Ensure a valid derivative order for one-electron integrals

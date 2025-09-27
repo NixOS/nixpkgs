@@ -35,9 +35,7 @@ let
       }) supportedDevices
     );
 
-  unsupportedDeviceIds = lib.filterAttrs (
-    name: value: !(lib.hasAttr name supportedDeviceIds)
-  ) deviceIds;
+  unsupportedDeviceIds = lib.removeAttrs deviceIds (lib.attrNames supportedDeviceIds);
 
   componentHashes = {
     "arria_lite" = "sha256-PNoc15Y5h+2bxhYFIxkg1qVAsXIX3IMfEQSdPLVNUp4=";

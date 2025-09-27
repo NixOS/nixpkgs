@@ -137,7 +137,7 @@ let
     addresses:
     let
       splitAddress = addr: strings.splitString ":" addr;
-      extractPort = addr: builtins.foldl' (a: b: b) "" (splitAddress addr);
+      extractPort = addr: last (splitAddress addr);
     in
     builtins.map (address: strings.toInt (extractPort address)) addresses;
 

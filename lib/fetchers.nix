@@ -3,7 +3,7 @@
 let
   commonH = hashTypes: rec {
     hashNames = [ "hash" ] ++ hashTypes;
-    hashSet = lib.genAttrs hashNames (lib.const { });
+    hashSet = lib.genAttrs hashNames (_: { });
   };
 
   fakeH = {

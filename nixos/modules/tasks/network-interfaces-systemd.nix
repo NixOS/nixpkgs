@@ -21,8 +21,8 @@ let
   dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
 
   slaves =
-    concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
-    ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
+    concatMap (bond: bond.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (bridge: bridge.interfaces) (attrValues cfg.bridges)
     ++ map (sit: sit.dev) (attrValues cfg.sits)
     ++ map (ipip: ipip.dev) (attrValues cfg.ipips)
     ++ map (gre: gre.dev) (attrValues cfg.greTunnels)
@@ -347,7 +347,7 @@ in
                         driverOpt:
                         assertTrace (elem driverOpt (knownOptions ++ unknownOptions))
                           "The bond.driverOption `${driverOpt}` cannot be mapped to the list of known networkd bond options. Please add it to the mapping above the assert or to `unknownOptions` should it not exist in networkd."
-                      ) (mapAttrsToList (k: _: k) do);
+                      ) (attrNames do);
                       "";
                     # get those driverOptions that have been set
                     filterSystemdOptions = filterAttrs (sysDOpt: kOpts: any (kOpt: do ? ${kOpt}) kOpts.optNames);
