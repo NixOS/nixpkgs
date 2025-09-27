@@ -12958,8 +12958,6 @@ with pkgs;
 
   tagainijisho = libsForQt5.callPackage ../applications/office/tagainijisho { };
 
-  tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
-
   telegram-desktop =
     kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop
       {
