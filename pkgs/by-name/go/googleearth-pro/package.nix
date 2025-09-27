@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   freetype,
   glib,
@@ -38,7 +37,7 @@ let
     else
       throw "Unsupported system ${stdenv.hostPlatform.system} ";
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "googleearth-pro";
   version = "7.3.6.10201";
 
