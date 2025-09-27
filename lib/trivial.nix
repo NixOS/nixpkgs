@@ -771,6 +771,8 @@ in
   */
   importTOML = path: builtins.fromTOML (builtins.readFile path);
 
+  inherit (lib.ron) importRON;
+
   /**
     `warn` *`message`* *`value`*
 
