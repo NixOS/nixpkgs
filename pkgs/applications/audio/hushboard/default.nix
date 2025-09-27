@@ -12,12 +12,14 @@
   six,
   wrapGAppsHook3,
   xlib,
+  nix-update-script,
+  setuptools,
 }:
 
 buildPythonApplication {
   pname = "hushboard";
   version = "unstable-2021-03-17";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
@@ -25,6 +27,8 @@ buildPythonApplication {
     rev = "c16611c539be111891116a737b02c5fb359ad1fc";
     sha256 = "06jav6j0bsxhawrq31cnls8zpf80fpwk0cak5s82js6wl4vw2582";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -62,15 +66,21 @@ buildPythonApplication {
     cp hushboard-512.png $out/share/icons/hicolor/512x512/apps/hushboard.png
   '';
 
-  # There are no tests
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  # no tests
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [
+    "hushboard"
+  ];
+
+  meta = {
     homepage = "https://kryogenix.org/code/hushboard/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ keysmashes ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ keysmashes ];
   };
 }
