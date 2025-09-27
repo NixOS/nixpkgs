@@ -3,7 +3,7 @@
 callPackage ./generic.nix (
   args
   // {
-    version = "0.3.4";
-    sha256 = "0xp8mcfyi5nmb5a2zi5ibmyshxkb1zv1dgmnyn413m7ahgdx8mfg";
+    version = "0.4.2";
+    sha256 = "iHWwll/jPeYriQ9s15O+f6/kGk5VLtv2QfH+1eu/Re0=";
   }
 )
