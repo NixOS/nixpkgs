@@ -12,7 +12,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "creduce";
   version = "2.10.0-unstable-2024-06-01";
 

@@ -42,7 +42,7 @@ let
     inherit flashbackEnabled nixos-background-dark nixos-background-light;
   };
 
-  nixos-background-info = pkgs.writeTextFile rec {
+  nixos-background-info = pkgs.writeTextFile {
     name = "nixos-background-info";
     text = ''
       <?xml version="1.0"?>

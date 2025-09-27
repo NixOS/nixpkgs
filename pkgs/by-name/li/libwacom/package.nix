@@ -47,12 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     libevdev
     libgudev
-    (python3.withPackages (
-      pp: with pp; [
-        pp.libevdev
-        pp.pyudev
-      ]
-    ))
+    (python3.withPackages (pp: [
+      pp.libevdev
+      pp.pyudev
+    ]))
   ];
 
   mesonFlags = [

@@ -62,6 +62,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/goobook/goobook";
     changelog = "https://gitlab.com/goobook/goobook/-/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

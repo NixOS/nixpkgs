@@ -223,13 +223,13 @@ let
     translations = importVariant "translations.nix";
     deps = (importVariant "deps.nix") ++ [
       # TODO: Why is this needed?
-      (rec {
+      rec {
         name = "unowinreg.dll";
         url = "https://dev-www.libreoffice.org/extern/${md5name}";
         sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
         md5 = "185d60944ea767075d27247c3162b3bc";
         md5name = "${md5}-${name}";
-      })
+      }
     ];
   };
   srcs = {

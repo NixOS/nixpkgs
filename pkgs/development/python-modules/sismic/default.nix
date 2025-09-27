@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Sismic Interactive Statechart Model Interpreter and Checker";
     homepage = "https://github.com/AlexandreDecan/sismic";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

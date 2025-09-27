@@ -22,7 +22,7 @@ let
       environments =
         let
           inherit python;
-          pythonEnv = python.withPackages (ps: with ps; [ ]);
+          pythonEnv = python.withPackages (ps: [ ]);
           pythonVirtualEnv =
             if python.isPy3k then
               python.withPackages (ps: with ps; [ virtualenv ])

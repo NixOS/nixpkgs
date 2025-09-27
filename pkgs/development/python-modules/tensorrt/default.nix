@@ -12,7 +12,7 @@ let
   pyVersion = "${lib.versions.major python.version}${lib.versions.minor python.version}";
   buildVersion = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tensorrt";
   version = buildVersion;
 

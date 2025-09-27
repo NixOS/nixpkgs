@@ -38,7 +38,7 @@ let
     }@args:
     makeTest (
       recursiveUpdate
-        rec {
+        {
           name = tested.name;
 
           meta = {

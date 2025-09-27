@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Client for Software Heritage Web applications, via their APIs";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-web-client";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

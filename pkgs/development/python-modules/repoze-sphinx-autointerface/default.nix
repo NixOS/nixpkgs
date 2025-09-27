@@ -47,7 +47,7 @@ buildPythonPackage rec {
     description = "Auto-generate Sphinx API docs from Zope interfaces";
     changelog = "https://github.com/repoze/repoze.sphinx.autointerface/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     # https://github.com/repoze/repoze.sphinx.autointerface/issues/21
     broken = versionAtLeast sphinx.version "7.2";
   };

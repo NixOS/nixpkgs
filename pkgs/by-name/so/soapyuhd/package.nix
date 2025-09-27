@@ -9,7 +9,7 @@
   soapysdr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soapyuhd";
   version = "0.4.1-unstable-2025-02-13";
 

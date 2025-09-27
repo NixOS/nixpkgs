@@ -216,7 +216,7 @@ stdenv.mkDerivation {
   ++ lib.optional fribidiSupport "--enable-fribidi"
   ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) "--enable-vidix"
   ++ lib.optional stdenv.hostPlatform.isLinux "--enable-fbdev"
-  ++ lib.optionals (crossBuild) [
+  ++ lib.optionals crossBuild [
     "--enable-cross-compile"
     "--disable-vidix-pcidb"
     "--with-vidix-drivers=no"

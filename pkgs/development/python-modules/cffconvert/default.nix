@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/citation-file-format/cffconvert";
     license = lib.licenses.asl20;
     mainProgram = "cffconvert";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

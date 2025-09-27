@@ -283,7 +283,7 @@ let
         'apps_paths' => [
           ${lib.concatStrings (lib.mapAttrsToList mkAppStoreConfig appStores)}
         ],
-        ${lib.optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
+        ${lib.optionalString showAppStoreSetting "'appstoreenabled' => ${renderedAppStoreSetting},"}
         ${lib.optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
         ${lib.optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
         ${lib.optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}

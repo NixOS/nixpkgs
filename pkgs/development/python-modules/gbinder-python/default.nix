@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/erfanoabdi/gbinder-python";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

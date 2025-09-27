@@ -15,7 +15,7 @@
   apispec,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyipv8";
   version = "3.0.2197-unstable-2025-07-29";
   format = "setuptools";

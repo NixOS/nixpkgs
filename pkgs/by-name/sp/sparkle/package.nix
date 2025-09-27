@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/xishang0128/sparkle";
     license = lib.licenses.gpl3Plus;
     mainProgram = "sparkle";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

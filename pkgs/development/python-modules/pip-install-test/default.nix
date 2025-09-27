@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "Minimal stub package to test success of pip install";
     homepage = "https://pypi.org/project/pip-install-test";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

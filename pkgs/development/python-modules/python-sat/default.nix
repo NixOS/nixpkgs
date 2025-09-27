@@ -6,7 +6,7 @@
   pypblib,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-sat";
   version = "0.1.8.dev20";
   format = "setuptools";

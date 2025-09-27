@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     mainProgram = "dictu";
     homepage = "https://dictu-lang.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dictu.x86_64-darwin
   };

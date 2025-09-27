@@ -336,7 +336,7 @@ in
         ConfigurationDirectory = "bind";
         ReadWritePaths = [
           (lib.mapAttrsToList (
-            name: config: if (lib.hasPrefix "/" config.file) then ("-${dirOf config.file}") else ""
+            name: config: if (lib.hasPrefix "/" config.file) then "-${dirOf config.file}" else ""
           ) cfg.zones)
           cfg.directory
         ];

@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
     description = "High-performance and strong-extensibility Golang RPC framework";
     homepage = "https://github.com/cloudwego/kitex";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "kitex";
   };
 })

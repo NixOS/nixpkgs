@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage {
     description = "Colorful, configurable xxd";
     mainProgram = "0x";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

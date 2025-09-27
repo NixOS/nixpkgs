@@ -52,8 +52,8 @@ let
       crcmod
       grpcio
     ]
-    ++ lib.optional (with-gce) google-compute-engine
-    ++ lib.optional (with-numpy) numpy
+    ++ lib.optional with-gce google-compute-engine
+    ++ lib.optional with-numpy numpy
   );
 
   data = import ./data.nix { };

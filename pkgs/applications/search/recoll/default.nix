@@ -164,9 +164,9 @@ mkDerivation rec {
       if [[ ! "$f" =~ \.zip$ ]]; then
   ''
   + lib.concatStrings (
-    lib.mapAttrsToList (k: v: (''
+    lib.mapAttrsToList (k: v: ''
       substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
-    '')) filters
+    '') filters
   )
   + ''
         substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'

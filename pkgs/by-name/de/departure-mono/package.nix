@@ -32,6 +32,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://departuremono.com/";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

@@ -38,9 +38,9 @@ appimageTools.wrapType2 {
   '';
 
   extraPkgs =
-    pkgs: with pkgs; ([
+    pkgs: with pkgs; [
       xorg.libxkbfile
-    ]);
+    ];
 
   meta = {
     homepage = "https://wooting.io/wootility";

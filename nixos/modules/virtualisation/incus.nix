@@ -258,10 +258,10 @@ in
         };
       };
 
-      socketActivation = lib.mkEnableOption (''
+      socketActivation = lib.mkEnableOption ''
         socket-activation for starting incus.service. Enabling this option
         will stop incus.service from starting automatically on boot.
-      '');
+      '';
 
       startTimeout = lib.mkOption {
         type = lib.types.ints.unsigned;

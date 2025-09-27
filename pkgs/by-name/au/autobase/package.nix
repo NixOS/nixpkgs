@@ -33,7 +33,7 @@ buildNpmPackage (finalAttrs: {
     description = "Concise multiwriter for data structures with Hypercore";
     homepage = "https://github.com/holepunchto/autobase";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
 })

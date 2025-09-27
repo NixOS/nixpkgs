@@ -32,7 +32,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-greeter";
   # To allow overriding last-session-type.
   # nixpkgs-update: no auto update

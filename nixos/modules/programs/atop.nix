@@ -16,7 +16,7 @@ in
 
   options = {
 
-    programs.atop = rec {
+    programs.atop = {
 
       enable = lib.mkEnableOption "Atop, a tool for monitoring system resources";
 

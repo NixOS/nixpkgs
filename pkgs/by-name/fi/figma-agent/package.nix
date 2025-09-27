@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
     description = "Figma Agent for Linux with a focus on performance";
     homepage = "https://github.com/neetly/figma-agent-linux";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "figma-agent";
     platforms = lib.platforms.linux;
   };

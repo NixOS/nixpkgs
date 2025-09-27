@@ -57,6 +57,6 @@ buildGoModule rec {
     homepage = "https://roadrunner.dev";
     license = lib.licenses.mit;
     mainProgram = "rr";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

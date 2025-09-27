@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
     "VERBOSE=1"
   ]
-  ++ lib.optionals (isCross) [
+  ++ lib.optionals isCross [
     "CROSS=${stdenv.cc.targetPrefix}"
   ];
 

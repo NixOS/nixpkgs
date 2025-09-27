@@ -235,7 +235,7 @@ let
                     tries=3
                     success=false
                     while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
-                      ${systemd}/bin/systemd-ask-password ${lib.optionalString cfgZfs.useKeyringForCredentials ("--keyname=zfs-$ds")} --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
+                      ${systemd}/bin/systemd-ask-password ${lib.optionalString cfgZfs.useKeyringForCredentials "--keyname=zfs-$ds"} --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
                         && success=true \
                         || tries=$((tries - 1))
                     done

@@ -40,7 +40,7 @@ appimageTools.wrapType2 {
     description = "Database development tool that allows you to simultaneously connect to many databases";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

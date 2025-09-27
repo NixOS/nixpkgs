@@ -540,7 +540,7 @@ rec {
       # https://github.com/gucci-on-fleek/context-packaging
       context_packaging_release = "2025-06-12-14-21-B";
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "luametatex";
       version = "2.11.07";
 

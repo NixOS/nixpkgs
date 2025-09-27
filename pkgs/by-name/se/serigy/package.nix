@@ -60,6 +60,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "serigy";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

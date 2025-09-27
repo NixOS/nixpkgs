@@ -55,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "distroshelf";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

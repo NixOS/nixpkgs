@@ -7,7 +7,7 @@
   kdePackages,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "nordic";
   version = "2.2.0-unstable-2025-05-05";
 

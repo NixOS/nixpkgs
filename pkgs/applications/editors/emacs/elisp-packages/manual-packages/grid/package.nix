@@ -19,6 +19,6 @@ melpaBuild {
     homepage = "https://github.com/ichernyshovvv/grid.el";
     description = "Library to put text data into boxes and manipulate them";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

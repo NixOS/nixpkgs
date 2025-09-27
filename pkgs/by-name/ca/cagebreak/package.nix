@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/project-repo/cagebreak";
     description = "Wayland tiling compositor inspired by ratpoison";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     changelog = "https://github.com/project-repo/cagebreak/blob/${finalAttrs.version}/Changelog.md";
     mainProgram = "cagebreak";

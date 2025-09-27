@@ -708,7 +708,7 @@ optionalAttrs allowAliases aliases
               description = "Elixir value";
             };
         in
-        attrsOf (attrsOf (valueType));
+        attrsOf (attrsOf valueType);
 
       lib =
         let
