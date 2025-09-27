@@ -17,18 +17,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t5mQmrBrXc1wl5PRCdEHZvIEMxeCokrd0x4YhZU+qE0=";
+    hash = "sha256-KkRCMS/g+xCQyVh1qB/kf5Seqrn2McYBaUHqKOeigCA=";
   };
 
   patches = [
     ./patches/use-local-font.patch
-    ./patches/fix-migrations-path.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
   postPatch = ''
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     fetcherVersion = 1;
-    hash = "sha256-8NdYEcslo9dxSyJbNWzO81/MrDLO+QyrhQN1hwM0/j4=";
+    hash = "sha256-74jLff9v2+qc09b8ArooUX6qpFt2tDNW3ZayHPcDVj0=";
   };
   buildPhase = ''
     runHook preBuild
@@ -74,6 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "Building apps/cli"
     pushd apps/cli
+    pnpm run build
+    popd
+
+    echo "Building apps/workers"
+    pushd apps/workers
     pnpm run build
     popd
 
