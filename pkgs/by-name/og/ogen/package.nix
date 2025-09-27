@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "ogen";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "ogen-go";
     repo = "ogen";
     tag = "v${version}";
-    hash = "sha256-w3h65MNXBgsH8PCHfoPqY+XNI6TMbLUAMI4Y3WWLEJM=";
+    hash = "sha256-gs18lfInbmW5PePGN5+KfDaSqVZK/y+yK0XxViDXrek=";
   };
 
-  vendorHash = "sha256-PQ2ZrigS9jZY1oL3Dsuc2RZwedZLzLKUqhMYfWiZ854=";
+  vendorHash = "sha256-9ZuFGNC/mFtFPiKjl8RNnmPLLH9RF6g27owG8VNQWug=";
 
   patches = [ ./modify-version-handling.patch ];
 
