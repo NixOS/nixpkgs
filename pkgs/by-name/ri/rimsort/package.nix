@@ -7,6 +7,7 @@
   makeBinaryWrapper,
 
   makeDesktopItem,
+  copyDesktopItems,
   replaceVars,
 
   todds,
@@ -15,15 +16,16 @@
 }:
 let
   pname = "rimsort";
-  version = "1.0.30";
+  version = "1.0.39";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
     rev = "v${version}";
-    hash = "sha256-f1wYoBC0EbkvYNJHkVuoMukJZMY7eNjCIzJra7/hpLs=";
+    hash = "sha256-p9+8KlqADCq3WtFAvKpemhJCVnk3r4MRAQxjJEtI9bU=";
     fetchSubmodules = true;
   };
+
   steamworksSrc = fetchzip {
     url = "https://web.archive.org/web/20250527013243/https://partner.steamgames.com/downloads/steamworks_sdk_162.zip"; # Steam sometimes requires auth to download.
     hash = "sha256-yDA92nGj3AKTNI4vnoLaa+7mDqupQv0E4YKRRUWqyZw=";
@@ -70,6 +72,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -133,7 +136,7 @@ stdenv.mkDerivation {
       name = "RimSort";
       desktopName = "RimSort";
       exec = "rimsort";
-      icon = "io.github.rimsort.rimsort";
+      icon = "rimsort.png";
       comment = "RimWorld Mod Manager";
       categories = [ "Game" ];
     })
@@ -155,10 +158,12 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --set RIMSORT_DISABLE_UPDATER 1
 
-    install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/io.github.rimsort.rimsort
+    install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/rimsort.png
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open source mod manager for the video game RimWorld";
