@@ -278,13 +278,35 @@ in
         '';
       };
 
+      defaultInterfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "eno1" ];
+        description = ''
+          Restricts the {option}`networking.firewall.allowed*` rules to a
+          specific list of network interfaces.
+
+          If left empty, the rules will apply to all interfaces.
+        '';
+      };
+
       allInterfaces = lib.mkOption {
         internal = true;
         visible = false;
-        default = {
-          default = lib.mapAttrs (name: value: cfg.${name}) commonOptions;
-        }
-        // cfg.interfaces;
+        default =
+          let
+            defaultInterface = lib.optionalAttrs (cfg.defaultInterfaces == [ ]) {
+              default = lib.mapAttrs (option: _: cfg.${option}) commonOptions;
+            };
+
+            defaultInterfaces = lib.genAttrs cfg.defaultInterfaces (
+              interface:
+              lib.mapAttrs (
+                option: _: cfg.${option} ++ cfg.interfaces.${interface}.${option} or [ ]
+              ) commonOptions
+            );
+          in
+          defaultInterface // cfg.interfaces // defaultInterfaces;
         type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
         description = ''
           All open ports.
