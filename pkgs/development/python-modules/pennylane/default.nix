@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  doCheck = false;
+  doCheck = true;
 
   pythonImportsCheck = [ "pennylane" ];
 
