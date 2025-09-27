@@ -43,7 +43,7 @@
   rubiks,
   blas,
   lapack,
-  flint3,
+  flint,
   gmp,
   mpfr,
   zlib,
@@ -167,7 +167,7 @@ writeTextFile rec {
         export LDFLAGS='${
           lib.concatStringsSep " " (
             map (pkg: "-L${pkg}/lib") [
-              flint3
+              flint
               gap
               glpk
               gmp
@@ -187,7 +187,7 @@ writeTextFile rec {
               singular
               gmp.dev
               glpk
-              flint3
+              flint
               gap
               mpfr.dev
             ]

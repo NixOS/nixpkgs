@@ -503,7 +503,7 @@ let
       pkg-config
       gmp.dev
       mpfr.dev
-      flint3
+      flint
     ];
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
