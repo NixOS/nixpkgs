@@ -15,19 +15,10 @@
   fetchpatch,
   fetchFromGitHub,
   makeSetupHook,
-  makeWrapper,
-  bison,
-  cups ? null,
-  harfbuzz,
-  libGL,
-  perl,
   python3,
-  gstreamer,
-  gst-plugins-base,
-  gtk3,
-  dconf,
   llvmPackages_19,
   darwin,
+  buildPackages,
 
   # options
   developerBuild ? false,
@@ -58,6 +49,11 @@ let
         url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/81b14ae4eed038662b53cd20786fd5e0816279ec/community/qt5-qtbase/loongarch64.patch";
         hash = "sha256-BnpejF6/L73kVVts0R0/OMbVN8G4DXVFwBMJPLU9QbE=";
       })
+      ./qtbase.patch.d/0015-qtbase-cross-build.patch
+      (fetchpatch {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtbase/-/raw/6910758e1141f8ea65a8f2359ac30163d65bf6e2/debian/patches/cross_build_mysql.diff";
+        hash = "sha256-tzmmLmMXmeDwRVjdpWekDJvSkrIIlslC12HP7XPcm3E=";
+      })
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
@@ -65,6 +61,7 @@ let
       ./qtdeclarative-default-disable-qmlcache.patch
       # add version specific QML import path
       ./qtdeclarative-qml-paths.patch
+      ./qtdeclarative-cross-build.patch
     ];
     qtlocation = lib.optionals stdenv.cc.isClang [
       # Fix build with Clang 16
@@ -200,6 +197,7 @@ let
       # See: https://bugreports.qt.io/browse/QTBUG-124375
       # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
       ./qtwebengine-ninja-1.12.patch
+      ./qtwebengine-cross-build.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
@@ -235,12 +233,27 @@ let
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
       ./qtwebkit-cstdint.patch
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/84f3c61c46bce99bfbd70d8c202e022d62f2ea9a/f/qtwebkit-icu76.patch";
+        sha256 = "sha256-Z+ot7R5Dy+F08FbcXzN4MB2ttxLg0I0P8uVErpbFiu4=";
+      })
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/84f3c61c46bce99bfbd70d8c202e022d62f2ea9a/f/webkit-offlineasm-warnings-ruby27.patch";
+        sha256 = "sha256-g+qkAJD78lPdZzZZ910SZqk0yJlJIBZh9ue4ClRD5L4=";
+      })
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/84f3c61c46bce99bfbd70d8c202e022d62f2ea9a/f/qtwebkit-fix-build-gcc14.patch";
+        sha256 = "sha256-K7TgGux34dMN0Mnm4EsJhNKLdy1VdKTAE3HGRD8KARU=";
+      })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
-    qttools = [ ./qttools.patch ];
+    qttools = [
+      ./qttools.patch
+      ./qttools-cross-build.patch
+    ];
   };
 
   addPackages =
@@ -253,14 +266,15 @@ let
         mkDerivation = (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
       };
 
-      callPackage = self.newScope {
-        inherit
-          qtCompatVersion
-          qtModule
-          srcs
-          stdenv
-          ;
+      qtbase-bootstrap = buildPackages.qt5.qtbase.override { bootstrapBuild = true; };
+      # qtbase won't be spliced here, but that's fine as it's only a buildInput
+      qttools-bootstrap = buildPackages.qt5.qttools.override {
+        qtbase = qtbase-bootstrap;
+        qtdeclarative = null;
       };
+
+      #                              ↓Things available only to packages in the scope↓
+      callPackage = self.newScope { inherit qtbase-bootstrap qttools-bootstrap stdenv; };
     in
     {
 
@@ -278,14 +292,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        inherit
-          bison
-          cups
-          harfbuzz
-          libGL
-          ;
         withGtk3 = !stdenv.hostPlatform.isDarwin;
-        inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };
 
@@ -301,9 +308,7 @@ let
       qtlocation = callPackage ../modules/qtlocation.nix { };
       qtlottie = callPackage ../modules/qtlottie.nix { };
       qtmacextras = callPackage ../modules/qtmacextras.nix { };
-      qtmultimedia = callPackage ../modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base;
-      };
+      qtmultimedia = callPackage ../modules/qtmultimedia.nix { };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix { };
       qtpim = callPackage ../modules/qtpim.nix { };
       qtpositioning = callPackage ../modules/qtpositioning.nix { };
@@ -332,7 +337,6 @@ let
         stdenv = if stdenv.cc.isClang then llvmPackages_19.stdenv else stdenv;
         inherit (srcs.qtwebengine) version;
         inherit (darwin) bootstrap_cmds;
-        python = python3;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
       qtwebkit = callPackage ../modules/qtwebkit.nix { };
@@ -380,16 +384,10 @@ let
           );
 
       qmake = callPackage (
-        { qtbase }:
+        { qtbase-bootstrap }:
         makeSetupHook {
           name = "qmake-hook";
-          ${
-            if stdenv.buildPlatform == stdenv.hostPlatform then
-              "propagatedBuildInputs"
-            else
-              "depsTargetTargetPropagated"
-          } =
-            [ qtbase.dev ];
+          propagatedBuildInputs = [ qtbase-bootstrap.qmake ];
           substitutions = {
             inherit debug;
             fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
@@ -405,34 +403,19 @@ let
         }:
         makeSetupHook {
           name = "wrap-qt5-apps-hook";
-          propagatedBuildInputs = [
+          propagatedBuildInputs = [ makeBinaryWrapper ];
+          depsTargetTargetPropagated = [
             qtbase.dev
-            makeBinaryWrapper
           ]
           ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
         } ../hooks/wrap-qt-apps-hook.sh
       ) { };
     };
 
-  baseScope = makeScopeWithSplicing' {
+  finalScope = makeScopeWithSplicing' {
     otherSplices = generateSplicesForMkScope "qt5";
     f = addPackages;
   };
 
-  bootstrapScope = baseScope.overrideScope (
-    final: prev: {
-      qtbase = prev.qtbase.override { qttranslations = null; };
-      qtdeclarative = null;
-    }
-  );
-
-  finalScope = baseScope.overrideScope (
-    final: prev: {
-      # qttranslations causes eval-time infinite recursion when
-      # cross-compiling; disabled for now.
-      qttranslations =
-        if stdenv.buildPlatform == stdenv.hostPlatform then bootstrapScope.qttranslations else null;
-    }
-  );
 in
 finalScope

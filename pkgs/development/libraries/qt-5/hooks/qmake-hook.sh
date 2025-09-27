@@ -1,5 +1,15 @@
 . @fix_qmake_libtool@
 
+# Split qmakeFlags if it's not an array already (i.e. comes from a derivation
+# with __structuredAttrs disabled). This will be important later when we pass
+# it to qmake: qmakeFlags can contain file names and other options that must
+# be separate words in the command.
+local type=$(declare -p qmakeFlags)
+local typeArray='declare -a'
+if [[ "${type:0:${#typeArray}}" == "$typeArray" ]]; then
+    qmakeFlags=( ${qmakeFlags-} )
+fi
+
 qmakePrePhase() {
     # These flags must be added _before_ the flags specified in the derivation.
     prependToVar qmakeFlags \
