@@ -1,0 +1,177 @@
+Backported from <https://github.com/ceph/ceph/commit/68c72c5dff5fbe92bf399118860324dcdcec3b49>.
+
+Original author: steven <steven.chien@ed.ac.uk>
+
+diff --git i/systemd/ceph-crash.service.in w/systemd/ceph-crash.service.in
+index 8304dd61220bbe22ca01f277962bcc9557c18165..a3784f7fad6a9653a4449830cfb9c35a0bf04415 100644
+--- i/systemd/ceph-crash.service.in
++++ w/systemd/ceph-crash.service.in
+@@ -3,7 +3,7 @@ Description=Ceph crash dump collector
+ 
+ [Service]
+ Type=simple
+-ExecStart=/usr/bin/ceph-crash
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-crash
+ Restart=always
+ RestartSec=10
+ StartLimitInterval=10min
+diff --git i/systemd/ceph-exporter.service.in w/systemd/ceph-exporter.service.in
+index f4f6d05c4b4d47b171a4aa40cc33e5be7a54359c..94724407b18f349ecc815ccbb069fc3abd2eddef 100644
+--- i/systemd/ceph-exporter.service.in
++++ w/systemd/ceph-exporter.service.in
+@@ -7,7 +7,7 @@ Wants=network-online.target local-fs.target ceph.target ceph-mon.target
+ 
+ [Service]
+ ExecReload=/bin/kill -HUP $MAINPID
+-ExecStart=/usr/bin/ceph-exporter -f --id %i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-exporter -f --id %i --setuser ceph --setgroup ceph
+ LockPersonality=true
+ NoNewPrivileges=true
+ PrivateDevices=yes
+diff --git i/systemd/ceph-fuse@.service.in w/systemd/ceph-fuse@.service.in
+index 9c12c9ba4446690a122eff36cb8b34b0e4fecec7..fc549b53093e41a889762ceba78142ac94dbd643 100644
+--- i/systemd/ceph-fuse@.service.in
++++ w/systemd/ceph-fuse@.service.in
+@@ -8,7 +8,7 @@ PartOf=ceph-fuse.target
+ [Service]
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+-ExecStart=/usr/bin/ceph-fuse -f --cluster ${CLUSTER} %I
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-fuse -f --cluster ${CLUSTER} %I
+ LockPersonality=true
+ MemoryDenyWriteExecute=true
+ NoNewPrivileges=true
+diff --git i/systemd/ceph-immutable-object-cache@.service.in w/systemd/ceph-immutable-object-cache@.service.in
+index 62ff8dbd2729e1f3a0373ff5ceb554fd6085dace..00648ed3191453f24d148010062421cf0643f580 100644
+--- i/systemd/ceph-immutable-object-cache@.service.in
++++ w/systemd/ceph-immutable-object-cache@.service.in
+@@ -8,7 +8,7 @@ PartOf=ceph-immutable-object-cache.target
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+ ExecReload=/bin/kill -HUP $MAINPID
+-ExecStart=/usr/bin/ceph-immutable-object-cache -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-immutable-object-cache -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
+ LockPersonality=true
+ MemoryDenyWriteExecute=true
+ NoNewPrivileges=true
+diff --git i/systemd/ceph-mds@.service.in w/systemd/ceph-mds@.service.in
+index afa36702f9c0ab0257b7dbdfb161bd2b770d8713..49916f52762abd12a0605b92e824519d58c46fc4 100644
+--- i/systemd/ceph-mds@.service.in
++++ w/systemd/ceph-mds@.service.in
+@@ -9,7 +9,7 @@ Wants=network-online.target local-fs.target time-sync.target remote-fs-pre.targe
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+ ExecReload=/bin/kill -HUP $MAINPID
+-ExecStart=/usr/bin/ceph-mds -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-mds -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
+ LimitNOFILE=1048576
+ LimitNPROC=1048576
+ LockPersonality=true
+diff --git i/systemd/ceph-mgr@.service.in w/systemd/ceph-mgr@.service.in
+index 8fadc4746b3ad18c2c7082e3a4cb5f2159c19617..2af5a4affafd5fe7c8ce4aa93bf463b520ae45ba 100644
+--- i/systemd/ceph-mgr@.service.in
++++ w/systemd/ceph-mgr@.service.in
+@@ -9,7 +9,7 @@ Wants=network-online.target local-fs.target time-sync.target remote-fs-pre.targe
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+ ExecReload=/bin/kill -HUP $MAINPID
+-ExecStart=/usr/bin/ceph-mgr -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-mgr -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
+ LimitNOFILE=1048576
+ LimitNPROC=1048576
+ LockPersonality=true
+diff --git i/systemd/ceph-mon@.service.in w/systemd/ceph-mon@.service.in
+index 2eba83c3cc9bcc5dcfeefd8bc2491a0b13574b58..a9ab7b631d6e8f07f3d18dbe0e79bbe3840bd89a 100644
+--- i/systemd/ceph-mon@.service.in
++++ w/systemd/ceph-mon@.service.in
+@@ -13,7 +13,7 @@ Wants=network-online.target local-fs.target time-sync.target remote-fs-pre.targe
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+ ExecReload=/bin/kill -HUP $MAINPID
+-ExecStart=/usr/bin/ceph-mon -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-mon -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
+ LimitNOFILE=1048576
+ LimitNPROC=1048576
+ LockPersonality=true
+diff --git i/systemd/ceph-osd@.service.in w/systemd/ceph-osd@.service.in
+index 046500efb66b27d9d1af52b27e5cdca0bec50a28..c2b2093a7999ba530e105be3aec2988f482e38ad 100644
+--- i/systemd/ceph-osd@.service.in
++++ w/systemd/ceph-osd@.service.in
+@@ -9,7 +9,7 @@ Wants=network-online.target local-fs.target time-sync.target remote-fs-pre.targe
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+ ExecReload=/bin/kill -HUP $MAINPID
+-ExecStart=/usr/bin/ceph-osd -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/ceph-osd -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
+ ExecStartPre=@CMAKE_INSTALL_FULL_LIBEXECDIR@/ceph/ceph-osd-prestart.sh --cluster ${CLUSTER} --id %i
+ LimitNOFILE=1048576
+ LimitNPROC=1048576
+diff --git i/systemd/ceph-radosgw@.service.in w/systemd/ceph-radosgw@.service.in
+index b74747055065282bd2740da2c4afebc60c40d275..77a3aea6865907536c7485c8b58307f96131ebf5 100644
+--- i/systemd/ceph-radosgw@.service.in
++++ w/systemd/ceph-radosgw@.service.in
+@@ -8,7 +8,7 @@ Wants=network-online.target local-fs.target time-sync.target remote-fs-pre.targe
+ [Service]
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+-ExecStart=/usr/bin/radosgw -f --cluster ${CLUSTER} --name client.%i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/radosgw -f --cluster ${CLUSTER} --name client.%i --setuser ceph --setgroup ceph
+ LimitNOFILE=1048576
+ LimitNPROC=1048576
+ LockPersonality=true
+diff --git i/systemd/ceph-rbd-mirror@.service.in w/systemd/ceph-rbd-mirror@.service.in
+index 1057892dc99c25e45411cdf651d3c5e862979c35..5cc25f7e0af382dc22bf107ca5804ef36eb12145 100644
+--- i/systemd/ceph-rbd-mirror@.service.in
++++ w/systemd/ceph-rbd-mirror@.service.in
+@@ -8,7 +8,7 @@ PartOf=ceph-rbd-mirror.target
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+ ExecReload=/bin/kill -HUP $MAINPID
+-ExecStart=/usr/bin/rbd-mirror -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/rbd-mirror -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
+ LimitNOFILE=1048576
+ LimitNPROC=1048576
+ LockPersonality=true
+diff --git i/systemd/ceph-volume@.service w/systemd/ceph-volume@.service
+index c21002cecb93407176a1977df6ad0e4f95e60cc1..78bfc256c76621e07317b4478f6476900f4a7d0a 100644
+--- i/systemd/ceph-volume@.service
++++ w/systemd/ceph-volume@.service
+@@ -7,7 +7,7 @@ Wants=local-fs.target
+ Type=oneshot
+ KillMode=none
+ Environment=CEPH_VOLUME_TIMEOUT=10000
+-ExecStart=/bin/sh -c 'timeout $CEPH_VOLUME_TIMEOUT /usr/sbin/ceph-volume-systemd %i'
++ExecStart=/bin/sh -c 'timeout $CEPH_VOLUME_TIMEOUT @CMAKE_INSTALL_PREFIX@/sbin/ceph-volume-systemd %i'
+ TimeoutSec=0
+ 
+ [Install]
+diff --git i/systemd/cephfs-mirror@.service.in w/systemd/cephfs-mirror@.service.in
+index bed9d195302ba14c6efaa019ddc34c0637486d62..40f53d0e641faaa1e3f19b9b9825fbfe6d6d6456 100644
+--- i/systemd/cephfs-mirror@.service.in
++++ w/systemd/cephfs-mirror@.service.in
+@@ -7,7 +7,7 @@ PartOf=cephfs-mirror.target
+ [Service]
+ Environment=CLUSTER=ceph
+ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+-ExecStart=/usr/bin/cephfs-mirror --id %i --cluster ${CLUSTER} -f --setuser ceph --setgroup ceph
++ExecStart=@CMAKE_INSTALL_PREFIX@/cephfs-mirror --id %i --cluster ${CLUSTER} -f --setuser ceph --setgroup ceph
+ LimitNOFILE=1048576
+ LimitNPROC=1048576
+ LockPersonality=true
+diff --git i/systemd/rbdmap.service.in w/systemd/rbdmap.service.in
+index 6644508cf0dea9ffb617bcf55e37d9315109926a..2b365cf2aa04260f4dbfc38673fbba3f435d74e3 100644
+--- i/systemd/rbdmap.service.in
++++ w/systemd/rbdmap.service.in
+@@ -9,9 +9,9 @@ EnvironmentFile=-@SYSTEMD_ENV_FILE@
+ Environment=RBDMAPFILE=/etc/ceph/rbdmap
+ Type=oneshot
+ RemainAfterExit=yes
+-ExecStart=/usr/bin/rbdmap map
+-ExecReload=/usr/bin/rbdmap map
+-ExecStop=/usr/bin/rbdmap unmap-all
++ExecStart=@CMAKE_INSTALL_PREFIX@/rbdmap map
++ExecReload=@CMAKE_INSTALL_PREFIX@/rbdmap map
++ExecStop=@CMAKE_INSTALL_PREFIX@/rbdmap unmap-all
+ 
+ [Install]
+ WantedBy=multi-user.target
