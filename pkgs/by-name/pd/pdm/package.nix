@@ -19,6 +19,8 @@ let
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });
+      # pdm requires ...... -> ghostscript-with-X which is AGPL only
+      matplotlib = super.matplotlib.override ({ enableTk = false; });
       # pdm requires ...... -> jbig2dec which is AGPL only
       moto = super.moto.overridePythonAttrs (old: rec {
         doCheck = false;
