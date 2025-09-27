@@ -12,12 +12,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3007.7";
+  version = "3007.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WGEC38rCegqcCCb/gGve6YjkAooEzyqzFiq6nwsEAss=";
+    hash = "sha256-WfK1pIf9gyOeMaeNsAgrElCDOTEx2uENO5Cjs0h2meI=";
   };
 
   patches = [
