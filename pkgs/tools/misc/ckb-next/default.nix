@@ -12,24 +12,27 @@
   kmod,
   libXdmcp,
   qttools,
-  qtx11extras,
-  libdbusmenu,
   gnused,
   withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   quazip,
   udevCheckHook,
+  qtwayland,
+  wayland-protocols,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.6.2";
+let
+  rev = "4bf942dba5e73c2778ef797b6b8dd6b0239aca9a";
+in
+stdenv.mkDerivation {
+  version = "source-${builtins.substring 0 7 rev}";
   pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
-    rev = "v${version}";
-    hash = "sha256-lA1FpUee2SpUQwJotbYhG0QX7LT5l2PP9lJ9F3uNtdU=";
+    inherit rev;
+    hash = "sha256-sKgA1LZXZ64OixhbBWYUyCN4y29DRG0O0b/bAMd1I8M=";
   };
 
   buildInputs = [
@@ -38,9 +41,9 @@ stdenv.mkDerivation rec {
     zlib
     libXdmcp
     qttools
-    qtx11extras
-    libdbusmenu
     quazip
+    qtwayland
+    wayland-protocols
   ]
   ++ lib.optional withPulseaudio libpulseaudio;
 
