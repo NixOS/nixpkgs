@@ -64,11 +64,12 @@ buildPythonPackage rec {
 
   doCheck = true;
 
+  XDG_DATA_DIRS = "${gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-48.0/";
+
   installCheckPhase = ''
     export HOME=$(mktemp -d)
+    ${glib.bin}/bin/gsettings set org.gnome.desktop.interface toolkit-accessibility true
   '';
-
-  XDG_DATA_DIRS = "${gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-48.0/";
 
   #checkPhase = ''
   #  python -c 'from dogtail.tree import root, Node'
