@@ -56,6 +56,41 @@ buildPythonPackage rec {
     gsettings-desktop-schemas
   ];
 
+  checkPhase = ''
+    runHook preCheck
+    export HOME=$(mktemp -d)
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS
+    gsettings set org.gnome.desktop.interface toolkit-accessibility true
+    echo "<busconfig>
+      <type>session</type>
+      <listen>unix:tmpdir=$TMPDIR</listen>
+      <listen>unix:path=/build/system_bus_socket</listen>
+      <standard_session_servicedirs/>
+      <policy context=\"default\">
+        <!-- Allow everything to be sent -->
+        <allow send_destination=\"*\" eavesdrop=\"true\"/>
+        <!-- Allow everything to be received -->
+        <allow eavesdrop=\"true\"/>
+        <!-- Allow anyone to own anything -->
+        <allow own=\"*\"/>
+      </policy>
+    </busconfig>" > dbus.cfg
+
+    export PATH=${
+        lib.makeBinPath (
+          [
+            dbus
+          ]
+        )
+    }:$PATH
+    export USER="$(id -u -n)"
+    export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/build/system_bus_socket
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+       --config-file dbus.cfg \
+      ${python.interpreter} -c 'from dogtail.tree import root, Node'
+    runHook postCheck
+  '';
+
   dontWrapGApps = true;
 
   preFixup = ''
@@ -63,19 +98,6 @@ buildPythonPackage rec {
   '';
 
   doCheck = true;
-
-  XDG_DATA_DIRS = "${gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-48.0/";
-
-  installCheckPhase = ''
-    export HOME=$(mktemp -d)
-    ${glib.bin}/bin/gsettings set org.gnome.desktop.interface toolkit-accessibility true
-  '';
-
-  #checkPhase = ''
-  #  python -c 'from dogtail.tree import root, Node'
-  #'';
-
-  pythonImportsCheck = [ "dogtail.tree" ];
 
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
