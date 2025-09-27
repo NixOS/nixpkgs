@@ -6,6 +6,8 @@
 }:
 
 let
+  inherit (lib) types;
+
   cfg = config.services.maubot;
 
   wrapper1 = if cfg.plugins == [ ] then cfg.package else cfg.package.withPlugins (_: cfg.plugins);
@@ -58,15 +60,15 @@ let
   hasLocalPostgresDB = localPostgresDBs != [ ];
 in
 {
-  options.services.maubot = with lib; {
-    enable = mkEnableOption "maubot";
+  options.services.maubot = {
+    enable = lib.mkEnableOption "maubot";
 
     package = lib.mkPackageOption pkgs "maubot" { };
 
-    plugins = mkOption {
+    plugins = lib.mkOption {
       type = types.listOf types.package;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with config.services.maubot.package.plugins; [
           xyz.maubot.reactbot
           xyz.maubot.rss
@@ -77,10 +79,10 @@ in
       '';
     };
 
-    pythonPackages = mkOption {
+    pythonPackages = lib.mkOption {
       type = types.listOf types.package;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with pkgs.python3Packages; [
           aiohttp
         ];
@@ -90,7 +92,7 @@ in
       '';
     };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       type = types.str;
       default = "/var/lib/maubot";
       description = ''
@@ -98,10 +100,10 @@ in
       '';
     };
 
-    extraConfigFile = mkOption {
+    extraConfigFile = lib.mkOption {
       type = types.str;
       default = "./config.yaml";
-      defaultText = literalExpression ''"''${config.services.maubot.dataDir}/config.yaml"'';
+      defaultText = lib.literalExpression ''"''${config.services.maubot.dataDir}/config.yaml"'';
       description = ''
         A file for storing secrets. You can pass homeserver registration keys here.
         If it already exists, **it must contain `server.unshared_secret`** which is used for signing API keys.
@@ -109,7 +111,7 @@ in
       '';
     };
 
-    configMutable = mkOption {
+    configMutable = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -117,7 +119,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = ''
         YAML settings for maubot. See the
@@ -127,11 +129,10 @@ in
         Secrets should be passed in by using `extraConfigFile`.
       '';
       type =
-        with types;
-        submodule {
+        types.submodule {
           options = {
-            database = mkOption {
-              type = str;
+            database = lib.mkOption {
+              type = types.str;
               default = "sqlite:maubot.db";
               example = "postgresql://username:password@hostname/dbname";
               description = ''
@@ -140,8 +141,8 @@ in
               '';
             };
 
-            crypto_database = mkOption {
-              type = str;
+            crypto_database = lib.mkOption {
+              type = types.str;
               default = "default";
               example = "postgresql://username:password@hostname/dbname";
               description = ''
@@ -149,7 +150,7 @@ in
               '';
             };
 
-            database_opts = mkOption {
+            database_opts = lib.mkOption {
               type = types.attrs;
               default = { };
               description = ''
@@ -157,31 +158,31 @@ in
               '';
             };
 
-            plugin_directories = mkOption {
+            plugin_directories = lib.mkOption {
               default = { };
               description = "Plugin directory paths";
-              type = submodule {
+              type = types.submodule {
                 options = {
-                  upload = mkOption {
+                  upload = lib.mkOption {
                     type = types.str;
                     default = "./plugins";
-                    defaultText = literalExpression ''"''${config.services.maubot.dataDir}/plugins"'';
+                    defaultText = lib.literalExpression ''"''${config.services.maubot.dataDir}/plugins"'';
                     description = ''
                       The directory where uploaded new plugins should be stored.
                     '';
                   };
-                  load = mkOption {
+                  load = lib.mkOption {
                     type = types.listOf types.str;
                     default = [ "./plugins" ];
-                    defaultText = literalExpression ''[ "''${config.services.maubot.dataDir}/plugins" ]'';
+                    defaultText = lib.literalExpression ''[ "''${config.services.maubot.dataDir}/plugins" ]'';
                     description = ''
                       The directories from which plugins should be loaded. Duplicate plugin IDs will be moved to the trash.
                     '';
                   };
-                  trash = mkOption {
+                  trash = lib.mkOption {
                     type = with types; nullOr str;
                     default = "./trash";
-                    defaultText = literalExpression ''"''${config.services.maubot.dataDir}/trash"'';
+                    defaultText = lib.literalExpression ''"''${config.services.maubot.dataDir}/trash"'';
                     description = ''
                       The directory where old plugin versions and conflicting plugins should be moved. Set to null to delete files immediately.
                     '';
@@ -190,30 +191,30 @@ in
               };
             };
 
-            plugin_databases = mkOption {
+            plugin_databases = lib.mkOption {
               description = "Plugin database settings";
               default = { };
-              type = submodule {
+              type = types.submodule {
                 options = {
-                  sqlite = mkOption {
+                  sqlite = lib.mkOption {
                     type = types.str;
                     default = "./plugins";
-                    defaultText = literalExpression ''"''${config.services.maubot.dataDir}/plugins"'';
+                    defaultText = lib.literalExpression ''"''${config.services.maubot.dataDir}/plugins"'';
                     description = ''
                       The directory where SQLite plugin databases should be stored.
                     '';
                   };
 
-                  postgres = mkOption {
+                  postgres = lib.mkOption {
                     type = types.nullOr types.str;
                     default = if isPostgresql cfg.settings.database then "default" else null;
-                    defaultText = literalExpression ''if isPostgresql config.services.maubot.settings.database then "default" else null'';
+                    defaultText = lib.literalExpression ''if isPostgresql config.services.maubot.settings.database then "default" else null'';
                     description = ''
                       The connection URL for plugin database. See [example config](https://github.com/maubot/maubot/blob/master/maubot/example-config.yaml) for exact format.
                     '';
                   };
 
-                  postgres_max_conns_per_plugin = mkOption {
+                  postgres_max_conns_per_plugin = lib.mkOption {
                     type = types.nullOr types.int;
                     default = 3;
                     description = ''
@@ -221,7 +222,7 @@ in
                     '';
                   };
 
-                  postgres_opts = mkOption {
+                  postgres_opts = lib.mkOption {
                     type = types.attrs;
                     default = { };
                     description = ''
@@ -232,51 +233,51 @@ in
               };
             };
 
-            server = mkOption {
+            server = lib.mkOption {
               default = { };
               description = "Listener config";
-              type = submodule {
+              type = types.submodule {
                 options = {
-                  hostname = mkOption {
+                  hostname = lib.mkOption {
                     type = types.str;
                     default = "127.0.0.1";
                     description = ''
                       The IP to listen on
                     '';
                   };
-                  port = mkOption {
+                  port = lib.mkOption {
                     type = types.port;
                     default = 29316;
                     description = ''
                       The port to listen on
                     '';
                   };
-                  public_url = mkOption {
+                  public_url = lib.mkOption {
                     type = types.str;
                     default = "http://${cfg.settings.server.hostname}:${toString cfg.settings.server.port}";
-                    defaultText = literalExpression ''"http://''${config.services.maubot.settings.server.hostname}:''${toString config.services.maubot.settings.server.port}"'';
+                    defaultText = lib.literalExpression ''"http://''${config.services.maubot.settings.server.hostname}:''${toString config.services.maubot.settings.server.port}"'';
                     description = ''
                       Public base URL where the server is visible.
                     '';
                   };
-                  ui_base_path = mkOption {
+                  ui_base_path = lib.mkOption {
                     type = types.str;
                     default = "/_matrix/maubot";
                     description = ''
                       The base path for the UI.
                     '';
                   };
-                  plugin_base_path = mkOption {
+                  plugin_base_path = lib.mkOption {
                     type = types.str;
                     default = "${config.services.maubot.settings.server.ui_base_path}/plugin/";
-                    defaultText = literalExpression ''
+                    defaultText = lib.literalExpression ''
                       "''${config.services.maubot.settings.server.ui_base_path}/plugin/"
                     '';
                     description = ''
                       The base path for plugin endpoints. The instance ID will be appended directly.
                     '';
                   };
-                  override_resource_path = mkOption {
+                  override_resource_path = lib.mkOption {
                     type = types.nullOr types.str;
                     default = null;
                     description = ''
@@ -287,11 +288,11 @@ in
               };
             };
 
-            homeservers = mkOption {
+            homeservers = lib.mkOption {
               type = types.attrsOf (
                 types.submodule {
                   options = {
-                    url = mkOption {
+                    url = lib.mkOption {
                       type = types.str;
                       description = ''
                         Client-server API URL
@@ -311,7 +312,7 @@ in
               '';
             };
 
-            admins = mkOption {
+            admins = lib.mkOption {
               type = types.attrsOf types.str;
               default = {
                 root = "";
@@ -322,8 +323,8 @@ in
               '';
             };
 
-            api_features = mkOption {
-              type = types.attrsOf bool;
+            api_features = lib.mkOption {
+              type = types.attrsOf types.bool;
               default = {
                 login = true;
                 plugin = true;
@@ -341,7 +342,7 @@ in
               '';
             };
 
-            logging = mkOption {
+            logging = lib.mkOption {
               type = types.attrs;
               description = ''
                 Python logging configuration. See [section 16.7.2 of the Python

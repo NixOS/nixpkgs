@@ -4,7 +4,6 @@
   lib,
   ...
 }:
-with lib;
 let
   cfg = config.services.victoriametrics;
   settingsFormat = pkgs.formats.yaml { };
@@ -42,18 +41,18 @@ in
         VictoriaMetrics is a fast, cost-effective and scalable monitoring solution and time series database.
       '';
     };
-    package = mkPackageOption pkgs "victoriametrics" { };
+    package = lib.mkPackageOption pkgs "victoriametrics" { };
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       default = ":8428";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         TCP address to listen for incoming http requests.
       '';
     };
 
-    stateDir = mkOption {
-      type = types.str;
+    stateDir = lib.mkOption {
+      type = lib.types.str;
       default = "victoriametrics";
       description = ''
         Directory below `/var/lib` to store VictoriaMetrics metrics data.
@@ -61,8 +60,8 @@ in
       '';
     };
 
-    retentionPeriod = mkOption {
-      type = types.nullOr types.str;
+    retentionPeriod = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "15d";
       description = ''
@@ -92,7 +91,7 @@ in
     prometheusConfig = lib.mkOption {
       type = lib.types.submodule { freeformType = settingsFormat.type; };
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           scrape_configs = [
             {
@@ -129,10 +128,10 @@ in
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           "-loggerLevel=WARN"
         ]

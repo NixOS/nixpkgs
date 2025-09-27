@@ -5,6 +5,7 @@
   ...
 }:
 let
+  inherit (lib) types;
   cfg = config.services.tigerbeetle;
 in
 {
@@ -15,12 +16,12 @@ in
   };
 
   options = {
-    services.tigerbeetle = with lib; {
-      enable = mkEnableOption "TigerBeetle server";
+    services.tigerbeetle = {
+      enable = lib.mkEnableOption "TigerBeetle server";
 
-      package = mkPackageOption pkgs "tigerbeetle" { };
+      package = lib.mkPackageOption pkgs "tigerbeetle" { };
 
-      clusterId = mkOption {
+      clusterId = lib.mkOption {
         type = types.either types.ints.unsigned (types.strMatching "[0-9]+");
         default = 0;
         description = ''
@@ -30,7 +31,7 @@ in
         '';
       };
 
-      replicaIndex = mkOption {
+      replicaIndex = lib.mkOption {
         type = types.ints.unsigned;
         default = 0;
         description = ''
@@ -38,7 +39,7 @@ in
         '';
       };
 
-      replicaCount = mkOption {
+      replicaCount = lib.mkOption {
         type = types.ints.unsigned;
         default = 1;
         description = ''
@@ -46,7 +47,7 @@ in
         '';
       };
 
-      cacheGridSize = mkOption {
+      cacheGridSize = lib.mkOption {
         type = types.strMatching "[0-9]+(K|M|G)iB";
         default = "1GiB";
         description = ''
@@ -56,7 +57,7 @@ in
         '';
       };
 
-      addresses = mkOption {
+      addresses = lib.mkOption {
         type = types.listOf types.nonEmptyStr;
         default = [ "3001" ];
         description = ''
