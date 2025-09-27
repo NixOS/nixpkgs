@@ -51,6 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
+    # Update the deployment target for the minimum target used by nixpkgs.
+    while IFS= read -d "" proj; do
+      echo "Updating deployment target to ${stdenv.hostPlatform.darwinMinVersion}: $proj"
+      substituteInPlace "$proj" \
+        --replace-fail 'MACOSX_DEPLOYMENT_TARGET = 10.15' "MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
+    done < <(grep -Z -rl --include=project.pbxproj MACOSX_DEPLOYMENT_TARGET)
+
     # Move `mvkGitRevDerived.h` to a stable location
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
       --replace-fail '$'''{BUILT_PRODUCTS_DIR}' "$NIX_BUILD_TOP/$sourceRoot/build/include" \
@@ -102,6 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional enablePrivateAPIUsage "-DMVK_USE_METAL_PRIVATE_API=1"
   );
+
+  # MoltenVK does its own checks for availability by probing the version at runtime and checking the MSL version.
+  allowUnguardedAvailability = true;
 
   env.NIX_LDFLAGS = toString [
     "-lglslang"
