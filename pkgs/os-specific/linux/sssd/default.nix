@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
   autoreconfHook,
   makeWrapper,
   glibc,
@@ -72,8 +73,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JN4GVx5rBfNBLaMpLcKgyd+CyNDafz85BXUcfg5kDXQ=";
   };
 
+  patches = [
+    (replaceVars ./fix-ldb-modules-path.patch {
+      inherit ldb;
+      out = null; # will be replaced in postPatch https://github.com/NixOS/nixpkgs/pull/446589#discussion_r2384899857
+    })
+  ];
+
   postPatch = ''
     patchShebangs ./sbus_generate.sh.in
+
+    substituteInPlace src/confdb/confdb.c \
+      --replace-fail "@out@" "${placeholder "out"}"
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
@@ -101,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
+      --with-sssd-user=root
     )
   ''
   + lib.optionalString withSudo ''
