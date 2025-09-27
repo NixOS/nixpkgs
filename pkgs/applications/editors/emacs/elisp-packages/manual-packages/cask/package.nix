@@ -1,35 +1,56 @@
 {
   lib,
   ansi,
+  cask,
   cl-generic,
   cl-lib,
   commander,
-
   epl,
   f,
   fetchFromGitHub,
+  installShellFiles,
   git,
   melpaBuild,
   package-build,
   s,
   shut-up,
 }:
-
+let
+  getAllDependenciesOfPkg =
+    pkg:
+    let
+      direct = builtins.filter (x: x != null) (pkg.packageRequires or [ ]);
+      indirect = builtins.concatLists (map getAllDependenciesOfPkg direct);
+    in
+    lib.unique (direct ++ indirect);
+  dependencies = getAllDependenciesOfPkg cask;
+  load-path-mod = builtins.concatStringsSep "\n" (
+    map (
+      x:
+      "(add-to-list 'load-path \\\"${x.outPath}/share/emacs/site-lisp/elpa/${x.pname}-${x.version}/\\\")"
+    ) dependencies
+  );
+  deps-mod = builtins.concatStringsSep " " (map (x: x.pname) dependencies);
+in
 melpaBuild (finalAttrs: {
   pname = "cask";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     name = "cask-source-${finalAttrs.version}";
     owner = "cask";
     repo = "cask";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-91rJFsp2SLk/JY+v6G5JmXH5bg9QnT+qhI8ccNJlI4A=";
+    hash = "sha256-/vinpQ51AuaTbXW4L4MnVonyfzTMvHUF4HViSPBKZxs=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   patches = [
     # Uses LISPDIR substitution var
     ./0000-cask-lispdir.diff
+    # Use Nix provided dependencies instead of letting Cask bootstrap itself
+    ./0001-cask-bootstrap.diff
   ];
 
   packageRequires = [
@@ -47,13 +68,16 @@ melpaBuild (finalAttrs: {
 
   # use melpaVersion so that it works for unstable releases too
   postPatch = ''
-    lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.melpaVersion} \
-      substituteAllInPlace bin/cask
+    export lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.melpaVersion}
+    substituteAllInPlace bin/cask
+
+    substituteInPlace cask-bootstrap.el \
+      --replace "@deps-mod@" "${deps-mod}" \
+      --replace "@load-path-mod@" "${load-path-mod}"
   '';
 
-  # TODO: use installBin as soon as installBin arrives Master branch
   postInstall = ''
-    install -D -t $out/bin bin/cask
+    installBin bin/cask
   '';
 
   meta = {
