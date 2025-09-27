@@ -9,13 +9,13 @@
 
 buildDunePackage rec {
   pname = "postgresql";
-  version = "5.2.0";
+  version = "5.3.0";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/mmottl/postgresql-ocaml/releases/download/${version}/postgresql-${version}.tbz";
-    hash = "sha256-uU/K7hvQljGnUzClPRdod32tpVAGd/sGqh3NqIygJ4A=";
+    hash = "sha256-BSiltsXZ8/M+3xcOOcxroY/a8IS7hxXltvYqGyGSwOQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
