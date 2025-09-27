@@ -12,14 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "tree-sitter-sql";
-  version = "0.3.8";
+  version = "0.3.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DerekStride";
     repo = "tree-sitter-sql";
     tag = "v${version}";
-    hash = "sha256-8gdbbz187sV8I+PJHubFyyQwGUqvo05Yw1DX7rOK4DI=";
+    hash = "sha256-vPPlDdLkenLG8uH26fzMOS3oxClCLSIKa6zhmDbnC/A=";
   };
 
   postUnpack = ''
