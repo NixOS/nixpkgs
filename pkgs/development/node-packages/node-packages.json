@@ -18,7 +18,6 @@
 , "audiosprite"
 , "aws-cdk"
 , "awesome-lint"
-, "bower"
 , "browserify"
 , "browser-sync"
 , "cdk8s-cli"
