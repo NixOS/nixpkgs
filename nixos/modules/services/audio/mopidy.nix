@@ -4,12 +4,14 @@
   pkgs,
   ...
 }:
+
 let
   uid = config.ids.uids.mopidy;
   gid = config.ids.gids.mopidy;
   cfg = config.services.mopidy;
+  settingsFormat = pkgs.formats.toml { };
 
-  mopidyConf = pkgs.writeText "mopidy.conf" cfg.configuration;
+  mopidyConf = settingsFormat.generate "mopidy.conf" cfg.settings;
 
   mopidyEnv = pkgs.buildEnv {
     name = "mopidy-with-extensions-${pkgs.mopidy.version}";
@@ -24,11 +26,16 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkChangedOptionModule
+      [ "services" "mopidy" "configuration" ]
+      [ "services" "mopidy" "settings" ]
+      (config: builtins.fromTOML config.services.mopidy.configuration)
+    )
+  ];
 
   options = {
-
     services.mopidy = {
-
       enable = lib.mkEnableOption "Mopidy, a music player daemon";
 
       dataDir = lib.mkOption {
@@ -48,11 +55,15 @@ in
         '';
       };
 
-      configuration = lib.mkOption {
-        default = "";
-        type = lib.types.lines;
+      settings = lib.mkOption {
+        inherit (settingsFormat) type;
+        example.mpd = {
+          enabled = true;
+          hostname = "::";
+        };
         description = ''
           The configuration that Mopidy should use.
+          See the upstream documentation <https://docs.mopidy.com/stable/config/> for details.
         '';
       };
 
@@ -66,8 +77,6 @@ in
       };
     };
   };
-
-  ###### implementation
 
   config = lib.mkIf cfg.enable {
 
