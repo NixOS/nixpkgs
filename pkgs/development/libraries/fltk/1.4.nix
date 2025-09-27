@@ -25,19 +25,34 @@
   withCairo ? true,
   cairo,
 
-  withPango ? stdenv.hostPlatform.isLinux,
+  # pango depends on Xft, and implicitly enables cairo.
+  # So only enable pango if cairo is enabled too.
+  withPango ? withXorg && withCairo,
   pango,
 
   withDocs ? true,
   doxygen,
   graphviz,
 
+  withXorg ? stdenv.hostPlatform.isLinux,
+
+  withWayland ? stdenv.hostPlatform.isLinux && withCairo,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
+  wayland-scanner,
+
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
+
+  nix-update-script,
 }:
 
-let
-  onOff = value: if value then "ON" else "OFF";
-in
+# pango support depends on Xft
+assert withPango -> withXorg;
+
+# wayland support depends on cairo
+assert withWayland -> withCairo;
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "fltk";
   version = "1.4.4";
@@ -61,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ lib.optionals withWayland [
+    wayland-scanner
   ]
   ++ lib.optionals withDocs [
     doxygen
@@ -86,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     freetype
+  ]
+  ++ lib.optionals withXorg [
     libX11
     libXext
     libXinerama
@@ -93,6 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
     libXcursor
     libXft
     libXrender
+  ]
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-protocols
+    libxkbcommon
   ]
   ++ lib.optionals withCairo [
     cairo
@@ -103,43 +128,45 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Common
-    "-DFLTK_BUILD_SHARED_LIBS=${onOff (!stdenv.hostPlatform.isStatic)}"
-    "-DFLTK_USE_SYSTEM_LIBDECOR=ON"
-    "-DFLTK_USE_SYSTEM_LIBJPEG=ON"
-    "-DFLTK_USE_SYSTEM_LIBPNG=ON"
-    "-DFLTK_USE_SYSTEM_ZLIB=ON"
+    (lib.cmakeBool "FLTK_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "FLTK_USE_SYSTEM_LIBDECOR" true)
+    (lib.cmakeBool "FLTK_USE_SYSTEM_LIBJPEG" true)
+    (lib.cmakeBool "FLTK_USE_SYSTEM_LIBPNG" true)
+    (lib.cmakeBool "FLTK_USE_SYSTEM_ZLIB" true)
 
     # X11
-    "-DFLTK_USE_XINERAMA=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XFIXES=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XCURSOR=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XFT=${onOff stdenv.hostPlatform.isLinux}"
-    "-DFLTK_USE_XRENDER=${onOff stdenv.hostPlatform.isLinux}"
+    (lib.cmakeBool "FLTK_USE_XINERAMA" withXorg)
+    (lib.cmakeBool "FLTK_USE_XFIXES" withXorg)
+    (lib.cmakeBool "FLTK_USE_XCURSOR" withXorg)
+    (lib.cmakeBool "FLTK_USE_XFT" withXorg)
+    (lib.cmakeBool "FLTK_USE_XRENDER" withXorg)
+
+    # Wayland
+    (lib.cmakeBool "FLTK_BACKEND_WAYLAND" withWayland)
 
     # GL
-    "-DFLTK_BUILD_GL=${onOff withGL}"
-    "-DOpenGL_GL_PREFERENCE=GLVND"
+    (lib.cmakeBool "FLTK_BUILD_GL" withGL)
 
     # Cairo
-    "-DFLTK_OPTION_CAIRO_WINDOW=${onOff withCairo}"
-    "-DFLTK_OPTION_CAIRO_EXT=${onOff withCairo}"
+    (lib.cmakeBool "FLTK_OPTION_CAIRO_WINDOW" withCairo)
+    (lib.cmakeBool "FLTK_OPTION_CAIRO_EXT" withCairo)
 
     # Pango
-    "-DFLTK_USE_PANGO=${onOff withPango}"
+    (lib.cmakeBool "FLTK_USE_PANGO" withPango)
 
     # Examples & Tests
-    "-DFLTK_BUILD_EXAMPLES=${onOff withExamples}"
-    "-DFLTK_BUILD_TEST=${onOff withExamples}"
+    (lib.cmakeBool "FLTK_BUILD_EXAMPLES" withExamples)
+    (lib.cmakeBool "FLTK_BUILD_TEST" withExamples)
 
     # Docs
-    "-DFLTK_BUILD_HTML_DOCS=${onOff withDocs}"
-    "-DFLTK_BUILD_PDF_DOCS=OFF"
-    "-DFLTK_INSTALL_HTML_DOCS=${onOff withDocs}"
-    "-DFLTK_INSTALL_PDF_DOCS=OFF"
-    "-DFLTK_INCLUDE_DRIVER_DOCS=${onOff withDocs}"
+    (lib.cmakeBool "FLTK_BUILD_HTML_DOCS" withDocs)
+    (lib.cmakeBool "FLTK_INSTALL_HTML_DOCS" withDocs)
+    (lib.cmakeBool "FLTK_INCLUDE_DRIVER_DOCS" withDocs)
+    (lib.cmakeBool "FLTK_BUILD_PDF_DOCS" false)
+    (lib.cmakeBool "FLTK_INSTALL_PDF_DOCS" false)
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   postBuild = lib.optionalString withDocs ''
@@ -173,6 +200,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/bin/fltk-config \
       --replace-fail "/$out/" "/"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(1\\.4\\.[0-9.]+)"
+    ];
+  };
 
   meta = {
     description = "C++ cross-platform lightweight GUI library";

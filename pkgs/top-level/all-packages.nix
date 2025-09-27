@@ -7451,7 +7451,6 @@ with pkgs;
   fltk13-minimal = fltk13.override {
     withGL = false;
     withCairo = false;
-    withPango = false;
     withExamples = false;
     withDocs = false;
   };
