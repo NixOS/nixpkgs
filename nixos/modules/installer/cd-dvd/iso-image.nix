@@ -17,6 +17,7 @@ let
       image,
       params,
       initrd,
+      devicetree,
     }:
     ''
       menuentry '${name}' --class ${class} {
@@ -25,6 +26,11 @@ let
 
         linux ${image} \''${isoboot} ${params}
         initrd ${initrd}
+    ''
+    + lib.optionalString (devicetree != null) ''
+      devicetree ${devicetree}
+    ''
+    + ''
       }
     '';
 
@@ -48,6 +54,11 @@ let
         image = "/boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}";
         initrd = "/boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}";
         class = "installer";
+        devicetree =
+          if cfg.boot.loader.efi.installDeviceTree then
+            "/boot/${cfg.hardware.deviceTree.package}/${cfg.hardware.deviceTree.name}"
+          else
+            null;
       };
     in
     ''
@@ -491,7 +502,7 @@ let
       ''
         mkdir ./contents && cd ./contents
         mkdir -p ./EFI/BOOT
-        cp -rp "${efiDir}"/EFI/BOOT/{grub.cfg,*.EFI,*.efi} ./EFI/BOOT
+        cp -rp "${efiDir}"/EFI/BOOT/{grub.cfg,*.EFI,*.efi,*.dtb} ./EFI/BOOT
 
         # Rewrite dates for everything in the FS
         find . -exec touch --date=2000-01-01 {} +
@@ -950,7 +961,7 @@ in
       let
         cfgFiles =
           cfg:
-          lib.optionals cfg.isoImage.showConfiguration ([
+          lib.optionals cfg.isoImage.showConfiguration [
             {
               source = cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
               target = "/boot/" + cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
@@ -959,7 +970,13 @@ in
               source = cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
               target = "/boot/" + cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
             }
-          ])
+          ]
+          ++ lib.optionals cfg.boot.loader.efi.installDeviceTree [
+            {
+              source = "${cfg.hardware.deviceTree.package}/${cfg.hardware.deviceTree.name}";
+              target = "/boot/${cfg.hardware.deviceTree.package}/${cfg.hardware.deviceTree.name}";
+            }
+          ]
           ++ lib.concatLists (
             lib.mapAttrsToList (_: { configuration, ... }: cfgFiles configuration) cfg.specialisation
           );
