@@ -47,7 +47,7 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  name = "mumps";
+  pname = "mumps";
   version = "5.8.1";
   # makeFlags contain space and one should use makeFlagsArray+
   # Setting this magic var is an optional solution
