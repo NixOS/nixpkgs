@@ -10,6 +10,7 @@
   eigen,
   example-robot-data,
   fetchFromGitHub,
+  fetchpatch,
   coal,
   jrl-cmakemodules,
   lib,
@@ -32,6 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
+  ];
+
+  patches = [
+    # ref. https://github.com/stack-of-tasks/pinocchio/pull/2771
+    (fetchpatch {
+      name = "fix-viser-path.patch";
+      url = "https://github.com/stack-of-tasks/pinocchio/commit/36a04bddb6980a7bcd28ebcc55d4e442f7920d87.patch";
+      hash = "sha256-9oENiMmRqJLU4ZiyGojm7suqdwTDGfk56aS2kcZiGaI=";
+    })
   ];
 
   postPatch = ''
