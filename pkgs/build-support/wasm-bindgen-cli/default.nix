@@ -44,7 +44,10 @@ rustPlatform.buildRustPackage {
       mit
     ];
     description = "Facilitating high-level interactions between wasm modules and JavaScript";
-    maintainers = with lib.maintainers; [ rizary ];
+    maintainers = with lib.maintainers; [
+      rizary
+      insipx
+    ];
     mainProgram = "wasm-bindgen";
   };
 }
