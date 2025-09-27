@@ -334,7 +334,7 @@ let
         shellcheck-minimal
         sourceAndTags
         spacecookie
-        spago
+        spago-legacy
         specup
         splot
         stack
