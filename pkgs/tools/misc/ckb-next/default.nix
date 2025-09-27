@@ -12,13 +12,13 @@
   kmod,
   libXdmcp,
   qttools,
-  qtx11extras,
-  libdbusmenu,
   gnused,
   withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   quazip,
   udevCheckHook,
+  qtwayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
     zlib
     libXdmcp
     qttools
-    qtx11extras
-    libdbusmenu
     quazip
+    qtwayland
+    wayland-protocols
   ]
   ++ lib.optional withPulseaudio libpulseaudio;
 
