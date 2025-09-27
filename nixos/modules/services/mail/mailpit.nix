@@ -22,7 +22,10 @@ let
 
   isNonNull = v: v != null;
   genCliFlags =
-    settings: concatStringsSep " " (cli.toGNUCommandLine { } (filterAttrs (const isNonNull) settings));
+    settings:
+    concatStringsSep " " (
+      cli.toCommandLine lib.cli.gnuOptionFormat (filterAttrs (const isNonNull) settings)
+    );
 in
 {
   options.services.mailpit.instances = mkOption {
