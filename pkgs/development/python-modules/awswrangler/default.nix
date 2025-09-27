@@ -1,41 +1,38 @@
 {
-  sparqlwrapper,
+  lib,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
   gremlinpython,
+  hatchling,
   jsonpath-ng,
-  lib,
   moto,
   openpyxl,
   opensearch-py,
   pandas,
   pg8000,
-  poetry-core,
   progressbar2,
   pyarrow,
   pymysql,
   pyodbc,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   redshift-connector,
   requests-aws4auth,
   setuptools,
+  sparqlwrapper,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.12.1";
+  version = "3.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
     tag = version;
-    hash = "sha256-N4IqeAfW4PqgQcBFaFK/Ugbcsz8pLiFzkBr9SRm7AOs=";
+    hash = "sha256-MkoJpztVjwZbGcJTdnLRF7ZtIFd0qGoz/cksEoqLe4w=";
   };
 
   pythonRelaxDeps = [
@@ -43,7 +40,7 @@ buildPythonPackage rec {
     "pyarrow"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
