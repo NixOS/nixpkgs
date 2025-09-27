@@ -9,6 +9,7 @@
   librsvg,
   wrapGAppsHook3,
   nix-update-script,
+  fetchpatch,
 }:
 
 python3Packages.buildPythonApplication {
@@ -22,6 +23,14 @@ python3Packages.buildPythonApplication {
     rev = "13f5e62add99355f90798006742f62397be8be0c";
     hash = "sha256-z5ZSqcdKUHWt7kgW7ISZJei2YzVZHJGOqJ2IXv3qiWQ=";
   };
+
+  patches = [
+    # https://github.com/stuartlangridge/hushboard/pull/30
+    (fetchpatch {
+      url = "https://github.com/stuartlangridge/hushboard/commit/b17b58cd00eb9af8184f8dcb010bbae7f9bc470c.patch";
+      hash = "sha256-C03hq2ttXY8DJzrarQvFIzo29d+owZVIHZRA28fq7Z8=";
+    })
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
