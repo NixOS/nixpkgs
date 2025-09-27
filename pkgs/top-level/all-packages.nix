@@ -3386,6 +3386,15 @@ with pkgs;
     prefetch-npm-deps
     ;
 
+  inherit (callPackages ../build-support/node/fetch-bun-deps { })
+    fetchBunDeps
+    prefetch-bun-deps
+    fixup-bun-lock
+    bunConfigHook
+    bunBuildHook
+    bunInstallHook
+    ;
+
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
 
   nodePackages_latest = recurseIntoAttrs nodejs_latest.pkgs;
