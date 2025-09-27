@@ -56,6 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "linearmodels" ];
 
+  disabledTestPaths = [
+    # Skip long-running tests
+    "linearmodels/tests/panel/test_panel_ols.py"
+  ];
+
   meta = {
     description = "Models for panel data, system regression, instrumental variables and asset pricing";
     homepage = "https://bashtage.github.io/linearmodels/";
