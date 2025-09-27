@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.7.0";
+  version = "2025.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-bwM4Q95YTEp9pDz6LmBLOeYjmi8nH8Cc/srZlXfEIlg=";
+    hash = "sha256-RB8cNYb2CabrRmGi76dH9HCdsifYvW7ZhPzBSrzwzec=";
   };
 
   postPatch = ''
