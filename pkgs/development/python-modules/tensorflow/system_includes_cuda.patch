@@ -1,0 +1,12 @@
+diff -Naurd x/third_party/gpus/cuda_configure.bzl y/third_party/gpus/cuda_configure.bzl
+--- x/third_party/gpus/cuda_configure.bzl	2024-10-17 14:10:15.759870088 +0000
++++ y/third_party/gpus/cuda_configure.bzl	2024-10-17 14:14:42.795467879 +0000
+@@ -1263,7 +1263,7 @@
+         repository_ctx,
+         cc_fullpath,
+         tf_sysroot,
+-    )
++    ) + ["@cuda_wrapper_includes@"]
+     cuda_defines = {}
+     cuda_defines["%{builtin_sysroot}"] = tf_sysroot
+     cuda_defines["%{cuda_toolkit_path}"] = ""

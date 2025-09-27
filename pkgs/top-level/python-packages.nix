@@ -18099,11 +18099,11 @@ self: super: with self; {
   tensorflow-build =
     let
       compat = rec {
-        #protobufTF = pkgs.protobuf_21.override { abseil-cpp = pkgs.abseil-cpp_202301; };
-        protobufTF = pkgs.protobuf;
+        abseil-cppTF = pkgs.abseil-cpp_202301;
+        protobufTF = pkgs.protobuf_21.override { abseil-cpp = abseil-cppTF; };
         # https://www.tensorflow.org/install/source#gpu
-        #cudaPackagesTF = pkgs.cudaPackages_11;
-        cudaPackagesTF = pkgs.cudaPackages;
+        # TODO: re-enable on tensorflow 2.15 - CUDA 11 has been dropped
+        # cudaPackagesTF = pkgs.cudaPackages_11;
         grpcTF =
           (pkgs.grpc.overrideAttrs (oldAttrs: rec {
             # nvcc fails on recent grpc versions, so we use the latest patch level
@@ -18130,20 +18130,37 @@ self: super: with self; {
           grpcio = grpcioTF;
           protobuf = protobuf-pythonTF;
         };
+        # at least with CUDA the build needs bazel 6.1.0
+        # https://discuss.ai.google.dev/t/undefined-references-to-mlir-ciface-symbols/30184/3
+        # due to hard coded dependencies, simply overriding doesn't work,
+        # so we import the derivation from commit c03f31e
+        bazel_6_1_0 = pkgs.callPackage ../development/python-modules/tensorflow/bazel_6_1_0 {
+          buildJdk = pkgs.jdk11_headless;
+          runJdk = pkgs.jdk11_headless;
+          stdenv = if stdenv.isDarwin then
+            pkgs.stdenv else
+            if stdenv.cc.isClang
+              then pkgs.llvmPackages.stdenv
+              else pkgs.stdenv;
+          bazel_self = compat.bazel_6_1_0;
+        };
       };
     in
     callPackage ../development/python-modules/tensorflow {
       inherit (pkgs.config) cudaSupport;
+      llvmPackages = pkgs.llvmPackages_16;
       flatbuffers-core = pkgs.flatbuffers;
       flatbuffers-python = self.flatbuffers;
-      cudaPackages = compat.cudaPackagesTF;
+      # TODO: re-enable on tensorflow 2.15 - CUDA 11 has been dropped
+      #cudaPackages = compat.cudaPackagesTF;
       protobuf-core = compat.protobufTF;
       protobuf-python = compat.protobuf-pythonTF;
       grpc = compat.grpcTF;
       grpcio = compat.grpcioTF;
       tensorboard = compat.tensorboardTF;
-      #abseil-cpp = pkgs.abseil-cpp_202301;
+      abseil-cpp = compat.abseil-cppTF;
       snappy-cpp = pkgs.snappy;
+      bazel_6 = compat.bazel_6_1_0;
 
       # Tensorflow 2.13 doesn't support gcc13:
       # https://github.com/tensorflow/tensorflow/issues/61289
