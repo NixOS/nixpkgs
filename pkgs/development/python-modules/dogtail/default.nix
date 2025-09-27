@@ -14,6 +14,7 @@
   xvfb-run,
   wrapGAppsHook3,
   fetchPypi,
+  gnome-ponytail-daemon,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     pygobject3
     pyatspi
     pycairo
+    gnome-ponytail-daemon
   ];
 
   dontWrapGApps = true;
@@ -52,7 +54,13 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  doCheck = false;
+  #doCheck = true;
+
+  #checkPhase = ''
+  #  python -c 'from dogtail.tree import root, Node'
+  #'';
+
+  pythonImportsCheck = [ "dogtail.tree" ];
 
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
