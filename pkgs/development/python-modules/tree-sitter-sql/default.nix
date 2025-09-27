@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Sql grammar for tree-sitter";
     homepage = "https://github.com/DerekStride/tree-sitter-sql";
+    changelog = "https://github.com/DerekStride/tree-sitter-sql/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };
