@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nix-update-script,
   fetchYarnDeps,
   fetchFromGitHub,
   yarnConfigHook,
@@ -12,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vivify";
-  version = "0.8.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "jannis-baum";
     repo = "Vivify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2lxf21T9y4GMFlk0+qbaJJ/twRffYEBoBXZXe/NRDQk=";
+    hash = "sha256-n2l0+CFQ7EXnTZXr+JO7NE1OVSzpphs6lUgHfjebX4M=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-mOgfwetiLMTDquw3f3+U1iEhBbvf0OC5lkNJHdrRSK0=";
+    hash = "sha256-rztQiOod7xI/gF9NQTCsfE7Wulm1eZHjyNLBI1YSNKk=";
   };
 
   installPhase = ''
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace node_modules/.bin/postject \
       --replace-fail '/usr/bin/env node' '${lib.getExe nodejs}'
 
-    make linux
+    make VIV_VERSION=${finalAttrs.version} linux
 
     mkdir -p $out/bin
     install -Dm755 ./build/linux/viv $out/bin/viv
@@ -67,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Stripping 'unneeded symbols' causes vivify-server executable to break
   # (segmentation fault)
   dontStrip = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Live Markdown viewer";
