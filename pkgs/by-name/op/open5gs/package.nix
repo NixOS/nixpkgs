@@ -21,6 +21,7 @@
   curl,
   libtins,
   mongosh,
+  usrsctp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -75,22 +76,19 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     libmicrohttpd
     libgcrypt
-    lksctp-tools
     libidn
     openssl
     curl
     libtins
     gnutls
     libnghttp2.dev
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    lksctp-tools
+  ]
+  ++ lib.optionals (!stdenv.isLinux) [
+    usrsctp
   ];
-
-  # For subproject
-  env = {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=array-bounds"
-      "-Wno-error=stringop-overflow"
-    ];
-  };
 
   preConfigure = ''
     cp -R --no-preserve=mode,ownership ${finalAttrs.diameter} subprojects/freeDiameter
