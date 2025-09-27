@@ -2728,6 +2728,12 @@
     githubId = 2998834;
     name = "Bruno Rodrigues";
   };
+  b2dennis = {
+    email = "dennis@base2.sh";
+    github = "b2dennis";
+    githubId = 121493649;
+    name = "Dennis Winghardt";
+  };
   b4dm4n = {
     email = "fabianm88@gmail.com";
     github = "B4dM4n";
