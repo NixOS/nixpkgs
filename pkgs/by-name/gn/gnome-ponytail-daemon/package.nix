@@ -1,34 +1,43 @@
 {
   stdenv,
   lib,
-  fetchFromSourcehut,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
+  glib,
+  systemd,
+  libei,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-ponytail-daemon";
-  version = "1.0.1";
+  version = "0.0.11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "ofourdan";
     repo = "gnome-ponytail-daemon";
     rev = "9dd3bda1816de216219232b8f6baec9f2d423ec6";
-    hash = "";
+    hash = "sha256-0DvrYN/UP7SFNcVeh+3nuBUumiizFS+TAjFApu1oIIM=";
   };
+
+   mesonFlags = [
+    "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapQtAppsHook
   ];
 
   buildInputs = [
+    glib
+    systemd
+    libei
+    libxkbcommon
   ];
 
   meta = with lib; {
@@ -36,7 +45,6 @@ stdenv.mkDerivation rec {
     mainProgram = "gnome-ponytail-daemo";
     homepage = "https://gitlab.gnome.org/ofourdan/gnome-ponytail-daemon";
     license = licenses.gpl2Plus;
-    platforms = qtbase.meta.platforms;
     maintainers = with maintainers; [ ];
   };
 }
