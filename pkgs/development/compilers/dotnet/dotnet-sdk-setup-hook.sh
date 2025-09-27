@@ -23,7 +23,7 @@ _linkPackages() {
         for x in "$src"/*/*; do
             dir=$dest/$(basename "$(dirname "$x")")
             mkdir -p "$dir"
-            if [[ ! -f "$dir/$(basename "$x")" ]]; then
+            if [[ ! -e "$dir/$(basename "$x")" ]]; then
               ln -s "$x" "$dir"/
             fi
         done
