@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch,
   cmake,
   gtest,
   lz4,
@@ -11,6 +10,7 @@
   snappy,
   zlib,
   zstd,
+  nix-update-script,
 }:
 
 let
@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     ZLIB_ROOT = zlib.dev;
     ZSTD_ROOT = zstd.dev;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/apache/orc/releases/tag/v${finalAttrs.version}";
