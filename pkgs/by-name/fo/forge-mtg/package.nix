@@ -129,6 +129,9 @@ maven.buildMavenPackage {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://card-forge.github.io/forge";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ eigengrau ];
+    maintainers = with maintainers; [
+      dyegoaurelio
+      eigengrau
+    ];
   };
 }
