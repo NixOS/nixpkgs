@@ -25,6 +25,12 @@ in
       description = "Port to expose the matter-server service on.";
     };
 
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to open the port in the firewall.";
+    };
+
     logLevel = lib.mkOption {
       type = lib.types.enum [
         "critical"
@@ -48,6 +54,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+
     systemd.services.matter-server = {
       after = [ "network-online.target" ];
       before = [ "home-assistant.service" ];
