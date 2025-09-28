@@ -680,10 +680,6 @@ in
             NoNewPrivileges = true;
             LockPersonality = true;
             RemoveIPC = true;
-            ReadWritePaths = [
-              rootDir
-              confDir
-            ];
             ProtectSystem = "strict";
             PrivateUsers = true;
             ProtectHome = true;
@@ -695,6 +691,10 @@ in
             ProtectKernelModules = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
+            StateDirectory = "crowdsec";
+            StateDirectoryMode = "0750";
+            ConfigurationDirectory = "crowdsec";
+            ConfigurationDirectoryMode = "0750";
             SystemCallFilter = [
               " " # This is needed to clear the SystemCallFilter existing definitions
               "~@reboot"
@@ -832,10 +832,8 @@ in
                   };
                 })
                 [
-                  rootDir
                   dataDir
                   hubDir
-                  confDir
                   localScenariosDir
                   localPostOverflowsDir
                   localPostOverflowsS01WhitelistDir
