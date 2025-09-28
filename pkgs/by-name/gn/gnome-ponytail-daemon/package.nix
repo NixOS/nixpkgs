@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sort of a bridge for dogtail for GNOME on Wayland";
-    mainProgram = "gnome-ponytail-daemo";
+    mainProgram = "gnome-ponytail-daemon";
     homepage = "https://gitlab.gnome.org/ofourdan/gnome-ponytail-daemon";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
