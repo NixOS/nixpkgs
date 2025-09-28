@@ -61,7 +61,6 @@ extra-packages:
   - extensions == 0.1.0.1               # 2025-09-21: needed for Cabal 3.10 (fourmolo/ormolu with ghc 9.8)
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - fourmolu == 0.15.0.0                # 2025-09-21: for ghc-lib-parser 9.8 compat
-  - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
@@ -116,7 +115,6 @@ extra-packages:
   - text-builder < 1                    # 2025-08-27: Needed for building postgrest
   - text-builder-dev < 0.4              # 2025-08-27: Needed for building postgrest
   - text-metrics < 0.3.3                # 2025-02-08: >= 0.3.3 uses GHC2021
-  - versions < 6                        # 2024-04-22: required by spago-0.21
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
 # keep-sorted end
