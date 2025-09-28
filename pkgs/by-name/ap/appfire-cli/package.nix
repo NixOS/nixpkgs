@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "atlassian-cli";
+  pname = "appfire-cli";
   version = "9.6.0";
 
   src = fetchzip {
