@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromRepoOrCz,
+  fetchPypi,
   buildPythonPackage,
   flit-core,
   pillow,
@@ -19,10 +19,10 @@ let
 
     disabled = pythonOlder "3.7";
 
-    src = fetchFromRepoOrCz {
-      repo = "docutils";
-      rev = "docutils-${version}";
-      hash = "sha256-Q+9yW+BYUEvPYV504368JsAoKKoaTZTeKh4tVeiNv5Y=";
+    src = fetchPypi {
+      inherit version pname;
+      format = "setuptools";
+      hash = "sha256-OmsYcy7fGC2qPNEndbuzOM9WkUaPke7rEJ3v9uv6mG8=";
     };
 
     build-system = [ flit-core ];
