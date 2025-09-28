@@ -1459,9 +1459,11 @@ with pkgs;
     rxvt-unicode-unwrapped = rxvt-unicode-unwrapped-emoji;
   };
 
-  rxvt-unicode-plugins = import ../applications/terminal-emulators/rxvt-unicode-plugins {
-    inherit callPackage;
-  };
+  rxvt-unicode-plugins = lib.recurseIntoAttrs (
+    import ../applications/terminal-emulators/rxvt-unicode-plugins {
+      inherit callPackage;
+    }
+  );
 
   rxvt-unicode-unwrapped = callPackage ../applications/terminal-emulators/rxvt-unicode { };
 
@@ -1617,7 +1619,7 @@ with pkgs;
     withDriver = false;
   };
 
-  fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
+  fedora-backgrounds = lib.recurseIntoAttrs (callPackage ../data/misc/fedora-backgrounds { });
 
   coconut = with python312Packages; toPythonApplication coconut;
 
@@ -2459,7 +2461,7 @@ with pkgs;
 
   libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
 
-  skkDictionaries = callPackages ../tools/inputmethods/skk/skk-dicts { };
+  skkDictionaries = lib.recurseIntoAttrs (callPackages ../tools/inputmethods/skk/skk-dicts { });
 
   ibus = callPackage ../tools/inputmethods/ibus { };
 
@@ -3324,7 +3326,7 @@ with pkgs;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
-  npmHooks = callPackage ../build-support/node/build-npm-package/hooks { };
+  npmHooks = lib.recurseIntoAttrs (callPackage ../build-support/node/build-npm-package/hooks { });
 
   inherit (callPackages ../build-support/node/fetch-npm-deps { })
     fetchNpmDeps
@@ -5873,7 +5875,9 @@ with pkgs;
     enableQt = true;
   };
 
-  octave-kernel = callPackage ../applications/editors/jupyter-kernels/octave { };
+  octave-kernel = lib.recurseIntoAttrs (
+    callPackage ../applications/editors/jupyter-kernels/octave { }
+  );
 
   octavePackages = recurseIntoAttrs octave.pkgs;
 
@@ -5881,8 +5885,8 @@ with pkgs;
   #
   # Set default PHP interpreter, extensions and packages
   php = php84;
-  phpExtensions = php.extensions;
-  phpPackages = php.packages;
+  phpExtensions = lib.recurseIntoAttrs php.extensions;
+  phpPackages = lib.recurseIntoAttrs php.packages;
 
   # Import PHP84 interpreter, extensions and packages
   php84 = callPackage ../development/interpreters/php/8.4.nix {
@@ -8253,7 +8257,9 @@ with pkgs;
   nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
   nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
 
-  nvidiaCtkPackages = callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix { };
+  nvidiaCtkPackages = lib.recurseIntoAttrs (
+    callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix { }
+  );
   inherit (nvidiaCtkPackages)
     nvidia-docker
     ;
@@ -9385,7 +9391,7 @@ with pkgs;
   icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
   icingaweb2-thirdparty = callPackage ../servers/icingaweb2/thirdparty.nix { };
   icingaweb2 = callPackage ../servers/icingaweb2 { };
-  icingaweb2Modules = {
+  icingaweb2Modules = lib.recurseIntoAttrs {
     theme-april = callPackage ../servers/icingaweb2/theme-april { };
     theme-lsd = callPackage ../servers/icingaweb2/theme-lsd { };
     theme-particles = callPackage ../servers/icingaweb2/theme-particles { };
@@ -10038,7 +10044,7 @@ with pkgs;
 
   elegant-sddm = libsForQt5.callPackage ../data/themes/elegant-sddm { };
 
-  error-inject = callPackages ../os-specific/linux/error-inject { };
+  error-inject = lib.recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
 
   ffado = callPackage ../os-specific/linux/ffado { };
   ffado-mixer = callPackage ../os-specific/linux/ffado { withMixer = true; };
@@ -10737,9 +10743,9 @@ with pkgs;
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 
-  tex-gyre = callPackages ../data/fonts/tex-gyre { };
+  tex-gyre = lib.recurseIntoAttrs (callPackages ../data/fonts/tex-gyre { });
 
-  tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
+  tex-gyre-math = lib.recurseIntoAttrs (callPackages ../data/fonts/tex-gyre-math { });
 
   xkeyboard_config = xkeyboard-config;
 
@@ -10965,7 +10971,7 @@ with pkgs;
 
   deadbeef = callPackage ../applications/audio/deadbeef { };
 
-  deadbeefPlugins = {
+  deadbeefPlugins = lib.recurseIntoAttrs {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
     lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
@@ -11906,13 +11912,11 @@ with pkgs;
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
-  mopidyPackages =
-    (callPackages ../applications/audio/mopidy {
+  mopidyPackages = lib.recurseIntoAttrs (
+    callPackages ../applications/audio/mopidy {
       python = python3;
-    })
-    // {
-      __attrsFailEvaluation = true;
-    };
+    }
+  );
 
   inherit (mopidyPackages)
     mopidy
@@ -12509,7 +12513,7 @@ with pkgs;
 
   cura = libsForQt5.callPackage ../applications/misc/cura { };
 
-  curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
+  curaPlugins = lib.recurseIntoAttrs (callPackage ../applications/misc/cura/plugins.nix { });
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer {
     # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
@@ -13007,7 +13011,7 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  inherit (windowmaker) dockapps;
+  dockapps = lib.recurseIntoAttrs windowmaker.dockapps;
 
   wofi-pass = callPackage ../../pkgs/tools/security/pass/wofi-pass.nix { };
 
@@ -13119,7 +13123,7 @@ with pkgs;
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
-  zathuraPkgs = callPackage ../applications/misc/zathura { };
+  zathuraPkgs = lib.recurseIntoAttrs (callPackage ../applications/misc/zathura { });
   zathura = zathuraPkgs.zathuraWrapper;
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
@@ -14414,7 +14418,7 @@ with pkgs;
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
-  openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
+  openlilylib-fonts = lib.recurseIntoAttrs (callPackage ../misc/lilypond/fonts.nix { });
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
@@ -14593,7 +14597,7 @@ with pkgs;
 
   nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 
-  nixos-artwork = callPackage ../data/misc/nixos-artwork { };
+  nixos-artwork = lib.recurseIntoAttrs (callPackage ../data/misc/nixos-artwork { });
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
 
@@ -14792,7 +14796,9 @@ with pkgs;
 
   buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
 
-  dartHooks = callPackage ../build-support/dart/build-dart-application/hooks { };
+  dartHooks = lib.recurseIntoAttrs (
+    callPackage ../build-support/dart/build-dart-application/hooks { }
+  );
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
 
@@ -14879,11 +14885,11 @@ with pkgs;
     name = "bsd-setup-hook";
   } ../os-specific/bsd/setup-hook.sh;
 
-  freebsd = callPackage ../os-specific/bsd/freebsd { };
+  freebsd = lib.recurseIntoAttrs (callPackage ../os-specific/bsd/freebsd { });
 
-  netbsd = callPackage ../os-specific/bsd/netbsd { };
+  netbsd = lib.recurseIntoAttrs (callPackage ../os-specific/bsd/netbsd { });
 
-  openbsd = callPackage ../os-specific/bsd/openbsd { };
+  openbsd = lib.recurseIntoAttrs (callPackage ../os-specific/bsd/openbsd { });
 
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare { };
 

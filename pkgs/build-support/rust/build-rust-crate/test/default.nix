@@ -228,7 +228,7 @@ let
 in
 rec {
 
-  tests =
+  tests = lib.recurseIntoAttrs (
     let
       cases = rec {
         libPath = {
@@ -910,7 +910,8 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
-    };
+    }
+  );
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
