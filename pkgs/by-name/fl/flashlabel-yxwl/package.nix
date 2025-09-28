@@ -1,20 +1,17 @@
 {
   autoPatchelfHook,
   cups,
+  fetchurl,
   lib,
-  requireFile,
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "flashlabel-yxwl";
   version = "1.2.1";
 
-  # The source URL currently redirects through “pCloud”, a file storage service
-  # that resists direct downloads.
-  src = requireFile {
-    name = "A4_Linux_Driver_Ver${version}.run";
-    url = "https://flashlabel.net/YXWL-A4driver-linux";
+  src = fetchurl {
+    url = "https://cdn.shopify.com/s/files/1/0771/1984/8732/files/A4_Linux_Driver_Ver1.2.1.run";
     hash = "sha256-qkc3NJ1dK0nJf+Q7xL7f1/+X0COWSWMEbH4luzaFARc=";
   };
 
