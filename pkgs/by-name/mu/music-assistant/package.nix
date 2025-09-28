@@ -5,7 +5,9 @@
   ffmpeg-headless,
   nixosTests,
   replaceVars,
+  callPackage,
   providers ? [ ],
+  withSpotifySupport ? false,
 }:
 
 let
@@ -31,6 +33,8 @@ let
       });
     };
   };
+
+  librespot-ma = if withSpotifySupport then callPackage ./librespot-ma.nix { } else null;
 
   providerPackages = (import ./providers.nix).providers;
   providerNames = lib.attrNames providerPackages;
@@ -63,19 +67,31 @@ python.pkgs.buildPythonApplication rec {
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })
 
-    # Look up librespot from PATH at runtime
-    ./librespot.patch
-
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+  postPatch =
+    let
+      spotifyBinPath = "music_assistant/providers/spotify/bin";
+    in
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "0.0.0" "${version}"
 
-    rm -rv music_assistant/providers/spotify/bin
-  '';
+      rm -rv ${spotifyBinPath}
+    ''
+    + (
+      if withSpotifySupport then
+        ''
+          mkdir -p ${spotifyBinPath}
+          system=$(uname -s | tr '[:upper:]' '[:lower:]' | sed 's/darwin/macos/')
+          arch=$(uname -m | tr '[:upper:]' '[:lower:]')
+          cp ${lib.getExe librespot-ma} ${spotifyBinPath}/librespot-$system-$arch
+        ''
+      else
+        ""
+    );
 
   build-system = with python.pkgs; [
     setuptools
@@ -176,6 +192,7 @@ python.pkgs.buildPythonApplication rec {
       pythonPath
       providerPackages
       providerNames
+      withSpotifySupport
       ;
     tests = nixosTests.music-assistant;
   };
