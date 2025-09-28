@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   fontconfig,
   llvmPackages,
   nix-update-script,
@@ -36,6 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-x9vOj5Dy2SaQOLBCM13wZ/4SxgBz+99K/UxJqhKTg3c=";
   };
+
+  patches = [
+    # ref. https://github.com/Simple-Robotics/aligator/pull/344 merged upstream
+    (fetchpatch {
+      name = "fix-compat-with-crocoddyl-v310.patch";
+      url = "https://github.com/Simple-Robotics/aligator/commit/be6acbd9f558dc313c16bd8dc2d639eb0ec00f7e.patch";
+      hash = "sha256-D2yvvnj4CcV2lJgaAh6oQShmEnXPd3NxTWMjtNIkN8U=";
+    })
+  ];
 
   outputs = [
     "doc"
