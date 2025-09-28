@@ -13,7 +13,7 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.35";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
