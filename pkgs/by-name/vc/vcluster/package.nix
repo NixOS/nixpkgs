@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.28.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "vcluster";
     tag = "v${version}";
-    hash = "sha256-ddt9UDLKlC16ki+D35Ct1uvygeFb++fNeHVps0vCsPA=";
+    hash = "sha256-5Ai73ikvwjvxLhDJ5RV4vqpdbe/uiXmcRVDp45er6kc=";
   };
 
   vendorHash = null;
