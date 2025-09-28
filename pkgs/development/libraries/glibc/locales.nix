@@ -51,16 +51,16 @@
 
           mkdir -p $TMPDIR/"${buildPackages.glibc.out}/lib/locale"
 
-          echo 'C.UTF-8/UTF-8 \' >> ../glibc-2*/localedata/SUPPORTED
+          echo 'C.UTF-8/UTF-8 \' >> ../localedata/SUPPORTED
 
           # Hack to allow building of the locales (needed since glibc-2.12)
-          sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef $(LOCALEDEF_FLAGS),' ../glibc-2*/localedata/Makefile
+          sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef $(LOCALEDEF_FLAGS),' ../localedata/Makefile
         ''
         + lib.optionalString (!allLocales) ''
           # Check that all locales to be built are supported
           echo -n '${lib.concatMapStrings (s: s + " \\\n") locales}' \
             | sort -u > locales-to-build.txt
-          cat ../glibc-2*/localedata/SUPPORTED | grep ' \\' \
+          cat ../localedata/SUPPORTED | grep ' \\' \
             | sort -u > locales-supported.txt
           comm -13 locales-supported.txt locales-to-build.txt \
             > locales-unsupported.txt
@@ -72,7 +72,7 @@
             false
           fi
 
-          echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
+          echo SUPPORTED-LOCALES='${toString locales}' > ../localedata/SUPPORTED
         '';
 
       # Current `nixpkgs` way of building locales is not compatible with
@@ -89,7 +89,7 @@
       installPhase = ''
         mkdir -p "$out/lib/locale" "$out/share/i18n"
         cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
-        cp -v ../glibc-2*/localedata/SUPPORTED "$out/share/i18n/SUPPORTED"
+        cp -v ../localedata/SUPPORTED "$out/share/i18n/SUPPORTED"
       '';
 
       setupHook = writeText "locales-setup-hook.sh" ''
