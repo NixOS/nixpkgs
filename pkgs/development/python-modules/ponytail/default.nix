@@ -14,6 +14,7 @@
   pygobject3,
   pyatspi,
   pycairo,
+  dbus-python,
 }:
 
 buildPythonPackage rec {
@@ -67,6 +68,7 @@ build-backend = "setuptools.build_meta"
     pygobject3
     pyatspi
     pycairo
+    dbus-python
   ];
 
   meta = with lib; {
