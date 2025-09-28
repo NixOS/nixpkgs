@@ -272,6 +272,17 @@ let
       # See: https://rocm.docs.amd.com/en/docs-5.7.1/_images/image.004.png
       # See: https://rocm.docs.amd.com/en/docs-5.7.1/deploy/linux/os-native/package_manager_integration.html
       meta = with self; rec {
+        release-attrPaths = (builtins.fromJSON (builtins.readFile ./release-attrPaths.json)).attrPaths;
+        release-packagePlatforms =
+          let
+            platforms = [
+              "x86_64-linux"
+            ];
+          in
+          lib.foldl' (
+            acc: path: lib.recursiveUpdate acc (lib.setAttrByPath (lib.splitString "." path) platforms)
+          ) { } self.meta.release-attrPaths;
+
         rocm-developer-tools = symlinkJoin {
           name = "rocm-developer-tools-meta";
           paths = [
