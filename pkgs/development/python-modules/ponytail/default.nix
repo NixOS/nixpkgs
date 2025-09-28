@@ -50,6 +50,10 @@ build-backend = "setuptools.build_meta"
 
     ' >> pyproject.toml
     cat pyproject.toml
+    ls -R
+    mkdir ponytail
+    mv ponytail.py ponytail/ponytail.py
+    mv __init__.py ponytail/__init__.py
   '';
 
   build-system = [
