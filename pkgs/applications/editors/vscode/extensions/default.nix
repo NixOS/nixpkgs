@@ -1834,8 +1834,8 @@ let
         mktplcRef = {
           publisher = "funkyremi";
           name = "vscode-google-translate";
-          version = "1.4.13";
-          hash = "sha256-9Vo6lwqD1eE3zY0Gi9ME/6lPwmwuJ3Iq9StHPvncnM4=";
+          version = "1.5.0";
+          hash = "sha256-t6USs2mZE3g802BRwP56eH/Wj/cyAcA+h/V+++NtHnA=";
         };
         meta = {
           description = "Visual Studio Code extension using google translation to helping you quickly translate text right in your code rocket";
