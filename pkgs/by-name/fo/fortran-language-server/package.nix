@@ -1,13 +1,13 @@
 {
   lib,
   fetchPypi,
-  buildPythonApplication,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "fortran-language-server";
   version = "1.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

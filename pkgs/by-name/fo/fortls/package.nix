@@ -1,16 +1,13 @@
 {
-  buildPythonApplication,
+  python3Packages,
   lib,
   fetchFromGitHub,
-  setuptools-scm,
-  json5,
-  packaging,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "fortls";
   version = "3.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
@@ -19,9 +16,9 @@ buildPythonApplication rec {
     hash = "sha256-cUZBr+dtTFbd68z6ts4quIPp9XYMikUBrCq+icrZ1KU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     json5
     packaging
   ];

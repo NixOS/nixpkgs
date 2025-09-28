@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  pyserial,
-  pyudev,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rshell";
   version = "0.0.36";
   format = "setuptools";
@@ -16,7 +14,7 @@ buildPythonApplication rec {
     hash = "sha256-SmbYNSB0eVUOWdDdPoMAPQTE7KeKTkklD4h+0t1LC/U=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     pyserial
     pyudev
   ];

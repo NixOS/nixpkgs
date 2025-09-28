@@ -1,15 +1,11 @@
 {
   lib,
-  buildPythonApplication,
   fetchFromGitHub,
-  python,
-  pyyaml,
-  fonttools,
-  fontforge,
-  setuptools,
+  python3Packages,
+  python3,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "scfbuild";
   version = "2.0.0";
 
@@ -22,7 +18,7 @@ buildPythonApplication {
     sha256 = "0wkyzkhshlax9rvdmn441gv87n9abfr0qqmgs8bkg9kbcjb4bhad";
   };
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     pyyaml
     fonttools
     fontforge
@@ -32,8 +28,8 @@ buildPythonApplication {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/${python.sitePackages}
-    cp -r scfbuild $out/${python.sitePackages}
+    mkdir -p $out/${python3.sitePackages}
+    cp -r scfbuild $out/${python3.sitePackages}
     cp -r bin $out
 
     runHook postInstall

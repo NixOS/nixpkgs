@@ -1,24 +1,24 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  dnspython,
-  pytestCheckHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nxdomain";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0va7nkbdjgzrf7fnbxkh1140pbc62wyj86rdrrh5wmg3phiziqkb";
   };
 
-  propagatedBuildInputs = [ dnspython ];
+  build-system = with python3Packages; [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = with python3Packages; [ dnspython ];
+
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   postCheck = ''
     echo example.org > simple.list
