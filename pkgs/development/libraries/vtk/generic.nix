@@ -282,7 +282,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove thirdparty find module that have been provided in nixpkgs.
     ''
       rm -rf $out/lib/cmake/vtk/patches
-      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig}.cmake
+      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig,TBB}.cmake
     ''
     # libvtkglad.so will find and load libGL.so at runtime.
     + lib.optionalString stdenv.hostPlatform.isLinux ''
