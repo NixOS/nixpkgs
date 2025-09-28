@@ -40,14 +40,14 @@ melpaBuild (
   in
   {
     pname = "cask";
-    version = "0.9.0";
+    version = "0.9.1";
 
     src = fetchFromGitHub {
       name = "cask-source-${finalAttrs.version}";
       owner = "cask";
       repo = "cask";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-91rJFsp2SLk/JY+v6G5JmXH5bg9QnT+qhI8ccNJlI4A=";
+      hash = "sha256-/vinpQ51AuaTbXW4L4MnVonyfzTMvHUF4HViSPBKZxs=";
     };
 
     nativeBuildInputs = [ installShellFiles ];
