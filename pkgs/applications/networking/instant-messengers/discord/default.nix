@@ -3,6 +3,10 @@
   fetchurl,
   lib,
   stdenv,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
 let
   variants = rec {
@@ -18,6 +22,7 @@ let
         branch = "stable";
         binaryName = desktopName;
         desktopName = "Discord";
+        self = discord;
       };
       discord-ptb = rec {
         version = "0.0.161";
@@ -30,6 +35,7 @@ let
         branch = "ptb";
         binaryName = "DiscordPTB";
         desktopName = "Discord PTB";
+        self = discord-ptb;
       };
       discord-canary = rec {
         version = "0.0.761";
@@ -42,6 +48,7 @@ let
         branch = "canary";
         binaryName = "DiscordCanary";
         desktopName = "Discord Canary";
+        self = discord-canary;
       };
       discord-development = rec {
         version = "0.0.89";
@@ -54,6 +61,7 @@ let
         branch = "development";
         binaryName = "DiscordDevelopment";
         desktopName = "Discord Development";
+        self = discord-development;
       };
     };
     x86_64-darwin = {
@@ -68,6 +76,7 @@ let
         branch = "stable";
         binaryName = desktopName;
         desktopName = "Discord";
+        self = discord;
       };
       discord-ptb = rec {
         version = "0.0.192";
@@ -80,6 +89,7 @@ let
         branch = "ptb";
         binaryName = desktopName;
         desktopName = "Discord PTB";
+        self = discord-ptb;
       };
       discord-canary = rec {
         version = "0.0.867";
@@ -92,6 +102,7 @@ let
         branch = "canary";
         binaryName = desktopName;
         desktopName = "Discord Canary";
+        self = discord-canary;
       };
       discord-development = rec {
         version = "0.0.100";
@@ -104,6 +115,7 @@ let
         branch = "development";
         binaryName = desktopName;
         desktopName = "Discord Development";
+        self = discord-development;
       };
     };
 
