@@ -10,12 +10,12 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "parallel";
   version = "20250822";
 
   src = fetchurl {
-    url = "mirror://gnu/parallel/parallel-${version}.tar.bz2";
+    url = "mirror://gnu/parallel/parallel-${finalAttrs.version}.tar.bz2";
     hash = "sha256-AZ0yhyKGfP/pGMRJNkMIwN8EhFbGkpm5FFGj5vrJFno=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "parallel";
   };
-}
+})
