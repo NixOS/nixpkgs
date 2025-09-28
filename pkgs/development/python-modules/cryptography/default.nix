@@ -98,9 +98,6 @@ buildPythonPackage rec {
       bsd3
       psfl
     ];
-    maintainers = with maintainers; [
-      SuperSandro2000
-      mdaniels5757
-    ];
+    maintainers = with maintainers; [ mdaniels5757 ];
   };
 }

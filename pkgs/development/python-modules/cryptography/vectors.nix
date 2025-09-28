@@ -33,9 +33,6 @@ buildPythonPackage rec {
       asl20
       bsd3
     ];
-    maintainers = with maintainers; [
-      SuperSandro2000
-      mdaniels5757
-    ];
+    maintainers = with maintainers; [ mdaniels5757 ];
   };
 }
