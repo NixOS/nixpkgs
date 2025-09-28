@@ -487,9 +487,7 @@ in
 
       cscli = pkgs.writeShellScriptBin "cscli" ''
         set -euo pipefail
-        # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
-        export PATH="$PATH:${lib.makeBinPath [ cfg.package ]}"
-                sudo=exec
+        sudo=exec
         if [ "$USER" != "${cfg.user}" ]; then
           ${
             if config.security.sudo.enable then
@@ -529,64 +527,64 @@ in
 
       scriptArray = [
         "set -euo pipefail"
-        "${lib.getExe' pkgs.coreutils "mkdir"} -p '${hubDir}'"
+        "mkdir -p '${hubDir}'"
         "${lib.getExe cscli} hub update"
       ]
-      ++ lib.optionals (cfg.hub.collections != [ ]) [
-        "${lib.getExe cscli} collections install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.scenarios != [ ]) [
-        "${lib.getExe cscli} scenarios install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.parsers != [ ]) [
-        "${lib.getExe cscli} parsers install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
-        "${lib.getExe cscli} postoverflows install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
-        "${lib.getExe cscli} appsec-configs install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
-        "${lib.getExe cscli} appsec-rules install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
-        }"
-      ]
-      ++ lib.optionals (cfg.settings.general.api.server.online_client.credentials_path != null) [
+      ++ lib.optional (cfg.hub.collections != [ ])
+        "${lib.getExe cscli} collections install ${lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections}"
+
+      ++ lib.optional (cfg.hub.scenarios != [ ])
+        "${lib.getExe cscli} scenarios install ${lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios}"
+
+      ++ lib.optional (cfg.hub.parsers != [ ])
+        "${lib.getExe cscli} parsers install ${lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers}"
+
+      ++ lib.optional (cfg.hub.postOverflows != [ ])
+        "${lib.getExe cscli} postoverflows install ${lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows}"
+
+      ++ lib.optional (cfg.hub.appSecConfigs != [ ])
+        "${lib.getExe cscli} appsec-configs install ${lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs}"
+
+      ++ lib.optional (cfg.hub.appSecRules != [ ])
+        "${lib.getExe cscli} appsec-rules install ${lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules}"
+
+      ++ lib.optional (cfg.settings.general.api.server.online_client.credentials_path != null)
         ''
-          if ! ${lib.getExe pkgs.gnugrep} -q password "${cfg.settings.general.api.server.online_client.credentials_path}";  then
+          if ! grep -q password "${cfg.settings.general.api.server.online_client.credentials_path}";  then
             ${lib.getExe cscli} capi register
           fi
         ''
-      ]
-      ++ lib.optionals (cfg.settings.general.api.server.enable) [
+
+      ++ lib.optional (cfg.settings.general.api.server.enable)
         ''
           if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
             ${lib.getExe cscli} machine add "${cfg.name}" --auto
           fi
         ''
-      ]
-      ++ lib.optionals (cfg.settings.console.tokenFile != null) [
-        ''
-          if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
-            ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
-          fi
-        ''
-      ];
 
-      setupScript = pkgs.writeShellScriptBin "crowdsec-setup" (
-        lib.strings.concatStringsSep "\n" scriptArray
-      );
+      ++ lib.optional (cfg.settings.console.tokenFile != null)
+        ''
+          ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
+        ''
+      ;
+
+      # setupScript = pkgs.writeShellApplication "crowdsec-setup" (
+      #   lib.strings.concatStringsSep "\n" scriptArray
+      # );
+
+      setupScript = pkgs.writeShellApplication {
+        name = "crowdsec-setup";
+
+        runtimeInputs = with pkgs; [
+          coreutils
+          gnugrep
+        ] ++ [
+          # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
+          cfg.package
+        ];
+
+        text = lib.strings.concatStringsSep "\n" scriptArray;
+      };
 
     in
     lib.mkIf (cfg.enable) {
