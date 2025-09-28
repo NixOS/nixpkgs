@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "btor2tools";
-  version = "0-unstable-2024-08-07";
+  version = "0-unstable-2025-09-18";
 
   src = fetchFromGitHub {
     owner = "boolector";
     repo = "btor2tools";
-    rev = "44bcadbfede292ff4c4a4a8962cc18130de522fb";
-    sha256 = "0ncl4xwms8d656x95ga8v8zjybx4cmdl5hlcml7dpcgm3p8qj4ks";
+    rev = "d33c73ff1d173f1bfac8ba6b1c6d68ba62c55f8e";
+    sha256 = "sha256-RVjZ5HM2yQ3eAICFuzwvNeQDXzWzzSiCCslIWMJi6U8=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
