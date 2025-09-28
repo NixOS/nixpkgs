@@ -606,10 +606,13 @@ lib.fix (
           echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
           cp ${newCabalFile} ${pname}.cabal
         ''
+        + prePatch
+        + "\n"
+        # cabal2nix-generated expressions run hpack not until prePatch to create
+        # the .cabal file (if necessary)
         + lib.optionalString (!dontConvertCabalFileToUnix) ''
           sed -i -e 's/\r$//' *.cabal
-        ''
-        + prePatch;
+        '';
 
       postPatch =
         optionalString jailbreak ''
