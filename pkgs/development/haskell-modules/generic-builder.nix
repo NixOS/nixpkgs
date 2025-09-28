@@ -607,7 +607,7 @@ lib.fix (
           cp ${newCabalFile} ${pname}.cabal
         ''
         + lib.optionalString (!dontConvertCabalFileToUnix) ''
-          sed -i '${pname}.cabal' -e 's/\r$//'
+          sed -i -e 's/\r$//' *.cabal
         ''
         + prePatch;
 
