@@ -427,15 +427,11 @@ in
 
     services.traefik = {
       enable = true;
+      localPlugins = [ pkgs.fosrl-badger ];
       static.settings = {
         providers.http = {
           endpoint = "http://localhost:${toString finalSettings.server.internal_port}/api/v1/traefik-config";
           pollInterval = "5s";
-        };
-        # TODO to change this once #437073 is merged.
-        experimental.plugins.badger = {
-          moduleName = "github.com/fosrl/badger";
-          version = "v1.2.0";
         };
         certificatesResolvers.letsencrypt.acme =
           (
