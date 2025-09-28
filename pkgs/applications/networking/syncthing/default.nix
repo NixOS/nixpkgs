@@ -68,7 +68,6 @@ let
           inherit (nixosTests)
             syncthing
             syncthing-init
-            syncthing-many-devices
             syncthing-no-settings
             syncthing-relay
             ;
