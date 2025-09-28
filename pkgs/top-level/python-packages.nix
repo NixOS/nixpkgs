@@ -11960,6 +11960,8 @@ self: super: with self; {
 
   plugincode = callPackage ../development/python-modules/plugincode { };
 
+  pluginlib = callPackage ../development/python-modules/pluginlib { };
+
   plugnplay = callPackage ../development/python-modules/plugnplay { };
 
   plugp100 = callPackage ../development/python-modules/plugp100 { };
