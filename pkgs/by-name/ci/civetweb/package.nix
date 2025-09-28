@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 
@@ -18,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-pkg-config-files.patch
+    (fetchpatch {
+      name = "CVE-2025-55763.patch";
+      url = "https://github.com/civetweb/civetweb/commit/76e222bcb77ba8452e5da4e82ae6cecd499c25e0.patch";
+      hash = "sha256-gv2FR53SxmRCCTRjj17RhIjoHkgOz5ENs9oHmcfFmw8=";
+    })
   ];
 
   outputs = [
