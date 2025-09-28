@@ -7,7 +7,7 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
-  jdk23,
+  zulu24,
   gtk3,
   gsettings-desktop-schemas,
   writeScript,
@@ -27,7 +27,7 @@ let
   pname = "sparrow";
   version = "2.2.3";
 
-  openjdk = jdk23.override { enableJavaFX = true; };
+  openjdk = zulu24.override { enableJavaFX = true; };
 
   sparrowArch =
     {
@@ -139,7 +139,7 @@ let
       # Extract the JDK's JIMAGE and generate a list of modules.
       mkdir modules
       pushd modules
-      jimage extract ${openjdk}/lib/openjdk/lib/modules
+      jimage extract ${openjdk}/lib/modules
       ls | xargs -d " " -- echo > ../manifest.txt
       popd
     '';

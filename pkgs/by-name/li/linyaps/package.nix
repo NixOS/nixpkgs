@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.9.12";
+  version = "1.9.13";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-BNP/CenPXMuEixEleil9zB08qLn/SZ9Ur/Im4MQy5nE=";
+    hash = "sha256-sAxHDvhRz7okElk8vdISJt/yrNnCdu95hW3ImHOjiyw=";
   };
 
   patches = [
@@ -139,6 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "ll-cli";
-    maintainers = with lib.maintainers; [ wineee ];
+    maintainers = with lib.maintainers; [
+      wineee
+      hhr2020
+    ];
   };
 })

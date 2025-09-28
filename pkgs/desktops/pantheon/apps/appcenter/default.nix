@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "8.3.0";
+  version = "8.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "appcenter";
     rev = version;
-    hash = "sha256-78tj/FuB5xzit5W0HsldQS5WEmNtOFmTsPcEFqBQOtc=";
+    hash = "sha256-DFlPXsKLlBufOx/GgFAJovaRwCaFFHo2AlnvszdU7Go=";
   };
 
   nativeBuildInputs = [

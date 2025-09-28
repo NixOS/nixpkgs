@@ -1182,8 +1182,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.118.1";
-          hash = "sha256-Ug3rEfM2oh1s9a6BulHmj0++xt+nzT0XcdQ4TuH8xV4=";
+          version = "3.118.2";
+          hash = "sha256-AHT5QP8aNhuMOyyV7Nig8UnoG4dkQhN2XKw0eh+Rfbg=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1324,8 +1324,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.27.0";
-          hash = "sha256-EfdgQxjpsycfxe+X1QfO6WP3W+WS5Ovnb7q/qHGJ1N4=";
+          version = "2.27.2";
+          hash = "sha256-NkOYn0ZNRqgi8HHowZSYmRKeOfqcxXfKIXUQNsJ0BtM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1969,8 +1969,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.116.2";
-          hash = "sha256-PDX3Wpmy82MvBzr/fnPP5Y7HMKkfphJLe/Rc284Vxlc=";
+          version = "0.118.1";
+          hash = "sha256-k3fz2PPXS85Xb0emVPyiQ4yGf1hmBZSU8LQ7lgLQ4JU=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2368,8 +2368,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.27.0";
-          hash = "sha256-NGl5uiR4taamA8lhH/qJT1nCfUhxCQ/XQ/oEZ9N9Q5Y=";
+          version = "7.27.1";
+          hash = "sha256-ur+/ZSewWBzLxkHVXHQJg4KzkC3Mi3E9fE3/wL6sD8g=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2766,6 +2766,8 @@ let
             maintainers = [ ];
           };
         };
+
+      kilocode.kilo-code = callPackage ./kilocode.kilo-code { };
 
       kravets.vscode-publint = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -4321,8 +4323,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.30.0";
-          hash = "sha256-sMiIxsMip2ep8ySOERHIAj+Ndwo+GnPhh9uaUncXO9k=";
+          version = "4.31.0";
+          hash = "sha256-Zw5Dy6VaMkt2zyEy8wZs2e92hA2j7u+moRSONHCDkgw=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -4526,8 +4528,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.314.1";
-          hash = "sha256-KWXQY4HyK7s4mNGh6x1eDK6okC5rxWe916RjlsACQxA=";
+          version = "3.315.0";
+          hash = "sha256-y6nTUDMQtJWZA30/jWTu0Kj9EMYkLGUAq7xvBvwGpeY=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5062,8 +5064,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.24.1";
-          hash = "sha256-M0y6/9EPkcXTMxArqLpfSeVKpVF2SvjLtTWvLMIvauY=";
+          version = "0.25.2025092303";
+          hash = "sha256-GU33NuhgNZdTFGkRQ6aJHs9nbvoOuJlf323mYf6TPOs=";
         };
         meta = {
           license = lib.licenses.mit;

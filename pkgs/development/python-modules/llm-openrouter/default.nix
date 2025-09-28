@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "llm-openrouter";
-  version = "0.4.1";
+  version = "0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-openrouter";
     tag = version;
-    hash = "sha256-ojBkyXqEaqTcOv7mzTWL5Ihhb50zeVzeQZNA6DySuVg=";
+    hash = "sha256-lofijdGKkQRQa2Hle4puIBOj+I28hGdKRILeQZOLkz4=";
   };
 
   build-system = [

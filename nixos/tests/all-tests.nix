@@ -190,6 +190,7 @@ in
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
   activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-nix-channel = runTest ./activation/nix-channel.nix;
+  activation-nixos-init = runTest ./activation/nixos-init.nix;
   activation-perlless = runTest ./activation/perlless.nix;
   activation-var = runTest ./activation/var.nix;
   actual = runTest ./actual.nix;
@@ -429,6 +430,7 @@ in
   cyrus-imap = runTest ./cyrus-imap.nix;
   dae = runTest ./dae.nix;
   darling-dmg = runTest ./darling-dmg.nix;
+  dashy = runTest ./web-apps/dashy.nix;
   davis = runTest ./davis.nix;
   db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;
@@ -746,6 +748,7 @@ in
   invoiceplane = runTest ./invoiceplane.nix;
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
+  ipget = runTest ./ipget.nix;
   ipv6 = runTest ./ipv6.nix;
   iscsi-multipath-root = runTest ./iscsi-multipath-root.nix;
   iscsi-root = runTest ./iscsi-root.nix;
@@ -1073,6 +1076,7 @@ in
   ntpd = runTest ./ntpd.nix;
   ntpd-rs = runTest ./ntpd-rs.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
+  nvme-rs = runTest ./nvme-rs.nix;
   nvmetcfg = runTest ./nvmetcfg.nix;
   nyxt = runTest ./nyxt.nix;
   nzbget = runTest ./nzbget.nix;
@@ -1584,6 +1588,7 @@ in
   vengi-tools = runTest ./vengi-tools.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
+  victoriatraces = import ./victoriatraces { inherit runTest; };
   vikunja = runTest ./vikunja.nix;
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };

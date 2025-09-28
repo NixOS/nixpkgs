@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libsoup/${lib.versions.majorMinor version}/libsoup-${version}.tar.xz";
     sha256 = "sha256-5Ld8Qc/EyMWgNfzcMgx7xs+3XvfFoDQVPfFBP6HZLxM=";
   };
 
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "libsoup_2_4";
-      packageName = pname;
+      packageName = "libsoup";
       versionPolicy = "odd-unstable";
       freeze = true;
     };

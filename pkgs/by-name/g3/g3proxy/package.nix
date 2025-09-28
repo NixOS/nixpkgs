@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "g3proxy";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "bytedance";
     repo = "g3";
     tag = "g3proxy-v${finalAttrs.version}";
-    hash = "sha256-nEvkzWbjbnhFC4HqYgw89FIKx2HlvX+fYR05bgzKdMg=";
+    hash = "sha256-zh++wptu1hukQ+Bm5AWhjrLLyLuAb4owfJwDztfKnwY=";
   };
 
-  cargoHash = "sha256-Ey0STb6VeExYIYx/k5o5d2oMDwmxS7gvH31+3WPea/M=";
+  cargoHash = "sha256-JNRH2IFUwzHarZZLxmYgyWr5lO1UX8H38EbmGoXebKo=";
 
   cargoBuildFlags = [
     "-p"

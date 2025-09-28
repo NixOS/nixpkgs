@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.25.1";
+  version = "0.25.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zXYa0OTR/IiksbgIO64G1PlzrPb18pu/E+qWCcHeycE=";
+    hash = "sha256-/kPBWFVdpGcjsotS4FitREGVr9HbPKdyDFmiVFROnCA=";
   };
 
   build-system = [ setuptools ];

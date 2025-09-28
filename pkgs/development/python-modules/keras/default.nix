@@ -214,5 +214,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    # Not yet released for tensorflow >= 2.20.0
+    broken = lib.versionAtLeast tensorflow.version "2.20";
   };
 }

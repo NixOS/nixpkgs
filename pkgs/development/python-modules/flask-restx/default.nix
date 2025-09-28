@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "python-restx";
     repo = "flask-restx";
     tag = version;
-    hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
+    hash = "sha256-KSHRfGX6M/w09P35A68u7uzMKaRioytScPh0Sw8JBfw=";
   };
 
   build-system = [ setuptools ];

@@ -2790,8 +2790,11 @@ src: {
     dependencies = [
       "activerecord"
       "activesupport"
+      "aws-sdk-core"
       "connection_pool"
       "elasticsearch"
+      "faraday-typhoeus"
+      "faraday_middleware-aws-sigv4"
       "opensearch-ruby"
       "pg"
       "zeitwerk"

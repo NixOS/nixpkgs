@@ -1586,6 +1586,7 @@ assertNoAdditions {
       # attempt to index global 'LazyVim' (a nil value)
       "lazyvim.config.keymaps"
       "lazyvim.plugins.extras.ai.tabnine"
+      "lazyvim.plugins.extras.ai.copilot-native"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
       "lazyvim.plugins.extras.coding.neogen"
@@ -1652,6 +1653,7 @@ assertNoAdditions {
     checkInputs = with self; [
       snacks-nvim
       telescope-nvim
+      mini-nvim
     ];
     dependencies = with self; [
       nui-nvim
@@ -1676,6 +1678,7 @@ assertNoAdditions {
       "leetcode.picker.question.init"
       "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
+      "leetcode.picker.question.mini"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
       "leetcode-plugins.cn.api"
@@ -2351,6 +2354,7 @@ assertNoAdditions {
       nvim-lspconfig
       telescope-nvim
       nvim-treesitter
+      nvchad-ui
     ];
     nvimSkipModules = [
       # Requires global config setup
@@ -3900,11 +3904,8 @@ assertNoAdditions {
   };
 
   vim-isort = super.vim-isort.overrideAttrs {
-    # Code updated to find relative path at runtime
-    # https://github.com/fisadev/vim-isort/pull/41
-    dontCheckForBrokenSymlinks = true;
     postPatch = ''
-      substituteInPlace ftplugin/python_vimisort.vim \
+      substituteInPlace autoload/vimisort.vim \
         --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
     '';
   };

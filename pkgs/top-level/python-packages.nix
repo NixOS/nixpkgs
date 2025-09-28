@@ -122,6 +122,8 @@ self: super: with self; {
 
   affine = callPackage ../development/python-modules/affine { };
 
+  affine-gaps = callPackage ../development/python-modules/affine-gaps { };
+
   afsapi = callPackage ../development/python-modules/afsapi { };
 
   agate = callPackage ../development/python-modules/agate { };
@@ -799,6 +801,8 @@ self: super: with self; {
 
   appimage = callPackage ../development/python-modules/appimage { };
 
+  appium-python-client = callPackage ../development/python-modules/appium-python-client { };
+
   apple-weatherkit = callPackage ../development/python-modules/apple-weatherkit { };
 
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
@@ -1401,6 +1405,8 @@ self: super: with self; {
   azure-mgmt-cosmosdb = callPackage ../development/python-modules/azure-mgmt-cosmosdb { };
 
   azure-mgmt-databoxedge = callPackage ../development/python-modules/azure-mgmt-databoxedge { };
+
+  azure-mgmt-databricks = callPackage ../development/python-modules/azure-mgmt-databricks { };
 
   azure-mgmt-datafactory = callPackage ../development/python-modules/azure-mgmt-datafactory { };
 
@@ -2245,6 +2251,8 @@ self: super: with self; {
   bundlewrap-pass = callPackage ../development/python-modules/bundlewrap-pass { };
 
   bundlewrap-teamvault = callPackage ../development/python-modules/bundlewrap-teamvault { };
+
+  busylight-core = callPackage ../development/python-modules/busylight-core { };
 
   busylight-for-humans = callPackage ../development/python-modules/busylight-for-humans { };
 
@@ -3124,6 +3132,8 @@ self: super: with self; {
 
   crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
 
+  crypt4gh = callPackage ../development/python-modules/crypt4gh { };
+
   cryptg = callPackage ../development/python-modules/cryptg { };
 
   cryptodatahub = callPackage ../development/python-modules/cryptodatahub { };
@@ -3322,6 +3332,8 @@ self: super: with self; {
   dash-table = callPackage ../development/python-modules/dash-table { };
 
   dashing = callPackage ../development/python-modules/dashing { };
+
+  dashscope = callPackage ../development/python-modules/dashscope { };
 
   dask = callPackage ../development/python-modules/dask { };
 
@@ -3714,6 +3726,8 @@ self: super: with self; {
   dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
 
   dissect-cobaltstrike = callPackage ../development/python-modules/dissect-cobaltstrike { };
+
+  dissect-cramfs = callPackage ../development/python-modules/dissect-cramfs { };
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
@@ -6884,6 +6898,8 @@ self: super: with self; {
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
+  iamdata = callPackage ../development/python-modules/iamdata { };
+
   iammeter = callPackage ../development/python-modules/iammeter { };
 
   iapws = callPackage ../development/python-modules/iapws { };
@@ -8743,6 +8759,8 @@ self: super: with self; {
   lockfile = callPackage ../development/python-modules/lockfile { };
 
   locust = callPackage ../development/python-modules/locust { };
+
+  locust-cloud = callPackage ../development/python-modules/locust-cloud { };
 
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
@@ -11843,6 +11861,8 @@ self: super: with self; {
 
   pixel-ring = callPackage ../development/python-modules/pixel-ring { };
 
+  pixelmatch = callPackage ../development/python-modules/pixelmatch { };
+
   pizzapi = callPackage ../development/python-modules/pizzapi { };
 
   pjsua2 =
@@ -12417,6 +12437,8 @@ self: super: with self; {
   py-evm = callPackage ../development/python-modules/py-evm { };
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
+
+  py-iam-expand = callPackage ../development/python-modules/py-iam-expand { };
 
   py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
 
@@ -15702,6 +15724,8 @@ self: super: with self; {
     };
   };
 
+  rds2py = callPackage ../development/python-modules/rds2py { };
+
   re-assert = callPackage ../development/python-modules/re-assert { };
 
   reactionmenu = callPackage ../development/python-modules/reactionmenu { };
@@ -16292,6 +16316,8 @@ self: super: with self; {
   sagemaker-core = callPackage ../development/python-modules/sagemaker-core { };
 
   sagemaker-mlflow = callPackage ../development/python-modules/sagemaker-mlflow { };
+
+  saiph = callPackage ../development/python-modules/saiph { };
 
   salib = callPackage ../development/python-modules/salib { };
 
@@ -17529,6 +17555,8 @@ self: super: with self; {
 
   ssort = callPackage ../development/python-modules/ssort { };
 
+  sss = callPackage ../development/python-modules/sss { };
+
   st-pages = callPackage ../development/python-modules/st-pages { };
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
@@ -17595,6 +17623,8 @@ self: super: with self; {
   starlingbank = callPackage ../development/python-modules/starlingbank { };
 
   starlink-grpc-core = callPackage ../development/python-modules/starlink-grpc-core { };
+
+  starsessions = callPackage ../development/python-modules/starsessions { };
 
   stashy = callPackage ../development/python-modules/stashy { };
 
@@ -18360,6 +18390,8 @@ self: super: with self; {
   timing-asgi = callPackage ../development/python-modules/timing-asgi { };
 
   timm = callPackage ../development/python-modules/timm { };
+
+  timple = callPackage ../development/python-modules/timple { };
 
   timy = callPackage ../development/python-modules/timy { };
 
