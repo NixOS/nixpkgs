@@ -3,13 +3,16 @@
   buildPythonPackage,
   python,
   fetchPypi,
-  setuptools,
+  meson,
+  ninja,
+  fetchFromGitLab,
+  pkg-config,
 }:
 
 buildPythonPackage rec {
   pname = "ponytail";
   version = "0.0.12-dev";
-  pyproject = true;
+  format = "other";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -20,7 +23,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    meson
+    ninja
+    pkg-config
   ];
 
   propagatedBuildInputs = [
