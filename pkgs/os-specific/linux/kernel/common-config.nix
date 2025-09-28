@@ -1307,7 +1307,12 @@ let
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
         # Enable AMD's ROCm GPU compute stack
-        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit (yes);
+        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
+        # required for P2P DMABUF
+        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+        # required for P2P transfers between accelerators
+        HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+
         ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit (yes);
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
