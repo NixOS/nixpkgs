@@ -4,10 +4,10 @@
   cl-generic,
   cl-lib,
   commander,
-
   epl,
   f,
   fetchFromGitHub,
+  installShellFiles,
   git,
   melpaBuild,
   package-build,
@@ -26,6 +26,8 @@ melpaBuild (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-91rJFsp2SLk/JY+v6G5JmXH5bg9QnT+qhI8ccNJlI4A=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   patches = [
     # Uses LISPDIR substitution var
@@ -51,9 +53,8 @@ melpaBuild (finalAttrs: {
       substituteAllInPlace bin/cask
   '';
 
-  # TODO: use installBin as soon as installBin arrives Master branch
   postInstall = ''
-    install -D -t $out/bin bin/cask
+    installBin bin/cask
   '';
 
   meta = {
