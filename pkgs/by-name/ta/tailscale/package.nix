@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.86.5";
+  version = "1.88.3";
 
   outputs = [
     "out"
