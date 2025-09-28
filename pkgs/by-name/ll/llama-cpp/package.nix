@@ -177,7 +177,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    tests = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       metal = llama-cpp.override { metalSupport = true; };
     };
     updateScript = nix-update-script {
