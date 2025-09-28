@@ -1,5 +1,5 @@
 {
-  buildPythonApplication,
+  python3,
   lib,
   fetchFromGitHub,
 
@@ -18,26 +18,9 @@
   webkitgtk_4_1,
   wrapGAppsHook3,
   meson,
-  ninja,
 
   # check inputs
   xvfb-run,
-  nose2,
-  flake8,
-
-  # python dependencies
-  certifi,
-  dbus-python,
-  distro,
-  evdev,
-  lxml,
-  pillow,
-  pygobject3,
-  pypresence,
-  pyyaml,
-  requests,
-  protobuf,
-  moddb,
 
   # commands that lutris needs
   xrandr,
@@ -79,7 +62,7 @@ let
     util-linux
   ];
 in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "lutris-unwrapped";
   version = "0.5.19";
 
@@ -99,7 +82,7 @@ buildPythonApplication rec {
     glib
     gobject-introspection
     meson
-    ninja
+    python3.pkgs.ninja
     wrapGAppsHook3
     pkg-config
   ];
@@ -123,7 +106,7 @@ buildPythonApplication rec {
   ]);
 
   # See `install_requires` in https://github.com/lutris/lutris/blob/master/setup.py
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     certifi
     dbus-python
     distro

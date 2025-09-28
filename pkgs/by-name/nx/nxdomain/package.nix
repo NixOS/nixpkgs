@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3,
   fetchPypi,
-  dnspython,
-  pytestCheckHook,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nxdomain";
   version = "1.0.2";
   format = "setuptools";
@@ -16,9 +14,9 @@ buildPythonApplication rec {
     sha256 = "0va7nkbdjgzrf7fnbxkh1140pbc62wyj86rdrrh5wmg3phiziqkb";
   };
 
-  propagatedBuildInputs = [ dnspython ];
+  dependencies = with python3.pkgs; [ dnspython ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   postCheck = ''
     echo example.org > simple.list

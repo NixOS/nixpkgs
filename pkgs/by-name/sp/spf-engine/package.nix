@@ -1,15 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3,
   fetchurl,
-  flit-core,
-  pyspf,
-  dnspython,
-  authres,
-  pymilter,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "spf-engine";
   version = "3.1.0";
   pyproject = true;
@@ -19,9 +14,9 @@ buildPythonApplication rec {
     hash = "sha256-HUuMxYFCqItLFgMSnrkwfmJWqgFGyI1RWgmljb+jkWk=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = with python3.pkgs; [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     pyspf
     dnspython
     authres

@@ -1,10 +1,10 @@
 {
   lib,
   fetchPypi,
-  buildPythonApplication,
+  python3,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "fortran-language-server";
   version = "1.12.0";
   format = "setuptools";

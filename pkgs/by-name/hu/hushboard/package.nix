@@ -1,20 +1,16 @@
 {
   lib,
-  buildPythonApplication,
+  python3,
   fetchFromGitHub,
   gobject-introspection,
   gtk3,
   libappindicator,
   libpulseaudio,
   librsvg,
-  pycairo,
-  pygobject3,
-  six,
   wrapGAppsHook3,
-  xlib,
 }:
 
-buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   pname = "hushboard";
   version = "unstable-2021-03-17";
   format = "setuptools";
@@ -37,7 +33,7 @@ buildPythonApplication {
     libpulseaudio
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     pycairo
     pygobject3
     six
