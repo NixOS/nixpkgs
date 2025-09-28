@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-ponytail-daemon";
-  version = "0.0.11";
+  version = "0.0.12-dev";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
