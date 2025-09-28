@@ -8,12 +8,23 @@
   fetchFromGitLab,
   pkg-config,
   setuptools,
+  dbus,
+  at-spi2-core,
+  gtk3,
+  pygobject3,
+  pyatspi,
+  pycairo,
 }:
 
 buildPythonPackage rec {
   pname = "ponytail";
   version = "0.0.12-dev";
   pyproject = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -29,6 +40,13 @@ buildPythonPackage rec {
 [project]
 name = "ponytail"
 version = "0.0.12-dev"
+dependencies = [
+]
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
     ' >> pyproject.toml
     cat pyproject.toml
   '';
@@ -39,7 +57,16 @@ version = "0.0.12-dev"
     setuptools
   ];
 
+  nativeBuildInputs = [
+    dbus
+  ];
+
   propagatedBuildInputs = [
+    at-spi2-core
+    gtk3
+    pygobject3
+    pyatspi
+    pycairo
   ];
 
   meta = with lib; {
