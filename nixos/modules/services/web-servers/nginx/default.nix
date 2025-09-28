@@ -209,15 +209,16 @@ let
               # https://ssl-config.mozilla.org/#server=nginx&config=intermediate that
               # isn't already handled by some other option.
               ''
-              ssl_ecdh_curve X25519:prime256v1:secp384r1;
-              ssl_session_timeout 1d;
-              ssl_session_cache shared:SSL:10m;
-              # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
-              ssl_session_tickets off;
-              # We don't enable insecure ciphers by default, so this allows
-              # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
-              ssl_prefer_server_ciphers off;
-            ''}
+                ssl_ecdh_curve X25519:prime256v1:secp384r1;
+                ssl_session_timeout 1d;
+                ssl_session_cache shared:SSL:10m;
+                # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
+                ssl_session_tickets off;
+                # We don't enable insecure ciphers by default, so this allows
+                # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+                ssl_prefer_server_ciphers off;
+              ''
+            }
 
             ${optionalString cfg.recommendedBrotliSettings ''
               brotli on;
@@ -449,12 +450,11 @@ let
               ''}
             '';
 
-        hstsValue =
-          concatStringsSep "; " (
-            [ "max-age=${toString vhost.strictTransportSecurity.seconds}" ]
-            ++ optional vhost.strictTransportSecurity.includeSubdomains "includeSubdomains"
-            ++ optional vhost.strictTransportSecurity.preload "preload"
-          );
+        hstsValue = concatStringsSep "; " (
+          [ "max-age=${toString vhost.strictTransportSecurity.seconds}" ]
+          ++ optional vhost.strictTransportSecurity.includeSubdomains "includeSubdomains"
+          ++ optional vhost.strictTransportSecurity.preload "preload"
+        );
       in
       ''
         ${optionalString vhost.forceSSL ''
