@@ -614,7 +614,7 @@ lib.fix (
       postPatch =
         optionalString jailbreak ''
           echo "Run jailbreak-cabal to lift version restrictions on build inputs."
-          ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
+          ${jailbreak-cabal}/bin/jailbreak-cabal *.cabal
         ''
         + postPatch;
 
