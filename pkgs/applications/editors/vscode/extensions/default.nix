@@ -379,8 +379,8 @@ let
         mktplcRef = {
           name = "cue";
           publisher = "asdine";
-          version = "0.3.2";
-          hash = "sha256-jMXqhgjRdM3UG/9NtiwWAg61mBW8OYVAKDWgb4hzhA4=";
+          version = "0.3.4";
+          hash = "sha256-X+CFRKAZmjzf5dkE/AGd3A/voX/XHfMP5WEt8sJll8U=";
         };
         meta = {
           description = "Cue language support for Visual Studio Code";
