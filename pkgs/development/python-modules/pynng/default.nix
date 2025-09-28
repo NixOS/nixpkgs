@@ -31,7 +31,7 @@ let
 in
 buildPythonPackage {
   pname = "pynng";
-  version = "0.8.1-unstable-2025-05-14";
+  version = "0.8.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
