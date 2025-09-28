@@ -1268,6 +1268,7 @@ mapAliases {
 
   # Julia
   julia_16-bin = throw "'julia_16-bin' has been removed from nixpkgs as it has reached end of life"; # Added 2024-10-08
+  julia_19-bin = throw "'julia_19-bin' is not supported by upstream anymore and breaks with glibc 2.41+"; # Added 2025-09-28
 
   jush = throw "jush has been removed from nixpkgs because it is unmaintained"; # Added 2024-05-28
 
