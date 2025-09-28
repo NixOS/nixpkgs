@@ -224,11 +224,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    CMAKE_PREFIX_PATH = "${lib.getDev openvdb}/lib/cmake/OpenVDB";
     NIX_LDFLAGS = "-L${lib.getLib libmysqlclient}/lib/mariadb";
   };
 
   cmakeFlags = [
+    # Required for locating the findOpenVDB.cmake module
+    # TODO: Add a setup hook in openvdb to append CMAKE_MODULE_PATH to cmakeFlagsArray
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${lib.getDev openvdb}/lib/cmake/OpenVDB")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
