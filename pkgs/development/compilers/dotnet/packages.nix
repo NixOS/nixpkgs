@@ -20,11 +20,9 @@ let
         args
         // {
           outputs = args.outputs or [ "out" ] ++ [ "man" ];
-          postFixup =
-            args.postFixup or ""
-            + ''
-              ln -s ${vmr.man} $man
-            '';
+          postFixup = args.postFixup or "" + ''
+            ln -s ${vmr.man} $man
+          '';
           propagatedSandboxProfile = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
             (allow file-read* (subpath "/private/var/db/mds/system"))
             (allow mach-lookup (global-name "com.apple.SecurityServer")
@@ -56,7 +54,7 @@ let
 
         mkdir -p "$out"
 
-        pushd "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}
+        pushd "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}
         pushd ${pname}.${version}.nupkg
 
         xmlstarlet \
@@ -86,36 +84,34 @@ let
       '';
     };
 
-  packages =
-    [
-      (mkPackage "Microsoft.AspNetCore.App.Ref" aspnetcore.version)
-      (mkPackage "Microsoft.NETCore.DotNetAppHost" runtime.version)
-      (mkPackage "Microsoft.NETCore.App.Ref" runtime.version)
-      (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
-      (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
-      (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
-      (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
-    ]
-    ++ lib.optionals (lib.versionOlder runtime.version "9") [
-      (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
-      (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
-      (mkPackage "Microsoft.NETCore.DotNetHostResolver" runtime.version)
-    ]
-    ++ targetPackages.${targetRid};
+  packages = [
+    (mkPackage "Microsoft.AspNetCore.App.Ref" aspnetcore.version)
+    (mkPackage "Microsoft.NETCore.DotNetAppHost" runtime.version)
+    (mkPackage "Microsoft.NETCore.App.Ref" runtime.version)
+    (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
+    (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
+    (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
+    (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
+  ]
+  ++ lib.optionals (lib.versionOlder runtime.version "9") [
+    (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
+    (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+    (mkPackage "Microsoft.NETCore.DotNetHostResolver" runtime.version)
+  ]
+  ++ targetPackages.${targetRid};
 
   targetPackages = fallbackTargetPackages // {
-    ${targetRid} =
-      [
-        (mkPackage "Microsoft.AspNetCore.App.Runtime.${targetRid}" aspnetcore.version)
-        (mkPackage "Microsoft.NETCore.App.Host.${targetRid}" runtime.version)
-        (mkPackage "Microsoft.NETCore.App.Runtime.${targetRid}" runtime.version)
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
-      ]
-      ++ lib.optionals (lib.versionOlder runtime.version "9") [
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
-      ];
+    ${targetRid} = [
+      (mkPackage "Microsoft.AspNetCore.App.Runtime.${targetRid}" aspnetcore.version)
+      (mkPackage "Microsoft.NETCore.App.Host.${targetRid}" runtime.version)
+      (mkPackage "Microsoft.NETCore.App.Runtime.${targetRid}" runtime.version)
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
+    ]
+    ++ lib.optionals (lib.versionOlder runtime.version "9") [
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+    ];
   };
 
   sdk = mkCommon "sdk" rec {
@@ -140,13 +136,13 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src"/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
+      cp -r "$src"/lib/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
       mkdir -p "$artifacts"
-      cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
+      cp -r "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
       chmod +w -R "$artifacts"
 
       local package
@@ -197,7 +193,7 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
@@ -225,12 +221,12 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet/shared
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
+      cp -Tr "$src/lib/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
       chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall

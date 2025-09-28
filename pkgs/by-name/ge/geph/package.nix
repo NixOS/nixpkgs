@@ -14,6 +14,7 @@
   libglvnd,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 let
   binPath = lib.makeBinPath [
@@ -23,22 +24,23 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.61";
+  version = "0.2.83";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-qy1E5x5Fn+xwS5st6HkMrJu9nksXQQIyJf97FvNOKO4=";
+    hash = "sha256-gEhr+goQYcjhgkoFGG1swbC0LHKwVlGAijFcwzBEF/Q=";
   };
 
-  cargoHash = "sha256-r97DsSsqp/KtgqtYQe92nz2qaOBcJF6w9ckfxpk8Cxg=";
-
-  patches = [ ./test-fix.patch ];
+  cargoHash = "sha256-k0VZFyVqGdfXFsmQ5cscTMZZeEk3PxaEDHzfqLGH3H4=";
 
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
       --replace-fail 'PATH=' 'PATH=${binPath}:'
+
+    # This setting is dumped from https://github.com/geph-official/gephgui-wry/blob/a85a632448e548f69f9d1eea3d06a4bdc8be3d57/src/daemon.rs#L230
+    cat ${./settings_default.yaml} | base32 -w 0  | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567' '0123456789ABCDEFGHJKMNPQRSTVWXYZ' | sed 's/=//g' > binaries/geph5-client-gui/src/settings_default.yaml.base32
   '';
 
   nativeBuildInputs = [
@@ -64,13 +66,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Wrong test
-    "--skip=traffcount::tests::test_traffic_cleanup"
     "--skip=traffcount::tests::test_traffic_count_basic"
     # Requires network
     "--skip=dns::tests::resolve_google"
     # Never finish
     "--skip=tests::test_blind_sign"
     "--skip=tests::test_generate_secret_key"
+    "--skip=tests::ping_pong"
   ];
 
   desktopItems = [
@@ -99,6 +101,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ]
     }' "$out/bin/geph5-client-gui"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "geph5-client-v(.*)"
+    ];
+  };
 
   meta = {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";

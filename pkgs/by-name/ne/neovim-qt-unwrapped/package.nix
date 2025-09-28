@@ -32,17 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      neovim.unwrapped # only used to generate help tags at build time
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-    ]
-    ++ (with python3Packages; [
-      jinja2
-      python
-      msgpack
-    ]);
+  buildInputs = [
+    neovim.unwrapped # only used to generate help tags at build time
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+  ]
+  ++ (with python3Packages; [
+    jinja2
+    python
+    msgpack
+  ]);
 
   preCheck = ''
     # The GUI tests require a running X server, disable them

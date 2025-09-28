@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "systemd";
 
@@ -27,7 +27,13 @@
         };
       };
 
-      systemd.extraConfig = "DefaultEnvironment=\"XXX_SYSTEM=foo\"";
+      systemd.settings.Manager = {
+        DefaultEnvironment = "XXX_SYSTEM=foo";
+        WatchdogDevice = "/dev/watchdog";
+        RuntimeWatchdogSec = "30s";
+        RebootWatchdogSec = "10min";
+        KExecWatchdogSec = "5min";
+      };
       systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
       services.journald.extraConfig = "Storage=volatile";
       test-support.displayManager.auto.user = "alice";
@@ -86,13 +92,6 @@
         '';
       };
 
-      systemd.watchdog = {
-        device = "/dev/watchdog";
-        runtimeTime = "30s";
-        rebootTime = "10min";
-        kexecTime = "5min";
-      };
-
       environment.etc."systemd/system-preset/10-testservice.preset".text = ''
         disable ${config.systemd.services.testservice1.name}
       '';
@@ -108,6 +107,14 @@
 
       # Will not succeed unless ConditionFirstBoot=yes
       machine.wait_for_unit("first-boot-complete.target")
+
+      machine.succeed(
+        "journalctl --system -o cat --grep 'systemd ${lib.escapeRegex pkgs.systemd.version} running'"
+      )
+
+      assert "systemd ${lib.versions.major pkgs.systemd.version} (${pkgs.systemd.version})" in machine.succeed(
+        "systemctl --version"
+      )
 
       # Make sure, a subsequent boot isn't a ConditionFirstBoot=yes.
       machine.reboot()

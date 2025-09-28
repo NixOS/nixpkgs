@@ -9,7 +9,7 @@
 
 let
   baseName = "scalafmt";
-  version = "3.9.7";
+  version = "3.9.8";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -19,7 +19,7 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-x1hEJtzZ0DmFDc7X5Tua3F0BcWz/Atm2zmMr7GgfkUM=";
+    outputHash = "sha256-mZrRb2n+ZE0DmQaH9iSMzPcpdZPtflekkP8bHv6Qw4k=";
   };
 in
 stdenv.mkDerivation {

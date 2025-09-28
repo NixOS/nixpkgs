@@ -6,6 +6,11 @@
   nix-prefetch-scripts,
   luarocks-nix,
   pluginupdate,
+  lua5_1,
+  lua5_2,
+  lua5_3,
+  lua5_4,
+  luajit,
 }:
 let
 
@@ -13,6 +18,11 @@ let
     nix
     nix-prefetch-scripts
     luarocks-nix
+    lua5_1
+    lua5_2
+    lua5_3
+    lua5_4
+    luajit
   ];
 
   attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);

@@ -244,7 +244,6 @@ import ./make-test-python.nix (
                     if ($request_method = OPTIONS) {
                         return 204;
                     }
-                    add_header X-XSS-Protection "1; mode=block";
                     add_header X-Permitted-Cross-Domain-Policies none;
                     add_header X-Frame-Options DENY;
                     add_header X-Content-Type-Options nosniff;
@@ -266,7 +265,7 @@ import ./make-test-python.nix (
     testScript =
       { nodes, ... }:
       ''
-        pleroma.wait_for_unit("postgresql.service")
+        pleroma.wait_for_unit("postgresql.target")
         pleroma.wait_until_succeeds("ls /var/lib/pleroma")
         pleroma.succeed("provision-db")
         pleroma.wait_for_file("/var/lib/pleroma")

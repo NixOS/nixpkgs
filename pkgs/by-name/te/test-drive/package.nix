@@ -3,10 +3,19 @@
   lib,
   fetchFromGitHub,
   gfortran,
+  buildType ? "meson",
   meson,
   ninja,
+  cmake,
   mesonEmulatorHook,
 }:
+
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
 stdenv.mkDerivation rec {
   pname = "test-drive";
@@ -19,15 +28,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-xRx8ErIN9xjxZt/nEsdIQkIGFRltuELdlI8lXA+M030=";
   };
 
-  nativeBuildInputs =
-    [
-      gfortran
-      meson
-      ninja
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  patches = [
+    # Fix wrong generation of package config include paths
+    ./cmake.patch
+  ];
+
+  nativeBuildInputs = [
+    gfortran
+  ]
+  ++ lib.optionals (buildType == "meson") [
+    meson
+    ninja
+  ]
+  ++ lib.optional (buildType == "cmake") cmake
+  ++ lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) mesonEmulatorHook;
 
   mesonAutoFeatures = "auto";
 

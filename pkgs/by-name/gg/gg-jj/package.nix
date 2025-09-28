@@ -17,42 +17,52 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gg";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vmzALX1x7VfdnwN05bCwbnTL+HfFVyNiKFoT74tFuu8=";
+    hash = "sha256-RFNROdPfJksxK5tOP1LOlV/di8AyeJbxwaIoWaZEaVU=";
   };
 
   cargoRoot = "src-tauri";
 
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-esStQ55+T4uLbHbg7P7hqS6kIpXIMxouRSFkTo6dvAU=";
+  cargoHash = "sha256-AdatJNDqIoRHfaf81iFhOs2JGLIxy7agFJj96bFPj00=";
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-yFDGH33maCndH4vgyMfNg0+c5jCOeoIAWUJgAPHXwsM=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    hash = "sha256-ehXGLpCCN+BNqtwjEatcfR0kQHj5WOofTDR5mLSVW0U=";
   };
 
-  nativeBuildInputs =
-    [
-      cargo-tauri.hook
-      nodejs
-      npmHooks.npmConfigHook
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook3
-    ];
+  patches = [
+    # Remove after https://github.com/gulbanana/gg/pull/68 is released
+    ./update-tauri-npm-to-match-cargo.patch
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_1
-    ];
+  nativeBuildInputs = [
+    cargo-tauri.hook
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+  ];
 
   env.OPENSSL_NO_VENDOR = true;
 

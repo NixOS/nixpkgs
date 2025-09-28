@@ -9,7 +9,7 @@
   perl,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.2.0",
+  version ? "2.2.1",
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-build-tools";
     rev = version;
     hash =
       {
         "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
-        "2.2.0" = "sha256-q/VkxfC2vGRpFnAGULkjhmJ8JsdpxChROqemCyf0esE=";
+        "2.2.1" = "sha256-dewsmkma8QHgb3LzRGvfntI48bOaFFsrEDrOznaC8eg=";
       }
       ."${version}";
   };

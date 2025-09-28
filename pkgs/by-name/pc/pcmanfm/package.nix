@@ -14,6 +14,8 @@
   withGtk3 ? true,
   gtk2,
   gtk3,
+  gettext,
+  nix-update-script,
 }:
 
 let
@@ -48,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
   ];
 
+  env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
+
   configureFlags = optional withGtk3 "--with-gtk=3";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://blog.lxde.org/category/pcmanfm/";

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "spidev";
-  version = "3.7";
+  version = "3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doceme";
     repo = "py-spidev";
     tag = "v${version}";
-    hash = "sha256-XLCWuLjBpsEGjP3yUNbFMxJQ1m9S7TY0LfVVteUU2bY=";
+    hash = "sha256-ysOLZWsMiHjPxQ7fMWsywp44vkNGFGH8n6X7zk7XQck=";
   };
 
   build-system = [ setuptools ];

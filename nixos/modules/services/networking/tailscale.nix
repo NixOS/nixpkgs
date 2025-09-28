@@ -44,6 +44,12 @@ in
       description = "Whether to disable the Taildrop feature for sending files between nodes.";
     };
 
+    disableUpstreamLogging = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to disable Tailscaled from sending debug logging upstream.";
+    };
+
     package = lib.mkPackageOption pkgs "tailscale" { };
 
     openFirewall = mkOption {
@@ -78,6 +84,8 @@ in
       description = ''
         A file containing the auth key.
         Tailscale will be automatically started if provided.
+
+        Services that bind to Tailscale IPs should order using {option}`systemd.services.<name>.after` `tailscaled-autoconnect.service`.
       '';
     };
 
@@ -104,13 +112,13 @@ in
       default = { };
       description = ''
         Extra parameters to pass after the auth key.
-        See https://tailscale.com/kb/1215/oauth-clients#registering-new-nodes-using-oauth-credentials
+        See <https://tailscale.com/kb/1215/oauth-clients#registering-new-nodes-using-oauth-credentials>
       '';
     };
 
     extraUpFlags = mkOption {
       description = ''
-        Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
+        Extra flags to pass to {command}`tailscale up`. Only applied if {option}`services.tailscale.authKeyFile` is specified.
       '';
       type = types.listOf types.str;
       default = [ ];
@@ -143,18 +151,21 @@ in
         pkgs.procps # for collecting running services (opt-in feature)
         pkgs.getent # for `getent` to look up user shells
         pkgs.kmod # required to pass tailscale's v6nat check
-      ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
-      serviceConfig.Environment =
-        [
-          "PORT=${toString cfg.port}"
-          ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
-        ]
-        ++ (lib.optionals (cfg.permitCertUid != null) [
-          "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-        ])
-        ++ (lib.optionals (cfg.disableTaildrop) [
-          "TS_DISABLE_TAILDROP=true"
-        ]);
+      ]
+      ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
+      serviceConfig.Environment = [
+        "PORT=${toString cfg.port}"
+        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
+      ]
+      ++ (lib.optionals (cfg.permitCertUid != null) [
+        "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+      ])
+      ++ (lib.optionals (cfg.disableTaildrop) [
+        "TS_DISABLE_TAILDROP=true"
+      ])
+      ++ (lib.optionals (cfg.disableUpstreamLogging) [
+        "TS_NO_LOGS_NO_SUPPORT=true"
+      ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of
@@ -174,12 +185,15 @@ in
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        Type = "oneshot";
+        Type = "notify";
       };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+      path = [
+        cfg.package
+        pkgs.jq
+      ];
+      enableStrictShellChecks = true;
       script =
         let
-          statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
           paramToString = v: if (builtins.isBool v) then (lib.boolToString v) else (toString v);
           params = lib.pipe cfg.authKeyParameters [
             (lib.filterAttrs (_: v: v != null))
@@ -188,14 +202,35 @@ in
             (params: if params != "" then "?${params}" else "")
           ];
         in
+        # bash
         ''
-          while [[ "$(${statusCommand})" == "NoState" ]]; do
-            sleep 0.5
+          getState() {
+            tailscale status --json --peers=false | jq -r '.BackendState'
+          }
+
+          lastState=""
+          while state="$(getState)"; do
+            if [[ "$state" != "$lastState" ]]; then
+              # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+              case "$state" in
+                NeedsLogin)
+                  echo "Server needs authentication, sending auth key"
+                  tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                  ;;
+                Running)
+                  echo "Tailscale is running"
+                  systemd-notify --ready
+                  exit 0
+                  ;;
+                *)
+                  echo "Waiting for Tailscale State = Running or systemd timeout"
+                  ;;
+              esac
+            fi
+            echo "State = $state"
+            lastState="$state"
+            sleep .5
           done
-          status=$(${statusCommand})
-          if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-            ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
-          fi
         '';
     };
 

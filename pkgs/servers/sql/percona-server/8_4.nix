@@ -50,11 +50,11 @@ assert !(withJemalloc && withTcmalloc);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.4.5-5";
+  version = "8.4.6-6";
 
   src = fetchurl {
     url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-i0f/Ndwqbn6qyqLSBK5FbBW12ZUzYMy2JQ2o1o2Y9q8=";
+    hash = "sha256-q01k+/TzvT7h52bqn9icc6VMlrUUjMDNKz0UdTyAWjU=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     coreutils
     gnugrep
     procps
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
@@ -84,120 +85,117 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
   '';
 
-  buildInputs =
-    [
-      boost
-      (curl.override { inherit openssl; })
-      icu
-      libedit
-      libevent
-      lz4
-      ncurses
-      openssl
-      protobuf
-      re2
-      readline
-      zlib
-      zstd
-      libfido2
-      openldap
-      perl
-      cyrus_sasl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      numactl
-      libtirpc
-      systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      developer_cmds
-      DarwinTools
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) jemalloc
-    ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) gperftools;
+  buildInputs = [
+    boost
+    (curl.override { inherit openssl; })
+    icu
+    libedit
+    libevent
+    lz4
+    ncurses
+    openssl
+    protobuf
+    re2
+    readline
+    zlib
+    zstd
+    libfido2
+    openldap
+    perl
+    cyrus_sasl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+    libtirpc
+    systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    developer_cmds
+    DarwinTools
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) jemalloc
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) gperftools;
 
   outputs = [
     "out"
     "static"
   ];
 
-  cmakeFlags =
-    [
-      # Percona-specific flags.
-      "-DPORTABLE=1"
-      "-DWITH_LDAP=system"
-      "-DROCKSDB_DISABLE_AVX2=1"
-      "-DROCKSDB_DISABLE_MARCH_NATIVE=1"
+  cmakeFlags = [
+    # Percona-specific flags.
+    "-DPORTABLE=1"
+    "-DWITH_LDAP=system"
+    "-DROCKSDB_DISABLE_AVX2=1"
+    "-DROCKSDB_DISABLE_MARCH_NATIVE=1"
 
-      # Flags taken from mysql package.
-      "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
-      "-DWITH_ROUTER=OFF" # It may be packaged separately.
-      "-DWITH_SYSTEM_LIBS=ON"
-      "-DWITH_UNIT_TESTS=OFF"
-      "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
-      "-DMYSQL_DATADIR=/var/lib/mysql"
-      "-DINSTALL_INFODIR=share/mysql/docs"
-      "-DINSTALL_MANDIR=share/man"
-      "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
-      "-DINSTALL_INCLUDEDIR=include/mysql"
-      "-DINSTALL_DOCREADMEDIR=share/mysql"
-      "-DINSTALL_SUPPORTFILESDIR=share/mysql"
-      "-DINSTALL_MYSQLSHAREDIR=share/mysql"
-      "-DINSTALL_MYSQLTESTDIR="
-      "-DINSTALL_DOCDIR=share/mysql/docs"
-      "-DINSTALL_SHAREDIR=share/mysql"
+    # Flags taken from mysql package.
+    "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
+    "-DWITH_ROUTER=OFF" # It may be packaged separately.
+    "-DWITH_SYSTEM_LIBS=ON"
+    "-DWITH_UNIT_TESTS=OFF"
+    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+    "-DMYSQL_DATADIR=/var/lib/mysql"
+    "-DINSTALL_INFODIR=share/mysql/docs"
+    "-DINSTALL_MANDIR=share/man"
+    "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
+    "-DINSTALL_INCLUDEDIR=include/mysql"
+    "-DINSTALL_DOCREADMEDIR=share/mysql"
+    "-DINSTALL_SUPPORTFILESDIR=share/mysql"
+    "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLTESTDIR="
+    "-DINSTALL_DOCDIR=share/mysql/docs"
+    "-DINSTALL_SHAREDIR=share/mysql"
 
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DWITH_SYSTEMD=1"
-      "-DWITH_SYSTEMD_DEBUG=1"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) "-DWITH_JEMALLOC=1"
-    ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) "-DWITH_TCMALLOC=1";
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DWITH_SYSTEMD=1"
+    "-DWITH_SYSTEMD_DEBUG=1"
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) "-DWITH_JEMALLOC=1"
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) "-DWITH_TCMALLOC=1";
 
-  postInstall =
-    ''
-      moveToOutput "lib/*.a" $static
-      so=${stdenv.hostPlatform.extensions.sharedLibrary}
-      ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
+  postInstall = ''
+    moveToOutput "lib/*.a" $static
+    so=${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
 
-      wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          procps
-          gnugrep
-          gnused
-          hostname
-        ]
-      }
-      wrapProgram $out/bin/mysql_config --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnused
-        ]
-      }
-      wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnugrep
-        ]
-      }
-      wrapProgram $out/bin/ps-admin --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnugrep
-        ]
-      }
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      wrapProgram $out/bin/mysqld_multi --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnugrep
-        ]
-      }
-    '';
+    wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        procps
+        gnugrep
+        gnused
+        hostname
+      ]
+    }
+    wrapProgram $out/bin/mysql_config --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnused
+      ]
+    }
+    wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+      ]
+    }
+    wrapProgram $out/bin/ps-admin --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+      ]
+    }
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapProgram $out/bin/mysqld_multi --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+      ]
+    }
+  '';
 
   passthru = {
     client = finalAttrs.finalPackage;

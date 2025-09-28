@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-config";
     rev = version;
     hash = "sha256-iyAqdAWcg94a65lPjq412slvSKdP3W62LTyyvYdWipA=";
   };
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     xf86inputlibinput
     xf86inputlibinput.dev
   ];
+
+  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=20" ];
 
   postPatch = ''
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \

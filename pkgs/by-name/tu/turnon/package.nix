@@ -1,6 +1,7 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
+  fetchFromGitea,
   rustPlatform,
   cairo,
   pango,
@@ -9,21 +10,25 @@
   blueprint-compiler,
   wrapGAppsHook4,
   gsettings-desktop-schemas,
+  just,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  version = "2.7.4";
+in
+rustPlatform.buildRustPackage {
   pname = "turnon";
-  version = "2.6.3";
+  version = version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";
-    hash = "sha256-fRDyfgS+jLGFJTYIEXJ27cCM9knfbIjlGpYNU4OyoJ0=";
+    hash = "sha256-RTLFajUMJHZoXKhy83G3c7a2fZ+P6CZXadFpbcPFLY8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Bg3+PX5/BlqeN3EEFzBX42Dw4BbyKHlN1dnQSHnEz+c=";
+  cargoHash = "sha256-8vqsQPbl3c2++8T5bjDjAWzm00qSDogT1YaumOC7qzk=";
 
   doCheck = true;
 
@@ -40,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     blueprint-compiler
     wrapGAppsHook4
+    just
   ];
 
   buildInputs = [
@@ -49,20 +55,23 @@ rustPlatform.buildRustPackage rec {
 
   strictDeps = true;
 
-  postInstall =
-    # The build.rs compiles the settings schema and writes the compiled file next to the .xml file.
-    # This copies the compiled file to a path that can be detected by gsettings-desktop-schemas
-    ''
-      mkdir -p "$out/share/glib-2.0/schemas"
-      cp "schemas/gschemas.compiled" "$out/share/glib-2.0/schemas"
-    '';
+  postPatch = ''
+    substituteInPlace justfile \
+        --replace-fail "version := \`git describe\`" "version := \"${version}\"" \
+        --replace-fail "DESTPREFIX := '/app'" "DESTPREFIX := '$out'" \
+        --replace-fail "just --list" "just compile" # Replacing the default recipe with the compile command as just-hook-buildPhase runs the default recipe to compile the package.
+  '';
+
+  postBuild = ''
+    cargo build --release
+  '';
 
   meta = {
     description = "Turn on devices in your local network";
-    homepage = "https://github.com/swsnr/turnon";
-    license = lib.licenses.mpl20;
+    homepage = "https://codeberg.org/swsnr/turnon";
+    license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ mksafavi ];
-    mainProgram = "turnon";
+    mainProgram = "de.swsnr.turnon";
     platforms = lib.platforms.linux;
   };
 }

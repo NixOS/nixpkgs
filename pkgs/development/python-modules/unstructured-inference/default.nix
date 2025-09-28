@@ -23,30 +23,29 @@
 
 buildPythonPackage rec {
   pname = "unstructured-inference";
-  version = "1.0.2";
+  version = "1.0.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
     tag = version;
-    hash = "sha256-wRFTwSvkPdvvB08qGOvn8lrbUuoXF6yPqNSk9iiB1S8=";
+    hash = "sha256-3eyavjGUc3qbKuTorAiefisz4TjiG5v/88lsXYmcFmo=";
   };
 
-  propagatedBuildInputs =
-    [
-      layoutparser
-      python-multipart
-      huggingface-hub
-      opencv-python
-      onnxruntime
-      transformers
-      # detectron2 # fails to build
-      # paddleocr # 3.12 not yet supported
-      # yolox
-    ]
-    ++ layoutparser.optional-dependencies.layoutmodels
-    ++ layoutparser.optional-dependencies.tesseract;
+  propagatedBuildInputs = [
+    layoutparser
+    python-multipart
+    huggingface-hub
+    opencv-python
+    onnxruntime
+    transformers
+    # detectron2 # fails to build
+    # paddleocr # 3.12 not yet supported
+    # yolox
+  ]
+  ++ layoutparser.optional-dependencies.layoutmodels
+  ++ layoutparser.optional-dependencies.tesseract;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -88,7 +87,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unstructured_inference" ];
 
   meta = with lib; {
-    description = "hosted model inference code for layout parsing models";
+    description = "Hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
     changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;

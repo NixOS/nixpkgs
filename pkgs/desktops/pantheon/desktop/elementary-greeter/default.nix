@@ -20,6 +20,7 @@
   gnome-settings-daemon,
   mutter,
   elementary-icon-theme,
+  elementary-settings-daemon,
   wingpanel-with-indicators,
   elementary-gtk-theme,
   nixos-artwork,
@@ -33,13 +34,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "8.0.1";
+  # To allow overriding last-session-type.
+  # nixpkgs-update: no auto update
+  version = "8.0.1-unstable-2025-09-14";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
-    rev = version;
-    sha256 = "sha256-T/tI8WRVbTLdolDYa98M2Vm26p0xhGiai74lXAlpQ8k=";
+    rev = "2461ad1be4a4d0e541879abe869cf8911f505215";
+    hash = "sha256-rDlaL2KCm0tz73cwHLgNAD7Ddbn1QFJVa+Syh5eTfWo=";
   };
 
   patches = [
@@ -65,6 +68,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     elementary-icon-theme
+    elementary-settings-daemon
     gala # for io.elementary.desktop.background
     gnome-desktop
     gnome-settings-daemon

@@ -10,13 +10,13 @@
   boost,
   lua,
   luabind,
-  tbb_2022_0,
+  tbb_2022,
   expat,
   nixosTests,
 }:
 
 let
-  tbb = tbb_2022_0;
+  tbb = tbb_2022;
 in
 stdenv.mkDerivation rec {
   pname = "osrm-backend";
@@ -45,8 +45,12 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  # Needed with GCC 12
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=uninitialized";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=uninitialized"
+    # Needed with GCC 14
+    "-Wno-error=maybe-uninitialized"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/osrm-backend

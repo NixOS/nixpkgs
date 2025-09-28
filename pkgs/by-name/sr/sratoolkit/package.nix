@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OeM4syv9c1rZn2ferrhXyKJu68ywVYwnHoqnviWBZy4=";
   };
 
+  patches = [ ./attribute_unused.patch ];
+
   cmakeFlags = [
     "-DVDB_INCDIR=${ncbi-vdb}/include"
     "-DVDB_LIBDIR=${ncbi-vdb}/lib"
@@ -49,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of tools and libraries for using data in the INSDC Sequence Read Archives";
     license = lib.licenses.ncbiPd;
     maintainers = with lib.maintainers; [
-      thyol
       t4ccer
     ];
     platforms = lib.platforms.unix;

@@ -2,22 +2,26 @@
   lib,
   stdenv,
   fetchMavenArtifact,
+  junixsocket-common,
+  junixsocket-native-common,
 }:
 
 stdenv.mkDerivation rec {
   pname = "postgresql-jdbc";
-  version = "42.6.1";
+  version = "42.7.7";
 
   src = fetchMavenArtifact {
     artifactId = "postgresql";
     groupId = "org.postgresql";
-    hash = "sha256-ywd0/X0JsjniHp0Es3RKQId7/0Y6jVjD9AfPfZdsNVc=";
+    hash = "sha256-FXlj1grmbWB+CUZujAzfgIfpyyDQFZiZ/8qWvKJShGA=";
     inherit version;
   };
 
   installPhase = ''
     runHook preInstall
     install -m444 -D $src/share/java/*postgresql-${version}.jar $out/share/java/postgresql-jdbc.jar
+    ln -s ${junixsocket-common}/share/java/* $out/share/java/
+    ln -s ${junixsocket-native-common}/share/java/* $out/share/java/
     runHook postInstall
   '';
 

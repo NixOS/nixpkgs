@@ -49,7 +49,7 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  pytestFlagsArray = [ "-s" ];
+  pytestFlags = [ "-s" ];
 
   pythonImportsCheck = [ "bindep" ];
 

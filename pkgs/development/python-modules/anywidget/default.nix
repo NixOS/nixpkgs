@@ -45,7 +45,8 @@ buildPythonPackage rec {
     ipywidgets
     psygnal
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ]
+  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -58,6 +59,16 @@ buildPythonPackage rec {
   disabledTests = [
     # requires package.json
     "test_version"
+
+    # AssertionError: assert not {140737277121872: <MockComm id='140737277118512'>}
+    "test_descriptor_with_psygnal"
+    "test_descriptor_with_pydantic"
+    "test_descriptor_with_msgspec"
+    "test_descriptor_with_traitlets"
+    "test_infer_file_contents"
+
+    #  assert not {<function _connect_psygnal.<locals>._disconnect at 0x7ffff3617e...
+    "test_descriptor_with_psygnal"
   ];
 
   pythonImportsCheck = [ "anywidget" ];

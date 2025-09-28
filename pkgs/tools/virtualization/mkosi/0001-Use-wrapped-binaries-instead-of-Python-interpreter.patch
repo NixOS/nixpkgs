@@ -7,15 +7,24 @@ Rather than calling ukify and mkosi with sys.executable, which doesn't use the P
 
 Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
 ---
- mkosi/__init__.py   | 11 +++++------
- mkosi/bootloader.py |  5 +----
+ mkosi/__init__.py   | 17 +++++++----------
+ mkosi/bootloader.py |  3 +--
  mkosi/run.py        |  8 ++++----
- 3 files changed, 10 insertions(+), 14 deletions(-)
+ 3 files changed, 12 insertions(+), 16 deletions(-)
 
 diff --git a/mkosi/__init__.py b/mkosi/__init__.py
-index 65cac772bf1fc9feabec5740ed89a958ba406125..12b29061c819d50559132aa6c3b6f24a12945bb9 100644
+index 65cac772bf1fc9feabec5740ed89a958ba406125..c0debc09a76f36ae878bd172294eee6637b95bcb 100644
 --- a/mkosi/__init__.py
 +++ b/mkosi/__init__.py
+@@ -570,7 +570,7 @@ def finalize_host_scripts(
+         if context.config.find_binary(binary):
+             scripts[binary] = (binary, "--root", "/buildroot")
+     if ukify := context.config.find_binary("ukify"):
+-        scripts["ukify"] = (python_binary(context.config), ukify)
++        scripts["ukify"] = (ukify,)
+     return finalize_scripts(context.config, scripts | dict(helpers))
+ 
+ 
 @@ -702,7 +702,7 @@ def script_maybe_chroot_sandbox(
  
      helpers = {
@@ -51,7 +60,23 @@ index 65cac772bf1fc9feabec5740ed89a958ba406125..12b29061c819d50559132aa6c3b6f24a
          die("Could not find ukify")
  
      json_out = False
-@@ -1887,7 +1886,7 @@ def want_uki(context: Context) -> bool:
+@@ -1759,7 +1758,6 @@ def build_uki(
+         # TODO: bump version to 258 once it is released
+         if (
+             systemd_tool_version(
+-                python_binary(context.config),
+                 ukify,
+                 sandbox=context.sandbox,
+             )
+@@ -1819,7 +1817,6 @@ def build_uki(
+         # new .ucode section support?
+         if (
+             systemd_tool_version(
+-                python_binary(context.config),
+                 ukify,
+                 sandbox=context.sandbox,
+             )
+@@ -1887,7 +1884,7 @@ def want_uki(context: Context) -> bool:
          or (
              context.config.unified_kernel_images == ConfigFeature.auto
              and systemd_stub_binary(context).exists()
@@ -60,28 +85,29 @@ index 65cac772bf1fc9feabec5740ed89a958ba406125..12b29061c819d50559132aa6c3b6f24a
          )
      )
  
-@@ -2769,7 +2768,7 @@ def check_ukify(
+@@ -2769,9 +2766,9 @@ def check_ukify(
      reason: str,
      hint: Optional[str] = None,
  ) -> None:
 -    ukify = check_tool(config, "ukify", "/usr/lib/systemd/ukify", reason=reason, hint=hint)
 +    ukify = check_tool(config, "ukify", "@UKIFY@", reason=reason, hint=hint)
  
-     v = systemd_tool_version(python_binary(config), ukify, sandbox=config.sandbox)
+-    v = systemd_tool_version(python_binary(config), ukify, sandbox=config.sandbox)
++    v = systemd_tool_version(ukify, sandbox=config.sandbox)
      if v < version:
+         die(
+             f"Found '{ukify}' with version {v} but version {version} or newer is required to {reason}.",
 diff --git a/mkosi/bootloader.py b/mkosi/bootloader.py
-index 6f112b854f72a8863dc5e7348f0154851d3dda96..8fdf2c5df7950c032bfcd36d89f7824e86ec9173 100644
+index 6f112b854f72a8863dc5e7348f0154851d3dda96..28b32b9c8fcaa7c49a7d69e7e303ccf332d47d58 100644
 --- a/mkosi/bootloader.py
 +++ b/mkosi/bootloader.py
-@@ -268,10 +268,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
- 
- 
+@@ -270,8 +270,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
  def python_binary(config: Config) -> PathString:
--    # If there's no tools tree, prefer the interpreter from MKOSI_INTERPRETER. If there is a tools
--    # tree, just use the default python3 interpreter.
+     # If there's no tools tree, prefer the interpreter from MKOSI_INTERPRETER. If there is a tools
+     # tree, just use the default python3 interpreter.
 -    exe = Path(sys.executable)
 -    return "python3" if config.tools_tree or not exe.is_relative_to("/usr") else exe
-+    return "@PYTHON_PEFILE@"
++    return "python3" if config.tools_tree else "@PYTHON_PEFILE@"
  
  
  def extract_pe_section(context: Context, binary: Path, section: str, output: Path) -> Path:

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Requests reviews for a PR after verifying that the base branch is correct
+# Requests reviews for a PR
 
 set -euo pipefail
 tmp=$(mktemp -d)
@@ -9,14 +9,6 @@ SCRIPT_DIR=$(dirname "$0")
 
 log() {
     echo "$@" >&2
-}
-
-effect() {
-    if [[ -n "${DRY_MODE:-}" ]]; then
-        log "Skipping in dry mode:" "${@@Q}"
-    else
-        "$@"
-    fi
 }
 
 if (( $# < 3 )); then
@@ -62,20 +54,6 @@ git -C "$tmp/nixpkgs.git" config remote.fork.promisor true
 
 git -C "$tmp/nixpkgs.git" fetch --no-tags fork "$prBranch"
 headRef=$(git -C "$tmp/nixpkgs.git" rev-parse refs/remotes/fork/"$prBranch")
-
-log "Checking correctness of the base branch"
-if ! "$SCRIPT_DIR"/verify-base-branch.sh "$tmp/nixpkgs.git" "$headRef" "$baseRepo" "$baseBranch" "$prRepo" "$prBranch" | tee "$tmp/invalid-base-error" >&2; then
-    log "Posting error as comment"
-    if ! response=$(effect gh api \
-        --method POST \
-        -H "Accept: application/vnd.github+json" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-        "/repos/$baseRepo/issues/$prNumber/comments" \
-        -F "body=@$tmp/invalid-base-error"); then
-        log "Failed to post the comment: $response"
-    fi
-    exit 1
-fi
 
 log "Requesting reviews from code owners"
 "$SCRIPT_DIR"/get-code-owners.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseBranch" "$headRef" | \

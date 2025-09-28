@@ -11,18 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mergiraf";
-  version = "0.10.0";
+  version = "0.15.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "mergiraf";
     repo = "mergiraf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wnXOl7KzSvvxQP4CebOJ+fEIn7fQDKTmO2PkGMRA4t4=";
+    hash = "sha256-aq0xeIj780wV6PlWj6dgDfXxzQHRRg0T6/EWLKVf+3o=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-jShWfd3m9g6YlUFLOzlMPFtuXAAfjh+sBujCJ9F2Uj0=";
+  cargoHash = "sha256-nsp+jV9bl3rAFbibvIUD9WT/VZ9b8PXGu4IReOIybuM=";
 
   nativeCheckInputs = [ git ];
 
@@ -30,6 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   versionCheckProgramArg = "--version";
+
+  cargoBuildFlags = [
+    # don't install the `mgf_dev`
+    "--bin"
+    "mergiraf"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

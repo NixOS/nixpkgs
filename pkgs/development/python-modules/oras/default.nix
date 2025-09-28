@@ -1,5 +1,6 @@
 {
   lib,
+  boto3,
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "oras";
-  version = "0.2.33";
+  version = "0.2.37";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "oras-project";
     repo = "oras-py";
     tag = version;
-    hash = "sha256-789XJTMB+07hN8qcZS8S+Sa/E58VYi1N48RnBOAGFY8=";
+    hash = "sha256-pXIA970QBIlbFVFpN1Yl71ojc+atdXQuNoPEW+PrrWc=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +31,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    boto3
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "oras" ];
 

@@ -23,20 +23,23 @@ A complete list of options for the Borgbase module may be found
 A very basic configuration for backing up to a locally accessible directory is:
 ```nix
 {
-    services.borgbackup.jobs = {
-      rootBackup = {
-        paths = "/";
-        exclude = [ "/nix" "/path/to/local/repo" ];
-        repo = "/path/to/local/repo";
-        doInit = true;
-        encryption = {
-          mode = "repokey";
-          passphrase = "secret";
-        };
-        compression = "auto,lzma";
-        startAt = "weekly";
+  services.borgbackup.jobs = {
+    rootBackup = {
+      paths = "/";
+      exclude = [
+        "/nix"
+        "/path/to/local/repo"
+      ];
+      repo = "/path/to/local/repo";
+      doInit = true;
+      encryption = {
+        mode = "repokey";
+        passphrase = "secret";
       };
+      compression = "auto,lzma";
+      startAt = "weekly";
     };
+  };
 }
 ```
 
@@ -64,8 +67,8 @@ Add the following snippet to your NixOS configuration:
     my_borg_repo = {
       authorizedKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/ root@nixos"
-      ] ;
-      path = "/var/lib/my_borg_repo" ;
+      ];
+      path = "/var/lib/my_borg_repo";
     };
   };
 }
@@ -85,12 +88,14 @@ accessible by root
     backupToLocalServer = {
       paths = [ "/etc/nixos" ];
       doInit = true;
-      repo =  "borg@nixos:." ;
+      repo = "borg@nixos:.";
       encryption = {
         mode = "repokey-blake2";
         passCommand = "cat /run/keys/borgbackup_passphrase";
       };
-      environment = { BORG_RSH = "ssh -i /run/keys/id_ed25519_my_borg_repo"; };
+      environment = {
+        BORG_RSH = "ssh -i /run/keys/id_ed25519_my_borg_repo";
+      };
       compression = "auto,lzma";
       startAt = "hourly";
     };

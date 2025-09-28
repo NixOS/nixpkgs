@@ -15,14 +15,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-nfOmiF+t5QtAl1I7CSz26C9SGo7ZkdSziO2eiHbk6pA=";
   };
 
-  preBuild =
-    ''
-      substituteInPlace Makefile --replace '/usr/local' $out
-      mkdir -p $out/bin
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      sed -i s/-m64//g Makefile
-    '';
+  preBuild = ''
+    substituteInPlace Makefile --replace '/usr/local' $out
+    mkdir -p $out/bin
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    sed -i s/-m64//g Makefile
+  '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

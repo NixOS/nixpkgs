@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gopass-hibp";
-  version = "1.15.16";
+  version = "1.15.18";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-hibp";
     rev = "v${version}";
-    hash = "sha256-wmZtLVZhIKAcaE7CC7mlGq/ybcANki1vzdgAoh+NXB8=";
+    hash = "sha256-tlElF7AO4eJQAYwqBdwf6140Y1lsB8xdPCPfZZe/d8k=";
   };
 
-  vendorHash = "sha256-5+DdlNqPNbStG7c6eX4t+4ICi3ZfCNQblkyw3eFZZL4=";
+  vendorHash = "sha256-3uxKxpIgnQvTA1v/IJU7Z8IfIjjyhOFU7Py8uPIQ1q8=";
 
   subPackages = [ "." ];
 
@@ -34,6 +34,8 @@ buildGoModule rec {
     wrapProgram $out/bin/gopass-hibp \
       --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Gopass haveibeenpwnd.com integration";

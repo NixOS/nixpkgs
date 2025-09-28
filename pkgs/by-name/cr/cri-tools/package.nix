@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "cri-tools";
-  version = "1.33.0";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cri-tools";
     rev = "v${version}";
-    hash = "sha256-KxckDpZ3xfD+buCGrQ+udJF0X2D9sg/d3TLSQEcWyV4=";
+    hash = "sha256-nWbxPw8lz1FYLHXJ2G4kzOl5nBPXSl4nEJ9KgzS/wmA=";
   };
 
   vendorHash = null;
@@ -29,20 +29,19 @@ buildGoModule rec {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      make install BINDIR=$out/bin
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash fish zsh; do
-        installShellCompletion --cmd crictl \
-          --$shell <($out/bin/crictl completion $shell)
-      done
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    make install BINDIR=$out/bin
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd crictl \
+        --$shell <($out/bin/crictl completion $shell)
+    done
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "CLI and validation tools for Kubelet Container Runtime Interface (CRI)";

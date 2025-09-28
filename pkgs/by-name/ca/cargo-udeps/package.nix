@@ -10,26 +10,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-udeps";
-  version = "0.1.56";
+  version = "0.1.59";
 
   src = fetchFromGitHub {
     owner = "est31";
     repo = "cargo-udeps";
     rev = "v${version}";
-    sha256 = "sha256-W9COzLyE7A/Yp88HTknSSa9WjufwHMgcmlsqwOYSSCw=";
+    sha256 = "sha256-oA/oWXTaQPY7bCBUP52b+PACZXV+32G3/STh+sec6AI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ttIzCro9/oiF0ycRG/UzvgMT+3kXhkVAdkNCIVjIc2g=";
+  cargoHash = "sha256-X+Y2ialZnwusy3XVnXiTcGmSYsKsFOmEOL4Gc5SgXWU=";
 
   nativeBuildInputs = [ pkg-config ];
 
   # TODO figure out how to use provided curl instead of compiling curl from curl-sys
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   # Requires network access
   doCheck = false;

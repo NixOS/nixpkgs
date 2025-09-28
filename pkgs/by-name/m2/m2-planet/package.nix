@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "m2-planet";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "oriansj";
     repo = "M2-Planet";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-xVwUO67PlRiBj/YBnnTXFGh3jH470fcbaNjABoyYes4=";
+    hash = "sha256-qig+E9rrg168yYTR5n1Y9Iqy1NX+8GOraMhsr7id4lk=";
   };
 
   # Don't use vendored M2libc

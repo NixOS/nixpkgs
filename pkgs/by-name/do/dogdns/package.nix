@@ -21,6 +21,13 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-y3T0vXg7631FZ4bzcbQjz3Buui/DFxh9LG8BZWwynp0=";
   };
 
+  cargoPatches = [
+    # update Cargo.lock to work with openssl 3
+    ./openssl3-support.patch
+  ];
+
+  cargoHash = "sha256-UY7+AhsVw/p+FDfzJWj9A6VRntceIDCWzJ5Zim8euAE=";
+
   patches = [
     # remove date info to make the build reproducible
     # remove commit hash to avoid dependency on git and the need to keep `.git`
@@ -31,7 +38,8 @@ rustPlatform.buildRustPackage {
     installShellFiles
     just
     pandoc
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   outputs = [
@@ -39,21 +47,9 @@ rustPlatform.buildRustPackage {
     "man"
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mutagen-0.2.0" = "sha256-FnSeNI9lAcxonRFTu7wnP/M/d5UbMzSZ97w+mUqoEg8=";
-    };
-  };
-
   dontUseJustBuild = true;
   dontUseJustCheck = true;
   dontUseJustInstall = true;
-
-  postPatch = ''
-    # update Cargo.lock to work with openssl 3
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
 
   postBuild = ''
     just man

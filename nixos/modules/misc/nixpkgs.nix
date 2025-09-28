@@ -202,7 +202,6 @@ in
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = lib.literalExpression ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform where the NixOS configuration will run.
 
@@ -253,7 +252,7 @@ in
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = lib.literalExpression ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
+      defaultText = lib.literalExpression ''config.nixpkgs.system'';
       description = ''
         Systems with a recently generated `hardware-configuration.nix`
         do not need to specify this option, unless cross-compiling, in which case

@@ -20,17 +20,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7D/r9/uY1JcShKgfNUGVTn8P5kUAwUIa/xBbhpReeNw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rIwlNXe7me3Ehj1EIYiOYo12FQqovmZT0ui58gFRWWw=";
 
   OPENSSL_NO_VENDOR = true;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   checkFlags = [ "--skip=tests::cli" ];
 
@@ -42,7 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.cc0;
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

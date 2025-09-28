@@ -48,13 +48,13 @@ in
       default = 20 * 1024;
       type = types.int;
       example = 30720;
-      description = "The maximum disk space allocated to the runner in MB";
+      description = "The maximum disk space allocated to the runner in MiB (1024×1024 bytes).";
     };
     memorySize = mkOption {
       default = 3 * 1024;
       type = types.int;
       example = 8192;
-      description = "The runner's memory in MB";
+      description = "The runner's memory in MiB (1024×1024 bytes).";
     };
     min-free = mkOption {
       default = 1024 * 1024 * 1024;
@@ -85,7 +85,7 @@ in
     };
     hostPort = mkOption {
       default = 31022;
-      type = types.int;
+      type = types.port;
       example = 22;
       description = ''
         The localhost host port to forward TCP to the guest port.

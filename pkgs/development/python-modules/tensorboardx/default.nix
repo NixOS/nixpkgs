@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.6.2";
+  version = "2.6.2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
     tag = "v${version}";
-    hash = "sha256-m7RLDOMuRNLacnIudptBGjhcTlMk8+v/onz6Amqxb90=";
+    hash = "sha256-4eMkjya0B+r/DMQobeFJCfYHwnTOWrb+aNkkW2XvoqY=";
   };
 
   nativeBuildInputs = [
@@ -55,18 +55,17 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  disabledTests =
-    [
-      # ImportError: Visdom visualization requires installation of Visdom
-      "test_TorchVis"
-      # Requires network access (FileNotFoundError: [Errno 2] No such file or directory: 'wget')
-      "test_onnx_graph"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fails with a mysterious error in pytorch:
-      # RuntimeError: required keyword attribute 'name' has the wrong type
-      "test_pytorch_graph"
-    ];
+  disabledTests = [
+    # ImportError: Visdom visualization requires installation of Visdom
+    "test_TorchVis"
+    # Requires network access (FileNotFoundError: [Errno 2] No such file or directory: 'wget')
+    "test_onnx_graph"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails with a mysterious error in pytorch:
+    # RuntimeError: required keyword attribute 'name' has the wrong type
+    "test_pytorch_graph"
+  ];
 
   disabledTestPaths = [
     # we are not interested in linting errors

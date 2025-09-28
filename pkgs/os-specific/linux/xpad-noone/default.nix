@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation (finalAttr: {
@@ -12,13 +13,15 @@ stdenv.mkDerivation (finalAttr: {
   src = fetchFromGitHub {
     owner = "medusalix";
     repo = finalAttr.pname;
-    rev = "c3d1610";
+    tag = "c3d1610";
     hash = "sha256-jDRyvbU9GsnM1ARTuwnoD7ZXlfBxne13UpSKRo7HHSY=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  makeFlags = kernelModuleMakeFlags;
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail "/lib/modules/\$(shell uname -r)/build" "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

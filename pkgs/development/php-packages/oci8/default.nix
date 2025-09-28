@@ -19,8 +19,8 @@ let
       }
     else
       {
-        version = "3.3.0";
-        sha256 = "sha256-0y5VnRKspJYE6xWeBcX2OG2pJTNbB+27GMywDv4gzwQ=";
+        version = "3.4.0";
+        sha256 = "sha256-YPXDijyQxGHZbWHFEpx4xTq3hCJU3ANVIi5t0OqMEag=";
       };
 in
 buildPecl {

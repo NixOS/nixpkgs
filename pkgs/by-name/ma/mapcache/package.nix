@@ -35,15 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AwdZdOEq9SZ5VzuBllg4U1gdVxZ9IVdqiDrn3QuRdCk=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
-      gfortran.cc
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
+    gfortran.cc
+  ];
 
   buildInputs = [
     apacheHttpd

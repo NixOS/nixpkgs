@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "datrie";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UlsI9jjVz2EV32zNgY5aASmM0jCy2skcj/LmSZ0Ydl0=";
+    hash = "sha256-6gIa1MiovxTginHHhypiKqOZpRD5gSloJQkcfKBDboA=";
   };
 
   postPatch = ''

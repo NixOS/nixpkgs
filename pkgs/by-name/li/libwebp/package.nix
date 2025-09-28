@@ -29,17 +29,19 @@
   opencv,
   python3,
   vips,
+  testers,
+  libwebp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libwebp";
     rev = "v${version}";
-    hash = "sha256-DMHP7DVWXrTsqU0m9tc783E6dNO0EQoSXZTn5kZOtTg=";
+    hash = "sha256-7i4fGBTsTjAkBzCjVqXqX4n22j6dLgF/0mz4ajNA45U=";
   };
 
   cmakeFlags = [
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
       ;
     inherit (python3.pkgs) pillow imread;
     haskell-webp = haskellPackages.webp;
+    pkg-config = testers.hasPkgConfigModules { package = libwebp; };
   };
 
   meta = with lib; {
@@ -87,5 +90,15 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ajs124 ];
+    pkgConfigModules = [
+      # configure_pkg_config() calls for these are unconditional
+      "libwebp"
+      "libwebpdecoder"
+      "libwebpdemux"
+      "libsharpyuv"
+    ]
+    ++ lib.optionals libwebpmuxSupport [
+      "libwebpmux"
+    ];
   };
 }

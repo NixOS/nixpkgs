@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
       Works with any window manager, such as [i3wm](https://i3wm.org/), [bspwm](https://github.com/baskerville/bspwm), and [KDE](https://kde.org/), as a standalone script, or with statusbars such as [polybar](https://github.com/polybar/polybar), [i3blocks](https://github.com/vivien/i3blocks), [i3status](https://github.com/i3/i3status), and more.
     '';
     homepage = "https://github.com/hastinbe/i3-volume";
-    maintainers = with lib.maintainers; [ srghma ];
     mainProgram = "i3-volume";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

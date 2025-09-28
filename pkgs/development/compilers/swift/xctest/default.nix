@@ -24,7 +24,8 @@ stdenv.mkDerivation {
     cmake
     ninja
     swift
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
   buildInputs = [ Foundation ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

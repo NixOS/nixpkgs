@@ -10,37 +10,39 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.4.0";
+  version = "2.5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
     tag = "v${version}";
-    hash = "sha256-1XYDCHR1GitMr6wgpj+roCzf5q4tMr6eGLMWzZgzpBY=";
+    hash = "sha256-2SoLiqOLuGcB4IV2CPud+mjc5s8mqobD72kkx0WCwVU=";
   };
 
   build-system = with python3Packages; [
     hatchling
   ];
 
-  dependencies = with python3Packages; [
-    click
-    mysql-connector
-    pytimeparse2
-    pymysql
-    pymysqlsa
-    simplejson
-    sqlalchemy
-    sqlalchemy-utils
-    tqdm
-    tabulate
-    unidecode
-    packaging
-    mysql80
-    python-dateutil
-    types-python-dateutil
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      click
+      mysql-connector
+      pytimeparse2
+      pymysql
+      pymysqlsa
+      simplejson
+      sqlalchemy
+      sqlalchemy-utils
+      tqdm
+      tabulate
+      unidecode
+      packaging
+      mysql80
+      python-dateutil
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   pythonRelaxDeps = [
     "mysql-connector-python"

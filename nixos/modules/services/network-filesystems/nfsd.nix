@@ -81,7 +81,7 @@ in
         };
 
         mountdPort = lib.mkOption {
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.port;
           default = null;
           example = 4002;
           description = ''
@@ -90,7 +90,7 @@ in
         };
 
         lockdPort = lib.mkOption {
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.port;
           default = null;
           example = 4001;
           description = ''
@@ -101,7 +101,7 @@ in
         };
 
         statdPort = lib.mkOption {
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.port;
           default = null;
           example = 4000;
           description = ''

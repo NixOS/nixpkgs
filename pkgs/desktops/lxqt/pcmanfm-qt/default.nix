@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "pcmanfm-qt";
     rev = version;
     hash = "sha256-mYjbOb9c7Qc3qhVYt1EHy50YOVguLnwg0NJg2zBgwOM=";
   };

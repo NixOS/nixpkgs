@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sbc";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-jxI2jh279V4UU2UgRzz7M4yEs5KTnMm2Qpg2D9SgeZI=";
+    sha256 = "sha256-QmYzyr18eYI2RDUW36gzW0fgBLDvN/8Qfgx+rTKZ/MI=";
   };
 
   outputs = [

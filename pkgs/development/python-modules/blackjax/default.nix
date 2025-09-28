@@ -49,10 +49,9 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: JAXopt is no longer maintained
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -62,27 +61,28 @@ buildPythonPackage rec {
     "tests/mcmc/test_integrators.py"
   ];
 
-  disabledTests =
-    [
-      # too slow
-      "test_adaptive_tempered_smc"
+  disabledTests = [
+    # too slow
+    "test_adaptive_tempered_smc"
 
-      # AssertionError on numerical values
-      "test_barker"
-      "test_mclmc"
-      "test_mcse4"
-      "test_normal_univariate"
-      "test_nuts__with_device"
-      "test_nuts__with_jit"
-      "test_nuts__without_device"
-      "test_nuts__without_jit"
-      "test_smc_waste_free__with_jit"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Numerical test (AssertionError)
-      # https://github.com/blackjax-devs/blackjax/issues/668
-      "test_chees_adaptation"
-    ];
+    # AssertionError on numerical values
+    "test_barker"
+    "test_mclmc"
+    "test_mcse4"
+    "test_normal_univariate"
+    "test_nuts__with_device"
+    "test_nuts__with_jit"
+    "test_nuts__without_device"
+    "test_nuts__without_jit"
+    "test_smc_waste_free__with_jit"
+
+    # Numerical test (AssertionError)
+    # First report, when the failure was only happening on aarch64-linux:
+    # https://github.com/blackjax-devs/blackjax/issues/668
+    # Second report, when the test started happening on x86_64-linux too after Jax was updated to 0.7.0
+    # https://github.com/blackjax-devs/blackjax/issues/795
+    "test_chees_adaptation"
+  ];
 
   pythonImportsCheck = [ "blackjax" ];
 

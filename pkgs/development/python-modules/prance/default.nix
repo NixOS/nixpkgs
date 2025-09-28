@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "23.06.21.0";
+  version = "25.04.08.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     repo = "prance";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-p+LZbQal4DPeMp+eJ2O83rCaL+QIUDcU34pZhYdN4bE=";
+    hash = "sha256-71M9ufxb0aaSgokThlsTS4ElOJLZntF2TYIErPccQbU=";
   };
 
   build-system = [ setuptools-scm ];
@@ -54,7 +54,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Disable tests that require network
   disabledTestPaths = [ "tests/test_convert.py" ];

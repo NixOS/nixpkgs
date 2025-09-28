@@ -6,6 +6,7 @@
   snagboot,
   testers,
   gitUpdater,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,8 +26,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "pylibfdt"
     "swig"
+  ];
+
+  nativeBuildInputs = [
+    udevCheckHook
   ];
 
   dependencies = with python3Packages; [
@@ -35,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     pyserial
     tftpy
     crccheck
-    # pylibfdt
+    libfdt
     # swig
     packaging
   ];
@@ -54,9 +58,6 @@ python3Packages.buildPythonApplication rec {
     mkdir -p "$out/lib/udev/rules.d"
     cp "$rules" "$out/lib/udev/rules.d/50-snagboot.rules"
   '';
-
-  # There are no tests
-  doCheck = false;
 
   passthru = {
     updateScript = gitUpdater {

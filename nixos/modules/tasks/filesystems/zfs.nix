@@ -167,12 +167,14 @@ let
       # https://github.com/zfsonlinux/zfs/pull/4943
       wants = [
         "systemd-udev-settle.service"
-      ] ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
+      ]
+      ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
-      ] ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
+      ]
+      ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
       requiredBy =
         let
           poolFilesystems = getPoolFilesystems pool;
@@ -832,7 +834,7 @@ in
           pkgs.gawk
           pkgs.gnugrep
           pkgs.gnused
-          pkgs.nettools
+          pkgs.hostname-debian
           pkgs.util-linux
         ];
       };

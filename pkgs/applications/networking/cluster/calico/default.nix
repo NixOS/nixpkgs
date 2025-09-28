@@ -14,16 +14,16 @@ builtins.mapAttrs
     }:
     buildGoModule rec {
       inherit pname;
-      version = "3.30.0";
+      version = "3.30.3";
 
       src = fetchFromGitHub {
         owner = "projectcalico";
         repo = "calico";
         rev = "v${version}";
-        hash = "sha256-twq0Yp2M1f9qtcAQ+kcZoBxXXtw1VrV9ZrtEnEPv+Ks=";
+        hash = "sha256-Z2kYUak/zzO0IsKQyQ6sb3UD4QUZ9+9vGGVfl4qdPF8=";
       };
 
-      vendorHash = "sha256-hvAFSr64YsGaSbbG3aEsSO+gprtQy51/BsdYAhAgH3Q=";
+      vendorHash = "sha256-C9sge+xNTsW30PF2wJhRUNI1YEmXInD+xcboCtcC9kc=";
 
       inherit doCheck subPackages;
 

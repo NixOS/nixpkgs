@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
-  version = "0.19.2";
+  version = "0.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";
     tag = "v${version}";
-    hash = "sha256-LRXgB85jo0Frmdsq5cHQKQ60bYzuVPXsjPeGLj5uyNU=";
+    hash = "sha256-XaaL5O6WHIs+9vNq/IqolPUsL04l6PCKTZNBTYH1z4g=";
   };
 
   pythonRelaxDeps = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to create MQTT entities that are automatically discovered by Home Assistant";
     homepage = "https://github.com/unixorn/ha-mqtt-discoverable";
-    changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/v${version}";
+    changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

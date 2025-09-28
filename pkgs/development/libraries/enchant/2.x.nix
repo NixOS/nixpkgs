@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/rrthomas/enchant/releases/download/v${version}/enchant-${version}.tar.gz";
     hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
   };
 
@@ -44,19 +44,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-    ]
-    ++ lib.optionals withHunspell [
-      hunspell
-    ]
-    ++ lib.optionals withNuspell [
-      nuspell
-    ]
-    ++ lib.optionals withVoikko [
-      libvoikko
-    ];
+  buildInputs = [
+    glib
+  ]
+  ++ lib.optionals withHunspell [
+    hunspell
+  ]
+  ++ lib.optionals withNuspell [
+    nuspell
+  ]
+  ++ lib.optionals withVoikko [
+    libvoikko
+  ];
 
   checkInputs = [
     unittest-cpp

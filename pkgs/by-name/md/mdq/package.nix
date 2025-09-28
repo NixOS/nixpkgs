@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdq";
-  version = "0.7.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "yshavit";
     repo = "mdq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QGva+yuiNwez8z9j4SL8vpcHdUm8nxRFn+6WiZgdWjQ=";
+    hash = "sha256-Ys5Ol/j4IZ4SNp6TjryfHCIgWoEu3ToNp7ffiTZp5BE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-k+St07jA+F+c4md9OzFiDp9idie6zoNI65HEQ2JqynM=";
+  cargoHash = "sha256-fwFi/OYlTqRuDDE2TKuvf9T7u0hLyrDejhOwjFDYHAk=";
 
   passthru.updateScript = nix-update-script { };
 

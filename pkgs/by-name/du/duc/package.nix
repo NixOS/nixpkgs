@@ -28,15 +28,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
-  buildInputs =
-    [
-      tokyocabinet
-      ncurses
-    ]
-    ++ lib.optionals enableCairo [
-      cairo
-      pango
-    ];
+  buildInputs = [
+    tokyocabinet
+    ncurses
+  ]
+  ++ lib.optionals enableCairo [
+    cairo
+    pango
+  ];
 
   configureFlags = lib.optionals (!enableCairo) [
     "--disable-x11"

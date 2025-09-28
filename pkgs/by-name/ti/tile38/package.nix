@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tile38";
-  version = "1.34.4";
+  version = "1.36.3";
 
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = "tile38";
     tag = version;
-    hash = "sha256-TLVFFgT5lxOLhv1RBS09DCcZAozkcHzIBlJSWt1ztB4=";
+    hash = "sha256-pz7fB5lg27z3edrExLPe8Vff0OocH/TvtO2Pztmwnzk=";
   };
 
-  vendorHash = "sha256-geXYLeJf/u+8RD7Slr2x+J6zABkWSIfhxKLxZVF/icU=";
+  vendorHash = "sha256-YiivAh7aXeVuvI9V1ayvqjJ658Hu8/1icvRbqq2QeI0=";
 
   subPackages = [
     "cmd/tile38-cli"

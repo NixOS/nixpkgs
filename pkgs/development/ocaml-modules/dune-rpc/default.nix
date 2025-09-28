@@ -4,8 +4,8 @@
   dune_3,
   csexp,
   stdune,
+  ocamlc-loc,
   ordering,
-  pp,
   xdg,
   dyn,
 }:
@@ -21,8 +21,8 @@ buildDunePackage {
   propagatedBuildInputs = [
     csexp
     stdune
+    ocamlc-loc
     ordering
-    pp
     xdg
     dyn
   ];

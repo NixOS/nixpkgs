@@ -1,25 +1,25 @@
 {
   lib,
   stdenv,
-  fetchFromSavannah,
+  fetchurl,
   m2libc,
   which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mescc-tools";
-  version = "1.5.1";
+  version = "1.7.0";
 
-  src = fetchFromSavannah {
-    repo = "mescc-tools";
-    rev = "Release_${finalAttrs.version}";
-    hash = "sha256-jFDrmzsjKEQKOKlsch1ceWtzUhoJAJVyHjXGVhjE9/U=";
+  src = fetchurl {
+    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-toL3v1dvieVdCxxjjZ3i2b6yhVciaPWPq/TtFNm2V1w=";
   };
 
   # Don't use vendored M2libc
   postPatch = ''
-    rmdir M2libc
+    rm -r M2libc
     ln -s ${m2libc}/include/M2libc M2libc
+    patchShebangs --build Kaem/test.sh
   '';
 
   enableParallelBuilding = true;

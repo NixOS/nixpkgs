@@ -19,25 +19,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.40.0";
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals installManPages [
-      "man"
-    ]
-    ++ lib.optionals withDocumentation [ "doc" ];
+  version = "1.42.4";
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals installManPages [
+    "man"
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-pmuwZoBIgUsKWFTXo8HYHVxrDWPMO8cumD/UHajFS6A=";
+    hash = "sha256-MLGtHMNCyhYq9OTquCc9zKmear1ts5vNAvlLxNQaOqk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mQQGxtSgNuRbz/83eWru+dmtWiLSKdVH+3z88BNugQE=";
+  cargoHash = "sha256-udNHlPEwTb5S1ZypIqng7JLZ6Yl1vbYwASn+DT2SOLY=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -72,7 +70,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--package=just"
-  ] ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
+  ]
+  ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
 
   checkFlags = [
     "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell
@@ -116,6 +115,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       xrelkd
       jk
+      ryan4yin
     ];
     mainProgram = "just";
   };

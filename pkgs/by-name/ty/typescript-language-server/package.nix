@@ -11,17 +11,18 @@
   yarn,
   testers,
   typescript,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typescript-language-server";
-  version = "4.3.3";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "typescript-language-server";
     repo = "typescript-language-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FCv0+tA7AuCdGeG6FEiMyRAHcl0WbezhNYLL7xp5FWU=";
+    hash = "sha256-dWTo9OM5gPKj78/KtCMeu59KYL5IhhapOsFtuj9JzVQ=";
   };
 
   patches = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-nSMhPfbWD93sGIKehBBE/bh4RzHXFtGAjeyG20m/LWQ=";
+    hash = "sha256-9WezeKRsnwWB98YVhQD1nzrT/T6T3plIVwKhVkOsKPo=";
   };
 
   nativeBuildInputs = [
@@ -77,10 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
+  passthru = {
+    tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {

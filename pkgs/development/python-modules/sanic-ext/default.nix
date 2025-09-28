@@ -18,7 +18,7 @@
   msgspec,
   pydantic,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-asyncio,
   tox,
   jinja2,
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     msgspec
     pydantic
     pytest
-    pytest-cov
+    pytest-cov-stub
     pytest-asyncio
     tox
     jinja2

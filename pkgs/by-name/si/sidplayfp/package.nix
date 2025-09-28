@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sidplayfp";
-  version = "2.14.1";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-t2bZcslHPRxrTt3cDW6mTXK35/MMw1u1CnVXTzN/UEs=";
+    hash = "sha256-IUyXkHs8QfWhuTVYrPbmMU/mhfGwGminypLmGYimcLg=";
   };
 
   strictDeps = true;
@@ -34,19 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libsidplayfp
-    ]
-    ++ lib.optionals alsaSupport [
-      alsa-lib
-    ]
-    ++ lib.optionals pulseSupport [
-      libpulseaudio
-    ]
-    ++ lib.optionals out123Support [
-      mpg123
-    ];
+  buildInputs = [
+    libsidplayfp
+  ]
+  ++ lib.optionals alsaSupport [
+    alsa-lib
+  ]
+  ++ lib.optionals pulseSupport [
+    libpulseaudio
+  ]
+  ++ lib.optionals out123Support [
+    mpg123
+  ];
 
   configureFlags = [
     (lib.strings.withFeature out123Support "out123")

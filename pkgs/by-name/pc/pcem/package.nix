@@ -36,12 +36,14 @@ stdenv.mkDerivation rec {
     SDL2
     openal
     gtk3
-  ] ++ lib.optional withALSA alsa-lib;
+  ]
+  ++ lib.optional withALSA alsa-lib;
 
-  configureFlags =
-    [ "--enable-release-build" ]
-    ++ lib.optional withNetworking "--enable-networking"
-    ++ lib.optional withALSA "--enable-alsa";
+  configureFlags = [
+    "--enable-release-build"
+  ]
+  ++ lib.optional withNetworking "--enable-networking"
+  ++ lib.optional withALSA "--enable-alsa";
 
   # Fix GCC 14 build
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";

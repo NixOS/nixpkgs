@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Program for making large letters out of ordinary text";
     homepage = "http://www.figlet.org/";
     license = lib.licenses.afl21;
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.unix;
     mainProgram = "figlet";
   };

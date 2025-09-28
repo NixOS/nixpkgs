@@ -2,34 +2,39 @@
   lib,
   stdenv,
   fetchzip,
-  jdk23,
+  jdk24,
+  unzip,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
 let
-  throwSystem = throw "Unsupported system: ${stdenv.system}";
-  platform =
-    {
-      "x86_64-linux" = "linux-x86-64";
-    }
-    .${stdenv.system} or throwSystem;
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  platform = selectSystem {
+    "x86_64-linux" = "linux-x86-64";
+    "aarch64-linux" = "linux-aarch64";
+    "x86_64-darwin" = "macosx-x86-64";
+    "aarch64-darwin" = "macosx-aarch64";
+  };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";
-  version = "4.5.1";
+  version = "4.6.3";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
-    url = "https://github.com/nroduit/Weasis/releases/download/v${version}/weasis-native.zip";
-    hash = "sha256-aGoTSOZ1W8JHQ0+FcJ9RZ47A1LfXJOoGNmVDiUd9zxE=";
+    url = "https://github.com/nroduit/Weasis/releases/download/v${finalAttrs.version}/weasis-native.zip";
+    hash = "sha256-1dvBKxInuk8FpZjo59+LkIuEBTr57wkLaHfvvvT6bOg=";
     stripRoot = false;
   };
 
   nativeBuildInputs = [
     copyDesktopItems
-  ];
+  ]
+  ++ lib.optional stdenv.isDarwin unzip;
 
   desktopItems = [
     (makeDesktopItem {
@@ -44,7 +49,7 @@ stdenv.mkDerivation rec {
       exec = "Weasis";
       icon = "Weasis";
       desktopName = "Weasis";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
     })
   ];
 
@@ -55,19 +60,24 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ./build/script/package-weasis.sh --no-installer --jdk ${jdk23}
+    ./build/script/package-weasis.sh --no-installer --jdk ${jdk24}
 
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.isLinux ''
     mkdir -p $out/share/{applications,pixmaps}
-
-    mv weasis-${platform}-jdk${lib.versions.major jdk23.version}-${version}/Weasis/* $out/
+    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis/* $out/
     mv $out/lib/*.png $out/share/pixmaps/
-
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis.app $out/Applications/
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -75,13 +85,13 @@ stdenv.mkDerivation rec {
     description = "Multipurpose standalone and web-based DICOM viewer with a highly modular architecture";
     homepage = "https://weasis.org";
     # Using changelog from releases as it is more accurate
-    changelog = "https://github.com/nroduit/Weasis/releases/tag/v${version}";
+    changelog = "https://github.com/nroduit/Weasis/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       epl20
     ];
     maintainers = [ ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "Weasis";
   };
-}
+})

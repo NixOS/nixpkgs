@@ -16,12 +16,10 @@
   libcap_ng,
   libselinux,
   p11-kit,
-  openssh,
   wrapGAppsNoGuiHook,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   gnome,
-  writeText,
   useWrappedDaemon ? true,
 }:
 
@@ -55,7 +53,6 @@ stdenv.mkDerivation rec {
     glib
     libgcrypt
     pam
-    openssh
     libcap_ng
     libselinux
     gcr
@@ -71,16 +68,8 @@ stdenv.mkDerivation rec {
     # installation directories
     "-Dpkcs11-config=${placeholder "out"}/etc/pkcs11" # todo: this should probably be /share/p11-kit/modules
     "-Dpkcs11-modules=${placeholder "out"}/lib/pkcs11"
-    # gnome-keyring doesn't build with ssh-agent by default anymore, we need to
-    # switch to using gcr https://github.com/NixOS/nixpkgs/issues/140824
-    "-Dssh-agent=true"
     # TODO: enable socket activation
     "-Dsystemd=disabled"
-    "--cross-file=${writeText "crossfile.ini" ''
-      [binaries]
-      ssh-add = '${lib.getExe' openssh "ssh-add"}'
-      ssh-agent = '${lib.getExe' openssh "ssh-agent"}'
-    ''}"
   ];
 
   # Tends to fail non-deterministically.

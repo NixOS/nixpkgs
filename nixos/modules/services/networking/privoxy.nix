@@ -145,7 +145,7 @@ in
         freeformType = configType;
 
         options.listen-address = mkOption {
-          type = types.str;
+          type = types.either types.str (types.listOf types.str);
           default = "127.0.0.1:8118";
           description = "Pair of address:port the proxy server is listening to.";
         };
@@ -261,30 +261,30 @@ in
       }
     ];
 
-    services.privoxy.settings =
-      {
-        user-manual = "${pkgs.privoxy}/share/doc/privoxy/user-manual";
-        # This is needed for external filters
-        temporary-directory = "/tmp";
-        filterfile = [ "default.filter" ];
-        actionsfile = [
-          "match-all.action"
-          "default.action"
-        ] ++ optional cfg.inspectHttps (toString inspectAction);
-      }
-      // (optionalAttrs cfg.enableTor {
-        forward-socks5 = "/ 127.0.0.1:9063 .";
-        toggle = true;
-        enable-remote-toggle = false;
-        enable-edit-actions = false;
-        enable-remote-http-toggle = false;
-      })
-      // (optionalAttrs cfg.inspectHttps {
-        # This allows setting absolute key/crt paths
-        ca-directory = "/var/empty";
-        certificate-directory = "/run/privoxy/certs";
-        trusted-cas-file = config.security.pki.caBundle;
-      });
+    services.privoxy.settings = {
+      user-manual = "${pkgs.privoxy}/share/doc/privoxy/user-manual";
+      # This is needed for external filters
+      temporary-directory = "/tmp";
+      filterfile = [ "default.filter" ];
+      actionsfile = [
+        "match-all.action"
+        "default.action"
+      ]
+      ++ optional cfg.inspectHttps (toString inspectAction);
+    }
+    // (optionalAttrs cfg.enableTor {
+      forward-socks5 = "/ 127.0.0.1:9063 .";
+      toggle = true;
+      enable-remote-toggle = false;
+      enable-edit-actions = false;
+      enable-remote-http-toggle = false;
+    })
+    // (optionalAttrs cfg.inspectHttps {
+      # This allows setting absolute key/crt paths
+      ca-directory = "/var/empty";
+      certificate-directory = "/run/privoxy/certs";
+      trusted-cas-file = config.security.pki.caBundle;
+    });
   };
 
   imports =

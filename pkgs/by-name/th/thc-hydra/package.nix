@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.5";
+  version = "9.6";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
+    sha256 = "sha256-DS3Fh4a6OtqZRHubgJewB7qnJXm10sYv85R6o/NePoU=";
   };
 
   postPatch =
@@ -58,7 +58,8 @@ stdenv.mkDerivation rec {
     libmysqlclient
     libpq
     samba
-  ] ++ lib.optional withGUI gtk2;
+  ]
+  ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;
 

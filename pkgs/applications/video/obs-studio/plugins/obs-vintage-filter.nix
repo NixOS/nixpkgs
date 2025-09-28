@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cg2121/obs-vintage-filter";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

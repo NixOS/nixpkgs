@@ -10,13 +10,13 @@
   goocanvas2 = goocanvas3;
 }).overrideAttrs
   (finalAttrs: {
-    version = "2.2.1-unstable-2024-09-17";
+    version = "2.2.1-unstable-2025-09-20";
 
     src = fetchFromGitHub {
       owner = "csete";
       repo = "gpredict";
-      rev = "91a4a3fb15e7eab0374d1bb7c859d386818b48ee";
-      hash = "sha256-/XCJ+jCSY4o0OLVVY6OGvnmMw6aI/iQOhjyLYWPj7Ec=";
+      rev = "34af48e6bfd9647559abb1df4907a65d064fc870";
+      hash = "sha256-G4bS7w/USIzYOa+aYv3YQCbUQolV22Z/7+71GHHSUpk=";
     };
 
     patches = [ ];

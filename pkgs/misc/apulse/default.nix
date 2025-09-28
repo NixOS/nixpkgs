@@ -16,13 +16,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "apulse";
-  version = "0.1.13";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "i-rinat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p6fh6ah5v3qz7dxhcsixx38bxg44ypbim4m03bxk3ls5i9xslmn";
+    sha256 = "sha256-SWvQvS9QBOevOSRpjY3XpyhzWoHAkXzkk8Mh4ovltNI=";
   };
 
   nativeBuildInputs = [

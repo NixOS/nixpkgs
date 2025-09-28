@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "sttr";
-  version = "0.2.25";
+  version = "0.2.27";
 
   src = fetchFromGitHub {
     owner = "abhimanyu003";
     repo = "sttr";
     rev = "v${version}";
-    hash = "sha256-FVjdlheKt3WoFQnb9qrYQATSkJmuXCVrigBbnKUHUR0=";
+    hash = "sha256-tJljVXyTIYFsjPTzmlzJ/jC9rm8DC2SA1eU6GTyXnG8=";
   };
 
-  vendorHash = "sha256-OQxp52v8TEgB09obp3UKOReRWB79Cwa6zbSE1V/s+JY=";
+  vendorHash = "sha256-QVLOcFRZ7Ovft7Tzn47+mstSikpqRVZAqyMEVgemwA8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,7 +27,7 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sttr \
       --bash <($out/bin/sttr completion bash) \
       --fish <($out/bin/sttr completion fish) \

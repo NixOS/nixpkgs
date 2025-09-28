@@ -174,7 +174,7 @@ let
           type = types.int;
           default = 0;
           description = ''
-            Specifies the size of the swap file in megabytes.
+            Specifies the size of the swap file in MiB (1024×1024 bytes).
 
             This configuration has no effect if resource disk is managed by cloud-init.
           '';
@@ -220,7 +220,7 @@ let
         };
 
         Port = lib.mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = ''
             If you set http proxy, waagent will use this proxy to access the Internet.
@@ -257,7 +257,7 @@ in
       type = settingsType;
       default = { };
       description = ''
-        The waagent.conf configuration, see https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux for documentation.
+        The waagent.conf configuration, see <https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux> for documentation.
       '';
     };
   };
@@ -329,7 +329,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network-online.target"
-      ] ++ lib.optionals config.services.cloud-init.enable [ "cloud-init.service" ];
+      ]
+      ++ lib.optionals config.services.cloud-init.enable [ "cloud-init.service" ];
       wants = [
         "network-online.target"
         "sshd.service"
@@ -351,7 +352,7 @@ in
           parted
 
           # for hostname
-          nettools
+          net-tools
           # for pidof
           procps
           # for useradd, usermod

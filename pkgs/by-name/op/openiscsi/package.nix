@@ -13,6 +13,7 @@
   systemd,
   runtimeShell,
   nixosTests,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     ninja
     perl
+    udevCheckHook
   ];
   buildInputs = [
     kmod
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     "-Dsystemddir=${placeholder "out"}/lib/systemd"
     "-Ddbroot=/etc/iscsi"
   ];
+
+  doInstallCheck = true;
 
   passthru.tests = { inherit (nixosTests) iscsi-root; };
 

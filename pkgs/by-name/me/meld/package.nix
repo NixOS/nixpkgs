@@ -42,7 +42,8 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook3
     gtk3 # for gtk-update-icon-cache
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     gtk3

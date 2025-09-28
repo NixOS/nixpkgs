@@ -17,14 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ rsync ]
-    ++ (with ocamlPackages; [
-      ocaml
-      dune_3
-      menhir
-      findlib
-    ]);
+  nativeBuildInputs = [
+    rsync
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    dune_3
+    menhir
+    findlib
+  ]);
   buildInputs = with ocamlPackages; [
     cmdliner
     yojson

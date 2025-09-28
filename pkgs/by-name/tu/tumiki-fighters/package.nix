@@ -4,7 +4,7 @@
   fetchpatch,
   fetchurl,
   unzip,
-  gdc,
+  ldc,
   libGL,
   SDL,
   SDL_mixer,
@@ -16,7 +16,7 @@ let
     patchname: hash:
     fetchpatch {
       name = "${patchname}.patch";
-      url = "https://sources.debian.org/data/main/t/tumiki-fighters/0.2.dfsg1-9/debian/patches/${patchname}.patch";
+      url = "https://sources.debian.org/data/main/t/tumiki-fighters/0.2.dfsg1-10/debian/patches/${patchname}.patch";
       sha256 = hash;
     };
 
@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     (debianPatch "window-resizing" "1dm79d0yisa8zs5fr89y3wq2kzd3khcaxs0la8lhncvkqbd4smx8")
     (debianPatch "dlang_v2" "1isnvbl3bjnpyphji8k3fl0yd1z4869h0lai143vpwgj6518lpg4")
     (debianPatch "gdc-8" "1md0zwmv50jnak5g9d93bglv9v4z41blinjii6kv3vmgjnajapzj")
+    (debianPatch "gcc12" "sha256-3ZFsI2Q4zCT591qCOu2iT2edE52DfO2pUySnMMBhNIQ=")
   ];
 
   postPatch = ''
@@ -57,11 +58,16 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $f \
         --replace "/usr/" "$out/"
     done
+    # GDC → DMD/LDC flag compatibility
+    substituteInPlace Makefile \
+      --replace-fail "-o " -of= \
+      --replace-fail -Wno-deprecated "" \
+      --replace-fail -l -L-l
   '';
 
   nativeBuildInputs = [
     unzip
-    gdc
+    ldc
   ];
 
   buildInputs = [
@@ -70,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_mixer
     bulletml
   ];
+
+  makeFlags = [ "GDC=ldc2" ];
 
   installPhase = ''
     install -Dm755 tumiki-fighters $out/bin/tumiki-fighters

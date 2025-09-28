@@ -7,31 +7,29 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.73.1";
+  version = "3.87.2";
 
   src = fetchFromGitHub {
     owner = "PHP-CS-Fixer";
     repo = "PHP-CS-Fixer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1sivnmQDqyYVimac6yjKHTGSmJlx9WFCoQJXiZVce9Y=";
+    hash = "sha256-IPBMi8Bln99zcCxkNPGKWSUQMvtxHlRq4BwuoMCXkYw=";
   };
 
-  # Upstream doesn't provide a composer.lock.
-  # More info at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
   composerLock = ./composer.lock;
-  vendorHash = "sha256-ywJ2Gj9vMeu1pOg2UtfWDaxU+mpt/ay5KNQiWZGm6h4=";
+  vendorHash = "sha256-I4F6WDnWDEmLJFRGMS2QV62jaNAtZoTNQBoH3gT3OAw=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
   meta = {
-    broken = lib.versionOlder php.version "8.2" || lib.versionAtLeast php.version "8.4";
+    broken = lib.versionOlder php.version "8.2";
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
     description = "Tool to automatically fix PHP coding standards issues";
     homepage = "https://cs.symfony.com/";
     license = lib.licenses.mit;
     mainProgram = "php-cs-fixer";
-    teams = [ lib.teams.php ];
+    maintainers = [ lib.maintainers.patka ];
   };
 })

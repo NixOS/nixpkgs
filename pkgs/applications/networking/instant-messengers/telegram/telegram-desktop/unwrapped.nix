@@ -10,12 +10,7 @@
   python3,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
-  libavif,
-  libheif,
-  libjxl,
-  kimageformats,
   qtbase,
-  qtimageformats,
   qtsvg,
   qtwayland,
   kcoreaddons,
@@ -25,14 +20,10 @@
   protobuf,
   openalSoft,
   minizip,
-  libopus,
-  alsa-lib,
-  libpulseaudio,
   range-v3,
   tl-expected,
   hunspell,
   gobject-introspection,
-  jemalloc,
   rnnoise,
   microsoft-gsl,
   boost,
@@ -51,82 +42,55 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.15.2";
+  version = "6.1.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-T+gzNY3jPfCWjV9yFEGlz8kNGeAioyDUD2qazM/j05I=";
+    hash = "sha256-ElbKzv+QMqH62BGAvNjDDNp7NSJYIEvoDzxKCbEdwqM=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # to build bundled libdispatch
+    clang
+    gobject-introspection
+  ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      ninja
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # to build bundled libdispatch
-      clang
-      gobject-introspection
-    ];
-
-  buildInputs =
-    [
-      qtbase
-      qtimageformats
-      qtsvg
-      lz4
-      xxHash
-      ffmpeg_6
-      openalSoft
-      minizip
-      libopus
-      range-v3
-      tl-expected
-      rnnoise
-      tg_owt
-      microsoft-gsl
-      boost
-      ada
-      (tdlib.override { tde2eOnly = true; })
-      # even though the last 3 dependencies are already in `kimageformats`,
-      # because of a logic error in the cmake files, in td 5.15.{1,2} it
-      # doesn't link when you don't add them explicitly
-      #
-      # this has been fixed
-      # (https://github.com/desktop-app/cmake_helpers/pull/413), remove next
-      # release
-      kimageformats
-      libavif
-      libheif
-      libjxl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      protobuf
-      qtwayland
-      kcoreaddons
-      alsa-lib
-      libpulseaudio
-      hunspell
-      jemalloc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      libicns
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    lz4
+    xxHash
+    ffmpeg_6
+    openalSoft
+    minizip
+    range-v3
+    tl-expected
+    rnnoise
+    tg_owt
+    microsoft-gsl
+    boost
+    ada
+    (tdlib.override { tde2eOnly = true; })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    protobuf
+    qtwayland
+    kcoreaddons
+    hunspell
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+    libicns
+  ];
 
   dontWrapQtApps = true;
 

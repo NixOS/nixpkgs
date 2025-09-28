@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "data for offline version of the Esperanto dictionary Reta Vortaro";
+    description = "Data for offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
       PReVo is the "portable" ReVo, i.e., the offline version
       of the Esperanto dictionary Reta Vortaro.
@@ -41,7 +41,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       das-g
-      ehmry
     ];
   };
 }

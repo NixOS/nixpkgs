@@ -5,17 +5,18 @@
   openssl,
   pkg-config,
   libpcap,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "mongo-tools";
-  version = "100.10.0";
+  version = "100.13.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
-    rev = version;
-    sha256 = "sha256-9DUfPD6wrv65PLVtxAF21BZ/joWFVFk+cItt9m/1Nx8=";
+    tag = version;
+    hash = "sha256-aQrwJFFdaCIkcnofdGtZ/BMX9KPqr1pHxwm+A04LhXI=";
   };
 
   vendorHash = null;
@@ -52,10 +53,15 @@ buildGoModule rec {
       runHook postBuild
     '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/mongodb/mongo-tools";
     description = "Tools for the MongoDB";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      iamanaws
+    ];
   };
 }

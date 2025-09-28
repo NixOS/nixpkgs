@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.3.0";
+  version = "6.3.1";
   pname = "icalendar";
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-sAZVVVkugwd3veMGAqnhKA46KZpGdZdeWFbCUgyG1js=";
+    hash = "sha256-lLcMuwKFdZbjscrp4dW5ybPHwcx9RHf44RH3BWwO6ng=";
   };
 
   patches = [
@@ -48,9 +48,11 @@ buildPythonPackage rec {
     # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
     "test_dateutil_timezone_is_matched_with_tzname"
     "test_docstring_of_python_file"
+    # AssertionError: assert $TZ not in set()
+    "test_add_missing_timezones_to_example"
   ];
 
-  pytestFlagsArray = [ "src/icalendar" ];
+  enabledTestPaths = [ "src/icalendar" ];
 
   meta = with lib; {
     changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";

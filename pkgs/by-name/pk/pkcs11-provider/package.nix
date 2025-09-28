@@ -22,14 +22,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pkcs11-provider";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "pkcs11-provider";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Q9dmzYDBco+LLVWdORFTjRyk0RX8qhmZ1m+Kgfeyr04=";
+    hash = "sha256-QXEwDl6pk8G5ba8lD4uYw2QuD3qS/sgd1od8crHct2s=";
   };
 
   buildInputs = [

@@ -36,13 +36,13 @@ let
   '';
 
   databaseSettingsOpts = with lib.types; {
-    freeformType = oneOf [
+    freeformType = attrsOf (oneOf [
       (listOf str)
       (listOf (attrsOf anything))
       str
       int
       bool
-    ];
+    ]);
 
     options = {
       "app.notify_emails" = lib.mkOption {
@@ -193,7 +193,7 @@ in
 
     systemd.services.listmonk = {
       description = "Listmonk - newsletter and mailing list manager";
-      after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "exec";

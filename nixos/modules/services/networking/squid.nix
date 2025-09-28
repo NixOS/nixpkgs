@@ -145,7 +145,7 @@ in
       };
 
       proxyPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3128;
         description = "TCP port on which squid will listen.";
       };

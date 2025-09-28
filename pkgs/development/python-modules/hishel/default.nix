@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = version;
-    hash = "sha256-EaVE70lzjvMqMJlXObz450FwunaPZv86kJCKgI174a8=";
+    hash = "sha256-3dcXj9MPPtHBzafdccrOeh+Wrn9hulDA8L3itOe8ZXw=";
   };
 
   build-system = [
@@ -49,7 +49,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "hishel" ];
 

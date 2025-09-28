@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python312,
   writableTmpDirAsHomeHook,
 }:
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       impacket = super.impacket.overridePythonAttrs {
-        version = "0.12.0.dev1-unstable-2023-11-30";
+        version = "0.12.0-unstable-2025-03-14";
         src = fetchFromGitHub {
-          owner = "Pennyw0rth";
+          owner = "fortra";
           repo = "impacket";
-          rev = "d370e6359a410063b2c9c68f6572c3b5fb178a38";
-          hash = "sha256-Jozn4lKAnLQ2I53+bx0mFY++OH5P4KyqVmrS5XJUY3E=";
+          rev = "8b4566b12fc79acb520d045dbae8f13446a9d4d7";
+          hash = "sha256-jyn5qSSAipGYhHm2EROwDHa227mnmW+d+0H0/++i1OY=";
         };
         # Fix version to be compliant with Python packaging rules
         postPatch = ''

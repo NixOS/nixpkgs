@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.22.0";
+  version = "1.22.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pydsdl";
     tag = version;
-    hash = "sha256-Q6Zt7qiFZvTK2pF4nWfHbjwQHZffzKOad6X/HQ94EUo=";
+    hash = "sha256-JQE7e735arclu7avLu0Nf/ecULd0wuPmxyO3DtDsxLs=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "pydsdl/_test.py" ];
+  enabledTestPaths = [ "pydsdl/_test.py" ];
 
   meta = with lib; {
     description = "Library to process Cyphal DSDL";

@@ -10,7 +10,6 @@
   libiconv,
   numactl,
   libffi,
-  llvmPackages,
   coreutils,
   targetPackages,
 
@@ -193,8 +192,6 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
-
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.
     map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
@@ -202,19 +199,15 @@ let
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
 
-  runtimeDeps =
-    [
-      targetPackages.stdenv.cc
-      targetPackages.stdenv.cc.bintools
-      coreutils # for cat
-    ]
-    ++ lib.optionals useLLVM [
-      (lib.getBin llvmPackages.llvm)
-    ]
-    # On darwin, we need unwrapped bintools as well (for otool)
-    ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-      targetPackages.stdenv.cc.bintools.bintools
-    ];
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 
@@ -276,7 +269,7 @@ stdenv.mkDerivation {
       for exe in $(find . -type f -executable); do
         isScript $exe && continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
     ''
     +
@@ -311,12 +304,17 @@ stdenv.mkDerivation {
                     -i {} \;
     ''
     +
-      # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+      # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
       # FFI_LIB_DIR is a good indication of places it must be needed.
-      lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-        find . -name package.conf.in \
-            -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
-      ''
+      lib.optionalString
+        (
+          lib.meta.availableOn stdenv.hostPlatform numactl
+          && builtins.any ({ nixPackage, ... }: nixPackage == numactl) binDistUsed.archSpecificLibraries
+        )
+        ''
+          find . -name package.conf.in \
+              -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
+        ''
     +
       # Rename needed libraries and binaries, fix interpreter
       lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -328,19 +326,27 @@ stdenv.mkDerivation {
   preConfigure = lib.optionalString stdenv.targetPlatform.isAarch32 "LD=ld.gold";
 
   configurePlatforms = [ ];
-  configureFlags =
-    [
-      "--with-gmp-includes=${lib.getDev gmpUsed}/include"
-      # Note `--with-gmp-libraries` does nothing for GHC bindists:
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  configureFlags = [
+    "--with-gmp-includes=${lib.getDev gmpUsed}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+  # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
 
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''
@@ -405,7 +411,7 @@ stdenv.mkDerivation {
       for exe in $(find "$out" -type f -executable); do
         isScript $exe && continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
 
       for file in $(find "$out" -name setup-config); do
@@ -454,26 +460,25 @@ stdenv.mkDerivation {
     [ $(./main) == "yes" ]
   '';
 
-  passthru =
-    {
-      targetPrefix = "";
-      enableShared = true;
+  passthru = {
+    targetPrefix = "";
+    enableShared = true;
 
-      inherit llvmPackages;
+    llvmPackages = null;
 
-      # Our Cabal compiler name
-      haskellCompilerName = "ghc-${version}";
-    }
-    # We duplicate binDistUsed here since we have a sensible default even if no bindist is available,
-    # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
-    // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
-      # Normal GHC derivations expose the hadrian derivation used to build them
-      # here. In the case of bindists we just make sure that the attribute exists,
-      # as it is used for checking if a GHC derivation has been built with hadrian.
-      # The isHadrian mechanism will become obsolete with GHCs that use hadrian
-      # exclusively, i.e. 9.6 (and 9.4?).
-      hadrian = null;
-    };
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc-${version}";
+  }
+  # We duplicate binDistUsed here since we have a sensible default even if no bindist is available,
+  # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
+  // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
+    # Normal GHC derivations expose the hadrian derivation used to build them
+    # here. In the case of bindists we just make sure that the attribute exists,
+    # as it is used for checking if a GHC derivation has been built with hadrian.
+    # The isHadrian mechanism will become obsolete with GHCs that use hadrian
+    # exclusively, i.e. 9.6 (and 9.4?).
+    hadrian = null;
+  };
 
   meta = rec {
     homepage = "http://haskell.org/ghc";
@@ -490,5 +495,6 @@ stdenv.mkDerivation {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     teams = [ lib.teams.haskell ];
+    broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
   };
 }

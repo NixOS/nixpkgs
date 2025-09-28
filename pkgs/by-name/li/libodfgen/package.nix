@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Mj5JH5VsjKKrsSyZjjUGcJMKMjF7+WYrBhXdSzkiuDE=";
   };
 
+  patches = [
+    # Fix build with gcc15, based on:
+    # https://sourceforge.net/p/libwpd/libodfgen/ci/4da0b148def5b40ee60d4cd79762c0f158d64cc7/
+    ./libodfgen-add-include-cstdint-gcc15.patch
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost

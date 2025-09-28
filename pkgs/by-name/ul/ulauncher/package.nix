@@ -18,23 +18,26 @@
   xvfb-run,
   librsvg,
   libX11,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
   version = "5.15.7";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
     hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    distutils-extra
+  nativeBuildInputs = [
     gobject-introspection
     intltool
     wrapGAppsHook3
     gdk-pixbuf
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -49,7 +52,12 @@ python3Packages.buildPythonApplication rec {
     wmctrl
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    distutils-extra
+  ];
+
+  dependencies = with python3Packages; [
     mock
     dbus-python
     pygobject3
@@ -101,6 +109,8 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [ "ulauncher" ];
+
   # do not double wrap
   dontWrapGApps = true;
   preFixup = ''
@@ -116,6 +126,16 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ulauncher";
+      desktopName = "Ulauncher";
+      exec = "ulauncher";
+      categories = [ "Utility" ];
+      icon = "ulauncher";
+    })
+  ];
+
   meta = with lib; {
     description = "Fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
@@ -124,7 +144,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "ulauncher";
     maintainers = with maintainers; [
       aaronjanse
-      sebtm
     ];
   };
 }

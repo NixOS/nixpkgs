@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.2.16";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SFl2uGHunF/IjhO5XoDCh1bJ5eIWRosv7HFDMXyknvI=";
+    hash = "sha256-X/rihS5iOVAFJsqTG2Bq1V/G1ITFxxJIS+YDI0TKfE4=";
   };
 
   buildInputs = [ php84 ];
@@ -38,13 +38,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     composerNoScripts = true;
     composerStrictValidation = true;
     strictDeps = true;
-    vendorHash = "sha256-C7lsSon9y286DoAppteZ3fY0qaWVTe66nyFckyrnylk=";
+    vendorHash = "sha256-ICoOD0cJrsSphJ9Ke86qO9/cOZst30pwAXDjerV+Ds4=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-qymMgMXjKll3awXFL/Lo8DloPyqAaxoS2Lw8HBaar9g=";
+    hash = "sha256-6SMXXc1aJiHpWloRuY6Rd6NhuS5xQ0QuInlu5fLUHvk=";
   };
 
   preInstall = ''
@@ -55,7 +55,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru = {
     phpPackage = php84;
     tests = nixosTests.firefly-iii;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(\\d+\\.\\d+\\.\\d+)"
+      ];
+    };
   };
 
   postInstall = ''

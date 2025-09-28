@@ -7,19 +7,17 @@
   pip,
   pytestCheckHook,
   pythonOlder,
-  setuptools-git,
   setuptools,
   twine,
   watchdog,
   webtest,
-  wheel,
   build,
   importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,19 +26,23 @@ buildPythonPackage rec {
     owner = "pypiserver";
     repo = "pypiserver";
     tag = "v${version}";
-    hash = "sha256-ODwDYAEAqel31+kR/BE1yBfgOZOtPz3iaCLg/d6jbb4=";
+    hash = "sha256-tbBSZdkZJGcas3PZ3dj7CqAYNH2Mt0a4aXl6t7E+wNY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"setuptools-git>=0.3",' ""
+  '';
 
   build-system = [
     setuptools
-    setuptools-git
-    wheel
   ];
 
   dependencies = [
     distutils
     pip
-  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     passlib = [ passlib ];
@@ -54,7 +56,8 @@ buildPythonPackage rec {
     twine
     webtest
     build
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 

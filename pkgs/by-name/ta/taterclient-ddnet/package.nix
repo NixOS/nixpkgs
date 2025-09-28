@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.3.0";
+  version = "10.5.3";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-OEoiUtD87xsXBgAZ65mmfmAJcEvrley3drRX+IJo20s=";
+    hash = "sha256-MHBBDn/3kS1BuZQU7qHdbtuy0JuRRqtzmHVdg8Az+Qc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -76,13 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     spirv-tools
     glew
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   strictDeps = true;
-
-  patches = [
-    ./client_log_format_security.patch
-  ];
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
@@ -101,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.3.0/CMakeLists.txt#L3072
+  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.5.2/CMakeLists.txt#L3171
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

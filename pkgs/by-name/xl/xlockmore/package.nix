@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xlockmore";
-  version = "5.83";
+  version = "5.84";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
-    sha256 = "sha256-ppjQmf1qPBnEHhl8EG2ejDo4pOj/B3wqpLrHYp1pyMM=";
+    sha256 = "sha256-HiZ89pIL6nmBNemMJZBaj1Q21H5cYLJOCbIXZgWpRtQ=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-setuid"
     "--enable-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
-  ] ++ (lib.optional (pam != null) "--enable-pam");
+  ]
+  ++ (lib.optional (pam != null) "--enable-pam");
 
   postPatch =
     let

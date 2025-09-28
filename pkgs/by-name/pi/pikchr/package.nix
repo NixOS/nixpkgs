@@ -31,19 +31,18 @@ stdenv.mkDerivation {
 
   buildFlags = [ "pikchr" ] ++ lib.optional enableTcl "piktcl";
 
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 pikchr $out/bin/pikchr
-      install -Dm755 pikchr.out $out/lib/pikchr.o
-      install -Dm644 pikchr.h $out/include/pikchr.h
-    ''
-    + lib.optionalString enableTcl ''
-      cp -r piktcl $out/lib/piktcl
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 pikchr $out/bin/pikchr
+    install -Dm755 pikchr.out $out/lib/pikchr.o
+    install -Dm644 pikchr.h $out/include/pikchr.h
+  ''
+  + lib.optionalString enableTcl ''
+    cp -r piktcl $out/lib/piktcl
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   dontWrapTclBinaries = true;
 

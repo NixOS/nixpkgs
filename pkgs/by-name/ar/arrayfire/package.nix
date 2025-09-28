@@ -107,30 +107,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-GSUdHtvV/97RyDKy8i+ticnSlQCubGGWHg4Oo+YAr8Y=";
   };
 
-  cmakeFlags =
-    [
-      "-DBUILD_TESTING=ON"
-      # We do not build examples, because building tests already takes long enough...
-      "-DAF_BUILD_EXAMPLES=OFF"
-      # No need to build forge, because it's a separate package
-      "-DAF_BUILD_FORGE=OFF"
-      "-DAF_COMPUTE_LIBRARY='FFTW/LAPACK/BLAS'"
-      # Prevent ArrayFire from trying to download some matrices from the Internet
-      "-DAF_TEST_WITH_MTX_FILES=OFF"
-      # Have to use the header-only version, because we're not using the version
-      # from Nixpkgs. Otherwise, libaf.so won't be able to find the shared
-      # library, because ArrayFire's CMake files do not run the install step of
-      # spdlog.
-      "-DAF_WITH_SPDLOG_HEADER_ONLY=ON"
-      (if cpuSupport then "-DAF_BUILD_CPU=ON" else "-DAF_BUILD_CPU=OFF")
-      (if openclSupport then "-DAF_BUILD_OPENCL=ON" else "-DAF_BUILD_OPENCL=OFF")
-      (if cudaSupport then "-DAF_BUILD_CUDA=ON" else "-DAF_BUILD_CUDA=OFF")
-    ]
-    ++ lib.optionals cudaSupport [
-      # ArrayFire use deprecated FindCUDA in their CMake files, so we help CMake
-      # locate cudatoolkit.
-      "-DCUDA_LIBRARIES_PATH=${cudaPackages.cudatoolkit}/lib"
-    ];
+  cmakeFlags = [
+    "-DBUILD_TESTING=ON"
+    # We do not build examples, because building tests already takes long enough...
+    "-DAF_BUILD_EXAMPLES=OFF"
+    # No need to build forge, because it's a separate package
+    "-DAF_BUILD_FORGE=OFF"
+    "-DAF_COMPUTE_LIBRARY='FFTW/LAPACK/BLAS'"
+    # Prevent ArrayFire from trying to download some matrices from the Internet
+    "-DAF_TEST_WITH_MTX_FILES=OFF"
+    # Have to use the header-only version, because we're not using the version
+    # from Nixpkgs. Otherwise, libaf.so won't be able to find the shared
+    # library, because ArrayFire's CMake files do not run the install step of
+    # spdlog.
+    "-DAF_WITH_SPDLOG_HEADER_ONLY=ON"
+    (if cpuSupport then "-DAF_BUILD_CPU=ON" else "-DAF_BUILD_CPU=OFF")
+    (if openclSupport then "-DAF_BUILD_OPENCL=ON" else "-DAF_BUILD_OPENCL=OFF")
+    (if cudaSupport then "-DAF_BUILD_CUDA=ON" else "-DAF_BUILD_CUDA=OFF")
+  ]
+  ++ lib.optionals cudaSupport [
+    # ArrayFire use deprecated FindCUDA in their CMake files, so we help CMake
+    # locate cudatoolkit.
+    "-DCUDA_LIBRARIES_PATH=${cudaPackages.cudatoolkit}/lib"
+  ];
 
   # ArrayFire have a repo with assets for the examples. Since we don't build
   # the examples anyway, remove the dependency on assets.
@@ -199,33 +198,32 @@ stdenv.mkDerivation rec {
       AF_PRINT_ERRORS=1 ctest ${ctestFlags}
     '';
 
-  buildInputs =
-    [
-      blas
-      boost.dev
-      boost.out
-      clblast
-      fftw
-      fftwFloat
-      # We need fmt_9 because ArrayFire fails to compile with newer versions.
-      fmt_9
-      forge
-      freeimage
-      gtest
-      lapack
-      libGL
-      ocl-icd
-      opencl-clhpp
-      span-lite
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cudatoolkit
-      cudaPackages.cudnn
-      cudaPackages.cuda_cccl
-    ]
-    ++ lib.optionals openclSupport [
-      mesa
-    ];
+  buildInputs = [
+    blas
+    boost.dev
+    boost.out
+    clblast
+    fftw
+    fftwFloat
+    # We need fmt_9 because ArrayFire fails to compile with newer versions.
+    fmt_9
+    forge
+    freeimage
+    gtest
+    lapack
+    libGL
+    ocl-icd
+    opencl-clhpp
+    span-lite
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cudatoolkit
+    cudaPackages.cudnn
+    cudaPackages.cuda_cccl
+  ]
+  ++ lib.optionals openclSupport [
+    mesa
+  ];
 
   nativeBuildInputs = [
     cmake

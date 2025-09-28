@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://warmplace.ru/soft/ans/virtual_ans-${version}.zip";
-    sha256 = "sha256-tqR7icgURUFOyLJ8+mS17JRf2gK53I2FW/2m8IJPtJE=";
+    hash = "sha256-QrYWTRYCh1YYJFtBukC2kUNoiRlsAJOD1NdB9rcx7yM=";
   };
 
   nativeBuildInputs = [

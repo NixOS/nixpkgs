@@ -8,13 +8,13 @@
 let
   drv = stdenv.mkDerivation rec {
     pname = "controller-topology-project";
-    version = "1.0.3";
+    version = "1.0.7";
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = "controller-topology-project";
       rev = "v${version}";
-      sha256 = "sha256-KHM4DAF6xLLlxF19R4UKfVMbLsmniuxy/C4STcL0IHQ=";
+      sha256 = "sha256-LzwMKsoip+ajmmk4qUJynOmhhf3Auivn8Af8VRGWkTA=";
     };
 
     postPatch = ''

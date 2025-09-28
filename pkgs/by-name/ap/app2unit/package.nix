@@ -2,22 +2,42 @@
   lib,
   stdenvNoCC,
   dash,
+  scdoc,
   fetchFromGitHub,
+  nix-update-script,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "app2unit";
-  version = "0-unstable-2025-05-09";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
-    rev = "7b9672a2dc16bdfbe7b7b7c27043529ca3bcb6ae";
-    sha256 = "03dnx5v75530fwppfgpjl6xzzmdbk73ymrlix129d9n5sqrz9wgk";
+    tag = "v${version}";
+    sha256 = "sha256-M2sitlrQNSLthSaDH+R8gUcZ8i+o1ktf2SB/vvjyJEI=";
   };
+
+  passthru.updateScript = nix-update-script { };
+
+  nativeBuildInputs = [ scdoc ];
+
+  buildPhase = ''
+    scdoc < app2unit.1.scd > app2unit.1
+  '';
 
   installPhase = ''
     install -Dt $out/bin app2unit
-    ln -s $out/bin/app2unit $out/bin/app2unit-open
+
+    for link in \
+      app2unit-open \
+      app2unit-open-scope \
+      app2unit-open-service \
+      app2unit-term \
+      app2unit-term-scope \
+      app2unit-term-service
+    do
+      ln -s $out/bin/app2unit $out/bin/$link
+    done
   '';
 
   dontPatchShebangs = true;

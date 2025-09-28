@@ -26,8 +26,9 @@
   libgcrypt,
   libgpg-error,
   ninja,
+  writableTmpDirAsHomeHook,
 
-  util-linux,
+  util-linuxMinimal,
   libselinux,
   libsepol,
   libthai,
@@ -51,7 +52,6 @@
 
   stable,
   testing,
-  baseName,
   kicadSrc,
   kicadVersion,
   withNgspice,
@@ -69,11 +69,16 @@ assert testing -> !stable -> throw "testing implies stable and cannot be used wi
 
 let
   opencascade-occt = opencascade-occt_7_6;
-  inherit (lib) optional optionals optionalString;
+  inherit (lib)
+    cmakeBool
+    cmakeFeature
+    optionals
+    optionalString
+    ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kicad-base";
-  version = if (stable) then kicadVersion else builtins.substring 0 10 src.rev;
+  version = if stable then kicadVersion else builtins.substring 0 10 finalAttrs.src.rev;
 
   src = kicadSrc;
 
@@ -89,118 +94,97 @@ stdenv.mkDerivation rec {
   # nix removes .git, so its approximated here
   postPatch = lib.optionalString (!stable || testing) ''
     substituteInPlace cmake/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}"
+      --replace-fail "unknown" "${builtins.substring 0 10 finalAttrs.src.rev}"
 
     substituteInPlace cmake/CreateGitVersionHeader.cmake \
-      --replace "0000000000000000000000000000000000000000" "${src.rev}"
+      --replace-fail "0000000000000000000000000000000000000000" "${finalAttrs.src.rev}"
   '';
 
-  preConfigure = optional (debug) ''
+  preConfigure = optionalString debug ''
     export CFLAGS="''${CFLAGS:-} -Og -ggdb"
     export CXXFLAGS="''${CXXFLAGS:-} -Og -ggdb"
   '';
 
-  cmakeFlags =
-    [
-      "-DKICAD_USE_EGL=ON"
-      "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
-      # https://gitlab.com/kicad/code/kicad/-/issues/17133
-      "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_spice'"
-      "-DKICAD_USE_CMAKE_FINDPROTOBUF=OFF"
-    ]
-    ++ optional (
-      stdenv.hostPlatform.system == "aarch64-linux"
-    ) "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'qa_spice|qa_cli'"
-    ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
-    ++ optionals (!withScripting) [
-      "-DKICAD_SCRIPTING_WXPYTHON=OFF"
-    ]
-    ++ optionals (withI18n) [
-      "-DKICAD_BUILD_I18N=ON"
-    ]
-    ++ optionals (!doInstallCheck) [
-      "-DKICAD_BUILD_QA_TESTS=OFF"
-    ]
-    ++ optionals (debug) [
-      "-DKICAD_STDLIB_DEBUG=ON"
-      "-DKICAD_USE_VALGRIND=ON"
-    ]
-    ++ optionals (sanitizeAddress) [
-      "-DKICAD_SANITIZE_ADDRESS=ON"
-    ]
-    ++ optionals (sanitizeThreads) [
-      "-DKICAD_SANITIZE_THREADS=ON"
-    ];
+  cmakeFlags = [
+    (cmakeBool "KICAD_USE_EGL" true)
+    (cmakeFeature "OCC_INCLUDE_DIR" "${opencascade-occt}/include/opencascade")
+    # https://gitlab.com/kicad/code/kicad/-/issues/17133
+    (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;qa_spice")
+    (cmakeBool "KICAD_USE_CMAKE_FINDPROTOBUF" false)
+    (cmakeBool "KICAD_SCRIPTING_WXPYTHON" withScripting)
+    (cmakeBool "KICAD_BUILD_I18N" withI18n)
+    (cmakeBool "KICAD_BUILD_QA_TESTS" (!finalAttrs.doInstallCheck))
+    (cmakeBool "KICAD_STDLIB_DEBUG" debug)
+    (cmakeBool "KICAD_USE_VALGRIND" debug)
+    (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
+    (cmakeBool "KICAD_SANITIZE_THREADS" sanitizeThreads)
+    (cmakeBool "KICAD_SPICE" (!(stable && !withNgspice)))
+  ]
+  ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'qa_spice|qa_cli'")
+  ];
 
   cmakeBuildType = if debug then "Debug" else "Release";
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      doxygen
-      graphviz
-      pkg-config
-      libgit2
-      libsecret
-      libgcrypt
-      libgpg-error
-    ]
-    # wanted by configuration on linux, doesn't seem to affect performance
-    # no effect on closure size
-    ++ optionals (stdenv.hostPlatform.isLinux) [
-      util-linux
-      libselinux
-      libsepol
-      libthai
-      libdatrie
-      libxkbcommon
-      libepoxy
-      dbus
-      at-spi2-core
-      libXtst
-      pcre2
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    doxygen
+    graphviz
+    pkg-config
+    libgit2
+    libsecret
+    libgcrypt
+    libgpg-error
+  ]
+  # wanted by configuration on linux, doesn't seem to affect performance
+  # no effect on closure size
+  ++ optionals (stdenv.hostPlatform.isLinux) [
+    util-linuxMinimal
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    libxkbcommon
+    libepoxy
+    dbus
+    at-spi2-core
+    libXtst
+    pcre2
+  ];
 
-  buildInputs =
-    [
-      libGLU
-      libGL
-      zlib
-      libX11
-      wxGTK
-      gtk3
-      libXdmcp
-      gettext
-      glew
-      glm
-      libpthreadstubs
-      cairo
-      curl
-      openssl
-      boost
-      swig
-      python
-      unixODBC
-      libdeflate
-      opencascade-occt
-      protobuf_29
+  buildInputs = [
+    libGLU
+    libGL
+    zlib
+    libX11
+    wxGTK
+    gtk3
+    libXdmcp
+    gettext
+    glew
+    glm
+    libpthreadstubs
+    cairo
+    curl
+    openssl
+    boost
+    swig
+    python
+    unixODBC
+    libdeflate
+    opencascade-occt
+    protobuf_29
 
-      # This would otherwise cause a linking requirement for mbedtls.
-      (nng.override { mbedtlsSupport = false; })
-    ]
-    ++ optional (withScripting) wxPython
-    ++ optional (withNgspice) libngspice
-    ++ optional (debug) valgrind;
-
-  # some ngspice tests attempt to write to $HOME/.cache/
-  # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
-  # but failing tests still attempt to create $HOME
-  # and the newer CLI tests seem to also use $HOME...
-  HOME = "$TMP";
+    # This would otherwise cause a linking requirement for mbedtls.
+    (nng.override { mbedtlsSupport = false; })
+  ]
+  ++ optionals withScripting [ wxPython ]
+  ++ optionals withNgspice [ libngspice ]
+  ++ optionals debug [ valgrind ];
 
   # debug builds fail all but the python test
-  doInstallCheck = !(debug);
+  doInstallCheck = !debug;
   installCheckTarget = "test";
 
   nativeInstallCheckInputs = [
@@ -212,6 +196,7 @@ stdenv.mkDerivation rec {
         pytest-image-diff
       ]
     ))
+    writableTmpDirAsHomeHook
   ];
 
   dontStrip = debug;
@@ -226,4 +211,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -31,18 +31,18 @@ stdenvNoCC.mkDerivation rec {
     mksh
     yash
     zsh
-  ] ++ lib.lists.optional (!stdenvNoCC.hostPlatform.isDarwin) busybox-sandbox-shell;
+  ]
+  ++ lib.lists.optional (!stdenvNoCC.hostPlatform.isDarwin) busybox-sandbox-shell;
 
   # Disable checks against yash, since shellspec seems to be broken for yash>=2.54
   # (see: https://github.com/NixOS/nixpkgs/pull/218264#pullrequestreview-1434402054)
-  preCheck =
-    ''
-      sed -i '/shellspec -s posh/d' Makefile
-      sed -i '/shellspec -s yash/d' Makefile
-    ''
-    + lib.strings.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      sed -i "/shellspec -s 'busybox ash'/d" Makefile
-    '';
+  preCheck = ''
+    sed -i '/shellspec -s posh/d' Makefile
+    sed -i '/shellspec -s yash/d' Makefile
+  ''
+  + lib.strings.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    sed -i "/shellspec -s 'busybox ash'/d" Makefile
+  '';
 
   checkTarget = "test_in_various_shells";
 

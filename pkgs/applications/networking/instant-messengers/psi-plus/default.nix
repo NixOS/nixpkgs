@@ -46,12 +46,12 @@ assert enablePsiMedia -> enablePlugins;
 mkDerivation rec {
   pname = "psi-plus";
 
-  version = "1.5.2072";
+  version = "1.5.2115";
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "sha256-RlZwMBWjhCTEEV08UHbf8NvuqmuihXwR1aA/vMmD1BM=";
+    sha256 = "sha256-4is3ksl6IsYP1L0WhTT/56QUtR+EC1X6Lftre2BO6pM=";
   };
 
   cmakeFlags = [
@@ -60,47 +60,45 @@ mkDerivation rec {
     "-DBUILD_PSIMEDIA=${if enablePsiMedia then "ON" else "OFF"}"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      qttools
-    ]
-    ++ lib.optionals enablePsiMedia [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ]
+  ++ lib.optionals enablePsiMedia [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
-      qtimageformats
-      qtx11extras
-      libidn
-      qca-qt5
-      libXScrnSaver
-      hunspell
-      libsecret
-      libgcrypt
-      libgpg-error
-      usrsctp
-      qtkeychain
-    ]
-    ++ lib.optionals voiceMessagesSupport [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ]
-    ++ lib.optionals enablePlugins [
-      html-tidy
-      http-parser
-      libotr
-      libomemo-c
-    ]
-    ++ lib.optionals (chatType == "webkit") [
-      qtwebkit
-    ]
-    ++ lib.optionals (chatType == "webengine") [
-      qtwebengine
-    ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    qtimageformats
+    qtx11extras
+    libidn
+    qca-qt5
+    libXScrnSaver
+    hunspell
+    libsecret
+    libgcrypt
+    libgpg-error
+    usrsctp
+    qtkeychain
+  ]
+  ++ lib.optionals voiceMessagesSupport [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ]
+  ++ lib.optionals enablePlugins [
+    html-tidy
+    http-parser
+    libotr
+    libomemo-c
+  ]
+  ++ lib.optionals (chatType == "webkit") [
+    qtwebkit
+  ]
+  ++ lib.optionals (chatType == "webengine") [
+    qtwebengine
+  ];
 
   preFixup = lib.optionalString voiceMessagesSupport ''
     qtWrapperArgs+=(

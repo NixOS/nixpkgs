@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -17,6 +18,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontBuild = true;
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   # 80-* renamed to 70-* for uaccess TAG
   installPhase = ''
     runHook preInstall
@@ -26,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "apio udev rules list";
+    description = "Apio udev rules list";
     homepage = "https://github.com/FPGAwars/apio";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;

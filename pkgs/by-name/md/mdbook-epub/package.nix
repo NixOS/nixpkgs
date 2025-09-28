@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ddWClkeGabvqteVUtuwy4pWZGnarrKrIbuPEe62m6es=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3R81PJCOFc22QDHH2BqGB9jjvEcMc1axoySSJLJD3wI=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://michael-f-bryan.github.io/mdbook-epub";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      yuu
       matthiasbeyer
     ];
   };

@@ -22,19 +22,19 @@ let
   par2TurboSrc = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "par2cmdline-turbo";
-    rev = "v1.2.0-nzbget-20250213"; # from cmake/par2-turbo.cmake
-    hash = "sha256-IHoSvW9bKxMRXbxd41A5268rpi7/+LRxC3HANHtawkQ=";
+    rev = "v1.3.0-20250808"; # from cmake/par2-turbo.cmake
+    hash = "sha256-ZP8AI5htmEcxQQtvgShcQ8qNoRL+jBR1BdKS6yyuB/E=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "25.0";
+  version = "25.3";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PtmXirnaQH9viFWUdNEDwJ/pgQjm2N1Or13V4ozUUGI=";
+    hash = "sha256-ecTz+axqPOlRe0wi7IRiESn2JjLbalI+sQVKqrvrAoU=";
   };
 
   patches = [

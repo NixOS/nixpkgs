@@ -42,7 +42,8 @@ let
     upx
     zstd
     lz4
-  ] ++ lib.optional stdenvNoCC.isLinux partclone;
+  ]
+  ++ lib.optional stdenvNoCC.isLinux partclone;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
@@ -116,25 +117,21 @@ python3.pkgs.buildPythonApplication rec {
     with python3.pkgs;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov # cannot use stub
       versionCheckHook
     ]
     ++ runtimeDeps;
 
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray =
-    let
-      # `disabledTests` swallows the parameters between square brackets
-      disabled = [
-        # https://github.com/tytso/e2fsprogs/issues/152
-        "test_all_handlers[filesystem.extfs]"
-      ];
-    in
-    [
-      "--no-cov"
-      "-k 'not ${lib.concatStringsSep " and not " disabled}'"
-    ];
+  pytestFlags = [
+    "--no-cov"
+  ];
+
+  disabledTests = [
+    # https://github.com/tytso/e2fsprogs/issues/152
+    "test_all_handlers[filesystem.extfs]"
+  ];
 
   passthru = {
     updateScript = gitUpdater { };

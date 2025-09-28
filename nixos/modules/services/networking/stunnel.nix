@@ -225,8 +225,7 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    # Server side
-    lschuermann
+    # Server side: maintainers wanted
     # Client side
     das_j
   ];

@@ -9,7 +9,7 @@
   nodejs,
   jpegoptim,
   oxipng,
-  nodePackages,
+  svgo,
   nix-update-script,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VKYeJwAc4pMpF1dWBnx5D39ffNk7eGpJI2es+GAxdow=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     jpegoptim
     oxipng
-    nodePackages.svgo
+    svgo
   ];
 
   postPatch = ''
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     # (Losslessly) optimise compression of image artifacts
     find dist -type f -name '*.jpg' -execdir ${jpegoptim}/bin/jpegoptim -w$NIX_BUILD_CORES {} \;
     find dist -type f -name '*.png' -execdir ${oxipng}/bin/oxipng -o max -t $NIX_BUILD_CORES {} \;
-    find dist -type f -name '*.svg' -execdir ${nodePackages.svgo}/bin/svgo {} \;
+    find dist -type f -name '*.svg' -execdir ${svgo}/bin/svgo {} \;
 
     cp -R -v dist $out
 

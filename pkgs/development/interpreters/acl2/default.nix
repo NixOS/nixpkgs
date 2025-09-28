@@ -3,12 +3,10 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   runCommandLocal,
   makeWrapper,
   replaceVars,
   sbcl,
-  bash,
   which,
   perl,
   hostname,
@@ -35,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "acl2";
-  version = "8.5";
+  version = "8.6";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
     rev = version;
-    sha256 = "12cv5ms1j3vfrq066km020nwxb6x2dzh12g8nz6xxyxysn44wzzi";
+    sha256 = "sha256-fF9bbEacwCHP1m/eVgFrTD4Ne7L2mzq0K9vJ1tiy9go=";
   };
 
   # You can swap this out with any other IPASIR implementation at
@@ -52,15 +50,10 @@ stdenv.mkDerivation rec {
   libipasir = callPackage ./libipasirglucose4 { };
 
   patches = [
-    (replaceVars ./0001-Fix-some-paths-for-Nix-build.patch {
+    (replaceVars ./0001-path-changes-for-nix.patch {
       libipasir = "${libipasir}/lib/${libipasir.libname}";
       libssl = "${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
       libcrypto = "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-    (fetchpatch {
-      name = "fix-fastnumio-on-newer-sbcl.patch";
-      url = "https://github.com/acl2-devel/acl2-devel/commit/84f5a6cd4a1aaf204e8bae3eab4c21e8c061f469.patch";
-      hash = "sha256-VA9giXZMb/Ob8ablxfbBAaZ2+2PGcv7WtooXwKDgT08=";
     })
   ];
 
@@ -72,39 +65,37 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optional certifyBooks makeWrapper;
 
-  buildInputs =
-    [
-      # ACL2 itself only needs a Common Lisp compiler/interpreter:
-      sbcl
-    ]
-    ++ lib.optionals certifyBooks [
-      # To build community books, we need Perl and a couple of utilities:
-      which
-      perl
-      hostname
-      # Some of the books require one or more of these external tools:
-      glucose
-      minisat
-      abc-verifier
-      libipasir
-      z3
-      (python3.withPackages (ps: [ ps.z3-solver ]))
-    ];
+  buildInputs = [
+    # ACL2 itself only needs a Common Lisp compiler/interpreter:
+    sbcl
+  ]
+  ++ lib.optionals certifyBooks [
+    # To build community books, we need Perl and a couple of utilities:
+    which
+    perl
+    hostname
+    # Some of the books require one or more of these external tools:
+    glucose
+    minisat
+    abc-verifier
+    libipasir
+    z3
+    (python3.withPackages (ps: [ ps.z3-solver ]))
+  ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of
   # concurrent jobs.  For example, this build has been seen to use >120GB of
   # RAM on an 85 core machine.
   enableParallelBuilding = true;
 
-  preConfigure =
-    ''
-      # When certifying books, ACL2 doesn't like $HOME not existing.
-      export HOME=$(pwd)/fake-home
-    ''
-    + lib.optionalString certifyBooks ''
-      # Some books also care about $USER being nonempty.
-      export USER=nobody
-    '';
+  preConfigure = ''
+    # When certifying books, ACL2 doesn't like $HOME not existing.
+    export HOME=$(pwd)/fake-home
+  ''
+  + lib.optionalString certifyBooks ''
+    # Some books also care about $USER being nonempty.
+    export USER=nobody
+  '';
 
   postConfigure = ''
     # ACL2 and its books need to be built in place in the out directory because
@@ -125,15 +116,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "mini-proveall";
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      ln -s $out/share/${pname}/saved_acl2           $out/bin/${pname}
-    ''
-    + lib.optionalString certifyBooks ''
-      ln -s $out/share/${pname}/books/build/cert.pl  $out/bin/${pname}-cert
-      ln -s $out/share/${pname}/books/build/clean.pl $out/bin/${pname}-clean
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    ln -s $out/share/${pname}/saved_acl2           $out/bin/${pname}
+  ''
+  + lib.optionalString certifyBooks ''
+    ln -s $out/share/${pname}/books/build/cert.pl  $out/bin/${pname}-cert
+    ln -s $out/share/${pname}/books/build/clean.pl $out/bin/${pname}-clean
+  '';
 
   preDistPhases = [ (if certifyBooks then "certifyBooksPhase" else "removeBooksPhase") ];
 
@@ -159,32 +149,31 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Interpreter and prover for a Lisp dialect";
     mainProgram = "acl2";
-    longDescription =
-      ''
-        ACL2 is a logic and programming language in which you can model computer
-        systems, together with a tool to help you prove properties of those
-        models. "ACL2" denotes "A Computational Logic for Applicative Common
-        Lisp".
+    longDescription = ''
+      ACL2 is a logic and programming language in which you can model computer
+      systems, together with a tool to help you prove properties of those
+      models. "ACL2" denotes "A Computational Logic for Applicative Common
+      Lisp".
 
-        ACL2 is part of the Boyer-Moore family of provers, for which its authors
-        have received the 2005 ACM Software System Award.
+      ACL2 is part of the Boyer-Moore family of provers, for which its authors
+      have received the 2005 ACM Software System Award.
 
-        This package installs the main ACL2 executable ${pname}, as well as the
-        build tools cert.pl and clean.pl, renamed to ${pname}-cert and
-        ${pname}-clean.
+      This package installs the main ACL2 executable ${pname}, as well as the
+      build tools cert.pl and clean.pl, renamed to ${pname}-cert and
+      ${pname}-clean.
 
-      ''
-      + (
-        if certifyBooks then
-          ''
-            The community books are also included and certified with the `make
-            everything` target.
-          ''
-        else
-          ''
-            The community books are not included in this package.
-          ''
-      );
+    ''
+    + (
+      if certifyBooks then
+        ''
+          The community books are also included and certified with the `make
+          everything` target.
+        ''
+      else
+        ''
+          The community books are not included in this package.
+        ''
+    );
     homepage = "https://www.cs.utexas.edu/users/moore/acl2/";
     downloadPage = "https://github.com/acl2-devel/acl2-devel/releases";
     license =
@@ -208,6 +197,5 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

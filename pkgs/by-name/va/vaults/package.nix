@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
   appstream-glib,
   desktop-file-utils,
   meson,
@@ -18,43 +19,37 @@
   wayland,
   gocryptfs,
   cryfs,
+  fuse,
+  util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vaults";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mpobaschnig";
     repo = "vaults";
-    tag = version;
-    hash = "sha256-PczDj6G05H6XbkMQBr4e1qgW5s8GswEA9f3BRxsAWv0=";
+    tag = finalAttrs.version;
+    hash = "sha256-B4CNEghMfP+r0poyhE102zC1Yd2U5ocV1MCMEVEMjEY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-j0A6HlApV0l7LuB7ISHp+k/bSH5Icdv+aNQ9juCCO9I=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-my4CxFIEN19juo/ya2vlkejQTaZsyoYLtFTR7iCT9s0=";
   };
 
-  patches = [ ./not-found-flatpak-info.patch ];
+  patches = [
+    (replaceVars ./remove_flatpak_dependency.patch {
+      cryfs = lib.getExe' cryfs "cryfs";
+      gocryptfs = lib.getExe' gocryptfs "gocryptfs";
+      fusermount = lib.getExe' fuse "fusermount";
+      umount = lib.getExe' util-linux "umount";
+    })
+  ];
 
   postPatch = ''
     patchShebangs build-aux
-  '';
-
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${
-        lib.makeBinPath [
-          gocryptfs
-          cryfs
-        ]
-      }"
-    )
   '';
 
   nativeBuildInputs = [
@@ -82,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GTK frontend for encrypted vaults supporting gocryptfs and CryFS for encryption";
     homepage = "https://mpobaschnig.github.io/vaults/";
-    changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${version}";
+    changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       benneti
@@ -91,4 +86,4 @@ stdenv.mkDerivation rec {
     mainProgram = "vaults";
     platforms = lib.platforms.linux;
   };
-}
+})

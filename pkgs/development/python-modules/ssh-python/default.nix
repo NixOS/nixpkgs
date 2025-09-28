@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "ssh-python";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ParallelSSH";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for libssh C library";
     homepage = "https://github.com/ParallelSSH/ssh-python";
-    changelog = "https://github.com/ParallelSSH/ssh-python/blob/${version}/Changelog.rst";
+    changelog = "https://github.com/ParallelSSH/ssh-python/blob/${src.tag}/Changelog.rst";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ infinidoge ];
   };

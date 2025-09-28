@@ -3,16 +3,17 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3.1";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "dlundqvist";
     repo = "xone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qMZlQgAe5vB5zfuhyK7EBxIwfhnC5MvnF/qr3BGnDms=";
+    hash = "sha256-pM4Csmikh8NV0bjl0pz99yxDLDmebIxKCiC4rMeAf3k=";
   };
 
   setSourceRoot = ''
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(sourceRoot)"

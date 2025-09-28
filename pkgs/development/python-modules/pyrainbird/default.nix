@@ -9,7 +9,7 @@
   parameterized,
   pycryptodome,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytest-golden,
   pytest-mock,
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     parameterized
-    pytest-aiohttp
-    pytest-asyncio
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-asyncio_0
     pytest-cov-stub
     pytest-golden
     pytest-mock

@@ -45,6 +45,10 @@
   libnotify,
   buildFHSEnv,
   writeShellScript,
+  runCommandLocal,
+  cacert,
+  coreutils,
+  curl,
 }:
 let
   wechat-uos-env = stdenvNoCC.mkDerivation {
@@ -123,66 +127,84 @@ let
     bzip2
   ];
 
-  sources = import ./sources.nix;
+  wechat =
+    let
+      sources = import ./sources.nix;
 
-  wechat = stdenvNoCC.mkDerivation rec {
-    pname = "wechat-uos";
-    version = sources.version;
+      pname = "wechat-uos";
+      version = sources.version;
+      fetch =
+        {
+          url,
+          hash,
+        }:
+        runCommandLocal "wechat-uos-${version}-src"
+          {
+            outputHashAlgo = "sha256";
+            outputHash = hash;
 
-    src =
-      {
-        x86_64-linux = fetchurl {
-          url = sources.amd64_url;
-          hash = sources.amd64_hash;
-        };
-        aarch64-linux = fetchurl {
-          url = sources.arm64_url;
-          hash = sources.arm64_hash;
-        };
-        loongarch64-linux = fetchurl {
-          url = sources.loongarch64_url;
-          hash = sources.loongarch64_hash;
-        };
-      }
-      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+            nativeBuildInputs = [
+              curl
+              coreutils
+            ];
 
-    nativeBuildInputs = [ dpkg ];
+            impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+            SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          }
+          ''
+            curl -A "debian APT-HTTP/1.3 (1.6.11)" --retry 3 --retry-delay 3 -L "${url}" > $out
+          '';
 
-    unpackPhase = ''
-      runHook preUnpack
+      srcs = {
+        x86_64-linux = fetch sources.amd64;
+        aarch64-linux = fetch sources.arm64;
+        loongarch64-linux = fetch sources.loongarch64;
+      };
 
-      dpkg -x $src ./wechat-uos
+      src =
+        srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-      runHook postUnpack
-    '';
+    in
+    stdenvNoCC.mkDerivation {
+      inherit pname src version;
 
-    # Use ln for license to prevent being garbage collection
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
+      nativeBuildInputs = [ dpkg ];
 
-      cp -r wechat-uos/* $out
+      unpackPhase = ''
+        runHook preUnpack
 
-      runHook postInstall
-    '';
+        dpkg -x $src ./wechat-uos
 
-    meta = with lib; {
-      description = "Messaging app";
-      homepage = "https://weixin.qq.com/";
-      license = licenses.unfree;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "loongarch64-linux"
-      ];
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      maintainers = with maintainers; [
-        pokon548
-        xddxdd
-      ];
-      mainProgram = "wechat-uos";
+        runHook postUnpack
+      '';
+
+      # Use ln for license to prevent being garbage collection
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out
+
+        cp -r wechat-uos/* $out
+
+        runHook postInstall
+      '';
+
+      meta = with lib; {
+        description = "Messaging app";
+        homepage = "https://weixin.qq.com/";
+        license = licenses.unfree;
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "loongarch64-linux"
+        ];
+        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+        maintainers = with maintainers; [
+          pokon548
+          xddxdd
+        ];
+        mainProgram = "wechat-uos";
+      };
     };
-  };
 in
 buildFHSEnv {
   inherit (wechat) pname version meta;

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pymodes";
-  version = "2.20";
+  version = "2.21.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "junzis";
     repo = "pyModeS";
     tag = "v${version}";
-    hash = "sha256-BC1GLQW0/UBVwx3346mZsXSREGeVS+GhqH2Rl2faUoY=";
+    hash = "sha256-Tla5hJ7J/3R4r4fTQMUIpY+QGvLRuNMZfWU0RsAiuk0=";
   };
 
   build-system = [

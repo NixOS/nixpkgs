@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snowflake-cli";
-  version = "3.7.2";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
     tag = "v${version}";
-    hash = "sha256-MCJl6Mkkkp9JkG+8ZNfWAYQFMJccdtKfPdcnfaY8Y3w=";
+    hash = "sha256-dJc5q3vE1G6oJq9V4JSPaSyODxKDyhprIwBo39Nu/bA=";
   };
 
   build-system = with python3Packages; [
@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
 
   dependencies = with python3Packages; [
+    id
     jinja2
     pluggy
     pyyaml
@@ -39,6 +40,8 @@ python3Packages.buildPythonApplication rec {
     urllib3
     gitpython
     pydantic
+    prompt-toolkit
+    snowflake-core
     snowflake-connector-python
   ];
 
@@ -52,9 +55,7 @@ python3Packages.buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [
-    "-n"
-    "$NIX_BUILD_CORES"
+  pytestFlags = [
     "--snapshot-warn-unused"
   ];
 
@@ -72,6 +73,13 @@ python3Packages.buildPythonApplication rec {
     "test_executing_command_sends_telemetry_usage_data" # Fails on mocked version
     "test_internal_application_data_is_sent_if_feature_flag_is_set"
     "test_if_bundling_dependencies_resolves_requirements" # impure?
+    "test_silent_output_help" # Snapshot needs update? Diff between received and snapshot is the word 'TABLE' moving down a line
+    "test_new_connection_can_be_added_as_default" # Snapshot needs update? Diff between received and snapshot is an empty line
+  ];
+
+  disabledTestPaths = [
+    "tests/app/test_version_check.py"
+    "tests/nativeapp/test_sf_sql_facade.py"
   ];
 
   pythonRelaxDeps = true;

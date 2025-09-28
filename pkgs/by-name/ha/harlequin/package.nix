@@ -6,6 +6,7 @@
   nix-update-script,
   glibcLocales,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
@@ -25,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     "numpy"
     "pyarrow"
     "textual"
+    "tree-sitter"
     "tree-sitter-sql"
   ];
 
@@ -65,26 +67,22 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
     pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "test_connect_extensions"
-      "test_connect_prql"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      # Test incorrectly tries to load a dylib/so compiled for x86_64
-      "test_load_extension"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "test_connect_extensions"
+    "test_connect_prql"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # Test incorrectly tries to load a dylib/so compiled for x86_64
+    "test_load_extension"
+  ];
 
   disabledTestPaths = [
     # Tests requires more setup

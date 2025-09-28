@@ -39,6 +39,18 @@ in
       };
     };
 
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "--log-level"
+        "debug"
+      ];
+      description = ''
+        Specifies extra command line arguments to pass to mealie (Gunicorn).
+      '';
+    };
+
     credentialsFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -66,8 +78,8 @@ in
     systemd.services.mealie = {
       description = "Mealie, a self hosted recipe manager and meal planner";
 
-      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -77,13 +89,14 @@ in
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
         NLTK_DATA = pkgs.nltk-data.averaged-perceptron-tagger-eng;
-      } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
+      }
+      // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
         DynamicUser = true;
         User = "mealie";
         ExecStartPre = "${pkg}/libexec/init_db";
-        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port}";
+        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
         StandardOutput = "journal";

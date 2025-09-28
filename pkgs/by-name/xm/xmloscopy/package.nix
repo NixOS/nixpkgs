@@ -9,7 +9,7 @@
   coreutils,
   libxml2,
   libxslt,
-  jing,
+  jing-trang,
   findutils,
   gnugrep,
   gnused,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     coreutils
     libxml2
     libxslt
-    jing
+    jing-trang
     findutils
     gnugrep
     gnused
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "wtf is my docbook broken?";
+    description = "XML debugger";
     mainProgram = "xmloscopy";
     homepage = "https://github.com/grahamc/xmloscopy";
     license = licenses.mit;

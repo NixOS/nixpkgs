@@ -60,7 +60,7 @@ in
       description = ''
         Settings to be rendered into the configuration file. If this is set, no configuration is possible from the web UI.
 
-        See https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#configuration for syntax.
+        See <https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#configuration for syntax>.
       '';
       example = literalExpression ''
         {
@@ -73,7 +73,7 @@ in
           type = port;
           default = defaultPort;
           description = ''
-            Base port -- others used are offset from this one, see https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#port for details.
+            Base port -- others used are offset from this one, see <https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#port> for details.
           '';
         };
       });

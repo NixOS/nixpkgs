@@ -27,14 +27,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
-  version = "0-unstable-2025-04-11";
+  version = "0-unstable-2025-09-13";
 
   src = fetchFromGitLab {
     domain = "voidpoint.io";
     owner = "terminx";
     repo = "eduke32";
-    rev = "b8759847124c2c53a165a02efef4a0c778674baf";
-    hash = "sha256-+XaIoCP6TA5QMzs/VxXIv1NP8X4i9rIm6iw+pFH8Q6Q=";
+    rev = "e5aad188685d005f8ad65478384693fc0dc0c83f";
+    hash = "sha256-0iICExzsw/l/QjGJDJ6X+08+dzwsA+6tjaOWKNrXsjs=";
     deepClone = true;
     leaveDotGit = true;
     postFetch = ''
@@ -50,44 +50,41 @@ stdenv.mkDerivation (finalAttrs: {
     ./convert-bmp-to-png.diff
   ];
 
-  buildInputs =
-    [
-      flac
-      libvorbis
-      libvpx
-      SDL2
-      SDL2_mixer
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libGL
-      xorg.libX11
-    ];
+  buildInputs = [
+    flac
+    libvorbis
+    libvpx
+    SDL2
+    SDL2_mixer
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libGL
+    xorg.libX11
+  ];
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-      copyDesktopItems
-      graphicsmagick
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
-      nasm
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    copyDesktopItems
+    graphicsmagick
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+    nasm
+  ];
 
-  postPatch =
-    ''
-      substituteInPlace source/imgui/src/imgui_impl_sdl2.cpp \
-        --replace-fail '#include <SDL.h>' '#include <SDL2/SDL.h>' \
-        --replace-fail '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
-        --replace-fail '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      for f in glad.c glad_wgl.c ; do
-        substituteInPlace source/glad/src/$f \
-          --replace-fail libGL.so ${libGL}/lib/libGL.so
-      done
-    '';
+  postPatch = ''
+    substituteInPlace source/imgui/src/imgui_impl_sdl2.cpp \
+      --replace-fail '#include <SDL.h>' '#include <SDL2/SDL.h>' \
+      --replace-fail '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
+      --replace-fail '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for f in glad.c glad_wgl.c ; do
+      substituteInPlace source/glad/src/$f \
+        --replace-fail libGL.so ${libGL}/lib/libGL.so
+    done
+  '';
 
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"
@@ -137,48 +134,47 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      install -Dm755 -t $out/bin eduke32 mapster32 voidsw wangulator
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
-        --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
-        --add-flags '-j"$EDUKE32_DATA_DIR"' \
-        --add-flags '-gamegrp DUKE3D.GRP'
-      makeWrapper $out/bin/voidsw $out/bin/${swWrapper} \
-        --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
-        --add-flags '-j"$EDUKE32_DATA_DIR"'
-      makeWrapper $out/bin/eduke32 $out/bin/${furyWrapper} \
-        --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
-        --add-flags '-j"$EDUKE32_DATA_DIR"' \
-        --add-flags '-gamegrp FURY.GRP'
-      mkdir -p $out/share/icons/hicolor/scalable/apps
-      gm convert "./source/duke3d/rsrc/game_icon.ico[10]" $out/share/icons/hicolor/scalable/apps/eduke32.png
-      install -Dm644 ./source/sw/rsrc/game_icon.svg $out/share/icons/hicolor/scalable/apps/voidsw.svg
-      gm convert "./source/duke3d/rsrc/fury/game_icon.ico[4]" $out/share/icons/hicolor/scalable/apps/fury.png
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications/EDuke32.app/Contents/MacOS
-      mkdir -p $out/Applications/Mapster32.app/Contents/MacOS
-      mkdir -p $out/Applications/VoidSW.app/Contents/MacOS
-      mkdir -p $out/Applications/Wangulator.app/Contents/MacOS
+    install -Dm755 -t $out/bin eduke32 mapster32 voidsw wangulator
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
+      --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
+      --add-flags '-j"$EDUKE32_DATA_DIR"' \
+      --add-flags '-gamegrp DUKE3D.GRP'
+    makeWrapper $out/bin/voidsw $out/bin/${swWrapper} \
+      --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
+      --add-flags '-j"$EDUKE32_DATA_DIR"'
+    makeWrapper $out/bin/eduke32 $out/bin/${furyWrapper} \
+      --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
+      --add-flags '-j"$EDUKE32_DATA_DIR"' \
+      --add-flags '-gamegrp FURY.GRP'
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    gm convert "./source/duke3d/rsrc/game_icon.ico[10]" $out/share/icons/hicolor/scalable/apps/eduke32.png
+    install -Dm644 ./source/sw/rsrc/game_icon.svg $out/share/icons/hicolor/scalable/apps/voidsw.svg
+    gm convert "./source/duke3d/rsrc/fury/game_icon.ico[4]" $out/share/icons/hicolor/scalable/apps/fury.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/EDuke32.app/Contents/MacOS
+    mkdir -p $out/Applications/Mapster32.app/Contents/MacOS
+    mkdir -p $out/Applications/VoidSW.app/Contents/MacOS
+    mkdir -p $out/Applications/Wangulator.app/Contents/MacOS
 
-      cp -r platform/Apple/bundles/EDuke32.app/* $out/Applications/EDuke32.app/
-      cp -r platform/Apple/bundles/Mapster32.app/* $out/Applications/Mapster32.app/
-      cp -r platform/Apple/bundles/VoidSW.app/* $out/Applications/VoidSW.app/
-      cp -r platform/Apple/bundles/Wangulator.app/* $out/Applications/Wangulator.app/
+    cp -r platform/Apple/bundles/EDuke32.app/* $out/Applications/EDuke32.app/
+    cp -r platform/Apple/bundles/Mapster32.app/* $out/Applications/Mapster32.app/
+    cp -r platform/Apple/bundles/VoidSW.app/* $out/Applications/VoidSW.app/
+    cp -r platform/Apple/bundles/Wangulator.app/* $out/Applications/Wangulator.app/
 
-      ln -sf $out/bin/eduke32 $out/Applications/EDuke32.app/Contents/MacOS/eduke32
-      ln -sf $out/bin/mapster32 $out/Applications/Mapster32.app/Contents/MacOS/mapster32
-      ln -sf $out/bin/voidsw $out/Applications/VoidSW.app/Contents/MacOS/voidsw
-      ln -sf $out/bin/wangulator $out/Applications/Wangulator.app/Contents/MacOS/wangulator
-    ''
-    + ''
-      runHook postInstall
-    '';
+    ln -sf $out/bin/eduke32 $out/Applications/EDuke32.app/Contents/MacOS/eduke32
+    ln -sf $out/bin/mapster32 $out/Applications/Mapster32.app/Contents/MacOS/mapster32
+    ln -sf $out/bin/voidsw $out/Applications/VoidSW.app/Contents/MacOS/voidsw
+    ln -sf $out/bin/wangulator $out/Applications/Wangulator.app/Contents/MacOS/wangulator
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 

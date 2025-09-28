@@ -114,36 +114,35 @@ stdenv.mkDerivation (finalAttrs: {
     ./find-exectables-in-path.patch
   ];
 
-  postPatch =
-    ''
-      # dont symlink fontconfig to /etc/fonts/conf.d
-      substituteInPlace Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp \
-        --replace-fail 'this->ctx->session->IsAdminMode()' 'false'
+  postPatch = ''
+    # dont symlink fontconfig to /etc/fonts/conf.d
+    substituteInPlace Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp \
+      --replace-fail 'this->ctx->session->IsAdminMode()' 'false'
 
-      substituteInPlace \
-        Libraries/MiKTeX/App/app.cpp \
-        Programs/Editors/TeXworks/miktex/miktex-texworks.cpp \
-        Programs/MiKTeX/Console/Qt/main.cpp \
-        Programs/MiKTeX/PackageManager/mpm/mpm.cpp \
-        Programs/MiKTeX/Yap/MFC/StdAfx.h \
-        Programs/MiKTeX/initexmf/initexmf.cpp \
-        Programs/MiKTeX/miktex/miktex.cpp \
-        --replace-fail "log4cxx/rollingfileappender.h" "log4cxx/rolling/rollingfileappender.h"
+    substituteInPlace \
+      Libraries/MiKTeX/App/app.cpp \
+      Programs/Editors/TeXworks/miktex/miktex-texworks.cpp \
+      Programs/MiKTeX/Console/Qt/main.cpp \
+      Programs/MiKTeX/PackageManager/mpm/mpm.cpp \
+      Programs/MiKTeX/Yap/MFC/StdAfx.h \
+      Programs/MiKTeX/initexmf/initexmf.cpp \
+      Programs/MiKTeX/miktex/miktex.cpp \
+      --replace-fail "log4cxx/rollingfileappender.h" "log4cxx/rolling/rollingfileappender.h"
 
-      substitute cmake/modules/FindPOPPLER_QT5.cmake \
-        cmake/modules/FindPOPPLER_QT6.cmake \
-        --replace-fail "QT5" "QT6" \
-        --replace-fail "qt5" "qt6"
+    substitute cmake/modules/FindPOPPLER_QT5.cmake \
+      cmake/modules/FindPOPPLER_QT6.cmake \
+      --replace-fail "QT5" "QT6" \
+      --replace-fail "qt5" "qt6"
 
-      substituteInPlace Programs/TeXAndFriends/omega/otps/source/outocp.c \
-        --replace-fail 'fprintf(stderr, s);' 'fprintf(stderr, "%s", s);'
-    ''
-    # This patch fixes mismatch char types (signed int and unsigned int) on aarch64-linux platform.
-    # Should not be applied to other platforms otherwise the build will fail.
-    + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
-      sed -i 's/--using-namespace=MiKTeX::TeXAndFriends/& --chars-are-unsigned/g' \
-        Programs/TeXAndFriends/Knuth/web/CMakeLists.txt
-    '';
+    substituteInPlace Programs/TeXAndFriends/omega/otps/source/outocp.c \
+      --replace-fail 'fprintf(stderr, s);' 'fprintf(stderr, "%s", s);'
+  ''
+  # This patch fixes mismatch char types (signed int and unsigned int) on aarch64-linux platform.
+  # Should not be applied to other platforms otherwise the build will fail.
+  + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
+    sed -i 's/--using-namespace=MiKTeX::TeXAndFriends/& --chars-are-unsigned/g' \
+      Programs/TeXAndFriends/Knuth/web/CMakeLists.txt
+  '';
 
   strictDeps = true;
 
@@ -218,16 +217,15 @@ stdenv.mkDerivation (finalAttrs: {
   # Todo: figure out the exact binary to be Qt wrapped.
   dontWrapQtApps = true;
 
-  postFixup =
-    ''
-      wrapQtApp $out/bin/miktex-console
-      wrapQtApp $out/bin/miktex-texworks
-      $out/bin/miktexsetup finish --verbose
-    ''
-    # Biber binary is missing on ctan.org for aarch64-linux platform.
-    + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
-      ln -sf ${biber}/bin/biber $out/bin/biber
-    '';
+  postFixup = ''
+    wrapQtApp $out/bin/miktex-console
+    wrapQtApp $out/bin/miktex-texworks
+    $out/bin/miktexsetup finish --verbose
+  ''
+  # Biber binary is missing on ctan.org for aarch64-linux platform.
+  + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
+    ln -sf ${biber}/bin/biber $out/bin/biber
+  '';
 
   meta = {
     description = "Modern TeX distribution";

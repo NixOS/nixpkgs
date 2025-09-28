@@ -75,17 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
-  cmakeFlags =
-    [
-      "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
-      "-Dprotobuf_ABSL_PROVIDER=package"
-    ]
-    ++ lib.optionals enableShared [
-      "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dprotobuf_BUILD_TESTS=OFF"
-    ];
+  cmakeFlags = [
+    "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
+    "-Dprotobuf_ABSL_PROVIDER=package"
+  ]
+  ++ lib.optionals enableShared [
+    "-Dprotobuf_BUILD_SHARED_LIBS=ON"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dprotobuf_BUILD_TESTS=OFF"
+  ];
 
   doCheck =
     # Tests fail to build on 32-bit platforms; fixed in 22.x

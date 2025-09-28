@@ -13,17 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xh";
-  version = "0.24.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2c96O5SL6tcPSbxx8NYxG8LDX3ZgyxEMmEeJnKDwb38=";
+    hash = "sha256-UuWNLsJAoSjDPs/8VzW2vics3A/nsXWR5xmjMqTmYvQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oncf3Hd85LgKn8KSDIBHXLJ3INzfp0X/Ng9OjAltLB4=";
+  cargoHash = "sha256-SsJSBkOdQSpbEbFPK+qscSBePUKMLM1UpajpvpR2ZEo=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
@@ -73,7 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
-      aaronjheng
       defelo
     ];
     mainProgram = "xh";

@@ -19,20 +19,25 @@ stdenv.mkDerivation rec {
     sha256 = "1sgzv547h7hrskb9qd0x5yp45kmhvibjwj2mfswv95lg070h074d";
   };
 
+  # fix build with cmake v4
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs =
-    [
-      zlib
-      libpng
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-      libglut
-    ];
+  buildInputs = [
+    zlib
+    libpng
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+    libglut
+  ];
 
   meta = with lib; {
     homepage = "http://geuz.org/gl2ps";

@@ -8,11 +8,14 @@
   coreutils,
   libuuid,
   libaio,
+  bash,
+  bashNonInteractive,
   replaceVars,
   enableCmdlib ? false,
   enableDmeventd ? false,
   udevSupport ? !stdenv.hostPlatform.isStatic,
   udev,
+  udevCheckHook,
   onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have a infinity recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
@@ -38,6 +41,8 @@ stdenv.mkDerivation rec {
     + lib.optionalString enableVDO "-with-vdo";
   inherit version;
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     urls = [
       "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
@@ -46,57 +51,67 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libaio
-    ]
-    ++ lib.optionals udevSupport [
-      udev
-    ]
-    ++ lib.optionals (!onlyLib) [
-      libuuid
-    ]
-    ++ lib.optionals enableVDO [
-      vdo
-    ];
+  strictDeps = true;
 
-  configureFlags =
-    [
-      "--disable-readline"
-      "--enable-pkgconfig"
-      "--with-default-locking-dir=/run/lock/lvm"
-      "--with-default-run-dir=/run/lvm"
-      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-      "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
-      "--with-default-profile-subdir=profile.d"
-    ]
-    ++ lib.optionals (!enableCmdlib && !onlyLib) [
-      "--bindir=${placeholder "bin"}/bin"
-      "--sbindir=${placeholder "bin"}/bin"
-      "--libdir=${placeholder "lib"}/lib"
-      "--with-libexecdir=${placeholder "lib"}/libexec"
-    ]
-    ++ lib.optional enableCmdlib "--enable-cmdlib"
-    ++ lib.optionals enableDmeventd [
-      "--enable-dmeventd"
-      "--with-dmeventd-pidfile=/run/dmeventd/pid"
-      "--with-default-dm-run-dir=/run/dmeventd"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "ac_cv_func_malloc_0_nonnull=yes"
-      "ac_cv_func_realloc_0_nonnull=yes"
-    ]
-    ++ lib.optionals udevSupport [
-      "--enable-udev_rules"
-      "--enable-udev_sync"
-    ]
-    ++ lib.optionals enableVDO [
-      "--enable-vdo"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "--enable-static_link"
-    ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals udevSupport [ udevCheckHook ];
+  buildInputs = [
+    libaio
+    bash
+  ]
+  ++ lib.optionals udevSupport [
+    udev
+  ]
+  ++ lib.optionals (!onlyLib) [
+    libuuid
+  ]
+  ++ lib.optionals enableVDO [
+    vdo
+  ];
+
+  configureFlags = [
+    "--disable-readline"
+    "--enable-pkgconfig"
+    "--with-default-locking-dir=/run/lock/lvm"
+    "--with-default-run-dir=/run/lvm"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
+    "--with-default-profile-subdir=profile.d"
+  ]
+  ++ lib.optionals (!onlyLib) (
+    if enableCmdlib then
+      [
+        "--bindir=${placeholder "out"}/bin"
+        "--sbindir=${placeholder "out"}/bin"
+      ]
+    else
+      [
+        "--bindir=${placeholder "bin"}/bin"
+        "--sbindir=${placeholder "bin"}/bin"
+        "--libdir=${placeholder "lib"}/lib"
+        "--with-libexecdir=${placeholder "lib"}/libexec"
+      ]
+  )
+  ++ lib.optional enableCmdlib "--enable-cmdlib"
+  ++ lib.optionals enableDmeventd [
+    "--enable-dmeventd"
+    "--with-dmeventd-pidfile=/run/dmeventd/pid"
+    "--with-default-dm-run-dir=/run/dmeventd"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ]
+  ++ lib.optionals udevSupport [
+    "--enable-udev_rules"
+    "--enable-udev_sync"
+  ]
+  ++ lib.optionals enableVDO [
+    "--enable-vdo"
+    "--with-vdo-format=${vdo}/bin/vdoformat"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "--enable-static_link"
+  ];
 
   preConfigure = ''
     sed -i /DEFAULT_SYS_DIR/d Makefile.in
@@ -132,6 +147,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # requires root
+  doInstallCheck = true;
 
   makeFlags =
     lib.optionals udevSupport [
@@ -141,6 +157,8 @@ stdenv.mkDerivation rec {
       "libdm.device-mapper"
     ];
 
+  enableParallelBuilding = true;
+
   # To prevent make install from failing.
   installFlags = [
     "OWNER="
@@ -149,13 +167,14 @@ stdenv.mkDerivation rec {
   ];
 
   # Install systemd stuff.
-  installTargets =
-    [ "install" ]
-    ++ lib.optionals udevSupport [
-      "install_systemd_generators"
-      "install_systemd_units"
-      "install_tmpfiles_configuration"
-    ];
+  installTargets = [
+    "install"
+  ]
+  ++ lib.optionals udevSupport [
+    "install_systemd_generators"
+    "install_systemd_units"
+    "install_tmpfiles_configuration"
+  ];
 
   installPhase = lib.optionalString onlyLib ''
     make -C libdm install_${if stdenv.hostPlatform.isStatic then "static" else "dynamic"}
@@ -164,22 +183,41 @@ stdenv.mkDerivation rec {
   '';
 
   # only split bin and lib out from out if cmdlib isn't enabled
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals (!onlyLib) [
-      "dev"
-      "man"
-    ]
-    ++ lib.optionals (!onlyLib && !enableCmdlib) [
-      "bin"
-      "lib"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (!onlyLib) [
+    "dev"
+    "man"
+    "scripts"
+  ]
+  ++ lib.optionals (!onlyLib && !enableCmdlib) [
+    "bin"
+    "lib"
+  ];
 
-  postInstall = lib.optionalString (enableCmdlib != true) ''
-    moveToOutput lib/libdevmapper.so $lib
-  '';
+  postInstall =
+    lib.optionalString (!onlyLib) ''
+      moveToOutput bin/fsadm $scripts
+      moveToOutput bin/blkdeactivate $scripts
+      moveToOutput bin/lvmdump $scripts
+      moveToOutput bin/lvm_import_vdo $scripts
+      moveToOutput libexec/lvresize_fs_helper $scripts/lib
+    ''
+    + lib.optionalString (!enableCmdlib) ''
+      moveToOutput lib/libdevmapper.so $lib
+    '';
+
+  outputChecks = lib.optionalAttrs (!stdenv.hostPlatform.isStatic && !enableVDO) {
+    out.disallowedRequisites = [
+      bash
+      bashNonInteractive
+    ];
+    lib.disallowedRequisites = [
+      bash
+      bashNonInteractive
+    ];
+  };
 
   passthru.tests = {
     installer = nixosTests.installer.lvm;

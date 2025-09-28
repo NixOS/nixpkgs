@@ -9,30 +9,37 @@
   pyyaml,
   requests,
   setuptools,
+  pytestCheckHook,
 }:
 
 let
   finalAttrs = {
     pname = "duden";
-    version = "0.19.1";
+    version = "0.19.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "radomirbosak";
       repo = "duden";
-      rev = finalAttrs.version;
-      hash = "sha256-c6IItrjFVbsdYg3sDrExcxv7aRcKhd/M5hiZD+wBZ2Y=";
+      tag = finalAttrs.version;
+      hash = "sha256-wjFIlwd4qG6aG9w0VPus6BGqghwIlPC6a8m0eagvIYM=";
     };
 
-    nativeBuildInputs = [ poetry-core ];
+    build-system = [ poetry-core ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       beautifulsoup4
       crayons
       pyxdg
       pyyaml
       requests
       setuptools
+    ];
+
+    nativeCheckInputs = [ pytestCheckHook ];
+
+    disabledTestPaths = [
+      "tests/test_online_attributes.py"
     ];
 
     pythonImportsCheck = [ "duden" ];

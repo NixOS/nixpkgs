@@ -12,8 +12,9 @@
   },
   patches ? [ ],
   maintainers ? [
-    lib.maintainers.lovesegfault
     lib.maintainers.artturin
+    lib.maintainers.philiptaron
+    lib.maintainers.lovesegfault
   ],
   teams ? [ lib.teams.nix ],
   self_attribute_name,
@@ -63,7 +64,11 @@ assert (hash == null) -> (src != null);
   xz,
   enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ?
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+    && !enableStatic
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
@@ -87,78 +92,76 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit src patches;
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals enableDocumentation [
-      "man"
-      "doc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals enableDocumentation [
+    "man"
+    "doc"
+  ];
 
   hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   hardeningDisable = [
     "shadowstack"
-  ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
   nativeCheckInputs = [
     git
     man
   ];
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      flex
-      jq
-      meson
-      ninja
-      pkg-config
-      rsync
-    ]
-    ++ lib.optionals enableDocumentation [
-      (lib.getBin lowdown-unsandboxed)
-      mdbook
-      mdbook-linkcheck
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      util-linuxMinimal
-    ]
-    ++ lib.optionals enableDocumentation [
-      python3
-      doxygen
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    jq
+    meson
+    ninja
+    pkg-config
+    rsync
+  ]
+  ++ lib.optionals enableDocumentation [
+    (lib.getBin lowdown-unsandboxed)
+    mdbook
+    mdbook-linkcheck
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    util-linuxMinimal
+  ]
+  ++ lib.optionals enableDocumentation [
+    python3
+    doxygen
+  ];
 
-  buildInputs =
-    [
-      boost
-      brotli
-      bzip2
-      curl
-      editline
-      libgit2
-      libsodium
-      lowdown
-      openssl
-      sqlite
-      toml11
-      xz
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.26") [
-      libblake3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      libcpuid
-    ]
-    ++ lib.optionals withLibseccomp [
-      libseccomp
-    ]
-    ++ lib.optionals withAWS [
-      aws-sdk-cpp
-    ];
+  buildInputs = [
+    boost
+    brotli
+    bzip2
+    curl
+    editline
+    libgit2
+    libsodium
+    lowdown
+    openssl
+    sqlite
+    toml11
+    xz
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.26") [
+    libblake3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    libcpuid
+  ]
+  ++ lib.optionals withLibseccomp [
+    libseccomp
+  ]
+  ++ lib.optionals withAWS [
+    aws-sdk-cpp
+  ];
 
   propagatedBuildInputs = [
     boehmgc
@@ -190,28 +193,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  mesonFlags =
-    [
-      (lib.mesonBool "unit-tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
-      (lib.mesonBool "bindings" false)
-      (lib.mesonOption "libstore:store-dir" storeDir)
-      (lib.mesonOption "libstore:localstatedir" stateDir)
-      (lib.mesonOption "libstore:sysconfdir" confDir)
-      (lib.mesonEnable "libutil:cpuid" stdenv.hostPlatform.isx86_64)
-      (lib.mesonEnable "libstore:seccomp-sandboxing" withLibseccomp)
-      (lib.mesonBool "libstore:embedded-sandbox-shell" (
-        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
-      ))
-      (lib.mesonBool "doc-gen" enableDocumentation)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.mesonOption "libstore:sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
-      # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-    ]
-    ++ lib.optionals (stdenv.cc.isGNU && !enableStatic) [
-      # TODO: do we still need this?
-      # "--enable-lto"
-    ];
+  mesonFlags = [
+    (lib.mesonBool "unit-tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+    (lib.mesonBool "bindings" false)
+    (lib.mesonOption "libstore:store-dir" storeDir)
+    (lib.mesonOption "libstore:localstatedir" stateDir)
+    (lib.mesonOption "libstore:sysconfdir" confDir)
+    (lib.mesonEnable "libutil:cpuid" stdenv.hostPlatform.isx86_64)
+    (lib.mesonEnable "libstore:seccomp-sandboxing" withLibseccomp)
+    (lib.mesonBool "libstore:embedded-sandbox-shell" (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+    ))
+    (lib.mesonBool "doc-gen" enableDocumentation)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.mesonOption "libstore:sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
+    # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
+  ]
+  ++ lib.optionals (stdenv.cc.isGNU && !enableStatic) [
+    # TODO: do we still need this?
+    # "--enable-lto"
+  ];
 
   doCheck = true;
 
@@ -229,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
       export MANPATH=$man/share/man:$MANPATH
     '';
 
-  separateDebugInfo = stdenv.hostPlatform.isLinux && enableStatic;
+  separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
 
   passthru = {
     inherit aws-sdk-cpp boehmgc;

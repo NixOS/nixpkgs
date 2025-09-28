@@ -16,13 +16,13 @@
   };
   gi-crystal = {
     url = "https://github.com/hugopl/gi-crystal.git";
-    rev = "v0.22.1";
-    sha256 = "1bwsr5i6cmvnc72qdnmq4v6grif1hahrc7s6js2ivdrfix72flyg";
+    rev = "v0.23.0";
+    sha256 = "0ykb7sy62036brix12sj416h6gx85liq2kivwkh2cmf71lk02cqr";
   };
   gtk3 = {
     url = "https://github.com/phil294/gtk3.cr.git";
-    rev = "3105fc24ef5e841791f8c30002db998b9c20a677";
-    sha256 = "16sjiyyfprnfmqw8pf58d12sv2x8rnv7kb72k5rmvd67sr6gv8pq";
+    rev = "3e6cdc45c1c39d82c215b4cdf0bbb9b5598460e1";
+    sha256 = "0x25p85kp2f6gbsi36nyddhji7mmmqa7v4xs18bddf3kbgh72nw3";
   };
   harfbuzz = {
     url = "https://github.com/hugopl/harfbuzz.cr.git";

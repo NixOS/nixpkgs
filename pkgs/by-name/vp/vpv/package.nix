@@ -17,20 +17,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpv";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "kidanger";
     repo = "vpv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mlBceYMfsAE7MI6J7xnkJHBJ8RInePooXH5YW9I47YM=";
+    sha256 = "sha256-eyfRMoocKEt0VezDRm5Tq7CjpEyfrcEb6WcUSO5M1Og=";
   };
 
   cargoRoot = "src/fuzzy-finder";
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
     sourceRoot = "${finalAttrs.src.name}/src/fuzzy-finder";
-    hash = "sha256-5QjKvndExImVn+w6OZNSD5n7K3C+tmN2jJOcDCVEW8I=";
+    hash = "sha256-4XxhKzrfTulAnLvlzRCrxSxuR+Nl/ANqcUem0YqCQ0Y=";
   };
 
   nativeBuildInputs = [

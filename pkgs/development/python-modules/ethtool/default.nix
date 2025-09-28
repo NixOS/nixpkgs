@@ -6,7 +6,7 @@
   setuptools,
   pkg-config,
   libnl,
-  nettools,
+  net-tools,
   pytestCheckHook,
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/parse_ifconfig.py \
-      --replace-fail "Popen('ifconfig'," "Popen('${lib.getExe' nettools "ifconfig"}',"
+      --replace-fail "Popen('ifconfig'," "Popen('${lib.getExe' net-tools "ifconfig"}',"
   '';
 
   build-system = [ setuptools ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ethtool" ];
 
   nativeCheckInputs = [
-    nettools
+    net-tools
     pytestCheckHook
   ];
 

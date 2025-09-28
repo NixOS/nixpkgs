@@ -16,7 +16,6 @@
   python3,
   runCommand,
   rustPlatform,
-  unstableGitUpdater,
   vulkan-loader,
   wayland,
   wezterm,
@@ -29,63 +28,61 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-05-18";
+  version = "0-unstable-2025-08-14";
 
   src = fetchFromGitHub {
-    owner = "wez";
+    owner = "wezterm";
     repo = "wezterm";
-    rev = "5663e749948df3ed3c2d8ee0bfea6c85226310d9";
+    rev = "bf9a2aeebacec19fd07b55234d626f006b22d369";
     fetchSubmodules = true;
-    hash = "sha256-SQ1H16jy6GVjM8tEKZZC7AGIADLR1NyGfOT/6pFcFA0=";
+    hash = "sha256-cD0r+TchRc/A+G3HMu2PjjPm8m7Ue7GpH9F/PlfJcKE=";
   };
 
-  postPatch =
-    ''
-      echo ${version} > .tag
+  postPatch = ''
+    echo ${version} > .tag
 
-      # hash does not work well with NixOS
-      substituteInPlace assets/shell-integration/wezterm.sh \
-        --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
-        --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
-        --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
-        --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # many tests fail with: No such file or directory
-      rm -r wezterm-ssh/tests
-    '';
+    # hash does not work well with NixOS
+    substituteInPlace assets/shell-integration/wezterm.sh \
+      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # many tests fail with: No such file or directory
+    rm -r wezterm-ssh/tests
+  '';
 
   # dep: syntax causes build failures in rare cases
   # https://github.com/rust-secure-code/cargo-auditable/issues/124
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-9pdkXpkIbe5HeVGvgusRaI4A6ZjDGssO5k0ULVnO6k8=";
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-chMbDMT8UWaiGovlzYn1UD8VFqb9UYHMDDx/A62wQsY=";
 
   nativeBuildInputs = [
     installShellFiles
     ncurses # tic for terminfo
     pkg-config
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin perl;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin perl;
 
-  buildInputs =
-    [
-      fontconfig
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libxcb
-      libxkbcommon
-      wayland
-      xcbutil
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilwm # contains xcb-ewmh among others
-    ];
+  buildInputs = [
+    fontconfig
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libxcb
+    libxkbcommon
+    wayland
+    xcbutil
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilwm # contains xcb-ewmh among others
+  ];
 
   buildFeatures = [ "distro-defaults" ];
 
@@ -119,7 +116,12 @@ rustPlatform.buildRustPackage rec {
       cp -r assets/macos/WezTerm.app "$OUT_APP"
       rm $OUT_APP/*.dylib
       cp -r assets/shell-integration/* "$OUT_APP"
-      ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
+      # https://github.com/wezterm/wezterm/pull/6886
+      # macOS will only recognize our application bundle
+      # if the binaries are inside of it. Move them there
+      # and create symbolic links for them in bin/.
+      mv $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
+      ln -s "$OUT_APP"/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$out/bin"
     '';
 
   passthru = {
@@ -149,21 +151,17 @@ rustPlatform.buildRustPackage rec {
       #terminal-emulators = nixosTests.terminal-emulators.wezterm;
     };
 
-    # upstream tags are composed with timestamp+commit, e.g.:
-    # 20240203-110809-5046fc22
-    # doesn't make much sense if we are following unstable
-    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
     description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
-    homepage = "https://wezfurlong.org/wezterm";
+    homepage = "https://wezterm.org";
     license = licenses.mit;
     mainProgram = "wezterm";
     maintainers = with maintainers; [
       mimame
       SuperSandro2000
-      thiagokokada
     ];
   };
 }

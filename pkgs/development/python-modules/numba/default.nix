@@ -4,6 +4,7 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   python,
   buildPythonPackage,
   setuptools,
@@ -32,7 +33,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.61.0";
+  version = "0.62.0";
   pname = "numba";
   pyproject = true;
 
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-d09armWFI55fqyYCzZNVOq6f5b8BTk0s8fjU0OGrNgo=";
+    hash = "sha256-y/mvmzMwTHc/tWg4WFqFJOThbFiIF71OHLvtztkT+hE=";
   };
 
   postPatch = ''
@@ -58,18 +59,7 @@ buildPythonPackage rec {
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
-
-    substituteInPlace setup.py \
-      --replace-fail \
-        'max_numpy_run_version = "2.2"' \
-        'max_numpy_run_version = "3"'
-    substituteInPlace numba/__init__.py \
-      --replace-fail \
-        'numpy_version > (2, 1)' \
-        'numpy_version >= (3, 0)'
   '';
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   build-system = [
     setuptools
@@ -83,7 +73,9 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
-  pythonRelaxDeps = [ "numpy" ];
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
   dependencies = [
     numpy
@@ -107,12 +99,16 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = lib.optionals (!doFullCheck) [
-    # These are the most basic tests. Running all tests is too expensive, and
-    # some of them fail (also differently on different platforms), so it will
-    # be too hard to maintain such a `disabledTests` list.
-    "${python.sitePackages}/numba/tests/test_usecases.py"
-  ];
+  enabledTestPaths =
+    if doFullCheck then
+      null
+    else
+      [
+        # These are the most basic tests. Running all tests is too expensive, and
+        # some of them fail (also differently on different platforms), so it will
+        # be too hard to maintain such a `disabledTests` list.
+        "${python.sitePackages}/numba/tests/test_usecases.py"
+      ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # captured stderr: Fatal Python error: Segmentation fault

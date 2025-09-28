@@ -15,28 +15,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-lsp";
-  version = "1.11.0";
+  version = "1.13.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-bFYoXIe/AFN2eNUOGoFhxjD0fWtxujrdhmLx0TZOH0U=";
+    hash = "sha256-XEs7zJWocRZgVPPDM/IxOOwE7ofh+b7A/TJrQw/mMOo=";
   };
 
-  cargoHash = "sha256-GYEItiyUVAAL7K/6o31U4Ss75JOUE8Mxxf0Ut6T7X04=";
+  cargoHash = "sha256-DAoqfnis95oEPBgYeOdR3zUVdoKbay780iJ6zVkxdDU=";
 
-  rpathLibs =
-    [
-      fontconfig
-      libGL
-      xorg.libxcb
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      wayland
-    ];
+  rpathLibs = [
+    fontconfig
+    libGL
+    xorg.libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    wayland
+  ];
 
   nativeBuildInputs = [
     cmake

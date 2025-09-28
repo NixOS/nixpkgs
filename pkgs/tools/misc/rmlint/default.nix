@@ -44,35 +44,33 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      sphinx
-      scons
-    ]
-    ++ lib.optionals withGui [
-      makeWrapper
-      wrapGAppsHook3
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    sphinx
+    scons
+  ]
+  ++ lib.optionals withGui [
+    makeWrapper
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
-  buildInputs =
-    [
-      glib
-      json-glib
-      util-linux
-    ]
-    ++ lib.optionals withGui [
-      cairo
-      gtksourceview3
-      pango
-      polkit
-      python3
-      python3.pkgs.pygobject3
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ];
+  buildInputs = [
+    glib
+    json-glib
+    util-linux
+  ]
+  ++ lib.optionals withGui [
+    cairo
+    gtksourceview3
+    pango
+    polkit
+    python3
+    python3.pkgs.pygobject3
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ];
 
   prePatch = ''
     # remove sources of nondeterminism

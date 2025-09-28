@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-edit";
-  version = "unstable-2022-05-05";
+  version = "0-unstable-2022-05-05";
 
   src = fetchFromGitHub {
     owner = "marlonrichert";

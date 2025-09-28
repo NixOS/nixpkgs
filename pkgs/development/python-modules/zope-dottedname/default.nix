@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/zope/dottedname/tests.py" ];
+  enabledTestPaths = [ "src/zope/dottedname/tests.py" ];
 
   pythonImportsCheck = [ "zope.dottedname" ];
 

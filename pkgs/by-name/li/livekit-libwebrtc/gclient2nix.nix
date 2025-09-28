@@ -8,7 +8,7 @@
   nix-prefetch-git,
   nix,
   coreutils,
-  nixfmt-rfc-style,
+  nixfmt,
   makeWrapper,
 }:
 # Based on https://github.com/milahu/gclient2nix
@@ -19,7 +19,7 @@ let
     nix-prefetch-git
     nix
     coreutils
-    nixfmt-rfc-style
+    nixfmt
   ];
 in
 buildPythonPackage {

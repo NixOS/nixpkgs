@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "posix-ipc";
-  version = "1.1.1";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "osvenskan";
     repo = "posix_ipc";
     rev = "rel${version}";
-    hash = "sha256-xK5CkThqVFVMIxBtgUfHIRNRfmBxKa/DWBYQg7QHl/M=";
+    hash = "sha256-icytv2Cv7rVmlSARtx9ld5Kgo+Xba5fHUUjeKAUnGDM=";
   };
 
   pythonImportsCheck = [ "posix_ipc" ];

@@ -20,8 +20,7 @@
   yaml-cpp,
   ncurses,
   file,
-  libutil,
-  sigtool,
+  darwin,
   nixosTests,
   installShellFiles,
   reflection-cpp,
@@ -52,50 +51,49 @@ stdenv.mkDerivation (finalAttrs: {
     file
     qt6.wrapQtAppsHook
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
-  buildInputs =
-    [
-      boxed-cpp
-      fontconfig
-      freetype
-      libunicode
-      termbench-pro
-      qt6.qtmultimedia
-      qt6.qt5compat
-      pcre
-      boost
-      catch2_3
-      fmt
-      microsoft-gsl
-      range-v3
-      yaml-cpp
-      reflection-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libutil
-    ];
+  buildInputs = [
+    boxed-cpp
+    fontconfig
+    freetype
+    libunicode
+    termbench-pro
+    qt6.qtmultimedia
+    qt6.qt5compat
+    pcre
+    boost
+    catch2_3
+    fmt
+    microsoft-gsl
+    range-v3
+    yaml-cpp
+    reflection-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libutil
+  ];
 
   cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
 
-  postInstall =
-    ''
-      mkdir -p $out/nix-support $terminfo/share
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/Applications
-      cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
-      mv $out/contour.app $out/Applications
-      ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mv $out/share/terminfo $terminfo/share/
-    ''
-    + ''
-      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-      rm -r $out/share/contour
-    '';
+  postInstall = ''
+    mkdir -p $out/nix-support $terminfo/share
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
+    mv $out/contour.app $out/Applications
+    ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mv $out/share/terminfo $terminfo/share/
+  ''
+  + ''
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    rm -r $out/share/contour
+  '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 

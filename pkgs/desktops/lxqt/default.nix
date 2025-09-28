@@ -74,18 +74,6 @@ let
         lxqt-build-tools = lxqt-build-tools_0_13;
         inherit (pkgs.libsForQt5) qttools qtx11extras;
       };
-      lxqt-qtplugin_1_4 = callPackage ./lxqt-qtplugin {
-        version = "1.4.1";
-        lxqt-build-tools = lxqt-build-tools_0_13;
-        libqtxdg = libqtxdg_3_12;
-        libfm-qt = libfm-qt_1_4;
-        inherit (pkgs.libsForQt5)
-          qtbase
-          qtsvg
-          qttools
-          libdbusmenu
-          ;
-      };
       qtermwidget_1_4 = callPackage ./qtermwidget {
         version = "1.4.0";
         lxqt-build-tools = lxqt-build-tools_0_13;

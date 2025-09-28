@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,13 +10,13 @@
 
 buildGoModule rec {
   pname = "helm-ls";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
     rev = "v${version}";
-    hash = "sha256-OxrPqDa2g5jmm+XtLE0YCnVhkvVK60xxrO49Gl8VT60=";
+    hash = "sha256-z+gSD7kcDxgJPoYQ7HjokJONjgAAuIIkg1VGyV3v01k=";
   };
 
   vendorHash = "sha256-w/BWPbpSYum0SU8PJj76XiLUjTWO4zNQY+khuLRK0O8=";
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mv $out/bin/helm-ls $out/bin/helm_ls
     installShellCompletion --cmd helm_ls \
       --bash <($out/bin/helm_ls completion bash) \

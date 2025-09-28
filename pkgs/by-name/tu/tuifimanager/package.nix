@@ -44,19 +44,18 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
         makeWrapper
       ]);
 
-    propagatedBuildInputs =
-      [
-        python3.pkgs.send2trash
-        python3.pkgs.unicurses
-      ]
-      ++ (lib.optionals enableDragAndDrop [
-        python3.pkgs.pynput
-        python3.pkgs.pyside6
-        python3.pkgs.requests
-        python3.pkgs.xlib
-        kdePackages.qtbase
-        kdePackages.qt6gtk2
-      ]);
+    propagatedBuildInputs = [
+      python3.pkgs.send2trash
+      python3.pkgs.unicurses
+    ]
+    ++ (lib.optionals enableDragAndDrop [
+      python3.pkgs.pynput
+      python3.pkgs.pyside6
+      python3.pkgs.requests
+      python3.pkgs.xlib
+      kdePackages.qtbase
+      kdePackages.qt6gtk2
+    ]);
 
     postFixup =
       let

@@ -72,7 +72,7 @@ in
         default = { };
         description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
-          <https://github.com/nzbget/nzbget/blob/master/nzbget.conf>
+          <https://github.com/nzbgetcom/nzbget/blob/develop/nzbget.conf>
           for details on supported values.
         '';
         example = {

@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.4.2.0";
+  version = "1.4.3.3";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-+ydv67uQkoofU3GrSJWosb99DrGDGs80z+hq9MpFIpA=";
+    hash = "sha256-bhbk2ayY4syyUXJcYesRlVFArAVhivTjELvM8uuNzEQ=";
   };
 
   prePatch = ''
@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
       --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
+
+    substituteInPlace external/vulkan-video-samples/src/cmake/FindVulkanSDK.cmake \
+      --replace-fail 'GIT_TAG main' 'GIT_TAG main FIND_PACKAGE_ARGS NAMES VulkanHeaders'
 
     chmod u+w -R external
   '';
@@ -118,9 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a external/vulkancts/modules/vulkan/deqp-vk $out/bin/
     cp -a external/vulkancts/modules/vulkan/vulkan $out/archive-dir/
     cp -a external/vulkancts/modules/vulkan/vk-default $out/
+  '';
 
+  postFixup = ''
+    patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/bin/deqp-vk
     wrapProgram $out/bin/deqp-vk \
-      --add-flags '--deqp-vk-library-path=${vulkan-loader}/lib/libvulkan.so' \
       --add-flags "--deqp-archive-dir=$out/archive-dir"
   '';
 

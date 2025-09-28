@@ -9,6 +9,7 @@
 
 let
   inherit (builtins) readFile;
+  inherit (lib.meta) hiPrio;
   inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule mkIf;
   inherit (lib.options)
     mkOption
@@ -51,7 +52,7 @@ let
         gnused
         jq
       ])
-      ++ optionals (cfg.efi.bootBuilderVerbosity == "info") (
+      ++ optionals (cfg.boot.builderVerbosity == "info") (
         with pkgs;
         [
           bat
@@ -146,6 +147,48 @@ in
         "path"
       ]
     )
+    (mkRenamedOptionModule
+      [
+        "virtualisation"
+        "xen"
+        "efi"
+        "bootBuilderVerbosity"
+      ]
+      [
+        "virtualisation"
+        "xen"
+        "boot"
+        "builderVerbosity"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "virtualisation"
+        "xen"
+        "bootParams"
+      ]
+      [
+        "virtualisation"
+        "xen"
+        "boot"
+        "params"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "virtualisation"
+        "xen"
+        "efi"
+        "path"
+      ]
+      [
+        "virtualisation"
+        "xen"
+        "boot"
+        "efi"
+        "path"
+      ]
+    )
   ];
 
   ## Interface ##
@@ -178,25 +221,24 @@ in
       };
     };
 
-    bootParams = mkOption {
-      default = [ ];
-      example = ''
-        [
-          "iommu=force:true,qinval:true,debug:true"
-          "noreboot=true"
-          "vga=ask"
-        ]
-      '';
-      type = listOf str;
-      description = ''
-        Xen Command Line parameters passed to Domain 0 at boot time.
-        Note: these are different from `boot.kernelParams`. See
-        the [Xen documentation](https://xenbits.xenproject.org/docs/unstable/misc/xen-command-line.html) for more information.
-      '';
-    };
-
-    efi = {
-      bootBuilderVerbosity = mkOption {
+    boot = {
+      params = mkOption {
+        default = [ ];
+        example = ''
+          [
+            "iommu=force:true,qinval:true,debug:true"
+            "noreboot=true"
+            "vga=ask"
+          ]
+        '';
+        type = listOf str;
+        description = ''
+          Xen Command Line parameters passed to Domain 0 at boot time.
+          Note: these are different from `boot.kernelParams`. See
+          the [Xen documentation](https://xenbits.xenproject.org/docs/unstable/misc/xen-command-line.html) for more information.
+        '';
+      };
+      builderVerbosity = mkOption {
         type = enum [
           "default"
           "info"
@@ -206,7 +248,7 @@ in
         default = "default";
         example = "info";
         description = ''
-          The EFI boot entry builder script should be called with exactly one of the following arguments in order to specify its verbosity:
+          The boot entry builder script should be called with exactly one of the following arguments in order to specify its verbosity:
 
           - `quiet` supresses all messages.
 
@@ -220,19 +262,33 @@ in
           This option does not alter the actual functionality of the script, just the number of messages printed when rebuilding the system.
         '';
       };
-
-      path = mkOption {
-        type = path;
-        default = "${cfg.package.boot}/${cfg.package.efi}";
-        defaultText = literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.efi}";
-        example = literalExpression "\${config.virtualisation.xen.package}/boot/efi/efi/nixos/xen-\${config.virtualisation.xen.package.version}.efi";
-        description = ''
-          Path to xen.efi. `pkgs.xen` is patched to install the xen.efi file
-          on `$boot/boot/xen.efi`, but an unpatched Xen build may install it
-          somewhere else, such as `$out/boot/efi/efi/nixos/xen.efi`. Unless
-          you're building your own Xen derivation, you should leave this
-          option as the default value.
-        '';
+      bios = {
+        path = mkOption {
+          type = path;
+          default = "${cfg.package.boot}/${cfg.package.multiboot}";
+          defaultText = literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.multiboot}";
+          example = literalExpression "\${config.virtualisation.xen.package}/boot/xen-\${config.virtualisation.xen.package.version}";
+          description = ''
+            Path to the Xen `multiboot` binary used for BIOS booting.
+            Unless you're building your own Xen derivation, you should leave this
+            option as the default value.
+          '';
+        };
+      };
+      efi = {
+        path = mkOption {
+          type = path;
+          default = "${cfg.package.boot}/${cfg.package.efi}";
+          defaultText = literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.efi}";
+          example = literalExpression "\${config.virtualisation.xen.package}/boot/efi/efi/nixos/xen-\${config.virtualisation.xen.package.version}.efi";
+          description = ''
+            Path to xen.efi. `pkgs.xen` is patched to install the xen.efi file
+            on `$boot/boot/xen.efi`, but an unpatched Xen build may install it
+            somewhere else, such as `$out/boot/efi/efi/nixos/xen.efi`. Unless
+            you're building your own Xen derivation, you should leave this
+            option as the default value.
+          '';
+        };
       };
     };
 
@@ -612,8 +668,9 @@ in
       {
         assertion =
           config.boot.loader.systemd-boot.enable
-          || (config.boot ? lanzaboote) && config.boot.lanzaboote.enable;
-        message = "Xen only supports booting on systemd-boot or Lanzaboote.";
+          || (config.boot ? lanzaboote) && config.boot.lanzaboote.enable
+          || config.boot.loader.limine.enable;
+        message = "Xen only supports booting on systemd-boot, Lanzaboote or Limine.";
       }
       {
         assertion = config.boot.initrd.systemd.enable;
@@ -639,7 +696,7 @@ in
       }
     ];
 
-    virtualisation.xen.bootParams =
+    virtualisation.xen.boot.params =
       optionals cfg.trace [
         "loglvl=all"
         "guest_loglvl=all"
@@ -692,17 +749,28 @@ in
       '';
 
       # Xen Bootspec extension. This extension allows NixOS bootloaders to
-      # fetch the `xen.efi` path and access the `cfg.bootParams` option.
+      # fetch the dom0 kernel paths and access the `cfg.boot.params` option.
       bootspec.extensions = {
+        # Bootspec extension v1 is deprecated, and will be removed in 26.05
+        # It is present for backwards compatibility
         "org.xenproject.bootspec.v1" = {
-          xen = cfg.efi.path;
-          xenParams = cfg.bootParams;
+          xen = cfg.boot.efi.path;
+          xenParams = cfg.boot.params;
+        };
+        # Bootspec extension v2 includes more detail,
+        # including supporting multiboot, and is the current supported
+        # bootspec extension
+        "org.xenproject.bootspec.v2" = {
+          efiPath = cfg.boot.efi.path;
+          multibootPath = cfg.boot.bios.path;
+          version = cfg.package.version;
+          params = cfg.boot.params;
         };
       };
 
       # See the `xenBootBuilder` script in the main `let...in` statement of this file.
       loader.systemd-boot.extraInstallCommands = ''
-        ${getExe xenBootBuilder} ${cfg.efi.bootBuilderVerbosity}
+        ${getExe xenBootBuilder} ${cfg.boot.builderVerbosity}
       '';
     };
 
@@ -730,7 +798,7 @@ in
     environment = {
       systemPackages = [
         cfg.package
-        cfg.qemu.package
+        (hiPrio cfg.qemu.package)
       ];
       etc =
         # Set up Xen Domain 0 configuration files.

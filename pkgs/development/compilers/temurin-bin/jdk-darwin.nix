@@ -24,4 +24,7 @@ in
 
   jdk-24 = common { sourcePerArch = sources.jdk.openjdk24; };
   jre-24 = common { sourcePerArch = sources.jre.openjdk24; };
+
+  jdk-25 = common { sourcePerArch = sources.jdk.openjdk25; };
+  jre-25 = common { sourcePerArch = sources.jre.openjdk25; };
 }

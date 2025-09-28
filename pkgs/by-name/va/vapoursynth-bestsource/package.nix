@@ -4,16 +4,16 @@
   fetchFromGitHub,
   meson,
   ninja,
-  cmake,
   pkg-config,
   vapoursynth,
   ffmpeg,
   xxHash,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth-bestsource";
-  version = "6";
+  version = "13";
 
   outputs = [
     "out"
@@ -25,19 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vapoursynth";
     repo = "bestsource";
     tag = "R${finalAttrs.version}";
-    hash = "sha256-ICkdIomlkHUdK6kMeui45fvUn4OMxSrP8svB2IN+GCg=";
+    hash = "sha256-c+FMFWICDS8Plj6GE2vvhWPmf56Vk10j41HUK1q20/U=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    cmake
     pkg-config
   ];
 
   buildInputs = [
     vapoursynth
-    ffmpeg
+    (ffmpeg.override { withLcms2 = true; })
     xxHash
   ];
 
@@ -45,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build \
       --replace-fail "vapoursynth_dep.get_variable(pkgconfig: 'libdir')" "get_option('libdir')"
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "R";
+    ignoredVersions = "*-RC*";
+  };
 
   meta = {
     description = "Wrapper library around FFmpeg that ensures sample and frame accurate access to audio and video";

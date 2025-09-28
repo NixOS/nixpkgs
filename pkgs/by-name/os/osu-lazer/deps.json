@@ -405,11 +405,6 @@
     "hash": "sha256-ke9rovup7UFVz2T6HYtHawwrs/XARLDQOwCysC2qDAs="
   },
   {
-    "pname": "Microsoft.DotNet.PlatformAbstractions",
-    "version": "2.0.3",
-    "hash": "sha256-qRoDjAl3I8hYH6tQw06UVn5cf55avtTCjRDUzjUJAgg="
-  },
-  {
     "pname": "Microsoft.Extensions.Configuration.Abstractions",
     "version": "9.0.2",
     "hash": "sha256-icRtfbi0nDRUYDErtKYx0z6A1gWo5xdswsSM6o4ozxc="
@@ -436,18 +431,8 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "8.0.0",
-    "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
-  },
-  {
-    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
     "version": "9.0.2",
     "hash": "sha256-WoTLgw/OlXhgN54Szip0Zpne7i/YTXwZ1ZLCPcHV6QM="
-  },
-  {
-    "pname": "Microsoft.Extensions.DependencyModel",
-    "version": "2.0.3",
-    "hash": "sha256-itpwRYzmJZUt2kYJrrcq2IOwqqOskdbE3HMmD8GV/jY="
   },
   {
     "pname": "Microsoft.Extensions.Features",
@@ -458,11 +443,6 @@
     "pname": "Microsoft.Extensions.Logging",
     "version": "9.0.2",
     "hash": "sha256-vPCb4ZoiwZUSGJIOhYiLwcZLnsd0ZZhny6KQkT88nI0="
-  },
-  {
-    "pname": "Microsoft.Extensions.Logging.Abstractions",
-    "version": "8.0.0",
-    "hash": "sha256-Jmddjeg8U5S+iBTwRlVAVLeIHxc4yrrNgqVMOB7EjM4="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
@@ -555,11 +535,6 @@
     "hash": "sha256-LZdDJkwQSVBLJfeE3SEckpi+EZcHIccHlhHoUxZ5FqE="
   },
   {
-    "pname": "NativeLibraryLoader",
-    "version": "1.0.13",
-    "hash": "sha256-ENubvwbFy0ZB8I88xHTRkkjG8lrQ98jQ33IQoe4rcaM="
-  },
-  {
     "pname": "NETStandard.Library",
     "version": "1.6.1",
     "hash": "sha256-iNan1ix7RtncGWC9AjAZ2sk70DoxOsmEOgQ10fXm4Pw="
@@ -581,8 +556,8 @@
   },
   {
     "pname": "NuGet.Versioning",
-    "version": "6.12.1",
-    "hash": "sha256-f/ejCuzCAwKs4N4Ec6yf2RovrhBT0nj0hRDP+03/Iy4="
+    "version": "6.14.0",
+    "hash": "sha256-DqdOJgsphKxSvqB8b60zNPCaiLfbiu3WnUJ/90feLrY="
   },
   {
     "pname": "NUnit",
@@ -651,13 +626,13 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2025.604.1",
-    "hash": "sha256-TnxNneBVR6YYuaUbU1sHewwVzy15qmCpudSopHol1tM="
+    "version": "2025.908.0",
+    "hash": "sha256-ywGPEtZqgeqgG7LJ459FfRy+JtCw9zChuYUHHY4QIcU="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
-    "version": "2024.809.1-nativelibs",
-    "hash": "sha256-F7xd66bCEDgEjYgqmx21lYde+ebCsX/E2fuqWXH4xyU="
+    "version": "2025.806.0-nativelibs",
+    "hash": "sha256-2oqo+sJvTnV3bTCLOlReOWTJpg0eI+g62Q+e2iXImeU="
   },
   {
     "pname": "ppy.osu.Framework.SourceGeneration",
@@ -666,8 +641,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2025.605.0",
-    "hash": "sha256-t9uNvlimF81LNECTBnhLidSmN8cOXi3Sn0rqI3na3zQ="
+    "version": "2025.911.0",
+    "hash": "sha256-N7CPME+A+tPpojOe7HN7Vz49VwtcmRKCJK4IIdY0kFs="
   },
   {
     "pname": "ppy.osuTK.NS20",
@@ -681,28 +656,28 @@
   },
   {
     "pname": "ppy.SDL3-CS",
-    "version": "2025.220.0",
-    "hash": "sha256-A43tJzQ779wQ76wkCxvZ39w3KapZwhUpKe1P4RcOvCQ="
+    "version": "2025.828.0",
+    "hash": "sha256-3+ShJIv4TJuzPAIF7uiwOXVyb+5EpCAuIz1Ff0dPdhA="
   },
   {
     "pname": "ppy.Veldrid",
-    "version": "4.9.62-gca0239da6b",
-    "hash": "sha256-mGlMQbp2/ewA7PzamEeMA1pbboC73iAIARhK4MPrwO4="
+    "version": "4.9.69-ga405fe8484",
+    "hash": "sha256-aFn5I5HofCfUPE9yf/uuKzYZgPEDA+40QxzCV5CPsfM="
   },
   {
     "pname": "ppy.Veldrid.MetalBindings",
-    "version": "4.9.62-gca0239da6b",
-    "hash": "sha256-8jkbU2QV4HV8RU1vnSNtP8kNEhDWbTb3Dr2cl8w/T6A="
+    "version": "4.9.69-ga405fe8484",
+    "hash": "sha256-PLwLXeFCje6Qj7Q1afeIFQJRuRPt2pKnrSqUeMOOtPU="
   },
   {
     "pname": "ppy.Veldrid.OpenGLBindings",
-    "version": "4.9.62-gca0239da6b",
-    "hash": "sha256-I81to2x5D4LlIJN80d5DbqcU0jPTVSPoc0tvL15YG6I="
+    "version": "4.9.69-ga405fe8484",
+    "hash": "sha256-l8XNsxVtLrzcq2R8TIjpLu+MNGglxjyk+Pxzo7lzvuY="
   },
   {
     "pname": "ppy.Veldrid.SPIRV",
-    "version": "1.0.15-gfbb03d21c2",
-    "hash": "sha256-rnl6+U4E3BJVYTWtEjOx7fDVcJJNBP8MOisoGVLT7vA="
+    "version": "1.0.15-g5911265ec3",
+    "hash": "sha256-XiA2gCiQzjsErPOF4TrbQBhnahFXHIVlsetlEOpPTeI="
   },
   {
     "pname": "ppy.Vk",
@@ -833,11 +808,6 @@
     "pname": "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl",
     "version": "4.3.2",
     "hash": "sha256-g9Uiikrl+M40hYe0JMlGHe/lrR0+nN05YF64wzLmBBA="
-  },
-  {
-    "pname": "runtime.native.System",
-    "version": "4.0.0",
-    "hash": "sha256-bmaM0ovT4X4aqDJOR255Yda/u3fmHZskU++lMnsy894="
   },
   {
     "pname": "runtime.native.System",
@@ -1016,8 +986,8 @@
   },
   {
     "pname": "SixLabors.ImageSharp",
-    "version": "3.1.7",
-    "hash": "sha256-jMD/FiIwW1kNhTI6hKig8/QFOO3eTQX/C22cSAcKBH4="
+    "version": "3.1.11",
+    "hash": "sha256-MlRF+3SGfahbsB1pZGKMOrsfUCx//hCo7ECrXr03DpA="
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",
@@ -1043,11 +1013,6 @@
     "pname": "StbiSharp",
     "version": "1.1.0",
     "hash": "sha256-oP64y/hYgoYo+heDFzmt6sWukTF0lDDFkB16eyoQfHE="
-  },
-  {
-    "pname": "System.AppContext",
-    "version": "4.1.0",
-    "hash": "sha256-v6YfyfrKmhww+EYHUq6cwYUMj00MQ6SOfJtcGVRlYzs="
   },
   {
     "pname": "System.AppContext",
@@ -1131,11 +1096,6 @@
   },
   {
     "pname": "System.Dynamic.Runtime",
-    "version": "4.0.11",
-    "hash": "sha256-qWqFVxuXioesVftv2RVJZOnmojUvRjb7cS3Oh3oTit4="
-  },
-  {
-    "pname": "System.Dynamic.Runtime",
     "version": "4.3.0",
     "hash": "sha256-k75gjOYimIQtLBD5NDzwwi3ZMUBPRW3jmc3evDMMJbU="
   },
@@ -1178,11 +1138,6 @@
     "pname": "System.IO.Compression.ZipFile",
     "version": "4.3.0",
     "hash": "sha256-WQl+JgWs+GaRMeiahTFUbrhlXIHapzcpTFXbRvAtvvs="
-  },
-  {
-    "pname": "System.IO.FileSystem",
-    "version": "4.0.1",
-    "hash": "sha256-4VKXFgcGYCTWVXjAlniAVq0dO3o5s8KHylg2wg2/7k0="
   },
   {
     "pname": "System.IO.FileSystem",
@@ -1441,11 +1396,6 @@
   },
   {
     "pname": "System.Runtime.InteropServices.RuntimeInformation",
-    "version": "4.0.0",
-    "hash": "sha256-5j53amb76A3SPiE3B0llT2XPx058+CgE7OXL4bLalT4="
-  },
-  {
-    "pname": "System.Runtime.InteropServices.RuntimeInformation",
     "version": "4.3.0",
     "hash": "sha256-MYpl6/ZyC6hjmzWRIe+iDoldOMW1mfbwXsduAnXIKGA="
   },
@@ -1616,8 +1566,8 @@
   },
   {
     "pname": "Velopack",
-    "version": "0.0.1053",
-    "hash": "sha256-YAOvvHDyazxqxQoZ7rDB3szkYnTq/zrzS9mXnpI+2jI="
+    "version": "0.0.1298",
+    "hash": "sha256-oaejrsFMKymGY8/irvB1LEQdIe8NYtZbc+/RWUaL4hk="
   },
   {
     "pname": "Vortice.D3DCompiler",

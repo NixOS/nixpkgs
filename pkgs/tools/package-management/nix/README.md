@@ -32,7 +32,7 @@ curl https://releases.nixos.org/nix/nix-$version/fallback-paths.nix > nixos/modu
 
 If you're updating `nixVersions.stable`, follow all the steps mentioned above, but use the **staging** branch for your pull request (or **staging-next** after coordinating with the people in matrix `#staging:nixos.org`)
 This is necessary because, at the end of the staging-next cycle, the NixOS tests are built through the [staging-next-small](https://hydra.nixos.org/jobset/nixos/staging-next-small) jobset.
-Especially nixos installer test are important to look at here.
+Especially NixOS installer tests are important to look at here.
 
 There is a script to update minor versions:
 

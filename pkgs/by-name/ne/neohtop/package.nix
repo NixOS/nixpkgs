@@ -31,9 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-t0REXcsy9XIIARiI7lkOc5lO/ZSL50KOUK+SMsXpjdM=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-nFWF1ER3vk1G/MBw8to+lDJAv6HJNobhdPXV0hVERFE=";
+  cargoPatches = [
+    # Remove when https://github.com/Abdenasser/neohtop/pull/187 is released
+    ./tauri-version.patch
+  ];
+  cargoHash = "sha256-fl/slVYr5RExI9ab8YeX2Q8mF+cnR1R1rUg5i11ao4M=";
 
   cargoRoot = "src-tauri";
 
@@ -62,6 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "NeoHtop";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ sandarukasa ];
   };
 })

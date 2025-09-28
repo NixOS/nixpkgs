@@ -19,18 +19,20 @@
   packaging,
 
   pytestCheckHook,
+  pytest-timeout,
+  numpydoc,
 }:
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.11.1";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
     repo = "nilearn";
     tag = version;
-    hash = "sha256-ZvodSRJkKwPwpYHOLmxAYIIv7f9AlrjmZS9KLPjz5rM=";
+    hash = "sha256-jUP/gUMUVveX8m2VbyilTsx5OppuYVXH1qKeEfEVajQ=";
   };
 
   postPatch = ''
@@ -39,8 +41,8 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    hatch-vcs
     hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -55,23 +57,19 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # https://github.com/nilearn/nilearn/issues/2608
-    "test_clean_confounds"
-
-    # [XPASS(strict)] invalid checks should fail
-    "test_check_estimator_invalid_group_sparse_covariance"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+    numpydoc
   ];
 
   # do subset of tests which don't fetch resources
-  pytestFlagsArray = [ "nilearn/connectome/tests" ];
+  enabledTestPaths = [ "nilearn/connectome/tests" ];
 
   meta = {
     description = "Module for statistical learning on neuroimaging data";
     homepage = "https://nilearn.github.io";
-    changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
+    changelog = "https://github.com/nilearn/nilearn/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

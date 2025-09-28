@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "trdl-client";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "trdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QqAVcATpxfjKEaluurVN9EylEGKNKWlBkE8KepIpjfo=";
+    hash = "sha256-/rhRsKlkRYQwN5IrFcOXiU12nEQMN75o2DPku5YPFe0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/client";

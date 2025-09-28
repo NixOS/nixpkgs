@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wit-bindgen";
-  version = "0.42.1";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wit-bindgen";
     rev = "v${version}";
-    hash = "sha256-zj+O8Rp/KXvDYCew0k5veBUokR91CGEIan398/mPY8w=";
+    hash = "sha256-PBvFa5BrgtKC8f999JJsCdFz34w/xZD57qBFW510oeI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-epvE6qSKVUudqHXPJG5mP2X7xlR5XSm3UWDzZK0gHyA=";
+  cargoHash = "sha256-5nz7+2pB5F63vvCecYpp3ExBDIqbRU3MwLNfmMdA2vE=";
 
   # Some tests fail because they need network access to install the `wasm32-unknown-unknown` target.
   # However, GitHub Actions ensures a proper build.

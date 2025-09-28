@@ -64,23 +64,23 @@ buildPythonPackage rec {
       pytest
       pytest-cov
       types-requests
-    ] ++ optional;
+    ]
+    ++ optional;
     dev = [ ipython ];
     docs = [
       sphinx
       sphinx-rtd-theme
     ];
-    json =
-      [
-        orjson
-        pandas
-        pydantic
-        pymongo
-      ]
-      ++ lib.optionals (pythonOlder "3.13") [
-        pint
-        torch
-      ];
+    json = [
+      orjson
+      pandas
+      pydantic
+      pymongo
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
+      pint
+      torch
+    ];
     multiprocessing = [ tqdm ];
     optional = dev ++ json ++ multiprocessing ++ serialization;
     serialization = [ msgpack ];

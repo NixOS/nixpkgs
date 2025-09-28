@@ -3,18 +3,17 @@
   fetchFromGitHub,
   unstableGitUpdater,
   stdenvNoCC,
-  ...
 }:
 
 stdenvNoCC.mkDerivation (self: {
   pname = "alacritty-theme";
-  version = "0-unstable-2025-05-15";
+  version = "0-unstable-2025-08-18";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "59a96ef4c734f97a1aadaa619b31cc1ca90a0fbc";
-    hash = "sha256-7Qu00+odZblXqN9e3uVZWfIWySFT0IiwIyK5wEbtReE=";
+    rev = "40e0c6c8690d1c62f58718fcef8a48eb6077740b";
+    hash = "sha256-guNbnnSyENom6SkwN2Zjn3I1KnV5F3hbvYS1ns4q4uE=";
     sparseCheckout = [ "themes" ];
   };
 

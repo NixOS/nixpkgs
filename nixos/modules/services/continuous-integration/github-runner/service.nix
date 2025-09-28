@@ -59,7 +59,8 @@
         environment = {
           HOME = workDir;
           RUNNER_ROOT = stateDir;
-        } // cfg.extraEnvironment;
+        }
+        // cfg.extraEnvironment;
 
         path =
           (with pkgs; [

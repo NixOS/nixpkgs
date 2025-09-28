@@ -62,5 +62,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/gboeing/osmnx/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
+    teams = [ lib.teams.geospatial ];
   };
 }

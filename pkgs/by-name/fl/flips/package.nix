@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   libdivsufsort,
   pkg-config,
 
@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
   pname = "flips";
   version = "198";
 
-  src = fetchFromGitHub {
-    owner = "Alcaro";
+  src = fetchFromGitea {
+    domain = "git.disroot.org";
+    owner = "Sir_Walrus";
     repo = "Flips";
     tag = "v${version}";
     hash = "sha256-zYGDcUbtzstk1sTKgX2Mna0rzH7z6Dic+OvjZLI1umI=";
@@ -24,14 +25,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optional withGTK3 wrapGAppsHook3;
+  ]
+  ++ lib.optional withGTK3 wrapGAppsHook3;
 
-  buildInputs =
-    [
-      libdivsufsort
-    ]
-    ++ lib.optional withGTK3 gtk3
-    ++ lib.optional (withGTK3 && stdenv.hostPlatform.isDarwin) llvmPackages.openmp;
+  buildInputs = [
+    libdivsufsort
+  ]
+  ++ lib.optional withGTK3 gtk3
+  ++ lib.optional (withGTK3 && stdenv.hostPlatform.isDarwin) llvmPackages.openmp;
 
   patches = [ ./use-system-libdivsufsort.patch ];
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Patcher for IPS and BPS files";
-    homepage = "https://github.com/Alcaro/Flips";
+    homepage = "https://git.disroot.org/Sir_Walrus/Flips";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;

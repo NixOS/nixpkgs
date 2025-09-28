@@ -12,7 +12,7 @@ in
 {
   name = "multipass";
 
-  meta.maintainers = [ lib.maintainers.jnsgruk ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { lib, ... }:

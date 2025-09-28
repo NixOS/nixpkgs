@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "weblate-schemas";
-  version = "2025.1";
+  version = "2025.5";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "weblate_schemas";
     inherit version;
-    hash = "sha256-R2G5s51XmZfc3qewNGv5D9K03pvCFeod4RH4VtY9cAA=";
+    hash = "sha256-ZhFF3UD7lX/KXVDZFOn+Gc1w/cpzzVYVrbpVeJ9/wiE=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +35,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fedora-messaging
     pytestCheckHook
-  ] ++ jsonschema.optional-dependencies.format;
+  ]
+  ++ jsonschema.optional-dependencies.format;
 
   pythonImportsCheck = [ "weblate_schemas" ];
 

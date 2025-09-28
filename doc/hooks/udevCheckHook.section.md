@@ -2,7 +2,7 @@
 
 The `udevCheckHook` derivation adds `udevCheckPhase` to the [`preInstallCheckHooks`](#ssec-installCheck-phase),
 which finds all udev rules in all outputs and verifies them using `udevadm verify --resolve-names=never --no-style`.
-It should be used in any package that has udev rules outputs to ensure the rules are and stay valid.
+It should be used in any package that has udev rules outputs to ensure the rules are and remain valid.
 
 The hook runs in `installCheckPhase`, requiring `doInstallCheck` is enabled for the hook to take effect:
 ```nix
@@ -16,9 +16,7 @@ The hook runs in `installCheckPhase`, requiring `doInstallCheck` is enabled for 
 stdenv.mkDerivation (finalAttrs: {
   # ...
 
-  nativeInstallCheckInputs = [
-    udevCheckHook
-  ];
+  nativeInstallCheckInputs = [ udevCheckHook ];
   doInstallCheck = true;
 
   # ...

@@ -12,14 +12,19 @@
   (
     finalAttrs: _: {
       pname = "chatterino2";
-      version = "2.5.3";
+      version = "2.5.4";
 
       src = fetchFromGitHub {
         owner = "Chatterino";
         repo = "chatterino2";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-W2sqlqL6aa68aQ3nE161G64x7K7p8iByX03g1dseQbs=";
+        hash = "sha256-eozT3Lfra4i+q3pCxH0Z1v/3Y/FB5yJc/88tA90hTzI=";
         fetchSubmodules = true;
+        leaveDotGit = true;
+        postFetch = ''
+          git -C $out rev-parse --short HEAD > $out/GIT_HASH
+          find "$out" -name .git -print0 | xargs -0 rm -rf
+        '';
       };
 
       passthru = {
