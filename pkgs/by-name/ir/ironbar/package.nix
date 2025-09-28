@@ -22,6 +22,8 @@
   luajit,
   luajitPackages,
   libpulseaudio,
+  libinput,
+  libevdev,
   features ? [ ],
   systemd,
 }:
@@ -58,7 +60,11 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals (hasFeature "http") [ openssl ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
   ++ lib.optionals (hasFeature "cairo") [ luajit ]
-  ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ];
+  ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ]
+  ++ lib.optionals (hasFeature "keyboard") [
+    libinput
+    libevdev
+  ];
 
   nativeBuildInputs = [
     pkg-config
