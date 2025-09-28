@@ -108,7 +108,6 @@ let
       inherit mpi mpiSupport;
       cppSupport = !mpiSupport;
     };
-    openvdb = self.callPackage openvdb.override { };
     netcdf = self.callPackage netcdf.override { };
     catalyst = self.callPackage catalyst.override { };
     adios2 = self.callPackage adios2.override { };
@@ -156,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     openturns
     libarchive
     libGL
-    vtkPackages.openvdb
+    openvdb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libXfixes
