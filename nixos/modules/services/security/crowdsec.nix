@@ -526,7 +526,6 @@ in
       '';
 
       scriptArray = [
-        "set -euo pipefail"
         "mkdir -p '${hubDir}'"
         "${lib.getExe cscli} hub update"
       ]
