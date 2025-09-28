@@ -137,8 +137,8 @@ let
 
       postInstall =
         let
-          cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
-          preservedNixVariables = [
+          cLibsFlags = (map (l: "-H:CLibraryPath=${l}/lib") cLibs);
+          preservedNixVarFlags = [
             "-ENIX_BINTOOLS"
             "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
             "-ENIX_BUILD_CORES"
@@ -161,7 +161,6 @@ let
             "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
             "-ENIX_APPLE_SDK_VERSION"
           ];
-          preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
         in
         ''
           # jni.h expects jni_md.h to be in the header search path.
@@ -182,7 +181,7 @@ let
 
           wrapProgram $out/bin/native-image \
             --prefix PATH : ${binPath} \
-            ${toString (cLibsAsFlags ++ preservedNixVariablesAsFlags)}
+            --add-flags "${toString (cLibsFlags ++ preservedNixVarFlags)}"
         '';
 
       preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
