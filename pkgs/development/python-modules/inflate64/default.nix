@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "inflate64";
-  version = "1.0.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "miurahr";
     repo = "inflate64";
     tag = "v${version}";
-    hash = "sha256-qYTkL37IzvrhYYwj6i6X8WRSQxprNKgBnQEYRnztzjA=";
+    hash = "sha256-Ytz+QbztpNm7cbUqWu0rlYzk3Q3qyg0evikCV22+mXo=";
   };
 
   build-system = [
