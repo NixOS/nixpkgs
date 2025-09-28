@@ -7,6 +7,7 @@
   perl,
   gdb,
   writeScript,
+  gcc-unwrapped,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +51,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdb
     perl
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [ gcc-unwrapped ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [
