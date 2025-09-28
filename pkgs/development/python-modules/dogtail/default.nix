@@ -15,7 +15,7 @@
   wrapGAppsHook3,
   fetchPypi,
   setuptools,
-  gnome-ponytail-daemon,
+  ponytail,
 }:
 
 buildPythonPackage rec {
@@ -33,14 +33,6 @@ buildPythonPackage rec {
     sha256 = "sha256-VURwc8li710YRdEZcuIayVeSQEkN6CtON3C5qMOk+zs=";
   };
 
-  patchPhase = ''
-    echo 'dependencies = [
-      "gi",
-      "pygobject3",
-    ]' >> pyproject.toml
-    cat pyproject.toml
-  '';
-
   patches = [ ./nix-support.patch ];
 
   nativeBuildInputs = [
@@ -49,14 +41,15 @@ buildPythonPackage rec {
     xvfb-run
     wrapGAppsHook3
     setuptools
-  ]; # for setup hooks
+  ];
+
   propagatedBuildInputs = [
-    gnome-ponytail-daemon
     at-spi2-core
     gtk3
     pygobject3
     pyatspi
     pycairo
+    ponytail
   ];
 
   checkPhase = ''
