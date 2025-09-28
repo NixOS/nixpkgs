@@ -26,7 +26,10 @@ buildGoModule rec {
   ldflags = [ "-X main.Build=${version}" ];
 
   passthru.tests = {
-    inherit (nixosTests.nebula) connectivity;
+    inherit (nixosTests.nebula)
+      connectivity
+      reload
+      ;
   };
 
   meta = {
