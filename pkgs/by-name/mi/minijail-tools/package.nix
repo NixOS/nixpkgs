@@ -1,8 +1,8 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   pkgsBuildTarget,
-  python,
+  pkgsBuildHost,
   minijail,
 }:
 
@@ -10,7 +10,7 @@ let
   targetClang = pkgsBuildTarget.targetPackages.clangStdenv.cc;
 in
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   format = "setuptools";
   pname = "minijail-tools";
   inherit (minijail) version src;
@@ -28,7 +28,7 @@ buildPythonApplication {
     make libconstants.gen.c libsyscalls.gen.c
     ${targetClang}/bin/${targetClang.targetPrefix}cc -S -emit-llvm \
         libconstants.gen.c libsyscalls.gen.c
-    ${python.pythonOnBuildForHost.interpreter} tools/generate_constants_json.py \
+    ${pkgsBuildHost.python3.interpreter} tools/generate_constants_json.py \
         --output constants.json \
         libconstants.gen.ll libsyscalls.gen.ll
   '';

@@ -2,11 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python,
-  pyaes,
-  pycrypto,
-  uvloop,
-  wrapPython,
+  python3Packages,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tQ6e1Y25V4qAqBvhhKdirSCYzeALfH+PhNtcHTuBurs=";
   };
 
-  nativeBuildInputs = [ wrapPython ];
-  pythonPath = [
+  nativeBuildInputs = with python3Packages; [ wrapPython ];
+  pythonPath = with python3Packages; [
     pyaes
     pycrypto
     uvloop
@@ -36,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Async MTProto proxy for Telegram";
     license = lib.licenses.mit;
     homepage = "https://github.com/alexbers/mtprotoproxy";
-    platforms = python.meta.platforms;
+    platforms = python3.meta.platforms;
     maintainers = [ ];
     mainProgram = "mtprotoproxy";
   };

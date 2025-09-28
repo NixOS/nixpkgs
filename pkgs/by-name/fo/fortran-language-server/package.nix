@@ -1,18 +1,22 @@
 {
   lib,
   fetchPypi,
-  buildPythonApplication,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "fortran-language-server";
   version = "1.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7Dkh7yPX4rULkzfJFxg47YxrCaxuHk+k3TOINHS9T5A=";
+    hash = "sha256-7Dkh7yPX4rULkzfJFxg47YxrCaxuHk+k3TOINHS9T5A=";
   };
+
+  build-system = [
+    python3Packages.setuptools
+  ];
 
   checkPhase = "$out/bin/fortls --help 1>/dev/null";
   pythonImportsCheck = [ "fortls" ];
