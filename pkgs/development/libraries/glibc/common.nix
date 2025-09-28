@@ -290,10 +290,10 @@ stdenv.mkDerivation (
             sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
         done
 
-        mkdir ../build
-        cd ../build
+        mkdir build
+        cd build
 
-        configureScript="`pwd`/../$sourceRoot/configure"
+        configureScript="`pwd`/../configure"
       ''
       + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
         sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
