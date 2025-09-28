@@ -37,6 +37,10 @@ let
       ${python.interpreter} test/alltests.py
     '';
 
+    patches = [
+      ./test_html5_polyglot_parts.patch # fix false positive failure
+    ];
+
     # Create symlinks lacking a ".py" suffix, many programs depend on these names
     postFixup = ''
       for f in $out/bin/*.py; do

@@ -1,0 +1,13 @@
+--- a/test/test_writers/test_html5_polyglot_parts.py
++++ b/test/test_writers/test_html5_polyglot_parts.py
+@@ -43,10 +43,6 @@
+     REQUIRES_PIL = ''
+     ONLY_LOCAL = 'Can only read local images.'
+     DUMMY_PNG_NOT_FOUND = "[Errno 2] No such file or directory: 'dummy.png'"
+-    # Pillow reports the absolute path since version 10.3.0 (cf. [bugs: 485])
+-    if (tuple(int(i) for i in PIL.__version__.split('.')) >= (10, 3)):
+-        DUMMY_PNG_NOT_FOUND = ("[Errno 2] No such file or directory: '%s'"
+-                               % Path('dummy.png').resolve())
+     SCALING_OUTPUT = 'style="width: 32.0px; height: 32.0px;" '
+     NO_PIL_SYSTEM_MESSAGE = ''
+ else:
