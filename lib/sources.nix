@@ -50,6 +50,7 @@ let
             || baseName == ".hg"
             || baseName == ".jj"
             || baseName == ".pijul"
+            || baseName == "_darcs"
           )
       )
       ||
