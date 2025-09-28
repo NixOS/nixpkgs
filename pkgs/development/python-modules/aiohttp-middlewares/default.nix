@@ -7,7 +7,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiohttp-middlewares";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "playpauseandstop";
@@ -57,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of useful middlewares for aiohttp.web applications";
     homepage = "https://github.com/playpauseandstop/aiohttp-middlewares";
-    changelog = "https://github.com/playpauseandstop/aiohttp-middlewares/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/playpauseandstop/aiohttp-middlewares/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
