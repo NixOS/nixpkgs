@@ -8,11 +8,12 @@
   perl,
   stdenv,
   writeShellScript,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
-  version = "8.12.1";
+  version = "8.13.0";
   outputs = [
     "out"
     "doc"
@@ -21,12 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yTwndQ43aBCned7iKPZm70zCC3zMapf2GXtornjiZos=";
+    # This hash was published on the mailing list as nncp-8.13.0.tar.xz.meta4.
+    sha256 = "8ce3680e98005198d8975e031760b3a9b33be6d2d61844c799f778ca233d05f4";
   };
 
   nativeBuildInputs = [
     go
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Build parameters
   CFGPATH = cfgPath;
@@ -39,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./build
     runHook postBuild
   '';
+
+  doInstallCheck = true;
+  versionCheckProgram = "${builtins.placeholder "out"}/bin/nncp";
 
   installPhase = ''
     runHook preInstall
