@@ -204,6 +204,20 @@ let
   self = stdenv.mkDerivation (
     finalAttrs:
     let
+      getFinalPassthru =
+        let
+          pos = unsafeGetAttrPos "passthru" finalAttrs;
+        in
+        attrName:
+        finalAttrs.passthru.${attrName} or (throw (
+          ''
+            ${finalAttrs.name}: passthru.${attrName} missing after overrideAttrs overriding.
+          ''
+          + optionalString (pos != null) ''
+            Last overridden at ${pos.file}:${toString pos.line}
+          ''
+        ));
+
       format' =
         assert (pyproject != null) -> (format == null);
         if pyproject != null then
