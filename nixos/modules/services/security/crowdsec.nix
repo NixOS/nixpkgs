@@ -15,6 +15,7 @@ let
   notificationsDir = "${confDir}/notifications";
   pluginDir = "${confDir}/plugins";
   parsersDir = "${confDir}/parsers";
+
   localPostOverflowsDir = "${confDir}/postoverflows";
   localPostOverflowsS01WhitelistDir = "${localPostOverflowsDir}/s01-whitelist";
   localScenariosDir = "${confDir}/scenarios";
@@ -141,10 +142,30 @@ in
               Additional settings for the main CrowdSec configuration file.
 
               Refer to the defaults at <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
+
+              See here for possible values: <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#configuration-directives>.
             '';
-            type = format.type;
+            type = lib.types.submodule {
+              freeformType = format.type;
+            };
             default = { };
+            example = {
+              common = {
+                log_level = "info";
+              };
+
+              api = {
+                client = {
+                  credentials_path = "/var/lib/crowdsec/local_api_credentials.yaml";
+                };
+                server = {
+                  enable = false;
+                  online_client.credentials_path = "/var/lib/crowdsec/online_api_credentials.yaml";
+                };
+              };
+            };
           };
+
           simulation = lib.mkOption {
             type = format.type;
             default = {
@@ -452,6 +473,7 @@ in
   config =
     let
       cfg = config.services.crowdsec;
+
       configFile = format.generate "config.yaml" cfg.settings.general;
       simulationFile = format.generate "simulation.yaml" cfg.settings.simulation;
       consoleFile = format.generate "console.yaml" cfg.settings.console.configuration;
