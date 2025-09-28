@@ -44,8 +44,6 @@
   cgns,
   adios2,
   libLAS,
-  libgeotiff,
-  laszip_2,
   gdal,
   pdal,
   alembic,
@@ -139,8 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libLAS
-    libgeotiff
-    laszip_2
     gdal
     pdal
     alembic
@@ -223,11 +219,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  env = {
-    NIX_LDFLAGS = "-L${lib.getLib libmysqlclient}/lib/mariadb";
-  };
-
   cmakeFlags = [
+    # During installPhase, keep rpath that came from target_link_libraries() of imported targets.
+    # Typically libgeotiff,liblaszip propagated from liblas and libmariadb found by pkg-config.
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
     # Required for locating the findOpenVDB.cmake module
     # TODO: Add a setup hook in openvdb to append CMAKE_MODULE_PATH to cmakeFlagsArray
     (lib.cmakeFeature "CMAKE_MODULE_PATH" "${lib.getDev openvdb}/lib/cmake/OpenVDB")
