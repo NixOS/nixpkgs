@@ -32,7 +32,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Infisical/python-sdk-official";
     description = "Infisical Python SDK";
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artur-sannikov ];
   };
 }

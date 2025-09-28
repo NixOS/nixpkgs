@@ -1150,6 +1150,7 @@ mapAliases {
   ### H ###
 
   hacksaw = throw "'hacksaw' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  hacpack = throw "hacpack has been removed from nixpkgs, as it has been taken down upstream"; # added 2025-09-26
   haka = throw "haka has been removed because it failed to build and was unmaintained for 9 years"; # Added 2025-03-11
   hardinfo = throw "'hardinfo' has been removed as it was abandoned upstream. Consider using 'hardinfo2' instead."; # added 2025-04-17
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
@@ -1236,6 +1237,7 @@ mapAliases {
 
   ### K ###
 
+  k2pdfopt = throw "'k2pdfopt' has been removed from nixpkgs as it was broken"; # Added 2025-09-27
   k3s_1_26 = throw "'k3s_1_26' has been removed from nixpkgs as it has reached end of life"; # Added 2024-05-20
   k3s_1_27 = throw "'k3s_1_27' has been removed from nixpkgs as it has reached end of life on 2024-06-28"; # Added 2024-06-01
   k3s_1_28 = throw "'k3s_1_28' has been removed from nixpkgs as it has reached end of life"; # Added 2024-12-15
