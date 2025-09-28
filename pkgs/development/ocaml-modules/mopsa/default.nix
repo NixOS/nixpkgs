@@ -5,7 +5,7 @@
   clang,
   libclang,
   libllvm,
-  flint3,
+  flint,
   mpfr,
   pplite,
   ocaml,
@@ -39,7 +39,7 @@ buildDunePackage rec {
   buildInputs = [
     arg-complete
     camlidl
-    flint3
+    flint
     libclang
     mpfr
     pplite

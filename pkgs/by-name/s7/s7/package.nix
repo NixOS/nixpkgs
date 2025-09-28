@@ -3,7 +3,7 @@
   fetchFromGitLab,
   stdenv,
 
-  flint3,
+  flint,
   gmp,
   libmpc,
   mpfr,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs =
-    lib.optional withArb flint3
+    lib.optional withArb flint
     ++ lib.optionals withGMP [
       gmp
       mpfr
