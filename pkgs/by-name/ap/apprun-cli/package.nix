@@ -23,7 +23,14 @@ buildGoModule rec {
     "-w"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      # Until a stable version is released, v0 tags are incorrectly recognized as the latest,
+      # so specify minor releases
+      "^v0.([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "CLI for sakura AppRun";
