@@ -71,7 +71,6 @@ let
             syncthing-guiPassword
             syncthing-guiPasswordFile
             syncthing-init
-            syncthing-many-devices
             syncthing-no-settings
             syncthing-relay
             ;
