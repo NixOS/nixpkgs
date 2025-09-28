@@ -7,12 +7,13 @@
   ninja,
   fetchFromGitLab,
   pkg-config,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ponytail";
   version = "0.0.12-dev";
-  format = "other";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -22,10 +23,19 @@ buildPythonPackage rec {
     hash = "sha256-0DvrYN/UP7SFNcVeh+3nuBUumiizFS+TAjFApu1oIIM=";
   };
 
-  nativeBuildInputs = [
+  patchPhase = ''
+    echo '
+[project]
+name = "ponytail"
+version = "0.0.12-dev"
+    ' >> pyproject.toml
+    cat pyproject.toml
+  '';
+
+  build-system = [
     meson
     ninja
-    pkg-config
+    setuptools
   ];
 
   propagatedBuildInputs = [

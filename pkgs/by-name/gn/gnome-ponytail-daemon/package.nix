@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-0DvrYN/UP7SFNcVeh+3nuBUumiizFS+TAjFApu1oIIM=";
   };
 
-   mesonFlags = [
+  mesonFlags = [
     "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
   ];
 
