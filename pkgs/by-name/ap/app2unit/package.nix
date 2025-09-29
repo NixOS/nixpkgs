@@ -6,14 +6,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "app2unit";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-M2sitlrQNSLthSaDH+R8gUcZ8i+o1ktf2SB/vvjyJEI=";
   };
 
@@ -54,4 +54,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ fazzi ];
     platforms = lib.platforms.linux;
   };
-}
+})
