@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.31";
+  version = "0.6.32";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-Pv+2+j5S4jokGYHGSewk33Vmf41XJj8CwyKYLMG2EWA=";
+    hash = "sha256-+P/IjELE1G2Fm8OwS5l7k78f78s/o1/Dy945aw+lfQw=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-HBmhRzWY7lIl3OScIlwSj/JJUlVcgFvXNHbw4jJRbl8=";
+    npmDepsHash = "sha256-BcSDzLg2voHyUz4cnXQ0KRNSbLCsCwJ1itEJSbfAQhU=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [

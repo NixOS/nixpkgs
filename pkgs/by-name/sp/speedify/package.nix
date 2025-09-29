@@ -7,13 +7,13 @@
   net-tools,
   autoPatchelfHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "speedify";
-  version = "15.6.4-12495";
+  version = "15.8.2-12611";
 
   src = fetchurl {
-    url = "https://apt.connectify.me/pool/main/s/speedify/speedify_${version}_amd64.deb";
-    hash = "sha256-b8J7JqVxuRREC16DeKD7hOBX4IZMbJPLArLmPtnDUB4=";
+    url = "https://apt.connectify.me/pool/main/s/speedify/speedify_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-61GQZkXBe3EQpOUODpL60SCHJO0FGqvpL9xFn+q+kPs=";
   };
 
   nativeBuildInputs = [
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ zahrun ];
   };
-}
+})
