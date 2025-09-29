@@ -79,6 +79,7 @@
       && !isAarch32
       && !hostPlatform.isLoongArch64
       && !hostPlatform.isRiscV
+      && !(hostPlatform.isPower && hostPlatform.isBigEndian)
       && hostPlatform == buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
