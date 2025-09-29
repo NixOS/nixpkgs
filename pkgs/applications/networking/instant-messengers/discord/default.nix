@@ -161,6 +161,3 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
     }
   )
 )
-// {
-  supportedSystems = builtins.attrNames variants;
-}
