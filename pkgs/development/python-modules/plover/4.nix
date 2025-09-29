@@ -3,36 +3,27 @@
   config,
   stdenv,
   plover,
-  buildPythonPackage ? python3Packages.buildPythonPackage,
+  buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
   versionCheckHook,
-  python3Packages,
-  libsForQt5,
+  appdirs,
+  babel,
+  evdev,
+  mock,
+  pyqt5,
+  pyserial,
+  pytestCheckHook,
+  pytest-qt,
+  plover-stroke,
+  rtf-tokenize,
+  setuptools,
+  wcwidth,
+  wheel,
+  xlib,
+  wrapQtAppsHook,
 }:
 
-let
-  inherit (python3Packages)
-    buildPythonPackage
-    appdirs
-    babel
-    evdev
-    mock
-    pyqt5
-    pyserial
-    pytestCheckHook
-    pytest-qt
-    plover-stroke
-    rtf-tokenize
-    setuptools
-    wcwidth
-    wheel
-    xlib
-    ;
-  inherit (libsForQt5)
-    wrapQtAppsHook
-    ;
-in
 buildPythonPackage rec {
   pname = "plover";
   version = "4.0.2";

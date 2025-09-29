@@ -12172,6 +12172,10 @@ self: super: with self; {
 
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
 
+  plover_4 = callPackage ../development/python-modules/plover/4.nix {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
   pluggy = callPackage ../development/python-modules/pluggy { };
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
