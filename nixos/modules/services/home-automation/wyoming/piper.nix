@@ -190,7 +190,7 @@ in
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            ProcSubset = "pid";
+            ProcSubset = "all"; # for onnxruntime, which queries cpuinfo
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
