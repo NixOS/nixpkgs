@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iproute2mac";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "brona";
     repo = "iproute2mac";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-hmSqJ2gc0DOXUuFrp1ZG8usjFdo07zjV/1JLs5r/E04=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aemeZnZlnmIKdLz5Myjn51dYTvfovFPQeytJbNxbI4E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
