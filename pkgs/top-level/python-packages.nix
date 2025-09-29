@@ -12108,6 +12108,7 @@ self: super: with self; {
 
   plover = callPackage ../development/python-modules/plover {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
+    pyqt = self.pyqt5;
   };
 
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
