@@ -1,16 +1,17 @@
 {
   qtModule,
   qtbase,
+  qtshadertools,
   stdenv,
   lib,
-  pkgsBuildBuild,
 }:
 
 qtModule {
   pname = "qtshadertools";
   propagatedBuildInputs = [ qtbase ];
-  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
-  ];
+  # When cross building, qtshadertools depends on tools from the host version of itself
+  propagatedNativeBuildInputs = lib.optional (
+    !stdenv.buildPlatform.canExecute stdenv.hostPlatform
+  ) qtshadertools;
   meta.mainProgram = "qsb";
 }

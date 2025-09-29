@@ -1,0 +1,13 @@
+diff --git a/cmake/QtToolHelpers.cmake b/cmake/QtToolHelpers.cmake
+index a7e1842c..ee9406ff 100644
+--- a/cmake/QtToolHelpers.cmake
++++ b/cmake/QtToolHelpers.cmake
+@@ -723,6 +723,8 @@ function(qt_internal_find_tool out_var target_name tools_target)
+         endif()
+         set(CMAKE_PREFIX_PATH "${qt_host_path_cmake_dir_absolute}")
+ 
++				list(PREPEND CMAKE_PREFIX_PATH "${_qt_additional_host_packages_prefix_paths}")
++
+         # Look for tools in additional host Qt installations. This is done for conan support where
+         # we have separate installation prefixes per package. For simplicity, we assume here that
+         # all host Qt installations use the same value of INSTALL_LIBDIR.

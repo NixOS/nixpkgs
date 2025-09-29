@@ -3,12 +3,13 @@
   qtbase,
   qtlanguageserver,
   qtshadertools,
+  qtdeclarative,
   qtsvg,
   openssl,
   darwin,
   stdenv,
   lib,
-  pkgsBuildBuild,
+  pkgsBuildHost,
   replaceVars,
 }:
 
@@ -26,6 +27,12 @@ qtModule {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
+  ];
+
+  # When cross building, qtdeclarative depends on tools from the host version of itself
+  propagatedNativeBuildInputs = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    qtdeclarative
+    qtshadertools
   ];
 
   patches = [
@@ -51,13 +58,8 @@ qtModule {
     '';
 
   cmakeFlags = [
-    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"
     # for some reason doesn't get found automatically on Darwin
-    "-DPython_EXECUTABLE=${lib.getExe pkgsBuildBuild.python3}"
-  ]
-  # Conditional is required to prevent infinite recursion during a cross build
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
+    "-DPython_EXECUTABLE=${lib.getExe pkgsBuildHost.python3}"
   ];
 
   meta.maintainers = with lib.maintainers; [
