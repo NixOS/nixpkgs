@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blst";
-  version = "0.3.15";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "supranational";
     repo = "blst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q9/zGN93TnJt2c8YvSaURstoxT02ts3nVkO5V08m4TI=";
+    hash = "sha256-wQ5dHFnYqrWC4vl+7OJ/utcuTXdBtN26q0OsNPW0kfs=";
   };
 
   buildPhase = ''
