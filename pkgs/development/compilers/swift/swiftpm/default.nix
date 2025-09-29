@@ -23,7 +23,11 @@
 
 let
 
-  inherit (swift) swiftOs swiftArch swiftModuleSubdir swiftStaticModuleSubdir;
+  inherit (swift)
+    swiftOs
+    swiftModuleSubdir
+    swiftStaticModuleSubdir
+    ;
   sharedLibraryExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
   sources = callPackage ../sources.nix { };
