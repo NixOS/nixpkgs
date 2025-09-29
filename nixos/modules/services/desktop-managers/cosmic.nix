@@ -72,6 +72,7 @@ in
     environment.pathsToLink = [
       "/share/backgrounds"
       "/share/cosmic"
+      "/share/cosmic-layouts"
     ];
     environment.systemPackages = utils.removePackagesByName (
       corePkgs
