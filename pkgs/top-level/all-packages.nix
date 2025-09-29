@@ -13774,8 +13774,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  orthorobot = callPackage ../games/orthorobot { love = love_0_10; };
-
   papermcServers = callPackages ../games/papermc { };
 
   papermc = papermcServers.papermc;
