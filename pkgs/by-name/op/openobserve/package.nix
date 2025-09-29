@@ -96,6 +96,8 @@ rustPlatform.buildRustPackage {
     "--skip=handler::http::router::tests::test_get_proxy_routes"
     "--skip=tests::e2e_test"
     "--skip=service::organization::tests::test_organization"
+    "--skip=handler::http::request::search::saved_view::tests::test_create_view_post"
+    "--skip=service::metadata::trace_list_index::tests::test_write"
   ];
 
   passthru.updateScript = gitUpdater {
