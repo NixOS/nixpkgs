@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       rm -f check/check-requires-private check/check-gtk check/missing
     '';
 
-  autoreconfFlags = lib.optional stdenv.hostPlatform.isCygwin "glib";
+  autoreconfFlags = if stdenv.hostPlatform.isCygwin then "glib" else null;
 
   nativeBuildInputs =
     # required for cygwin patch
