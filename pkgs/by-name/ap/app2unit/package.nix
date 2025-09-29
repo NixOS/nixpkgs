@@ -5,6 +5,7 @@
   scdoc,
   fetchFromGitHub,
   nix-update-script,
+  installShellFiles,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "app2unit";
@@ -19,7 +20,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  nativeBuildInputs = [ scdoc ];
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+  ];
 
   buildPhase = ''
     scdoc < app2unit.1.scd > app2unit.1
@@ -27,6 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     install -Dt $out/bin app2unit
+    installManPage app2unit.1
 
     for link in \
       app2unit-open \
