@@ -24,16 +24,16 @@ let
   inherit (_cuda.lib)
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
-    _evaluateAssertions
+    _mkFailedAssertionsString
     getRedistSystem
     mkVersionedName
     ;
   inherit (lib)
-    addErrorContext
     assertMsg
     extendDerivation
     filter
     findFirst
+    flip
     intersectLists
     pipe
     range
@@ -41,6 +41,7 @@ let
     subtractLists
     toIntBase10
     versionAtLeast
+    versionOlder
     ;
   inherit (lib.versions) major;
 
@@ -68,7 +69,11 @@ let
     hostNixSystem = stdenv.hostPlatform.system;
 
     # The Nix system of the host platform for the CUDA redistributable.
-    hostRedistSystem = getRedistSystem passthruExtra.hasJetsonCudaCapability stdenv.hostPlatform.system;
+    hostRedistSystem = getRedistSystem {
+      inherit (passthruExtra) cudaCapabilities;
+      inherit cudaMajorMinorVersion;
+      inherit (stdenv.hostPlatform) system;
+    };
 
     # Sets whether packages should be built with forward compatibility.
     # TODO(@connorbaker): If the requested CUDA capabilities are not supported by the current CUDA version,
@@ -117,53 +122,74 @@ let
 
   assertions =
     let
-      # Jetson devices cannot be targeted by the same binaries which target non-Jetson devices. While
+      # Jetson devices (pre-Thor) cannot be targeted by the same binaries which target non-Jetson devices. While
       # NVIDIA provides both `linux-aarch64` and `linux-sbsa` packages, which both target `aarch64`,
       # they are built with different settings and cannot be mixed.
-      jetsonMesssagePrefix = "Jetson CUDA capabilities (${toJSON passthruExtra.requestedJetsonCudaCapabilities})";
+      preThorJetsonCudaCapabilities = filter (flip versionOlder "10.1") passthruExtra.requestedJetsonCudaCapabilities;
+      postThorJetsonCudaCapabilities = filter (flip versionAtLeast "10.1") passthruExtra.requestedJetsonCudaCapabilities;
 
       # Remove all known capabilities from the user's list to find unrecognized capabilities.
       unrecognizedCudaCapabilities = subtractLists allSortedCudaCapabilities passthruExtra.cudaCapabilities;
 
-      # Remove all supported capabilities from the user's list to find unsupported capabilities.
-      unsupportedCudaCapabilities = subtractLists passthruExtra.supportedCudaCapabilities passthruExtra.cudaCapabilities;
+      # Capabilities which are too old for this CUDA version.
+      tooOldCudaCapabilities = filter (
+        cap:
+        let
+          # This can be null!
+          maybeMax = cudaCapabilityToInfo.${cap}.maxCudaMajorMinorVersion;
+        in
+        maybeMax != null && lib.versionOlder maybeMax cudaMajorMinorVersion
+      ) passthruExtra.cudaCapabilities;
+
+      # Capabilities which are too new for this CUDA version.
+      tooNewCudaCapabilities = filter (
+        cap: lib.versionOlder cudaMajorMinorVersion cudaCapabilityToInfo.${cap}.minCudaMajorMinorVersion
+      ) passthruExtra.cudaCapabilities;
     in
     [
       {
-        message = "Unrecognized CUDA capabilities: ${toJSON unrecognizedCudaCapabilities}";
+        message = "Requested unrecognized CUDA capabilities: ${toJSON unrecognizedCudaCapabilities}";
         assertion = unrecognizedCudaCapabilities == [ ];
       }
       {
-        message = "Unsupported CUDA capabilities: ${toJSON unsupportedCudaCapabilities}";
-        assertion = unsupportedCudaCapabilities == [ ];
+        message = "Requested CUDA capabilities which are too old for CUDA ${cudaMajorMinorVersion}: ${toJSON tooOldCudaCapabilities}";
+        assertion = tooOldCudaCapabilities == [ ];
+      }
+      {
+        message = "Requested CUDA capabilities which are too new for CUDA ${cudaMajorMinorVersion}: ${toJSON tooNewCudaCapabilities}";
+        assertion = tooNewCudaCapabilities == [ ];
       }
       {
         message =
-          "${jetsonMesssagePrefix} require hostPlatform (currently ${passthruExtra.hostNixSystem}) "
-          + "to be aarch64-linux";
+          "Requested Jetson CUDA capabilities (${toJSON passthruExtra.requestedJetsonCudaCapabilities}) require "
+          + "hostPlatform (${passthruExtra.hostNixSystem}) to be aarch64-linux";
         assertion = passthruExtra.hasJetsonCudaCapability -> passthruExtra.hostNixSystem == "aarch64-linux";
       }
       {
         message =
-          let
-            # Find the capabilities which are not Jetson capabilities.
-            requestedNonJetsonCudaCapabilities = subtractLists (
-              passthruExtra.requestedJetsonCudaCapabilities
-              ++ passthruExtra.requestedArchitectureSpecificCudaCapabilities
-              ++ passthruExtra.requestedFamilySpecificCudaCapabilities
-            ) passthruExtra.cudaCapabilities;
-          in
-          "${jetsonMesssagePrefix} cannot be specified with non-Jetson capabilities "
-          + "(${toJSON requestedNonJetsonCudaCapabilities})";
+          "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) cannot be "
+          + "specified with other capabilities (${toJSON (subtractLists preThorJetsonCudaCapabilities passthruExtra.cudaCapabilities)})";
         assertion =
-          passthruExtra.hasJetsonCudaCapability
-          -> passthruExtra.requestedJetsonCudaCapabilities == passthruExtra.cudaCapabilities;
+          # If there are preThorJetsonCudaCapabilities, they must be the only requested capabilities.
+          preThorJetsonCudaCapabilities != [ ]
+          -> preThorJetsonCudaCapabilities == passthruExtra.cudaCapabilities;
+      }
+      {
+        message =
+          "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) require "
+          + "computed NVIDIA hostRedistSystem (${passthruExtra.hostRedistSystem}) to be linux-aarch64";
+        assertion =
+          preThorJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-aarch64";
+      }
+      {
+        message =
+          "Requested post-Thor (10.1) Jetson CUDA capabilities (${toJSON postThorJetsonCudaCapabilities}) require "
+          + "computed NVIDIA hostRedistSystem (${passthruExtra.hostRedistSystem}) to be linux-sbsa";
+        assertion = postThorJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-sbsa";
       }
     ];
 
-  assertCondition = addErrorContext "while evaluating ${mkVersionedName "cudaPackages" cudaMajorMinorVersion}.backendStdenv" (
-    _evaluateAssertions assertions
-  );
+  failedAssertionsString = _mkFailedAssertionsString assertions;
 
   # TODO(@connorbaker): Seems like `stdenvAdapters.useLibsFrom` breaks clangStdenv's ability to find header files.
   # To reproduce: use `nix shell .#cudaPackages_12_6.backendClangStdenv.cc` since CUDA 12.6 supports at most Clang
@@ -239,4 +265,7 @@ let
       stdenvAdapters.useLibsFrom stdenv maybeHostStdenv;
 in
 # TODO: Consider testing whether we in fact use the newer libstdc++
-extendDerivation assertCondition passthruExtra backendStdenv
+# NOTE: The assertion message we get from `extendDerivation` is not at all helpful. Instead, we use assertMsg.
+assert assertMsg (failedAssertionsString == "")
+  "${mkVersionedName "cudaPackages" cudaMajorMinorVersion}.backendStdenv has failed assertions:${failedAssertionsString}";
+extendDerivation true passthruExtra backendStdenv
