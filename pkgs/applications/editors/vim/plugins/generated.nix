@@ -13705,6 +13705,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  sidekick-nvim = buildVimPlugin {
+    pname = "sidekick.nvim";
+    version = "2025-09-27";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "sidekick.nvim";
+      rev = "242b2bd216191c151d24f665cc8f596cb63288ea";
+      sha256 = "11qg13y57437pjwdsg0khj0wrwp86m779847isnb3a35kia7b2cc";
+    };
+    meta.homepage = "https://github.com/folke/sidekick.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   sideways-vim = buildVimPlugin {
     pname = "sideways.vim";
     version = "2025-07-28";
