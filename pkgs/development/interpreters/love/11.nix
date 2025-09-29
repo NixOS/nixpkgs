@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath "@loader_path/../lib" "$out/bin/love" || true
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Framework for making 2D games in Lua";
     homepage = "https://love2d.org/";
     license = licenses.zlib;
