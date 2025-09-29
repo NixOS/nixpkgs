@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
     mainProgram = "love";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       dannydannydanny
     ];
