@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_lib_m_significand=no"
   ];
 
-  makeFlags = lib.optional stdenv.hostPlatform.isCygwin "libjq_la_LDFLAGS=-no-undefined";
+  makeFlags = if stdenv.hostPlatform.isCygwin then "libjq_la_LDFLAGS=-no-undefined" else null;
 
   # jq binary includes the whole `configureFlags` in:
   # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
