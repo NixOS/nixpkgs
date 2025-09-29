@@ -281,7 +281,7 @@ let
         };
       }; # end of configfile derivation
 
-      kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) {
+      kernel = (callPackage ./build.nix { inherit lib stdenv buildPackages; }) {
         inherit
           pname
           version
