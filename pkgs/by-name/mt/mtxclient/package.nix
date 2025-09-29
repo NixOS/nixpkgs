@@ -63,8 +63,5 @@ stdenv.mkDerivation rec {
       rnhmjoj
     ];
     platforms = platforms.all;
-    # Should be fixable if a higher clang version is used, see:
-    # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
