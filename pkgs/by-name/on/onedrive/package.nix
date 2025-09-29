@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
-  version = "2.5.6";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AFaz1RkrtsdTZfaWobdcADbzsAhbdCzJPkQX6Pa7hN8=";
+    hash = "sha256-IllPh4YJvoAAyXDmSNwWDHN/EUtUuUqS7TOnBpr3Yts=";
   };
 
   outputs = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ lib.optionals withSystemd [ systemd ];
+  inherit coreutils;
 
   configureFlags = [
     (lib.enableFeature true "notifications")
@@ -68,9 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
       --fish contrib/completions/complete.fish \
       --zsh contrib/completions/complete.zsh
 
-    for s in $out/lib/systemd/user/onedrive.service $out/lib/systemd/system/onedrive@.service; do
-      substituteInPlace $s \
-        --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
+    for s in "$out/lib/systemd/"{user/onedrive,system/onedrive@}.service; do
+      substituteInPlace "$s" \
+        --replace-fail "/bin/sh -c 'sleep 15'" "''${coreutils@Q}/bin/sleep 15"
     done
   '';
 
