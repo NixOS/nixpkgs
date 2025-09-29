@@ -3,8 +3,11 @@
   stdenv,
   fetchurl,
   zlib,
+  brotli,
+  zstd,
   libtasn1,
   nettle,
+  leancrypto,
   pkg-config,
   perl,
   gmp,
@@ -123,6 +126,12 @@ stdenv.mkDerivation rec {
       "--with-unbound-root-key-file=${dns-root-data}/root.key"
       (lib.withFeature withP11-kit "p11-kit")
       (lib.enableFeature cxxBindings "cxx")
+      # enables PQC support
+      "--with-leancrypto"
+      # additional compression format support (brotli)
+      "--with-brotli"
+      # additional compression format support (zstd)
+      "--with-zstd"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-ktls"
@@ -143,6 +152,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "trivialautovarinit" ];
 
   buildInputs = [
+    brotli
     libtasn1
     libidn2
     zlib
@@ -151,6 +161,7 @@ stdenv.mkDerivation rec {
     unbound
     gettext
     libiconv
+    zstd
   ]
   ++ lib.optional withP11-kit p11-kit
   ++ lib.optional (tpmSupport && stdenv.hostPlatform.isLinux) trousers;
@@ -170,7 +181,10 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
-  propagatedBuildInputs = [ nettle ];
+  propagatedBuildInputs = [
+    leancrypto
+    nettle
+  ];
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
