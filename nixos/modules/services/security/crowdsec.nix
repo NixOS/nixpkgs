@@ -132,9 +132,7 @@ in
     };
 
     settings = lib.mkOption {
-      description = ''
-        Config options for the main config file.
-      '';
+      description = "Config options for the main config file.";
       type = lib.types.submodule {
         options = {
           general = lib.mkOption {
@@ -554,7 +552,7 @@ in
           fi
         ''
 
-      ++ lib.optional (cfg.settings.general.api.server.enable)
+      ++ lib.optional cfg.settings.general.api.server.enable
         ''
           if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
             ${lib.getExe cscli} machine add "${cfg.name}" --auto
@@ -566,10 +564,6 @@ in
           ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
         ''
       ;
-
-      # setupScript = pkgs.writeShellApplication "crowdsec-setup" (
-      #   lib.strings.concatStringsSep "\n" scriptArray
-      # );
 
       setupScript = pkgs.writeShellApplication {
         name = "crowdsec-setup";
@@ -691,10 +685,13 @@ in
             ProtectKernelModules = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            StateDirectory = "crowdsec";
+
+            StateDirectory = "crowdsec ";
             StateDirectoryMode = "0750";
+
             ConfigurationDirectory = "crowdsec";
             ConfigurationDirectoryMode = "0750";
+
             SystemCallFilter = [
               " " # This is needed to clear the SystemCallFilter existing definitions
               "~@reboot"
