@@ -361,9 +361,8 @@ let
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         # SwiftASN1 uses the full target triple as the name of the swiftmodule
         # (https://github.com/apple/swift-asn1/pull/103)
-        mkdir -p $out/lib/swift/${swiftOs}/${swiftArch}/
-        mv $out/lib/swift/${swiftOs}/SwiftASN1.swiftmodule/*.swiftmodule $out/lib/swift/${swiftOs}/${swiftArch}/SwiftASN1.swiftmodule
-        mv $out/lib/swift/${swiftOs}/SwiftASN1.swiftmodule/*.swiftdoc $out/lib/swift/${swiftOs}/${swiftArch}/SwiftASN1.swiftdoc
+        mkdir -p $out/${swiftModuleSubdir}
+        cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
       '';
   };
 
