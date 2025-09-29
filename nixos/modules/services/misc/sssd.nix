@@ -21,7 +21,6 @@ in
         description = "Contents of {file}`sssd.conf`.";
         default = ''
           [sssd]
-          config_file_version = 2
           services = nss, pam
           domains = shadowutils
 
