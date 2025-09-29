@@ -14207,7 +14207,6 @@ with pkgs;
   # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
 
-  xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
   inherit
     (callPackages ../applications/misc/redshift {
