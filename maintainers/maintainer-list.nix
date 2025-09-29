@@ -12885,7 +12885,7 @@
     email = "juanparati@gmail.com";
     github = "juanparati";
     githubId = 835173;
-    name = "Juan Lago"
+    name = "Juan Lago";
   };
   juboba = {
     email = "juboba@gmail.com";
