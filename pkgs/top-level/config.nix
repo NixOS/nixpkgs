@@ -116,7 +116,7 @@ let
 
         To set the configuration file directly, use the [`gitConfigFile`](#opt-gitConfigFile) option instead.
 
-        To set the configuration file for individual calls, use `fetchurl { gitConfigFile = "..."; }`.
+        To set the configuration file for individual calls, use `fetchgit { gitConfigFile = "..."; }`.
       '';
       default = { };
       example = {
