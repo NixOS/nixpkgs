@@ -9,7 +9,7 @@ let
     packageOverrides = self: super: {
 
       # Doesn't work with latest pydantic
-      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: {
         dependencies = [
           python3.pkgs.pydantic_1
           python3.pkgs.cryptography
@@ -95,12 +95,12 @@ py.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "prowler" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
     changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "prowler";
   };
 }

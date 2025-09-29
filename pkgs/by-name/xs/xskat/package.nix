@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     "install.man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Famous german card game";
     mainProgram = "xskat";
-    platforms = platforms.unix;
-    license = licenses.xskat;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.xskat;
     longDescription = "Play the german card game Skat against the AI or over IRC.";
     homepage = "https://web.archive.org/web/20221003060115/https://www.xskat.de/xskat.html";
   };

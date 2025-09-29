@@ -15,10 +15,10 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  meta = with lib; {
+  meta = {
     description = "Compatibility Either module";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mirage/either";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

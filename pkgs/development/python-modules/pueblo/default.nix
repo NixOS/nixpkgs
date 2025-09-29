@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pueblo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python toolbox library";
     homepage = "https://github.com/pyveci/pueblo";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

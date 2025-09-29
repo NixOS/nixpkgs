@@ -22,7 +22,7 @@
   procps,
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "ponyc";
   version = "0.59.0";
 
@@ -158,11 +158,11 @@ stdenv.mkDerivation (rec {
 
   passthru.tests.pony-corral = pony-corral;
 
-  meta = with lib; {
+  meta = {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = "https://www.ponylang.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       kamilchm
       patternspandemic
       redvers
@@ -175,4 +175,4 @@ stdenv.mkDerivation (rec {
       "aarch64-darwin"
     ];
   };
-})
+}

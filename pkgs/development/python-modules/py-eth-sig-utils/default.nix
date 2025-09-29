@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py_eth_sig_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of functions to generate hashes for signing on Ethereum";
     homepage = "https://github.com/rmeissner/py-eth-sig-utils";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     # TODO: upstream is stale and doesn't not work with the new `eth-abi` package any more.
     broken = true;

@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     libsecret
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FUSE FS for mounting Samba shares";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
     downloadPage = "https://sourceforge.net/projects/smbnetfs/files/smbnetfs";
     homepage = "https://sourceforge.net/projects/smbnetfs/";
     mainProgram = "smbnetfs";

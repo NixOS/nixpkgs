@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sockjs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sockjs server";
     homepage = "https://github.com/aio-libs/sockjs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ freezeboy ];
   };
 }

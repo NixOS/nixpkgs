@@ -30,11 +30,11 @@ python3.pkgs.buildPythonApplication {
     "certilib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ADCS abuser";
     homepage = "https://github.com/zer1t0/certi";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "certi";
   };
 }

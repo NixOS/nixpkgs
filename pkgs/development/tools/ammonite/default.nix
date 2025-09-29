@@ -32,7 +32,7 @@ let
         install -Dm755 $src $out/bin/amm
         sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
       ''
-      + lib.optionalString (disableRemoteLogging) ''
+      + lib.optionalString disableRemoteLogging ''
         sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
       '';
@@ -72,7 +72,7 @@ let
         runHook postInstallCheck
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Improved Scala REPL";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
@@ -81,10 +81,10 @@ let
           that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
         '';
         homepage = "https://github.com/com-lihaoyi/Ammonite";
-        license = licenses.mit;
-        maintainers = [ maintainers.nequissimus ];
+        license = lib.licenses.mit;
+        maintainers = [ lib.maintainers.nequissimus ];
         mainProgram = "amm";
-        platforms = platforms.all;
+        platforms = lib.platforms.all;
       };
     };
 in

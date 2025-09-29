@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     ./device-info-sys-stat.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ignorantguru.github.io/udevil/";
     description = "Mount without password";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

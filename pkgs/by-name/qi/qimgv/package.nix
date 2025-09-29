@@ -10,7 +10,7 @@
   opencv4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qimgv";
   version = "1.0.3-unstable-2024-10-11";
 
@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt5 image viewer with optional video support";
     mainProgram = "qimgv";
     homepage = "https://github.com/easymodo/qimgv";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ cole-h ];
   };
 }

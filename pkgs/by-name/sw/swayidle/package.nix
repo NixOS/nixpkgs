@@ -50,16 +50,16 @@ stdenv.mkDerivation rec {
       --replace '"sh"' '"${runtimeShell}"'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Idle management daemon for Wayland";
     inherit (src.meta) homepage;
     longDescription = ''
       Sway's idle management daemon. It is compatible with any Wayland
       compositor which implements the KDE idle protocol.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "swayidle";
-    maintainers = with maintainers; [ wineee ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
+    platforms = lib.platforms.linux;
   };
 }

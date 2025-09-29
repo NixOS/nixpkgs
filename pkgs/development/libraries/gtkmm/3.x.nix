@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GTK graphical user interface library";
 
     longDescription = ''
@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gtkmm.gnome.org/";
 
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

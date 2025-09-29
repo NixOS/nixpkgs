@@ -31,7 +31,7 @@ lib.checkListOfEnum "${pname}: color variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname;
     version = "0-unstable-2023-05-13";
 
@@ -85,11 +85,11 @@ lib.checkListOfEnum "${pname}: color variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Colorful Design Rectangle icon theme";
       homepage = "https://github.com/yeyushengfan258/Reversal-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

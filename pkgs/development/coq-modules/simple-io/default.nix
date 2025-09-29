@@ -44,10 +44,10 @@
 
   passthru.tests.HelloWorld = callPackage ./test.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Purely functional IO for Coq";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }).overrideAttrs
   (

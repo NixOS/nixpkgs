@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
-    lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"
+    lib.optional qrcodegenSupport "-DUSE_QRCODEGEN=ON"
     ++ lib.optional (!multimediaSupport) "-DUSE_MULTIMEDIA=none";
 
   # https://github.com/dankamongmen/notcurses/issues/2661
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dankamongmen/notcurses";
     description = "Blingful TUIs and character graphics";
     longDescription = ''
@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
       It is not a source-compatible X/Open Curses implementation, nor a
       replacement for NCURSES on existing systems.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     inherit (ncurses.meta) platforms;
   };
 }

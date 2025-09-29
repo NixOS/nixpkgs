@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   # not mangle the legitimate use of the opt/ folder.
   dontFixCmake = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tvm.apache.org/";
     description = "End to End Deep Learning Compiler Stack for CPUs, GPUs and accelerators";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ adelbertc ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ adelbertc ];
   };
 }

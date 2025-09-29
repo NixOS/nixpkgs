@@ -144,15 +144,15 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     mainProgram = "sqlite3";
-    maintainers = with maintainers; [ np ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ np ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
   };
 }

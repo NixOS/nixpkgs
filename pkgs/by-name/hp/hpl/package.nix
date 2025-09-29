@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     mpi
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable Implementation of the Linpack Benchmark for Distributed-Memory Computers";
     homepage = "http://www.netlib.org/benchmark/hpl/";
-    platforms = platforms.unix;
-    license = licenses.bsdOriginal;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ lib.maintainers.markuskowa ];
     mainProgram = "xhpl";
   };
 }

@@ -58,13 +58,13 @@ buildGoModule rec {
     installManPage *.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://restic.net";
     changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
     description = "Backup program that is fast, efficient and secure";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       mbrgm
       dotlambda
       ryan4yin

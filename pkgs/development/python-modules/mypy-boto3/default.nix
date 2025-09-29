@@ -33,18 +33,18 @@ let
 
       pythonImportsCheck = [ "mypy_boto3_${toUnderscore serviceName}" ];
 
-      meta = with lib; {
+      meta = {
         description = "Type annotations for boto3 ${serviceName}";
         homepage = "https://github.com/youtype/mypy_boto3_builder";
-        license = with licenses; [ mit ];
-        maintainers = with maintainers; [
+        license = with lib.licenses; [ mit ];
+        maintainers = with lib.maintainers; [
           fab
           mbalatsko
         ];
       };
     };
 in
-rec {
+{
   mypy-boto3-accessanalyzer =
     buildMypyBoto3Package "accessanalyzer" "1.40.0"
       "sha256-hY5aShO9E5zMwPSUUucjgG2Bod0lAm51BZyLP/1JLgY=";

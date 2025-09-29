@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/pgbouncer/pgbouncer/releases/tag/pgbouncer_${
       replaceStrings [ "." ] [ "_" ] version
     }";
-    license = licenses.isc;
-    maintainers = with maintainers; [ _1000101 ];
-    platforms = platforms.all;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ _1000101 ];
+    platforms = lib.platforms.all;
   };
 }

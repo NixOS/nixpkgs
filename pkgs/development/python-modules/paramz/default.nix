@@ -63,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "paramz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parameterization framework for parameterized model creation and handling";
     homepage = "https://github.com/sods/paramz";
     changelog = "https://github.com/sods/paramz/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

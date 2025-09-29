@@ -73,10 +73,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nototools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Noto fonts support tools and scripts plus web site generation";
     homepage = "https://github.com/googlefonts/nototools";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

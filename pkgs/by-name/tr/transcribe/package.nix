@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/transcribe $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software to help transcribe recorded music";
     longDescription = ''
       The Transcribe! application is an assistant for people who want
@@ -110,10 +110,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.seventhstring.com/xscribe/";
     changelog = "https://www.seventhstring.com/xscribe/history.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ iwanb ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ iwanb ];
+    platforms = lib.platforms.linux;
     mainProgram = "transcribe";
   };
 }

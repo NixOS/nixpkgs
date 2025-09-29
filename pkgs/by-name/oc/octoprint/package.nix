@@ -15,7 +15,7 @@ let
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) [
       (
 
         self: super: {
@@ -225,12 +225,12 @@ let
             };
           };
 
-          meta = with lib; {
+          meta = {
             homepage = "https://octoprint.org/";
             description = "Snappy web interface for your 3D printer";
             mainProgram = "octoprint";
-            license = licenses.agpl3Only;
-            maintainers = with maintainers; [
+            license = lib.licenses.agpl3Only;
+            maintainers = with lib.maintainers; [
               WhittlesJr
               gador
             ];
@@ -239,7 +239,7 @@ let
       })
       (callPackage ./plugins.nix { })
       packageOverrides
-    ]);
+    ];
   };
 in
 with py.pkgs;

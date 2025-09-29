@@ -32,12 +32,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jiwer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and fast python package to evaluate an automatic speech recognition system";
     mainProgram = "jiwer";
     homepage = "https://github.com/jitsi/jiwer";
     changelog = "https://github.com/jitsi/jiwer/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

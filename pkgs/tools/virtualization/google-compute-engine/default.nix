@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google_compute_engine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Compute Engine tools and services";
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zimbatm ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    platforms = lib.platforms.linux;
   };
 }

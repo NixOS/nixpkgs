@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical companion application for various bridges like LinVst, etc";
     mainProgram = "linvstmanager";
     homepage = "https://github.com/Goli4thus/linvstmanager";
-    license = with licenses; [ gpl3 ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.GabrielDougherty ];
+    license = with lib.licenses; [ gpl3 ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.GabrielDougherty ];
   };
 }

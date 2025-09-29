@@ -32,11 +32,11 @@ python3.pkgs.buildPythonApplication rec {
     "uddup"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for de-duplication URLs";
     mainProgram = "uddup";
     homepage = "https://github.com/rotemreiss/uddup";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

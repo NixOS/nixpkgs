@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/denesb/xfce4-i3-workspaces-plugin";
     description = "Workspace switcher plugin for xfce4-panel which can be used for the i3 window manager";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ berbiche ];
-    teams = [ teams.xfce ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ berbiche ];
+    teams = [ lib.teams.xfce ];
   };
 }

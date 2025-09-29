@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://swapoff.org/devtodo1.html";
     description = "Hierarchical command-line task manager";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.woffs ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.woffs ];
+    platforms = lib.platforms.linux;
   };
 }

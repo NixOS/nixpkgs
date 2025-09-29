@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage; # https://nvmexpress.org/
     description = "NVM-Express user space tooling for Linux";
     longDescription = ''
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
       tooling for NVM-Express drives. It was made specifically for Linux as it
       relies on the IOCTLs defined by the mainline kernel driver.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mic92
       vifino
     ];

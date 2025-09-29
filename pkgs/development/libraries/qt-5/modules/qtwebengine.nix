@@ -267,14 +267,14 @@ qtModule (
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin (''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace src/buildtools/config/mac_osx.pri \
         --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
       # Use system ffmpeg
       echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
       echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
-    '')
+    ''
     + postPatch;
 
     env = {
@@ -441,7 +441,7 @@ qtModule (
     meta = with lib; {
       description = "Web engine based on the Chromium web browser";
       mainProgram = "qwebengine_convert_dict";
-      maintainers = with maintainers; [ matthewbauer ];
+      maintainers = with lib.maintainers; [ matthewbauer ];
 
       # qtwebengine-5.15.8: "QtWebEngine can only be built for x86,
       # x86-64, ARM, Aarch64, and MIPSel architectures."

@@ -136,18 +136,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free/libre COBOL compiler";
     homepage = "https://gnu.org/software/gnucobol/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       lgpl3Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovesegfault
       techknowlogick
       kiike
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

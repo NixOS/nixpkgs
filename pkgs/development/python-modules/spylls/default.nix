@@ -43,11 +43,11 @@ buildPythonPackage rec {
     "spylls.hunspell.algo.string_metrics"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python spell-checker, (almost) full port of Hunspell";
     homepage = "https://github.com/zverok/spylls";
     changelog = "https://github.com/zverok/spylls/blob/master/CHANGELOG.rst";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

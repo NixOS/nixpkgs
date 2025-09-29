@@ -60,11 +60,11 @@ python3.pkgs.buildPythonApplication rec {
       containerexec-version = testVersion "containerexec";
     };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for Reliable Benchmarking and Resource Measurement";
     homepage = "https://github.com/sosy-lab/benchexec";
-    maintainers = with maintainers; [ lorenzleutgeb ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ lorenzleutgeb ];
+    license = lib.licenses.asl20;
     mainProgram = "benchexec";
   };
 }

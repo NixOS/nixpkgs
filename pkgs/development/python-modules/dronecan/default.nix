@@ -19,14 +19,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dronecan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the DroneCAN v1 protocol stack";
     mainProgram = "dronecan_bridge.py";
     longDescription = ''
       DroneCAN is a lightweight protocol designed for reliable communication in aerospace and robotic applications via CAN bus.
     '';
     homepage = "https://dronecan.github.io/";
-    license = licenses.mit;
-    teams = [ teams.ororatech ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.ororatech ];
   };
 }

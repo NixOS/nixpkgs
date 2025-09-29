@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured & carefully designed adaptive prompt for Bash & Zsh";
     homepage = "https://github.com/liquidprompt/liquidprompt";
-    license = licenses.agpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gerschtli ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ gerschtli ];
   };
 }

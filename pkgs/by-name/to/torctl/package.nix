@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     cp -R service $out/etc/systemd/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Script to redirect all traffic through tor network including dns queries for anonymizing entire system";
     homepage = "https://github.com/BlackArch/torctl";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tochiaha ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "torctl";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

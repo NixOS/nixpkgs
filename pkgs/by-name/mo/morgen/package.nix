@@ -64,13 +64,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one Calendars, Tasks and Scheduler";
     homepage = "https://morgen.so/";
     mainProgram = "morgen";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ justanotherariel ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ justanotherariel ];
     platforms = [ "x86_64-linux" ];
   };
 }

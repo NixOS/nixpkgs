@@ -612,19 +612,19 @@ let
           };
         };
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.postgresql.org";
         description = "Powerful, open source object-relational database system";
-        license = licenses.postgresql;
+        license = lib.licenses.postgresql;
         changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-        teams = [ teams.postgres ];
+        teams = [ lib.teams.postgres ];
         pkgConfigModules = [
           "libecpg"
           "libecpg_compat"
           "libpgtypes"
           "libpq"
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
 
         # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
         # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for

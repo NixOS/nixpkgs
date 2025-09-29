@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "linear_garage_door" ];
 
-  meta = with lib; {
+  meta = {
     description = "Control Linear Garage Doors with Python";
     homepage = "https://github.com/IceBotYT/linear-garage-door";
     changelog = "https://github.com/IceBotYT/linear-garage-door/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -49,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "knack" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/microsoft/knack";
     description = "Command-Line Interface framework";
     changelog = "https://github.com/microsoft/knack/blob/v${version}/HISTORY.rst";
-    platforms = platforms.all;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

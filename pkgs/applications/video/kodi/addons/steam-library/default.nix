@@ -25,10 +25,10 @@ buildKodiAddon rec {
     routing
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aanderse/plugin.program.steam.library";
     description = "View your entire Steam library right from Kodi";
-    license = licenses.gpl3Plus;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

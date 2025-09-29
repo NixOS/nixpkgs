@@ -43,11 +43,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ jaxlib ];
   pythonImportsCheck = [ "treeo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small library for creating and manipulating custom JAX Pytree classes";
     homepage = "https://github.com/cgarciae/treeo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ndl ];
     # obsolete as of 2023-02-27 and not updated for more than a year as of 2023-08
     broken = true;
   };

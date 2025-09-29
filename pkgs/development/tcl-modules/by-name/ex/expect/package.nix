@@ -67,12 +67,12 @@ tcl.mkTclDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for automating interactive applications";
     homepage = "https://expect.sourceforge.net/";
-    license = licenses.publicDomain;
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
     mainProgram = "expect";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

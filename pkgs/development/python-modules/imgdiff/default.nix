@@ -28,12 +28,12 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Compare two images side-by-side";
     mainProgram = "imgdiff";
     homepage = "https://github.com/mgedmin/imgdiff";
     changelog = "https://github.com/mgedmin/imgdiff/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evils ];
   };
 }

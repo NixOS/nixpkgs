@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_interrupt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Context manager to raise an exception when a future is done";
     homepage = "https://github.com/bdraco/async_interrupt";
     changelog = "https://github.com/bdraco/async_interrupt/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

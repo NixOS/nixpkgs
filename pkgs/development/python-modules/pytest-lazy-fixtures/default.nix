@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_lazy_fixtures" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows you to use fixtures in @pytest.mark.parametrize";
     homepage = "https://github.com/dev-petrov/pytest-lazy-fixtures";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

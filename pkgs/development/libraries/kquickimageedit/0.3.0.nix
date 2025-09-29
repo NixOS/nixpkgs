@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Set of QtQuick components providing basic image editing capabilities";
     homepage = "https://invent.kde.org/libraries/kquickimageeditor";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     badPlatforms = platforms.darwin;
   };
 }

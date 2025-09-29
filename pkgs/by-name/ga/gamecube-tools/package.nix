@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GsTmwyxBc36Qg+UGy+cRAjGW1eh1XxV0s94B14ZJAjU=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for gamecube/wii projects";
     homepage = "https://github.com/devkitPro/gamecube-tools/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ tomsmeets ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ tomsmeets ];
   };
 }

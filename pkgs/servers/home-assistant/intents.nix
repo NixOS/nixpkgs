@@ -68,11 +68,11 @@ buildPythonPackage rec {
     "test_HassLightSet_name_brightness"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${src.tag}";
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/OHF-Voice/intents-package";
-    license = licenses.cc-by-40;
-    teams = [ teams.home-assistant ];
+    license = lib.licenses.cc-by-40;
+    teams = [ lib.teams.home-assistant ];
   };
 }

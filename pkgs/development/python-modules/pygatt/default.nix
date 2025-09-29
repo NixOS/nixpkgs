@@ -45,14 +45,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygatt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper the BGAPI for accessing Bluetooth LE Devices";
     homepage = "https://github.com/peplin/pygatt";
     changelog = "https://github.com/peplin/pygatt/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

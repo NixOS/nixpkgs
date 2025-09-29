@@ -74,12 +74,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kasa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for TP-Link Kasa Smarthome products";
     homepage = "https://python-kasa.readthedocs.io/";
     changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kasa";
   };
 }

@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-rpath" ];
 
-  meta = with lib; {
+  meta = {
     description = "GiNaC C++ library for symbolic manipulations";
     homepage = "https://www.ginac.de/";
-    maintainers = with maintainers; [ lovek323 ];
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

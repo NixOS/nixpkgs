@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "LDCONFIG="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unicode string library";
     homepage = "https://libs.suckless.org/libgrapheme/";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

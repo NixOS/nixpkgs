@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Graphical Frontend to Rclone written in Qt";
     mainProgram = "rclone-browser";
-    license = licenses.unlicense;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

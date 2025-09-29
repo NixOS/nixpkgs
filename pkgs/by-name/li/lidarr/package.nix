@@ -71,10 +71,10 @@ stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.lidarr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "Lidarr";
     platforms = [

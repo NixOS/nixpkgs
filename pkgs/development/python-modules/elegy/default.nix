@@ -90,11 +90,11 @@ buildPythonPackage rec {
     "DataLoaderTestCase"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Neural Networks framework based on Jax inspired by Keras and Haiku";
     homepage = "https://github.com/poets-ai/elegy";
     changelog = "https://github.com/poets-ai/elegy/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

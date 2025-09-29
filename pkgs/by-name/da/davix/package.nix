@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     rapidjson
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
-  ++ lib.optional (enableThirdPartyCopy) gsoap;
+  ++ lib.optional enableThirdPartyCopy gsoap;
 
   # using the url below since the github release page states
   # "please ignore the GitHub-generated tarballs, as they are incomplete"
@@ -69,19 +69,19 @@ stdenv.mkDerivation rec {
     "-DENABLE_THIRD_PARTY_COPY=${boolToUpper enableThirdPartyCopy}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file
     operations with Http based protocols (WebDav, Amazon S3, ...).
     Davix provides an API and a set of command line tools";
 
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "https://github.com/cern-fts/davix";
     changelog = "https://github.com/cern-fts/davix/blob/R_${
       lib.replaceStrings [ "." ] [ "_" ] version
     }/RELEASE-NOTES.md";
-    maintainers = with maintainers; [ adev ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ adev ];
+    platforms = lib.platforms.all;
   };
 }

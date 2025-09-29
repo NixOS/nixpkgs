@@ -39,16 +39,16 @@ rustPlatform.buildRustPackage rec {
     "--skip test_update_cache"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       davidak
       newam
       mfrw
       ryan4yin
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];

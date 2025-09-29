@@ -71,10 +71,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

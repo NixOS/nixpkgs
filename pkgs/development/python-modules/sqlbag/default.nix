@@ -82,11 +82,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "sqlbag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Handy python code for doing database things";
     homepage = "https://github.com/djrobstep/sqlbag";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ bpeetz ];
+    license = with lib.licenses; [ unlicense ];
+    maintainers = with lib.maintainers; [ bpeetz ];
     broken = true; # Fails to build against the current flask version
   };
 }

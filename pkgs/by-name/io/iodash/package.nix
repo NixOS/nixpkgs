@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/YukiWorkshop/IODash";
     description = "Lightweight C++ I/O library for POSIX operation systems";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jappie ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jappie ];
+    platforms = with lib.platforms; linux;
   };
 }

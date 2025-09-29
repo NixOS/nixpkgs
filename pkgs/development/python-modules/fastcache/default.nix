@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest ];
 
-  meta = with lib; {
+  meta = {
     description = "C implementation of Python3 lru_cache for Python 2 and 3";
     homepage = "https://github.com/pbrady/fastcache";
-    license = licenses.mit;
-    maintainers = [ maintainers.bhipple ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.bhipple ];
   };
 }

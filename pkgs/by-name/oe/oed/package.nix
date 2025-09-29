@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     install -m644 -Dt $out/share/man/man1 ed.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable ed editor from OpenBSD";
     homepage = "https://github.com/ibara/oed";
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
     mainProgram = "ed";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

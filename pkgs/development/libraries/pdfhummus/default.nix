@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     "-DUSE_UNBUNDLED_FALLBACK_BUNDLED=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and Free C++ Library for Creating, Parsing an Manipulating PDF Files and Streams";
     homepage = "https://www.pdfhummus.com";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wineee ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
 }

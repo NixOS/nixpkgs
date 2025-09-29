@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     mv $bin/bin/caca-config $dev/bin/caca-config
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://caca.zoy.org/wiki/libcaca";
     description = "Graphics library that outputs text instead of pixels";
     longDescription = ''
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
 
       Libcaca was written by Sam Hocevar and Jean-Yves Lamoureux.
     '';
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.wtfpl;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

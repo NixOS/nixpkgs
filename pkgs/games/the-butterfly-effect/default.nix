@@ -45,12 +45,12 @@ mkDerivation rec {
     cp -r ../usr/share $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Physics-based game vaguely similar to Incredible Machine";
     mainProgram = "tbe";
     homepage = "http://the-butterfly-effect.org/";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 }

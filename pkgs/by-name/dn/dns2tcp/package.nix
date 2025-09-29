@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for relaying TCP connections over DNS";
     homepage = "https://github.com/alex-sector/dns2tcp";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "dns2tcpc";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
   };
 })

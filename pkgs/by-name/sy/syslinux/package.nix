@@ -136,10 +136,10 @@ stdenv.mkDerivation {
 
   passthru.tests.biosCdrom = nixosTests.boot.biosCdrom;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.syslinux.org/";
     description = "Lightweight bootloader";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = [
       "i686-linux"

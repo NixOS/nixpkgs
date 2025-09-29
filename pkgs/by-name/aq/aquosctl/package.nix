@@ -24,12 +24,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sharp Aquos television RS-232 control application";
     homepage = "https://github.com/jdwhite/aquosctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.linux;
     mainProgram = "aquosctl";
   };
 }

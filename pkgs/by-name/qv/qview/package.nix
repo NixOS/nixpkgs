@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals x11Support [ libsForQt5.qtx11extras ];
 
-  meta = with lib; {
+  meta = {
     description = "Practical and minimal image viewer";
     mainProgram = "qview";
     homepage = "https://interversehq.com/qview/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ acowley ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ acowley ];
+    platforms = lib.platforms.all;
   };
 }

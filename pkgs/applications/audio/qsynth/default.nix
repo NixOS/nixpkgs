@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fluidsynth GUI";
     mainProgram = "qsynth";
     homepage = "https://sourceforge.net/projects/qsynth";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

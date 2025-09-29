@@ -144,8 +144,8 @@ let
         recursiveUpdate {
           homepage = "https://hadoop.apache.org/";
           description = "Framework for distributed processing of large data sets across clusters of computers";
-          license = licenses.asl20;
-          sourceProvenance = with sourceTypes; [ binaryBytecode ];
+          license = lib.licenses.asl20;
+          sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
 
           longDescription = ''
             The Apache Hadoop software library is a framework that allows for
@@ -158,7 +158,7 @@ let
             so delivering a highly-availabile service on top of a cluster of
             computers, each of which may be prone to failures.
           '';
-          maintainers = with maintainers; [ illustris ];
+          maintainers = with lib.maintainers; [ illustris ];
           platforms = attrNames platformAttrs;
         } (attrByPath [ stdenv.system "meta" ] { } platformAttrs);
     });
@@ -186,7 +186,7 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop;
   };
-  hadoop_3_3 = common rec {
+  hadoop_3_3 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
@@ -204,7 +204,7 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop_3_3;
   };
-  hadoop2 = common rec {
+  hadoop2 = common {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
       version = "2.10.2";

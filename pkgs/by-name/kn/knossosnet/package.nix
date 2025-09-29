@@ -25,11 +25,11 @@ buildDotnetModule rec {
 
   runtimeDeps = [ openal ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KnossosNET/Knossos.NET";
     description = "Multi-platform launcher for Freespace 2 Open";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "Knossos.NET";
-    maintainers = with maintainers; [ cdombroski ];
+    maintainers = with lib.maintainers; [ cdombroski ];
   };
 }

@@ -93,9 +93,8 @@ let
          runHook postInstall
       '';
       meta =
-        with lib;
-        shared_meta lib
-        // {
+
+        shared_meta lib // {
           description = "Library for picotech oscilloscope ${name} series";
         };
     };
@@ -158,9 +157,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta =
-    with lib;
-    shared_meta lib
-    // {
+
+    shared_meta lib // {
       description = "Oscilloscope application that works with all PicoScope models";
       longDescription = ''
         PicoScope for Linux is a powerful oscilloscope application that works
@@ -173,6 +171,6 @@ stdenv.mkDerivation rec {
         PicoScope for Linux, PicoScope for macOS and PicoScope for Windows
         users, or exported in text, CSV and MathWorks MATLAB 4 formats.
       '';
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     };
 }

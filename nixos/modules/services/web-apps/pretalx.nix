@@ -33,7 +33,7 @@ in
 
 {
   meta = with lib; {
-    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
+    maintainers = with lib.maintainers; [ hexa ] ++ teams.c3d2.members;
   };
 
   options.services.pretalx = {

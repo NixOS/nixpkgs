@@ -87,7 +87,7 @@ mkDerivation rec {
   ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
-    (makeDesktopItem (rec {
+    (makeDesktopItem rec {
       name = "AniLibria";
       desktopName = name;
       icon = "anilibria";
@@ -101,14 +101,14 @@ mkDerivation rec {
       keywords = [ "anime" ];
       exec = name;
       terminal = false;
-    }))
+    })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anilibria/anilibria-winmaclinux";
     description = "AniLibria cross platform desktop client";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     inherit (qtbase.meta) platforms;
     mainProgram = "AniLibria";
   };

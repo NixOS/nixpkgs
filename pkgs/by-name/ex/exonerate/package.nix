@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic tool for sequence alignment";
     homepage = "https://www.ebi.ac.uk/about/vertebrate-genomics/software/exonerate";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.unix;
   };
 }

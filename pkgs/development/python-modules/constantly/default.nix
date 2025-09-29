@@ -48,10 +48,10 @@ let
 
     passthru.tests.constantly = self.overridePythonAttrs { doCheck = true; };
 
-    meta = with lib; {
+    meta = {
       description = "Module for symbolic constant support";
       homepage = "https://github.com/twisted/constantly";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
     };
   };

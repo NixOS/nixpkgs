@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = (callPackage ./update.nix { }) { inherit (finalAttrs) version; };
 
-  meta = with lib; {
+  meta = {
     description = "AQLPROFILE library for AMD HSA runtime API extension support";
     homepage = "https://rocm.docs.amd.com/en/latest/";
-    license = with licenses; [ unfree ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ unfree ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

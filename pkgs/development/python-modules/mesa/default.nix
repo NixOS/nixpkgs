@@ -41,11 +41,11 @@ buildPythonPackage rec {
     "test_scaffold_creates_project_dir"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/projectmesa/mesa";
     description = "Agent-based modeling (or ABM) framework in Python";
-    license = licenses.asl20;
-    maintainers = [ maintainers.dpaetzel ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.dpaetzel ];
     broken = true; # missing dependencies
   };
 }

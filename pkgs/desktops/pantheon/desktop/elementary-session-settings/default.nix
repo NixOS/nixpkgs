@@ -19,7 +19,7 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-session-settings";
   # Allow disabling x11 session
   # nixpkgs-update: no auto update
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Session settings for elementary";
     homepage = "https://github.com/elementary/session-settings";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

@@ -28,10 +28,10 @@ buildDunePackage rec {
     blas
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mmottl.github.io/lacaml";
     description = "OCaml bindings for BLAS and LAPACK";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

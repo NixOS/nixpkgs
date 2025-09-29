@@ -30,11 +30,11 @@ buildHomeAssistantComponent rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/smartHomeHub/SmartIR/releases/tag/v${version}";
     description = "Integration for Home Assistant to control climate, TV and fan devices via IR/RF controllers (Broadlink, Xiaomi, MQTT, LOOKin, ESPHome)";
     homepage = "https://github.com/smartHomeHub/SmartIR";
-    maintainers = with maintainers; [ azuwis ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ azuwis ];
+    license = lib.licenses.mit;
   };
 }

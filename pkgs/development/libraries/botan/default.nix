@@ -149,17 +149,18 @@ let
         static = pkgsStatic.botan3;
       };
 
-      meta = with lib; {
+      meta = {
         description = "Cryptographic algorithms library";
         homepage = "https://botan.randombit.net";
         mainProgram = "botan";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           raskin
           thillux
           nikstur
         ];
-        platforms = platforms.unix ++ lib.optionals (lib.versionAtLeast version "3.0") platforms.windows;
-        license = licenses.bsd2;
+        platforms =
+          lib.platforms.unix ++ lib.optionals (lib.versionAtLeast version "3.0") lib.platforms.windows;
+        license = lib.licenses.bsd2;
       };
     });
 in

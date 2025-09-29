@@ -163,15 +163,15 @@ stdenv.mkDerivation rec {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description =
       "Replaces the connection between your device and the Internet with a modern, optimized, protocol"
       + lib.optionalString headless " (headless version)";
     homepage = "https://pkg.cloudflareclient.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     mainProgram = "warp-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       marcusramberg
     ];
     platforms = [
