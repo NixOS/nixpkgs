@@ -583,6 +583,7 @@ mapAliases {
   catch = throw "catch has been removed. Please upgrade to catch2 or catch2_3"; # Added 2025-08-21
   catcli = throw "catcli has been superseded by gocatcli"; # Added 2025-04-19
   canonicalize-jars-hook = stripJavaArchivesHook; # Added 2024-03-17
+  cardboard = throw "cardboard has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   cargo-deps = throw "cargo-deps has been removed as the repository is deleted"; # Added 2024-04-09
   cargo-espflash = espflash; # Added 2024-02-09
   cargo-kcov = throw "'cargo-kcov' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
@@ -1781,6 +1782,18 @@ mapAliases {
   nettools = net-tools; # Added 2025-06-11
   newt-go = fosrl-newt; # Added 2025-06-24
   notify-sharp = throw "'notify-sharp' has been removed as it was unmaintained and depends on deprecated dbus-sharp versions"; # Added 2025-08-25
+  nextcloud30 = throw ''
+    Nextcloud v30 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2025-09. Please upgrade to at least Nextcloud v31 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud31;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 29 you have to upgrade to Nextcloud 30
+    first on 25.05 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2025-09-25
+  nextcloud30Packages = throw "Nextcloud 30 is EOL!"; # Added 2025-09-25
   nextcloud29 = throw ''
     Nextcloud v29 has been removed from `nixpkgs` as the support for is dropped
     by upstream in 2025-04. Please upgrade to at least Nextcloud v30 by declaring

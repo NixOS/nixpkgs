@@ -437,7 +437,6 @@ in
       type = lib.types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud30"
         "nextcloud31"
       ];
     };
@@ -549,7 +548,7 @@ in
         Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
         configuration directives. The above are recommended for a server with 4GiB of RAM.
 
-        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#tune-php-fpm)
         and consider customizing the values.
       '';
     };

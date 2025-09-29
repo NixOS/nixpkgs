@@ -408,7 +408,7 @@ in
         mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
         val = pkgs.callPackage ./repart-image.nix {
           systemd = cfg.package;
-          imageFileBasename = config.image.baseName;
+          inherit (config.image) baseName;
           inherit (cfg)
             name
             version

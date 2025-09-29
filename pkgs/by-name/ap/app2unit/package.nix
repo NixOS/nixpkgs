@@ -5,21 +5,25 @@
   scdoc,
   fetchFromGitHub,
   nix-update-script,
+  installShellFiles,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "app2unit";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-M2sitlrQNSLthSaDH+R8gUcZ8i+o1ktf2SB/vvjyJEI=";
   };
 
   passthru.updateScript = nix-update-script { };
 
-  nativeBuildInputs = [ scdoc ];
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+  ];
 
   buildPhase = ''
     scdoc < app2unit.1.scd > app2unit.1
@@ -27,6 +31,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     install -Dt $out/bin app2unit
+    installManPage app2unit.1
 
     for link in \
       app2unit-open \
@@ -54,4 +59,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ fazzi ];
     platforms = lib.platforms.linux;
   };
-}
+})
