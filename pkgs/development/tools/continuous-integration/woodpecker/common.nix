@@ -45,7 +45,6 @@ in
     maintainers = with maintainers; [
       ambroisie
       techknowlogick
-      adamcstephens
     ];
   };
 }
