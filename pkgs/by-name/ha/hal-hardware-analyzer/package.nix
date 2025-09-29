@@ -16,6 +16,7 @@
   spdlog,
   verilator,
   z3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -94,6 +95,8 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "$(patchelf --print-rpath "$f"):$out/lib/hal_plugins" "$f"
     done
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     changelog = "https://github.com/emsec/hal/blob/${src.tag}/CHANGELOG.md";
