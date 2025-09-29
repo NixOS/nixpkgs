@@ -1,52 +1,98 @@
 {
   lib,
-  buildNpmPackage,
-  fetchzip,
-  nodejs_20,
+  stdenvNoCC,
+  fetchurl,
+  autoPatchelfHook,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  makeWrapper,
+  installShellFiles,
+  writeShellScript,
 }:
-
-buildNpmPackage rec {
+let
+  inherit (stdenvNoCC.hostPlatform) system;
+  gcsBucket = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases";
+  manifestFile = ./manifest.json;
+  manifestContents = if lib.pathExists manifestFile then lib.importJSON manifestFile else { };
+  platforms = {
+    x86_64-linux = "linux-x64";
+    aarch64-linux = "linux-arm64";
+    x86_64-darwin = "darwin-x64";
+    aarch64-darwin = "darwin-arm64";
+  };
+  platform = platforms.${system};
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "claude-code";
-  version = "1.0.126";
+  version = manifestContents.version or "unstable";
 
-  nodejs = nodejs_20; # required for sandboxed Nix builds on Darwin
-
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-U6uYRkmVqMoJDAAzLHpF9G5OglPhLqPuwe6gWMQPx78=";
+  src = fetchurl {
+    url = "${gcsBucket}/${finalAttrs.version}/${platform}/claude";
+    hash = manifestContents.hashes.${platform} or lib.fakeHash;
   };
 
-  npmDepsHash = "sha256-m+GYa3uPfkUDV+p95uQToY3n/k0JG8hbppBn0GUeV+8=";
+  dontUnpack = true;
+  dontBuild = true;
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-  '';
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ]
+  ++ (lib.optional (!stdenvNoCC.isDarwin) autoPatchelfHook);
 
-  dontNpmBuild = true;
+  installPhase = ''
+    runHook preInstall
 
-  AUTHORIZED = "1";
-
-  # `claude-code` tries to auto-update by default, this disables that functionality.
-  # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
-  # The DEV=true env var causes claude to crash with `TypeError: window.WebSocket is not a constructor`
-  postInstall = ''
+    installBin $src
     wrapProgram $out/bin/claude \
-      --set DISABLE_AUTOUPDATER 1 \
-      --unset DEV
+      --set DISABLE_AUTOUPDATER 1
+
+    runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = writeShellScript "update-claude-code" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq
+
+    set -euo pipefail
+
+    # https://claude.ai/install.sh
+    version="$(curl -fsSL "${gcsBucket}/stable")"
+    output="$(
+      curl -fsSL "${gcsBucket}/$version/manifestContents.json" \
+      | jq '{
+        version: .version,
+        hashes: .platforms | with_entries(
+          select(.key | test("^(darwin|linux)-(x64|arm64)$"))
+          | .value = "sha256:\(.value.checksum)"
+        )
+      }'
+    )"
+    echo "$output" > "${toString manifestFile}"
+  '';
 
   meta = {
     description = "Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
     homepage = "https://github.com/anthropics/claude-code";
     downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
+    changelog = "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       malo
       markus1189
+      mirkolenz
       omarjatoi
     ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "claude";
+    platforms = lib.attrNames platforms;
   };
-}
+})

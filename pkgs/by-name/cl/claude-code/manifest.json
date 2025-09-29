@@ -1,0 +1,9 @@
+{
+  "version": "1.0.128",
+  "hashes": {
+    "darwin-arm64": "sha256:d0d03a793f13556493d77067bd5bb9fb62a554775d9bde2e286fd59bd9827fa5",
+    "darwin-x64": "sha256:2c182afb08d62d678f05d29a67174519cecab267bdf3d1e81e8fcbaff4e6e8e1",
+    "linux-arm64": "sha256:e4fd71bd629bbb86e580b2258c96c987d4492bed130fbf5c8a36c4b0ba747bbd",
+    "linux-x64": "sha256:9ba55a33bf3b4c96556a1a084dc39bd9c775476bff64998100869cfe64293ab2"
+  }
+}
