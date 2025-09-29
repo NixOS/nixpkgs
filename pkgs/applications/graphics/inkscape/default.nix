@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  adwaita-icon-theme,
   boehmgc,
   boost,
   cairo,
