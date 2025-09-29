@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [ ]
     # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS+=-no-undefined" ]
+    ++ lib.optionals stdenv.hostPlatform.isPE [ "LDFLAGS+=-no-undefined" ]
 
     # lld 17 sets `--no-undefined-version` by default and `libxcrypt`'s
     # version script unconditionally lists legacy compatibility symbols, even
