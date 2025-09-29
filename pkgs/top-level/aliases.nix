@@ -1488,6 +1488,8 @@ mapAliases {
 
   lixVersions = lixPackageSets.renamedDeprecatedLixVersions; # Added 2025-03-20, warning in ../tools/package-management/lix/default.nix
 
+  lizardfs = throw "lizardfs has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
+
   llvmPackages_git = (callPackages ../development/compilers/llvm { }).git; # Added 2024-08-02
 
   llvmPackages_9 = throw "llvmPackages_9 has been removed from nixpkgs"; # Added 2024-04-08
