@@ -3047,10 +3047,6 @@ with pkgs;
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
-  hal-hardware-analyzer =
-    libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer
-      { };
-
   halide = callPackage ../development/compilers/halide {
     llvmPackages = llvmPackages_19;
   };
@@ -3595,11 +3591,9 @@ with pkgs;
   libnma-gtk4 = libnma.override { withGtk4 = true; };
 
   inherit (callPackages ../servers/nextcloud { })
-    nextcloud30
     nextcloud31
     ;
 
-  nextcloud30Packages = callPackage ../servers/nextcloud/packages { ncVersion = "30"; };
   nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
@@ -4587,7 +4581,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_8_20) compcert;
+  inherit (coqPackages_9_0) compcert;
 
   computecpp = wrapCCWith rec {
     cc = computecpp-unwrapped;

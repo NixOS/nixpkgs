@@ -60,6 +60,10 @@ in
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
+      "cardboard"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
