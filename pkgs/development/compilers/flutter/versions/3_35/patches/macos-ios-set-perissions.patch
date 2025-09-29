@@ -1,0 +1,112 @@
+Subject: [PATCH] Set permissions on the frameworks when codesign and lipo are called. Set permissions on the built app bundle.
+---
+Index: packages/flutter_tools/bin/xcode_backend.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/packages/flutter_tools/bin/xcode_backend.dart b/packages/flutter_tools/bin/xcode_backend.dart
+--- a/packages/flutter_tools/bin/xcode_backend.dart	(revision d693b4b9dbac2acd4477aea4555ca6dcbea44ba2)
++++ b/packages/flutter_tools/bin/xcode_backend.dart	(revision 5e10f063458657b478441565205aba357fa0ace2)
+@@ -378,6 +378,12 @@
+   }
+ 
+   void _codesignFramework(String expandedCodeSignIdentity, String frameworkPath) {
++    final frameworkDir = File(frameworkPath).parent.path;
++    runSync('chmod', <String>[
++      '-R',
++      'u+w',
++      frameworkDir
++    ]);
+     runSync('codesign', <String>[
+       '--force',
+       '--verbose',
+@@ -565,6 +571,13 @@
+     streamOutput('done');
+     streamOutput(' └─Compiling, linking and signing...');
+ 
++    // set the permissions so we can deploy to the simulator
++    runSync('chmod', <String>[
++      '-R',
++      '755',
++      projectPath,
++    ]);
++
+     echo('Project $projectPath built and packaged successfully.');
+   }
+ 
+Index: packages/flutter_tools/lib/src/build_system/targets/darwin.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/packages/flutter_tools/lib/src/build_system/targets/darwin.dart b/packages/flutter_tools/lib/src/build_system/targets/darwin.dart
+--- a/packages/flutter_tools/lib/src/build_system/targets/darwin.dart	(revision d693b4b9dbac2acd4477aea4555ca6dcbea44ba2)
++++ b/packages/flutter_tools/lib/src/build_system/targets/darwin.dart	(revision 5e10f063458657b478441565205aba357fa0ace2)
+@@ -3,11 +3,12 @@
+ // found in the LICENSE file.
+ 
+ import 'package:meta/meta.dart';
++import 'package:path/path.dart' as path;
+ 
+ import '../../artifacts.dart';
+ import '../../base/io.dart';
+ import '../../build_info.dart';
+-import '../../globals.dart' as globals show stdio;
++import '../../globals.dart' as globals show stdio, os;
+ import '../build_system.dart';
+ 
+ abstract class UnpackDarwin extends Target {
+@@ -91,6 +92,9 @@
+       return;
+     }
+ 
++    final A_directoryPath = path.dirname(frameworkBinaryPath);
++    globals.os.chmod(environment.fileSystem.directory(A_directoryPath), '755');
++
+     // Thin in-place.
+     final ProcessResult extractResult = await environment.processManager.run(<String>[
+       'lipo',
+Index: packages/flutter_tools/lib/src/build_system/targets/ios.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/packages/flutter_tools/lib/src/build_system/targets/ios.dart b/packages/flutter_tools/lib/src/build_system/targets/ios.dart
+--- a/packages/flutter_tools/lib/src/build_system/targets/ios.dart	(revision d693b4b9dbac2acd4477aea4555ca6dcbea44ba2)
++++ b/packages/flutter_tools/lib/src/build_system/targets/ios.dart	(revision 5e10f063458657b478441565205aba357fa0ace2)
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ import 'package:meta/meta.dart';
++import 'package:path/path.dart' as path;
+ import 'package:unified_analytics/unified_analytics.dart';
+ 
+ import '../../artifacts.dart';
+@@ -891,6 +892,26 @@
+   if (codesignIdentity == null || codesignIdentity.isEmpty) {
+     codesignIdentity = '-';
+   }
++  final frameworkDir = path.dirname(binary.path);
++  final ProcessResult chmodResult = environment.processManager.runSync(<String>[
++    'chmod',
++    '-R',
++    '755',
++    frameworkDir,
++  ]);
++  if (chmodResult.exitCode != 0) {
++    final String stdout = (chmodResult.stdout as String).trim();
++    final String stderr = (chmodResult.stderr as String).trim();
++    final output = StringBuffer();
++    output.writeln('Failed ''chmod +R 755 ${frameworkDir}''');
++    if (stdout.isNotEmpty) {
++      output.writeln(stdout);
++    }
++    if (stderr.isNotEmpty) {
++      output.writeln(stderr);
++    }
++    throw Exception(output.toString());
++  }
+   final ProcessResult result = environment.processManager.runSync(<String>[
+     'codesign',
+     '--force',
