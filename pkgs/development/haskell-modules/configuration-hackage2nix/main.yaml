@@ -711,7 +711,6 @@ unsupported-platforms:
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
-  kmonad:                                       [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
   libmodbus:                                    [ platforms.darwin ]
