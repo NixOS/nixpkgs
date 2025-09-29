@@ -60,6 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs withSystemd "systemduserunitdir" "${placeholder "out"}/lib/systemd/user")
   ];
 
+  postPatch = ''
+    substituteInPlace src/main.d \
+    --replace-fail "addLogEntry(\"Checking Application Version ...\", [\"verbose\"]);" "addLogEntry(\"Update check has been disabled by Nixpkgs maintainers. \nCreate an issue on Nixpkgs if this package is out of date.\", [\"verbose\"]);" \
+    --replace-fail "checkApplicationVersion();" " "
+  '';
+
   # we could also pass --enable-completions to configure but we would then have to
   # figure out the paths manually and pass those along.
   postInstall = ''
