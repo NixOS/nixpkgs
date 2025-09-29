@@ -8,13 +8,13 @@
   mpfr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cgal";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchurl {
-    url = "https://github.com/CGAL/cgal/releases/download/v${version}/CGAL-${version}.tar.xz";
-    sha256 = "0zwvyp096p0vx01jks9yf74nx6zjh0vjbwr6sl6n6mn52zrzpk8a";
+    url = "https://github.com/CGAL/cgal/releases/download/v${finalAttrs.version}/CGAL-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-8wxb58JaKj6iS8y6q1z2P6/aY8AnnzTX5/izISgh/tY=";
   };
 
   # note: optional component libCGAL_ImageIO would need zlib and opengl;
@@ -30,18 +30,18 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Computational Geometry Algorithms Library";
     homepage = "http://cgal.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       raskin
       drew-dirac
       ylannl
     ];
   };
-}
+})
