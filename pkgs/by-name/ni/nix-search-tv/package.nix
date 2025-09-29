@@ -20,6 +20,8 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/nix-search-tv" ];
 
+  env.GOEXPERIMENT = "jsonv2";
+
   ldflags = [
     "-s"
     "-w"
