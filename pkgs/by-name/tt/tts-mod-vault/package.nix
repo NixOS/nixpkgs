@@ -2,18 +2,43 @@
 {
   lib,
   stdenv,
-  libbar,
+  cmake,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "tts-mod-vault";
-  version = "v1.3.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "ryanbinns";
+
+    owner = "markomijic";
     repo = "TTS-Mod-Vault";
-    rev = "v1.3.0";
-    sha256 = "0vdkjlvjc5psyb0pg7080m1p1jy3y3aqhvjywfh9fm5j0zhkwfq5";
+    rev = "v${version}";
+    hash = "sha256-BTs+4QeyVJeg415uiNXww8twQwUInHfB8voWJjeVs20=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
+  configurePhase = {
+
+  };
+
+  buildPhase = {
+
+  };
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp tts-mod-vault $out/bin
+  '';
+
+  meta = with lib; {
+    description = "TTS Mod Vault is a cross-platform mod backup tool for your Tabletop Simulator mods, saves and saved objects on Windows, Linux, and macOS.";
+    homepage = "https://github.com/markomijic/TTS-Mod-Vault";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "TTS-Mod-Vault";
+    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ esch ];
   };
 }
