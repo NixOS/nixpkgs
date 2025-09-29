@@ -172,7 +172,7 @@ def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
     return json.loads(output)
 
 
-def try_get_crate_manifest_path_from_mainfest_path(manifest_path: Path, crate_name: str) -> Path | None:
+def try_get_crate_manifest_path_from_manifest_path(manifest_path: Path, crate_name: str) -> Path | None:
     metadata = get_manifest_metadata(manifest_path)
 
     for pkg in metadata["packages"]:
@@ -187,7 +187,7 @@ def find_crate_manifest_in_tree(tree: Path, crate_name: str) -> Path:
     manifest_paths = tree.glob("**/Cargo.toml")
 
     for manifest_path in manifest_paths:
-        res = try_get_crate_manifest_path_from_mainfest_path(manifest_path, crate_name)
+        res = try_get_crate_manifest_path_from_manifest_path(manifest_path, crate_name)
         if res is not None:
             return res
 
@@ -274,13 +274,14 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     seen_source_keys = set()
     for pkg in cargo_lock_toml["package"]:
 
-        # ignore local dependenices
+        # ignore local dependencies
         if "source" not in pkg.keys():
             continue
 
         source: str = pkg["source"]
+        source_hash = hashlib.sha256(source.encode()).hexdigest()
 
-        dir_name = f"{pkg["name"]}-{pkg["version"]}"
+        dir_name = f"{pkg["name"]}-{pkg["version"]}-{source_hash}"
         crate_out_dir = out_dir / dir_name
 
         if source.startswith("git+"):
