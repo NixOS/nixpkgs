@@ -1,7 +1,11 @@
 {
   lib,
   stdenv,
-  pkgs,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  libuecc,
 }:
 
 let
@@ -11,19 +15,19 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "freifunk-gluon";
     repo = "ecdsautils";
     rev = "v${version}";
     sha256 = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
   };
 
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = [
     cmake
     pkg-config
     doxygen
   ];
-  buildInputs = with pkgs; [ libuecc ];
+  buildInputs = [ libuecc ];
 
   meta = with lib; {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
