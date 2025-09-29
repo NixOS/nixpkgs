@@ -12344,6 +12344,10 @@ self: super: with self; {
 
   plotpy = callPackage ../development/python-modules/plotpy { };
 
+  plover = callPackage ../development/python-modules/plover {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
 
   pluggy = callPackage ../development/python-modules/pluggy { };
