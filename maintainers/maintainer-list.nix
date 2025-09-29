@@ -21577,6 +21577,12 @@
     github = "i-am-logger";
     githubId = 1440852;
   };
+  rebmit = {
+    name = "Lu Wang";
+    email = "rebmit@rebmit.moe";
+    github = "rebmit";
+    githubId = 188659765;
+  };
   reckenrode = {
     name = "Randy Eckenrode";
     email = "randy@largeandhighquality.com";
