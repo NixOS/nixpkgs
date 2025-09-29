@@ -43,7 +43,11 @@ in
 
   options.services.amazon-ssm-agent = {
     enable = lib.mkEnableOption "Amazon SSM agent";
-    disableSudoersRule = lib.mkEnableOption "Whether to disable automatic generation of sudoers entry";
+    enableSudoersRule = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "automatic generation of sudoers entry";
+    };
     package = lib.mkPackageOption pkgs "amazon-ssm-agent" { };
   };
 
@@ -75,7 +79,7 @@ in
 
     # Add user that Session Manager needs, and give it sudo.
     # This is consistent with Amazon Linux 2 images.
-    security = lib.mkIf (!cfg.disableSudoersRule) {
+    security = lib.mkIf cfg.enableSudoersRule {
       sudo.extraRules = [ sudoRule ];
       sudo-rs.extraRules = [ sudoRule ];
     };
