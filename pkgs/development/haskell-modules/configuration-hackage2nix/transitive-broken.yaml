@@ -35,7 +35,6 @@ dont-distribute-packages:
  - AERN-RnToRm
  - AERN-RnToRm-Plot
  - aeson-native
- - aeson_1_5_6_0
  - affine
  - afis
  - afv
@@ -313,7 +312,6 @@ dont-distribute-packages:
  - boots-cloud
  - boots-web
  - borel
- - botan-low
  - both
  - bound-gen
  - BPS
@@ -1649,9 +1647,6 @@ dont-distribute-packages:
  - hsql-odbc
  - hsql-postgresql
  - hsql-sqlite3
- - hsqml-datamodel-vinyl
- - hsqml-demo-morris
- - hsqml-morris
  - hsreadability
  - hssourceinfo
  - hssqlppp-th
