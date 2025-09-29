@@ -43,9 +43,7 @@ buildPythonPackage rec {
     homepage = "http://wiki.ros.org/catkin_pkg";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      adhityaravi
-      bepri
-      dstathis
+      wentasah
     ];
   };
 }
