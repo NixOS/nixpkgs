@@ -11589,6 +11589,8 @@ self: super: with self; {
 
   peacasso = callPackage ../development/python-modules/peacasso { };
 
+  peakutils = callPackage ../development/python-modules/peakutils { };
+
   peaqevcore = callPackage ../development/python-modules/peaqevcore { };
 
   pebble = callPackage ../development/python-modules/pebble { };
