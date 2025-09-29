@@ -32,7 +32,7 @@ let
   llvmStdenv = llvmPackages_19.stdenv;
 in
 llvmStdenv.mkDerivation (finalAttrs: {
-  pname = "clickhouse" + lib.optionalString lts "-lts";
+  pname = "clickhouse";
   inherit version;
 
   src = fetchFromGitHub rec {
