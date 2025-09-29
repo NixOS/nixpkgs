@@ -11,7 +11,6 @@
   babel,
   evdev,
   mock,
-  pyqt5,
   pyserial,
   pytestCheckHook,
   pytest-qt,
@@ -21,6 +20,8 @@
   wcwidth,
   wheel,
   xlib,
+  # Qt dependencies
+  pyqt,
   wrapQtAppsHook,
 }:
 
@@ -43,13 +44,13 @@ buildPythonPackage rec {
   build-system = [
     babel
     setuptools
-    pyqt5
+    pyqt
     wheel
   ];
   dependencies = [
     appdirs
     evdev
-    pyqt5
+    pyqt
     pyserial
     plover-stroke
     rtf-tokenize
