@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       fpletz
       pstn
+      rebmit
       rnhmjoj
     ];
     platforms = platforms.all;
