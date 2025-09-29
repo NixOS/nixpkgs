@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "alice-lg";
-    rev = version;
+    tag = version;
     hash = "sha256-DlmUurpu/bs/91fLsSQ3xJ8I8NWJweynMgV6Svkf0Uo=";
   };
 

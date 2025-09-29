@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "autologin";
-    rev = version;
+    tag = version;
     hash = "sha256-Cy4v/1NuaiSr5Bl6SQMWk5rga8h1QMBUkHpN6M3bWOc=";
   };
 
