@@ -15565,6 +15565,8 @@ self: super: with self; {
 
   radon = callPackage ../development/python-modules/radon { };
 
+  rakopy = callPackage ../development/python-modules/rakopy { };
+
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
 
   rainbowstream = callPackage ../development/python-modules/rainbowstream { };
