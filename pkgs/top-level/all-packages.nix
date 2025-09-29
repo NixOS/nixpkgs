@@ -4602,7 +4602,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_8_20) compcert;
+  inherit (coqPackages_9_0) compcert;
 
   computecpp = wrapCCWith rec {
     cc = computecpp-unwrapped;
