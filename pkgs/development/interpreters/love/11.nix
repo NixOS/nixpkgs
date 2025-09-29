@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Framework for making 2D games in Lua";
     homepage = "https://love2d.org/";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     platforms = platforms.unix;
     mainProgram = "love";
     maintainers = with maintainers; [
