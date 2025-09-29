@@ -7,6 +7,7 @@
   ncurses,
   perl,
   flex,
+  testers,
   texinfo,
   qhull,
   libsndfile,
@@ -226,6 +227,12 @@ stdenv.mkDerivation (finalAttrs: {
     withPackages = import ./with-packages.nix { inherit buildEnv octavePackages; };
     pkgs = octavePackages;
     interpreter = "${finalAttrs.finalPackage}/bin/octave";
+    tests = {
+      wrapper = testers.testVersion {
+        package = finalAttrs.finalPackage.withPackages (ps: [ ps.doctest ]);
+        command = "octave --version";
+      };
+    };
   };
 
   meta = {
