@@ -5,7 +5,7 @@
   git,
   pkg-config,
   openssl,
-  erlang_27,
+  erlang,
   nodejs,
   bun,
   deno,
@@ -15,20 +15,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.12.0";
+  version = "1.13.0-rc1";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qjl+I09tnBbGc771SVJVb6fzAZ2tVOnBNhGfrIUh824=";
+    hash = "sha256-NIy4CUpWflQho3WH2x/O/h6wbkgv7TX+T1VNFuVOU4E=";
   };
 
-  cargoHash = "sha256-Ya0glVECB3cb9kgguuH4nY0ClK5NPH1mKAX9INDLzx4=";
+  cargoHash = "sha256-FQ+HcFBiw8yczpOe4VlfnBsm3XldA0mm9dqGTuBIxq0=";
 
   nativeBuildInputs = [
     pkg-config
-    erlang_27
+    erlang
   ];
 
   buildInputs = [ openssl ];
