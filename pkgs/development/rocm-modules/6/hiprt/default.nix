@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       mksafavi
     ];
+    teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
 })
