@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyTado" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for Tado web API";
     homepage = "https://github.com/wmalgadey/PyTado";
     changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jamiemagee ];
     mainProgram = "pytado";
   };
 }

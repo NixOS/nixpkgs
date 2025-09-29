@@ -18,15 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bhejnA7FfuopR27heliaE/vNd1Rqvnjj3n/vkjmimAw=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Islamic Tools and Libraries (ITL)";
     longDescription = ''
       The Islamic Tools and Libraries (ITL) project provides
       a fully featured library for performing common Islamic calculations.
     '';
     homepage = "https://www.arabeyes.org/ITL";
-    license = licenses.lgpl21Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ amyipdev ];
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ amyipdev ];
   };
 })

@@ -92,11 +92,11 @@ rebar3Relx {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/erlang-ls/erlang_ls";
     description = "Erlang Language Server";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     mainProgram = "erlang_ls";
   };
 }

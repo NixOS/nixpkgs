@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
     ./autogen-2.22.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GIO API bindings";
     homepage = "https://github.com/mono/gio-sharp";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

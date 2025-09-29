@@ -17,16 +17,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-4zolwQzK6dnFIcS2NwuxYZRS2AGcUGHh+KQzDkI0J6c=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate a THIRDPARTY file with all licenses in a cargo project";
     mainProgram = "cargo-bundle-licenses";
     homepage = "https://github.com/sstadick/cargo-bundle-licenses";
     changelog = "https://github.com/sstadick/cargo-bundle-licenses/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
     ];

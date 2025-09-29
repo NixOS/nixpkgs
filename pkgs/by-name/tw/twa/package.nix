@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny web auditor with strong opinions";
     homepage = "https://github.com/trailofbits/twa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ avaq ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ avaq ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -36,10 +36,10 @@ buildPythonPackage rec {
     pandas
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Save matplotlib figures as TikZ/PGFplots for smooth integration into LaTeX";
     homepage = "https://github.com/nschloe/tikzplotlib";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

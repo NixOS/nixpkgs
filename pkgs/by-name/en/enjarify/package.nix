@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/enjarify
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for translating Dalvik bytecode to equivalent Java bytecode";
     homepage = "https://github.com/google/enjarify/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "enjarify";
   };

@@ -34,11 +34,11 @@ python3.pkgs.buildPythonApplication rec {
     ./fix-runtime-error.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bring your ZSH history to Fish shell";
     homepage = "https://github.com/rsalmei/zsh-history-to-fish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alanpearce ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alanpearce ];
     mainProgram = "zsh-history-to-fish";
   };
 }

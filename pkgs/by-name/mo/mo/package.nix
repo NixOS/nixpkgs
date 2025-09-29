@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Moustache templates for Bash";
     homepage = "https://github.com/tests-always-included/mo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sheepforce ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sheepforce ];
   };
 }

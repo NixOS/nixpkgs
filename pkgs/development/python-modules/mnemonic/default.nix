@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mnemonic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementation of BIP-0039";
     homepage = "https://github.com/trezor/python-mnemonic";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       np
       prusnak
     ];

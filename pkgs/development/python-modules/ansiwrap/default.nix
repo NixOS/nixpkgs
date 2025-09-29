@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansiwrap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Textwrap, but savvy to ANSI colors and styles";
     homepage = "https://github.com/jonathaneunice/ansiwrap";
     changelog = "https://github.com/jonathaneunice/ansiwrap/blob/master/CHANGES.yml";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
 
     broken = true;

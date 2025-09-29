@@ -16,7 +16,7 @@
   vtkWithQt6,
   llvmPackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elmerfem";
   version = "9.0-unstable-2025-05-25";
 
@@ -73,15 +73,15 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "QWT_INCLUDE_DIR" "${qt6Packages.qwt}/lib/qwt.framework/Headers")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://elmerfem.org";
     description = "Finite element software for multiphysical problems";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       wulfsta
       broke
     ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 
 }

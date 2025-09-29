@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_git_revision_date_localized_plugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin that enables displaying the date of the last git modification of a page";
     homepage = "https://github.com/timvink/mkdocs-git-revision-date-localized-plugin";
     changelog = "https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
   };
 }

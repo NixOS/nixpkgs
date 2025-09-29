@@ -20,9 +20,9 @@ buildPythonPackage rec {
   # Only needed for tests
   nativeCheckInputs = [ pkgs.openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

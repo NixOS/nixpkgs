@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  meta = with lib; {
+  meta = {
     description = "Belledonne Communications' language recognition library. Part of the Linphone project";
     homepage = "https://gitlab.linphone.org/BC/public/belr";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

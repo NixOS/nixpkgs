@@ -42,10 +42,10 @@ buildPythonPackage rec {
     export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for implementing a modified pre-order traversal tree in Django";
     homepage = "https://github.com/django-mptt/django-mptt";
-    maintainers = with maintainers; [ hexa ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ hexa ];
+    license = with lib.licenses; [ mit ];
   };
 }

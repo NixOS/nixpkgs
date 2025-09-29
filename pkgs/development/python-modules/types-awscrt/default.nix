@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awscrt-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations and code completion for awscrt";
     homepage = "https://github.com/youtype/types-awscrt";
     changelog = "https://github.com/youtype/types-awscrt/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

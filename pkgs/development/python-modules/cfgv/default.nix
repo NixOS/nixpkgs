@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cfgv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Validate configuration and produce human readable error messages";
     homepage = "https://github.com/asottile/cfgv";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
 }

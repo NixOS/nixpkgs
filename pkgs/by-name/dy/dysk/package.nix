@@ -27,16 +27,16 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/*/out/{dysk.bash,dysk.fish,_dysk}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Get information on your mounted disks";
     homepage = "https://github.com/Canop/dysk";
     changelog = "https://github.com/Canop/dysk/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       koral
     ];
     mainProgram = "dysk";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

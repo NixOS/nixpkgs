@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Qt frontend of radare2";
     longDescription = ''
       iaito is the official graphical interface for radare2, a libre reverse
@@ -93,9 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://radare.org/n/iaito.html";
     changelog = "https://github.com/radareorg/iaito/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "iaito";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LuRsT/hr";
     description = "Horizontal bar for your terminal";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
     mainProgram = "hr";
   };
 }

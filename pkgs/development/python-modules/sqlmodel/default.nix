@@ -67,11 +67,11 @@ buildPythonPackage rec {
     "tests/test_tutorial/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to work with SQL databases";
     homepage = "https://github.com/tiangolo/sqlmodel";
     changelog = "https://github.com/tiangolo/sqlmodel/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

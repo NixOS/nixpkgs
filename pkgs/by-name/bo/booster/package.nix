@@ -59,11 +59,11 @@ buildGoModule rec {
       wrapProgram $out/bin/init --prefix PATH : ${lib.makeBinPath runtimeInputs}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and secure initramfs generator";
     homepage = "https://github.com/anatol/booster";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "init";
   };
 }

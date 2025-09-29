@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Recharge the robot";
     mainProgram = "orthorobot";
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free;
     downloadPage = "https://stabyourself.net/orthorobot/";
   };
 }

@@ -68,12 +68,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastavro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast read/write of AVRO files";
     mainProgram = "fastavro";
     homepage = "https://github.com/fastavro/fastavro";
     changelog = "https://github.com/fastavro/fastavro/blob/${src.tag}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://rogue.rogueforge.net/rogue-5-4/";
     description = "Final version of the original Rogue game developed for the UNIX operating system";
     mainProgram = "rogue";
-    platforms = platforms.all;
-    license = licenses.bsd3;
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

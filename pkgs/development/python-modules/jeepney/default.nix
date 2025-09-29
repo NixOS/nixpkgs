@@ -58,11 +58,11 @@ buildPythonPackage rec {
     "jeepney.io.trio"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.com/takluyver/jeepney/-/blob/${src.tag}/docs/release-notes.rst";
     homepage = "https://gitlab.com/takluyver/jeepney";
     description = "Pure Python DBus interface";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

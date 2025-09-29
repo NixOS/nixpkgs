@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://oscaf.sourceforge.net/";
     description = "Ontologies necessary for the Nepomuk semantic desktop";
     longDescription = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       ontologies such as RDF and RDFS as well as the Nepomuk ontologies which
       are used by projects like KDE or Strigi.
     '';
-    platforms = platforms.all;
-    maintainers = [ maintainers.sander ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.sander ];
   };
 }

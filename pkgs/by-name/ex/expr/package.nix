@@ -28,12 +28,12 @@ buildGoModule rec {
     mv $out/bin/{repl,expr}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Expression language and expression evaluation for Go";
     homepage = "https://github.com/expr-lang/expr";
     changelog = "https://github.com/expr-lang/expr/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "expr";
   };
 }

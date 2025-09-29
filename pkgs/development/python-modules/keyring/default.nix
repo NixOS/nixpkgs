@@ -70,16 +70,16 @@ buildPythonPackage rec {
   # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
   ++ lib.optional stdenv.hostPlatform.isDarwin "tests/test_multiprocess.py";
 
-  meta = with lib; {
+  meta = {
     description = "Store and access your passwords safely";
     homepage = "https://github.com/jaraco/keyring";
     changelog = "https://github.com/jaraco/keyring/blob/${src.tag}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "keyring";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       dotlambda
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

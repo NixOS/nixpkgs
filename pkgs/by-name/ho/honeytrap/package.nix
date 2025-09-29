@@ -21,11 +21,11 @@ buildGoModule {
   # dockerize.sh, which we don't care about.
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced Honeypot framework";
     mainProgram = "honeytrap";
     homepage = "https://github.com/honeytrap/honeytrap";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     # Broken on darwin for Go toolchain > 1.22, with error:
     # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'

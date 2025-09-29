@@ -58,14 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hodapp
       pbsds
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
   };
 })

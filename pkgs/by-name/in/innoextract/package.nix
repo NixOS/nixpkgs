@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ unar ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "innoextract";
   };
 }

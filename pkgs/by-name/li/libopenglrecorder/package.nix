@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     libvorbis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library allowing Optional async readback OpenGL frame buffer with optional audio recording";
     homepage = "https://github.com/Benau/libopenglrecorder";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = with platforms; windows ++ linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = with lib.platforms; windows ++ linux;
   };
 }

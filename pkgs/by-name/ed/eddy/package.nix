@@ -38,12 +38,12 @@ python3Packages.buildPythonApplication rec {
     wrapQtApp "$out/bin/eddy" --prefix JAVA_HOME : ${jre}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.obdasystems.com/eddy";
     description = "Graphical editor for the specification and visualization of Graphol ontologies";
     mainProgram = "eddy";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ koslambrou ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ koslambrou ];
   };
 }

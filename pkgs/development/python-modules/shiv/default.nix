@@ -43,10 +43,10 @@ buildPythonPackage rec {
     "test_alternate_root_environment_variable"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility for building fully self contained Python zipapps";
     homepage = "https://github.com/linkedin/shiv";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

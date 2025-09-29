@@ -97,11 +97,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lexiforest/curl_cffi/releases/tag/${src.tag}";
     description = "Python binding for curl-impersonate via cffi";
     homepage = "https://curl-cffi.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chuangzhu ];
   };
 }

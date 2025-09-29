@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plugin.core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic code loading framework for building pluggable Python distributions";
     homepage = "https://github.com/localstack/plux";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

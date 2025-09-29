@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita # for goa-backend
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Online accounts configuration utility";
     homepage = "https://github.com/xapp-project/gnome-online-accounts-gtk";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 })

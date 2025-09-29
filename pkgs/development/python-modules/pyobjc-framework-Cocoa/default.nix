@@ -56,11 +56,11 @@ buildPythonPackage rec {
     "PyObjCTools"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PyObjC wrappers for the Cocoa frameworks on macOS";
     homepage = "https://github.com/ronaldoussoren/pyobjc";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

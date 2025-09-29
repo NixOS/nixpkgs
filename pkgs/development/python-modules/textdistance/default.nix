@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textdistance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for comparing distance between two or more sequences";
     homepage = "https://github.com/life4/textdistance";
     changelog = "https://github.com/life4/textdistance/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

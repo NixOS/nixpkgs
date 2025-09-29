@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "memcache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure python memcached client";
     homepage = "https://github.com/linsomniac/python-memcached";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

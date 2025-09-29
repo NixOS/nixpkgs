@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schwifty" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";
     description = "Validate/generate IBANs and BICs";
     homepage = "https://github.com/mdomke/schwifty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ milibopp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ milibopp ];
   };
 }

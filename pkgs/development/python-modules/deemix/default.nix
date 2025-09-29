@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deezer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deezer downloader built from the ashes of Deezloader Remix";
     mainProgram = "deemix";
     homepage = "https://gitlab.com/RemixDev/deemix-py";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ natto1784 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ natto1784 ];
   };
 }

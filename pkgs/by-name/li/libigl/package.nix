@@ -22,10 +22,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r include/igl $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple C++ geometry processing library";
     homepage = "https://github.com/libigl/libigl";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nim65s ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nim65s ];
   };
 })

@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "AWS SDK for C common core";
     homepage = "https://github.com/awslabs/aws-c-common";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     # https://github.com/awslabs/aws-c-common/issues/1175
     badPlatforms = platforms.bigEndian;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       orivej
       r-burns
     ];

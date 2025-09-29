@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
       --subst-var version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use, powerful and expressive command line argument handling for C++11/14/17";
     homepage = "https://github.com/muellan/clipp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xbreak ];
-    platforms = with platforms; all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xbreak ];
+    platforms = with lib.platforms; all;
   };
 }

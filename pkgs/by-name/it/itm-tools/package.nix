@@ -31,14 +31,14 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for analyzing ITM traces";
     homepage = "https://github.com/japaric/itm-tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hh
       sb0
     ];

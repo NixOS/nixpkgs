@@ -62,11 +62,11 @@ buildPythonPackage {
       rm $out/bin/qom-fuse
     '');
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.qemu.org/";
     description = "Python tooling used by the QEMU project to build, configure, and test QEMU";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       devplayer0
       davhau
     ];

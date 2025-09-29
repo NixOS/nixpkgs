@@ -18,12 +18,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "HID report descriptor I/O library and conversion tool";
     homepage = "https://github.com/DIGImend/hidrd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ euxane ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ euxane ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/hidrd.x86_64-darwin
     mainProgram = "hidrd-convert";
   };

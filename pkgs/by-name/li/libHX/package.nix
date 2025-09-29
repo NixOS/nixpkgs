@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libhx.sourceforge.net/";
     longDescription = ''
       libHX is a C library (with some C++ bindings available) that provides data structures
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       and autoresizing, option and config file parsing, type checking casts and more.
     '';
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       gpl3
       lgpl21Plus
       wtfpl

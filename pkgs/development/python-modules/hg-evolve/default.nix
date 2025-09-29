@@ -54,13 +54,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enables the “changeset evolution” feature of Mercurial core";
     homepage = "https://www.mercurial-scm.org/doc/evolution/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       xavierzwirtz
       lukegb
     ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

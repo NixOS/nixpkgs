@@ -17,15 +17,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-DEwipAG/zPPftYwYahRJfpXgHPXerGdn10PkS8DHWCM=";
 
-  meta = with lib; {
+  meta = {
     description = "Wayland clipboard manager that will make you clap";
     homepage = "https://github.com/bjesus/clapboard";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dit7ya
       bjesus
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "clapboard";
   };
 }

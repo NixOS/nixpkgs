@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK, gnome-shell and Xfce theme based on Ubuntu Ambiance";
     homepage = "https://github.com/lassekongo83/amber-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

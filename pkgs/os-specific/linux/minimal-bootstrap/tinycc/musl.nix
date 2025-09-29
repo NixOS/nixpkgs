@@ -26,11 +26,11 @@ let
     ./static-link.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast, and embeddable C compiler and interpreter";
     homepage = "https://repo.or.cz/w/tinycc.git";
-    license = licenses.lgpl21Only;
-    teams = [ teams.minimal-bootstrap ];
+    license = lib.licenses.lgpl21Only;
+    teams = [ lib.teams.minimal-bootstrap ];
     platforms = [ "i686-linux" ];
   };
 

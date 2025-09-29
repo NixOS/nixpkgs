@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     "-Dmunt_WITH_MT32EMU_SMF2WAV=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://munt.sourceforge.net/";
     description = "Produces a WAVE file from a Standard MIDI file (SMF)";
     mainProgram = "mt32emu-smf2wav";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -79,11 +79,11 @@ buildPythonPackage rec {
     "test_async_get_messages"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to communicate with the Automower Connect API";
     homepage = "https://github.com/Thomas55555/aioautomower";
     changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

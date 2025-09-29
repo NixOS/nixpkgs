@@ -55,11 +55,11 @@ stdenv.mkDerivation {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
     homepage = "https://www.infradead.org/openconnect/";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
       tricktron
       pentane
     ];

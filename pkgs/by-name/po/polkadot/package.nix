@@ -75,16 +75,16 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
     homepage = "https://github.com/paritytech/polkadot-sdk";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       akru
       andresilva
       FlorianFranzen
       RaghavSood
     ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
-    platforms = intersectLists platforms.unix (
-      platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86
+    platforms = intersectLists lib.platforms.unix (
+      lib.platforms.aarch64 ++ lib.platforms.s390x ++ lib.platforms.riscv64 ++ lib.platforms.x86
     );
   };
 }

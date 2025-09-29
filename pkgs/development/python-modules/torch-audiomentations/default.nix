@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_transform_is_differentiable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast audio data augmentation in PyTorch";
     homepage = "https://github.com/asteroid-team/torch-audiomentations";
     changelog = "https://github.com/asteroid-team/torch-audiomentations/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

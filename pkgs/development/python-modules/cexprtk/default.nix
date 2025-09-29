@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cexprtk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mathematical expression parser, cython wrapper";
     homepage = "https://github.com/mjdrushton/cexprtk";
-    license = licenses.cpl10;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.cpl10;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "motioneye_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for motionEye";
     homepage = "https://github.com/dermotduffy/motioneye-client";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

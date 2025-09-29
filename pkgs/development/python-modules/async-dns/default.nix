@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_dns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python DNS library";
     homepage = "https://github.com/gera2ld/async_dns";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

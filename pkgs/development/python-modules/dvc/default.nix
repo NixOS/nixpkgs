@@ -162,12 +162,12 @@ buildPythonPackage rec {
     "dvc.api"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cmcdragonkai
       fab
     ];

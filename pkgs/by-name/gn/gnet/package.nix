@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     description = "Network library, written in C, object-oriented, and built upon GLib";
     homepage = "https://developer.gnome.org/gnet/";
-    license = licenses.lgpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

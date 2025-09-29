@@ -63,10 +63,10 @@ let
           kdeFilePath = "${pkg}/share/wallpapers/${name}/contents/images/${src.name}";
         };
 
-        meta = with lib; {
+        meta = {
           inherit description license;
           homepage = "https://github.com/NixOS/nixos-artwork";
-          platforms = platforms.all;
+          platforms = lib.platforms.all;
         };
       };
     in

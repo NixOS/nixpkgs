@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     docutils
   ];
 
-  meta = with lib; {
+  meta = {
     description = "'top' like tool for PostgreSQL";
     longDescription = ''
       pg_top allows you to:
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://pg_top.gitlab.io";
     changelog = "https://gitlab.com/pg_top/pg_top/-/blob/main/HISTORY.rst";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "pg_top";
   };
 }

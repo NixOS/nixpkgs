@@ -32,11 +32,11 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests.prometheus-exporters) pve;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Exposes information gathered from Proxmox VE cluster for use by the Prometheus monitoring system";
     mainProgram = "pve_exporter";
     homepage = "https://github.com/prometheus-pve/prometheus-pve-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nukaduka ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nukaduka ];
   };
 }

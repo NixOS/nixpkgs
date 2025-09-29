@@ -112,12 +112,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.timidity;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/timidity/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Software MIDI renderer";
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
     mainProgram = "timidity";
   };
 }

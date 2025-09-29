@@ -29,12 +29,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Add missing integrity and resolved fields to a package-lock.json file";
     homepage = "https://github.com/jeslie0/npm-lockfile-fix";
     mainProgram = "npm-lockfile-fix";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lucasew
       felschr
     ];

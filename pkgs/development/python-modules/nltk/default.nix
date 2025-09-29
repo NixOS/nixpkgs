@@ -99,11 +99,11 @@ buildPythonPackage rec {
     dataDir = pkgs.callPackage ./data-dir.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Natural Language Processing ToolKit";
     mainProgram = "nltk";
     homepage = "http://nltk.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bengsparks ];
   };
 }

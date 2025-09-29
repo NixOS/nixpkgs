@@ -45,7 +45,7 @@ buildKodiAddon rec {
   meta = with lib; {
     homepage = "https://www.plex.tv";
     description = "Unofficial Plex for Kodi add-on";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = teams.kodi.members;
   };
 }

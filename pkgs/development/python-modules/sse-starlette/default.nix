@@ -73,11 +73,11 @@ buildPythonPackage rec {
     "test_sse_server_termination"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Server Sent Events for Starlette and FastAPI";
     homepage = "https://github.com/sysid/sse-starlette";
     changelog = "https://github.com/sysid/sse-starlette/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

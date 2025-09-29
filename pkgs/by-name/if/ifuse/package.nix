@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     libimobiledevice
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libimobiledevice/ifuse";
     description = "Fuse filesystem implementation to access the contents of iOS devices";
     longDescription = ''
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
       app, an app's documents folder or even the root filesystem on jailbroken
       devices.
     '';
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "ifuse";
   };

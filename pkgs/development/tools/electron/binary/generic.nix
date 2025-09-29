@@ -42,9 +42,9 @@ let
   meta = with lib; {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       yayayayaka
       teutat3s
       tomasajt
@@ -56,7 +56,7 @@ let
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
     knownVulnerabilities = optional (versionOlder version "36.0.0") "Electron version ${version} is EOL";
   };

@@ -123,13 +123,13 @@ stdenv.mkDerivation {
     ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "sha256:$sha256" "$installation_script_url"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       michalrus
     ];
   };

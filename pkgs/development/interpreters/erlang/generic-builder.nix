@@ -208,7 +208,7 @@ stdenv.mkDerivation (
     };
 
     meta =
-      with lib;
+
       (
         {
           homepage = "https://www.erlang.org/";
@@ -224,9 +224,9 @@ stdenv.mkDerivation (
             tolerance.
           '';
 
-          platforms = platforms.unix;
-          teams = [ teams.beam ];
-          license = licenses.asl20;
+          platforms = lib.platforms.unix;
+          teams = [ lib.teams.beam ];
+          license = lib.licenses.asl20;
         }
         // meta
       );

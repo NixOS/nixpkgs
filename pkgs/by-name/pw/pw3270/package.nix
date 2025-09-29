@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "3270 Emulator for gtk";
     homepage = "https://softwarepublico.gov.br/social/pw3270/";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.vifino ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.vifino ];
     mainProgram = "pw3270";
   };
 }

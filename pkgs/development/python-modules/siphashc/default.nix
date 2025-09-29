@@ -21,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "siphashc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python c-module for siphash";
     homepage = "https://github.com/WeblateOrg/siphashc";
     changelog = "https://github.com/WeblateOrg/siphashc/blob/${version}/CHANGES.rst";
-    license = licenses.isc;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

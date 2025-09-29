@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (!withWebSocket) "--without-websocket";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://named-data.net/";
     description = "Named Data Networking (NDN) Forwarding Daemon";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bertof ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bertof ];
   };
 }
