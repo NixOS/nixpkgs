@@ -12,6 +12,7 @@
   libnotify,
   slurp,
   wl-clipboard,
+  unixtools,
   bash,
   nix-update-script,
 }:
@@ -54,6 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           libnotify
           slurp
           wl-clipboard
+          unixtools.getopt
         ]
       }"
   '';
