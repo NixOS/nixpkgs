@@ -428,11 +428,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withPasswordQuality [ libpwquality ]
   ++ lib.optionals withQrencode [ qrencode ]
   ++ lib.optionals withLibarchive [ libarchive ]
-  ++ lib.optional (withBootloader && stdenv.targetPlatform.useLLVM or false) (
-    llvmPackages.compiler-rt.override {
-      doFakeLibgcc = true;
-    }
-  );
+  ++ lib.optional (withBootloader && stdenv.targetPlatform.useLLVM or false) llvmPackages.llvm-libgcc;
 
   mesonBuildType = "release";
 
