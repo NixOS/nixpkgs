@@ -201,4 +201,9 @@ in
 
     users.groups.traefik = { };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    jackr
+    sigmasquadron
+  ];
 }
