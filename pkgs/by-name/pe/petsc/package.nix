@@ -26,10 +26,10 @@
   # External libraries options
   withHdf5 ? withCommonDeps,
   withMetis ? withCommonDeps,
-  withZlib ? (withP4est || withPtscotch),
+  withZlib ? (withP4est || withPtScotch),
   withScalapack ? withCommonDeps && mpiSupport,
   withParmetis ? withFullDeps, # parmetis is unfree
-  withPtscotch ? withCommonDeps && mpiSupport,
+  withPtScotch ? withCommonDeps && mpiSupport,
   withMumps ? withCommonDeps,
   withP4est ? withFullDeps,
   withHypre ? withCommonDeps && mpiSupport,
@@ -67,7 +67,7 @@ assert withP4est -> (mpiSupport && withZlib);
 # Package parmetis depend on metis and mpi support
 assert withParmetis -> (withMetis && mpiSupport);
 
-assert withPtscotch -> (mpiSupport && withZlib);
+assert withPtScotch -> (mpiSupport && withZlib);
 assert withScalapack -> mpiSupport;
 assert (withMumps && mpiSupport) -> withScalapack;
 assert withHypre -> mpiSupport;
@@ -83,6 +83,7 @@ let
       fortranSupport
       pythonSupport
       precision
+      withPtScotch
       ;
     enableMpi = self.mpiSupport;
 
@@ -139,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withP4est petscPackages.p4est
   ++ lib.optional withMetis petscPackages.metis
   ++ lib.optional withParmetis petscPackages.parmetis
-  ++ lib.optional withPtscotch petscPackages.scotch
+  ++ lib.optional withPtScotch petscPackages.scotch
   ++ lib.optional withScalapack petscPackages.scalapack
   ++ lib.optional withMumps petscPackages.mumps
   ++ lib.optional withHypre petscPackages.hypre
@@ -184,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional pythonSupport "--with-petsc4py=1"
   ++ lib.optional withMetis "--with-metis=1"
   ++ lib.optional withParmetis "--with-parmetis=1"
-  ++ lib.optional withPtscotch "--with-ptscotch=1"
+  ++ lib.optional withPtScotch "--with-ptscotch=1"
   ++ lib.optional withScalapack "--with-scalapack=1"
   ++ lib.optional withMumps "--with-mumps=1"
   ++ lib.optional (withMumps && !mpiSupport) "--with-mumps-serial=1"
@@ -196,11 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSuperLuDist "--with-superlu_dist=1"
   ++ lib.optional withFftw "--with-fftw=1"
   ++ lib.optional withSuitesparse "--with-suitesparse=1";
-
-  hardeningDisable = lib.optionals debug [
-    "fortify"
-    "fortify3"
-  ];
 
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
