@@ -7,7 +7,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 diff --git a/packages/flutter_tools/bin/xcode_backend.dart b/packages/flutter_tools/bin/xcode_backend.dart
 --- a/packages/flutter_tools/bin/xcode_backend.dart	(revision d693b4b9dbac2acd4477aea4555ca6dcbea44ba2)
-+++ b/packages/flutter_tools/bin/xcode_backend.dart	(revision 5e10f063458657b478441565205aba357fa0ace2)
++++ b/packages/flutter_tools/bin/xcode_backend.dart	(revision f50a62d973f7a592fc1167ae37e4d39e9bc1ede4)
 @@ -378,6 +378,12 @@
    }
  
@@ -21,7 +21,7 @@ diff --git a/packages/flutter_tools/bin/xcode_backend.dart b/packages/flutter_to
      runSync('codesign', <String>[
        '--force',
        '--verbose',
-@@ -565,6 +571,13 @@
+@@ -565,6 +571,15 @@
      streamOutput('done');
      streamOutput(' └─Compiling, linking and signing...');
  
@@ -29,8 +29,10 @@ diff --git a/packages/flutter_tools/bin/xcode_backend.dart b/packages/flutter_to
 +    runSync('chmod', <String>[
 +      '-R',
 +      '755',
-+      projectPath,
-+    ]);
++      "${projectPath}/build/${platform.name}/",
++    ],
++      allowFail: true,
++    );
 +
      echo('Project $projectPath built and packaged successfully.');
    }
