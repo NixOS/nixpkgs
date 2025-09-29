@@ -30,6 +30,13 @@ buildPythonPackage rec {
     cryptography
   ];
 
+  patches = [
+    # NOTE: This is the same patch file as Fix-compat-with-current-cryptography.patch
+    #       from the pgpy packaging, with the base directory modified for pgpy-dtc.
+    # https://github.com/SecurityInnovation/PGPy/pull/474
+    ./Fix-compat-with-current-cryptography.patch
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pgpy_dtc" ];
