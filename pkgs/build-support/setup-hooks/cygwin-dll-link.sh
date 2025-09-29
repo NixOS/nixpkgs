@@ -15,6 +15,7 @@ addOutputDLLPaths() {
 postInstallHooks+=(addOutputDLLPaths)
 
 _dllDeps() {
+  [ -z "${OBJDUMP:-}" ] && echo "_dllDeps: '\$OBJDUMP' variable is empty, skipping." 1>&2 && return
   "$OBJDUMP" -p "$1" \
     | sed -n 's/.*DLL Name: \(.*\)/\1/p' \
     | sort -u
