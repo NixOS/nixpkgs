@@ -3,20 +3,22 @@
   buildNpmPackage,
   fetchzip,
   nodejs_20,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "1.0.126";
+  version = "1.0.128";
 
   nodejs = nodejs_20; # required for sandboxed Nix builds on Darwin
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-U6uYRkmVqMoJDAAzLHpF9G5OglPhLqPuwe6gWMQPx78=";
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
+    hash = "sha256-dzLGcCgje3FMMS+Ptmxd2JK08y7z9rI0ak5l3Bv1MUk=";
   };
 
-  npmDepsHash = "sha256-m+GYa3uPfkUDV+p95uQToY3n/k0JG8hbppBn0GUeV+8=";
+  npmDepsHash = "sha256-Ynoj85a/F9Jv4w2vRDnGqn/G6zkaPesNQNEdqAE5zOo=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -24,7 +26,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  AUTHORIZED = "1";
+  env.AUTHORIZED = "1";
 
   # `claude-code` tries to auto-update by default, this disables that functionality.
   # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
@@ -34,6 +36,14 @@ buildNpmPackage rec {
       --set DISABLE_AUTOUPDATER 1 \
       --unset DEV
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = ./update.sh;
 
@@ -46,7 +56,8 @@ buildNpmPackage rec {
       malo
       markus1189
       omarjatoi
+      xiaoxiangmoe
     ];
     mainProgram = "claude";
   };
-}
+})
