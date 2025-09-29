@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SAeQ7nFsr37I8XncV3eMT8JCb74CdM+xPrNBX+qf8Bc=";
+    hash = "sha256-AgzLv6HkmHmWLQuWv2QXWhzB8jxvEKLyznVj67J6Wl8=";
   };
 
   postPatch = ''
