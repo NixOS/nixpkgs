@@ -3794,10 +3794,6 @@ with pkgs;
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
-  parallel = callPackage ../tools/misc/parallel { };
-
-  parallel-full = callPackage ../tools/misc/parallel/wrapper.nix { };
-
   parcellite = callPackage ../tools/misc/parcellite { };
 
   patchutils = callPackage ../tools/text/patchutils { };
