@@ -3,7 +3,6 @@
 {
   _cuda,
   addDriverRunpath,
-  backendStdenv,
   buildRedist,
   cuda_cccl,
   cuda_compat,
@@ -12,7 +11,7 @@
   cudaAtLeast,
   lib,
 }:
-buildRedist {
+buildRedist (finalAttrs: {
   redistName = "cuda";
   pname = "cuda_cudart";
 
@@ -28,10 +27,11 @@ buildRedist {
     "stubs"
   ];
 
-  propagatedBuildOutputs = [
-    "static" # required by CMake
-    "stubs" # always propagate, even when cuda_compat is used, to avoid symbol linking errors
-  ];
+  propagatedBuildOutputs =
+    # required by CMake
+    lib.optionals (lib.elem "static" finalAttrs.outputs) [ "static" ]
+    # always propagate, even when cuda_compat is used, to avoid symbol linking errors
+    ++ lib.optionals (lib.elem "stubs" finalAttrs.outputs) [ "stubs" ];
 
   # When cuda_compat is available, propagate it.
   # NOTE: `cuda_compat` can be disabled by setting the package to `null`. This is useful in cases where
@@ -47,9 +47,8 @@ buildRedist {
     # - nv/target
     # TODO(@connorbaker): Check that the dependency offset for this is correct.
     ++ [ (lib.getOutput "include" cuda_cccl) ]
-    ++ lib.optionals (backendStdenv.hasJetsonCudaCapability && cuda_compat != null) [
-      cuda_compat
-    ];
+    # NOTE: cuda_compat may be null or unavailable
+    ++ lib.optionals (cuda_compat.meta.available or false) [ cuda_compat ];
 
   allowFHSReferences = false;
 
@@ -95,4 +94,4 @@ buildRedist {
   '';
 
   meta.description = "CUDA Runtime";
-}
+})
