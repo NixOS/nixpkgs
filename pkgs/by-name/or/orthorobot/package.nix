@@ -34,10 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
       name = "orthorobot";
       exec = "orthorobot";
       icon = icon;
-      comment = "Robot game";
+      comment = "A perspective based puzzle game, where you flatten the view to move across gaps";
       desktopName = "Orthorobot";
-      genericName = "orthorobot";
-      categories = [ "Game" ];
+      genericName = "Perspective puzzle game";
+      categories = [
+        "Game"
+        "LogicGame"
+      ];
+      singleMainWindow = true;
     })
   ];
 
