@@ -36,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-D CMAKE_BUILD_TYPE=Release"
-    "-D BAKE_KERNEL=OFF"
-    "-D BAKE_COMPILED_KERNEL=OFF"
-    "-D BITCODE=ON"
-    "-D PRECOMPILE=ON"
-    "-D NO_UNITTEST=ON"
-    "-D FORCE_DISABLE_CUDA=ON"
+    (lib.cmakeBool "BAKE_KERNEL" false)
+    (lib.cmakeBool "BAKE_COMPILED_KERNEL" false)
+    (lib.cmakeBool "BITCODE" true)
+    (lib.cmakeBool "PRECOMPILE" true)
+    # needs accelerator
+    (lib.cmakeBool "NO_UNITTEST" true)
+    (lib.cmakeBool "FORCE_DISABLE_CUDA" true)
   ];
 
   postInstall = ''
