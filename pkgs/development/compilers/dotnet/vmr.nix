@@ -367,30 +367,6 @@ stdenv.mkDerivation rec {
       cp -Tr ${bootstrapSdk}/share/dotnet .dotnet
       chmod -R +w .dotnet
 
-      ${lib.optionalString (lib.versionAtLeast version "10") ''
-        # seed Microsoft.Build.NoTargets so MSBuild can resolve it during prep
-        if [[ ! -d ".dotnet/sdk/$sdk_version/Sdks/Microsoft.Build.NoTargets" ]]; then
-          shopt -s nullglob
-          for packDir in .dotnet/packs/Microsoft.Build.NoTargets.*; do
-            if [[ -d "$packDir/Sdk" ]]; then
-              mkdir -p ".dotnet/sdk/$sdk_version/Sdks"
-              cp -R "$packDir/Sdk" ".dotnet/sdk/$sdk_version/Sdks/Microsoft.Build.NoTargets"
-              break
-            fi
-          done
-          shopt -u nullglob
-        fi
-
-        if [[ ! -d ".dotnet/sdk/$sdk_version/Sdks/Microsoft.Build.NoTargets" ]] \
-           && [[ -d "${bootstrapSdk.artifacts}" ]]; then
-          no_targets_pkg=$(find "${bootstrapSdk.artifacts}" -maxdepth 6 -type f -name 'Microsoft.Build.NoTargets*.nupkg' -print -quit)
-          if [[ -n "$no_targets_pkg" ]]; then
-            mkdir -p ".dotnet/sdk/$sdk_version/Sdks/Microsoft.Build.NoTargets"
-            unzip -qo "$no_targets_pkg" -d ".dotnet/sdk/$sdk_version/Sdks/Microsoft.Build.NoTargets"
-          fi
-        fi
-      ''}
-
       export HOME=$(mktemp -d)
     ''
     + lib.optionalString (lib.versionAtLeast version "10") ''

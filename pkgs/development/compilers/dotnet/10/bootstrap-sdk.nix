@@ -4,9 +4,7 @@
   buildNetSdk,
   fetchNupkg,
 }:
-
 # v10.0 (go-live)
-
 let
   commonPackages = [
     (fetchNupkg {
@@ -33,6 +31,11 @@ let
       pname = "Microsoft.NET.ILLink.Tasks";
       version = "10.0.0-rc.1.25451.107";
       hash = "sha512-XisyrroZsOir2prziGawVqx8sVAFvyamu5W5ordZYYuHIr/yeLlC6xDCgZ1CMhHE00ElUyc34ChHl6gUgQdCeg==";
+    })
+    (fetchNupkg {
+      pname = "Microsoft.Build.NoTargets";
+      version = "3.7.0";
+      hash = "sha512-5qdJsWhJBNGg6NGg2jqU8BqkSzaPvA5i7rWtYWoIVy4UluXgHwvC2Y0U2CGlZ1TjO82t4cQgtK/7Qeob4b+5Dw==";
     })
   ];
 
@@ -455,9 +458,7 @@ let
       })
     ];
   };
-
-in
-rec {
+in rec {
   release_10_0 = "10.0.0-rc.1";
 
   aspnetcore_10_0 = buildAspNetCore {
