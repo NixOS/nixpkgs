@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  fetchpatch,
+  fetchgit,
   cmake,
   ninja,
   git,
@@ -314,7 +314,16 @@ let
 
   swift-crypto = mkBootstrapDerivation {
     name = "swift-crypto";
-    src = generated.sources.swift-crypto;
+    src = fetchgit {
+      url = "https://github.com/apple/swift-crypto.git";
+      rev = "95ba0316a9b733e92bb6b071255ff46263bbe7dc"; # 3.15.1, as opposed to the pinned version of 3.0.0
+      sha256 = "sha256-RzoUBx4l12v0ZamSIAEpHHCRQXxJkXJCwVBEj7Qwg9I=";
+      fetchSubmodules = true;
+    };
+
+    buildInputs = [
+      swift-asn1
+    ];
 
     patches = [
       ./patches/install-crypto-extras.patch
@@ -334,6 +343,12 @@ let
 
       # Headers are not installed.
       cp -r ../Sources/CCryptoBoringSSL/include $out/include
+
+      # Swift modules are put in the wrong place by default (and not all are linked)
+      mkdir -p $out/${swiftModuleSubdir}
+      rm -rf $out/${swiftModuleSubdir}/*.swift{module,doc}
+      # I assume we don't care about .swiftsourceinfo
+      cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
     '';
   };
 
