@@ -16,7 +16,7 @@
   patchelf,
   stdenv,
   systemdMinimal,
-  tbb,
+  onetbb,
   writeTextDir,
 }:
 
@@ -36,7 +36,7 @@ let
     openssl
     stdenv.cc.cc.lib
     systemdMinimal
-    tbb
+    onetbb
   ];
 
   gdkLoadersCache = "${gdk-pixbuf.out}/${gdk-pixbuf.moduleDir}.cache";
