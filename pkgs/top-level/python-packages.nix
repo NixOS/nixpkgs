@@ -11849,7 +11849,6 @@ self: super: with self; {
   piqp = callPackage ../development/python-modules/piqp { };
 
   pivy = callPackage ../development/python-modules/pivy {
-    inherit (pkgs.qt5) qtbase qmake;
     inherit (pkgs.libsForQt5) soqt;
   };
 
