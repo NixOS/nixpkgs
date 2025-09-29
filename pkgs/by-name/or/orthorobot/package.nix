@@ -58,10 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  installPhase = ''
-    runHook preInstall
+  buildPhase = ''
+    runHook preBuild
     zip -9 -r orthorobot.love ./*
     strip-nondeterminism --type zip orthorobot.love
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
     install -Dm444 -t $out/share/games/lovegames/ orthorobot.love
     makeWrapper ${love}/bin/love $out/bin/orthorobot \
                 --add-flags $out/share/games/lovegames/orthorobot.love
