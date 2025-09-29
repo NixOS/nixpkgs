@@ -1,0 +1,25 @@
+diff --git a/libgcc/config/i386/w32-unwind.h b/libgcc/config/i386/w32-unwind.h
+index c610c50cbd4..b9a6f336307 100644
+--- a/libgcc/config/i386/w32-unwind.h
++++ b/libgcc/config/i386/w32-unwind.h
+@@ -6,6 +6,7 @@ This file is part of GCC.
+ 
+ GCC is free software; you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free
++
+ Software Foundation; either version 3, or (at your option) any later
+ version.
+ 
+diff --git a/libiberty/configure b/libiberty/configure
+index 02fbaabe89e..7fe3ed3df1e 100755
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -5336,8 +5336,6 @@ case "${host}" in
+     hppa*64*-*-hpux*)
+ 	# PIC is the default for 64-bit PA HP-UX.
+ 	;;
+-    i[34567]86-*-cygwin* | x86_64-*-cygwin*)
+-	;;
+     i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	;;
+     i[34567]86-*-interix[3-9]*)

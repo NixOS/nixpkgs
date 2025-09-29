@@ -248,4 +248,9 @@ optionals noSysDirs (
     url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-3-corngood@gmail.com/raw";
     hash = "sha256-8I2G4430gkYoWgUued4unqhk8ZCajHf1dcivAeuLZ0E=";
   })
+  ./cygwin-remove-relative-w32api-paths.patch
+]
+
+++ optionals hostPlatform.isCygwin [
+  ./cygwin-allow-pic.patch
 ]

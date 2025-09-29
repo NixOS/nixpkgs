@@ -1,0 +1,12 @@
+diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
+index 93b279d0a92..a266eaabb9c 100644
+--- a/gcc/config/i386/cygwin.h
++++ b/gcc/config/i386/cygwin.h
+@@ -32,7 +32,6 @@ along with GCC; see the file COPYING3.  If not see
+ #define CPP_SPEC "%(cpp_cpu) %{posix:-D_POSIX_SOURCE} \
+   %{pthread:-D_REENTRANT} \
+   %{mwin32:-DWIN32 -D_WIN32 -D__WIN32 -D__WIN32__ %{!ansi:-DWINNT}} \
+-  %{!nostdinc:%{!mno-win32:-idirafter ../include/w32api%s -idirafter ../../include/w32api%s}}\
+ "
+ 
+ #undef STARTFILE_SPEC

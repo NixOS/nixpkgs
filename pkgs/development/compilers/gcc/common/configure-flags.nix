@@ -176,7 +176,15 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       # Darwin requires using the SDK as the sysroot for `SDKROOT` to work correctly.
-      "--with-build-sysroot=${if targetPlatform.isDarwin then apple-sdk.sdkroot else "/"}"
+      "--with-build-sysroot=${
+        if targetPlatform.isDarwin then
+          apple-sdk.sdkroot
+        else if buildPlatform.isCygwin then
+          # this avoids creating paths that start with //, which is a network path on cygwin
+          "/./"
+        else
+          "/"
+      }"
       # Same with the stdlibc++ headers embedded in the gcc output
       "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
     ]
