@@ -472,7 +472,7 @@ rec {
     let
       nativePluginsConfigs = lib.attrsets.attrValues packages;
       nonNativePlugins = (lib.optionals (plug != null) plug.plugins);
-      nativePlugins = lib.concatMap (requiredPluginsForPackage) nativePluginsConfigs;
+      nativePlugins = lib.concatMap requiredPluginsForPackage nativePluginsConfigs;
     in
     nativePlugins ++ nonNativePlugins;
 

@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/CherryHQ/cherry-studio/releases/tag/v${finalAttrs.version}";
     mainProgram = "cherry-studio";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = with lib.licenses; [ agpl3Only ];
   };
 })

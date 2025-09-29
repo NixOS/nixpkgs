@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/blockattack/blockattack-game/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "blockattack";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (SDL2.meta) platforms;
   };
 })

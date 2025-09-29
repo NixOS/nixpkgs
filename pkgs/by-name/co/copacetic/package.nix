@@ -78,6 +78,6 @@ buildGoModule rec {
     changelog = "https://github.com/project-copacetic/copacetic/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "copa";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

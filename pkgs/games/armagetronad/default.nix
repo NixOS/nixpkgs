@@ -226,7 +226,7 @@ let
       '';
 
       passthru =
-        if (dedicatedServer) then
+        if dedicatedServer then
           {
             # No passthru, end of the line.
             # https://www.youtube.com/watch?v=NOMa56y_Was

@@ -33,6 +33,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/Reverier-Xu/Fluent-fcitx5";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

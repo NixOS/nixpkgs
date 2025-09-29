@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "unwaf";
   version = "0-unstable-2025-07-04";
 

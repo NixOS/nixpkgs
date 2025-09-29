@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Simple high quality GIF encoding";
     homepage = "https://github.com/lukechilds/gifgen";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "gifgen";
     platforms = platforms.all;
   };

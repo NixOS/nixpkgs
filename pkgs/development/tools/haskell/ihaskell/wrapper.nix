@@ -24,10 +24,10 @@ let
     #! ${stdenv.shell}
     export GHC_PACKAGE_PATH="$(${ihaskellEnv}/bin/ghc --print-global-package-db):$GHC_PACKAGE_PATH"
     export PATH="${
-      lib.makeBinPath ([
+      lib.makeBinPath [
         ihaskellEnv
         jupyter
-      ])
+      ]
     }''${PATH:+:}$PATH"
     ${ihaskellEnv}/bin/ihaskell install -l $(${ihaskellEnv}/bin/ghc --print-libdir) && ${jupyter}/bin/jupyter notebook
   '';

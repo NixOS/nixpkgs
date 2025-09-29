@@ -47,6 +47,6 @@ melpaBuild {
   meta = {
     description = "Core APIs of the Emacs binding for tree-sitter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

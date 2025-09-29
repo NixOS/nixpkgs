@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/tkellogg/dura";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

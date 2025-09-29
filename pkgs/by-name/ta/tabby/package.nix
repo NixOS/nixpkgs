@@ -106,9 +106,9 @@ let
   darwinBuildInputs = [
     llamaccpPackage
   ]
-  ++ optionals stdenv.hostPlatform.isDarwin ([
+  ++ optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
-  ]);
+  ];
 
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];
