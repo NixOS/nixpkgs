@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       asl20
     ];
-    maintainers = with lib.maintainers; [ tfmoraes ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.all;
   };
 })

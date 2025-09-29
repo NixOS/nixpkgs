@@ -466,8 +466,6 @@ with pkgs;
     python3Packages = python311Packages;
   };
 
-  fetchbower = callPackage ../build-support/fetchbower { };
-
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
   fetchcvs =
@@ -7361,10 +7359,6 @@ with pkgs;
   };
   fftwMpi = fftw.override { enableMpi = true; };
 
-  flint = flint3;
-
-  flint3 = callPackage ../development/libraries/flint/3.nix { };
-
   fltk13 = callPackage ../development/libraries/fltk { };
   fltk14 = callPackage ../development/libraries/fltk/1.4.nix { };
   fltk13-minimal = fltk13.override {
@@ -9101,12 +9095,6 @@ with pkgs;
     saxon_11-he
     saxon_12-he
     ;
-
-  ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
-
-  ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
-
-  buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO
 
