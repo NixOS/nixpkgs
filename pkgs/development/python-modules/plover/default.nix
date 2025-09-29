@@ -94,12 +94,3 @@ buildPythonPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
   };
 }
-// lib.optionalAttrs config.allowAliases {
-  # TODO: After 26.05 branch-off, remove these aliases
-  dev =
-    if lib.versionOlder "25.05" lib.version then
-      throw "plover.dev was renamed. Use plover-dev instead." # added 2025-06-05`
-    else
-      plover;
-  stable = throw "plover.stable was renamed. Use plover instead."; # added 2022-06-05; updated 2025-06-27
-}

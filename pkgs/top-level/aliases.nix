@@ -1351,6 +1351,12 @@ mapAliases {
   platformioPackages.platformio-core = platformio-core; # Added 2025-09-04
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
   PlistCpp = throw "'PlistCpp' has been renamed to/replaced by 'plistcpp'"; # Converted to throw 2025-10-27
+  plover.dev =
+    if lib.versionOlder "25.11" lib.version then
+      throw "plover.dev was renamed. Use python3Packages.plover-dev instead." # Added 2025-11-15
+    else
+      python3Packages.plover-dev;
+  plover.stable = throw "plover.stable was renamed. Use python3Packages.plover instead."; # Added 2022-06-05; Updated 2025-11-15
   pltScheme = throw "'pltScheme' has been renamed to/replaced by 'racket'"; # Converted to throw 2025-10-27
   plv8 = throw "'plv8' has been removed. Use 'postgresqlPackages.plv8' instead."; # Added 2025-07-19
   pn = throw "'pn' has been removed as upstream was archived in 2020"; # Added 2025-10-17
