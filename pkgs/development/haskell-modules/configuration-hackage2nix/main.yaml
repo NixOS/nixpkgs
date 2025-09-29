@@ -377,6 +377,10 @@ package-maintainers:
     - libssh2
     - sitemap
     - ihp-openai
+    - ihp
+    - ihp-ide
+    - ihp-migrate
+    - ihp-postgresql-simple-extra
   ncfavier:
     - Agda
     - irc-client
