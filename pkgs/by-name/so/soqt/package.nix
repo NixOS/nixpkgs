@@ -4,9 +4,9 @@
   fetchFromGitHub,
   cmake,
   coin3d,
-  qtbase,
+  qt6,
   testers,
-  wrapQtAppsHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,17 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     coin3d
-    qtbase
+    qt6.qtbase
   ];
 
   dontWrapQtApps = true;
 
-  passthru.tests = {
-    cmake-config = testers.hasCmakeConfigModules {
-      moduleNames = [ "soqt" ];
-      package = finalAttrs.finalPackage;
-      nativeBuildInputs = [ wrapQtAppsHook ];
+  passthru = {
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "soqt" ];
+        package = finalAttrs.finalPackage;
+        nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+      };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {

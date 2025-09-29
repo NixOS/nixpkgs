@@ -11848,9 +11848,7 @@ self: super: with self; {
 
   piqp = callPackage ../development/python-modules/piqp { };
 
-  pivy = callPackage ../development/python-modules/pivy {
-    inherit (pkgs.libsForQt5) soqt;
-  };
+  pivy = callPackage ../development/python-modules/pivy { };
 
   pixcat = callPackage ../development/python-modules/pixcat { };
 
