@@ -45,9 +45,12 @@ buildRedist {
     # - nv/target
     # TODO(@connorbaker): Check that the dependency offset for this is correct.
     ++ [ (lib.getOutput "include" cuda_cccl) ]
-    ++ lib.optionals (backendStdenv.hasJetsonCudaCapability && cuda_compat != null) [
-      cuda_compat
-    ];
+    ++
+      lib.optionals
+        (backendStdenv.hasJetsonCudaCapability && cuda_compat != null && cuda_compat.meta.available)
+        [
+          cuda_compat
+        ];
 
   allowFHSReferences = false;
 
