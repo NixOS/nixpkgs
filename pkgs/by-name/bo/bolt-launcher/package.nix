@@ -68,7 +68,6 @@ let
 
     cmakeFlags = [
       "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
-      "-G Ninja"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
       (lib.cmakeFeature "PROJECT_ARCH" "arm64")
@@ -158,6 +157,6 @@ buildFHSEnv {
       iedame
     ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "bolt-launcher";
   };
 }
