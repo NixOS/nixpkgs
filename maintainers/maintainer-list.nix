@@ -20296,6 +20296,13 @@
     name = "Pablo Ovelleiro Corral";
     keys = [ { fingerprint = "D03B 218C AE77 1F77 D7F9  20D9 823A 6154 4264 08D3"; } ];
   };
+  pionaiki = {
+    email = "marta+git@pionaiki.com";
+    github = "pionaiki";
+    githubId = 51377752;
+    name = "Marta";
+    keys = [ { fingerprint = "1D6D E31F 298A 239C 49CE  63AE 61B6 6525 11C9 A28C"; } ];
+  };
   piotrkwiecinski = {
     email = "piokwiecinski+nixpkgs@gmail.com";
     github = "piotrkwiecinski";
