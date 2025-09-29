@@ -1,43 +1,50 @@
 {
-  fetchFromGitHub,
   lib,
   stdenv,
+  fetchFromGitHub,
+  cmake,
   coin3d,
   qtbase,
-  cmake,
-  pkg-config,
+  testers,
+  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soqt";
-  version = "2020-12-05-unstable";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "soqt";
-    # rev = "SoQt-${version}";
-    rev = "fb8f655632bb9c9c60e0ff9fa69a5ba22d3ff99d";
-    hash = "sha256-YoBq8P3Tag2Sepqxf/qIcJDBhH/gladBmDUj78aacZs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H904mFfrELjB6ZVhypaKJd+pu5y+aVV4foryrsN7IqE=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  propagatedBuildInputs = [
     coin3d
     qtbase
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-
   dontWrapQtApps = true;
 
-  meta = with lib; {
-    homepage = "https://github.com/coin3d/soqt";
-    license = licenses.bsd3;
-    description = "Glue between Coin high-level 3D visualization library and Qt";
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+  passthru.tests = {
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "soqt" ];
+      package = finalAttrs.finalPackage;
+      nativeBuildInputs = [ wrapQtAppsHook ];
+    };
   };
-}
+
+  meta = {
+    homepage = "https://github.com/coin3d/soqt";
+    license = lib.licenses.bsd3;
+    description = "Glue between Coin high-level 3D visualization library and Qt";
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
+  };
+})
