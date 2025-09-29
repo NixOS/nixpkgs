@@ -19,19 +19,19 @@ let
     name = "portable";
     owner = "rpki-client";
     repo = "rpki-client-openbsd";
-    rev = "master";
+    tag = "rpki-client-9.6";
     sha256 = "sha256-mdg2gbwG+sm+a3HtLhzVy1pHtuTf8RmkrQFq5yKfrKA=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpki-client";
   version = "9.6";
 
   src = fetchFromGitHub {
     owner = "rpki-client";
     repo = "rpki-client-portable";
-    rev = version;
-    sha256 = "sha256-emwYvo4sayLOBMLuqwk+HiJfyZ+UsVh4wZsk6ol0k1M=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-emwYvo4sayLOBMLuqwk+HiJfyZ+UsVh4wZsk6ol0k1M=";
   };
 
   nativeBuildInputs = [
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "rpki-client is a FREE, easy-to-use implementation of the Resource Public Key Infrastructure (RPKI) for Relying Parties (RP) to facilitate validation of BGP announcements";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://rpki-client.org";
-    maintainers = with maintainers; [ seike ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ seike ];
+    platforms = lib.platforms.linux;
   };
-}
+})
