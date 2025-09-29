@@ -18188,6 +18188,12 @@
     githubId = 42888162;
     keys = [ { fingerprint = "A0B9 48C5 A263 55C2 035F  8567 FBB7 2A94 52D9 1A72"; } ];
   };
+  neural-blade = {
+    name = "Carmelo Scaccianoce";
+    email = "6c5bk3syhivc1t5ae2prj6k05p12cj.swifter143@simplelogin.com";
+    github = "neural-blade";
+    githubId = 64137177;
+  };
   neurofibromin = {
     name = "Neurofibromin";
     github = "Neurofibromin";
