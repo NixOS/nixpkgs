@@ -309,7 +309,9 @@ let
 in
 patched_compcert.overrideAttrs (
   o:
-  lib.optionalAttrs (coq.version != null && coq.version == "dev") {
-    configurePhase = "${o.configurePhase} -ignore-ocaml-version -ignore-coq-version";
-  }
+  lib.optionalAttrs
+    (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.coq-version))
+    {
+      configurePhase = "${o.configurePhase} -ignore-ocaml-version -ignore-coq-version";
+    }
 )
