@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
 
-  buildFlags = lib.optionalString stdenv.hostPlatform.isCygwin "LDFLAGS=-no-undefined";
+  buildFlags = if stdenv.hostPlatform.isCygwin then "LDFLAGS=-no-undefined" else null;
 
   outputs = [
     "out"
