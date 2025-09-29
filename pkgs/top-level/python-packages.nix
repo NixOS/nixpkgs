@@ -12349,6 +12349,11 @@ self: super: with self; {
     pyqt = self.pyqt5;
   };
 
+  plover-dev = callPackage ../development/python-modules/plover-dev {
+    inherit (pkgs.qt6) wrapQtAppsHook qtbase;
+    pyqt = self.pyside6;
+  };
+
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
 
   pluggy = callPackage ../development/python-modules/pluggy { };
