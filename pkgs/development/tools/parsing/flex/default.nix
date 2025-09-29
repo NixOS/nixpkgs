@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     export ac_cv_func_realloc_0_nonnull=yes
   '';
 
-  configureFlags =
+  ${if stdenv.hostPlatform.isCygwin then "configureFlags" else null} =
     # from flex.cygport
     lib.optional stdenv.hostPlatform.isCygwin "--disable-shared";
 
