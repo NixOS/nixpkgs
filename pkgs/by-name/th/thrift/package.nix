@@ -96,6 +96,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/thrift/commit/eae3ac418f36c73833746bcd53e69ed8a12f0e1a.diff";
       hash = "sha256-0jlN4fo94cfGFUKcLFQgVMI/x7uxn5OiLiFk6txVPzs=";
     })
+    # Fix build with gcc15
+    # https://github.com/apache/thrift/pull/3078
+    (fetchpatch {
+      name = "thrift-add-missing-cstdint-include-gcc15.patch";
+      url = "https://github.com/apache/thrift/commit/947ad66940cfbadd9b24ba31d892dfc1142dd330.patch";
+      hash = "sha256-pWcG6/BepUwc/K6cBs+6d74AWIhZ2/wXvCunb/KyB0s=";
+    })
   ];
 
   cmakeFlags = [
