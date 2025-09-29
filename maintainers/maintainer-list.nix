@@ -5743,6 +5743,11 @@
     name = "Dan Nixon";
     matrix = "@dannixon:matrix.org";
   };
+  dannydannydanny = {
+    name = "Daniel Thoren";
+    github = "dannydannydanny";
+    githubId = 16453674;
+  };
   dansbandit = {
     github = "dansbandit";
     githubId = 4530687;
