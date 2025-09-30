@@ -13,6 +13,7 @@
   libmicrohttpd,
   gnutls,
   libtasn1,
+  libtool,
   libxml2,
   p11-kit,
   vim,
@@ -23,13 +24,13 @@
 
 let
 
-  version = "2.79.3";
+  version = "2.81.10";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     tag = version;
-    hash = "sha256-Rn+Cjpk4vttxARrkDSnpKdBdSRtgElsit8zu1BA8Jd4=";
+    hash = "sha256-xmaZY1jFIZQjWlQkJ+uHC4tY4pFPLJ+fKSbktIZkBFI=";
     fetchSubmodules = true;
   };
 
@@ -70,6 +71,7 @@ let
         libmicrohttpd
         gnutls
         libtasn1
+        libtool
         p11-kit
         ncurses_static
         libxml2
@@ -81,6 +83,14 @@ let
         # include llvm-config in path
         export PATH="${lib.getDev llvm_18}/bin:$PATH"
         cd build
+
+        # Darwin cannot use 'libtool -static'
+        ${lib.optionalString stdenv.isDarwin ''
+          echo "Disabling static LLVM build on Darwin"
+          # Replace the whole static target with a no-op using a literal TAB
+          printf 'all:\n\t@echo "Static LLVM build disabled on Darwin"\n' > Make.llvm.static
+        ''}
+
         substituteInPlace Make.llvm.static \
           --replace 'mkdir -p $@ && cd $@ && ar -x ../../$<' 'mkdir -p $@ && cd $@ && ar -x ../source/build/lib/libfaust.a && cd ../source/build/'
         substituteInPlace Make.llvm.static \
