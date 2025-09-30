@@ -20,44 +20,40 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 let
   version = "9.6.6";
 
+  # GHC upstream doesn't release bindist tarballs for some platforms.
+  # We're using Debian's binary package, and patching it into a usable-in-Nixpkgs state.
   ghcDebs = {
-    # GHC upstream doesn't release bindist tarballs for some platforms.
-    # We're using Debian's binary package, and patching it into a usable-in-Nixpkgs state.
-    defaultLibc = {
-      powerpc64-linux = {
-        variantSuffix = "";
-        src = {
-          url = "http://ftp.ports.debian.org/debian-ports/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb";
-          sha256 = "722cc301b6ba70b342e5e3d9d0671440bcd749cd2f13dcccbd23c3f6a6060171";
-        };
-        exePathForLibraryCheck = null;
-        archSpecificLibraries = [
-          {
-            nixPackage = gmp;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = ncurses6;
-            fileToCheckFor = "libtinfo.so.6";
-          }
-          {
-            nixPackage = numactl;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = libffi;
-            fileToCheckFor = null;
-          }
-        ];
+    powerpc64-linux = {
+      variantSuffix = "";
+      src = {
+        url = "http://ftp.ports.debian.org/debian-ports/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb";
+        sha256 = "722cc301b6ba70b342e5e3d9d0671440bcd749cd2f13dcccbd23c3f6a6060171";
       };
+      exePathForLibraryCheck = null;
+      archSpecificLibraries = [
+        {
+          nixPackage = gmp;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = ncurses6;
+          fileToCheckFor = "libtinfo.so.6";
+        }
+        {
+          nixPackage = numactl;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = libffi;
+          fileToCheckFor = null;
+        }
+      ];
     };
   };
 
-  debSetName = if stdenv.hostPlatform.isMusl then "musl" else "defaultLibc";
-
   debUsed =
-    ghcDebs.${debSetName}.${stdenv.hostPlatform.system}
-      or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}' with libc '${debSetName}') from Debian debs");
+    ghcDebs.${stdenv.hostPlatform.system}
+      or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}') from Debian debs");
 
   gmpUsed =
     (builtins.head (
@@ -149,14 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
             --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
       '';
 
-  # GHC has a patched config.sub and bindists' platforms should always work
-  #dontUpdateAutotoolsGnuConfigScripts = true;
-
   # Not a bindist, nothing to configure
   dontConfigure = true;
 
-  # No building is necessary, but calling make without flags ironically
-  # calls install-strip ...
+  # Not a bindist, it's already built
   dontBuild = true;
 
   # Install prebuilt GHC files
@@ -294,16 +286,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
-    # HACK: since we can't encode the libc / abi in platforms, we need
-    # to make the platform list dependent on the evaluation platform
-    # in order to avoid eval errors with musl which supports less
-    # platforms than the default libcs (i. e. glibc / libSystem).
-    # This is done for the benefit of Hydra, so `packagePlatforms`
-    # won't return any platforms that would cause an evaluation
-    # failure for `pkgsMusl.haskell.compiler.ghc922Binary`, as
-    # long as the evaluator runs on a platform that supports
-    # `pkgsMusl`.
-    platforms = builtins.attrNames ghcDebs.${debSetName};
+    platforms = builtins.attrNames ghcDebs;
     teams = [ lib.teams.haskell ];
   };
 })
