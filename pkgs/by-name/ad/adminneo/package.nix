@@ -57,7 +57,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       gpl2Only
     ];
     maintainers = with lib.maintainers; [
-      johnrtitor
       Necoro
     ];
     platforms = lib.platforms.all;
