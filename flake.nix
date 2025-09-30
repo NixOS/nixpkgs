@@ -91,7 +91,7 @@
                   )
                 ];
               }
-              // builtins.removeAttrs args [ "modules" ]
+              // removeAttrs args [ "modules" ]
             );
         }
       );
