@@ -52,7 +52,7 @@ let
           inherent design complexities and limitations.
         '';
         license = lib.licenses.lgpl2Only;
-        maintainers = [ ];
+        maintainers = with lib.maintainers; [ etwas ];
         platforms = lib.platforms.linux;
         mainProgram = "sdbus-c++-xml2cpp";
       };
