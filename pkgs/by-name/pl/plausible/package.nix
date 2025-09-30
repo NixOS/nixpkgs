@@ -12,6 +12,7 @@
   brotli,
   tailwindcss_3,
   esbuild,
+  coreutils,
   ...
 }:
 
@@ -160,7 +161,7 @@ beamPackages.mixRelease rec {
     cp -r ${tracker} tracker
 
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss_3}"
+    config :tailwind, path: "${lib.getExe' coreutils "echo"}"
     config :esbuild, path: "${lib.getExe esbuild}"
     EOF
   '';
@@ -184,3 +185,4 @@ beamPackages.mixRelease rec {
     platforms = lib.platforms.unix;
   };
 }
+
