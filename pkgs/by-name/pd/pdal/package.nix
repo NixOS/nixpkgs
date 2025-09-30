@@ -112,15 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     "pdal_io_e57_write_test"
     "pdal_io_stac_reader_test"
 
-    # Segfault
-    "pdal_io_hdf_reader_test"
-
-    # Failure
-    "pdal_app_plugin_test"
-
-    # Removed in GDAL 3.11
-    "pdal_io_gdal_writer_test"
-
     # Require data to be downloaded from Internet
     "pdal_io_copc_reader_test"
   ];
