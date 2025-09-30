@@ -42,6 +42,8 @@ let
     '';
   };
 
+  patches = [ ./disable_tailwindcss_test.patch ];
+
   assets = buildNpmPackage {
     pname = "${pname}-assets";
     inherit version;
@@ -160,19 +162,19 @@ beamPackages.mixRelease rec {
     cp -r ${tracker} tracker
 
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss_3}"
+    #config :tailwind, path: "#$#{lib.getExe tailwindcss_3}"
     config :esbuild, path: "${lib.getExe esbuild}"
     EOF
   '';
 
-  postBuild = ''
-    npm run deploy --prefix ./tracker
-
-    # for external task you need a workaround for the no deps check flag
-    # https://github.com/phoenixframework/phoenix/issues/2690
-    mix do deps.loadpaths --no-deps-check, assets.deploy
-    mix do deps.loadpaths --no-deps-check, phx.digest priv/static
-  '';
+  #postBuild = ''
+  #  npm run deploy --prefix ./tracker
+  #
+  #  # for external task you need a workaround for the no deps check flag
+  #  # https://github.com/phoenixframework/phoenix/issues/2690
+  #  mix do deps.loadpaths --no-deps-check, assets.deploy
+  #  mix do deps.loadpaths --no-deps-check, phx.digest priv/static
+  #'';
 
   meta = {
     license = lib.licenses.agpl3Plus;
@@ -184,3 +186,4 @@ beamPackages.mixRelease rec {
     platforms = lib.platforms.unix;
   };
 }
+
