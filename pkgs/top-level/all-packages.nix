@@ -11006,8 +11006,6 @@ with pkgs;
 
   backintime = backintime-qt;
 
-  barrier = libsForQt5.callPackage ../applications/misc/barrier { };
-
   bespokesynth-with-vst2 = bespokesynth.override {
     enableVST2 = true;
   };
