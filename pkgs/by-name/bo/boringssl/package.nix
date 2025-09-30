@@ -5,11 +5,11 @@
   cmake,
   ninja,
   perl,
-  buildGoModule,
+  go,
 }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
-buildGoModule (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boringssl";
   version = "0.20250818.0";
 
@@ -28,19 +28,8 @@ buildGoModule (finalAttrs: {
     cmake
     ninja
     perl
+    go
   ];
-
-  vendorHash = "sha256-IXmnoCYLoiQ/XL2wjksRFv5Kwsje0VNkcupgGxG6rSY=";
-  proxyVendor = true;
-
-  # hack to get both go and cmake configure phase
-  # (if we use postConfigure then cmake will loop runHook postConfigure)
-  preBuild = ''
-    cmakeConfigurePhase
-  ''
-  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    export GOARCH=$(go env GOHOSTARCH)
-  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
@@ -49,28 +38,13 @@ buildGoModule (finalAttrs: {
     ]
   );
 
-  buildPhase = ''
-    ninjaBuildPhase
-  '';
-
   # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
   cmakeFlags = [
     "-GNinja"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $bin/bin $dev $out/lib
-
-    install -Dm755 bssl -t $bin/bin
-    install -Dm644 {libboringssl_gtest,libcrypto,libdecrepit,libpki,libssl,libtest_support_lib}.a -t $out/lib
-
-    cp -r ../include $dev
-
-    runHook postInstall
-  '';
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    "-DCMAKE_OSX_ARCHITECTURES="
+  ];
 
   outputs = [
     "out"
