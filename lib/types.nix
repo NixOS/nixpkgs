@@ -59,6 +59,7 @@ let
     ;
   inherit (lib.trivial)
     boolToString
+    toFunction
     ;
 
   inherit (lib.modules)
@@ -170,108 +171,154 @@ let
 
     isOptionType = isType "option-type";
     mkOptionType =
-      {
-        # Human-readable representation of the type, should be equivalent to
-        # the type function name.
-        name,
-        # Description of the type, defined recursively by embedding the wrapped type if any.
-        description ? null,
-        # A hint for whether or not this description needs parentheses. Possible values:
-        #  - "noun": a noun phrase
-        #    Example description: "positive integer",
-        #  - "conjunction": a phrase with a potentially ambiguous "or" connective
-        #    Example description: "int or string"
-        #  - "composite": a phrase with an "of" connective
-        #    Example description: "list of string"
-        #  - "nonRestrictiveClause": a noun followed by a comma and a clause
-        #    Example description: "positive integer, meaning >0"
-        # See the `optionDescriptionPhrase` function.
-        descriptionClass ? null,
-        # DO NOT USE WITHOUT KNOWING WHAT YOU ARE DOING!
-        # Function applied to each definition that must return false when a definition
-        # does not match the type. It should not check more than the root of the value,
-        # because checking nested values reduces laziness, leading to unnecessary
-        # infinite recursions in the module system.
-        # Further checks of nested values should be performed by throwing in
-        # the merge function.
-        # Strict and deep type checking can be performed by calling lib.deepSeq on
-        # the merged value.
-        #
-        # See https://github.com/NixOS/nixpkgs/pull/6794 that introduced this change,
-        # https://github.com/NixOS/nixpkgs/pull/173568 and
-        # https://github.com/NixOS/nixpkgs/pull/168295 that attempted to revert this,
-        # https://github.com/NixOS/nixpkgs/issues/191124 and
-        # https://github.com/NixOS/nixos-search/issues/391 for what happens if you ignore
-        # this disclaimer.
-        check ? (x: true),
-        # Merge a list of definitions together into a single value.
-        # This function is called with two arguments: the location of
-        # the option in the configuration as a list of strings
-        # (e.g. ["boot" "loader "grub" "enable"]), and a list of
-        # definition values and locations (e.g. [ { file = "/foo.nix";
-        # value = 1; } { file = "/bar.nix"; value = 2 } ]).
-        merge ? mergeDefaultOption,
-        # Whether this type has a value representing nothingness. If it does,
-        # this should be a value of the form { value = <the nothing value>; }
-        # If it doesn't, this should be {}
-        # This may be used when a value is required for `mkIf false`. This allows the extra laziness in e.g. `lazyAttrsOf`.
-        emptyValue ? { },
-        # Return a flat attrset of sub-options.  Used to generate
-        # documentation.
-        getSubOptions ? prefix: { },
-        # List of modules if any, or null if none.
-        getSubModules ? null,
-        # Function for building the same option type with a different list of
-        # modules.
-        substSubModules ? m: null,
-        # Function that merge type declarations.
-        # internal, takes a functor as argument and returns the merged type.
-        # returning null means the type is not mergeable
-        typeMerge ? defaultTypeMerge functor,
-        # The type functor.
-        # internal, representation of the type as an attribute set.
-        #   name: name of the type
-        #   type: type function.
-        #   wrapped: the type wrapped in case of compound types.
-        #   payload: values of the type, two payloads of the same type must be
-        #            combinable with the binOp binary operation.
-        #   binOp: binary operation that merge two payloads of the same type.
-        functor ? defaultFunctor name,
-        # The deprecation message to display when this type is used by an option
-        # If null, the type isn't deprecated
-        deprecationMessage ? null,
-        # The types that occur in the definition of this type. This is used to
-        # issue deprecation warnings recursively. Can also be used to reuse
-        # nested types
-        nestedTypes ? { },
-      }:
-      {
-        _type = "option-type";
-        inherit
-          name
-          check
-          merge
-          emptyValue
-          getSubOptions
-          getSubModules
-          substSubModules
-          typeMerge
-          deprecationMessage
-          nestedTypes
-          descriptionClass
-          ;
-        functor =
-          if functor ? wrappedDeprecationMessage then
-            functor
+      args:
+      let
+        mkOptionType' =
+          self:
+          {
+            # Human-readable representation of the type, should be equivalent to
+            # the type function name.
+            name,
+            # Description of the type, defined recursively by embedding the wrapped type if any.
+            description ? null,
+            # A hint for whether or not this description needs parentheses. Possible values:
+            #  - "noun": a noun phrase
+            #    Example description: "positive integer",
+            #  - "conjunction": a phrase with a potentially ambiguous "or" connective
+            #    Example description: "int or string"
+            #  - "composite": a phrase with an "of" connective
+            #    Example description: "list of string"
+            #  - "nonRestrictiveClause": a noun followed by a comma and a clause
+            #    Example description: "positive integer, meaning >0"
+            # See the `optionDescriptionPhrase` function.
+            descriptionClass ? null,
+            # DO NOT USE WITHOUT KNOWING WHAT YOU ARE DOING!
+            # Function applied to each definition that must return false when a definition
+            # does not match the type. It should not check more than the root of the value,
+            # because checking nested values reduces laziness, leading to unnecessary
+            # infinite recursions in the module system.
+            # Further checks of nested values should be performed by throwing in
+            # the merge function.
+            # Strict and deep type checking can be performed by calling lib.deepSeq on
+            # the merged value.
+            #
+            # See https://github.com/NixOS/nixpkgs/pull/6794 that introduced this change,
+            # https://github.com/NixOS/nixpkgs/pull/173568 and
+            # https://github.com/NixOS/nixpkgs/pull/168295 that attempted to revert this,
+            # https://github.com/NixOS/nixpkgs/issues/191124 and
+            # https://github.com/NixOS/nixos-search/issues/391 for what happens if you ignore
+            # this disclaimer.
+            check ? (x: true),
+            # Merge a list of definitions together into a single value.
+            # This function is called with two arguments: the location of
+            # the option in the configuration as a list of strings
+            # (e.g. ["boot" "loader "grub" "enable"]), and a list of
+            # definition values and locations (e.g. [ { file = "/foo.nix";
+            # value = 1; } { file = "/bar.nix"; value = 2 } ]).
+            merge ? mergeDefaultOption,
+            # Whether this type has a value representing nothingness. If it does,
+            # this should be a value of the form { value = <the nothing value>; }
+            # If it doesn't, this should be {}
+            # This may be used when a value is required for `mkIf false`. This allows the extra laziness in e.g. `lazyAttrsOf`.
+            emptyValue ? { },
+            # Return a flat attrset of sub-options. Used to generate
+            # documentation.
+            getSubOptions ? prefix: { },
+            # List of modules if any, or null if none.
+            getSubModules ? null,
+            # Function for building the same option type with a different list of
+            # modules.
+            substSubModules ? m: null,
+            # Function that merge type declarations.
+            # internal, takes a functor as argument and returns the merged type.
+            # returning null means the type is not mergeable
+            typeMerge ? defaultTypeMerge functor,
+            # The type functor.
+            # internal, representation of the type as an attribute set.
+            #   name: name of the type.
+            #   type: function to initialize the type with the passed values.
+            #   wrapped: the type wrapped in case of compound types.
+            #   payload: values passed to the function that initializes the type,
+            #            two payloads of the same type must be combinable with
+            #            the binOp binary operation.
+            #   binOp: binary operation that merge two payloads of the same type.
+            functor ? defaultFunctor self,
+            # The deprecation message to display when this type is used by an option
+            # If null, the type isn't deprecated
+            deprecationMessage ? null,
+            # The types that occur in the definition of this type. This is used to
+            # issue deprecation warnings recursively. Can also be used to reuse
+            # nested types
+            nestedTypes ? { },
+            ...
+          }:
+          {
+            _type = "option-type";
+            inherit
+              name
+              check
+              merge
+              emptyValue
+              getSubOptions
+              getSubModules
+              substSubModules
+              typeMerge
+              deprecationMessage
+              nestedTypes
+              descriptionClass
+              ;
+            functor =
+              if functor ? wrappedDeprecationMessage then
+                functor
+                // {
+                  wrapped = functor.wrappedDeprecationMessage {
+                    loc = null;
+                  };
+                }
+              else
+                functor;
+            description = if description == null then self.name else description;
+          };
+
+        makeExtensibleOptionType =
+          prev:
+          lib.fix' (
+            self:
+            prev self
             // {
-              wrapped = functor.wrappedDeprecationMessage {
-                loc = null;
-              };
+              extend =
+                f:
+                makeExtensibleOptionType (
+                  self':
+                  lib.extends f prev self'
+                  // {
+                    __constructor__ =
+                      let
+                        applyExtendRecursively =
+                          value: if isFunction value then arg: applyExtendRecursively (value arg) else value.extend f;
+                      in
+                      applyExtendRecursively self.__constructor__;
+                  }
+                );
             }
+          );
+
+        argsWithSelf = toFunction args;
+
+        recurseIntoArgs =
+          shape: acc:
+          if isFunction shape then
+            arg: recurseIntoArgs (shape arg) (g: (acc g) arg)
           else
-            functor;
-        description = if description == null then name else description;
-      };
+            makeExtensibleOptionType (
+              self:
+              mkOptionType' self (acc (argsWithSelf self))
+              // {
+                __constructor__ = mkOptionType argsWithSelf;
+              }
+            );
+      in
+      recurseIntoArgs (argsWithSelf null) (g: g);
 
     # optionDescriptionPhrase :: (str -> bool) -> optionType -> str
     #
