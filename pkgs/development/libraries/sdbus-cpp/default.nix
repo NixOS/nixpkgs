@@ -67,7 +67,7 @@ in
   };
 
   sdbus-cpp_2 = generic {
-    version = "2.0.0";
-    hash = "sha256-W8V5FRhV3jtERMFrZ4gf30OpIQLYoj2yYGpnYOmH2+g=";
+    version = "2.1.0";
+    hash = "sha256-JnjabBr7oELLsUV9a+dAAaRyUzaMIriu90vkaVJg2eY=";
   };
 }
