@@ -19,13 +19,13 @@
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.39.0";
+  version = "5.40.1";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
     tag = "v${version}";
-    hash = "sha256-R0IFIGDSpKxNmcDUMVdtKV+M3I8tglBhyHj5XXe2rjg=";
+    hash = "sha256-rjJDMa4nka66Udx/zBIT31RSGGJb2357Hz9pVGEVaPg=";
   };
 
   modPostBuild = ''
@@ -33,7 +33,7 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-llbBYO1dNPm+k8WEfao6qyDtQZbcmueNwFBuIpaMvFQ=";
+  vendorHash = "sha256-y4yyj3m6TuDmrr48Ansnc5fXrnV/UfLWaiu2UU8w7ic=";
 
   nativeBuildInputs = [ pkg-config ];
 
