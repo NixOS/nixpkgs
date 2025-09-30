@@ -124,8 +124,8 @@ in
   };
   testScript =
     let
-      portStrHTTP = builtins.toString port.HTTP;
-      portStrTLS = builtins.toString port.TLS;
+      portStrHTTP = toString port.HTTP;
+      portStrTLS = toString port.TLS;
     in
     # python
     ''

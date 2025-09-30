@@ -118,7 +118,7 @@ in
         };
 
         environment = {
-          API_LISTEN = "127.0.0.1:${builtins.toString cfg.api.port}";
+          API_LISTEN = "127.0.0.1:${toString cfg.api.port}";
           DATABASE_URL = "postgres:///crabfit?host=/run/postgresql";
           FRONTEND_URL = "https://${cfg.frontend.host}";
         }
@@ -140,7 +140,7 @@ in
 
         environment = {
           NEXT_PUBLIC_API_URL = "https://${cfg.api.host}";
-          PORT = builtins.toString cfg.frontend.port;
+          PORT = toString cfg.frontend.port;
         }
         // cfg.frontend.environment;
       };

@@ -18,7 +18,7 @@ let
     }
     // (lib.optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
-      addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
+      addr = "${cfg.listenAddress}:${toString cfg.port}";
       headers.X-Content-Type-Options = [ "nosniff" ];
     };
     health.storagedriver = {

@@ -46,7 +46,7 @@ in
       pkgs.runtimeShell
       "${pkgs.coreutils}/bin"
     ]
-    ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
+    ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
 
     systemd.mounts = [
       {

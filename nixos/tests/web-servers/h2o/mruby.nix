@@ -51,7 +51,7 @@ in
 
   testScript =
     let
-      portStr = builtins.toString port;
+      portStr = toString port;
     in
     # python
     ''
