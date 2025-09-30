@@ -18050,6 +18050,12 @@
     matrix = "@n3t:matrix.org";
     name = "Adrian Sadłocha";
   };
+  Necoro = {
+    email = "nix@necoro.dev";
+    github = "Necoro";
+    githubId = 68708;
+    name = "René Neumann";
+  };
   necrophcodr = {
     email = "nc@scalehost.eu";
     github = "necrophcodr";
@@ -24472,14 +24478,6 @@
     github = "SRv6d";
     githubId = 18124752;
     email = "m@rvinvogt.com";
-  };
-  srxl = {
-    name = "Ruby Iris Juric";
-    email = "ruby@srxl.me";
-    matrix = "@ruby:isincredibly.gay";
-    github = "Sorixelle";
-    githubId = 38685302;
-    keys = [ { fingerprint = "2D76 76C7 A28E 16FC 75C7  268D 1B55 6ED8 4B0E 303A"; } ];
   };
   Srylax = {
     name = "Srylax";

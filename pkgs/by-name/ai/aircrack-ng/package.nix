@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "aircrack-ng";
-    rev = version;
+    tag = version;
     hash = "sha256-niQDwiqi5GtBW5HIn0endnqPb/MqllcjsjXw4pTyFKY=";
   };
 

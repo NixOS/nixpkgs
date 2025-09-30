@@ -2239,10 +2239,6 @@ with pkgs;
 
   patool = with python3Packages; toPythonApplication patool;
 
-  pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_35;
-  };
-
   pixcat = with python3Packages; toPythonApplication pixcat;
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap { };
@@ -4790,7 +4786,7 @@ with pkgs;
         isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
-        langCC = false;
+        langCC = stdenv.targetPlatform.isCygwin; # can't compile libcygwin1.a without C++
         libcCross = libc1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
@@ -4799,6 +4795,7 @@ with pkgs;
           # temporarily disabled due to breakage;
           # see https://github.com/NixOS/nixpkgs/pull/243249
           && !stdenv.targetPlatform.isWindows
+          && !stdenv.targetPlatform.isCygwin
           && !(stdenv.targetPlatform.useLLVM or false);
       };
       bintools = binutilsNoLibc;
@@ -7482,6 +7479,8 @@ with pkgs;
       windows.mingw_w64_headers or fallback
     else if libc == "nblibc" then
       netbsd.headers
+    else if libc == "cygwin" then
+      cygwin.newlib-cygwin-headers
     else
       null;
 
@@ -7518,6 +7517,8 @@ with pkgs;
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "ucrt" then
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
+    else if libc == "cygwin" then
+      cygwin.newlib-cygwin-nobin
     else if libc == "libSystem" then
       if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
     else if libc == "fblibc" then
@@ -9898,7 +9899,6 @@ with pkgs;
     callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix
       { };
   prometheus-mongodb-exporter = callPackage ../servers/monitoring/prometheus/mongodb-exporter.nix { };
-  prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix { };
   prometheus-nextcloud-exporter =
     callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix
@@ -10614,6 +10614,8 @@ with pkgs;
   v4l-utils = callPackage ../os-specific/linux/v4l-utils { };
 
   windows = recurseIntoAttrs (callPackages ../os-specific/windows { });
+
+  cygwin = recurseIntoAttrs (callPackages ../os-specific/cygwin { });
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
@@ -11837,10 +11839,6 @@ with pkgs;
   kubectl-view-allocations =
     callPackage ../applications/networking/cluster/kubectl-view-allocations
       { };
-
-  kubelogin-oidc = callPackage ../by-name/ku/kubelogin-oidc/package.nix {
-    buildGoModule = buildGo124Module;
-  };
 
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
 

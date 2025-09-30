@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromSourcehut {
     owner = "~onemoresuza";
     repo = "aba";
-    rev = version;
+    tag = version;
     hash = "sha256-2zVQNchL4DFh2v2/kwupJTBSmXiKqlxzUMrP9TbfCMs=";
   };
 

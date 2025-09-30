@@ -16,6 +16,7 @@
   pango,
   cairo,
   pkg-config,
+  libnotify,
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
@@ -126,6 +127,7 @@ buildFHSEnv {
       SDL2
       sdl3
       libGL
+      libnotify
     ])
     ++ lib.optionals enableRS3 (
       with pkgs;

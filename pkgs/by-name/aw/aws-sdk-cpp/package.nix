@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
-    rev = version;
+    tag = version;
     hash = "sha256-RJKR0xw3HTNItaLGyYCjibmfK3UBDA4hfAZzQ0xYg9U=";
   };
 
