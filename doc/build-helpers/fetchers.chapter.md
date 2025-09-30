@@ -3,7 +3,7 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 To this end, we use functions that we call _fetchers_, which obtain remote sources via various protocols and services.
 
-Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball).
+Nix provides built-in fetchers such as [`fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball).
 Nixpkgs provides its own fetchers, which work differently:
 
 - A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path).
