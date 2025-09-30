@@ -31,7 +31,9 @@ melpaBuild (
   let
     nixpkgDependencies = getAllDependenciesOfPkg finalAttrs.finalPackage;
     loadPaths = builtins.concatStringsSep " " (map formatLoadPath nixpkgDependencies);
-    nativeLoadPaths = builtins.concatStringsSep " " (map formatNativeLoadPath nixpkgDependencies);
+    nativeLoadPaths = builtins.concatStringsSep " " (
+      map formatNativeLoadPath (nixpkgDependencies ++ [ (placeholder "out") ])
+    );
     emacsBuiltinDeps = [
       "cl-lib"
       "eieio"
@@ -56,9 +58,7 @@ melpaBuild (
       # Uses LISPDIR substitution var
       ./0000-cask-lispdir.diff
       # Use Nix provided dependencies instead of letting Cask bootstrap itself
-      (replaceVars ./0001-cask-bootstrap.diff {
-        inherit depsMod loadPaths nativeLoadPaths;
-      })
+      ./0001-cask-bootstrap.diff
     ];
 
     packageRequires = [
@@ -78,6 +78,12 @@ melpaBuild (
       # use melpaVersion so that it works for unstable releases too
       substituteInPlace bin/cask \
         --replace-fail @lispdir@ $out/share/emacs/site-lisp/elpa/$ename-$melpaVersion
+
+      # using `replaceVars` results in wrong result of `placeholder "out"`
+      substituteInPlace cask-bootstrap.el \
+        --replace-fail @depsMod@ '${depsMod}' \
+        --replace-fail @loadPaths@ '${loadPaths}' \
+        --replace-fail @nativeLoadPaths@ '${nativeLoadPaths}'
     '';
 
     postInstall = ''
