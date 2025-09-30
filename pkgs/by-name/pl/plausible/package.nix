@@ -10,8 +10,8 @@
   npm-lockfile-fix,
   nix-update-script,
   brotli,
-  tailwindcss_3,
   esbuild,
+  pkgsBuildHost,
   ...
 }:
 
@@ -159,8 +159,10 @@ beamPackages.mixRelease rec {
     cp --no-preserve=mode -r ${assets} assets
     cp -r ${tracker} tracker
 
+    # Fix cross-compilation with pkgsBuildHost
+    # since tailwindcss_3 is not available for RiscV
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss_3}"
+    config :tailwind, path: "${lib.getExe pkgsBuildHost.tailwindcss_3}"
     config :esbuild, path: "${lib.getExe esbuild}"
     EOF
   '';
