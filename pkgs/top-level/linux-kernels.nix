@@ -284,7 +284,7 @@ in
 
         linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
-        linux_latest_libre = deblobKernel packageAliases.linux_latest.kernel;
+        linux_latest_libre = markBroken (deblobKernel packageAliases.linux_latest.kernel);
 
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
 
