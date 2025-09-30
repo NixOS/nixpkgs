@@ -298,7 +298,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           dep2 = derivation {
             name = "dep2";
@@ -307,7 +307,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           passAsFile = [ "dep2" ];
         })
@@ -338,7 +338,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           dep2 = derivation {
             name = "dep2";
@@ -347,7 +347,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           name = "meow";
           outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
