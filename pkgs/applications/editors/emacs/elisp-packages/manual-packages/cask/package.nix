@@ -74,10 +74,10 @@ melpaBuild (
       shut-up
     ];
 
-    # use melpaVersion so that it works for unstable releases too
     postPatch = ''
-      lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.melpaVersion} \
-        substituteAllInPlace bin/cask
+      # use melpaVersion so that it works for unstable releases too
+      substituteInPlace bin/cask \
+        --replace-fail @lispdir@ $out/share/emacs/site-lisp/elpa/$ename-$melpaVersion
     '';
 
     postInstall = ''
