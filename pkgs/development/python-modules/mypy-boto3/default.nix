@@ -182,8 +182,8 @@ rec {
       "sha256-UzM2sg9jxU/kU6kmMizVJwYLqq+nrZi+D6GLHYPdmJQ=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.40.31"
-      "sha256-7tuIhj+Kz01F4sPhL8N6g+e0CcdWwtAl7jF0Xii3c0Q=";
+    buildMypyBoto3Package "ce" "1.40.40"
+      "sha256-ygUnU/oDBQPqmRfZ6jKMnvVXdORQkBuC57UyXjV6Xi0=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.40.19"
@@ -338,8 +338,8 @@ rec {
       "sha256-MIxmEy+/mlDwWKpHrb0jo8Yu1C7+xP6JRNvUeDmlfZ0=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.40.35"
-      "sha256-uiE7vhxNtCMrxZeH3CbEIv2n5Qs5B3ohx/sg+L7lvpQ=";
+    buildMypyBoto3Package "connect" "1.40.40"
+      "sha256-k9Q5WmeCTzqlhjIsPUPlbZXB6kB2Ll6sNdhybOWrUHk=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.40.0"
@@ -438,16 +438,16 @@ rec {
       "sha256-L0JDFdKZzPCztOOysjAPkPCc0LfGn8Rz0M3Atr5sMNY=";
 
   mypy-boto3-dynamodbstreams =
-    buildMypyBoto3Package "dynamodbstreams" "1.40.0"
-      "sha256-x/0Scc259VN45rx94YT48Q3NS7nnd2oNRgxQAmy3nSQ=";
+    buildMypyBoto3Package "dynamodbstreams" "1.40.40"
+      "sha256-TgENR4bY5AHy0hqJkTq63jApASafB6agMPFPYDlzJ7A=";
 
   mypy-boto3-ebs =
     buildMypyBoto3Package "ebs" "1.40.15"
       "sha256-jtkx0kbI7SB74U5uWyGdVhKMlsy/T82lz3P89k8LMPA=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.40.37"
-      "sha256-/fjsvFbryW6xD+B1rQT+XpPmwHS9KlbYogTtxo9tFgM=";
+    buildMypyBoto3Package "ec2" "1.40.40"
+      "sha256-I+YOlaDhTIFN3fd8f5MctMEFEQNKR+lyMTyPXiPqaRo=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.40.20"
@@ -1093,8 +1093,8 @@ rec {
       "sha256-EjuSI3v4i4PRTmcQtqRTRdgfBXBBzF9ChJV9x6VCdtY=";
 
   mypy-boto3-redshift =
-    buildMypyBoto3Package "redshift" "1.40.19"
-      "sha256-+noMuqryk81BMx7hTdJq30i2bDUXH3zVTFWkLkoMuAA=";
+    buildMypyBoto3Package "redshift" "1.40.40"
+      "sha256-S2Kq4+up5zWfLS2rM14qwmzLd1h13hz8YURBq9O715w=";
 
   mypy-boto3-redshift-data =
     buildMypyBoto3Package "redshift-data" "1.40.0"

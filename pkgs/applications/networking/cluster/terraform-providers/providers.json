@@ -36,13 +36,13 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "aiven": {
-    "hash": "sha256-9VyYG1wtYJf/eOvHhNWKgs439uSbHmsz7caoq0odZXM=",
+    "hash": "sha256-BF1Js7K6CqxcE5+H/fWFsSvhrNr1UCg2T4Bz9BOSF0w=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.44.0",
+    "rev": "v4.45.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-HABnNXDWP1s8Gcv1ZW/fNr+dOyUnJ4nTMujjRXsVxu4="
+    "vendorHash": "sha256-t3BENz/43pI33HkWrFnV3ISE3oZOAWyYodjKQcnyE/4="
   },
   "akamai": {
     "hash": "sha256-cM3/GwtS4Y7WG1Rg3D58FOvzfwMSNhcggD3bwJcWgE8=",
@@ -552,20 +552,20 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-HmHqRFdyzJLxkTIqde+NCv3FHILL4xjYFqlOiVCQprs=",
+    "hash": "sha256-KVNwgn7swWXRNJNpXV8oy++s+CrDZhMPDDP40qIZIlY=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v4.8.0",
+    "rev": "v4.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-0l2Y8mWsJzZ/j7isUullkZ48z/MyDYFid4crH8b0Hp8="
+    "vendorHash": "sha256-JS0moRxd+Vxzg4Wq5Med4/daVSZPver+JifAdgt2sQk="
   },
   "gridscale": {
-    "hash": "sha256-zD3KiTLKALVOvFOewWyrd65p0XmLOi/bSIP27dXwveU=",
+    "hash": "sha256-52EVQm2YsbEOY7R6W1Xd7FAFKTuzIhlyb0gek7iZwSc=",
     "homepage": "https://registry.terraform.io/providers/gridscale/gridscale",
     "owner": "gridscale",
     "repo": "terraform-provider-gridscale",
-    "rev": "v2.2.0",
+    "rev": "v2.2.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -633,11 +633,11 @@
     "vendorHash": "sha256-SsEWNIBkgcdTlSrB4hIvRmhMv2eJ2qQaPUmiN09A+NM="
   },
   "huaweicloud": {
-    "hash": "sha256-0bfwqqI/o+erzfF2f0Hp0ULl6FxHjqXQAcdphTGI0CY=",
+    "hash": "sha256-uMWYrO5X8+CrafIN+NyYX3C1U2r9JAsAsAG5czlxyDY=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.78.4",
+    "rev": "v1.79.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

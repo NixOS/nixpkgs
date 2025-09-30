@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytomlpp";
-  version = "1.0.13";
+  version = "1.0.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     repo = "pytomlpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-QJeXvj1M3Vq5ctmx7RhczONsPRXAecv3WhJgKWtNK+M=";
+    hash = "sha256-P41jEs1ShpiuSenreE4ykesY2wgBaR7TUKuv3tcD5J0=";
   };
 
   buildInputs = [ pybind11 ];
