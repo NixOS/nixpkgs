@@ -6,12 +6,6 @@
 }:
 
 # TODO aarch64 vm filter
-# TODO CSM
-# with subtest("incus-user allows users to create instances"):
-#     server.succeed("su - testuser bash -c 'incus image import ${(images "systemd").container.metadata} ${(images "systemd").container.rootfs} --alias nixos'")
-#     server.succeed("su - testuser bash -c 'incus launch nixos instance2'")
-#     server.wait_for_instance("instance2", "user-1000")
-#
 let
   cfg = config.tests.incus;
 
