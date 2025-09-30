@@ -30,7 +30,6 @@ let
       buildTests = false;
       buildBenchmarks = false;
 
-      rocmPath = self.callPackage ./rocm-path { };
       rocmUpdateScript = self.callPackage ./update.nix { };
 
       ## ROCm ##
@@ -417,6 +416,13 @@ let
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      rocmPath = throw ''
+        'rocm-path' has been removed. If a ROCM_PATH value is required in nixpkgs please
+        construct one with the minimal set of required deps.
+        For convenience use outside of nixpkgs consider one of the entries in
+        'rocmPackages.meta'.
+      ''; # Added 2025-09-30
+
       rocm-merged-llvm = throw ''
         'rocm-merged-llvm' has been removed.
         For 'libllvm' or 'libclang' use 'rocmPackages.llvm.libllvm/clang'.
