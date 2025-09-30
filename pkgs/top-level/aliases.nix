@@ -509,6 +509,7 @@ mapAliases {
   baserow = throw "baserow has been removed, due to lack of maintenance"; # Added 2025-08-02
   bashInteractive_5 = throw "'bashInteractive_5' has been renamed to/replaced by 'bashInteractive'"; # Converted to throw 2024-10-17
   bash_5 = throw "'bash_5' has been renamed to/replaced by 'bash'"; # Converted to throw 2024-10-17
+  barrier = throw "'barrier' has been removed as it is unmaintained. Consider 'deskflow' or 'input-leap' instead."; # Added 2025-09-29
   bareboxTools = throw "bareboxTools has been removed due to lack of interest in maintaining it in nixpkgs"; # Added 2025-04-19
   bazel_5 = throw "bazel_5 has been removed as it is EOL"; # Added 2025-08-09
   bazel_6 = throw "bazel_6 has been removed as it will be EOL by the release of Nixpkgs 25.11"; # Added 2025-08-19

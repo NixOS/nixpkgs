@@ -25,6 +25,13 @@ let
         (./. + "/dont-set-cmake-skip-rpath-${version}.patch")
       ];
 
+      # https://github.com/icculus/physfs/commit/f7d24ce8486d9229207cca1ff98858fe60ffe583
+      # but the patch wouldn't apply to physfs_2, so let's do a fuzzy sed.
+      postPatch = ''
+        sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' \
+          -i CMakeLists.txt
+      '';
+
       nativeBuildInputs = [
         cmake
         doxygen

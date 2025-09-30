@@ -5168,6 +5168,7 @@ with pkgs;
   openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
   openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
   openjfx24 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "24"; };
+  openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -5204,6 +5205,11 @@ with pkgs;
   jdk24 = openjdk24;
   jdk24_headless = openjdk24_headless;
 
+  openjdk25 = javaPackages.compiler.openjdk25;
+  openjdk25_headless = javaPackages.compiler.openjdk25.headless;
+  jdk25 = openjdk25;
+  jdk25_headless = openjdk25_headless;
+
   # default JDK
   jdk = jdk21;
   jdk_headless = jdk21_headless;
@@ -5218,21 +5224,34 @@ with pkgs;
   jre = jdk;
   jre_headless = jdk_headless;
 
-  jre11_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk11;
-    jdkOnBuild = buildPackages.jdk11;
-  };
-  jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk17;
-    jdkOnBuild = buildPackages.jdk17;
-  };
-  jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk21;
-    jdkOnBuild = buildPackages.jdk21;
-  };
-  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdkOnBuild = buildPackages.jdk;
-  };
+  inherit
+    ({
+      jre11_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk11;
+        jdkOnBuild = buildPackages.jdk11;
+      };
+      jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk17;
+        jdkOnBuild = buildPackages.jdk17;
+      };
+      jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk21;
+        jdkOnBuild = buildPackages.jdk21;
+      };
+      jre25_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk25;
+        jdkOnBuild = buildPackages.jdk25;
+      };
+      jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdkOnBuild = buildPackages.jdk;
+      };
+    })
+    jre11_minimal
+    jre17_minimal
+    jre21_minimal
+    jre25_minimal
+    jre_minimal
+    ;
 
   openjdk = jdk;
   openjdk_headless = jdk_headless;
@@ -6114,6 +6133,7 @@ with pkgs;
     ruby_3_2
     ruby_3_3
     ruby_3_4
+    ruby_3_5
     ;
 
   ruby = ruby_3_3;
@@ -6123,6 +6143,7 @@ with pkgs;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
+  rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
 
   samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
 
@@ -10949,8 +10970,6 @@ with pkgs;
   backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
 
   backintime = backintime-qt;
-
-  barrier = libsForQt5.callPackage ../applications/misc/barrier { };
 
   bespokesynth-with-vst2 = bespokesynth.override {
     enableVST2 = true;

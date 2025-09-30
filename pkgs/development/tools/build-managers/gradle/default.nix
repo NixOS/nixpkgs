@@ -1,8 +1,8 @@
 {
   callPackage,
+  jdk11,
   jdk17,
   jdk21,
-  jdk23,
 }:
 
 let
@@ -56,7 +56,7 @@ let
           tests = {
             toolchains =
               let
-                javaVersion = lib.getVersion jdk23;
+                javaVersion = lib.getVersion jdk11;
                 javaMajorVersion = lib.versions.major javaVersion;
               in
               runCommand "detects-toolchains-from-nix-env"
@@ -65,7 +65,7 @@ let
                   nativeBuildInputs = [
                     (gradle.override {
                       javaToolchains = [
-                        jdk23
+                        jdk11
                       ];
                     })
                   ];

@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-NqfJPUoQ0doqLmY2dVnZF0GqDwNivArpQxcc8XcfZhU=";
   };
 
+  postPatch = ''
+    sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' \
+      -i ./cdk/extra/protobuf/CMakeLists.txt \
+      -i ./cdk/extra/lz4/CMakeLists.txt \
+      -i ./cdk/extra/zstd/CMakeLists.txt
+  '';
+
   nativeBuildInputs = [
     cmake
     mysql80

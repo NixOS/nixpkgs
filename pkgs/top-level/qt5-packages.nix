@@ -215,8 +215,6 @@ makeScopeWithSplicing' {
           callPackage ../development/libraries/sailfish-access-control-plugin
             { };
 
-        soqt = callPackage ../development/libraries/soqt { };
-
         telepathy = callPackage ../development/libraries/telepathy/qt { };
 
         qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
