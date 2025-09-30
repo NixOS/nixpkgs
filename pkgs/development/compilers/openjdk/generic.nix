@@ -60,12 +60,14 @@
   openjfx21,
   openjfx23,
   openjfx24,
+  openjfx25,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
       "23" = openjfx23;
       "24" = openjfx24;
+      "25" = openjfx25;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
 
@@ -80,6 +82,7 @@
   temurin-bin-21,
   temurin-bin-23,
   temurin-bin-24,
+  temurin-bin-25,
   jdk-bootstrap ?
     {
       "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
@@ -88,6 +91,7 @@
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
       "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
       "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
+      "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
     }
     .${featureVersion},
 }:
@@ -104,6 +108,7 @@ let
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
   atLeast24 = lib.versionAtLeast featureVersion "24";
+  atLeast25 = lib.versionAtLeast featureVersion "25";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
@@ -217,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
     })
   ]
-  ++ lib.optionals atLeast11 [
+  ++ lib.optionals (atLeast11 && !atLeast25) [
     # Fix build for gnumake-4.4.1:
     #   https://github.com/openjdk/jdk/pull/12992
     (fetchpatch {
@@ -225,6 +230,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
       hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
     })
+  ]
+  ++ lib.optionals atLeast25 [
+    ./25/patches/make-4.4.1.patch
   ]
   ++ lib.optionals (!headless && enableGtk) [
     (
