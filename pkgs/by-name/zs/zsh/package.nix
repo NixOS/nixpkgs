@@ -4,7 +4,6 @@
   fetchurl,
   fetchpatch,
   autoreconfHook,
-  yodl,
   perl,
   groff,
   util-linux,
@@ -14,6 +13,9 @@
   pkg-config,
   buildPackages,
   nixosTests,
+
+  enableYodl ? true,
+  yodl,
 }:
 
 let
@@ -87,6 +89,8 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && enableYodl) [
     yodl
   ];
 
