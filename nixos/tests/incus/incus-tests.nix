@@ -202,8 +202,8 @@ in
               server.succeed("incus project show user-1000")
               # users shouldn't be able to list storage pools
               server.fail("su - testuser bash -c 'incus storage list'")
-
-
+              # user can create an instance
+              server.succeed("su - testuser bash -c 'incus create --empty'")
         ''
     + instanceScript;
 }
