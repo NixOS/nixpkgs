@@ -41,6 +41,7 @@
   wayland-protocols,
   libxkbcommon,
   wayland-scanner,
+  libdecor,
 
   withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform),
 
@@ -118,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     libxkbcommon
+    libdecor
   ]
   ++ lib.optionals withCairo [
     cairo
