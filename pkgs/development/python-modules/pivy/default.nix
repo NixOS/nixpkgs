@@ -2,7 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  python,
+  pythonRecompileBytecodeHook,
   swig,
   cmake,
   coin3d,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pivy";
   version = "0.6.10";
-  pyproject = true;
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "coin3d";
@@ -22,26 +23,21 @@ buildPythonPackage rec {
     hash = "sha256-DRA4NTAHg2iB/D1CU9pJEpsZwX9GW3X5gpxbIwP54Ko=";
   };
 
-  # https://github.com/coin3d/pivy/pull/138
-  # FindThreads only works if either C or CXX language is enabled
-  postPatch = ''
-    substituteInPlace distutils_cmake/CMakeLists.txt \
-      --replace-fail 'project(pivy_cmake_setup NONE)' 'project(pivy_cmake_setup CXX)'
-  '';
-
-  build-system = [ setuptools ];
-
-  dontUseCmakeConfigure = true;
-
   nativeBuildInputs = [
     swig
     cmake
+    pythonRecompileBytecodeHook
   ];
 
   buildInputs = [
     coin3d
     soqt
     libGLU # dummy buildInput that provides missing header <GL/glu.h>
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "PIVY_USE_QT6" true)
+    (lib.cmakeFeature "PIVY_Python_SITEARCH" "${placeholder "out"}/${python.sitePackages}")
   ];
 
   dontWrapQtApps = true;
