@@ -13,6 +13,7 @@
   rocm-device-libs,
   rocm-comgr,
   rocm-runtime,
+  rocm-toolchain,
   rocm-core,
   roctracer,
   rocminfo,

@@ -71,7 +71,7 @@ let
     stdenvToBuildRocmLlvm.cc
     stdenvToBuildRocmLlvm.cc.cc
   ];
-  # A prefix for use as the GCC prefix when building rocmcxx
+  # A prefix for use as the GCC prefix when building rocm-toolchain
   gcc-prefix-headers = symlinkJoin {
     name = "gcc-prefix-headers";
     paths = [
@@ -149,7 +149,7 @@ let
     runCommand name
       {
         # If this is erroring, try why-depends --precise on the symlinkJoin of inputs to look for the problem
-        # nix why-depends --precise .#rocmPackages.llvm.rocmcxx.linked /store/path/its/not/allowed
+        # nix why-depends --precise .#rocmPackages.llvm.rocm-toolchain.linked /store/path/its/not/allowed
         disallowedRequisites = disallowedRefsForToolchain;
         passthru.linked = linked;
       }
@@ -384,7 +384,7 @@ rec {
             (builtins.filter tablegenUsage old.cmakeFlags)
             ++ commonCmakeFlags
             ++ lib.optionals (!withLibcxx) [
-              # FIXME: Config file in rocmcxx instead of GCC_INSTALL_PREFIX?
+              # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
               # Expected to be fully removed eventually
               "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
               "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
@@ -407,7 +407,7 @@ rec {
   # A clang that understands standard include searching in a GNU sysroot and will put GPU libs in include path
   # in the right order
   # and expects its libc to be in the sysroot
-  rocmcxx =
+  rocm-toolchain =
     (sysrootCompiler clang-unwrapped "rocmcxx" (
       listUsefulOutputs (
         [
@@ -428,7 +428,7 @@ rec {
     ))
     // {
       version = llvmMajorVersion;
-      cc = rocmcxx;
+      cc = rocm-toolchain;
       libllvm = llvm;
       isClang = true;
       isGNU = false;
@@ -460,7 +460,7 @@ rec {
     };
   };
 
-  clang = rocmcxx;
+  clang = rocm-toolchain;
 
   # Emulate a monolithic ROCm LLVM build to support building ROCm's in-tree LLVM projects
   # TODO(@LunNova): destroy this
