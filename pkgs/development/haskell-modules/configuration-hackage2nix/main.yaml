@@ -40,6 +40,8 @@ default-package-overrides:
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
+  # Needs to match microlens == 0.4.* in Stackage LTS 24
+  - microlens-pro < 0.2.0.4
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
