@@ -17,7 +17,9 @@
   aixlog,
   popl,
   pulseaudioSupport ? false,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
+  pipewire,
   nixosTests,
   openssl,
 }:
@@ -54,11 +56,15 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional pipewireSupport pipewire
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport) ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport)
+    (lib.cmakeBool "BUILD_WITH_PIPEWIRE" pipewireSupport)
+  ];
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...
