@@ -35,7 +35,9 @@ let
       ];
 
       cmakeFlags = [
-        (lib.cmakeBool "BUILD_CODE_GEN" true)
+        (lib.cmakeBool (
+          if lib.versionOlder finalAttrs.version "2.0.0" then "BUILD_CODE_GEN" else "SDBUSCPP_BUILD_CODEGEN"
+        ) true)
       ];
 
       meta = {
