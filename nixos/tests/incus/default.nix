@@ -18,6 +18,29 @@ let
     };
 in
 {
+  all = incusRunTest {
+    feature.user = true;
+
+    instances = {
+      c1 = {
+        type = "container";
+      };
+
+      vm1 = {
+        type = "virtual-machine";
+      };
+    };
+
+    network = {
+      ovs = true;
+    };
+
+    storage = {
+      lvm = true;
+      zfs = true;
+    };
+  };
+
   # appArmor = incusRunTest {
   #   all = true;
   #   appArmor = true;
@@ -29,9 +52,9 @@ in
     };
   };
 
-  # lvm = incusRunTest { storage.lvm = true; };
-  #
-  # openvswitch = incusRunTest { network.ovs = true; };
+  lvm = incusRunTest { storage.lvm = true; };
+
+  openvswitch = incusRunTest { network.ovs = true; };
 
   ui = runTest {
     imports = [ ./ui.nix ];
@@ -44,6 +67,14 @@ in
       vm1 = {
         type = "virtual-machine";
       };
+
+      # TODO never becomes available
+      # csm = {
+      #   type = "virtual-machine";
+      #   incusConfig.config = {
+      #     "security.csm" = true;
+      #   };
+      # };
     };
   };
 
