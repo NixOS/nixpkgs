@@ -211,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
       Python or Matlab/Octave
     '';
     homepage = "https://github.com/casadi/casadi";
+    changelog = "https://github.com/casadi/casadi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.all;
