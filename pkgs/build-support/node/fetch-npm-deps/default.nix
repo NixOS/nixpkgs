@@ -68,6 +68,7 @@
             hash,
             forceGitDeps ? false,
             forceEmptyCache ? false,
+            npmRegistryOverrides ? { },
           }:
           testers.invalidateFetcherByDrvHash fetchNpmDeps {
             inherit
@@ -75,6 +76,7 @@
               hash
               forceGitDeps
               forceEmptyCache
+              npmRegistryOverrides
               ;
 
             src = makeTestSrc { inherit name src; };
@@ -175,6 +177,23 @@
 
           hash = "sha256-FhxlJ0HdJMPiWe7+n1HaGLWOr/2HJEPwiS65uqXZM8Y=";
         };
+
+        # Test that npmRegistryOverrides work
+        npmRegistryOverrides = makeTest {
+          name = "npm-registry-overrides";
+
+          src = fetchurl {
+            url = "https://cyberchaos.dev/yuka/trainsearch/-/raw/e3cba6427e8ecfd843d0f697251ddaf5e53c2327/package-lock.json";
+            postFetch = "sed -i 's/registry.npmjs.org/broken.link/' $out";
+            hash = "sha256-Qo24ei1d9Ql4zCLjQJ04zVgS4qhBUpew9NZrhrsBds4=";
+          };
+
+          npmRegistryOverrides = builtins.toJSON {
+            "broken.link" = "https://registry.npmjs.org";
+          };
+
+          hash = "sha256-QGObVDd9qVtf/U78+ayP6RHVWsU+HXhg70BFblQ1PZs=";
+        };
       };
 
     meta = with lib; {
@@ -192,6 +211,9 @@
       forceGitDeps ? false,
       forceEmptyCache ? false,
       nativeBuildInputs ? [ ],
+      # A string with a JSON attrset specifying registry mirrors, for example
+      #   {"registry.example.org": "my-mirror.local/registry.example.org"}
+      npmRegistryOverrides ? null,
       ...
     }@args:
     let
@@ -208,6 +230,9 @@
 
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
       forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
+      npmRegistryOverrides_ = lib.optionalAttrs (!isNull npmRegistryOverrides) {
+        NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverrides;
+      };
     in
     stdenvNoCC.mkDerivation (
       args
@@ -261,5 +286,6 @@
       // hash_
       // forceGitDeps_
       // forceEmptyCache_
+      // npmRegistryOverrides_
     );
 }
