@@ -1,0 +1,25 @@
+From b1c0d2542234247a5051df015d70347597dfe8d8 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 28 Mar 2021 10:26:40 -0500
+Subject: [PATCH 2/2] QDirIterator follow symlinks
+
+---
+ src/kpackage/packageloader.cpp            | 2 +-
+ src/kpackage/private/packagejobthread.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/kpackage/packageloader.cpp b/src/kpackage/packageloader.cpp
+index f03d882..d5aee56 100644
+--- a/src/kpackage/packageloader.cpp
++++ b/src/kpackage/packageloader.cpp
+@@ -196,7 +196,7 @@ QList<KPluginMetaData> PackageLoader::listPackages(const QString &packageFormat,
+     }
+
+     for (auto const &plugindir : std::as_const(paths)) {
+-        const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
++        const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories | QDirIterator::FollowSymlinks;
+         const QStringList nameFilters = {QStringLiteral("metadata.json"), QStringLiteral("metadata.desktop")};
+
+         QDirIterator it(plugindir, nameFilters, QDir::Files, flags);
+--
+2.30.1

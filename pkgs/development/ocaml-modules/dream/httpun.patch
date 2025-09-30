@@ -1,0 +1,20 @@
+diff --git a/src/http/adapt.ml b/src/http/adapt.ml
+index c6bd416..5b01e17 100644
+--- a/src/http/adapt.ml
++++ b/src/http/adapt.ml
+@@ -74,7 +74,7 @@ let forward_body
+     response
+     (Httpun.Body.Writer.write_string body)
+     (Httpun.Body.Writer.write_bigstring body)
+-    (Httpun.Body.Writer.flush body)
++    (fun f -> Httpun.Body.Writer.flush body (fun _ -> f ()))
+     (fun _code -> Httpun.Body.Writer.close body)
+ 
+ let forward_body_h2
+@@ -85,5 +85,5 @@ let forward_body_h2
+     response
+     (H2.Body.Writer.write_string body)
+     (H2.Body.Writer.write_bigstring body)
+-    (H2.Body.Writer.flush body)
++    (fun f -> H2.Body.Writer.flush body (fun _ -> f ()))
+     (fun _code -> H2.Body.Writer.close body)

@@ -1,0 +1,23 @@
+diff --git a/cluster/addons/addon-manager/kube-addons-main.sh b/cluster/addons/addon-manager/kube-addons-main.sh
+index 849973470d1..e4fef30eaea 100755
+--- a/cluster/addons/addon-manager/kube-addons-main.sh
++++ b/cluster/addons/addon-manager/kube-addons-main.sh
+@@ -17,17 +17,7 @@
+ # Import required functions. The addon manager is installed to /opt in
+ # production use (see the Dockerfile)
+ # Disabling shellcheck following files as the full path would be required.
+-if [ -f "kube-addons.sh" ]; then
+-  # shellcheck disable=SC1091
+-  source "kube-addons.sh"
+-elif [ -f "/opt/kube-addons.sh" ]; then
+-  # shellcheck disable=SC1091
+-  source "/opt/kube-addons.sh"
+-else
+-  # If the required source is missing, we have to fail.
+-  log ERR "== Could not find kube-addons.sh (not in working directory or /opt) at $(date -Is) =="
+-  exit 1
+-fi
++source "@out@/bin/kube-addons-lib.sh"
+ 
+ # The business logic for whether a given object should be created
+ # was already enforced by salt, and /etc/kubernetes/addons is the

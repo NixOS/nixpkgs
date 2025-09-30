@@ -1,0 +1,49 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/libutil/blob/main/libutil.xcodeproj/project.pbxproj
+
+# Project settings
+project('libutil', 'c', 'cpp', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+cxx = meson.get_compiler('cpp')
+
+
+# Libraries
+libutil = library(
+    'util',
+    darwin_versions : '1',
+    install : true,
+    sources : [
+        'ExtentManager.cpp',
+        'expand_number.c',
+        'getmntopts.c',
+        'humanize_number.c',
+        'pidfile.c',
+        'realhostname.c',
+        'reexec_to_match_kernel.c',
+        'trimdomain.c',
+        'tzbootuuid.c',
+        'tzlink.c',
+        'tzlink.h',
+        'wipefs.cpp',
+    ],
+)
+install_headers(
+    'libutil.h',
+    'mntopts.h',
+    'tzlink.h',
+    'wipefs.h',
+)
+install_man(
+    'expand_number.3',
+    'getmntopts.3',
+    'humanize_number.3',
+    'pidfile.3',
+    'realhostname.3',
+    'realhostname_sa.3',
+    'reexec_to_match_kernel.3',
+    'trimdomain.3',
+    'wipefs.3',
+)

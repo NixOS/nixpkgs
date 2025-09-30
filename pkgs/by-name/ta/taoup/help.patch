@@ -1,0 +1,21 @@
+--- a/taoup	2021-09-07 16:45:00.000000000 +0800
++++ b/taoup	2021-09-07 16:46:00.000000000 +0800
+@@ -7,12 +7,12 @@
+ 
+ # show help if requested
+ if ARGV[0] == '--help' or ARGV[0] == '-h' then
+- puts "usage: " + $0 + " [arguments]"
+- puts "       " + $0 + "                    Display all fortunes and sections."
+- puts "       " + $0 + " < --help | -h >    This help."
+- puts "       " + $0 + " --whitetrash       Convert ANSI colors for light/white terminals."
+- puts "       " + $0 + " --machine          Remove ANSI colors."
+- puts "       " + $0 + " --fortune          Convert output to fortune format (and lose colors)."
++ puts "usage: " + "@pname@" + " [arguments]"
++ puts "       " + "@pname@" + "                    Display all fortunes and sections."
++ puts "       " + "@pname@" + " < --help | -h >    This help."
++ puts "       " + "@pname@" + " --whitetrash       Convert ANSI colors for light/white terminals."
++ puts "       " + "@pname@" + " --machine          Remove ANSI colors."
++ puts "       " + "@pname@" + " --fortune          Convert output to fortune format (and lose colors)."
+  exit(0)
+ end
+ # ... but optionally make sure ANSI escape sequences are filtered out

@@ -1,0 +1,24 @@
+From 95c90f302c384f410dc92e64468ac7061b57fe2d Mon Sep 17 00:00:00 2001
+From: Michael Hoang <enzime@users.noreply.github.com>
+Date: Fri, 13 Jul 2018 19:03:09 +1000
+Subject: [PATCH] Add errno.h header which isn't always included automatically.
+
+---
+ termite.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/termite.cc b/termite.cc
+index 160fe82..13e2572 100644
+--- a/termite.cc
++++ b/termite.cc
+@@ -21,6 +21,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ #include <cmath>
++#include <errno.h>
+ #include <functional>
+ #include <limits>
+ #include <map>
+-- 
+2.17.1
+

@@ -1,0 +1,21 @@
+diff -Nru glob2-0.9.4.4/src/Game.h glob2-0.9.4.4.new/src/Game.h
+--- glob2-0.9.4.4/src/Game.h	2009-08-29 16:39:06.000000000 -0400
++++ glob2-0.9.4.4.new/src/Game.h	2015-08-29 00:59:07.843398596 -0400
+@@ -148,7 +148,7 @@
+ 		TOP_TO_BOTTOM,
+ 		BOTTOM_TO_TOP
+ 	};
+-	
++public:	
+ 	struct BuildProject
+ 	{
+ 		int posX;
+@@ -158,7 +158,7 @@
+ 		int unitWorking;
+ 		int unitWorkingFuture;
+ 	};
+-	
++private:	
+ 	///Initiates Game
+ 	void init(GameGUI *gui, MapEdit* edit);
+ 

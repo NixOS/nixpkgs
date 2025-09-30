@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+KARAKEEP_LIB_PATH=
+RELEASE=
+NODEJS=
+NODE_ENV=production
+
+[[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
+
+export RELEASE NODE_ENV
+exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/apps/web/.next/standalone/apps/web/server.js"

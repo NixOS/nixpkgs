@@ -1,0 +1,34 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index abaace2..5e3465c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -182,10 +182,10 @@ if(WIN32)
+     RUNTIME DESTINATION ./
+   )
+ else()
+-	install(TARGETS
+-    ${LIB_STEAMCLIENT}
+-    LIBRARY DESTINATION ./
+-  )
++    #    install(TARGETS
++    #${LIB_STEAMCLIENT}
++    #LIBRARY DESTINATION ./
++    #)
+ endif()
+ 
+ if(NOT WIN32)
+@@ -220,10 +220,10 @@ if(WIN32)
+     RUNTIME DESTINATION ./
+   )
+ else()
+-	install(TARGETS
+-    ${LIB_STEAMNETWORKINGSOCKETS}
+-    LIBRARY DESTINATION ./
+-  )
++    #	install(TARGETS
++    #    ${LIB_STEAMNETWORKINGSOCKETS}
++    #    LIBRARY DESTINATION ./
++    #  )
+ endif()
+ 
+ if(NOT WIN32)

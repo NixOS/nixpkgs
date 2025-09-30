@@ -1,0 +1,71 @@
+From a98cc23b288e13665c8698eec56e0653613946d7 Mon Sep 17 00:00:00 2001
+From: Aidan Gauland <aidalgol@fastmail.net>
+Date: Tue, 19 Aug 2025 09:45:55 +1200
+Subject: [PATCH] [Fix] Run GalaxyComm executable path through fixAsarPath
+
+---
+ src/backend/constants/paths.ts |  4 ++++
+ src/backend/launcher.ts        | 15 +++++----------
+ 2 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/src/backend/constants/paths.ts b/src/backend/constants/paths.ts
+index 1d05ce5b58..2e9cff1197 100644
+--- a/src/backend/constants/paths.ts
++++ b/src/backend/constants/paths.ts
+@@ -44,6 +44,10 @@ export const fakeEpicExePath = fixAsarPath(
+   join(publicDir, 'bin', 'x64', 'win32', 'EpicGamesLauncher.exe')
+ )
+ 
++export const galaxyCommunicationExePath = fixAsarPath(
++  join(publicDir, 'bin', 'x64', 'win32', 'GalaxyCommunication.exe')
++)
++
+ export const webviewPreloadPath = fixAsarPath(
+   join('file://', publicDir, 'webviewPreload.js')
+ )
+diff --git a/src/backend/launcher.ts b/src/backend/launcher.ts
+index a239cff927..2262dc35b2 100644
+--- a/src/backend/launcher.ts
++++ b/src/backend/launcher.ts
+@@ -80,7 +80,7 @@ import {
+   defaultWinePrefix,
+   fixesPath,
+   flatpakHome,
+-  publicDir,
++  galaxyCommunicationExePath,
+   runtimePath,
+   userHome
+ } from './constants/paths'
+@@ -888,28 +888,23 @@ async function prepareWineLaunch(
+ 
+   try {
+     if (runner === 'gog' && experimentalFeatures?.cometSupport !== false) {
+-      const communicationSource = join(
+-        publicDir,
+-        'bin/x64/win32/GalaxyCommunication.exe'
+-      )
+-
+-      const galaxyCommPath =
++      const galaxyCommWinePath =
+         'C:\\ProgramData\\GOG.com\\Galaxy\\redists\\GalaxyCommunication.exe'
+       const communicationDest = await getWinePath({
+-        path: galaxyCommPath,
++        path: galaxyCommWinePath,
+         gameSettings,
+         variant: 'unix'
+       })
+ 
+       if (!existsSync(communicationDest)) {
+         mkdirSync(dirname(communicationDest), { recursive: true })
+-        await copyFile(communicationSource, communicationDest)
++        await copyFile(galaxyCommunicationExePath, communicationDest)
+         await runWineCommand({
+           commandParts: [
+             'sc',
+             'create',
+             'GalaxyCommunication',
+-            `binpath=${galaxyCommPath}`
++            `binpath=${galaxyCommWinePath}`
+           ],
+           gameSettings,
+           protonVerb: 'runinprefix'

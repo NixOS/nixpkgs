@@ -1,0 +1,140 @@
+diff '--color=auto' -ruN a/src/model/transport.py b/src/model/transport.py
+--- a/src/model/transport.py	2025-08-27 17:12:23.761436314 +0200
++++ b/src/model/transport.py	2025-08-27 17:17:35.723006746 +0200
+@@ -105,7 +105,6 @@
+     MSG_NAMES,
+ )
+ from paramiko.compress import ZlibCompressor, ZlibDecompressor
+-from paramiko.dsskey import DSSKey
+ from paramiko.ed25519key import Ed25519Key
+ from paramiko.kex_curve25519 import KexCurve25519
+ from paramiko.kex_gex import KexGex, KexGexSHA256
+@@ -117,7 +116,6 @@
+ from paramiko.message import Message
+ from paramiko.packet import Packetizer, NeedRekeyException
+ from paramiko.primes import ModulusPack
+-from paramiko.py3compat import string_types, long, byte_ord, b, input, PY2
+ from paramiko.rsakey import RSAKey
+ from paramiko.ecdsakey import ECDSAKey
+ from paramiko.server import ServerInterface
+@@ -128,7 +126,7 @@
+     ChannelException,
+     ProxyCommandFailure,
+ )
+-from paramiko.util import retry_on_signal, ClosingContextManager, clamp_value
++from paramiko.util import ClosingContextManager, clamp_value
+ 
+ 
+ # for thread cleanup
+@@ -192,7 +190,6 @@
+         "ecdsa-sha2-nistp384",
+         "ecdsa-sha2-nistp521",
+         "ssh-rsa",
+-        "ssh-dss",
+     )
+     _preferred_kex = (
+         "ecdh-sha2-nistp256",
+@@ -273,8 +270,6 @@
+     _key_info = {
+         "ssh-rsa": RSAKey,
+         "ssh-rsa-cert-v01@openssh.com": RSAKey,
+-        "ssh-dss": DSSKey,
+-        "ssh-dss-cert-v01@openssh.com": DSSKey,
+         "ecdsa-sha2-nistp256": ECDSAKey,
+         "ecdsa-sha2-nistp256-cert-v01@openssh.com": ECDSAKey,
+         "ecdsa-sha2-nistp384": ECDSAKey,
+@@ -396,7 +391,7 @@
+         self.active = False
+         self.hostname = None
+ 
+-        if isinstance(sock, string_types):
++        if isinstance(sock, str):
+             # convert "host:port" into (host, port)
+             hl = sock.split(":", 1)
+             self.hostname = hl[0]
+@@ -419,7 +414,7 @@
+                     sock = socket.socket(af, socket.SOCK_STREAM)
+                     sock.settimeout(1)
+                     try:
+-                        retry_on_signal(lambda: sock.connect((hostname, port)))
++                        sock.connect((hostname, port))
+                     except socket.error as e:
+                         reason = str(e)
+                     else:
+@@ -542,7 +537,7 @@
+         """
+         Returns a string representation of this object, for debugging.
+         """
+-        id_ = hex(long(id(self)) & xffffffff)
++        id_ = hex(int(id(self)) & xffffffff)
+         out = "<paramiko.Transport at {}".format(id_)
+         if not self.active:
+             out += " (unconnected)"
+@@ -749,11 +744,11 @@
+         as a server, the host key is used to sign certain packets during the
+         SSH2 negotiation, so that the client can trust that we are who we say
+         we are.  Because this is used for signing, the key must contain private
+-        key info, not just the public half.  Only one key of each type (RSA or
+-        DSS) is kept.
++        key info, not just the public half.  Only one key of each type (i.e.
++        RSA) is kept.
+ 
+         :param .PKey key:
+-            the host key to add, usually an `.RSAKey` or `.DSSKey`.
++            the host key to add, usually an `.RSAKey`.
+         """
+         self.server_key_dict[key.get_name()] = key
+ 
+@@ -763,7 +758,7 @@
+         client, this method will return the negotiated host key.  If only one
+         type of host key was set with `add_server_key`, that's the only key
+         that will ever be returned.  But in cases where you have set more than
+-        one type of host key (for example, an RSA key and a DSS key), the key
++        one type of host key (for example, an RSA key and another key), the key
+         type will be negotiated by the client, and this method will return the
+         key of the type agreed on.  If the host key has not been negotiated
+         yet, ``None`` is returned.  In client mode, the behavior is undefined.
+@@ -1123,7 +1118,7 @@
+         m = Message()
+         m.add_byte(cMSG_IGNORE)
+         if byte_count is None:
+-            byte_count = (byte_ord(os.urandom(1)) % 32) + 10
++            byte_count = (os.urandom(1) % 32) + 10
+         m.add_bytes(os.urandom(byte_count))
+         self._send_user_message(m)
+ 
+@@ -1802,7 +1797,7 @@
+     def stop_thread(self):
+         self.active = False
+         self.packetizer.close()
+-        if PY2:
++        if False:
+             # Original join logic; #520 doesn't appear commonly present under
+             # Python 2.
+             while self.is_alive() and self is not threading.current_thread():
+@@ -1909,7 +1904,7 @@
+         m = Message()
+         m.add_mpint(self.K)
+         m.add_bytes(self.H)
+-        m.add_byte(b(id))
++        m.add_byte(id.encode("utf8"))
+         m.add_bytes(self.session_id)
+         # Fallback to SHA1 for kex engines that fail to specify a hex
+         # algorithm, or for e.g. transport tests that don't run kexinit.
+@@ -2037,14 +2032,14 @@
+ 
+         # active=True occurs before the thread is launched, to avoid a race
+         _active_threads.append(self)
+-        tid = hex(long(id(self)) & xffffffff)
++        tid = hex(int(id(self)) & xffffffff)
+         if self.server_mode:
+             self._log(DEBUG, "starting thread (server mode): {}".format(tid))
+         else:
+             self._log(DEBUG, "starting thread (client mode): {}".format(tid))
+         try:
+             try:
+-                self.packetizer.write_all(b(self.local_version + "\r\n"))
++                self.packetizer.write_all((self.local_version + "\r\n").encode("utf8"))
+                 self._log(
+                     DEBUG,
+                     "Local version/idstring: {}".format(self.local_version),

@@ -1,0 +1,68 @@
+diff --git a/Canvas.cpp b/Canvas.cpp
+index 8c00727..5ee7756 100644
+--- a/Canvas.cpp
++++ b/Canvas.cpp
+@@ -889,7 +889,6 @@ void Canvas::Refresh(){
+   if (doDraw){
+     wxClientDC dc(this);
+ 
+-    dc.BeginDrawing();
+     
+     wxMemoryDC memdc;
+     wxImage image(g_width, g_height, bitmapdata, true);
+@@ -899,7 +898,6 @@ void Canvas::Refresh(){
+     dc.Blit(0,0,g_width, g_height, &memdc, 0, 0);
+     
+     if (!drawAll){
+-      dc.EndDrawing();
+       return;
+     }
+     else{
+@@ -912,7 +910,6 @@ void Canvas::Refresh(){
+     }
+     
+ 
+-    dc.EndDrawing();
+ 
+   }
+ }
+diff --git a/MainFrame.cpp b/MainFrame.cpp
+index c45107b..d93f9e1 100644
+--- a/MainFrame.cpp
++++ b/MainFrame.cpp
+@@ -178,7 +178,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
+       RHSizer->Add(RH4, 0, wxEXPAND | wxALL, 5);
+     }
+ 
+-    sizer->Add(g_canvas, 0, wxADJUST_MINSIZE | wxALL, 10);
++    sizer->Add(g_canvas, 0, wxALL, 10);
+     sizer->Add(RHSizer, 1, wxEXPAND);
+   }
+   this->SetSizer(sizer);
+@@ -1165,7 +1165,7 @@ void MainFrame::OnMenu(wxCommandEvent& event){
+   }
+   else if(event.GetId() == 1051){
+     //Load
+-    wxFileDialog dialog(this, _("Load from a file"), _(""), _(""), _("Any Image Files (*.*)|*.*"), wxOPEN);
++    wxFileDialog dialog(this, _("Load from a file"), _(""), _(""), _("Any Image Files (*.*)|*.*"), wxFD_OPEN);
+     
+     if (dialog.ShowModal() == wxID_OK){
+       sandboxFilename = dialog.GetPath();
+@@ -1174,7 +1174,7 @@ void MainFrame::OnMenu(wxCommandEvent& event){
+   }
+   else if(event.GetId() == 1052){
+     //Save
+-    wxFileDialog dialog(this, _("Save to a file"), _(""), _(""), _("PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp"), wxSAVE);
++    wxFileDialog dialog(this, _("Save to a file"), _(""), _(""), _("PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp"), wxFD_SAVE);
+     
+     if (dialog.ShowModal() == wxID_OK){
+       wxString filename = dialog.GetPath();
+@@ -1216,7 +1216,7 @@ void MainFrame::OnMenu(wxCommandEvent& event){
+   else if(event.GetId() == 1055){
+     //Load physics
+ 
+-    wxFileDialog dialog(this, _("Load from a file"), _(""), _(""), _("Physics Files (*.txt)|*.txt"), wxOPEN);
++    wxFileDialog dialog(this, _("Load from a file"), _(""), _(""), _("Physics Files (*.txt)|*.txt"), wxFD_OPEN);
+     if (dialog.ShowModal() == wxID_OK){
+       physicsFilename = dialog.GetPath();
+       loadPhysics(physicsFilename);

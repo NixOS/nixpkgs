@@ -1,0 +1,14 @@
+diff --git a/test/test_xsimd_api.cpp b/test/test_xsimd_api.cpp
+index f416ae9..1f8253e 100644
+--- a/test/test_xsimd_api.cpp
++++ b/test/test_xsimd_api.cpp
+@@ -468,7 +468,8 @@ struct xsimd_api_float_types_functions
+     void test_asin()
+     {
+         value_type val(1);
+-        CHECK_EQ(extract(xsimd::asin(T(val))), std::asin(val));
++        CHECK(extract(xsimd::asin(T(val)))
++              == doctest::Approx(std::asin(val)).epsilon(1e-7));
+     }
+     void test_asinh()
+     {

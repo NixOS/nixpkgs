@@ -1,0 +1,19 @@
+diff -rN -u old-regex-compat-tdfa/Text/Regex.hs new-regex-compat-tdfa/Text/Regex.hs
+--- old-regex-compat-tdfa/Text/Regex.hs	2022-02-20 13:42:36.828752458 +0100
++++ new-regex-compat-tdfa/Text/Regex.hs	2022-02-20 13:42:36.828752458 +0100
+@@ -139,7 +139,7 @@
+ splitRegex :: Regex -> String -> [String]
+ splitRegex _ [] = []
+ splitRegex delim strIn = 
+-  let matches = map (!0) (matchAll delim strIn)
++  let matches = map (! 0) (matchAll delim strIn)
+       go _i str [] = str : []
+       go i str ((off,len):rest) =
+         let i' = off+len
+@@ -194,4 +194,4 @@
+                     then [firstline,""]
+                     else firstline : loop remainder
+ 
+--}
+\ No newline at end of file
++-}

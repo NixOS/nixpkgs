@@ -1,0 +1,18 @@
+diff --git i/packages/web/script/build.ts w/packages/web/script/build.ts
+index 9bdcdb3..e9ce1c9 100755
+--- i/packages/web/script/build.ts
++++ w/packages/web/script/build.ts
+@@ -14,6 +14,13 @@ for await (const file of new Bun.Glob("./public/*").scan()) {
+   await Bun.write(file.replace("./public/", "./dist/"), Bun.file(file));
+ }
+ 
++const distFiles = await fs.readdir("./dist");
++const htmlFile = distFiles.find(file => file.startsWith("index-") && file.endsWith(".html"));
++
++if (htmlFile) {
++  await fs.rename(`./dist/${htmlFile}`, "./dist/index.html");
++}
++
+ let html = await Bun.file("./dist/index.html").text();
+ html = html.replace("<!--static-->", Rendered);
+ await Bun.write("./dist/index.html", html);

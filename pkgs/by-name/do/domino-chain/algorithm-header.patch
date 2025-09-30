@@ -1,0 +1,13 @@
+diff --git a/src/domino-chain/tools.cpp b/src/domino-chain/tools.cpp
+index 0eaa592..e91c760 100644
+--- a/src/domino-chain/tools.cpp
++++ b/src/domino-chain/tools.cpp
+@@ -48,6 +48,8 @@
+ 
+ #include <boost/filesystem.hpp>
+ 
++#include <algorithm>
++
+ uint64_t getTime(void)
+ {
+ #if defined(WIN32) || defined(_WIN32)

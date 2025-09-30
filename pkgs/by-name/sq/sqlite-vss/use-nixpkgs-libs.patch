@@ -1,0 +1,41 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c59d993..5606b46 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,15 +18,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ option(FAISS_ENABLE_GPU "" OFF)
+ option(FAISS_ENABLE_PYTHON "" OFF)
+ option(BUILD_TESTING "" OFF)
+-add_subdirectory(./vendor/faiss)
+-
+-# vendor in SQLite amalgammation
+-include_directories(vendor/sqlite)
+-link_directories(BEFORE vendor/sqlite)
++find_package(OpenMP REQUIRED)
++find_package(faiss REQUIRED)
+ 
+ # Adding nlohmann_json for json parsing
+ set(JSON_BuildTests OFF CACHE INTERNAL "")
+-add_subdirectory(vendor/json)
++find_package(nlohmann_json REQUIRED)
+ 
+ # ================================== sqlite-vector ================================== #
+ add_library(sqlite-vector SHARED src/sqlite-vector.cpp)
+@@ -49,7 +46,7 @@ target_compile_definitions(sqlite-vector-static PUBLIC SQLITE_CORE)
+ # ================================== sqlite-vss ================================== #
+ add_library(sqlite-vss SHARED src/sqlite-vss.cpp)
+ target_link_libraries(sqlite-vss sqlite3)
+-target_link_libraries(sqlite-vss faiss_avx2)
++target_link_libraries(sqlite-vss faiss)
+ target_include_directories(sqlite-vss PUBLIC "${PROJECT_BINARY_DIR}")
+ 
+ set_target_properties(sqlite-vss PROPERTIES PREFIX "")
+@@ -58,7 +55,7 @@ set_target_properties(sqlite-vss PROPERTIES OUTPUT_NAME "vss0")
+ # ============================== sqlite-vss-static =============================== #
+ add_library(sqlite-vss-static STATIC src/sqlite-vss.cpp)
+ target_link_libraries(sqlite-vss-static PRIVATE sqlite3)
+-target_link_libraries(sqlite-vss-static PUBLIC faiss_avx2)
++target_link_libraries(sqlite-vss-static PUBLIC faiss)
+ target_link_options(sqlite-vss-static PRIVATE "-Wl,-all_load")
+ target_include_directories(sqlite-vss-static PUBLIC "${PROJECT_BINARY_DIR}")
+ set_target_properties(sqlite-vss-static PROPERTIES OUTPUT_NAME "sqlite_vss0")

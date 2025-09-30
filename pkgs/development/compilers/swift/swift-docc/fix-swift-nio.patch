@@ -1,0 +1,13 @@
+diff --git a/Package.swift b/Package.swift
+index 39c6fb4b2f..02c08b898d 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -26,7 +26,7 @@
+     .target(name: "NIOFoundationCompat", dependencies: ["NIO"]),
+     .target(name: "CNIOAtomics", dependencies: []),
+     .target(name: "CNIOSHA1", dependencies: []),
+-    .target(name: "CNIOLinux", dependencies: []),
++    .target(name: "CNIOLinux", dependencies: [], cSettings: [.define("_GNU_SOURCE")]),
+     .target(name: "CNIODarwin", dependencies: [], cSettings: [.define("__APPLE_USE_RFC_3542")]),
+     .target(name: "CNIOWindows", dependencies: []),
+     .target(name: "NIOConcurrencyHelpers",

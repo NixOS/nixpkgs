@@ -1,0 +1,40 @@
+diff --git a/lib_pypy/_sqlite3_build.py b/lib_pypy/_sqlite3_build.py
+index 2a4e573..92ab786 100644
+--- a/lib_pypy/_sqlite3_build.py
++++ b/lib_pypy/_sqlite3_build.py
+@@ -352,7 +352,7 @@ def _has_load_extension():
+     typedef ... sqlite3;
+     int sqlite3_enable_load_extension(sqlite3 *db, int onoff);
+     """)
+-    libname = 'sqlite3'
++    libname = '@libsqlite@'
+     if sys.platform == 'win32':
+         import os
+         _libname = os.path.join(os.path.dirname(sys.executable), libname)
+@@ -369,7 +369,7 @@ def _has_backup():
+     typedef ... sqlite3_backup;
+     sqlite3_backup* sqlite3_backup_init(sqlite3 *, const char* , sqlite3 *, const char*);
+     """)
+-    libname = 'sqlite3'
++    libname = '@libsqlite@'
+     if sys.platform == 'win32':
+         import os
+         _libname = os.path.join(os.path.dirname(sys.executable), libname)
+@@ -383,7 +383,7 @@ def _get_version():
+     unverified_ffi.cdef("""
+     int sqlite3_libversion_number(void);
+     """)
+-    libname = 'sqlite3'
++    libname = '@libsqlite@'
+     if sys.platform == 'win32':
+         import os
+         _libname = os.path.join(os.path.dirname(sys.executable), libname)
+@@ -554,6 +554,8 @@ if sys.platform.startswith('freebsd'):
+ else:
+     extra_args = dict(
+         libraries=libraries,
++        include_dirs=['@dev@/include'],
++        library_dirs=['@out@/lib']
+     )
+ 
+ SOURCE = """
