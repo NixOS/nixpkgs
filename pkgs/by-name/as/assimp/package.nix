@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.nim65s ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
