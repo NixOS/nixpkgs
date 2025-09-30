@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
@@ -49,5 +50,7 @@ buildPythonPackage rec {
     description = "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
     homepage = "https://nuitka.net/";
+    # never built on darwin since first introduction in nixpkgs
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
