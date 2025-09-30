@@ -106,7 +106,7 @@ let
               }
             ) [ ] allExtensionFunctions;
 
-            getExtName = ext: ext.extensionName;
+            getExtName = ext: ext.extensionName or ext.pname;
 
             # Recursively get a list of all internal dependencies
             # for a list of extensions.
