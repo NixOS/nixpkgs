@@ -399,7 +399,7 @@ rec {
     => true
     lib.getLicenseFromSpdxIdOr "MY LICENSE" null
     => null
-    lib.getLicenseFromSpdxIdOr "MY LICENSE" (builtins.throw "No SPDX ID matches MY LICENSE")
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" (throw "No SPDX ID matches MY LICENSE")
     => error: No SPDX ID matches MY LICENSE
     ```
     :::
