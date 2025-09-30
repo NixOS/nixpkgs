@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  nixosTests,
   symlinkJoin,
 }:
 let
@@ -58,4 +59,8 @@ symlinkJoin {
 }
 // {
   inherit (bird-lg-frontend) version meta;
+
+  passthru.tests = {
+    basic-functionality = nixosTests.bird-lg;
+  };
 }
