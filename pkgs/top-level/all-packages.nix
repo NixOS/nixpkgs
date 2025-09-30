@@ -14897,6 +14897,8 @@ with pkgs;
 
   kicadAddons = recurseIntoAttrs (callPackage ../applications/science/electronics/kicad/addons { });
 
+  kicost = with python3Packages; toPythonApplication kicost;
+
   librepcb = qt6Packages.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = libngspice.override {

@@ -7759,6 +7759,8 @@ self: super: with self; {
 
   kicadcliwrapper = callPackage ../development/python-modules/kicadcliwrapper { };
 
+  kicost = callPackage ../development/python-modules/kicost { };
+
   kicost-digikey-api-v3 = callPackage ../development/python-modules/kicost-digikey-api-v3 { };
 
   kicost-digikey-api-v4 = callPackage ../development/python-modules/kicost-digikey-api-v4 { };
