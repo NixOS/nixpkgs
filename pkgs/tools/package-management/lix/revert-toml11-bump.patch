@@ -16,7 +16,7 @@ index 1522213cb4..0000000000
 -version aligns with the [TOML v1.0.0 specification’s
 -requirement](https://toml.io/en/v1.0.0#integer) to reject integer
 -literals that cannot be losslessly parsed. This means that code like
--`fromTOML "v=0x8000000000000000"` will now produce an error
+-`builtins.fromTOML "v=0x8000000000000000"` will now produce an error
 -rather than silently saturating the integer result.
 diff --git a/lix/libexpr/primops/fromTOML.cc b/lix/libexpr/primops/fromTOML.cc
 index 9d4b5e6abf..3e26773eac 100644
@@ -147,7 +147,7 @@ index 0c90e85edf..0000000000
 -error:
 -       … while calling the 'fromTOML' builtin
 -         at /pwd/in.nix:1:1:
--            1| fromTOML ''attr = 9223372036854775808''
+-            1| builtins.fromTOML ''attr = 9223372036854775808''
 -             | ^
 -            2|
 -
@@ -166,7 +166,7 @@ index a287e18655..0000000000
 -error:
 -       … while calling the 'fromTOML' builtin
 -         at /pwd/in.nix:1:1:
--            1| fromTOML ''attr = -9223372036854775809''
+-            1| builtins.fromTOML ''attr = -9223372036854775809''
 -             | ^
 -            2|
 -
