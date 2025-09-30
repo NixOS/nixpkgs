@@ -5,7 +5,7 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
   twisted,
   zope-interface,
 }:
@@ -13,16 +13,16 @@
 buildPythonPackage rec {
   pname = "txaio";
   version = "25.9.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-5CAEoHfALrWBn/AEpJieSdsRODZwhDDVnLE9Mb0wkJk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     twisted
     zope-interface
   ];
