@@ -1176,31 +1176,31 @@ with self;
   };
 
   AppFatPackerSimple = buildPerlModule {
-      pname = "App-FatPacker-Simple";
-      version = "0.20";
-      src = pkgs.fetchurl {
-        url = "mirror://cpan/authors/id/S/SK/SKAJI/${pname}-${version}.tar.gz";
-        sha256 = "sha256-nkSy/gno2PxT5aA3UWCRK0Dnn9fIdcCOtQvoGUZocSo=";
-      };
-      buildInputs = [ 
-        JSON
-        ModuleBuildTiny
-        pkgs.gnumake
-        ClonePP
-        PPI
-        TestLeakTrace
-      ];
-      propagatedBuildInputs = [
-        AppFatPacker
-        YAMLPP
-        JSONPP
-        Mouse
-        MouseXTypes
-        MouseXGetopt
-        DistributionMetadata
-      ];
+    pname = "App-FatPacker-Simple";
+    version = "0.20";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-FatPacker-Simple-0.20.tar.gz";
+      sha256 = "sha256-nkSy/gno2PxT5aA3UWCRK0Dnn9fIdcCOtQvoGUZocSo=";
     };
+    buildInputs = [
+      JSON
+      ModuleBuildTiny
+      pkgs.gnumake
+      ClonePP
+      PPI
+      TestLeakTrace
+    ];
+    propagatedBuildInputs = [
+      AppFatPacker
+      YAMLPP
+      JSONPP
+      Mouse
+      MouseXTypes
+      MouseXGetopt
+      DistributionMetadata
+    ];
   };
+
 
   Appcpanminus = buildPerlPackage {
     pname = "App-cpanminus";
@@ -10990,10 +10990,10 @@ with self;
     pname = "Distribution-Metadata";
     version = "0.10";
     src = pkgs.fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/${pname}-${version}.tar.gz";
-      sha256 = "sha256-uynMfh26OQphJnYfB9BwQ27fqinrjpBwMCOwXzET6nE=";  
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Distribution-Metadata-0.10.tar.gz";
+      sha256 = "sha256-uynMfh26OQphJnYfB9BwQ27fqinrjpBwMCOwXzET6nE=";
     };
-    buildInputs = [ 
+    buildInputs = [
       ModuleBuildTiny
     ];
     propagatedBuildInputs = [
@@ -11004,9 +11004,9 @@ with self;
     meta = {
       description = "Distribution::Metadata - gather distribution metadata in local";
       homepage = "https://metacpan.org/pod/Distribution::Metadata";
-      license = with lib.licenses; [
-        perl_5
-      ];
+      # license = with lib.licenses; [
+      #   perl5
+      # ];
     };
   };
 
@@ -29123,21 +29123,20 @@ with self;
     pname = "Perl-Strip";
     version = "1.2";
     src = pkgs.fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Perl-Strip-1.2.tar.gz";
       sha256 = "sha256-PI7buDcjZwzD/RIEFVUW+a18N2nzPnnan4xlxQItixo=";
     };
-    buildInputs = [ 
+    buildInputs = [
       ModuleBuildTiny
       PPI
-      ];
-      propagatedBuildInputs = [
-        commonsense
-      ];
-      meta = {
-        description = "Perl::Strip - reduce file size by stripping whitespace, comments, pod etc";
-        mainProgram = "perlstrip";
-      };
-    
+    ];
+    propagatedBuildInputs = [
+      commonsense
+    ];
+    meta = {
+      description = "Perl::Strip - reduce file size by stripping whitespace, comments, pod etc";
+      mainProgram = "perlstrip";
+    };
   };
 
   PerlVersion = buildPerlPackage {
