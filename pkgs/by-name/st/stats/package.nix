@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "2.11.51";
+  version = "2.11.54";
 
   src = fetchurl {
     url = "https://github.com/exelban/stats/releases/download/v${finalAttrs.version}/Stats.dmg";
-    hash = "sha256-oFRS60LPIscqBPMUfK1WvWi7eDv3VpAUaaAKyrpzN2s=";
+    hash = "sha256-Oo/4/xXwweFh01e19NN5HgfUBHkr/AxyoxMyfN6D93g=";
   };
 
   sourceRoot = ".";
@@ -37,6 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       FlameFlag
       emilytrau
+      iedame
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
