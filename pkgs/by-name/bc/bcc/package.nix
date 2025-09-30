@@ -5,6 +5,7 @@
   cmake,
   elfutils,
   fetchFromGitHub,
+  fetchpatch,
   flex,
   iperf,
   lib,
@@ -42,6 +43,12 @@ python3Packages.buildPythonApplication rec {
 
     (replaceVars ./absolute-ausyscall.patch {
       ausyscall = lib.getExe' audit "ausyscall";
+    })
+
+    (fetchpatch {
+      name = "clang-21.patch";
+      url = "https://github.com/iovisor/bcc/commit/8c5c96ad3beeed2fa827017f451a952306826974.diff";
+      hash = "sha256-VOzhdeZ3mRstLlMhxHwEgqCa6L39eRpbFJuKZqFnBws=";
     })
   ];
 
