@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "unixODBC";
-  version = "2.3.12";
+  version = "2.3.13";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz"
       "https://www.unixodbc.org/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-8hBQFEXOIb9ge6Ue+MEl4Q4i3/3/7Dd2RkYt9fAZFew=";
+    sha256 = "sha256-EZr+9fTLBOeAymz3YyZbn7K5nEwRNJo/nKsUBp0sfCs=";
   };
 
   configureFlags = [
