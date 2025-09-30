@@ -282,7 +282,7 @@ in
           ];
         };
 
-        linux_libre = deblobKernel packageAliases.linux_default.kernel;
+        linux_libre = markBroken (deblobKernel packageAliases.linux_default.kernel);
 
         linux_latest_libre = markBroken (deblobKernel packageAliases.linux_latest.kernel);
 
