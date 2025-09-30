@@ -12,6 +12,7 @@
   cacert,
   prefetch-npm-deps,
   fetchNpmDeps,
+  config,
 }:
 
 {
@@ -68,7 +69,7 @@
             hash,
             forceGitDeps ? false,
             forceEmptyCache ? false,
-            npmRegistryOverrides ? { },
+            npmRegistryOverridesString ? "{}",
           }:
           testers.invalidateFetcherByDrvHash fetchNpmDeps {
             inherit
@@ -76,7 +77,7 @@
               hash
               forceGitDeps
               forceEmptyCache
-              npmRegistryOverrides
+              npmRegistryOverridesString
               ;
 
             src = makeTestSrc { inherit name src; };
@@ -188,7 +189,7 @@
             hash = "sha256-Qo24ei1d9Ql4zCLjQJ04zVgS4qhBUpew9NZrhrsBds4=";
           };
 
-          npmRegistryOverrides = builtins.toJSON {
+          npmRegistryOverridesString = builtins.toJSON {
             "broken.link" = "https://registry.npmjs.org";
           };
 
@@ -213,7 +214,7 @@
       nativeBuildInputs ? [ ],
       # A string with a JSON attrset specifying registry mirrors, for example
       #   {"registry.example.org": "my-mirror.local/registry.example.org"}
-      npmRegistryOverrides ? null,
+      npmRegistryOverridesString ? config.npmRegistryOverridesString,
       ...
     }@args:
     let
@@ -230,9 +231,6 @@
 
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
       forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
-      npmRegistryOverrides_ = lib.optionalAttrs (!isNull npmRegistryOverrides) {
-        NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverrides;
-      };
     in
     stdenvNoCC.mkDerivation (
       args
@@ -268,6 +266,8 @@
         # `{ "registry.example.com": "example-registry-bearer-token", ... }`
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
+        NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
+
         SSL_CERT_FILE =
           if
             (
@@ -286,6 +286,5 @@
       // hash_
       // forceGitDeps_
       // forceEmptyCache_
-      // npmRegistryOverrides_
     );
 }
