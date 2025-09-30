@@ -375,7 +375,11 @@ in
 
         bbswitch = callPackage ../os-specific/linux/bbswitch { };
 
-        bcachefs = callPackage ../os-specific/linux/bcachefs-kernel-module { };
+        # NOTE: The bcachefs module is called this way to facilitate
+        # easy overriding, as it is expected many users will want to
+        # pull from the upstream git repo, which may include
+        # unreleased changes to the module build process.
+        bcachefs = callPackage pkgs.bcachefs-tools.kernelModule { };
 
         ch9344 = callPackage ../os-specific/linux/ch9344 { };
 

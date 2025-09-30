@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
+  ]
+  # FIXME: apply unconditionally
+  ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    ./tests-libls.sh.patch
   ];
 
   strictDeps = true;

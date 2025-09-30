@@ -178,8 +178,20 @@ let
 in
 
 {
-  options.boot.bcachefs.package = lib.mkPackageOption pkgs "bcachefs-tools" { } // {
-    description = "Configured Bcachefs userspace package.";
+  options.boot.bcachefs = {
+    package = lib.mkPackageOption pkgs "bcachefs-tools" {
+      extraDescription = ''
+        This package should also provide a passthru 'kernelModule'
+        attribute to build the out-of-tree kernel module.
+      '';
+    };
+
+    modulePackage = lib.mkOption {
+      type = lib.types.package;
+      # See NOTE in linux-kernels.nix
+      default = config.boot.kernelPackages.callPackage cfg.package.kernelModule { };
+      internal = true;
+    };
   };
 
   options.services.bcachefs.autoScrub = {
@@ -245,8 +257,8 @@ in
         system.fsPackages = [ cfg.package ];
         services.udev.packages = [ cfg.package ];
 
-        boot.extraModulePackages = lib.optionals (!config.boot.kernelPackages.bcachefs.meta.broken) [
-          config.boot.kernelPackages.bcachefs
+        boot.extraModulePackages = lib.optionals (!cfg.modulePackage.meta.broken) [
+          cfg.modulePackage
         ];
 
         systemd = {
