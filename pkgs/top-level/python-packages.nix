@@ -7269,6 +7269,8 @@ self: super: with self; {
 
   irisclient = callPackage ../development/python-modules/irisclient { };
 
+  irm-kmi-api = callPackage ../development/python-modules/irm-kmi-api { };
+
   isal = callPackage ../development/python-modules/isal { };
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
