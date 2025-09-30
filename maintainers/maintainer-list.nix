@@ -18098,12 +18098,6 @@
     githubId = 50854675;
     name = "Nelson Jeppesen";
   };
-  neonfuz = {
-    email = "neonfuz@gmail.com";
-    github = "neonfuz";
-    githubId = 2590830;
-    name = "Sage Raflik";
-  };
   neosimsim = {
     email = "me@abn.sh";
     github = "neosimsim";
@@ -19974,12 +19968,6 @@
     github = "perstarkse";
     githubId = 63069986;
     name = "Per Stark";
-  };
-  petee = {
-    name = "Pete Erickson";
-    email = "pete.perickson@gmail.com";
-    github = "petee";
-    githubId = 89916;
   };
   Peter3579 = {
     github = "Peter3579";

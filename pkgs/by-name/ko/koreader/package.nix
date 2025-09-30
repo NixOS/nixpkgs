@@ -138,7 +138,6 @@ stdenv.mkDerivation {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       contrun
-      neonfuz
       liberodark
     ];
   };

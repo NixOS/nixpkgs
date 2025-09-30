@@ -11,13 +11,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "smtp4dev";
-  version = "3.10.2";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
     tag = finalAttrs.version;
-    hash = "sha256-0j5r5YO1wHg3N/OX81UE2YCqhqIaQuSGZa2uh2y+zqs=";
+    hash = "sha256-bbo4kke0deZQoD08dbUKsLUhjg/z7TaIr5qmU4SETNg=";
   };
 
   patches = [ ./smtp4dev-npm-packages.patch ];

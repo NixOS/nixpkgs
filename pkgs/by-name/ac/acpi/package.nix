@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acpi";
   version = "1.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/acpiclient/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5kxuALU815dCfqMqFgUTQlsD7U8HdzP3Hx8J/zQPIws=";
+    url = "mirror://sourceforge/acpiclient/${finalAttrs.version}/acpi-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5kxuALU815dCfqMqFgUTQlsD7U8HdzP3Hx8J/zQPIws=";
   };
 
   meta = {
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];
   };
-}
+})
