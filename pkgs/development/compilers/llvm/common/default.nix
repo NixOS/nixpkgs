@@ -374,18 +374,14 @@ let
 
       # This is an "oddly ordered" bootstrap just for Darwin. Probably
       # don't want it otherwise.
-      clangNoCompilerRtWithLibc =
-        wrapCCWith rec {
-          cc = tools.clang-unwrapped;
-          libcxx = null;
-          bintools = bintools';
-          extraPackages = [ ];
-          extraBuildCommands = mkExtraBuildCommands0 cc;
-        }
-        # FIXME: This should be inside the `wrapCCWith` call.
-        // lib.optionalAttrs stdenv.targetPlatform.isWasm {
-          nixSupport.cc-cflags = [ "-fno-exceptions" ];
-        };
+      clangNoCompilerRtWithLibc = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = null;
+        bintools = bintools';
+        extraPackages = [ ];
+        extraBuildCommands = mkExtraBuildCommands0 cc;
+        nixSupport.cc-cflags = lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      };
 
       # Aliases
       clangNoCompilerRt = tools.clangNoLibcNoRt;
