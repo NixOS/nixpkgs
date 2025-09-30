@@ -1,19 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3,
   fetchPypi,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  pillow,
-  psutil,
-  async-tkinter-loop,
-  timeago,
-  platformdirs,
-  sv-ttk,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "steamback";
   version = "0.3.6";
   format = "pyproject";
@@ -23,28 +14,29 @@ buildPythonApplication rec {
     hash = "sha256-hvMPSxIfwwQqo80JCpYhcbVY4kXs5jWtjjafVSMrw6o=";
   };
 
-  build-system = [
+  build-system = with python3.pkgs; [
     setuptools-scm
     wheel
   ];
 
-  buildInputs = [
+  buildInputs = with python3.pkgs; [
     setuptools
     pillow
   ];
 
-  dependencies = [
+  dependencies = with python3.pkgs; [
     psutil
     async-tkinter-loop
     timeago
     platformdirs
     sv-ttk
+    pillow
   ];
 
   pythonRelaxDeps = [
     "async-tkinter-loop"
     "platformdirs"
-    "Pillow"
+    "pillow"
     "psutil"
   ];
 
