@@ -3411,14 +3411,6 @@ with haskellLib;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
 
-  # 2025-08-01: Fixes few build errors related to pointers.
-  # https://github.com/haskell-cryptography/botan/pull/17
-  botan-bindings = appendPatch (pkgs.fetchpatch2 {
-    url = "https://github.com/haskell-cryptography/botan/commit/99de68c3938187b7ab740c6534ec032a4a236747.patch";
-    sha256 = "sha256-v255WFO9HsRuTAWFZG27TYbpoK7rJ1AuiCFNFIV18mI=";
-    stripLen = 1;
-  }) super.botan-bindings;
-
   # 2025-08-04: Disable failing testcases. It would feel bad to disable all the
   # checks in a cryptography related package.
   botan-low = overrideCabal (drv: {
