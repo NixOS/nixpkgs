@@ -60,9 +60,9 @@ in
 # If we are passed a derivation (based on stdenv*), we can use overrideAttrs to
 # update the arguments to mkDerivation. This gives us the proper awareness of
 # what arguments were effectively passed *to* mkDerivation as opposed to
-# derivation (by mkDerivation). For example, stdenv.mkDerivation
+# builtins.derivation (by mkDerivation). For example, stdenv.mkDerivation
 # accepts an `env` attribute set which is postprocessed before being passed to
-# derivation. This can lead to evaluation failures, if we assume
+# builtins.derivation. This can lead to evaluation failures, if we assume
 # that drvAttrs is equivalent to the arguments passed to mkDerivation.
 # See https://github.com/NixOS/nixpkgs/issues/269539.
 if lib.isDerivation attrs && attrs ? overrideAttrs then
