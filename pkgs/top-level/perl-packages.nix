@@ -11004,9 +11004,6 @@ with self;
     meta = {
       description = "Distribution::Metadata - gather distribution metadata in local";
       homepage = "https://metacpan.org/pod/Distribution::Metadata";
-      # license = with lib.licenses; [
-      #   perl5
-      # ];
     };
   };
 
