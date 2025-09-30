@@ -4616,11 +4616,6 @@ with pkgs;
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
 
-  inherit (callPackage ../applications/office/trilium { })
-    trilium-desktop
-    trilium-server
-    ;
-
   trytond = with python3Packages; toPythonApplication trytond;
 
   ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint {
