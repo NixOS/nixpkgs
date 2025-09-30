@@ -932,13 +932,13 @@ rec {
           throw ''
             lib.fileset.${function}: The ${argument} (${toString path}) is a store path within a working tree of a Git repository.
                 This indicates that a source directory was imported into the store using a method such as `import "''${./.}"` or `path:.`.
-                This function currently does not support such a use case, since it currently relies on `fetchGit`.
+                This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
                 You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
                 If you can't avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.''
         else
           # Otherwise we're going to assume that the path was a Git directory originally,
           # but it was fetched using a method that already removed files not tracked by Git,
-          # such as `fetchGit`, `pkgs.fetchgit` or others.
+          # such as `builtins.fetchGit`, `pkgs.fetchgit` or others.
           # So we can just import the path in its entirety.
           _singleton path;
 
@@ -946,7 +946,7 @@ rec {
       tryFetchGit =
         let
           # This imports the files unnecessarily, which currently can't be avoided
-          # because `fetchGit` is the only function exposing which files are tracked by Git.
+          # because `builtins.fetchGit` is the only function exposing which files are tracked by Git.
           # With the [lazy trees PR](https://github.com/NixOS/nix/pull/6530),
           # the unnecessarily import could be avoided.
           # However a simpler alternative still would be [a builtins.gitLsFiles](https://github.com/NixOS/nix/issues/2944).
@@ -960,7 +960,7 @@ rec {
         in
         # We can identify local working directories by checking for .git,
         # see https://git-scm.com/docs/gitrepository-layout#_description.
-        # Note that `fetchGit` _does_ work for bare repositories (where there's no `.git`),
+        # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
         # even though `git ls-files` wouldn't return any files in that case.
         if !pathExists (path + "/.git") then
           throw "lib.fileset.${function}: Expected the ${argument} (${toString path}) to point to a local working tree of a Git repository, but it's not."

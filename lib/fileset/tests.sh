@@ -1415,7 +1415,7 @@ expectEqual '(import '"$storePath"' { fs = lib.fileset; }).outPath' \""$storePat
 ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
 expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*\) is a store path within a working tree of a Git repository.
 [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-[[:blank:]]*This function currently does not support such a use case, since it currently relies on `fetchGit`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
 [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
 [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 
@@ -1441,12 +1441,12 @@ expectEqual '(import '"$storePathSub"' { fs = lib.fileset; }).outPath' \""$store
 ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
 expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTrackedWith: The second argument \(.*\) is a store path within a working tree of a Git repository.
 [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-[[:blank:]]*This function currently does not support such a use case, since it currently relies on `fetchGit`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
 [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
 [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 expectFailure 'import "${./.}/sub" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*/sub\) is a store path within a working tree of a Git repository.
 [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-[[:blank:]]*This function currently does not support such a use case, since it currently relies on `fetchGit`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
 [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
 [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 rm -rf -- *

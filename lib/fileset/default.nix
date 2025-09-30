@@ -947,7 +947,7 @@ in
     `gitTrackedWith` does not perform any filtering when the path is a [Nix store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path) and not a repository.
     In this way, it accommodates the use case where the expression that makes the `gitTracked` call does not reside in an actual git repository anymore,
     and has presumably already been fetched in a way that excludes untracked files.
-    Fetchers with such equivalent behavior include `fetchGit`, `fetchTree` (experimental), and `pkgs.fetchgit` when used without `leaveDotGit`.
+    Fetchers with such equivalent behavior include `builtins.fetchGit`, `builtins.fetchTree` (experimental), and `pkgs.fetchgit` when used without `leaveDotGit`.
 
     If you don't need the configuration,
     you can use [`gitTracked`](#function-library-lib.fileset.gitTracked) instead.
@@ -956,7 +956,7 @@ in
     (which uses [`--cached`](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt--c) by default).
 
     :::{.warning}
-    Currently this function is based on [`fetchGit`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchGit)
+    Currently this function is based on [`builtins.fetchGit`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchGit)
     As such, this function causes all Git-tracked files to be unnecessarily added to the Nix store,
     without being re-usable by [`toSource`](#function-library-lib.fileset.toSource).
 
