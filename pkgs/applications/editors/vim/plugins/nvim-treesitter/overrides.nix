@@ -111,7 +111,7 @@ in
       tree-sitter-queries-are-present-for-custom-grammars =
         let
           pluginsToCheck =
-            builtins.map (grammar: grammarToPlugin grammar)
+            map (grammar: grammarToPlugin grammar)
               # true is here because there is `recurseForDerivations = true`
               (lib.remove true (lib.attrValues tree-sitter-grammars));
         in

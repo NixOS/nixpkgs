@@ -43,7 +43,7 @@ buildGoModule rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/amazon-cloudwatch-agent";
+  versionCheckProgram = "${placeholder "out"}/bin/amazon-cloudwatch-agent";
 
   versionCheckProgramArg = "-version";
 

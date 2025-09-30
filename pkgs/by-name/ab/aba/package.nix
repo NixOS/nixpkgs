@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
 
   preBuild = ''
     justFlagsArray+=(
-      PREFIX=${builtins.placeholder "out"}
+      PREFIX=${placeholder "out"}
       MANIFEST_OPTS="--frozen --locked --profile=release"
       INSTALL_OPTS="--no-track"
     )

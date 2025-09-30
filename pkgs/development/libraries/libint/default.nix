@@ -75,29 +75,29 @@ assert (eri3Deriv >= 0 && eri3Deriv <= 4);
 # Ensure valid arguments for generated angular momenta in ERI derivatives are used.
 assert (
   builtins.length eriAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eriAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eriAm)
 );
 assert (
   builtins.length eri3Am == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri3Am)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri3Am)
 );
 assert (
   builtins.length eri2Am == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri2Am)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri2Am)
 );
 
 # Ensure valid arguments for generated angular momenta in optimised ERI derivatives are used.
 assert (
   builtins.length eriOptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eriOptAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eriOptAm)
 );
 assert (
   builtins.length eri3OptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri3OptAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri3OptAm)
 );
 assert (
   builtins.length eri2OptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri2OptAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri2OptAm)
 );
 
 # Ensure a valid derivative order for one-electron integrals
@@ -185,26 +185,26 @@ let
     ];
 
     configureFlags = [
-      "--with-max-am=${builtins.toString maxAm}"
-      "--with-eri-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriAm)}"
-      "--with-eri3-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3Am)}"
-      "--with-eri2-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2Am)}"
-      "--with-eri-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriOptAm)}"
-      "--with-eri3-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3OptAm)}"
-      "--with-eri2-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2OptAm)}"
+      "--with-max-am=${toString maxAm}"
+      "--with-eri-max-am=${lib.concatStringsSep "," (map toString eriAm)}"
+      "--with-eri3-max-am=${lib.concatStringsSep "," (map toString eri3Am)}"
+      "--with-eri2-max-am=${lib.concatStringsSep "," (map toString eri2Am)}"
+      "--with-eri-opt-am=${lib.concatStringsSep "," (map toString eriOptAm)}"
+      "--with-eri3-opt-am=${lib.concatStringsSep "," (map toString eri3OptAm)}"
+      "--with-eri2-opt-am=${lib.concatStringsSep "," (map toString eri2OptAm)}"
       "--with-cartgauss-ordering=${cartGaussOrd}"
       "--with-shgauss-ordering=${shGaussOrd}"
       "--with-shell-set=${shellSet}"
     ]
     ++ lib.optional enableFMA "--enable-fma"
-    ++ lib.optional (eriDeriv > 0) "--enable-eri=${builtins.toString eriDeriv}"
-    ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${builtins.toString eri2Deriv}"
-    ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${builtins.toString eri3Deriv}"
+    ++ lib.optional (eriDeriv > 0) "--enable-eri=${toString eriDeriv}"
+    ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${toString eri2Deriv}"
+    ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${toString eri3Deriv}"
     ++ lib.optionals enableOneBody [
-      "--enable-1body=${builtins.toString oneBodyDerivOrd}"
+      "--enable-1body=${toString oneBodyDerivOrd}"
       "--enable-1body-property-derivs"
     ]
-    ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${builtins.toString multipoleOrd}"
+    ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${toString multipoleOrd}"
     ++ lib.optional enableGeneric "--enable-generic"
     ++ lib.optional enableContracted "--enable-contracted-ints"
     ++ lib.optional eri3PureSh "--enable-eri3-pure-sh"

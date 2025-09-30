@@ -78,7 +78,7 @@ in
     }
     // args.meta or { };
   }
-  // builtins.removeAttrs args [
+  // removeAttrs args [
     "name"
     "pname"
     "version"

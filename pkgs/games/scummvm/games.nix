@@ -48,7 +48,7 @@ let
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "plong"
         "pshort"
         "pcode"

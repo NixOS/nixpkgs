@@ -7,8 +7,7 @@
 }:
 
 let
-  mkDerivation =
-    if builtins.isNull buildPythonPackage then stdenv.mkDerivation else buildPythonPackage;
+  mkDerivation = if isNull buildPythonPackage then stdenv.mkDerivation else buildPythonPackage;
 in
 mkDerivation rec {
   pname = "pigpio";

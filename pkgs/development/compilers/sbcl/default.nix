@@ -218,8 +218,8 @@ stdenv.mkDerivation (self: {
     "--prefix=$out"
     "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
   ]
-  ++ builtins.map (x: "--with-${x}") self.enableFeatures
-  ++ builtins.map (x: "--without-${x}") self.disableFeatures
+  ++ map (x: "--with-${x}") self.enableFeatures
+  ++ map (x: "--without-${x}") self.disableFeatures
   ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
     "--arch=arm64"
   ];

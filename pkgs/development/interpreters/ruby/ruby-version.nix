@@ -76,7 +76,7 @@ let
       else
         base;
 
-    # Implements the builtins.toString interface.
+    # Implements the toString interface.
     __toString =
       self:
       self.majMinTiny

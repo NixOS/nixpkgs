@@ -44,7 +44,7 @@ let
     "AMDGPU"
     "NVPTX"
   ]
-  ++ builtins.map inferNativeTarget llvmTargetsToBuild;
+  ++ map inferNativeTarget llvmTargetsToBuild;
 
   # This LLVM version can't seem to find pygments/pyyaml,
   # but a later update will likely fix this (triton-2.1.0)

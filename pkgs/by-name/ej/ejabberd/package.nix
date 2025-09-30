@@ -127,7 +127,7 @@ let
     };
   };
 
-  beamDeps = builtins.removeAttrs allBeamDeps [
+  beamDeps = removeAttrs allBeamDeps [
     "sqlite3"
     "p1_pgsql"
     "p1_mysql"

@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication rec {
 
   # Actually install plugins
   postInstall = ''
-    for plug in ${builtins.toString userPlugins}; do
+    for plug in ${toString userPlugins}; do
       lndir $plug/${python3Packages.python.sitePackages} $out/${python3Packages.python.sitePackages}
     done
   '';

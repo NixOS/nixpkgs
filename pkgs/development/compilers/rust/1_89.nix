@@ -86,7 +86,7 @@ import ./default.nix
   }
 
   (
-    builtins.removeAttrs args [
+    removeAttrs args [
       "llvmPackages_20"
       "llvm_20"
       "wrapCCWith"

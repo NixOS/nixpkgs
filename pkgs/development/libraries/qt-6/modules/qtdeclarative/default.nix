@@ -33,7 +33,7 @@ qtModule {
     # store paths and disallows saving caches of bare qml files in the store.
     (replaceVars ./invalidate-caches-from-mismatched-store-paths.patch {
       nixStore = builtins.storeDir;
-      nixStoreLength = builtins.toString ((builtins.stringLength builtins.storeDir) + 1); # trailing /
+      nixStoreLength = toString ((builtins.stringLength builtins.storeDir) + 1); # trailing /
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
@@ -41,7 +41,7 @@ qtModule {
 
   preConfigure =
     let
-      storePrefixLen = builtins.toString ((builtins.stringLength builtins.storeDir) + 1);
+      storePrefixLen = toString ((builtins.stringLength builtins.storeDir) + 1);
     in
     ''
       # "NIX:" is reserved for saved qmlc files in patch 0001, "QTDHASH:" takes the place
