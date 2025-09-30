@@ -200,8 +200,6 @@ let
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1734643670";
-
-  kbd' = if withPam then kbd else kbd.override { withVlock = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
@@ -475,8 +473,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
 
     # Keyboard
-    (lib.mesonOption "loadkeys-path" "${kbd'}/bin/loadkeys")
-    (lib.mesonOption "setfont-path" "${kbd'}/bin/setfont")
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
 
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
@@ -928,9 +926,8 @@ stdenv.mkDerivation (finalAttrs: {
       withUtmp
       util-linux
       kmod
+      kbd
       ;
-
-    kbd = kbd';
 
     # Many TPM2-related units are only installed if this trio of features are
     # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
