@@ -11880,10 +11880,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/kubectl-view-allocations
       { };
 
-  kubelogin-oidc = callPackage ../by-name/ku/kubelogin-oidc/package.nix {
-    buildGoModule = buildGo124Module;
-  };
-
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
