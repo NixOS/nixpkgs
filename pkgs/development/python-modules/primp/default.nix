@@ -39,7 +39,7 @@ let
       (lib.optionalString stdenv.hostPlatform.isDarwin ''
         rm ../BUILD
       '')
-      + oa.preBuild;
+      + (oa.preBuild or "");
 
     env.NIX_CFLAGS_COMPILE =
       oa.env.NIX_CFLAGS_COMPILE
