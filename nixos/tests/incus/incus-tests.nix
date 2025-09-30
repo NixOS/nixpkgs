@@ -15,11 +15,14 @@ let
   ) "" cfg.instances;
 in
 {
-  name = cfg.package.name;
+  name = "${cfg.package.name}-${cfg.name}";
 
   meta = {
     maintainers = lib.teams.lxc.members;
   };
+
+  # sshBackdoor.enable = true;
+  # enableDebugHook = true;
 
   nodes.server = {
     virtualisation = {

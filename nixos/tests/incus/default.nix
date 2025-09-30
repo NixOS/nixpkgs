@@ -19,6 +19,8 @@ let
 in
 {
   all = incusRunTest {
+    name = "all";
+    appArmor = true;
     feature.user = true;
 
     instances = {
@@ -41,20 +43,25 @@ in
     };
   };
 
-  # appArmor = incusRunTest {
-  #   all = true;
-  #   appArmor = true;
-  # };
-
   container = incusRunTest {
+    name = "container";
+
     instances.c1 = {
       type = "container";
     };
   };
 
-  lvm = incusRunTest { storage.lvm = true; };
+  lvm = incusRunTest {
+    name = "lvm";
 
-  openvswitch = incusRunTest { network.ovs = true; };
+    storage.lvm = true;
+  };
+
+  openvswitch = incusRunTest {
+    name = "openvswitch";
+
+    network.ovs = true;
+  };
 
   ui = runTest {
     imports = [ ./ui.nix ];
@@ -63,12 +70,14 @@ in
   };
 
   virtual-machine = incusRunTest {
+    name = "virtual-machine";
+
     instances = {
       vm1 = {
         type = "virtual-machine";
       };
 
-      # TODO never becomes available
+      # disabled because never becomes available
       # csm = {
       #   type = "virtual-machine";
       #   incusConfig.config = {
@@ -78,5 +87,9 @@ in
     };
   };
 
-  zfs = incusRunTest { storage.zfs = true; };
+  zfs = incusRunTest {
+    name = "zfs";
+
+    storage.zfs = true;
+  };
 }

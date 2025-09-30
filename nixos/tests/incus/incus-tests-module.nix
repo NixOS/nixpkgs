@@ -8,6 +8,11 @@ let
 in
 {
   options.tests.incus = {
+    name = lib.mkOption {
+      type = lib.types.str;
+      description = "name appended to test";
+    };
+
     package = lib.mkPackageOption pkgs "incus" { };
 
     preseed = lib.mkOption {
