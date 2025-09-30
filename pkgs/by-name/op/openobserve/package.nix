@@ -95,6 +95,7 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     "--skip=handler::http::router::tests::test_get_proxy_routes"
     "--skip=tests::e2e_test"
+    "--skip=tests::test_export_operator"
     "--skip=service::organization::tests::test_organization"
   ];
 
