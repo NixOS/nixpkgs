@@ -13810,6 +13810,8 @@ self: super: with self; {
 
   pyporscheconnectapi = callPackage ../development/python-modules/pyporscheconnectapi { };
 
+  pyportainer = callPackage ../development/python-modules/pyportainer { };
+
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
   pyppmd = callPackage ../development/python-modules/pyppmd { };
