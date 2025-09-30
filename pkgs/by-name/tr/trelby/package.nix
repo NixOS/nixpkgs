@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Free, multiplatform, feature-rich screenwriting program";
-    homepage = "www.trelby.org";
+    homepage = "https://www.trelby.org";
     downloadPage = "https://github.com/trelby/trelby";
     mainProgram = "trelby";
     license = lib.licenses.gpl2Only;
