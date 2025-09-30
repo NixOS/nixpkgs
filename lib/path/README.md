@@ -102,7 +102,7 @@ Decision: It should be `./.`.
 - (-) `./.` is rather long.
   - (-) We don't require users to type this though, as it's only output by the library.
     As inputs all three variants are supported for subpaths (and we can't do anything about absolute paths)
-- (-) `builtins.dirOf "foo" == "."`, so `.` would be consistent with that.
+- (-) `dirOf "foo" == "."`, so `.` would be consistent with that.
 - (+) `./.` is consistent with the [decision to have leading `./`][leading-dots].
 - (+) `./.` is a valid Nix path expression, although this property does not hold for every relative path or subpath.
 

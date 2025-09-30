@@ -4487,8 +4487,8 @@ runTests {
   testPackagesFromDirectoryRecursiveStringDirectory = {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
-      # Do NOT remove the `builtins.toString` call here!!!
-      directory = builtins.toString ./packages-from-directory/plain;
+      # Do NOT remove the `toString` call here!!!
+      directory = toString ./packages-from-directory/plain;
     };
     expected = {
       a = "a";

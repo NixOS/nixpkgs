@@ -75,7 +75,7 @@ let
 
       # Those two will always be derived from "config", if given, so they should NOT
       # be overridden further down with "// args".
-      args = builtins.removeAttrs allArgs [
+      args = removeAttrs allArgs [
         "parsed"
         "system"
       ];
