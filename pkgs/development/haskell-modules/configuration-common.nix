@@ -2640,6 +2640,11 @@ with haskellLib;
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
   hexstring = overrideCabal (old: {
+    # GitHub doesn't generate a patch with DOS line endings, so we
+    # need to convert the patched file to Unix line endings
+    prePatch = old.prePatch or "" + ''
+      sed -i -e 's/\r$//' src/Data/HexString.hs
+    '';
     patches = old.patches or [ ] ++ [
       (pkgs.fetchpatch {
         name = "fix-base16-bytestring-compat";
