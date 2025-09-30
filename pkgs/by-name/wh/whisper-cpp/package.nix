@@ -73,13 +73,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.7.6";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dppBhiCS4C3ELw/Ckx5W0KOMUvOHUiisdZvkS7gkxj4=";
+    hash = "sha256-6mEBhxZNAXu+Ya/jbI0G0tb6Wf5Wqz4KxPEZSrfsgv8=";
   };
 
   # The upstream download script tries to download the models to the
