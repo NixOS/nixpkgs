@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   unasync,
   poetry-core,
   python,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "redis-om";
   version = "0.3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "redis";
@@ -68,10 +65,7 @@ buildPythonPackage rec {
   # https://github.com/redis/redis-om-python/issues/532
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aredis_om"
-    "redis_om"
-  ];
+  pythonImportsCheck = [ "aredis_om" ];
 
   meta = with lib; {
     description = "Object mapping, and more, for Redis and Python";
