@@ -14,6 +14,7 @@
   buildPackages,
   nixosTests,
 
+  # Yodl provides the conversion to troff man pages and to TeXinfo
   enableYodl ? true,
   yodl,
 }:
