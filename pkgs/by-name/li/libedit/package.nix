@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./01-cygwin.patch
+    (if stdenv.hostPlatform.isCygwin then ./01-cygwin-new.patch else ./01-cygwin.patch)
   ];
 
   nativeBuildInputs = [
