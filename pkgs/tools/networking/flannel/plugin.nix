@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cni-plugin-flannel";
-  version = "1.7.1-flannel2";
+  version = "1.8.0-flannel1";
 
   src = fetchFromGitHub {
     owner = "flannel-io";
     repo = "cni-plugin";
     rev = "v${version}";
-    sha256 = "sha256-vKHkgdmfG7jf0avwcJsNNCYlERH71ULPBHI3ObtwrIM=";
+    sha256 = "sha256-DaE8T/c1n5Mx/MvPXw+bXO+91Ux/bcWWAdbVmNhQXIo=";
   };
 
-  vendorHash = "sha256-hDodGat/aZyDSRHN6K4J8Pq9LFlclbnEmYVwxCbraKk=";
+  vendorHash = "sha256-x4QoAXrMhzEqSNBvWl3/9Lb4JjDgwcoV9a0xEYcwKFI=";
 
   ldflags = [
     "-s"
