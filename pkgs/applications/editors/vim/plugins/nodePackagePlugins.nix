@@ -11,7 +11,6 @@ let
     "coc-eslint"
     "coc-explorer"
     "coc-flutter"
-    "coc-git"
     "coc-go"
     "coc-haxe"
     "coc-highlight"
