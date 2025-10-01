@@ -1,26 +1,45 @@
 {
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   mono,
   gtk2,
+  msbuild,
+  iconv,
   lib,
 }:
 stdenv.mkDerivation rec {
   pname = "nbtexplorer";
   version = "2.8.0";
 
-  src = fetchzip {
-    url = "https://github.com/jaquadro/NBTExplorer/releases/download/v${version}-win/NBTExplorer-${version}.zip";
-    sha256 = "sha256-T0FLxuzgVHBz78rScPC81Ns2X1Mw/omzvYJVRQM24iU=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "jaquadro";
+    repo = "NBTExplorer";
+    rev = "v${version}-win";
+    sha256 = "uOoELun0keFYN1N2/a1IkCP1AZQvfDLiUdrLxxrhE/A=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [mono];
   buildInputs = [gtk2];
+
+  nativeBuildInputs = [mono msbuild];
+
+  preBuild = ''
+    # Convert vendor files to UTF-8 using iconv
+    for f in NBTExplorer/Vendor/Be.Windows.Forms.HexBox/*.cs; do
+      iconv -f WINDOWS-1252 -t UTF-8 "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+    done
+  '';
+
+  buildPhase = ''
+    msbuild NBTExplorer/NBTExplorer.csproj \
+      /p:Configuration=Release \
+      /p:UseSharedCompilation=false \
+      /p:CodePage=65001
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r * $out/bin
+    cp NBTExplorer/bin/Release/NBTExplorer.exe $out/bin/
 
     cat > $out/bin/nbtexplorer <<EOF
     #!/usr/bin/env bash
