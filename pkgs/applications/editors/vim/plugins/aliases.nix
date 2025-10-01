@@ -43,6 +43,7 @@ mapAliases (
     BufOnly = BufOnly-vim;
     calendar = calendar-vim;
     coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # addedd 2025-10-01
+    coc-vetur = throw "coc-vetur was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # added 2025-10-01
     coffee-script = vim-coffee-script;
     coffeeScript = vim-coffee-script; # backwards compat, added 2014-10-18
     Solarized = vim-colors-solarized;
