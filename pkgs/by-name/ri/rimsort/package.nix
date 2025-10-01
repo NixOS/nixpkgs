@@ -12,6 +12,8 @@
   todds,
 
   steam,
+
+  nix-update-script,
 }:
 let
   pname = "rimsort";
@@ -50,6 +52,7 @@ in
 stdenv.mkDerivation {
   inherit pname;
   inherit version;
+  inherit src; # Required for nix-update
 
   unpackPhase = ''
     runHook preUnpack
@@ -159,6 +162,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source mod manager for the video game RimWorld";
