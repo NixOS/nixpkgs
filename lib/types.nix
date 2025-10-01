@@ -565,15 +565,17 @@ let
               }
             );
 
-          positive = addCheck number (x: x > 0) // {
-            name = "numberPositive";
-            description = "positive integer or floating point number, meaning >0";
-            descriptionClass = "nonRestrictiveClause";
-          };
           nonnegative = (addCheck number (x: x >= 0)).extend (
             final: prev: {
               name = "numberNonnegative";
               description = "nonnegative integer or floating point number, meaning >=0";
+              descriptionClass = "nonRestrictiveClause";
+            }
+          );
+          positive = (addCheck number (x: x > 0)).extend (
+            final: prev: {
+              name = "numberPositive";
+              description = "positive integer or floating point number, meaning >0";
               descriptionClass = "nonRestrictiveClause";
             }
           );
