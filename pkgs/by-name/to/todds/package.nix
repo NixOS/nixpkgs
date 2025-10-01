@@ -9,7 +9,7 @@
   fmt,
   hyperscan,
   opencv,
-  tbb_2021,
+  tbb_2022_0,
   fetchFromGitHub,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     hyperscan
     opencv
-    tbb_2021
+    tbb_2022_0
   ];
 
   strictDeps = true;
