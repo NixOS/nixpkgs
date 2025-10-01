@@ -1,5 +1,10 @@
-{ stdenv, fetchzip, mono, gtk2, lib }:
-
+{
+  stdenv,
+  fetchzip,
+  mono,
+  gtk2,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "nbtexplorer";
   version = "2.8.0";
@@ -10,8 +15,8 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ mono ];
-  buildInputs = [ gtk2 ];
+  nativeBuildInputs = [mono];
+  buildInputs = [gtk2];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -36,8 +41,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jaquadro/NBTExplorer";
     license = licenses.mit;
     platforms = platforms.unix;
-    # I won't call myself a maintainer since this didn't receive updates 
+    # I won't call myself a maintainer since this didn't receive updates
     # in 8 Years but if it ever updates count me in as the maintainer
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }
