@@ -15,13 +15,13 @@
 }:
 let
   pname = "rimsort";
-  version = "1.0.30";
+  version = "1.0.47";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
     rev = "v${version}";
-    hash = "sha256-f1wYoBC0EbkvYNJHkVuoMukJZMY7eNjCIzJra7/hpLs=";
+    hash = "sha256-1wn3WIflrhH3IMBeGFwcHi0zOREakuk/5gqwPY720eA=";
     fetchSubmodules = true;
   };
   steamworksSrc = fetchzip {
@@ -100,6 +100,7 @@ stdenv.mkDerivation {
       toposort
       watchdog
       xmltodict
+      zstandard
       steamworkspy
       ;
   };
