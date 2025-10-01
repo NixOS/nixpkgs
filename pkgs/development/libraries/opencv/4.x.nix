@@ -121,7 +121,7 @@ let
     owner = "opencv";
     repo = "opencv_contrib";
     tag = version;
-    hash = "sha256-YNd96qFJ8SHBgDEEsoNps888myGZdELbbuYCae9pW3M=";
+    hash = "sha256-3tbscRFryjCynIqh0OWec8CUjXTeIDxOGJkHTK2aIao=";
   };
 
   testDataSrc = fetchFromGitHub {
