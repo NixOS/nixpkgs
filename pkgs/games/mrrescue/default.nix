@@ -1,11 +1,14 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   fetchurl,
   love,
   lua,
   makeWrapper,
   makeDesktopItem,
+  strip-nondeterminism,
+  zip,
 }:
 
 let
@@ -32,24 +35,33 @@ in
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
-    sha256 = "0kzahxrgpb4vsk9yavy7f8nc34d62d1jqjrpsxslmy9ywax4yfpi";
+  src = fetchFromGitHub {
+    owner = "SimonLarsen";
+    repo = "mrrescue";
+    tag = "v${version}";
+    hash = "sha256-/g4SzaI1tSJZg1wW0onQwLMMam5v8PvM45tqP2FxZCA=";
   };
 
   nativeBuildInputs = [
     lua
     love
     makeWrapper
+    strip-nondeterminism
+    zip
   ];
 
-  dontUnpack = true;
+  buildPhase = ''
+    runHook preBuild
+    zip -9 -r mrrescue.love ./*
+    strip-nondeterminism --type zip mrrescue.love
+    runHook postBuild
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
-    cp -v $src $out/share/games/lovegames/${pname}.love
+    cp -v mrrescue.love $out/share/games/lovegames/${pname}.love
 
     makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
 
