@@ -60,6 +60,9 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.rauthy = {
       description = "rauthy";
+      after = [
+        "postgresql.service"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -115,7 +118,6 @@ in
           # Use "+" to run as root because the secrets may not be accessible to the dynamic user
           "+"
           + pkgs.writeShellScript "rauthy-pre" ''
-            set -x
             install -m 600 -o $USER ${renderedSettingsFile} ${finalSettingsFile}
             ${secretReplacements}
           '';
@@ -124,6 +126,7 @@ in
           ${cfg.package}/bin/rauthy
         '';
 
+        User = "rauthy";
         DynamicUser = true;
       };
     };
