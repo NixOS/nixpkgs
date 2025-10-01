@@ -12,21 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
-  version = "0.32.1";
+  version = "0.32.4";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rtn1JqWxH+MCu102KaQ/Xjjh9D3UtPolko78YQPJFXc=";
+    hash = "sha256-bGBSwv2js9Bu8n904cIM5jwZwjXugoUkYSqL/5tbDeU=";
   };
 
-  cargoPatches = [
-    # otherwise it tries to download swagger-ui at build time
-    ./0001-enable-vendored-feature-for-utoipa-swagger-ui.patch
-  ];
-
-  cargoHash = "sha256-+W3yEska30ynTZyiq5AYHvFC5VSIsw6kPMazvOmVWn4=";
+  cargoHash = "sha256-SUGmGWpJz1+gtie/jCZ7Ajt7jBtc5f1hZyaYXV8xgPY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -55,11 +50,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     patches = [
       # otherwise permission denied error for trying to write outside of the build directory
-      ./0002-build-svelte-files-inside-the-current-directory.patch
-      ./0003-fix-aarch64-segfault.patch
+      ./0001-build-svelte-files-inside-the-current-directory.patch
     ];
 
-    npmDepsHash = "sha256-IYzWw1Ctz5L5R+e54t88ntYjREhaaQOwXBCAh4Th/EU=";
+    patchFlags = [
+      "-p2"
+    ];
+
+    npmDepsHash = "sha256-khkHAkz6p6i9/b5ITKQMrSz2kyOPFHEBSAJY78j8Y+I=";
   };
 
   passthru = {
