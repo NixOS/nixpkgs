@@ -17,6 +17,8 @@ use std::{
 use anyhow::{anyhow, bail, Context, Result};
 use dbus::{
     blocking::{stdintf::org_freedesktop_dbus::Properties, LocalConnection, Proxy},
+    channel::Sender,
+    strings::{BusName, Interface, Member},
     Message,
 };
 use glob::glob;
@@ -31,6 +33,15 @@ use nix::{
 };
 use regex::Regex;
 use syslog::Facility;
+
+mod fdo_dbus {
+    #![allow(non_upper_case_globals)]
+    #![allow(non_camel_case_types)]
+    #![allow(non_snake_case)]
+    #![allow(unused)]
+    #![allow(clippy::all)]
+    include!(concat!(env!("OUT_DIR"), "/fdo_dbus.rs"));
+}
 
 mod systemd_manager {
     #![allow(non_upper_case_globals)]
@@ -50,7 +61,9 @@ mod logind_manager {
     include!(concat!(env!("OUT_DIR"), "/logind_manager.rs"));
 }
 
-use crate::systemd_manager::OrgFreedesktopSystemd1Manager;
+use crate::{
+    fdo_dbus::OrgFreedesktopDBusNameOwnerChanged, systemd_manager::OrgFreedesktopSystemd1Manager,
+};
 use crate::{
     logind_manager::OrgFreedesktopLogin1Manager,
     systemd_manager::{
@@ -123,7 +136,14 @@ impl From<&Action> for &'static str {
 // Allow for this switch-to-configuration to remain consistent with the perl implementation.
 // Perl's "die" uses errno to set the exit code: https://perldoc.perl.org/perlvar#%24%21
 fn die() -> ! {
-    std::process::exit(std::io::Error::last_os_error().raw_os_error().unwrap_or(1));
+    let code = match std::io::Error::last_os_error().raw_os_error().unwrap_or(1) {
+        // Ensure that even if errno did not point to a helpful error code, we still have a
+        // non-zero exit code
+        0 => 1,
+        other => other,
+    };
+
+    std::process::exit(code);
 }
 
 fn parse_os_release() -> Result<HashMap<String, String>> {
@@ -259,6 +279,8 @@ fn parse_systemd_ini(data: &mut UnitInfo, mut unit_file: impl Read) -> Result<()
         &unit_file_content,
         ParseOption {
             enabled_quote: true,
+            enabled_indented_mutiline_value: false,
+            enabled_preserve_key_leading_whitespace: false,
             // Allow for escaped characters that won't get interpreted by the INI parser. These
             // often show up in systemd unit files device/mount/swap unit names (e.g. dev-disk-by\x2dlabel-root.device).
             enabled_escape: false,
@@ -885,20 +907,27 @@ impl std::fmt::Display for Job {
     }
 }
 
-fn new_dbus_proxies(
-    conn: &LocalConnection,
-) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
-    (
-        conn.with_proxy(
-            "org.freedesktop.systemd1",
-            "/org/freedesktop/systemd1",
-            Duration::from_millis(10000),
-        ),
-        conn.with_proxy(
-            "org.freedesktop.login1",
-            "/org/freedesktop/login1",
-            Duration::from_millis(10000),
-        ),
+fn fdo_dbus_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.DBus",
+        "/org/freedesktop/DBus",
+        Duration::from_millis(500),
+    )
+}
+
+fn systemd1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.systemd1",
+        "/org/freedesktop/systemd1",
+        Duration::from_millis(10000),
+    )
+}
+
+fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.login1",
+        "/org/freedesktop/login1",
+        Duration::from_millis(10000),
     )
 }
 
@@ -907,6 +936,10 @@ fn block_on_jobs(
     submitted_jobs: &Rc<RefCell<HashMap<dbus::Path<'static>, Job>>>,
 ) {
     while !submitted_jobs.borrow().is_empty() {
+        log::debug!(
+            "waiting for submitted jobs to finish, still have {} job(s)",
+            submitted_jobs.borrow().len()
+        );
         _ = conn.process(Duration::from_millis(500));
     }
 }
@@ -916,6 +949,54 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
         Err(err) if err.kind() != std::io::ErrorKind::NotFound => Err(err),
         _ => Ok(()),
     }
+}
+
+fn reexecute_systemd_manager(
+    dbus_conn: &LocalConnection,
+    fdo_dbus: &Proxy<'_, &LocalConnection>,
+) -> anyhow::Result<()> {
+    let reexecute_done = Rc::new(RefCell::new(false));
+    let _reexecute_done = reexecute_done.clone();
+    let owner_changed_token = fdo_dbus
+        .match_signal(
+            move |signal: OrgFreedesktopDBusNameOwnerChanged, _: &LocalConnection, _: &Message| {
+                if signal.name.as_str() == "org.freedesktop.systemd1" {
+                    *_reexecute_done.borrow_mut() = true;
+                }
+
+                true
+            },
+        )
+        .context("Failed to add signal match for DBus name owner changes")?;
+
+    let bus_name = BusName::from("org.freedesktop.systemd1");
+    let object_path = dbus::Path::from("/org/freedesktop/systemd1");
+    let interface = Interface::new("org.freedesktop.systemd1.Manager")
+        .expect("the org.freedesktop.systemd1.Manager interface name should be valid");
+    let method_name = Member::new("Reexecute").expect("the Reexecute method name should be valid");
+
+    // Systemd does not reply to the Reexecute method.
+    let _serial = dbus_conn
+        .send(Message::method_call(
+            &bus_name,
+            &object_path,
+            &interface,
+            &method_name,
+        ))
+        .map_err(|_err| anyhow!("Failed to send org.freedesktop.systemd1.Manager.Reexecute"))?;
+
+    log::debug!("waiting for systemd to finish reexecuting");
+    while !*reexecute_done.borrow() {
+        _ = dbus_conn
+            .process(Duration::from_secs(500))
+            .context("Failed to process dbus messages")?;
+    }
+
+    dbus_conn
+        .remove_match(owner_changed_token)
+        .context("Failed to remove jobs token")?;
+
+    Ok(())
 }
 
 /// Performs switch-to-configuration functionality for a single non-root user
@@ -933,7 +1014,10 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     }
 
     let dbus_conn = LocalConnection::new_session().context("Failed to open dbus connection")?;
-    let (systemd, _) = new_dbus_proxies(&dbus_conn);
+    let fdo_dbus = fdo_dbus_proxy(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
+
+    reexecute_systemd_manager(&dbus_conn, &fdo_dbus)?;
 
     let nixos_activation_done = Rc::new(RefCell::new(false));
     let _nixos_activation_done = nixos_activation_done.clone();
@@ -951,14 +1035,11 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         )
         .context("Failed to add signal match for systemd removed jobs")?;
 
-    // The systemd user session seems to not send a Reloaded signal, so we don't have anything to
-    // wait on here.
-    _ = systemd.reexecute();
-
     systemd
         .restart_unit("nixos-activation.service", "replace")
         .context("Failed to restart nixos-activation.service")?;
 
+    log::debug!("waiting for nixos activation to finish");
     while !*nixos_activation_done.borrow() {
         _ = dbus_conn
             .process(Duration::from_secs(500))
@@ -987,6 +1068,8 @@ dry-activate: show what would be done if this configuration were activated
 
 /// Performs switch-to-configuration functionality for the entire system
 fn do_system_switch(action: Action) -> anyhow::Result<()> {
+    log::debug!("Performing system switch");
+
     let out = PathBuf::from(required_env("OUT")?);
     let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
     let distro_id = required_env("DISTRO_ID")?;
@@ -994,8 +1077,14 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
     let locale_archive = required_env("LOCALE_ARCHIVE")?;
     let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
+    let log_level = if std::env::var("STC_DEBUG").is_ok() {
+        LevelFilter::Debug
+    } else {
+        LevelFilter::Info
+    };
 
     let action = ACTION.get_or_init(|| action);
+    log::debug!("Using action {:?}", action);
 
     // The action that is to be performed (like switch, boot, test, dry-activate) Also exposed via
     // environment variable from now on
@@ -1027,6 +1116,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     std::fs::set_permissions("/run/nixos", perms)
         .context("Failed to set permissions on /run/nixos directory")?;
 
+    log::debug!("Creating lock file /run/nixos/switch-to-configuration.lock");
     let Ok(lock) = std::fs::OpenOptions::new()
         .append(true)
         .create(true)
@@ -1036,12 +1126,13 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         die();
     };
 
+    log::debug!("Acquiring lock on file /run/nixos/switch-to-configuration.lock");
     let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusiveNonblock) else {
         eprintln!("Could not acquire lock");
         die();
     };
 
-    if syslog::init(Facility::LOG_USER, LevelFilter::Debug, Some("nixos")).is_err() {
+    if syslog::init(Facility::LOG_USER, log_level, Some("nixos")).is_err() {
         bail!("Failed to initialize logger");
     }
 
@@ -1051,6 +1142,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         != "1"
     {
         do_pre_switch_check(&pre_switch_check, &toplevel, action)?;
+        log::debug!("Done performing pre-switch checks");
     }
 
     if *action == Action::Check {
@@ -1060,6 +1152,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     // Install or update the bootloader.
     if matches!(action, Action::Switch | Action::Boot) {
         do_install_bootloader(&install_bootloader, &toplevel)?;
+        log::debug!("Done performing bootloader installation");
     }
 
     // Just in case the new configuration hangs the system, do a sync now.
@@ -1114,7 +1207,9 @@ won't take effect until you reboot the system.
     let mut units_to_reload = map_from_list_file(RELOAD_LIST_FILE);
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
-    let (systemd, logind) = new_dbus_proxies(&dbus_conn);
+    let fdo_dbus = fdo_dbus_proxy(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
+    let logind = login1_proxy(&dbus_conn);
 
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
@@ -1638,8 +1733,9 @@ won't take effect until you reboot the system.
     // just in case the new one has trouble communicating with the running pid 1.
     if restart_systemd {
         eprintln!("restarting systemd...");
-        _ = systemd.reexecute(); // we don't get a dbus reply here
+        reexecute_systemd_manager(&dbus_conn, &fdo_dbus)?;
 
+        log::debug!("waiting for systemd restart to finish");
         while !*systemd_reload_status.borrow() {
             _ = dbus_conn
                 .process(Duration::from_millis(500))
@@ -1654,6 +1750,7 @@ won't take effect until you reboot the system.
 
     // Make systemd reload its units.
     _ = systemd.reload(); // we don't get a dbus reply here
+    log::debug!("waiting for systemd reload to finish");
     while !*systemd_reload_status.borrow() {
         _ = dbus_conn
             .process(Duration::from_millis(500))
@@ -1690,6 +1787,7 @@ won't take effect until you reboot the system.
                     .canonicalize()
                     .context("Failed to get full path to /proc/self/exe")?;
 
+                log::debug!("Performing user switch for {name}");
                 std::process::Command::new(&myself)
                     .uid(uid)
                     .gid(gid)
@@ -1865,10 +1963,17 @@ won't take effect until you reboot the system.
     //
     // Wait for events from systemd to settle. process() will return true if we have received any
     // messages on the bus.
-    while dbus_conn
-        .process(Duration::from_millis(250))
-        .unwrap_or_default()
-    {}
+    let mut waited = Duration::from_millis(0);
+    let wait_interval = Duration::from_millis(250);
+    let max_wait = Duration::from_secs(90);
+    log::debug!("waiting for systemd events to settle");
+    while dbus_conn.process(wait_interval).unwrap_or_default() {
+        waited += wait_interval;
+        if waited >= max_wait {
+            log::debug!("timed out waiting systemd events to settle");
+            break;
+        }
+    }
 
     let new_active_units = get_active_units(&systemd)?;
 

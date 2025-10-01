@@ -10,8 +10,8 @@
 let
   darwin_arch = if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "amd64";
   darwin_configure = ''
-    chmod -R +w vendor/github.com/keys-pub/go-libfido2
-    cat << EOF > vendor/github.com/keys-pub/go-libfido2/fido2_static_${darwin_arch}.go
+    chmod -R +w vendor/github.com/olastor/go-libfido2
+    cat << EOF > vendor/github.com/olastor/go-libfido2/fido2_static_${darwin_arch}.go
     package libfido2
 
     /*

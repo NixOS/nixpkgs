@@ -21,13 +21,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-0gK+fM/YGGpxlcR1HQixbLK0/sv+HH29h6ajEP2w2pI=";
+    hash = "sha256-e5Zelu3g8m9u5NtyABkIV4wOed9cq58xSaxginoDb2Q=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-qLRFZXbVbsgMyXiljsb8lOBCDZKa17LcxWuPaUYSG70=";
+  cargoHash = "sha256-64SDz0wHKcp/tPGDDOlCRFr3Z1q6cWOafhP0howSFhA=";
 
   env.RADICLE_VERSION = finalAttrs.version;
 

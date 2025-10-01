@@ -203,6 +203,7 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
+      meta.mainProgram = name;
     };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md

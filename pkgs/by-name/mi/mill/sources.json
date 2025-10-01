@@ -1,0 +1,18 @@
+{
+  "aarch64-darwin": {
+    "artifact-suffix": "native-mac-aarch64",
+    "hash": "sha256-A9dShPyfkfTuRJ1/DkLwb/5NTRTxc7OY7Rd1h0Tzjos="
+  },
+  "x86_64-darwin": {
+    "artifact-suffix": "native-mac-amd64",
+    "hash": "sha256-zctTOVxFghF9z9PUQt3OO20Ul/qY8H/j6MPpFNpw+Ow="
+  },
+  "aarch64-linux": {
+    "artifact-suffix": "native-linux-aarch64",
+    "hash": "sha256-E+IMTkRP1a1TigpRyVHPu0assgHEbzbF8lv7Rsm2FOM="
+  },
+  "x86_64-linux": {
+    "artifact-suffix": "native-linux-amd64",
+    "hash": "sha256-rgAqlTCZc8nedUU2D+Klo3KY0z9sI0KJczdaugM3//8="
+  }
+}

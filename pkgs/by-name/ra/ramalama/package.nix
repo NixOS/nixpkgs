@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ramalama";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
-    hash = "sha256-BFJoM9MEprCdCANQntb4IIuWhtUXvCnK/mE7vOdf2PM=";
+    hash = "sha256-v9/cE6GFOUT5urHQwif7skP5vnRCdu435QGAAypWX0w=";
   };
 
   build-system = with python3.pkgs; [
@@ -69,6 +69,11 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
+  ];
+
+  # Enable when https://github.com/containers/ramalama/pull/1891 is released
+  disabledTests = [
+    "test_ollama_model_pull"
   ];
 
   passthru = {

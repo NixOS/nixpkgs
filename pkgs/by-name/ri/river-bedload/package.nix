@@ -10,7 +10,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  zig,
+  zig_0_14,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    zig.hook
+    zig_0_14.hook
   ];
 
   buildInputs = [

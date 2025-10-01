@@ -39,7 +39,7 @@
   libvdpau,
   libxkbcommon,
   lua,
-  makeWrapper,
+  makeBinaryWrapper,
   libgbm,
   meson,
   mujs,
@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     buildPackages.darwin.sigtool
     swift
-    makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
@@ -253,6 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
       mpv.desktop > umpv.desktop
     printf "NoDisplay=true\n" >> umpv.desktop
+    printf "StartupNotify=false\n" >> umpv.desktop
     popd
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''

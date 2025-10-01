@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     "--lib"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd novops \
       --bash <($out/bin/novops completion bash) \
       --fish <($out/bin/novops completion fish) \

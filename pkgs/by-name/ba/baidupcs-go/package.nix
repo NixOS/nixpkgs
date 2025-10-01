@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "baidupcs-go";
-  version = "3.9.8";
+  version = "3.9.9";
 
   src = fetchFromGitHub {
     owner = "qjfoidnh";
     repo = "BaiduPCS-Go";
     rev = "v${version}";
-    hash = "sha256-iQ28wDrkd0mralgsBgCZ+MCkPR7x42tFVqFGNm/m1d0=";
+    hash = "sha256-x0oEuj8LoR0yUkKOzI27u3AIFVDDV7vMHCqvjENHwv8=";
   };
 
   vendorHash = "sha256-hW+IrzS5+DublQUIIcecL08xoauTjba9qnAtpzNeDXw=";

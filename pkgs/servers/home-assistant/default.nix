@@ -32,18 +32,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.0";
+      aionotion = super.aionotion.overridePythonAttrs rec {
+        version = "2024.03.0";
         src = fetchFromGitHub {
-          owner = "jpbede";
-          repo = "aioelectricitymaps";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-q06B40c0uvSuzH/3YCoxg4p9aNIOPrphsoESktF+B14=";
+          owner = "bachya";
+          repo = "aionotion";
+          tag = version;
+          hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
         };
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
-      });
+        postPatch = null;
+      };
 
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
@@ -87,16 +85,6 @@ let
         ];
       });
 
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.3";
-        src = fetchFromGitHub {
-          owner = "aio-libs";
-          repo = "async-timeout";
-          tag = "v${version}";
-          hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
-        };
-      });
-
       av = super.av.overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
@@ -115,16 +103,6 @@ let
         ];
       });
 
-      google-genai = super.google-genai.overridePythonAttrs (old: rec {
-        version = "1.7.0";
-        src = fetchFromGitHub {
-          owner = "googleapis";
-          repo = "python-genai";
-          tag = "v${version}";
-          hash = "sha256-vmrFPE7H9s9varrP0s6WK4opoU1hREH7rVVjrKiXY5E=";
-        };
-      });
-
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
@@ -138,16 +116,14 @@ let
         ];
       });
 
-      hassil = super.hassil.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2.3";
-
+      livisi = super.livisi.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.25";
         src = fetchFromGitHub {
-          inherit (oldAttrs.src) repo owner;
+          owner = "planbnet";
+          repo = "livisi";
           tag = "v${version}";
-          hash = "sha256-rP7F0BovD0Klf06lywo+1uFhPf+dS0qbNBZluun8+cE=";
+          hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
         };
-
-        disabledTestPaths = [ ];
       });
 
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
@@ -214,16 +190,20 @@ let
         };
       });
 
-      py-madvr2 = super.py-madvr2.overridePythonAttrs rec {
-        version = "1.6.33";
+      py-madvr2 = super.py-madvr2.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.40";
         src = fetchFromGitHub {
           owner = "iloveicedgreentea";
           repo = "py-madvr";
           tag = "v${version}";
-          hash = "sha256-z+PVLz9eApGJ94I/Jp0MyqNpKQwIemk8j+OyqFmIbgI=";
+          hash = "sha256-0IX57Sa/oXGiViD39FVBRa2jxuKuZ3UNsOTHwuBdmWs=";
         };
         pythonImportsCheck = [ "madvr" ];
-      };
+        disabledTests = oldAttrs.disabledTests ++ [
+          "test_async_add_tasks"
+          "test_send_heartbeat"
+        ];
+      });
 
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
@@ -292,16 +272,20 @@ let
         doCheck = false;
       });
 
-      python-roborock = super.python-roborock.overridePythonAttrs rec {
-        version = "2.18.2";
+      python-roborock =
+        (super.python-roborock.override {
+          pytest-asyncio = self.pytest-asyncio_0;
+        }).overridePythonAttrs
+          rec {
+            version = "2.18.2";
 
-        src = fetchFromGitHub {
-          owner = "Python-roborock";
-          repo = "python-roborock";
-          tag = "v${version}";
-          hash = "sha256-7xcw1jNCDapHjH1YVB5NW7jxMyb8Raf8HuTnWf2vdFo=";
-        };
-      };
+            src = fetchFromGitHub {
+              owner = "Python-roborock";
+              repo = "python-roborock";
+              tag = "v${version}";
+              hash = "sha256-7xcw1jNCDapHjH1YVB5NW7jxMyb8Raf8HuTnWf2vdFo=";
+            };
+          };
 
       python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
         version = "21.5";
@@ -310,6 +294,16 @@ let
           inherit (oldAttrs.src) owner repo;
           tag = version;
           hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
+        };
+      });
+
+      pytraccar = super.pytraccar.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
         };
       });
 
@@ -364,7 +358,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.8.3";
+  hassVersion = "2025.9.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -385,13 +379,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-FiaRCXWEn1AsLaLH88hfZjMNeRcmP5uNJxxFvEW5K3c=";
+    hash = "sha256-d2lsyW2yAkIbq7wx/pLu4Qzroblh/TYDx08r6im8cI8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-X7G9SAN1t4OPLdyRu/Fwfq70JWu5k1F6Qgz8YgP4jis=";
+    hash = "sha256-mq2cjct4YrURV/T51w/skukwEsUV4iwDphuOftFOUdw=";
   };
 
   build-system = with python.pkgs; [
@@ -556,10 +550,12 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
-    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
-    "tests/helpers/test_event.py::test_track_time_interval_name"
-    # (2025.7.2) Exception string mismatch (non-blocking vs non blocking)
-    "tests/test_core.py::test_services_call_return_response_requires_blocking"
+    # (2025.9.0) Extra argument (demo platform) in list that is expected to be empty
+    "tests/scripts/test_check_config.py::test_config_platform_valid"
+    # (2025.9.0) Schema mismatch, diff shows a required field that needs to be removed
+    "tests/test_data_entry_flow.py::test_section_in_serializer"
+    # (2025.9.0) unique id collision in async_update_entry
+    "tests/test_config_entries.py::test_async_update_entry_unique_id_collision"
   ];
 
   preCheck = ''

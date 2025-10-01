@@ -39,7 +39,7 @@ let
       pname = "thunderbird";
       inherit version updateScript applicationName;
       application = "comm/mail";
-      binaryName = pname;
+      binaryName = "thunderbird";
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
@@ -101,8 +101,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "142.0";
-    sha512 = "9a871846fc395c69688310dbf4a4569b75d3b2952a34ba1f7dc9ef5a60a34bd740087b4abb2a1a4d522dfa9d6640f2f4fcc9972a2b72160d1ed3e0df71c2901c";
+    version = "143.0.1";
+    sha512 = "5f4fd5e4f5bc9fee9852d51b8e675f7c9c605660332c24aa0c90e5437301b468153c1788720bc80a53cfc1c3bf95a4bdb622a0533b8f11fb9853b290485c47c6";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -115,8 +115,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.2.0esr";
-    sha512 = "6a10f95b805f00a0820c822ae07bc52ac39d0a55f084c319d27f01710d8a1d809b7b224da966632ae0a22658bf14e76c8fd7cec022718316c306c43809a4997d";
+    version = "140.3.0esr";
+    sha512 = "82a9c4aa250b01e0e4d53890b0337972e46504636831c1b6307b841c4c5aeec86482b2da3c1666c46e870a75f6cb54db9f759664688b382ad66efa647145d900";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";

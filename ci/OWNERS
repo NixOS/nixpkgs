@@ -120,7 +120,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/lib/test-driver  @tfc
 
 # NixOS QEMU virtualisation
-/nixos/modules/virtualisation/qemu-vm.nix           @raitobezarius
+/nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
+/nixos/modules/services/backup/libvirtd-autosnapshot.nix  @6543
 
 # ACME
 /nixos/modules/security/acme                @NixOS/acme
@@ -222,9 +223,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
+/pkgs/development/compilers/llvm @NixOS/llvm
 /pkgs/development/compilers/emscripten @raitobezarius
-/doc/toolchains/llvm.chapter.md @alyssais @RossComputerGuy @NixOS/llvm
+/doc/toolchains/llvm.chapter.md @NixOS/llvm
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
@@ -337,7 +338,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/compilers/idris2 @mattpolzin
 
 # Bazel
-/pkgs/development/tools/build-managers/bazel @Profpatsch
+/pkgs/by-name/ba/bazel_7 @Profpatsch
 
 # NixOS modules for e-mail and dns services
 /nixos/modules/services/mail/mailman.nix    @peti
@@ -493,7 +494,8 @@ pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
 pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
-pkgs/by-name/te/teleport*   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
 pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor

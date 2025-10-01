@@ -1,24 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "crush";
-  version = "0.6.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QUYNJ2Ifny9Zj9YVQHcH80E2qa4clWVg2T075IEWujM=";
+    hash = "sha256-VFAGjNtXKNjkv8Ryi28oFN/uLomXXdw6NFtyjT3pMEY=";
   };
 
-  vendorHash = "sha256-vdzAVVGr7uTW/A/I8TcYW189E3960SCIqatu7Kb60hg=";
+  vendorHash = "sha256-ktF3kIr143uPwiEbgafladZRqIsmG6jI2BeumGSu82U=";
 
   # rename TestMain to prevent it from running, as it panics in the sandbox.
   postPatch = ''

@@ -153,7 +153,7 @@ async function get_gitiles_commit_date(base_url, rev) {
   const response = await (await fetch(url)).text()
   const json = JSON.parse(response.replace(`)]}'\n`, ''))
 
-  const date = new Date(json.commiter.time)
+  const date = new Date(json.committer.time)
   return date.toISOString().split("T")[0]
 }
 

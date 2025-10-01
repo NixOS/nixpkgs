@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
-  version = "0.7.1";
+  version = "0.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;
-    hash = "sha256-GJtl6iXAPGYMEFuA27UQnE/qjaaPHpBZKuv9/d5wiSg=";
+    hash = "sha256-AG2/QHpr9JYS0/8loXhw2QTYg9MSerFjRguJ0WUlDKI=";
   };
 
   build-system = [ hatchling ];

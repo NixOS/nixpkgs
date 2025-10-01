@@ -60,7 +60,6 @@ buildPythonPackage rec {
     description = "Multi-purpose brute-forcer";
     homepage = "https://github.com/lanjelot/patator";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ y0no ];
     # Still uses cx-oracle which is broken and was replaced by oracledb
     # https://github.com/lanjelot/patator/issues/234
     broken = true;

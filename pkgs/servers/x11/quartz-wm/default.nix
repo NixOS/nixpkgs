@@ -1,39 +1,47 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  xorg,
+  fetchgit,
+  autoreconfHook,
   pixman,
   pkg-config,
+  util-macros,
+  libXinerama,
+  libAppleWM,
+  xorgproto,
+  libXrandr,
+  libXext,
 }:
 
-let
-  version = "1.3.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quartz-wm";
-  inherit version;
-  src = fetchurl {
-    url = "http://xquartz-dl.macosforge.org/src/quartz-wm-${version}.tar.xz";
-    sha256 = "1j8zd3p7rhay1s3sxq6anw78k5s59mx44xpqla2ianl62346a5g9";
+  version = "1.3.2";
+
+  src = fetchgit {
+    url = "https://gitlab.freedesktop.org/xorg/app/quartz-wm.git";
+    tag = "quartz-wm-${finalAttrs.version}";
+    hash = "sha256-1+KZNeR4Gq2uWBHTN53PTITHuly1Z4buR+grzdVNwhs=";
   };
-  patches = [
-    ./no_title_crash.patch
-    ./extern-patch.patch
-  ];
+
   configureFlags = [ "--enable-xplugin-dock-support" ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    util-macros
+  ];
   buildInputs = [
-    xorg.libXinerama
-    xorg.libAppleWM
-    xorg.xorgproto
-    xorg.libXrandr
-    xorg.libXext
+    libXinerama
+    libAppleWM
+    xorgproto
+    libXrandr
+    libXext
     pixman
   ];
-  meta = with lib; {
-    license = licenses.apple-psl20;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+
+  meta = {
+    license = lib.licenses.apple-psl20;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
+    mainProgram = "quartz-wm";
   };
-}
+})

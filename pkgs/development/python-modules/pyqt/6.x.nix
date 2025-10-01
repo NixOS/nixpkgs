@@ -118,6 +118,7 @@ buildPythonPackage rec {
       qtquicktimeline
     ]
     # ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport;

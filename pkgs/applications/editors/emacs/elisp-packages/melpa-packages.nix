@@ -1603,6 +1603,16 @@ let
 
           pastery = ignoreCompilationError super.pastery; # elisp error
 
+          pdf-meta-edit = super.pdf-meta-edit.overrideAttrs (attrs: {
+            postPatch =
+              attrs.postPatch or ""
+              + "\n"
+              + ''
+                substituteInPlace pdf-meta-edit.el \
+                    --replace-fail '(executable-find "pdftk")' '"${lib.getExe pkgs.pdftk}"'
+              '';
+          });
+
           pgdevenv = ignoreCompilationError super.pgdevenv; # elisp error
 
           pinot = ignoreCompilationError super.pinot; # elisp error

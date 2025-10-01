@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  pkgs,
   fetchFromGitHub,
   fetchFromGitLab,
   fetchpatch,
@@ -182,12 +181,16 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
-      # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
-      # TODO: Retest after ROCm 6.4 or torch 2.8
       lib.lists.subtractLists [
+        # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
+        # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
+        # TODO: Retest after ROCm 6.4 or torch 2.8
         "gfx1010"
         "gfx1012"
+
+        # Strix Halo seems to be broken as well, see
+        # https://github.com/NixOS/nixpkgs/pull/440359.
+        "gfx1151"
       ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
     else
       throw "No GPU targets specified"
@@ -251,9 +254,6 @@ let
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport
       && (effectiveMagma.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
-    # Should be fixed by WIP https://github.com/NixOS/nixpkgs/pull/438399
-    "ROCm support on non-default python versions is temporarily broken" =
-      rocmSupport && (pkgs.python3.version != python.version);
   };
 
   unroll-src = writeShellScript "unroll-src" ''
@@ -306,6 +306,11 @@ buildPythonPackage rec {
       url = "https://github.com/pytorch/pytorch/commit/231c72240d80091f099c95e326d3600cba866eee.patch";
       hash = "sha256-BBCjxzz2TUkx4nXRyRILA82kMwyb/4+C3eOtYqf5dhk=";
     })
+
+    # Fixes GCC-14 compatibility on ARM
+    # Adapted from https://github.com/pytorch/pytorch/pull/157867
+    # TODO: remove at the next release
+    ./gcc-14-arm-compat.path
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
@@ -368,13 +373,6 @@ buildPythonPackage rec {
     # Doesn't pick up the environment variable?
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
-
-    # Workaround cmake error //include does not exist! in rocm-core-config.cmake
-    # Removing the call falls back to hip_version. Can likely be removed after ROCm 6.4 bump
-    substituteInPlace cmake/public/LoadHIP.cmake \
-      --replace-fail \
-        "find_package(rocm-core CONFIG)" \
-        ""
 
     # Use composable kernel as dependency, rather than built-in third-party
     substituteInPlace aten/src/ATen/CMakeLists.txt \

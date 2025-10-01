@@ -107,7 +107,7 @@ in
       };
 
       mining.threads = lib.mkOption {
-        type = lib.types.addCheck lib.types.int (x: x >= 0);
+        type = lib.types.ints.unsigned;
         default = 0;
         description = ''
           Number of threads used for mining.
@@ -174,7 +174,7 @@ in
       };
 
       limits.threads = lib.mkOption {
-        type = lib.types.addCheck lib.types.int (x: x >= 0);
+        type = lib.types.ints.unsigned;
         default = 0;
         description = ''
           Maximum number of threads used for a parallel job.
@@ -183,7 +183,7 @@ in
       };
 
       limits.syncSize = lib.mkOption {
-        type = lib.types.addCheck lib.types.int (x: x >= 0);
+        type = lib.types.ints.unsigned;
         default = 0;
         description = ''
           Maximum number of blocks to sync at once.

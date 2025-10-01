@@ -3,13 +3,11 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
   eigen,
   flatbuffers_23,
-  gbenchmark,
   glibcLocales,
   gtest,
   howard-hinnant-date,
@@ -19,24 +17,25 @@
   python3Packages,
   re2,
   zlib,
+  protobuf,
   microsoft-gsl,
-  libiconv,
-  protobuf_21,
+  darwinMinVersionHook,
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
   ncclSupport ? config.cudaSupport,
+  withFullProtobuf ? false,
   cudaPackages ? { },
 }@inputs:
 
 let
-  version = "1.22.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fcTvMsEgO3tHOvCKCAqkO/bpZX4tcJHq9ZqpZH+uMqs=";
+    hash = "sha256-X8Pdtc0eR0iU+Xi2A1HrNo1xqCnoaxNjj4QFm/E3kSE=";
   };
 
   stdenv = throw "Use effectiveStdenv instead";
@@ -58,25 +57,6 @@ let
     hash = "sha256-pjwjrqq6dfiVsXIhbBtbolhiysiFlFTnx5XcX77f+C0=";
   };
 
-  pytorch_clog = effectiveStdenv.mkDerivation {
-    pname = "clog";
-    version = "3c8b153";
-    src = "${cpuinfo.src}/deps/clog";
-
-    nativeBuildInputs = [
-      cmake
-      gbenchmark
-      gtest
-    ];
-    cmakeFlags = [
-      (lib.cmakeBool "USE_SYSTEM_GOOGLEBENCHMARK" true)
-      (lib.cmakeBool "USE_SYSTEM_GOOGLETEST" true)
-      (lib.cmakeBool "USE_SYSTEM_LIBS" true)
-      # 'clog' tests set 'CXX_STANDARD 11'; this conflicts with our 'gtest'.
-      (lib.cmakeBool "CLOG_BUILD_TESTS" false)
-    ];
-  };
-
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
@@ -94,8 +74,8 @@ let
   dlpack = fetchFromGitHub {
     owner = "dmlc";
     repo = "dlpack";
-    tag = "v0.6";
-    hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
+    rev = "5c210da409e7f1e51ddf445134a4376fdbd70d7d";
+    hash = "sha256-YqgzCyNywixebpHGx16tUuczmFS5pjCz5WjR89mv9eI=";
   };
 
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
@@ -114,7 +94,7 @@ effectiveStdenv.mkDerivation rec {
     cmake
     pkg-config
     python3Packages.python
-    protobuf_21
+    protobuf
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -135,15 +115,16 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cpuinfo
     eigen
     glibcLocales
     howard-hinnant-date
     libpng
     nlohmann_json
     microsoft-gsl
-    pytorch_clog
     zlib
+  ]
+  ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
+    cpuinfo
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -153,9 +134,6 @@ effectiveStdenv.mkDerivation rec {
       packaging
     ]
   )
-  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    libiconv
-  ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
@@ -173,7 +151,10 @@ effectiveStdenv.mkDerivation rec {
         nccl
       ]
     )
-  );
+  )
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ];
 
   nativeCheckInputs = [
     gtest
@@ -212,10 +193,10 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint}")
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
     # fails to find protoc on darwin, so specify it
-    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" "${protobuf_21}/bin/protoc")
+    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
-    (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" false)
+    (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
@@ -234,10 +215,23 @@ effectiveStdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
-  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
-  doCheck = !(cudaSupport || effectiveStdenv.buildPlatform.system == "aarch64-linux");
+  doCheck =
+    !(
+      cudaSupport
+      || builtins.elem effectiveStdenv.buildPlatform.system [
+        # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
+        "aarch64-linux"
+        # 1 - onnxruntime_test_all (Failed)
+        # 4761 tests from 311 test suites ran, 57 failed.
+        "loongarch64-linux"
+      ]
+    );
 
   requiredSystemFeatures = lib.optionals cudaSupport [ "big-parallel" ];
+
+  hardeningEnable = lib.optionals (effectiveStdenv.hostPlatform.system == "loongarch64-linux") [
+    "nostrictaliasing"
+  ];
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
@@ -268,7 +262,7 @@ effectiveStdenv.mkDerivation rec {
 
   passthru = {
     inherit cudaSupport cudaPackages; # for the python module
-    protobuf = protobuf_21;
+    inherit protobuf;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
     };
@@ -293,7 +287,6 @@ effectiveStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       puffnfresh
       ck3d
-      cbourjau
     ];
   };
 }

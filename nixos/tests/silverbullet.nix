@@ -27,10 +27,6 @@
           SB_USER=user:password
           SB_AUTH_TOKEN=test
         '';
-        extraArgs = [
-          "--reindex"
-          "--db /home/test/silverbullet/custom.db"
-        ];
       };
     };
 

@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-CxrUGgQfU1R87D3ZzZCHbQBMIOJRneH6CLbHS62sCaY=";
+    hash = "sha256-LHc2G5mzyfZ2GvUIuaXYp8AHOVGs6Xtk4MTDYtUcySI=";
   };
 
   postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''

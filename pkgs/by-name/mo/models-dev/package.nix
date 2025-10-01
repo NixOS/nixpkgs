@@ -6,23 +6,14 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
-
-let
-  models-dev-node-modules-hash = {
-    "aarch64-darwin" = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
-    "aarch64-linux" = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
-    "x86_64-darwin" = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
-    "x86_64-linux" = "sha256-Uajwvce9EO1UwmpkGrViOrxlm2R/VnnMK8WAiOiQOhY=";
-  };
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2025-08-27";
+  version = "0-unstable-2025-09-26";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "58cb8fe59ed6c1cbd64ae27a401286bd7cb39f23";
-    hash = "sha256-jGMZvpcpuW2ALGYkYF67HO7sV/XivWXPBqOedGazCAs=";
+    rev = "ac659a30024a3d2d9729ec4b8572985a78f0d4aa";
+    hash = "sha256-GZ1fIoSp/1gFGbOyuzOY1ufjWfz7py4tLzrpBkRV50Q=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -67,7 +58,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = models-dev-node-modules-hash.${stdenvNoCC.hostPlatform.system};
+    outputHash =
+      {
+        x86_64-linux = "sha256-Uajwvce9EO1UwmpkGrViOrxlm2R/VnnMK8WAiOiQOhY=";
+        aarch64-linux = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
+        x86_64-darwin = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
+        aarch64-darwin = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
+      }
+      .${stdenvNoCC.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

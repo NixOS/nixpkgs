@@ -20,7 +20,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "RainerKuemmerle";
-    repo = pname;
+    repo = "g2o";
     rev = "${version}_git";
     hash = "sha256-MW1IO1P2e3KgurOW5ZfHlxK0m5sF0JhdLmvQNEHWEtI=";
   };

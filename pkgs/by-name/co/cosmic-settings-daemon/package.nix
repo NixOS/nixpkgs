@@ -7,22 +7,22 @@
   adw-gtk3,
   pkg-config,
   libpulseaudio,
-  geoclue2-with-demo-agent,
   libinput,
   udev,
+  openssl,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-beta.1.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-vdhkE5CmgiGYg5TXxN7lLqxjv7apKEKvIscXFIzZfRc=";
+    hash = "sha256-tHG/VoaP1tcns6AyedkkVUpWFlcOclWijsHYQ3vOIjs=";
   };
 
   postPatch = ''
@@ -32,16 +32,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  cargoHash = "sha256-Dzv1SDeZFIa+LFQQ91lO7RBHldsjDnGf+R12Ln2WZwU=";
+  cargoHash = "sha256-1YQ7eQ6L6OHvVihUUnZCDWXXtVOyaI1pFN7YD/OBcfo=";
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     libinput
     libpulseaudio
+    openssl
     udev
   ];
-
-  env.GEOCLUE_AGENT = "${lib.getLib geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
 
   makeFlags = [
     "prefix=$(out)"
@@ -59,12 +59,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-settings-daemon";
     description = "Settings Daemon for the COSMIC Desktop Environment";
     mainProgram = "cosmic-settings-daemon";
-    license = licenses.gpl3Only;
-    teams = [ teams.cosmic ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
 })

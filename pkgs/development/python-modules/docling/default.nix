@@ -30,7 +30,7 @@
   pypdfium2,
   python-docx,
   python-pptx,
-  rapidocr-onnxruntime,
+  rapidocr,
   requests,
   rtree,
   scipy,
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     pypdfium2
     python-docx
     python-pptx
-    rapidocr-onnxruntime
+    rapidocr
     requests
     rtree
     scipy
@@ -112,7 +112,7 @@ buildPythonPackage rec {
     ];
     rapidocr = [
       onnxruntime
-      rapidocr-onnxruntime
+      rapidocr
     ];
     tesserocr = [
       tesserocr

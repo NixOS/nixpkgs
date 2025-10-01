@@ -5,9 +5,11 @@
   copyDesktopItems,
   imagemagick,
   makeDesktopItem,
-  jre,
+  jdk21,
 }:
 let
+  jre = jdk21;
+
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
   version = "2025.3-b154";

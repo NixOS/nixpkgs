@@ -13,7 +13,7 @@
   cmake,
   gn,
   go,
-  jdk,
+  openjdk11_headless,
   ninja,
   patchelf,
   python312,
@@ -23,9 +23,14 @@
   gnutar,
   gnugrep,
   envoy,
+  git,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
-  wasmRuntime ? "wamr",
+  wasmRuntime ? "wasmtime",
+
+  # Allows overriding the deps hash used for building - you will likely need to
+  # set this if you have changed the 'wasmRuntime' setting.
+  depsHash ? null,
 }:
 
 let
@@ -34,20 +39,24 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.35.1";
-    rev = "6e9539d0366baf85baf9acb3e618cb3384765f13";
-    hash = "sha256-c1c8j/BCRrvAEqjt4EQ/d7zsM1zUe4Qr5EHzpuGblIk=";
+    version = "1.35.2";
+    rev = "2c2cd7efd119a5c9028b68a97d88a540248f8d18";
+    hash = "sha256-HhjIewZMOr9hzcnFPIckfK5PIozqdypSdmYgvb7ccds=";
   };
 
   # these need to be updated for any changes to fetchAttrs
-  depsHash =
-    {
-      x86_64-linux = "sha256-E6yUSd00ngmjaMds+9UVZLtcYhzeS8F9eSIkC1mZSps=";
-      aarch64-linux = "sha256-ivboOrV/uORKVHRL3685aopcElGvzsxgVcUmYsBwzXY=";
-    }
-    .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+  depsHash' =
+    if depsHash != null then
+      depsHash
+    else
+      {
+        x86_64-linux = "sha256-pih2EaVFDSTaCDpqkVSt39wBFGc4MFrhc1BioeHBp+w=";
+        aarch64-linux = "sha256-RpgZSsDJctTzqm8M3u0+jyEi51HaNC2RZH0Hrelovo8=";
+      }
+      .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
+  jdk = openjdk11_headless;
 
 in
 buildBazelPackage rec {
@@ -94,7 +103,7 @@ buildBazelPackage rec {
     ln -sf "${cargo}/bin/cargo" bazel/nix/cargo
     ln -sf "${rustc}/bin/rustc" bazel/nix/rustc
     ln -sf "${rustc}/bin/rustdoc" bazel/nix/rustdoc
-    ln -sf "${rustPlatform.rustLibSrc}" bazel/nix/ruststd
+    ln -sf "${rustc.unwrapped}" bazel/nix/rustcroot
     substituteInPlace bazel/dependency_imports.bzl \
       --replace-fail 'crate_universe_dependencies()' 'crate_universe_dependencies(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc")' \
       --replace-fail 'crates_repository(' 'crates_repository(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc",'
@@ -120,12 +129,13 @@ buildBazelPackage rec {
     ninja
     patchelf
     cacert
+    git
   ];
 
   buildInputs = [ linuxHeaders ];
 
   fetchAttrs = {
-    sha256 = depsHash;
+    sha256 = depsHash';
     env.CARGO_BAZEL_REPIN = true;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -239,6 +249,7 @@ buildBazelPackage rec {
     "--linkopt=-Wl,-z,noexecstack"
     "--config=gcc"
     "--verbose_failures"
+    "--incompatible_enable_cc_toolchain_resolution=true"
 
     # Force use of system Java.
     "--extra_toolchains=@local_jdk//:all"

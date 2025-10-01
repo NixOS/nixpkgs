@@ -102,6 +102,7 @@ mapAliases (
     neoinclude = neoinclude-vim;
     neomru = neomru-vim;
     neosnippet = neosnippet-vim;
+    neuron-nvim = throw "neuron.nvim has been removed: archived repository 2023-02-19"; # Added 2025-09-10
     nvim-ts-rainbow = throw "nvim-ts-rainbow has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     nvim-ts-rainbow2 = throw "nvim-ts-rainbow2 has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     The_NERD_Commenter = nerdcommenter;

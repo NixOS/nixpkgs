@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2025.8.6";
+  version = "2025.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-HmcBl+uFjEeyZdilqqTxQ8wrFbDr/8tsh/l0yoVfYJg=";
+    hash = "sha256-+OoWomZCrRPHtpmYnzjhvcpidP5GWQwWoZpTZ4Bdgwg=";
   };
 
   postPatch = ''
@@ -60,6 +60,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/SukramJ/aiohomematic";
     changelog = "https://github.com/SukramJ/aiohomematic/blob/${src.tag}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      fab
+    ];
   };
 }

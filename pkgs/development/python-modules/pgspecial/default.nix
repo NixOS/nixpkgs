@@ -11,6 +11,7 @@
   setuptools,
   setuptools-scm,
   sqlparse,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,9 @@ buildPythonPackage rec {
     sqlparse
     psycopg
   ];
+
+  # postgresqlTestHook is not available on Darwin
+  doCheck = stdenv.hostPlatform.isLinux;
 
   nativeCheckInputs = [
     configobj
@@ -59,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbcli/pgspecial";
     changelog = "https://github.com/dbcli/pgspecial/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.SuperSandro2000 ];
   };
 }

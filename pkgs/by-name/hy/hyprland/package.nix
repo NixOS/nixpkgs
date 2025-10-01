@@ -91,14 +91,14 @@ assert assertMsg (
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.50.1";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ALp/WkfOfXMScwytTmjxpjRNmbezrgFQdEX6n3py7L8=";
+    hash = "sha256-TPlZf0urtvDH4Cb4By06szJmzR4sBlgQATuGQy8bH6U=";
   };
 
   postPatch = ''

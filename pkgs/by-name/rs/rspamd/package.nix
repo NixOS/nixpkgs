@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   doctest,
   fmt_11,
@@ -15,6 +16,7 @@
   ragel,
   fasttext,
   icu,
+  hyperscan,
   vectorscan,
   jemalloc,
   blas,
@@ -27,20 +29,32 @@
   # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
   # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
   withBlas ? false,
+  withHyperscan ? false,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
+  withVectorscan ? true,
   nixosTests,
 }:
 
+assert withHyperscan -> stdenv.hostPlatform.isx86_64;
+assert (!withHyperscan) || (!withVectorscan);
+
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.12.1";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-bAkT0msUkgGkjAIlF7lnJbimBKW1NSn2zjkCj3ErJ1I=";
+    hash = "sha256-0qX/rvcEXxzr/PGL2A59T18Mfcalrjz0KJpEWBKJsZg=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/rspamd/rspamd/commit/d808fd75ff1db1821b1dd817eb4ba9a118b31090.patch";
+      hash = "sha256-v1Gn3dPxN/h92NYK3PTrZomnbwUcVkAWcYeQCFzQNyo=";
+    })
+  ];
 
   hardeningEnable = [ "pie" ];
 
@@ -66,14 +80,15 @@ stdenv.mkDerivation rec {
     xxHash
     zstd
     libarchive
-    vectorscan
   ]
   ++ lib.optionals withBlas [
     blas
     lapack
   ]
+  ++ lib.optional withHyperscan hyperscan
   ++ lib.optional withLuaJIT luajit
-  ++ lib.optional (!withLuaJIT) lua;
+  ++ lib.optional (!withLuaJIT) lua
+  ++ lib.optional withVectorscan vectorscan;
 
   cmakeFlags = [
     # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908

@@ -523,8 +523,22 @@ builtins.intersectAttrs super {
       )
     );
 
-  # Needs help finding LLVM.
-  spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
+  # Forces the LLVM backend; upstream signalled intent to remove this
+  # in 2017: <https://github.com/SeanRBurton/spaceprobe/issues/1>.
+  spaceprobe = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace spaceprobe.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.spaceprobe;
+
+  # Forces the LLVM backend.
+  GlomeVec = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace GlomeVec.cabal \
+        --replace-fail '-fllvm ' ""
+    '';
+  }) super.GlomeVec;
 
   # Tries to run GUI in tests
   leksah = dontCheck (
@@ -635,15 +649,9 @@ builtins.intersectAttrs super {
   tasty = overrideCabal (drv: {
     libraryHaskellDepends =
       (drv.libraryHaskellDepends or [ ])
-      ++
-        lib.optionals
-          (
-            !(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)
-            || (self.ghc.isGhcjs or false)
-          )
-          [
-            self.unbounded-delays
-          ];
+      ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)) [
+        self.unbounded-delays
+      ];
   }) super.tasty;
 
   tasty-discover = overrideCabal (drv: {

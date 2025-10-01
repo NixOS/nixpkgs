@@ -11,13 +11,13 @@
 
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3sUkEbC96/XUR1tvCmxu56hPh7Ag/sD6/pGrq9JhHC8=";
+    hash = "sha256-YAQT7ORRg27ORh57NTE8F89iNfw+3gd1xPM8f4zHKm4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
@@ -49,7 +49,7 @@ buildGo125Module (finalAttrs: {
     pnpmDeps = pnpm_10.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 1;
-      hash = "sha256-q2oXyFVdaDfJ4NFDt26/VJVXzQLCuKXHtCx1mah6Js8=";
+      hash = "sha256-Gjj2iFQ15Tso0gXihFH96nW49GJleOU323shBE7VgJ4=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";

@@ -55,11 +55,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2123.1";
+  version = "2123.2";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Rwq1fkRCzOna04d71w175iSQnH26z7gQfwfIZhFW/90=";
+    hash = "sha256-T0oVWYedap3BfMvnzKWEoW3+y3f3ld0RKp3z49LJIds=";
   };
 
   patches = [
@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     qt6.qtwayland
     xorg.libX11
+    xorg.libxcb
     xorg.libXext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [

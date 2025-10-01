@@ -11,12 +11,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flac2all";
-  version = "5.1";
+  version = "5.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "OBjlr7cbSx2WOIfZUNwHy5Hpb2Fmh3vmZdc70JiWsiI=";
+    sha256 = "sha256-UGrkCQcpNzWH2hIRd1oTDryUeDumgHKuuxsbC87xaUI=";
   };
 
   # Not sure why this is needed, but setup.py expects this to be set

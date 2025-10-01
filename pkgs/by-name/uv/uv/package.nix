@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.8.6";
+  version = "0.8.14";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-82KKnz42Nn2Ef8DHBWBMPTrQVsM+klIOV8hqSKnXqEY=";
+    hash = "sha256-KG6WNaHbrPBasHdSdtWrnvzwMRrvpwukVSIZe3COrUA=";
   };
 
-  cargoHash = "sha256-l2/PMPiSPE6WpXOuU21NsMx0vsz9cuy/QeCiSTkbvVw=";
+  cargoHash = "sha256-Ow39kxnACXVbEtCPGJJ7SKdTFhYwd9IDPbYAsvNPOKw=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -69,6 +69,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
+    longDescription = ''
+      `uv` manages project dependencies and environments, with support for lockfiles, workspaces, and more.
+
+      Due to `uv`'s (over)eager fetching of dynamically-linked Python executables,
+      as well as vendoring of dynamically-linked libraries within Python modules distributed via PyPI,
+      NixOS users can run into issues when managing Python projects.
+      See the Nixpkgs Reference Manual entry for `uv` for information on how to mitigate these issues:
+      https://nixos.org/manual/nixpkgs/unstable/#sec-uv.
+
+      For building Python projects with `uv` and Nix outside of nixpkgs, check out `uv2nix` at https://github.com/pyproject-nix/uv2nix.
+    '';
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [

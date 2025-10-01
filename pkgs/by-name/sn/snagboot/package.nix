@@ -26,7 +26,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "pylibfdt"
     "swig"
   ];
 
@@ -40,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     pyserial
     tftpy
     crccheck
-    # pylibfdt
+    libfdt
     # swig
     packaging
   ];

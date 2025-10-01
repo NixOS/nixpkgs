@@ -17,21 +17,25 @@
   pythonOlder,
   tenacity,
   tiktoken,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "fnllm";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q7aeFXuXIrwjjXEHVpACohWommIxJZo9PRUgh4uLtfA=";
+    hash = "sha256-gKdFBpNpG/CDLhKi1wQgZHv+o1pDy5HEqcteLzkXK1A=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     aiolimiter

@@ -26,6 +26,7 @@ let
       cosmic-files
       config.services.displayManager.cosmic-greeter.package
       cosmic-idle
+      cosmic-initial-setup
       cosmic-launcher
       cosmic-notifications
       cosmic-osd
@@ -47,9 +48,9 @@ in
 
   options = {
     services.desktopManager.cosmic = {
-      enable = lib.mkEnableOption "Enable the COSMIC desktop environment";
+      enable = lib.mkEnableOption "COSMIC desktop environment";
 
-      showExcludedPkgsWarning = lib.mkEnableOption "Disable the warning for excluding core packages." // {
+      showExcludedPkgsWarning = lib.mkEnableOption "the warning for excluding core packages" // {
         default = true;
       };
 
@@ -103,6 +104,8 @@ in
     services.graphical-desktop.enable = true;
 
     xdg = {
+      # Required for cosmic-osd
+      sounds.enable = true;
       icons.fallbackCursorThemes = lib.mkDefault [ "Cosmic" ];
 
       portal = {

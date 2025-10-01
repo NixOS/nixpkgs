@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.3";
+  version = "19.4";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-8mCkzZPdLFGIlOkMiNDOxiQeEHa+k0BX9PMIPbjmW5k=";
+    hash = "sha256-x/QHTjtFX2j3CA9YAg7c09WTRnW0Y+1keu52RMLSSoA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

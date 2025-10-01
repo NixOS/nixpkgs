@@ -1,6 +1,6 @@
 {
   lib,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   runCommand,
   yq-go,
@@ -9,16 +9,16 @@
 }:
 
 let
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-3cDT1t74SrDUqUtFmNZFQHUx+eCdDjZhPseT3lhNOYE=";
+    hash = "sha256-kxX9gHNKDlRir9TGSob6iz8cRJOqHdoYlvIi4MQAroc=";
   };
 in
-flutter332.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   pname = "butterfly";
   inherit version src;
 
@@ -40,7 +40,7 @@ flutter332.buildFlutterApplication {
           nativeBuildInputs = [ yq-go ];
         }
         ''
-          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+          yq eval --output-format=json --prettyPrint $src/app/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater {

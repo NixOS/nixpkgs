@@ -145,6 +145,8 @@ let
 
         brr = callPackage ../development/ocaml-modules/brr { };
 
+        bstr = callPackage ../development/ocaml-modules/bstr { };
+
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
         bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
@@ -267,6 +269,16 @@ let
         color = callPackage ../development/ocaml-modules/color { };
 
         colors = callPackage ../development/ocaml-modules/colors { };
+
+        conan = callPackage ../development/ocaml-modules/conan { };
+
+        conan-cli = callPackage ../development/ocaml-modules/conan/cli.nix { };
+
+        conan-database = callPackage ../development/ocaml-modules/conan/database.nix { };
+
+        conan-lwt = callPackage ../development/ocaml-modules/conan/lwt.nix { };
+
+        conan-unix = callPackage ../development/ocaml-modules/conan/unix.nix { };
 
         conduit = callPackage ../development/ocaml-modules/conduit { };
 
@@ -546,7 +558,7 @@ let
           in
           {
             ppx_deriving_0_15 = ppx_deriving_ "0.15";
-            ppx_deriving = ppx_deriving_ "0.33.0";
+            ppx_deriving_0_33 = ppx_deriving_ "0.33.0";
           }
         );
 
@@ -1327,7 +1339,11 @@ let
 
         multipart_form = callPackage ../development/ocaml-modules/multipart_form { };
 
+        multipart_form-eio = callPackage ../development/ocaml-modules/multipart_form/eio.nix { };
+
         multipart_form-lwt = callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
+
+        multipart_form-miou = callPackage ../development/ocaml-modules/multipart_form/miou.nix { };
 
         multipart-form-data = callPackage ../development/ocaml-modules/multipart-form-data { };
 
@@ -1577,6 +1593,8 @@ let
         opus = callPackage ../development/ocaml-modules/opus { };
 
         ordering = callPackage ../development/ocaml-modules/ordering { };
+
+        osdp = callPackage ../development/ocaml-modules/osdp { };
 
         oseq = callPackage ../development/ocaml-modules/oseq { };
 

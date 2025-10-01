@@ -9,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "yara-x";
-  version = "1.5.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "yara-x";
     tag = "v${version}";
-    hash = "sha256-YZmhwHA6PnQb3QXhbWK8cbV0CScbiD5k+HceDcV6iCI=";
+    hash = "sha256-Ux7BA5LH1HN7Kq84UQw7n7Ad/LmHekdWkLaUIxvp5g8=";
   };
 
   buildAndTestSubdir = "py";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-8LofNTLa3a2dDH72T54HJR/+qArXt+X6OMJIQwmjQIQ=";
+    hash = "sha256-o9m1zPDhn5ZxBonQMTFp19jUYMInwW9r/O8UwQpExqk=";
   };
 
   nativeBuildInputs = [

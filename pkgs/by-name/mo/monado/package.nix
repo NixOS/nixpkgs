@@ -35,7 +35,6 @@
   libXrandr,
   nix-update-script,
   onnxruntime,
-  opencv4,
   openhmd,
   openvr,
   orc,
@@ -125,7 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     onnxruntime
-    opencv4
+    # FIXME: OpenCV support causes a segfault on start. See https://github.com/NixOS/nixpkgs/issues/439075
+    # opencv4
     openhmd
     openvr
     orc
@@ -154,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_STEAM" true)
   ];
 
   # Help openxr-loader find this runtime

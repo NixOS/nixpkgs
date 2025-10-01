@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs tests
     sed -i '\,server/acl/localgroup,d' tests/TESTS
+    substituteInPlace configure.ac --replace "-Werror" ""
   '';
 
   nativeBuildInputs = [

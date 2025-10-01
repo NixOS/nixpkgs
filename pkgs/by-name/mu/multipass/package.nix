@@ -22,7 +22,7 @@ let
   commonMeta = {
     homepage = "https://multipass.run";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 

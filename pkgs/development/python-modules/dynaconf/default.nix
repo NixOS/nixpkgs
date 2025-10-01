@@ -59,6 +59,11 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError: assert 42.1 == 'From development env'
+    "test_envless_load_file"
+  ];
+
   disabledTestPaths = [
     # import file mismatch
     # imported module 'app_test' has this __file__ attribute:

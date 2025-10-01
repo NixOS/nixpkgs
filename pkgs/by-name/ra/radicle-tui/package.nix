@@ -87,9 +87,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # versionCheckHook doesn't support multiple arguments yet
   doInstallCheck = true;
   installCheckPhase = ''
-    runHook preInstallCheckPhase
+    runHook preInstallCheck
     $out/bin/rad-tui --version --no-forward | grep -F 'rad-tui ${finalAttrs.version}'
-    runHook postInstallCheckPhase
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = ./update.sh;

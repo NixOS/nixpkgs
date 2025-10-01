@@ -29,17 +29,18 @@
   unstableGitUpdater,
   apple-sdk_14,
   libtommath,
+  sdl3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-08-29";
+  version = "0-unstable-2025-09-19";
 
   src = fetchFromGitHub {
-    owner = "LadybirdWebBrowser";
+    owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "c3aa8f0c8d3ee28b100260b376c45f2583b49c0d";
-    hash = "sha256-pckHeaGhpFemCIhTL8FeNWVea8itvy3SFYT9oWVPmu4=";
+    rev = "5bd867f1dcb1f1b1c1397c4615ce7f091c8370aa";
+    hash = "sha256-/SPWjgHiWgrLThgAxBt9gZVELH+rrJWkfhxnuKEIxd8=";
   };
 
   postPatch = ''
@@ -91,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     qt6Packages.qtbase
     qt6Packages.qtmultimedia
+    sdl3
     simdutf
     (skia.overrideAttrs (prev: {
       gnFlags = prev.gnFlags ++ [

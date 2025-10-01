@@ -414,7 +414,14 @@ in
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
       default = null;
-      description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
+      description = ''
+        If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot
+        be manually installed.
+
+        Keep in mind that this turns off drilldown: for this to work, you need to add
+        `grafana-metricsdrilldown-app`, `grafana-lokiexplore-app`, `grafana-exploretraces-app`
+        and `grafana-pyroscope-app` to this option.
+      '';
       example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple

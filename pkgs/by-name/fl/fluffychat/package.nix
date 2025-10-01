@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
+  fetchzip,
   imagemagick,
   libgbm,
   libdrm,
@@ -21,17 +23,21 @@ let
     libdrm
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  libwebrtc = fetchzip {
+    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.1.0/libwebrtc.zip";
+    sha256 = "sha256-lRfymTSfoNUtR5tSUiAptAvrrTwbB8p+SaYQeOevMzA=";
+  };
 in
 flutter332.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.0.0";
+    version = "2.1.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-fFc6nIVQUY9OiGkEc7jrzXnBQPDWC5x5A4/XHUhu6hs=";
+      hash = "sha256-Gk3PtIb90rmrEIq52aL+vBHhRG6LoyfG2jrAGH5Iyqo=";
     };
 
     inherit pubspecLock;
@@ -83,6 +89,31 @@ flutter332.buildFlutterApplication (
         ];
       })
     ];
+
+    customSourceBuilders = {
+      flutter_webrtc =
+        { version, src, ... }:
+        stdenv.mkDerivation {
+          pname = "flutter_webrtc";
+          inherit version src;
+          inherit (src) passthru;
+
+          postPatch = ''
+            substituteInPlace third_party/CMakeLists.txt \
+              --replace-fail "\''${CMAKE_CURRENT_LIST_DIR}/downloads/libwebrtc.zip" ${libwebrtc}
+              ln -s ${libwebrtc} third_party/libwebrtc
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir $out
+            cp -r ./* $out/
+
+            runHook postInstall
+          '';
+        };
+    };
 
     postInstall = ''
       FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png

@@ -117,13 +117,13 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.11.7";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rSKuLdfbmAyGTkhfdE9GuywuQweeA5WfNwP/wGMN4So=";
+    hash = "sha256-D3b3ddW6s9NqV8mJZboQ/z8IkId8h7a4eTh/MkjPNqg=";
   };
 
   vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
@@ -228,6 +228,15 @@ goBuild (finalAttrs: {
     (allow iokit-open (iokit-user-client-class "AGXDeviceUserClient"))
   '';
 
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestPushHandler/unauthorized_push" # Writes to $HOME, se https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   passthru = {
     tests = {
       inherit ollama;
@@ -258,7 +267,6 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       abysssol
       dit7ya
-      elohmeier
       prusnak
     ];
   };

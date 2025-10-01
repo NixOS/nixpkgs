@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "steel";
-  version = "0-unstable-2025-06-15";
+  version = "0-unstable-2025-09-17";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "123adb314702d6520f8ab04115e79308d2400c38";
-    hash = "sha256-o1RZBlAGUht0Q7UVF+yPlrWW7B016fpBBcoaxuzRQo4=";
+    rev = "e387a1f2b69edfd213451a6541ece49365da96f0";
+    hash = "sha256-vwz7MfSo2b5beWvB8x333wgDGUB0ZEL3UK+DIfL2idQ=";
   };
 
-  cargoHash = "sha256-/vPDVVOhLO7mnULyU8QLW+YHh+kGd+BSiPi55jrOWps=";
+  cargoHash = "sha256-MTSVnCXXDVox3CfFEATTYffbKxG8ETp3p1Hp1+Nguiw=";
 
   nativeBuildInputs = [
     curl
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
   ]
   ++ lib.optionals includeForge [
     "--package"
-    "forge"
+    "steel-forge"
   ];
 
   # Tests are disabled since they always fail when building with Nix
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     mkdir -p $out/lib/steel
 
-    substituteInPlace cogs/installer/download.scm \
+    substituteInPlace crates/forge/installer/download.scm \
       --replace-fail '"cargo-steel-lib"' '"$out/bin/cargo-steel-lib"'
 
     pushd cogs

@@ -163,12 +163,7 @@ let
       };
     };
 
-  pjproject_2_14_1 = fetchurl {
-    url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.14.1/pjproject-2.14.1.tar.bz2";
-    hash = "sha256-MtsK8bOc0fT/H/pUydqK/ahMIVg8yiRDt3TSM1uhUFQ=";
-  };
-
-  pjproject_2_15_1 = fetchurl {
+  pjproject = fetchurl {
     url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/pjproject-2.15.1.tar.bz2";
     hash = "sha256-WLuDzsTUMfSNAG5FXYIWaEUPjPa2yV8JDe9HBi+jpgw=";
   };
@@ -191,13 +186,10 @@ let
   versions = lib.mapAttrs (
     _:
     { version, sha256 }:
-    let
-      pjsip = if lib.versionAtLeast version "20" then pjproject_2_15_1 else pjproject_2_14_1;
-    in
     common {
       inherit version sha256;
       externals = {
-        "externals_cache/${pjsip.name}" = pjsip;
+        "externals_cache/${pjproject.name}" = pjproject;
         "addons/mp3" = mp3-204;
       };
     }
