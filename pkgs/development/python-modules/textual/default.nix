@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-awieNrdyORLxQU52rmon/jftzt/A4+HMbMpa6V0HaG8=";
+    hash = "sha256-XvuKwQwaNwgwKScgHNQyxkPXzDQtOA690Dt+VndmZ6o=";
   };
 
   build-system = [ poetry-core ];
@@ -77,6 +77,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
+
+    # fixture 'snap_compare' not found
+    "test_progress_bar_width_1fr"
   ];
 
   pytestFlags = [

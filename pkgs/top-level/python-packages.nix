@@ -2398,6 +2398,8 @@ self: super: with self; {
     };
   };
 
+  catkin-pkg = callPackage ../development/python-modules/catkin-pkg { };
+
   catppuccin = callPackage ../development/python-modules/catppuccin { };
 
   cattrs = callPackage ../development/python-modules/cattrs { };
@@ -7267,6 +7269,8 @@ self: super: with self; {
 
   irisclient = callPackage ../development/python-modules/irisclient { };
 
+  irm-kmi-api = callPackage ../development/python-modules/irm-kmi-api { };
+
   isal = callPackage ../development/python-modules/isal { };
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
@@ -9608,6 +9612,8 @@ self: super: with self; {
 
   momepy = callPackage ../development/python-modules/momepy { };
 
+  momonga = callPackage ../development/python-modules/momonga { };
+
   monai = callPackage ../development/python-modules/monai { };
 
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
@@ -11856,10 +11862,7 @@ self: super: with self; {
 
   piqp = callPackage ../development/python-modules/piqp { };
 
-  pivy = callPackage ../development/python-modules/pivy {
-    inherit (pkgs.qt5) qtbase qmake;
-    inherit (pkgs.libsForQt5) soqt;
-  };
+  pivy = callPackage ../development/python-modules/pivy { };
 
   pixcat = callPackage ../development/python-modules/pixcat { };
 
@@ -13810,6 +13813,8 @@ self: super: with self; {
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
 
   pyporscheconnectapi = callPackage ../development/python-modules/pyporscheconnectapi { };
+
+  pyportainer = callPackage ../development/python-modules/pyportainer { };
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 

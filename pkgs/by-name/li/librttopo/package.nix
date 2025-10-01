@@ -27,10 +27,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     validatePkgConfig
-    geos # for geos-config
   ];
 
   buildInputs = [ geos ];
+
+  configureFlags = [
+    "--with-geosconfig=${lib.getExe' (lib.getDev geos) "geos-config"}"
+  ];
 
   enableParallelBuilding = true;
 

@@ -5208,6 +5208,22 @@ let
         };
       };
 
+      vytautassurvila.csharp-ls = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "csharp-ls";
+          publisher = "vytautassurvila";
+          version = "0.0.27";
+          hash = "sha256-kl6W1UQ36cNQNj3cOsMyZbxD6glaRm3W0Z1W+xuEcjs=";
+        };
+        meta = {
+          changelog = "https://github.com/vytautassurvila/vscode-csharp-ls/blob/master/CHANGELOG.md";
+          description = "Visual Studio Code Extension - C# LSP client for csharp-language-server";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vytautassurvila.csharp-ls";
+          homepage = "https://github.com/vytautassurvila/vscode-csharp-ls";
+          license = lib.licenses.mit;
+        };
+      };
+
       waderyan.gitblame = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitblame";

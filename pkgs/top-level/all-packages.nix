@@ -2251,10 +2251,6 @@ with pkgs;
 
   patool = with python3Packages; toPythonApplication patool;
 
-  pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_35;
-  };
-
   pixcat = with python3Packages; toPythonApplication pixcat;
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap { };
@@ -4805,7 +4801,7 @@ with pkgs;
         isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
-        langCC = false;
+        langCC = stdenv.targetPlatform.isCygwin; # can't compile libcygwin1.a without C++
         libcCross = libc1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
@@ -4814,6 +4810,7 @@ with pkgs;
           # temporarily disabled due to breakage;
           # see https://github.com/NixOS/nixpkgs/pull/243249
           && !stdenv.targetPlatform.isWindows
+          && !stdenv.targetPlatform.isCygwin
           && !(stdenv.targetPlatform.useLLVM or false);
       };
       bintools = binutilsNoLibc;
@@ -5193,6 +5190,7 @@ with pkgs;
   openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
   openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
   openjfx24 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "24"; };
+  openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -5229,6 +5227,11 @@ with pkgs;
   jdk24 = openjdk24;
   jdk24_headless = openjdk24_headless;
 
+  openjdk25 = javaPackages.compiler.openjdk25;
+  openjdk25_headless = javaPackages.compiler.openjdk25.headless;
+  jdk25 = openjdk25;
+  jdk25_headless = openjdk25_headless;
+
   # default JDK
   jdk = jdk21;
   jdk_headless = jdk21_headless;
@@ -5243,21 +5246,34 @@ with pkgs;
   jre = jdk;
   jre_headless = jdk_headless;
 
-  jre11_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk11;
-    jdkOnBuild = buildPackages.jdk11;
-  };
-  jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk17;
-    jdkOnBuild = buildPackages.jdk17;
-  };
-  jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdk = jdk21;
-    jdkOnBuild = buildPackages.jdk21;
-  };
-  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
-    jdkOnBuild = buildPackages.jdk;
-  };
+  inherit
+    ({
+      jre11_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk11;
+        jdkOnBuild = buildPackages.jdk11;
+      };
+      jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk17;
+        jdkOnBuild = buildPackages.jdk17;
+      };
+      jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk21;
+        jdkOnBuild = buildPackages.jdk21;
+      };
+      jre25_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk25;
+        jdkOnBuild = buildPackages.jdk25;
+      };
+      jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdkOnBuild = buildPackages.jdk;
+      };
+    })
+    jre11_minimal
+    jre17_minimal
+    jre21_minimal
+    jre25_minimal
+    jre_minimal
+    ;
 
   openjdk = jdk;
   openjdk_headless = jdk_headless;
@@ -6144,6 +6160,7 @@ with pkgs;
     ruby_3_2
     ruby_3_3
     ruby_3_4
+    ruby_3_5
     ;
 
   ruby = ruby_3_3;
@@ -6153,6 +6170,7 @@ with pkgs;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
+  rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
 
   samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
 
@@ -7284,7 +7302,6 @@ with pkgs;
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
-      amdvlk
       intel-media-driver
       intel-vaapi-driver
       mesa
@@ -7495,6 +7512,8 @@ with pkgs;
       windows.mingw_w64_headers or fallback
     else if libc == "nblibc" then
       netbsd.headers
+    else if libc == "cygwin" then
+      cygwin.newlib-cygwin-headers
     else
       null;
 
@@ -7531,6 +7550,8 @@ with pkgs;
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "ucrt" then
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
+    else if libc == "cygwin" then
+      cygwin.newlib-cygwin-nobin
     else if libc == "libSystem" then
       if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
     else if libc == "fblibc" then
@@ -9913,7 +9934,6 @@ with pkgs;
     callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix
       { };
   prometheus-mongodb-exporter = callPackage ../servers/monitoring/prometheus/mongodb-exporter.nix { };
-  prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix { };
   prometheus-nextcloud-exporter =
     callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix
@@ -10630,6 +10650,8 @@ with pkgs;
 
   windows = recurseIntoAttrs (callPackages ../os-specific/windows { });
 
+  cygwin = recurseIntoAttrs (callPackages ../os-specific/cygwin { });
+
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
@@ -10983,8 +11005,6 @@ with pkgs;
   backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
 
   backintime = backintime-qt;
-
-  barrier = libsForQt5.callPackage ../applications/misc/barrier { };
 
   bespokesynth-with-vst2 = bespokesynth.override {
     enableVST2 = true;
@@ -11588,8 +11608,6 @@ with pkgs;
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
-  hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
-
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
@@ -11854,10 +11872,6 @@ with pkgs;
   kubectl-view-allocations =
     callPackage ../applications/networking/cluster/kubectl-view-allocations
       { };
-
-  kubelogin-oidc = callPackage ../by-name/ku/kubelogin-oidc/package.nix {
-    buildGoModule = buildGo124Module;
-  };
 
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
 
@@ -12850,9 +12864,6 @@ with pkgs;
 
   thunderbird-esr-unwrapped = thunderbirdPackages.thunderbird-esr;
   thunderbird-esr = wrapThunderbird thunderbird-esr-unwrapped { };
-
-  thunderbird-128-unwrapped = thunderbirdPackages.thunderbird-128;
-  thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
   thunderbird-140-unwrapped = thunderbirdPackages.thunderbird-140;
   thunderbird-140 = wrapThunderbird thunderbirdPackages.thunderbird-140 { };

@@ -326,7 +326,7 @@ in
   coerce_str_to_int_coercer_ouput = getMatrix {
     outerTypeName = "coercedTo";
     innerTypeName = "int->str";
-    getType = a: b: a.coercedTo b.int builtins.toString a.str;
+    getType = a: b: a.coercedTo b.int toString a.str;
     value = [ ];
     testAttrs = {
       expectedError = {

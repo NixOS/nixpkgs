@@ -13707,12 +13707,12 @@ final: prev: {
 
   sidekick-nvim = buildVimPlugin {
     pname = "sidekick.nvim";
-    version = "2025-09-27";
+    version = "2025-09-30";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "sidekick.nvim";
-      rev = "242b2bd216191c151d24f665cc8f596cb63288ea";
-      sha256 = "11qg13y57437pjwdsg0khj0wrwp86m779847isnb3a35kia7b2cc";
+      rev = "7b3d28bbb883e898f6a8b4f2d7a9ab6ad5cef9f8";
+      sha256 = "1m2af27xvagdq6q8kyahcsrbraaw4x2yvrg35xxcpgp0vi0m9h6a";
     };
     meta.homepage = "https://github.com/folke/sidekick.nvim/";
     meta.hydraPlatforms = [ ];
