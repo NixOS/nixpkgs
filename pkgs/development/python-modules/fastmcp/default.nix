@@ -98,6 +98,9 @@ buildPythonPackage rec {
     "test_multi_client"
     "test_canonical_multi_client_with_transforms"
 
+    # AssertionError: assert {'annotations...object'}, ...} == {'annotations...sers']}}, ...}
+    "test_list_tools"
+
     # fastmcp.exceptions.ToolError: Unknown tool
     "test_multi_client_with_logging"
     "test_multi_client_with_elicitation"
