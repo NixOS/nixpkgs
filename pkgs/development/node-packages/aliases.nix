@@ -90,6 +90,7 @@ mapAliases {
   inherit (pkgs) cordova; # added 2023-08-18
   inherit (pkgs) create-react-app; # added 2023-09-25
   create-react-native-app = throw "create-react-native-app was removed because it was deprecated. Upstream suggests using a framework for React Native."; # added 2024-12-08
+  inherit (pkgs) cspell;
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) diagnostic-languageserver; # added 2024-06-25

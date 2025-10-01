@@ -65,7 +65,6 @@
 , "conventional-changelog-cli"
 , "cpy-cli"
 , "create-cycle-app"
-, "cspell"
 , "csslint"
 , "dhcp"
 , "diff2html-cli"
