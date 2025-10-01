@@ -9614,6 +9614,8 @@ self: super: with self; {
 
   momepy = callPackage ../development/python-modules/momepy { };
 
+  momonga = callPackage ../development/python-modules/momonga { };
+
   monai = callPackage ../development/python-modules/monai { };
 
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
