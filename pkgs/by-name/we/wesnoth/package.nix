@@ -12,7 +12,7 @@
   SDL2_ttf,
   pango,
   gettext,
-  boost,
+  boost186,
   libvorbis,
   fribidi,
   dbus,
@@ -20,10 +20,20 @@
   pcre,
   openssl,
   icu,
-  lua,
+  lua5_4,
   curl,
   nix-update-script,
 }:
+
+let
+  boost = boost186;
+  # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
+  lua = lua5_4.override {
+    postConfigure = ''
+      makeFlagsArray+=("CC=$CXX")
+    '';
+  };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth";
