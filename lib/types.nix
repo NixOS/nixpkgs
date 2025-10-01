@@ -618,9 +618,8 @@ let
 
       # Merge multiple definitions by concatenating them (with the given
       # separator between the values).
-      separatedString =
-        sep:
-        mkOptionType rec {
+      separatedString = mkOptionType (
+        self: sep: {
           name = "separatedString";
           description =
             if sep == "" then
@@ -630,12 +629,13 @@ let
           descriptionClass = "noun";
           check = isString;
           merge = loc: defs: concatStringsSep sep (getValues defs);
-          functor = (defaultFunctor name) // {
+          functor = defaultFunctor self // {
+            type = payload: self.__uncall__ payload.sep;
             payload = { inherit sep; };
-            type = payload: types.separatedString payload.sep;
             binOp = lhs: rhs: if lhs.sep == rhs.sep then { inherit (lhs) sep; } else null;
           };
-        };
+        }
+      );
 
       lines = separatedString "\n";
       commas = separatedString ",";
