@@ -1,6 +1,7 @@
 {
   pkgs,
   linuxKernel,
+  kernelPackagesExtensions,
   config,
   buildPackages,
   callPackage,
@@ -327,7 +328,7 @@ in
 
   packagesFor =
     kernel_:
-    lib.makeExtensible (
+    (lib.makeExtensible (
       self:
       with self;
       let
@@ -724,7 +725,8 @@ in
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
       }
-    );
+    )).extend
+      (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
 
