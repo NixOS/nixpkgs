@@ -14,6 +14,12 @@ stdenv.mkDerivation (finaAttrs: {
     hash = "sha256-fFA0s+B94YPDvcPi2GCThcMGcSY6qR1f7x/jP8gXh94=";
   };
 
+  # Fix build w/ glibc-2.42.
+  # Upstream PR: https://github.com/crash-systems/scom/pull/1
+  postPatch = ''
+    substituteInPlace src/common.h --replace-fail termio.h termios.h
+  '';
+
   enableParallelBuilding = true;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
