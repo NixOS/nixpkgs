@@ -38,6 +38,9 @@ buildGoModule rec {
     changelog = "https://github.com/woodpecker-ci/plugin-git/releases/tag/${version}";
     license = lib.licenses.asl20;
     mainProgram = "plugin-git";
-    maintainers = with lib.maintainers; [ ambroisie ];
+    maintainers = with lib.maintainers; [
+      ambroisie
+      marcusramberg
+    ];
   };
 }
