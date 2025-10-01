@@ -43,16 +43,9 @@ lib.extendMkDerivation {
       setOutputFlags = args.setOutputFlags or false; # $dev gets into the library otherwise
 
       strictDeps = true;
-      depsBuildBuild =
-        args.depsBuildBuild or [ ]
-        ++ [
-          pkgsBuildBuild.stdenv.cc
-        ]
-        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_1_8;
+      depsBuildBuild = args.depsBuildBuild or [ ] ++ [ pkgsBuildBuild.stdenv.cc ];
 
-      nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
-        pkg-config
-      ];
+      nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ pkg-config ];
 
       buildInputs = args.buildInputs or [ ] ++ [
         libtool
@@ -71,7 +64,8 @@ lib.extendMkDerivation {
 
       # GCC 4.6 raises a number of set-but-unused warnings.
       configureFlags =
-        args.configureFlags or [
+        args.configureFlags or [ ]
+        ++ [
           "--disable-error-on-warning"
           "AWK=${lib.getExe gawk}"
         ]
