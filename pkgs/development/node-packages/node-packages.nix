@@ -46651,24 +46651,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-git = nodeEnv.buildNodePackage {
-    name = "coc-git";
-    packageName = "coc-git";
-    version = "2.7.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-git/-/coc-git-2.7.5.tgz";
-      sha512 = "bmewJbSmVXB6JDal0AblJhPjmlo9J+QfepHCznK5LwB3pGeiyKPH/g5apiFQ2or4HX7L8FmyQqrzFPOe6O71OQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Git extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-git#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-go = nodeEnv.buildNodePackage {
     name = "coc-go";
     packageName = "coc-go";

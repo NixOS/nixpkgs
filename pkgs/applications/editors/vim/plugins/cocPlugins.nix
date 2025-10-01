@@ -5,6 +5,7 @@
   coc-css,
   coc-diagnostic,
   coc-docker,
+  coc-git,
   coc-pyright,
   coc-spell-checker,
   coc-toml,
@@ -33,6 +34,11 @@ final: prev: {
   coc-docker = buildVimPlugin {
     inherit (coc-docker) pname version meta;
     src = "${coc-docker}/lib/node_modules/coc-docker";
+  };
+
+  coc-git = buildVimPlugin {
+    inherit (coc-git) pname version meta;
+    src = "${coc-git}/lib/node_modules/coc-git";
   };
 
   coc-pyright = buildVimPlugin {
