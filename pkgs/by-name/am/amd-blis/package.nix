@@ -33,6 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hqb/Q1CBqtC4AXqHNd7voewGUD675hJ9IwvP3Mn9b+M=";
   };
 
+  patches = [
+    # Set the date stamp to $SOURCE_DATE_EPOCH
+    ./build-date.patch
+  ];
+
   inherit blas64;
 
   nativeBuildInputs = [
