@@ -717,28 +717,26 @@ let
         inStore = true;
       };
 
-      pathWith =
+      pathWith = mkOptionType (
+        self:
         {
           inStore ? null,
           absolute ? null,
         }:
         throwIf (inStore != null && absolute != null && inStore && !absolute)
           "In pathWith, inStore means the path must be absolute"
-          mkOptionType
           {
             name = "path";
-            description = (
+            description =
               (if absolute == null then "" else (if absolute then "absolute " else "relative "))
               + "path"
               + (
                 if inStore == null then "" else (if inStore then " in the Nix store" else " not in the Nix store")
-              )
-            );
+              );
             descriptionClass = "noun";
 
             merge = mergeEqualOption;
-            functor = defaultFunctor "path" // {
-              type = pathWith;
+            functor = defaultFunctor self // {
               payload = { inherit inStore absolute; };
               binOp = lhs: rhs: if lhs == rhs then lhs else null;
             };
@@ -755,14 +753,15 @@ let
                     /. + builtins.unsafeDiscardStringContext x
                 );
                 isAbsolute = builtins.substring 0 1 (toString x) == "/";
-                isExpectedType = (
+                isExpectedType =
                   if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.
-                );
+                ;
               in
               isExpectedType
               && (inStore == null || inStore == isInStore)
               && (absolute == null || absolute == isAbsolute);
-          };
+          }
+      );
 
       listOf =
         elemType:
