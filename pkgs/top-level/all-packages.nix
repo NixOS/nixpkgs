@@ -5951,14 +5951,12 @@ with pkgs;
 
   jruby = callPackage ../development/interpreters/jruby { };
 
-  guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
-
-  # Needed for autogen
-  guile_2_0 = callPackage ../development/interpreters/guile/2.0.nix { };
-
-  guile_2_2 = callPackage ../development/interpreters/guile/2.2.nix { };
-
-  guile_3_0 = callPackage ../development/interpreters/guile/3.0.nix { };
+  inherit (callPackage ../development/interpreters/guile/packages.nix { })
+    guile_1_8
+    guile_2_0
+    guile_2_2
+    guile_3_0
+    ;
 
   guile = guile_3_0;
 
