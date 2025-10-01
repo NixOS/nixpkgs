@@ -1812,6 +1812,8 @@ let
 
         randomconv = callPackage ../development/ocaml-modules/randomconv { };
 
+        raven = callPackage ../development/ocaml-modules/raven { };
+
         raylib = callPackage ../development/ocaml-modules/raylib { };
 
         raygui = callPackage ../development/ocaml-modules/raylib/raygui.nix { };
