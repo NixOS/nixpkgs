@@ -819,12 +819,12 @@ let
         let
           list = addCheck (types.listOf elemType) (l: l != [ ]);
         in
-        list
-        // {
-          description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
-          emptyValue = { }; # no .value attr, meaning unset
-          substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
-        };
+        list.extend (
+          final: prev: {
+            description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
+            emptyValue = { }; # no .value attr, meaning unset
+          }
+        );
 
       attrsOf = elemType: attrsWith { inherit elemType; };
 
