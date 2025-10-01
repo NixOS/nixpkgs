@@ -5,6 +5,7 @@
   coc-css,
   coc-diagnostic,
   coc-pyright,
+  coc-spell-checker,
   coc-toml,
 }:
 final: prev: {
@@ -32,6 +33,12 @@ final: prev: {
     pname = "coc-pyright";
     inherit (coc-pyright) version meta;
     src = "${coc-pyright}/lib/node_modules/coc-pyright";
+  };
+
+  coc-spell-checker = buildVimPlugin {
+    pname = "coc-spell-checker";
+    inherit (coc-spell-checker) version meta;
+    src = "${coc-spell-checker}/lib/node_modules/coc-spell-checker";
   };
 
   coc-toml = buildVimPlugin {

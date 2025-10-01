@@ -49,7 +49,6 @@
 , "coc-smartf"
 , "coc-snippets"
 , "coc-solargraph"
-, "coc-spell-checker"
 , "coc-stylelint"
 , "coc-sumneko-lua"
 , "coc-sqlfluff"
