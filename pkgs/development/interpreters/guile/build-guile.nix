@@ -23,6 +23,7 @@ lib.extendMkDerivation {
     {
       srcHash ? "",
       maintainers ? [ ],
+      ...
     }@args:
     {
       pname = args.pname or "guile";

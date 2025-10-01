@@ -1,6 +1,9 @@
 {
   lib,
+  stdenv,
+  pkgsBuildBuild,
   buildGuile,
+  libtool,
 }:
 
 buildGuile {
@@ -18,14 +21,18 @@ buildGuile {
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
   '';
 
+  depsBuildBuild = lib.optional (
+    stdenv.hostPlatform != stdenv.buildPlatform
+  ) pkgsBuildBuild.guile_1_8;
+
   enableParallelBuilding = false;
 
   # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
   # why `--with-libunistring-prefix' and similar options coming from
   # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
   postInstall = ''
-    substituteInPlace "out/lib/pkgconfig/guile"-*.pc \
-      --replace-fail "-lltdl" "-L${libtool.lib}/lib -lltdl"
+    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
+        -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
   '';
 
   setupHook = ./setup-hook-1.8.sh;
