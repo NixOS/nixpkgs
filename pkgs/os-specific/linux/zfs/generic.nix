@@ -156,7 +156,7 @@ let
             --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
               "bashcompletiondir=$out/share/bash-completion/completions"
 
-          substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
+          substituteInPlace ./cmd/zarcsummary --replace-fail "/sbin/modinfo" "modinfo"
         ''
         + ''
           echo 'Supported Kernel versions:'
