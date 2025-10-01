@@ -366,8 +366,8 @@ rec {
       "sha256-QRwEUkDj7S0/VuQrcwuPWqKnzXEN6NYUSakhT+9T2wk=";
 
   mypy-boto3-customer-profiles =
-    buildMypyBoto3Package "customer-profiles" "1.40.0"
-      "sha256-fMWdXDlTjSkf5R5U+cd85E5qEEHAyl4Mc0v1W2rW4WA=";
+    buildMypyBoto3Package "customer-profiles" "1.40.42"
+      "sha256-9zxTdvAc7+MgUM1KZJndXBCc0qL6jp50u7I93zZXrJY=";
 
   mypy-boto3-databrew =
     buildMypyBoto3Package "databrew" "1.40.20"
