@@ -666,14 +666,16 @@ let
 
       passwdEntry =
         entryType:
-        addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str))
-        // {
-          name = "passwdEntry ${entryType.name}";
-          description = "${
-            optionDescriptionPhrase (class: class == "noun") entryType
-          }, not containing newlines or colons";
-          descriptionClass = "nonRestrictiveClause";
-        };
+        (addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str))).extend (
+          final: prev: {
+            name = "passwdEntry ${entryType.name}";
+            description = "${
+              optionDescriptionPhrase (class: class == "noun") entryType
+            }, not containing newlines or colons";
+            descriptionClass = "nonRestrictiveClause";
+            __constructor__ = passwdEntry;
+          }
+        );
 
       attrs = mkOptionType {
         name = "attrs";
