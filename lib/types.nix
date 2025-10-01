@@ -710,9 +710,11 @@ let
             res;
       };
 
-      shellPackage = package // {
-        check = x: isDerivation x && hasAttr "shellPath" x;
-      };
+      shellPackage = package.extend (
+        final: prev: {
+          check = x: isDerivation x && hasAttr "shellPath" x;
+        }
+      );
 
       pkgs = addCheck (
         unique { message = "A Nixpkgs pkgs set can not be merged with another pkgs set."; } attrs
