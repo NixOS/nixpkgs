@@ -25,7 +25,6 @@ let
     "coc-pairs"
     "coc-prettier"
     "coc-r-lsp"
-    "coc-rls"
     "coc-rust-analyzer"
     "coc-sh"
     "coc-smartf"

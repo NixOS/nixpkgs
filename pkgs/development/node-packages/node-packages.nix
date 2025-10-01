@@ -48600,24 +48600,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-rls = nodeEnv.buildNodePackage {
-    name = "coc-rls";
-    packageName = "coc-rls";
-    version = "1.1.6";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-rls/-/coc-rls-1.1.6.tgz";
-      sha512 = "/XUM5UjOtnVBHghxBtwHz6C2lWnWgF8kX2+uocc356c2Bn8msQa6mrN0lijhlpDlsomSMPkGpZiY4zS1tNakMw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Rust language support - code completion, Intellisense, refactoring, reformatting, errors, snippets. A client for the Rust Language Server, built by the RLS team";
-      homepage = "https://github.com/neoclide/coc-rls#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-rust-analyzer = nodeEnv.buildNodePackage {
     name = "coc-rust-analyzer";
     packageName = "coc-rust-analyzer";
