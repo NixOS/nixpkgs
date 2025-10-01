@@ -6,6 +6,7 @@
   coc-diagnostic,
   coc-pyright,
   coc-toml,
+  coc-sh,
 }:
 final: prev: {
   coc-basedpyright = buildVimPlugin {
@@ -32,6 +33,12 @@ final: prev: {
     pname = "coc-pyright";
     inherit (coc-pyright) version meta;
     src = "${coc-pyright}/lib/node_modules/coc-pyright";
+  };
+
+  coc-sh = buildVimPlugin {
+    pname = "coc-sh";
+    inherit (coc-sh) version meta;
+    src = "${coc-sh}/lib/node_modules/coc-sh";
   };
 
   coc-toml = buildVimPlugin {

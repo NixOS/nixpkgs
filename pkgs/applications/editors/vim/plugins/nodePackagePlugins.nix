@@ -28,7 +28,6 @@ let
     "coc-r-lsp"
     "coc-rls"
     "coc-rust-analyzer"
-    "coc-sh"
     "coc-smartf"
     "coc-snippets"
     "coc-solargraph"
