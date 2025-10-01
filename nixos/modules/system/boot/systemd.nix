@@ -425,6 +425,16 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
+        options = {
+          DefaultEnvironment = lib.mkOption {
+            type = lib.types.separatedString " ";
+            description = "Configures environment variables passed to all executed processes.";
+          };
+          ManagerEnvironment = lib.mkOption {
+            type = lib.types.separatedString " ";
+            description = "Sets variables for the manager process itself.";
+          };
+        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
