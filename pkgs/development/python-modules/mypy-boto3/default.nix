@@ -613,8 +613,8 @@ rec {
       "sha256-nOj8fkesQ6iVsoLwa/29LYl9X16UUL13k7M2rTEln0U=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.40.36"
-      "sha256-aOo29FyR1QdV3DCIQAM/rumH/LjbQozDfmisNyyCi4I=";
+    buildMypyBoto3Package "imagebuilder" "1.40.41"
+      "sha256-vGem/ZZqqYL3sjrf2gTlMx/YTB+lHcG9lJcJLjGRkOk=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.40.0"
@@ -1385,8 +1385,8 @@ rec {
       "sha256-voJSA17LDkjLBNDd7/TPS5tC63BfyEffvp7JUb46trk=";
 
   mypy-boto3-vpc-lattice =
-    buildMypyBoto3Package "vpc-lattice" "1.40.0"
-      "sha256-I2rPZoC+WSv7qNHD/UKqeACtX11wyse4CKBFy7hoBfI=";
+    buildMypyBoto3Package "vpc-lattice" "1.40.41"
+      "sha256-ULIgKqAo6aDuFZpl/NFS77RrR8yCss7HbRV7E25OcqE=";
 
   mypy-boto3-waf =
     buildMypyBoto3Package "waf" "1.40.20"

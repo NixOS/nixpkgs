@@ -21,13 +21,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "0-unstable-2025-09-15";
+  version = "0-unstable-2025-09-26";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
-    rev = "5535ce27d6c80b3e0cf891d93e3ee07af492346c";
-    hash = "sha256-Ha5orh/6tvaNhGWmFpC/+ZV7WcD+nqkjwf3grhKUPys=";
+    rev = "247383198a95d045df0d97ece5a81adffb5c08e8";
+    hash = "sha256-RrdtUtrs0Mh1VyMbF89qJhr2fnCVcQy2l1/85/mJ/4Y=";
   };
 
   # This matches postInstall of PostgreSQL's generic.nix, which does this for the PGXS Makefile.
