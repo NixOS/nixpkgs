@@ -944,15 +944,16 @@ let
       # TODO: deprecate this in the future:
       loaOf =
         elemType:
-        types.attrsOf elemType
-        // {
-          name = "loaOf";
-          deprecationMessage =
-            "Mixing lists with attribute values is no longer"
-            + " possible; please use `types.attrsOf` instead. See"
-            + " https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.";
-          nestedTypes.elemType = elemType;
-        };
+        (types.attrsOf elemType).extend (
+          final: prev: {
+            name = "loaOf";
+            deprecationMessage =
+              "Mixing lists with attribute values is no longer"
+              + " possible; please use `types.attrsOf` instead. See"
+              + " https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.";
+            nestedTypes.elemType = elemType;
+          }
+        );
 
       attrTag = mkOptionType (
         self: tags':
