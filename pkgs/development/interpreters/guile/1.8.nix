@@ -2,52 +2,68 @@
   lib,
   stdenv,
   fetchurl,
-  buildPackages,
+  pkgsBuildBuild,
   gawk,
   gmp,
   libtool,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
-  pkgsBuildBuild,
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile";
   version = "1.8.8";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0l200a0v7h8bh0cwz6v7hc13ds39cgqsmfrks55b1rbj5vniyiy3";
+    url = "mirror://gnu/guile/guile-${finalAttrs.version}.tar.gz";
+    hash = "sha256-w0cf7S5y5bBK0TO7qvFjaeg2AoNnm88ZgAvBs4ECQFA=";
   };
+
+  patches = [
+    # Fix doc snarfing with GCC 4.5.
+    ./cpp-4.5.patch
+    # Self explanatory
+    ./CVE-2016-8605.patch
+  ];
+
+  postPatch = ''
+    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
+  '';
 
   outputs = [
     "out"
     "dev"
     "info"
   ];
+
   setOutputFlags = false; # $dev gets into the library otherwise
 
   # GCC 4.6 raises a number of set-but-unused warnings.
   configureFlags = [
     "--disable-error-on-warning"
+    "AWK=${lib.getExe gawk}"
   ]
   # Guile needs patching to preset results for the configure tests about
   # pthreads, which work only in native builds.
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-threads=no";
 
+  strictDeps = true;
   depsBuildBuild = [
-    buildPackages.stdenv.cc
+    pkgsBuildBuild.stdenv.cc
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_1_8;
+
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
+
   buildInputs = [
     libtool
     readline
   ];
+
   propagatedBuildInputs = [
     gmp
 
@@ -58,26 +74,12 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  patches = [
-    # Fix doc snarfing with GCC 4.5.
-    ./cpp-4.5.patch
-    # Self explanatory
-    ./CVE-2016-8605.patch
-  ];
-
-  preBuild = ''
-    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-  ''
   # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
   # why `--with-libunistring-prefix' and similar options coming from
   # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-  + ''
-    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
-        -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
+  postInstall = ''
+    substituteInPlace "out/lib/pkgconfig/guile"-*.pc \
+      --replace-fail "-lltdl" "-L${libtool.lib}/lib -lltdl"
   '';
 
   # One test fails.
@@ -85,17 +87,17 @@ stdenv.mkDerivation rec {
   # This is fixed here:
   # <https://git.savannah.gnu.org/cgit/guile.git/commit/?h=branch_release-1-8&id=a0aa1e5b69d6ef0311aeea8e4b9a94eae18a1aaf>.
   doCheck = false;
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.doCheck;
 
   setupHook = ./setup-hook-1.8.sh;
 
   passthru = {
-    effectiveVersion = lib.versions.majorMinor version;
+    effectiveVersion = lib.versions.majorMinor finalAttrs.version;
     siteCcacheDir = "lib/guile/site-ccache";
     siteDir = "share/guile/site";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
@@ -106,8 +108,8 @@ stdenv.mkDerivation rec {
       system calls, networking support, multiple threads, dynamic linking, a
       foreign function call interface, and powerful string processing.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ ludo ];
+    platforms = lib.platforms.all;
   };
-}
+})
