@@ -12,6 +12,7 @@
   mpi,
   withPtScotch ? false,
   testers,
+  pkgsMusl ? { }, # default to empty set to avoid CI fails with allowVariants = false
   nix-update-script,
 }:
 
@@ -73,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
         moduleNames = [ "SCOTCH" ];
         package = finalAttrs.finalPackage;
       };
+      musl = pkgsMusl.scotch or null;
     };
 
     updateScript = nix-update-script { };
