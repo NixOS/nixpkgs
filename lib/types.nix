@@ -1239,7 +1239,8 @@ let
             mergedOption.type;
       };
 
-      submoduleWith =
+      submoduleWith = mkOptionType (
+        self:
         {
           modules,
           specialArgs ? { },
@@ -1297,7 +1298,7 @@ let
 
           check = x: isAttrs x || isFunction x || path.check x;
         in
-        mkOptionType {
+        {
           inherit name;
           description =
             if description != null then
@@ -1339,12 +1340,10 @@ let
           getSubOptions =
             prefix:
             let
-              docsEval = (
-                base.extendModules {
-                  inherit prefix;
-                  modules = [ noCheckForDocsModule ];
-                }
-              );
+              docsEval = base.extendModules {
+                inherit prefix;
+                modules = [ noCheckForDocsModule ];
+              };
               # Intentionally shadow the freeformType from the possibly *checked*
               # configuration. See `noCheckForDocsModule` comment.
               inherit (docsEval._module) freeformType;
@@ -1359,7 +1358,7 @@ let
           getSubModules = modules;
           substSubModules =
             m:
-            submoduleWith (
+            self.__constructor__ (
               attrs
               // {
                 modules = m;
@@ -1368,8 +1367,7 @@ let
           nestedTypes = lib.optionalAttrs (freeformType != null) {
             freeformType = freeformType;
           };
-          functor = defaultFunctor name // {
-            type = types.submoduleWith;
+          functor = defaultFunctor self // {
             payload = {
               inherit
                 modules
@@ -1420,7 +1418,8 @@ let
                   throw "A submoduleWith option is declared multiple times with conflicting descriptions";
             };
           };
-        };
+        }
+      );
 
       # A value from a set of allowed ones.
       enum =
