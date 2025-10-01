@@ -692,6 +692,9 @@ in
       ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
     };
     systemd.settings.Manager = {
+      DefaultEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.globalEnvironment
+      );
       ManagerEnvironment = lib.concatStringsSep " " (
         lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
       );
