@@ -3,9 +3,8 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   makeWrapper,
-  electron_35,
+  electron_37,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
@@ -14,30 +13,20 @@
 }:
 
 let
-  electron = electron_35;
+  electron = electron_37;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.22.1";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vVKdaFKOx4xm4BK+AjVr4cEDOHpOjOe58k2wUAhB9XA=";
+    hash = "sha256-Qa8ykN514Moc/PpBhD/X+mzfclQPp3yiriwTJCtmMA8=";
   };
 
-  npmDepsHash = "sha256-OS5DR+24F98ICgQ6zL4VD231Rd5JB/gJKl+qNfnP3PE=";
-
-  patches = [
-    # Make it possible to load the electron-builder config without sideeffects.
-    # PR at https://github.com/sunfish-shogi/shogihome/pull/1184
-    # Should be removed next 1.22.X ShogiHome update or possibly 1.23.X.
-    (fetchpatch {
-      url = "https://github.com/sunfish-shogi/shogihome/commit/a075571a3bf4f536487e1212a2e7a13802dc7ec7.patch";
-      sha256 = "sha256-dJyaoWOC+fEufzpYenmfnblgd2C9Ymv4Cl8Y/hljY6c=";
-    })
-  ];
+  npmDepsHash = "sha256-rcrj3dG96oNbmp3cXw1qRJPi1SZdBcG9paAShSfb/0E=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -46,6 +35,11 @@ buildNpmPackage (finalAttrs: {
 
     substituteInPlace .electron-builder.config.mjs \
       --replace-fail 'AppImage' 'dir'
+  ''
+  # Workaround for https://github.com/electron/electron/issues/31121
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/background/window/path.ts \
+      --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
 
   env = {
@@ -73,12 +67,15 @@ buildNpmPackage (finalAttrs: {
     rm electron-dist/libvulkan.so.1
     cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
   ''
+  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+  # See: https://github.com/electron-userland/electron-builder/pull/9007
   + ''
     npm run electron:pack
 
     ./node_modules/.bin/electron-builder \
         --dir \
         --config .electron-builder.config.mjs \
+        -c.mac.identity=null \
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
 
@@ -117,7 +114,11 @@ buildNpmPackage (finalAttrs: {
       genericName = "Shogi Frontend";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
-      startupWMClass = "ShogiHome";
+
+      # The project was renamed "shogihome" from "electron-shogi."
+      # Some references to "electron-shogi" remain for compatibility.
+      # ref: https://github.com/sunfish-shogi/shogihome/commit/e5bbc4d43d231df23ac31c655adb64e11890993e
+      startupWMClass = "electron-shogi";
     })
   ];
 

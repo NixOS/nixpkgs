@@ -2372,10 +2372,6 @@ with pkgs;
 
   patool = with python3Packages; toPythonApplication patool;
 
-  pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_35;
-  };
-
   pixcat = with python3Packages; toPythonApplication pixcat;
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap { };
@@ -4615,11 +4611,6 @@ with pkgs;
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
-
-  inherit (callPackage ../applications/office/trilium { })
-    trilium-desktop
-    trilium-server
-    ;
 
   trytond = with python3Packages; toPythonApplication trytond;
 
