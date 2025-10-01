@@ -70,6 +70,19 @@ let
     ++ lib.optional (opt.localSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.localSystem
     ++ lib.optional (opt.crossSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.crossSystem;
 
+  nixpkgs =
+    if cfg.patches != [ ] then
+      (import ../../.. {
+        inherit (cfg.buildPlatform) system;
+      }).applyPatches
+        {
+          name = "nixpkgs-patched";
+          src = ../../..;
+          patches = cfg.patches;
+        }
+    else
+      ../../..;
+
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
@@ -85,14 +98,14 @@ let
               localSystem = cfg.hostPlatform;
             };
       in
-      import ../../.. (
+      import nixpkgs (
         {
           inherit (cfg) config overlays;
         }
         // systemArgs
       )
     else
-      import ../../.. {
+      import nixpkgs {
         inherit (cfg)
           config
           overlays
@@ -191,6 +204,48 @@ in
         For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
 
         If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays` will be applied after the overlays that were already included in `nixpkgs.pkgs`.
+      '';
+    };
+
+    patches = lib.mkOption {
+      default = [ ];
+      example = lib.literalExpression ''
+        [
+          (builtins.fetchurl {
+            url = "https://github.com/NixOS/nixpkgs/pull/12345.patch";
+            sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
+          })
+          ./local-nixpkgs.patch
+        ]
+      '';
+      type = lib.types.listOf lib.types.path;
+      description = ''
+        List of patches to apply to the Nixpkgs source tree.
+
+        This option allows patching the entire Nixpkgs tree, which can be useful
+        for applying upstream PRs that haven't been merged yet, or for testing
+        local changes.
+
+        You can obtain patches from GitHub PRs by using `builtins.fetchurl`:
+
+        ```nix
+        builtins.fetchurl {
+          url = "https://github.com/NixOS/nixpkgs/pull/12345.patch";
+          sha256 = "0000000...";
+        }
+        ```
+
+        Or use local patch files: `./my-fix.patch`
+
+        **Important:** Do NOT use `pkgs.fetchpatch` or any other `pkgs.*` functions
+        here, as it will cause infinite recursion. Use `builtins.fetchurl` instead.
+
+        Note: This option has no effect when {option}`nixpkgs.pkgs` is set.
+        Patches are applied before overlays and config options.
+
+        Warning: Patching Nixpkgs directly can lead to cache misses and increased
+        build times, as many packages may need to be rebuilt. Use this option
+        sparingly and consider using overlays for package-specific changes instead.
       '';
     };
 
@@ -413,6 +468,18 @@ in
 
             Defined in:
             ${lib.concatMapStringsSep "\n" (file: "  - ${file}") opt.config.files}
+          '';
+        }
+        {
+          assertion = opt.pkgs.isDefined -> cfg.patches == [ ];
+          message = ''
+            Your system configures nixpkgs with an externally created instance.
+            `nixpkgs.patches` has no effect when `nixpkgs.pkgs` is set.
+
+            Patches should be applied when creating the pkgs instance instead.
+
+            Defined in:
+            ${lib.concatMapStringsSep "\n" (file: "  - ${file}") opt.patches.files}
           '';
         }
       ];
