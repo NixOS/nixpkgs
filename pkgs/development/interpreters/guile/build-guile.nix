@@ -1,32 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkgsBuildBuild,
-  gawk,
-  gmp,
-  libtool,
-  pkg-config,
-  readline,
-}:
+{ lib, stdenv, fetchurl, pkgsBuildBuild, gawk, gmp, libtool, pkg-config
+, readline, }:
 
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
 
-  excludeDrvArgNames = [
-    "maintainers"
-    "srcHash"
-  ];
+  excludeDrvArgNames = [ "maintainers" "srcHash" ];
 
-  extendDrvArgs =
-    finalAttrs:
-    {
-      version ? "",
-      srcHash ? "",
-      maintainers ? [ ],
-      ...
-    }@args:
-    {
+  extendDrvArgs = finalAttrs:
+    { version ? "", srcHash ? "", maintainers ? [ ], ... }@args: {
       inherit version;
       pname = args.pname or "guile";
 
@@ -35,31 +16,18 @@ lib.extendMkDerivation {
         hash = srcHash;
       };
 
-      outputs =
-        args.outputs or [
-          "out"
-          "dev"
-          "info"
-        ];
+      outputs = args.outputs or [ "out" "dev" "info" ];
 
-      setOutputFlags = args.setOutputFlags or false; # $dev gets into the library otherwise
+      setOutputFlags =
+        args.setOutputFlags or false; # $dev gets into the library otherwise
 
       strictDeps = true;
-      depsBuildBuild =
-        args.depsBuildBuild or [ ]
-        ++ [
-          pkgsBuildBuild.stdenv.cc
-        ]
-        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_1_8;
+      depsBuildBuild = args.depsBuildBuild or [ ]
+        ++ [ pkgsBuildBuild.stdenv.cc ];
 
-      nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
-        pkg-config
-      ];
+      nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ pkg-config ];
 
-      buildInputs = args.buildInputs or [ ] ++ [
-        libtool
-        readline
-      ];
+      buildInputs = args.buildInputs or [ ] ++ [ libtool readline ];
 
       propagatedBuildInputs = args.propagatedBuildInputs or [ ] ++ [
         gmp
@@ -72,14 +40,14 @@ lib.extendMkDerivation {
       ];
 
       # GCC 4.6 raises a number of set-but-unused warnings.
-      configureFlags =
-        args.configureFlags or [
-          "--disable-error-on-warning"
-          "AWK=${lib.getExe gawk}"
-        ]
-        # Guile needs patching to preset results for the configure tests about
-        # pthreads, which work only in native builds.
-        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-threads=no";
+      configureFlags = args.configureFlags or [ ] ++ [
+        "--disable-error-on-warning"
+        "AWK=${lib.getExe gawk}"
+      ]
+      # Guile needs patching to preset results for the configure tests about
+      # pthreads, which work only in native builds.
+        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+        "--with-threads=no";
 
       # One test fails.
       # ERROR: file: "libtest-asmobs", message: "file not found"
