@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.3.2";
+  version = "0.3.3b0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
     tag = version;
-    hash = "sha256-LR3ZZD7TLpvCGVSx27tSxa7H2A06JBPBCH2yHGvqV84=";
+    hash = "sha256-Uv9chL9GxP5vJu1P6RB7B2b0pRQMeNtE6t1XFr2tBI4=";
   };
 
   postPatch = ''
