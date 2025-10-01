@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   gmp,
   flint,
@@ -24,6 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ];
+
+  # upgrade supported cmake version in SymEngineConfig.cmake
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/symengine/symengine/commit/c149b874b8ff947e51e8e58670a0d37daf588f86.patch?full_index=1";
+      hash = "sha256-LqkJRPdsbE8OE8G6AkpWX9B+GqnOQjUNPHpKKIcCL3Q=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/symengine/symengine/commit/186f72e208220efd12362c336a49378076f63f30.patch?full_index=1";
+      hash = "sha256-CuQra9K3MTxm8M0bt3LooJz9HgW0/Jy6ydRBCvEgkO4=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
