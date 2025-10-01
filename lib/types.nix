@@ -510,15 +510,17 @@ let
           */
           inherit between;
 
-          positive = addCheck types.int (x: x > 0) // {
-            name = "positiveInt";
-            description = "positive integer, meaning >0";
-            descriptionClass = "nonRestrictiveClause";
-          };
           unsigned = (addCheck types.int (x: x >= 0)).extend (
             final: prev: {
               name = "unsignedInt";
               description = "unsigned integer, meaning >=0";
+              descriptionClass = "nonRestrictiveClause";
+            }
+          );
+          positive = (addCheck types.int (x: x > 0)).extend (
+            final: prev: {
+              name = "positiveInt";
+              description = "positive integer, meaning >0";
               descriptionClass = "nonRestrictiveClause";
             }
           );
