@@ -12,19 +12,20 @@
   mpi,
   withPtScotch ? false,
   testers,
+  pkgsMusl ? { }, # default to empty set to avoid CI fails with allowVariants = false
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scotch";
-  version = "7.0.9";
+  version = "7.0.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "scotch";
     repo = "scotch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dbf18XdmDP0KgS4H4L7Wnam7kGF88yBcCvehYRRpHvA=";
+    hash = "sha256-qeMgTkoM/RDsZa0T6hmrDLbLuSeR8WNxllyHSlkMVzA=";
   };
 
   outputs = [
@@ -73,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
         moduleNames = [ "SCOTCH" ];
         package = finalAttrs.finalPackage;
       };
+      musl = pkgsMusl.scotch or null;
     };
 
     updateScript = nix-update-script { };
