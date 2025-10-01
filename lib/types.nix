@@ -950,16 +950,13 @@ let
           nestedTypes.elemType = elemType;
         };
 
-      attrTag =
-        tags:
-        let
-          tags_ = tags;
-        in
+      attrTag = mkOptionType (
+        self: tags':
         let
           tags = mapAttrs (
             n: opt:
             builtins.addErrorContext
-              "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}"
+              "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags' n}"
               (
                 throwIf (opt._type or null != "option")
                   "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
@@ -976,23 +973,23 @@ let
                   declarations =
                     opt.declarations or (
                       let
-                        pos = builtins.unsafeGetAttrPos n tags_;
+                        pos = builtins.unsafeGetAttrPos n tags';
                       in
                       if pos == null then [ ] else [ pos.file ]
                     );
                   declarationPositions =
                     opt.declarationPositions or (
                       let
-                        pos = builtins.unsafeGetAttrPos n tags_;
+                        pos = builtins.unsafeGetAttrPos n tags';
                       in
                       if pos == null then [ ] else [ pos ]
                     );
                 }
               )
-          ) tags_;
+          ) tags';
           choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
         in
-        mkOptionType {
+        {
           name = "attrTag";
           description = "attribute-tagged union";
           descriptionClass = "noun";
@@ -1022,8 +1019,8 @@ let
             else
               throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
           nestedTypes = tags;
-          functor = defaultFunctor "attrTag" // {
-            type = { tags, ... }: types.attrTag tags;
+          functor = defaultFunctor self // {
+            type = { tags, ... }: self.__constructor__ tags;
             payload = { inherit tags; };
             binOp =
               let
@@ -1057,7 +1054,8 @@ let
                   ) (builtins.intersectAttrs a.tags b.tags);
               };
           };
-        };
+        }
+      );
 
       # A value produced by `lib.mkLuaInline`
       luaInline = mkOptionType {
