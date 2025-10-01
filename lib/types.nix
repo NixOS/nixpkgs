@@ -1075,10 +1075,10 @@ let
 
       uniq = unique { message = ""; };
 
-      unique =
+      unique = mkOptionType (
+        self:
         { message }:
-        type:
-        mkOptionType rec {
+        type: {
           name = "unique";
           inherit (type) description descriptionClass check;
           merge = mergeUniqueOption {
@@ -1089,11 +1089,12 @@ let
           getSubOptions = type.getSubOptions;
           getSubModules = type.getSubModules;
           substSubModules = m: uniq (type.substSubModules m);
-          functor = elemTypeFunctor name { elemType = type; } // {
-            type = payload: types.unique { inherit message; } payload.elemType;
+          functor = elemTypeFunctor self.name { elemType = type; } // {
+            type = payload: self.__uncall__ { inherit message; } payload.elemType;
           };
           nestedTypes.elemType = type;
-        };
+        }
+      );
 
       # Null or value of ...
       nullOr =
