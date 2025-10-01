@@ -9,7 +9,6 @@ let
     "coc-cmake"
     "coc-emmet"
     "coc-eslint"
-    "coc-explorer"
     "coc-flutter"
     "coc-go"
     "coc-haxe"
