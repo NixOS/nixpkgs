@@ -765,9 +765,8 @@ let
           }
       );
 
-      listOf =
-        elemType:
-        mkOptionType rec {
+      listOf = mkOptionType (
+        self: elemType: {
           name = "listOf";
           description = "list of ${
             optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
@@ -799,7 +798,7 @@ let
                 );
               in
               {
-                headError = checkDefsForError check loc defs;
+                headError = checkDefsForError self.check loc defs;
                 value = map (x: x.optionalValue.value or x.mergedValue) evals;
                 valueMeta.list = map (v: v.checkedAndMerged.valueMeta) evals;
               };
@@ -809,12 +808,13 @@ let
           };
           getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" ]);
           getSubModules = elemType.getSubModules;
-          substSubModules = m: listOf (elemType.substSubModules m);
-          functor = (elemTypeFunctor name { inherit elemType; }) // {
-            type = payload: types.listOf payload.elemType;
+          substSubModules = m: self.__uncall__ (elemType.substSubModules m);
+          functor = (elemTypeFunctor self.name { inherit elemType; }) // {
+            type = payload: self.__uncall__ payload.elemType;
           };
           nestedTypes.elemType = elemType;
-        };
+        }
+      );
 
       nonEmptyListOf =
         elemType:
