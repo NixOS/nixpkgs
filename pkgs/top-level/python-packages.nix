@@ -929,6 +929,8 @@ self: super: with self; {
 
   asana = callPackage ../development/python-modules/asana { };
 
+  asap3 = callPackage ../development/python-modules/asap3 { };
+
   ascii-magic = callPackage ../development/python-modules/ascii-magic { };
 
   asciimatics = callPackage ../development/python-modules/asciimatics { };
