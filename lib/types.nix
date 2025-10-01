@@ -465,11 +465,12 @@ let
           between =
             lowest: highest:
             assert lib.assertMsg (lowest <= highest) "ints.between: lowest must be smaller than highest";
-            addCheck int (x: x >= lowest && x <= highest)
-            // {
-              name = "intBetween";
-              description = "integer between ${betweenDesc lowest highest}";
-            };
+            (addCheck int (x: x >= lowest && x <= highest)).extend (
+              final: prev: {
+                name = "intBetween";
+                description = "integer between ${betweenDesc lowest highest}";
+              }
+            );
           ign =
             lowest: highest: name: docStart:
             between lowest highest
