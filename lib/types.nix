@@ -599,20 +599,20 @@ let
           merge = loc: defs: lib.removeSuffix "\n" (merge loc defs);
         };
 
-      strMatching =
-        pattern:
-        mkOptionType {
+      strMatching = mkOptionType (
+        self: pattern: {
           name = "strMatching ${escapeNixString pattern}";
           description = "string matching the pattern ${pattern}";
           descriptionClass = "noun";
           check = x: str.check x && builtins.match pattern x != null;
           inherit (str) merge;
-          functor = defaultFunctor "strMatching" // {
-            type = payload: strMatching payload.pattern;
+          functor = defaultFunctor self // {
+            type = payload: self.__constructor__ payload.pattern;
             payload = { inherit pattern; };
             binOp = lhs: rhs: if lhs == rhs then lhs else null;
           };
-        };
+        }
+      );
 
       # Merge multiple definitions by concatenating them (with the given
       # separator between the values).
