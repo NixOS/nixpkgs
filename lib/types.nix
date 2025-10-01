@@ -1127,9 +1127,8 @@ let
         }
       );
 
-      functionTo =
-        elemType:
-        mkOptionType {
+      functionTo = mkOptionType (
+        self: elemType: {
           name = "functionTo";
           description = "function that evaluates to a(n) ${
             optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
@@ -1152,12 +1151,13 @@ let
           };
           getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
           getSubModules = elemType.getSubModules;
-          substSubModules = m: functionTo (elemType.substSubModules m);
-          functor = (elemTypeFunctor "functionTo" { inherit elemType; }) // {
-            type = payload: types.functionTo payload.elemType;
+          substSubModules = m: self.__constructor__ (elemType.substSubModules m);
+          functor = (elemTypeFunctor self.name { inherit elemType; }) // {
+            type = payload: self.__constructor__ payload.elemType;
           };
           nestedTypes.elemType = elemType;
-        };
+        }
+      );
 
       # A submodule (like typed attribute set). See NixOS manual.
       submodule =
