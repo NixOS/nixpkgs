@@ -77,7 +77,20 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ leenaars ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
-    license = lib.licenses.free;
+    license = with lib.licenses; [
+      # code
+      zlib
+
+      # assets
+      cc-by-sa-40
+      cc-by-nc-nd-40
+
+      # slam
+      mit
+
+      # tserial
+      unfree
+    ];
     downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
 
