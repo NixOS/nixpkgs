@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       niklaskorz
+      iedame
     ];
     platforms = lib.platforms.unix;
     mainProgram = "wesnoth";
