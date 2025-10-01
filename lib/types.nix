@@ -1558,12 +1558,12 @@ let
 
       # Either value of type `coercedType` or `finalType`, the former is
       # converted to `finalType` using `coerceFunc`.
-      coercedTo =
-        coercedType: coerceFunc: finalType:
+      coercedTo = mkOptionType (
+        self: coercedType: coerceFunc: finalType:
         assert lib.assertMsg (
           coercedType.getSubModules == null
         ) "coercedTo: coercedType must not have submodules (it’s a ${coercedType.description})";
-        mkOptionType rec {
+        {
           name = "coercedTo";
           description = "${optionDescriptionPhrase (class: class == "noun") finalType} or ${
             optionDescriptionPhrase (class: class == "noun") coercedType
@@ -1576,27 +1576,25 @@ let
             v2 =
               { loc, defs }:
               let
-                finalDefs = (
-                  map (
-                    def:
-                    def
-                    // {
-                      value =
-                        let
-                          merged = coercedType.merge.v2 {
-                            inherit loc;
-                            defs = [ def ];
-                          };
-                        in
-                        if coercedType.merge ? v2 then
-                          if merged.headError == null then coerceFunc def.value else def.value
-                        else if coercedType.check def.value then
-                          coerceFunc def.value
-                        else
-                          def.value;
-                    }
-                  ) defs
-                );
+                finalDefs = map (
+                  def:
+                  def
+                  // {
+                    value =
+                      let
+                        merged = coercedType.merge.v2 {
+                          inherit loc;
+                          defs = [ def ];
+                        };
+                      in
+                      if coercedType.merge ? v2 then
+                        if merged.headError == null then coerceFunc def.value else def.value
+                      else if coercedType.check def.value then
+                        coerceFunc def.value
+                      else
+                        def.value;
+                  }
+                ) defs;
               in
               if finalType.merge ? v2 then
                 finalType.merge.v2 {
@@ -1607,20 +1605,21 @@ let
                 {
                   value = finalType.merge loc finalDefs;
                   valueMeta = { };
-                  headError = checkDefsForError check loc defs;
+                  headError = checkDefsForError self.check loc defs;
                 };
           };
           emptyValue = finalType.emptyValue;
           getSubOptions = finalType.getSubOptions;
           getSubModules = finalType.getSubModules;
-          substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
+          substSubModules = m: self.__constructor__ coercedType coerceFunc (finalType.substSubModules m);
           typeMerge = t: null;
-          functor = (defaultFunctor name) // {
+          functor = defaultFunctor self // {
             wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
           };
           nestedTypes.coercedType = coercedType;
           nestedTypes.finalType = finalType;
-        };
+        }
+      );
 
       /**
         Augment the given type with an additional type check function.
