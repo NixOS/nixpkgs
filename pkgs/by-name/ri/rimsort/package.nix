@@ -137,7 +137,7 @@ stdenv.mkDerivation {
       name = "RimSort";
       desktopName = "RimSort";
       exec = "rimsort";
-      icon = "rimsort.png";
+      icon = "rimsort";
       comment = "RimWorld Mod Manager";
       categories = [ "Game" ];
     })
