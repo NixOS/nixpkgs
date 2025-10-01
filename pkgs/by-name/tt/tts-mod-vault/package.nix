@@ -11,7 +11,7 @@ flutter329.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "markomijic";
     repo = "TTS-Mod-Vault";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BTs+4QeyVJeg415uiNXww8twQwUInHfB8voWJjeVs20=";
   };
 
