@@ -4,6 +4,7 @@
   coc-clangd,
   coc-css,
   coc-diagnostic,
+  coc-docker,
   coc-pyright,
   coc-toml,
 }:
@@ -26,6 +27,11 @@ final: prev: {
   coc-diagnostic = buildVimPlugin {
     inherit (coc-diagnostic) pname version meta;
     src = "${coc-diagnostic}/lib/node_modules/coc-diagnostic";
+  };
+
+  coc-docker = buildVimPlugin {
+    inherit (coc-docker) pname version meta;
+    src = "${coc-docker}/lib/node_modules/coc-docker";
   };
 
   coc-pyright = buildVimPlugin {

@@ -7,7 +7,6 @@ final: prev:
 let
   nodePackageNames = [
     "coc-cmake"
-    "coc-docker"
     "coc-emmet"
     "coc-eslint"
     "coc-explorer"
