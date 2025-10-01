@@ -7644,6 +7644,12 @@
     name = "Zhenbo Li";
     matrix = "@zhenbo:matrix.org";
   };
+  enkarterisi = {
+    name = "xNefas";
+    email = "enkarterisi@proton.me";
+    github = "xNefas";
+    githubId = 199727225;
+  };
   enorris = {
     name = "Eric Norris";
     email = "erictnorris@gmail.com";
@@ -9391,6 +9397,11 @@
     github = "gin66";
     githubId = 5549373;
     name = "Jochen Kiemes";
+  };
+  ginkogruen = {
+    name = "Jasper Wolter";
+    github = "ginkogruen";
+    githubId = 93037574;
   };
   giodamelio = {
     name = "Giovanni d'Amelio";
