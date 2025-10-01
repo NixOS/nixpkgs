@@ -34,7 +34,7 @@
 }:
 let
   pnpm = pnpm_10;
-  version = "1.142.0";
+  version = "2.0.0";
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -108,7 +108,7 @@ let
     owner = "immich-app";
     repo = "immich";
     tag = "v${version}";
-    hash = "sha256-0nStZuSnb8tJ0+Y247MHitmMURl8vTuPLAhUm+OHctE=";
+    hash = "sha256-N9/vDOZzx4BQvWQBPE6ANCJ9RhWmytw8j1BgDU6ob+g=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
