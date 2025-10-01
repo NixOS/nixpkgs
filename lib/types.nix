@@ -1424,8 +1424,8 @@ let
       );
 
       # A value from a set of allowed ones.
-      enum =
-        values:
+      enum = mkOptionType (
+        self: values:
         let
           inherit (lib.lists) unique;
           show =
@@ -1439,7 +1439,7 @@ let
             else
               ''<${builtins.typeOf v}>'';
         in
-        mkOptionType rec {
+        {
           name = "enum";
           description =
             # Length 0 or 1 enums may occur in a design pattern with type merging
@@ -1455,12 +1455,13 @@ let
           descriptionClass = if builtins.length values < 2 then "noun" else "conjunction";
           check = flip elem values;
           merge = mergeEqualOption;
-          functor = (defaultFunctor name) // {
+          functor = defaultFunctor self // {
+            type = payload: self.__uncall__ payload.values;
             payload = { inherit values; };
-            type = payload: types.enum payload.values;
             binOp = a: b: { values = unique (a.values ++ b.values); };
           };
-        };
+        }
+      );
 
       # Either value of type `t1` or `t2`.
       either =
