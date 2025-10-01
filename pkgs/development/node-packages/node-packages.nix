@@ -15666,24 +15666,6 @@ let
         sha512 = "ens7BiayssQz/uAxGzH8zGXCtiV24rRWXdjNha5V4zSOcxmAZsfGVm/PPFbwQdqEkDnhG+SyR9E3zSHUbOKXBQ==";
       };
     };
-    "dockerfile-ast-0.4.2" = {
-      name = "dockerfile-ast";
-      packageName = "dockerfile-ast";
-      version = "0.4.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/dockerfile-ast/-/dockerfile-ast-0.4.2.tgz";
-        sha512 = "k770mVWaCm3KbyOSPFizP6WB2ucZjfAv8aun4UsKl+IivowK7ItwBixNbziBjN05yNpvCL1/IxBdZiSz6KQIvA==";
-      };
-    };
-    "dockerfile-language-server-nodejs-0.9.0" = {
-      name = "dockerfile-language-server-nodejs";
-      packageName = "dockerfile-language-server-nodejs";
-      version = "0.9.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/dockerfile-language-server-nodejs/-/dockerfile-language-server-nodejs-0.9.0.tgz";
-        sha512 = "QPWcUxbbNTaWaRQrJKUBmCXI6iE8l7f81bCVaZizCIkVg4py/4o2mho+AKlLUsZcCml5ss8MkJ257SFV2BZWCg==";
-      };
-    };
     "dockerfile-language-service-0.9.0" = {
       name = "dockerfile-language-service";
       packageName = "dockerfile-language-service";
@@ -15691,15 +15673,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/dockerfile-language-service/-/dockerfile-language-service-0.9.0.tgz";
         sha512 = "sDUkTR4LUimEAWXDIbUTEx2CytCBlx+XlJkg4B2Ptvak9HkwPD4JpXesaWxXPpp6YHCzxqwsTDY7Gf79ic340g==";
-      };
-    };
-    "dockerfile-utils-0.10.0" = {
-      name = "dockerfile-utils";
-      packageName = "dockerfile-utils";
-      version = "0.10.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/dockerfile-utils/-/dockerfile-utils-0.10.0.tgz";
-        sha512 = "gnEhxITHpOXNXdlwJgJEq3xnJokm0IZOmrmHlJv8zCB2EDsgZWwdYWuktMMslIywK2YT22gxgZEoFjtEaJqzhQ==";
       };
     };
     "dockerode-4.0.4" = {
@@ -41282,15 +41255,6 @@ let
         sha512 = "tZFUSbyjUcrh+qQf13ALX4QDdOfDX0cVaBFgy7ktJ0VwS7AW/yRKgGPSxVqqP9OCMNPdqP57O5q47w2pEwfaUg==";
       };
     };
-    "vscode-languageserver-types-3.17.0-next.3" = {
-      name = "vscode-languageserver-types";
-      packageName = "vscode-languageserver-types";
-      version = "3.17.0-next.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-languageserver-types/-/vscode-languageserver-types-3.17.0-next.3.tgz";
-        sha512 = "VQcXnhKYxUW6OiRMhG++SzmZYMJwusXknJGd+FfdOnS1yHAo734OHyR0e2eEHDlv0/oWc8RZPgx/VKSKyondVg==";
-      };
-    };
     "vscode-languageserver-types-3.17.2" = {
       name = "vscode-languageserver-types";
       packageName = "vscode-languageserver-types";
@@ -48209,50 +48173,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-docker = nodeEnv.buildNodePackage {
-    name = "coc-docker";
-    packageName = "coc-docker";
-    version = "1.0.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-docker/-/coc-docker-1.0.2.tgz";
-      sha512 = "6As7Y7yhU0aI5UwI/QOuJzmAluoDMUcOcNg0yJZOMsnpjw9ezrPdNMIo+vRImXp1V/STU0j27CztwnH8vofOQQ==";
-    };
-    dependencies = [
-      sources."dockerfile-ast-0.4.2"
-      sources."dockerfile-language-server-nodejs-0.9.0"
-      (
-        sources."dockerfile-language-service-0.9.0"
-        // {
-          dependencies = [
-            sources."vscode-languageserver-types-3.17.0-next.3"
-          ];
-        }
-      )
-      sources."dockerfile-utils-0.10.0"
-      sources."tslib-2.8.1"
-      sources."vscode-jsonrpc-8.1.0"
-      sources."vscode-languageserver-8.1.0"
-      (
-        sources."vscode-languageserver-protocol-3.17.3"
-        // {
-          dependencies = [
-            sources."vscode-languageserver-types-3.17.3"
-          ];
-        }
-      )
-      sources."vscode-languageserver-textdocument-1.0.12"
-      sources."vscode-languageserver-types-3.17.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "docker extension for coc";
-      homepage = "https://github.com/josa42/coc-docker#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-emmet = nodeEnv.buildNodePackage {
     name = "coc-emmet";
     packageName = "coc-emmet";
@@ -48674,24 +48594,6 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "R language server extension for coc.nvim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-rls = nodeEnv.buildNodePackage {
-    name = "coc-rls";
-    packageName = "coc-rls";
-    version = "1.1.6";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-rls/-/coc-rls-1.1.6.tgz";
-      sha512 = "/XUM5UjOtnVBHghxBtwHz6C2lWnWgF8kX2+uocc356c2Bn8msQa6mrN0lijhlpDlsomSMPkGpZiY4zS1tNakMw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Rust language support - code completion, Intellisense, refactoring, reformatting, errors, snippets. A client for the Rust Language Server, built by the RLS team";
-      homepage = "https://github.com/neoclide/coc-rls#readme";
       license = "MIT";
     };
     production = true;
