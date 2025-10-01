@@ -1468,9 +1468,8 @@ let
       );
 
       # Either value of type `t1` or `t2`.
-      either =
-        t1: t2:
-        mkOptionType rec {
+      either = mkOptionType (
+        self: t1: t2: {
           name = "either";
           description =
             if t1.descriptionClass or null == "nonRestrictiveClause" then
@@ -1541,16 +1540,24 @@ let
               mt1 = t1.typeMerge (elemAt f'.payload.elemType 0).functor;
               mt2 = t2.typeMerge (elemAt f'.payload.elemType 1).functor;
             in
-            if (name == f'.name) && (mt1 != null) && (mt2 != null) then functor.type mt1 mt2 else null;
-          functor = elemTypeFunctor name {
-            elemType = [
-              t1
-              t2
-            ];
-          };
+            if (self.name == f'.name) && (mt1 != null) && (mt2 != null) then
+              self.functor.type mt1 mt2
+            else
+              null;
+          functor =
+            elemTypeFunctor self.name {
+              elemType = [
+                t1
+                t2
+              ];
+            }
+            // {
+              type = self.__constructor__;
+            };
           nestedTypes.left = t1;
           nestedTypes.right = t2;
-        };
+        }
+      );
 
       # Any of the types in the given list
       oneOf =
