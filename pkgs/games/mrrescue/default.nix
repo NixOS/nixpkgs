@@ -13,7 +13,7 @@
 
 let
   pname = "mrrescue";
-  version = "1.02d";
+  version = "1.02d-unstable-2018-08-18";
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/mrrescue.png";
@@ -38,8 +38,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "SimonLarsen";
     repo = "mrrescue";
-    tag = "v${version}";
-    hash = "sha256-/g4SzaI1tSJZg1wW0onQwLMMam5v8PvM45tqP2FxZCA=";
+    rev = "a5be73c60acb8d1be506f7b5e48e784492ba96ce";
+    hash = "sha256-UDfMgE7LyyXioURclA56Kx+bTrwMNDPR3evCRJ3reRM=";
   };
 
   nativeBuildInputs = [
