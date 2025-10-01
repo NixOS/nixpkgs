@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-0WzqYbK18IL8VY7NsVONwJCI5+me5SPulfkkLCifLvY=";
   };
 
+  patches = [
+    # https://github.com/SimonLarsen/duckmarines/pull/18
+    ./love-11-support.patch
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     strip-nondeterminism
