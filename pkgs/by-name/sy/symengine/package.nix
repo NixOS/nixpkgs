@@ -40,8 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" withShared)
   ];
 
-  # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+  doCheck = true;
 
   meta = {
     description = "Fast symbolic manipulation library";
