@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
     tag = finalAttrs.version;
-    hash = "sha256-554ZN+GfkGHN0cthsb/fPWdo+U2IqLz4q+x60SxRAfk=";
+    hash = "sha256-I6CYtKVvE67NSYH/JGJFP5wHhm1xACctz7uTwOFFihA=";
   };
 
   patches = [
@@ -177,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_DSDP" true)
     # "clang_compiler.cpp has basically been abandonded for several years", ref.
     # https://github.com/casadi/casadi/issues/4225#issuecomment-3352552113
-    (lib.cmakeBool "WITH_CLANG" false) 
+    (lib.cmakeBool "WITH_CLANG" false)
     (lib.cmakeBool "WITH_LAPACK" true)
     (lib.cmakeBool "WITH_QPOASES" true)
     (lib.cmakeBool "WITH_BLOCKSQP" true)
