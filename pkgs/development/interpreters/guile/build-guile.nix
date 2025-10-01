@@ -24,6 +24,7 @@ lib.extendMkDerivation {
       version ? "",
       srcHash ? "",
       maintainers ? [ ],
+      ...
     }@args:
     {
       inherit version;

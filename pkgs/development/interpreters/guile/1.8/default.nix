@@ -1,6 +1,9 @@
 {
   lib,
+  stdenv,
+  pkgsBuildBuild,
   buildGuile,
+  libtool,
 }:
 
 buildGuile {
@@ -17,6 +20,10 @@ buildGuile {
   postPatch = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
   '';
+
+  depsBuildBuild = lib.optional (
+    stdenv.hostPlatform != stdenv.buildPlatform
+  ) pkgsBuildBuild.guile_1_8;
 
   # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
   # why `--with-libunistring-prefix' and similar options coming from
