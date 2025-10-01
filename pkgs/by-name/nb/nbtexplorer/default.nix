@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jaquadro/NBTExplorer";
     license = licenses.mit;
     platforms = platforms.unix;
-    # I won't call myself a maintainer since this didn't receive updates
-    # in 8 Years but if it ever updates count me in as the maintainer
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [Peritia-System];
   };
 }
