@@ -1169,11 +1169,12 @@ let
       # A module to be imported in some other part of the configuration.
       # `staticModules`' options will be added to the documentation, unlike
       # options declared via `config`.
-      deferredModuleWith =
+      deferredModuleWith = mkOptionType (
+        self:
         attrs@{
           staticModules ? [ ],
         }:
-        mkOptionType {
+        {
           name = "deferredModule";
           description = "module";
           descriptionClass = "noun";
@@ -1191,14 +1192,13 @@ let
             ;
           substSubModules =
             m:
-            deferredModuleWith (
+            self.__uncall__ (
               attrs
               // {
                 staticModules = m;
               }
             );
-          functor = defaultFunctor "deferredModuleWith" // {
-            type = types.deferredModuleWith;
+          functor = defaultFunctor self // {
             payload = {
               inherit staticModules;
             };
@@ -1206,7 +1206,8 @@ let
               staticModules = lhs.staticModules ++ rhs.staticModules;
             };
           };
-        };
+        }
+      );
 
       # The type of a type!
       optionType = mkOptionType {
