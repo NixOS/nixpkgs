@@ -1097,9 +1097,8 @@ let
       );
 
       # Null or value of ...
-      nullOr =
-        elemType:
-        mkOptionType rec {
+      nullOr = mkOptionType (
+        self: elemType: {
           name = "nullOr";
           description = "null or ${
             optionDescriptionPhrase (class: class == "noun" || class == "conjunction") elemType
@@ -1122,12 +1121,13 @@ let
           };
           getSubOptions = elemType.getSubOptions;
           getSubModules = elemType.getSubModules;
-          substSubModules = m: nullOr (elemType.substSubModules m);
-          functor = (elemTypeFunctor name { inherit elemType; }) // {
-            type = payload: types.nullOr payload.elemType;
+          substSubModules = m: self.__uncall__ (elemType.substSubModules m);
+          functor = (elemTypeFunctor self.name { inherit elemType; }) // {
+            type = payload: self.__uncall__ payload.elemType;
           };
           nestedTypes.elemType = elemType;
-        };
+        }
+      );
 
       functionTo =
         elemType:
