@@ -473,11 +473,12 @@ let
             );
           ign =
             lowest: highest: name: docStart:
-            between lowest highest
-            // {
-              inherit name;
-              description = docStart + "; between ${betweenDesc lowest highest}";
-            };
+            (between lowest highest).extend (
+              final: prev: {
+                inherit name;
+                description = docStart + "; between ${betweenDesc lowest highest}";
+              }
+            );
           unsign =
             bit: range: ign 0 (range - 1) "unsignedInt${toString bit}" "${toString bit} bit unsigned integer";
           sign =
