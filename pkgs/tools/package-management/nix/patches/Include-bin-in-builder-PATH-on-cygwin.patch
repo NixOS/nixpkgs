@@ -1,0 +1,32 @@
+From b64bfd3db32542324cc724fc8b2a6e36bf856f47 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 1 Oct 2025 13:36:33 -0300
+Subject: [PATCH] Include /bin in builder PATH on cygwin
+
+---
+ src/libstore/unix/build/derivation-builder.cc | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/libstore/unix/build/derivation-builder.cc b/src/libstore/unix/build/derivation-builder.cc
+index f94bb40cc..d817f954d 100644
+--- a/src/libstore/unix/build/derivation-builder.cc
++++ b/src/libstore/unix/build/derivation-builder.cc
+@@ -981,7 +981,14 @@ void DerivationBuilderImpl::initEnv()
+     /* Most shells initialise PATH to some default (/bin:/usr/bin:...) when
+        PATH is not set.  We don't want this, so we fill it in with some dummy
+        value. */
+-    env["PATH"] = "/path-not-set";
++    env["PATH"] =
++#ifdef __CYGWIN__
++        // on cygwin we always need /bin in PATH, so cygwin1.dll can be found
++        "/bin"
++#else
++        "/path-not-set"
++#endif
++        ;
+ 
+     /* Set HOME to a non-existing path to prevent certain programs from using
+        /etc/passwd (or NIS, or whatever) to locate the home directory (for
+-- 
+2.51.0
+
