@@ -13461,8 +13461,6 @@ with pkgs;
 
   ### GAMES
 
-  _90secondportraits = callPackage ../games/90secondportraits { };
-
   inherit (callPackages ../games/fteqw { })
     fteqw
     fteqw-dedicated
