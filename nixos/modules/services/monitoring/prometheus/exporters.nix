@@ -88,6 +88,7 @@ let
         "lnd"
         "mail"
         "mailman3"
+        "mktxp"
         "mikrotik"
         "modemmanager"
         "mongodb"
