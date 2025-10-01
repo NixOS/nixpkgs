@@ -10,6 +10,7 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   gtk3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "prefix=$(out)"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Multiple USB File Flasher";
