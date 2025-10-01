@@ -12834,12 +12834,12 @@ final: prev: {
 
   project-nvim = buildVimPlugin {
     pname = "project.nvim";
-    version = "2025-09-26";
+    version = "2025-10-01";
     src = fetchFromGitHub {
       owner = "DrKJeff16";
       repo = "project.nvim";
-      rev = "8010402e3b10264eb832f5ebbeb853decaa97433";
-      sha256 = "0lfyv2hl453pxm3kkmb2d6gq2a7g5c5kycvhhnc1kkgznvr5872z";
+      rev = "7008545417848450c6dad83fcc6b3e58f0450990";
+      sha256 = "sha256-ZGKC/r+1/TcAqZvkzTHPtpcBC7eRfvuuMNTVeMR4qLQ=";
     };
     meta.homepage = "https://github.com/DrKJeff16/project.nvim/";
     meta.hydraPlatforms = [ ];
