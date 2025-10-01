@@ -1821,6 +1821,8 @@ let
 
         raven-nx = callPackage ../development/ocaml-modules/raven/nx.nix { };
 
+        raven-nx-datasets = callPackage ../development/ocaml-modules/raven/nx-datasets.nix { };
+
         raven-saga = callPackage ../development/ocaml-modules/raven/saga.nix { };
 
         raylib = callPackage ../development/ocaml-modules/raylib { };
