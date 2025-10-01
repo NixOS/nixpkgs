@@ -1,11 +1,14 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   fetchurl,
   love,
   lua,
   makeWrapper,
   makeDesktopItem,
+  strip-nondeterminism,
+  zip,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,24 +30,35 @@ stdenv.mkDerivation rec {
     categories = [ "Game" ];
   };
 
-  src = fetchurl {
-    url = "https://github.com/SimonLarsen/duckmarines/releases/download/v${version}/duckmarines-1.0c.love";
-    sha256 = "1rvgpkvi4h9zhc4fwb4knhsa789yjcx4a14fi4vqfdyybhvg5sh9";
+  src = fetchFromGitHub {
+    owner = "SimonLarsen";
+    repo = "duckmarines";
+    tag = "v${version}";
+    hash = "sha256-0WzqYbK18IL8VY7NsVONwJCI5+me5SPulfkkLCifLvY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    strip-nondeterminism
+    zip
+  ];
   buildInputs = [
     lua
     love
   ];
 
-  dontUnpack = true;
+  buildPhase = ''
+    runHook preBuild
+    zip -9 -r duckmarines.love ./*
+    strip-nondeterminism --type zip duckmarines.love
+    runHook postBuild
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
-    cp -v ${src} $out/share/games/lovegames/duckmarines.love
+    cp -v duckmarines.love $out/share/games/lovegames/duckmarines.love
 
     makeWrapper ${love}/bin/love $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
 
