@@ -903,13 +903,13 @@
     "vendorHash": "sha256-pez5anuq3hHXH7XMthT7y8+rjCHsMV3Vqk/DBCpbkdg="
   },
   "nomad": {
-    "hash": "sha256-0ShkpPAxCT9lmfrVUoyjx7DhwlSYz9uEIujsKSB+dgA=",
+    "hash": "sha256-+lWAVb9ffyTfnkR3qZzgggRVjizdrgQ96Tj/K4ngZWQ=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/nomad",
     "owner": "hashicorp",
     "repo": "terraform-provider-nomad",
-    "rev": "v2.5.0",
+    "rev": "v2.5.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-U8eA/9og4LIedhPSEN9SyInLQuJSzvm0AeFhzC3oqyQ="
+    "vendorHash": "sha256-CIR59EIgC5kkwfITQYrzoU8quCx5iCDRNOdYphVVk6Y="
   },
   "ns1": {
     "hash": "sha256-xIl0jUYmXe2tom8HwXLQRbdSWWyZkRtdDc0XqkQ0RcQ=",
