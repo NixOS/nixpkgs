@@ -657,10 +657,11 @@ let
         lib.warn
           "The type `types.string` is deprecated. See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types."
           (
-            separatedString ""
-            // {
-              name = "string";
-            }
+            (separatedString "").extend (
+              final: prev: {
+                name = "string";
+              }
+            )
           );
 
       passwdEntry =
