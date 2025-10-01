@@ -7,17 +7,17 @@
   flint,
   mpfr,
   libmpc,
-  withShared ? true,
+  withShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symengine";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WriVcYt3fkObR2U4J6a4KGGc2HgyyFyFpdrwxBD+AHA=";
   };
 
@@ -31,28 +31,23 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DWITH_FLINT=ON"
-    "-DINTEGER_CLASS=flint"
-    "-DWITH_SYMENGINE_THREAD_SAFE=yes"
-    "-DWITH_MPC=yes"
-    "-DBUILD_FOR_DISTRIBUTION=yes"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
-    "-DBUILD_TESTS=OFF"
-  ]
-  ++ lib.optionals withShared [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "WITH_FLINT" true)
+    (lib.cmakeFeature "INTEGER_CLASS" "flint")
+    (lib.cmakeBool "WITH_SYMENGINE_THREAD_SAFE" true)
+    (lib.cmakeBool "WITH_MPC" true)
+    (lib.cmakeBool "BUILD_FOR_DISTRIBUTION" true)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" withShared)
   ];
 
-  doCheck = true;
+  # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  meta = with lib; {
+  meta = {
     description = "Fast symbolic manipulation library";
     homepage = "https://github.com/symengine/symengine";
-    platforms = platforms.unix ++ platforms.windows;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    platforms = with lib.platforms; unix ++ windows;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ costrouc ];
   };
-
-}
+})
