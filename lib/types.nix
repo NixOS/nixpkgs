@@ -558,11 +558,12 @@ let
           between =
             lowest: highest:
             assert lib.assertMsg (lowest <= highest) "numbers.between: lowest must be smaller than highest";
-            addCheck number (x: x >= lowest && x <= highest)
-            // {
-              name = "numberBetween";
-              description = "integer or floating point number between ${betweenDesc lowest highest}";
-            };
+            (addCheck number (x: x >= lowest && x <= highest)).extend (
+              final: prev: {
+                name = "numberBetween";
+                description = "integer or floating point number between ${betweenDesc lowest highest}";
+              }
+            );
 
           nonnegative = addCheck number (x: x >= 0) // {
             name = "numberNonnegative";
