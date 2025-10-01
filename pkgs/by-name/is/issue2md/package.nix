@@ -17,11 +17,6 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
-
   meta = {
     description = "CLI tool to convert GitHub issue into Markdown file";
     homepage = "https://github.com/bigwhite/issue2md";
