@@ -607,6 +607,7 @@ mapAliases {
 
   challenger = taler-challenger; # Added 2024-09-04
   charmcraft = throw "charmcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # added 2025-09-18
+  chatgpt-retrieval-plugin = throw "chatgpt-retrieval-plugin has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   check_smartmon = nagiosPlugins.check_smartmon; # Added 2024-05-03
   check_systemd = nagiosPlugins.check_systemd; # Added 2024-05-03
   check_zfs = nagiosPlugins.check_zfs; # Added 2024-05-03
@@ -2517,6 +2518,8 @@ mapAliases {
   tfplugindocs = terraform-plugin-docs; # Added 2023-11-01
   thiefmd = throw "'thiefmd' has been removed due to lack of maintenance upstream and incompatible with newer Pandoc. Please use 'apostrophe' or 'folio' instead"; # Added 2025-02-20
   thefuck = throw "'thefuck' has been removed due to lack of maintenance upstream and incompatible with python 3.12+. Consider using 'pay-respects' instead"; # Added 2025-05-30
+  thunderbird-128 = throw "Thunderbird 128 support ended in August 2025";
+  thunderbird-128-unwrapped = throw "Thunderbird 128 support ended in August 2025";
   invalidateFetcherByDrvHash = testers.invalidateFetcherByDrvHash; # Added 2022-05-05
   ticpp = throw "'ticpp' has been removed due to being unmaintained"; # Added 2025-09-10
   tijolo = throw "'tijolo' has been removed due to being unmaintained"; # Added 2024-12-27

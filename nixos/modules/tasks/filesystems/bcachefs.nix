@@ -242,7 +242,7 @@ in
           }
         ];
 
-        warnings = lib.mkIf config.boot.kernelPackages.bcachefs.meta.broken [
+        warnings = lib.mkIf cfg.modulePackage.meta.broken [
           ''
             Using unmaintained in-tree bcachefs kernel module. This
             will be removed in 26.05. Please use a kernel supported

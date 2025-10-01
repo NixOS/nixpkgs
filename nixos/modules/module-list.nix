@@ -1552,7 +1552,6 @@
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/castopod.nix
   ./services/web-apps/changedetection-io.nix
-  ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/chhoto-url.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
