@@ -115,6 +115,10 @@ in
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
+      "chatgpt-retrieval-plugin"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
       "chronos"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
