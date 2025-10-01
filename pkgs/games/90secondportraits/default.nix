@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch2,
   love,
   makeWrapper,
   makeDesktopItem,
@@ -43,6 +44,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-xxgB8Aw7QTK9lPus7Q4E7iP2/rRfCwwiYbk5NqzujHI=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Love 11 support
+      url = "https://github.com/SimonLarsen/90-Second-Portraits/commit/0ae7ba046f14cef9857fd6c05d9072455097441f.patch?full_index=true";
+      hash = "sha256-/C4gqzwHQqZCuTA/m6WX8mvTxmLxOcHRItVLA3bty3Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
