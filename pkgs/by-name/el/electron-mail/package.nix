@@ -34,7 +34,7 @@ appimageTools.wrapType2 {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Unofficial Election-based ProtonMail desktop client";
+    description = "Unofficial Electron-based ProtonMail desktop client";
     mainProgram = "electron-mail";
     homepage = "https://github.com/vladimiry/ElectronMail";
     license = lib.licenses.gpl3;
