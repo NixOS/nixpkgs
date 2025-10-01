@@ -59,6 +59,12 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--reruns=3" ];
 
+  disabledTests = [
+    # broken by https://github.com/zigpy/zigpy/pull/1635
+    "test_concurrency_auto_config"
+    "test_request_concurrency"
+  ];
+
   pythonImportsCheck = [ "zigpy_znp" ];
 
   meta = with lib; {
