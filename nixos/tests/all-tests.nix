@@ -659,6 +659,7 @@ in
   go-csp-collector = runTest ./go-csp-collector.nix;
   go-httpbin = runTest ./go-httpbin.nix;
   go-neb = runTest ./go-neb.nix;
+  go-webring = runTest ./go-webring.nix;
   goatcounter = runTest ./goatcounter.nix;
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;
