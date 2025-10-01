@@ -3,9 +3,8 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  pkgsBuildBuild,
   boehmgc,
-  buildPackages,
-  coverageAnalysis ? null,
   gawk,
   gmp,
   libffi,
@@ -13,22 +12,45 @@
   libunistring,
   makeWrapper,
   pkg-config,
-  pkgsBuildBuild,
   readline,
+
+  coverageAnalysis ? null,
 }:
 
 let
   # Do either a coverage analysis build or a standard build.
   builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
 in
-builder rec {
+builder (finalAttrs: {
   pname = "guile";
   version = "2.0.13";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "12yqkr974y91ylgw6jnmci2v90i90s7h9vxa4zk0sai8vjnz4i1p";
+    url = "mirror://gnu/guile/guile-${finalAttrs.version}.tar.xz";
+    hash = "sha256-N0TyrdwoKg3mJ6rvBI8GKYK0RWTVSsMf9SF5clKe2Is=";
   };
+
+  patches = [
+    # Small fixes to Clang compiler
+    ./clang.patch
+    # Self-explanatory
+    ./disable-gc-sensitive-tests.patch
+    # Read the header of the patch to more info
+    ./eai_system.patch
+    # RISC-V endianness
+    ./riscv.patch
+    # Fixes stability issues with 00-repl-server.test
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
+      hash = "sha256-+xwK/3BYdqV7tmS1/eYgBdPxZjG19PMHwNHGwCsNzFw=";
+    })
+    ./filter-mkostemp-darwin.patch
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
+      hash = "sha256-BwgdtWvRgJEAnzqK2fCQgRHU0va50VR6SQfJpGzjm4s=";
+    })
+  ]
+  ++ (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   outputs = [
     "out"
@@ -37,8 +59,9 @@ builder rec {
   ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
+  strictDeps = true;
   depsBuildBuild = [
-    buildPackages.stdenv.cc
+    pkgsBuildBuild.stdenv.cc
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_2_0;
 
@@ -66,40 +89,24 @@ builder rec {
 
   enableParallelBuilding = true;
 
-  patches = [
-    # Small fixes to Clang compiler
-    ./clang.patch
-    # Self-explanatory
-    ./disable-gc-sensitive-tests.patch
-    # Read the header of the patch to more info
-    ./eai_system.patch
-    # RISC-V endianness
-    ./riscv.patch
-    # Fixes stability issues with 00-repl-server.test
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
-      sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
-    })
-  ]
-  ++ (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./filter-mkostemp-darwin.patch
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
-      sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
-    })
-  ];
-
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
   # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl
-  ) "-lgcc_s";
+  env = {
+    LDFLAGS = lib.optionalString (
+      !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl
+    ) "-lgcc_s";
+  }
+  // (lib.optionalAttrs (!stdenv.hostPlatform.isLinux) {
+    # Work around <https://bugs.gnu.org/14201>.
+    SHELL = stdenv.shell;
+    CONFIG_SHELL = stdenv.shell;
+  });
 
   configureFlags = [
     "--with-libreadline-prefix"
+    "AWK=${lib.getExe gawk}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isSunOS [
     # Make sure the right <gmp.h> is found, and not the incompatible
@@ -117,34 +124,29 @@ builder rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-  ''
-  # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
-  # why `--with-libunistring-prefix' and similar options coming from
-  # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-  + ''
+    substituteInPlace "$out/lib/pkgconfig/guile"-*.pc \
+      --replace-fail "-lunistring" "-L${libunistring}/lib -lunistring" \
+      --replace-fail "-lltdl" "-L${libtool.lib}/lib -lltdl" \
+      --replace-fail "includedir=$out" "includedir=$dev"
+
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
-        -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
-            s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
-            s|includedir=$out|includedir=$dev|g
-            "
+        -e "s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;"
   '';
 
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.doCheck;
 
   setupHook = ./setup-hook-2.0.sh;
 
-  passthru = rec {
-    effectiveVersion = lib.versions.majorMinor version;
-    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
-    siteDir = "share/guile/site/${effectiveVersion}";
+  passthru = {
+    effectiveVersion = lib.versions.majorMinor finalAttrs.version;
+    siteCcacheDir = "lib/guile/${finalAttrs.effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${finalAttrs.effectiveVersion}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
@@ -156,16 +158,8 @@ builder rec {
       linking, a foreign function call interface, and powerful string
       processing.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ ludo ];
+    platforms = lib.platforms.all;
   };
-}
-
-//
-
-  (lib.optionalAttrs (!stdenv.hostPlatform.isLinux) {
-    # Work around <https://bugs.gnu.org/14201>.
-    SHELL = stdenv.shell;
-    CONFIG_SHELL = stdenv.shell;
-  })
+})
