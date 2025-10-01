@@ -24,9 +24,16 @@ let
 
   inherit (hostPkgs.stdenv) hostPlatform;
 
-  guestSystem =
+  guestPlatform =
     if hostPlatform.isLinux then
-      hostPlatform.system
+      hostPlatform
+      // lib.optionalAttrs (hostPlatform.isPower64) {
+        # QEMU PowerNV emuation has a 128MiB size limit on loadable kernel, but we default to an uncompressed one (>300MiB).
+        # Build a compressed one for VM testing.
+        linux-kernel = hostPlatform.linux-kernel // {
+          target = "zImage";
+        };
+      }
     else
       let
         hostToGuest = {
@@ -38,7 +45,9 @@ let
 
         message = "NixOS Test: don't know which VM guest system to pair with VM host system: ${hostPlatform.system}. Perhaps you intended to run the tests on a Linux host, or one of the following systems that may run NixOS tests: ${supportedHosts}";
       in
-      hostToGuest.${hostPlatform.system} or (throw message);
+      {
+        system = hostToGuest.${hostPlatform.system} or (throw message);
+      };
 
   baseOS = import ../eval-config.nix {
     inherit lib;
@@ -64,8 +73,7 @@ let
           key = "nodes.nix-pkgs";
           config = optionalAttrs (!config.node.pkgsReadOnly) (
             mkIf (!options.nixpkgs.pkgs.isDefined) {
-              # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
-              nixpkgs.system = guestSystem;
+              nixpkgs.hostPlatform = guestPlatform;
             }
           );
         }
