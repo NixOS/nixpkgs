@@ -14040,6 +14040,12 @@
     githubId = 15742918;
     name = "Sergey Kuznetsov";
   };
+  kuzushicat = {
+    email = "kuzushicat-nixpkgs.postwar333@passmail.net";
+    github = "kuzushicat";
+    githubId = 235389611;
+    name = "KuzushiCat";
+  };
   kvendingoldo = {
     email = "kvendingoldo@gmail.com";
     github = "kvendingoldo";
