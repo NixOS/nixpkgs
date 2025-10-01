@@ -1816,11 +1816,21 @@ let
 
         raven-hugin = callPackage ../development/ocaml-modules/raven/hugin.nix { };
 
+        raven-kaun = callPackage ../development/ocaml-modules/raven/kaun.nix { };
+
         raven-nx = callPackage ../development/ocaml-modules/raven/nx.nix { };
 
         raven-nx-datasets = callPackage ../development/ocaml-modules/raven/nx-datasets.nix { };
 
+        raven-quill = callPackage ../development/ocaml-modules/raven/quill.nix { };
+
+        raven-rune = callPackage ../development/ocaml-modules/raven/rune.nix { };
+
         raven-saga = callPackage ../development/ocaml-modules/raven/saga.nix { };
+
+        raven-sowilo = callPackage ../development/ocaml-modules/raven/sowilo.nix { };
+
+        raven-talon = callPackage ../development/ocaml-modules/raven/talon.nix { };
 
         raylib = callPackage ../development/ocaml-modules/raylib { };
 
