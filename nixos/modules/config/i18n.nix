@@ -173,7 +173,7 @@ in
     }
     // config.i18n.extraLocaleSettings;
 
-    systemd.globalEnvironment = lib.mkIf (config.i18n.supportedLocales != [ ]) {
+    systemd.defaultEnvironment = lib.mkIf (config.i18n.supportedLocales != [ ]) {
       LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
     };
 

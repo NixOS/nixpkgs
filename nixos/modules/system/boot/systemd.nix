@@ -376,7 +376,7 @@ in
       '';
     };
 
-    globalEnvironment = mkOption {
+    defaultEnvironment = mkOption {
       type =
         with types;
         attrsOf (
@@ -703,7 +703,7 @@ in
     };
     systemd.settings.Manager = {
       DefaultEnvironment = lib.concatStringsSep " " (
-        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.globalEnvironment
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.defaultEnvironment
       );
       ManagerEnvironment = lib.concatStringsSep " " (
         lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
@@ -837,6 +837,7 @@ in
       [ "systemd" "watchdog" "kexecTime" ]
       [ "systemd" "settings" "Manager" "KExecWatchdogSec" ]
     )
+    (lib.mkRenamedOptionModule [ "systemd" "globalEnvironment" ] [ "systemd" "defaultEnvironment" ])
     (mkRemovedOptionModule [
       "systemd"
       "enableCgroupAccounting"

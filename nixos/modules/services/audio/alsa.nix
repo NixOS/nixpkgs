@@ -393,7 +393,7 @@ in
 
       # Set default PCM devices
       environment.sessionVariables = defaultDeviceVars;
-      systemd.globalEnvironment = defaultDeviceVars;
+      systemd.defaultEnvironment = defaultDeviceVars;
 
       environment.etc."asound.conf".text = cfg.config;
 
