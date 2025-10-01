@@ -381,7 +381,7 @@ let
         merge = mergeOneOption;
       };
 
-      anything = mkOptionType {
+      anything = mkOptionType (self: {
         name = "anything";
         description = "anything";
         descriptionClass = "noun";
@@ -405,12 +405,12 @@ let
             mergeFunction =
               {
                 # Recursively merge attribute sets
-                set = (attrsOf anything).merge;
+                set = (attrsOf self).merge;
                 # This is the type of packages, only accept a single definition
                 stringCoercibleSet = mergeOneOption;
                 lambda =
                   loc: defs: arg:
-                  anything.merge (loc ++ [ "<function body>" ]) (
+                  self.merge (loc ++ [ "<function body>" ]) (
                     map (def: {
                       file = def.file;
                       value = def.value arg;
@@ -421,7 +421,7 @@ let
               .${commonType} or mergeEqualOption;
           in
           mergeFunction loc defs;
-      };
+      });
 
       unspecified = mkOptionType {
         name = "unspecified";
