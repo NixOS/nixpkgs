@@ -510,16 +510,18 @@ let
           */
           inherit between;
 
-          unsigned = addCheck types.int (x: x >= 0) // {
-            name = "unsignedInt";
-            description = "unsigned integer, meaning >=0";
-            descriptionClass = "nonRestrictiveClause";
-          };
           positive = addCheck types.int (x: x > 0) // {
             name = "positiveInt";
             description = "positive integer, meaning >0";
             descriptionClass = "nonRestrictiveClause";
           };
+          unsigned = (addCheck types.int (x: x >= 0)).extend (
+            final: prev: {
+              name = "unsignedInt";
+              description = "unsigned integer, meaning >=0";
+              descriptionClass = "nonRestrictiveClause";
+            }
+          );
           u8 = unsign 8 256;
           u16 = unsign 16 65536;
           # the biggest int Nix accepts is 2^63 - 1 (9223372036854775808)
