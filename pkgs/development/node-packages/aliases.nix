@@ -81,6 +81,7 @@ mapAliases {
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
   coc-python = throw "coc-python was removed because it was abandoned upstream on 2020-12-24. Upstream now recommends using coc-pyright or coc-jedi instead."; # added 2024-10-15
   coc-rls = throw "coc-rls was removed because rls was deprecated in 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
+  inherit (pkgs) coc-sh; # added 2025-10-02
   inherit (pkgs) coc-spell-checker; # added 2025-10-01
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18

@@ -24,7 +24,6 @@ let
     "coc-prettier"
     "coc-r-lsp"
     "coc-rust-analyzer"
-    "coc-sh"
     "coc-smartf"
     "coc-snippets"
     "coc-solargraph"

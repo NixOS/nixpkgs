@@ -8,6 +8,7 @@
   coc-explorer,
   coc-git,
   coc-pyright,
+  coc-sh,
   coc-spell-checker,
   coc-toml,
 }:
@@ -51,6 +52,12 @@ final: prev: {
     pname = "coc-pyright";
     inherit (coc-pyright) version meta;
     src = "${coc-pyright}/lib/node_modules/coc-pyright";
+  };
+
+  coc-sh = buildVimPlugin {
+    pname = "coc-sh";
+    inherit (coc-sh) version meta;
+    src = "${coc-sh}/lib/node_modules/coc-sh";
   };
 
   coc-spell-checker = buildVimPlugin {
