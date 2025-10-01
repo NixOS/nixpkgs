@@ -12,6 +12,7 @@
   mpi,
   withPtScotch ? false,
   testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,15 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     mpi
   ];
 
-  passthru = {
-    tests = {
-      cmake-config = testers.hasCmakeConfigModules {
-        moduleNames = [ "SCOTCH" ];
-        package = finalAttrs.finalPackage;
-      };
-    };
-  };
-
   # SCOTCH provide compatibility with Metis/Parmetis interface.
   # We install the metis compatible headers to subdirectory to
   # avoid conflict with metis/parmetis.
@@ -74,6 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $dev/include/scotch
     mv $dev/include/{*metis,metisf}.h $dev/include/scotch
   '';
+
+  passthru = {
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "SCOTCH" ];
+        package = finalAttrs.finalPackage;
+      };
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
