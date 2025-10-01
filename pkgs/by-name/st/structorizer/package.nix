@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-32";
+  version = "3.32-33";
 
   src = fetchFromGitHub {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-ZA+DGys4vR8W+nX8JyWiD1GPOLjYAKaqJTel8wWooHA=";
+    hash = "sha256-7cvh1h4IFYD/5UMs6g76LmjJoDpkLLdvX2ED5oLtD5o=";
   };
 
   patches = [
