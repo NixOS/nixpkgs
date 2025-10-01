@@ -873,69 +873,73 @@ let
                 inherit elemType lazy placeholder;
               };
         in
-        {
-          elemType,
-          lazy ? false,
-          placeholder ? "name",
-        }:
-        mkOptionType rec {
-          name = if lazy then "lazyAttrsOf" else "attrsOf";
-          description =
-            (if lazy then "lazy attribute set" else "attribute set")
-            + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
-          descriptionClass = "composite";
-          check = isAttrs;
-          merge = {
-            __functor =
-              self: loc: defs:
-              (self.v2 { inherit loc defs; }).value;
-            v2 =
-              { loc, defs }:
-              let
-                evals =
-                  if lazy then
-                    zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
-                  else
-                    # Filtering makes the merge function more strict
-                    # Meaning it is less lazy
-                    filterAttrs (n: v: v.optionalValue ? value) (
+        mkOptionType (
+          self:
+          {
+            elemType,
+            lazy ? false,
+            placeholder ? "name",
+          }:
+          {
+            name = if lazy then "lazyAttrsOf" else "attrsOf";
+            description =
+              (if lazy then "lazy attribute set" else "attribute set")
+              + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
+            descriptionClass = "composite";
+            check = isAttrs;
+            merge = {
+              __functor =
+                self: loc: defs:
+                (self.v2 { inherit loc defs; }).value;
+              v2 =
+                { loc, defs }:
+                let
+                  evals =
+                    if lazy then
                       zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
-                    );
-              in
-              {
-                headError = checkDefsForError check loc defs;
-                value = mapAttrs (
-                  n: v:
-                  if lazy then
-                    v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
-                  else
-                    v.optionalValue.value
-                ) evals;
-                valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
-              };
-          };
+                    else
+                      # Filtering makes the merge function more strict
+                      # Meaning it is less lazy
+                      filterAttrs (n: v: v.optionalValue ? value) (
+                        zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                      );
+                in
+                {
+                  headError = checkDefsForError self.check loc defs;
+                  value = mapAttrs (
+                    n: v:
+                    if lazy then
+                      v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+                    else
+                      v.optionalValue.value
+                  ) evals;
+                  valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
+                };
+            };
 
-          emptyValue = {
-            value = { };
-          };
-          getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<${placeholder}>" ]);
-          getSubModules = elemType.getSubModules;
-          substSubModules =
-            m:
-            attrsWith {
-              elemType = elemType.substSubModules m;
-              inherit lazy placeholder;
+            emptyValue = {
+              value = { };
             };
-          functor =
-            (elemTypeFunctor "attrsWith" {
-              inherit elemType lazy placeholder;
-            })
-            // {
-              # Custom type merging required because of the "placeholder" attribute
-              inherit binOp;
-            };
-          nestedTypes.elemType = elemType;
-        };
+            getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<${placeholder}>" ]);
+            getSubModules = elemType.getSubModules;
+            substSubModules =
+              m:
+              self.__constructor__ {
+                elemType = elemType.substSubModules m;
+                inherit lazy placeholder;
+              };
+            functor =
+              (elemTypeFunctor "attrsWith" {
+                inherit elemType lazy placeholder;
+              })
+              // {
+                # Custom type merging required because of the "placeholder" attribute
+                inherit binOp;
+                type = self.__constructor__;
+              };
+            nestedTypes.elemType = elemType;
+          }
+        );
 
       # TODO: deprecate this in the future:
       loaOf =
