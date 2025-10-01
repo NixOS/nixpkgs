@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     tag = "v${version}";
-    hash = "sha256-unJpJjoS0C9TKsvk9/fQO8jiIOGbgfJopeXR5FcIq/g=";
+    hash = "sha256-HUeKd0XTZFGDNDQpBb1wx4vndsj9TVOw0wDIm/MOYNE=";
   };
 
   postPatch = ''
