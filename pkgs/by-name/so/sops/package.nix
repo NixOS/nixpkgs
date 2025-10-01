@@ -12,16 +12,16 @@
 
 buildGoModule (final: {
   pname = "sops";
-  version = "3.10.2";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = final.pname;
     tag = "v${final.version}";
-    hash = "sha256-IdQnxVBMAQpSAYB2S3D3lSULelFMBpjiBGOxeTgC10I=";
+    hash = "sha256-AAnrZvNkBgliHdk1lAoFrJdISNWteFdBUorRycKsptU=";
   };
 
-  vendorHash = "sha256-7aHUIERVSxv3YGAMteGbqkAZQXXDVziV0rhUhjwch3U=";
+  vendorHash = "sha256-9bB3MbE03KEaxUp0VvCnNVKUY4zSUoam8h2cDlAz7RY=";
 
   subPackages = [ "cmd/sops" ];
 

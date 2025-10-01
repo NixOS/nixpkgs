@@ -42,7 +42,7 @@ in
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
   version = "4.5.0b1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
@@ -55,11 +55,10 @@ py.pkgs.buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail py-radix py-radix-sr
   '';
+
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   nativeCheckInputs = [
     git
@@ -69,14 +68,14 @@ py.pkgs.buildPythonPackage rec {
     postgresqlTestHook
   ]
   ++ (with py.pkgs; [
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-freezegun
     pytestCheckHook
     smtpdfix
     httpx
   ]);
 
-  propagatedBuildInputs =
+  dependencies =
     with py.pkgs;
     [
       python-gnupg
@@ -142,10 +141,15 @@ py.pkgs.buildPythonPackage rec {
     kill $REDIS_PID
   '';
 
-  # skip tests that require internet access
   disabledTests = [
+    # Skip tests that require internet access
     "test_020_dash_o_noop"
     "test_050_non_json_response"
+  ];
+
+  disabledTestPaths = [
+    # Doesn't work with later pytest releases
+    "irrd/server/whois/tests/test_query_response.py"
   ];
 
   meta = {

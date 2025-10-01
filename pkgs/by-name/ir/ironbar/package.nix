@@ -22,7 +22,10 @@
   luajit,
   luajitPackages,
   libpulseaudio,
+  libinput,
+  libevdev,
   features ? [ ],
+  systemd,
 }:
 
 let
@@ -30,16 +33,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-UtBO1XaghmzKv9qfhfoLi4ke+mf+Mtgh4f4UpCeEVDg=";
+    hash = "sha256-8Ol/EvG7BPNyrJ3SdwSYtJcTLCr4TRmsMczKXD6Wuws=";
   };
 
-  cargoHash = "sha256-l+Y/ntuqaasDL0cEHSwscFxAs1jC0bm9oTU0J/K60AY=";
+  cargoHash = "sha256-nBoe4Xq1MAKNUyf61WSA2r83nNJeZiBXL0PJRc+XXpc=";
 
   buildInputs = [
     gtk3
@@ -52,11 +55,16 @@ rustPlatform.buildRustPackage rec {
     hicolor-icon-theme
     gsettings-desktop-schemas
     libxkbcommon
+    systemd
   ]
   ++ lib.optionals (hasFeature "http") [ openssl ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
   ++ lib.optionals (hasFeature "cairo") [ luajit ]
-  ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ];
+  ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ]
+  ++ lib.optionals (hasFeature "keyboard") [
+    libinput
+    libevdev
+  ];
 
   nativeBuildInputs = [
     pkg-config

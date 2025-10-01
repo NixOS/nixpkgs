@@ -337,7 +337,6 @@
   ./programs/vivid.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
-  ./programs/wayland/cardboard.nix
   ./programs/wayland/dwl.nix
   ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
@@ -541,6 +540,7 @@
   ./services/databases/tigerbeetle.nix
   ./services/databases/victorialogs.nix
   ./services/databases/victoriametrics.nix
+  ./services/databases/victoriatraces.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/ayatana-indicators.nix
   ./services/desktops/bamf.nix
@@ -568,6 +568,7 @@
   ./services/desktops/gnome/sushi.nix
   ./services/desktops/gnome/tinysparql.nix
   ./services/desktops/gvfs.nix
+  ./services/desktops/linyaps.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix
   ./services/desktops/pipewire/pipewire.nix
@@ -630,7 +631,6 @@
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/amdgpu.nix
-  ./services/hardware/amdvlk.nix
   ./services/hardware/argonone.nix
   ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
@@ -1235,7 +1235,6 @@
   ./services/networking/mmsd.nix
   ./services/networking/modemmanager.nix
   ./services/networking/monero.nix
-  ./services/networking/morty.nix
   ./services/networking/mosquitto.nix
   ./services/networking/mozillavpn.nix
   ./services/networking/mptcpd.nix
@@ -1292,6 +1291,7 @@
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
+  ./services/networking/pangolin.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
@@ -1499,6 +1499,7 @@
   ./services/system/localtimed.nix
   ./services/system/nix-daemon.nix
   ./services/system/nscd.nix
+  ./services/system/nvme-rs.nix
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
   ./services/system/swapspace.nix
@@ -1550,7 +1551,6 @@
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/castopod.nix
   ./services/web-apps/changedetection-io.nix
-  ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/chhoto-url.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
@@ -1801,6 +1801,7 @@
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
   ./system/activation/bootspec.nix
+  ./system/activation/nixos-init.nix
   ./system/activation/pre-switch-check.nix
   ./system/activation/specialisation.nix
   ./system/activation/switchable-system.nix

@@ -34,6 +34,11 @@ in
       "fontconfig"
       "penultimate"
     ] "The corresponding package has removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "hardware"
+      "amdgpu"
+      "amdvlk"
+    ] "'amdvlk' has been removed. The replacement driver RADV, part of Mesa, is enabled by default.")
     (mkRemovedOptionModule [ "hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of
       brightnessctl don't require the udev rules anymore (they can use the
@@ -57,6 +62,10 @@ in
     (mkRemovedOptionModule [
       "networking"
       "wicd"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "cardboard"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
@@ -109,6 +118,10 @@ in
       "cgmanager"
       "enable"
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "chatgpt-retrieval-plugin"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
       "chronos"
@@ -211,6 +224,9 @@ in
       "services"
       "moinmoin"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "morty" ]
+      "services.morty has been removed from NixOS. As the morty package was unmaintained and removed and searxng, its main consumer, dropped support for it."
+    )
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.13.0-unstable-2025-09-16";
+  version = "0.13.0-unstable-2025-09-26";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "8db5d254e077e10583cfaff0d9e70e08263383e5";
-    sha256 = "sha256-5lPPWuQVqtFVGmBvZX5rUwnOw9V1SCKfyLDxZ416tMM=";
+    rev = "af17c8c238ba8cdeaaabb87b25a3ca2375b47c11";
+    sha256 = "sha256-n3t58gsPXxlf2DnrofI28/0ZRC4EwnZvoFKxgxZ9vYA=";
   };
 
   sourceRoot = "${src.name}/klippy";

@@ -303,6 +303,19 @@ let
               })
             ];
           }
+          {
+            cases = [
+              (isEq "9.0")
+              (isEq "3.16")
+            ];
+            out = [
+              # Support for Coq 9.0.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/a962ef9da0fb4ef2a4314ccedd111eb248e42cf2.patch";
+                hash = "sha256-ipYqcfcgz3cKyI1NGSgfOgiVdV1WUwlv6DVB1S1hJvw=";
+              })
+            ];
+          }
         ]
         [ ];
   });

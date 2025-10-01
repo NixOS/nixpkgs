@@ -12,10 +12,11 @@
   appstream-glib,
   blueprint-compiler,
   libadwaita,
+  libportal,
   nix-update-script,
 }:
 let
-  version = "1.0.1";
+  version = "1.0.8";
 in
 python3Packages.buildPythonApplication {
   pname = "rewaita";
@@ -26,16 +27,12 @@ python3Packages.buildPythonApplication {
     owner = "SwordPuffin";
     repo = "Rewaita";
     tag = "v${version}";
-    hash = "sha256-adSXq+DFw3IQxNuUkP1FcKlIh9h4Zb0tJKswYs3S92E=";
+    hash = "sha256-T1MrSg3DO6U/ztX4LYB1Uhpne+7xAfr8+INV5CyS0eE=";
   };
 
-  # Prevent the app from copying the RO flag of files from /nix/store
   postPatch = ''
-    substituteInPlace src/interface_to_shell_theme.py \
-      --replace-fail 'shutil.copy2' 'shutil.copyfile'
-
     substituteInPlace src/window.py \
-      --replace-fail 'shutil.copy' 'shutil.copyfile'
+      --replace-fail 'shutil.copy(' 'shutil.copyfile('
   '';
 
   strictDeps = true;
@@ -59,6 +56,7 @@ python3Packages.buildPythonApplication {
   buildInputs = [
     libadwaita
     gtk4
+    libportal
   ];
 
   dontWrapGApps = true;
@@ -73,6 +71,9 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Plus;
     mainProgram = "rewaita";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = with lib.maintainers; [
+      awwpotato
+      getchoo
+    ];
   };
 }

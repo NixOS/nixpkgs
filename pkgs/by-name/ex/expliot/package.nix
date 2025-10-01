@@ -3,62 +3,50 @@
   fetchFromGitLab,
   python3,
 }:
-let
-  py = python3.override {
-    self = py;
-    packageOverrides = self: super: {
-
-      cmd2 = super.cmd2.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-cBqMmXXEq8ReXROQarFJ+Vn4EoaRBjRzI6P4msDoKmI=";
-        };
-        doCheck = false;
-      });
-    };
-  };
-in
-with py.pkgs;
-
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "expliot";
-  version = "0.9.8";
-  format = "setuptools";
+  version = "0.11.1";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = "expliot";
-    rev = version;
-    hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
+    tag = version;
+    hash = "sha256-aFJVT5vE9YKirZEINKFzYWDffoVgluoUyvMmOifLq1M=";
   };
 
+  build-system = [
+    poetry-core
+  ];
+
   pythonRelaxDeps = [
-    "pymodbus"
-    "pynetdicom"
     "cryptography"
-    "python-can"
-    "pyparsing"
+    "paho-mqtt"
+    "pynetdicom"
+    "setuptools"
+    "xmltodict"
     "zeroconf"
   ];
 
-  nativeBuildInputs = [
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiocoap
     awsiotpythonsdk
     bluepy
-    python-can
     cmd2
     cryptography
+    distro
+    jsonschema
     paho-mqtt
     pyi2cflash
     pymodbus
     pynetdicom
     pyparsing
-    pyserial
     pyspiflash
+    python-can
+    python-magic
+    pyudev
+    setuptools
     upnpy
     xmltodict
     zeroconf
@@ -67,13 +55,10 @@ buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "expliot"
-  ];
+  pythonImportsCheck = [ "expliot" ];
 
-  meta = with lib; {
+  meta = {
     description = "IoT security testing and exploitation framework";
-    mainProgram = "expliot";
     longDescription = ''
       EXPLIoT is a Framework for security testing and exploiting IoT
       products and IoT infrastructure. It provides a set of plugins
@@ -83,7 +68,8 @@ buildPythonApplication rec {
       purpose of the framework i.e. IoT exploitation.
     '';
     homepage = "https://expliot.readthedocs.io/";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "expliot";
   };
 }

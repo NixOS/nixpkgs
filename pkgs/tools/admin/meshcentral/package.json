@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "1.1.50",
+  "version": "1.1.51",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -73,7 +73,7 @@
     "jwt-simple": "*",
     "openid-client": "5.7.1",
     "passport-saml": "*",
-    "@duosecurity/duo_universal": "*",
+    "@duosecurity/duo_universal": "2.1.0",
     "archiver": "7.0.1",
     "body-parser": "1.20.3",
     "cbor": "5.2.0",

@@ -39,7 +39,7 @@ let
       pname = "thunderbird";
       inherit version updateScript applicationName;
       application = "comm/mail";
-      binaryName = pname;
+      binaryName = "thunderbird";
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
@@ -101,8 +101,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "143.0";
-    sha512 = "128fb1ed35561cceb847b09c881968b474c9fc2cf7bf027f20c2d5b03366116e058b471f98cad4606a720f65d99c60ed3b4301b9e57b5971001adb3e00a51cc5";
+    version = "143.0.1";
+    sha512 = "5f4fd5e4f5bc9fee9852d51b8e675f7c9c605660332c24aa0c90e5437301b468153c1788720bc80a53cfc1c3bf95a4bdb622a0533b8f11fb9853b290485c47c6";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -124,21 +124,9 @@ rec {
       versionSuffix = "esr";
     };
   };
-
-  thunderbird-128 = common {
-    applicationName = "Thunderbird ESR";
-
-    version = "128.14.0esr";
-    sha512 = "3ce2debe024ad8dafc319f86beff22feb9edecfabfad82513269e037a51210dfd84810fe35adcf76479273b8b2ceb8d4ecd2d0c6a3c5f6600b6b3df192bb798b";
-
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbirdPackages.thunderbird-128";
-      versionPrefix = "128";
-      versionSuffix = "esr";
-    };
-  };
 }
 // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
   thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
+  thunderbird-128 = throw "Thunderbird 128 support ended in August 2025";
 }

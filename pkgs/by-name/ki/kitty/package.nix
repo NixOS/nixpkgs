@@ -45,26 +45,27 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
+  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.42.2";
+  version = "0.43.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-YDfKYzj5LRx1XaKUpBKo97CMW4jPhVQq0aXx/Qfcdzo=";
+    hash = "sha256-wPLXuZWhaA51J7jGHffh/xnXzWDKCXV2G3Uvrg7G8Kg=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-q5LMyogAqgUFfln7LVkhuXzYSMuYmOif5sj15KkOjB4=";
+      vendorHash = "sha256-bjtzvEQmpsrwD0BArw9N6/HqMB3T5xeqxpx89FV7p2A=";
     }).goModules;
 
   buildInputs = [
@@ -142,6 +143,12 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
+    # Fix test failure with fish >= 4.1
+    # See: https://github.com/kovidgoyal/kitty/commit/2f991691f9dca291c52bd619c800d3c2f3eb0d66
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/2f991691f9dca291c52bd619c800d3c2f3eb0d66.patch";
+      hash = "sha256-LIQz3e2qgiwpsMd5EbEcvd7ePEEPJvIH4NmNpxydQiU=";
+    })
   ];
 
   hardeningDisable = [

@@ -17,20 +17,22 @@
   aixlog,
   popl,
   pulseaudioSupport ? false,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
+  pipewire,
   nixosTests,
   openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.32.3";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
     rev = "v${version}";
-    hash = "sha256-pGON2Nh7GgcGvMUNI3nWstm5Q9R+VW9eEi4IE6KkFBo=";
+    hash = "sha256-YJwRY9OLoRiRRJVFnXw9AEsDo2W8elpH4LIUScKjpT0=";
   };
 
   nativeBuildInputs = [
@@ -54,9 +56,15 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional pipewireSupport pipewire
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport)
+    (lib.cmakeBool "BUILD_WITH_PIPEWIRE" pipewireSupport)
+  ];
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

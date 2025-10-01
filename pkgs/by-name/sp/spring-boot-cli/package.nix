@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spring-boot-cli";
-  version = "3.5.4";
+  version = "3.5.6";
 
   src = fetchzip {
     url = "mirror://maven/org/springframework/boot/spring-boot-cli/${finalAttrs.version}/spring-boot-cli-${finalAttrs.version}-bin.zip";
-    hash = "sha256-8/jp1TTLROs4f+tdBDF0NBP851lXqyxB4sDozi+YExs=";
+    hash = "sha256-ujG9miirmOfWKB5o4ju0jtYoWu9k0bYRYohFnEpOVRA=";
   };
 
   nativeBuildInputs = [

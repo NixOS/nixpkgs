@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2025_08_05.309eefd";
+  version = "2025_09_11.6cbcccc";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2SLxEK/J2C0EGrb06KD1Vu4d9u2nWht8RKMy8ArXdpE=";
+    hash = "sha256-9Byeb4gsP6Ai1lbET1DGcuUn/637ujrxYn70t2o59L4=";
   };
 
   separateDebugInfo = true;
@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
       licenses.gpl2Plus
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ _8aed ];
     mainProgram = "passt";
   };
 })

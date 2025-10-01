@@ -21,15 +21,18 @@
   darwin,
   findutils,
   libiconv,
+  removeReferencesTo,
   rustSupport ? true,
   rustc,
   cargo,
   rustPlatform,
   nix-update-script,
 }:
-
-llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
-  pname = "clickhouse" + lib.optionalString lts "-lts";
+let
+  llvmStdenv = llvmPackages_19.stdenv;
+in
+llvmStdenv.mkDerivation (finalAttrs: {
+  pname = "clickhouse";
   inherit version;
 
   src = fetchFromGitHub rec {
@@ -70,6 +73,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     python3
     perl
     llvmPackages_19.lld
+    removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
@@ -154,7 +158,11 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace-fail "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>" \
       --replace-fail "<level>trace</level>" "<level>warning</level>"
+    remove-references-to -t ${llvmStdenv.cc} $out/bin/clickhouse
   '';
+
+  # canary for the remove-references-to hook failing
+  disallowedReferences = [ llvmStdenv.cc ];
 
   # Basic smoke test
   doCheck = true;

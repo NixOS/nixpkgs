@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor version}/glibmm-${version}.tar.xz";
     hash = "sha256-Vu5fUcis/Ar99GlZMW5MhVTLUO0ra8XOOJ2XnLtkJQk=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glibmm";
       attrPath = "glibmm_2_68";
       versionPolicy = "odd-unstable";
     };

@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-1NoJ2PA0ov9ZOWaZdlajV23UqTelRzfW7jESMsfOxkg=";
+    hash = "sha256-fDbgas4RG4cJRqrISWmrMUQUycQindlqF9/jA5R1TF8=";
   };
 
   build-system = [

@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    pnpm prune --prod
+    CI=true pnpm prune --prod
     find node_modules -xtype l -delete
 
     mkdir -p $out/{bin,share/zipline}

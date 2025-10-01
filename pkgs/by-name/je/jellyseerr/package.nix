@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     pnpm build
-    pnpm prune --prod --ignore-scripts
+    CI=true pnpm prune --prod --ignore-scripts
     rm -rf .next/cache
 
     # Clean up broken symlinks left behind by `pnpm prune`

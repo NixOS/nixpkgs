@@ -215,15 +215,9 @@ makeScopeWithSplicing' {
           callPackage ../development/libraries/sailfish-access-control-plugin
             { };
 
-        soqt = callPackage ../development/libraries/soqt { };
-
         telepathy = callPackage ../development/libraries/telepathy/qt { };
 
         qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
-
-        # Not a library, but we do want it to be built for every qt version there
-        # is, to allow users to choose the right build if needed.
-        sddm = callPackage ../applications/display-managers/sddm { };
 
         signond = callPackage ../development/libraries/signond { };
 

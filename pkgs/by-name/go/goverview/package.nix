@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -25,7 +26,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     installShellFiles
   ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd goverview \
       --bash <($out/bin/goverview completion bash) \
       --fish <($out/bin/goverview completion fish) \

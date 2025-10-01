@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubevpn";
-  version = "2.9.7";
+  version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "KubeNetworks";
     repo = "kubevpn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MWDVigjh1DWesMjLrT7p1ghawhfGssLNMhje5gbV874=";
+    hash = "sha256-fRf7vAA67ZMQABQ4yuK3wnmzACp+dFdCuVwFthj8Hms=";
   };
 
   vendorHash = null;

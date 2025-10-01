@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "5.1.0";
+  version = "5.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
     tag = "v${version}";
-    hash = "sha256-snowpTdHelcFjo1+hvqpoVt5ROB0f91yt0GsIvA5cso=";
+    hash = "sha256-n0ZP01BU/s9iJ+RP7rNlBjD11jNDj8A8Q/seekh56nA=";
   };
 
   build-system = [ setuptools ];

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "icalevents";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "icalevents";
     tag = version;
-    hash = "sha256-PHx83oHhKdKxvO+mBc5tLonAxn1zJUQL3+u+1BRhxvA=";
+    hash = "sha256-QDqmcZY/UANVKRjk1ZFEFHgrjtD+hXE4qd3tX64sE7c=";
   };
 
   build-system = [

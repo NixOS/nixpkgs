@@ -73,7 +73,7 @@ buildNpmPackage {
       type = "Application";
       desktopName = "KopiaUI";
       comment = "Fast and secure open source backup.";
-      icon = "kopia-ui";
+      icon = "kopia";
       exec = "kopia-ui";
       categories = [ "Utility" ];
     })

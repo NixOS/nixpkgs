@@ -5,6 +5,7 @@
   python3,
   cmake,
   ninja,
+  nix-update-script,
 }:
 
 let
@@ -17,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lief";
-  version = "0.16.6";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     tag = finalAttrs.version;
-    hash = "sha256-SvwFyhIBuG0u5rE7+1OaO7VZu4/X4jVI6oFOm5+yCd8=";
+    hash = "sha256-icwRW9iY/MiG/x3VHqRfAU2Yk4q2hXLJsfN5Lwx37gw=";
   };
 
   outputs = [
@@ -47,7 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     scikit-build-core
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
+  cmakeFlags = [
+    (lib.cmakeBool "LIEF_PYTHON_API" true)
+    (lib.cmakeBool "LIEF_EXAMPLES" false)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   postBuild = ''
     pushd ../api/python
@@ -60,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     ${pyEnv.interpreter} -m pip install --prefix $py dist/*.whl
     popd
   '';
+
+  pythonImportsCheck = [ "lief" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library to Instrument Executable Formats";

@@ -38,6 +38,7 @@ buildGoModule rec {
     homepage = "https://tillitis.se/app/tkey-ssh-agent/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bbigras ];
+    mainProgram = "tkey-ssh-agent";
     platforms = platforms.all;
   };
 }
