@@ -63,11 +63,6 @@ buildGuile (finalAttrs: {
             "
   '';
 
-  # make check doesn't work on darwin
-  # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
-  doCheck = false;
-  doInstallCheck = finalAttrs.doCheck;
-
   setupHook = ./setup-hook-3.0.sh;
 
   passthru = {
