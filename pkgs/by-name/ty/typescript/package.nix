@@ -8,20 +8,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "typescript";
-  version = "5.9.2";
+  version = "5.9.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w37DtnNRs0OH4HRu/sb/h1US9am4aQ0nTkJnjKu457U=";
+    hash = "sha256-OVsvlHtYZhoCtTxdZO6mhVPpIICWEt1Q92Jqrf95jyM=";
   };
 
   patches = [
     ./disable-dprint-dstBundler.patch
   ];
 
-  npmDepsHash = "sha256-6mgCLPy73xblP8ltikrKGHFmvQJncLetQWx32HqQ43U=";
+  npmDepsHash = "sha256-4ft5168ru+aGPvZAxASQ4wkjtfNG2e0sNhJTedbiKQA=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
