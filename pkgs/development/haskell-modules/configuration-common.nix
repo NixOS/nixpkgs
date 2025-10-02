@@ -3014,8 +3014,8 @@ with haskellLib;
     hash = "sha256-JxraFWzErJT4EhELa3PWBGHaLT9OLgEPNSnxwpdpHd0=";
   }) (doJailbreak super.argon2); # Unmaintained
 
-  # 2024-07-09: zinza has bumped their QuickCheck and tasty dependencies beyond stackage lts.
-  # Can possibly be removed once QuickCheck >= 2.15 and tasty >= 1.5
+  # 2025-10-02: Too strict upper bound on tasty-quickcheck (<0.11)
+  # https://github.com/phadej/zinza/pull/28
   zinza = dontCheck super.zinza;
 
   pdftotext = overrideCabal (drv: {
