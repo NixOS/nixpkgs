@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   mpi,
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kagen";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "KarlsruheGraphGeneration";
@@ -28,25 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # use vendor libmorton and xxHash
     fetchSubmodules = true;
-    hash = "sha256-FSlTNOQgwPGOn4mIVIgFejvU0dpyydomHYJOKPz1UjU=";
+    hash = "sha256-2jXHHS9Siu6hXrYPIrZSOWe6D2PgsvrbMw/7Ykpc3wk=";
   };
-
-  patches = [
-    # replace asm by builtin function to ensure compatibility with arm64
-    (fetchpatch2 {
-      url = "https://github.com/KarlsruheGraphGeneration/KaGen/commit/cab9d5dc6cc256972e52675ad9c385524d40ecd9.patch?full_index=1";
-      hash = "sha256-DCsuwUiE98UKZMxlUI9p36/wq486uHHrUphrIVqM+Cc=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace tests/CMakeLists.txt \
-      --replace-fail "FetchContent_MakeAvailable(googletest)" "find_package(GTest REQUIRED)"\
-      --replace-fail "set_property(DIRECTORY" "#set_property(DIRECTORY"
-
-    substituteInPlace kagen/CMakeLists.txt \
-      --replace-fail "OBJECT" ""
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -66,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "KAGEN_USE_BUNDLED_GTEST" false)
     (lib.cmakeBool "KAGEN_BUILD_EXAMPLES" withExamples)
     (lib.cmakeBool "KAGEN_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
@@ -85,10 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     "test_rgg2d.2cores"
     "test_rgg2d.4cores"
   ];
-
-  postInstall = ''
-    cmake --install . --component tools
-  '';
 
   meta = {
     description = "Communication-free Massively Distributed Graph Generators";
