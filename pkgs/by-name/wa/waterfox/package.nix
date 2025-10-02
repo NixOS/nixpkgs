@@ -45,7 +45,7 @@
 }:
 
 let
-  version = "6.5.4";
+  version = "6.6.3";
 
   desktopItem = makeDesktopItem {
     name = "waterfox";
@@ -204,6 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       joyfulcat
+      cmdorexe
     ];
   };
 })
