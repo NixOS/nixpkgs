@@ -38,7 +38,6 @@ let
     "coc-texlab"
     "coc-tsserver"
     "coc-ultisnips"
-    "coc-vetur"
     "coc-vimlsp"
     "coc-vimtex"
     "coc-wxml"
