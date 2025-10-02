@@ -68,14 +68,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "securefs";
-  version = "1.1.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "netheril96";
     repo = "securefs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-iC9hvhjRtoyJ35dPLOivkmti39+f12JXYDi4ZSVOeDk=";
+    hash = "sha256-ZY6FE8DCLip8p5eWqBtkVNxhGQp8zAVhkhM6kUsBZXo=";
   };
 
   nativeBuildInputs = [
