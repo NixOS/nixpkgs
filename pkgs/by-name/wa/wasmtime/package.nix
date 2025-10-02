@@ -65,8 +65,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       moveToOutput lib $dev
-      ${lib.optionalString (!enableShared) "rm $dev/lib/*.so{,.*}"}
-      ${lib.optionalString (!enableStatic) "rm $dev/lib/*.a"}
+      ${lib.optionalString (!enableShared) "rm -f $dev/lib/*.so{,.*}"}
+      ${lib.optionalString (!enableStatic) "rm -f $dev/lib/*.a"}
 
       # copy the build.rs generated c-api headers
       # https://github.com/rust-lang/cargo/issues/9661
