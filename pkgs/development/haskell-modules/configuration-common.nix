@@ -3457,10 +3457,6 @@ with haskellLib;
   # including the current one in nixpkgs.
   liquid-fixpoint = dontCheck super.liquid-fixpoint;
 
-  # 2025-09-20: Too strict upper bound on text (<2.1.3)
-  # https://github.com/mchav/dataframe/issues/61
-  dataframe = doJailbreak (warnAfterVersion "0.3.0.4" super.dataframe);
-
   # 2025-8-26: Too strict bounds on containers and text, see: https://github.com/stackbuilders/inflections-hs/pull/83
   inflections = doJailbreak super.inflections;
 
