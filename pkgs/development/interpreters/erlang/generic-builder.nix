@@ -31,9 +31,9 @@
   baseName ? "erlang",
   version,
   sha256 ? null,
-  rev ? "OTP-${version}",
+  tag ? "OTP-${version}",
   src ? fetchFromGitHub {
-    inherit rev sha256;
+    inherit tag sha256;
     owner = "erlang";
     repo = "otp";
   },
@@ -79,14 +79,7 @@ let
   major = builtins.head (builtins.splitVersion version);
 in
 stdenv.mkDerivation {
-  # name is used instead of pname to
-  # - not have to pass pnames as argument
-  # - have a separate pname for erlang (main module)
-  name =
-    "${baseName}"
-    + optionalString javacSupport "_javac"
-    + optionalString odbcSupport "_odbc"
-    + "-${version}";
+  pname = "${baseName}" + optionalString javacSupport "_javac" + optionalString odbcSupport "_odbc";
 
   inherit src version;
 
