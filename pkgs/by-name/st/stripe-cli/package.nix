@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "stripe-cli";
   version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = "stripe-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fvemd1yo8WOWob/l3TU9lHcFc7OAI/oaX5XEK38vDwo=";
   };
   vendorHash = "sha256-EDdRgApJ7gv/4ma/IfaHi+jjpTPegsUfqHbvoFMn048=";
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/stripe/stripe-cli/pkg/version.Version=${version}"
+    "-X github.com/stripe/stripe-cli/pkg/version.Version=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -64,13 +64,13 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/stripe --help
-    $out/bin/stripe --version | grep "${version}"
+    $out/bin/stripe --version | grep "${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
   meta = {
     homepage = "https://stripe.com/docs/stripe-cli";
-    changelog = "https://github.com/stripe/stripe-cli/releases/tag/v${version}";
+    changelog = "https://github.com/stripe/stripe-cli/releases/tag/v${finalAttrs.version}";
     description = "Command-line tool for Stripe";
     longDescription = ''
       The Stripe CLI helps you build, test, and manage your Stripe integration
@@ -90,4 +90,4 @@ buildGoModule rec {
     ];
     mainProgram = "stripe";
   };
-}
+})
