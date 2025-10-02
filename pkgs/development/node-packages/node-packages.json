@@ -21,7 +21,6 @@
 , "browserify"
 , "browser-sync"
 , "cdk8s-cli"
-, "cdktf-cli"
 , "clipboard-cli"
 , "coc-cmake"
 , "coc-emmet"
