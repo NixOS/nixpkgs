@@ -1366,6 +1366,8 @@ let
         };
       };
 
+      docker.docker = callPackage ./docker.docker { };
+
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "githistory";
