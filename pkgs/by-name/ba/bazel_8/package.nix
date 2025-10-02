@@ -144,9 +144,7 @@ stdenv.mkDerivation rec {
     # Nixpkgs toolcahins do not support that (yet?) and get confused.
     # Also add an explicit /usr/bin prefix that will be patched below.
     (replaceVars ./patches/xcode.patch {
-      usrBinEnv = "${coreutils}/bin/env";
       clangDarwin = "${stdenv.cc}/bin/clang";
-      codesign = "${darwin.sigtool}/bin/codesign";
     })
 
     # Revert preference for apple_support over rules_cc toolchain for now

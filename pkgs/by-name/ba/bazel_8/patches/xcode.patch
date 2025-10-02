@@ -12,20 +12,16 @@ index 1bad14cba7..d312fe08bb 100755
    cp tools/osx/xcode_locator_stub.sh ${ARCHIVE_DIR}/xcode-locator
  fi
 diff --git a/tools/osx/BUILD b/tools/osx/BUILD
-index 0358fb0ffe..1e6eae1f33 100644
+index 5b99589ad4..3d3269772b 100644
 --- a/tools/osx/BUILD
 +++ b/tools/osx/BUILD
-@@ -27,9 +27,9 @@ exports_files([
+@@ -27,7 +27,7 @@ exports_files([
  ])
  
  DARWIN_XCODE_LOCATOR_COMPILE_COMMAND = """
 -  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
--      -framework Foundation -arch arm64 -arch x86_64 -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
--  env -i codesign --identifier $@ --force --sign - $@
 +  @clangDarwin@ -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
-+      -framework Foundation -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
-+  @usrBinEnv@ @codesign@ --identifier $@ --force --sign - $@
+       -framework Foundation -arch arm64 -arch x86_64 -o $@ $<
  """
  
- genrule(
 
