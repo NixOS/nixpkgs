@@ -5780,7 +5780,12 @@ with pkgs;
     xeus-cling
     ;
 
-  clojure = callPackage ../development/interpreters/clojure { };
+  clojure = callPackage ../development/interpreters/clojure {
+    # set this to an LTS version of java
+    # Be careful if you remove this, out-of-tree consumers expect to
+    # be able to override `jdk`.
+    jdk = jdk21;
+  };
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
