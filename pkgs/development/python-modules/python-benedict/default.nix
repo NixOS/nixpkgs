@@ -14,27 +14,25 @@
   python-decouple,
   python-fsutil,
   python-slugify,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
   toml,
+  useful-types,
   xlrd,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.34.1";
+  version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
     tag = version;
-    hash = "sha256-ffmyTVeQKzV/sssxFuIckmBW6wmjnTWkHbVQ1v7fmGg=";
+    hash = "sha256-b9tAK500Hr2flYI82weNMCM88d6b5+Oz9HgvBDaqNZw=";
   };
 
   pythonRelaxDeps = [ "boto3" ];
@@ -45,6 +43,7 @@ buildPythonPackage rec {
     python-fsutil
     python-slugify
     requests
+    useful-types
   ];
 
   optional-dependencies = {
@@ -116,7 +115,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
-    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
