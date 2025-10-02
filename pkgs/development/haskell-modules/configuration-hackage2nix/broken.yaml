@@ -2296,7 +2296,6 @@ broken-packages:
   - Grafos # failure in job https://hydra.nixos.org/build/233201494 at 2023-09-02
   - grakn # failure in job https://hydra.nixos.org/build/233218052 at 2023-09-02
   - grammatical-parsers # failure in job https://hydra.nixos.org/build/233252219 at 2023-09-02
-  - granite # failure in job https://hydra.nixos.org/build/307518928 at 2025-09-19
   - graph-matchings # failure in job https://hydra.nixos.org/build/233245821 at 2023-09-02
   - graph-rewriting # failure in job https://hydra.nixos.org/build/233191278 at 2023-09-02
   - graph-serialize # failure in job https://hydra.nixos.org/build/233192162 at 2023-09-02

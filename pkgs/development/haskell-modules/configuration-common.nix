@@ -3036,6 +3036,10 @@ with haskellLib;
   # https://github.com/google/proto-lens/issues/403
   proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
 
+  # Forbids QuickCheck >= 2.15
+  # https://github.com/mchav/granite/issues/12#issuecomment-3360209408
+  granite = doJailbreak super.granite;
+
   proto3-wire = appendPatches [
     (fetchpatch {
       # https://github.com/awakesecurity/proto3-wire/pull/109
