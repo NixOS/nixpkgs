@@ -4987,6 +4987,12 @@
     githubId = 118829;
     name = "codec";
   };
+  CodedNil = {
+    github = "CodedNil";
+    githubId = 5075747;
+    email = "codenil@proton.me";
+    name = "Dan Lock";
+  };
   CodeLongAndProsper90 = {
     github = "CodeLongAndProsper90";
     githubId = 50145141;
