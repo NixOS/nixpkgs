@@ -3224,6 +3224,20 @@ with haskellLib;
     doJailbreak
   ];
 
+  # agda2hs 1.3 is not compatible with Agda 2.8.0
+  agda2hs = lib.pipe super.agda2hs [
+    (warnAfterVersion "1.3")
+    (overrideSrc rec {
+      version = "1.4";
+      src = pkgs.fetchFromGitHub {
+        owner = "agda";
+        repo = "agda2hs";
+        rev = "v${version}";
+        hash = "sha256-ZhemGUY6V0cplSwDAXkny+s6yQWKDDShTiUotIDhTXY=";
+      };
+    })
+  ];
+
   bsb-http-chunked = lib.pipe super.bsb-http-chunked [
     (warnAfterVersion "0.0.0.4")
     # Last released in 2018

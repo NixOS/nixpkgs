@@ -36,6 +36,8 @@ let
 
       agda-categories = callPackage ../development/libraries/agda/agda-categories { };
 
+      agda2hs-base = callPackage ../development/libraries/agda/agda2hs-base { };
+
       cubical = callPackage ../development/libraries/agda/cubical { };
 
       cubical-mini = callPackage ../development/libraries/agda/cubical-mini { };

@@ -9,6 +9,7 @@ let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
     axis = getComponentDeps "deconz";
+    homeassistant_connect_zbt2 = getComponentDeps "zha";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     govee_ble = [
       ibeacon-ble
