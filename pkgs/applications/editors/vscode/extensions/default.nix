@@ -1123,8 +1123,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.4.0";
-          hash = "sha256-ly54itCpVdirU6GmK2GM7A749wt2SbHR/TidutTwCUE=";
+          version = "8.4.2";
+          hash = "sha256-SfvpR1ldrvo/q0nt0cLu55bzNXjwNNdqdSwBORN2Bjw=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -3782,8 +3782,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "6.16.2";
-          hash = "sha256-woL6jWlrNb9lsQ6NqXx3YOo/eAinpAuz2bXw6mJw8Dc=";
+          version = "6.16.3";
+          hash = "sha256-xJ2SQgXZfVXjn6JCsjBr2SkaCpkGS2Fk1mjcW6WPnS0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
