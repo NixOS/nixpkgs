@@ -198,8 +198,8 @@ rec {
       "sha256-5qaK+piVZhvHqBJgGteNsvmMZG5y6fvLD4W8qASfcL0=";
 
   mypy-boto3-chime-sdk-meetings =
-    buildMypyBoto3Package "chime-sdk-meetings" "1.40.19"
-      "sha256-gTxOeRYnpZDUi207vzeDL1FFVFhwTZjtLdLPAyHV+8M=";
+    buildMypyBoto3Package "chime-sdk-meetings" "1.40.43"
+      "sha256-vhWKoKhIJbB9Em7EA1IMdrSUTBFIgkAOxrdAeepCjbg=";
 
   mypy-boto3-chime-sdk-messaging =
     buildMypyBoto3Package "chime-sdk-messaging" "1.40.34"
@@ -210,8 +210,8 @@ rec {
       "sha256-axa2niA9HlLpV9Tf01p0fG2GhK2lNlCM/O8LLPHQVRc=";
 
   mypy-boto3-cleanrooms =
-    buildMypyBoto3Package "cleanrooms" "1.40.37"
-      "sha256-Uam/iXnOhYGUwZVRpyv61asq1dJkKO2Hoce3sIMm3Zo=";
+    buildMypyBoto3Package "cleanrooms" "1.40.43"
+      "sha256-EDO9P8qznO0SjRmT602UX/FpSUcLNdGnb5kGd8NTc1Q=";
 
   mypy-boto3-cloud9 =
     buildMypyBoto3Package "cloud9" "1.40.20"
@@ -414,8 +414,8 @@ rec {
       "sha256-Qx3IAePD2OHEnXHG3O2U1aRcH3Tf/6WUrjrn1uZXmwE=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.40.0"
-      "sha256-JT+/tWyrcEXCiPhfcJQYXsPAwKCKLPu+c3A+r4iJIVg=";
+    buildMypyBoto3Package "dms" "1.40.43"
+      "sha256-Is9yMouO7WxY/P7ViK+s8Y1q8Y7KvTvY7X/H4ndeG6s=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.40.16"
@@ -462,8 +462,8 @@ rec {
       "sha256-mkaBmHn3LsOHnH4kTWkGbCsL4w/TrPBt/pBXnj+1Ai8=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.40.42"
-      "sha256-1U8AdbZK5u7HVuuCPoeyMqSzQDZEzfYfJzqf1mAjqVI=";
+    buildMypyBoto3Package "ecs" "1.40.43"
+      "sha256-wVaLCKZXJJG32j2dUjzxj1Q2slgulxZ8xhqKXWenTUc=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.40.0"
