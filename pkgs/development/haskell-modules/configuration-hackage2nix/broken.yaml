@@ -5860,7 +5860,6 @@ broken-packages:
   - snaplet-sqlite-simple # failure in job https://hydra.nixos.org/build/252738602 at 2024-03-16
   - snaplet-typed-sessions # failure in job https://hydra.nixos.org/build/252724459 at 2024-03-16
   - snappy-conduit # failure in job https://hydra.nixos.org/build/233196865 at 2023-09-02
-  - snappy-hs # failure in job https://hydra.nixos.org/build/307522028 at 2025-09-19
   - snelstart-import # failure in job https://hydra.nixos.org/build/295097114 at 2025-04-22
   - SNet # failure in job https://hydra.nixos.org/build/233225638 at 2023-09-02
   - snipcheck # failure in job https://hydra.nixos.org/build/233214417 at 2023-09-02

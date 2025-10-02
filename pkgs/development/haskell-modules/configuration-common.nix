@@ -3040,6 +3040,10 @@ with haskellLib;
   # https://github.com/mchav/granite/issues/12#issuecomment-3360209408
   granite = doJailbreak super.granite;
 
+  # Erroneously forbids vector >= 0.13.2.0
+  # https://github.com/mchav/snappy-hs/commit/400490df38e0db7f353c0427f034a231bdf73098#r167007963
+  snappy-hs = doJailbreak super.snappy-hs;
+
   proto3-wire = appendPatches [
     (fetchpatch {
       # https://github.com/awakesecurity/proto3-wire/pull/109
