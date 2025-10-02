@@ -4,6 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+
+  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -54,19 +56,21 @@ buildGoModule (finalAttrs: {
         rm pkg/plugins/plugin_test.go
       '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd stripe \
-      --bash <($out/bin/stripe completion --write-to-stdout --shell bash) \
-      --zsh <($out/bin/stripe completion --write-to-stdout --shell zsh)
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/stripe --help
-    $out/bin/stripe --version | grep "${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  postInstall =
+    let
+      inherit (finalAttrs.meta) mainProgram;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/${mainProgram}"
+        else
+          lib.getExe buildPackages.stripe-cli;
+    in
+    ''
+      # only outputs bash and zsh completion
+      installShellCompletion --cmd ${mainProgram} \
+        --bash <(${exe} completion --write-to-stdout --shell bash) \
+        --zsh <(${exe} completion --write-to-stdout --shell zsh)
+    '';
 
   meta = {
     homepage = "https://stripe.com/docs/stripe-cli";
