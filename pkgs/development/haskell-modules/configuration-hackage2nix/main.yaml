@@ -364,6 +364,7 @@ package-maintainers:
     - amazonka
   ncfavier:
     - Agda
+    - agda2hs
     - irc-client
     - lambdabot
     - shake
