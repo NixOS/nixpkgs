@@ -27,8 +27,13 @@ lib.extendMkDerivation {
     {
       version ? "",
       srcHash ? "",
+      coverage ? false,
       ...
     }@args:
+    assert coverage -> (lib.versionAtLeast finalAttrs.version "2.0.0");
+    assert lib.assertMsg (
+      !(args ? coverageAnalysis)
+    ) "If you want a coverage analysis build, pass 'coverage = true' and override the stdenv";
     {
       inherit version;
       pname = args.pname or "guile";
@@ -42,6 +47,9 @@ lib.extendMkDerivation {
         args.patches or [ ]
         ++ lib.optionals (lib.versionAtLeast finalAttrs.version "2.0.0") [
           ./2.0/eai_system.patch
+        ]
+        ++ lib.optionals coverage [
+          ./gcov-file-name.patch
         ];
 
       outputs =
