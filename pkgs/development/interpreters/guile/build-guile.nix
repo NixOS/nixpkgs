@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkgsBuildBuild,
   gawk,
   gmp,
@@ -38,6 +39,10 @@ lib.extendMkDerivation {
       patches =
         args.patches or [ ]
         ++ lib.optionals (lib.versionAtLeast finalAttrs.version "2.0.0") [
+          (fetchpatch {
+            url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
+            hash = "sha256-BwgdtWvRgJEAnzqK2fCQgRHU0va50VR6SQfJpGzjm4s=";
+          })
           ./2.0/eai_system.patch
         ];
 
