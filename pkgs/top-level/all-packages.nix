@@ -12612,6 +12612,8 @@ with pkgs;
 
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
 
+  ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
+
   ripcord =
     if stdenv.hostPlatform.isLinux then
       qt5.callPackage ../applications/networking/instant-messengers/ripcord { }
