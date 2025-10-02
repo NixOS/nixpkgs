@@ -2933,13 +2933,13 @@ with haskellLib;
   # agda2hs 1.3 is not compatible with Agda 2.8.0
   agda2hs = lib.pipe super.agda2hs [
     (warnAfterVersion "1.3")
-    (overrideSrc {
-      version = "1.3-unstable-2025-07-25";
+    (overrideSrc rec {
+      version = "1.4";
       src = pkgs.fetchFromGitHub {
         owner = "agda";
         repo = "agda2hs";
-        rev = "01cc0532b522f64223782617cbde1a6f21b8880e";
-        hash = "sha256-SXhnkZa8OmgpYRTb2IVTfebtX+GG5mkVcqKchl2Noic=";
+        rev = "v${version}";
+        hash = "sha256-ZhemGUY6V0cplSwDAXkny+s6yQWKDDShTiUotIDhTXY=";
       };
     })
   ];
