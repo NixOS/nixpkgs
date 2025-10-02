@@ -153,8 +153,8 @@ in
   };
 
   libressl_4_1 = generic {
-    version = "4.1.0";
-    hash = "sha256-D3HBa9NL2qzNy5al2UpJIb+2EuxuDrp6gNiFTu/Yu2E=";
+    version = "4.1.1";
+    hash = "sha256-x/96fWddX1dzCUDlzP8dvi3NW3QFtTl+D3/9ZqXtVnk=";
     # Fixes build on loongarch64
     # https://github.com/libressl/portable/pull/1184
     postPatch = ''
