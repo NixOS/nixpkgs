@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.18.0";
+  version = "3.19.0";
   pname = "commons-lang";
 
   src = fetchurl {
     url = "mirror://apache/commons/lang/binaries/commons-lang3-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-rdX5zWVkN1FdGcivRgWDIvm7wzdZGoEQJ/cG34TuWxQ=";
+    hash = "sha256-BipGZH6z6s2GKPSdgU4UCjBhIM+o0cB9/QyXRJLIADo=";
   };
 
   installPhase = ''
