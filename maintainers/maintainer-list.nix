@@ -22931,12 +22931,6 @@
     email = "hey@sandydoo.me";
     matrix = "@sandydoo:matrix.org";
   };
-  Sanskarzz = {
-    email = "sanskar.gur@gmail.com";
-    github = "Sanskarzz";
-    githubId = 92817635;
-    name = "Sanskar Gurdasani";
-  };
   santosh = {
     email = "santoshxshrestha@gmail.com";
     name = "Santosh Shrestha";
