@@ -58,8 +58,6 @@ buildGuile (finalAttrs: {
         -e "s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;"
   '';
 
-  setupHook = ./setup-hook-3.0.sh;
-
   passthru = {
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell

@@ -29,7 +29,5 @@ buildGuile {
         -e "s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;"
   '';
 
-  setupHook = ./setup-hook-2.2.sh;
-
   meta.maintainers = with lib.maintainers; [ ludo ];
 }

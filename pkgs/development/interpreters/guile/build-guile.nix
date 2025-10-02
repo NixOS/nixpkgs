@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  replaceVars,
   pkgsBuildBuild,
   gawk,
   gmp,
@@ -147,6 +148,10 @@ lib.extendMkDerivation {
       # linux binutils-2.45: $ guile --version
       # Pre-boot error; key: misc-error, args: ("load-thunk-from-memory" "missing DT_GUILE_ENTRY" () #f)Aborted
       dontStrip = args.dontStrip or (lib.versionAtLeast finalAttrs.version "3.0.0");
+
+      setupHook = args.setupHook or replaceVars ./setup-hook.sh {
+        version = lib.versions.majorMinor finalAttrs.version;
+      };
 
       passthru = args.passthru or { } // {
         effectiveVersion = lib.versions.majorMinor finalAttrs.version;
