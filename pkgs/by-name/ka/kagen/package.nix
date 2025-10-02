@@ -5,16 +5,14 @@
   cmake,
   pkg-config,
   mpi,
-  cgal_5,
-  boost,
-  gmp,
-  mpfr,
+  cgal,
   sparsehash,
   imagemagick,
   gtest,
   ctestCheckHook,
   mpiCheckPhaseHook,
   withExamples ? false,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,14 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    mpi
-    cgal_5
-    sparsehash
     imagemagick
-    # should be propagated by cgal
-    boost
-    gmp
-    mpfr
+  ];
+
+  propagatedBuildInputs = [
+    mpi
+    cgal
+    sparsehash
   ];
 
   cmakeFlags = [
@@ -72,6 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
     "test_permutation.2cores"
     "test_permutation.4cores"
   ];
+
+  passthru = {
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "KaGen" ];
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
 
   meta = {
     description = "Communication-free Massively Distributed Graph Generators";
