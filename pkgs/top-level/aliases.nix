@@ -2449,6 +2449,7 @@ mapAliases {
   symbiyosys = sby; # Added 2024-08-18
   syn2mas = throw "'syn2mas' has been removed. It has been integrated into the main matrix-authentication-service CLI as a subcommand: 'mas-cli syn2mas'."; # Added 2025-07-07
   sync = taler-sync; # Added 2024-09-04
+  syncall = "'syncall' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   syncthing-cli = throw "'syncthing-cli' has been renamed to/replaced by 'syncthing'"; # Converted to throw 2024-10-17
   syncthingtray-qt6 = syncthingtray; # Added 2024-03-06
   syncthing-tray = throw "syncthing-tray has been removed because it is broken and unmaintained"; # Added 2025-05-18
