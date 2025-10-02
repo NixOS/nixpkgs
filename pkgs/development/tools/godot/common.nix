@@ -427,7 +427,16 @@ let
           # happen in 4.4, but an existing fix couldn't be identified.
           ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
         ]
-        ++ lib.optional (lib.versionAtLeast version "4.5") ./fix-freetype-link-error.patch;
+        ++ lib.optionals (lib.versionAtLeast version "4.5") [
+          ./fix-freetype-link-error.patch
+          (fetchpatch {
+            # Remove after Godot 4.5 release
+            # https://github.com/godotengine/godot/pull/110540
+            name = "libjpeg-turbo-not-being-used-from-system-fix.patch";
+            url = "https://github.com/godotengine/godot/commit/6d8aa8582f5c312cd5aab396f90904df1ddc0567.patch";
+            hash = "sha256-dGqSrWoqJ5a8l9V5DYgoXLjECP2HFejioZS6N88Xr7g=";
+          })
+        ];
 
         postPatch = ''
           # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE
