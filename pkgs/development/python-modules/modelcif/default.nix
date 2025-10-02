@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "modelcif";
-  version = "1.4";
+  version = "1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-modelcif";
     tag = version;
-    hash = "sha256-Uj6E25uqFdCo2lGf0Cmhc7rs3Rwj7vkpe2G0uhv53gc=";
+    hash = "sha256-NVsADYEemnhuFwvM4lMebkU5WrqF+gL/3i6LoZ/Alt8=";
   };
 
   build-system = [

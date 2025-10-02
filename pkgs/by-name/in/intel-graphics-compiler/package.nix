@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.16.0";
+  version = "2.18.5";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-vtVktc77OT7OANVXnLvEQx+NEQBPrTE5FFynXhpsK7o=";
+      hash = "sha256-AvEeK3rySEu89br4JgeZlXVQ6IXEzStVZYvehzdWq7g=";
     })
     (fetchFromGitHub {
       name = "llvm-project";

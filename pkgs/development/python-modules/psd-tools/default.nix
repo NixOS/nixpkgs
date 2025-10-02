@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.10.9";
+  version = "1.10.12";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "psd-tools";
     repo = "psd-tools";
     tag = "v${version}";
-    hash = "sha256-HCvajc69u1avtzN3vIYjyymZmJkJY+57EjqHfdjvUH0=";
+    hash = "sha256-BNicUiFZSNCcJ2g/zNBH8h2FGT+pd45IurBnnBqklUY=";
   };
 
   build-system = [

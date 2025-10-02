@@ -21,18 +21,18 @@ let
   param =
     if lib.versionAtLeast ocaml.version "4.05" then
       {
-        version = "1.0.7";
-        sha256 = "sha256-X8Iq0/OtbRJ8sSRdGFgIgUeNotbeULIxXm3UWGxSvhk=";
+        version = "1.1.0";
+        hash = "sha256-rS2n9eoqRKclaOy5W1ezaquItfnhH/ee+2TkFvF3FOA=";
       }
     else if lib.versionAtLeast ocaml.version "4.03" then
       {
         version = "1.0.3";
-        sha256 = "0b77gsz9bqby8v77kfi4lans47x9p2lmzanzwins5r29maphb8y6";
+        hash = "sha256:0b77gsz9bqby8v77kfi4lans47x9p2lmzanzwins5r29maphb8y6";
       }
     else
       {
         version = "1.0.0";
-        sha256 = "1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
+        hash = "sha256:1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
         propagatedBuildInputs = [ result ];
       };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://erratique.ch/software/topkg/releases/topkg-${version}.tbz";
-    inherit (param) sha256;
+    inherit (param) hash;
   };
 
   nativeBuildInputs = [

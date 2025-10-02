@@ -73,6 +73,15 @@ stdenv.mkDerivation {
       "BUILD_WITH_ALL"
     ]);
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out"/Applications/TIC-80.app/Contents/{MacOS,Resources}
+    cp bin/tic80 "$out"/Applications/TIC-80.app/Contents/MacOS/tic80
+    cp macosx/tic80.plist "$out"/Applications/TIC-80.app/Contents/Info.plist
+    cp macosx/tic80.icns "$out"/Applications/TIC-80.app/Contents/Resources/tic80.icns
+    mkdir -p "$out"/bin
+    ln -s "$out"/Applications/TIC-80.app/Contents/MacOS/tic80 "$out"/bin/tic80
+  '';
+
   nativeBuildInputs = [
     cmake
     curl
@@ -109,7 +118,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/nesbox/TIC-80";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     mainProgram = "tic80";
     maintainers = with maintainers; [ blinry ];
   };

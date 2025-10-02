@@ -75,11 +75,19 @@
           machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
       with subtest("Check if Pantheon components actually start"):
-          # We specifically check gsd-xsettings here since it is manually pulled up by gala.
-          # https://github.com/elementary/gala/pull/2140
-          for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock", "gsd-media-keys", "gsd-xsettings", "io.elementary.desktop.agent-polkit"]:
-              machine.wait_until_succeeds(f"pgrep -f {i}")
-          machine.wait_until_succeeds("pgrep -xf ${pkgs.pantheon.elementary-files}/libexec/io.elementary.files.xdg-desktop-portal")
+          pgrep_list = [
+              "${pkgs.pantheon.gala}/bin/gala",
+              "io.elementary.wingpanel",
+              "io.elementary.dock",
+              "${pkgs.pantheon.gnome-settings-daemon}/libexec/gsd-media-keys",
+              # We specifically check gsd-xsettings here since it is manually pulled up by gala.
+              # https://github.com/elementary/gala/pull/2140
+              "${pkgs.pantheon.gnome-settings-daemon}/libexec/gsd-xsettings",
+              "${pkgs.pantheon.pantheon-agent-polkit}/libexec/policykit-1-pantheon/io.elementary.desktop.agent-polkit",
+              "${pkgs.pantheon.elementary-files}/libexec/io.elementary.files.xdg-desktop-portal"
+          ]
+          for i in pgrep_list:
+              machine.wait_until_succeeds(f"pgrep -xf {i}")
 
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf ${pkgs.pantheon.gala}/bin/gala)/environ"
@@ -93,7 +101,7 @@
           machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 
       with subtest("Wait for elementary videos autostart"):
-          machine.wait_until_succeeds("pgrep -f io.elementary.videos")
+          machine.wait_until_succeeds("pgrep -xf /run/current-system/sw/bin/io.elementary.videos")
           machine.wait_for_text("No Videos Open")
           machine.screenshot("videos")
 

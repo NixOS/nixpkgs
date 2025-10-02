@@ -375,6 +375,12 @@ in
 
         bbswitch = callPackage ../os-specific/linux/bbswitch { };
 
+        # NOTE: The bcachefs module is called this way to facilitate
+        # easy overriding, as it is expected many users will want to
+        # pull from the upstream git repo, which may include
+        # unreleased changes to the module build process.
+        bcachefs = callPackage pkgs.bcachefs-tools.kernelModule { };
+
         ch9344 = callPackage ../os-specific/linux/ch9344 { };
 
         chipsec = callPackage ../tools/security/chipsec {
@@ -819,7 +825,7 @@ in
       src,
       modDirVersion ? lib.versions.pad 3 version,
       configfile,
-      allowImportFromDerivation ? true,
+      allowImportFromDerivation ? false,
     }:
     recurseIntoAttrs (
       packagesFor (manualConfig {

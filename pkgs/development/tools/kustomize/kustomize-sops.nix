@@ -6,22 +6,24 @@
 
 buildGoModule rec {
   pname = "kustomize-sops";
-  version = "4.3.3";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "viaduct-ai";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qIYV0wDzBRPt6s6d2dL4FobBSMlmVm+Z0ogig3r0Q/c=";
+    hash = "sha256-a9SvkHt8ZQFobOjKAECSJcRZEeRE8pTKLnXN4DYNa7k=";
   };
 
-  vendorHash = "sha256-UyDW4WgDgEygMxrxbCATxlPk9KAuc9lO/ldSFyydZUA=";
+  vendorHash = "sha256-ajXW6H1XBgVtMdK7/asfpy6e3rFAD2pz3Lg+QFnkVpo=";
 
   installPhase = ''
+    mkdir -p $out/bin
     mkdir -p $out/lib/viaduct.ai/v1/ksops/
     mkdir -p $out/lib/viaduct.ai/v1/ksops-exec/
-    mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops/ksops
-    ln -s $out/lib/viaduct.ai/v1/ksops/ksops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
+    mv $GOPATH/bin/kustomize-sops $out/bin/ksops
+    ln -s $out/bin/ksops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
+    ln -s $ous/bin/ksops $out/lib/viaduct.ai/v1/ksops/ksops
   '';
 
   # Tests are broken in a nix environment

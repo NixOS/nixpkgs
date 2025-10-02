@@ -5,7 +5,46 @@
   runCommand,
   writeText,
   python3,
+  stdenvNoCC,
+  makeWrapper,
 }:
+let
+  python = python3.withPackages (ps: [
+    ps.numpy
+    ps.pandas
+    ps.scipy
+    ps.tabulate
+  ]);
+
+  cmp-stats = stdenvNoCC.mkDerivation {
+    pname = "cmp-stats";
+    version = lib.trivial.release;
+
+    dontUnpack = true;
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/cmp-stats
+
+      cp ${./cmp-stats.py} "$out/share/cmp-stats/cmp-stats.py"
+
+      makeWrapper ${python.interpreter} "$out/bin/cmp-stats" \
+          --add-flags "$out/share/cmp-stats/cmp-stats.py"
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Performance comparison of Nix evaluation statistics";
+      license = lib.licenses.mit;
+      mainProgram = "cmp-stats";
+      maintainers = with lib.maintainers; [ philiptaron ];
+    };
+  };
+in
 {
   combinedDir,
   touchedFilesJson,
@@ -140,21 +179,10 @@ runCommand "compare"
     # Don't depend on -dev outputs to reduce closure size for CI.
     nativeBuildInputs = map lib.getBin [
       jq
-      (python3.withPackages (
-        ps: with ps; [
-          numpy
-          pandas
-          scipy
-        ]
-      ))
-
+      cmp-stats
     ];
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
-    env = {
-      BEFORE_DIR = "${combined}/before";
-      AFTER_DIR = "${combined}/after";
-    };
   }
   ''
     mkdir $out
@@ -181,7 +209,7 @@ runCommand "compare"
         echo
       } >> $out/step-summary.md
 
-      python3 ${./cmp-stats.py} >> $out/step-summary.md
+      cmp-stats --explain ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
 
     else
       # Package chunks are the same in both revisions

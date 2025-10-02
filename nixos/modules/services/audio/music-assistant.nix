@@ -84,7 +84,7 @@ in
         [
           lsof
         ]
-        ++ lib.optionals (lib.elem "librespot" cfg.providers) [
+        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
           librespot
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [

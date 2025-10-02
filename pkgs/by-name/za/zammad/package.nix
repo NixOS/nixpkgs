@@ -20,7 +20,7 @@
 
 let
   pname = "zammad";
-  version = "6.5.1";
+  version = "6.5.2";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -37,7 +37,7 @@ let
   };
 
   rubyEnv = bundlerEnv {
-    name = "${pname}-gems-${version}";
+    name = "zammad-gems-${version}";
     inherit version;
 
     # Which ruby version to select:
@@ -127,15 +127,15 @@ stdenvNoCC.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       taeer
       netali
     ];

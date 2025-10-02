@@ -357,7 +357,6 @@ in
       "d '${cfg.stateDir}/themes' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
 
-      "d /run/redmine - - - - -"
       "d /run/redmine/public - - - - -"
       "L+ /run/redmine/config - - - - ${cfg.stateDir}/config"
       "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
@@ -456,6 +455,8 @@ in
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
         ExecStart = "${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+        RuntimeDirectory = "redmine";
+        RuntimeDirectoryMode = "0750";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
@@ -473,7 +474,10 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "noaccess";
-        ProtectSystem = "full";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.stateDir
+        ];
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_UNIX"

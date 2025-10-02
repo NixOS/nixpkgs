@@ -29,7 +29,6 @@
   runCommand,
   rust-bindgen,
   rust-cbindgen,
-  rustPlatform,
   rustc,
   spirv-llvm-translator,
   stdenv,
@@ -145,6 +144,8 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/37027
+    ./gallivm-llvm-21.patch
   ];
 
   postPatch = ''
@@ -314,7 +315,6 @@ stdenv.mkDerivation {
     rustc
     rust-bindgen
     rust-cbindgen
-    rustPlatform.bindgenHook
     wayland-scanner
   ]
   ++ lib.optionals needNativeCLC [

@@ -18,17 +18,17 @@
 
 let
   lanterna = fetchurl {
-    url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
-    hash = "sha256-7zxCeXYW5v9ritnvkwRpPKdgSptCmkT3HJOaNgQHUmQ=";
+    url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.3/lanterna-3.1.3.jar";
+    hash = "sha256-4EeBz34i9+7iYwnx2IC74SQMLw6ThgNKJD8Hy6eMUOA=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.1.7";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-GpjWo2+AsT0hD3CJJ8Pf/K5TbWtG0ZE2tIpH/UEGTws=";
+    hash = "sha256-OcXXKaZcBuP584SJWeQB+aaxO0kih6Oiud0Vm8e9kPo=";
   };
 
   unpackPhase = "tar xvf $src";

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "blake3";
-  version = "1.0.5";
+  version = "1.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "blake3-py";
     tag = version;
-    hash = "sha256-7u0HOgutKIvYF/hoCXKJN1a7OgY4SvWYwieG21sawsw=";
+    hash = "sha256-km4vN/xKvjNd/bdHEIsUR9+Hmi0K5ju+wlQ2kuuDzzI=";
   };
 
   postPatch = ''

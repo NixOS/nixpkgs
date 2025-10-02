@@ -126,6 +126,7 @@ let
           aarch64-darwin = "./Configure darwin64-arm64-cc";
           x86_64-linux = "./Configure linux-x86_64";
           x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+          powerpc-linux = "./Configure linux-ppc";
           powerpc64-linux = "./Configure linux-ppc64";
           riscv32-linux = "./Configure ${
             if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"
@@ -293,6 +294,8 @@ let
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
         '';
+
+      allowedImpureDLLs = [ "CRYPT32.dll" ];
 
       postFixup =
         lib.optionalString (!stdenv.hostPlatform.isWindows) ''

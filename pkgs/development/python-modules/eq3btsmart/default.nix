@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   bleak,
+  bleak-retry-connector,
   construct-typing,
   pytest-asyncio,
   pytestCheckHook,
@@ -11,20 +12,21 @@
 
 buildPythonPackage rec {
   pname = "eq3btsmart";
-  version = "2.1.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EuleMitKeule";
     repo = "eq3btsmart";
     tag = version;
-    hash = "sha256-/Z/lSZXJ+c+G5iDF/BGacSpxrgJK4NLU7ShIAV4ipLc=";
+    hash = "sha256-9x2uQUpLl0bSOiEBTvt6IPZCJ3Oj+U4knlvrTXPGs3I=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     bleak
+    bleak-retry-connector
     construct-typing
   ];
 

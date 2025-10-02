@@ -3,12 +3,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
   eigen,
   flatbuffers_23,
-  gbenchmark,
   glibcLocales,
   gtest,
   howard-hinnant-date,
@@ -18,11 +18,13 @@
   python3Packages,
   re2,
   zlib,
-  microsoft-gsl,
   protobuf,
+  microsoft-gsl,
+  darwinMinVersionHook,
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
   ncclSupport ? config.cudaSupport,
+  withFullProtobuf ? false,
   cudaPackages ? { },
 }@inputs:
 
@@ -56,25 +58,6 @@ let
     hash = "sha256-pjwjrqq6dfiVsXIhbBtbolhiysiFlFTnx5XcX77f+C0=";
   };
 
-  pytorch_clog = effectiveStdenv.mkDerivation {
-    pname = "clog";
-    version = "3c8b153";
-    src = "${cpuinfo.src}/deps/clog";
-
-    nativeBuildInputs = [
-      cmake
-      gbenchmark
-      gtest
-    ];
-    cmakeFlags = [
-      (lib.cmakeBool "USE_SYSTEM_GOOGLEBENCHMARK" true)
-      (lib.cmakeBool "USE_SYSTEM_GOOGLETEST" true)
-      (lib.cmakeBool "USE_SYSTEM_LIBS" true)
-      # 'clog' tests set 'CXX_STANDARD 11'; this conflicts with our 'gtest'.
-      (lib.cmakeBool "CLOG_BUILD_TESTS" false)
-    ];
-  };
-
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
@@ -92,8 +75,8 @@ let
   dlpack = fetchFromGitHub {
     owner = "dmlc";
     repo = "dlpack";
-    tag = "v0.6";
-    hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
+    rev = "5c210da409e7f1e51ddf445134a4376fdbd70d7d";
+    hash = "sha256-YqgzCyNywixebpHGx16tUuczmFS5pjCz5WjR89mv9eI=";
   };
 
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
@@ -102,7 +85,15 @@ effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
 
-  patches = lib.optionals cudaSupport [
+  patches = [
+    # https://github.com/microsoft/onnxruntime/pull/24583
+    (fetchpatch {
+      name = "fix-compilation-with-gcc-15.patch";
+      url = "https://github.com/microsoft/onnxruntime/commit/f7619dc93f592ddfc10f12f7145f9781299163a0.patch";
+      hash = "sha256-jxfMB+/Zokcu5DSfZP7QV1E8mTrsLe/sMr+ZCX/Y3m0=";
+    })
+  ]
+  ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
     ./nvcc-gsl.patch
@@ -139,7 +130,6 @@ effectiveStdenv.mkDerivation rec {
     libpng
     nlohmann_json
     microsoft-gsl
-    pytorch_clog
     zlib
   ]
   ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
@@ -170,7 +160,10 @@ effectiveStdenv.mkDerivation rec {
         nccl
       ]
     )
-  );
+  )
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ];
 
   nativeCheckInputs = [
     gtest
@@ -212,7 +205,7 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
-    (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" false)
+    (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))

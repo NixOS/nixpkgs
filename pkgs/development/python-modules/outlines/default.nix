@@ -95,6 +95,11 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+  pytestFlagsArray = [
+    # FutureWarning: functools.partial will be a method descriptor in future Python versions; wrap it in enum.member() if you want to preserve the old behavior
+    "-Wignore::FutureWarning"
+  ];
+
   disabledTests = [
     # Try to dowload models from Hugging Face Hub
     "test_application_callable_call"

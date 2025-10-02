@@ -14,7 +14,7 @@ let
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
-      repo = pname;
+      repo = "cargo-auditable";
       rev = "v${version}";
       sha256 = "sha256-zjv2/qZM0vRyz45DeKRtPHaamv2iLtjpSedVTEXeDr8=";
     };

@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd keyring \
       --bash <($out/bin/keyring --print-completion bash) \
       --zsh <($out/bin/keyring --print-completion zsh)

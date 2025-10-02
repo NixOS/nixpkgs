@@ -112,10 +112,13 @@ let
         iface != null
       ) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
       configStr =
-        if cfg.allowAuxiliaryImperativeNetworks then
-          "-c /etc/wpa_supplicant.conf -I ${configFile}"
-        else
-          "-c ${configFile}";
+        (
+          if cfg.allowAuxiliaryImperativeNetworks then
+            "-c /etc/wpa_supplicant.conf -I ${configFile}"
+          else
+            "-c ${configFile}"
+        )
+        + lib.concatMapStrings (p: " -I " + p) cfg.extraConfigFiles;
     in
     {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
@@ -542,6 +545,14 @@ in
           See
           {manpage}`wpa_supplicant.conf(5)`
           for available options.
+        '';
+      };
+
+      extraConfigFiles = mkOption {
+        type = types.listOf types.path;
+        default = [ ];
+        description = ''
+          Extra wpa_supplicant configuration files to load.
         '';
       };
     };

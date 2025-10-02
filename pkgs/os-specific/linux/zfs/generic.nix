@@ -155,8 +155,12 @@ let
           substituteInPlace ./config/zfs-build.m4 \
             --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
               "bashcompletiondir=$out/share/bash-completion/completions"
-
+        ''
+        + lib.optionalString (lib.versionOlder version "2.4.0") ''
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
+        ''
+        + lib.optionalString (lib.versionAtLeast version "2.4.0") ''
+          substituteInPlace ./cmd/zarcsummary --replace-fail "/sbin/modinfo" "modinfo"
         ''
         + ''
           echo 'Supported Kernel versions:'

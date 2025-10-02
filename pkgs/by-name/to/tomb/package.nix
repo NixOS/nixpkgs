@@ -13,12 +13,12 @@
   lib,
   libargon2,
   lsof,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   pinentry,
   stdenvNoCC,
-  testers,
-  util-linux,
+  util-linuxMinimal,
+  versionCheckHook,
   zsh,
 }:
 
@@ -37,7 +37,7 @@ let
     libargon2
     lsof
     pinentry
-    util-linux
+    util-linuxMinimal
   ];
 
 in
@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-z7LkCes0wg+1bZrNXXy4Lh5VwMotCULJQy5DmCisu+Q=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
     pinentry
@@ -69,18 +69,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    install -Dm755 tomb $out/bin/tomb
-    install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
+    runHook preInstall
+
+    install -D -m755 -t $out/bin tomb
+    install -D -m644 -t $out/share/man/man1/ doc/tomb.1
 
     wrapProgram $out/bin/tomb \
       --prefix PATH : $out/bin:${lib.makeBinPath runtimeDependencies}
+
+    runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "tomb -v";
-    };
     updateScript = nix-update-script { };
   };
 

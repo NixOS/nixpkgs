@@ -51,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of tools and libraries for using data in the INSDC Sequence Read Archives";
     license = lib.licenses.ncbiPd;
     maintainers = with lib.maintainers; [
-      thyol
       t4ccer
     ];
     platforms = lib.platforms.unix;

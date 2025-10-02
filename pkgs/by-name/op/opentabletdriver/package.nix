@@ -23,13 +23,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "OpenTabletDriver";
-  version = "0.6.5.1";
+  version = "0.6.6.0";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PpgqmeQRGZew0+HD4xtbimc25XPEfgW69VfJf+TlYC4=";
+    hash = "sha256-NS/r4FU3dT7UT+R7NryRnU5RfLEN0E6pSqtNDpKMS7U=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -83,9 +83,6 @@ buildDotnetModule (finalAttrs: {
     "OpenTabletDriver.Tests.UpdaterTests.Install_Copies_AppDataFiles"
     # Depends on processor load
     "OpenTabletDriver.Tests.TimerTests.TimerAccuracy"
-    # Can't find Configurations directory, remove after https://github.com/OpenTabletDriver/OpenTabletDriver/pull/3796
-    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_Verify_Configs_With_Schema"
-    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_Are_Linted"
   ];
 
   preBuild = ''

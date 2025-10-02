@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.33.1";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CLrXkyLHPA4t0srIME2Td9/6QQ5fsJyq+kuKfzawwFs=";
+    hash = "sha256-9g23rtLi/tHIXpfZSHgaIHIGHwQ0eYW5kLtMHqrIlMk=";
   };
 
   vendorHash = null;
@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     # Allow older go versions
     substituteInPlace go.mod \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+      --replace-fail "go 1.25.1" "go ${finalAttrs.passthru.go.version}"
 
     substituteInPlace vendor/modules.txt \
       --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"

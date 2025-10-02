@@ -42,8 +42,6 @@ in
             options = {
               enable = mkEnableOption "Wyoming Piper server";
 
-              piper = mkPackageOption pkgs "piper-tts" { };
-
               voice = mkOption {
                 type = str;
                 example = "en-us-ryan-medium";
@@ -103,8 +101,8 @@ in
 
               useCUDA = mkOption {
                 type = bool;
-                default = config.cudaSupport;
-                defaultText = literalExpression "config.cudaSupport";
+                default = pkgs.config.cudaSupport;
+                defaultText = literalExpression "pkgs.config.cudaSupport";
                 description = ''
                   Whether to accelerate the underlying onnxruntime library with CUDA.
                 '';
@@ -159,8 +157,6 @@ in
                 "/var/lib/wyoming/piper"
                 "--uri"
                 options.uri
-                "--piper"
-                (lib.getExe options.piper)
                 "--voice"
                 options.voice
                 "--speaker"
@@ -169,13 +165,13 @@ in
                 options.lengthScale
                 "--noise-scale"
                 options.noiseScale
-                "--noise-w"
+                "--noise-w-scale"
                 options.noiseWidth
               ]
               ++ lib.optionals options.streaming [
                 "--streaming"
               ]
-              ++ lib.optionals options.cuda [
+              ++ lib.optionals options.useCUDA [
                 "--use-cuda"
               ]
               ++ options.extraArgs
@@ -194,7 +190,7 @@ in
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            ProcSubset = "pid";
+            ProcSubset = "all"; # for onnxruntime, which queries cpuinfo
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"

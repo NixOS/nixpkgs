@@ -94,7 +94,7 @@ in
     };
 
     listenPortStart = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       default = 4500;
       description = ''
         Starting port number for database listening sockets. Every FDB process binds to a

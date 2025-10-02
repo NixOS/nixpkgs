@@ -47,7 +47,10 @@ buildPythonPackage rec {
       --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';
 
-  pythonRelaxDeps = [ "attrs" ];
+  pythonRelaxDeps = [
+    "attrs"
+    "pendulum"
+  ];
 
   build-system = [ poetry-core ];
 
