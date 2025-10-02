@@ -4,39 +4,33 @@
   fetchFromGitHub,
   installShellFiles,
 }:
-buildGoModule (
-  finalAttrs:
-  let
-    ver = "0.1.0";
-  in
-  {
-    pname = "version-cli";
-    version = ver;
+buildGoModule (finalAttrs: {
+  pname = "version-cli";
+  version = "0.1.0";
 
-    src = fetchFromGitHub {
-      owner = "asciimoth";
-      repo = "version";
-      rev = "v${ver}";
-      hash = "sha256-TOmShw4nRyTWv2F0/p9X5WHjLSUz/dYCkp6/+NrILGo=";
-    };
+  src = fetchFromGitHub {
+    owner = "asciimoth";
+    repo = "version";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TOmShw4nRyTWv2F0/p9X5WHjLSUz/dYCkp6/+NrILGo=";
+  };
 
-    vendorHash = "sha256-TGrtVY1ut76K2J/dpt3OvuXaOkAAnxFTYVl1aTii+AI=";
+  vendorHash = "sha256-TGrtVY1ut76K2J/dpt3OvuXaOkAAnxFTYVl1aTii+AI=";
 
-    nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ];
 
-    postInstall = ''
-      installManPage man/version.1
-    '';
+  postInstall = ''
+    installManPage man/version.1
+  '';
 
-    meta = {
-      description = "Multi-source semantic version management tool";
-      homepage = "https://github.com/asciimoth/version";
-      maintainers = with lib.maintainers; [ asciimoth ];
-      license = with lib.licenses; [
-        mit
-        asl20
-      ];
-      mainProgram = "version";
-    };
-  }
-)
+  meta = {
+    description = "Multi-source semantic version management tool";
+    homepage = "https://github.com/asciimoth/version";
+    maintainers = with lib.maintainers; [ asciimoth ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
+    mainProgram = "version";
+  };
+})
