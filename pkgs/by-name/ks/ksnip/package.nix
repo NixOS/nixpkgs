@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
       - Many configuration options.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ x3ro ];
     platforms = lib.platforms.linux;
     mainProgram = "ksnip";
   };

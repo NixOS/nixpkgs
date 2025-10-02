@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tuist";
-  version = "4.53.4";
+  version = "4.79.7";
 
   src = fetchurl {
     url = "https://github.com/tuist/tuist/releases/download/${finalAttrs.version}/tuist.zip";
-    hash = "sha256-4YQY94/uWh/H4cCzhdQ3KxIh19D8mmUCCDKMF8ZwA4E=";
+    hash = "sha256-afZToryR7SXLlS/MKFuQFoBv2JQAaF4bHvEk5tO6xiw=";
   };
 
   dontUnpack = true;
@@ -35,14 +35,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9.]+)$" ]; };
 
   meta = {
     description = "Command line tool that helps you generate, maintain and interact with Xcode projects";
     homepage = "https://tuist.dev";
-    changelog = "https://github.com/tuist/tuist/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/tuist/tuist/blob/${finalAttrs.version}/cli/CHANGELOG.md";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = [ lib.maintainers.DimitarNestorov ];

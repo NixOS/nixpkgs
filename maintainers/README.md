@@ -155,8 +155,15 @@ When reviewing changes to a team, read the team's scope and the context around t
 In any case, request reviews from the existing team members.
 If the team lists no specific membership policy, feel free to merge changes to the team after giving the existing members a few days to respond.
 
-*Important:* If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
+> [!IMPORTANT]
+> If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
 
+A corresponding GitHub team can be created by any org member.
+When creating the team it should be created with the `nixpkgs-maintainers` team as parent.
+Once approved, the team will have the right privileges to be pinged and requested for review in Nixpkgs.
+
+> [!TIP]
+> The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
 
 # Maintainer scripts
 

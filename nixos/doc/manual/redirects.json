@@ -302,8 +302,14 @@
   "sec-image-repart": [
     "index.html#sec-image-repart"
   ],
+  "sec-image-repart-store-paths": [
+    "index.html#sec-image-repart-store-paths"
+  ],
   "sec-image-repart-store-partition": [
     "index.html#sec-image-repart-store-partition"
+  ],
+  "sec-image-repart-store-subvolume": [
+    "index.html#sec-image-repart-store-subvolume"
   ],
   "sec-image-repart-appliance": [
     "index.html#sec-image-repart-appliance"

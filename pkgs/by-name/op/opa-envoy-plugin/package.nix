@@ -14,13 +14,13 @@ assert
 
 buildGoModule rec {
   pname = "opa-envoy-plugin";
-  version = "1.8.0-envoy";
+  version = "1.9.0-envoy";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa-envoy-plugin";
     tag = "v${version}";
-    hash = "sha256-tPPF/zCwPShejBZZO1Kw7+jd4BpTU81DeIUxxz9b0RY=";
+    hash = "sha256-Arc0aVDcGZqCrrUrAB9yVXSXzdtOlXEFGZ8pJ578oKk=";
   };
 
   vendorHash = null;

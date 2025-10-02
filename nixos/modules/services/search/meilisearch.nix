@@ -223,6 +223,9 @@ in
       );
 
       serviceConfig = {
+        Type = "simple";
+        DynamicUser = true;
+        Restart = "always";
         LoadCredential = lib.mkMerge (
           [
             (lib.mkIf (cfg.masterKeyFile != null) [ "master_key:${cfg.masterKeyFile}" ])
@@ -232,11 +235,15 @@ in
           ) secrets-with-path
         );
         ExecStart = "${lib.getExe cfg.package} --config-file-path \${RUNTIME_DIRECTORY}/config.toml";
-        DynamicUser = true;
         StateDirectory = "meilisearch";
         WorkingDirectory = "%S/meilisearch";
         RuntimeDirectory = "meilisearch";
         RuntimeDirectoryMode = "0700";
+        ReadWritePaths = [
+          cfg.settings.db_path
+          cfg.settings.dump_dir
+          cfg.settings.snapshot_dir
+        ];
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -255,6 +262,7 @@ in
         RestrictSUIDSGID = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        RemoveIPC = true;
 
         # Meilisearch needs to determine cgroup memory limits to set its own memory limits.
         # This means this can't be set to "pid"

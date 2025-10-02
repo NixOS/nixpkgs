@@ -176,6 +176,7 @@ let
     "disallowedRequisites"
     "allowedReferences"
     "allowedRequisites"
+    "allowedImpureDLLs"
   ];
 
   inherit (stdenv)
@@ -198,6 +199,7 @@ let
     isLinux
     isDarwin
     isWindows
+    isCygwin
     isOpenBSD
     isStatic
     isMusl
@@ -358,6 +360,8 @@ let
       sandboxProfile ? "",
       propagatedSandboxProfile ? "",
 
+      allowedImpureDLLs ? [ ],
+
       hardeningEnable ? [ ],
       hardeningDisable ? [ ],
 
@@ -479,6 +483,7 @@ let
           nativeBuildInputs
           ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
           ++ optional isWindows ../../build-support/setup-hooks/win-dll-link.sh
+          ++ optional isCygwin ../../build-support/setup-hooks/cygwin-dll-link.sh
           ++ optionals doCheck nativeCheckInputs
           ++ optionals doInstallCheck nativeInstallCheckInputs;
 
@@ -699,6 +704,19 @@ let
                   "/bin/sh"
                 ];
               __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+            }
+          )
+          // optionalAttrs (isWindows || isCygwin) (
+            let
+              dlls =
+                allowedImpureDLLs
+                ++ lib.optionals isCygwin [
+                  "KERNEL32.dll"
+                  "cygwin1.dll"
+                ];
+            in
+            {
+              allowedImpureDLLs = if dlls != [ ] then dlls else null;
             }
           )
           // (
