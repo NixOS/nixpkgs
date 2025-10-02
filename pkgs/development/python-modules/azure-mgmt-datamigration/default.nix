@@ -1,33 +1,33 @@
 {
   lib,
+  azure-common,
+  azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
-  msrest,
-  msrestazure,
-  azure-common,
-  azure-mgmt-nspkg,
-  azure-mgmt-core,
+  isodate,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datamigration";
-  version = "10.0.0";
-  format = "setuptools";
+  version = "10.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "5cee70f97fe3a093c3cb70c2a190c2df936b772e94a09ef7e3deb1ed177c9f32";
+    pname = "azure_mgmt_datamigration";
+    inherit version;
+    hash = "sha256-wo748WK5RaTLUAZASjA3QcJG8DMSSeYB0V6h/c6VxUo=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
-  ]
-  ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
+    isodate
+    typing-extensions
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
@@ -36,10 +36,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Data Migration Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/datamigration/azure-mgmt-datamigration";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      maxwilson
-    ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }
