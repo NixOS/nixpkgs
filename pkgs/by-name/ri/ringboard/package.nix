@@ -9,6 +9,7 @@
   xorg,
   makeWrapper,
   displayServer ? "x11",
+  nixosTests,
 }:
 
 assert lib.assertOneOf "displayServer" displayServer [
@@ -95,6 +96,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sed -i "s|Exec=ringboard-egui|Exec=$(echo /bin/sh -c \"ps -p \`cat /tmp/.ringboard/\$USER.egui-sleep 2\> /dev/null\` \> /dev/null 2\>\\\&1 \\\&\\\& exec rm -f /tmp/.ringboard/\$USER.egui-sleep \\\|\\\| exec $out/bin/ringboard-egui\")|g" $out/share/applications/ringboard-egui.desktop
     sed -i "s|Icon=ringboard|Icon=$out/share/icons/hicolor/1024x1024/ringboard.jpeg|g" $out/share/applications/ringboard-egui.desktop
   '';
+
+  passthru.tests.nixos = nixosTests.ringboard;
 
   meta = {
     description = "Fast, efficient, and composable clipboard manager for Linux";
