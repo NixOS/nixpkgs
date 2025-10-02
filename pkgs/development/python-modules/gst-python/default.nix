@@ -42,6 +42,13 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The analytics tests often timeout under load on Darwin (e.g. on Hydra), so remove them
+    substituteInPlace testsuite/meson.build --replace-fail \
+      "['Test analytics', 'test_analytics.py', ['gst-plugins-bad/gst-libs/gst/analytics', 'gst-plugins-base/gst-libs/gst/video']]," \
+      ""
+  '';
+
   # Python 2.x is not supported.
   disabled = !isPy3k;
 
