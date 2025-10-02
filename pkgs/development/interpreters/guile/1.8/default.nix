@@ -35,7 +35,5 @@ buildGuile {
         -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
   '';
 
-  setupHook = ./setup-hook-1.8.sh;
-
-  maintainers = with lib.maintainers; [ ludo ];
+  meta.maintainers = with lib.maintainers; [ ludo ];
 }
