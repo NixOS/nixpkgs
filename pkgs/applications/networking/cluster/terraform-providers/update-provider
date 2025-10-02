@@ -106,7 +106,15 @@ pushd "$(dirname "$0")" >/dev/null
 
 if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   homepage="https://registry.terraform.io/providers/${provider}"
-  provider=$(basename "${provider}")
+  unnamespaced=$(basename "${provider}")
+  owner="$(jq -r ".${unnamespaced} // {} | .owner" providers.json)"
+  if [[ "${owner}" == null || "${provider}" == "${owner}/${unnamespaced}" ]]; then
+    # no namespace needed if the name wasn't taken by a provider of a different owner yet
+    provider="${unnamespaced}"
+  else
+    # to store namespaced, use `_` as we cannot use slashes in derivation names
+    provider="${provider/\//_}"
+  fi
   echo_provider "init"
   update_attr homepage "${homepage}"
   # create empty stings so nix-prefetch works
