@@ -29,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   # no pytest tests exist
+  doCheck = false;
 
   meta = {
     description = "Libervia temporary third party patches";
