@@ -1,89 +1,97 @@
 {
-  lib,
-  stdenv,
+  # options set through beam-packages
+  # systemd support for epmd only
+  systemdSupport ? null,
+  wxSupport ? true,
+
+  # options set by version specific files, e.g. 28.nix
+  version,
+  hash ? null,
+
+}:
+{
+  # overridable options
+  enableDebugInfo ? false,
+  enableHipe ? true,
+  enableKernelPoll ? true,
+  enableSmpSupport ? true,
+  enableThreads ? true,
+  javacSupport ? false,
+  odbcSupport ? false,
+  parallelBuild ? true,
+
   fetchFromGitHub,
-  makeWrapper,
   gawk,
   gnum4,
   gnused,
+  lib,
+  libGL,
+  libGLU,
   libxml2,
   libxslt,
+  makeWrapper,
   ncurses,
   nix-update-script,
+  openjdk11,
   openssl,
   perl,
   runtimeShell,
-  openjdk11 ? null, # javacSupport
-  unixODBC ? null, # odbcSupport
-  libGL ? null,
-  libGLU ? null,
-  wxGTK ? null,
-  xorg ? null,
-  parallelBuild ? false,
+  stdenv,
   systemd,
-  wxSupport ? true,
-  # systemd support for epmd
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  unixODBC,
   wrapGAppsHook3,
+  wxGTK32,
+  xorg,
   zlib,
 }:
-{
-  baseName ? "erlang",
-  version,
-  sha256 ? null,
-  tag ? "OTP-${version}",
-  src ? fetchFromGitHub {
-    inherit tag sha256;
-    owner = "erlang";
-    repo = "otp";
-  },
-  enableHipe ? true,
-  enableDebugInfo ? false,
-  enableThreads ? true,
-  enableSmpSupport ? true,
-  enableKernelPoll ? true,
-  javacSupport ? false,
-  javacPackages ? [ openjdk11 ],
-  odbcSupport ? false,
-  odbcPackages ? [ unixODBC ],
-  opensslPackage ? openssl,
-  wxPackages ? [
-    libGL
-    libGLU
-    wxGTK
-    xorg.libX11
-    wrapGAppsHook3
-  ],
-}:
-
-assert
-  wxSupport
-  -> (
-    if stdenv.hostPlatform.isDarwin then
-      wxGTK != null
-    else
-      libGL != null && libGLU != null && wxGTK != null && xorg != null
-  );
-
-assert odbcSupport -> unixODBC != null;
-assert javacSupport -> openjdk11 != null;
-
 let
   inherit (lib)
     optional
     optionals
     optionalString
     ;
-  wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
+
+  wxPackages2 =
+    if stdenv.hostPlatform.isDarwin then
+      [ wxGTK32 ]
+    else
+      [
+        libGL
+        libGLU
+        wxGTK32
+        xorg.libX11
+        wrapGAppsHook3
+      ];
 
   major = builtins.head (builtins.splitVersion version);
+
+  enableSystemd =
+    if (systemdSupport == null) then
+      lib.meta.availableOn stdenv.hostPlatform systemd
+    else
+      systemdSupport;
+
+  runtimePath = lib.makeBinPath [
+    gawk
+    gnused
+  ];
 in
 stdenv.mkDerivation {
-  pname = "${baseName}" + optionalString javacSupport "_javac" + optionalString odbcSupport "_odbc";
+  pname = "erlang" + optionalString javacSupport "_javac" + optionalString odbcSupport "_odbc";
+  inherit version;
 
-  inherit src version;
+  src = fetchFromGitHub {
+    owner = "erlang";
+    repo = "otp";
+    tag = "OTP-${version}";
+    inherit hash;
+  };
 
-  LANG = "C.UTF-8";
+  env = {
+    # only build man pages and shell/IDE docs
+    DOC_TARGETS = "man chunks";
+    LANG = "C.UTF-8";
+  };
 
   nativeBuildInputs = [
     makeWrapper
@@ -93,20 +101,20 @@ stdenv.mkDerivation {
     libxml2
   ];
 
-  env = {
-    # only build man pages and shell/IDE docs
-    DOC_TARGETS = "man chunks";
-  };
-
   buildInputs = [
     ncurses
-    opensslPackage
+    openssl
     zlib
   ]
   ++ optionals wxSupport wxPackages2
-  ++ optionals odbcSupport odbcPackages
-  ++ optionals javacSupport javacPackages
-  ++ optional systemdSupport systemd;
+  ++ optionals odbcSupport [ unixODBC ]
+  ++ optionals javacSupport [ openjdk11 ]
+  ++ optionals enableSystemd [ systemd ];
+
+  # disksup requires a shell
+  postPatch = ''
+    substituteInPlace lib/os_mon/src/disksup.erl --replace-fail '"sh ' '"${runtimeShell} '
+  '';
 
   debugInfo = enableDebugInfo;
 
@@ -114,9 +122,9 @@ stdenv.mkDerivation {
   enableParallelBuilding = parallelBuild;
 
   configureFlags = [
-    "--with-ssl=${lib.getOutput "out" opensslPackage}"
+    "--with-ssl=${lib.getOutput "out" openssl}"
+    "--with-ssl-incl=${lib.getDev openssl}"
   ]
-  ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
   ++ optional enableThreads "--enable-threads"
   ++ optional enableSmpSupport "--enable-smp-support"
   ++ optional enableKernelPoll "--enable-kernel-poll"
@@ -124,28 +132,21 @@ stdenv.mkDerivation {
   ++ optional javacSupport "--with-javac"
   ++ optional odbcSupport "--with-odbc=${unixODBC}"
   ++ optional wxSupport "--enable-wx"
-  ++ optional systemdSupport "--enable-systemd"
+  ++ optional enableSystemd "--enable-systemd"
   ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
   # make[3]: *** [yecc.beam] Segmentation fault: 11
   ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit";
 
-  installPhase = ''
-    runHook preInstall
+  installTargets = [
+    "install"
+    "install-docs"
+  ];
 
-    make install
-    make install-docs
-
+  postInstall = ''
     ln -sv $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
 
-    wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
-    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${
-      lib.makeBinPath [
-        gnused
-        gawk
-      ]
-    }"
-
-    runHook postInstall
+    wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${runtimePath}"
+    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${runtimePath}"
   '';
 
   passthru = {
