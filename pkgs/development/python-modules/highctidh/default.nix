@@ -4,6 +4,7 @@
   setuptools,
   pytestCheckHook,
   fetchFromGitea,
+  gitUpdater,
 }:
 buildPythonPackage rec {
   pname = "highctidh";
@@ -31,6 +32,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "highctidh"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Fork of high-ctidh as as a portable shared library with Python bindings";
