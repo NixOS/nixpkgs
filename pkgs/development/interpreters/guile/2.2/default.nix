@@ -2,6 +2,7 @@
   lib,
   stdenv,
   pkgsBuildBuild,
+  fetchpatch,
   libtool,
   libunistring,
   buildGuile,
@@ -9,7 +10,7 @@
 
 buildGuile {
   version = "2.2.7";
-  srcHash = "sha256-zfd26l8pQwsSWCCWMFVb7qbSvlSB+dpNZJhrB3/zdQQ=";
+  srcHash = "sha256-RLTF+74lfM3r6hhCAhLJs+kMPIalSSDYVUA5/GdpoAc=";
 
   depsBuildBuild = lib.optional (
     stdenv.hostPlatform != stdenv.buildPlatform
