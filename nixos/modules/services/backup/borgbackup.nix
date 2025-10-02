@@ -194,6 +194,7 @@ let
       timerConfig = {
         Persistent = cfg.persistentTimer;
         OnCalendar = cfg.startAt;
+        RandomizedOffsetSec = cfg.randomizedOffset;
       };
       # if remote-backup wait for network
       after = lib.optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
@@ -497,6 +498,20 @@ in
                 {manpage}`systemd.timer(5)`
                 which triggers the backup immediately if the last trigger
                 was missed (e.g. if the system was powered down).
+              '';
+            };
+
+            randomizedOffset = lib.mkOption {
+              default = "0";
+              type = lib.types.str;
+              example = "2h";
+              description = ''
+                Set the `RandomizedOffsetSec` option for the
+                {manpage}`systemd.timer(5)`
+                which adds a random but static offset to the starting time of
+                the different jobs. This prevents locking issues with borg and resource
+                exhaustion. Must be in the format described in
+                {manpage}`systemd.time(7)`.
               '';
             };
 
