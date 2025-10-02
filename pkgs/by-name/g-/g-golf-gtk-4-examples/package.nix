@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     wrapGAppsHook4
     glib
-  ] ++ lib.optionals useLibadwaita [ libadwaita ];
+  ]
+  ++ lib.optionals useLibadwaita [ libadwaita ];
 
   buildInputs = [
     guile

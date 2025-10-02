@@ -2,14 +2,12 @@
   stdenv,
   lib,
   fetchurl,
+  gettext,
   pkg-config,
-  automake117x,
-  autoconf,
   libtool,
   gnumake,
   gcc,
   gnum4,
-  gettext,
   texinfo,
   guile,
   guile-lib,
@@ -36,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    automake117x
-    autoconf
     libtool
     gnumake
     gcc
@@ -63,8 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     # In build environment, There is no /dev/tty
     sed -i "s|/dev/tty|/dev/null|g" test-suite/tests/gobject.scm
 
-    sed -i "s|SITEDIR=.*$|SITEDIR="$out/${guile.siteDir}"|" configure.ac
-    sed -i "s|SITECCACHEDIR=.*$|SITECCACHEDIR="$out/${guile.siteCcacheDir}"|" configure.ac
+    sed -i "s|SITEDIR=.*$|SITEDIR="$out/${guile.siteDir}"|" configure
+    sed -i "s|SITECCACHEDIR=.*$|SITECCACHEDIR="$out/${guile.siteCcacheDir}"|" configure
+  '';
+
+  # error: possibly undefined macro: AC_LIB_LINKFLAGS_FROM_LIBS
+  preConfigure = ''
+    cp ${gettext}/share/gettext/m4/lib-{ld,link,prefix}.m4 m4
   '';
 
   checkPhase = ''

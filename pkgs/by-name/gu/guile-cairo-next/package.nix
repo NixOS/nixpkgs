@@ -10,6 +10,7 @@
   autoconf,
   automake,
   texinfo,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
     automake
     texinfo
     pkg-config
+    gettext
   ];
   buildInputs = [
     cairo
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    cp ${gettext}/share/gettext/m4/lib-{ld,link,prefix}.m4 m4
     autoreconf -fvi
   '';
 
