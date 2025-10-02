@@ -51,14 +51,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.43.0";
+  version = "0.43.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-wPLXuZWhaA51J7jGHffh/xnXzWDKCXV2G3Uvrg7G8Kg=";
+    hash = "sha256-Wd61Q1sG55oDxPuHJpmvSWuptwJIuzgn2sB/dzNRc1c=";
   };
 
   goModules =
@@ -142,13 +142,6 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
-
-    # Fix test failure with fish >= 4.1
-    # See: https://github.com/kovidgoyal/kitty/commit/2f991691f9dca291c52bd619c800d3c2f3eb0d66
-    (fetchpatch {
-      url = "https://github.com/kovidgoyal/kitty/commit/2f991691f9dca291c52bd619c800d3c2f3eb0d66.patch";
-      hash = "sha256-LIQz3e2qgiwpsMd5EbEcvd7ePEEPJvIH4NmNpxydQiU=";
-    })
   ];
 
   hardeningDisable = [
