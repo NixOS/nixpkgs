@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "1.1.5";
+  version = "1.1.7";
 
   src =
     let
@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_linux_${arch}.tar.gz";
       stripRoot = false;
       hash = selectSystem {
-        x86_64-linux = "sha256-2F8GU7TOypg0YLtXSMQlzjtocsZeqK/f1MSEx8jNuP0=";
-        aarch64-linux = "sha256-Anj/cTuG0iba/HewkZZcC1zZsiU2F0kIGI/LbC0IDZU=";
-        armv7l-linux = "sha256-vmeFeOn94awUWZupQzDyOVRBEcaiaz7IHZyoge1B2Us=";
+        x86_64-linux = "sha256-2eLnKjIVYZCOe5KZcT2fLQbYWnK5HBNfnaO/5spBOEU=";
+        aarch64-linux = "sha256-ZGyh8w9Zcgbm9YcNDaGiSdI3D62e4G8RFX7GbEPhCtE=";
+        armv7l-linux = "sha256-H6Ae2fnS48MG5fPmPbl7Rzaw7ElB+fsdjUHfDwfn8pk=";
       };
     };
 
