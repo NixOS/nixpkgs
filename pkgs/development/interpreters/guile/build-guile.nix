@@ -21,6 +21,8 @@ lib.extendMkDerivation {
   excludeDrvArgNames = [
     "maintainers"
     "srcHash"
+    "coverage"
+    "coverageAnalysis"
   ];
 
   extendDrvArgs =
@@ -80,6 +82,7 @@ lib.extendMkDerivation {
           readline
         ]
         ++ lib.optionals (lib.versionAtLeast finalAttrs.version "2.0.0") [
+          boehmgc
           libunistring
           libffi
         ];
