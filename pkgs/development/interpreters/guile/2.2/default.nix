@@ -10,7 +10,7 @@
 
 buildGuile {
   version = "2.2.7";
-  srcHash = "sha256-zfd26l8pQwsSWCCWMFVb7qbSvlSB+dpNZJhrB3/zdQQ=";
+  srcHash = "sha256-RLTF+74lfM3r6hhCAhLJs+kMPIalSSDYVUA5/GdpoAc=";
 
   patches = lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
     url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
