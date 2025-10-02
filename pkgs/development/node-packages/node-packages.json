@@ -132,7 +132,6 @@
 , "purescript-psa"
 , "purs-tidy"
 , "purty"
-, "rimraf"
 , "sass"
 , "semver"
 , "sloc"
