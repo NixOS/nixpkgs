@@ -43,9 +43,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://www.typescriptlang.org/";
     changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      kachick
-    ];
+    maintainers = [ ];
     mainProgram = "tsc";
   };
 })
