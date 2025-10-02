@@ -57,6 +57,7 @@
   fontconfig,
   freetype,
   openssl,
+  openxr-loader,
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
@@ -80,7 +81,7 @@
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.48.2";
+  version = "2.50.0";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
     if lib.versionAtLeast gtk3.version "4.0" then
       "6.0"
@@ -100,7 +101,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7Fj238JdOzYDiOGS+GUGjWmqsJtNffAh+Q4xTS+lTzc=";
+    hash = "sha256-5WS4CZ+aOuMkCVObKQu9KtCE6ZttItSqxeUeRVTfi8I=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -110,94 +111,94 @@ clangStdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      gettext
-      gobject-introspection
-      gperf
-      ninja
-      perl
-      perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
-      pkg-config
-      python3
-      ruby
-      gi-docgen
-      glib # for gdbus-codegen
-      unifdef
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    gettext
+    gobject-introspection
+    gperf
+    ninja
+    perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
+    pkg-config
+    python3
+    ruby
+    gi-docgen
+    glib # for gdbus-codegen
+    unifdef
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      cairo # required even when using skia
-      enchant2
-      flite
-      libavif
-      libepoxy
-      libjxl
-      gnutls
-      gst-plugins-bad
-      gst-plugins-base
-      harfbuzz
-      hyphen
-      icu
-      libGL
-      libGLU
-      libgbm
-      libgcrypt
-      libgpg-error
-      libidn
-      libintl
-      lcms2
-      libpthreadstubs
-      libsysprof-capture
-      libtasn1
-      libwebp
-      libxkbcommon
-      libxml2
-      libxslt
-      libbacktrace
-      nettle
-      p11-kit
-      sqlite
-      woff2
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
-      # https://bugs.webkit.org/show_bug.cgi?id=274032
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
-      libedit
-      readline
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      libseccomp
-      libmanette
-      wayland
-      xorg.libX11
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableExperimental [
-      # For ENABLE_WEB_RTC
-      openssl
-    ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-      wayland-protocols
-    ];
+  buildInputs = [
+    at-spi2-core
+    cairo # required even when using skia
+    enchant2
+    flite
+    libavif
+    libepoxy
+    libjxl
+    gnutls
+    gst-plugins-bad
+    gst-plugins-base
+    harfbuzz
+    hyphen
+    icu
+    libGL
+    libGLU
+    libgbm
+    libgcrypt
+    libgpg-error
+    libidn
+    libintl
+    lcms2
+    libpthreadstubs
+    libsysprof-capture
+    libtasn1
+    libwebp
+    libxkbcommon
+    libxml2
+    libxslt
+    libbacktrace
+    nettle
+    p11-kit
+    sqlite
+    woff2
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libedit
+    readline
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libseccomp
+    libmanette
+    wayland
+    xorg.libX11
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableExperimental [
+    # For ENABLE_WEB_RTC
+    openssl
+    # For ENABLE_WEBXR
+    openxr-loader
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    wayland-protocols
+  ];
 
   propagatedBuildInputs = [
     gtk3

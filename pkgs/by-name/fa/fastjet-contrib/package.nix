@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     make fragile-shared-install
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Third party extensions for FastJet";
     homepage = "http://fastjet.fr/";
     changelog = "https://phab.hepforge.org/source/fastjetsvn/browse/contrib/tags/${version}/NEWS?as=source&blame=off";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
   };
 }

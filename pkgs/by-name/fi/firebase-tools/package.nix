@@ -10,28 +10,27 @@
 
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "14.4.0";
+  version = "14.17.0";
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-mcb0rCI7tJE6A/CK4rGUJ2qqvjrld0Yzl9l4mMipCoA=";
+    hash = "sha256-qZMm3xW46XZG0l3ECKOSBb2vRwZrwLP2Cl3UXcH7OTY=";
   };
 
-  npmDepsHash = "sha256-Ezjn5oVjvVJnfw0oBTxNbmfmgHYBDixdiIJHft9FbQE=";
+  npmDepsHash = "sha256-3voUCvmBqi9Lfpol1lMDe4gTmF6TevLMmxBoDS03K0o=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
   '';
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
   env.PUPPETEER_SKIP_DOWNLOAD = true;
 

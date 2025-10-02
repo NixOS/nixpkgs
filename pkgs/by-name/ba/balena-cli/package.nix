@@ -22,31 +22,30 @@ let
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "21.1.14";
+  version = "22.4.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-6KiH7hgyltvWv/ZALnYZ9LkkTEp5aJ6X/3fNwcj0qck=";
+    hash = "sha256-/EV4xixcJBNDWqvNp9uv4ZjlPcm6j/d7u4qYlALtixQ=";
   };
 
-  npmDepsHash = "sha256-jBxF179wdnH5j6cZLzuFm2XKd2n0iEjc+W1X+HGdJPg=";
+  npmDepsHash = "sha256-ZunJp1wY8iFhEvGKPJDPcnKO/eGGVT2NduK1kjjZ2k0=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
   '';
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      node-gyp'
-      python3
-      versionCheckHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    node-gyp'
+    python3
+    versionCheckHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [

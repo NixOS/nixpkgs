@@ -24,20 +24,19 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/rest/${lib.versions.majorMinor version}/rest-${version}.tar.xz";
     sha256 = "0513aad38e5d3cedd4ae3c551634e3be1b9baaa79775e53b2dba9456f15b01c9";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      gobject-introspection
-    ]
-    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_412
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "rest";
       attrPath = "librest";
       versionPolicy = "odd-unstable";
       freeze = true;

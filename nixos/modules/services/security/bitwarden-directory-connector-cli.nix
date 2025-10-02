@@ -150,7 +150,7 @@ in
             overwriteExisting = mkOption {
               type = types.bool;
               default = false;
-              description = "Remove and re-add users/groups, See https://bitwarden.com/help/user-group-filters/#overwriting-syncs for more details.";
+              description = "Remove and re-add users/groups, See <https://bitwarden.com/help/user-group-filters/#overwriting-syncs> for more details.";
             };
 
             largeImport = mkOption {

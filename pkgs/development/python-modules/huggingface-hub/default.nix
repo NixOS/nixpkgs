@@ -9,6 +9,7 @@
   # dependencies
   filelock,
   fsspec,
+  hf-xet,
   packaging,
   pyyaml,
   requests,
@@ -35,18 +36,21 @@
   graphviz,
   # tensorflow-testing
   keras,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.31.4";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-V/FbInskBHefbPkbwQyx+aWBcdrk5WaXXbR/v3fNU+Y=";
+    hash = "sha256-b7zuqY1d2wBjqyQ3nxhXg33limR1Nq3dGS2YoY5xcsQ=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +58,7 @@ buildPythonPackage rec {
   dependencies = [
     filelock
     fsspec
+    hf-xet
     packaging
     pyyaml
     requests
@@ -74,7 +79,8 @@ buildPythonPackage rec {
     torch = [
       torch
       safetensors
-    ] ++ safetensors.optional-dependencies.torch;
+    ]
+    ++ safetensors.optional-dependencies.torch;
     hf_transfer = [
       hf-transfer
     ];
@@ -93,21 +99,26 @@ buildPythonPackage rec {
       keras
     ];
     hf_xet = [
-      # hf-xet (unpackaged)
+      hf-xet
     ];
   };
 
-  # Tests require network access.
-  doCheck = false;
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
 
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";
-    mainProgram = "huggingface-cli";
+    mainProgram = "hf";
     homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      osbm
+    ];
   };
 }

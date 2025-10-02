@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d0e35b6..fc19477 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -96,20 +96,6 @@ endif()
+ # set the path where we can find the findXXX.cmake
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
+ 
+-if(APPLE)
+-
+-  # avoid the cmake policy warning about @rpath in MacOSX
+-  cmake_policy(SET CMP0042 NEW)
+-
+-  SET(CMAKE_MACOSX_RPATH TRUE) # initialize the MACOSX_RPATH property on all targets
+-  SET(CMAKE_SKIP_BUILD_RPATH  FALSE) # don't skip the full RPATH for the build tree
+-  # SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) # when building, don't use the install RPATH already
+-  SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE) # when building, use the install RPATH already
+-                                           # probably not needed
+-  # SET(CMAKE_INSTALL_RPATH "") # the RPATH to be used when installing
+-  SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE) # LC_RPATH for CUDA and OpenCV etc written into executable
+-endif(APPLE)
+-
+ # FIND BOOST
+ set(BOOST_REQUIRED_COMPONENTS "atomic;chrono;date_time;filesystem;program_options;serialization;system;thread;timer;math_c99")
+ if(WIN32)
+

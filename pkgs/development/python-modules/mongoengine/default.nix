@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
-    repo = pname;
+    repo = "mongoengine";
     tag = "v${version}";
     hash = "sha256-trWCKmCa+q+qtzF0HKCZMnko1cvvpwJvczLFuKtB83E=";
   };

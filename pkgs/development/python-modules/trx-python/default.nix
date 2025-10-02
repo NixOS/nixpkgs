@@ -47,7 +47,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [ "trx/tests" ];
+  enabledTestPaths = [ "trx/tests" ];
 
   disabledTestPaths = [
     # access to network

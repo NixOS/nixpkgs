@@ -176,7 +176,7 @@ in
       # need to be writeable, so we can't just point at the ones in the nix
       # store. Instead we take the approach of copying them out of the store
       # on first run. If `bookarch` already exists, we assume the rest of the
-      # files do as well, and copy nothing -- otherwise we risk ovewriting
+      # files do as well, and copy nothing -- otherwise we risk overwriting
       # server state information every time the server is upgraded.
       preStart = ''
         if [ ! -e "${cfg.stateDir}"/bookarch ]; then

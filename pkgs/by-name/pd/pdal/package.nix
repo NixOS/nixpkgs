@@ -44,27 +44,26 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      gdal
-      hdf5-cpp
-      laszip
-      libgeotiff
-      libtiff
-      libxml2
-      openscenegraph
-      libpq
-      proj
-      sqlite
-      tiledb
-      xercesc
-      zlib
-      zstd
-    ]
-    ++ lib.optionals enableE57 [
-      libe57format
-    ];
+  buildInputs = [
+    curl
+    gdal
+    hdf5-cpp
+    laszip
+    libgeotiff
+    libtiff
+    libxml2
+    openscenegraph
+    libpq
+    proj
+    sqlite
+    tiledb
+    xercesc
+    zlib
+    zstd
+  ]
+  ++ lib.optionals enableE57 [
+    libe57format
+  ];
 
   strictDeps = true;
 
@@ -143,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
+    description = "Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = licenses.bsd3;
     teams = [ teams.geospatial ];

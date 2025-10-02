@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.38.1";
+  version = "1.40.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_securitycenter";
     inherit version;
-    hash = "sha256-XsR+gNtFCWhe0PEmaS8lIgGl0+ri7MR/omK+bch4Too=";
+    hash = "sha256-IhiLtqPEyeIkt7DaXgTW+fyOsYBO+qrz+Noxs8ntFOo=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hukkin";
-    repo = pname;
+    repo = "mdformat-toc";
     tag = version;
     hash = "sha256-3EX6kGez408tEYiR9VSvi3GTrb4ds+HJwpFflv77nkg=";
   };

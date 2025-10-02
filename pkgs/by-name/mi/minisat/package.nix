@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "stp";
-    repo = pname;
+    repo = "minisat";
     rev = "releases/${version}";
     sha256 = "14vcbjnlia00lpyv2fhbmw3wbc9bk9h7bln9zpyc3nwiz5cbjz4a";
   };

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "usb1/testUSB1.py" ];
+  enabledTestPaths = [ "usb1/testUSB1.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/vpelletier/python-libusb1";

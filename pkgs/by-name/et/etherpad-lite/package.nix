@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "2.3.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OomZ1oziEGgLJfYyfkHZOPRHfrrWc4XLAsZA4cn0btA=";
+    hash = "sha256-11fNDAR6zmHv1O5nL0GhGJj6eHwDc8zT0Tvrba7qBpw=";
   };
 
   patches = [
@@ -31,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-nhiPopGLCeCHiqEQ3solwuLwkDnHTH3otbxIJmbuQAA=";
+    fetcherVersion = 1;
+    hash = "sha256-PZD55V/3dvNLx39tD4I00IzURhuyqMX4uObnQfnSBtk=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     # remove unnecessary files
     rm node_modules/.modules.yaml
-    pnpm prune --prod --ignore-scripts
+    CI=true pnpm prune --prod --ignore-scripts
     find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
 
     # remove non-deterministic files

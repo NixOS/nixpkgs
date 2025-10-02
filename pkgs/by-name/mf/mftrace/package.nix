@@ -20,7 +20,7 @@
   - fontforge = null (limited functionality)
 */
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mftrace";
   version = "1.2.20";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "hanwen";
     repo = "mftrace";
-    rev = "release/${version}";
+    rev = "release/${finalAttrs.version}";
     sha256 = "02ik25aczkbi10jrjlnxby3fmixxrwm2k5r4fkfif3bjfym7nqbc";
   };
 

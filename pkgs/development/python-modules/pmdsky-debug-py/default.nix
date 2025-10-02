@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "pmdsky-debug-py";
     rev = version;
     sha256 = "sha256-JTvLyYUwOEp1O0rtO313VIT6AYOqXWVFUleTrb6BN6Q=";
   };

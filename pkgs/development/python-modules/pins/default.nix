@@ -3,6 +3,7 @@
   adlfs,
   appdirs,
   buildPythonPackage,
+  databackend,
   fastparquet,
   fetchFromGitHub,
   fsspec,
@@ -21,23 +22,24 @@
   pyyaml,
   requests,
   s3fs,
-  setuptools,
   setuptools-scm,
+  setuptools,
+  typing-extensions,
   xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.8.7";
+  version = "0.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-79TVAfr872Twc7D2iej51jiKNwZ9ESOa66ItNDmyfFM=";
+    hash = "sha256-fDbgas4RG4cJRqrISWmrMUQUycQindlqF9/jA5R1TF8=";
   };
 
   build-system = [
@@ -47,6 +49,7 @@ buildPythonPackage rec {
 
   dependencies = [
     appdirs
+    databackend
     fsspec
     humanize
     importlib-metadata
@@ -56,6 +59,7 @@ buildPythonPackage rec {
     pandas
     pyyaml
     requests
+    typing-extensions
     xxhash
   ];
 
@@ -71,11 +75,12 @@ buildPythonPackage rec {
     pytest-cases
     pytest-parallel
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pins" ];
 
-  pytestFlagsArray = [ "pins/tests/" ];
+  enabledTestPaths = [ "pins/tests/" ];
 
   disabledTestPaths = [
     # Tests require network access
@@ -88,7 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to publishes data, models and other Python objects";
     homepage = "https://github.com/rstudio/pins-python";
-    changelog = "https://github.com/rstudio/pins-python/releases/tag/v${version}";
+    changelog = "https://github.com/rstudio/pins-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

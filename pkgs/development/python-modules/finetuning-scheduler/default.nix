@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "finetuning-scheduler";
-  version = "2.5.1";
+  version = "2.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${version}";
-    hash = "sha256-+jt+if9aAbEd2XDMC7RpZmJpm4VUEZMt5xoLOP/esMg=";
+    hash = "sha256-6WRKDYug7eVaTSY2R2jBcj9o/984mqKZZi36XRT7KyI=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   env.PACKAGE_NAME = "pytorch";
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
   disabledTests =
     lib.optionals (pythonOlder "3.12") [
       # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:

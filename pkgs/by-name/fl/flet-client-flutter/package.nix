@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  flutter327,
+  flutter329,
   gst_all_1,
   libunwind,
   makeWrapper,
@@ -18,15 +18,15 @@
   fletTarget ? "linux",
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.27.6";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-ZtIAfLdj9209ZzgmNzTHMyzCTohxYK0Va4M8NYyie64=";
+    hash = "sha256-fD42AcfU3a/7sNvLE81pd1jdwUn5dEro3uKzaRBCWIU=";
   };
 
   sourceRoot = "${src.name}/client";
@@ -47,19 +47,18 @@ flutter327.buildFlutterApplication rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-vaapi
-      gst_all_1.gstreamer
-      libunwind
-      orc
-      mimalloc
-    ]
-    ++ mpv-unwrapped.buildInputs
-    ++ libplacebo.buildInputs;
+  buildInputs = [
+    mpv-unwrapped
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-vaapi
+    gst_all_1.gstreamer
+    libunwind
+    orc
+    mimalloc
+  ]
+  ++ mpv-unwrapped.buildInputs
+  ++ libplacebo.buildInputs;
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [

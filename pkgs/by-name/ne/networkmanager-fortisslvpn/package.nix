@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       inherit openfortivpn;
     })
     ./support-ppp-2.5.0.patch
+    ./pppd-accept-remote.patch
   ];
 
   strictDeps = true;
@@ -47,20 +48,19 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs =
-    [
-      openfortivpn
-      networkmanager
-      ppp
-      glib
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      gtk4
-      libsecret
-      libnma
-      libnma-gtk4
-    ];
+  buildInputs = [
+    openfortivpn
+    networkmanager
+    ppp
+    glib
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -82,6 +82,9 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
     networkManagerPlugin = "VPN/nm-fortisslvpn-service.name";
+    networkManagerTmpfilesRules = [
+      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
+    ];
   };
 
   meta = with lib; {

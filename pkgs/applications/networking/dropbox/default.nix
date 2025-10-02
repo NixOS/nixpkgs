@@ -6,15 +6,6 @@
   makeDesktopItem,
 }:
 
-let
-  platforms = [
-    "i686-linux"
-    "x86_64-linux"
-  ];
-in
-
-assert lib.elem stdenv.hostPlatform.system platforms;
-
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
@@ -23,7 +14,7 @@ let
       x86_64-linux = "217.4.4417";
       i686-linux = "206.3.6386";
     }
-    .${stdenv.hostPlatform.system};
+    .${stdenv.hostPlatform.system} or "";
 
   arch =
     {
@@ -89,6 +80,7 @@ buildFHSEnv {
       gcc
       glib
       gnutar
+      gtk3
       libxml2
       libxslt
       procps

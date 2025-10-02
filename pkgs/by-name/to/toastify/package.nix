@@ -11,12 +11,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "hoodie";
-    repo = pname;
+    repo = "toastify";
     rev = "v${version}";
     sha256 = "sha256-hSBh1LTfe3rQDPUryo2Swdf/yLYrOQ/Fg3Dz7ZqV3gw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xnmns0YXsKuoNxxax3St5pLiFwu6BD0iIYHNi9N9mO0=";
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''

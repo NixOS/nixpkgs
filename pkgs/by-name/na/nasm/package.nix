@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       pSub
-      willibutz
     ];
+    mainProgram = "nasm";
     license = licenses.bsd2;
   };
 }

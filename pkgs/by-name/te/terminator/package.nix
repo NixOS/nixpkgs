@@ -17,6 +17,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
   version = "2.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
@@ -41,7 +42,9 @@ python3.pkgs.buildPythonApplication rec {
     vte
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     configobj
     dbus-python
     pygobject3
@@ -54,6 +57,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   doCheck = false;
+
+  pythonImportsCheck = [ "terminatorlib" ];
 
   dontWrapGApps = true;
 

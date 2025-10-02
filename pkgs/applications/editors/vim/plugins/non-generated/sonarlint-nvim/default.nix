@@ -6,13 +6,13 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "sonarlint.nvim";
-  version = "0-unstable-2025-05-16";
+  version = "0-unstable-2025-09-18";
 
   src = fetchFromGitLab {
     owner = "schrieveslaach";
     repo = "sonarlint.nvim";
-    rev = "2aa7a9fd9d8022d1c8d472fb63ce62e021d70130";
-    hash = "sha256-RfQthodqF6r24I6EJxlewjYiX3jLAIb/RMAOVnWs73s=";
+    rev = "dc5702556f90eedce587233f3c1a0ae671ea3648";
+    hash = "sha256-IBXQ9ijAG8TdnwkSTNbBtzziQC5bbCbkAmC8gM7G5E4=";
   };
 
   passthru.updateScript = nix-update-script {

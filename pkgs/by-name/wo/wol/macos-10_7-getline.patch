@@ -1,0 +1,64 @@
+From f78508f9803de42faf6e578d89ce08ea31a62b0d Mon Sep 17 00:00:00 2001
+From: Bryan Lai <bryanlais@gmail.com>
+Date: Thu, 29 May 2025 15:38:11 +0800
+Subject: [PATCH] fix: build for darwin (conflicting getline)
+
+Previously failing with:
+
+  In file included from getpass4.c:7:
+  ./getline.h:32:1: error: conflicting types for 'getline'
+     32 | getline PARAMS ((char **_lineptr, size_t *_n, FILE *_stream));
+        | ^
+  /nix/store/w41ks2baj649algkjnbh9746cprrnr1k-apple-sdk-11.3/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h:355:9: note: previous declaration is here
+    355 | ssize_t getline(char ** __restrict __linep, size_t * __restrict __linecapp, FILE * __restrict __stream) __OSX_AVAILABLE_STARTING(__MAC_10_7, __IPHONE_4_3);
+        |         ^
+  In file included from getpass4.c:7:
+  ./getline.h:35:1: error: conflicting types for 'getdelim'
+     35 | getdelim PARAMS ((char **_lineptr, size_t *_n, int _delimiter, FILE *_stream));
+        | ^
+  /nix/store/w41ks2baj649algkjnbh9746cprrnr1k-apple-sdk-11.3/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h:354:9: note: previous declaration is here
+    354 | ssize_t getdelim(char ** __restrict __linep, size_t * __restrict __linecapp, int __delimiter, FILE * __restrict __stream) __OSX_AVAILABLE_STARTING(__MAC_10_7, __IPHONE_4_3);
+        |         ^
+  4 warnings generated.
+  2 errors generated.
+---
+ configure.ac  | 2 +-
+ lib/getline.h | 7 +++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 99dc73d..fd0b0dc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -193,7 +193,7 @@ gl_MD5 dnl for GNU md5
+ AM_FUNC_GETLINE dnl for GNU getline
+ AC_CHECK_FUNCS(usleep)
+ AC_CHECK_FUNCS(getopt_long) dnl for GNU getopt
+-AC_CHECK_FUNCS(getdelim)
++AC_CHECK_FUNCS([getline getdelim])
+ AC_CHECK_FUNC(inet_aton, [], [
+ 	dnl check libresolv for inet_aton() as seen on solaris
+ 	AC_CHECK_LIB(resolv, inet_aton,
+diff --git a/lib/getline.h b/lib/getline.h
+index 991184c..34a0247 100644
+--- a/lib/getline.h
++++ b/lib/getline.h
+@@ -28,11 +28,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+ # endif
+ 
+ # if __GLIBC__ < 2
++
++#include "config.h"
++#ifndef HAVE_GETLINE
+ int
+ getline PARAMS ((char **_lineptr, size_t *_n, FILE *_stream));
++#endif
+ 
++#ifndef HAVE_GETDELIM
+ int
+ getdelim PARAMS ((char **_lineptr, size_t *_n, int _delimiter, FILE *_stream));
++#endif
++
+ # endif
+ 
+ #endif /* not GETLINE_H_ */

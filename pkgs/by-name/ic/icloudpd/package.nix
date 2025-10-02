@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.27.5";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
     tag = "v${version}";
-    hash = "sha256-7D/oyX5gBvybelFRsZAmr5xGRB6G7uD2V8ZTGFpbHGg=";
+    hash = "sha256-GZhc5AeOxfSPxloN630lQguh63ha63Wnuh0H6pMkPyE=";
   };
 
   pythonRelaxDeps = true;
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.6.0" "setuptools" \
+      --replace-fail "setuptools==80.9.0" "setuptools" \
       --replace-fail "wheel==0.45.1" "wheel"
 
     substituteInPlace src/foundation/__init__.py \
@@ -86,7 +86,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "icloudpd";
     maintainers = with maintainers; [
       anpin
-      jnsgruk
     ];
   };
 }

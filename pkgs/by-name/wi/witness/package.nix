@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -39,7 +40,7 @@ buildGoModule rec {
     unset subPackages
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd witness \
       --bash <($out/bin/witness completion bash) \
       --fish <($out/bin/witness completion fish) \
@@ -52,7 +53,7 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
     longDescription = ''
       Witness prevents tampering of build materials and verifies the integrity
@@ -66,8 +67,8 @@ buildGoModule rec {
     mainProgram = "witness";
     homepage = "https://github.com/testifysec/witness";
     changelog = "https://github.com/testifysec/witness/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fkautz
       jk
     ];

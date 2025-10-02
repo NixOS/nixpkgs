@@ -21,7 +21,7 @@ in
 
 buildPythonPackage rec {
   pname = "pygltflib";
-  version = "1.16.2";
+  version = "1.16.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "dodgyville";
     repo = "pygltflib";
     tag = "v${version}";
-    hash = "sha256-rUAg05M5biVsdG2yEH0Olng/0jH1R/Jo5/+j4ToKkTI=";
+    hash = "sha256-3XfOlL+l0isMFv71+uY/PBHCwND54qACoCVYntfCot4=";
   };
 
   nativeBuildInputs = [ setuptools ];

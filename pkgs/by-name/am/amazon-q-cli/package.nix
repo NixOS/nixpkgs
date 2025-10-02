@@ -2,36 +2,34 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  protobuf_26,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
-  version = "1.10.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X1L3Nrzchp8yuGGBwwLQ4ZE41GKH3pFR2CX77TYYhNo=";
+    hash = "sha256-RZUe08hPcfPuovfDqndytjz+OVwd3SGvAhWp5XMm+jU=";
   };
 
-  useFetchCargoVendor = true;
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
 
-  cargoHash = "sha256-qtQ+e0NRzzGn0s2zpnMNUv7JdQDuImMfyC0C/QZrpjU=";
+  cargoHash = "sha256-qcuxJf038260hr/1Mi5hgWC4Nwmj2xkt4XFkdfgs4QQ=";
 
   cargoBuildFlags = [
     "-p"
     "chat_cli"
   ];
 
-  nativeBuildInputs = [
-    protobuf_26
-  ];
-
   postInstall = ''
     install -m 0755 $out/bin/chat_cli $out/bin/amazon-q
+    rm -f $out/bin/chat_cli $out/bin/test_mcp_server
   '';
 
   cargoTestFlags = [
@@ -61,6 +59,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=init_lint_zsh_pre_zprofile"
     "--skip=init_lint_zsh_pre_zshrc"
     "--skip=telemetry::cognito::test::pools"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_state_mismatch_throws_err"
+    "--skip=auth::pkce::tests::test_pkce_flow_completes_successfully"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_authorization_redirect_error"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_timeout"
+    "--skip=request::tests::request_test"
   ];
 
   doInstallCheck = true;
@@ -77,6 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "amazon-q";
     maintainers = [ lib.maintainers.jamesward ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

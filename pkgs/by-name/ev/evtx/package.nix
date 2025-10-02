@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fgOuhNE77zVjL16oiUifnKZ+X4CQnZuD8tY+h0JTOYU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-E9BoqpnKhVNwOiEvZROF3xj9Ge8r2CNaBiwHdkdV5aw=";
 
   postPatch = ''
@@ -23,15 +22,15 @@ rustPlatform.buildRustPackage rec {
     rm tests/test_cli_interactive.rs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parser for the Windows XML Event Log (EVTX) format";
     homepage = "https://github.com/omerbenamram/evtx";
     changelog = "https://github.com/omerbenamram/evtx/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evtx_dump";
   };
 }

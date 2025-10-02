@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     "--with-expatlibdir=${expat.out}/lib"
     "--with-ltdl-include=${libtool}/include"
     "--with-ltdl-lib=${libtool.lib}/lib"
-  ] ++ lib.optional (libX11 == null) "--without-x";
+  ]
+  ++ lib.optional (libX11 == null) "--without-x";
 
   meta = {
     description = "Program for visualising graphs";

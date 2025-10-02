@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.20.0";
+  version = "1.20.3";
 
   outputs = [
     "out"
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     tag = finalAttrs.version;
-    hash = "sha256-FHMa8fTr8qNEM5WptuMjMs/XOsvmFxi8pDaCrwJ3/ww=";
+    hash = "sha256-ntTGEsk8GlXkp3i9RtF+T7jqnNdL2GVbu05d68WVTYc=";
   };
 
   patches = [
@@ -81,29 +81,28 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsNoGuiHook
   ];
 
-  buildInputs =
-    [
-      flatpak
-      fuse3
-      bubblewrap
-      glib
-      gsettings-desktop-schemas
-      json-glib
-      pipewire
-      gst_all_1.gst-plugins-base
-      libgudev
+  buildInputs = [
+    flatpak
+    fuse3
+    bubblewrap
+    glib
+    gsettings-desktop-schemas
+    json-glib
+    pipewire
+    gst_all_1.gst-plugins-base
+    libgudev
 
-      # For icon validator
-      gdk-pixbuf
-      librsvg
-      bash
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableSystemd [
-      systemdMinimal # libsystemd
-    ];
+    # For icon validator
+    gdk-pixbuf
+    librsvg
+    bash
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableSystemd [
+    systemdMinimal # libsystemd
+  ];
 
   nativeCheckInputs = [
     dbus
@@ -126,20 +125,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ umockdev ];
 
-  mesonFlags =
-    [
-      "--sysconfdir=/etc"
-      "-Dinstalled-tests=true"
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "-Ddocumentation=disabled" # pulls in a whole lot of extra stuff
-      (lib.mesonEnable "systemd" enableSystemd)
-    ]
-    ++ lib.optionals (!enableGeoLocation) [
-      "-Dgeoclue=disabled"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dtests=disabled"
-    ];
+  mesonFlags = [
+    "--sysconfdir=/etc"
+    "-Dinstalled-tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Ddocumentation=disabled" # pulls in a whole lot of extra stuff
+    (lib.mesonEnable "systemd" enableSystemd)
+  ]
+  ++ lib.optionals (!enableGeoLocation) [
+    "-Dgeoclue=disabled"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dtests=disabled"
+  ];
 
   strictDeps = true;
 

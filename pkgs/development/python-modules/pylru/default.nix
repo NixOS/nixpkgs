@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jlhutch";
-    repo = pname;
+    repo = "pylru";
     rev = "v${version}";
     hash = "sha256-dTYiD+/zt0ZSP+sefYyeD87To1nRXyoFodlBg8pm1YE=";
   };
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Least recently used (LRU) cache implementation";
     homepage = "https://github.com/jlhutch/pylru";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

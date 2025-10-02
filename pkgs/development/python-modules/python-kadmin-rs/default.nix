@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "python-kadmin-rs";
-  version = "0.5.3";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authentik-community";
     repo = "kadmin-rs";
     rev = "kadmin/version/${version}";
-    hash = "sha256-JK1BwPtIdfp6fleEPyRxMBCFP2njtQebr/Wt+Dc9CYs=";
+    hash = "sha256-0YE9LGrc0qUhbNBEXqiaPZM5kwW1JkL+RHkDi16msog=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-9LCtsX3fuRXCHu5Gd+7OB5JQZ0h6KjSOSan83KUivLQ=";
+    hash = "sha256-Cnn8C3Wdwl4ZS7mDKRxuK30lr2ympOcmqKPIL59RKxk=";
   };
 
   buildInputs = [
@@ -62,6 +62,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/authentik-community/kadmin-rs";
     changelog = "https://github.com/authentik-community/kadmin-rs/releases/tag/kadmin%2Fversion%2F${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    maintainers = with lib.maintainers; [
+      jvanbruegge
+      risson
+    ];
   };
 }

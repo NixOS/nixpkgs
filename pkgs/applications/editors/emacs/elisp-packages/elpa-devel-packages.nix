@@ -58,6 +58,8 @@ let
       commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
 
       overrides = self: super: {
+        # keep-sorted start block=yes newline_separated=yes
+        # keep-sorted end
       };
 
       elpaDevelPackages =

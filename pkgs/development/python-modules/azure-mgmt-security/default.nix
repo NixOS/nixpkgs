@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-security";
   version = "7.0.0";
-  fpyproject = true;
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

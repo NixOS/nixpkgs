@@ -31,20 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libftdi1
-      libusb1
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      pciutils
-    ]
-    ++ lib.optionals (withJlink) [
-      libjaylink
-    ]
-    ++ lib.optionals (withGpio) [
-      libgpiod
-    ];
+  buildInputs = [
+    libftdi1
+    libusb1
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    pciutils
+  ]
+  ++ lib.optionals (withJlink) [
+    libjaylink
+  ]
+  ++ lib.optionals (withGpio) [
+    libgpiod
+  ];
 
   postPatch = ''
     # Remove these rules from flashprog to avoid conflicts with libftdi
@@ -57,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -Dm644 ../util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
   '';
+
+  doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

@@ -6,6 +6,7 @@ import dataclasses
 import re
 
 from .types import RenderFn
+from .src_error import SrcError
 
 import markdown_it
 from markdown_it.token import Token
@@ -446,12 +447,16 @@ def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
        generate here are derived from the footnote label, making numeric footnote
        labels invalid.
     """
-    def generate_ids(tokens: Sequence[Token]) -> None:
+    def generate_ids(src: str, tokens: Sequence[Token]) -> None:
         for token in tokens:
             if token.type == 'footnote_open':
                 if token.meta["label"][:1].isdigit():
                     assert token.map
-                    raise RuntimeError(f"invalid footnote label in line {token.map[0] + 1}")
+                    raise SrcError(
+                        src=src,
+                        description="invalid footnote label",
+                        token=token,
+                    )
                 token.attrs['id'] = token.meta["label"]
             elif token.type == 'footnote_anchor':
                 token.meta['target'] = f'{token.meta["label"]}.__back.{token.meta["subId"]}'
@@ -460,10 +465,10 @@ def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
                 token.meta['target'] = token.meta["label"]
             elif token.type == 'inline':
                 assert token.children is not None
-                generate_ids(token.children)
+                generate_ids(src, token.children)
 
     def footnote_ids(state: markdown_it.rules_core.StateCore) -> None:
-        generate_ids(state.tokens)
+        generate_ids(state.src, state.tokens)
 
     md.core.ruler.after("footnote_tail", "footnote_ids", footnote_ids)
 
@@ -537,7 +542,7 @@ def _block_titles(block: str) -> Callable[[markdown_it.MarkdownIt], None]:
     non-title heading since those would make toc generation extremely complicated.
     """
     def block_titles(state: markdown_it.rules_core.StateCore) -> None:
-        in_example = [False]
+        in_example = [None]
         for i, token in enumerate(state.tokens):
             if token.type == open:
                 if state.tokens[i + 1].type == 'heading_open':
@@ -545,14 +550,29 @@ def _block_titles(block: str) -> Callable[[markdown_it.MarkdownIt], None]:
                     state.tokens[i + 1].type = title_open
                     state.tokens[i + 3].type = title_close
                 else:
-                    assert token.map
-                    raise RuntimeError(f"found {block} without title in line {token.map[0] + 1}")
-                in_example.append(True)
+                    raise SrcError(
+                        src=state.src,
+                        description=f"found {block} without title",
+                        token=token,
+                    )
+                in_example.append(token)
             elif token.type == close:
                 in_example.pop()
             elif token.type == 'heading_open' and in_example[-1]:
                 assert token.map
-                raise RuntimeError(f"unexpected non-title heading in {block} in line {token.map[0] + 1}")
+                started_at = in_example[-1]
+
+                block_display = ":::{." + block + "}"
+
+                raise SrcError(
+                    description=f"unexpected non-title heading in `{block_display}`; are you missing a `:::`?\n"
+                        f"Note: blocks like `{block_display}` are only allowed to contain a single heading in order to simplify TOC generation.",
+                    src=state.src,
+                    tokens={
+                        f"`{block_display}` block": started_at,
+                        "Unexpected heading": token,
+                    },
+                )
 
     def do_add(md: markdown_it.MarkdownIt) -> None:
         md.core.ruler.push(f"{block}_titles", block_titles)

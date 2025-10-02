@@ -24,7 +24,7 @@ let
 
   src = fetchFromGitHub {
     owner = "kimlimjustin";
-    repo = pname;
+    repo = "xplorer";
     rev = "8d69a281cbceda277958796cb6b77669fb062ee3";
     sha256 = "sha256-VFRdkSfe2mERaYYtZlg9dvH1loGWVBGwiTRj4AoNEAo=";
   };
@@ -54,7 +54,6 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-D7qgmxDYQEgOkEYKDSLA875bXeTKDvAntF7kB4esn24=";
 
   # copy the frontend static resources to final build directory

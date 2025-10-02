@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcontrolcenter";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dmitry-s93";
     repo = "MControlCenter";
     rev = finalAttrs.version;
-    hash = "sha256-Gl+YnbUbwtwF2WHT39bIKh48qSIMe3fpzxgdvifR4DQ=";
+    hash = "sha256-uWxEWLb2QOZlJ1d3LbORCc81kILB9N+0bzr+xzHAa7Y=";
   };
 
   postPatch = ''

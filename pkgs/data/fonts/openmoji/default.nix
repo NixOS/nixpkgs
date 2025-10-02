@@ -42,13 +42,13 @@ assert lib.asserts.assertOneOf "buildMaximumColorFonts" buildMaximumColorFonts [
 
 stdenvNoCC.mkDerivation rec {
   pname = "openmoji";
-  version = "15.1.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
-    repo = pname;
+    repo = "openmoji";
     rev = version;
-    hash = "sha256-k37MsBbRUZ4vIEPAgVMiCK8gz377DWwAfjjjOassNMY=";
+    hash = "sha256-4dYtLaABu88z25Ud/cuOECajxSJWR01qcTIZNWN7Fhw=";
   };
 
   patches = [
@@ -66,8 +66,7 @@ stdenvNoCC.mkDerivation rec {
   methods_black = builtins.filter (m: builtins.elem m fontFormats) methods.black;
   methods_color = builtins.filter (m: builtins.elem m fontFormats) methods.color;
   saturations =
-    lib.optional (methods_black != [ ]) "black"
-    ++ lib.optional (methods_color != [ ]) "color";
+    lib.optional (methods_black != [ ]) "black" ++ lib.optional (methods_color != [ ]) "color";
   maximumColorVersions = lib.optionals (buildMaximumColorFonts != "none") (
     lib.optional (builtins.elem "glyf_colr_0" fontFormats) "0"
     ++ lib.optional (builtins.elem "glyf_colr_1" fontFormats) "1"

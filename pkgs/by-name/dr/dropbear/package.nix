@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     (lib.concatStringsSep " ")
   ];
 
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "--enable-wtmp=no"
+    "--enable-wtmpx=no"
+  ];
+
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
     makeFlagsArray=(
@@ -65,12 +70,12 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small footprint implementation of the SSH 2 protocol";
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
     changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

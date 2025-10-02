@@ -26,13 +26,13 @@ buildGoModule rec {
     unset subPackages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, reliable, interoperable, better gRPC";
     mainProgram = "protoc-gen-connect-go";
     homepage = "https://github.com/connectrpc/connect-go";
     changelog = "https://github.com/connectrpc/connect-go/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kilimnik
       jk
     ];

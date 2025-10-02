@@ -1,23 +1,23 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo125Module,
   exiftool,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "f2";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "ayoisaiah";
     repo = "f2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hl4giLTQtqJiPseiTzWPtksEYlyQpE1UOC7JMUF9v4Y=";
+    hash = "sha256-zAhJ1giOhAhcDlRO/M+pf275m6lVydet1WCSiBIUkjw=";
   };
 
-  vendorHash = "sha256-xeylGT32bGMJjGdpQQH8DBpqxtvMxpqSEsLPbeoUzl4=";
+  vendorHash = "sha256-DHUX+8gw+pmjEQRUeukzTimfYo0iHyN90MjrOlpjoJg=";
 
   ldflags = [
     "-s"

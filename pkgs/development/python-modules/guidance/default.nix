@@ -8,26 +8,20 @@
   setuptools,
 
   # dependencies
-  diskcache,
   guidance-stitch,
+  jinja2,
   llguidance,
   numpy,
-  ordered-set,
-  platformdirs,
   psutil,
   pydantic,
-  referencing,
   requests,
-  tiktoken,
 
   # optional-dependencies
   openai,
-  jsonschema,
-  fastapi,
-  uvicorn,
 
   # tests
   huggingface-hub,
+  jsonschema,
   pytestCheckHook,
   tokenizers,
   torch,
@@ -36,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
     tag = version;
-    hash = "sha256-FBnND9kCIVmE/IEz3TNOww8x0EAH6TTBYfKTprqSbDg=";
+    hash = "sha256-ZKHCnLGZdpr/R+vu7crijnKUFc+LMMxIdN9f6hYL7dk=";
   };
 
   build-system = [
@@ -56,38 +50,33 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    diskcache
     guidance-stitch
+    jinja2
     llguidance
     numpy
-    ordered-set
-    platformdirs
     psutil
     pydantic
-    referencing
     requests
-    tiktoken
   ];
 
   optional-dependencies = {
-    azureai = [ openai ];
-    openai = [ openai ];
-    schemas = [ jsonschema ];
-    server = [
-      fastapi
-      uvicorn
+    azureai = [
+      # azure-ai-inference
+      openai
     ];
+    openai = [ openai ];
   };
 
   nativeCheckInputs = [
     huggingface-hub
+    jsonschema
     pytestCheckHook
     tokenizers
     torch
     writableTmpDirAsHomeHook
-  ] ++ optional-dependencies.schemas;
+  ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # require network access
@@ -118,7 +107,7 @@ buildPythonPackage rec {
   meta = {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/v${version}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

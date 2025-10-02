@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-tools
   ];
 
-  qrWrapperArgs = [
+  qtWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
   ];
 

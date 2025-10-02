@@ -60,7 +60,7 @@ let
   inherit (eval) pkgs;
 
   excludedTestOptions = [
-    # We cannot evluate _module.args, as it is used during the computation
+    # We cannot evaluate _module.args, as it is used during the computation
     # of the modules list.
     "_module.args"
 

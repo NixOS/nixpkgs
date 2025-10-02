@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "piccata";
-  version = "2.0.2";
+  version = "2.0.3";
   format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
-    repo = pname;
+    repo = "piccata";
     tag = version;
-    hash = "sha256-Vuhwt+esTkvyEIRVYaRGvNMTAXVWBBv/6lpaxN5RrBA=";
+    hash = "sha256-wdfujQ8QYHZGFsnI0fQRSEI6sOCsDXj2FX0ZII5zmtA=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

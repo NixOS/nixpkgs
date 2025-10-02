@@ -11,11 +11,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cyberduck";
-  version = "9.1.2.42722";
+  version = "9.2.4.43667";
 
   src = fetchurl {
     url = "https://update.cyberduck.io/Cyberduck-${finalAttrs.version}.zip";
-    hash = "sha256-oGerVv6CteMl+MJ9AfGYmo6Iv6i7BFUCF+E3My6UH6I=";
+    hash = "sha256-fTJoNdgp6EWdloejk7XG2lJh1NErxFRmvx2fZiwvWuc=";
   };
   sourceRoot = ".";
 
@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       emilytrau
       DimitarNestorov
+      iedame
     ];
     platforms = lib.platforms.darwin;
     mainProgram = "cyberduck";

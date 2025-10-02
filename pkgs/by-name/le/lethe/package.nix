@@ -10,12 +10,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kostassoid";
-    repo = pname;
+    repo = "lethe";
     rev = "v${version}";
     sha256 = "sha256-y2D/80pnpYpTl+q9COTQkvtj9lzBlOWuMcnn5WFnX8E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Ky39RpLoYks4xDiheSsrUj3l/ZrGcY+y5IuDZ28pH/c=";
 
   meta = with lib; {

@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A python library for volkswagen carnet";
+    description = "Python library for volkswagen carnet";
     homepage = "https://github.com/robinostlund/volkswagencarnet";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];

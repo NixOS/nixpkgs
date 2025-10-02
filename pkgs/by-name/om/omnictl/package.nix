@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "omnictl";
-  version = "0.49.1";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "omni";
     rev = "v${version}";
-    hash = "sha256-0SLeR91KVwpAKLLVVZ3pEKI2Vy0QaysezX2M3X5aZdQ=";
+    hash = "sha256-bm2ItsMgjZ/yrvinBPVaEvPSLwrD+uZGCzcnBKdvmK4=";
   };
 
-  vendorHash = "sha256-dT0sniTYli+zRYN/uLETS3SrM5cfDY5ZYYAthaiQ93U=";
+  vendorHash = "sha256-Vq2XTW36L1Rq9l/ADaJXQUSkAbPWNJcEn+5VXKADdw8=";
 
   ldflags = [
     "-s"
@@ -29,7 +30,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd omnictl \
       --bash <($out/bin/omnictl completion bash) \
       --fish <($out/bin/omnictl completion fish) \

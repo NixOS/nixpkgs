@@ -21,7 +21,10 @@ frontend proxy:
     virtualHosts."git.example.com" = {
       enableACME = true;
       forceSSL = true;
-      locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+      locations."/" = {
+        proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+        proxyWebsockets = true;
+      };
     };
   };
 }
@@ -64,7 +67,9 @@ A basic configuration with some custom settings could look like this:
         email_from = "gitlab-no-reply@example.com";
         email_display_name = "Example GitLab";
         email_reply_to = "gitlab-no-reply@example.com";
-        default_projects_features = { builds = false; };
+        default_projects_features = {
+          builds = false;
+        };
       };
     };
   };

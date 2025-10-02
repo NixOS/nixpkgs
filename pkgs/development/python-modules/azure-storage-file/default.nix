@@ -21,7 +21,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     azure-common
     azure-storage-common
-  ] ++ lib.optional (!isPy3k) futures;
+  ]
+  ++ lib.optional (!isPy3k) futures;
 
   # has no tests
   doCheck = false;

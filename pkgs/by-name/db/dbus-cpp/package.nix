@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cpp";
-  version = "5.0.4";
+  version = "5.0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/dbus-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-ki4bnwRpvmB9yzt/Mn3MQs1Dr6Vrcs2D0tvCjvvfmq4=";
+    hash = "sha256-+QqmZsBFmYRwaAFqRyMBxVFFrjZGBDdMaW4YD/7D2gU=";
   };
 
   outputs = [
@@ -35,23 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
     "examples"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace doc/CMakeLists.txt \
-        --replace-fail 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
+  postPatch = ''
+    substituteInPlace doc/CMakeLists.txt \
+      --replace-fail 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
 
-      # Warning on aarch64-linux breaks build due to -Werror
-      substituteInPlace CMakeLists.txt \
-        --replace-fail '-Werror' ""
+    # Warning on aarch64-linux breaks build due to -Werror
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '-Werror' ""
 
-      # pkg-config output patching hook expects prefix variable here
-      substituteInPlace data/dbus-cpp.pc.in \
-        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
-    '';
+    # pkg-config output patching hook expects prefix variable here
+    substituteInPlace data/dbus-cpp.pc.in \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
+  '';
 
   strictDeps = true;
 
@@ -95,7 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      versionCheck = true;
+      # Not bumped for 5.0.5: https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/9
+      # Try again on next bump.
+      versionCheck = finalAttrs.version != "5.0.5";
     };
     updateScript = gitUpdater { };
   };

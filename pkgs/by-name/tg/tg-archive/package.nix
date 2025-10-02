@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication {
   ];
 
   meta = {
-    description = "A tool for exporting Telegram group chats into static websites like mailing list archives";
+    description = "Tool for exporting Telegram group chats into static websites like mailing list archives";
     homepage = "https://github.com/knadh/tg-archive";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];

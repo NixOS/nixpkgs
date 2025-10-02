@@ -23,18 +23,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-6OEf3yWFBmTKgeTMojRMRf/t9Ec1i851Lx3mQjCeOuw=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "\''$ORIGIN" "\''${CMAKE_INSTALL_PREFIX}/lib" \
-        --replace-fail "-m64" ""
-      substituteInPlace src/tests/CMakeLists.txt \
-        --replace-fail "src/tests/" ""
-    ''
-    + lib.optionalString withGurobi ''
-      substituteInPlace CMakeExtensions/FindGurobi.cmake \
-        --replace-fail "\''${GUROBI_VERSION}" '"${lib.versions.major gurobi.version}${lib.versions.minor gurobi.version}"'
-    '';
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''$ORIGIN" "\''${CMAKE_INSTALL_PREFIX}/lib" \
+      --replace-fail "-m64" ""
+    substituteInPlace src/tests/CMakeLists.txt \
+      --replace-fail "src/tests/" ""
+  ''
+  + lib.optionalString withGurobi ''
+    substituteInPlace CMakeExtensions/FindGurobi.cmake \
+      --replace-fail "\''${GUROBI_VERSION}" '"${lib.versions.major gurobi.version}${lib.versions.minor gurobi.version}"'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -51,19 +50,18 @@ stdenv.mkDerivation rec {
       lp_solve
     ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_TESTS" doCheck)
-    ]
-    ++ lib.optionals withGurobi [
-      (lib.cmakeFeature "GUROBI_ROOT_DIR" "${gurobi}")
-    ]
-    ++ lib.optionals withCplex [
-      (lib.cmakeFeature "CPLEX_ROOT_DIR" "${cplex}")
-    ]
-    ++ lib.optionals withLpsolve [
-      (lib.cmakeFeature "LPSOLVE_ROOT_DIR" "${lp_solve}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTS" doCheck)
+  ]
+  ++ lib.optionals withGurobi [
+    (lib.cmakeFeature "GUROBI_ROOT_DIR" "${gurobi}")
+  ]
+  ++ lib.optionals withCplex [
+    (lib.cmakeFeature "CPLEX_ROOT_DIR" "${cplex}")
+  ]
+  ++ lib.optionals withLpsolve [
+    (lib.cmakeFeature "LPSOLVE_ROOT_DIR" "${lp_solve}")
+  ];
 
   doCheck = true;
 

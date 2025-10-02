@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "A Typst package CLI tool";
+    description = "Typst package CLI tool";
     homepage = "https://github.com/sjfhsjfh/typship";
     license = lib.licenses.mit;
     changelog = "https://github.com/sjfhsjfh/typship/releases/tag/v${finalAttrs.version}";

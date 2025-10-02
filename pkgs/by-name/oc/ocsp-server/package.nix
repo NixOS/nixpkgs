@@ -6,6 +6,7 @@
   openssl,
   perl,
   libmysqlclient,
+  sqlite,
   mariadb,
   postgresql,
   mbedtls,
@@ -15,26 +16,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ocsp-server";
-  version = "0.4.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "DorianCoding";
     repo = "OCSP-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xYZ2NM+U7ZW5xDKVUhT+s66i/d7zaDLBbSbr6TDOG0o=";
+    hash = "sha256-7JYefylOs+Chqejt+hpB1AD4FTdbIhfKS1He4xAFMLo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-RFrm2dtjJ2VvOg8ee54ps8MuWgsV0kd9rhpzOFTem2k=";
+  cargoHash = "sha256-2wtQO6Mp4rkeklpCDKFRre5WGao7dQd+Mmma80QRo00=";
+
+  checkFlags = [
+    # Requires database access
+    "--skip=test::checkconfig"
+  ];
 
   nativeBuildInputs = [
     pkg-config
     perl
     libmysqlclient
+    sqlite
   ];
 
   buildInputs = [
     openssl
+    sqlite
     mariadb
     postgresql
     mbedtls

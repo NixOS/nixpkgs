@@ -40,13 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/seteuid/d' -e '/setegid/d' app/main.c
   '';
 
-  configureFlags =
-    [
-      "--with-graphics-backend=gdk"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--disable-alsa"
-    ];
+  configureFlags = [
+    "--with-graphics-backend=gdk"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-alsa"
+  ];
 
   enableParallelBuilding = true;
 
@@ -63,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     goocanvas
     libxml2
     libsndfile
-  ] ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   meta = with lib; {
     description = "Music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";

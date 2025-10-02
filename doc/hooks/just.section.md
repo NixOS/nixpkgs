@@ -12,7 +12,7 @@ This phase attempts to invoke `just` with [the default recipe](https://just.syst
 
 ## `checkPhase` {#just-hook-checkPhase}
 
-This phase attempts to invoke the `just test` recipe, if it is available. This can be overrided by setting `checkTarget` to a string.
+This phase attempts to invoke the `just test` recipe, if it is available. This can be overridden by setting `checkTarget` to a string.
 
 []{#just-hook-dontUseJustCheck} This behavior can be disabled by setting `dontUseJustCheck` to `true`.
 

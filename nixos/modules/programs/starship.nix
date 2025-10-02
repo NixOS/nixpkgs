@@ -62,7 +62,7 @@ in
       description = ''
         Configuration included in `starship.toml`.
 
-        See https://starship.rs/config/#prompt for documentation.
+        See <https://starship.rs/config/#prompt> for documentation.
       '';
     };
 
@@ -157,6 +157,18 @@ in
         fi
         eval "$(${cfg.package}/bin/starship init zsh)"
       fi
+    '';
+
+    # use `config` instead of `${initOption}` because `programs.xonsh` doesn't have `shellInit` or `promptInit`
+    programs.xonsh.config = ''
+      if $TERM != "dumb":
+        # don't set STARSHIP_CONFIG automatically if there's a user-specified
+        # config file.  starship appears to use a hardcoded config location
+        # rather than one inside an XDG folder:
+        # https://github.com/starship/starship/blob/686bda1706e5b409129e6694639477a0f8a3f01b/src/configure.rs#L651
+        if not `$HOME/.config/starship.toml`:
+          $STARSHIP_CONFIG = ('${settingsFile}')
+        execx($(${cfg.package}/bin/starship init xonsh))
     '';
   };
 

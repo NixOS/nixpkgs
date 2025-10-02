@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     name = pname + "-src";
     owner = "~sircmpwn";
-    repo = pname;
+    repo = "himitsu-firefox";
     rev = "d6d0fdb30aefc93f6ff7d48e5737557051f1ffea";
     hash = "sha256-5RbNdEGPnfDt1KDeU2LnuRsqqqMRyV/Dh2cgEWkz4vQ=";
   };

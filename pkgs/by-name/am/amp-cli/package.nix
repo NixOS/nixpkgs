@@ -4,15 +4,16 @@
   fetchzip,
   ripgrep,
   makeWrapper,
+  testers,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "amp-cli";
-  version = "0.0.1747886591-g90f24f";
+  version = "0.0.1759233723-gf92434";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${version}.tgz";
-    hash = "sha256-knNzJYGXmLuerlw6j+lbIf45uv0tYtMOfsIQVfpJ0Kc=";
+    url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${finalAttrs.version}.tgz";
+    hash = "sha256-r48Odw2PA9ei3WrCm+Q8eGXCY1TVzyrqJa9FLzW84vs=";
   };
 
   postPatch = ''
@@ -25,7 +26,7 @@ buildNpmPackage rec {
       "version": "0.0.0",
       "license": "UNLICENSED",
       "dependencies": {
-        "@sourcegraph/amp": "${version}"
+        "@sourcegraph/amp": "${finalAttrs.version}"
       },
       "bin": {
         "amp": "./bin/amp-wrapper.js"
@@ -39,12 +40,12 @@ buildNpmPackage rec {
     # Create a wrapper script that will be installed by npm
     cat > bin/amp-wrapper.js << EOF
     #!/usr/bin/env node
-    require('@sourcegraph/amp/dist/amp.js')
+    import('@sourcegraph/amp/dist/main.js')
     EOF
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-ir13FuVQtxEcryqmSh5BOdrCUWeXAUUX72BYZweUNBU=";
+  npmDepsHash = "sha256-Al8JZ2g68ZvMTxDbZM9grKz7C217YJxnjWnO8o8ySnI=";
 
   propagatedBuildInputs = [
     ripgrep
@@ -69,16 +70,19 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "HOME=$(mktemp -d) amp --version";
+  };
 
   meta = {
-    description = "Amp is an AI coding agent, in research preview from Sourcegraph. This is the CLI for Amp.";
+    description = "CLI for Amp, an agentic coding agent in research preview from Sourcegraph";
     homepage = "https://ampcode.com/";
     downloadPage = "https://www.npmjs.com/package/@sourcegraph/amp";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       keegancsmith
-      owickstrom
     ];
     mainProgram = "amp";
   };
-}
+})

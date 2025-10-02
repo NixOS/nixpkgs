@@ -50,32 +50,31 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+iMV8oN5tDCm5mBbQoSwe+BqPvQi1PXhybskcUxM9t0=";
   };
 
-  buildInputs =
-    [
-      libjpeg
-      libtiff
-      giflib
-      libpng
-      bzip2
-      freetype
-      libid3tag
-    ]
-    ++ optionals x11Support [
-      xorg.libXft
-      xorg.libXext
-    ]
-    ++ optional heifSupport libheif
-    ++ optional svgSupport librsvg
-    ++ optional webpSupport libwebp
-    ++ optional jxlSupport libjxl
-    ++ optional psSupport libspectre;
+  buildInputs = [
+    libjpeg
+    libtiff
+    giflib
+    libpng
+    bzip2
+    freetype
+    libid3tag
+  ]
+  ++ optionals x11Support [
+    xorg.libXft
+    xorg.libXext
+  ]
+  ++ optional heifSupport libheif
+  ++ optional svgSupport librsvg
+  ++ optional webpSupport libwebp
+  ++ optional jxlSupport libjxl
+  ++ optional psSupport libspectre;
 
   nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
-  # with unknow directive errors
+  # with unknown directive errors
   configureFlags =
     optional stdenv.hostPlatform.isDarwin "--enable-amd64=no"
     ++ optional (!svgSupport) "--without-svg"

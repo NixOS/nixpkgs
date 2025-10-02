@@ -20,12 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "xvxx";
-    repo = pname;
+    repo = "phetch";
     tag = "v${version}";
     hash = "sha256-J+ka7/B37WzVPPE2Krkd/TIiVwuKfI2QYWmT0JHgBGQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2lbQAM3gdytXsoMFzKwLWA1hvQIJf1vBdMRpYx/VLVg=";
 
   nativeBuildInputs = [
@@ -43,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Quick lil gopher client for your terminal, written in rust";
     mainProgram = "phetch";
     longDescription = ''
@@ -59,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/xvxx/phetch/releases/tag/v${version}";
     homepage = "https://github.com/xvxx/phetch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ felixalbrigtsen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ felixalbrigtsen ];
   };
 }

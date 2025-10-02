@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "fluxcd-operator-mcp";
-  version = "0.20.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "controlplaneio-fluxcd";
     repo = "fluxcd-operator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GGHufHUqTylgynK19aaj4KAawlzzuz3iSEHa+vVVPMM=";
+    hash = "sha256-yV8aGmY2mUAu0urIi7d1pIjhJasRX17hpmvFEQm4YpY=";
   };
 
-  vendorHash = "sha256-5uT/pcfXrinyJ1hXmQ+vmWNuyO33c6d5PAjm6kwOZmY=";
+  vendorHash = "sha256-zCzMNlpBBUS2P2aywFDUp/RSl+HlfQe+L8a1+vVYbgY=";
 
   ldflags = [
     "-s"
@@ -37,16 +37,15 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  postInstall =
-    ''
-      mv $out/bin/mcp $out/bin/flux-operator-mcp
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash fish zsh; do
-        installShellCompletion --cmd flux-operator-mcp \
-          --$shell <($out/bin/flux-operator-mcp completion $shell)
-      done
-    '';
+  postInstall = ''
+    mv $out/bin/mcp $out/bin/flux-operator-mcp
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd flux-operator-mcp \
+        --$shell <($out/bin/flux-operator-mcp completion $shell)
+    done
+  '';
 
   passthru.updateScript = nix-update-script { };
 

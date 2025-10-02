@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.3.1";
+  version = "0.3.3b0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,12 +26,13 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
     tag = version;
-    hash = "sha256-CrcLyG8fpThYHFHH2w+UAlGxuqwpUCWsYUx2gaW9RLw=";
+    hash = "sha256-Uv9chL9GxP5vJu1P6RB7B2b0pRQMeNtE6t1XFr2tBI4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "setuptools>=68.0,<80.10" "setuptools"
   '';
 
   build-system = [ setuptools ];

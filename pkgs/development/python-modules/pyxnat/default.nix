@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  pytest-cov-stub,
   lxml,
   matplotlib,
   networkx,
@@ -37,11 +38,11 @@ buildPythonPackage rec {
   # pathlib is installed part of python38+ w/o an external package
   prePatch = ''
     substituteInPlace setup.py --replace-fail "pathlib>=1.0" ""
-    sed -i '/--cov/d' setup.cfg
   '';
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     matplotlib
     networkx
     pandas
@@ -49,7 +50,7 @@ buildPythonPackage rec {
   preCheck = ''
     export PYXNAT_SKIP_NETWORK_TESTS=1
   '';
-  pytestFlagsArray = [ "pyxnat" ];
+  enabledTestPaths = [ "pyxnat" ];
   disabledTestPaths = [
     # require a running local XNAT instance e.g. in a docker container:
     "pyxnat/tests/attributes_test.py"

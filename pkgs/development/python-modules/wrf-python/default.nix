@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "wrf-python";
-  version = "1.3.4.1";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "NCAR";
     repo = "wrf-python";
     tag = "v${version}";
-    hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
+    hash = "sha256-LvNorZ28j/O8fs9z6jhYWC8RcCDIwh7k5iR9iumCvnQ=";
   };
 
   nativeBuildInputs = [ gfortran ];

@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-VjvHCiWjsx5Y7xxqck/O9gSNrL8mxCTosLwLqC85ywY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3MvUn6CJ3skVctTIYhib8G+UVOB/VXokwlTnseGJAGU=";
   cargoPatches = [ ./0001-make-near-test-contracts-optional.patch ];
 

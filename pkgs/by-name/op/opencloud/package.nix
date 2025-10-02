@@ -28,13 +28,13 @@ let
 in
 buildGoModule rec {
   pname = "opencloud";
-  version = "2.3.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
     tag = "v${version}";
-    hash = "sha256-IIasFyKF28ynYi8bAmx8LddF0OWB1/Hji6Ovp5pm9QE=";
+    hash = "sha256-NPBz9pevjDUqDrEg/S6Vtk+jAA9f2H95ehO8EgcB1eY=";
   };
 
   postPatch = ''
@@ -86,6 +86,12 @@ buildGoModule rec {
     vips
   ];
 
+  # wants testcontainers and docker, and we don't have a good way to skip tests
+  # based on package name and not test name
+  preCheck = ''
+    rm services/search/pkg/opensearch/*_test.go
+  '';
+
   env = {
     # avoids 'make generate' calling `git`, otherwise no-op
     STRING = version;
@@ -106,7 +112,7 @@ buildGoModule rec {
   versionCheckProgramArg = [ "version" ];
 
   meta = {
-    description = "OpenCloud gives you a secure and private way to store, access, and share your files.";
+    description = "OpenCloud gives you a secure and private way to store, access, and share your files";
     homepage = "https://github.com/opencloud-eu/opencloud";
     changelog = "https://github.com/opencloud-eu/opencloud/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

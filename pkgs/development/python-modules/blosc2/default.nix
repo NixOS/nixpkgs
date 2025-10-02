@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "3.3.3";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
     tag = "v${version}";
-    hash = "sha256-piBimkKEJbrKcebjDpgbHqx09T6GsfhUTTA7l9CxMgc=";
+    hash = "sha256-mA7/8i77wtl9b6IT4Wp/uFDYp/IacnPnAsRoXe64+z4=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pytestCheckHook
-  ] ++ lib.optionals runTorchTests [ torch ];
+  ]
+  ++ lib.optionals runTorchTests [ torch ];
+
+  disabledTests = [
+    # attempts external network requests
+    "test_with_remote"
+  ];
 
   passthru.c-blosc2 = c-blosc2;
 

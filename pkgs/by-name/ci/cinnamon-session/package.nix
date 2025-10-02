@@ -3,7 +3,6 @@
   cinnamon-desktop,
   cinnamon-settings-daemon,
   cinnamon-translations,
-  dbus-glib,
   glib,
   gsettings-desktop-schemas,
   gtk3,
@@ -34,18 +33,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "6.4.0";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-session";
     rev = version;
-    hash = "sha256-4uTKcmwfEytoAy4CFiOedYJqmPtBFBHk0P1gEGgm6pU=";
+    hash = "sha256-zv1X1MLZBg+Bayd4hjsmrdXkFTRkH4kz7PJe6mFTBqc=";
   };
-
-  patches = [
-    ./0001-Use-dbus_glib-instead-of-elogind.patch
-  ];
 
   buildInputs = [
     # meson.build
@@ -68,8 +63,6 @@ stdenv.mkDerivation rec {
 
     # other (not meson.build)
     cinnamon-settings-daemon
-    dbus-glib
-    glib
     gsettings-desktop-schemas
     pythonEnv # for cinnamon-session-quit
   ];

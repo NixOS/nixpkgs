@@ -12,7 +12,7 @@ nvidia_x11: sha256:
 let
   sys = lib.concatStringsSep "-" (lib.reverseList (lib.splitString "-" stdenv.system));
   bsys = builtins.replaceStrings [ "_" ] [ "-" ] sys;
-  fmver = nvidia_x11.version;
+  fmver = nvidia_x11.fabricmanagerVersion;
   ldd = (lib.getBin glibc) + "/bin/ldd";
 in
 

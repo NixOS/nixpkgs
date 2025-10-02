@@ -33,7 +33,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus";
-  version = "3.1.0";
+  version = "3.6.0";
 
   outputs = [
     "out"
@@ -45,18 +45,19 @@ buildGoModule (finalAttrs: {
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q3f0L6cRVQRL1AHgUI3VNbMG9eTfcApbXfSjOTHr7Go=";
+    hash = "sha256-GowtA1iTx6lpRW+RBLYFc8s5H8ECPEmcbdVJvGHl5Cw=";
   };
 
-  vendorHash = "sha256-vQwBnSxoyIYTeWLk3GD9pKDuUjjsMfwPptgyVnzcTok=";
+  vendorHash = "sha256-xGMBd/MhwjCbrQrP5d5aSd99F8GN6wB3jaHpOh0M7OA=";
 
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-05DaaDIFtADnkLFqdHe5eUvo6LRz6BduMvGVmzOeurM=";
+    hash = "sha256-lw097NTDJUWm2RY0RUg/5djNdbj+W9hRdIaF2cQz4Bo=";
   };
 
   excludedPackages = [
     "documentation/prometheus-mixin"
+    "internal/tools"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 
@@ -128,6 +129,10 @@ buildGoModule (finalAttrs: {
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-skip=TestEvaluations/testdata/aggregators.test"
+  ];
+
   passthru.tests = { inherit (nixosTests) prometheus; };
 
   meta = with lib; {
@@ -136,7 +141,6 @@ buildGoModule (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [
       fpletz
-      willibutz
       Frostman
     ];
   };

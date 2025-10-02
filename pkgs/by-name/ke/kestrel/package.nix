@@ -11,12 +11,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "finfet";
-    repo = pname;
+    repo = "kestrel";
     rev = "v${version}";
     hash = "sha256-bKQBOk9yUqgnufRyyqXatsRHpesbM49rAkz0dD5XE80=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cwEHxbRFdOLmQy0FS4U6g785szMWISe6vkXvtj4VwPs=";
 
   nativeBuildInputs = [
@@ -25,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage docs/man/kestrel.1
-    installShellCompletion --bash --name ${pname} completion/kestrel.bash-completion
+    installShellCompletion --bash --name kestrel completion/kestrel.bash-completion
   '';
 
   meta = with lib; {

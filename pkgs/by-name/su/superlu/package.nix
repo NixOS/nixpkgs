@@ -45,16 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ blas ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-      (lib.cmakeBool "enable_fortran" true)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # prevent cmake from using Accelerate, which causes tests to segfault
-      # https://github.com/xiaoyeli/superlu/issues/155
-      "-DBLA_VENDOR=Generic"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeBool "enable_fortran" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # prevent cmake from using Accelerate, which causes tests to segfault
+    # https://github.com/xiaoyeli/superlu/issues/155
+    "-DBLA_VENDOR=Generic"
+  ];
 
   doCheck = true;
 

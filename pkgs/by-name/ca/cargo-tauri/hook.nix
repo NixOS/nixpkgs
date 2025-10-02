@@ -42,7 +42,8 @@ makeSetupHook {
         '';
 
         linux = ''
-          mv "$targetDir"/bundle/deb/*/data/usr $out
+          mkdir -p $out
+          mv "$targetDir"/bundle/deb/*/data/usr/* $out/
         '';
       }
       .${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");

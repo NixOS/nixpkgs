@@ -7,22 +7,22 @@
   oniguruma,
   installShellFiles,
   tpnote,
-  testers,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpnote";
-  version = "1.25.10";
+  version = "1.25.15";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
-    tag = "v${version}";
-    hash = "sha256-bQGgpO820eCp3J1cwOXfTA61PTekjdRc891L3UyokTk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vmHRpY2KvG6vxVQ6OVi/u6wpD8oqQFXn2IJOT0Nh/V0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LTNYnETMO/jeByWWsEazfP8nsHaJ6aVeqCVCwtxiQfQ=";
+  cargoHash = "sha256-dltBOA6pxy2gLemVoX8l0Z+xkiJvhGWSmediWWnN1bc=";
 
   nativeBuildInputs = [
     cmake
@@ -40,19 +40,27 @@ rustPlatform.buildRustPackage rec {
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
-  passthru.tests.version = testers.testVersion { package = tpnote; };
-
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";
   cargoTestFlags = "--package tpnote-lib";
   doCheck = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    changelog = "https://github.com/getreu/tp-note/releases/tag/v${version}";
+    changelog = "https://github.com/getreu/tp-note/releases/tag/v${finalAttrs.version}";
     description = "Markup enhanced granular note-taking";
     homepage = "https://blog.getreu.net/projects/tp-note/";
     license = lib.licenses.mit;
     mainProgram = "tpnote";
     maintainers = with lib.maintainers; [ getreu ];
   };
-}
+})

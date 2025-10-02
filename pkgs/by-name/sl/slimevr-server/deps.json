@@ -20,24 +20,13 @@
    "jar": "sha256-At4T7JOk5Ary/jGDErygVFkglIQ37CdG98idweqySAQ=",
    "pom": "sha256-aEgGw0Vfw3gG0B4RCADfpb1wmQBtXY4c0jwryNaS3yY="
   },
-  "loucass003#EspflashKotlin/v0.10.0": {
-   "jar": "sha256-ORIPUdeqSAhXBuXmPkmyZ6gS8EFnwYkvUtgXFttKIwU=",
-   "module": "sha256-6IMNElGmZLIg/qqVYFdFoHxZIK+YYsT4rBTzyM86FW8=",
-   "pom": "sha256-4ni1oElb85tIe9C0diwh20pgxVUA0c8PX1JZhgomdgo="
+  "loucass003#EspflashKotlin/v0.11.0": {
+   "jar": "sha256-JjFP8WfEvQA8QfKwSQ3EL+LcihGOEsEobFnCfLz/wK8=",
+   "module": "sha256-M9dHPREom7PongBx9lIIJYNAxh3ed9nCcFsqjSfa2ng=",
+   "pom": "sha256-5dGKuzEH67lOmuyc2CJdxWhWyS7tZVMFTvaKw+IBZT8="
   }
  },
  "https://oss.sonatype.org/content/repositories/snapshots": {
-  "com/fazecast#jSerialComm/2.11.1-20240515.234541-3/SNAPSHOT": {
-   "jar": "sha256-n4A3U5elHQhq9b0YVgvWCuXAHqt0RzxL5e4Fe4iGTkM=",
-   "module": "sha256-xeVUO5f2Imx43EgYUI5vbLXyyEmJh/jT106eLUWtUYg=",
-   "pom": "sha256-y+ZXr7k89vlAHOMZmlTNYl8D0Nki+6CDame/QNX/e2M="
-  },
-  "com/fazecast/jSerialComm/2.11.1-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "com.fazecast",
-    "lastUpdated": "20241221185706"
-   }
-  },
   "net/java/dev/jna#jna-platform/5.1.1-20181118.214522-1/SNAPSHOT": {
    "pom": "sha256-STVISbMwC8BymYDxq6UJhC3ZWqO+p7iA7lRW34ZcX6g="
   },
@@ -560,6 +549,11 @@
   "com/fasterxml/jackson/dataformat#jackson-dataformats-text/2.15.1": {
    "pom": "sha256-xLCopnocY3IgeJlhd5bYafE/UerrGsN/wHqcpxPaQjU="
   },
+  "com/fazecast#jSerialComm/2.11.2": {
+   "jar": "sha256-IG2ScOZI3wMyR+deuECTpek9ePB8U+X+H6n8SmAaxXY=",
+   "module": "sha256-9ogHv84GSzOaAwFlbzbffC8GORkp7GKOyGyOMK7bufw=",
+   "pom": "sha256-jc/TZu3kSH1ZOSy+OvUaN3cUT09dRPinstTcvwBB38I="
+  },
   "com/github/jonpeterson#jackson-module-model-versioning/1.2.2": {
    "jar": "sha256-FcepndfH5cTcOLXkhn1TZw1YDYqAXvQ4A7qT8IN2Uc0=",
    "pom": "sha256-eN9L1tMAM6b3JUkuBewt0shfbc7EYm6wWT6KpO9f0ic="
@@ -595,15 +589,15 @@
    "module": "sha256-tJZEwfTNkvRk844MXEwqFJp7s+0VsyrJCO5XypCHfqg=",
    "pom": "sha256-qRWJAaDp8uNB+jtHPwK7mOIC+gkY1Fxo3/n602z+X2Y="
   },
-  "com/melloware#jintellitype/1.5.0": {
-   "jar": "sha256-jf+mMUTxKiDf70/Zm9OeyQSxS0TPR8CeGOy3G4Hze1g=",
-   "pom": "sha256-e1E2mFo87oyeK/FQR1K/++7WyQwTCLsrX5//sNwBvao="
+  "com/melloware#jintellitype/1.5.6": {
+   "jar": "sha256-Ocg8asI4sopzRAiIhBYr+MmY3z5ipGteBtq0y08Q+1s=",
+   "pom": "sha256-oHvWfANoBK+t3hnGbtlCSQdjxnRqSTdlQB0LxPlY40s="
   },
   "com/melloware/jintellitype/maven-metadata": {
    "xml": {
     "groupId": "com.melloware",
-    "lastUpdated": "20250413134243",
-    "release": "1.5.0"
+    "lastUpdated": "20250523184542",
+    "release": "1.5.6"
    }
   },
   "com/typesafe#config/1.4.3": {

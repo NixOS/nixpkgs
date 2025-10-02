@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "creds";
   version = "0.5.3";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ihebski";
@@ -21,10 +21,14 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace creds \
-      --replace "pathlib.Path(__file__).parent" "pathlib.Path.home()"
+      --replace-fail "pathlib.Path(__file__).parent" "pathlib.Path.home()"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     fire
     prettytable
     requests

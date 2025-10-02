@@ -42,7 +42,7 @@ buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = magika; };
 
   meta = with lib; {
-    description = "Magika: Detect file content types with deep learning";
+    description = "Detect file content types with deep learning";
     homepage = "https://github.com/google/magika";
     changelog = "https://github.com/google/magika/blob/python-v${version}/python/CHANGELOG.md";
     license = licenses.asl20;

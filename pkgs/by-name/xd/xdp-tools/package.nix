@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
   libbpf,
   elfutils,
@@ -16,21 +17,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.5.2";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    hash = "sha256-NJawacCrmTuRXsOiAOMD8RaljPnuPFISoWEgiDcInw8=";
+    hash = "sha256-ztIatDNp0RXUpNsSoNWGj/kHNsCOlI6mqZvaQdlGbtQ=";
   };
-
-  patches = [
-    # Allow building with emacs 30
-    # Submitted upstream: https://github.com/xdp-project/xdp-tools/pull/484
-    # FIXME: remove when merged
-    ./emacs-30.patch
-  ];
 
   outputs = [
     "out"
@@ -49,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     bpftools
-    llvmPackages.clang
     llvmPackages.llvm
     pkg-config
     m4
@@ -62,6 +55,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "zerocallusedregs" ];
   # When building BPF, the default CC wrapper is interfering a bit too much.
   BPF_CFLAGS = "-fno-stack-protector -Wno-error=unused-command-line-argument";
+  # When cross compiling, configure prefers the unwrapped clang unless told otherwise.
+  CLANG = lib.getExe buildPackages.llvmPackages.clang;
 
   PRODUCTION = 1;
   DYNAMIC_LIBXDP = 1;

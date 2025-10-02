@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.29.0";
+  version = "3.32.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_dlp";
     inherit version;
-    hash = "sha256-FbNmneFjhZmqq17EMeNsiOSCq98+JODhAJDEzHabLiA=";
+    hash = "sha256-lXsPTvwTd9e0+6tNRwxyD4CPTw7dVXkmPwDroR9VVTk=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils

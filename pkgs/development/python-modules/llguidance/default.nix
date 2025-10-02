@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build-system
+  # nativeBuildInputs
   cargo,
   pkg-config,
   rustPlatform,
@@ -18,27 +18,26 @@
   pytestCheckHook,
   torch,
   transformers,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llguidance";
-  version = "0.7.19";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "llguidance";
     tag = "v${version}";
-    hash = "sha256-tfTiut8jiGGf2uQLGcC4ieNf4ePFauJZL6vNbWie078=";
+    hash = "sha256-Fe7cKZotjRexcSHcoT0Y9I3m+dRarhlBOjYR7rdJBRY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-I1sjkZgtsBpPVkGL596TjLi9txRmgP5oTIWaM1K5I1E=";
+    inherit src pname version;
+    hash = "sha256-//Vjj4QIDcZEPujMfUhZd5nx5pAyF3l3CdNvI/Wi74A=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cargo
     pkg-config
     rustPlatform.cargoSetupHook
@@ -71,29 +70,28 @@ buildPythonPackage rec {
     rm -r python/llguidance
   '';
 
-  disabledTests =
-    [
-      # Require internet access (https://huggingface.co)
-      "test_grammar"
-      "test_incomplete_tokenizer"
-      "test_par_errors"
-      "test_par_grammar"
-      "test_tokenize_partial_basic"
-      "test_tokenize_partial_docs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # torch._inductor.exc.CppCompileError: C++ compile error
-      # OpenMP support not found.
-      "test_mask_data_torch"
-    ];
+  disabledTests = [
+    # Require internet access (https://huggingface.co)
+    "test_grammar"
+    "test_incomplete_tokenizer"
+    "test_par_errors"
+    "test_par_grammar"
+    "test_tokenize_partial_basic"
+    "test_tokenize_partial_docs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # torch._inductor.exc.CppCompileError: C++ compile error
+    # OpenMP support not found.
+    "test_mask_data_torch"
+  ];
 
   disabledTestPaths = [
     # Require internet access (https://huggingface.co)
+    "python/torch_tests/test_hf.py"
+    "python/torch_tests/test_llamacpp.py"
+    "python/torch_tests/test_tiktoken.py"
     "scripts/tokenizer_test.py"
   ];
-
-  # As dynamo is not supported on Python 3.13+, no successful tests remain.
-  doCheck = pythonOlder "3.13";
 
   meta = {
     description = "Super-fast Structured Outputs";

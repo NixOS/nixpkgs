@@ -30,7 +30,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Export pass(1), \"Standard unix password manager\", to CSV";
     mainProgram = "pass2csv";
-    homepage = "https://github.com/reinefjord/pass2csv";
+    homepage = "https://codeberg.org/svartstare/pass2csv";
     license = licenses.mit;
     maintainers = [ ];
   };

@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   python3,
   fetchPypi,
@@ -28,6 +29,7 @@ let
       # core and the actual application are highly coupled
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
+        format = "setuptools";
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
@@ -99,6 +101,7 @@ let
       azure-cli-telemetry = buildAzureCliPackage {
         pname = "azure-cli-telemetry";
         version = "1.1.0";
+        format = "setuptools";
         inherit src;
 
         sourceRoot = "${src.name}/src/azure-cli-telemetry";
@@ -188,6 +191,41 @@ let
       azure-mgmt-redhatopenshift =
         overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.5.0" "tar.gz"
           "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
+
+      # azure.mgmt.resource will shadow the other azure.mgmt.resource.* packages unless we merge them together
+      azure-mgmt-resource-all = py.pkgs.buildPythonPackage {
+        pname = "azure-mgmt-resource-all";
+        inherit version;
+
+        format = "other"; # we're not building from sdist/wheel
+
+        src = py.pkgs.azure-mgmt-resource.src;
+
+        # No real build, just symlink all site-packages into one dir
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p $out/${py.sitePackages}
+          for pkg in ${
+            lib.concatStringsSep " " (
+              map (p: "${p}") [
+                py.pkgs.azure-mgmt-resource
+                py.pkgs.azure-mgmt-resource-deployments
+                py.pkgs.azure-mgmt-resource-deploymentscripts
+                py.pkgs.azure-mgmt-resource-deploymentstacks
+                py.pkgs.azure-mgmt-resource-templatespecs
+              ]
+            )
+          }; do
+            # Copy recursively, keep symlinks, skip duplicates silently
+            cp -rs --no-preserve=mode "$pkg/${py.sitePackages}/." "$out/${py.sitePackages}/" || true
+          done
+
+          runHook postInstall
+        '';
+
+        doCheck = false;
+      };
 
       # ImportError: cannot import name 'IPRule' from 'azure.mgmt.signalr.models'
       azure-mgmt-signalr =

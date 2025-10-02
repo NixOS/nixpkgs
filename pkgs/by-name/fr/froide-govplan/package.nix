@@ -14,13 +14,14 @@
 let
   python = python3Packages.python.override {
     packageOverrides = self: super: {
-      django = super.django.override { withGdal = true; };
+      django_5 = super.django_5.override { withGdal = true; };
+      django = super.django_5;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide-govplan";
-  version = "0-unstable-2025-01-27";
+  version = "0-unstable-2025-07-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -28,8 +29,8 @@ python.pkgs.buildPythonApplication rec {
     repo = "froide-govplan";
     # No tagged release yet
     # https://github.com/okfde/froide-govplan/issues/15
-    rev = "f1763807614b8c54a9214359a2a1e442ca58cb6d";
-    hash = "sha256-Y7/qjhu3y9E55ZDmDf5HUk9JVcUTvi9KnqavqwNixTM=";
+    rev = "7d304ae0e34e44f3bc34dce2b7e5f3c62bd64299";
+    hash = "sha256-/0KASLvKWgXBrhYkPeOkWfovNLAuKB5m0PVkQvC6w7s=";
   };
 
   patches = [
@@ -69,7 +70,6 @@ python.pkgs.buildPythonApplication rec {
   build-inputs = [ gdal ];
 
   dependencies = with python.pkgs; [
-    bleach
     django-admin-sortable2
     django-cms
     django-filer
@@ -80,19 +80,14 @@ python.pkgs.buildPythonApplication rec {
     django-tinymce
     django-treebeard
     djangocms-alias
-    # Downgrade to last working version
+    # Patch froide to avoid loading account module
     (toPythonModule (
       froide.overridePythonAttrs (prev: {
-        nativeBuildInputs = [ makeBinaryWrapper ];
-        postBuild = "";
+        patches = prev.patches ++ [ ./froide_avoid_loading_account_module.patch ];
         doCheck = false;
-        pnpmDeps = null;
-        src = prev.src.override {
-          rev = "a78a4054f9f37b0a5109a6d8cfbbda742f86a8ca";
-          hash = "sha256-gtOssbsVf3nG+pmLPgvh4685vHh2x+jlXiTjU+JhQa8=";
-        };
       })
     ))
+    nh3
     psycopg
   ];
 
@@ -103,7 +98,7 @@ python.pkgs.buildPythonApplication rec {
     cp -r project $out/${python.sitePackages}/froide_govplan/
     cp -r froide_govplan/locale $out/${python.sitePackages}/froide_govplan/
     makeWrapper $out/${python.sitePackages}/froide_govplan/manage.py $out/bin/froide-govplan \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : ${passthru.pythonPath}:$out/${python.sitePackages} \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
@@ -112,8 +107,8 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) froide-govplan;
     };
-    python = python;
-    pythonPath = "${python.pkgs.makePythonPath dependencies}:${froide-govplan}/${python.sitePackages}";
+    inherit python;
+    pythonPath = "${python.pkgs.makePythonPath dependencies}";
   };
 
   meta = {

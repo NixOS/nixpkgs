@@ -34,13 +34,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "megasync";
-  version = "5.9.0.3";
+  version = "5.15.0.1";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     tag = "v${finalAttrs.version}_Linux";
-    hash = "sha256-anX/zVCKG3azROamIIqG9hrj+2Tcw+sFIE60RDCJjaY=";
+    hash = "sha256-CqeR1UmwrwUjr8QM2LCkZ4RaEU2bU1fq+QLCN7yfIJk=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -122,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_PDFIUM" false) # PDFIUM is not in nixpkgs
     (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage is insecure
     (lib.cmakeBool "ENABLE_DESIGN_TOKENS_IMPORTER" false) # cannot be fetched
+    (lib.cmakeBool "USE_BREAKPAD" false)
+    (lib.cmakeBool "ENABLE_DESKTOP_APP_TESTS" false)
   ];
 
   preFixup = ''
@@ -146,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "megasync";
   };
 })

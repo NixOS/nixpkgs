@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "n2";
-  version = "unstable-2025-03-14";
+  version = "0-unstable-2025-03-14";
 
   src = fetchFromGitHub {
     owner = "evmar";
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-eWcN/iK/ToufABi4+hIyWetp2I94Vy4INHb4r6fw+TY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LTgAaTQXW0XEbe+WS47pqSb+eU7FqjdTSO2++C3J5aM=";
 
   meta = {

@@ -41,6 +41,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Makes network calls
     "test_async_data_1"
+    # async def functions are not natively supported.
+    "test_can_create"
   ];
 
   pythonImportsCheck = [ "anova_wifi" ];

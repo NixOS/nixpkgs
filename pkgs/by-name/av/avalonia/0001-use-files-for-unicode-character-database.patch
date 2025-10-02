@@ -1,4 +1,4 @@
-From f4c599a48d153d15ccb1879ff511617c8e310515 Mon Sep 17 00:00:00 2001
+From 8682dcc3fd46658a9d11b4370ca76881efc69c07 Mon Sep 17 00:00:00 2001
 From: David McFarland <corngood@gmail.com>
 Date: Sat, 10 Aug 2024 23:14:12 -0300
 Subject: [PATCH 1/2] use files for unicode character database
@@ -8,13 +8,13 @@ Subject: [PATCH 1/2] use files for unicode character database
  .../TextFormatting/BiDiTestDataGenerator.cs   |  1 -
  .../GraphemeBreakClassTrieGenerator.cs        |  1 -
  .../GraphemeBreakTestDataGenerator.cs         |  1 -
- .../LineBreakEnumuratorTests.cs               |  1 -
+ .../LineBreakEnumeratorTests.cs               |  1 -
  .../TextFormatting/UnicodeDataGenerator.cs    | 28 +++++++++++++++++--
  .../TextFormatting/UnicodeEnumsGenerator.cs   |  1 -
  7 files changed, 26 insertions(+), 8 deletions(-)
 
 diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs
-index f6b01d737..bc7278ef8 100644
+index d944a6cf5..9ddf500c1 100644
 --- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs
 +++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiClassTestDataGenerator.cs
 @@ -3,7 +3,6 @@
@@ -26,7 +26,7 @@ index f6b01d737..bc7278ef8 100644
  
  namespace Avalonia.Visuals.UnitTests.Media.TextFormatting
 diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs
-index 28d37130a..5e26edf49 100644
+index bdaa8274e..e41f0b08e 100644
 --- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs
 +++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/BiDiTestDataGenerator.cs
 @@ -3,7 +3,6 @@
@@ -50,7 +50,7 @@ index 1a8d41caa..185b6ea62 100644
  using Avalonia.Media.TextFormatting.Unicode;
  
 diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs
-index 029f8e236..44c2aaf6a 100644
+index 891c70b7d..a04eb8b41 100644
 --- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs
 +++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/GraphemeBreakTestDataGenerator.cs
 @@ -3,7 +3,6 @@
@@ -58,26 +58,26 @@ index 029f8e236..44c2aaf6a 100644
  using System.IO;
  using System.Linq;
 -using System.Net.Http;
+ using System.Runtime.InteropServices;
+ using System.Text;
  using Avalonia.Base.UnitTests.Media.TextFormatting;
- 
- namespace Avalonia.Visuals.UnitTests.Media.TextFormatting
-diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumuratorTests.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumuratorTests.cs
-index 3db9a32b6..b8df1f446 100644
---- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumuratorTests.cs
-+++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumuratorTests.cs
+diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs
+index 38df949d1..cb050d5f4 100644
+--- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs
++++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/LineBreakEnumeratorTests.cs
 @@ -3,7 +3,6 @@
  using System.Collections.Generic;
  using System.IO;
  using System.Linq;
 -using System.Net.Http;
- using Avalonia.Media.TextFormatting;
  using Avalonia.Media.TextFormatting.Unicode;
  using Xunit;
+ using Xunit.Abstractions;
 diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs
-index f05a1e574..7e698ae0a 100644
+index 3a0255f56..557ff6ea8 100644
 --- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs
 +++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeDataGenerator.cs
-@@ -1,16 +1,40 @@
+@@ -1,15 +1,39 @@
  ﻿using System;
  using System.Collections.Generic;
  using System.IO;
@@ -85,7 +85,6 @@ index f05a1e574..7e698ae0a 100644
  using System.Text.RegularExpressions;
 +using System.Threading.Tasks;
  using Avalonia.Media.TextFormatting.Unicode;
- using Xunit;
  
  namespace Avalonia.Base.UnitTests.Media.TextFormatting
  {
@@ -115,13 +114,13 @@ index f05a1e574..7e698ae0a 100644
 +
      internal static class UnicodeDataGenerator
      {
--        public const string Ucd = "https://www.unicode.org/Public/15.0.0/ucd/";
+-        public const string Ucd = "https://www.unicode.org/Public/16.0.0/ucd/";
 +        public static readonly string Ucd = Environment.GetEnvironmentVariable("UNICODE_CHARACTER_DATABASE");
  
          public static UnicodeTrie GenerateBiDiTrie(out BiDiDataEntries biDiDataEntries, out Dictionary<int, BiDiDataItem> biDiData)
          {
 diff --git a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs
-index 110e57cbd..7073ea508 100644
+index 74fe70978..b82808ffc 100644
 --- a/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs
 +++ b/tests/Avalonia.Base.UnitTests/Media/TextFormatting/UnicodeEnumsGenerator.cs
 @@ -2,7 +2,6 @@
@@ -133,5 +132,5 @@ index 110e57cbd..7073ea508 100644
  namespace Avalonia.Base.UnitTests.Media.TextFormatting
  {
 -- 
-2.42.2
+2.49.0
 

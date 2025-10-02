@@ -14,6 +14,7 @@
   gtk3,
   systemdMinimal,
   udisks,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "endlessm";
     repo = "eos-installer";
-    rev = "Release_${version}";
+    tag = "Release_${version}";
     sha256 = "BqvZglzFJabGXkI8hnLiw1r+CvM7kSKQPj8IKYBB6S4=";
     fetchSubmodules = true;
   };
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     gtk3
     systemdMinimal
     udisks
+    xz
   ];
 
   preConfigure = ''

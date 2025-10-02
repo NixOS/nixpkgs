@@ -8,25 +8,25 @@
 
 let
   pname = "dbgate";
-  version = "6.3.3";
+  version = "6.6.3";
   src =
     fetchurl
       {
         aarch64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_arm64.AppImage";
-          hash = "sha256-H4ACPBLmZ78JOCxgx/ZuP8yawh8XK9EN+CZh12uLf8g=";
+          hash = "sha256-/Ouoo+ygEcj5u597+peqxQ0BFAi6Dp1Dy5BEJbHjo/s=";
         };
         x86_64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_x86_64.AppImage";
-          hash = "sha256-lsQ3/O2Jr4VQ7pusiUYgUPiXu5WHEzLiUf+vmKC0tEo=";
+          hash = "sha256-FUwRXpuIPubtVAendCDTiXNJ5TQ1LBB5MD25hH5EzGE=";
         };
         x86_64-darwin = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_x64.dmg";
-          hash = "sha256-1mO/wlvV+zaB7gLJcl8WfD9SnHdio8eXXHboyYBsWzU=";
+          hash = "sha256-UgdSHW5Gs0cat6leIFJtp3OspgQRV2AHnk/sZ1b7z/U=";
         };
         aarch64-darwin = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_universal.dmg";
-          hash = "sha256-EFKjPJZ2sghPFNYO/A3Ow2GTFyuTcB85VAuQZFn6Q3U=";
+          hash = "sha256-mvONm929IG2ViH0h7u/7fRZ6ghDaPsy7cqpqIp/JgM4=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "dbgate: ${stdenv.hostPlatform.system} is unsupported.");

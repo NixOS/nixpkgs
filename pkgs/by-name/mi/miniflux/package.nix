@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "miniflux";
-  version = "2.2.8";
+  version = "2.2.13";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
-    tag = version;
-    hash = "sha256-AQ6HVRVlWt1D8fA4Z2FH7VIEKydDva7txwa/9Rfq0Ho=";
+    tag = finalAttrs.version;
+    hash = "sha256-u3YnABf+ik7q29JtOSlK+UlInLRq5mMlH7vIDpxOOvk=";
   };
 
-  vendorHash = "sha256-9I0/dyjanuV8oZystox9RY/gGx1SZuFRTghArv5aJ64=";
+  vendorHash = "sha256-JBT3BUFbPrSpkeZUoGiJJaeiSyXu8y+xcHWPNpxo3cU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X miniflux.app/v2/internal/version.Version=${version}"
+    "-X miniflux.app/v2/internal/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -42,6 +42,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Minimalist and opinionated feed reader";
+    changelog = "https://miniflux.app/releases/${finalAttrs.version}.html";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
     maintainers = with maintainers; [
@@ -52,4 +53,4 @@ buildGoModule rec {
     ];
     mainProgram = "miniflux";
   };
-}
+})

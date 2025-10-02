@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "7.8.0";
+  version = "7.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "web3.py";
     tag = "v${version}";
-    hash = "sha256-Rk12QZK47oF0ri1+kCquW4vaqPPPO5UPYOhq4StR1+U=";
+    hash = "sha256-cG4P/mrvQ3GlGT17o5yVGZtIM5Vgi2+iojUsYSBbhFA=";
   };
 
   build-system = [ setuptools ];
@@ -55,26 +55,25 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  dependencies =
-    [
-      aiohttp
-      eth-abi
-      eth-account
-      eth-hash
-    ]
-    ++ eth-hash.optional-dependencies.pycryptodome
-    ++ [
-      eth-typing
-      eth-utils
-      hexbytes
-      jsonschema
-      lru-dict
-      protobuf
-      pydantic
-      requests
-      types-requests
-      websockets
-    ];
+  dependencies = [
+    aiohttp
+    eth-abi
+    eth-account
+    eth-hash
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome
+  ++ [
+    eth-typing
+    eth-utils
+    hexbytes
+    jsonschema
+    lru-dict
+    protobuf
+    pydantic
+    requests
+    types-requests
+    websockets
+  ];
 
   # Note: to reflect the extra_requires in main/setup.py.
   optional-dependencies = {

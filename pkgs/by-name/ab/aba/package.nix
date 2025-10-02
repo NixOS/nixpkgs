@@ -16,11 +16,10 @@ rustPlatform.buildRustPackage {
   src = fetchFromSourcehut {
     owner = "~onemoresuza";
     repo = "aba";
-    rev = version;
+    tag = version;
     hash = "sha256-2zVQNchL4DFh2v2/kwupJTBSmXiKqlxzUMrP9TbfCMs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-U1f68DY+yV6Uxwk1Re0eSNCFWYrYKCN08hJAYcp4ksE=";
 
   nativeBuildInputs = [

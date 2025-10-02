@@ -24,19 +24,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -53,43 +52,41 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
-  buildInputs =
-    [
-      rocfft
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks || buildSamples) [
-      gtest
-      boost
-      fftw
-      fftwFloat
-      openmp
-    ];
+  buildInputs = [
+    rocfft
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks || buildSamples) [
+    gtest
+    boost
+    fftw
+    fftwFloat
+    openmp
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      "-DCMAKE_MODULE_PATH=${clr}/lib/cmake/hip"
-      "-DHIP_ROOT_DIR=${clr}"
-      "-DHIP_PATH=${clr}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_CLIENTS_TESTS=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_CLIENTS_RIDER=ON"
-    ]
-    ++ lib.optionals buildSamples [
-      "-DBUILD_CLIENTS_SAMPLES=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_C_COMPILER=hipcc"
+    "-DCMAKE_CXX_COMPILER=hipcc"
+    "-DCMAKE_MODULE_PATH=${clr}/lib/cmake/hip"
+    "-DHIP_ROOT_DIR=${clr}"
+    "-DHIP_PATH=${clr}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_CLIENTS_TESTS=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_CLIENTS_RIDER=ON"
+  ]
+  ++ lib.optionals buildSamples [
+    "-DBUILD_CLIENTS_SAMPLES=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''

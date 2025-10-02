@@ -2,27 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
+  setuptools-scm,
   ujson,
 }:
 
 buildPythonPackage rec {
   pname = "enterpriseattack";
-  version = "0.1.8";
+  version = "1.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "xakepnz";
     repo = "enterpriseattack";
-    tag = "v.${version}";
-    hash = "sha256-cxbGc9iQe94Th6MSUldI17oVCclFhUM78h1w+6KXzm4=";
+    tag = "v${version}";
+    hash = "sha256-9tEJVz6eO02/iwOHIjhcASfSd2t2W06JGzxSqepUYjk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     requests

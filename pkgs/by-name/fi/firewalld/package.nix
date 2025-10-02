@@ -44,74 +44,73 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-ubE1zMIOcdg2+mgXsk6brCZxS1XkvJYwVY3E+UXIIiU=";
+    sha256 = "sha256-ONpyJJjIn5kEnkudZe4Nf67wdQgWa+2qEkT1nxRBDpI=";
   };
 
   patches = [
     ./add-config-path-env-var.patch
     ./respect-xml-catalog-files-var.patch
     ./specify-localedir.patch
+
+    ./gettext-0.25.patch
   ];
 
-  postPatch =
-    ''
-      substituteInPlace config/xmlschema/check.sh \
-        --replace-fail /usr/bin/ ""
+  postPatch = ''
+    substituteInPlace config/xmlschema/check.sh \
+      --replace-fail /usr/bin/ ""
 
-      for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in} \
-        config/firewall-{applet,config}.desktop.in; do
-          substituteInPlace $file \
-            --replace-fail /usr "$out"
-      done
-    ''
-    + lib.optionalString withGui ''
-      substituteInPlace src/firewall-applet.in \
-        --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
-        --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
-    '';
+    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in} \
+      config/firewall-{applet,config}.desktop.in; do
+        substituteInPlace $file \
+          --replace-fail /usr "$out"
+    done
+  ''
+  + lib.optionalString withGui ''
+    substituteInPlace src/firewall-applet.in \
+      --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
+      --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
+  '';
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      docbook_xml_dtd_42
-      docbook-xsl-nons
-      glib
-      intltool
-      libxml2
-      libxslt
-      pkg-config
-      python3
-      python3.pkgs.wrapPython
-      wrapGAppsNoGuiHook
-    ]
-    ++ lib.optionals withGui [
-      qt6.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    docbook_xml_dtd_42
+    docbook-xsl-nons
+    glib
+    intltool
+    libxml2
+    libxslt
+    pkg-config
+    python3
+    python3.pkgs.wrapPython
+    wrapGAppsNoGuiHook
+  ]
+  ++ lib.optionals withGui [
+    qt6.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      glib
-      gobject-introspection
-      ipset
-      iptables
-      kmod
-      networkmanager
-      pythonPath
-      sysctl
-    ]
-    ++ lib.optionals withGui [
-      gtk3
-      libnotify
-      librsvg
-      qt6.qtbase
-    ];
+  buildInputs = [
+    glib
+    gobject-introspection
+    ipset
+    iptables
+    kmod
+    networkmanager
+    pythonPath
+    sysctl
+  ]
+  ++ lib.optionals withGui [
+    gtk3
+    libnotify
+    librsvg
+    qt6.qtbase
+  ];
 
   preConfigure = ''
     ./autogen.sh
@@ -131,24 +130,22 @@ stdenv.mkDerivation rec {
     "--with-ipset=${lib.getExe' ipset "ipset"}"
   ];
 
-  postInstall =
-    ''
-      rm -r $out/share/firewalld/testsuite
-    ''
-    + lib.optionalString (!withGui) ''
-      rm $out/bin/firewall-{applet,config}
-    '';
+  postInstall = ''
+    rm -r $out/share/firewalld/testsuite
+  ''
+  + lib.optionalString (!withGui) ''
+    rm $out/bin/firewall-{applet,config}
+  '';
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  preFixup =
-    ''
-      makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    ''
-    + lib.optionalString withGui ''
-      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    '';
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  ''
+  + lib.optionalString withGui ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   postFixup = ''
     chmod +x $out/share/firewalld/*.py

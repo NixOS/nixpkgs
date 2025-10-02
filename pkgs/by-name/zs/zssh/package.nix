@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 1i'#include <pty.h>' openpty.c
+    # readline has renamed the type name
+    substituteInPlace completion.c \
+      --replace-fail CPPFunction rl_completion_func_t
   '';
 
   # The makefile does not create the directories

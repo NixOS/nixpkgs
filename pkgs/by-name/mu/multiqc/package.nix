@@ -10,7 +10,8 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "multiqc";
-  version = "1.28";
+  version = "1.30";
+  pyproject = true;
 
   # Two data sources. One for the code, another for the test data
   srcs = [
@@ -19,20 +20,37 @@ python3Packages.buildPythonApplication rec {
       owner = "MultiQC";
       repo = "MultiQC";
       tag = "v${version}";
-      hash = "sha256-rYZaecoVAO1RE44XCw60aVwvWhKcZ/RrG3WpVRcLbuA=";
+      hash = "sha256-TR5YFoWj97gpsykIzc1lqtYVePsVLRIT0HXw+VPJ7o4=";
     })
     (fetchFromGitHub {
       owner = "MultiQC";
       repo = "test-data";
-      rev = "d775b73c106d48726653f2fd02e473b7acbd93d8";
-      hash = "sha256-uxBpMx22gWJmnbF9tVuVIdYdiqUh7n51swzu5hnfZQ0=";
+      rev = "cc9f853e7892eb537e91505e0e847ff63669138d";
+      hash = "sha256-/MiNnPayG6wpF2S09ENYTlEBF7Km4aH1RjdGOfMgZcA=";
       name = "test-data";
     })
   ];
 
+  # Multiqc cannot remove temporary directories in some case.
+  # Default is 10 retries, lower it to 2
+  postPatch = ''
+    substituteInPlace multiqc/utils/util_functions.py \
+      --replace-fail \
+        "max_retries: int = 10," \
+        "max_retries: int = 2,"
+    substituteInPlace pyproject.toml \
+      --replace 'polars-lts-cpu' 'polars'
+  '';
+
   sourceRoot = "multiqc";
 
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+    wheel
+  ];
+
   dependencies = with python3Packages; [
+    boto3
     click
     humanize
     importlib-metadata
@@ -43,14 +61,17 @@ python3Packages.buildPythonApplication rec {
     numpy
     packaging
     requests
+    polars
     pillow
     plotly
+    pyarrow
     pyyaml
     rich
     rich-click
     coloredlogs
     spectra
     pydantic
+    tiktoken
     typeguard
     tqdm
     python-dotenv
@@ -62,7 +83,7 @@ python3Packages.buildPythonApplication rec {
       pre-commit-hooks
       pdoc3
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       syrupy
       pygithub
@@ -86,8 +107,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs =
     with python3Packages;
     [
-      procps
-      pytest-cov
+      pytest-cov-stub
       pytest-xdist
       pytestCheckHook
       syrupy
@@ -95,6 +115,7 @@ python3Packages.buildPythonApplication rec {
       versionCheckHook
     ]
     ++ [
+      procps
       addBinToPathHook
     ];
 

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   attrs,
   bitarray,
   buildPythonPackage,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyais";
-  version = "2.9.4";
+  version = "2.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,9 +20,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "M0r13n";
     repo = "pyais";
-    tag = version;
-    hash = "sha256-cuV3M8lI2Lw9iu4jLfMu/p3kfQO2TEnjjobMRj/Em78=";
+    tag = "v${version}";
+    hash = "sha256-CLsUVARpyxOshvrHY+NoVi0HSvn1R02jDnMqn0sRGgM=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -37,6 +40,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests the examples which have additional requirements
     "tests/test_examples.py"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: [Errno 48] Address already in use
+    "test_full_message_flow"
   ];
 
   meta = with lib; {

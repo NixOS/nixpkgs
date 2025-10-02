@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -116,6 +115,7 @@ buildPythonPackage rec {
     # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <sqlite3.Connection object at 0x115dcc9a0>
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x115dcc9a0>
     "test_clean_book"
+    "test_clean_html"
     "test_clean_html_latex"
     "test_clean_latex"
   ];

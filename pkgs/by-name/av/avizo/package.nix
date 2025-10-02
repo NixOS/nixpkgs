@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "avizo";
-  version = "1.3";
+  version = "1.3-unstable-2024-11-03";
 
   src = fetchFromGitHub {
     owner = "misterdanb";
     repo = "avizo";
-    rev = version;
-    sha256 = "sha256-Vj8OrNlAstl0AXTeVAPdEf5JgnAmJwl9s3Jdc0ZiYQc=";
+    rev = "5efaa22968b2cc1a3c15a304cac3f22ec2727b17";
+    sha256 = "sha256-KYQPHVxjvqKt4d7BabplnrXP30FuBQ6jQ1NxzR5U7qI=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/misterdanb/avizo";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.berbiche ];
+    maintainers = [
+      maintainers.berbiche
+      maintainers.flexiondotorg
+    ];
   };
 }

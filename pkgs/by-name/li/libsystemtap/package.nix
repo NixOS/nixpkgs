@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation {
   pname = "libsystemtap";
-  version = "5.2";
+  version = "5.3";
 
   src = fetchgit {
     url = "git://sourceware.org/git/systemtap.git";
-    rev = "release-5.2";
-    hash = "sha256-SUPNarZW8vdK9hQaI2kU+rfKWIPiXB4BvJvRNC1T9tU=";
+    rev = "release-5.3";
+    hash = "sha256-W9iJ+hyowqgeq1hGcNQbvPfHpqY0Yt2W/Ng/4p6asxc=";
   };
 
   dontBuild = true;
@@ -41,6 +41,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = elfutils.meta.platforms or platforms.unix;
     badPlatforms = elfutils.meta.badPlatforms or [ ];
-    maintainers = [ lib.maintainers.farlion ];
+    maintainers = [ lib.maintainers.workflow ];
   };
 }

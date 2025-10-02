@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YjGfnYK22RIVa8D8CWnAxHGDqXENGAPIeQQ606Q3JW8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CwucGAwAvxePNQu5p1OWx9o9xsvpzX1abH6HyF43nEE=";
 
   prePatch = ''
@@ -30,12 +29,12 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for downloading APK files from various sources";
     homepage = "https://github.com/EFForg/apkeep";
     changelog = "https://github.com/EFForg/apkeep/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "apkeep";
   };
 }

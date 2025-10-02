@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -18,6 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9avri/2H0zv65tkBsIi9yVxx3eVS9oCkVCCFdjXqSgI=";
   };
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   makeFlags = [
     "DESTDIR=$(out)"
     "bindir=/bin"
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://lekensteyn.nl/logitech-unifying.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "ltunify";
   };

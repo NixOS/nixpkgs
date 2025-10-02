@@ -37,10 +37,12 @@ stdenv.mkDerivation {
     man = "share/man";
     include = "include";
     lib = "lib";
+    libexec = "libexec";
     locale = "share/locale";
     doc = "share/doc/cpupower";
     conf = "etc";
     bash_completion_ = "share/bash-completion/completions";
+    unit = "lib/systemd/system";
   };
 
   enableParallelBuilding = true;

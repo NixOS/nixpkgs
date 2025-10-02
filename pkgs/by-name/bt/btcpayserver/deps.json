@@ -36,8 +36,8 @@
   },
   {
     "pname": "BIP78.Sender",
-    "version": "0.2.4",
-    "hash": "sha256-4D1894cwcj+Wf7tm+u5cC/H3JdxDSxLz4hHr7ygkqLo="
+    "version": "0.2.5",
+    "hash": "sha256-4NoELK+s5nklvsKYYI23fC/h7CaaKiomWl9kSRCyNlE="
   },
   {
     "pname": "BouncyCastle.Cryptography",
@@ -51,8 +51,8 @@
   },
   {
     "pname": "BTCPayServer.Lightning.All",
-    "version": "1.6.9",
-    "hash": "sha256-pCCxZ1CW+Xc2KvG5yZ79vLYtcwr/PWsrz9A1x02ryb0="
+    "version": "1.6.11",
+    "hash": "sha256-HId8axtrx8i205y1uytHp/04/DyKsXzJwSEMzpr7Mzk="
   },
   {
     "pname": "BTCPayServer.Lightning.Charge",
@@ -95,14 +95,9 @@
     "hash": "sha256-CbSjeix4JCVtgb8WCfsKgThpl/YbnhbJ3wcPoexpSew="
   },
   {
-    "pname": "BTCPayServer.NETCore.Plugins",
-    "version": "1.4.4",
-    "hash": "sha256-1LQGTEK/5NrUIAuWimKJofDth8dsjOZKlGkUsGq+YGY="
-  },
-  {
-    "pname": "BTCPayServer.NETCore.Plugins.Mvc",
-    "version": "1.4.4",
-    "hash": "sha256-VEcPjbwrApQOIqtjbewGjNx7ZFiB4ztVYDwQfWqRtc4="
+    "pname": "BTCPayServer.Lightning.Phoenixd",
+    "version": "1.5.8",
+    "hash": "sha256-pISNuSZW/B0MZ5VkW8nHAENTOUoFI+YfvrubD/vh74w="
   },
   {
     "pname": "BTCPayServer.NTag424",
@@ -701,28 +696,13 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "7.0.45",
-    "hash": "sha256-hWgtvAJvONk6jg1WiytE6M+ExkQJUCwO6cyVA6JE+8w="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "7.0.50",
-    "hash": "sha256-l3H70u5OAbd2hevX/yeVBdQyee/dUn5mp4iGvTnTcjk="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "8.0.8",
-    "hash": "sha256-gpbxlfE7TN7mUOcWF9+r8htQTc19KqAuzsVaG5RYa3A="
+    "version": "9.0.0",
+    "hash": "sha256-FLqOA3Axa2Xyz7MRgXPnbIQHwMcuKqduTJrUt87/W8Q="
   },
   {
     "pname": "NBitcoin.Altcoins",
-    "version": "3.0.31",
-    "hash": "sha256-Mtaqj8Fl8jxeOBXz66fjZQKZ/yg6pARJKJTFW0V/wDA="
-  },
-  {
-    "pname": "NBitcoin.Altcoins",
-    "version": "3.0.33",
-    "hash": "sha256-0RYmRKcluGwfTEcOEmoREC/9CgECEi7piQZetMXHOxI="
+    "version": "5.0.0",
+    "hash": "sha256-3dPvHLcVvM26NW1MHcZeHkoIFm/ypcpiv+W948ff1ys="
   },
   {
     "pname": "NBitpayClient",
@@ -731,8 +711,8 @@
   },
   {
     "pname": "NBXplorer.Client",
-    "version": "4.3.9",
-    "hash": "sha256-PSQfKk2kW0O0PB+JyjCaDx/aijNcfdmfj9dzb/fdxl8="
+    "version": "5.0.5",
+    "hash": "sha256-vUP1bGd5iw3roNcvG525JV3SnL/6eXIqjvJKxdy+7dY="
   },
   {
     "pname": "NETStandard.Library",

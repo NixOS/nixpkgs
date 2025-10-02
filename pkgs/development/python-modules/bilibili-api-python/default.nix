@@ -24,13 +24,13 @@
 }:
 buildPythonPackage rec {
   pname = "bilibili-api-python";
-  version = "17.1.4";
+  version = "17.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bilibili_api_python";
     inherit version;
-    hash = "sha256-Wmfrf4rJzKk088ZoWNmoR9mI9NjLKJGjo5QYDWzwuVA=";
+    hash = "sha256-Rlnz3ws023x5MiwabGR4gARH0bdUgucoixIMRqj+Z64=";
   };
 
   # The upstream uses requirements.txt, which overly strict version constraints.

@@ -80,8 +80,8 @@
             builtins.storeDir
             "/etc/ssl"
             "/etc/static/ssl"
-            "${pkgs.nettools}/bin/route:/usr/bin/route"
-            "${pkgs.nettools}/bin/ifconfig:/usr/bin/ifconfig"
+            "${pkgs.net-tools}/bin/route:/usr/bin/route"
+            "${pkgs.net-tools}/bin/ifconfig:/usr/bin/ifconfig"
           ];
 
           BindPaths = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.1";
 
   src = fetchurl {
-    url = "mirror://samba/paulus/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://samba/paulus/dirdiff-${finalAttrs.version}.tar.gz";
     hash = "sha256-yzc2VNV4gCeAQ1XjVd8GlYYsO/wfaj/GAUcisxVqklI=";
   };
 

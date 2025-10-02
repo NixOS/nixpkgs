@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-edit";
-  version = "0.13.4";
+  version = "0.13.7";
 
   src = fetchFromGitHub {
     owner = "killercup";
-    repo = pname;
+    repo = "cargo-edit";
     rev = "v${version}";
-    hash = "sha256-gs7+OuW0av7p45+wgXVVS17YKTwIqDFQWc3kKE7y/Yw=";
+    hash = "sha256-doNQzXB+tW+5UI3PCuZo8aZErsXeafL6lldi/yXyBhs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JafagbF+JCp3ATtGjlExLDUehYqO9DhI39uD4fLafsQ=";
+  cargoHash = "sha256-N3Q3rK9GsVf9mI9SFqF7lnU8CWxmueDCgBjP6n9dUoY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -30,15 +29,15 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # integration tests depend on changing cargo config
 
-  meta = with lib; {
+  meta = {
     description = "Utility for managing cargo dependencies from the command line";
     homepage = "https://github.com/killercup/cargo-edit";
     changelog = "https://github.com/killercup/cargo-edit/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       figsoda
       gerschtli

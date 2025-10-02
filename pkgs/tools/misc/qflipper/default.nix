@@ -50,24 +50,23 @@ mkDerivation {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      zlib
-      libusb1
-      libGL
+  buildInputs = [
+    zlib
+    libusb1
+    libGL
 
-      qtbase
-      qt3d
-      qtsvg
-      qtserialport
-      qtdeclarative
-      qtquickcontrols
-      qtquickcontrols2
-      qtgraphicaleffects
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      qtwayland
-    ];
+    qtbase
+    qt3d
+    qtsvg
+    qtserialport
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
+    qtgraphicaleffects
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    qtwayland
+  ];
 
   qmakeFlags = [
     "DEFINES+=DISABLE_APPLICATION_UPDATES"
@@ -94,6 +93,8 @@ mkDerivation {
     mkdir -p $out/etc/udev/rules.d
     cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
+
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

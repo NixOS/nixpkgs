@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "terraform-plugin-docs";
-  version = "0.21.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
     tag = "v${version}";
-    hash = "sha256-tvo5ufRBtiecOCHfGO9Sxe+bHXqgnfGhBaQQ47CVllk=";
+    hash = "sha256-SIPGdY8wvM7Lfn0PAqbmk12fhJpq4CA/GYQppTYE8HY=";
   };
 
-  vendorHash = "sha256-y69F/KF7cQvtZ4/ZNpw86l/xZgn4aTzmVBw1bs+AtZI=";
+  vendorHash = "sha256-Dqc3B3wfAwX0M6T8TmQU7kjjECHVaK+YmW8H7ZTK+ao=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -51,12 +51,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate and validate Terraform plugin/provider documentation";
     homepage = "https://github.com/hashicorp/terraform-plugin-docs";
     changelog = "https://github.com/hashicorp/terraform-plugin-docs/releases/tag/v${version}";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "tfplugindocs";
-    maintainers = with maintainers; [ lewo ];
+    maintainers = with lib.maintainers; [ lewo ];
   };
 }

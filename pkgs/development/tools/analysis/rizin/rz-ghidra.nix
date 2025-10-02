@@ -17,40 +17,38 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rz-ghidra";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "rz-ghidra";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W9VcKrDAh7GNRbE4eyWbtHlsYLmrjBBgVvWNyMUhlDk=";
+    hash = "sha256-uI0EnuHAuyrXYKDijh5Tg/WcQ/5yyZnW3d5MMHZxnqA=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      openssl
-      pugixml
-      rizin
-    ]
-    ++ lib.optionals enableCutterPlugin [
-      cutter
-      qt5compat
-      qtbase
-      qtsvg
-    ];
+  buildInputs = [
+    openssl
+    pugixml
+    rizin
+  ]
+  ++ lib.optionals enableCutterPlugin [
+    cutter
+    qt5compat
+    qtbase
+    qtsvg
+  ];
 
   dontWrapQtApps = true;
 
-  cmakeFlags =
-    [
-      "-DUSE_SYSTEM_PUGIXML=ON"
-    ]
-    ++ lib.optionals enableCutterPlugin [
-      "-DBUILD_CUTTER_PLUGIN=ON"
-      "-DCUTTER_INSTALL_PLUGDIR=share/rizin/cutter/plugins/native"
-    ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_PUGIXML=ON"
+  ]
+  ++ lib.optionals enableCutterPlugin [
+    "-DBUILD_CUTTER_PLUGIN=ON"
+    "-DCUTTER_INSTALL_PLUGDIR=share/rizin/cutter/plugins/native"
+  ];
 
   meta = with lib; {
     # errors out with undefined symbols from Cutter

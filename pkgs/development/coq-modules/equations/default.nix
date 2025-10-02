@@ -12,72 +12,28 @@
   repo = "Coq-Equations";
   opam-name = "rocq-equations";
   inherit version;
-  defaultVersion = lib.switch coq.coq-version [
-    {
-      case = "9.0";
-      out = "1.3.1+9.0";
-    }
-    {
-      case = "8.20";
-      out = "1.3.1+8.20";
-    }
-    {
-      case = "8.19";
-      out = "1.3+8.19";
-    }
-    {
-      case = "8.18";
-      out = "1.3+8.18";
-    }
-    {
-      case = "8.17";
-      out = "1.3+8.17";
-    }
-    {
-      case = "8.16";
-      out = "1.3+8.16";
-    }
-    {
-      case = "8.15";
-      out = "1.3+8.15";
-    }
-    {
-      case = "8.14";
-      out = "1.3+8.14";
-    }
-    {
-      case = "8.13";
-      out = "1.3+8.13";
-    }
-    {
-      case = "8.12";
-      out = "1.2.4+coq8.12";
-    }
-    {
-      case = "8.11";
-      out = "1.2.4+coq8.11";
-    }
-    {
-      case = "8.10";
-      out = "1.2.1+coq8.10-2";
-    }
-    {
-      case = "8.9";
-      out = "1.2.1+coq8.9";
-    }
-    {
-      case = "8.8";
-      out = "1.2+coq8.8";
-    }
-    {
-      case = "8.7";
-      out = "1.0+coq8.7";
-    }
-    {
-      case = "8.6";
-      out = "1.0+coq8.6";
-    }
-  ] null;
+  defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
+    lib.switch coq.coq-version [
+      (case "9.0" "1.3.1+9.0")
+      (case "8.20" "1.3.1+8.20")
+      (case "8.19" "1.3+8.19")
+      (case "8.18" "1.3+8.18")
+      (case "8.17" "1.3+8.17")
+      (case "8.16" "1.3+8.16")
+      (case "8.15" "1.3+8.15")
+      (case "8.14" "1.3+8.14")
+      (case "8.13" "1.3+8.13")
+      (case "8.12" "1.2.4+coq8.12")
+      (case "8.11" "1.2.4+coq8.11")
+      (case "8.10" "1.2.1+coq8.10-2")
+      (case "8.9" "1.2.1+coq8.9")
+      (case "8.8" "1.2+coq8.8")
+      (case "8.7" "1.0+coq8.7")
+      (case "8.6" "1.0+coq8.6")
+    ] null;
 
   release."1.0+coq8.6".version = "1.0";
   release."1.0+coq8.6".rev = "v1.0";

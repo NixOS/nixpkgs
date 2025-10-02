@@ -31,10 +31,11 @@ buildPythonPackage rec {
     googleapis-common-protos
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
+    # float_precision option is deprecated for json_format error with latest protobuf
+    "-Wignore:float_precision:UserWarning"
   ];
 
   pythonImportsCheck = [ "proto" ];

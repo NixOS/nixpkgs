@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   htslib,
   zlib,
   bzip2,
@@ -12,16 +13,19 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bcftools";
-  version = "1.21";
+  version = "1.22";
 
-  src = fetchurl {
-    url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UopMwdNVU2jbdacAsio8ldqJP9GCf20wRxbf1F6k4oI=";
+  src = fetchFromGitHub {
+    owner = "samtools";
+    repo = "bcftools";
+    tag = finalAttrs.version;
+    hash = "sha256-S+FuqjiOf38sAQKWYOixv/MlXGnuDmkx9z4Co/pk/eM=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     perl
     python3
   ];
@@ -32,6 +36,10 @@ stdenv.mkDerivation rec {
     bzip2
     xz
     curl
+  ];
+
+  nativeCheckInputs = [
+    htslib
   ];
 
   strictDeps = true;
@@ -59,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.mimame ];
   };
-}
+})

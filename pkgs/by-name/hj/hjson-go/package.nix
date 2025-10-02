@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hjson";
-    repo = pname;
+    repo = "hjson-go";
     rev = "v${version}";
     hash = "sha256-0xFTxnXMJA98+Y6gwO8zCDPQvLecG1qmbGAISCFMaPw=";
   };
@@ -22,12 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to convert JSON to and from HJSON";
     homepage = "https://hjson.github.io/";
     changelog = "https://github.com/hjson/hjson-go/releases/tag/v${version}";
-    maintainers = with maintainers; [ ehmry ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "hjson-cli";
   };
 }

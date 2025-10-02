@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "goctl";
-  version = "1.8.3";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "zeromicro";
     repo = "go-zero";
     tag = "v${version}";
-    hash = "sha256-v5WzqMotF9C7i9hTYSjaPmTwveBVDVn+SKQXYuS4Rdc=";
+    hash = "sha256-1V/LH38H0alylKLid/nQxNF8fA02G++m6Nq2/JIen2w=";
   };
 
-  vendorHash = "sha256-tOIlfYiAI9m7oTZyPDCzTXg9XTwBb6EOVLzDfZnzL4E=";
+  vendorHash = "sha256-clbTaXZck16guROF6bHeDt95CtwtgkvIAEM8JBS5u7Y=";
 
   modRoot = "tools/goctl";
   subPackages = [ "." ];

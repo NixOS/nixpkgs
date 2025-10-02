@@ -17,7 +17,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.2.14";
+  version = "1.2.23";
   pname = "bun";
 
   src =
@@ -36,7 +36,8 @@ stdenvNoCC.mkDerivation rec {
     unzip
     installShellFiles
     makeWrapper
-  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = [ openssl ];
 
   dontConfigure = true;
@@ -86,19 +87,19 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-J0w3utbdUEH3T2UzCww5gDF7EUKhveznvr6zqrRLiNo=";
+        hash = "sha256-IvX6P/9ysNO45+D4BR7K3y5Bkg1HSsYttSeRRICckAU=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-hLctvtLYWywlHx80ViQ65LVyd7hs6sNAakRgGPbPltk=";
+        hash = "sha256-anqYxUbQhKhF3tpi6ypblKahSmPqgc+RhtRr9Vv5EKk=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64-baseline.zip";
-        hash = "sha256-c97u+DigXOVc28AA/rVUSt773Z8GbW21pejeCHLdF2Q=";
+        hash = "sha256-/MZyPIq6ZGpYRDWG0XhrkJ5kBh5YS0IUoLZ+BFElKEU=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-zrG9NHKgi83I2VSCAkOjKdgLigwC9Xy+/ZERCS2NPd0=";
+        hash = "sha256-zw7QqSB5nVdv/eTgyuZtcyvyPCUwQH8m9Zx4Md/+Hw4=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -120,20 +121,20 @@ stdenvNoCC.mkDerivation rec {
       done
     '';
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://bun.sh";
     changelog = "https://bun.sh/blog/bun-v${version}";
     description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     longDescription = ''
       All in one fast & easy-to-use tool. Instead of 1,000 node_modules for development, you only need bun.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # bun core
       lgpl21Only # javascriptcore and webkit
     ];
     mainProgram = "bun";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       DAlperin
       jk
       thilobillerbeck

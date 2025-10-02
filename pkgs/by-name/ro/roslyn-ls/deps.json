@@ -19,51 +19,21 @@
   },
   {
     "pname": "MessagePack",
-    "version": "2.5.124",
-    "hash": "sha256-3ZUXCiDKpD82W+prJ5yLFm/gmztNsm8W0NPRs74bgrw=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack/2.5.124/messagepack.2.5.124.nupkg"
-  },
-  {
-    "pname": "MessagePack",
-    "version": "2.5.187",
-    "hash": "sha256-3sBINhdkGdKPKTKxE4YuLGFHg6stAEHUIboR1g7eXgA=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack/2.5.187/messagepack.2.5.187.nupkg"
+    "version": "2.5.198",
+    "hash": "sha256-La9QIOel2n2yZaOPaRi04Q/7YudWQ4SiDxgpacFivgI=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack/2.5.198/messagepack.2.5.198.nupkg"
   },
   {
     "pname": "MessagePack.Annotations",
-    "version": "2.5.124",
-    "hash": "sha256-4zgAUW6py8CA2hMGUUrHr7Q6vKeRBqOCmcKgAR9fRGg=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack.annotations/2.5.124/messagepack.annotations.2.5.124.nupkg"
-  },
-  {
-    "pname": "MessagePack.Annotations",
-    "version": "2.5.187",
-    "hash": "sha256-SQCJa6u8coWMptbR9iQJLjoi/YkT9t0kJNbojh9vUPw=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack.annotations/2.5.187/messagepack.annotations.2.5.187.nupkg"
+    "version": "2.5.198",
+    "hash": "sha256-WnXjX2pGroKn+KukCgPeUUZAkz2S6CdMrCc9P2VcBDQ=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack.annotations/2.5.198/messagepack.annotations.2.5.198.nupkg"
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
     "version": "9.0.0",
     "hash": "sha256-BsXNOWEgfFq3Yz7VTtK6m/ov4/erRqyBzieWSIpmc1U=",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.bcl.asyncinterfaces/9.0.0/microsoft.bcl.asyncinterfaces.9.0.0.nupkg"
-  },
-  {
-    "pname": "Microsoft.Bcl.HashCode",
-    "version": "1.1.1",
-    "hash": "sha256-gP6ZhEsjjbmw6a477sm7UuOvGFFTxZYfRE2kKxK8jnc=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.bcl.hashcode/1.1.1/microsoft.bcl.hashcode.1.1.1.nupkg"
-  },
-  {
-    "pname": "Microsoft.Build",
-    "version": "17.11.4",
-    "hash": "sha256-y2qkHCwPbRYZKXwmABQUNhEHHQB/67xSH1zq8fz9olo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build/17.11.4/microsoft.build.17.11.4.nupkg"
-  },
-  {
-    "pname": "Microsoft.Build",
-    "version": "17.13.9",
-    "hash": "sha256-rS0qX48D/t6YLJ+PbI6fmZKkCz8VSLHAZOGDsGpGbu8=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build/17.13.9/microsoft.build.17.13.9.nupkg"
   },
   {
     "pname": "Microsoft.Build",
@@ -79,9 +49,9 @@
   },
   {
     "pname": "Microsoft.Build.Framework",
-    "version": "17.13.9",
-    "hash": "sha256-IrYG5ushm3fFW7DudKBPBj1Xs5BDwfc3vpZnkwsn2Bc=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.framework/17.13.9/microsoft.build.framework.17.13.9.nupkg"
+    "version": "17.15.0-preview-25353-11",
+    "hash": "sha256-Zh78ZPYCj0B5j+lrIBAX0KAZAUWA6ItZ78tYvMDi2oI=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.build.framework/17.15.0-preview-25353-11/microsoft.build.framework.17.15.0-preview-25353-11.nupkg"
   },
   {
     "pname": "Microsoft.Build.Framework",
@@ -91,39 +61,15 @@
   },
   {
     "pname": "Microsoft.Build.Locator",
-    "version": "1.6.10",
-    "hash": "sha256-hOFFiQiCNkkDqt0Ad/4Y/sggj4t0zWXmfGjE+I/cqqM=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.locator/1.6.10/microsoft.build.locator.1.6.10.nupkg"
-  },
-  {
-    "pname": "Microsoft.Build.Tasks.Core",
-    "version": "17.11.4",
-    "hash": "sha256-Y1A6j3uuYVrjM+waJ4/AKNgiGGqZU3Cai3swu8FUtqM=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.tasks.core/17.11.4/microsoft.build.tasks.core.17.11.4.nupkg"
-  },
-  {
-    "pname": "Microsoft.Build.Tasks.Core",
-    "version": "17.13.9",
-    "hash": "sha256-ZF6MaW4TIGGgqMqr78f7XrY4ZuoxTyaDi8EMLNMiV5I=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.tasks.core/17.13.9/microsoft.build.tasks.core.17.13.9.nupkg"
+    "version": "1.8.1",
+    "hash": "sha256-q1oZLwPGO+Q/btm3jUzNo37eBziDD/MOXE3LsUSVeA4=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.locator/1.8.1/microsoft.build.locator.1.8.1.nupkg"
   },
   {
     "pname": "Microsoft.Build.Tasks.Core",
     "version": "17.3.4",
     "hash": "sha256-0RA95pD6zHBf1lgYyrrAuEuNeGwuCgGxNdhEJ0cJUCs=",
     "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.build.tasks.core/17.3.4/microsoft.build.tasks.core.17.3.4.nupkg"
-  },
-  {
-    "pname": "Microsoft.Build.Utilities.Core",
-    "version": "17.11.4",
-    "hash": "sha256-1hfIxI2oIHDH1HUotX4l4SFzWerkjoCYSFYUcW0SF5g=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.utilities.core/17.11.4/microsoft.build.utilities.core.17.11.4.nupkg"
-  },
-  {
-    "pname": "Microsoft.Build.Utilities.Core",
-    "version": "17.13.9",
-    "hash": "sha256-B1+u6sdrkwz3b5JLZ42BHkFRvPKRGyMWWUt44Fyb9Zo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.build.utilities.core/17.13.9/microsoft.build.utilities.core.17.13.9.nupkg"
   },
   {
     "pname": "Microsoft.Build.Utilities.Core",
@@ -145,15 +91,9 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.Common",
-    "version": "3.11.0",
-    "hash": "sha256-lOW5q1kAAk+Wpweb9TaZ1LztWzAODt9yZKe6SN5rkV8=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.codeanalysis.common/3.11.0/microsoft.codeanalysis.common.3.11.0.nupkg"
-  },
-  {
-    "pname": "Microsoft.CodeAnalysis.Common",
-    "version": "4.1.0",
-    "hash": "sha256-g3RLyeHfdOOF6H89VLJi06/k8/eJ6j2dgNYZ/MBdfNU=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.codeanalysis.common/4.1.0/microsoft.codeanalysis.common.4.1.0.nupkg"
+    "version": "4.12.0",
+    "hash": "sha256-mm/OKG3zPLAeTVGZtuLxSG+jpQDOchn1oyHqBBJW2Ho=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.codeanalysis.common/4.12.0/microsoft.codeanalysis.common.4.12.0.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Elfie",
@@ -163,9 +103,9 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.NetAnalyzers",
-    "version": "8.0.0-preview.23468.1",
-    "hash": "sha256-2wF9nG7tL92RKT46l5A0EQB3uow93516Dh8hSw7kUvg=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/49a1bb2b-12b0-475f-adbd-1560fc76be38/nuget/v3/flat2/microsoft.codeanalysis.netanalyzers/8.0.0-preview.23468.1/microsoft.codeanalysis.netanalyzers.8.0.0-preview.23468.1.nupkg"
+    "version": "10.0.0-preview.25375.1",
+    "hash": "sha256-1AmmAyGxYIazQQhA0bcOOccAfP+WUL0il31XQLyeYlc=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/299b99f1-f3f1-4630-81e2-4fb223c52e70/nuget/v3/flat2/microsoft.codeanalysis.netanalyzers/10.0.0-preview.25375.1/microsoft.codeanalysis.netanalyzers.10.0.0-preview.25375.1.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.PerformanceSensitiveAnalyzers",
@@ -193,15 +133,15 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "9.0.0-beta.25255.5",
-    "hash": "sha256-AgHPYDKvoO3a2zoRSgnokC6XrF521V1lQ9KEPcKyS5E=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25255.5/microsoft.dotnet.arcade.sdk.9.0.0-beta.25255.5.nupkg"
+    "version": "10.0.0-beta.25367.5",
+    "hash": "sha256-BXE25tCcZgri9yxfIx8S5mEC8F5hYx7rvibc5Q/SNeY=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/10.0.0-beta.25367.5/microsoft.dotnet.arcade.sdk.10.0.0-beta.25367.5.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "9.0.0-beta.25255.5",
-    "hash": "sha256-yigTPcb88S+1FUal0K/fL5pu5I/dmPACAo2sPOTDfZk=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/9.0.0-beta.25255.5/microsoft.dotnet.xlifftasks.9.0.0-beta.25255.5.nupkg"
+    "version": "10.0.0-beta.25367.5",
+    "hash": "sha256-S3amNkCq0gbp9FCYWMxKIwrMNDhyX7AbGLSqH1O5sPk=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/10.0.0-beta.25367.5/microsoft.dotnet.xlifftasks.10.0.0-beta.25367.5.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
@@ -283,21 +223,9 @@
   },
   {
     "pname": "Microsoft.IO.Redist",
-    "version": "6.0.1",
-    "hash": "sha256-IaATAy1M/MEBTid0mQiTrHj4aTwo2POCtckxSbLc3lU=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.io.redist/6.0.1/microsoft.io.redist.6.0.1.nupkg"
-  },
-  {
-    "pname": "Microsoft.NET.StringTools",
-    "version": "17.11.4",
-    "hash": "sha256-lWfzY35WQ+iKS9TpuztDTljgF9CIORhFhFEm0p1dVBE=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.net.stringtools/17.11.4/microsoft.net.stringtools.17.11.4.nupkg"
-  },
-  {
-    "pname": "Microsoft.NET.StringTools",
-    "version": "17.13.9",
-    "hash": "sha256-E3bKeMbBLabLM3GWPmD4HDjJzS3Ru1KcPTRWHugRgrQ=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.net.stringtools/17.13.9/microsoft.net.stringtools.17.13.9.nupkg"
+    "version": "6.1.0",
+    "hash": "sha256-dPKouWmGIheKa4MU/goBplwgLJbS1Eh2+jXZQ109sak=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.io.redist/6.1.0/microsoft.io.redist.6.1.0.nupkg"
   },
   {
     "pname": "Microsoft.NET.StringTools",
@@ -331,51 +259,45 @@
   },
   {
     "pname": "Microsoft.ServiceHub.Analyzers",
-    "version": "4.8.3",
-    "hash": "sha256-ZF9f8HvwnY1oZB+/ACRdswBrVOUrHGVJ4cCUoDQqIco=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.servicehub.analyzers/4.8.3/microsoft.servicehub.analyzers.4.8.3.nupkg"
+    "version": "4.9.11-beta",
+    "hash": "sha256-v4vgNHVeTwxnETMNVxtBzQrnacVF0GyKs/PQSDcAJ1c=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.servicehub.analyzers/4.9.11-beta/microsoft.servicehub.analyzers.4.9.11-beta.nupkg"
   },
   {
     "pname": "Microsoft.ServiceHub.Client",
-    "version": "4.2.1017",
-    "hash": "sha256-Achfy4EpZfcIOf02P8onWJH1cte+rP9ZAy94Gf4MVCA=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/2a239fd0-3e21-40b0-b9d6-bc122fec7eb2/nuget/v3/flat2/microsoft.servicehub.client/4.2.1017/microsoft.servicehub.client.4.2.1017.nupkg"
+    "version": "4.6.3200",
+    "hash": "sha256-cEXlKEJbQxKztw5g+k9GNTZ0fbHVDCp8/JuMqCK6bAE=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.servicehub.client/4.6.3200/microsoft.servicehub.client.4.6.3200.nupkg"
   },
   {
     "pname": "Microsoft.ServiceHub.Framework",
-    "version": "4.8.3",
-    "hash": "sha256-p9rVrNzs4PAiZpZr7x24N2PgZDKC64XT0ngtj/R5sSs=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.servicehub.framework/4.8.3/microsoft.servicehub.framework.4.8.3.nupkg"
-  },
-  {
-    "pname": "Microsoft.ServiceHub.Resources",
-    "version": "4.2.1017",
-    "hash": "sha256-6nq1jsXLThMritNI1CZj5Batfo/0W0Pt2iLY72yZGNw=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/2a239fd0-3e21-40b0-b9d6-bc122fec7eb2/nuget/v3/flat2/microsoft.servicehub.resources/4.2.1017/microsoft.servicehub.resources.4.2.1017.nupkg"
+    "version": "4.9.11-beta",
+    "hash": "sha256-sAdzwH8lt1Z44YMGYTTwMSS8uceK8FXWR5h1p3Iu1OQ=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.servicehub.framework/4.9.11-beta/microsoft.servicehub.framework.4.9.11-beta.nupkg"
   },
   {
     "pname": "Microsoft.TestPlatform.ObjectModel",
-    "version": "17.5.0",
-    "hash": "sha256-M8Ct2u3RaTxWip0XBLPtL2xeGsYz1rjKgfsV++nZDPg=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.testplatform.objectmodel/17.5.0/microsoft.testplatform.objectmodel.17.5.0.nupkg"
+    "version": "17.13.0",
+    "hash": "sha256-+dmv0r97ZxSAcx6PfOWBaaTcy9m00tIGeOPjtVQnZVU=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.testplatform.objectmodel/17.13.0/microsoft.testplatform.objectmodel.17.13.0.nupkg"
   },
   {
     "pname": "Microsoft.TestPlatform.TranslationLayer",
-    "version": "17.5.0",
-    "hash": "sha256-rVgeXl/F8jqXJhQcrm2tV6jvsYHA6UF+5crLVr4GZBA=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.testplatform.translationlayer/17.5.0/microsoft.testplatform.translationlayer.17.5.0.nupkg"
+    "version": "17.13.0",
+    "hash": "sha256-2D2hEhJLgGCFuLJbWTwu2wQAB+H5FWuug5cGfLax3NE=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.testplatform.translationlayer/17.13.0/microsoft.testplatform.translationlayer.17.13.0.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.Composition",
-    "version": "17.12.20",
-    "hash": "sha256-gRFLq/ggHBz/wP7btKIwId9MjnaepQEZpotCTutxWE0=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.composition/17.12.20/microsoft.visualstudio.composition.17.12.20.nupkg"
+    "version": "17.13.50",
+    "hash": "sha256-1o5CEOSOGqWaBBzUEQWKCVIE1VYWIvJD7zh2+XHhC1Q=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.composition/17.13.50/microsoft.visualstudio.composition.17.13.50.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.Composition.Analyzers",
-    "version": "17.12.20",
-    "hash": "sha256-WjjWfmMh+cK0bwGyWEJm1KVn7X7er+DXrgruEYbfoVA=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.composition.analyzers/17.12.20/microsoft.visualstudio.composition.analyzers.17.12.20.nupkg"
+    "version": "17.13.50",
+    "hash": "sha256-0fxXjTykGG8NU8BExsk0qwQQ5chDwmRVKFFVG+yWs2Y=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.composition.analyzers/17.13.50/microsoft.visualstudio.composition.analyzers.17.13.50.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.RemoteControl",
@@ -385,27 +307,45 @@
   },
   {
     "pname": "Microsoft.VisualStudio.SolutionPersistence",
-    "version": "1.0.28",
-    "hash": "sha256-7BmeidGDb19wfvpaYA91luCFE1CStb8iLlnyJhVCJ6w=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.solutionpersistence/1.0.28/microsoft.visualstudio.solutionpersistence.1.0.28.nupkg"
+    "version": "1.0.52",
+    "hash": "sha256-KZGPtOXe6Hv8RrkcsgoLKTRyaCScIpQEa2NhNB3iOXw=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.solutionpersistence/1.0.52/microsoft.visualstudio.solutionpersistence.1.0.52.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.Telemetry",
-    "version": "17.14.8",
-    "hash": "sha256-DBqhTILQhgFqeVVr1/ktcIAlM8KgdUuaKomONSwzQ1I=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.telemetry/17.14.8/microsoft.visualstudio.telemetry.17.14.8.nupkg"
+    "version": "18.0.22",
+    "hash": "sha256-0Y5PFohljinGeJGVSJqYSUGUq49SRpW29/W/ucKklXQ=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.telemetry/18.0.22/microsoft.visualstudio.telemetry.18.0.22.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.Threading",
-    "version": "17.13.2",
-    "hash": "sha256-NSknHS71f/GLA1GcJwGXGOcRYuir6aGz5+u4SEJ99cE=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.threading/17.13.2/microsoft.visualstudio.threading.17.13.2.nupkg"
+    "version": "17.15.20-alpha",
+    "hash": "sha256-/0oB9YozrbcEoew5Tvh0OEE/b3iFHWmO1nzsmS2iDRA=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.threading/17.15.20-alpha/microsoft.visualstudio.threading.17.15.20-alpha.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.Threading.Analyzers",
-    "version": "17.13.2",
-    "hash": "sha256-pfhN5HDSWbo6hmlSnCVWvnkYTqSjs8PNtSyHCEEtUjI=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.threading.analyzers/17.13.2/microsoft.visualstudio.threading.analyzers.17.13.2.nupkg"
+    "version": "17.15.20-alpha",
+    "hash": "sha256-0Jw6ZAvu7YyM5TgCTTpEeTzcWh1nAIeWvzT6Hj32uSs=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.threading.analyzers/17.15.20-alpha/microsoft.visualstudio.threading.analyzers.17.15.20-alpha.nupkg"
+  },
+  {
+    "pname": "Microsoft.VisualStudio.Threading.Only",
+    "version": "17.13.61",
+    "hash": "sha256-OhXEAuF9PZAkZuHqHwdVODLjA/rIMqmD7nXJfVAQWA8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.threading.only/17.13.61/microsoft.visualstudio.threading.only.17.13.61.nupkg"
+  },
+  {
+    "pname": "Microsoft.VisualStudio.Threading.Only",
+    "version": "17.14.15",
+    "hash": "sha256-o15PJKoIqyfgP2jqybgkydc8bKVZUpCCcrPR05rO7k4=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.threading.only/17.14.15/microsoft.visualstudio.threading.only.17.14.15.nupkg"
+  },
+  {
+    "pname": "Microsoft.VisualStudio.Threading.Only",
+    "version": "17.15.20-alpha",
+    "hash": "sha256-cBFSercx77Jqw4Z8Af5lu57a2xUmudETNywGN43JR8U=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.threading.only/17.15.20-alpha/microsoft.visualstudio.threading.only.17.15.20-alpha.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.Utilities.Internal",
@@ -433,9 +373,9 @@
   },
   {
     "pname": "Nerdbank.Streams",
-    "version": "2.11.79",
-    "hash": "sha256-1bzibVcSH8LJMR8Nb6Q0q/7fieTgxRnVY4C1RvRbrrI=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/nerdbank.streams/2.11.79/nerdbank.streams.2.11.79.nupkg"
+    "version": "2.12.87",
+    "hash": "sha256-BglFZT1nSyJO8mB235sP5yyu51iaGXwRHSOV8aeeY2A=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/nerdbank.streams/2.12.87/nerdbank.streams.2.12.87.nupkg"
   },
   {
     "pname": "NETStandard.Library",
@@ -472,12 +412,6 @@
     "version": "6.8.0-rc.112",
     "hash": "sha256-nS0Km+T6sRdIQLzwqjluHoV3MQe2dxwYhCrnKuURoSs=",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.dependencyresolver.core/6.8.0-rc.112/nuget.dependencyresolver.core.6.8.0-rc.112.nupkg"
-  },
-  {
-    "pname": "NuGet.Frameworks",
-    "version": "5.11.0",
-    "hash": "sha256-n+hxcrf+sXM80Tv9YH9x4+hwTslVidFq4tjBNPAzYnM=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/nuget.frameworks/5.11.0/nuget.frameworks.5.11.0.nupkg"
   },
   {
     "pname": "NuGet.Frameworks",
@@ -751,15 +685,15 @@
   },
   {
     "pname": "StreamJsonRpc",
-    "version": "2.21.10",
-    "hash": "sha256-Ufx0QWwG9dNm/OrHRzkztVvbQHyKdj6MtTzNTQwTwl0=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/streamjsonrpc/2.21.10/streamjsonrpc.2.21.10.nupkg"
+    "version": "2.23.39-alpha",
+    "hash": "sha256-3gQz0m7BhU6dTj6cDgaY/TFIn0Tl0+CAJl6SXRr4Oxg=",
+    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/streamjsonrpc/2.23.39-alpha/streamjsonrpc.2.23.39-alpha.nupkg"
   },
   {
     "pname": "System.Buffers",
-    "version": "4.5.1",
-    "hash": "sha256-wws90sfi9M7kuCPWkv1CEYMJtCqx9QB/kj0ymlsNaxI=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.buffers/4.5.1/system.buffers.4.5.1.nupkg"
+    "version": "4.6.0",
+    "hash": "sha256-c2QlgFB16IlfBms5YLsTCFQ/QeKoS6ph1a9mdRkq/Jc=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.buffers/4.6.0/system.buffers.4.6.0.nupkg"
   },
   {
     "pname": "System.CodeDom",
@@ -787,9 +721,9 @@
   },
   {
     "pname": "System.CommandLine",
-    "version": "2.0.0-beta5.25210.1",
-    "hash": "sha256-AIUy4OsHWpfbH200l+rdZ2VvYsvDDMkccFfXd1ApE8Y=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/2.0.0-beta5.25210.1/system.commandline.2.0.0-beta5.25210.1.nupkg"
+    "version": "2.0.0-rc.2.25420.109",
+    "hash": "sha256-jZMqUnzqJVY5GNdzJO8rk/NumyYDj4dqNTZjEz+Qccc=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/2.0.0-rc.2.25420.109/system.commandline.2.0.0-rc.2.25420.109.nupkg"
   },
   {
     "pname": "System.ComponentModel.Composition",
@@ -802,12 +736,6 @@
     "version": "9.0.0",
     "hash": "sha256-FehOkQ2u1p8mQ0/wn3cZ+24HjhTLdck8VZYWA1CcgbM=",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.composition/9.0.0/system.composition.9.0.0.nupkg"
-  },
-  {
-    "pname": "System.Composition.AttributedModel",
-    "version": "8.0.0",
-    "hash": "sha256-n3aXiBAFIlQicSRLiNtLh++URSUxRBLggsjJ8OMNRpo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.composition.attributedmodel/8.0.0/system.composition.attributedmodel.8.0.0.nupkg"
   },
   {
     "pname": "System.Composition.AttributedModel",
@@ -900,12 +828,6 @@
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.formats.asn1/8.0.0/system.formats.asn1.8.0.0.nupkg"
   },
   {
-    "pname": "System.Formats.Nrbf",
-    "version": "9.0.0",
-    "hash": "sha256-c4qf6CocQUZB0ySGQd8s15PXY7xfrjQqMGXxkwytKyw=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.formats.nrbf/9.0.0/system.formats.nrbf.9.0.0.nupkg"
-  },
-  {
     "pname": "System.Globalization",
     "version": "4.3.0",
     "hash": "sha256-caL0pRmFSEsaoeZeWN5BTQtGrAtaQPwFi8YOZPZG5rI=",
@@ -955,9 +877,9 @@
   },
   {
     "pname": "System.Memory",
-    "version": "4.5.5",
-    "hash": "sha256-EPQ9o1Kin7KzGI5O3U3PUQAZTItSbk9h/i4rViN3WiI=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.memory/4.5.5/system.memory.4.5.5.nupkg"
+    "version": "4.6.0",
+    "hash": "sha256-OhAEKzUM6eEaH99DcGaMz2pFLG/q/N4KVWqqiBYUOFo=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.memory/4.6.0/system.memory.4.6.0.nupkg"
   },
   {
     "pname": "System.Net.NameResolution",
@@ -979,9 +901,9 @@
   },
   {
     "pname": "System.Numerics.Vectors",
-    "version": "4.5.0",
-    "hash": "sha256-qdSTIFgf2htPS+YhLGjAGiLN8igCYJnCCo6r78+Q+c8=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg"
+    "version": "4.6.0",
+    "hash": "sha256-fKS3uWQ2HmR69vNhDHqPLYNOt3qpjiWQOXZDHvRE1HU=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.numerics.vectors/4.6.0/system.numerics.vectors.4.6.0.nupkg"
   },
   {
     "pname": "System.Private.Uri",
@@ -1026,22 +948,10 @@
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.reflection.metadata/9.0.0/system.reflection.metadata.9.0.0.nupkg"
   },
   {
-    "pname": "System.Reflection.MetadataLoadContext",
-    "version": "8.0.0",
-    "hash": "sha256-jS5XPZiHjY2CJFnLSxL6U7lMrU3ZknvB4EOgMbG0LEo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.reflection.metadataloadcontext/8.0.0/system.reflection.metadataloadcontext.8.0.0.nupkg"
-  },
-  {
     "pname": "System.Reflection.Primitives",
     "version": "4.3.0",
     "hash": "sha256-5ogwWB4vlQTl3jjk1xjniG2ozbFIjZTL9ug0usZQuBM=",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.reflection.primitives/4.3.0/system.reflection.primitives.4.3.0.nupkg"
-  },
-  {
-    "pname": "System.Resources.Extensions",
-    "version": "9.0.0",
-    "hash": "sha256-y2gLEMuAy6QfEyNJxABC/ayMWGnwlpX735jsUQLktho=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.resources.extensions/9.0.0/system.resources.extensions.9.0.0.nupkg"
   },
   {
     "pname": "System.Resources.ResourceManager",
@@ -1057,9 +967,9 @@
   },
   {
     "pname": "System.Runtime.CompilerServices.Unsafe",
-    "version": "6.0.0",
-    "hash": "sha256-bEG1PnDp7uKYz/OgLOWs3RWwQSVYm+AnPwVmAmcgp2I=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg"
+    "version": "6.1.0",
+    "hash": "sha256-NyqqpRcHumzSxpsgRDguD5SGwdUNHBbo0OOdzLTIzCU=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.runtime.compilerservices.unsafe/6.1.0/system.runtime.compilerservices.unsafe.6.1.0.nupkg"
   },
   {
     "pname": "System.Runtime.Extensions",
@@ -1086,6 +996,12 @@
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.security.accesscontrol/5.0.0/system.security.accesscontrol.5.0.0.nupkg"
   },
   {
+    "pname": "System.Security.AccessControl",
+    "version": "6.0.0",
+    "hash": "sha256-qOyWEBbNr3EjyS+etFG8/zMbuPjA+O+di717JP9Cxyg=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.security.accesscontrol/6.0.0/system.security.accesscontrol.6.0.0.nupkg"
+  },
+  {
     "pname": "System.Security.Cryptography.Pkcs",
     "version": "8.0.0",
     "hash": "sha256-yqfIIeZchsII2KdcxJyApZNzxM/VKknjs25gDWlweBI=",
@@ -1098,10 +1014,10 @@
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.security.cryptography.protecteddata/9.0.0/system.security.cryptography.protecteddata.9.0.0.nupkg"
   },
   {
-    "pname": "System.Security.Cryptography.Xml",
-    "version": "8.0.0",
-    "hash": "sha256-XSg8r9TBoYi6KF10Tg3HyCN3pTm1pA2v0BonEgu+PXU=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.security.cryptography.xml/8.0.0/system.security.cryptography.xml.8.0.0.nupkg"
+    "pname": "System.Security.Permissions",
+    "version": "9.0.0",
+    "hash": "sha256-BFrA9ottmQtLIAiKiGRbfSUpzNJwuaOCeFRDN4Z0ku0=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.security.permissions/9.0.0/system.security.permissions.9.0.0.nupkg"
   },
   {
     "pname": "System.Security.Principal",
@@ -1129,9 +1045,9 @@
   },
   {
     "pname": "System.Text.Encoding.CodePages",
-    "version": "7.0.0",
-    "hash": "sha256-eCKTVwumD051ZEcoJcDVRGnIGAsEvKpfH3ydKluHxmo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.text.encoding.codepages/7.0.0/system.text.encoding.codepages.7.0.0.nupkg"
+    "version": "8.0.0",
+    "hash": "sha256-fjCLQc1PRW0Ix5IZldg0XKv+J1DqPSfu9pjMyNBp7dE=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.text.encoding.codepages/8.0.0/system.text.encoding.codepages.8.0.0.nupkg"
   },
   {
     "pname": "System.Text.Encoding.Extensions",
@@ -1159,9 +1075,9 @@
   },
   {
     "pname": "System.Threading.Channels",
-    "version": "7.0.0",
-    "hash": "sha256-Cu0gjQsLIR8Yvh0B4cOPJSYVq10a+3F9pVz/C43CNeM=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg"
+    "version": "8.0.0",
+    "hash": "sha256-c5TYoLNXDLroLIPnlfyMHk7nZ70QAckc/c7V199YChg=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.threading.channels/8.0.0/system.threading.channels.8.0.0.nupkg"
   },
   {
     "pname": "System.Threading.Overlapped",
@@ -1183,9 +1099,9 @@
   },
   {
     "pname": "System.Threading.Tasks.Extensions",
-    "version": "4.5.4",
-    "hash": "sha256-owSpY8wHlsUXn5xrfYAiu847L6fAKethlvYx97Ri1ng=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg"
+    "version": "4.6.0",
+    "hash": "sha256-OwIB0dpcdnyfvTUUj6gQfKW2XF2pWsQhykwM1HNCHqY=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.threading.tasks.extensions/4.6.0/system.threading.tasks.extensions.4.6.0.nupkg"
   },
   {
     "pname": "System.Threading.Thread",
@@ -1204,5 +1120,11 @@
     "version": "4.5.0",
     "hash": "sha256-niH6l2fU52vAzuBlwdQMw0OEoRS/7E1w5smBFoqSaAI=",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg"
+  },
+  {
+    "pname": "System.Windows.Extensions",
+    "version": "9.0.0",
+    "hash": "sha256-RErD+Ju15qtnwdwB7E0SjjJGAnhXwJyC7UPcl24Z3Vs=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.windows.extensions/9.0.0/system.windows.extensions.9.0.0.nupkg"
   }
 ]

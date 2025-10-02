@@ -9,13 +9,13 @@
 
 buildDunePackage rec {
   pname = "ocamlfuse";
-  version = "2.7.1_cvs12";
+  version = "2.7.1_cvs13";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "ocamlfuse";
     rev = "v${version}";
-    hash = "sha256-ZYwvILgJvVa1nhTJ2V0h8my4kJGefkpZdDQMcJKNQ88=";
+    hash = "sha256-h1ExohTlr1gP2DwHKQW3PTwz6d3pust5gdeyTHJ2KBk=";
   };
 
   postPatch = ''

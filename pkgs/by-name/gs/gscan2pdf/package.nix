@@ -38,42 +38,41 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  buildInputs =
-    [
-      librsvg
-      sane-backends
-      sane-frontends
-    ]
-    ++ (with perlPackages; [
-      Gtk3
-      Gtk3ImageView
-      Gtk3SimpleList
-      Cairo
-      CairoGObject
-      Glib
-      GlibObjectIntrospection
-      GooCanvas2
-      GraphicsTIFF
-      IPCSystemSimple
-      LocaleCodes
-      LocaleGettext
-      PDFBuilder
-      ImagePNGLibpng
-      ImageSane
-      SetIntSpan
-      ImageMagick
-      ConfigGeneral
-      ListMoreUtils
-      HTMLParser
-      ProcProcessTable
-      LogLog4perl
-      TryTiny
-      DataUUID
-      DateCalc
-      IOString
-      FilesysDf
-      SubOverride
-    ]);
+  buildInputs = [
+    librsvg
+    sane-backends
+    sane-frontends
+  ]
+  ++ (with perlPackages; [
+    Gtk3
+    Gtk3ImageView
+    Gtk3SimpleList
+    Cairo
+    CairoGObject
+    Glib
+    GlibObjectIntrospection
+    GooCanvas2
+    GraphicsTIFF
+    IPCSystemSimple
+    LocaleCodes
+    LocaleGettext
+    PDFBuilder
+    ImagePNGLibpng
+    ImageSane
+    SetIntSpan
+    ImageMagick
+    ConfigGeneral
+    ListMoreUtils
+    HTMLParser
+    ProcProcessTable
+    LogLog4perl
+    TryTiny
+    DataUUID
+    DateCalc
+    IOString
+    FilesysDf
+    SubOverride
+  ]);
 
   postPatch =
     let
@@ -113,23 +112,22 @@ perlPackages.buildPerlPackage rec {
     "man"
   ];
 
-  nativeCheckInputs =
-    [
-      imagemagick
-      libtiff
-      djvulibre
-      poppler-utils
-      ghostscript
-      unpaper
-      pdftk
+  nativeCheckInputs = [
+    imagemagick
+    libtiff
+    djvulibre
+    poppler-utils
+    ghostscript
+    unpaper
+    pdftk
 
-      xvfb-run
-      file
-      tesseract3 # tests are expecting tesseract 3.x precisely
-    ]
-    ++ (with perlPackages; [
-      TestPod
-    ]);
+    xvfb-run
+    file
+    tesseract3 # tests are expecting tesseract 3.x precisely
+  ]
+  ++ (with perlPackages; [
+    TestPod
+  ]);
 
   checkPhase = ''
     # Temporarily disable a dubiously failing test:

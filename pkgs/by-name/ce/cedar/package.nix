@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cedar";
-  version = "4.4.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "cedar-policy";
     repo = "cedar";
     tag = "v${version}";
-    hash = "sha256-rF6r7BUwjRYK9MM0owLs77i7duNj710+PHoX1LGDO24=";
+    hash = "sha256-f8d7KL1DzEfJqEJ5uwwOJCgePE/frOXIFcXuoybIp2U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-6SvXJc7ow0zhCPqrI15n05FUBZOmYDnqV4YSclkTZ9I=";
+  cargoHash = "sha256-MK6Zcpf12mGzntEv632kQjH7YOx31QBCmSJHxjE3l1c=";
 
   passthru = {
     tests.version = testers.testVersion { package = cedar; };

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fabiocolacio";
     repo = "Marker";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-HhDhigQ6Aqo8R57Yrf1i69sM0feABB9El5R5OpzOyB0=";
   };
@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
     meson rewrite kwargs set project / version '${version}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop made with GTK3";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       trepetti
       aleksana
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";
     mainProgram = "marker";
   };

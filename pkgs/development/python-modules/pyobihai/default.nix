@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ejpenney";
-    repo = pname;
+    repo = "pyobihai";
     tag = version;
     hash = "sha256-tDPu/ceH7+7AnxokADDfl+G56B0+ri8RxXxXEyWa61Q=";
   };

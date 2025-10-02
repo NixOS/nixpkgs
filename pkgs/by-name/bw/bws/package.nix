@@ -22,25 +22,22 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-acS4yKppvIBiwBMoa5Ero4G9mUf8OLG/TbrZOolAwuc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-SJn00C7vkNoghdVPUszep40RSL8fD+/ELUeuf9GBD7c=";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      perl
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    perl
+  ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   env = {
     PYO3_PYTHON = "${python3}/bin/python3";

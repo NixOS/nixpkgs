@@ -18,11 +18,10 @@ diff --git a/src/main/CMakeLists.txt b/src/main/CMakeLists.txt
 index 49b86371..bb8e4bb6 100644
 --- a/src/main/CMakeLists.txt
 +++ b/src/main/CMakeLists.txt
-@@ -74,3 +74,14 @@ target_link_libraries(main
-   PkgConfig::Sword
+@@ -77,6 +77,17 @@
    PkgConfig::Biblesync
    )
-+
+
 +IF (DBUS)
 +  target_include_directories (main
 +    PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
@@ -33,6 +32,10 @@ index 49b86371..bb8e4bb6 100644
 +    PkgConfig::DBus
 +    )
 +ENDIF (DBUS)
++
+ if(WK_FOUND)
+   target_compile_definitions(main
+     PRIVATE
 -- 
 2.34.1
 

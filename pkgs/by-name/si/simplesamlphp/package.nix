@@ -17,7 +17,7 @@ php.buildComposerProject2 (finalAttrs: {
   vendorHash = "sha256-kFRvOxSfqlM+xzFFlEm9YrbQDOvC4AA0BtztFQ1xxDU=";
 
   meta = {
-    description = "SimpleSAMLphp is an application written in native PHP that deals with authentication (SQL, .htpasswd, YubiKey, LDAP, PAPI, Radius)";
+    description = "Application written in native PHP that deals with authentication (SQL, .htpasswd, YubiKey, LDAP, PAPI, Radius)";
     homepage = "https://simplesamlphp.org";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ nhnn ];

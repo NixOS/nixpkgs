@@ -69,6 +69,16 @@ stdenv.mkDerivation rec {
       midchildan
       pjungkamp
     ];
+    knownVulnerabilities = [
+      ''
+        End of life with various local privilege escalation vulnerabilites:
+          - CVE-2023-22656
+          - CVE-2023-45221
+          - CVE-2023-47169
+          - CVE-2023-47282
+          - CVE-2023-48368
+      ''
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

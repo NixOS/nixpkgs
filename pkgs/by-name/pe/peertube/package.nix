@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchurl,
   fetchFromGitHub,
   fetchYarnDeps,
@@ -46,35 +45,35 @@ let
     inherit (bcryptAttrs) hash;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "7.0.1";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
-    tag = "v${version}";
-    hash = "sha256-DoUSzqb8lrU+s5R95rxCN/5A8sgb11edAhv0T6YACRo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WbZFOOvX6WzKB9tszxJl6z+V6cDBH6Y2SjoxF17WvUo=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-WLaIIyz6SEekLFeVO39Swpny5/x5Jc1zoxy/6bmOXTk=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-T1stKz8+1ghQBJB8kujwcqmygMdoswjFBL/QWAHSis0=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
-    yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-/ZdORSnwk29ubsgKKB7RfHCetODNOH9DzkflQdDsMz0=";
+    yarnLock = "${finalAttrs.src}/client/yarn.lock";
+    hash = "sha256-jeE6Xpi/A1Ldbbp12rkG19auud61AZna/vbVE2mpp/8=";
   };
 
   yarnOfflineCacheAppsCli = fetchYarnDeps {
-    yarnLock = "${src}/apps/peertube-cli/yarn.lock";
+    yarnLock = "${finalAttrs.src}/apps/peertube-cli/yarn.lock";
     hash = "sha256-lcWtZGE/6XGm8KXmzSowCHAb/vGwBoqkwk32Ru3mMYU=";
   };
 
   yarnOfflineCacheAppsRunner = fetchYarnDeps {
-    yarnLock = "${src}/apps/peertube-runner/yarn.lock";
-    hash = "sha256-R7oXJUT698l2D1WkQGTWfkmbC7bC1XJ04xT0O8bwuI8=";
+    yarnLock = "${finalAttrs.src}/apps/peertube-runner/yarn.lock";
+    hash = "sha256-OX9em03iqaRCqFuo2QO/r+CBdk7hHk3WY1EBXlFr1cY=";
   };
 
   outputs = [
@@ -106,6 +105,13 @@ stdenv.mkDerivation rec {
     cd ~/client
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheClient
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+
+    # Switch sass-embedded to sass
+    find node_modules/vite/dist -name "*.js" -type f -exec grep -l "sass-embedded" {} \; | while read file; do
+      echo "Patching $file"
+      sed -i 's/"sass-embedded"/"sass"/g; s/'"'"'sass-embedded'"'"'/'"'"'sass'"'"'/g' "$file"
+    done
+
     cd ~/apps/peertube-cli
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheAppsCli
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
@@ -174,7 +180,7 @@ stdenv.mkDerivation rec {
     # be needed, either now or in the future. If they might be, then we probably want
     # to move the package to $out above instead of removing the broken symlink.
     rm $out/node_modules/@peertube/{peertube-server,peertube-transcription-devtools,peertube-types-generator,tests}
-    rm $out/client/node_modules/@peertube/{peertube-transcription-devtools,peertube-types-generator,tests}
+    rm $out/client/node_modules/@peertube/{peertube-transcription-devtools,peertube-types-generator,tests,player}
 
     mkdir -p $cli/bin
     mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $cli
@@ -193,7 +199,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.peertube = nixosTests.peertube;
 
-  meta = with lib; {
+  meta = {
     description = "Free software to take back control of your videos";
     longDescription = ''
       PeerTube aspires to be a decentralized and free/libre alternative to video
@@ -209,7 +215,7 @@ stdenv.mkDerivation rec {
       though if the administrator of your instance had previously connected it
       with other instances.
     '';
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
     platforms = [
       "x86_64-linux"
@@ -217,10 +223,10 @@ stdenv.mkDerivation rec {
       # feasible, looking for maintainer to help out
       # "x86_64-darwin" "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       immae
       izorkin
       stevenroose
     ];
   };
-}
+})

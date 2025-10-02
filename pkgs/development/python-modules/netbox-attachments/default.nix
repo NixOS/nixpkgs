@@ -1,28 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   setuptools,
+  python,
   netbox,
+  django,
+  netaddr,
 }:
 buildPythonPackage rec {
   pname = "netbox-attachments";
-  version = "7.2.0";
+  version = "9.0.0";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "Kani999";
     repo = "netbox-attachments";
     tag = version;
-    hash = "sha256-EYf1PbFIFyCb2fYrnn/T8dnXz3dHmDOLI8Wbnef8V8M=";
+    hash = "sha256-lm1+MWDT9N6Y+Uf1t3jTrFRF8jRy86JNdZSL1RQO7cw=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ netbox ];
+  nativeCheckInputs = [
+    netbox
+    django
+    netaddr
+  ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH

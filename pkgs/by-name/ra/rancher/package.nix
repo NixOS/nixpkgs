@@ -6,14 +6,16 @@
 
 buildGoModule rec {
   pname = "rancher";
-  version = "2.11.1";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-puwbZQ6JOdRODOChb2hOqW4KPIxxubOkMILFHUP/I78=";
+    hash = "sha256-EUkGdnk8LmDwLBqhIp5VbTBQrLicl25aQRBK/nYQhWE=";
   };
+
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-w"
@@ -23,7 +25,7 @@ buildGoModule rec {
     "-static"
   ];
 
-  vendorHash = "sha256-NQ5R2rYmPc5Y6tpnWm9/QL5TNe70ZWwXF51KgShyovQ=";
+  vendorHash = "sha256-8+GWDZy8icrmsr5hTnjxKy+D5oUOh/HXIKlmxIzq/m0=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/rancher
@@ -35,7 +37,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Rancher Command Line Interface (CLI) is a unified tool for interacting with your Rancher Server";
+    description = "CLI tool for interacting with your Rancher Server";
     mainProgram = "rancher";
     homepage = "https://github.com/rancher/cli";
     license = licenses.asl20;

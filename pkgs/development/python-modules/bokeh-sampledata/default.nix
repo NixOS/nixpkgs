@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "bokeh-sampledata";
-  version = "2024.2";
+  version = "2025.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bokeh_sampledata";
     inherit version;
-    hash = "sha256-5j2qluedVj7IuE8gZy/+lPkFshRV+rjYPuM05G2jNiQ=";
+    hash = "sha256-a4dK9bh45w8WEzaVrAfhXeOGQvqfrf33I/fUIzOWevQ=";
   };
 
   build-system = [

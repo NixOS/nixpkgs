@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "extractcode-7z";
   version = "21.5.31";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aboutcode-org";

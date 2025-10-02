@@ -1,25 +1,25 @@
 {
   lib,
   stdenv,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   git,
   nix-update-script,
   installShellFiles,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "git-spice";
-  version = "0.13.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
-    tag = "v${version}";
-    hash = "sha256-hqdU0j7H3hhhjGV4lmluG1D6NXNqI80d9gGr5KJ9D+Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Gt4dS1Wu3w/iS0vtYO3XHyknKQEveob9slwNA/HAks=";
   };
 
-  vendorHash = "sha256-Wi/NNqHnHrfikO0EWDXNdTjPmgHrGSs2k612c0w8OA8=";
+  vendorHash = "sha256-VCUNaWi14Pc39ncWzZZsdsZSd+IxYFhbm1cfTZ40dMw=";
 
   subPackages = [ "." ];
 
@@ -32,7 +32,7 @@ buildGo124Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main._version=${version}"
+    "-X=main._version=${finalAttrs.version}"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -55,9 +55,9 @@ buildGo124Module rec {
   meta = {
     description = "Manage stacked Git branches";
     homepage = "https://abhinav.github.io/git-spice/";
-    changelog = "https://github.com/abhinav/git-spice/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/abhinav/git-spice/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "gs";
   };
-}
+})

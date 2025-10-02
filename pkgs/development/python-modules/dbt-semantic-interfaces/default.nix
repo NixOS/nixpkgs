@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
     tag = "v${version}";
-    hash = "sha256-gY2CJqN/ohYs4Qej451PexWcsM7N9GuHt79qC+NC7T4=";
+    hash = "sha256-I/bMpqTaAHs0XnYOYjFRgXv3qB06LItkaSxtRjk55js=";
   };
 
   pythonRelaxDeps = [ "importlib-metadata" ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Shared interfaces used by dbt-core and MetricFlow projects";
     homepage = "https://github.com/dbt-labs/dbt-semantic-interfaces";
-    changelog = "https://github.com/dbt-labs/dbt-semantic-interfaces/releases/tag/v${version}";
+    changelog = "https://github.com/dbt-labs/dbt-semantic-interfaces/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
   };

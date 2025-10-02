@@ -149,7 +149,8 @@ in
           "pm.min_spare_servers" = lib.mkDefault 2;
           "pm.max_spare_servers" = lib.mkDefault 4;
           "pm.max_requests" = lib.mkDefault 500;
-        } // cfg.poolConfig;
+        }
+        // cfg.poolConfig;
       };
 
       postgresql = mkIf cfg.enablePostgresql {
@@ -195,8 +196,8 @@ in
       services = {
         part-db-migrate = {
           before = [ "phpfpm-part-db.service" ];
-          after = [ "postgresql.service" ];
-          requires = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
+          requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "oneshot";
@@ -216,7 +217,7 @@ in
           after = [ "part-db-migrate.service" ];
           requires = [
             "part-db-migrate.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           # ensure nginx can access the php-fpm socket
           postStart = ''

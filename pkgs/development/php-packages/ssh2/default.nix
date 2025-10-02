@@ -5,10 +5,10 @@
 }:
 
 buildPecl rec {
-  version = "1.3.1";
+  version = "1.4.1";
   pname = "ssh2";
 
-  sha256 = "sha256-kJOh+NJNxlg2AnsOI5xQ3o1err+DlrwzMf3TjF1pr9k=";
+  sha256 = "sha256-e8pbI/cx252O0K6l25uxXaj/EzsPu6lhArguldpNh2Q=";
 
   buildInputs = [ libssh2 ];
   configureFlags = [ "--with-ssh2=${libssh2.dev}" ];

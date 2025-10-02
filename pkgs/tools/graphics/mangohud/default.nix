@@ -10,6 +10,8 @@
   gnused,
   xdg-utils,
   dbus,
+  libGL,
+  libX11,
   hwdata,
   mangohud32,
   addDriverRunpath,
@@ -20,7 +22,6 @@
   ninja,
   pkg-config,
   unzip,
-  libX11,
   wayland,
   libXNVCtrl,
   nlohmann_json,
@@ -138,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
       libdbus = dbus.lib;
+      libGL = libGL;
+      libX11 = libX11;
       inherit hwdata;
     })
   ];
@@ -185,21 +188,20 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
   ];
 
-  buildInputs =
-    [
-      dbus
-      nlohmann_json
-      spdlog
-    ]
-    ++ lib.optional waylandSupport wayland
-    ++ lib.optional x11Support libX11
-    ++ lib.optional nvidiaSupport libXNVCtrl
-    ++ lib.optional (x11Support || waylandSupport) libxkbcommon
-    ++ lib.optionals mangoappSupport [
-      glew
-      glfw
-      libXrandr
-    ];
+  buildInputs = [
+    dbus
+    nlohmann_json
+    spdlog
+  ]
+  ++ lib.optional waylandSupport wayland
+  ++ lib.optional x11Support libX11
+  ++ lib.optional nvidiaSupport libXNVCtrl
+  ++ lib.optional (x11Support || waylandSupport) libxkbcommon
+  ++ lib.optionals mangoappSupport [
+    glew
+    glfw
+    libXrandr
+  ];
 
   doCheck = true;
 

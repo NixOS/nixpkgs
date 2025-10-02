@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L4SQ29vUGTZs7xUWAyqwbQfMtYOe9UkF6EKkcmktQgQ=";
+    hash = "sha256-iB+3W7FlTtVdhgYLsGfyxxb44VX1e7c/1ETlNxOq/sg=";
   };
 
   build-system = [ setuptools ];
@@ -47,25 +47,24 @@ buildPythonPackage rec {
     "tests/test_async.py"
   ];
 
-  disabledTests =
-    [
-      "test_diagram"
-      "test_ordered_with_graph"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
-      "test_binary_stream"
+  disabledTests = [
+    "test_diagram"
+    "test_ordered_with_graph"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
+    "test_binary_stream"
 
-      # sleep is not accurate on Darwin
-      "test_timeout"
-      "test_timeout_callbacks"
-      "test_timeout_transitioning"
-      "test_thread_access"
-      "test_parallel_access"
-      "test_parallel_deep"
-      "test_conditional_access"
-      "test_pickle"
-    ];
+    # sleep is not accurate on Darwin
+    "test_timeout"
+    "test_timeout_callbacks"
+    "test_timeout_transitioning"
+    "test_thread_access"
+    "test_parallel_access"
+    "test_parallel_deep"
+    "test_conditional_access"
+    "test_pickle"
+  ];
 
   pythonImportsCheck = [ "transitions" ];
 

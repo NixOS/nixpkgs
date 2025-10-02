@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard-plug-sharing";
     rev = version;
-    sha256 = "sha256-BWlQrM13gI6FXoqfOKoeqtE1+HVBUB09NDatGraTYtY=";
+    hash = "sha256-XTgUHgvBSzZeuUup0gT6sbhyT4FGGG7o+qbPmfeRVQE=";
   };
 
   nativeBuildInputs = [

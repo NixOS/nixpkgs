@@ -45,14 +45,14 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.6.0";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${version}";
-    hash = "sha256-OGEnB+GVqBwtYQegPuR7MOYFxmc4aNHCQt2+OKHLZ5M=";
+    hash = "sha256-SmFDIj170CWRuQ/rQX+Nc3cME4GCItNGkxIPPWIn7AA=";
   };
 
   postPatch = ''
@@ -97,7 +97,8 @@ mkDerivationWith buildPythonPackage rec {
     typing-extensions
     vispy
     wrapt
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   postFixup = ''
     wrapQtApp $out/bin/napari

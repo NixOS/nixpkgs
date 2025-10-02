@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lianad";
-  version = "10.0"; # keep in sync with liana
+  version = "13.0"; # keep in sync with liana
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
     rev = "v${version}";
-    hash = "sha256-nuwbJxpcapk01qwGAZ2z9nKjHNqE1BMikz3hWrCAGsA=";
+    hash = "sha256-zr9FZZSLPMk2d5vyZqrj12RG4UCdmkyKLjTU7XpgedE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tODnld6V2KWarfHXyoPjSGw+q1A/dalPtW3Swc2dNes=";
+  cargoHash = "sha256-uLSlx1WWCcngL1WSP3jOvwFJd/gbz/g9AT6Of9rwEMw=";
 
   buildInputs = [ udev ];
 

@@ -9,12 +9,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "riquito";
-    repo = pname;
+    repo = "tuc";
     rev = "v${version}";
     sha256 = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Ry7S/Pqo3AoUKCyGFfV9RNWOguBwajJ8rOqRg+LFReY=";
 
   meta = with lib; {

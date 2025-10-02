@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     makeFlagsArray=( CFLAGS="-I. -O3"
                      STRIP="-s"
                      INSTALL="install"
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
                      MANDIR="$out/share/man"
                    )
     patchShebangs .
+
+    runHook postConfigure
   '';
 
   meta = with lib; {

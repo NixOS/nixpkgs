@@ -164,36 +164,34 @@ in
   # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
   # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
 
-  buildInputs =
-    [
-      bash # To patch /bin/sh shebangs.
-      conmon
-      cryptsetup
-      gpgme
-      libuuid
-      openssl
-      squashfsTools # Required at build time by SingularityCE
-    ]
-    # Optional dependencies.
-    # Formatting: Optional dependencies are likely to increase.
-    # Don't squash them into the same line.
-    ++ lib.optional enableNvidiaContainerCli nvidia-docker
-    ++ lib.optional enableSeccomp libseccomp;
+  buildInputs = [
+    bash # To patch /bin/sh shebangs.
+    conmon
+    cryptsetup
+    gpgme
+    libuuid
+    openssl
+    squashfsTools # Required at build time by SingularityCE
+  ]
+  # Optional dependencies.
+  # Formatting: Optional dependencies are likely to increase.
+  # Don't squash them into the same line.
+  ++ lib.optional enableNvidiaContainerCli nvidia-docker
+  ++ lib.optional enableSeccomp libseccomp;
 
   configureScript = "./mconfig";
 
-  configureFlags =
-    [
-      "--localstatedir=${
-        if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
-      }"
-      "--runstatedir=/var/run"
-    ]
-    ++ lib.optional (!enableSeccomp) "--without-seccomp"
-    ++ lib.optional (enableSuid != defaultToSuid) (
-      if enableSuid then "--with-suid" else "--without-suid"
-    )
-    ++ extraConfigureFlags;
+  configureFlags = [
+    "--localstatedir=${
+      if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
+    }"
+    "--runstatedir=/var/run"
+  ]
+  ++ lib.optional (!enableSeccomp) "--without-seccomp"
+  ++ lib.optional (enableSuid != defaultToSuid) (
+    if enableSuid then "--with-suid" else "--without-suid"
+  )
+  ++ extraConfigureFlags;
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
@@ -211,7 +209,8 @@ in
     mount # mount
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
-  ] ++ lib.optional enableNvidiaContainerCli nvidia-docker;
+  ]
+  ++ lib.optional enableNvidiaContainerCli nvidia-docker;
 
   postPatch = ''
     if [[ ! -e .git || ! -e VERSION ]]; then
@@ -326,7 +325,8 @@ in
       ShamrockLee
     ];
     mainProgram = projectName;
-  } // extraMeta;
+  }
+  // extraMeta;
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {

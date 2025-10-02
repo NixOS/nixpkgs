@@ -1,11 +1,14 @@
 {
   binutils,
   lib,
+  libucontext,
+  pkg-config,
   clangStdenv,
   fetchFromGitHub,
   cmake,
   openssl,
   zlib,
+  nix-update-script,
 }:
 
 let
@@ -30,21 +33,34 @@ in
 # See: https://gerrit.lix.systems/c/lix/+/1874
 clangStdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "1.1.0";
+  version = "1.2.0";
 
   # release tarballs are missing some ekam rules
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    hash = "sha256-gxkko7LFyJNlxpTS+CWOd/p9x/778/kNIXfpDGiKM2A=";
+    hash = "sha256-aDcn4bLZGq8915/NPPQsN5Jv8FRWd8cAspkG3078psc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  patches = [
+    # https://github.com/capnproto/capnproto/pull/2377
+    ./fix-libucontext.patch
+    # https://github.com/capnproto/capnproto/pull/2410
+    ./fix-libatomic.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   propagatedBuildInputs = [
     openssl
     zlib
-  ] ++ lib.optional (clangStdenv.cc.isClang && clangStdenv.targetPlatform.isStatic) empty-libgcc_eh;
+  ]
+  ++ lib.optional (clangStdenv.cc.isClang && clangStdenv.hostPlatform.isStatic) empty-libgcc_eh
+  # musl doesn't ship getcontext/setcontext unlike basically every other libc
+  ++ lib.optional clangStdenv.hostPlatform.isMusl libucontext;
 
   # FIXME: separate the binaries from the stuff that user systems actually use
   # This runs into a terrible UX issue in Lix and I just don't want to debug it
@@ -54,6 +70,10 @@ clangStdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    # merely requires setcontext/getcontext (libc), lix expects fibers to
+    # be available, and we want to make sure that the build will fail if
+    # it breaks
+    (lib.cmakeBool "WITH_FIBERS" true)
     # Take optimization flags from CXXFLAGS rather than cmake injecting them
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
   ];
@@ -64,6 +84,8 @@ clangStdenv.mkDerivation rec {
   };
 
   separateDebugInfo = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://capnproto.org/";

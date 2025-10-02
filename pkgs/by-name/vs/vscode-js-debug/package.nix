@@ -15,21 +15,22 @@
 
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.97.1";
+  version = "1.104.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-MZY6gthj3q2ptAvV28hVvIYgBsW4dpsznasZmK1wVOU=";
+    hash = "sha256-CoR3ezhyIQtt5ZlTjfJSNvfMX47U5xSJdzsMN5dkUGI=";
   };
 
-  npmDepsHash = "sha256-Xvpb5KauM5BvybKPqUOF7vwDlbVBbpxGTuakx4TVyas=";
+  npmDepsHash = "sha256-bX4p0LQIL4XF0rL5dnBAvR6Ut+YZ1H676Mu/uCedNtU=";
 
   nativeBuildInputs = [
     pkg-config
     node-gyp
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
@@ -74,8 +75,8 @@ buildNpmPackage rec {
         fi
       '';
 
-  meta = with lib; {
-    description = "A DAP-compatible JavaScript debugger";
+  meta = {
+    description = "DAP-compatible JavaScript debugger";
     longDescription = ''
       This is a [DAP](https://microsoft.github.io/debug-adapter-protocol/)-based
       JavaScript debugger. It debugs Node.js, Chrome, Edge, WebView2, VS Code
@@ -86,7 +87,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/microsoft/vscode-js-debug";
     changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
     mainProgram = "js-debug";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zeorin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zeorin ];
   };
 }

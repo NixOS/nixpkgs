@@ -10,18 +10,18 @@ Signed-off-by: Luke Granger-Brown <git@lukegb.com>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
-index c5aefca14b729b548c4e90857202eb82576b507d..6938ce63abb53661e8d1fb71eaaab03ba0cc37c6 100644
+index 10be4b0b3f65e486c1dc8419337a5cf823431774..b0badb3ccab3b112043bd8616770f8014238d396 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -30,7 +30,11 @@ YQ_VERSION = "4.24.4"
- BUF_VERSION = "v1.50.0"
- 
- def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION, yq_version = YQ_VERSION, buf_version = BUF_VERSION):
+@@ -38,7 +38,11 @@ def envoy_dependency_imports(
+         yq_version = YQ_VERSION,
+         buf_sha = BUF_SHA,
+         buf_version = BUF_VERSION):
 -    rules_foreign_cc_dependencies()
 +    rules_foreign_cc_dependencies(
 +        register_default_tools=False,  # no prebuilt toolchains
-+	    register_built_tools=False,  # nor from source
-+	    register_preinstalled_tools=True,  # use host tools (default)
++        register_built_tools=False,  # nor from source
++        register_preinstalled_tools=True,  # use host tools (default)
 +    )
      go_rules_dependencies()
      go_register_toolchains(go_version)

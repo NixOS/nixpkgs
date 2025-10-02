@@ -30,21 +30,20 @@ mkAppleDerivation (finalAttrs: {
   # Propagate `out` only when there are dylibs to link (i.e., don’t propagate when doing a static build).
   propagatedBuildOutputs = lib.optionalString (!hostPlatform.isStatic) "out";
 
-  postPatch =
-    ''
-      # Work around unnecessary private API usage in libcharset.
-      mkdir -p libcharset/os && cat <<EOF > libcharset/os/variant_private.h
-        #pragma once
-        #include <stdbool.h>
-        static inline bool os_variant_has_internal_content(const char*) { return false; }
-      EOF
+  postPatch = ''
+    # Work around unnecessary private API usage in libcharset.
+    mkdir -p libcharset/os && cat <<EOF > libcharset/os/variant_private.h
+      #pragma once
+      #include <stdbool.h>
+      static inline bool os_variant_has_internal_content(const char*) { return false; }
+    EOF
 
-      # Add additional test cases found while working on packaging libiconv in nixpkgs.
-      cp ${./nixpkgs_test.c} tests/libiconv/nixpkgs_test.c
-    ''
-    + lib.optionalString hostPlatform.isStatic ''
-      cp ${./static-modules.gperf} static-modules.gperf
-    '';
+    # Add additional test cases found while working on packaging libiconv in nixpkgs.
+    cp ${./nixpkgs_test.c} tests/libiconv/nixpkgs_test.c
+  ''
+  + lib.optionalString hostPlatform.isStatic ''
+    cp ${./static-modules.gperf} static-modules.gperf
+  '';
 
   # Dynamic builds use `dlopen` to load modules, but static builds have to link them all.
   # `gperf` is used to generate a lookup table from module to ops functions.
@@ -87,7 +86,8 @@ mkAppleDerivation (finalAttrs: {
     license = [
       lib.licenses.bsd2
       lib.licenses.bsd3
-    ] ++ lib.optional finalAttrs.finalPackage.doInstallCheck lib.licenses.apple-psl10;
+    ]
+    ++ lib.optional finalAttrs.finalPackage.doInstallCheck lib.licenses.apple-psl10;
     mainProgram = "iconv";
   };
 })

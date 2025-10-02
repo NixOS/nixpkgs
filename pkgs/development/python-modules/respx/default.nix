@@ -6,6 +6,7 @@
   httpcore,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -27,10 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-T3DLNXJykSF/HXjlmQdJ2CG4d+U1eTa+XWcgtT3dhl4=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [ httpx ];
@@ -40,6 +37,7 @@ buildPythonPackage rec {
     httpx
     flask
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     starlette
     trio

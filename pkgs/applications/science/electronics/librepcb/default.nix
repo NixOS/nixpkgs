@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "librepcb";
+    repo = "librepcb";
     rev = version;
     hash = "sha256-J4y0ikZNuOguN9msmEQzgcY0/REnOEOoDkY/ga+Cfd8=";
     fetchSubmodules = true;
@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    sourceRoot = "source/${cargoRoot}";
+    inherit src cargoRoot;
     hash = "sha256-1td3WjxbDq2lX7c0trpYRhO82ChNAG/ZABBRsekYtq4=";
   };
 

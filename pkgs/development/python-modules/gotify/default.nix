@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   # tests raise an exception if the system is not Linux or Windows
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.buildPlatform.isDarwin;
 
   # tests require gotify-server to be located in ./tests/test-server/gotify-linux-{arch}
   postPatch = ''

@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smartsynchronize";
-  version = "4.6.1";
+  version = "4.6.3";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartsynchronize/smartsynchronize-linux-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
-    hash = "sha256-oc1GFwiA6LPbCsCsGGENEz9ktcu0NINfQ9dsL27VIpI=";
+    hash = "sha256-F+Yrr029nPnnCvFEhIxgeXloyt2JRKSw8uOmVySWKzo=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];

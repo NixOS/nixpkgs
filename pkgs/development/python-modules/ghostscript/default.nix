@@ -54,7 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ghostscript" ];
 
   meta = {
-    description = "Interface to the Ghostscript C-API using ctypes.";
+    description = "Interface to the Ghostscript C-API using ctypes";
     homepage = "https://gitlab.com/pdftools/python-ghostscript";
     changelog = "https://gitlab.com/pdftools/python-ghostscript/-/blob/v${version}/CHANGES.txt";
     license = lib.licenses.gpl3Plus;

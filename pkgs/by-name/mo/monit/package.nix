@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "monit";
-  version = "5.35.1";
+  version = "5.35.2";
 
   src = fetchurl {
     url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
-    hash = "sha256-d6TAI+4Gru1IU23+tJ2WqGip64EGw+LojKtTe7xylRs=";
+    hash = "sha256-Tf71QynmPZdyqeHDasmbxBFzt5lj3A2CNfLDL0ueB48=";
   };
 
   nativeBuildInputs = [
@@ -26,34 +26,32 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  buildInputs =
-    [
-      zlib.dev
-      libxcrypt
-    ]
-    ++ lib.optionals useSSL [ openssl ]
-    ++ lib.optionals usePAM [ pam ];
+  buildInputs = [
+    zlib.dev
+    libxcrypt
+  ]
+  ++ lib.optionals useSSL [ openssl ]
+  ++ lib.optionals usePAM [ pam ];
 
-  configureFlags =
-    [
-      (lib.withFeature usePAM "pam")
-    ]
-    ++ (
-      if useSSL then
-        [
-          "--with-ssl-incl-dir=${openssl.dev}/include"
-          "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
-        ]
-      else
-        [
-          "--without-ssl"
-        ]
-    )
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # will need to check both these are true for musl
-      "libmonit_cv_setjmp_available=yes"
-      "libmonit_cv_vsnprintf_c99_conformant=yes"
-    ];
+  configureFlags = [
+    (lib.withFeature usePAM "pam")
+  ]
+  ++ (
+    if useSSL then
+      [
+        "--with-ssl-incl-dir=${openssl.dev}/include"
+        "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
+      ]
+    else
+      [
+        "--without-ssl"
+      ]
+  )
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # will need to check both these are true for musl
+    "libmonit_cv_setjmp_available=yes"
+    "libmonit_cv_vsnprintf_c99_conformant=yes"
+  ];
 
   meta = {
     homepage = "https://mmonit.com/monit/";

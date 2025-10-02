@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "montag451";
-    repo = pname;
+    repo = "pypi-mirror";
     tag = "v${version}";
     hash = "sha256-hRqQDYgOKpv4jmNvyrt/+EInPM/Xwsr3IjtrySAGRgY=";
   };

@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.43";
+  version = "0.9.82";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9ACeMGbOpa3Nh6NQIGckcI2oYNjtQ1pE4Zn++qcE0tM=";
+    hash = "sha256-vdmWmSh0JqEAkgH9k3ZCjzBvUyNpt+ZH1uDtYiKHxRA=";
     fetchSubmodules = true;
   };
 
@@ -39,28 +39,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ozRDNXWqg0CZ1IgU33C6yJu4e05010jsHeTdIVhB72M=";
+    fetcherVersion = 1;
+    hash = "sha256-sRa1IO8JmMsA0/7dMuYF0as/MYHpclEwAknZIycNQ3Y=";
   };
 
   pnpmRoot = "../..";
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-5DIagAKSq427kwZTH/QKY3vbb+TmFscKSANoSkEJMGg=";
+  cargoHash = "sha256-oNzgsxJb8N++AGCkXuJmK+51iF7XZ0xmShPlOpkAQEg=";
 
   cargoRoot = "../..";
 
   buildAndTestSubdir = "src-tauri";
 
   postPatch = ''
-    substituteInPlace src-tauri/Cargo.toml \
-      --replace-fail '"devtools"' '"devtools", "rustls-tls"'
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"Readest"' '"readest"'
     jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
-      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false"
+      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
+      --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
   '';
 
   nativeBuildInputs = [

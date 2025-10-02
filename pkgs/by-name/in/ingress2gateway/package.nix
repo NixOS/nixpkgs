@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
+    repo = "ingress2gateway";
     rev = "v${version}";
     hash = "sha256-0w2ZM1g2rr46bN8BNgrkmb3tOQw0FZTMLp/koW01c5I=";
   };

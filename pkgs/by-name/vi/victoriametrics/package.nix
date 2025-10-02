@@ -9,18 +9,17 @@
   withVmAuth ? true, # HTTP proxy for authentication
   withBackupTools ? true, # vmbackup, vmrestore
   withVmctl ? true, # vmctl is used to migrate time series
-  withVictoriaLogs ? true, # logs server
 }:
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.117.1";
+  version = "1.126.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y3Ai5e9bJnGlWfxOMWMhesJ/eHrklSbR+YmR1EgzFS0=";
+    hash = "sha256-QVeg/F7oPPgSRTi5jcfTj15bD/7fQoPopahpUP9b0UA=";
   };
 
   vendorHash = null;
@@ -43,12 +42,6 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withBackupTools [
       "app/vmbackup"
       "app/vmrestore"
-    ]
-    ++ lib.optionals withVictoriaLogs [
-      "app/victoria-logs"
-      "app/vlinsert"
-      "app/vlselect"
-      "app/vlstorage"
     ];
 
   postPatch = ''
@@ -57,6 +50,10 @@ buildGoModule (finalAttrs: {
     #
     # This appears to be some kind of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
+
+    # Allow older go versions
+    substituteInPlace go.mod \
+      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
@@ -78,13 +75,16 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    inherit (nixosTests) victoriametrics;
+  passthru = {
+    tests = {
+      inherit (nixosTests) victoriametrics;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {
     homepage = "https://victoriametrics.com/";
-    description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
+    description = "Fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp

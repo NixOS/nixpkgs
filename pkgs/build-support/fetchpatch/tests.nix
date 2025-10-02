@@ -48,4 +48,22 @@ in
       else
         "sha256-SJHk8XrutqAyoIdORlhCpBCN626P+uzed7mjKz5eQYY=";
   };
+
+  fileWithSpace = testers.invalidateFetcherByDrvHash fetchpatch {
+    url = "https://github.com/jfly/annoying-filenames/commit/1e86a219f5fc9c4137b409bc9c38036f3922724b.patch";
+    sha256 =
+      if isFetchpatch2 then
+        "sha256-RB6pjigoXtzHILkGFXYd3Lz2aM9DvO0NRmLdey1N6gg="
+      else
+        "sha256-aptUvVojqIIIVNuHqkl+C+dZBGFfs+1MUd0FNV+4j4E=";
+  };
+
+  fileWithApostrophe = testers.invalidateFetcherByDrvHash fetchpatch {
+    url = "https://github.com/jfly/annoying-filenames/commit/8b6d8f8d7094ce646523b3369cfdf5030289c66c.patch";
+    sha256 =
+      if isFetchpatch2 then
+        "sha256-CrQFmVvLEvWpo2ucVrWyLb5qk2GVOxyUbFN3hp9sV68="
+      else
+        "sha256-CrQFmVvLEvWpo2ucVrWyLb5qk2GVOxyUbFN3hp9sV68=";
+  };
 }

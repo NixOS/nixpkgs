@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmsd-tng";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitLab {
     owner = "kop316";
     repo = "mmsd";
     rev = finalAttrs.version;
-    hash = "sha256-kXl+T5A8Qw0PmJ47sned8dzTIYUmaWc8w6X6BLEdLIg=";
+    hash = "sha256-/nHsLs7C2W7bCjTPBBlAN+O7zP4bgVW0dBmjHaoY2I8=";
   };
 
   nativeBuildInputs = [

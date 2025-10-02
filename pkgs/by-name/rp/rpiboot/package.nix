@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpiboot";
-  version = "20250227-132106";
+  version = "20250908-162618-bookworm";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "usbboot";
-    rev = version;
-    hash = "sha256-WccnaIUF5M080M4vg5NzBCLpLVcE7ts/oJJE8CLRi8A=";
+    tag = version;
+    hash = "sha256-BJOm8VBEbrUasYwuV8NqwmsolJzmaqIaxYqj9EkU5hc=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     mainProgram = "rpiboot";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      cartr
       flokli
       stv0g
     ];

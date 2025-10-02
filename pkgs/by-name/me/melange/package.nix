@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,13 +8,13 @@
 
 buildGoModule rec {
   pname = "melange";
-  version = "0.24.0";
+  version = "0.31.5";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
-    repo = pname;
+    repo = "melange";
     rev = "v${version}";
-    hash = "sha256-LlcPkxTeT1jD6PTj22Jn4T6kD8HBuw58LXhEdX5MDtk=";
+    hash = "sha256-aa5r7755c2b69HB7bLk6ccs8k34iuNXATqRgZ98MyB4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,7 +27,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-C8P750AtJX4c/7MtuETP7q5T7WJZPbV4X/0y7HgRPDI=";
+  vendorHash = "sha256-52wU1icjR70EASU5DIu7Dpu8jEQv0vu69Qoibp6uB1o=";
 
   subPackages = [ "." ];
 
@@ -45,7 +46,7 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd melange \
       --bash <($out/bin/melange completion bash) \
       --fish <($out/bin/melange completion fish) \

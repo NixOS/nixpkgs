@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ios-webkit-debug-proxy";
-  version = "1.9.1";
+  version = "1.9.2";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "ios-webkit-debug-proxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-94gYTv5v4YNwbiUJ/9PIHU+Bnvf5uN12+oMFWKj+J1Y=";
+    hash = "sha256-42hNAMokjfo7Vi1xclFcjUmioMFQW64HYTMvvTVk5hY=";
   };
 
   patches = [
@@ -74,9 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/google/ios-webkit-debug-proxy/releases/tag/${finalAttrs.src.rev}";
     license = licenses.bsd3;
     mainProgram = "ios_webkit_debug_proxy";
-    maintainers = with maintainers; [
-      abustany
-      paveloom
-    ];
+    maintainers = with maintainers; [ abustany ];
   };
 })

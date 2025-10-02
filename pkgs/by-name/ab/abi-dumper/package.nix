@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-dumper";
-    rev = version;
+    tag = version;
     sha256 = "sha256-BefDMeKHx4MNU6SyX5UpQnwdI+zqap7zunsgdWG/2xc=";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
   preBuild = "mkdir -p $out";
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lvc/abi-dumper";
     description = "Dump ABI of an ELF object containing DWARF debug info";
     mainProgram = "abi-dumper";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.bhipple ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ bhipple ];
+    platforms = lib.platforms.all;
   };
 }

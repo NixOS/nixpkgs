@@ -37,7 +37,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-UWgDjFojPBYgykrCrJyYvVWY+Gc5d4aRGjTWjc528AM=";
   };
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
+  postPatch = ''
+    for i in cstream intinf libgmp libjson-c libpcre; do
+      ln -sf ../../../../../share/Makefile.gen contrib/atscntrb/atscntrb-hx-$i/SATS/DOCUGEN/Makefile.gen
+    done
+    for i in libcairo libsdl2; do
+      ln -sf ../../../../../../share/Makefile.gen npm-utils/contrib/atscntrb/atscntrb-hx-$i/SATS/DOCUGEN/Makefile.gen
+    done
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
     sed -i 's/gcc/clang/g' utils/*/DATS/atscc_util.dats
   '';
 

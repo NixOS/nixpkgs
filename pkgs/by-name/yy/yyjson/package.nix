@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yyjson";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ibireme";
     repo = "yyjson";
     rev = finalAttrs.version;
-    hash = "sha256-V5wjhclZaLgViVsIJCwoRhYyacyflc4+BshkM6tR9ME=";
+    hash = "sha256-1CYnEgUMUc7eqdkv6M/KyL/MdVQBMov9HgLCycF6++w=";
   };
 
   nativeBuildInputs = [

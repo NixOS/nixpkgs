@@ -6,15 +6,15 @@
   cabal-install,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "cubical-mini";
-  version = "nightly-20241214";
+  version = "0.5-unstable-2025-06-13";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "cubical-mini";
     owner = "cmcmA20";
-    rev = "ab18320018ddc0055db60d4bb5560d31909c5b78";
-    hash = "sha256-32qXY9KbProdPwqHxSkwO74Oqx65rTzoXtH2SpRB3OM=";
+    rev = "1776874d13d0b811e6eeb70d0e5a52b4d2a978d2";
+    hash = "sha256-UxWOS+uzP9aAaMdSueA2CAuzWkImGAoKxroarcgpk+w=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/cmcmA20/cubical-mini";
-    description = "A nonstandard library for Cubical Agda";
+    description = "Nonstandard library for Cubical Agda";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thelissimus ];

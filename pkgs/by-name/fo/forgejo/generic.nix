@@ -129,7 +129,7 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preInstall = ''
-    mv "$GOPATH/bin/forgejo.org" "$GOPATH/bin/gitea"
+    mv "$GOPATH/bin/forgejo.org" "$GOPATH/bin/forgejo"
   '';
 
   postInstall = ''
@@ -137,7 +137,7 @@ buildGoModule rec {
     cp -R ./{templates,options} ${frontend}/public $data
     mkdir -p $out
     cp -R ./options/locale $out/locale
-    wrapProgram $out/bin/gitea \
+    wrapProgram $out/bin/forgejo \
       --prefix PATH : ${
         lib.makeBinPath [
           bash
@@ -199,8 +199,9 @@ buildGoModule rec {
       adamcstephens
       marie
       pyrox0
+      tebriel
     ];
     broken = stdenv.hostPlatform.isDarwin;
-    mainProgram = "gitea";
+    mainProgram = "forgejo";
   };
 }

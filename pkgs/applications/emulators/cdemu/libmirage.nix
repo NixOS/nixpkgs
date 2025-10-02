@@ -4,6 +4,7 @@
   cmake,
   pkg-config,
   gobject-introspection,
+  vala,
   glib,
   libsndfile,
   zlib,
@@ -48,6 +49,7 @@ stdenv.mkDerivation {
     pkg-config
     intltool
     gobject-introspection
+    vala
   ];
   propagatedBuildInputs = [
     pcre

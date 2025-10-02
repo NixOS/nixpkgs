@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "makeworld-the-better-one";
-    repo = pname;
+    repo = "gemget";
     rev = "v${version}";
     sha256 = "sha256-P5+yRaf2HioKOclJMMm8bJ8/BtBbNEeYU57TceZVqQ8=";
   };

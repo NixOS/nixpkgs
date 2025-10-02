@@ -30,13 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
   ];
-  buildInputs =
-    [ freetype ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-      llvmPackages.compiler-rt.override {
-        doFakeLibgcc = true;
-      }
-    );
+  buildInputs = [
+    freetype
+  ]
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+    llvmPackages.compiler-rt.override {
+      doFakeLibgcc = true;
+    }
+  );
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''

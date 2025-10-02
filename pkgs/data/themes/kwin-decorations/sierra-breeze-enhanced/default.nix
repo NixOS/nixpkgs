@@ -6,24 +6,16 @@
   wrapQtAppsHook,
   kwin,
   lib,
-  useQt5 ? false,
 }:
-let
-  latestVersion = "2.1.0";
-  latestSha256 = "sha256-Dzsl06FdCRGuBv2K5BmowCdaWQpYhe/U7aeQ0Q1T5Z4=";
-
-  qt5Version = "1.3.3";
-  qt5Sha256 = "sha256-zTUTsSzy4p0Y7RPOidCtxTjjyvPRyWSQCxA5sUzXcLc=";
-in
 stdenv.mkDerivation rec {
   pname = "sierra-breeze-enhanced";
-  version = if useQt5 then qt5Version else latestVersion;
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "kupiqu";
     repo = "SierraBreezeEnhanced";
-    rev = if version == "2.1.0" then "V.2.1.0" else "V${version}";
-    sha256 = if useQt5 then qt5Sha256 else latestSha256;
+    rev = if version == "2.1.1" then "V.2.1.1" else "V${version}";
+    hash = "sha256-7mQnJCQr/zm9zEdg2JPr7jQn8uajyCXvyYRQZWxG+Q8=";
   };
 
   nativeBuildInputs = [

@@ -10,6 +10,7 @@
 buildPythonApplication rec {
   pname = "fortls";
   version = "3.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fortran-lang";

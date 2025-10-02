@@ -92,7 +92,7 @@ in
       type = settingsFormat.type;
       default = defaultSettings;
       apply = lib.recursiveUpdate defaultSettings;
-      description = "Configuration options to set for the Strfry service. See https://github.com/hoytech/strfry for documentation.";
+      description = "Configuration options to set for the Strfry service. See <https://github.com/hoytech/strfry> for documentation.";
       example = lib.literalExpression ''
         dbParams = {
           maxreaders = 256;

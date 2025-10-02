@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/alexbers/mtprotoproxy";
     platforms = python.meta.platforms;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "mtprotoproxy";
   };
 }

@@ -11,12 +11,7 @@ in
   options.services.tang = {
     enable = lib.mkEnableOption "tang";
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.tang;
-      defaultText = lib.literalExpression "pkgs.tang";
-      description = "The tang package to use.";
-    };
+    package = lib.mkPackageOption pkgs "tang" { };
 
     listenStream = lib.mkOption {
       type = with lib.types; listOf str;

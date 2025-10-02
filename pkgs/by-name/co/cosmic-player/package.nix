@@ -18,22 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-player";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-beta.1.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-player";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-/xf3IOFVpctfgaaNNq2HUzK/qHt7Qikcv0JKoPJboRU=";
+    hash = "sha256-oTTVVQkSkON5NTgO5+eUD2wVpiW5MvW3MZyeyqqc3qk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0RrtErTR2J5mn/Lfppk+5X8UUOC2LN65krAq1uz/O4M=";
-
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-DodFIfthiGFSvXWfPsPjFhNY6G7z3lb6pfc5HtUXhMo=";
 
   nativeBuildInputs = [
     just
@@ -65,8 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-player"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   postInstall = ''

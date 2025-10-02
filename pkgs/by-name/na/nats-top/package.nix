@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nats-io";
-    repo = pname;
+    repo = "nats-top";
     tag = "v${version}";
     hash = "sha256-NOU0U1hyP9FCSLK0ulf28cx1K0/KWKQd+t3KtaVqWWo=";
   };
@@ -32,12 +32,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "top-like tool for monitoring NATS servers";
     homepage = "https://github.com/nats-io/nats-top";
     changelog = "https://github.com/nats-io/nats-top/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nats-top";
   };
 }

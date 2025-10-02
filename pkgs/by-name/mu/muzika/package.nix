@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muzika";
-  version = "unstable-2023-11-07";
+  version = "0-unstable-2023-11-07";
 
   src = fetchFromGitHub {
     owner = "vixalien";

@@ -1,61 +1,61 @@
 {
   lib,
   fetchFromGitHub,
-  buildNpmPackage,
+  fetchNpmDeps,
+  npmHooks,
   rustPlatform,
   pkg-config,
   openssl,
+  nodejs,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cook-cli";
-  version = "0.10.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
     rev = "v${version}";
-    hash = "sha256-1m2+etJG+33fPTxBF8qT/U9WiZGcSn9r0WlK5PDL6/Q=";
+    hash = "sha256-alrmQOt9PY155fIWXmp1m2dfhhkMOd4PkfkBWS2XXRg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3tWVCP80a6odmi9C0klLbfO5UmdFczyUY8KQSaMIyw4=";
+  cargoHash = "sha256-tYD49UrLzPPS8G2zy2GKFBK4SGYXQ7UEjFWKcHvUTSY=";
+
+  # Build without the self-updating feature
+  buildNoDefaultFeatures = true;
 
   nativeBuildInputs = [
     pkg-config
     openssl
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   buildInputs = [
     openssl
   ];
 
-  postPatch = ''
-    rm -rf "ui/public"
-    ln -s ${passthru.ui} "ui/public"
-  '';
-
   OPENSSL_NO_VENDOR = 1;
 
-  passthru.ui = buildNpmPackage {
-    name = "ui";
-    src = "${src}/ui";
-    npmDepsHash = "sha256-uMyOAYLVHhY4ytvEFvVzdoQ7ExzQ4sH+ZtDrEacu5bk=";
-    makeCacheWritable = true;
-    npmFlags = [ "--legacy-peer-deps" ];
-    installPhase = ''
-      runHook preInstall
-      mv public/ $out
-      runHook postInstall
-    '';
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    hash = "sha256-HxC9Tf+PZvvETuNqm1W3jaZx7SpYXlxZlI8FwGouK+s=";
   };
 
-  meta = with lib; {
+  preBuild = ''
+    npm run build-css
+  '';
+
+  meta = {
     changelog = "https://github.com/cooklang/cookcli/releases/tag/v${version}";
     description = "Suite of tools to create shopping lists and maintain recipes";
     homepage = "https://cooklang.org/";
-    license = [ licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "cook";
-    maintainers = [ maintainers.emilioziniades ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [
+      lib.maintainers.emilioziniades
+      lib.maintainers.ginkogruen
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

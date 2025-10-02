@@ -94,7 +94,7 @@ in
                   ) cfg.configuration.security.acme.certs
                 )
                 # A specialisation's config is nested under its configuration attribute.
-                # For ease of use, nest the root node's configuration simiarly.
+                # For ease of use, nest the root node's configuration similarly.
                 ([ { configuration = node; } ] ++ (builtins.attrValues node.specialisation))
             )
           );

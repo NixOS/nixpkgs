@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xld";
-  version = "20240511";
+  version = "20250302";
 
   src = fetchurl {
     url = "mirror://sourceforge/xld/xld-${finalAttrs.version}.dmg";
-    hash = "sha256-8xfjAWgtSdbD8gGlkGzT8QRz7egIf4PE/rFsFEDX0+c=";
+    hash = "sha256-ADKlRw6k4yoRo1uAd+v0mGECiR+OuCdDCU8sZiGtius=";
   };
 
   buildInputs = [ undmg ];
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     text = ''
       url=$(curl --silent "https://svn.code.sf.net/p/xld/code/appcast/xld-appcast_e.xml")
-      version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
+      version=$(echo "$url" | xmlstarlet sel -t -v "//enclosure/@sparkle:shortVersionString")
       update-source-version xld "$version" --file=./pkgs/by-name/xl/xld/package.nix
     '';
   });

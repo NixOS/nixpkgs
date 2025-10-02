@@ -20,25 +20,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1fVhimwBAYtC+HnuxA7ywfEnVlqHnlzwfKT9+H/ZG0k=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ (with libsForQt5; [
-      qmake
-      qttools
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
-  buildInputs =
-    [
-      libvorbis
-      rtmidi
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qtmultimedia
-    ]);
+  buildInputs = [
+    libvorbis
+    rtmidi
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qtmultimedia
+  ]);
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Move appbundles to Applications before wrapping happens

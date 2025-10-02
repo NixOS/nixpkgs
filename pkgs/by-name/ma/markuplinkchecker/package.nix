@@ -6,7 +6,7 @@
   openssl,
 }:
 let
-  version = "0.21.0";
+  version = "1.0.0";
 in
 rustPlatform.buildRustPackage {
   pname = "markuplinkchecker";
@@ -16,11 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "becheran";
     repo = "mlc";
     rev = "v${version}";
-    hash = "sha256-16ZGYUP7h6WmwjadLHqOQClejZ35LwavFgjs9x3NYVo=";
+    hash = "sha256-Bj1Yf+lrKwMvYnE/YVb+KC8tZtRr2OkWoYxQChLINyY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-u60hjpQaF+EnWzMcM7T8UjcERF0+0ArltKcQXkEaxmc=";
+  cargoHash = "sha256-r3LGWJ5RsvWRXNVXWIM83quC3AT8T+WDfSJnD3sVoOM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,7 +37,6 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/becheran/mlc/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      uncenter
       anas
     ];
     mainProgram = "mlc";

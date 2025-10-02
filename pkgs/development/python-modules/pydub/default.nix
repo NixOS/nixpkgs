@@ -54,7 +54,7 @@ buildPythonPackage rec {
     "pydub.playback"
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   meta = with lib; {
     description = "Manipulate audio with a simple and easy high level interface";

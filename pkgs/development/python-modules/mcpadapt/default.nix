@@ -12,18 +12,20 @@
   pytestCheckHook,
   python-dotenv,
   smolagents,
+  soundfile,
+  torchaudio,
 }:
 
 buildPythonPackage rec {
   pname = "mcpadapt";
-  version = "0.1.9";
+  version = "0.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grll";
     repo = "mcpadapt";
     tag = "v${version}";
-    hash = "sha256-sczXScP1wDUntAwVEfiGfJe0ghBpqPQH1YaXhFGj97Y=";
+    hash = "sha256-uhphBJ9gab/5i8rTnEzfhCm0caJ756XdGqJeHoHP0tM=";
   };
 
   build-system = [ hatchling ];
@@ -35,12 +37,18 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    audio = [
+      torchaudio
+      soundfile
+    ];
+    # crewai = [ crewai ];
     langchain = [
       langchain
       # langchain-anthropic
       langgraph
     ];
     llamaindex = [ llama-index ];
+    smolagents = [ smolagents ];
   };
 
   pythonImportsCheck = [ "mcpadapt" ];

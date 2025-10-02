@@ -9,6 +9,7 @@
   bzip2,
   check,
   ncurses,
+  udevCheckHook,
   util-linux,
   zlib,
 }:
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     bison
     flex
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [
     bzip2
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ check ];
   doCheck = true;
+  doInstallCheck = true;
 
   enableParallelBuilding = true;
 

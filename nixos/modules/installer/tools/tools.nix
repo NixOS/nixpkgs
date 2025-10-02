@@ -108,9 +108,9 @@ let
 
     $bootLoaderConfig
       # networking.hostName = "nixos"; # Define your hostname.
-      # Pick only one of the below networking options.
-      # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-      # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+      # Configure network connections interactively with nmcli or nmtui.
+      networking.networkmanager.enable = true;
 
       # Set your time zone.
       # time.timeZone = "Europe/Amsterdam";
@@ -280,6 +280,7 @@ in
   };
 
   options.system.rebuild.enableNg = lib.mkEnableOption "" // {
+    default = true;
     description = ''
       Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
       Python-based re-implementation of the original in Bash.
@@ -330,12 +331,16 @@ in
   config = {
     documentation.man.man-db.skipPackages = [ nixos-version ];
 
+    warnings = lib.optional (!config.system.disableInstallerTools && !config.system.rebuild.enableNg) ''
+      The Bash implementation of nixos-rebuild will be deprecated and removed in the 26.05 release of NixOS.
+      Please migrate to the newer implementation by removing 'system.rebuild.enableNg = false' from your configuration.
+      If you are unable to migrate due to any issues with the new implementation, please create an issue and tag the maintainers of 'nixos-rebuild-ng'.
+    '';
+
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
       inherit nixos-generate-config nixos-install;
       nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
-      nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-      nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
     };
   };
 }

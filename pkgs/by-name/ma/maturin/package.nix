@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  fetchpatch,
   libiconv,
   testers,
   nix-update-script,
@@ -13,27 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "1.8.3";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-qMiFHoEm6Q3Pwz8Gv6U75rTKO2Pj81g9rhqdyYJKOys=";
+    hash = "sha256-VhL4nKXyONXbxriEHta0vCnWY1j82oDOLoxVigaggSc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7YPUTTRo9+aBmVXLq5NfU+t5VPxfEQc4+rdQnPN+AZ0=";
-
-  patches = [
-    # Sorts RECORD file in wheel archives to make them deterministic. See: https://github.com/NixOS/nixpkgs/issues/384708
-    # Remove on next bump https://github.com/PyO3/maturin/pull/2550
-    (fetchpatch {
-      name = "wheel-deterministic-record.patch";
-      url = "https://github.com/PyO3/maturin/commit/bade37e108514f4288c1dd6457119a257bf95db4.patch";
-      hash = "sha256-jcZ/NMHKFYQuOfR+fu5UPykEljUq3l/+ZAx0Tlyu3Zw=";
-    })
-  ];
+  cargoHash = "sha256-Iom4GoTBFJ9P5UQnYF5JbeQeO2Eh1MwKOwbo+PhgtQM=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

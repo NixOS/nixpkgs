@@ -89,7 +89,7 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  pytestFlagsArray = [ "--import-mode append" ];
+  pytestFlags = [ "--import-mode=append" ];
 
   disabledTests = [
     # this test requires xformers

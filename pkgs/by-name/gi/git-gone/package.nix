@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-VjnnrVN+uST99paImI1uNj34CNozid7ZiPslJqvmKCs=";
 
   # remove if updating to rust 1.85

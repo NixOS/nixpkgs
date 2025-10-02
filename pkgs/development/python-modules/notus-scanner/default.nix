@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "notus-scanner";
-  version = "22.7.1";
+  version = "22.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "notus-scanner";
     tag = "v${version}";
-    hash = "sha256-iTcGo33GRf+CihSRuK1GFXOpYL6TT8e3CRyK2/AA38U=";
+    hash = "sha256-JKDnqgEBzEIOI3WIh+SOycACFaYZoZHy7tPFirltDiM=";
   };
 
   pythonRelaxDeps = [
@@ -39,7 +39,8 @@ buildPythonPackage rec {
     psutil
     python-gnupg
     sentry-sdk
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

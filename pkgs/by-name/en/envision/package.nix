@@ -149,28 +149,27 @@ buildFHSEnv {
       allProfilesPresent = testers.runCommand {
         name = "envision-all-profiles-present-test";
         # TODO: Is there a better way to escape ${}?
-        script =
-          ''
-            export ALL_PROFILES=(${lib.concatStringsSep " " (profiles ++ [ "UUID" ])})
-            export ENVISION_PROFILES=($(envision -l | grep -oP '^\w+(?=:)'))
+        script = ''
+          export ALL_PROFILES=(${lib.concatStringsSep " " (profiles ++ [ "UUID" ])})
+          export ENVISION_PROFILES=($(envision -l | grep -oP '^\w+(?=:)'))
 
-            # This is dark magic
-            missing_from_array=($(grep -vf <(printf "%s\n" "$''
-          + ''{ALL_PROFILES[@]}") <(printf "%s\n" "$''
-          + ''
-            {ENVISION_PROFILES[@]}") || true))
+          # This is dark magic
+          missing_from_array=($(grep -vf <(printf "%s\n" "$''
+        + ''{ALL_PROFILES[@]}") <(printf "%s\n" "$''
+        + ''
+          {ENVISION_PROFILES[@]}") || true))
 
-                      if [ $''
-          + ''
-            {#missing_from_array[@]} -gt 0 ]; then
-                        echo "Missing profiles: $''
-          + ''
-            {missing_from_array[@]}"
-                        exit 1
-                      fi
+                    if [ $''
+        + ''
+          {#missing_from_array[@]} -gt 0 ]; then
+                      echo "Missing profiles: $''
+        + ''
+          {missing_from_array[@]}"
+                      exit 1
+                    fi
 
-                      touch $out
-          '';
+                    touch $out
+        '';
         nativeBuildInputs = [ envision ];
       };
     }

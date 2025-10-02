@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-sudoku"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-sudoku";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-sudoku/-/blob/${version}/NEWS?ref_type=tags";
     description = "Test your logic skills in this number grid puzzle";
     mainProgram = "gnome-sudoku";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

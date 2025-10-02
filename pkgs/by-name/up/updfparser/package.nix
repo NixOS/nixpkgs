@@ -1,18 +1,20 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitea,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "updfparser";
-  version = "unstable-2023-08-08";
-  rev = "c5ce75b9eea8ebb2746b13eeb0f335813c615115";
+  version = "0-unstable-2024-03-24";
+  rev = "6060d123441a06df699eb275ae5ffdd50409b8f3";
 
-  src = fetchzip {
-    url = "https://indefero.soutade.fr/p/updfparser/source/download/${rev}/";
-    hash = "sha256-RT7mvu43Izp0rHhKq4wR4kt0TDfzHvB2NGMR+fxO5UM=";
-    extension = "zip";
+  src = fetchFromGitea {
+    inherit (finalAttrs) rev;
+    domain = "forge.soutade.fr";
+    owner = "soutade";
+    repo = "updfparser";
+    hash = "sha256-HD73WGZ4e/3T7vQmwU/lRADtvsInFG62uqvJmF773Rk=";
   };
 
   makeFlags = [
@@ -30,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Very simple PDF parser";
-    homepage = "https://indefero.soutade.fr/p/updfparser";
+    homepage = "https://forge.soutade.fr/soutade/updfparser";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ autumnal ];
     platforms = platforms.all;
   };
-}
+})

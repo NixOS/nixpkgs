@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share/licenses/${finalAttrs.pname}
+    mkdir -p $out/bin $out/share/licenses/ufetch
     ${
       if !full then
         "install -Dm755 ufetch-${osName} $out/bin/ufetch"
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           ln -s $out/bin/ufetch-${osName} $out/bin/ufetch
         ''
     }
-    install -Dm644 LICENSE $out/share/licenses/${finalAttrs.pname}/LICENSE
+    install -Dm644 LICENSE $out/share/licenses/ufetch/LICENSE
     runHook postInstall
   '';
 

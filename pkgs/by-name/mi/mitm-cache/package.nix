@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eY8mgmQB8wXQ7YJbLvdjXEEgGD+/RDywjvehJYf7ckE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DTPlPCumkVI2naYoNdO8T3pQNSawBA0FZ9LxVpqKqN0=";
 
   setupHook = replaceVars ./setup-hook.sh {
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   passthru.fetch = callPackage ./fetch.nix { };
 
   meta = with lib; {
-    description = "A MITM caching proxy for use in nixpkgs";
+    description = "MITM caching proxy for use in nixpkgs";
     homepage = "https://github.com/chayleaf/mitm-cache#readme";
     license = licenses.mit;
     maintainers = with maintainers; [ chayleaf ];

@@ -6,26 +6,26 @@
   openssl,
   gtk4,
   gtk4-layer-shell,
+  mimalloc,
   glib,
   pkg-config,
   wrapGAppsHook4,
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dynisland";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "cr3eperall";
     repo = "dynisland";
-    tag = version;
-    hash = "sha256-HqwykR6BXxtYSxNUYdegmjCwSVTW29pqP7qLWbcqLeg=";
+    tag = finalAttrs.version;
+    hash = "sha256-gO6QniPcv/250CD/cjEJPKijb4cg5R1mUvdrOqamEzk=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-91dQG0NvEL28gHxn6zk3vLODNft8C5ymkLddMT+PB0Q=";
+  cargoHash = "sha256-cvGsRFaqeMdp2cxgfZZcB2r67Si2K6En4or9HVG4WwA=";
 
   buildFeatures = [ "completions" ];
 
@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     gtk4
     gtk4-layer-shell
+    mimalloc
   ];
 
   nativeBuildInputs = [
@@ -55,10 +56,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Dynamic and extensible GTK4 layer-shell, written in Rust";
     homepage = "https://github.com/cr3eperall/dynisland";
-    changelog = "https://github.com/cr3eperall/dynisland/releases/tag/${version}";
+    changelog = "https://github.com/cr3eperall/dynisland/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryand56 ];
     mainProgram = "dynisland";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -64,7 +64,7 @@ in
         Extra contents appended to the jupyterhub configuration
 
         Jupyterhub configuration is a normal python file using
-        Traitlets. https://jupyterhub.readthedocs.io/en/stable/getting-started/config-basics.html. The
+        Traitlets. <https://jupyterhub.readthedocs.io/en/stable/getting-started/config-basics.html>. The
         base configuration of this module was designed to have sane
         defaults for configuration but you can override anything since
         this is a python file.

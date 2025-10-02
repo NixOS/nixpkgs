@@ -67,21 +67,20 @@ import ./versions.nix (
       makeWrapper
     ];
 
-    buildInputs =
-      [
-        cairo
-        glib
-        libnotify
-        rofi-unwrapped
-      ]
-      ++ lib.optionals waylandSupport [
-        wl-clipboard
-        wtype
-      ]
-      ++ lib.optionals x11Support [ xclip ];
+    buildInputs = [
+      cairo
+      glib
+      libnotify
+      rofi-unwrapped
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+      wtype
+    ]
+    ++ lib.optionals x11Support [ xclip ];
 
     meta = with lib; {
-      description = "Emoji selector plugin for Rofi (built against ${rofi-unwrapped.pname})";
+      description = "Emoji selector plugin for Rofi";
       homepage = "https://github.com/Mange/rofi-emoji";
       license = licenses.mit;
       maintainers = with maintainers; [

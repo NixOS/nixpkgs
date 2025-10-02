@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "zabbixctl";
   version = "unstable-2021-05-25";
 
   src = fetchFromGitHub {
     owner = "kovetskiy";
-    repo = pname;
+    repo = "zabbixctl";
     rev = "872d73b12901b143898bffe3711b93a34ca75abe";
     sha256 = "sha256-fWT3cgIHjHcKwFDjWIf3BUUUaVZ7hyc2ibkpU+AsW0I=";
   };

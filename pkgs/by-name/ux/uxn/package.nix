@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "1.0-unstable-2025-05-08";
+  version = "1.0-unstable-2025-09-27";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "bc17707cc81a6d0ce4f9ce8d844ab4197e89f818";
-    hash = "sha256-AQrfyHgsWA6SwCaSPkZI3jni+b5doS3/IormX6AFrPI=";
+    rev = "87465a40baf315e32213fbd100fee20d7d97c371";
+    hash = "sha256-iZjzC+LwVZcB4WKd6JYU0oUswQuxby1NPfIa62uLsdg=";
   };
 
   outputs = [
@@ -35,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build.sh
     substituteInPlace build.sh \
-      --replace "-L/usr/local/lib " ""
+      --replace "-L/usr/local/lib " "" \
+      --replace "$(brew --prefix)/lib/libSDL2.a " "" \
+      --replace "--static-libs" "--libs" \
+      --replace " | sed -e 's/-lSDL2 //'" ""
   '';
 
   buildPhase = ''
@@ -68,6 +71,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ];
     mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

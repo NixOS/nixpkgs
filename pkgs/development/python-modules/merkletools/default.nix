@@ -35,6 +35,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/Tierion/pymerkletools";
     changelog = "https://github.com/Tierion/pymerkletools/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
   };
 }

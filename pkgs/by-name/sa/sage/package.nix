@@ -17,7 +17,7 @@ let
       self: super: {
         # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
         sagelib = self.callPackage ./sagelib.nix {
-          inherit flint3;
+          inherit flint;
           inherit sage-src env-locations singular;
           inherit (maxima) lisp-compiler;
           linbox = pkgs.linbox;
@@ -79,7 +79,7 @@ let
       python3
       singular
       palp
-      flint3
+      flint
       pythonEnv
       maxima
       ;
@@ -142,7 +142,7 @@ let
       extraLibs = pythonRuntimeDeps;
     }; # make the libs accessible
 
-  singular = pkgs.singular.override { inherit flint3; };
+  singular = pkgs.singular.override { inherit flint; };
 
   maxima = pkgs.maxima-ecl.override {
     lisp-compiler = pkgs.ecl.override {
@@ -164,7 +164,7 @@ let
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
   # blas when it is available. Alternative would be to override flint to use
   # openblasCompat.
-  flint3 = pkgs.flint3.override { withBlas = false; };
+  flint = pkgs.flint.override { withBlas = false; };
 
   # Multiple palp dimensions need to be available and sage expects them all to be
   # in the same folder.

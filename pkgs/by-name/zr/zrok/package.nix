@@ -18,15 +18,15 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-3W6y79GXhBzy4YTafUuct6kWc6yvVdhJGL+Byg+AXog=";
-      aarch64-linux = "sha256-qhl+yT1lAf/xXhEoMZ7lkGZWKnwI0ANQrHO1BHcGrfo=";
-      armv7l-linux = "sha256-EYbvN+Z7KFVoJk1KNljgypjbBnJJ4dM+YFl8RQri5jw=";
+      x86_64-linux = "sha256-Ewez2QUsIAmxyjxR8wvt7UJpXVHjIb8s6gGF1YNgrec=";
+      aarch64-linux = "sha256-5hZaOqnTYWeUJXGObzUZMqE62ZgNvJ9Wi8shVng10l8=";
+      armv7l-linux = "sha256-MOM0OS2/mhYaxowsBVnZH0poR+wXsbjsJKldU/nAfjU=";
     }
     .${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "0.4.46";
+  version = "1.0.4";
 
   src = fetchzip {
     url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_${plat}.tar.gz";

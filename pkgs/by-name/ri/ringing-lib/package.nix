@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ringing-lib";
-  version = "0-unstable-2024-05-31";
+  version = "0-unstable-2025-07-16";
 
   src = fetchFromGitHub {
     owner = "ringing-lib";
     repo = "ringing-lib";
-    rev = "4f791c559743499589d66dc44266cd681f6901de";
-    hash = "sha256-+P2x2ywk7Ev7GacfUONusVHjlE6bIVBeJasjlcw5kTU=";
+    rev = "838d13edb3231d8c122d3222da1b465e2018757f";
+    hash = "sha256-MO5FerQMyWDV/cV2hrY/L+JyhMojtaqPQkw8efaVu1I=";
   };
 
   nativeBuildInputs = [

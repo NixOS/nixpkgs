@@ -14,12 +14,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-apjYXFdvxLZjhcN1wV7Y/LKNuWtWtCZM0h1VFg/znVo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-u3aFmPcceLP7yPdWWoPmOnQEbM0jhULs/kPweymQcZ8=";
 
   meta = {
     homepage = "https://github.com/isabelroses/lix-diff";
-    description = "lix plugin for diffing two generations";
+    description = "Lix plugin for diffing two generations";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ isabelroses ];
     mainProgram = "lix-diff";

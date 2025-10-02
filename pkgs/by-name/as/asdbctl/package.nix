@@ -5,6 +5,7 @@
   rustPlatform,
   pkg-config,
   udev,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,11 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-S5m1iQlchGKc0PODQNDHpNzaNXRepmk5zfK5aXdiMiM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OPmnGh6xN6XeREeIgyYB2aeHUpdQ5hFS5MivcTeY29E=";
 
   nativeBuildInputs = [
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rules.d/20-asd-backlight.rules \
       $out/lib/udev/rules.d/20-asd-backlight.rules
   '';
+
+  doInstallCheck = true;
 
   meta = {
     description = "Apple Studio Display brightness controll";

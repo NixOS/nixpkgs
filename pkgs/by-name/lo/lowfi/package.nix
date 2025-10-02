@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lowfi";
-  version = "1.6.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "lowfi";
     tag = version;
-    hash = "sha256-t3Lbqrcmh0XSOO+hc4UsWhKi4zToORFQo0A4G32aeOw=";
+    hash = "sha256-0Oim1nGll76APjjfNCuJgjOlEJxAU6vZteECEFhsWkI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-waQcxdVXZZ09wuLWUNL4nRUHF1rIDI8lAfYc/1bxMl0=";
+  cargoHash = "sha256-vInuM96TJuewhFafDkhOiZiyxwc6SeBsSH8Fs8YIRRs=";
 
   buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
 
@@ -29,13 +28,12 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   meta = {
     description = "Extremely simple lofi player";

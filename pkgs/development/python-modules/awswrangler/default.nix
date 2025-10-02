@@ -1,41 +1,38 @@
 {
-  sparqlwrapper,
+  lib,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
   gremlinpython,
+  hatchling,
   jsonpath-ng,
-  lib,
   moto,
   openpyxl,
   opensearch-py,
   pandas,
   pg8000,
-  poetry-core,
   progressbar2,
   pyarrow,
   pymysql,
   pyodbc,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   redshift-connector,
   requests-aws4auth,
   setuptools,
+  sparqlwrapper,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.11.0";
+  version = "3.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
     tag = version;
-    hash = "sha256-dIdNrfhBrfrzXmspw25yd/y6MbXRrLfDveCQk+AERV0=";
+    hash = "sha256-MkoJpztVjwZbGcJTdnLRF7ZtIFd0qGoz/cksEoqLe4w=";
   };
 
   pythonRelaxDeps = [
@@ -43,7 +40,7 @@ buildPythonPackage rec {
     "pyarrow"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
@@ -74,7 +71,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awswrangler" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Subset of tests that run in upstream CI (many others require credentials)
     # https://github.com/aws/aws-sdk-pandas/blob/20fec775515e9e256e8cee5aee12966516608840/.github/workflows/minimal-tests.yml#L36-L43
     "tests/unit/test_metadata.py"
@@ -86,7 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
-    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${version}";
+    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mcwitt ];
   };

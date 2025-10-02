@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fider";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "getfider";
     repo = "fider";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uABRIR/3D+//qYu/396qqVizP0kLmAA8auYd83rABhE=";
+    hash = "sha256-2aV6f4cgO89hIqksT/kutR+ZRTGncuS04kJ5xZZC5Ds=";
   };
 
   dontConfigure = true;
@@ -76,7 +76,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     mainProgram = "fider";
     maintainers = with lib.maintainers; [
-      drupol
       niklaskorz
     ];
   };

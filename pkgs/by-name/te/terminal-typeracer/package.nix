@@ -16,25 +16,23 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitLab {
     owner = "ttyperacer";
-    repo = pname;
+    repo = "terminal-typeracer";
     rev = "v${version}";
     hash = "sha256-S3OW6KihRd6ReTWUXRb1OWC7+YoxehjFRBxcnJVgImU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WYqbG0iSVvnRLCy5Qs4wr72LjQ6uPgskVWP62Af0RQ8=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   OPENSSL_NO_VENDOR = 1;
   LIBGIT2_NO_VENDOR = 1;

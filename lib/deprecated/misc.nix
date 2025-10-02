@@ -250,9 +250,9 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/194391 for details.
   closePropagationFast =
     list:
-    builtins.map (x: x.val) (
+    map (x: x.val) (
       builtins.genericClosure {
-        startSet = builtins.map (x: {
+        startSet = map (x: {
           key = x.outPath;
           val = x;
         }) (builtins.filter (x: x != null) list);
@@ -355,8 +355,11 @@ let
   mergeAttrByFunc =
     x: y:
     let
-      mergeAttrBy2 =
-        { mergeAttrBy = mergeAttrs; } // (maybeAttr "mergeAttrBy" { } x) // (maybeAttr "mergeAttrBy" { } y);
+      mergeAttrBy2 = {
+        mergeAttrBy = mergeAttrs;
+      }
+      // (maybeAttr "mergeAttrBy" { } x)
+      // (maybeAttr "mergeAttrBy" { } y);
     in
     foldr mergeAttrs { } [
       x

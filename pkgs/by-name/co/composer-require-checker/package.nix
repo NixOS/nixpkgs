@@ -27,7 +27,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/maglnet/ComposerRequireChecker/";
     changelog = "https://github.com/maglnet/ComposerRequireChecker/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "composer-require-checker";
+    maintainers = [ lib.maintainers.patka ];
   };
 })

@@ -2,46 +2,61 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
-  asciitree,
+  donfig,
   numpy,
-  fasteners,
   numcodecs,
+  packaging,
+  typing-extensions,
 
   # tests
+  hypothesis,
+  pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.18.7";
+  version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-srj2bxTaxK9msYDSM4gZmBuYH3Dhlsmmbmv6qeWVcvU=";
+    hash = "sha256-F9ty838kiUUtITesiRxBM7j5dvkYnY79PnXzs63YTow=";
   };
 
   build-system = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
-    asciitree
-    numpy
-    fasteners
+    donfig
     numcodecs
-  ] ++ numcodecs.optional-dependencies.msgpack;
+    numpy
+    packaging
+    typing-extensions
+  ]
+  ++ numcodecs.optional-dependencies.crc32c;
 
   nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-xdist
     pytestCheckHook
+    tomlkit
+  ];
+
+  disabledTestPaths = [
+    # requires uv and then fails at setting up python envs
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [ "zarr" ];

@@ -1,5 +1,4 @@
 {
-  fetchFromGitHub,
   gnupg,
   gpgme,
   isLuaJIT,
@@ -7,8 +6,10 @@
   libgit2,
   libgpg-error,
   lua,
+  lux-cli,
   nix,
   openssl,
+  perl,
   pkg-config,
   rustPlatform,
 }:
@@ -20,24 +21,18 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "lux-lua";
 
-  version = "0.1.5";
+  version = lux-cli.version;
 
-  src = fetchFromGitHub {
-    owner = "nvim-neorocks";
-    repo = "lux";
-    # NOTE: Lux's tags represent the lux-cli version, which may differ from the lux-lua version
-    tag = "v0.5.0";
-    hash = "sha256-maVnRaEuB8q7wUukDGwB4d+go+oerkoWsnb5swPagMY=";
-  };
+  src = lux-cli.src;
 
   buildAndTestSubdir = "lux-lua";
   buildNoDefaultFeatures = true;
   buildFeatures = [ luaFeature ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-CWPHE+j6RDtVrnYzakKecIM5dXuHuWaWK+T9xFEdmz8=";
+  cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [
+    perl
     pkg-config
   ];
 
@@ -46,8 +41,11 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgit2
     libgpg-error
-    lua
     openssl
+  ];
+
+  propagatedBuildInputs = [
+    lua
   ];
 
   doCheck = false; # lux-lua tests are broken in nixpkgs
@@ -63,14 +61,19 @@ rustPlatform.buildRustPackage rec {
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
     cargo xtask-${luaFeature} dist
+    mkdir -p $out
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -D -v target/dist/${luaVersionDir}/* -t $out/${luaVersionDir}
-    install -D -v target/dist/lib/pkgconfig/* -t $out/lib/pkgconfig
+    cp -r target/dist/share $out
+    cp -r target/dist/lib $out
+    mkdir -p $out/lib/lua
+    ln -s $out/share/lux-lua/${luaVersionDir} $out/lib/lua/${luaVersionDir}
     runHook postInstall
   '';
 
@@ -78,9 +81,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Lua API for the Lux package manager";
-    homepage = "https://nvim-neorocks.github.io/";
-    changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    homepage = "https://lux.lumen-labs.org/";
+    changelog = "https://github.com/lumen-oss/lux/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
     ];

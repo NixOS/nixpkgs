@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "notepad-next";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qpJXby355iSyAGzj19jJJFmFkKeBRgOGod2rrZJqU9Y=";
+    hash = "sha256-YD4tIPh5iJpbcDMZk334k2AV9jTVWCSGP34Mj2x0cJ0=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };

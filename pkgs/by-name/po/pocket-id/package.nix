@@ -1,86 +1,76 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
-  makeWrapper,
-  nodejs,
+  buildGo125Module,
   stdenvNoCC,
+  nodejs,
+  pnpm_10,
   nixosTests,
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "0.53.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3lW4jPh9YElgpBcIooGQ2zZbNwC/rz7CABsp7ScTxyQ=";
+    hash = "sha256-thKPYbHx9w75hUgWkLS5fX4R3QLLqFtAJqcvfTxAFiY=";
   };
 
-  backend = buildGoModule {
-    pname = "pocket-id-backend";
-    inherit (finalAttrs) version src;
+  sourceRoot = "${finalAttrs.src.name}/backend";
 
-    sourceRoot = "${finalAttrs.src.name}/backend";
+  vendorHash = "sha256-+HF1zAWA6Ak7uJqWCcTXrttTy1sPA8bN+/No95eqFTU=";
 
-    vendorHash = "sha256-wOrYIhOrUxz22Ay2A26FTrPJA8YRgdRihP78Ls8VgNM=";
+  env.CGO_ENABLED = 0;
+  ldflags = [
+    "-X github.com/pocket-id/pocket-id/backend/internal/common.Version=${finalAttrs.version}"
+    "-buildid=${finalAttrs.version}"
+  ];
 
-    preFixup = ''
-      mv $out/bin/cmd $out/bin/pocket-id-backend
-    '';
-  };
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
+  '';
 
-  frontend = buildNpmPackage {
+  preFixup = ''
+    mv $out/bin/cmd $out/bin/pocket-id
+  '';
+
+  frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
 
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    npmDepsHash = "sha256-UjYAndueuJU07unbNFoTQHqRFkdyaBKHyT4k3Ex4pg0=";
-    npmFlags = [ "--legacy-peer-deps" ];
-
     nativeBuildInputs = [
-      makeWrapper
+      nodejs
+      pnpm_10.configHook
     ];
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 1;
+      hash = "sha256-IVrp5qWYMgud9ryLidrUowWWBHZ2lMrJp0cfPPHpXls=";
+    };
+
+    env.BUILD_OUTPUT_PATH = "dist";
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm --filter pocket-id-frontend build
+
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
 
-      # even though vite build creates most of the minified js files,
-      # it still needs a few packages from node_modules, try to strip that
-      npm prune --omit=dev --omit=optional $npmFlags
-      # larger seemingly unused packages
-      rm -r node_modules/{lucide-svelte,jiti,@swc,.bin}
-      # unused file types
-      for pattern in '*.map' '*.map.js' '*.ts'; do
-        find . -type f -name "$pattern" -exec rm {} +
-      done
-
-      mkdir -p $out/{bin,lib/pocket-id-frontend}
-      cp -r build $out/lib/pocket-id-frontend/dist
-      cp -r node_modules $out/lib/pocket-id-frontend/node_modules
-      makeWrapper ${lib.getExe nodejs} $out/bin/pocket-id-frontend \
-        --add-flags $out/lib/pocket-id-frontend/dist/index.js
+      mkdir -p $out/lib/pocket-id-frontend
+      cp -r frontend/dist $out/lib/pocket-id-frontend/dist
 
       runHook postInstall
     '';
   };
-
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    ln -s ${finalAttrs.backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
-    ln -s ${finalAttrs.frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
-
-    runHook postInstall
-  '';
 
   passthru = {
     tests = {
@@ -88,8 +78,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "backend"
         "--subpackage"
         "frontend"
       ];
@@ -101,6 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://pocket-id.org";
     changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
+    mainProgram = "pocket-id";
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg

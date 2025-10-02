@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Fetch and print the GraphQL schema from a GraphQL HTTP endpoint.";
+    description = "Fetch and print the GraphQL schema from a GraphQL HTTP endpoint";
     homepage = "https://github.com/prisma-labs/get-graphql-schema";
     license = lib.licenses.mit;
     mainProgram = "get-graphql-schema";

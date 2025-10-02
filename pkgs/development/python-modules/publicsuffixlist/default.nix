@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "publicsuffixlist";
-  version = "1.0.2.20250521";
+  version = "1.0.2.20250927";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iQWEhXvCHN1HTWzM9z4r43HCD7noRPyIWtvdlX6ZCCk=";
+    hash = "sha256-vbAul+z36HKdKB0MEcuo7ux8wr5vg+v4cUJqGWy1rjg=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "publicsuffixlist" ];
 
-  pytestFlagsArray = [ "publicsuffixlist/test.py" ];
+  enabledTestPaths = [ "publicsuffixlist/test.py" ];
 
   meta = with lib; {
     changelog = "https://github.com/ko-zu/psl/blob/v${version}-gha/CHANGES.md";

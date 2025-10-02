@@ -37,15 +37,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libdeflate
-      libunistring
-      ncurses
-      zlib
-    ]
-    ++ lib.optional qrcodegenSupport qrcodegen
-    ++ lib.optional multimediaSupport ffmpeg;
+  buildInputs = [
+    libdeflate
+    libunistring
+    ncurses
+    zlib
+  ]
+  ++ lib.optional qrcodegenSupport qrcodegen
+  ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
     lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"

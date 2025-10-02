@@ -62,7 +62,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

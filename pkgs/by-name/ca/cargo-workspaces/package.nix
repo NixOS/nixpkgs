@@ -10,15 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.3.6";
+  version = "0.4.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-JqLKFVM/EnVAPF7erINpHdaaDG+g2nbB0iE/hB1gml8=";
+    hash = "sha256-5heOf74OUsnrG+vt9AdMXV7uRxqKYs0KRE7qm0irmC0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EfTcbgvOQ2KgUpu4+QBUVTaz/ToH9FuMHlXMpJN1BK4=";
+  cargoHash = "sha256-Is2ddCrg+dP0TSw3EUl057RA0L2VW4mPttg2eAtC0j4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     LIBSSH2_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing cargo workspaces and their crates, inspired by lerna";
     longDescription = ''
       A tool that optimizes the workflow around cargo workspaces with
@@ -43,8 +42,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/pksunkara/cargo-workspaces";
     changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       macalinao
       matthiasbeyer

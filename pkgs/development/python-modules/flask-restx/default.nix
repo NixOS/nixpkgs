@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "python-restx";
     repo = "flask-restx";
     tag = version;
-    hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
+    hash = "sha256-KSHRfGX6M/w09P35A68u7uzMKaRioytScPh0Sw8JBfw=";
   };
 
   build-system = [ setuptools ];
@@ -60,16 +60,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray =
-    [
-      "--benchmark-disable"
-      "--deselect=tests/test_inputs.py::URLTest::test_check"
-      "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
-      "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--deselect=tests/test_inputs.py::EmailTest::test_invalid_values_check"
-    ];
+  pytestFlags = [
+    "--benchmark-disable"
+  ];
+  disabledTestPaths = [
+    "tests/test_inputs.py::URLTest::test_check"
+    "tests/test_inputs.py::EmailTest::test_valid_value_check"
+    "tests/test_logging.py::LoggingTest::test_override_app_level"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/test_inputs.py::EmailTest::test_invalid_values_check"
+  ];
 
   disabledTests = [
     "test_specs_endpoint_host_and_subdomain"

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pandoc-latex-environment";
-  version = "1.2.0.0";
+  version = "1.2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chdemko";
     repo = "pandoc-latex-environment";
     tag = version;
-    hash = "sha256-DdDCwysTCiDg1rXO3pvI5m6lIcdAXhsnwEEgvG/ErBM=";
+    hash = "sha256-uyOqw8YnTljgXkwZOXTXAsnobVSV65EVicohREBNMCY=";
   };
 
   build-system = [

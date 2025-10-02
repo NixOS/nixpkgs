@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/rust";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9DwED8X/RHjBCInm+VbzoeVSb28U+XIE2IjNAGon6+E=";
 
   env = {
@@ -40,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nikstur/nix-store-veritysetup-generator";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ nikstur ];
+    mainProgram = "nix-store-veritysetup-generator";
   };
 }

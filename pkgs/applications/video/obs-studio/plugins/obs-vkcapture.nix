@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = "obs-vkcapture";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ghfRST7J3bipQnOZnYMtmDggET+Etq/ngHs+zQ0bm1w=";
+    hash = "sha256-zra7fwYnUfPKS4AA6Z9FIPP3p/uR5O1wB6Z76aivtZI=";
   };
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isi686 [
@@ -42,21 +42,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
   ];
-  buildInputs =
-    [
-      libGL
-      libffi
-      libX11
-      libXau
-      libXdmcp
-      libxcb
-      vulkan-headers
-      vulkan-loader
-      wayland
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isi686) [
-      obs-studio
-    ];
+  buildInputs = [
+    libGL
+    libffi
+    libX11
+    libXau
+    libXdmcp
+    libxcb
+    vulkan-headers
+    vulkan-loader
+    wayland
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    obs-studio
+  ];
 
   postPatch = ''
     substituteInPlace src/glinject.c \

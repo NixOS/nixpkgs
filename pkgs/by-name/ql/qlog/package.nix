@@ -11,31 +11,30 @@
 
 stdenv.mkDerivation rec {
   pname = "qlog";
-  version = "0.43.1";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
     tag = "v${version}";
-    hash = "sha256-D3WtvSHDauo/9py9To2Kn+20vrSvgw+b1+H0inNnRJI=";
+    hash = "sha256-yb2wSd3Hu6p/BacXxVekTrwy36FsxHapuRigHBRu1yU=";
     fetchSubmodules = true;
   };
 
   env.NIX_LDFLAGS = "-lhamlib";
 
-  buildInputs =
-    [
-      hamlib
-      qt6.qtbase
-      qt6.qtcharts
-      qt6.qtserialport
-      qt6.qtwebchannel
-      qt6.qtwebengine
-      qt6Packages.qtkeychain
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cups
-    ];
+  buildInputs = [
+    hamlib
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtserialport
+    qt6.qtwebchannel
+    qt6.qtwebengine
+    qt6Packages.qtkeychain
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cups
+  ];
 
   nativeBuildInputs = [
     pkg-config

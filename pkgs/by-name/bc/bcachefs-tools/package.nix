@@ -24,17 +24,18 @@
   nixosTests,
   installShellFiles,
   fuseSupport ? false,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.25.2";
+  version = "1.31.6";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4MscYFlUwGrFhjpQs1ifDMh5j+t9x7rokOtR2SmhCro=";
+    hash = "sha256-9oiXMMrMMfu9VR0zSFM4yCAQaBgThDdEILSrxH9a84k=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     makeWrapper
     installShellFiles
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -59,22 +61,34 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     attr
     udev
-  ] ++ lib.optional fuseSupport fuse3;
+  ]
+  ++ lib.optional fuseSupport fuse3;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-juXRmI3tz2BXQsRaRRGyBaGqeLk2QHfJb2sKPmWur8s=";
+    hash = "sha256-E2d9uAaja6OsCMhmWFyqIVbGdad5fJ+tw3S7+X7YzpM=";
   };
+
+  outputs = [
+    "out"
+    "dkms"
+  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+    "DKMSDIR=${placeholder "dkms"}"
 
     # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
     "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
     "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
-  ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+  ]
+  ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+  installFlags = [
+    "install"
+    "install_dkms"
+  ];
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -83,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
+
+  doInstallCheck = true;
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -94,19 +110,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
-  postInstall =
-    ''
-      substituteInPlace $out/libexec/bcachefsck_all \
-        --replace-fail "/usr/bin/python3" "${python3.interpreter}"
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd bcachefs \
-        --bash <($out/sbin/bcachefs completions bash) \
-        --zsh  <($out/sbin/bcachefs completions zsh) \
-        --fish <($out/sbin/bcachefs completions fish)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd bcachefs \
+      --bash <($out/sbin/bcachefs completions bash) \
+      --zsh  <($out/sbin/bcachefs completions zsh) \
+      --fish <($out/sbin/bcachefs completions fish)
+  '';
 
   passthru = {
+    # See NOTE in linux-kernels.nix
+    kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
+
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
@@ -128,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       davidak
-      Madouura
+      johnrtitor
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";

@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-K+LKRokfE8i4Huti0aQm4UrpConTcxVwJ2DyeOLjNKA=";
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
+  ]
+  ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
 
@@ -54,12 +54,12 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/neverest completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI to synchronize, backup and restore emails";
     mainProgram = "neverest";
     homepage = "https://pimalaya.org/neverest/cli/v${version}/";
     changelog = "https://git.sr.ht/~soywod/neverest-cli/tree/v${version}/item/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ soywod ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ soywod ];
   };
 }

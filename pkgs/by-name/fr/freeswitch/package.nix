@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   version = "1.10.12";
   src = fetchFromGitHub {
     owner = "signalwire";
-    repo = pname;
+    repo = "freeswitch";
     rev = "v${version}";
     hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
   };
@@ -154,11 +154,16 @@ stdenv.mkDerivation rec {
     libtiff
     libuuid
     libxcrypt
-  ] ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
+  ]
+  ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error"
+    # https://github.com/signalwire/freeswitch/issues/2495
+    "-Wno-incompatible-pointer-types"
+  ];
 
   # Using c++14 because of build error
   # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications

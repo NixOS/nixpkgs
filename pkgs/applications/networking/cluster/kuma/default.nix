@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   coredns,
@@ -16,17 +17,17 @@
 
 buildGoModule rec {
   inherit pname;
-  version = "2.10.1";
+  version = "2.12.0";
   tags = lib.optionals enableGateway [ "gateway" ];
 
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
-    rev = version;
-    hash = "sha256-7vRz2B1aSxpQrV7Om8Zs4o1kJgSVd9rMsOagQZyWMLI=";
+    tag = version;
+    hash = "sha256-5syQFcYBY/xKipIsAJdjVrXYXt7NNjjCeXiDVNO9NTo=";
   };
 
-  vendorHash = "sha256-1vI61lfs9R9aY1vFQUxXN99zE1SPSfPQ8RxWxykqqp0=";
+  vendorHash = "sha256-KgZYKopW+FOdwBIGxa2RLiEbefZ/1vAhcsWtcYhgdFs=";
 
   # no test files
   doCheck = false;
@@ -40,12 +41,14 @@ buildGoModule rec {
   subPackages = map (p: "app/" + p) components;
 
   postInstall =
-    lib.concatMapStringsSep "\n" (p: ''
-      installShellCompletion --cmd ${p} \
-        --bash <($out/bin/${p} completion bash) \
-        --fish <($out/bin/${p} completion fish) \
-        --zsh <($out/bin/${p} completion zsh)
-    '') components
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+      lib.concatMapStringsSep "\n" (p: ''
+        installShellCompletion --cmd ${p} \
+          --bash <($out/bin/${p} completion bash) \
+          --fish <($out/bin/${p} completion fish) \
+          --zsh <($out/bin/${p} completion zsh)
+      '') components
+    )
     + lib.optionalString isFull ''
       ln -sLf ${coredns}/bin/coredns $out/bin
     '';
@@ -63,11 +66,11 @@ buildGoModule rec {
       "-X ${prefix}.buildDate=${version}"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Service mesh controller";
     homepage = "https://kuma.io/";
     changelog = "https://github.com/kumahq/kuma/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zbioe ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zbioe ];
   };
 }

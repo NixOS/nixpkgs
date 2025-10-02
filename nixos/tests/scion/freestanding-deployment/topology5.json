@@ -1,4 +1,5 @@
 {
+  "dispatched_ports": "31000-32767",
   "attributes": [],
   "isd_as": "42-ffaa:1:5",
   "mtu": 1472,

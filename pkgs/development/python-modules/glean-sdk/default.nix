@@ -24,8 +24,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-Ppc+6ex3yLC4xuhbZGZDKLqxDjSdGpgrLDpbbbqMgPY=";
   };
 
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "glean-core/python/tests" ];
+  enabledTestPaths = [ "glean-core/python/tests" ];
 
   disabledTests = [
     # RuntimeError: No ping received.

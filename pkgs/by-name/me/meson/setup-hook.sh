@@ -63,16 +63,16 @@ mesonCheckPhase() {
         flagsArray+=("--timeout-multiplier=0")
     fi
 
-    # Parallel building is enabled by default.
+    # Parallel checking is enabled by default.
     local buildCores=1
-    if [ "${enableParallelBuilding-1}" ]; then
+    if [ "${enableParallelChecking-1}" ]; then
         buildCores="$NIX_BUILD_CORES"
     fi
 
     TERM=dumb ninja -j"$buildCores" $ninjaFlags "${ninjaFlagsArray[@]}" meson-test-prereq
 
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
-    meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
+    meson test --no-rebuild --print-errorlogs --max-lines=1000000 "${flagsArray[@]}"
 
     runHook postCheck
 }

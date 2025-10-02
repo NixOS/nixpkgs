@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+qPSeDpOeCq+KwZb5ANXx6z+pYbgdT1hVgcrSzxyGp0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cUuInYCT2jzen9gswfFGtKum6w2X/SiKA2ccdmxk38A=";
 
   postPatch = ''
@@ -40,12 +39,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=resolver_default_cloudflare"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Faster Nmap Scanning with Rust";
     homepage = "https://github.com/RustScan/RustScan";
     changelog = "https://github.com/RustScan/RustScan/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "rustscan";
   };
 }

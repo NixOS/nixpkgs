@@ -25,7 +25,7 @@ let
         in
         {
           pg_dump_command =
-            if d.name == "all" then
+            if d.name == "all" && (!(d ? format) || isNull d.format) then
               "${as_user}${postgresql}/bin/pg_dumpall"
             else
               "${as_user}${postgresql}/bin/pg_dump";
@@ -131,7 +131,7 @@ in
 
     settings = lib.mkOption {
       description = ''
-        See https://torsion.org/borgmatic/docs/reference/configuration/
+        See <https://torsion.org/borgmatic/docs/reference/configuration/>
       '';
       default = null;
       type = lib.types.nullOr cfgType;
@@ -139,7 +139,7 @@ in
 
     configurations = lib.mkOption {
       description = ''
-        Set of borgmatic configurations, see https://torsion.org/borgmatic/docs/reference/configuration/
+        Set of borgmatic configurations, see <https://torsion.org/borgmatic/docs/reference/configuration/>
       '';
       default = { };
       type = lib.types.attrsOf cfgType;

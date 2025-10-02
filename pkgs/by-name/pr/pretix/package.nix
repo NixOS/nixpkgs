@@ -7,6 +7,7 @@
   python3,
   gettext,
   nixosTests,
+  pretix,
   plugins ? [ ],
 }:
 
@@ -35,18 +36,19 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
     };
   };
 
   pname = "pretix";
-  version = "2025.4.0";
+  version = "2025.8.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K/llv85CWp+V70BiYAR7lT+urGdLbXBhWpCptxUqDrc=";
+    hash = "sha256-89BAQZpXyyTg6T9hxm4EV8QHZDcD3FcnGKxAulxziyg=";
   };
 
   npmDeps = buildNpmPackage {
@@ -54,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-FqwgHmIUfcipVbeXmN4uYPHdmnuaSgOQ9LHgKRf16ys=";
+    npmDepsHash = "sha256-E2K9SYqRbhpQi83va8D02cwPnf51haoKv4P/ppU2m08=";
 
     dontBuild = true;
 
@@ -81,7 +83,10 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "celery"
+    "css-inline"
     "django-bootstrap3"
+    "django-formset-js-improved"
+    "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
@@ -89,9 +94,11 @@ python.pkgs.buildPythonApplication rec {
     "importlib-metadata"
     "kombu"
     "markdown"
+    "oauthlib"
     "phonenumberslite"
     "pillow"
     "protobuf"
+    "pycparser"
     "pycryptodome"
     "pyjwt"
     "pypdf"
@@ -101,6 +108,7 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "sentry-sdk"
+    "sepaxml"
     "ua-parser"
     "webauthn"
   ];
@@ -121,6 +129,10 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
       --replace-fail 'backend-path = ["_build"]' ""
+
+    # npm ci would remove and try to reinstall node_modules
+    substituteInPlace src/pretix/_build.py \
+      --replace-fail "npm ci" "npm install"
   '';
 
   build-system = with python.pkgs; [
@@ -220,7 +232,9 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ./src/manage.py $out/bin/pretix-manage
+    cp ./src/manage.py $out/${python.sitePackages}/pretix/manage.py
+    makeWrapper $out/${python.sitePackages}/pretix/manage.py $out/bin/pretix-manage \
+      --prefix PYTHONPATH : "$PYTHONPATH"
 
     # Trim packages size
     rm -rfv $out/${python.sitePackages}/pretix/static.dist/node_prefix
@@ -243,9 +257,8 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "--reruns"
-    "3"
+  pytestFlags = [
+    "--reruns=3"
   ];
 
   disabledTests = [
@@ -258,6 +271,11 @@ python.pkgs.buildPythonApplication rec {
     "test_same_day_spanish"
     "test_same_month_spanish"
     "test_same_year_spanish"
+
+    # broken with fakeredis>=2.27.0
+    "test_waitinglist_cache_separation"
+    "test_waitinglist_item_active"
+    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''

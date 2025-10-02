@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "safecloset";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
     rev = "v${version}";
-    hash = "sha256-buIceYP/dZMDw3tyrzj1bY6+sIIPaVJIVj1L//jZnws=";
+    hash = "sha256-pTfslMZmP8YzLzTru3b64qQ9qefkPzo9V8/S6eSQBgM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/AnzUaya+dgckcilxj9ZZbDNqmfj1uTWkzhVphpZIsM=";
+  cargoHash = "sha256-b0MD30IJRp06qkYsQsiEI7c4ArY3GCSIh8I16/4eom0=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libxcb

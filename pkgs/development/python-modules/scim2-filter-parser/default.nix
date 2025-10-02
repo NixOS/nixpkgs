@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "15five";
-    repo = pname;
+    repo = "scim2-filter-parser";
     tag = version;
     hash = "sha256-KmtOtI/5HT0lVwvXQFTlEwMeptoa4cA5hTSgSULxhIc=";
   };
@@ -49,7 +49,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.django-query;
+  ]
+  ++ optional-dependencies.django-query;
 
   meta = with lib; {
     description = "Customizable parser/transpiler for SCIM2.0 filters";

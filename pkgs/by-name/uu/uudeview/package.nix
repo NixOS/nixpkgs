@@ -1,19 +1,21 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   tcl,
   tk,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "uudeview";
-  version = "0.5.20";
+  version = "0.5.20-unstable-2025-03-20";
 
-  src = fetchurl {
-    url = "http://www.fpx.de/fp/Software/UUDeview/download/uudeview-${version}.tar.gz";
-    sha256 = "0dg4v888fxhmf51vxq1z1gd57fslsidn15jf42pj4817vw6m36p4";
+  src = fetchFromGitHub {
+    owner = "hannob";
+    repo = "uudeview";
+    rev = "7640bc56aa5016cdc9c139eb1ab3ec874e47c744";
+    hash = "sha256-IdHxkrXe+2I+aJpZ0bhimXq4xEXE9HDXrL5DtCs7MKk=";
   };
 
   buildInputs = [
@@ -21,20 +23,11 @@ stdenv.mkDerivation rec {
     tk
   ];
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   configureFlags = [
     "--enable-tk=${tk.dev}"
     "--enable-tcl=${tcl}"
-  ];
-
-  patches = [
-    # https://wiki.tcl.tk/3577
-    ./matherr.patch
-    # format hardening
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/OpenMandrivaAssociation/uudeview/master/uudeview-0.5.20-fix-str-fmt.patch";
-      sha256 = "1biipck60mhpd0j6jwizaisvqa8alisw1dpfqm6zf7ic5b93hmfw";
-      extraPrefix = "";
-    })
   ];
 
   postPatch = ''

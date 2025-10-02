@@ -7,7 +7,6 @@
   webrtc,
   pkg-config,
   cubeb,
-  libpulseaudio,
 }:
 let
   cubeb' = cubeb.override {
@@ -15,21 +14,21 @@ let
     pulseSupport = true;
     jackSupport = false;
     sndioSupport = false;
-    buildSharedLibs = false;
+    enableShared = false;
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringrtc";
-  version = "2.51.0";
+  version = "2.57.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "ringrtc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PLrGLW6pDoCNpbWASxAqockAJRoeBrkBdxNOHYrQu4s=";
+    hash = "sha256-U3sfNjJInT7QBqLLNK1j/0xzmwi/pfZZGOtL/JZ5gZM=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-u38VOV2xdNG1WFox+SWT9ejJD1TjK0yAI6lCB9r75iY=";
+
+  cargoHash = "sha256-DcaZmOPVO/eAMZ9NsqmwnI2d7Vdz/aVmvI4COivvDBM=";
 
   cargoBuildFlags = [
     "-p"
@@ -52,8 +51,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     webrtc
     cubeb'
-    libpulseaudio
-  ];
+  ]
+  # Workaround for https://github.com/NixOS/nixpkgs/pull/394607
+  ++ cubeb'.buildInputs;
 
   meta = {
     homepage = "https://github.com/signalapp/ringrtc";

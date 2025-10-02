@@ -62,23 +62,33 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # AttributeError: module 'numpy' has no attribute 'product'
-      "test_extended_system"
-    ]
-    ++
-      lib.optionals
-        ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
-        [
-          # AssertionError on a numerical test
-          "test_cell_list"
-        ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-      "test_examples"
-    ];
+  disabledTests = [
+    # AttributeError: module 'numpy' has no attribute 'product'
+    "test_extended_system"
+  ]
+  ++
+    lib.optionals
+      ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
+      [
+        # AssertionError on a numerical test
+        "test_cell_list"
+      ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+    "test_examples"
+  ];
+
+  # Broken due to use of missing _get_constraints attr in ase >= 3.26.0
+  # https://github.com/SINGROUP/dscribe/issues/160
+  disabledTestPaths = [
+    "tests/test_examples.py::test_examples"
+    "tests/test_general.py::test_atoms_to_system"
+    "tests/test_lmbtr.py"
+    "tests/test_mbtr.py"
+    "tests/test_sinematrix.py"
+    "tests/test_valle_oganov.py"
+  ];
 
   meta = {
     description = "Machine learning descriptors for atomistic systems";

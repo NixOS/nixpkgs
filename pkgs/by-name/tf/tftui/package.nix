@@ -46,12 +46,12 @@ python3Packages.buildPythonApplication rec {
       --add-flags "--disable-usage-tracking"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Textual UI to view and interact with Terraform state";
     homepage = "https://github.com/idoavrah/terraform-tui";
     changelog = "https://github.com/idoavrah/terraform-tui/releases/tag/v${version}";
-    license = licenses.asl20;
-    teams = [ teams.bitnomial ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.bitnomial ];
     mainProgram = "tftui";
   };
 }

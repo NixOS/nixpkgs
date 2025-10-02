@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
   mock,
   pbr,
@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.14";
+  version = "0.3.15";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-G+Wj1gu5e4/VqdnUR34iAeB+RyWn1CwOsWhGu4eeS5c=";
+  src = fetchFromGitHub {
+    owner = "pycontribs";
+    repo = "jenkinsapi";
+    tag = version;
+    hash = "sha256-r6GOi/0ALJDy6R6cd/bECk+HVe/AyKZYG96sr9y9o/4=";
   };
-
-  patches = [ ./pytest-warn-none.patch ];
 
   nativeBuildInputs = [
     flit-core

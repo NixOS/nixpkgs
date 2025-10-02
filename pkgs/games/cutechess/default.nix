@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cutechess";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cutechess";
     repo = "cutechess";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-P44Twbw2MGz+oTzPwMFCe73zPxAex6uYjSTtaUypfHw=";
+    hash = "sha256-vhS3Eenxcq7D8E5WVON5C5hCTytcEVbYUeuCkfB0apA=";
   };
 
   nativeBuildInputs = [

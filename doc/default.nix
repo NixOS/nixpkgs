@@ -1,6 +1,6 @@
 {
-  pkgs ? (import ./.. { }),
+  pkgs ? (import ../ci { }).pkgs,
   nixpkgs ? { },
 }:
 
-pkgs.nixpkgs-manual.override { inherit nixpkgs; }
+pkgs.callPackage ./doc-support/package.nix { inherit nixpkgs; }

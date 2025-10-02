@@ -1,0 +1,28 @@
+From 448f3f2e2065a5ef20010133dae58c5311ecc538 Mon Sep 17 00:00:00 2001
+From: Yureka <yuka@yuka.dev>
+Date: Sat, 23 Aug 2025 18:24:07 +0200
+Subject: [PATCH] sync: uapi: move constants from <linux/kernel.h> to
+ <linux/const.h>
+
+This change was applied to the kernel tree in 2020 afaict, to fix redefinition issues with musl-libc.
+
+I ran into this issue while building with the headers included with libbpf, since it seems they were not synced since then.
+
+Signed-off-by: Yureka Lilian <yuka@yuka.dev>
+---
+ include/uapi/linux/netlink.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/netlink.h b/include/uapi/linux/netlink.h
+index b857821e3..e900b1f88 100644
+--- a/include/uapi/linux/netlink.h
++++ b/include/uapi/linux/netlink.h
+@@ -2,7 +2,7 @@
+ #ifndef __LINUX_NETLINK_H
+ #define __LINUX_NETLINK_H
+ 
+-#include <linux/kernel.h>
++#include <linux/const.h>
+ #include <linux/socket.h> /* for __kernel_sa_family_t */
+ #include <linux/types.h>
+ 

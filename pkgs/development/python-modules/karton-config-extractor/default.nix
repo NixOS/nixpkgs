@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "karton-config-extractor";
     tag = "v${version}";
     hash = "sha256-a9wSw25q0blgAkR2s3brW7jGHJSLjx1yXjMmhMJNUFk=";
   };

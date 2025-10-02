@@ -24,7 +24,7 @@ let
 
   src = fetchFromGitHub {
     owner = "sambayless";
-    repo = pname;
+    repo = "monosat";
     inherit rev sha256;
   };
 
@@ -88,6 +88,7 @@ let
       pytestCheckHook,
     }:
     buildPythonPackage {
+      format = "setuptools";
       inherit
         pname
         version

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "crowdsec";
-  version = "1.6.8";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
-    repo = pname;
+    repo = "crowdsec";
     tag = "v${version}";
-    hash = "sha256-/NTlj0kYCOMxShfoKdmouJTiookDjccUj5HFHLPn5HI=";
+    hash = "sha256-ILGvHSDONyq6O1V/xm4lanSTmkdkMAwvvhoUtM2b7Gc=";
   };
 
-  vendorHash = "sha256-7587ezh/9C69UzzQGq3DVGBzNEvTzho/zhRlG6g6tkk=";
+  vendorHash = "sha256-B9VZlNks7/ozay5+di++sbLwIKN98P7U+o6knVaKlqo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -62,10 +62,10 @@ buildGoModule rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://crowdsec.net/";
     changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${version}";
-    description = "CrowdSec is a free, open-source and collaborative IPS";
+    description = "Free, open-source and collaborative IPS";
     longDescription = ''
       CrowdSec is a free, modern & collaborative behavior detection engine,
       coupled with a global IP reputation network. It stacks on fail2ban's
@@ -77,8 +77,8 @@ buildGoModule rec {
       etc.) while the aggressive IP can be sent to CrowdSec for curation before
       being shared among all users to further improve everyone's security.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       urandom
     ];

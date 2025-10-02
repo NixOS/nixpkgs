@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "readsb";
-  version = "3.14.1641";
+  version = "3.16.3";
 
   src = fetchFromGitHub {
     owner = "wiedehopf";
     repo = "readsb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-viz/oADxdduan6W0FsetEqifR6fcyeoEZvEnoO/K5/g=";
+    hash = "sha256-IjARj2qC1/kwoVvc5SXkJmoDN2m1fjPWj7jVgHG8cWI=";
   };
 
   strictDeps = true;
@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     # set something for version, we removed the original value in postPatch
     "READSB_VERSION=${finalAttrs.version}"
-  ] ++ (lib.lists.optional (rtl-sdr != null) "RTLSDR=yes");
+  ]
+  ++ (lib.lists.optional (rtl-sdr != null) "RTLSDR=yes");
 
   doCheck = true;
   checkTarget = "cprtest";

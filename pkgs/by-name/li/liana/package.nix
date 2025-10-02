@@ -39,17 +39,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "10.0"; # keep in sync with lianad
+  version = "13.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
     tag = "v${version}";
-    hash = "sha256-nuwbJxpcapk01qwGAZ2z9nKjHNqE1BMikz3hWrCAGsA=";
+    hash = "sha256-zr9FZZSLPMk2d5vyZqrj12RG4UCdmkyKLjTU7XpgedE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tODnld6V2KWarfHXyoPjSGw+q1A/dalPtW3Swc2dNes=";
+  cargoHash = "sha256-uLSlx1WWCcngL1WSP3jOvwFJd/gbz/g9AT6Of9rwEMw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -84,7 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "liana-gui";
-    description = "A Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
+    description = "Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
     changelog = "https://github.com/wizardsardine/liana/releases/tag/${src.rev}";
     license = licenses.bsd3;

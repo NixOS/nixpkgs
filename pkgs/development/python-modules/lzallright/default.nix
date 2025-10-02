@@ -10,19 +10,18 @@
 
 buildPythonPackage rec {
   pname = "lzallright";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "vlaci";
-    repo = pname;
+    repo = "lzallright";
     rev = "v${version}";
-    hash = "sha256-E4Eaah58JCbxXfmpqFS2Emi1/eo2L3qyJP+vWH3PHPg=";
+    hash = "sha256-bnGnx+CKcneBWd5tpYWxEPp5f3hvGxM+8QcD2NKX4Tw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-2AR9slC/vWv5Ump1DLE2em8LLSTXHVkI/PBW5PxCXXg=";
+    inherit pname version src;
+    hash = "sha256-RxR1EFssGCp7etTdh56LSEfDQsx8uPrQTVqTsDVvkHo=";
   };
 
   format = "pyproject";

@@ -25,7 +25,7 @@
   scenefx,
   wayland-scanner,
   xcbutilwm,
-  wlroots_0_18,
+  wlroots_0_19,
   testers,
   nixosTests,
   # Used by the NixOS module:
@@ -44,33 +44,32 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   pname = "swayfx-unwrapped";
-  version = "0.5";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
     tag = finalAttrs.version;
-    hash = "sha256-gdab7zkjp/S7YVCP1t/OfOdUXZRwNvNSuRFGWEJScF8=";
+    hash = "sha256-TZNN5pQhH/10DfntCfGHL1kuAceLMYbxwa4RFq7OmrQ=";
   };
 
-  patches =
-    [
-      ./load-configuration-from-etc.patch
+  patches = [
+    ./load-configuration-from-etc.patch
 
-      (replaceVars ./fix-paths.patch {
-        inherit swaybg;
-      })
-    ]
-    ++ lib.optionals (!finalAttrs.isNixOS) [
-      # References to /nix/store/... will get GC'ed which causes problems when
-      # copying the default configuration:
-      ./sway-config-no-nix-store-references.patch
-    ]
-    ++ lib.optionals finalAttrs.isNixOS [
-      # Use /run/current-system/sw/share and /etc instead of /nix/store
-      # references:
-      ./sway-config-nixos-paths.patch
-    ];
+    (replaceVars ./fix-paths.patch {
+      inherit swaybg;
+    })
+  ]
+  ++ lib.optionals (!finalAttrs.isNixOS) [
+    # References to /nix/store/... will get GC'ed which causes problems when
+    # copying the default configuration:
+    ./sway-config-no-nix-store-references.patch
+  ]
+  ++ lib.optionals finalAttrs.isNixOS [
+    # Use /run/current-system/sw/share and /etc instead of /nix/store
+    # references:
+    ./sway-config-nixos-paths.patch
+  ];
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
@@ -98,8 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     scenefx
     wayland
     wayland-protocols
-    (wlroots_0_18.override { inherit (finalAttrs) enableXWayland; })
-  ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
+    (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
+  ]
+  ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
 
   mesonFlags =
     let
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Sway, but with eye candy!";
+    description = "Sway, but with eye candy";
     homepage = "https://github.com/WillPower3309/swayfx";
     changelog = "https://github.com/WillPower3309/swayfx/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.32.0";
+  version = "0.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${version}";
-    hash = "sha256-5zO1/lfB5ULJqSt14by9OYFT/0H9ZGSkA90wmf7dB5U=";
+    hash = "sha256-YlyhIT8hlkFGo7xBjxa/5feiqv7H2HfA/E4+gz9cCkw=";
     leaveDotGit = true;
   };
 
@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       lxml
       mashumaro
       mergedeep
+      oras
       orjson
       packageurl-python
       pytest-snapshot
@@ -60,14 +61,15 @@ python3.pkgs.buildPythonApplication rec {
     ++ xsdata.optional-dependencies.lxml
     ++ xsdata.optional-dependencies.soap;
 
-  nativeCheckInputs =
-    [ git ]
-    ++ (with python3.pkgs; [
-      jsonschema
-      pytest-mock
-      pytest-unordered
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+  ]
+  ++ (with python3.pkgs; [
+    jsonschema
+    pytest-mock
+    pytest-unordered
+    pytestCheckHook
+  ]);
 
   pythonImportsCheck = [ "vunnel" ];
 
@@ -76,14 +78,16 @@ python3.pkgs.buildPythonApplication rec {
     "test_status"
     # TypeError
     "test_parser"
+    # Test require network access
+    "test_rhel_provider_supports_ignore_hydra_errors"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for collecting vulnerability data from various sources";
     homepage = "https://github.com/anchore/vunnel";
-    changelog = "https://github.com/anchore/vunnel/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/anchore/vunnel/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vunnel";
   };
 }

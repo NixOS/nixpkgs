@@ -13,7 +13,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "Beaglefoot";
     repo = "awk-language-server";
-    rev = "server-${version}";
+    tag = "server-${version}";
     hash = "sha256-YtduDfMAUAoQY9tgyhgERFwx9TEgD52KdeHnX2MrjjI=";
     sparseCheckout = [ "server" ];
     postFetch = ''

@@ -9,7 +9,8 @@
 
 buildPythonPackage {
   pname = "qreactor-unstable";
-  version = "2018-09-29";
+  version = "0.6.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";

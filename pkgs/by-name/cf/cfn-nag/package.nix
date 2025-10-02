@@ -12,7 +12,7 @@ bundlerEnv rec {
   inherit ruby;
   gemdir = ./.;
 
-  passthru.updateScript = bundlerUpdateScript pname;
+  passthru.updateScript = bundlerUpdateScript "cfn-nag";
 
   meta = {
     description = "Linting tool for CloudFormation templates";

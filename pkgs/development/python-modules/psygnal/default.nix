@@ -7,6 +7,7 @@
   mypy-extensions,
   numpy,
   pydantic,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   toolz,
@@ -17,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
-    repo = pname;
+    repo = "psygnal";
     tag = "v${version}";
-    hash = "sha256-ZEN8S2sI1usXl5A1Ow1+l4BBB6qNnlVt/nvFtAX4maY=";
+    hash = "sha256-RQ53elonwvna5UDVell3JI1dcZSMHREyB51r+ddsW2M=";
   };
 
   build-system = [
@@ -42,15 +43,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
     pydantic
+    pytest-asyncio
     pytestCheckHook
     toolz
     wrapt
     attrs
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+  pytestFlags = [
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
   pythonImportsCheck = [ "psygnal" ];

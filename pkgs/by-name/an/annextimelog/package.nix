@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "annextimelog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RfqBtbfArFva3TVJGF4STx0QTio62qxXaM23lsLYLUg=";
   };
 

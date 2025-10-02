@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cashaddress";
-  version = "1.0.6-unstable-2015-05-19";
+  version = "1.0.6-unstable-2019-05-15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cashaddress" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool for convert bitcoin cash legacy addresses";
     homepage = "https://github.com/oskyk/cashaddress";
     changelog = "https://github.com/oskyk/cashaddress/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

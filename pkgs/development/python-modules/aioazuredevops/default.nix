@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aioazuredevops";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -31,13 +31,8 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "aioazuredevops";
     tag = version;
-    hash = "sha256-RZBiFPzYtEoc51T3irVHL9xVlZgACyM2lu1TkMoatqU=";
+    hash = "sha256-0KQHL9DmNeRvEs51XPcncxNzXb+SqYM5xPDvOdKSQMI=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements_setup.txt \
-      --replace-fail "==" ">="
-  '';
 
   build-system = [
     incremental
@@ -65,7 +60,12 @@ buildPythonPackage rec {
     "test_get_build"
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  disabledTestPaths = [
+    # https://github.com/timmo001/aioazuredevops/commit/d6278d92937dd47de272ac6371b2d007067763c3
+    "tests/test__version.py"
+  ];
+
+  pytestFlags = [ "--snapshot-update" ];
 
   pythonImportsCheck = [ "aioazuredevops" ];
 

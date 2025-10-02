@@ -22,31 +22,29 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-sNLCyIHWDW/8jIrMFCZAqtWsh4SRugqtPR4HaoW/Vzk=";
   };
 
-  buildInputs =
-    [
-      libuuid
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      readline
-    ];
+  buildInputs = [
+    libuuid
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    readline
+  ];
 
   patches = [ ./no-curl-ca.patch ];
-  postPatch =
-    ''
-      substituteInPlace contrib/curl/premake5.lua \
-        --replace-fail "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace premake5.lua \
-        --replace-fail '"-arch arm64"' '""' \
-        --replace-fail '"-arch x86_64"' '""'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      substituteInPlace \
-        binmodules/example/premake5.lua \
-        binmodules/luasocket/premake5.lua \
-        --replace-fail SharedLib StaticLib
-    '';
+  postPatch = ''
+    substituteInPlace contrib/curl/premake5.lua \
+      --replace-fail "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace premake5.lua \
+      --replace-fail '"-arch arm64"' '""' \
+      --replace-fail '"-arch x86_64"' '""'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace \
+      binmodules/example/premake5.lua \
+      binmodules/luasocket/premake5.lua \
+      --replace-fail SharedLib StaticLib
+  '';
 
   buildPhase =
     if stdenv.hostPlatform.isDarwin then

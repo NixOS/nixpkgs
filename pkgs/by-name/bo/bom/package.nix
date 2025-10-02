@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -11,8 +12,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bom";
+    tag = "v${version}";
     hash = "sha256-nYzBaFtOJhqO0O6MJsxTw/mxsIOa+cnU27nOFRe2/uI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -43,7 +44,7 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd bom \
       --bash <($out/bin/bom completion bash) \
       --fish <($out/bin/bom completion fish) \
@@ -60,12 +61,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kubernetes-sigs/bom";
     changelog = "https://github.com/kubernetes-sigs/bom/releases/tag/v${version}";
     description = "Utility to generate SPDX-compliant Bill of Materials manifests";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ developer-guy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ developer-guy ];
     mainProgram = "bom";
   };
 }

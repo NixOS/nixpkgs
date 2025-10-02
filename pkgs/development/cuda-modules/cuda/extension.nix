@@ -7,19 +7,9 @@ let
   # https://developer.download.nvidia.com/compute/cuda/redist/
   # Maps a cuda version to the specific version of the manifest.
   cudaVersionMap = {
-    "11.4" = "11.4.4";
-    "11.5" = "11.5.2";
-    "11.6" = "11.6.2";
-    "11.7" = "11.7.1";
-    "11.8" = "11.8.0";
-    "12.0" = "12.0.1";
-    "12.1" = "12.1.1";
-    "12.2" = "12.2.2";
-    "12.3" = "12.3.2";
-    "12.4" = "12.4.1";
-    "12.5" = "12.5.1";
     "12.6" = "12.6.3";
     "12.8" = "12.8.1";
+    "12.9" = "12.9.1";
   };
 
   # Check if the current CUDA version is supported.
@@ -43,7 +33,7 @@ let
   };
 
   # Generally we prefer to do things involving getting attribute names with feature_manifest instead
-  # of redistrib_manifest because the feature manifest will have *only* the redist architecture
+  # of redistrib_manifest because the feature manifest will have *only* the redist system
   # names as the keys, whereas the redistrib manifest will also have things like version, name, license,
   # and license_path.
   featureManifest = evaluatedModules.config.cuda.manifests.feature;

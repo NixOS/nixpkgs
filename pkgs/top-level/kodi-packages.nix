@@ -129,6 +129,8 @@ let
 
     netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
+    plex-for-kodi = callPackage ../applications/video/kodi/addons/plex-for-kodi { };
+
     orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
 
     radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
@@ -136,6 +138,8 @@ let
     raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
 
     robotocjksc = callPackage ../applications/video/kodi/addons/robotocjksc { };
+
+    screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
 
     skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 

@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "duckdb.yazi";
-  version = "25.4.8-unstable-2025-04-28";
+  version = "25.4.8-unstable-2025-05-29";
 
   src = fetchFromGitHub {
     owner = "wylie102";
     repo = "duckdb.yazi";
-    rev = "02f902dfaf22f20c121da49bfcf5500f4fb11d7d";
-    hash = "sha256-fESxJDU7befG2aDxm79M9Eq71RH1UwA4hi0OgK9vPbM=";
+    rev = "3f8c8633d4b02d3099cddf9e892ca5469694ba22";
+    hash = "sha256-XQM459V3HbPgXKgd9LnAIKRQOAaJPdZA/Tp91TSGHqY=";
   };
 
   meta = {

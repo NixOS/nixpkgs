@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
-    repo = pname;
+    repo = "pc-ble-driver";
     rev = "v${version}";
     hash = "sha256-srH7Gdiy9Lsv68fst/9jhifx03R2e+4kMia6pU/oCZg=";
   };
@@ -35,13 +35,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags =
-    [
-      "-DNRF_BLE_DRIVER_VERSION=${version}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      "-DARCH=arm64"
-    ];
+  cmakeFlags = [
+    "-DNRF_BLE_DRIVER_VERSION=${version}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    "-DARCH=arm64"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,13 +52,12 @@ stdenv.mkDerivation rec {
     spdlog
   ];
 
-  propagatedBuildInputs =
-    [
+  propagatedBuildInputs = [
 
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
   meta = with lib; {
     description = "Desktop library for Bluetooth low energy development";

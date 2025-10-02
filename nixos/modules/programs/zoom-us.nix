@@ -23,17 +23,13 @@
         plasma6XdgDesktopPortalSupport =
           prev.plasma6XdgDesktopPortalSupport or config.services.desktopManager.plasma6.enable;
 
-        # Support Plasma 5 desktop environment if it's enabled on the system.
-        plasma5XdgDesktopPortalSupport =
-          prev.plasma5XdgDesktopPortalSupport or config.services.xserver.desktopManager.plasma5.enable;
-
         # Support LXQT desktop environment if it's enabled on the system.
         # There's also `config.services.xserver.desktopManager.lxqt.enable`
         lxqtXdgDesktopPortalSupport = prev.lxqtXdgDesktopPortalSupport or config.xdg.portal.lxqt.enable;
 
         # Support GNOME desktop environment if it's enabled on the system.
         gnomeXdgDesktopPortalSupport =
-          prev.gnomeXdgDesktopPortalSupport or config.services.xserver.desktopManager.gnome.enable;
+          prev.gnomeXdgDesktopPortalSupport or config.services.desktopManager.gnome.enable;
 
         # Support Hyprland desktop for Wayland if it's enabled on the system.
         hyprlandXdgDesktopPortalSupport =

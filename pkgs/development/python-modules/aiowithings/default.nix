@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiowithings" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   disabledTests = [
     # Tests require network access

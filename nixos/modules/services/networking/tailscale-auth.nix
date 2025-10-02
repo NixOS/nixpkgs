@@ -68,6 +68,7 @@ in
     systemd.services.tailscale-nginx-auth = {
       description = "Tailscale NGINX Authentication service";
       requires = [ "tailscale-nginx-auth.socket" ];
+      after = [ "tailscaled.service" ];
 
       serviceConfig = {
         ExecStart = getExe cfg.package;
@@ -107,6 +108,8 @@ in
           "~@privileged"
           "~@setuid"
         ];
+
+        Restart = "on-failure";
       };
     };
   };

@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Sensorpro BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/sensorpro-ble";
-    changelog = "https://github.com/Bluetooth-Devices/sensorpro-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/sensorpro-ble/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

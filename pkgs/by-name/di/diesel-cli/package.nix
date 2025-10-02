@@ -27,30 +27,30 @@ assert lib.assertMsg (lib.elem true [
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.2.10";
+  version = "2.3.2";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-ELl8jrTWu2pXn2+ZQh7Z/lrmxRCkCXCCXvXcAKF5IJg=";
+    hash = "sha256-JNDFXBNmwCWpk+Lub453wS+7lVMZcdiJBmPoVAedpug=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uijO0eAc9U7T5SDh3iCr/wC257Q83VOJGop4KADGfgA=";
+  cargoHash = "sha256-qfXa6DuuhKbXCdOvhuPNx6xlDIouoDVJUMob9Fc5XgI=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresqlSupport libpq
-    ++ lib.optionals mysqlSupport [
-      libmysqlclient
-      zlib
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional sqliteSupport sqlite
+  ++ lib.optional postgresqlSupport libpq
+  ++ lib.optionals mysqlSupport [
+    libmysqlclient
+    zlib
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures =

@@ -7,20 +7,17 @@
 }:
 crystal.buildCrystalPackage rec {
   pname = "gi-crystal";
-  version = "0.24.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "gi-crystal";
     rev = "v${version}";
-    hash = "sha256-0LsYREn4zWLQYUTpNWJhLLHWmg7UQzxOoQiAMmw3ZXQ=";
+    hash = "sha256-+sc36YjaVKBkrg8Ond4hCZoObnSHIU/jyMRalZ+OAwk=";
   };
 
-  # Make sure gi-crystal picks up the name of the so or dylib and not the leading nix store path
-  # when the package name happens to start with “lib”.
   patches = [
     ./src.patch
-    ./store-friendly-library-name.patch
   ];
 
   nativeBuildInputs = [ gobject-introspection ];

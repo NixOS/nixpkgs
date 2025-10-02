@@ -1,0 +1,56 @@
+From 9b104ed9859f17b6ed4c4ad01806c75a0c197dd7 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Tue, 5 Aug 2025 15:55:24 +0100
+Subject: [PATCH] Allow `ls(1)` to fail in test setup
+
+This can happen when the tests are unable to `stat(2)` some files in
+`/etc`, `/bin`, or `/`, due to Unix permissions or other sandboxing. We
+still guard against serious errors, which use exit code 2.
+---
+ testsuite/longdir.test | 4 ++--
+ testsuite/rsync.fns    | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/testsuite/longdir.test b/testsuite/longdir.test
+index 8d66bb5f..26747292 100644
+--- a/testsuite/longdir.test
++++ b/testsuite/longdir.test
+@@ -16,9 +16,9 @@ makepath "$longdir" || test_skipped "unable to create long directory"
+ touch "$longdir/1" || test_skipped "unable to create files in long directory"
+ date > "$longdir/1"
+ if [ -r /etc ]; then
+-    ls -la /etc >"$longdir/2"
++    ls -la /etc >"$longdir/2" || [ $? -eq 1 ]
+ else
+-    ls -la / >"$longdir/2"
++    ls -la / >"$longdir/2" || [ $? -eq 1 ]
+ fi
+ checkit "$RSYNC --delete -avH '$fromdir/' '$todir'" "$fromdir/" "$todir"
+ 
+diff --git a/testsuite/rsync.fns b/testsuite/rsync.fns
+index 2ab97b69..f7da363f 100644
+--- a/testsuite/rsync.fns
++++ b/testsuite/rsync.fns
+@@ -195,15 +195,15 @@ hands_setup() {
+     echo some data > "$fromdir/dir/subdir/foobar.baz"
+     mkdir "$fromdir/dir/subdir/subsubdir"
+     if [ -r /etc ]; then
+-	ls -ltr /etc > "$fromdir/dir/subdir/subsubdir/etc-ltr-list"
++	ls -ltr /etc > "$fromdir/dir/subdir/subsubdir/etc-ltr-list" || [ $? -eq 1 ]
+     else
+-	ls -ltr / > "$fromdir/dir/subdir/subsubdir/etc-ltr-list"
++	ls -ltr / > "$fromdir/dir/subdir/subsubdir/etc-ltr-list" || [ $? -eq 1 ]
+     fi
+     mkdir "$fromdir/dir/subdir/subsubdir2"
+     if [ -r /bin ]; then
+-	ls -lt /bin > "$fromdir/dir/subdir/subsubdir2/bin-lt-list"
++	ls -lt /bin > "$fromdir/dir/subdir/subsubdir2/bin-lt-list" || [ $? -eq 1 ]
+     else
+-	ls -lt / > "$fromdir/dir/subdir/subsubdir2/bin-lt-list"
++	ls -lt / > "$fromdir/dir/subdir/subsubdir2/bin-lt-list" || [ $? -eq 1 ]
+     fi
+ 
+ #      echo testing head:
+-- 
+2.50.1
+

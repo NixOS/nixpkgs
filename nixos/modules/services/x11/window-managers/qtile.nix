@@ -25,7 +25,7 @@ in
   options.services.xserver.windowManager.qtile = {
     enable = mkEnableOption "qtile";
 
-    package = mkPackageOption pkgs "qtile-unwrapped" { };
+    package = mkPackageOption pkgs [ "python3" "pkgs" "qtile" ] { };
 
     configFile = mkOption {
       type = with types; nullOr path;
@@ -65,8 +65,8 @@ in
 
   config = mkIf cfg.enable {
     services = {
-      xserver.windowManager.qtile.finalPackage = pkgs.python3.pkgs.qtile.override {
-        extraPackages = cfg.extraPackages pkgs.python3.pkgs;
+      xserver.windowManager.qtile.finalPackage = cfg.package.override {
+        extraPackages = cfg.extraPackages cfg.package.pythonModule.pkgs;
       };
       displayManager.sessionPackages = [ cfg.finalPackage ];
     };

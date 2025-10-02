@@ -16,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-k6j7DIwK8YAKmEjn8JJO7XBcap9ui6cgUSJG7CeHAAM=";
   };
 
-  vendorHash = "sha256-lV6dUl+OMUQfhlgNL38k0Re1Mr3VP9b8SI3vTJ8CP18=";
+  vendorHash = "sha256-l3IKvcO10C+PVDX962tFWny7eMNC48ATIVqiHjpVH/Y=";
 
   meta = with lib; {
     description = "Tool to check missing hosted DNS zones";

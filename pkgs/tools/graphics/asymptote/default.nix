@@ -35,7 +35,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.03";
+  version = "3.05";
   pname = "asymptote";
 
   outputs = [
@@ -48,46 +48,45 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-PIpOaYi1M9PVhlCqnL1VZvn3hqmrDl/QoDcPOHUOT70=";
+    hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
   texContainer = null;
   texdocContainer = null;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      bison
-      flex
-      bison
-      texinfo
-      wrapQtAppsHook
-      cmake
-      ghostscriptX
-      perl
-      pkg-config
-      (python3.withPackages (
-        ps: with ps; [
-          click
-          cson
-          numpy
-          pyqt5
-        ]
-      ))
-    ]
-    ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null) (
-      texliveSmall.withPackages (
-        ps: with ps; [
-          epsf
-          cm-super
-          ps.texinfo
-          media9
-          ocgx2
-          collection-latexextra
-        ]
-      )
-    );
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    bison
+    texinfo
+    wrapQtAppsHook
+    cmake
+    ghostscriptX
+    perl
+    pkg-config
+    (python3.withPackages (
+      ps: with ps; [
+        click
+        cson
+        numpy
+        pyqt5
+      ]
+    ))
+  ]
+  ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null) (
+    texliveSmall.withPackages (
+      ps: with ps; [
+        epsf
+        cm-super
+        ps.texinfo
+        media9
+        ocgx2
+        collection-latexextra
+      ]
+    )
+  );
 
   buildInputs = [
     ghostscriptX
@@ -114,18 +113,18 @@ stdenv.mkDerivation (finalAttrs: {
         pyqt5
       ]
     ))
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
 
-  propagatedBuildInputs =
-    [
-      glm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libglut
-      libGLU
-      libGL
-      libglvnd
-    ];
+  propagatedBuildInputs = [
+    glm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libglut
+    libGLU
+    libGL
+    libglvnd
+  ];
 
   dontWrapQtApps = true;
 

@@ -27,8 +27,8 @@
         ];
       };
       systemd.services.wiki-js = {
-        requires = [ "postgresql.service" ];
-        after = [ "postgresql.service" ];
+        requires = [ "postgresql.target" ];
+        after = [ "postgresql.target" ];
       };
       environment.systemPackages = with pkgs; [ jq ];
     };

@@ -4,7 +4,7 @@
 # this test works doing a migration and asserting ntfy-sh runs properly. first,
 # ntfy-sh is configured to use a static user and group. then ntfy-sh is
 # started and tested. after that, ntfy-sh is shut down and a systemd drop
-# in configuration file is used to upate the service configuration to use
+# in configuration file is used to update the service configuration to use
 # DynamicUser=true. then the ntfy-sh is started again and tested.
 
 import ./make-test-python.nix {

@@ -11,20 +11,19 @@
 
 let
   pname = "ockam";
-  version = "0.138.0";
+  version = "0.157.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "build-trust";
-    repo = pname;
+    repo = "ockam";
     rev = "ockam_v${version}";
-    hash = "sha256-AY0i7qXA7JXfIEY0htmL+/yn71xAuh7WowXOs2fD6n8=";
+    hash = "sha256-o895VPlUGmLUsIeOnShjCetKoS/4x0nbEKxipEbuBu4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Mt/UFVFLZRrY8Mka4VFi6J2XjBjFsnJPi9tnBVZ6a5E=";
+  cargoHash = "sha256-hHbMMi4nuTORUPEKEo3OiQg7y12+cXHzUAkh3ApYx5s=";
   nativeBuildInputs = [
     git
     pkg-config
@@ -38,6 +37,8 @@ rustPlatform.buildRustPackage {
 
   # too many tests fail for now
   doCheck = false;
+
+  cargoBuildFlags = [ "-p ockam" ];
 
   meta = with lib; {
     description = "Orchestrate end-to-end encryption, cryptographic identities, mutual authentication, and authorization policies between distributed applications – at massive scale";

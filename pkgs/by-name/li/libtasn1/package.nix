@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     inherit gnutls samba qemu;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/libtasn1/";
     description = "ASN.1 library";
     longDescription = ''
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
       other packages.  The goal of this implementation is to be highly
       portable, and only require an ANSI C89 platform.
     '';
-    license = licenses.lgpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
     changelog = "https://gitlab.com/gnutls/libtasn1/-/blob/v${version}/NEWS";
   };
 }
