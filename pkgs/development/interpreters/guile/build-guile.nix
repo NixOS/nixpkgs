@@ -110,6 +110,7 @@ lib.extendMkDerivation {
       configureFlags =
         args.configureFlags or [ ]
         ++ [
+          "--with-libreadline-prefix=${lib.getDev readline}"
           "--disable-error-on-warning"
           "AWK=${lib.getExe gawk}"
         ]
@@ -140,7 +141,14 @@ lib.extendMkDerivation {
       doCheck = args.doCheck or false;
       doInstallCheck = args.doInstallCheck or finalAttrs.doCheck;
 
-      passthru = {
+      # guile-3 uses ELF files to store bytecode. strip does not
+      # always handle them correctly and destroys the image:
+      # darwin: In procedure bytevector-u8-ref: Argument 2 out of range
+      # linux binutils-2.45: $ guile --version
+      # Pre-boot error; key: misc-error, args: ("load-thunk-from-memory" "missing DT_GUILE_ENTRY" () #f)Aborted
+      dontStrip = args.dontStrip or (lib.versionAtLeast finalAttrs.version "3.0.0");
+
+      passthru = args.passthru or { } // {
         effectiveVersion = lib.versions.majorMinor finalAttrs.version;
         siteCcacheDir = "lib/guile/site-ccache";
         siteDir = "share/guile/site";
