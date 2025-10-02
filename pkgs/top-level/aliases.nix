@@ -2818,7 +2818,7 @@ mapAliases {
   openbsdCross = openbsd; # Added 2024-09-06
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_latest = llvmPackages_20;
+  llvmPackages_latest = llvmPackages_21;
 
   /*
     If these are in the scope of all-packages.nix, they cause collisions
