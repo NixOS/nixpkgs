@@ -24,7 +24,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "Multi-source semantic version management tool ";
+    description = "Multi-source semantic version management tool";
     homepage = "https://github.com/asciimoth/version";
     maintainers = with lib.maintainers; [ asciimoth ];
     license = with lib.licenses; [
