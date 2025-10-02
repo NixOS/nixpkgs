@@ -25,18 +25,7 @@ buildGuile (finalAttrs: {
   ]
   ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch;
 
-  outputs = [
-    "out"
-    "dev"
-    "info"
-  ];
-  setOutputFlags = false; # $dev gets into the library otherwise
-
-  strictDeps = true;
-  depsBuildBuild = [
-    pkgsBuildBuild.stdenv.cc
-  ]
-  ++ lib.optional (
+  depsBuildBuild = lib.optional (
     !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
   ) pkgsBuildBuild.guile_3_0;
 
@@ -60,19 +49,17 @@ buildGuile (finalAttrs: {
   # why `--with-libunistring-prefix' and similar options coming from
   # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
   postInstall = ''
-    substituteInPlace "$out/lib/pkgconfig/guile"*.pc \
+    substituteInPlace "$out/lib/pkgconfig/"*.pc \
       --replace-fail "-lunistring" "-L${libunistring}/lib -lunistring" \
-      --replace-fail "-lcrypt" "-L${libxcrypt}/lib -lcrypt" \
       --replace-fail "includedir=$out" "includedir=$dev"
 
-    sed -i "$out/lib/pkgconfig/guile"*.pc \
+    sed -i "$out/lib/pkgconfig/"*.pc    \
         -e "s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace "$out/lib/pkgconfig"*.pc \
+      --replace-fail "-lcrypt" "-L${libxcrypt}/lib -lcrypt"
   '';
-
-  # make check doesn't work on darwin
-  # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
-  doCheck = false;
-  doInstallCheck = finalAttrs.doCheck;
 
   setupHook = ./setup-hook-3.0.sh;
 
