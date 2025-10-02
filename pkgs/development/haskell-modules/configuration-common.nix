@@ -3224,18 +3224,6 @@ with haskellLib;
     doJailbreak
   ];
 
-  agda2hs = lib.pipe super.agda2hs [
-    (overrideSrc rec {
-      version = "1.4";
-      src = pkgs.fetchFromGitHub {
-        owner = "agda";
-        repo = "agda2hs";
-        rev = "v${version}";
-        hash = "sha256-ZhemGUY6V0cplSwDAXkny+s6yQWKDDShTiUotIDhTXY=";
-      };
-    })
-  ];
-
   bsb-http-chunked = lib.pipe super.bsb-http-chunked [
     (warnAfterVersion "0.0.0.4")
     # Last released in 2018
