@@ -118,20 +118,6 @@ let
     };
 in
 {
-  libressl_3_9 = generic {
-    version = "3.9.2";
-    hash = "sha256-ewMdrGSlnrbuMwT3/7ddrTOrjJ0nnIR/ksifuEYGj5c=";
-
-    patches = [
-      # Fixes build on ppc64
-      # https://github.com/libressl/portable/pull/1073
-      (fetchpatch {
-        url = "https://github.com/libressl/portable/commit/e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d.patch";
-        hash = "sha256-LJy3fjbnc9h5DG3/+8bLECwJeBpPxy3hU8sPuhovmcw=";
-      })
-    ];
-  };
-
   libressl_4_0 = generic {
     version = "4.0.1";
     hash = "sha256-IClLh3eMJidIk4Y5Q8hjWJebSZ03tJl31r+Gj3tZfL0=";
