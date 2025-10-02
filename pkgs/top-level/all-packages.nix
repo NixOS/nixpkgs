@@ -15038,25 +15038,45 @@ with pkgs;
   # Overriding does not work when using callPackage on discord using import instead. (https://github.com/NixOS/nixpkgs/pull/179906)
   discord = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;
-    inherit (pkgs) callPackage fetchurl;
+    inherit (pkgs)
+      callPackage
+      fetchurl
+      writeScript
+      _experimental-update-script-combinators
+      ;
     branch = "stable";
   };
 
   discord-ptb = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;
-    inherit (pkgs) callPackage fetchurl;
+    inherit (pkgs)
+      callPackage
+      fetchurl
+      writeScript
+      _experimental-update-script-combinators
+      ;
     branch = "ptb";
   };
 
   discord-canary = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;
-    inherit (pkgs) callPackage fetchurl;
+    inherit (pkgs)
+      callPackage
+      fetchurl
+      writeScript
+      _experimental-update-script-combinators
+      ;
     branch = "canary";
   };
 
   discord-development = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;
-    inherit (pkgs) callPackage fetchurl;
+    inherit (pkgs)
+      callPackage
+      fetchurl
+      writeScript
+      _experimental-update-script-combinators
+      ;
     branch = "development";
   };
 
