@@ -21,5 +21,5 @@ in
     services.dbus.packages = [ cfg.package ];
   };
 
-  meta.maintainers = with lib.maintainers; [ aidalgol ];
+  meta.maintainers = with lib.maintainers; [ jluttine ];
 }

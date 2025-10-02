@@ -117,7 +117,6 @@ finalAttrs: prevAttrs: {
       prevAttrs.meta.badPlatforms or [ ]
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
-    maintainers = prevAttrs.meta.maintainers or [ ] ++ [ maintainers.aidalgol ];
     teams = prevAttrs.meta.teams or [ ];
 
     # Building TensorRT on Hydra is impossible because of the non-redistributable

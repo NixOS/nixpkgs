@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   name = "peroxide";
-  meta.maintainers = with lib.maintainers; [ aidalgol ];
+  meta.maintainers = with lib.maintainers; [ aanderse ];
 
   nodes.machine =
     { config, pkgs, ... }:
