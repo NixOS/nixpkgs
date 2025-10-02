@@ -802,6 +802,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  amp-nvim = buildVimPlugin {
+    pname = "amp.nvim";
+    version = "2025-10-01";
+    src = fetchFromGitHub {
+      owner = "sourcegraph";
+      repo = "amp.nvim";
+      rev = "ceeed031e70966492a01a33774b48652ba3f1043";
+      sha256 = "1n6d8nbakyg6yiq8mhhrvmsp9z0zb8cb67820jsg3wl6vqd1vwv5";
+    };
+    meta.homepage = "https://github.com/sourcegraph/amp.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   animation-nvim = buildVimPlugin {
     pname = "animation.nvim";
     version = "2022-09-18";
