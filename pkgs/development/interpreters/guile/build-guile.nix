@@ -124,6 +124,7 @@ lib.extendMkDerivation {
         ++ [
           "--with-libreadline-prefix=${lib.getDev readline}"
           "--disable-error-on-warning"
+          "ac_cv_prog_AWK=${lib.getExe pkgsBuildBuild.gawk}"
           "AWK=${lib.getExe gawk}"
         ]
         # Guile needs patching to preset results for the configure tests about
