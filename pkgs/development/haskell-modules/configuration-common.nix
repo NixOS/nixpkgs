@@ -3224,9 +3224,7 @@ with haskellLib;
     doJailbreak
   ];
 
-  # agda2hs 1.3 is not compatible with Agda 2.8.0
   agda2hs = lib.pipe super.agda2hs [
-    (warnAfterVersion "1.3")
     (overrideSrc rec {
       version = "1.4";
       src = pkgs.fetchFromGitHub {
