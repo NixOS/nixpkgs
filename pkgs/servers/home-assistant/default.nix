@@ -490,7 +490,6 @@ python.pkgs.buildPythonApplication rec {
       # some components are needed even if tests in tests/components are disabled
       "default_config"
       "hue"
-      "qwikswitch"
     ];
 
   pytestFlags = [
