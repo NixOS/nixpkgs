@@ -5,7 +5,7 @@
   gitUpdater,
   gtk3,
   hicolor-icon-theme,
-  jdupes,
+  rmlint,
   schemeVariants ? [ ],
   colorVariants ? [ ], # default is blue
 }:
@@ -44,18 +44,18 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-02-09";
+    version = "2025-07-19";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
       rev = version;
-      hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
+      hash = "sha256-CzFEMY3oJE3sHdIMQQi9qizG8jKo72gR8FlVK0w0p74=";
     };
 
     nativeBuildInputs = [
       gtk3
-      jdupes
+      rmlint
     ];
 
     propagatedBuildInputs = [
@@ -81,7 +81,14 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
         ${lib.optionalString (colorVariants != [ ]) ("--theme " + builtins.toString colorVariants)} \
         --dest $out/share/icons
 
-      jdupes --quiet --link-soft --recurse $out/share
+      # Deduplicate files and remove broken symlinks
+      rmlint --types="duplicates,badlinks" \
+              --config=sh:handler=symlink \
+              --output=sh:$TMPDIR/rmlint.sh \
+              $out/share
+      if [ -f "$TMPDIR/rmlint.sh" ]; then
+        sh $TMPDIR/rmlint.sh -d -q
+      fi
 
       runHook postInstall
     '';
