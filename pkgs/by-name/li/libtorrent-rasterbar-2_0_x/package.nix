@@ -55,6 +55,11 @@ stdenv.mkDerivation {
       --replace-fail 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
                      'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
                       set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+  ''
+  # a: libdir=''${prefix}//nix/store/...
+  # b: libdir=/nix/store/...
+  # https://github.com/NixOS/nixpkgs/issues/144170
+  + ''
     substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
       --replace-fail '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
   '';
@@ -67,6 +72,12 @@ stdenv.mkDerivation {
   postFixup = ''
     substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
       --replace-fail "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+  ''
+  # a: Cflags: ... -I/nix/store/x//nix/store/x-dev/include ...
+  # b: Cflags: ... -I/nix/store/x-dev/include ...
+  + ''
+    substituteInPlace $dev/lib/pkgconfig/libtorrent-rasterbar.pc \
+      --replace-fail "$out/$dev" "$dev"
   '';
 
   outputs = [
