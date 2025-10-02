@@ -88,6 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch
     ;
 
+  outputs = [
+    "out"
+    "pyghidrasrc"
+  ];
+
   # Don't create .orig files if the patch isn't an exact match.
   patchFlags = [
     "--no-backup-if-mismatch"
@@ -173,6 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
     # improved macOS icon support
     install -Dm444 Ghidra/Framework/Gui/src/main/resources/images/GhidraIcon64.png $out/share/icons/hicolor/32x32@2/apps/ghidra.png
 
+    mkdir -p $pyghidrasrc
+    cp -r Ghidra/Features/PyGhidra/src/main/py/. $pyghidrasrc
+
     runHook postInstall
   '';
 
@@ -191,6 +199,8 @@ stdenv.mkDerivation (finalAttrs: {
       buildGhidraExtension
       buildGhidraScripts
       ;
+
+    jdk = openjdk21;
 
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
   };
