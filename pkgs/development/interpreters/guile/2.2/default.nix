@@ -33,7 +33,5 @@ buildGuile {
             "
   '';
 
-  setupHook = ./setup-hook-2.2.sh;
-
   meta.maintainers = with lib.maintainers; [ ludo ];
 }

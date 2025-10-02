@@ -63,8 +63,6 @@ buildGuile (finalAttrs: {
             "
   '';
 
-  setupHook = ./setup-hook-3.0.sh;
-
   passthru = {
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
