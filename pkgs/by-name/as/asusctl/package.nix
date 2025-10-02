@@ -14,6 +14,7 @@
   seatd,
   wayland,
   glibc,
+  udevCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
@@ -22,11 +23,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
-    rev = version;
+    tag = version;
     hash = "sha256-E/tDd7wQKDgC91x1rGa8Ltn4GMPk3DJDvmMQNafVLyM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lvm3xvI01RyaSS39nm3l7Zpn3x23DDBQr+0Gggl4p9U=";
 
   postPatch = ''
@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -85,6 +86,7 @@ rustPlatform.buildRustPackage rec {
 
   # upstream has minimal tests, so don't rebuild twice
   doCheck = false;
+  doInstallCheck = true;
 
   postInstall = ''
     make prefix=$out install-data

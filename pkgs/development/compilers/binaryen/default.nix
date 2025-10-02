@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "123";
+  version = "124";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-SFruWOJVxO3Ll1HwjK3DYSPY2IprnDly7QjxrECTrzE=";
+    hash = "sha256-tkvO0gNESliRV6FOpXDQd7ZKujGe6q1mGX5V+twcE1o=";
   };
 
   nativeBuildInputs = [
@@ -56,28 +56,27 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';
 
-  tests =
-    [
-      "version"
-      "wasm-opt"
-      "wasm-dis"
-      "crash"
-      "dylink"
-      "ctor-eval"
-      "wasm-metadce"
-      "wasm-reduce"
-      "spec"
-      "lld"
-      "wasm2js"
-      # "unit" # fails on test.unit.test_cluster_fuzz.ClusterFuzz
-      # "binaryenjs" "binaryenjs_wasm" # not building this
-      # "lit" # fails on d8/fuzz_shell*
-      "gtest"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "example"
-      "validator"
-    ];
+  tests = [
+    "version"
+    "wasm-opt"
+    "wasm-dis"
+    "crash"
+    "dylink"
+    "ctor-eval"
+    "wasm-metadce"
+    "wasm-reduce"
+    "spec"
+    "lld"
+    "wasm2js"
+    # "unit" # fails on test.unit.test_cluster_fuzz.ClusterFuzz
+    # "binaryenjs" "binaryenjs_wasm" # not building this
+    # "lit" # fails on d8/fuzz_shell*
+    "gtest"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "example"
+    "validator"
+  ];
 
   doCheck = (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin);
 

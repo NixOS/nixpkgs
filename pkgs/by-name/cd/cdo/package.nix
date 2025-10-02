@@ -32,15 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  configureFlags =
-    [
-      "--with-netcdf=${netcdf}"
-      "--with-hdf5=${hdf5}"
-      "--with-eccodes=${eccodes}"
-    ]
-    ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
-    ++ lib.optional enable_all_static "--enable-all-static"
-    ++ lib.optional enable_cxx "--enable-cxx";
+  configureFlags = [
+    "--with-netcdf=${netcdf}"
+    "--with-hdf5=${hdf5}"
+    "--with-eccodes=${eccodes}"
+  ]
+  ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
+  ++ lib.optional enable_all_static "--enable-all-static"
+  ++ lib.optional enable_cxx "--enable-cxx";
 
   meta = {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";

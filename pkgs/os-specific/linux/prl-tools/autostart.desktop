@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=@version@
-Encoding=UTF-8
-Name=@description@
-Type=Application
-Exec=@exec@
-X-KDE-autostart-phase=1
-GenericName[en_US]=

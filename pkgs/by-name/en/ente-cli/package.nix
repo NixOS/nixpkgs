@@ -34,29 +34,28 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
-    ''
-      mv $out/bin/{cli,ente}
-    ''
-    # running ente results in the following errors:
-    # > mkdir /homeless-shelter: permission denied
-    # > error getting password from keyring: exec: "dbus-launch": executable file not found in $PATH
-    # fix by setting ENTE_CLI_CONFIG_PATH to $TMP and ENTE_CLI_SECRETS_PATH to a non existing path
-    # also guarding with `isLinux` because ENTE_CLI_SECRETS_PATH doesn't help on darwin:
-    # > error setting password in keyring: exit status 195
-    #
-    +
-      lib.optionalString
-        (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-        ''
-          export ENTE_CLI_CONFIG_PATH=$TMP
-          export ENTE_CLI_SECRETS_PATH=$TMP/secrets
+  postInstall = ''
+    mv $out/bin/{cli,ente}
+  ''
+  # running ente results in the following errors:
+  # > mkdir /homeless-shelter: permission denied
+  # > error getting password from keyring: exec: "dbus-launch": executable file not found in $PATH
+  # fix by setting ENTE_CLI_CONFIG_PATH to $TMP and ENTE_CLI_SECRETS_PATH to a non existing path
+  # also guarding with `isLinux` because ENTE_CLI_SECRETS_PATH doesn't help on darwin:
+  # > error setting password in keyring: exit status 195
+  #
+  +
+    lib.optionalString
+      (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      ''
+        export ENTE_CLI_CONFIG_PATH=$TMP
+        export ENTE_CLI_SECRETS_PATH=$TMP/secrets
 
-          installShellCompletion --cmd ente \
-            --bash <($out/bin/ente completion bash) \
-            --fish <($out/bin/ente completion fish) \
-            --zsh <($out/bin/ente completion zsh)
-        '';
+        installShellCompletion --cmd ente \
+          --bash <($out/bin/ente completion bash) \
+          --fish <($out/bin/ente completion fish) \
+          --zsh <($out/bin/ente completion zsh)
+      '';
 
   passthru = {
     # only works on linux, see comment above about ENTE_CLI_SECRETS_PATH on darwin
@@ -87,8 +86,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/ente-io/ente/tree/main/cli#readme";
     changelog = "https://github.com/ente-io/ente/releases/tag/cli-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = [
-      lib.maintainers.zi3m5f
+    maintainers = with lib.maintainers; [
+      zi3m5f
+      iedame
     ];
     mainProgram = "ente";
   };

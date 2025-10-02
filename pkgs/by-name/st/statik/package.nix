@@ -32,6 +32,5 @@ buildGoModule rec {
     description = "Embed files into a Go executable";
     mainProgram = "statik";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Madouura ];
   };
 }

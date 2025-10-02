@@ -11,8 +11,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "calva";
     publisher = "betterthantomorrow";
-    version = "2.0.516";
-    hash = "sha256-0RBydQ2+ec6Swj/DGYVen3g8a6SqhIKLZ9m1Bohjqco=";
+    version = "2.0.536";
+    hash = "sha256-Q6T8Ab8kwOjdFM63SjTNEOgd+a6fL1PRGRredHzwg7U=";
   };
 
   nativeBuildInputs = [

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "2.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/drumstick/${version}/drumstick-${version}.tar.bz2";
     hash = "sha256-rFoH1daXHiT3LZWQRP+buzMRQSWLJfGMgRtJ9XFy/L0=";
   };
 
@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
     sonivox
-  ] ++ lib.optionals isQt6 [ qt5compat ];
+  ]
+  ++ lib.optionals isQt6 [ qt5compat ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_DBUS" true)

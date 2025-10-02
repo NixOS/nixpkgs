@@ -43,15 +43,14 @@ stdenv.mkDerivation {
 
   separateDebugInfo = true;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      asciidoc
-    ]
-    ++ (with python3Packages; [
-      python
-      wrapPython
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+    asciidoc
+  ]
+  ++ (with python3Packages; [
+    python
+    wrapPython
+  ]);
   buildInputs = buildInputs ++ [
     openssl
     zlib

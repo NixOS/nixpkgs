@@ -9,7 +9,7 @@
   libz,
 }:
 let
-  version = "1.1.5";
+  version = "1.1.7";
 in
 rustPlatform.buildRustPackage {
   pname = "committed";
@@ -19,11 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "crate-ci";
     repo = "committed";
     tag = "v${version}";
-    hash = "sha256-puv64/btSEkxGNhGGkh2A08gI+EIHWjC+s+QQDKj/ZQ=";
+    hash = "sha256-8Np7kSLSoZCytQ9RN+kRzUlQa8Lj9F70hbbYNfdgQKI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fW3TqI26xggUKfzI11YCO8bpotd3aO6pdu1CHhtiShs=";
+  cargoHash = "sha256-gmB2NXxoD9xc24avjWyEFihVVZN1rPggOGwXz/gaZ1c=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # Until upstream bumps the libz-sys dependency to >= 1.1.15 the build fails on unstable

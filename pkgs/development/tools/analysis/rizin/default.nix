@@ -76,20 +76,19 @@ let
 
     # meson's find_library seems to not use our compiler wrapper if static parameter
     # is either true/false... We work around by also providing LIBRARY_PATH
-    preConfigure =
-      ''
-        LIBRARY_PATH=""
-        for b in ${toString (map lib.getLib buildInputs)}; do
-          if [[ -d "$b/lib" ]]; then
-            LIBRARY_PATH="$b/lib''${LIBRARY_PATH:+:}$LIBRARY_PATH"
-          fi
-        done
-        export LIBRARY_PATH
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        substituteInPlace binrz/rizin/macos_sign.sh \
-          --replace 'codesign' '# codesign'
-      '';
+    preConfigure = ''
+      LIBRARY_PATH=""
+      for b in ${toString (map lib.getLib buildInputs)}; do
+        if [[ -d "$b/lib" ]]; then
+          LIBRARY_PATH="$b/lib''${LIBRARY_PATH:+:}$LIBRARY_PATH"
+        fi
+      done
+      export LIBRARY_PATH
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace binrz/rizin/macos_sign.sh \
+        --replace 'codesign' '# codesign'
+    '';
 
     buildInputs = [
       file

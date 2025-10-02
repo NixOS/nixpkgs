@@ -211,8 +211,8 @@
   },
   {
     "pname": "Microsoft.Extensions.ApiDescription.Server",
-    "version": "6.0.3",
-    "hash": "sha256-1G+68E/fg89Vkgo4V7pCGqWlDdBErZMFfW+AV1q5brA="
+    "version": "8.0.14",
+    "hash": "sha256-mfNB1+5kcIr8burRrsr5LR5pVEAISQ8o9m8FrCtye3M="
   },
   {
     "pname": "Microsoft.Extensions.Caching.Abstractions",
@@ -581,8 +581,8 @@
   },
   {
     "pname": "Microsoft.TypeScript.MSBuild",
-    "version": "5.8.1",
-    "hash": "sha256-5x81TEhXaEEYnBeosK8zmBwPLKPifMf4JUFrGsk/IxA="
+    "version": "5.8.3",
+    "hash": "sha256-zL02BnZRCc5v1GUmzhaL1TnUq9+8Vkz5rGDPt+7CkD8="
   },
   {
     "pname": "Microsoft.VisualStudio.Web.CodeGeneration.Contracts",
@@ -636,8 +636,8 @@
   },
   {
     "pname": "Namotion.Reflection",
-    "version": "3.3.0",
-    "hash": "sha256-YBYWLYmnCZrKfiJWQo7tofiz2A7ROpxFfAYdYLa5cgI="
+    "version": "3.4.2",
+    "hash": "sha256-iaQrE5VwRHqXOyzym4vY3+4aDw6eswN5P3LDd3FoFZk="
   },
   {
     "pname": "NETStandard.Library",
@@ -666,53 +666,53 @@
   },
   {
     "pname": "NJsonSchema",
-    "version": "11.2.0",
-    "hash": "sha256-Y1FggfzRf54+ioMKvyyzMW30psrHF7hmAwnYom/Ud8s="
+    "version": "11.3.2",
+    "hash": "sha256-x+vNknToh2X1qk7NmsQEUWCoEJ5CGc1b9XNOrIbCOLc="
   },
   {
     "pname": "NJsonSchema.Annotations",
-    "version": "11.2.0",
-    "hash": "sha256-uQYU/NuAbz+HlImemuv1Yi4ODKoaQ38BSrWONOR9jFs="
+    "version": "11.3.2",
+    "hash": "sha256-MWC0Hvd6knCAjViSKOY7lugxGbVEcn3lyzEUO5unphQ="
   },
   {
     "pname": "NJsonSchema.NewtonsoftJson",
-    "version": "11.2.0",
-    "hash": "sha256-NyXB3rcdPpjaZq0CAZy5xMmvLqqzPGyddeTVtowqaBU="
+    "version": "11.3.2",
+    "hash": "sha256-jIRsXWHVNmWgz2WlmiJnfyXNofwrrdkLVlx4x3PPPlM="
   },
   {
     "pname": "NJsonSchema.Yaml",
-    "version": "11.2.0",
-    "hash": "sha256-NtlUldW5D0VSj10XqfMvxDMVULdw99owTS1zGYg4aKg="
+    "version": "11.3.2",
+    "hash": "sha256-7IzmfufXlhTZoESAIsd5zqBZ/x30tAAZl9Bx/m3QaxA="
   },
   {
     "pname": "NSwag.Annotations",
-    "version": "14.3.0",
-    "hash": "sha256-kz+fEwUlEjsPsOiFCTcXYHAAYCJa2cepDRIY4mkye4U="
+    "version": "14.4.0",
+    "hash": "sha256-NbAAQ+tlgi+/766JeEsD+W6SQMEHy2qyTsoMlxvuuo8="
   },
   {
     "pname": "NSwag.AspNetCore",
-    "version": "14.3.0",
-    "hash": "sha256-lGeH27yzj5fXPpBMqtoFOTRiu+gve8oSgugW2u4tMAk="
+    "version": "14.4.0",
+    "hash": "sha256-3nMNWDrr6k6q5vaskxWc6oioUkLoyJciZ4ocyW5oN+w="
   },
   {
     "pname": "NSwag.Core",
-    "version": "14.3.0",
-    "hash": "sha256-FjWms/V5+j4ut1TShKWDsTr1LuBsHxRQIFs1fwD0jGw="
+    "version": "14.4.0",
+    "hash": "sha256-l1nBCyf/ed2Xm8Yk5TL3ni8kQxQSAf0ajAfwaAL3/6I="
   },
   {
     "pname": "NSwag.Core.Yaml",
-    "version": "14.3.0",
-    "hash": "sha256-CcGXuyNUvF/e3f9K3wZY+h0RIbzoLOLLguUcj+VVFXI="
+    "version": "14.4.0",
+    "hash": "sha256-YBlNeIqgZgcYvf/VvJXelTIxDCRqyPJPo7ZzTIo16ak="
   },
   {
     "pname": "NSwag.Generation",
-    "version": "14.3.0",
-    "hash": "sha256-M487C7OsnZnURcAN90DGIhZTnxlToaIskkztCKkXzQc="
+    "version": "14.4.0",
+    "hash": "sha256-DH7C00KVAiv6i8lJxNAzkDtuNHykyGQAfgT6MAbeBko="
   },
   {
     "pname": "NSwag.Generation.AspNetCore",
-    "version": "14.3.0",
-    "hash": "sha256-DvjSjbM2ug0AvjAE8CwVUej2hZbLWopmZMbOx4Oy2IU="
+    "version": "14.4.0",
+    "hash": "sha256-YT2v9ddGAFk8gMj1aQ2yHOK3UWX3mcIoGYWBl+OsJ2s="
   },
   {
     "pname": "NuGet.Frameworks",
@@ -1396,8 +1396,8 @@
   },
   {
     "pname": "System.Linq.Dynamic.Core",
-    "version": "1.6.0.2",
-    "hash": "sha256-5qzEVm+33ATR+SQljwe/LcP5o0MNjv49nHfXIVG27dw="
+    "version": "1.6.4",
+    "hash": "sha256-Mpp+3UYARo+Hnh3ybtHtdN0LI5HQV07CBZP7jRnVk10="
   },
   {
     "pname": "System.Linq.Expressions",

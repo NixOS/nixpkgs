@@ -406,6 +406,31 @@ in
                 '';
                 example = [ "alice@example.com" ];
               };
+
+              pkce = {
+                enabled = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Enable or disable PKCE (Proof Key for Code Exchange) support.
+                    PKCE adds an additional layer of security to the OAuth 2.0
+                    authorization code flow by preventing authorization code
+                    interception attacks
+                    See https://datatracker.ietf.org/doc/html/rfc7636
+                  '';
+                  example = true;
+                };
+
+                method = lib.mkOption {
+                  type = lib.types.str;
+                  default = "S256";
+                  description = ''
+                    PKCE method to use:
+                      - plain: Use plain code verifier
+                      - S256: Use SHA256 hashed code verifier (default, recommended)
+                  '';
+                };
+              };
             };
 
             tls_letsencrypt_hostname = lib.mkOption {

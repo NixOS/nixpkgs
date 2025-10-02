@@ -19,6 +19,7 @@
   py,
   httpx,
   pyramid,
+  pytest-asyncio,
   pytestCheckHook,
   repoze-lru,
   setuptools,
@@ -32,7 +33,7 @@
 
 buildPythonApplication rec {
   pname = "devpi-server";
-  version = "6.14.0";
+  version = "6.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -41,7 +42,7 @@ buildPythonApplication rec {
     owner = "devpi";
     repo = "devpi";
     rev = "server-${version}";
-    hash = "sha256-j8iILbptUw8DUE9lFpjDp/VYzdJzmOYqM/RCnkpWdcA=";
+    hash = "sha256-tKR1xZju5bDbFu8t3SunTM8FlaXodSm/OjJ3Jfl7Dzk=";
   };
 
   sourceRoot = "${src.name}/server";
@@ -73,12 +74,14 @@ buildPythonApplication rec {
     waitress
     py
     httpx
-  ] ++ passlib.optional-dependencies.argon2;
+  ]
+  ++ passlib.optional-dependencies.argon2;
 
   nativeCheckInputs = [
     beautifulsoup4
     nginx
     py
+    pytest-asyncio
     pytestCheckHook
     webtest
   ];
@@ -90,12 +93,16 @@ buildPythonApplication rec {
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
   '';
-  pytestFlagsArray = [
-    "./test_devpi_server"
+  pytestFlags = [
     "-rfsxX"
-    "--ignore=test_devpi_server/test_nginx_replica.py"
-    "--ignore=test_devpi_server/test_streaming_nginx.py"
-    "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
+  ];
+  enabledTestPaths = [
+    "./test_devpi_server"
+  ];
+  disabledTestPaths = [
+    "test_devpi_server/test_nginx_replica.py"
+    "test_devpi_server/test_streaming_nginx.py"
+    "test_devpi_server/test_streaming_replica_nginx.py"
   ];
   disabledTests = [
     "root_passwd_hash_option"

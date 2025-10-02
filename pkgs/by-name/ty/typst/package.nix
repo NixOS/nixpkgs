@@ -5,9 +5,7 @@
   installShellFiles,
   pkg-config,
   openssl,
-  writeShellScript,
-  nix-update,
-  gitMinimal,
+  nix-update-script,
   versionCheckHook,
   callPackage,
 }:
@@ -23,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
 
   nativeBuildInputs = [
@@ -62,25 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    updateScript = {
-      command = [
-        (writeShellScript "update-typst.sh" ''
-          currentVersion=$(nix-instantiate --eval -E "with import ./. {}; typst.version or (lib.getVersion typst)" | tr -d '"')
-          ${lib.getExe nix-update} typst > /dev/null
-          latestVersion=$(nix-instantiate --eval -E "with import ./. {}; typst.version or (lib.getVersion typst)" | tr -d '"')
-          changes=()
-          if [[ "$currentVersion" != "$latestVersion" ]]; then
-            changes+=("{\"attrPath\":\"typst\",\"oldVersion\":\"$currentVersion\",\"newVersion\":\"$latestVersion\",\"files\":[\"pkgs/by-name/ty/typst/package.nix\"]}")
-          fi
-          maintainers/scripts/update-typst-packages.py --output pkgs/by-name/ty/typst/typst-packages-from-universe.toml > /dev/null
-          ${lib.getExe gitMinimal} diff --quiet HEAD -- pkgs/by-name/ty/typst/typst-packages-from-universe.toml || changes+=("{\"attrPath\":\"typstPackages\",\"oldVersion\":\"0\",\"newVersion\":\"1\",\"files\":[\"pkgs/by-name/ty/typst/typst-packages-from-universe.toml\"]}")
-          echo -n "["
-            IFS=,; echo -n "''${changes[*]}"
-          echo "]"
-        '')
-      ];
-      supportedFeatures = [ "commit" ];
-    };
+    updateScript = nix-update-script { };
     packages = callPackage ./typst-packages.nix { };
     withPackages = callPackage ./with-packages.nix { };
   };
@@ -92,7 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "typst";
     maintainers = with lib.maintainers; [
-      drupol
       figsoda
       kanashimia
       RossSmyth

@@ -72,19 +72,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./1114-lomiri-calendar-app-Adjust-SyncManager-filters.patch
   ];
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'QT_IMPORTS_DIR "lib/''${ARCH_TRIPLET}"' 'QT_IMPORTS_DIR "${qtbase.qtQmlPrefix}"'
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'QT_IMPORTS_DIR "lib/''${ARCH_TRIPLET}"' 'QT_IMPORTS_DIR "${qtbase.qtQmlPrefix}"'
 
-      # Outdated paths
-      substituteInPlace tests/unittests/tst_{calendar_canvas,date,event_bubble,event_list_model}.qml \
-        --replace-fail '../../qml' '../../src/qml'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
-    '';
+    # Outdated paths
+    substituteInPlace tests/unittests/tst_{calendar_canvas,date,event_bubble,event_list_model}.qml \
+      --replace-fail '../../qml' '../../src/qml'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
+  '';
 
   strictDeps = true;
 

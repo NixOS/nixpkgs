@@ -4,7 +4,7 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -33,22 +33,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "kaleidescape" ];
 
-  disabledTests =
-    [
-      # Test requires network access
-      "test_resolve_succeeds"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # stuck in EpollSelector.poll()
-      "test_manual_disconnect"
-      "test_concurrency"
-    ];
+  disabledTests = [
+    # Test requires network access
+    "test_resolve_succeeds"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # stuck in EpollSelector.poll()
+    "test_manual_disconnect"
+    "test_concurrency"
+  ];
 
   meta = with lib; {
     description = "Module for controlling Kaleidescape devices";

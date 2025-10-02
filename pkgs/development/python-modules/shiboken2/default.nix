@@ -6,7 +6,7 @@
   cmake,
   qt5,
   libxcrypt,
-  llvmPackages_15,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     cd sources/shiboken2
   '';
 
-  CLANG_INSTALL_DIR = llvmPackages_15.libclang.out;
+  CLANG_INSTALL_DIR = llvmPackages.libclang.out;
 
   nativeBuildInputs = [
     cmake
@@ -31,18 +31,17 @@ stdenv.mkDerivation {
     qt5.qmake
   ];
 
-  buildInputs =
-    [
-      llvmPackages_15.libclang
-      python.pkgs.setuptools
-      qt5.qtbase
-      qt5.qtxmlpatterns
-    ]
-    ++ (lib.optionals (python.pythonOlder "3.9") [
-      # see similar issue: 202262
-      # libxcrypt is required for crypt.h for building older python modules
-      libxcrypt
-    ]);
+  buildInputs = [
+    llvmPackages.libclang
+    python.pkgs.setuptools
+    qt5.qtbase
+    qt5.qtxmlpatterns
+  ]
+  ++ (lib.optionals (python.pythonOlder "3.9") [
+    # see similar issue: 202262
+    # libxcrypt is required for crypt.h for building older python modules
+    libxcrypt
+  ]);
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 

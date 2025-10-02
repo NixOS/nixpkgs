@@ -3,6 +3,7 @@
   buildPythonPackage,
   certifi,
   click,
+  cryptography,
   dotmap,
   ecs-logging,
   elastic-transport,
@@ -15,13 +16,13 @@
   pythonOlder,
   pyyaml,
   requests,
-  six,
+  tiered-debug,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.17.4";
+  version = "8.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     tag = "v${version}";
-    hash = "sha256-43LB0QceljuS3k+yYtJCbJsstsFr3d2h2Gnjal2HcdQ=";
+    hash = "sha256-siB17xVRS/eeKOsJcWdh4foOHXbeV8wwRclXDHodADM=";
   };
 
   pythonRelaxDeps = true;
@@ -40,12 +41,13 @@ buildPythonPackage rec {
   dependencies = [
     certifi
     click
+    cryptography
     dotmap
     ecs-logging
     elastic-transport
     elasticsearch8
     pyyaml
-    six
+    tiered-debug
     voluptuous
   ];
 

@@ -41,6 +41,7 @@
   orc,
   pcre2,
   pkg-config,
+  protobuf_21,
   python3,
   SDL2,
   shaderc,
@@ -63,7 +64,14 @@
   serviceSupport ? true,
   tracingSupport ? false,
 }:
-
+let
+  # For some reason protobuf 32 causes a segfault during startup
+  # Pin to last (known) working version
+  # See https://github.com/NixOS/nixpkgs/issues/439075
+  opencv4' = opencv4.override {
+    protobuf = protobuf_21;
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
   version = "25.0.0";
@@ -98,61 +106,62 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
-  buildInputs =
-    [
-      bluez
-      cjson
-      dbus
-      eigen
-      elfutils
-      gst-plugins-base
-      gstreamer
-      hidapi
-      libbsd
-      libdrm
-      libffi
-      libGL
-      libjpeg
-      librealsense
-      libsurvive
-      libunwind
-      libusb1
-      libuv
-      libuvc
-      libv4l
-      libXau
-      libxcb
-      libXdmcp
-      libXext
-      libXrandr
-      onnxruntime
-      opencv4
-      openhmd
-      openvr
-      orc
-      pcre2
-      SDL2
-      shaderc
-      udev
-      vulkan-headers
-      vulkan-loader
-      wayland
-      wayland-protocols
-      wayland-scanner
-      zlib
-      zstd
-    ]
-    ++ lib.optionals tracingSupport [
-      tracy
-    ];
+  buildInputs = [
+    bluez
+    cjson
+    dbus
+    eigen
+    elfutils
+    gst-plugins-base
+    gstreamer
+    hidapi
+    libbsd
+    libdrm
+    libffi
+    libGL
+    libjpeg
+    librealsense
+    libsurvive
+    libunwind
+    libusb1
+    libuv
+    libuvc
+    libv4l
+    libXau
+    libxcb
+    libXdmcp
+    libXext
+    libXrandr
+    onnxruntime
+    opencv4'
+    openhmd
+    openvr
+    orc
+    pcre2
+    SDL2
+    shaderc
+    udev
+    vulkan-headers
+    vulkan-loader
+    wayland
+    wayland-protocols
+    wayland-scanner
+    zlib
+    zstd
+  ]
+  ++ lib.optionals tracingSupport [
+    tracy
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_STEAM" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   # Help openxr-loader find this runtime
@@ -169,10 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
-      Scrumplex
-      prusnak
-    ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
     mainProgram = "monado-cli";
   };

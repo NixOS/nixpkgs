@@ -14,13 +14,12 @@ let
     name = "freshrss-extensions";
     paths = cfg.extensions;
   };
-  env-vars =
-    {
-      DATA_PATH = cfg.dataDir;
-    }
-    // lib.optionalAttrs (cfg.extensions != [ ]) {
-      THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
-    };
+  env-vars = {
+    DATA_PATH = cfg.dataDir;
+  }
+  // lib.optionalAttrs (cfg.extensions != [ ]) {
+    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss";
+  };
 in
 {
   meta.maintainers = with maintainers; [

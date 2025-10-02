@@ -14,17 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
-  version = "0.47.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ndNwtCKAU/59bq6uDlaxb+24DG2yKD7NyfwgBAlHMtg=";
+    hash = "sha256-hMHOhdy8J/LQsrA1EWDuOP2weXB0NbXB++vyjaU4bkI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Q82CD/byqXAqJpO0izIwBD6lYpoZNJoWqDCciRecZnY=";
+  cargoHash = "sha256-W/kjdqyMMs6ICzDgPeZyaOlS8fVfdS7bFcGcxlp6aQo=";
 
   nativeBuildInputs = [
     pkg-config

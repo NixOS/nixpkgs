@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "5.0.2";
+  version = "5.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "joerick";
     repo = "pyinstrument";
     tag = "v${version}";
-    hash = "sha256-30e8J7TF16SRgDTt5Eizc7ofg00bCF61O9y+2jA63GY=";
+    hash = "sha256-omQLUVgHbyz6YzLQ/7zU0f1R5xFU7EVGnwXohcuuP+o=";
   };
 
   nativeBuildInputs = [

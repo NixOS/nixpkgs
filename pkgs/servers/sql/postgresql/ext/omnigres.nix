@@ -12,6 +12,8 @@
   postgresqlBuildExtension,
   postgresqlTestExtension,
   python3,
+  stdenv,
+  unstableGitUpdater,
 }:
 
 let
@@ -19,14 +21,24 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "0-unstable-2025-05-16";
+  version = "0-unstable-2025-09-26";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
-    rev = "84f14792d80fb6fd60b680b7825245a8e7c5583e";
-    hash = "sha256-jOlHXl7ANhMwOPizd5KH+wYZmBNNkkIa9jbXZR8Xu28=";
+    rev = "247383198a95d045df0d97ece5a81adffb5c08e8";
+    hash = "sha256-RrdtUtrs0Mh1VyMbF89qJhr2fnCVcQy2l1/85/mJ/4Y=";
   };
+
+  # This matches postInstall of PostgreSQL's generic.nix, which does this for the PGXS Makefile.
+  # Since omnigres uses a CMake file, which tries to replicate the things that PGXS does, we need
+  # to apply the same fix for darwin.
+  # The reason we need to do this is, because PG_BINARY will point at the postgres wrapper of
+  # postgresql.withPackages, which does not contain the same symbols as the original file, ofc.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace "cmake/PostgreSQLExtension.cmake" \
+      --replace-fail '-bundle_loader ''${PG_BINARY}' "-bundle_loader ${postgresql}/bin/postgres"
+  '';
 
   strictDeps = true;
 
@@ -47,8 +59,6 @@ postgresqlBuildExtension (finalAttrs: {
   cmakeFlags = [
     "-DOPENSSL_CONFIGURED=1"
     "-DPG_CONFIG=${pgWithExtensions.pg_config}/bin/pg_config"
-    "-DPostgreSQL_EXTENSION_DIR=${pgWithExtensions}/share/postgresql/extension/"
-    "-DPostgreSQL_PACKAGE_LIBRARY_DIR=${pgWithExtensions}/lib/"
     "-DPostgreSQL_TARGET_EXTENSION_DIR=${builtins.placeholder "out"}/share/postgresql/extension/"
     "-DPostgreSQL_TARGET_PACKAGE_LIBRARY_DIR=${builtins.placeholder "out"}/lib/"
   ];
@@ -73,6 +83,10 @@ postgresqlBuildExtension (finalAttrs: {
 
       SELECT identity_type('user_id');
     '';
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
   };
 
   meta = {

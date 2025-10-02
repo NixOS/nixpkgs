@@ -15,19 +15,20 @@
   flask,
   flask-cors,
   moto,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2025.2.0";
+  version = "2025.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "s3fs";
     tag = version;
-    hash = "sha256-nnfvccORDspj54sRxL3d0hn4MpzKYGKE2Kl0v/wLaNw=";
+    hash = "sha256-Wb9y2l6/J0EQQwB4AqasqvSVSURylkoh2D2wvw4NjlE=";
   };
 
   build-system = [
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     flask
     flask-cors
     moto
+    pytest-asyncio
     pytestCheckHook
   ];
 

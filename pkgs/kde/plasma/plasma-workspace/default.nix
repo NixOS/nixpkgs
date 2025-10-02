@@ -2,12 +2,14 @@
   lib,
   mkKdeDerivation,
   replaceVars,
+  fetchpatch,
   dbus,
   fontconfig,
   xorg,
   lsof,
   pkg-config,
   spirv-tools,
+  qtlocation,
   qtpositioning,
   qtsvg,
   qtwayland,
@@ -32,6 +34,12 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
+    # Fixes https://github.com/NixOS/nixpkgs/issues/442630, next upstream release should already contain this patch
+    (fetchpatch {
+      name = "fix-media-applet-crash.diff";
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/30273fb2afcc6e304951c8895bb17d38255fed39.diff";
+      sha256 = "sha256-1p1CjxRioCDm5ugoI8l6kDlOse5FbDJ71tTAY9LPvRc=";
+    })
   ];
 
   postInstall = ''
@@ -44,6 +52,7 @@ mkKdeDerivation {
     spirv-tools
   ];
   extraBuildInputs = [
+    qtlocation
     qtpositioning
     qtsvg
     qtwayland

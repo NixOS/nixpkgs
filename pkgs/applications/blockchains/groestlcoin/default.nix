@@ -43,75 +43,72 @@ stdenv.mkDerivation rec {
     sha256 = "0kl7nq62362clgzxwwd5c256xnaar4ilxcvbralazxg47zv95r11";
   };
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals withGui [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      boost
-      libevent
-      miniupnpc
-      zeromq
-      zlib
-    ]
-    ++ lib.optionals withWallet [
-      db53
-      sqlite
-    ]
-    ++ lib.optionals withGui [
-      qrencode
-      qtbase
-      qttools
-    ];
+  buildInputs = [
+    boost
+    libevent
+    miniupnpc
+    zeromq
+    zlib
+  ]
+  ++ lib.optionals withWallet [
+    db53
+    sqlite
+  ]
+  ++ lib.optionals withGui [
+    qrencode
+    qtbase
+    qttools
+  ];
 
-  postInstall =
-    ''
-      installShellCompletion --bash contrib/completions/bash/groestlcoin-cli.bash
-      installShellCompletion --bash contrib/completions/bash/groestlcoind.bash
-      installShellCompletion --bash contrib/completions/bash/groestlcoin-tx.bash
+  postInstall = ''
+    installShellCompletion --bash contrib/completions/bash/groestlcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/groestlcoind.bash
+    installShellCompletion --bash contrib/completions/bash/groestlcoin-tx.bash
 
-      for file in contrib/completions/fish/groestlcoin-*.fish; do
-        installShellCompletion --fish $file
-      done
-    ''
-    + lib.optionalString withGui ''
-      installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
+    for file in contrib/completions/fish/groestlcoin-*.fish; do
+      installShellCompletion --fish $file
+    done
+  ''
+  + lib.optionalString withGui ''
+    installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
 
-      install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
-      substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
-      install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
-    '';
+    install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
+    substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
+    install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
+  '';
 
-  configureFlags =
-    [
-      "--with-boost-libdir=${boost.out}/lib"
-      "--disable-bench"
-    ]
-    ++ lib.optionals (!withWallet) [
-      "--disable-wallet"
-    ]
-    ++ lib.optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-    ];
+  configureFlags = [
+    "--with-boost-libdir=${boost.out}/lib"
+    "--disable-bench"
+  ]
+  ++ lib.optionals (!withWallet) [
+    "--disable-wallet"
+  ]
+  ++ lib.optionals withGui [
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+  ];
 
   nativeCheckInputs = [ python3 ];
 
-  checkFlags =
-    [ "LC_ALL=en_US.UTF-8" ]
-    # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
-    # See also https://github.com/NixOS/nixpkgs/issues/24256
-    ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  checkFlags = [
+    "LC_ALL=en_US.UTF-8"
+  ]
+  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
+  # See also https://github.com/NixOS/nixpkgs/issues/24256
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

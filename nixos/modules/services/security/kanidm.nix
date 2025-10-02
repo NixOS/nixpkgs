@@ -54,15 +54,11 @@ let
     ++ optional (cfg.provision.extraJsonFile != null) cfg.provision.extraJsonFile
     ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
   );
-  secretDirectories = unique (
-    map builtins.dirOf (
-      [
-        cfg.serverSettings.tls_chain
-        cfg.serverSettings.tls_key
-      ]
-      ++ optionals cfg.provision.enable provisionSecretFiles
-    )
-  );
+  secretPaths = [
+    cfg.serverSettings.tls_chain
+    cfg.serverSettings.tls_key
+  ]
+  ++ optionals cfg.provision.enable provisionSecretFiles;
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -205,7 +201,7 @@ let
         echo "Tried for at least 30 seconds, giving up..."
         exit 1
       fi
-      count=$((count++))
+      count=$((++count))
     done
 
     ${recoverIdmAdmin}
@@ -465,6 +461,17 @@ in
                 apply = unique;
                 default = [ ];
               };
+
+              overwriteMembers = mkOption {
+                description = ''
+                  Whether the member list should be overwritten each time (true) or appended
+                  (false). Append mode allows interactive group management in addition to the
+                  declared members. Also, future member removals cannot be reflected
+                  automatically in append mode.
+                '';
+                type = types.bool;
+                default = true;
+              };
             };
             config.members = concatLists (
               flip mapAttrsToList cfg.provision.persons (
@@ -541,7 +548,7 @@ in
                 description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
-                    originStrType = types.strMatching ".*://.*$";
+                    originStrType = types.strMatching ".*://?.*$";
                   in
                   types.either originStrType (types.nonEmptyListOf originStrType);
                 example = "https://someservice.example.com/auth/login";
@@ -664,6 +671,8 @@ in
   };
 
   config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
+    warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
+
     assertions =
       let
         entityList =
@@ -881,7 +890,14 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretDirectories);
+            BindReadOnlyPaths = mergePaths (
+              defaultServiceConfig.BindReadOnlyPaths
+              ++ secretPaths
+              ++ (lib.optionals (cfg.provision.enable && !cfg.provision.acceptInvalidCerts) [
+                "-/etc/ssl"
+                "-/etc/static/ssl"
+              ])
+            );
           }
         )
         {
@@ -893,16 +909,13 @@ in
           User = "kanidm";
           Group = "kanidm";
 
-          BindPaths =
-            [
-              # To create the socket
-              "/run/kanidmd:/run/kanidmd"
-              # To store backups
-              cfg.serverSettings.online_backup.path
-            ]
-            ++ optional (
-              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
-            ) cfg.unixSettings.home_mount_prefix;
+          BindPaths = [
+            # To store backups
+            cfg.serverSettings.online_backup.path
+          ]
+          ++ optional (
+            cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+          ) cfg.unixSettings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
@@ -983,6 +996,9 @@ in
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"
           "-/etc/hosts"
+          "-/etc/passwd"
+          "-/etc/group"
+          "-/etc/shadow"
           "-/etc/localtime"
           "-/etc/kanidm"
           "-/etc/static/kanidm"

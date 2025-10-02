@@ -1,22 +1,29 @@
 {
-  buildGo124Module,
+  # golangci-lint has historically required code changes to support new versions of
+  # go so always use the latest specific go version that golangci-lint supports
+  # rather than buildGoLatestModule.
+  # This can be bumped when the release notes of golangci-lint detail support for
+  # new version of go.
+  buildGo125Module,
+  buildPackages,
   fetchFromGitHub,
-  lib,
   installShellFiles,
+  lib,
+  stdenv,
 }:
 
-buildGo124Module rec {
+buildGo125Module (finalAttrs: {
   pname = "golangci-lint";
-  version = "2.1.6";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
-    rev = "v${version}";
-    hash = "sha256-L0TsVOUSU+nfxXyWsFLe+eU4ZxWbW3bHByQVatsTpXA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7dHr7cd+yYofIb+yR2kKfj0k0onLH2W/YuxNor7zPeo=";
   };
 
-  vendorHash = "sha256-tYoAUumnHgA8Al3jKjS8P/ZkUlfbmmmBcJYUR7+5u9w=";
+  vendorHash = "sha256-QEYbFz7SJxLMblkNqaRLDn/PO+mtSPvNYiEUmZh0sLQ=";
 
   subPackages = [ "cmd/golangci-lint" ];
 
@@ -24,22 +31,31 @@ buildGo124Module rec {
 
   ldflags = [
     "-s"
-    "-X main.version=${version}"
-    "-X main.commit=v${version}"
-    "-X main.date=19700101-00:00:00"
+    "-w"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=v${finalAttrs.version}"
+    "-X main.date=1970-01-01T00:00:00Z"
   ];
 
-  postInstall = ''
-    for shell in bash zsh fish; do
-      HOME=$TMPDIR $out/bin/golangci-lint completion $shell > golangci-lint.$shell
-      installShellCompletion golangci-lint.$shell
-    done
-  '';
+  postInstall =
+    let
+      golangcilintBin =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out"
+        else
+          lib.getBin buildPackages.golangci-lint;
+    in
+    ''
+      installShellCompletion --cmd golangci-lint \
+        --bash <(${golangcilintBin}/bin/golangci-lint completion bash) \
+        --fish <(${golangcilintBin}/bin/golangci-lint completion fish) \
+        --zsh <(${golangcilintBin}/bin/golangci-lint completion zsh)
+    '';
 
   meta = {
     description = "Fast linters Runner for Go";
     homepage = "https://golangci-lint.run/";
-    changelog = "https://github.com/golangci/golangci-lint/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/golangci/golangci-lint/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "golangci-lint";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -47,4 +63,4 @@ buildGo124Module rec {
       mic92
     ];
   };
-}
+})

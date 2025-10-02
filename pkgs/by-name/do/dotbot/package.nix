@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dotbot";
-  version = "1.21.0";
+  version = "1.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anishathalye";
     repo = "dotbot";
     tag = "v${version}";
-    hash = "sha256-f+ykGXcQ1hLptGElQ5ZTt8z0SXnlTbdcf922AVF78bU=";
+    hash = "sha256-Yq6mpBUokt4Zi84xyA5bayW1WLXEUXFev2aDJ/q/Fgo=";
   };
 
   preCheck = ''
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
       dotfiles.
     '';
     homepage = "https://github.com/anishathalye/dotbot";
-    changelog = "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/anishathalye/dotbot/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ludat ];
   };

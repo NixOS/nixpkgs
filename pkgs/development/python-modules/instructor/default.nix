@@ -23,6 +23,7 @@
   anthropic,
   diskcache,
   fastapi,
+  google-genai,
   google-generativeai,
   pytest-asyncio,
   pytestCheckHook,
@@ -32,16 +33,14 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.7.9";
+  version = "1.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     tag = version;
-    hash = "sha256-3IwvbepDrylOIlL+IteyFChqYc/ZIu6IieIkbAPL+mw=";
+    hash = "sha256-vknPfRHyLoLo2838p/fbjrqyaBORZzLp9+fN98yVDz0=";
   };
 
   build-system = [ hatchling ];
@@ -65,6 +64,7 @@ buildPythonPackage rec {
     anthropic
     diskcache
     fastapi
+    google-genai
     google-generativeai
     pytest-asyncio
     pytestCheckHook
@@ -90,12 +90,20 @@ buildPythonPackage rec {
     # Performance benchmarks that sometimes fail when running many parallel builds
     "test_combine_system_messages_benchmark"
     "test_extract_system_messages_benchmark"
+
+    # pydantic validation mismatch
+    "test_control_characters_not_allowed_in_anthropic_json_strict_mode"
+    "test_control_characters_allowed_in_anthropic_json_non_strict_mode"
   ];
 
   disabledTestPaths = [
     # Tests require OpenAI API key
-    "tests/test_distil.py"
     "tests/llm/"
+    # Network and requires API keys
+    "tests/test_auto_client.py"
+    # annoying dependencies
+    "tests/docs"
+    "examples"
   ];
 
   meta = {

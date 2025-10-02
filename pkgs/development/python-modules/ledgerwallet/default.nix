@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ledgerwallet";
-  version = "0.5.0";
+  version = "0.5.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";
     repo = "ledgerctl";
     rev = "v${version}";
-    hash = "sha256-PBULYvyO3+YaW+a1/enJtKB/DR4ndL/o/WdpETbWyZ0=";
+    hash = "sha256-roDfj+igDBS+sTJL4hwYNg5vZzaq+F8QvDA9NucnrMA=";
   };
 
   buildInputs = [
@@ -66,7 +66,6 @@ buildPythonPackage rec {
     mainProgram = "ledgerctl";
     license = licenses.mit;
     maintainers = with maintainers; [
-      d-xo
       erdnaxe
     ];
   };

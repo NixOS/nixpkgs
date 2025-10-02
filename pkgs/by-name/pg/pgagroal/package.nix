@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     cjson
     libev
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
   meta = with lib; {
     description = "High-performance connection pool for PostgreSQL";

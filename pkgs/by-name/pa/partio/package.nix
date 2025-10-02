@@ -38,18 +38,17 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      zlib
-      swig
-      xorg.libXi
-      xorg.libXmu
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libglut
-      libGLU
-      libGL
-    ];
+  buildInputs = [
+    zlib
+    swig
+    xorg.libXi
+    xorg.libXmu
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libglut
+    libGLU
+    libGL
+  ];
 
   # TODO:
   # Sexpr support

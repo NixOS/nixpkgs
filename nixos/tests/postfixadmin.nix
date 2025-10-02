@@ -23,7 +23,7 @@
 
   testScript = ''
     postfixadmin.start
-    postfixadmin.wait_for_unit("postgresql.service")
+    postfixadmin.wait_for_unit("postgresql.target")
     postfixadmin.wait_for_unit("phpfpm-postfixadmin.service")
     postfixadmin.wait_for_unit("nginx.service")
     postfixadmin.succeed(

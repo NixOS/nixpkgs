@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "logcheck";
-  version = "1.4.4";
+  version = "1.4.7";
   _name = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
-    sha256 = "sha256-1A4aknB+GVgc3F8VlqVtJjlvGLBhYS6E+w+9lXvAOGQ=";
+    sha256 = "sha256-zBYMvKwo85OI6LluRixOYtAFRTtpV/Hw6qjAk/+c898=";
   };
 
   prePatch = ''
@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bluescreen303 ];
   };
 }

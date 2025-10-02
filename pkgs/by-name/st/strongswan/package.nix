@@ -2,85 +2,134 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
   autoreconfHook,
-  perl,
-  gperf,
+  pkg-config,
   bison,
   flex,
-  gmp,
-  python3,
-  iptables,
-  ldns,
-  unbound,
+  curl,
+  perl,
+  gperf,
   openssl,
   pcsclite,
-  glib,
+  networkmanager,
   openresolv,
+  glib,
   systemd,
+  tpm2-tss,
+  libxml2,
   pam,
-  curl,
-  enableTNC ? false,
+  iptables,
   trousers,
   sqlite,
-  libxml2,
-  enableTPM2 ? false,
-  tpm2-tss,
-  enableNetworkManager ? false,
-  networkmanager,
+  unbound,
+  ldns,
+  gmp,
   nixosTests,
+  enableNetworkManager ? false,
+  enableTNC ? false,
+  enableTPM2 ? false,
 }:
+let
+  features = rec {
+    nm = enableNetworkManager;
+    cmd = true;
+    stroke = true;
+    swanctl = true;
+    systemd = stdenv.hostPlatform.isLinux;
 
-# Note on curl support: If curl is built with gnutls as its backend, the
-# strongswan curl plugin may break.
-# See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
+    openssl = true;
 
+    farp = stdenv.hostPlatform.isLinux;
+    dhcp = stdenv.hostPlatform.isLinux;
+    af-alg = stdenv.hostPlatform.isLinux;
+    resolve = stdenv.hostPlatform.isLinux;
+    scripts = stdenv.hostPlatform.isLinux;
+    connmark = stdenv.hostPlatform.isLinux;
+    forecast = stdenv.hostPlatform.isLinux;
+    kernel-netlink = stdenv.hostPlatform.isLinux;
+
+    aesni = stdenv.hostPlatform.isx86_64;
+    rdrand = stdenv.hostPlatform.isx86_64;
+    padlock = stdenv.hostPlatform.system == "i686-linux";
+
+    kernel-pfkey = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD;
+    kernel-pfroute = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD;
+    kernel-libipsec = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD;
+
+    keychain = false; # breaks build
+    osx-attr = stdenv.hostPlatform.isDarwin;
+
+    ml = true;
+    # Note on curl support: If curl is built with gnutls as its backend, the
+    # strongswan curl plugin may break.
+    # See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
+    curl = true;
+    acert = true;
+    pkcs11 = true;
+    dnscert = true;
+    unbound = true;
+    chapoly = true;
+    ext-auth = true;
+    socket-dynamic = stdenv.hostPlatform.isLinux;
+
+    eap-sim = true;
+    eap-sim-file = true;
+    eap-sim-pcsc = true;
+    eap-simaka-pseudonym = true;
+    eap-simaka-reauth = true;
+    eap-identity = true;
+    eap-md5 = true;
+    eap-gtc = true;
+    eap-aka = true;
+    eap-aka-3gpp = true;
+    eap-aka-3gpp2 = true;
+    eap-mschapv2 = true;
+    eap-tls = true;
+    eap-peap = true;
+    eap-radius = true;
+
+    xauth-eap = true;
+    xauth-pam = stdenv.hostPlatform.isLinux;
+    xauth-noauth = true;
+
+    gmp = eap-aka-3gpp2;
+  }
+  // lib.optionalAttrs enableTNC {
+    eap-tnc = true;
+    eap-ttls = true;
+    eap-dynamic = true;
+
+    tnccs-20 = true;
+
+    tnc-imc = true;
+    tnc-imv = true;
+    tnc-ifmap = true;
+
+    imc-os = true;
+    imv-os = true;
+    imc-attestation = true;
+    imv-attestation = true;
+
+    aikgen = true;
+    tss-trousers = true;
+
+    sqlite = true;
+  }
+  // lib.optionalAttrs enableTPM2 {
+    tpm = true;
+    tss-tss2 = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "strongswan";
-  version = "5.9.14"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "6.0.2"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchFromGitHub {
     owner = "strongswan";
     repo = "strongswan";
-    rev = version;
-    hash = "sha256-qFM7ErfqiDlUsZdGXJQVW3nJoh+I6tEdKRwzrKteRVY=";
+    tag = version;
+    hash = "sha256-wjz41gt+Xu4XJkEXRRVl3b3ryEoEtijeqmfVFoRjnA4=";
   };
-
-  dontPatchELF = true;
-
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-    perl
-    gperf
-    bison
-    flex
-  ];
-  buildInputs =
-    [
-      curl
-      gmp
-      python3
-      ldns
-      unbound
-      openssl
-      pcsclite
-    ]
-    ++ lib.optionals enableTNC [
-      trousers
-      sqlite
-      libxml2
-    ]
-    ++ lib.optional enableTPM2 tpm2-tss
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemd.dev
-      pam
-      iptables
-    ]
-    ++ lib.optionals enableNetworkManager [
-      networkmanager
-      glib
-    ];
 
   patches = [
     ./ext_auth-path.patch
@@ -88,110 +137,65 @@ stdenv.mkDerivation rec {
     ./updown-path.patch
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # glibc-2.26 reorganized internal includes
-    sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    bison
+    flex
+    perl
+    gperf
+  ];
 
-    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
-  '';
-
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--enable-swanctl"
-      "--enable-cmd"
-      "--enable-openssl"
-      "--enable-eap-sim"
-      "--enable-eap-sim-file"
-      "--enable-eap-simaka-pseudonym"
-      "--enable-eap-simaka-reauth"
-      "--enable-eap-identity"
-      "--enable-eap-md5"
-      "--enable-eap-gtc"
-      "--enable-eap-aka"
-      "--enable-eap-aka-3gpp2"
-      "--enable-eap-mschapv2"
-      "--enable-eap-radius"
-      "--enable-xauth-eap"
-      "--enable-ext-auth"
-      "--enable-acert"
-      "--enable-pkcs11"
-      "--enable-eap-sim-pcsc"
-      "--enable-dnscert"
-      "--enable-unbound"
-      "--enable-chapoly"
-      "--enable-curl"
+  buildInputs =
+    lib.optional (features.gmp or false) gmp
+    ++ lib.optional (features.eap-sim-pcsc or false) pcsclite
+    ++ lib.optional (features.openssl or false) openssl
+    ++ lib.optional (features.curl or false) curl
+    ++ lib.optional (features.systemd or false) systemd
+    ++ lib.optional (features.tnc-ifmap or false) libxml2
+    ++ lib.optional (features.xauth-pam or false) pam
+    ++ lib.optional (features.forecast or false || features.connmark or false) iptables
+    ++ lib.optional (features.tss-trousers or false) trousers
+    ++ lib.optional (features.tss-tss2 or false) tpm2-tss
+    ++ lib.optional (features.sqlite or false) sqlite
+    ++ lib.optionals (features.unbound or false) [
+      unbound
+      ldns
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-farp"
-      "--enable-dhcp"
-      "--enable-systemd"
-      "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-      "--enable-xauth-pam"
-      "--enable-forecast"
-      "--enable-connmark"
-      "--enable-af-alg"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      "--enable-aesni"
-      "--enable-rdrand"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") "--enable-padlock"
-    ++ lib.optionals enableTNC [
-      "--disable-gmp"
-      "--disable-aes"
-      "--disable-md5"
-      "--disable-sha1"
-      "--disable-sha2"
-      "--disable-fips-prf"
-      "--enable-eap-tnc"
-      "--enable-eap-ttls"
-      "--enable-eap-dynamic"
-      "--enable-tnccs-20"
-      "--enable-tnc-imc"
-      "--enable-imc-os"
-      "--enable-imc-attestation"
-      "--enable-tnc-imv"
-      "--enable-imv-attestation"
-      "--enable-tnc-ifmap"
-      "--enable-tnc-imc"
-      "--enable-tnc-imv"
-      "--with-tss=trousers"
-      "--enable-aikgen"
-      "--enable-sqlite"
-    ]
-    ++ lib.optionals enableTPM2 [
-      "--enable-tpm"
-      "--enable-tss-tss2"
-    ]
-    ++ lib.optionals enableNetworkManager [
-      "--enable-nm"
-      "--with-nm-ca-dir=/etc/ssl/certs"
-    ]
-    # Taken from: https://wiki.strongswan.org/projects/strongswan/wiki/MacOSX
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--disable-systemd"
-      "--disable-xauth-pam"
-      "--disable-kernel-netlink"
-      "--enable-kernel-pfkey"
-      "--enable-kernel-pfroute"
-      "--enable-kernel-libipsec"
-      "--enable-osx-attr"
-      "--disable-scripts"
+    ++ lib.optionals (features.nm or false) [
+      networkmanager
+      glib
     ];
+
+  configureFlags = (lib.mapAttrsToList (lib.flip lib.enableFeature)) features ++ [
+    "--sysconfdir=/etc"
+    (lib.withFeatureAs (features.nm or false) "nm-ca-dir" "/etc/ssl/certs")
+    (lib.withFeatureAs (features.systemd or false
+    ) "systemdsystemunitdir" "${placeholder "out"}/etc/systemd/system")
+  ];
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  enableParallelBuilding = true;
+
+  dontPatchELF = true;
 
   passthru.tests = { inherit (nixosTests) strongswan-swanctl; };
 
-  meta = with lib; {
-    description = "OpenSource IPsec-based VPN Solution";
-    homepage = "https://www.strongswan.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+  postPatch = lib.optionalString features.resolve ''
+    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c \
+      --replace-fail "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
+  '';
+
+  meta = {
+    description = "OpenSource IPsec-based VPN solution";
+    homepage = "https://www.strongswan.org/";
+    changelog = "https://github.com/strongswan/strongswan/blob/${src.rev}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
+    mainProgram = "swanctl";
+    platforms = lib.platforms.unix;
   };
 }

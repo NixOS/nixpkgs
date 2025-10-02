@@ -23,7 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = ''
-      A small human-editable language to emit DER or BER encodings of ASN.1
+      Small human-editable language to emit DER or BER encodings of ASN.1
       structures and malformed variants of them
     '';
     homepage = "https://github.com/google/der-ascii";

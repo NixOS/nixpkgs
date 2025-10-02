@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_ivm";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "sraoss";
     repo = "pg_ivm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fPtDwP+IZ/RQOriRklSvpUnJ8qEwJaxIrcfnAReRQeQ=";
+    hash = "sha256-UeRcxoUkpPw4EcQXKUxHamjczOaE59d00kSrYsijnH8=";
   };
 
   meta = {
@@ -23,6 +23,5 @@ postgresqlBuildExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ ivan ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
-    broken = lib.versionOlder postgresql.version "13";
   };
 })

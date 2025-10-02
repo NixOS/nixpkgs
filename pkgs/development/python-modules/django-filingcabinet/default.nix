@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0.17-unstable-2025-04-10";
+  version = "0.17-unstable-2025-08-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,8 +45,8 @@ buildPythonPackage rec {
     repo = "django-filingcabinet";
     # No release tagged yet on GitHub
     # https://github.com/okfde/django-filingcabinet/issues/69
-    rev = "64b7b4ad804067e2f16e8a0f165c139e3ffe5fb5";
-    hash = "sha256-48Peui/5N/GfzWS1EJ5uKeKEoPjX+fPEXzG2owxsDaE=";
+    rev = "e1713921d6d14e0abc8b81315545d7fb6f08c39f";
+    hash = "sha256-R/JNI+PZb0H09ZoYCGV3nbAowkf/YlKia4xkgAgqoNM=";
   };
 
   postPatch = ''
@@ -94,7 +94,8 @@ buildPythonPackage rec {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-uMO2iEOi9ACYdIM8Thf7+y1KpHQEqVxO3yxZ8RaGFXA=";
+    fetcherVersion = 1;
+    hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
   };
 
   postBuild = ''
@@ -124,13 +125,12 @@ buildPythonPackage rec {
     "test_document_viewer"
   ];
 
-  preCheck =
-    ''
-      export DJANGO_SETTINGS_MODULE="test_project.settings"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
-      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-    '';
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE="test_project.settings"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+  '';
 
   pythonImportsCheck = [ "filingcabinet" ];
 

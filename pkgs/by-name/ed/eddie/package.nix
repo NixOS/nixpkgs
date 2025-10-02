@@ -22,21 +22,21 @@
 
   mono,
 
+  versionCheckHook,
+
   eddie,
   testers,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "eddie";
-  version = "2.24.4";
+  version = "2.24.6";
 
   src = fetchFromGitHub {
     owner = "AirVPN";
     repo = "Eddie";
-    # Upstream uses the summaries of commits for
-    # specifying the versions of experimental builds
-    rev = "aeaa7e594d71610dd2c231a8dc5c5aaddc89a7c1";
-    hash = "sha256-AlnWqrKoZb4s4MfPClxlEqzKIOwWL/frA+dx2kCNwW4=";
+    tag = finalAttrs.version;
+    hash = "sha256-XSLxjF2k9cw+cx6KzFIQHtjDWqLT2V49KRw+oIyxM5M=";
   };
 
   patches = [
@@ -77,7 +77,7 @@ buildDotnetModule rec {
 
   makeWrapperArgs = [
     "--add-flags \"--path.resources=${placeholder "out"}/share/eddie-ui\""
-    "--prefix PATH : ${nativeRuntimeInputs}"
+    "--prefix PATH : ${finalAttrs.nativeRuntimeInputs}"
   ];
 
   executables = [ "eddie-cli" ];
@@ -122,9 +122,16 @@ buildDotnetModule rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/eddie-ui \
       --add-flags $out/lib/eddie-ui/App.Forms.Linux.exe \
-      --prefix LD_LIBRARY_PATH : ${runtimeInputs} \
+      --prefix LD_LIBRARY_PATH : ${finalAttrs.runtimeInputs} \
       ''${makeWrapperArgs[@]}
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/eddie-cli";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     tests.version = testers.testVersion {
@@ -138,7 +145,9 @@ buildDotnetModule rec {
     homepage = "https://eddie.website";
     license = lib.licenses.gpl3Plus;
     mainProgram = "eddie-ui";
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [
+      ryand56
+    ];
     platforms = lib.platforms.linux;
   };
-}
+})

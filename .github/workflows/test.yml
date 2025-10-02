@@ -1,0 +1,113 @@
+name: Test
+
+on:
+  pull_request:
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      merge-group: ${{ steps.files.outputs.merge-group }}
+      mergedSha: ${{ steps.prepare.outputs.mergedSha }}
+      pr: ${{ steps.files.outputs.pr }}
+      push: ${{ steps.files.outputs.push }}
+      targetSha: ${{ steps.prepare.outputs.targetSha }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout-cone-mode: true # default, for clarity
+          sparse-checkout: |
+            ci/github-script
+      - id: prepare
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            require('./ci/github-script/prepare.js')({
+              github,
+              context,
+              core,
+              // Review comments will be posted by the main PR workflow on the pull_request_target event.
+              dry: false,
+            })
+
+      - name: Determine changed files
+        id: files
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const files = (await github.paginate(github.rest.pulls.listFiles, {
+              ...context.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            })).map(file => file.filename)
+
+            if (files.some(file => [
+              '.github/workflows/lint.yml',
+              '.github/workflows/merge-group.yml',
+              '.github/workflows/test.yml',
+            ].includes(file))) core.setOutput('merge-group', true)
+
+            if (files.some(file => [
+              '.github/actions/checkout/action.yml',
+              '.github/workflows/build.yml',
+              '.github/workflows/check.yml',
+              '.github/workflows/eval.yml',
+              '.github/workflows/labels.yml',
+              '.github/workflows/lint.yml',
+              '.github/workflows/pr.yml',
+              '.github/workflows/reviewers.yml',
+              '.github/workflows/test.yml',
+            ].includes(file))) core.setOutput('pr', true)
+
+            if (files.some(file => [
+              '.github/workflows/eval.yml',
+              '.github/workflows/push.yml',
+              '.github/workflows/test.yml',
+            ].includes(file))) core.setOutput('push', true)
+
+  merge-group:
+    if: needs.prepare.outputs.merge-group
+    name: Merge Group
+    needs: [prepare]
+    uses: ./.github/workflows/merge-group.yml
+    # Those are actually only used on the merge_group event, but will throw an error if not set.
+    permissions:
+      statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+
+  pr:
+    if: needs.prepare.outputs.pr
+    name: PR
+    needs: [prepare]
+    uses: ./.github/workflows/pr.yml
+    # Those are actually only used on the pull_request_target event, but will throw an error if not set.
+    permissions:
+      issues: write
+      pull-requests: write
+      statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+
+  push:
+    if: needs.prepare.outputs.push
+    name: Push
+    needs: [prepare]
+    uses: ./.github/workflows/push.yml
+    # Those are not actually used on the push or pull_request events, but will throw an error if not set.
+    permissions:
+      statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}

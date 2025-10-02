@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   boost,
   cmake,
   ninja,
@@ -10,17 +11,25 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   name = "libdjinterop";
 
-  version = "unstable";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "xsco";
     repo = "libdjinterop";
-    rev = "0.24.3";
-    hash = "sha256-Fp7AwEOq2JOpL60GDAXmA15ptFeLoG79nnnPXHl1Hjw=";
+    rev = finalAttrs.version;
+    hash = "sha256-HwNhCemqVR1xNSbcht0AuwTfpRhVi70ZH5ksSTSRFoc=";
   };
+
+  patches = [
+    # https://github.com/xsco/libdjinterop/pull/161
+    (fetchpatch2 {
+      url = "https://github.com/xsco/libdjinterop/commit/94ce315cd5155bd031eeccfec12fbeb8e399dd14.patch";
+      hash = "sha256-WahMsFeetSlHHiIyaC04YxTiXDxD1ooASqoIP2TK9R0=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -46,4 +55,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+})

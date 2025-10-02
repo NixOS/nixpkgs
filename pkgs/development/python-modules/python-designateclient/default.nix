@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   debtcollector,
-  fetchFromGitea,
+  fetchFromGitHub,
   jsonschema,
   keystoneauth1,
   openstackdocstheme,
@@ -22,16 +22,15 @@
 
 buildPythonPackage rec {
   pname = "python-designateclient";
-  version = "6.2.0";
+  version = "6.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitea {
-    domain = "opendev.org";
+  src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-designateclient";
-    rev = version;
+    tag = version;
     hash = "sha256-Upfu6FDaCRXniJLacuIt6K0qi8aOvHU0t43F3uWvhG8=";
   };
 

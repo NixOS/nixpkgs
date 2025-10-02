@@ -8,7 +8,7 @@
   git,
   cmake,
   nixosTests,
-  nixfmt-rfc-style,
+  nixfmt,
   mobilizon-frontend,
   ...
 }:
@@ -19,19 +19,6 @@ let
 in
 mixRelease rec {
   inherit (common) pname version src;
-
-  patches = [
-    # Version 5.1.2 failed to bump their internal package version,
-    # which causes issues with static file serving in the NixOS module.
-    ./0001-fix-version.patch
-    # Mobilizon uses chunked Transfer-Encoding for the media proxy but also
-    # sets the Content-Length header. This is a HTTP/1.1 protocol violation
-    # and results in nginx >=1.24 rejecting the response with this error:
-    # 'upstream sent "Content-Length" and "Transfer-Encoding" headers at the same
-    # time while reading response header from upstream'
-    # Upstream PR: https://framagit.org/framasoft/mobilizon/-/merge_requests/1604
-    ./0002-fix-media-proxy.patch
-  ];
 
   nativeBuildInputs = [
     git
@@ -59,7 +46,7 @@ mixRelease rec {
             owner = "elixir-cldr";
             repo = "cldr";
             rev = "v${old.version}";
-            sha256 =
+            hash =
               assert old.version == "2.37.5";
               "sha256-T5Qvuo+xPwpgBsqHNZYnTCA4loToeBn1LKTMsDcCdYs=";
           };
@@ -80,7 +67,7 @@ mixRelease rec {
             owner = "danhper";
             repo = "elixir-web-push-encryption";
             rev = "6e143dcde0a2854c4f0d72816b7ecab696432779";
-            sha256 = "sha256-Da+/28SPZuUQBi8fQj31zmMvhMrYUaQIW4U4E+mRtMg=";
+            hash = "sha256-Da+/28SPZuUQBi8fQj31zmMvhMrYUaQIW4U4E+mRtMg=";
           };
           beamDeps = with final; [
             httpoison
@@ -94,7 +81,7 @@ mixRelease rec {
             owner = "tcitworld";
             repo = name;
             rev = "1033d922c82a7223db0ec138e2316557b70ff49f";
-            sha256 = "sha256-N3bJZznNazLewHS4c2B7LP1lgxd1wev+EWVlQ7rOwfU=";
+            hash = "sha256-N3bJZznNazLewHS4c2B7LP1lgxd1wev+EWVlQ7rOwfU=";
           };
           beamDeps = with final; [
             mix_test_watch
@@ -109,7 +96,7 @@ mixRelease rec {
             owner = "tcitworld";
             repo = name;
             rev = "0c036448e261e8be6a512581c592fadf48982d84";
-            sha256 = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
+            hash = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
           };
           beamDeps = with final; [
             ex_doc
@@ -127,7 +114,7 @@ mixRelease rec {
             owner = "tcitworld";
             repo = name;
             rev = "8b5485fde00fafbde20f315bec387a77f7358334";
-            sha256 = "sha256-ttgCWoBKU7VTjZJBhZNtqVF4kN7psBr/qOeR65MbTqw=";
+            hash = "sha256-ttgCWoBKU7VTjZJBhZNtqVF4kN7psBr/qOeR65MbTqw=";
           };
           beamDeps = with final; [
             httpoison
@@ -157,8 +144,8 @@ mixRelease rec {
     updateScript = writeShellScriptBin "update.sh" ''
       set -eou pipefail
 
-      ${mix2nix}/bin/mix2nix '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
-      ${nixfmt-rfc-style}/bin/nixfmt pkgs/servers/mobilizon/mix.nix
+      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
+      ${lib.getExe nixfmt} pkgs/servers/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
   };

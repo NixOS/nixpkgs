@@ -9,6 +9,7 @@
 buildPythonPackage {
   pname = "pipetools";
   version = "1.1.0";
+  format = "setuptools";
 
   # Used github as the src since the pypi package does not include the tests
   src = fetchFromGitHub {

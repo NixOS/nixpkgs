@@ -5,8 +5,8 @@
 
   # Native build inputs
   docbook-xsl-nons,
+  gi-docgen,
   gobject-introspection,
-  gtk-doc,
   meson,
   ninja,
   pkg-config,
@@ -32,7 +32,7 @@
   libjpeg,
   libjxl,
   librsvg,
-  libspng,
+  libpng,
   libtiff,
   libwebp,
   matio,
@@ -52,20 +52,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.16.1";
+  version = "8.17.2";
 
   outputs = [
     "bin"
     "out"
     "man"
     "dev"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [ "devdoc" ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F2ymfvqwuCtNtFIOLgXvqRWATSMaeV7EQKYyQalCNfc=";
+    hash = "sha256-Jwb1bH0y3lmv/IU5JqcnAxiMK4gj+aTBj5nLKZ+XnKY=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -73,17 +74,20 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  nativeBuildInputs =
-    [
-      docbook-xsl-nons
-      gobject-introspection
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [
-      gtk-doc
-    ];
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  nativeBuildInputs = [
+    docbook-xsl-nons
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [
+    gi-docgen
+  ];
 
   buildInputs = [
     glib
@@ -105,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libjxl
     librsvg
-    libspng
+    libpng
     libtiff
     libwebp
     matio
@@ -121,16 +125,20 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  mesonFlags =
-    [
-      (lib.mesonEnable "pdfium" false)
-      (lib.mesonEnable "nifti" false)
-      (lib.mesonEnable "introspection" withIntrospection)
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) (
-      lib.mesonBool "gtk_doc" true
-    )
-    ++ lib.optional (imagemagick == null) (lib.mesonEnable "magick" false);
+  mesonFlags = [
+    (lib.mesonEnable "pdfium" false)
+    (lib.mesonEnable "nifti" false)
+    (lib.mesonEnable "spng" false) # we want to use libpng
+    (lib.mesonEnable "introspection" withIntrospection)
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) (
+    lib.mesonBool "docs" true
+  )
+  ++ lib.optional (imagemagick == null) (lib.mesonEnable "magick" false);
+
+  postFixup = ''
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     tests = {
@@ -145,17 +153,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v([0-9.]+)"
+        "^v([0-9.]+)$"
       ];
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/libvips/libvips/blob/${finalAttrs.src.rev}/ChangeLog";
     homepage = "https://www.libvips.org/";
     description = "Image processing system for large images";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       kovirobi
       anthonyroussel
     ];
@@ -163,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
       "vips"
       "vips-cpp"
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "vips";
   };
 })

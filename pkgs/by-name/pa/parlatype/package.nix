@@ -6,6 +6,7 @@
   desktop-file-utils,
   gettext,
   glib,
+  gobject-introspection,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
@@ -16,25 +17,27 @@
   meson,
   ninja,
   pkg-config,
+  pocketsphinx,
   python3,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "gkarsay";
     repo = "parlatype";
-    rev = "v${version}";
-    sha256 = "1wi9f23zgvsa98xcxgghm53jlafnr3pan1zl4gkn0yd8b2d6avhk";
+    tag = "v${version}";
+    sha256 = "1kjsbwr08k1kzaan555zjk37r3l5qhpgrvjb1p57dnygk2g3hsm2";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     gettext
+    gobject-introspection
     itstool
     libxml2
     meson
@@ -56,11 +59,17 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     isocodes
     libadwaita
+    pocketsphinx
   ];
 
   postPatch = ''
     patchShebangs libparlatype/tests/data/generate_config_data
   '';
+
+  mesonFlags = [
+    "-Dgir=true"
+    "-Dpocketsphinx=true"
+  ];
 
   doCheck = false;
 

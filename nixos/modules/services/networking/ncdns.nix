@@ -202,28 +202,27 @@ in
     };
 
     services.ncdns.settings = mkDefaultAttrs {
-      ncdns =
-        {
-          # Namecoin RPC
-          namecoinrpcaddress = "${cfgs.namecoind.rpc.address}:${toString cfgs.namecoind.rpc.port}";
-          namecoinrpcusername = cfgs.namecoind.rpc.user;
-          namecoinrpcpassword = cfgs.namecoind.rpc.password;
+      ncdns = {
+        # Namecoin RPC
+        namecoinrpcaddress = "${cfgs.namecoind.rpc.address}:${toString cfgs.namecoind.rpc.port}";
+        namecoinrpcusername = cfgs.namecoind.rpc.user;
+        namecoinrpcpassword = cfgs.namecoind.rpc.password;
 
-          # Identity
-          selfname = cfg.identity.hostname;
-          hostmaster = cfg.identity.hostmaster;
-          selfip = cfg.identity.address;
+        # Identity
+        selfname = cfg.identity.hostname;
+        hostmaster = cfg.identity.hostmaster;
+        selfip = cfg.identity.address;
 
-          # Other
-          bind = "${cfg.address}:${toString cfg.port}";
-        }
-        // lib.optionalAttrs cfg.dnssec.enable {
-          # DNSSEC
-          publickey = "../.." + cfg.dnssec.keys.public;
-          privatekey = "../.." + cfg.dnssec.keys.private;
-          zonepublickey = "../.." + cfg.dnssec.keys.zonePublic;
-          zoneprivatekey = "../.." + cfg.dnssec.keys.zonePrivate;
-        };
+        # Other
+        bind = "${cfg.address}:${toString cfg.port}";
+      }
+      // lib.optionalAttrs cfg.dnssec.enable {
+        # DNSSEC
+        publickey = "../.." + cfg.dnssec.keys.public;
+        privatekey = "../.." + cfg.dnssec.keys.private;
+        zonepublickey = "../.." + cfg.dnssec.keys.zonePublic;
+        zoneprivatekey = "../.." + cfg.dnssec.keys.zonePrivate;
+      };
 
       # Daemon
       service.daemon = true;

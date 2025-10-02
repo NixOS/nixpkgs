@@ -37,7 +37,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "Render markdown on the CLI, with pizzazz!";
+    description = "Render markdown on the CLI, with pizzazz";
     homepage = "https://github.com/charmbracelet/glow";
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.17.0";
+  version = "2.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "nibe";
     tag = version;
-    hash = "sha256-wq+Gtt2oW8koxOqu3z8G3XvHo6Ur+FhWPe+KslDG754=";
+    hash = "sha256-1Awf/7AUSsLo9O2GrVvdlHm5Fcj2CQ7TdKY152bogfQ=";
   };
 
   pythonRelaxDeps = [ "async-modbus" ];
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "nibe" ];
 

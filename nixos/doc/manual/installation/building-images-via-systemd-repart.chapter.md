@@ -9,7 +9,8 @@ images and exposes it's entire interface via the `repartConfig` option.
 An example of how to build an image:
 
 ```nix
-{ config, modulesPath, ... }: {
+{ config, modulesPath, ... }:
+{
 
   imports = [ "${modulesPath}/image/repart.nix" ];
 
@@ -39,12 +40,18 @@ An example of how to build an image:
 }
 ```
 
-## Nix Store Partition {#sec-image-repart-store-partition}
+## Nix Store Paths {#sec-image-repart-store-paths}
+
+If you want to rewrite Nix store paths, e.g., to remove the `/nix/store` prefix
+or to nest it below a parent path, you can do that through the
+`nixStorePrefix` option.
+
+### Nix Store Partition {#sec-image-repart-store-partition}
 
 You can define a partition that only contains the Nix store and then mount it
 under `/nix/store`. Because the `/nix/store` part of the paths is already
-determined by the mount point, you have to set `stripNixStorePrefix = true;` so
-that the prefix is stripped from the paths before copying them into the image.
+determined by the mount point, you have to set `nixStorePrefix = "/"` so
+that `/nix/store` is stripped from the paths before copying them into the image.
 
 ```nix
 {
@@ -53,10 +60,46 @@ that the prefix is stripped from the paths before copying them into the image.
   image.repart.partitions = {
     "store" = {
       storePaths = [ config.system.build.toplevel ];
-      stripNixStorePrefix = true;
+      nixStorePrefix = "/";
       repartConfig = {
         Type = "linux-generic";
         Label = "nix-store";
+        # ...
+      };
+    };
+  };
+}
+```
+
+### Nix Store Subvolume {#sec-image-repart-store-subvolume}
+
+Alternatively, you can create a Btrfs subvolume `/@nix-store` containing the
+Nix store and mount it on `/nix/store`:
+
+```nix
+{
+  fileSystems."/" = {
+    device = "/dev/disk/by-partlabel/root";
+    fsType = "btrfs";
+    options = [ "subvol=/@" ];
+  };
+
+  fileSystems."/nix/store" = {
+    device = "/dev/disk/by-partlabel/root";
+    fsType = "btrfs";
+    options = [ "subvol=/@nix-store" ];
+  };
+
+  image.repart.partitions = {
+    "root" = {
+      storePaths = [ config.system.build.toplevel ];
+      nixStorePrefix = "/@nix-store";
+      repartConfig = {
+        Type = "root";
+        Label = "root";
+        Format = "btrfs";
+        Subvolumes = "/@ /@nix-store";
+        MakeDirectories = "/@ /@nix-store";
         # ...
       };
     };
@@ -88,43 +131,52 @@ let
   efiArch = pkgs.stdenv.hostPlatform.efiArch;
 in
 (pkgs.nixos [
-  ({ config, lib, pkgs, modulesPath, ... }: {
+  (
+    {
+      config,
+      lib,
+      pkgs,
+      modulesPath,
+      ...
+    }:
+    {
 
-    imports = [ "${modulesPath}/image/repart.nix" ];
+      imports = [ "${modulesPath}/image/repart.nix" ];
 
-    boot.loader.grub.enable = false;
+      boot.loader.grub.enable = false;
 
-    fileSystems."/".device = "/dev/disk/by-label/nixos";
+      fileSystems."/".device = "/dev/disk/by-label/nixos";
 
-    image.repart = {
-      name = "image";
-      partitions = {
-        "esp" = {
-          contents = {
-            "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
-              "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
+      image.repart = {
+        name = "image";
+        partitions = {
+          "esp" = {
+            contents = {
+              "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
+                "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
 
-            "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
-              "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+              "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
+                "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+            };
+            repartConfig = {
+              Type = "esp";
+              Format = "vfat";
+              SizeMinBytes = "96M";
+            };
           };
-          repartConfig = {
-            Type = "esp";
-            Format = "vfat";
-            SizeMinBytes = "96M";
-          };
-        };
-        "root" = {
-          storePaths = [ config.system.build.toplevel ];
-          repartConfig = {
-            Type = "root";
-            Format = "ext4";
-            Label = "nixos";
-            Minimize = "guess";
+          "root" = {
+            storePaths = [ config.system.build.toplevel ];
+            repartConfig = {
+              Type = "root";
+              Format = "ext4";
+              Label = "nixos";
+              Minimize = "guess";
+            };
           };
         };
       };
-    };
 
-  })
+    }
+  )
 ]).image
 ```

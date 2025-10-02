@@ -37,13 +37,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.31.0";
+  version = "3.35.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery";
     inherit version;
-    hash = "sha256-uJ3HFtvkq9t6T4c/cFAQAoe8mFFOBhTF1UzWqOn7CZE=";
+    hash = "sha256-WZ8mys8ZCs/ogAD2zF9Lyea6rHiZ5PQGygVPGQb3GWA=";
   };
 
   build-system = [ setuptools ];
@@ -58,7 +58,8 @@ buildPythonPackage rec {
     protobuf
     python-dateutil
     requests
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     bqstorage = [
@@ -75,19 +76,18 @@ buildPythonPackage rec {
     ipython = [ ipython ];
   };
 
-  nativeCheckInputs =
-    [
-      freezegun
-      google-cloud-datacatalog
-      google-cloud-storage
-      google-cloud-testutils
-      mock
-      psutil
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.pandas
-    ++ optional-dependencies.ipython;
+  nativeCheckInputs = [
+    freezegun
+    google-cloud-datacatalog
+    google-cloud-storage
+    google-cloud-testutils
+    mock
+    psutil
+    pytest-xdist
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.pandas
+  ++ optional-dependencies.ipython;
 
   # prevent google directory from shadowing google imports
   preCheck = ''

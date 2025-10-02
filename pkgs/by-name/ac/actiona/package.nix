@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Jmgr";
     repo = "actiona";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sJlzrrpmo2CbzChCtiyxqDtjoN58BN4Ptjm4sH83zAw=";
     fetchSubmodules = true;
   };
@@ -49,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtmultimedia
     qt6.qttools
     qt6.qt5compat
-  ] ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
+  ]
+  ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
 
   meta = {
     description = "Cross-platform automation tool";

@@ -120,22 +120,15 @@ stdenv.mkDerivation {
       name = "rename-lerp.patch";
       url = "https://github.com/DFHack/dfhack/commit/389dcf5cfcdb8bfb8deeb05fa5756c9f4f5709d1.patch";
       hash = "sha256-QuDtGURhP+nM+x+8GIKO5LrMcmBkl9JSHHIeqzqGIPQ=";
-    });
+    })
+    # Newer versions use SDL_GetBasePath and SDL_GetPrefPath with a Windows-esque directory
+    # that mismatches where we have historically stored data in nixpkgs:
+    # https://github.com/libsdl-org/SDL/blob/release-2.24.x/src/filesystem/unix/SDL_sysfilesystem.c#L136
+    # Use SDL_GetPrefPath since this takes XDG_DATA_HOME into account (which is correct).
+    ++ optional (versionAtLeast version "52.02-r2") ./use-df-linux-dir.patch;
 
   # gcc 11 fix
   CXXFLAGS = optionalString (versionOlder version "0.47.05-r3") "-fpermissive";
-
-  # As of
-  # https://github.com/DFHack/dfhack/commit/56e43a0dde023c5a4595a22b29d800153b31e3c4,
-  # dfhack gets its goodies from the directory above the Dwarf_Fortress
-  # executable, which leads to stock Dwarf Fortress and not the built
-  # environment where all the dfhack resources are symlinked to (typically
-  # ~/.local/share/df_linux). This causes errors like `tweak is not a
-  # recognized command` to be reported and dfhack to lose some of its
-  # functionality.
-  postPatch = ''
-    sed -i 's@cached_path = path_string.*@cached_path = getenv("DF_DIR");@' library/Process-linux.cpp
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -148,15 +141,16 @@ stdenv.mkDerivation {
   ];
 
   # We don't use system libraries because dfhack needs old C++ ABI.
-  buildInputs =
-    [ zlib ]
-    ++ optional isAtLeast50 SDL2
-    ++ optional (!isAtLeast50) SDL
-    ++ optionals enableStoneSense [
-      allegro5
-      libGLU
-      libGL
-    ];
+  buildInputs = [
+    zlib
+  ]
+  ++ optional isAtLeast50 SDL2
+  ++ optional (!isAtLeast50) SDL
+  ++ optionals enableStoneSense [
+    allegro5
+    libGLU
+    libGL
+  ];
 
   preConfigure = ''
     # Trick the build system into believing we have .git.
@@ -164,27 +158,27 @@ stdenv.mkDerivation {
     touch .git/index .git/modules/library/xml/index
   '';
 
-  cmakeFlags =
-    [
-      # Race condition in `Generating codegen.out.xml and df/headers` that is fixed when using Ninja.
-      "-GNinja"
-      "-DDFHACK_BUILD_ARCH=${arch}"
+  cmakeFlags = [
+    # Race condition in `Generating codegen.out.xml and df/headers` that is fixed when using Ninja.
+    "-GNinja"
+    "-DDFHACK_BUILD_ARCH=${arch}"
 
-      # Don't download anything.
-      "-DDOWNLOAD_RUBY=OFF"
-      "-DUSE_SYSTEM_SDL2=ON"
+    # Don't download anything.
+    "-DDOWNLOAD_RUBY=OFF"
+    "-DUSE_SYSTEM_SDL2=ON"
 
-      # Ruby support with dfhack is very spotty and was removed in version 50.
-      "-DBUILD_RUBY=OFF"
-    ]
-    ++ optionals enableStoneSense [
-      "-DBUILD_STONESENSE=ON"
-      "-DSTONESENSE_INTERNAL_SO=OFF"
-    ];
+    # Ruby support with dfhack is very spotty and was removed in version 50.
+    "-DBUILD_RUBY=OFF"
+  ]
+  ++ optionals enableStoneSense [
+    "-DBUILD_STONESENSE=ON"
+    "-DSTONESENSE_INTERNAL_SO=OFF"
+  ];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=deprecated-enum-enum-conversion"
-  ] ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
+  ]
+  ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
 
   preFixup = ''
     # Wrap dfhack scripts.
@@ -242,7 +236,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       robbinch
       a1russell
-      abbradar
       numinit
       ncfavier
     ];

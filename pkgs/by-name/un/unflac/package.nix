@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A command line tool for fast frame accurate audio image + cue sheet splitting";
+    description = "Command line tool for fast frame accurate audio image + cue sheet splitting";
     homepage = "https://sr.ht/~ft/unflac/";
     license = licenses.mit;
     platforms = platforms.all;

@@ -23,6 +23,12 @@ let
     data-dir ${cfg.dataDir}
 
     ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
+
+    ${optionalString ((builtins.length cfg.log) > 0) ''
+      log ${concatStringsSep " " cfg.log}
+    ''}
+
+    wkpf-strict ${if cfg.wkpfStrict then "yes" else "no"}
   '';
 
   addrOpts =
@@ -36,7 +42,7 @@ let
         };
 
         prefixLength = mkOption {
-          type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+          type = types.ints.between 0 (if v == 4 then 32 else 128);
           description = ''
             Subnet mask of the interface, specified as the number of
             bits in the prefix ("${if v == 4 then "24" else "64"}").
@@ -132,6 +138,21 @@ in
           }
         '';
       };
+
+      log = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "Packet errors to log (drop, reject, icmp, self)";
+        example = literalExpression ''
+          [ "drop" "reject" "icmp" "self" ]
+        '';
+      };
+
+      wkpfStrict = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable restrictions on the use of the well-known prefix (64:ff9b::/96) - prevents translation of non-global IPv4 ranges when using the well-known prefix. Must be enabled for RFC 6052 compatibility.";
+      };
     };
   };
 
@@ -171,13 +192,16 @@ in
       };
     };
 
+    environment.etc."tayga.conf".source = configFile;
+
     systemd.services.tayga = {
       description = "Stateless NAT64 implementation";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      reloadTriggers = [ configFile ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/tayga -d --nodetach --config ${configFile}";
+        ExecStart = "${cfg.package}/bin/tayga -d --nodetach --config /etc/tayga.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         Restart = "always";
 

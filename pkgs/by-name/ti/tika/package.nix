@@ -5,6 +5,7 @@
   jdk17,
   jre17_minimal,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   mvnDepsHash ? null,
   enableGui ? true,
@@ -48,6 +49,14 @@ maven.buildMavenPackage rec {
     tag = version;
     hash = "sha256-nuiE+MWJNA4PLprAC0vDBadk34TFsVEDBcCZct1XRxo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-54988.patch";
+      url = "https://github.com/apache/tika/commit/bfee6d5569fe9197c4ea947a96e212825184ca33.patch";
+      hash = "sha256-LHM2SafZ85f53mWWSbA4ZQ/QSiDeiwNnzAbLGqGQqPM=";
+    })
+  ];
 
   buildOffline = true;
 

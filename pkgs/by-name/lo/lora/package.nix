@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Lora is a well-balanced contemporary serif with roots in calligraphy";
+    description = "Lora Font: well-balanced contemporary serif with roots in calligraphy";
     homepage = "https://github.com/cyrealtype/lora";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

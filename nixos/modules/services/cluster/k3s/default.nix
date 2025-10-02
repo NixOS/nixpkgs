@@ -26,21 +26,20 @@ let
   mkManifestTarget =
     name: if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name) then name else name + ".yaml";
   # Produces a list containing all duplicate manifest names
-  duplicateManifests =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.manifests);
+  duplicateManifests = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.manifests
+  );
   # Produces a list containing all duplicate chart names
-  duplicateCharts =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.charts);
+  duplicateCharts = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.charts
+  );
 
   # Converts YAML -> JSON -> Nix
   fromYaml =
     path:
-    with builtins;
-    fromJSON (
-      readFile (
-        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ yq-go ]; } ''
+    builtins.fromJSON (
+      builtins.readFile (
+        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
           yq --no-colors --output-format json ${path} > $out
         ''
       )
@@ -83,6 +82,8 @@ let
         nativeBuildInputs = with pkgs; [
           kubernetes-helm
           cacert
+          # Helm requires HOME to refer to a writable dir
+          writableTmpDirAsHomeHook
         ];
       }
       ''
@@ -294,7 +295,7 @@ let
           description = ''
             Extra HelmChart field definitions that are merged with the rest of the HelmChart
             custom resource. This can be used to set advanced fields or to overwrite
-            generated fields. See https://docs.k3s.io/helm#helmchart-field-definitions
+            generated fields. See <https://docs.k3s.io/helm#helmchart-field-definitions>
             for possible fields.
           '';
         };
@@ -631,7 +632,7 @@ in
             finalImageTag = "21.1.2-debian-11-r0";
           })
 
-          config.services.k3s.package.airgapImages
+          config.services.k3s.package.airgap-images
         ]
       '';
       description = ''
@@ -782,7 +783,7 @@ in
       ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node")
       ++ (lib.optional (
         cfg.role == "agent" && cfg.configPath == null && cfg.serverAddr == ""
-      ) "k3s: ServerAddr or configPath (with 'server' key) should be set if role is 'agent'")
+      ) "k3s: serverAddr or configPath (with 'server' key) should be set if role is 'agent'")
       ++ (lib.optional
         (cfg.role == "agent" && cfg.configPath == null && cfg.tokenFile == null && cfg.token == "")
         "k3s: Token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"

@@ -149,7 +149,7 @@ let
 
     src = fetchFromGitHub {
       owner = "evaleev";
-      repo = pname;
+      repo = "libint";
       rev = "v${version}";
       hash = "sha256-oV/RWWfD0Kf2egI40fV8z2atG+4Cs+9+Wvy0euNNjtM=";
     };
@@ -176,39 +176,39 @@ let
       python3
       perl
       gmpxx
-    ] ++ lib.optional enableFortran gfortran;
+    ]
+    ++ lib.optional enableFortran gfortran;
 
     buildInputs = [
       boost
       eigen
     ];
 
-    configureFlags =
-      [
-        "--with-max-am=${builtins.toString maxAm}"
-        "--with-eri-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriAm)}"
-        "--with-eri3-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3Am)}"
-        "--with-eri2-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2Am)}"
-        "--with-eri-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriOptAm)}"
-        "--with-eri3-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3OptAm)}"
-        "--with-eri2-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2OptAm)}"
-        "--with-cartgauss-ordering=${cartGaussOrd}"
-        "--with-shgauss-ordering=${shGaussOrd}"
-        "--with-shell-set=${shellSet}"
-      ]
-      ++ lib.optional enableFMA "--enable-fma"
-      ++ lib.optional (eriDeriv > 0) "--enable-eri=${builtins.toString eriDeriv}"
-      ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${builtins.toString eri2Deriv}"
-      ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${builtins.toString eri3Deriv}"
-      ++ lib.optionals enableOneBody [
-        "--enable-1body=${builtins.toString oneBodyDerivOrd}"
-        "--enable-1body-property-derivs"
-      ]
-      ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${builtins.toString multipoleOrd}"
-      ++ lib.optional enableGeneric "--enable-generic"
-      ++ lib.optional enableContracted "--enable-contracted-ints"
-      ++ lib.optional eri3PureSh "--enable-eri3-pure-sh"
-      ++ lib.optional eri2PureSh "--enable-eri2-pure-sh";
+    configureFlags = [
+      "--with-max-am=${builtins.toString maxAm}"
+      "--with-eri-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriAm)}"
+      "--with-eri3-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3Am)}"
+      "--with-eri2-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2Am)}"
+      "--with-eri-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriOptAm)}"
+      "--with-eri3-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3OptAm)}"
+      "--with-eri2-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2OptAm)}"
+      "--with-cartgauss-ordering=${cartGaussOrd}"
+      "--with-shgauss-ordering=${shGaussOrd}"
+      "--with-shell-set=${shellSet}"
+    ]
+    ++ lib.optional enableFMA "--enable-fma"
+    ++ lib.optional (eriDeriv > 0) "--enable-eri=${builtins.toString eriDeriv}"
+    ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${builtins.toString eri2Deriv}"
+    ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${builtins.toString eri3Deriv}"
+    ++ lib.optionals enableOneBody [
+      "--enable-1body=${builtins.toString oneBodyDerivOrd}"
+      "--enable-1body-property-derivs"
+    ]
+    ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${builtins.toString multipoleOrd}"
+    ++ lib.optional enableGeneric "--enable-generic"
+    ++ lib.optional enableContracted "--enable-contracted-ints"
+    ++ lib.optional eri3PureSh "--enable-eri3-pure-sh"
+    ++ lib.optional eri2PureSh "--enable-eri2-pure-sh";
 
     preConfigure = ''
       ./autogen.sh
@@ -218,7 +218,7 @@ let
 
     installPhase = ''
       mkdir -p $out
-      cp ${pname}-${version}.tgz $out/.
+      cp libint-${version}.tgz $out/.
     '';
 
     enableParallelBuilding = true;
@@ -229,12 +229,13 @@ let
   codeComp = stdenv.mkDerivation {
     inherit pname version;
 
-    src = "${codeGen}/${pname}-${version}.tgz";
+    src = "${codeGen}/libint-${version}.tgz";
 
     nativeBuildInputs = [
       python3
       cmake
-    ] ++ lib.optional enableFortran gfortran;
+    ]
+    ++ lib.optional enableFortran gfortran;
 
     buildInputs = [
       boost
@@ -244,12 +245,11 @@ let
     # Default is just "double", but SSE2 is available on all x86_64 CPUs.
     # AVX support is advertised, but does not work.
     # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
-    cmakeFlags =
-      [
-        "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"
-      ]
-      ++ lib.optional enableFortran "-DENABLE_FORTRAN=ON"
-      ++ lib.optional enableSSE "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble";
+    cmakeFlags = [
+      "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"
+    ]
+    ++ lib.optional enableFortran "-DENABLE_FORTRAN=ON"
+    ++ lib.optional enableSSE "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble";
 
     # Can only build in the source-tree. A lot of preprocessing magic fails otherwise.
     dontUseCmakeBuildDir = true;

@@ -6,17 +6,18 @@
   intel-compute-runtime,
   openvino,
   stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.22.3";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     tag = "v${version}";
-    hash = "sha256-yCrfaAoxvsDngfayw13/HqL4RW/gC+eRls6WgIELWHE=";
+    hash = "sha256-5QkXWuMFNsYNsW8lgo9FQIZ5NuLiRZCFKGWedpddi8Y=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +29,11 @@ stdenv.mkDerivation rec {
     addDriverRunpath $out/lib/libze_loader.so
   '';
 
-  passthru.tests = {
-    inherit intel-compute-runtime openvino;
+  passthru = {
+    tests = {
+      inherit intel-compute-runtime openvino;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

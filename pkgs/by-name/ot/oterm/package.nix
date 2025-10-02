@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.12.1";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = version;
-    hash = "sha256-6y73Lh3cV/fnvpZWzfyD4CletC4UV2zl+I7l88BYPIk=";
+    hash = "sha256-zTRCAg5BjwdP2s1LZrOjLctqYe/jX4Mc3gK+IwVoLR4=";
   };
 
   pythonRelaxDeps = [
@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     "pydantic"
     "textual"
     "typer"
+    "fastmcp"
   ];
 
   build-system = with python3Packages; [ hatchling ];

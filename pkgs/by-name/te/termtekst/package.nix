@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "termtekst";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zevv";

@@ -22,6 +22,7 @@ Example configuration:
 {
   services.pihole-ftl = {
     enable = true;
+    openFirewallDNS = true;
     openFirewallDHCP = true;
     queryLogDeleter.enable = true;
     lists = [
@@ -98,17 +99,16 @@ to configure additional interfaces with different configuration, use
 {
   services.pihole-ftl = {
     settings.misc.dnsmasq_lines = [
-        # Specify the secondary interface
-        "interface=enp1s0"
-        # A different device is the router on this network, e.g. the one
-        # provided by your ISP
-        "dhcp-option=enp1s0,option:router,192.168.0.1"
-        # Specify the IPv4 ranges to allocate, with a 1-day lease time
-        "dhcp-range=enp1s0,192.168.0.10,192.168.0.253,1d"
-        # Enable IPv6
-        "dhcp-range=::f,::ff,constructor:enp1s0,ra-names,ra-stateless"
-      ];
-    };
+      # Specify the secondary interface
+      "interface=enp1s0"
+      # A different device is the router on this network, e.g. the one
+      # provided by your ISP
+      "dhcp-option=enp1s0,option:router,192.168.0.1"
+      # Specify the IPv4 ranges to allocate, with a 1-day lease time
+      "dhcp-range=enp1s0,192.168.0.10,192.168.0.253,1d"
+      # Enable IPv6
+      "dhcp-range=::f,::ff,constructor:enp1s0,ra-names,ra-stateless"
+    ];
   };
 }
 ```

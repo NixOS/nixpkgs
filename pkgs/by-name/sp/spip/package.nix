@@ -32,7 +32,7 @@ in
 
 stdenv.mkDerivation {
   pname = "spip";
-  version = "unstable-2023-04-19";
+  version = "0-unstable-2023-04-19";
 
   src = fetchFromGitHub {
     owner = "raphaelleman";
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A random forest model for splice prediction in genomics";
+    description = "Random forest model for splice prediction in genomics";
     license = licenses.mit;
     homepage = "https://github.com/raphaelleman/SPiP";
     maintainers = with maintainers; [ apraga ];

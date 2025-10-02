@@ -26,6 +26,8 @@
   libmysqlclient,
   withSQLite ? false,
   sqlite,
+  withTLSRPT ? true,
+  libtlsrpt,
 }:
 
 let
@@ -36,6 +38,9 @@ let
       "-DUSE_CYRUS_SASL"
       "-I${cyrus_sasl.dev}/include/sasl"
       "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
+      # Fix build with gcc15, no upstream fix for stable releases:
+      # https://www.mail-archive.com/postfix-devel@postfix.org/msg01270.html
+      "-std=gnu17"
     ]
     ++ lib.optional withPgSQL "-DHAS_PGSQL"
     ++ lib.optionals withMySQL [
@@ -48,6 +53,7 @@ let
       "-DHAS_LDAP"
       "-DUSE_LDAP_SASL"
     ]
+    ++ lib.optional withTLSRPT "-DUSE_TLSRPT"
   );
   auxlibs = lib.concatStringsSep " " (
     [
@@ -62,35 +68,36 @@ let
     ++ lib.optional withMySQL "-lmysqlclient"
     ++ lib.optional withSQLite "-lsqlite3"
     ++ lib.optional withLDAP "-lldap"
+    ++ lib.optional withTLSRPT "-ltlsrpt"
   );
 
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.10.2";
+  version = "3.10.4";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-vMpWQTLUz1+cnONU2rndNe6OniGQCGRiPIFdrBa/vCc=";
+    hash = "sha256-z7ZoYf6PlkeH3a6rFfPKPn7z3nMPlxca/EpeyjOMpEQ=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     m4
   ];
-  buildInputs =
-    [
-      db
-      openssl
-      cyrus_sasl
-      icu
-      libnsl
-      pcre2
-    ]
-    ++ lib.optional withPgSQL libpq
-    ++ lib.optional withMySQL libmysqlclient
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withLDAP openldap;
+  buildInputs = [
+    db
+    openssl
+    cyrus_sasl
+    icu
+    libnsl
+    pcre2
+  ]
+  ++ lib.optional withPgSQL libpq
+  ++ lib.optional withMySQL libmysqlclient
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withLDAP openldap
+  ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
@@ -183,16 +190,16 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.postfix.org/";
     changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
     description = "Fast, easy to administer, and secure mail server";
-    license = with licenses; [
+    license = with lib.licenses; [
       ipl10
       epl20
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       globin
       dotlambda
       lewo

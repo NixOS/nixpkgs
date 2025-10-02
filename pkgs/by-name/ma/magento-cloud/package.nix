@@ -4,7 +4,8 @@
   fetchurl,
   makeBinaryWrapper,
   php,
-  testers,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "magento-cloud";
@@ -32,12 +33,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "HOME=$TMPDIR magento-cloud --version";
-    };
   };
 
   meta = {

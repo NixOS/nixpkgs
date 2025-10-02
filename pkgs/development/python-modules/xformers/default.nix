@@ -26,18 +26,20 @@
   einops,
   transformers,
   timm,
-#, flash-attn
+  #, flash-attn
+  openmp,
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
+
+  # version 0.0.32.post2 was confirmed to break CUDA.
+  # Remove this note once the latest published revision "just works".
   version = "0.0.30";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -66,23 +68,27 @@ buildPythonPackage {
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
-  buildInputs = lib.optionals cudaSupport (
-    with cudaPackages;
-    [
-      # flash-attn build
-      cuda_cudart # cuda_runtime_api.h
-      libcusparse # cusparse.h
-      cuda_cccl # nv/target
-      libcublas # cublas_v2.h
-      libcusolver # cusolverDn.h
-      libcurand # curand_kernel.h
-    ]
-  );
+  buildInputs =
+    lib.optional stdenv.hostPlatform.isDarwin openmp
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        # flash-attn build
+        cuda_cudart # cuda_runtime_api.h
+        libcusparse # cusparse.h
+        cuda_cccl # nv/target
+        libcublas # cublas_v2.h
+        libcusolver # cusolverDn.h
+        libcurand # curand_kernel.h
+      ]
+    );
 
   nativeBuildInputs = [
     ninja
     which
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
+  ]
+  ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ])
+  ++ lib.optional stdenv.hostPlatform.isDarwin openmp.dev;
 
   dependencies = [
     numpy
@@ -123,9 +129,5 @@ buildPythonPackage {
     changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ happysalada ];
-    badPlatforms = [
-      # fatal error: 'omp.h' file not found
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

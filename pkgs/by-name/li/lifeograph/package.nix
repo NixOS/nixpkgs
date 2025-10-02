@@ -12,16 +12,17 @@
   libgcrypt,
   shared-mime-info,
   libshumate,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lifeograph";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchgit {
     url = "https://git.launchpad.net/lifeograph";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eb31/ncGH5+Wz1vPCHeEFP1AiKe29rAOg5SL2cjabCc=";
+    hash = "sha256-Zo3bMIAao055YhhIFR8AH43lMi6T82PrcYR3Cis/yK0=";
   };
 
   nativeBuildInputs = [
@@ -36,20 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     enchant
     gtkmm4
-    libchamplain
+    (libchamplain.override { withLibsoup3 = true; })
     libshumate
   ];
 
-  postInstall = ''
-    substituteInPlace $out/share/applications/net.sourceforge.Lifeograph.desktop \
-      --replace-fail "Exec=" "Exec=$out/bin/"
-  '';
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     homepage = "https://lifeograph.sourceforge.net/doku.php?id=start";
     description = "Off-line and private journal and note taking application";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ kyehn ];
     mainProgram = "lifeograph";
     platforms = lib.platforms.linux;
   };

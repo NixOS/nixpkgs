@@ -58,8 +58,8 @@ let
           finds structures that satisfy them. Structures are displayed graphically,
           and their appearance can be customized for the domain at hand.
         '';
-        homepage = "http://alloytools.org/";
-        downloadPage = "http://alloytools.org/download.html";
+        homepage = "https://alloytools.org/";
+        downloadPage = "https://alloytools.org/download.html";
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
         license = licenses.mit;
         platforms = platforms.unix;

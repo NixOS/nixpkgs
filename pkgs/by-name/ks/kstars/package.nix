@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   cfitsio,
   cmake,
   curl,
@@ -23,19 +22,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.6";
+  version = "3.7.8";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6hwWMmAGKJmldL8eTLQzzBsumk5thFoqGvm2dWk0Jpo=";
+    hash = "sha256-VbOu8p7Bq6UJBr05PVZein4LWzpdLo4838G1jXGNLAw=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://invent.kde.org/education/kstars/-/commit/92eb37bdb3e24bd06e6da9977f3bf76218c95339.diff";
-      hash = "sha256-f2m15op48FiPYsKJ7WudlejVwoiGYWGnX2QiCnBINU8=";
-    })
-  ];
 
   nativeBuildInputs = with kdePackages; [
     extra-cmake-modules
@@ -81,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_QT5" false)
     (cmakeFeature "INDI_PREFIX" "${indi-full}")
     (cmakeFeature "XPLANET_PREFIX" "${xplanet}")
-    (cmakeFeature "DATA_INSTALL_DIR" "$out/share/kstars/")
+    (cmakeFeature "DATA_INSTALL_DIR" (placeholder "out") + "/share/kstars/")
   ];
 
   meta = with lib; {
@@ -97,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       timput
-      hjones2199
       returntoreality
     ];
   };

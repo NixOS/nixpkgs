@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Therion – cave surveying software";
+    description = "Cave surveying software";
     homepage = "https://therion.speleo.sk/";
     changelog = "https://github.com/therion/therion/blob/${src.rev}/CHANGES";
     license = lib.licenses.gpl2Only;

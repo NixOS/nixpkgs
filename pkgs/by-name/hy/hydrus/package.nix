@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hydrus";
-  version = "624";
+  version = "631";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     tag = "v${version}";
-    hash = "sha256-fdg4ym3OT1OIG6gkYf1Y8PmKG2uxgnuEc7bCTJ11z/0=";
+    hash = "sha256-YZnlQIiq0dUGEnQgVCTvNS+kuSpXlaAN5UvZAQ3xeZM=";
   };
 
   nativeBuildInputs = [
@@ -99,40 +99,39 @@ python3Packages.buildPythonApplication rec {
     "doc"
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      # Move the hydrus module and related directories
-      mkdir -p $out/${python3Packages.python.sitePackages}
-      mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
-      # Fix random files being marked with execute permissions
-      chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
-      # Build docs
-      mkdocs build -d help
-      mkdir -p $doc/share/doc
-      mv help $doc/share/doc/hydrus
+    # Move the hydrus module and related directories
+    mkdir -p $out/${python3Packages.python.sitePackages}
+    mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
+    # Fix random files being marked with execute permissions
+    chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
+    # Build docs
+    mkdocs build -d help
+    mkdir -p $doc/share/doc
+    mv help $doc/share/doc/hydrus
 
-      # install the hydrus binaries
-      mkdir -p $out/bin
-      install -m0755 hydrus_server.py $out/bin/hydrus-server
-      install -m0755 hydrus_client.py $out/bin/hydrus-client
-      install -m0755 hydrus_test.py $out/bin/hydrus-test
+    # install the hydrus binaries
+    mkdir -p $out/bin
+    install -m0755 hydrus_server.py $out/bin/hydrus-server
+    install -m0755 hydrus_client.py $out/bin/hydrus-client
+    install -m0755 hydrus_test.py $out/bin/hydrus-test
 
-      # desktop item
-      mkdir -p "$out/share/icons/hicolor/scalable/apps"
-      ln -s "$doc/share/doc/hydrus/assets/hydrus-white.svg" "$out/share/icons/hicolor/scalable/apps/hydrus-client.svg"
-    ''
-    + lib.optionalString enableSwftools ''
-      mkdir -p $out/${python3Packages.python.sitePackages}/bin
-      # swfrender seems to have to be called sfwrender_linux
-      # not sure if it can be loaded through PATH, but this is simpler
-      # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
-      ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
-    ''
-    + ''
-      runHook postInstall
-    '';
+    # desktop item
+    mkdir -p "$out/share/icons/hicolor/scalable/apps"
+    ln -s "$doc/share/doc/hydrus/assets/hydrus-white.svg" "$out/share/icons/hicolor/scalable/apps/hydrus-client.svg"
+  ''
+  + lib.optionalString enableSwftools ''
+    mkdir -p $out/${python3Packages.python.sitePackages}/bin
+    # swfrender seems to have to be called sfwrender_linux
+    # not sure if it can be loaded through PATH, but this is simpler
+    # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
+    ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   checkPhase = ''
     runHook preCheck

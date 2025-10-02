@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Multithreaded daemon maintaining the NIS binding informations.";
+    description = "Multithreaded daemon maintaining the NIS binding informations";
     homepage = "https://github.com/thkukuk/ypbind-mt";
     changelog = "https://github.com/thkukuk/ypbind-mt/blob/master/NEWS";
     license = lib.licenses.gpl2Plus;

@@ -62,7 +62,7 @@ let
     stdenv.cc.cc
     stdenv.cc.libc
   ];
-  version = "1.0.32";
+  version = "1.0.46";
 in
 stdenv.mkDerivation {
   pname = "tana";
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
-    hash = "sha256-oAW9Vx4z0TOweKA6bsmCm7DY72pFWBnPLG0dS05oCw8=";
+    hash = "sha256-WBPTJ2eca5XuccblC31DZ5mCdFm46cXjP4GHyakSalY=";
   };
 
   nativeBuildInputs = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Tana is an intelligent all-in-one workspace";
+    description = "Intelligent all-in-one workspace";
     longDescription = ''
       At its core, Tana is an outline editor which can be extended to
       cover multiple use-cases and different workflows.

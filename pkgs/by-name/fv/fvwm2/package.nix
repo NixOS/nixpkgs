@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     perl
     python3Packages.python
     readline
-  ] ++ lib.optional enableGestures libstroke;
+  ]
+  ++ lib.optional enableGestures libstroke;
 
   pythonPath = [
     python3Packages.pyxdg

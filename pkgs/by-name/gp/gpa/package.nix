@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://dev.gnupg.org/source/gpa/browse/master/NEWS;gpa-${version}?view=raw";
     description = "Graphical user interface for the GnuPG";
     homepage = "https://www.gnupg.org/related_software/gpa/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "gpa";
   };
 }

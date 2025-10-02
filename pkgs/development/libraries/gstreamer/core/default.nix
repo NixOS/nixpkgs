@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.26.0";
+  version = "1.26.5";
 
   outputs = [
     "bin"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gy7kAoAQwlt3bv+nw5bH4+GGG2C5QX5Bb0kUq83/J58=";
+    hash = "sha256-Cn7bDntC2+a1dfzmGkgIo/ayDghaHq7LwCXQ7CHx53Q=";
   };
 
   depsBuildBuild = [
@@ -60,48 +60,46 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      bison
-      flex
-      python3
-      makeWrapper
-      glib
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap # for setcap binary
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ]
-    ++ lib.optionals withRust [
-      rustc
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    bison
+    flex
+    python3
+    makeWrapper
+    glib
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap # for setcap binary
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withRust [
+    rustc
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-    ]
-    ++ lib.optionals hasElfutils [
-      elfutils
-    ]
-    ++ lib.optionals withLibunwind [
-      libunwind
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+  ]
+  ++ lib.optionals hasElfutils [
+    elfutils
+  ]
+  ++ lib.optionals withLibunwind [
+    libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     glib

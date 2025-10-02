@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "25.0";
+  version = "25.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     tag = "v${version}";
-    hash = "sha256-Czq8Wx8ThKLcR8GjdlRND+Y1nY1PTl6wDkz9ml83DBk=";
+    hash = "sha256-cLofkkp2T6Y9nQ5LIS7w9URZlt8DQNN8dm3NnrvcKWY=";
   };
 
   # Remove after package bump
@@ -95,7 +95,7 @@ buildPythonPackage rec {
     "test_timing"
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   meta = with lib; {
     description = "Embedded control & testing library";

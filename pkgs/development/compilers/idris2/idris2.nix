@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     clang
     platformChez
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
   buildInputs = [
     platformChez
     gmp

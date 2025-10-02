@@ -98,37 +98,36 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glfw
-      glew
-      fftwFloat
-      volk
-      zstd
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libX11
-    ++ lib.optional airspy_source airspy
-    ++ lib.optional airspyhf_source airspyhf
-    ++ lib.optional bladerf_source libbladeRF
-    ++ lib.optional hackrf_source hackrf
-    ++ lib.optional limesdr_source limesuite
-    ++ lib.optionals rtl_sdr_source [
-      rtl-sdr-osmocom
-      libusb1
-    ]
-    ++ lib.optional sdrplay_source sdrplay
-    ++ lib.optional soapy_source soapysdr-with-plugins
-    ++ lib.optionals plutosdr_source [
-      libiio
-      libad9361
-    ]
-    ++ lib.optionals usrp_source [
-      uhd
-      boost
-    ]
-    ++ lib.optional audio_sink rtaudio
-    ++ lib.optional portaudio_sink portaudio
-    ++ lib.optional m17_decoder codec2;
+  buildInputs = [
+    glfw
+    glew
+    fftwFloat
+    volk
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libX11
+  ++ lib.optional airspy_source airspy
+  ++ lib.optional airspyhf_source airspyhf
+  ++ lib.optional bladerf_source libbladeRF
+  ++ lib.optional hackrf_source hackrf
+  ++ lib.optional limesdr_source limesuite
+  ++ lib.optionals rtl_sdr_source [
+    rtl-sdr-osmocom
+    libusb1
+  ]
+  ++ lib.optional sdrplay_source sdrplay
+  ++ lib.optional soapy_source soapysdr-with-plugins
+  ++ lib.optionals plutosdr_source [
+    libiio
+    libad9361
+  ]
+  ++ lib.optionals usrp_source [
+    uhd
+    boost
+  ]
+  ++ lib.optional audio_sink rtaudio
+  ++ lib.optional portaudio_sink portaudio
+  ++ lib.optional m17_decoder codec2;
 
   cmakeFlags = [
     # Sources

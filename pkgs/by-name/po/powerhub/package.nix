@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "powerhub";
-  version = "2.0.7";
+  version = "2.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdrianVollmer";
     repo = "PowerHub";
     tag = version;
-    hash = "sha256-ejdG/vMINyvToP8GAhRMdp/Jq8rZNBubDbRcg2i05lM=";
+    hash = "sha256-vZIdYjP7F7lUauOCkouwUpR/gO0gEjFR8HLqD3ZjS3E=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -54,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     cd tests/helpers
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Post exploitation tool based on a web application, focusing on bypassing endpoint protection and application whitelisting";
     homepage = "https://github.com/AdrianVollmer/PowerHub";
     changelog = "https://github.com/AdrianVollmer/PowerHub/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "powerhub";
   };
 }

@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.0";
   pname = "beancount";
   pyproject = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "beancount";
     repo = "beancount";
     tag = version;
-    hash = "sha256-ogjBW/NGlMmhYlzcx3EWWoVi+OOEv2Wm49tzwMiNb8A=";
+    hash = "sha256-XWTgaBvB4/SONL44afvprZwJUVrkoda5XLGNxad0kec=";
   };
 
   build-system = [

@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -Dm755 srht-gen-oauth-tok $out/bin/srht-gen-oauth-tok";
 
-  passthru.tests.sourcehut = nixosTests.sourcehut;
-
   meta = {
     description = "Script to register a new Sourcehut OAuth token for a given user";
     longDescription = ''

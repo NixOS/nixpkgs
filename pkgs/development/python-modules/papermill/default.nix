@@ -62,7 +62,8 @@ buildPythonPackage rec {
     requests
     tenacity
     tqdm
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
 
   optional-dependencies = {
     azure = [
@@ -76,44 +77,42 @@ buildPythonPackage rec {
     s3 = [ boto3 ];
   };
 
-  nativeCheckInputs =
-    [
-      ipykernel
-      moto
-      pytest-mock
-      pytestCheckHook
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ optional-dependencies.azure
-    ++ optional-dependencies.s3
-    ++ optional-dependencies.gcs;
+  nativeCheckInputs = [
+    ipykernel
+    moto
+    pytest-mock
+    pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.azure
+  ++ optional-dependencies.s3
+  ++ optional-dependencies.gcs;
   versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "papermill" ];
 
-  # Using pytestFlagsArray to prevent disabling false positives
-  pytestFlagsArray = [
-    # AssertionError: 'error' != 'display_data'
-    "--deselect=papermill/tests/test_execute.py::TestBrokenNotebook2::test"
+  disabledTests = [
+    # pytest 8 compat
+    "test_read_with_valid_file_extension"
 
-    # AssertionError: '\x1b[31mSystemExit\x1b[39m\x1b[31m:\x1b[39m 1\n' != '\x1b[0;31mSystemExit\x1b[0m\x1b[0;31m:\x1b[0m 1\n'
-    "--deselect=papermill/tests/test_execute.py::TestOutputFormatting::test_output_formatting"
+    # azure datalake api compat issue
+    "test_create_adapter"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # might fail due to the sandbox
+    "test_end2end_autosave_slow_notebook"
   ];
-
-  disabledTests =
-    [
-      # pytest 8 compat
-      "test_read_with_valid_file_extension"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # might fail due to the sandbox
-      "test_end2end_autosave_slow_notebook"
-    ];
 
   disabledTestPaths = [
     # ImportError: cannot import name 'mock_s3' from 'moto'
     "papermill/tests/test_s3.py"
+
+    # AssertionError: 'error' != 'display_data'
+    "papermill/tests/test_execute.py::TestBrokenNotebook2::test"
+
+    # AssertionError: '\x1b[31mSystemExit\x1b[39m\x1b[31m:\x1b[39m 1\n' != '\x1b[0;31mSystemExit\x1b[0m\x1b[0;31m:\x1b[0m 1\n'
+    "papermill/tests/test_execute.py::TestOutputFormatting::test_output_formatting"
   ];
 
   __darwinAllowLocalNetworking = true;

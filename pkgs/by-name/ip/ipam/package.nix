@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitea,
   installShellFiles,
@@ -28,19 +29,19 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ipam \
       --bash <($out/bin/ipam completion bash) \
       --fish <($out/bin/ipam completion fish) \
       --zsh <($out/bin/ipam completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli based IPAM written in Go with PowerDNS support";
     homepage = "https://ipam.lauka.net/";
     changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "ipam";
   };
 }

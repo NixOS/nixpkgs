@@ -6,32 +6,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "arjun";
-  version = "2.2.2";
+  version = "2.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "Arjun";
     tag = version;
-    hash = "sha256-odVUFs517RSp66MymniSeTKTntQtXomjC68Hhdsglf0=";
+    hash = "sha256-XEfCQEvRCvmNQ8yOlaR0nd7knhK1fQIrXEfQgrdVDrs=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
+  dependencies = with python3.pkgs; [
     dicttoxml
+    ratelimit
+    requests
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "arjun"
-  ];
+  pythonImportsCheck = [ "arjun" ];
 
   meta = {
     description = "HTTP parameter discovery suite";

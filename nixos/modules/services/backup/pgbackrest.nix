@@ -52,13 +52,15 @@ let
       ))
     ];
 
-  fullConfig =
-    {
-      global = normalize (cfg.settings // flattenWithIndex cfg.repos "repo");
-    }
-    // lib.mapAttrs (
-      _: cfg': normalize (cfg'.settings // flattenWithIndex cfg'.instances "pg")
-    ) cfg.stanzas;
+  fullConfig = {
+    global = normalize (cfg.settings // flattenWithIndex cfg.repos "repo");
+  }
+  // lib.mapAttrs' (
+    cmd: settings: lib.nameValuePair "global:${cmd}" (normalize settings)
+  ) cfg.commands
+  // lib.mapAttrs (
+    _: cfg': normalize (cfg'.settings // flattenWithIndex cfg'.instances "pg")
+  ) cfg.stanzas;
 
   namedJobs = lib.listToAttrs (
     lib.flatten (
@@ -96,7 +98,6 @@ in
   };
 
   # TODO: Add enableServer option and corresponding pgBackRest TLS server service.
-  # TODO: Allow command-specific options
   # TODO: Write wrapper around pgbackrest to turn --repo=<name> into --repo=<number>
   # The following two are dependent on improvements upstream:
   #   https://github.com/pgbackrest/pgbackrest/issues/2621
@@ -329,6 +330,55 @@ in
         }
       '';
     };
+
+    commands =
+      lib.genAttrs
+        [
+          # List of commands from https://pgbackrest.org/command.html:
+          "annotate"
+          "archive-get"
+          "archive-push"
+          "backup"
+          "check"
+          "expire"
+          "help"
+          "info"
+          "repo-get"
+          "repo-ls"
+          "restore"
+          "server"
+          "server-ping"
+          "stanza-create"
+          "stanza-delete"
+          "stanza-upgrade"
+          "start"
+          "stop"
+          "verify"
+          "version"
+        ]
+        (
+          command:
+          lib.mkOption {
+            type = lib.types.submodule {
+              freeformType = settingsType;
+
+              # The following options are not fully supported / tested, yet, but point to files with secrets.
+              # Users can already set those options, but we'll force non-store paths.
+              options.tls-server-cert-file = secretPathOption;
+              options.tls-server-key-file = secretPathOption;
+            };
+            default = { };
+            description = ''
+              Options for the '${command}' command.
+
+              An attribute set of options as described in:
+              <https://pgbackrest.org/configuration.html>
+
+              All globally available options, i.e. all except stanza options, can be used.
+              Repository options should be set via [`repos`](#opt-services.pgbackrest.repos) instead.
+            '';
+          }
+        );
   };
 
   config = lib.mkIf cfg.enable (
@@ -409,6 +459,9 @@ in
             user = "postgres";
           };
         };
+        # If PostgreSQL runs on the same machine, any restore will have to be done with that user.
+        # Keeping the lock file in a directory writeable by the postgres user prevents errors.
+        services.pgbackrest.commands.restore.lock-path = "/tmp/postgresql";
         services.postgresql.identMap = ''
           postgres pgbackrest postgres
         '';

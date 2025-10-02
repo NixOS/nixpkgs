@@ -43,12 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  cmakeFlags =
-    [
-      "-DQT_PLUGINS_DIR=${placeholder "out"}/${qt.qtbase.qtPluginPrefix}"
-    ]
-    ++ lib.optional useQt6 "-DUSE_QT6=true"
-    ++ lib.optional qt5ShadowsSupport "-DHAS_QT6_SUPPORT=true";
+  cmakeFlags = [
+    "-DQT_PLUGINS_DIR=${placeholder "out"}/${qt.qtbase.qtPluginPrefix}"
+  ]
+  ++ lib.optional useQt6 "-DUSE_QT6=true"
+  ++ lib.optional qt5ShadowsSupport "-DHAS_QT6_SUPPORT=true";
 
   passthru.updateScript = nix-update-script { };
 

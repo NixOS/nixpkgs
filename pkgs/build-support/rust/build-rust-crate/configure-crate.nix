@@ -246,9 +246,13 @@ in
      IFS="$_OLDIFS"
 
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
+     # SemVer allows version numbers to contain alphanumeric characters and `.+-`
+     # which aren't legal bash identifiers.
+     # https://semver.org/#backusnaur-form-grammar-for-valid-semver-versions
+     CRATEVERSION=$(echo ${crateVersion} | sed -e "s/[\.\+-]/_/g")
      grep -P "^cargo:(?!:?(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
        | awk -F= "/^cargo::metadata=/ {  gsub(/-/, \"_\", \$2); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$2) \"=\" \"\\\"\"\$3\"\\\"\"; next }
-                  /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
+                  /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; print \"export \" toupper(\"DEP_$(echo $CRATENAME)_$(echo $CRATEVERSION)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
      set -e
   fi
   runHook postConfigure

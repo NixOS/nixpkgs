@@ -88,6 +88,7 @@ let
       pytestCheckHook,
     }:
     buildPythonPackage {
+      format = "setuptools";
       inherit
         pname
         version

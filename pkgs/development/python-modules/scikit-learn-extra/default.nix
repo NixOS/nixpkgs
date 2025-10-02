@@ -42,7 +42,10 @@ buildPythonPackage rec {
     rm -r sklearn_extra
   '';
 
-  pytestFlagsArray = [ "--pyargs sklearn_extra" ];
+  pytestFlags = [
+    "--pyargs"
+    "sklearn_extra"
+  ];
   disabledTestPaths = [
     "benchmarks"
     "examples"

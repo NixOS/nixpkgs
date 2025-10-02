@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "scandir";
   version = "1.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +25,6 @@ buildPythonPackage rec {
     description = "Better directory iterator and faster os.walk()";
     homepage = "https://github.com/benhoyt/scandir";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

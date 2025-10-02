@@ -11,27 +11,26 @@ let
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
   databaseSettings = {
-    production =
-      {
-        adapter = cfg.database.type;
-        database =
-          if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
-      }
-      // lib.optionalAttrs (cfg.database.type != "sqlite3") {
-        host =
-          if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
-            cfg.database.socket
-          else
-            cfg.database.host;
-        port = cfg.database.port;
-        username = cfg.database.user;
-      }
-      // lib.optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
-        password = "#dbpass#";
-      }
-      // lib.optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
-        socket = cfg.database.socket;
-      };
+    production = {
+      adapter = cfg.database.type;
+      database =
+        if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
+    }
+    // lib.optionalAttrs (cfg.database.type != "sqlite3") {
+      host =
+        if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
+          cfg.database.socket
+        else
+          cfg.database.host;
+      port = cfg.database.port;
+      username = cfg.database.user;
+    }
+    // lib.optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
+      password = "#dbpass#";
+    }
+    // lib.optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
+      socket = cfg.database.socket;
+    };
   };
 
   databaseYml = format.generate "database.yml" databaseSettings;
@@ -358,7 +357,6 @@ in
       "d '${cfg.stateDir}/themes' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
 
-      "d /run/redmine - - - - -"
       "d /run/redmine/public - - - - -"
       "L+ /run/redmine/config - - - - ${cfg.stateDir}/config"
       "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
@@ -371,10 +369,11 @@ in
     ];
 
     systemd.services.redmine = {
-      after =
-        [ "network.target" ]
-        ++ lib.optional mysqlLocal "mysql.service"
-        ++ lib.optional pgsqlLocal "postgresql.service";
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional mysqlLocal "mysql.service"
+      ++ lib.optional pgsqlLocal "postgresql.target";
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
@@ -456,6 +455,8 @@ in
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
         ExecStart = "${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+        RuntimeDirectory = "redmine";
+        RuntimeDirectoryMode = "0750";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
@@ -473,7 +474,10 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "noaccess";
-        ProtectSystem = "full";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.stateDir
+        ];
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_UNIX"

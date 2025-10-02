@@ -18,17 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2025.2";
+  version = "2025.9";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = version;
-    hash = "sha256-ijSUGiAowxSqYwH3OxSWiGvm99n88ETJxAFn5x4m/BE=";
+    hash = "sha256-yjia9tNNaXCTQFe8xfUeBYVHhW214AaOeCLFjAG703E=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-j4lx3sSQZ7BKl+d5nFJQkMhgQWjn0xkNNCWMlbKLwVQ=";
+  cargoHash = "sha256-GmcRm6/dvY3stjV2ON8NVlVWZ5m0LXa9Kv0gqycbRoY=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -36,19 +35,19 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libxkbcommon
-      vulkan-loader
-      wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libxkbcommon
+    vulkan-loader
+    wayland
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libxcb
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -89,23 +88,22 @@ rustPlatform.buildRustPackage rec {
     ''
   );
 
-  postInstall =
-    ''
-      install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
-        $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      APP_DIR="$out/Applications/Halloy.app/Contents"
+  postInstall = ''
+    install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
+      $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    APP_DIR="$out/Applications/Halloy.app/Contents"
 
-      mkdir -p "$APP_DIR/MacOS"
-      cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+    mkdir -p "$APP_DIR/MacOS"
+    cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
-      substituteInPlace "$APP_DIR/Info.plist" \
-        --replace-fail "{{ VERSION }}" "${version}" \
-        --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+    substituteInPlace "$APP_DIR/Info.plist" \
+      --replace-fail "{{ VERSION }}" "${version}" \
+      --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
 
-      makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
-    '';
+    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+  '';
 
   passthru.updateScript = nix-update-script { };
 

@@ -18,6 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-58sOp3Tbgb+RhE2yLecqQKro97D5u5ug9mbUdO9r+fw=";
   };
 
+  # https://github.com/pahaz/sshtunnel/pull/301
+  patches = [ ./paramiko-4.0-compat.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [ paramiko ];
@@ -32,6 +35,8 @@ buildPythonPackage rec {
     "test_get_keys"
     "connect_via_proxy"
     "read_ssh_config"
+    # Test doesn't work with paramiko < 4.0.0 and the patch above
+    "test_read_private_key_file"
   ];
 
   meta = with lib; {

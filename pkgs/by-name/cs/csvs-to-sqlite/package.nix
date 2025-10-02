@@ -5,11 +5,10 @@
   fetchpatch,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.3";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "simonw";
@@ -32,10 +31,11 @@ buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = with python3.pkgs; [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     click
     dateparser
     pandas
@@ -47,7 +47,7 @@ buildPythonApplication rec {
     "click"
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     cogapp
     pytestCheckHook
   ];

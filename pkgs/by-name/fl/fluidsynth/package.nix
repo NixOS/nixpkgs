@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluidsynth";
-  version = "2.4.4";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K7NJOLq0Yjf8IlJZKqQA7WS1uKPC+WN97mtPgwhA/+8=";
+    hash = "sha256-z7DIX8KpPdtEHEMoxH7ewW32aXm27gfmWPZawwITyRQ=";
   };
 
   outputs = [
@@ -35,16 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    [
-      glib
-      libsndfile
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-    ];
+  buildInputs = [
+    glib
+    libsndfile
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+  ];
 
   cmakeFlags = [
     "-Denable-framework=off"

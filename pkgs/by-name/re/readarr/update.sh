@@ -15,7 +15,7 @@ updateHash()
 
     url="https://github.com/Readarr/Readarr/releases/download/v$version/Readarr.develop.$version.$os-core-$arch.tar.gz"
     hash=$(nix-prefetch-url --type sha256 $url)
-    sriHash="$(nix hash to-sri --type sha256 $hash)"
+    sriHash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $hash)"
 
     sed -i "s|$hashKey = \"[a-zA-Z0-9\/+-=]*\";|$hashKey = \"$sriHash\";|g" "$dirname/package.nix"
 }

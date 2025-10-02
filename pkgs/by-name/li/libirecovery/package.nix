@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     libimobiledevice-glue
   ];
 
+  doInstallCheck = true;
+
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
   '';
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
   # without further configuration).
   configureFlags = [
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
-    ''--with-udevrule="OWNER=\"root\", GROUP=\"myusergroup\", MODE=\"0660\""''
+    ''--with-udevrule=OWNER="root",GROUP="myusergroup",MODE="0660"''
   ];
 
   meta = with lib; {

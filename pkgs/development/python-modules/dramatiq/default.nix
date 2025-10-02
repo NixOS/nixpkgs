@@ -9,6 +9,7 @@
   prometheus-client,
   pylibmc,
   pytestCheckHook,
+  pytest-cov-stub,
   redis,
   setuptools,
   watchdog,
@@ -17,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "1.17.1";
+  version = "1.18.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
     tag = "v${version}";
-    hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
+    hash = "sha256-noq2tWi7IUdYmRB9N3MN9oWrnNaYBgXFumOpcGw8Jn0=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pika
     redis
     pylibmc
@@ -61,40 +63,40 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i ./setup.cfg \
-      -e 's:--cov dramatiq::' \
-      -e 's:--cov-report html::' \
       -e 's:--benchmark-autosave::' \
       -e 's:--benchmark-compare::' \
   '';
 
-  disabledTests =
-    [
-      # Requires a running redis
-      "test_after_process_boot_call_has_no_blocked_signals"
-      "test_cli_can_be_reloaded_on_sighup"
-      "test_cli_can_watch_for_source_code_changes"
-      "test_cli_fork_functions_have_no_blocked_signals"
-      "test_consumer_threads_have_no_blocked_signals"
-      "test_middleware_fork_functions_have_no_blocked_signals"
-      "test_redis_broker_can_connect_via_client"
-      "test_redis_broker_can_connect_via_url"
-      "test_redis_process_100k_messages_with_cli"
-      "test_redis_process_10k_fib_with_cli"
-      "test_redis_process_1k_latency_with_cli"
-      "test_worker_threads_have_no_blocked_signals"
-      # Requires a running rabbitmq
-      "test_rabbitmq_broker_can_be_passed_a_list_of_parameters_for_failover"
-      "test_rabbitmq_broker_can_be_passed_a_list_of_uri_for_failover"
-      "test_rabbitmq_broker_can_be_passed_a_semicolon_separated_list_of_uris"
-      "test_rabbitmq_broker_connections_are_lazy"
-      "test_rabbitmq_process_100k_messages_with_cli"
-      "test_rabbitmq_process_10k_fib_with_cli"
-      "test_rabbitmq_process_1k_latency_with_cli"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Takes too long for darwin ofborg
-      "test_retry_exceptions_can_specify_a_delay"
-    ];
+  disabledTests = [
+    # Requires a running redis
+    "test_after_process_boot_call_has_no_blocked_signals"
+    "test_cli_can_be_reloaded_on_sighup"
+    "test_cli_can_watch_for_source_code_changes"
+    "test_cli_fork_functions_have_no_blocked_signals"
+    "test_consumer_threads_have_no_blocked_signals"
+    "test_middleware_fork_functions_have_no_blocked_signals"
+    "test_redis_broker_can_connect_via_client"
+    "test_redis_broker_can_connect_via_url"
+    "test_redis_process_100k_messages_with_cli"
+    "test_redis_process_10k_fib_with_cli"
+    "test_redis_process_1k_latency_with_cli"
+    "test_worker_threads_have_no_blocked_signals"
+    # Requires a running rabbitmq
+    "test_rabbitmq_broker_can_be_passed_a_list_of_parameters_for_failover"
+    "test_rabbitmq_broker_can_be_passed_a_list_of_uri_for_failover"
+    "test_rabbitmq_broker_can_be_passed_a_semicolon_separated_list_of_uris"
+    "test_rabbitmq_broker_connections_are_lazy"
+    "test_rabbitmq_process_100k_messages_with_cli"
+    "test_rabbitmq_process_10k_fib_with_cli"
+    "test_rabbitmq_process_1k_latency_with_cli"
+    # AssertionError
+    "test_cli_scrubs_stale_pid_files"
+    "test_message_contains_requeue_time_after_retry"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Takes too long for darwin ofborg
+    "test_retry_exceptions_can_specify_a_delay"
+  ];
 
   pythonImportsCheck = [ "dramatiq" ];
 

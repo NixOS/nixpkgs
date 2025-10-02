@@ -117,7 +117,7 @@ in
         default = "";
         description = ''
           Shell commands executed before the `oh-my-zsh` is loaded.
-          For example, to disable async git prompt write `zstyle ':omz:alpha:lib:git' async-prompt no` (more information https://github.com/ohmyzsh/ohmyzsh?tab=readme-ov-file#async-git-prompt)
+          For example, to disable async git prompt write `zstyle ':omz:alpha:lib:git' async-prompt no` (more information <https://github.com/ohmyzsh/ohmyzsh?tab=readme-ov-file#async-git-prompt>)
         '';
       };
     };

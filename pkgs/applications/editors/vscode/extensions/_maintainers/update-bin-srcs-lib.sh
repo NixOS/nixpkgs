@@ -60,7 +60,7 @@ prefetchExtensionUnpacked() {
   declare unpackedStorePath
   unpackedStorePath="$(nix add-to-store -n "$unpackedStoreName" "$tmpDir")"
   declare unpackedSha256
-  unpackedSha256="$(nix hash-path --base32 --type sha256 "$unpackedStorePath")"
+  unpackedSha256="$(nix --extra-experimental-features nix-command hash path --base32 --type sha256 "$unpackedStorePath")"
   1>&2 echo "unpackedStorePath='$unpackedStorePath'"
   1>&2 echo "unpackedSha256='$unpackedSha256'"
 

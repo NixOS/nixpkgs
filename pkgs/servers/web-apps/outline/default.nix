@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.84.0";
+  version = "0.87.4";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-wTarO1nVta4rxkJRa3NIhyu0IJUukO5trOdOj16Zwn0=";
+    hash = "sha256-gsQPDbKTzsXV8y8/xMxmhJM6pI+zDkx/r1Zk83ixb7k=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-iXaiTPjbAV/aRIdUYrIf0Y4z43yRALqSxjF5wB2q0Mg=";
+    hash = "sha256-/bWDFIGElBc1lMODKTxmSkal9c4L1iTPd521/DVYyxo=";
   };
 
   configurePhase = ''

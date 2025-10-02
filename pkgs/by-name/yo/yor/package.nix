@@ -33,11 +33,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible auto-tagger for your IaC files. The ultimate way to link entities in the cloud back to the codified resource which created it";
     homepage = "https://github.com/bridgecrewio/yor";
     changelog = "https://github.com/bridgecrewio/yor/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 }

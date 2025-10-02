@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # All other tests make network requests to exercise the API
     "tests/test_async.py::test_generate_async_settings"
     "tests/test_async.py::test_url_protocol"

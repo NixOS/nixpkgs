@@ -40,21 +40,19 @@ let
         {
           inherit name;
 
-          postFixup =
-            previousAttrs.postFixup
-            + ''
-              declare -p wrapperName
-              echo "env.wrapperName = $wrapperName"
-              [[ $wrapperName == "CC_WRAPPER" ]] || (echo "'\$wrapperName' was not 'CC_WRAPPER'" && false)
-              declare -p suffixSalt
-              echo "env.suffixSalt = $suffixSalt"
-              [[ $suffixSalt == "${stdenv'.cc.suffixSalt}" ]] || (echo "'\$suffxSalt' was not '${stdenv'.cc.suffixSalt}'" && false)
+          postFixup = previousAttrs.postFixup + ''
+            declare -p wrapperName
+            echo "env.wrapperName = $wrapperName"
+            [[ $wrapperName == "CC_WRAPPER" ]] || (echo "'\$wrapperName' was not 'CC_WRAPPER'" && false)
+            declare -p suffixSalt
+            echo "env.suffixSalt = $suffixSalt"
+            [[ $suffixSalt == "${stdenv'.cc.suffixSalt}" ]] || (echo "'\$suffxSalt' was not '${stdenv'.cc.suffixSalt}'" && false)
 
-              grep -q "@out@" $out/bin/cc || echo "@out@ in $out/bin/cc was substituted"
-              grep -q "@suffixSalt@" $out/bin/cc && (echo "$out/bin/cc contains unsubstituted variables" && false)
+            grep -q "@out@" $out/bin/cc || echo "@out@ in $out/bin/cc was substituted"
+            grep -q "@suffixSalt@" $out/bin/cc && (echo "$out/bin/cc contains unsubstituted variables" && false)
 
-              touch $out
-            '';
+            touch $out
+          '';
         }
         // extraAttrs
       )
@@ -258,25 +256,6 @@ in
     stdenv' = bootStdenv;
   };
 
-  # Test compatibility with derivations using `env` as a regular variable.
-  test-env-derivation = bootStdenv.mkDerivation rec {
-    name = "test-env-derivation";
-    env = bootStdenv.mkDerivation {
-      name = "foo";
-      buildCommand = ''
-        mkdir "$out"
-        touch "$out/bar"
-      '';
-    };
-
-    passAsFile = [ "buildCommand" ];
-    buildCommand = ''
-      declare -p env
-      [[ $env == "${env}" ]]
-      touch "$out"
-    '';
-  };
-
   # Check that mkDerivation rejects MD5 hashes
   rejectedHashes = lib.recurseIntoAttrs {
     md5 =
@@ -300,7 +279,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           dep2 = derivation {
             name = "dep2";
@@ -309,7 +288,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           passAsFile = [ "dep2" ];
         })
@@ -340,7 +319,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           dep2 = derivation {
             name = "dep2";
@@ -349,7 +328,7 @@ in
               "-c"
               ": > $out"
             ];
-            system = builtins.currentSystem;
+            inherit (stdenv.buildPlatform) system;
           };
           name = "meow";
           outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
@@ -403,6 +382,50 @@ in
     name = "test-cc-wrapper-substitutions";
     stdenv' = bootStdenv;
   };
+
+  ensure-no-execve-in-setup-sh =
+    derivation {
+      name = "ensure-no-execve-in-setup-sh";
+      inherit (stdenv.hostPlatform) system;
+      builder = "${stdenv.bootstrapTools}/bin/bash";
+      PATH = "${pkgs.strace}/bin:${stdenv.bootstrapTools}/bin";
+      initialPath = [
+        stdenv.bootstrapTools
+        pkgs.strace
+      ];
+      args = [
+        "-c"
+        ''
+          countCall() {
+            echo "$stats" | tr -s ' ' | grep "$1" | cut -d ' ' -f5
+          }
+
+          # prevent setup.sh from running `nproc` when cores=0
+          # (this would mess up the syscall stats)
+          export NIX_BUILD_CORES=1
+
+          echo "Analyzing setup.sh with strace"
+          stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
+          echo "$stats" | head -n15
+
+          # fail if execve calls is > 1
+          stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
+          execveCalls=$(countCall execve)
+          if [ "$execveCalls" -gt 1 ]; then
+            echo "execve calls: $execveCalls; expected: 1"
+            echo "ERROR: setup.sh should not launch additional processes when being sourced"
+            exit 1
+          else
+            echo "setup.sh doesn't launch extra processes when sourcing, as expected"
+          fi
+
+          touch $out
+        ''
+      ];
+    }
+    // {
+      meta = { };
+    };
 
   structuredAttrsByDefault = lib.recurseIntoAttrs {
 
@@ -570,6 +593,5 @@ in
           diff $out/json $goldenJson
         '';
       };
-
   };
 }

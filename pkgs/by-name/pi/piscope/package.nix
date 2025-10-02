@@ -23,9 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VDrx/RLSpMhyD64PmdeWVacb9LleHakcy7D6zFxeyhw=";
   };
   # Fix FHS paths
-  postConfigure = ''
+  postPatch = ''
     substituteInPlace piscope.c \
-      --replace /usr/share/piscope $out/share/piscope
+      --replace-fail /usr/share/piscope $out/share/piscope
   '';
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://abyz.me.uk/rpi/pigpio/piscope.html";
-    description = "A logic analyser (digital waveform viewer) for the Raspberry";
+    description = "Logic analyser (digital waveform viewer) for the Raspberry";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux;

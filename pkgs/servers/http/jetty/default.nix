@@ -52,12 +52,12 @@ let
 in
 {
   jetty_11 = common {
-    version = "11.0.25";
-    hash = "sha256-KaceKN/iu0QCv9hVmoXYvN7TxK9DwhiCcbjEnqcKSzs=";
+    version = "11.0.26";
+    hash = "sha256-uJgh/+/uGjchTgtoF38f7jIvbdrwdToAsqqVOlYtMIM=";
   };
 
   jetty_12 = common {
-    version = "12.0.21";
-    hash = "sha256-U/W6h0S7b0zLoYahDGo/pkKa+NIMKR0tiX3pyRl40zg=";
+    version = "12.1.1";
+    hash = "sha256-VHmPhVEqq4eoOwo9O7sbdv6bJB9dCFkN+64jTlnFarM=";
   };
 }

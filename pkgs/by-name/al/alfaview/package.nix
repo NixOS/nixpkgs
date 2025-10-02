@@ -21,16 +21,17 @@
   libgbm,
   openssl,
   systemd,
+  xcb-util-cursor,
   xorg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "9.21.1";
+  version = "9.23.1";
 
   src = fetchurl {
     url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-/Wue2Ag+ofv3z33PfpI7SlZWsGUjY33nOEcx5xPh5CA=";
+    hash = "sha256-T1RsG/8uuPtma7TCNww4V6tKzPK0Ds8zmdjk2duhMEw=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
+    xcb-util-cursor
     xorg.libX11
     xorg.xcbutilwm
     xorg.xcbutilimage

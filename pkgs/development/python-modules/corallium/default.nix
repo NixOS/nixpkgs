@@ -25,15 +25,14 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  dependencies =
-    [
-      beartype
-      pydantic
-      rich
-    ]
-    ++ lib.optionals (python.pythonOlder "3.11") [
-      tomli
-    ];
+  dependencies = [
+    beartype
+    pydantic
+    rich
+  ]
+  ++ lib.optionals (python.pythonOlder "3.11") [
+    tomli
+  ];
 
   meta = with lib; {
     description = "Shared functionality for calcipy-ecosystem";

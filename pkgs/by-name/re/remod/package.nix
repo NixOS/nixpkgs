@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/samuela/remod/releases/tag/v${finalAttrs.version}";
-    description = "chmod for human beings!";
+    description = "chmod for human beings";
     homepage = "https://github.com/samuela/remod";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];

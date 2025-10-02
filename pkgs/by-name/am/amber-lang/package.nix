@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     ./fix_gnused_detection.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
 
   preConfigure = ''
@@ -54,14 +53,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::formatter::all_exist"
   ];
 
-  postInstall =
-    ''
-      wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd amber \
-        --bash <($out/bin/amber completion)
-    '';
+  postInstall = ''
+    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd amber \
+      --bash <($out/bin/amber completion)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -78,7 +76,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "amber";
     maintainers = with maintainers; [
       cafkafk
-      uncenter
       aleksana
     ];
     platforms = platforms.unix;

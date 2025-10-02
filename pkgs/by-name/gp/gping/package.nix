@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.19.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     tag = "gping-v${version}";
-    hash = "sha256-RTjYgsi3PmmPufdTcxZr+Laipa32Kkq1M1eHSAJVWZQ=";
+    hash = "sha256-whHbGZnxOQ/ISyWMl6miuogppZahgXxO3XmhcP6ymIo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-b7GsaAaCYz3ohE4BUHlvexJ41L0OhbcWkBo61X4FKzQ=";
+  cargoHash = "sha256-F0QBL7tCCdjnavClqrw8yYxFrY8y4f8h/gcHSpEqBiM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

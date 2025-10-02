@@ -39,7 +39,7 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-Ma2WWknZ0rF9NZNqOaPyQ2eil34HWmgSIHMnfaSaFjs=";
+      x86_64-linux = "sha256-HQ9d0yUaYRh20/OczwQzshbyO8wMh5vRh+RRNwNIx74=";
     }
     .${system} or throwSystem;
 
@@ -48,7 +48,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "16.4.1";
+  version = "18.7";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
@@ -141,18 +141,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform shell connection hub and remote file manager";
     homepage = "https://github.com/xpipe-io/${pname}";
     downloadPage = "https://github.com/xpipe-io/${pname}/releases/latest";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     changelog = "https://github.com/xpipe-io/${pname}/releases/tag/${version}";
     license = [
-      licenses.asl20
-      licenses.unfree
+      lib.licenses.asl20
+      lib.licenses.unfree
     ];
-    maintainers = with maintainers; [ crschnick ];
+    maintainers = with lib.maintainers; [ crschnick ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = pname;
+    mainProgram = "xpipe";
   };
 }

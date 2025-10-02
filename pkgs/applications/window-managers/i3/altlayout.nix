@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "i3altlayout";
   version = "0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

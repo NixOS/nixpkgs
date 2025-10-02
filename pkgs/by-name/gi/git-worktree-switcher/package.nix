@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mateusauler/git-worktree-switcher";
-    description = "Switch between git worktrees with speed.";
+    description = "Switch between git worktrees with speed";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "wt";

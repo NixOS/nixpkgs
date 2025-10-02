@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "doulos-sil";
-  version = "6.200";
+  version = "7.000";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/doulos/DoulosSIL-${version}.zip";
-    hash = "sha256-kpbXJVAEQLr5HMFaE+8OgAYrMGQoetgMi0CcPn4a3Xw=";
+    hash = "sha256-i2M7YVBiLWUZETAZEesHdyQypoO5fbWHqhpizqVLB5E=";
   };
 
   installPhase = ''

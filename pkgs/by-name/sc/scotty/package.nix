@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "scotty";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromSourcehut {
     owner = "~phw";
     repo = "scotty";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VvBnTnW4ngJ0yPT2CV7t7HEUwJlBfWNE3coTHxGcAs4=";
+    hash = "sha256-Sf1JuIWCscHPn7bA7spQ1zTKt+1kEehR+rEZ1+MTnoE=";
   };
 
   # Otherwise checks fail with `panic: open /etc/protocols: operation not permitted` when sandboxing is enabled on Darwin
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
       --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
   '';
 
-  vendorHash = "sha256-5mDY3vlRzoqJleNukB8NcPaAcDLX/UNegUSBYFMzGGA=";
+  vendorHash = "sha256-AfCSp/f8jAy1a6PyYHMErmOOgADXTfliJPQgyNLhVFo=";
 
   env = {
     # *Some* locale is required to be set

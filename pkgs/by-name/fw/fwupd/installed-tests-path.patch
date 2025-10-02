@@ -1,27 +1,27 @@
-commit 2fa1d39bb54d448ffe59bf6a8358c01f786a1cce
+commit 954e41500e1b409a24fca43ae3bdc1c6a890db48
 Author: r-vdp <ramses@well-founded.dev>
 Date:   Tue Oct 15 14:49:53 2024 +0200
 
     Add output for installed tests
 
 diff --git a/data/tests/meson.build b/data/tests/meson.build
-index a22a989f3..cbd135cfa 100644
+index 3eba65eea..cf3931bb7 100644
 --- a/data/tests/meson.build
 +++ b/data/tests/meson.build
-@@ -105,7 +105,7 @@ configure_file(
-   output: 'fwupd-tests.conf',
+@@ -122,7 +122,7 @@ configure_file(
    configuration: con2,
    install: true,
+   install_tag: 'tests',
 -  install_dir: join_paths(datadir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
  
  if umockdev_integration_tests.allowed()
 diff --git a/meson.build b/meson.build
-index 5a35cfda1..40ef142f0 100644
+index cb66be0cc..ca431980b 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -194,8 +194,8 @@ else
+@@ -239,8 +239,8 @@ else
    datadir = join_paths(prefix, get_option('datadir'))
    sysconfdir = join_paths(prefix, get_option('sysconfdir'))
    localstatedir = join_paths(prefix, get_option('localstatedir'))
@@ -32,7 +32,7 @@ index 5a35cfda1..40ef142f0 100644
    daemon_dir = join_paths(libexecdir, 'fwupd')
  endif
  mandir = join_paths(prefix, get_option('mandir'))
-@@ -545,6 +545,7 @@ gnome = import('gnome')
+@@ -721,6 +721,7 @@ gnome = import('gnome')
  i18n = import('i18n')
  
  conf.set_quoted('FWUPD_PREFIX', prefix)
@@ -41,12 +41,12 @@ index 5a35cfda1..40ef142f0 100644
  conf.set_quoted('FWUPD_LIBDIR', libdir)
  conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
 diff --git a/meson_options.txt b/meson_options.txt
-index e04bb37c9..b1060ddb8 100644
+index 40103c03e..63c8d288d 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -333,6 +333,10 @@ option('systemd_syscall_filter',
-   value: 'true',
-   description: 'Enable systemd syscall filter',
+@@ -174,6 +174,10 @@ option('systemd_unit_user',
+   value: 'fwupd-refresh',
+   description: 'User account to use for fwupd-refresh.service (empty for DynamicUser)',
  )
 +option('installed_test_prefix',
 +  type: 'string',
@@ -56,13 +56,13 @@ index e04bb37c9..b1060ddb8 100644
    type: 'boolean',
    value: true,
 diff --git a/src/tests/host-emulate/meson.build b/src/tests/host-emulate/meson.build
-index 4bc02e46e..17bc2270d 100644
+index c36da65cd..f0b70d4d6 100644
 --- a/src/tests/host-emulate/meson.build
 +++ b/src/tests/host-emulate/meson.build
 @@ -9,7 +9,7 @@ if build_standalone
-       capture: true,
        command: [gzip, '-k', '--stdout', '@INPUT@'],
        install: true,
+       install_tag: 'tests',
 -      install_dir: join_paths(datadir, 'fwupd', 'host-emulate.d'),
 +      install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'host-emulate.d'),
      )

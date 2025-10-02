@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   cmake,
   gmp,
@@ -12,19 +13,23 @@
   readline,
   xxd,
   iproute2,
-  ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pihole-ftl";
-  version = "6.1";
+  version = "6.2.3";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "FTL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b3/kyDQa6qDK2avvDObWLvwUpAn6TFr1ZBdQC9AZWa4=";
+    hash = "sha256-d1kpkBKuc30oIT1dRac8gkzh36Yyg80cizNRbyZ4424=";
   };
+
+  patches = [
+    # https://github.com/pi-hole/FTL/pull/2610: Fix authentication redirect when webhome is /
+    ./disable-redirect-root.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -60,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "execv" "execvp"
 
     substituteInPlace src/database/network-table.c \
-      --replace-fail "ip neigh show" "${iproute2}/bin/ip neigh show" \
-      --replace-fail "ip address show" "${iproute2}/bin/ip address show"
+      --replace-fail "ip neigh show" "${lib.getExe' iproute2 "ip"} neigh show" \
+      --replace-fail "ip address show" "${lib.getExe' iproute2 "ip"} address show"
   '';
 
   installPhase = ''
@@ -73,10 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.settingsTemplate = ./pihole.toml;
+  passthru.tests = nixosTests.pihole-ftl;
 
   meta = {
     description = "Pi-hole FTL engine";
     homepage = "https://github.com/pi-hole/FTL";
+    changelog = "https://github.com/pi-hole/FTL/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = lib.platforms.linux;

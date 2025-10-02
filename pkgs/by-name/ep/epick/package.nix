@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-gjqAQrGJ9KFdzn2a3fOgu0VJ9zrX5stsbzriOGJaD/4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-r/0aNzU8jm2AqiZWq4plxXY/H7qKVC8nEI9BwOUKCdA=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -50,12 +49,12 @@ rustPlatform.buildRustPackage rec {
     patchelf $out/bin/epick --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple color picker that lets the user create harmonic palettes with ease";
     homepage = "https://github.com/vv9k/epick";
     changelog = "https://github.com/vv9k/epick/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "epick";
   };
 }

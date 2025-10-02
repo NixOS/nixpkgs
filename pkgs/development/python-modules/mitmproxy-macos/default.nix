@@ -16,7 +16,7 @@ buildPythonPackage rec {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-sNguT3p72v9+FU5XFLYV6p0fO6WvGYerPy68GINwbyA=";
+    hash = "sha256-NArp10yhERk7Hhw5fIU+ekbupyldyzpLQdKgebiUpOM=";
   };
 
   # repo has no python tests
@@ -24,13 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy_macos" ];
 
-  meta = with lib; {
+  meta = {
+    inherit (mitmproxy-rs.meta) changelog license maintainers;
     description = "MacOS Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-macos";
-    changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ boltzmannrain ];
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }

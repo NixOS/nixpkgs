@@ -7,21 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "pptpd";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/poptop/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1h06gyxj51ba6kbbnf6hyivwjia0i6gsmjz8kyggaany8a58pkcg";
+    sha256 = "sha256-anJChLHOAOoj99dgjQgYQ6EMio2H2VHLLqhucKobTnc=";
   };
-
-  patches = [
-    ./ppp-2.5.0-compat.patch
-  ];
 
   buildInputs = [ ppp ];
 
   postPatch = ''
-    substituteInPlace plugins/Makefile --replace "install -o root" "install"
+    substituteInPlace plugins/Makefile --replace-fail "install -o root" "install"
   '';
 
   meta = with lib; {

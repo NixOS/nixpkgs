@@ -9,13 +9,13 @@
 }:
 mkLibretroCore {
   core = "citra";
-  version = "0-unstable-2025-05-17";
+  version = "0-unstable-2025-08-17";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "citra";
-    rev = "8e634afee9e870620b40efedaef77478cd1f3c99";
-    hash = "sha256-pf0fgamSg2OHxvft36+Y4wPF9hjyZOQXEtMWs0dkNRM=";
+    rev = "5263fae3344e5e9af43036e0e38bec2d10fb2407";
+    hash = "sha256-66kbE1taODjxXDhO3uV5R212nikyXfHwCHC/zamZuL0=";
     fetchSubmodules = true;
   };
 

@@ -31,7 +31,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dvc
     fsspec
-  ] ++ fsspec.optional-dependencies.arrow;
+  ]
+  ++ fsspec.optional-dependencies.arrow;
 
   # Circular dependency with dvc
   doCheck = false;

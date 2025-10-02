@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   itstool,
@@ -21,6 +23,7 @@
   gtk3,
   polkit,
   marco,
+  mate-common,
   mate-desktop,
   mate-menus,
   mate-panel,
@@ -29,24 +32,31 @@
   systemd,
   hicolor-icon-theme,
   wrapGAppsHook3,
+  yelp-tools,
   mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-control-center";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "6/LHBP1SSNwvmDb/KQKIae8p1QVJB8xhVzS2ODp5FLw=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-control-center";
+    tag = "v${version}";
+    hash = "sha256-rsEu3Ig6GxqPOvAFOXhkEoXM+etyjWpQWHGOsA+myJs=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
     itstool
     desktop-file-utils
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [

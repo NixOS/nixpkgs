@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ ];
 
   meta = with lib; {
-    description = "A Snakemake storage plugin that reads and writes from a locally mounted filesystem using rsync";
+    description = "Snakemake storage plugin that reads and writes from a locally mounted filesystem using rsync";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-fs";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

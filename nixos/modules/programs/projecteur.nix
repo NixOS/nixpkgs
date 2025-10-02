@@ -22,7 +22,6 @@ in
   meta = {
     maintainers = with lib.maintainers; [
       benneti
-      drupol
     ];
   };
 }

@@ -1,13 +1,12 @@
 {
   buildFHSEnv,
-  electron_33,
+  electron_36,
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchurl,
   git,
   lib,
   makeDesktopItem,
-  nodejs_20,
+  nodejs,
   stdenvNoCC,
   util-linux,
   yarnBuildHook,
@@ -17,32 +16,26 @@
 
 let
   pname = "electron-fiddle";
-  version = "0.36.5";
-  electron = electron_33;
-  nodejs = nodejs_20;
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     tag = "v${version}";
-    hash = "sha256-Fo7rXnufJ26WijnplWswdeCGJitkvTDboOggUfrz1Hw=";
+    hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
   };
 
-  # As of https://github.com/electron/fiddle/pull/1316 this is fetched
-  # from the network and has no stable hash.  Grab an old version from
-  # the repository.
-  releasesJson = fetchurl {
-    url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
-    hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
-  };
+  electron = electron_36;
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
     inherit version src;
 
+    patches = [ ./dont-use-initial-releases-json.patch ];
+
     offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
-      hash = "sha256-eZ/g2cP6M0zWhF14go0sIC+UuzTo9Gl4KsPBGzJU3FQ=";
+      inherit src;
+      hash = "sha256-mB8WG6tX204u6AJ8qLbWrA+pSN3oDihHqj0t3bWcuAI=";
     };
 
     nativeBuildInputs = [
@@ -67,9 +60,7 @@ let
 
       # force @electron/packager to use our electron instead of downloading it, even if it is a different version
       substituteInPlace node_modules/@electron/packager/dist/packager.js \
-          --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
-
-      ln -s ${releasesJson} static/releases.json
+        --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
     '';
 
     yarnBuildScript = "package";
@@ -105,7 +96,7 @@ let
 in
 buildFHSEnv {
   inherit pname version;
-  runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+  runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"

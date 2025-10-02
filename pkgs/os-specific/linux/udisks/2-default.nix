@@ -35,24 +35,26 @@
   nilfs-utils,
   ntfs3g,
   nixosTests,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "udisks";
-  version = "2.10.1";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     rev = "${pname}-${version}";
-    sha256 = "sha256-L8jr1+SJWsCizkPXC8VKDy2eVa7/FpqdB8SkBYq6vwc=";
+    sha256 = "sha256-W0vZY6tYxAJbqxNF3F6F6J6h6XxLT+Fon+LqR6jwFUQ=";
   };
 
   outputs = [
     "out"
     "man"
     "dev"
-  ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
+  ]
+  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   patches = [
     (replaceVars ./fix-paths.patch {
@@ -93,6 +95,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
     docbook_xml_dtd_43
     docbook_xsl
+    udevCheckHook
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -136,6 +139,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+  doInstallCheck = true;
 
   passthru = {
     inherit libblockdev;

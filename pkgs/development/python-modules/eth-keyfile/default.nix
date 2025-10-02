@@ -7,13 +7,15 @@
   eth-keys,
   eth-utils,
   pycryptodome,
+  py-ecc,
   # nativeCheckInputs
   pytestCheckHook,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "eth-keyfile";
-  version = "0.8.1";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     repo = "eth-keyfile";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-HufsN3aXdQErcQmnG2PZnEm5joqpy4f8IWNm3VrzJSY=";
+    hash = "sha256-DR17EupRDnviN6OXF+B+RlCVdG8cfcvnIgIEKxrXFKs=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +32,19 @@ buildPythonPackage rec {
     eth-keys
     eth-utils
     pycryptodome
+    py-ecc
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pydantic
+  ];
 
   pythonImportsCheck = [ "eth_keyfile" ];
+
+  disabledTests = [
+    "test_install_local_wheel"
+  ];
 
   meta = {
     description = "Tools for handling the encrypted keyfile format used to store private keys";

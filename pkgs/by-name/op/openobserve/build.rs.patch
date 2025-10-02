@@ -1,11 +1,11 @@
 diff --git a/build.rs b/build.rs
 index 0f66ace..be74fad 100644
---- a/build.rs
-+++ b/build.rs
-@@ -99,24 +99,5 @@ fn main() -> Result<()> {
-         &["proto"],
-     )?;
- 
+--- a/src/config/build.rs
++++ b/src/config/build.rs
+@@ -20,24 +20,5 @@ use chrono::{DateTime, SecondsFormat, Utc};
+ fn main() -> Result<()> {
+     println!("cargo:rerun-if-changed=build.rs");
+
 -    // build information
 -    let output = Command::new("git")
 -        .args(["describe", "--tags", "--abbrev=0"])

@@ -77,33 +77,32 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
+    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
 
-      # copy libraries except SWT
-      cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
-      # copy platform-specific SWT
-      cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
+    # copy libraries except SWT
+    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
+    # copy platform-specific SWT
+    cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
 
-      install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
-      install -Dm644 plugin.xml $out/share/java/
-      install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
-      cp ${desktopItem}/share/applications/* $out/share/applications/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
+    install -Dm644 plugin.xml $out/share/java/
+    install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
 
-      # Create .app bundle for macOS
-      mkdir -p $out/Applications
-      chmod +x releases/${_version}-${_build}-${_build}/tmp/jameica.app/jameica*.sh
-      cp -r releases/${_version}-${_build}-${_build}/tmp/jameica.app $out/Applications/Jameica.app
-    ''
-    + ''
+    # Create .app bundle for macOS
+    mkdir -p $out/Applications
+    chmod +x releases/${_version}-${_build}-${_build}/tmp/jameica.app/jameica*.sh
+    cp -r releases/${_version}-${_build}-${_build}/tmp/jameica.app $out/Applications/Jameica.app
+  ''
+  + ''
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \

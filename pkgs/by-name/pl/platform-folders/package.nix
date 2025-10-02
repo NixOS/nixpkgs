@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "platform-folders";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "sago007";
     repo = "PlatformFolders";
     rev = version;
-    hash = "sha256-ruhAP9kjwm6pIFJ5a6oy6VE5W39bWQO3qSrT5IUtiwA=";
+    hash = "sha256-8dKW9nmxiqt47Z9RBNuHjFRyOhwmi+9mR7prUOxXIRE=";
   };
 
   nativeBuildInputs = [ cmake ];

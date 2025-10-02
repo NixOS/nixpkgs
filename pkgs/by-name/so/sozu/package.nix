@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Cda53lhKPxm2w8guoKuQjdjhZNWJinzR1PHc5S57y2w=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AIj59MqK+TqyTTDjGzN1Oec3svPaXRBkHJTBtxTwZNg=";
 
   nativeBuildInputs = [ protobuf ];
@@ -36,12 +35,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       gaelreyrol
     ];

@@ -3,22 +3,20 @@
   rustPlatform,
   fetchFromGitHub,
   testers,
-  weaver,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
-  version = "0.15.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cEexfPtlbcLR+u5bfwLtDX7iT8ayelSTGdVXSRhKGkY=";
+    hash = "sha256-kEGz6alm+P6zKR4vxzsyZ67R99tVBjEIK0OEx6SzdvQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-b06bNgRYlsqk/evGubgtnBJM76mm5rQP6VuiHOxyCuw=";
+  cargoHash = "sha256-//nPXBUi7swKPusaamSJdsUTObnyh+wNc7i8CoyGWrU=";
 
   checkFlags = [
     # Skip tests requiring network
@@ -26,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru.tests.version = testers.testVersion {
-    package = weaver;
+    package = finalAttrs.finalPackage;
   };
 
   meta = {

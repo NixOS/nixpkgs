@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ifuN3Kb7Hhq8H/eoZcumO5yyrxOCA+nWQQvAdFk7w2Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wZRWusETLl32BJy5lza4Bvix500VkpXLUpQb5aO8yJ0=";
 
   # needed for internal protobuf c wrapper library

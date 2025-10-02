@@ -27,23 +27,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      bzip2
-      fftw
-      zlib
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    bzip2
+    fftw
+    zlib
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CMAKE_CXX_STANDARD" "14")
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Dfinite=isfinite")
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "14")
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Dfinite=isfinite")
+  ];
 
   meta = with lib; {
     description = "Computational Morphometry Toolkit";

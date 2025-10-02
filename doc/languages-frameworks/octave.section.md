@@ -16,7 +16,7 @@ All Octave add-on packages are available in two ways:
 Nixpkgs provides a function `buildOctavePackage`, a generic package builder function for any Octave package that complies with the Octave's current packaging format.
 
 All Octave packages are defined in [pkgs/top-level/octave-packages.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/octave-packages.nix) rather than `pkgs/all-packages.nix`.
-Each package is defined in their own file in the [pkgs/development/octave-modules](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/octave-modules) directory.
+Each package is defined in its own file in the [pkgs/development/octave-modules](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/octave-modules) directory.
 Octave packages are made available through `all-packages.nix` through both the attribute `octavePackages` and `octave.pkgs`.
 You can test building an Octave package as follows:
 
@@ -44,9 +44,7 @@ This will also work in a `shell.nix` file.
 }:
 
 pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [
-    (octave.withPackages (opkgs: with opkgs; [ symbolic ]))
-  ];
+  nativeBuildInputs = with pkgs; [ (octave.withPackages (opkgs: with opkgs; [ symbolic ])) ];
 }
 ```
 
@@ -56,7 +54,7 @@ The `buildOctavePackage` does several things to make sure things work properly.
 
 1. Sets the environment variable `OCTAVE_HISTFILE` to `/dev/null` during package compilation so that the commands run through the Octave interpreter directly are not logged.
 2. Skips the configuration step, because the packages are stored as gzipped tarballs, which Octave itself handles directly.
-3. Change the hierarchy of the tarball so that only a single directory is at the top-most level of the tarball.
+3. Changes the hierarchy of the tarball so that only a single directory is at the top-most level of the tarball.
 4. Use Octave itself to run the `pkg build` command, which unzips the tarball, extracts the necessary files written in Octave, and compiles any code written in C++ or Fortran, and places the fully compiled artifact in `$out`.
 
 `buildOctavePackage` is built on top of `stdenv` in a standard way, allowing most things to be customized.
@@ -82,7 +80,7 @@ See [Symbolic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/oct
 
 By default, the `buildOctavePackage` function does _not_ install the requested package into Octave for use.
 The function will only build the requested package.
-This is due to Octave maintaining an text-based database about which packages are installed where.
+This is due to Octave maintaining a text-based database about which packages are installed where.
 To this end, when all the requested packages have been built, the Octave package and all its add-on packages are put together into an environment, similar to Python.
 
 1. First, all the Octave binaries are wrapped with the environment variable `OCTAVE_SITE_INITFILE` set to a file in `$out`, which is required for Octave to be able to find the non-standard package database location.
@@ -90,5 +88,5 @@ To this end, when all the requested packages have been built, the Octave package
 3. The path down to the default install location of Octave packages is recreated so that Nix-operated Octave can install the packages.
 4. Install the packages into the `$out` environment while writing package entries to the database file.
 This database file is unique for each different (according to Nix) environment invocation.
-5. Rewrite the Octave-wide startup file to read from the list of packages installed in that particular environment.
+5. Rewrites the Octave-wide startup file to read from the list of packages installed in that particular environment.
 6. Wrap any programs that are required by the Octave packages so that they work with all the paths defined within the environment.

@@ -60,12 +60,12 @@ buildGoModule rec {
       --zsh mutagen.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Make remote development work with your local tools";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen/releases/tag/v${version}";
-    maintainers = [ ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
   };
 }

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
+  pytestFlags = [ "-Wignore::DeprecationWarning" ];
 
   meta = with lib; {
     description = "Plugin to fake subprocess for pytest";

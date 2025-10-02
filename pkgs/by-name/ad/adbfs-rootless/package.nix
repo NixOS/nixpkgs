@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "adbfs-rootless";
-  version = "unstable-2023-03-21";
+  version = "0-unstable-2023-03-21";
 
   src = fetchFromGitHub {
     owner = "spion";
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mount Android phones on Linux with adb, no root required";
     mainProgram = "adbfs";
     inherit (src.meta) homepage;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -10,6 +10,7 @@
   libtiff,
   opencolorio,
   openexr,
+  openjph,
   robin-map,
   unzip,
   fmt,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimageio";
-  version = "3.0.7.0";
+  version = "3.0.10.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenImageIO";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eVX7X0wqTasEBRz4i98av1PzwdUVycBmtPjWS+31yIE=";
+    hash = "sha256-BBrzmukPfQVYR0CdfiYOxvPfIEXCj/45lQFRxl9Loc0=";
   };
 
   outputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     opencolorio
     openexr
+    openjph
     robin-map
   ];
 

@@ -40,5 +40,4 @@
   purs-tidy = "purs-tidy";
   purty = "purty";
   pscid = "pscid";
-  vscode-json-languageserver = "vscode-json-languageserver";
 }

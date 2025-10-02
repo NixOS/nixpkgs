@@ -40,6 +40,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # albumentations doesn't support newer versions of albucore
+  # and has been archived upstream in favor of relicensed `albumentationsx`
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "High-performance image processing library to optimize and extend Albumentations with specialized functions for image transformations";
     homepage = "https://github.com/albumentations-team/albucore";

@@ -4,7 +4,6 @@
   cunit,
   docbook5,
   fetchFromGitHub,
-  fetchpatch,
   gdalMinimal,
   geos,
   jitSupport,
@@ -36,7 +35,7 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.5.2";
+  version = "3.6.0";
 
   outputs = [
     "out"
@@ -47,29 +46,19 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     tag = finalAttrs.version;
-    hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
+    hash = "sha256-L8k3yk1Dn4Dk7UyHse+8RJsjYsYMebdsiZp6fS7cC0Y=";
   };
 
-  patches = [
-    # Backport patch for compatibility with GDAL 3.11
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://git.osgeo.org/gitea/postgis/postgis/commit/614eca7c169cd6e9819801d3ea99d5258262c58b.patch";
-      hash = "sha256-VkNZFANAt8Jv+ExCusGvi+ZWB7XLcAheefSx7akA7Go=";
-    })
-  ];
-
-  buildInputs =
-    [
-      geos
-      proj
-      gdal
-      json_c
-      protobufc
-      pcre2.dev
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
-    ++ lib.optional withSfcgal sfcgal;
+  buildInputs = [
+    geos
+    proj
+    gdal
+    json_c
+    protobufc
+    pcre2.dev
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+  ++ lib.optional withSfcgal sfcgal;
 
   nativeBuildInputs = [
     autoconf
@@ -80,14 +69,18 @@ postgresqlBuildExtension (finalAttrs: {
     pkg-config
     protobufc
     which
-  ] ++ lib.optional jitSupport llvm;
+  ]
+  ++ lib.optional jitSupport llvm;
 
   dontDisableStatic = true;
+
+  checkInputs = [
+    cunit
+  ];
 
   nativeCheckInputs = [
     postgresql
     postgresqlTestHook
-    cunit
     libxslt
   ];
 
@@ -101,12 +94,19 @@ postgresqlBuildExtension (finalAttrs: {
     ./autogen.sh
   '';
 
-  configureFlags = [
-    "--with-pgconfig=${postgresql.pg_config}/bin/pg_config"
-    "--with-gdalconfig=${gdal}/bin/gdal-config"
-    "--with-jsondir=${json_c.dev}"
-    "--disable-extension-upgrades-install"
-  ] ++ lib.optional withSfcgal "--with-sfcgal=${sfcgal}/bin/sfcgal-config";
+  configureFlags =
+    let
+      isCross = stdenv.hostPlatform.config != stdenv.buildPlatform.config;
+    in
+    [
+      (lib.enableFeature false "extension-upgrades-install")
+      (lib.withFeatureAs true "pgconfig" "${postgresql.pg_config}/bin/pg_config")
+      (lib.withFeatureAs true "gdalconfig" "${gdal}/bin/gdal-config")
+      (lib.withFeatureAs true "jsondir" (lib.getDev json_c))
+      (lib.withFeatureAs true "xml2config" (lib.getExe' (lib.getDev libxml2) "xml2-config"))
+      (lib.withFeatureAs withSfcgal "sfcgal" "${sfcgal}/bin/sfcgal-config")
+      (lib.withFeature (!isCross) "json") # configure: error: cannot check for file existence when cross compiling
+    ];
 
   makeFlags = [
     "PERL=${perl}/bin/perl"
@@ -132,40 +132,38 @@ postgresqlBuildExtension (finalAttrs: {
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
-    sql =
-      ''
-        CREATE EXTENSION postgis;
-        CREATE EXTENSION postgis_raster;
-        CREATE EXTENSION postgis_topology;
-        -- st_makepoint goes through c code
-        select st_makepoint(1, 1);
-      ''
-      + lib.optionalString withSfcgal ''
-        CREATE EXTENSION postgis_sfcgal;
-        CREATE TABLE geometries (
-          name varchar,
-          geom geometry(PolygonZ) NOT NULL
-        );
+    sql = ''
+      CREATE EXTENSION postgis;
+      CREATE EXTENSION postgis_raster;
+      CREATE EXTENSION postgis_topology;
+      -- st_makepoint goes through c code
+      select st_makepoint(1, 1);
+    ''
+    + lib.optionalString withSfcgal ''
+      CREATE EXTENSION postgis_sfcgal;
+      CREATE TABLE geometries (
+        name varchar,
+        geom geometry(PolygonZ) NOT NULL
+      );
 
-        INSERT INTO geometries(name, geom) VALUES
-          ('planar geom', 'PolygonZ((1 1 0, 1 2 0, 2 2 0, 2 1 0, 1 1 0))'),
-          ('nonplanar geom', 'PolygonZ((1 1 1, 1 2 -1, 2 2 2, 2 1 0, 1 1 1))');
+      INSERT INTO geometries(name, geom) VALUES
+        ('planar geom', 'PolygonZ((1 1 0, 1 2 0, 2 2 0, 2 1 0, 1 1 0))'),
+        ('nonplanar geom', 'PolygonZ((1 1 1, 1 2 -1, 2 2 2, 2 1 0, 1 1 1))');
 
-        SELECT name from geometries where cg_isplanar(geom);
-      '';
-    asserts =
-      [
-        {
-          query = "postgis_version()";
-          expected = "'${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version} USE_GEOS=1 USE_PROJ=1 USE_STATS=1'";
-          description = "postgis_version() returns correct values.";
-        }
-      ]
-      ++ lib.optional withSfcgal {
-        query = "postgis_sfcgal_version()";
-        expected = "'${sfcgal.version}'";
-        description = "postgis_sfcgal_version() returns correct value.";
-      };
+      SELECT name from geometries where cg_isplanar(geom);
+    '';
+    asserts = [
+      {
+        query = "postgis_version()";
+        expected = "'${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version} USE_GEOS=1 USE_PROJ=1 USE_STATS=1'";
+        description = "postgis_version() returns correct values.";
+      }
+    ]
+    ++ lib.optional withSfcgal {
+      query = "postgis_sfcgal_version()";
+      expected = "'${sfcgal.version}'";
+      description = "postgis_sfcgal_version() returns correct value.";
+    };
   };
 
   meta = {

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "propcache";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "propcache";
     tag = "v${version}";
-    hash = "sha256-sVZsa6WkG1wUj9G+1vzgT+HT4fWLBqRNmn5nlEj5J0w=";
+    hash = "sha256-G8SLIZaJUu3uwyFicrQF+PjKp3vsUh/pNUsmDpnnAAg=";
   };
 
   postPatch = ''

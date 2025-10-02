@@ -21,7 +21,6 @@
   stdio,
   uuseg,
   uutf,
-  janeStreet_0_15,
   ...
 }:
 
@@ -67,37 +66,32 @@ rec {
 
   cmdliner_v = if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0;
 
-  base_v = if lib.versionAtLeast version "0.25.1" then base else janeStreet_0_15.base;
-
-  stdio_v = if lib.versionAtLeast version "0.25.1" then stdio else janeStreet_0_15.stdio;
-
-  library_deps =
-    [
-      base_v
-      cmdliner_v
-      dune-build-info
-      fix
-      fpath
-      menhirLib
-      menhirSdk
-      ocp-indent
-      stdio_v
-      uuseg
-      uutf
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "0.20.0") [
-      either
-      ocaml-version
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "0.22.4") [ csexp ]
-    ++ (
-      if lib.versionOlder version "0.25.1" then
-        [ odoc-parser_v ]
-      else
-        [
-          camlp-streams
-          result
-          astring
-        ]
-    );
+  library_deps = [
+    base
+    cmdliner_v
+    dune-build-info
+    fix
+    fpath
+    menhirLib
+    menhirSdk
+    ocp-indent
+    stdio
+    uuseg
+    uutf
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "0.20.0") [
+    either
+    ocaml-version
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "0.22.4") [ csexp ]
+  ++ (
+    if lib.versionOlder version "0.25.1" then
+      [ odoc-parser_v ]
+    else
+      [
+        camlp-streams
+        result
+        astring
+      ]
+  );
 }

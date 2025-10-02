@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "overturemaps";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UtYS5FcNBT9IIiybKUXK+jwGnXQ+oR/HQI3ntfV8NYg=";
+    hash = "sha256-Q24jVbg0AUX8a4dho3uiCvGjTL4n13Yl/8k19T86b1Y=";
   };
 
   build-system = with python3Packages; [ poetry-core ];

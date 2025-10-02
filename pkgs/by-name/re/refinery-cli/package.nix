@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/332957
   cargoPatches = [ ./time-crate.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-gcPVbKcPkV0H+BpErTokvLKFxpSXhxNoptxOeuhH1FU=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -29,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Run migrations for the Refinery ORM for Rust via the CLI";
     mainProgram = "refinery";
     homepage = "https://github.com/rust-db/refinery";
     changelog = "https://github.com/rust-db/refinery/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

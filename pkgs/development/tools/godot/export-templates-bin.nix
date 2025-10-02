@@ -39,9 +39,6 @@ let
       mv templates "$templates/$version"
     '';
 
-    # this allows update-source-version to work
-    passthru.src = self;
-
     meta = {
       inherit (godot.meta)
         changelog

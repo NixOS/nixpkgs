@@ -191,8 +191,8 @@
   },
   {
     "pname": "Nerdbank.GitVersioning",
-    "version": "3.6.141",
-    "hash": "sha256-i1pBJ12vlPmde6qSQK4PG2QLSpjaUCoY+odTi24R5XI="
+    "version": "3.7.115",
+    "hash": "sha256-sqn+i7vvBgBUtm7j82mH+SpApgI2hsmL5DYfLm1Z7gw="
   },
   {
     "pname": "NETStandard.Library",

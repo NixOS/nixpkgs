@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")" || exit 1
 
 # Grab latest version, ignoring "latest" and "preview" tags
-LATEST_VER="$(curl --fail -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/PCSX2/pcsx2/releases" | jq -r '.[0].tag_name' | sed 's/^v//')"
+LATEST_VER="$(curl --fail -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/PCSX2/pcsx2/releases/latest" | jq -r '.tag_name' | sed 's/^v//')"
 CURRENT_VER="$(grep -oP 'version = "\K[^"]+' package.nix)"
 
 if [[ "$LATEST_VER" == "$CURRENT_VER" ]]; then

@@ -59,29 +59,28 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost186
-      cmake-extras
-      dbus
-      dbus-cpp
-      gdk-pixbuf
-      glib
-      libapparmor
-      libexif
-      properties-cpp
-      qtbase
-      qtdeclarative
-      shared-mime-info
-      sqlite
-      taglib
-      udisks
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    boost186
+    cmake-extras
+    dbus
+    dbus-cpp
+    gdk-pixbuf
+    glib
+    libapparmor
+    libexif
+    properties-cpp
+    qtbase
+    qtdeclarative
+    shared-mime-info
+    sqlite
+    taglib
+    udisks
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   checkInputs = [ gtest ];
 

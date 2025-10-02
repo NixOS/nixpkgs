@@ -42,28 +42,24 @@ Because overlays that are set in NixOS configuration do not affect non-NixOS ope
 
 ## Defining overlays {#sec-overlays-definition}
 
-Overlays are Nix functions which accept two arguments, conventionally called `self` and `super`, and return a set of packages. For example, the following is a valid overlay.
+Overlays are Nix functions which accept two arguments, conventionally called either `final` and `prev` in newer code or `self` and `super` in older code, and return a set of packages. For example, the following is a valid overlay.
 
 ```nix
-self: super:
+final: prev:
 
 {
-  boost = super.boost.override {
-    python = self.python3;
-  };
-  rr = super.callPackage ./pkgs/rr {
-    stdenv = self.stdenv_32bit;
-  };
+  boost = prev.boost.override { python = final.python3; };
+  rr = prev.callPackage ./pkgs/rr { stdenv = final.stdenv_32bit; };
 }
 ```
 
-The first argument (`self`) corresponds to the final package set. You should use this set for the dependencies of all packages specified in your overlay. For example, all the dependencies of `rr` in the example above come from `self`, as well as the overridden dependencies used in the `boost` override.
+The first argument (`final`, `self`) corresponds to the final package set. You should use this set for the dependencies of all packages specified in your overlay. For example, all the dependencies of `rr` in the example above come from `final`, as well as the overridden dependencies used in the `boost` override.
 
-The second argument (`super`) corresponds to the result of the evaluation of the previous stages of Nixpkgs. It does not contain any of the packages added by the current overlay, nor any of the following overlays. This set should be used either to refer to packages you wish to override, or to access functions defined in Nixpkgs. For example, the original recipe of `boost` in the above example, comes from `super`, as well as the `callPackage` function.
+The second argument (`prev`, `super`) corresponds to the result of the evaluation of the previous stages of Nixpkgs. It does not contain any of the packages added by the current overlay, nor any of the following overlays. This set should be used either to refer to packages you wish to override, or to access functions defined in Nixpkgs. For example, the original recipe of `boost` in the above example, comes from `prev`, as well as the `callPackage` function.
 
 The value returned by this function should be a set similar to `pkgs/top-level/all-packages.nix`, containing overridden and/or new packages.
 
-Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [](#sec-modify-via-packageOverrides). Indeed, `packageOverrides` acts as an overlay with only the `super` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
+Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [](#sec-modify-via-packageOverrides). Indeed, `packageOverrides` acts as an overlay with only the `prev` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
 
 ## Using overlays to configure alternatives {#sec-overlays-alternatives}
 
@@ -96,16 +92,12 @@ In Nixpkgs, we have multiple implementations of the BLAS/LAPACK numerical linear
 Introduced in [PR #83888](https://github.com/NixOS/nixpkgs/pull/83888), we are able to override the `blas` and `lapack` packages to use different implementations, through the `blasProvider` and `lapackProvider` argument. This can be used to select a different provider. BLAS providers will have symlinks in `$out/lib/libblas.so.3` and `$out/lib/libcblas.so.3` to their respective BLAS libraries.  Likewise, LAPACK providers will have symlinks in `$out/lib/liblapack.so.3` and `$out/lib/liblapacke.so.3` to their respective LAPACK libraries. For example, Intel MKL is both a BLAS and LAPACK provider. An overlay can be created to use Intel MKL that looks like:
 
 ```nix
-self: super:
+final: prev:
 
 {
-  blas = super.blas.override {
-    blasProvider = self.mkl;
-  };
+  blas = prev.blas.override { blasProvider = final.mkl; };
 
-  lapack = super.lapack.override {
-    lapackProvider = self.mkl;
-  };
+  lapack = prev.lapack.override { lapackProvider = final.mkl; };
 }
 ```
 
@@ -120,16 +112,12 @@ Intel MKL requires an `openmp` implementation when running with multiple process
 To override `blas` and `lapack` with its reference implementations (i.e. for development purposes), one can use the following overlay:
 
 ```nix
-self: super:
+final: prev:
 
 {
-  blas = super.blas.override {
-    blasProvider = self.lapack-reference;
-  };
+  blas = prev.blas.override { blasProvider = final.lapack-reference; };
 
-  lapack = super.lapack.override {
-    lapackProvider = self.lapack-reference;
-  };
+  lapack = prev.lapack.override { lapackProvider = final.lapack-reference; };
 }
 ```
 
@@ -152,7 +140,7 @@ stdenv.mkDerivation {
 
 ### Switching the MPI implementation {#sec-overlays-alternatives-mpi}
 
-All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides two different MPI implementations:
+All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides the following MPI implementations:
 
 -   [Open MPI](https://www.open-mpi.org/) (default), attribute name
     `openmpi`
@@ -164,9 +152,9 @@ All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Pas
 To provide MPI enabled applications that use `MPICH`, instead of the default `Open MPI`, use the following overlay:
 
 ```nix
-self: super:
+final: prev:
 
 {
-  mpi = self.mpich;
+  mpi = final.mpich;
 }
 ```

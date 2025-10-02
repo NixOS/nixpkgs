@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-EFEyP7eqB4sUQ2ksD67kCr0BEShTiKWbk1PxXOUOGc4=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.12,<3.1.0" Cython
+  '';
+
   build-system = [
     cmake
     cython

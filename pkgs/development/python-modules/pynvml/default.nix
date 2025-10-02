@@ -11,18 +11,22 @@
 
 buildPythonPackage rec {
   pname = "pynvml";
-  version = "12.0.0";
+  version = "13.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gpuopenanalytics";
     repo = "pynvml";
     tag = version;
-    hash = "sha256-bfES6QqL9DO7rmQ3btXxVzW0KlL0eHyUvYJVeijymBk=";
+    hash = "sha256-Jwj3cm0l7qR/q5jzwKbD52L7ePYCdzXrYFOceMA776M=";
   };
 
   build-system = [
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "nvidia-ml-py"
   ];
 
   dependencies = [ nvidia-ml-py ];

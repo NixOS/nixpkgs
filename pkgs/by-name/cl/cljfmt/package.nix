@@ -4,16 +4,15 @@
   fetchurl,
   nix-update-script,
   testers,
-  cljfmt,
 }:
 
-buildGraalvmNativeImage rec {
+buildGraalvmNativeImage (finalAttrs: {
   pname = "cljfmt";
-  version = "0.13.1";
+  version = "0.13.4";
 
   src = fetchurl {
-    url = "https://github.com/weavejester/cljfmt/releases/download/${version}/cljfmt-${version}-standalone.jar";
-    hash = "sha256-Dj1g6hMzRhqm0pJggODVFgEkayB2Wdh3d0z6RglHbgY=";
+    url = "https://github.com/weavejester/cljfmt/releases/download/${finalAttrs.version}/cljfmt-${finalAttrs.version}-standalone.jar";
+    hash = "sha256-i6ZUhN7gwADw0tZFPOjiGpC/po8us5QSAJAW7n3LgIU=";
   };
 
   extraNativeImageBuildArgs = [
@@ -28,8 +27,8 @@ buildGraalvmNativeImage rec {
   passthru.updateScript = nix-update-script { };
 
   passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = cljfmt;
+    inherit (finalAttrs) version;
+    package = finalAttrs.finalPackage;
     command = "cljfmt --version";
   };
 
@@ -39,7 +38,7 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/weavejester/cljfmt";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
-    changelog = "https://github.com/weavejester/cljfmt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/weavejester/cljfmt/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ sg-qwt ];
   };
-}
+})

@@ -3,7 +3,7 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 To this end, we use functions that we call _fetchers_, which obtain remote sources via various protocols and services.
 
-Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball).
+Nix provides built-in fetchers such as [`fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball).
 Nixpkgs provides its own fetchers, which work differently:
 
 - A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path).
@@ -162,6 +162,8 @@ Here are security considerations for this scenario:
 Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automatically inherit proxy-related environment variables (`http_proxy`, `https_proxy`, etc) via [impureEnvVars](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-impureEnvVars).
 
 The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
+
+To use a temporary Tor instance as a proxy for fetching from `.onion` addresses, add `nativeBuildInputs = [ tor.proxyHook ];` to the fetcher parameters.
 
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
@@ -827,6 +829,10 @@ Additionally, the following optional arguments can be given:
 
   See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
 
+*`rootDir`* (String)
+
+: When not empty, copy only contents of the subdirectory of the repository to the result. Automatically sets `sparseCheckout` and `nonConeMode` to avoid checking out any extra pieces. Incompatible with `leaveDotGit`.
+
 Some additional parameters for niche use-cases can be found listed in the function parameters in the declaration of `fetchgit`: `pkgs/build-support/fetchgit/default.nix`.
 Future parameters additions might also happen without immediately being documented here.
 
@@ -840,7 +846,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `hash`.
+Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
@@ -889,6 +895,39 @@ or "hg"), `domain` and `fetchSubmodules`.
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
 respectively. Otherwise, the fetcher uses `fetchzip`.
+
+## `fetchFromRadicle` {#fetchfromradicle}
+
+This is used with Radicle repositories. The arguments expected are similar to `fetchgit`.
+
+Requires a `seed` argument (e.g. `seed.radicle.xyz` or `rosa.radicle.xyz`) and a `repo` argument
+(the repository id *without* the `rad:` prefix). Also accepts an optional `node` argument which
+contains the id of the node from which to fetch the specified ref. If `node` is `null` (the
+default), a canonical ref is fetched instead.
+
+```nix
+fetchFromRadicle {
+  seed = "seed.radicle.xyz";
+  repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5"; # heartwood
+  tag = "releases/1.3.0";
+  hash = "sha256-4o88BWKGGOjCIQy7anvzbA/kPOO+ZsLMzXJhE61odjw=";
+}
+```
+
+## `fetchRadiclePatch` {#fetchradiclepatch}
+
+`fetchRadiclePatch` works very similarly to `fetchFromRadicle` with almost the same arguments
+expected. However, instead of a `rev` or `tag` argument, a `revision` argument is expected, which
+contains the full revision id of the Radicle patch to fetch.
+
+```nix
+fetchRadiclePatch {
+  seed = "rosa.radicle.xyz";
+  repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5"; # radicle-explorer
+  revision = "d97d872386c70607beda2fb3fc2e60449e0f4ce4"; # patch: d77e064
+  hash = "sha256-ttnNqj0lhlSP6BGzEhhUOejKkkPruM9yMwA5p9Di4bk=";
+}
+```
 
 ## `requireFile` {#requirefile}
 

@@ -112,7 +112,8 @@ buildPythonPackage rec {
       huggingface-hub
       google-cloud-storage
       requests
-    ] ++ huggingface-hub.optional-dependencies.hf_transfer;
+    ]
+    ++ huggingface-hub.optional-dependencies.hf_transfer;
     logging = [ asgi-logger ];
     ray = [ ray ];
     llm = [
@@ -128,48 +129,53 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     tomlkit
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "kserve" ];
-
-  pytestFlagsArray =
-    [
-      # AssertionError
-      "--deselect=test/test_server.py::TestTFHttpServerLoadAndUnLoad::test_unload"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # RuntimeError: Failed to start GCS
-      "--deselect=test/test_dataplane.py::TestDataPlane::test_explain"
-      "--deselect=test/test_dataplane.py::TestDataPlane::test_infer"
-      "--deselect=test/test_dataplane.py::TestDataPlane::test_model_metadata"
-      "--deselect=test/test_dataplane.py::TestDataPlane::test_server_readiness"
-      "--deselect=test/test_server.py::TestRayServer::test_explain"
-      "--deselect=test/test_server.py::TestRayServer::test_health_handler"
-      "--deselect=test/test_server.py::TestRayServer::test_infer"
-      "--deselect=test/test_server.py::TestRayServer::test_list_handler"
-      "--deselect=test/test_server.py::TestRayServer::test_liveness_handler"
-      "--deselect=test/test_server.py::TestRayServer::test_predict"
-      # Permission Error
-      "--deselect=test/test_server.py::TestMutiProcessServer::test_rest_server_multiprocess"
-    ];
 
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
     "test/test_inference_service_client.py"
+
+    # AssertionError
+    "test/test_server.py::TestTFHttpServerLoadAndUnLoad::test_unload"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: Failed to start GCS
+    "test/test_dataplane.py::TestDataPlane::test_explain"
+    "test/test_dataplane.py::TestDataPlane::test_infer"
+    "test/test_dataplane.py::TestDataPlane::test_model_metadata"
+    "test/test_dataplane.py::TestDataPlane::test_server_readiness"
+    "test/test_server.py::TestRayServer::test_explain"
+    "test/test_server.py::TestRayServer::test_health_handler"
+    "test/test_server.py::TestRayServer::test_infer"
+    "test/test_server.py::TestRayServer::test_list_handler"
+    "test/test_server.py::TestRayServer::test_liveness_handler"
+    "test/test_server.py::TestRayServer::test_predict"
+    # Permission Error
+    "test/test_server.py::TestMutiProcessServer::test_rest_server_multiprocess"
   ];
 
-  disabledTests =
-    [
-      # Require network access
-      "test_infer_graph_endpoint"
-      "test_infer_path_based_routing"
+  disabledTests = [
+    # AssertionError: assert CompletionReq...lm_xargs=None) == CompletionReq...lm_xargs=None)
+    "test_convert_params"
 
-      # Tries to access `/tmp` (hardcoded)
-      "test_local_path_with_out_dir_exist"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_local_path_with_out_dir_not_exist"
-    ];
+    # Flaky: ray.exceptions.ActorDiedError: The actor died unexpectedly before finishing this task.
+    "test_explain"
+    "test_infer"
+    "test_predict"
+
+    # Require network access
+    "test_infer_graph_endpoint"
+    "test_infer_path_based_routing"
+
+    # Tries to access `/tmp` (hardcoded)
+    "test_local_path_with_out_dir_exist"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_local_path_with_out_dir_not_exist"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

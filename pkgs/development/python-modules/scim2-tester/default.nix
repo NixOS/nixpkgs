@@ -36,7 +36,8 @@ buildPythonPackage rec {
     scim2-server
     pytest-httpserver
     cacert
-  ] ++ optional-dependencies.httpx;
+  ]
+  ++ optional-dependencies.httpx;
 
   pythonImportsCheck = [ "scim2_tester" ];
 

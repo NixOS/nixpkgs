@@ -28,7 +28,6 @@ in
     version = "unstable-2021-01-05";
     inherit src meta;
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
 
     buildAndTestSubdir = "server";
@@ -50,7 +49,6 @@ in
     version = "unstable-2021-01-05";
     inherit src meta;
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
 
     PROTOC = "${protobuf}/bin/protoc";

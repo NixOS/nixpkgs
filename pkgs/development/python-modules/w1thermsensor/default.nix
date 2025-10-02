@@ -39,14 +39,13 @@ buildPythonPackage rec {
   # Don't try to load the kernel module in tests.
   env.W1THERMSENSOR_NO_KERNEL_MODULE = 1;
 
-  nativeCheckInputs =
-    [
-      pytest-mock
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    pytest-mock
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "w1thermsensor" ];
 

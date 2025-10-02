@@ -39,20 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      bluez
-      glib
-      sbc
-      dbus
-      readline
-      libbsd
-      ncurses
-    ]
-    ++ lib.optionals aacSupport [
-      fdk_aac
-    ];
+  buildInputs = [
+    alsa-lib
+    bluez
+    glib
+    sbc
+    dbus
+    readline
+    libbsd
+    ncurses
+  ]
+  ++ lib.optionals aacSupport [
+    fdk_aac
+  ];
 
   configureFlags = [
     (lib.enableFeature aacSupport "aac")

@@ -42,28 +42,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs =
-    [
-      expected-lite
-      fmt
-      llhttp
-      openssl
-      pcre2
-      zlib
-    ]
-    ++ (
-      if with_boost_asio then
-        [
-          boost
-        ]
-      else
-        [
-          asio
-        ]
-    );
+  propagatedBuildInputs = [
+    expected-lite
+    fmt
+    openssl
+    pcre2
+    zlib
+  ]
+  ++ (
+    if with_boost_asio then
+      [
+        boost
+      ]
+    else
+      [
+        asio
+      ]
+  );
 
   buildInputs = [
     catch2_3
+    llhttp
   ];
 
   cmakeDir = "../dev";
@@ -76,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DRESTINIO_ASIO_SOURCE=${if with_boost_asio then "boost" else "standalone"}"
     "-DRESTINIO_DEP_EXPECTED_LITE=find"
     "-DRESTINIO_DEP_FMT=find"
-    "-DRESTINIO_DEP_LLHTTP=find"
+    "-DRESTINIO_DEP_LLHTTP=system"
     "-DRESTINIO_DEP_CATCH2=find"
   ];
 

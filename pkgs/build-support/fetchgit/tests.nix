@@ -1,4 +1,14 @@
-{ testers, fetchgit, ... }:
+{
+  runCommand,
+  testers,
+  fetchgit,
+  nix-prefetch-git,
+  jq,
+  cacert,
+  nix,
+  closureInfo,
+  ...
+}:
 {
   simple = testers.invalidateFetcherByDrvHash fetchgit {
     name = "simple-nix-source";
@@ -97,4 +107,106 @@
       rm -rf .git
     '';
   };
+
+  rootDir = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "fetchgit-with-rootdir";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    rootDir = "misc/systemd";
+    sha256 = "sha256-UhxHk4SrXYq7ZDMtXLig5SigpbITrVgkpFTmryuvpcM=";
+  };
+
+  # Make sure that if an expected hash is given and the corresponding store path exists already, no fetch is done
+  cached-prefetch-avoids-fetch =
+    let
+      name = "cached-prefetch-avoids-fetch";
+      url = "https://github.com/NixOS/nix";
+      rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+      sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+      fetched = fetchgit {
+        inherit
+          name
+          url
+          rev
+          sha256
+          ;
+      };
+    in
+    runCommand "cached-prefetch-avoids-fetch"
+      {
+        nativeBuildInputs = [
+          nix-prefetch-git
+          nix
+        ];
+      }
+      ''
+        export NIX_REMOTE=local?root=$(mktemp -d)
+        nix-store --load-db < ${closureInfo { rootPaths = fetched; }}/registration
+        nix-prefetch-git --name "${name}" "${url}" "${rev}" "${sha256}" > $out
+      '';
+
+  prefetch-git-no-add-path =
+    testers.invalidateFetcherByDrvHash
+      (
+        {
+          name,
+          url,
+          rev,
+          hash,
+          ...
+        }:
+        runCommand name
+          {
+            buildInputs = [
+              nix-prefetch-git
+              nix
+              cacert
+              jq
+            ];
+            outputHashMode = "recursive";
+            outputHashAlgo = null;
+            outputHash = hash;
+            inherit url rev;
+          }
+          ''
+            store_root="$(mktemp -d)"
+            prefetch() { NIX_REMOTE="local?root=$store_root" nix-prefetch-git $@ "$url" --rev "$rev" | jq -r .path; }
+            path="$(prefetch --no-add-path)"
+            if test -e "$store_root/$path"; then
+              echo "$path exists in $NIX_REMOTE when it shouldn't" >&2
+              exit 1
+            fi
+            path_added="$(prefetch)"
+            if ! test -e "$store_root/$path"; then
+              echo "$path_added doesn't exist in NIX_REMOTE when it should" >&2
+              exit 1
+            fi
+            if test "$path" != "$path_added"; then
+              echo "Paths are different with and without --no-add-path: $path != $path_added" >&2
+              exit 1
+            fi
+            cp -r "$store_root/$path_added" "$out"
+          ''
+      )
+      {
+        name = "nix-prefetch-git-no-add-path";
+        url = "https://github.com/NixOS/nix";
+        rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+        hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+      };
+
+  withGitConfig =
+    let
+      pkgs = import ../../.. {
+        config.gitConfig = {
+          url."https://github.com".insteadOf = "https://doesntexist.forsure";
+        };
+      };
+    in
+    pkgs.testers.invalidateFetcherByDrvHash pkgs.fetchgit {
+      name = "fetchgit-with-config";
+      url = "https://doesntexist.forsure/NixOS/nix";
+      rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+      sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+    };
 }

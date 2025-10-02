@@ -5,7 +5,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
-    pytest-asyncio
-    pytest-aiohttp
+    pytest-asyncio_0
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook

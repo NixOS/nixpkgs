@@ -1,0 +1,11 @@
+{
+  "dart_leap": "sha256-oO5851cIdrW/asgOePxvwUgjn1XchkH9CKJUruvlLYI=",
+  "lw_file_system": "sha256-cnGaTriJI3IEZjUg5sj4VrrG3cxfzBfDzJRkFRIKmu4=",
+  "lw_file_system_api": "sha256-ozp/mJq2o5pzQgFcTWLzG67XgHZRHoIRW+W0QDLCTFM=",
+  "lw_sysapi": "sha256-rs/nC6/uUGXHZ6kzb+RCcvtVP/zSYV9NdrUq+WHLOKQ=",
+  "material_leap": "sha256-cnGaTriJI3IEZjUg5sj4VrrG3cxfzBfDzJRkFRIKmu4=",
+  "networker": "sha256-YqCl/FODv8QZFnz1qVHoJLIioYhcluPiY4pP09MzvNE=",
+  "networker_crypto": "sha256-8I/qBdxxbIse7un4W9MjaifbK7TqsyYrFnIbaTuezo0=",
+  "networker_socket": "sha256-8I/qBdxxbIse7un4W9MjaifbK7TqsyYrFnIbaTuezo0=",
+  "swamp_api": "sha256-74Zr2qUeS8JnWcqqU7zAwaD8ygnni76OuTOwQqobhCk="
+}

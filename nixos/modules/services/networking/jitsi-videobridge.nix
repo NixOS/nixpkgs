@@ -253,7 +253,8 @@ in
           "-Dconfig.file" = format.generate "jvb.conf" jvbConfig;
           # Mitigate CVE-2021-44228
           "-Dlog4j2.formatMsgNoLookups" = true;
-        } // (lib.mapAttrs' (k: v: lib.nameValuePair "-D${k}" v) cfg.extraProperties);
+        }
+        // (lib.mapAttrs' (k: v: lib.nameValuePair "-D${k}" v) cfg.extraProperties);
       in
       {
         aliases = [ "jitsi-videobridge.service" ];

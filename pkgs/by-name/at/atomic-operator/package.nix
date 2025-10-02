@@ -7,21 +7,25 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "atomic-operator";
   version = "0.8.5";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "swimlane";
     repo = "atomic-operator";
-    rev = version;
+    tag = version;
     hash = "sha256-DyNqu3vndyLkmfybCfTbgxk3t/ALg7IAkAMg4kBkH7Q=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "charset_normalizer~=2.0.0" "charset_normalizer"
-  '';
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "charset_normalizer"
+    "urllib3"
+  ];
+
+  dependencies = with python3.pkgs; [
     attrs
     certifi
     chardet

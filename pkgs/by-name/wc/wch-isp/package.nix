@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "install-rules"
   ];
 
+  doInstallCheck = true;
+
   meta = {
     description = "Firmware programmer for WCH microcontrollers over USB";
     mainProgram = "wch-isp";

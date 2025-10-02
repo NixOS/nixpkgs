@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitea,
   bash,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,6 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-b2NBgGpRQ2pQZYQgiRSAt0loAxq1NEByRHVkQQRDOj0=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm444 -t "$out/lib/udev/rules.d" *.rules

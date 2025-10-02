@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "ALMO is markdown parser and static site generator";
+    description = "Markdown parser and static site generator";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     homepage = "https://github.com/abap34/almo";

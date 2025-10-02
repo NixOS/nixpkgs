@@ -64,6 +64,11 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    adobeUtopia = {
+      fullName = "Adobe Utopia Font License";
+      spdxId = "Adobe-Utopia";
+    };
+
     afl20 = {
       spdxId = "AFL-2.0";
       fullName = "Academic Free License v2.0";
@@ -152,6 +157,11 @@ lib.mapAttrs mkLicense (
       fullName = "Artistic License 2.0";
     };
 
+    asl11 = {
+      spdxId = "Apache-1.1";
+      fullName = "Apache License 1.1";
+    };
+
     asl20 = {
       spdxId = "Apache-2.0";
       fullName = "Apache License 2.0";
@@ -232,6 +242,11 @@ lib.mapAttrs mkLicense (
       fullName = "Lawrence Berkeley National Labs BSD variant license";
     };
 
+    bsd3ClauseTso = {
+      spdxId = "BSD-3-Clause-Tso";
+      fullName = "BSD 3-Clause Tso variant";
+    };
+
     bsdAxisNoDisclaimerUnmodified = {
       fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
       url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
@@ -267,11 +282,6 @@ lib.mapAttrs mkLicense (
       fullName = "Business Source License 1.1";
       free = false;
       redistributable = true;
-    };
-
-    caossl = {
-      fullName = "Computer Associates Open Source Licence Version 1.0";
-      url = "http://jxplorer.org/licence.html";
     };
 
     cal10 = {
@@ -405,9 +415,8 @@ lib.mapAttrs mkLicense (
     };
 
     cc-sa-10 = {
-      shortName = "CC-SA-1.0";
+      spdxId = "CC-SA-1.0";
       fullName = "Creative Commons Share Alike 1.0";
-      url = "https://creativecommons.org/licenses/sa/1.0";
     };
 
     cddl = {
@@ -433,6 +442,11 @@ lib.mapAttrs mkLicense (
     cecill-c = {
       spdxId = "CECILL-C";
       fullName = "CeCILL-C Free Software License Agreement";
+    };
+
+    classpathException20 = {
+      spdxId = "Classpath-exception-2.0";
+      fullName = "Classpath exception 2.0";
     };
 
     cockroachdb-community-license = {
@@ -583,14 +597,14 @@ lib.mapAttrs mkLicense (
 
     fsl11Mit = {
       fullName = "Functional Source License, Version 1.1, MIT Future License";
-      url = "https://fsl.software/FSL-1.1-MIT.template.md";
+      spdxId = "FSL-1.1-MIT";
       free = false;
       redistributable = true;
     };
 
     fsl11Asl20 = {
       fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
-      url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
+      spdxId = "FSL-1.1-ALv2";
       free = false;
       redistributable = true;
     };
@@ -641,26 +655,6 @@ lib.mapAttrs mkLicense (
       fullName = "GNU General Public License v2.0 only";
     };
 
-    gpl2Classpath = {
-      spdxId = "GPL-2.0-with-classpath-exception";
-      fullName = "GNU General Public License v2.0 only (with Classpath exception)";
-    };
-
-    gpl2ClasspathPlus = {
-      fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
-      url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
-    };
-
-    gpl2UBDLPlus = {
-      fullName = "GNU General Public License v3.0 or later (with UBDL exception)";
-      url = "https://spdx.org/licenses/UBDL-exception.html";
-    };
-
-    gpl2Oss = {
-      fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
-      url = "https://www.mysql.com/about/legal/licensing/foss-exception";
-    };
-
     gpl2Plus = {
       spdxId = "GPL-2.0-or-later";
       fullName = "GNU General Public License v2.0 or later";
@@ -676,11 +670,6 @@ lib.mapAttrs mkLicense (
       fullName = "GNU General Public License v3.0 or later";
     };
 
-    gpl3ClasspathPlus = {
-      fullName = "GNU General Public License v3.0 or later (with Classpath exception)";
-      url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
-    };
-
     giftware = {
       spdxId = "Giftware";
       fullName = "Giftware License";
@@ -691,9 +680,36 @@ lib.mapAttrs mkLicense (
       fullName = "Historic Permission Notice and Disclaimer";
     };
 
+    hpndDifferentDisclaimer = {
+      fullName = "HPND with different disclaimer";
+      url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/1914233e662d23ffb3812b80fadd0bbd064ad91c/COPYING-x11proto#L69-88";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace reference with whatever this license is supposed to be then
+      # https://tools.spdx.org/app/license_requests/456
+      # https://github.com/spdx/license-list-xml/issues/2753
+    };
+
     hpndSellVariant = {
       fullName = "Historical Permission Notice and Disclaimer - sell variant";
       spdxId = "HPND-sell-variant";
+    };
+
+    hpndDec = {
+      fullName = "Historical Permission Notice and Disclaimer - DEC variant";
+      spdxId = "HPND-DEC";
+    };
+
+    hpndDoc = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation variant";
+      spdxId = "HPND-doc";
+    };
+
+    hpndDocSell = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation sell variant";
+      spdxId = "HPND-doc-sell";
     };
 
     hpndUc = {
@@ -914,6 +930,11 @@ lib.mapAttrs mkLicense (
     lpl-102 = {
       spdxId = "LPL-1.02";
       fullName = "Lucent Public License v1.02";
+    };
+
+    lsof = {
+      spdxId = "lsof";
+      fullName = "lsof License"; # also known as Purdue BSD-Style License
     };
 
     miros = {
@@ -1143,11 +1164,6 @@ lib.mapAttrs mkLicense (
       fullName = "Public Domain";
     };
 
-    purdueBsd = {
-      fullName = "Purdue BSD-Style License"; # also known as lsof license
-      url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
-    };
-
     prosperity30 = {
       fullName = "Prosperity-3.0.0";
       free = false;
@@ -1164,14 +1180,9 @@ lib.mapAttrs mkLicense (
       fullName = "Q Public License 1.0";
     };
 
-    qwt = {
-      fullName = "Qwt License, Version 1.0";
-      url = "https://qwt.sourceforge.io/qwtlicense.html";
-    };
-
-    radiance = {
-      fullName = "The Radiance Software License, Version 2.0";
-      url = "https://github.com/LBNL-ETA/Radiance/blob/master/License.txt";
+    qwtException = {
+      spdxId = "Qwt-exception-1.0";
+      fullName = "Qwt exception 1.0";
     };
 
     ruby = {
@@ -1202,15 +1213,19 @@ lib.mapAttrs mkLicense (
       fullName = "SGML UG SGML Parser Materials license";
     };
 
+    sissl11 = {
+      spdxId = "SISSL";
+      fullName = "Sun Industry Standards Source License 1.1";
+    };
+
     sleepycat = {
       spdxId = "Sleepycat";
       fullName = "Sleepycat License";
     };
 
     smail = {
-      shortName = "smail";
+      spdxId = "SMAIL-GPL";
       fullName = "SMAIL General Public License";
-      url = "https://sources.debian.org/copyright/license/debianutils/4.9.1/";
     };
 
     smlnj = {
@@ -1219,9 +1234,8 @@ lib.mapAttrs mkLicense (
     };
 
     sspl = {
-      shortName = "SSPL";
+      spdxId = "SSPL-1.0";
       fullName = "Server Side Public License";
-      url = "https://www.mongodb.com/licensing/server-side-public-license";
       free = false;
       # NOTE Debatable.
       # The license a slightly modified AGPL but still considered unfree by the
@@ -1242,9 +1256,8 @@ lib.mapAttrs mkLicense (
     };
 
     sustainableUse = {
-      shortName = "sustainable";
+      spdxId = "SUL-1.0";
       fullName = "Sustainable Use License";
-      url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
       free = false;
       redistributable = false; # only free to redistribute "for non-commercial purposes"
     };
@@ -1288,6 +1301,14 @@ lib.mapAttrs mkLicense (
       # Marc Weber (small nix contributor)
     };
 
+    tekHvcLicense = {
+      fullName = "TekHVC License";
+      url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/7f8305c779ac6948d7261764f5ffb8ae9aa975b1/COPYING#L138-171";
+      # TODO: add spdxId when it gets accepted to spdx
+      # https://tools.spdx.org/app/license_requests/458
+      # https://github.com/spdx/license-list-XML/issues/2757
+    };
+
     tsl = {
       shortName = "TSL";
       fullName = "Timescale License Agreegment";
@@ -1303,6 +1324,11 @@ lib.mapAttrs mkLicense (
     tost = {
       fullName = "Tomorrow Open Source Technology License 1.0";
       url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+    };
+
+    ubdlException = {
+      spdxId = "UBDL-exception";
+      fullName = "Unmodified Binary Distribution exception";
     };
 
     ucd = {
@@ -1413,8 +1439,8 @@ lib.mapAttrs mkLicense (
       fullName = "Do What The F*ck You Want To Public License";
     };
 
-    wxWindows = {
-      spdxId = "wxWindows";
+    wxWindowsException31 = {
+      spdxId = "WxWindows-exception-3.1";
       fullName = "wxWindows Library Licence, Version 3.1";
     };
 

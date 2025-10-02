@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   anyio,
   buildPythonPackage,
   dirty-equals,
@@ -7,10 +8,12 @@
   fetchFromGitHub,
   hatch-fancy-pypi-readme,
   hatchling,
+  httpx-aiohttp,
   httpx,
   nest-asyncio,
   pydantic,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   respx,
   sniffio,
@@ -19,15 +22,21 @@
 
 buildPythonPackage rec {
   pname = "groq";
-  version = "0.19.0";
+  version = "0.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "groq";
     repo = "groq-python";
     tag = "v${version}";
-    hash = "sha256-+1us/LPQEMeswxxHvydfTCod+RimUD2lKtlAZ3pDZOA=";
+    hash = "sha256-31doHBwdZWlEb1tk0OjfLciPhde0kfiMY6heiXDvnWI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.26.3" \
+      "hatchling>=1.26.3"
+  '';
 
   build-system = [
     hatch-fancy-pypi-readme
@@ -43,13 +52,22 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
+  };
+
   nativeCheckInputs = [
     dirty-equals
     nest-asyncio
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     respx
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "groq" ];
 
@@ -66,6 +84,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/groq/groq-python";
     changelog = "https://github.com/groq/groq-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      sarahec
+    ];
   };
 }

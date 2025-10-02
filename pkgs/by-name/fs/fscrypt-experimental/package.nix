@@ -45,8 +45,8 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A high-level tool for the management of Linux filesystem encryption";
+  meta = {
+    description = "High-level tool for the management of Linux filesystem encryption";
     mainProgram = "fscrypt";
     longDescription = ''
       This tool manages metadata, key generation, key wrapping, PAM integration,
@@ -55,8 +55,8 @@ buildGoModule rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/google/fscrypt/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
 }

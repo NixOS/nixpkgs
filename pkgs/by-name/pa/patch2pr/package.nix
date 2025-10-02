@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "patch2pr";
-  version = "0.35.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "bluekeyes";
     repo = "patch2pr";
     rev = "v${version}";
-    hash = "sha256-dj8xDTl7S1XETJqDI61rdRvQebJ4xgit+xc1xRyaV4M=";
+    hash = "sha256-WkjO6FBeJ5E2bc4PT9lkfNq5CYL3Kh1Mgai+39YDzSU=";
   };
 
-  vendorHash = "sha256-pn2x6f+N9VYncc490VtPzXkJxwC0nZgj4pDNB+no2Lo=";
+  vendorHash = "sha256-RiaFvvPwNxfQE6F93BdPT+LLmUkNC9sYOfHyFgG9/30=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -30,12 +30,12 @@ buildGoModule rec {
     version = version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create pull requests from patches without cloning the repository";
     homepage = "https://github.com/bluekeyes/patch2pr";
     changelog = "https://github.com/bluekeyes/patch2pr/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ katrinafyi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ katrinafyi ];
     mainProgram = "patch2pr";
   };
 }

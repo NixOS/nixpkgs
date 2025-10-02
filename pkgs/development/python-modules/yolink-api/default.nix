@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "yolink-api";
-  version = "0.5.4";
+  version = "0.5.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "YoSmart-Inc";
     repo = "yolink-api";
     tag = "v${version}";
-    hash = "sha256-b83ozdnaZ15LMUiDJH2LPZv9D/ovV0Nx15+R6tip6Yk=";
+    hash = "sha256-lIwslGErlMGAu8BzM2gt1vVcaWy7S3Rqw7ce+qvQ+WU=";
   };
 
   build-system = [ setuptools ];

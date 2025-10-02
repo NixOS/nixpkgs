@@ -8,6 +8,10 @@
   qtimageformats,
   qtsvg,
   qtwayland,
+  kimageformats,
+  libavif,
+  libheif,
+  libjxl,
   wrapGAppsHook3,
   wrapQtAppsHook,
   glib-networking,
@@ -20,26 +24,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit unwrapped;
 
-  nativeBuildInputs =
-    [
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withWebkit [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals withWebkit [
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      qtbase
-      qtimageformats
-      qtsvg
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-    ++ lib.optionals withWebkit [
-      glib-networking
-    ];
+  buildInputs = [
+    qtbase
+    qtimageformats
+    qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    kimageformats
+    qtwayland
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libavif
+    libheif
+    libjxl
+  ]
+  ++ lib.optionals withWebkit [
+    glib-networking
+  ];
 
   qtWrapperArgs = lib.optionals (stdenv.hostPlatform.isLinux && withWebkit) [
     "--prefix"

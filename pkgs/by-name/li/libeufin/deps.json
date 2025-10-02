@@ -813,8 +813,8 @@
   "org/bouncycastle/bcutil-jdk18on/maven-metadata": {
    "xml": {
     "groupId": "org.bouncycastle",
-    "lastUpdated": "20250114201150",
-    "release": "1.80"
+    "lastUpdated": "20250604080934",
+    "release": "1.81"
    }
   },
   "org/checkerframework#checker-qual/3.48.3": {
@@ -1076,6 +1076,10 @@
   "org/jetbrains/kotlin#kotlin-stdlib-common/1.8.20": {
    "pom": "sha256-YFWRuJs3ISfmspxpMl+i9qjEb0aMRdCUEOeOtZ/IChc="
   },
+  "org/jetbrains/kotlin#kotlin-stdlib-common/1.9.0": {
+   "jar": "sha256-KDJ0IEvXwCB4nsRvj45yr0JE1/VQszkqV+XKAGrXqiw=",
+   "pom": "sha256-NmDTanD+s6vknxG5BjPkHTYnNXbwcbDhCdqbOg3wgqU="
+  },
   "org/jetbrains/kotlin#kotlin-stdlib-common/2.0.20": {
    "module": "sha256-tZe3Be/U4tgnFCCQw2BUJlVI7VG09SN38r+JxFlNU28=",
    "pom": "sha256-o11/wINw+TE6S5U7zu7d2F4OHnLTEGLTe/jHeBs/b18="
@@ -1091,6 +1095,10 @@
   "org/jetbrains/kotlin#kotlin-stdlib-jdk8/1.8.20": {
    "jar": "sha256-45i2eXdiJxi/GP+ZtznH2doGDzP7RYouJSAyIcFq8BA=",
    "pom": "sha256-OkYiFKM26ZVod2lTGx43sMgdjhDJlJzV6nrh14A6AjI="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib/1.9.0": {
+   "jar": "sha256-Na7/vi21qkRgcs7lD87ki3+p4vxRyjfAzH19C8OdlS4=",
+   "pom": "sha256-N3UiY/Ysw+MlCFbiiO5Kc9QQLXJqd2JwNPlIBsjBCso="
   },
   "org/jetbrains/kotlin#kotlin-stdlib/2.0.20": {
    "jar": "sha256-+xaVlmWaUYNXxLLBb0PcdascSYBWXtS0oxegUOXjkAY=",

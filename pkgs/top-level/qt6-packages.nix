@@ -88,12 +88,17 @@ makeScopeWithSplicing' {
       qcoro = callPackage ../development/libraries/qcoro { };
       qcustomplot = callPackage ../development/libraries/qcustomplot { };
       qgpgme = callPackage ../development/libraries/gpgme { };
+      qhotkey = callPackage ../development/libraries/qhotkey { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
+
+      qodeassist-plugin = callPackage ../development/libraries/qodeassist-plugin { };
 
       qt6ct = callPackage ../tools/misc/qt6ct { };
 
       qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
+
+      qt-color-widgets = callPackage ../development/libraries/qt-color-widgets { };
 
       qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
@@ -117,6 +122,8 @@ makeScopeWithSplicing' {
         wlroots = pkgs.wlroots_0_18;
       };
 
+      qwt = callPackage ../development/libraries/qwt/default.nix { };
+
       qxlsx = callPackage ../development/libraries/qxlsx { };
 
       qzxing = callPackage ../development/libraries/qzxing { };
@@ -131,8 +138,6 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
-      # Not a library, but we do want it to be built for every qt version there
-      # is, to allow users to choose the right build if needed.
       sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =

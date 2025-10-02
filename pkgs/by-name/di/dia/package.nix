@@ -40,34 +40,32 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  buildInputs =
-    [
-      graphene
-      gtk3
-      (libxml2.override { zlibSupport = true; })
-      python3
-      poppler
-    ]
-    ++ lib.optionals withDocs [
-      libxslt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gtk-mac-integration-gtk3
-    ];
+  buildInputs = [
+    graphene
+    gtk3
+    (libxml2.override { zlibSupport = true; })
+    python3
+    poppler
+  ]
+  ++ lib.optionals withDocs [
+    libxslt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration-gtk3
+  ];
 
-  nativeBuildInputs =
-    [
-      appstream-glib
-      desktop-file-utils
-      intltool
-      meson
-      ninja
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals withDocs [
-      dblatex
-    ];
+  nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
+    intltool
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals withDocs [
+    dblatex
+  ];
 
   meta = with lib; {
     description = "Gnome Diagram drawing software";

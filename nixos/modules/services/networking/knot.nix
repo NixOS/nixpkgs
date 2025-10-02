@@ -81,7 +81,7 @@ let
           # We output the config section in the upstream-mandated order.
           # Ordering is important due to forward-references not being allowed.
           # See definition of conf_export and 'const yp_item_t conf_schema'
-          # upstream for reference.  Last updated for 3.3.
+          # upstream for reference.  Last updated for 3.5.
           # When changing the set of sections, also update secAllow above.
           [ (sec_list_fa "id" nix_def "module") ]
           ++ map (sec_plain nix_def) [
@@ -102,6 +102,7 @@ let
             "acl"
             "submission"
             "policy"
+            "external"
           ]
 
           # Export module sections before the template section.
@@ -364,10 +365,12 @@ in
 
           AmbientCapabilities = [
             "CAP_NET_BIND_SERVICE"
-          ] ++ xdpCapabilities;
+          ]
+          ++ xdpCapabilities;
           CapabilityBoundingSet = [
             "CAP_NET_BIND_SERVICE"
-          ] ++ xdpCapabilities;
+          ]
+          ++ xdpCapabilities;
           DeviceAllow = "";
           DevicePolicy = "closed";
           LockPersonality = true;
@@ -388,16 +391,15 @@ in
           ProtectSystem = "strict";
           RemoveIPC = true;
           Restart = "on-abort";
-          RestrictAddressFamilies =
-            [
-              "AF_INET"
-              "AF_INET6"
-              "AF_UNIX"
-            ]
-            ++ optionals (cfg.enableXDP) [
-              "AF_NETLINK"
-              "AF_XDP"
-            ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ]
+          ++ optionals (cfg.enableXDP) [
+            "AF_NETLINK"
+            "AF_XDP"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
@@ -405,15 +407,14 @@ in
           StateDirectory = "knot";
           StateDirectoryMode = "0700";
           SystemCallArchitectures = "native";
-          SystemCallFilter =
-            [
-              "@system-service"
-              "~@privileged"
-              "@chown"
-            ]
-            ++ optionals (cfg.enableXDP) [
-              "bpf"
-            ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "@chown"
+          ]
+          ++ optionals (cfg.enableXDP) [
+            "bpf"
+          ];
           UMask = "0077";
         };
     };

@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgnome-games-support";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "AYbyXEiSyGx+rEOjB/wZ22lt9PGayn9U6DwiHfnZeQo=";
+    sha256 = "grvHTwj5i4M6m2REuEeeG9hN7QoHQl0Fe0XzjoeD5b0=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgnome-games-support";
       attrPath = "${pname}_2_0";
       versionPolicy = "odd-unstable";
     };

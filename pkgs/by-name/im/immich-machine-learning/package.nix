@@ -17,6 +17,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   pythonRelaxDeps = [
+    "numpy"
     "pillow"
     "pydantic-settings"
   ];

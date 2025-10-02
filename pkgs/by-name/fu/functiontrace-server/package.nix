@@ -7,15 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "functiontrace-server";
-  version = "0.8.4";
+  version = "0.8.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-i+lXjFXCPT6Skr+r/RKYQm+iJ+WETJ/tAQg5U6qFFi8=";
+    hash = "sha256-f/DpT5IYhUA/+w+QK3Itk4bBaYRFhGOWQbN51YYrmxA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-61+hEq0cdJZ+DTgN/ZtK6IKuwLCq3oxk0SrzqWewQXs=";
+  cargoHash = "sha256-rDCIzJUFA+2iEpITg3MuKFfgiyQ6GtMvIigiHkX70M8=";
 
   passthru.updateScript = nix-update-script { };
 

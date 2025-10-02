@@ -100,8 +100,8 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "A calendar web-app designed for scheduling and managing on-call shifts";
-    homepage = "http://oncall.tools";
+    description = "Calendar web-app designed for scheduling and managing on-call shifts";
+    homepage = "https://oncall.tools";
     changelog = "https://github.com/linkedin/oncall/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ onny ];

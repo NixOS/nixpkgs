@@ -77,7 +77,7 @@ mkDerivation {
     description = "Tool to edit resource files (BRF)";
     mainProgram = "openBrf";
     homepage = "https://github.com/cfcohen/openbrf";
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
     license = licenses.free;
     platforms = platforms.linux;
   };

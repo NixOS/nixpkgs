@@ -104,7 +104,7 @@
   # The NixOS configuration to be installed onto the disk image.
   config,
 
-  # The size of the disk, in megabytes.
+  # The size of the disk, in MiB (1024*1024 bytes).
   # if "auto" size is calculated based on the contents copied to it and
   #   additionalSpace is taken into account.
   diskSize ? "auto",
@@ -160,7 +160,7 @@
   # Shell code executed after the VM has finished.
   postVM ? "",
 
-  # Guest memory size
+  # Guest memory size in MiB (1024*1024 bytes)
   memSize ? 1024,
 
   # Copy the contents of the Nix store to the root of the image and

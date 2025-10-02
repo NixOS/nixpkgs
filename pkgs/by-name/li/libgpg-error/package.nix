@@ -25,16 +25,18 @@ in
 stdenv.mkDerivation (
   rec {
     pname = "libgpg-error";
-    version = "1.51";
+    version = "1.55";
 
     src = fetchurl {
       url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-      hash = "sha256-vg8bLba5Pu1VNpzfefGfcnUMjHw5/CC1d+ckVFQn5rI=";
+      hash = "sha256-lbF4FIhj8H1F3wzqZ+iAp5ue9x9dIwut3ABxEoUW73g=";
     };
 
     postPatch = ''
       sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
     '';
+
+    hardeningDisable = [ "strictflexarrays3" ];
 
     configureFlags = [
       # See https://dev.gnupg.org/T6257#164567

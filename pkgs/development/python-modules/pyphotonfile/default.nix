@@ -6,7 +6,7 @@
   numpy,
 }:
 let
-  version = "0.2.1+";
+  version = "0.2.1";
 in
 buildPythonPackage {
   pname = "pyphotonfile";
@@ -22,7 +22,7 @@ buildPythonPackage {
     owner = "cab404";
     repo = "pyphotonfile";
     rev = "b7ee92a0071007bb1d6a5984262651beec26543d";
-    sha256 = "iB5ky4fPX8ZnvXlDpggqS/345k2x/mPC4cIgb9M0f/c=";
+    sha256 = "sha256-iB5ky4fPX8ZnvXlDpggqS/345k2x/mPC4cIgb9M0f/c=";
   };
 
   meta = with lib; {

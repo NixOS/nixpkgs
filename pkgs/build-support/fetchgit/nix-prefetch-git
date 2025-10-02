@@ -59,6 +59,8 @@ Options:
       --fetch-submodules Fetch submodules.
       --fetch-tags    Fetch all tags (useful for git describe).
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+      --no-add-path   Do not actually add the contents of the git repo to the store.
+      --root-dir dir  Directory in the repository that will be copied to the output instead of the full repository.
       --quiet         Only print the final json summary.
 "
     exit 1
@@ -90,6 +92,8 @@ for arg; do
             --fetch-submodules) fetchSubmodules=true;;
             --fetch-tags) fetchTags=true;;
             --builder) builder=true;;
+            --no-add-path) noAddPath=true;;
+            --root-dir) argfun=set_rootDir;;
             -h|--help) usage; exit;;
             *)
                 : $((++argi))
@@ -126,6 +130,11 @@ init_remote(){
         echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
     fi
     ( [ -n "$http_proxy" ] && clean_git config --global http.proxy "$http_proxy" ) || true
+    local proxy_pairs i
+    read -a proxy_pairs <<< "${FETCHGIT_HTTP_PROXIES:-}"
+    for ((i = 1; i < ${#proxy_pairs[@]}; i += 2)); do
+        clean_git config --global "http.${proxy_pairs[$i - 1]}.proxy" "${proxy_pairs[$i]}"
+    done
 }
 
 # Return the reference of an hash if it exists on the remote repository.
@@ -150,10 +159,16 @@ url_to_name(){
     local base
     base=$(basename "$url" .git | cut -d: -f2)
 
-    if [[ $ref =~ ^[a-z0-9]+$ ]]; then
-        echo "$base-${ref:0:7}"
+    if test -n "$rootDir"; then
+        # Sanitize by removing leading dots and replacing all invalid character sequences with dashes.
+        # See sanitizeDerivationName in ../../../lib/strings.nix for reference.
+        echo "$base-$(sed -E 's/^\.+//;s/[^[:alnum:]+._?=-]+/-/g' <<< $rootDir)"
     else
-        echo "$base"
+        if [[ $ref =~ ^[a-z0-9]+$ ]]; then
+            echo "$base-${ref:0:7}"
+        else
+            echo "$base"
+        fi
     fi
 }
 
@@ -214,8 +229,8 @@ checkout_ref(){
 init_submodules(){
     # shallow with leaveDotGit will change hashes
     [[ -z "$deepClone" ]] && [[ -z "$leaveDotGit" ]] && \
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress
+    clean_git submodule update --init --recursive --checkout -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
+    clean_git submodule update --init --recursive --checkout -j ${NIX_BUILD_CORES:-1} --progress
 }
 
 clone(){
@@ -348,6 +363,23 @@ clone_user_rev() {
     fi
 }
 
+clone_user_rev_to_tmpfile(){
+    local url="$1"
+    local rev="${2:-HEAD}"
+
+    # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+    # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+    tmpPath="$(realpath "$(mktemp -d --tmpdir git-checkout-tmp-XXXXXXXX)")"
+    exit_handlers+=(remove_tmpPath)
+
+    tmpOut="$tmpPath/out/$storePathName"
+    tmpClone="$tmpPath/clone"
+    mkdir -p "$tmpPath/out" "$tmpClone"
+
+    # Perform the checkout.
+    clone_user_rev "$tmpClone" "$url" "$rev"
+}
+
 exit_handlers=()
 
 run_exit_handlers() {
@@ -413,7 +445,8 @@ print_results() {
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
   "fetchTags": $([[ -n "$fetchTags" ]] && echo true || echo false),
-  "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
+  "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false),
+  "rootDir": "$(json_escape "$rootDir")"
 }
 EOF
     fi
@@ -451,8 +484,13 @@ export GIT_CONFIG_NOSYSTEM=1
 
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage
-    mkdir -p "$out"
-    clone_user_rev "$out" "$url" "$rev"
+    if test -n "$rootDir"; then
+        clone_user_rev_to_tmpfile "$url" "$rev"
+        mv "$tmpClone/$rootDir" "$out"
+    else
+        mkdir -p "$out"
+        clone_user_rev "$out" "$url" "$rev"
+    fi
 else
     if test -z "$hashType"; then
         hashType=sha256
@@ -471,22 +509,26 @@ else
     # If we don't know the hash or a path with that hash doesn't exist,
     # download the file and add it to the store.
     if test -z "$finalPath"; then
-        # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
-        # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
-        tmpPath="$(realpath "$(mktemp -d --tmpdir git-checkout-tmp-XXXXXXXX)")"
-        exit_handlers+=(remove_tmpPath)
+        clone_user_rev_to_tmpfile "$url" "$rev"
 
-        tmpFile="$tmpPath/$storePathName"
-        mkdir -p "$tmpFile"
-
-        # Perform the checkout.
-        clone_user_rev "$tmpFile" "$url" "$rev"
+        if test -z "$rootDir"; then
+            mv "$tmpClone" "$tmpOut"
+        else
+            mv "$tmpClone/$rootDir" "$tmpOut"
+        fi
 
         # Compute the hash.
-        hash=$(nix-hash --type $hashType --base32 "$tmpFile")
+        hash=$(nix-hash --type $hashType --base32 "$tmpOut")
 
         # Add the downloaded file to the Nix store.
-        finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
+
+        if test -z "$noAddPath"; then
+            finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpOut") \
+                || { printf "maybe try again with \`nix-prefetch-git --no-add-path <...>' ?\n" >&2; exit 1; }
+        else
+            printf "the path for \`%s' has NOT been added to the store\n" "$url" >&2
+            finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$hash" "$storePathName")
+        fi
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
             echo "hash mismatch for URL \`$url'. Got \`$hash'; expected \`$expHash'." >&2

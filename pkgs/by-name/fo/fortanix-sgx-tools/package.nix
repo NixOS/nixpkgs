@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     inherit pname version;
     hash = "sha256-F0lZG1neAPVvyOxUtDPv0t7o+ZC+aQRtpFeq55QwcmE=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-FNMNHn1M0JzsgFqxXLUU3sEn7VB+YHVsWQCYVSxbUEg=";
   meta = {
     description = "Tools for building and running enclaves for the Fortanix SGX ABI";

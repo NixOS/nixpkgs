@@ -13,7 +13,11 @@ including them from `configuration.nix`, e.g.:
 ```nix
 { config, pkgs, ... }:
 
-{ imports = [ ./vpn.nix ./kde.nix ];
+{
+  imports = [
+    ./vpn.nix
+    ./kde.nix
+  ];
   services.httpd.enable = true;
   environment.systemPackages = [ pkgs.emacs ];
   # ...
@@ -26,9 +30,10 @@ Here, we include two modules from the same directory, `vpn.nix` and
 ```nix
 { config, pkgs, ... }:
 
-{ services.xserver.enable = true;
+{
+  services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
   environment.systemPackages = [ pkgs.vim ];
 }
 ```
@@ -42,9 +47,7 @@ merged last, so for list-type options, it will appear at the end of the
 merged list. If you want it to appear first, you can use `mkBefore`:
 
 ```nix
-{
-  boot.kernelModules = mkBefore [ "kvm-intel" ];
-}
+{ boot.kernelModules = mkBefore [ "kvm-intel" ]; }
 ```
 
 This causes the `kvm-intel` kernel module to be loaded before any other
@@ -62,9 +65,7 @@ When that happens, it's possible to force one definition take precedence
 over the others:
 
 ```nix
-{
-  services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org";
-}
+{ services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org"; }
 ```
 
 When using multiple modules, you may need to access configuration values
@@ -84,9 +85,11 @@ For example, here is a module that adds some packages to
 ```nix
 { config, pkgs, ... }:
 
-{ environment.systemPackages =
+{
+  environment.systemPackages =
     if config.services.xserver.enable then
-      [ pkgs.firefox
+      [
+        pkgs.firefox
         pkgs.thunderbird
       ]
     else
@@ -126,12 +129,14 @@ have the same effect as importing a file which sets those options.
 ```nix
 { config, pkgs, ... }:
 
-let netConfig = hostName: {
-  networking.hostName = hostName;
-  networking.useDHCP = false;
-};
+let
+  netConfig = hostName: {
+    networking.hostName = hostName;
+    networking.useDHCP = false;
+  };
 
 in
-
-{ imports = [ (netConfig "nixos.localdomain") ]; }
+{
+  imports = [ (netConfig "nixos.localdomain") ];
+}
 ```
