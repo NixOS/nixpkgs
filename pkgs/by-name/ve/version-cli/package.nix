@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 buildGoModule rec {
   pname = "version-cli";
@@ -16,9 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-TGrtVY1ut76K2J/dpt3OvuXaOkAAnxFTYVl1aTii+AI=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    mkdir -p $out/share/man/man1
-    install -Dm644 man/version.1 $out/share/man/man1/version.1
+    installManPage man/version.1
   '';
 
   meta = {
