@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 buildGoModule rec {
-  pname = "version";
+  pname = "version-cli";
   version = "0.1.0";
 
   src = fetchFromGitHub {
