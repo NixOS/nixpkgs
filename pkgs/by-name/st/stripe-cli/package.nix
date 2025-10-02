@@ -5,12 +5,17 @@
   installShellFiles,
   stdenv,
 
+  writableTmpDirAsHomeHook,
+
   buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "stripe-cli";
   version = "1.31.0";
+
+  # required for tests
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "stripe";
@@ -28,33 +33,44 @@ buildGoModule (finalAttrs: {
     "-X github.com/stripe/stripe-cli/pkg/version.Version=${finalAttrs.version}"
   ];
 
+  nativeCheckInputs = [
+    # required by pkg/rpcservice/sample_create_test.go
+    writableTmpDirAsHomeHook
+  ];
+
   preCheck = ''
     # the tests expect the Version ldflag not to be set
     unset ldflags
-
-    # requires internet access
-    rm pkg/cmd/plugin_cmds_test.go
-    rm pkg/cmd/resources_test.go
-    rm pkg/cmd/root_test.go
-
-    # TODO: no clue why it's broken (1.17.1), remove for now.
-    rm pkg/login/client_login_test.go
-    rm pkg/git/editor_test.go
-    rm pkg/rpcservice/sample_create_test.go
   ''
   +
     lib.optionalString
       (
         # delete plugin tests on all platforms but exact matches
         # https://github.com/stripe/stripe-cli/issues/850
+        # https://github.com/stripe/stripe-cli/blob/e3020d2e2df9c731b2f51df3aa53bf16383e863f/pkg/plugins/test_artifacts/plugins.toml
         !lib.lists.any (platform: lib.meta.platformMatch stdenv.hostPlatform platform) [
           "x86_64-linux"
           "x86_64-darwin"
+          "aarch64-darwin"
         ]
       )
       ''
         rm pkg/plugins/plugin_test.go
       '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # network access
+        "TestConflictWithPluginCommand"
+        "TestLogin"
+
+        # not providing git or the various editors it wants to call
+        "TestGetOpenEditorCommand"
+        "TestGetDefaultGitEditor"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall =
     let
