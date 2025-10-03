@@ -7523,6 +7523,44 @@ with pkgs;
       null;
 
   # We can choose:
+  ccChooser =
+    platform: pkgs: fallback:
+    let
+      # TODO: use cc when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      inherit (platform) useLLVM isDarwin isGhcjs;
+      useArocc = platform.useArocc or false;
+      useZig = platform.useZig or false;
+      useiOSPrebuilt = platform.useiOSPrebuilt or false;
+      useAndroidPrebuilt = platform.useAndroidPrebuilt or false;
+    in
+    if useiOSPrebuilt then
+      pkgs.darwin.iosSdkPkgs.clang or fallback
+    else if useAndroidPrebuilt then
+      pkgs."androidndkPkgs_${platform.androidNdkVersion}".clang or fallback
+    else if isGhcjs then
+      # Need to use `throw` so tryEval for splicing works, ugh.  Using
+      # `null` or skipping the attribute would cause an eval failure
+      # `tryEval` wouldn't catch, wrecking accessing previous stages
+      # when there is a C compiler and everything should be fine.
+      # NOTE: maybe we remove this and return null instead?
+      throw "no C compiler provided for this platform"
+    else if isDarwin then
+      pkgs.llvmPackages.libcxxClang or fallback
+    else if useArocc then
+      pkgs.arocc or fallback
+    else if useZig then
+      pkgs.zig.cc or fallback
+    else if useLLVM then
+      pkgs.llvmPackages.clang or fallback
+    else
+      # NOTE: we shouldn't imply GCC, ideally we should either fallback, null, or error.
+      pkgs.gcc or fallback;
+
+  # The default C compiler to use, this has been provided by the stdenv for a long time.
+  # However, we're working to move it out of the stdenv. It is recommended to switch to
+  # this attribute and using an "stdenvNoCC" as soon as possible.
+  cc = ccChooser stdenv.targetPlatform pkgs null;
+
   libc =
     let
       inherit (stdenv.hostPlatform) libc;
