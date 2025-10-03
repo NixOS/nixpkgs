@@ -15,6 +15,7 @@
   treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; },
   fixDarwinDylibNames,
   glibcLocales ? null,
+  nlsSupport ? true,
   procps ? null,
   versionCheckHook,
   nix-update-script,
@@ -195,7 +196,7 @@ stdenv.mkDerivation (
       # That's because all dependencies were found and
       # third-party/CMakeLists.txt is not read at all.
       (lib.cmakeBool "USE_BUNDLED" false)
-      (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
+      (lib.cmakeBool "ENABLE_TRANSLATIONS" nlsSupport)
     ]
     ++ (
       if lua.pkgs.isLuaJIT then
