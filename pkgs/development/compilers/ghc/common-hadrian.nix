@@ -340,6 +340,10 @@ let
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
+    ]
+    # Inform GHC that we can't load dynamic libraries which forces iserv-proxy to load static libraries.
+    ++ lib.optionals targetPlatform.isStatic [
+      "*.ghc.cabal.configure.opts += --flags=-dynamic-system-linker"
     ];
 
   # Splicer will pull out correct variations
