@@ -39,8 +39,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-XAR7yZjAzbMxIVGSV82agpAGwlejkILGgDI6iRicZuQ=";
+    rev = "1e3893997c56a9c1b6ca240f4c91e0549472b5f7";
+    hash = "sha256-V2uuKPJa+U7msyrXwJg4dhHsbXEE0rYrc0upAqj2JqM=";
   };
 
   postPatch = ''
