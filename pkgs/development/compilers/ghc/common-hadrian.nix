@@ -342,7 +342,7 @@ let
       "*.*.ghc.c.opts += -optc-std=gnu99"
     ]
     # Inform GHC that we can't load dynamic libraries which forces iserv-proxy to load static libraries.
-    ++ lib.optionals targetPlatform.isStatic [
+    ++ lib.optionals (targetPlatform.isAndroid || targetPlatform.isStatic) [
       "*.ghc.cabal.configure.opts += --flags=-dynamic-system-linker"
     ];
 
