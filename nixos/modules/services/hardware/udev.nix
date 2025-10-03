@@ -462,6 +462,7 @@ in
       "${config.boot.initrd.systemd.package}/lib/systemd/systemd-udevd"
       "${config.boot.initrd.systemd.package}/lib/udev/ata_id"
       "${config.boot.initrd.systemd.package}/lib/udev/cdrom_id"
+      "${config.boot.initrd.systemd.package}/lib/udev/dmi_memory_id"
       "${config.boot.initrd.systemd.package}/lib/udev/scsi_id"
       "${config.boot.initrd.systemd.package}/lib/udev/rules.d"
     ]
