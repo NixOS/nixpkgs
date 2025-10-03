@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ramalama";
-  version = "0.12.2";
+  version = "0.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
-    hash = "sha256-v9/cE6GFOUT5urHQwif7skP5vnRCdu435QGAAypWX0w=";
+    hash = "sha256-PnuAPQ9RF7IRnmHtUrwDRXIKEzZBDEU2mWfG5FyfY0c=";
   };
 
   build-system = with python3.pkgs; [
