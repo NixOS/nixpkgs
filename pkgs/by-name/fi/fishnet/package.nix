@@ -51,12 +51,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/fishnet";
   versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
-      name = "update-${finalAttrs.pname}";
+      name = "update-fishnet";
 
       runtimeInputs = [
         curl
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       runtimeEnv = {
         PNAME = finalAttrs.pname;
         PKG_FILE = builtins.toString ./package.nix;
-        GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
+        GITHUB_REPOSITORY = "lichess-org/fishnet";
         NNUE_BIG_FILE = nnueBigFile;
         NNUE_BIG_HASH = nnueBigHash;
         NNUE_SMALL_FILE = nnueSmallFile;
@@ -79,11 +79,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       tu-maurice
       thibaultd
     ];
