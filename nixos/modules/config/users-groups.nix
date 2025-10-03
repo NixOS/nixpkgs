@@ -262,10 +262,10 @@ let
           type = types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
           default = pkgs.shadow;
           defaultText = literalExpression "pkgs.shadow";
-          example = literalExpression "pkgs.bashInteractive";
+          example = literalExpression "pkgs.bash";
           description = ''
             The path to the user's shell. Can use shell derivations,
-            like `pkgs.bashInteractive`. Don’t
+            like `pkgs.bash`. Don’t
             forget to enable your shell in
             `programs` if necessary,
             like `programs.zsh.enable = true;`.
