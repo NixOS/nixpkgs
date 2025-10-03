@@ -9,7 +9,7 @@
 }:
 let
   mainProgram = "proton-mail";
-  version = "1.9.0";
+  version = "1.9.1";
 
 in
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
-    sha256 = "sha256-8gUkWDBLzilmLrZCHRjf8EPYrjyHpwpA7ZIU4FQ1azA=";
+    hash = "sha256-P2i/uX++F1JUgwSUyndYazjLSCK1mP+XSGICPUoo1VE=";
   };
 
   dontConfigure = true;

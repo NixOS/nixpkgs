@@ -229,6 +229,7 @@ let
       DAMON_DBGFS = whenBetween "5.15" "6.9" yes;
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
+      DAMON_STAT = whenAtLeast "6.17" yes;
       # Support recovering from memory failures on systems with ECC and MCA recovery.
       MEMORY_FAILURE = yes;
 
@@ -698,8 +699,8 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
-      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
-      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
+      BCACHEFS_QUOTA = whenBetween "6.7" "6.18" (option yes);
+      BCACHEFS_POSIX_ACL = whenBetween "6.7" "6.18" (option yes);
 
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
@@ -1462,6 +1463,9 @@ let
         # Enable AMD Wi-Fi RF band mitigations
         # See https://cateee.net/lkddb/web-lkddb/AMD_WBRF.html
         AMD_WBRF = whenAtLeast "6.8" yes;
+
+        # Enable AMD heterogeneous core hardware feedback interface
+        AMD_HFI = whenAtLeast "6.17" yes;
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
