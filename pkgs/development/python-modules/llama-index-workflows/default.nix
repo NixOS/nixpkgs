@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-workflows";
-  version = "1.3.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_workflows";
     inherit version;
-    hash = "sha256-nBaI4jfvrThPFkha9xxvlFai622Fv2H/SeVxfxD/KG0=";
+    hash = "sha256-IQkkp3g8fTgU8NtEEUXgBagqlgZKC/wSgUdU9q7lnc8=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
