@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   qt5,
@@ -16,17 +17,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdr-j-fm";
-  # The stable release doen't include the commit the came after 3.16 which
-  # added support for cmake options instead of using cmake set() commands. See
-  # also: https://github.com/JvanKatwijk/sdr-j-fm/pull/25
-  version = "3.16-unstable-2023-12-07";
+  version = "3.20";
 
   src = fetchFromGitHub {
     owner = "JvanKatwijk";
     repo = "sdr-j-fm";
-    rev = "8e3a67f8fbf72dd6968cbeb2e3d7d513fd107c71";
-    hash = "sha256-l9WqfhDp2V01lhleYZqRpmyL1Ww+tJj10bjkMMlvyA0=";
+    tag = finalAttrs.version;
+    hash = "sha256-qNSmBVY1n5+DR9k1d+nY11gBrYS7Ah774R2FMgCR4ks=";
   };
+
+  patches = [
+    # Fix linking error, https://github.com/JvanKatwijk/sdr-j-fm/pull/26
+    (fetchpatch {
+      url = "https://github.com/JvanKatwijk/sdr-j-fm/pull/26/commits/b336b5175a267347e037adb333669e571f7bde01.patch";
+      hash = "sha256-xYNR6XZVSKKk+s/DQJFGaSGc2U+P1AWFIeiRnGfpZX8=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
       SDRPLAY = true;
       SDRPLAY_V3 = true;
       HACKRF = true;
+      LIME = true;
       PLUTO = true;
+      RTLSDR = true;
       # Some more cmake flags are mentioned in upstream's CMakeLists.txt file
       # but they don't actually make a difference.
     }
@@ -63,15 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Weird default of upstream
     mv $out/linux-bin $out/bin
+    mv $out/bin/fmreceiver{-3.15,}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SDR based FM radio receiver software";
     homepage = "https://github.com/JvanKatwijk/sdr-j-fm";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
     # Upstream doesn't find libusb1 on Darwin. Upstream probably doesn't
     # support it officially.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    mainProgram = "fmreceiver";
   };
 })
