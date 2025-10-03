@@ -587,7 +587,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
     (lib.mesonEnable "man" true)
-    # (lib.mesonEnable "nspawn" withNspawn) # nspawn build can be turned off on systemd 258, on 257.x it will just not be installed in systemdLibs but the build is unconditional
+    (lib.mesonEnable "nspawn" withNspawn)
 
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
