@@ -14,7 +14,10 @@
   rustc,
   windows,
 }:
-
+let
+  getOptionalAttrs =
+    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
+in
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
 
@@ -28,16 +31,9 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
     {
-      name ? "${args.pname}-${args.version}",
-
       # Name for the vendored dependencies tarball
-      cargoDepsName ? name,
+      cargoDepsName ? finalAttrs.name,
 
-      src ? null,
-      srcs ? null,
-      preUnpack ? null,
-      unpackPhase ? null,
-      postUnpack ? null,
       cargoPatches ? [ ],
       patches ? [ ],
       sourceRoot ? null,
@@ -82,6 +78,8 @@ lib.extendMkDerivation {
       RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
     }
     // {
+      name = args.name or "${finalAttrs.pname}-${finalAttrs.version}";
+
       cargoDeps =
         if cargoVendorDir != null then
           null
@@ -93,16 +91,16 @@ lib.extendMkDerivation {
           throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
         else
           fetchCargoVendor (
-            {
-              inherit
-                src
-                srcs
-                sourceRoot
-                cargoRoot
-                preUnpack
-                unpackPhase
-                postUnpack
-                ;
+            getOptionalAttrs [
+              "src"
+              "srcs"
+              "sourceRoot"
+              "cargoRoot"
+              "preUnpack"
+              "unpackPhase"
+              "postUnpack"
+            ] finalAttrs
+            // {
               name = cargoDepsName;
               patches = cargoPatches;
               hash = args.cargoHash;
