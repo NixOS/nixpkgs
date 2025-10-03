@@ -527,6 +527,7 @@ mapAliases {
   bitcoind-unlimited = throw "bitcoind-unlimited has been removed as it was broken and unmaintained"; # Added 2024-07-15
   bird = throw "The bird alias was ambiguous and has been removed for the time being. Please explicitly choose bird2 or bird3."; # Added 2025-01-11
   bisq-desktop = throw "bisq-desktop has been removed because OpenJFX 11 was removed"; # Added 2024-11-17
+  bitmeter = throw "bitmeter has been removed because it relies on gtk2 and upstream is abandoned since 2006"; # Aded 2025-10-03
   bitwarden = bitwarden-desktop; # Added 2024-02-25
   blender-with-packages =
     args:
