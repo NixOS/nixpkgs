@@ -226,8 +226,8 @@ rec {
       "sha256-fFnHwgB8r239cpVnWSfeiGO1MNOxkXn9MNMUA5ohm04=";
 
   mypy-boto3-cloudformation =
-    buildMypyBoto3Package "cloudformation" "1.40.24"
-      "sha256-4rAK/GqrExGyWMkxSO7qWz7q2UxyA+KP+f046fzihIg=";
+    buildMypyBoto3Package "cloudformation" "1.40.44"
+      "sha256-PYL1UEOCyGrRlaG4CiqC9zWHw34bY2hk67hd1DvXmls=";
 
   mypy-boto3-cloudfront =
     buildMypyBoto3Package "cloudfront" "1.40.23"
