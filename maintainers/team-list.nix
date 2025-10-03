@@ -1175,6 +1175,15 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  secshell = {
+    members = [
+      felbinger
+      juli0604
+    ];
+    scope = "Maintain packages and modules created by members of Secure Shell Networks.";
+    shortName = "secshell";
+  };
+
   serokell = {
     # Verify additions by approval of an already existing member of the team.
     members = [ balsoft ];
