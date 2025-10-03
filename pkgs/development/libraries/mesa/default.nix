@@ -144,6 +144,8 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/37027
+    ./gallivm-llvm-21.patch
   ];
 
   postPatch = ''

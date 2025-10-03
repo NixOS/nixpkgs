@@ -74,14 +74,19 @@ mapAliases {
   inherit (pkgs) coc-css; # added 2024-06-29
   inherit (pkgs) coc-diagnostic; # added 2024-06-29
   inherit (pkgs) coc-docker; # added 2025-10-01
+  inherit (pkgs) coc-explorer; # added 2025-10-01
+  inherit (pkgs) coc-git; # added 2025-10-01
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) coc-pyright; # added 2024-07-14
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
   coc-python = throw "coc-python was removed because it was abandoned upstream on 2020-12-24. Upstream now recommends using coc-pyright or coc-jedi instead."; # added 2024-10-15
   coc-rls = throw "coc-rls was removed because rls was deprecated in 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
+  inherit (pkgs) coc-sh; # added 2025-10-02
+  inherit (pkgs) coc-spell-checker; # added 2025-10-01
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coc-tslint-plugin = throw "coc-tslint-plugin was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
+  coc-vetur = throw "coc-vetur was removed because vetur was deprecated by Vue in favor of volar. Use coc-volar instead, which supports Vue 3"; # added 2025-10-01
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05
@@ -90,6 +95,7 @@ mapAliases {
   inherit (pkgs) cordova; # added 2023-08-18
   inherit (pkgs) create-react-app; # added 2023-09-25
   create-react-native-app = throw "create-react-native-app was removed because it was deprecated. Upstream suggests using a framework for React Native."; # added 2024-12-08
+  inherit (pkgs) cspell;
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) diagnostic-languageserver; # added 2024-06-25
@@ -190,6 +196,7 @@ mapAliases {
   remod-cli = pkgs.remod; # added 2024-12-04
   "reveal.js" = throw "reveal.js was removed because it provides no executable"; # added 2025-03-23
   reveal-md = pkgs.reveal-md; # added 2023-07-31
+  rimraf = throw "rimraf was removed because it is a library, and your project should lock it instead."; # added 2025-05-28
   rollup = throw "rollup has been removed because it was broken"; # added 2025-04-28
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18

@@ -79,6 +79,8 @@ in
               "--exclude-if-present"
               ".dont backup"
             ];
+
+            wrapper = "borg-main";
             postHook = "echo post";
             startAt = [ ]; # Do not run automatically
           };
@@ -87,6 +89,7 @@ in
             paths = dataDir;
             repo = localRepoMount;
             encryption.mode = "none";
+            wrapper = null;
             startAt = [ ];
           };
 
@@ -211,6 +214,9 @@ in
             "cat /mnt/borg/${dataDir}/${keepFile}"
         )
 
+        # Make sure custom wrapper name works
+        client.succeed("command -v borg-main")
+
     with subtest("localMount"):
         # the file system for the repo should not be already mounted
         client.fail("mount | grep ${localRepoMount}")
@@ -222,6 +228,9 @@ in
         # Make sure exactly one archive has been created
         assert int(client.succeed("{} list '${localRepoMount}' | wc -l".format(borg))) > 0
 
+        # Make sure disabling wrapper works
+        client.fail("command -v borg-job-localMount")
+
     with subtest("remote"):
         borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg"
         server.wait_for_unit("sshd.service")
@@ -231,6 +240,9 @@ in
 
         # Make sure we can't access repos other than the specified one
         client.fail("{} list borg\@server:wrong".format(borg))
+
+        # Make sure default wrapper works
+        client.succeed("command -v borg-job-remote")
 
         # TODO: Make sure that data is actually deleted
 

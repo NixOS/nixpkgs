@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-Yh16la+3zk+igdMyHov4rf2M1yAT3JYYe/0IYu/SmVY=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail ".dev0" ""
+  '';
+
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "systembridgemodels" ];
