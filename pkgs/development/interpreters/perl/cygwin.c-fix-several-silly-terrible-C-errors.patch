@@ -1,0 +1,179 @@
+From b872e74120c4245132e2c906399bff9fc18e032d Mon Sep 17 00:00:00 2001
+From: Lukas Mai <lukasmai.403@gmail.com>
+Date: Wed, 6 Nov 2024 22:58:05 +0100
+Subject: [PATCH] cygwin.c: fix several silly/terrible C errors
+
+Errors fixed:
+
+Not detected by the compiler, but the preprocessor version checks only
+looked at `CYGWIN_VERSION_API_MINOR`, ignoring
+`CYGWIN_VERSION_API_MAJOR`.
+
+    cygwin.c: In function 'utf8_to_wide_extra_len':
+    cygwin.c:187:18: warning: initialization of 'size_t' {aka 'long unsigned int'} from 'size_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+      187 |     Size_t len = strlen(buf) + extra_len + 1;
+          |                  ^~~~~~
+
+`extra_len` was declared as a pointer, but used as an integer. I don't
+see how this could have ever worked.
+
+    cygwin.c: In function 'S_convert_path_common':
+    cygwin.c:339:38: warning: 'realloc' called on unallocated object 'wconverted' [-Wfree-nonheap-object]
+      339 |             wconverted = (wchar_t *) realloc(&wconverted, newlen);
+          |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    cygwin.c:357:39: warning: 'realloc' called on unallocated object 'converted_path' [-Wfree-nonheap-object]
+      357 |             converted_path = (char *) realloc(&converted_path, newlen);
+          |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Again, I don't see how this could have ever worked. We're passing the
+address of a local (stack) variable to `realloc` (instead of the value
+of the variable).
+
+    cygwin.c: In function 'wide_to_utf8':
+    cygwin.c:173:32: warning: pointer targets in passing argument 3 of 'Perl_utf16_to_utf8_base' differ in signedness [-Wpointer-sign]
+      173 |     utf16_to_utf8((U8 *) wsrc, buf, wlen, &blen);
+          |                                ^~~
+          |                                |
+          |                                char *
+
+The argument is declared as `U8 *`, so this is mostly harmless, but a
+cast silences the warning anyway.
+
+    cygwin.c: In function 'utf8_to_wide_extra_len':
+    cygwin.c:194:19: warning: passing argument 2 of 'Perl_utf8_to_utf16_base' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      194 |     utf8_to_utf16(buf, (U8 *) wsrc, len, &wlen);
+          |                   ^~~
+
+This is arguably a bug in `utf8_to_utf16`, which doesn't declare its
+input argument as pointer-to-const. But it's also a `char *` vs `U8 *`
+type mismatch, so a cast silences both issues.
+
+    cygwin.c: In function 'S_convert_path_common':
+    cygwin.c:292:22: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      292 |         char *name = (direction == to_posix)
+          |                      ^
+
+This is a missing `const` in the declaration of a variable that points
+to string literals.
+---
+ cygwin/cygwin.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
+
+diff --git a/cygwin/cygwin.c b/cygwin/cygwin.c
+index 7c3d5dc48c..625777366c 100644
+--- a/cygwin/cygwin.c
++++ b/cygwin/cygwin.c
+@@ -15,7 +15,10 @@
+ #include <mntent.h>
+ #include <alloca.h>
+ #include <dlfcn.h>
+-#if (CYGWIN_VERSION_API_MINOR >= 181)
++#define HAVE_CYGWIN_VERSION(MAJOR, MINOR) \
++    (CYGWIN_VERSION_API_MAJOR > (MAJOR) || \
++        (CYGWIN_VERSION_API_MAJOR == (MAJOR) && CYGWIN_VERSION_API_MINOR >= (MINOR)))
++#if HAVE_CYGWIN_VERSION(0, 181)
+ #include <wchar.h>
+ #endif
+ 
+@@ -158,7 +161,7 @@ leave:
+     return result;
+ }
+ 
+-#if (CYGWIN_VERSION_API_MINOR >= 181)
++#if HAVE_CYGWIN_VERSION(0, 181)
+ char*
+ wide_to_utf8(const wchar_t *wsrc)
+ {
+@@ -170,13 +173,13 @@ wide_to_utf8(const wchar_t *wsrc)
+ 
+     char *buf = (char *) safemalloc(blen);
+ 
+-    utf16_to_utf8((U8 *) wsrc, buf, wlen, &blen);
++    utf16_to_utf8((U8 *) wsrc, (U8 *) buf, wlen, &blen);
+ 
+     return buf;
+ }
+ 
+ wchar_t*
+-utf8_to_wide_extra_len(const char *buf, Size_t *extra_len)
++utf8_to_wide_extra_len(const char *buf, Size_t extra_len)
+ {
+     /* Return the conversion to UTF-16 of the UTF-8 string 'buf'
+      * (terminated by a NUL), making sure to have space for at least *extra_len
+@@ -191,7 +194,7 @@ utf8_to_wide_extra_len(const char *buf, Size_t *extra_len)
+ 
+     wchar_t* wsrc = (wchar_t *) safemalloc(wlen);
+ 
+-    utf8_to_utf16(buf, (U8 *) wsrc, len, &wlen);
++    utf8_to_utf16((U8 *) buf, (U8 *) wsrc, len, &wlen);
+ 
+     return wsrc;
+ }
+@@ -199,9 +202,7 @@ utf8_to_wide_extra_len(const char *buf, Size_t *extra_len)
+ wchar_t*
+ utf8_to_wide(const char *buf)
+ {
+-    Size_t extra_len = 0;
+-
+-    return utf8_to_wide_extra_len(buf, &extra_len);
++    return utf8_to_wide_extra_len(buf, 0);
+ }
+ 
+ #endif /* cygwin 1.7 */
+@@ -255,7 +256,7 @@ XS(XS_Cygwin_winpid_to_pid)
+ 
+     pid = (pid_t)SvIV(ST(0));
+ 
+-#if (CYGWIN_VERSION_API_MINOR >= 181)
++#if HAVE_CYGWIN_VERSION(0, 181)
+     RETVAL = cygwin_winpid_to_pid(pid);
+ #else
+     RETVAL = cygwin32_winpid_to_pid(pid);
+@@ -289,7 +290,7 @@ S_convert_path_common(pTHX_ const direction_t direction)
+     int isutf8 = 0;
+ 
+     if (items < 1 || items > 2) {
+-        char *name = (direction == to_posix)
++        const char *name = (direction == to_posix)
+                      ? "win::win_to_posix_path"
+                      : "posix_to_win_path";
+         Perl_croak(aTHX_ "Usage: Cygwin::%s(pathname, [absolute])", name);
+@@ -303,7 +304,7 @@ S_convert_path_common(pTHX_ const direction_t direction)
+         Perl_croak(aTHX_ "can't convert empty path");
+     isutf8 = SvUTF8(ST(0));
+ 
+-#if (CYGWIN_VERSION_API_MINOR >= 181)
++#if HAVE_CYGWIN_VERSION(0, 181)
+     /* Check utf8 flag and use wide api then.
+        Size calculation: On overflow let cygwin_conv_path calculate the final size.
+      */
+@@ -322,7 +323,7 @@ S_convert_path_common(pTHX_ const direction_t direction)
+ 
+         if (LIKELY(! IN_BYTES)) {    /* Normal case, convert UTF-8 to UTF-16 */
+             wlen = PATH_LEN_GUESS;
+-            wsrc = utf8_to_wide_extra_len(src_path, &wlen);
++            wsrc = utf8_to_wide_extra_len(src_path, wlen);
+             which_src = wsrc;
+         }
+         else { /* use bytes; assume already UTF-16 encoded bytestream */
+@@ -336,7 +337,7 @@ S_convert_path_common(pTHX_ const direction_t direction)
+ 
+         if (err == ENOSPC) { /* our space assumption was wrong, not enough space */
+             int newlen = cygwin_conv_path(what, which_src, wconverted, 0);
+-            wconverted = (wchar_t *) realloc(&wconverted, newlen);
++            wconverted = (wchar_t *) realloc(wconverted, newlen);
+             err = cygwin_conv_path(what, which_src, wconverted, newlen);
+         }
+ 
+@@ -354,7 +355,7 @@ S_convert_path_common(pTHX_ const direction_t direction)
+         err = cygwin_conv_path(what, src_path, converted_path, len + PATH_LEN_GUESS);
+         if (err == ENOSPC) { /* our space assumption was wrong, not enough space */
+             int newlen = cygwin_conv_path(what, src_path, converted_path, 0);
+-            converted_path = (char *) realloc(&converted_path, newlen);
++            converted_path = (char *) realloc(converted_path, newlen);
+             err = cygwin_conv_path(what, src_path, converted_path, newlen);
+         }
+     }
+-- 
+2.50.1
+
