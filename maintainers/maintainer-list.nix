@@ -10202,6 +10202,12 @@
     githubId = 1631166;
     name = "Marcel Müller";
   };
+  hendrikheil = {
+    email = "hendrik@ciidyr.com";
+    github = "hendrikheil";
+    githubId = 19904485;
+    name = "Hendrik Heil";
+  };
   henkery = {
     email = "jim@reupload.nl";
     github = "henkery";
