@@ -193,7 +193,7 @@ let
 
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
-          inherit (config) rewriteURL;
+          inherit (config) mirrors rewriteURL;
         };
 
         cc =
