@@ -35,24 +35,24 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "9";
+  version = "10";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-O211trFJ9tQRVdlztp5ER0Ej6SIrCDn45mRGns7NV90=";
+    hash = "sha256-ap0NnjyBjvyFjHPu9vACQMoOXqwz90/8QqSfPFqfh5U=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
   frontend = buildNpmPackage {
-    name = "grayjay-frontend";
+    pname = "grayjay-frontend";
     inherit version src;
 
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-pTEbMSAJwTY6ZRriPWfBFnRHSYufSsD0d+hWGz35xFM=";
+    npmDepsHash = "sha256-3RMUV6o6422PEuqYg7B+y6JjlaiHDhnwsgsaKEbu5BM=";
 
     installPhase = ''
       runHook preInstall
