@@ -51,6 +51,7 @@ let
     file = [ ];
     sodium = [ libsodium ];
     threadshare = [ ];
+    inter = [ ];
 
     # mux
     flavors = [ ];
