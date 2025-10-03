@@ -172,7 +172,7 @@ python3Packages.buildPythonApplication {
       # if not self._poll(timeout):
       #   raise Empty
       #   _queue.Empty
-      "test/plugins/test_player.py"
+      "test/plugins/test_bpd.py"
     ];
   disabledTests = disabledTests ++ [
     # https://github.com/beetbox/beets/issues/5880
