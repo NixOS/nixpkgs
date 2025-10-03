@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  buildInput = [ pytest ];
+  buildInputs = [ pytest ];
 
   dependencies = [
     (celery.overridePythonAttrs { doCheck = false; })
