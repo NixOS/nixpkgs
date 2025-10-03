@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeWrapper,
   libaio,
+  libnbd,
+  pkg-config,
   python3,
   zlib,
   withGnuplot ? false,
@@ -22,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+    libnbd
     python3
     zlib
   ]
@@ -31,10 +34,13 @@ stdenv.mkDerivation rec {
   # We use $CC instead.
   configurePlatforms = [ ];
 
+  configureFlags = [ "--enable-libnbd" ];
+
   dontAddStaticConfigureFlags = true;
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
     python3.pkgs.wrapPython
   ];
 
