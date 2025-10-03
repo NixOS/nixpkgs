@@ -10992,8 +10992,6 @@ with pkgs;
 
   audacious = audacious-bare.override { withPlugins = true; };
 
-  av-98 = callPackage ../applications/networking/browsers/av-98 { };
-
   bambootracker-qt6 = bambootracker.override { withQt6 = true; };
 
   ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
