@@ -9897,6 +9897,12 @@
     githubId = 5190539;
     keys = [ { fingerprint = "AD3D 53CB A68A FEC0 8065  BCBB 416A D9E8 E372 C075"; } ];
   };
+  hadziqM = {
+    name = "Hadziq Masfuh";
+    email = "dimascrazz@gmail.com";
+    github = "HadziqM";
+    githubId = 50319538;
+  };
   hagl = {
     email = "harald@glie.be";
     github = "hagl";
