@@ -10,13 +10,13 @@ buildGoModule rec {
 
   # The first portion of this version string corresponds to a compatible DCGM
   # version.
-  version = "4.3.1-4.4.0"; # N.B: If you change this, update dcgm as well to the matching version.
+  version = "4.4.1-4.5.2"; # N.B: If you change this, update dcgm as well to the matching version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "dcgm-exporter";
     tag = version;
-    hash = "sha256-NafQWP1NxHTwmOND8ovy3oVia7qq0rCwZYE3VNlMBKQ=";
+    hash = "sha256-jR/VwBq5YlWmYD0fNDE1c8l3l0BajjjEE4MbORGL4BU=";
   };
 
   CGO_LDFLAGS = "-ldcgm";
@@ -29,7 +29,7 @@ buildGoModule rec {
   # symbols are available on startup.
   hardeningDisable = [ "bindnow" ];
 
-  vendorHash = "sha256-BfHC49Dzb4ArXK87JKD+aYEHR5HUS5NL0fEHa0jOCYM=";
+  vendorHash = "sha256-61Sywtee1JTsN1JsSZbDSbjnjPgRnfqKPHwBW7nmcDk=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath
