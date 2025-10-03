@@ -1068,6 +1068,13 @@
     githubId = 22500561;
     name = "Albert Ilagan";
   };
+  albertlarsan68 = {
+    email = "albertlarsan@albertlarsan.fr";
+    github = "albertlarsan68";
+    githubId = 74931857;
+    matrix = "@albertlarsan68:albertlarsan.fr";
+    name = "Albert Larsan";
+  };
   albertodvp = {
     email = "alberto.fanton@protonmail.com";
     github = "albertodvp";
@@ -22923,12 +22930,6 @@
     githubId = 7572407;
     email = "hey@sandydoo.me";
     matrix = "@sandydoo:matrix.org";
-  };
-  Sanskarzz = {
-    email = "sanskar.gur@gmail.com";
-    github = "Sanskarzz";
-    githubId = 92817635;
-    name = "Sanskar Gurdasani";
   };
   santosh = {
     email = "santoshxshrestha@gmail.com";

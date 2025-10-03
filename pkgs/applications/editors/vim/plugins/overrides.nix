@@ -1276,6 +1276,8 @@ assertNoAdditions {
       "fyler.views.explorer.init"
       "fyler.views.explorer.actions"
       "fyler.views.explorer.ui"
+      "fyler.explorer.ui"
+      "fyler.explorer"
     ];
   };
 
@@ -1587,8 +1589,9 @@ assertNoAdditions {
     nvimSkipModules = [
       # attempt to index global 'LazyVim' (a nil value)
       "lazyvim.config.keymaps"
-      "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.ai.copilot-native"
+      "lazyvim.plugins.extras.ai.sidekick"
+      "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
       "lazyvim.plugins.extras.coding.neogen"
