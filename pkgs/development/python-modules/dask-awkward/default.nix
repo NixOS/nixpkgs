@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2025.5.0";
+  version = "2025.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     tag = version;
-    hash = "sha256-TLMT7YxedBUfz05F8wTsS5LQ9LyBbcUhQENM8C7Xric=";
+    hash = "sha256-7z9SkkE4WqULW0m7lk+oohq1uwSO7XLcrnh6U7wqTgo=";
   };
 
   build-system = [
