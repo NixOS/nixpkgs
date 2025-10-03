@@ -394,6 +394,10 @@ in
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
     '')
+    (mkRemovedOptionModule [ "services" "invoiceplane" ] ''
+      services.invoiceplane has been removed since the service only supported PHP 8.1 which is EOL
+      and removed from nixpkgs.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
