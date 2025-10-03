@@ -106,10 +106,6 @@ let
         description = "Number of ElGamal/AES tags to send.";
         default = 40;
       };
-      destination = mkOption {
-        type = types.str;
-        description = "Remote endpoint, I2P hostname or b32.i2p address.";
-      };
       keys = mkOption {
         type = types.str;
         default = name + "-keys.dat";
@@ -254,7 +250,6 @@ let
             (intOpt "port" tun.port)
             (strOpt "host" tun.address)
           ]
-          ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
           ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
           ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
           ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
@@ -685,6 +680,10 @@ in
             { name, ... }:
             {
               options = {
+                destination = mkOption {
+                  type = types.str;
+                  description = "Remote endpoint, I2P hostname or b32.i2p address.";
+                };
                 destinationPort = mkOption {
                   type = with types; nullOr port;
                   default = null;
