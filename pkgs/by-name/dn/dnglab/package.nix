@@ -5,7 +5,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "dnglab";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "dnglab";
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
     postFetch = ''
       rm -rf "$out"/rawler/data/testdata/cameras/Canon/{"EOS REBEL T7i","EOS Rebel T7i"}
     '';
-    hash = "sha256-nUZZgVDnFH+TYx9eltI7edsAiWYPkvc3wwnkSNXr0Jw=";
+    hash = "sha256-KBv7HhsGSPo1fa2QGXZi7zjh5Bu9wEtKwZ9X2TRkg2g=";
   };
 
-  cargoHash = "sha256-n7p16cCk1sJaTBQ/E7e4BmPeMvcApzTGBrd+CmJ8E3k=";
+  cargoHash = "sha256-0Fxhs6Igi5kf/I5wgQ6bM01ka3Favo4AhfIL2DSvLAw=";
 
   postInstall = ''
     rm $out/bin/benchmark $out/bin/identify
