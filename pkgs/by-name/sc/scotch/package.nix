@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qeMgTkoM/RDsZa0T6hmrDLbLuSeR8WNxllyHSlkMVzA=";
   };
 
+  patches = [
+    ./fix-cmake-suffix-fortran-file.patch
+  ];
+
   outputs = [
     "bin"
     "dev"
@@ -39,8 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_PTSCOTCH" withPtScotch)
     # Prefix Scotch version of MeTiS routines
     (lib.cmakeBool "SCOTCH_METIS_PREFIX" true)
-    # building tests is broken with SCOTCH_METIS_PREFIX enabled, at least since 7.0.9
-    (lib.cmakeBool "ENABLE_TESTS" false)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
@@ -59,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = lib.optionals withPtScotch [
     mpi
   ];
+
+  doCheck = true;
 
   # SCOTCH provide compatibility with Metis/Parmetis interface.
   # We install the metis compatible headers to subdirectory to
