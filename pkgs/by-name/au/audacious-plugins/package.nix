@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   alsa-lib,
@@ -64,7 +65,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     audacious-bare
-    alsa-lib
     curl
     faad2
     ffmpeg
@@ -90,17 +90,20 @@ stdenv.mkDerivation rec {
     libsndfile
     libvorbis
     libxml2
-    lirc
     mpg123
     neon
     opusfile
-    pipewire
     qt6.qtbase
     qt6.qtmultimedia
-    qt6.qtwayland
     soxr
     wavpack
     libopenmpt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    lirc
+    pipewire
+    qt6.qtwayland
   ];
 
   mesonFlags = [
@@ -112,6 +115,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -s ${vgmstream.audacious}/lib/audacious/Input/* $out/lib/audacious/Input
   '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${qt6.qtbase}/lib -iframework ${qt6.qtbase}/lib -F${qt6.qtmultimedia}/lib -iframework ${qt6.qtmultimedia}/lib";
 
   meta = audacious-bare.meta // {
     description = "Plugins for Audacious music player";
