@@ -7,10 +7,7 @@
   ninja,
   gfortran,
   blas,
-  lapack,
 }:
-
-assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlu";
