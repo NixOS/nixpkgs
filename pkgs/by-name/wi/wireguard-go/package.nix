@@ -33,6 +33,8 @@ buildGoModule (
 
     subPackages = [ "." ];
 
+    env.CGO_ENABLED = 0;
+
     ldflags = [ "-s" ];
 
     # No tests besides the formatting one are in root.
