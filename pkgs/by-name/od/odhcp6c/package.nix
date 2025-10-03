@@ -7,14 +7,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odhcp6c";
-  version = "0-unstable-2026-01-25";
+  version = "0-unstable-2026-06-03";
+  __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/odhcp6c.git";
-    rev = "24485bb4b35ab84c17c2e87bd561d026d4c15c00";
-    hash = "sha256-cfBKly95vI+8u6lZ4LyrSrNvCf3ogTKtLDzuodO26qw=";
+    rev = "daf4ec3054e753c99fdcc3ac5464926548b38351";
+    hash = "sha256-UjvDMA+sDfouW8sMjNc6hqNzHYFrtP5E1M2zHkKBX64=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,7 +25,10 @@ stdenv.mkDerivation {
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    updateScript = unstableGitUpdater { };
+    defaultScript = "${finalAttrs.src}/odhcp6c-example-script.sh";
+  };
 
   meta = {
     description = "Embedded DHCPv6-client for OpenWrt";
@@ -32,5 +36,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ felbinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "odhcp6c";
   };
-}
+})
