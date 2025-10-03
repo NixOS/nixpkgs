@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nlpo3";
-  version = "1.4.0-unstable-2024-11-11";
+  version = "nlpo3-python-v1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
