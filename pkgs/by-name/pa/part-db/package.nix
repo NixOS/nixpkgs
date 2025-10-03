@@ -16,7 +16,7 @@ let
   pname = "part-db";
   version = "1.14.5";
 
-  srcWithVendor = php.buildComposerProject ({
+  srcWithVendor = php.buildComposerProject2 ({
     inherit pname version;
 
     src = fetchFromGitHub {
@@ -40,15 +40,17 @@ let
       );
     };
 
-    vendorHash = "sha256-PJtm/3Vdm2zomUklVMKlDAe/vziJN4e+JNNf/u8N3B4=";
+    vendorHash = "sha256-k47f6SSsQvNfhSIvNYfh+lEs9mVS3bxcVeqbKn5XjrY=";
 
     composerNoPlugins = false;
 
     postInstall = ''
+      chmod -R u+w $out/share
       mv "$out"/share/php/part-db/* $out/
       mv "$out"/share/php/part-db/.* $out/
       cd $out/
       php -d memory_limit=256M bin/console cache:warmup
+      rm -rf "$out/share"
     '';
   });
 in
