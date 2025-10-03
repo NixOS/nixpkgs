@@ -161,6 +161,8 @@ let
 
         ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
 
+        cachet = callPackage ../development/ocaml-modules/cachet { };
+
         cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
         calendar = callPackage ../development/ocaml-modules/calendar { };
