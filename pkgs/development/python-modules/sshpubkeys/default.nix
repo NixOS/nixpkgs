@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.3.1";
+  version = "3.2.0";
   format = "setuptools";
   pname = "sshpubkeys";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ojarva";
     repo = "python-${pname}";
     rev = version;
-    sha256 = "1qsixmqg97kyvg1naw76blq4314vaw4hl5f9wi0v111mcmdia1r4";
+    sha256 = "sha256-WDQX7pIi4sqF/W84IgmIL85cBiT+nX4pSMkJ9lvfQ00=";
   };
 
   propagatedBuildInputs = [
