@@ -46,7 +46,7 @@ buildRedist (
       (getLib cuda_nvrtc)
       cuda_cudart
     ]
-    ++ optionals hasJetsonCudaCapability [ libcudla ];
+    ++ optionals libcudla.meta.available [ libcudla ];
 
     preInstall =
       let
