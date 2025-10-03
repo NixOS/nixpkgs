@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "libpyvivotek";
-  version = "0.4.0";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "HarlemSquirrel";
     repo = "python-vivotek";
     rev = "v${version}";
-    sha256 = "pNlnGpDjdYE7Lxog8GGZV+UZZmfmt5bwHof5LngPQjg=";
+    sha256 = "sha256-ai+FlvyrdeLyg/PJU8T0fTtbdnlyGo6mE4AM2oRATj8=";
   };
 
   propagatedBuildInputs = [ requests ];
