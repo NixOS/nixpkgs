@@ -6,13 +6,14 @@
   pytestCheckHook,
   requests,
   requests-mock,
+  poetry-core,
   six,
 }:
 
 buildPythonPackage rec {
-  pname = "python-owasp-zap-v2-4";
+  pname = "zaproxy";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zaproxy";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "sha256-UG8+0jJwnywvuc68/9r10kKMqxNIOg5mIdPt2Fx2BZA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     requests
     six
   ];

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    hash = "sha256-o4N1op+beeoM0GGtcQGWNfFt6SMDohiNnOyD8lWzuk0=";
+    hash = "sha256-BZOij+iqp5CMK2r7HjKr8PksAX8UtgRICVNtyIs1Rak=";
   };
 
   pythonRelaxDeps = [ "validators" ];
