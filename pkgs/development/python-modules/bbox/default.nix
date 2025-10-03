@@ -14,7 +14,7 @@
 
 buildPythonPackage {
   pname = "bbox";
-  version = "0.9.4";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
