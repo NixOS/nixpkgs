@@ -13,9 +13,7 @@
   libgcrypt,
   libsigcxx,
   popt,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
   rtl-sdr,
   tcl,
   doxygen,
@@ -63,7 +61,7 @@ stdenv.mkDerivation rec {
     pkg-config
     doxygen
     groff
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -74,8 +72,8 @@ stdenv.mkDerivation rec {
     libsigcxx
     libopus
     popt
-    qtbase
-    qttools
+    qt5.qtbase
+    qt5.qttools
     rtl-sdr
     speex
     tcl
