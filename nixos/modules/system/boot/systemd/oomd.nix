@@ -50,9 +50,6 @@ in
       "systemd-oomd.socket"
     ];
 
-    systemd.services.systemd-oomd.after = [
-      "swap.target" # TODO: drop after systemd v258
-    ];
     systemd.services.systemd-oomd.wantedBy = [ "multi-user.target" ];
 
     environment.etc."systemd/oomd.conf".text = utils.systemdUtils.lib.settingsToSections cfg.settings;
