@@ -3078,6 +3078,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  codecompanion-spinner-nvim = buildVimPlugin {
+    pname = "codecompanion-spinner.nvim";
+    version = "2025-09-11";
+    src = fetchFromGitHub {
+      owner = "franco-ruggeri";
+      repo = "codecompanion-spinner.nvim";
+      rev = "c1fa2a84ea1aed687aaed60df65e347c280f4f22";
+      sha256 = "05cyf6wnzfj7jdyd2ppfs2r5i3mld2h4lwsfjm5qkn9lc70samps";
+    };
+    meta.homepage = "https://github.com/franco-ruggeri/codecompanion-spinner.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   codewindow-nvim = buildVimPlugin {
     pname = "codewindow.nvim";
     version = "2025-05-22";
