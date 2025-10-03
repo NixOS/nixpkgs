@@ -7393,6 +7393,12 @@
     name = "Edward Kimber";
     githubId = 99987;
   };
+  ekisu = {
+    email = "dts.ramon@gmail.com";
+    github = "ekisu";
+    name = "Ramon Dantas";
+    githubId = 5082637;
+  };
   eklairs = {
     name = "Eklairs";
     email = "eklairs@proton.me";
