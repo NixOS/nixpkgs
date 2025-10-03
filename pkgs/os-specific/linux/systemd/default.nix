@@ -1004,7 +1004,6 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-journal
             systemd-journal-gateway
             systemd-journal-upload
-            systemd-lock-handler
             systemd-machinectl
             systemd-networkd
             systemd-networkd-bridge
