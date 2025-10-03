@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-icdiff";
-  version = "0.5-unstable-2024-09-04";
+  version = "0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
