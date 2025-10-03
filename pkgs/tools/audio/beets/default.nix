@@ -46,6 +46,7 @@ lib.makeExtensible (
     audible = callPackage ./plugins/audible.nix { beets = self.beets-minimal; };
     copyartifacts = callPackage ./plugins/copyartifacts.nix { beets = self.beets-minimal; };
     filetote = callPackage ./plugins/filetote.nix { beets = self.beets-minimal; };
+    yearfixer = callPackage ./plugins/yearfixer.nix { beets = self.beets-minimal; };
   }
   // lib.optionalAttrs config.allowAliases {
     beets-unstable = lib.warn "beets-unstable was aliased to beets, since upstream releases are frequent nowadays" self.beets;
