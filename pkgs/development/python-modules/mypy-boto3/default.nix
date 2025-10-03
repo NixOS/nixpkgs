@@ -226,8 +226,8 @@ rec {
       "sha256-fFnHwgB8r239cpVnWSfeiGO1MNOxkXn9MNMUA5ohm04=";
 
   mypy-boto3-cloudformation =
-    buildMypyBoto3Package "cloudformation" "1.40.24"
-      "sha256-4rAK/GqrExGyWMkxSO7qWz7q2UxyA+KP+f046fzihIg=";
+    buildMypyBoto3Package "cloudformation" "1.40.44"
+      "sha256-PYL1UEOCyGrRlaG4CiqC9zWHw34bY2hk67hd1DvXmls=";
 
   mypy-boto3-cloudfront =
     buildMypyBoto3Package "cloudfront" "1.40.23"
@@ -350,8 +350,8 @@ rec {
       "sha256-nAOKVy+aH2gw8NZ8cNSYqQ0kFWV4Gb4oU6y1vHz3fpI=";
 
   mypy-boto3-connectcases =
-    buildMypyBoto3Package "connectcases" "1.40.42"
-      "sha256-DJcEbPyJZVRVF1FnTSQpuUZlBTEYcOXJ42yN1o4yUwU=";
+    buildMypyBoto3Package "connectcases" "1.40.44"
+      "sha256-T4E5rin+Y0DJWARRqzA7agLwcF11v4CGy/Fe/x/F7vY=";
 
   mypy-boto3-connectparticipant =
     buildMypyBoto3Package "connectparticipant" "1.40.18"
@@ -434,8 +434,8 @@ rec {
       "sha256-gKzshS6Q6O/lTAsrkuXOvKkGz+ECRlmSeb5NxNCBim8=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.40.20"
-      "sha256-L0JDFdKZzPCztOOysjAPkPCc0LfGn8Rz0M3Atr5sMNY=";
+    buildMypyBoto3Package "dynamodb" "1.40.44"
+      "sha256-WPo6Y4scrvVkS2D1iU4RgqKVH+swo9xt7bNOGwyd7Zk=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.40.40"
@@ -593,8 +593,8 @@ rec {
       "sha256-/LlMFYC7cJWb9C5JIt0dTEPtl2sPsalSq7mYaFSf3c4=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.40.29"
-      "sha256-G5d3++tcszwfPxeBmPA+1akV4lIVC85MT/5mXBtJekE=";
+    buildMypyBoto3Package "guardduty" "1.40.44"
+      "sha256-vOTVkra2RG5DPgcegpDij+6tjWkY01b6zXoSIze8AZ8=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.40.0"
@@ -1345,8 +1345,8 @@ rec {
       "sha256-qkE3rF32WkR56WB5pu3dKJLCLY5e1rvMDPYAruyj9O8=";
 
   mypy-boto3-synthetics =
-    buildMypyBoto3Package "synthetics" "1.40.16"
-      "sha256-E7spYXuGbWE7BrOPNP/f8kUakXjTLGf1JAZuhd6m0Yg=";
+    buildMypyBoto3Package "synthetics" "1.40.44"
+      "sha256-777DKmK4DKxIWhXp+Mu7TQ8wNdfnzz4+0fJyPVGx0R0=";
 
   mypy-boto3-textract =
     buildMypyBoto3Package "textract" "1.40.0"
