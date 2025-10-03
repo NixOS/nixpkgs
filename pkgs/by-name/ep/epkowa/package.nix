@@ -22,8 +22,8 @@ let
   common_meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; epson;
-    platforms = with lib.platforms; linux;
+    license = lib.licenses.epson;
+    platforms = lib.platforms.linux;
   };
 in
 ############################
@@ -58,10 +58,14 @@ let
       ];
 
       installPhase = ''
-        ${rpm}/bin/rpm2cpio plugins/esci-interpreter-perfection-v330-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        runHook preInstall
+
+        ${lib.getExe' rpm "rpm2cpio"} plugins/esci-interpreter-perfection-v330-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out{,/share,/lib}
         cp -r ./usr/share/{iscan-data,esci}/ $out/share/
         cp -r ./usr/lib64/esci $out/lib
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -70,10 +74,12 @@ let
         '';
         hw = "Perfection V330 Photo";
       };
+
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support Perfection V330 Photo scanner in sane";
       };
     };
+
     v370 = stdenv.mkDerivation rec {
       name = "iscan-v370-bundle";
       version = "2.30.4";
@@ -92,15 +98,18 @@ let
       ];
 
       installPhase = ''
-        cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v370-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        runHook preInstall
 
+        cd plugins
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-perfection-v370-*.x86_64.rpm | ${lib.getExe cpio} -idmv
 
         mkdir -p $out/share $out/lib
         cp -r usr/share/{iscan-data,iscan}/ $out/share
         cp -r usr/lib64/iscan $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -110,9 +119,10 @@ let
         hw = "Perfection V37/V370";
       };
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support Perfection V37/V370 scanner in sane";
       };
     };
+
     v550 = stdenv.mkDerivation rec {
       pname = "iscan-perfection-v550-bundle";
       version = "2.30.4";
@@ -129,13 +139,17 @@ let
         sha256 = "f8b3abf21354fc5b9bc87753cef950b6c0f07bf322a94aaff2c163bafcf50cd9";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v550-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-perfection-v550-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = ''
@@ -144,9 +158,10 @@ let
         hw = "Perfection V550 Photo";
       };
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support Perfection V550 Photo scanner in sane";
       };
     };
+
     v600 = stdenv.mkDerivation rec {
       pname = "iscan-gt-x820-bundle";
       version = "2.30.4";
@@ -163,13 +178,17 @@ let
         sha256 = "1vlba7dsgpk35nn3n7is8nwds3yzlk38q43mppjzwsz2d2n7sr33";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-x820-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-x820-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = ''
@@ -178,9 +197,10 @@ let
         hw = "Perfection V600 Photo";
       };
       meta = common_meta // {
-        description = "iscan esci x820 plugin for " + passthru.hw;
+        description = "iscan esci x820 plugin for Perfection V600 Photo";
       };
     };
+
     x770 = stdenv.mkDerivation rec {
       pname = "iscan-gt-x770-bundle";
       version = "2.30.4";
@@ -194,16 +214,20 @@ let
           "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
           "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
         ];
-        sha256 = "1chxdm6smv2d14pn2jl9xyd0vr42diy7vpskd3b9a61gf5h3gj03";
+        hash = "sha256-A8g3YHEvGJXWaFPffXxsguQNmu+JSmEvCU3sqk1tHbI=";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-x770-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-x770-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = ''
@@ -229,11 +253,15 @@ let
         sha256 = "1xnbmb2rn610kqpg1x6k1cc13zlmx2f3l2xnj6809rnhg96qqn20";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio esci-interpreter-gt-f720-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} esci-interpreter-gt-f720-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -244,9 +272,10 @@ let
       };
 
       meta = common_meta // {
-        description = "iscan esci f720 plugin for " + passthru.hw;
+        description = "iscan esci f720 plugin for GT-F720, GT-S620, Perfection V30, Perfection V300 Photo";
       };
     };
+
     s80 = stdenv.mkDerivation rec {
       pname = "iscan-gt-s80-bundle";
       version = "2.30.4";
@@ -264,13 +293,17 @@ let
         sha256 = "00qfdgs03k7bbs67zjrk8hbxvlyinsmk890amp9cmpfjfzdxgg58";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio esci-interpreter-gt-s80-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
-        ${rpm}/bin/rpm2cpio iscan-plugin-esdip-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} esci-interpreter-gt-s80-*.x86_64.rpm | ${lib.getExe cpio} -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-esdip-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mkdir $out/share/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -284,9 +317,10 @@ let
       };
 
       meta = common_meta // {
-        description = "iscan esci s80 plugin for " + passthru.hw;
+        description = "iscan esci s80 plugin for ES-D200, ED-D350, ES-D400, GT-S50, GT-S55, GT-S80, GT-S85";
       };
     };
+
     s600 = stdenv.mkDerivation rec {
       name = "iscan-gt-s600-bundle";
       version = "2.30.4";
@@ -305,13 +339,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-s600-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-s600-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -321,9 +359,10 @@ let
         hw = "GT-F650, GT-S600, Perfection V10, Perfection V100 Photo";
       };
       meta = common_meta // {
-        description = "iscan gt-s600 plugin for " + passthru.hw;
+        description = "iscan gt-s600 plugin for GT-F650, GT-S600, Perfection V10, Perfection V100 Photo";
       };
     };
+
     s650 = stdenv.mkDerivation rec {
       name = "iscan-gt-s650-bundle";
       version = "2.30.4";
@@ -342,13 +381,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-s650-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-s650-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -359,9 +402,10 @@ let
         hw = "GT-S650, Perfection V19, Perfection V39";
       };
       meta = common_meta // {
-        description = "iscan GT-S650 for " + passthru.hw;
+        description = "iscan GT-S650 for GT-S650, Perfection V19, Perfection V39";
       };
     };
+
     x750 = stdenv.mkDerivation rec {
       name = "iscan-gt-x750-bundle";
       version = "2.30.4";
@@ -380,13 +424,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-x750-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-x750-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -396,9 +444,10 @@ let
         hw = "GT-X750, Perfection 4490";
       };
       meta = common_meta // {
-        description = "iscan GT-X750 for " + passthru.hw;
+        description = "iscan GT-X750 for GT-X750, Perfection 4490";
       };
     };
+
     gt1500 = stdenv.mkDerivation rec {
       name = "iscan-gt-1500-bundle";
       version = "2.30.4";
@@ -417,13 +466,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-1500-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-1500-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -433,9 +486,10 @@ let
         hw = "GT-1500";
       };
       meta = common_meta // {
-        description = "iscan GT-1500 for " + passthru.hw;
+        description = "iscan GT-1500 for GT-1500";
       };
     };
+
     ds30 = stdenv.mkDerivation rec {
       name = "iscan-ds-30-bundle";
       version = "2.30.4";
@@ -454,12 +508,16 @@ let
       ];
 
       installPhase = ''
-        ${rpm}/bin/rpm2cpio plugins/iscan-plugin-ds-30-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        runHook preInstall
+
+        ${lib.getExe' rpm "rpm2cpio"} plugins/iscan-plugin-ds-30-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/lib/iscan $out/lib/esci
         mkdir $out/share/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -469,9 +527,10 @@ let
         hw = "DS-30";
       };
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support DS-30 scanner in sane";
       };
     };
+
     network = stdenv.mkDerivation rec {
       pname = "iscan-nt-bundle";
       # for the version, look for the driver of XP-750 in the search page
@@ -488,13 +547,17 @@ let
         sha256 = "0jssigsgkxb9i7qa7db291a1gbvwl795i4ahvb7bnqp33czkj85k";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-network-nt-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-network-nt-*.x86_64.rpm | ${lib.getExe cpio} -idmv
 
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mkdir $out/share/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = "";
