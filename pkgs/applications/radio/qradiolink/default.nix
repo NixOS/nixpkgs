@@ -1,8 +1,10 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   libpulseaudio,
   libconfig,
+  pkg-config,
   # Needs a gnuradio built with qt gui support
   gnuradio,
   log4cpp,
@@ -24,30 +26,41 @@
   uhd,
 }:
 
-gnuradio.pkgs.mkDerivation {
+gnuradio.pkgs.mkDerivation rec {
   pname = "qradiolink";
-  # https://github.com/qradiolink/qradiolink/tree/gr_3.10
-  version = "0.9.0-1-unstable-2024-08-29";
+  version = "0.9.1-3";
 
   src = fetchFromGitHub {
     owner = "qradiolink";
     repo = "qradiolink";
-    rev = "f1006a20e0a642d0ac20aab18b19fa97567f2621";
-    sha256 = "sha256-9AYFO+mmwLAH8gEpZn6qcENabc/KBMcg/0wCTKsInNY=";
+    tag = version;
+    hash = "sha256-0inXfeOSVmJYtNhD6WBExjT43STfBjePomKILxoHO6Q=";
   };
+
+  patches = [
+    # dmr: add explicit cstdint import
+    (fetchpatch {
+      url = "https://github.com/qradiolink/qradiolink/pull/131/commits/bdd3b47708edf42b281fb9e5507d356d475f3df9.patch";
+      hash = "sha256-Uoi8/IK8yBmfPL7RAkCGuyHdcdJZ+YMxccviY7Z+hXs=";
+    })
+    # qmake: find protobuf via pkg-config
+    (fetchpatch {
+      url = "https://github.com/qradiolink/qradiolink/pull/132/commits/cd3e4bc188a60bc85693fe3de4540c48f325deb4.patch";
+      hash = "sha256-ufSStm0pyDkCUIx0SjVVHZhA4gW7Ip6PiexPg34DsCo=";
+    })
+  ];
 
   preBuild = ''
     cd src/ext
     protoc --cpp_out=. Mumble.proto
     protoc --cpp_out=. QRadioLink.proto
-    cd ../..
-    qmake
+    cd -
   '';
 
   installPhase = ''
-    install -D qradiolink $out/bin/qradiolink
+    install -Dm755 qradiolink -t $out/bin
+    install -Dm644 qradiolink.desktop -t $out/share/applications
     install -Dm644 src/res/icon.png $out/share/pixmaps/qradiolink.png
-    install -Dm644 qradiolink.desktop $out/share/applications/qradiolink.desktop
   '';
 
   buildInputs = [
@@ -77,23 +90,30 @@ gnuradio.pkgs.mkDerivation {
     cppzmq
     gnuradio.qwt
     uhd
+    protobuf
   ]
   ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift
     gnuradio.unwrapped.python.pkgs.thrift
   ];
   nativeBuildInputs = [
+    pkg-config
     protobuf
     gnuradio.qt.qmake
     gnuradio.qt.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SDR transceiver application for analog and digital modes";
     mainProgram = "qradiolink";
     homepage = "http://qradiolink.org/";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      bsd2
+      gpl3Only
+      lgpl3Only
+      mit
+    ];
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.linux;
   };
 }
