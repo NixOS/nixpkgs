@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "py-libnuma";
-  version = "1.2";
+  version = "1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
