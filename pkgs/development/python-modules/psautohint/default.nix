@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "psautohint";
-  version = "2.4.0";
+  version = "2.4.1a0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "adobe-type-tools";
     repo = "psautohint";
     rev = "v${version}";
-    sha256 = "125nx7accvbk626qlfar90va1995kp9qfrz6a978q4kv2kk37xai";
+    sha256 = "sha256-CH0pGJeb7AXP+1s1tPL/NtM6aXY8NPV0jux+hoQNgNA=";
     fetchSubmodules = true; # data dir for tests
   };
 
