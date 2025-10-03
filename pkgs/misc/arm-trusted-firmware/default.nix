@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
   openssl,
   pkgsCross,
   buildPackages,
@@ -67,8 +66,6 @@ let
         # Make the new toolchain guessing (from 2.11+) happy
         # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
         rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
-
-        buildInputs = [ openssl ];
 
         makeFlags = [
           "HOSTCC=$(CC_FOR_BUILD)"
