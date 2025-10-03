@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  flutter332,
+  flutter335,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
+  alsa-lib,
   mpv-unwrapped,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -13,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.35";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-XSXFo0+rLTUJ0p3F5+CvKD85OmrShb2xrpQK0F6fo2U=";
+    hash = "sha256-0ypYsejDi1HLBZSm4OYsiImpfu4YbqIqvFf3pFNIXfo=";
   };
 
   metaCommon = {
@@ -43,7 +44,7 @@ let
     meta = metaCommon;
   };
 in
-flutter332.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -122,6 +123,7 @@ flutter332.buildFlutterApplication {
   nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
+    alsa-lib
     mpv-unwrapped
     webkitgtk_4_1
   ];
