@@ -6975,6 +6975,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  kiwi-nvim = buildVimPlugin {
+    pname = "kiwi.nvim";
+    version = "2025-07-07";
+    src = fetchFromGitHub {
+      owner = "serenevoid";
+      repo = "kiwi.nvim";
+      rev = "61e86fc29365e32b44c2914a2b10c90d04a3b22e";
+      sha256 = "1knma0bjpvakiki9iwkhqxqsdzyx3dgyvhds9v3h0bsjyj15nj7x";
+    };
+    meta.homepage = "https://github.com/serenevoid/kiwi.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   kmonad-vim = buildVimPlugin {
     pname = "kmonad-vim";
     version = "2022-03-20";

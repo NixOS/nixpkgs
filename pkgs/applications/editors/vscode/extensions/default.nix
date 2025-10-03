@@ -1546,6 +1546,8 @@ let
         };
       };
 
+      elijah-potter.harper = callPackage ./elijah-potter.harper { };
+
       elixir-lsp.vscode-elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
@@ -3881,8 +3883,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "vscode-yaml";
-          version = "1.18.0";
-          hash = "sha256-UtxDplORUWqmiW6I8n4ZhK7HAQdSDG4dw7M/cbjkmZY=";
+          version = "1.19.0";
+          hash = "sha256-Nc/lkcZh5kp71eygkUCJQT7iNT+9Jg+ud1hgaXdV0Ls=";
         };
         meta = {
           description = "YAML Language Support by Red Hat, with built-in Kubernetes syntax support";
