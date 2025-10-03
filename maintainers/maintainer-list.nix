@@ -11082,12 +11082,6 @@
     githubId = 7348004;
     name = "Benjamin Levy";
   };
-  iogamaster = {
-    email = "iogamastercode+nixpkgs@gmail.com";
-    name = "IogaMaster";
-    github = "IogaMaster";
-    githubId = 67164465;
-  };
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
