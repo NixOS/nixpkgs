@@ -5,6 +5,10 @@
   nodejs_22,
   fetchFromGitHub,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
@@ -57,7 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withMoonlight
+    );
+  };
 
   meta = with lib; {
     description = "Discord client modification, focused on enhancing user and developer experience";
