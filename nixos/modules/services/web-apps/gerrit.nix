@@ -226,6 +226,7 @@ in
         StandardInput = "socket";
         StandardOutput = "journal";
         StateDirectory = "gerrit";
+        StateDirectoryMode = "750";
         WorkingDirectory = "%S/gerrit";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
