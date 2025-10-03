@@ -163,6 +163,8 @@ let
 
         cachet = callPackage ../development/ocaml-modules/cachet { };
 
+        cachet-lwt = callPackage ../development/ocaml-modules/cachet/lwt.nix { };
+
         cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
         calendar = callPackage ../development/ocaml-modules/calendar { };
