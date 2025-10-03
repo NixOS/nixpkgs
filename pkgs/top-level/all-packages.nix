@@ -3799,8 +3799,6 @@ with pkgs;
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
-  parcellite = callPackage ../tools/misc/parcellite { };
-
   patchutils = callPackage ../tools/text/patchutils { };
 
   patchutils_0_3_3 = callPackage ../tools/text/patchutils/0.3.3.nix { };
