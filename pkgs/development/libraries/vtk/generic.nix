@@ -44,8 +44,6 @@
   cgns,
   adios2,
   libLAS,
-  libgeotiff,
-  laszip_2,
   gdal,
   pdal,
   alembic,
@@ -108,7 +106,6 @@ let
       inherit mpi mpiSupport;
       cppSupport = !mpiSupport;
     };
-    openvdb = self.callPackage openvdb.override { };
     netcdf = self.callPackage netcdf.override { };
     catalyst = self.callPackage catalyst.override { };
     adios2 = self.callPackage adios2.override { };
@@ -140,8 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libLAS
-    libgeotiff
-    laszip_2
     gdal
     pdal
     alembic
@@ -156,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     openturns
     libarchive
     libGL
-    vtkPackages.openvdb
+    openvdb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libXfixes
@@ -224,12 +219,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  env = {
-    CMAKE_PREFIX_PATH = "${lib.getDev openvdb}/lib/cmake/OpenVDB";
-    NIX_LDFLAGS = "-L${lib.getLib libmysqlclient}/lib/mariadb";
-  };
-
   cmakeFlags = [
+    # During installPhase, keep rpath that came from target_link_libraries() of imported targets.
+    # Typically libgeotiff,liblaszip propagated from liblas and libmariadb found by pkg-config.
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # Required for locating the findOpenVDB.cmake module
+    # TODO: Add a setup hook in openvdb to append CMAKE_MODULE_PATH to cmakeFlagsArray
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${lib.getDev openvdb}/lib/cmake/OpenVDB")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
@@ -283,7 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove thirdparty find module that have been provided in nixpkgs.
     ''
       rm -rf $out/lib/cmake/vtk/patches
-      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig}.cmake
+      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig,TBB}.cmake
     ''
     # libvtkglad.so will find and load libGL.so at runtime.
     + lib.optionalString stdenv.hostPlatform.isLinux ''

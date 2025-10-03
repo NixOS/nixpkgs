@@ -170,11 +170,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "140.0.7339.207";
+    version = "141.0.7390.54";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-5g0t+EEJJeItjqKiTpp5qE/bkGKkxvOvLaxh5jCDPss=";
+      hash = "sha256-vJMHfwIPf+aM3uj3UlYGo/YxTerNLrVouKNNFApGl48=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -230,9 +230,6 @@ let
         --replace-fail /usr/bin/google-chrome-$dist $exe
       substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
         --replace-fail /opt/google/$appname/google-$appname $exe
-      substituteInPlace $out/share/menu/google-$appname.menu \
-        --replace-fail /opt $out/share \
-        --replace-fail $out/share/google/$appname/google-$appname $exe
 
       for icon_file in $out/share/google/chrome*/product_logo_[0-9]*.png; do
         num_and_suffix="''${icon_file##*logo_}"
@@ -275,11 +272,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "140.0.7339.214";
+    version = "141.0.7390.55";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/mfmmq5vcqbb2jdp3e77lsymylu_140.0.7339.214/GoogleChrome-140.0.7339.214.dmg";
-      hash = "sha256-oTyyTHMs3VhGRXWoVlGXvNvwnOWb1eF7iswfJkl8Pe0=";
+      url = "http://dl.google.com/release2/chrome/ft5t2atavjdcw35pqqr5b5rp6e_141.0.7390.55/GoogleChrome-141.0.7390.55.dmg";
+      hash = "sha256-F0IAksB2PHdl4yRV9Pdyd2iRAM7vLF7fJVO7V+l4KTE=";
     };
 
     dontPatch = true;

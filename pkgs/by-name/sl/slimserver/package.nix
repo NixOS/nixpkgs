@@ -26,6 +26,7 @@ let
     ]
     ++ (lib.optional stdenv.hostPlatform.isLinux monkeysAudio)
   );
+
   libPath = lib.makeLibraryPath [
     zlib
     stdenv.cc.cc
@@ -33,13 +34,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "9.0.2";
+  version = "9.0.3";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
-    rev = version;
-    hash = "sha256-rwaHlNM5KGqvk8SAdinvCGT5+UUAU8I2jiN5Ine/eds=";
+    tag = version;
+    hash = "sha256-Yc/XBINSX1JN7lJn4fin4qcTUSF8Bg+FbFe23KlYkfs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

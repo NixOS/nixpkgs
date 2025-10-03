@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     description = "Like IntelliSense, but for shells";
     homepage = "https://github.com/lasantosr/intelli-shell";
     license = licenses.asl20;
-    maintainers = with maintainers; [ iogamaster ];
+    maintainers = [ ];
     mainProgram = "intelli-shell";
   };
 }

@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
-  fetchpatch2,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch2 {
+    (fetchpatch {
       # https://github.com/imageio/imageio/issues/1139
       # https://github.com/imageio/imageio/pull/1144
       name = "fix-pyav-13-1-compat";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
       excludes = [
         "setup.py"
       ];
-      hash = "sha256-xBYdhK6XmJJuChqXOIdRVf8X6/GpWLG+21+cPVZ4bVg=";
+      hash = "sha256-ycsW1YXtiO3ZecIF1crYaX6vg/nRW4bF4So5uWCVzME=";
     })
   ];
 
