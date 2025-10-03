@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "e3-testsuite";
-  version = "27.2";
+  version = "26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "AdaCore";
     repo = "e3-testsuite";
     tag = "v${version}";
-    hash = "sha256-qG8SHwogBle3demgFJCqcfCh5ktLvOqh2XSwxPCANFk=";
+    hash = "sha256-V20tX0zi2DRHO42udUcW/CDMyBxh1uSTgac0zZGubsI=";
   };
 
   build-system = [ setuptools ];
