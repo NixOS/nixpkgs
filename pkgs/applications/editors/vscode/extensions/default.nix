@@ -3764,6 +3764,8 @@ let
 
       prince781.vala = callPackage ./prince781.vala { };
 
+      pranaygp.vscode-css-peek = callPackage ./pranaygp.vscode-css-peek { };
+
       prisma.prisma = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "prisma";
