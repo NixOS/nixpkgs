@@ -7,7 +7,11 @@
 let
   cfg = config.services.frp;
   settingsFormat = pkgs.formats.toml { };
-  configFile = settingsFormat.generate "frp.toml" cfg.settings;
+  configFile =
+    if cfg.settingsFile != null then
+      cfg.settingsFile
+    else
+      settingsFormat.generate "frp.toml" cfg.settings;
   isClient = (cfg.role == "client");
   isServer = (cfg.role == "server");
 in
@@ -38,11 +42,25 @@ in
           Frp configuration, for configuration options
           see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_full_example.toml)
           or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml) on github.
+          This can not be set with `settingsFile` at the same time.
         '';
         example = {
           serverAddr = "x.x.x.x";
           serverPort = 7000;
         };
+      };
+
+      settingsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          A file contains frp configuration. This option takes the path of a file.
+          The path is **unchecked** to keep pure.
+          see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_full_example.toml)
+          or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml) on github.
+          This can not be set with `settings` at the same time.
+        '';
+        example = "/run/configs/myconfig.toml";
       };
     };
   };
@@ -53,6 +71,17 @@ in
       executableFile = if isClient then "frpc" else "frps";
     in
     lib.mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = !(cfg.settingsFile != null && cfg.settings != { });
+          message = "Cannot set `settingsFile` when `settings` is set";
+        }
+        {
+          assertion = !(cfg.settingsFile == null && cfg.settings == { });
+          message = "One of `settingsFile` or `settings` must be set";
+        }
+      ];
+
       systemd.services = {
         frp = {
           wants = lib.optionals isClient [ "network-online.target" ];
