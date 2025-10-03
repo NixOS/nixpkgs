@@ -8,6 +8,7 @@
   stdenv,
   writeShellScript,
   zlib,
+  nix-update-script,
 }:
 
 let
@@ -26,7 +27,7 @@ let
       fi
     done
 
-    if [ ! -d "data/sound/music" ]; then
+    if [ ! -d "data/sound/music" ] && [ ! -d "sound/music" ]; then
       echo "data/sound/music directory not found in $PWD. This may prevent in-game music from functioning."
       notice=1
     fi
@@ -43,60 +44,65 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fallout2-ce";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "alexbatalov";
     repo = "fallout2-ce";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-r1pnmyuo3uw2R0x9vGScSHIVNA6t+txxABzgHkUEY5U=";
   };
 
   patches = [
     # Fix case-sensitive filesystems issue when save/load games
     (fetchpatch2 {
-      url = "https://github.com/alexbatalov/fallout2-ce/commit/d843a662b3ceaf01ac363e9abb4bfceb8b805c36.patch";
-      sha256 = "sha256-r4sfl1JolWRNd2xcf4BMCxZw3tbN21UJW4TdyIbQzgs=";
+      url = "https://github.com/alexbatalov/fallout2-ce/commit/e770e64a48cd4d0a58a07f8db72839e4747e4c1e.patch?full_index=1";
+      sha256 = "sha256-49N6uXwOBL/sE+f+W4nX6Gpwwpmbgvy38B1NjECiia0=";
     })
   ];
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     SDL2
     zlib
   ];
+
   hardeningDisable = [ "format" ];
-  cmakeBuildType = "RelWithDebInfo";
 
   postPatch = ''
     substituteInPlace third_party/fpattern/CMakeLists.txt \
-      --replace "FetchContent_Populate" "#FetchContent_Populate" \
-      --replace "{fpattern_SOURCE_DIR}" "${fpattern}/include" \
-      --replace "$/nix/" "/nix/"
+      --replace-fail "FetchContent_Populate" "#FetchContent_Populate" \
+      --replace-fail "\''${fpattern_SOURCE_DIR}" "${fpattern}/include"
   '';
 
   installPhase = ''
     runHook preInstall
 
-    install -D ${pname} $out/libexec/${pname}
-    install -D ${launcher} $out/bin/${pname}
-    substituteInPlace $out/bin/${pname} --subst-var out
+    install -D fallout2-ce $out/libexec/fallout2-ce
+    install -D ${launcher} $out/bin/fallout2-ce
+    substituteInPlace $out/bin/fallout2-ce --subst-var out
 
     runHook postInstall
   '';
 
-  meta =
-    with lib;
-    {
-      description = "Fully working re-implementation of Fallout 2, with the same original gameplay, engine bugfixes, and some quality of life improvements";
-      homepage = "https://github.com/alexbatalov/fallout2-ce";
-      license = licenses.sustainableUse;
-      maintainers = with maintainers; [
-        hughobrien
-        iedame
-      ];
-      platforms = platforms.linux;
-    };
-}
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Fallout 2 for modern operating systems";
+    longDescription = ''
+      Fully working re-implementation of Fallout 2, with the same original gameplay, engine bugfixes, and some quality of life improvements.
+      You must own the game and copy the files to the specified folder to play.
+    '';
+    homepage = "https://github.com/alexbatalov/fallout2-ce";
+    license = lib.licenses.sustainableUse;
+    maintainers = with lib.maintainers; [
+      hughobrien
+      iedame
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "fallout2-ce";
+  };
+})
