@@ -7,7 +7,7 @@ bossa.overrideAttrs (attrs: rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "BOSSA";
-    rev = version;
+    tag = version;
     sha256 = "sha256-sBJ6QMd7cTClDnGCeOU0FT6IczEjqqRxCD7kef5GuY8=";
   };
 })

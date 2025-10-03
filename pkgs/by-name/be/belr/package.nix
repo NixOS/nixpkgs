@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = "belr";
-    rev = version;
+    tag = version;
     hash = "sha256-4keVUAsTs1DAhOfV71VD28I0PEHnyvW95blplY690LY=";
   };
 
