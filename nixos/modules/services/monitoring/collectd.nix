@@ -111,6 +111,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.optional ((cfg.plugins ? xencpu) || cfg.user == "root") ''
+      The xencpu plugin for collectd typically requires root privileges. You
+      have enabled the xencpu plugin but collectd is not configured to run as
+      root. If you're running in a Xen dom0 environment and want to collect
+      metrics of hardware CPU load, you may need
+      `services.collectd.user = "root"`;
+    '';
+
     # 1200 is after the default (1000) but before mkAfter (1500).
     services.collectd.extraConfig = lib.mkOrder 1200 ''
       ${baseDirLine}
