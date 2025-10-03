@@ -80,7 +80,10 @@ stdenv.mkDerivation {
     with lib;
     {
       license = licenses.sustainableUse;
-      maintainers = with maintainers; [ hughobrien ];
+      maintainers = with maintainers; [
+        hughobrien
+        iedame
+      ];
       platforms = platforms.linux;
     }
     // extraMeta;
