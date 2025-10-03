@@ -3,26 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
   vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "libpyvivotek";
   version = "0.6.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HarlemSquirrel";
     repo = "python-vivotek";
-    rev = "v${version}";
-    sha256 = "sha256-ai+FlvyrdeLyg/PJU8T0fTtbdnlyGo6mE4AM2oRATj8=";
+    tag = "v${version}";
+    hash = "sha256-ai+FlvyrdeLyg/PJU8T0fTtbdnlyGo6mE4AM2oRATj8=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Library for Vivotek IP Cameras";
     homepage = "https://github.com/HarlemSquirrel/python-vivotek";
+    changelog = "https://github.com/HarlemSquirrel/python-vivotek/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
