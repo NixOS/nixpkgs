@@ -13599,7 +13599,6 @@ with pkgs;
     d2x-rebirth-full
     ;
 
-  fallout-ce = callPackage ../games/fallout-ce/fallout-ce.nix { };
   fallout2-ce = callPackage ../games/fallout-ce/fallout2-ce.nix { };
 
   fltrator = callPackage ../games/fltrator {
