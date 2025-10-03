@@ -10,6 +10,7 @@
   migen,
 
   # tests
+  unittestCheckHook,
   numpy,
 }:
 
@@ -32,7 +33,10 @@ buildPythonPackage {
     migen
   ];
 
-  nativeCheckInputs = [ numpy ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    numpy
+  ];
 
   pythonImportsCheck = [ "misoc" ];
 
