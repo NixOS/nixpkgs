@@ -17032,6 +17032,10 @@ self: super: with self; {
     callPackage ../development/python-modules/snakemake-interface-report-plugins
       { };
 
+  snakemake-interface-scheduler-plugins =
+    callPackage ../development/python-modules/snakemake-interface-scheduler-plugins
+      { };
+
   snakemake-interface-storage-plugins =
     callPackage ../development/python-modules/snakemake-interface-storage-plugins
       { };
