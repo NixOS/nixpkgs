@@ -4166,10 +4166,6 @@ with pkgs;
 
   buildTeleport = callPackage ../build-support/teleport { };
 
-  telepresence = callPackage ../tools/networking/telepresence {
-    pythonPackages = python3Packages;
-  };
-
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
     extraFonts = true;
   };
