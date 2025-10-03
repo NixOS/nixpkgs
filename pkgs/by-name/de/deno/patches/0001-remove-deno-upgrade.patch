@@ -1,8 +1,8 @@
 diff --git a/cli/args/flags.rs b/cli/args/flags.rs
-index e1bc861e4..05f070563 100644
+index 9e296542e..8fd86a7ba 100644
 --- a/cli/args/flags.rs
 +++ b/cli/args/flags.rs
-@@ -1349,8 +1349,6 @@ static DENO_HELP: &str = cstr!(
+@@ -1337,8 +1337,6 @@ static DENO_HELP: &str = cstr!(
      <g>test</>         Run tests
                    <p(245)>deno test  |  deno test test.ts</>
      <g>publish</>      Publish the current working directory's package or workspace
@@ -11,7 +11,7 @@ index e1bc861e4..05f070563 100644
  {after-help}
  
  <y>Docs:</> https://docs.deno.com
-@@ -1536,7 +1534,6 @@ pub fn flags_from_vec(args: Vec<OsString>) -> clap::error::Result<Flags> {
+@@ -1522,7 +1520,6 @@ pub fn flags_from_vec(args: Vec<OsString>) -> clap::error::Result<Flags> {
          "types" => types_parse(&mut flags, &mut m),
          "uninstall" => uninstall_parse(&mut flags, &mut m),
          "update" => outdated_parse(&mut flags, &mut m, true)?,
@@ -19,7 +19,7 @@ index e1bc861e4..05f070563 100644
          "vendor" => vendor_parse(&mut flags, &mut m),
          "publish" => publish_parse(&mut flags, &mut m)?,
          _ => unreachable!(),
-@@ -1797,7 +1794,6 @@ pub fn clap_root() -> Command {
+@@ -1784,7 +1781,6 @@ pub fn clap_root() -> Command {
          .subcommand(test_subcommand())
          .subcommand(types_subcommand())
          .subcommand(update_subcommand())
@@ -27,7 +27,15 @@ index e1bc861e4..05f070563 100644
          .subcommand(vendor_subcommand());
  
        let help = help_subcommand(&cmd);
-@@ -6644,6 +6640,7 @@ mod tests {
+@@ -3691,6 +3687,7 @@ pub static UPGRADE_USAGE: &str = cstr!(
+   <bold>deno upgrade</> <p(245)>canary</>"
+ );
+ 
++#[allow(dead_code)]
+ fn upgrade_subcommand() -> Command {
+   command(
+     "upgrade",
+@@ -6666,6 +6663,7 @@ mod tests {
      assert_eq!(flags2, flags);
    }
  
@@ -35,7 +43,7 @@ index e1bc861e4..05f070563 100644
    #[test]
    fn upgrade() {
      let r = flags_from_vec(svec!["deno", "upgrade", "--dry-run", "--force"]);
-@@ -6665,6 +6662,7 @@ mod tests {
+@@ -6687,6 +6685,7 @@ mod tests {
      );
    }
  
@@ -43,7 +51,7 @@ index e1bc861e4..05f070563 100644
    #[test]
    fn upgrade_with_output_flag() {
      let r = flags_from_vec(svec!["deno", "upgrade", "--output", "example.txt"]);
-@@ -10599,6 +10597,7 @@ mod tests {
+@@ -10645,6 +10644,7 @@ mod tests {
      );
    }
  
@@ -51,7 +59,7 @@ index e1bc861e4..05f070563 100644
    #[test]
    fn upgrade_with_ca_file() {
      let r = flags_from_vec(svec!["deno", "upgrade", "--cert", "example.crt"]);
-@@ -10620,6 +10619,7 @@ mod tests {
+@@ -10666,6 +10666,7 @@ mod tests {
      );
    }
  
