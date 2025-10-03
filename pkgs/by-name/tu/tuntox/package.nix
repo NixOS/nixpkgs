@@ -3,8 +3,8 @@
   stdenv,
   cscope,
   fetchFromGitHub,
-  fetchpatch,
   git,
+  installShellFiles,
   libevent,
   libopus,
   libsodium,
@@ -16,20 +16,21 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tuntox";
-  version = "0.0.10";
+  version = "0.0.10.1";
 
   src = fetchFromGitHub {
     owner = "gjedeer";
     repo = "tuntox";
-    rev = version;
-    sha256 = "sha256-c/0OxUH8iw8nRuVg4Fszf6Z/JiEV+m0B2ofzy81uFu8=";
+    tag = finalAttrs.version;
+    hash = "sha256-LsFmTRojs0nUCd8ER+v1S7XlmSGa2lV4ugqFsU6Td/8=";
   };
 
   nativeBuildInputs = [
     cscope
     git
+    installShellFiles
     pkg-config
   ];
 
@@ -48,52 +49,51 @@ stdenv.mkDerivation rec {
     requests
   ];
 
-  patches = [
-    # https://github.com/gjedeer/tuntox/pull/67
-    (fetchpatch {
-      url = "https://github.com/gjedeer/tuntox/compare/a646402f42e120c7148d4de29dbdf5b09027a80a..365d2e5cbc0e3655fb64c204db0515f5f4cdf5a4.patch";
-      sha256 = "sha256-P3uIRnV+pBi3s3agGYUMt2PZU4CRxx/DUR8QPVQ+UN8=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace gitversion.h --replace '7d45afdf7d00a95a8c3687175e2b1669fa1f7745' '365d2e5cbc0e3655fb64c204db0515f5f4cdf5a4'
+    substituteInPlace gitversion.h --replace-fail '7d45afdf7d00a95a8c3687175e2b1669fa1f7745' '4eda1442c458506158257341ab6d3fd4543288cc'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Makefile --replace ' -static ' ' '
-    substituteInPlace Makefile --replace 'CC=gcc' ' '
+    substituteInPlace Makefile --replace-fail ' -static ' ' '
+    substituteInPlace Makefile --replace-fail 'CC=gcc' ' '
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile.mac --replace '.git/HEAD .git/index' ' '
-    substituteInPlace Makefile.mac --replace '/usr/local/lib/libtoxcore.a' '${libtoxcore}/lib/libtoxcore.a'
-    substituteInPlace Makefile.mac --replace '/usr/local/lib/libsodium.a' '${libsodium}/lib/libsodium.dylib'
-    substituteInPlace Makefile.mac --replace 'CC=gcc' ' '
+    substituteInPlace Makefile.mac --replace-fail '.git/HEAD .git/index' ' '
+    substituteInPlace Makefile.mac --replace-fail '/usr/local/lib/libtoxcore.a' '${libtoxcore}/lib/libtoxcore.a'
+    substituteInPlace Makefile.mac --replace-fail '/usr/local/lib/libsodium.a' '${libsodium}/lib/libsodium.dylib'
+    substituteInPlace Makefile.mac --replace-fail 'CC=gcc' ' '
   '';
 
-  buildPhase =
-    ''''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      make
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      make -f Makefile.mac tuntox
-    '';
+  buildPhase = ''
+    runHook preBuild
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    make
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    make -f Makefile.mac tuntox
+  ''
+  + ''
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv tuntox $out/bin/
+    runHook preInstall
+
+    installBin tuntox
+
+    runHook postInstall
   '';
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tunnel TCP connections over the Tox protocol";
     mainProgram = "tuntox";
     homepage = "https://github.com/gjedeer/tuntox";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       willcohen
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
