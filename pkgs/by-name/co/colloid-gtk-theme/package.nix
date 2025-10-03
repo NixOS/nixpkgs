@@ -62,7 +62,7 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-gtk-theme";
-      rev = version;
+      tag = version;
       hash = "sha256-0pXbeeBAkk6v2DBWfUYhWWdyrQhgr/JfDbhyS33maMM=";
     };
 

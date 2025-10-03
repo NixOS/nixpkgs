@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cargo-llvm-lines";
-    rev = version;
+    tag = version;
     hash = "sha256-5Tf3vkDTCQCmYvfKW3OHCese6HEs9CNbcUeLyS7MsOE=";
   };
 
