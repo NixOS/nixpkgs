@@ -13,4 +13,5 @@ in
   pass-update = callPackage ./update.nix { };
   pass-genphrase = callPackage ./genphrase.nix { };
   pass-file = callPackage ./file.nix { };
+  pass-tail = callPackage ./tail.nix { };
 }
