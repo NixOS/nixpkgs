@@ -3052,6 +3052,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  codecompanion-lualine-nvim = buildVimPlugin {
+    pname = "codecompanion-lualine.nvim";
+    version = "2025-07-12";
+    src = fetchFromGitHub {
+      owner = "franco-ruggeri";
+      repo = "codecompanion-lualine.nvim";
+      rev = "b264433444715bf07ee9f7d5015086b927ccf7f1";
+      sha256 = "1s7rr1jwgfdr6gnf26cv9pws3jkhgblrpq48yryvfyd3wc8qii93";
+    };
+    meta.homepage = "https://github.com/franco-ruggeri/codecompanion-lualine.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   codecompanion-nvim = buildVimPlugin {
     pname = "codecompanion.nvim";
     version = "2025-10-02";
