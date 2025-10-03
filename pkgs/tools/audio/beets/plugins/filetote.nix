@@ -84,5 +84,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ dansbandit ];
     license = licenses.mit;
     inherit (beets.meta) platforms;
+    # https://github.com/gtronset/beets-filetote/issues/211
+    broken = true;
   };
 }
