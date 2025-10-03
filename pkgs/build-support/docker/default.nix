@@ -73,6 +73,9 @@ let
       ${buildPackages.nix}/bin/nix-store --load-db < ${
         closureInfo { rootPaths = contentsList; }
       }/registration
+      # copy signatures from building system (-s "local?read-only=true") into "NIX_REMOTE=local?root=$PWD"
+      # readonly store is required to avoid write operations which might fail due to missing privileges
+      ${buildPackages.nix}/bin/nix store copy-sigs --all -s "local?read-only=true" --extra-experimental-features read-only-local-store
       # Reset registration times to make the image reproducible
       ${buildPackages.sqlite}/bin/sqlite3 nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
