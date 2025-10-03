@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "log4j-scan";
-  version = "unstable-2021-12-18";
+  version = ".1.1.0";
   format = "other";
 
   src = fetchFromGitHub {
