@@ -2,16 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # dependencies
   pyserial,
   asyncserial,
   jinja2,
   migen,
+
+  # tests
   numpy,
 }:
 
 buildPythonPackage {
   pname = "misoc";
-  version = "0-unstable-2024-05-14";
+  version = "0.12-unstable-2024-05-14";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -21,7 +25,7 @@ buildPythonPackage {
     hash = "sha256-zZ9LnUwvTvBL9iNFfmNTklQnd0I4PmV0BApMSblTnc0=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyserial
     asyncserial
     jinja2
