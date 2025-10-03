@@ -33,6 +33,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/3-manifolds/low_index/releases/tag/${src.tag}";
     homepage = "https://github.com/3-manifolds/low_index";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }
