@@ -93,10 +93,6 @@ buildVscodeMarketplaceExtension {
       --replace '# Start the server\n' '${patch}'
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) vscode-remote-ssh;
-  };
-
   meta = {
     description = "Use any remote machine with a SSH server as your development environment";
     license = lib.licenses.unfree;
