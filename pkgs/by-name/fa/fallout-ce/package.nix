@@ -7,6 +7,7 @@
   SDL2,
   stdenv,
   writeShellScript,
+  nix-update-script,
 }:
 
 let
@@ -19,13 +20,13 @@ let
     notice=0 fault=0
     requiredFiles=(master.dat critter.dat)
     for f in "''${requiredFiles[@]}"; do
-      if [ ! -f "$f" ]; then
-        echo "Required file $f not found in $PWD, note the files are case-sensitive"
+      if [ ! -f "$f" ] && [ ! -f "$(tr '[:lower:]' '[:upper:]' <<< "$f")" ]; then
+        echo "Required file $f not found in $PWD"
         notice=1 fault=1
       fi
     done
 
-    if [ ! -d "data/sound/music" ]; then
+    if [ ! -d "data/sound/music" ] && [ ! -d "DATA/SOUND/MUSIC" ]; then
       echo "data/sound/music directory not found in $PWD. This may prevent in-game music from functioning."
       notice=1
     fi
@@ -42,58 +43,62 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fallout-ce";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "alexbatalov";
     repo = "fallout1-ce";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZiBoF3SL00sN0QrD3fkWG9SAknumOvzRB1oQJff6ITA=";
   };
 
   patches = [
     # Fix case-sensitive filesystems issue when save/load games
     (fetchpatch2 {
-      url = "https://github.com/alexbatalov/fallout1-ce/commit/aa3c5c1e3e3f9642d536406b2d8d6b362c9e402f.patch";
-      sha256 = "sha256-quFRbKMS2pNDCNTWc1ZoB3jnB5qzw0b+2OeJUi8IPBc=";
+      url = "https://github.com/alexbatalov/fallout1-ce/commit/fbd25f00e9ccfb5391e394272d536206bb86678b.patch?full_index=1";
+      sha256 = "sha256-MylI1DZwaANuScyRJ7fXch3aym8n6BDRhccAXAyvU70=";
     })
   ];
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ SDL2 ];
+
   hardeningDisable = [ "format" ];
-  cmakeBuildType = "RelWithDebInfo";
 
   postPatch = ''
     substituteInPlace third_party/fpattern/CMakeLists.txt \
-      --replace "FetchContent_Populate" "#FetchContent_Populate" \
-      --replace "{fpattern_SOURCE_DIR}" "${fpattern}/include" \
-      --replace "$/nix/" "/nix/"
+      --replace-fail "FetchContent_Populate" "#FetchContent_Populate" \
+      --replace-fail "\''${fpattern_SOURCE_DIR}" "${fpattern}/include"
   '';
 
   installPhase = ''
     runHook preInstall
 
-    install -D ${pname} $out/libexec/${pname}
-    install -D ${launcher} $out/bin/${pname}
-    substituteInPlace $out/bin/${pname} --subst-var out
+    install -D fallout-ce $out/libexec/fallout-ce
+    install -D ${launcher} $out/bin/fallout-ce
+    substituteInPlace $out/bin/fallout-ce --subst-var out
 
     runHook postInstall
   '';
 
-   meta =
-    with lib;
-    {
-      license = licenses.sustainableUse;
-      description = "Fully working re-implementation of Fallout, with the same original gameplay, engine bugfixes, and some quality of life improvements";
-      homepage = "https://github.com/alexbatalov/fallout1-ce";
-      maintainers = with maintainers; [
-        hughobrien
-        iedame
-      ];
-      platforms = platforms.linux;
-    };
-}
+  passthru.updateScript = nix-update-script { };
 
+  meta = {
+    description = "Fallout for modern operating systems";
+    longDescription = ''
+      Fully working re-implementation of Fallout, with the same original gameplay, engine bugfixes, and some quality of life improvements.
+      You must own the game and copy the files to the specified folder to play.
+    '';
+    homepage = "https://github.com/alexbatalov/fallout1-ce";
+    license = lib.licenses.sustainableUse;
+    maintainers = with lib.maintainers; [
+      hughobrien
+      iedame
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "fallout-ce";
+  };
+})
