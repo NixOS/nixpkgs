@@ -1171,10 +1171,6 @@ in
     inherit runTest;
     php = pkgs.php;
   };
-  php81 = import ./php/default.nix {
-    inherit runTest;
-    php = pkgs.php81;
-  };
   php82 = import ./php/default.nix {
     inherit runTest;
     php = pkgs.php82;

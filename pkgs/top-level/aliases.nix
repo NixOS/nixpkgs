@@ -2039,6 +2039,9 @@ mapAliases {
   pgadmin = pgadmin4; # Added 2022-01-14
   pharo-spur64 = pharo; # Added 2022-08-03
   phlare = throw "'phlare' has been removed as the upstream project was archived."; # Added 2025-03-27
+  php81 = throw "php81 is EOL";
+  php81Extensions = php81;
+  php81Packages = php81;
   picom-next = picom; # Added 2024-02-13
   pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
   pidgin-mra = throw "'pidgin-mra' has been removed since mail.ru agent service has stopped functioning in 2024."; # Added 2025-09-17
