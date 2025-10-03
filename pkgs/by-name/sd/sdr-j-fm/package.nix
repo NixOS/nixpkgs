@@ -3,10 +3,9 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
   pkg-config,
-  qtbase,
-  qwt6_1,
+  qt5,
+  libsForQt5,
   fftwFloat,
   libsamplerate,
   portaudio,
@@ -31,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
     pkg-config
   ];
 
   buildInputs = [
-    qtbase
-    qwt6_1
+    qt5.qtbase
+    libsForQt5.qwt6_1
     fftwFloat
     libsamplerate
     portaudio
