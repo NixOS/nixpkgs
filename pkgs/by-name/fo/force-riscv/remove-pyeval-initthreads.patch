@@ -1,0 +1,12 @@
+diff --git a/3rd_party/inc/pybind11/detail/internals.h b/3rd_party/inc/pybind11/detail/internals.h
+index 86fbe92..31ff371 100644
+--- a/3rd_party/inc/pybind11/detail/internals.h
++++ b/3rd_party/inc/pybind11/detail/internals.h
+@@ -265,7 +265,6 @@ PYBIND11_NOINLINE inline internals &get_internals() {
+         auto *&internals_ptr = *internals_pp;
+         internals_ptr = new internals();
+ #if defined(WITH_THREAD)
+-        PyEval_InitThreads();
+         PyThreadState *tstate = PyThreadState_Get();
+         #if PY_VERSION_HEX >= 0x03070000
+             internals_ptr->tstate = PyThread_tss_alloc();
