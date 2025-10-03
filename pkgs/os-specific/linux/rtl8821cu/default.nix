@@ -1,26 +1,25 @@
 {
   lib,
-  stdenv,
+  buildKernelModule,
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
   bc,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+buildKernelModule {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2025-05-08";
+  version = "0-unstable-2025-09-10";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210916";
-    rev = "d74134a1c68f59f2b80cdd6c6afb8c1a8a687cbf";
-    hash = "sha256-ExT7ONQeejFoMwUUXKua7wMnRi+3IYayLmlWIEWteK4=";
+    rev = "07fa9cf0fa8b0c08920c359c725dfc250e91422b";
+    hash = "sha256-JAkh0Vnt+Hg16F2xCsFPs5SAmaS2oqdIf45L0hXN0iY=";
   };
 
-  hardeningDisable = [ "pic" ];
-
-  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ];
   makeFlags = kernelModuleMakeFlags;
 
   prePatch = ''
@@ -34,13 +33,12 @@ stdenv.mkDerivation {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  enableParallelBuilding = true;
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Realtek rtl8821cu driver";
     homepage = "https://github.com/morrownr/8821cu-20210916";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     maintainers = [ maintainers.contrun ];
   };
 }
