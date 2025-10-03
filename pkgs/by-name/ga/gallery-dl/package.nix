@@ -8,7 +8,7 @@
 
 let
   pname = "gallery-dl";
-  version = "1.30.8";
+  version = "1.30.9";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     owner = "mikf";
     repo = "gallery-dl";
     tag = "v${version}";
-    hash = "sha256-jetfEjKwAtJwOLKRZfnnnlb7G5YCDUzeHIASqJS3gcI=";
+    hash = "sha256-y+xMKrYwqpMMxw5FoYmM1RurH/WNhU+7kIN5i1rmEW0=";
   };
 
   build-system = [ python3Packages.setuptools ];
