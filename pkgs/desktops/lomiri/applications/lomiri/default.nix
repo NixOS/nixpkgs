@@ -42,7 +42,7 @@
   lomiri-thumbnailer,
   lomiri-ui-toolkit,
   maliit-keyboard,
-  mir_2_15,
+  mir,
   nixos-icons,
   pam,
   pkg-config,
@@ -71,6 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Newer Mir dropped EDID descriptor information, will be ported to libdisplay-info eventually
+    (fetchpatch {
+      name = "0001-lomiri-DisplayConfigurationStorage-drop-use-of-descriptors.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/7e3001f3546e20f22aa7d0dc887a83ded1d611b7.patch";
+      hash = "sha256-ttlWYbay3/YgImNsx/eejvAE1S891yN5bJOvG4cZTQg=";
+    })
+
     # Fix broken multimedia suspend due to missing media-hub
     (fetchpatch {
       name = "2012-lomiri-dont-suspend-apps.patch";
@@ -119,8 +126,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
+    # Modern new needs C++20 for concept and requires
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'qt5mir2server' 'qtmirserver'
+      --replace-fail 'qt5mir2server' 'qtmirserver' \
+      --replace-fail 'CMAKE_CXX_STANDARD 17' 'CMAKE_CXX_STANDARD 20'
 
     # Need to replace prefix
     substituteInPlace data/systemd-user/CMakeLists.txt \
@@ -184,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-system-settings-unwrapped
     lomiri-ui-toolkit
     maliit-keyboard
-    mir_2_15
+    mir
     pam
     properties-cpp
     protobuf
