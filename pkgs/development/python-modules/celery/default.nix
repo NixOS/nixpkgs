@@ -9,6 +9,7 @@
   click-plugins,
   click-repl,
   click,
+  cryptography,
   fetchFromGitHub,
   gevent,
   google-cloud-firestore,
@@ -66,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    auth = [ cryptography ];
     azureblockblob = [
       azure-identity
       azure-storage-blob
