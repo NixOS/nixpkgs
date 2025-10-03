@@ -64,6 +64,8 @@ buildDotnetModule rec {
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     dotnetProjectFiles=(ArchiSteamFarm)
 
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
@@ -89,6 +91,8 @@ buildDotnetModule rec {
     wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm
     substituteInPlace $out/bin/ArchiSteamFarm \
       --replace-fail "exec " "exec dotnet "
+
+    runHook postInstall
   '';
 
   passthru = {
