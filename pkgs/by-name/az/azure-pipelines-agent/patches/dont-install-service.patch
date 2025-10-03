@@ -1,0 +1,23 @@
+diff --git a/src/Agent.Listener/Configuration/ConfigurationManager.cs b/src/Agent.Listener/Configuration/ConfigurationManager.cs
+index 45dcf280..9016102b 100644
+--- a/src/Agent.Listener/Configuration/ConfigurationManager.cs
++++ b/src/Agent.Listener/Configuration/ConfigurationManager.cs
+@@ -412,18 +412,6 @@ namespace Microsoft.VisualStudio.Services.Agent.Listener.Configuration
+                     //if you are adding code after this, keep that in mind
+                 }
+             }
+-            else if (PlatformUtil.RunningOnLinux)
+-            {
+-                // generate service config script for Linux
+-                var serviceControlManager = HostContext.GetService<ILinuxServiceControlManager>();
+-                serviceControlManager.GenerateScripts(agentSettings);
+-            }
+-            else if (PlatformUtil.RunningOnMacOS)
+-            {
+-                // generate service config script for macOS
+-                var serviceControlManager = HostContext.GetService<IMacOSServiceControlManager>();
+-                serviceControlManager.GenerateScripts(agentSettings);
+-            }
+ 
+             if(PlatformUtil.RunningOnWindows)
+             {
