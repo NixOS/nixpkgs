@@ -496,6 +496,9 @@ checkConfigOutput '^"extendedSimple \(extended simple\)"$' options.extendedSimpl
 checkConfigOutput '^"description-based-extendedDescription"$' options.extendedDescriptionOption.type.name ./option-type-extending.nix
 checkConfigOutput '^"description-based-extendedDescription"$' options.extendedDescriptionOption.type.description ./option-type-extending.nix
 
+# Check option type merging with extended types
+checkConfigError 'A definition for option .foo. is not of type .string.. Definition values:\n\s*- In .*: "wrong start"' config.foo ./option-type-merging-with-extended.nix
+
 # Test type.functor.wrapped deprecation warning
 # should emit the warning on:
 # - merged types
