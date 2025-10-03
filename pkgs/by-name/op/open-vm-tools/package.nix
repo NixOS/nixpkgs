@@ -51,13 +51,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-vm-tools";
-  version = "12.5.2";
+  version = "12.5.4";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     tag = "stable-${finalAttrs.version}";
-    hash = "sha256-gKtPyLsmTrbA3aG/Jiod/oAl5aMpVm3enuCe+b7jsY4=";
+    hash = "sha256-lbdyZ3N8EExlVt5NSBcV5ifuwt7qQ+/E4nLMEqTggas=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/open-vm-tools";
