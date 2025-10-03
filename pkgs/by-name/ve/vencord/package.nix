@@ -9,6 +9,10 @@
   pnpm_10,
   stdenv,
   writeShellScript,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
   buildWebExtension ? false,
 }:
 
@@ -58,23 +62,29 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
-  # Vencord had a single "devbuild" release that we do not care about
-  passthru.updateScript = writeShellScript "update-vencord" ''
-    export PATH="${
-      lib.makeBinPath [
-        curl
-        jq
-        nix-update
-      ]
-    }:$PATH"
-    ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
-    latestTag=$(echo "$ghTags" | jq -r .[0].name)
+  passthru = {
+    # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
+    # Vencord had a single "devbuild" release that we do not care about
+    updateScript = writeShellScript "update-vencord" ''
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          nix-update
+        ]
+      }:$PATH"
+      ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
+      latestTag=$(echo "$ghTags" | jq -r .[0].name)
 
-    echo "Latest tag: $latestTag"
+      echo "Latest tag: $latestTag"
 
-    exec nix-update --version "$latestTag" "$@"
-  '';
+      exec nix-update --version "$latestTag" "$@"
+    '';
+
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withVencord
+    );
+  };
 
   meta = {
     description = "Cutest Discord client mod";
