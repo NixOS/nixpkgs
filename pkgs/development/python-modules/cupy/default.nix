@@ -17,8 +17,7 @@
 let
   inherit (cudaPackages) cudnn;
 
-  shouldUsePkg =
-    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg = lib.mapNullable (pkg: if pkg.meta.available or true then pkg else null);
 
   # some packages are not available on all platforms
   cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
