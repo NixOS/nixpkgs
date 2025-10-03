@@ -407,6 +407,7 @@ lib.makeScope pkgs.newScope (
       }
       // lib.optionalAttrs config.allowAliases {
         php-spx = throw "php-spx is deprecated, use spx instead";
+        openssl-legacy = throw "openssl-legacy has been removed";
       }
       // (
         # Core extensions
@@ -596,16 +597,6 @@ lib.makeScope pkgs.newScope (
             {
               name = "openssl";
               buildInputs = [ openssl ];
-              configureFlags = [ "--with-openssl" ];
-              doCheck = false;
-            }
-            # This provides a legacy OpenSSL PHP extension
-            # For situations where OpenSSL 3 do not support a set of features
-            # without a specific openssl.cnf file
-            {
-              name = "openssl-legacy";
-              extName = "openssl";
-              buildInputs = [ openssl_1_1 ];
               configureFlags = [ "--with-openssl" ];
               doCheck = false;
             }
