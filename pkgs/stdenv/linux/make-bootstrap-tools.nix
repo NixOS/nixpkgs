@@ -47,10 +47,21 @@ rec {
     '';
   };
 
-  bootGCC = pkgs.gcc.cc.override {
-    enableLTO = false;
-    isl = null;
-  };
+  bootGCC =
+    (pkgs.gcc.cc.override {
+      enableLTO = false;
+      isl = null;
+    }).overrideAttrs
+      (old: {
+        patches = old.patches or [ ] ++ [
+          (pkgs.fetchpatch {
+            # c++tools: Don't check --enable-default-pie.
+            # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
+            url = "https://github.com/gcc-mirror/gcc/commit/3f1f99ef82a65d66e3aaa429bf4fb746b93da0db.patch";
+            hash = "sha256-wKVuwrW22gSN1woYFYxsyVk49oYmbogIN6FWbU8cVds=";
+          })
+        ];
+      });
 
   bootBinutils = pkgs.binutils.bintools.override {
     withAllTargets = false;
