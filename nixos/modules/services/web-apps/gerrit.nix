@@ -219,7 +219,6 @@ in
       '';
 
       serviceConfig = {
-        CacheDirectory = "gerrit";
         DynamicUser = true;
         ExecStart = "${gerrit-cli}/bin/gerrit daemon --console-log";
         LimitNOFILE = 4096;
@@ -227,6 +226,8 @@ in
         StandardOutput = "journal";
         StateDirectory = "gerrit";
         StateDirectoryMode = "750";
+        CacheDirectory = "gerrit";
+        CacheDirectoryMode = "750";
         WorkingDirectory = "%S/gerrit";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
