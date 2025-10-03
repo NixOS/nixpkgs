@@ -475,10 +475,7 @@ let
           nativeBuildInputs
           ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
           ++ optional isWindows ../../build-support/setup-hooks/win-dll-link.sh
-          ++ optionals isCygwin [
-            ../../build-support/setup-hooks/cygwin-dll-link.sh
-            ../../os-specific/cygwin/create-exe-links.sh
-          ]
+          ++ optional isCygwin ../../build-support/setup-hooks/cygwin-dll-link.sh
           ++ optionals doCheck nativeCheckInputs
           ++ optionals doInstallCheck nativeInstallCheckInputs;
 
