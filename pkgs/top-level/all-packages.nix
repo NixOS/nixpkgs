@@ -13599,8 +13599,6 @@ with pkgs;
     d2x-rebirth-full
     ;
 
-  fallout2-ce = callPackage ../games/fallout-ce/fallout2-ce.nix { };
-
   fltrator = callPackage ../games/fltrator {
     fltk = fltk-minimal;
   };
