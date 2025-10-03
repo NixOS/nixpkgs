@@ -32,7 +32,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-march=armv8-a+crc";
+  env.NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.hostPlatform.isAarch64 "-march=armv8-a+crc"
+    # TODO: probably fixed for version > 1.1.2
+    + lib.optionalString stdenv.cc.isClang " -Wno-error=character-conversion";
 
   cmakeFlags = [
     "-DCRC32C_INSTALL=1"
