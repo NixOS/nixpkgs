@@ -11672,6 +11672,8 @@ self: super: with self; {
     }
   );
 
+  petsctools = callPackage ../development/python-modules/petsctools { };
+
   pettingzoo = callPackage ../development/python-modules/pettingzoo { };
 
   pex = callPackage ../development/python-modules/pex { };
