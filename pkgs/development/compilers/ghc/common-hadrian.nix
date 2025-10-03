@@ -360,7 +360,13 @@ let
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
-    ];
+    ]
+    ++
+      lib.optionals
+        (targetPlatform.isAndroid || (targetPlatform.isMusl && hostPlatform != targetPlatform))
+        [
+          "*.ghc.cabal.configure.opts += --flags=-dynamic-system-linker"
+        ];
 
   # Splicer will pull out correct variations
   libDeps =
