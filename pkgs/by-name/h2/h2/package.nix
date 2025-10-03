@@ -9,7 +9,7 @@
 
 maven.buildMavenPackage rec {
   pname = "h2";
-  version = "2.3.232";
+  version = "2.4.240";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ maven.buildMavenPackage rec {
     owner = "h2database";
     repo = "h2database";
     tag = "version-${version}";
-    hash = "sha256-voqQ4JqYkHRxVdxMGsHmKirQXMP7s44rTXeasWWW2Jw=";
+    hash = "sha256-Cy6MoumJBhhcYT6dCHWeOfmhjGRkdNvSONdIiZaf6uU=";
   };
 
   mvnParameters = "-f h2/pom.xml";
@@ -52,7 +52,10 @@ maven.buildMavenPackage rec {
     description = "Java SQL database";
     homepage = "https://h2database.com/html/main.html";
     changelog = "https://h2database.com/html/changelog.html";
-    license = lib.licenses.mpl20;
+    license = with lib.licenses; [
+      epl10
+      mpl20
+    ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       mahe
