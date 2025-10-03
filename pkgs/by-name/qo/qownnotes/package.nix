@@ -106,5 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
       matthiasbeyer
     ];
     platforms = lib.platforms.unix;
+    mainProgram = "qownnotes";
   };
 })
