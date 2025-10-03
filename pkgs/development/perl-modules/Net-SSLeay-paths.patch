@@ -1,0 +1,22 @@
+diff --git a/Makefile.PL b/Makefile.PL
+index dc058ff657..dff4cdd7c5 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -139,7 +139,7 @@
+ }
+ 
+ sub ssleay {
+-    my $prefix = find_openssl_prefix();
++    my $prefix = '@bin@';
+     my $exec   = find_openssl_exec($prefix);
+     unless (defined $exec && -x $exec) {
+         print <<EOM;
+@@ -198,6 +198,8 @@
+     my ($prefix) = @_;
+ 
+     my $opts = {
++        inc_path   => '@include@/include',
++        lib_paths  => ['@lib@/lib'],
+         lib_links  => [],
+         cccdlflags => '',
+     };
