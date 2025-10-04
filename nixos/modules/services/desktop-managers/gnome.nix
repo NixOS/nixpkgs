@@ -482,7 +482,6 @@ in
       # enable that program module if the package hasn't been excluded
       # through `environment.gnome.excludePackages`
       programs.evince.enable = notExcluded pkgs.evince;
-      programs.file-roller.enable = notExcluded pkgs.file-roller;
       programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
