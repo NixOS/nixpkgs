@@ -67,6 +67,16 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
       hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
     })
+    (fetchpatch {
+      name = "CVE-2025-6375.patch";
+      url = "https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf.patch";
+      hash = "sha256-lkwYidX79UFQMubSj/qmvxv91OGeVSAc5fDYUv5c0Iw=";
+    })
+    (fetchpatch {
+      name = "sec-fix-crash-NTLMCredentials-parseChallengeMessage.patch";
+      url = "https://github.com/pocoproject/poco/commit/da7fcba551a06c4f91a5e06ba983a6afc2480ae6.patch";
+      hash = "sha256-WYQ5MYHE2iBbstamWKmCQaZdK8DxeklEhCFH7mlHYiI=";
+    })
   ];
 
   postFixup = ''
