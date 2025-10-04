@@ -30,6 +30,7 @@
   ./config/stub-ld.nix
   ./config/swap.nix
   ./config/sysctl.nix
+  ./config/sysfs.nix
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/terminfo.nix
