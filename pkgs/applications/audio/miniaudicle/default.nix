@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo '#define GIT_REVISION "${finalAttrs.version}-NixOS"' > git-rev.h
     substituteInPlace miniAudicle.pro \
-      --replace "/usr/local" $out
+      --replace-fail "/usr/local" $out
   '';
 
   nativeBuildInputs = [
