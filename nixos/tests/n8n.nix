@@ -23,7 +23,7 @@ in
 
       services.n8n = {
         enable = true;
-        webhookUrl = webhookUrl;
+        environment.WEBHOOK_URL = webhookUrl;
       };
     };
 
