@@ -1,0 +1,13 @@
+diff --git i/python/geoarrow-c/pyproject.toml w/python/geoarrow-c/pyproject.toml
+index d13fbf1..1cc7715 100644
+--- i/pyproject.toml
++++ w/pyproject.toml
+@@ -37,7 +37,7 @@ requires = [
+     "setuptools >= 61.0.0",
+     "setuptools-scm",
+     # Something about cpdef changed here
+-    "Cython < 3.1.0"
++    "Cython"
+ ]
+ build-backend = "setuptools.build_meta"
+ 
