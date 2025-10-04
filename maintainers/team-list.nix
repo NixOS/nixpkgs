@@ -45,6 +45,17 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  agda = {
+    members = [
+      alexarice
+      ncfavier
+      phijor
+      turion
+    ];
+    scope = "Maintain Agda-related packages and modules.";
+    shortName = "Agda";
+  };
+
   android = {
     members = [
       adrian-gierakowski
