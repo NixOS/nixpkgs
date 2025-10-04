@@ -33228,6 +33228,10 @@ with self;
       ./scripts/yath test -j $NIX_BUILD_CORES
     '';
 
+    # The t/integration/preload.t test is broken on riscv64
+    # https://github.com/Test-More/Test2-Harness/issues/290
+    doCheck = !stdenv.hostPlatform.isRiscV;
+
     propagatedBuildInputs = [
       DataUUID
       Importer
