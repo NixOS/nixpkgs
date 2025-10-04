@@ -13,11 +13,11 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
-  version = "6.9.2";
+  version = "6.9.3";
 
   src = fetchurl {
     url = "mirror://qt/official_releases/QtForPython/pyside6/PySide6-${finalAttrs.version}-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nsCHRlNCvcnb5JKjDlj9u8VEhlXerPWYKg/nEj9ZIi0=";
+    hash = "sha256-fNLVq7mPLm9EKw5B9fz5MOcxKuSxf2gTFrGtx7Y7sXI=";
   };
 
   sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/shiboken6";
