@@ -3622,7 +3622,7 @@ with pkgs;
     toPythonApplication (
       nvchecker.overridePythonAttrs (oldAttrs: {
         propagatedBuildInputs =
-          oldAttrs.propagatedBuildInputs ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
+          oldAttrs.dependencies ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
       })
     );
 
