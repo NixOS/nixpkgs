@@ -16,13 +16,13 @@ in
 
 buildDotnetModule rec {
   pname = "EventStore";
-  version = "24.10.6";
+  version = "24.10.7";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     tag = "v${version}";
-    hash = "sha256-8/sagvMyJ1/onGMuJ28QLWI5M8dBDWyGOcZKUv3PJsQ=";
+    hash = "sha256-CeLSj8PMIxGs+0P8IJMA9ojk3MJVhD+mvvFum5T4Pu0=";
     leaveDotGit = true;
   };
 
