@@ -8451,7 +8451,7 @@ with pkgs;
 
   libressl = libressl_4_1;
 
-  openssl = openssl_3_5;
+  openssl = openssl_3_6;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -8460,7 +8460,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_5
+    openssl_3_6
     ;
 
   pcre = callPackage ../development/libraries/pcre { };
