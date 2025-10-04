@@ -483,8 +483,9 @@ in
 
       # Since PackageKit Nix support is not there yet,
       # only install gnome-software if flatpak is enabled.
-      services.gnome.gnome-software.enable =
-        notExcluded pkgs.gnome-software && config.services.flatpak.enable;
+      services.gnome.gnome-software.enable = lib.mkIf config.services.flatpak.enable (
+        notExcluded pkgs.gnome-software
+      );
 
       # VTE shell integration for gnome-console
       programs.bash.vteIntegration = mkDefault true;
