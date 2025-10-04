@@ -1,11 +1,12 @@
 {
   lib,
-  apple-sdk_12,
+  apple-sdk,
   ld64,
   mkAppleDerivation,
   cmake,
-  llvmPackages,
+  llvm,
   openssl,
+  pkgsBuildHost,
   pkg-config,
   stdenvNoCC,
   fetchurl,
@@ -19,11 +20,11 @@ let
     hash = "sha256-0ybVcwHuGEdThv0PPjYQc3SW0YVOyrM3/L9zG/l1Vtk=";
   };
 
-  launchd = apple-sdk_12.sourceRelease "launchd";
-  Libc = apple-sdk_12.sourceRelease "Libc";
-  libplatform = apple-sdk_12.sourceRelease "libplatform";
-  libpthread = apple-sdk_12.sourceRelease "libpthread";
-  xnu = apple-sdk_12.sourceRelease "xnu";
+  launchd = apple-sdk.sourceRelease "launchd";
+  Libc = apple-sdk.sourceRelease "Libc";
+  libplatform = apple-sdk.sourceRelease "libplatform";
+  libpthread = apple-sdk.sourceRelease "libpthread";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "dyld-deps-private-headers";
@@ -155,13 +156,13 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = [
-    apple-sdk_12 # Needed for `PLATFORM_FIRMWARE` and `PLATFORM_SEPOS` defines in `mach-o/loader.h`.
-    llvmPackages.llvm
+    llvm
     openssl
   ];
 
   nativeBuildInputs = [
     cmake # CMake is required for Meson to find LLVM as a dependency.
+    (lib.getDev pkgsBuildHost.llvm) # Workaround Meson limitations with LLVM 21.
     pkg-config
   ];
 

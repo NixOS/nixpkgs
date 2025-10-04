@@ -3,6 +3,12 @@
 
 # Project settings
 project('libresolv', 'c', version : '@version@')
+add_project_arguments(
+    '-DCOMMON_DIGEST_FOR_RFC_1321', # To enable legacy `MD5` APIs in CommonCrypto.
+    # This is not defined automatically by Clang. Not having them defined causes compilation failures.
+    '-DTARGET_OS_BRIDGE=0',
+    language : 'c',
+)
 
 
 # Dependencies
@@ -46,10 +52,12 @@ libresolv = library(
     soversion : '9'
 )
 install_headers(
+    'arpa/nameser_compat.h',
     'dns.h',
     'dns_util.h',
     'nameser.h',
     'resolv.h',
+    preserve_path : true,
 )
 install_man(
     'resolver.3',

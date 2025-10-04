@@ -3,7 +3,6 @@
   stdenv,
   cmake,
   git,
-  apple-sdk_11,
   ninja,
   fetchFromGitHub,
   SDL2,
@@ -46,8 +45,6 @@ let
     optional
     optionals
     ;
-
-  darwinBuildInputs = [ apple-sdk_11 ];
 
   cudaBuildInputs = with cudaPackages; [
     cuda_cccl # <nv/target>
@@ -110,7 +107,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     optional withSDL SDL2
-    ++ optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals vulkanSupport vulkanBuildInputs;

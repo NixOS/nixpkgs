@@ -13,7 +13,8 @@ let
 
     buildCommand = ''
       install -D -t "$out/include/IOKit/pwr_mgt" \
-        '${iokitUser}/pwr_mgt.subproj/IOPMLibPrivate.h'
+        '${iokitUser}/pwr_mgt.subproj/IOPMLibPrivate.h' \
+        '${iokitUser}/pwr_mgt.subproj/IOPMAssertionCategories.h'
     '';
   };
 in

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  apple-sdk_11,
   cmake,
   pkg-config,
   ninja,
@@ -120,9 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     xcb-util-cursor
     pcre
     mount
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   postInstall =
