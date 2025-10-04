@@ -67,7 +67,7 @@ lib.listToAttrs (
                 kernelPackages = pkgs."linuxPackages_${v'}";
                 inherit mkXfsFlags;
               }
-              // builtins.removeAttrs t [
+              // removeAttrs t [
                 "test"
                 "kernelFilter"
               ]

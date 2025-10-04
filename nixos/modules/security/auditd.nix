@@ -90,7 +90,7 @@ let
     else if lib.isList v then
       lib.concatStringsSep " " (map prepareConfigValue v)
     else
-      builtins.toString v;
+      toString v;
   prepareConfigText =
     conf:
     lib.concatLines (

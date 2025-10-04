@@ -221,7 +221,7 @@ in
           };
 
           environment = {
-            PORT = builtins.toString cfg.serverPort;
+            PORT = toString cfg.serverPort;
             WM_BASE_URL = cfg.baseUrl;
             RUST_LOG = cfg.logLevel;
             MODE = "server";

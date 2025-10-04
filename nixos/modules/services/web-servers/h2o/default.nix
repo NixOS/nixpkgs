@@ -121,7 +121,7 @@ let
           acmeChallengePath = "/.well-known/acme-challenge";
         in
         {
-          "${names.server}:${builtins.toString acmePort}" = {
+          "${names.server}:${toString acmePort}" = {
             listen.port = acmePort;
             paths."${acmeChallengePath}/" = {
               "file.dir" = value.acme.root + acmeChallengePath;
@@ -132,17 +132,17 @@ let
 
       httpSettings =
         lib.optionalAttrs (value.tls == null || value.tls.policy == "add") {
-          "${names.server}:${builtins.toString port.HTTP}" = value.settings // {
+          "${names.server}:${toString port.HTTP}" = value.settings // {
             listen.port = port.HTTP;
           };
         }
         // lib.optionalAttrs (value.tls != null && value.tls.policy == "force") {
-          "${names.server}:${builtins.toString port.HTTP}" = {
+          "${names.server}:${toString port.HTTP}" = {
             listen.port = port.HTTP;
             paths."/" = {
               redirect = {
                 status = value.tls.redirectCode;
-                url = "https://${names.server}:${builtins.toString port.TLS}";
+                url = "https://${names.server}:${toString port.TLS}";
               };
             };
           };
@@ -159,7 +159,7 @@ let
             ]
           )
           {
-            "${names.server}:${builtins.toString port.TLS}" =
+            "${names.server}:${toString port.TLS}" =
               let
                 tlsRecommendations = lib.attrByPath [ "tls" "recommendations" ] cfg.defaultTLSRecommendations value;
 
@@ -208,7 +208,7 @@ let
                       let
                         headerSet = value.settings."header.set" or [ ];
                         recs = mozTLSRecs.${tlsRecommendations};
-                        hsts = "Strict-Transport-Security: max-age=${builtins.toString recs.hsts_min_age}; includeSubDomains; preload";
+                        hsts = "Strict-Transport-Security: max-age=${toString recs.hsts_min_age}; includeSubDomains; preload";
                       in
                       {
                         "header.set" =
@@ -409,7 +409,7 @@ in
         '';
       }
     ]
-    ++ builtins.map (
+    ++ map (
       name:
       mkCertOwnershipAssertion {
         cert = certs.${name};
@@ -436,11 +436,11 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = lib.concatLists (map (certName: [ "acme-${certName}.service" ]) acmeCertNames.all);
       # Since H2O will be hosting the challenges, H2O must be started
-      before = builtins.map (certName: "acme-order-renew-${certName}.service") acmeCertNames.all;
+      before = map (certName: "acme-order-renew-${certName}.service") acmeCertNames.all;
       after = [
         "network.target"
       ]
-      ++ builtins.map (certName: "acme-${certName}.service") acmeCertNames.all;
+      ++ map (certName: "acme-${certName}.service") acmeCertNames.all;
 
       serviceConfig = {
         ExecStart = "${h2oExe} --mode 'master'";
