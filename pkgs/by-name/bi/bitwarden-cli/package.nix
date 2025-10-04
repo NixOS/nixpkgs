@@ -104,6 +104,9 @@ buildNpmPackage rec {
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      dotlambda
+    ];
   };
 }
