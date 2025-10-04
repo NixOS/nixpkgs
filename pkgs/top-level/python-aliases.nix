@@ -797,6 +797,7 @@ mapAliases ({
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23
   sqlsoup = throw "sqlsoup has been removed as it is incompatible with modern SQLAlchemy and unmaintained"; # added 2024-05-13
   subdownloader = throw "subdownloader has been removed, because it depended on pyqt4"; # added 2022-06-09
+  subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   suds-jurko = throw "suds-jurko has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-02-27
   supervise_api = supervise-api; # added 2023-10-11
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
