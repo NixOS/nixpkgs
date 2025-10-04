@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.101.0";
+  version = "1.109.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-XCstUYM2jiq3PbNiRmLnguzQtvrGk0Ik5K0tk37bq2U=";
+    hash = "sha256-hC7oJZJo+HBHnmGgagdqzntzx5mRFY529AkP/OOLsIg=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -120,7 +120,9 @@ buildPythonPackage rec {
     "tests/api_resources"
     # E   TypeError: Unexpected type for 'content', <class 'inline_snapshot._external.external'>
     # This seems to be due to `inline-snapshot` being disabled when `pytest-xdist` is used.
+    "tests/lib/chat/test_completions.py"
     "tests/lib/chat/test_completions_streaming.py"
+    "tests/lib/responses/test_responses.py"
   ];
 
   meta = {
