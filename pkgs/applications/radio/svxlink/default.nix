@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DDO_INSTALL_CHOWN=NO"
-    "-DRTLSDR_LIBRARIES=${rtl-sdr}/lib/librtlsdr.so"
-    "-DRTLSDR_INCLUDE_DIRS=${rtl-sdr}/include"
+    "-DRTLSDR_LIBRARIES=${lib.getLib rtl-sdr}/lib/librtlsdr.so"
+    "-DRTLSDR_INCLUDE_DIRS=${lib.getInclude rtl-sdr}/include"
     "../src"
   ];
 
