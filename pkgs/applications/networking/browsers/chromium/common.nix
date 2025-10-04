@@ -256,7 +256,7 @@ let
           ''
         else
           ''
-            mkdir -p ${builtins.dirOf path}
+            mkdir -p ${dirOf path}
             cp -r ${dep}/. ${path}
           ''
       )

@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       runtimeEnv = {
         PNAME = finalAttrs.pname;
-        PKG_FILE = builtins.toString ./package.nix;
+        PKG_FILE = toString ./package.nix;
         GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
         NNUE_BIG_FILE = nnueBigFile;
         NNUE_BIG_HASH = nnueBigHash;

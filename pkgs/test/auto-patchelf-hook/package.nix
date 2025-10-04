@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       readarray -td':' runpathArray < <(echo -n "$runpath")
 
       echo "[auto-patchelf-hook-test]: Check that the runpath has the right number of entries"
-      test "''${#runpathArray[@]}" -eq ${builtins.toString (builtins.length allDeps)}
+      test "''${#runpathArray[@]}" -eq ${toString (builtins.length allDeps)}
 
       echo "[auto-patchelf-hook-test]: Check that the runpath contains the expected runtime deps"
     ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
       lib.lists.imap0 (
         i: path:
         let
-          iAsStr = builtins.toString i;
+          iAsStr = toString i;
         in
         ''
           echo "[auto-patchelf-hook-test]: Check that entry ${iAsStr} is ${path}"

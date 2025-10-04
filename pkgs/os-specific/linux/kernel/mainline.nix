@@ -29,7 +29,7 @@ let
       };
 
   args' =
-    (builtins.removeAttrs args [ "branch" ])
+    (removeAttrs args [ "branch" ])
     // {
       inherit src version;
       isLTS = thisKernel.lts;

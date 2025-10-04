@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ qbe ];
 
   makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
     "QBEFLAGS=-t${qbePlatform}"
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence (
-      builtins.map (item: item.command) [
+      map (item: item.command) [
         (gitUpdater {
           attrPath = "harec";
           ignoredVersions = [ "-rc[0-9]{1,}" ];

@@ -81,7 +81,7 @@
         else if (builtins.isPath patches) then
           (if (isDir patches) then (lib.filesystem.listFilesRecursive patches) else [ patches ])
         else if (builtins.isList patches) then
-          (lib.flatten (builtins.map consolidatePatches patches))
+          (lib.flatten (map consolidatePatches patches))
         else
           throw "Bad patches - must be path or derivation or list thereof";
       consolidated = consolidatePatches patches;
@@ -115,7 +115,7 @@
             );
           filteredLines = builtins.filter filterFunc partitionedPatches;
           derive = patchLines: writeText "freebsd-patch" (lib.concatLines patchLines);
-          derivedPatches = builtins.map derive filteredLines;
+          derivedPatches = map derive filteredLines;
         in
         derivedPatches;
     in

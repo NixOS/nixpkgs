@@ -52,7 +52,7 @@ let
     See https://hexdocs.pm/elixir/${version}/compatibility-and-deprecations.html
   '';
 
-  maxShiftMajor = builtins.toString ((toInt (versions.major maximumOTPVersion)) + 1);
+  maxShiftMajor = toString ((toInt (versions.major maximumOTPVersion)) + 1);
   maxAssert =
     if (maximumOTPVersion == null) then
       true

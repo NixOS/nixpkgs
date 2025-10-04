@@ -37,7 +37,7 @@ let
 
     }
     // lib.optionalAttrs pkgs.config.allowAliases {
-      interpreter = builtins.throw "factorPackages now offers various wrapped factor runtimes (see documentation) and the buildFactorApplication helper.";
+      interpreter = throw "factorPackages now offers various wrapped factor runtimes (see documentation) and the buildFactorApplication helper.";
     };
   extensible-self = lib.makeExtensible (lib.extends overrides inside);
 in

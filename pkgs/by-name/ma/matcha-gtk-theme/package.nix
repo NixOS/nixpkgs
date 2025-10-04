@@ -56,8 +56,8 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
       mkdir -p $out/share/themes
 
       name= ./install.sh \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
         --dest $out/share/themes
 
       mkdir -p $out/share/doc/matcha-gtk-theme
