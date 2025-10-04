@@ -1,28 +1,29 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitea,
   pkg-config,
-  gtk2,
-  imlib2,
+  gtk3,
   file,
   lcms2,
   libexif,
 }:
 
 stdenv.mkDerivation (rec {
-  version = "2.3.3";
   pname = "qiv";
+  version = "3.0.2";
 
-  src = fetchurl {
-    url = "https://spiegl.de/qiv/download/${pname}-${version}.tgz";
-    sha256 = "sha256-7whf/eLUiwWzZlk55a4eNZ06OBAI+4J2hPfW/UxTNwQ=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "ciberandy";
+    repo = "qiv";
+    tag = "v${version}";
+    hash = "sha256-U++ZyJ0cVa5x/1Me7Em1W33jAYe3Q/TfMZgPj71ZaFA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk2
-    imlib2
+    gtk3
     file
     lcms2
     libexif
