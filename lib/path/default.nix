@@ -40,7 +40,7 @@ let
     isValid
     ;
 
-  # Return the reason why a subpath is invalid, or `null` if it's valid
+  # Returns the reason why a subpath is invalid, or `null` if it's valid
   subpathInvalidReason =
     value:
     if !isString value then
