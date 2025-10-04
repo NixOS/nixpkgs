@@ -50,16 +50,26 @@ in
           enable = true;
           sshKey = "/var/lib/syncoid/id_ecdsa";
           commands = {
-            # Sync snapshot taken by sanoid
-            "pool/sanoid" = {
-              target = "root@target:pool/sanoid";
+            # Take snapshot and sync
+            "pool/syncoid".target = "root@target:pool/syncoid";
+
+            # Sync the same dataset to different targets
+            "pool/sanoid1" = {
+              source = "pool/sanoid";
+              target = "root@target:pool/sanoid1";
               extraArgs = [
                 "--no-sync-snap"
                 "--create-bookmark"
               ];
             };
-            # Take snapshot and sync
-            "pool/syncoid".target = "root@target:pool/syncoid";
+            "pool/sanoid2" = {
+              source = "pool/sanoid";
+              target = "root@target:pool/sanoid2";
+              extraArgs = [
+                "--no-sync-snap"
+                "--create-bookmark"
+              ];
+            };
 
             # Test pool without parent (regression test for https://github.com/NixOS/nixpkgs/pull/180111)
             "pool".target = "root@target:pool/full-pool";
@@ -106,41 +116,44 @@ in
         "mkdir -m 700 -p /var/lib/syncoid",
         "cat '${snakeOilPrivateKey}' > /var/lib/syncoid/id_ecdsa",
         "chmod 600 /var/lib/syncoid/id_ecdsa",
-        "chown -R syncoid:syncoid /var/lib/syncoid/",
     )
 
-    assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set before snapshotting"
-    assert len(source.succeed("zfs allow pool/sanoid")) == 0, "Sanoid dataset shouldn't have delegated permissions set before snapshotting"
-    assert len(source.succeed("zfs allow pool/syncoid")) == 0, "Syncoid dataset shouldn't have delegated permissions set before snapshotting"
+    with subtest("Take snapshots with sanoid"):
+      source.succeed("touch /mnt/pool/sanoid/test.txt")
+      source.succeed("touch /mnt/pool/compat/test.txt")
+      source.systemctl("start --wait sanoid.service")
 
-    # Take snapshot with sanoid
-    source.succeed("touch /mnt/pool/sanoid/test.txt")
-    source.succeed("touch /mnt/pool/compat/test.txt")
-    source.systemctl("start --wait sanoid.service")
+    # Add some unused dynamic users to the stateful allow list of ZFS datasets,
+    # simulating a state where they remain after the system crashed,
+    # to check they'll be correctly removed by the syncoid services.
+    # Each syncoid service run from now may reuse at most one of them for itself.
+    source.succeed(
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool",
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool/sanoid",
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool/syncoid",
+    )
+
+    with subtest("sync snapshots"):
+      target.wait_for_open_port(22)
+      source.succeed("touch /mnt/pool/syncoid/test.txt")
+
+      source.systemctl("start --wait syncoid-pool-syncoid.service")
+      target.succeed("cat /mnt/pool/syncoid/test.txt")
+
+      source.systemctl("start --wait syncoid-pool-sanoid{1,2}.service")
+      target.succeed("cat /mnt/pool/sanoid1/test.txt")
+      target.succeed("cat /mnt/pool/sanoid2/test.txt")
+
+      source.systemctl("start --wait syncoid-pool.service")
+      target.succeed("[[ -d /mnt/pool/full-pool/syncoid ]]")
+
+      source.systemctl("start --wait syncoid-pool-compat.service")
+      target.succeed("cat /mnt/pool/compat/test.txt")
 
     assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set after snapshotting"
     assert len(source.succeed("zfs allow pool/sanoid")) == 0, "Sanoid dataset shouldn't have delegated permissions set after snapshotting"
     assert len(source.succeed("zfs allow pool/syncoid")) == 0, "Syncoid dataset shouldn't have delegated permissions set after snapshotting"
 
-    # Sync snapshots
-    target.wait_for_open_port(22)
-    source.succeed("touch /mnt/pool/syncoid/test.txt")
-    source.systemctl("start --wait syncoid-pool-sanoid.service")
-    target.succeed("cat /mnt/pool/sanoid/test.txt")
-    source.systemctl("start --wait syncoid-pool-syncoid.service")
-    source.systemctl("start --wait syncoid-pool-syncoid.service")
-    target.succeed("cat /mnt/pool/syncoid/test.txt")
-
     assert(len(source.succeed("zfs list -H -t snapshot pool/syncoid").splitlines()) == 1), "Syncoid should only retain one sync snapshot"
-
-    source.systemctl("start --wait syncoid-pool.service")
-    target.succeed("[[ -d /mnt/pool/full-pool/syncoid ]]")
-
-    source.systemctl("start --wait syncoid-pool-compat.service")
-    target.succeed("cat /mnt/pool/compat/test.txt")
-
-    assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set after syncing snapshots"
-    assert len(source.succeed("zfs allow pool/sanoid")) == 0, "Sanoid dataset shouldn't have delegated permissions set after syncing snapshots"
-    assert len(source.succeed("zfs allow pool/syncoid")) == 0, "Syncoid dataset shouldn't have delegated permissions set after syncing snapshots"
   '';
 }
