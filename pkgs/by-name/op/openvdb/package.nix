@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openvdb";
-  version = "12.1.0";
+  version = "12.1.1";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "AcademySoftwareFoundation";
     repo = "openvdb";
     tag = "v${version}";
-    hash = "sha256-28vrIlruPl1tvw2JhjIAARtord45hqCqnA9UNnu4Z70=";
+    hash = "sha256-FYXySDWceby/oLdNDMqzrR1sR5OF0T5u+j2qJH5cBMQ=";
   };
 
   nativeBuildInputs = [ cmake ];
