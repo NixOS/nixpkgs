@@ -132,24 +132,6 @@ in
       );
     };
 
-    systemd.tmpfiles.settings."10-traefik" = lib.mkMerge [
-      {
-        ${cfg.dataDir}.d = {
-          group = "traefik";
-          mode = "0700";
-          user = "traefik";
-        };
-      }
-      (lib.mkIf (cfg.plugins != [ ]) {
-        "${cfg.dataDir}/plugins-local"."L+".argument = toString (
-          pkgs.symlinkJoin {
-            name = "traefik-plugins";
-            paths = cfg.plugins;
-          }
-        );
-      })
-    ];
-
     systemd.services.traefik = {
       description = "Traefik web server";
       wants = [ "network-online.target" ];
@@ -159,12 +141,25 @@ in
       startLimitBurst = 5;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = lib.optional (cfg.environmentFiles != [ ]) (
-          pkgs.writeShellScript "traefik-pre-start-envsubst" ''
-            umask 077
-            ${lib.getExe pkgs.envsubst} -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-          ''
-        );
+        ExecStartPre =
+          lib.optional (cfg.environmentFiles != [ ]) (
+            pkgs.writeShellScript "traefik-pre-start-envsubst" ''
+              umask 077
+              ${lib.getExe pkgs.envsubst} -i "${staticConfigFile}" > "${finalStaticConfigFile}"
+            ''
+          )
+          ++ lib.optional (cfg.plugins != [ ]) (
+            pkgs.writeShellScript "traefik-pre-start-ln-plugins" ''
+              ${lib.getExe' pkgs.coreutils "ln"} -Tsf ${
+                toString (
+                  pkgs.symlinkJoin {
+                    name = "traefik-plugins";
+                    paths = cfg.plugins;
+                  }
+                )
+              } plugins-local
+            ''
+          );
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";
@@ -194,9 +189,4 @@ in
 
     users.groups.traefik = { };
   };
-
-  meta.maintainers = with lib.maintainers; [
-    jackr
-    sigmasquadron
-  ];
 }
