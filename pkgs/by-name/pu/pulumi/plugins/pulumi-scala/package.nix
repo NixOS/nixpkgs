@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "pulumi-scala";
-  version = "0.3.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "VirtusLab";
     repo = "besom";
     tag = "v${version}";
-    hash = "sha256-ZOWC8S4OP2URfrzeegMmrJ9yC5xwCuC1cdEtBEsaCdk=";
+    hash = "sha256-iJLIwc8yVURz7YdL42hJBfvYNpaehJbPIAB51umsLEE=";
   };
 
   sourceRoot = "source/language-plugin/pulumi-language-scala";
