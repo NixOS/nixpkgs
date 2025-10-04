@@ -123,6 +123,7 @@ let
       imadnyc
       FlameFlag
       johnrtitor
+      logger
     ];
     platforms = platforms.darwin ++ [
       "x86_64-linux"
