@@ -84,7 +84,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-tweaks";
     };
   };
 
