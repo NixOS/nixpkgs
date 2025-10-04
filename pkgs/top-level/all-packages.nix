@@ -4531,9 +4531,6 @@ with pkgs;
     inherit (llvmPackages) lld stdenv;
   };
 
-  colmap = libsForQt5.callPackage ../applications/science/misc/colmap {
-    inherit (config) cudaSupport;
-  };
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
   opensplatWithCuda = opensplat.override { cudaSupport = true; };
@@ -5833,7 +5830,6 @@ with pkgs;
     ;
 
   inherit (beam.packages.erlang)
-    erlang-ls
     ex_doc
     erlfmt
     elvis-erlang
@@ -8665,10 +8661,6 @@ with pkgs;
     nodejs = nodejs_22;
   };
 
-  qradiolink = callPackage ../applications/radio/qradiolink {
-    protobuf = protobuf_21;
-  };
-
   qadwaitadecorations-qt6 = callPackage ../by-name/qa/qadwaitadecorations/package.nix {
     useQt6 = true;
   };
@@ -10280,12 +10272,6 @@ with pkgs;
   linuxPackages-rt_latest = linuxKernel.packageAliases.linux_rt_latest;
   linux-rt = linuxPackages-rt.kernel;
   linux-rt_latest = linuxPackages-rt_latest.kernel;
-
-  # GNU Linux-libre kernels
-  linuxPackages-libre = linuxKernel.packages.linux_libre;
-  linux-libre = linuxPackages-libre.kernel;
-  linuxPackages_latest-libre = linuxKernel.packages.linux_latest_libre;
-  linux_latest-libre = linuxPackages_latest-libre.kernel;
 
   # zen-kernel
   linuxPackages_zen = linuxKernel.packages.linux_zen;

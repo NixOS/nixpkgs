@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsop";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "heiko";
     repo = "rsop";
     rev = "rsop/v${version}";
-    hash = "sha256-6vP+epxsDid3M7cpfpOY29VWeIbuCB30qtmotPhzShc=";
+    hash = "sha256-bbB2IefXauVV6LjpJxSNy4RVYjAGH0osTpUZGGscGec=";
   };
 
-  cargoHash = "sha256-BSsqI3zo7eC4zGIsU1xScnjWNwt4iTqs4SWzbOUt7Iw=";
+  cargoHash = "sha256-P27PnFNArKn3CQtik6TaV7eW/8bQiOZ57ZbMth2pNiY=";
 
   nativeBuildInputs = [ pkg-config ];
 
