@@ -277,7 +277,8 @@
     "release-notes.html#sec-nixpkgs-release-25.11-lib-breaking"
   ],
   "sec-nixpkgs-release-25.11-lib-deprecations": [
-    "release-notes.html#sec-nixpkgs-release-25.11-lib-deprecations"
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-deprecations",
+    "index.html#fetchfromsavannah"
   ],
   "sec-nixpkgs-release-25.11-lib-additions-improvements": [
     "release-notes.html#sec-nixpkgs-release-25.11-lib-additions-improvements"
@@ -1686,9 +1687,6 @@
   ],
   "fetchfrombitbucket": [
     "index.html#fetchfrombitbucket"
-  ],
-  "fetchfromsavannah": [
-    "index.html#fetchfromsavannah"
   ],
   "fetchfromrepoorcz": [
     "index.html#fetchfromrepoorcz"
