@@ -55,7 +55,7 @@ let
 in
 
 symlinkJoin {
-  name = "prismlauncher-${prismlauncher'.version}";
+  inherit (prismlauncher') pname version;
 
   paths = [ prismlauncher' ];
 
