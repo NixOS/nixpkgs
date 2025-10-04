@@ -590,8 +590,6 @@ in
 
         netatop = callPackage ../os-specific/linux/netatop { };
 
-        prl-tools = callPackage ../os-specific/linux/prl-tools { };
-
         isgx = callPackage ../os-specific/linux/isgx { };
 
         rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
@@ -723,6 +721,7 @@ in
         system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
+        prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
       }
     );
 

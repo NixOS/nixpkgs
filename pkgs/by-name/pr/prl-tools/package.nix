@@ -1,32 +1,28 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
   autoPatchelfHook,
+  bash,
   bbe,
+  coreutils,
+  cups,
+  dbus,
+  fetchurl,
+  fuse,
+  gawk,
+  glib,
+  lib,
   makeWrapper,
+  netcat,
   p7zip,
   perl,
-  undmg,
-  dbus-glib,
-  fuse,
-  glib,
-  xorg,
-  zlib,
-  kernel,
-  bash,
-  cups,
-  gawk,
-  netcat,
+  stdenv,
   timetrap,
+  undmg,
   util-linux,
   wayland,
+  xorg,
 }:
 
 let
-  kernelVersion = kernel.modDirVersion;
-  kernelDir = "${kernel.dev}/lib/modules/${kernelVersion}";
-
   libPath = lib.concatStringsSep ":" [
     "${glib.out}/lib"
     "${xorg.libXrandr}/lib"
@@ -34,6 +30,7 @@ let
   ];
   scriptPath = lib.concatStringsSep ":" [
     "${bash}/bin"
+    "${coreutils}/bin"
     "${cups}/sbin"
     "${gawk}/bin"
     "${netcat}/bin"
@@ -43,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "26.0.1-57243";
+  version = "26.1.1-57288";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-jAOP9g3JCKxOFyiDdYJvvM9ecGDbMuCARCEu4sE7Cfs=";
+    hash = "sha256-11IyKI2oOffzSPTB65XksZI3PD9W2+0SPZIfpb0RLuU=";
   };
 
   hardeningDisable = [
@@ -64,11 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     p7zip
     perl
     undmg
-  ]
-  ++ kernel.moduleBuildDependencies;
+  ];
 
   buildInputs = [
-    dbus-glib
     fuse
     glib
     xorg.libX11
@@ -77,10 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
     xorg.libXi
     xorg.libXinerama
-    zlib
   ];
 
   runtimeDependencies = [
+    dbus
     glib
     xorg.libXrandr
   ];
@@ -91,35 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     undmg $src
     export sourceRoot=prl-tools-build
     7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm"}.iso" -o$sourceRoot
-    ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
-
     runHook postUnpack
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    ( # kernel modules
-      cd kmods
-      make -f Makefile.kmods \
-        KSRC=${kernelDir}/source \
-        HEADERS_CHECK_DIR=${kernelDir}/source \
-        KERNEL_DIR=${kernelDir}/build \
-        SRC=${kernelDir}/build \
-        KVER=${kernelVersion}
-    )
-
-    runHook postBuild
-  '';
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-
-    ( # kernel modules
-      cd kmods
-      mkdir -p $out/lib/modules/${kernelVersion}/extra
-      cp prl_tg/Toolgate/Guest/Linux/prl_tg/prl_tg.ko $out/lib/modules/${kernelVersion}/extra
-    )
 
     ( # tools
       cd tools/tools${
@@ -139,6 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f bin/prltoolsd
       mv bin/prltoolsd.tmp bin/prltoolsd
 
+      # replace hardcoded /usr/bin/prl_fsd
+      substituteInPlace ../mount.fuse.prl_fsd \
+        --replace-fail "/usr/bin/prl_fsd" "$out/bin/prl_fsd"
+
       # install binaries
       for i in bin/* sbin/prl_nettool sbin/prl_snapshot; do
         # also patch binaries to replace /usr/bin/XXX to XXX
@@ -156,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
         install -Dm755 $i $out/$i
       done
 
+      install -Dm755 ../../tools/mount.fuse.prl_fsd $out/sbin/mount.fuse.prl_fsd
       install -Dm755 ../../tools/prlfsmountd.sh $out/sbin/prlfsmountd
       install -Dm755 ../../tools/prlbinfmtconfig.sh $out/sbin/prlbinfmtconfig
       for f in $out/bin/* $out/sbin/*; do
@@ -170,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       substituteInPlace ../99prltoolsd-hibernate \
-        --replace "/bin/bash" "${bash}/bin/bash"
+        --replace-fail "/bin/bash" "${bash}/bin/bash"
 
       mkdir -p $out/etc/pm/sleep.d
       install -Dm644 ../99prltoolsd-hibernate $out/etc/pm/sleep.d

@@ -4,7 +4,7 @@
 set -eu -o pipefail
 
 nixpkgs="$(git rev-parse --show-toplevel)"
-path="$nixpkgs/pkgs/os-specific/linux/prl-tools/default.nix"
+path="$nixpkgs/pkgs/by-name/pr/prl-tools/default.nix"
 
 # Currently this script only supports Parallels 26
 # Please change the knowledge base url after each major release
