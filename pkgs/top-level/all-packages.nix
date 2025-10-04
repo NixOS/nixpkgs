@@ -3380,8 +3380,6 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
-  ktailctl = kdePackages.callPackage ../applications/networking/ktailctl { };
-
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
