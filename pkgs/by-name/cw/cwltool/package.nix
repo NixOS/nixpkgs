@@ -25,23 +25,25 @@ with py.pkgs;
 
 py.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20250110105449";
+  version = "3.1.20250925164626";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
     tag = version;
-    hash = "sha256-V0CQiNkIw81s6e9224qcfbsOqBvMo34q+lRURpRetKs=";
+    hash = "sha256-esY/p7wm0HvLiX+jZENBye4NblYveYAXevYRQxk+u44=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "prov == 1.5.1" "prov" \
-      --replace-fail '"schema-salad >= 8.7, < 9",' '"schema-salad",' \
       --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy==1.14.1" "mypy"
+      --replace-fail "mypy==1.18.2" "mypy"
+
+    substituteInPlace cwltool/cwlviewer.py \
+      --replace-fail "quote_id_if_necessary" "quote_if_necessary"
   '';
 
   build-system = with py.pkgs; [
