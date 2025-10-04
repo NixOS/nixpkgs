@@ -20,12 +20,12 @@
   typescript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-weather";
   version = "49.rc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/gnome-weather-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major finalAttrs.version}/gnome-weather-${finalAttrs.version}.tar.xz";
     hash = "sha256-gFwVmU12o1ap5+95AgCNnM2vNsqmpxD5PwuQWLHlgaw=";
   };
 
@@ -64,7 +64,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-weather"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-weather";
+    };
   };
 
   meta = with lib; {
@@ -75,4 +77,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})
