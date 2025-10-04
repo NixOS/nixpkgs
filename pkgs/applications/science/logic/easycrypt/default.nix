@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easycrypt";
-  version = "2025.08";
+  version = "2025.10";
 
   src = fetchFromGitHub {
     owner = "easycrypt";
     repo = "easycrypt";
     tag = "r${version}";
-    hash = "sha256-WUms6hh7T5/gxRLFvbJQiT1ErLr8KFilFNOMTT/fIyY=";
+    hash = "sha256-EF508JsM99lLIqTrWkV/gvlKYRSPQgaLfqxDoOkJbhU=";
   };
 
   nativeBuildInputs =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     batteries
     dune-build-info
     dune-site
-    inifiles
+    pcre2
     why3
     yojson
     zarith
