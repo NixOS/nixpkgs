@@ -69,7 +69,7 @@
   darwinVersionInputs,
   xcbuild,
   # mingw
-  pkgsBuildBuild,
+  pkgsBuildHost,
   # optional dependencies
   cups,
   libmysqlclient,
@@ -80,6 +80,7 @@
   libinput,
   # options
   qttranslations ? null,
+  qtbase,
 }:
 
 let
@@ -179,6 +180,8 @@ stdenv.mkDerivation rec {
     cmake
     ninja
   ]
+  # When cross building, qtbase depends on tools from the host version of itself
+  ++ lib.optional isCrossBuild qtbase
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   propagatedNativeBuildInputs = [
@@ -217,7 +220,9 @@ stdenv.mkDerivation rec {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
-  ];
+  ]
+  # use the QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH environment variable to find host packages
+  ++ lib.optional isCrossBuild ./cross-search-host-paths.patch;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # TODO: Verify that this catches all the occurrences?
@@ -274,10 +279,7 @@ stdenv.mkDerivation rec {
     # to query the version.
     "-DQT_INTERNAL_XCODE_VERSION=0.1"
   ]
-  ++ lib.optionals isCrossBuild [
-    "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
-    "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
-  ]
+  ++ lib.optional isCrossBuild "-DQT_HOST_PATH=${pkgsBuildHost.qt6.qtbase}"
   ++ lib.optional (
     qttranslations != null && !isCrossBuild
   ) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
@@ -306,6 +308,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   setupHook = ../../hooks/qtbase-setup-hook.sh;
+  qtCrossBuild = isCrossBuild;
 
   meta = with lib; {
     homepage = "https://www.qt.io/";

@@ -1,14 +1,22 @@
+if [[ -n "${__nix_qt_skip_setup-}" ]]; then return; fi
+
+if [[ -n "@qtCrossBuild@" ]]; then
+    export __nix_qt_crossbuild=1
+    declare -n __nix_qtbase_check=__nix_qtbase_cross
+else
+    declare -n __nix_qtbase_check=__nix_qtbase
+fi
+
 if [[ -n "${__nix_qtbase-}" ]]; then
     # Throw an error if a different version of Qt was already set up.
-    if [[ "$__nix_qtbase" != "@out@" ]]; then
+
+    if [[ -n "${__nix_qtbase_check-}" && "${__nix_qtbase_check}" != "@out@" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
         echo >&2 "    @out@"
-        echo >&2 "    $__nix_qtbase"
+        echo >&2 "    $__nix_qtbase_check"
         exit 1
     fi
 else # Only set up Qt once.
-    __nix_qtbase="@out@"
-
     qtPluginPrefix=@qtPluginPrefix@
     qtQmlPrefix=@qtQmlPrefix@
 
@@ -34,22 +42,6 @@ else # Only set up Qt once.
         fi
     }
     envBuildHostHooks+=(qmakePathHook)
-
-    declare -g qttoolsPathSeen=
-    qtToolsHook() {
-        if [ -f "$1/libexec/qhelpgenerator" ]; then
-            if [[ -n "${qtToolsPathSeen:-}" && "${qttoolsPathSeen:-}" != "$1" ]]; then
-                echo >&2 "Error: detected mismatched Qt dependencies:"
-                echo >&2 "    $1"
-                echo >&2 "    $qttoolsPathSeen"
-                exit 1
-            fi
-
-            qttoolsPathSeen=$1
-            appendToVar cmakeFlags "-DQT_OPTIONAL_TOOLS_PATH=$1"
-        fi
-    }
-    addEnvHooks "$hostOffset" qtToolsHook
 
     postPatchMkspecs() {
         # Prevent this hook from running multiple times
@@ -87,10 +79,34 @@ else # Only set up Qt once.
         fi
     }
     appendToVar prePhases qtPreHook
-
-    addQtModulePrefix() {
-        addToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH $1
-    }
-    addEnvHooks "$hostOffset" addQtModulePrefix
-
 fi
+
+__nix_qtbase_check="@out@"
+
+declare -g qttoolsPathSeen=
+qtToolsHook() {
+    # If cross building, only QtTools versions executable on the build host should be considered.
+    if [[ -n "${__nix_qt_crossbuild-}" && "${depHostOffset}" -ge 0 ]]; then return; fi
+
+    if [ -f "$1/libexec/qhelpgenerator" ]; then
+        if [[ -n "${qtToolsPathSeen:-}" && "${qttoolsPathSeen:-}" != "$1" ]]; then
+            echo >&2 "Error: detected mismatched Qt dependencies:"
+            echo >&2 "    $1"
+            echo >&2 "    $qttoolsPathSeen"
+            exit 1
+        fi
+
+        qttoolsPathSeen=$1
+        appendToVar cmakeFlags "-DQT_OPTIONAL_TOOLS_PATH=$1"
+    fi
+}
+addEnvHooks "$hostOffset" qtToolsHook
+
+addQtModulePrefix() {
+    if [[ -z "${__nix_qt_crossbuild-}" || "$depHostOffset" -ge 0 ]]; then
+        addToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH "$1"
+    else
+        addToSearchPath QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH "$1"
+    fi
+}
+addEnvHooks "$hostOffset" addQtModulePrefix

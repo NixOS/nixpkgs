@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b39a73c..31c4a3b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -49,11 +49,6 @@ if(WASM)
+     return()
+ endif()
+ 
+-if(CMAKE_CROSSCOMPILING)
+-    message(NOTICE "Skipping the build as the condition \"NOT CMAKE_CROSSCOMPILING\" is not met.")
+-    return()
+-endif()
+-
+ # Copy nodes content
+ set(nodes_folders
+     "nodes/basic"

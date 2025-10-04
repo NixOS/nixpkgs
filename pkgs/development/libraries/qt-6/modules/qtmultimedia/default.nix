@@ -24,7 +24,6 @@
   elfutils,
   libunwind,
   orc,
-  pkgsBuildBuild,
 }:
 
 qtModule {
@@ -50,7 +49,6 @@ qtModule {
     qtbase
     qtdeclarative
     qtsvg
-    qtshadertools
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ qtquick3d ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -62,6 +60,8 @@ qtModule {
     gst-vaapi
   ];
 
+  propagatedNativeBuildInputs = [ qtshadertools ];
+
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
     ./windows-no-uppercase-libs.patch
     ./windows-resolve-function-name.patch
@@ -69,7 +69,6 @@ qtModule {
 
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
-    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
