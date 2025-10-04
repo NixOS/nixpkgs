@@ -2,27 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoreconfHook,
+  buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zuo";
-  version = "1.9";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "racket";
     repo = "zuo";
-    rev = "v${version}";
-    hash = "sha256-F7ba/4VVVhNDK/wqk+kgJKYxETS2pR9ZiDh0O0aOWn0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BUJtAKB2tz04LhkCsDWBjgTTymU4U3Zcdm+RDYawfxQ=";
   };
 
-  doCheck = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  configureFlags = [
+    "CC_FOR_BUILD=cc"
+  ];
+
+  doCheck = true;
+  enableParallelChecking = true;
+
+  meta = {
     description = "Tiny Racket for Scripting";
     mainProgram = "zuo";
     homepage = "https://github.com/racket/zuo";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.RossSmyth ];
   };
-}
+})
