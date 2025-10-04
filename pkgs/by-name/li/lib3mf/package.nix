@@ -93,6 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn "RAND_cleanup();" "" \
       --replace-warn "EVP_cleanup();" "" \
       --replace-warn "CRYPTO_cleanup_all_ex_data();" ""
+
+    # Fix CMake export
+    substituteInPlace cmake/lib3mfConfig.cmake \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/include" "$""{LIB3MF_ROOT_DIR}/include/lib3mf" \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/lib" "$out/lib"
   '';
 
   doCheck = true;
@@ -104,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nim65s ];
     platforms = platforms.all;
   };
 })
