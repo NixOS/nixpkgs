@@ -54,14 +54,14 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pince";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "korcankaraokcu";
     repo = "PINCE";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hGPENzcMbXTRZ57wxTDIGPK9dDvjKVeGwhgGX6fB25I=";
     fetchSubmodules = true;
   };
@@ -145,4 +145,4 @@ stdenv.mkDerivation rec {
     mainProgram = "PINCE";
     platforms = lib.platforms.linux;
   };
-}
+})
