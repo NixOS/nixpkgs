@@ -6,7 +6,6 @@
   makeDesktopItem,
   copyDesktopItems,
   xorg,
-  gtk2,
   sqlite,
   openal,
   cairo,
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeLibs = lib.makeLibraryPath (
     [
-      gtk2
       sqlite
       openal
       cairo
