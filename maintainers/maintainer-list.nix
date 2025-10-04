@@ -21661,6 +21661,11 @@
     githubId = 77415970;
     name = "Redhawk";
   };
+  redianthus = {
+    github = "redianthus";
+    githubId = 16472988;
+    name = "redianthus";
+  };
   redlonghead = {
     email = "git@beardit.net";
     github = "Redlonghead";
