@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gradle,
-  jdk24,
+  gradle_9,
+  jdk25,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
@@ -16,15 +16,18 @@
   makeDesktopItem,
   writeScript,
 }:
+let
+  gradle = gradle_9;
+in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "3.0.1";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-tdpt0/TO7K1bK6OMCR9s5TbN1/v1ZywCzO/IvdOfsSA=";
+    hash = "sha256-4VxaQF1kmBo/9M0psr7jvshy1XhS02zUSMSuWvyEcoo=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jdk24}"
+    "-Dorg.gradle.java.home=${jdk25}"
     "--stacktrace"
   ];
 
