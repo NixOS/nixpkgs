@@ -12408,10 +12408,6 @@ with pkgs;
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
-  qiv = callPackage ../applications/graphics/qiv {
-    imlib2 = imlib2Full;
-  };
-
   # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules
   profanity = callPackage ../applications/networking/instant-messengers/profanity (
