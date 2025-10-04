@@ -300,6 +300,20 @@ lib.makeOverridable (
         platforms = ruby.meta.platforms;
         mainProgram = gemName;
       }
+      // (lib.optionalAttrs (type == "gem") {
+        identifiers.purlParts = {
+          type = "gem";
+          # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/gem-definition.md
+          spec = "${gemName}@${version}?platform=${platform}";
+        };
+      })
+      // (lib.optionalAttrs (type == "git") {
+        identifiers = {
+          ${if (src.meta.identifiers.purl or null) != null then "purl" else null} = src.meta.identifiers.purl;
+          ${if (src.meta.identifiers.purls or null) != null then "purls" else null} =
+            src.meta.identifiers.purls;
+        };
+      })
       // meta;
     }
   )
