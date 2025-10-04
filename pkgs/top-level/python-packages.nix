@@ -16423,9 +16423,8 @@ self: super: with self; {
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
   scikit-build-core = callPackage ../development/python-modules/scikit-build-core { };
-  scikit-build-core-no-test =
-    (callPackage ../development/python-modules/scikit-build-core { pybind11 = null; }).overrideAttrs
-      (finalAttrs: previousAttrs: { doTest = false; });
+  scikit-build-core-no-test = (scikit-build-core.override { pybind11 = null; }).overrideAttrs
+      { doCheck = false; };
 
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
