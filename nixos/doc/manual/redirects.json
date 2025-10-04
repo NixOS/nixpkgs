@@ -1,0 +1,2538 @@
+{
+  "module-boot-plymouth-tpm2-totp": [
+    "index.html#module-boot-plymouth-tpm2-totp"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-check": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-check"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-configure": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-configure"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-enable": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
+  ],
+  "sec-override-nixos-test": [
+    "index.html#sec-override-nixos-test"
+  ],
+  "test-opt-rawTestDerivationArg": [
+    "index.html#test-opt-rawTestDerivationArg"
+  ],
+  "ex-nixos-test-extendNixOS": [
+    "index.html#ex-nixos-test-extendNixOS"
+  ],
+  "book-nixos-manual": [
+    "index.html#book-nixos-manual"
+  ],
+  "modular-service-composition": [
+    "index.html#modular-service-composition"
+  ],
+  "modular-service-migration": [
+    "index.html#modular-service-migration"
+  ],
+  "modular-service-options-portable": [
+    "index.html#modular-service-options-portable"
+  ],
+  "modular-service-options-systemd": [
+    "index.html#modular-service-options-systemd"
+  ],
+  "modular-service-portability": [
+    "index.html#modular-service-portability"
+  ],
+  "modular-service-review": [
+    "index.html#modular-service-review"
+  ],
+  "modular-services": [
+    "index.html#modular-services"
+  ],
+  "module-services-anubis": [
+    "index.html#module-services-anubis"
+  ],
+  "module-services-anubis-configuration": [
+    "index.html#module-services-anubis-configuration"
+  ],
+  "module-services-anubis-quickstart": [
+    "index.html#module-services-anubis-quickstart"
+  ],
+  "module-services-crab-hole": [
+    "index.html#module-services-crab-hole"
+  ],
+  "module-services-crab-hole-api": [
+    "index.html#module-services-crab-hole-api"
+  ],
+  "module-services-crab-hole-configuration": [
+    "index.html#module-services-crab-hole-configuration"
+  ],
+  "module-services-crab-hole-dnssec": [
+    "index.html#module-services-crab-hole-dnssec"
+  ],
+  "module-services-crab-hole-downstream": [
+    "index.html#module-services-crab-hole-downstream"
+  ],
+  "module-services-crab-hole-https": [
+    "index.html#module-services-crab-hole-https"
+  ],
+  "module-services-crab-hole-invalid-config": [
+    "index.html#module-services-crab-hole-invalid-config"
+  ],
+  "module-services-crab-hole-permission-error": [
+    "index.html#module-services-crab-hole-permission-error"
+  ],
+  "module-services-crab-hole-quic": [
+    "index.html#module-services-crab-hole-quic"
+  ],
+  "module-services-crab-hole-tls": [
+    "index.html#module-services-crab-hole-tls"
+  ],
+  "module-services-crab-hole-troubleshooting": [
+    "index.html#module-services-crab-hole-troubleshooting"
+  ],
+  "module-services-crab-hole-udp": [
+    "index.html#module-services-crab-hole-udp"
+  ],
+  "module-services-crab-hole-upstream-options": [
+    "index.html#module-services-crab-hole-upstream-options"
+  ],
+  "module-services-firefox-syncserver-clients": [
+    "index.html#module-services-firefox-syncserver-clients"
+  ],
+  "module-services-firefox-syncserver-clients-android": [
+    "index.html#module-services-firefox-syncserver-clients-android"
+  ],
+  "module-services-firefox-syncserver-clients-desktop": [
+    "index.html#module-services-firefox-syncserver-clients-desktop"
+  ],
+  "module-services-opencloud": [
+    "index.html#module-services-opencloud"
+  ],
+  "module-services-opencloud-basic-usage": [
+    "index.html#module-services-opencloud-basic-usage"
+  ],
+  "module-services-networking-pihole-ftl-configuration-inherit-dnsmasq": [
+    "index.html#module-services-networking-pihole-ftl-configuration-inherit-dnsmasq"
+  ],
+  "module-services-networking-pihole-ftl-configuration-multiple-interfaces": [
+    "index.html#module-services-networking-pihole-ftl-configuration-multiple-interfaces"
+  ],
+  "module-services-strfry": [
+    "index.html#module-services-strfry"
+  ],
+  "module-services-strfry-basic-usage": [
+    "index.html#module-services-strfry-basic-usage"
+  ],
+  "module-services-strfry-reverse-proxy": [
+    "index.html#module-services-strfry-reverse-proxy"
+  ],
+  "module-services-dump1090-fa": [
+    "index.html#module-services-dump1090-fa"
+  ],
+  "module-services-dump1090-fa-configuration": [
+    "index.html#module-services-dump1090-fa-configuration"
+  ],
+  "preface": [
+    "index.html#preface"
+  ],
+  "ch-installation": [
+    "index.html#ch-installation"
+  ],
+  "sec-contributing-development-env": [
+    "index.html#sec-contributing-development-env"
+  ],
+  "sec-contributing-devmode": [
+    "index.html#sec-contributing-devmode"
+  ],
+  "sec-mattermost": [
+    "index.html#sec-mattermost"
+  ],
+  "sec-mattermost-derivation": [
+    "index.html#sec-mattermost-derivation"
+  ],
+  "sec-mattermost-plugins": [
+    "index.html#sec-mattermost-plugins"
+  ],
+  "sec-mattermost-plugins-build": [
+    "index.html#sec-mattermost-plugins-build"
+  ],
+  "sec-nixos-test-wifi": [
+    "index.html#sec-nixos-test-wifi"
+  ],
+  "sec-nixos-test-wifi-ap": [
+    "index.html#sec-nixos-test-wifi-ap"
+  ],
+  "sec-nixos-test-wifi-monitor": [
+    "index.html#sec-nixos-test-wifi-monitor"
+  ],
+  "sec-nixos-test-wifi-station": [
+    "index.html#sec-nixos-test-wifi-station"
+  ],
+  "sec-nixos-test-wifi-vwifi-server": [
+    "index.html#sec-nixos-test-wifi-vwifi-server"
+  ],
+  "sec-obtaining": [
+    "index.html#sec-obtaining"
+  ],
+  "sec-installation": [
+    "index.html#sec-installation"
+  ],
+  "sec-installation-booting": [
+    "index.html#sec-installation-booting"
+  ],
+  "sec-installation-graphical": [
+    "index.html#sec-installation-graphical"
+  ],
+  "sec-installation-manual": [
+    "index.html#sec-installation-manual"
+  ],
+  "sec-installation-manual-networking": [
+    "index.html#sec-installation-manual-networking"
+  ],
+  "sec-installation-booting-networking": [
+    "index.html#sec-installation-booting-networking"
+  ],
+  "sec-installation-manual-partitioning": [
+    "index.html#sec-installation-manual-partitioning"
+  ],
+  "sec-installation-partitioning": [
+    "index.html#sec-installation-partitioning"
+  ],
+  "sec-installation-manual-partitioning-UEFI": [
+    "index.html#sec-installation-manual-partitioning-UEFI"
+  ],
+  "sec-installation-partitioning-UEFI": [
+    "index.html#sec-installation-partitioning-UEFI"
+  ],
+  "sec-installation-manual-partitioning-MBR": [
+    "index.html#sec-installation-manual-partitioning-MBR"
+  ],
+  "sec-installation-partitioning-MBR": [
+    "index.html#sec-installation-partitioning-MBR"
+  ],
+  "sec-installation-manual-partitioning-formatting": [
+    "index.html#sec-installation-manual-partitioning-formatting"
+  ],
+  "sec-installation-partitioning-formatting": [
+    "index.html#sec-installation-partitioning-formatting"
+  ],
+  "sec-installation-manual-installing": [
+    "index.html#sec-installation-manual-installing"
+  ],
+  "sec-installation-installing": [
+    "index.html#sec-installation-installing"
+  ],
+  "sec-installation-manual-summary": [
+    "index.html#sec-installation-manual-summary"
+  ],
+  "sec-installation-summary": [
+    "index.html#sec-installation-summary"
+  ],
+  "ex-partition-scheme-MBR": [
+    "index.html#ex-partition-scheme-MBR"
+  ],
+  "ex-partition-scheme-UEFI": [
+    "index.html#ex-partition-scheme-UEFI"
+  ],
+  "ex-install-sequence": [
+    "index.html#ex-install-sequence"
+  ],
+  "ex-config": [
+    "index.html#ex-config"
+  ],
+  "ex-nixos-rebuild-build-image-customize": [
+    "index.html#ex-nixos-rebuild-build-image-customize"
+  ],
+  "sec-installation-additional-notes": [
+    "index.html#sec-installation-additional-notes"
+  ],
+  "sec-booting-from-usb": [
+    "index.html#sec-booting-from-usb"
+  ],
+  "sec-booting-from-usb-graphical": [
+    "index.html#sec-booting-from-usb-graphical"
+  ],
+  "sec-booting-from-usb-linux": [
+    "index.html#sec-booting-from-usb-linux"
+  ],
+  "sec-booting-from-usb-macos": [
+    "index.html#sec-booting-from-usb-macos"
+  ],
+  "sec-booting-from-pxe": [
+    "index.html#sec-booting-from-pxe"
+  ],
+  "sec-booting-via-kexec": [
+    "index.html#sec-booting-via-kexec"
+  ],
+  "sec-installing-virtualbox-guest": [
+    "index.html#sec-installing-virtualbox-guest"
+  ],
+  "sec-installing-from-other-distro": [
+    "index.html#sec-installing-from-other-distro"
+  ],
+  "sec-installing-behind-proxy": [
+    "index.html#sec-installing-behind-proxy"
+  ],
+  "sec-changing-config": [
+    "index.html#sec-changing-config"
+  ],
+  "sec-upgrading": [
+    "index.html#sec-upgrading"
+  ],
+  "sec-upgrading-automatic": [
+    "index.html#sec-upgrading-automatic"
+  ],
+  "sec-building-image": [
+    "index.html#sec-building-image"
+  ],
+  "sec-building-image-instructions": [
+    "index.html#sec-building-image-instructions"
+  ],
+  "sec-building-image-drivers": [
+    "index.html#sec-building-image-drivers"
+  ],
+  "sec-building-image-tech-notes": [
+    "index.html#sec-building-image-tech-notes"
+  ],
+  "sec-image-nixos-rebuild-build-image": [
+    "index.html#sec-image-nixos-rebuild-build-image"
+  ],
+  "sec-image-nixos-rebuild-build-image-customize": [
+    "index.html#sec-image-nixos-rebuild-build-image-customize"
+  ],
+  "sec-image-repart": [
+    "index.html#sec-image-repart"
+  ],
+  "sec-image-repart-store-paths": [
+    "index.html#sec-image-repart-store-paths"
+  ],
+  "sec-image-repart-store-partition": [
+    "index.html#sec-image-repart-store-partition"
+  ],
+  "sec-image-repart-store-subvolume": [
+    "index.html#sec-image-repart-store-subvolume"
+  ],
+  "sec-image-repart-appliance": [
+    "index.html#sec-image-repart-appliance"
+  ],
+  "ch-configuration": [
+    "index.html#ch-configuration"
+  ],
+  "sec-configuration-syntax": [
+    "index.html#sec-configuration-syntax"
+  ],
+  "sec-configuration-file": [
+    "index.html#sec-configuration-file"
+  ],
+  "sec-module-abstractions": [
+    "index.html#sec-module-abstractions"
+  ],
+  "sec-modularity": [
+    "index.html#sec-modularity"
+  ],
+  "sec-package-management": [
+    "index.html#sec-package-management"
+  ],
+  "sec-declarative-package-mgmt": [
+    "index.html#sec-declarative-package-mgmt"
+  ],
+  "sec-customising-packages": [
+    "index.html#sec-customising-packages"
+  ],
+  "sec-custom-packages": [
+    "index.html#sec-custom-packages"
+  ],
+  "sec-custom-packages-nix": [
+    "index.html#sec-custom-packages-nix"
+  ],
+  "sec-custom-packages-prebuilt": [
+    "index.html#sec-custom-packages-prebuilt"
+  ],
+  "sec-ad-hoc-packages": [
+    "index.html#sec-ad-hoc-packages"
+  ],
+  "sec-user-management": [
+    "index.html#sec-user-management"
+  ],
+  "sec-systemd-sysusers": [
+    "index.html#sec-systemd-sysusers"
+  ],
+  "sec-userborn": [
+    "index.html#sec-userborn"
+  ],
+  "sec-restrict-usage-time": [
+    "index.html#sec-restrict-usage-time"
+  ],
+  "ch-file-systems": [
+    "index.html#ch-file-systems"
+  ],
+  "sec-luks-file-systems": [
+    "index.html#sec-luks-file-systems"
+  ],
+  "sec-luks-file-systems-fido2": [
+    "index.html#sec-luks-file-systems-fido2"
+  ],
+  "sec-luks-file-systems-fido2-legacy": [
+    "index.html#sec-luks-file-systems-fido2-legacy"
+  ],
+  "sec-luks-file-systems-fido2-systemd": [
+    "index.html#sec-luks-file-systems-fido2-systemd"
+  ],
+  "sec-sshfs-file-systems": [
+    "index.html#sec-sshfs-file-systems"
+  ],
+  "sec-sshfs-interactive": [
+    "index.html#sec-sshfs-interactive"
+  ],
+  "sec-sshfs-non-interactive": [
+    "index.html#sec-sshfs-non-interactive"
+  ],
+  "sec-sshfs-troubleshooting": [
+    "index.html#sec-sshfs-troubleshooting"
+  ],
+  "sec-overlayfs": [
+    "index.html#sec-overlayfs"
+  ],
+  "sec-x11": [
+    "index.html#sec-x11"
+  ],
+  "sec-x11-auto-login": [
+    "index.html#sec-x11-auto-login"
+  ],
+  "sec-x11-startx": [
+    "index.html#sec-x11-startx"
+  ],
+  "sec-x11--graphics-cards-intel": [
+    "index.html#sec-x11--graphics-cards-intel"
+  ],
+  "sec-x11-graphics-cards-nvidia": [
+    "index.html#sec-x11-graphics-cards-nvidia"
+  ],
+  "sec-x11-touchpads": [
+    "index.html#sec-x11-touchpads"
+  ],
+  "sec-x11-gtk-and-qt-themes": [
+    "index.html#sec-x11-gtk-and-qt-themes"
+  ],
+  "custom-xkb-layouts": [
+    "index.html#custom-xkb-layouts"
+  ],
+  "sec-wayland": [
+    "index.html#sec-wayland"
+  ],
+  "sec-gpu-accel": [
+    "index.html#sec-gpu-accel"
+  ],
+  "sec-gpu-accel-opencl": [
+    "index.html#sec-gpu-accel-opencl"
+  ],
+  "sec-gpu-accel-opencl-amd": [
+    "index.html#sec-gpu-accel-opencl-amd"
+  ],
+  "sec-gpu-accel-opencl-intel": [
+    "index.html#sec-gpu-accel-opencl-intel"
+  ],
+  "sec-gpu-accel-vulkan": [
+    "index.html#sec-gpu-accel-vulkan"
+  ],
+  "sec-gpu-accel-vulkan-amd": [
+    "index.html#sec-gpu-accel-vulkan-amd"
+  ],
+  "sec-gpu-accel-va-api": [
+    "index.html#sec-gpu-accel-va-api"
+  ],
+  "sec-gpu-accel-va-api-intel": [
+    "index.html#sec-gpu-accel-va-api-intel"
+  ],
+  "sec-gpu-accel-common-issues": [
+    "index.html#sec-gpu-accel-common-issues"
+  ],
+  "sec-gpu-accel-common-issues-permissions": [
+    "index.html#sec-gpu-accel-common-issues-permissions"
+  ],
+  "sec-gpu-accel-common-issues-mixing-nixpkgs": [
+    "index.html#sec-gpu-accel-common-issues-mixing-nixpkgs"
+  ],
+  "sec-xfce": [
+    "index.html#sec-xfce"
+  ],
+  "sec-xfce-thunar-plugins": [
+    "index.html#sec-xfce-thunar-plugins"
+  ],
+  "sec-xfce-troubleshooting": [
+    "index.html#sec-xfce-troubleshooting"
+  ],
+  "sec-networking": [
+    "index.html#sec-networking"
+  ],
+  "sec-networkmanager": [
+    "index.html#sec-networkmanager"
+  ],
+  "sec-ssh": [
+    "index.html#sec-ssh"
+  ],
+  "sec-ipv4": [
+    "index.html#sec-ipv4"
+  ],
+  "sec-ipv6": [
+    "index.html#sec-ipv6"
+  ],
+  "sec-firewall": [
+    "index.html#sec-firewall"
+  ],
+  "sec-wireless": [
+    "index.html#sec-wireless"
+  ],
+  "ad-hoc-network-config": [
+    "index.html#ad-hoc-network-config"
+  ],
+  "sec-rename-ifs": [
+    "index.html#sec-rename-ifs"
+  ],
+  "sec-custom-ifnames": [
+    "index.html#sec-custom-ifnames"
+  ],
+  "sec-kernel-config": [
+    "index.html#sec-kernel-config"
+  ],
+  "sec-linux-config-customizing": [
+    "index.html#sec-linux-config-customizing"
+  ],
+  "sec-linux-rust": [
+    "index.html#sec-linux-rust"
+  ],
+  "sec-linux-config-developing-modules": [
+    "index.html#sec-linux-config-developing-modules"
+  ],
+  "sec-linux-zfs": [
+    "index.html#sec-linux-zfs"
+  ],
+  "module-services-subversion": [
+    "index.html#module-services-subversion"
+  ],
+  "module-services-subversion-apache-httpd": [
+    "index.html#module-services-subversion-apache-httpd"
+  ],
+  "chap-pantheon": [
+    "index.html#chap-pantheon"
+  ],
+  "sec-pantheon-enable": [
+    "index.html#sec-pantheon-enable"
+  ],
+  "sec-pantheon-wingpanel-switchboard": [
+    "index.html#sec-pantheon-wingpanel-switchboard"
+  ],
+  "sec-pantheon-faq": [
+    "index.html#sec-pantheon-faq"
+  ],
+  "sec-pantheon-faq-messed-up-theme": [
+    "index.html#sec-pantheon-faq-messed-up-theme"
+  ],
+  "sec-pantheon-faq-gnome-and-pantheon": [
+    "index.html#sec-pantheon-faq-gnome-and-pantheon"
+  ],
+  "sec-pantheon-faq-appcenter": [
+    "index.html#sec-pantheon-faq-appcenter"
+  ],
+  "chap-gnome": [
+    "index.html#chap-gnome"
+  ],
+  "sec-gnome-enable": [
+    "index.html#sec-gnome-enable"
+  ],
+  "sec-gnome-without-the-apps": [
+    "index.html#sec-gnome-without-the-apps"
+  ],
+  "sec-gnome-disabling-services": [
+    "index.html#sec-gnome-disabling-services"
+  ],
+  "sec-gnome-games": [
+    "index.html#sec-gnome-games"
+  ],
+  "sec-gnome-core-developer-tools": [
+    "index.html#sec-gnome-core-developer-tools"
+  ],
+  "sec-gnome-enable-flashback": [
+    "index.html#sec-gnome-enable-flashback"
+  ],
+  "sec-gnome-icons-and-gtk-themes": [
+    "index.html#sec-gnome-icons-and-gtk-themes"
+  ],
+  "sec-gnome-shell-extensions": [
+    "index.html#sec-gnome-shell-extensions"
+  ],
+  "sec-gnome-gsettings-overrides": [
+    "index.html#sec-gnome-gsettings-overrides"
+  ],
+  "sec-gnome-gsettings-overrides-example": [
+    "index.html#sec-gnome-gsettings-overrides-example"
+  ],
+  "sec-gnome-faq": [
+    "index.html#sec-gnome-faq"
+  ],
+  "sec-gnome-faq-can-i-use-lightdm-with-gnome": [
+    "index.html#sec-gnome-faq-can-i-use-lightdm-with-gnome"
+  ],
+  "sec-bootloader-external": [
+    "index.html#sec-bootloader-external"
+  ],
+  "sec-bootloader-external-developing": [
+    "index.html#sec-bootloader-external-developing"
+  ],
+  "module-boot-clevis": [
+    "index.html#module-boot-clevis"
+  ],
+  "module-boot-clevis-create-secret": [
+    "index.html#module-boot-clevis-create-secret"
+  ],
+  "module-boot-clevis-activate": [
+    "index.html#module-boot-clevis-activate"
+  ],
+  "module-services-garage": [
+    "index.html#module-services-garage"
+  ],
+  "module-services-garage-upgrade-scenarios": [
+    "index.html#module-services-garage-upgrade-scenarios"
+  ],
+  "module-services-garage-advanced-upgrades": [
+    "index.html#module-services-garage-advanced-upgrades"
+  ],
+  "module-services-garage-maintainer-info": [
+    "index.html#module-services-garage-maintainer-info"
+  ],
+  "module-services-youtrack": [
+    "index.html#module-services-youtrack"
+  ],
+  "module-services-youtrack-installation": [
+    "index.html#module-services-youtrack-installation"
+  ],
+  "module-services-youtrack-upgrade-2022_3-2023_1": [
+    "index.html#module-services-youtrack-upgrade-2022_3-2023_1"
+  ],
+  "module-services-szurubooru": [
+    "index.html#module-services-szurubooru"
+  ],
+  "module-services-szurubooru-basic-usage": [
+    "index.html#module-services-szurubooru-basic-usage"
+  ],
+  "module-services-szurubooru-reverse-proxy-configuration": [
+    "index.html#module-services-szurubooru-reverse-proxy-configuration"
+  ],
+  "module-services-szurubooru-extra-config": [
+    "index.html#module-services-szurubooru-extra-config"
+  ],
+  "module-services-suwayomi-server": [
+    "index.html#module-services-suwayomi-server"
+  ],
+  "module-services-suwayomi-server-basic-usage": [
+    "index.html#module-services-suwayomi-server-basic-usage"
+  ],
+  "module-services-suwayomi-server-basic-auth": [
+    "index.html#module-services-suwayomi-server-basic-auth"
+  ],
+  "module-services-suwayomi-server-extra-config": [
+    "index.html#module-services-suwayomi-server-extra-config"
+  ],
+  "module-services-immich": [
+    "index.html#module-services-immich"
+  ],
+  "module-services-immich-vectorchord-migration": [
+    "index.html#module-services-immich-vectorchord-migration"
+  ],
+  "module-services-paisa": [
+    "index.html#module-services-paisa"
+  ],
+  "module-services-paisa-usage": [
+    "index.html#module-services-paisa-usage"
+  ],
+  "module-services-plausible": [
+    "index.html#module-services-plausible"
+  ],
+  "module-services-plausible-basic-usage": [
+    "index.html#module-services-plausible-basic-usage"
+  ],
+  "module-services-pingvin-share": [
+    "index.html#module-services-pingvin-share"
+  ],
+  "module-services-pingvin-share-basic-usage": [
+    "index.html#module-services-pingvin-share-basic-usage"
+  ],
+  "module-services-pingvin-share-reverse-proxy-configuration": [
+    "index.html#module-services-pingvin-share-reverse-proxy-configuration"
+  ],
+  "module-services-pict-rs": [
+    "index.html#module-services-pict-rs"
+  ],
+  "module-services-pict-rs-quickstart": [
+    "index.html#module-services-pict-rs-quickstart"
+  ],
+  "module-services-pict-rs-usage": [
+    "index.html#module-services-pict-rs-usage"
+  ],
+  "module-services-pict-rs-missing": [
+    "index.html#module-services-pict-rs-missing"
+  ],
+  "module-services-nextcloud": [
+    "index.html#module-services-nextcloud"
+  ],
+  "module-services-nextcloud-basic-usage": [
+    "index.html#module-services-nextcloud-basic-usage"
+  ],
+  "module-services-nextcloud-pitfalls-during-upgrade": [
+    "index.html#module-services-nextcloud-pitfalls-during-upgrade"
+  ],
+  "module-services-nextcloud-httpd": [
+    "index.html#module-services-nextcloud-httpd"
+  ],
+  "module-services-nextcloud-occ": [
+    "index.html#module-services-nextcloud-occ"
+  ],
+  "installing-apps-php-extensions-nextcloud": [
+    "index.html#installing-apps-php-extensions-nextcloud"
+  ],
+  "module-services-nextcloud-known-warnings": [
+    "index.html#module-services-nextcloud-known-warnings"
+  ],
+  "module-services-nextcloud-warning-logreader": [
+    "index.html#module-services-nextcloud-warning-logreader"
+  ],
+  "module-services-nextcloud-maintainer-info": [
+    "index.html#module-services-nextcloud-maintainer-info"
+  ],
+  "module-services-matomo": [
+    "index.html#module-services-matomo"
+  ],
+  "module-services-matomo-database-setup": [
+    "index.html#module-services-matomo-database-setup"
+  ],
+  "module-services-matomo-archive-processing": [
+    "index.html#module-services-matomo-archive-processing"
+  ],
+  "module-services-matomo-backups": [
+    "index.html#module-services-matomo-backups"
+  ],
+  "module-services-matomo-issues": [
+    "index.html#module-services-matomo-issues"
+  ],
+  "module-services-matomo-other-web-servers": [
+    "index.html#module-services-matomo-other-web-servers"
+  ],
+  "module-services-lemmy": [
+    "index.html#module-services-lemmy"
+  ],
+  "module-services-lemmy-quickstart": [
+    "index.html#module-services-lemmy-quickstart"
+  ],
+  "module-services-lemmy-usage": [
+    "index.html#module-services-lemmy-usage"
+  ],
+  "module-services-lemmy-missing": [
+    "index.html#module-services-lemmy-missing"
+  ],
+  "module-services-keycloak": [
+    "index.html#module-services-keycloak"
+  ],
+  "module-services-keycloak-admin": [
+    "index.html#module-services-keycloak-admin"
+  ],
+  "module-services-keycloak-database": [
+    "index.html#module-services-keycloak-database"
+  ],
+  "module-services-keycloak-hostname": [
+    "index.html#module-services-keycloak-hostname"
+  ],
+  "module-services-keycloak-tls": [
+    "index.html#module-services-keycloak-tls"
+  ],
+  "module-services-keycloak-themes": [
+    "index.html#module-services-keycloak-themes"
+  ],
+  "module-services-keycloak-settings": [
+    "index.html#module-services-keycloak-settings"
+  ],
+  "module-services-keycloak-example-config": [
+    "index.html#module-services-keycloak-example-config"
+  ],
+  "module-services-jitsi-meet": [
+    "index.html#module-services-jitsi-meet"
+  ],
+  "module-services-jitsi-basic-usage": [
+    "index.html#module-services-jitsi-basic-usage"
+  ],
+  "module-services-jitsi-configuration": [
+    "index.html#module-services-jitsi-configuration"
+  ],
+  "module-services-honk": [
+    "index.html#module-services-honk"
+  ],
+  "module-services-honk-basic-usage": [
+    "index.html#module-services-honk-basic-usage"
+  ],
+  "module-services-hatsu": [
+    "index.html#module-services-hatsu"
+  ],
+  "module-services-hatsu-quickstart": [
+    "index.html#module-services-hatsu-quickstart"
+  ],
+  "module-services-grocy": [
+    "index.html#module-services-grocy"
+  ],
+  "module-services-grocy-basic-usage": [
+    "index.html#module-services-grocy-basic-usage"
+  ],
+  "module-services-grocy-settings": [
+    "index.html#module-services-grocy-settings"
+  ],
+  "module-services-gotosocial": [
+    "index.html#module-services-gotosocial"
+  ],
+  "modules-services-gotosocial-service-configuration": [
+    "index.html#modules-services-gotosocial-service-configuration"
+  ],
+  "modules-services-gotosocial-proxy-configuration": [
+    "index.html#modules-services-gotosocial-proxy-configuration"
+  ],
+  "modules-services-gotosocial-user-management": [
+    "index.html#modules-services-gotosocial-user-management"
+  ],
+  "module-services-glance": [
+    "index.html#module-services-glance"
+  ],
+  "module-services-glance-quickstart": [
+    "index.html#module-services-glance-quickstart"
+  ],
+  "module-services-filesender": [
+    "index.html#module-services-filesender"
+  ],
+  "module-services-filesender-quickstart": [
+    "index.html#module-services-filesender-quickstart"
+  ],
+  "module-services-discourse": [
+    "index.html#module-services-discourse"
+  ],
+  "module-services-discourse-basic-usage": [
+    "index.html#module-services-discourse-basic-usage"
+  ],
+  "module-services-discourse-tls": [
+    "index.html#module-services-discourse-tls"
+  ],
+  "module-services-discourse-database": [
+    "index.html#module-services-discourse-database"
+  ],
+  "module-services-discourse-mail": [
+    "index.html#module-services-discourse-mail"
+  ],
+  "module-services-discourse-settings": [
+    "index.html#module-services-discourse-settings"
+  ],
+  "module-services-discourse-site-settings": [
+    "index.html#module-services-discourse-site-settings"
+  ],
+  "module-services-discourse-backend-settings": [
+    "index.html#module-services-discourse-backend-settings"
+  ],
+  "module-services-discourse-settings-example": [
+    "index.html#module-services-discourse-settings-example"
+  ],
+  "module-services-discourse-plugins": [
+    "index.html#module-services-discourse-plugins"
+  ],
+  "module-services-davis": [
+    "index.html#module-services-davis"
+  ],
+  "module-services-davis-basic-usage": [
+    "index.html#module-services-davis-basic-usage"
+  ],
+  "module-services-draupnir": [
+    "index.html#module-services-draupnir"
+  ],
+  "module-services-draupnir-setup": [
+    "index.html#module-services-draupnir-setup"
+  ],
+  "module-services-draupnir-setup-ems": [
+    "index.html#module-services-draupnir-setup-ems"
+  ],
+  "module-services-castopod": [
+    "index.html#module-services-castopod"
+  ],
+  "module-services-castopod-quickstart": [
+    "index.html#module-services-castopod-quickstart"
+  ],
+  "module-services-c2fmzq": [
+    "index.html#module-services-c2fmzq"
+  ],
+  "module-services-akkoma": [
+    "index.html#module-services-akkoma"
+  ],
+  "modules-services-akkoma-service-configuration": [
+    "index.html#modules-services-akkoma-service-configuration"
+  ],
+  "modules-services-akkoma-user-management": [
+    "index.html#modules-services-akkoma-user-management"
+  ],
+  "modules-services-akkoma-proxy-configuration": [
+    "index.html#modules-services-akkoma-proxy-configuration"
+  ],
+  "modules-services-akkoma-media-proxy": [
+    "index.html#modules-services-akkoma-media-proxy"
+  ],
+  "modules-services-akkoma-prefetch-remote-media": [
+    "index.html#modules-services-akkoma-prefetch-remote-media"
+  ],
+  "modules-services-akkoma-media-previews": [
+    "index.html#modules-services-akkoma-media-previews"
+  ],
+  "modules-services-akkoma-frontend-management": [
+    "index.html#modules-services-akkoma-frontend-management"
+  ],
+  "modules-services-akkoma-federation-policies": [
+    "index.html#modules-services-akkoma-federation-policies"
+  ],
+  "modules-services-akkoma-upload-filters": [
+    "index.html#modules-services-akkoma-upload-filters"
+  ],
+  "modules-services-akkoma-migration-pleroma": [
+    "index.html#modules-services-akkoma-migration-pleroma"
+  ],
+  "modules-services-akkoma-migration-pleroma-copy": [
+    "index.html#modules-services-akkoma-migration-pleroma-copy"
+  ],
+  "modules-services-akkoma-migration-pleroma-reuse": [
+    "index.html#modules-services-akkoma-migration-pleroma-reuse"
+  ],
+  "modules-services-akkoma-advanced-deployment": [
+    "index.html#modules-services-akkoma-advanced-deployment"
+  ],
+  "modules-services-akkoma-confinement": [
+    "index.html#modules-services-akkoma-confinement"
+  ],
+  "modules-services-akkoma-distributed-deployment": [
+    "index.html#modules-services-akkoma-distributed-deployment"
+  ],
+  "module-services-atalkd": [
+    "index.html#module-services-atalkd"
+  ],
+  "module-services-atalkd-basic-usage": [
+    "index.html#module-services-atalkd-basic-usage"
+  ],
+  "module-services-systemd-lock-handler": [
+    "index.html#module-services-systemd-lock-handler"
+  ],
+  "module-services-kerberos-server": [
+    "index.html#module-services-kerberos-server"
+  ],
+  "module-services-kerberos-server-usage": [
+    "index.html#module-services-kerberos-server-usage"
+  ],
+  "module-services-kerberos-server-notes": [
+    "index.html#module-services-kerberos-server-notes"
+  ],
+  "module-services-kerberos-server-upstream-documentation": [
+    "index.html#module-services-kerberos-server-upstream-documentation"
+  ],
+  "module-services-meilisearch": [
+    "index.html#module-services-meilisearch"
+  ],
+  "module-services-meilisearch-quickstart": [
+    "index.html#module-services-meilisearch-quickstart"
+  ],
+  "module-services-meilisearch-usage": [
+    "index.html#module-services-meilisearch-usage"
+  ],
+  "module-services-meilisearch-quickstart-add": [
+    "index.html#module-services-meilisearch-quickstart-add"
+  ],
+  "module-services-meilisearch-quickstart-search": [
+    "index.html#module-services-meilisearch-quickstart-search"
+  ],
+  "module-services-meilisearch-defaults": [
+    "index.html#module-services-meilisearch-defaults",
+    "index.html#module-services-meilisearch-missing"
+  ],
+  "module-services-networking-yggdrasil": [
+    "index.html#module-services-networking-yggdrasil"
+  ],
+  "module-services-networking-yggdrasil-configuration": [
+    "index.html#module-services-networking-yggdrasil-configuration"
+  ],
+  "module-services-networking-yggdrasil-configuration-simple": [
+    "index.html#module-services-networking-yggdrasil-configuration-simple"
+  ],
+  "module-services-networking-yggdrasil-configuration-prefix": [
+    "index.html#module-services-networking-yggdrasil-configuration-prefix"
+  ],
+  "module-services-networking-yggdrasil-configuration-container": [
+    "index.html#module-services-networking-yggdrasil-configuration-container"
+  ],
+  "module-services-prosody": [
+    "index.html#module-services-prosody"
+  ],
+  "module-services-prosody-basic-usage": [
+    "index.html#module-services-prosody-basic-usage"
+  ],
+  "module-services-prosody-letsencrypt": [
+    "index.html#module-services-prosody-letsencrypt"
+  ],
+  "module-services-pleroma": [
+    "index.html#module-services-pleroma"
+  ],
+  "module-services-pleroma-generate-config": [
+    "index.html#module-services-pleroma-generate-config"
+  ],
+  "module-services-pleroma-initialize-db": [
+    "index.html#module-services-pleroma-initialize-db"
+  ],
+  "module-services-pleroma-enable": [
+    "index.html#module-services-pleroma-enable"
+  ],
+  "module-services-pleroma-admin-user": [
+    "index.html#module-services-pleroma-admin-user"
+  ],
+  "module-services-pleroma-nginx": [
+    "index.html#module-services-pleroma-nginx"
+  ],
+  "module-services-netbird-server": [
+    "index.html#module-services-netbird-server"
+  ],
+  "module-services-netbird-server-quickstart": [
+    "index.html#module-services-netbird-server-quickstart"
+  ],
+  "module-services-netbird": [
+    "index.html#module-services-netbird"
+  ],
+  "module-services-netbird-quickstart": [
+    "index.html#module-services-netbird-quickstart"
+  ],
+  "module-services-netbird-multiple-connections": [
+    "index.html#module-services-netbird-multiple-connections"
+  ],
+  "module-services-netbird-firewall": [
+    "index.html#module-services-netbird-firewall"
+  ],
+  "module-services-netbird-customization": [
+    "index.html#module-services-netbird-customization"
+  ],
+  "module-services-mosquitto": [
+    "index.html#module-services-mosquitto"
+  ],
+  "module-services-mosquitto-quickstart": [
+    "index.html#module-services-mosquitto-quickstart"
+  ],
+  "module-services-mosquitto-config": [
+    "index.html#module-services-mosquitto-config"
+  ],
+  "module-services-mosquitto-config-passwords": [
+    "index.html#module-services-mosquitto-config-passwords"
+  ],
+  "module-services-mosquitto-config-acl": [
+    "index.html#module-services-mosquitto-config-acl"
+  ],
+  "module-services-jotta-cli": [
+    "index.html#module-services-jotta-cli"
+  ],
+  "module-services-jotta-cli-quick-start": [
+    "index.html#module-services-jotta-cli-quick-start"
+  ],
+  "module-services-jotta-cli-example-configuration": [
+    "index.html#module-services-jotta-cli-example-configuration"
+  ],
+  "module-services-gns3-server": [
+    "index.html#module-services-gns3-server"
+  ],
+  "module-services-gns3-server-basic-usage": [
+    "index.html#module-services-gns3-server-basic-usage"
+  ],
+  "module-services-firefox-syncserver": [
+    "index.html#module-services-firefox-syncserver"
+  ],
+  "module-services-firefox-syncserver-quickstart": [
+    "index.html#module-services-firefox-syncserver-quickstart"
+  ],
+  "module-services-firefox-syncserver-configuration": [
+    "index.html#module-services-firefox-syncserver-configuration"
+  ],
+  "module-services-networking-dnsmasq": [
+    "index.html#module-services-networking-dnsmasq"
+  ],
+  "module-services-networking-dnsmasq-configuration": [
+    "index.html#module-services-networking-dnsmasq-configuration"
+  ],
+  "module-services-networking-dnsmasq-configuration-home": [
+    "index.html#module-services-networking-dnsmasq-configuration-home"
+  ],
+  "module-services-networking-dnsmasq-references": [
+    "index.html#module-services-networking-dnsmasq-references"
+  ],
+  "module-service-doh-server": [
+    "index.html#module-service-doh-server"
+  ],
+  "module-service-doh-server-quick-start": [
+    "index.html#module-service-doh-server-quick-start"
+  ],
+  "module-services-samba": [
+    "index.html#module-services-samba"
+  ],
+  "module-services-samba-basic-usage": [
+    "index.html#module-services-samba-basic-usage"
+  ],
+  "module-services-samba-configuring": [
+    "index.html#module-services-samba-configuring"
+  ],
+  "module-services-samba-configuring-file-share": [
+    "index.html#module-services-samba-configuring-file-share"
+  ],
+  "module-services-litestream": [
+    "index.html#module-services-litestream"
+  ],
+  "module-services-litestream-configuration": [
+    "index.html#module-services-litestream-configuration"
+  ],
+  "module-services-prometheus-exporters": [
+    "index.html#module-services-prometheus-exporters"
+  ],
+  "module-services-prometheus-exporters-configuration": [
+    "index.html#module-services-prometheus-exporters-configuration"
+  ],
+  "module-services-prometheus-exporters-new-exporter": [
+    "index.html#module-services-prometheus-exporters-new-exporter"
+  ],
+  "module-services-prometheus-exporters-update-exporter-module": [
+    "index.html#module-services-prometheus-exporters-update-exporter-module"
+  ],
+  "module-services-parsedmarc": [
+    "index.html#module-services-parsedmarc"
+  ],
+  "module-services-parsedmarc-basic-usage": [
+    "index.html#module-services-parsedmarc-basic-usage"
+  ],
+  "module-services-parsedmarc-local-mail": [
+    "index.html#module-services-parsedmarc-local-mail"
+  ],
+  "module-services-parsedmarc-grafana-geoip": [
+    "index.html#module-services-parsedmarc-grafana-geoip"
+  ],
+  "module-services-ocsinventory-agent": [
+    "index.html#module-services-ocsinventory-agent"
+  ],
+  "module-services-ocsinventory-agent-basic-usage": [
+    "index.html#module-services-ocsinventory-agent-basic-usage"
+  ],
+  "module-services-goss": [
+    "index.html#module-services-goss"
+  ],
+  "module-services-goss-basic-usage": [
+    "index.html#module-services-goss-basic-usage"
+  ],
+  "module-services-certspotter": [
+    "index.html#module-services-certspotter"
+  ],
+  "modules-services-certspotter-service-configuration": [
+    "index.html#modules-services-certspotter-service-configuration"
+  ],
+  "modules-services-certspotter-operation": [
+    "index.html#modules-services-certspotter-operation"
+  ],
+  "modules-services-certspotter-hooks": [
+    "index.html#modules-services-certspotter-hooks"
+  ],
+  "module-services-weechat": [
+    "index.html#module-services-weechat"
+  ],
+  "module-services-weechat-basic-usage": [
+    "index.html#module-services-weechat-basic-usage"
+  ],
+  "module-services-weechat-reattach": [
+    "index.html#module-services-weechat-reattach"
+  ],
+  "module-services-taskserver": [
+    "index.html#module-services-taskserver"
+  ],
+  "module-services-taskserver-configuration": [
+    "index.html#module-services-taskserver-configuration"
+  ],
+  "module-services-taskserver-nixos-taskserver-tool": [
+    "index.html#module-services-taskserver-nixos-taskserver-tool"
+  ],
+  "module-services-taskserver-declarative-ca-management": [
+    "index.html#module-services-taskserver-declarative-ca-management"
+  ],
+  "module-services-taskserver-manual-ca-management": [
+    "index.html#module-services-taskserver-manual-ca-management"
+  ],
+  "module-services-gitlab": [
+    "index.html#module-services-gitlab"
+  ],
+  "module-services-gitlab-prerequisites": [
+    "index.html#module-services-gitlab-prerequisites"
+  ],
+  "module-services-gitlab-configuring": [
+    "index.html#module-services-gitlab-configuring"
+  ],
+  "module-services-gitlab-maintenance": [
+    "index.html#module-services-gitlab-maintenance"
+  ],
+  "module-services-gitlab-maintenance-backups": [
+    "index.html#module-services-gitlab-maintenance-backups"
+  ],
+  "module-services-gitlab-maintenance-rake": [
+    "index.html#module-services-gitlab-maintenance-rake"
+  ],
+  "module-forgejo": [
+    "index.html#module-forgejo"
+  ],
+  "module-forgejo-migration-gitea": [
+    "index.html#module-forgejo-migration-gitea"
+  ],
+  "module-forgejo-migration-gitea-default": [
+    "index.html#module-forgejo-migration-gitea-default"
+  ],
+  "module-forgejo-migration-gitea-impersonate": [
+    "index.html#module-forgejo-migration-gitea-impersonate"
+  ],
+  "module-services-apache-kafka": [
+    "index.html#module-services-apache-kafka"
+  ],
+  "module-services-apache-kafka-basic-usage": [
+    "index.html#module-services-apache-kafka-basic-usage"
+  ],
+  "module-services-apache-kafka-kraft": [
+    "index.html#module-services-apache-kafka-kraft"
+  ],
+  "module-services-apache-kafka-migrating-to-settings": [
+    "index.html#module-services-apache-kafka-migrating-to-settings"
+  ],
+  "module-services-anki-sync-server": [
+    "index.html#module-services-anki-sync-server"
+  ],
+  "module-services-anki-sync-server-basic-usage": [
+    "index.html#module-services-anki-sync-server-basic-usage"
+  ],
+  "module-services-matrix": [
+    "index.html#module-services-matrix"
+  ],
+  "module-services-matrix-synapse": [
+    "index.html#module-services-matrix-synapse"
+  ],
+  "module-services-matrix-register-users": [
+    "index.html#module-services-matrix-register-users"
+  ],
+  "module-services-matrix-element-web": [
+    "index.html#module-services-matrix-element-web"
+  ],
+  "module-services-mjolnir": [
+    "index.html#module-services-mjolnir"
+  ],
+  "module-services-mjolnir-setup": [
+    "index.html#module-services-mjolnir-setup"
+  ],
+  "module-services-mjolnir-setup-ems": [
+    "index.html#module-services-mjolnir-setup-ems"
+  ],
+  "module-services-mjolnir-matrix-synapse-antispam": [
+    "index.html#module-services-mjolnir-matrix-synapse-antispam"
+  ],
+  "module-services-mautrix-signal": [
+    "index.html#module-services-mautrix-signal"
+  ],
+  "module-services-mautrix-signal-configuration": [
+    "index.html#module-services-mautrix-signal-configuration"
+  ],
+  "module-services-mautrix-signal-migrate-configuration": [
+    "index.html#module-services-mautrix-signal-migrate-configuration"
+  ],
+  "module-services-mautrix-whatsapp": [
+    "index.html#module-services-mautrix-whatsapp"
+  ],
+  "module-services-mautrix-whatsapp-configuration": [
+    "index.html#module-services-mautrix-whatsapp-configuration"
+  ],
+  "module-services-mautrix-whatsapp-migrate-configuration": [
+    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
+  ],
+  "module-services-maubot": [
+    "index.html#module-services-maubot"
+  ],
+  "module-services-maubot-configuration": [
+    "index.html#module-services-maubot-configuration"
+  ],
+  "module-services-mailman": [
+    "index.html#module-services-mailman"
+  ],
+  "module-services-mailman-basic-usage": [
+    "index.html#module-services-mailman-basic-usage"
+  ],
+  "module-services-mailman-other-mtas": [
+    "index.html#module-services-mailman-other-mtas"
+  ],
+  "trezor": [
+    "index.html#trezor"
+  ],
+  "module-hardware-display": [
+    "index.html#module-hardware-display"
+  ],
+  "module-hardware-display-modes": [
+    "index.html#module-hardware-display-modes"
+  ],
+  "module-hardware-display-edid-custom": [
+    "index.html#module-hardware-display-edid-custom"
+  ],
+  "module-hardware-display-edid-assign": [
+    "index.html#module-hardware-display-edid-assign"
+  ],
+  "module-hardware-display-edid-linuxhw": [
+    "index.html#module-hardware-display-edid-linuxhw"
+  ],
+  "module-hardware-display-edid-modelines": [
+    "index.html#module-hardware-display-edid-modelines"
+  ],
+  "module-hardware-display-pg278q": [
+    "index.html#module-hardware-display-pg278q"
+  ],
+  "module-services-emacs": [
+    "index.html#module-services-emacs"
+  ],
+  "module-services-emacs-installing": [
+    "index.html#module-services-emacs-installing"
+  ],
+  "module-services-emacs-releases": [
+    "index.html#module-services-emacs-releases"
+  ],
+  "module-services-emacs-adding-packages": [
+    "index.html#module-services-emacs-adding-packages"
+  ],
+  "ex-emacsNix": [
+    "index.html#ex-emacsNix"
+  ],
+  "module-services-emacs-querying-packages": [
+    "index.html#module-services-emacs-querying-packages"
+  ],
+  "module-services-emacs-configuration-nix": [
+    "index.html#module-services-emacs-configuration-nix"
+  ],
+  "module-services-emacs-config-nix": [
+    "index.html#module-services-emacs-config-nix"
+  ],
+  "module-services-emacs-advanced": [
+    "index.html#module-services-emacs-advanced"
+  ],
+  "ex-emacsGtk3Nix": [
+    "index.html#ex-emacsGtk3Nix"
+  ],
+  "module-services-emacs-running": [
+    "index.html#module-services-emacs-running"
+  ],
+  "module-services-emacs-enabling": [
+    "index.html#module-services-emacs-enabling"
+  ],
+  "module-services-emacs-starting-client": [
+    "index.html#module-services-emacs-starting-client"
+  ],
+  "module-services-emacs-editor-variable": [
+    "index.html#module-services-emacs-editor-variable"
+  ],
+  "module-services-emacs-per-user": [
+    "index.html#module-services-emacs-per-user"
+  ],
+  "module-services-emacs-configuring": [
+    "index.html#module-services-emacs-configuring"
+  ],
+  "module-services-emacs-major-mode": [
+    "index.html#module-services-emacs-major-mode"
+  ],
+  "module-services-emacs-man-pages": [
+    "index.html#module-services-emacs-man-pages"
+  ],
+  "module-services-livebook": [
+    "index.html#module-services-livebook"
+  ],
+  "module-services-livebook-basic-usage": [
+    "index.html#module-services-livebook-basic-usage"
+  ],
+  "module-services-livebook-extra-dependencies": [
+    "index.html#module-services-livebook-extra-dependencies"
+  ],
+  "module-services-blackfire": [
+    "index.html#module-services-blackfire"
+  ],
+  "module-athens": [
+    "index.html#module-athens"
+  ],
+  "module-services-development-athens-configuring": [
+    "index.html#module-services-development-athens-configuring"
+  ],
+  "module-services-flatpak": [
+    "index.html#module-services-flatpak"
+  ],
+  "module-services-tigerbeetle": [
+    "index.html#module-services-tigerbeetle"
+  ],
+  "module-services-tigerbeetle-configuring": [
+    "index.html#module-services-tigerbeetle-configuring"
+  ],
+  "module-services-tigerbeetle-upgrading": [
+    "index.html#module-services-tigerbeetle-upgrading"
+  ],
+  "module-postgresql": [
+    "index.html#module-postgresql"
+  ],
+  "module-services-postgres-configuring": [
+    "index.html#module-services-postgres-configuring"
+  ],
+  "module-services-postgres-initializing": [
+    "index.html#module-services-postgres-initializing"
+  ],
+  "module-services-postgres-initializing-ownership": [
+    "index.html#module-services-postgres-initializing-ownership"
+  ],
+  "module-services-postgres-initializing-extra-permissions": [
+    "index.html#module-services-postgres-initializing-extra-permissions"
+  ],
+  "module-services-postgres-initializing-extra-permissions-superuser-post-start": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start",
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser",
+    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start",
+    "index.html#module-services-postgres-initializing-extra-permissions-service-user"
+  ],
+  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot",
+    "index.html#module-services-postgres-initializing-extra-permissions-service-user-oneshot"
+  ],
+  "module-services-postgres-authentication": [
+    "index.html#module-services-postgres-authentication"
+  ],
+  "module-services-postgres-authentication-user-mapping": [
+    "index.html#module-services-postgres-authentication-user-mapping"
+  ],
+  "module-services-postgres-pg_config": [
+    "index.html#module-services-postgres-pg_config"
+  ],
+  "module-services-postgres-upgrading": [
+    "index.html#module-services-postgres-upgrading"
+  ],
+  "module-services-postgres-versioning": [
+    "index.html#module-services-postgres-versioning"
+  ],
+  "module-services-postgres-options": [
+    "index.html#module-services-postgres-options"
+  ],
+  "module-services-postgres-plugins": [
+    "index.html#module-services-postgres-plugins"
+  ],
+  "module-services-postgres-pls": [
+    "index.html#module-services-postgres-pls"
+  ],
+  "module-services-postgres-jit": [
+    "index.html#module-services-postgres-jit"
+  ],
+  "module-services-postgres-hardening": [
+    "index.html#module-services-postgres-hardening"
+  ],
+  "module-services-postgres-upstream-deviation": [
+    "index.html#module-services-postgres-upstream-deviation"
+  ],
+  "module-services-foundationdb": [
+    "index.html#module-services-foundationdb"
+  ],
+  "module-services-foundationdb-configuring": [
+    "index.html#module-services-foundationdb-configuring"
+  ],
+  "module-services-foundationdb-scaling": [
+    "index.html#module-services-foundationdb-scaling"
+  ],
+  "module-services-foundationdb-clustering": [
+    "index.html#module-services-foundationdb-clustering"
+  ],
+  "module-services-foundationdb-connectivity": [
+    "index.html#module-services-foundationdb-connectivity"
+  ],
+  "module-services-foundationdb-authorization": [
+    "index.html#module-services-foundationdb-authorization"
+  ],
+  "module-services-foundationdb-disaster-recovery": [
+    "index.html#module-services-foundationdb-disaster-recovery"
+  ],
+  "module-services-foundationdb-limitations": [
+    "index.html#module-services-foundationdb-limitations"
+  ],
+  "module-services-foundationdb-options": [
+    "index.html#module-services-foundationdb-options"
+  ],
+  "module-services-foundationdb-full-docs": [
+    "index.html#module-services-foundationdb-full-docs"
+  ],
+  "module-service-umurmur": [
+    "index.html#module-service-umurmur"
+  ],
+  "module-service-umurmur-quick-start": [
+    "index.html#module-service-umurmur-quick-start"
+  ],
+  "module-borgbase": [
+    "index.html#module-borgbase"
+  ],
+  "module-services-backup-borgbackup-configuring": [
+    "index.html#module-services-backup-borgbackup-configuring"
+  ],
+  "module-security-acme": [
+    "index.html#module-security-acme"
+  ],
+  "module-security-acme-prerequisites": [
+    "index.html#module-security-acme-prerequisites"
+  ],
+  "module-security-acme-nginx": [
+    "index.html#module-security-acme-nginx"
+  ],
+  "module-security-acme-httpd": [
+    "index.html#module-security-acme-httpd"
+  ],
+  "module-security-acme-configuring": [
+    "index.html#module-security-acme-configuring"
+  ],
+  "module-security-acme-config-dns": [
+    "index.html#module-security-acme-config-dns"
+  ],
+  "module-security-acme-config-dns-with-vhosts": [
+    "index.html#module-security-acme-config-dns-with-vhosts"
+  ],
+  "module-security-acme-root-owned": [
+    "index.html#module-security-acme-root-owned"
+  ],
+  "module-security-acme-regenerate": [
+    "index.html#module-security-acme-regenerate"
+  ],
+  "module-security-acme-fix-jws": [
+    "index.html#module-security-acme-fix-jws"
+  ],
+  "module-security-acme-reload-dependencies": [
+    "index.html#module-security-acme-reload-dependencies"
+  ],
+  "module-programs-zsh-ohmyzsh": [
+    "index.html#module-programs-zsh-ohmyzsh"
+  ],
+  "module-programs-oh-my-zsh-usage": [
+    "index.html#module-programs-oh-my-zsh-usage"
+  ],
+  "module-programs-oh-my-zsh-additions": [
+    "index.html#module-programs-oh-my-zsh-additions"
+  ],
+  "module-programs-oh-my-zsh-environments": [
+    "index.html#module-programs-oh-my-zsh-environments"
+  ],
+  "module-programs-oh-my-zsh-packaging-customizations": [
+    "index.html#module-programs-oh-my-zsh-packaging-customizations"
+  ],
+  "module-program-plotinus": [
+    "index.html#module-program-plotinus"
+  ],
+  "module-programs-digitalbitbox": [
+    "index.html#module-programs-digitalbitbox"
+  ],
+  "sec-digitalbitbox-package": [
+    "index.html#sec-digitalbitbox-package"
+  ],
+  "sec-digitalbitbox-hardware-module": [
+    "index.html#sec-digitalbitbox-hardware-module"
+  ],
+  "module-services-input-methods": [
+    "index.html#module-services-input-methods"
+  ],
+  "module-services-input-methods-ibus": [
+    "index.html#module-services-input-methods-ibus"
+  ],
+  "module-services-input-methods-troubleshooting": [
+    "index.html#module-services-input-methods-troubleshooting"
+  ],
+  "module-services-input-methods-fcitx": [
+    "index.html#module-services-input-methods-fcitx"
+  ],
+  "module-services-input-methods-nabi": [
+    "index.html#module-services-input-methods-nabi"
+  ],
+  "module-services-input-methods-uim": [
+    "index.html#module-services-input-methods-uim"
+  ],
+  "module-services-input-methods-hime": [
+    "index.html#module-services-input-methods-hime"
+  ],
+  "module-services-input-methods-kime": [
+    "index.html#module-services-input-methods-kime"
+  ],
+  "module-services-networking-pihole-ftl": [
+    "index.html#module-services-networking-pihole-ftl"
+  ],
+  "module-services-networking-pihole-ftl-administration": [
+    "index.html#module-services-networking-pihole-ftl-administration"
+  ],
+  "module-services-networking-pihole-ftl-configuration": [
+    "index.html#module-services-networking-pihole-ftl-configuration"
+  ],
+  "module-services-web-apps-pihole-web": [
+    "index.html#module-services-web-apps-pihole-web"
+  ],
+  "module-services-web-apps-pihole-web-configuration": [
+    "index.html#module-services-web-apps-pihole-web-configuration"
+  ],
+  "ch-profiles": [
+    "index.html#ch-profiles"
+  ],
+  "sec-profile-all-hardware": [
+    "index.html#sec-profile-all-hardware"
+  ],
+  "sec-profile-base": [
+    "index.html#sec-profile-base"
+  ],
+  "sec-profile-clone-config": [
+    "index.html#sec-profile-clone-config"
+  ],
+  "sec-profile-demo": [
+    "index.html#sec-profile-demo"
+  ],
+  "sec-profile-docker-container": [
+    "index.html#sec-profile-docker-container"
+  ],
+  "sec-profile-graphical": [
+    "index.html#sec-profile-graphical"
+  ],
+  "sec-profile-hardened": [
+    "index.html#sec-profile-hardened"
+  ],
+  "sec-profile-headless": [
+    "index.html#sec-profile-headless"
+  ],
+  "sec-profile-installation-device": [
+    "index.html#sec-profile-installation-device"
+  ],
+  "sec-perlless": [
+    "index.html#sec-perlless"
+  ],
+  "sec-profile-minimal": [
+    "index.html#sec-profile-minimal"
+  ],
+  "sec-profile-qemu-guest": [
+    "index.html#sec-profile-qemu-guest"
+  ],
+  "sec-kubernetes": [
+    "index.html#sec-kubernetes"
+  ],
+  "ch-running": [
+    "index.html#ch-running"
+  ],
+  "sec-systemctl": [
+    "index.html#sec-systemctl"
+  ],
+  "sect-nixos-systemd-general": [
+    "index.html#sect-nixos-systemd-general"
+  ],
+  "sect-nixos-systemd-nixos": [
+    "index.html#sect-nixos-systemd-nixos"
+  ],
+  "sect-nixos-systemd-custom-services": [
+    "index.html#sect-nixos-systemd-custom-services"
+  ],
+  "sect-nixos-systemd-template-units": [
+    "index.html#sect-nixos-systemd-template-units"
+  ],
+  "sec-rebooting": [
+    "index.html#sec-rebooting"
+  ],
+  "sec-user-sessions": [
+    "index.html#sec-user-sessions"
+  ],
+  "sec-cgroups": [
+    "index.html#sec-cgroups"
+  ],
+  "sec-logging": [
+    "index.html#sec-logging"
+  ],
+  "ch-system-state": [
+    "index.html#ch-system-state"
+  ],
+  "sec-nixos-state": [
+    "index.html#sec-nixos-state"
+  ],
+  "sec-state-nix": [
+    "index.html#sec-state-nix"
+  ],
+  "sec-state-boot": [
+    "index.html#sec-state-boot"
+  ],
+  "sec-state-users": [
+    "index.html#sec-state-users"
+  ],
+  "sec-systemd-state": [
+    "index.html#sec-systemd-state"
+  ],
+  "sec-machine-id": [
+    "index.html#sec-machine-id"
+  ],
+  "sec-var-systemd": [
+    "index.html#sec-var-systemd"
+  ],
+  "sec-var-journal": [
+    "index.html#sec-var-journal"
+  ],
+  "sec-zfs-state": [
+    "index.html#sec-zfs-state"
+  ],
+  "sec-nix-gc": [
+    "index.html#sec-nix-gc"
+  ],
+  "sect-nixos-gc-boot-entries": [
+    "index.html#sect-nixos-gc-boot-entries"
+  ],
+  "ch-containers": [
+    "index.html#ch-containers"
+  ],
+  "sec-imperative-containers": [
+    "index.html#sec-imperative-containers"
+  ],
+  "sec-declarative-containers": [
+    "index.html#sec-declarative-containers"
+  ],
+  "sec-container-networking": [
+    "index.html#sec-container-networking"
+  ],
+  "ch-troubleshooting": [
+    "index.html#ch-troubleshooting"
+  ],
+  "sec-boot-problems": [
+    "index.html#sec-boot-problems"
+  ],
+  "sec-maintenance-mode": [
+    "index.html#sec-maintenance-mode"
+  ],
+  "sec-rollback": [
+    "index.html#sec-rollback"
+  ],
+  "sec-nix-store-corruption": [
+    "index.html#sec-nix-store-corruption"
+  ],
+  "sec-nix-network-issues": [
+    "index.html#sec-nix-network-issues"
+  ],
+  "ch-development": [
+    "index.html#ch-development"
+  ],
+  "sec-getting-sources": [
+    "index.html#sec-getting-sources"
+  ],
+  "sec-writing-modules": [
+    "index.html#sec-writing-modules"
+  ],
+  "ex-module-syntax": [
+    "index.html#ex-module-syntax"
+  ],
+  "locate-example": [
+    "index.html#locate-example"
+  ],
+  "exec-escaping-example": [
+    "index.html#exec-escaping-example"
+  ],
+  "sec-option-declarations": [
+    "index.html#sec-option-declarations"
+  ],
+  "sec-option-declarations-util": [
+    "index.html#sec-option-declarations-util"
+  ],
+  "sec-option-declarations-util-mkEnableOption": [
+    "index.html#sec-option-declarations-util-mkEnableOption"
+  ],
+  "ex-options-declarations-util-mkEnableOption-magic": [
+    "index.html#ex-options-declarations-util-mkEnableOption-magic"
+  ],
+  "sec-option-declarations-util-mkPackageOption": [
+    "index.html#sec-option-declarations-util-mkPackageOption"
+  ],
+  "ex-options-declarations-util-mkPackageOption": [
+    "index.html#ex-options-declarations-util-mkPackageOption"
+  ],
+  "ex-options-declarations-util-mkPackageOption-hello": [
+    "index.html#ex-options-declarations-util-mkPackageOption-hello"
+  ],
+  "ex-options-declarations-util-mkPackageOption-ghc": [
+    "index.html#ex-options-declarations-util-mkPackageOption-ghc"
+  ],
+  "ex-options-declarations-util-mkPackageOption-extraDescription": [
+    "index.html#ex-options-declarations-util-mkPackageOption-extraDescription"
+  ],
+  "sec-option-declarations-eot": [
+    "index.html#sec-option-declarations-eot"
+  ],
+  "ex-option-declaration-eot-service": [
+    "index.html#ex-option-declaration-eot-service"
+  ],
+  "ex-option-declaration-eot-backend-gdm": [
+    "index.html#ex-option-declaration-eot-backend-gdm"
+  ],
+  "ex-option-declaration-eot-backend-sddm": [
+    "index.html#ex-option-declaration-eot-backend-sddm"
+  ],
+  "sec-option-types": [
+    "index.html#sec-option-types"
+  ],
+  "sec-option-types-basic": [
+    "index.html#sec-option-types-basic"
+  ],
+  "ex-types-anything": [
+    "index.html#ex-types-anything"
+  ],
+  "sec-option-types-numeric": [
+    "index.html#sec-option-types-numeric"
+  ],
+  "sec-option-types-string": [
+    "index.html#sec-option-types-string"
+  ],
+  "sec-option-types-specialised": [
+    "index.html#sec-option-types-specialised"
+  ],
+  "sec-option-types-submodule": [
+    "index.html#sec-option-types-submodule"
+  ],
+  "sec-option-types-unions": [
+    "index.html#sec-option-types-unions"
+  ],
+  "sec-option-types-sums": [
+    "index.html#sec-option-types-sums"
+  ],
+  "sec-option-types-composed": [
+    "index.html#sec-option-types-composed"
+  ],
+  "section-option-types-submodule": [
+    "index.html#section-option-types-submodule"
+  ],
+  "ex-submodule-direct": [
+    "index.html#ex-submodule-direct"
+  ],
+  "ex-submodule-reference": [
+    "index.html#ex-submodule-reference"
+  ],
+  "ex-submodule-listof-declaration": [
+    "index.html#ex-submodule-listof-declaration"
+  ],
+  "ex-submodule-listof-definition": [
+    "index.html#ex-submodule-listof-definition"
+  ],
+  "ex-submodule-attrsof-declaration": [
+    "index.html#ex-submodule-attrsof-declaration"
+  ],
+  "ex-submodule-attrsof-definition": [
+    "index.html#ex-submodule-attrsof-definition"
+  ],
+  "sec-option-types-extending": [
+    "index.html#sec-option-types-extending"
+  ],
+  "ex-extending-type-check-1": [
+    "index.html#ex-extending-type-check-1"
+  ],
+  "ex-extending-type-check-2": [
+    "index.html#ex-extending-type-check-2"
+  ],
+  "sec-option-types-custom": [
+    "index.html#sec-option-types-custom"
+  ],
+  "sec-option-definitions": [
+    "index.html#sec-option-definitions"
+  ],
+  "sec-option-definitions-delaying-conditionals": [
+    "index.html#sec-option-definitions-delaying-conditionals"
+  ],
+  "sec-option-definitions-setting-priorities": [
+    "index.html#sec-option-definitions-setting-priorities"
+  ],
+  "sec-option-definitions-ordering": [
+    "index.html#sec-option-definitions-ordering"
+  ],
+  "sec-option-definitions-merging": [
+    "index.html#sec-option-definitions-merging"
+  ],
+  "sec-option-definitions-definitions": [
+    "index.html#sec-option-definitions-definitions"
+  ],
+  "sec-assertions": [
+    "index.html#sec-assertions"
+  ],
+  "sec-assertions-warnings": [
+    "index.html#sec-assertions-warnings"
+  ],
+  "sec-assertions-assetions": [
+    "index.html#sec-assertions-assetions"
+  ],
+  "sec-meta-attributes": [
+    "index.html#sec-meta-attributes"
+  ],
+  "sec-importing-modules": [
+    "index.html#sec-importing-modules"
+  ],
+  "sec-replace-modules": [
+    "index.html#sec-replace-modules"
+  ],
+  "sec-freeform-modules": [
+    "index.html#sec-freeform-modules"
+  ],
+  "ex-freeform-module": [
+    "index.html#ex-freeform-module"
+  ],
+  "sec-settings-options": [
+    "index.html#sec-settings-options"
+  ],
+  "sec-settings-nix-representable": [
+    "index.html#sec-settings-nix-representable"
+  ],
+  "pkgs-formats-php": [
+    "index.html#pkgs-formats-php"
+  ],
+  "pkgs-formats-result": [
+    "index.html#pkgs-formats-result"
+  ],
+  "ex-settings-nix-representable": [
+    "index.html#ex-settings-nix-representable"
+  ],
+  "sec-settings-attrs-options": [
+    "index.html#sec-settings-attrs-options"
+  ],
+  "ex-settings-typed-attrs": [
+    "index.html#ex-settings-typed-attrs"
+  ],
+  "sec-building-parts": [
+    "index.html#sec-building-parts"
+  ],
+  "sec-bootspec": [
+    "index.html#sec-bootspec"
+  ],
+  "sec-bootspec-schema": [
+    "index.html#sec-bootspec-schema"
+  ],
+  "sec-bootspec-extensions": [
+    "index.html#sec-bootspec-extensions"
+  ],
+  "sec-bootspec-external-bootloaders": [
+    "index.html#sec-bootspec-external-bootloaders"
+  ],
+  "sec-switching-systems": [
+    "index.html#sec-switching-systems"
+  ],
+  "sec-unit-handling": [
+    "index.html#sec-unit-handling"
+  ],
+  "sec-sysinit-reactivation": [
+    "index.html#sec-sysinit-reactivation"
+  ],
+  "sec-activation-script": [
+    "index.html#sec-activation-script"
+  ],
+  "sec-activation-script-nixos-snippets": [
+    "index.html#sec-activation-script-nixos-snippets"
+  ],
+  "sec-non-switchable-system": [
+    "index.html#sec-non-switchable-system"
+  ],
+  "sec-etc-overlay": [
+    "index.html#sec-etc-overlay"
+  ],
+  "sec-writing-documentation": [
+    "index.html#sec-writing-documentation"
+  ],
+  "sec-writing-docs-building-the-manual": [
+    "index.html#sec-writing-docs-building-the-manual"
+  ],
+  "sec-nixos-tests": [
+    "index.html#sec-nixos-tests"
+  ],
+  "sec-writing-nixos-tests": [
+    "index.html#sec-writing-nixos-tests"
+  ],
+  "sec-calling-nixos-tests": [
+    "index.html#sec-calling-nixos-tests"
+  ],
+  "sec-call-nixos-test-in-nixos": [
+    "index.html#sec-call-nixos-test-in-nixos"
+  ],
+  "sec-call-nixos-test-outside-nixos": [
+    "index.html#sec-call-nixos-test-outside-nixos"
+  ],
+  "sec-nixos-test-nodes": [
+    "index.html#sec-nixos-test-nodes"
+  ],
+  "ssec-machine-objects": [
+    "index.html#ssec-machine-objects"
+  ],
+  "ssec-failing-tests-early": [
+    "index.html#ssec-failing-tests-early"
+  ],
+  "ssec-python-packages-in-test-script": [
+    "index.html#ssec-python-packages-in-test-script"
+  ],
+  "sec-test-options-reference": [
+    "index.html#sec-test-options-reference"
+  ],
+  "test-opt-sshBackdoor.enable": [
+    "index.html#test-opt-sshBackdoor.enable"
+  ],
+  "test-opt-sshBackdoor.vsockOffset": [
+    "index.html#test-opt-sshBackdoor.vsockOffset"
+  ],
+  "test-opt-enableDebugHook": [
+    "index.html#test-opt-enableDebugHook"
+  ],
+  "test-opt-defaults": [
+    "index.html#test-opt-defaults"
+  ],
+  "test-opt-driver": [
+    "index.html#test-opt-driver"
+  ],
+  "test-opt-enableOCR": [
+    "index.html#test-opt-enableOCR"
+  ],
+  "test-opt-extraBaseModules": [
+    "index.html#test-opt-extraBaseModules"
+  ],
+  "test-opt-extraDriverArgs": [
+    "index.html#test-opt-extraDriverArgs"
+  ],
+  "test-opt-extraPythonPackages": [
+    "index.html#test-opt-extraPythonPackages"
+  ],
+  "test-opt-globalTimeout": [
+    "index.html#test-opt-globalTimeout"
+  ],
+  "test-opt-hostPkgs": [
+    "index.html#test-opt-hostPkgs"
+  ],
+  "test-opt-interactive": [
+    "index.html#test-opt-interactive"
+  ],
+  "test-opt-meta": [
+    "index.html#test-opt-meta"
+  ],
+  "test-opt-meta.broken": [
+    "index.html#test-opt-meta.broken"
+  ],
+  "test-opt-meta.maintainers": [
+    "index.html#test-opt-meta.maintainers"
+  ],
+  "test-opt-meta.platforms": [
+    "index.html#test-opt-meta.platforms"
+  ],
+  "test-opt-meta.hydraPlatforms": [
+    "index.html#test-opt-meta.hydraPlatforms"
+  ],
+  "test-opt-meta.timeout": [
+    "index.html#test-opt-meta.timeout"
+  ],
+  "test-opt-name": [
+    "index.html#test-opt-name"
+  ],
+  "test-opt-node.pkgs": [
+    "index.html#test-opt-node.pkgs"
+  ],
+  "test-opt-node.pkgsReadOnly": [
+    "index.html#test-opt-node.pkgsReadOnly"
+  ],
+  "test-opt-node.specialArgs": [
+    "index.html#test-opt-node.specialArgs"
+  ],
+  "test-opt-nodes": [
+    "index.html#test-opt-nodes"
+  ],
+  "test-opt-passthru": [
+    "index.html#test-opt-passthru"
+  ],
+  "test-opt-qemu.package": [
+    "index.html#test-opt-qemu.package"
+  ],
+  "test-opt-skipLint": [
+    "index.html#test-opt-skipLint"
+  ],
+  "test-opt-skipTypeCheck": [
+    "index.html#test-opt-skipTypeCheck"
+  ],
+  "test-opt-test": [
+    "index.html#test-opt-test"
+  ],
+  "test-opt-testScript": [
+    "index.html#test-opt-testScript"
+  ],
+  "sec-running-nixos-tests": [
+    "index.html#sec-running-nixos-tests"
+  ],
+  "sec-running-nixos-tests-requirements": [
+    "index.html#sec-running-nixos-tests-requirements"
+  ],
+  "sec-running-nixos-tests-interactively": [
+    "index.html#sec-running-nixos-tests-interactively"
+  ],
+  "sec-nixos-test-shell-access": [
+    "index.html#sec-nixos-test-shell-access"
+  ],
+  "sec-nixos-test-ssh-access": [
+    "index.html#sec-nixos-test-ssh-access"
+  ],
+  "sec-nixos-test-port-forwarding": [
+    "index.html#sec-nixos-test-port-forwarding"
+  ],
+  "sec-nixos-test-reuse-vm-state": [
+    "index.html#sec-nixos-test-reuse-vm-state"
+  ],
+  "sec-nixos-test-interactive-configuration": [
+    "index.html#sec-nixos-test-interactive-configuration"
+  ],
+  "sec-linking-nixos-tests-to-packages": [
+    "index.html#sec-linking-nixos-tests-to-packages"
+  ],
+  "sec-nixos-test-testing-hardware-features": [
+    "index.html#sec-nixos-test-testing-hardware-features"
+  ],
+  "sec-test-sandbox-breakpoint": [
+    "index.html#sec-test-sandbox-breakpoint"
+  ],
+  "chap-developing-the-test-driver": [
+    "index.html#chap-developing-the-test-driver"
+  ],
+  "sec-test-the-test-framework": [
+    "index.html#sec-test-the-test-framework"
+  ],
+  "ch-testing-installer": [
+    "index.html#ch-testing-installer"
+  ],
+  "chap-contributing": [
+    "index.html#chap-contributing"
+  ],
+  "sec-contributing-redirects": [
+    "index.html#sec-contributing-redirects"
+  ],
+  "sec-contributing-options": [
+    "index.html#sec-contributing-options"
+  ],
+  "sec-contributing-nixos-tools": [
+    "index.html#sec-contributing-nixos-tools"
+  ],
+  "ssec-contributing-nixos-tools-cli-and-args": [
+    "index.html#ssec-contributing-nixos-tools-cli-and-args"
+  ],
+  "ssec-contributing-nixos-tools-options-and-environment": [
+    "index.html#ssec-contributing-nixos-tools-options-and-environment"
+  ],
+  "ssec-contributing-nixos-tools-code-examples": [
+    "index.html#ssec-contributing-nixos-tools-code-examples"
+  ],
+  "ch-options": [
+    "options.html#ch-options"
+  ],
+  "ch-release-notes": [
+    "release-notes.html#ch-release-notes"
+  ],
+  "sec-release-25.11": [
+    "release-notes.html#sec-release-25.11"
+  ],
+  "sec-release-25.11-highlights": [
+    "release-notes.html#sec-release-25.11-highlights"
+  ],
+  "sec-release-25.11-new-modules": [
+    "release-notes.html#sec-release-25.11-new-modules"
+  ],
+  "sec-release-25.11-incompatibilities": [
+    "release-notes.html#sec-release-25.11-incompatibilities"
+  ],
+  "sec-release-25.11-incompatibilities-sourcehut-removed": [
+    "release-notes.html#sec-release-25.11-incompatibilities-sourcehut-removed",
+    "index.html#module-services-sourcehut",
+    "index.html#module-services-sourcehut-basic-usage",
+    "index.html#module-services-sourcehut-configuration",
+    "index.html#module-services-sourcehut-httpd"
+  ],
+  "sec-release-25.11-notable-changes": [
+    "release-notes.html#sec-release-25.11-notable-changes"
+  ],
+  "sec-release-25.05": [
+    "release-notes.html#sec-release-25.05"
+  ],
+  "sec-release-25.05-highlights": [
+    "release-notes.html#sec-release-25.05-highlights"
+  ],
+  "sec-release-25.05-new-modules": [
+    "release-notes.html#sec-release-25.05-new-modules"
+  ],
+  "sec-release-25.05-incompatibilities": [
+    "release-notes.html#sec-release-25.05-incompatibilities"
+  ],
+  "sec-release-25.05-notable-changes": [
+    "release-notes.html#sec-release-25.05-notable-changes"
+  ],
+  "sec-release-25.05-wiki": [
+    "release-notes.html#sec-release-25.05-wiki"
+  ],
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities",
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
+  ],
+  "sec-release-24.11": [
+    "release-notes.html#sec-release-24.11"
+  ],
+  "sec-release-24.11-highlights": [
+    "release-notes.html#sec-release-24.11-highlights"
+  ],
+  "sec-release-24.11-new-modules": [
+    "release-notes.html#sec-release-24.11-new-modules"
+  ],
+  "sec-release-24.11-incompatibilities": [
+    "release-notes.html#sec-release-24.11-incompatibilities"
+  ],
+  "sec-release-24.11-notable-changes": [
+    "release-notes.html#sec-release-24.11-notable-changes"
+  ],
+  "sec-release-24.11-migration": [
+    "release-notes.html#sec-release-24.11-migration"
+  ],
+  "sec-release-24.11-migration-sound": [
+    "release-notes.html#sec-release-24.11-migration-sound"
+  ],
+  "sec-release-24.11-migration-dto-compatible": [
+    "release-notes.html#sec-release-24.11-migration-dto-compatible"
+  ],
+  "sec-release-24.11-wiki": [
+    "release-notes.html#sec-release-24.11-wiki"
+  ],
+  "sec-release-24.11-lib": [
+    "release-notes.html#sec-release-24.11-lib"
+  ],
+  "sec-release-24.11-lib-breaking": [
+    "release-notes.html#sec-release-24.11-lib-breaking"
+  ],
+  "sec-release-24.11-lib-additions-improvements": [
+    "release-notes.html#sec-release-24.11-lib-additions-improvements"
+  ],
+  "sec-release-24.11-lib-deprecations": [
+    "release-notes.html#sec-release-24.11-lib-deprecations"
+  ],
+  "sec-release-24.05": [
+    "release-notes.html#sec-release-24.05"
+  ],
+  "sec-release-24.05-highlights": [
+    "release-notes.html#sec-release-24.05-highlights"
+  ],
+  "sec-release-24.05-new-services": [
+    "release-notes.html#sec-release-24.05-new-services"
+  ],
+  "sec-release-24.05-incompatibilities": [
+    "release-notes.html#sec-release-24.05-incompatibilities"
+  ],
+  "sec-release-24.05-notable-changes": [
+    "release-notes.html#sec-release-24.05-notable-changes"
+  ],
+  "sec-release-24.05-nixpkgs-lib": [
+    "release-notes.html#sec-release-24.05-nixpkgs-lib"
+  ],
+  "sec-release-24.05-lib-additions-improvements": [
+    "release-notes.html#sec-release-24.05-lib-additions-improvements"
+  ],
+  "sec-release-24.05-lib-deprecations": [
+    "release-notes.html#sec-release-24.05-lib-deprecations"
+  ],
+  "sec-release-24.05-lib-internal": [
+    "release-notes.html#sec-release-24.05-lib-internal"
+  ],
+  "sec-release-23.11": [
+    "release-notes.html#sec-release-23.11"
+  ],
+  "sec-release-23.11-toc": [
+    "release-notes.html#sec-release-23.11-toc"
+  ],
+  "sec-release-23.11-nixos": [
+    "release-notes.html#sec-release-23.11-nixos"
+  ],
+  "sec-release-23.11-nixos-breaking-changes": [
+    "release-notes.html#sec-release-23.11-nixos-breaking-changes"
+  ],
+  "sec-release-23.11-nixos-new-services": [
+    "release-notes.html#sec-release-23.11-nixos-new-services"
+  ],
+  "sec-release-23.11-nixos-notable-changes": [
+    "release-notes.html#sec-release-23.11-nixos-notable-changes"
+  ],
+  "sec-release-23.11-nixpkgs-lib": [
+    "release-notes.html#sec-release-23.11-nixpkgs-lib"
+  ],
+  "sec-release-23.11-lib-breaking": [
+    "release-notes.html#sec-release-23.11-lib-breaking"
+  ],
+  "sec-release-23.11-lib-additions-improvements": [
+    "release-notes.html#sec-release-23.11-lib-additions-improvements"
+  ],
+  "sec-release-23.11-lib-deprecations": [
+    "release-notes.html#sec-release-23.11-lib-deprecations"
+  ],
+  "sec-release-23.05": [
+    "release-notes.html#sec-release-23.05"
+  ],
+  "sec-release-23.05-highlights": [
+    "release-notes.html#sec-release-23.05-highlights"
+  ],
+  "sec-release-23.05-new-services": [
+    "release-notes.html#sec-release-23.05-new-services"
+  ],
+  "sec-release-23.05-incompatibilities": [
+    "release-notes.html#sec-release-23.05-incompatibilities"
+  ],
+  "sec-release-23.05-notable-changes": [
+    "release-notes.html#sec-release-23.05-notable-changes"
+  ],
+  "sec-release-23.05-nixpkgs-internals": [
+    "release-notes.html#sec-release-23.05-nixpkgs-internals"
+  ],
+  "sec-release-23.05-migration": [
+    "release-notes.html#sec-release-23.05-migration"
+  ],
+  "sec-release-23.05-migration-pipewire": [
+    "release-notes.html#sec-release-23.05-migration-pipewire"
+  ],
+  "sec-release-23.05-migration-pipewire-why": [
+    "release-notes.html#sec-release-23.05-migration-pipewire-why"
+  ],
+  "sec-release-23.05-migration-pipewire-how": [
+    "release-notes.html#sec-release-23.05-migration-pipewire-how"
+  ],
+  "sec-release-23.05-migration-pipewire-simple": [
+    "release-notes.html#sec-release-23.05-migration-pipewire-simple"
+  ],
+  "sec-release-23.05-migration-pipewire-removing-modules": [
+    "release-notes.html#sec-release-23.05-migration-pipewire-removing-modules"
+  ],
+  "sec-release-23.05-migration-pipewire-modifying-modules": [
+    "release-notes.html#sec-release-23.05-migration-pipewire-modifying-modules"
+  ],
+  "sec-release-23.05-migration-pipewire-nuclear": [
+    "release-notes.html#sec-release-23.05-migration-pipewire-nuclear"
+  ],
+  "sec-release-22.11": [
+    "release-notes.html#sec-release-22.11"
+  ],
+  "sec-release-22.11-highlights": [
+    "release-notes.html#sec-release-22.11-highlights"
+  ],
+  "sec-release-22.11-internal": [
+    "release-notes.html#sec-release-22.11-internal"
+  ],
+  "sec-release-22.11-version-updates": [
+    "release-notes.html#sec-release-22.11-version-updates"
+  ],
+  "sec-release-22.11-incompatibilities": [
+    "release-notes.html#sec-release-22.11-incompatibilities"
+  ],
+  "sec-release-22.11-notable-changes": [
+    "release-notes.html#sec-release-22.11-notable-changes"
+  ],
+  "sec-release-22.11-new-services": [
+    "release-notes.html#sec-release-22.11-new-services"
+  ],
+  "sec-release-22.05": [
+    "release-notes.html#sec-release-22.05"
+  ],
+  "sec-release-22.05-highlights": [
+    "release-notes.html#sec-release-22.05-highlights"
+  ],
+  "sec-release-22.05-new-services": [
+    "release-notes.html#sec-release-22.05-new-services"
+  ],
+  "sec-release-22.05-incompatibilities": [
+    "release-notes.html#sec-release-22.05-incompatibilities"
+  ],
+  "sec-release-22.05-notable-changes": [
+    "release-notes.html#sec-release-22.05-notable-changes"
+  ],
+  "sec-release-21.11": [
+    "release-notes.html#sec-release-21.11"
+  ],
+  "sec-release-21.11-highlights": [
+    "release-notes.html#sec-release-21.11-highlights"
+  ],
+  "sec-release-21.11-new-services": [
+    "release-notes.html#sec-release-21.11-new-services"
+  ],
+  "sec-release-21.11-incompatibilities": [
+    "release-notes.html#sec-release-21.11-incompatibilities"
+  ],
+  "sec-release-21.11-notable-changes": [
+    "release-notes.html#sec-release-21.11-notable-changes"
+  ],
+  "sec-release-21.05": [
+    "release-notes.html#sec-release-21.05"
+  ],
+  "sec-release-21.05-highlights": [
+    "release-notes.html#sec-release-21.05-highlights"
+  ],
+  "sec-release-21.05-new-services": [
+    "release-notes.html#sec-release-21.05-new-services"
+  ],
+  "sec-release-21.05-incompatibilities": [
+    "release-notes.html#sec-release-21.05-incompatibilities"
+  ],
+  "sec-release-21.05-notable-changes": [
+    "release-notes.html#sec-release-21.05-notable-changes"
+  ],
+  "sec-release-20.09": [
+    "release-notes.html#sec-release-20.09"
+  ],
+  "sec-release-20.09-highlights": [
+    "release-notes.html#sec-release-20.09-highlights"
+  ],
+  "sec-release-20.09-new-services": [
+    "release-notes.html#sec-release-20.09-new-services"
+  ],
+  "sec-release-20.09-incompatibilities": [
+    "release-notes.html#sec-release-20.09-incompatibilities"
+  ],
+  "sec-release-20.09-notable-changes": [
+    "release-notes.html#sec-release-20.09-notable-changes"
+  ],
+  "sec-release-20.09-contributions": [
+    "release-notes.html#sec-release-20.09-contributions"
+  ],
+  "sec-release-20.03": [
+    "release-notes.html#sec-release-20.03"
+  ],
+  "sec-release-20.03-highlights": [
+    "release-notes.html#sec-release-20.03-highlights"
+  ],
+  "sec-release-20.03-new-services": [
+    "release-notes.html#sec-release-20.03-new-services"
+  ],
+  "sec-release-20.03-incompatibilities": [
+    "release-notes.html#sec-release-20.03-incompatibilities"
+  ],
+  "sec-release-20.03-notable-changes": [
+    "release-notes.html#sec-release-20.03-notable-changes"
+  ],
+  "sec-release-19.09": [
+    "release-notes.html#sec-release-19.09"
+  ],
+  "sec-release-19.09-highlights": [
+    "release-notes.html#sec-release-19.09-highlights"
+  ],
+  "sec-release-19.09-new-services": [
+    "release-notes.html#sec-release-19.09-new-services"
+  ],
+  "sec-release-19.09-incompatibilities": [
+    "release-notes.html#sec-release-19.09-incompatibilities"
+  ],
+  "sec-release-19.09-notable-changes": [
+    "release-notes.html#sec-release-19.09-notable-changes"
+  ],
+  "sec-release-19.03": [
+    "release-notes.html#sec-release-19.03"
+  ],
+  "sec-release-19.03-highlights": [
+    "release-notes.html#sec-release-19.03-highlights"
+  ],
+  "sec-release-19.03-new-services": [
+    "release-notes.html#sec-release-19.03-new-services"
+  ],
+  "sec-release-19.03-incompatibilities": [
+    "release-notes.html#sec-release-19.03-incompatibilities"
+  ],
+  "sec-release-19.03-notable-changes": [
+    "release-notes.html#sec-release-19.03-notable-changes"
+  ],
+  "sec-release-18.09": [
+    "release-notes.html#sec-release-18.09"
+  ],
+  "sec-release-18.09-highlights": [
+    "release-notes.html#sec-release-18.09-highlights"
+  ],
+  "sec-release-18.09-new-services": [
+    "release-notes.html#sec-release-18.09-new-services"
+  ],
+  "sec-release-18.09-incompatibilities": [
+    "release-notes.html#sec-release-18.09-incompatibilities"
+  ],
+  "sec-release-18.09-notable-changes": [
+    "release-notes.html#sec-release-18.09-notable-changes"
+  ],
+  "sec-release-18.03": [
+    "release-notes.html#sec-release-18.03"
+  ],
+  "sec-release-18.03-highlights": [
+    "release-notes.html#sec-release-18.03-highlights"
+  ],
+  "sec-release-18.03-new-services": [
+    "release-notes.html#sec-release-18.03-new-services"
+  ],
+  "sec-release-18.03-incompatibilities": [
+    "release-notes.html#sec-release-18.03-incompatibilities"
+  ],
+  "sec-release-18.03-notable-changes": [
+    "release-notes.html#sec-release-18.03-notable-changes"
+  ],
+  "sec-release-17.09": [
+    "release-notes.html#sec-release-17.09"
+  ],
+  "sec-release-17.09-highlights": [
+    "release-notes.html#sec-release-17.09-highlights"
+  ],
+  "sec-release-17.09-new-services": [
+    "release-notes.html#sec-release-17.09-new-services"
+  ],
+  "sec-release-17.09-incompatibilities": [
+    "release-notes.html#sec-release-17.09-incompatibilities"
+  ],
+  "sec-release-17.09-notable-changes": [
+    "release-notes.html#sec-release-17.09-notable-changes"
+  ],
+  "sec-release-17.03": [
+    "release-notes.html#sec-release-17.03"
+  ],
+  "sec-release-17.03-highlights": [
+    "release-notes.html#sec-release-17.03-highlights"
+  ],
+  "sec-release-17.03-new-services": [
+    "release-notes.html#sec-release-17.03-new-services"
+  ],
+  "sec-release-17.03-incompatibilities": [
+    "release-notes.html#sec-release-17.03-incompatibilities"
+  ],
+  "sec-release-17.03-notable-changes": [
+    "release-notes.html#sec-release-17.03-notable-changes"
+  ],
+  "sec-release-16.09": [
+    "release-notes.html#sec-release-16.09"
+  ],
+  "sec-release-16.03": [
+    "release-notes.html#sec-release-16.03"
+  ],
+  "sec-release-15.09": [
+    "release-notes.html#sec-release-15.09"
+  ],
+  "sec-release-14.12": [
+    "release-notes.html#sec-release-14.12"
+  ],
+  "sec-release-14.04": [
+    "release-notes.html#sec-release-14.04"
+  ],
+  "sec-release-13.10": [
+    "release-notes.html#sec-release-13.10"
+  ]
+}

@@ -1,0 +1,57 @@
+diff --git a/FreeFileSync/Source/ui/gui_generated.cpp b/FreeFileSync/Source/ui/gui_generated.cpp
+index a40eea3..23ec896 100644
+--- a/FreeFileSync/Source/ui/gui_generated.cpp
++++ b/FreeFileSync/Source/ui/gui_generated.cpp
+@@ -5573,8 +5573,6 @@ AboutDlgGenerated::AboutDlgGenerated( wxWindow* parent, wxWindowID id, const wxS
+     wxBoxSizer* bSizer183;
+     bSizer183 = new wxBoxSizer( wxHORIZONTAL );
+ 
+-    m_bitmapAnimalSmall = new wxStaticBitmap( m_panelDonate, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+-    bSizer183->Add( m_bitmapAnimalSmall, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+ 
+     wxPanel* m_panel39;
+     m_panel39 = new wxPanel( m_panelDonate, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+@@ -5587,13 +5585,11 @@ AboutDlgGenerated::AboutDlgGenerated( wxWindow* parent, wxWindowID id, const wxS
+     m_staticTextDonate->Wrap( -1 );
+     m_staticTextDonate->SetForegroundColour( wxColour( 0, 0, 0 ) );
+ 
+-    bSizer184->Add( m_staticTextDonate, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+ 
+ 
+     m_panel39->SetSizer( bSizer184 );
+     m_panel39->Layout();
+     bSizer184->Fit( m_panel39 );
+-    bSizer183->Add( m_panel39, 1, wxTOP|wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
+ 
+ 
+     m_panelDonate->SetSizer( bSizer183 );
+diff --git a/FreeFileSync/Source/ui/small_dlgs.cpp b/FreeFileSync/Source/ui/small_dlgs.cpp
+index 933fe81..734201f 100644
+--- a/FreeFileSync/Source/ui/small_dlgs.cpp
++++ b/FreeFileSync/Source/ui/small_dlgs.cpp
+@@ -137,9 +137,6 @@ AboutDlg::AboutDlg(wxWindow* parent) : AboutDlgGenerated(parent)
+ 
+     wxImage::AddHandler(new wxJPEGHandler /*ownership passed*/); //activate support for .jpg files
+ 
+-    wxImage animalImg(utfTo<wxString>(appendPath(getResourceDirPath(), Zstr("Animal.dat"))), wxBITMAP_TYPE_JPEG);
+-    convertToVanillaImage(animalImg);
+-    assert(animalImg.IsOk());
+ 
+     //--------------------------------------------------------------------------
+     //have animal + text match *final* dialog width
+@@ -150,13 +147,11 @@ AboutDlg::AboutDlg(wxWindow* parent) : AboutDlgGenerated(parent)
+ #endif
+ 
+     {
+-        const int imageWidth = (m_panelDonate->GetSize().GetWidth() - 5 - 5 - 5 /* grey border*/) / 2;
+-        const int textWidth  =  m_panelDonate->GetSize().GetWidth() - 5 - 5 - 5 - imageWidth;
++        const int textWidth  =  m_panelDonate->GetSize().GetWidth();
+ 
+-        setImage(*m_bitmapAnimalSmall, shrinkImage(animalImg, wxsizeToScreen(imageWidth), -1 /*maxHeight*/));
+ 
+         m_staticTextDonate->Show();
+-        m_staticTextDonate->Wrap(textWidth - 10 /*left gap*/); //wrap *after* changing font size
++        m_staticTextDonate->Wrap(textWidth - 20); //wrap *after* changing font size
+     }
+     //--------------------------------------------------------------------------
+ 

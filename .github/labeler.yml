@@ -1,0 +1,604 @@
+# This file is used by .github/workflows/labels.yml
+# This version uses `sync-labels: true`, meaning that a non-match will remove the label
+
+# keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
+
+"4.workflow: backport":
+  - any:
+      - base-branch:
+          - '^release-'
+          - '^staging-\d'
+          - '^staging-next-\d'
+
+# NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
+"6.topic: agda":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/agda.section.md
+              - nixos/tests/agda.nix
+              - pkgs/build-support/agda/**/*
+              - pkgs/development/libraries/agda/**/*
+              - pkgs/top-level/agda-packages.nix
+
+"6.topic: cinnamon":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/x11/desktop-managers/cinnamon.nix
+              - nixos/tests/cinnamon.nix
+              - nixos/tests/cinnamon-wayland.nix
+              - pkgs/by-name/ci/cinnamon/**/*
+              - pkgs/by-name/ci/cinnamon-*/**/*
+              - pkgs/by-name/cj/cjs/**/*
+              - pkgs/by-name/mu/muffin/**/*
+              - pkgs/by-name/ne/nemo/**/*
+              - pkgs/by-name/ne/nemo-*/**/*
+
+"6.topic: continuous integration":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - .github/**/*
+              - ci/**/*.*
+
+"6.topic: coq":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/applications/science/logic/coq/**/*
+              - pkgs/development/coq-modules/**/*
+              - pkgs/top-level/coq-packages.nix
+
+"6.topic: COSMIC":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/desktop-managers/cosmic.nix
+              - nixos/modules/services/display-managers/cosmic-greeter.nix
+              - nixos/tests/cosmic.nix
+              - pkgs/by-name/co/cosmic-*/**/*
+              - pkgs/by-name/li/libcosmicAppHook/*
+              - pkgs/by-name/po/pop-launcher/*
+              - pkgs/by-name/xd/xdg-desktop-portal-cosmic/*
+
+"6.topic: crystal":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/development/compilers/crystal/**/*
+
+"6.topic: cuda":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/development/cuda-modules/**/*
+              - pkgs/top-level/cuda-packages.nix
+
+"6.topic: deepin":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/desktops/deepin/**/*
+              - pkgs/desktops/deepin/**/*
+
+"6.topic: docker tools":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/applications/virtualization/docker/**/*
+
+"6.topic: dotnet":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/dotnet.section.md
+              - maintainers/scripts/update-dotnet-lockfiles.nix
+              - pkgs/build-support/dotnet/**/*
+              - pkgs/development/compilers/dotnet/**/*
+              - pkgs/test/dotnet/**/*
+              - pkgs/top-level/dotnet-packages.nix
+
+"6.topic: emacs":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/editors/emacs.nix
+              - nixos/modules/services/editors/emacs.xml
+              - nixos/tests/emacs-daemon.nix
+              - pkgs/applications/editors/emacs/build-support/**/*
+              - pkgs/applications/editors/emacs/elisp-packages/**/*
+              - pkgs/applications/editors/emacs/**/*
+              - pkgs/top-level/emacs-packages.nix
+
+"6.topic: Enlightenment DE":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/x11/desktop-managers/enlightenment.nix
+              - pkgs/desktops/enlightenment/**/*
+              - pkgs/development/python-modules/python-efl/*
+
+"6.topic: erlang":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/beam.section.md
+              - pkgs/development/beam-modules/**/*
+              - pkgs/development/interpreters/elixir/**/*
+              - pkgs/development/interpreters/erlang/**/*
+              - pkgs/development/tools/build-managers/rebar/**/*
+              - pkgs/development/tools/build-managers/rebar3/**/*
+              - pkgs/development/tools/erlang/**/*
+              - pkgs/top-level/beam-packages.nix
+
+"6.topic: fetch":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/build-support/fetch*/**/*
+
+"6.topic: flakes":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - '**/flake.nix'
+              - lib/systems/flake-systems.nix
+              - nixos/modules/config/nix-flakes.nix
+
+"6.topic: flutter":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/build-support/flutter/*.nix
+              - pkgs/development/compilers/flutter/**/*.nix
+
+"6.topic: games":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/games/**/*
+
+"6.topic: GNOME":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/gnome.section.md
+              - nixos/modules/services/desktops/gnome/**/*
+              - nixos/modules/services/desktop-managers/gnome.nix
+              - nixos/tests/gnome-xorg.nix
+              - nixos/tests/gnome.nix
+              - pkgs/desktops/gnome/**/*
+
+"6.topic: golang":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/go.section.md
+              - pkgs/build-support/go/**/*
+              - pkgs/development/compilers/go/**/*
+
+"6.topic: hardware":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/hardware/**/*
+
+"6.topic: haskell":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/haskell.section.md
+              - maintainers/scripts/haskell/**/*
+              - pkgs/development/compilers/ghc/**/*
+              - pkgs/development/haskell-modules/**/*
+              - pkgs/development/tools/haskell/**/*
+              - pkgs/test/haskell/**/*
+              - pkgs/top-level/haskell-packages.nix
+              - pkgs/top-level/release-haskell.nix
+
+"6.topic: java":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              # Distributions
+              - pkgs/development/compilers/adoptopenjdk-icedtea-web/**/*
+              - pkgs/development/compilers/corretto/**/*
+              - pkgs/development/compilers/graalvm/**/*
+              - pkgs/development/compilers/openjdk/**/*
+              - pkgs/by-name/op/openjfx/**/*
+              - pkgs/development/compilers/semeru-bin/**/*
+              - pkgs/development/compilers/temurin-bin/**/*
+              - pkgs/development/compilers/zulu/**/*
+              # Documentation
+              - doc/languages-frameworks/java.section.md
+              # Gradle
+              - doc/languages-frameworks/gradle.section.md
+              - pkgs/development/tools/build-managers/gradle/**/*
+              - pkgs/by-name/gr/gradle-completion/**/*
+              # Maven
+              - pkgs/by-name/ma/maven/**/*
+              - doc/languages-frameworks/maven.section.md
+              # Ant
+              - pkgs/by-name/an/ant/**/*
+              # javaPackages attrset
+              - pkgs/development/java-modules/**/*
+              - pkgs/top-level/java-packages.nix
+              # Maintainer tooling
+              - pkgs/by-name/ni/nixpkgs-openjdk-updater/**/*
+              # Misc
+              - nixos/modules/programs/java.nix
+
+"6.topic: jitsi":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/networking/jitsi-videobridge.nix
+              - nixos/modules/services/web-apps/jitsi-meet.nix
+              - pkgs/servers/web-apps/jitsi-meet/**/*
+              - pkgs/servers/jitsi-videobridge/**/*
+              - pkgs/applications/networking/instant-messengers/jitsi/**/*
+
+"6.topic: julia":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/julia.section.md
+              - pkgs/development/compilers/julia/**/*
+              - pkgs/development/julia-modules/**/*
+
+"6.topic: jupyter":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/development/python-modules/jupyter*/**/*
+              - pkgs/development/python-modules/mkdocs-jupyter/*
+              - nixos/modules/services/development/jupyter/**/*
+              - pkgs/applications/editors/jupyter-kernels/**/*
+              - pkgs/applications/editors/jupyter/**/*
+
+"6.topic: k3s":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/cluster/k3s/**/*
+              - nixos/tests/k3s/**/*
+              - pkgs/applications/networking/cluster/k3s/**/*
+
+"6.topic: kernel":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/build-support/kernel/**/*
+              - pkgs/os-specific/linux/kernel/**/*
+
+"6.topic: lib":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - lib/**
+
+"6.topic: llvm/clang":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/development/compilers/llvm/**/*
+
+"6.topic: lua":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/development/tools/misc/luarocks/*
+              - pkgs/development/interpreters/lua-5/**/*
+              - pkgs/development/interpreters/luajit/**/*
+              - pkgs/development/lua-modules/**/*
+              - pkgs/top-level/lua-packages.nix
+
+"6.topic: Lumina DE":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/x11/desktop-managers/lumina.nix
+              - pkgs/desktops/lumina/**/*
+
+"6.topic: LXQt":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/x11/desktop-managers/lxqt.nix
+              - pkgs/desktops/lxqt/**/*
+
+"6.topic: mate":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/x11/desktop-managers/mate.nix
+              - nixos/tests/mate.nix
+              - pkgs/desktops/mate/**/*
+
+"6.topic: module system":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - lib/modules.nix
+              - lib/types.nix
+              - lib/options.nix
+              - lib/tests/modules.sh
+              - lib/tests/modules/**
+
+"6.topic: musl":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/os-specific/linux/musl/**/*
+
+"6.topic: nim":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/nim.section.md
+              - pkgs/build-support/build-nim-package.nix
+              - pkgs/build-support/build-nim-sbom.nix
+              - pkgs/by-name/ni/nim*
+              - pkgs/top-level/nim-overrides.nix
+
+"6.topic: nixos":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/**/*
+              - pkgs/by-name/sw/switch-to-configuration-ng/**/*
+              - pkgs/by-name/ni/nixos-rebuild-ng/**/*
+              - pkgs/os-specific/linux/nixos-rebuild/**/*
+
+"6.topic: nixos-container":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/virtualisation/nixos-containers.nix
+              - pkgs/tools/virtualization/nixos-container/**/*
+
+"6.topic: nodejs":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/javascript.section.md
+              - pkgs/build-support/node/**/*
+              - pkgs/development/node-packages/**/*
+              - pkgs/development/tools/yarn/*
+              - pkgs/development/tools/yarn2nix-moretea/**/*
+              - pkgs/development/tools/pnpm/**/*
+              - pkgs/development/web/nodejs/*
+
+"6.topic: nvidia":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/hardware/video/nvidia.nix
+              - nixos/modules/services/hardware/nvidia-container-toolkit/**/*
+              - nixos/modules/services/hardware/nvidia-optimus.nix
+              - pkgs/os-specific/linux/nvidia-x11/**/*
+
+"6.topic: ocaml":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/ocaml.section.md
+              - pkgs/development/compilers/ocaml/**/*
+              - pkgs/development/compilers/reason/**/*
+              - pkgs/development/ocaml-modules/**/*
+              - pkgs/development/tools/ocaml/**/*
+              - pkgs/top-level/ocaml-packages.nix
+
+"6.topic: pantheon":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/desktops/pantheon/**/*
+              - nixos/modules/services/desktop-managers/pantheon.nix
+              - nixos/modules/services/x11/display-managers/lightdm-greeters/pantheon.nix
+              - nixos/tests/pantheon.nix
+              - pkgs/desktops/pantheon/**/*
+
+"6.topic: php":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/php.section.md
+              - nixos/tests/php/**/*
+              - pkgs/build-support/php/**/*
+              - pkgs/development/interpreters/php/**/*
+              - pkgs/development/php-packages/**/*
+              - pkgs/test/php/default.nix
+              - pkgs/top-level/php-packages.nix
+
+"6.topic: printing":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/services/printing/cupsd.nix
+              - pkgs/misc/cups/**/*
+
+"6.topic: python":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/python.section.md
+              - pkgs/development/interpreters/python/**/*
+              - pkgs/development/python-modules/**/*
+              - pkgs/top-level/python-packages.nix
+
+"6.topic: qt/kde":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/qt.section.md
+              - nixos/modules/services/desktop-managers/plasma6.nix
+              - nixos/tests/plasma6.nix
+              - pkgs/kde/**/*
+
+"6.topic: R":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/applications/science/math/R/**/*
+              - pkgs/development/r-modules/**/*
+
+"6.topic: rocm":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/development/rocm-modules/**/*
+
+"6.topic: ruby":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/ruby.section.md
+              - pkgs/development/interpreters/ruby/**/*
+              - pkgs/development/ruby-modules/**/*
+              - pkgs/top-level/ruby-packages.nix
+
+"6.topic: rust":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/rust.section.md
+              - pkgs/build-support/rust/**/*
+              - pkgs/development/compilers/rust/**/*
+
+"6.topic: stdenv":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/stdenv/**/*
+
+"6.topic: steam":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/games/steam/**/*
+
+"6.topic: systemd":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/os-specific/linux/systemd/**/*
+              - nixos/modules/system/boot/systemd*/**/*
+
+"6.topic: tcl":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/tcl.section.md
+              - pkgs/development/interpreters/tcl/*
+              - pkgs/development/tcl-modules/**/*
+              - pkgs/top-level/tcl-packages.nix
+
+"6.topic: teams":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - maintainers/team-list.nix
+
+"6.topic: testing":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              # NOTE: Let's keep the scope limited to test frameworks that are
+              #       *developed in this repo*;
+              #       - not individual tests
+              #       - not packages for test frameworks
+              - pkgs/build-support/testers/**
+              - nixos/lib/testing/**
+              - nixos/lib/test-driver/**
+              - nixos/tests/nixos-test-driver/**
+              - nixos/lib/testing-python.nix # legacy
+              - nixos/tests/make-test-python.nix # legacy
+              # lib/debug.nix has a test framework (runTests) but it's not the main focus
+
+"6.topic: TeX":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/texlive.section.md
+              - pkgs/test/texlive/**
+              - pkgs/tools/typesetting/tex/**/*
+
+"6.topic: updaters":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/common-updater/**/*
+
+"6.topic: vim":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/languages-frameworks/vim.section.md
+              - pkgs/applications/editors/vim/**/*
+              - pkgs/applications/editors/vim/plugins/**/*
+              - nixos/modules/programs/neovim.nix
+              - pkgs/applications/editors/neovim/**/*
+
+"6.topic: vscode":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/applications/editors/vscode/**/*
+
+"6.topic: windows":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/os-specific/windows/**/*
+
+"6.topic: xen-project":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/virtualisation/xen*
+              - pkgs/by-name/xe/xen/*
+              - pkgs/by-name/qe/qemu_xen/*
+              - pkgs/by-name/xe/xen-guest-agent/*
+              - pkgs/by-name/xt/xtf/*
+              - pkgs/build-support/xen/*
+              - pkgs/development/ocaml-modules/xen*/*
+              - pkgs/development/ocaml-modules/vchan/*
+
+"6.topic: xfce":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/doc/manual/configuration/xfce.xml
+              - nixos/modules/services/x11/desktop-managers/xfce.nix
+              - nixos/tests/xfce.nix
+              - pkgs/desktops/xfce/**/*
+
+"6.topic: zig":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/development/compilers/zig/**/*
+              - doc/hooks/zig.section.md
+
+"8.has: changelog":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/release-notes/**/*
+              - nixos/doc/manual/release-notes/**/*
+
+"8.has: maintainer-list (update)":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - maintainers/maintainer-list.nix
+
+"8.has: module (update)":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - nixos/modules/**/*
+
+# keep-sorted end

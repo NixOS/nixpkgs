@@ -1,0 +1,30 @@
+diff --git a/src/sage_docbuild/builders.py b/src/sage_docbuild/builders.py
+index 91035a01f1c..24f3d0c7c12 100644
+--- a/src/sage_docbuild/builders.py
++++ b/src/sage_docbuild/builders.py
+@@ -130,10 +130,9 @@ def builder_helper(type):
+         logger.debug(build_command)
+ 
+         # Run Sphinx with Sage's special logger
+-        sys.argv = ["sphinx-build"] + build_command.split()
+-        from .sphinxbuild import runsphinx
++        args = "python3 -um sage_docbuild.sphinxbuild -N".split() + build_command.split()
+         try:
+-            runsphinx()
++            subprocess.check_call(args)
+         except Exception:
+             if build_options.ABORT_ON_ERROR:
+                 raise
+diff --git a/src/sage_docbuild/sphinxbuild.py b/src/sage_docbuild/sphinxbuild.py
+index 62b2d3cb112..aa7dc07741b 100644
+--- a/src/sage_docbuild/sphinxbuild.py
++++ b/src/sage_docbuild/sphinxbuild.py
+@@ -331,3 +331,8 @@ def runsphinx():
+ 
+     if not sys.warnoptions:
+         warnings.filters = original_filters[:]
++
++if __name__ == '__main__':
++    import sys
++    sys.argv[0] = "sphinx-build"
++    runsphinx()

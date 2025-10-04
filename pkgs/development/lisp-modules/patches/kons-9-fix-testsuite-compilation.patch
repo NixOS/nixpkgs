@@ -1,0 +1,22 @@
+--- a/testsuite/assertions.lisp
++++ b/testsuite/assertions.lisp
+@@ -13,7 +13,7 @@
+ relation when computing with floating point numbers. Two floating point numbers are
+ essentially equal when they are in a neighbourhood whose size is based
+ on the magnitude orders of these floating point numbers and the inaccuracy."
+-  (:report
++   :report
+    (lambda (stream)
+      (flet ((maybe-report (name float1 float2)
+ 	      (unless (float-is-essentially-equal (p:y point1) (p:y point2) :inaccuracy inaccuracy)
+@@ -29,7 +29,7 @@
+ 	    inaccuracy (confidence::float-comparison-threshold 'single-float max inaccuracy float1 float2)))))
+        (maybe-report "X" (p:x point1) (p:x point2))
+        (maybe-report "Y" (p:y point1) (p:y point2))
+-       (maybe-report "Z" (p:z point1) (p:z point2)))))
++       (maybe-report "Z" (p:z point1) (p:z point2))))
+   (and (float-is-essentially-equal (p:x point1) (p:x point2) :inaccuracy inaccuracy)
+        (float-is-essentially-equal (p:y point1) (p:y point2) :inaccuracy inaccuracy)
+        (float-is-essentially-equal (p:z point1) (p:z point2) :inaccuracy inaccuracy)))
+
+Diff finished.  Sun Oct 20 03:05:54 2024

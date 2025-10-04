@@ -1,0 +1,53 @@
+From b54dd2923448f2ae7402cf2364f40337d6c3cb6d Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 7 Aug 2024 22:47:00 +0200
+Subject: [PATCH] Patch QT_HOST_DATA references
+
+---
+ src/linguist/linguist.pro                           | 2 +-
+ src/qdoc/qdoc.pro                                   | 2 +-
+ src/qtattributionsscanner/qtattributionsscanner.pro | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/linguist/linguist.pro b/src/linguist/linguist.pro
+index 7638c7710..bd8798818 100644
+--- a/src/linguist/linguist.pro
++++ b/src/linguist/linguist.pro
+@@ -47,7 +47,7 @@ contains(CMAKE_BIN_DIR, "^\\.\\./.*") {
+ load(qt_build_paths)
+ 
+ cmake_linguist_config_file.input = $$PWD/Qt5LinguistToolsConfig.cmake.in
+-cmake_linguist_config_version_file.input = $$[QT_HOST_DATA/src]/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
++cmake_linguist_config_version_file.input = @qtbaseDev@/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
+ cmake_linguist_macros_file.input = $$PWD/Qt5LinguistToolsMacros.cmake
+ CMAKE_PACKAGE_VERSION = $$MODULE_VERSION
+ cmake_linguist_config_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsConfig.cmake
+diff --git a/src/qdoc/qdoc.pro b/src/qdoc/qdoc.pro
+index db4b25cf1..19592d50b 100644
+--- a/src/qdoc/qdoc.pro
++++ b/src/qdoc/qdoc.pro
+@@ -151,7 +151,7 @@ load(qt_build_paths)
+ equals(QMAKE_HOST.os, Windows): CMAKE_BIN_SUFFIX = ".exe"
+ 
+ cmake_qdoc_config_file.input = $$PWD/Qt5DocToolsConfig.cmake.in
+-cmake_qdoc_config_version_file.input = $$[QT_HOST_DATA/src]/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
++cmake_qdoc_config_version_file.input = @qtbaseDev@/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
+ CMAKE_PACKAGE_VERSION = $$MODULE_VERSION
+ cmake_qdoc_config_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5DocTools/Qt5DocToolsConfig.cmake
+ cmake_qdoc_config_version_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5DocTools/Qt5DocToolsConfigVersion.cmake
+diff --git a/src/qtattributionsscanner/qtattributionsscanner.pro b/src/qtattributionsscanner/qtattributionsscanner.pro
+index d645a22a9..5d4239f83 100644
+--- a/src/qtattributionsscanner/qtattributionsscanner.pro
++++ b/src/qtattributionsscanner/qtattributionsscanner.pro
+@@ -51,7 +51,7 @@ load(qt_build_paths)
+ equals(QMAKE_HOST.os, Windows): CMAKE_BIN_SUFFIX = ".exe"
+ 
+ cmake_qattributionsscanner_config_file.input = $$PWD/Qt5AttributionsScannerTools.cmake.in
+-cmake_qattributionsscanner_config_version_file.input = $$[QT_HOST_DATA/src]/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
++cmake_qattributionsscanner_config_version_file.input = @qtbaseDev@/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
+ CMAKE_PACKAGE_VERSION = $$MODULE_VERSION
+ cmake_qattributionsscanner_config_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5AttributionsScannerTools/Qt5AttributionsScannerToolsConfig.cmake
+ cmake_qattributionsscanner_config_version_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5AttributionsScannerTools/Qt5AttributionsScannerToolsConfigVersion.cmake
+-- 
+2.44.1
+

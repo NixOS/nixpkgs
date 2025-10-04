@@ -1,0 +1,26 @@
+diff --git a/slixmpp/plugins/xep_0027/gpg.py b/slixmpp/plugins/xep_0027/gpg.py
+index a0b1df4..7cfb3bd 100644
+--- a/slixmpp/plugins/xep_0027/gpg.py
++++ b/slixmpp/plugins/xep_0027/gpg.py
+@@ -41,7 +41,7 @@ class XEP_0027(BasePlugin):
+     dependencies = set()
+     stanza = stanza
+     default_config = {
+-        'gpg_binary': 'gpg',
++        'gpg_binary': '@gnupg@/bin/gpg',
+         'gpg_home': '',
+         'use_agent': True,
+         'keyring': None,
+diff --git a/slixmpp/thirdparty/gnupg.py b/slixmpp/thirdparty/gnupg.py
+index a89289f..46dd9b7 100644
+--- a/slixmpp/thirdparty/gnupg.py
++++ b/slixmpp/thirdparty/gnupg.py
+@@ -468,7 +468,7 @@ class GPG(object):
+     }
+ 
+     "Encapsulate access to the gpg executable"
+-    def __init__(self, gpgbinary='gpg', gnupghome=None, verbose=False,
++    def __init__(self, gpgbinary='@gnupg@/bin/gpg', gnupghome=None, verbose=False,
+                  use_agent=False, keyring=None):
+         """Initialize a GPG process wrapper.  Options are:
+ 

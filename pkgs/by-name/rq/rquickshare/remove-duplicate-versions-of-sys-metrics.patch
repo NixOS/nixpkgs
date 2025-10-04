@@ -1,0 +1,114 @@
+diff --git a/app/legacy/src-tauri/Cargo.lock b/app/legacy/src-tauri/Cargo.lock
+index 14872dc..341fcc8 100644
+--- a/app/legacy/src-tauri/Cargo.lock
++++ b/app/legacy/src-tauri/Cargo.lock
+@@ -4296,7 +4296,7 @@ dependencies = [
+  "rand 0.9.0",
+  "serde",
+  "sha2",
+- "sys_metrics 0.2.7 (git+https://github.com/Martichou/sys_metrics)",
++ "sys_metrics",
+  "tokio",
+  "tokio-util",
+  "tracing-subscriber",
+@@ -4316,7 +4316,7 @@ dependencies = [
+  "rqs_lib",
+  "serde",
+  "serde_json",
+- "sys_metrics 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
++ "sys_metrics",
+  "tauri",
+  "tauri-build",
+  "tauri-plugin-autostart",
+@@ -4920,21 +4920,6 @@ dependencies = [
+  "libc",
+ ]
+ 
+-[[package]]
+-name = "sys_metrics"
+-version = "0.2.7"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c9b266b80f59f86e2e1e0a4938e316e32c3730d94a749f236305152279f77484"
+-dependencies = [
+- "core-foundation-sys",
+- "glob",
+- "io-kit-sys",
+- "lazy_static",
+- "libc",
+- "mach",
+- "serde",
+-]
+-
+ [[package]]
+ name = "sys_metrics"
+ version = "0.2.7"
+diff --git a/app/legacy/src-tauri/Cargo.toml b/app/legacy/src-tauri/Cargo.toml
+index fb735b2..cfd1349 100644
+--- a/app/legacy/src-tauri/Cargo.toml
++++ b/app/legacy/src-tauri/Cargo.toml
+@@ -20,7 +20,7 @@ notify-rust = "4.10"
+ rqs_lib = { path = "../../../core_lib", features = ["experimental"] }
+ serde = { version = "1.0", features = ["derive"] }
+ serde_json = "1.0"
+-sys_metrics = "0.2"
++sys_metrics = { git = "https://github.com/Martichou/sys_metrics" }
+ tauri = { version = "1.8", features = ["api-all", "reqwest-native-tls-vendored", "devtools", "system-tray"] }
+ tauri-plugin-autostart = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+ tauri-plugin-single-instance = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+diff --git a/app/main/src-tauri/Cargo.lock b/app/main/src-tauri/Cargo.lock
+index 5580ef5..4327d4c 100644
+--- a/app/main/src-tauri/Cargo.lock
++++ b/app/main/src-tauri/Cargo.lock
+@@ -4247,7 +4247,7 @@ dependencies = [
+  "rand 0.9.0",
+  "serde",
+  "sha2",
+- "sys_metrics 0.2.7 (git+https://github.com/Martichou/sys_metrics)",
++ "sys_metrics",
+  "tokio",
+  "tokio-util",
+  "tracing-subscriber",
+@@ -4267,7 +4267,7 @@ dependencies = [
+  "rqs_lib",
+  "serde",
+  "serde_json",
+- "sys_metrics 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
++ "sys_metrics",
+  "tauri",
+  "tauri-build",
+  "tauri-plugin-autostart",
+@@ -4932,21 +4932,6 @@ dependencies = [
+  "syn 2.0.95",
+ ]
+ 
+-[[package]]
+-name = "sys_metrics"
+-version = "0.2.7"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c9b266b80f59f86e2e1e0a4938e316e32c3730d94a749f236305152279f77484"
+-dependencies = [
+- "core-foundation-sys",
+- "glob",
+- "io-kit-sys",
+- "lazy_static",
+- "libc",
+- "mach",
+- "serde",
+-]
+-
+ [[package]]
+ name = "sys_metrics"
+ version = "0.2.7"
+diff --git a/app/main/src-tauri/Cargo.toml b/app/main/src-tauri/Cargo.toml
+index 8864112..7707922 100644
+--- a/app/main/src-tauri/Cargo.toml
++++ b/app/main/src-tauri/Cargo.toml
+@@ -20,7 +20,7 @@ notify-rust = "4.10"
+ rqs_lib = { path = "../../../core_lib", features = ["experimental"] }
+ serde = { version = "1.0", features = ["derive"] }
+ serde_json = "1.0"
+-sys_metrics = "0.2"
++sys_metrics = { git = "https://github.com/Martichou/sys_metrics" }
+ tauri = { version = "2.2", features = [ "devtools", "tray-icon", "native-tls-vendored", "image-png"] }
+ tauri-plugin-autostart = "2.2"
+ tauri-plugin-process = "2.2"

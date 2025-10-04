@@ -1,0 +1,20 @@
+diff --git a/configure b/configure
+index d45e88f..25d872b 100755
+--- a/configure
++++ b/configure
+@@ -322,7 +322,14 @@ case "$bytecc,$target" in
+     bytecccompopts="-fno-defer-pop $gcc_warnings -DSHRINKED_GNUC"
+     mathlib="";;
+   *,*-*-darwin*)
+-    bytecccompopts="-fno-defer-pop $gcc_warnings"
++    # On recent version of OSX, gcc is a symlink to clang
++    if $bytecc --version | grep -q clang; then
++        # -fno-defer-pop is not supported by clang, and make recent
++        # versions of clang to fail
++        bytecccompopts="$gcc_warnings"
++    else
++        bytecccompopts="-fno-defer-pop $gcc_warnings"
++    fi
+     mathlib=""
+     mkexe="$mkexe -Wl,-no_compact_unwind"
+     # Tell gcc that we can use 32-bit code addresses for threaded code

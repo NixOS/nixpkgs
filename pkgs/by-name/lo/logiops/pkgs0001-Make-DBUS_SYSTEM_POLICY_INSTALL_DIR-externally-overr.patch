@@ -1,0 +1,30 @@
+From b7588376e20661c8d79e7472732244c70b8e7d3f Mon Sep 17 00:00:00 2001
+From: ckie <git-525ff67@ckie.dev>
+Date: Mon, 16 Oct 2023 02:02:38 +0300
+Subject: [PATCH] Make DBUS_SYSTEM_POLICY_INSTALL_DIR externally overrideable
+
+---
+ src/logid/CMakeLists.txt | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/logid/CMakeLists.txt b/src/logid/CMakeLists.txt
+index b2616c8..58d6719 100644
+--- a/src/logid/CMakeLists.txt
++++ b/src/logid/CMakeLists.txt
+@@ -111,9 +111,11 @@ elseif (NOT SYSTEMD_FOUND AND SYSTEMD_SERVICES_INSTALL_DIR)
+ endif ()
+
+ # Install DBus conf
+-# TODO: Is there a better way of setting the system policy directory?
+-set(DBUS_SYSTEM_POLICY_INSTALL_DIR "/usr/share/dbus-1/system.d")
+ configure_file(logiops-dbus.conf.in ${CMAKE_BINARY_DIR}/pizza.pixl.LogiOps.conf)
++if (NOT DEFINED DBUS_SYSTEM_POLICY_INSTALL_DIR)
++    # TODO: Is there a better way of setting the system policy directory?
++    set(DBUS_SYSTEM_POLICY_INSTALL_DIR "/usr/share/dbus-1/system.d")
++endif ()
+ message(STATUS "dbus system policy will be installed at ${DBUS_SYSTEM_POLICY_INSTALL_DIR}")
+ install(FILES ${CMAKE_BINARY_DIR}/pizza.pixl.LogiOps.conf
+         DESTINATION ${DBUS_SYSTEM_POLICY_INSTALL_DIR}
+-- 
+2.42.0
+

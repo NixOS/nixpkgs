@@ -1,0 +1,141 @@
+diff --git a/Libraries/process/Headers/process/DefaultLauncher.h b/Libraries/process/Headers/process/DefaultLauncher.h
+index cee6e145..698ffe84 100644
+--- a/Libraries/process/Headers/process/DefaultLauncher.h
++++ b/Libraries/process/Headers/process/DefaultLauncher.h
+@@ -20,11 +20,14 @@ namespace process {
+  */
+ class DefaultLauncher : public Launcher {
+ public:
+-    DefaultLauncher();
++    DefaultLauncher(bool sync_output);
+     ~DefaultLauncher();
+ 
+ public:
+     virtual ext::optional<int> launch(libutil::Filesystem *filesystem, Context const *context);
++
++private:
++    bool sync_output_;
+ };
+ 
+ }
+diff --git a/Libraries/process/Sources/DefaultLauncher.cpp b/Libraries/process/Sources/DefaultLauncher.cpp
+index a7f14e1a..e9aaf330 100644
+--- a/Libraries/process/Sources/DefaultLauncher.cpp
++++ b/Libraries/process/Sources/DefaultLauncher.cpp
+@@ -91,9 +91,18 @@ EscapedToken(const WideString &token)
+ }
+ #endif
+ 
++namespace {
++    enum class PipeStatus {
++        UNUSED,
++        CREATED,
++        ERROR
++    };
++}
++
+ DefaultLauncher::
+-DefaultLauncher() :
+-    Launcher()
++DefaultLauncher(bool sync_output) :
++    Launcher(),
++    sync_output_{sync_output}
+ {
+ }
+ 
+@@ -199,10 +208,14 @@ launch(Filesystem *filesystem, Context const *context)
+ 
+     /* Setup parent-child stdout/stderr pipe. */
+     int pfd[2];
+-    bool pipe_setup_success = true;
+-    if (pipe(pfd) == -1) {
+-        ::perror("pipe");
+-        pipe_setup_success = false;
++    PipeStatus pipe_status = PipeStatus::UNUSED;
++    if (sync_output_) {
++        if (pipe(pfd) == -1) {
++            ::perror("pipe");
++            pipe_status = PipeStatus::ERROR;
++        } else {
++            pipe_status = PipeStatus::CREATED;
++        }
+     }
+ 
+     /*
+@@ -214,22 +227,25 @@ launch(Filesystem *filesystem, Context const *context)
+         return ext::nullopt;
+     } else if (pid == 0) {
+         /* Fork succeeded, new process. */
+-        if (pipe_setup_success) {
+-            /* Setup pipe to parent, redirecting both stdout and stderr */
+-            dup2(pfd[1], STDOUT_FILENO);
+-            dup2(pfd[1], STDERR_FILENO);
+-            close(pfd[0]);
+-            close(pfd[1]);
+-        } else {
+-            /* No parent-child pipe setup, just ignore outputs from child */
+-            int nullfd = open("/dev/null", O_WRONLY);
+-            if (nullfd == -1) {
+-                ::perror("open");
+-                ::_exit(1);
+-            }
+-            dup2(nullfd, STDOUT_FILENO);
+-            dup2(nullfd, STDERR_FILENO);
+-            close(nullfd);
++        switch (pipe_status) {
++            case PipeStatus::CREATED:
++                /* Setup pipe to parent, redirecting both stdout and stderr */
++                dup2(pfd[1], STDOUT_FILENO);
++                dup2(pfd[1], STDERR_FILENO);
++                close(pfd[0]);
++                close(pfd[1]);
++                break;
++            case PipeStatus::ERROR:
++                /* No parent-child pipe setup, just ignore outputs from child */
++                int nullfd = open("/dev/null", O_WRONLY);
++                if (nullfd == -1) {
++                    ::perror("open");
++                    ::_exit(1);
++                }
++                dup2(nullfd, STDOUT_FILENO);
++                dup2(nullfd, STDERR_FILENO);
++                close(nullfd);
++                break;
+         }
+ 
+         if (::chdir(cDirectory) == -1) {
+@@ -243,7 +259,7 @@ launch(Filesystem *filesystem, Context const *context)
+         return ext::nullopt;
+     } else {
+         /* Fork succeeded, existing process. */
+-        if (pipe_setup_success) {
++        if (pipe_status == PipeStatus::CREATED) {
+             close(pfd[1]);
+             /* Read child's stdout/stderr through pipe, and output stdout */
+             while (true) {
+diff --git a/Libraries/xcdriver/Tools/xcbuild.cpp b/Libraries/xcdriver/Tools/xcbuild.cpp
+index 3a1baadc..c9340ff5 100644
+--- a/Libraries/xcdriver/Tools/xcbuild.cpp
++++ b/Libraries/xcdriver/Tools/xcbuild.cpp
+@@ -19,7 +19,7 @@ main(int argc, char **argv)
+ {
+     DefaultFilesystem filesystem = DefaultFilesystem();
+     process::DefaultContext processContext = process::DefaultContext();
+-    process::DefaultLauncher processLauncher = process::DefaultLauncher();
++    process::DefaultLauncher processLauncher = process::DefaultLauncher(true);
+     process::DefaultUser user = process::DefaultUser();
+     return xcdriver::Driver::Run(&user, &processContext, &processLauncher, &filesystem);
+ }
+diff --git a/Libraries/xcsdk/Tools/xcrun.cpp b/Libraries/xcsdk/Tools/xcrun.cpp
+index 9d6d4576..c177b273 100644
+--- a/Libraries/xcsdk/Tools/xcrun.cpp
++++ b/Libraries/xcsdk/Tools/xcrun.cpp
+@@ -469,7 +469,7 @@ main(int argc, char **argv)
+ {
+     DefaultFilesystem filesystem = DefaultFilesystem();
+     process::DefaultContext processContext = process::DefaultContext();
+-    process::DefaultLauncher processLauncher = process::DefaultLauncher();
++    process::DefaultLauncher processLauncher = process::DefaultLauncher(false);
+     process::DefaultUser user = process::DefaultUser();
+     return Run(&filesystem, &user, &processContext, &processLauncher);
+ }

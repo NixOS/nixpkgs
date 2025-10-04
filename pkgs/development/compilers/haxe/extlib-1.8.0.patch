@@ -1,0 +1,26 @@
+diff --git a/src/context/typecore.ml b/src/context/typecore.ml
+index dc38a5264..0c3ebde9f 100644
+--- a/src/context/typecore.ml
++++ b/src/context/typecore.ml
+@@ -294,7 +294,7 @@ let add_local ctx k n t p =
+ 			begin try
+ 				let v' = PMap.find n ctx.locals in
+ 				(* ignore std lib *)
+-				if not (List.exists (ExtLib.String.starts_with p.pfile) ctx.com.std_path) then begin
++				if not (List.exists (ExtLib.String.starts_with ~prefix:p.pfile) ctx.com.std_path) then begin
+ 					warning ctx WVarShadow "This variable shadows a previously declared variable" p;
+ 					warning ~depth:1 ctx WVarShadow (compl_msg "Previous variable was here") v'.v_pos
+ 				end
+diff --git a/src/optimization/dce.ml b/src/optimization/dce.ml
+index 4e7b1fc98..90d8fc5d6 100644
+--- a/src/optimization/dce.ml
++++ b/src/optimization/dce.ml
+@@ -76,7 +76,7 @@ let overrides_extern_field cf c =
+ 	loop c cf
+ 
+ let is_std_file dce file =
+-	List.exists (ExtString.String.starts_with file) dce.std_dirs
++	List.exists (ExtString.String.starts_with ~prefix:file) dce.std_dirs
+ 
+ let keep_metas = [Meta.Keep;Meta.Expose]
+ 

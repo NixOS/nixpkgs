@@ -1,0 +1,44 @@
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
+
+buildGoModule rec {
+  pname = "helm-diff";
+  version = "3.13.0";
+
+  src = fetchFromGitHub {
+    owner = "databus23";
+    repo = "helm-diff";
+    rev = "v${version}";
+    hash = "sha256-U1lNCOYix+7aPNq4U0A7KU4Cr+AqQsTUrYTg/0Zg5cs=";
+  };
+
+  vendorHash = "sha256-nwL6n0pthW12ij9iqmS404r0m9xv0qh8RYiQhqvJC2U=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}"
+  ];
+
+  # NOTE: Remove the install and upgrade hooks.
+  postPatch = ''
+    sed -i '/^hooks:/,+2 d' plugin.yaml
+  '';
+
+  postInstall = ''
+    install -dm755 $out/${pname}
+    mv $out/bin $out/${pname}/
+    mv $out/${pname}/bin/{helm-,}diff
+    install -m644 -Dt $out/${pname} plugin.yaml
+  '';
+
+  meta = with lib; {
+    description = "Helm plugin that shows a diff";
+    homepage = "https://github.com/databus23/helm-diff";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ yurrriq ];
+  };
+}

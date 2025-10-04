@@ -1,0 +1,41 @@
+From: Dmitry Shachnev <mitya57@debian.org>
+Date: Sun, 4 Feb 2024 00:29:00 +0300
+Subject: Modify sendCommand signatures to use 0 as default value
+
+The original default value was QNodeCommand::CommandId(), and shiboken
+copies it verbatim from the header file, however it does not work because
+we do not generate "using namespace Qt3DCore;".
+
+0 is the same as QNodeCommand::CommandId().
+---
+ sources/pyside2/PySide2/Qt3DCore/typesystem_3dcore.xml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/sources/pyside2/PySide2/Qt3DCore/typesystem_3dcore.xml b/sources/pyside2/PySide2/Qt3DCore/typesystem_3dcore.xml
+index 8696a12..310595f 100644
+--- a/sources/pyside2/PySide2/Qt3DCore/typesystem_3dcore.xml
++++ b/sources/pyside2/PySide2/Qt3DCore/typesystem_3dcore.xml
+@@ -58,6 +58,11 @@
+         <object-type name="QAspectJob"/>
+         <object-type name="QBackendNode">
+             <enum-type name="Mode"/>
++            <modify-function signature="sendCommand(const QString&amp;,const QVariant&amp;,unsigned long long)">
++              <modify-argument index="3">
++                <replace-default-expression with="0"/>
++              </modify-argument>
++            </modify-function>
+         </object-type>
+         <!-- TODO: Solve issues related to windows and a unresolved
+             external symbol
+@@ -82,6 +87,11 @@
+         </object-type>
+         <object-type name="QNode">
+             <enum-type name="PropertyTrackingMode"/>
++            <modify-function signature="sendCommand(const QString&amp;,const QVariant&amp;,unsigned long long)">
++              <modify-argument index="3">
++                <replace-default-expression with="0"/>
++              </modify-argument>
++            </modify-function>
+         </object-type>
+         <object-type name="QNodeCommand" since="5.10"/>
+         <object-type name="QNodeCreatedChangeBase"/>

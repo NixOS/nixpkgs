@@ -1,0 +1,15 @@
+diff --git a/auth/lib/services/update_service.dart b/auth/lib/services/update_service.dart
+index 716d553f1b..3946d87a7d 100644
+--- a/lib/services/update_service.dart
++++ b/lib/services/update_service.dart
+@@ -134,9 +134,7 @@ class UpdateService {
+   }
+ 
+   bool isIndependent() {
+-    return flavor == "independent" ||
+-        _packageInfo.packageName.endsWith("independent") ||
+-        PlatformUtil.isDesktop();
++    return false;
+   }
+ }
+ 

@@ -1,0 +1,216 @@
+From 6a426b8093cf6633425d08a2d33ed24d200473a0 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Sun, 9 Feb 2025 08:51:32 +0100
+Subject: [PATCH] build: use pkg-config to find tss2-esys
+
+Otherwise, tss2-esys's dependencies (other tss2 libraries, OpenSSL)
+won't be linked when tss2-esys is a static library.
+---
+Link: https://dev.gnupg.org/D606
+
+ configure    | 131 +++++++++++++++++++++++++++++----------------------
+ configure.ac |   5 +-
+ 2 files changed, 76 insertions(+), 60 deletions(-)
+
+diff --git a/configure b/configure
+index 59f027d..f53c99d 100755
+--- a/configure
++++ b/configure
+@@ -669,12 +669,12 @@ TEST_LIBTSS_FALSE
+ TEST_LIBTSS_TRUE
+ HAVE_LIBTSS_FALSE
+ HAVE_LIBTSS_TRUE
+-LIBTSS_CFLAGS
+-LIBTSS_LIBS
+ SWTPM
+ TSSSTARTUP
+ TPMSERVER
+ TSS_INCLUDE
++LIBTSS_LIBS
++LIBTSS_CFLAGS
+ W32SOCKLIBS
+ NETLIBS
+ CROSS_COMPILING_FALSE
+@@ -1005,7 +1005,9 @@ PKG_CONFIG_LIBDIR
+ SQLITE3_CFLAGS
+ SQLITE3_LIBS
+ LIBGNUTLS_CFLAGS
+-LIBGNUTLS_LIBS'
++LIBGNUTLS_LIBS
++LIBTSS_CFLAGS
++LIBTSS_LIBS'
+ 
+ 
+ # Initialize some variables set by options.
+@@ -1771,6 +1773,9 @@ Some influential environment variables:
+               C compiler flags for LIBGNUTLS, overriding pkg-config
+   LIBGNUTLS_LIBS
+               linker flags for LIBGNUTLS, overriding pkg-config
++  LIBTSS_CFLAGS
++              C compiler flags for LIBTSS, overriding pkg-config
++  LIBTSS_LIBS linker flags for LIBTSS, overriding pkg-config
+ 
+ Use these variables to override the choices made by `configure' or to help
+ it to find libraries and programs with nonstandard names/locations.
+@@ -15465,64 +15470,77 @@ else
+ fi
+ 
+   elif test "$with_tss" = intel; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing Esys_Initialize" >&5
+-$as_echo_n "checking for library containing Esys_Initialize... " >&6; }
+-if ${ac_cv_search_Esys_Initialize+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_func_search_save_LIBS=$LIBS
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+ 
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char Esys_Initialize ();
+-int
+-main ()
+-{
+-return Esys_Initialize ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-for ac_lib in '' tss2-esys; do
+-  if test -z "$ac_lib"; then
+-    ac_res="none required"
+-  else
+-    ac_res=-l$ac_lib
+-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+-  fi
+-  if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_search_Esys_Initialize=$ac_res
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext
+-  if ${ac_cv_search_Esys_Initialize+:} false; then :
+-  break
+-fi
+-done
+-if ${ac_cv_search_Esys_Initialize+:} false; then :
++pkg_failed=no
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBTSS" >&5
++$as_echo_n "checking for LIBTSS... " >&6; }
+ 
++if test -n "$LIBTSS_CFLAGS"; then
++    pkg_cv_LIBTSS_CFLAGS="$LIBTSS_CFLAGS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"tss2-esys tss2-mu tss2-rc tss2-tctildr\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "tss2-esys tss2-mu tss2-rc tss2-tctildr") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_LIBTSS_CFLAGS=`$PKG_CONFIG --cflags "tss2-esys tss2-mu tss2-rc tss2-tctildr" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+-  ac_cv_search_Esys_Initialize=no
++  pkg_failed=yes
+ fi
+-rm conftest.$ac_ext
+-LIBS=$ac_func_search_save_LIBS
++ else
++    pkg_failed=untried
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_Esys_Initialize" >&5
+-$as_echo "$ac_cv_search_Esys_Initialize" >&6; }
+-ac_res=$ac_cv_search_Esys_Initialize
+-if test "$ac_res" != no; then :
+-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+-  have_libtss=Intel
++if test -n "$LIBTSS_LIBS"; then
++    pkg_cv_LIBTSS_LIBS="$LIBTSS_LIBS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"tss2-esys tss2-mu tss2-rc tss2-tctildr\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "tss2-esys tss2-mu tss2-rc tss2-tctildr") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_LIBTSS_LIBS=`$PKG_CONFIG --libs "tss2-esys tss2-mu tss2-rc tss2-tctildr" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+-  as_fn_error $? "Intel TPM Software Stack requested but not found" "$LINENO" 5
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
+ fi
+ 
++
++
++if test $pkg_failed = yes; then
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
++else
++        _pkg_short_errors_supported=no
++fi
++        if test $_pkg_short_errors_supported = yes; then
++	        LIBTSS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "tss2-esys tss2-mu tss2-rc tss2-tctildr" 2>&1`
++        else
++	        LIBTSS_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "tss2-esys tss2-mu tss2-rc tss2-tctildr" 2>&1`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$LIBTSS_PKG_ERRORS" >&5
++
++	as_fn_error $? "Intel TPM Software Stack requested but not found" "$LINENO" 5
++elif test $pkg_failed = untried; then
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++	as_fn_error $? "Intel TPM Software Stack requested but not found" "$LINENO" 5
++else
++	LIBTSS_CFLAGS=$pkg_cv_LIBTSS_CFLAGS
++	LIBTSS_LIBS=$pkg_cv_LIBTSS_LIBS
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++	have_libtss=Intel
++fi
+   else
+     as_fn_error $? "Invalid TPM Software Stack requested: $with_tss" "$LINENO" 5
+   fi
+@@ -15616,7 +15634,6 @@ $as_echo "$as_me: WARNING: Need Esys_TR_GetTpmHandle API (usually requires Intel
+ 
+ fi
+ 
+-    LIBTSS_LIBS="$LIBS -ltss2-mu -ltss2-rc -ltss2-tctildr"
+ 
+ $as_echo "#define HAVE_INTEL_TSS 1" >>confdefs.h
+ 
+diff --git a/configure.ac b/configure.ac
+index dc44465..92880e6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1574,8 +1574,8 @@ if test "$build_tpm2d" = "yes"; then
+     AC_SEARCH_LIBS([TSS_Create],[tss ibmtss],have_libtss=IBM,
+                    [AC_MSG_ERROR([IBM TPM Software Stack requested but not found])])
+   elif test "$with_tss" = intel; then
+-    AC_SEARCH_LIBS([Esys_Initialize],[tss2-esys],have_libtss=Intel,
+-                   [AC_MSG_ERROR([Intel TPM Software Stack requested but not found])])
++    PKG_CHECK_MODULES([LIBTSS], [tss2-esys tss2-mu tss2-rc tss2-tctildr],have_libtss=Intel,
++                      [AC_MSG_ERROR([Intel TPM Software Stack requested but not found])])
+   else
+     AC_MSG_ERROR([Invalid TPM Software Stack requested: $with_tss])
+   fi
+@@ -1605,7 +1605,6 @@ if test "$build_tpm2d" = "yes"; then
+ 	AC_MSG_WARN([Need Esys_TR_GetTpmHandle API (usually requires Intel TSS 2.4.0 or later, disabling TPM support)])
+ 	have_libtss=no
+     ])
+-    LIBTSS_LIBS="$LIBS -ltss2-mu -ltss2-rc -ltss2-tctildr"
+     AC_DEFINE(HAVE_INTEL_TSS, 1, [Defined if we have the Intel TSS])
+   fi
+   LIBS="$_save_libs"
+-- 
+2.47.2
+

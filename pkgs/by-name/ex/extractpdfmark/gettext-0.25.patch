@@ -1,0 +1,15 @@
+diff --git a/configure.ac b/configure.ac
+index 2e7d562..c8dd741 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -7,6 +7,10 @@ AC_INIT([Extract PDFmark], [1.1.1], , [extractpdfmark],
+ AM_INIT_AUTOMAKE([foreign])
+ AC_CONFIG_SRCDIR([src/main.cc])
+ AC_CONFIG_HEADERS([config.h])
++AC_CONFIG_MACRO_DIRS([m4])
++
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
+ 
+ PACKAGE_COPYRIGHT="Copyright (C) 2016-2022 Masamichi Hosoda"
+ PACKAGE_LICENSE="License: GPL3+"

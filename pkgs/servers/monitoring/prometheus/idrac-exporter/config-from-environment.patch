@@ -1,0 +1,100 @@
+diff --git a/internal/config/config.go b/internal/config/config.go
+index ba8f066..1c801cd 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -2,8 +2,11 @@ package config
+ 
+ import (
+ 	"encoding/base64"
++	"fmt"
+ 	"os"
++	"strconv"
+ 	"sync"
++
+ 	"github.com/mrlhansen/idrac_exporter/internal/logging"
+ 	"gopkg.in/yaml.v2"
+ )
+@@ -17,9 +20,9 @@ type HostConfig struct {
+ 
+ type RootConfig struct {
+ 	mutex         sync.Mutex
+-	Address       string                 `yaml:"address"`
+-	Port          uint                   `yaml:"port"`
+-	MetricsPrefix string                 `yaml:"metrics_prefix"`
++	Address       string `yaml:"address"`
++	Port          uint   `yaml:"port"`
++	MetricsPrefix string `yaml:"metrics_prefix"`
+ 	Collect       struct {
+ 		System  bool `yaml:"system"`
+ 		Sensors bool `yaml:"sensors"`
+@@ -28,9 +31,29 @@ type RootConfig struct {
+ 		Storage bool `yaml:"storage"`
+ 		Memory  bool `yaml:"memory"`
+ 	} `yaml:"metrics"`
+-	Timeout       uint                   `yaml:"timeout"`
+-	Retries       uint                   `yaml:"retries"`
+-	Hosts         map[string]*HostConfig `yaml:"hosts"`
++	Timeout uint                   `yaml:"timeout"`
++	Retries uint                   `yaml:"retries"`
++	Hosts   map[string]*HostConfig `yaml:"hosts"`
++}
++
++func getEnv(envvar string, defvalue string) string {
++	value := os.Getenv(envvar)
++	if len(value) == 0 {
++		return defvalue
++	}
++	return value
++}
++
++func getEnvUint(envvar string, defvalue uint) uint {
++	value, err := strconv.Atoi(getEnv(envvar, fmt.Sprint(defvalue)))
++	if err != nil {
++		logging.Fatalf("Failed parse integer value: %s", err)
++	}
++	if value == 0 {
++		return defvalue
++	}
++
++	return uint(value)
+ }
+ 
+ func (config *RootConfig) GetHostCfg(target string) *HostConfig {
+@@ -70,29 +93,29 @@ func ReadConfigFile(fileName string) {
+ 	}
+ 
+ 	if Config.Address == "" {
+-		Config.Address = "0.0.0.0"
++		Config.Address = getEnv("IDRAC_EXPORTER_LISTEN_ADDRESS", "0.0.0.0")
+ 	}
+ 
+ 	if Config.Port == 0 {
+-		Config.Port = 9348
++		Config.Port = getEnvUint("IDRAC_EXPORTER_LISTEN_PORT", 9348)
+ 	}
+ 
+ 	if Config.Timeout == 0 {
+-		Config.Timeout = 10
++		Config.Timeout = getEnvUint("IDRAC_EXPORTER_TIMEOUT", 10)
+ 	}
+ 
+ 	if Config.Retries == 0 {
+-		Config.Retries = 1
++		Config.Retries = getEnvUint("IDRAC_EXPORTER_RETRIES", 1)
++	}
++
++	if Config.MetricsPrefix == "" {
++		Config.MetricsPrefix = getEnv("IDRAC_EXPORTER_PREFIX", "idrac")
+ 	}
+ 
+ 	if len(Config.Hosts) == 0 {
+ 		parseError("missing section", "hosts")
+ 	}
+ 
+-	if Config.MetricsPrefix == "" {
+-		Config.MetricsPrefix = "idrac"
+-	}
+-
+ 	for k, v := range Config.Hosts {
+ 		if v.Username == "" {
+ 			parseError("missing username for host", k)

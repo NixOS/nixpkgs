@@ -1,0 +1,104 @@
+name: Check
+
+on:
+  workflow_call:
+    inputs:
+      baseBranch:
+        required: true
+        type: string
+      headBranch:
+        required: true
+        type: string
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  commits:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: trusted
+          sparse-checkout: |
+            ci/github-script
+
+      - name: Install dependencies
+        run: npm install bottleneck
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Check commits
+        id: check
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          TARGETS_STABLE: ${{ fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development') }}
+        with:
+          script: |
+            const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
+            require('./trusted/ci/github-script/commits.js')({
+              github,
+              context,
+              core,
+              dry: context.eventName == 'pull_request',
+              cherryPicks: context.eventName == 'pull_request' || targetsStable,
+            })
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+  owners:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: .github/actions
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+
+      - uses: cachix/install-nix-action@9280e7aca88deada44c930f1e2c78e21c3ae3edd # v31
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
+
+      - name: Build codeowners validator
+        run: nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A codeownersValidator
+
+      - name: Validate codeowners
+        env:
+          OWNERS_FILE: nixpkgs/untrusted/ci/OWNERS
+          REPOSITORY_PATH: nixpkgs/untrusted
+          # Omits "owners", which checks whether GitHub handles exist, but fails with nested team
+          # structures.
+          CHECKS: "duppatterns,files,syntax"
+          # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
+          EXPERIMENTAL_CHECKS: "avoid-shadowing"
+        run: result/bin/codeowners-validator
