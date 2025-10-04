@@ -5,7 +5,7 @@
   oath,
   pycryptodome,
   requests,
-  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,14 +24,22 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # test_check_token_detects_valid_hotp_token,
   # test_check_token_detects_valid_totp_token and
   # test_check_token_detects_invlaid_token require network
-  checkPhase = ''
+
+  # unittest based tests using yield, imcompatible with pytest
+  preCheck = ''
     mv vipaccess vipaccess.hidden
-    pytest tests/ -k 'not test_check_token'
+    substituteInPlace tests/test_utils.py \
+      --replace-fail "test_check_TOTP_token_models" "check_TOTP_token_models" \
+      --replace-fail "test_check_HOTP_token_models" "check_HOTP_token_models"
   '';
+
+  disabledTests = [
+    "test_check_token_detects_invalid_token"
+  ];
 
   meta = with lib; {
     description = "Free software implementation of Symantec's VIP Access application and protocol";
