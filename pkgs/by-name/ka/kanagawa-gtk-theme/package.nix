@@ -4,40 +4,92 @@
   fetchFromGitHub,
   gtk3,
   gtk-engine-murrine,
+  sassc,
+  themeVariants ? [ ], # default: blue
+  colorVariants ? [ ], # default: all
+  sizeVariants ? [ ], # default: standard
+  tweaks ? [ ],
 }:
-stdenvNoCC.mkDerivation {
+let
   pname = "kanagawa-gtk-theme";
-  version = "0-unstable-2023-07-03";
+in
+lib.checkListOfEnum "${pname}: theme variants"
+  [
+    "default"
+    "purple"
+    "pink"
+    "red"
+    "orange"
+    "yellow"
+    "green"
+    "teal"
+    "grey"
+    "all"
+  ]
+  themeVariants
+  lib.checkListOfEnum
+  "${pname}: color variants"
+  [ "light" "dark" ]
+  colorVariants
+  lib.checkListOfEnum
+  "${pname}: size variants"
+  [ "standard" "compact" ]
+  sizeVariants
+  lib.checkListOfEnum
+  "${pname}: tweaks"
+  [
+    "dragon"
+    "black"
+    "outline"
+    "float"
+    "macos"
+  ]
+  tweaks
 
-  src = fetchFromGitHub {
-    owner = "Fausto-Korpsvart";
-    repo = "Kanagawa-GKT-Theme";
-    rev = "35936a1e3bbd329339991b29725fc1f67f192c1e";
-    hash = "sha256-BZRmjVas8q6zsYbXFk4bCk5Ec/3liy9PQ8fqFGHAXe0=";
-  };
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname;
+    version = "0-unstable-2025-04-24";
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+    src = fetchFromGitHub {
+      owner = "Fausto-Korpsvart";
+      repo = "Kanagawa-GKT-Theme";
+      rev = "825ac8d90e16ce612b487f29ee6db60b5dc63012";
+      hash = "sha256-YOA3qBtMcz0to2yOStd33rF4NGhZWiLAJMo7MHx9nqM=";
+    };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+    nativeBuildInputs = [
+      gtk3
+      sassc
+    ];
 
-  installPhase = ''
-    runHook preInstall
+    propagatedUserEnvPkgs = [
+      gtk-engine-murrine
+    ];
 
-    mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
+    postPatch = ''
+      patchShebangs ./themes/install.sh
+    '';
 
-    runHook postInstall
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  meta = with lib; {
-    description = "GTK theme with the Kanagawa colour palette";
-    homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iynaix ];
-    platforms = gtk3.meta.platforms;
-  };
-}
+      mkdir -p $out/share/themes
+      ./themes/install.sh --name "" \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        --dest $out/share/themes
+
+      runHook postInstall
+    '';
+
+    meta = with lib; {
+      description = "GTK theme with the Kanagawa colour palette";
+      homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
+      license = licenses.gpl3Only;
+      maintainers = with maintainers; [ iynaix ];
+      platforms = platforms.linux;
+    };
+  }
