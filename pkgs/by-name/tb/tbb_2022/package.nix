@@ -67,9 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=stringop-overflow";
 
     # Fix undefined reference errors with version script under LLVM.
-    NIX_LDFLAGS = lib.optionalString (
-      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-    ) "--undefined-version";
+    NIX_LDFLAGS =
+      lib.optionalString (
+        stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+      ) "--undefined-version"
+      + lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
   };
 
   meta = {
