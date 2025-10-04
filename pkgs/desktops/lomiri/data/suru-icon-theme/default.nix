@@ -19,6 +19,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-6MyZTRcfCpiCXzwrwNiBP6J4L4oFbFtoymhke13tLy0=";
   };
 
+  # Commit 79763fa4ff701d1d89d7362c37c65b2a3cbdf543 introduced abunch of symlinks for Lomiri apps' icons to files from this theme.
+  # This seems to have broken Lomiri, as it now gets stuck during startup (presumably?) trying to resolve the icons of these apps in the sidebar.
+  # Can't apply a revert of the commit because patch refuses to touch symlinks.
+  postPatch = ''
+    for app in dekko2 lomiri-{addressbook,calculator,calendar,camera,clock,dialer,docviewer,gallery,mediaplayer,messaging,music,notes,terminal,weather}-app lomiri-system-settings lomiri-online-accounts-{facebook,flickr,google,owncloud,twitter,ubuntuones,yahoo}; do
+      find suru/apps -name "$app".png -exec rm -v {} \;
+      find suru/apps -name "$app"-symbolic.svg -exec rm -v {} \;
+    done
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
