@@ -3,30 +3,12 @@
   lib,
   fetchurl,
   cmake,
-  extra-cmake-modules,
   pkg-config,
-  qtbase,
-  wrapQtAppsHook,
-  qtwebengine,
   grantlee,
-  kxmlgui,
-  kwallet,
-  kparts,
-  kdoctools,
-  kjobwidgets,
-  kiconthemes,
-  knewstuff,
   sqlcipher,
-  qca,
-  plasma-activities,
-  karchive,
-  kguiaddons,
-  knotifyconfig,
-  krunner,
-  ktexttemplate,
-  kwindowsystem,
   libofx,
   shared-mime-info,
+  kdePackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-HNui/SjCN9LWxUxHDae59n5qPIwYWHX1uFSlVnwBlL8=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with kdePackages; [
     cmake
     extra-cmake-modules
     kdoctools
@@ -47,7 +29,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = with kdePackages; [
     qtbase
     qtwebengine
     grantlee
