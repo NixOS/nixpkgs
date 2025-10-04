@@ -14630,8 +14630,6 @@ with pkgs;
 
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
-  meilisearch_1_11 = callPackage ../by-name/me/meilisearch/package.nix { version = "1.11.3"; };
-
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
   nixDependencies = recurseIntoAttrs (
