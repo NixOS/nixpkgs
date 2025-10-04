@@ -25121,6 +25121,12 @@
     githubId = 143103;
     name = "Attila Sztupak";
   };
+  szympajka = {
+    email = "szymon.pajka@gmail.com";
+    github = "szympajka";
+    githubId = 19807209;
+    name = "Szymon Pajka";
+  };
   t-monaghan = {
     email = "tomaghan@gmail.com";
     github = "t-monaghan";
