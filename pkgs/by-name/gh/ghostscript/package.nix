@@ -82,6 +82,13 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/ghostscript/-/raw/01e895fea033cc35054d1b68010de9818fa4a8fc/debian/patches/2010_add_build_timestamp_setting.patch";
       hash = "sha256-XTKkFKzMR2QpcS1YqoxzJnyuGk/l/Y2jdevsmbMtCXA=";
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    # 32 bit compat. conditional as to not cause rebuilds
+    (fetchpatch2 {
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f.patch?full_index=1";
+      hash = "sha256-NrL4lI19x+OHaSIwV93Op/I9k2MWXxSWgbkwSGU7R6A=";
+    })
   ];
 
   outputs = [
