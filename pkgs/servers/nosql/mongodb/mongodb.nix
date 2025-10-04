@@ -96,13 +96,13 @@ stdenv.mkDerivation rec {
     pcre-cpp
     sasl
     snappy
+    xz
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp
-  ++ [ xz ];
+  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp;
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
