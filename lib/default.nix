@@ -505,7 +505,6 @@ let
         unknownModule
         mkOption
         mkPackageOption
-        mkPackageOptionMD
         literalMD
         ;
       inherit (self.types)
