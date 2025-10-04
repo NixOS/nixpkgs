@@ -1,0 +1,169 @@
+From c9ba906c9878f3b8c8c876438d82ec5d4c90af4c Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 20 Feb 2025 20:07:18 +0100
+Subject: [PATCH] Handle plugin location via wrapper
+
+---
+ CMakeLists.txt                            | 11 +++++++++--
+ data/CMakeLists.txt                       |  2 --
+ data/lomiri-indicator-transfer.desktop.in |  2 +-
+ data/lomiri-indicator-transfer.pc.in      |  3 ++-
+ data/lomiri-indicator-transfer.service.in |  2 +-
+ src/CMakeLists.txt                        |  8 +++++---
+ src/dm-plugin/CMakeLists.txt              |  2 +-
+ src/main.cpp                              | 14 +++++++++++++-
+ 8 files changed, 32 insertions(+), 12 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b4397bc..dc59965 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,8 +21,15 @@ if (EXISTS "/etc/debian_version") # Workaround for libexecdir on debian
+   set (CMAKE_INSTALL_LIBEXECDIR "${CMAKE_INSTALL_LIBDIR}")
+   set (CMAKE_INSTALL_FULL_LIBEXECDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+ endif ()
+-set (CMAKE_INSTALL_PKGLIBEXECDIR "${CMAKE_INSTALL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")
+-set (CMAKE_INSTALL_FULL_PKGLIBEXECDIR "${CMAKE_INSTALL_FULL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")
++
++set (PLUGINDIR "${CMAKE_INSTALL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")
++set (PLUGINDIR_SUFFIX "${PLUGINDIR}")
++
++if (CMAKE_VERSION VERSION_LESS "3.20")
++    file (RELATIVE_PATH PLUGINDIR_SUFFIX "${CMAKE_INSTALL_PREFIX}" "${PLUGINDIR}")
++else()
++    cmake_path (RELATIVE_PATH PLUGINDIR_SUFFIX BASE_DIRECTORY "${CMAKE_INSTALL_PREFIX}")
++endif()
+ 
+ ##
+ ## Version
+diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
+index e5e5b85..b356d40 100644
+--- a/data/CMakeLists.txt
++++ b/data/CMakeLists.txt
+@@ -11,7 +11,6 @@ set (SYSTEMD_USER_FILE "${CMAKE_CURRENT_BINARY_DIR}/${SYSTEMD_USER_NAME}")
+ set (SYSTEMD_USER_FILE_IN "${CMAKE_CURRENT_SOURCE_DIR}/${SYSTEMD_USER_NAME}.in")
+ 
+ # build it
+-set (pkglibexecdir "${CMAKE_INSTALL_FULL_PKGLIBEXECDIR}")
+ configure_file ("${SYSTEMD_USER_FILE_IN}" "${SYSTEMD_USER_FILE}")
+ 
+ # install it
+@@ -31,7 +30,6 @@ set (XDG_AUTOSTART_FILE "${CMAKE_CURRENT_BINARY_DIR}/${XDG_AUTOSTART_NAME}")
+ set (XDG_AUTOSTART_FILE_IN "${CMAKE_CURRENT_SOURCE_DIR}/${XDG_AUTOSTART_NAME}.in")
+ 
+ # build it
+-set (pkglibexecdir "${CMAKE_INSTALL_FULL_PKGLIBEXECDIR}")
+ configure_file ("${XDG_AUTOSTART_FILE_IN}" "${XDG_AUTOSTART_FILE}")
+ 
+ # install it
+diff --git a/data/lomiri-indicator-transfer.desktop.in b/data/lomiri-indicator-transfer.desktop.in
+index 384c088..08c0847 100644
+--- a/data/lomiri-indicator-transfer.desktop.in
++++ b/data/lomiri-indicator-transfer.desktop.in
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ Type=Application
+ Name=Lomiri Indicator Transfer
+-Exec=@pkglibexecdir@/lomiri-indicator-transfer-service
++Exec=@PLUGINDIR@/lomiri-indicator-transfer-service
+ OnlyShowIn=Unity;GNOME;
+ NoDisplay=true
+ StartupNotify=false
+diff --git a/data/lomiri-indicator-transfer.pc.in b/data/lomiri-indicator-transfer.pc.in
+index 5ed09c0..c7d1eff 100644
+--- a/data/lomiri-indicator-transfer.pc.in
++++ b/data/lomiri-indicator-transfer.pc.in
+@@ -1,6 +1,7 @@
++prefix=@CMAKE_INSTALL_PREFIX@
+ libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@CMAKE_PROJECT_NAME@
+-plugindir=@CMAKE_INSTALL_FULL_PKGLIBEXECDIR@
++plugindir=${prefix}/@PLUGINDIR_SUFFIX@
+ 
+ Name: @CMAKE_PROJECT_NAME@
+ Description: Developer files for @CMAKE_PROJECT_NAME@
+diff --git a/data/lomiri-indicator-transfer.service.in b/data/lomiri-indicator-transfer.service.in
+index 8ebc933..86386d0 100644
+--- a/data/lomiri-indicator-transfer.service.in
++++ b/data/lomiri-indicator-transfer.service.in
+@@ -4,7 +4,7 @@ PartOf=graphical-session.target
+ PartOf=lomiri-indicators.target
+ 
+ [Service]
+-ExecStart=@pkglibexecdir@/lomiri-indicator-transfer-service
++ExecStart=@PLUGINDIR@/lomiri-indicator-transfer-service
+ Restart=on-failure
+ 
+ [Install]
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d42b087..f668b8b 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -33,13 +33,15 @@ link_directories (${SERVICE_DEPS_LIBRARY_DIRS})
+ set (SERVICE_EXEC_HANDWRITTEN_SOURCES main.cpp)
+ add_executable (${SERVICE_EXEC} ${SERVICE_EXEC_HANDWRITTEN_SOURCES})
+ target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${GCOV_LIBS})
+-install (TARGETS ${SERVICE_EXEC} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_PKGLIBEXECDIR})
++install (TARGETS ${SERVICE_EXEC} RUNTIME DESTINATION ${PLUGINDIR})
+ 
+ # add warnings/coverage info on handwritten files
+ # but not the generated ones...
+ set_property (SOURCE ${SERVICE_LIB_HANDWRITTEN_SOURCES} ${SERVICE_EXEC_HANDWRITTEN_SOURCES}
+-              APPEND_STRING PROPERTY COMPILE_FLAGS " -std=c++11 -fPIC -g ${CXX_WARNING_ARGS} ${GCOV_FLAGS}")
++              APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC -g ${CXX_WARNING_ARGS} ${GCOV_FLAGS}")
+ 
+-set_property (SOURCE main.cpp APPEND PROPERTY COMPILE_DEFINITIONS PLUGINDIR="${CMAKE_INSTALL_FULL_PKGLIBEXECDIR}")
++set_property (SOURCE main.cpp APPEND PROPERTY COMPILE_DEFINITIONS
++              PLUGINDIR_FALLBACK="${CMAKE_INSTALL_PREFIX}"
++              PLUGINDIR_SUFFIX="${PLUGINDIR_SUFFIX}")
+ 
+ add_subdirectory (dm-plugin)
+diff --git a/src/dm-plugin/CMakeLists.txt b/src/dm-plugin/CMakeLists.txt
+index ee6505b..ab59ccd 100644
+--- a/src/dm-plugin/CMakeLists.txt
++++ b/src/dm-plugin/CMakeLists.txt
+@@ -15,7 +15,7 @@ target_link_libraries (${DM_LIB}
+     ${SERVICE_DEPS_LIBRARIES}
+     ${GCOV_LIBS})
+ 
+-install(TARGETS ${DM_LIB} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_PKGLIBEXECDIR})
++install(TARGETS ${DM_LIB} LIBRARY DESTINATION ${PLUGINDIR})
+ 
+ set_property (SOURCE ${DM_SOURCES}
+               APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC -g ${CXX_WARNING_ARGS} ${GCOV_FLAGS}")
+diff --git a/src/main.cpp b/src/main.cpp
+index 385add9..095c336 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -25,6 +25,9 @@
+ #include <glib/gi18n.h> // bindtextdomain()
+ #include <gio/gio.h>
+ 
++#include <cstdlib>
++#include <cstring>
++#include <filesystem>
+ #include <locale.h>
+ 
+ using namespace lomiri::indicator::transfer;
+@@ -43,8 +46,17 @@ main(int /*argc*/, char** /*argv*/)
+ 
+     auto loop = g_main_loop_new(nullptr, false);
+ 
++    // Find out where we should look for plugins
++		std::filesystem::path pluginDir(PLUGINDIR_FALLBACK);
++
++    const char* pluginDirEnv = std::getenv("LOMIRI_INDICATOR_TRANSFER_PLUGINDIR");
++    if(std::strlen(pluginDirEnv) > 0)
++        pluginDir = pluginDirEnv;
++
++    pluginDir /= PLUGINDIR_SUFFIX;
++
+     // run until we lose the busname
+-    auto source = std::make_shared<PluginSource>(PLUGINDIR);
++    auto source = std::make_shared<PluginSource>(pluginDir.string());
+     auto controller = std::make_shared<Controller>(source);
+     GMenuView menu_view (controller);
+     // FIXME: listen for busname-lost
+-- 
+2.47.2
+
