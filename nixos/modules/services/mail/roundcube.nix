@@ -262,7 +262,7 @@ in
         "catch_workers_output" = true;
       };
       phpPackage = phpWithPspell;
-      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspell.withDicts (_: cfg.dicts)}/lib/aspell";
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
