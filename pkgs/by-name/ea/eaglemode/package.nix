@@ -135,14 +135,12 @@ stdenv.mkDerivation rec {
     extraRegex = "(?!.*(x86_64|setup64|livecd)).*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eaglemode.sourceforge.net";
     description = "Zoomable User Interface";
     changelog = "https://eaglemode.sourceforge.net/ChangeLog.html";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
-      chuangzhu
-    ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ chuangzhu ];
+    platforms = lib.platforms.linux;
   };
 }
