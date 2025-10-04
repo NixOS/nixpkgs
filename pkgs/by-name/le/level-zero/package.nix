@@ -25,6 +25,19 @@ stdenv.mkDerivation rec {
     addDriverRunpath
   ];
 
+  postInstall = ''
+    mkdir -p $out/nix-support
+    cat > $out/nix-support/setup-hook <<EOF
+    # Setup-hook to add Intel OpenGL driver libs to LD_LIBRARY_PATH if available
+    if [ -d /run/opengl-driver/lib ]; then
+      export LD_LIBRARY_PATH="/run/opengl-driver/lib:$LD_LIBRARY_PATH"
+    fi
+    if [ -d /run/opengl-driver-32/lib ]; then
+      export LD_LIBRARY_PATH="/run/opengl-driver-32/lib:$LD_LIBRARY_PATH"
+    fi
+    EOF
+  '';
+
   postFixup = ''
     addDriverRunpath $out/lib/libze_loader.so
   '';
