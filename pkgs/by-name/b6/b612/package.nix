@@ -46,7 +46,10 @@ stdenvNoCC.mkDerivation rec {
       epl10
       bsd3
     ];
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [
+      leenaars
+      sternenseemann
+    ];
     platforms = platforms.all;
   };
 }
