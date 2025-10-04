@@ -1738,7 +1738,7 @@
   };
   annaaurora = {
     email = "anna@annaaurora.eu";
-    matrix = "@papojari:artemislena.eu";
+    matrix = "@anna:annaaurora.eu";
     github = "auroraanna";
     githubId = 81317317;
     name = "Anna Aurora";
