@@ -9,9 +9,9 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "6.12.34";
-  tag = "stable_20250702";
-  hash = "sha256-lK0esjFhLvtBbyddMfa1H7ZcBbcOm2ygor338ZT5VpI=";
+  modDirVersion = "6.12.47";
+  tag = "stable_20250916";
+  hash = "sha256-HG8Oc04V2t54l0SOn4gKmNJWQUrZfjWusgKcWvx74H0==";
 in
 lib.overrideDerivation
   (buildLinux (
