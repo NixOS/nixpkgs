@@ -10,7 +10,6 @@
   pygments,
   pyqt5,
   pythonOlder,
-  pythonAtLeast,
   traitsui,
   vtk,
   wrapQtAppsHook,
@@ -62,7 +61,5 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ ];
     mainProgram = "mayavi2";
-    # segfault
-    broken = pythonAtLeast "3.13";
   };
 }
