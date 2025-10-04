@@ -13,23 +13,17 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     tag = version;
-    hash = "sha256-SUZSWChO0oQlLblPwmCg2zt2Jp5QnpM1CXWnMiOiLhw=";
+    hash = "sha256-GhyUOp/iLpuKKQAwQsA6D7IiW8ym8QTC4OmRxEKydVA=";
     # note: upstream consistently seems to modify the tag shortly after release,
     # so best to wait a few days before updating
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail 'torch>=2.4.1, <2.7.0' 'torch'
-  '';
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
@@ -47,8 +41,6 @@ buildPythonPackage rec {
     packaging
     torch
   ];
-
-  pythonRelaxDeps = [ "torch" ];
 
   env.BUILD_MONAI = 1;
 
@@ -70,11 +62,11 @@ buildPythonPackage rec {
     "monai.visualize"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytorch framework (based on Ignite) for deep learning in medical imaging";
     homepage = "https://github.com/Project-MONAI/MONAI";
     changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }
