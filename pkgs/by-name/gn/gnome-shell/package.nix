@@ -63,6 +63,7 @@
   libXi,
   libX11,
   libxkbcommon,
+  libsoup_3,
   libxml2,
 }:
 
@@ -160,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXi # required by libmutter
     libX11
     libxkbcommon
+    libsoup_3
     libxml2
 
     # recording
