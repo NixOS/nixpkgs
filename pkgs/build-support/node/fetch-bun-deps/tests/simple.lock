@@ -1,0 +1,6 @@
+{
+  "lockfileVersion": 1,
+  "packages": {
+    "lit-html": ["lit-html@1.4.1", "", {}, "sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q=="]
+  }
+}
