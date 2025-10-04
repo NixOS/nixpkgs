@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       ulrikstrid
-      realsnick
+      logger
       chn
     ];
     mainProgram = "legion_gui";
