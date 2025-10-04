@@ -184,6 +184,10 @@ let
           cp ${self.knownRockspec} "$rockspecFilename"
         ''
         + ''
+          LUAROCKS_EXTRA_ARGS=""
+          if (( ''${NIX_DEBUG:-0} >= 1 )); then
+              LUAROCKS_EXTRA_ARGS=" --verbose"
+          fi
           runHook postConfigure
         '';
 
@@ -193,10 +197,15 @@ let
           source ${lua}/nix-support/utils.sh
           nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
-          LUAROCKS_EXTRA_ARGS=""
-          if (( ''${NIX_DEBUG:-0} >= 1 )); then
-              LUAROCKS_EXTRA_ARGS=" --verbose"
-          fi
+          # luarocks make assumes sources are available in cwd
+          # After the build is complete, it also installs the rock.
+          # If no argument is given, it looks for a rockspec in the current directory
+          # but some packages have several rockspecs in their source directory so
+          # we force the use of the upper level since it is
+          # the sole rockspec in that folder
+          # maybe we could reestablish dependency checking via passing --rock-trees
+          nix_debug "ROCKSPEC $rockspecFilename"
+          luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
 
           runHook postBuild
         '';
@@ -209,21 +218,6 @@ let
 
         installPhase = ''
           runHook preInstall
-
-          # work around failing luarocks test for Write access
-          mkdir -p $out
-
-          # luarocks make assumes sources are available in cwd
-          # After the build is complete, it also installs the rock.
-          # If no argument is given, it looks for a rockspec in the current directory
-          # but some packages have several rockspecs in their source directory so
-          # we force the use of the upper level since it is
-          # the sole rockspec in that folder
-          # maybe we could reestablish dependency checking via passing --rock-trees
-
-          nix_debug "ROCKSPEC $rockspecFilename"
-          luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
-
           runHook postInstall
         '';
 
