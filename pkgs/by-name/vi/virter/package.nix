@@ -1,7 +1,10 @@
 {
   lib,
+  stdenv,
   dnsmasq,
   makeWrapper,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -27,11 +30,21 @@ buildGoModule rec {
     "-X github.com/LINBIT/virter/cmd.githash=builtByNix"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/virter \
       --prefix PATH ":" ${lib.makeBinPath [ dnsmasq ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd virter \
+      --bash <($out/bin/virter completion bash) \
+      --fish <($out/bin/virter completion fish) \
+      --zsh <($out/bin/virter completion zsh)
   '';
 
   # requires network access
