@@ -90,6 +90,22 @@ self: super: {
     else
       throw "Musl libc only supports 64-bit Linux systems.";
 
+  pkgsUutils =
+    if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then
+      nixpkgsFun {
+        overlays = [
+          (self': super': {
+            pkgsUutils = super';
+          })
+        ]
+        ++ overlays;
+        ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+          config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
+        };
+      }
+    else
+      throw "uutils only supports 64-bit Linux systems.";
+
   # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
   pkgsx86_64Darwin =
     if stdenv.hostPlatform.isDarwin then
