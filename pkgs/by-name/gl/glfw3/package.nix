@@ -41,6 +41,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withMinecraftPatch [
     ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
+    ./0010-Avoid-window-icon-error-wayland.patch
   ];
 
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
