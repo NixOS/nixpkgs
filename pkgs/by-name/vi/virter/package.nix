@@ -1,7 +1,12 @@
 {
   lib,
+  stdenv,
+  dnsmasq,
+  makeWrapper,
+  installShellFiles,
   buildGoModule,
   fetchFromGitHub,
+  buildPackages,
 }:
 
 buildGoModule rec {
@@ -24,6 +29,30 @@ buildGoModule rec {
     "-X github.com/LINBIT/virter/cmd.builddate=builtByNix"
     "-X github.com/LINBIT/virter/cmd.githash=builtByNix"
   ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/virter \
+      --prefix PATH ":" ${lib.makeBinPath [ dnsmasq ]}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      # Ensure virter successfully creates $HOME/.config/virter/virter.toml on first run
+      export HOME="$(mktemp -d)"
+
+      installShellCompletion --cmd virter \
+        --bash <(${emulator} $out/bin/virter completion bash) \
+        --fish <(${emulator} $out/bin/virter completion fish) \
+        --zsh <(${emulator} $out/bin/virter completion zsh)
+    ''
+  );
 
   # requires network access
   doCheck = false;
