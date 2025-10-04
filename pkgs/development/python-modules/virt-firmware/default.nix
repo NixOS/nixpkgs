@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "virt-firmware";
-  version = "25.7.3";
+  version = "25.9";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "kraxel";
     repo = "virt-firmware";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kuFTKMhBVlgCBYLTO23IUz/tRLoMRHxjWPIaauu/PWw=";
+    hash = "sha256-UAsXwWwp13s7+KmtLLUV0VFmmfTEEK5MWYf0HfHgXDI=";
   };
 
   build-system = [ setuptools ];
