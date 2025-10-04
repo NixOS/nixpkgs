@@ -4,8 +4,6 @@
   fetchurl,
   gitUpdater,
   lib,
-  shortenPerlShebang,
-  stdenv,
   testers,
 }:
 
@@ -18,14 +16,8 @@ buildPerlPackage rec {
     hash = "sha256-HNVVFEhGooKYeDvr86tFIjUnPHg1hBCBPj1Ok8ZTsfo=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-
   postPatch = ''
     patchShebangs exiftool
-  '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/exiftool
   '';
 
   passthru = {

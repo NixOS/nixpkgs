@@ -43,7 +43,6 @@
   woff2,
   xxHash,
   makeWrapper,
-  shortenPerlShebang,
   useFixedHashes,
   asymptote,
   biber-ms,
