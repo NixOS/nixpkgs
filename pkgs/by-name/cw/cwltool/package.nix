@@ -1,29 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   nodejs,
-  python3,
+  python3Packages,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = final: prev: {
-      # Requires "pydot >= 1.4.1, <3",
-      pydot = prev.pydot.overridePythonAttrs (old: rec {
-        version = "2.0.0";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-YCRq8hUSP6Bi8hzXkb5n3aI6bygN8J9okZ5jeh5PMjU=";
-        };
-        doCheck = false;
-      });
-    };
-  };
-in
-with py.pkgs;
-
-py.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cwltool";
   version = "3.1.20250925164626";
   pyproject = true;
@@ -41,19 +24,16 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
       --replace-fail "mypy==1.18.2" "mypy"
-
-    substituteInPlace cwltool/cwlviewer.py \
-      --replace-fail "quote_id_if_necessary" "quote_if_necessary"
   '';
 
-  build-system = with py.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ git ];
+  nativeBuildInputs = [ gitMinimal ];
 
-  dependencies = with py.pkgs; [
+  dependencies = with python3Packages; [
     argcomplete
     bagit
     coloredlogs
@@ -76,7 +56,7 @@ py.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     mock
     nodejs
     pytest-mock
