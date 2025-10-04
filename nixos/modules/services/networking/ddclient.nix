@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.ddclient;
-  boolToStr = bool: if bool then "yes" else "no";
   dataDir = "/var/lib/ddclient";
   StateDirectory = builtins.baseNameOf dataDir;
   RuntimeDirectory = StateDirectory;
@@ -33,10 +32,10 @@ let
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
     ${lib.optionalString (cfg.zone != "") "zone=${cfg.zone}"}
-    ssl=${boolToStr cfg.ssl}
+    ssl=${lib.boolToYesNo cfg.ssl}
     wildcard=YES
-    quiet=${boolToStr cfg.quiet}
-    verbose=${boolToStr cfg.verbose}
+    quiet=${lib.boolToYesNo cfg.quiet}
+    verbose=${lib.boolToYesNo cfg.verbose}
     ${cfg.extraConfig}
     ${lib.concatStringsSep "," cfg.domains}
   '';
