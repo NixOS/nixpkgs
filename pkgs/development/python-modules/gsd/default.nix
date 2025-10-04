@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gsd";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "glotzerlab";
     repo = "gsd";
     tag = "v${version}";
-    hash = "sha256-8pEs1use/R7g0l6h+rxjpN5j8PznqkJpjLxqiupn9iY=";
+    hash = "sha256-sgMjCAqEC0zxH00hzYexCwnzJ+1vyaBU4RiIadoCJN4=";
   };
 
   build-system = [
