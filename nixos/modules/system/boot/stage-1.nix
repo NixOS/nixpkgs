@@ -224,6 +224,7 @@ let
         if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
         # Make sure that the patchelf'ed binaries still work.
         echo "testing patched programs..."
+        set -x
         $out/bin/ash -c 'echo hello world' | grep "hello world"
         ${
           if zfsRequiresMountHelper then
