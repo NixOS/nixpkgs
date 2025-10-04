@@ -8,6 +8,15 @@
     sha256 = "sha256-Nf1Cvbx7Sbab8EeSSBU5baLBiuFYiQtITED+f4tfjC0=";
   };
 
+  withEncodedWhitespaceGit = testers.invalidateFetcherByDrvHash fetchFromBitbucket {
+    name = "withWhitespaceGit";
+    owner = "tetov";
+    repo = "fetchbitbucket_tester";
+    rev = "tag%20with%20encoded%20spaces";
+    sha256 = "sha256-Nf1Cvbx7Sbab8EeSSBU5baLBiuFYiQtITED+f4tfjC0=";
+    forceFetchGit = true;
+  };
+
   withoutWhitespace = testers.invalidateFetcherByDrvHash fetchFromBitbucket {
     name = "withoutWhitespace";
     owner = "tetov";
