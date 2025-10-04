@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch2,
+  buildPackages,
   pcre,
   pcre2,
   jemalloc,
@@ -24,7 +25,6 @@ let
     {
       version,
       hash,
-      extraNativeBuildInputs ? [ ],
     }:
     stdenv.mkDerivation rec {
       pname = "varnish";
@@ -35,12 +35,15 @@ let
         inherit hash;
       };
 
+      strictDeps = true;
+
       nativeBuildInputs = with python3.pkgs; [
         pkg-config
         docutils
         sphinx
         makeWrapper
       ];
+
       buildInputs = [
         libxslt
         groff
@@ -53,6 +56,13 @@ let
       ++ lib.optional (lib.versionAtLeast version "7") pcre2
       ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
       ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
+
+      configureFlags = [
+        "ac_cv_have_tcp_fastopen=yes"
+        "ac_cv_have_tcp_keep=yes"
+        "ac_cv_have_working_close_range=yes"
+        "PYTHON=${buildPackages.python3.interpreter}"
+      ];
 
       buildFlags = [ "localstatedir=/var/run" ];
 
@@ -75,11 +85,30 @@ let
         ];
 
       postPatch = ''
-        substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
+        substituteInPlace bin/varnishtest/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
+      '';
+
+      postConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        # prevent cache invalidation
+        substituteInPlace bin/varnishd/Makefile \
+          --replace-fail "vhp_hufdec.h: vhp_gen_hufdec" "vhp_hufdec.h:"
+        ln -s "${buildPackages.varnish.vhp_hufdec_h}" bin/varnishd/vhp_hufdec.h
+
+        substituteInPlace bin/varnishstat/Makefile \
+          --replace-fail "varnishstat_curses_help.c: varnishstat_help_gen" "varnishstat_curses_help.c:" \
+          --replace-fail "./varnishstat_help_gen" "${buildPackages.varnish}/bin/varnishstat_help_gen"
+
+        # the docs execute lots of commands to gather options
+        substituteInPlace doc/Makefile \
+          --replace-fail "SUBDIRS = graphviz sphinx" "SUBDIRS = graphviz"
+        substituteInPlace Makefile \
+          --replace-fail "include lib bin vmod etc doc man contrib" "include lib bin vmod etc doc contrib"
       '';
 
       postInstall = ''
         wrapProgram "$out/sbin/varnishd" --prefix PATH : "${lib.makeBinPath [ stdenv.cc ]}"
+
+        cp bin/varnishd/vhp_hufdec.h $vhp_hufdec_h
       '';
 
       # https://github.com/varnishcache/varnish-cache/issues/1875
@@ -89,6 +118,7 @@ let
         "out"
         "dev"
         "man"
+        "vhp_hufdec_h"
       ];
 
       passthru = {
