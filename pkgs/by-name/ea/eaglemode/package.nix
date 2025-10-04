@@ -32,12 +32,12 @@
   extraRuntimeDeps ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eaglemode";
   version = "0.96.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/eaglemode/eaglemode-${version}.tar.bz2";
+    url = "mirror://sourceforge/eaglemode/eaglemode-${finalAttrs.version}.tar.bz2";
     hash = "sha256:1al5n2mcjp0hmsvi4hsdmzd7i0id5i3255xplk0il1nmzydh312a";
   };
 
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       exec = "eaglemode";
       icon = "eaglemode";
       desktopName = "Eagle Mode";
-      genericName = meta.description;
+      genericName = "Zoomable User Interface";
       categories = [
         "Game"
         "Graphics"
@@ -145,4 +145,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
