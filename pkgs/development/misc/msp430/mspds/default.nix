@@ -37,7 +37,10 @@ stdenv.mkDerivation {
   ];
   env.NIX_CFLAGS_COMPILE = toString [ "-I${hidapi}/include/hidapi" ];
 
-  patches = [ ./bsl430.patch ];
+  patches = [
+    ./bsl430.patch
+    ./boost.patch
+  ];
 
   preBuild = ''
     rm ThirdParty/src/pugixml.cpp
