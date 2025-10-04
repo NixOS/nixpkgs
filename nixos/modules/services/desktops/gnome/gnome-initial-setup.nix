@@ -89,6 +89,11 @@ in
     programs.dconf.profiles.gnome-initial-setup.databases = [
       "${pkgs.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
     ];
+
+    users = {
+      # TODO: switch to using provided gnome-initial-setup sysusers.d
+      groups.gnome-initial-setup = { };
+    };
   };
 
 }
