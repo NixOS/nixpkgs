@@ -190,6 +190,15 @@ in
         If overriding fileSystems."/" then you should to set this to the root mount + /nix-path-registration
       '';
     };
+
+    roundUpImage = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the SD image should be rounded up to nearest power of two.
+        Can be used to feed result directly to QEMU.
+      '';
+    };
   };
 
   config = {
@@ -228,6 +237,7 @@ in
         libfaketime,
         util-linux,
         zstd,
+        bc,
       }:
       stdenv.mkDerivation {
         name = config.image.fileName;
@@ -239,9 +249,10 @@ in
           mtools
           util-linux
         ]
-        ++ lib.optional config.sdImage.compressImage zstd;
+        ++ lib.optional config.sdImage.compressImage zstd
+        ++ lib.optional config.sdImage.roundUpImage bc;
 
-        inherit (config.sdImage) compressImage;
+        inherit (config.sdImage) compressImage roundUpImage;
 
         buildCommand = ''
           mkdir -p $out/nix-support $out/sd-image
@@ -312,6 +323,11 @@ in
           dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
 
           ${config.sdImage.postBuildCommands}
+
+          if test -n "$roundUpImage"; then
+              roundedUpSize=$(echo "x=l($imageSize)/l(2); scale=0; 2^((x+0.5)/1)" | bc -l;)
+              truncate -s $roundedUpSize $img
+          fi
 
           if test -n "$compressImage"; then
               zstd -T$NIX_BUILD_CORES --rm $img
