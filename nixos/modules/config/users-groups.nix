@@ -25,7 +25,6 @@ let
     hasAttr
     id
     length
-    listToAttrs
     literalExpression
     mapAttrs'
     mapAttrsToList
@@ -584,14 +583,9 @@ let
         let
           id = toString (getAttr idAttr (getAttr name set));
           exists = hasAttr id acc;
-          newAcc =
-            acc
-            // (listToAttrs [
-              {
-                name = id;
-                value = true;
-              }
-            ]);
+          newAcc = acc // {
+            ${id} = true;
+          };
         in
         if dup then
           args

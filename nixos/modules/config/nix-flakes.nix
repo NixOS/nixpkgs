@@ -8,12 +8,12 @@
 { config, lib, ... }:
 let
   inherit (lib)
-    filterAttrs
     literalExpression
     mapAttrsToList
     mkDefault
     mkIf
     mkOption
+    removeAttrs
     types
     ;
 
@@ -98,7 +98,11 @@ in
                       type = "path";
                       path = config.flake.outPath;
                     }
-                    // filterAttrs (n: _: n == "lastModified" || n == "rev" || n == "narHash") config.flake
+                    // removeAttrs config.flake [
+                      "lastModified"
+                      "rev"
+                      "narHash"
+                    ]
                   )
                 );
               };

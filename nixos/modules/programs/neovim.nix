@@ -167,19 +167,15 @@ in
     # from other packages will be used by neovim.
     environment.pathsToLink = [ "/share/nvim" ];
 
-    environment.etc = builtins.listToAttrs (
-      builtins.attrValues (
-        builtins.mapAttrs (name: value: {
-          name = "xdg/nvim/${name}";
-          value = builtins.removeAttrs (
-            value
-            // {
-              target = "xdg/nvim/${value.target}";
-            }
-          ) (lib.optionals (builtins.isNull value.source) [ "source" ]);
-        }) cfg.runtime
-      )
-    );
+    environment.etc = lib.mapAttrs' (name: value: {
+      name = "xdg/nvim/${name}";
+      value = lib.removeAttrs (
+        value
+        // {
+          target = "xdg/nvim/${value.target}";
+        }
+      ) (lib.optionals (builtins.isNull value.source) [ "source" ]);
+    }) cfg.runtime;
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
       inherit (cfg)

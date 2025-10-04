@@ -181,8 +181,7 @@ let
   isUnixSocket = socket: hasPrefix "/" (if (isString socket) then socket else socket.socket);
 
   mkBindSockets =
-    enabled: socks:
-    concatStringsSep "\n  " (flatten (map (each: "bind_socket = \"${each.rawEntry}\";") socks));
+    enabled: socks: concatMapStringsSep "\n  " (each: "bind_socket = \"${each.rawEntry}\";") socks;
 
   rspamdConfFile = pkgs.writeText "rspamd.conf" ''
     .include "$CONFDIR/common.conf"

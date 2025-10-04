@@ -6,7 +6,7 @@
   withStyle ? "light", # use override to specify one of "dark" / "orange" / "bigSur"
 }:
 
-assert builtins.any (s: withStyle == s) [
+assert builtins.elem withStyle [
   "light"
   "dark"
   "orange"

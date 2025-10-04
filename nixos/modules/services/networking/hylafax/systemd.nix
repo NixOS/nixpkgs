@@ -270,6 +270,6 @@ in
 {
   config.systemd = mkIf cfg.enable {
     inherit sockets timers paths;
-    services = lib.mapAttrs (lib.const hardenService) (services // modemServices);
+    services = lib.mapAttrs (_: hardenService) (services // modemServices);
   };
 }

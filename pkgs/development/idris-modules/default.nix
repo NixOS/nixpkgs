@@ -65,7 +65,7 @@ let
 
       # The set of libraries that comes with idris
 
-      builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins_;
+      builtins = pkgs.lib.attrValues builtins_;
 
       # Libraries
 

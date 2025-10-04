@@ -170,7 +170,7 @@ let
           ) { } extensions;
 
           Extensions = {
-            Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
+            Install = map (e: "${e.outPath}/${e.extid}.xpi") extensions;
           };
         }
         // lib.optionalAttrs smartcardSupport {
