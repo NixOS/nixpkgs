@@ -187,6 +187,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
     "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
+    # there is many different min versions set accross different
+    # Find*.cmake files, substituting them all is not viable
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   postInstall = ''
