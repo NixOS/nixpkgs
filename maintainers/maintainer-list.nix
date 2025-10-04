@@ -22170,6 +22170,12 @@
     githubId = 31457698;
     name = "Nathanael Robbins";
   };
+  RobertCraigie = {
+    email = "robert@craigie.dev";
+    github = "RobertCraigie";
+    githubId = 23125036;
+    name = "Robert Craigie";
+  };
   roberth = {
     email = "nixpkgs@roberthensing.nl";
     matrix = "@roberthensing:matrix.org";
