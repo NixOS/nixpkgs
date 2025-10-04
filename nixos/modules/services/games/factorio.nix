@@ -296,6 +296,15 @@ in
           Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
         '';
       };
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "--rcon-bind=localhost:27015"
+          "--rcon-password=..."
+        ];
+        description = "Extra command line arguments.";
+      };
     };
   };
 
@@ -340,6 +349,7 @@ in
           (playerListOption "server-adminlist" cfg.admins)
           (playerListOption "server-whitelist" cfg.allowedPlayers)
           (lib.optionalString (cfg.allowedPlayers != [ ]) "--use-server-whitelist")
+          cfg.extraArgs
         ];
 
         # Sandboxing
