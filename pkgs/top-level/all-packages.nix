@@ -8695,8 +8695,6 @@ with pkgs;
 
   reposilitePlugins = recurseIntoAttrs (callPackage ../by-name/re/reposilite/plugins.nix { });
 
-  rhino = callPackage ../development/libraries/java/rhino { };
-
   rocksdb_9_10 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "9.10.0";
@@ -12296,8 +12294,6 @@ with pkgs;
 
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins { });
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
-
-  omegat = callPackage ../applications/misc/omegat.nix { };
 
   openambit = qt5.callPackage ../applications/misc/openambit { };
 
