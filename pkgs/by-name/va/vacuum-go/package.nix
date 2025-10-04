@@ -15,6 +15,8 @@ buildGoModule (finalAttrs: {
     # using refs/tags because simple version gives: 'the given path has multiple possibilities' error
     tag = "v${finalAttrs.version}";
     hash = "sha256-vsdSRsfGXjWlYxl3a6cGWJ7IadLP7KIM3lFkUlboTj4=";
+    # needed to set the proper version
+    leaveDotGit = true;
   };
 
   vendorHash = "sha256-+GkxN20mZD/ZBTCjmjiDcEAJix2Ssn9HsNrUtQkrI18=";
@@ -23,10 +25,12 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${finalAttrs.version}"
   ];
 
-  subPackages = [ "./vacuum.go" ];
+  # separate module (another main package)
+  excludedPackages = [ "./plugin/sample" ];
+  # require plugin/sample
+  checkFlags = [ "-skip=^TestApplyRules_TestRules_Custom_JS|^Test_Issue486$" ];
 
   passthru = {
     tests.version = testers.testVersion {
