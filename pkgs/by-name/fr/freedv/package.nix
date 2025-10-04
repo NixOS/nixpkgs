@@ -25,6 +25,18 @@
 }:
 
 let
+  ebur128Src = fetchFromGitHub {
+    owner = "jiixyj";
+    repo = "libebur128";
+    rev = "v1.2.6";
+    hash = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
+  };
+  mimallocSrc = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    tag = "v2.2.4";
+    hash = "sha256-+8xZT+mVEqlqabQc+1buVH/X6FZxvCd0rWMyjPu9i4o=";
+  };
   radaeSrc = fetchFromGitHub {
     owner = "drowe67";
     repo = "radae";
@@ -34,13 +46,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+hVh5GgSz8MWib10dVV6gx9EvocvLAJm2Eid/4y//2E=";
+    hash = "sha256-awWeq0ueKAK+4mAM0Nv3SsSv/mIFQ+/TqCPw9wjed1w=";
   };
 
   patches = [
@@ -48,11 +60,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    cp -R ${ebur128Src} ebur128
+    cp -R ${mimallocSrc} mimalloc
     cp -R ${radaeSrc} radae
-    chmod -R u+w radae
+    chmod -R u+w ebur128 mimalloc radae
     substituteInPlace radae/cmake/BuildOpus.cmake \
       --replace-fail "https://gitlab.xiph.org/xiph/opus/-/archive/main/opus-main.tar.gz" "${libopus.src}" \
       --replace-fail "./autogen.sh && " ""
+    substituteInPlace cmake/BuildEbur128.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
+      --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
+      --replace-fail "git apply" "patch -p1 <"
+    substituteInPlace cmake/BuildMimalloc.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/microsoft/mimalloc.git" "URL $(realpath mimalloc)" \
+      --replace-fail "GIT_TAG        v2.2.4" ""
     substituteInPlace cmake/BuildRADE.cmake \
       --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
       --replace-fail "GIT_TAG main" ""
