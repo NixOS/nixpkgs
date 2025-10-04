@@ -13549,6 +13549,8 @@ self: super: with self; {
 
   pymsteams = callPackage ../development/python-modules/pymsteams { };
 
+  pymultihash = callPackage ../development/python-modules/pymultihash { };
+
   pymumble = callPackage ../development/python-modules/pymumble { };
 
   pymunk = callPackage ../development/python-modules/pymunk { };
@@ -18744,6 +18746,8 @@ self: super: with self; {
   trio = callPackage ../development/python-modules/trio { };
 
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
+
+  trio-typing = callPackage ../development/python-modules/trio-typing { };
 
   trio-websocket = callPackage ../development/python-modules/trio-websocket { };
 
