@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt	2025-09-20 14:27:54.008381773 -0700
++++ b/CMakeLists.txt	2025-09-20 14:30:56.681248692 -0700
+@@ -86,7 +86,7 @@
+     add_compile_definitions(TTMLIR_ENABLE_DEBUG_LOGS)
+ endif()
+ 
+-add_compile_options(-Wall -Wextra -Wpedantic -Werror -Wno-unused-parameter --system-header-prefix=ENV{TTMLIR_TOOLCHAIN_DIR})
++add_compile_options(-Wall -Wextra -Wpedantic -Werror -Wno-unused-parameter --system-header-prefix=$ENV{TTMLIR_TOOLCHAIN_DIR})
+ 
+ set(CMAKE_LINKER_TYPE DEFAULT)
+ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")

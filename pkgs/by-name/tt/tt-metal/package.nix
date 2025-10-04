@@ -12,6 +12,7 @@
   mpi,
   hwloc,
   python3,
+  capstone,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-metal";
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "tt-metal";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ZIUjZLifRVmpWpG8Ty+I+pwgpIf5r9gJkI8ULTau4OE=";
+    hash = "sha256-h2pbMJtyK7xedy3L2y8VN39p4Fyu6xS+9pzDrrE6+54=";
   };
 
   cpm = fetchurl {
@@ -31,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sfpi = callPackage ./sfpi.nix { };
+
+  patches = [
+    ./fix-clang.diff
+  ];
 
   postUnpack = ''
     mkdir -p "$sourceRoot/runtime"
@@ -46,18 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
     (lib.cmakeFeature "VERSION_NUMERIC" finalAttrs.version)
+    (lib.cmakeBool "ENABLE_TRACY" true)
   ];
 
   preConfigure = ''
     mkdir -p build/_deps
-    ${lib.concatMapAttrsStringSep "\n"
-      (name: src: "cp -r --no-preserve=ownership,mode ${src} build/_deps/${name}-src")
-      (
-        import ./deps.nix {
-          inherit fetchFromGitHub;
-        }
-      )
-    }
+    ${lib.concatMapAttrsStringSep "\n" (
+      name: src: "cp -r --no-preserve=ownership,mode ${src} build/_deps/${name}-src"
+    ) finalAttrs.passthru.deps}
     cp $cpm build/_deps/tt-logger-src/cmake/CPM.cmake
   '';
 
@@ -81,7 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     mpi
     hwloc
+    capstone
   ];
+
+  passthru.deps = import ./deps.nix {
+    inherit fetchFromGitHub;
+  };
 
   # Fixes the parallel hook crashing in the fixupPhase with no error.
   noAuditTmpdir = true;
