@@ -22,8 +22,8 @@ let
   common_meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; epson;
-    platforms = with lib.platforms; linux;
+    license = lib.licenses.epson;
+    platforms = lib.platforms.linux;
   };
 in
 ############################
@@ -35,7 +35,7 @@ in
 # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
 let
   plugins = {
-    v330 = stdenv.mkDerivation rec {
+    v330 = stdenv.mkDerivation (finalAttrs: {
       name = "iscan-v330-bundle";
       version = "2.30.4";
 
@@ -46,8 +46,8 @@ let
         # version.
         # NOTE: Don't forget to update the webarchive link too!
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "056c04pfsf98nnknphg28l489isqb6y4l2c8g7wqhclwgj7m338i";
       };
@@ -58,10 +58,14 @@ let
       ];
 
       installPhase = ''
-        ${rpm}/bin/rpm2cpio plugins/esci-interpreter-perfection-v330-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        runHook preInstall
+
+        ${lib.getExe' rpm "rpm2cpio"} plugins/esci-interpreter-perfection-v330-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out{,/share,/lib}
         cp -r ./usr/share/{iscan-data,esci}/ $out/share/
         cp -r ./usr/lib64/esci $out/lib
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -70,18 +74,20 @@ let
         '';
         hw = "Perfection V330 Photo";
       };
+
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support Perfection V330 Photo scanner in sane";
       };
-    };
-    v370 = stdenv.mkDerivation rec {
+    });
+
+    v370 = stdenv.mkDerivation (finalAttrs: {
       name = "iscan-v370-bundle";
       version = "2.30.4";
 
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "1ff7adp9mha1i2ibllz540xkagpy8r757h4s3h60bgxbyzv2yggr";
       };
@@ -92,15 +98,18 @@ let
       ];
 
       installPhase = ''
-        cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v370-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        runHook preInstall
 
+        cd plugins
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-perfection-v370-*.x86_64.rpm | ${lib.getExe cpio} -idmv
 
         mkdir -p $out/share $out/lib
         cp -r usr/share/{iscan-data,iscan}/ $out/share
         cp -r usr/lib64/iscan $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -110,10 +119,11 @@ let
         hw = "Perfection V37/V370";
       };
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support Perfection V37/V370 scanner in sane";
       };
-    };
-    v550 = stdenv.mkDerivation rec {
+    });
+
+    v550 = stdenv.mkDerivation (finalAttrs: {
       pname = "iscan-perfection-v550-bundle";
       version = "2.30.4";
 
@@ -123,19 +133,23 @@ let
       ];
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/iscan-perfection-v550-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "f8b3abf21354fc5b9bc87753cef950b6c0f07bf322a94aaff2c163bafcf50cd9";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v550-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-perfection-v550-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = ''
@@ -144,10 +158,11 @@ let
         hw = "Perfection V550 Photo";
       };
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support Perfection V550 Photo scanner in sane";
       };
-    };
-    v600 = stdenv.mkDerivation rec {
+    });
+
+    v600 = stdenv.mkDerivation (finalAttrs: {
       pname = "iscan-gt-x820-bundle";
       version = "2.30.4";
 
@@ -157,19 +172,23 @@ let
       ];
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x820/rpm/x64/iscan-gt-x820-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "1vlba7dsgpk35nn3n7is8nwds3yzlk38q43mppjzwsz2d2n7sr33";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-x820-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-x820-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = ''
@@ -178,9 +197,10 @@ let
         hw = "Perfection V600 Photo";
       };
       meta = common_meta // {
-        description = "iscan esci x820 plugin for " + passthru.hw;
+        description = "iscan esci x820 plugin for Perfection V600 Photo";
       };
-    };
+    });
+
     x770 = stdenv.mkDerivation rec {
       pname = "iscan-gt-x770-bundle";
       version = "2.30.4";
@@ -194,16 +214,20 @@ let
           "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
           "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
         ];
-        sha256 = "1chxdm6smv2d14pn2jl9xyd0vr42diy7vpskd3b9a61gf5h3gj03";
+        hash = "sha256-A8g3YHEvGJXWaFPffXxsguQNmu+JSmEvCU3sqk1tHbI=";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-x770-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-x770-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = ''
@@ -215,7 +239,7 @@ let
         description = "iscan esci x770 plugin for " + passthru.hw;
       };
     };
-    f720 = stdenv.mkDerivation rec {
+    f720 = stdenv.mkDerivation (finalAttrs: {
       pname = "iscan-gt-f720-bundle";
       version = "2.30.4";
 
@@ -223,17 +247,21 @@ let
       buildInputs = [ gcc.cc.lib ];
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "1xnbmb2rn610kqpg1x6k1cc13zlmx2f3l2xnj6809rnhg96qqn20";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio esci-interpreter-gt-f720-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} esci-interpreter-gt-f720-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -244,10 +272,11 @@ let
       };
 
       meta = common_meta // {
-        description = "iscan esci f720 plugin for " + passthru.hw;
+        description = "iscan esci f720 plugin for GT-F720, GT-S620, Perfection V30, Perfection V300 Photo";
       };
-    };
-    s80 = stdenv.mkDerivation rec {
+    });
+
+    s80 = stdenv.mkDerivation (finalAttrs: {
       pname = "iscan-gt-s80-bundle";
       version = "2.30.4";
 
@@ -258,19 +287,23 @@ let
       ];
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "00qfdgs03k7bbs67zjrk8hbxvlyinsmk890amp9cmpfjfzdxgg58";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio esci-interpreter-gt-s80-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
-        ${rpm}/bin/rpm2cpio iscan-plugin-esdip-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} esci-interpreter-gt-s80-*.x86_64.rpm | ${lib.getExe cpio} -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-esdip-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mkdir $out/share/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -284,17 +317,18 @@ let
       };
 
       meta = common_meta // {
-        description = "iscan esci s80 plugin for " + passthru.hw;
+        description = "iscan esci s80 plugin for ES-D200, ED-D350, ES-D400, GT-S50, GT-S55, GT-S80, GT-S85";
       };
-    };
-    s600 = stdenv.mkDerivation rec {
+    });
+
+    s600 = stdenv.mkDerivation (finalAttrs: {
       name = "iscan-gt-s600-bundle";
       version = "2.30.4";
 
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/20240614120113/https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/20240614120113/https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "fe1356b1d5c40bc5ac985a5693166efb9e5049a78b412f49c385eb503eadf2c6";
       };
@@ -305,13 +339,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-s600-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-s600-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -321,17 +359,18 @@ let
         hw = "GT-F650, GT-S600, Perfection V10, Perfection V100 Photo";
       };
       meta = common_meta // {
-        description = "iscan gt-s600 plugin for " + passthru.hw;
+        description = "iscan gt-s600 plugin for GT-F650, GT-S600, Perfection V10, Perfection V100 Photo";
       };
-    };
-    s650 = stdenv.mkDerivation rec {
+    });
+
+    s650 = stdenv.mkDerivation (finalAttrs: {
       name = "iscan-gt-s650-bundle";
       version = "2.30.4";
 
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "0fn4lz4g0a8l301v6yv7fwl37wgwhz5y90nf681f655xxc91hqh7";
       };
@@ -342,13 +381,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-s650-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-s650-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -359,17 +402,18 @@ let
         hw = "GT-S650, Perfection V19, Perfection V39";
       };
       meta = common_meta // {
-        description = "iscan GT-S650 for " + passthru.hw;
+        description = "iscan GT-S650 for GT-S650, Perfection V19, Perfection V39";
       };
-    };
-    x750 = stdenv.mkDerivation rec {
+    });
+
+    x750 = stdenv.mkDerivation (finalAttrs: {
       name = "iscan-gt-x750-bundle";
       version = "2.30.4";
 
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "sha256-9EeBHmh1nwSxnTnevPP8RZ4WBdyY+itR3VXo2I7f5N0=";
       };
@@ -380,13 +424,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-x750-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-x750-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -396,17 +444,18 @@ let
         hw = "GT-X750, Perfection 4490";
       };
       meta = common_meta // {
-        description = "iscan GT-X750 for " + passthru.hw;
+        description = "iscan GT-X750 for GT-X750, Perfection 4490";
       };
-    };
-    gt1500 = stdenv.mkDerivation rec {
+    });
+
+    gt1500 = stdenv.mkDerivation (finalAttrs: {
       name = "iscan-gt-1500-bundle";
       version = "2.30.4";
 
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "sha256-1rVsbBsb+QtCOT1FsyhgvCbZIN6IeQH7rZXNmsD7cl8=";
       };
@@ -417,13 +466,17 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-plugin-gt-1500-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-plugin-gt-1500-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/share/iscan $out/share/esci
         mv $out/lib/iscan $out/lib/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -433,17 +486,18 @@ let
         hw = "GT-1500";
       };
       meta = common_meta // {
-        description = "iscan GT-1500 for " + passthru.hw;
+        description = "iscan GT-1500 for GT-1500";
       };
-    };
-    ds30 = stdenv.mkDerivation rec {
+    });
+
+    ds30 = stdenv.mkDerivation (finalAttrs: {
       name = "iscan-ds-30-bundle";
       version = "2.30.4";
 
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/ds-30/rpm/x64/iscan-ds-30-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "0d5ef9b83999c56c14bd17ca63537f63ad4f0d70056870dc00888af1b36f4153";
       };
@@ -454,12 +508,16 @@ let
       ];
 
       installPhase = ''
-        ${rpm}/bin/rpm2cpio plugins/iscan-plugin-ds-30-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        runHook preInstall
+
+        ${lib.getExe' rpm "rpm2cpio"} plugins/iscan-plugin-ds-30-*.x86_64.rpm | ${lib.getExe cpio} -idmv
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mv $out/lib/iscan $out/lib/esci
         mkdir $out/share/esci
+
+        runHook postInstall
       '';
 
       passthru = {
@@ -469,10 +527,11 @@ let
         hw = "DS-30";
       };
       meta = common_meta // {
-        description = "Plugin to support " + passthru.hw + " scanner in sane";
+        description = "Plugin to support DS-30 scanner in sane";
       };
-    };
-    network = stdenv.mkDerivation rec {
+    });
+
+    network = stdenv.mkDerivation (finalAttrs: {
       pname = "iscan-nt-bundle";
       # for the version, look for the driver of XP-750 in the search page
       version = "2.30.4";
@@ -482,19 +541,23 @@ let
 
       src = fetchurl {
         urls = [
-          "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz"
-          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz"
+          "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
+          "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${finalAttrs.version}.x64.rpm.tar.gz"
         ];
         sha256 = "0jssigsgkxb9i7qa7db291a1gbvwl795i4ahvb7bnqp33czkj85k";
       };
       installPhase = ''
+        runHook preInstall
+
         cd plugins
-        ${rpm}/bin/rpm2cpio iscan-network-nt-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${lib.getExe' rpm "rpm2cpio"} iscan-network-nt-*.x86_64.rpm | ${lib.getExe cpio} -idmv
 
         mkdir $out
         cp -r usr/share $out
         cp -r usr/lib64 $out/lib
         mkdir $out/share/esci
+
+        runHook postInstall
       '';
       passthru = {
         registrationCommand = "";
@@ -504,7 +567,7 @@ let
       meta = common_meta // {
         description = "iscan network plugin";
       };
-    };
+    });
   };
 in
 let
@@ -514,16 +577,16 @@ let
   };
 in
 let
-  iscan-data = stdenv.mkDerivation rec {
+  iscan-data = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-data";
     version = "1.39.2-1";
 
     src = fetchurl {
       urls = [
-        "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
-        "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
+        "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${finalAttrs.version}.tar.gz"
+        "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${finalAttrs.version}.tar.gz"
       ];
-      sha256 = "092qhlnjjgz11ifx6mng7mz20i44gc0nlccrbmw18xr5hipbqqka";
+      hash = "sha256-amK8boQldxR4XZkxagF7hEQgfj3PVtNdDOE/KS2FWCQ=";
     };
 
     buildInputs = [
@@ -531,16 +594,16 @@ let
     ];
 
     meta = common_meta;
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iscan";
   version = "2.30.4-2";
 
   src = fetchurl {
     urls = [
-      "http://support.epson.net/linux/src/scanner/iscan/iscan_${version}.tar.gz"
-      "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan_${version}.tar.gz"
+      "http://support.epson.net/linux/src/scanner/iscan/iscan_${finalAttrs.version}.tar.gz"
+      "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan_${finalAttrs.version}.tar.gz"
     ];
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
@@ -613,4 +676,4 @@ stdenv.mkDerivation rec {
       dominikh
     ];
   };
-}
+})
