@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eaglemode";
-  version = "0.96.2";
+  version = "0.96.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/eaglemode/eaglemode-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-SoQBm//VBhrBpLeXIkYsLYJ42q9NQxK3rhBcyaqwhao=";
+    hash = "sha256-AHeupgEnyQylRWFDrPeo4b0mNONqG+6QwWnRpYknqOQ=";
   };
 
   # Fixes "Error: No time zones found." on the clock
