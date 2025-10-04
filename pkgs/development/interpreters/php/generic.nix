@@ -85,7 +85,7 @@ let
           }@innerArgs:
           let
             allArgs = args // prevArgs // innerArgs;
-            filteredArgs = builtins.removeAttrs allArgs [
+            filteredArgs = removeAttrs allArgs [
               "extensions"
               "extraConfig"
             ];

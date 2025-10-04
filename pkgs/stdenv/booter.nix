@@ -108,7 +108,7 @@ let
           args'
         else
           allPackages (
-            (builtins.removeAttrs args' [ "selfBuild" ])
+            (removeAttrs args' [ "selfBuild" ])
             // {
               adjacentPackages =
                 if args.selfBuild or true then

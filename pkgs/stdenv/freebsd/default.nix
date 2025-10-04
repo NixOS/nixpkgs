@@ -59,7 +59,7 @@ let
       attrs
       // {
         inherit system;
-        name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
+        name = attrs.name or (baseNameOf (builtins.elemAt attrs.paths 0));
         src = bootstrapArchive;
         builder = "${bootstrapArchive}/bin/bash";
         # this script will prefer to link files instead of copying them.
@@ -497,7 +497,7 @@ in
           bzip2
           xz
           ;
-        binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
+        binutils-unwrapped = removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
         fetchurl = import ../../build-support/fetchurl {
           inherit lib;
           inherit (self) stdenvNoCC;

@@ -160,7 +160,7 @@ let
     env.LANG = "C.UTF-8";
   };
 
-  cleanArgs = builtins.removeAttrs args [
+  cleanArgs = removeAttrs args [
     "extraBuildInputs"
     "extraNativeBuildInputs"
     "extraPropagatedBuildInputs"

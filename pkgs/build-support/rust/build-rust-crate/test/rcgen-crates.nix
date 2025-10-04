@@ -73,7 +73,7 @@ rec {
       let
         members = builtins.attrValues workspaceMembers;
       in
-      builtins.map (m: m.build) members;
+      map (m: m.build) members;
   };
 
   #
@@ -4347,7 +4347,7 @@ rec {
     sourceFilter =
       name: type:
       let
-        baseName = builtins.baseNameOf (builtins.toString name);
+        baseName = baseNameOf (toString name);
       in
       !(
         # Filter out git
@@ -4603,7 +4603,7 @@ rec {
           let
             features = mergedFeatures."${packageId}" or [ ];
             crateConfig' = crateConfigs."${packageId}";
-            crateConfig = builtins.removeAttrs crateConfig' [
+            crateConfig = removeAttrs crateConfig' [
               "resolvedDefaultFeatures"
               "devDependencies"
             ];
@@ -4657,7 +4657,7 @@ rec {
                     version = package.version;
                   };
               in
-              lib.mapAttrs (name: choices: builtins.map versionAndRename choices) grouped;
+              lib.mapAttrs (name: choices: map versionAndRename choices) grouped;
           in
           buildRustCrateForPkgsFunc pkgs (
             crateConfig
@@ -4715,7 +4715,7 @@ rec {
       if builtins.isAttrs val then
         lib.mapAttrs (n: v: sanitizeForJson v) val
       else if builtins.isList val then
-        builtins.map sanitizeForJson val
+        map sanitizeForJson val
       else if builtins.isFunction val then
         "function"
       else
@@ -4826,7 +4826,7 @@ rec {
       assert (builtins.isAttrs target);
       assert (builtins.isBool runTests);
       let
-        crateConfig = crateConfigs."${packageId}" or (builtins.throw "Package not found: ${packageId}");
+        crateConfig = crateConfigs."${packageId}" or (throw "Package not found: ${packageId}");
         expandedFeatures = expandFeatures (crateConfig.features or { }) features;
         enabledFeatures = enableFeatures (crateConfig.dependencies or [ ]) expandedFeatures;
         depWithResolvedFeatures =
@@ -4984,7 +4984,7 @@ rec {
             dependencyPrefix = (dependency.rename or dependency.name) + "/";
             dependencyFeatures = builtins.filter (f: lib.hasPrefix dependencyPrefix f) features;
           in
-          builtins.map (lib.removePrefix dependencyPrefix) dependencyFeatures;
+          map (lib.removePrefix dependencyPrefix) dependencyFeatures;
       in
       defaultOrNil ++ explicitFeatures ++ additionalDependencyFeatures;
 
@@ -5002,7 +5002,7 @@ rec {
     deprecationWarning =
       message: value:
       if strictDeprecation then
-        builtins.throw "strictDeprecation enabled, aborting: ${message}"
+        throw "strictDeprecation enabled, aborting: ${message}"
       else
         builtins.trace message value;
 

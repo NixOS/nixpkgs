@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # some python tests use uv, which in turn needs python
   UV_PYTHON = "${python312}/bin/python";
 
-  checkFlags = builtins.map (t: "--skip ${t}") [
+  checkFlags = map (t: "--skip ${t}") [
     # these tests require internet access
     "check_added_large_files_hook"
     "check_json_hook"

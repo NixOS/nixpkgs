@@ -474,7 +474,7 @@ let
 in
 outer
 // builtins.listToAttrs (
-  builtins.map (arch: {
+  map (arch: {
     name = arch;
     value = scopeForArches [ arch ];
   }) outer.clr.gpuTargets

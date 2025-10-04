@@ -192,9 +192,7 @@ let
 
   buildInputs =
     if enabledPlugins == null then
-      builtins.concatMap pluginBuildInputs (
-        builtins.attrNames (builtins.removeAttrs plugins [ "xencpu" ])
-      )
+      builtins.concatMap pluginBuildInputs (builtins.attrNames (removeAttrs plugins [ "xencpu" ]))
     else
       builtins.concatMap pluginBuildInputs enabledPlugins;
 in

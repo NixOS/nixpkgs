@@ -10,7 +10,7 @@
 }:
 let
   pluginsDir = linkFarm "reposilite-plugins" (
-    builtins.map (p: {
+    map (p: {
       name = (builtins.parseDrvName p.name).name + ".jar";
       path = p.outPath or p;
     }) plugins

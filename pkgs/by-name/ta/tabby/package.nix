@@ -59,7 +59,7 @@ let
   # - metal if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
   # !! warn if multiple acceleration methods are enabled and default to the first one in the list
   featureDevice =
-    if (builtins.isNull acceleration) then
+    if (isNull acceleration) then
       (warnIfMultipleAccelerationMethods availableAccelerations)
     else
       acceleration;

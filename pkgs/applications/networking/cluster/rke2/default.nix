@@ -2,7 +2,7 @@
 
 let
   common = opts: callPackage (import ./builder.nix lib opts);
-  extraArgs = builtins.removeAttrs args [ "callPackage" ];
+  extraArgs = removeAttrs args [ "callPackage" ];
 in
 rec {
   rke2_1_30 = common (

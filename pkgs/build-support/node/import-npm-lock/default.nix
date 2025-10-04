@@ -52,7 +52,7 @@ let
                 // fetcherOpts
               ))
             else if lib.hasPrefix "git" module.resolved then
-              (builtins.fetchGit (
+              (fetchGit (
                 {
                   url = module.resolved;
                 }

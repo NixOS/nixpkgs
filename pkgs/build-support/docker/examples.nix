@@ -699,7 +699,7 @@ rec {
               " --program-prefix=layeredImageWithFakeRootCommands-"
             ];
             doCheck = false;
-            versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+            versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
             meta = prevAttrs.meta // {
               mainProgram = "layeredImageWithFakeRootCommands-hello";
             };

@@ -32,7 +32,7 @@ lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.m
       inherit (topkg) buildPhase installPhase;
 
     }
-    // (builtins.removeAttrs args [ "minimalOCamlVersion" ])
+    // (removeAttrs args [ "minimalOCamlVersion" ])
     // {
 
       name = "ocaml${ocaml.version}-${pname}-${version}";

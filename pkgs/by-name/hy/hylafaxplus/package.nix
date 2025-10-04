@@ -33,7 +33,7 @@
 let
 
   configSite = replaceVars ./config.site {
-    config_maxgid = lib.optionalString (maxgid != null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
+    config_maxgid = lib.optionalString (maxgid != null) ''CONFIG_MAXGID=${toString maxgid}'';
     ghostscript_version = ghostscript.version;
     out = null; # "out" will be resolved in post-install.sh
     inherit coreutils ghostscript libtiff;
@@ -41,7 +41,7 @@ let
 
   postPatch = replaceVars ./post-patch.sh {
     inherit configSite;
-    maxuid = lib.optionalString (maxuid != null) (builtins.toString maxuid);
+    maxuid = lib.optionalString (maxuid != null) (toString maxuid);
     faxcover_binpath = lib.makeBinPath [
       stdenv.shellPackage
       coreutils

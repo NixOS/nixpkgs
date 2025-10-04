@@ -891,11 +891,7 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences =
     lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
       # 'or p' is for manually specified buildPackages as they dont have __spliced
-      (
-        builtins.filter (p: p != null) (
-          builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs
-        )
-      );
+      (builtins.filter (p: p != null) (map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs));
 
   disallowedRequisites = lib.optionals (!withUkify) [
     bash

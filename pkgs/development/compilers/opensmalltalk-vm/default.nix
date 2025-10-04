@@ -197,5 +197,5 @@ if (!config.allowAliases && !(vmsByPlatform ? platform)) then
 else
   vmsByPlatform.${platform} or (throw (
     "Unsupported platform ${platform}: only the following platforms are supported: "
-    + builtins.toString (builtins.attrNames vmsByPlatform)
+    + toString (builtins.attrNames vmsByPlatform)
   ))

@@ -72,7 +72,7 @@ let
   # This used to mean that if a package defined extra nativeBuildInputs, it
   # would override the ones for building an Octave package (the hook and Octave
   # itself, causing everything to fail.
-  attrs' = builtins.removeAttrs attrs [
+  attrs' = removeAttrs attrs [
     "nativeBuildInputs"
     "passthru"
   ];

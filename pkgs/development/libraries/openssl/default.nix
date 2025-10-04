@@ -193,9 +193,7 @@ let
       # starting with 3.5 its nice to speed things up for free
       ++ lib.optional stdenv.hostPlatform.isx86_64 "enable-ec_nistp_64_gcc_128"
       # useful to set e.g. 256 bit security level with setting this to 5
-      ++ lib.optional (
-        securityLevel != null
-      ) "-DOPENSSL_TLS_SECURITY_LEVEL=${builtins.toString securityLevel}"
+      ++ lib.optional (securityLevel != null) "-DOPENSSL_TLS_SECURITY_LEVEL=${toString securityLevel}"
       ++ lib.optional enableMD2 "enable-md2"
       ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"

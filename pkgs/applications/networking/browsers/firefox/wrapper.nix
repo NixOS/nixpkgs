@@ -76,7 +76,7 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      allNativeMessagingHosts = builtins.map lib.getBin nativeMessagingHosts;
+      allNativeMessagingHosts = map lib.getBin nativeMessagingHosts;
 
       libs =
         lib.optionals stdenv.hostPlatform.isLinux (
@@ -130,7 +130,7 @@ let
 
       usesNixExtensions = nixExtensions != null;
 
-      nameArray = builtins.map (a: a.name) (lib.optionals usesNixExtensions nixExtensions);
+      nameArray = map (a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
       # Check that every extension has a unique .name attribute
       # and an extid attribute
@@ -140,7 +140,7 @@ let
         else if browser.requireSigning || !browser.allowAddonSideload then
           throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
         else
-          builtins.map (
+          map (
             a:
             if !(builtins.hasAttr "extid" a) then
               throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
@@ -516,7 +516,7 @@ let
           rm -f "$POL_PATH"
           cat ${policiesJson} >> "$POL_PATH"
 
-          extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
+          extraPoliciesFiles=(${toString extraPoliciesFiles})
           for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
             jq -s '.[0] * .[1]' $extraPoliciesFile "$POL_PATH" > .tmp.json
             mv .tmp.json "$POL_PATH"
@@ -533,7 +533,7 @@ let
           ${mozillaCfg}
           EOF
 
-          extraPrefsFiles=(${builtins.toString extraPrefsFiles})
+          extraPrefsFiles=(${toString extraPrefsFiles})
           for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
             cat "$extraPrefsFile" >> "$libDir/mozilla.cfg"
           done

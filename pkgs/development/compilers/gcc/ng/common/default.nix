@@ -59,12 +59,11 @@ let
       ;
     src = monorepoSrc;
     versionDir =
-      (builtins.toString ../.)
-      + "/${if (gitRelease != null) then "git" else lib.versions.major release_version}";
+      (toString ../.) + "/${if (gitRelease != null) then "git" else lib.versions.major release_version}";
     getVersionFile =
       p:
       builtins.path {
-        name = builtins.baseNameOf p;
+        name = baseNameOf p;
         path =
           let
             patches = args.patchesFn (import ./patches.nix);

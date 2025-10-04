@@ -180,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ cunit ];
   doCheck = true;
 
-  versionCheckProgram = "${builtins.placeholder "out"}/libexec/master";
+  versionCheckProgram = "${placeholder "out"}/libexec/master";
   versionCheckProgramArg = "-V";
   nativeInstallCheckInputs = [
     versionCheckHook

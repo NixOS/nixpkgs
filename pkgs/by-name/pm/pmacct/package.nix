@@ -8,6 +8,8 @@
   libpcap,
   libcdada,
   # Optional Dependencies
+  withKafka ? true,
+  rdkafka,
   withJansson ? true,
   jansson,
   withNflog ? true,
@@ -45,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcdada
     libpcap
   ]
+  ++ lib.optional withKafka rdkafka
   ++ lib.optional withJansson jansson
   ++ lib.optional withNflog libnetfilter_log
   ++ lib.optional withSQLite sqlite
@@ -61,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
   ]
+  ++ lib.optional withKafka "--enable-kafka"
   ++ lib.optional withJansson "--enable-jansson"
   ++ lib.optional withNflog "--enable-nflog"
   ++ lib.optional withSQLite "--enable-sqlite3"
