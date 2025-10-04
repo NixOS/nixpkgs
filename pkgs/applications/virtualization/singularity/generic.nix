@@ -12,16 +12,6 @@
   extraDescription ? "",
   extraMeta ? { },
 }:
-
-let
-  # Backward compatibility layer for the obsolete workaround of
-  # the "vendor-related attributes not overridable" issue (#86349),
-  # whose solution (#225051) is merged and released.
-  # TODO(@ShamrockLee): Remove after the Nixpkgs 25.05 branch-off.
-  _defaultGoVendorArgs = {
-    inherit vendorHash deleteVendor proxyVendor;
-  };
-in
 {
   lib,
   buildGoModule,
@@ -97,28 +87,9 @@ in
   #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
   # }
   sourceFilesWithDefaultPaths ? { },
-  # Placeholders for the obsolete workaround of #86349
-  # TODO(@ShamrockLee): Remove after the Nixpkgs 25.05 branch-off.
-  vendorHash ? null,
-  deleteVendor ? null,
-  proxyVendor ? null,
-}@args:
+}:
 
 let
-  # Backward compatibility layer for the obsolete workaround of #86349
-  # TODO(@ShamrockLee): Convert to simple inheritance after the Nixpkgs 25.05 branch-off.
-  moduleArgsOverridingCompat =
-    argName:
-    if args.${argName} or null == null then
-      _defaultGoVendorArgs.${argName}
-    else
-      lib.warn
-        "${projectName}: Override ${argName} with .override is deprecated. Use .overrideAttrs instead."
-        args.${argName};
-  vendorHash = moduleArgsOverridingCompat "vendorHash";
-  deleteVendor = moduleArgsOverridingCompat "deleteVendor";
-  proxyVendor = moduleArgsOverridingCompat "proxyVendor";
-
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
