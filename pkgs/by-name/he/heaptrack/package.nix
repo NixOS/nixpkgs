@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
   makeBinaryWrapper,
   zlib,
   boost,
@@ -11,14 +10,7 @@
   elfutils,
   sparsehash,
   zstd,
-  qtbase,
-  wrapQtAppsHook,
-  kio,
-  kitemmodels,
-  threadweaver,
-  kconfigwidgets,
-  kcoreaddons,
-  kdiagram,
+  kdePackages,
 }:
 
 stdenv.mkDerivation {
@@ -35,9 +27,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     makeBinaryWrapper
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -46,6 +38,8 @@ stdenv.mkDerivation {
     libunwind
     sparsehash
     zstd
+  ]
+  ++ (with kdePackages; [
     qtbase
     kio
     kitemmodels
@@ -53,7 +47,8 @@ stdenv.mkDerivation {
     kconfigwidgets
     kcoreaddons
     kdiagram
-  ]
+  ])
+
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     elfutils
   ];

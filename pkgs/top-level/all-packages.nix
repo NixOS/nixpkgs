@@ -3091,8 +3091,6 @@ with pkgs;
     threadsafe = true;
   };
 
-  heaptrack = kdePackages.callPackage ../development/tools/profiling/heaptrack { };
-
   headscale = callPackage ../servers/headscale { };
 
   highlight = callPackage ../tools/text/highlight {
