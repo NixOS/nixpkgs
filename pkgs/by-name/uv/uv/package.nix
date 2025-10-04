@@ -52,6 +52,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
         --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+        
+        # Add uvx alias
+        mkdir -p $out/bin
+        cat > $out/bin/uvx <<'EOF'
+        #!/usr/bin/env bash
+        exec "$out/bin/uv" tool run "$@"
+        EOF
+        chmod +x $out/bin/uvx
     ''
   );
 
