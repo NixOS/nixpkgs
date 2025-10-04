@@ -8,13 +8,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.24.0";
+  version = "4.1.0";
   pname = "libre";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "re";
     rev = "v${version}";
-    sha256 = "sha256-wcntgFKpVxDlRMF8a7s9UxeXihguiGxTL/PGv9ImB80=";
+    sha256 = "sha256-sfWjED3cC+T6vrlCoq00Ha9huitU+r/RL7A8zDZ5iEY=";
   };
 
   buildInputs = [
