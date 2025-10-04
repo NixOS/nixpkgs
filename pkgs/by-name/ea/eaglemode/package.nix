@@ -12,7 +12,7 @@
   pkg-config,
   librsvg,
   glib,
-  gtk2,
+  gtk3,
   libXext,
   libXxf86vm,
   poppler,
@@ -45,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/emClock/emTimeZonesModel.cpp \
       --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+
+    substituteInPlace makers/emPdf.maker.pm \
+      --replace-fail gtk+-2.0 gtk+-3.0
   '';
 
   nativeBuildInputs = [
@@ -62,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     librsvg
     glib
-    gtk2
+    gtk3
     libXxf86vm
     libXext
     poppler
