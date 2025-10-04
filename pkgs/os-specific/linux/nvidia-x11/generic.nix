@@ -215,6 +215,9 @@ stdenv.mkDerivation (finalAttrs: {
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "C_INCLUDE_PATH=${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
+    ]
   );
 
   hardeningDisable = [
