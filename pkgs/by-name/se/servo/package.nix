@@ -159,6 +159,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
+    broken = true; # cargo fetcher leaves invalid Cargo.toml around, which breaks mozjs-sys build
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
