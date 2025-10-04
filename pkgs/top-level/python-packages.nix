@@ -9598,7 +9598,9 @@ self: super: with self; {
 
   moderngl = callPackage ../development/python-modules/moderngl { };
 
-  moderngl-window = callPackage ../development/python-modules/moderngl-window { };
+  moderngl-window = callPackage ../development/python-modules/moderngl-window {
+    inherit (pkgs) mesa;
+  };
 
   moehlenhoff-alpha2 = callPackage ../development/python-modules/moehlenhoff-alpha2 { };
 
@@ -13679,7 +13681,9 @@ self: super: with self; {
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
-  pyopengl = callPackage ../development/python-modules/pyopengl { };
+  pyopengl = callPackage ../development/python-modules/pyopengl {
+    inherit (pkgs) mesa;
+  };
 
   pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
 
@@ -13884,7 +13888,9 @@ self: super: with self; {
 
   pyqt5-multimedia = self.pyqt5.override { withMultimedia = true; };
 
-  pyqt5-sip = callPackage ../development/python-modules/pyqt/sip.nix { };
+  pyqt5-sip = callPackage ../development/python-modules/pyqt/sip.nix {
+    inherit (pkgs) mesa;
+  };
 
   pyqt5-stubs = callPackage ../development/python-modules/pyqt5-stubs { };
 
@@ -13893,13 +13899,21 @@ self: super: with self; {
   # `propagatedBuildInputs` may cause collisions.
   pyqt5-webkit = self.pyqt5.override { withWebKit = true; };
 
-  pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix { };
+  pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix {
+    inherit (pkgs) mesa;
+  };
 
-  pyqt6-charts = callPackage ../development/python-modules/pyqt6-charts { };
+  pyqt6-charts = callPackage ../development/python-modules/pyqt6-charts {
+    inherit (pkgs) mesa;
+  };
 
-  pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix { };
+  pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix {
+    inherit (pkgs) mesa;
+  };
 
-  pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine { };
+  pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine {
+    inherit (pkgs) mesa;
+  };
 
   pyqtchart = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtchart {
     inherit (self)
@@ -13931,7 +13945,9 @@ self: super: with self; {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
-  pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine { };
+  pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine {
+    inherit (pkgs) mesa;
+  };
 
   pyquaternion = callPackage ../development/python-modules/pyquaternion { };
 
