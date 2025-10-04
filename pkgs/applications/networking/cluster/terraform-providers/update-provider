@@ -91,11 +91,11 @@ update_attr() {
 repo_root=$(git rev-parse --show-toplevel)
 
 generate_hash() {
-  nurl --expr "(import ${repo_root} {}).terraform-providers.${provider}.$1"
+  nurl --expr "(import ${repo_root} {}).terraform-providers.\"${provider}\".$1"
 }
 
 echo_provider() {
-  echo "== terraform-providers.${provider}: $* =="
+  echo "== terraform-providers.\"${provider}\": $* =="
 }
 
 is_stable_version() {
@@ -104,15 +104,24 @@ is_stable_version() {
 
 pushd "$(dirname "$0")" >/dev/null
 
+# we invoke the script by pattern `<owner>/<provider>` to store the provider name-spaced and/or to initialize one
 if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   homepage="https://registry.terraform.io/providers/${provider}"
-  provider=$(basename "${provider}")
-  echo_provider "init"
-  update_attr homepage "${homepage}"
-  # create empty stings so nix-prefetch works
-  update_attr hash ""
-  update_attr vendorHash ""
-  update_attr spdx ""
+  # if the specified provider is name-spaced, store it un-namespaced if no un-namespaced entry exists of a different owner
+  unnamespaced=$(basename "${provider}")
+  owner="$(jq -r ".\"${unnamespaced}\" // {} | .owner" providers.json)"
+  if [[ "${owner}" == null || "${provider}" == "${owner}/${unnamespaced}" ]]; then
+    provider="${unnamespaced}"
+  fi
+  # initialize if needed
+  if [[ "$(read_attr homepage)" == null ]]; then
+    echo_provider "init"
+    update_attr homepage "${homepage}"
+    # create empty stings so nix-prefetch works
+    update_attr hash ""
+    update_attr vendorHash ""
+    update_attr spdx ""
+  fi
 fi
 
 homepage="$(read_attr homepage)"
@@ -172,7 +181,7 @@ fi
 # Check that the provider builds
 if [[ ${build} == 1 ]]; then
   echo_provider "building"
-  nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider}"
+  nix-build --no-out-link "${repo_root}" -A "terraform-providers.\"${provider}\""
 fi
 
 popd >/dev/null
