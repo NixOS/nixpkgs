@@ -426,6 +426,7 @@ optionalAttrs allowAliases aliases
       mkValueString = mkValueStringDefault { };
       mkKeyValue = k: v: if v == null then "# ${k} is unset" else "${k} = ${mkValueString v}";
     in
+    { }:
     ini {
       listsAsDuplicateKeys = true;
       inherit mkKeyValue;
