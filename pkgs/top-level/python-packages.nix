@@ -889,8 +889,6 @@ self: super: with self; {
 
   argparse-manpage = callPackage ../development/python-modules/argparse-manpage { };
 
-  args = callPackage ../development/python-modules/args { };
-
   aria2p = callPackage ../development/python-modules/aria2p { };
 
   ariadne = callPackage ../development/python-modules/ariadne { };
@@ -2699,8 +2697,6 @@ self: super: with self; {
   cligj = callPackage ../development/python-modules/cligj { };
 
   clikit = callPackage ../development/python-modules/clikit { };
-
-  clint = callPackage ../development/python-modules/clint { };
 
   clintermission = callPackage ../development/python-modules/clintermission { };
 
@@ -6234,8 +6230,6 @@ self: super: with self; {
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
-
-  gplaycli = callPackage ../development/python-modules/gplaycli { };
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
 
