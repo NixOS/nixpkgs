@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
       C or C++ programs, though that is not its primary goal.
     '';
     changelog = "https://github.com/bdwgc/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
-    license = "https://hboehm.info/gc/license.txt"; # non-copyleft, X11-style license
+    license = lib.licenses.boehmGC;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };

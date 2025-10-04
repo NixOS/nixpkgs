@@ -1209,6 +1209,7 @@ mapAliases {
   inotifyTools = inotify-tools; # Added 2015-09-01
   insync-emblem-icons = throw "'insync-emblem-icons' has been removed, use 'insync-nautilus' instead"; # Added 2025-05-14
   inter-ui = throw "'inter-ui' has been renamed to/replaced by 'inter'"; # Converted to throw 2024-10-17
+  invoiceplane = throw "'invoiceplane' doesn't support non-EOL PHP versions"; # Added 2025-10-03
   ioccheck = throw "ioccheck was dropped since it was unmaintained."; # Added 2025-07-06
   ipfs = kubo; # Added 2022-09-27
   ipfs-migrator-all-fs-repo-migrations = kubo-fs-repo-migrations; # Added 2022-09-27
@@ -1765,6 +1766,7 @@ mapAliases {
 
   ### N ###
 
+  n98-magerun = throw "n98-magerun doesn't support new PHP newer than 8.1"; # Added 2025-10-03
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
   nanoblogger = throw "nanoblogger has been removed as upstream stopped developement in 2013"; # Added 2025-09-10
   ncdu_2 = ncdu; # Added 2022-07-22
@@ -2047,6 +2049,9 @@ mapAliases {
   pgadmin = pgadmin4; # Added 2022-01-14
   pharo-spur64 = pharo; # Added 2022-08-03
   phlare = throw "'phlare' has been removed as the upstream project was archived."; # Added 2025-03-27
+  php81 = throw "php81 is EOL";
+  php81Extensions = php81;
+  php81Packages = php81;
   picom-next = picom; # Added 2024-02-13
   pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
   pidgin-mra = throw "'pidgin-mra' has been removed since mail.ru agent service has stopped functioning in 2024."; # Added 2025-09-17
@@ -2082,6 +2087,7 @@ mapAliases {
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
   posix_man_pages = throw "'posix_man_pages' has been renamed to/replaced by 'man-pages-posix'"; # Converted to throw 2024-10-17
   powerdns = pdns; # Added 2022-03-28
+  postfixadmin = throw "'postfixadmin' has been removed due to lack of maintenance and missing support for PHP >8.1"; # Added 2025-10-03
   presage = throw "presage has been removed, as it has been unmaintained since 2018"; # Added 2024-03-24
   preserves-nim = throw "'preserves-nim' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10

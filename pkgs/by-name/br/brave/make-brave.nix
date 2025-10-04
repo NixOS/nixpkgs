@@ -221,8 +221,6 @@ stdenv.mkDerivation {
           --replace-fail /usr/bin/brave-browser-stable $out/bin/brave
       substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
           --replace-fail /opt/brave.com $out/opt/brave.com
-      substituteInPlace $out/share/menu/brave-browser.menu \
-          --replace-fail /opt/brave.com $out/opt/brave.com
       substituteInPlace $out/opt/brave.com/brave/default-app-block \
           --replace-fail /opt/brave.com $out/opt/brave.com
 

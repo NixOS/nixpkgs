@@ -5987,16 +5987,6 @@ with pkgs;
   php82Extensions = recurseIntoAttrs php82.extensions;
   php82Packages = recurseIntoAttrs php82.packages;
 
-  # Import PHP81 interpreter, extensions and packages
-  php81 = callPackage ../development/interpreters/php/8.1.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    pcre2 = pcre2.override {
-      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-    };
-  };
-  php81Extensions = recurseIntoAttrs php81.extensions;
-  php81Packages = recurseIntoAttrs php81.packages;
-
   polyml = callPackage ../development/compilers/polyml { };
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
   polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
