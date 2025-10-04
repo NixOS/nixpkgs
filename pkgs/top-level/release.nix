@@ -22,7 +22,7 @@
   supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
   # The platform triples for which we build bootstrap tools.
   bootstrapConfigs ? [
-    "aarch64-apple-darwin"
+    "arm64-apple-darwin"
     "aarch64-unknown-linux-gnu"
     "aarch64-unknown-linux-musl"
     "i686-unknown-linux-gnu"
