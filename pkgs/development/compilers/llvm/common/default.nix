@@ -425,11 +425,6 @@ let
           {
             inherit stdenv;
           }
-          // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-            libxcrypt = (libxcrypt.override { inherit stdenv; }).overrideAttrs (old: {
-              configureFlags = old.configureFlags ++ [ "--disable-symvers" ];
-            });
-          }
         );
 
         compiler-rt-no-libc = callPackage ./compiler-rt {
