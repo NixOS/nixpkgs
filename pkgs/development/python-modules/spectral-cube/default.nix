@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.6.6-unstable-2025-06-11";
+  version = "0.6.6";
   pyproject = true;
 
   src = fetchFromGitHub {
