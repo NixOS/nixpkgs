@@ -1,0 +1,14 @@
+{
+  "darwin": {
+    "hash": "sha256-QophJA6N9o0qyvYtaquWu7GNEKd8jaoKWYB9sDQAhRk=",
+    "version": "0.2025.09.24.08.13.preview_03"
+  },
+  "linux_x86_64": {
+    "hash": "sha256-YpYtqUKcOQqfPre/s5B6uvnL0hb5rA0Hf7RQ6skYJTw=",
+    "version": "0.2025.09.24.08.13.preview_03"
+  },
+  "linux_aarch64": {
+    "hash": "sha256-15xgvJpddQOirLZTTR44ubaLZXhzglL/CKhvk+Erc3o=",
+    "version": "0.2025.09.24.08.13.preview_03"
+  }
+}
