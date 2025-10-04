@@ -45,7 +45,7 @@ let
 
     cargoPatches = [ ./libptrscan-add-cargo-lock.patch ];
 
-    cargoHash = "sha256-uMMAAwA28/q5E0SHdqrktLYbdfzIpwjrbH1JRZISl3w=";
+    cargoHash = "sha256-YhpiOvODsyVnh6ukEVcQwAF3eYT/DbZmtq5+MIcJrtY=";
 
     cargoBuildFlags = [ "-p libptrscan" ];
 
