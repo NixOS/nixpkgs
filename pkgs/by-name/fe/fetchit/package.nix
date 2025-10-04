@@ -81,7 +81,7 @@ buildGoModule rec {
     homepage = "https://fetchit.readthedocs.io";
     changelog = "https://github.com/containers/fetchit/releases/tag/${src.rev}";
     license = licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ guylamar2006 ];
     platforms = platforms.linux;
   };
 }

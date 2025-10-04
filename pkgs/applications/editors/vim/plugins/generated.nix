@@ -3052,6 +3052,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  codecompanion-lualine-nvim = buildVimPlugin {
+    pname = "codecompanion-lualine.nvim";
+    version = "2025-07-12";
+    src = fetchFromGitHub {
+      owner = "franco-ruggeri";
+      repo = "codecompanion-lualine.nvim";
+      rev = "b264433444715bf07ee9f7d5015086b927ccf7f1";
+      sha256 = "1s7rr1jwgfdr6gnf26cv9pws3jkhgblrpq48yryvfyd3wc8qii93";
+    };
+    meta.homepage = "https://github.com/franco-ruggeri/codecompanion-lualine.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   codecompanion-nvim = buildVimPlugin {
     pname = "codecompanion.nvim";
     version = "2025-10-02";
@@ -3062,6 +3075,19 @@ final: prev: {
       sha256 = "1rmbdc9xbvk1rk6mi9ay7jxz382rx41a1bjx1qd4g96zv5hw6a87";
     };
     meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  codecompanion-spinner-nvim = buildVimPlugin {
+    pname = "codecompanion-spinner.nvim";
+    version = "2025-09-11";
+    src = fetchFromGitHub {
+      owner = "franco-ruggeri";
+      repo = "codecompanion-spinner.nvim";
+      rev = "c1fa2a84ea1aed687aaed60df65e347c280f4f22";
+      sha256 = "05cyf6wnzfj7jdyd2ppfs2r5i3mld2h4lwsfjm5qkn9lc70samps";
+    };
+    meta.homepage = "https://github.com/franco-ruggeri/codecompanion-spinner.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6972,6 +6998,19 @@ final: prev: {
       sha256 = "0h8ziqx1d1c68wkrymxn3hv8k2lniwrcwi81lr69p8yd3qr51l2h";
     };
     meta.homepage = "https://github.com/mikesmithgh/kitty-scrollback.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  kiwi-nvim = buildVimPlugin {
+    pname = "kiwi.nvim";
+    version = "2025-07-07";
+    src = fetchFromGitHub {
+      owner = "serenevoid";
+      repo = "kiwi.nvim";
+      rev = "61e86fc29365e32b44c2914a2b10c90d04a3b22e";
+      sha256 = "1knma0bjpvakiki9iwkhqxqsdzyx3dgyvhds9v3h0bsjyj15nj7x";
+    };
+    meta.homepage = "https://github.com/serenevoid/kiwi.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

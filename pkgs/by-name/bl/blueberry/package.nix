@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "blueberry";
-    rev = version;
+    tag = version;
     sha256 = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
   };
 

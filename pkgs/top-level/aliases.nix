@@ -515,6 +515,7 @@ mapAliases {
   BeatSaberModManager = beatsabermodmanager; # Added 2024-06-12
   beam_nox = throw "beam_nox has been removed in favor of beam_minimal or beamMinimalPackages"; # Added 2025-04-01
   beatsabermodmanager = throw "'beatsabermodmanager' has been removed due to lack of upstream maintainenance. Consider using 'bs-manager' instead"; # Added 2025-03-18
+  inherit (beetsPackages) beets-unstable;
   betterbird = throw "betterbird has been removed as there were insufficient maintainer resources to keep up with security updates"; # Added 2024-10-25
   betterbird-unwrapped = throw "betterbird has been removed as there were insufficient maintainer resources to keep up with security updates"; # Added 2024-10-25
   bfc = throw "bfc has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
@@ -526,6 +527,7 @@ mapAliases {
   bitcoind-unlimited = throw "bitcoind-unlimited has been removed as it was broken and unmaintained"; # Added 2024-07-15
   bird = throw "The bird alias was ambiguous and has been removed for the time being. Please explicitly choose bird2 or bird3."; # Added 2025-01-11
   bisq-desktop = throw "bisq-desktop has been removed because OpenJFX 11 was removed"; # Added 2024-11-17
+  bitmeter = throw "bitmeter has been removed because it relies on gtk2 and upstream is abandoned since 2006"; # Aded 2025-10-03
   bitwarden = bitwarden-desktop; # Added 2024-02-25
   blender-with-packages =
     args:
@@ -864,6 +866,7 @@ mapAliases {
   erlangR26_javac = throw "erlangR26_javac has been removed in favor of erlang_26_javac"; # added 2024-05-24
   erlangR26_odbc_javac = throw "erlangR26_odbc_javac has been removed in favor of erlang_26_odbc_javac"; # added 2024-05-24
 
+  erlang-ls = throw "'erlang-ls' has been removed as it has been archived upstream. Consider using 'erlang-language-platform' instead"; # Added 2025-10-02
   erlang_language_platform = throw "erlang_language_platform has been renamed erlang-language-platform"; # added 2025-04-04
   est-sfs = throw "'est-sfs' has been removed as it was unmaintained in Nixpkgs"; # Added 2025-05-18
   ethabi = throw "ethabi has been removed due to lack of maintainence upstream and no updates in Nixpkgs"; # Added 2024-07-16
@@ -1491,6 +1494,11 @@ mapAliases {
 
   linuxPackages_testing_bcachefs = throw "'linuxPackages_testing_bcachefs' has been removed, please use 'linuxPackages_latest', any kernel version at least 6.7, or any other linux kernel with bcachefs support"; # Converted to throw 2024-01-09
   linux_testing_bcachefs = throw "'linux_testing_bcachefs' has been removed, please use 'linux_latest', any kernel version at least 6.7, or any other linux kernel with bcachefs support"; # Converted to throw 2024-01-09
+
+  linuxPackages-libre = linuxKernel.packages.linux_libre;
+  linux-libre = linuxPackages-libre.kernel;
+  linuxPackages_latest-libre = linuxKernel.packages.linux_latest_libre;
+  linux_latest-libre = linuxPackages_latest-libre.kernel;
 
   linuxstopmotion = stopmotion; # Added 2024-11-01
 
@@ -2613,6 +2621,7 @@ mapAliases {
   };
   vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
   vaapiVdpau = libva-vdpau-driver; # Added 2024-06-05
+  valum = throw "'valum' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   vaultwarden-vault = vaultwarden.webvault; # Added 2022-12-13
   varnish74 = throw "varnish 7.4 is EOL. Either use the LTS or upgrade."; # Added 2024-10-31
   varnish74Packages = throw "varnish 7.4 is EOL. Either use the LTS or upgrade."; # Added 2024-10-31
@@ -2657,6 +2666,7 @@ mapAliases {
 
   ### W ###
   w_scan = throw "'w_scan' has been removed due to lack of upstream maintenance"; # Added 2025-08-29
+  waitron = throw "'waitron' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   wakatime = wakatime-cli; # 2024-05-30
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   wal_e = throw "wal_e was removed as it is unmaintained upstream and depends on the removed boto package; upstream recommends using wal-g or pgbackrest"; # Added 2024-09-22

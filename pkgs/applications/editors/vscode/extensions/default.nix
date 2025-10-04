@@ -1366,6 +1366,8 @@ let
         };
       };
 
+      docker.docker = callPackage ./docker.docker { };
+
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "githistory";
@@ -1429,31 +1431,7 @@ let
         };
       };
 
-      eamodio.gitlens = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "gitlens";
-          publisher = "eamodio";
-          # Stable versions are listed on the GitHub releases page and use a
-          # semver scheme, contrary to preview versions which are listed on
-          # the VSCode Marketplace and use a calver scheme. We should avoid
-          # using preview versions, because they expire after two weeks.
-          version = "17.4.1";
-          hash = "sha256-H14LJ1diURp6dtZE5djSmvI7aJFBnwVAj7Qi7VFf5oo=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
-          description = "Visual Studio Code extension that improves its built-in Git capabilities";
-          longDescription = ''
-            Supercharge the Git capabilities built into Visual Studio Code — Visualize code authorship at a glance via Git
-            blame annotations and code lens, seamlessly navigate and explore Git repositories, gain valuable insights via
-            powerful comparison commands, and so much more
-          '';
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens";
-          homepage = "https://gitlens.amod.io/";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ratsclub ];
-        };
-      };
+      eamodio.gitlens = callPackage ./eamodio.gitlens { };
 
       earthly.earthfile-syntax-highlighting = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1545,6 +1523,8 @@ let
           maintainers = with lib.maintainers; [ thtrf ];
         };
       };
+
+      elijah-potter.harper = callPackage ./elijah-potter.harper { };
 
       elixir-lsp.vscode-elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2368,8 +2348,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.27.1";
-          hash = "sha256-ur+/ZSewWBzLxkHVXHQJg4KzkC3Mi3E9fE3/wL6sD8g=";
+          version = "7.28.0";
+          hash = "sha256-d6AucdoKeVAobTj1cbELce2vcXsZW5TX74mkcnHPtkA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -3881,8 +3861,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "vscode-yaml";
-          version = "1.18.0";
-          hash = "sha256-UtxDplORUWqmiW6I8n4ZhK7HAQdSDG4dw7M/cbjkmZY=";
+          version = "1.19.0";
+          hash = "sha256-Nc/lkcZh5kp71eygkUCJQT7iNT+9Jg+ud1hgaXdV0Ls=";
         };
         meta = {
           description = "YAML Language Support by Red Hat, with built-in Kubernetes syntax support";

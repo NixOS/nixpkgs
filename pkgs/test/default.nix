@@ -140,6 +140,7 @@ with pkgs;
     callPackages ../build-support/fetchnextcloudapp/tests.nix { }
   );
   fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
+  fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
   );
