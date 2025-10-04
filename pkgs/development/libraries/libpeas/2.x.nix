@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     # Required by libpeas-2.pc
-    gobject-introspection
+    glib
   ];
 
   mesonFlags = [
