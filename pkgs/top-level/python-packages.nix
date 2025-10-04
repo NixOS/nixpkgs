@@ -8906,8 +8906,6 @@ self: super: with self; {
 
   macholib = callPackage ../development/python-modules/macholib { };
 
-  macropy = callPackage ../development/python-modules/macropy { };
-
   maec = callPackage ../development/python-modules/maec { };
 
   maestral = callPackage ../development/python-modules/maestral { };
@@ -17806,8 +17804,6 @@ self: super: with self; {
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
-
-  subunit2sql = callPackage ../development/python-modules/subunit2sql { };
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
