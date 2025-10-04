@@ -103,8 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir $apparmor
     cat >$apparmor/bin.transmission-daemon <<EOF
+    abi <abi/4.0>,
     include <tunables/global>
-    $out/bin/transmission-daemon {
+    profile $out/bin/transmission-daemon {
       include <abstractions/base>
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
@@ -123,15 +124,15 @@ stdenv.mkDerivation (finalAttrs: {
           ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
         )
       }"
-      r @{PROC}/sys/kernel/random/uuid,
-      r @{PROC}/sys/vm/overcommit_memory,
-      r @{PROC}/@{pid}/environ,
-      r @{PROC}/@{pid}/mounts,
-      rwk /tmp/tr_session_id_*,
+      @{PROC}/sys/kernel/random/uuid r,
+      @{PROC}/sys/vm/overcommit_memory r,
+      @{PROC}/@{pid}/environ r,
+      @{PROC}/@{pid}/mounts r,
+      /tmp/tr_session_id_* rwk,
 
-      r $out/share/transmission/web/**,
+      $out/share/transmission/web/** r,
 
-      include <local/bin.transmission-daemon>
+      include if exists <local/bin.transmission-daemon>
     }
     EOF
   '';
