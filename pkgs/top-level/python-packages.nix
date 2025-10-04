@@ -8900,8 +8900,6 @@ self: super: with self; {
 
   macholib = callPackage ../development/python-modules/macholib { };
 
-  macropy = callPackage ../development/python-modules/macropy { };
-
   maec = callPackage ../development/python-modules/maec { };
 
   maestral = callPackage ../development/python-modules/maestral { };
