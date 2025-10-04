@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.48.0";
+  version = "0.49.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ve69Na6iZwsNM0y7AZ0p/CObUfE6uEbhOV4sb5NaCYg=";
+    hash = "sha256-hzld1GZeqdGBph1iBs9M+FkQyB8NNgksJbkHpnBncqU=";
   };
 
   nativeBuildInputs = [
