@@ -12,6 +12,7 @@
   vala,
   gi-docgen,
   gobject-introspection,
+  fontconfig,
   libseccomp,
   lcms2,
   gtk4,
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
+    fontconfig
     libseccomp
     lcms2
     gtk4
