@@ -400,8 +400,6 @@ in
         find "${cfg.stateDir}/config" ! -name "secret_token.rb" -type f -exec rm -f {} +
         cp -r ${cfg.package}/share/redmine/config.dist/* "${cfg.stateDir}/config/"
 
-        chmod -R u+w "${cfg.stateDir}/config"
-
         # link in the application configuration
         ln -fs ${configurationYml} "${cfg.stateDir}/config/configuration.yml"
 
