@@ -1294,7 +1294,6 @@
   ./services/networking/pangolin.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
-  ./services/networking/peroxide.nix
   ./services/networking/picosnitch.nix
   ./services/networking/pihole-ftl.nix
   ./services/networking/pixiecore.nix

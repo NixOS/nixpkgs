@@ -42,7 +42,6 @@ buildGoModule rec {
     mainProgram = "jf";
     maintainers = with lib.maintainers; [
       detegr
-      aidalgol
     ];
   };
 }

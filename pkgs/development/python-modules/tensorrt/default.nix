@@ -48,7 +48,6 @@ buildPythonPackage rec {
     homepage = "https://developer.nvidia.com/tensorrt";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ aidalgol ];
     broken = !(cudaPackages ? tensorrt) || !(cudaPackages ? cudnn);
   };
 }

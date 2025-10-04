@@ -118,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
-      aidalgol
       huantian
     ];
     inherit (electron.meta) platforms;
