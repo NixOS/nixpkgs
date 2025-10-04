@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [
       prusnak
-      realsnick
+      logger
     ];
   };
 }
