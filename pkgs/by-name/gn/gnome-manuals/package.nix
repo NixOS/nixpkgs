@@ -13,23 +13,17 @@
   gi-docgen,
   libadwaita,
   libdex,
+  gom,
   flatpak,
   libfoundry,
+  libpanel,
   webkitgtk_6_0,
-  gettext,
-  itstool,
-  # gsettings-desktop-schemas,
-  shared-mime-info,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-manuals";
   version = "49.0";
-
-  outputs = [
-    "out"
-    # "devdoc"
-  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/manuals/${lib.versions.major finalAttrs.version}/manuals-${finalAttrs.version}.tar.xz";
@@ -40,14 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    # gettext
-    # itstool
+    desktop-file-utils
     wrapGAppsHook4
-    # gobject-introspection
-    # gi-docgen
-    # post install script
-    # glib
-    # gtk4
   ];
 
   buildInputs = [
@@ -55,32 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libdex
+    gom
     flatpak
     libfoundry
+    libpanel
     webkitgtk_6_0
-    # gsettings-desktop-schemas
   ];
 
   strictDeps = true;
-
-  # mesonFlags = [
-  #   "-Dgtk_doc=true"
-  # ];
-
-  # doCheck = true;
-
-  # preFixup = ''
-  #   gappsWrapperArgs+=(
-  #     # Fix pages being blank
-  #     # https://gitlab.gnome.org/GNOME/manuals/issues/14
-  #     --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-  #   )
-  # '';
-
-  # postFixup = ''
-  #   # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-  #   moveToOutput share/doc/manuals-3 "$devdoc"
-  # '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -89,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "API documentation browser for GNOME";
+    description = "Tool for browsing documentation";
     mainProgram = "manuals";
     homepage = "https://apps.gnome.org/Manuals/";
     changelog = "https://gitlab.gnome.org/GNOME/manuals/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
