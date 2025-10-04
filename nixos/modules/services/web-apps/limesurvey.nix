@@ -27,6 +27,9 @@ let
   cfg = config.services.limesurvey;
   fpm = config.services.phpfpm.pools.limesurvey;
 
+  # https://github.com/LimeSurvey/LimeSurvey/blob/master/.github/workflows/main.yml
+  php = pkgs.php83;
+
   user = "limesurvey";
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
@@ -328,7 +331,7 @@ in
 
     services.phpfpm.pools.limesurvey = {
       inherit user group;
-      phpPackage = pkgs.php83;
+      phpPackage = php;
       phpEnv.DBENGINE = "${cfg.database.dbEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
       # App code cannot access credentials directly since the service starts
@@ -420,8 +423,8 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${pkgs.php83}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
-        ${pkgs.php83}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${lib.getExe php} ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
+        ${lib.getExe php} ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;
