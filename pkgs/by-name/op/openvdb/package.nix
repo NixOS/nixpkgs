@@ -8,6 +8,7 @@
   c-blosc,
   onetbb,
   zlib,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-28vrIlruPl1tvw2JhjIAARtord45hqCqnA9UNnu4Z70=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3Packages.nanobind
+  ];
 
   buildInputs = [
     boost
@@ -37,14 +41,18 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DOPENVDB_BUILD_PYTHON_MODULE=ON"
+    "-DUSE_NUMPY=ON"
+    "-DOPENVDB_PYTHON_WRAP_ALL_GRID_TYPES=ON"
     "-DOPENVDB_CORE_STATIC=OFF"
     "-DOPENVDB_BUILD_NANOVDB=ON"
+    "-Dnanobind_DIR=${python3Packages.nanobind}/${python3Packages.python.sitePackages}/nanobind/cmake"
   ];
 
   postFixup = ''
     substituteInPlace $dev/lib/cmake/OpenVDB/FindOpenVDB.cmake \
-      --replace \''${OPENVDB_LIBRARYDIR} $out/lib \
-      --replace \''${OPENVDB_INCLUDEDIR} $dev/include
+      --replace-fail \''${OPENVDB_LIBRARYDIR} $out/lib \
+      --replace-fail \''${OPENVDB_INCLUDEDIR} $dev/include
   '';
 
   meta = with lib; {
