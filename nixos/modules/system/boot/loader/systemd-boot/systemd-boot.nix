@@ -99,6 +99,9 @@ let
           '') cfg.extraEntries
         )}
       '';
+
+      bootCountingTries = cfg.bootCounting.tries;
+      bootCounting = if cfg.bootCounting.enable then "True" else "False";
     };
   };
 
@@ -416,6 +419,15 @@ in
         Only enable this option if `systemd-boot` otherwise fails to install, as the
         scope or implication of the `--graceful` option may change in the future.
       '';
+    };
+
+    bootCounting = {
+      enable = mkEnableOption "automatic boot assessment";
+      tries = mkOption {
+        default = 3;
+        type = types.int;
+        description = "number of tries each entry should start with";
+      };
     };
 
     rebootForBitlocker = mkOption {
