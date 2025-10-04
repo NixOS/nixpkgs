@@ -20156,8 +20156,6 @@ self: super: with self; {
 
   world-bank-data = callPackage ../development/python-modules/world-bank-data { };
 
-  worldengine = callPackage ../development/python-modules/worldengine { };
-
   wrapcco = callPackage ../development/python-modules/wrapcco { };
 
   wrapio = callPackage ../development/python-modules/wrapio { };
