@@ -17,14 +17,14 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.11.0";
+  version = "2.12.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     tag = "v${version}";
-    hash = "sha256-xaX3QMnTKXTXPuLzui0e0WgaQNvbz8u1JNRBkfe4QWg=";
+    hash = "sha256-UaWOHjgTiSVvpKKw6VFAeRAYkYp4y0Dnamzr7yhH0vQ=";
   };
 
   patches = [
