@@ -29079,6 +29079,26 @@ with self;
     };
   };
 
+  PerlStrip = buildPerlPackage {
+    pname = "Perl-Strip";
+    version = "1.2";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Perl-Strip-1.2.tar.gz";
+      sha256 = "sha256-PI7buDcjZwzD/RIEFVUW+a18N2nzPnnan4xlxQItixo=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      PPI
+    ];
+    propagatedBuildInputs = [
+      commonsense
+    ];
+    meta = {
+      description = "Perl::Strip - reduce file size by stripping whitespace, comments, pod etc";
+      mainProgram = "perlstrip";
+    };
+  };
+
   PodAbstract = buildPerlPackage {
     pname = "Pod-Abstract";
     version = "0.20";
@@ -33220,6 +33240,10 @@ with self;
       export AUTOMATED_TESTING=1
       ./scripts/yath test -j $NIX_BUILD_CORES
     '';
+
+    # The t/integration/preload.t test is broken on riscv64
+    # https://github.com/Test-More/Test2-Harness/issues/290
+    doCheck = !stdenv.hostPlatform.isRiscV;
 
     propagatedBuildInputs = [
       DataUUID

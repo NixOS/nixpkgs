@@ -182,7 +182,7 @@ stdenv.mkDerivation {
       completion, shell functions (with autoloading), a history mechanism, and
       a host of other features.
     '';
-    license = "MIT-like";
+    license = lib.licenses.mit-modern;
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [
       pSub
