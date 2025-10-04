@@ -656,6 +656,11 @@ let
         inStore = true;
       };
 
+      externalPath = pathWith {
+        absolute = true;
+        inStore = false;
+      };
+
       pathWith =
         {
           inStore ? null,
