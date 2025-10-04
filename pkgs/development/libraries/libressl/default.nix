@@ -16,14 +16,15 @@ let
       version,
       hash,
       patches ? [ ],
+      postPatch ? "",
       knownVulnerabilities ? [ ],
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "libressl";
       inherit version;
 
       src = fetchurl {
-        url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
+        url = "mirror://openbsd/LibreSSL/libressl-${version}.tar.gz";
         inherit hash;
       };
 
@@ -38,6 +39,8 @@ let
         "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
         # libressl will append this to the regular prefix for libdir
         "-DCMAKE_INSTALL_LIBDIR=lib"
+
+        "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
       ]
       ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
@@ -48,20 +51,16 @@ let
       preConfigure = ''
         rm configure
         substituteInPlace CMakeLists.txt \
-          --replace 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
-          --replace 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
+          --replace-fail 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
+          --replace-fail 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
       '';
 
       inherit patches;
 
-      # Since 2.9.x the default location can't be configured from the build using
-      # DEFAULT_CA_FILE anymore, instead we have to patch the default value.
       postPatch = ''
         patchShebangs tests/
-        ${lib.optionalString (lib.versionAtLeast version "2.9.2") ''
-          substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
-        ''}
-      '';
+      ''
+      + postPatch;
 
       doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
       preCheck = ''
@@ -117,64 +116,11 @@ let
         ];
       };
     };
-
 in
 {
-  libressl_3_6 = generic {
-    version = "3.6.3";
-    hash = "sha256-h7G7426e7I0K5fBMg9NrLFsOWBeEx+sIFwJe0p6t6jc=";
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/libressl/portable/commit/86e4965d7f20c3a6afc41d95590c9f6abb4fe788.patch";
-        includes = [ "tests/tlstest.sh" ];
-        hash = "sha256-XmmKTvP6+QaWxyGFCX6/gDfME9GqBWSx4X8RH8QbDXA=";
-      })
-    ];
-  };
-
-  libressl_3_7 = generic {
-    version = "3.7.3";
-    hash = "sha256-eUjIVqkMglvXJotvhWdKjc0lS65C4iF4GyTj+NwzXbM=";
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/libressl/portable/commit/86e4965d7f20c3a6afc41d95590c9f6abb4fe788.patch";
-        includes = [ "tests/tlstest.sh" ];
-        hash = "sha256-XmmKTvP6+QaWxyGFCX6/gDfME9GqBWSx4X8RH8QbDXA=";
-      })
-    ];
-  };
-
-  libressl_3_8 = generic {
-    version = "3.8.4";
-    hash = "sha256-wM75z+F0rDZs5IL1Qv3bB3Ief6DK+s40tJqHIPo3/n0=";
-
-    patches = [
-      # Fixes build on ppc64
-      # https://github.com/libressl/portable/pull/1073
-      (fetchpatch {
-        url = "https://github.com/libressl/portable/commit/e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d.patch";
-        hash = "sha256-LJy3fjbnc9h5DG3/+8bLECwJeBpPxy3hU8sPuhovmcw=";
-      })
-    ];
-  };
-
-  libressl_3_9 = generic {
-    version = "3.9.2";
-    hash = "sha256-ewMdrGSlnrbuMwT3/7ddrTOrjJ0nnIR/ksifuEYGj5c=";
-
-    patches = [
-      # Fixes build on ppc64
-      # https://github.com/libressl/portable/pull/1073
-      (fetchpatch {
-        url = "https://github.com/libressl/portable/commit/e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d.patch";
-        hash = "sha256-LJy3fjbnc9h5DG3/+8bLECwJeBpPxy3hU8sPuhovmcw=";
-      })
-    ];
-  };
-
   libressl_4_0 = generic {
-    version = "4.0.0";
-    hash = "sha256-TYQZVfCsw9/HHQ49018oOvRhIiNQ4mhD/qlzHAJGoeQ=";
+    version = "4.0.1";
+    hash = "sha256-IClLh3eMJidIk4Y5Q8hjWJebSZ03tJl31r+Gj3tZfL0=";
     # Fixes build on loongarch64
     # https://github.com/libressl/portable/pull/1146
     patches = [
@@ -190,5 +136,21 @@ in
         hash = "sha256-dEdtmHHiR7twAqgebXv1Owle/KYCak71NhDCp0PdseU=";
       })
     ];
+  };
+
+  libressl_4_1 = generic {
+    version = "4.1.1";
+    hash = "sha256-x/96fWddX1dzCUDlzP8dvi3NW3QFtTl+D3/9ZqXtVnk=";
+    # Fixes build on loongarch64
+    # https://github.com/libressl/portable/pull/1184
+    postPatch = ''
+      mkdir -p include/arch/loongarch64
+      cp ${
+        fetchurl {
+          url = "https://github.com/libressl/portable/raw/refs/tags/v4.1.0/include/arch/loongarch64/opensslconf.h";
+          hash = "sha256-68dw5syUy1z6GadCMR4TR9+0UQX6Lw/CbPWvjHGAhgo=";
+        }
+      } include/arch/loongarch64/opensslconf.h
+    '';
   };
 }
