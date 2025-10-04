@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "termsvg";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "mrmarble";
     repo = "termsvg";
     rev = "v${version}";
-    hash = "sha256-ejrg1UywPQDCeaymkGzU+xZoPXME6XEP/SBe3Yxf4YU=";
+    hash = "sha256-y07C82yzgQ1i04le+l/KM/Oty+5BH6S9mA0xFuIIe0o=";
   };
 
   vendorHash = "sha256-BoXRLWhQmfvMIN658MiXGCFMbnvuXfv/H/jCE6h4aWk=";
