@@ -1,6 +1,4 @@
 {
-  lib,
-  stdenv,
   qtModule,
   qtbase,
   qtdeclarative,
@@ -15,6 +13,6 @@ qtModule {
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "bin" ];
+    "bin"
+  ];
 }

@@ -1,0 +1,149 @@
+commit 8d8892f237a510a614311e37ebcc4d70b71b7924
+Author:     eryngion <eryngion@protonmail.com>
+AuthorDate: Fri Dec 1 10:59:02 2023 +0300
+
+    Use buildBuld version of stdenv.cc in the "host" toolchain for chromium
+    
+    Chromium builds some tools for itself as a part of its build process.
+    Those tools don't end up in outputs of Nix packages, so we can actually
+    just compile them for the buildPlatform.
+    
+    It is mostly a Nixified version of this patch
+    https://github.com/meta-qt5/meta-qt5/raw/9537acc9fdd07f2dae6ea562eed34ba41ccde39d/recipes-qt/qt5/qtwebengine/0001-Force-host-toolchain-configuration.patch
+    Plus a small change that allows v8_snapshot_toolchain to properly find ICU
+    on the buildPlatform instead of resorting to the bundled ICU as done in
+    https://github.com/meta-qt5/meta-qt5/blob/9537acc9fdd07f2dae6ea562eed34ba41ccde39d/recipes-qt/qt5/qtwebengine/chromium/0010-chromium-icu-use-system-library-only-targets.patch
+    
+    The original commentary of the first patch is below:
+    
+    From: Samuli Piippo <samuli.piippo@qt.io>
+    Date: Wed, 15 Mar 2017 13:53:28 +0200
+    Subject: [PATCH] Force host toolchain configuration
+    
+    Force gcc/g++ to be used for parts using host toolchain, since
+    the option(host_build) does not work in yocto builds.
+    
+    Don't use QT_ARCH for the host architecture, since that's always
+    the target architecture in bitbake builds, instead ask specifically
+    for the qmakes's host architecture.
+    
+    Upstream-Status: Inappropriate [OE specific]
+    Signed-off-by: Samuli Piippo <samuli.piippo@qt.io>
+
+diff --git a/mkspecs/features/functions.prf b/mkspecs/features/functions.prf
+index 7f63058..6b658e8 100644
+--- a/mkspecs/features/functions.prf
++++ b/mkspecs/features/functions.prf
+@@ -109,6 +109,7 @@ defineReplace(gnArch) {
+     contains(qtArch, "x86_64"): return(x64)
+     contains(qtArch, "arm"): return(arm)
+     contains(qtArch, "arm64"): return(arm64)
++    contains(qtArch, "aarch64"): return(arm64)
+     contains(qtArch, "mips"): return(mipsel)
+     contains(qtArch, "mips64"): return(mips64el)
+     contains(qtArch, "mips64el"): return(mips64el)
+diff --git a/src/buildtools/config/linux.pri b/src/buildtools/config/linux.pri
+index 7507d51..5bc9c1b 100644
+--- a/src/buildtools/config/linux.pri
++++ b/src/buildtools/config/linux.pri
+@@ -118,7 +118,7 @@ contains(QT_ARCH, "mips") {
+ 
+ host_build {
+     gn_args += custom_toolchain=\"$$QTWEBENGINE_OUT_ROOT/src/toolchain:host\"
+-    GN_HOST_CPU = $$gnArch($$QT_ARCH)
++    GN_HOST_CPU = $$gnArch($$QMAKE_HOST.arch)
+     gn_args += host_cpu=\"$$GN_HOST_CPU\"
+     # Don't bother trying to use system libraries in this case
+     gn_args += use_glib=false
+@@ -138,7 +138,7 @@ host_build {
+         # Strip '>2 /dev/null' from $$pkgConfigExecutable()
+         PKGCONFIG = $$first($$list($$pkgConfigExecutable()))
+         gn_args += pkg_config=\"$$PKGCONFIG\"
+-        PKG_CONFIG_HOST = $$(GN_PKG_CONFIG_HOST)
++        PKG_CONFIG_HOST = $$(PKG_CONFIG_FOR_BUILD)
+         pkgConfigLibDir = $$(PKG_CONFIG_LIBDIR)
+         pkgConfigSysrootDir = $$(PKG_CONFIG_SYSROOT_DIR)
+         isEmpty(PKG_CONFIG_HOST): cross_compile {
+diff --git a/src/buildtools/configure_host.pro b/src/buildtools/configure_host.pro
+index dd0d3e3..8703801 100644
+--- a/src/buildtools/configure_host.pro
++++ b/src/buildtools/configure_host.pro
+@@ -4,7 +4,7 @@ TEMPLATE = aux
+ # Pick up the host toolchain
+ option(host_build)
+ 
+-GN_HOST_CPU = $$gnArch($$QT_ARCH)
++GN_HOST_CPU = $$gnArch($$QMAKE_HOST.arch)
+ !isEmpty(QT_TARGET_ARCH): GN_TARGET_CPU = $$gnArch($$QT_TARGET_ARCH)
+ else: GN_TARGET_CPU = $$GN_HOST_CPU
+ GN_OS = $$gnOS()
+@@ -23,20 +23,17 @@ contains(GN_TARGET_CPU, "arm")|contains(GN_TARGET_CPU, "mipsel")|contains(GN_TAR
+     else: contains(GN_V8_HOST_CPU, mips64el): GN_V8_HOST_CPU = "mipsel"
+ }
+ 
+-GN_HOST_EXTRA_CPPFLAGS = $$(GN_HOST_TOOLCHAIN_EXTRA_CPPFLAGS)
+-
+ # We always use the gcc_toolchain, because clang_toolchain is just
+ # a broken wrapper around it for Google's custom clang binaries.
+ GN_CONTENTS = \
+ "import(\"//build/config/sysroot.gni\")" \
+ "import(\"//build/toolchain/gcc_toolchain.gni\")" \
+ "gcc_toolchain(\"host\") {" \
+-"  cc = \"$$which($$QMAKE_CC)\" " \
+-"  cxx = \"$$which($$QMAKE_CXX)\" " \
+-"  ld = \"$$which($$QMAKE_LINK)\" " \
+-"  ar = \"$$which(ar)\" " \
+-"  nm = \"$$which(nm)\" " \
+-"  extra_cppflags = \"$$GN_HOST_EXTRA_CPPFLAGS\" " \
++"  cc = \"$$which($$(CC_FOR_BUILD))\" " \
++"  cxx = \"$$which($$(CXX_FOR_BUILD))\" " \
++"  ld = \"$$which($$(CXX_FOR_BUILD))\" " \
++"  ar = \"$$which($$(AR_FOR_BUILD))\" " \
++"  nm = \"$$which($$(NM_FOR_BUILD))\" " \
+ "  toolchain_args = { " \
+ "    current_os = \"$$GN_OS\" " \
+ "    current_cpu = \"$$GN_HOST_CPU\" " \
+@@ -45,11 +42,11 @@ GN_CONTENTS = \
+ "  } " \
+ "}" \
+ "gcc_toolchain(\"v8_snapshot\") {" \
+-"  cc = \"$$which($$QMAKE_CC)\" " \
+-"  cxx = \"$$which($$QMAKE_CXX)\" " \
+-"  ld = \"$$which($$QMAKE_LINK)\" " \
+-"  ar = \"$$which(ar)\" " \
+-"  nm = \"$$which(nm)\" " \
++"  cc = \"$$which($$(CC_FOR_BUILD))\" " \
++"  cxx = \"$$which($$(CXX_FOR_BUILD))\" " \
++"  ld = \"$$which($$(CXX_FOR_BUILD))\" " \
++"  ar = \"$$which($$(AR_FOR_BUILD))\" " \
++"  nm = \"$$which($$(NM_FOR_BUILD))\" " \
+ "  toolchain_args = { " \
+ "    current_os = \"$$GN_OS\" " \
+ "    current_cpu = \"$$GN_V8_HOST_CPU\" " \
+diff --git a/src/buildtools/gn.pro b/src/buildtools/gn.pro
+index f94694d..8035d5a 100644
+--- a/src/buildtools/gn.pro
++++ b/src/buildtools/gn.pro
+@@ -19,9 +19,8 @@ build_pass|!debug_and_release {
+             gn_bootstrap = $$system_path($$absolute_path(gn/build/gen.py, $$src_3rd_party_dir))
+ 
+             gn_gen_args = --no-last-commit-position --out-path $$out_path \
+-                          --cc \"$$which($$QMAKE_CC)\" --cxx \"$$which($$QMAKE_CXX)\" \
+-                          --ld \"$$which($$QMAKE_LINK)\"
+-            !isEmpty(QMAKE_AR): gn_gen_args += --ar \"$$which($$first(QMAKE_AR))\"
++                          --cc \"$$which($$(CC_FOR_BUILD))\" --cxx \"$$which($$(CXX_FOR_BUILD))\" \
++                          --ld \"$$which($$(CXX_FOR_BUILD))\" --ar \"$$which($$(AR_FOR_BUILD))\"
+ 
+             msvc:!clang_cl: gn_gen_args += --use-lto
+ 
+--- a/src/3rdparty/chromium/build/config/linux/pkg_config.gni
++++ b/src/3rdparty/chromium/build/config/linux/pkg_config.gni
+@@ -91,7 +91,7 @@
+   assert(defined(invoker.packages),
+          "Variable |packages| must be defined to be a list in pkg_config.")
+   config(target_name) {
+-    if (host_toolchain == current_toolchain) {
++    if (default_toolchain != current_toolchain) {
+       args = host_pkg_config_args + invoker.packages
+     } else {
+       args = pkg_config_args + invoker.packages

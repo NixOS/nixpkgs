@@ -4,9 +4,14 @@
   lib,
   qtbase,
   qtdeclarative,
+  qttools,
   replaceVars,
   llvmPackages,
 }:
+
+let
+  isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
+in
 
 qtModule {
   pname = "qttools";
@@ -20,12 +25,13 @@ qtModule {
   buildInputs = with llvmPackages; [
     libclang
     libllvm
-  ];
-
-  propagatedBuildInputs = [
     qtbase
     qtdeclarative
   ];
+
+  # We don't need this to build qttools itself, only for the packages that include qttools
+  # in their buildInputs and expect to get not only libs but also runnable tools.
+  propagatedNativeBuildInputs = lib.optional isCrossBuild qttools;
 
   patches = [
     # fixQtBuiltinPaths overwrites builtin paths we should keep
@@ -37,6 +43,9 @@ qtModule {
       libclangDev = lib.getDev llvmPackages.libclang;
     })
   ];
+
+  # Bootstrap build produces no out, and that makes nix unhappy and results in an unannotated failure for remote builds.
+  postFixup = ''[ -e $out ] || mkdir $out'';
 
   devTools = [
     "bin/qcollectiongenerator"

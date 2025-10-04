@@ -1,14 +1,13 @@
 {
   lib,
   stdenv,
-  buildPackages,
   mkDerivation,
   apple-sdk_14,
   perl,
   qmake,
   patches,
   srcs,
-  pkgsHostTarget,
+  qtbase-bootstrap,
 }:
 
 let
@@ -35,24 +34,13 @@ mkDerivation (
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         apple-sdk_14
       ];
-
-    nativeBuildInputs =
-      (args.nativeBuildInputs or [ ])
-      ++ [
-        perl
-        qmake
-      ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-        pkgsHostTarget.qt5.qtbase.dev
-      ];
+    nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+      perl
+      qmake
+    ];
     propagatedBuildInputs =
       (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or [ ])
       ++ (args.propagatedBuildInputs or [ ]);
-  }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-    depsBuildBuild = [ buildPackages.stdenv.cc ] ++ (args.depsBuildBuild or [ ]);
-  }
-  // {
 
     outputs =
       args.outputs or [
@@ -70,6 +58,7 @@ mkDerivation (
       ${args.preConfigure or ""}
 
       fixQtBuiltinPaths . '*.pr?'
+      fixQtBuiltinPaths . '*.cmake.in'
     ''
     +
       lib.optionalString (builtins.compareVersions "5.15.0" version <= 0)
@@ -107,6 +96,8 @@ mkDerivation (
 
       ${args.postFixup or ""}
     '';
+
+    disallowedReferences = (args.disallowedReferences or [ ]) ++ [ qtbase-bootstrap.qmake ];
 
     meta = {
       homepage = "https://www.qt.io";

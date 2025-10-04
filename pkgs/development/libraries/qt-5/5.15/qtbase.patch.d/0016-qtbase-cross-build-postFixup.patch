@@ -1,0 +1,40 @@
+diff --git a/mkspecs/features/qt_build_config.prf b/mkspecs/features/qt_build_config.prf
+index 70d1e10611..ce8b9383eb 100644
+--- a/mkspecs/features/qt_build_config.prf
++++ b/mkspecs/features/qt_build_config.prf
+@@ -16,6 +16,12 @@
+     } else {
+         debug(1, "Loaded qmodule.pri from ($$QMAKE_QT_MODULE)")
+ 
++        # detect cross compilation status dynamically for the case of
++        # switching cross and natively built qtbase
++        _crossComp = $$(XQMAKESPEC)
++        isEmpty(_crossComp): CONFIG -= cross_compile
++        else: CONFIG += cross_compile
++
+         # Yeah, there are multiple pkg-config related varialbes and functions
+         # that are used throughout QT modules somewhat interchangeably.
+         # As we're now trying to build all packaged binaries for the hostPlatform
+diff --git a/mkspecs/features/qt_config.prf b/mkspecs/features/qt_config.prf
+index 93c54e3010..65552276ac 100644
+--- a/mkspecs/features/qt_config.prf
++++ b/mkspecs/features/qt_config.prf
+@@ -5,6 +5,18 @@ QMAKE_QT_CONFIG = $$[QT_HOST_DATA/get]/mkspecs/qconfig.pri
+    debug(1, "Cannot load qconfig.pri!")
+ } else {
+    debug(1, "Loaded .qconfig.pri from ($$QMAKE_QT_CONFIG)")
++
++   # detect cross compilation status dynamically for the case of
++   # switching cross and natively built qtbase
++   _crossComp = $$(XQMAKESPEC)
++   isEmpty(_crossComp) {
++      QT.global.enabled_features -= cross_compile
++      CONFIG -= cross_compile
++   } else {
++      QT.global.enabled_features += cross_compile
++      CONFIG += cross_compile
++   }
++
+    dirs = $$(QMAKEMODULES)
+    QMAKE_MODULE_PATH = $$split(dirs, $$DIRLIST_SEPARATOR)
+    QMAKE_MODULE_PATH += $$QMAKEMODULES

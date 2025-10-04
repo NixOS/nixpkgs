@@ -6,19 +6,17 @@
   qtwebchannel,
   fetchpatch,
   fetchpatch2,
+  srcs,
 
   bison,
   flex,
   gperf,
   ninja,
   pkg-config,
-  python,
   which,
   nodejs,
   perl,
   buildPackages,
-  pkgsBuildTarget,
-  pkgsBuildBuild,
 
   xorg,
   libXcursor,
@@ -34,24 +32,25 @@
   zlib,
   minizip,
   libjpeg,
+  openjpeg,
   libpng,
   libtiff,
   libwebp,
   libopus,
-  jsoncpp,
-  protobuf,
   libvpx,
   srtp,
   snappy,
   nss,
   libevent,
+  lcms2,
+  libxml2,
+  libxslt,
   alsa-lib,
   pulseaudio,
   libcap,
   pciutils,
   systemd,
   enableProprietaryCodecs ? true,
-  gn,
   cctools,
   cups,
   bootstrap_cmds,
@@ -65,27 +64,56 @@
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   postPatch ? "",
-  nspr,
-  lndir,
 }:
 
 let
-  # qtwebengine expects to find an executable in $PATH which runs on
-  # the build platform yet knows about the host `.pc` files.  Most
-  # configury allows setting $PKG_CONFIG to point to an
-  # arbitrarily-named script which serves this purpose; however QT
-  # insists that it is named `pkg-config` with no target prefix.  So
-  # we re-wrap the host platform's pkg-config.
-  pkg-config-wrapped-without-prefix = stdenv.mkDerivation {
-    name = "pkg-config-wrapper-without-target-prefix";
-    dontUnpack = true;
-    dontBuild = true;
-    installPhase = ''
-      mkdir -p $out/bin
-      ln -s '${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' $out/bin/pkg-config
-    '';
-  };
+  isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
 
+  # qtwebengine requires its own very particular specially patched for qt version of gn
+  gnQtWebengine =
+    with srcs.qtwebengine;
+    buildPackages.gn.overrideAttrs {
+      pname = "gn-qtwebengine";
+      inherit src version;
+      sourceRoot = "${src.name}/src/3rdparty/gn";
+      configurePhase = ''
+        # using $CXX as ld because the script uses --gc-sections, and ld doesn't recognize it.
+        # on a related note, here we can see as QT developers intentionally de-standardize build tools:
+        # https://github.com/qt/qtwebengine-chromium/commit/0e7e61966f9215babb0d4b32d97b9c0b73db1ca9
+        python build/gen.py --no-last-commit-position --cc $CC --cxx $CXX --ld $CXX --ar $AR
+      '';
+      buildPhase = ''
+        ninja -j $NIX_BUILD_CORES -C out gn
+      '';
+    };
+
+  # Overriding stdenv seems to be a common thing for qt5 scope, so I'm using the
+  # "__spliced or" construction here instead of pkgsBuildBuild.
+  stdenvForBuildPlatform = stdenv.__spliced.buildBuild or stdenv;
+
+  cflagsForPlatform =
+    stdenv:
+    toString (
+      [ "-w " ]
+      ++ lib.optionals stdenv.cc.isGNU [
+        # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
+        "-Wno-class-memaccess"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
+        # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+        # TODO: investigate and fix properly
+        "-march=westmere"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        "-Wno-elaborated-enum-base"
+        # 5.15.17: need to silence these two warnings
+        # https://trac.macports.org/ticket/70850
+        "-Wno-enum-constexpr-conversion"
+        "-Wno-unused-but-set-variable"
+        # Clang 19
+        "-Wno-error=missing-template-arg-list-after-template-kw"
+      ]
+    );
 in
 
 qtModule (
@@ -97,23 +125,52 @@ qtModule (
       gperf
       ninja
       pkg-config
-      (python.withPackages (ps: [ ps.html5lib ]))
+      (buildPackages.python3.withPackages (ps: [ ps.html5lib ]))
       which
-      gn
+      gnQtWebengine
       nodejs
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      perl
-      lndir
-      (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
-      pkgsBuildBuild.pkg-config
-      (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
-      pkg-config-wrapped-without-prefix
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin [
       bootstrap_cmds
       xcbuild
+
+      # FIXME These dependencies shouldn't be needed but can't find a way
+      # around it. Chromium pulls this in while bootstrapping GN.
+      cctools.libtool
+
+      # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
+      # to get some information about the host platform.
+      (writeScriptBin "sw_vers" ''
+        #!${stdenv.shell}
+
+        while [ $# -gt 0 ]; do
+          case "$1" in
+            -buildVersion) echo "17E199";;
+          *) break ;;
+
+          esac
+          shift
+        done
+      '')
     ];
+
+    # For "host" builds in chromium. Only cc in depsBuildBuild will produce
+    # _FOR_BUILD env variables that are used in qtwebengine-cross-build.patch.
+    depsBuildBuild = [
+      stdenvForBuildPlatform.cc
+      pkg-config
+      zlib
+      nss
+      icu
+      # apparently chromium doesn't care if these deps are non-functional on the buildPlatform
+      # but build fails if pkg-config can't find them
+      libjpeg
+      libpng
+      libwebp
+      freetype
+      harfbuzz
+    ];
+    strictDeps = true;
     doCheck = true;
     outputs = [
       "bin"
@@ -220,21 +277,39 @@ qtModule (
 
       # Fix the build with gperf ≥ 3.2 and Clang 19.
       ./qtwebengine-gperf-3.2.patch
+
+      # support for building with python 3.12
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/python3.12-six.patch";
+        hash = "sha256-gjc9sOPbcyHtJWnSHpkpupY6dIAODO20tiaTEtAfFr0=";
+      })
+
+      # Build with C++17, which is required by ICU 75
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/build-with-c++17.patch";
+        hash = "sha256-1fhkj50radAc3uG386UnS735+LRe0Xs8jQOJtMqE7hQ=";
+      })
+
+      # Use system openjpeg
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/system-openjpeg2.patch";
+        hash = "sha256-H3WwC40t0FRMGf1K2aXucrQjynMU/U/14goB4HK9/KM=";
+      })
+
+      # Use system lcms2
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/system-lcms2.patch";
+        hash = "sha256-ccEbt5T54uXTV1pJnHI12NfYJ+QdUSUJFj0xcKcmtIA=";
+      })
     ];
 
     postPatch = ''
       # Patch Chromium build tools
       (
-        cd src/3rdparty/chromium;
+        # Force configure to accept qtwebengine's own version of gn when passed from outside
+        substituteInPlace configure.pri --replace 'qtLog("Gn version too old")' 'return(true)'
 
-        patch -p1 < ${
-          (fetchpatch {
-            # support for building with python 3.12
-            name = "python312-six.patch";
-            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
-            hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
-          })
-        }
+        cd src/3rdparty/chromium;
 
         # Manually fix unsupported shebangs
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
@@ -278,56 +353,24 @@ qtModule (
     + postPatch;
 
     env = {
-      NIX_CFLAGS_COMPILE = toString (
-        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-          "-w "
-        ]
-        ++ lib.optionals stdenv.cc.isGNU [
-          # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
-          "-Wno-class-memaccess"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
-          # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
-          # TODO: investigate and fix properly
-          "-march=westmere"
-        ]
-        ++ lib.optionals stdenv.cc.isClang [
-          "-Wno-elaborated-enum-base"
-          # 5.15.17: need to silence these two warnings
-          # https://trac.macports.org/ticket/70850
-          "-Wno-enum-constexpr-conversion"
-          "-Wno-unused-but-set-variable"
-          # Clang 19
-          "-Wno-error=missing-template-arg-list-after-template-kw"
-        ]
-      );
-    }
-    // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-      NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
-      "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
+      NIX_CFLAGS_COMPILE = cflagsForPlatform stdenv;
+      NIX_CFLAGS_COMPILE_FOR_BUILD = cflagsForPlatform stdenvForBuildPlatform;
     };
 
     preConfigure = ''
       export NINJAFLAGS=-j$NIX_BUILD_CORES
-
-      if [ -d "$PWD/tools/qmake" ]; then
-          QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
-      fi
-    ''
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      export QMAKE_CC=$CC
-      export QMAKE_CXX=$CXX
-      export QMAKE_LINK=$CXX
-      export QMAKE_AR=$AR
     '';
 
     qmakeFlags = [
       "--"
-      "-system-ffmpeg"
+      "-feature-webengine-system-gn"
+      "-webengine-icu"
     ]
-    ++ lib.optional (
-      pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
-    ) "-webengine-webrtc-pipewire"
+    # webengine-embedded-build disables WebRTC, "Printing and PDF" and breaks PyQtWebEngine build.
+    # It is automatically switched on for cross compilation. We probably always want it disabled.
+    ++ lib.optional stdenv.hostPlatform.isLinux "-no-webengine-embedded-build"
+    ++ lib.optional (ffmpeg != null) "-webengine-ffmpeg"
+    ++ lib.optional (pipewireSupport && !isCrossBuild) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
     propagatedBuildInputs = [
@@ -335,9 +378,14 @@ qtModule (
       qtquickcontrols
       qtlocation
       qtwebchannel
+    ];
 
+    # Optional dependency on system-provided re2 library is not used here because it activates
+    # some broken code paths in chromium.
+    buildInputs = [
       # Image formats
       libjpeg
+      openjpeg
       libpng
       libtiff
       libwebp
@@ -352,18 +400,20 @@ qtModule (
       # Text rendering
       harfbuzz
       icu
+      freetype
 
       libevent
       ffmpeg
+
+      lcms2
+
+      snappy
+      minizip
+      zlib
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       dbus
-      zlib
-      minizip
-      snappy
       nss
-      protobuf
-      jsoncpp
 
       # Audio formats
       alsa-lib
@@ -371,10 +421,16 @@ qtModule (
 
       # Text rendering
       fontconfig
-      freetype
 
       libcap
       pciutils
+
+      # there's an explicit check for LIBXML_ICU_ENABLED at configuraion time
+      # FIXME: still doesn't work because of the propagation of non-icu libxml2
+      # from qtbase. Not sure what is the right move here.
+      # FIXME: those could also be used on Darwin if we fix https://github.com/NixOS/nixpkgs/issues/272383
+      (libxml2.override { icuSupport = true; })
+      libxslt
 
       # X11 libs
       xorg.xrandr
@@ -389,39 +445,24 @@ qtModule (
       xorg.libxkbfile
 
     ]
-    ++ lib.optionals pipewireSupport [
+    ++ lib.optionals (pipewireSupport && !isCrossBuild) [
       # Pipewire
       pipewire
     ]
-
-    # FIXME These dependencies shouldn't be needed but can't find a way
-    # around it. Chromium pulls this in while bootstrapping GN.
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cups
-
-      # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
-      # to get some information about the host platform.
-      (writeScriptBin "sw_vers" ''
-        #!${stdenv.shell}
-
-        while [ $# -gt 0 ]; do
-          case "$1" in
-            -buildVersion) echo "17E199";;
-          *) break ;;
-
-          esac
-          shift
-        done
-      '')
     ];
+
+    # to get progress output in `nix-build` and `nix build -L`
+    preBuild = ''
+      export TERM=dumb
+    '';
 
     dontUseNinjaBuild = true;
     dontUseNinjaInstall = true;
 
     postInstall =
-      lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      lib.optionalString isCrossBuild ''
         mkdir -p $out/libexec
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -502,18 +543,7 @@ qtModule (
     };
 
   }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  // lib.optionalAttrs isCrossBuild {
     configurePlatforms = [ ];
-    # to get progress output in `nix-build` and `nix build -L`
-    preBuild = ''
-      export TERM=dumb
-    '';
-    depsBuildBuild = [
-      pkgsBuildBuild.stdenv
-      zlib
-      nss
-      nspr
-    ];
-
   }
 )
