@@ -5,7 +5,7 @@
   autoPatchelfHook,
   udev,
   libusb1,
-  segger-jlink,
+  segger-jlink-headless,
 }:
 
 let
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   };
 
   runtimeDependencies = [
-    segger-jlink
+    segger-jlink-headless
   ];
 
   nativeBuildInputs = [
