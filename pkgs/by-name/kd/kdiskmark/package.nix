@@ -1,14 +1,10 @@
 {
   stdenv,
   lib,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
   fio,
   cmake,
-  polkit-qt-1,
-  extra-cmake-modules,
   fetchFromGitHub,
+  kdePackages,
 }:
 stdenv.mkDerivation rec {
   pname = "kdiskmark";
@@ -22,13 +18,13 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with kdePackages; [
     cmake
     extra-cmake-modules
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = with kdePackages; [
     qtbase
     qttools
     polkit-qt-1
