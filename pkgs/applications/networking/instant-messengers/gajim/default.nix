@@ -2,7 +2,7 @@
   lib,
   fetchFromGitLab,
   gettext,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 
   # Native dependencies
   python3,
@@ -12,10 +12,6 @@
   gtksourceview5,
   glib-networking,
   libadwaita,
-
-  # Test dependencies
-  xvfb-run,
-  dbus,
 
   # Optional dependencies
   enableJingle ? true,
@@ -31,11 +27,11 @@
   enableRST ? true,
   docutils,
   enableSpelling ? true,
-  gspell,
+  libspelling,
   enableUPnP ? true,
   gupnp-igd,
   enableAppIndicator ? true,
-  libappindicator-gtk3,
+  libappindicator,
   enableSoundNotifications ? true,
   gsound,
   extraPythonPackages ? ps: [ ],
@@ -70,14 +66,14 @@ python3.pkgs.buildPythonApplication rec {
     libnice
   ]
   ++ lib.optional enableSecrets libsecret
-  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableSpelling libspelling
   ++ lib.optional enableUPnP gupnp-igd
-  ++ lib.optional enableAppIndicator libappindicator-gtk3
+  ++ lib.optional enableAppIndicator libappindicator
   ++ lib.optional enableSoundNotifications gsound;
 
   nativeBuildInputs = [
     gettext
-    wrapGAppsHook3
+    wrapGAppsHook4
     gobject-introspection
     libadwaita
   ];
@@ -112,6 +108,9 @@ python3.pkgs.buildPythonApplication rec {
       qrcode
       sqlalchemy
       emoji
+
+      gobject-introspection
+      libadwaita
     ]
     ++ lib.optionals enableE2E [
       pycrypto
@@ -121,22 +120,13 @@ python3.pkgs.buildPythonApplication rec {
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [
-    xvfb-run
-    dbus
+    gobject-introspection
+    libadwaita
   ];
 
   checkPhase = ''
-    xvfb-run dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python3.interpreter} -m unittest discover -s test/gui -v
-    ${python3.interpreter} -m unittest discover -s test/common -v
+    ${python3.interpreter} -m unittest discover -s test -v
   '';
-
-  # test are broken in 1.7.3, 1.8.0
-  doCheck = false;
-
-  # necessary for wrapGAppsHook3
-  strictDeps = false;
 
   meta = {
     homepage = "http://gajim.org/";
