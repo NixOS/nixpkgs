@@ -84,7 +84,7 @@ let
           ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
           ../../build-support/setup-hooks/strip.sh
         ]
-        ++ lib.optionals hasCC [ cc ];
+        ++ lib.optionals (hasCC && cc != null) [ cc ];
 
       defaultBuildInputs = extraBuildInputs;
 

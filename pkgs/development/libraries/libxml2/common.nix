@@ -14,7 +14,6 @@
     enableShared
     && (
       stdenv.hostPlatform == stdenv.buildPlatform
-      || stdenv.hostPlatform.isCygwin
       || stdenv.hostPlatform.isLinux
       || stdenv.hostPlatform.isWasi
     ),
@@ -87,9 +86,12 @@ stdenv'.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     findXMLCatalogs
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
-    libiconv
-  ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin)
+      [
+        libiconv
+      ]
   ++ lib.optionals icuSupport [
     icu
   ];

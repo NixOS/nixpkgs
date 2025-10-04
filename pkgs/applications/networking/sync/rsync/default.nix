@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableXXHash xxHash;
 
   # fakeroot doesn't work well on darwin anymore, apparently
-  checkInputs = lib.optionals (!stdenv.isDarwin) [ fakeroot ];
+  checkInputs = lib.optionals (!stdenv.isDarwin && !stdenv.buildPlatform.isCygwin) [ fakeroot ];
 
   configureFlags = [
     (lib.enableFeature enableLZ4 "lz4")
