@@ -51,6 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/uxlfoundation/oneTBB/commit/e57411968661ab1205322ba1c84fc1cd90a306c6.patch";
       hash = "sha256-PFixW4lYqA5oy4LSwewvxgJbjVKJceRHnp8mgW9zBF0=";
     })
+
+    # Fix build with gcc15
+    # <https://github.com/uxlfoundation/oneTBB/pull/1831>
+    (fetchpatch {
+      name = "onetbb-fix-gcc15-build.patch";
+      url = "https://github.com/uxlfoundation/oneTBB/commit/712ad98443300aab202f5e93a76472d59b79752a.patch";
+      hash = "sha256-4qoVCy3xQZK6Vp471miE79FSrU0D0Iu6KWMJ08m0EsE=";
+    })
   ];
 
   nativeBuildInputs = [
