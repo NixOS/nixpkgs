@@ -19,7 +19,7 @@ let
   inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
 
   # For `nix-shell -A hello`
-  curPkgs = builtins.removeAttrs (import ./. { inherit system; }) [
+  curPkgs = removeAttrs (import ./. { inherit system; }) [
     # Although this is what anyone may expect from a `_type = "pkgs"`,
     # this file is intended to produce a shell in the first place,
     # and a `_type` tag could confuse some code.
