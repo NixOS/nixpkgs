@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeWrapper,
   php83,
+  icingaweb2-ipl,
+  icingaweb2-thirdparty,
   nixosTests,
 }:
 
@@ -21,11 +23,14 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/share
+    mkdir -p $out/share/icinga-php
     cp -ra application bin etc library modules public schema $out
     cp -ra doc $out/share
 
-    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php83 ]}"
+    ln -s ${icingaweb2-ipl} $out/share/icinga-php/ipl
+    ln -s ${icingaweb2-thirdparty} $out/share/icinga-php/vendor
+
+    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php83 ]}" --suffix ICINGAWEB_LIBDIR : $out/share/icinga-php
   '';
 
   passthru.tests = { inherit (nixosTests) icingaweb2; };
