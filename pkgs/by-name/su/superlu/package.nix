@@ -34,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Prevent clang from crashing when compiling slatms.c from SuperLU’s matgen test code.
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    echo 'target_compile_options(matgen PRIVATE -fno-vectorize)' >> TESTING/MATGEN/CMakeLists.txt
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
