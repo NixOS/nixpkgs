@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "python-secp256k1-cardano";
-  version = "0.2.3";
+  version = "ac83be33";
 
   format = "setuptools";
 
