@@ -9,7 +9,7 @@
 
 buildPythonApplication {
   pname = "cambrinary";
-  version = "unstable-2023-07-16";
+  version = "0.1.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
