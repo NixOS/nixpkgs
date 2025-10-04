@@ -8691,6 +8691,12 @@
     name = "Bogdan Burlacu";
     keys = [ { fingerprint = "B722 6464 838F 8BDB 2BEA  C8C8 5B0E FDDF BA81 6105"; } ];
   };
+  footvaalvica = {
+    email = "mateusleitepinho@gmail.com";
+    github = "footvaalvica";
+    githubId = 11351574;
+    name = "Mateus Pinho";
+  };
   Forden = {
     email = "forden@zuku.tech";
     github = "Forden";
