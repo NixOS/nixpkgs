@@ -710,14 +710,27 @@ let
                   cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
+
+          purlParts = attrs.meta.identifiers.purlParts or { };
+          purl =
+            attrs.meta.identifiers.purl or (
+              if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null
+            );
+          purls = attrs.meta.identifiers.purls or (optional (purl != null) purl);
+
           v1 = {
-            inherit cpeParts possibleCPEs;
+            inherit
+              cpeParts
+              possibleCPEs
+              purls
+              ;
             ${if cpe != null then "cpe" else null} = cpe;
+            ${if purl != null then "purl" else null} = purl;
           };
         in
         v1
         // {
-          inherit v1;
+          inherit v1 purlParts;
         };
 
       # Expose the result of the checks for everyone to see.
