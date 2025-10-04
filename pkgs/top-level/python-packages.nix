@@ -11203,8 +11203,6 @@ self: super: with self; {
 
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
-  orderedset = callPackage ../development/python-modules/orderedset { };
-
   orderly-set = callPackage ../development/python-modules/orderly-set { };
 
   orgformat = callPackage ../development/python-modules/orgformat { };
