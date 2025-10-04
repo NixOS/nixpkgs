@@ -102,6 +102,8 @@ python3Packages.buildPythonApplication {
       platformdirs
       pyyaml
       unidecode
+      # Can be built without it, but: https://github.com/NixOS/nixpkgs/issues/437308
+      reflink
       typing-extensions
       lap
     ]
