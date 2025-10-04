@@ -113,6 +113,10 @@ buildPythonPackage {
   disabledTests = [
     # Needs Internet access
     "test_long_img"
+  ] ++ lib.optionals onnxruntime.cudaSupport [
+    # segfault when built with cuda support but GPU is not availaible in build environment
+    "test_ort_cuda_warning"
+    "test_ort_dml_warning"
   ];
 
   # rapidocr-onnxruntime has been renamed to rapidocr by upstream since 2.0.0. However, some packages like open-webui still requires rapidocr-onnxruntime 1.4.4. Therefore we set no auto update here.
