@@ -9,8 +9,12 @@ let
     {
       # name used in paths/names, e.g. k3s
       name ? null,
+      # suffix appended to the systemd service name
+      serviceSuffix ? "",
       # extra flags to pass to the binary before user-defined extraFlags
       extraBinFlags ? [ ],
+      # see rke2.nix
+      jsonManifests ? false,
     }:
     let
       cfg = config.services.${name};
@@ -18,11 +22,30 @@ let
       imageDir = "/var/lib/rancher/${name}/agent/images";
       containerdConfigTemplateFile = "/var/lib/rancher/${name}/agent/etc/containerd/config.toml.tmpl";
 
-      yamlFormat = pkgs.formats.yaml { };
-      yamlDocSeparator = builtins.toFile "yaml-doc-separator" "\n---\n";
-      # Manifests need a valid YAML suffix to be respected
+      manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml { };
+      # Manifests need a valid suffix to be respected
       mkManifestTarget =
-        name: if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name) then name else name + ".yaml";
+        name:
+        if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name || lib.hasSuffix ".json" name) then
+          name
+        else if jsonManifests then
+          name + ".json"
+        else
+          name + ".yaml";
+      # Returns a path to the final manifest file
+      mkManifestSource =
+        name: manifests:
+        manifestFormat.generate name (
+          if builtins.isList manifests then
+            {
+              apiVersion = "v1";
+              kind = "List";
+              items = manifests;
+            }
+          else
+            manifests
+        );
+
       # Produces a list containing all duplicate manifest names
       duplicateManifests = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
         builtins.attrNames cfg.manifests
@@ -93,7 +116,7 @@ let
           x.outPath
         # x is an attribute set that needs to be converted to a YAML file
         else if builtins.isAttrs x then
-          (yamlFormat.generate "extra-deploy-chart-manifest" x)
+          (manifestFormat.generate "extra-deploy-chart-manifest" x)
         # assume x is a path to a YAML file
         else
           x;
@@ -122,24 +145,15 @@ let
           };
         } value.extraFieldDefinitions;
 
-      # Generate a HelmChart custom resource together with extraDeploy manifests. This
-      # generates possibly a multi document YAML file that the auto deploy mechanism
-      # deploys.
+      # Generate a HelmChart custom resource together with extraDeploy manifests.
       mkAutoDeployChartManifest = name: value: {
         # target is the final name of the link created for the manifest file
         target = mkManifestTarget name;
         inherit (value) enable package;
         # source is a store path containing the complete manifest file
-        source = pkgs.concatText "auto-deploy-chart-${name}.yaml" (
-          [
-            (yamlFormat.generate "helm-chart-manifest-${name}.yaml" (mkHelmChartCR name value))
-          ]
-          # alternate the YAML doc separator (---) and extraDeploy manifests to create
-          # multi document YAMLs
-          ++ (lib.concatMap (x: [
-            yamlDocSeparator
-            (mkExtraDeployManifest x)
-          ]) value.extraDeploy)
+        source = mkManifestSource "auto-deploy-chart-${name}" (
+          lib.singleton (mkHelmChartCR name value)
+          ++ builtins.map (x: fromYaml (mkExtraDeployManifest x)) value.extraDeploy
         );
       };
 
@@ -276,7 +290,7 @@ let
             };
 
             extraFieldDefinitions = lib.mkOption {
-              inherit (yamlFormat) type;
+              inherit (manifestFormat) type;
               default = { };
               example = {
                 spec = {
@@ -289,7 +303,7 @@ let
               description = ''
                 Extra HelmChart field definitions that are merged with the rest of the HelmChart
                 custom resource. This can be used to set advanced fields or to overwrite
-                generated fields. See <https://docs.k3s.io/helm#helmchart-field-definitions>
+                generated fields. See <https://docs.${name}.io/helm#helmchart-field-definitions>
                 for possible fields.
               '';
             };
@@ -355,18 +369,7 @@ let
             source = lib.mkIf (config.content != null) (
               let
                 name' = "${name}-manifest-" + builtins.baseNameOf name;
-                docName = "${name}-manifest-doc-" + builtins.baseNameOf name;
-                mkSource =
-                  value:
-                  if builtins.isList value then
-                    pkgs.concatText name' (
-                      lib.concatMap (x: [
-                        yamlDocSeparator
-                        (yamlFormat.generate docName x)
-                      ]) value
-                    )
-                  else
-                    yamlFormat.generate name' value;
+                mkSource = mkManifestSource name';
               in
               lib.mkDerivedConfig options.content mkSource
             );
@@ -413,7 +416,28 @@ let
 
         tokenFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          description = "File path containing ${name} token to use when connecting to the server.";
+          description = "File path containing the ${name} token to use when connecting to a server.";
+          default = null;
+        };
+
+        agentToken = lib.mkOption {
+          type = lib.types.str;
+          description = ''
+            The ${name} token agents can use to connect to the server.
+            This option only makes sense on server nodes (`role = server`).
+
+            WARNING: This option will expose your token unencrypted in the world-readable nix store.
+            If this is undesired use the tokenFile option instead.
+          '';
+          default = "";
+        };
+
+        agentTokenFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          description = ''
+            File path containing the ${name} token agents can use to connect to the server.
+            This option only makes sense on server nodes (`role = server`).
+          '';
           default = null;
         };
 
@@ -439,6 +463,42 @@ let
           type = lib.types.nullOr lib.types.path;
           default = null;
           description = "File path containing the ${name} YAML config. This is useful when the config is generated (for example on boot).";
+        };
+
+        disable = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "Disable default components via the `--disable` flag.";
+          default = [ ];
+        };
+
+        nodeName = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "Node name.";
+          default = null;
+        };
+
+        nodeLabel = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "Registering and starting kubelet with set of labels.";
+          default = [ ];
+        };
+
+        nodeTaint = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "Registering kubelet with set of taints.";
+          default = [ ];
+        };
+
+        nodeIP = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "IPv4/IPv6 addresses to advertise for node.";
+          default = null;
+        };
+
+        selinux = lib.mkOption {
+          type = lib.types.bool;
+          description = "Enable SELinux in containerd.";
+          default = false;
         };
 
         manifests = lib.mkOption {
@@ -702,8 +762,11 @@ let
           ) "${name}: serverAddr or configPath (with 'server' key) should be set if role is 'agent'")
           ++ (lib.optional
             (cfg.role == "agent" && cfg.configPath == null && cfg.tokenFile == null && cfg.token == "")
-            "${name}: Token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"
-          );
+            "${name}: token, tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"
+          )
+          ++ (lib.optional (
+            cfg.role == "agent" && !(cfg.agentTokenFile != null || cfg.agentToken != "")
+          ) "${name}: agentToken and agentToken should not be set if role is 'agent'");
 
         environment.systemPackages = [ config.services.${name}.package ];
 
@@ -735,14 +798,14 @@ let
             };
           });
 
-        systemd.services.${name} =
+        systemd.services."${name}${serviceSuffix}" =
           let
             kubeletParams =
               (lib.optionalAttrs (cfg.gracefulNodeShutdown.enable) {
                 inherit (cfg.gracefulNodeShutdown) shutdownGracePeriod shutdownGracePeriodCriticalPods;
               })
               // cfg.extraKubeletConfig;
-            kubeletConfig = (pkgs.formats.yaml { }).generate "${name}-kubelet-config" (
+            kubeletConfig = manifestFormat.generate "${name}-kubelet-config" (
               {
                 apiVersion = "kubelet.config.k8s.io/v1beta1";
                 kind = "KubeletConfiguration";
@@ -750,7 +813,7 @@ let
               // kubeletParams
             );
 
-            kubeProxyConfig = (pkgs.formats.yaml { }).generate "${name}-kubeProxy-config" (
+            kubeProxyConfig = manifestFormat.generate "${name}-kubeProxy-config" (
               {
                 apiVersion = "kubeproxy.config.k8s.io/v1alpha1";
                 kind = "KubeProxyConfiguration";
@@ -781,13 +844,22 @@ let
               LimitNPROC = "infinity";
               LimitCORE = "infinity";
               TasksMax = "infinity";
+              TimeoutStartSec = 0;
               EnvironmentFile = cfg.environmentFile;
               ExecStart = lib.concatStringsSep " \\\n " (
                 [ "${cfg.package}/bin/${name} ${cfg.role}" ]
                 ++ (lib.optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
                 ++ (lib.optional (cfg.token != "") "--token ${cfg.token}")
                 ++ (lib.optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
+                ++ (lib.optional (cfg.agentToken != "") "--agent-token ${cfg.agentToken}")
+                ++ (lib.optional (cfg.agentTokenFile != null) "--agent-token-file ${cfg.agentTokenFile}")
                 ++ (lib.optional (cfg.configPath != null) "--config ${cfg.configPath}")
+                ++ (map (d: "--disable=${d}") cfg.disable)
+                ++ (lib.optional (cfg.nodeName != null) "--node-name=${cfg.nodeName}")
+                ++ (lib.optionals (cfg.nodeLabel != [ ]) (map (l: "--node-label=${l}") cfg.nodeLabel))
+                ++ (lib.optionals (cfg.nodeTaint != [ ]) (map (t: "--node-taint=${t}") cfg.nodeTaint))
+                ++ (lib.optional (cfg.nodeIP != null) "--node-ip=${cfg.nodeIP}")
+                ++ (lib.optional cfg.selinux "--selinux")
                 ++ (lib.optional (kubeletParams != { }) "--kubelet-arg=config=${kubeletConfig}")
                 ++ (lib.optional (cfg.extraKubeProxyConfig != { }) "--kube-proxy-arg=config=${kubeProxyConfig}")
                 ++ extraBinFlags
@@ -802,16 +874,16 @@ in
   imports =
     # pass mkRancherModule explicitly instead of via
     # _modules.args to prevent infinite recursion
-    builtins.map (
-      f:
-      import f {
+    let
+      args = {
         inherit config lib;
         inherit mkRancherModule;
-      }
-    ) [ ./k3s.nix ];
+      };
+    in
+    [
+      (import ./k3s.nix args)
+      (import ./rke2.nix args)
+    ];
 
-  meta.maintainers =
-    with lib.maintainers;
-    [ azey7f ] # modules only
-    ++ lib.teams.k3s.members;
+  meta.maintainers = pkgs.rke2.meta.maintainers ++ lib.teams.k3s.members;
 }
