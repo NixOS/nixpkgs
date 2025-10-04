@@ -4,6 +4,7 @@
   fetchFromGitHub,
   writeText,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +34,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.limesurvey;
+  passthru = {
+    tests = { inherit (nixosTests) limesurvey; };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
