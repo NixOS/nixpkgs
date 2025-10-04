@@ -1077,7 +1077,7 @@ let
         KERNEL_XZ = lib.mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
         KERNEL_ZSTD = lib.mkIf (
           with stdenv.hostPlatform;
-          (isMips || isS390 || isx86 || (lib.versionAtLeast version "6.1" && isAarch64 || isLoongArch64))
+          (isMips || isS390 || isx86 || (lib.versionAtLeast version "6.1" && isAarch64 || isLoongArch64) || (isPower64 && isBigEndian))
           && useZstd
         ) yes;
 
