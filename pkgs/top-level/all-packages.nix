@@ -5098,8 +5098,6 @@ with pkgs;
 
   purenix = haskell.lib.compose.justStaticExecutables haskellPackages.purenix;
 
-  spago = callPackage ../development/tools/purescript/spago { };
-
   pulp = nodePackages.pulp;
 
   pscid = nodePackages.pscid;
