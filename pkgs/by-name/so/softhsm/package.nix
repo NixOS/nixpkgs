@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  botan2,
+  openssl,
   sqlite,
   autoreconfHook,
 }:
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-crypto-backend=botan"
-    "--with-botan=${lib.getDev botan2}"
+    "--with-crypto-backend=openssl"
+    "--with-openssl=${lib.getDev openssl}"
     "--with-objectstore-backend-db"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    botan2
+    openssl
     sqlite
   ];
 
