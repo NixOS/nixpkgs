@@ -10959,6 +10959,29 @@ with self;
     };
   };
 
+  DistributionMetadata = buildPerlModule {
+    pname = "Distribution-Metadata";
+    version = "0.10";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Distribution-Metadata-0.10.tar.gz";
+      sha256 = "sha256-uynMfh26OQphJnYfB9BwQ27fqinrjpBwMCOwXzET6nE=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      pkgs.gnumake
+    ];
+    propagatedBuildInputs = [
+      PerlStrip
+      CPANDistnameInfo
+      JSON
+    ];
+    meta = {
+      description = "Distribution::Metadata - gather distribution metadata in local";
+      homepage = "https://metacpan.org/pod/Distribution::Metadata";
+      mainProgram = "Metadata.pm";
+    };
+  };
+
   DistZilla = buildPerlPackage {
     pname = "Dist-Zilla";
     version = "6.030";
