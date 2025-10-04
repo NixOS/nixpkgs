@@ -13,11 +13,11 @@
   gettext,
   gnome,
   gtk-doc,
-  docbook_xsl,
+  docbook-xsl-nons,
   docbook_xml_dtd_43,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "template-glib";
   version = "3.37.1";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/template-glib/${lib.versions.majorMinor version}/template-glib-${version}.tar.xz";
+    url = "mirror://gnome/sources/template-glib/${lib.versions.majorMinor finalAttrs.version}/template-glib-${finalAttrs.version}.tar.xz";
     hash = "sha256-16xEMdWUe6KSCGx+R7iK6Kzb7A+PjTiyvbiIoL3MBhw=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     vala
     glib
     gtk-doc
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_43
     gobject-introspection
   ];
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
-}
+})
