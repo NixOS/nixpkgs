@@ -29,6 +29,10 @@ buildPythonPackage rec {
   ];
 
   # no pytest tests exist
+  doCheck = false;
+
+  # Default-added updateScript doesn't handle Mercurial sources
+  passthru.updateScript = null;
 
   meta = {
     description = "Libervia temporary third party patches";
