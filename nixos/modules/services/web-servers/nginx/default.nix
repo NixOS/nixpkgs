@@ -1509,6 +1509,11 @@ in
       '';
 
       startLimitIntervalSec = 60;
+      unitConfig = {
+        # We get errors when reloading the dbus-broker service
+        # if /tmp got remounted after this service started
+        RequiresMountsFor = [ "/tmp" ];
+      };
       serviceConfig = {
         ExecStart = execCommand;
         ExecReload = [
