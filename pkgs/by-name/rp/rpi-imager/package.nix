@@ -20,19 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.6";
+  version = "2.0.0-rc2";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HJLl0FOseZgW3DMi8M3SqIN/UHBDkIc09vKcenhSnO8=";
+    hash = "sha256-JbjgitOn6d1VLwpg/f4S0gVKQRne2LWxNp3R9e7FEi0=";
   };
 
   patches = [ ./remove-vendoring.patch ];
 
   postPatch = ''
-    substituteInPlace debian/org.raspberrypi.rpi-imager.desktop \
+    substituteInPlace debian/com.raspberrypi.rpi-imager.desktop \
       --replace-fail "/usr/bin/" ""
   '';
 
