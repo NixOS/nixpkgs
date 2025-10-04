@@ -14,6 +14,7 @@
   jedi,
   loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
@@ -33,13 +34,13 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.15.2";
+  version = "0.16.5";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
+    hash = "sha256-j1k508Tmf/JfbP7v5zGXHtfzNGwgCYA0uSOiSg13cNY=";
   };
 
   build-system = [ uv-build ];
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     jedi
     loro
     markdown
+    msgspec
     narwhals
     packaging
     psutil
