@@ -1,5 +1,7 @@
 {
   lib,
+  dnsmasq,
+  makeWrapper,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -24,6 +26,13 @@ buildGoModule rec {
     "-X github.com/LINBIT/virter/cmd.builddate=builtByNix"
     "-X github.com/LINBIT/virter/cmd.githash=builtByNix"
   ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/virter \
+      --prefix PATH ":" ${lib.makeBinPath [ dnsmasq ]}
+  '';
 
   # requires network access
   doCheck = false;
