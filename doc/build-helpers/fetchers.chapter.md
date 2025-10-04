@@ -882,7 +882,17 @@ This is used with Gitiles repositories. The arguments expected are similar to `f
 
 ## `fetchFromBitbucket` {#fetchfrombitbucket}
 
-This is used with BitBucket repositories. The arguments expected are very similar to `fetchFromGitHub` above.
+Used for repositories hosted on Bitbucket (`"bitbucket.org"`) owned by the Australian-based Atlassian Corporation. It requires an `owner` and `repo` argument which are both strings that reference the workspace ID and repository name hosted on Bitbucket cloud as well as either a `tag` or `rev` argument.
+
+By default, `fetchFromBitbucket` will attempt to download a commit snapshot tarball at the specified `tag` or `rev` at `https://bitbucket.org/<owner>/<repo>/get/<tag-or-rev>.tar.gz`
+
+However, `fetchFromBitbucket` will automatically switch to using `fetchgit` and fetch from `https://bitbucket.org/<owner>/<repo>.git` in any of these cases:
+
+- `forceFetchGit`, `leaveDotGit`, `deepClone`, `fetchLFS`, or `fetchSubmodules` are set to `true`
+- `sparseCheckout` contains any entries (is a non-empty list)
+- `rootDir` is set to a non-empty string
+
+When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
 
 ## `fetchFromSavannah` {#fetchfromsavannah}
 
