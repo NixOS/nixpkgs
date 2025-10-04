@@ -61,7 +61,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.11.2";
+  version = "0.11.6";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-JczlQulHlViV9pg0uPXd9Boagp74VBdZ1UMDXh2c3DA=";
+    hash = "sha256-UIS9ZyvsXOqgHBHIMLAfoVFGw59wZb7vgddUJ4yCf7k=";
   };
 
   build-system = [
@@ -185,6 +185,8 @@ buildPythonPackage rec {
     "test_performance_mifs_bus_params"
     "test_resistor"
     "test_reserved_attrs"
+    "test_examples_build"
+    "test_net_names_deterministic"
     # requires internet
     "test_simple_pick"
     "test_simple_negative_pick"
@@ -192,14 +194,6 @@ buildPythonPackage rec {
     "test_jlcpcb_pick_capacitor"
     "test_regression_rp2040_usb_diffpair_full"
     "test_model_translations"
-    # type error
-    "test_alternate_trait_constructor_with_params"
-    "test_parameterised_trait_with_params"
-    "test_trait_alternate_constructor_precedence"
-    "test_trait_template_enum"
-    "test_trait_template_enum_invalid"
-    # failure
-    "test_solve_voltage_divider_complex"
   ];
 
   # in order to use pytest marker, we need to use ppytestFlagsArray
