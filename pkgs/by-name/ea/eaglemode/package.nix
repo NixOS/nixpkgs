@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://eaglemode.sourceforge.net/download.html";
-    extraRegex = "(?!.*(x86_64|setup64|livecd)).*";
+    extraRegex = "(?!.*(x86_64|setup64|livecd|amd64)).*";
   };
 
   meta = {
