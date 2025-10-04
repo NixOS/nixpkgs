@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_88,
   fetchFromGitea,
   pkg-config,
   bzip2,
@@ -19,6 +19,8 @@
   nixosTests,
 }:
 let
+  inherit (rustPackages_1_88) rustPlatform;
+
   rocksdb' =
     (rocksdb.override {
       inherit enableLiburing;
