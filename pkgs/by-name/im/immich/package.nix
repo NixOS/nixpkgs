@@ -224,9 +224,9 @@ stdenv.mkDerivation {
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
 
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/admin-cli" \
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/immich-admin" \
       --add-flags "$packageOut/dist/main" \
-      --add-flags cli
+      --add-flags immich-admin
     makeWrapper '${lib.getExe nodejs}' "$out/bin/server" \
       --add-flags "$packageOut/dist/main" \
       --chdir "$packageOut" \
