@@ -10,7 +10,27 @@
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
-python3Packages.buildPythonApplication rec {
+let
+  # Using textual 5.3.0 to avoid error at runtime
+  # https://github.com/tconbeer/harlequin/issues/841
+  python = python3Packages.python.override {
+    self = python3Packages.python;
+    packageOverrides = self: super: {
+      textual = super.textual.overridePythonAttrs (old: rec {
+        version = "5.3.0";
+
+        src = fetchFromGitHub {
+          owner = "Textualize";
+          repo = "textual";
+          tag = "v${version}";
+          hash = "sha256-J7Sb4nv9wOl1JnR6Ky4XS9HZHABKtNKPB3uYfC/UGO4=";
+        };
+      });
+    };
+  };
+  pythonPackages = python.pkgs;
+in
+pythonPackages.buildPythonApplication rec {
   pname = "harlequin";
   version = "2.1.2";
   pyproject = true;
@@ -28,14 +48,15 @@ python3Packages.buildPythonApplication rec {
     "textual"
     "tree-sitter"
     "tree-sitter-sql"
+    "rich-click"
   ];
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with pythonPackages; [ poetry-core ];
 
   nativeBuildInputs = [ glibcLocales ];
 
   dependencies =
-    with python3Packages;
+    with pythonPackages;
     [
       click
       duckdb
@@ -67,7 +88,7 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with pythonPackages; [
     pytest-asyncio
     pytestCheckHook
     versionCheckHook
