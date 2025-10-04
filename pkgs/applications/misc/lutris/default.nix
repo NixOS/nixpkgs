@@ -158,6 +158,7 @@ buildPythonApplication rec {
     maintainers = with maintainers; [
       Madouura
       rapiteanu
+      iedame
     ];
     platforms = platforms.linux;
     mainProgram = "lutris";
