@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlu";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "xiaoyeli";
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/xiaoyeli/superlu/blob/0bbd6571bd839d866bff6a8ff1eaa812a8c31463/License.txt#L32-L65>
     # * <https://salsa.debian.org/science-team/superlu/-/blob/0acab1b41f332f2f2e3b0b5d28ba7fc9f7539533/debian/copyright>
     postFetch = "rm $out/SRC/mc64ad.* $out/DOC/*.pdf";
-    hash = "sha256-iJiVyY+/vr6kll8FCunvZ8rKBj+w+Rnj4F696XW9xFc=";
+    hash = "sha256-MiQPhYIGZbvmtpIojrNzTG4Xao7lc4Ks/FtxlfdAKmQ=";
   };
 
   patches = [
