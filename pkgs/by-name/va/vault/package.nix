@@ -75,7 +75,6 @@ buildGoModule rec {
       rushmorem
       lnl7
       offline
-      pradeepchhetri
       Chili-Man
       techknowlogick
     ];

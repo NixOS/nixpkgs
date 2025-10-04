@@ -65,7 +65,6 @@ let
           inherit license;
           maintainers = with maintainers; [
             rushmorem
-            pradeepchhetri
             techknowlogick
             cottand
           ];

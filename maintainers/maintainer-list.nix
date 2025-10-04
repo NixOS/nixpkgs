@@ -19840,12 +19840,6 @@
     github = "ppom0";
     githubId = 38916722;
   };
-  pradeepchhetri = {
-    email = "pradeep.chhetri89@gmail.com";
-    github = "pradeepchhetri";
-    githubId = 2232667;
-    name = "Pradeep Chhetri";
-  };
   pradyuman = {
     email = "me@pradyuman.co";
     github = "pradyuman";
