@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "dcmstack";
-  version = "0.9-unstable-2024-12-05";
+  version = "0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
