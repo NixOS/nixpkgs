@@ -9,7 +9,7 @@
   libexif,
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qiv";
   version = "3.0.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (rec {
     domain = "codeberg.org";
     owner = "ciberandy";
     repo = "qiv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U++ZyJ0cVa5x/1Me7Em1W33jAYe3Q/TfMZgPj71ZaFA=";
   };
 
@@ -30,16 +30,17 @@ stdenv.mkDerivation (rec {
   ];
 
   preBuild = ''
-    substituteInPlace Makefile --replace /usr/local "$out"
-    substituteInPlace Makefile --replace /man/ /share/man/
-    substituteInPlace Makefile --replace /share/share/ /share/
+    substituteInPlace Makefile \
+      --replace-fail /usr/local "$out" \
+      --replace-fail /man/ /share/man/ \
+      --replace-fail /share/share/ /share/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Quick image viewer";
     homepage = "http://spiegl.de/qiv/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     mainProgram = "qiv";
   };
 })
