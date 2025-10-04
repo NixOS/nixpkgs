@@ -34,7 +34,9 @@ in
   options.services.music-assistant = {
     enable = mkEnableOption "Music Assistant";
 
-    package = mkPackageOption pkgs "music-assistant" { };
+    package = mkPackageOption pkgs "music-assistant" {
+      example = "pkgs.music-assistant.override { withSpotifySupport = true; }";
+    };
 
     extraOptions = mkOption {
       type = listOf str;
@@ -83,9 +85,6 @@ in
         with pkgs;
         [
           lsof
-        ]
-        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
-          librespot
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
           snapcast
