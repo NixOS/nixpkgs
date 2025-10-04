@@ -7,4 +7,5 @@
   partial-broken-config = runTest ./partial-broken-config.nix;
   ping = runTest ./ping.nix;
   wireguard = runTest ./wireguard.nix;
+  dhcp = runTest ./dhcp.nix;
 }
