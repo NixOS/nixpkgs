@@ -10257,6 +10257,8 @@ with pkgs;
 
   inherit (linuxKernel) buildLinux linuxConfig kernelPatches;
 
+  kernelPackagesExtensions = [ ];
+
   linuxPackagesFor = linuxKernel.packagesFor;
 
   hardenedLinuxPackagesFor = linuxKernel.hardenedPackagesFor;
