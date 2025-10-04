@@ -3,12 +3,11 @@
   stdenv,
   fetchpatch,
   cmake,
+  llvm,
   python3,
-  rocm-merged-llvm,
   rocm-device-libs,
   zlib,
   zstd,
-  libxml2,
 }:
 
 let
@@ -23,10 +22,10 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
   # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
-
+  inherit (llvm.llvm) version;
+  src = llvm.llvm.monorepoSrc;
   sourceRoot = "${finalAttrs.src.name}/amd/comgr";
+  strictDeps = true;
 
   patches = [
     # [Comgr] Extend ISA compatibility
@@ -43,22 +42,26 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace cmake/opencl_pch.cmake \
+      --replace-fail "\''${CLANG_CMAKE_DIR}/../../../" "${llvm.clang-unwrapped.lib}"
+  '';
+
   nativeBuildInputs = [
     cmake
     python3
   ];
 
   buildInputs = [
+    llvm.llvm
+    llvm.clang-unwrapped
+    llvm.lld
     rocm-device-libs
-    libxml2
     zlib
     zstd
-    rocm-merged-llvm
   ];
 
   cmakeFlags = [
-    "-DCMAKE_VERBOSE_MAKEFILE=ON"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
   ];
 

@@ -5,7 +5,6 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  git,
   rocm-comgr,
   rocm-runtime,
   hwdata,
@@ -82,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    git
   ]
   ++ lib.optionals buildDocs [
     writableTmpDirAsHomeHook
