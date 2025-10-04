@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   hwloc,
-  llvmPackages,
+  llvmPackages_20,
   libxml2, # required for statically linked llvm
   spirv-llvm-translator,
   spirv-tools,
@@ -19,7 +19,7 @@
 }:
 
 let
-  clang = llvmPackages.clangUseLLVM;
+  clang = llvmPackages_20.clangUseLLVM;
   # Workaround to make sure libclang finds libgcc.a and libgcc_s.so when
   # invoked from within libpocl
   clangWrapped =
@@ -85,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     hwloc
     libxml2
-    llvmPackages.llvm
-    llvmPackages.libclang
+    llvmPackages_20.llvm
+    llvmPackages_20.libclang
     opencl-headers
     ocl-icd
     spirv-tools
