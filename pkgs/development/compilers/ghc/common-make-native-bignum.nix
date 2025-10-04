@@ -381,9 +381,6 @@ stdenv.mkDerivation (
 
     postPatch = "patchShebangs .";
 
-    # GHC needs the locale configured during the Haddock phase.
-    LANG = "en_US.UTF-8";
-
     # GHC is a bit confused on its cross terminology.
     # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
     preConfigure = ''
@@ -438,9 +435,15 @@ stdenv.mkDerivation (
       echo -n "${buildMK}" > mk/build.mk
       sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
-    + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
-      export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
-    ''
+    # Haddock and sphinx need a working locale
+    + lib.optionalString (enableDocs || enableHaddockProgram) (
+      ''
+        export LANG="en_US.UTF-8"
+      ''
+      + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+        export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
+      ''
+    )
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
     ''

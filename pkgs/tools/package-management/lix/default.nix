@@ -224,13 +224,6 @@ lib.makeExtensible (
           hash = "sha256-rbf0ptj4BTSwsitKQu3FuaiJwhNDePGBeBJovm5HLdQ=";
         };
 
-        patches = [
-          # Bumping to toml11 ≥4.0.0 makes integer parsing throw (as it should) instead of saturate on overflow.
-          # However, the updated version is not in nixpkgs yet, and the released versions still have the saturation bug.
-          # Hence reverting the bump for now seems to be the least bad option.
-          ./revert-toml11-bump.patch
-        ];
-
         cargoDeps = rustPlatform.fetchCargoVendor {
           name = "lix-${version}";
           inherit src;

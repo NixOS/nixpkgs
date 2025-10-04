@@ -54,9 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Drop in libiberty, as external builds are not expected
     cd "$buildRoot"
     (
-      mkdir -p build-${stdenv.buildPlatform.config}/libiberty/
-      cd build-${stdenv.buildPlatform.config}/libiberty/
-      ln -s ${buildPackages.libiberty}/lib/libiberty.a ./
+      mkdir -p "build-${stdenv.buildPlatform.config}/libiberty/pic"
+      cd "build-${stdenv.buildPlatform.config}/libiberty/"
+      ln -s "${buildPackages.libiberty}/lib/libiberty.a" ./
+      ln -s "${buildPackages.libiberty}/lib/libiberty_pic.a" pic/libiberty.a
     )
     mkdir -p "$buildRoot/gcc"
     cd "$buildRoot/gcc"

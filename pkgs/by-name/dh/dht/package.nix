@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation {
   pname = "dht";
-  version = "0.27";
+  version = "0.27-unstable-2025-05-01";
 
   src = fetchFromGitHub {
     # Use transmission fork from post-0.27-transmission branch
     owner = "transmission";
     repo = "dht";
-    rev = "015585510e402a057ec17142711ba2b568b5fd62";
-    sha256 = "m4utcxqE3Mn5L4IQ9UfuJXj2KkXXnqKBGqh7kHHGMJQ=";
+    rev = "38c9f261d9b58b76b9eaf85f84ec1b35151a1eac";
+    hash = "sha256-Y6CQhHnXS0YiL9K2VQtHeksuqgqYj7yvGYQr5nVC+yc=";
   };
 
   nativeBuildInputs = [ cmake ];

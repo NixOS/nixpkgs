@@ -14,7 +14,7 @@ buildPythonPackage {
     setuptools
     setuptools-scm
   ];
-  version = "6.4.0";
+  version = "6.4.3";
   inherit (composable_kernel) src;
   pythonImportsCheck = [
     "ck4inductor"

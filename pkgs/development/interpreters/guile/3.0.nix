@@ -147,8 +147,12 @@ builder rec {
   doCheck = false;
   doInstallCheck = doCheck;
 
-  # In procedure bytevector-u8-ref: Argument 2 out of range
-  dontStrip = stdenv.hostPlatform.isDarwin;
+  # guile-3 uses ELF files to store bytecode. strip does not
+  # always handle them correctly and destroys the image:
+  # darwin: In procedure bytevector-u8-ref: Argument 2 out of range
+  # linux binutils-2.45: $ guile --version
+  # Pre-boot error; key: misc-error, args: ("load-thunk-from-memory" "missing DT_GUILE_ENTRY" () #f)Aborted
+  dontStrip = true;
 
   setupHook = ./setup-hook-3.0.sh;
 

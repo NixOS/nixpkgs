@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils curl jq gnused haskellPackages.cabal2nix-unstable -I nixpkgs=.
+#! nix-shell -i bash -p coreutils curl jq gnused haskellPackages.cabal2nix-unstable.bin nix-prefetch-scripts -I nixpkgs=.
 
 # Updates cabal2nix-unstable to the latest master of the nixos/cabal2nix repository.
 # See regenerate-hackage-packages.sh for details on the purpose of this script.

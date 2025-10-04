@@ -33,9 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # Source has a path "systemd/usr/{libexec,lib}/...", don't break references to that
-  dontFixCmake = true;
-
   nativeBuildInputs = [
     cmake
     pkg-config

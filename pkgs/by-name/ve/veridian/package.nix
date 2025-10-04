@@ -8,7 +8,7 @@
   pkg-config,
 
   boost,
-  fmt_11,
+  fmt,
   openssl,
   sv-lang,
   mimalloc,
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     openssl
     sv-lang
     mimalloc

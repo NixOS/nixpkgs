@@ -22,7 +22,7 @@ let
     timerToUnit
     mountToUnit
     automountToUnit
-    attrsToSection
+    settingsToSections
     ;
 
   cfg = config.boot.initrd.systemd;
@@ -484,10 +484,7 @@ in
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
 
-        "/etc/systemd/system.conf".text = ''
-          [Manager]
-          ${attrsToSection cfg.settings.Manager}
-        '';
+        "/etc/systemd/system.conf".text = settingsToSections cfg.settings;
 
         # We can use either ! or * to lock the root account in the
         # console, but some software like OpenSSH won't even allow you

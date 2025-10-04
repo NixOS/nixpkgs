@@ -7,7 +7,6 @@
   zlib,
   libuv,
   sqlite,
-  http-parser,
   icu,
   bash,
   ninja,
@@ -99,16 +98,11 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedHttpParser =
-    !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
   useSharedSQLite = lib.versionAtLeast version "22.5";
 
   sharedLibDeps = {
     inherit openssl zlib libuv;
   }
-  // (lib.optionalAttrs useSharedHttpParser {
-    inherit http-parser;
-  })
   // (lib.optionalAttrs useSharedSQLite {
     inherit sqlite;
   });
@@ -191,7 +185,6 @@ let
         zlib
         libuv
         openssl
-        http-parser
         icu
         bash
       ]

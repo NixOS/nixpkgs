@@ -20,7 +20,7 @@
   opencv,
   pkg-config,
   stdenv,
-  tbb,
+  onetbb,
   xorg,
   cudaPackages,
   enableCuda ? config.cudaSupport,
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     lz4
     magic-enum
     opencv.cxxdev
-    tbb
+    onetbb
     xorg.libX11
   ]
   ++ lib.optionals enableCuda [

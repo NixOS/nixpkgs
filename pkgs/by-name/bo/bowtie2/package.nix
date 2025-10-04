@@ -5,7 +5,7 @@
   cmake,
   perl,
   python3,
-  tbb,
+  onetbb,
   zlib,
   runCommand,
   bowtie2,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    tbb
+    onetbb
     zlib
     python3
     perl

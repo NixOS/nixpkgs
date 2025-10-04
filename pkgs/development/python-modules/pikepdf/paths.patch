@@ -1,18 +1,18 @@
 diff --git a/src/pikepdf/_methods.py b/src/pikepdf/_methods.py
-index da40043f..4f566f01 100644
+index 62939b47..d4807ef2 100644
 --- a/src/pikepdf/_methods.py
 +++ b/src/pikepdf/_methods.py
-@@ -74,7 +74,7 @@ def _mudraw(buffer, fmt) -> bytes:
-         tmp_in.flush()
+@@ -69,7 +69,7 @@ def _single_page_pdf(page: Page) -> bytes:
  
-         proc = run(
--            ['mutool', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
-+            ['@mutool@', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
-             capture_output=True,
-             check=True,
-         )
+ def _run_mudraw(in_path: Path, out_pattern: Path) -> Path:
+     run(
+-        ['mutool', 'draw', '-o', str(out_pattern), str(in_path)],
++        ['@mutool@', 'draw', '-o', str(out_pattern), str(in_path)],
+         check=True,
+     )
+     out_path = out_pattern.with_name(out_pattern.name.format(1))  # Replace %d with 1
 diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
-index 901f3b6f..45551820 100644
+index aff8c657..5bcf1b4f 100644
 --- a/src/pikepdf/jbig2.py
 +++ b/src/pikepdf/jbig2.py
 @@ -72,7 +72,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
@@ -25,7 +25,7 @@ index 901f3b6f..45551820 100644
                  "--format",
                  "png",
 @@ -101,7 +101,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
-     def _version(self) -> Version:
+     def _version(self) -> Version | None:
          try:
              proc = self._run(
 -                ['jbig2dec', '--version'],

@@ -119,6 +119,7 @@ let
     };
 
     meta = {
+      mainProgram = "pip";
       description = "PyPA recommended tool for installing Python packages";
       license = with lib.licenses; [ mit ];
       homepage = "https://pip.pypa.io/";
