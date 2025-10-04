@@ -106,7 +106,6 @@ let
     "doInstallCheck"
     "pyproject"
     "format"
-    "outputs"
     "stdenv"
     "dependencies"
     "optional-dependencies"
@@ -204,10 +203,24 @@ let
   self = stdenv.mkDerivation (
     finalAttrs:
     let
+      getFinalPassthru =
+        let
+          pos = unsafeGetAttrPos "passthru" finalAttrs;
+        in
+        attrName:
+        finalAttrs.passthru.${attrName} or (throw (
+          ''
+            ${finalAttrs.name}: passthru.${attrName} missing after overrideAttrs overriding.
+          ''
+          + optionalString (pos != null) ''
+            Last overridden at ${pos.file}:${toString pos.line}
+          ''
+        ));
+
       format' =
-        assert (pyproject != null) -> (format == null);
-        if pyproject != null then
-          if pyproject then "pyproject" else "other"
+        assert (getFinalPassthru "pyproject" != null) -> (format == null);
+        if getFinalPassthru "pyproject" != null then
+          if getFinalPassthru "pyproject" then "pyproject" else "other"
         else if format != null then
           format
         else
@@ -262,11 +275,11 @@ let
         in
         attrName: inputs: map (checkDrv attrName) inputs;
 
-      isBootstrapInstallPackage = isBootstrapInstallPackage' (attrs.pname or null);
+      isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 
-      isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (attrs.pname or null);
+      isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (finalAttrs.pname or null);
 
-      isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
+      isSetuptoolsDependency = isSetuptoolsDependency' (finalAttrs.pname or null);
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
@@ -294,13 +307,15 @@ let
         #
         pythonCatchConflictsHook
       ]
-      ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
-        pythonRelaxDepsHook
-      ]
+      ++
+        optionals (finalAttrs.pythonRelaxDeps or [ ] != [ ] || finalAttrs.pythonRemoveDeps or [ ] != [ ])
+          [
+            pythonRelaxDepsHook
+          ]
       ++ optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
-      ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [
+      ++ optionals (hasSuffix "zip" (finalAttrs.src.name or "")) [
         unzip
       ]
       ++ optionals (format' == "setuptools") [
@@ -355,13 +370,13 @@ let
         pythonOutputDistHook
       ]
       ++ nativeBuildInputs
-      ++ build-system;
+      ++ getFinalPassthru "build-system";
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
       propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
         propagatedBuildInputs
-        ++ dependencies
+        ++ getFinalPassthru "dependencies"
         ++ [
           # we propagate python even for packages transformed with 'toPythonApplication'
           # this pollutes the PATH but avoids rebuilds
@@ -396,19 +411,16 @@ let
       outputs = outputs ++ optional withDistOutput "dist";
 
       passthru = {
-        inherit disabled;
+        inherit
+          disabled
+          pyproject
+          build-system
+          dependencies
+          optional-dependencies
+          ;
       }
       // {
         updateScript = nix-update-script { };
-      }
-      // optionalAttrs (dependencies != [ ]) {
-        inherit dependencies;
-      }
-      // optionalAttrs (optional-dependencies != { }) {
-        inherit optional-dependencies;
-      }
-      // optionalAttrs (build-system != [ ]) {
-        inherit build-system;
       }
       // attrs.passthru or { };
 
