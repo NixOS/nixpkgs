@@ -6,7 +6,7 @@
   lib,
   makeWrapper,
   nix-update-script,
-  nodejs,
+  nodejs_20,
   npmHooks,
   stdenv,
   which,
@@ -15,34 +15,34 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OZiqEef4jE1H47mweVCzhaRCSsFdpgUdCSuhWRz2n2M=";
+    hash = "sha256-DwgOboYa8X1lbZwFNwQdJn4qLd7c17AMo1Zefx0GUgc=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-N9P2mmqAfbg/Kpqx+vZbb+fhaD1I/3UjiJaEqFPJyO0=";
+    hash = "sha256-Fld7XI42Vyd8ou/lmQEDOTPvZcph0JlyEQ92IVVt8WI=";
   };
 
   nativeBuildInputs = [
     yarnBuildHook
     yarnConfigHook
     npmHooks.npmInstallHook
-    nodejs
+    nodejs_20
     installShellFiles
     makeWrapper
     fish
   ];
 
-  yarnBuildScript = "setup";
+  yarnBuildScript = "dev";
 
   postBuild = ''
-    yarn --offline compile
+    yarn --offline dev
   '';
 
   # We do it in postPatch, since it needs to be fixed before buildPhase
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/fish-lsp
     cp -r . $out/share/fish-lsp
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/fish-lsp" \
+    makeWrapper ${lib.getExe nodejs_20} "$out/bin/fish-lsp" \
       --add-flags "$out/share/fish-lsp/out/cli.js" \
       --prefix PATH : "${
         lib.makeBinPath [
