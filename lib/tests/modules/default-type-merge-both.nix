@@ -1,12 +1,12 @@
 { lib, options, ... }:
 let
-  foo = lib.mkOptionType {
+  foo = lib.mkOptionType (self: {
     name = "foo";
-    functor = lib.types.defaultFunctor "foo" // {
+    functor = lib.types.defaultFunctor self // {
       wrapped = lib.types.int;
       payload = 10;
     };
-  };
+  });
 in
 {
   imports = [

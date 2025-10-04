@@ -30,10 +30,12 @@ let
   planExample = "1h=>10min,1d=>1h,1w=>1d,1m=>1w,1y=>1m";
 
   # A type for a string of the form number{b|k|M|G}
-  mbufferSizeType = lib.types.str // {
-    check = x: lib.types.str.check x && builtins.isList (builtins.match "^[0-9]+[bkMG]$" x);
-    description = "string of the form number{b|k|M|G}";
-  };
+  mbufferSizeType = lib.types.str.extend (
+    final: prev: {
+      check = x: prev.check x && builtins.isList (builtins.match "^[0-9]+[bkMG]$" x);
+      description = "string of the form number{b|k|M|G}";
+    }
+  );
 
   enabledFeatures = lib.concatLists (
     lib.mapAttrsToList (name: enabled: lib.optional enabled name) cfg.features
