@@ -5,12 +5,8 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  sqlite,
-  openal,
   cairo,
   libGLU,
-  SDL2,
-  freealut,
   libglvnd,
   pipewire,
   libpulseaudio,
@@ -45,12 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeLibs = lib.makeLibraryPath (
     [
-      sqlite
-      openal
       cairo
       libGLU
-      SDL2
-      freealut
       libglvnd
       pipewire
       libpulseaudio
