@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "45.0.4"; # Also update the hash in vectors.nix
+  version = "46.0.1"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-rKgMUVj5IdeWIdLWQ4E6zhC6dwJMi+BRHCh2JG73Zgc=";
+    hash = "sha256-saTHFKSJa9gjtEp6uGAHsvzFE3yPeck1WGdIE1+9kgs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-dKwNnWBzBM9QEcRbbvkNhFJnFxFakqZ/MS7rqE8/tNQ=";
+    hash = "sha256-aCQzY2gBjVVwiqlqAxkH4y6yf4lqdQuSEnQSIjLPRJg=";
   };
 
   postPatch = ''
@@ -98,6 +98,6 @@ buildPythonPackage rec {
       bsd3
       psfl
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ mdaniels5757 ];
   };
 }
