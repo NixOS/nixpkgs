@@ -15,6 +15,7 @@
   pytestCheckHook,
   libxcrypt,
   makeSetupHook,
+  scikit-build-core,
 }:
 let
   setupHook = makeSetupHook {
@@ -29,20 +30,21 @@ let
 in
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.13.6";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
     tag = "v${version}";
-    hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
+    hash = "sha256-ZiwNGsE1FOkhnWv/1ib1akhQ4FZvrXRCDnnBZoPp6r4=";
   };
 
   build-system = [
     cmake
     ninja
     setuptools
+    scikit-build-core
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
