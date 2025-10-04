@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       marcweber
       oxalica
+      Necior
     ];
     mainProgram = "task";
     platforms = platforms.unix;
