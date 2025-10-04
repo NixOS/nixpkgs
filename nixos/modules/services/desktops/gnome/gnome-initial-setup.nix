@@ -78,6 +78,9 @@ in
 
     systemd.user.targets."gnome-session".wants = [
       "gnome-initial-setup-copy-worker.service"
+    ];
+
+    systemd.user.targets."graphical-session-pre".wants = [
       "gnome-initial-setup-first-login.service"
     ];
 
