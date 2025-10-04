@@ -14807,8 +14807,6 @@ with pkgs;
 
   nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
 
-  nixfmt-classic = haskellPackages.nixfmt.bin;
-
   nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
