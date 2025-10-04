@@ -193,7 +193,6 @@ let
             }
           );
           config = lib.mkIf doConfig {
-            # Only add flags in SOCKSPort to avoid duplicates
             flags =
               lib.filter (name: config.${name} == true) flags
               ++ lib.optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
@@ -293,7 +292,6 @@ let
       (
         lib.mapAttrs (
           k: v:
-          # Not necessary, but prettier rendering
           if
             lib.elem k [
               "AutomapHostsSuffixes"
@@ -872,7 +870,7 @@ in
             default = false;
           };
           options.CacheDirectory = optionPath "CacheDirectory";
-          options.CacheDirectoryGroupReadable = optionBool "CacheDirectoryGroupReadable"; # default is null and like "auto"
+          options.CacheDirectoryGroupReadable = optionBool "CacheDirectoryGroupReadable";
           options.CellStatistics = optionBool "CellStatistics";
           options.ClientAutoIPv6ORPort = optionBool "ClientAutoIPv6ORPort";
           options.ClientDNSRejectInternalAddresses = optionBool "ClientDNSRejectInternalAddresses";
@@ -881,8 +879,8 @@ in
             default = null;
             type = with lib.types; nullOr path;
           };
-          options.ClientPreferIPv6DirPort = optionBool "ClientPreferIPv6DirPort"; # default is null and like "auto"
-          options.ClientPreferIPv6ORPort = optionBool "ClientPreferIPv6ORPort"; # default is null and like "auto"
+          options.ClientPreferIPv6DirPort = optionBool "ClientPreferIPv6DirPort";
+          options.ClientPreferIPv6ORPort = optionBool "ClientPreferIPv6ORPort";
           options.ClientRejectInternalAddresses = optionBool "ClientRejectInternalAddresses";
           options.ClientUseIPv4 = optionBool "ClientUseIPv4";
           options.ClientUseIPv6 = optionBool "ClientUseIPv6";
@@ -963,7 +961,7 @@ in
           options.DisableOOSCheck = optionBool "DisableOOSCheck";
           options.DNSPort = optionIsolablePorts "DNSPort";
           options.DoSCircuitCreationEnabled = optionBool "DoSCircuitCreationEnabled";
-          options.DoSConnectionEnabled = optionBool "DoSConnectionEnabled"; # default is null and like "auto"
+          options.DoSConnectionEnabled = optionBool "DoSConnectionEnabled";
           options.DoSRefuseSingleHopClientRendezvous = optionBool "DoSRefuseSingleHopClientRendezvous";
           options.DownloadExtraInfo = optionBool "DownloadExtraInfo";
           options.EnforceDistinctSubnets = optionBool "EnforceDistinctSubnets";
@@ -975,7 +973,7 @@ in
           options.ExitPolicyRejectLocalInterfaces = optionBool "ExitPolicyRejectLocalInterfaces";
           options.ExitPolicyRejectPrivate = optionBool "ExitPolicyRejectPrivate";
           options.ExitPortStatistics = optionBool "ExitPortStatistics";
-          options.ExitRelay = optionBool "ExitRelay"; # default is null and like "auto"
+          options.ExitRelay = optionBool "ExitRelay";
           options.ExtORPort = lib.mkOption {
             description = (descriptionGeneric "ExtORPort");
             default = null;
@@ -1058,7 +1056,7 @@ in
           options.Nickname = optionString "Nickname";
           options.ORPort = optionORPort "ORPort";
           options.OfflineMasterKey = optionBool "OfflineMasterKey";
-          options.OptimisticData = optionBool "OptimisticData"; # default is null and like "auto"
+          options.OptimisticData = optionBool "OptimisticData";
           options.PaddingStatistics = optionBool "PaddingStatistics";
           options.PerConnBWBurst = optionBandwidth "PerConnBWBurst";
           options.PerConnBWRate = optionBandwidth "PerConnBWRate";
@@ -1082,11 +1080,10 @@ in
             default = null;
           };
           options.ReducedExitPolicy = optionBool "ReducedExitPolicy";
-          options.RefuseUnknownExits = optionBool "RefuseUnknownExits"; # default is null and like "auto"
+          options.RefuseUnknownExits = optionBool "RefuseUnknownExits";
           options.RejectPlaintextPorts = optionPorts "RejectPlaintextPorts";
           options.RelayBandwidthBurst = optionBandwidth "RelayBandwidthBurst";
           options.RelayBandwidthRate = optionBandwidth "RelayBandwidthRate";
-          #options.RunAsDaemon
           options.Sandbox = optionBool "Sandbox";
           options.ServerDNSAllowBrokenConfig = optionBool "ServerDNSAllowBrokenConfig";
           options.ServerDNSAllowNonRFC953Hostnames = optionBool "ServerDNSAllowNonRFC953Hostnames";
@@ -1156,7 +1153,6 @@ in
               ]);
             default = null;
           };
-          #options.TruncateLogFile
           options.UnixSocksGroupWritable = optionBool "UnixSocksGroupWritable";
           options.UseDefaultFallbackDirs = optionBool "UseDefaultFallbackDirs";
           options.UseMicrodescriptors = optionBool "UseMicrodescriptors";
@@ -1172,8 +1168,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Not sure if `cfg.relay.role == "private-bridge"` helps as tor
-    # sends a lot of stats
     warnings =
       lib.optional
         (
@@ -1257,19 +1251,12 @@ in
         }
       ))
       (lib.mkIf (!cfg.relay.enable) {
-        # Avoid surprises when leaving ORPort/DirPort configurations in cfg.settings,
-        # because it would still enable Tor as a relay,
-        # which can trigger all sort of problems when not carefully done,
-        # like the blocklisting of the machine's IP addresses
-        # by some hosting providers...
         DirPort = lib.mkForce [ ];
         ORPort = lib.mkForce [ ];
         PublishServerDescriptor = lib.mkForce false;
       })
       (lib.mkIf (!cfg.client.enable) {
-        # Make sure application connections via SOCKS are disabled
-        # when services.tor.client.enable is false
-        SOCKSPort = lib.mkForce [ 0 ];
+        SOCKSPort = lib.mkDefault [ { port = 0; } ];
       })
       (lib.mkIf cfg.client.enable (
         {
@@ -1334,7 +1321,6 @@ in
         Group = "tor";
         ExecStartPre = [
           "${cfg.package}/bin/tor -f ${torrc} --verify-config"
-          # DOC: Appendix G of https://spec.torproject.org/rend-spec-v3
           (
             "+"
             + pkgs.writeShellScript "ExecStartPre" (
@@ -1383,14 +1369,12 @@ in
         ExecStart = "${cfg.package}/bin/tor -f ${torrc}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         KillSignal = "SIGINT";
-        TimeoutSec = cfg.settings.ShutdownWaitLength + 30; # Wait a bit longer than ShutdownWaitLength before actually timing out
+        TimeoutSec = cfg.settings.ShutdownWaitLength + 30;
         Restart = "on-failure";
         LimitNOFILE = 32768;
         RuntimeDirectory = [
-          # g+x allows access to the control socket
           "tor"
           "tor/root"
-          # g+x can't be removed in ExecStart=, but will be removed by Tor
           "tor/ClientOnionAuthDir"
         ];
         RuntimeDirectoryMode = "0710";
@@ -1404,11 +1388,8 @@ in
             name: onion: lib.optional (onion.secretKey == null) "tor/onion/${name}"
           ) cfg.relay.onionServices
         );
-        # The following options are only to optimize:
-        # systemd-analyze security tor
         RootDirectory = runDir + "/root";
         RootDirectoryStartOnly = true;
-        #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
         BindPaths = [ stateDir ];
         BindReadOnlyPaths = [
@@ -1421,7 +1402,6 @@ in
         ];
         AmbientCapabilities = [ "" ] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = [ "" ] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
-        # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -1430,8 +1410,6 @@ in
         PrivateMounts = true;
         PrivateNetwork = lib.mkDefault false;
         PrivateTmp = true;
-        # Tor cannot currently bind privileged port when PrivateUsers=true,
-        # see https://gitlab.torproject.org/legacy/trac/-/issues/20930
         PrivateUsers = !bindsPrivilegedPort;
         ProcSubset = "pid";
         ProtectClock = true;
@@ -1453,12 +1431,8 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        # See also the finer but experimental option settings.Sandbox
         SystemCallFilter = [
           "@system-service"
-          # Groups in @system-service which do not contain a syscall listed by:
-          # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' tor
-          # in tests, and seem likely not necessary for tor.
           "~@aio"
           "~@chown"
           "~@keyring"
