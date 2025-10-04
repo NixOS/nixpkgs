@@ -5,7 +5,6 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  gtk2,
   sqlite,
   openal,
   cairo,
@@ -113,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
     runtimeLibs = [
-      gtk2
       sqlite
       openal
       cairo
