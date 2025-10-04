@@ -68,6 +68,7 @@ lib:
   socat,
   sqlite,
   stdenv,
+  su,
   systemdMinimal,
   util-linuxMinimal,
   yq-go,
@@ -371,6 +372,7 @@ buildGoModule (finalAttrs: {
     conntrack-tools
     runc
     bash
+    su
   ];
 
   k3sKillallDeps = [
