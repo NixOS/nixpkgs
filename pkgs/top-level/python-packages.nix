@@ -12345,15 +12345,17 @@ self: super: with self; {
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
 
-  pulumi-aws-native = pkgs.pulumiPackages.pulumi-aws-native.sdks.python;
+  pulumi-aws-native = callPackage ../development/python-modules/pulumi-aws-native { };
 
-  pulumi-azure-native = pkgs.pulumiPackages.pulumi-azure-native.sdks.python;
+  pulumi-azure-native = callPackage ../development/python-modules/pulumi-azure-native { };
 
-  pulumi-command = pkgs.pulumiPackages.pulumi-command.sdks.python;
+  pulumi-command = callPackage ../development/python-modules/pulumi-command { };
 
-  pulumi-hcloud = pkgs.pulumiPackages.pulumi-hcloud.sdks.python;
+  pulumi-hcloud = callPackage ../development/python-modules/pulumi-hcloud { };
 
-  pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
+  pulumi-random = callPackage ../development/python-modules/pulumi-random { };
+
+  pulumi-yandex-unofficial = callPackage ../development/python-modules/pulumi-yandex-unofficial { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
