@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   version = "0.96.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/eaglemode/eaglemode-${version}.tar.bz2";
     hash = "sha256:1al5n2mcjp0hmsvi4hsdmzd7i0id5i3255xplk0il1nmzydh312a";
   };
 
@@ -109,16 +109,16 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/eaglemode --set EM_DIR "$out" --prefix LD_LIBRARY_PATH : "$out/lib" --prefix PATH : "${runtimeDeps}"
       for i in 32 48 96; do
         mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-        ln -s $out/res/icons/${pname}$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
+        ln -s $out/res/icons/eaglemode$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/eaglemode.png
       done
       runHook postInstall
     '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "eaglemode";
+      exec = "eaglemode";
+      icon = "eaglemode";
       desktopName = "Eagle Mode";
       genericName = meta.description;
       categories = [
