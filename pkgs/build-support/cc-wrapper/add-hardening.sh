@@ -52,7 +52,7 @@ fi
 
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection nostrictaliasing pacret strictflexarrays1 strictflexarrays3 pie pic strictoverflow glibcxxassertions format trivialautovarinit zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection nostrictaliasing pacret strictflexarrays1 strictflexarrays3 pic strictoverflow glibcxxassertions format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -126,15 +126,6 @@ for flag in "${!hardeningEnableMap[@]}"; do
     nostrictaliasing)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling nostrictaliasing >&2; fi
       hardeningCFlagsBefore+=('-fno-strict-aliasing')
-      ;;
-    pie)
-      # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
-      hardeningCFlagsBefore=('-fPIE' "${hardeningCFlagsBefore[@]}")
-      if [[ ! (" ${params[*]} " =~ " -shared " || " ${params[*]} " =~ " -static ") ]]; then
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-        hardeningCFlagsBefore=('-pie' "${hardeningCFlagsBefore[@]}")
-      fi
       ;;
     pic)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
