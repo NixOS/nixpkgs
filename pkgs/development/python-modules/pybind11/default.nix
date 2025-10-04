@@ -15,7 +15,7 @@
   pytestCheckHook,
   libxcrypt,
   makeSetupHook,
-  scikit-build-core,
+  scikit-build-core-no-test,
 }:
 let
   setupHook = makeSetupHook {
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     cmake
     ninja
     setuptools
-    scikit-build-core
+    scikit-build-core-no-test
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
