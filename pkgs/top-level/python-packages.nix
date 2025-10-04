@@ -7823,8 +7823,6 @@ self: super: with self; {
     callPackage ../development/python-modules/keyrings-google-artifactregistry-auth
       { };
 
-  keyrings-passwordstore = callPackage ../development/python-modules/keyrings-passwordstore { };
-
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
 
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
