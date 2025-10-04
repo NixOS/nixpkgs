@@ -14565,6 +14565,8 @@ self: super: with self; {
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
+  pytest-pycodestyle = callPackage ../development/python-modules/pytest-pycodestyle { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-pytestrail = callPackage ../development/python-modules/pytest-pytestrail { };
