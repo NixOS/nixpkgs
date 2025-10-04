@@ -9,16 +9,16 @@
 
 buildGo125Module (finalAttrs: {
   pname = "crush";
-  version = "0.9.2";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VFAGjNtXKNjkv8Ryi28oFN/uLomXXdw6NFtyjT3pMEY=";
+    hash = "sha256-VH7PxBUnuPJSItwfkjZsZC+Ry0ckLpTufRXca67iAWI=";
   };
 
-  vendorHash = "sha256-ktF3kIr143uPwiEbgafladZRqIsmG6jI2BeumGSu82U=";
+  vendorHash = "sha256-PSxqAmnqnEEm5mbnzo+HKyS/0/kDUfvisLlFDOcNmN4=";
 
   # rename TestMain to prevent it from running, as it panics in the sandbox.
   postPatch = ''
