@@ -43,5 +43,9 @@ symlinkJoin {
     done
   '';
 
-  inherit (gimp) meta;
+  meta = gimp.meta // {
+    description = "${gimp.meta.description} with plugins: ${
+      lib.concatMapStringsSep ", " (p: p.pname) selectedPlugins
+    }";
+  };
 }
