@@ -234,7 +234,7 @@ in
         PrivateDevices = true;
         PrivateTmp = true;
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
