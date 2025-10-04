@@ -115,8 +115,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "a757314c04eedd166e329e846c820eb1bdd702de";
-      hash = "sha256-KT9R6ju7XzgqKHPGQwzw0yNiKL3DNW6qJrEBvmLn4hY=";
+      rev = "5f65b85703c7ed75fda01e06495077caad207c3f";
+      hash = "sha256-DO9EFNSoAgyfRRc095v1UjT+Zdzk4cFY0+n28FVEwI0=";
     };
 
     dontConfigure = true;
@@ -271,7 +271,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.10.2";
+  version = "0.11.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -280,7 +280,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-m9P4cxxdAToGKKIyTQdFupG3vZ3sEueMMxjugYfjKbo=";
+    hash = "sha256-uYK/e9McEyrDTACMk5S0cGCjai9rf6HMR9dpPL7ISYc=";
   };
 
   patches = [
