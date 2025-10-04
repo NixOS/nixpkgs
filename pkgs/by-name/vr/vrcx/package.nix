@@ -11,10 +11,12 @@
   stdenv,
 }:
 let
-  pname = "vrcx";
-  version = "2025.09.10";
   dotnet = dotnetCorePackages.dotnet_9;
   electron = electron_37;
+in
+buildNpmPackage (finalAttrs: {
+  pname = "vrcx";
+  version = "2025.09.10";
 
   src = fetchFromGitHub {
     owner = "vrcx-team";
@@ -22,29 +24,6 @@ let
     rev = "b233bbc299fca9a956db387b83d90a4dbba61175";
     hash = "sha256-7axYnsImG+VllQE1rhr8NmuMCm5t3bgNYGIIn9j2wMk=";
   };
-
-  backend = buildDotnetModule {
-    inherit version src;
-    pname = "${pname}-backend";
-
-    dotnet-sdk = dotnet.sdk;
-    dotnet-runtime = dotnet.runtime;
-    projectFile = "Dotnet/VRCX-Electron.csproj";
-
-    nugetDeps = ./deps.json;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/build/Electron
-      cp -r build/Electron/* $out/build/Electron/
-
-      runHook postInstall
-    '';
-  };
-in
-buildNpmPackage {
-  inherit pname version src;
 
   npmDepsHash = "sha256-VFYWXPhZrg3q2PW4kWfVr5/DY8W6Uf1mvnwfB4mVBrs=";
   npmFlags = [ "--ignore-scripts" ];
@@ -76,7 +55,7 @@ buildNpmPackage {
     mkdir -p "$out/share/vrcx"
     cp -r build/*-unpacked/resources "$out/share/vrcx/"
     mkdir -p "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
-    cp -r ${backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
+    cp -r ${finalAttrs.passthru.backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
       --add-flags "--ozone-platform-hint=auto"              \
@@ -107,7 +86,25 @@ buildNpmPackage {
   ];
 
   passthru = {
-    inherit backend;
+    backend = buildDotnetModule {
+      pname = "${finalAttrs.pname}-backend";
+      inherit (finalAttrs) version src;
+
+      dotnet-sdk = dotnet.sdk;
+      dotnet-runtime = dotnet.runtime;
+      projectFile = "Dotnet/VRCX-Electron.csproj";
+
+      nugetDeps = ./deps.json;
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/build/Electron
+        cp -r build/Electron/* $out/build/Electron/
+
+        runHook postInstall
+      '';
+    };
   };
 
   meta = {
@@ -126,4 +123,4 @@ buildNpmPackage {
     platforms = lib.platforms.linux;
     broken = !stdenv.hostPlatform.isx86_64;
   };
-}
+})
