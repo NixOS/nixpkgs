@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.8.8";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "ariebovenberg";
     repo = "whenever";
     tag = version;
-    hash = "sha256-i9zUf0oRcG4993Q0kkfndfcEe+mLYFcqrIlg7idKDGY=";
+    hash = "sha256-92BsQpavHm+hPMbKBgrmCpGrYs+r/IX4U8+SnDymtvE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
