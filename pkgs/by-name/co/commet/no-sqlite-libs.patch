@@ -1,0 +1,94 @@
+diff --git a/linux/flutter/generated_plugin_registrant.cc b/linux/flutter/generated_plugin_registrant.cc
+index 1f78707..9e203d0 100644
+--- a/linux/flutter/generated_plugin_registrant.cc
++++ b/linux/flutter/generated_plugin_registrant.cc
+@@ -12,7 +12,6 @@
+ #include <media_kit_video/media_kit_video_plugin.h>
+ #include <pasteboard/pasteboard_plugin.h>
+ #include <screen_retriever/screen_retriever_plugin.h>
+-#include <sqlite3_flutter_libs/sqlite3_flutter_libs_plugin.h>
+ #include <url_launcher_linux/url_launcher_plugin.h>
+ #include <window_manager/window_manager_plugin.h>
+ #include <window_to_front/window_to_front_plugin.h>
+@@ -36,9 +35,6 @@ void fl_register_plugins(FlPluginRegistry* registry) {
+   g_autoptr(FlPluginRegistrar) screen_retriever_registrar =
+       fl_plugin_registry_get_registrar_for_plugin(registry, "ScreenRetrieverPlugin");
+   screen_retriever_plugin_register_with_registrar(screen_retriever_registrar);
+-  g_autoptr(FlPluginRegistrar) sqlite3_flutter_libs_registrar =
+-      fl_plugin_registry_get_registrar_for_plugin(registry, "Sqlite3FlutterLibsPlugin");
+-  sqlite3_flutter_libs_plugin_register_with_registrar(sqlite3_flutter_libs_registrar);
+   g_autoptr(FlPluginRegistrar) url_launcher_linux_registrar =
+       fl_plugin_registry_get_registrar_for_plugin(registry, "UrlLauncherPlugin");
+   url_launcher_plugin_register_with_registrar(url_launcher_linux_registrar);
+diff --git a/linux/flutter/generated_plugins.cmake b/linux/flutter/generated_plugins.cmake
+index cc291f1..8ad40f5 100644
+--- a/linux/flutter/generated_plugins.cmake
++++ b/linux/flutter/generated_plugins.cmake
+@@ -9,7 +9,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
+   media_kit_video
+   pasteboard
+   screen_retriever
+-  sqlite3_flutter_libs
+   url_launcher_linux
+   window_manager
+   window_to_front
+diff --git a/pubspec.lock b/pubspec.lock
+index 99f72f5..990656b 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -1601,18 +1601,10 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "2.4.2"
+-  sqlite3_flutter_libs:
+-    dependency: "direct main"
+-    description:
+-      name: sqlite3_flutter_libs
+-      sha256: d6c31c8511c441d1f12f20b607343df1afe4eddf24a1cf85021677c8eea26060
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "0.5.20"
+   stack_trace:
+     dependency: transitive
+     description:
+-      name: stack_trace
++      name: gtack_trace
+       sha256: "73713990125a6d93122541237550ee3352a2d84baad52d375a4cad2eb9b7ce0b"
+       url: "https://pub.dev"
+     source: hosted
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 170d160..7673dea 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -84,7 +84,6 @@ dependencies:
+     git: https://github.com/commetchat/encrypted_url_preview.git
+   signal_sticker_api: 
+     git: https://github.com/commetchat/signal-sticker-api.git
+-  sqlite3_flutter_libs: ^0.5.18
+   fuzzy: ^0.5.1
+   encrypt: ^5.0.3
+   pointycastle: ^3.7.4
+diff --git a/windows/flutter/generated_plugin_registrant.cc b/windows/flutter/generated_plugin_registrant.cc
+index cb53625..66710c1 100644
+--- a/windows/flutter/generated_plugin_registrant.cc
++++ b/windows/flutter/generated_plugin_registrant.cc
+@@ -14,7 +14,6 @@
+ #include <permission_handler_windows/permission_handler_windows_plugin.h>
+ #include <screen_brightness_windows/screen_brightness_windows_plugin.h>
+ #include <screen_retriever/screen_retriever_plugin.h>
+-#include <sqlite3_flutter_libs/sqlite3_flutter_libs_plugin.h>
+ #include <url_launcher_windows/url_launcher_windows.h>
+ #include <win_toast/win_toast_plugin.h>
+ #include <window_manager/window_manager_plugin.h>
+diff --git a/windows/flutter/generated_plugins.cmake b/windows/flutter/generated_plugins.cmake
+index 9f655f7..c6f6299 100644
+--- a/windows/flutter/generated_plugins.cmake
++++ b/windows/flutter/generated_plugins.cmake
+@@ -11,7 +11,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
+   permission_handler_windows
+   screen_brightness_windows
+   screen_retriever
+-  sqlite3_flutter_libs
+   url_launcher_windows
+   win_toast
+   window_manager
