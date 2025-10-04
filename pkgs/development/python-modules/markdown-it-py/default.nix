@@ -26,16 +26,16 @@
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "3.0.0";
+  version = "4.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "markdown-it-py";
     tag = "v${version}";
-    hash = "sha256-cmjLElJA61EysTUFMVY++Kw0pI4wOIXOyCY3To9fpQc=";
+    hash = "sha256-92J9cMit2zwyjoE8G1YpwDxj+wiApQW2eUHxUOUt3as=";
   };
 
   # fix downstrem usage of markdown-it-py[linkify]
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Markdown parser in Python";
     homepage = "https://markdown-it-py.readthedocs.io/";
-    changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];
     mainProgram = "markdown-it";
