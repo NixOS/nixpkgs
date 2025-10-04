@@ -3091,8 +3091,6 @@ with pkgs;
     threadsafe = true;
   };
 
-  heaptrack = kdePackages.callPackage ../development/tools/profiling/heaptrack { };
-
   headscale = callPackage ../servers/headscale { };
 
   highlight = callPackage ../tools/text/highlight {
@@ -3236,8 +3234,6 @@ with pkgs;
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
-
-  kdiskmark = kdePackages.callPackage ../tools/filesystems/kdiskmark { };
 
   keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
@@ -3383,8 +3379,6 @@ with pkgs;
   nodePackages = recurseIntoAttrs nodejs.pkgs;
 
   node2nix = nodePackages.node2nix;
-
-  ktailctl = kdePackages.callPackage ../applications/networking/ktailctl { };
 
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
@@ -10893,8 +10887,6 @@ with pkgs;
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
 
-  whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
-
   xkeyboard_config = xkeyboard-config;
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
@@ -12695,8 +12687,6 @@ with pkgs;
   super-slicer-beta = super-slicer.beta;
 
   super-slicer-latest = super-slicer.latest;
-
-  skrooge = kdePackages.callPackage ../applications/office/skrooge { };
 
   soci = callPackage ../development/libraries/soci { };
 
