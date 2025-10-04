@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = "${version}";
-    sha256 = "sha256-rCT/w2Y6eV0oc/dOoQitzOpy7xFcUC7tUpkzWRf/QAc=";
+    sha256 = "sha256-a3sSAvLarn33WqMovZu0rzvRqN4DfT+LZgUr3O5zdc8=";
     leaveDotGit = true;
   };
 
