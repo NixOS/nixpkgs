@@ -9325,14 +9325,11 @@ with pkgs;
   openvdb = callPackage ../development/libraries/openvdb { };
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_6
-    libressl_3_7
-    libressl_3_8
-    libressl_3_9
     libressl_4_0
+    libressl_4_1
     ;
 
-  libressl = libressl_4_0;
+  libressl = libressl_4_1;
 
   openssl = openssl_3_4;
 
