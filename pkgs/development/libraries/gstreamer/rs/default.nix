@@ -116,6 +116,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "reqwest" # tests hang on darwin
           "threadshare" # tests cannot bind to localhost on darwin
+          "uriplaylistbin" # thread reqwest-internal-sync-runtime attempred to create a NULL object (in test_cache)
           "webp" # not supported on darwin (upstream crate issue)
         ]
         ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
