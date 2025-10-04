@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   gradle,
-  jdk24,
+  jdk25,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jdk24}"
+    "-Dorg.gradle.java.home=${jdk25}"
     "--stacktrace"
   ];
 

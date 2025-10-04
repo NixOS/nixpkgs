@@ -59,14 +59,12 @@
   openjfx17,
   openjfx21,
   openjfx23,
-  openjfx24,
   openjfx25,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
       "23" = openjfx23;
-      "24" = openjfx24;
       "25" = openjfx25;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
@@ -81,7 +79,6 @@
   temurin-bin-17,
   temurin-bin-21,
   temurin-bin-23,
-  temurin-bin-24,
   temurin-bin-25,
   jdk-bootstrap ?
     {
@@ -90,7 +87,6 @@
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
       "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
-      "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
       "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
     }
     .${featureVersion},
@@ -107,7 +103,6 @@ let
   atLeast17 = lib.versionAtLeast featureVersion "17";
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
-  atLeast24 = lib.versionAtLeast featureVersion "24";
   atLeast25 = lib.versionAtLeast featureVersion "25";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
@@ -152,8 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (
-      if atLeast24 then
-        ./24/patches/fix-java-home-jdk24.patch
+      if atLeast25 then
+        ./25/patches/fix-java-home-jdk25.patch
       else if atLeast21 then
         ./21/patches/fix-java-home-jdk21.patch
       else if atLeast11 then
@@ -162,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
         ./8/patches/fix-java-home-jdk8.patch
     )
     (
-      if atLeast24 then
-        ./24/patches/read-truststore-from-env-jdk24.patch
+      if atLeast25 then
+        ./25/patches/read-truststore-from-env-jdk25.patch
       else if atLeast11 then
         ./11/patches/read-truststore-from-env-jdk10.patch
       else
@@ -271,7 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals atLeast21 [
     ensureNewerSourcesForZipFilesHook
   ]
-  ++ lib.optionals atLeast24 [
+  ++ lib.optionals atLeast25 [
     pandoc
   ];
 
@@ -477,7 +472,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x configure
     patchShebangs --build configure
   ''
-  + lib.optionalString atLeast24 ''
+  + lib.optionalString atLeast25 ''
     chmod +x make/scripts/*.{template,sh,pl}
     patchShebangs --build make/scripts
   '';
