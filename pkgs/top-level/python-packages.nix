@@ -20617,6 +20617,8 @@ self: super: with self; {
 
   zulip-emoji-mapping = callPackage ../development/python-modules/zulip-emoji-mapping { };
 
+  zundler = callPackage ../development/python-modules/zundler { };
+
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zwave-me-ws = callPackage ../development/python-modules/zwave-me-ws { };
