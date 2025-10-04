@@ -33,6 +33,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pytestFlags = [
+    # This test relies on old pymodbus 2 version
+    "--ignore=sunspec2/tests/test_tls_client.py"
+  ];
+
   pythonImportsCheck = [ "sunspec2" ];
 
   meta = with lib; {
