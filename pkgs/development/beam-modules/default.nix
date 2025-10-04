@@ -45,7 +45,6 @@ let
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
       mixRelease = callPackage ./mix-release.nix { };
 
-      erlang-ls = callPackage ./erlang-ls { };
       erlfmt = callPackage ./erlfmt { };
       elvis-erlang = callPackage ./elvis-erlang { };
 
