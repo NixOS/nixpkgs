@@ -14284,6 +14284,11 @@
     githubId = 2034420;
     name = "Luke Sandell";
   };
+  lasantosr = {
+    github = "lasantosr";
+    githubId = 5946707;
+    name = "Luis Santos";
+  };
   lassulus = {
     email = "lassulus@gmail.com";
     matrix = "@lassulus:lassul.us";
