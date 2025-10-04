@@ -106,6 +106,13 @@ stdenv'.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
     --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
+
+    # udev rules allow all users to access realsense cameras.
+    # On NixOS, this is enabled by adding librealsense to services.udev.packages.
+    install -D -t $out/libexec/librealsense/ ../config/usb-R200-in
+    substituteInPlace ../config/99-realsense-libusb.rules \
+      --replace-fail "/usr/local/bin/usb-R200-in_udev" "$out/libexec/librealsense/usb-R200-in"
+    install -m 644 -D -t $out/etc/udev/rules.d/ ../config/99-realsense-libusb.rules
   ''
   + lib.optionalString enablePython ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
