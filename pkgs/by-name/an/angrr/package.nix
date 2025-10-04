@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angrr";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "linyinfeng";
     repo = "angrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SL4UBDoD0pvpCKokQvKLAcS9cQJaFiA+IjswFARswdM=";
+    hash = "sha256-nybE+2EO7NbE6OOoyOZrsvUwoniEYRDDmiCmEMC2oYA=";
   };
 
-  cargoHash = "sha256-lo9JpsHkvyrEqFnIiGlU2o4rREeQeqWpe9WMwisvw+4=";
+  cargoHash = "sha256-iJUkQMjDArBBR++es431dpv+4++0LVqVLf5u3bFO3hc=";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
