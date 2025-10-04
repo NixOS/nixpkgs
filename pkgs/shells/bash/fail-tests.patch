@@ -1,0 +1,35 @@
+diff --git tests/run-all tests/run-all
+index f9dfa604..60fcf2be 100644
+--- tests/run-all
++++ tests/run-all
+@@ -58,13 +58,29 @@ rm -f ${BASH_TSTOUT}
+ 
+ echo Any output from any test, unless otherwise noted, indicates a possible anomaly
+ 
++passed=0
++total=0
+ for x in run-*
+ do
+ 	case $x in
+ 	$0|run-minimal|run-gprof)	;;
+ 	*.orig|*~) ;;
+-	*)	echo $x ; sh $x ; rm -f ${BASH_TSTOUT} ;;
++	*)
++		echo $x
++		total=$(( total + 1 ))
++		if ! sh $x; then
++			echo "FAILED $x, set BASH_TST_FAILED to a directory to preserve test output"
++			[ "${BASH_TST_FAILED+set}" = "set" ] && cp ${BASH_TSTOUT} ${BASH_TST_FAILED}/$x
++		else
++			passed=$(( passed + 1 ))
++		fi
++		rm -f ${BASH_TSTOUT}
++		;;
+ 	esac
+ done
+ 
++echo "$passed/$total tests passed"
++if [ "$passed" -ne "$total" ]; then
++	exit 1
++fi
+ exit 0
