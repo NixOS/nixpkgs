@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "haxor-news";
-  version = "unstable-2022-04-22";
+  version = "0.4.2";
   format = "setuptools";
 
   # haven't done a stable release in 3+ years, but actively developed
