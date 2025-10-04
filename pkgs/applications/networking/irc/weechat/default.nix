@@ -119,6 +119,7 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "dev"
     "man"
   ]
   ++ map (p: p.name) enabledPlugins;
