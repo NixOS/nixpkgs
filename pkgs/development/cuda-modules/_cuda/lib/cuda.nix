@@ -121,7 +121,7 @@
       ++ lib.map (license: license.shortName) (lib.attrValues _cuda.lib.licenses);
     in
     package:
-    lib.all (license: license.free || lib.elem license.shortName cudaLicenseNames) (
+    lib.all (license: license.free || lib.elem (license.shortName or null) cudaLicenseNames) (
       lib.toList package.meta.license
     );
 }
