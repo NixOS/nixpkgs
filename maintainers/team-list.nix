@@ -1101,7 +1101,7 @@ with lib.maintainers;
       LunNova
       mschwaig
     ];
-    githubTeams = [ "rocm-maintainers" ];
+    githubTeams = [ "rocm" ];
     scope = "Maintain ROCm and related packages.";
     shortName = "ROCm";
   };
