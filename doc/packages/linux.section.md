@@ -105,3 +105,63 @@ $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox module
 ```
 
 :::
+
+## Packaging out of tree kernel modules {#sec-packaging-out-of-tree-kernel-modules}
+
+It is recommended to use the build helper `buildKernelModule`. This is a wrapper over `stdenv.mkDerivation` and accepts
+the same arguments. It has improved compatibility with existing update scripts like `nix-update` and sets some reasonable defaults. Like:
+
+1. Parallel building is set by default
+2. Adds common dependencies needed for kernel module building
+3. Disables some hardening features (ie, `pic`) which are incompatible with kernel compilation
+4. Adds kernel version to the `name` attribute of the module derivation
+
+Here's an example below:
+
+```nix
+{
+  lib,
+  buildKernelModule,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  bc,
+  nix-update-script,
+}:
+
+buildKernelModule {
+  pname = "rtl8821cu";
+  version = "0-unstable-2025-09-10";
+
+  src = fetchFromGitHub {
+    owner = "morrownr";
+    repo = "8821cu-20210916";
+    rev = "07fa9cf0fa8b0c08920c359c725dfc250e91422b";
+    hash = "sha256-JAkh0Vnt+Hg16F2xCsFPs5SAmaS2oqdIf45L0hXN0iY=";
+  };
+
+  makeFlags = kernelModuleMakeFlags;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
+    description = "Realtek rtl8821cu driver";
+    homepage = "https://github.com/morrownr/8821cu-20210916";
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.contrun ];
+  };
+}
+```
+
+It then needs to be imported in `pkgs/top-level/linux-kernels.nix`.
+
+```nix
+{
+  rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
+}
+```
+
+::: {.note}
+Kernel modules are built for all existing kernel versions on Nixpkgs, as such these packages should NOT be in `by-name` scope or be imported in `pkgs/top-level/all-packages.nix`.
+Top level attributes like `kernel`, `kernelModuleMakeFlags`, `buildKernelModule` are only available for package scope within `pkgs/top-level/linux-kernels.nix`.
+:::
