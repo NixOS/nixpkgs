@@ -379,16 +379,17 @@ in
           ${optionalString (settings != null) "ln -sf ${settings} config.yaml"}
         '';
 
-        script = ''
-          ${config.security.wrapperDir}/OpenGFW \
-            -f ${cfg.logFormat} \
-            -l ${cfg.logLevel} \
-            ${optionalString (cfg.pcapReplay != null) "-p ${cfg.pcapReplay}"} \
-            -c config.yaml \
-            rules.yaml
-        '';
-
         serviceConfig = rec {
+          ExecStart =
+            let
+              args = lib.cli.toCommandLineShellGNU { } {
+                f = cfg.logFormat;
+                l = cfg.logLevel;
+                p = cfg.pcapReplay;
+                c = "config.yaml";
+              };
+            in
+            "${config.security.wrapperDir}/OpenGFW ${args} rules.yaml";
           WorkingDirectory = cfg.dir;
           ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
           Restart = "always";
