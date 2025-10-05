@@ -64,7 +64,7 @@ flutter324.buildFlutterApplication rec {
     homepage = "https://github.com/orz12/PiliPalaX";
     mainProgram = "pilipala";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

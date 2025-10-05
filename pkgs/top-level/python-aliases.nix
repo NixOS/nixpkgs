@@ -31,7 +31,7 @@ in
 
 ### Deprecated aliases - for backward compatibility
 
-mapAliases ({
+mapAliases {
   # Prevent incorrect Python packaging attempts.
   # Note: `{ python3, python3Packages, ... }: with python3Packages; [ ... python3 ]` still works, since `with` has lower priority.
   pythonPackages = throw "do not use pythonPackages when building Python packages, specify each used package as a separate argument"; # do not remove
@@ -847,4 +847,4 @@ mapAliases ({
   zope_testing = zope-testing; # added 2023-11-12
   zope_testrunner = zope-testrunner; # added 2024-01-06
   zxing_cpp = zxing-cpp; # added 2023-11-05
-})
+}

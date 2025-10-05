@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     mainProgram = "btinfo";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

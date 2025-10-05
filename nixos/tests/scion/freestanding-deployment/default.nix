@@ -9,7 +9,7 @@ import ../../make-test-python.nix (
     } (builtins.readFile ./bootstrap.sh);
 
     imports = hostId: [
-      ({
+      {
         services.scion = {
           enable = true;
           bypassBootstrapWarning = true;
@@ -32,7 +32,7 @@ import ../../make-test-python.nix (
         environment.systemPackages = [
           pkgs.scion
         ];
-      })
+      }
     ];
   in
   {

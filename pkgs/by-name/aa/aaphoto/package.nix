@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       one-by-one.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "aaphoto";
   };

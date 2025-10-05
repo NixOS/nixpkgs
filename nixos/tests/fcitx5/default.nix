@@ -1,6 +1,6 @@
 import ../make-test-python.nix (
   { lib, ... }:
-  rec {
+  {
     name = "fcitx5";
     meta.maintainers = with lib.maintainers; [ nevivurn ];
 

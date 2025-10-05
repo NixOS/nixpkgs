@@ -33,7 +33,7 @@ let
 in
 
 let
-  fetched = coqPackages.metaFetch ({
+  fetched = coqPackages.metaFetch {
     release."2.0.7".sha256 = "sha256-gCM+vZK6vWlhSO1VMjiWHse23mvxVwRarhxwkIQK7e0=";
     release."2.0.6".sha256 = "sha256-tRUYXQZ0VXrjIZBZ1skdzieUsww4rSNEe5ik+iKpk3U=";
     release."2.0.5".sha256 = "sha256-cHgERFqrfSg5WtUX3UxR6L+QkzS7+t6n4V+wweiEacc=";
@@ -55,7 +55,7 @@ let
       owner = "LPCIC";
       repo = "elpi";
     };
-  }) version;
+  } version;
 in
 let
   inherit (fetched) version;

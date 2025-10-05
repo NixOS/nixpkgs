@@ -831,7 +831,7 @@ let
                 loc: defs:
                 mapAttrs (n: v: v.value) (
                   filterAttrs (n: v: v ? value) (
-                    zipAttrsWith (name: defs: (mergeDefinitions (loc ++ [ name ]) elemType (defs)).optionalValue)
+                    zipAttrsWith (name: defs: (mergeDefinitions (loc ++ [ name ]) elemType defs).optionalValue)
                       # Push down position info.
                       (pushPositions defs)
                   )

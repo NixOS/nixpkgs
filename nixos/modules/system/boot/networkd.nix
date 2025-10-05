@@ -738,14 +738,14 @@ let
           "both"
           "any"
         ])
-        (assertValueOneOf "ActivationPolicy" ([
+        (assertValueOneOf "ActivationPolicy" [
           "up"
           "always-up"
           "manual"
           "always-down"
           "down"
           "bound"
-        ]))
+        ])
       ];
 
       sectionNetwork = checkUnitConfig "Network" [

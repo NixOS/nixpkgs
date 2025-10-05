@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "elan";
   };
 }

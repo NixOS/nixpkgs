@@ -293,7 +293,7 @@ let
         'apps_paths' => [
           ${concatStrings (mapAttrsToList mkAppStoreConfig appStores)}
         ],
-        ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
+        ${optionalString showAppStoreSetting "'appstoreenabled' => ${renderedAppStoreSetting},"}
         ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
         ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
         ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
@@ -1407,13 +1407,13 @@ in
       services.nextcloud = {
         caching.redis = lib.mkIf cfg.configureRedis true;
         settings = mkMerge [
-          ({
+          {
             datadirectory = lib.mkDefault "${datadir}/data";
             trusted_domains = [ cfg.hostName ];
             "upgrade.disable-web" = true;
             # NixOS already provides its own integrity check and the nix store is read-only, therefore Nextcloud does not need to do its own integrity checks.
             "integrity.check.disabled" = true;
-          })
+          }
           (lib.mkIf cfg.configureRedis {
             "memcache.distributed" = ''\OC\Memcache\Redis'';
             "memcache.locking" = ''\OC\Memcache\Redis'';

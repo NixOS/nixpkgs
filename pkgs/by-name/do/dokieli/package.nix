@@ -49,10 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeWrapper ${nodejs}/bin/npx $out/bin/dokieli           \
       --prefix PATH : ${
-        lib.makeBinPath ([
+        lib.makeBinPath [
           nodejs
           xsel
-        ])
+        ]
       }   \
       --add-flags serve                                      \
       --chdir $out/deps/dokieli

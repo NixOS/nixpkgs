@@ -125,11 +125,11 @@ import ./make-test-python.nix (
         }:
         {
           boot.loader.grub.enable = false;
-          boot.kernelParams = lib.mkOverride 5 ([
+          boot.kernelParams = lib.mkOverride 5 [
             "boot.shell_on_fail"
             "console=tty1"
             "ip=${config.networking.primaryIPAddress}:::255.255.255.0::eth1:none"
-          ]);
+          ];
 
           # defaults to true, puts some code in the initrd that tries to mount an overlayfs on /nix/store
           virtualisation.writableStore = false;

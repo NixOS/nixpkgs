@@ -25,6 +25,6 @@ crystal.buildCrystalPackage rec {
     homepage = "https://crystal-ameba.github.io";
     changelog = "https://github.com/crystal-ameba/ameba/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

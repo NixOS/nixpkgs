@@ -336,7 +336,7 @@ in
       ];
 
       unitConfig.RequiresMountsFor = lib.concatStringsSep " " (
-        [ "${cfg.cache.dataPath}" ] ++ lib.optional (isSqlite) dbDir
+        [ "${cfg.cache.dataPath}" ] ++ lib.optional isSqlite dbDir
       );
     };
   };

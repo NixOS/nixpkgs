@@ -152,7 +152,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

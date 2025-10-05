@@ -11,7 +11,7 @@ import ../make-test-python.nix (
   { pkgs, ... }:
   {
     name = "ejabberd";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
     nodes = {

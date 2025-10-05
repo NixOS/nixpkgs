@@ -237,7 +237,7 @@ let
       # Create hashes for cert data directories based on configuration
       # Flags are separated to avoid collisions
       hashData =
-        with builtins;
+
         ''
           ${lib.concatStringsSep " " data.extraLegoFlags} -
           ${lib.concatStringsSep " " data.extraLegoRunFlags} -

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({
+import ./make-test-python.nix {
   name = "corerad";
   nodes = {
     router =
@@ -97,4 +97,4 @@ import ./make-test-python.nix ({
             "corerad_build_info" in out
         ), "Build info metric was not found in Prometheus output"
   '';
-})
+}

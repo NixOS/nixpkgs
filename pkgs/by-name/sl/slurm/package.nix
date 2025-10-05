@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
   ]
   ++ (lib.optional enableGtk2 "--disable-gtktest")
   ++ (lib.optional (!enableX11) "--disable-x11")
-  ++ (lib.optional (enableNVML) "--with-nvml");
+  ++ (lib.optional enableNVML "--with-nvml");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py

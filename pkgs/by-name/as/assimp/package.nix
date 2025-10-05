@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DASSIMP_BUILD_ASSIMP_TOOLS=ON" ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=array-bounds"
-  ]);
+  ];
 
   meta = with lib; {
     description = "Library to import various 3D model formats";

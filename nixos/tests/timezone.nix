@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "timezone";
-    meta.maintainers = with pkgs.lib.maintainers; [ ];
+    meta.maintainers = [ ];
 
     nodes = {
       node_eutz =

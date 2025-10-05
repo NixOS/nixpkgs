@@ -150,14 +150,14 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${
-    lib.makeLibraryPath ([
+    lib.makeLibraryPath [
       libX11
       libXrandr
       libXinerama
       libXext
       libXcursor
       libXScrnSaver
-    ])
+    ]
   }";
 
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
