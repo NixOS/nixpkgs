@@ -124,7 +124,7 @@ buildPythonPackage rec {
       --bash <($out/bin/datalad shell-completion) \
       --zsh  <($out/bin/datalad shell-completion)
     wrapProgram $out/bin/datalad \
-      --prefix PATH : "${git-annex}/bin:$PATH" \
+      --prefix PATH : "${git-annex}/bin" \
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
