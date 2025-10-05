@@ -27,7 +27,7 @@ let
             nativeBuildInputs = [ pkgs.yq-go ];
           }
           ''
-          ${pkgs.yq-go}/bin/yq -o=yaml < ${lib.escapeShellArg file} > $out
+            ${pkgs.yq-go}/bin/yq -o=yaml < ${lib.escapeShellArg file} > $out
           ''
     );
 
