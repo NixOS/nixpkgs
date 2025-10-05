@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6.2)' \
+      'cmake_minimum_required(VERSION 3.10)'
   '';
 
   # make the install path match the rpath
