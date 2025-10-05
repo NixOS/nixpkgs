@@ -6485,7 +6485,6 @@
     github = "DimitarNestorov";
     githubId = 8790386;
   };
-
   diniamo = {
     name = "diniamo";
     email = "diniamo53@gmail.com";
@@ -21402,11 +21401,11 @@
     githubId = 210965013;
   };
   randoneering = {
-     name = "randoneering";
-     email = "justin@randoneering.tech";
-     github = "randoneering";
-     githubId = 127273550;
-   };
+    name = "randoneering";
+    email = "justin@randoneering.tech";
+    github = "randoneering";
+    githubId = 127273550;
+  };
   rane = {
     name = "Rane";
     email = "rane+git@junkyard.systems";
