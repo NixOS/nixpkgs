@@ -1261,7 +1261,7 @@ with pkgs;
     python3Packages.callPackage ../applications/version-management/pass-git-helper
       { };
 
-  qgit = qt5.callPackage ../applications/version-management/qgit { };
+  qgit = qt6Packages.callPackage ../applications/version-management/qgit { };
 
   silver-platter = python3Packages.callPackage ../applications/version-management/silver-platter { };
 
