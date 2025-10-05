@@ -244,7 +244,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
+        ProtectProc = "invisible";
         ProtectSystem = "full";
         RestrictAddressFamilies = [
           "AF_UNIX"
