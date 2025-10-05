@@ -17,6 +17,18 @@ buildGo124Module (finalAttrs: {
     hash = "sha256-mdLrLiRNudpQ8i0lvwoNAqhSWJ8VMEC1ZRxXHWHpqLY=";
   };
 
+  checkFlags =
+    let
+      skippedTests = [
+        # Flaky test, sometimes fails with:
+        # --- FAIL: TestClustersPeerAddInUnhealthyCluster (7.58s)
+        #     peer_manager_test.go:247: failed to dial: failed to dial QmSookyjcPhxchnHeo2jtssHqe8zdmhgEQiY61yUcWjWp5: all dials failed
+        #           * [/ip4/127.0.0.1/tcp/46571] dial backoff
+        "TestClustersPeerAddInUnhealthyCluster"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   __darwinAllowLocalNetworking = true; # required for tests
 
   meta = with lib; {
