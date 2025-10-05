@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.5.3";
+  version = "10.6.0";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-MHBBDn/3kS1BuZQU7qHdbtuy0JuRRqtzmHVdg8Az+Qc=";
+    hash = "sha256-Z5W+IBiNhEXyBVk6w2YzotBlHam1fELmr3ojJ0q4Ge8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
