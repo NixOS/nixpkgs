@@ -54,7 +54,8 @@
           echo 'C.UTF-8/UTF-8 \' >> ../glibc-2*/localedata/SUPPORTED
 
           # Hack to allow building of the locales (needed since glibc-2.12)
-          sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef $(LOCALEDEF_FLAGS),' ../glibc-2*/localedata/Makefile
+          substituteInPlace ../glibc-2*/localedata/Makefile \
+            --replace-fail '$(rtld-prefix) $(common-objpfx)locale/localedef' 'localedef $(LOCALEDEF_FLAGS)'
         ''
         + lib.optionalString (!allLocales) ''
           # Check that all locales to be built are supported
