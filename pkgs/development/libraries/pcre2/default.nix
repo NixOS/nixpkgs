@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   updateAutotoolsGnuConfigScriptsHook,
   # Causes consistent segfaults on ELFv1 PPC64 when trying to use Perl regex in gnugrep
   # https://github.com/PCRE2Project/pcre2/issues/762
@@ -16,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
     hash = "sha256-FfvFq6a+7gsXrssEYCrjlDI5OroevY45t8q/fbiDKZ8=";
   };
+
+  ${if stdenv.hostPlatform.isCygwin then "patches" else null} =
+    lib.optional stdenv.hostPlatform.isCygwin
+      (fetchpatch2 {
+        url = "https://cygwin.com/cgit/cygwin-packages/pcre2/plain/pcre2-10.46-cygwin-jit.patch?id=45f4a0514d89311078f4a6d0bc4d12bcc2c3d4c6";
+        hash = "sha256-9fDAzjDgrM016IR8gCzEHn0ZrXhvwTdcjbzSlAV59Zg=";
+        stripLen = 1;
+      });
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
