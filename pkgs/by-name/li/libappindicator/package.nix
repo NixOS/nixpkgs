@@ -67,24 +67,23 @@ stdenv.mkDerivation (finalAttrs: {
     }
     .${gtkVersion} or throwBadGtkVersion;
 
-  buildInputs =
-    [
-      glib
-      dbus-glib
-      {
-        "2" = libindicator-gtk2;
-        "3" = libindicator-gtk3;
-      }
-      .${gtkVersion} or throwBadGtkVersion
-    ]
-    ++ lib.optionals monoSupport [
-      mono
-      {
-        "2" = gtk-sharp-2_0;
-        "3" = gtk-sharp-3_0;
-      }
-      .${gtkVersion} or throwBadGtkVersion
-    ];
+  buildInputs = [
+    glib
+    dbus-glib
+    {
+      "2" = libindicator-gtk2;
+      "3" = libindicator-gtk3;
+    }
+    .${gtkVersion} or throwBadGtkVersion
+  ]
+  ++ lib.optionals monoSupport [
+    mono
+    {
+      "2" = gtk-sharp-2_0;
+      "3" = gtk-sharp-3_0;
+    }
+    .${gtkVersion} or throwBadGtkVersion
+  ];
 
   preAutoreconf = ''
     gtkdocize

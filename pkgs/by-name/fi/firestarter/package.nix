@@ -64,46 +64,45 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1ik6j1lw5nldj4i3lllrywqg54m9i2vxkxsb2zr4q0d2rfywhn23";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-    ]
-    ++ lib.optionals withCuda [
-      addDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+  ]
+  ++ lib.optionals withCuda [
+    addDriverRunpath
+  ];
 
-  buildInputs =
-    [ hwloc ]
-    ++ (
-      if withCuda then
-        [
-          glibc_multi
-          cudatoolkit
-        ]
-      else
-        [ glibc.static ]
-    );
+  buildInputs = [
+    hwloc
+  ]
+  ++ (
+    if withCuda then
+      [
+        glibc_multi
+        cudatoolkit
+      ]
+    else
+      [ glibc.static ]
+  );
 
   NIX_LDFLAGS = lib.optionals withCuda [
     "-L${cudatoolkit}/lib/stubs"
   ];
 
-  cmakeFlags =
-    [
-      "-DFIRESTARTER_BUILD_HWLOC=OFF"
-      "-DCMAKE_C_COMPILER_WORKS=1"
-      "-DCMAKE_CXX_COMPILER_WORKS=1"
-    ]
-    ++ lib.optionals withCuda [
-      "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
-    ];
+  cmakeFlags = [
+    "-DFIRESTARTER_BUILD_HWLOC=OFF"
+    "-DCMAKE_C_COMPILER_WORKS=1"
+    "-DCMAKE_CXX_COMPILER_WORKS=1"
+  ]
+  ++ lib.optionals withCuda [
+    "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
+  ];
 
   installPhase = ''
     runHook preInstall

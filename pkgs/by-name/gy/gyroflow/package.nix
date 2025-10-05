@@ -25,18 +25,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "gyroflow";
-  version = "1.6.0";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "gyroflow";
     repo = "gyroflow";
     tag = "v${version}";
-    hash = "sha256-Ib9GnHN23eTbd3nEwvZf3+CBSkUHycN77o3ura0Ze/0=";
+    hash = "sha256-ncGbM8wIwnyLHp+oArgDnKCCGIeywdH7YGZPgRBLiJM=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-bqBFAobXwPC4V0OYHbwmkk7shfiFt3YMGAf7F5ybLAQ=";
+  cargoHash = "sha256-9UamQxrKVMSivhZ/cvRRCliaf3eFeHg5XPPtuaRKrg0=";
 
   nativeBuildInputs = [
     clang

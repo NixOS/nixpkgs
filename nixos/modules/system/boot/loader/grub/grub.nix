@@ -558,7 +558,7 @@ in
 
       theme = mkOption {
         type = types.nullOr types.path;
-        example = literalExpression ''"''${pkgs.libsForQt5.breeze-grub}/grub/themes/breeze"'';
+        example = literalExpression ''"''${pkgs.kdePackages.breeze-grub}/grub/themes/breeze"'';
         default = null;
         description = ''
           Path to the grub theme to be used.
@@ -846,59 +846,67 @@ in
       environment.systemPackages = mkIf (grub != null) [ grub ];
 
       boot.loader.grub.extraPrepareConfig = concatStrings (
-        mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
-        '') config.boot.loader.grub.extraFiles
+        mapAttrsToList (
+          fileName: sourcePath:
+          flip concatMapStrings cfg.mirroredBoots (
+            args:
+            let
+              efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+            in
+            ''
+              ${pkgs.coreutils}/bin/install -Dp ${escapeShellArg sourcePath} ${escapeShellArg efiSysMountPoint}/${escapeShellArg fileName}
+            ''
+          )
+        ) config.boot.loader.grub.extraFiles
       );
 
-      assertions =
+      assertions = [
+        {
+          assertion = cfg.mirroredBoots != [ ];
+          message =
+            "You must set the option ‘boot.loader.grub.devices’ or "
+            + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
+        }
+        {
+          assertion =
+            cfg.efiSupport
+            || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
+          message = "You cannot have duplicated devices in mirroredBoots";
+        }
+        {
+          assertion = cfg.efiInstallAsRemovable -> cfg.efiSupport;
+          message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn on boot.loader.grub.efiSupport";
+        }
+        {
+          assertion = cfg.efiInstallAsRemovable -> !config.boot.loader.efi.canTouchEfiVariables;
+          message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn off boot.loader.efi.canTouchEfiVariables";
+        }
+        {
+          assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
+          message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
+        }
+      ]
+      ++ flip concatMap cfg.mirroredBoots (
+        args:
         [
           {
-            assertion = cfg.mirroredBoots != [ ];
-            message =
-              "You must set the option ‘boot.loader.grub.devices’ or "
-              + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
+            assertion = args.devices != [ ];
+            message = "A boot path cannot have an empty devices string in ${args.path}";
           }
           {
-            assertion =
-              cfg.efiSupport
-              || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
-            message = "You cannot have duplicated devices in mirroredBoots";
+            assertion = hasPrefix "/" args.path;
+            message = "Boot paths must be absolute, not ${args.path}";
           }
           {
-            assertion = cfg.efiInstallAsRemovable -> cfg.efiSupport;
-            message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn on boot.loader.grub.efiSupport";
-          }
-          {
-            assertion = cfg.efiInstallAsRemovable -> !config.boot.loader.efi.canTouchEfiVariables;
-            message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn off boot.loader.efi.canTouchEfiVariables";
-          }
-          {
-            assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
-            message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
+            assertion = if args.efiSysMountPoint == null then true else hasPrefix "/" args.efiSysMountPoint;
+            message = "EFI paths must be absolute, not ${args.efiSysMountPoint}";
           }
         ]
-        ++ flip concatMap cfg.mirroredBoots (
-          args:
-          [
-            {
-              assertion = args.devices != [ ];
-              message = "A boot path cannot have an empty devices string in ${args.path}";
-            }
-            {
-              assertion = hasPrefix "/" args.path;
-              message = "Boot paths must be absolute, not ${args.path}";
-            }
-            {
-              assertion = if args.efiSysMountPoint == null then true else hasPrefix "/" args.efiSysMountPoint;
-              message = "EFI paths must be absolute, not ${args.efiSysMountPoint}";
-            }
-          ]
-          ++ forEach args.devices (device: {
-            assertion = device == "nodev" || hasPrefix "/" device;
-            message = "GRUB devices must be absolute paths, not ${device} in ${args.path}";
-          })
-        );
+        ++ forEach args.devices (device: {
+          assertion = device == "nodev" || hasPrefix "/" device;
+          message = "GRUB devices must be absolute paths, not ${device} in ${args.path}";
+        })
+      );
     })
 
     (mkIf options.boot.loader.grub.version.isDefined {

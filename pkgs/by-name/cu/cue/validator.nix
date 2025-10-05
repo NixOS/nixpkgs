@@ -15,7 +15,6 @@ cueSchemaFile:
 writeShellScript "validate-using-cue" ''
   ${cue}/bin/cue \
     --all-errors \
-    --strict \
     vet \
     --concrete \
     "$1" \

@@ -8,21 +8,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unifont";
-  version = "16.0.02";
+  version = "16.0.03";
 
   otf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.otf";
-    hash = "sha256-3oI6EOZeIkOt56mK+CuC68a71c89CqPjjtTMzTa8qzM=";
+    hash = "sha256-9TnyHLrjkWoJP4GdNsR3EtVwGshtrO2KaOzPe9nTPAw=";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.pcf.gz";
-    hash = "sha256-AqP+EZlNPNrx1L1dK2tglzXmgj4BdkroO3BOAuwvZA0=";
+    hash = "sha256-ysKULOBusx4n7NfYRAzEoRfqaTNn5JtjigTVmb7wozY=";
   };
 
   bdf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.bdf.gz";
-    hash = "sha256-Uh8rkui2vU6hkM6gSaA53eNZpuLK6UWORdaWAI+mmX8=";
+    hash = "sha256-fz0WZKwcBR9ZoaE2DdZU942CwkamiMNC6GPOx/a6ldQ=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://unifoundry.com/unifont/";
 
     # Basically GPL2+ with font exception.
-    license = "https://unifoundry.com/LICENSE.txt";
+    license = with lib.licenses; [
+      gpl2Plus
+      fontException
+    ];
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };

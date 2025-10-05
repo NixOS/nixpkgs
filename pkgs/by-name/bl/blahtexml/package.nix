@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
         --replace "\$(CXX)" "\$(CXX) -std=c++98"
     ''
     +
-      # fix the doc build on TeX Live 2023
-      ''
-        substituteInPlace Documentation/manual.tex \
-          --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
-      '';
+    # fix the doc build on TeX Live 2023
+    ''
+      substituteInPlace Documentation/manual.tex \
+        --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
+    '';
 
   outputs = [
     "out"
@@ -38,20 +38,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  buildFlags =
-    [ "doc" ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          "blahtex-mac"
-          "blahtexml-mac"
-        ]
-      else
-        [
-          "blahtex-linux"
-          "blahtexml-linux"
-        ]
-    );
+  buildFlags = [
+    "doc"
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        "blahtex-mac"
+        "blahtexml-mac"
+      ]
+    else
+      [
+        "blahtex-linux"
+        "blahtexml-linux"
+      ]
+  );
 
   installPhase = ''
     install -D -t "$out/bin" blahtex blahtexml

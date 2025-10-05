@@ -5,20 +5,22 @@
   qtsvg,
   qtwebengine,
   kconfigwidgets,
+  kitemmodels,
 }:
 mkKdeDerivation rec {
   pname = "klevernotes";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://kde/stable/klevernotes/${version}/klevernotes-${version}.tar.xz";
-    hash = "sha256-WQoeozREN4GsqUC4OlYTrirt+fYa1yeT90RaJxvTH3I=";
+    hash = "sha256-btnCn9YhA0aIhg6PXYuxsZQa6JeHyIrYwSKvTuqrsj8=";
   };
 
   extraBuildInputs = [
     qtsvg
     qtwebengine
     kconfigwidgets
+    kitemmodels
   ];
 
   meta.license = with lib.licenses; [

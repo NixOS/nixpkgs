@@ -64,7 +64,7 @@ buildGoModule {
       --zsh misc/_gg.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "gg";
     description = "Git with less typing";
     longDescription = ''
@@ -74,6 +74,6 @@ buildGoModule {
     '';
     homepage = "https://gg-scm.io/";
     changelog = "https://github.com/gg-scm/gg/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

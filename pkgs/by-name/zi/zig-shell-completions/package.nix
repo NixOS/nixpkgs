@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-shell-completions";
-  version = "0-unstable-2024-07-08";
+  version = "0-unstable-2025-06-29";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = "shell-completions";
-    rev = "8d3db71e9a0497de98946b2ca2ee7e87d106607e";
-    hash = "sha256-iil6M59S94f9SojTnwdWGOlIO/QOV77fJOUjyBa7jMk=";
+    rev = "4f91bcbe28cec28ff707d5e032333cbdbfa01161";
+    hash = "sha256-4uzM5pFnYf5dTkw3igzWUCYYsBZVTrb/mFf5iHFiGT4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

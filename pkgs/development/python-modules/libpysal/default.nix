@@ -84,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://pysal.org/libpysal/";
     changelog = "https://github.com/pysal/libpysal/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

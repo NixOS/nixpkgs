@@ -38,21 +38,21 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  pythonRelaxDeps = [ "lxml" ];
+
   optional-dependencies = {
-    speed =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
-    all =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
+    speed = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
+    ++ urllib3.optional-dependencies.brotli;
+    all = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
+    ++ urllib3.optional-dependencies.brotli;
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

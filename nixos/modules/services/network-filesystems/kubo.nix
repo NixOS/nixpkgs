@@ -161,7 +161,7 @@ in
       autoMount = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Whether Kubo should try to mount /ipfs and /ipns at startup.";
+        description = "Whether Kubo should try to mount /ipfs, /ipns and /mfs at startup.";
       };
 
       autoMigrate = lib.mkOption {
@@ -235,6 +235,12 @@ in
               type = lib.types.str;
               default = "/ipns";
               description = "Where to mount the IPNS namespace to";
+            };
+
+            Mounts.MFS = lib.mkOption {
+              type = lib.types.str;
+              default = "/mfs";
+              description = "Where to mount the MFS namespace to";
             };
           };
         };
@@ -356,6 +362,7 @@ in
         ${cfg.dataDir}.d = defaultConfig;
         ${cfg.settings.Mounts.IPFS}.d = lib.mkIf (cfg.autoMount) defaultConfig;
         ${cfg.settings.Mounts.IPNS}.d = lib.mkIf (cfg.autoMount) defaultConfig;
+        ${cfg.settings.Mounts.MFS}.d = lib.mkIf (cfg.autoMount) defaultConfig;
       };
 
     # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
@@ -366,66 +373,65 @@ in
       Mounts.FuseAllowOther = lib.mkDefault true;
     };
 
-    systemd.services.ipfs =
-      {
-        path = [
-          "/run/wrappers"
-          cfg.package
+    systemd.services.ipfs = {
+      path = [
+        "/run/wrappers"
+        cfg.package
+      ];
+      environment.IPFS_PATH = cfg.dataDir;
+
+      preStart = ''
+        if [[ ! -f "$IPFS_PATH/config" ]]; then
+          ipfs init --empty-repo=${lib.boolToString cfg.emptyRepo}
+        else
+          # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
+          rm -vf "$IPFS_PATH/api"
+      ''
+      + lib.optionalString cfg.autoMigrate ''
+        '${lib.getExe pkgs.kubo-migrator}' -to '${cfg.package.repoVersion}' -y
+      ''
+      + ''
+        fi
+        ipfs --offline config show |
+          ${pkgs.jq}/bin/jq -s '.[0].Pinning as $Pinning | .[0].Identity as $Identity | .[1] + {$Identity,$Pinning}' - '${configFile}' |
+
+          # This command automatically injects the private key and other secrets from
+          # the old config file back into the new config file.
+          # Unfortunately, it doesn't keep the original `Identity.PeerID`,
+          # so we need `ipfs config show` and jq above.
+          # See https://github.com/ipfs/kubo/issues/8993 for progress on fixing this problem.
+          # Kubo also wants a specific version of the original "Pinning.RemoteServices"
+          # section (redacted by `ipfs config show`), such that that section doesn't
+          # change when the changes are applied. Whyyyyyy.....
+          ipfs --offline config replace -
+      '';
+      postStop = lib.mkIf cfg.autoMount ''
+        # After an unclean shutdown the fuse mounts at cfg.settings.Mounts.IPFS, cfg.settings.Mounts.IPNS and cfg.settings.Mounts.MFS are locked
+        umount --quiet '${cfg.settings.Mounts.IPFS}' '${cfg.settings.Mounts.IPNS}' '${cfg.settings.Mounts.MFS}' || true
+      '';
+      serviceConfig = {
+        ExecStart = [
+          ""
+          "${cfg.package}/bin/ipfs daemon ${kuboFlags}"
         ];
-        environment.IPFS_PATH = cfg.dataDir;
-
-        preStart =
-          ''
-            if [[ ! -f "$IPFS_PATH/config" ]]; then
-              ipfs init --empty-repo=${lib.boolToString cfg.emptyRepo}
-            else
-              # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
-              rm -vf "$IPFS_PATH/api"
-          ''
-          + lib.optionalString cfg.autoMigrate ''
-            '${lib.getExe pkgs.kubo-migrator}' -to '${cfg.package.repoVersion}' -y
-          ''
-          + ''
-            fi
-            ipfs --offline config show |
-              ${pkgs.jq}/bin/jq -s '.[0].Pinning as $Pinning | .[0].Identity as $Identity | .[1] + {$Identity,$Pinning}' - '${configFile}' |
-
-              # This command automatically injects the private key and other secrets from
-              # the old config file back into the new config file.
-              # Unfortunately, it doesn't keep the original `Identity.PeerID`,
-              # so we need `ipfs config show` and jq above.
-              # See https://github.com/ipfs/kubo/issues/8993 for progress on fixing this problem.
-              # Kubo also wants a specific version of the original "Pinning.RemoteServices"
-              # section (redacted by `ipfs config show`), such that that section doesn't
-              # change when the changes are applied. Whyyyyyy.....
-              ipfs --offline config replace -
-          '';
-        postStop = lib.mkIf cfg.autoMount ''
-          # After an unclean shutdown the fuse mounts at cfg.settings.Mounts.IPFS and cfg.settings.Mounts.IPNS are locked
-          umount --quiet '${cfg.settings.Mounts.IPFS}' '${cfg.settings.Mounts.IPNS}' || true
-        '';
-        serviceConfig = {
-          ExecStart = [
-            ""
-            "${cfg.package}/bin/ipfs daemon ${kuboFlags}"
-          ];
-          User = cfg.user;
-          Group = cfg.group;
-          StateDirectory = "";
-          ReadWritePaths = lib.optionals (!cfg.autoMount) [
-            ""
-            cfg.dataDir
-          ];
-          # Make sure the socket units are started before ipfs.service
-          Sockets = [
-            "ipfs-gateway.socket"
-            "ipfs-api.socket"
-          ];
-        } // lib.optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
+        User = cfg.user;
+        Group = cfg.group;
+        StateDirectory = "";
+        ReadWritePaths = lib.optionals (!cfg.autoMount) [
+          ""
+          cfg.dataDir
+        ];
+        # Make sure the socket units are started before ipfs.service
+        Sockets = [
+          "ipfs-gateway.socket"
+          "ipfs-api.socket"
+        ];
       }
-      // lib.optionalAttrs (!cfg.startWhenNeeded) {
-        wantedBy = [ "default.target" ];
-      };
+      // lib.optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
+    }
+    // lib.optionalAttrs (!cfg.startWhenNeeded) {
+      wantedBy = [ "default.target" ];
+    };
 
     systemd.sockets.ipfs-gateway = {
       wantedBy = [ "sockets.target" ];
@@ -443,7 +449,8 @@ in
         ListenStream = [
           ""
           "%t/ipfs.sock"
-        ] ++ (multiaddrsToListenStreams cfg.settings.Addresses.API);
+        ]
+        ++ (multiaddrsToListenStreams cfg.settings.Addresses.API);
         SocketMode = "0660";
         SocketUser = cfg.user;
         SocketGroup = cfg.group;

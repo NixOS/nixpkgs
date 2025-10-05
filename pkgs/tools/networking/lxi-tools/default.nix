@@ -38,25 +38,25 @@ stdenv.mkDerivation rec {
     ninja
     cmake
     pkg-config
-  ] ++ lib.optional withGui wrapGAppsHook4;
+  ]
+  ++ lib.optional withGui wrapGAppsHook4;
 
-  buildInputs =
-    [
-      liblxi
-      readline
-      lua
-      bash-completion
-    ]
-    ++ lib.optionals withGui [
-      glib
-      gtk4
-      gtksourceview5
-      libadwaita
-      json-glib
-      desktop-file-utils
-      appstream-glib
-      gsettings-desktop-schemas
-    ];
+  buildInputs = [
+    liblxi
+    readline
+    lua
+    bash-completion
+  ]
+  ++ lib.optionals withGui [
+    glib
+    gtk4
+    gtksourceview5
+    libadwaita
+    json-glib
+    desktop-file-utils
+    appstream-glib
+    gsettings-desktop-schemas
+  ];
 
   postUnpack = "sed -i '/meson.add_install.*$/d' source/meson.build";
 

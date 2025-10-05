@@ -4,6 +4,7 @@
   src,
   officialRelease,
   maintainers,
+  teams,
   version,
 }:
 
@@ -28,18 +29,6 @@ let
     pkg-config
     ;
 
-  baseVersion = version;
-
-  versionSuffix = lib.optionalString (!officialRelease) "pre";
-
-  fineVersionSuffix =
-    lib.optionalString (!officialRelease)
-      "pre${
-        builtins.substring 0 8 (src.lastModifiedDate or src.lastModified or "19700101")
-      }_${src.shortRev or "dirty"}";
-
-  fineVersion = baseVersion + fineVersionSuffix;
-
   root = ../.;
 
   # Indirection for Nixpkgs to override when package.nix files are vendored
@@ -55,12 +44,12 @@ let
     preConfigure =
       prevAttrs.preConfigure or ""
       +
-        # Update the repo-global .version file.
-        # Symlink ./.version points there, but by default only workDir is writable.
-        ''
-          chmod u+w ./.version
-          echo ${finalAttrs.version} > ./.version
-        '';
+      # Update the repo-global .version file.
+      # Symlink ./.version points there, but by default only workDir is writable.
+      ''
+        chmod u+w ./.version
+        echo ${finalAttrs.version} > ./.version
+      '';
   };
 
   localSourceLayer =
@@ -149,7 +138,8 @@ let
     nativeBuildInputs = [
       meson
       ninja
-    ] ++ prevAttrs.nativeBuildInputs or [ ];
+    ]
+    ++ prevAttrs.nativeBuildInputs or [ ];
     mesonCheckFlags = prevAttrs.mesonCheckFlags or [ ] ++ [
       "--print-errorlogs"
     ];
@@ -166,6 +156,11 @@ let
       // lib.optionalAttrs (
         stdenv.isLinux
         && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
+        && !(
+          stdenv.buildPlatform.config != stdenv.hostPlatform.config
+          && stdenv.hostPlatform.system == "powerpc64-linux"
+        )
+        && !(stdenv.system == "loongarch64-linux")
         && !(stdenv.hostPlatform.useLLVM or false)
       ) { LDFLAGS = "-fuse-ld=gold"; };
   };
@@ -198,6 +193,7 @@ let
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
       maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
+      teams = prevAttrs.meta.teams or [ ] ++ scope.teams;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
   };
@@ -213,13 +209,15 @@ let
       }
     );
 
+  whenAtLeast = v: thing: if lib.versionAtLeast version v then thing else null;
+
 in
 
 # This becomes the pkgs.nixComponents attribute set
 {
-  version = baseVersion + versionSuffix;
-  inherit versionSuffix;
+  inherit version;
   inherit maintainers;
+  inherit teams;
 
   inherit filesetToSource;
 
@@ -349,6 +347,7 @@ in
   nix-store-tests = callPackage ../src/libstore-tests/package.nix { };
 
   nix-fetchers = callPackage ../src/libfetchers/package.nix { };
+  ${whenAtLeast "2.29pre" "nix-fetchers-c"} = callPackage ../src/libfetchers-c/package.nix { };
   nix-fetchers-tests = callPackage ../src/libfetchers-tests/package.nix { };
 
   nix-expr = callPackage ../src/libexpr/package.nix { };
@@ -365,15 +364,13 @@ in
 
   nix-cmd = callPackage ../src/libcmd/package.nix { };
 
-  nix-cli = callPackage ../src/nix/package.nix { version = fineVersion; };
+  nix-cli = callPackage ../src/nix/package.nix { };
 
-  nix-functional-tests = callPackage ../tests/functional/package.nix {
-    version = fineVersion;
-  };
+  nix-functional-tests = callPackage ../tests/functional/package.nix { };
 
-  nix-manual = callPackage ../doc/manual/package.nix { version = fineVersion; };
-  nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { version = fineVersion; };
-  nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { version = fineVersion; };
+  nix-manual = callPackage ../doc/manual/package.nix { };
+  nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
+  nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
 
   nix-perl-bindings = callPackage ../src/perl/package.nix { };
 

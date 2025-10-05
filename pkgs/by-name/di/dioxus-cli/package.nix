@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wuIJq+UN1q5qYW4TXivq93C9kZiPHwBW5Ty2Vpik2oY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-L9r/nJj0Rz41mg952dOgKxbDS5u4zGEjSA3EhUHfGIk=";
   cargoPatches = [
     # TODO: Remove once https://github.com/DioxusLabs/dioxus/issues/3659 is fixed upstream.

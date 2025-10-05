@@ -2,15 +2,17 @@
   lib,
   python3Packages,
   fetchPypi,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "usbsdmux";
-  version = "24.1.1";
+  version = "25.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OtGgToDGUr6pBu9+LS/DxaYw/9+Pd6jPhxVDAM22HB4=";
+    hash = "sha256-/hDDEUvpdpUpg3ZVw8NWcDOLOtLu087Ki7FmGrDh9Gg=";
   };
 
   # Remove the wrong GROUP=plugdev.
@@ -20,18 +22,28 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'TAG+="uaccess", GROUP="plugdev"' 'TAG+="uaccess"'
   '';
 
-  # usbsdmux is not meant to be used as an importable module and has no tests
-  doCheck = false;
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm0444 -t $out/lib/udev/rules.d/ contrib/udev/99-usbsdmux.rules
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "usbsdmux" ];
+
+  meta = {
     description = "Control software for the LXA USB-SD-Mux";
     homepage = "https://github.com/linux-automation/usbsdmux";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -3,6 +3,10 @@
   stdenv,
   fetchFromGitHub,
   telegram-desktop,
+  alsa-lib,
+  jemalloc,
+  libopus,
+  libpulseaudio,
   withWebkit ? true,
 }:
 
@@ -11,15 +15,22 @@ telegram-desktop.override {
   inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
     pname = "64gram-unwrapped";
-    version = "1.1.58";
+    version = "1.1.78";
 
     src = fetchFromGitHub {
       owner = "TDesktop-x64";
       repo = "tdesktop";
       tag = "v${version}";
-      hash = "sha256-RHybrvm5p8BUt5StT/NuR76f2y1CCICirTMjdeRLtkY=";
+      hash = "sha256-3iMDkosa19iVd3b1dS+xONZZokFnvjuehHFN05NsCTY=";
       fetchSubmodules = true;
     };
+
+    buildInputs = (old.buildInputs or [ ]) ++ [
+      alsa-lib
+      jemalloc
+      libopus
+      libpulseaudio
+    ];
 
     cmakeFlags = (old.cmakeFlags or [ ]) ++ [
       (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)

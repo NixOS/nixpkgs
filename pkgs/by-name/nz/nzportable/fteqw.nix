@@ -41,7 +41,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzp-fteqw";
-  version = "0-unstable-2024-09-11-20-07-31";
+  version = "0-unstable-2024-09-11";
 
   src = fetchFromGitHub {
     owner = "nzp-team";
@@ -59,32 +59,32 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ];
 
-  buildInputs =
-    [
-      libGL
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXcursor
-      xorg.libXScrnSaver
-      dbus
-      fontconfig
-      libjpeg
-      libpng
-      alsa-lib
-      libogg
-      libvorbis
-      libopus
-      SDL2
-      gnutls
-      zlib
-      bullet
-    ]
-    ++ lib.optional enableEGL libglvnd
-    ++ lib.optionals enableWayland [
-      wayland
-      libxkbcommon
-    ]
-    ++ lib.optional enableVulkan vulkan-headers;
+  buildInputs = [
+    libGL
+    xorg.libxcb
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXScrnSaver
+    dbus
+    fontconfig
+    libjpeg
+    libpng
+    alsa-lib
+    libogg
+    libvorbis
+    libopus
+    SDL2
+    gnutls
+    zlib
+    bullet
+  ]
+  ++ lib.optional enableEGL libglvnd
+  ++ lib.optionals enableWayland [
+    wayland
+    libxkbcommon
+  ]
+  ++ lib.optional enableVulkan vulkan-headers;
 
   cmakeFlags = [
     (lib.cmakeFeature "FTE_BUILD_CONFIG" "${finalAttrs.src}/engine/common/config_nzportable.h")
@@ -109,31 +109,30 @@ stdenv.mkDerivation (finalAttrs: {
       # Some of them are also just deprecated by better backend options
       # (SDL audio is preferred over ALSA, OpenAL and PulseAudio, for example)
 
-      libs =
-        [
-          addDriverRunpath.driverLink
+      libs = [
+        addDriverRunpath.driverLink
 
-          # gl/gl_vidlinuxglx.c
-          xorg.libX11
-          xorg.libXrandr
-          xorg.libXxf86vm
-          xorg.libXxf86dga
-          xorg.libXi
-          xorg.libXcursor
-          libGL
+        # gl/gl_vidlinuxglx.c
+        xorg.libX11
+        xorg.libXrandr
+        xorg.libXxf86vm
+        xorg.libXxf86dga
+        xorg.libXi
+        xorg.libXcursor
+        libGL
 
-          libvorbis
+        libvorbis
 
-          sqlite # server/sv_sql.c
+        sqlite # server/sv_sql.c
 
-          SDL2 # a lot of different files
-          gnutls # common/net_ssl_gnutls.c
-          openexr # client/image.c
+        SDL2 # a lot of different files
+        gnutls # common/net_ssl_gnutls.c
+        openexr # client/image.c
 
-          (placeholder "out")
-        ]
-        ++ lib.optional enableWayland wayland
-        ++ lib.optional enableVulkan vulkan-loader;
+        (placeholder "out")
+      ]
+      ++ lib.optional enableWayland wayland
+      ++ lib.optional enableVulkan vulkan-loader;
     in
     ''
       wrapProgram $out/bin/fteqw \

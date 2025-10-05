@@ -11,7 +11,7 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "traittypes";
   version = "0.2.1-unstable-2020-07-17";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jupyter-widgets";
-    repo = pname;
+    repo = "traittypes";
     rev = "af2ebeec9e58b73a12d4cf841bd506d6eadb8868";
     hash = "sha256-q7kt8b+yDHsWML/wCeND9PrZMVjemhzG7Ih1OtHbnTw=";
   };

@@ -12,6 +12,7 @@
   doxygen,
   pkg-config,
   python,
+  requests,
   sip,
   which,
   buildPackages,
@@ -29,7 +30,7 @@
   libglvnd,
   libgbm,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK,
   xorgproto,
 
@@ -41,13 +42,13 @@
 
 buildPythonPackage rec {
   pname = "wxpython";
-  version = "4.2.2";
+  version = "4.2.3";
   format = "other";
 
   src = fetchPypi {
     pname = "wxPython";
     inherit version;
-    hash = "sha256-XbywZQ9n/cLFlleVolX/qj17CfsUmqjaLQ2apE444ro=";
+    hash = "sha256-INbgySfifO2FZDcZvWPp9/1QHfbpqKqxSJsDmJf9fAE=";
   };
 
   patches = [
@@ -69,30 +70,31 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     attrdict
     pkg-config
+    requests
     setuptools
     sip
     which
     wxGTK
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs =
-    [
-      wxGTK
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      libGL
-      libGLU
-      libSM
-      libXinerama
-      libXtst
-      libXxf86vm
-      libglvnd
-      libgbm
-      webkitgtk_4_0
-      xorgproto
-    ];
+  buildInputs = [
+    wxGTK
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libGL
+    libGLU
+    libSM
+    libXinerama
+    libXtst
+    libXxf86vm
+    libglvnd
+    libgbm
+    webkitgtk_4_1
+    xorgproto
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -100,12 +102,13 @@ buildPythonPackage rec {
     six
   ];
 
+  wafPath = "bin/waf";
+
   buildPhase = ''
     runHook preBuild
 
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
-    export WAF=$PWD/bin/waf
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
 
@@ -133,7 +136,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = licenses.wxWindows;
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with maintainers; [ hexa ];
   };
 }

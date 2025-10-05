@@ -6,17 +6,17 @@
 
 buildGo124Module rec {
   pname = "vuls";
-  version = "0.30.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "future-architect";
     repo = "vuls";
     tag = "v${version}";
-    hash = "sha256-lDLT5GNFL2LtooHNlpKrewzxVK5W8u+0U47BDvMG8l4=";
+    hash = "sha256-Vrfqn2hZiUyJX2bBw3skWfIxNgtWwFrmknE97gz91Q0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-X9PWg4vB07Bh9w8Lw3cdEaciVvRhvQD0L5n4cFKf880=";
+  vendorHash = "sha256-vhbHHhtDtwyrXZ/mSNKXwSSEzVZ2nCu/7Qs+LJEww5o=";
 
   ldflags = [
     "-s"

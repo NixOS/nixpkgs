@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-nWkiaegSjxgyGlpjXE9vzGjiDORaRCSoZJMDv0jtvaA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-czfDtiSEmzmcLfpqv0/8sP8zDAEKh+pkQkGXdd5NskM=";
 
   nativeBuildInputs = [
@@ -52,10 +51,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/pop-os/cosmic-design-demo";
     description = "Design Demo for the COSMIC Desktop Environment";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-design-demo";
   };

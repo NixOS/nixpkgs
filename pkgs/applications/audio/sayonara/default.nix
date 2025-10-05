@@ -47,22 +47,21 @@ mkDerivation rec {
     qttools
   ];
 
-  buildInputs =
-    [
-      libpulseaudio
-      pcre
-      qtbase
-      taglib
-      zlib
-      py
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    libpulseaudio
+    pcre
+    qtbase
+    taglib
+    zlib
+    py
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   # we carry the patched taglib 1.11.1 that doesn't break ogg but sayonara just
   # checks for the version

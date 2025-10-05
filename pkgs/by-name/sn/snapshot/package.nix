@@ -11,6 +11,7 @@
   ninja,
   pkg-config,
   rustc,
+  rustPlatform,
   wrapGAppsHook4,
   glib,
   gst_all_1,
@@ -24,17 +25,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "47.1";
+  version = "48.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5LFiZ5ryTH6W7m4itH1f8NqW4KD2FtE66xIHxgn4lIM=";
+    hash = "sha256-OTF2hZogt9I138MDAxuiDGhkQRBpiNyRHdkbe21m4f0=";
   };
 
   patches = [
     # Fix paths in glycin library
     glycin-loaders.passthru.glycinPathsPatch
   ];
+
+  cargoVendorDir = "vendor";
 
   nativeBuildInputs = [
     cargo
@@ -45,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
 
@@ -69,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
       '.files."src/sandbox.rs" = $hash' \
       vendor/glycin/.cargo-checksum.json \
       | sponge vendor/glycin/.cargo-checksum.json
+
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()" \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
   preFixup = ''
@@ -80,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  # For https://gitlab.gnome.org/GNOME/snapshot/-/blob/34236a6dded23b66fdc4e4ed613e5b09eec3872c/src/meson.build#L57
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
   passthru.updateScript = gnome.updateScript {
     packageName = "snapshot";
   };
@@ -87,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/snapshot";
     description = "Take pictures and videos on your computer, tablet, or phone";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     mainProgram = "snapshot";

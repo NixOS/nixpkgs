@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   writeText,
   bluez,
   cjson,
@@ -11,7 +12,6 @@
   doxygen,
   eigen,
   elfutils,
-  fetchpatch2,
   glslang,
   gst-plugins-base,
   gstreamer,
@@ -66,15 +66,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
-  version = "24.0.0";
+  version = "25.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-lFy0VvaLD4Oyu2TZJnaIWjuaJUZjGGDJS0VsRfIUpcc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VxTxvw+ftqlh3qF5qWxpK1OJsRowkRXu0xEH2bDckUA=";
   };
+
+  patches = [
+    # Remove with v26
+    (fetchpatch2 {
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/2a6932d46dad9aa957205e8a47ec2baa33041076.patch";
+      hash = "sha256-CZMbGgx7mEDcjcoRJHDZ5P6BecFW8CB4fpzxQ9bpAvE=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -90,62 +98,55 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
-  buildInputs =
-    [
-      bluez
-      cjson
-      dbus
-      eigen
-      elfutils
-      gst-plugins-base
-      gstreamer
-      hidapi
-      libbsd
-      libdrm
-      libffi
-      libGL
-      libjpeg
-      librealsense
-      libsurvive
-      libunwind
-      libusb1
-      libuv
-      libuvc
-      libv4l
-      libXau
-      libxcb
-      libXdmcp
-      libXext
-      libXrandr
-      onnxruntime
-      opencv4
-      openhmd
-      openvr
-      orc
-      pcre2
-      SDL2
-      shaderc
-      udev
-      vulkan-headers
-      vulkan-loader
-      wayland
-      wayland-protocols
-      wayland-scanner
-      zlib
-      zstd
-    ]
-    ++ lib.optionals tracingSupport [
-      tracy
-    ];
-
-  patches = [
-    # Remove this patch on the next update
-    # https://gitlab.freedesktop.org/monado/monado/-/merge_requests/2338
-    (fetchpatch2 {
-      name = "improve-reproducibility.patch";
-      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/9819fb6dd61d2af5b2d993ed37b976760002b055.patch";
-      hash = "sha256-qpTF1Q64jl8ZnJzMtflrpHLahCqfde2DXA9/Avlc18I=";
-    })
+  buildInputs = [
+    bluez
+    cjson
+    dbus
+    eigen
+    elfutils
+    gst-plugins-base
+    gstreamer
+    hidapi
+    libbsd
+    libdrm
+    libffi
+    libGL
+    libjpeg
+    librealsense
+    libsurvive
+    libunwind
+    libusb1
+    libuv
+    libuvc
+    libv4l
+    libXau
+    libxcb
+    libXdmcp
+    libXext
+    libXrandr
+    onnxruntime
+    opencv4
+    openhmd
+    openvr
+    orc
+    pcre2
+    SDL2
+    shaderc
+    udev
+    vulkan-headers
+    vulkan-loader
+    wayland
+    wayland-protocols
+    wayland-scanner
+    zlib
+    zstd
+  ]
+  ++ lib.optionals tracingSupport [
+    tracy
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [
@@ -153,8 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_STEAM" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   # Help openxr-loader find this runtime
@@ -171,10 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
-      Scrumplex
-      prusnak
-    ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
     mainProgram = "monado-cli";
   };

@@ -99,17 +99,16 @@ in
       );
     };
 
-    environment.etc."systemd/timesyncd.conf".text =
-      ''
-        [Time]
-      ''
-      + optionalString (cfg.servers != null) ''
-        NTP=${concatStringsSep " " cfg.servers}
-      ''
-      + optionalString (cfg.fallbackServers != null) ''
-        FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
-      ''
-      + cfg.extraConfig;
+    environment.etc."systemd/timesyncd.conf".text = ''
+      [Time]
+    ''
+    + optionalString (cfg.servers != null) ''
+      NTP=${concatStringsSep " " cfg.servers}
+    ''
+    + optionalString (cfg.fallbackServers != null) ''
+      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+    ''
+    + cfg.extraConfig;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;

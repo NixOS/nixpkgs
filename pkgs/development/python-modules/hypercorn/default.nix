@@ -56,12 +56,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 

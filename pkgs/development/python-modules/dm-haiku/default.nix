@@ -58,6 +58,17 @@ let
       })
     ];
 
+    # AttributeError: jax.core.Var was removed in JAX v0.6.0. Use jax.extend.core.Var instead, and
+    # see https://docs.jax.dev/en/latest/jax.extend.html for details.
+    # Already on master: https://github.com/google-deepmind/dm-haiku/commit/cfe8480d253a93100bf5e2d24c40435a95399c96
+    # TODO: remove at the next release
+    postPatch = ''
+      substituteInPlace haiku/_src/jaxpr_info.py \
+        --replace-fail "jax.core.JaxprEqn" "jax.extend.core.JaxprEqn" \
+        --replace-fail "jax.core.Var" "jax.extend.core.Var" \
+        --replace-fail "jax.core.Jaxpr" "jax.extend.core.Jaxpr"
+    '';
+
     build-system = [ setuptools ];
 
     dependencies = [

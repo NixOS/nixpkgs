@@ -13,16 +13,15 @@
   libpulseaudio,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.1.1";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0RbLvRCvy58HlOhHLcAoErRFgYxjWrKFQ6DPJD50c5Q=";
+    hash = "sha256-6egqI1JhnRc8YwzAvyy4Xg9Z9dEfG7wIbMfUgQ+4IBA=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zAf3EGIt/BWSZ9BMHWWVPWo3m+whnl/p+SahmpdLoZ4=";
+    fetcherVersion = 1;
+    hash = "sha256-nobOORfhwlGEvNt+MfDKd3rXor6tJHDulz5oD1BGY4I=";
   };
 
   buildPhase = ''

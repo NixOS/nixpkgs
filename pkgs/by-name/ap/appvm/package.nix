@@ -22,13 +22,13 @@ let
 in
 buildGoModule rec {
   pname = "appvm";
-  version = "unstable-2021-12-20";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "jollheef";
-    repo = pname;
-    rev = "17f17be7846d872e7e26d5cb6759a52ea4113587";
-    sha256 = "sha256-FL5olOy1KufULyqI2dJeS0OnKzC3LfPWxnia2i4f4yY=";
+    repo = "appvm";
+    tag = "v${version}";
+    sha256 = "sha256-n+YputGiNWSOYbwes/rjz0h3RWZONDTc8+LDc0La/KU=";
   };
 
   vendorHash = "sha256-8eU+Mf5dxL/bAMMShXvj8I1Kdd4ysBTWvgYIXwLStPI=";
@@ -45,14 +45,14 @@ buildGoModule rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nix-based app VMs";
-    homepage = "https://code.dumpstack.io/tools/${pname}";
-    maintainers = with maintainers; [
+    homepage = "https://code.dumpstack.io/tools/appvm";
+    maintainers = with lib.maintainers; [
       dump_stack
       cab404
       onny
     ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

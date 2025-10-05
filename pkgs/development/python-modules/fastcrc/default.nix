@@ -31,8 +31,7 @@ buildPythonPackage {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-9Vap8E71TkBIf4eIB2lapUqcMukdsHX4LR7U8AD77SU=";
   };
 
@@ -42,6 +41,8 @@ buildPythonPackage {
     pytestCheckHook
     pytest-benchmark
   ];
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   # Python source files interfere with testing
   preCheck = ''

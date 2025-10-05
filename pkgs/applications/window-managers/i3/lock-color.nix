@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/PandorasFox/i3lock-color";
     maintainers = with maintainers; [ malyn ];
+    mainProgram = "i3lock-color";
     license = licenses.bsd3;
 
     platforms = platforms.all;

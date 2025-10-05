@@ -15,14 +15,14 @@ let
     "cli"
     "desktop"
   ];
-  version = "0.45.1";
+  version = "0.52.0";
   cli = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-cli-v${version}-linux-x86_64.tar.gz";
-    hash = "sha256-tudXyf9wwWABMGwfsxaLJtkZPKImlgjzfJJYFtimQOE=";
+    hash = "sha256-gxB5GeJXTrPDGRXxKV3kdYQ0VgmmIeO8rggRPQlTDqw=";
   };
   desktop = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-    hash = "sha256-meNB1KCtxApsP95476ggL2gbCxu2fdold6BQ2dlZqFc=";
+    hash = "sha256-ANCMHJTeH0UyJvCpslbxc0I3BbfPfR7kr4UISWeo2ec=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version;
@@ -42,7 +42,8 @@ let
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
       wrapProgram $out/bin/caido \
-        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+        --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     '';
   };
 
@@ -70,6 +71,7 @@ let
     maintainers = with lib.maintainers; [
       octodi
       d3vil0p3r
+      blackzeshi
     ];
     platforms = [ "x86_64-linux" ];
   };

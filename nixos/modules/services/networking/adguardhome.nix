@@ -36,7 +36,7 @@ let
       null;
 
   configFile = (settingsFormat.generate "AdGuardHome.yaml" settings).overrideAttrs (_: {
-    checkPhase = "${cfg.package}/bin/adguardhome -c $out --check-config";
+    checkPhase = "${cfg.package}/bin/AdGuardHome -c $out --check-config";
   });
 in
 {

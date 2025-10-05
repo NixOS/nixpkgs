@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://hg.sr.ht/~scoopta/wlrobs";
     maintainers = with maintainers; [ grahamc ];
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

@@ -46,27 +46,25 @@ stdenv.mkDerivation {
     texinfo
   ];
 
-  configureFlags =
-    [
-      "--with-editor=${nano}/bin/nano"
+  configureFlags = [
+    "--with-editor=${nano}/bin/nano"
 
-      # Required for cross-compilation.
-      "cvs_cv_func_printf_ptr=yes"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [
-      # So that fputs_unlocked is defined
-      "CFLAGS=-D_GNU_SOURCE"
-    ];
+    # Required for cross-compilation.
+    "cvs_cv_func_printf_ptr=yes"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [
+    # So that fputs_unlocked is defined
+    "CFLAGS=-D_GNU_SOURCE"
+  ];
 
-  makeFlags =
-    [
-      "AR=${stdenv.cc.targetPrefix}ar"
-    ]
-    ++ lib.optionals (!stdenv.cc.bintools.isGNU) [
-      # Don't pass --as-needed to linkers that don't support it
-      # (introduced in debian patchset)
-      "cvs_LDFLAGS="
-    ];
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals (!stdenv.cc.bintools.isGNU) [
+    # Don't pass --as-needed to linkers that don't support it
+    # (introduced in debian patchset)
+    "cvs_LDFLAGS="
+  ];
 
   doCheck = false; # fails 1 of 1 tests
 

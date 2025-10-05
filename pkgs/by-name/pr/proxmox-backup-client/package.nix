@@ -1,73 +1,55 @@
 {
   lib,
   fetchgit,
-  fetchFromGitHub,
   rustPlatform,
-  pkg-config,
   pkgconf,
   openssl,
   fuse3,
-  libuuid,
   acl,
-  libxcrypt,
-  git,
   installShellFiles,
   sphinx,
-  systemd,
   stdenv,
-  fetchpatch,
   versionCheckHook,
 }:
 
 let
   pname = "proxmox-backup-client";
-  version = "3.3.2";
+  version = "4.0.14";
 
   proxmox-backup_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-backup.git";
-    tag = "v${version}";
+    rev = "8b1b5f8e4d8216a0c45146b426dbfaff01ac0068";
     name = "proxmox-backup";
-    hash = "sha256-0piUftzuK9e8KbOe+bc3SXWa0DlnEgk5iNGWGn4fw7Y=";
+    hash = "sha256-aLiGJcCsHI4QFfMwgmQsXWabRyQ829itNsIDcaVW4FA=";
   };
 
   proxmox_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox.git";
-    rev = "df6b705f564ff145faa14770db6493bc5da8cab3";
+    rev = "56c4deb6309c41ff5afa5765b112be967c653857";
     name = "proxmox";
-    hash = "sha256-6fQVK+G5FMPy+29hScMkvQ+MQQryYs8f8oooq1YGXbg=";
+    hash = "sha256-mkGvfWWis1W8xBLb8Da/uIauPEMKPosPdZ+UcgMrvkk=";
   };
 
   proxmox-fuse_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-fuse.git";
-    rev = "6faec3a52fcdb0df3ca13fee2977683824d62d01"; # 0.1.7-1
+    rev = "87dbf9bfef9169286263bccffaae3206635ca108"; # 1.0.0
     name = "proxmox-fuse";
-    hash = "sha256-FwkZ5L7gJr9xZTQkdVHmOP8vnzf+To5Wz2SbIEzGUOY=";
+    hash = "sha256-/8Xy6LTql3gHfHuxT0lK5mhLGc58YAb1W+eyusmEP8Y=";
   };
 
   proxmox-pxar_src = fetchgit {
     url = "git://git.proxmox.com/git/pxar.git";
-    rev = "410f326a08ef6c08141af5c7431beb2e16f0c666"; # 0.12.1
+    rev = "993c66fcb8819770f279cb9fb4d13f58f367606c"; # 1.0.0
     name = "pxar";
-    hash = "sha256-USvtrWTbP3VUiy9MB9Ym6s4wXBNZ4Ooyg4MRDwRVOtU=";
+    hash = "sha256-V5DkTIyPuopSILQoJt04E5G9ZEylQF1x5oXgWQJuDq8=";
   };
 
   proxmox-pathpatterns_src = fetchgit {
     url = "git://git.proxmox.com/git/pathpatterns.git";
-    rev = "5f625aacbd6f81d97a1c6f5476fb38769d069f26"; # 0.3.0
+    rev = "42e5e96e30297da878a4d4b3a7fa52b65c1be0ab"; # 1.0.0
     name = "pathpatterns";
-    hash = "sha256-717XSlvQdvP0Q516fEx04rsrLCk3QI8frTD5NMmkSr4=";
+    hash = "sha256-U8EhTg/2iuArQvUNGNYrgVYn1T/jnxxqSKJxfsCMAjs=";
   };
-
-  # needs a patched version
-  h2_src = fetchFromGitHub {
-    name = "h2";
-    owner = "hyperium";
-    repo = "h2";
-    rev = "v0.4.7";
-    hash = "sha256-GcO4321Jqt1w7jbvQKd0GXIjptyz+tlN2SuxHoBJ/9k=";
-  };
-
-  aurPatchCommit = "6f83f58d54bc7186211d0cfa637c652b13e0dfee";
 in
 
 rustPlatform.buildRustPackage {
@@ -79,49 +61,41 @@ rustPlatform.buildRustPackage {
     proxmox-fuse_src
     proxmox-pxar_src
     proxmox-pathpatterns_src
-    h2_src
   ];
 
   sourceRoot = proxmox-backup_src.name;
 
   # These patches are essentially un-upstreamable, due to being "workarounds" related to the
-  # project structure.
+  # project structure and upstream/Debian-specific packaging.
   cargoPatches = [
     # A lot of Rust crates `proxmox-backup-client` depends on are only available through git (or
     # Debian packages). This patch redirects all these dependencies to a local, relative path, which
     # works in combination with the other three repos being checked out.
     ./0001-cargo-re-route-dependencies-not-available-on-crates..patch
-    # `make docs` assumes that the binaries are located under `target/{debug,release}`, but due
-    # to how `buildRustPackage` works, they get put under `target/$RUSTC_TARGET/{debug,release}`.
-    # This patch simply fixes that up.
-    ./0002-docs-Add-target-path-fixup-variable.patch
-    # Need to use a patched version of the `h2` crate (with a downgraded dependency, see also postPatch).
-    # This overrides it in the Cargo.toml as needed.
-    ./0003-cargo-use-local-patched-h2-dependency.patch
     # This patch prevents the generation of the man-pages for other components inside the repo,
     # which would require them too be built too. Thus avoid wasting resources and just skip them.
-    (fetchpatch {
-      name = "0002-docs-drop-all-but-client-man-pages.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/0002-docs-drop-all-but-client-man-pages.patch?h=proxmox-backup-client&id=${aurPatchCommit}";
-      hash = "sha256-AlIGfJZGaZl2NBVfuFxpDL6bgyvXA2Wcz7UWSrnQa24=";
-    })
+    ./0002-docs-drop-all-but-client-man-pages.patch
   ];
 
   postPatch = ''
-    # need to downgrade the `http` crate for `h2`
-    # see https://aur.archlinux.org/cgit/aur.git/tree/0003-cargo-downgrade-http-to-0.2.12.patch?h=proxmox-backup-client
-    cp -r ../h2 .
-    chmod u+w ./h2
-    (cd h2 && sed -i 's/^http = "1"$/http = "0.2.12"/' Cargo.toml)
-
     cp ${./Cargo.lock} Cargo.lock
     rm .cargo/config.toml
+
+    (cd ../pxar && chmod -R u+w . && patch -p1 <${./0003-decoder-fix-autoref-error-in-pointer-to-reference-co.patch})
+    (cd ../proxmox && chmod -R u+w . && patch -p1 <${./0004-pbs-api-types-crypto-fix-autoref-error-in-ptr-to-ref.patch})
+
+    # avoid some unnecessary dependencies, stemming from greedy linkage by rustc
+    # see also upstream Makefile for similar workaround
+    mkdir -p .dep-stubs
+    echo '!<arch>' >.dep-stubs/libsystemd.a
+    echo '!<arch>' >.dep-stubs/libuuid.a
+    echo '!<arch>' >.dep-stubs/libcrypt.a
   '';
 
   postBuild = ''
     make -C docs \
       DEB_VERSION=${version} DEB_VERSION_UPSTREAM=${version} \
-      RUSTC_TARGET=${stdenv.hostPlatform.config} \
+      DEB_HOST_RUST_TYPE=${stdenv.targetPlatform.rust.rustcTarget} \
       BUILD_MODE=release \
       proxmox-backup-client.1 pxar.1
   '';
@@ -150,28 +124,31 @@ rustPlatform.buildRustPackage {
     "--bin=pxar"
   ];
 
+  RUSTFLAGS = [ "-L.dep-stubs" ];
+
   doCheck = false;
 
+  # pbs-buildcfg requires this set, would be the git commit id
+  REPOID = "";
+
   nativeBuildInputs = [
-    git
-    pkg-config
     pkgconf
     rustPlatform.bindgenHook
     installShellFiles
     sphinx
   ];
+
   buildInputs = [
     openssl
     fuse3
-    libuuid
     acl
-    libxcrypt
-    systemd.dev
   ];
+
+  strictDeps = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Command line client for Proxmox Backup Server";

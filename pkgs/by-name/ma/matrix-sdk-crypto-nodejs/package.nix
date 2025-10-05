@@ -10,20 +10,20 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-sdk-crypto-nodejs";
-  version = "0.2.0-beta.1";
+  version = "0.4.0-beta.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-rust-sdk-crypto-nodejs";
-    rev = "v${version}";
-    hash = "sha256-g86RPfhF9XHpbXhHRbyhl920VazCrQyRQrYV6tVCHy4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Rl0xtaEj2RnW9HPN94hjETwiMInxT1XGa1BocldQAPs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-5+nW5g9oxe4L39wJUkSuP3ul5yH8V+E7IdhQVfvzhNk=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-4AC+l52I8Z3sXiViNPe6GLCl1Z+GpqjbwkcFX6BhxDA=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    local -r outPath="$out/lib/node_modules/@matrix-org/${pname}"
+    local -r outPath="$out/lib/node_modules/@matrix-org/${finalAttrs.pname}"
     mkdir -p "$outPath"
     cp package.json index.js index.d.ts matrix-sdk-crypto.*.node "$outPath"
 
@@ -64,5 +64,7 @@ stdenv.mkDerivation rec {
       dandellion
     ];
     inherit (nodejs.meta) platforms;
+    # napi_build doesn't handle most cross-compilation configurations
+    broken = (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) || stdenv.hostPlatform.isStatic;
   };
-}
+})

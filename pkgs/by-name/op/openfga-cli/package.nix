@@ -7,7 +7,7 @@
 
 let
   pname = "openfga-cli";
-  version = "0.6.4";
+  version = "0.7.4";
 in
 
 buildGoModule {
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "openfga";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-EIfVu6RnfIlHDKa5Kfy9cZ9ntg4Mdaz0SaDcCVHi01Q=";
+    hash = "sha256-kskPQyMzFgCOIaHmN/iZbRDPR6wbYp8kBcf+51cniSk=";
   };
 
-  vendorHash = "sha256-l6gZ8E7WYeJq8crxzKAP8q4L9aoXkjad64XUZfToE14=";
+  vendorHash = "sha256-e/w1KGVzrZPp8KTP0paCRcE9OYkZMmEmmIZmKmPtx5s=";
 
   nativeBuildInputs = [ installShellFiles ];
 

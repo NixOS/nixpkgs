@@ -31,6 +31,8 @@ buildPythonPackage rec {
     hash = "sha256-eE807M8qFDlSMAcE+GFJyve1YfmlWmB3ML9VJhMUeIE=";
   };
 
+  pythonRelaxDeps = [ "typing-extensions" ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [

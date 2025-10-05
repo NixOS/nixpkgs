@@ -59,9 +59,10 @@ lib.makeOverridable (
         meta = {
           homepage = "https://opensource.apple.com/releases/";
           license = lib.licenses.apple-psl20;
-          maintainers = lib.teams.darwin.members;
+          teams = [ lib.teams.darwin ];
           platforms = lib.platforms.darwin;
-        } // super.meta or { };
+        }
+        // super.meta or { };
       }
       // lib.optionalAttrs (super ? xcodeHash) {
         postUnpack =

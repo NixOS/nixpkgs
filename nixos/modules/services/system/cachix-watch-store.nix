@@ -8,13 +8,12 @@ let
   cfg = config.services.cachix-watch-store;
 in
 {
-  meta.maintainers = [
-    lib.maintainers.jfroche
-    lib.maintainers.domenkozar
-  ];
+  meta = {
+    maintainers = lib.teams.cachix.members ++ [ lib.maintainers.jfroche ];
+  };
 
   options.services.cachix-watch-store = {
-    enable = lib.mkEnableOption "Cachix Watch Store: https://docs.cachix.org";
+    enable = lib.mkEnableOption "Cachix Watch Store: <https://docs.cachix.org>";
 
     cacheName = lib.mkOption {
       type = lib.types.str;
@@ -37,13 +36,13 @@ in
     };
 
     compressionLevel = lib.mkOption {
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr (lib.types.ints.between 0 16);
       description = "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
     jobs = lib.mkOption {
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr lib.types.ints.positive;
       description = "Number of threads used for pushing store paths";
       default = null;
     };
@@ -83,27 +82,29 @@ in
         DynamicUser = true;
         LoadCredential = [
           "cachix-token:${toString cfg.cachixTokenFile}"
-        ] ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
+        ]
+        ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
       };
       script =
         let
-          command =
-            [ "${cfg.package}/bin/cachix" ]
-            ++ (lib.optional cfg.verbose "--verbose")
-            ++ (lib.optionals (cfg.host != null) [
-              "--host"
-              cfg.host
-            ])
-            ++ [ "watch-store" ]
-            ++ (lib.optionals (cfg.compressionLevel != null) [
-              "--compression-level"
-              (toString cfg.compressionLevel)
-            ])
-            ++ (lib.optionals (cfg.jobs != null) [
-              "--jobs"
-              (toString cfg.jobs)
-            ])
-            ++ [ cfg.cacheName ];
+          command = [
+            "${cfg.package}/bin/cachix"
+          ]
+          ++ (lib.optional cfg.verbose "--verbose")
+          ++ (lib.optionals (cfg.host != null) [
+            "--host"
+            cfg.host
+          ])
+          ++ [ "watch-store" ]
+          ++ (lib.optionals (cfg.compressionLevel != null) [
+            "--compression-level"
+            (toString cfg.compressionLevel)
+          ])
+          ++ (lib.optionals (cfg.jobs != null) [
+            "--jobs"
+            (toString cfg.jobs)
+          ])
+          ++ [ cfg.cacheName ];
         in
         ''
           export CACHIX_AUTH_TOKEN="$(<"$CREDENTIALS_DIRECTORY/cachix-token")"

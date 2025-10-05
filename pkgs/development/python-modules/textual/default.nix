@@ -23,36 +23,38 @@
   pytestCheckHook,
   syrupy,
   time-machine,
+  tree-sitter-markdown,
+  tree-sitter-python,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "2.1.2";
+  version = "6.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-VKo1idLu5sYGtuK8yZzVE6QrrMOciYIesbGVlqzNjfk=";
+    hash = "sha256-2myMafLHxJNw3EWLvlvg0wWznY6m04BOQjhYtRvYTP8=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [
-      markdown-it-py
-      platformdirs
-      rich
-      typing-extensions
-    ]
-    ++ markdown-it-py.optional-dependencies.plugins
-    ++ markdown-it-py.optional-dependencies.linkify;
+  dependencies = [
+    markdown-it-py
+    platformdirs
+    rich
+    typing-extensions
+  ]
+  ++ markdown-it-py.optional-dependencies.plugins
+  ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ] ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+    ]
+    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [
@@ -63,33 +65,28 @@ buildPythonPackage rec {
     syrupy
     time-machine
     tree-sitter
+    tree-sitter-markdown
+    tree-sitter-python
   ];
 
   disabledTestPaths = [
     # Snapshot tests require syrupy<4
     "tests/snapshot_tests/test_snapshots.py"
-
-    # Flaky: https://github.com/Textualize/textual/issues/5511
-    # RuntimeError: There is no current event loop in thread 'MainThread'.
-    "tests/test_focus.py"
   ];
 
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
 
-    # Requirements for tests are not quite ready
-    "test_register_language"
-
-    # Requires python bindings for tree-sitter languages
-    # https://github.com/Textualize/textual/issues/5449
-    "test_setting_unknown_language"
-    "test_update_highlight_query"
+    # fixture 'snap_compare' not found
+    "test_progress_bar_width_1fr"
   ];
 
-  # Some tests in groups require state from previous tests
-  # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
-  pytestFlagsArray = [ "--dist=loadgroup" ];
+  pytestFlags = [
+    # Some tests in groups require state from previous tests
+    # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
+    "--dist=loadgroup"
+  ];
 
   pythonImportsCheck = [ "textual" ];
 

@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "0.9.1";
+  version = "0.9.3";
   # list of all theoretically available targets
   targets = [
     "genode"
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    hash = "sha256-aHCY/mrEn3tNXC6e1fzzLHcrzYkKzgF7t1qc3QtnaVE=";
+    hash = "sha256-KbeY667Y/ZPUuRIGYOZMMAuVEVJ7Kn9UDUSThX5zfII=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -95,7 +95,6 @@ stdenv.mkDerivation {
     description = "Sandboxed execution environment";
     homepage = "https://github.com/solo5/solo5";
     license = licenses.isc;
-    maintainers = [ maintainers.ehmry ];
     platforms = mapCartesianProduct ({ arch, os }: "${arch}-${os}") {
       arch = [
         "aarch64"

@@ -29,16 +29,16 @@ let
     ."${system}" or (throw "Unsupported system: ${system}");
   hash =
     {
-      arm64-linux-hash = "sha256-GQSDButJqPmWbxhDIYqIZxhL2Bn4IpFP8Vinv6OsI9Q=";
-      arm64-osx-hash = "sha256-6e2Pqb/V02I+9ZTxR2er+zMLEBE4ZnJcwkVEgqO04eU=";
-      x64-linux-hash = "sha256-KZ24XPz1WwL4dK1wFT7x6jH2WU3NgFYLiSx2QfmstkA=";
-      x64-osx-hash = "sha256-p749/sc7aAzuvwwlCOx+pNh4J7DIJIZlvsFRa/mIlMk=";
+      arm64-linux-hash = "sha256-o2iZAgpKM/E9EL+jXpcJhQkyIfC3ytcW5erAuHsNNCo=";
+      arm64-osx-hash = "sha256-axa2VeieIdsjp09DG8vAlvYHX4PmqoLhiTe1OtAK8/k=";
+      x64-linux-hash = "sha256-bLmTovZrO3+8CrYM7h46k2TvGK0v7Mn3CXdkLgwCoD4=";
+      x64-osx-hash = "sha256-mExZSwmeSkssPRbRoXKN3htstPPyAju2Z7/cSZ8ZeU0=";
     }
     ."${arch}-${os}-hash";
 in
 stdenv.mkDerivation rec {
   pname = "whisparr";
-  version = "2.0.0.891";
+  version = "2.0.0.1278";
 
   src = fetchurl {
     name = "${pname}-${arch}-${os}-${version}.tar.gz";
@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "Whisparr";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
   };
 }

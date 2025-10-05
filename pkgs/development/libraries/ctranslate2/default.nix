@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  darwin, # Accelerate
   llvmPackages, # openmp
   withMkl ? false,
   mkl,
@@ -25,26 +24,26 @@
 
 let
   cmakeBool = b: if b then "ON" else "OFF";
+  stdenv' = if withCUDA then cudaPackages.backendStdenv else stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "ctranslate2";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     rev = "v${version}";
-    hash = "sha256-2Znrt+TiQf/9YI1HYAikDfqbekAghOvxKoC05S18scQ=";
+    hash = "sha256-EM2kunqtxo0BTIzrEomfaRsdav7sx6QEOhjDtjjSoYY=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withCUDA [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withCUDA [
+    cudaPackages.cuda_nvcc
+  ];
 
   cmakeFlags = [
     # https://opennmt.net/CTranslate2/installation.html#build-options
@@ -57,7 +56,8 @@ stdenv.mkDerivation rec {
     "-DWITH_OPENBLAS=${cmakeBool withOpenblas}"
     "-DWITH_RUY=${cmakeBool withRuy}"
     "-DWITH_MKL=${cmakeBool withMkl}"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-DWITH_ACCELERATE=ON";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DWITH_ACCELERATE=ON";
 
   buildInputs =
     lib.optionals withMkl [
@@ -80,11 +80,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       llvmPackages.openmp
-      darwin.apple_sdk.frameworks.Accelerate
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.CoreVideo
     ];
 
   passthru.tests = {
@@ -104,6 +99,6 @@ stdenv.mkDerivation rec {
       hexa
       misuzu
     ];
-    broken = (lib.versionOlder cudaPackages.cudaVersion "11.4") || !(withCuDNN -> withCUDA);
+    broken = !(withCuDNN -> withCUDA);
   };
 }

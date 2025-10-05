@@ -27,18 +27,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     tag = "v${version}";
-    hash = "sha256-RbuEgmly6Mjmx58zOV+tg6Mv5ghCNy/dE5FXYrEXtdg=";
+    hash = "sha256-EMxA5QqmIae/d3nUpwKjgURo0nOyaNbma8poB5mcQW0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-0c3Me9SobMvUiJqTyz/3zhEvntkiJFS92BNJ9rRBAv0=";
+    hash = "sha256-fr1bDTzTKx7TLBqw94CyaB0/Jo2x1BzZcM6dcen1PHc=";
   };
 
   nativeBuildInputs = [
@@ -64,19 +64,18 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs =
-    [
-      appstream
-      glib
-      gst_all_1.gstreamer
-      gtk4
-      libadwaita
-      libxml2
-      poppler
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    appstream
+    glib
+    gst_all_1.gstreamer
+    gtk4
+    libadwaita
+    libxml2
+    poppler
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   postPatch = ''
     chmod +x build-aux/*.py
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.tag}";
     description = "Simple drawing application to create handwritten notes";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [

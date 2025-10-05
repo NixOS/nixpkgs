@@ -2,16 +2,12 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-
   cargo-tauri,
   nodejs,
-  pnpm,
-
+  pnpm_8,
   pkg-config,
   wrapGAppsHook3,
-
   openssl,
-  libsoup_2_4,
   webkitgtk_4_1,
   glib-networking,
   nix-update-script,
@@ -19,39 +15,39 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aonsoku";
-  version = "0.8.3";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "victoralvesf";
     repo = "aonsoku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A1U1ubprwYJvyqTe5gVYTo8687sfP/76GfA+2EmtoCo=";
+    hash = "sha256-qlc7P222e6prYG30iVTAZhP772za3H7gVszfWvOr2NM=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  # lockfileVersion: '6.0' need old pnpm
+  pnpmDeps = pnpm_8.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-BMEBJRycmOgsI1loTPTNY1dVOJ0HTCnzg0QyNAzZMn4=";
+    fetcherVersion = 1;
+    hash = "sha256-h1rcM+H2c0lk7bpGeQT5ue9bQIggrCFHkj4o7KxnH08=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-yuKaf05bQFah3MTC0eF82pMmTJrllWfUKX3SdIWbPjM=";
+
+  cargoHash = "sha256-8UtfL8iB1XKP31GT9Ok5hIQSobQTm681uiluG+IhK/s=";
 
   patches = [ ./remove_updater.patch ];
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_8.configHook
     cargo-tauri.hook
-
     pkg-config
     wrapGAppsHook3
   ];
 
   buildInputs = [
     openssl
-    libsoup_2_4
     webkitgtk_4_1
     glib-networking
   ];

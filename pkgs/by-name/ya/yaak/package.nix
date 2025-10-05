@@ -11,7 +11,6 @@
   webkitgtk_4_1,
   glib,
   gtk3,
-  libsoup_2_4,
   openssl,
   pango,
   cairo,
@@ -20,6 +19,7 @@
   perl,
   makeWrapper,
   nix-update-script,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,8 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) src;
     hash = "sha256-4D7ETUOLixpFB4luqQlwkGR/C6Ke6+ZmPg3dKKkrw7c=";
   };
-
-  useFetchCargoVendor = true;
 
   cargoHash = "sha256-YxOSfSyn+gUsw0HeKrkXZg568X9CAY1UWKnGHHWCC78=";
 
@@ -59,30 +57,43 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     gtk3
     openssl
-    libsoup_2_4
-    webkitgtk_4_1
     pango
     cairo
     pixman
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   postPatch = ''
     substituteInPlace src-tauri/tauri.conf.json \
-      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false'
+      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
     substituteInPlace package.json \
       --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
       --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
   '';
 
-  preBuild = ''
-    mkdir -p src-tauri/vendored/node
-    ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-x86_64-unknown-linux-gnu
-    mkdir -p src-tauri/vendored/protoc
-    ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-x86_64-unknown-linux-gnu
-    ln -s ${protobuf}/include src-tauri/vendored/protoc/include
-  '';
+  preBuild =
+    let
+      archPlatforms =
+        {
+          "aarch64-darwin" = "aarch64-apple-darwin";
+          "x86_64-darwin" = "x86_64-apple-darwin";
+          "aarch64-linux" = "aarch64-unknown-linux-gnu";
+          "x86_64-linux" = "x86_64-unknown-linux-gnu";
+        }
+        .${stdenv.hostPlatform.system};
+    in
+    ''
+      mkdir -p src-tauri/vendored/node
+      ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-${archPlatforms}
+      mkdir -p src-tauri/vendored/protoc
+      ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-${archPlatforms}
+      ln -s ${protobuf}/include src-tauri/vendored/protoc/include
+    '';
 
   # Permission denied (os error 13)
   # write to src-tauri/vendored/protoc/include
@@ -92,7 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = "popd";
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/yaak-app \
       --inherit-argv0 \
       --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
@@ -107,6 +118,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ redyf ];
     mainProgram = "yaak";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

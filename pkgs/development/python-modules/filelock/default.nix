@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.17.0";
+  version = "3.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7k53QB71duuzjNfxO5soiTGUrMIKjmjhhzC6nA5UZg4=";
+    hash = "sha256-rbyI6ruZ0v7IycGyKbFx8Yr6ZVQAFz3cZT1dAVAfufI=";
   };
 
   build-system = [

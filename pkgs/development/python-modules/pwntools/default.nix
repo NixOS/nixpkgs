@@ -33,25 +33,32 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.14.0";
+  version = "4.14.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g7MkfeCD3/r6w79A9NFFVzLxbiXOMQX9CbVawPDRLoM=";
+    hash = "sha256-YPBJdtFyISDRi51QVTQIoCRmS1z4iPNvJYr8pL8DXKw=";
   };
 
   postPatch = ''
     # Upstream hardcoded the check for the command `gdb-multiarch`;
     # Forcefully use the provided debugger as `gdb`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
+
+    # Disable update checks
+    substituteInPlace pwnlib/update.py \
+      --replace-fail 'disabled        = False' 'disabled        = True'
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [ "pip" ];
+  pythonRemoveDeps = [
+    "pip"
+    "unicorn"
+  ];
 
   propagatedBuildInputs = [
     capstone

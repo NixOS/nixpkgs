@@ -14,7 +14,7 @@
 
 let
   pname = "nezha";
-  version = "1.10.4";
+  version = "1.13.2";
 
   frontendName = lib.removePrefix "nezha-theme-";
 
@@ -58,26 +58,25 @@ buildGo124Module {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${version}";
-    hash = "sha256-9dw1MT3v7ZCpC/MrlZDJmZ9EdTNVIbE0b45ao3eXO7o=";
+    hash = "sha256-IkB2V4KKSUfX+E9bMEGzCc3urAjgpXYhpO0Lfi4LYdY=";
   };
 
   proxyVendor = true;
 
-  prePatch =
-    ''
-      rm -rf cmd/dashboard/*-dist
+  prePatch = ''
+    rm -rf cmd/dashboard/*-dist
 
-      cp ${frontend-templates} service/singleton/frontend-templates.yaml
-    ''
-    + lib.concatStringsSep "\n" (
-      map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
-        [
-          nezha-theme-admin
-          nezha-theme-user
-        ]
-        ++ withThemes
-      )
-    );
+    cp ${frontend-templates} service/singleton/frontend-templates.yaml
+  ''
+  + lib.concatStringsSep "\n" (
+    map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
+      [
+        nezha-theme-admin
+        nezha-theme-user
+      ]
+      ++ withThemes
+    )
+  );
 
   patches = [
     # Nezha originally used ipinfo.mmdb to provide geoip query feature.
@@ -97,7 +96,7 @@ buildGo124Module {
     GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
   '';
 
-  vendorHash = "sha256-ftVcbO1QYIEYUwPqxAHE/7TNBwzgN5BNyu5+rTnOgIs=";
+  vendorHash = "sha256-e4FlXKE9A7WpZpafSv0Ais97cyta56ElD9pL4eIvnUk=";
 
   ldflags = [
     "-s"
@@ -111,7 +110,7 @@ buildGo124Module {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "-v" ];
+  versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
   passthru = {

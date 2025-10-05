@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sepaxml";
-  version = "2.6.1";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-sepaxml";
     rev = version;
-    hash = "sha256-l5UMy0M3Ovzb6rcSAteGOnKdmBPHn4L9ZWY+YGOCn40=";
+    hash = "sha256-SSkqHLP4I3C48209+89omWcD66QBJOjkUh+4qPNzOZ0=";
   };
 
   propagatedBuildInputs = [

@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "qogir-kde";
     rev = "31e7bbf94e905ef40d262d2bc6063156df252470";
     hash = "sha256-zgXwYmpD31vs2Gyg21m0MdOkwqzSn6V21Kva+nvNeVI=";
   };

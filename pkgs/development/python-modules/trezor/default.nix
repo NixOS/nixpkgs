@@ -43,7 +43,8 @@ buildPythonPackage rec {
     shamir-mnemonic
     slip10
     typing-extensions
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -9,34 +9,35 @@
 
 buildPythonPackage rec {
   pname = "airium";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "kamichal";
     repo = "airium";
-    rev = "v${version}";
-    hash = "sha256-qAU+rmj2ZHw7KdxVvRyponcPiRcyENfDyW1y9JTiwsY=";
+    tag = "v${version}";
+    hash = "sha256-sXyqGYBjyQ3Ig1idw+omrjj+ElknN9oemzob7NxFppo=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     beautifulsoup4
+    pytestCheckHook
   ];
 
-  # tests require internet access, broken in sandbox
   disabledTests = [
+    # Tests require internet access, broken in sandbox
     "test_get_bad_content_type"
     "test_translate_remote_file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bidirectional HTML-python translator";
-    mainProgram = "airium";
     homepage = "https://gitlab.com/kamichal/airium";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hulr ];
+    changelog = "https://gitlab.com/kamichal/airium/-/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hulr ];
+    mainProgram = "airium";
   };
 }

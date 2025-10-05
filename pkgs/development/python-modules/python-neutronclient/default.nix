@@ -1,13 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   # Build and Runtime
   pbr,
   cliff,
   debtcollector,
-  iso8601,
   netaddr,
   openstacksdk,
   osc-lib,
@@ -25,7 +24,6 @@
   oslotest,
   osprofiler,
   python-openstackclient,
-  subunit,
   requests-mock,
   stestr,
   testtools,
@@ -35,13 +33,17 @@
 
 buildPythonPackage rec {
   pname = "python-neutronclient";
-  version = "11.4.0";
+  version = "11.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h0Ehk2Lkv5wuQ/LmyuTUmR7Y+d+QY/Q0CKC2WLA9YuI=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-neutronclient";
+    tag = version;
+    hash = "sha256-nz7KiFe8IWJypGCjFgrEgGTEsC0xlW3YG/QRNJUzcpc=";
   };
+
+  env.PBR_VERSION = version;
 
   build-system = [
     setuptools
@@ -51,7 +53,6 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     debtcollector
-    iso8601
     netaddr
     openstacksdk
     osc-lib
@@ -71,7 +72,6 @@ buildPythonPackage rec {
     oslotest
     osprofiler
     python-openstackclient
-    subunit
     requests-mock
     stestr
     testtools
@@ -93,6 +93,6 @@ buildPythonPackage rec {
     description = "Python bindings for the OpenStack Networking API";
     homepage = "https://github.com/openstack/python-neutronclient/";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

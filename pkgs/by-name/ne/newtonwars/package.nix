@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "newtonwars";
-  version = "unstable-2023-04-08";
+  version = "0-unstable-2023-04-08";
 
   src = fetchFromGitHub {
     owner = "Draradech";

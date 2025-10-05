@@ -13,12 +13,11 @@
   libjpeg,
   libpng,
   libtool,
+  makeWrapper,
   pango,
   bash,
   bison,
   xorg,
-  ApplicationServices,
-  Foundation,
   python3,
   withXorg ? true,
 
@@ -44,42 +43,32 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    makeWrapper
     pkg-config
     python3
     bison
     flex
   ];
 
-  buildInputs =
-    [
-      libpng
-      libjpeg
-      expat
-      fontconfig
-      gd
-      gts
-      pango
-      bash
-    ]
-    ++ optionals withXorg (
-      with xorg;
-      [
-        libXrender
-        libXaw
-        libXpm
-      ]
-    )
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      Foundation
-    ];
+  buildInputs = [
+    libpng
+    libjpeg
+    expat
+    fontconfig
+    gd
+    gts
+    pango
+    bash
+  ]
+  ++ optionals withXorg (with xorg; [ libXrender ]);
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ optional (xorg == null) "--without-x";
+  ]
+  ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 
@@ -93,9 +82,11 @@ stdenv.mkDerivation rec {
 
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/vimdot \
-      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
-      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
-      --replace /usr/bin/vimdot $out/bin/vimdot \
+      --replace-warn '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace-warn '"/usr/bin/vim"' '"$(command -v vim)"' \
+      --replace-warn /usr/bin/vimdot $out/bin/vimdot
+
+    wrapProgram $out/bin/vimdot --prefix PATH : "$out/bin"
   '';
 
   passthru.tests = {

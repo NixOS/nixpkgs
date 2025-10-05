@@ -24,16 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs =
-    [
-      makeBinaryWrapper
-      copyDesktopItems
-      unzip
-      imagemagick
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    copyDesktopItems
+    unzip
+    imagemagick
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -68,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "An IDE for programming in MIPS assembly language intended for educational-level use";
+    description = "IDE for programming in MIPS assembly language intended for educational-level use";
     mainProgram = "Mars";
     homepage = "https://courses.missouristate.edu/KenVollmar/MARS/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

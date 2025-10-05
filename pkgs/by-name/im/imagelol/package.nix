@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MCRedstoner2004";
     repo = "imagelol";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0978zdrfj41jsqm78afyyd1l64iki9nwjvhd8ynii1b553nn4dmd";
     fetchSubmodules = true;
   };
@@ -46,11 +46,12 @@ stdenv.mkDerivation rec {
     cp ./ImageLOL $out/bin
   '';
 
-  cmakeFlags =
-    [ (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90") ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-    ) "-DPNG_ARM_NEON=off";
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90")
+  ]
+  ++ lib.optional (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  ) "-DPNG_ARM_NEON=off";
 
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";

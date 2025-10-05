@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "4.0.1";
+  version = "4.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,10 +29,11 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = "databricks-sql-python";
     tag = "v${version}";
-    hash = "sha256-/CWaWjDlgmaUY4Z6Nb0qfQ6gQR6u4FxkM/B/nOfAAYo=";
+    hash = "sha256-CzS6aVOFkBSJ9+0KJOaJLxK2ZiRY4OybNkCX5VdybqY=";
   };
 
   pythonRelaxDeps = [
+    "pandas"
     "pyarrow"
     "thrift"
   ];
@@ -57,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "databricks" ];
 

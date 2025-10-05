@@ -3,17 +3,16 @@
   stdenv,
   fetchFromGitiles,
   cmake,
-  darwin,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aemu";
   version = "0.1.2";
 
   src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/hardware/google/aemu";
-    rev = "07ccc3ded3357e67e39104f18f35feaf8b3b6a0e";
-    hash = "sha256-H3IU9aTFSzUAqYgrtHd4F18hbhZsbOJGC4K5JwMQOOw=";
+    rev = "v${finalAttrs.version}-aemu-release";
+    hash = "sha256-8UMm2dXdvmX6rUn4wQWuqI8bamwgf0x/5BQT+7atzjY=";
   };
 
   patches = [
@@ -23,9 +22,6 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
 
   cmakeFlags = [
     "-DAEMU_COMMON_GEN_PKGCONFIG=ON"
@@ -52,4 +48,4 @@ stdenv.mkDerivation {
       "aarch64-darwin"
     ];
   };
-}
+})

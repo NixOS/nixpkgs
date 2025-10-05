@@ -20,6 +20,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-/jkZiCapmCLMp7WfgUmpsR8aNCfb3gBELlMYaC4e7zI=";
   };
 
+  patches = [
+    ./remove-setuptools-sandbox.patch
+  ];
+
   nativeBuildInputs = [
     gettext
     python3Packages.pyqt5

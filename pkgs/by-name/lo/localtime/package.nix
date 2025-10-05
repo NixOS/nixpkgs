@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "localtime";
-  version = "unstable-2022-02-20";
+  version = "0-unstable-2022-02-20";
 
   src = fetchFromGitHub {
     owner = "Stebalien";

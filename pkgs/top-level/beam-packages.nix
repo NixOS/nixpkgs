@@ -51,6 +51,7 @@ in
     # `beam.packages.erlang_27.elixir`.
     inherit (self.packages.erlang)
       elixir
+      elixir_1_19
       elixir_1_18
       elixir_1_17
       elixir_1_16
@@ -73,6 +74,4 @@ in
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
   };
-
-  __attrsFailEvaluation = true;
 }

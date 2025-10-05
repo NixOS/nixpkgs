@@ -10,25 +10,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "janet";
-  version = "1.37.1";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "janet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KwuBJY3SG5Ao/sFgjrp0pzEasdI7AAWrG49uHjVA1Rs=";
+    hash = "sha256-Hd8DueT9f7vmK0QFJdRx7FgZ8BYh5prQyM++5Yb6tg4=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace janet.1 \
-        --replace /usr/local/ $out/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # error: Socket is not connected
-      substituteInPlace meson.build \
-        --replace "'test/suite-ev.janet'," ""
-    '';
+  postPatch = ''
+    substituteInPlace janet.1 \
+      --replace /usr/local/ $out/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # error: Socket is not connected
+    substituteInPlace meson.build \
+      --replace "'test/suite-ev.janet'," ""
+  '';
 
   nativeBuildInputs = [
     meson

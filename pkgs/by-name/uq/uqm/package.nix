@@ -87,22 +87,21 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  postUnpack =
-    ''
-      mkdir -p uqm-${version}/content/packages
-      mkdir -p uqm-${version}/content/addons
-      ln -s "$content" "uqm-${version}/content/packages/uqm-${version}-content.uqm"
-      ln -s "$music" "uqm-${version}/content/addons/uqm-${version}-3domusic.uqm"
-      ln -s "$voice" "uqm-${version}/content/addons/uqm-${version}-voice.uqm"
-    ''
-    + lib.optionalString useRemixPacks (
-      lib.concatMapStrings (disc: ''
-        ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
-      '') remixPacks
-    )
-    + lib.optionalString use3DOVideos ''
-      ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
-    '';
+  postUnpack = ''
+    mkdir -p uqm-${version}/content/packages
+    mkdir -p uqm-${version}/content/addons
+    ln -s "$content" "uqm-${version}/content/packages/uqm-${version}-content.uqm"
+    ln -s "$music" "uqm-${version}/content/addons/uqm-${version}-3domusic.uqm"
+    ln -s "$voice" "uqm-${version}/content/addons/uqm-${version}-voice.uqm"
+  ''
+  + lib.optionalString useRemixPacks (
+    lib.concatMapStrings (disc: ''
+      ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
+    '') remixPacks
+  )
+  + lib.optionalString use3DOVideos ''
+    ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
+  '';
 
   postPatch = ''
     # Using _STRINGS_H as include guard conflicts with glibc.
@@ -114,11 +113,15 @@ stdenv.mkDerivation rec {
   # uqm has a 'unique' build system with a root script incidentally called
   # 'build.sh'.
   configurePhase = ''
+    runHook preConfigure
+
     echo "INPUT_install_prefix_VALUE='$out'" >> config.state
     echo "INPUT_install_bindir_VALUE='$out/bin'" >> config.state
     echo "INPUT_install_libdir_VALUE='$out/lib'" >> config.state
     echo "INPUT_install_sharedir_VALUE='$out/share'" >> config.state
     PREFIX=$out ./build.sh uqm config
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

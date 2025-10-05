@@ -27,39 +27,43 @@
   packaging,
   platformdirs,
   prettytable,
+  pyasn1,
   pyocd,
   pyserial,
   requests,
   ruamel-yaml,
   sly,
+  spsdk-mcu-link,
+  spsdk-pyocd,
   typing-extensions,
+  x690,
 
   # tests
+  cookiecutter,
   ipykernel,
   pytest-notebook,
   pytestCheckHook,
   voluptuous,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.5.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     tag = "v${version}";
-    hash = "sha256-Ua32c6hNjwfjsQIugiqtRL50AvOrPgqyKoG1Lb0NVqE=";
+    hash = "sha256-unJpJjoS0C9TKsvk9/fQO8jiIOGbgfJopeXR5FcIq/g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=72.1,<74" "setuptools"
-
-    substituteInPlace setup.py \
-      --replace-fail "setuptools>=72.1,<74" "setuptools"
+      --replace-fail "setuptools>=72.1,<74" "setuptools" \
+      --replace-fail "setuptools_scm<8.2" "setuptools_scm"
   '';
 
   build-system = [
@@ -69,8 +73,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "cryptography"
-    "requests"
+    "filelock"
+    "importlib-metadata"
     "packaging"
+    "prettytable"
+    "requests"
+    "setuptools_scm"
     "typing-extensions"
   ];
 
@@ -88,6 +96,7 @@ buildPythonPackage rec {
     click-command-tree
     click-option-group
     colorama
+    cookiecutter
     crcmod
     cryptography
     deepmerge
@@ -100,32 +109,37 @@ buildPythonPackage rec {
     packaging
     platformdirs
     prettytable
+    pyasn1
     pyocd
     pyserial
     requests
     ruamel-yaml
     sly
+    spsdk-mcu-link
+    spsdk-pyocd
     typing-extensions
+    x690
   ];
 
   pythonImportsCheck = [ "spsdk" ];
 
-  preInstallCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
-
   nativeCheckInputs = [
+    cookiecutter
     ipykernel
     pytest-notebook
     pytestCheckHook
     voluptuous
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Missing rotk private key
     "test_general_notebooks"
+
+    # Attempts to access /run
+    "test_nxpimage_famode_export_cli"
   ];
 
   meta = {

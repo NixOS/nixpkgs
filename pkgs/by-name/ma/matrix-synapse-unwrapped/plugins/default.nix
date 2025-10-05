@@ -7,4 +7,5 @@
   matrix-synapse-pam = callPackage ./pam.nix { };
   matrix-synapse-s3-storage-provider = callPackage ./s3-storage-provider.nix { };
   matrix-synapse-shared-secret-auth = callPackage ./shared-secret-auth.nix { };
+  synapse-http-antispam = callPackage ./synapse-http-antispam.nix { };
 }

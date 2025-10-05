@@ -67,43 +67,42 @@ gccStdenv.mkDerivation rec {
   # Or wrap relevant programs to add a suitable PATH ?
   #runtimeDeps = [ gnused gnugrep ];
 
-  configureFlags =
-    [
-      "--enable-targets=${gambit-params.targets}"
-      "--enable-single-host"
-      "--enable-c-opt=${optimizationSetting}"
-      "--enable-c-opt-rts=-O2"
-      "--enable-gcc-opts"
-      "--enable-trust-c-tco"
-      "--enable-shared"
-      "--enable-absolute-shared-libs" # Yes, NixOS will want an absolute path, and fix it.
-      "--enable-openssl"
-      "--enable-dynamic-clib"
-      #"--enable-default-compile-options='(compactness 9)'" # Make life easier on the JS backend
-      "--enable-default-runtime-options=${gambit-params.defaultRuntimeOptions}"
-      # "--enable-rtlib-debug" # used by Geiser, but only on recent-enough gambit, and messes js runtime
-      # "--enable-debug" # Nope: enables plenty of good stuff, but also the costly console.log
-      # "--enable-multiple-versions" # Nope, NixOS already does version multiplexing
-      # "--enable-guide"
-      # "--enable-track-scheme"
-      # "--enable-high-res-timing"
-      # "--enable-max-processors=4"
-      # "--enable-multiple-vms"
-      # "--enable-dynamic-tls"
-      # "--enable-multiple-threaded-vms"  # when SMP branch is merged in
-      # "--enable-thread-system=posix"    # default when --enable-multiple-vms is on.
-      # "--enable-profile"
-      # "--enable-coverage"
-      # "--enable-inline-jumps"
-      # "--enable-char-size=1" # default is 4
-      # "--enable-march=native" # Nope, makes it not work on machines older than the builder
-    ]
-    ++ gambit-params.extraOptions
-    # TODO: pick an appropriate architecture to optimize on on x86-64?
-    # https://gcc.gnu.org/onlinedocs/gcc-4.8.4/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
-    # ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "--enable-march=core-avx2"
-    # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
-    ++ lib.optional (!gccStdenv.hostPlatform.isDarwin) "--enable-poll";
+  configureFlags = [
+    "--enable-targets=${gambit-params.targets}"
+    "--enable-single-host"
+    "--enable-c-opt=${optimizationSetting}"
+    "--enable-c-opt-rts=-O2"
+    "--enable-gcc-opts"
+    "--enable-trust-c-tco"
+    "--enable-shared"
+    "--enable-absolute-shared-libs" # Yes, NixOS will want an absolute path, and fix it.
+    "--enable-openssl"
+    "--enable-dynamic-clib"
+    #"--enable-default-compile-options='(compactness 9)'" # Make life easier on the JS backend
+    "--enable-default-runtime-options=${gambit-params.defaultRuntimeOptions}"
+    # "--enable-rtlib-debug" # used by Geiser, but only on recent-enough gambit, and messes js runtime
+    # "--enable-debug" # Nope: enables plenty of good stuff, but also the costly console.log
+    # "--enable-multiple-versions" # Nope, NixOS already does version multiplexing
+    # "--enable-guide"
+    # "--enable-track-scheme"
+    # "--enable-high-res-timing"
+    # "--enable-max-processors=4"
+    # "--enable-multiple-vms"
+    # "--enable-dynamic-tls"
+    # "--enable-multiple-threaded-vms"  # when SMP branch is merged in
+    # "--enable-thread-system=posix"    # default when --enable-multiple-vms is on.
+    # "--enable-profile"
+    # "--enable-coverage"
+    # "--enable-inline-jumps"
+    # "--enable-char-size=1" # default is 4
+    # "--enable-march=native" # Nope, makes it not work on machines older than the builder
+  ]
+  ++ gambit-params.extraOptions
+  # TODO: pick an appropriate architecture to optimize on on x86-64?
+  # https://gcc.gnu.org/onlinedocs/gcc-4.8.4/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
+  # ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "--enable-march=core-avx2"
+  # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
+  ++ lib.optional (!gccStdenv.hostPlatform.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \

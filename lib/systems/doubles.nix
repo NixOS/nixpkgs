@@ -12,9 +12,7 @@ let
 
     # Darwin
     "x86_64-darwin"
-    "i686-darwin"
     "aarch64-darwin"
-    "armv7a-darwin"
 
     # FreeBSD
     "i686-freebsd"
@@ -47,6 +45,7 @@ let
     "mips64-linux"
     "mips64el-linux"
     "mipsel-linux"
+    "powerpc-linux"
     "powerpc64-linux"
     "powerpc64le-linux"
     "riscv32-linux"

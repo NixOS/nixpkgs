@@ -41,7 +41,7 @@ lib.makeScope pkgs.newScope (
       wingpanel-quick-settings
     ];
 
-    maintainers = lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
 
     mutter = pkgs.mutter46;
 
@@ -73,6 +73,8 @@ lib.makeScope pkgs.newScope (
     elementary-iconbrowser = callPackage ./apps/elementary-iconbrowser { };
 
     elementary-mail = callPackage ./apps/elementary-mail { };
+
+    elementary-maps = callPackage ./apps/elementary-maps { };
 
     elementary-music = callPackage ./apps/elementary-music { };
 

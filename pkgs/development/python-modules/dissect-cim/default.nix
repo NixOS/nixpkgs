@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-cim";
-  version = "3.10";
+  version = "3.12";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cim";
     tag = version;
-    hash = "sha256-7Mv8yiWEs/mj/JKDrD1BxT75tQr13VgGj0yHdRltcYM=";
+    hash = "sha256-e1G4642QeIhtKWvtfiQs3eOl+dFP/8VWZJGvO8dFWxY=";
   };
 
   build-system = [
@@ -37,6 +37,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dissect.cim" ];
+
+  # gzip.BadGzipFile: Not a gzipped file
+  doCheck = false;
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the Windows Common Information Model (CIM) database";

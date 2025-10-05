@@ -18,7 +18,6 @@
   "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
   cdk8s-cli = "cdk8s";
-  cdktf-cli = "cdktf";
   clipboard-cli = "clipboard";
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";
@@ -34,13 +33,10 @@
   lua-fmt = "luafmt";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
-  postcss-cli = "postcss";
-  prettier = "prettier";
   pulp = "pulp";
   purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
   purty = "purty";
   pscid = "pscid";
-  vscode-json-languageserver = "vscode-json-languageserver";
 }

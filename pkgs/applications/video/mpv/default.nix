@@ -39,7 +39,7 @@
   libvdpau,
   libxkbcommon,
   lua,
-  makeWrapper,
+  makeBinaryWrapper,
   libgbm,
   meson,
   mujs,
@@ -149,83 +149,81 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonAutoFeatures = "auto";
 
-  nativeBuildInputs =
-    [
-      addDriverRunpath
-      docutils # for rst2man
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      buildPackages.darwin.sigtool
-      swift
-      makeWrapper
-    ]
-    ++ lib.optionals waylandSupport [ wayland-scanner ];
+  nativeBuildInputs = [
+    addDriverRunpath
+    docutils # for rst2man
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    buildPackages.darwin.sigtool
+    swift
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals waylandSupport [ wayland-scanner ];
 
-  buildInputs =
-    [
-      bash
-      ffmpeg
-      freetype
-      libass
-      libplacebo
-      libpthreadstubs
-      libuchardet
-      luaEnv
-      python3
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals archiveSupport [ libarchive ]
-    ++ lib.optionals bluraySupport [ libbluray ]
-    ++ lib.optionals bs2bSupport [ libbs2b ]
-    ++ lib.optionals cacaSupport [ libcaca ]
-    ++ lib.optionals cddaSupport [
-      libcdio
-      libcdio-paranoia
-    ]
-    ++ lib.optionals cmsSupport [ lcms2 ]
-    ++ lib.optionals drmSupport [
-      libdrm
-      libdisplay-info
-      libgbm
-    ]
-    ++ lib.optionals dvdnavSupport [
-      libdvdnav
-      libdvdnav.libdvdread
-    ]
-    ++ lib.optionals jackaudioSupport [ libjack2 ]
-    ++ lib.optionals javascriptSupport [ mujs ]
-    ++ lib.optionals openalSupport [ openalSoft ]
-    ++ lib.optionals pipewireSupport [ pipewire ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals rubberbandSupport [ rubberband ]
-    ++ lib.optionals sdl2Support [ SDL2 ]
-    ++ lib.optionals sixelSupport [ libsixel ]
-    ++ lib.optionals vaapiSupport [ libva ]
-    ++ lib.optionals vapoursynthSupport [ vapoursynth ]
-    ++ lib.optionals vdpauSupport [ libvdpau ]
-    ++ lib.optionals vulkanSupport [
-      shaderc
-      vulkan-headers
-      vulkan-loader
-    ]
-    ++ lib.optionals waylandSupport [
-      wayland
-      wayland-protocols
-      libxkbcommon
-    ]
-    ++ lib.optionals x11Support [
-      libX11
-      libXext
-      libGL
-      libXrandr
-      libXpresent
-      libXScrnSaver
-    ]
-    ++ lib.optionals zimgSupport [ zimg ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
+  buildInputs = [
+    bash
+    ffmpeg
+    freetype
+    libass
+    libplacebo
+    libpthreadstubs
+    libuchardet
+    luaEnv
+    python3
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals archiveSupport [ libarchive ]
+  ++ lib.optionals bluraySupport [ libbluray ]
+  ++ lib.optionals bs2bSupport [ libbs2b ]
+  ++ lib.optionals cacaSupport [ libcaca ]
+  ++ lib.optionals cddaSupport [
+    libcdio
+    libcdio-paranoia
+  ]
+  ++ lib.optionals cmsSupport [ lcms2 ]
+  ++ lib.optionals drmSupport [
+    libdrm
+    libdisplay-info
+    libgbm
+  ]
+  ++ lib.optionals dvdnavSupport [
+    libdvdnav
+    libdvdnav.libdvdread
+  ]
+  ++ lib.optionals jackaudioSupport [ libjack2 ]
+  ++ lib.optionals javascriptSupport [ mujs ]
+  ++ lib.optionals openalSupport [ openalSoft ]
+  ++ lib.optionals pipewireSupport [ pipewire ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ]
+  ++ lib.optionals rubberbandSupport [ rubberband ]
+  ++ lib.optionals sdl2Support [ SDL2 ]
+  ++ lib.optionals sixelSupport [ libsixel ]
+  ++ lib.optionals vaapiSupport [ libva ]
+  ++ lib.optionals vapoursynthSupport [ vapoursynth ]
+  ++ lib.optionals vdpauSupport [ libvdpau ]
+  ++ lib.optionals vulkanSupport [
+    shaderc
+    vulkan-headers
+    vulkan-loader
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+    wayland-protocols
+    libxkbcommon
+  ]
+  ++ lib.optionals x11Support [
+    libX11
+    libXext
+    libGL
+    libXrandr
+    libXpresent
+    libXScrnSaver
+  ]
+  ++ lib.optionals zimgSupport [ zimg ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
 
   # https://github.com/mpv-player/mpv/issues/15591#issuecomment-2764797522
   # In file included from ../player/clipboard/clipboard-mac.m:19:
@@ -240,35 +238,35 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  postInstall =
-    ''
-      # Use a standard font
-      mkdir -p $out/share/mpv
-      ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
+  postInstall = ''
+    # Use a standard font
+    mkdir -p $out/share/mpv
+    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
-      pushd ../TOOLS
-      cp mpv_identify.sh umpv $out/bin/
-      popd
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      pushd $out/share/applications
+    pushd ../TOOLS
+    cp mpv_identify.sh umpv $out/bin/
+    popd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    pushd $out/share/applications
 
-      sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
-        mpv.desktop > umpv.desktop
-      printf "NoDisplay=true\n" >> umpv.desktop
-      popd
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r mpv.app $out/Applications
+    sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
+      mpv.desktop > umpv.desktop
+    printf "NoDisplay=true\n" >> umpv.desktop
+    printf "StartupNotify=false\n" >> umpv.desktop
+    popd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r mpv.app $out/Applications
 
-      # On macOS, many things won’t work properly unless `mpv(1)` is
-      # executed from the app bundle, such as spatial audio with
-      # `--ao=avfoundation`. This wrapper ensures that those features
-      # work reliably and also avoids shipping two copies of the entire
-      # `mpv` executable.
-      makeWrapper $out/Applications/mpv.app/Contents/MacOS/mpv $out/bin/mpv
-    '';
+    # On macOS, many things won’t work properly unless `mpv(1)` is
+    # executed from the app bundle, such as spatial audio with
+    # `--ao=avfoundation`. This wrapper ensures that those features
+    # work reliably and also avoids shipping two copies of the entire
+    # `mpv` executable.
+    makeWrapper $out/Applications/mpv.app/Contents/MacOS/mpv $out/bin/mpv
+  '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addDriverRunpath.
@@ -317,7 +315,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fpletz
       globin
-      ma27
       SchweGELBin
     ];
     platforms = lib.platforms.unix;

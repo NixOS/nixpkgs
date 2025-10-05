@@ -55,10 +55,19 @@ let
           were removed. Please use, respectively, {rescanIntervalS,fsWatcherEnabled,fsWatcherDelayS} instead.
         ''
         {
-          devices = map (
-            device:
-            if builtins.isString device then { deviceId = cfg.settings.devices.${device}.id; } else device
-          ) folder.devices;
+          devices =
+            let
+              folderDevices = folder.devices;
+            in
+            map (
+              device:
+              if builtins.isString device then
+                { deviceId = cfg.settings.devices.${device}.id; }
+              else if builtins.isAttrs device then
+                { deviceId = cfg.settings.devices.${device.name}.id; } // device
+              else
+                throw "Invalid type for devices in folder '${folderName}'; expected list or attrset."
+            ) folderDevices;
         }
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
@@ -128,9 +137,79 @@ let
               # don't exist in the array given. That's why we use here `POST`, and
               # only if s.override == true then we DELETE the relevant folders
               # afterwards.
-              (map (new_cfg: ''
-                curl -d ${lib.escapeShellArg (builtins.toJSON new_cfg)} -X POST ${s.baseAddress}
-              ''))
+              (map (
+                new_cfg:
+                let
+                  jsonPreSecretsFile = pkgs.writeTextFile {
+                    name = "${conf_type}-${new_cfg.id}-conf-pre-secrets.json";
+                    text = builtins.toJSON new_cfg;
+                  };
+                  injectSecretsJqCmd =
+                    {
+                      # There are no secrets in `devs`, so no massaging needed.
+                      "devs" = "${jq} .";
+                      "dirs" =
+                        let
+                          folder = new_cfg;
+                          devicesWithSecrets = lib.pipe folder.devices [
+                            (lib.filter (device: (builtins.isAttrs device) && device ? encryptionPasswordFile))
+                            (map (device: {
+                              deviceId = device.deviceId;
+                              variableName = "secret_${builtins.hashString "sha256" device.encryptionPasswordFile}";
+                              secretPath = device.encryptionPasswordFile;
+                            }))
+                          ];
+                          # At this point, `jsonPreSecretsFile` looks something like this:
+                          #
+                          #   {
+                          #     ...,
+                          #     "devices": [
+                          #       {
+                          #         "deviceId": "id1",
+                          #         "encryptionPasswordFile": "/etc/bar-encryption-password",
+                          #         "name": "..."
+                          #       }
+                          #     ],
+                          #   }
+                          #
+                          # We now generate a `jq` command that can replace those
+                          # `encryptionPasswordFile`s with `encryptionPassword`.
+                          # The `jq` command ends up looking like this:
+                          #
+                          #   jq --rawfile secret_DEADBEEF /etc/bar-encryption-password '
+                          #     .devices[] |= (
+                          #       if .deviceId == "id1" then
+                          #         del(.encryptionPasswordFile) |
+                          #         .encryptionPassword = $secret_DEADBEEF
+                          #       else
+                          #         .
+                          #       end
+                          #     )
+                          #   '
+                          jqUpdates = map (device: ''
+                            .devices[] |= (
+                              if .deviceId == "${device.deviceId}" then
+                                del(.encryptionPasswordFile) |
+                                .encryptionPassword = ''$${device.variableName}
+                              else
+                                .
+                              end
+                            )
+                          '') devicesWithSecrets;
+                          jqRawFiles = map (
+                            device: "--rawfile ${device.variableName} ${lib.escapeShellArg device.secretPath}"
+                          ) devicesWithSecrets;
+                        in
+                        "${jq} ${lib.concatStringsSep " " jqRawFiles} ${
+                          lib.escapeShellArg (lib.concatStringsSep "|" ([ "." ] ++ jqUpdates))
+                        }";
+                    }
+                    .${conf_type};
+                in
+                ''
+                  ${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}
+                ''
+              ))
               (lib.concatStringsSep "\n")
             ]
             /*
@@ -157,13 +236,14 @@ let
     +
       /*
         Now we update the other settings defined in cleanedConfig which are not
-        "folders" or "devices".
+        "folders", "devices", or "guiPasswordFile".
       */
       (lib.pipe cleanedConfig [
         builtins.attrNames
         (lib.subtractLists [
           "folders"
           "devices"
+          "guiPasswordFile"
         ])
         (map (subOption: ''
           curl -X PUT -d ${
@@ -172,6 +252,12 @@ let
         ''))
         (lib.concatStringsSep "\n")
       ])
+    +
+      # Now we hash the contents of guiPasswordFile and use the result to update the gui password
+      (lib.optionalString (cfg.guiPasswordFile != null) ''
+        ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
+        curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+      '')
     + ''
       # restart Syncthing if required
       if curl ${curlAddressArgs "/rest/config/restart-required"} |
@@ -203,6 +289,14 @@ in
         description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
+        '';
+      };
+
+      guiPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
 
@@ -257,7 +351,7 @@ in
                     };
 
                     localAnnouncePort = mkOption {
-                      type = types.nullOr types.int;
+                      type = types.nullOr types.port;
                       default = null;
                       description = ''
                         The port on which to listen and send IPv4 broadcast announcements to.
@@ -438,11 +532,48 @@ in
                       };
 
                       devices = mkOption {
-                        type = types.listOf types.str;
+                        type = types.listOf (
+                          types.oneOf [
+                            types.str
+                            (types.submodule (
+                              { ... }:
+                              {
+                                freeformType = settingsFormat.type;
+                                options = {
+                                  name = mkOption {
+                                    type = types.str;
+                                    default = null;
+                                    description = ''
+                                      The name of a device defined in the
+                                      [devices](#opt-services.syncthing.settings.devices)
+                                      option.
+                                    '';
+                                  };
+                                  encryptionPasswordFile = mkOption {
+                                    type = types.nullOr (
+                                      types.pathWith {
+                                        inStore = false;
+                                        absolute = true;
+                                      }
+                                    );
+                                    default = null;
+                                    description = ''
+                                      Path to encryption password. If set, the file will be read during
+                                      service activation, without being embedded in derivation.
+                                    '';
+                                  };
+                                };
+                              }
+                            ))
+                          ]
+                        );
                         default = [ ];
                         description = ''
                           The devices this folder should be shared with. Each device must
                           be defined in the [devices](#opt-services.syncthing.settings.devices) option.
+
+                          A list of either strings or attribute sets, where values
+                          are device names or device configurations.
                         '';
                       };
 
@@ -675,30 +806,30 @@ in
     };
   };
 
-  imports =
-    [
-      (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
-        This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
-        It can be enabled on a per-folder basis through the web interface.
-      '')
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "extraOptions" ]
-        [ "services" "syncthing" "settings" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "folders" ]
-        [ "services" "syncthing" "settings" "folders" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "devices" ]
-        [ "services" "syncthing" "settings" "devices" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "options" ]
-        [ "services" "syncthing" "settings" "options" ]
-      )
-    ]
-    ++ map
+  imports = [
+    (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
+      This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
+      It can be enabled on a per-folder basis through the web interface.
+    '')
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "extraOptions" ]
+      [ "services" "syncthing" "settings" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "folders" ]
+      [ "services" "syncthing" "settings" "folders" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "devices" ]
+      [ "services" "syncthing" "settings" "devices" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "options" ]
+      [ "services" "syncthing" "settings" "options" ]
+    )
+  ]
+  ++
+    map
       (o: mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ])
       [
         "cert"
@@ -721,6 +852,12 @@ in
           from the configuration, creating path conflicts.
         '';
       }
+      {
+        assertion = (lib.hasAttrByPath [ "gui" "password" ] cfg.settings) -> cfg.guiPasswordFile == null;
+        message = ''
+          Please use only one of services.syncthing.settings.gui.password or services.syncthing.guiPasswordFile.
+        '';
+      }
     ];
 
     networking.firewall = mkIf cfg.openDefaultPorts {
@@ -731,7 +868,8 @@ in
       ];
     };
 
-    systemd.packages = [ pkgs.syncthing ];
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       ${defaultUser} = {
@@ -757,7 +895,8 @@ in
           STNORESTART = "yes";
           STNOUPGRADE = "yes";
           inherit (cfg) all_proxy;
-        } // config.networking.proxy.envVars;
+        }
+        // config.networking.proxy.envVars;
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
@@ -770,20 +909,25 @@ in
               "+${pkgs.writers.writeBash "syncthing-copy-keys" ''
                 install -dm700 -o ${cfg.user} -g ${cfg.group} ${cfg.configDir}
                 ${optionalString (cfg.cert != null) ''
-                  install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.cert} ${cfg.configDir}/cert.pem
+                  install -Dm644 -o ${cfg.user} -g ${cfg.group} ${toString cfg.cert} ${cfg.configDir}/cert.pem
                 ''}
                 ${optionalString (cfg.key != null) ''
-                  install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
+                  install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart = ''
-            ${cfg.package}/bin/syncthing \
-              -no-browser \
-              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
-              ${escapeShellArgs cfg.extraFlags}
-          '';
+          ExecStart =
+            let
+              args = lib.escapeShellArgs (
+                (lib.cli.toGNUCommandLine { } {
+                  "no-browser" = true;
+                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+                  "config" = cfg.configDir;
+                  "data" = cfg.databaseDir;
+                })
+                ++ cfg.extraFlags
+              );
+            in
+            "${lib.getExe cfg.package} ${args}";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "6.0.1";
+  version = "6.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "TomerFi";
     repo = "aioswitcher";
     tag = version;
-    hash = "sha256-w1gTLieZkn4iGrswyqRjwMrHX9ZtEMPB2zaKblJFlSw=";
+    hash = "sha256-DtTrfwT8Xvw5byWzTGpO/o2PI7/4Zt++xgKVnNMwA1k=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -57,19 +57,18 @@ buildPythonPackage rec {
     time-machine
   ];
 
-  disabledTests =
-    [
-      # AssertionError: Expected <14:00> to be equal to <17:00>, but was not.
-      "test_schedule_parser_with_a_weekly_recurring_enabled_schedule_data"
-      "test_schedule_parser_with_a_daily_recurring_enabled_schedule_data"
-      "test_schedule_parser_with_a_partial_daily_recurring_enabled_schedule_data"
-      "test_schedule_parser_with_a_non_recurring_enabled_schedule_data"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # ssertionError: Expected <'I' format requires 0 <= number <= 4294967295> to be equal to <argument out of range>, but was not.
-      "test_minutes_to_hexadecimal_seconds_with_a_negative_value_should_throw_an_error"
-      "test_current_timestamp_to_hexadecimal_with_errornous_value_should_throw_an_error"
-    ];
+  disabledTests = [
+    # AssertionError: Expected <14:00> to be equal to <17:00>, but was not.
+    "test_schedule_parser_with_a_weekly_recurring_enabled_schedule_data"
+    "test_schedule_parser_with_a_daily_recurring_enabled_schedule_data"
+    "test_schedule_parser_with_a_partial_daily_recurring_enabled_schedule_data"
+    "test_schedule_parser_with_a_non_recurring_enabled_schedule_data"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # ssertionError: Expected <'I' format requires 0 <= number <= 4294967295> to be equal to <argument out of range>, but was not.
+    "test_minutes_to_hexadecimal_seconds_with_a_negative_value_should_throw_an_error"
+    "test_current_timestamp_to_hexadecimal_with_errornous_value_should_throw_an_error"
+  ];
 
   pythonImportsCheck = [ "aioswitcher" ];
 

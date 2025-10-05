@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-compute";
-  version = "34.0.0";
+  version = "35.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_compute";
     inherit version;
-    hash = "sha256-WM0B0CXvoChwuE2/tpg0o7I1AaE1ZYwDhU0kNOjf7h4=";
+    hash = "sha256-QxlpERNVB9HOdvCJxOV9OyJYheUSfQI74s4cWX/UQzY=";
   };
 
   build-system = [ setuptools ];

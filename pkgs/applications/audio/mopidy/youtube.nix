@@ -1,43 +1,23 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  pythonPackages,
   mopidy,
-  yt-dlp,
+  pkgs,
   extraPkgs ? pkgs: [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "mopidy-youtube";
   version = "3.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natumbri";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "mopidy-youtube";
+    tag = "v${version}";
     hash = "sha256-iFt7r8Ljymc+grNJiOClTHkZOeo7AcYpcNc8tLMPROk=";
   };
-
-  propagatedBuildInputs =
-    with python3.pkgs;
-    [
-      beautifulsoup4
-      cachetools
-      pykka
-      requests
-      ytmusicapi
-    ]
-    ++ [
-      mopidy
-      yt-dlp
-    ]
-    ++ extraPkgs pkgs;
-
-  nativeCheckInputs = with python3.pkgs; [
-    vcrpy
-    pytestCheckHook
-  ];
 
   postPatch = ''
     substituteInPlace mopidy_youtube/youtube.py \
@@ -48,6 +28,26 @@ python3.pkgs.buildPythonApplication rec {
       'patcher = mock.patch.object(youtube, "youtube_dl", spec=yt_dlp)' \
       --replace-fail '"youtube_dl_package": "youtube_dl",' '"youtube_dl_package": "yt_dlp",'
   '';
+
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
+    mopidy
+    pythonPackages.beautifulsoup4
+    pythonPackages.cachetools
+    pythonPackages.pykka
+    pythonPackages.requests
+    pythonPackages.ytmusicapi
+    pythonPackages.yt-dlp
+  ]
+  ++ extraPkgs pkgs; # should we remove this? If we do, don't forget to also change the docs!
+
+  nativeCheckInputs = with pythonPackages; [
+    vcrpy
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # Test requires a YouTube API key

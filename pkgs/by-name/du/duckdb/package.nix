@@ -40,20 +40,22 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
   ];
-  buildInputs =
-    [ openssl ] ++ lib.optionals withJdbc [ openjdk11 ] ++ lib.optionals withOdbc [ unixODBC ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals withJdbc [ openjdk11 ]
+  ++ lib.optionals withOdbc [ unixODBC ];
 
-  cmakeFlags =
-    [
-      "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
-      "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
-      "-DJDBC_DRIVER=${enableFeature withJdbc}"
-      "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
-    ]
-    ++ lib.optionals finalAttrs.doInstallCheck [
-      # development settings
-      "-DBUILD_UNITTESTS=ON"
-    ];
+  cmakeFlags = [
+    "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
+    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
+    "-DJDBC_DRIVER=${enableFeature withJdbc}"
+    "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
+  ]
+  ++ lib.optionals finalAttrs.doInstallCheck [
+    # development settings
+    "-DBUILD_UNITTESTS=ON"
+  ];
 
   doInstallCheck = true;
 
@@ -111,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
           # fails with incorrect result
           # Upstream issue https://github.com/duckdb/duckdb/issues/14294
           "test/sql/copy/file_size_bytes.test"
+          # https://github.com/duckdb/duckdb/issues/17757#issuecomment-3032080432
+          "test/issues/general/test_17757.test"
         ]
         ++ lib.optionals stdenv.hostPlatform.isAarch64 [
           "test/sql/aggregate/aggregates/test_kurtosis.test"
@@ -132,16 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
     description = "Embeddable SQL OLAP Database Management System";
     homepage = "https://duckdb.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "duckdb";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       costrouc
       cpcloud
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

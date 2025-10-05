@@ -619,15 +619,14 @@ rec {
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
       tag = "latest";
-      contents =
-        [
-          pkgs.bash
-          pkgs.coreutils
-        ]
-        ++ nonRootShadowSetup {
-          uid = 999;
-          user = "somebody";
-        };
+      contents = [
+        pkgs.bash
+        pkgs.coreutils
+      ]
+      ++ nonRootShadowSetup {
+        uid = 999;
+        user = "somebody";
+      };
     };
 
   # basic example, with cross compilation
@@ -700,7 +699,7 @@ rec {
               " --program-prefix=layeredImageWithFakeRootCommands-"
             ];
             doCheck = false;
-            versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+            versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
             meta = prevAttrs.meta // {
               mainProgram = "layeredImageWithFakeRootCommands-hello";
             };

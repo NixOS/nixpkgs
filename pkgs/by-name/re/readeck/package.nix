@@ -1,15 +1,15 @@
 {
+  lib,
   fetchFromGitea,
   fetchNpmDeps,
-  buildGoModule,
+  buildGo125Module,
   nodejs,
   npmHooks,
-  lib,
+  python3,
 }:
 
 let
-
-  file-compose = buildGoModule {
+  file-compose = buildGo125Module {
     pname = "file-compose";
     version = "unstable-2023-10-21";
 
@@ -25,21 +25,22 @@ let
   };
 in
 
-buildGoModule rec {
+buildGo125Module rec {
   pname = "readeck";
-  version = "0.17.1";
+  version = "0.20.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "readeck";
     repo = "readeck";
     tag = version;
-    hash = "sha256-+GgjR1mxD93bFNaLeDuEefPlQEV9jNgFIo8jTAxphyo=";
+    hash = "sha256-7ZLEAMma0eLrcCbwbeK8EPDY1+ZOJy3i4Rz+obDsuko=";
   };
 
   nativeBuildInputs = [
     nodejs
     npmHooks.npmConfigHook
+    (python3.withPackages (ps: with ps; [ babel ]))
   ];
 
   npmRoot = "web";
@@ -48,9 +49,12 @@ buildGoModule rec {
 
   preBuild = ''
     make web-build
+    python3 locales/messages.py compile
     ${file-compose}/bin/file-compose -format json docs/api/api.yaml docs/assets/api.json
     go run ./tools/docs docs/src docs/assets
   '';
+
+  subPackages = [ "." ];
 
   tags = [
     "netgo"
@@ -66,6 +70,7 @@ buildGoModule rec {
     "-X"
     "codeberg.org/readeck/readeck/configs.version=${version}"
   ];
+
   overrideModAttrs = oldAttrs: {
     # Do not add `npmConfigHook` to `goModules`
     nativeBuildInputs = lib.remove npmHooks.npmConfigHook oldAttrs.nativeBuildInputs;
@@ -75,18 +80,17 @@ buildGoModule rec {
 
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-7fRSkXKAMEC7rFmSF50DM66SVhV68g93PMBjrtkd9/E=";
+    hash = "sha256-/imn3IoRh6aoQFNH0yMmgYNktfkN647H4KfpcVVC728=";
   };
 
-  vendorHash = "sha256-O/ZrpT6wTtPwBDUCAmR0XHRgQmd46/MPvWNE0EvD3bg=";
+  vendorHash = "sha256-8SdDuMsFKpEhJ3qnH/9nly54A/PJCCh5xIyKNLDs740=";
 
   meta = {
-    description = "Web application that lets you save the readable content of web pages you want to keep forever.";
+    description = "Web application that lets you save the readable content of web pages you want to keep forever";
     mainProgram = "readeck";
     homepage = "https://readeck.org/";
-    changelog = "https://github.com/readeck/readeck/releases/tag/${version}";
+    changelog = "https://codeberg.org/readeck/readeck/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ julienmalka ];
   };
-
 }

@@ -4,17 +4,19 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   affine,
   dask,
   numpy,
   odc-geo,
+  odc-loader,
   pandas,
   pystac,
   rasterio,
   toolz,
+  typing-extensions,
   xarray,
 
   # optional-dependencies
@@ -29,38 +31,29 @@
 
 buildPythonPackage rec {
   pname = "odc-stac";
-  version = "0.3.11";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-stac";
     tag = "v${version}";
-    hash = "sha256-uudBzxVGt3RW4ppDrFYfA9LMa2xPfs3FTBzVS19FjB4=";
+    hash = "sha256-Ekyavcin13B4DAxv0/XG5QTBuLE7PRospAXe40fHeX0=";
   };
 
-  # ImportError: cannot import name 'quote' from 'dask.base'
-  # https://github.com/dask/dask/issues/11843
-  postPatch = ''
-    substituteInPlace odc/loader/_builder.py \
-      --replace-fail \
-        "from dask.base import quote, tokenize" \
-        "from dask.base import tokenize; from dask.core import quote"
-  '';
-
-  build-system = [
-    setuptools
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     affine
     dask
     numpy
     odc-geo
+    odc-loader
     pandas
     pystac
     rasterio
     toolz
+    typing-extensions
     xarray
   ];
 
@@ -73,9 +66,10 @@ buildPythonPackage rec {
     distributed
     pystac-client
     pytestCheckHook
-  ] ++ optional-dependencies.botocore;
+  ]
+  ++ optional-dependencies.botocore;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # pystac href error (possible related to network)
@@ -85,19 +79,14 @@ buildPythonPackage rec {
     # urllib url open error
     "test_norm_geom"
     "test_output_geobox"
-    "test_mem_reader"
-    "test_memreader_zarr"
-
   ];
 
-  pythonImportsCheck = [
-    "odc.stac"
-  ];
+  pythonImportsCheck = [ "odc.stac" ];
 
   meta = {
-    description = "Load STAC items into xarray Datasets.";
+    description = "Load STAC items into xarray Datasets";
     homepage = "https://github.com/opendatacube/odc-stac/";
-    changelog = "https://github.com/opendatacube/odc-stac/tag/v${version}";
+    changelog = "https://github.com/opendatacube/odc-stac/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };

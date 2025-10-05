@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   openssl,
-  darwin,
   pkg-config,
   testers,
   fetchzip,
@@ -13,27 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripunzip";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ripunzip";
     rev = "v${version}";
-    hash = "sha256-Y4p3CFE8MyEQJ/af0g2/EL4kto/VZABvD5OS0rRuo8g=";
+    hash = "sha256-giNaTALPZYOfQ+kPyQufbRTdTwwKLK7iDvg50YNfzDg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lhStxg8H2T29eFYDFAZhFjOyH4hfRwEmcewm7Ec/oTw=";
+  cargoHash = "sha256-uz07yZBkmBTEGB64rhBYQ2iL0KbrY4UAM96utv8HCSE=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
   checkFlags = [

@@ -4,9 +4,7 @@ To facilitate network configuration, some desktop environments use
 NetworkManager. You can enable NetworkManager by setting:
 
 ```nix
-{
-  networking.networkmanager.enable = true;
-}
+{ networking.networkmanager.enable = true; }
 ```
 
 some desktop managers (e.g., GNOME) enable NetworkManager automatically
@@ -16,9 +14,7 @@ All users that should have permission to change network settings must
 belong to the `networkmanager` group:
 
 ```nix
-{
-  users.users.alice.extraGroups = [ "networkmanager" ];
-}
+{ users.users.alice.extraGroups = [ "networkmanager" ]; }
 ```
 
 NetworkManager is controlled using either `nmcli` or `nmtui`
@@ -38,7 +34,9 @@ NetworkManager to ignore those interfaces like:
 ```nix
 {
   networking.networkmanager.unmanaged = [
-     "*" "except:type:wwan" "except:type:gsm"
+    "*"
+    "except:type:wwan"
+    "except:type:gsm"
   ];
 }
 ```

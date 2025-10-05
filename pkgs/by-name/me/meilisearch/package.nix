@@ -6,24 +6,20 @@
   nix-update-script,
 }:
 
-let
-  version = "1.11.3";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meilisearch";
-  inherit version;
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meiliSearch";
-    tag = "v${version}";
-    hash = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RWHu77/GoSMzRU7KyKmu23DFwWn6RD3MUWUc5ICY1d8=";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cEJTokDJQuc9Le5+3ObMDNJmEhWEb+Qh0TV9xZkD9D8=";
+  cargoHash = "sha256-xKBYumdb1vJS+UQF3yD/p+7FvWRfBKbLjOFiT7DVJ+o=";
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
@@ -44,7 +40,7 @@ rustPlatform.buildRustPackage {
     description = "Powerful, fast, and an easy to use search engine";
     mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
-    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
+    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
@@ -57,4 +53,4 @@ rustPlatform.buildRustPackage {
       "x86_64-darwin"
     ];
   };
-}
+})

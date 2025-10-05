@@ -1,24 +1,24 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
-  notation,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "notation";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "notaryproject";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-KxxksliL2ZxbvwbLKB81Lhpvjab9nm4o3QBT2CVFwDw=";
+    repo = "notation";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l9A5AwKJ/atN92Oral6PRH2nCbMJ+/ST9weXYRZXWms=";
   };
 
-  vendorHash = "sha256-Mjuw0J5ITLcTWbCUYKLBDrK84wrN7KC05dn0+eBqb9s=";
+  vendorHash = "sha256-WFcy7to3bV3V3bBto5F175PEIxrG9Tj7MuLeBXdSvaM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,11 +30,11 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/notaryproject/notation/internal/version.Version=${version}"
+    "-X github.com/notaryproject/notation/internal/version.Version=${finalAttrs.version}"
     "-X github.com/notaryproject/notation/internal/version.BuildMetadata="
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd notation \
       --bash <($out/bin/notation completion bash) \
       --fish <($out/bin/notation completion fish) \
@@ -42,7 +42,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = notation;
+    package = finalAttrs.finalPackage;
     command = "notation version";
   };
 
@@ -50,7 +50,7 @@ buildGoModule rec {
     description = "CLI tool to sign and verify OCI artifacts and container images";
     homepage = "https://notaryproject.dev/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "notation";
   };
-}
+})

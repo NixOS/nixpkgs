@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "feather-wallet";
     repo = "feather";
-    rev = finalAttrs.version;
-    hash = "sha256-c7qa6MmENCEjZz8b/xyCcCO2+iI5dI8hJynBW3haSWE=";
+    tag = finalAttrs.version;
+    hash = "sha256-DZBRZBcoba32Z/bFThn/9siC8VESg5gdfoFO4Nw8JqM=";
     fetchSubmodules = true;
   };
 
@@ -40,27 +40,26 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      bc-ur
-      boost186
-      hidapi
-      libsodium
-      libusb1
-      openssl
-      protobuf
-      qrencode
-      unbound
-      zxing-cpp
-    ]
-    ++ (with qt6; [
-      qtbase
-      qtmultimedia
-      qtsvg
-      qttools
-      qtwayland
-      qtwebsockets
-    ]);
+  buildInputs = [
+    bc-ur
+    boost186
+    hidapi
+    libsodium
+    libusb1
+    openssl
+    protobuf
+    qrencode
+    unbound
+    zxing-cpp
+  ]
+  ++ (with qt6; [
+    qtbase
+    qtmultimedia
+    qtsvg
+    qttools
+    qtwayland
+    qtwebsockets
+  ]);
 
   cmakeFlags = [
     "-DProtobuf_INCLUDE_DIR=${lib.getDev protobuf}/include"

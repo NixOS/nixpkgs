@@ -10,7 +10,7 @@ container, so checking early whether it exists will fail.
  1 file changed, 2 insertions(+)
 
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 500725d35f..2b735e4df4 100644
+index 6f90f2f418..74b2a237d3 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -6189,6 +6189,7 @@ static int run(int argc, char *argv[]) {

@@ -20,7 +20,7 @@ callPackage ./build.nix rec {
     # Fix case-sensitive filesystems issue when save/load games
     (fetchpatch2 {
       url = "https://github.com/alexbatalov/fallout2-ce/commit/d843a662b3ceaf01ac363e9abb4bfceb8b805c36.patch";
-      sha256 = "sha256-u4E9+DE6sGYikIGwKDmSBj3ErCfIo6YzIw2eMiqXw/E=";
+      sha256 = "sha256-r4sfl1JolWRNd2xcf4BMCxZw3tbN21UJW4TdyIbQzgs=";
     })
   ];
 

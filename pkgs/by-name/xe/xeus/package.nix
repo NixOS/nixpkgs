@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xeus";
-  version = "5.2.0";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
-    repo = finalAttrs.pname;
+    repo = "xeus";
     tag = finalAttrs.version;
-    hash = "sha256-/4SVrfPU5pkO3PNrhgdCcNUts++Or7AeMqO/PorsBdw=";
+    hash = "sha256-7hT2Ellgut25R3R28nRKd6/kKmfQf9NCoJ2BV9ZGt8I=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.14.0";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "NeuralEnsemble";
     repo = "python-neo";
     tag = version;
-    hash = "sha256-lLs70BsbFxTmd/qR0EqsceG+fAKI1P+em5Ix2kM9w/w=";
+    hash = "sha256-THAdUFCbteiUdfhjLzl6ocM2I0zFKHfFxJExCnK1z1Y=";
   };
 
   build-system = [ setuptools ];

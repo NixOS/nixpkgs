@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     sed -i s,data/,$out/share/teetertorture/, src/teetertorture.c
+
+    runHook postConfigure
   '';
 
   patchPhase = ''
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.newbreedsoftware.com/teetertorture/";
     description = "Simple shooting game with your cannon is sitting atop a teeter totter";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    inherit (SDL.meta) platforms;
     mainProgram = "teetertorture";
   };
 }

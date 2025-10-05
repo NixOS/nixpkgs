@@ -113,7 +113,8 @@ in
       path = [
         pkgs.findutils
         pkgs.coreutils
-      ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      ]
+      ++ lib.optional cfg.imagemagick pkgs.imagemagick;
 
       serviceConfig = {
         User = cfg.user;

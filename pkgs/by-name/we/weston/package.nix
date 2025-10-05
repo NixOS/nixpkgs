@@ -73,61 +73,59 @@ stdenv.mkDerivation rec {
     python3
     wayland-scanner
   ];
-  buildInputs =
-    [
-      cairo
-      libGL
-      libdisplay-info
-      libdrm
-      libevdev
-      libinput
-      libxkbcommon
-      libgbm
-      seatd
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional lcmsSupport lcms2
-    ++ lib.optional pangoSupport pango
-    ++ lib.optional pipewireSupport pipewire
-    ++ lib.optional rdpSupport freerdp
-    ++ lib.optionals remotingSupport [
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-    ]
-    ++ lib.optional vaapiSupport libva
-    ++ lib.optionals vncSupport [
-      aml
-      neatvnc
-      pam
-    ]
-    ++ lib.optional webpSupport libwebp
-    ++ lib.optionals xwaylandSupport [
-      libXcursor
-      xcbutilcursor
-      xwayland
-    ];
+  buildInputs = [
+    cairo
+    libGL
+    libdisplay-info
+    libdrm
+    libevdev
+    libinput
+    libxkbcommon
+    libgbm
+    seatd
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional jpegSupport libjpeg
+  ++ lib.optional lcmsSupport lcms2
+  ++ lib.optional pangoSupport pango
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional rdpSupport freerdp
+  ++ lib.optionals remotingSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ]
+  ++ lib.optional vaapiSupport libva
+  ++ lib.optionals vncSupport [
+    aml
+    neatvnc
+    pam
+  ]
+  ++ lib.optional webpSupport libwebp
+  ++ lib.optionals xwaylandSupport [
+    libXcursor
+    xcbutilcursor
+    xwayland
+  ];
 
-  mesonFlags =
-    [
-      (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
-      (lib.mesonBool "backend-pipewire" pipewireSupport)
-      (lib.mesonBool "backend-rdp" rdpSupport)
-      (lib.mesonBool "backend-vnc" vncSupport)
-      (lib.mesonBool "color-management-lcms" lcmsSupport)
-      (lib.mesonBool "demo-clients" demoSupport)
-      (lib.mesonBool "image-jpeg" jpegSupport)
-      (lib.mesonBool "image-webp" webpSupport)
-      (lib.mesonBool "pipewire" pipewireSupport)
-      (lib.mesonBool "remoting" remotingSupport)
-      (lib.mesonOption "simple-clients" "")
-      (lib.mesonBool "test-junit-xml" false)
-      (lib.mesonBool "xwayland" xwaylandSupport)
-    ]
-    ++ lib.optionals xwaylandSupport [
-      (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
-    ];
+  mesonFlags = [
+    (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
+    (lib.mesonBool "backend-pipewire" pipewireSupport)
+    (lib.mesonBool "backend-rdp" rdpSupport)
+    (lib.mesonBool "backend-vnc" vncSupport)
+    (lib.mesonBool "color-management-lcms" lcmsSupport)
+    (lib.mesonBool "demo-clients" demoSupport)
+    (lib.mesonBool "image-jpeg" jpegSupport)
+    (lib.mesonBool "image-webp" webpSupport)
+    (lib.mesonBool "pipewire" pipewireSupport)
+    (lib.mesonBool "remoting" remotingSupport)
+    (lib.mesonOption "simple-clients" "")
+    (lib.mesonBool "test-junit-xml" false)
+    (lib.mesonBool "xwayland" xwaylandSupport)
+  ]
+  ++ lib.optionals xwaylandSupport [
+    (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
+  ];
 
   passthru.providedSessions = [ "weston" ];
 
@@ -148,7 +146,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "weston";
     maintainers = with maintainers; [
-      primeos
       qyliss
     ];
   };

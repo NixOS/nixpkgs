@@ -56,7 +56,7 @@ let
     pkgs.writeTextFile {
       inherit name;
       text = "<?php\n${text}";
-      checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+      checkPhase = "${pkgs.php84}/bin/php --syntax-check $target";
     };
 
   mkPhpValue =
@@ -368,8 +368,7 @@ let
         };
 
         phpPackage = mkPackageOption pkgs "php" {
-          default = "php81";
-          example = "php82";
+          default = "php84";
         };
 
         phpOptions = mkOption {
@@ -494,7 +493,8 @@ in
           settings = {
             "listen.owner" = webserver.user;
             "listen.group" = webserver.group;
-          } // cfg.poolConfig;
+          }
+          // cfg.poolConfig;
         })
       ) eachSite;
 

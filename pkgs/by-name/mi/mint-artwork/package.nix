@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
-  version = "1.8.9";
+  version = "1.9.2";
 
   src = fetchurl {
     urls = [
       "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
-      "https://web.archive.org/web/20250111022232/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
+      "https://web.archive.org/web/20250807131013/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
     ];
-    hash = "sha256-MKXKne3wqxfIqmOawpmZbX/NRVSA5fBetpSE+mr/eqA=";
+    hash = "sha256-zmVpy7T1AyVE5nwD0aZ//9kIFK2IYjl3rSq+9bcHPDE=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
       cc-by-40
     ]; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

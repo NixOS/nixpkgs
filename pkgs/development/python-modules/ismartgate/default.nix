@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "ismartgate";
     tag = "v${version}";
     hash = "sha256-8c05zzDav87gTL2CI7Aoi6ALwLw76H9xj+90xH31hdE=";
   };

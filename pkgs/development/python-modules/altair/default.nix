@@ -44,7 +44,8 @@ buildPythonPackage rec {
     packaging
     pandas
     toolz
-  ] ++ lib.optional (pythonOlder "3.14") typing-extensions;
+  ]
+  ++ lib.optional (pythonOlder "3.14") typing-extensions;
 
   nativeCheckInputs = [
     ipython

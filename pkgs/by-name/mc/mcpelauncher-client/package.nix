@@ -20,12 +20,13 @@
   fetchzip,
   zenity,
   xdg-utils,
+  sdl3,
 }:
 
 # Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.2.0-qt6";
+  version = "1.4.0-qt6";
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -33,7 +34,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-SyIiBUZCGcV4NFD7IcQv8YdRkDGhkBeqE0qVsKp+44Y=";
+    hash = "sha256-2YmsxcR4EipnBIBqoM8g6hOCCh1WKooukqXhP/1X6tU=";
   };
 
   patches = [ ./dont_download_glfw_client.patch ];
@@ -51,37 +52,36 @@ clangStdenv.mkDerivation (finalAttrs: {
   # FORTIFY_SOURCE breaks libc_shim and the project will fail to compile
   hardeningDisable = [ "fortify" ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-      libpng
-      libglvnd
-      xorg.libX11
-      xorg.libXi
-      xorg.libXtst
-      libevdev
-      curl
-      pulseaudio
-      glfw
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.qtbase
-      qt6.qttools
-      qt6.qtwayland
-    ]
-    ++ lib.optionals withQtWebview [
-      qt6.qtwebengine
-    ];
+  buildInputs = [
+    openssl
+    zlib
+    libpng
+    libglvnd
+    xorg.libX11
+    xorg.libXi
+    xorg.libXtst
+    libevdev
+    curl
+    pulseaudio
+    glfw
+    sdl3
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwayland
+  ]
+  ++ lib.optionals withQtWebview [
+    qt6.qtwebengine
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)

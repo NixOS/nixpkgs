@@ -12,14 +12,14 @@
 let
   textx = buildPythonPackage rec {
     pname = "textx";
-    version = "4.0.1";
+    version = "4.2.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = version;
-      hash = "sha256-qiKOG6B7yWWzkL7bmcRAVv6AOHKTWmrlrsJlXD5RoaQ=";
+      hash = "sha256-AlFXaB+D03GAsXNd2GnFOLxo2g5BjWAu6K1/GsncwLw=";
     };
 
     outputs = [
@@ -62,7 +62,7 @@ let
       mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";
       license = licenses.mit;
-      maintainers = with maintainers; [ yuu ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -85,7 +85,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -108,7 +108,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -128,7 +128,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -148,7 +148,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -168,7 +168,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX sub-command for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 in

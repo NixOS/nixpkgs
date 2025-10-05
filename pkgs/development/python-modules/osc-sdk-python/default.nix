@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.31.0";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
     tag = "v${version}";
-    hash = "sha256-5Ws/yPIw0H+FV9oRZLsywap1eqIkCOEK1yGhk0Ft6Ic=";
+    hash = "sha256-PzTdQ5/ZtMAJ+niQNTlXCstjqhpuSCnRo0CybUfsz7s=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   # Only keep test not requiring access and secret keys
-  pytestFlagsArray = [ "tests/test_net.py" ];
+  enabledTestPaths = [ "tests/test_net.py" ];
 
   pythonImportsCheck = [ "osc_sdk_python" ];
 
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "SDK to perform actions on Outscale API";
     homepage = "https://github.com/outscale/osc-sdk-python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    maintainers = [ ];
   };
 }

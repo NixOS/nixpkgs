@@ -9,21 +9,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koto";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "koto-lang";
     repo = "koto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T8SjNeoTANAcT+uAdgzBRMK0LbC038cpKFoCFHgsp8k=";
+    hash = "sha256-KdwKJ0ZKKHU+Fe/TTIITHOyRH9uoJ3LU3qXqUwpJI6g=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kIjDY27ot1dN3L8TKaBEQWDzo7+QIFvhdmi1YN9TofI=";
+  cargoHash = "sha256-5uWCpTnGbqoogOxSD2GcXMjQpoYIp1GfB9k4bd+Easc=";
 
   postPatch = ''
-    ${lib.getExe' yq "tomlq"} -ti 'del(.bench)' crates/koto/Cargo.toml
+    tomlq -ti 'del(.bench)' crates/koto/Cargo.toml
   '';
+
+  nativeBuildInputs = [
+    yq # for `tomlq`
+  ];
 
   cargoBuildFlags = [ "--package=koto_cli" ];
 
@@ -36,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Simple, expressive, embeddable programming language";
     homepage = "https://github.com/koto-lang/koto";
-    changelog = "https://github.com/koto-lang/koto/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/koto-lang/koto/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "koto";

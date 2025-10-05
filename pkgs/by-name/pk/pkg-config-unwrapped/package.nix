@@ -25,9 +25,11 @@ stdenv.mkDerivation rec {
   # Process Requires.private properly, see
   # http://bugs.freedesktop.org/show_bug.cgi?id=4738, migrated to
   # https://gitlab.freedesktop.org/pkg-config/pkg-config/issues/28
-  patches =
-    lib.optional (!vanilla) ./requires-private.patch
-    ++ lib.optional stdenv.hostPlatform.isCygwin ./2.36.3-not-win32.patch;
+  patches = [
+    ./gcc-15.patch
+  ]
+  ++ lib.optional (!vanilla) ./requires-private.patch
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./2.36.3-not-win32.patch;
 
   # These three tests fail due to a (desired) behavior change from our ./requires-private.patch
   postPatch =
@@ -42,21 +44,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
-  configureFlags =
-    [ "--with-internal-glib" ]
-    ++ lib.optionals (stdenv.hostPlatform.isSunOS) [
-      "--with-libiconv=gnu"
-      "--with-system-library-path"
-      "--with-system-include-path"
-      "CFLAGS=-DENABLE_NLS"
-    ]
-    # Can't run these tests while cross-compiling
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "glib_cv_stack_grows=no"
-      "glib_cv_uscore=no"
-      "ac_cv_func_posix_getpwuid_r=yes"
-      "ac_cv_func_posix_getgrgid_r=yes"
-    ];
+  configureFlags = [
+    "--with-internal-glib"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isSunOS) [
+    "--with-libiconv=gnu"
+    "--with-system-library-path"
+    "--with-system-include-path"
+    "CFLAGS=-DENABLE_NLS"
+  ]
+  # Can't run these tests while cross-compiling
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "glib_cv_stack_grows=no"
+    "glib_cv_uscore=no"
+    "ac_cv_func_posix_getpwuid_r=yes"
+    "ac_cv_func_posix_getgrgid_r=yes"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # Silence "incompatible integer to pointer conversion passing 'gsize'" when building with Clang.

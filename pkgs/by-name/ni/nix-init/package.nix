@@ -11,12 +11,11 @@
   openssl,
   zlib,
   zstd,
-  stdenv,
   spdx-license-list-data,
   nix,
   nurl,
-  testers,
-  nix-init,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -25,18 +24,16 @@ let
   };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-init";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0RLEPVtYnwYH+pMnpO0/Evbp7x9d0RMobOVAqwgMJz4=";
   };
-
-  useFetchCargoVendor = true;
 
   cargoHash = "sha256-kk/SaP/ZtSorSSewAdf0Bq7tiMhB5dZb8v9MlsaUa0M=";
 
@@ -87,16 +84,18 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  passthru.tests.version = testers.testVersion {
-    package = nix-init;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command line tool to generate Nix packages from URLs";
     mainProgram = "nix-init";
     homepage = "https://github.com/nix-community/nix-init";
-    changelog = "https://github.com/nix-community/nix-init/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/nix-community/nix-init/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
-}
+})

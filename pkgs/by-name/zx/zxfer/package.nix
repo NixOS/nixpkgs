@@ -77,11 +77,11 @@ resholve.mkDerivation rec {
     execer = [ "cannot:${rsync}/bin/rsync" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Popular script for managing ZFS snapshot replication";
     homepage = "https://github.com/allanjude/zxfer";
     changelog = "https://github.com/allanjude/zxfer/releases/tag/v${version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "zxfer";
   };

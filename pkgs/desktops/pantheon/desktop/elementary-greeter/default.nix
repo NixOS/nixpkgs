@@ -15,10 +15,12 @@
   granite,
   libgee,
   libhandy,
+  gala,
   gnome-desktop,
   gnome-settings-daemon,
   mutter,
   elementary-icon-theme,
+  elementary-settings-daemon,
   wingpanel-with-indicators,
   elementary-gtk-theme,
   nixos-artwork,
@@ -32,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
-    rev = version;
-    sha256 = "sha256-T/tI8WRVbTLdolDYa98M2Vm26p0xhGiai74lXAlpQ8k=";
+    tag = version;
+    hash = "sha256-lOk5H1uuaf2Q+z+hRLyhtKAHq+3ibtBzWI7r87KpKgQ=";
   };
 
   patches = [
@@ -64,6 +66,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     elementary-icon-theme
+    elementary-settings-daemon
+    gala # for io.elementary.desktop.background
     gnome-desktop
     gnome-settings-daemon
     gdk-pixbuf
@@ -128,7 +132,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.greeter";
   };
 }

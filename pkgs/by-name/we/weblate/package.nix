@@ -16,8 +16,8 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_5;
-      sentry-sdk = prev.sentry-sdk_2;
+      # https://github.com/django-crispy-forms/crispy-bootstrap3/issues/12
+      django = prev.django_5_1;
       djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
         # https://github.com/encode/django-rest-framework/discussions/9342
         disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
@@ -27,7 +27,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.10.4";
+  version = "5.13.3";
 
   pyproject = true;
 
@@ -40,13 +40,8 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-ReODTMaKMkvbaR8JETSeOrXxQIsL1Vy1pjKYWo5mw+A=";
+    hash = "sha256-PM5h9RqCMdt0FODE7MoCWv9I+RMFTgjDmSrid59cHOA=";
   };
-
-  patches = [
-    # FIXME This shouldn't be necessary and probably has to do with some dependency mismatch.
-    ./cache.lock.patch
-  ];
 
   build-system = with python.pkgs; [ setuptools ];
 
@@ -72,6 +67,10 @@ python.pkgs.buildPythonApplication rec {
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
 
+  pythonRelaxDeps = [
+    "rapidfuzz"
+  ];
+
   dependencies =
     with python.pkgs;
     [
@@ -82,13 +81,15 @@ python.pkgs.buildPythonApplication rec {
       celery
       certifi
       charset-normalizer
-      django-crispy-bootstrap3
+      crispy-bootstrap3
+      crispy-bootstrap5
       cryptography
       cssselect
       cython
       cyrtranslit
       dateparser
       diff-match-patch
+      disposable-email-domains
       django-appconf
       django-celery-beat
       django-compressor
@@ -124,7 +125,6 @@ python.pkgs.buildPythonApplication rec {
       pyicumessageformat
       pyparsing
       python-dateutil
-      python-redis-lock
       qrcode
       rapidfuzz
       redis
@@ -134,6 +134,7 @@ python.pkgs.buildPythonApplication rec {
       siphashc
       social-auth-app-django
       social-auth-core
+      standardwebhooks
       tesserocr
       translate-toolkit
       translation-finder
@@ -143,7 +144,6 @@ python.pkgs.buildPythonApplication rec {
       weblate-schemas
     ]
     ++ django.optional-dependencies.argon2
-    ++ python-redis-lock.optional-dependencies.django
     ++ celery.optional-dependencies.redis
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi;
@@ -171,14 +171,15 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    license = with licenses; [
+    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${src.tag}";
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

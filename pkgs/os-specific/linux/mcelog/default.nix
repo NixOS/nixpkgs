@@ -5,27 +5,28 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mcelog";
-  version = "180";
+  version = "207";
 
   src = fetchFromGitHub {
     owner = "andikleen";
     repo = "mcelog";
-    rev = "v${version}";
-    sha256 = "1xy1082c67yd48idg5vwvrw7yx74gn6jj2d9c67d0rh6yji091ki";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZHhY7pqDuez3QtbhjDr2D/isw+gsoVdfB5WRRchdh6E=";
   };
 
   postPatch = ''
+    patchShebangs .
     for i in mcelog.conf paths.h; do
-      substituteInPlace $i --replace /etc $out/etc
+      substituteInPlace $i --replace-fail "/etc" "$out/etc"
     done
     touch mcelog.conf.5 # avoid regeneration requiring Python
 
-    substituteInPlace Makefile --replace '"unknown"' '"${version}"'
+    substituteInPlace Makefile --replace-fail '"unknown"' '"${finalAttrs.version}"'
 
     for i in triggers/*; do
-      substituteInPlace $i --replace 'logger' '${util-linux}/bin/logger'
+      substituteInPlace $i --replace-fail 'logger' '${util-linux}/bin/logger'
     done
   '';
 
@@ -40,10 +41,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/lib/systemd/system
     substitute mcelog.service $out/lib/systemd/system/mcelog.service \
-      --replace /usr/sbin $out/bin
+      --replace-fail "/usr/sbin" "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
     mainProgram = "mcelog";
     longDescription = ''
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
       errors are logged to /var/log/mcelog or syslog or the journal.
     '';
     homepage = "http://mcelog.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

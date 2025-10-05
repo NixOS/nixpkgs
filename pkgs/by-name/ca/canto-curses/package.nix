@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   python3Packages,
   readline,
   ncurses,
@@ -9,6 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.9";
+  format = "pyproject";
   pname = "canto-curses";
 
   src = fetchFromGitHub {
@@ -17,6 +19,18 @@ python3Packages.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "1vzb9n1j4gxigzll6654ln79lzbrrm6yy0lyazd9kldyl349b8sr";
   };
+
+  # Fixes the issue found here https://github.com/themoken/canto-curses/issues/59
+  patches = [
+    (fetchurl {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/canto-curses/-/raw/6daa56bc5baebb2444c368a8208666ef484a6fc0/fix-build.patch";
+      hash = "sha256-2TMNmwjUAGyenSDqxfI+U2hNeDZaj2CivfTfpX7CKgY=";
+    })
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   buildInputs = [
     readline

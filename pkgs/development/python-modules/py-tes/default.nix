@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "py-tes";
-  version = "1.1.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "ohsu-comp-bio";
     repo = "py-tes";
     tag = version;
-    hash = "sha256-PP6l9HITC8JDOUVwf+S5tDOZDIFST9Uz+ttG0xJwrB0=";
+    hash = "sha256-hZF4koc/nZ8rBYKfhIQCLtn4DKiljJrSBgkKX8bMoQ0=";
   };
 
   build-system = [ setuptools ];

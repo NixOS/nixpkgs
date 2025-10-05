@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "23.10.0";
+  version = "24.10.3";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "sha256-eujVEU+XkxF1kIGQJoBW3oXXNSqBEzx6mwR2XYoHinM=";
+    sha256 = "sha256-6KC1k+LWNSU/mdwcUKjCaq8pGOcO+dFzeXX4PJm0QgE=";
   };
 
   nativeBuildInputs = [
@@ -33,18 +33,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      dpdk
-      libbsd
-      libpcap
-      lua5_3
-      numactl
-      which
-    ]
-    ++ lib.optionals withGtk [
-      gtk2
-    ];
+  buildInputs = [
+    dpdk
+    libbsd
+    libpcap
+    lua5_3
+    numactl
+    which
+  ]
+  ++ lib.optionals withGtk [
+    gtk2
+  ];
 
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";

@@ -100,29 +100,28 @@ stdenv.mkDerivation {
   #     `e820_types'; memory.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  makeFlags =
-    [
-      "BINDIR=$(out)/bin"
-      "SBINDIR=$(out)/sbin"
-      "DATADIR=$(out)/share"
-      "MANDIR=$(out)/share/man"
-      "PERL=perl"
-      "HEXDATE=0x00000000"
-      # Works around confusing (unrelated) error messages when upx is not made available
-      "UPX=false"
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "SBINDIR=$(out)/sbin"
+    "DATADIR=$(out)/share"
+    "MANDIR=$(out)/share/man"
+    "PERL=perl"
+    "HEXDATE=0x00000000"
+    # Works around confusing (unrelated) error messages when upx is not made available
+    "UPX=false"
 
-      # Configurations needed to make use of external gnu-efi
-      "LIBEFI=${gnu-efi}/lib/libefi.a"
-      "LIBDIR=${gnu-efi}/lib/"
-      "EFIINC=${gnu-efi}/include/efi"
+    # Configurations needed to make use of external gnu-efi
+    "LIBEFI=${gnu-efi}/lib/libefi.a"
+    "LIBDIR=${gnu-efi}/lib/"
+    "EFIINC=${gnu-efi}/include/efi"
 
-      # Legacy bios boot target is always built
-      "bios"
-    ]
-    # Build "ia32" EFI for i686
-    ++ lib.optional stdenv.hostPlatform.isi686 "efi32"
-    # Build "x86_64" EFI for x86_64
-    ++ lib.optional stdenv.hostPlatform.isx86_64 "efi64";
+    # Legacy bios boot target is always built
+    "bios"
+  ]
+  # Build "ia32" EFI for i686
+  ++ lib.optional stdenv.hostPlatform.isi686 "efi32"
+  # Build "x86_64" EFI for x86_64
+  ++ lib.optional stdenv.hostPlatform.isx86_64 "efi64";
 
   # Some tests require qemu, some others fail in a sandboxed environment
   doCheck = false;

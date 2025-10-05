@@ -11,13 +11,14 @@
   qtbase,
   qtsvg,
   qttools,
+  qtwayland,
   qwt,
   qscintilla,
   kissfftFloat,
   crossguid,
   reproc,
   platform-folders,
-  ruby,
+  ruby_3_2,
   erlang,
   elixir,
   beamPackages,
@@ -40,20 +41,25 @@
   fmt,
 }:
 
+# Sonic Pi fails to build with Ruby 3.3.
+let
+  ruby = ruby_3_2;
+in
+
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
   version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
-    repo = pname;
+    repo = "sonic-pi";
     rev = "v${version}";
     hash = "sha256-JMextQY0jLShWmqRQoVAbqIzDhA1mOzI7vfsG7+jjX0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit version;
-    pname = "mix-deps-${pname}";
+    pname = "mix-deps-sonic-pi";
     mixEnv = "test";
     src = "${src}/app/server/beam/tau";
     hash = "sha256-7wqFI3f0CRVrXK2IUguqHNANwKMmTak/Xh9nr624TXc=";
@@ -72,32 +78,32 @@ stdenv.mkDerivation rec {
     beamPackages.hex
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qttools
-      qwt
-      qscintilla
-      kissfftFloat
-      catch2_3
-      crossguid
-      reproc
-      platform-folders
-      ruby
-      alsa-lib
-      rtmidi
-      boost
-      aubio
-    ]
-    ++ lib.optionals withTauWidget [
-      qtwebengine
-    ]
-    ++ lib.optionals withImGui [
-      gl3w
-      SDL2
-      fmt
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
+    qwt
+    qscintilla
+    kissfftFloat
+    catch2_3
+    crossguid
+    reproc
+    platform-folders
+    ruby
+    alsa-lib
+    rtmidi
+    boost
+    aubio
+  ]
+  ++ lib.optionals withTauWidget [
+    qtwebengine
+  ]
+  ++ lib.optionals withImGui [
+    gl3w
+    SDL2
+    fmt
+  ];
 
   nativeCheckInputs = [
     parallel

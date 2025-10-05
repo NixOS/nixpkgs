@@ -62,6 +62,11 @@ buildPerlPackage rec {
       url = "https://github.com/mquinson/po4a/commit/28fe52651eb8096d97d6bd3a97b3168522ba5306.patch";
       hash = "sha256-QUXxkSzcnwRvU+2y2KoBXmtfE8qTZ2BV0StkJHqZehQ=";
     })
+    (fetchpatch {
+      name = "gettext-0.25.patch";
+      url = "https://github.com/mquinson/po4a/commit/7d88a5e59606a9a29ffe73325fff4a5ddb865d5c.patch";
+      hash = "sha256-5x+EX++v7DxOHOZgRM2tv5eNN1Gy28f+qaqH27emZhk=";
+    })
   ];
 
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build

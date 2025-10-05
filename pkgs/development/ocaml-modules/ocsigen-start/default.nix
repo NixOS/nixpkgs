@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   ocaml,
   findlib,
   ocsigen-toolkit,
@@ -17,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocsigen-start";
-  version = "6.2.0";
+  version = "7.1.0";
 
   nativeBuildInputs = [
     ocaml
@@ -38,18 +37,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./templates-dir.patch
-    # Compatibility with tyxml 4.6.x
-    (fetchpatch {
-      url = "https://github.com/ocsigen/ocsigen-start/commit/0b70506f94fcb2e06cb65ce0d6a28b9b84c695f3.patch";
-      hash = "sha256-p/VvIu9reI8lc9lxWiTrjZvn46vuF00QInYuWPtRVyk=";
-    })
   ];
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-start";
     rev = version;
-    hash = "sha256-i2nj/m1Ihb/bprtHvZh47/oK0v+aFNVH+A2CB4rrrPk=";
+    hash = "sha256-2DFFceUI7BYgGKvJ1sZphLWt/Rusa5Y86yc94Mi/quo=";
   };
 
   preInstall = ''

@@ -2,14 +2,12 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  mkDerivation,
   cmake,
   exempi,
   extra-cmake-modules,
   karchive,
   kdoctools,
   kfilemetadata,
-  khtml,
   kitemmodels,
   knewstuff,
   kxmlgui,
@@ -27,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tellico";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
-    repo = pname;
+    repo = "tellico";
     rev = "v${version}";
-    hash = "sha256-eYmLDQfnC0/R7VF+oMBwb5Q56CBl2icusoit/LIIpUs=";
+    hash = "sha256-+ky47wbyGAsBLx9q4ya/Vm9jiqEAbFfhloOytAyUYCQ=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +47,6 @@ stdenv.mkDerivation rec {
     exempi
     karchive
     kfilemetadata
-    khtml
     kitemmodels
     knewstuff
     kxmlgui

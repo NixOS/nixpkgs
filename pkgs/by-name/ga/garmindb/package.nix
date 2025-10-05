@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "garmindb";
-  version = "3.6.3";
+  version = "3.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tcgoetz";
     repo = "garmindb";
     tag = "v${version}";
-    hash = "sha256-JAUDAYf9CH/BxwV88ziF5Zy+3ibcbieEfHrZpHSU8m0=";
+    hash = "sha256-uXRFvItaO4ptvxzvqN8bOzTUWcVeGk0IX82z+yLWFDw=";
   };
 
   pythonRelaxDeps = [

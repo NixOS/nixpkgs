@@ -1,43 +1,57 @@
 {
   lib,
   boost,
-  cmake,
   fetchFromGitHub,
   meson,
   ninja,
   curl,
-  nix,
   nlohmann_json,
   pkg-config,
   stdenv,
+  nixComponents,
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "2.26.0";
+  version = "2.31.0";
+
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Lo4KFBNcY8tmBuCmEr2XV0IUZtxXHmbXPNLkov/QSU0=";
+    repo = "nix-eval-jobs";
+    tag = "v${version}";
+    hash = "sha256-VrHPtHxVIboqgnw+tlCQepgtBOhBvU5hxbMHsPo8LAc=";
   };
+
   buildInputs = [
     boost
-    nix
     curl
     nlohmann_json
+    nixComponents.nix-store
+    nixComponents.nix-fetchers
+    nixComponents.nix-expr
+    nixComponents.nix-flake
+    nixComponents.nix-main
+    nixComponents.nix-cmd
   ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    # nlohmann_json can be only discovered via cmake files
-    cmake
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   # Since this package is intimately tied to a specific Nix release, we
   # propagate the Nix used for building it to make it easier for users
   # downstream to reference it.
-  passthru = { inherit nix; };
+  passthru = {
+    inherit nixComponents;
+    # For nix-fast-build
+    nix = nixComponents.nix-cli;
+  };
 
   meta = {
     description = "Hydra's builtin hydra-eval-jobs as a standalone";

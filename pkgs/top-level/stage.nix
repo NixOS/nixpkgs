@@ -54,10 +54,15 @@ in
 
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
-  stdenvNoCC ? stdenv.override {
-    cc = null;
-    hasCC = false;
-  },
+  stdenvNoCC ? stdenv.override (
+    {
+      cc = null;
+      hasCC = false;
+    }
+    # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
+    # size down from ~1 GiB to ~83 MiB, which is a considerable reduction.
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin { extraBuildInputs = [ ]; }
+  ),
 
   # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
@@ -87,7 +92,7 @@ let
     # The following line guarantees that the output of this function
     # is a well-formed platform with no missing fields.  It will be
     # uncommented in a separate PR, in case it breaks the build.
-    #(x: lib.trivial.pipe x [ (x: builtins.removeAttrs x [ "_type" ]) lib.systems.parse.mkSystem ])
+    #(x: lib.trivial.pipe x [ (x: removeAttrs x [ "_type" ]) lib.systems.parse.mkSystem ])
     (
       parsed
       // {
@@ -107,15 +112,6 @@ let
             muslabi64 = lib.systems.parse.abis.muslabi64;
           }
           .${parsed.abi.name} or lib.systems.parse.abis.musl;
-      }
-    );
-
-  makeLLVMParsedPlatform =
-    parsed:
-    (
-      parsed
-      // {
-        abi = lib.systems.parse.abis.llvm;
       }
     );
 
@@ -195,6 +191,20 @@ let
 
   aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
 
+  variants =
+    self: super:
+    lib.optionalAttrs config.allowVariants (
+      import ./variants.nix {
+        inherit
+          lib
+          nixpkgsFun
+          stdenv
+          overlays
+          makeMuslParsedPlatform
+          ;
+      } self super
+    );
+
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
   # standard environment.
@@ -218,6 +228,7 @@ let
   # - pkgsCross.<system> where system is a member of lib.systems.examples
   # - pkgsMusl
   # - pkgsi686Linux
+  # NOTE: add new non-critical package sets to "pkgs/top-level/variants.nix"
   otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
@@ -226,94 +237,37 @@ let
     # Raspberry Pi.
     pkgsCross = lib.mapAttrs (n: crossSystem: nixpkgsFun { inherit crossSystem; }) lib.systems.examples;
 
-    pkgsLLVM = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVM = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using the LLVM toolchain.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useLLVM = true;
-        linker = "lld";
-      };
-    };
-
-    pkgsLLVMLibc = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVMLibc = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using LLVM libc.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        config = lib.systems.parse.tripleFromSystem (makeLLVMParsedPlatform stdenv.hostPlatform.parsed);
-        libc = "llvm";
-      };
-    };
-
-    pkgsArocc = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsArocc = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using the Aro C compiler.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useArocc = true;
-        linker = "lld";
-      };
-    };
-
-    pkgsZig = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsZig = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using the Zig toolchain.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useZig = true;
-        linker = "lld";
-      };
-    };
-
-    # All packages built with the Musl libc. This will override the
-    # default GNU libc on Linux systems. Non-Linux systems are not
-    # supported. 32-bit is also not supported.
-    pkgsMusl =
-      if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsMusl = super';
-            })
-          ] ++ overlays;
-          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-            config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
-          };
-        }
-      else
-        throw "Musl libc only supports 64-bit Linux systems.";
-
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux =
-      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then
+      let
+        isSupported = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
+      in
+      if !config.allowAliases || isSupported then
         nixpkgsFun {
           overlays = [
-            (self': super': {
-              pkgsi686Linux = super';
-            })
-          ] ++ overlays;
+            (
+              self': super':
+              {
+                pkgsi686Linux = super';
+              }
+              // lib.optionalAttrs (!isSupported) {
+                # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
+                # when used on a non x86_64-linux platform in CI.
+                # TODO: Remove this, once pkgsi686Linux can become a variant.
+                stdenv = super'.stdenv // {
+                  mkDerivation =
+                    args:
+                    (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
+                      meta = prevAttrs.meta or { } // {
+                        broken = true;
+                      };
+                    });
+                };
+              }
+            )
+          ]
+          ++ overlays;
           ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
             config = lib.systems.parse.tripleFromSystem (
               stdenv.hostPlatform.parsed
@@ -325,27 +279,6 @@ let
         }
       else
         throw "i686 Linux package set can only be used with the x86 family.";
-
-    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin =
-      if stdenv.hostPlatform.isDarwin then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsx86_64Darwin = super';
-            })
-          ] ++ overlays;
-          localSystem = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.x86_64;
-              }
-            );
-          };
-        }
-      else
-        throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
     # If already linux: the same package set unaltered
     # Otherwise, return a natively built linux package set for the current cpu architecture string.
@@ -381,7 +314,8 @@ let
         (self': super': {
           pkgsStatic = super';
         })
-      ] ++ overlays;
+      ]
+      ++ overlays;
       crossSystem = {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
@@ -395,40 +329,11 @@ let
           // stdenv.hostPlatform.gcc or { };
       };
     });
-
-    pkgsExtraHardening = nixpkgsFun {
-      overlays = [
-        (
-          self': super':
-          {
-            pkgsExtraHardening = super';
-            stdenv = super'.withDefaultHardeningFlags (
-              super'.stdenv.cc.defaultHardeningFlags
-              ++ [
-                "shadowstack"
-                "pacret"
-                "trivialautovarinit"
-              ]
-            ) super'.stdenv;
-            glibc = super'.glibc.override rec {
-              enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
-              enableCETRuntimeDefault = enableCET != false;
-            };
-          }
-          // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
-            # causes shadowstack disablement
-            pcre = super'.pcre.override { enableJit = false; };
-            pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
-            pcre16 = super'.pcre16.override { enableJit = false; };
-          }
-        )
-      ] ++ overlays;
-    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
-  # previous bootstrapping phases which have already been overlayed.
+  # previous bootstrapping phases which have already been overlaid.
   toFix = lib.foldl' (lib.flip lib.extends) (self: { }) (
     [
       stdenvBootstappingAndPlatforms
@@ -439,6 +344,7 @@ let
       allPackages
       otherPackageSets
       aliases
+      variants
       configOverrides
     ]
     ++ overlays

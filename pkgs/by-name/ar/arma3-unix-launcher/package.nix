@@ -11,18 +11,19 @@
   nlohmann_json,
   qt5,
   spdlog,
+  steam-run,
   replaceVars,
   buildDayZLauncher ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "arma3-unix-launcher";
-  version = "413-unstable-2025-02-10";
+  version = "420";
 
   src = fetchFromGitHub {
     owner = "muttleyxd";
     repo = "arma3-unix-launcher";
-    rev = "7d4bcb166da3bb64ef10af421619d0b00136ebd5";
-    hash = "sha256-so7fjxESUAkQfO4hO5aQTzU5lHpeJlOOfEGp0Pb89sQ=";
+    tag = "commit-${finalAttrs.version}";
+    hash = "sha256-QY3zDtfZt2ifF69Jzp0Ls1SpDCliKdkwLaGFXneT79o=";
   };
 
   patches = [
@@ -52,8 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
       doctest_src = null;
       trompeloeil_src = null;
     })
-    # game won't launch with steam integration anyways, disable it
-    ./disable_steam_integration.patch
+
+    # use steam-run when running the game directly
+    (replaceVars ./steam-run.patch {
+      steamRun = lib.getExe steam-run;
+    })
   ];
 
   nativeBuildInputs = [

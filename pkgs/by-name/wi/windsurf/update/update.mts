@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 /*
-#!nix-shell -i node --pure --packages cacert nodejs_23
+#!nix-shell -i node --pure --packages cacert nodejs_latest
 */
 import * as assert from "node:assert/strict";
 import * as fsPromises from "node:fs/promises";

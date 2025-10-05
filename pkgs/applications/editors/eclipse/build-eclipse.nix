@@ -14,22 +14,22 @@
   libXtst,
   libsecret,
   gsettings-desktop-schemas,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   makeWrapper,
   perl,
   ...
 }:
 
 {
-  name,
+  pname,
   src ? builtins.getAttr stdenv.hostPlatform.system sources,
   sources ? null,
   description,
-  productVersion,
+  version,
 }:
 
 stdenv.mkDerivation rec {
-  inherit name src;
+  inherit pname version src;
 
   desktopItem = makeDesktopItem {
     name = "Eclipse";
@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
     libXtst
     libsecret
     zlib
-  ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0;
+  ]
+  ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1;
 
   buildCommand = ''
     # Unpack tarball.
@@ -93,12 +94,12 @@ stdenv.mkDerivation rec {
             libXtst
             libsecret
           ]
-          ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0
+          ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1
         )
       } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${version}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications

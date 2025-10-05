@@ -4,36 +4,28 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-kroki-preprocessor";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "joelcourtney";
     repo = "mdbook-kroki-preprocessor";
     rev = "v${version}";
-    hash = "sha256-3BxIhJK0YWZBEbbNwMKixo1icEn+QKJwoskgIEaZcGQ=";
+    hash = "sha256-rTXieHa/EIg69vUQE2FOD1Xb4cUVe5CvBiv9CnhHB3I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vOP/XvoHwJd34f+NGGCFJkEbefbbJjFcGTOFaCn9dj8=";
+  cargoHash = "sha256-aTtjrCl13oOKqwPGiVlOfjGqAdBS94XGjcvn3bBWpa0=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   meta = with lib; {
     description = "Render Kroki diagrams from files or code blocks in mdbook";

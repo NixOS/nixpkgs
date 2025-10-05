@@ -20,10 +20,10 @@
 }:
 
 let
-  pyStrokeVer = "20121124";
+  pyStrokeVer = "20250329";
   pyStroke = fetchurl {
     url = "http://download.fcitx-im.org/data/py_stroke-${pyStrokeVer}.tar.gz";
-    hash = "sha256-jrEoqb+kOVLmfPL87h/RNMb0z9MXvC9sOKYV9etk4kg=";
+    hash = "sha256-wafKciXTYUq4M1P8gnUDAGqYBEd2IBj1N2BCXXtTA6Y=";
   };
   pyTableVer = "20121124";
   pyTable = fetchurl {
@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.8";
+  version = "5.1.9";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-QO136EbUFxT7yA1Fs4DvV0CKpdCMw/s5s9sW3vRzGD8=";
+    hash = "sha256-xHLd7X9IdYTsVyqbghVzdC2i9AVipFHKRxP2Zqq7zGw=";
   };
 
   nativeBuildInputs = [
@@ -64,11 +64,9 @@ stdenv.mkDerivation rec {
     opencc
     qtwebengine
     fmt
-  ] ++ lib.optional luaSupport fcitx5-lua;
-
-  cmakeFlags = [
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
-  ];
+    qtbase
+  ]
+  ++ lib.optional luaSupport fcitx5-lua;
 
   dontWrapQtApps = true;
 

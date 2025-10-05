@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "odp-amsterdam";
-  version = "6.0.2";
+  version = "6.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
     tag = "v${version}";
-    hash = "sha256-veBccNxqhqBYKUC5pdjZ1IOWUYUqiNK5pJq1L+8UCxA=";
+    hash = "sha256-vamWelyEcwvYI5I9wmKk8kKc7j0OMer/BKgC0pbN4g0=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for getting garage occupancy in Amsterdam";
     homepage = "https://github.com/klaasnicolaas/python-odp-amsterdam";
-    changelog = "https://github.com/klaasnicolaas/python-odp-amsterdam/releases/tag/v${version}";
+    changelog = "https://github.com/klaasnicolaas/python-odp-amsterdam/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

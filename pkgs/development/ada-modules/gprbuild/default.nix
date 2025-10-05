@@ -30,17 +30,16 @@ stdenv.mkDerivation {
     xmlada
   ];
 
-  makeFlags =
-    [
-      "ENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "no" else "yes"}"
-      "PROCESSORS=$(NIX_BUILD_CORES)"
-      # confusingly, for gprbuild --target is autoconf --host
-      "TARGET=${stdenv.hostPlatform.config}"
-      "prefix=${placeholder "out"}"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-      "LIBRARY_TYPE=relocatable"
-    ];
+  makeFlags = [
+    "ENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "no" else "yes"}"
+    "PROCESSORS=$(NIX_BUILD_CORES)"
+    # confusingly, for gprbuild --target is autoconf --host
+    "TARGET=${stdenv.hostPlatform.config}"
+    "prefix=${placeholder "out"}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    "LIBRARY_TYPE=relocatable"
+  ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to

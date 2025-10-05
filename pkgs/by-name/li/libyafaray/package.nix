@@ -2,7 +2,6 @@
   cmake,
   fetchFromGitHub,
   freetype,
-  ilmbase,
   lib,
   libjpeg,
   libtiff,
@@ -33,10 +32,6 @@ stdenv.mkDerivation {
       include/geometry/poly_double.h include/noise/noise_generator.h # gcc12
   '';
 
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -isystem ${ilmbase.dev}/include/OpenEXR"
-  '';
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -44,7 +39,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     freetype
-    ilmbase
     libjpeg
     libtiff
     libxml2
@@ -52,7 +46,8 @@ stdenv.mkDerivation {
     openexr
     swig
     zlib
-  ] ++ lib.optional withPython python3;
+  ]
+  ++ lib.optional withPython python3;
 
   meta = with lib; {
     description = "Free, open source raytracer";

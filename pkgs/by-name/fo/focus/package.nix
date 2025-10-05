@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "focus";
-  version = "unstable-2021-02-23";
+  version = "0-unstable-2021-02-23";
 
   src = fetchFromGitHub {
     owner = "phillbush";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/phillbush/focus";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

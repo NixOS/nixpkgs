@@ -6,6 +6,7 @@
   lapack,
   python3,
   fetchFromGitHub,
+  fetchpatch,
 }:
 assert (!blas.isILP64);
 assert blas.isILP64 == lapack.isILP64;
@@ -27,6 +28,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-+Mq7lM6WuwAnK/2FlDz9gNRIg2sRazQRezb3BfD0veY=";
   };
 
+  patches = [
+    # upstream patch, fixes test runner.
+    (fetchpatch {
+      name = "replace-obsolete-pipes-module";
+      url = "https://github.com/wannier-developers/wannier90/commit/8aef6edaa4f169d45b479dc5d5c5efb8b9385a49.patch";
+      hash = "sha256-6ZfHd8CVTzfaj99AA3dsJJ/EOeCZmzACAM5pe2wBo8g=";
+    })
+  ];
+
   # test cases are removed as error bounds of wannier90 are obviously to tight
   postPatch = ''
     rm -r test-suite/tests/testpostw90_{fe_kpathcurv,fe_kslicecurv,si_geninterp,si_geninterp_wsdistance}
@@ -35,7 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cp config/make.inc.gfort make.inc
+
+    runHook postConfigure
   '';
 
   buildFlags = [

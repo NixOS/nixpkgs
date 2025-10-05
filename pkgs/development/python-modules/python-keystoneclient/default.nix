@@ -17,14 +17,15 @@
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "5.5.0";
+  version = "5.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wvWTT5VXaTbJjkW/WZrUi8sKxFFZPl+DROv1LLD0EfU=";
+    pname = "python_keystoneclient";
+    inherit version;
+    hash = "sha256-jOe/HIzdym1xQPx2kYtE7d8dZAQKYMuP9wWRNhBNTOs=";
   };
 
   build-system = [ setuptools ];
@@ -56,6 +57,6 @@ buildPythonPackage rec {
     description = "Client Library for OpenStack Identity";
     homepage = "https://github.com/openstack/python-keystoneclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -2,12 +2,14 @@
   lib,
   mkKdeDerivation,
   replaceVars,
+  fetchpatch,
   dbus,
   fontconfig,
   xorg,
   lsof,
   pkg-config,
   spirv-tools,
+  qtlocation,
   qtpositioning,
   qtsvg,
   qtwayland,
@@ -17,7 +19,6 @@
   qttools,
   qqc2-breeze-style,
   gpsd,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";
@@ -33,12 +34,11 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
-
-    # Backport patch recommended by upstream
-    # FIXME: remove in 6.3.5
+    # Fixes https://github.com/NixOS/nixpkgs/issues/442630, next upstream release should already contain this patch
     (fetchpatch {
-      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/47d502353720004fa2d0e7b0065994b75b3e0ded.patch";
-      hash = "sha256-wt0ZIF4zcEOmP0o4ZcjBYxVjr2hVUlOKVJ8SMNSYt68=";
+      name = "fix-media-applet-crash.diff";
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/30273fb2afcc6e304951c8895bb17d38255fed39.diff";
+      sha256 = "sha256-1p1CjxRioCDm5ugoI8l6kDlOse5FbDJ71tTAY9LPvRc=";
     })
   ];
 
@@ -52,6 +52,7 @@ mkKdeDerivation {
     spirv-tools
   ];
   extraBuildInputs = [
+    qtlocation
     qtpositioning
     qtsvg
     qtwayland

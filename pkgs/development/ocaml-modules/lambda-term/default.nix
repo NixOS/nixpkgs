@@ -38,17 +38,16 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  propagatedBuildInputs =
-    [
-      zed
-      lwt_log
-      lwt_react
-      mew_vi
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "3.3.1") [
-      uucp
-      logs
-    ];
+  propagatedBuildInputs = [
+    zed
+    lwt_log
+    lwt_react
+    mew_vi
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "3.3.1") [
+    uucp
+    logs
+  ];
 
   meta = {
     description = "Terminal manipulation library for OCaml";

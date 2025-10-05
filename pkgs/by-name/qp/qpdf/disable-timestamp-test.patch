@@ -1,0 +1,31 @@
+diff --git a/libtests/qtest/qutil/qutil.out b/libtests/qtest/qutil/qutil.out
+index a5f7b108c7..08c6c2eccc 100644
+--- a/libtests/qtest/qutil/qutil.out
++++ b/libtests/qtest/qutil/qutil.out
+@@ -126,13 +126,6 @@
+ create file
+ rename over existing
+ delete file
+----- timestamp
+-D:20210209144925-05'00'
+-2021-02-09T14:49:25-05:00
+-D:20210210011925+05'30'
+-2021-02-10T01:19:25+05:30
+-D:20210209191925Z
+-2021-02-09T19:19:25Z
+ ---- is_long_long
+ done
+ ---- memory usage
+diff --git a/libtests/qutil.cc b/libtests/qutil.cc
+index 78ae82c8e3..daa9281a19 100644
+--- a/libtests/qutil.cc
++++ b/libtests/qutil.cc
+@@ -766,8 +766,6 @@
+         hex_encode_decode_test();
+         std::cout << "---- rename/delete" << std::endl;
+         rename_delete_test();
+-        std::cout << "---- timestamp" << std::endl;
+-        timestamp_test();
+         std::cout << "---- is_long_long" << std::endl;
+         is_long_long_test();
+         std::cout << "---- memory usage" << std::endl;

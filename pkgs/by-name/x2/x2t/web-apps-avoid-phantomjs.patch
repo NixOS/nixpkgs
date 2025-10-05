@@ -1,0 +1,12 @@
+diff --git a/build/package.json b/build/package.json
+index 96b35b328a..f8ec8397b4 100644
+--- a/package.json
++++ b/package.json
+@@ -45,7 +45,6 @@
+   },
+   "devDependencies": {
+     "chai": "^5.1.0",
+-    "grunt-mocha": "^1.2.0",
+     "mocha": "^10.2.0"
+   }
+ }

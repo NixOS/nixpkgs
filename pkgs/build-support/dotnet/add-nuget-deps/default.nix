@@ -4,8 +4,7 @@
   nix,
   lib,
   replaceVarsWith,
-  nuget-to-nix,
-  nixfmt-rfc-style,
+  nixfmt,
   nuget-to-json,
   cacert,
   fetchNupkg,
@@ -50,7 +49,7 @@ let
       assert (lib.isPath nugetDeps);
       callPackage nugetDeps { fetchNuGet = fetchNupkg; }
     else
-      builtins.map fetchNupkg (lib.importJSON nugetDeps);
+      map fetchNupkg (lib.importJSON nugetDeps);
 
   finalPackage = finalAttrs.finalPackage;
 
@@ -89,8 +88,7 @@ attrs
             isExecutable = true;
             replacements = {
               binPath = lib.makeBinPath [
-                nuget-to-nix
-                nixfmt-rfc-style
+                nixfmt
                 nuget-to-json
               ];
             };

@@ -241,15 +241,14 @@ in
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages =
-      [
-        cfg.package
-        cfg.package.run
-      ]
-      ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
-      ++ lib.optional cfg.protontricks.enable (
-        cfg.protontricks.package.override { inherit extraCompatPaths; }
-      );
+    environment.systemPackages = [
+      cfg.package
+      cfg.package.run
+    ]
+    ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
+    ++ lib.optional cfg.protontricks.enable (
+      cfg.protontricks.package.override { inherit extraCompatPaths; }
+    );
 
     networking.firewall = lib.mkMerge [
       (lib.mkIf (cfg.remotePlay.openFirewall || cfg.localNetworkGameTransfers.openFirewall) {

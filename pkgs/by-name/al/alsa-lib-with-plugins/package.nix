@@ -16,18 +16,17 @@ in
 runCommand "${alsa-lib.pname}-${alsa-lib.version}"
   {
     meta = with lib; {
-      description = "wrapper to ease access to ALSA plugins";
+      description = "Wrapper to ease access to ALSA plugins";
       mainProgram = "aserver";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ gm6k ];
     };
     outputs = alsa-lib.outputs;
   }
   (
     (lib.concatMapStringsSep "\n" (output: ''
-      mkdir ${builtins.placeholder output}
+      mkdir ${placeholder output}
       ${lndir}/bin/lndir ${lib.attrByPath [ output ] null alsa-lib} \
-        ${builtins.placeholder output}
+        ${placeholder output}
     '') alsa-lib.outputs)
     + ''
       cp -r ${merged}/lib/alsa-lib $out/lib

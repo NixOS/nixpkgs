@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   # files that are also in that repo.
   cmakeBuildDir = "cmake-build";
 
-  includeInstallDir = "${builtins.placeholder "out"}/include/cppitertools";
-  cmakeInstallDir = "${builtins.placeholder "out"}/share/cmake";
+  includeInstallDir = "${placeholder "out"}/include/cppitertools";
+  cmakeInstallDir = "${placeholder "out"}/share/cmake";
 
   # This version of cppitertools considers itself as having used the default value,
   # and issues warning, unless -Dcppitertools_INSTALL_CMAKE_DIR is present as an
@@ -58,16 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Dcppitertools_INSTALL_CMAKE_DIR=${finalAttrs.cmakeInstallDir}" ];
 
-  prePatch =
-    ''
-      # Mark the `.` install target as non-default.
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "  DIRECTORY ." "  DIRECTORY . EXCLUDE_FROM_ALL"
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      # Required for tests.
-      cp ${lib.getDev catch2}/include/catch2/catch.hpp test/
-    '';
+  prePatch = ''
+    # Mark the `.` install target as non-default.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "  DIRECTORY ." "  DIRECTORY . EXCLUDE_FROM_ALL"
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    # Required for tests.
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp test/
+  '';
 
   checkPhase = ''
     runHook preCheck

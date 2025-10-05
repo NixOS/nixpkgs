@@ -1,59 +1,96 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  numpy,
-  pydantic,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   jsonschema,
+  numpy,
   opencv-python-headless,
-  sentencepiece,
-  typing-extensions,
-  tiktoken,
   pillow,
+  pydantic,
+  pydantic-extra-types,
   requests,
+  sentencepiece,
+  tiktoken,
+  typing-extensions,
+
+  # tests
+  click,
+  fastapi,
+  huggingface-hub,
+  openai,
+  pycountry,
+  pydantic-settings,
+  pytestCheckHook,
+  soundfile,
+  soxr,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.5.2";
+  version = "1.8.4";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "mistral_common";
-    inherit version;
-    hash = "sha256-nRFXsTdsSdNav8dD2+AITyyjezpavQPnQSdqG8ZshS8=";
+  src = fetchFromGitHub {
+    owner = "mistralai";
+    repo = "mistral-common";
+    tag = "v${version}";
+    hash = "sha256-HB6dsqiDSLhjyANk7ZT/cU98mjJamegAF0uKH8GfgM8=";
   };
 
-  # relax dependencies
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'pillow = "^10.3.0"' 'pillow = ">=10.3.0"' \
-      --replace-fail 'tiktoken = "^0.7.0"' 'tiktoken = ">=0.7.0"' \
-  '';
-
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
-    numpy
-    pydantic
     jsonschema
+    numpy
     opencv-python-headless
-    sentencepiece
-    typing-extensions
-    tiktoken
     pillow
+    pydantic
+    pydantic-extra-types
     requests
+    sentencepiece
+    tiktoken
+    typing-extensions
   ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "mistral_common" ];
 
-  meta = with lib; {
-    description = "mistral-common is a set of tools to help you work with Mistral models.";
+  nativeCheckInputs = [
+    click
+    fastapi
+    huggingface-hub
+    openai
+    pycountry
+    pydantic-settings
+    pytestCheckHook
+    soundfile
+    soxr
+    uvicorn
+  ];
+
+  disabledTests = [
+    # Require internet
+    "test_download_gated_image"
+    "test_image_encoder_formats"
+    "test_image_processing"
+
+    # AssertionError: Regex pattern did not match.
+    "test_from_url"
+
+    # AssertionError, Extra items in the right set
+    "test_openai_chat_fields"
+  ];
+
+  meta = {
+    description = "Tools to help you work with Mistral models";
     homepage = "https://github.com/mistralai/mistral-common";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bgamari ];
+    changelog = "https://github.com/mistralai/mistral-common/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bgamari ];
   };
 }

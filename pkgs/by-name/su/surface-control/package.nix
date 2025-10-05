@@ -10,41 +10,36 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "surface-control";
-  version = "0.4.3-2";
+  version = "0.4.8-1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "surface-control";
-    rev = "v${version}";
-    sha256 = "sha256-QgkUxT5Ae0agvalZl1ie+1LwxgaTzMrKpQY3KkpWwG4=";
+    tag = "v${version}";
+    hash = "sha256-ZooqPlvxx+eBFEIf9Y1iU6zhhgafGUw28G5cwdF/E78=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-BBEdX/VSTYYIusLkqUZOxmf5pTMbF4v7LjlQxy8RV3Y=";
+  cargoHash = "sha256-gv/ipOQ1kmLc9YxxwuXc/rq6YUdVw2FhrI9C+DHxIDM=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
+
   buildInputs = [ udev ];
 
   postInstall = ''
     installShellCompletion \
       $releaseDir/build/surface-*/out/surface.{bash,fish} \
       --zsh $releaseDir/build/surface-*/out/_surface
-    install -Dm 0444 -t $out/etc/udev/rules.d \
-      etc/udev/40-surface-control.rules
-    substituteInPlace $out/etc/udev/rules.d/40-surface-control.rules \
-      --replace "/usr/bin/chmod" "${coreutils}/bin/chmod" \
-      --replace "/usr/bin/chown" "${coreutils}/bin/chown"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control various aspects of Microsoft Surface devices on Linux from the Command-Line";
     homepage = "https://github.com/linux-surface/surface-control";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "surface";
   };
 }

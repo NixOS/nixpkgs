@@ -33,10 +33,15 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-zZc2+0oskptpWZE4fyVcR4QHxqzpj71GXMXNXMK4an0=";
   };
+
+  postPatch = ''
+    substituteInPlace delfin/meson.build --replace-fail \
+      "'delfin' / rust_target / meson.project_name()" \
+      "'delfin' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
 
   nativeBuildInputs = [
     appstream
@@ -62,6 +67,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonOption "profile" "release")
   ];
+
+  # For https://codeberg.org/avery42/delfin/src/commit/820b466bfd47f71c12e9b2cabb698e8f78942f41/delfin/meson.build#L47-L48
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

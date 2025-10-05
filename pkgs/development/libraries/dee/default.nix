@@ -11,6 +11,7 @@
   vala,
   python3,
   autoreconfHook,
+  gtk-doc,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     gobject-introspection
     python3
+    gtk-doc
   ];
 
   buildInputs = [
@@ -74,6 +76,6 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/dee";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

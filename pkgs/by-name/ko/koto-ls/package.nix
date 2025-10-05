@@ -7,24 +7,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koto-ls";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "koto-lang";
     repo = "koto-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6a8xckgpz2/Eb0mQ3ZUL7ywmHA69RMXar/55LUu1UWk=";
+    hash = "sha256-k3XzVfuObA+PyE45arZvp1aER/6uDOyMzs937K8VECQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-sDgLvZcLW2lC0fCMOdSX2OvaqOG1GMfQiwAPit6L2/g=";
+  cargoHash = "sha256-4mHl9Pds2B4Htkpm425LBHADaR2E2VwvhYC1FwDu304=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server for Koto";
     homepage = "https://github.com/koto-lang/koto-ls";
-    changelog = "https://github.com/koto-lang/koto-ls/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/koto-lang/koto-ls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "koto-ls";

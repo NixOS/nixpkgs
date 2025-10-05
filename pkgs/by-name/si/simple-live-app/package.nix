@@ -1,22 +1,22 @@
 {
-  autoPatchelfHook,
   lib,
+  flutter332,
   fetchFromGitHub,
-  flutter327,
+  autoPatchelfHook,
   mpv,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "simple-live-app";
-  version = "1.7.6";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "xiaoyaocz";
     repo = "dart_simple_live";
     tag = "v${version}";
-    hash = "sha256-nnbGSqPyqoGNOjFx75soy+0liYv6pVwiLBGb7yV1AgI=";
+    hash = "sha256-6kEty4QZZQW3Xzz4213ThC4FF+quMNE4oAuZ1limxFg=";
   };
 
   sourceRoot = "${src.name}/simple_live_app";
@@ -39,9 +39,7 @@ flutter327.buildFlutterApplication rec {
       icon = "simple-live-app";
       genericName = "Simple-Live";
       desktopName = "Simple-Live";
-      keywords = [
-        "Simple Live"
-      ];
+      keywords = [ "Simple Live" ];
     })
   ];
 

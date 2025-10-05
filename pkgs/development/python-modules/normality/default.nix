@@ -3,36 +3,36 @@
   fetchFromGitHub,
   buildPythonPackage,
   hatchling,
-  text-unidecode,
   charset-normalizer,
   chardet,
   banal,
   pyicu,
   pytestCheckHook,
 }:
+
 buildPythonPackage rec {
   pname = "normality";
-  version = "2.6.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "normality";
-    rev = version;
-    hash = "sha256-RsZP/GkEuPKGZK2+/57kvMwm9vk0FTKN2/XtOmfoZxA=";
+    tag = version;
+    hash = "sha256-X8ssSURC3NiQ1uf2qv1PgCBIYQnmoYVKPn5YPdJG71o=";
   };
 
-  buildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
-    text-unidecode
     chardet
     banal
     pyicu
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "normality" ];
 
   meta = {

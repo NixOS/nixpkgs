@@ -9,6 +9,7 @@
 buildPythonApplication rec {
   pname = "autotiling";
   version = "1.9.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";

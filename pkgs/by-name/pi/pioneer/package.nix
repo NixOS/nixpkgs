@@ -13,6 +13,7 @@
   libpng,
   libsigcxx,
   libvorbis,
+  libX11,
   lua5_2,
   libgbm,
   SDL2,
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pioneer";
-  version = "20250203";
+  version = "20250501";
 
   src = fetchFromGitHub {
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    hash = "sha256-mPTMmCgttFEhMyhGbRFBsIqI6oU0yBQJp+m7NbeeUHA=";
+    hash = "sha256-bQ1JGndHbBM28SuAUybo9msC/nBXu6el1UY41BKJN5A=";
   };
 
   postPatch = ''
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     libpng
     libsigcxx
     libvorbis
+    libX11
     lua5_2
     libgbm
     SDL2

@@ -43,17 +43,16 @@ mkDerivation rec {
     ./yt-dlp-path.patch
   ];
 
-  postPatch =
-    ''
-      substituteInPlace youtube_dl.cpp \
-        --replace 'QString YoutubeDl::path = QString();' \
-                  'QString YoutubeDl::path = QString("${yt-dlp}/bin/yt-dlp");'
-    ''
-    + lib.optionalString (ffmpeg != null) ''
-      substituteInPlace converter_ffmpeg.cpp \
-        --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
-        --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
-    '';
+  postPatch = ''
+    substituteInPlace youtube_dl.cpp \
+      --replace 'QString YoutubeDl::path = QString();' \
+                'QString YoutubeDl::path = QString("${yt-dlp}/bin/yt-dlp");'
+  ''
+  + lib.optionalString (ffmpeg != null) ''
+    substituteInPlace converter_ffmpeg.cpp \
+      --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
+      --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
+  '';
 
   qmakeFlags = [ "clipgrab.pro" ];
 

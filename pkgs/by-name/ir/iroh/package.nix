@@ -1,32 +1,21 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "iroh";
-  version = "0.34.0";
+  version = "0.92.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = "iroh";
     rev = "v${version}";
-    hash = "sha256-uavWluu7rVY2lZXDRsKApcZMB7TJsGuhJzieZPMXdvE=";
+    hash = "sha256-Xdiw77zJd0WfrEqo4Y6BwyD9qAKFEIUS511CQvtU9xs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7tQbfXVdgoxACF6qtesbUQ3AtVFAI2IbGO720PjwZCc=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Security
-      SystemConfiguration
-    ]
-  );
+  cargoHash = "sha256-Bq53DOZZ+MJlzJVHL6uPAH/YXkeSFFHhTlC2ZkvW7FM=";
 
   # Some tests require network access which is not available in nix build sandbox.
   doCheck = false;

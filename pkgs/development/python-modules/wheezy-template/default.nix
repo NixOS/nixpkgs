@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "wheezy.template";
   version = "3.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

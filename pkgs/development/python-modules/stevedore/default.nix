@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Manage dynamic plugins for Python applications";
     homepage = "https://github.com/openstack/stevedore";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

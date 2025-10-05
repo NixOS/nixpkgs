@@ -4,10 +4,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0sx97bm9by389rbzv8r1f43h06xcz8vwi3h5jv074gvparql7lcx";
+      sha256 = "1x5b8ipv6g0z44wgc45039k04smsyf95h2m5m67mqq35sa5a955s";
       type = "gem";
     };
-    version = "2.2.0";
+    version = "2.12.2";
   };
   procodile = {
     dependencies = [ "json" ];
@@ -15,9 +15,9 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "025pbr1kah7cgs527n5q56m5agaa2smzac4rpmpk619xg4r1rdhs";
+      sha256 = "1f2xf460p0dd8871dfjm3mx669hiy4fz2n53za0pfrd6mvwx5qkq";
       type = "gem";
     };
-    version = "1.0.23";
+    version = "1.0.26";
   };
 }

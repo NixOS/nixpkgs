@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apachetomcatscanner";
-  version = "3.7.2";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "ApacheTomcatScanner";
     tag = version;
-    hash = "sha256-mzpJq0er13wcekTac3j4cnRokHh6Q0seM8vwZsM2tN8=";
+    hash = "sha256-gMyJClEE/i8AKHcSyvvMPwCooLwl/hvcRZgZqF59RUY=";
   };
 
   # Posted a PR for discussion upstream that can be followed:
@@ -41,12 +41,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "apachetomcatscanner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan for Apache Tomcat server vulnerabilities";
     homepage = "https://github.com/p0dalirius/ApacheTomcatScanner";
     changelog = "https://github.com/p0dalirius/ApacheTomcatScanner/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ApacheTomcatScanner";
   };
 }

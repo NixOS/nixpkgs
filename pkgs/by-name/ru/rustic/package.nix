@@ -1,41 +1,32 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
-  Security,
-  SystemConfiguration,
   installShellFiles,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     tag = "v${version}";
-    hash = "sha256-HYPzgynCeWDRRNyACHqnzkjn6uZWS0TDHuJE9STJxbQ=";
+    hash = "sha256-KyJce0pTTpPv3K0WXWQv2MPx8dDGhUVYEIjTeYH1KPY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+BlLVnvI2qBfwEtyxmZFNhR9MEzs0/a1Ce6ALOKtoPU=";
+  cargoHash = "sha256-Axiq1Yu5pg3fZ/E8aYFGAuPi3KVIlotQ2TZs0pczG+4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
-
-  postInstall = ''
-    for shell in {ba,fi,z}sh; do
-      $out/bin/rustic completions $shell > rustic.$shell
-    done
-
-    installShellCompletion rustic.{ba,fi,z}sh
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rustic \
+      --bash <($out/bin/rustic completions bash) \
+      --fish <($out/bin/rustic completions fish) \
+      --zsh <($out/bin/rustic completions zsh)
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -43,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/rustic-rs/rustic";
     changelog = "https://github.com/rustic-rs/rustic/blob/${src.rev}/CHANGELOG.md";
-    description = "fast, encrypted, deduplicated backups powered by pure Rust";
+    description = "Fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = [

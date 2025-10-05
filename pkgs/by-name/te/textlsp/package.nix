@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "textlsp";
   version = "0.3.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hangyav";
@@ -19,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     pygls
     lsprotocol
     language-tool-python
-    tree-sitter_0_21
+    tree-sitter
     gitpython
     appdirs
     openai

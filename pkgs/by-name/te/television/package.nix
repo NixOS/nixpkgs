@@ -2,23 +2,35 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeWrapper,
   testers,
   television,
   nix-update-script,
+  extraPackages ? [ ],
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "television";
-  version = "0.11.5";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "television";
-    tag = version;
-    hash = "sha256-2Yt98ZtoTHqCtyqGuPL583NBe2CHI+9PIyO0fnonM4E=";
+    tag = finalAttrs.version;
+    hash = "sha256-IlFOYnZ9xPQaRheielKqAckyVlSVQMhnO4wCtVixlNQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+T/WC7jq6qra9qxQ+mR929LQavETHTtAGHKWm81cwNU=";
+  cargoHash = "sha256-QKUspbC1bmSeZP0n/O5roEqQkrja+fVKLhAvgzqNS9E=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = lib.optionalString (extraPackages != [ ]) ''
+    wrapProgram $out/bin/tv \
+      --prefix PATH : ${lib.makeBinPath extraPackages}
+  '';
+
+  # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
+  # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
+  doCheck = false;
 
   passthru = {
     tests.version = testers.testVersion {
@@ -37,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       fuzzy matching algorithm and is designed to be easily extensible.
     '';
     homepage = "https://github.com/alexpasmantier/television";
-    changelog = "https://github.com/alexpasmantier/television/releases/tag/${version}";
+    changelog = "https://github.com/alexpasmantier/television/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "tv";
     maintainers = with lib.maintainers; [
@@ -45,4 +57,4 @@ rustPlatform.buildRustPackage rec {
       getchoo
     ];
   };
-}
+})

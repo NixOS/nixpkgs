@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "btc-rpc-explorer";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "janoside";
     repo = "btc-rpc-explorer";
     rev = "v${version}";
-    hash = "sha256-ZGg3jwSl1XyzS9hMa2YqwExhHSNgrsUmSscZtfF2h54=";
+    hash = "sha256-L7mW1WIbHga6/UjMx4sP0MUhJIRytUhHVIEWMD2amQo=";
   };
 
-  npmDepsHash = "sha256-9pVjydGaEaHytZqwXv0/kaJAVqlE7zzuTvubBFTkuBg=";
+  npmDepsHash = "sha256-eYA2joO4wcV10xJeYLqCbvM2szWlqofmugoHHD9D30U=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -43,9 +43,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/janoside/btc-rpc-explorer";
     license = lib.licenses.mit;
     mainProgram = "btc-rpc-explorer";
-    maintainers = with lib.maintainers; [ d-xo ];
-    broken = true;
-    # At 2024-06-29
-    # https://hydra.nixos.org/build/264232177/nixlog/1
   };
 }

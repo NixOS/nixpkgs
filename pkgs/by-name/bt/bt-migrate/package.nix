@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation {
   pname = "bt-migrate";
-  version = "0-unstable-2023-08-17";
+  version = "0-unstable-2025-05-31";
 
   src = fetchFromGitHub {
     owner = "mikedld";
     repo = "bt-migrate";
-    rev = "e15a489c0c76f98355586ebbee08223af4e9bf50";
-    hash = "sha256-kA6yxhbIh3ThmgF8Zyoe3I79giLVmdNr9IIrw5Xx4s0=";
+    rev = "eb5b0ba5e0176844efde3a319595f52ffe900c2c";
+    hash = "sha256-eg7rZnqpQiOA1N7GHv14eDAmvmj6VWq/dlw2YBw6IAA=";
   };
 
   nativeBuildInputs = [
@@ -54,13 +54,12 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Torrent state migration tool";
     homepage = "https://github.com/mikedld/bt-migrate?tab=readme-ov-file";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "BtMigrate";
-    platforms = platforms.all;
-    broken = true; # https://github.com/mikedld/bt-migrate/issues/26
+    platforms = lib.platforms.all;
   };
 }

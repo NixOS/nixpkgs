@@ -11,28 +11,27 @@
 
 buildGoModule rec {
   pname = "kraftkit";
-  version = "0.11.5";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${version}";
-    hash = "sha256-rwowlwP56IAdogEL6/SBGDtvOW7FhO4+2vTWI755HXI=";
+    hash = "sha256-a6c7g2cxrawE7BRpcrsefCQ7xQ56wVOGjFexdkOKnv0=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      gpgme
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      btrfs-progs
-    ];
+  buildInputs = [
+    gpgme
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    btrfs-progs
+  ];
 
-  vendorHash = "sha256-LdLbAja4AoND5kA+A4rEl5r4tUVDTVxiYzV5GUJP+CA=";
+  vendorHash = "sha256-lwgxedKLcuV6RucbU26sDO+9j+8uWkignJDomFHaSXU=";
 
   ldflags = [
     "-s"

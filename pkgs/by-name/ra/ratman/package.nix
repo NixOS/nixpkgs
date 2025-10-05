@@ -19,11 +19,10 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "irdest";
     repo = "irdest";
-    rev = "${version}";
-    sha256 = "sha256-OuKUZSvIUekhbe1LoEFBL8+sU2KLXBsp1JCEEuxkUlk=";
+    tag = "${version}";
+    hash = "sha256-rdKfKbikyqs0Y/y9A8XRVSKenjHD5rS3blxwy98Tvmg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-H1XE+khN6sU9WTM87foEQRTK0u5fgDZvoG3//hvd464=";
 
   nativeBuildInputs = [

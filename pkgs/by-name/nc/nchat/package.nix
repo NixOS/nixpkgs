@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   file, # for libmagic
@@ -10,18 +11,19 @@
   zlib,
   cmake,
   gperf,
-  stdenv,
-  darwin,
+  nix-update-script,
+  withWhatsApp ? true,
+  apple-sdk_12,
 }:
 
 let
-  version = "5.4.2";
+  version = "5.10.15";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-NrAU47GA7ZASJ7vCo1S8nyGBpfsZn4EBBqx2c4HKx7k=";
+    hash = "sha256-wA0sLOcCDPi3w1naIx/Q82DJk/tl/LTnrUBbMAPvvFU=";
   };
 
   libcgowm = buildGoModule {
@@ -29,14 +31,18 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-EdbOO5cCDT1CcPlCBgMoPDg65FcoOYvBwZa4bz0hfGE=";
+    vendorHash = "sha256-u64b9z/B0j3qArMfxJ8QolgDc9k7Q+LqrQRle3nN7eM=";
 
     buildPhase = ''
+      runHook preBuild
+
       mkdir -p $out/
       go build -o $out/ -buildmode=c-archive
       mv $out/go.a $out/libcgowm.a
       ln -s $out/libcgowm.a $out/libref-cgowm.a
       mv $out/go.h $out/libcgowm.h
+
+      runHook postBuild
     '';
   };
 in
@@ -75,27 +81,33 @@ stdenv.mkDerivation rec {
     libcgowm
   ];
 
-  buildInputs =
-    [
-      file # for libmagic
-      ncurses
-      openssl
-      readline
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        Cocoa
-        Foundation
-      ]
-    );
+  buildInputs = [
+    file # for libmagic
+    ncurses
+    openssl
+    readline
+    sqlite
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # For SecTrustCopyCertificateChain, see https://github.com/NixOS/nixpkgs/pull/445063#pullrequestreview-3261846621
+    apple-sdk_12
+  ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "HAS_WHATSAPP" withWhatsApp)
   ];
+
+  passthru = {
+    inherit libcgowm;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "libcgowm"
+      ];
+    };
+  };
 
   meta = {
     description = "Terminal-based chat client with support for Telegram and WhatsApp";

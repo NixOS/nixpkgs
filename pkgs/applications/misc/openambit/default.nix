@@ -18,7 +18,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openambitproject";
-    repo = pname;
+    repo = "openambit";
     rev = version;
     sha256 = "1074kvkamwnlkwdajsw1799wddcfkjh2ay6l842r0s4cvrxrai85";
   };
@@ -49,7 +49,11 @@ mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/openambit --version
+
+    runHook postInstallCheck
   '';
 
   postInstall = ''

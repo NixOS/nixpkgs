@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.25.0";
+  version = "1.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "proto-plus-python";
     tag = "v${version}";
-    hash = "sha256-rRA5t3QPVSeAqy60icrgvYKbvrClv22I3IYxHoMftQ0=";
+    hash = "sha256-7FonHHXpgJC0vg9Y26bqz0g1NmLWwaZWyFZ0kv7PjY8=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +29,13 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     googleapis-common-protos
+  ];
+
+  pytestFlags = [
+    # pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    "-Wignore::DeprecationWarning"
+    # float_precision option is deprecated for json_format error with latest protobuf
+    "-Wignore:float_precision:UserWarning"
   ];
 
   pythonImportsCheck = [ "proto" ];

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spotify-qt";
-  version = "3.12";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "kraxarn";
     repo = "spotify-qt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-j9g2fq12gsue0pc/fLoCAtDlwwlbCVJ65kxPiTJTqvk=";
+    hash = "sha256-R6ucuQdntc1OxDCV8jDAlyjAo/393HN7fjRJH70OdNs=";
   };
 
   postPatch = ''

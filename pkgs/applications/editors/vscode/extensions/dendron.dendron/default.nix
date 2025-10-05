@@ -9,7 +9,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   };
   meta = {
     changelog = "https://github.com/dendronhq/dendron/blob/master/CHANGELOG.md";
-    description = "The personal knowledge management (PKM) tool that grows as you do!";
+    description = "Personal knowledge management (PKM) tool that grows as you do";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=dendron.dendron";
     homepage = "https://www.dendron.so/";
     license = lib.licenses.asl20;

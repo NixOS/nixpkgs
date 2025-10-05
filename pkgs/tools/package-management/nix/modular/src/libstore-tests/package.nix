@@ -3,6 +3,7 @@
   buildPackages,
   stdenv,
   mkMesonExecutable,
+  writableTmpDirAsHomeHook,
 
   nix-store,
   nix-store-c,
@@ -19,25 +20,11 @@
   filesetToSource,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonExecutable (finalAttrs: {
   pname = "nix-store-tests";
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.unions [
-    ../../nix-meson-build-support
-    ./nix-meson-build-support
-    ../../.version
-    ./.version
-    ./meson.build
-    # ./meson.options
-    (fileset.fileFilter (file: file.hasExt "cc") ./.)
-    (fileset.fileFilter (file: file.hasExt "hh") ./.)
-  ];
 
   # Hack for sake of the dev shell
   passthru.externalBuildInputs = [
@@ -53,6 +40,10 @@ mkMesonExecutable (finalAttrs: {
   ];
 
   mesonFlags = [
+  ];
+
+  excludedTestPatterns = lib.optionals (lib.versionOlder finalAttrs.version "2.31") [
+    "nix_api_util_context.nix_store_real_path_binary_cache"
   ];
 
   passthru = {
@@ -72,18 +63,15 @@ mkMesonExecutable (finalAttrs: {
         runCommand "${finalAttrs.pname}-run"
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
+            buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          (
-            lib.optionalString stdenv.hostPlatform.isWindows ''
-              export HOME="$PWD/home-dir"
-              mkdir -p "$HOME"
-            ''
-            + ''
-              export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}
-              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-              touch $out
-            ''
-          );
+          (''
+            export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}
+            export NIX_REMOTE=$HOME/store
+            ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage} \
+              --gtest_filter=-${lib.concatStringsSep ":" finalAttrs.excludedTestPatterns}
+            touch $out
+          '');
     };
   };
 

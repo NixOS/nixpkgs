@@ -221,8 +221,7 @@ in
 
     sendmailPath = mkOption {
       type = path;
-      example = literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
-      # '' ;  # fix vim
+      example = literalExpression ''lib.getExe' config.services.postfix.package "sendmail"'';
       description = ''
         Path to {file}`sendmail` program.
         The default uses the local sendmail wrapper

@@ -21,7 +21,8 @@ buildPythonPackage rec {
   # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   disabledTestPaths = [
     # Doesn't work with an exported home, RuntimeError: timeout waiting for change to file=/build/tmpgfn145cx

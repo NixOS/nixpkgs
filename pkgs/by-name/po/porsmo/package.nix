@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   alsa-lib,
-  stdenv,
-  darwin,
   testers,
   porsmo,
 }:
@@ -21,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bYPUSrGJKoNLFkIiGuXraYoaYn/HKSP8IiH3gtyWfmw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-zkeQY0YNcKfyaWHmv1N61dBggsvFzz1fgkjXkyYK3Lg=";
 
   nativeBuildInputs = [
@@ -29,14 +26,9 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreAudio
-      darwin.apple_sdk.frameworks.CoreFoundation
-    ];
+  buildInputs = [
+    alsa-lib
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = porsmo;

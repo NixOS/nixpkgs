@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.34.0";
+  version = "2.36.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZvdWWvPUdZIEadxV0nhqgTXhgJJu+hD1LnYCAP+9gpM=";
+    hash = "sha256-3qtd++4Xm6B9TPfKvx85s71/Hz8qFrhN+XR9TuvfHXw=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -81,6 +81,6 @@ buildPythonPackage rec {
     description = "OpenStack Object Storage";
     homepage = "https://github.com/openstack/swift";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

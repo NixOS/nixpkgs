@@ -28,25 +28,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${adaptivecpp.src.name}/tests";
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "AdaptiveCpp_DIR" "${adaptivecpp}/lib/cmake/AdaptiveCpp")
-      (lib.cmakeBool "WITH_PSTL_TESTS" enablePstlTests)
-    ]
-    ++ lib.optionals (targets != null) [
-      (lib.cmakeFeature "DACCP_TARGETS" "${targets}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "AdaptiveCpp_DIR" "${adaptivecpp}/lib/cmake/AdaptiveCpp")
+    (lib.cmakeBool "WITH_PSTL_TESTS" enablePstlTests)
+  ]
+  ++ lib.optionals (targets != null) [
+    (lib.cmakeFeature "DACCP_TARGETS" "${targets}")
+  ];
 
-  installPhase =
-    ''
-      mkdir $out
-      install -Dm755 sycl_tests -t $out/bin/
-      install -Dm755 rt_tests -t $out/bin/
-      install -Dm755 device_compilation_tests -t $out/bin/
-      install -Dm755 dump_test/dump_test -t $out/bin/
-      install -Dm755 platform_api/platform_api -t $out/bin/
-    ''
-    + lib.optionalString enablePstlTests ''
-      install -Dm755 pstl_tests -t $out/bin/
-    '';
+  installPhase = ''
+    mkdir $out
+    install -Dm755 sycl_tests -t $out/bin/
+    install -Dm755 rt_tests -t $out/bin/
+    install -Dm755 device_compilation_tests -t $out/bin/
+    install -Dm755 dump_test/dump_test -t $out/bin/
+    install -Dm755 platform_api/platform_api -t $out/bin/
+  ''
+  + lib.optionalString enablePstlTests ''
+    install -Dm755 pstl_tests -t $out/bin/
+  '';
 })

@@ -7,9 +7,7 @@ Meilisearch is a lightweight, fast and powerful search engine. Think elastic sea
 the minimum to start meilisearch is
 
 ```nix
-{
-  services.meilisearch.enable = true;
-}
+{ services.meilisearch.enable = true; }
 ```
 
 this will start the http server included with meilisearch on port 7700.
@@ -32,10 +30,12 @@ you first need to add documents to an index before you can search for documents.
 
 - The default nixos package doesn't come with the [dashboard](https://docs.meilisearch.com/learn/getting_started/quick_start.html#search), since the dashboard features makes some assets downloads at compile time.
 
-- Anonymized Analytics sent to meilisearch are disabled by default.
+- `no_analytics` is set to true by default.
 
-- Default deployment is development mode. It doesn't require a secret master key. All routes are not protected and accessible.
+- `http_addr` is derived from {option}`services.meilisearch.listenAddress` and {option}`services.meilisearch.listenPort`. The two sub-fields are separate because this makes it easier to consume in certain other modules.
 
-## Missing {#module-services-meilisearch-missing}
+- `db_path` is set to `/var/lib/meilisearch` by default. Upstream, the default value is equivalent to `/var/lib/meilisearch/data.ms`.
 
-- the snapshot feature is not yet configurable from the module, it's just a matter of adding the relevant environment variables.
+- `dump_dir` and `snapshot_dir` are set to `/var/lib/meilisearch/dumps` and `/var/lib/meilisearch/snapshots`, respectively. This is equivalent to the upstream defaults.
+
+- All other options inherit their upstream defaults. In particular, the default configuration uses `env = "development"`, which doesn't require a master key, in which case all routes are unprotected.

@@ -28,19 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc";
-  version = "1.12.6";
+  version = "1.12.9";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc/";
     rev = "Orthanc-${finalAttrs.version}";
-    hash = "sha256-1ztA95PiCGL1oD6zVfsEhwrwGNID13/NcyZDD3eHYv0=";
+    hash = "sha256-IBULO03og+aXmpYAXZdsesTFkc7HkeXol+A7yzDzcfQ=";
   };
-
-  patches = [
-    # Without this patch, the build fails to find `GOOGLE_PROTOBUF_VERIFY_VERSION`
-    # The patch has been included upstream, it need to be removed in the next release.
-    ./add-missing-include.patch
-  ];
 
   outputs = [
     "out"
@@ -129,11 +123,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Orthanc is a lightweight, RESTful DICOM server for healthcare and medical research";
+    description = "Lightweight, RESTful DICOM server for healthcare and medical research";
     homepage = "https://www.orthanc-server.com/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Orthanc";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

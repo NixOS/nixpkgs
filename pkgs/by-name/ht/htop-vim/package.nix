@@ -6,7 +6,6 @@
   autoreconfHook,
   pkg-config,
   ncurses,
-  darwin,
   libcap,
   libnl,
   sensorsSupport ? stdenv.hostPlatform.isLinux,
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "htop-dev";
-    repo = pname;
+    repo = "htop-vim";
     rev = version;
     hash = "sha256-4M2Kzy/tTpIZzpyubnXWywQh7Np5InT4sYkVG2v6wWs";
   };
@@ -51,27 +50,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.IOKit ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      libnl
-    ]
-    ++ lib.optional sensorsSupport lm_sensors
-    ++ lib.optional systemdSupport systemd;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    libnl
+  ]
+  ++ lib.optional sensorsSupport lm_sensors
+  ++ lib.optional systemdSupport systemd;
 
-  configureFlags =
-    [
-      "--enable-unicode"
-      "--sysconfdir=/etc"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-affinity"
-      "--enable-capabilities"
-      "--enable-delayacct"
-    ]
-    ++ lib.optional sensorsSupport "--enable-sensors";
+  configureFlags = [
+    "--enable-unicode"
+    "--sysconfdir=/etc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-affinity"
+    "--enable-capabilities"
+    "--enable-delayacct"
+  ]
+  ++ lib.optional sensorsSupport "--enable-sensors";
 
   postFixup =
     let

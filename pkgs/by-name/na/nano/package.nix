@@ -24,18 +24,18 @@ let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
     repo = "nanonix";
-    rev = "bf8d898efaa10dce3f7972ff765b58c353b4b4ab";
-    hash = "sha256-1tJV7F+iwMPRV6FgnbTw+5m7vMhgaeXftYkr9GPR4xw=";
+    rev = "5c30e1de6d664d609ff3828a8877fba3e06ca336";
+    hash = "sha256-S9p/g8DZhZ1cZdyFI6eaOxxGAbz+dloFEWdamAHo120=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.3";
+  version = "8.6";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    hash = "sha256-VRtxey4o9+kPdJMjaGobW7vYTPoTkGBNhUo8o3ePER4=";
+    hash = "sha256-96v78O7V9XOrUb13pFjzLYL5hZxV6WifgZ2W/hQ3phk=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     (lib.enableFeature enableNls "nls")
     (lib.enableFeature enableTiny "tiny")
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "gl_cv_func_strcasecmp_works=yes"
   ];
 
   postInstall =
@@ -60,7 +63,12 @@ stdenv.mkDerivation rec {
         cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
       '';
 
+  # https://hydra.nixos.org/build/300187289/nixlog/1
+  # openat-die.c:57:10: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+  hardeningDisable = [ "format" ];
+
   enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru = {
     tests = {

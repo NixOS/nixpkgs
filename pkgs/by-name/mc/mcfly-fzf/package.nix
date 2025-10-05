@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace shell/mcfly-fzf.fish --replace '(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xHYOhq/vDmjP7RfgRR15Isj7rg/nIV9tz9XznHBENig=";
 
   meta = with lib; {

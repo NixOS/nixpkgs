@@ -6,6 +6,7 @@
 python3Packages.buildPythonApplication {
   pname = "av-98";
   version = "1.0.2dev";
+  format = "setuptools";
 
   src = fetchgit {
     url = "https://tildegit.org/solderpunk/AV-98.git";
@@ -27,7 +28,6 @@ python3Packages.buildPythonApplication {
     description = "Experimental console client for the Gemini protocol";
     mainProgram = "av98";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ehmry ];
 
     broken = true;
   };

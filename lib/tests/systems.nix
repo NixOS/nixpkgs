@@ -49,6 +49,7 @@ lib.runTests (
       ++ illumos
       ++ wasi
       ++ windows
+      ++ cygwin
       ++ embedded
       ++ mmix
       ++ js
@@ -66,10 +67,8 @@ lib.runTests (
       "armv7l-linux"
       "armv7l-netbsd"
       "arm-none"
-      "armv7a-darwin"
     ];
     testarmv7 = mseteq armv7 [
-      "armv7a-darwin"
       "armv7a-linux"
       "armv7l-linux"
       "armv7a-netbsd"
@@ -84,7 +83,6 @@ lib.runTests (
       "i686-cygwin"
       "i686-windows"
       "i686-none"
-      "i686-darwin"
     ];
     testmips = mseteq mips [
       "mips-none"
@@ -97,6 +95,7 @@ lib.runTests (
     ];
     testmmix = mseteq mmix [ "mmix-mmixware" ];
     testpower = mseteq power [
+      "powerpc-linux"
       "powerpc-netbsd"
       "powerpc-none"
       "powerpc64-linux"
@@ -145,9 +144,7 @@ lib.runTests (
     ];
     testdarwin = mseteq darwin [
       "x86_64-darwin"
-      "i686-darwin"
       "aarch64-darwin"
-      "armv7a-darwin"
     ];
     testfreebsd = mseteq freebsd [
       "aarch64-freebsd"
@@ -179,6 +176,7 @@ lib.runTests (
       "mips64-linux"
       "mips64el-linux"
       "mipsel-linux"
+      "powerpc-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
       "riscv32-linux"
@@ -205,8 +203,6 @@ lib.runTests (
       "x86_64-openbsd"
     ];
     testwindows = mseteq windows [
-      "i686-cygwin"
-      "x86_64-cygwin"
       "aarch64-windows"
       "i686-windows"
       "x86_64-windows"

@@ -33,25 +33,24 @@ stdenv.mkDerivation rec {
 
     (
       if stdenv.hostPlatform.isDarwin then
-        ../openssl/3.4/use-etc-ssl-certs-darwin.patch
+        ../openssl/3.5/use-etc-ssl-certs-darwin.patch
       else
-        ../openssl/3.4/use-etc-ssl-certs.patch
+        ../openssl/3.5/use-etc-ssl-certs.patch
     )
   ];
 
-  postPatch =
-    ''
-      patchShebangs Configure
-    ''
-    # config is a configure script which is not installed.
-    + ''
-      substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMusl ''
-      substituteInPlace crypto/async/arch/async_posix.h \
-        --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
-                  '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
-    '';
+  postPatch = ''
+    patchShebangs Configure
+  ''
+  # config is a configure script which is not installed.
+  + ''
+    substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace crypto/async/arch/async_posix.h \
+      --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
+                '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -122,29 +121,28 @@ stdenv.mkDerivation rec {
   # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
   dontAddStaticConfigureFlags = true;
 
-  configureFlags =
-    [
-      "shared" # "shared" builds both shared and static libraries
-      "--libdir=lib"
-      "--openssldir=etc/ssl"
-    ]
-    ++ lib.optionals withCryptodev [
-      "-DHAVE_CRYPTODEV"
-      "-DUSE_CRYPTODEV_DIGESTS"
-    ]
-    ++ lib.optional enableSSL2 "enable-ssl2"
-    ++ lib.optional enableSSL3 "enable-ssl3"
-    # We select KTLS here instead of the configure-time detection (which we patch out).
-    # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
-    ++ lib.optional (stdenv.hostPlatform.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
-    ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
-    # OpenSSL needs a specific `no-shared` configure flag.
-    # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
-    # for a comprehensive list of configuration options.
-    ++ lib.optional static "no-shared"
-    # This introduces a reference to the CTLOG_FILE which is undesired when
-    # trying to build binaries statically.
-    ++ lib.optional static "no-ct";
+  configureFlags = [
+    "shared" # "shared" builds both shared and static libraries
+    "--libdir=lib"
+    "--openssldir=etc/ssl"
+  ]
+  ++ lib.optionals withCryptodev [
+    "-DHAVE_CRYPTODEV"
+    "-DUSE_CRYPTODEV_DIGESTS"
+  ]
+  ++ lib.optional enableSSL2 "enable-ssl2"
+  ++ lib.optional enableSSL3 "enable-ssl3"
+  # We select KTLS here instead of the configure-time detection (which we patch out).
+  # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+  ++ lib.optional (stdenv.hostPlatform.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
+  # OpenSSL needs a specific `no-shared` configure flag.
+  # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
+  # for a comprehensive list of configuration options.
+  ++ lib.optional static "no-shared"
+  # This introduces a reference to the CTLOG_FILE which is undesired when
+  # trying to build binaries statically.
+  ++ lib.optional static "no-ct";
 
   makeFlags = [
     "MANDIR=$(man)/share/man"

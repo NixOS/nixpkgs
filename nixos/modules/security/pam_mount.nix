@@ -15,7 +15,7 @@ let
     ${pkgs.lsof}/bin/lsof | ${pkgs.gnugrep}/bin/grep $MNTPT | ${pkgs.gawk}/bin/awk '{print $2}' | ${pkgs.findutils}/bin/xargs ${pkgs.util-linux}/bin/kill -$SIGNAL
   '';
 
-  anyPamMount = lib.any (lib.attrByPath [ "pamMount" ] false) (
+  anyPamMount = lib.any (svc: svc.enable && svc.pamMount) (
     lib.attrValues config.security.pam.services
   );
 in
@@ -158,7 +158,8 @@ in
                 user = user.name;
                 path = user.cryptHomeLuks;
                 mountpoint = user.home;
-              } // user.pamMount;
+              }
+              // user.pamMount;
             in
             "<volume ${lib.concatStringsSep " " (lib.mapAttrsToList mkAttr attrs)} />\n";
         in

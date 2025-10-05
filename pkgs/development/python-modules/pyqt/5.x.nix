@@ -118,32 +118,33 @@ buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ libsForQt5.qmake ]
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ libsForQt5.qmake ]
+  ++ [
+    setuptools
+    lndir
+    sip
+  ]
+  ++ (
+    with pkgsBuildTarget.targetPackages.libsForQt5;
+    [ ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
     ++ [
-      setuptools
-      lndir
-      sip
+      qtbase
+      qtsvg
+      qtdeclarative
+      qtwebchannel
     ]
-    ++ (
-      with pkgsBuildTarget.targetPackages.libsForQt5;
-      [ ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
-      ++ [
-        qtbase
-        qtsvg
-        qtdeclarative
-        qtwebchannel
-      ]
-      ++ lib.optional withConnectivity qtconnectivity
-      ++ lib.optional withMultimedia qtmultimedia
-      ++ lib.optional withWebKit qtwebkit
-      ++ lib.optional withWebSockets qtwebsockets
-      ++ lib.optional withLocation qtlocation
-      ++ lib.optional withSerialPort qtserialport
-      ++ lib.optional withTools qttools
-    );
+    ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
+    ++ lib.optional withWebKit qtwebkit
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withTools qttools
+  );
 
   buildInputs =
     with libsForQt5;
@@ -182,21 +183,20 @@ buildPythonPackage rec {
   # Checked using pythonImportsCheck
   doCheck = false;
 
-  pythonImportsCheck =
-    [
-      "PyQt5"
-      "PyQt5.QtCore"
-      "PyQt5.QtQml"
-      "PyQt5.QtWidgets"
-      "PyQt5.QtGui"
-    ]
-    ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-    ++ lib.optional withWebKit "PyQt5.QtWebKit"
-    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
-    ++ lib.optional withLocation "PyQt5.QtPositioning"
-    ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
-    ++ lib.optional withTools "PyQt5.QtDesigner";
+  pythonImportsCheck = [
+    "PyQt5"
+    "PyQt5.QtCore"
+    "PyQt5.QtQml"
+    "PyQt5.QtWidgets"
+    "PyQt5.QtGui"
+  ]
+  ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+  ++ lib.optional withWebKit "PyQt5.QtWebKit"
+  ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+  ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
+  ++ lib.optional withLocation "PyQt5.QtPositioning"
+  ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
+  ++ lib.optional withTools "PyQt5.QtDesigner";
 
   meta = with lib; {
     description = "Python bindings for Qt5";

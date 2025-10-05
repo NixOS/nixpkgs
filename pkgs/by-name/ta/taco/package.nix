@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DOPENMP=ON"
-  ] ++ lib.optional enablePython "-DPYTHON=ON";
+  ]
+  ++ lib.optional enablePython "-DPYTHON=ON";
 
   postInstall = lib.strings.optionalString enablePython ''
     mkdir -p $out/${python.sitePackages}

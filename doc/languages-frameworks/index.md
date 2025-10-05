@@ -55,7 +55,6 @@ agda.section.md
 android.section.md
 astal.section.md
 beam.section.md
-bower.section.md
 chicken.section.md
 coq.section.md
 cosmic.section.md
@@ -98,6 +97,7 @@ scheme.section.md
 swift.section.md
 tcl.section.md
 texlive.section.md
+typst.section.md
 vim.section.md
 neovim.section.md
 ```

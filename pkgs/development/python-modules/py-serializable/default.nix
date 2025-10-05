@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-serializable";
-  version = "1.1.2";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "madpah";
     repo = "serializable";
     tag = "v${version}";
-    hash = "sha256-2A+QjokZ7gtgstclZ7PFSPymYjQYKsLVXy9xbFOfxLo=";
+    hash = "sha256-nou1/80t9d2iKOdZZbcN4SI3dlvuC8T55KMCP/cDEEU=";
   };
 
   build-system = [ poetry-core ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     xmldiff
   ];
 
-  pythonImportsCheck = [ "serializable" ];
+  pythonImportsCheck = [ "py_serializable" ];
 
   disabledTests = [
     # AssertionError: '<ns0[155 chars]itle>The Phoenix
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to aid with serialisation and deserialisation to/from JSON and XML";
     homepage = "https://github.com/madpah/serializable";
-    changelog = "https://github.com/madpah/serializable/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/madpah/serializable/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

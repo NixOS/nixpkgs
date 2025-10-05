@@ -91,7 +91,7 @@
                   )
                 ];
               }
-              // builtins.removeAttrs args [ "modules" ]
+              // removeAttrs args [ "modules" ]
             );
         }
       );
@@ -209,11 +209,14 @@
       */
       legacyPackages = forAllSystems (
         system:
-        (import ./. { inherit system; }).extend (
-          final: prev: {
-            lib = prev.lib.extend libVersionInfoOverlay;
-          }
-        )
+        (import ./. {
+          inherit system;
+          overlays = import ./pkgs/top-level/impure-overlays.nix ++ [
+            (final: prev: {
+              lib = prev.lib.extend libVersionInfoOverlay;
+            })
+          ];
+        })
       );
 
       /**

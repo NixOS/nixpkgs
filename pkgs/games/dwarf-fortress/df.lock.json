@@ -1,0 +1,127 @@
+{
+  "game": {
+    "latest": {
+      "linux": "52.04",
+      "darwin": "0.47.05"
+    },
+    "versions": {
+      "52.04": {
+        "df": {
+          "version": "52.04",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_52_04_linux.tar.bz2",
+              "outputHash": "sha256-x/v4yWuojnbea0N7KUAINBdhPBjl0DoWy8Pi/eDCpec="
+            }
+          }
+        },
+        "hack": {
+          "version": "52.04-r1",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "52.04-r1",
+            "outputHash": "sha256-DPW+fvurUYnwfGrEqV3JEN1TfllOJPHqGIlNJ3Wha90="
+          },
+          "xmlRev": "7b691d256f9427036e7ff24fa795a0f9334739e7"
+        }
+      },
+      "51.13": {
+        "df": {
+          "version": "51.13",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_51_13_linux.tar.bz2",
+              "outputHash": "sha256-Fdb3QS+P0xL4/U0z6nZyMh78KVHDiu9TI3fF6saAw3I="
+            }
+          }
+        },
+        "hack": {
+          "version": "51.13-r1",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "51.13-r1",
+            "outputHash": "sha256-Z6ZmXl4BmSg9jRwPpYKMIw3fW6DYxBJEv8oboh+PbZQ="
+          },
+          "xmlRev": "ae7424d3f40bf60b3906b5b9b472cb9a7209a3a8"
+        }
+      },
+      "50.15": {
+        "df": {
+          "version": "50.15",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_50_15_linux.tar.bz2",
+              "outputHash": "sha256-KkKcXfXjD7dUjQDfKtXiaKfoieRN8wJSYxyN6liBwU4="
+            }
+          }
+        },
+        "hack": {
+          "version": "50.15-r2",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "50.15-r2",
+            "outputHash": "sha256-6T1RXdBJdo/tvHXwYATS8emLIfDg7/0cGL4i982iHdY="
+          },
+          "xmlRev": "c6c8f15afec05d457813c003a869509901993af4"
+        }
+      },
+      "0.47.05": {
+        "df": {
+          "version": "0.47.05",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_47_05_linux.tar.bz2",
+              "outputHash": "sha256-rHSm27fX2WIfQwQFCAMiq1DDX2YyNS/y6pI/bcWv/KM="
+            },
+            "darwin": {
+              "url": "https://www.bay12games.com/dwarves/df_47_05_osx.tar.bz2",
+              "outputHash": "sha256-vHmpKtuWSX1ZVGN46MmrLvZ8oiq/vZdjYW3pwuAOXyQ="
+            }
+          }
+        },
+        "hack": {
+          "version": "0.47.05-r8",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "0.47.05-r8",
+            "outputHash": "sha256-y5XluaNU0ewUg2uAd77+h80CYDwNr1rsxB8IslZWip8="
+          },
+          "xmlRev": "afe7e908e9e7e863412e8983f9feb2b999fae498"
+        }
+      },
+      "0.44.12": {
+        "df": {
+          "version": "0.44.12",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_44_12_linux.tar.bz2",
+              "outputHash": "sha256-Wi0Vcw0htBpo2gnOPDtww+Km/RW5XGy/toV47S0tuXk="
+            },
+            "darwin": {
+              "url": "https://www.bay12games.com/dwarves/df_44_12_osx.tar.bz2",
+              "outputHash": "sha256-IY1TGZ9+ufWMA146XUTYgvG2ngfvY/mKZZDWGm/IptU="
+            }
+          }
+        },
+        "hack": {
+          "version": "0.44.12-r3",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "0.44.12-r3",
+            "outputHash": "sha256-8ChD4P7SpSNlhhOsrbIxoJ/T/CWobwvOY7QswxP0KK0="
+          },
+          "xmlRev": "4053321b202a29f667d64d824ba8339ec1b1df4f"
+        }
+      }
+    }
+  },
+  "therapist": {
+    "version": "42.1.18",
+    "maxDfVersion": "52.03",
+    "git": {
+      "url": "https://github.com/Dwarf-Therapist/Dwarf-Therapist.git",
+      "revision": "v42.1.18",
+      "outputHash": "sha256-RdBUpVkjvsNjTowHpQ2FQUCtJiwfqls4dnoUIwKoXGg="
+    }
+  }
+}

@@ -11,6 +11,7 @@ let
   inherit (lib)
     all
     attrNames
+    attrValues
     concatMapStrings
     concatMapStringsSep
     concatStrings
@@ -37,6 +38,8 @@ let
 
   inherit (lib.meta)
     availableOn
+    cpeFullVersionWithVendor
+    tryCPEPatchVersionInUpdateWithVendor
     ;
 
   inherit (lib.generators)
@@ -108,15 +111,40 @@ let
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
-  hasNoMaintainers = attrs: attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
+  hasNoMaintainers =
+    # To get usable output, we want to avoid flagging "internal" derivations.
+    # Because we do not have a way to reliably decide between internal or
+    # external derivation, some heuristics are required to decide.
+    #
+    # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
+    # If `description` is not defined, the derivation is probably not a package.
+    # Simply checking whether `meta` is defined is insufficient,
+    # as some fetchers and trivial builders do define meta.
+    attrs:
+    (!attrs ? outputHash)
+    && (attrs ? meta.description)
+    && (attrs.meta.maintainers or [ ] == [ ])
+    && (attrs.meta.teams or [ ] == [ ]);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
+
+  # Allow granular checks to allow only some broken packages
+  # Example:
+  # { pkgs, ... }:
+  # {
+  #   allowBroken = false;
+  #   allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+  # }
+  allowBrokenPredicate = config.allowBrokenPredicate or (x: false);
+
+  hasDeniedBroken =
+    attrs: (attrs.meta.broken or false) && !allowBroken && !allowBrokenPredicate attrs;
 
   hasUnsupportedPlatform = pkg: !(availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
-  # Alow granular checks to allow only some unfree packages
+  # Allow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
   # {
@@ -161,7 +189,8 @@ let
   hasDeniedNonSourceProvenance =
     attrs: hasNonSourceProvenance attrs && !allowNonSource && !allowNonSourcePredicate attrs;
 
-  showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (toList value));
+  showLicenseOrSourceType =
+    value: toString (map (v: v.shortName or v.fullName or "unknown") (toList value));
   showLicense = showLicenseOrSourceType;
   showSourceType = showLicenseOrSourceType;
 
@@ -277,9 +306,9 @@ let
 
       however ${getNameWithVersion attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
 
-      and is missing the following ouputs:
+      and is missing the following outputs:
 
-      ${concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
+      ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
   handleEvalIssue =
@@ -368,6 +397,7 @@ let
         ];
       sourceProvenance = listOf attrs;
       maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
       inherit platforms;
@@ -386,6 +416,8 @@ let
             (isDerivation x && x ? meta.timeout);
       };
       timeout = int;
+      knownVulnerabilities = listOf str;
+      badPlatforms = platforms;
 
       # Needed for Hydra to expose channel tarballs:
       # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
@@ -393,7 +425,6 @@ let
 
       # Weirder stuff that doesn't appear in the documentation?
       maxSilent = int;
-      knownVulnerabilities = listOf str;
       name = str;
       version = str;
       tag = str;
@@ -406,7 +437,12 @@ let
       isFcitxEngine = bool;
       isIbusEngine = bool;
       isGutenprint = bool;
-      badPlatforms = platforms;
+
+      # Used for the original location of the maintainer and team attributes to assist with pings.
+      maintainersPosition = any;
+      teamsPosition = any;
+
+      identifiers = attrs;
     };
 
   checkMetaAttr =
@@ -498,7 +534,7 @@ let
         reason = "non-source";
         errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
       }
-    else if !allowBroken && attrs.meta.broken or false then
+    else if hasDeniedBroken attrs then
       {
         valid = "no";
         reason = "broken";
@@ -516,7 +552,7 @@ let
         reason = "unsupported";
         errormsg = ''
           is not available on the requested hostPlatform:
-            hostPlatform.config = "${hostPlatform.config}"
+            hostPlatform.system = "${hostPlatform.system}"
             package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
             package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
         '';
@@ -534,11 +570,41 @@ let
       {
         valid = "warn";
         reason = "maintainerless";
-        errormsg = "has no maintainers";
+        errormsg = "has no maintainers or teams";
       }
     # -----
     else
       validYes;
+
+  # Helper functions and declarations to handle identifiers, extracted to reduce allocations
+  hasAllCPEParts =
+    cpeParts:
+    let
+      values = attrValues cpeParts;
+    in
+    (length values == 11) && !any isNull values;
+  makeCPE =
+    {
+      part,
+      vendor,
+      product,
+      version,
+      update,
+      edition,
+      sw_edition,
+      target_sw,
+      target_hw,
+      language,
+      other,
+    }:
+    "cpe:2.3:${part}:${vendor}:${product}:${version}:${update}:${edition}:${sw_edition}:${target_sw}:${target_hw}:${language}:${other}";
+  possibleCPEPartsFuns = [
+    (vendor: version: {
+      success = true;
+      value = cpeFullVersionWithVendor vendor version;
+    })
+    tryCPEPatchVersionInUpdateWithVendor
+  ];
 
   # The meta attribute is passed in the resulting attribute set,
   # but it's not part of the actual derivation, i.e., it's not
@@ -557,6 +623,8 @@ let
     let
       outputs = attrs.outputs or [ "out" ];
       hasOutput = out: builtins.elem out outputs;
+      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -583,14 +651,75 @@ let
           else
             findFirst hasOutput null outputs
         )
-      ] ++ optional (hasOutput "man") "man";
+      ]
+      ++ optional (hasOutput "man") "man";
+
+      # CI scripts look at these to determine pings. Note that we should filter nulls out of this,
+      # or nix-env complains: https://github.com/NixOS/nix/blob/2.18.8/src/nix-env/nix-env.cc#L963
+      ${if maintainersPosition == null then null else "maintainersPosition"} = maintainersPosition;
+      ${if teamsPosition == null then null else "teamsPosition"} = teamsPosition;
     }
     // attrs.meta or { }
-    # Fill `meta.position` to identify the source location of the package.
-    // optionalAttrs (pos != null) {
-      position = pos.file + ":" + toString pos.line;
-    }
     // {
+      # Fill `meta.position` to identify the source location of the package.
+      ${if pos == null then null else "position"} = pos.file + ":" + toString pos.line;
+
+      # Maintainers should be inclusive of teams.
+      # Note that there may be external consumers of this API (repology, for instance) -
+      # if you add a new maintainer or team attribute please ensure that this expectation is still met.
+      maintainers =
+        attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+
+      identifiers =
+        let
+          # nix-env writes a warning for each derivation that has null in its meta values, so
+          # fields without known values are removed from the result
+          defaultCPEParts = {
+            part = "a";
+            #vendor = null;
+            ${if attrs ? pname then "product" else null} = attrs.pname;
+            #version = null;
+            #update = null;
+            edition = "*";
+            sw_edition = "*";
+            target_sw = "*";
+            target_hw = "*";
+            language = "*";
+            other = "*";
+          };
+
+          cpeParts = defaultCPEParts // attrs.meta.identifiers.cpeParts or { };
+          cpe = if hasAllCPEParts cpeParts then makeCPE cpeParts else null;
+
+          possibleCPEs =
+            if cpe != null then
+              [ { inherit cpeParts cpe; } ]
+            else if attrs.meta.identifiers.cpeParts.vendor or null == null || attrs.version or null == null then
+              [ ]
+            else
+              concatMap (
+                f:
+                let
+                  result = f attrs.meta.identifiers.cpeParts.vendor attrs.version;
+                  # Note that attrs.meta.identifiers.cpeParts at this point can include defaults with user overrides.
+                  # Since we can't split them apart, user overrides don't apply to possibleCPEs.
+                  guessedParts = cpeParts // result.value;
+                in
+                optional (result.success && hasAllCPEParts guessedParts) {
+                  cpeParts = guessedParts;
+                  cpe = makeCPE guessedParts;
+                }
+              ) possibleCPEPartsFuns;
+          v1 = {
+            inherit cpeParts possibleCPEs;
+            ${if cpe != null then "cpe" else null} = cpe;
+          };
+        in
+        v1
+        // {
+          inherit v1;
+        };
+
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
       broken = isMarkedBroken attrs;
@@ -625,7 +754,7 @@ let
           else if valid == "warn" then
             (handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; })
           else
-            throw "Unknown validitiy: '${valid}'"
+            throw "Unknown validity: '${valid}'"
         );
       };
 

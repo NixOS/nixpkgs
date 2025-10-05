@@ -21,15 +21,14 @@ python3.pkgs.buildPythonApplication {
     sha256 = "1lssr7iv43mp5v6nzrfbqlfzx8jcc7m636wlfyhhnd8ydd39n6k4";
   };
 
-  propagatedBuildInputs =
-    [
-      libnotify
-      gtk3
-    ]
-    ++ (with python3.pkgs; [
-      notmuch
-      pygobject3
-    ]);
+  propagatedBuildInputs = [
+    libnotify
+    gtk3
+  ]
+  ++ (with python3.pkgs; [
+    notmuch
+    pygobject3
+  ]);
 
   nativeBuildInputs = [
     gobject-introspection

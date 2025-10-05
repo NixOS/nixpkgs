@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.8.1";
   pname = "angie-console-light";
 
   src = fetchurl {
     url = "https://download.angie.software/files/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-Oz+FdMrIGNmJKHl/wOVZCP1b0AJODcURvDUKz4gCqYU=";
+    hash = "sha256-yKKwkvLsBFVNc0Uv9iDMhhinuXAukJI9k9ZG5Amhgfs=";
   };
 
   outputs = [

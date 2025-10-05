@@ -4,7 +4,6 @@
   postgresql,
   postgresqlBuildExtension,
   protobufc,
-  stdenv,
 }:
 
 postgresqlBuildExtension {

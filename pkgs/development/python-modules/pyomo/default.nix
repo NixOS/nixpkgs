@@ -1,17 +1,20 @@
 {
   lib,
   buildPythonPackage,
+  cython,
   fetchFromGitHub,
   parameterized,
   ply,
+  pybind11,
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.9.1";
+  version = "6.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,23 +23,24 @@ buildPythonPackage rec {
     repo = "pyomo";
     owner = "pyomo";
     tag = version;
-    hash = "sha256-sEbvQ6U8eSzDPE3kVCektt92dpVV9JhZ4tKDtlHX42s=";
+    hash = "sha256-iH6vxxA/CdPCXqiw3BUmhUwhS2hfwaJy5jIic4id0Jw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    pybind11
+    setuptools
+  ];
 
   dependencies = [ ply ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pyomo" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTestPaths = [
     # Don't test the documentation and the examples

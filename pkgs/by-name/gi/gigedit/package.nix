@@ -15,18 +15,19 @@
   libgig,
   libsndfile,
   libxslt,
+  linuxsampler,
 }:
 
 let
   gtkmm2_with_pango242 = gtkmm2.override { pangomm = pangomm_2_42; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gigedit";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "08db12crwf0dy1dbyrmivqqpg5zicjikqkmf2kb1ywpq0a9hcxrb";
+    url = "https://download.linuxsampler.org/packages/gigedit-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-pz+2gbVbPytuioXxNHQWE3Pml4r9JfwBIQcsbevWHkQ=";
   };
 
   preConfigure = "make -f Makefile.svn";
@@ -47,16 +48,17 @@ stdenv.mkDerivation rec {
     libgig
     libsndfile
     libxslt
+    linuxsampler
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.linuxsampler.org";
     description = "Gigasampler file access library";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "gigedit";
   };
-}
+})

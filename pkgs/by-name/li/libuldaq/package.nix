@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoreconfHook,
   libusb1,
-  ...
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ libusb1 ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Library to talk to uldaq devices";

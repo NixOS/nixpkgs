@@ -5,20 +5,16 @@
   sqlite,
   libpq,
   boost,
-  darwin,
   lib,
   stdenv,
 }:
-let
-  inherit (darwin.apple_sdk_11_0.frameworks) Kerberos;
-in
 stdenv.mkDerivation rec {
   pname = "soci";
   version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "SOCI";
-    repo = pname;
+    repo = "soci";
     rev = "v${version}";
     sha256 = "sha256-NE0ApbX8HG2VAQ9cg9+kX3kJQ4PR1XvWL9BlT8NphmE=";
   };
@@ -39,15 +35,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      sqlite
-      libpq
-      boost
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Kerberos
-    ];
+  buildInputs = [
+    sqlite
+    libpq
+    boost
+  ];
 
   meta = with lib; {
     description = "Database access library for C++";

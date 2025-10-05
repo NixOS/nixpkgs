@@ -13,13 +13,13 @@ assert enableShared || enableStatic;
 
 stdenv.mkDerivation rec {
   pname = "redis-plus-plus";
-  version = "1.3.14";
+  version = "1.3.15";
 
   src = fetchFromGitHub {
     owner = "sewenew";
     repo = "redis-plus-plus";
     rev = version;
-    sha256 = "sha256-GN+GrV53+JPEbVefH0EXzS1PyGEdQGFcPEctdWOI5uk=";
+    sha256 = "sha256-0q+pQ2tS04RYKsikTG5QMuTPW3f6+fFIPuJZVf/aIw0=";
   };
 
   patches = [
@@ -29,16 +29,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ hiredis ];
 
-  cmakeFlags =
-    [
-      "-DREDIS_PLUS_PLUS_BUILD_TEST=OFF"
-    ]
-    ++ lib.optionals (!enableShared) [
-      "-DREDIS_PLUS_PLUS_BUILD_SHARED=OFF"
-    ]
-    ++ lib.optionals (!enableStatic) [
-      "-DREDIS_PLUS_PLUS_BUILD_STATIC=OFF"
-    ];
+  cmakeFlags = [
+    "-DREDIS_PLUS_PLUS_BUILD_TEST=OFF"
+  ]
+  ++ lib.optionals (!enableShared) [
+    "-DREDIS_PLUS_PLUS_BUILD_SHARED=OFF"
+  ]
+  ++ lib.optionals (!enableStatic) [
+    "-DREDIS_PLUS_PLUS_BUILD_STATIC=OFF"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/sewenew/redis-plus-plus";

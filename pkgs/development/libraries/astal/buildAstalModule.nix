@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  source, # this is ./source.nix
 
   glib,
   wrapGAppsHook3,
@@ -15,7 +15,7 @@
   python3,
 }:
 let
-  cleanArgs = lib.flip builtins.removeAttrs [
+  cleanArgs = lib.flip removeAttrs [
     "name"
     "sourceRoot"
     "nativeBuildInputs"
@@ -39,17 +39,12 @@ let
       cleanArgs args
       // {
         pname = "astal-${name}";
-        version = "0-unstable-2025-03-17";
+        inherit (source) version;
 
         __structuredAttrs = true;
         strictDeps = true;
 
-        src = fetchFromGitHub {
-          owner = "Aylur";
-          repo = "astal";
-          rev = "e5a8e3b60e41d06450284baf7008abe4ac27a53d";
-          hash = "sha256-8gWNDDVS7TqLiS+eR1XhfMHBeknmTzLQ3ItB40OK3p0=";
-        };
+        src = source;
 
         sourceRoot = "${finalAttrs.src.name}/${sourceRoot}";
 
@@ -75,7 +70,8 @@ let
             "aarch64-linux"
             "x86_64-linux"
           ];
-        } // meta;
+        }
+        // meta;
       }
     );
 in

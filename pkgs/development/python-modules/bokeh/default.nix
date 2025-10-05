@@ -26,6 +26,7 @@
   geckodriver,
   isort,
   json5,
+  narwhals,
   nbconvert,
   networkx,
   psutil,
@@ -45,14 +46,14 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.6.3";
+  version = "3.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m4HWqepi51oEoanZ+TGUIBaJC+7Jq10SmipEMs9ZXAo=";
+    hash = "sha256-cKian3l7ED1e5q0V+3lErdoRXPDamW7Qt1z7phyxLys=";
   };
 
   patches = [
@@ -111,6 +112,7 @@ buildPythonPackage rec {
     pyyaml
     tornado
     xyzservices
+    narwhals
   ];
 
   doCheck = false; # need more work

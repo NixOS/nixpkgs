@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libxml2
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) shared-mime-info;
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) shared-mime-info;
 
   buildInputs = [
     libxml2
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.freedesktop.members ++ [ maintainers.mimame ];
+    maintainers = [ maintainers.mimame ];
+    teams = [ teams.freedesktop ];
     mainProgram = "update-mime-database";
   };
 }

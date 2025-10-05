@@ -43,19 +43,18 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      for file in poly class cws nef mori; do
-        cp -p $file.x "$out/bin/$file-${dim}d.x"
-      done
-    ''
-    + lib.optionalString doSymlink ''
-      cd $out/bin
-      for file in poly class cws nef mori; do
-        ln -sf $file-6d.x $file.x
-      done
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    for file in poly class cws nef mori; do
+      cp -p $file.x "$out/bin/$file-${dim}d.x"
+    done
+  ''
+  + lib.optionalString doSymlink ''
+    cd $out/bin
+    for file in poly class cws nef mori; do
+      ln -sf $file-6d.x $file.x
+    done
+  '';
 
   meta = with lib; {
     description = "Package for Analyzing Lattice Polytopes";
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
     # version was released that pointed to gplv2 however, so thats probably
     # the right license.
     license = licenses.gpl2;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
   };
 }

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
+  enabledTestPaths = [
     "tests"
   ];
 
@@ -57,7 +57,6 @@ buildPythonPackage rec {
     description = "Process-based discrete-event simulation framework based on standard Python";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [
-      dmrauh
       shlevy
     ];
   };

@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
   };
 
+  postPatch = ''
+    substituteInPlace external/CMakeLists.txt \
+      --replace-fail 'set(mimalloc_min_version "2.1")' 'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
+  '';
+
   cmakeFlags = [
     # fix for https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"

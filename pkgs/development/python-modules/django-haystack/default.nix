@@ -51,7 +51,8 @@ buildPythonPackage rec {
     python-dateutil
     requests
     whoosh
-  ] ++ optional-dependencies.elasticsearch;
+  ]
+  ++ optional-dependencies.elasticsearch;
 
   checkPhase = ''
     runHook preCheck

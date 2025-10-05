@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.71";
+  version = "0.78";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    hash = "sha256-nbfWjV0zPPx2kcnD/aRaWSXUGIqrUX7Z4U45ASk5Ric=";
+    hash = "sha256-1kw0oiYkEydoMWrECehI5M6VbcL+Y340Pu5QU2F3sbQ=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
   # Runs multiple dbus instances on the same port failing the bind.
   enableParallelChecking = false;
 
+  # 'unit/test-hwdb' fails in the sandbox as it relies on
+  # '/etc/udev/hwdb.bin' file presence in the sandbox. `nixpkgs` does
+  # not provide it today in any form. Let's skip the test.
+  env.XFAIL_TESTS = "unit/test-hwdb";
+
   # tests sporadically fail on musl
   doCheck = !stdenv.hostPlatform.isMusl;
 
@@ -50,16 +55,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     description = "Embedded Linux Library";
     longDescription = ''
       The Embedded Linux* Library (ELL) provides core, low-level functionality for system daemons. It typically has no dependencies other than the Linux kernel, C standard library, and libdl (for dynamic linking). While ELL is designed to be efficient and compact enough for use on embedded Linux platforms, it is not limited to resource-constrained systems.
     '';
     changelog = "https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=${version}";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mic92
       dtzWill
     ];

@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       # `AS' is set to the binutils assembler, but we need nasm
       unset AS
     ''
-    + lib.optionalString stdenv.hostPlatform.isAarch ''
+    + lib.optionalString (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isLoongArch64) ''
       export AS=$CC
     '';
 

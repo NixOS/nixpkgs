@@ -42,6 +42,7 @@ let
     isLinux
     isPower64
     isWindows
+    isCygwin
     ;
 
   inherit (lib.types)
@@ -396,6 +397,12 @@ rec {
         significantByte = littleEndian;
         family = "javascript";
       };
+    }
+    // {
+      # aliases
+      # Apple architecture name, as used by `darwinArch`; required by
+      # LLVM ≥ 20.
+      arm64 = cpuTypes.aarch64;
     };
 
   # GNU build systems assume that older NetBSD architectures are using a.out.
@@ -611,6 +618,10 @@ rec {
         execFormat = pe;
         families = { };
       };
+      cygwin = {
+        execFormat = pe;
+        families = { };
+      };
       ghcjs = {
         execFormat = unknown;
         families = { };
@@ -644,7 +655,6 @@ rec {
   types.abi = enum (attrValues abis);
 
   abis = setTypes types.openAbi {
-    cygnus = { };
     msvc = { };
 
     # Note: eabi is specific to ARM and PowerPC.
@@ -734,9 +744,6 @@ rec {
     };
     uclibc = { };
 
-    # LLVM libc
-    llvm = { };
-
     unknown = { };
   };
 
@@ -780,11 +787,11 @@ rec {
           throw "system string '${lib.concatStringsSep "-" l}' with 1 component is ambiguous";
       "2" = # We only do 2-part hacks for things Nix already supports
         if elemAt l 1 == "cygwin" then
-          {
-            cpu = elemAt l 0;
-            kernel = "windows";
-            abi = "cygnus";
-          }
+          mkSkeletonFromList [
+            (elemAt l 0)
+            "pc"
+            "cygwin"
+          ]
         # MSVC ought to be the default ABI so this case isn't needed. But then it
         # becomes difficult to handle the gnu* variants for Aarch32 correctly for
         # minGW. So it's easier to make gnu* the default for the MinGW, but
@@ -848,6 +855,13 @@ rec {
               else
                 elemAt l 2;
           }
+        # lots of tools expect a triplet for Cygwin, even though the vendor is just "pc"
+        else if elemAt l 2 == "cygwin" then
+          {
+            cpu = elemAt l 0;
+            vendor = elemAt l 1;
+            kernel = "cygwin";
+          }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 3 components is ambiguous";
       "4" = {
@@ -888,7 +902,7 @@ rec {
             getVendor args.vendor
           else if isDarwin parsed then
             vendors.apple
-          else if isWindows parsed then
+          else if (isWindows parsed || isCygwin parsed) then
             vendors.pc
           else
             vendors.unknown;
@@ -921,6 +935,8 @@ rec {
 
   kernelName = kernel: kernel.name + toString (kernel.version or "");
 
+  darwinArch = cpu: if cpu.name == "aarch64" then "arm64" else cpu.name;
+
   doubleFromSystem =
     {
       cpu,
@@ -928,12 +944,7 @@ rec {
       abi,
       ...
     }:
-    if abi == abis.cygnus then
-      "${cpu.name}-cygwin"
-    else if kernel.families ? darwin then
-      "${cpu.name}-darwin"
-    else
-      "${cpu.name}-${kernelName kernel}";
+    if kernel.families ? darwin then "${cpu.name}-darwin" else "${cpu.name}-${kernelName kernel}";
 
   tripleFromSystem =
     {
@@ -949,8 +960,9 @@ rec {
         kernel.name == "netbsd" && gnuNetBSDDefaultExecFormat cpu != kernel.execFormat
       ) kernel.execFormat.name;
       optAbi = optionalString (abi != abis.unknown) "-${abi.name}";
+      cpuName = if kernel.families ? darwin then darwinArch cpu else cpu.name;
     in
-    "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
+    "${cpuName}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
   ################################################################################
 

@@ -10,7 +10,7 @@
   iptables,
   iputils,
   kmod,
-  nettools,
+  net-tools,
   procps,
   tcpdump,
   traceroute,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     iptables
     iputils
     kmod
-    nettools
+    net-tools
     procps
     tcpdump
     traceroute
@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     "--disable-doc"
     "--disable-man"
     "--disable-update-ipsets"
-  ] ++ lib.optionals onlyQOS [ "--disable-firehol" ];
+  ]
+  ++ lib.optionals onlyQOS [ "--disable-firehol" ];
 
   meta = with lib; {
     description = "Firewall for humans";

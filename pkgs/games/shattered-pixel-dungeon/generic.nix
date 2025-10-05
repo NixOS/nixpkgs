@@ -22,7 +22,7 @@
 }@attrs:
 
 let
-  cleanAttrs = builtins.removeAttrs attrs [
+  cleanAttrs = removeAttrs attrs [
     "lib"
     "stdenv"
     "makeWrapper"
@@ -90,7 +90,8 @@ stdenv.mkDerivation (
       perl
       makeWrapper
       copyDesktopItems
-    ] ++ attrs.nativeBuildInputs or [ ];
+    ]
+    ++ attrs.nativeBuildInputs or [ ];
 
     desktopItems = [ desktopItem ];
 

@@ -54,61 +54,59 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "all-no-docs" ];
 
-  configurePhase =
-    ''
-      # Fix paths in the source.
-      find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
+  configurePhase = ''
+    # Fix paths in the source.
+    find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
 
-      substituteInPlace $(pwd)/Makefile --replace '/bin/cp' $(type -p cp)
-      substituteInPlace bin/mlton-script --replace gcc cc
-      substituteInPlace bin/regression --replace gcc cc
-      substituteInPlace lib/mlnlffi-lib/Makefile --replace gcc cc
-      substituteInPlace mlnlffigen/gen-cppcmd --replace gcc cc
-      substituteInPlace runtime/Makefile --replace gcc cc
-      substituteInPlace ../${usr_prefix}/bin/mlton --replace gcc cc
+    substituteInPlace $(pwd)/Makefile --replace '/bin/cp' $(type -p cp)
+    substituteInPlace bin/mlton-script --replace gcc cc
+    substituteInPlace bin/regression --replace gcc cc
+    substituteInPlace lib/mlnlffi-lib/Makefile --replace gcc cc
+    substituteInPlace mlnlffigen/gen-cppcmd --replace gcc cc
+    substituteInPlace runtime/Makefile --replace gcc cc
+    substituteInPlace ../${usr_prefix}/bin/mlton --replace gcc cc
 
-      # Fix paths in the binary distribution.
-      BIN_DIST_DIR="$(pwd)/../${usr_prefix}"
-      for f in "bin/mlton" "lib/mlton/platform" "lib/mlton/static-library" ; do
-        substituteInPlace "$BIN_DIST_DIR/$f" --replace '/${usr_prefix}/bin/env bash' $(type -p bash)
-      done
+    # Fix paths in the binary distribution.
+    BIN_DIST_DIR="$(pwd)/../${usr_prefix}"
+    for f in "bin/mlton" "lib/mlton/platform" "lib/mlton/static-library" ; do
+      substituteInPlace "$BIN_DIST_DIR/$f" --replace '/${usr_prefix}/bin/env bash' $(type -p bash)
+    done
 
-      substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
-    ''
-    + lib.optionalString stdenv.cc.isClang ''
-      sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i 's|XCFLAGS += -I/usr/local/include -I/sw/include -I/opt/local/include||' ./runtime/Makefile
-    '';
+    substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
+    sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i 's|XCFLAGS += -I/usr/local/include -I/sw/include -I/opt/local/include||' ./runtime/Makefile
+  '';
 
-  preBuild =
-    ''
-      # To build the source we have to put the binary distribution in the $PATH.
-      export PATH="$PATH:$(pwd)/../${usr_prefix}/bin/"
+  preBuild = ''
+    # To build the source we have to put the binary distribution in the $PATH.
+    export PATH="$PATH:$(pwd)/../${usr_prefix}/bin/"
 
-      # Let the builder execute the binary distribution.
-      chmod u+x $(pwd)/../${usr_prefix}/bin/mllex
-      chmod u+x $(pwd)/../${usr_prefix}/bin/mlyacc
-      chmod u+x $(pwd)/../${usr_prefix}/bin/mlton
+    # Let the builder execute the binary distribution.
+    chmod u+x $(pwd)/../${usr_prefix}/bin/mllex
+    chmod u+x $(pwd)/../${usr_prefix}/bin/mlyacc
+    chmod u+x $(pwd)/../${usr_prefix}/bin/mlton
 
-      # So the builder runs the binary compiler with gmp.
-      export LD_LIBRARY_PATH=${gmp.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+    # So the builder runs the binary compiler with gmp.
+    export LD_LIBRARY_PATH=${gmp.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Patch ELF interpreter.
-      patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
-      for e in mllex mlyacc ; do
-        patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/bin/$e
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Patch libgmp linking
-      install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
-      install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mlyacc
-      install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mllex
-    '';
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Patch ELF interpreter.
+    patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
+    for e in mllex mlyacc ; do
+      patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/bin/$e
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Patch libgmp linking
+    install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
+    install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mlyacc
+    install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mllex
+  '';
 
   doCheck = true;
 
@@ -133,5 +131,5 @@ stdenv.mkDerivation rec {
     cp -r $(pwd)/install/${usr_prefix}/man $out
   '';
 
-  meta = import ./meta.nix;
+  meta = import ./meta.nix { inherit lib; };
 }

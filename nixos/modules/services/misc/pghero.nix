@@ -102,7 +102,8 @@ in
       environment = {
         RAILS_ENV = "production";
         PGHERO_CONFIG_PATH = settingsFile;
-      } // cfg.environment;
+      }
+      // cfg.environment;
 
       serviceConfig = {
         Type = "notify";

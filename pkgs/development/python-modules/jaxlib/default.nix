@@ -6,7 +6,7 @@
   # Build-time dependencies:
   addDriverRunpath,
   autoAddDriverRunpath,
-  bazel_6,
+  bazel_7,
   binutils,
   buildBazelPackage,
   buildPythonPackage,
@@ -15,7 +15,6 @@
   cython,
   fetchFromGitHub,
   git,
-  darwin,
   jsoncpp,
   nsync,
   openssl,
@@ -39,7 +38,7 @@
   giflib,
   libjpeg_turbo,
   python,
-  snappy,
+  snappy-cpp,
   zlib,
 
   config,
@@ -53,8 +52,8 @@
 
 let
   inherit (cudaPackages)
-    cudaFlags
-    cudaVersion
+    cudaMajorMinorVersion
+    flags
     nccl
     ;
 
@@ -78,6 +77,9 @@ let
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
     platforms = platforms.linux;
+
+    # Needs update for Bazel 7.
+    broken = true;
   };
 
   # Bazel wants a merged cudnn at configuration time
@@ -222,7 +224,8 @@ let
     name = "bazel-build-${pname}-${version}";
 
     # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
-    bazel = bazel_6;
+    #bazel = bazel_6;
+    bazel = bazel_7;
 
     src = fetchFromGitHub {
       owner = "google";
@@ -240,7 +243,8 @@ let
       wheel
       build
       which
-    ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
+    ]
+    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
 
     buildInputs = [
       curl
@@ -255,9 +259,10 @@ let
       pybind11
       scipy
       six
-      snappy
+      snappy-cpp
       zlib
-    ] ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
+    ]
+    ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
 
     # We don't want to be quite so picky regarding bazel version
     postPatch = ''
@@ -318,9 +323,9 @@ let
         build --action_env CUDA_TOOLKIT_PATH="${cuda_build_deps_joined}"
         build --action_env CUDNN_INSTALL_PATH="${cudnnMerged}"
         build --action_env TF_CUDA_PATHS="${cuda_build_deps_joined},${cudnnMerged},${lib.getDev nccl}"
-        build --action_env TF_CUDA_VERSION="${lib.versions.majorMinor cudaVersion}"
+        build --action_env TF_CUDA_VERSION="${cudaMajorMinorVersion}"
         build --action_env TF_CUDNN_VERSION="${lib.versions.major cudaPackages.cudnn.version}"
-        build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," cudaFlags.realArches}"
+        build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," flags.realArches}"
       ''
       +
         # Note that upstream conditions this on `wheel_cpu == "x86_64"`. We just
@@ -340,22 +345,21 @@ let
 
     # Make sure Bazel knows about our configuration flags during fetching so that the
     # relevant dependencies can be downloaded.
-    bazelFlags =
-      [
-        "-c opt"
-        # See https://bazel.build/external/advanced#overriding-repositories for
-        # information on --override_repository flag.
-        "--override_repository=xla=${xla}"
-      ]
-      ++ lib.optionals effectiveStdenv.cc.isClang [
-        # bazel depends on the compiler frontend automatically selecting these flags based on file
-        # extension but our clang doesn't.
-        # https://github.com/NixOS/nixpkgs/issues/150655
-        "--cxxopt=-x"
-        "--cxxopt=c++"
-        "--host_cxxopt=-x"
-        "--host_cxxopt=c++"
-      ];
+    bazelFlags = [
+      "-c opt"
+      # See https://bazel.build/external/advanced#overriding-repositories for
+      # information on --override_repository flag.
+      "--override_repository=xla=${xla}"
+    ]
+    ++ lib.optionals effectiveStdenv.cc.isClang [
+      # bazel depends on the compiler frontend automatically selecting these flags based on file
+      # extension but our clang doesn't.
+      # https://github.com/NixOS/nixpkgs/issues/150655
+      "--cxxopt=-x"
+      "--cxxopt=c++"
+      "--host_cxxopt=-x"
+      "--host_cxxopt=c++"
+    ];
 
     # We intentionally overfetch so we can share the fetch derivation across all the different configurations
     fetchAttrs = {
@@ -409,10 +413,8 @@ let
       );
 
       # Note: we cannot do most of this patching at `patch` phase as the deps
-      # are not available yet. Framework search paths aren't added by bintools
-      # hook. See https://github.com/NixOS/nixpkgs/pull/41914.
+      # are not available yet.
       preBuild = lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
-        export NIX_LDFLAGS+=" -F${darwin.apple_sdk.frameworks.IOKit}/Library/Frameworks"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/osx_cc_wrapper.sh.tpl \
           --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
@@ -473,7 +475,10 @@ buildPythonPackage {
     numpy
     scipy
     six
-    snappy
+  ];
+
+  buildInputs = [
+    snappy-cpp
   ];
 
   pythonImportsCheck = [

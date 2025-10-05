@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "AutoRaise (and focus) a window when hovering over it with the mouse";
+    description = "Automatically raise and focus a window when hovering over it with the mouse";
     homepage = "https://github.com/sbmpost/AutoRaise";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nickhu ];

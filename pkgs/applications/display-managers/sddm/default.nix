@@ -2,24 +2,18 @@
   lib,
   callPackage,
   runCommand,
-  layer-shell-qt,
-  qtwayland,
   wrapQtAppsHook,
   unwrapped ? callPackage ./unwrapped.nix { },
-  withWayland ? false,
-  withLayerShellQt ? false,
   extraPackages ? [ ],
 }:
 runCommand "sddm-wrapped"
   {
-    inherit (unwrapped) version;
+    inherit (unwrapped) version outputs;
 
-    buildInputs =
-      unwrapped.buildInputs
-      ++ extraPackages
-      ++ lib.optional withWayland qtwayland
-      ++ lib.optional (withWayland && withLayerShellQt) layer-shell-qt;
+    buildInputs = unwrapped.buildInputs ++ extraPackages;
     nativeBuildInputs = [ wrapQtAppsHook ];
+
+    strictDeps = true;
 
     passthru = {
       inherit unwrapped;
@@ -43,4 +37,7 @@ runCommand "sddm-wrapped"
     for i in bin/*; do
       makeQtWrapper ${unwrapped}/$i $out/$i --set SDDM_GREETER_DIR $out/bin
     done
+
+    mkdir -p $man
+    ln -s ${lib.getMan unwrapped}/* $man/
   ''

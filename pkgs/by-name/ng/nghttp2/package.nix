@@ -46,11 +46,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.64.0";
+  version = "1.66.0";
 
   src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-OmcN83joUrhaIpXyXk9RzCj1bg/MSWQIuMN2QpBTevU=";
+    url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
+    hash = "sha256-HUhK03NU35/KuXCBTpOl3KkaUyVug/T1jdcxGcYyEBc=";
   };
 
   outputs = [
@@ -113,16 +113,13 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString (enablePython) ''
       patchShebangs $out/share/nghttp2
-    ''
-    + lib.optionalString (!enablePython) ''
-      rm -r $out/share
     '';
 
   passthru.tests = {
     inherit curl libsoup_3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2 C library and tools";
     longDescription = ''
       nghttp2 is an implementation of the HyperText Transfer Protocol version 2 in C.
@@ -137,8 +134,8 @@ stdenv.mkDerivation rec {
     homepage = "https://nghttp2.org/";
     changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${version}";
     # News articles with changes summary can be found here: https://nghttp2.org/blog/archives/
-    license = licenses.mit;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ c0bw3b ];
+    platforms = lib.platforms.all;
   };
 }

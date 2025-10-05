@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "dockerspawner";
-  version = "13.0.0";
+  version = "14.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-POlTZ9luS9wQ/vt9w8VMfTEqGzg/DhfB45ePfvnyito=";
+    hash = "sha256-VkHUdj7MeMGxw8diG/6IwFVZaJPkO+f2buDcysBsHSo=";
   };
 
   nativeBuildInputs = [ setuptools ];

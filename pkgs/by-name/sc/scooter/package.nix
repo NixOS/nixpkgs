@@ -6,23 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scooter";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
     rev = "v${version}";
-    hash = "sha256-wu9SNcd1+JqTkhUghOiRlGP/za/9Md/lgGrwNA2lCJE=";
+    hash = "sha256-9pdw7QGa+KRMlMIPrdCVIroXKNwzTl5FiP0W20Axkhk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DQU3djlSjG1VG2bs+JuegwF3ii+asJXpEEPb95xeXqk=";
+  cargoHash = "sha256-juLzW3gsJ/HD04ErLc9ctAhL7L7fkSzEaEedf5YFvvo=";
 
-  checkFlags = [
-    # failed only for buildRustPackage
-    # might be related to https://ryantm.github.io/nixpkgs/languages-frameworks/rust/#tests-relying-on-the-structure-of-the-target-directory
-    "--skip=test_search_current_dir"
+  # Ensure that only the `scooter` package is built (excluding `xtask`)
+  cargoBuildFlags = [
+    "--package"
+    "scooter"
   ];
+
+  # Many tests require filesystem writes which fail in Nix sandbox
+  doCheck = false;
 
   meta = {
     description = "Interactive find and replace in the terminal";

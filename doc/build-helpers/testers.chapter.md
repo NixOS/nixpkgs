@@ -15,9 +15,7 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 ```nix
 {
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta.pkgConfigModules = [ "libfoo" ];
 }
@@ -40,6 +38,26 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 :::
 
+## `hasCmakeConfigModules` {#tester-hasCmakeConfigModules}
+
+Checks whether a package exposes a given list of `*config.cmake` modules.
+Note the moduleNames used in cmake find_package are case sensitive.
+
+:::{.example #ex-hascmakeconfigmodules}
+
+# Check that `*config.cmake` modules are exposed using explicit module names
+
+```nix
+{
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
+    package = finalAttrs.finalPackage;
+    moduleNames = [ "Foo" ];
+  };
+}
+```
+
+:::
+
 ## `lycheeLinkCheck` {#tester-lycheeLinkCheck}
 
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
@@ -54,9 +72,7 @@ If you have a static site that can be built with Nix, you can use `lycheeLinkChe
 # Check hyperlinks in the `nix` documentation
 
 ```nix
-testers.lycheeLinkCheck {
-  site = nix.doc + "/share/doc/nix/manual";
-}
+testers.lycheeLinkCheck { site = nix.doc + "/share/doc/nix/manual"; }
 ```
 
 :::
@@ -98,7 +114,8 @@ It has two modes:
   ```nix
   {
     "https://nix\\.dev/manual/nix/[a-z0-9.-]*" = "${nix.doc}/share/doc/nix/manual";
-    "https://nixos\\.org/manual/nix/(un)?stable" = "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
+    "https://nixos\\.org/manual/nix/(un)?stable" =
+      "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
   }
   ```
 
@@ -248,9 +265,7 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-{
-  passthru.tests.version = testers.testVersion { package = hello; };
-}
+{ passthru.tests.version = testers.testVersion { package = hello; }; }
 ```
 
 :::
@@ -302,18 +317,22 @@ While `testBuildFailure` is designed to keep changes to the original builder's e
 # Check that a build fails, and verify the changes made during build
 
 ```nix
-runCommand "example" {
-  failed = testers.testBuildFailure (runCommand "fail" {} ''
-    echo ok-ish >$out
-    echo failing though
-    exit 3
-  '');
-} ''
-  grep -F 'ok-ish' $failed/result
-  grep -F 'failing though' $failed/testBuildFailure.log
-  [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
-  touch $out
-''
+runCommand "example"
+  {
+    failed = testers.testBuildFailure (
+      runCommand "fail" { } ''
+        echo ok-ish >$out
+        echo failing though
+        exit 3
+      ''
+    );
+  }
+  ''
+    grep -F 'ok-ish' $failed/result
+    grep -F 'failing though' $failed/testBuildFailure.log
+    [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+    touch $out
+  ''
 ```
 
 :::
@@ -386,6 +405,22 @@ The tester produces an empty output and only succeeds when the checks using `exp
 
 Check that two paths have the same contents.
 
+`assertion` (string)
+
+: A message that is printed before the comparison, after `Checking:`.
+
+`expected` (path or value coercible to store path)
+
+: The path to the expected [file system object] content
+
+`actual` (value coercible to store path) <!-- path value is possible, but wrong in practice, but let's not bother readers with our predictions -->
+
+: The path to the actual file system object content to check
+
+`postFailureMessage` (string)
+
+: A message that is printed last if the file system object contents at the two paths don't match exactly.
+
 :::{.example #ex-testEqualContents-toyexample}
 
 # Check that two paths have the same contents
@@ -396,14 +431,22 @@ testers.testEqualContents {
   expected = writeText "expected" ''
     foo baz baz
   '';
-  actual = runCommand "actual" {
-    # not really necessary for a package that's in stdenv
-    nativeBuildInputs = [ gnused ];
-    base = writeText "base" ''
-      foo bar baz
-    '';
-  } ''
-    sed -e 's/bar/baz/g' $base >$out
+  actual =
+    runCommand "actual"
+      {
+        # not really necessary for a package that's in stdenv
+        nativeBuildInputs = [ gnused ];
+        base = writeText "base" ''
+          foo bar baz
+        '';
+      }
+      ''
+        sed -e 's/bar/baz/g' $base >$out
+      '';
+  # if applicable
+  postFailureMessage = ''
+    The bar-baz replacer produced an unexpected result.
+    If the new behavior is acceptable and validated against the bar-baz specification, run ./adopt-new-bar-baz-result.sh to adjust this test and require the new behavior.
   '';
 }
 ```
@@ -515,10 +558,11 @@ Otherwise, the build log explains the difference via `nix-diff`.
 # Check that two packages produce the same derivation
 
 ```nix
-testers.testEqualDerivation
-  "The hello package must stay the same when enabling checks."
-  hello
-  (hello.overrideAttrs(o: { doCheck = true; }))
+testers.testEqualDerivation "The hello package must stay the same when enabling checks." hello (
+  hello.overrideAttrs (o: {
+    doCheck = true;
+  })
+)
 ```
 
 :::
@@ -563,7 +607,7 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 
 This is a wrapper around `pkgs.runCommandWith`, which
 - produces a fixed-output derivation, enabling the command(s) to access the network ;
-- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
+- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs change.
 
 It accepts the following attributes:
 - the derivation's `name` ;
@@ -586,7 +630,10 @@ testers.runCommand {
     curl -o /dev/null https://example.com
     touch $out
   '';
-  nativeBuildInputs = with pkgs; [ cacert curl ];
+  nativeBuildInputs = with pkgs; [
+    cacert
+    curl
+  ];
 }
 ```
 
@@ -603,15 +650,20 @@ If your test is part of the Nixpkgs repository, or if you need a more general en
 # Run a NixOS test using `runNixOSTest`
 
 ```nix
-pkgs.testers.runNixOSTest ({ lib, ... }: {
-  name = "hello";
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.hello ];
-  };
-  testScript = ''
-    machine.succeed("hello")
-  '';
-})
+pkgs.testers.runNixOSTest (
+  { lib, ... }:
+  {
+    name = "hello";
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.hello ];
+      };
+    testScript = ''
+      machine.succeed("hello")
+    '';
+  }
+)
 ```
 
 :::
@@ -634,10 +686,17 @@ A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-te
 {
   name = "my-test";
   nodes = {
-    machine1 = { lib, pkgs, nodes, ... }: {
-      environment.systemPackages = [ pkgs.hello ];
-      services.foo.enable = true;
-    };
+    machine1 =
+      {
+        lib,
+        pkgs,
+        nodes,
+        ...
+      }:
+      {
+        environment.systemPackages = [ pkgs.hello ];
+        services.foo.enable = true;
+      };
     # machine2 = ...;
   };
   testScript = ''
@@ -657,3 +716,5 @@ Notable attributes:
  * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
  * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+
+[file system object]: https://nix.dev/manual/nix/latest/store/file-system-object

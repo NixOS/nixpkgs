@@ -45,6 +45,11 @@ in
       "systemd-oomd.service"
       "systemd-oomd.socket"
     ];
+
+    systemd.services.systemd-oomd.after = [
+      "swap.target" # TODO: drop after systemd v258
+      "systemd-sysusers.service" # TODO: drop after systemd v257.8
+    ];
     systemd.services.systemd-oomd.wantedBy = [ "multi-user.target" ];
 
     environment.etc."systemd/oomd.conf".text = lib.generators.toINI { } {
@@ -68,7 +73,7 @@ in
       ManagedOOMMemoryPressure = "kill";
       ManagedOOMMemoryPressureLimit = lib.mkDefault "80%";
     };
-    systemd.slices."user-".sliceConfig = lib.mkIf cfg.enableUserSlices {
+    systemd.slices."user".sliceConfig = lib.mkIf cfg.enableUserSlices {
       ManagedOOMMemoryPressure = "kill";
       ManagedOOMMemoryPressureLimit = lib.mkDefault "80%";
     };

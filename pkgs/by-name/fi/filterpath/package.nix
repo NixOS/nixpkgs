@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "filterpath";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "Sigmanificient";
     repo = "filterpath";
     rev = finalAttrs.version;
-    hash = "sha256-9rHooXgpvfNNeWxS8UF6hmb8vCz+xKABrJNd+AgKFJs=";
+    hash = "sha256-GW8f3o7D5ddHQ8WZvds6rcsKPmlTSr/w4k2mU7oR6aM=";
   };
 
   makeFlags = [

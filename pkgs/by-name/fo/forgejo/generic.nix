@@ -40,9 +40,9 @@ let
     pname = "forgejo-frontend";
     inherit src version npmDepsHash;
 
-    patches = [
-      ./package-json-npm-build-frontend.patch
-    ];
+    buildPhase = ''
+      ./node_modules/.bin/webpack
+    '';
 
     # override npmInstallHook
     installPhase = ''
@@ -128,12 +128,16 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  preInstall = ''
+    mv "$GOPATH/bin/forgejo.org" "$GOPATH/bin/forgejo"
+  '';
+
   postInstall = ''
     mkdir $data
     cp -R ./{templates,options} ${frontend}/public $data
     mkdir -p $out
     cp -R ./options/locale $out/locale
-    wrapProgram $out/bin/gitea \
+    wrapProgram $out/bin/forgejo \
       --prefix PATH : ${
         lib.makeBinPath [
           bash
@@ -187,7 +191,7 @@ buildGoModule rec {
     description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
-    license = if lib.versionAtLeast version "9.0.0" then lib.licenses.gpl3Plus else lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       emilylange
       urandom
@@ -195,8 +199,9 @@ buildGoModule rec {
       adamcstephens
       marie
       pyrox0
+      tebriel
     ];
     broken = stdenv.hostPlatform.isDarwin;
-    mainProgram = "gitea";
+    mainProgram = "forgejo";
   };
 }

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/PackageKit/";
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     description = "Tools for installing software on the GNOME desktop using PackageKit";
   };

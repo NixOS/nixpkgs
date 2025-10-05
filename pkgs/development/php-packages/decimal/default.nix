@@ -21,6 +21,6 @@ buildPecl {
     homepage = "https://php-decimal.github.io";
     changelog = "https://pecl.php.net/package-changelog.php?package=decimal&release=${version}";
     license = lib.licenses.mit;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

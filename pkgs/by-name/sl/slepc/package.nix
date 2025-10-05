@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  sowing,
-  python3,
   python3Packages,
   arpack-mpi,
   petsc,
@@ -17,27 +15,22 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.22.2";
+  version = "3.23.3";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a5DmsA7NAlhrEaS43TYPk7vtDfhXLEP+5sftu2A9Yt4=";
+    hash = "sha256-j0sUJet4eViFxOR0XOAxNSprnL+kN4OW1npGihT0Q4Y=";
   };
 
   postPatch = ''
     # Fix slepc4py install prefix
     substituteInPlace config/packages/slepc4py.py \
       --replace-fail "slepc.prefixdir,'lib'" \
-      "slepc.prefixdir,'${python3.sitePackages}'"
+      "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
 
     patchShebangs lib/slepc/bin
-
-    # Use system bfort
-    substituteInPlace config/packages/sowing.py \
-      --replace-fail "bfort = os.path.join(archdir,'bin','bfort')" \
-      "bfort = '${sowing}/bin/bfort'"
   '';
 
   # Usually this project is being built as part of a `petsc` build or as part of
@@ -48,14 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     export SLEPC_DIR=$PWD
   '';
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.setuptools
-      python3Packages.cython
-    ];
+  nativeBuildInputs = [
+    python3Packages.python
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.setuptools
+    python3Packages.cython
+  ];
 
   configureFlags =
     lib.optionals withArpack [
@@ -65,13 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-slepc4py=1"
     ];
 
-  buildInputs =
-    [
-      mpi
-    ]
-    ++ lib.optionals withArpack [
-      arpack-mpi
-    ];
+  buildInputs = [
+    mpi
+  ]
+  ++ lib.optionals withArpack [
+    arpack-mpi
+  ];
 
   propagatedBuildInputs = [
     petsc
@@ -81,14 +72,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
-  nativeInstallCheckInputs =
-    [
-      mpiCheckPhaseHook
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.pythonImportsCheckHook
-      python3Packages.unittestCheckHook
-    ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    mpiCheckPhaseHook
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.pythonImportsCheckHook
+    python3Packages.unittestCheckHook
+  ];
 
   doInstallCheck = true;
 

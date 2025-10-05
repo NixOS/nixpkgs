@@ -12,7 +12,6 @@ let
     mkEnableOption
     mkOption
     mkIf
-    literalMD
     mkPackageOption
     ;
   settingsFormat = pkgs.formats.ini { };
@@ -26,6 +25,18 @@ in
         default = [ "cockpit" ];
       };
 
+      allowed-origins = lib.mkOption {
+        type = types.listOf types.str;
+
+        default = [ ];
+
+        description = ''
+          List of allowed origins.
+
+          Maps to the WebService.Origins setting and allows merging from multiple modules.
+        '';
+      };
+
       settings = lib.mkOption {
         type = settingsFormat.type;
 
@@ -36,6 +47,13 @@ in
 
           See the [documentation](https://cockpit-project.org/guide/latest/cockpit.conf.5.html), that is also available with `man cockpit.conf.5` for details.
         '';
+      };
+
+      showBanner = mkOption {
+        description = "Whether to add the Cockpit banner to the issue and motd files.";
+        type = types.bool;
+        default = true;
+        example = false;
       };
 
       port = mkOption {
@@ -51,27 +69,56 @@ in
       };
     };
   };
-  config = mkIf cfg.enable {
 
+  config = mkIf cfg.enable {
     # expose cockpit-bridge system-wide
     environment.systemPackages = [ cfg.package ];
 
     # allow cockpit to find its plugins
     environment.pathsToLink = [ "/share/cockpit" ];
 
-    # generate cockpit settings
-    environment.etc."cockpit/cockpit.conf".source = settingsFormat.generate "cockpit.conf" cfg.settings;
+    environment.etc = {
+      # generate cockpit settings
+      "cockpit/cockpit.conf".source = settingsFormat.generate "cockpit.conf" cfg.settings;
 
-    security.pam.services.cockpit = { };
+      # Add "Web console: ..." line to issue and MOTD
+      "issue.d/cockpit.issue" = {
+        enable = cfg.showBanner;
+        source = "/run/cockpit/issue";
+      };
+      "motd.d/cockpit" = {
+        enable = cfg.showBanner;
+        source = "/run/cockpit/issue";
+      };
+    };
+
+    security.pam.services.cockpit = {
+      startSession = true;
+    };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.packages = [ cfg.package ];
-    systemd.sockets.cockpit.wantedBy = [ "multi-user.target" ];
-    systemd.sockets.cockpit.listenStreams = [
-      ""
-      (toString cfg.port)
-    ];
+
+    systemd.sockets.cockpit = {
+      wantedBy = [ "multi-user.target" ];
+      listenStreams = [
+        "" # workaround so it doesn't listen on both ports caused by the runtime merging
+        (toString cfg.port)
+      ];
+    };
+
+    # Enable connecting to remote hosts from the login page
+    systemd.services = mkIf (cfg.settings ? LoginTo -> cfg.settings.LoginTo) {
+      "cockpit-wsinstance-http".path = [
+        config.programs.ssh.package
+        cfg.package
+      ];
+      "cockpit-wsinstance-https@".path = [
+        config.programs.ssh.package
+        cfg.package
+      ];
+    };
 
     systemd.tmpfiles.rules = [
       # From $out/lib/tmpfiles.d/cockpit-tmpfiles.conf
@@ -80,6 +127,13 @@ in
       "L+ /run/cockpit/motd - - - - inactive.motd"
       "d /etc/cockpit/ws-certs.d 0600 root root 0"
     ];
+
+    services.cockpit.allowed-origins = [
+      "https://localhost:${toString config.services.cockpit.port}"
+    ];
+
+    services.cockpit.settings.WebService.Origins =
+      builtins.concatStringsSep " " config.services.cockpit.allowed-origins;
   };
 
   meta.maintainers = pkgs.cockpit.meta.maintainers;

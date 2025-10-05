@@ -3,10 +3,6 @@
   fetchFromGitHub,
   mkDerivation,
   stdenv,
-  Cocoa,
-  CoreAudio,
-  CoreFoundation,
-  MediaPlayer,
   SDL2,
   cmake,
   libGL,
@@ -44,28 +40,21 @@ mkDerivation rec {
     ./disable-update-notifications.patch
   ];
 
-  buildInputs =
-    [
-      SDL2
-      libGL
-      libX11
-      libXrandr
-      libvdpau
-      mpv
-      qtbase
-      qtwebchannel
-      qtwebengine
-      qtx11extras
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreAudio
-      CoreFoundation
-      MediaPlayer
-    ];
+  buildInputs = [
+    SDL2
+    libGL
+    libX11
+    libXrandr
+    libvdpau
+    mpv
+    qtbase
+    qtwebchannel
+    qtwebengine
+    qtx11extras
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -74,14 +63,13 @@ mkDerivation rec {
     python3
   ];
 
-  cmakeFlags =
-    [
-      "-DQTROOT=${qtbase}"
-      "-GNinja"
-    ]
-    ++ lib.optionals (!withDbus) [
-      "-DLINUX_X11POWER=ON"
-    ];
+  cmakeFlags = [
+    "-DQTROOT=${qtbase}"
+    "-GNinja"
+  ]
+  ++ lib.optionals (!withDbus) [
+    "-DLINUX_X11POWER=ON"
+  ];
 
   preConfigure = ''
     # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)

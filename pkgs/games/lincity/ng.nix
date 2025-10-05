@@ -10,6 +10,8 @@
   lib,
   libGL,
   libGLU,
+  libwebp,
+  libtiff,
   libX11,
   libxml2,
   libxmlxx5,
@@ -52,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libX11
+    libwebp
+    libtiff
     libxmlxx5
     libxml2
     libxslt

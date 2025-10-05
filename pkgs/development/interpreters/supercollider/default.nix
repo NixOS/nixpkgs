@@ -12,6 +12,7 @@
   fftw,
   curl,
   gcc,
+  libsForQt5,
   libXt,
   qtbase,
   qttools,
@@ -25,6 +26,7 @@
   supercolliderPlugins,
   writeText,
   runCommand,
+  withWebengine ? false, # vulnerable, so disabled by default
 }:
 
 mkDerivation rec {
@@ -51,7 +53,9 @@ mkDerivation rec {
     cmake
     pkg-config
     qttools
-  ] ++ lib.optionals useSCEL [ emacs ];
+    libsForQt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals useSCEL [ emacs ];
 
   buildInputs = [
     gcc
@@ -61,16 +65,18 @@ mkDerivation rec {
     curl
     libXt
     qtbase
-    qtwebengine
     qtwebsockets
     readline
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  ]
+  ++ lib.optional withWebengine qtwebengine
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   hardeningDisable = [ "stackprotector" ];
 
   cmakeFlags = [
     "-DSC_WII=OFF"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
+    (lib.cmakeBool "SC_USE_QTWEBENGINE" withWebengine)
   ];
 
   passthru = {

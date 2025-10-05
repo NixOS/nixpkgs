@@ -49,6 +49,7 @@ let
   # Adds the root package to a dependency package_config.json file from pub2nix.
   linkPackageConfig =
     {
+      pubspecLock,
       packageConfig,
       extraSetupCommands ? "",
     }:
@@ -67,15 +68,27 @@ let
 
         dontBuild = true;
 
-        installPhase = ''
-          runHook preInstall
+        installPhase =
+          let
+            m = builtins.match "^[[:space:]]*(\\^|>=|>)?[[:space:]]*([0-9]+\\.[0-9]+)\\.[0-9]+.*$" pubspecLock.sdks.dart;
+            languageVersion =
+              if m != null then
+                (builtins.elemAt m 1)
+              else if pubspecLock.sdks.dart == "any" then
+                "null"
+              else
+                # https://github.com/dart-lang/pub/blob/15b96589066884300a30bdc356566f3398794857/lib/src/language_version.dart#L109
+                "2.7";
+          in
+          ''
+            runHook preInstall
 
-          packageName="$(yq --raw-output .name pubspec.yaml)"
-          jq --arg name "$packageName" '.packages |= . + [{ name: $name, rootUri: "../", packageUri: "lib/" }]' '${packageConfig}' > "$out"
-          ${extraSetupCommands}
+            packageName="$(yq --raw-output .name pubspec.yaml)"
+            jq --arg name "$packageName" --arg languageVersion ${languageVersion} '.packages |= . + [{ name: $name, rootUri: "../", packageUri: "lib/", languageVersion: (if $languageVersion == "null" then null else $languageVersion end) }]' '${packageConfig}' > "$out"
+            ${extraSetupCommands}
 
-          runHook postInstall
-        '';
+            runHook postInstall
+          '';
       }
     );
 in

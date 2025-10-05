@@ -17,18 +17,18 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.15.1";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-yNCVSaA2GtTFUYoN7IZxEYMxkkQwMiNnfnmSXaruFjM=";
+    hash = "sha256-U/I18OtinWlk8d9OLLAzZHoN5d8KHx9CUoZsv2mrQtw=";
   };
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-w0mIeSFRSGl3EorrGcxqnXF6C0SowjWUMYT/NN1erwM=";
+  mvnHash = "sha256-uQz70epBFKTyX/PpOyWBtxHOiX0OQT3aTX6KWKwLc1I=";
 
   preBuild = ''
     VERSION=${version}

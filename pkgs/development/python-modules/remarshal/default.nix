@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "1.0.0";
+  version = "1.2.0"; # test with `nix-build pkgs/pkgs-lib/format`
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "remarshal";
     tag = "v${version}";
-    hash = "sha256-14vkLX7wKi+AYv2wPeHJ7MhKBKp+GB3oHWqxiPdkQhs=";
+    hash = "sha256-y/odWWFJ7KDehYzUKSM/cprcCd+UaArEZFoYbtyW0Ok=";
   };
 
   build-system = [ poetry-core ];

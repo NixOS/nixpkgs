@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "castty";
-  version = "unstable-2020-11-10";
+  version = "0-unstable-2020-11-10";
 
   src = fetchFromGitHub {
     owner = "dhobsd";

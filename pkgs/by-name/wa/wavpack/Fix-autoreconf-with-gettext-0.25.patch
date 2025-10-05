@@ -1,0 +1,48 @@
+From ae8d7708e8e28b0d32ef00d18dbd65ed93853811 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Fri, 27 Jun 2025 12:27:58 +0200
+Subject: [PATCH] Fix autoreconf with gettext 0.25
+
+Since gettext 0.25, the AM_ICONV macro is installed into the m4
+directory, so we need to add that autoconf config directory.  We also
+need to make sure autoreconf recognizes that it needs to run autopoint
+to install the gettext macros, which it does heuristically by checking
+whether AM_GNU_GETTEXT_VERSION is used, so add that and the minimum
+amount of other stuff required to make it happy.  The version of
+gettext we say we use shouldn't matter, so I just went with the
+version in ubuntu:latest since that's what CI uses.
+
+Link: https://github.com/dbry/WavPack/pull/205
+---
+ Makefile.am  | 2 ++
+ configure.ac | 3 +++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/Makefile.am b/Makefile.am
+index ec20499..6c18f61 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,3 +1,5 @@
++SUBDIRS =
++
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = wavpack.pc
+ 
+diff --git a/configure.ac b/configure.ac
+index e35bb72..7fb0ebb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,7 +2,10 @@ dnl wavpack 5.8.1 configure.ac
+ 
+ AC_INIT([wavpack], [5.8.1], [bryant@wavpack.com])
+ AC_CONFIG_SRCDIR([src/pack.c])
++AC_CONFIG_MACRO_DIRS([m4])
+ AM_INIT_AUTOMAKE([-Wall 1.15 serial-tests subdir-objects foreign no-dist-gzip dist-xz])
++AM_GNU_GETTEXT_VERSION([0.21])
++AM_GNU_GETTEXT([external])
+ AM_MAINTAINER_MODE
+ 
+ LIBWAVPACK_MAJOR=5
+-- 
+2.49.0
+

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter327,
+  flutter335,
   keybinder3,
   nodejs,
   pnpm_9,
@@ -22,31 +22,29 @@
 }:
 
 let
-  version = "2.0.0-beta.1";
+  version = "2.0.0-beta.5";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-ghrvBOTR2v7i50OrwfwbwwFFF4uBQuEPxhXimdcFUJI=";
+    hash = "sha256-ZuKsIWooLqGeEex8uRiMVYVxnAJyiQt0soZ9OP6+qq0=";
   };
 
   metaCommon = {
     description = "Cross-platform launcher that simply works";
     homepage = "https://github.com/Wox-launcher/Wox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 
-  ui-flutter = flutter327.buildFlutterApplication {
+  ui-flutter = flutter335.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
     sourceRoot = "${src.name}/wox.ui.flutter/wox";
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-    gitHashes.window_manager = "sha256-OGVrby09QsCvXnkLdEcCoZBO2z/LXY4xFBVdRHnvKEQ=";
 
     nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -76,7 +74,8 @@ let
         src
         sourceRoot
         ;
-      hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
+      fetcherVersion = 2;
+      hash = "sha256-HhdMwVNt7178EQlZGpTiTySBp8GR9tBpUaikEWt1BGY=";
     };
 
     buildPhase = ''
@@ -98,7 +97,7 @@ let
     meta = metaCommon;
   });
 
-  plugin-python = python3Packages.buildPythonApplication rec {
+  plugin-python = python3Packages.buildPythonApplication {
     pname = "wox-plugin";
     inherit version src;
     pyproject = true;
@@ -110,7 +109,7 @@ let
     meta = metaCommon;
   };
 
-  plugin-host-python = python3Packages.buildPythonApplication rec {
+  plugin-host-python = python3Packages.buildPythonApplication {
     pname = "wox-plugin-host-python";
     inherit version src;
     pyproject = true;
@@ -155,7 +154,7 @@ buildGoModule {
       --replace-fail "Exec=%s" "Exec=wox"
   '';
 
-  vendorHash = "sha256-n3lTx1od4EvWdTSe3sIsUStp2qcuSWMqztJZoNLrzQg=";
+  vendorHash = "sha256-Ft4X2woSf0ib0Z8dAwf0VAFQv0ck9nVs7EnpWgGi2+0=";
 
   proxyVendor = true;
 
@@ -201,7 +200,7 @@ buildGoModule {
   ];
 
   postInstall = ''
-    install -Dm644 ../assets/app.png $out/share/pixmaps/wox.png
+    install -Dm644 ../assets/app.png $out/share/icons/hicolor/1024x1024/apps/wox.png
   '';
 
   meta = metaCommon // {

@@ -2,20 +2,23 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ONL2qKBXL2FtTv5Eao61qPKWP2h9t3KyoHlS5nAHMGA=";
+    hash = "sha256-fA33LZkozPTng47kunXWkfUExVbMZsiL8Dtkm1hLV6U=";
   };
 
-  vendorHash = "sha256-47eJO1Ai78RuhlEPn/J1cd+YSqvmfUD8cuPZIqsdxvI=";
+  vendorHash = "sha256-0A9pd+PAsGs4KS2BnCxc7PAaUAV3Z+XKNqSrmYvxNeM=";
+
+  passthru.tests = nixosTests.lk-jwt-service;
 
   meta = with lib; {
     changelog = "https://github.com/element-hq/lk-jwt-service/releases/tag/${finalAttrs.src.tag}";

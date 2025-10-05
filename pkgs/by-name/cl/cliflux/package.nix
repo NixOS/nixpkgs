@@ -9,18 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cliflux";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "spencerwi";
     repo = "cliflux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AGkinlN5Ng0LXau6U9Ft+yMIFMpbrbup3R3c3UlglEM=";
+    hash = "sha256-2Hmdze3so74YHv9JrRHfylWcT1LlBrXVcAiBxigW6wU=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-3nNvPQMnYRZlhUab0MSf39vMNidpMLJh56JSjlsrYAg=";
+  cargoHash = "sha256-glA78iRu7SoJZnk6QL7b84jY1+U4RzgUXe/zQpAnK7A=";
 
   nativeBuildInputs = [
     pkg-config

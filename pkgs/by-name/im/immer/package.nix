@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Postmodern immutable and persistent data structures for C++ — value semantics at scale";
     homepage = "https://sinusoid.es/immer";
     changelog = "https://github.com/arximboldi/immer/releases/tag/v${version}";
-    license = licenses.boost;
-    maintainers = with maintainers; [ sifmelcara ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ sifmelcara ];
+    platforms = lib.platforms.all;
   };
 }

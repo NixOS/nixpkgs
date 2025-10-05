@@ -143,7 +143,7 @@ runBuildTests {
   };
 
   yaml_1_1Atoms = shouldPass {
-    format = formats.yaml { };
+    format = formats.yaml_1_1 { };
     input = {
       null = null;
       false = false;
@@ -172,6 +172,40 @@ runBuildTests {
       path: ${./testfile}
       str: foo
       time: '22:30:00'
+      'true': true
+    '';
+  };
+
+  yaml_1_2Atoms = shouldPass {
+    format = formats.yaml_1_2 { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        null
+        null
+      ];
+      path = ./testfile;
+      no = "no";
+      time = "22:30:00";
+    };
+    expected = ''
+      attrs:
+        foo: null
+      'false': false
+      float: 3.141
+      list:
+      - null
+      - null
+      no: no
+      'null': null
+      path: ${./testfile}
+      str: foo
+      time: 22:30:00
       'true': true
     '';
   };
@@ -663,6 +697,7 @@ runBuildTests {
       list = [1, 2]
       str = "foo"
       true = true
+
       [attrs]
       foo = "foo"
 
@@ -815,6 +850,31 @@ runBuildTests {
     '';
   };
 
+  nixConfAtoms = shouldPass {
+    format = formats.nixConf {
+      package = pkgs.nix;
+      version = pkgs.nix.version;
+      extraOptions = ''ignore-try = false'';
+    };
+    input = {
+      auto-optimise-store = true;
+      cores = 0;
+      store = "auto";
+    };
+    # note that null type is hard to test here,
+    # as it involves a trailing space our formatter will remove here
+    expected = ''
+      # WARNING: this file is generated from the nix.* options in
+      # your NixOS configuration, typically
+      # /etc/nixos/configuration.nix.  Do not edit it!
+      auto-optimise-store = true
+      cores = 0
+      store = auto
+
+      ignore-try = false
+    '';
+  };
+
   phpAtoms = shouldPass rec {
     format = formats.php { finalVariable = "config"; };
     input = {
@@ -843,6 +903,63 @@ runBuildTests {
       testhello\'\'\'${"'"}, 'true' => true];
     '';
   };
+
+  pythonVars = shouldPass (
+    let
+      format = formats.pythonVars { };
+    in
+    {
+      inherit format;
+      input = {
+        _imports = [
+          "re"
+          "a.b.c"
+        ];
+
+        int = 10;
+        float = 3.141;
+        bool = true;
+        str = "foo";
+        str_special = "foo\ntesthello'''";
+        null = null;
+        list = [
+          null
+          1
+          "str"
+          true
+          (format.lib.mkRaw "1 if True else 2")
+        ];
+        attrs = {
+          foo = null;
+          conditional = format.lib.mkRaw "1 if True else 2";
+        };
+        func = format.lib.mkRaw "re.findall(r'\\bf[a-z]*', 'which foot or hand fell fastest')";
+      };
+      expected = ''
+        import re
+        import a.b.c
+
+        attrs = {
+            "conditional": 1 if True else 2,
+            "foo": None,
+        }
+        bool = True
+        float = 3.141
+        func = re.findall(r"\bf[a-z]*", "which foot or hand fell fastest")
+        int = 10
+        list = [
+            None,
+            1,
+            "str",
+            True,
+            1 if True else 2,
+        ]
+        null = None
+        str = "foo"
+        str_special = "foo\ntesthello''''"
+      '';
+    }
+  );
 
   phpReturn = shouldPass {
     format = formats.php { };

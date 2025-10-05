@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qadwaitadecorations";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QAdwaitaDecorations";
     rev = finalAttrs.version;
-    hash = "sha256-ZU3cwFwQECh4Z6YcTzD2WooZmJ2nSUABYft3dfakSuY=";
+    hash = "sha256-Zg2G3vuRD/kK5C2fFq6Cft218uFyBvfXtO1DHKQECFQ=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  cmakeFlags =
-    [
-      "-DQT_PLUGINS_DIR=${placeholder "out"}/${qt.qtbase.qtPluginPrefix}"
-    ]
-    ++ lib.optional useQt6 "-DUSE_QT6=true"
-    ++ lib.optional qt5ShadowsSupport "-DHAS_QT6_SUPPORT=true";
+  cmakeFlags = [
+    "-DQT_PLUGINS_DIR=${placeholder "out"}/${qt.qtbase.qtPluginPrefix}"
+  ]
+  ++ lib.optional useQt6 "-DUSE_QT6=true"
+  ++ lib.optional qt5ShadowsSupport "-DHAS_QT6_SUPPORT=true";
 
   passthru.updateScript = nix-update-script { };
 

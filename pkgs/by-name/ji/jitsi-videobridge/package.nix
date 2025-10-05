@@ -11,10 +11,10 @@
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.3-209-gb5fbe618";
+  version = "2.3-249-g9a2123ad4";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "DsHpGdVmkhXNovBF2VEw96praKd6WpVMdxV+Tnxbzi0=";
+    sha256 = "b8hYuDyweRLAagaehHMzC2/XjZHNlxMchM8za8zPtj4=";
   };
 in
 stdenv.mkDerivation {
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/jitsi/jitsi-videobridge";
     license = licenses.asl20;
-    maintainers = teams.jitsi.members;
+    teams = [ teams.jitsi ];
     platforms = platforms.linux;
     mainProgram = "jitsi-videobridge";
   };

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "The 'Z' pre-processor, the last preprocessor you'll ever need";
+    description = "'Z' pre-processor, the last preprocessor you'll ever need";
     homepage = "https://github.com/jbigot/zpp";
     license = lib.licenses.mit;
     mainProgram = "zpp";

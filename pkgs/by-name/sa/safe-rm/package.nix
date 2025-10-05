@@ -16,12 +16,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-7+4XwsjzLBCQmHDYNwhlN4Yg3eL43GUEbq8ROtuP2Kw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6mPx7qgrsUtjDiFMIL4NTmG9jeC3mBlsQIf/TUB4SQM=";
 
   postPatch = ''
     substituteInPlace src/main.rs \
-      --replace "/bin/rm" "${coreutils}/bin/rm"
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
   '';
 
   nativeBuildInputs = [ installShellFiles ];

@@ -39,7 +39,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     defcon
     fonttools
-  ] ++ fonttools.optional-dependencies.ufo;
+  ]
+  ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -2,9 +2,9 @@
 
 buildDotnetGlobalTool {
   pname = "pbm";
-  version = "1.4.4";
+  version = "1.4.5";
 
-  nugetHash = "sha256-2MoIpgBDrjbi2nInGxivgjLSnS/iyv01y0Yia8R/Gyc=";
+  nugetHash = "sha256-iwacwYa1bB51Wp7PvrUclJ+Rdn0yzZa0EKcBwbpGSag=";
 
   meta = with lib; {
     description = "CLI for managing Akka.NET applications and Akka.NET Clusters";

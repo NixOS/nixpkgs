@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchpatch,
   lib,
   mqttx-cli,
   nodejs,
@@ -13,24 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mqttx-cli";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "MQTTX";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IPIiSav6MPJmzetBgVw9fLGPjJ+JKS3oWMEfCJmEY84=";
+    hash = "sha256-kxK/c1tOwK9hCxX19um0z1MWBZQOwADYEh4xEqJNgWI=";
   };
-
-  patches = [
-    # moves @faker-js/faker from devDependencies to dependencies
-    # because the final package depends on it
-    # https://github.com/emqx/MQTTX/pull/1801
-    (fetchpatch {
-      url = "https://github.com/emqx/MQTTX/commit/3d89c3a08477e9e2b5d83f2a222ceaa8c08e50ce.patch";
-      hash = "sha256-Rd6YpGHsvAYD7/XCJq6dgvGeKfOiLh7IUQFr/AQz0mY=";
-    })
-  ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/cli/yarn.lock";

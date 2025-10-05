@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iir1";
-  version = "1.9.5";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "berndporr";
     repo = "iir1";
     rev = finalAttrs.version;
-    hash = "sha256-8u+V3+p/nVfl1Izht27OE6D1kkA6all6aUEL9APwXmk=";
+    hash = "sha256-WrefRcC6pOpcWVVOtJbJiyllgCPMm9cdlK6eXB2gxFw=";
   };
 
   nativeBuildInputs = [ cmake ];

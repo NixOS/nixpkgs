@@ -3,28 +3,29 @@
   stdenv,
   fetchFromGitLab,
   extra-cmake-modules,
+  kdePackages,
   qtbase,
   qtdeclarative,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kquickimageeditor";
-  version = "0.3.0";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
-    repo = pname;
+    repo = "kquickimageeditor";
     rev = "v${version}";
-    sha256 = "sha256-+BByt07HMb4u6j9bVZqkUPvyRaElKvJ2MjKlPakL87E=";
+    sha256 = "sha256-8TJBg42E9lNbLpihjtc5Z/drmmSGQmic8yO45yxSNQ4=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
+    kdePackages.kirigami
     qtbase
     qtdeclarative
   ];
-  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
   dontWrapQtApps = true;
 
   meta = with lib; {

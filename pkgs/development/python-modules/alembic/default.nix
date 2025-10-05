@@ -2,53 +2,45 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
-  importlib-metadata,
-  importlib-resources,
   mako,
   sqlalchemy,
   typing-extensions,
 
   # tests
-  pytest7CheckHook,
+  black,
+  pytestCheckHook,
   pytest-xdist,
   python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.14.1";
+  version = "1.16.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SW6IgkWlOt8UmPyrMXE6Rpxlg2+N524BOZqhw+kN0hM=";
+    hash = "sha256-76tq2g3Q+uLJIGCADgv1wdwmrxWhDgL7S6v/FktHJeI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      mako
-      sqlalchemy
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-      importlib-metadata
-    ];
+  dependencies = [
+    mako
+    sqlalchemy
+    typing-extensions
+  ];
 
   pythonImportsCheck = [ "alembic" ];
 
   nativeCheckInputs = [
-    pytest7CheckHook
+    black
+    pytestCheckHook
     pytest-xdist
     python-dateutil
   ];

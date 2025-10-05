@@ -2,8 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,10 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RCD11KdzM66Mkydc51r6fG+q8bmKl5eZma58YoARwPo=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk; [ frameworks.SystemConfiguration ]
-  );
-
   GIT_HASH = "000000000000000000000000000000000000000000000000000";
 
   checkFlags = [
@@ -28,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=widgets::text_note::tests::test_created_at"
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tway75ZAP2cGdpn79VpuRd0q/h+ovDvkih1LKitM/EU=";
 
   meta = with lib; {

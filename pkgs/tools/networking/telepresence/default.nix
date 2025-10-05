@@ -21,6 +21,7 @@ in
 pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
   version = "0.109";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";

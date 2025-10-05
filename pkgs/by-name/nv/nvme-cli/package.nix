@@ -9,17 +9,18 @@
   json_c,
   zlib,
   python3Packages,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "2.11";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    hash = "sha256-LkFYkfHeBKC/0kr33DKu7oXxXrtfu1YcpuwzRRWsHpc=";
+    hash = "sha256-zXzNjEpxioqYoSHDzimCnP/tKbi0H+GTH4xZ0g1+XnU=";
   };
 
   mesonFlags = [
@@ -31,12 +32,15 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3Packages.nose2
+    udevCheckHook
   ];
   buildInputs = [
     libnvme
     json_c
     zlib
   ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     inherit (src.meta) homepage; # https://nvmexpress.org/

@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
       PLUTO = true;
       # Some more cmake flags are mentioned in upstream's CMakeLists.txt file
       # but they don't actually make a difference.
-    } // featuresOverride;
+    }
+    // featuresOverride;
   };
 
   postInstall = ''

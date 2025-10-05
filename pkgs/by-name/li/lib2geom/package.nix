@@ -10,6 +10,7 @@
   cairo,
   double-conversion,
   gtest,
+  ctestCheckHook,
   lib,
   inkscape,
   pkgsCross,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     gtest
+    ctestCheckHook
   ];
 
   cmakeFlags = [
@@ -56,51 +58,41 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  dontUseNinjaCheck = true;
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isMusl [
+      # Fails due to rounding differences
+      # https://gitlab.com/inkscape/lib2geom/-/issues/70
+      "circle-test"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+      # Broken on all platforms, test just accidentally passes on some.
+      # https://gitlab.com/inkscape/lib2geom/-/issues/63
+      "elliptical-arc-test"
 
-  # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
-  checkPhase =
-    let
-      disabledTests =
-        lib.optionals stdenv.hostPlatform.isMusl [
-          # Fails due to rounding differences
-          # https://gitlab.com/inkscape/lib2geom/-/issues/70
-          "circle-test"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
-          # Broken on all platforms, test just accidentally passes on some.
-          # https://gitlab.com/inkscape/lib2geom/-/issues/63
-          "elliptical-arc-test"
+      # https://gitlab.com/inkscape/lib2geom/-/issues/69
+      "polynomial-test"
 
-          # https://gitlab.com/inkscape/lib2geom/-/issues/69
-          "polynomial-test"
+      # https://gitlab.com/inkscape/lib2geom/-/issues/75
+      "line-test"
 
-          # https://gitlab.com/inkscape/lib2geom/-/issues/75
-          "line-test"
+      # Failure observed on i686
+      "angle-test"
+      "self-intersections-test"
 
-          # Failure observed on i686
-          "angle-test"
-          "self-intersections-test"
-
-          # Failure observed on aarch64-darwin
-          "bezier-test"
-          "ellipse-test"
-        ];
-    in
-    ''
-      runHook preCheck
-      ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
-      runHook postCheck
-    '';
+      # Failure observed on aarch64-darwin
+      "bezier-test"
+      "ellipse-test"
+    ];
 
   passthru = {
-    tests =
-      {
-        inherit inkscape;
-      }
-      # Make sure x86_64-linux -> aarch64-linux cross compilation works
-      // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
-        aarch64-cross = pkgsCross.aarch64-multiplatform.lib2geom;
-      };
+    tests = {
+      inherit inkscape;
+    }
+    # Make sure x86_64-linux -> aarch64-linux cross compilation works
+    // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+      aarch64-cross = pkgsCross.aarch64-multiplatform.lib2geom;
+    };
   };
 
   meta = with lib; {

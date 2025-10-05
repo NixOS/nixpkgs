@@ -59,18 +59,17 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      PURS="$out/bin/purs"
+  installPhase = ''
+    mkdir -p $out/bin
+    PURS="$out/bin/purs"
 
-      install -D -m555 -T purs $PURS
-      ${patchelf libPath}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      mkdir -p $out/share/bash-completion/completions
-      $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
-    '';
+    install -D -m555 -T purs $PURS
+    ${patchelf libPath}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    mkdir -p $out/share/bash-completion/completions
+    $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
+  '';
 
   passthru = {
     updateScript = ./update.sh;

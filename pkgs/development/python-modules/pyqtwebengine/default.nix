@@ -42,39 +42,37 @@ buildPythonPackage (
       "dev"
     ];
 
-    nativeBuildInputs =
-      [
-        pkg-config
-        libsForQt5.qmake
-        libsForQt5.wrapQtAppsHook
-      ]
-      ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ sip ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-        python.pythonOnBuildForHost.pkgs.sip
-      ]
-      ++ [
-        libsForQt5.qtbase
-        libsForQt5.qtsvg
-        libsForQt5.qtwebengine
-        pyqt-builder
-        setuptools
-      ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ libsForQt5.qtdeclarative ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-        autoSignDarwinBinariesHook
-      ];
+    nativeBuildInputs = [
+      pkg-config
+      libsForQt5.qmake
+      libsForQt5.wrapQtAppsHook
+    ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ sip ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      python.pythonOnBuildForHost.pkgs.sip
+    ]
+    ++ [
+      libsForQt5.qtbase
+      libsForQt5.qtsvg
+      libsForQt5.qtwebengine
+      pyqt-builder
+      setuptools
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ libsForQt5.qtdeclarative ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
-    buildInputs =
-      [
-        sip
-        libsForQt5.qtbase
-        libsForQt5.qtsvg
-        libsForQt5.qtwebengine
-      ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-        libsForQt5.qtwebchannel
-        libsForQt5.qtdeclarative
-      ];
+    buildInputs = [
+      sip
+      libsForQt5.qtbase
+      libsForQt5.qtsvg
+      libsForQt5.qtwebengine
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      libsForQt5.qtwebchannel
+      libsForQt5.qtdeclarative
+    ];
 
     propagatedBuildInputs = [ pyqt5 ];
 

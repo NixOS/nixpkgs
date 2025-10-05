@@ -17,6 +17,18 @@ let
           tag = "v${version}";
           hash = "sha256-nklizCiu7Nmynjd5WU5oX/v2TWy9xFVF4GkmCwFKZLI=";
         };
+
+        # The `serializable` package eventually got renamed `py_serializable`, therefore we need
+        # to patch the imports;
+        # _c.f._ https://github.com/madpah/serializable/pull/155 .
+        postPatch = ''
+          find . -name '*.py' | xargs -I{} sed -i \
+            -e 's/serializable\./py_serializable\./g' \
+            -e 's/@serializable/@py_serializable/g' \
+            -e 's/from serializable/from py_serializable/g' \
+            -e 's/import serializable/import py_serializable/g' \
+            {}
+        '';
       });
     };
   };
@@ -25,23 +37,24 @@ with py.pkgs;
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.396";
+  version = "3.2.473";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = version;
-    hash = "sha256-Ppj8dxxT+BcqrxJRycFBBb0QmoFI1yY0/eE7bZY2QaQ=";
+    hash = "sha256-FfzAMuFF+ftjcKn+6uYgoeUPoBDnkVTBCPSeom6KR5k=";
   };
 
   pythonRelaxDeps = [
+    "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
     "boto3"
     "botocore"
+    "cachetools"
     "cloudsplaining"
-    "cyclonedx-python-lib"
     "dpath"
     "igraph"
     "importlib-metadata"
@@ -69,6 +82,7 @@ python3.pkgs.buildPythonApplication rec {
     aiohttp
     aiomultiprocess
     argcomplete
+    asteval
     bc-detect-secrets
     bc-jsonpath-ng
     bc-python-hcl2
@@ -177,7 +191,7 @@ python3.pkgs.buildPythonApplication rec {
     chmod +x $out/bin/checkov
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
     changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${version}";
@@ -185,8 +199,9 @@ python3.pkgs.buildPythonApplication rec {
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    mainProgram = "checkov";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       anhdle14
       fab
     ];

@@ -53,28 +53,32 @@ procedure for updating eggs.
 ## Override Scope {#sec-chicken-override-scope}
 
 The chicken package and its eggs, respectively, reside in a scope. This means,
-the scope can be overridden to effect other packages in it.
+the scope can be overridden to affect other packages in it.
 
 This example shows how to use a local copy of `srfi-180` and have it affect
 all the other eggs:
 
 ```nix
 let
-  myChickenPackages = pkgs.chickenPackages.overrideScope (self: super: {
-      # The chicken package itself can be overridden to effect the whole ecosystem.
+  myChickenPackages = pkgs.chickenPackages.overrideScope (
+    self: super: {
+      # The chicken package itself can be overridden to affect the whole ecosystem.
       # chicken = super.chicken.overrideAttrs {
       #   src = ...
       # };
 
-      chickenEggs = super.chickenEggs.overrideScope (eggself: eggsuper: {
-        srfi-180 = eggsuper.srfi-180.overrideAttrs {
-          # path to a local copy of srfi-180
-          src = <...>;
-        };
-      });
-  });
+      chickenEggs = super.chickenEggs.overrideScope (
+        eggself: eggsuper: {
+          srfi-180 = eggsuper.srfi-180.overrideAttrs {
+            # path to a local copy of srfi-180
+            src = <...>;
+          };
+        }
+      );
+    }
+  );
+  # Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
+  # the local copy of `srfi-180`.
 in
-# Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
-# the local copy of `srfi-180`.
 <...>
 ```

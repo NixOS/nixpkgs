@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "SystemdJournal2Gelf";
-  version = "unstable-2023-03-10";
+  version = "0-unstable-2023-03-10";
 
   src = fetchFromGitHub {
     owner = "parse-nl";

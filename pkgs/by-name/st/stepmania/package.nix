@@ -17,6 +17,7 @@
   libvorbis,
   udev,
   xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -61,11 +62,13 @@ stdenv.mkDerivation {
     libvorbis
     udev
     xorg.libXtst
+    zlib
   ];
 
   cmakeFlags = [
     "-DWITH_SYSTEM_FFMPEG=1"
     "-DWITH_SYSTEM_PNG=on"
+    "-DWITH_SYSTEM_ZLIB=on"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];

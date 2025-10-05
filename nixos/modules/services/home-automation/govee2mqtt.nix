@@ -52,7 +52,11 @@ in
     systemd.services.govee2mqtt = {
       description = "Govee2MQTT Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      after = [
+        "networking.target"
+        "network-online.target"
+      ];
+      requires = [ "network-online.target" ];
       serviceConfig = {
         CacheDirectory = "govee2mqtt";
         Environment = [

@@ -11,16 +11,13 @@ mkCoqDerivation {
   owner = "uwplse";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.version [
-      {
-        case = range "8.14" "9.0";
-        out = "20230107";
-      }
-      {
-        case = range "8.6" "8.16";
-        out = "20200201";
-      }
+      (case (range "8.14" "9.1") "20230107")
+      (case (range "8.6" "8.16") "20200201")
     ] null;
   release."20230107".rev = "bad8ad2476e14df6b5a819b7aaddc27a7c53fb69";
   release."20230107".sha256 = "sha256-G7a+6h4VDk7seKvFr6wy7vYqYmhUje78TYCj98wXrr8=";

@@ -21,7 +21,7 @@ php82.buildComposerProject2 (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -30,6 +30,6 @@ php82.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/consolidation/robo";
     license = lib.licenses.mit;
     mainProgram = "robo";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

@@ -1,21 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-cachedescriptors";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.cachedescriptors";
-    inherit version;
-    hash = "sha256-MVe+hm/Jck0Heotb9sP8IcOKQUerZk5yRiLf5fr/BIo=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.cachedescriptors";
+    tag = version;
+    hash = "sha256-2cb8XosPCAV2BfMisCN9mr0KIu5xcsLPIcPkmpeVT+k=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools <= 75.6.0" setuptools
+  '';
 
   build-system = [ setuptools ];
 
@@ -23,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/zope/cachedescriptors/tests.py" ];
+  enabledTestPaths = [ "src/zope/cachedescriptors/tests.py" ];
 
   pythonImportsCheck = [ "zope.cachedescriptors" ];
 

@@ -7,7 +7,6 @@
   pkg-config,
   gtk3,
   ncurses,
-  darwin,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -30,12 +29,10 @@ stdenv.mkDerivation rec {
     pkg-config
     copyDesktopItems
   ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isUnix [
-      gtk3
-      ncurses
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
+  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
+    gtk3
+    ncurses
+  ];
   enableParallelBuilding = true;
 
   desktopItems = [

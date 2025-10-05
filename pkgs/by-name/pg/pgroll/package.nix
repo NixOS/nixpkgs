@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "pgroll";
-  version = "0.10.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "xataio";
     repo = "pgroll";
     tag = "v${version}";
-    hash = "sha256-AJ0dTvywbwwSHOwSPrAgTE9M1AMvo/GRj6L1dZM9Hz8=";
+    hash = "sha256-OqBgFeXpvoImoPMKHBCvsPQGhHSBZuNNMLh2/3DPPYo=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-olblf/mi/M9Zo4C/fR/Z11C+bAEFOy7bz7EXfMn8Akw=";
+  vendorHash = "sha256-rQPWL39AD/qCneuRyJHOQCANmDE7pqmwHx+AavJ/3cw=";
 
   excludedPackages = [ "dev" ];
 

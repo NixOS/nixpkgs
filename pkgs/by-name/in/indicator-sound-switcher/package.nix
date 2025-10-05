@@ -18,10 +18,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "indicator-sound-switcher";
   version = "2.3.10.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yktoo";
-    repo = pname;
+    repo = "indicator-sound-switcher";
     tag = "v${version}";
     sha256 = "sha256-Benhlhz81EgL6+pmjzyruKBOS6O7ce5PPmIIzk2Zong=";
   };

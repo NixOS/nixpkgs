@@ -113,6 +113,11 @@ let
 
     cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
+    if [ -n "$FLAKE" ] && [ ! -e "/nix/var/nix/profiles/per-container/$INSTANCE/system" ]; then
+      # we create the etc/nixos-container config file, then if we utilize the update function, we can then build all the necessary system files for the container
+      ${lib.getExe nixos-container} update "$INSTANCE"
+    fi
+
     declare -a extraFlags
 
     if [ "$PRIVATE_NETWORK" = 1 ]; then
@@ -122,9 +127,12 @@ let
     NIX_BIND_OPT=""
     if [ -n "$PRIVATE_USERS" ]; then
       extraFlags+=("--private-users=$PRIVATE_USERS")
-      if [ "$PRIVATE_USERS" = "pick" ] || { [ "$PRIVATE_USERS" != "identity" ] && [ "$PRIVATE_USERS" -gt 0 ]; }; then
-        # when user namespacing is enabled, we use `idmap` mount option
-        # so that bind mounts under /nix get proper owner (and not nobody/nogroup).
+      if [[
+        "$PRIVATE_USERS" = "pick"
+        || ("$PRIVATE_USERS" =~ ^[[:digit:]]+$ && "$PRIVATE_USERS" -gt 0)
+      ]]; then
+        # when user namespacing is enabled, we use `idmap` mount option so that
+        # bind mounts under /nix get proper owner (and not nobody/nogroup).
         NIX_BIND_OPT=":idmap"
       fi
     fi
@@ -408,11 +416,11 @@ let
               description = "The protocol specifier for port forwarding between host and container";
             };
             hostPort = mkOption {
-              type = types.int;
+              type = types.port;
               description = "Source port of the external interface on host";
             };
             containerPort = mkOption {
-              type = types.nullOr types.int;
+              type = types.nullOr types.port;
               default = null;
               description = "Target port of container";
             };
@@ -501,19 +509,31 @@ in
 
     boot.isContainer = mkOption {
       type = types.bool;
-      default = false;
+      default = config.boot.isNspawnContainer;
+      defaultText = "config.boot.isNspawnContainer";
       description = ''
         Whether this NixOS machine is a lightweight container running
         in another NixOS system.
       '';
     };
 
+    boot.isNspawnContainer = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the machine is running in an nspawn container. This
+        option is added because [](#opt-boot.isContainer) is heavily used
+        for non-nspawn environments as well, hence nspawn-specific settings
+        are guarded by this option.
+      '';
+    };
+
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = true;
+      default = config.containers != { };
+      defaultText = lib.literalExpression "config.containers != { }";
       description = ''
-        Whether to enable support for NixOS containers. Defaults to true
-        (at no cost if containers are not actually used).
+        Whether to enable support for NixOS containers.
       '';
     };
 
@@ -550,7 +570,7 @@ in
                                     { inherit (host.pkgs.stdenv) hostPlatform; }
                                   else
                                     { localSystem = host.pkgs.stdenv.hostPlatform; };
-                                boot.isContainer = true;
+                                boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
                                 assertions = [
@@ -721,7 +741,7 @@ in
                   so that no overlapping UID/GID ranges are assigned to multiple containers.
                   This is the recommanded option as it enhances container security massively and operates fully automatically in most cases.
 
-                  See https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users= for details.
+                  See <https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users=> for details.
                 '';
               };
 
@@ -841,9 +861,20 @@ in
                 '';
               };
 
+              flake = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                example = "github:NixOS/nixpkgs/master";
+                description = ''
+                  The Flake URI of the NixOS configuration to use for the container.
+                  Replaces the option {option}`containers.<name>.path`.
+                '';
+              };
+
               # Removed option. See `checkAssertion` below for the accompanying error message.
               pkgs = mkOption { visible = false; };
-            } // networkOptions;
+            }
+            // networkOptions;
 
             config =
               let
@@ -864,13 +895,18 @@ in
                       - containers.${name}.config.nixpkgs.pkgs
                         This only sets the `pkgs` argument used inside the container modules.
                     ''
+                  else if options.config.isDefined && (options.flake.value != null) then
+                    throw ''
+                      The options 'containers.${name}.path' and 'containers.${name}.flake' cannot both be set.
+                    ''
                   else
                     null;
               in
               {
-                path =
-                  builtins.seq checkAssertion mkIf options.config.isDefined
-                    config.config.system.build.toplevel;
+                path = builtins.seq checkAssertion mkMerge [
+                  (mkIf options.config.isDefined config.config.system.build.toplevel)
+                  (mkIf (config.flake != null) "/nix/var/nix/profiles/per-container/${name}")
+                ];
               };
           }
         )
@@ -926,7 +962,10 @@ in
 
           unitConfig.RequiresMountsFor = "${stateDirectory}/%i";
 
-          path = [ pkgs.iproute2 ];
+          path = [
+            pkgs.iproute2
+            config.nix.package
+          ];
 
           environment = {
             root = "${stateDirectory}/%i";
@@ -1041,7 +1080,12 @@ in
             name: cfg:
             nameValuePair "${configurationDirectoryName}/${name}.conf" {
               text = ''
-                SYSTEM_PATH=${cfg.path}
+                ${optionalString (cfg.flake == null) ''
+                  SYSTEM_PATH=${cfg.path}
+                ''}
+                ${optionalString (cfg.flake != null) ''
+                  FLAKE=${cfg.flake}
+                ''}
                 ${optionalString cfg.privateNetwork ''
                   PRIVATE_NETWORK=1
                   ${optionalString (cfg.hostBridge != null) ''

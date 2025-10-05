@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mas";
-  version = "1.9.0";
+  version = "2.2.2";
 
   src = fetchurl {
     url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}.pkg";
-    hash = "sha256-MiSrCHLby3diTAzDPCYX1ZwdmzcHwOx/UJuWrlRJe54=";
+    hash = "sha256-v+tiD5ZMVFzeShyuOt8Ss3yw6p8VjopHaMimOQznL6o=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
     license = licenses.mit;
+    mainProgram = "mas";
     maintainers = with maintainers; [
       steinybot
       zachcoyle

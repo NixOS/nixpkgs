@@ -3,7 +3,7 @@
   lib,
   stdenv,
   cmake,
-  fmt,
+  fmt_11,
   spdlog,
   tl-expected,
   nlohmann_json,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmamba";
-  version = "2.0.5";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = "libmamba-${finalAttrs.version}";
-    hash = "sha256-o5shAmsplJS2WZ4HhAt1U27KqUheVxZTkjlyxR7EYxI=";
+    tag = finalAttrs.version;
+    hash = "sha256-344CRyIIrIFrDFbdxdGH7iOidoDhfovd3EySXlOF+4M=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fmt
+    fmt_11
     spdlog
     tl-expected
     nlohmann_json

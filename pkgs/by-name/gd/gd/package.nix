@@ -38,12 +38,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags =
-    [
-      "--enable-gd-formats"
-    ]
-    # -pthread gets passed to clang, causing warnings
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
+  configureFlags = [
+    "--enable-gd-formats"
+  ]
+  # -pthread gets passed to clang, causing warnings
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [
     autoconf
@@ -51,20 +50,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      freetype
-      libpng
-      libjpeg
-      libwebp
-      libtiff
-      libavif
-    ]
-    ++ lib.optionals withXorg [
-      fontconfig
-      libXpm
-    ];
+  buildInputs = [
+    zlib
+    freetype
+    libpng
+    libjpeg
+    libwebp
+    libtiff
+    libavif
+  ]
+  ++ lib.optionals withXorg [
+    fontconfig
+    libXpm
+  ];
 
   outputs = [
     "bin"

@@ -4,23 +4,21 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  testers,
-  mago,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mago";
-  version = "0.22.1";
+  version = "1.0.0-beta.14";
 
   src = fetchFromGitHub {
     owner = "carthage-software";
     repo = "mago";
-    tag = version;
-    hash = "sha256-Zc6DTqIVU4shmZ9csg4nzwjn7ut/D6FrBXATQqwHI8o=";
+    tag = finalAttrs.version;
+    hash = "sha256-UKoq4RkFcLS47DZHPY/MhrRuLQoWYLoOzO2BeeJZoQw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wppfZNsAFzXMJzcIOHL8Lj2FCgPp/i/TZcHP4VYsGCk=";
+  cargoHash = "sha256-/THZFU3lJbgJGA4lxWt6fyiHqIgQ539vj57iKoQfXZo=";
 
   env = {
     # Get openssl-sys to use pkg-config
@@ -31,20 +29,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = mago;
-      command = "mago --version";
-      version = "mago ${version}";
-    };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
-    changelog = "https://github.com/carthage-software/mago/releases/tag/${version}";
+    changelog = "https://github.com/carthage-software/mago/releases/tag/${finalAttrs.version}";
     description = "Toolchain for PHP that aims to provide a set of tools to help developers write better code";
     homepage = "https://github.com/carthage-software/mago";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "mago";
   };
-}
+})

@@ -13,14 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "1b01j7nmm3wd92ngvsmn2sbw43sl9fpx4xxmkrink68fz1rx0gbj";
   };
 
-  prePatch =
-    ''
-      substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
-      substituteInPlace sysspec.h --replace "malloc.h" "stdlib.h"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace Makefile --replace "-static" ""
-    '';
+  prePatch = ''
+    substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
+    substituteInPlace sysspec.h --replace "malloc.h" "stdlib.h"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile --replace "-static" ""
+  '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
     stdenv.cc.libc.static

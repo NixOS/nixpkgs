@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation rec {
       gtk-update-icon-cache "$theme"
     done
   '';
+  dontCheckForBrokenSymlinks = true;
 
   meta = with lib; {
     description = "Oranchelo icon theme";

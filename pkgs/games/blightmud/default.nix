@@ -8,28 +8,18 @@
   openssl,
   withTTS ? false,
   speechd-minimal,
-  darwin,
 }:
-let
-  inherit (darwin.apple_sdk.frameworks)
-    CoreAudio
-    AudioUnit
-    AVFoundation
-    AppKit
-    ;
-in
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
   version = "5.3.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "blightmud";
+    repo = "blightmud";
     rev = "v${version}";
     hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-7cMd7pNWGV5DOSCLRW5fP3L1VnDTEsZZjhVz1AQLEXM=";
 
   buildFeatures = lib.optional withTTS "tts";
@@ -39,18 +29,11 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
-    ++ lib.optionals (withTTS && stdenv.hostPlatform.isDarwin) [
-      AVFoundation
-      AppKit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      AudioUnit
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   checkFlags =
     let
@@ -74,7 +57,7 @@ rustPlatform.buildRustPackage rec {
       ];
       skipFlag = test: "--skip " + test;
     in
-    builtins.concatStringsSep " " (builtins.map skipFlag skipList);
+    builtins.concatStringsSep " " (map skipFlag skipList);
 
   meta = with lib; {
     description = "Terminal MUD client written in Rust";

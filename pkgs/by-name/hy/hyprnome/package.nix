@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-GZn7qS1J6QSanWdy17sMBbwJ77iMij2jKRgPdrjt6tM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qCexb8D0iN3BWOz5L45mR5n9x0nqAh8MHHTp9QTHSOg=";
 
   # Upstream has 'missing_docs = "deny"', which trips up test builds for 0.3.1 release.

@@ -1,9 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
+  autoreconfHook,
+  gtk-doc,
   gettext,
+  yelp-tools,
   caja,
   gtk3,
   glib,
@@ -25,42 +28,47 @@
   enableXps ? true,
   libgxps,
   enableImages ? false,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "atril";
-  version = "1.28.1";
+  version = "1.28.2";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "dMT0KXnz6tUt7yN2dEjQatf3FUIeA8m1CUBLCW3oGT4=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "atril";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-NnWD3Gcxn8ZZKdHzg6iclLiSwj3sBvF+BwpNtcU+dSY=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
+    itstool
     pkg-config
     gettext
     wrapGAppsHook3
+    yelp-tools
   ];
 
-  buildInputs =
-    [
-      caja
-      gtk3
-      glib
-      itstool
-      libarchive
-      libsecret
-      libxml2
-      poppler
-      mate-desktop
-      hicolor-icon-theme
-      texlive.bin.core # for synctex, used by the pdf back-end
-    ]
-    ++ lib.optionals enableDjvu [ djvulibre ]
-    ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
-    ++ lib.optionals enablePostScript [ libspectre ]
-    ++ lib.optionals enableXps [ libgxps ];
+  buildInputs = [
+    caja
+    gtk3
+    glib
+    libarchive
+    libsecret
+    libxml2
+    poppler
+    mate-desktop
+    hicolor-icon-theme
+    texlive.bin.core # for synctex, used by the pdf back-end
+  ]
+  ++ lib.optionals enableDjvu [ djvulibre ]
+  ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
+  ++ lib.optionals enablePostScript [ libspectre ]
+  ++ lib.optionals enableXps [ libgxps ];
 
   configureFlags =
     [ ]
@@ -76,13 +84,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
   meta = with lib; {
     description = "Simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "4.2.0";
+  version = "4.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "accuweather";
     tag = version;
-    hash = "sha256-Ria725YXHgVLH3jOK5lV9Ux9UfUJtgF+/QMC3lJ/Dcg=";
+    hash = "sha256-ORxo92nfLGNRC+eWX4NrpoMgiCLbtfR5JA+23OT/L3Y=";
   };
 
   build-system = [ setuptools ];

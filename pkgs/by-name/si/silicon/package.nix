@@ -10,7 +10,6 @@
   libxcb,
   python3,
   libiconv,
-  darwin,
   fira-code,
   fontconfig,
   harfbuzz,
@@ -27,33 +26,26 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lwwbjSXW5uonJNZTAqTK14Ib4QDOD4puxY2CsiJk4/Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-MpmGLhg00quz4mYkidLofpcZTVwxbgIThg5v2r4HIfs=";
 
-  buildInputs =
-    [
-      expat
-      freetype
-      fira-code
-      fontconfig
-      harfbuzz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        libiconv
-        AppKit
-        CoreText
-        Security
-      ]
-    );
+  buildInputs = [
+    expat
+    freetype
+    fira-code
+    fontconfig
+    harfbuzz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
   preCheck = ''
     export HOME=$TMPDIR

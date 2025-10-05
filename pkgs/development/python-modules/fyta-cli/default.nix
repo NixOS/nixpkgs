@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "fyta-cli";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dontinelli";
     repo = "fyta_cli";
     tag = "v${version}";
-    hash = "sha256-OgpQh7WyZynFd308TjIGkQNoy8TFu9gynbDiLueqB/0=";
+    hash = "sha256-YYH15ZuRZirSFC7No1goY/afk2BGtCCykcZAnCDdq7U=";
   };
 
   build-system = [ hatchling ];
@@ -32,6 +32,8 @@ buildPythonPackage rec {
     aiohttp
     mashumaro
   ];
+
+  doCheck = false; # Failed: async def functions are not natively supported.
 
   nativeCheckInputs = [
     aioresponses
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fyta_cli" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module to access the FYTA API";

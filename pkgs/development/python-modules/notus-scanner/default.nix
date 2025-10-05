@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "notus-scanner";
-  version = "22.6.5";
+  version = "22.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "notus-scanner";
     tag = "v${version}";
-    hash = "sha256-PPwQjZIKSQ1OmyYJ8ErkqdbHZfH4iHPMiDdKZ3imBwo=";
+    hash = "sha256-JKDnqgEBzEIOI3WIh+SOycACFaYZoZHy7tPFirltDiM=";
   };
 
   pythonRelaxDeps = [
@@ -39,7 +39,8 @@ buildPythonPackage rec {
     psutil
     python-gnupg
     sentry-sdk
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -48,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Helper to create results from local security checks";
     homepage = "https://github.com/greenbone/notus-scanner";
-    changelog = "https://github.com/greenbone/notus-scanner/releases/tag/v${version}";
+    changelog = "https://github.com/greenbone/notus-scanner/releases/tag/${src.tag}";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

@@ -28,33 +28,32 @@ symlinkJoin {
   };
 
   # Replace the unwrapped tectonic with the one wrapping it with biber
-  postBuild =
-    ''
-      rm $out/bin/{tectonic,nextonic}
-    ''
-    # Pin the version of the online TeX bundle that Tectonic's developer
-    # distribute, so that the `biber` version and the `biblatex` version
-    # distributed from there are compatible.
-    #
-    # Upstream is updating it's online TeX bundle slower then
-    # https://github.com/plk/biber. That's why we match here the `bundleURL`
-    # version with that of `biber-for-tectonic`. See also upstream discussion:
-    #
-    # https://github.com/tectonic-typesetting/tectonic/discussions/1122
-    #
-    # Hence, we can be rather confident that for the near future, the online
-    # TeX bundle won't be updated and hence the biblatex distributed there
-    # won't require a higher version of biber.
-    + ''
-      makeWrapper ${lib.getBin tectonic-unwrapped}/bin/tectonic $out/bin/tectonic \
-        --prefix PATH : "${lib.getBin biber-for-tectonic}/bin" \
-        --add-flags "--web-bundle ${tectonic.passthru.bundleUrl}" \
-        --inherit-argv0 ## make sure binary name e.g. `nextonic` is passed along
-      ln -s $out/bin/tectonic $out/bin/nextonic
-    '';
+  postBuild = ''
+    rm $out/bin/{tectonic,nextonic}
+  ''
+  # Pin the version of the online TeX bundle that Tectonic's developer
+  # distribute, so that the `biber` version and the `biblatex` version
+  # distributed from there are compatible.
+  #
+  # Upstream is updating it's online TeX bundle slower then
+  # https://github.com/plk/biber. That's why we match here the `bundleURL`
+  # version with that of `biber-for-tectonic`. See also upstream discussion:
+  #
+  # https://github.com/tectonic-typesetting/tectonic/discussions/1122
+  #
+  # Hence, we can be rather confident that for the near future, the online
+  # TeX bundle won't be updated and hence the biblatex distributed there
+  # won't require a higher version of biber.
+  + ''
+    makeWrapper ${lib.getBin tectonic-unwrapped}/bin/tectonic $out/bin/tectonic \
+      --prefix PATH : "${lib.getBin biber-for-tectonic}/bin" \
+      --add-flags "--web-bundle ${tectonic.passthru.bundleUrl}" \
+      --inherit-argv0 ## make sure binary name e.g. `nextonic` is passed along
+    ln -s $out/bin/tectonic $out/bin/nextonic
+  '';
 
   meta = tectonic-unwrapped.meta // {
-    description = "Tectonic TeX/LaTeX engine, wrapped with a compatible biber";
+    description = "TeX/LaTeX engine, wrapped with a compatible biber";
     maintainers = with lib.maintainers; [
       doronbehar
       bryango

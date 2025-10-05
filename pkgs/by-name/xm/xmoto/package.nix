@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "xmoto";
+    repo = "xmoto";
     rev = "v${version}";
     hash = "sha256-DNljUd7FSH0fTgQx8LMqItZ54aLZtwMUPzqR8Z820SM=";
   };

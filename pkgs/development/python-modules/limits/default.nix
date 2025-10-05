@@ -22,14 +22,13 @@
   redis,
   setuptools,
   typing-extensions,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "4.0.1";
+  version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
@@ -38,10 +37,10 @@ buildPythonPackage rec {
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
     # file here, and recreate it later based on our version info.
+    hash = "sha256-EHLqkd5Muazr52/oYaLklFVvF+AzJWGbFaaIG+T0ulE=";
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-JXXjRVn3RQMqNYRYXF4LuV2DHzVF8PTeGepFkt4jDFM=";
   };
 
   patches = [
@@ -80,6 +79,7 @@ buildPythonPackage rec {
     # ];
     async-mongodb = [ motor ];
     async-etcd = [ aetcd ];
+    valkey = [ valkey ];
   };
 
   env = {
@@ -96,17 +96,24 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-lazy-fixtures
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [ "test_moving_window_memcached" ];
+  pytestFlags = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    "test_moving_window_memcached"
+    # Flaky: compares time to magic value
+    "test_sliding_window_counter_previous_window"
+  ];
 
   pythonImportsCheck = [ "limits" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
     changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

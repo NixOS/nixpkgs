@@ -16,7 +16,7 @@ let
         [Desktop Entry]
         Name=${opts.prettyName} (UWSM)
         Comment=${opts.comment}
-        Exec=${lib.getExe cfg.package} start -S -F ${opts.binPath}
+        Exec=${lib.getExe cfg.package} start -F ${opts.binPath}
         Type=Application
       '';
       destination = "/share/wayland-sessions/${opts.name}-uwsm.desktop";

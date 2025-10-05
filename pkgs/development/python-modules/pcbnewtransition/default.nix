@@ -8,15 +8,15 @@
 }:
 buildPythonPackage rec {
   pname = "pcbnewtransition";
-  version = "0.5.0";
+  version = "0.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "pcbnewTransition";
+    inherit pname;
     inherit version;
-    hash = "sha256-4XNcnQzUWpY0NEfS2bdtkedvG4lY79jaPe0QqTWNW6s=";
+    hash = "sha256-zLnvbu0G2mJKCHLCjbIKHBqSfdEyhR+1afkOFU++TfI=";
   };
 
   propagatedBuildInputs = [ kicad ];

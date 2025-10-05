@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1303,
+    "name": "Stardew Valley",
+    "name_lower": "stardew valley",
+    "forum_url": "https://forums.nexusmods.com/games/19-stardew-valley/",
+    "nexusmods_url": "https://www.nexusmods.com/stardewvalley",
+    "genre": "Simulation",
+    "file_count": 141253,
+    "downloads": 614556730,
+    "domain_name": "stardewvalley",
+    "approved_date": 1457432329,
+    "mods": 25471,
+    "collections": 2025
+  },
+  {
+    "id": 1704,
+    "name": "Skyrim Special Edition",
+    "name_lower": "skyrim special edition",
+    "forum_url": "https://forums.nexusmods.com/games/6-skyrim/",
+    "nexusmods_url": "https://www.nexusmods.com/skyrimspecialedition",
+    "genre": "RPG",
+    "file_count": 653576,
+    "downloads": 8992667521,
+    "domain_name": "skyrimspecialedition",
+    "approved_date": 1477480498,
+    "mods": 117157,
+    "collections": 4847
+  },
+  {
+    "id": 3174,
+    "name": "Mount & Blade II: Bannerlord",
+    "name_lower": "mount & blade ii: bannerlord",
+    "forum_url": "https://forums.nexusmods.com/games/9-mount-blade-ii-bannerlord/",
+    "nexusmods_url": "https://www.nexusmods.com/mountandblade2bannerlord",
+    "genre": "Strategy",
+    "file_count": 50070,
+    "downloads": 114524055,
+    "domain_name": "mountandblade2bannerlord",
+    "approved_date": 1582898627,
+    "mods": 6265,
+    "collections": 292
+  },
+  {
+    "id": 3333,
+    "name": "Cyberpunk 2077",
+    "name_lower": "cyberpunk 2077",
+    "forum_url": "https://forums.nexusmods.com/games/1-cyberpunk-2077/",
+    "nexusmods_url": "https://www.nexusmods.com/cyberpunk2077",
+    "genre": "Action",
+    "file_count": 123015,
+    "downloads": 894075844,
+    "domain_name": "cyberpunk2077",
+    "approved_date": 1607433331,
+    "mods": 17664,
+    "collections": 1584
+  },
+  {
+    "id": 3474,
+    "name": "Baldur's Gate 3",
+    "name_lower": "baldur's gate 3",
+    "forum_url": "https://forums.nexusmods.com/games/2-baldurs-gate-3/",
+    "nexusmods_url": "https://www.nexusmods.com/baldursgate3",
+    "genre": "RPG",
+    "file_count": 103892,
+    "downloads": 342668709,
+    "domain_name": "baldursgate3",
+    "approved_date": 1602863114,
+    "mods": 14725,
+    "collections": 1800
+  }
+]

@@ -111,7 +111,8 @@ let
 
         meta = {
           inherit (erlang.meta) platforms;
-        } // meta;
+        }
+        // meta;
 
         passthru = (
           {

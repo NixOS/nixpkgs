@@ -4,8 +4,6 @@
   fetchFromGitHub,
   cmake,
   zlib,
-  stdenv,
-  darwin,
   testers,
   cargo-semver-checks,
   nix-update-script,
@@ -13,34 +11,33 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.40.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = "cargo-semver-checks";
     tag = "v${version}";
-    hash = "sha256-bit8/o5MqlIL4vvCS9fGR2rNtD/Dn58aFqsmyhKueUI=";
+    hash = "sha256-QU8vLdq129gcGi8/VfjflY6zkIXXam/Ri2zjbO3sPNg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/8Juz8F5vJ/JLDYZUG9tyxkLSN7YPh5yAKJflpuSZ0w=";
+  cargoHash = "sha256-0oPAIhhBcCwZT8sD2PWJ5ZDuMMFvmwxhyOXJWA9+jZg=";
 
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    zlib
+  ];
 
   checkFlags = [
     # requires internet access
     "--skip=detects_target_dependencies"
     "--skip=query::tests_lints::feature_missing"
+    # platform specific snapshots
+    "--skip=query::tests_lints::trait_method_target_feature_removed"
+    "--skip=query::tests_lints::unsafe_trait_method_requires_more_target_features"
+    "--skip=query::tests_lints::unsafe_trait_method_target_feature_added"
   ];
 
   preCheck = ''

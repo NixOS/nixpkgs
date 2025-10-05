@@ -5,7 +5,6 @@
   fetchPypi,
   h11,
   maxminddb,
-  mocket,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -19,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "geoip2";
-  version = "5.0.1";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kK+LbTaH877yUfJwitAXsw1ifRFEwAQOq8TJAXqAfYY=";
+    hash = "sha256-7j+H8M6TJetkhP4Yy9l3GgPQorrR3RVvo1hPr6Vi05o=";
   };
 
   build-system = [
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     h11
-    mocket
     requests-mock
     pytestCheckHook
     pytest-httpserver

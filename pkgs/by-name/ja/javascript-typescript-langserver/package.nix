@@ -17,6 +17,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-nHGTi1aH9YY01dzBeNyUEUEswrdjZPWaoycDVZZmIAA=";
 
+  postInstall = ''
+    find $out/lib/node_modules -xtype l -delete
+  '';
+
   meta = {
     description = "JavaScript and TypeScript code intelligence through the Language Server Protocol";
     homepage = "https://github.com/sourcegraph/javascript-typescript-langserver";

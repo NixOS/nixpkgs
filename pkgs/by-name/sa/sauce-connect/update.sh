@@ -19,7 +19,7 @@ all_versions=$(jq --exit-status --raw-output \
     '.all_downloads | to_entries[] | select(.value | has("linux") and has("osx")) | .key' \
     <<< "$response")
 latest_version=$(sort --version-sort <<< "$all_versions" | tail -n 1)
-for platform in x86_64-linux x86_64-darwin; do
+for platform in x86_64-linux aarch64-linux x86_64-darwin; do
     update-source-version sauce-connect "$latest_version" \
         --ignore-same-version \
         --source-key="passthru.sources.$platform"

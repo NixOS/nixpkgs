@@ -2,33 +2,54 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  oldest-supported-numpy,
+
+  # build-system
+  hatchling,
+  numpy,
+  setuptools,
+
+  # dependencies
   scipy,
-  numba,
+
+  # tests
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "quaternion";
-  version = "2024.0.3";
-  format = "pyproject";
+  version = "2024.0.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moble";
-    repo = pname;
+    repo = "quaternion";
     tag = "v${version}";
-    hash = "sha256-3UVqeiGcdsjQQpVRhcDBf1N0XJw+Xe/Pp+4lmGzl8ws=";
+    hash = "sha256-HZDzzXf9lsvxa5yLayYvk3lgutEw0gEH8m0jkzwMAF8=";
   };
 
-  propagatedBuildInputs = [
-    oldest-supported-numpy
-    numba
+  build-system = [
+    hatchling
+    numpy
+    setuptools
+  ];
+
+  dependencies = [
+    numpy
     scipy
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "quaternion" ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  meta = {
     description = "Package add built-in support for quaternions to numpy";
     homepage = "https://github.com/moble/quaternion";
-    license = licenses.mit;
-    maintainers = [ maintainers.ocfox ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ocfox ];
   };
 }

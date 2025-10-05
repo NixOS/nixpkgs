@@ -65,13 +65,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.ustreamer.extraArgs =
-      [
-        "--device=${cfg.device}"
-      ]
-      ++ optionals (!cfg.autoStart) [
-        "--exit-on-no-clients=300"
-      ];
+    services.ustreamer.extraArgs = [
+      "--device=${cfg.device}"
+    ]
+    ++ optionals (!cfg.autoStart) [
+      "--exit-on-no-clients=300"
+    ];
 
     systemd.services."ustreamer" = {
       description = "µStreamer, a lightweight MJPEG-HTTP streamer";

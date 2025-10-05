@@ -16,6 +16,7 @@
 
   # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
   aacgain,
+  chromaprint,
   essentia-extractor,
   ffmpeg,
   flac,
@@ -82,7 +83,8 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   patches = [
-  ] ++ extraPatches;
+  ]
+  ++ extraPatches;
 
   build-system = [
     python3Packages.poetry-core
@@ -101,8 +103,6 @@ python3Packages.buildPythonApplication {
       pyyaml
       unidecode
       typing-extensions
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
       lap
     ]
     ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
@@ -111,16 +111,16 @@ python3Packages.buildPythonApplication {
     gobject-introspection
     sphinxHook
     python3Packages.pydata-sphinx-theme
-  ] ++ extraNativeBuildInputs;
+  ]
+  ++ extraNativeBuildInputs;
 
-  buildInputs =
-    [
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+  ]);
 
   outputs = [
     "out"
@@ -147,13 +147,12 @@ python3Packages.buildPythonApplication {
     with python3Packages;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
       mock
       rarfile
       responses
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
       requests-mock
+      pillow
     ]
     ++ [
       writableTmpDirAsHomeHook
@@ -173,13 +172,27 @@ python3Packages.buildPythonApplication {
       # if not self._poll(timeout):
       #   raise Empty
       #   _queue.Empty
-      "test/plugins/test_player.py"
+      "test/plugins/test_bpd.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # fail on Hydra with `RuntimeError: image cannot be obtained without artresizer backend`
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_percent_margin"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_px_margin"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_minwidth"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced_and_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_not_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_and_scaled"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_but_not_scaled"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_resize"
     ];
   disabledTests = disabledTests ++ [
-    # beets.ui.UserError: unknown command 'autobpm'
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
-    # AssertionError: assert 0 == 117
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_command"
+    # https://github.com/beetbox/beets/issues/5880
+    "test_reject_different_art"
+    # touches network
+    "test_merge_duplicate_album"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.

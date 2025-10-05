@@ -20,6 +20,10 @@ cd "$DIR"/modules
 pass=0
 fail=0
 
+local-nix-instantiate() {
+    nix-instantiate --timeout 1 --eval-only --show-trace --read-write-mode --json "$@"
+}
+
 # loc
 #   prints the location of the call of to the function that calls it
 # loc n
@@ -55,7 +59,7 @@ evalConfig() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode --json
+    local-nix-instantiate -E "$script" -A "$attr"
 }
 
 reportFailure() {
@@ -82,6 +86,44 @@ checkConfigOutput() {
     fi
 }
 
+invertIfUnset() {
+    gate="$1"
+    shift
+    if [[ -n "${!gate:-}" ]]; then
+        "$@"
+    else
+        ! "$@"
+    fi
+}
+
+globalErrorLogCheck() {
+    invertIfUnset "REQUIRE_INFINITE_RECURSION_HINT" \
+      grep -i 'if you get an infinite recursion here' \
+      <<<"$err" >/dev/null \
+      || {
+        if [[ -n "${REQUIRE_INFINITE_RECURSION_HINT:-}" ]]; then
+            echo "Unexpected infinite recursion hint"
+        else
+            echo "Expected infinite recursion hint, but none found"
+        fi
+        return 1
+      }
+}
+
+checkExpression() {
+  local path=$1
+  local output
+  {
+      output="$(local-nix-instantiate --strict "$path" 2>&1)" && ((++pass))
+  } || {
+      logStartFailure
+      echo "$output"
+      ((++fail))
+      logFailure
+      logEndFailure
+  }
+}
+
 checkConfigError() {
     local errorContains=$1
     local err=""
@@ -94,6 +136,14 @@ checkConfigError() {
         logFailure
         logEndFailure
     else
+        if ! globalErrorLogCheck "$err"; then
+            logStartFailure
+            echo "LOG:"
+            reportFailure "$@"
+            echo "GLOBAL ERROR LOG CHECK FAILED"
+            logFailure
+            logEndFailure
+        fi
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
@@ -159,6 +209,9 @@ checkConfigError 'A definition for option .intStrings\.badTagError. is not of ty
 checkConfigError 'A definition for option .intStrings\.badTagTypeError\.left. is not of type .signed integer.' config.intStrings.badTagTypeError.left ./types-attrTag.nix
 checkConfigError 'A definition for option .nested\.right\.left. is not of type .signed integer.' config.nested.right.left ./types-attrTag.nix
 checkConfigError 'In attrTag, each tag value must be an option, but tag int was a bare type, not wrapped in mkOption.' config.opt.int ./types-attrTag-wrong-decl.nix
+
+# types
+checkConfigOutput '"ok"' config.assertions ./types.nix
 
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
@@ -283,8 +336,8 @@ checkConfigOutput '^true$' "$@" ./define-_module-args-custom.nix
 # Check that using _module.args on imports cause infinite recursions, with
 # the proper error context.
 set -- "$@" ./define-_module-args-custom.nix ./import-custom-arg.nix
-checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
-checkConfigError 'infinite recursion encountered' "$@"
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'infinite recursion encountered' "$@"
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
@@ -295,15 +348,18 @@ checkConfigOutput '^true$' "$@" ./define-module-check.nix
 set --
 checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'A definition for option .*. is not of type .*.\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
 # Check coerced option merging.
 checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already declared in .*/declare-coerced-value-no-default.nix.' config.value ./declare-coerced-value.nix ./declare-coerced-value-no-default.nix
 
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
-checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
+checkConfigError 'A definition for option .* is not of type .*.\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+
+# Check `graph` attribute
+checkExpression './graph/test.nix'
 
 # Check mkAliasOptionModule.
 checkConfigOutput '^true$' config.enable ./alias-with-priority.nix
@@ -315,14 +371,26 @@ checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-overrid
 checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello"$' config.namedPackage.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.namedPackage.defaultText._type ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.namedPackage.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.namedPackageSingletonDefault.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Hello.*"$' options.namedPackageSingletonDefault.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.namedPackageSingletonDefault.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.packageWithExample.example._type ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.packageWithPathExample.example._type ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.packageWithPathExample.example.text ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
 checkConfigError 'The option .undefinedPackage. was accessed but has no value defined. Try setting the option.' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
-checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"null or package"$' options.nullablePackage.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.nullablePackageWithDefault.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.packageInvalidIdentifier.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifier.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifierExample.example.text ./declare-mkPackageOption.nix
 
 # submoduleWith
 
@@ -351,6 +419,9 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
+
+## _prefix module argument is available at import time and contains the prefix
+checkConfigOutput '^true$' config.foo.ok ./prefix-module-argument.nix
 
 ## deferredModule
 # default module is merged into nodes.foo
@@ -473,7 +544,7 @@ checkConfigOutput '^"bar"$' config.nest.bar ./freeform-attrsOf.nix ./freeform-ne
 checkConfigOutput '^null$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix ./define-value-string.nix
 # Check whether an freeform-typed value can depend on a declared option, this can only work with lazyAttrsOf
-checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigError 'The option .* was accessed but has no value defined. Try setting the option.' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
 # submodules in freeformTypes should have their locations annotated
@@ -481,6 +552,28 @@ checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freefo
 # freeformTypes can get merged using `types.type`, including submodules
 checkConfigOutput '^10$' config.free.xxx.foo ./freeform-submodules.nix
 checkConfigOutput '^10$' config.free.yyy.bar ./freeform-submodules.nix
+
+# Regression of either, due to freeform not beeing checked previously
+checkConfigOutput '^"foo"$' config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+checkConfigOutput '^"foo"$' config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+checkConfigOutput '^"foo"$' config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+checkConfigOutput '^"foo"$' config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+
+checkConfigOutput '^42$' config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+checkConfigOutput '^42$' config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+checkConfigOutput '^42$' config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+checkConfigOutput '^42$' config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+# Value OK: Fail if a warning is emitted
+NIX_ABORT_ON_WARN=1 checkConfigOutput "^42$" config.number.int ./freeform-attrsof-either.nix
+
 
 ## types.anything
 # Check that attribute sets are merged recursively
@@ -603,6 +696,7 @@ checkConfigError 'Expected a module, but found a value of type .*"flake".*, whil
 checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
 checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
 checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
+checkConfigError 'Expected a module, but found a value of type "configuration", while trying to load a module into .*/import-error-submodule.nix, while trying to load a module into .*foo.*\.' config.foo ./import-error-submodule.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
@@ -672,6 +766,46 @@ checkConfigError 'The option .conflictingPathOptionType. in .*/pathWith.nix. is 
 
 # types.pathWith { inStore = true; absolute = false; }
 checkConfigError 'In pathWith, inStore means the path must be absolute' config.impossiblePathOptionType ./pathWith.nix
+
+# mkDefinition
+# check that mkDefinition 'file' is printed in the error message
+checkConfigError 'Cannot merge definitions.*\n\s*- In .file.*\n\s*- In .other.*' config.conflict ./mkDefinition.nix
+checkConfigError 'A definition for option .viaOptionDefault. is not of type .boolean.*' config.viaOptionDefault ./mkDefinition.nix
+checkConfigOutput '^true$' config.viaConfig ./mkDefinition.nix
+checkConfigOutput '^true$' config.mkMerge ./mkDefinition.nix
+checkConfigOutput '^true$' config.mkForce ./mkDefinition.nix
+
+# specialArgs._class
+checkConfigOutput '"nixos"' config.nixos.config.foo ./specialArgs-class.nix
+checkConfigOutput '"bar"' config.conditionalImportAsNixos.config.foo ./specialArgs-class.nix
+checkConfigError 'attribute .*bar.* not found' config.conditionalImportAsNixos.config.bar ./specialArgs-class.nix
+checkConfigError 'attribute .*foo.* not found' config.conditionalImportAsDarwin.config.foo ./specialArgs-class.nix
+checkConfigOutput '"foo"' config.conditionalImportAsDarwin.config.bar ./specialArgs-class.nix
+checkConfigOutput '"nixos"' config.sub.nixos.foo ./specialArgs-class.nix
+checkConfigOutput '"bar"' config.sub.conditionalImportAsNixos.foo ./specialArgs-class.nix
+checkConfigError 'attribute .*bar.* not found' config.sub.conditionalImportAsNixos.bar ./specialArgs-class.nix
+checkConfigError 'attribute .*foo.* not found' config.sub.conditionalImportAsDarwin.foo ./specialArgs-class.nix
+checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs-class.nix
+# Check that some types expose the 'valueMeta'
+checkConfigOutput '\{\}' options.str.valueMeta ./types-valueMeta.nix
+checkConfigOutput '["foo", "bar"]' config.attrsOfResult ./types-valueMeta.nix
+checkConfigOutput '2' config.listOfResult ./types-valueMeta.nix
+
+# Check that composed types expose the 'valueMeta'
+# attrsOf submodule (also on merged options,types)
+checkConfigOutput '42' options.attrsOfModule.valueMeta.attrs.foo.configuration.options.bar.value ./composed-types-valueMeta.nix
+checkConfigOutput '42' options.mergedAttrsOfModule.valueMeta.attrs.foo.configuration.options.bar.value ./composed-types-valueMeta.nix
+
+# listOf submodule (also on merged options,types)
+checkConfigOutput '42' config.listResult ./composed-types-valueMeta.nix
+checkConfigOutput '42' config.mergedListResult ./composed-types-valueMeta.nix
+
+# Add check
+checkConfigOutput '^0$' config.v1CheckedPass ./add-check.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.v1CheckedFail ./add-check.nix
+checkConfigOutput '^true$' config.v2checkedPass ./add-check.nix
+checkConfigError 'A definition for option .* is not of type .attribute set of signed integer.*' config.v2checkedFail ./add-check.nix
+
 
 cat <<EOF
 ====== module tests ======

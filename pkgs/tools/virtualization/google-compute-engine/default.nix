@@ -7,11 +7,13 @@
   util-linux,
   setuptools,
   distro,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20190124";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
@@ -24,6 +26,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     setuptools
     distro
+  ];
+
+  nativeBuildInputs = [
+    udevCheckHook
   ];
 
   postPatch = ''
@@ -53,7 +59,6 @@ buildPythonPackage rec {
     patchShebangs $out/bin/*
   '';
 
-  doCheck = false;
   pythonImportsCheck = [ "google_compute_engine" ];
 
   meta = with lib; {

@@ -1,8 +1,15 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
+  fetchFromGitLab,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
   thunar,
   exo,
+  libxfce4ui,
   libxfce4util,
   gtk3,
   glib,
@@ -10,31 +17,57 @@
   apr,
   aprutil,
   withSubversion ? false,
+  gitUpdater,
 }:
-mkXfceDerivation {
-  category = "thunar-plugins";
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "thunar-vcs-plugin";
-  version = "0.3.0";
-  odd-unstable = false;
+  version = "0.4.0";
 
-  sha256 = "sha256-e9t6lIsvaV/2AAL/7I4Pbcokvy7Lp2+D9sJefTZqB1g=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "thunar-plugins";
+    repo = "thunar-vcs-plugin";
+    tag = "thunar-vcs-plugin-${finalAttrs.version}";
+    hash = "sha256-VuTTao46/3JNzCHv7phCC8DCy9rjlEcMuGmGiIOSsMM=";
+  };
 
-  buildInputs =
-    [
-      thunar
-      exo
-      libxfce4util
-      gtk3
-      glib
-    ]
-    ++ lib.optionals withSubversion [
-      apr
-      aprutil
-      subversion
-    ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    thunar
+    exo
+    libxfce4ui
+    libxfce4util
+    gtk3
+    glib
+  ]
+  ++ lib.optionals withSubversion [
+    apr
+    aprutil
+    subversion
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "svn" withSubversion)
+  ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "thunar-vcs-plugin-"; };
 
   meta = {
     description = "Thunar plugin providing support for Subversion and Git";
-    maintainers = with lib.maintainers; [ lordmzte ] ++ lib.teams.xfce.members;
+    homepage = "https://gitlab.xfce.org/thunar-plugins/thunar-vcs-plugin";
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ lordmzte ];
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -25,6 +25,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mailnag";
   version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pulb";
@@ -43,7 +44,8 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     libsecret
-  ] ++ pluginsDeps;
+  ]
+  ++ pluginsDeps;
 
   nativeBuildInputs = [
     gettext
@@ -93,7 +95,7 @@ python3Packages.buildPythonApplication rec {
 
   # Actually install plugins
   postInstall = ''
-    for plug in ${builtins.toString userPlugins}; do
+    for plug in ${toString userPlugins}; do
       lndir $plug/${python3Packages.python.sitePackages} $out/${python3Packages.python.sitePackages}
     done
   '';

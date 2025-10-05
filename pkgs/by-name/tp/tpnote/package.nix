@@ -1,30 +1,28 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   cmake,
   pkg-config,
   oniguruma,
-  darwin,
   installShellFiles,
   tpnote,
-  testers,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpnote";
-  version = "1.25.6";
+  version = "1.25.15";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
-    tag = "v${version}";
-    hash = "sha256-9mj88mUCpMPBIUrwAL61/XAtn3OQ3EtdP8ZlQBHE4/I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vmHRpY2KvG6vxVQ6OVi/u6wpD8oqQFXn2IJOT0Nh/V0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-K/vtA6Gr015xwuJBge+QDW3MQMJNyKyfxtkV6fs/zmE=";
+  cargoHash = "sha256-dltBOA6pxy2gLemVoX8l0Z+xkiJvhGWSmediWWnN1bc=";
 
   nativeBuildInputs = [
     cmake
@@ -32,18 +30,9 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    oniguruma
+  ];
 
   postInstall = ''
     installManPage docs/build/man/man1/tpnote.1
@@ -51,19 +40,27 @@ rustPlatform.buildRustPackage rec {
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
-  passthru.tests.version = testers.testVersion { package = tpnote; };
-
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";
   cargoTestFlags = "--package tpnote-lib";
   doCheck = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    changelog = "https://github.com/getreu/tp-note/releases/tag/v${version}";
+    changelog = "https://github.com/getreu/tp-note/releases/tag/v${finalAttrs.version}";
     description = "Markup enhanced granular note-taking";
     homepage = "https://blog.getreu.net/projects/tp-note/";
     license = lib.licenses.mit;
     mainProgram = "tpnote";
     maintainers = with lib.maintainers; [ getreu ];
   };
-}
+})

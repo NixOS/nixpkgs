@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}-electron";
     hash = "sha256-jGDCFdqRfnYwUgVs3KO1pDr52JgkYVRHi2KvABaZFl4=";
   };
-  sourceRoot = "source/openfortivpn-webview-qt";
+  sourceRoot = "${src.name}/openfortivpn-webview-qt";
 
   nativeBuildInputs = [
     qt6Packages.wrapQtAppsHook

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -47,7 +48,8 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     sparse
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     pytest-xdist
@@ -59,9 +61,14 @@ buildPythonPackage rec {
   disabledTests = [
     # ValueError: <class 'bool'> can be computed for one-element arrays only.
     "test_dot_with_sparse"
+
+    # ValueError: `shape` was not provided.
+    "test_sparse"
   ];
 
-  __darwinAllowLocalNetworking = true;
+  # On darwin, tests saturate the entire system, even when constrained to run single-threaded
+  # Removing pytest-xdist AND setting --cores to one does not prevent the load from exploding
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Generalized Linear Models with Dask";

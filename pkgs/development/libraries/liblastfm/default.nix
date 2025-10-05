@@ -9,7 +9,6 @@
   fftwSinglePrec,
   libsamplerate,
   qtbase,
-  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -40,7 +39,7 @@ stdenv.mkDerivation {
     fftwSinglePrec
     libsamplerate
     qtbase
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11"

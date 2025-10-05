@@ -2,27 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  importlib-resources,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asdf-standard";
-  version = "1.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "asdf_standard";
     inherit version;
-    hash = "sha256-AVNbwrFb/AnsimLUmZ+c8y3EnccWYMhCVkAij9h3YQI=";
+    hash = "sha256-DF8SHQ24fLd4DWGgh/OSxRBM4ggBbPsqEwyc6pEs/dw=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  build-system = [ setuptools-scm ];
 
   # Circular dependency on asdf
   doCheck = false;
@@ -32,6 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Standards document describing ASDF";
     homepage = "https://github.com/asdf-format/asdf-standard";
+    changelog = "https://github.com/asdf-format/asdf-standard/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

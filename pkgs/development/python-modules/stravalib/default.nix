@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "2.3";
+  version = "2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "stravalib";
     repo = "stravalib";
     tag = "v${version}";
-    hash = "sha256-kqR/fujspOyQ6QbWjP2n3NoLVkzzVxAMqntdhY84sl4=";
+    hash = "sha256-RMvahoUOy4RnSu0O7dBpYylaQ8nPfMiivx8k1XBeEGA=";
   };
 
   build-system = [

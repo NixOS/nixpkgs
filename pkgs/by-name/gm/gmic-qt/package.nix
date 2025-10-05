@@ -66,27 +66,26 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cimg
-      curl
-      fftw
-      gmic
-      graphicsmagick
-      libjpeg
-      libpng
-      libtiff
-      openexr
-      zlib
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qttools
-    ])
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ]
-    ++ variants.${variant}.extraDeps;
+  buildInputs = [
+    cimg
+    curl
+    fftw
+    gmic
+    graphicsmagick
+    libjpeg
+    libpng
+    libtiff
+    openexr
+    zlib
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qttools
+  ])
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ]
+  ++ variants.${variant}.extraDeps;
 
   postPatch = ''
     patchShebangs \
@@ -100,7 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
     (lib.cmakeBool "ENABLE_SYSTEM_GMIC" true)
-    (lib.cmakeFeature "GMIC_QT_HOST" (if variant == "standalone" then "none" else variant))
+    (lib.cmakeFeature "GMIC_QT_HOST" (
+      if variant == "standalone" then
+        "none"
+      else if variant == "gimp" && gimp.majorVersion == "3.0" then
+        "gimp3"
+      else
+        variant
+    ))
   ];
 
   postFixup = lib.optionalString (variant == "gimp") ''

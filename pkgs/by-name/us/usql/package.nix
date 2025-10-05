@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.19.19";
+  version = "0.19.25";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     tag = "v${version}";
-    hash = "sha256-IDCF/etK9mNjdcgQWEDj9tXP12c2CcEA2RamKlCXgRE=";
+    hash = "sha256-k6zXXtttW6AXLK/DoRqYOz39kqwamOE/xfT6TOa22jc=";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ buildGoModule rec {
     icu
   ];
 
-  vendorHash = "sha256-Z1Mjc+sI+8VHO9TTXUzF4yRvCtDs4sr/dGtjacXWCfE=";
+  vendorHash = "sha256-RdIf/1Vu37y+xoF2I8XJYqgeOxGHG+hLe3JOMbVLofw=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group
@@ -44,7 +44,6 @@ buildGoModule rec {
     "sqlite_json1"
     "sqlite_math_functions"
     "sqlite_stat4"
-    "sqlite_userauth"
     "sqlite_vtable"
     "no_adodb"
   ];

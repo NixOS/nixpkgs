@@ -62,24 +62,24 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
     yelp-tools
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      curl
-      gdk-pixbuf
-      gtk3
-      json-glib
-      libxml2
-    ]
-    ++ lib.optional withGeoClue geoclue2
-    ++ lib.optional withGeoTag gexiv2
-    ++ lib.optional withMagic file
-    ++ lib.optional withMapnik mapnik
-    ++ lib.optional withMBTiles sqlite
-    ++ lib.optional withMd5Hash nettle
-    ++ lib.optional withOAuth liboauth
-    ++ lib.optional withRealtimeGPSTracking gpsd;
+  buildInputs = [
+    curl
+    gdk-pixbuf
+    gtk3
+    json-glib
+    libxml2
+  ]
+  ++ lib.optional withGeoClue geoclue2
+  ++ lib.optional withGeoTag gexiv2
+  ++ lib.optional withMagic file
+  ++ lib.optional withMapnik mapnik
+  ++ lib.optional withMBTiles sqlite
+  ++ lib.optional withMd5Hash nettle
+  ++ lib.optional withOAuth liboauth
+  ++ lib.optional withRealtimeGPSTracking gpsd;
 
   configureFlags = [
     (lib.enableFeature withGeoClue "geoclue")

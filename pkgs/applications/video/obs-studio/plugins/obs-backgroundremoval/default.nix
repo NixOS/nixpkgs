@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     obs-studio
     onnxruntime
-    opencv
+    opencv.cxxdev
     qt6.qtbase
     curl
   ];
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/royshil/obs-backgroundremoval";
     maintainers = with maintainers; [ zahrun ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    inherit (obs-studio.meta) platforms;
   };
 }

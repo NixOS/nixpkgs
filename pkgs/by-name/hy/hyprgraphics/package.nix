@@ -12,18 +12,19 @@
   libjxl,
   libspng,
   libwebp,
+  pango,
   pixman,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.1.2";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U62Fo0w+aIXBAsSSYsfDsoe3YmoxWMArJ7pN2HNOAqo=";
+    hash = "sha256-CR6RnqEJSTiFgA6KQY4TTLUWbZ8RBnb+hxQqesuQNzQ=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjxl
     libspng
     libwebp
+    pango
     pixman
   ];
 
@@ -58,6 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cpp graphics library for Hypr* ecosystem";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
   };
 })

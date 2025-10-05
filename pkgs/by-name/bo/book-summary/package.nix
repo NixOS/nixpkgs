@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dxM6bqgHp4IaG03NriHvoT3al2u5Sz/I5ajlgzpjG1c=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8waVWCyjulMrXRc1nXZsiP4tMg70VZJ4wbgCQUgpX4A=";
 
   meta = with lib; {
@@ -21,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "book-summary";
     homepage = "https://github.com/dvogt23/book-summary";
     license = licenses.mit;
-    maintainers = with teams; iog.members;
+    teams = with teams; [ iog ];
   };
 }

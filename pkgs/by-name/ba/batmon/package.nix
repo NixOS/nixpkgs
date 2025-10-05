@@ -15,10 +15,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+kjDNQKlaoI5fQ5FqYF6IPCKeE92WKxIhVCKafqfE0o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-0SXb8jBAYKnNFguamSMosPE6gH9aUzydF16w3SLhOU4=";
 
-  meta = with lib; {
+  meta = {
     description = "Interactive batteries viewer";
     longDescription = ''
       An interactive viewer, similar to top, htop and other *top utilities,
@@ -26,10 +25,10 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/6543/batmon/";
     changelog = "https://github.com/6543/batmon/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "batmon";
-    platforms = with platforms; unix ++ windows;
+    platforms = with lib.platforms; unix ++ windows;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
-    maintainers = with maintainers; [ _6543 ];
+    maintainers = with lib.maintainers; [ _6543 ];
   };
 }

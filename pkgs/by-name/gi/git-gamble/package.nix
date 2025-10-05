@@ -9,21 +9,20 @@
 }:
 
 let
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitLab {
     owner = "pinage404";
     repo = "git-gamble";
     rev = "version/${version}";
-    hash = "sha256-oWbV3KhDcb/LlDkaGqkrYU/b2LEijUTX0RaHi0yS5cw=";
+    hash = "sha256-b7jGrt8uJ9arH4EEsOOPCIcQmhwrrJb8uXcSsZPFrNQ=";
   };
 in
 rustPlatform.buildRustPackage {
   pname = "git-gamble";
   inherit version src;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-v8sQuFmHHWuLUhRND1CzI5VkybgHRETVyNNabw1Uhyg=";
+  cargoHash = "sha256-lf66me4ot5lvrz2JTj8MreaHyVwOcFSVfPGX9lBTKug=";
 
   nativeCheckInputs = [ gitMinimal ];
   preCheck = ''

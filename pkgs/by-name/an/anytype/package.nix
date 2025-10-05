@@ -1,6 +1,6 @@
 {
   lib,
-  runCommand,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
@@ -10,38 +10,27 @@
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
-  nix-update-script,
 }:
 
-let
+buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.45.3";
+  version = "0.50.3";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
-    tag = "v${version}";
-    hash = "sha256-fwfxmNca75xAAHKeT2nddz+XZexDomzHbw188LXxZqA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D2B8DY9VogRc0YP/NKEmg0uVT1ZaqQrOA/4AS845phU=";
   };
-  description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "687106c4e37297f86fab79f77ef83599b61ab65c";
-    hash = "sha256-Y0irD0jzqYobnjtD2M1+hTDRUUYnuygUx9+tE1gUoTw=";
+    rev = "27d713f500ed375aabb57b551dbc0561cd1983b3";
+    hash = "sha256-1SyCVwicUoxj/xxlYe3dElYYXWtzbw2bHiHZ0FKgYDw=";
   };
 
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
-
-in
-buildNpmPackage {
-  inherit pname version src;
-
-  npmDepsHash = "sha256-9BI+rXzTYonlMhcH8uiWyyF18JGv8GL1U9hZ9Z6X3As=";
+  npmDepsHash = "sha256-pC1hT85Lk4asGRkQf4ZGlNULtmdlKX/2X1eDHMi6BZ0=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -55,7 +44,12 @@ buildNpmPackage {
 
   npmFlags = [
     # keytar needs to be built against electron's ABI
-    "--nodedir=${electron-headers}"
+    "--nodedir=${electron.headers}"
+  ];
+
+  patches = [
+    ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
+    ./0002-remove-grpc-devtools.patch
   ];
 
   buildPhase = ''
@@ -64,7 +58,7 @@ buildNpmPackage {
     cp -r ${anytype-heart}/lib dist/
     cp -r ${anytype-heart}/bin/anytypeHelper dist/
 
-    for lang in ${locales}/locales/*; do
+    for lang in ${finalAttrs.locales}/locales/*; do
       cp "$lang" "dist/lib/json/lang/$(basename $lang)"
     done
 
@@ -104,11 +98,12 @@ buildNpmPackage {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Anytype";
-      exec = "anytype";
+      name = "anytype";
+      exec = "anytype %U";
       icon = "anytype";
       desktopName = "Anytype";
-      comment = description;
+      comment = finalAttrs.meta.description;
+      mimeTypes = [ "x-scheme-handler/anytype" ];
       categories = [
         "Utility"
         "Office"
@@ -119,26 +114,20 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script {
-    # Prevent updating to versions with '-' in them.
-    # Necessary since Anytype uses Electron-based 'MAJOR.MINOR.PATCH(-{alpha,beta})?' versioning scheme where each
-    #  {alpha,beta} version increases the PATCH version, releasing a new full release version in GitHub instead of a
-    #  pre-release version.
-    extraArgs = [
-      "--version-regex"
-      "[^-]*"
-    ];
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
-    inherit description;
+    description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
+    changelog = "https://community.anytype.io/t/anytype-desktop-${
+      builtins.replaceStrings [ "." ] [ "-" ] (lib.versions.majorMinor finalAttrs.version)
+    }-0-released";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
-      running-grass
       autrimpo
       adda
+      kira-bruneau
     ];
     platforms = [
       "x86_64-linux"
@@ -146,5 +135,6 @@ buildNpmPackage {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

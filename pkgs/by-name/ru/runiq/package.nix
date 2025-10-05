@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -22,10 +20,6 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   meta = with lib; {
     description = "Efficient way to filter duplicate lines from input, à la uniq";

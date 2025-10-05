@@ -3,6 +3,7 @@
 
 {
   config,
+  options,
   pkgs,
   lib,
   utils,
@@ -14,69 +15,83 @@ let
 
   inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
 
-  partitionOptions = {
-    options = {
-      storePaths = lib.mkOption {
-        type = with lib.types; listOf path;
-        default = [ ];
-        description = "The store paths to include in the partition.";
-      };
-
-      stripNixStorePrefix = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to strip `/nix/store/` from the store paths. This is useful
-          when you want to build a partition that only contains store paths and
-          is mounted under `/nix/store`.
-        '';
-      };
-
-      contents = lib.mkOption {
-        type =
-          with lib.types;
-          attrsOf (submodule {
-            options = {
-              source = lib.mkOption {
-                type = types.path;
-                description = "Path of the source file.";
-              };
-            };
-          });
-        default = { };
-        example = lib.literalExpression ''
-          {
-            "/EFI/BOOT/BOOTX64.EFI".source =
-              "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
-
-            "/loader/entries/nixos.conf".source = systemdBootEntry;
-          }
-        '';
-        description = "The contents to end up in the filesystem image.";
-      };
-
-      repartConfig = lib.mkOption {
-        type =
-          with lib.types;
-          attrsOf (oneOf [
-            str
-            int
-            bool
-            (listOf str)
-          ]);
-        example = {
-          Type = "home";
-          SizeMinBytes = "512M";
-          SizeMaxBytes = "2G";
+  partitionOptions =
+    { config, ... }:
+    {
+      options = {
+        storePaths = lib.mkOption {
+          type = with lib.types; listOf path;
+          default = [ ];
+          description = "The store paths to include in the partition.";
         };
-        description = ''
-          Specify the repart options for a partiton as a structural setting.
-          See {manpage}`repart.d(5)`
-          for all available options.
-        '';
+
+        # Superseded by `nixStorePrefix`. Unfortunately, `mkChangedOptionModule`
+        # does not support submodules.
+        stripNixStorePrefix = lib.mkOption {
+          default = "_mkMergedOptionModule";
+          visible = false;
+        };
+
+        nixStorePrefix = lib.mkOption {
+          type = lib.types.path;
+          default = "/nix/store";
+          description = ''
+            The prefix to use for store paths. Defaults to `/nix/store`. This is
+            useful when you want to build a partition that only contains store
+            paths and is mounted under `/nix/store` or if you want to create the
+            store paths below a parent path (e.g., `/@nix/nix/store`).
+          '';
+        };
+
+        contents = lib.mkOption {
+          type =
+            with lib.types;
+            attrsOf (submodule {
+              options = {
+                source = lib.mkOption {
+                  type = types.path;
+                  description = "Path of the source file.";
+                };
+              };
+            });
+          default = { };
+          example = lib.literalExpression ''
+            {
+              "/EFI/BOOT/BOOTX64.EFI".source =
+                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+
+              "/loader/entries/nixos.conf".source = systemdBootEntry;
+            }
+          '';
+          description = "The contents to end up in the filesystem image.";
+        };
+
+        repartConfig = lib.mkOption {
+          type =
+            with lib.types;
+            attrsOf (oneOf [
+              str
+              int
+              bool
+              (listOf str)
+            ]);
+          example = {
+            Type = "home";
+            SizeMinBytes = "512M";
+            SizeMaxBytes = "2G";
+          };
+          description = ''
+            Specify the repart options for a partiton as a structural setting.
+            See {manpage}`repart.d(5)`
+            for all available options.
+          '';
+        };
+      };
+
+      config = lib.mkIf (config.stripNixStorePrefix == true) {
+        nixStorePrefix = "/";
       };
     };
-  };
 
   mkfsOptionsToEnv =
     opts:
@@ -88,6 +103,31 @@ in
 {
   imports = [
     ./repart-verity-store.nix
+    ./file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFileBasename"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFile"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
   ];
 
   options.image.repart = {
@@ -95,7 +135,7 @@ in
     name = lib.mkOption {
       type = lib.types.str;
       description = ''
-        Name of the image.
+          Name of the image.
 
         If this option is unset but config.system.image.id is set,
         config.system.image.id is used as the default value.
@@ -107,23 +147,6 @@ in
       default = config.system.image.version;
       defaultText = lib.literalExpression "config.system.image.version";
       description = "Version of the image";
-    };
-
-    imageFileBasename = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Basename of the image filename without any extension (e.g. `image_1`).
-      '';
-    };
-
-    imageFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Filename of the image including all extensions (e.g `image_1.raw` or
-        `image_1.raw.zst`).
-      '';
     };
 
     compression = {
@@ -152,8 +175,9 @@ in
       # Generated with `uuidgen`. Random but fixed to improve reproducibility.
       default = "0867da16-f251-457d-a9e8-c31f9a3c220b";
       description = ''
-        A UUID to use as a seed. You can set this to `null` to explicitly
+        A UUID to use as a seed. You can set this to `random` to explicitly
         randomize the partition UUIDs.
+        See {manpage}`systemd-repart(8)` for more information.
       '';
     };
 
@@ -250,55 +274,37 @@ in
       '';
     };
 
+    assertions = lib.mkOption {
+      type = options.assertions.type;
+      default = [ ];
+      internal = true;
+      visible = false;
+      description = ''
+        Assertions only evaluated by the repart image, not by the system toplevel.
+      '';
+    };
+
+    warnings = lib.mkOption {
+      type = options.warnings.type;
+      default = [ ];
+      internal = true;
+      visible = false;
+      description = ''
+        Warnings only evaluated by the repart image, not by the system toplevel.
+      '';
+    };
+
   };
 
   config = {
-
-    assertions = lib.mapAttrsToList (
-      fileName: partitionConfig:
-      let
-        inherit (partitionConfig) repartConfig;
-        labelLength = builtins.stringLength repartConfig.Label;
-      in
-      {
-        assertion = repartConfig ? Label -> GPTMaxLabelLength >= labelLength;
-        message = ''
-          The partition label '${repartConfig.Label}'
-          defined for '${fileName}' is ${toString labelLength} characters long,
-          but the maximum label length supported by UEFI is ${toString GPTMaxLabelLength}.
-        '';
-      }
-    ) cfg.partitions;
-
-    warnings = lib.filter (v: v != null) (
-      lib.mapAttrsToList (
-        fileName: partitionConfig:
-        let
-          inherit (partitionConfig) repartConfig;
-          suggestedMaxLabelLength = GPTMaxLabelLength - 2;
-          labelLength = builtins.stringLength repartConfig.Label;
-        in
-        if (repartConfig ? Label && labelLength >= suggestedMaxLabelLength) then
-          ''
-            The partition label '${repartConfig.Label}'
-            defined for '${fileName}' is ${toString labelLength} characters long.
-            The suggested maximum label length is ${toString suggestedMaxLabelLength}.
-
-            If you use sytemd-sysupdate style A/B updates, this might
-            not leave enough space to increment the version number included in
-            the label in a future release. For example, if your label is
-            ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
-            you're at version 9, you cannot increment this to 10.
-          ''
-        else
-          null
-      ) cfg.partitions
-    );
-
-    image.repart =
+    image.baseName =
       let
         version = config.image.repart.version;
         versionInfix = if version != null then "_${version}" else "";
+      in
+      cfg.name + versionInfix;
+    image.extension =
+      let
         compressionSuffix =
           lib.optionalString cfg.compression.enable
             {
@@ -308,6 +314,11 @@ in
             }
             ."${cfg.compression.algorithm}";
 
+      in
+      "raw" + compressionSuffix;
+
+    image.repart =
+      let
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
 
         # Add the closure of the provided Nix store paths to cfg.partitions so
@@ -321,9 +332,6 @@ in
       in
       {
         name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
-        imageFileBasename = cfg.name + versionInfix;
-        imageFile = cfg.imageFileBasename + ".raw" + compressionSuffix;
-
         compression = {
           # Generally default to slightly faster than default compression
           # levels under the assumption that most of the building will be done
@@ -339,6 +347,50 @@ in
         };
 
         finalPartitions = lib.mapAttrs addClosure cfg.partitions;
+
+        assertions = lib.mapAttrsToList (
+          fileName: partitionConfig:
+          let
+            inherit (partitionConfig) repartConfig;
+            labelLength = builtins.stringLength repartConfig.Label;
+          in
+          {
+            assertion = repartConfig ? Label -> GPTMaxLabelLength >= labelLength;
+            message = ''
+              The partition label '${repartConfig.Label}'
+              defined for '${fileName}' is ${toString labelLength} characters long,
+              but the maximum label length supported by UEFI is ${toString GPTMaxLabelLength}.
+            '';
+          }
+        ) cfg.partitions;
+
+        warnings = lib.flatten (
+          lib.mapAttrsToList (
+            fileName: partitionConfig:
+            let
+              inherit (partitionConfig) repartConfig;
+              suggestedMaxLabelLength = GPTMaxLabelLength - 2;
+              labelLength = builtins.stringLength repartConfig.Label;
+            in
+            lib.optional (repartConfig ? Label && labelLength >= suggestedMaxLabelLength) ''
+              The partition label '${repartConfig.Label}'
+              defined for '${fileName}' is ${toString labelLength} characters long.
+              The suggested maximum label length is ${toString suggestedMaxLabelLength}.
+
+              If you use sytemd-sysupdate style A/B updates, this might
+              not leave enough space to increment the version number included in
+              the label in a future release. For example, if your label is
+              ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
+              you're at version 9, you cannot increment this to 10.
+            ''
+            ++ lib.optional (partitionConfig.stripNixStorePrefix != "_mkMergedOptionModule") ''
+              The option definition `image.repart.paritions.${fileName}.stripNixStorePrefix`
+              has changed to `image.repart.paritions.${fileName}.nixStorePrefix` and now
+              accepts the path to use as prefix directly. Use `nixStorePrefix = "/"` to
+              achieve the same effect as setting `stripNixStorePrefix = true`.
+            ''
+          ) cfg.partitions
+        );
       };
 
     system.build.image =
@@ -354,26 +406,26 @@ in
         );
 
         mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
+        val = pkgs.callPackage ./repart-image.nix {
+          systemd = cfg.package;
+          inherit (config.image) baseName;
+          inherit (cfg)
+            name
+            version
+            compression
+            split
+            seed
+            sectorSize
+            finalPartitions
+            ;
+          inherit fileSystems definitionsDirectory mkfsEnv;
+        };
       in
-      pkgs.callPackage ./repart-image.nix {
-        systemd = cfg.package;
-        inherit (cfg)
-          name
-          version
-          imageFileBasename
-          compression
-          split
-          seed
-          sectorSize
-          finalPartitions
-          ;
-        inherit fileSystems definitionsDirectory mkfsEnv;
-      };
-
-    meta.maintainers = with lib.maintainers; [
-      nikstur
-      willibutz
-    ];
-
+      lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
   };
+
+  meta.maintainers = with lib.maintainers; [
+    nikstur
+    willibutz
+  ];
 }

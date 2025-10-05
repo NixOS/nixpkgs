@@ -154,15 +154,14 @@ in
 
     logLevel = lib.mkOption {
       default = 1;
-      type = lib.types.enum [
-        0
-        1
-        2
-        3
-        4
-        5
-      ];
+      type = lib.types.ints.between 0 5;
       description = "Log level (0 = DEBUG, 5 = FATAL).";
+    };
+
+    disable = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.commas;
+      description = "Endpoints to disable (comma-separated list)";
     };
   };
 
@@ -218,6 +217,7 @@ in
               (opt "tls-remote-ca" tlsRemoteCa)
               (opt "db-config" dbConfig)
               (opt "loglevel" (toString logLevel))
+              (opt "disable" disable)
             ];
         }
         (lib.mkIf (cfg.dataDir == options.services.cfssl.dataDir.default) {

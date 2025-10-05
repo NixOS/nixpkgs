@@ -23,8 +23,7 @@ assert
     inherit (lib) intersectLists platforms concatStringsSep;
     workingPlatforms = intersectLists platforms.linux (with platforms; x86_64 ++ aarch64 ++ riscv64);
   in
-  (enableCrossCompilation -> !(isLinux && is64bit))
-  -> builtins.throw ''
+  lib.assertMsg (enableCrossCompilation -> isLinux && is64bit) ''
     The cross-compilation toolchains may only be enabled on the following platforms:
     ${concatStringsSep "\n" workingPlatforms}
   '';
@@ -122,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
     "QBEFLAGS=-t${qbePlatform}"
@@ -134,7 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
     "HAREPATH=$(SRCDIR)/hare/stdlib"
-  ] ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
+  ]
+  ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
 
   enableParallelBuilding = true;
 

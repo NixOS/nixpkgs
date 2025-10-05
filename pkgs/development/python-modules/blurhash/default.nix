@@ -2,29 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytestCheckHook,
   pillow,
   numpy,
+  setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "blurhash";
-  version = "1.1.4";
-  format = "setuptools";
+  version = "1.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "blurhash-python";
-    # There are no tags: https://github.com/halcy/blurhash-python/issues/4
-    rev = "22e081ef1c24da1bb5c5eaa2c1d6649724deaef8";
-    sha256 = "1qq6mhydlp7q3na4kmaq3871h43wh3pyfyxr4b79bia73wjdylxf";
+    tag = "v${version}";
+    hash = "sha256-lTPn2GTD7eQ9XkZyuttFqEvNgzcx6b7OdeMc5WOXrJs=";
   };
 
-  postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
-  '';
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     pillow
     numpy
@@ -32,10 +32,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "blurhash" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/halcy/blurhash-python/releases/tag/${src.tag}";
     description = "Pure-Python implementation of the blurhash algorithm";
     homepage = "https://github.com/halcy/blurhash-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

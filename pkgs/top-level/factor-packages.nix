@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  factor-unwrapped,
   overrides ? (self: super: { }),
 }:
 
@@ -17,7 +18,7 @@ let
           { };
       buildFactorVocab = callPackage ../development/compilers/factor-lang/mk-vocab.nix { };
 
-      factor-unwrapped = callPackage ../development/compilers/factor-lang/unwrapped.nix { };
+      inherit factor-unwrapped;
 
       factor-lang = callPackage ../development/compilers/factor-lang/wrapper.nix { };
       factor-no-gui = callPackage ../development/compilers/factor-lang/wrapper.nix {
@@ -36,7 +37,7 @@ let
 
     }
     // lib.optionalAttrs pkgs.config.allowAliases {
-      interpreter = builtins.throw "factorPackages now offers various wrapped factor runtimes (see documentation) and the buildFactorApplication helper.";
+      interpreter = throw "factorPackages now offers various wrapped factor runtimes (see documentation) and the buildFactorApplication helper.";
     };
   extensible-self = lib.makeExtensible (lib.extends overrides inside);
 in

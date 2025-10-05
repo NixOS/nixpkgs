@@ -16,7 +16,6 @@
   dask,
   dask-awkward,
   dask-histogram,
-  fsspec-xrootd,
   hist,
   lz4,
   matplotlib,
@@ -42,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.3.0";
+  version = "2025.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-NZ3r/Dyw5bB4qOO29DUAARPzdJJxgR9OO9LxVu3YbNo=";
+    hash = "sha256-lCrmWcVzu8Ls0a+r2D1DMZ/Ysq3H9bPj13XOmAS1M5I=";
   };
 
   build-system = [
@@ -70,7 +69,6 @@ buildPythonPackage rec {
     dask
     dask-awkward
     dask-histogram
-    fsspec-xrootd
     hist
     lz4
     matplotlib
@@ -86,7 +84,8 @@ buildPythonPackage rec {
     tqdm
     uproot
     vector
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed
@@ -113,7 +112,7 @@ buildPythonPackage rec {
   meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/v${version}";
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };

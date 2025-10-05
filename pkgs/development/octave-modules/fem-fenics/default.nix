@@ -25,10 +25,10 @@ buildOctavePackage rec {
     ffc
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/fem-fenics/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/fem-fenics/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Package for the resolution of partial differential equations based on fenics";
     # Lots of compilation errors for newer octave versions and syntax errors
     broken = true;

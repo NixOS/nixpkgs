@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "owntone";
     repo = "owntone-server";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Mj3G1+Hwa/zl0AM4SO6TcB4W3WJkpIDzrSPEFx0vaEk=";
   };
 
@@ -57,28 +57,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      avahi
-      curl
-      ffmpeg
-      gettext
-      json_c
-      libconfuse
-      libevent
-      libgcrypt
-      libgpg-error
-      libplist
-      libsodium
-      libunistring
-      libwebsockets
-      libxml2
-      protobufc
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals chromecastSupport [ gnutls ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ];
+  buildInputs = [
+    avahi
+    curl
+    ffmpeg
+    gettext
+    json_c
+    libconfuse
+    libevent
+    libgcrypt
+    libgpg-error
+    libplist
+    libsodium
+    libunistring
+    libwebsockets
+    libxml2
+    protobufc
+    sqlite
+    zlib
+  ]
+  ++ lib.optionals chromecastSupport [ gnutls ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ];
 
   configureFlags =
     lib.optionals chromecastSupport [ "--enable-chromecast" ]

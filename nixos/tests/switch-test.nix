@@ -68,9 +68,9 @@ in
             echo "systemd 0" > $out/init-interface-version
           '';
 
-          modifiedSystemConf.configuration.systemd.extraConfig = ''
-            # Hello world!
-          '';
+          modifiedSystemConf.configuration.systemd.settings.Manager = {
+            DefaultEnvironment = "XXX_SYSTEM=foo";
+          };
 
           addedMount.configuration.virtualisation.fileSystems."/test" = {
             device = "tmpfs";
@@ -663,7 +663,7 @@ in
       '';
 
       # Returns a comma separated representation of the given list in sorted
-      # order, that matches the output format of switch-to-configuration.pl
+      # order, that matches the output format of switch-to-configuration
       sortedUnits = xs: lib.concatStringsSep ", " (builtins.sort builtins.lessThan xs);
 
       dbusService =

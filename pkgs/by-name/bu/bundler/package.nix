@@ -13,8 +13,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
-  version = "2.6.2";
-  source.sha256 = "sha256-S4l1bhsFOQ/2eEkRGaEPCXOiBFzJ/LInsCqTlrKPfXQ=";
+  version = "2.7.1";
+  source.sha256 = "sha256-CtWgAqh5d2sqmL5lL1V6yHMb4zU2EtY/pO8bJwbcHgs=";
   dontPatchShebangs = true;
 
   postFixup = ''
@@ -25,7 +25,7 @@ buildRubyGem rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bundler";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -37,7 +37,10 @@ buildRubyGem rec {
     homepage = "https://bundler.io";
     changelog = "https://github.com/rubygems/rubygems/blob/bundler-v${version}/bundler/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      guylamar2006
+    ];
     mainProgram = "bundler";
   };
 }

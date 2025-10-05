@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "doppler";
-  version = "3.73.0";
+  version = "3.75.1";
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
     rev = version;
-    hash = "sha256-CHPaY8Z8ov+loIViQceD4ZW26MtXN1hpkY00p3Yy1n4=";
+    hash = "sha256-YyhDvBgdcy3CtVpQj60XQ0aqE2zT1LV9QXQJiJvlaic=";
   };
 
-  vendorHash = "sha256-w3P/VbQrOJ9BMVw2thX/nU4loi4x8Nn/R2AJV5LzZBY=";
+  vendorHash = "sha256-tSRtgkDPvDlEfwuNhahvs3Pvt4h7QAJrJtb1XQXGaFM=";
 
   ldflags = [
     "-s -w"
@@ -28,18 +28,17 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
-    ''
-      mv $out/bin/cli $out/bin/doppler
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export HOME=$TMPDIR
-      mkdir $HOME/.doppler # to avoid race conditions below
-      installShellCompletion --cmd doppler \
-        --bash <($out/bin/doppler completion bash) \
-        --fish <($out/bin/doppler completion fish) \
-        --zsh <($out/bin/doppler completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/cli $out/bin/doppler
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export HOME=$TMPDIR
+    mkdir $HOME/.doppler # to avoid race conditions below
+    installShellCompletion --cmd doppler \
+      --bash <($out/bin/doppler completion bash) \
+      --fish <($out/bin/doppler completion fish) \
+      --zsh <($out/bin/doppler completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = doppler;

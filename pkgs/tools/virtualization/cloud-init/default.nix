@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "24.2";
+  version = "25.2";
   pyproject = true;
 
   namePrefix = "";
@@ -26,11 +26,12 @@ python3.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "cloud-init";
     tag = version;
-    hash = "sha256-BhTcOeSKZ1XRIx+xJQkqkSw9M8ilr+BRKXDy5MUXB6E=";
+    hash = "sha256-Ww76dhfoGrIbxPiXHxDjpgPsinmfrs42NnGmzhBeGC0=";
   };
 
   patches = [
     ./0001-add-nixos-support.patch
+    ./0002-fix-test-logs-on-nixos.patch
   ];
 
   prePatch = ''

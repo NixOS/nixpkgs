@@ -10,9 +10,9 @@ ocamlPackages.buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "pelzlpj";
-    repo = pname;
-    rev = "release-${version}";
-    sha256 = "1rx2nl6cdv609pfymnbq53pi3ql5fr4kda8x10ycd9xq2gc4f21g";
+    repo = "orpie";
+    tag = "release-${version}";
+    sha256 = "sha256-LwhH2BO4p8Y8CB2pNkl2heIR7yh42erdTcDsxgy1ouc=";
   };
 
   patches = [ ./prefix.patch ];

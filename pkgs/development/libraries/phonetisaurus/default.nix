@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AdolfVonKleist";
-    repo = pname;
+    repo = "phonetisaurus";
     rev = version;
     sha256 = "1b18s5zz0l0fhqh9n9jnmgjz2hzprwzf6hx5a12zibmmam3qyriv";
   };

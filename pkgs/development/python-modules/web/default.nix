@@ -15,6 +15,7 @@
 
 buildPythonPackage rec {
   version = "0.62";
+  format = "setuptools";
   pname = "web.py";
 
   src = fetchPypi {
@@ -24,7 +25,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cheroot
-  ] ++ lib.optional (pythonAtLeast "3.13") legacy-cgi;
+  ]
+  ++ lib.optional (pythonAtLeast "3.13") legacy-cgi;
 
   # requires multiple running databases
   doCheck = false;

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   ttyd,
   buildGoModule,
   fetchFromGitHub,
@@ -10,16 +11,16 @@
 }:
 buildGoModule rec {
   pname = "clive";
-  version = "0.12.9";
+  version = "0.12.12";
 
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "clive";
     tag = "v${version}";
-    hash = "sha256-mNx5SCBvhpxk9IkKp1j0oyPNZl91cAKHGIUzyYf+bYU=";
+    hash = "sha256-gycxHlNbwPLpR/ATxAsQ68Fetp/hptOUsRc+D3P7x1k=";
   };
 
-  vendorHash = "sha256-jHvr2tWp8iscm6vgHdRTYlFmPOWlRG3lz8hl4PM6e/c=";
+  vendorHash = "sha256-S2MR3eDfAiEz7boUetdPmOf0rQe7QrV6yO1RfMAEj4o=";
   subPackages = [ "." ];
   buildInputs = [ ttyd ];
   nativeBuildInputs = [
@@ -33,6 +34,8 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/clive --prefix PATH : ${ttyd}/bin
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd clive \
       --bash <($out/bin/clive completion bash) \
       --fish <($out/bin/clive completion fish) \

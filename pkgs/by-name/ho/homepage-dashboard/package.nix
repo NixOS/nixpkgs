@@ -6,8 +6,8 @@
   pnpm_10,
   python3,
   stdenv,
+  unixtools,
   cctools,
-  darwin,
   lib,
   nixosTests,
   enableLocalIcons ? false,
@@ -16,26 +16,26 @@ let
   dashboardIcons = fetchFromGitHub {
     owner = "homarr-labs";
     repo = "dashboard-icons";
-    rev = "51a2ae7b101c520bcfb5b44e5ddc99e658bc1e21"; # Until 2025-01-06
-    hash = "sha256-rKXeMAhHV0Ax7mVFyn6hIZXm5RFkbGakjugU0DG0jLM=";
+    rev = "f222c55843b888a82e9f2fe2697365841cbe6025"; # Until 2025-07-11
+    hash = "sha256-VOWQh8ZadsqNInoXcRKYuXfWn5MK0qJpuYEWgM7Pny8=";
   };
 
   installLocalIcons = ''
     mkdir -p $out/share/homepage/public/icons
-    cp ${dashboardIcons}/png/* $out/share/homepage/public/icons
-    cp ${dashboardIcons}/svg/* $out/share/homepage/public/icons
+    cp -r --no-preserve=mode ${dashboardIcons}/png/. $out/share/homepage/public/icons
+    cp -r --no-preserve=mode ${dashboardIcons}/svg/. $out/share/homepage/public/icons
     cp ${dashboardIcons}/LICENSE $out/share/homepage/public/icons/
   '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "1.1.1";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gYFJ/coLQ/iBuMIF3+MaGfhA8J4S8TOi5sbd3ZaYeXU=";
+    hash = "sha256-ug7cT/HMiOQF6CX6EEFlvgttXFZdRctSTqPAAkun2KU=";
   };
 
   # This patch ensures that the cache implementation respects the env
@@ -51,18 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-qLRtkQjwHH0JK+u+fJnYfJDhZDEasAzprSY+cogNrNg=";
+    fetcherVersion = 1;
+    hash = "sha256-IYmAl4eHR0jVpQJfxQRlOBTIbrrjS+dnJpUsl8ee6y4=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
     pnpm_10.configHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
   buildInputs = [
     nodePackages.node-gyp-build
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  ];
 
   env.PYTHON = "${python3}/bin/python";
 
@@ -88,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
       --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard \
-      --add-flags "$out/share/homepage/server.js"
+      --add-flags "$out/share/homepage/server.js" \
+      --set PATH "${lib.makeBinPath [ unixtools.ping ]}"
 
     ${if enableLocalIcons then installLocalIcons else ""}
 
@@ -110,8 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [ parthiv-krishna ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

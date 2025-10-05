@@ -12,7 +12,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = "sha256-Blhbjc9nNj2ZDKs6uO/IZ5RuFJJTkS2wJF/7Egc7VvA=";
+  vendorHash = "sha256-Q5Pk2f3EAiM4oit1vhc+PMEuMxdbrKAue3e0pnrZw2c=";
 
   ldflags = [
     "-s"

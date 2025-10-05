@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_CXX_FLAGS='-std=c++11'";
+
   meta = with lib; {
     description = "Platform library for libcec and Kodi addons";
     homepage = "https://github.com/Pulse-Eight/platform";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

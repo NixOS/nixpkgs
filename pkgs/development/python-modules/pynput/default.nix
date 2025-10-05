@@ -13,7 +13,6 @@
   # dependencies
   xlib,
   evdev,
-  darwin,
   six,
 
   # tests
@@ -47,19 +46,13 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  propagatedBuildInputs =
-    [ six ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      evdev
-      xlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        ApplicationServices
-        Quartz
-      ]
-    );
+  propagatedBuildInputs = [
+    six
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    evdev
+    xlib
+  ];
 
   doCheck = false; # requires running X server
 

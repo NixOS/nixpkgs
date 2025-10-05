@@ -21,33 +21,32 @@ stdenv.mkDerivation rec {
     let
       # compile few variants with different implementation of crypto
       # the fastest depends on a particular cpu
-      variants =
-        [
-          {
-            suffix = "ref10";
-            configureFlags = [ "--enable-ref10" ];
-          }
-          {
-            suffix = "donna";
-            configureFlags = [ "--enable-donna" ];
-          }
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isx86 [
-          {
-            suffix = "donna-sse2";
-            configureFlags = [ "--enable-donna-sse2" ];
-          }
-        ]
-        ++ lib.optionals (!stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-          {
-            suffix = "amd64-51-30k";
-            configureFlags = [ "--enable-amd64-51-30k" ];
-          }
-          {
-            suffix = "amd64-64-24k";
-            configureFlags = [ "--enable-amd64-64-24k" ];
-          }
-        ];
+      variants = [
+        {
+          suffix = "ref10";
+          configureFlags = [ "--enable-ref10" ];
+        }
+        {
+          suffix = "donna";
+          configureFlags = [ "--enable-donna" ];
+        }
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isx86 [
+        {
+          suffix = "donna-sse2";
+          configureFlags = [ "--enable-donna-sse2" ];
+        }
+      ]
+      ++ lib.optionals (!stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+        {
+          suffix = "amd64-51-30k";
+          configureFlags = [ "--enable-amd64-51-30k" ];
+        }
+        {
+          suffix = "amd64-64-24k";
+          configureFlags = [ "--enable-amd64-64-24k" ];
+        }
+      ];
     in
     lib.concatMapStrings (
       { suffix, configureFlags }:

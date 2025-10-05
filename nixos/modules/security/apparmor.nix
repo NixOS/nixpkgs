@@ -149,13 +149,12 @@ in
       }) enabledPolicies
       ++ lib.mapAttrsToList (name: path: { inherit name path; }) cfg.includes
     );
-    environment.etc."apparmor/parser.conf".text =
-      ''
-        ${if cfg.enableCache then "write-cache" else "skip-cache"}
-        cache-loc /var/cache/apparmor
-        Include /etc/apparmor.d
-      ''
-      + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
+    environment.etc."apparmor/parser.conf".text = ''
+      ${if cfg.enableCache then "write-cache" else "skip-cache"}
+      cache-loc /var/cache/apparmor
+      Include /etc/apparmor.d
+    ''
+    + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
     # For aa-logprof
     environment.etc."apparmor/apparmor.conf".text = '''';
     # For aa-logprof
@@ -172,7 +171,7 @@ in
               logfiles = /dev/stdin
 
               parser = ${pkgs.apparmor-parser}/bin/apparmor_parser
-              ldd = ${pkgs.glibc.bin}/bin/ldd
+              ldd = ${lib.getExe' pkgs.stdenv.cc.libc "ldd"}
               logger = ${pkgs.util-linux}/bin/logger
 
               # customize how file ownership permissions are presented
@@ -200,10 +199,8 @@ in
           sed '1,/\[qualifiers\]/d' $footer >> $out
         '';
 
-    boot.kernelParams = [
-      "apparmor=1"
-      "security=apparmor"
-    ];
+    boot.kernelParams = [ "apparmor=1" ];
+    security.lsm = [ "apparmor" ];
 
     systemd.services.apparmor = {
       after = [
@@ -277,8 +274,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    julm
-    grimmauld
-  ];
+  meta.maintainers = lib.teams.apparmor.members;
 }

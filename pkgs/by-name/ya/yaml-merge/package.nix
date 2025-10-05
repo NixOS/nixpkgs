@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  pkgsHostTarget,
 }:
 
 stdenv.mkDerivation {
   pname = "yaml-merge";
-  version = "unstable-2022-01-12";
+  version = "0-unstable-2022-01-12";
 
   src = fetchFromGitHub {
     owner = "abbradar";
@@ -17,7 +18,11 @@ stdenv.mkDerivation {
   };
 
   pythonPath = with python3Packages; [ pyyaml ];
-  nativeBuildInputs = with python3Packages; [ wrapPython ];
+  nativeBuildInputs = [
+    # Not `python3Packages.wrapPython` to workaround `python3Packages.wrapPython.__spliced.buildHost` having the wrong `pythonHost`
+    # See https://github.com/NixOS/nixpkgs/issues/434307
+    pkgsHostTarget.python3Packages.wrapPython
+  ];
 
   installPhase = ''
     install -Dm755 yaml-merge.py $out/bin/yaml-merge
@@ -30,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/abbradar/yaml-merge";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

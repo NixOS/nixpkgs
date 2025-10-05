@@ -2,8 +2,8 @@
   fetchFromGitHub,
   lib,
   gettext,
-  pkgs,
   python3,
+  udevCheckHook,
   umockdev,
   writeScript,
 }:
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "fablabnbg";
-    repo = pname;
+    repo = "inkscape-silhouette";
     tag = "v${version}";
     sha256 = "sha256-MfR88BuaAx6n5XRIjslpIk4PnDf6TLU9AsmHxKkcFS0=";
   };
@@ -54,14 +54,16 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
+    udevCheckHook
     umockdev
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
   ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

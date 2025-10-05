@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pycollada";
-  version = "0.9";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gk9ugJ5RDWSbWYSm6o5hTOXPJwyB6rb76q8K5x3mpq8=";
+    hash = "sha256-fKEiZ74KK5PkldYDbmsnQCOpRX3tZBlU6wxHDv4VPW4=";
   };
 
   build-system = [

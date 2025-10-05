@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "django-csp";
-  version = "3.8";
+  version = "4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "django_csp";
-    hash = "sha256-7w8an32Nporm4WnALprGYcDs8E23Dg0dhWQFEqaEccA=";
+    hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
   };
 
   postPatch = ''

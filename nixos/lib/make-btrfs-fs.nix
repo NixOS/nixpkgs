@@ -31,7 +31,8 @@ pkgs.stdenv.mkDerivation {
     btrfs-progs
     libfaketime
     fakeroot
-  ] ++ lib.optional compressImage zstd;
+  ]
+  ++ lib.optional compressImage zstd;
 
   buildCommand = ''
     ${if compressImage then "img=temp.img" else "img=$out"}

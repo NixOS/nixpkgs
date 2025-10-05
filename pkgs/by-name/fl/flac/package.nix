@@ -1,34 +1,38 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
   cmake,
-  pkg-config,
   doxygen,
+  fetchurl,
   graphviz,
+  lib,
   libogg,
+  nix-update-script,
+  buildPackages,
+  pkg-config,
+  stdenv,
+  versionCheckHook,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flac";
-  version = "1.4.3";
+  version = "1.5.0";
 
+  # Building from tarball instead of GitHub to include pre-built manpages.
+  # This prevents huge numbers of rebuilds for pandoc / haskell-updates.
+  # It also enables manpages for platforms where pandoc is not available.
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
-    # Official checksum is published at https://github.com/xiph/flac/releases/tag/${version}
-    hash = "sha256-bFjmnNIjSPRBuGEJK4JeWR0Lgi4QbebrDuTQXScgW3A=";
+    url = "http://downloads.xiph.org/releases/flac/flac-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8sHHZZKoL//4QTujxKEpm2x6sGxzTe4D/YhjBIXCuSA=";
   };
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   nativeBuildInputs = [
     cmake
-    pkg-config
     doxygen
     graphviz
+    pkg-config
   ];
 
-  buildInputs = [
-    libogg
-  ];
+  buildInputs = [ libogg ];
 
   cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [
     "-DBUILD_SHARED_LIBS=ON"
@@ -40,23 +44,35 @@ stdenv.mkDerivation rec {
   ];
   CXXFLAGS = [ "-O3" ];
 
-  # doCheck = true; # takes lots of time
+  patches = [ ./package.patch ];
+  doCheck = true;
 
   outputs = [
     "bin"
     "dev"
+    "doc"
     "out"
     "man"
-    "doc"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://xiph.org/flac/";
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
-    changelog = "https://xiph.org/flac/changelog.html";
+    changelog = "https://github.com/xiph/flac/releases/tag/${finalAttrs.version}";
     mainProgram = "flac";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ruuda ];
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
+      bsd3
+      fdl13Plus
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with lib.maintainers; [ ruuda ];
   };
-}
+})

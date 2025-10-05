@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "guile-goblins";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchurl {
     url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${version}.tar.gz";
-    hash = "sha256-H4mBn0Fe32J99pybfa7jMfxBBvmTfffbAcchujuC3bc=";
+    hash = "sha256-MLuCcarwqgRtxsMONBsvfvrLz30KF6ztLWAyi1JuzoE=";
   };
 
   strictDeps = true;
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     guile
+  ];
+  propagatedBuildInputs = [
     guile-fibers
     guile-gcrypt
     guile-gnutls
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Spritely Goblins for Guile";
     homepage = "https://spritely.institute/goblins/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offsetcyan ];
+    maintainers = with maintainers; [ ];
     platforms = guile.meta.platforms;
   };
 }

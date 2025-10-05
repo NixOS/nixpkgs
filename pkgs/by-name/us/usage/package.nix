@@ -1,27 +1,26 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
   installShellFiles,
   nix-update-script,
   usage,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.0.5";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
-    rev = "v${version}";
-    hash = "sha256-No/BDBW/NRnF81UOuAMrAs4cXEdzEAxnmkn67mReUcM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hnq3ViMrNIo9m/1mePjEzMv87U24wY50UiYxnpJqHR8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-W/CuXzwacarxgVv12TMVfo7Fr9qKJ7aZIO8xf4SygNA=";
+  cargoHash = "sha256-Zj8Z88gYx+i0VN14HbO1LSlWjZX1EvrtyKvAwpnFMgs=";
 
   postPatch = ''
     substituteInPlace ./examples/mounted.sh \
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
       --bash <($out/bin/usage --completions bash) \
       --fish <($out/bin/usage --completions fish) \
@@ -45,9 +44,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://usage.jdx.dev";
     description = "Specification for CLIs";
-    changelog = "https://github.com/jdx/usage/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/usage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "usage";
   };
-}
+})

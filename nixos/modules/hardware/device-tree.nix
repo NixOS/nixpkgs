@@ -93,7 +93,8 @@ let
           let
             includePaths = [
               "${lib.getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes"
-            ] ++ cfg.dtboBuildExtraIncludePaths;
+            ]
+            ++ cfg.dtboBuildExtraIncludePaths;
             extraPreprocessorFlags = cfg.dtboBuildExtraPreprocessorFlags;
           in
           if o.dtboFile == null then

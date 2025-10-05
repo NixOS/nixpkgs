@@ -14,14 +14,13 @@
 
 pkgs.runCommand "lib-path-tests"
   {
-    nativeBuildInputs =
-      [
-        nixVersions.stable
-      ]
-      ++ (with pkgs; [
-        jq
-        bc
-      ]);
+    nativeBuildInputs = [
+      nixVersions.stable
+    ]
+    ++ (with pkgs; [
+      jq
+      bc
+    ]);
   }
   ''
     # Needed to make Nix evaluation work

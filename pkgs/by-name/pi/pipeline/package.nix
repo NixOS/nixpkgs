@@ -17,7 +17,7 @@
   desktop-file-utils,
   blueprint-compiler,
   sqlite,
-  clapper,
+  clapper-unwrapped,
   gettext,
   gst_all_1,
   gtuber,
@@ -30,18 +30,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipeline";
-  version = "2.1.1";
+  version = "3.0.1";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "pipeline";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-51ru1L+wxPtrNlnHyTouVxR6oZjanYvCoouB+eNOSD0=";
+    rev = finalAttrs.version;
+    hash = "sha256-AF34En1MKlwyOd4zKQjGAeb/c6ElJipreBTCJhbbJuI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-G6E+V4hXqz/ec5qKV43IUlwM866iurbptYFxidASJz0=";
+    hash = "sha256-oO0c6DMmEmeP7Q2LoTDTNeEHUgRT0c3cJnZBVo2cX1U=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     openssl
     sqlite
-    clapper
+    clapper-unwrapped
 
     gst_all_1.gstreamer
     gst_all_1.gst-libav

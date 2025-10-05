@@ -197,17 +197,16 @@ in
         stopIfChanged = false;
       };
 
-      environment.etc =
-        {
-          "systemd/resolved.conf".text = resolvedConf;
+      environment.etc = {
+        "systemd/resolved.conf".text = resolvedConf;
 
-          # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
-          # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-          "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
-        }
-        // optionalAttrs dnsmasqResolve {
-          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        };
+        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
+      }
+      // optionalAttrs dnsmasqResolve {
+        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      };
 
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";

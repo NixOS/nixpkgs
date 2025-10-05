@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -7,15 +8,15 @@
   openssl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.87.0";
+  version = "0.100.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
-    tag = "v${version}";
-    hash = "sha256-El7cegeHMb6fhO1Vr6FK0E3Mlk/dbU0Dv4lUYNu0Gcc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-POGGhZ2uTqWjUsl1zR4eirb+Daji+igTtUNwTte7gPA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -30,7 +31,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-SbKvDAzWq58O0e/+1r5oI3rxfdsnPenMPwqNRTOe7AI=";
+  vendorHash = "sha256-QGGY88CELV9e5UxtfDXKmShnKiP8i+0f8iA9pOTirzc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,8 +47,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.gitDescription=v${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.gitDescription=v${finalAttrs.version}"
     "-X=main.gitTreeState=clean"
   ];
 
@@ -67,13 +68,16 @@ buildGoModule rec {
     unset ldflags
 
     # patch utility script
-    patchShebangs grype/db/legacy/distribution/test-fixtures/tls/generate-x509-cert-pair.sh
+    patchShebangs grype/db/v5/distribution/test-fixtures/tls/generate-x509-cert-pair.sh
 
     # FIXME: these tests fail when building with Nix
     substituteInPlace test/cli/config_test.go \
       --replace-fail "Test_configLoading" "Skip_configLoading"
     substituteInPlace test/cli/db_providers_test.go \
       --replace-fail "TestDBProviders" "SkipDBProviders"
+    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
+      --replace-fail "TestCycloneDxPresenterDir" "SkipCycloneDxPresenterDir" \
+      --replace-fail "Test_CycloneDX_Valid" "Skip_CycloneDX_Valid"
 
     # remove tests that depend on docker
     substituteInPlace test/cli/cmd_test.go \
@@ -108,27 +112,27 @@ buildGoModule rec {
     rm grype/db/v5/namespace/cpe/namespace_test.go
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd grype \
       --bash <($out/bin/grype completion bash) \
       --fish <($out/bin/grype completion fish) \
       --zsh <($out/bin/grype completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability scanner for container images and filesystems";
     homepage = "https://github.com/anchore/grype";
-    changelog = "https://github.com/anchore/grype/releases/tag/v${version}";
+    changelog = "https://github.com/anchore/grype/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
       fab
       jk
       kashw2
     ];
     mainProgram = "grype";
   };
-}
+})

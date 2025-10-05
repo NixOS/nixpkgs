@@ -1,22 +1,34 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  # Build fails with Go 1.25, with the following error:
+  # 'vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go:64:9: invalid array length -delta * delta (constant -256 of type int64)'
+  # Wait for upstream to update their vendored dependencies before unpinning.
+  buildGo124Module,
   fetchFromGitHub,
   installShellFiles,
+  testers,
 }:
-buildGoModule rec {
+
+buildGo124Module (finalAttrs: {
   pname = "terraform-docs";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-NOI9/2zGimsHMvdi2lGwl6YLVGpOET6g9C/l0xUZ/pI=";
+    repo = "terraform-docs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DiKoYAe7vcNy35ormKHYZcZrGK/MEb6VmcHWPgrbmUg=";
   };
 
-  vendorHash = "sha256-/56Y3VE4h//8IlyP8ocMFiorgw/4ee32J5FQYxFCIU8=";
+  vendorHash = "sha256-ynyYpX41LJxGhf5kF2AULj+VKROjsvTjVPBnqG+JGSg=";
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  env.CGO_ENABLED = 0;
 
   excludedPackages = [ "scripts" ];
 
@@ -29,11 +41,19 @@ buildGoModule rec {
     installShellCompletion terraform-docs.{bash,fish,zsh}
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
+  };
+
   meta = with lib; {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [
+      zimbatm
+      anthonyroussel
+    ];
   };
-}
+})

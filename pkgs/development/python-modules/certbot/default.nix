@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "3.1.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-lYGJgUNDzX+bE64GJ+djdKR+DXmhpcNbFJrAEnP86yQ=";
+    hash = "sha256-nlNjBbXd4ujzVx10+UwqbXliuLVVf+UHR8Dl5CQzsZo=";
   };
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
@@ -61,10 +61,14 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # network access
+    "test_lock_order"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
@@ -84,14 +88,12 @@ buildPythonPackage rec {
     '';
 
   meta = with lib; {
-    # AttributeError: module 'josepy' has no attribute 'ComparableX509'
-    broken = lib.versionAtLeast josepy.version "2";
     homepage = "https://github.com/certbot/certbot";
     changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
     mainProgram = "certbot";
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ asl20 ];
   };
 }

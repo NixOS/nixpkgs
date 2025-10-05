@@ -9,18 +9,18 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "simp1e-cursors";
-  version = "20221103.2";
+  version = "20250223";
 
   src = fetchFromGitLab {
     owner = "cursors";
     repo = "simp1e";
-    rev = version;
-    hash = "sha256-3DCF6TwxWwYK5pF2Ykr3OwF76H7J03vLNZch/XoZZZk=";
+    tag = version;
+    hash = "sha256-mNuGjpNZCaOlGLkHez4pFMPdCCbSoYQx1HTs7BI0DJA=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ pillow ]))
+    (python3.withPackages (ps: [ ps.pillow ]))
     librsvg
     xcursorgen
   ];
@@ -39,11 +39,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aesthetic cursor theme for Linux desktops";
     homepage = "https://gitlab.com/cursors/simp1e";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ natto1784 ];
+    changelog = "https://gitlab.com/cursors/simp1e/-/tags/${version}";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.natto1784 ];
   };
 }

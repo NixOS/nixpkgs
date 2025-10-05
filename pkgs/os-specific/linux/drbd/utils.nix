@@ -14,6 +14,7 @@
   perlPackages,
   systemd,
   keyutils,
+  udevCheckHook,
 
   # drbd-utils are compiled twice, once with forOCF = true to extract
   # its OCF definitions for use in the ocf-resource-agents derivation,
@@ -25,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drbd";
-  version = "9.27.0";
+  version = "9.32.0";
 
   src = fetchurl {
     url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
-    sha256 = "1qwdrjrgas8z8vc6c85xcrqaczjwyqd61yig01n44wa5z0j3v4aq";
+    hash = "sha256-szOM7jSbXEZZ4p1P73W6tK9Put0+wOZar+cUiUNC6M0=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     asciidoctor
     keyutils
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -56,7 +58,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "SOURCE_DATE_EPOCH=1"
     "WANT_DRBD_REPRODUCIBLE_BUILD=1"
-  ] ++ lib.optional (!forOCF) "OCF_ROOT=${ocf-resource-agents}/usr/lib/ocf}";
+  ]
+  ++ lib.optional (!forOCF) "OCF_ROOT=${ocf-resource-agents}/usr/lib/ocf}";
 
   installFlags = [
     "prefix="
@@ -119,6 +122,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   passthru.tests.drbd = nixosTests.drbd;
 

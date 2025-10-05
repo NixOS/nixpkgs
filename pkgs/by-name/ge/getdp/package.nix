@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
     blas
     lapack
     petsc
-  ] ++ lib.optional mpiSupport mpi;
+  ]
+  ++ lib.optional mpiSupport mpi;
   cmakeFlags = lib.optional mpiSupport "-DENABLE_MPI=1";
 
   meta = with lib; {

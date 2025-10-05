@@ -30,29 +30,16 @@
   readlineFlavor ? if stdenv.hostPlatform.isWindows then "readline" else "editline",
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonLibrary (finalAttrs: {
   pname = "nix-cmd";
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.unions [
-    ../../nix-meson-build-support
-    ./nix-meson-build-support
-    ../../.version
-    ./.version
-    ./meson.build
-    ./meson.options
-    (fileset.fileFilter (file: file.hasExt "cc") ./.)
-    (fileset.fileFilter (file: file.hasExt "hh") ./.)
-  ];
 
   buildInputs = [
     ({ inherit editline readline; }.${readlineFlavor})
-  ] ++ lib.optional enableMarkdown lowdown;
+  ]
+  ++ lib.optional enableMarkdown lowdown;
 
   propagatedBuildInputs = [
     nix-util

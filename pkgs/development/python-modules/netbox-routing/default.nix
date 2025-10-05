@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-routing";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-routing";
     tag = "v${version}";
-    hash = "sha256-QJ4/6eRPo2SIgOWNiK+3jrXW+KaXvzERLcXQqKwCNDU=";
+    hash = "sha256-qtGzZDRo80pdmt3CbM+HG/S7uLvLS7V6lHNB8sM6bcA=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   dependencies = [ django-polymorphic ];
 
   meta = {
-    description = "A NetBox plugin for tracking all kinds of routing information";
+    description = "NetBox plugin for tracking all kinds of routing information";
     homepage = "https://github.com/DanSheps/netbox-routing";
     changelog = "https://github.com/DanSheps/netbox-routing/releases/tag/${src.tag}";
     license = lib.licenses.asl20;

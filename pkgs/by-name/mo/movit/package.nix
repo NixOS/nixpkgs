@@ -6,18 +6,19 @@
   SDL2,
   fftw,
   gtest,
-  darwin,
   eigen,
   libepoxy,
+  libGL,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "movit";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "https://movit.sesse.net/${pname}-${version}.tar.gz";
-    sha256 = "sha256-szBztwXwzLasSULPURUVFUB7QLtOmi3QIowcLLH7wRo=";
+    sha256 = "sha256-AKwfjkbC0+OMdcu3oa8KYVdRwVjGEctwBTCUtl7P6NU=";
   };
 
   outputs = [
@@ -31,23 +32,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      fftw
-      gtest
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.libobjc
-    ];
+  buildInputs = [
+    SDL2
+    fftw
+    gtest
+    libGL
+    libX11
+  ];
 
   propagatedBuildInputs = [
     eigen
     libepoxy
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=c++17"; # needed for latest gtest
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-framework OpenGL";
   };
 

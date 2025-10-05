@@ -23,7 +23,6 @@ let
       name = "hostname-${fqdn}";
       meta = with pkgs.lib.maintainers; {
         maintainers = [
-          primeos
           blitz
         ];
       };

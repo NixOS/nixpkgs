@@ -85,8 +85,8 @@ let
               # the future, see link below to find new ones
               # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
               featureGates = {
-                AnonymousAuthConfigurableEndpoints = true;
-                ConsistentListFromCache = false;
+                AllowParsingUserUIDFromCertAuth = true;
+                ClusterTrustBundle = false;
               };
               masterAddress = "${masterName}.${config.networking.domain}";
             };
@@ -117,11 +117,10 @@ let
         ]
       ) machines;
 
-      testScript =
-        ''
-          start_all()
-        ''
-        + test;
+      testScript = ''
+        start_all()
+      ''
+      + test;
     };
 
   mkKubernetesMultiNodeTest =

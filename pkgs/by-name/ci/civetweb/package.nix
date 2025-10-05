@@ -40,6 +40,13 @@ stdenv.mkDerivation rec {
 
     # The civetweb unit tests rely on downloading their fork of libcheck.
     "-DCIVETWEB_BUILD_TESTING=OFF"
+
+    # The default stack size in civetweb is 102400 (see the CMakeLists [1]).
+    # This can lead to stack overflows even in basic usage;
+    # Setting this value to 0 lets the OS choose the stack size instead, which results in a more suitable value.
+    #
+    # [1] https://github.com/civetweb/civetweb/blob/cafd5f8fae3b859b7f8c29feb03ea075c7221497/CMakeLists.txt#L56
+    "-DCIVETWEB_THREAD_STACK_SIZE=0"
   ];
 
   meta = {

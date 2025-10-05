@@ -10,20 +10,19 @@ with lib;
 let
   cfg = config.services.getty;
 
-  baseArgs =
-    [
-      "--login-program"
-      "${cfg.loginProgram}"
-    ]
-    ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
-      "--autologin"
-      cfg.autologinUser
-    ]
-    ++ optionals (cfg.loginOptions != null) [
-      "--login-options"
-      cfg.loginOptions
-    ]
-    ++ cfg.extraArgs;
+  baseArgs = [
+    "--login-program"
+    "${cfg.loginProgram}"
+  ]
+  ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
+    "--autologin"
+    cfg.autologinUser
+  ]
+  ++ optionals (cfg.loginOptions != null) [
+    "--login-options"
+    cfg.loginOptions
+  ]
+  ++ cfg.extraArgs;
 
   gettyCmd = args: "${lib.getExe' pkgs.util-linux "agetty"} ${escapeShellArgs baseArgs} ${args}";
 
@@ -148,6 +147,15 @@ in
       "console-getty.service"
       "container-getty@.service"
     ];
+
+    # We can't just rely on 'Conflicts=autovt@tty1.service' because
+    # 'switch-to-configuration switch' will start 'autovt@tty1.service'
+    # and kill the display manager.
+    systemd.targets.getty.wants =
+      lib.mkIf (!(config.systemd.services.display-manager.enable or false))
+        [
+          "autovt@tty1.service"
+        ];
 
     systemd.services."getty@" = {
       serviceConfig.ExecStart = [

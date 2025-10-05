@@ -8,7 +8,7 @@
   llvmPackages,
   meson,
   ninja,
-  nixForLinking,
+  nixVersions,
   nix-update-script,
   nixd,
   nixf,
@@ -20,14 +20,15 @@
 }:
 
 let
+  nixComponents = nixVersions.nixComponents_2_30;
   common = rec {
-    version = "2.6.2";
+    version = "2.7.0";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-kxCUBgdIulW68H0ATOXsWp5977HFIF7wTw3qYYfgCAQ=";
+      hash = "sha256-VPUX/68ysFUr1S8JW9I1rU5UcRoyZiCjL+9u2owrs6w=";
     };
 
     nativeBuildInputs = [
@@ -101,12 +102,13 @@ in
       ];
 
       buildInputs = [
-        nixForLinking
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         gtest
         boost
       ];
-
-      env.CXXFLAGS = "-include ${nixForLinking.dev}/include/nix/config.h";
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
@@ -127,7 +129,10 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nixForLinking
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         nixf
         nixt
         llvmPackages.llvm
@@ -136,8 +141,6 @@ in
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
-
-      env.CXXFLAGS = "-include ${nixForLinking.dev}/include/nix/config.h";
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

@@ -2,31 +2,39 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python3,
+  python312,
   bash,
   openssl,
   nixosTests,
+  udevCheckHook,
 }:
 
 let
-  python = python3;
+  python = python312;
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
-  version = "2.12.0.4";
+  version = "2.14.0.1";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
     tag = "v${version}";
-    hash = "sha256-L8W/ijBHkNukM2G9HBRVx2wFXzgkR8gbFBljNVPs6xA=";
+    hash = "sha256-1q/buJSVaxu2ZTpDAw5slgQIJ0pih2i6nA42hgKqJ5I=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:
     # Read-only file system: '/etc/ssh/sshd_config'
     ./dont-configure-sshd.patch
   ];
-  doCheck = false;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   # Replace tools used in udev rules with their full path and ensure they are present.
   postPatch = ''
@@ -40,7 +48,9 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl'
   '';
 
-  propagatedBuildInputs = [ python.pkgs.distro ];
+  build-system = with python.pkgs; [ setuptools ];
+
+  dependencies = with python.pkgs; [ distro ];
 
   # The udev rules are placed to the wrong place.
   # Move them to their default location.

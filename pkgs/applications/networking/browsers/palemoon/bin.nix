@@ -6,7 +6,9 @@
   autoPatchelfHook,
   copyDesktopItems,
   dbus-glib,
-  ffmpeg,
+  # ffmpeg 7 not supported yet, results in MP4 playback being unavailable
+  # https://repo.palemoon.org/MoonchildProductions/UXP/issues/2523
+  ffmpeg_6,
   gtk2-x11,
   withGTK3 ? true,
   gtk3,
@@ -21,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.6.1";
+  version = "33.9.0.1";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -35,17 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      dbus-glib
-      gtk2-x11
-      libXt
-      (lib.getLib stdenv.cc.cc)
-    ]
-    ++ lib.optionals withGTK3 [
-      gtk3
-    ];
+  buildInputs = [
+    alsa-lib
+    dbus-glib
+    gtk2-x11
+    libXt
+    (lib.getLib stdenv.cc.cc)
+  ]
+  ++ lib.optionals withGTK3 [
+    gtk3
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -145,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          ffmpeg
+          ffmpeg_6
           libglvnd
           libpulseaudio
         ]
@@ -172,11 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         gtk3 = fetchzip {
           urls = urlRegionVariants "gtk3";
-          hash = "sha256-OaiY34UcPZ0zxDZP/VrJyEXou2Kz77SqMuJMiVCRIbA=";
+          hash = "sha256-QhER20l8GP0wQ0pDVwBZbYb2FImbX0kiUS9RCcR7gvg=";
         };
         gtk2 = fetchzip {
           urls = urlRegionVariants "gtk2";
-          hash = "sha256-Yq9bpvyNP+tOKvcZbjxbNhrtimi6Ylb5vBytx+OEgiI=";
+          hash = "sha256-13lq59H8xGNbZHalZo87xAaoQg61t2v+B/LXnPoEyoU=";
         };
       };
 

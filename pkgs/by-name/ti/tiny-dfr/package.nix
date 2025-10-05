@@ -7,31 +7,36 @@
   gdk-pixbuf,
   glib,
   libinput,
+  librsvg,
   libxml2,
   pango,
   udev,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny-dfr";
-  version = "0.3.2";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
-    owner = "WhatAmISupposedToPutHere";
+    owner = "AsahiLinux";
     repo = "tiny-dfr";
-    rev = "v${version}";
-    hash = "sha256-5u5jyoDEt7aMs8/8QrhrUrUzFJJCNayqbN2WrMhUCV4=";
+    tag = "v${version}";
+    hash = "sha256-G4OeYZH3VF6fKWxHYLTmwzQmQ4JupgYNH/6aJSgINvg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9UlH2W8wNzdZJxIgOafGylliS2RjaBlpirxSWHJ/SIQ=";
+  cargoHash = "sha256-/PtoAc2ZNJfW5gegcFQAAlEmjSMysZ+QebVfHtW35Nk=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [
     cairo
     gdk-pixbuf
     glib
     libinput
+    librsvg
     libxml2
     pango
     udev
@@ -48,8 +53,10 @@ rustPlatform.buildRustPackage rec {
     cp -R share $out
   '';
 
+  doInstallCheck = true;
+
   meta = with lib; {
-    homepage = "https://github.com/WhatAmISupposedToPutHere/tiny-dfr";
+    homepage = "https://github.com/AsahiLinux/tiny-dfr";
     description = "Most basic dynamic function row daemon possible";
     license = [
       licenses.asl20

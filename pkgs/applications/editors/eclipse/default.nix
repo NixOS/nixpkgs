@@ -16,7 +16,7 @@
   jdk,
   jdk8,
   gsettings-desktop-schemas,
-  webkitgtk_4_0 ? null, # for internal web browser
+  webkitgtk_4_1 ? null, # for internal web browser
   buildEnv,
   runCommand,
   callPackage,
@@ -64,15 +64,13 @@ let
       gtk
       libXtst
       gsettings-desktop-schemas
-      webkitgtk_4_0
+      webkitgtk_4_1
       makeWrapper
       ;
   };
   buildEclipse =
     eclipseData:
-    buildEclipseUnversioned (
-      eclipseData // { productVersion = "${platform_major}.${platform_minor}"; }
-    );
+    buildEclipseUnversioned (eclipseData // { version = "${platform_major}.${platform_minor}"; });
 
   generateEclipse =
     id:
@@ -85,7 +83,7 @@ let
       {
         name = "eclipse-${lib.strings.toLower id}";
         value = buildEclipse {
-          name = "eclipse-${lib.strings.toLower id}-${platform_major}.${platform_minor}";
+          pname = "eclipse-${lib.strings.toLower id}";
           inherit description;
           src = fetchurl {
             url =

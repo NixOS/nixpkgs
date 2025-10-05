@@ -1,0 +1,37 @@
+diff --git a/Tensile/TensileCreateLibrary.py b/Tensile/TensileCreateLibrary.py
+index 2b9da394..b001fa7c 100644
+--- a/Tensile/TensileCreateLibrary.py
++++ b/Tensile/TensileCreateLibrary.py
+@@ -808,10 +808,13 @@ def copyStaticFiles(outputPath=None):
+     "ReductionTemplate.h",
+     "memory_gfx.h" ]
+ 
++  import filecmp
+   for fileName in libraryStaticFiles:
+-    # copy file
+-    shutil.copy( os.path.join(globalParameters["SourcePath"], fileName), \
+-        outputPath )
++    src = os.path.join(globalParameters["SourcePath"], fileName)
++    dst = os.path.join(outputPath, os.path.basename(src))
++    # no need to copy twice if it has already been copied
++    if not os.path.isfile(dst) or not filecmp.cmp(src, dst):
++        shutil.copyfile(src, dst)
+ 
+   return libraryStaticFiles
+ 
+@@ -1417,9 +1420,13 @@ def TensileCreateLibrary():
+     writeCMake(outputPath, solutionFiles, sourceKernelFiles, staticFiles, masterLibraries)
+ 
+   # Make sure to copy the library static files.
++  import filecmp
+   for fileName in staticFiles:
+-    shutil.copy( os.path.join(globalParameters["SourcePath"], fileName), \
+-      outputPath )
++    src = os.path.join(globalParameters["SourcePath"], fileName)
++    dst = os.path.join(outputPath, os.path.basename(src))
++    # no need to copy twice if it has already been copied
++    if not os.path.isfile(dst) or not filecmp.cmp(src, dst):
++        shutil.copyfile(src, dst)
+ 
+   # write solutions and kernels
+   codeObjectFiles = writeSolutionsAndKernels(outputPath, CxxCompiler, None, solutions,

@@ -36,18 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     ninja
   ];
-  buildInputs =
+  buildInputs = [
+    eigen
+  ]
+  ++ lib.optionals (!useAccel) (
+    assert (blas.isILP64 == lapack.isILP64);
     [
-      eigen
+      blas
+      lapack
     ]
-    ++ lib.optionals (!useAccel) (
-      assert (blas.isILP64 == lapack.isILP64);
-      [
-        blas
-        lapack
-      ]
-    )
-    ++ lib.optional useMpi mpi;
+  )
+  ++ lib.optional useMpi mpi;
 
   nativeCheckInputs = lib.optional useMpi mpiCheckPhaseHook;
   checkInputs =
@@ -68,19 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
     FFLAGS = "-ff2c -fno-second-underscore";
   };
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
-      (lib.cmakeBool "EIGEN" true)
-      (lib.cmakeBool "EXAMPLES" finalAttrs.finalPackage.doCheck)
-      (lib.cmakeBool "ICB" true)
-      (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
-      (lib.cmakeBool "MPI" useMpi)
-      (lib.cmakeBool "TESTS" finalAttrs.finalPackage.doCheck)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
+    (lib.cmakeBool "EIGEN" true)
+    (lib.cmakeBool "EXAMPLES" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ICB" true)
+    (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
+    (lib.cmakeBool "MPI" useMpi)
+    (lib.cmakeBool "TESTS" finalAttrs.finalPackage.doCheck)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
+  ];
 
   passthru = {
     isILP64 = !useAccel && blas.isILP64;
@@ -92,10 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
     changelog = "https://github.com/opencollab/arpack-ng/blob/${finalAttrs.version}/CHANGES";
-    description = ''
-      A collection of Fortran77 subroutines to solve large scale eigenvalue
-      problems.
-    '';
+    description = "Collection of Fortran77 subroutines to solve large scale eigenvalue problems";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       ttuegel

@@ -52,6 +52,11 @@ let
 
       cat << EOF > $out/bin/${pname}
       #!${stdenvNoCC.shell}
+      updater_xml="\$HOME/.stm32cubemx/thirdparties/db/updaterThirdParties.xml"
+      if [ -e "\$updater_xml" ] && [ ! -w "\$updater_xml" ]; then
+        echo "Warning: Unwritable \$updater_xml prevents CubeMX software packages from working correctly. Fixing that."
+        (set -x; chmod u+w "\$updater_xml")
+      fi
       ${jdk21}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
       EOF
       chmod +x $out/bin/${pname}
@@ -81,7 +86,7 @@ let
     '';
 
     meta = with lib; {
-      description = "A graphical tool for configuring STM32 microcontrollers and microprocessors";
+      description = "Graphical tool for configuring STM32 microcontrollers and microprocessors";
       longDescription = ''
         A graphical tool that allows a very easy configuration of STM32
         microcontrollers and microprocessors, as well as the generation of the

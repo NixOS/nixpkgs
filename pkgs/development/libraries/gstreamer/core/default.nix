@@ -14,9 +14,6 @@
   elfutils, # for libdw
   bash-completion,
   lib,
-  Cocoa,
-  CoreServices,
-  xpc,
   testers,
   rustc,
   withRust ?
@@ -34,6 +31,8 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -41,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.24.10";
+  version = "1.26.5";
 
   outputs = [
     "bin"
@@ -51,70 +50,63 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  src =
-    let
-      inherit (finalAttrs) pname version;
-    in
-    fetchurl {
-      url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-      hash = "sha256-n8RbGjMuj4EvCelcKBzXWWn20WgtBiqBXbDnvAR1GP0=";
-    };
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Cn7bDntC2+a1dfzmGkgIo/ayDghaHq7LwCXQ7CHx53Q=";
+  };
 
   depsBuildBuild = [
     pkg-config
   ];
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      bison
-      flex
-      python3
-      makeWrapper
-      glib
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap # for setcap binary
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ]
-    ++ lib.optionals withRust [
-      rustc
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    bison
+    flex
+    python3
+    makeWrapper
+    glib
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap # for setcap binary
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withRust [
+    rustc
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-    ]
-    ++ lib.optionals hasElfutils [
-      elfutils
-    ]
-    ++ lib.optionals withLibunwind [
-      libunwind
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreServices
-      xpc
-    ];
+  buildInputs = [
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+  ]
+  ++ lib.optionals hasElfutils [
+    elfutils
+  ]
+  ++ lib.optionals withLibunwind [
+    libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     glib
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     (lib.mesonEnable "ptp-helper" withRust)
@@ -147,7 +139,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "Open source multimedia framework";

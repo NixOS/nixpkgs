@@ -6,7 +6,6 @@
   libglut,
   gtk2,
   libGLU,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,13 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libglut
-      libGLU
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+  buildInputs = [
+    libglut
+    libGLU
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''

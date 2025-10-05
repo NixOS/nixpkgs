@@ -18,10 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   sourceRoot = "${finalAttrs.src.name}/OrthancFramework/SharedLibrary";
-  outputs = [
-    "out"
-    "dev"
-  ];
 
   buildInputs = orthanc.buildInputs ++ [
     icu
@@ -38,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDK for building Orthanc plugins and related applications";
     homepage = "https://www.orthanc-server.com/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

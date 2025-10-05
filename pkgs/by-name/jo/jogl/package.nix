@@ -42,40 +42,38 @@ stdenv.mkDerivation {
 
   unpackCmd = "cp -r $curSrc \${curSrc##*-}";
 
-  postPatch =
-    ''
-      substituteInPlace gluegen/src/java/com/jogamp/common/util/IOUtil.java \
-        --replace-fail '#!/bin/true' '#!${coreutils}/bin/true'
-    ''
-    # prevent looking for native libraries in /usr/lib
-    + ''
-      substituteInPlace jogl/make/build-*.xml \
-        --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
-    ''
-    # force way to do dysfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
-    # if arm/aarch64 support will be added, this block might be commented out on those platforms
-    # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
-    + ''
-      xmlstarlet ed --inplace \
-        --delete '//*[@if="setup.addNativeBroadcom"]' \
-        jogl/make/build-newt.xml
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
-      rm -r jogl/oculusvr-sdk
-    '';
+  postPatch = ''
+    substituteInPlace gluegen/src/java/com/jogamp/common/util/IOUtil.java \
+      --replace-fail '#!/bin/true' '#!${coreutils}/bin/true'
+  ''
+  # prevent looking for native libraries in /usr/lib
+  + ''
+    substituteInPlace jogl/make/build-*.xml \
+      --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
+  ''
+  # force way to do dysfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
+  # if arm/aarch64 support will be added, this block might be commented out on those platforms
+  # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
+  + ''
+    xmlstarlet ed --inplace \
+      --delete '//*[@if="setup.addNativeBroadcom"]' \
+      jogl/make/build-newt.xml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
+    rm -r jogl/oculusvr-sdk
+  '';
 
-  nativeBuildInputs =
-    [
-      ant
-      jdk11
-      git
-      xmlstarlet
-      stripJavaArchivesHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    ant
+    jdk11
+    git
+    xmlstarlet
+    stripJavaArchivesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev

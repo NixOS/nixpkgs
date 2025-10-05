@@ -18,6 +18,7 @@ let
   pycrypto = python3Packages.buildPythonPackage rec {
     pname = "pycrypto";
     version = "2.6.1-13.1";
+    format = "setuptools";
 
     src = fetchgit {
       url = "https://salsa.debian.org/sramacher/python-crypto.git";
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   version = "1.9.2";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "weechat-otr";
     owner = "mmb";
     rev = "v${version}";
     sha256 = "1lngv98y6883vk8z2628cl4d5y8jxy39w8245gjdvshl8g18k5s2";

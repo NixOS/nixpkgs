@@ -10,7 +10,7 @@
   cjs,
   gtksourceview4,
   gobject-introspection,
-  libmusicbrainz5,
+  libmusicbrainz,
   webkitgtk_4_1,
   clutter-gtk,
   clutter-gst,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     cjs
     gtksourceview4
-    libmusicbrainz5
+    libmusicbrainz
     webkitgtk_4_1
     clutter-gtk
     clutter-gst
@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Quick previewer for Nemo, the Cinnamon desktop file manager";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.cinnamon.members;
+    teams = [ lib.teams.cinnamon ];
   };
 })

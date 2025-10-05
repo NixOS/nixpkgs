@@ -1,12 +1,9 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   zlib,
   openjpeg,
   libjpeg_turbo,
@@ -22,14 +19,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "trufanov-nok";
-    repo = pname;
+    repo = "scantailor-universal";
     rev = version;
     fetchSubmodules = true;
     hash = "sha256-n8NbokK+U0FAuYXtjRJcxlI1XAmI4hk5zV3sF86hB/s=";
   };
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     zlib
     libjpeg_turbo
     libpng
@@ -40,8 +37,8 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
-    qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
   ];
 
   meta = with lib; {

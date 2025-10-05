@@ -76,13 +76,18 @@ stdenv.mkDerivation {
   name = isoName;
   __structuredAttrs = true;
 
+  # the image will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
+
   buildCommandPath = ./make-iso9660-image.sh;
   nativeBuildInputs = [
     xorriso
     syslinux
     zstd
     libossp_uuid
-  ] ++ lib.optionals needSquashfs makeSquashfsDrv.nativeBuildInputs;
+  ]
+  ++ lib.optionals needSquashfs makeSquashfsDrv.nativeBuildInputs;
 
   inherit
     isoName

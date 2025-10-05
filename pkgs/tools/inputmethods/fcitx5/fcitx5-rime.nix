@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.1.10";
+  version = "5.1.11";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.zst";
-    hash = "sha256-ACW79fLgrS+Qv8YJjGr4WldTJsnnGhC0WWf8ia9khYk=";
+    hash = "sha256-cc/B99tdVVWnvdl7dYYQlIvk8F2xXUOr6sF36yxQZfY=";
   };
 
   cmakeFlags = [
@@ -43,7 +43,12 @@ stdenv.mkDerivation rec {
   rimeDataDrv = symlinkJoin {
     name = "fcitx5-rime-data";
     paths = rimeDataPkgs;
-    postBuild = "mkdir -p $out/share/rime-data";
+    postBuild = ''
+      mkdir -p $out/share/rime-data
+
+      # Ensure default.yaml exists
+      [ -e "$out/share/rime-data/default.yaml" ] || touch "$out/share/rime-data/default.yaml"
+    '';
   };
 
   postInstall = ''

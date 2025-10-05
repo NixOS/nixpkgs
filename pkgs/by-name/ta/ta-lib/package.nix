@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    description = "TA-Lib is a library that provides common functions for the technical analysis of financial market data.";
+    description = "Add technical analysis to your own financial market trading applications";
     mainProgram = "ta-lib-config";
     homepage = "https://ta-lib.org/";
     license = lib.licenses.bsd3;

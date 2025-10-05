@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-82IhLhw0TdaMh21phBxcUZ5JI5xOXb0DrwnBmPwyfAQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EnEc+B62dK3q6in8yn5wdeVmBw8XMkP8YKpCN7lCPnc=";
 
   nativeBuildInputs = [
@@ -76,16 +75,16 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "bat";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dywedir
       zowoq
       SuperSandro2000

@@ -7,44 +7,41 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qrtool";
-  version = "0.11.8";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
-    rev = "v${version}";
-    hash = "sha256-f/2AaNnojtZMhJod6ukLwEq+Bsu6O2oTD9OWGL8IS80=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I/LyDHV3pbRj+utzJBLvkgstEOodLkvfQT6uMLnOEgM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wXs3Y0g+inUU3Qho5UhZOJhNDs65HS6FjPdZQBuwLM0=";
+  cargoHash = "sha256-c1sw0zyJZDvJe3Hcn1W4UPkqTKqRhywHpR6HLrqAN+A=";
 
   nativeBuildInputs = [
     asciidoctor
     installShellFiles
   ];
 
-  postInstall =
-    ''
-      # Built by ./build.rs using `asciidoctor`
-      installManPage ./target/*/release/build/qrtool*/out/*.?
+  postInstall = ''
+    asciidoctor -b manpage docs/man/man1/*.1.adoc
+    installManPage docs/man/man1/*.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd qrtool \
+      --bash <($out/bin/qrtool completion bash) \
+      --fish <($out/bin/qrtool completion fish) \
+      --zsh <($out/bin/qrtool completion zsh)
+  '';
 
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd qrtool \
-        --bash <($out/bin/qrtool --generate-completion bash) \
-        --fish <($out/bin/qrtool --generate-completion fish) \
-        --zsh <($out/bin/qrtool --generate-completion zsh)
-    '';
-
-  meta = with lib; {
-    maintainers = with maintainers; [ philiptaron ];
+  meta = {
     description = "Utility for encoding and decoding QR code images";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://sorairolake.github.io/qrtool/book/index.html";
     changelog = "https://sorairolake.github.io/qrtool/book/changelog.html";
     mainProgram = "qrtool";
+    maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

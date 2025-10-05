@@ -18,7 +18,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   # Don't forget to change passthru.abiVersion
-  version = "0.8.1-unstable-2024-12-22";
+  version = "0.8.1-unstable-2025-03-30-03";
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Instead of applying several patches for Python 3.12 compat, just take the latest, from:
     # use old get python lib for v2 (#437)
-    rev = "309335ec6a52eb712387ed025d705a3c0f7a1e24";
-    hash = "sha256-a9414gX4fUAPQaKKqrWgSlFHZH0BWqbgHzhVCKnIn2M=";
+    rev = "fbf9f3c328868f46029284716df49095ab7b99a6";
+    hash = "sha256-W4915c6hV/GR5PZRRXZJW3ERsZmQQQ08EA9wYp2tAVk=";
   };
 
   nativeBuildInputs = [
@@ -35,15 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    [
-      libusb-compat-0_1
-      ncurses
-    ]
-    ++ lib.optionals usePython [
-      python
-      swig
-    ];
+  buildInputs = [
+    libusb-compat-0_1
+    ncurses
+  ]
+  ++ lib.optionals usePython [
+    python
+    swig
+  ];
 
   propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
 

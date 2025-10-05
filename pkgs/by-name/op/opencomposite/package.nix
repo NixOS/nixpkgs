@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencomposite";
-  version = "1.0.1473";
+  version = "1.0.1521";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-kwu8eM/rQBcZfs91loh7QAB46a01F9n5Xm1DmMd53MQ=";
+    hash = "sha256-qi1iqlsr0P+Hw63O3ayCBIEGdNtkhl8FCPcs/m0WIzs=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/lib/opencomposite
     cp -r bin/ $out/lib/opencomposite
+    touch $out/lib/opencomposite/bin/version.txt
     runHook postInstall
   '';
 

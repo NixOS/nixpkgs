@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
+  patches = [ ./build-stdio.patch ];
+
   buildPhase = ''
     substituteInPlace config.h --replace "p0f.fp" "$out/etc/p0f.fp"
     substituteInPlace build.sh --replace "/bin/bash" "${bash}/bin/bash"

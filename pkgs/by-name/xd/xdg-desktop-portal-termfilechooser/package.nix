@@ -9,16 +9,17 @@
   inih,
   systemd,
   scdoc,
+  nix-update-script,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-termfilechooser";
-  version = "0.4.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "hunkyburrito";
     repo = "xdg-desktop-portal-termfilechooser";
-    rev = "c35af27e323a492cbb3b19bdd135657ae523caef";
-    hash = "sha256-9bxhKkk5YFBhR2ylcDzlvt4ltYuF174w00EJK5r3aY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IlPNNuQaGVW5QXcyA8cWiFJxwgXmviQoisDUWX9QP2s=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +37,17 @@ stdenv.mkDerivation {
 
   mesonFlags = [ "-Dsd-bus-provider=libsystemd" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "xdg-desktop-portal backend for choosing files with your favorite file chooser";
     homepage = "https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ body20002 ];
+    maintainers = with lib.maintainers; [
+      body20002
+      ltrump
+    ];
     mainProgram = "xdg-desktop-portal-termfilechooser";
   };
-}
+})

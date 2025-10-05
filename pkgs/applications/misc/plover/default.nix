@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   fetchFromGitHub,
   python3Packages,
   wmctrl,
@@ -8,13 +9,12 @@
 }:
 
 {
-  stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
-
   dev =
     with python3Packages;
     mkDerivationWith buildPythonPackage rec {
       pname = "plover";
-      version = "4.0.0.dev10";
+      version = "4.0.2";
+      format = "setuptools";
 
       meta = with lib; {
         broken = stdenv.hostPlatform.isDarwin;
@@ -29,8 +29,8 @@
       src = fetchFromGitHub {
         owner = "openstenoproject";
         repo = "plover";
-        rev = "v${version}";
-        sha256 = "sha256-oJ7+R3ZWhUbNTTAw1AfMg2ur8vW1XEbsa5FgSTam1Ns=";
+        tag = "v${version}";
+        sha256 = "sha256-VpQT25bl8yPG4J9IwLkhSkBt31Y8BgPJdwa88WlreA8=";
       };
 
       # I'm not sure why we don't find PyQt5 here but there's a similar
@@ -57,4 +57,7 @@
         makeWrapperArgs+=("''${qtWrapperArgs[@]}")
       '';
     };
+}
+// lib.optionalAttrs config.allowAliases {
+  stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
 }

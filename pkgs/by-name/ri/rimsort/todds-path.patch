@@ -1,0 +1,17 @@
+diff --git a/app/utils/todds/wrapper.py b/app/utils/todds/wrapper.py
+index a239fe0..3375b70 100644
+--- a/app/utils/todds/wrapper.py
++++ b/app/utils/todds/wrapper.py
+@@ -66,11 +66,7 @@ class ToddsInterface:
+         :param todds_arguments: list of todds args to be passed to the todds executable
+         """
+ 
+-        if self.system == "Windows":
+-            todds_executable = "todds.exe"
+-        else:
+-            todds_executable = "todds"
+-        todds_exe_path = str(AppInfo().application_folder / "todds" / todds_executable)
++        todds_exe_path = "@todds@/bin/todds"
+         logger.info("Checking for todds...")
+         if os.path.exists(todds_exe_path):
+             logger.debug(f"Found todds executable at: {todds_exe_path}")

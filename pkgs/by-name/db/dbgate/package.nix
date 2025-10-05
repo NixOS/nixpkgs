@@ -1,34 +1,38 @@
 {
   lib,
   stdenv,
+  appimageTools,
   fetchurl,
   _7zz,
-  appimageTools,
 }:
+
 let
   pname = "dbgate";
-  version = "6.2.0";
+  version = "6.6.3";
   src =
     fetchurl
       {
         aarch64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_arm64.AppImage";
-          hash = "sha256-ZhF8ZxfJSNWg4AGj84oSs3/lJLiijSZDGXdnyuFLV7Q=";
+          hash = "sha256-/Ouoo+ygEcj5u597+peqxQ0BFAi6Dp1Dy5BEJbHjo/s=";
         };
         x86_64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_x86_64.AppImage";
-          hash = "sha256-d6+24Bn12v32fwRGK0GHkkDbNzknMIBbpNDygmIT9/E=";
+          hash = "sha256-FUwRXpuIPubtVAendCDTiXNJ5TQ1LBB5MD25hH5EzGE=";
         };
         x86_64-darwin = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_x64.dmg";
-          hash = "sha256-6gwjI0nlhzh0rLevdFRkcPPUrlxrwwIDSnD4mENtHc8=";
+          hash = "sha256-UgdSHW5Gs0cat6leIFJtp3OspgQRV2AHnk/sZ1b7z/U=";
         };
         aarch64-darwin = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_universal.dmg";
-          hash = "sha256-cSFtA/rjkE6lxxs1DR6yvP6WR9a4gjzsdUo8/oyz4/I=";
+          hash = "sha256-mvONm929IG2ViH0h7u/7fRZ6ghDaPsy7cqpqIp/JgM4=";
         };
       }
-      .${stdenv.system} or (throw "dbgate: ${stdenv.system} is unsupported.");
+      .${stdenv.hostPlatform.system} or (throw "dbgate: ${stdenv.hostPlatform.system} is unsupported.");
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Database manager for MySQL, PostgreSQL, SQL Server, MongoDB, SQLite and others";
     homepage = "https://dbgate.org/";
@@ -51,6 +55,7 @@ if stdenv.hostPlatform.isDarwin then
       pname
       version
       src
+      passthru
       meta
       ;
 
@@ -62,8 +67,10 @@ if stdenv.hostPlatform.isDarwin then
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
+
       runHook postInstall
     '';
   }
@@ -76,11 +83,14 @@ else
       pname
       version
       src
+      passthru
       meta
       ;
+
     extraInstallCommands = ''
-      install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/${pname}.desktop --replace-warn "Exec=AppRun --no-sandbox" "Exec=$out/bin/${pname}"
+      install -Dm644 ${appimageContents}/dbgate.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/dbgate.desktop \
+        --replace-warn "Exec=AppRun --no-sandbox" "Exec=dbgate"
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
   }

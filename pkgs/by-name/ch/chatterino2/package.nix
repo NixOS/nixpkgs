@@ -2,7 +2,7 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   boost186,
 }:
 
@@ -12,19 +12,27 @@
   (
     finalAttrs: _: {
       pname = "chatterino2";
-      version = "2.5.2";
+      version = "2.5.4";
 
       src = fetchFromGitHub {
         owner = "Chatterino";
         repo = "chatterino2";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-nrw4dQ7QjPPMbZXMC+p3VgUQKwc1ih6qS13D9+9oNuw=";
+        hash = "sha256-eozT3Lfra4i+q3pCxH0Z1v/3Y/FB5yJc/88tA90hTzI=";
         fetchSubmodules = true;
+        leaveDotGit = true;
+        postFetch = ''
+          git -C $out rev-parse --short HEAD > $out/GIT_HASH
+          find "$out" -name .git -print0 | xargs -0 rm -rf
+        '';
       };
 
       passthru = {
         buildChatterino = args: callPackage ./common.nix args;
-        updateScript = nix-update-script { };
+        updateScript = gitUpdater {
+          rev-prefix = "v";
+          ignoredVersions = "beta";
+        };
       };
 
       meta = {

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.20.1";
+  version = "2.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_firestore";
     inherit version;
-    hash = "sha256-WXDh5rn9HCZh+pHUu2FgEQaZokVuxNCMMxmaykqrKKA=";
+    hash = "sha256-DDf6qFBil/gn7vw4/rFVJHpty5pUEoljEBXRJfGwA/g=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +36,8 @@ buildPythonPackage rec {
     google-cloud-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     aiounittest

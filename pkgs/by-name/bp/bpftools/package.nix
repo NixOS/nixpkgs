@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
+  patches = [
+    # fix unknown type name '__vector128' on powerpc64*
+    # https://www.spinics.net/lists/bpf/msg28613.html
+    ./include-asm-types-for-powerpc64.patch
+  ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     python3

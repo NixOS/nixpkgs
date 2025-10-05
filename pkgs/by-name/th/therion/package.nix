@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "therion";
-  version = "6.3.3";
+  version = "6.3.4";
 
   src = fetchFromGitHub {
     owner = "therion";
     repo = "therion";
     tag = "v${version}";
-    hash = "sha256-yxY4rYaDmDK0mJH60FS12ILjntsjxhFNeijTFrNKSzU=";
+    hash = "sha256-kus5MoiUrLadpzq0wPB+J85F0RVva7NAYM6E6HX4eJ8=";
   };
 
   nativeBuildInputs = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Therion – cave surveying software";
+    description = "Cave surveying software";
     homepage = "https://therion.speleo.sk/";
     changelog = "https://github.com/therion/therion/blob/${src.rev}/CHANGES";
     license = lib.licenses.gpl2Only;

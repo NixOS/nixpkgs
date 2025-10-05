@@ -30,7 +30,7 @@ let
   # #226165 rewrites cudaStdenv
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
   # Ensures we don't use the stdenv value by accident.
-  stdenv = builtins.throw "Use effectiveStdenv instead of stdenv in xgboost derivation.";
+  stdenv = throw "Use effectiveStdenv instead of stdenv in xgboost derivation.";
 in
 
 effectiveStdenv.mkDerivation rec {
@@ -47,28 +47,30 @@ effectiveStdenv.mkDerivation rec {
   #     xgb = xgboost.override{rLibrary = true; doCheck = false;}; \
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
-  pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.1.4";
+  pname = lib.optionalString rLibrary "r-" + "xgboost";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "dmlc";
-    repo = pnameBase;
-    rev = "v${version}";
+    repo = "xgboost";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-k1k6K11cWpG6PtzTt99q/rrkN3FyxCVEzfPI9fCTAjM=";
+    hash = "sha256-khaD9gvKfUyWhkrIZXzGzKw/nfgeTcp9akCi5X3IORo=";
   };
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
-    ++ lib.optionals rLibrary [ R ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
+  ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
+  ++ lib.optionals rLibrary [ R ];
 
-  buildInputs =
-    [ gtest ]
-    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
-    ++ lib.optional cudaSupport cudaPackages.cuda_cudart
-    ++ lib.optional ncclSupport cudaPackages.nccl;
+  buildInputs = [
+    gtest
+  ]
+  ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+  ++ lib.optional cudaSupport cudaPackages.cuda_cudart
+  ++ lib.optional ncclSupport cudaPackages.nccl;
 
   propagatedBuildInputs = lib.optionals rLibrary [
     rPackages.data_table
@@ -87,6 +89,9 @@ effectiveStdenv.mkDerivation rec {
     ]
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
+
+  # on Darwin, cmake uses find_library to locate R instead of using the PATH
+  env.NIX_LDFLAGS = "-L${R}/lib/R/lib";
 
   preConfigure = lib.optionals rLibrary ''
     substituteInPlace cmake/RPackageInstall.cmake.in --replace "CMD INSTALL" "CMD INSTALL -l $out/library"
@@ -124,12 +129,14 @@ effectiveStdenv.mkDerivation rec {
         "Approx.PartitionerColumnSplit"
         "BroadcastTest.Basic"
         "CPUHistogram.BuildHistColSplit"
+        "CPUHistogram.BuildHistColumnSplit"
         "CPUPredictor.CategoricalPredictLeafColumnSplit"
         "CPUPredictor.CategoricalPredictionColumnSplit"
         "ColumnSplit/ColumnSplitTrainingTest*"
         "ColumnSplit/TestApproxColumnSplit*"
         "ColumnSplit/TestHistColumnSplit*"
         "ColumnSplitObjective/TestColumnSplit*"
+        "Cpu/ColumnSplitTrainingTest*"
         "CommGroupTest.Basic"
         "CommTest.Channel"
         "CpuPredictor.BasicColumnSplit"
@@ -150,6 +157,8 @@ effectiveStdenv.mkDerivation rec {
         "Quantile.SortedDistributedBasic"
         "QuantileHist.MultiPartitionerColumnSplit"
         "QuantileHist.PartitionerColumnSplit"
+        "Stats.SampleMean"
+        "Stats.WeightedSampleMean"
         "SimpleDMatrix.ColumnSplit"
         "TrackerAPITest.CAPI"
         "TrackerTest.AfterShutdown"
@@ -162,21 +171,19 @@ effectiveStdenv.mkDerivation rec {
     in
     "-${builtins.concatStringsSep ":" excludedTests}";
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    # the R library option builds a completely different binary xgboost.so instead of
-    # libxgboost.so, which isn't full featured for python and CLI
-    + lib.optionalString rLibrary ''
-      mkdir -p $out/library
-      export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
-    ''
-    + ''
-      cmake --install .
-      cp -r ../rabit/include/rabit $out/include
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  # the R library option builds a completely different binary xgboost.so instead of
+  # libxgboost.so, which isn't full featured for python and CLI
+  + lib.optionalString rLibrary ''
+    mkdir -p $out/library
+    export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
+  ''
+  + ''
+    cmake --install .
+    runHook postInstall
+  '';
 
   postFixup = lib.optionalString rLibrary ''
     if test -e $out/nix-support/propagated-build-inputs; then
@@ -187,12 +194,10 @@ effectiveStdenv.mkDerivation rec {
   meta = with lib; {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
-    broken = cudaSupport && cudaPackages.cudaOlder "11.4";
     license = licenses.asl20;
     mainProgram = "xgboost";
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      abbradar
       nviets
     ];
   };

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "3.5.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "pinocchio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oSxeFt84IB3KR12knm2vBAHYyevVNjCjnp9mS3e0Zls=";
+    hash = "sha256-MykHbHSXY/eJ1+8v0hptiXeVmglU9/wImimiuByw0tE=";
   };
 
   outputs = [
@@ -56,51 +56,48 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
 
-  propagatedBuildInputs =
-    [
-      console-bridge
-      jrl-cmakemodules
-      urdfdom
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      boost
-      eigen
-    ]
-    ++ lib.optionals (!pythonSupport && collisionSupport) [ coal ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.boost
-      python3Packages.eigenpy
-    ]
-    ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.coal ]
-    ++ lib.optionals (!pythonSupport && casadiSupport) [ casadi ]
-    ++ lib.optionals (pythonSupport && casadiSupport) [ python3Packages.casadi ];
+  propagatedBuildInputs = [
+    console-bridge
+    jrl-cmakemodules
+    urdfdom
+  ]
+  ++ lib.optionals (!pythonSupport) [
+    boost
+    eigen
+  ]
+  ++ lib.optionals (!pythonSupport && collisionSupport) [ coal ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.boost
+    python3Packages.eigenpy
+  ]
+  ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.coal ]
+  ++ lib.optionals (!pythonSupport && casadiSupport) [ casadi ]
+  ++ lib.optionals (pythonSupport && casadiSupport) [ python3Packages.casadi ];
 
   checkInputs = lib.optionals (pythonSupport && casadiSupport) [ python3Packages.matplotlib ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-      (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
-      (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
-      (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
-      (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-      # Disable test that fails on darwin
-      # https://github.com/stack-of-tasks/pinocchio/blob/42306ed023b301aafef91e2e76cb070c5e9c3f7d/flake.nix#L24C1-L27C17
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;pinocchio-example-py-casadi-quadrotor-ocp")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
+    (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+    (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
+    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+    # Disable test that fails on darwin
+    # https://github.com/stack-of-tasks/pinocchio/blob/42306ed023b301aafef91e2e76cb070c5e9c3f7d/flake.nix#L24C1-L27C17
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;pinocchio-example-py-casadi-quadrotor-ocp")
+  ];
 
   doCheck = true;
   pythonImportsCheck = [ "pinocchio" ];

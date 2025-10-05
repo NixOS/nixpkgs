@@ -36,29 +36,28 @@ mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs =
-    [
-      libuuid
-      libXtst
-      libXScrnSaver
-      libXfixes
-      alsa-lib
-      freetype
-      fontconfig
-      libXext
-      libGL
-      libpng
-      libxcb
-      libpulseaudio
-      libdrm
-      glib # For libgobject
-      stdenv.cc.cc # For libstdc++
-      xorg.libX11
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-    ]);
+  buildInputs = [
+    libuuid
+    libXtst
+    libXScrnSaver
+    libXfixes
+    alsa-lib
+    freetype
+    fontconfig
+    libXext
+    libGL
+    libpng
+    libxcb
+    libpulseaudio
+    libdrm
+    glib # For libgobject
+    stdenv.cc.cc # For libstdc++
+    xorg.libX11
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+  ]);
 
   unpackPhase = ''
     rpmextract $src

@@ -36,19 +36,7 @@ lib.fix (
                 tag = new.version;
                 hash = "sha256-13/QbA//wyHE9yMB7Jy/sJEyqPKxiMN+CZwSc4U6okU=";
               };
-            }
-          );
-
-          # the redis python library only supports hiredis 3+ from version 5.1.0 onwards
-          hiredis = super.hiredis.overrideAttrs (
-            new:
-            { src, ... }:
-            {
-              version = "3.1.0";
-              src = src.override {
-                tag = new.version;
-                hash = "sha256-ID5OJdARd2N2GYEpcYOpxenpZlhWnWr5fAClAgqEgGg=";
-              };
+              patches = [ ];
             }
           );
         })

@@ -13,7 +13,7 @@
   withGoolm ? false,
 }:
 let
-  version = "0.2.0";
+  version = "0.2.3";
 in
 buildGoModule {
   pname = "mautrix-slack";
@@ -23,16 +23,16 @@ buildGoModule {
     owner = "mautrix";
     repo = "slack";
     tag = "v${version}";
-    hash = "sha256-y6DsojQQAQkAB4puhk3DLheVvjn0puoYvzoX1H7gBEM=";
+    hash = "sha256-gR5D2uCNS+LiP0KXup/iIiOThWohzeBe4CD/oWak1BM=";
   };
 
-  vendorHash = "sha256-1aYg6wDG2hzUshtHs9KiJDAFb4OM1oupUJAh3LR4KxY=";
+  vendorHash = "sha256-aukL6RThtWcznz/x25btTTvloYkRZ/vhAQj1hOdI1U4=";
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

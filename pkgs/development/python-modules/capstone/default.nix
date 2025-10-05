@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "capstone";
   version = lib.getVersion capstone;
+  format = "setuptools";
 
   src = capstone.src;
   sourceRoot = "${src.name}/bindings/python";

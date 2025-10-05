@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "gotags";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "jstemmer";
-    repo = pname;
+    repo = "gotags";
     rev = "4c0c4330071a994fbdfdff68f412d768fbcca313";
     hash = "sha256-cHTgt+zW6S6NDWBE6NxSXNPdn84CLD8WmqBe+uXN8sA=";
   };

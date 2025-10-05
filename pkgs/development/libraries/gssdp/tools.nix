@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gssdp-device-sniffer";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
-    maintainers = gssdp_1_6.meta.maintainers;
+    teams = gssdp_1_6.meta.teams;
     platforms = platforms.all;
   };
 }

@@ -4,29 +4,26 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  hatchling,
   jinja2,
   pillow,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap5";
-  version = "25.1";
+  version = "25.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap5";
-    rev = "v${version}";
-    hash = "sha256-5VYw9Kq33/YFW9mFzkFzhrxavfx6r/CtC1SJhZbanhg=";
+    tag = "v${version}";
+    hash = "sha256-aqP2IkAkZsw5vbQxhiy9L3giSgb0seub9gsxPTajiXo=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [ django ];
 
@@ -40,7 +37,8 @@ buildPythonPackage rec {
     pillow
     pytest-django
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.app.settings
@@ -56,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bootstrap 5 integration with Django";
     homepage = "https://github.com/zostera/django-bootstrap5";
-    changelog = "https://github.com/zostera/django-bootstrap5/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/zostera/django-bootstrap5/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ netali ];
   };

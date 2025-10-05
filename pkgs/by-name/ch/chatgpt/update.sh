@@ -8,7 +8,7 @@ XML_DATA=$(curl -s $XML_URL)
 LATEST_VERSION=$(echo "$XML_DATA" | xmllint --xpath '/rss/channel/item[1]/*[local-name()="shortVersionString"]/text()' -)
 DOWNLOAD_URL=$(echo "$XML_DATA" | xmllint --xpath 'string(//item[1]/enclosure/@url)' -)
 
-HASH=$(nix-prefetch-url $DOWNLOAD_URL | xargs nix hash convert --hash-algo sha256)
+HASH=$(nix-prefetch-url $DOWNLOAD_URL | xargs nix --extra-experimental-features nix-command hash convert --hash-algo sha256)
 
 SOURCE_NIX="$(dirname ${BASH_SOURCE[0]})/source.nix"
 

@@ -6,6 +6,7 @@
   libjpeg,
   SDL2,
   libvorbis,
+  xorg,
 }:
 stdenv.mkDerivation {
   pname = "darkplaces";
@@ -22,6 +23,7 @@ stdenv.mkDerivation {
     zlib
     libjpeg
     SDL2
+    xorg.libX11
   ];
 
   buildFlags = [ "release" ];

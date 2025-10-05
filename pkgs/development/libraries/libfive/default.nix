@@ -3,31 +3,28 @@
   stdenv,
   wrapQtAppsHook,
   fetchFromGitHub,
-  fetchFromGitLab,
-  fetchpatch,
   unstableGitUpdater,
   cmake,
   ninja,
   pkg-config,
-  eigen,
+  eigen_3_4_0,
   zlib,
   libpng,
   boost,
   guile,
-  python,
+  python3,
   qtbase,
-  darwin,
 }:
 
 stdenv.mkDerivation {
   pname = "libfive";
-  version = "0-unstable-2024-10-10";
+  version = "0-unstable-2025-07-23";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "71899313d36ce14de6646ef760fa6bbc5c0cc067";
-    hash = "sha256-bA+4wGAygdbHcOMGFwNyzn2daQ8E7NeOTUF2Tr3RQww=";
+    rev = "e8370983e7bc6d49409affcc34fc70c673cc876f";
+    hash = "sha256-Jtf3yEnIySsLdSt5G3VdU3nUV55LHnES23fCAilXjNw=";
   };
 
   nativeBuildInputs = [
@@ -35,42 +32,17 @@ stdenv.mkDerivation {
     cmake
     ninja
     pkg-config
-    python.pkgs.pythonImportsCheckHook
+    python3.pkgs.pythonImportsCheckHook
   ];
   buildInputs = [
-    # reverts 'eigen: 3.4.0 -> 3.4.0-unstable-2022-05-19'
-    # https://github.com/nixos/nixpkgs/commit/d298f046edabc84b56bd788e11eaf7ed72f8171c
-    (eigen.overrideAttrs (old: rec {
-      version = "3.4.0";
-      src = fetchFromGitLab {
-        owner = "libeigen";
-        repo = "eigen";
-        rev = version;
-        hash = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
-      };
-      patches = (old.patches or [ ]) ++ [
-        # Fixes e.g. onnxruntime on aarch64-darwin:
-        # https://hydra.nixos.org/build/248915128/nixlog/1,
-        # originally suggested in https://github.com/NixOS/nixpkgs/pull/258392.
-        #
-        # The patch is from
-        # ["Fix vectorized reductions for Eigen::half"](https://gitlab.com/libeigen/eigen/-/merge_requests/699)
-        # which is two years old,
-        # but Eigen hasn't had a release in two years either:
-        # https://gitlab.com/libeigen/eigen/-/issues/2699.
-        (fetchpatch {
-          url = "https://gitlab.com/libeigen/eigen/-/commit/d0e3791b1a0e2db9edd5f1d1befdb2ac5a40efe0.patch";
-          hash = "sha256-8qiNpuYehnoiGiqy0c3Mcb45pwrmc6W4rzCxoLDSvj0=";
-        })
-      ];
-    }))
+    eigen_3_4_0
     zlib
     libpng
     boost
     guile
-    python
+    python3
     qtbase
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
+  ];
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \
@@ -87,11 +59,11 @@ stdenv.mkDerivation {
 
     substituteInPlace libfive/bind/python/CMakeLists.txt \
       --replace ' ''${PYTHON_SITE_PACKAGES_DIR}' \
-                " $out/${python.sitePackages}" \
+                " $out/${python3.sitePackages}" \
 
     substituteInPlace libfive/bind/python/libfive/ffi.py \
       --replace "os.path.join('libfive', folder)" \
-                "os.path.join('$out/${python.sitePackages}/libfive', folder)" \
+                "os.path.join('$out/${python3.sitePackages}/libfive', folder)" \
 
     export XDG_CACHE_HOME=$(mktemp -d)/.cache
   '';
@@ -119,14 +91,14 @@ stdenv.mkDerivation {
       ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
 
       # Create links since libfive looks for the library in a specific path.
-      mkdir -p "$out/${python.sitePackages}/libfive/src"
-      ln -s "$out"/lib/libfive.* "$out/${python.sitePackages}/libfive/src/"
-      mkdir -p "$out/${python.sitePackages}/libfive/stdlib"
-      ln -s "$out"/lib/libfive-stdlib.* "$out/${python.sitePackages}/libfive/stdlib/"
+      mkdir -p "$out/${python3.sitePackages}/libfive/src"
+      ln -s "$out"/lib/libfive.* "$out/${python3.sitePackages}/libfive/src/"
+      mkdir -p "$out/${python3.sitePackages}/libfive/stdlib"
+      ln -s "$out"/lib/libfive-stdlib.* "$out/${python3.sitePackages}/libfive/stdlib/"
 
       # Create links so Studio can find the bindings.
       mkdir -p "$out/libfive/bind"
-      ln -s "$out/${python.sitePackages}" "$out/libfive/bind/python"
+      ln -s "$out/${python3.sitePackages}" "$out/libfive/bind/python"
     '';
 
   pythonImportsCheck = [

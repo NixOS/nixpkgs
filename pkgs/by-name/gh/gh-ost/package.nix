@@ -3,17 +3,16 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  gh-ost,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-ost";
   version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-ost";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TTc69dWasqMVwwJNo+M9seMKEWgerZ2ZR7dwDfM1gWI=";
   };
 
@@ -22,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.AppVersion=${version}"
+    "-X main.AppVersion=${finalAttrs.version}"
   ];
 
   checkFlags =
@@ -37,7 +36,7 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.version = testers.testVersion {
-    package = gh-ost;
+    package = finalAttrs.finalPackage;
   };
 
   meta = {
@@ -47,4 +46,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "gh-ost";
   };
-}
+})

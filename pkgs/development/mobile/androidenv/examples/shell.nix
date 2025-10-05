@@ -2,7 +2,7 @@
   # If you copy this example out of nixpkgs, use these lines instead of the next.
   # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
   /*
-    nixpkgsSource ? (builtins.fetchTarball {
+    nixpkgsSource ? (fetchTarball {
       name = "nixpkgs-20.09";
       url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
       sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
@@ -45,12 +45,21 @@ let
   # The head unit only works on these platforms
   includeAuto = pkgs.stdenv.hostPlatform.isx86_64 || pkgs.stdenv.hostPlatform.isDarwin;
 
+  ndkVersions = [
+    "23.1.7779620"
+    "25.1.8937393"
+    "26.1.10909125"
+    "latest"
+  ];
+
   androidComposition = androidEnv.composeAndroidPackages {
     includeSources = true;
     includeSystemImages = false;
     includeEmulator = "if-supported";
     includeNDK = "if-supported";
+    inherit ndkVersions;
     useGoogleAPIs = true;
+    useGoogleTVAddOns = true;
 
     # Make sure everything from the last decade works since we are not using system images.
     numLatestPlatformVersions = 10;
@@ -74,13 +83,12 @@ let
       };
     */
 
-    includeExtras =
-      [
-        "extras;google;gcm"
-      ]
-      ++ pkgs.lib.optionals includeAuto [
-        "extras;google;auto"
-      ];
+    includeExtras = [
+      "extras;google;gcm"
+    ]
+    ++ pkgs.lib.optionals includeAuto [
+      "extras;google;auto"
+    ];
 
     # Accepting more licenses declaratively:
     extraLicenses = [
@@ -189,6 +197,12 @@ pkgs.mkShell rec {
               exit 1
             fi
           done
+
+          num_ndk_packages="$(echo "$installed_packages_section" | grep '^ndk;' | wc -l)"
+          if [ $num_ndk_packages -ne ${toString (pkgs.lib.length ndkVersions)} ]; then
+            echo "Invalid NDK package count: $num_ndk_packages"
+            exit 1
+          fi
 
           touch "$out"
         '';

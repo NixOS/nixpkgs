@@ -36,9 +36,6 @@ lib.recurseIntoAttrs rec {
     description = "Android SDK tools, packaged in Nixpkgs";
     license = lib.licenses.unfree;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      numinit
-      hadilq
-    ];
+    teams = [ lib.teams.android ];
   };
 }

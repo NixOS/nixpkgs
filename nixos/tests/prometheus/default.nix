@@ -1,14 +1,11 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-}:
+{ runTest }:
 
 {
-  alertmanager = import ./alertmanager.nix { inherit system pkgs; };
-  config-reload = import ./config-reload.nix { inherit system pkgs; };
-  federation = import ./federation.nix { inherit system pkgs; };
-  prometheus-pair = import ./prometheus-pair.nix { inherit system pkgs; };
-  pushgateway = import ./pushgateway.nix { inherit system pkgs; };
-  remote-write = import ./remote-write.nix { inherit system pkgs; };
+  alertmanager = runTest ./alertmanager.nix;
+  alertmanager-ntfy = runTest ./alertmanager-ntfy.nix;
+  config-reload = runTest ./config-reload.nix;
+  federation = runTest ./federation.nix;
+  prometheus-pair = runTest ./prometheus-pair.nix;
+  pushgateway = runTest ./pushgateway.nix;
+  remote-write = runTest ./remote-write.nix;
 }

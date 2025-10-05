@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentry-native";
-  version = "0.8.2";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
-    rev = version;
-    hash = "sha256-X5QA27y/7bJoGC1qDNhvbh5Cqm4StiZ9jkdsed+oVL4=";
+    tag = version;
+    hash = "sha256-1BZtlGeSnop0ti/XhrmDxzZOFwzS6bagcZ4+7tM5zEk=";
   };
 
   nativeBuildInputs = [
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     "-DSENTRY_BACKEND=breakpad"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/getsentry/sentry-native";
     description = "Sentry SDK for C, C++ and native applications";
     changelog = "https://github.com/getsentry/sentry-native/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       wheelsandmetal
       daniel-fahey
     ];

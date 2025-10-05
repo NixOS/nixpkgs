@@ -42,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ rc-zb ];
     mainProgram = "newlisp";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 })

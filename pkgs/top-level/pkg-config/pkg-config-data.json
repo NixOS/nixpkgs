@@ -4,11 +4,6 @@
     "minor": 1
   },
   "modules": {
-    "IL": {
-      "attrPath": [
-        "libdevil"
-      ]
-    },
     "ImageMagick": {
       "attrPath": [
         "imagemagick"
@@ -395,7 +390,7 @@
     },
     "javascriptcoregtk-4.0": {
       "attrPath": [
-        "webkitgtk"
+        "webkitgtk_4_0"
       ]
     },
     "lapack": {
@@ -726,11 +721,6 @@
         "openssl"
       ]
     },
-    "orte": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
     "panel": {
       "attrPath": [
         "ncurses"
@@ -837,12 +827,12 @@
     },
     "webkit2gtk-4.0": {
       "attrPath": [
-        "webkitgtk"
+        "webkitgtk_4_0"
       ]
     },
     "webkit2gtk-web-extension-4.0": {
       "attrPath": [
-        "webkitgtk"
+        "webkitgtk_4_0"
       ]
     },
     "x11": {

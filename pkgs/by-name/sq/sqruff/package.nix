@@ -3,39 +3,43 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
-  rust-jemalloc-sys,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sqruff";
-  version = "0.20.2";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
     tag = "v${version}";
-    hash = "sha256-Vlre3D1ydDqFdysf5no2rW2V2U/BimhCeV1vWZ2JPSM=";
+    hash = "sha256-bJmkHOACjdSXHE56okrIFERs1wK00XeyipdIFbRjIFI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-sFKq7CxQ7yoPqDQOR9Nr111RCiSA6bK50QvhHkaU5Go=";
+  cargoHash = "sha256-TxADMtapo6Pc4Z0MUkzkzUIrLnGa1DdZFzfTq4buF4g=";
 
-  buildInputs = [
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  # Disable the `python` feature which doesn't work on Nix yet
+  buildNoDefaultFeatures = true;
+  buildAndTestSubdir = "crates/cli";
 
-  # Patch the tests to find the binary
+  # Patch the tests to find the sqruff binary
   postPatch = ''
-    substituteInPlace crates/cli/tests/ui.rs \
+    substituteInPlace \
+      crates/cli/tests/config_not_found.rs \
+      crates/cli/tests/configure_rule.rs \
+      crates/cli/tests/fix_parse_errors.rs \
+      crates/cli/tests/fix_return_code.rs \
+      crates/cli/tests/ui_github.rs \
+      crates/cli/tests/ui_json.rs \
+      crates/cli/tests/ui.rs \
       --replace-fail \
       'sqruff_path.push(format!("../../target/{}/sqruff", profile));' \
       'sqruff_path.push(format!("../../target/${stdenv.hostPlatform.rust.cargoShortTarget}/{}/sqruff", profile));'
   '';
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

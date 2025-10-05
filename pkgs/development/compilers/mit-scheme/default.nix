@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchDebianPatch,
   lib,
   stdenv,
   makeWrapper,
@@ -42,6 +43,16 @@ stdenv.mkDerivation {
         url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
         sha256 = "035f92vni0vqmgj9hq2i7vwasz7crx52wll4823vhfkm1qdv5ywc";
       };
+
+  patches = [
+    (fetchDebianPatch {
+      pname = "mit-scheme";
+      version = "12.1";
+      debianRevision = "4";
+      patch = "0006-texi2any-_html-fix.patch";
+      hash = "sha256-tTAK/xRGubQeiqe1Nbo+m3CYmscXxQ8HAlIl4kSZxk8=";
+    })
+  ];
 
   buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libX11 ];
 

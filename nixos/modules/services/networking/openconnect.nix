@@ -81,7 +81,7 @@ let
           Extra config to be appended to the interface config. It should
           contain long-format options as would be accepted on the command
           line by `openconnect`
-          (see https://www.infradead.org/openconnect/manual.html).
+          (see <https://www.infradead.org/openconnect/manual.html>).
           Non-key-value options like `deflate` can be used by
           declaring them as booleans, i. e. `deflate = true;`.
         '';
@@ -159,5 +159,5 @@ in
     }) cfg.interfaces;
   };
 
-  meta.maintainers = with maintainers; [ alyaeanyx ];
+  meta.maintainers = with maintainers; [ pentane ];
 }

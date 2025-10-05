@@ -83,7 +83,7 @@ bootBash.runCommand "${pname}-${version}"
             ]
           );
         }
-        // (builtins.removeAttrs env [ "nativeBuildInputs" ])
+        // (removeAttrs env [ "nativeBuildInputs" ])
       );
 
     passthru.tests.get-version =
@@ -97,7 +97,7 @@ bootBash.runCommand "${pname}-${version}"
       description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
       homepage = "https://www.gnu.org/software/bash";
       license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
     };
   }

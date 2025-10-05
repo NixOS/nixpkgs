@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,13 +8,13 @@
 
 buildGoModule rec {
   pname = "roadrunner";
-  version = "2024.3.5";
+  version = "2025.1.3";
 
   src = fetchFromGitHub {
     repo = "roadrunner";
     owner = "roadrunner-server";
     tag = "v${version}";
-    hash = "sha256-zENTLo3jVOUE1yerIGTb+jFAMnClOVpU/IbUor+bi+g=";
+    hash = "sha256-+TA0ClPrmfksMchc4WgX2nMZetDuw8Q0xtbiHm2OMa4=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.buildTime=1970-01-01T00:00:00Z"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rr \
       --bash <($out/bin/rr completion bash) \
       --zsh <($out/bin/rr completion zsh) \
@@ -46,7 +47,9 @@ buildGoModule rec {
       --replace "127.0.0.1:0" "127.0.0.1:55554"
   '';
 
-  vendorHash = "sha256-/2MuuvWEyo6zY3op359BUjG/HcjKxRSIv7Qb+6vtNqM=";
+  __darwinAllowLocalNetworking = true;
+
+  vendorHash = "sha256-/u2so1/WXuQvLZhfRSYdG1QZasrA6xoZTE6lYXg9RWs=";
 
   meta = {
     changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${version}/CHANGELOG.md";
@@ -54,6 +57,6 @@ buildGoModule rec {
     homepage = "https://roadrunner.dev";
     license = lib.licenses.mit;
     mainProgram = "rr";
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

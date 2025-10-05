@@ -66,7 +66,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
@@ -98,6 +98,13 @@ in
             export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
           fi
         '') cfg.sessionPath}
+      ''
+      + lib.optionalString config.services.gnome.gcr-ssh-agent.enable ''
+        # Hack: https://bugzilla.redhat.com/show_bug.cgi?id=2250704 still
+        # applies to sessions not managed by systemd.
+        if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+        fi
       '';
 
       # Default services
@@ -107,7 +114,7 @@ in
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [
-        cinnamon-common
+        cinnamon
         cinnamon-screensaver
         nemo-with-extensions
         xapp
@@ -116,6 +123,7 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gvfs.enable = true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
@@ -158,7 +166,7 @@ in
             desktop-file-utils
 
             # common-files
-            cinnamon-common
+            cinnamon
             cinnamon-session
             cinnamon-desktop
             cinnamon-menus
@@ -169,7 +177,7 @@ in
 
             # session requirements
             cinnamon-screensaver
-            # cinnamon-killer-daemon: provided by cinnamon-common
+            # cinnamon-killer-daemon: provided by cinnamon
             networkmanagerapplet # session requirement - also nm-applet not needed
 
             # packages
@@ -217,7 +225,7 @@ in
 
       services.orca.enable = mkDefault (notExcluded pkgs.orca);
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

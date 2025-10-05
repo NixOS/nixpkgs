@@ -1,29 +1,26 @@
 {
   stdenv,
   lib,
-  fetchzip,
-  nix-update-script,
+  fetchurl,
   autoPatchelfHook,
   libxcrypt-legacy,
 }:
 
-let
-  system = stdenv.hostPlatform.parsed.cpu.name;
-  platform = "${system}-unknown-linux-gnu";
-in
 stdenv.mkDerivation rec {
   pname = "nav";
-  version = "1.2.1";
+  version = "1.4.5";
 
-  src = fetchzip {
-    url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${platform}.tar.gz";
+  src = fetchurl {
+    url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${stdenv.hostPlatform.parsed.cpu.name}-unknown-linux-gnu.tar.gz";
     sha256 =
       {
-        x86_64-linux = "sha256-ihn5wlagmujHlSfJpgojQNqa4NjLF1wk2pt8wHi60DY=";
-        aarch64-linux = "sha256-l3rKu3OU/TUUjmx3p06k9V5eN3ZDNcxbxObLqVQ2B7U=";
+        x86_64-linux = "sha256-N0C2rLKMNIgheNTjTStWOYliNuMKPPoxqtLAQSVV14Y=";
+        aarch64-linux = "sha256-kl+CtXXmgF9gU5auFIDCV2BOZFWh05XfE8OtbDBnrs0=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
+
+  sourceRoot = ".";
 
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [
@@ -40,7 +37,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Interactive and stylish replacement for ls & cd";

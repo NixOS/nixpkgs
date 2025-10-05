@@ -136,22 +136,21 @@ buildPerlPackage rec {
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
-  nativeCheckInputs =
-    [
-      curl
-      git
-      openssl
-      pkg-config
-      sqlite
-      xapian
-      EmailMIME
-      PlackTestExternalServer
-      TestSimple13
-      XMLTreePP
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      LinuxInotify2
-    ];
+  nativeCheckInputs = [
+    curl
+    git
+    openssl
+    pkg-config
+    sqlite
+    xapian
+    EmailMIME
+    PlackTestExternalServer
+    TestSimple13
+    XMLTreePP
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    LinuxInotify2
+  ];
   preCheck = ''
     perl certs/create-certs.perl
     export TEST_LEI_ERR_LOUD=1

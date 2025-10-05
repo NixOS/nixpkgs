@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  darwin,
 }:
 
 buildGoModule rec {
@@ -24,14 +22,6 @@ buildGoModule rec {
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreFoundation
-      IOKit
-    ]
-  );
-
   excludedPackages = [ "docs/node-mixin" ];
 
   ldflags = [
@@ -46,13 +36,13 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for machine metrics";
     mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
     changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin

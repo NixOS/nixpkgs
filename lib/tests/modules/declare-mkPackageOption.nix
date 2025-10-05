@@ -57,5 +57,19 @@ in
         };
       in
       lib.mkPackageOption myPkgs "hello" { };
+
+    packageInvalidIdentifier =
+      let
+        myPkgs."123"."with\"quote" = { inherit (pkgs) hello; };
+      in
+      lib.mkPackageOption myPkgs [ "123" "with\"quote" "hello" ] { };
+
+    packageInvalidIdentifierExample = lib.mkPackageOption pkgs "hello" {
+      example = [
+        "123"
+        "with\"quote"
+        "hello"
+      ];
+    };
   };
 }

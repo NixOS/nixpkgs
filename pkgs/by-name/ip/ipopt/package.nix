@@ -19,13 +19,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "ipopt";
-  version = "3.14.17";
+  version = "3.14.19";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
     rev = "releases/${version}";
-    sha256 = "sha256-0IRHryADQArhhtfbQjCy+EDvVRi/ywc51IwiQOfWlR4=";
+    sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
   };
 
   CXXDEFS = [
@@ -52,17 +52,16 @@ stdenv.mkDerivation rec {
     pkg-config
     gfortran
   ];
-  buildInputs =
-    [
-      blas
-      lapack
-    ]
-    ++ lib.optionals enableAMPL [ libamplsolver ]
-    ++ lib.optionals enableMUMPS [
-      mumps
-      mpi
-    ]
-    ++ lib.optionals enableSPRAL [ spral ];
+  buildInputs = [
+    blas
+    lapack
+  ]
+  ++ lib.optionals enableAMPL [ libamplsolver ]
+  ++ lib.optionals enableMUMPS [
+    mumps
+    mpi
+  ]
+  ++ lib.optionals enableSPRAL [ spral ];
 
   enableParallelBuilding = true;
 
@@ -71,6 +70,9 @@ stdenv.mkDerivation rec {
     homepage = "https://projects.coin-or.org/Ipopt";
     license = lib.licenses.epl10;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [
+      nim65s
+      qbisi
+    ];
   };
 }
