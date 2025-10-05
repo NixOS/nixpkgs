@@ -66,7 +66,7 @@ let
     in
     lib.assertMsg (
       matches == 1
-    ) "compressor ${ext} needs to have exactly one '{}', found ${builtins.toString matches}";
+    ) "compressor ${ext} needs to have exactly one '{}', found ${toString matches}";
   mkCmd =
     ext: prog:
     assert validProg ext prog;

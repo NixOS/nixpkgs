@@ -12,7 +12,7 @@ let
 
   variantHashes = import ./variants.nix;
   validVariants = map (lib.removePrefix "Iosevka") (
-    builtins.attrNames (builtins.removeAttrs variantHashes [ "Iosevka" ])
+    builtins.attrNames (removeAttrs variantHashes [ "Iosevka" ])
   );
 in
 stdenv.mkDerivation rec {

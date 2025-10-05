@@ -603,8 +603,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       overrides = self: super: {
         inherit (prevStage) ccWrapperStdenv cctools ld64;
 
-        binutils-unwrapped = builtins.throw "nothing in the Darwin bootstrap should depend on GNU binutils";
-        curl = builtins.throw "nothing in the Darwin bootstrap can depend on curl";
+        binutils-unwrapped = throw "nothing in the Darwin bootstrap should depend on GNU binutils";
+        curl = throw "nothing in the Darwin bootstrap can depend on curl";
 
         # Use this stage’s CF to build CMake. It’s required but can’t be included in the stdenv.
         cmake = self.cmakeMinimal;

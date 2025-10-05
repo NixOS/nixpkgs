@@ -185,7 +185,7 @@ let
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
-      urls = builtins.map (url: "${url}/${entry.url}") repositories;
+      urls = map (url: "${url}/${entry.url}") repositories;
       sha256 = entry.hash;
     };
   };

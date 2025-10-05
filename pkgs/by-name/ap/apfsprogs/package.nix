@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
           version = "v${finalAttrs.version}";
         };
       };
-      versionTestList = builtins.map mkVersionTest tools;
+      versionTestList = map mkVersionTest tools;
 
       versionTests = lib.mergeAttrsList versionTestList;
     in

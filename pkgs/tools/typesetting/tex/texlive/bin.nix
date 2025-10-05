@@ -250,7 +250,7 @@ rec {
       "man"
       "info"
     ]
-    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
     nativeBuildInputs = [
       pkg-config
@@ -493,7 +493,7 @@ rec {
       "man"
       "info"
     ]
-    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
     # some outputs of metapost, omegaware are for ptex/uptex
     ++ [
       "ptex"

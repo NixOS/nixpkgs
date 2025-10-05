@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-J7gyR7K1hauV+VrzoNzRrooLuSkjk8U6A3aFn9O2yFY=";
 
   strictDeps = true;
-  cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
+  cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;
   RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code";
   LIBCLANG_PATH = "${libclang.lib}/lib";
 

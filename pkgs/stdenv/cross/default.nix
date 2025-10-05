@@ -16,7 +16,7 @@ let
 
     # Ignore custom stdenvs when cross compiling for compatibility
     # Use replaceCrossStdenv instead.
-    config = builtins.removeAttrs config [ "replaceStdenv" ];
+    config = removeAttrs config [ "replaceStdenv" ];
   };
 
 in

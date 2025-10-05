@@ -77,7 +77,7 @@ let
   rewritePatch =
     { from, to }:
     patch:
-    runCommandLocal (builtins.baseNameOf patch)
+    runCommandLocal (baseNameOf patch)
       {
         inherit patch;
         nativeBuildInputs = [ patchutils ];
@@ -249,7 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
           ...
         }@args:
         let
-          args' = builtins.removeAttrs args [
+          args' = removeAttrs args [
             "owner"
             "repo"
             "rev"
@@ -276,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
           inherit hash;
           nvidia_x11 = finalAttrs.finalPackage;
           patches =
-            (builtins.map (rewritePatch {
+            (map (rewritePatch {
               from = "kernel";
               to = "kernel-open";
             }) patches)
