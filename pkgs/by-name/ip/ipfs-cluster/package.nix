@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipfs-cluster";
   version = "1.1.4";
 
@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ipfs-cluster";
     repo = "ipfs-cluster";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mdLrLiRNudpQ8i0lvwoNAqhSWJ8VMEC1ZRxXHWHpqLY=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
       jglukasik
     ];
   };
-}
+})
