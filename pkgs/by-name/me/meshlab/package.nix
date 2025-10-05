@@ -102,19 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     # ref. https://github.com/cnr-isti-vclab/meshlab/pull/1617
     # merged upstream
     ./1617_cmake-use-system-dependencies-install-exports.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./no-plist.patch
   ];
 
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/meshlab/CMakeLists.txt \
-        --replace-fail "set_additional_settings_info_plist(" "# set_additional_settings_info_plist(" \
-        --replace-fail "	TARGET meshlab" "#	TARGET meshlab" \
-        --replace-fail "	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)" \
-                       "#	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)"
-    '';
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
+  '';
 
   cmakeFlags = cmakeFlagsDisallowDownload;
 
