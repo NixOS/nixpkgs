@@ -34,14 +34,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.8.4";
+  version = "2025.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-L3CKfZGPEaMv9nmKX0S9qRXtZrfleQqgN3KHJjIEZew=";
+    hash = "sha256-9x4uf0gHCGYLq0gr0MoAp0sk9p82zdH41PaELph0fv0=";
   };
 
   patches = [
@@ -166,6 +166,14 @@ python.pkgs.buildPythonApplication rec {
     '';
 
   doInstallCheck = true;
+
+  disabledTests = [
+    # tries to import platformio, which is wrapped in an fhsenv
+    "test_clean_build"
+    "test_clean_build_empty_cache_dir"
+    # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
+    "test_run_platformio_cli_sets_environment_variables"
+  ];
 
   versionCheckProgramArg = "--version";
 

@@ -67,6 +67,11 @@ let
     pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
     pythonOnHostForHost = pkgsHostHost.${pythonAttr};
     pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
+
+    pythonABITags = [
+      "none"
+      "pypy${lib.concatStrings (lib.take 2 (lib.splitString "." pythonVersion))}_pp${sourceVersion.major}${sourceVersion.minor}"
+    ];
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";

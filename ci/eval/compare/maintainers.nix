@@ -22,7 +22,7 @@ let
   anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
   attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
-    (builtins.map (
+    (map (
       name:
       let
         # Some packages might be reported as changed on a different platform, but
@@ -46,7 +46,7 @@ let
   relevantFilenames =
     drv:
     (lib.lists.unique (
-      builtins.map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
+      map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
         builtins.filter (x: x != null) [
           ((drv.meta or { }).maintainersPosition or null)
           ((drv.meta or { }).teamsPosition or null)
@@ -73,7 +73,7 @@ let
       )
     ));
 
-  attrsWithFilenames = builtins.map (
+  attrsWithFilenames = map (
     pkg: pkg // { filenames = relevantFilenames pkg.package; }
   ) attrsWithMaintainers;
 
@@ -81,7 +81,7 @@ let
 
   listToPing = lib.concatMap (
     pkg:
-    builtins.map (maintainer: {
+    map (maintainer: {
       id = maintainer.githubId;
       inherit (maintainer) github;
       packageName = pkg.name;
@@ -92,7 +92,7 @@ let
   byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
-    maintainer: packages: builtins.map (pkg: pkg.packageName) packages
+    maintainer: packages: map (pkg: pkg.packageName) packages
   ) byMaintainer;
 in
 packagesPerMaintainer
