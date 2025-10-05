@@ -7,6 +7,7 @@
   testers,
 }:
 
+# Deprecated: unmaintained, no consumers in nixpkgs as of 2025-10-05, and doesn't compile with gcc 15.
 stdenv.mkDerivation (finalAttrs: {
   pname = "cuneiform";
   version = "1.1.0";
