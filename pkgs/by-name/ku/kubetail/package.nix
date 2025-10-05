@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubetail";
-  version = "1.6.20";
+  version = "1.6.21";
 
   src = fetchFromGitHub {
     owner = "johanhaleby";
     repo = "kubetail";
     rev = version;
-    sha256 = "sha256-RbbZHKXRtbs42cCbw+xb8TLul6ebUeCiNclMFF39c3M=";
+    sha256 = "sha256-Uzr63TkveJqfZl4USo0MNdlcvofxDp+o+reZmJG5F78=";
   };
 
   nativeBuildInputs = [
