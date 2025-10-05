@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kphotoalbum";
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/kphotoalbum/${finalAttrs.version}/kphotoalbum-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LLsQ66wKDg77nZUIxjcfzvC3AwLOtojuuDgkJm2dsww=";
+    hash = "sha256-fznB/B2VriB+Wt6ZxrPrNoJP45AuK1vV4ONpAHYwUlY=";
   };
 
   env.LANG = "C.UTF-8";
