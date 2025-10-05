@@ -1,7 +1,10 @@
-{ pkgs, ... }:
+{ hostPkgs, lib, ... }:
+let
+  inherit (hostPkgs.writers) writeJSON;
+in
 {
   name = "wiki-js";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
@@ -35,97 +38,91 @@
 
   testScript =
     let
-      payloads.finalize = pkgs.writeText "finalize.json" (
-        builtins.toJSON {
-          adminEmail = "webmaster@example.com";
-          adminPassword = "notapassword";
-          adminPasswordConfirm = "notapassword";
-          siteUrl = "http://localhost:3000";
-          telemetry = false;
+      payloads.finalize = writeJSON "finalize.json" {
+        adminEmail = "webmaster@example.com";
+        adminPassword = "notapassword";
+        adminPasswordConfirm = "notapassword";
+        siteUrl = "http://localhost:3000";
+        telemetry = false;
+      };
+      payloads.login = writeJSON "login.json" [
+        {
+          operationName = null;
+          extensions = { };
+          query = ''
+            mutation ($username: String!, $password: String!, $strategy: String!) {
+              authentication {
+                login(username: $username, password: $password, strategy: $strategy) {
+                  responseResult {
+                    succeeded
+                    errorCode
+                    slug
+                    message
+                    __typename
+                  }
+                  jwt
+                  mustChangePwd
+                  mustProvideTFA
+                  mustSetupTFA
+                  continuationToken
+                  redirect
+                  tfaQRImage
+                  __typename
+                }
+                __typename
+              }
+            }
+          '';
+          variables = {
+            password = "notapassword";
+            strategy = "local";
+            username = "webmaster@example.com";
+          };
         }
-      );
-      payloads.login = pkgs.writeText "login.json" (
-        builtins.toJSON [
-          {
-            operationName = null;
-            extensions = { };
-            query = ''
-              mutation ($username: String!, $password: String!, $strategy: String!) {
-                authentication {
-                  login(username: $username, password: $password, strategy: $strategy) {
-                    responseResult {
-                      succeeded
-                      errorCode
-                      slug
-                      message
-                      __typename
-                    }
-                    jwt
-                    mustChangePwd
-                    mustProvideTFA
-                    mustSetupTFA
-                    continuationToken
-                    redirect
-                    tfaQRImage
+      ];
+      payloads.content = writeJSON "content.json" [
+        {
+          extensions = { };
+          operationName = null;
+          query = ''
+            mutation ($content: String!, $description: String!, $editor: String!, $isPrivate: Boolean!, $isPublished: Boolean!, $locale: String!, $path: String!, $publishEndDate: Date, $publishStartDate: Date, $scriptCss: String, $scriptJs: String, $tags: [String]!, $title: String!) {
+              pages {
+                create(content: $content, description: $description, editor: $editor, isPrivate: $isPrivate, isPublished: $isPublished, locale: $locale, path: $path, publishEndDate: $publishEndDate, publishStartDate: $publishStartDate, scriptCss: $scriptCss, scriptJs: $scriptJs, tags: $tags, title: $title) {
+                  responseResult {
+                    succeeded
+                    errorCode
+                    slug
+                    message
+                    __typename
+                  }
+                  page {
+                    id
+                    updatedAt
                     __typename
                   }
                   __typename
                 }
+                __typename
               }
-            '';
-            variables = {
-              password = "notapassword";
-              strategy = "local";
-              username = "webmaster@example.com";
-            };
-          }
-        ]
-      );
-      payloads.content = pkgs.writeText "content.json" (
-        builtins.toJSON [
-          {
-            extensions = { };
-            operationName = null;
-            query = ''
-              mutation ($content: String!, $description: String!, $editor: String!, $isPrivate: Boolean!, $isPublished: Boolean!, $locale: String!, $path: String!, $publishEndDate: Date, $publishStartDate: Date, $scriptCss: String, $scriptJs: String, $tags: [String]!, $title: String!) {
-                pages {
-                  create(content: $content, description: $description, editor: $editor, isPrivate: $isPrivate, isPublished: $isPublished, locale: $locale, path: $path, publishEndDate: $publishEndDate, publishStartDate: $publishStartDate, scriptCss: $scriptCss, scriptJs: $scriptJs, tags: $tags, title: $title) {
-                    responseResult {
-                      succeeded
-                      errorCode
-                      slug
-                      message
-                      __typename
-                    }
-                    page {
-                      id
-                      updatedAt
-                      __typename
-                    }
-                    __typename
-                  }
-                  __typename
-                }
-              }
-            '';
-            variables = {
-              content = "# Header\n\nHello world!";
-              description = "";
-              editor = "markdown";
-              isPrivate = false;
-              isPublished = true;
-              locale = "en";
-              path = "home";
-              publishEndDate = "";
-              publishStartDate = "";
-              scriptCss = "";
-              scriptJs = "";
-              tags = [ ];
-              title = "Hello world";
-            };
-          }
-        ]
-      );
+            }
+          '';
+          variables = {
+            content = "# Header\n\nHello world!";
+            description = "";
+            editor = "markdown";
+            isPrivate = false;
+            isPublished = true;
+            locale = "en";
+            path = "home";
+            publishEndDate = "";
+            publishStartDate = "";
+            scriptCss = "";
+            scriptJs = "";
+            tags = [ ];
+            title = "Hello world";
+          };
+        }
+      ];
     in
     ''
       machine.start()
