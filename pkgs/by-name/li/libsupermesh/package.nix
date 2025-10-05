@@ -51,12 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ mpiCheckPhaseHook ];
 
-  # On aarch64-darwin platform, the test program segfault at the line
-  # https://github.com/firedrakeproject/libsupermesh/blob/09af7c9a3beefc715fbdc23e46fdc96da8169ff6/src/tests/test_parallel_p1_inner_product_2d.F90#L164
-  # in defining the lambda subroutine pack_data_b with variable field_b.
-  # This error is test source and compiler related and does not indicate broken functionality of libsupermesh.
-  doCheck = !(stdenv.hostPlatform.system == "aarch64-darwin");
-
   passthru = {
     tests = {
       pkg-config = testers.hasPkgConfigModules {
