@@ -16,7 +16,7 @@
   trimesh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "manifold3d";
   inherit (manifold) version src;
   pyproject = true;

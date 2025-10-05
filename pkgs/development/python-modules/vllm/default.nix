@@ -3,7 +3,7 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonAtLeast,
+  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   symlinkJoin,
@@ -115,8 +115,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "0e43e774597682284358ff2c54530757b654b8d1";
-      hash = "sha256-wxL/jtq/lsLg1o+4392KNgfw5TYlW6lqEVbmR3Jl4/Q=";
+      rev = "5f65b85703c7ed75fda01e06495077caad207c3f";
+      hash = "sha256-DO9EFNSoAgyfRRc095v1UjT+Zdzk4cFY0+n28FVEwI0=";
     };
 
     dontConfigure = true;
@@ -135,15 +135,15 @@ let
   vllm-flash-attn' = lib.defaultTo (stdenv.mkDerivation {
     pname = "vllm-flash-attn";
     # https://github.com/vllm-project/flash-attention/blob/${src.rev}/vllm_flash_attn/__init__.py
-    version = "2.7.4.post1";
+    version = "2.7.2.post1";
 
     # grep for GIT_TAG in the following file
     # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/vllm_flash_attn.cmake
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "57b4e68b9f9d94750b46de8f8dbd2bfcc86edd4f";
-      hash = "sha256-c7L7WZVVEnXMOTPBoSp7jhkl9d4TA4sj11QvOSWTDIE=";
+      rev = "ee4d25bd84e0cbc7e0b9b9685085fd5db2dcb62a";
+      hash = "sha256-2r0Habd/kBpvM4/aQFIYyj+uQAa3M9gjk3DcBZHFNfA=";
     };
 
     patches = [
@@ -167,7 +167,7 @@ let
       rm -rf csrc/cutlass
       ln -sf ${cutlass} csrc/cutlass
     ''
-    + lib.optionalString (rocmSupport) ''
+    + lib.optionalString rocmSupport ''
       rm -rf csrc/composable_kernel;
       ln -sf ${rocmPackages.composable_kernel} csrc/composable_kernel
     '';
@@ -179,7 +179,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.7.1/torch/utils/cpp_extension.py#L2343-L2345
+  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -204,8 +204,12 @@ let
         "10.0a"
         "10.1"
         "10.1a"
+        "10.3"
+        "10.3a"
         "12.0"
         "12.0a"
+        "12.1"
+        "12.1a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -245,6 +249,7 @@ let
   mergedCudaLibraries = with cudaPackages; [
     cuda_cudart # cuda_runtime.h, -lcudart
     cuda_cccl
+    libcurand # curand_kernel.h
     libcusparse # cusparse.h
     libcusolver # cusolverDn.h
     cuda_nvtx
@@ -266,11 +271,8 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.10.1.1";
+  version = "0.11.0";
   pyproject = true;
-
-  # https://github.com/vllm-project/vllm/issues/12083
-  disabled = pythonAtLeast "3.13";
 
   stdenv = torch.stdenv;
 
@@ -278,7 +280,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-lLNjBv5baER0AArX3IV4HWjDZ2jTGXyGIvnHupR8MGM=";
+    hash = "sha256-uYK/e9McEyrDTACMk5S0cGCjai9rf6HMR9dpPL7ISYc=";
   };
 
   patches = [
@@ -481,7 +483,12 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       happysalada
       lach
+      daniel-fahey
     ];
+    # Python 3.12 vLLM v0.10.2+CPU blake3 1.0.7 incompatibility
+    # discovered during https://github.com/NixOS/nixpkgs/pull/447722
+    # reported upstream in https://github.com/vllm-project/vllm/issues/26229
+    broken = (cpuSupport && pythonOlder "3.13");
     badPlatforms = [
       # CMake Error at cmake/cpu_extension.cmake:78 (find_isa):
       # find_isa Function invoked with incorrect arguments for function named:

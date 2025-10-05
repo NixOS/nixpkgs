@@ -17,6 +17,6 @@ melpaBuild rec {
     homepage = "https://gitweb.gentoo.org/proj/ebuild-mode.git/";
     description = "Major modes for Gentoo package files";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

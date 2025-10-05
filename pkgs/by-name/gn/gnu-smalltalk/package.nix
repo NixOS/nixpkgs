@@ -93,6 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

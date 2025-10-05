@@ -26,7 +26,7 @@
 #     ];
 # };
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "qogir-kde";
   version = "0-unstable-2024-12-21";
 

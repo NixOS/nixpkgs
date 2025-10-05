@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Collection of Sphinx extensions used by Canonical documentation";
     homepage = "https://pypi.org/project/canonical-sphinx-extensions";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

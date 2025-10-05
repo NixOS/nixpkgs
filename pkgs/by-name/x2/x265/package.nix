@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     cmake
     nasm
   ]
-  ++ lib.optionals (numaSupport) [ numactl ];
+  ++ lib.optionals numaSupport [ numactl ];
 
   cmakeFlags = [
     "-DENABLE_ALPHA=ON"

@@ -85,7 +85,7 @@ rec {
     (extensions: extensions // (import ./manuallyPackaged.nix { inherit callPackage; }))
     # Map the extension UUIDs to readable names
     (lib.attrValues)
-    (mapReadableNames)
+    mapReadableNames
     # Add some aliases
     (
       extensions:

@@ -42,6 +42,6 @@ buildPythonPackage rec {
       extra.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

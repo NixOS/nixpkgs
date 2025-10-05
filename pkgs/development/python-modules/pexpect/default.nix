@@ -9,7 +9,7 @@
   sage,
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "pexpect";
   version = "4.9.0";
   pyproject = true;
@@ -53,4 +53,4 @@ buildPythonPackage (rec {
       any platform that supports the standard Python pty module.
     '';
   };
-})
+}

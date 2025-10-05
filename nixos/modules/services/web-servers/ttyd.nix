@@ -77,7 +77,7 @@ in
 
   options = {
     services.ttyd = {
-      enable = lib.mkEnableOption ("ttyd daemon");
+      enable = lib.mkEnableOption "ttyd daemon";
 
       port = mkOption {
         type = types.port;

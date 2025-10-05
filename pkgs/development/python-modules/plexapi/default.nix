@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pkkid/python-plexapi";
     changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
