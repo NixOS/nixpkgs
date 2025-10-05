@@ -57,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # [1] https://github.com/civetweb/civetweb/blob/cafd5f8fae3b859b7f8c29feb03ea075c7221497/CMakeLists.txt#L56
     "-DCIVETWEB_THREAD_STACK_SIZE=0"
+
+    # Workaround CMake 4 compat
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
   meta = {
