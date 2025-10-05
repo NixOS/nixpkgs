@@ -11,7 +11,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   simple-websocket,
   tornado,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "python-engineio";
   version = "4.12.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
@@ -80,7 +77,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
     changelog = "https://github.com/miguelgrinberg/python-engineio/blob/${src.tag}/CHANGES.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };
 }
