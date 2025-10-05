@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -20,15 +19,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ps0uHgzPa+ZoXXrB+0gfuVIEBUNmym/ym6xCxiyHhxA=";
   };
-
-  patches = [
-    # https://github.com/the-lay/tiler/pull/24
-    (fetchpatch {
-      name = "unpin-setuptools-scm-dependency.patch";
-      url = "https://github.com/the-lay/tiler/commit/7a9f7e32c5f9c263c1ae28bfd19c7539556684cb.patch";
-      hash = "sha256-TMr3LJtiKUxJv2pAzAd8CWs3AtWsF0YS79NzKBN5TKM=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
