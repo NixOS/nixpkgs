@@ -2,14 +2,17 @@
   lib,
   stdenv,
   rustPlatform,
-  withRuffleTools ? false,
   fetchFromGitHub,
   jre_minimal,
   pkg-config,
   autoPatchelfHook,
   alsa-lib,
   wayland,
-  xorg,
+  libXcursor,
+  libXrandr,
+  libXi,
+  libX11,
+  libxcb,
   vulkan-loader,
   udev,
   libxkbcommon,
@@ -18,7 +21,10 @@
   curl,
   jq,
   nix-update,
+  withX11 ? true,
+  withRuffleTools ? false,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
   version = "0.2.0-nightly-2025-10-05";
@@ -75,17 +81,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     else
       null;
 
-  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
-    wayland
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libX11
-    xorg.libxcb
-    libxkbcommon
-    vulkan-loader
-    finalAttrs.openh264-241
-  ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (
+    [
+      wayland
+      libxkbcommon
+      vulkan-loader
+      finalAttrs.openh264-241
+    ]
+    ++ lib.optionals withX11 [
+      libXcursor
+      libXrandr
+      libXi
+      libX11
+      libxcb
+    ]
+  );
 
   postInstall = ''
     mv $out/bin/ruffle_desktop $out/bin/ruffle
