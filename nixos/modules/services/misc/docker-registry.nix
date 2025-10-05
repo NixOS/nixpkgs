@@ -143,11 +143,9 @@ in
       description = "Docker Container Registry";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      script = ''
-        ${cfg.package}/bin/registry serve ${configFile}
-      '';
 
       serviceConfig = {
+        ExecStart = "${lib.getExe cfg.package} serve ${configFile}";
         User = "docker-registry";
         WorkingDirectory = cfg.storagePath;
         AmbientCapabilities = lib.mkIf (cfg.port < 1024) "cap_net_bind_service";
