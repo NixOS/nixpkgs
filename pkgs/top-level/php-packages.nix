@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   config,
   callPackages,
   lib,
@@ -444,6 +445,14 @@ lib.makeScope pkgs.newScope (
               buildInputs = [ libxml2 ];
               configureFlags = [
                 "--enable-dom"
+              ];
+              patches = lib.optionals (lib.versionAtLeast php.version "8.4") [
+                # Fix build of ext-dom.
+                # https://github.com/php/php-src/pull/20023 (will be part of 8.4.14)
+                (fetchpatch {
+                  url = "https://github.com/php/php-src/commit/4fe040290da2822c70d3b60d30a2c1256264735d.patch";
+                  hash = "sha256-hCs59X5gCApXMjU9dKEtgdTJBHYq3BcKr9tlQjRCTIA=";
+                })
               ];
             }
             {
