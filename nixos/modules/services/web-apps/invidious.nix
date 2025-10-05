@@ -7,7 +7,6 @@
 }:
 let
   cfg = config.services.invidious;
-  isNew = lib.versionAtLeast config.system.stateVersion "25.11";
 
   inherit (lib) types;
 
