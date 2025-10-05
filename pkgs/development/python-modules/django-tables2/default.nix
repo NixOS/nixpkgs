@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   django,
@@ -23,17 +23,17 @@
 
 buildPythonPackage rec {
   pname = "django-tables2";
-  version = "2.7.1";
+  version = "2.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jieter";
     repo = "django-tables2";
     tag = "v${version}";
-    hash = "sha256-DhPQM/OEd8ViEm7cLbb/KCb6bjyoqKnbGOcqkTPRRxo=";
+    hash = "sha256-Cb8XhCLqhc2Dx/5uAHnN9zTVL6/1+WekC4qTloBurzM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ django ];
 
