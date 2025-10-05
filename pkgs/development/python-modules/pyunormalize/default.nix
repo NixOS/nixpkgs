@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pyunormalize";
-  version = "16.0.0";
+  version = "17.0.0";
   pyproject = true;
 
   # No tags on GitHub
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lh37tKEYFUrib3BxBCalKjZLkmyRkfdkYB9ajLEnYfc=";
+    hash = "sha256-CUmj5WgX4of+vK8bDMS1rfC7EHYo03kzWTgECUfux5I=";
   };
 
   build-system = [ setuptools ];
