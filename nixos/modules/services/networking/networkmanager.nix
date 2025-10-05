@@ -167,6 +167,18 @@ in
         '';
       };
 
+      nbft = mkOption {
+        type = lib.types.bool;
+        default = true; # Enable by default when libnvme is available
+        description = ''
+          Whether to enable NBFT (NVMe Boot Firmware Table) support in NetworkManager.
+          This allows NetworkManager to automatically configure network connections
+          for NVMe-over-Fabrics boot scenarios during early boot.
+
+          Only effective when NetworkManager is built with libnvme support.
+        '';
+      };
+
       package = mkPackageOption pkgs "networkmanager" { };
 
       connectionConfig = mkOption {
