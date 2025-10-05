@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  cmake,
+  meson,
   ninja,
   pkg-config,
 }:
@@ -28,13 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake
+    meson
     ninja
     pkg-config
-  ];
-
-  cmakeFlags = [
-    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
