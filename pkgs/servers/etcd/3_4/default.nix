@@ -41,6 +41,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/etcd-io/etcd/";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

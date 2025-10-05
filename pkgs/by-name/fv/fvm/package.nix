@@ -44,6 +44,6 @@ buildDartApplication {
     description = "Simple CLI to manage Flutter SDK versions";
     homepage = "https://github.com/leoafarias/fvm";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

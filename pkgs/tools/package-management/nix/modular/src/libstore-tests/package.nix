@@ -65,13 +65,13 @@ mkMesonExecutable (finalAttrs: {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
             buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          (''
+          ''
             export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}
             export NIX_REMOTE=$HOME/store
             ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage} \
               --gtest_filter=-${lib.concatStringsSep ":" finalAttrs.excludedTestPatterns}
             touch $out
-          '');
+          '';
     };
   };
 

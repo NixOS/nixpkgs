@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      withVtk = opencascade-occt.override ({ withVtk = true; });
+      withVtk = opencascade-occt.override { withVtk = true; };
     };
   };
 

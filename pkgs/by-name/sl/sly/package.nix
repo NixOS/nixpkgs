@@ -48,7 +48,7 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://github.com/kra-mo/Sly";
     mainProgram = "sly";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

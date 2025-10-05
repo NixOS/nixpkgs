@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/ericniebler/range-v3/releases/tag/${version}";
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

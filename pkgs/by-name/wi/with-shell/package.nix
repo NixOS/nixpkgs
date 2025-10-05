@@ -71,7 +71,7 @@ stdenv.mkDerivation {
       To exit use either :q or :exit.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "with";
   };
