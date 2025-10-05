@@ -904,6 +904,7 @@ let
       # Enable staging drivers.  These are somewhat experimental, but
       # they generally don't hurt.
       STAGING = yes;
+      STAGING_MEDIA = yes;
     };
 
     proc-events = {
