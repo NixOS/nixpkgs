@@ -36,7 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/jfernandez/mdserve";
     changelog = "https://github.com/jfernandez/mdserve/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vinnymeller ];
+    maintainers = with lib.maintainers; [
+      vinnymeller
+      matthiasbeyer
+    ];
     mainProgram = "mdserve";
   };
 })
