@@ -17,15 +17,15 @@
   enableStatic ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yara";
-  version = "4.5.2";
+  version = "4.5.4";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
-    tag = "v${version}";
-    hash = "sha256-ryRbLXnhC7nAxtlhr4bARxmNdtPhpvGKwlOiYPYPXOE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vSwjP0wbC65jEOxY9zrHAV1gEhcZ96emqvkuUw20Twc=";
   };
 
   nativeBuildInputs = [
@@ -54,13 +54,18 @@ stdenv.mkDerivation rec {
 
   doCheck = enableStatic;
 
+  # bin/yara contain forbidden references to /build/.
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/bin/yara
+  '';
+
   meta = {
     description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
-    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
+    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yara";
     platforms = lib.platforms.all;
   };
-}
+})

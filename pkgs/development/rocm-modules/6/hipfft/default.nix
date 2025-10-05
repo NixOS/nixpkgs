@@ -22,7 +22,7 @@
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "6.3.3";
+  version = "6.4.3";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Jq/YHEtOo7a0/Ki7gxZATKmSqPU6cyLf5gx3A4MAZNw=";
+    hash = "sha256-4W93OOKTqNteoQ4GKycr06cjvGy5NF7RR08F+rfn+0o=";
     fetchSubmodules = true;
   };
 

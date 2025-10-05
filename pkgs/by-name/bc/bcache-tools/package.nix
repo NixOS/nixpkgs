@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
         -e "/INSTALL.*initcpio\/install/d" \
         -e "/INSTALL.*dracut\/module-setup.sh/d" \
         -e "/INSTALL.*probe-bcache/d" \
+        -e "s/pkg-config/$PKG_CONFIG/" \
         -i Makefile
     # * Remove probe-bcache which is handled by util-linux
     sed -e "/probe-bcache/d" \

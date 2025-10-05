@@ -29,10 +29,6 @@ mkLibretroCore {
 
   extraNativeBuildInputs = [ cmake ];
 
-  # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
-  # making the build fail, as that path does not exist
-  dontFixCmake = true;
-
   # https://github.com/libretro/citra/blob/a31aff7e1a3a66f525b9ea61633d2c5e5b0c8b31/.gitlab-ci.yml#L6
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TESTS" false)

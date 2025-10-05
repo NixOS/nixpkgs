@@ -9,7 +9,7 @@
   bzip2,
   zstd,
   spdlog,
-  tbb_2022,
+  onetbb,
   openssl,
   boost,
   libpqxx,
@@ -35,7 +35,6 @@ let
     cp -r ${rapidcheck.dev}/* $out
   '';
   catch2 = catch2_3;
-  tbb = tbb_2022;
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
@@ -100,7 +99,7 @@ stdenv.mkDerivation rec {
     bzip2
     zstd
     spdlog
-    tbb
+    onetbb
     openssl
     boost
     libpqxx
@@ -135,7 +134,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
+    install_name_tool -add_rpath ${onetbb}/lib $out/lib/libtiledb.dylib
   '';
 
   meta = {

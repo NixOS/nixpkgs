@@ -63,7 +63,7 @@ buildFHSEnv {
           libepoxy
           lz4
           lz4.dev
-          tbb
+          onetbb
           libxkbcommon
           librealsense
           boost

@@ -1138,6 +1138,12 @@ self: super: with self; {
 
   audiotools = callPackage ../development/python-modules/audiotools { };
 
+  audit = toPythonModule (
+    pkgs.audit.override {
+      python3Packages = self;
+    }
+  );
+
   auditok = callPackage ../development/python-modules/auditok { };
 
   auditwheel = callPackage ../development/python-modules/auditwheel {
@@ -4691,8 +4697,6 @@ self: super: with self; {
 
   embrace = callPackage ../development/python-modules/embrace { };
 
-  embreex = callPackage ../development/python-modules/embreex { };
-
   emcee = callPackage ../development/python-modules/emcee { };
 
   emoji = callPackage ../development/python-modules/emoji { };
@@ -8129,6 +8133,8 @@ self: super: with self; {
 
   lektricowifi = callPackage ../development/python-modules/lektricowifi { };
 
+  lerobot = callPackage ../development/python-modules/lerobot { };
+
   letpot = callPackage ../development/python-modules/letpot { };
 
   leveldb = callPackage ../development/python-modules/leveldb { };
@@ -8968,9 +8974,7 @@ self: super: with self; {
     callPackage ../development/python-modules/marionette-harness/manifestparser.nix
       { };
 
-  manifold3d = callPackage ../development/python-modules/manifold3d {
-    inherit (pkgs.manifold.passthru) tbb;
-  };
+  manifold3d = callPackage ../development/python-modules/manifold3d { };
 
   manim = callPackage ../development/python-modules/manim { };
 
@@ -15512,7 +15516,7 @@ self: super: with self; {
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
-  qdldl = callPackage ../development/python-modules/qdldl { };
+  qdldl = callPackage ../development/python-modules/qdldl { inherit (pkgs) qdldl; };
 
   qdrant-client = callPackage ../development/python-modules/qdrant-client { };
 
