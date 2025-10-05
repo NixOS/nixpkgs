@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ayatana indiator exporting the network settings menu through D-Bus";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-indicator-network";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];

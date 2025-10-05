@@ -7823,8 +7823,6 @@ self: super: with self; {
     callPackage ../development/python-modules/keyrings-google-artifactregistry-auth
       { };
 
-  keyrings-passwordstore = callPackage ../development/python-modules/keyrings-passwordstore { };
-
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
 
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
@@ -8899,8 +8897,6 @@ self: super: with self; {
   macfsevents = callPackage ../development/python-modules/macfsevents { };
 
   macholib = callPackage ../development/python-modules/macholib { };
-
-  macropy = callPackage ../development/python-modules/macropy { };
 
   maec = callPackage ../development/python-modules/maec { };
 
@@ -11202,8 +11198,6 @@ self: super: with self; {
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
-
-  orderedset = callPackage ../development/python-modules/orderedset { };
 
   orderly-set = callPackage ../development/python-modules/orderly-set { };
 
@@ -17802,8 +17796,6 @@ self: super: with self; {
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
-
-  subunit2sql = callPackage ../development/python-modules/subunit2sql { };
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 

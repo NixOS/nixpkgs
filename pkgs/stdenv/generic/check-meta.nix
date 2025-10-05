@@ -308,7 +308,7 @@ let
 
       and is missing the following outputs:
 
-      ${concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
+      ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
   handleEvalIssue =

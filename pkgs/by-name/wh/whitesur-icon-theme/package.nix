@@ -61,7 +61,7 @@ lib.checkListOfEnum "${pname}: theme variants"
 
       ./install.sh --dest $out/share/icons \
         --name WhiteSur \
-        --theme ${builtins.toString themeVariants} \
+        --theme ${toString themeVariants} \
         ${lib.optionalString alternativeIcons "--alternative"} \
         ${lib.optionalString boldPanelIcons "--bold"} \
 

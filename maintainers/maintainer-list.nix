@@ -3918,6 +3918,12 @@
     name = "Builditluc";
     keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
   };
+  burmudar = {
+    email = "william.bezuidenhout@gmail.com";
+    github = "burmudar";
+    githubId = 1001709;
+    name = "William Bezuidenhout";
+  };
   buurro = {
     email = "marcoburro98@gmail.com";
     github = "buurro";
@@ -14283,6 +14289,11 @@
     github = "lasandell";
     githubId = 2034420;
     name = "Luke Sandell";
+  };
+  lasantosr = {
+    github = "lasantosr";
+    githubId = 5946707;
+    name = "Luis Santos";
   };
   lassulus = {
     email = "lassulus@gmail.com";

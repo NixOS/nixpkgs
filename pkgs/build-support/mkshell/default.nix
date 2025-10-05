@@ -29,7 +29,7 @@ let
       # this leaves actual dependencies of the derivations in `inputsFrom`, but never the derivations themselves
       (lib.subtractLists inputsFrom (lib.flatten (lib.catAttrs name inputsFrom)));
 
-  rest = builtins.removeAttrs attrs [
+  rest = removeAttrs attrs [
     "name"
     "packages"
     "inputsFrom"

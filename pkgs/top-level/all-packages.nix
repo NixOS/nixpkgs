@@ -3622,7 +3622,7 @@ with pkgs;
     toPythonApplication (
       nvchecker.overridePythonAttrs (oldAttrs: {
         propagatedBuildInputs =
-          oldAttrs.propagatedBuildInputs ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
+          oldAttrs.dependencies ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
       })
     );
 
@@ -6009,16 +6009,6 @@ with pkgs;
   php82Extensions = recurseIntoAttrs php82.extensions;
   php82Packages = recurseIntoAttrs php82.packages;
 
-  # Import PHP81 interpreter, extensions and packages
-  php81 = callPackage ../development/interpreters/php/8.1.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    pcre2 = pcre2.override {
-      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-    };
-  };
-  php81Extensions = recurseIntoAttrs php81.extensions;
-  php81Packages = recurseIntoAttrs php81.packages;
-
   polyml = callPackage ../development/compilers/polyml { };
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
   polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
@@ -8214,7 +8204,7 @@ with pkgs;
         py
       ];
       # Avoid update.nix/tests conflicts with libxml2.
-      passthru = builtins.removeAttrs libxml2.passthru [
+      passthru = removeAttrs libxml2.passthru [
         "updateScript"
         "tests"
       ];
@@ -12407,10 +12397,6 @@ with pkgs;
   pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
-
-  qiv = callPackage ../applications/graphics/qiv {
-    imlib2 = imlib2Full;
-  };
 
   # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules

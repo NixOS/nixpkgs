@@ -275,7 +275,7 @@ rec {
               drvPath = builtins.unsafeDiscardStringContext pkg.drvPath;
               license = pkg.meta.license or null;
             in
-            builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@" val;
+            builtins.trace "@:drv:${toString drvPath}:${toString license}:@" val;
         in
         pkg
         // {

@@ -20,7 +20,7 @@ buildNpmPackage (finalAttrs: {
     rm -rf $out/lib
   '';
 
-  meta = (builtins.removeAttrs llama-swap.meta [ "mainProgram" ]) // {
+  meta = (removeAttrs llama-swap.meta [ "mainProgram" ]) // {
     description = "${llama-swap.meta.description} - UI";
   };
 })

@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
               rsync --archive --mkpath --chmod=a+w ${finalAttrs.finalPackage}/ $out/
 
               # Symlink the data derivation to the default data path
-              mkdir -p ${builtins.dirOf Default_Data_Path}
+              mkdir -p ${dirOf Default_Data_Path}
               ln -s ${dataDerivation} ${Default_Data_Path}
 
               # Fix `error: suspicious ownership or permission on '/nix/store/xxx-0.0.0' for output 'out'; rejecting this build output`

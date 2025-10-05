@@ -394,6 +394,7 @@ mapAliases ({
   keras-applications = throw "keras-applications has been removed because it's abandoned since 2022"; # added 2025-01-12
   keras-preprocessing = throw "keras-preprocessing has been removed because it's abandoned since 2024"; # added 2025-01-12
   keyring_24 = throw "keyring_24 has been removed, use keyring instead"; # added 2025-01-01
+  keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2505-05-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
@@ -427,6 +428,7 @@ mapAliases ({
   markdownsuperscript = throw "markdownsuperscript is unmaintained, use pymdown-extensions"; # added 2023-06-10
   mask-rcnn = throw "mask-rcnn has been removed as it is unmaintained and its dependency imgaug no longer builds"; # added 2023-07-10
   mac_alias = mac-alias; # added 2024-01-07
+  macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   MDP = mdp; # added 2023-02-19
   mdp = throw "mdp has been removed as it is unmaintained and broken"; # added 2024-11-23
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
@@ -504,6 +506,7 @@ mapAliases ({
   opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16
   opentracing = throw "The opentracing Python module was removed due to being unmaintained upstream. Use OpenTelemetry instead."; # Added 2024-12-09
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
+  orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
   paho-mqtt_1 = throw "paho-mqtt_1 was removed because no package depends on it anymore"; # added 2025-03-05
@@ -797,6 +800,7 @@ mapAliases ({
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23
   sqlsoup = throw "sqlsoup has been removed as it is incompatible with modern SQLAlchemy and unmaintained"; # added 2024-05-13
   subdownloader = throw "subdownloader has been removed, because it depended on pyqt4"; # added 2022-06-09
+  subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   suds-jurko = throw "suds-jurko has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-02-27
   supervise_api = supervise-api; # added 2023-10-11
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27

@@ -20,7 +20,7 @@ let
   mkMassRebuild =
     args:
     mkOption (
-      builtins.removeAttrs args [ "feature" ]
+      removeAttrs args [ "feature" ]
       // {
         type = args.type or (types.uniq types.bool);
         default = args.default or false;

@@ -86,7 +86,7 @@ let
       outputHashAlgo = if hash == "" then "sha256" else null;
       outputHashMode = "recursive";
     }
-    // builtins.removeAttrs args removedArgs
+    // removeAttrs args removedArgs
   );
 in
 

@@ -161,8 +161,8 @@ let
   findClangNostdlibincPatch =
     x:
     (
-      (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (builtins.baseNameOf x))
-      || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (builtins.baseNameOf x))
+      (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (baseNameOf x))
+      || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (baseNameOf x))
     );
   llvmTargetsFlag = "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${
     {
@@ -251,7 +251,7 @@ rec {
     }).overrideAttrs
       (old: {
         patches = builtins.filter (
-          x: !(lib.strings.hasSuffix "more-openbsd-program-headers.patch" (builtins.baseNameOf x))
+          x: !(lib.strings.hasSuffix "more-openbsd-program-headers.patch" (baseNameOf x))
         ) old.patches;
         dontStrip = profilableStdenv;
         nativeBuildInputs = old.nativeBuildInputs ++ [

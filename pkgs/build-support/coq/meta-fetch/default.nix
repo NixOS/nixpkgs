@@ -68,7 +68,7 @@ let
           {
             ext = "tar.gz";
             fmt = "tarball";
-            fetchfun = builtins.fetchTarball;
+            fetchfun = fetchTarball;
           };
     in
     with kind;

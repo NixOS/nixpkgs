@@ -980,7 +980,7 @@ stdenvNoCC.mkDerivation {
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC;
-    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+    default_hardening_flags_str = toString defaultHardeningFlags;
     inherit useMacroPrefixMap;
   }
   // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {

@@ -641,7 +641,7 @@ let
           teams = [ lib.teams.haskell ];
         };
         constituents = accumulateDerivations (
-          builtins.map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
+          map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
         );
       };
 
