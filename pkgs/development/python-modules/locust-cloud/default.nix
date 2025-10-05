@@ -1,11 +1,11 @@
 {
+  lib,
   buildPythonPackage,
   configargparse,
   fetchFromGitHub,
   gevent,
   hatch-vcs,
   hatchling,
-  lib,
   platformdirs,
   python-engineio,
   python-socketio,
@@ -39,6 +39,8 @@ buildPythonPackage rec {
     requests
     tomli
   ];
+
+  pythonImportsCheck = [ "locust_cloud" ];
 
   meta = {
     description = "Hosted version of Locust to run distributed load tests";
