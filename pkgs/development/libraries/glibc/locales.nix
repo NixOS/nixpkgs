@@ -31,13 +31,25 @@
   (
     finalAttrs: previousAttrs: {
 
-      builder = ./locales-builder.sh;
-
       outputs = [ "out" ];
 
-      LOCALEDEF_FLAGS = [
-        (if stdenv.hostPlatform.isLittleEndian then "--little-endian" else "--big-endian")
-      ];
+      env = (previousAttrs.env or { }) // {
+        LOCALEDEF_FLAGS = if stdenv.hostPlatform.isLittleEndian then "--little-endian" else "--big-endian";
+
+        # Glibc cannot have itself in its RPATH.
+        NIX_NO_SELF_RPATH = 1;
+      };
+
+      postConfigure = (previousAttrs.postConfigure or "") + ''
+        # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
+        # This has to be done *after* `configure' because it builds some
+        # test binaries.
+        export NIX_CFLAGS_LINK=
+        export NIX_LDFLAGS_BEFORE=
+
+        export NIX_DONT_SET_RPATH=1
+        unset CFLAGS
+      '';
 
       preBuild =
         (previousAttrs.preBuild or "")
