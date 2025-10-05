@@ -4,7 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   gawk,
-  gnum4,
   gnused,
   libxml2,
   libxslt,
@@ -26,6 +25,9 @@
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wrapGAppsHook3,
   zlib,
+
+  pkgsBuildBuild,
+  callPackage,
 }:
 {
   baseName ? "erlang",
@@ -37,7 +39,6 @@
     owner = "erlang";
     repo = "otp";
   },
-  enableHipe ? true,
   enableDebugInfo ? false,
   enableThreads ? true,
   enableSmpSupport ? true,
@@ -93,12 +94,14 @@ assert javacSupport -> openjdk11 != null;
 
 let
   inherit (lib)
-    optional
     optionals
     optionalAttrs
     optionalString
     ;
+  erlBuilder = pkgsBuildBuild.beam_minimal.interpreters."erlang_${lib.versions.major version}";
   wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
+
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
   major = builtins.head (builtins.splitVersion version);
 in
@@ -117,13 +120,15 @@ stdenv.mkDerivation (
 
     LANG = "C.UTF-8";
 
+    strictDeps = true;
+
     nativeBuildInputs = [
       makeWrapper
       perl
-      gnum4
-      libxslt
       libxml2
     ];
+
+    depsBuildBuild = [ perl libxslt ] ++ optionals isCross [ erlBuilder ];
 
     env = {
       # only build man pages and shell/IDE docs
@@ -138,7 +143,7 @@ stdenv.mkDerivation (
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
-    ++ optional systemdSupport systemd;
+    ++ optionals systemdSupport [ systemd ];
 
     debugInfo = enableDebugInfo;
 
@@ -148,9 +153,10 @@ stdenv.mkDerivation (
     postPatch = ''
       patchShebangs make
 
-      ${postPatch}
-    ''
-    + optionalString (lib.versionOlder "25" version) ''
+    '' + optionalString isCross ''
+      substituteInPlace erts/emulator/Makefile.in \
+        --replace-fail '`utils/find_cross_ycf`' '${pkgsBuildBuild.beam_minimal.interpreters.erlang}/lib/erlang/erts-*/bin/yielding_c_fun'
+    '' + postPatch + optionalString (lib.versionOlder "25" version) ''
       substituteInPlace lib/os_mon/src/disksup.erl \
         --replace-fail '"sh ' '"${runtimeShell} '
     '';
@@ -159,17 +165,17 @@ stdenv.mkDerivation (
       "--with-ssl=${lib.getOutput "out" opensslPackage}"
     ]
     ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
-    ++ optional enableThreads "--enable-threads"
-    ++ optional enableSmpSupport "--enable-smp-support"
-    ++ optional enableKernelPoll "--enable-kernel-poll"
-    ++ optional enableHipe "--enable-hipe"
-    ++ optional javacSupport "--with-javac"
-    ++ optional odbcSupport "--with-odbc=${unixODBC}"
-    ++ optional wxSupport "--enable-wx"
-    ++ optional systemdSupport "--enable-systemd"
-    ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
+    ++ optionals enableThreads [ "--enable-threads" ]
+    ++ optionals enableSmpSupport [ "--enable-smp-support" ]
+    ++ optionals enableKernelPoll [ "--enable-kernel-poll" ]
+    ++ optionals javacSupport [ "--with-javac" ]
+    ++ optionals odbcSupport [ "--with-odbc=${unixODBC}" ]
+    ++ optionals wxSupport [ "--enable-wx" ]
+    ++ optionals systemdSupport [ "--enable-systemd" ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ "--enable-darwin-64bit" ]
     # make[3]: *** [yecc.beam] Segmentation fault: 11
-    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
+    ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ "--disable-jit" ]
+    ++ optionals isCross [ "erl_xcomp_sysroot=${stdenv.cc.libc}" ]
     ++ configureFlags;
 
     # install-docs will generate and install manpages and html docs

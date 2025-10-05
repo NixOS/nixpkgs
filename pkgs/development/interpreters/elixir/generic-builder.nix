@@ -9,6 +9,7 @@
   coreutils,
   curl,
   bash,
+  pkgs,
   debugInfo ? false,
 }@inputs:
 
@@ -83,8 +84,13 @@ else
 
     inherit src version debugInfo;
 
-    nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ erlang ];
+
+    strictDeps = true;
+
+    # When cross-compiling, we need the host's erlang to run `escriptPath`, which
+    # is executed at build time, not the spliced `inputs.erlang`.
+    nativeBuildInputs = [ pkgs.beam_minimal.interpreters.erlang makeWrapper ];
 
     env = {
       LANG = "C.UTF-8";
@@ -95,7 +101,7 @@ else
     };
 
     preBuild = ''
-      patchShebangs ${escriptPath} || true
+      patchShebangs ${escriptPath}
     '';
 
     # copy stdlib source files for LSP access
