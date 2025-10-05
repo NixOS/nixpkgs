@@ -1,37 +1,38 @@
 {
   stdenv,
-  mkDerivation,
   lib,
   fetchFromBitbucket,
   cmake,
-  qtbase,
-  qttools,
+  libsForQt5,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "speedcrunch";
-  version = "unstable-2021-10-09";
+  version = "0.12-unstable-2024-12-02";
 
   src = fetchFromBitbucket {
     owner = "heldercorreia";
     repo = "speedcrunch";
-    rev = "74756f3438149c01e9edc3259b0f411fa319a22f";
-    sha256 = "sha256-XxQv+A5SfYXFIRK7yacxGHHne1Q93pwCGeHhchIKizU=";
+    rev = "db51fc5e547aa83834761d874d3518c06d0fec9e";
+    hash = "sha256-rnl4z/HU3lAF9Y1JvdM8LZWIV1NGfR4q5gOMxlNU2EA=";
   };
 
-  buildInputs = [
+  sourceRoot = "source/src";
+
+  buildInputs = with libsForQt5; [
     qtbase
     qttools
   ];
 
-  nativeBuildInputs = [ cmake ];
-
-  preConfigure = ''
-    cd src
-  '';
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ [
+    libsForQt5.wrapQtAppsHook
+  ];
 
   meta = with lib; {
-    homepage = "http://speedcrunch.org";
+    homepage = "https://speedcrunch.org";
     license = licenses.gpl2Plus;
     description = "Fast power user calculator";
     mainProgram = "speedcrunch";
@@ -44,7 +45,7 @@ mkDerivation {
     maintainers = with maintainers; [
       j0hax
     ];
-    inherit (qtbase.meta) platforms;
+    inherit (libsForQt5.qtbase.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }
