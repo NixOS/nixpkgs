@@ -201,28 +201,9 @@ with haskellLib;
     }
   );
 
-  # Expected test output for these accidentally checks the absolute location of the source directory
-  # https://github.com/dan-t/cabal-cargs/issues/9
-  cabal-cargs = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      "-p"
-      "!/FindCabalFilePure withoutSandbox/"
-      "-p"
-      "!/FromCabalFilePure withoutSandbox/"
-      "-p"
-      "!/FromLibSrcPure withoutSandbox/"
-      "-p"
-      "!/FromExeSrcFilePure withoutSandbox/"
-      "-p"
-      "!/FindCabalFilePure withSandbox/"
-      "-p"
-      "!/FromCabalFilePure withSandbox/"
-      "-p"
-      "!/FromLibSrcPure withSandbox/"
-      "-p"
-      "!/FromExeSrcFilePure withSandbox/"
-    ];
-  }) super.cabal-cargs;
+  # 2025-09-20: Too strict bound on filepath (<1.5)
+  # https://github.com/dan-t/cabal-cargs/issues/10
+  cabal-cargs = doJailbreak super.cabal-cargs;
 
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
@@ -274,10 +255,24 @@ with haskellLib;
         super
         // {
           # HLS 2.11: Too strict bound on Diff 1.0.
-          haskell-language-server = dontCheck (doJailbreak super.haskell-language-server);
+          haskell-language-server = lib.pipe super.haskell-language-server [
+            dontCheck
+            doJailbreak
+            (
+              if versionOlder self.ghc.version "9.10" || versionOlder "9.11" self.ghc.version then
+                addBuildDepends [
+                  self.apply-refact
+                  self.hlint
+                  self.refact
+                ]
+              else
+                lib.id
+            )
+          ];
         }
       )
     )
+    hlint
     fourmolu
     ormolu
     haskell-language-server
@@ -397,6 +392,14 @@ with haskellLib;
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # fpr-calc test suite depends on random >= 1.3
+  # see https://github.com/IntersectMBO/lsm-tree/issues/797
+  bloomfilter-blocked =
+    lib.warnIf (lib.versionAtLeast self.random.version "1.3")
+      "haskellPackages.bloomfilter-blocked: dontCheck can potentially be removed"
+      dontCheck
+      super.bloomfilter-blocked;
+
   # support for transformers >= 0.6
   lifted-base = appendPatch (fetchpatch {
     url = "https://github.com/basvandijk/lifted-base/commit/6b61483ec7fd0d5d5d56ccb967860d42740781e8.patch";
@@ -426,6 +429,10 @@ with haskellLib;
   # 2025-09-03: Allow QuickCheck >= 2.15
   # https://github.com/sw17ch/data-clist/pull/28
   data-clist = doJailbreak super.data-clist;
+
+  # 2025-09-20: Allow QuickCheck >= 2.15
+  # https://github.com/raehik/binrep/issues/14
+  binrep = warnAfterVersion "1.1.0" (doJailbreak super.binrep);
 
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
@@ -493,6 +500,10 @@ with haskellLib;
   ];
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
+
+  # 2025-09-20: Too strict upper bound on base (<4.20)
+  # https://github.com/phadej/regression-simple/issues/13
+  regression-simple = doJailbreak super.regression-simple;
 
   # Fix 32bit struct being used for 64bit syscall on 32bit platforms
   # https://github.com/haskellari/lukko/issues/15
@@ -866,8 +877,28 @@ with haskellLib;
   }) super.xml-picklers;
 
   # 2025-08-03: Too strict bounds on open-browser, data-default and containers
-  # https://github.com/lierdakil/pandoc-crossref/issues/478
-  pandoc-crossref = doJailbreak super.pandoc-crossref;
+  # https://github.com/lierdakil/pandoc-crossref/issues/478 krank:ignore-line
+  pandoc-crossref = lib.pipe super.pandoc-crossref [
+    (warnAfterVersion "0.3.21")
+    doJailbreak
+
+    # We are still using pandoc == 3.7.*
+    (appendPatch (
+      lib.warnIf (lib.versionAtLeast self.pandoc.version "3.8")
+        "haskellPackages.pandoc-crossref: remove revert of pandoc-3.8 patch"
+        pkgs.fetchpatch
+        {
+          name = "pandoc-crossref-revert-pandoc-3.8-highlight.patch";
+          url = "https://github.com/lierdakil/pandoc-crossref/commit/b0c35a59d5a802f6525407bfeb31699ffd0b4671.patch";
+          hash = "sha256-MIITL9Qr3+1fKf1sTwHzXPcYTt3YC+vr9CpMgqsBXlc=";
+          revert = true;
+        }
+    ))
+  ];
+
+  # Too strict bounds on QuickCheck (<2.15), containers (<0.7), hashable (<1.5), pandoc (<3.7)
+  # https://github.com/jaspervdj/patat/issues/194
+  patat = doJailbreak super.patat;
 
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
@@ -1705,32 +1736,22 @@ with haskellLib;
       # https://github.com/NixOS/nixpkgs/issues/198495
       (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
-  # Needs matching lsp-types
-  # Allow lens >= 5.3
-  lsp_2_4_0_0 = doDistribute (
-    doJailbreak (
-      super.lsp_2_4_0_0.override {
-        lsp-types = self.lsp-types_2_1_1_0;
-      }
-    )
-  );
-
-  # Needs matching lsp-types;
-  # Lift bound on sorted-list <0.2.2
-  lsp_2_1_0_0 = doDistribute (
-    doJailbreak (
-      super.lsp_2_1_0_0.override {
-        lsp-types = self.lsp-types_2_1_1_0;
-      }
-    )
-  );
-  # Lift bound on lens <5.3
-  lsp-types_2_1_1_0 = doDistribute (doJailbreak super.lsp-types_2_1_1_0);
-
-  # 2025-03-03: dhall-lsp-server-1.1.4 requires lsp-2.1.0.0
-  dhall-lsp-server = super.dhall-lsp-server.override {
-    lsp = self.lsp_2_1_0_0;
-  };
+  dhall-lsp-server = appendPatches [
+    # Add support for lsp >= 2.7
+    (pkgs.fetchpatch {
+      name = "dhall-lsp-server-lsp-2.7.patch";
+      url = "https://github.com/dhall-lang/dhall-haskell/commit/a621e1438df5865d966597e2e1b0bb37e8311447.patch";
+      sha256 = "sha256-7edxNIeIM/trl2SUXybvSzkscvr1kj5+tZF50IeTOgY=";
+      relative = "dhall-lsp-server";
+    })
+    # Fix build with text >= 2.1.2
+    (pkgs.fetchpatch {
+      name = "dhall-lsp-server-text-2.1.2.patch";
+      url = "https://github.com/dhall-lang/dhall-haskell/commit/9f2d4d44be643229784bfc502ab49184ec82bc05.patch";
+      hash = "sha256-cwNH5+7YY8UbA9zHhTRfVaqtIMowZGfFT5Kj+wSlapA=";
+      relative = "dhall-lsp-server";
+    })
+  ] super.dhall-lsp-server;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = lib.pipe super.reflex-dom-core [
@@ -2183,12 +2204,15 @@ with haskellLib;
 
   # stack-3.7.1 requires Cabal < 3.12
   stack =
+    let
+      stack' = super.stack.overrideScope (self: super: { hpack = self.hpack_0_38_1; });
+    in
     if lib.versionOlder self.ghc.version "9.10" then
-      super.stack
+      stack'
     else
       lib.pipe
         # to reduce rebuilds, don't override Cabal in the entire scope
-        ((super.stack.override { Cabal = self.Cabal_3_10_3_0; }).overrideScope (
+        ((stack'.override { Cabal = self.Cabal_3_10_3_0; }).overrideScope (
           self: super:
           let
             downgradeCabal =
@@ -2643,6 +2667,9 @@ with haskellLib;
   # 2025-08-06: Upper bounds on containers <0.7 and hedgehog < 1.5 too strict.
   hermes-json = doJailbreak super.hermes-json;
 
+  # Allow containers >= 0.7, https://github.com/nomeata/arbtt/issues/181
+  arbtt = doJailbreak super.arbtt;
+
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
   hexstring = overrideCabal (old: {
@@ -2688,7 +2715,6 @@ with haskellLib;
       let
         # We need to build purescript with these dependencies and thus also its reverse
         # dependencies to avoid version mismatches in their dependency closure.
-        # TODO: maybe unify with the spago overlay in configuration-nix.nix?
         purescriptOverlay = self: super: {
           # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
           # but it has a problem with parsing the `async` keyword.  It doesn't allow
@@ -3258,17 +3284,22 @@ with haskellLib;
   brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
   brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
 
-  # Floating point precision issues. Test suite is only checked on x86_64.
-  # https://github.com/tweag/monad-bayes/issues/368
-  monad-bayes = dontCheckIf (
-    let
-      inherit (pkgs.stdenv) hostPlatform;
-    in
-    !hostPlatform.isx86_64
-    # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
-    # also fails on Hydra
-    || hostPlatform.isDarwin
-  ) super.monad-bayes;
+  monad-bayes =
+    # Floating point precision issues. Test suite is only checked on x86_64.
+    # https://github.com/tweag/monad-bayes/issues/368
+    dontCheckIf
+      (
+        let
+          inherit (pkgs.stdenv) hostPlatform;
+        in
+        !hostPlatform.isx86_64
+        # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
+        # also fails on Hydra
+        || hostPlatform.isDarwin
+      )
+      # Too strict bounds on brick (<2.6), vty (<6.3)
+      # https://github.com/tweag/monad-bayes/issues/378
+      (doJailbreak super.monad-bayes);
 
   crucible =
     lib.pipe
