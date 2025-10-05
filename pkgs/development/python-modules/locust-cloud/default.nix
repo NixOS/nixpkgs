@@ -42,7 +42,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Hosted version of Locust to run distributed load tests";
-    homepage = "https://www.locust.cloud/";
+    homepage = "https://github.com/locustcloud/locust-cloud";
+    changelog = "https://github.com/locustcloud/locust-cloud/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ magicquark ];
   };
