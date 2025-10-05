@@ -6,15 +6,12 @@
   recurseIntoAttrs,
   symlinkJoin,
   fetchFromGitHub,
-  ffmpeg_4,
   boost179,
   opencv,
   libjpeg_turbo,
   python3Packages,
-  triton-llvm,
   openmpi,
   stdenv,
-  rocmGpuArches ? [ ],
 }:
 
 let
@@ -22,14 +19,16 @@ let
     self:
     let
       inherit (self) llvm;
+      origStdenv = stdenv;
       pyPackages = python3Packages;
       openmpi-orig = openmpi;
+      rocmClangStdenv = llvm.rocmClangStdenv;
     in
     {
-      inherit rocmGpuArches;
+      inherit rocmClangStdenv;
+      stdenv = rocmClangStdenv;
       buildTests = false;
       buildBenchmarks = false;
-      stdenv = llvm.rocmClangStdenv;
 
       rocmPath = self.callPackage ./rocm-path { };
       rocmUpdateScript = self.callPackage ./update.nix { };
@@ -37,38 +36,43 @@ let
       ## ROCm ##
       llvm = recurseIntoAttrs (
         callPackage ./llvm/default.nix {
-          inherit (self) rocm-device-libs rocm-runtime;
+          # rocm-device-libs is used for .src only
+          # otherwise would cause infinite recursion
+          inherit (self) rocm-device-libs;
         }
       );
       inherit (self.llvm) rocm-merged-llvm clang openmp;
 
-      rocm-core = self.callPackage ./rocm-core { };
+      rocm-core = self.callPackage ./rocm-core { stdenv = origStdenv; };
+
+      rocm-cmake = self.callPackage ./rocm-cmake { stdenv = origStdenv; };
+
+      rocm-device-libs = self.callPackage ./rocm-device-libs {
+        stdenv = origStdenv;
+        inherit (llvm) rocm-merged-llvm;
+      };
+
+      rocm-runtime = self.callPackage ./rocm-runtime {
+        stdenv = origStdenv;
+        inherit (llvm) rocm-merged-llvm;
+      };
+
+      rocm-comgr = self.callPackage ./rocm-comgr {
+        stdenv = origStdenv;
+        inherit (llvm) rocm-merged-llvm;
+      };
+
+      rocminfo = self.callPackage ./rocminfo { stdenv = origStdenv; };
+
       amdsmi = pyPackages.callPackage ./amdsmi {
         inherit (self) rocmUpdateScript;
       };
-
-      rocm-cmake = self.callPackage ./rocm-cmake { };
 
       rocm-smi = pyPackages.callPackage ./rocm-smi {
         inherit (self) rocmUpdateScript;
       };
 
-      rocm-device-libs = self.callPackage ./rocm-device-libs {
-        inherit (llvm) rocm-merged-llvm;
-      };
-
-      rocm-runtime = self.callPackage ./rocm-runtime {
-        inherit (llvm) rocm-merged-llvm;
-      };
-
-      rocm-comgr = self.callPackage ./rocm-comgr {
-        inherit (llvm) rocm-merged-llvm;
-      };
-
-      rocminfo = self.callPackage ./rocminfo { };
-
-      # Unfree
-      hsa-amd-aqlprofile-bin = self.callPackage ./hsa-amd-aqlprofile-bin { };
+      aqlprofile = self.callPackage ./aqlprofile { };
 
       rdc = self.callPackage ./rdc { };
 
@@ -76,17 +80,18 @@ let
 
       hip-common = self.callPackage ./hip-common { };
 
-      # Eventually will be in the LLVM repo
       hipcc = self.callPackage ./hipcc {
+        stdenv = origStdenv;
         inherit (llvm) rocm-merged-llvm;
       };
 
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr { };
 
-      aotriton = self.callPackage ./aotriton { inherit stdenv; };
+      aotriton = self.callPackage ./aotriton { stdenv = origStdenv; };
 
       hipify = self.callPackage ./hipify {
+        stdenv = origStdenv;
         inherit (llvm)
           clang
           rocm-merged-llvm
@@ -103,7 +108,6 @@ let
         inherit (llvm) clang;
       };
 
-      # Needs GCC
       roctracer = self.callPackage ./roctracer { };
 
       rocgdb = self.callPackage ./rocgdb { };
@@ -127,13 +131,6 @@ let
       mscclpp = self.callPackage ./mscclpp { };
 
       rccl = self.callPackage ./rccl { };
-
-      # RCCL with sanitizers and tests
-      # Can't have with sanitizer build as dep of other packages without
-      # runtime crashes due to ASAN not loading first
-      rccl-tests = self.callPackage ./rccl {
-        buildTests = true;
-      };
 
       hipcub = self.callPackage ./hipcub { };
 
@@ -194,7 +191,7 @@ let
 
       miopen-hip = self.miopen;
 
-      migraphx = self.callPackage ./migraphx { };
+      migraphx = self.callPackage ./migraphx { stdenv = origStdenv; };
 
       rpp = self.callPackage ./rpp { };
 
@@ -214,10 +211,8 @@ let
       };
 
       mivisionx = self.callPackage ./mivisionx {
+        stdenv = origStdenv;
         opencv = opencv.override { enablePython = true; };
-        # TODO: Remove this pin in ROCm 6.4+
-        # FFMPEG support was improved in https://github.com/ROCm/MIVisionX/pull/1460
-        ffmpeg = ffmpeg_4;
         # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice
         # See: https://github.com/ROCm/MIVisionX/issues/1051
         libjpeg_turbo = libjpeg_turbo.overrideAttrs {
@@ -275,7 +270,7 @@ let
         rocm-developer-tools = symlinkJoin {
           name = "rocm-developer-tools-meta";
           paths = [
-            hsa-amd-aqlprofile-bin
+            aqlprofile
             rocm-core
             rocr-debug-agent
             roctracer
@@ -298,7 +293,6 @@ let
           name = "rocm-ml-libraries-meta";
           paths = [
             llvm.clang
-            llvm.mlir
             llvm.openmp
             rocm-core
             miopen-hip
@@ -357,7 +351,6 @@ let
           paths = [
             rocm-core
             llvm.clang
-            llvm.mlir
             llvm.openmp # openmp-extras-devel (https://github.com/ROCm/aomp)
             rocm-language-runtime
           ];
@@ -389,7 +382,6 @@ let
             hipify
             rocm-cmake
             llvm.clang
-            llvm.mlir
             llvm.openmp
             rocm-runtime
             rocm-hip-runtime
@@ -440,6 +432,10 @@ let
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      hsa-amd-aqlprofile-bin = lib.warn ''
+        'hsa-amd-aqlprofile-bin' has been replaced by 'aqlprofile'.
+      '' self.aqlprofile; # Added 2025-08-27
+
       triton = throw ''
         'rocmPackages.triton' has been removed. Please use python3Packages.triton
       ''; # Added 2025-08-24
@@ -478,7 +474,7 @@ let
 in
 outer
 // builtins.listToAttrs (
-  builtins.map (arch: {
+  map (arch: {
     name = arch;
     value = scopeForArches [ arch ];
   }) outer.clr.gpuTargets

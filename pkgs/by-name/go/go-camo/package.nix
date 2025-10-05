@@ -9,16 +9,16 @@
 
 buildGo125Module rec {
   pname = "go-camo";
-  version = "2.6.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = "go-camo";
     tag = "v${version}";
-    hash = "sha256-+EHJIohHSWg12Tmn6hu1XUSVRyYWu3aFI7MF7+PnfFg=";
+    hash = "sha256-CuEnJcbLcehmAj+TCx3VbRLWhYhbzYaXfV6qweuoooA=";
   };
 
-  vendorHash = "sha256-rKdBAu0tNsxw7I66qjZhtrA2hs1qpBtOSuzq34paziw=";
+  vendorHash = "sha256-3Yl0x02KcYG5+FVuON54NlO+ehvgvywep4Hu9sQ6nN4=";
 
   nativeBuildInputs = [
     installShellFiles

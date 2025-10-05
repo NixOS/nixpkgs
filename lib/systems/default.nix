@@ -75,7 +75,7 @@ let
 
       # Those two will always be derived from "config", if given, so they should NOT
       # be overridden further down with "// args".
-      args = builtins.removeAttrs allArgs [
+      args = removeAttrs allArgs [
         "parsed"
         "system"
       ];
@@ -124,6 +124,8 @@ let
             "ucrt"
           else if final.isMinGW then
             "msvcrt"
+          else if final.isCygwin then
+            "cygwin"
           else if final.isWasi then
             "wasilibc"
           else if final.isWasm && !final.isWasi then
@@ -183,7 +185,7 @@ let
             sharedLibrary =
               if final.isDarwin then
                 ".dylib"
-              else if final.isWindows then
+              else if (final.isWindows || final.isCygwin) then
                 ".dll"
               else
                 ".so";
@@ -191,7 +193,7 @@ let
           // {
             staticLibrary = if final.isWindows then ".lib" else ".a";
             library = if final.isStatic then final.extensions.staticLibrary else final.extensions.sharedLibrary;
-            executable = if final.isWindows then ".exe" else "";
+            executable = if (final.isWindows || final.isCygwin) then ".exe" else "";
           };
         # Misc boolean options
         useAndroidPrebuilt = false;
@@ -204,6 +206,7 @@ let
             {
               linux = "Linux";
               windows = "Windows";
+              cygwin = "CYGWIN_NT";
               darwin = "Darwin";
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
@@ -603,7 +606,7 @@ let
               "openbsd"
             else if final.isSunOS then
               "sunos"
-            else if final.isWindows then
+            else if (final.isWindows || final.isCygwin) then
               "win32"
             else
               null;

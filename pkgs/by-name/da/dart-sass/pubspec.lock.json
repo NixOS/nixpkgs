@@ -94,11 +94,11 @@
       "dependency": "direct main",
       "description": {
         "name": "cli_pkg",
-        "sha256": "eeeea1e0773c5d53fb80a179f82f12c96c50487a37b3cf0174499eb9884c55b2",
+        "sha256": "da207d78c602f97fad700975282ea516dcb6bab97d20836287eac8fac563f3a5",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.12.0"
+      "version": "2.14.0"
     },
     "cli_repl": {
       "dependency": "direct main",
@@ -174,11 +174,11 @@
       "dependency": "transitive",
       "description": {
         "name": "dart_mappable",
-        "sha256": "15f41a35da8ee690bbfa0059fa241edeeaea73f89a2ba685b354ece07cd8ada6",
+        "sha256": "0e219930c9f7b9e0f14ae7c1de931c401875110fd5c67975b6b9492a6d3a531b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.6.0"
+      "version": "4.6.1"
     },
     "dart_style": {
       "dependency": "transitive",
@@ -474,11 +474,11 @@
       "dependency": "direct main",
       "description": {
         "name": "pool",
-        "sha256": "20fe868b6314b322ea036ba325e6fc0711a22948856475e2c2b6306e8ab39c2a",
+        "sha256": "978783255c543aa3586a1b3c21f6e9d720eb315376a915872c61ef8b5c20177d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.1"
+      "version": "1.5.2"
     },
     "protobuf": {
       "dependency": "direct main",

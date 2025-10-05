@@ -20,9 +20,9 @@ mkCoqDerivation {
       (case (range "8.8" "8.16") "0.11.6")
       (case (range "8.8" "8.14") "0.11.4")
       (case (range "8.8" "8.13") "0.11.3")
-      (case ("8.7") "0.9.7")
-      (case ("8.6") "0.9.5")
-      (case ("8.5") "0.9.4")
+      (case "8.7" "0.9.7")
+      (case "8.6" "0.9.5")
+      (case "8.5" "0.9.4")
     ] null;
   release."0.13.0".sha256 = "sha256-vqVSu+nyGjRVXe2tnE6MPl0kcg4LHfgFwRCpTQAP/is=";
   release."0.12.2".sha256 = "sha256-lSTlbpkSuAY6B9cqofXSlDk2VchtqfZpRQ0+y/BAbEY=";

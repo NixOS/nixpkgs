@@ -5,9 +5,11 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  electron,
+  electron_36,
 }:
-
+let
+  electron = electron_36;
+in
 buildNpmPackage rec {
   pname = "pocket-casts";
   version = "0.10.4";

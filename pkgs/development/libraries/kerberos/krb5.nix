@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   bootstrap_cmds,
   byacc, # can also use bison, but byacc has fewer dependencies
   keyutils,
@@ -42,6 +43,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-GogyuMrZI+u/E5T2fi789B46SfRgKFpm41reyPoAU68=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isFreeBSD [
+    (fetchpatch {
+      name = "fix-missing-ENODATA.patch";
+      url = "https://cgit.freebsd.org/ports/plain/security/krb5-122/files/patch-lib_krad_packet.c?id=0501f716c4aff7880fde56e42d641ef504593b7d";
+      extraPrefix = "";
+      hash = "sha256-l8ev+WrDKbTqwgBRYhfJGELkCCE8mJTqVHFBvvCPvgE=";
+    })
+  ];
+
   outputs = [
     "out"
     "lib"
@@ -51,10 +61,15 @@ stdenv.mkDerivation rec {
   # While "out" acts as the bin output, most packages only care about the lib output.
   # We set prefix such that all the pkg-config configuration stays inside the dev and lib outputs.
   # stdenv will take care of overriding bindir, sbindir, etc. such that "out" contains the binaries.
-  prefix = builtins.placeholder "lib";
+  prefix = placeholder "lib";
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isStatic {
-    NIX_CFLAGS_COMPILE = "-fcommon";
+  env = {
+    # The release 1.21.3 is not compatible with c23, which changed the meaning of
+    #
+    #     void foo();
+    #
+    # declaration.
+    NIX_CFLAGS_COMPILE = "-std=gnu17" + lib.optionalString stdenv.hostPlatform.isStatic " -fcommon";
   };
 
   configureFlags = [

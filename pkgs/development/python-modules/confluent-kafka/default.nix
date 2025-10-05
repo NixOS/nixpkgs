@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.11.0";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     tag = "v${version}";
-    hash = "sha256-s4UeuFXieyUcFJsYHTaJBKfUssYZ7mt4YoHgXN7bZKI=";
+    hash = "sha256-WpvWv6UG7T0yJ1ZKZweHbWjh+C0PbEIYbbMAS4yyhzg=";
   };
 
   buildInputs = [ rdkafka ];
@@ -82,6 +82,7 @@ buildPythonPackage rec {
       authlib
       cachetools
       httpx
+      orjson
     ];
   };
 
@@ -111,7 +112,7 @@ buildPythonPackage rec {
     "tests/schema_registry/_async/test_config.py"
     "tests/schema_registry/_sync/test_config.py"
     # crashes the test runner on shutdown
-    "tests/test_KafkaError.py"
+    "tests/test_kafka_error.py"
   ];
 
   meta = with lib; {

@@ -13,7 +13,7 @@
   libxml2,
   freetype,
   mmtf-cpp,
-  msgpack,
+  msgpack-cxx,
   qt5,
 }:
 let
@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail '"cmake>=3.13.3",' ""
   '';
 
-  env.PREFIX_PATH = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${msgpack}";
+  env.PREFIX_PATH = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${msgpack-cxx}";
   build-system = [ python3Packages.setuptools ];
   dontUseCmakeConfigure = true;
 
@@ -105,7 +105,7 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     mmtf-cpp
-    msgpack
+    msgpack-cxx
   ];
 
   dependencies = with python3Packages; [

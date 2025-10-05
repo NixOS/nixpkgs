@@ -5,6 +5,7 @@
   # native
   cmake,
   desktopToDarwinBundle,
+  dos2unix,
   pkg-config,
   wrapGAppsHook3,
   # not native
@@ -42,8 +43,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "saga-${version}/saga-gis";
 
+  postPatch = ''
+    dos2unix src/saga_core/saga_gui/res/org.saga_gis.saga_gui.desktop
+  '';
+
   nativeBuildInputs = [
     cmake
+    dos2unix
     wrapGAppsHook3
     pkg-config
   ]

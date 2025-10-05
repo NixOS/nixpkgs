@@ -56,7 +56,6 @@
   elfutils,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   gnutls,
-  iptables,
   withSelinux ? false,
   libselinux,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
@@ -200,12 +199,10 @@ let
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1734643670";
-
-  kbd' = if withPam then kbd else kbd.override { withVlock = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "257.8";
+  version = "258";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -213,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XQ+IyRar74qQij96CKClHXW0kkPnGeKUgA8ULiWh5YY=";
+    hash = "sha256-xtGZaVNsBNxkidgfVBu8xtvj0SxpY6OyJCUE+gq59qE=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -225,6 +222,18 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
+    # https://github.com/systemd/systemd/pull/39094
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/0f44a6c64aebc64a0611a605831206afee9cb730.patch";
+      hash = "sha256-DO6q17mE2U8iLezMYt4PX5Ror20N1gCrUbXeQmrW1is=";
+    })
+
+    # https://github.com/systemd/systemd/pull/39069
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/b5fdfedf729712b9824a5cb457a07d5699d2946c.patch";
+      hash = "sha256-0SvAn9Dl4z80PRIvDbIVIjKp5DsT/IUoHa5IiH1HHFY=";
+    })
+
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
@@ -373,6 +382,7 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
+      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -475,8 +485,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
 
     # Keyboard
-    (lib.mesonOption "loadkeys-path" "${kbd'}/bin/loadkeys")
-    (lib.mesonOption "setfont-path" "${kbd'}/bin/setfont")
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
 
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
@@ -577,7 +587,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
     (lib.mesonEnable "man" true)
-    # (lib.mesonEnable "nspawn" withNspawn) # nspawn build can be turned off on systemd 258, on 257.x it will just not be installed in systemdLibs but the build is unconditional
+    (lib.mesonEnable "nspawn" withNspawn)
 
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
@@ -854,7 +864,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (
       !buildLibsOnly
-    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+    ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
 
     runHook postInstallCheck
   '';
@@ -891,11 +901,7 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences =
     lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
       # 'or p' is for manually specified buildPackages as they dont have __spliced
-      (
-        builtins.filter (p: p != null) (
-          builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs
-        )
-      );
+      (builtins.filter (p: p != null) (map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs));
 
   disallowedRequisites = lib.optionals (!withUkify) [
     bash
@@ -928,9 +934,8 @@ stdenv.mkDerivation (finalAttrs: {
       withUtmp
       util-linux
       kmod
+      kbd
       ;
-
-    kbd = kbd';
 
     # Many TPM2-related units are only installed if this trio of features are
     # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
@@ -992,7 +997,6 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-journal
             systemd-journal-gateway
             systemd-journal-upload
-            systemd-lock-handler
             systemd-machinectl
             systemd-networkd
             systemd-networkd-bridge

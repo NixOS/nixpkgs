@@ -672,7 +672,6 @@ with lib.maintainers;
       mic92
       rorosen
       wrmilling
-      yajo
     ];
     scope = "Maintain K3s package, NixOS module, NixOS tests, update script";
     shortName = "K3s";
@@ -1174,6 +1173,15 @@ with lib.maintainers;
     scope = "Maintain core SDL libraries.";
     shortName = "SDL";
     enableFeatureFreezePing = true;
+  };
+
+  secshell = {
+    members = [
+      felbinger
+      juli0604
+    ];
+    scope = "Maintain packages and modules created by members of Secure Shell Networks.";
+    shortName = "secshell";
   };
 
   serokell = {

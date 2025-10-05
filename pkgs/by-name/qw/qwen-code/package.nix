@@ -10,13 +10,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.0.13";
+  version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h7CtdZap+D+qRzEvkXJq1Ui4SFg4ldWjqdna/7Ggokk=";
+    hash = "sha256-Rld6k0MPfOOncK240zOJbcvheV4UKU2yF7luBrTrnFs=";
   };
 
   patches = [
@@ -25,7 +25,7 @@ buildNpmPackage (finalAttrs: {
     ./add-missing-resolved-integrity-fields.patch
   ];
 
-  npmDepsHash = "sha256-ClLXCjcFahbMerkyz3AZ12kiJU8CzUEvd9tYpK6BRUE=";
+  npmDepsHash = "sha256-43s13HncNKv4uOKVwNvqIF+Ih3rJBWrpVJnE3hCKD2w=";
 
   nativeBuildInputs = [
     jq

@@ -15,7 +15,6 @@
   libcxx,
   linuxHeaders,
   freebsd,
-  libxcrypt,
 
   # Some platforms have switched to using compiler-rt, but still want a
   # libgcc.a for ABI compat purposes. The use case would be old code that
@@ -47,7 +46,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "compiler-rt${lib.optionalString (haveLibc) "-libc"}";
+  pname = "compiler-rt${lib.optionalString haveLibc "-libc"}";
   inherit version;
 
   src =
@@ -102,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NIX_CFLAGS_COMPILE = toString (
       [
-        "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+        "-DSCUDO_DEFAULT_OPTIONS=delete_size_mismatch=false:dealloc_type_mismatch=false"
       ]
       ++ lib.optionals (!haveLibc) [
         # The compiler got stricter about this, and there is a usellvm patch below
@@ -123,9 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_C_COMPILER_TARGET" stdenv.hostPlatform.config)
     (lib.cmakeFeature "CMAKE_ASM_COMPILER_TARGET" stdenv.hostPlatform.config)
   ]
-  ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
-    (lib.cmakeFeature "SANITIZER_COMMON_CFLAGS" "-I${libxcrypt}/include")
-  ]
   ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
     (lib.cmakeFeature "SANITIZER_CXX_ABI" "libcxxabi")
     (lib.cmakeFeature "SANITIZER_CXX_ABI_LIBNAME" "libcxxabi")
@@ -135,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
     (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
   ]
-  ++ lib.optionals (noSanitizers) [
+  ++ lib.optionals noSanitizers [
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
   ]
   ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
@@ -156,12 +152,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!haveLibc) [
     (lib.cmakeFeature "CMAKE_C_FLAGS" "-nodefaultlibs")
   ]
-  ++ lib.optionals (useLLVM) [
+  ++ lib.optionals useLLVM [
     (lib.cmakeBool "COMPILER_RT_BUILD_BUILTINS" true)
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
   ]
-  ++ lib.optionals (bareMetal) [
+  ++ lib.optionals bareMetal [
     (lib.cmakeFeature "COMPILER_RT_OS_DIR" "baremetal")
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) (
@@ -186,6 +182,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
   ]
+  ++
+    lib.optional (stdenv.hostPlatform.isAarch64 && !haveLibc)
+      # Fixes https://github.com/NixOS/nixpkgs/issues/393603
+      (lib.cmakeBool "COMPILER_RT_DISABLE_AARCH64_FMV" true)
   ++ devExtraCmakeFlags;
 
   outputs = [

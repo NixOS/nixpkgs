@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Spritely Goblins for Guile";
     homepage = "https://spritely.institute/goblins/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

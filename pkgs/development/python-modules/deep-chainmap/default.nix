@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-Cw6Eiey501mzeigfdwnMuZH28abG4rcoACUGlmkzECA=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ flit-core ];
 
   # Tests are not published to pypi
   doCheck = false;

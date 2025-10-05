@@ -5,7 +5,7 @@
 }:
 {
   name = "greetd-no-shadow";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

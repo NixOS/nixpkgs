@@ -34,7 +34,9 @@ let
     nativeCheckInputs = [ pillow ];
 
     checkPhase = ''
+      runHook preCheck
       ${python.interpreter} test/alltests.py
+      runHook postCheck
     '';
 
     patches = [
@@ -48,16 +50,20 @@ let
       done
     '';
 
-    meta = with lib; {
+    pythonImportsCheck = [ "docutils" ];
+
+    meta = {
       description = "Python Documentation Utilities";
       homepage = "http://docutils.sourceforge.net/";
-      license = with licenses; [
+      changelog = "https://sourceforge.net/projects/docutils/files/docutils/${version}";
+      license = with lib.licenses; [
         publicDomain
         bsd2
         psfl
         gpl3Plus
       ];
-      maintainers = with maintainers; [ ];
+      maintainers = with lib.maintainers; [ jherland ];
+      mainProgram = "docutils";
     };
   };
 in

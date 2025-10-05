@@ -5,6 +5,7 @@
   meta,
   binaryName,
   desktopName,
+  self,
   autoPatchelfHook,
   makeDesktopItem,
   lib,
@@ -260,5 +261,20 @@ stdenv.mkDerivation (finalAttrs: {
       version=$(echo $url | grep -oP '/\K(\d+\.){2}\d+')
       update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
+
+    tests = {
+      withVencord = self.override {
+        withVencord = true;
+      };
+      withEquicord = self.override {
+        withEquicord = true;
+      };
+      withMoonlight = self.override {
+        withMoonlight = true;
+      };
+      withOpenASAR = self.override {
+        withOpenASAR = true;
+      };
+    };
   };
 })

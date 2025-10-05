@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hiGfbrE/I0Gmp5G8BOlTnWc8+XeuDc7yyBaw2AfeW40=";
+    hash = "sha256-52NTG+cZLOxCJZvDSZ9vqsyH+J8U38aGlQdWQ2dFOWE=";
   };
 
-  cargoHash = "sha256-8fg80Rluea3MgzHZYhik26UxzpoNcsT8PZp+NqTmhcY=";
+  cargoHash = "sha256-SYJ+ABvIoOW0O+28ofM8YXJwIlFkR84yDZaaehhx0Ks=";
 
   preBuild = ''
     version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # some python tests use uv, which in turn needs python
   UV_PYTHON = "${python312}/bin/python";
 
-  checkFlags = builtins.map (t: "--skip ${t}") [
+  checkFlags = map (t: "--skip ${t}") [
     # these tests require internet access
     "check_added_large_files_hook"
     "check_json_hook"

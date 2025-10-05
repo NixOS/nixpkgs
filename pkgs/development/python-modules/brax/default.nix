@@ -82,7 +82,14 @@ buildPythonPackage rec {
     transforms3d
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+  disabledTests = [
+    # AttributeError: 'functools.partial' object has no attribute 'value'
+    "testModelEncoding0"
+    "testModelEncoding1"
+    "testTrain"
+    "testTrainDomainRandomize"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # Flaky:
     # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
     "test_pendulum_period2"

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   gradle_8,
   makeWrapper,
   jre,
@@ -12,18 +13,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-g5ugvnnFUXBfYFN1Z5+m9HTVSZ5KS9HGkIte3lKi/sA=";
+    hash = "sha256-H1nYRUIUVRUGGK+Vonr2v7oM6SfhYEsFk+JJp/4DI4M=";
   };
 
   patches = [
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
+    # Apply fix for building on macOS. Remove when updating the package next time.
+    (fetchpatch2 {
+      name = "normalize-path-in-ApplicationPropertiesLogicTest.patch";
+      url = "https://github.com/Stirling-Tools/Stirling-PDF/commit/93fb62047a6ab85db63305c23dde5e5118e1ae2e.patch";
+      hash = "sha256-kQNYyRtJ0smuhaoII31k87b7QRBJosK6xlFiQUwobsg=";
+    })
   ];
 
   mitmCache = gradle.fetchDeps {

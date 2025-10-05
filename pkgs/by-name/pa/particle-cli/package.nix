@@ -26,10 +26,6 @@ buildNpmPackage (finalAttrs: {
   dontNpmBuild = true;
   dontNpmPrune = true;
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
-
   postInstall = ''
     install -D -t $out/etc/udev/rules.d \
       $out/lib/node_modules/particle-cli/assets/50-particle.rules

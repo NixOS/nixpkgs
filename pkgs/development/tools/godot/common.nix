@@ -5,17 +5,27 @@
   callPackage,
   dbus,
   dotnetCorePackages,
+  embree,
+  enet,
   exportTemplatesHash,
   fetchFromGitHub,
   fetchpatch,
   fontconfig,
+  freetype,
   glib,
+  glslang,
+  graphite2,
+  harfbuzz,
   hash,
+  icu,
   installShellFiles,
   lib,
   libdecor,
   libGL,
+  libjpeg_turbo,
   libpulseaudio,
+  libtheora,
+  libwebp,
   libX11,
   libXcursor,
   libXext,
@@ -26,10 +36,16 @@
   libXrandr,
   libXrender,
   makeWrapper,
+  mbedtls,
+  miniupnpc,
+  openxr-loader,
+  pcre2,
   perl,
   pkg-config,
+  recastnavigation,
   runCommand,
   scons,
+  sdl3,
   speechd-minimal,
   stdenv,
   stdenvNoCC,
@@ -55,6 +71,8 @@
   # https://github.com/godotengine/godot/pull/73504
   withWayland ? true,
   withX11 ? true,
+  wslay,
+  zstd,
 }:
 assert lib.asserts.assertOneOf "withPrecision" withPrecision [
   "single"
@@ -96,7 +114,7 @@ let
             version = dottedVersion;
           };
         }
-        // lib.optionalAttrs (editor) (
+        // lib.optionalAttrs editor (
           let
             project-src =
               runCommand "${pkg.name}-project-src"
@@ -319,7 +337,7 @@ let
         outputs = [
           "out"
         ]
-        ++ lib.optional (editor) "man";
+        ++ lib.optional editor "man";
         separateDebugInfo = true;
 
         # Set the build name which is part of the version. In official downloads, this
@@ -369,7 +387,23 @@ let
             ccflags = "-fno-strict-aliasing";
             linkflags = "-Wl,--build-id";
 
+            # libraries that aren't available in nixpkgs
+            builtin_msdfgen = true;
+            builtin_rvo2_2d = true;
+            builtin_rvo2_3d = true;
+            builtin_xatlas = true;
+
+            # using system clipper2 is currently not implemented
+            builtin_clipper2 = true;
+
             use_sowrap = false;
+          }
+          // lib.optionalAttrs (lib.versionOlder version "4.4") {
+            # libraries that aren't available in nixpkgs
+            builtin_squish = true;
+
+            # broken with system packages
+            builtin_miniupnpc = true;
           }
           // lib.optionalAttrs (lib.versionAtLeast version "4.5") {
             redirect_build_objects = false; # Avoid copying build objects to output
@@ -380,22 +414,30 @@ let
 
         strictDeps = true;
 
-        patches =
-          lib.optionals (lib.versionOlder version "4.4") [
-            (fetchpatch {
-              name = "wayland-header-fix.patch";
-              url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
-              hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
-            })
-            # Fix a crash in the mono test project build. It no longer seems to
-            # happen in 4.4, but an existing fix couldn't be identified.
-            ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
-          ]
-          ++ lib.optional (lib.versionAtLeast version "4.5") ./fix-freetype-link-error.patch;
+        patches = [
+          ./Linux-fix-missing-library-with-builtin_glslang-false.patch
+        ]
+        ++ lib.optionals (lib.versionOlder version "4.4") [
+          (fetchpatch {
+            name = "wayland-header-fix.patch";
+            url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
+            hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
+          })
+          # Fix a crash in the mono test project build. It no longer seems to
+          # happen in 4.4, but an existing fix couldn't be identified.
+          ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
+        ]
+        ++ lib.optional (lib.versionAtLeast version "4.5") ./fix-freetype-link-error.patch;
 
         postPatch = ''
           # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE
           perl -pi -e '{ $r += s:(env = Environment\(.*):\1\nenv["ENV"] = os.environ: } END { exit ($r != 1) }' SConstruct
+
+          # disable all builtin libraries by default
+          perl -pi -e '{ $r |= s:(opts.Add\(BoolVariable\("builtin_.*, )True(\)\)):\1False\2: } END { exit ($r != 1) }' SConstruct
+
+          substituteInPlace platform/linuxbsd/detect.py \
+            --replace-fail /usr/include/recastnavigation ${lib.escapeShellArg (lib.getDev recastnavigation)}/include/recastnavigation
 
           substituteInPlace thirdparty/glad/egl.c \
             --replace-fail \
@@ -423,36 +465,57 @@ let
           pkg-config
         ];
 
-        buildInputs =
-          lib.optionals (editor && withMono) dotnet-sdk.packages
-          ++ lib.optional withAlsa alsa-lib
-          ++ lib.optional (withX11 || withWayland) libxkbcommon
-          ++ lib.optionals withX11 [
-            libX11
-            libXcursor
-            libXext
-            libXfixes
-            libXi
-            libXinerama
-            libXrandr
-            libXrender
-          ]
-          ++ lib.optionals withWayland [
-            # libdecor
-            wayland
-          ]
-          ++ lib.optionals withDbus [
-            dbus
-          ]
-          ++ lib.optionals withFontconfig [
-            fontconfig
-          ]
-          ++ lib.optional withPulseaudio libpulseaudio
-          ++ lib.optionals withSpeechd [
-            speechd-minimal
-            glib
-          ]
-          ++ lib.optional withUdev udev;
+        buildInputs = [
+          embree
+          enet
+          freetype
+          glslang
+          graphite2
+          (harfbuzz.override { withIcu = true; })
+          icu
+          libtheora
+          libwebp
+          mbedtls
+          miniupnpc
+          openxr-loader
+          pcre2
+          recastnavigation
+          wslay
+          zstd
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "4.5") [
+          libjpeg_turbo
+          sdl3
+        ]
+        ++ lib.optionals (editor && withMono) dotnet-sdk.packages
+        ++ lib.optional withAlsa alsa-lib
+        ++ lib.optional (withX11 || withWayland) libxkbcommon
+        ++ lib.optionals withX11 [
+          libX11
+          libXcursor
+          libXext
+          libXfixes
+          libXi
+          libXinerama
+          libXrandr
+          libXrender
+        ]
+        ++ lib.optionals withWayland [
+          libdecor
+          wayland
+        ]
+        ++ lib.optionals withDbus [
+          dbus
+        ]
+        ++ lib.optionals withFontconfig [
+          fontconfig
+        ]
+        ++ lib.optional withPulseaudio libpulseaudio
+        ++ lib.optionals withSpeechd [
+          speechd-minimal
+          glib
+        ]
+        ++ lib.optional withUdev udev;
 
         nativeBuildInputs = [
           installShellFiles

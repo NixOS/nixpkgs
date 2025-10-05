@@ -669,7 +669,7 @@ let
             virtualisation.diskImage = "./target.qcow2";
 
             # and the same TPM options
-            virtualisation.qemu.options = mkIf (clevisTest) [
+            virtualisation.qemu.options = mkIf clevisTest [
               "-chardev socket,id=chrtpm,path=$NIX_BUILD_TOP/swtpm-sock"
               "-tpmdev emulator,id=tpm0,chardev=chrtpm"
               "-device tpm-tis,tpmdev=tpm0"
@@ -1064,7 +1064,7 @@ let
           "echo -n password | zfs create"
           + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
         ''
-        + optionalString (parentDataset) ''
+        + optionalString parentDataset ''
           "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
           "zfs create -o mountpoint=legacy rpool/root",
         ''
@@ -1079,7 +1079,7 @@ let
           optionalString (!parentDataset) ''
             boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
-          + optionalString (parentDataset) ''
+          + optionalString parentDataset ''
             boot.initrd.clevis.devices."rpool".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
           + ''
@@ -1451,9 +1451,9 @@ in
           "cat /proc/partitions >&2",
           "udevadm control --stop-exec-queue",
           "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 "
-          + "--raid-devices=2 /dev/vda5 /dev/vda6",
+          + "--raid-devices=2 --bitmap=internal /dev/vda5 /dev/vda6",
           "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 "
-          + "--raid-devices=2 /dev/vda7 /dev/vda8",
+          + "--raid-devices=2 --bitmap=internal /dev/vda7 /dev/vda8",
           "udevadm control --start-exec-queue",
           "udevadm settle",
           "mkswap -f /dev/md1 -L swap",

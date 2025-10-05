@@ -37,6 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
+    # the mv commands are workaround for https://github.com/pnpm/pnpm/issues/8307
+    mv packages packages.dontpruneme
+    CI=true pnpm prune --prod
+    find packages.dontpruneme/**/node_modules -xtype l -delete
+    mv packages.dontpruneme packages
+
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
 
     # https://github.com/pnpm/pnpm/issues/3645

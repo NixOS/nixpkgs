@@ -21,7 +21,7 @@ let
     owner = "hashicorp";
     repo = "vagrant";
     rev = "v${version}";
-    hash = "sha256-xlL0YLY5yG9Q2L93Ag1pO/F8LOp+JdcgrvWyw+bZP/I=";
+    hash = "sha256-8csEIkXI5LPf5aZUuKYKALgwtG/skXFvMBimbCerEPY=";
   };
 
   ruby = ruby_3_4;
@@ -32,6 +32,7 @@ let
     inherit version;
 
     inherit ruby;
+    gemdir = src;
     gemfile = writeText "Gemfile" "";
     lockfile = writeText "Gemfile.lock" "";
     gemset = lib.recursiveUpdate (import ./gemset.nix) (

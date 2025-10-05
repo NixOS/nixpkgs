@@ -93,8 +93,8 @@ let
     ''
     + (lib.strings.concatStringsSep "\n" (
       map (dep: ''
-        if ! [[ "${builtins.baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
-          ln -vsf ${dep.path} "$out/${builtins.baseNameOf dep.url}"
+        if ! [[ "${baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
+          ln -vsf ${dep.path} "$out/${baseNameOf dep.url}"
         fi
       '') pythonDeps
     ));

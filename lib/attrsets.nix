@@ -2149,7 +2149,7 @@ rec {
     chooseDevOutputs :: [Derivation] -> [Derivation]
     ```
   */
-  chooseDevOutputs = builtins.map getDev;
+  chooseDevOutputs = map getDev;
 
   /**
     Make various Nix tools consider the contents of the resulting
@@ -2230,7 +2230,7 @@ rec {
       intersection = builtins.intersectAttrs x y;
       collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
       mask = builtins.mapAttrs (
-        name: value: builtins.throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
+        name: value: throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
       ) intersection;
     in
     (x // y) // mask;

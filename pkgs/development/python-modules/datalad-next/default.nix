@@ -23,7 +23,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "datalad-next";
   version = "1.6.0-unstable-2025-07-04";
   pyproject = true;

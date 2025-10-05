@@ -13,7 +13,7 @@ let
     python3 = python;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sss";
   inherit (sssdForPython) version;
 

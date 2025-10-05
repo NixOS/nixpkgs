@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jomo/imgur-screenshot/";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "imgur-screenshot";
   };
 }

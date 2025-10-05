@@ -17,20 +17,23 @@
 
 buildPythonPackage rec {
   pname = "gliner";
-  version = "0.2.21";
+  version = "0.2.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urchade";
     repo = "GLiNER";
-    tag = version;
-    hash = "sha256-v8Q/+et9yWeVSWt1K9Ahg3I4dz5/Ft+o1ueNOSaGEOU=";
+    tag = "v${version}";
+    hash = "sha256-UyqKn4cvrLUtSnfZoivgj7tw/mH/c8kmFwRQFrTIwhU=";
   };
 
   build-system = [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "transformers"
+  ];
   dependencies = [
     huggingface-hub
     onnxruntime

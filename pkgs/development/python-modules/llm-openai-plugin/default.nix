@@ -50,6 +50,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonw/llm-openai-plugin";
     changelog = "https://github.com/simonw/llm-openai-plugin/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ josh ];
+    maintainers = with lib.maintainers; [
+      josh
+      philiptaron
+    ];
   };
 }

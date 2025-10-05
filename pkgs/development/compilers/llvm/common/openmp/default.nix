@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } (''
+      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } ''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/openmp "$out"
-      '')
+      ''
     else
       src;
 
@@ -45,9 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
-
-  # TODO: Remove on `staging`.
-  patchFlags = null;
 
   patches =
     lib.optional (lib.versionOlder release_version "19") (getVersionFile "openmp/fix-find-tool.patch")

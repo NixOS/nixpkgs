@@ -20,9 +20,9 @@ let
         };
       });
       # pdm requires ...... -> ghostscript-with-X which is AGPL only
-      matplotlib = super.matplotlib.override ({ enableTk = false; });
+      matplotlib = super.matplotlib.override { enableTk = false; };
       # pdm requires ...... -> jbig2dec which is AGPL only
-      moto = super.moto.overridePythonAttrs (old: rec {
+      moto = super.moto.overridePythonAttrs (old: {
         doCheck = false;
       });
     };

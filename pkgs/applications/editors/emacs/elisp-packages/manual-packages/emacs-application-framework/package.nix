@@ -21,8 +21,8 @@
 
 let
 
-  appPythonDeps = builtins.map (item: item.eafPythonDeps) enabledApps;
-  appOtherDeps = builtins.map (item: item.eafOtherDeps) enabledApps;
+  appPythonDeps = map (item: item.eafPythonDeps) enabledApps;
+  appOtherDeps = map (item: item.eafOtherDeps) enabledApps;
 
   pythonPackageLists = [
     (
@@ -38,7 +38,7 @@ let
     )
   ]
   ++ appPythonDeps;
-  pythonPkgs = ps: builtins.concatLists (builtins.map (f: f ps) pythonPackageLists);
+  pythonPkgs = ps: builtins.concatLists (map (f: f ps) pythonPackageLists);
   pythonEnv = python3.withPackages pythonPkgs;
 
   otherPackageLists = [
@@ -51,7 +51,7 @@ let
     )
   ]
   ++ appOtherDeps;
-  otherPkgs = builtins.concatLists (otherPackageLists);
+  otherPkgs = builtins.concatLists otherPackageLists;
 
   appsDrv = symlinkJoin {
     name = "emacs-application-framework-apps";

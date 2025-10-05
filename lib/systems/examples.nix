@@ -388,6 +388,10 @@ rec {
     useLLVM = true;
   };
 
+  x86_64-cygwin = {
+    config = "x86_64-pc-cygwin";
+  };
+
   # BSDs
 
   aarch64-freebsd = {

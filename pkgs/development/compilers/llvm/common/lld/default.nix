@@ -22,14 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } (''
+      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } ''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/lld "$out"
         mkdir -p "$out/libunwind"
         cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
         mkdir -p "$out/llvm"
-      '')
+      ''
     else
       src;
 
@@ -62,9 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
   ]
   ++ devExtraCmakeFlags;
-
-  # TODO: Remove on `staging`.
-  postPatch = "";
 
   # Musl's default stack size is too small for lld to be able to link Firefox.
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";

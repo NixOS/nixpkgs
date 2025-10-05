@@ -198,7 +198,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch";
     license = licenses.unfree;
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ eliandoran ];
+    maintainers = with maintainers; [
+      eliandoran
+      dwt
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";
   };

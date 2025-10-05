@@ -515,34 +515,38 @@ in
               tls.certResolver = "letsencrypt";
             };
             # Integration API router
-            int-api-router-redirect = lib.mkIf (finalSettings.flags.enable_integration_api) {
+            int-api-router-redirect = {
               rule = "Host(`api.${cfg.baseDomain}`)";
               service = "int-api-service";
               entryPoints = [ "web" ];
               middlewares = [ "redirect-to-https" ];
             };
-            int-api-router = lib.mkIf (finalSettings.flags.enable_integration_api) {
+            int-api-router = {
               rule = "Host(`api.${cfg.baseDomain}`)";
               service = "int-api-service";
               entryPoints = [ "websecure" ];
               tls.certResolver = "letsencrypt";
             };
           };
-          # could be map
-          services = {
-            # Next.js server
-            next-service.loadBalancer.servers = [
-              { url = "http://localhost:${toString finalSettings.server.next_port}"; }
-            ];
-            # API/WebSocket server
-            api-service.loadBalancer.servers = [
-              { url = "http://localhost:${toString finalSettings.server.external_port}"; }
-            ];
-            # Integration API server
-            int-api-service.loadBalancer.servers = lib.mkIf (finalSettings.flags.enable_integration_api) [
-              { url = "http://localhost:${toString finalSettings.server.integration_port}"; }
-            ];
-          };
+          # needs to be a mkMerge otherwise will give error about standalone element
+          services = lib.mkMerge [
+            {
+              # Next.js server
+              next-service.loadBalancer.servers = [
+                { url = "http://localhost:${toString finalSettings.server.next_port}"; }
+              ];
+              # API/WebSocket server
+              api-service.loadBalancer.servers = [
+                { url = "http://localhost:${toString finalSettings.server.external_port}"; }
+              ];
+            }
+            (lib.mkIf (finalSettings.flags.enable_integration_api) {
+              # Integration API server
+              int-api-service.loadBalancer.servers = [
+                { url = "http://localhost:${toString finalSettings.server.integration_port}"; }
+              ];
+            })
+          ];
         };
       };
     };

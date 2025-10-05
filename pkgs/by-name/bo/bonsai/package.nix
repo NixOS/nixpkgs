@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hareThirdParty.hare-json
   ];
 
-  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   enableParallelBuilding = true;
 

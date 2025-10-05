@@ -327,7 +327,7 @@ in
 
     services.phpfpm.pools.limesurvey = {
       inherit user group;
-      phpPackage = pkgs.php81;
+      phpPackage = pkgs.php83;
       phpEnv.DBENGINE = "${cfg.database.dbEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
       # App code cannot access credentials directly since the service starts
@@ -419,8 +419,8 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${pkgs.php81}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
-        ${pkgs.php81}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php83}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php83}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;

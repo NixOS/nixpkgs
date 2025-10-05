@@ -6,6 +6,10 @@
   pnpm_10,
   stdenv,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
   buildWebExtension ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -57,11 +61,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^(\\d{4}-\\d{2}-\\d{2})$"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(\\d{4}-\\d{2}-\\d{2})$"
+      ];
+    };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withEquicord
+    );
   };
 
   meta = {

@@ -17,11 +17,11 @@ assert enableCapabilities -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    hash = "sha256-JOkckSOkbFToNx86OiUC8RmPKJP7+/Wa+VvBwhSZsA4=";
+    hash = "sha256-a6Wd0ZInDowdIt20GgfZXc28Hw+wLQPEtUsjWBQzCqw=";
   };
 
   outputs = [
@@ -124,6 +124,6 @@ stdenv.mkDerivation rec {
     description = "General-purpose cryptographic library";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

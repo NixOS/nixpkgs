@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   stdenv,
+  fetchpatch,
   ...
 }@args:
 
@@ -16,6 +17,14 @@ callPackage ./generic.nix args {
 
   # this package should point to the latest release.
   version = "2.3.4";
+
+  extraPatches = [
+    (fetchpatch {
+      name = "fix_llvm-21_-wuninitialized-const-pointer_warning.patch";
+      url = "https://github.com/openzfs/zfs/commit/9acedbaceec362d08a33ebfe7c4c7efcee81d094.patch";
+      hash = "sha256-bjMRuT8gsMuwCnrS5PfG9vYthRvcFaWCCfQbCTVZdpw=";
+    })
+  ];
 
   tests = {
     inherit (nixosTests.zfs) series_2_3;

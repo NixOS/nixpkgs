@@ -63,7 +63,7 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript =
     let
-      pkgFile = builtins.toString ./package.nix;
+      pkgFile = toString ./package.nix;
     in
     lib.getExe (writeShellApplication {
       name = "update-${pname}";

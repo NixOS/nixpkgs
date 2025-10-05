@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/doraemonkeys/WindSend";
     mainProgram = "wind_send";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

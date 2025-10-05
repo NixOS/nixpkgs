@@ -34,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.9";
+  version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-mMhfULdvqphwdEqynLNq+7XCNmqmf+zi1SGumC/6qAc=";
+    hash = "sha256-ZvqhvjDhrZ7uKi9fE/UYRaJblmfXXH6pYoUZ5u7cOu0=";
   };
 
   patches = [
@@ -68,9 +68,6 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
-
-      substituteInPlace pyproject.toml \
-        --replace-fail "Cython >= 3.0.0, < 3.1.0" "Cython"
     '';
 
     nativeBuildInputs = [

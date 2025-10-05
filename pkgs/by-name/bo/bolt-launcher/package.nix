@@ -15,6 +15,8 @@
   jdk17,
   pango,
   cairo,
+  pkg-config,
+  libnotify,
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
@@ -38,14 +40,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.19.1";
+    version = "0.20.0";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-1BvjKlpUD4gJJOlrc2wsl9Pv2x1TBcejYsGiliMrwao=";
+      hash = "sha256-Gh1xaYAysZshEGzljnEYJuK8Mv4cwSWH1W4rEu2F/0s=";
     };
 
     nativeBuildInputs = [
@@ -54,6 +56,7 @@ let
       luajit
       makeWrapper
       copyDesktopItems
+      pkg-config
     ];
 
     buildInputs = [
@@ -67,7 +70,6 @@ let
     ];
 
     cmakeFlags = [
-      "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
       "-G Ninja"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
@@ -125,6 +127,7 @@ buildFHSEnv {
       SDL2
       sdl3
       libGL
+      libnotify
     ])
     ++ lib.optionals enableRS3 (
       with pkgs;

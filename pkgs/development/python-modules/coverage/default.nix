@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.10.5";
+  version = "7.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = "coveragepy";
     tag = version;
-    hash = "sha256-jsocpziOu0fSmFn075vj2u1SCZkG7M/kuRujaJ1OeH4=";
+    hash = "sha256-u62kfYE1yk/cIfyklWJz8vehPe9PL9uN+03bZZraw/U=";
   };
 
   build-system = [ setuptools ];

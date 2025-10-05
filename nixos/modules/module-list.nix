@@ -337,7 +337,6 @@
   ./programs/vivid.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
-  ./programs/wayland/cardboard.nix
   ./programs/wayland/dwl.nix
   ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
@@ -632,7 +631,6 @@
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/amdgpu.nix
-  ./services/hardware/amdvlk.nix
   ./services/hardware/argonone.nix
   ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
@@ -754,7 +752,6 @@
   ./services/mail/pfix-srsd.nix
   ./services/mail/postfix-tlspol.nix
   ./services/mail/postfix.nix
-  ./services/mail/postfixadmin.nix
   ./services/mail/postgrey.nix
   ./services/mail/postsrsd.nix
   ./services/mail/protonmail-bridge.nix
@@ -917,6 +914,7 @@
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
+  ./services/misc/ringboard.nix
   ./services/misc/rkvm.nix
   ./services/misc/rmfakecloud.nix
   ./services/misc/rshim.nix
@@ -1237,7 +1235,6 @@
   ./services/networking/mmsd.nix
   ./services/networking/modemmanager.nix
   ./services/networking/monero.nix
-  ./services/networking/morty.nix
   ./services/networking/mosquitto.nix
   ./services/networking/mozillavpn.nix
   ./services/networking/mptcpd.nix
@@ -1554,7 +1551,6 @@
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/castopod.nix
   ./services/web-apps/changedetection-io.nix
-  ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/chhoto-url.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
@@ -1616,7 +1612,6 @@
   ./services/web-apps/immich-public-proxy.nix
   ./services/web-apps/immich.nix
   ./services/web-apps/invidious.nix
-  ./services/web-apps/invoiceplane.nix
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix

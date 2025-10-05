@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       runtimeEnv = {
         PNAME = "podman-desktop";
-        PKG_FILE = builtins.toString ./package.nix;
+        PKG_FILE = toString ./package.nix;
       };
       text = ''
         new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"

@@ -321,6 +321,7 @@ in
             elementary-code
             elementary-files
             elementary-mail
+            elementary-maps
             elementary-music
             elementary-photos
             elementary-screenshot

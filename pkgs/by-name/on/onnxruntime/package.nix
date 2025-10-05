@@ -3,6 +3,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
@@ -84,7 +85,15 @@ effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
 
-  patches = lib.optionals cudaSupport [
+  patches = [
+    # https://github.com/microsoft/onnxruntime/pull/24583
+    (fetchpatch {
+      name = "fix-compilation-with-gcc-15.patch";
+      url = "https://github.com/microsoft/onnxruntime/commit/f7619dc93f592ddfc10f12f7145f9781299163a0.patch";
+      hash = "sha256-jxfMB+/Zokcu5DSfZP7QV1E8mTrsLe/sMr+ZCX/Y3m0=";
+    })
+  ]
+  ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
     ./nvcc-gsl.patch

@@ -75,7 +75,7 @@ in
       buildInputs = prevAttrs.buildInputs or [ ] ++ [ cutensor ];
 
       cmakeFlags = prevAttrs.cmakeFlags or [ ] ++ [
-        "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"
+        "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${placeholder "out"}/bin"
       ];
 
       # CUTENSOR_ROOT is double escaped

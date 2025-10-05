@@ -12,29 +12,27 @@
   openssl,
   re2,
   spdlog,
+  gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mtxclient";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y0FMCq4crSbm0tJtYq04ZFwWw+vlfxXKXBo0XUgf7hw=";
   };
 
-  postPatch = ''
-    # See https://github.com/gabime/spdlog/issues/1897
-    sed -i '1a add_compile_definitions(SPDLOG_FMT_EXTERNAL)' CMakeLists.txt
-  '';
+  patches = [
+    ./remove-network-tests.patch
+  ];
 
   cmakeFlags = [
-    # Network requiring tests can't be disabled individually:
-    # https://github.com/Nheko-Reborn/mtxclient/issues/22
-    "-DBUILD_LIB_TESTS=OFF"
-    "-DBUILD_LIB_EXAMPLES=OFF"
+    (lib.cmakeBool "BUILD_LIB_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_LIB_EXAMPLES" false)
   ];
 
   nativeBuildInputs = [
@@ -53,6 +51,10 @@ stdenv.mkDerivation rec {
     spdlog
   ];
 
+  checkInputs = [ gtest ];
+
+  doCheck = true;
+
   meta = with lib; {
     description = "Client API library for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
@@ -60,11 +62,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       fpletz
       pstn
+      rebmit
       rnhmjoj
     ];
     platforms = platforms.all;
-    # Should be fixable if a higher clang version is used, see:
-    # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
-    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

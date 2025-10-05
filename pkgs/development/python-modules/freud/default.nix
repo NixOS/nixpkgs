@@ -13,7 +13,7 @@
   ninja,
 
   # buildInputs
-  tbb_2022,
+  onetbb,
   nanobind,
 
   # dependencies
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   ];
   dontUseCmakeConfigure = true;
   buildInputs = [
-    tbb_2022
+    onetbb
     nanobind
   ];
 

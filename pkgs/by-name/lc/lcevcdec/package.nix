@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "3.3.8";
+  version = "4.0.1";
 
   outputs = [
     "out"
@@ -26,15 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-s7gY3l5ML+7T7i6DsstC75XXgxQgTWyITfa+8OhHl+w=";
+    hash = "sha256-azY4xle2wwopT9qEHa4+nXPkGzscWz9tYof1qN7Nw8c=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/010-lcevcdec-fix-pkgconfig-libs.patch?h=lcevcdec&id=a3470fad7d64dfc9d5ebd7ed0c09cb1fb5e2488f";
-      hash = "sha256-z65W3k2OA/QDX0jJu4nmXtpi8kTcUFN7cK82PsI4jrQ=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace cmake/tools/version_files.py \
@@ -43,20 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "args.git_date" '"1970-01-01"'
     substituteInPlace cmake/templates/lcevc_dec.pc.in \
       --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
-
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
-    substituteInPlace cmake/modules/Compiler/GNU.cmake \
-      --replace-fail "-mavx" ""
-
-     substituteInPlace src/core/decoder/src/common/simd.c \
-      --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
   '';
 
   env = {
     includedir = "${placeholder "dev"}/include";
     libdir = "${placeholder "out"}/lib";
-    NIX_CFLAGS_COMPILE = "-Wno-error=unused-variable";
   };
 
   nativeBuildInputs = [
@@ -78,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "VN_CORE_AVX2" stdenv.hostPlatform.avx2Support)
     # Requires avx for checking on runtime
     (lib.cmakeBool "VN_CORE_SSE" stdenv.hostPlatform.avxSupport)
+    (lib.cmakeBool "VN_SDK_SIMD" stdenv.hostPlatform.avxSupport)
   ];
 
   passthru = {

@@ -3,6 +3,7 @@
 let
   inherit (builtins)
     intersectAttrs
+    unsafeGetAttrPos
     ;
   inherit (lib)
     functionArgs
@@ -303,7 +304,7 @@ rec {
       errorForArg =
         arg:
         let
-          loc = builtins.unsafeGetAttrPos arg fargs;
+          loc = unsafeGetAttrPos arg fargs;
         in
         "Function called without required argument \"${arg}\" at "
         + "${loc.file}:${toString loc.line}${prettySuggestions (getSuggestions arg)}";
@@ -395,7 +396,7 @@ rec {
       outputs = drv.outputs or [ "out" ];
 
       commonAttrs =
-        drv // (listToAttrs outputsList) // ({ all = map (x: x.value) outputsList; }) // passthru;
+        drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
 
       outputToAttrListElement = outputName: {
         name = outputName;
