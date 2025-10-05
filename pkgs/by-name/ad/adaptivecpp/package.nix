@@ -10,7 +10,7 @@
   makeWrapper,
   config,
   cudaPackages,
-  rocmPackages_6,
+  rocmPackages,
   ompSupport ? true,
   openclSupport ? false,
   rocmSupport ? config.rocmSupport,
@@ -23,7 +23,6 @@
 }:
 let
   inherit (llvmPackages) stdenv;
-  rocmPackages = rocmPackages_6;
   llvmPackages = llvmPackages_18;
 in
 stdenv.mkDerivation (finalAttrs: {
