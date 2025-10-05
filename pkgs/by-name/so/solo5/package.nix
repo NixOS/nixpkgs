@@ -91,6 +91,8 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
+  passthru.targets = targets;
+
   meta = with lib; {
     description = "Sandboxed execution environment";
     homepage = "https://github.com/solo5/solo5";

@@ -13,10 +13,6 @@
   osmo-mgw,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-hnbgw";
   version = "1.4.0";

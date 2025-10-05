@@ -10,7 +10,6 @@
   lapack,
   parmetis,
   hdf5-fortran-mpi,
-  mpiCheckPhaseHook,
   python312Packages,
 }:
 

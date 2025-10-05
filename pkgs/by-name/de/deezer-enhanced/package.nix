@@ -17,11 +17,7 @@
   at-spi2-atk,
   cups,
   gtk3,
-  pango,
-  cairo,
-  expat,
   systemdLibs,
-  alsa-lib,
   nwjs,
   libGL,
 }:

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  requireFile,
   autoPatchelfHook,
   undmg,
   fetchurl,

@@ -8,7 +8,6 @@
   openssl,
   zlib,
   ostree,
-  stdenv,
   util-linux,
   skopeo,
   gnutar,

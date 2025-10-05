@@ -3,8 +3,6 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  audiothekar,
-  testers,
 }:
 
 buildDotnetModule rec {

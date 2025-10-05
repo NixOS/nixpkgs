@@ -1,5 +1,4 @@
 {
-  lib,
   fetchFromGitHub,
   goocanvas3,
   nix-update-script,

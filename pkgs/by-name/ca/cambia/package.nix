@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  cargo-tauri,
   fetchpatch,
   nix-update-script,
   openssl,
