@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.14";
+  version = "0.4.16";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "chrysn";
     repo = "aiocoap";
     tag = version;
-    hash = "sha256-v0OzRWHlGaBKqqcIyAlVafd/siXVwaTAZqw+Sstju3s=";
+    hash = "sha256-3zvc9ItGdkvJQNtR4ycaZh53Wh2NTIKY0tYjnfVXJss=";
   };
 
   build-system = [ setuptools ];
