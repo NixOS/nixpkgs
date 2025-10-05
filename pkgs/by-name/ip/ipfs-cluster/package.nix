@@ -1,10 +1,10 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo124Module (finalAttrs: {
   pname = "ipfs-cluster";
   version = "1.1.4";
 
