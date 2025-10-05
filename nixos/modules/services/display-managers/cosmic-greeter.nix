@@ -24,6 +24,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.cosmic-comp
+      cfg.package
+    ];
+
     services.greetd = {
       enable = true;
       settings = {
