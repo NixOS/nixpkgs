@@ -9,7 +9,6 @@
   coreutils,
   cfitsio,
   fetchFromGitHub,
-  fetchpatch,
   gtest,
   libusb1,
   libusb-compat-0_1,
@@ -47,7 +46,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-+WBQdu1iWleHf6xC4SK69y505wqZ36IUM4xnh1fnc6s=";
+    hash = "sha256-FJMVaiExDSuETdrNTlF+4AqkYiYycMzpkJ93U/9ojrI=";
   };
 
   buildIndi3rdParty =
@@ -551,14 +550,6 @@ in
   indi-astarbox = buildIndi3rdParty {
     pname = "indi-astarbox";
     buildInputs = [ indilib ];
-    # TODO patch already upstream, remove with version > 2.1.5.1
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/indilib/indi-3rdparty/commit/c347000ec227a5ef98911aab34c7b08a91509cba.patch";
-        hash = "sha256-M3b4ySoGJRpfNmBaagjDaeEPKqwaVgRUWaQY626SGBI=";
-        stripLen = 1;
-      })
-    ];
   };
 
   indi-astroasis = buildIndi3rdParty {
@@ -713,15 +704,6 @@ in
       glib
       zlib
     ];
-    # TODO patch already upstream, remove with version > 2.1.5.1
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/indilib/indi-3rdparty/commit/c33c08b50093698e2aa73d73783d96f85df488a9.patch";
-        hash = "sha256-EQ2G9gTexf9FESCAR28f2cwzvH4TOAA8bvyJCxFv/E8=";
-        stripLen = 1;
-      })
-    ];
-
   };
 
   indi-gphoto = buildIndi3rdParty {
