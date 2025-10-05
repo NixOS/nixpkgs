@@ -333,6 +333,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/dhall-modules      @Gabriella439 @Profpatsch
 /pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch
 
+# Agda
+/pkgs/build-support/agda                  @NixOS/agda
+/pkgs/top-level/agda-packages.nix         @NixOS/agda
+/pkgs/development/libraries/agda          @NixOS/agda
+/doc/languages-frameworks/agda.section.md @NixOS/agda
+/nixos/tests/agda.nix                     @NixOS/agda
+
 # Idris
 /pkgs/development/idris-modules @Infinisil
 /pkgs/development/compilers/idris2 @mattpolzin
