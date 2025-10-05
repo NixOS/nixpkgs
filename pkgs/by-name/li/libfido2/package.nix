@@ -65,6 +65,12 @@ stdenv.mkDerivation rec {
   # causes possible redefinition of _FORTIFY_SOURCE?
   hardeningDisable = [ "fortify3" ];
 
+  allowedImpureDLLs = [
+    "HID.DLL"
+    "SETUPAPI.dll"
+    "USER32.dll"
+  ];
+
   meta = with lib; {
     description = ''
       Provides library functionality for FIDO 2.0, including communication with a device over USB.

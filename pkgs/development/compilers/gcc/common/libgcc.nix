@@ -59,6 +59,8 @@ lib.pipe drv
           )
           && !langJit
           && !stdenv.hostPlatform.isDarwin
+          # $libgcc logic is currently hardcoded for .so
+          && !stdenv.hostPlatform.isCygwin
           && enableShared
           && !useLibgccFromTargetLibc;
 

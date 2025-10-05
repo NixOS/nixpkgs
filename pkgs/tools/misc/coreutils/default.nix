@@ -141,11 +141,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     xz.bin
-  ]
-  ++ optionals stdenv.hostPlatform.isCygwin [
-    # due to patch
-    autoreconfHook
-    texinfo
   ];
 
   buildInputs =
@@ -213,6 +208,7 @@ stdenv.mkDerivation rec {
     # Work around a bogus warning in conjunction with musl.
     ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
     ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+    ++ optional stdenv.hostPlatform.isCygwin "-Wno-error=format-security"
   );
 
   # Works around a bug with 8.26:

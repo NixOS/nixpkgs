@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gDBLnDBup5kyfwHZp1Sb2ygxd4kYJjHxtU9FEbQgbdY=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isCygwin [
+    ./fix-symver-on-non-elf.patch
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
@@ -44,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [ ]
     # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS+=-no-undefined" ]
+    ++ lib.optionals stdenv.hostPlatform.isPE [ "LDFLAGS+=-no-undefined" ]
 
     # lld 17 sets `--no-undefined-version` by default and `libxcrypt`'s
     # version script unconditionally lists legacy compatibility symbols, even

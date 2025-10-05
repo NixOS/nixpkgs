@@ -5632,8 +5632,10 @@ with pkgs;
     callPackage ../build-support/cc-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
+          nativeTools =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false && cc == null;
+          nativeLibc =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false && libc == null;
           nativePrefix = stdenv.cc.nativePrefix or "";
           noLibc = !self.nativeLibc && (self.libc == null);
 
@@ -5671,8 +5673,10 @@ with pkgs;
     callPackage ../build-support/bintools-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
+          nativeTools =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false && bintools == null;
+          nativeLibc =
+            stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false && libc == null;
           nativePrefix = stdenv.cc.nativePrefix or "";
 
           noLibc = (self.libc == null);

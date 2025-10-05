@@ -121,9 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
-  preBuild = lib.optionalString stdenv.hostPlatform.isCygwin ''
-    echo "#include <windows.h>" >> config.h
-  '';
+  preBuild = [ ];
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
