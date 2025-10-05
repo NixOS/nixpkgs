@@ -7,18 +7,18 @@
   glib,
   gtk2,
   gtk3,
-  jdk11,
+  jdk,
   libXtst,
   coreutils,
   gnugrep,
-  zulu11,
+  zulu,
   preferGtk3 ? true,
   preferZulu ? true,
 }:
 
 let
   rev = 3755;
-  jre' = (if preferZulu then zulu11 else jdk11).override { enableJavaFX = true; };
+  jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation rec {
