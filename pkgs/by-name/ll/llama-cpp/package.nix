@@ -139,11 +139,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
-  ++ optionals rocmSupport ([
+  ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
     # TODO: this should become `clr.gpuTargets` in the future.
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
-  ])
+  ]
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)

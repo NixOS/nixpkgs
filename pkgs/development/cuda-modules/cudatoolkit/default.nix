@@ -131,7 +131,7 @@ backendStdenv.mkDerivation rec {
     xorg.libxkbfile
   ]
   ++ (lib.optionals (lib.versionAtLeast version "12") (
-    map lib.getLib ([
+    map lib.getLib [
       # Used by `/target-linux-x64/CollectX/clx` and `/target-linux-x64/CollectX/libclx_api.so` for:
       # - `libcurl.so.4`
       curlMinimal
@@ -139,7 +139,7 @@ backendStdenv.mkDerivation rec {
       # Used by `/host-linux-x64/Scripts/WebRTCContainer/setup/neko/server/bin/neko`
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
-    ])
+    ]
     ++ (with qt6; [
       qtmultimedia
       qttools

@@ -96,14 +96,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # gst_plugins needed for setup-hooks
   ++ gst_plugins
-  ++ lib.optionals (withIpod) [
+  ++ lib.optionals withIpod [
     libgpod
     libplist
     usbmuxd
   ]
-  ++ lib.optionals (withMTP) [ libmtp ]
-  ++ lib.optionals (withCD) [ libcdio ]
-  ++ lib.optionals (withCloud) [ sparsehash ];
+  ++ lib.optionals withMTP [ libmtp ]
+  ++ lib.optionals withCD [ libcdio ]
+  ++ lib.optionals withCloud [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \

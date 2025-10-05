@@ -58,11 +58,19 @@ buildGoModule rec {
     license = licenses.bsl11;
     maintainers = with maintainers; [
       adamcstephens
-      pradeepchhetri
       vdemeester
       nh2
       techknowlogick
     ];
     mainProgram = "consul";
+    knownVulnerabilities = [
+      (lib.concatStringsSep " " [
+        "Note: These issues are fixed in the unstable nixpkgs releases."
+        "They cannot be fixed in the 25.05 release due to incompatible Go versions."
+      ])
+      "Remote authentication bypass (https://github.com/hashicorp/consul/pull/22612)"
+      "Local attacker can see TLS private key in some cases (https://github.com/hashicorp/consul/pull/22626)"
+      "Comparisons of sensitive values may be susceptible to timing attacks (https://github.com/hashicorp/consul/pull/22537)"
+    ];
   };
 }

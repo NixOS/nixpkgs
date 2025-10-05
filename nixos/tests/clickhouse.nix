@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "clickhouse";
-    meta.maintainers = with pkgs.lib.maintainers; [ ];
+    meta.maintainers = [ ];
 
     nodes.machine = {
       services.clickhouse.enable = true;

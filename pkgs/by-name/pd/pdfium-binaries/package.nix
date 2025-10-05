@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/bblanchon/pdfium-binaries";
     license = with lib.licenses; [ asl20 ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"

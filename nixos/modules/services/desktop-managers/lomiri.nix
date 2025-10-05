@@ -168,7 +168,7 @@ in
 
       services.gnome.evolution-data-server = {
         enable = true;
-        plugins = with pkgs; [
+        plugins = [
           # TODO: lomiri.address-book-service
         ];
       };

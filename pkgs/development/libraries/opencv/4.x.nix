@@ -628,7 +628,7 @@ effectiveStdenv.mkDerivation {
         inherit opencv4;
       };
     }
-    // optionalAttrs (enableCuda) {
+    // optionalAttrs enableCuda {
       no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
     };
   }

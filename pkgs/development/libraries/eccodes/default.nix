@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };

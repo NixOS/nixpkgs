@@ -13,7 +13,7 @@ import ./make-test-python.nix (
 
   {
     name = "udisks2";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

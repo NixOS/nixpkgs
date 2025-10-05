@@ -6,7 +6,7 @@ import ./make-test-python.nix (
   }:
   {
     name = "greetd-no-shadow";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

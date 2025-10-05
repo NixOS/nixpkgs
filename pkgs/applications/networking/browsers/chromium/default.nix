@@ -71,7 +71,7 @@ let
   chromium = rec {
     inherit stdenv upstream-info;
 
-    mkChromiumDerivation = callPackage ./common.nix ({
+    mkChromiumDerivation = callPackage ./common.nix {
       inherit chromiumVersionAtLeast versionRange;
       inherit
         proprietaryCodecs
@@ -106,7 +106,7 @@ let
         # As a work around until gn is updated again, we filter specifically that patch out.
         patches = lib.filter (e: lib.getName e != "LFS64.patch") oldAttrs.patches;
       });
-    });
+    };
 
     browser = callPackage ./browser.nix {
       inherit chromiumVersionAtLeast enableWideVine ungoogled;

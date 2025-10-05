@@ -54,7 +54,7 @@ mkDerivation rec {
     mainProgram = "yabause";
     homepage = "https://yabause.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "worker";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (libX11.meta) platforms;
   };
 })

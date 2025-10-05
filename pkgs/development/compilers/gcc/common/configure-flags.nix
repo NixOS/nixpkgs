@@ -283,7 +283,7 @@ let
     ++ lib.optionals langJit [
       "--enable-host-shared"
     ]
-    ++ lib.optionals (langD) [
+    ++ lib.optionals langD [
       "--with-target-system-zlib=yes"
     ]
     # On mips64-unknown-linux-gnu libsanitizer defines collide with

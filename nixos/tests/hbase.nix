@@ -23,7 +23,7 @@ import ./make-test-python.nix (
             # This setting and standalone mode are not suitable for production
             settings."hbase.unsafe.stream.capability.enforce" = "false";
           };
-          environment.systemPackages = with pkgs; [
+          environment.systemPackages = [
             package
           ];
         };

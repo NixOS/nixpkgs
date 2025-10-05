@@ -6,7 +6,7 @@ import ../make-test-python.nix (
     nodes.machine =
       { ... }:
       {
-        services.phylactery = rec {
+        services.phylactery = {
           enable = true;
           port = 8080;
           library = "/tmp";

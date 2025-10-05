@@ -201,7 +201,7 @@ in
     '';
   });
 
-  grug-far-nvim = prev.grug-far-nvim.overrideAttrs ({
+  grug-far-nvim = prev.grug-far-nvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1" && !stdenv.hostPlatform.isDarwin;
     nativeCheckInputs = [
       final.busted
@@ -233,7 +233,7 @@ in
       runHook postCheck
     '';
 
-  });
+  };
 
   http = prev.http.overrideAttrs (oa: {
     /*
@@ -909,7 +909,7 @@ in
       lua,
       luaposix,
     }:
-    buildLuarocksPackage ({
+    buildLuarocksPackage {
       pname = "readline";
       version = "3.2-0";
       knownRockspec =
@@ -944,7 +944,7 @@ in
         license.fullName = "MIT/X11";
         broken = (luaOlder "5.1") || (luaAtLeast "5.5");
       };
-    })
+    }
   ) { };
 
   rtp-nvim = prev.rtp-nvim.overrideAttrs (oa: {

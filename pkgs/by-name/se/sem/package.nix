@@ -32,7 +32,7 @@ buildGoModule rec {
     homepage = "https://github.com/semaphoreci/cli";
     changelog = "https://github.com/semaphoreci/cli/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

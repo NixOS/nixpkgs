@@ -245,7 +245,7 @@ in
 
       pythonPackages = lib.mkOption {
         type = lib.types.functionTo (lib.types.listOf lib.types.package);
-        default = pythonPackages: with pythonPackages; [ ];
+        default = pythonPackages: [ ];
         defaultText = lib.literalExpression "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
         example = lib.literalExpression "pythonPackages: with pythonPackages; [ requests ]";

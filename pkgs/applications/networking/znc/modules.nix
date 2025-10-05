@@ -53,7 +53,7 @@ in
     };
   };
 
-  clientbuffer = zncDerivation rec {
+  clientbuffer = zncDerivation {
     pname = "znc-clientbuffer";
     version = "unstable-2021-05-30";
     module_name = "clientbuffer";
@@ -77,7 +77,7 @@ in
     };
   };
 
-  clientaway = zncDerivation rec {
+  clientaway = zncDerivation {
     pname = "znc-clientaway";
     version = "unstable-2017-04-28";
     module_name = "clientaway";
@@ -97,7 +97,7 @@ in
     };
   };
 
-  fish = zncDerivation rec {
+  fish = zncDerivation {
     pname = "znc-fish";
     version = "unstable-2017-06-26";
     module_name = "fish";
@@ -117,7 +117,7 @@ in
     };
   };
 
-  ignore = zncDerivation rec {
+  ignore = zncDerivation {
     pname = "znc-ignore";
     version = "unstable-2017-04-28";
     module_name = "ignore";
@@ -157,7 +157,7 @@ in
     };
   };
 
-  playback = zncDerivation rec {
+  playback = zncDerivation {
     pname = "znc-playback";
     version = "unstable-2015-08-04";
     module_name = "playback";
@@ -177,7 +177,7 @@ in
     };
   };
 
-  privmsg = zncDerivation rec {
+  privmsg = zncDerivation {
     pname = "znc-privmsg";
     version = "unstable-2015-02-22";
     module_name = "privmsg";
@@ -195,7 +195,7 @@ in
     };
   };
 
-  push = zncDerivation rec {
+  push = zncDerivation {
     pname = "znc-push";
     version = "unstable-2016-10-12";
     module_name = "push";

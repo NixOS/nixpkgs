@@ -49,14 +49,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.9";
+  version = "3.16.17";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Dw9EErOINGoOlnNqroKR+fbRfMGL7Q13gP3E5iw4RhU=";
+    hash = "sha256-eKAOlmU0wc1DViZkUSrPFVjypa/kGfe+1+0lkXbaVJI=";
   };
 
   patches = [
@@ -65,17 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     # patch relative gamescopereaper path with absolute
     ./gamescopereaper.patch
 
-    # Revert change to always use vendored stb/glm libraries
-    # Upstream discussion: https://github.com/ValveSoftware/gamescope/pull/1751
+    # Pending upstream patch to allow using system libraries
+    # See: https://github.com/ValveSoftware/gamescope/pull/1846
     (fetchpatch {
-      url = "https://github.com/ValveSoftware/gamescope/commit/baae74c4b13676fa76a8b200f21ac78f55079734.patch";
-      revert = true;
-      hash = "sha256-XpbyLQ4R9KgBR3hlrgPzmM7Zxr2jm4Q10zGjyhh/Qxw=";
-    })
-    (fetchpatch {
-      url = "https://github.com/ValveSoftware/gamescope/commit/72bae179ba2ebbbc91ed07c7f66e7e4964a4cd9e.patch";
-      revert = true;
-      hash = "sha256-aglfGvEuycNyPlaFYxqqvPAgFpWns3xZ3B2GiAefxtg=";
+      url = "https://github.com/ValveSoftware/gamescope/commit/4ce1a91fb219f570b0871071a2ec8ac97d90c0bc.diff";
+      hash = "sha256-O358ScIIndfkc1S0A8g2jKvFWoCzcXB/g6lRJamqOI4=";
     })
   ];
 
@@ -89,12 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Replace gamescopereeaper with absolute path
     substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
-    patchShebangs default_scripts_install.sh
+    patchShebangs default_extras_install.sh
   '';
 
   mesonFlags = [
     (lib.mesonBool "enable_gamescope" enableExecutable)
     (lib.mesonBool "enable_gamescope_wsi_layer" enableWsi)
+
+    (lib.mesonOption "glm_include_dir" "${lib.getInclude glm}/include")
+    (lib.mesonOption "stb_include_dir" "${lib.getInclude stb}/include/stb")
   ];
 
   # don't install vendored vkroots etc
@@ -111,10 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     ninja
     wayland-scanner
-    # For `libdisplay-info`
-    python3
-    hwdata
-    edid-decode
+
     # For OpenVR
     cmake
 
@@ -124,17 +118,21 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
+
+    # For `libdisplay-info`
+    python3
+    hwdata
+    edid-decode
   ];
 
   buildInputs = [
     pipewire
     hwdata
     xorg.libX11
+    xorg.libxcb
     wayland
     wayland-protocols
     vulkan-loader
-    glm
-    luajit
   ]
   ++ lib.optionals enableWsi [
     vulkan-headers
@@ -163,8 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
       gbenchmark
       pixman
       libcap
-      stb
       lcms
+      luajit
     ]
   );
 

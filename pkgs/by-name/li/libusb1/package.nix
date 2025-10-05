@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
   dontAddDisableDepTrack = stdenv.hostPlatform.isWindows;
 
   configureFlags =
-    lib.optional (!enableUdev) "--disable-udev"
-    ++ lib.optional (withExamples) "--enable-examples-build";
+    lib.optional (!enableUdev) "--disable-udev" ++ lib.optional withExamples "--enable-examples-build";
 
   postBuild = lib.optionalString withDocs ''
     make -C doc

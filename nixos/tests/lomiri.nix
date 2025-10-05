@@ -99,7 +99,7 @@ let
         "lomiri-shell.service"
       ];
     in
-    rec {
+    {
       description = "Set Lomiri wallpaper to something OCR-able";
       wantedBy = lomiriServices;
       before = lomiriServices;
@@ -807,49 +807,49 @@ in
   ];
   details = [
     # messages normally has no contents
-    ({
+    {
       name = "display";
       left = 6;
       ocr = [ "Lock" ];
-    })
-    ({
+    }
+    {
       name = "bluetooth";
       left = 5;
       ocr = [ "Bluetooth" ];
-    })
-    ({
+    }
+    {
       name = "network";
       left = 4;
       ocr = [
         "Flight"
         "Wi-Fi"
       ];
-    })
-    ({
+    }
+    {
       name = "sound";
       left = 3;
       ocr = [
         "Silent"
         "Volume"
       ];
-    })
-    ({
+    }
+    {
       name = "power";
       left = 2;
       ocr = [
         "Charge"
         "Battery"
       ];
-    })
-    ({
+    }
+    {
       name = "datetime";
       left = 1;
       ocr = [
         "Time"
         "Date"
       ];
-    })
-    ({
+    }
+    {
       name = "session";
       left = 0;
       ocr = [ "Log Out" ];
@@ -859,6 +859,6 @@ in
         mouse_click(400, 240) # confirm logout
         machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
       '';
-    })
+    }
   ];
 }

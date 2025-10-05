@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { lib, pkgs, ... }:
   {
     name = "syncthing-relay";
-    meta.maintainers = with pkgs.lib.maintainers; [ ];
+    meta.maintainers = [ ];
 
     nodes.machine = {
       environment.systemPackages = [ pkgs.jq ];

@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       - block structure for label scoping
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 })

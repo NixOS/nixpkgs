@@ -116,7 +116,7 @@ in
         in
         {
           path = "/var/cache/stalwart-mail";
-          resource = lib.mkIf (hasHttpListener) (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
+          resource = lib.mkIf hasHttpListener (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
         };
     };
 

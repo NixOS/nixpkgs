@@ -284,7 +284,7 @@ qtModule {
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
 
-  meta = with lib; {
+  meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
       "x86_64-darwin"

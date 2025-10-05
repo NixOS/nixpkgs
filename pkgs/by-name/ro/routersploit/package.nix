@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "routersploit";
   version = "3.4.1-unstable-2025-04-24";
   pyproject = true;

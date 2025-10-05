@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/museoa/steghide";
     description = "Open source steganography program";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
     mainProgram = "steghide";
   };

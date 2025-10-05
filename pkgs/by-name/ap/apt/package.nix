@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${finalAttrs.version}/debian/changelog";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "apt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

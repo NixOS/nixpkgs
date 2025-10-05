@@ -11,7 +11,7 @@
   vscode-extension-update-script,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension rec {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";

@@ -18,7 +18,7 @@ let
       boost = boost186;
     };
   };
-  libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
+  libtorrent = (python3.pkgs.toPythonModule libtorrent-rasterbar-1_2_x).python;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tribler";
