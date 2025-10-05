@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "locust-cloud";
-  version = "1.27.0";
+  version = "1.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustcloud";
     repo = "locust-cloud";
     tag = version;
-    hash = "sha256-K69VIyQggwWQQoMld0JpzmtJRQc6HYrKAGA6E9O69MQ=";
+    hash = "sha256-jKCDbnVyL7K7w4mFIe4axKXcOKQgFPIPmVHDhxlzpsM=";
   };
 
   build-system = [
