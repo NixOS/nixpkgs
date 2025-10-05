@@ -6716,7 +6716,7 @@ with pkgs;
   iaca = iaca_3_0;
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_20;
+    llvmPackages = llvmPackages_21;
   };
 
   inherit (callPackage ../applications/misc/inochi2d { })
