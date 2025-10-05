@@ -1,28 +1,13 @@
 {
   buildGo124Module,
   cmake,
-  extra-cmake-modules,
   fetchFromGitHub,
   git,
   go_1_24,
-  kconfig,
-  kcoreaddons,
-  kdbusaddons,
-  kguiaddons,
-  ki18n,
-  kirigami,
-  kirigami-addons,
-  knotifications,
-  kwindowsystem,
   lib,
   nlohmann_json,
-  qqc2-desktop-style,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qtwayland,
   stdenv,
-  wrapQtAppsHook,
+  kdePackages,
 }:
 
 let
@@ -61,7 +46,7 @@ stdenv.mkDerivation {
     "-DKTAILCTL_FLATPAK_BUILD=ON"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with kdePackages; [
     cmake
     extra-cmake-modules
     git
@@ -69,7 +54,7 @@ stdenv.mkDerivation {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = with kdePackages; [
     kconfig
     kcoreaddons
     kdbusaddons
