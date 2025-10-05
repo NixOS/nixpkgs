@@ -20,7 +20,7 @@
   withPrivateFonts ? false,
   withEGL ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
-  withWebKit ? stdenv.hostPlatform.isDarwin,
+  withWebKit ? lib.meta.availableOn stdenv.hostPlatform webkitgtk_4_1,
   webkitgtk_4_1,
   libpng,
 }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCurl curl
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_1
+  ++ lib.optional withWebKit webkitgtk_4_1
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpng
   ];

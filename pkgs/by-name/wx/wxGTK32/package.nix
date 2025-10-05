@@ -27,7 +27,7 @@
   compat30 ? true,
   unicode ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
-  withWebKit ? true,
+  withWebKit ? lib.meta.availableOn stdenv.hostPlatform webkitgtk_4_1,
   webkitgtk_4_1,
 }:
 let
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     xorgproto
   ]
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_1
+  ++ lib.optional withWebKit webkitgtk_4_1
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     expat
   ];

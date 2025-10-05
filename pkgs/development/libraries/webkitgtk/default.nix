@@ -76,6 +76,7 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
+  stdenv,
 }:
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
@@ -263,6 +264,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.linux ++ platforms.darwin;
     teams = [ teams.gnome ];
-    broken = clangStdenv.hostPlatform.isDarwin;
+    broken = clangStdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isRiscV64;
   };
 })
