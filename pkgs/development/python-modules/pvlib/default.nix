@@ -10,7 +10,6 @@
   pytest-remotedata,
   pytest-rerunfailures,
   pytest-timeout,
-  pythonOlder,
   pytz,
   requests,
   requests-mock,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "pvlib";
   version = "0.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
