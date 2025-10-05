@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
-  version = "0.12.2";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+9L1NuyHnyX7yThC3LGqKJd9XU8Mo7NAdnGoJSdq4TM=";
+    hash = "sha256-4+jW3fuUi1OpwbcGccxvrPro/fiW9yBOlhc2KUbUExc=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.kquickimageedit
     kdePackages.prison
     kdePackages.qtbase
+    kdePackages.qtkeychain
     kdePackages.qttools
     kdePackages.qtmultimedia
     kdePackages.qtlocation
