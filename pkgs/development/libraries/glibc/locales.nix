@@ -61,7 +61,8 @@
           # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
           LOCALEDEF_FLAGS+=" --prefix=$TMPDIR"
 
-          mkdir -p $TMPDIR/"${buildPackages.glibc.out}/lib/locale"
+          export inst_complocaledir="$TMPDIR/"${buildPackages.glibc.out}/lib/locale
+          mkdir -p "$inst_complocaledir"
 
           echo 'C.UTF-8/UTF-8 \' >> ../glibc-2*/localedata/SUPPORTED
 
@@ -87,12 +88,6 @@
 
           echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
         '';
-
-      # Current `nixpkgs` way of building locales is not compatible with
-      # parallel install. `locale-archive` is updated in parallel with
-      # multiple `localedef` processes and causes non-deterministic result:
-      #   https://github.com/NixOS/nixpkgs/issues/245360
-      enableParallelBuilding = false;
 
       makeFlags = (previousAttrs.makeFlags or [ ]) ++ [
         "localedata/install-locales"
