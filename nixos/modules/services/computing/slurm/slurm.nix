@@ -475,15 +475,13 @@ in
             ''}
           '';
 
-          script = ''
-            export SLURM_CONF=${configPath}
-            exec ${cfg.package}/bin/slurmdbd -D
-          '';
+          environment.SLURM_CONF = configPath;
 
           serviceConfig = {
             RuntimeDirectory = "slurmdbd";
             Type = "simple";
             PIDFile = "/run/slurmdbd.pid";
+            ExecStart = "${cfg.package}/bin/slurmdbd -D";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
