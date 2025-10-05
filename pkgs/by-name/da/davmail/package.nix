@@ -7,27 +7,27 @@
   glib,
   gtk2,
   gtk3,
-  jdk11,
+  jdk,
   libXtst,
   coreutils,
   gnugrep,
-  zulu11,
+  zulu,
   preferGtk3 ? true,
   preferZulu ? true,
 }:
 
 let
-  rev = 3627;
-  jre' = (if preferZulu then zulu11 else jdk11).override { enableJavaFX = true; };
+  rev = 3755;
+  jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchzip {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    hash = "sha256-zJMwCFX/uJnLeThj6/t2usBRM+LIuamZt0EFLG3N+8k=";
+    hash = "sha256-cGuAxSIkhkcpRXlv5f3utH/1zZ1aYbLQN/OLuN80JdM=";
     stripRoot = false;
   };
 
