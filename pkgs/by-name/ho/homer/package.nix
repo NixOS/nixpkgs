@@ -24,14 +24,11 @@ stdenvNoCC.mkDerivation rec {
       pname
       version
       src
-      patches
+
       ;
     fetcherVersion = 2;
     hash = "sha256-y/4f/39NOVV46Eg3h7fw8K43/kUIBqtiokTRRlX7398=";
   };
-
-  # Enables specifying a custom Sass compiler binary path via `SASS_EMBEDDED_BIN_PATH` environment variable.
-  patches = [ ./0001-build-enable-specifying-custom-sass-compiler-path-by.patch ];
 
   nativeBuildInputs = [
     nodejs
@@ -42,7 +39,9 @@ stdenvNoCC.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    export SASS_EMBEDDED_BIN_PATH="${dart-sass}/bin/sass"
+    # force the sass npm dependency to use our own sass binary instead of the bundled one
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
     pnpm build
 
     runHook postBuild
