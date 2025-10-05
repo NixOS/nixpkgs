@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
-  version = "7.0";
+  version = "7.0-unstable-2025-09-30";
 
   src = fetchFromGitHub {
     owner = "pocl";
     repo = "pocl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-pyolM0SR6xiwhad7K0mX9I/PKbIa8Ltin0CYoA1U/qo=";
+    rev = "f24d07da32bdd639538d3016cad2ab920cd16ce3";
+    hash = "sha256-D7sMZ2B7Ex840ZhM07nrdnlek0HhI5GkvUNA4k5hsPk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

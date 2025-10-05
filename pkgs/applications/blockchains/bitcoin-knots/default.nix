@@ -3,26 +3,30 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  cmake,
   pkg-config,
-  util-linux,
-  hexdump,
+  installShellFiles,
   autoSignDarwinBinariesHook,
   wrapQtAppsHook ? null,
   boost,
   libevent,
-  miniupnpc,
   zeromq,
   zlib,
   db48,
   sqlite,
   qrencode,
+  libsystemtap,
   qtbase ? null,
   qttools ? null,
   python3,
+  versionCheckHook,
   withGui,
   withWallet ? true,
+  enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   gnupg,
-  cmake,
+  imagemagick,
+  librsvg,
+  libicns,
   # Signatures from the following GPG public keys checked during verification of the source code.
   # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
   builderKeys ? [
@@ -43,25 +47,32 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    pkg-config
-    gnupg
     cmake
+    pkg-config
+    installShellFiles
+    gnupg
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ]
-  ++ lib.optionals withGui [ wrapQtAppsHook ];
+  ++ lib.optionals withGui [
+    imagemagick # for convert
+    librsvg # for rsvg-convert
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && withGui) [
+    libicns # for png2icns
+  ];
 
   buildInputs = [
     boost
     libevent
-    miniupnpc
     zeromq
     zlib
   ]
+  ++ lib.optionals enableTracing [ libsystemtap ]
   ++ lib.optionals withWallet [ sqlite ]
+  # building with db48 (for legacy descriptor wallet support) is broken on Darwin
   ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
   ++ lib.optionals withGui [
     qrencode
@@ -110,17 +121,39 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $src ./bitcoin-${finalAttrs.version}.tar.gz
       gpg --no-autostart --batch --verify --status-fd 1 SHA256SUMS.asc SHA256SUMS > verify.log
       ${verifyBuilderKeys}
+      echo "Checking ${checksums} for bitcoin-${finalAttrs.version}.tar.gz..."
       grep bitcoin-${finalAttrs.version}.tar.gz SHA256SUMS > SHA256SUMS.filtered
       echo "Verifying the checksum of bitcoin-${finalAttrs.version}.tar.gz..."
       sha256sum -c SHA256SUMS.filtered
       popd
     '';
 
-  configureFlags = [
+  postInstall = ''
+    cd ..
+    installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoind.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
+
+    installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoind.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-tx.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-util.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-wallet.fish
+  ''
+  + lib.optionalString withGui ''
+    installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
+  '';
+
+  cmakeFlags = [
     (lib.cmakeBool "BUILD_BENCH" false)
+    (lib.cmakeBool "WITH_ZMQ" true)
+    # building with db48 (for legacy wallet support) is broken on Darwin
+    (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
+    (lib.cmakeBool "WITH_USDT" enableTracing)
   ]
   ++ lib.optionals (!finalAttrs.doCheck) [
     (lib.cmakeBool "BUILD_TESTS" false)
+    (lib.cmakeBool "BUILD_FUZZ_BINARY" false)
     (lib.cmakeBool "BUILD_GUI_TESTS" false)
   ]
   ++ lib.optionals (!withWallet) [
@@ -128,8 +161,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGui [
     (lib.cmakeBool "BUILD_GUI" true)
-    (lib.cmakeFeature "WITH_QT_VERSION" "5")
   ];
+
+  NIX_LDFLAGS = lib.optionals (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+  ) "-levent_core";
 
   nativeCheckInputs = [ python3 ];
 
@@ -144,8 +180,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/bitcoin-cli";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   meta = {
-    description = "Derivative of Bitcoin Core with a collection of improvements";
+    description = "Derivative of Bitcoin Core";
     homepage = "https://bitcoinknots.org/";
     changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${finalAttrs.version}/doc/release-notes.md";
     maintainers = with lib.maintainers; [
