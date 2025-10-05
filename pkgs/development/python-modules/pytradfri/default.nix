@@ -6,6 +6,7 @@
   aiocoap,
   dtlssocket,
   pydantic,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -32,7 +33,11 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.async;
 
   pythonImportsCheck = [ "pytradfri" ];
 
