@@ -37,9 +37,9 @@
   withNotmuch ? true,
 }:
 
-assert lib.warnIf (
-  enableMixmaster
-) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
+assert lib.warnIf enableMixmaster
+  "Support for mixmaster has been removed from neomutt since the 20241002 release"
+  true;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";

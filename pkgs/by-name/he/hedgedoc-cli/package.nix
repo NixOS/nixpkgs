@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hedgedoc/cli";
     license = lib.licenses.agpl3Only;
     mainProgram = "hedgedoc-cli";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

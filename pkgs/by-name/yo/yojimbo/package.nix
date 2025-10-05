@@ -61,6 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mas-bandwidth/yojimbo";
     license = licenses.bsd3;
     platforms = platforms.x86_64;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

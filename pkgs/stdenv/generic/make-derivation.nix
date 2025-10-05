@@ -817,12 +817,12 @@ let
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs ([
+        removeAttrs attrs [
           "meta"
           "passthru"
           "pos"
           "env"
-        ])
+        ]
         // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
         // {
           cmakeFlags = makeCMakeFlags attrs;

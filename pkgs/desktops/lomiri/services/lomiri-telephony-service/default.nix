@@ -147,11 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev telepathy-glib}/include/telepathy-1.0" # it's in telepathy-farstream's Requires.private, so it & its dependencies don't get pulled in
     "-I${lib.getDev dbus-glib}/include/dbus-1.0" # telepathy-glib dependency
     "-I${lib.getDev dbus}/include/dbus-1.0" # telepathy-glib dependency
-  ]);
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

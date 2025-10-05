@@ -143,10 +143,10 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      environment = lib.mkMerge ([
+      environment = lib.mkMerge [
         { CONDUIT_CONFIG = configFile; }
         cfg.extraEnvironment
-      ]);
+      ];
       serviceConfig = {
         DynamicUser = true;
         User = "conduit";

@@ -114,12 +114,12 @@ self: super: {
 
   # Full package set with rocm on cuda off
   # Mostly useful for asserting pkgs.pkgsRocm.torchWithRocm == pkgs.torchWithRocm and similar
-  pkgsRocm = nixpkgsFun ({
+  pkgsRocm = nixpkgsFun {
     config = super.config // {
       cudaSupport = false;
       rocmSupport = true;
     };
-  });
+  };
 
   # Full package set with cuda on rocm off
   # Mostly useful for asserting pkgs.pkgsCuda.torchWithCuda == pkgs.torchWithCuda and similar

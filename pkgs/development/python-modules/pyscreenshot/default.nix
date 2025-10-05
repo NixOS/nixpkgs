@@ -25,7 +25,7 @@ buildPythonPackage rec {
     entrypoint2
     pillow
   ]
-  ++ lib.optionals (isPy3k) [
+  ++ lib.optionals isPy3k [
     jeepney
     mss
   ];

@@ -51,7 +51,7 @@ let
   # Python used for KLEE tests.
   kleePython = python3.withPackages (ps: with ps; [ tabulate ]);
 in
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation {
   pname = "klee";
   version = "3.1-unstable-2025-07-11";
 

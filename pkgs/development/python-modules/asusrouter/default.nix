@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Vaskivskyi/asusrouter";
     changelog = "https://github.com/Vaskivskyi/asusrouter/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

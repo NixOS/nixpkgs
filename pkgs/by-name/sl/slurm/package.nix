@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-rpath" # Required for configure to pick up the right dlopen path
   ]
   ++ (lib.optional (!enableX11) "--disable-x11")
-  ++ (lib.optional (enableNVML) "--with-nvml");
+  ++ (lib.optional enableNVML "--with-nvml");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
