@@ -11,25 +11,11 @@ let
 
   inherit (lib) types;
 
-  settingsFormat = pkgs.formats.yaml { };
-  yamlSettingsFile = settingsFormat.generate "invidious-settings" cfg.settings;
-
-  # This needs to stay here for backwards compatibility
-  # with pre-25.11 configs
-  convertSettings =
-    file:
-    lib.escapeShellArg (
-      if isNew then
-        file
-      else
-        pkgs.runCommand "converted-settings.yaml"
-          {
-            nativeBuildInputs = [ pkgs.yq-go ];
-          }
-          ''
-            ${pkgs.yq-go}/bin/yq -o=yaml < ${lib.escapeShellArg file} > $out
-          ''
-    );
+  # This need to be JSON to reduce number of
+  # breaking changes, for backwards
+  # compatibility with pre-25.11
+  settingsFormat = pkgs.formats.json { };
+  settingsFile = settingsFormat.generate "invidious-settings" cfg.settings;
 
   generatedHmacKeyFile = "/var/lib/invidious/hmac_key";
   generateHmac = cfg.hmacKeyFile == null;
@@ -89,7 +75,7 @@ let
     ''
     # generated settings file
     + ''
-      configParts+=("$(< ${convertSettings yamlSettingsFile})")
+      configParts+=("$(< ${settingsFile})")
     ''
     # optional database password file
     + lib.optionalString (cfg.database.host != null) ''
@@ -97,7 +83,7 @@ let
     ''
     # optional extra settings file
     + lib.optionalString (cfg.extraSettingsFile != null) ''
-      configParts+=("$(< ${convertSettings cfg.extraSettingsFile})")
+      configParts+=("$(< ${cfg.extraSettingsFile})")
     ''
     # explicitly specified hmac key file
     + lib.optionalString (cfg.hmacKeyFile != null) ''
@@ -113,12 +99,8 @@ let
     ''
     # merge all parts into a single configuration with later elements overriding previous elements
     + ''
-      export INVIDIOUS_CONFIG="$(${
-        if isNew then
-          "${pkgs.yq-go}/bin/yq ea '. as $item ireduce ({}; . * $item)'"
-        else
-          "${pkgs.jq}/bin/jq -s 'reduce .[] as $item ({}; . * $item)'"
-      } <<<"''${configParts[*]}")"
+      mergedConfig="$(${pkgs.jq}/bin/jq -s 'reduce .[] as $item ({}; . * $item)' <<<"''${configParts[*]}")"
+      export INVIDIOUS_CONFIG=$(echo "$mergedConfig" | ${pkgs.yq-go}/bin/yq -P)
 
       exec ${cfg.package}/bin/invidious
     '';
