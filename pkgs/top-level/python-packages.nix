@@ -2785,6 +2785,8 @@ self: super: with self; {
 
   coapthon3 = callPackage ../development/python-modules/coapthon3 { };
 
+  columnize = callPackage ../development/python-modules/columnize { };
+
   cobble = callPackage ../development/python-modules/cobble { };
 
   cobs = callPackage ../development/python-modules/cobs { };
