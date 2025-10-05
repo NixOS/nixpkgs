@@ -16,7 +16,7 @@
   vtkWithQt6,
   llvmPackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elmerfem";
   version = "9.0-unstable-2025-05-25";
 

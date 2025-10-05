@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (
       decl:
       let
         declStr = toString decl;
-        root = toString (../..);
+        root = toString ../..;
         subpath = lib.removePrefix "/" (lib.removePrefix root declStr);
       in
       if lib.hasPrefix root declStr then

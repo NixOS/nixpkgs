@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/v1s1t0r1sh3r3/airgeddon";
     changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

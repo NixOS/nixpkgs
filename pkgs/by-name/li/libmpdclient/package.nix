@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/${finalAttrs.src.rev}/NEWS";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

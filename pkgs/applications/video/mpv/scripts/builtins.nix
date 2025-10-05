@@ -18,7 +18,7 @@ let
         dontUnpack = true;
         scriptPath = "${src}/${srcPath}";
 
-        meta = with lib; {
+        meta = {
           inherit (mpv-unwrapped.meta) license;
           homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${srcPath}";
         };

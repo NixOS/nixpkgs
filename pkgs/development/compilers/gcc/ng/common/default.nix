@@ -119,7 +119,7 @@ makeScopeWithSplicing' {
         langFortran = true;
       };
 
-      gfortran = wrapCCWith rec {
+      gfortran = wrapCCWith {
         cc = gccPackages.gfortran-unwrapped;
         libcxx = targetGccPackages.libstdcxx;
         bintools = binutils;
@@ -134,7 +134,7 @@ makeScopeWithSplicing' {
         ];
       };
 
-      gfortranNoLibgfortran = wrapCCWith rec {
+      gfortranNoLibgfortran = wrapCCWith {
         cc = gccPackages.gfortran-unwrapped;
         libcxx = targetGccPackages.libstdcxx;
         bintools = binutils;
@@ -148,7 +148,7 @@ makeScopeWithSplicing' {
         ];
       };
 
-      gcc = wrapCCWith rec {
+      gcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = targetGccPackages.libstdcxx;
         bintools = binutils;
@@ -162,7 +162,7 @@ makeScopeWithSplicing' {
         ];
       };
 
-      gccNoLibgcc = wrapCCWith rec {
+      gccNoLibgcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutilsNoLibc;
@@ -176,7 +176,7 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildGccPackages.gccNoLibgcc;
       };
 
-      gccWithLibc = wrapCCWith rec {
+      gccWithLibc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutils;
@@ -192,7 +192,7 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildGccPackages.gccWithLibc;
       };
 
-      gccWithLibssp = wrapCCWith rec {
+      gccWithLibssp = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutils;
@@ -209,7 +209,7 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildGccPackages.gccWithLibssp;
       };
 
-      gccWithLibatomic = wrapCCWith rec {
+      gccWithLibatomic = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutils;

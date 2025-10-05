@@ -7,7 +7,7 @@
   spirv-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spirv-tools";
   version = "1.4.321.0-unstable-2025-06-25";
 

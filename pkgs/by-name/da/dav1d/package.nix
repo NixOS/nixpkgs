@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

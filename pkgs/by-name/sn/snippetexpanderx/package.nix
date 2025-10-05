@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Your little expandable text snippet helper auto expander daemon";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderx";
   };

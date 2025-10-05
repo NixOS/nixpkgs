@@ -43,7 +43,7 @@ buildFHSEnv {
       tombert
       hughobrien
     ];
-    platforms = with lib.platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
   runScript = "${bigpemu-unwrapped}/bin/bigpemu";
   passthru = {

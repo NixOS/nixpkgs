@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "gdbmtool";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

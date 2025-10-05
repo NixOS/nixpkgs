@@ -34,7 +34,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/anweber/httpyac";
     license = lib.licenses.mit;
     mainProgram = "httpyac";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

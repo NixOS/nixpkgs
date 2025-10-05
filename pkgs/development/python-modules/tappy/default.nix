@@ -45,6 +45,6 @@ buildPythonPackage {
     changelog = "https://tappy.readthedocs.io/en/latest/releases.html";
     mainProgram = "tappy";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

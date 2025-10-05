@@ -129,7 +129,7 @@ in
         }${
           lib.optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"
         }${lib.optionalString cfgS.tls.enable " --enable-crypto"}${
-          lib.optionalString (cfgS.tls.cert != null) (" --tls-cert ${cfgS.tls.cert}")
+          lib.optionalString (cfgS.tls.cert != null) " --tls-cert ${cfgS.tls.cert}"
         }'';
         serviceConfig.Restart = "on-failure";
       };

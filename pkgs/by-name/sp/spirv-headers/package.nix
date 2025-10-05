@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spirv-headers";
   version = "1.4.321.0-unstable-2025-06-24";
 

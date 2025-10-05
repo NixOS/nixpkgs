@@ -45,13 +45,13 @@ rec {
   paramsToRenderedStrings =
     cfg: ps:
     filterEmptySets (
-      (mapParamsRecursive (
+      mapParamsRecursive (
         path: name: param:
         let
           value = attrByPath path null cfg;
         in
         optionalAttrs (value != null) (param.render name value)
-      ) ps)
+      ) ps
     );
 
   filterEmptySets =
