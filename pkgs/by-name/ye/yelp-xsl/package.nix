@@ -7,7 +7,6 @@
   fetchurl,
   pkg-config,
   itstool,
-  libxml2,
   libxslt,
   gnome,
 }:
@@ -27,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     gettext
     itstool
-    libxml2
     libxslt
   ];
 
