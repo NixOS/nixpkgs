@@ -1,0 +1,22 @@
+From e0ff1705800f007117a07134e761ab815c0cbcf2 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Wed, 28 May 2025 11:25:50 +0200
+Subject: [PATCH 3/3] fix include directory tests
+
+
+diff --git a/tests/src/onhost_tests/env_test.cpp b/tests/src/onhost_tests/env_test.cpp
+index ce5b860ad..e1ae1690a 100644
+--- a/tests/src/onhost_tests/env_test.cpp
++++ b/tests/src/onhost_tests/env_test.cpp
+@@ -3,7 +3,7 @@
+ #include <string>
+ #include <vector>
+ 
+-#include "../../../src/utility/Environment.hpp"
++#include <utility/Environment.hpp>
+ 
+ using namespace dai::utility;
+ 
+-- 
+2.49.0
+

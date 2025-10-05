@@ -1,0 +1,36 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5786ebe08..f8208c238 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -693,7 +693,6 @@ target_link_libraries(${TARGET_CORE_NAME}
+         LibArchive::LibArchive
+         ZLIB::ZLIB
+         httplib::httplib
+-        semver
+         magic_enum::magic_enum
+         lz4
+ )
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 258d6e05b..1452fb183 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -22,6 +22,7 @@ set(test_env
+ include(CMakeParseArguments)
+ 
+ include_directories(${CMAKE_SOURCE_DIR}/src)
++include_directories(${CMAKE_SOURCE_DIR}/include)
+ 
+ # Function for adding new tests
+ function(dai_add_test test_name test_src)
+diff --git a/tests/src/onhost_tests/naming_test.cpp b/tests/src/onhost_tests/naming_test.cpp
+index 2d31e9987..19eb5615a 100644
+--- a/tests/src/onhost_tests/naming_test.cpp
++++ b/tests/src/onhost_tests/naming_test.cpp
+@@ -1,6 +1,7 @@
+ #include <catch2/catch_all.hpp>
+ 
+ #include <utility/Environment.hpp>
++#include <utility/EepromDataParser.hpp>
+ 
+ struct ProductDevice {
+     std::string oldProductName, productName, deviceName;
