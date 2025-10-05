@@ -140,6 +140,12 @@ in
           `nix-shell -p util-linux --run uuidgen`.
         '';
       };
+
+      cacheDir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/cache/gerrit";
+        description = "";
+      };
     };
   };
 
@@ -153,7 +159,7 @@ in
     ];
 
     services.gerrit.settings = {
-      cache.directory = "/var/cache/gerrit";
+      cache.directory = cfg.cacheDir;
       container.heapLimit = cfg.jvmHeapLimit;
       gerrit.basePath = lib.mkDefault "git";
       gerrit.serverId = cfg.serverId;
@@ -226,7 +232,7 @@ in
         StandardOutput = "journal";
         StateDirectory = "gerrit";
         StateDirectoryMode = "750";
-        CacheDirectory = "gerrit";
+        CacheDirectory = lib.mkIf (cfg.cacheDir == "/var/cache/gerrit") "gerrit";
         CacheDirectoryMode = "750";
         WorkingDirectory = "%S/gerrit";
         AmbientCapabilities = "";
