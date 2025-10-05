@@ -232,6 +232,7 @@ in
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
