@@ -195,6 +195,12 @@ let
         pythonOnHostForHost
         pythonOnTargetForTarget
         ;
+
+      pythonABITags = [
+        "abi3"
+        "none"
+        "cp${sourceVersion.major}${sourceVersion.minor}${lib.optionalString (!enableGIL) "t"}"
+      ];
     };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
