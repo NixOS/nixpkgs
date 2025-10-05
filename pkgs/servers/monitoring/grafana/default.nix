@@ -44,7 +44,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.4";
+  version = "12.0.5";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -56,7 +56,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-htuBN+LyP3RgVG53LN0cgGn7Dmesgv/U1A9jYj4cdGc=";
+    hash = "sha256-60E/YOW7jlwss0+lvP5twM5xTBW3NM2FzUAnxZcWTJY=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -70,14 +70,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-OqdW5DRUDgWwbuHMNLTkM4gtjTK9vvm4g7L6tcEQFMs=";
+    hash = "sha256-qarRn9m12mthKiaTJGpQI4sLadqJm71X9tUfqRbLo2Y=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-wF1/buOyD5+lZJF4s1OKpDiWXUFXD6j0pJ9RBFLff7Q=";
+  vendorHash = "sha256-BtXwPQThXShORrp7TkOfrvcq5ajrkaBxxUceJtjJSNo=";
 
   proxyVendor = true;
 

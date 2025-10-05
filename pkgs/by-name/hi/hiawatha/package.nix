@@ -75,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix; # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
     mainProgram = "hiawatha";
     maintainers = [ ];
+    knownVulnerabilities = [
+      "CVE-2025-57783: request smuggling"
+      "CVE-2025-57784: local authentication bypass"
+      "CVE-2025-57785: double free, possible arbitrary code execution"
+    ];
   };
 
 })
