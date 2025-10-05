@@ -27,8 +27,8 @@
     enableParallelBuilding = true;
 
     passthru = {
-      incdir = "/include/w32api/";
-      libdir = "/lib/w32api/";
+      incdir = "/include/w32api";
+      libdir = "/lib/w32api";
     };
 
     meta = {
