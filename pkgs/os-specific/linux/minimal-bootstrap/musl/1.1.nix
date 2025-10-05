@@ -54,9 +54,10 @@ let
       url = "${liveBootstrap}/patches/sigsetjmp.patch";
       hash = "sha256-wd2Aev1zPJXy3q933aiup5p1IMKzVJBquAyl3gbK4PU=";
     })
-    # HACK: always flush stdio immediately
-    # Do not remove atm, gcc 4.6 does not build without this patch applied.
-    ./always-flush.patch
+    # liveBootstrap/sysa/musl-1.1.24/patches/stdio_flush_on_exit.patch with forward declarations added
+    # to avoid `error: implicit declaration of function '__stdio_exit'`
+    # Required to fix buffered stdout being truncated on exit
+    ./stdio_flush_on_exit.patch
     (fetchurl {
       url = "${liveBootstrap}/patches/va_list.patch";
       hash = "sha256-UmcMIl+YCi3wIeVvjbsCyqFlkyYsM4ECNwTfXP+s7vg=";
