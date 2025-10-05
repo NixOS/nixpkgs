@@ -292,3 +292,8 @@ b1c5cd3e794cdf89daa5e4f0086274a416a1cded
 #nixos/nextcloud: remove with lib usage
 b6088b0d8e13e8d18464d78935f0130052784658
 f7611cad5154a9096faa26d156a4079577bfae17
+
+# nixf-diagnose
+90e7159c559021ac4f4cc1222000f08a91feff69 # !autorebase nix-shell --run treefmt
+c283f32d296564fd649ef3ed268c1f1f7b199c49 # !autorebase nix-shell --run treefmt
+91a8fee3aaf79348aa2dc1552a29fc1b786c5133 # !autorebase nix-shell --run treefmt
