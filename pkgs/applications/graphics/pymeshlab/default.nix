@@ -45,10 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pybind11
   ];
 
+  nativeCheckInputs = [
+    python3Packages.pythonImportsCheckHook
+  ];
+
   propagatedBuildInputs = [
     meshlab
     python3Packages.numpy
-    python3Packages.pythonImportsCheckHook
   ];
 
   buildInputs = [
