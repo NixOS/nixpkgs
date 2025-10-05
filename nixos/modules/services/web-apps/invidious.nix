@@ -16,21 +16,25 @@ let
 
   # This needs to stay here for backwards compatibility
   # with pre-25.11 configs
-  convertSettings = file: lib.escapeShellArg (
-    if isNew then
-      file
-    else
-      pkgs.runCommand "converted-settings.yaml" {
-        nativeBuildInputs = [ pkgs.yq-go ];
-      } ''
-        ${pkgs.yq-go}/bin/yq -o=yaml < ${lib.escapeShellArg file} > $out
-      ''
-  );
+  convertSettings =
+    file:
+    lib.escapeShellArg (
+      if isNew then
+        file
+      else
+        pkgs.runCommand "converted-settings.yaml"
+          {
+            nativeBuildInputs = [ pkgs.yq-go ];
+          }
+          ''
+          ${pkgs.yq-go}/bin/yq -o=yaml < ${lib.escapeShellArg file} > $out
+          ''
+    );
 
   generatedHmacKeyFile = "/var/lib/invidious/hmac_key";
   generateHmac = cfg.hmacKeyFile == null;
 
-  commonInvidousServiceConfig = {
+  commonInvidiousServiceConfig = {
     description = "Invidious (An alternative YouTube front-end)";
     wants = [ "network-online.target" ];
     after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
@@ -74,7 +78,8 @@ let
     };
   };
 
-  configScript = scaleIndex:
+  configScript =
+    scaleIndex:
     ''
       configParts=()
     ''
@@ -108,10 +113,11 @@ let
     ''
     # merge all parts into a single configuration with later elements overriding previous elements
     + ''
-      export INVIDIOUS_CONFIG="$(${if isNew then
-        "${pkgs.yq-go}/bin/yq ea '. as $item ireduce ({}; . * $item)'"
-      else
-        "${pkgs.jq}/bin/jq -s 'reduce .[] as $item ({}; . * $item)'"
+      export INVIDIOUS_CONFIG="$(${
+        if isNew then
+          "${pkgs.yq-go}/bin/yq ea '. as $item ireduce ({}; . * $item)'"
+        else
+          "${pkgs.jq}/bin/jq -s 'reduce .[] as $item ({}; . * $item)'"
       } <<<"''${configParts[*]}")"
 
       exec ${cfg.package}/bin/invidious
@@ -119,7 +125,7 @@ let
 
   mkInvidiousService =
     scaleIndex:
-    lib.foldl' lib.recursiveUpdate commonInvidousServiceConfig [
+    lib.foldl' lib.recursiveUpdate commonInvidiousServiceConfig [
       # only generate the hmac file in the first service
       (lib.optionalAttrs (scaleIndex == 0) {
         preStart = lib.optionalString generateHmac ''
@@ -131,8 +137,8 @@ let
       })
       # configure the secondary services to run after the first service
       (lib.optionalAttrs (scaleIndex > 0) {
-        after = commonInvidousServiceConfig.after ++ [ "invidious.service" ];
-        wants = commonInvidousServiceConfig.wants ++ [ "invidious.service" ];
+        after = commonInvidiousServiceConfig.after ++ [ "invidious.service" ];
+        wants = commonInvidiousServiceConfig.wants ++ [ "invidious.service" ];
       })
       { script = configScript scaleIndex; }
     ];
