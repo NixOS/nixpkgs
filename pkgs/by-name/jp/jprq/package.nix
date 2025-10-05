@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "azimjohn";
     repo = "jprq";
     tag = version;
-    hash = "sha256-0+ope89NTODwFVNifXtq+yVLMMcf0bQT/XF3KyTfB0U=";
+    hash = "sha256-aOsknEmNXSOKwmCQtm5mibrw9VKpb7uOdOZsivYsz+g=";
   };
 
   vendorHash = "sha256-aK+7ca16jzvKEDEWjCiud52vHciy1ZUwlSxKjd6rc+U=";
