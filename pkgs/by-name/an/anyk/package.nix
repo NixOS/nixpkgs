@@ -26,12 +26,6 @@ let
     stripRoot = false;
   };
 
-  # ÁNYK needs JavaFX for the Ügyfélkapu login webview.
-  jdkWithFX = openjdk.override {
-    enableJavaFX = true;
-    openjfx_jdk = openjfx.override { withWebKit = true; };
-  };
-
   extraClasspath = [
     # ÁNYK uses some SOAP stuff that's not shipped with OpenJDK any more.
     # We don't really want to use openjdk8 because it's unusable on HiDPI
@@ -91,7 +85,7 @@ let
       SCALING_PROP="-Dsun.java2d.uiScale=''${WINDOW_SCALING_FACTOR}"
     fi
     # ÁNYK crashes with NullPointerException with the GTK look and feel so use the cross-platform one.
-    exec ${jdkWithFX}/bin/java -Dswing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel $SCALING_PROP "$@"
+    exec ${openjdk}/bin/java -Dswing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel $SCALING_PROP "$@"
   '';
 in
 stdenv.mkDerivation {
