@@ -95,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # functions are no longer in openssl, remove them from test cleanup function
     substituteInPlace Tests/CPP_Bindings/Source/UnitTest_EncryptionUtils.cpp \
-      --replace-warn "RAND_cleanup();" "" \
-      --replace-warn "EVP_cleanup();" "" \
-      --replace-warn "CRYPTO_cleanup_all_ex_data();" ""
+      --replace-fail "RAND_cleanup();" "" \
+      --replace-fail "EVP_cleanup();" "" \
+      --replace-fail "CRYPTO_cleanup_all_ex_data();" ""
 
     # Fix CMake export
     substituteInPlace cmake/lib3mfConfig.cmake \
