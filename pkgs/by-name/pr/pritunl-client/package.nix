@@ -97,7 +97,7 @@ let
       in
       lib.optionalString stdenv.hostPlatform.isLinux ''
         wrapProgram $out/bin/pritunl-client-service \
-          --prefix PATH : "${lib.makeBinPath ([ openvpn-wrapped ])}"
+          --prefix PATH : "${lib.makeBinPath [ openvpn-wrapped ]}"
       '';
     passthru.updateScript = nix-update-script { };
   };

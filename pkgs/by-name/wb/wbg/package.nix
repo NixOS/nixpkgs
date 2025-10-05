@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://codeberg.org/dnkl/wbg";
     changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux;
     mainProgram = "wbg";
   };

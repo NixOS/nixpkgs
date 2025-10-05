@@ -43,7 +43,7 @@ let
       license = lib.licenses.asl20;
     };
   };
-  kado = buildDunePackage rec {
+  kado = buildDunePackage {
     pname = "kado";
     version = "unstable-2023-10-03";
     src = fetchFromGitHub {

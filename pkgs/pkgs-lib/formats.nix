@@ -646,7 +646,7 @@ rec {
               description = "Elixir value";
             };
         in
-        attrsOf (attrsOf (valueType));
+        attrsOf (attrsOf valueType);
 
       lib =
         let

@@ -112,7 +112,7 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     doc = ./default.md;
   };
 

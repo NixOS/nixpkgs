@@ -5,7 +5,7 @@ import ./make-test-python.nix (
   in
   {
     name = "private-gpt";
-    meta = with lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

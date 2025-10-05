@@ -2,7 +2,7 @@
 let
   common = opts: libsForQt5.callPackage (import ./common.nix opts) { };
 in
-rec {
+{
   new-engine = common {
     version = "A62";
     sha256 = "sha256-U89j0BV57luv1c9hoYJtisKLxFezuaGFokZ29/NJ0xg=";
@@ -12,7 +12,7 @@ rec {
       "build/UEFIExtract/UEFIExtract"
     ];
   };
-  old-engine = common rec {
+  old-engine = common {
     version = "0.28.0";
     sha256 = "1n2hd2dysi5bv2iyq40phh1jxc48gdwzs414vfbxvcharcwapnja";
     installFiles = [

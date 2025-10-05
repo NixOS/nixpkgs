@@ -3,7 +3,7 @@ import ./make-test-python.nix (
 
   {
     name = "prowlarr";
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { pkgs, ... }:

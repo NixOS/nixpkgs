@@ -86,6 +86,6 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

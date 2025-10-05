@@ -57,7 +57,7 @@ import ../make-test-python.nix (
         };
 
         # Needed for lxc
-        environment.systemPackages = with pkgs; [
+        environment.systemPackages = [
           pkgs.wget
           pkgs.dnsmasq
         ];

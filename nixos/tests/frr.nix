@@ -33,7 +33,7 @@ import ./make-test-python.nix (
   {
     name = "frr";
 
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

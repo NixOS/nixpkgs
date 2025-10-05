@@ -7,7 +7,7 @@ import ./make-test-python.nix (
     name = "locate";
     meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
-    nodes = rec {
+    nodes = {
       a = {
         environment.systemPackages = with pkgs; [ sshfs ];
         virtualisation.fileSystems = {

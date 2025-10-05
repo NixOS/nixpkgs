@@ -273,3 +273,8 @@ a034fb50f79816c6738fb48b48503b09ea3b0132
 # nixfmt 1.0.0
 a46262ae77e4016fe5a4a390c4a39c0c1b266428 # !autorebase nix-shell --run treefmt
 aefcb0d50d1124314429a11ed6b7aaaedf2861c5 # !autorebase nix-shell --run treefmt
+
+# nixf-diagnose
+6c1e6f90d35932355fdee300b13136a8b7ec851c # !autorebase nix-shell --run treefmt
+1c6af9ba0a9667e10ad97f53d2cff663abc290c9 # !autorebase nix-shell --run treefmt
+5cbdb94f3aa2e7de13f3c0a67899ec17427b58ce # !autorebase nix-shell --run treefmt

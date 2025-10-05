@@ -44,7 +44,7 @@ let
       };
     };
 in
-rec {
+{
   mypy-boto3-accessanalyzer =
     buildMypyBoto3Package "accessanalyzer" "1.38.0"
       "sha256-y9/xQ8qsa7lI01hQTKuDBPavkQKuUX7pE4BRzwZ/bIQ=";

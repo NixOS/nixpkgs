@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals (enableApp) [ installShellFiles ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableApp [ installShellFiles ];
 
   buildInputs =
     lib.optionals enableApp [
@@ -70,15 +70,15 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.optionals (enableApp && !enableHttp3) [ openssl ]
-    ++ lib.optionals (enableGetAssets) [ libxml2 ]
-    ++ lib.optionals (enableHpack) [ jansson ]
-    ++ lib.optionals (enableJemalloc) [ jemalloc ]
-    ++ lib.optionals (enableHttp3) [
+    ++ lib.optionals enableGetAssets [ libxml2 ]
+    ++ lib.optionals enableHpack [ jansson ]
+    ++ lib.optionals enableJemalloc [ jemalloc ]
+    ++ lib.optionals enableHttp3 [
       ngtcp2
       nghttp3
       quictls
     ]
-    ++ lib.optionals (enablePython) [ python3 ];
+    ++ lib.optionals enablePython [ python3 ];
 
   enableParallelBuilding = true;
 
@@ -90,11 +90,11 @@ stdenv.mkDerivation rec {
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
-  nativeCheckInputs = lib.optionals (enableTests) [
+  nativeCheckInputs = lib.optionals enableTests [
     cunit
     tzdata
   ];
-  preCheck = lib.optionalString (enableTests) ''
+  preCheck = lib.optionalString enableTests ''
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
@@ -105,13 +105,13 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    lib.optionalString (enableApp) ''
+    lib.optionalString enableApp ''
       installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
     ''
     + lib.optionalString (!enableApp) ''
       rm -r $out/bin
     ''
-    + lib.optionalString (enablePython) ''
+    + lib.optionalString enablePython ''
       patchShebangs $out/share/nghttp2
     ''
     + lib.optionalString (!enablePython) ''

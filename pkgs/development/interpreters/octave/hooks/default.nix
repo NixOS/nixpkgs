@@ -6,7 +6,7 @@
   makeSetupHook,
 }:
 
-rec {
+{
   writeRequiredOctavePackagesHook = callPackage (
     { }:
     makeSetupHook {

@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       gretl is a cross-platform software package for econometric analysis,
       written in the C programming language.
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

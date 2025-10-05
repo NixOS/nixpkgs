@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gocardless/gocardless-pro-python";
     changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

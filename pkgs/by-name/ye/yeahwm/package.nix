@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "http://phrat.de/README";
     license = lib.licenses.isc;
     mainProgram = "yeahwm";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isLinux; # Does not build with GCC 14.
     inherit (libX11.meta) platforms;
   };

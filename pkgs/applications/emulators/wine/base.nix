@@ -166,7 +166,7 @@ stdenv.mkDerivation (
           pkgs.libdrm
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin darwinFrameworks
-        ++ lib.optionals (x11Support) (
+        ++ lib.optionals x11Support (
           with pkgs.xorg;
           [
             libX11

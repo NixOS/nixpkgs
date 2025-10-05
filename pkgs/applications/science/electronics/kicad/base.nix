@@ -74,7 +74,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
-  version = if (stable) then kicadVersion else builtins.substring 0 10 src.rev;
+  version = if stable then kicadVersion else builtins.substring 0 10 src.rev;
 
   src = kicadSrc;
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       --replace "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
-  preConfigure = optional (debug) ''
+  preConfigure = optional debug ''
     export CFLAGS="''${CFLAGS:-} -Og -ggdb"
     export CXXFLAGS="''${CXXFLAGS:-} -Og -ggdb"
   '';
@@ -115,20 +115,20 @@ stdenv.mkDerivation rec {
   ++ optionals (!withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=OFF"
   ]
-  ++ optionals (withI18n) [
+  ++ optionals withI18n [
     "-DKICAD_BUILD_I18N=ON"
   ]
   ++ optionals (!doInstallCheck) [
     "-DKICAD_BUILD_QA_TESTS=OFF"
   ]
-  ++ optionals (debug) [
+  ++ optionals debug [
     "-DKICAD_STDLIB_DEBUG=ON"
     "-DKICAD_USE_VALGRIND=ON"
   ]
-  ++ optionals (sanitizeAddress) [
+  ++ optionals sanitizeAddress [
     "-DKICAD_SANITIZE_ADDRESS=ON"
   ]
-  ++ optionals (sanitizeThreads) [
+  ++ optionals sanitizeThreads [
     "-DKICAD_SANITIZE_THREADS=ON"
   ];
 
@@ -188,9 +188,9 @@ stdenv.mkDerivation rec {
     # This would otherwise cause a linking requirement for mbedtls.
     (nng.override { mbedtlsSupport = false; })
   ]
-  ++ optional (withScripting) wxPython
-  ++ optional (withNgspice) libngspice
-  ++ optional (debug) valgrind;
+  ++ optional withScripting wxPython
+  ++ optional withNgspice libngspice
+  ++ optional debug valgrind;
 
   # some ngspice tests attempt to write to $HOME/.cache/
   # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
   HOME = "$TMP";
 
   # debug builds fail all but the python test
-  doInstallCheck = !(debug);
+  doInstallCheck = !debug;
   installCheckTarget = "test";
 
   nativeInstallCheckInputs = [

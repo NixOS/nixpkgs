@@ -1,7 +1,7 @@
 {
   addDriverRunpath,
   allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; },
-  allowedPatterns ? rec {
+  allowedPatterns ? {
     # This config is just an example.
     # When the hook observes either of the following requiredSystemFeatures:
     nvidia-gpu.onFeatures = [

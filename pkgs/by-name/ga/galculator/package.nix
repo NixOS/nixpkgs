@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "galculator";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (gtk3.meta) platforms;
   };
 })

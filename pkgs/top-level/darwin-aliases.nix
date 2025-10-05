@@ -20,8 +20,6 @@ lib: self: super: pkgs:
 
 # pkgs is provided to allow packages to be moved out of the darwin attrset.
 
-with self;
-
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute set
   # to appear while listing all the packages available.
@@ -96,7 +94,7 @@ let
 in
 
 stubs
-// mapAliases ({
+// mapAliases {
   ### A ###
 
   apple_sdk_10_12 = throw "darwin.apple_sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27
@@ -162,4 +160,4 @@ stubs
       ); # added 2025-04-20
   stubs = throw "'darwin.stubs.*' have been removed as they were unused"; # added 2025-04-20
   swift-corelibs-foundation = throw "'darwin.swift-corelibs-foundation' has been removed, as it was broken and is no longer used"; # added 2025-04-20
-})
+}

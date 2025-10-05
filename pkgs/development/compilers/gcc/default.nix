@@ -301,12 +301,12 @@ pipe
           )
         )
       )
-      + optionalString targetPlatform.isAvr (''
+      + optionalString targetPlatform.isAvr ''
         makeFlagsArray+=(
            '-s' # workaround for hitting hydra log limit
            'LIMITS_H_TEST=false'
         )
-      '');
+      '';
 
       inherit
         noSysDirs
@@ -348,7 +348,7 @@ pipe
         if atLeast11 then
           let
             target =
-              optionalString (profiledCompiler) "profiled"
+              optionalString profiledCompiler "profiled"
               + optionalString (
                 (lib.systems.equals targetPlatform hostPlatform)
                 && (lib.systems.equals hostPlatform buildPlatform)
@@ -433,7 +433,7 @@ pipe
             !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")
           ) "shadowstack"
           ++ optional (!(targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
-          ++ optionals (langFortran) [
+          ++ optionals langFortran [
             "fortify"
             "format"
           ];

@@ -88,14 +88,14 @@ python3.pkgs.buildPythonApplication {
     libmodplug
     libsoup_3
   ]
-  ++ lib.optionals (withXineBackend) [ xine-lib ]
-  ++ lib.optionals (withGstreamerBackend) (
+  ++ lib.optionals withXineBackend [ xine-lib ]
+  ++ lib.optionals withGstreamerBackend (
     with gst_all_1;
     [
       gst-plugins-base
       gstreamer
     ]
-    ++ lib.optionals (withGstPlugins) [
+    ++ lib.optionals withGstPlugins [
       gst-libav
       gst-plugins-bad
       gst-plugins-good
