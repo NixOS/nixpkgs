@@ -17,7 +17,7 @@ let
     name: attrs:
     lib.optionalAttrs (name != "DEFAULT") { inherit (attrs) enabled; }
     // lib.optionalAttrs (attrs.filter != null) {
-      filter = if (builtins.isString lib.filter) then lib.filter else name;
+      filter = if (builtins.isString lib.filter) then filter else name;
     }
     // attrs.settings;
 
