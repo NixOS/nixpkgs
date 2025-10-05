@@ -1,0 +1,31 @@
+diff --git a/example/example.csproj b/example/example.csproj
+index fd6d566..ed76d15 100644
+--- a/example/example.csproj
++++ b/example/example.csproj
+@@ -1,6 +1,6 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+-    <TargetFrameworks>net60;netstandard20</TargetFrameworks>
++    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+   </PropertyGroup>
+   <ItemGroup>
+diff --git a/tests/test_common.py b/tests/test_common.py
+index 8a9e36d..8370024 100644
+--- a/tests/test_common.py
++++ b/tests/test_common.py
+@@ -8,12 +8,12 @@ from pathlib import Path
+ 
+ @pytest.fixture(scope="session")
+ def example_netstandard(tmpdir_factory):
+-    return build_example(tmpdir_factory, "netstandard20")
++    return build_example(tmpdir_factory, "netstandard2.0")
+ 
+ 
+ @pytest.fixture(scope="session")
+ def example_netcore(tmpdir_factory):
+-    return build_example(tmpdir_factory, "net60")
++    return build_example(tmpdir_factory, "net8.0")
+ 
+ 
+ def build_example(tmpdir_factory, framework):

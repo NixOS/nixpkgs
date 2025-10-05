@@ -1,0 +1,21 @@
+diff --git a/conf/postfix-script b/conf/postfix-script
+index 19088a6..04fae23 100755
+--- a/conf/postfix-script
++++ b/conf/postfix-script
+@@ -43,7 +43,6 @@ FATAL="$LOGGER -p fatal"
+ PANIC="$LOGGER -p panic"
+ 
+ umask 022
+-SHELL=/bin/sh
+ 
+ #
+ # Can't do much without these in place.
+@@ -229,7 +228,7 @@ status)
+ check-fatal)
+ 	# This command is NOT part of the public interface.
+ 
+-	$SHELL $daemon_directory/post-install create-missing || {
++	$daemon_directory/post-install create-missing || {
+ 		$FATAL unable to create missing queue directories
+ 		exit 1
+ 	}

@@ -1,0 +1,12 @@
+diff --git a/src/recover.c b/src/recover.c
+index 41b4aee..30b5d8f 100644
+--- a/src/recover.c
++++ b/src/recover.c
+@@ -24,6 +24,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <utime.h>
++#include <sys/sysmacros.h>
+ 
+ #ifndef O_LARGEFILE
+ #define O_LARGEFILE 0

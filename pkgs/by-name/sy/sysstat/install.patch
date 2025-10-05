@@ -1,0 +1,13 @@
+diff -rc sysstat-11.0.1/Makefile.in sysstat-11.0.1-new/Makefile.in
+*** sysstat-11.0.1/Makefile.in	2014-08-30 15:38:39.000000000 +0200
+--- sysstat-11.0.1-new/Makefile.in	2014-12-18 14:40:45.466349009 +0100
+***************
+*** 331,337 ****
+  install_base: all sa1 sa2 sysstat.sysconfig install_man install_nls \
+  	contrib/isag/isag
+  	mkdir -p $(DESTDIR)$(SA_LIB_DIR)
+- 	mkdir -p $(DESTDIR)$(SA_DIR)
+  ifeq ($(CLEAN_SA_DIR),y)
+  	find $(DESTDIR)$(SA_DIR) \( -name 'sar??' -o -name 'sa??' -o -name 'sar??.gz' -o -name 'sa??.gz' \) \
+  		-exec rm -f {} \;
+--- 331,336 ----

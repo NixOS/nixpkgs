@@ -1,0 +1,25 @@
+From c6ac05c96b7908ccd35f3908fc0f13650b0583c0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ertugrul=20S=C3=B6ylemez?= <esz@posteo.de>
+Date: Sat, 3 Feb 2018 17:08:54 +0100
+Subject: [PATCH] Remove -Werror
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index bbe2c75..3357d2d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,7 @@ EXE=bcc
+ BUILD_DIR=build
+ CC=gcc
+ INCLUDE=-Isrc -I src/parse
+-OPTIONS=-Wall -Werror -Wno-unused -std=c99 -pedantic -Wstrict-aliasing \
++OPTIONS=-Wall -Wno-unused -std=c99 -pedantic -Wstrict-aliasing \
+ 	-Wstrict-aliasing=2 -Wmissing-field-initializers -D_BSD_SOURCE \
+ 	-D_DEFAULT_SOURCE $(INCLUDE)
+ VERSION_FILE=$(BUILD_DIR)/version.c
+-- 
+2.15.1
+

@@ -1,0 +1,12 @@
+diff -ru a/utils/bazel/llvm-project-overlay/llvm/include/llvm/Config/config.h b/utils/bazel/llvm-project-overlay/llvm/include/llvm/Config/config.h
+--- a/utils/bazel/llvm-project-overlay/llvm/include/llvm/Config/config.h	2021-09-21 15:57:02.000000000 -0400
++++ b/utils/bazel/llvm-project-overlay/llvm/include/llvm/Config/config.h	2021-11-20 18:48:48.000000000 -0500
+@@ -102,7 +102,7 @@
+ /* #undef HAVE_FFI_H */
+ 
+ /* Define to 1 if you have the `futimens' function. */
+-#define HAVE_FUTIMENS 1
++/* #define HAVE_FUTIMENS 1 */
+ 
+ /* Define to 1 if you have the `futimes' function. */
+ #define HAVE_FUTIMES 1

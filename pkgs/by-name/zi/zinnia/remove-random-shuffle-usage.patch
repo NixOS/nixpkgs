@@ -1,0 +1,27 @@
+diff --git a/svm.cpp b/svm.cpp
+index 3b7643e..2a34b42 100644
+--- a/svm.cpp
++++ b/svm.cpp
+@@ -10,6 +10,7 @@
+ #include <vector>
+ #include <cmath>
+ #include <algorithm>
++#include <random>
+ #include "feature.h"
+ 
+ namespace zinnia {
+@@ -43,11 +44,13 @@ bool svm_train(size_t l,
+     }
+   }
+ 
++  std::random_device rand_device;
++  std::default_random_engine rand_engine(rand_device());
+   static const size_t kMaxIteration = 2000;
+   for (size_t iter = 0; iter < kMaxIteration; ++iter) {
+     double PGmax_new = -kINF;
+     double PGmin_new = kINF;
+-    std::random_shuffle(index.begin(), index.begin() + active_size);
++    std::shuffle(index.begin(), index.begin() + active_size, rand_engine);
+ 
+     for (size_t s = 0; s < active_size; ++s) {
+       const size_t i = index[s];

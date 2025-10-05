@@ -1,0 +1,21 @@
+diff --git a/usr/bin/fxlputil.tcl b/usr/bin/fxlputil.tcl
+index 02eeaf6..788ed5a 100755
+--- a/usr/bin/fxlputil.tcl
++++ b/usr/bin/fxlputil.tcl
+@@ -25,14 +25,8 @@ catch {namespace import combobox::*}
+ 
+ 
+ 
+-lappend auto_path $cwd
+-
+-if {[lsearch $auto_path /usr/lib] == -1} {
+-	lappend auto_path /usr/lib
+-}
+-if {[lsearch $auto_path /usr/lib64] == -1} {
+-	lappend auto_path /usr/lib64
+-}
++# https://stackoverflow.com/a/23287132
++lappend auto_path [file join [file dirname [file dirname [info script]]] lib]
+ 
+ package require fxlputil
+ 

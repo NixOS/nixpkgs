@@ -1,0 +1,69 @@
+Backported from <https://github.com/ceph/ceph/commit/857eedbe6c9ed80ed0625bd0aa27b1a1e85f8d59>.
+
+Original author: Adam Emerson <aemerson@redhat.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bbd63a6a006..bbd7c737feb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -666,7 +666,7 @@ option(WITH_SYSTEM_BOOST "require and build with system Boost" OFF)
+ # Boost::thread depends on Boost::atomic, so list it explicitly.
+ set(BOOST_COMPONENTS
+   atomic chrono thread system regex random program_options date_time
+-  iostreams context coroutine)
++  iostreams context coroutine url)
+ set(BOOST_HEADER_COMPONENTS container)
+ 
+ if(WITH_MGR)
+diff --git a/src/mds/BoostUrlImpl.cc b/src/mds/BoostUrlImpl.cc
+deleted file mode 100644
+index 479f4c6d75d..00000000000
+--- a/src/mds/BoostUrlImpl.cc
++++ /dev/null
+@@ -1,8 +0,0 @@
+-/*
+- * https://www.boost.org/doc/libs/1_82_0/libs/url/doc/html/url/overview.html#url.overview.requirements
+- *
+- * To use the library as header-only; that is, to eliminate the requirement 
+- * to link a program to a static or dynamic Boost.URL library, 
+- * simply place the following line in exactly one source file in your project.
+- */
+-#include <boost/url/src.hpp>
+diff --git a/src/mds/CMakeLists.txt b/src/mds/CMakeLists.txt
+index 0c6c31a3c51..5c98db76e4d 100644
+--- a/src/mds/CMakeLists.txt
++++ b/src/mds/CMakeLists.txt
+@@ -45,12 +45,12 @@ set(mds_srcs
+   QuiesceDbManager.cc
+   QuiesceAgent.cc
+   MDSRankQuiesce.cc
+-  BoostUrlImpl.cc
+   ${CMAKE_SOURCE_DIR}/src/common/TrackedOp.cc
+   ${CMAKE_SOURCE_DIR}/src/common/MemoryModel.cc
+   ${CMAKE_SOURCE_DIR}/src/osdc/Journaler.cc
+   ${CMAKE_SOURCE_DIR}/src/mgr/MDSPerfMetricTypes.cc)
+ add_library(mds STATIC ${mds_srcs})
+ target_link_libraries(mds PRIVATE
++  Boost::url
+   heap_profiler cpu_profiler osdc ${LUA_LIBRARIES})
+ target_include_directories(mds PRIVATE "${LUA_INCLUDE_DIR}")
+diff --git a/src/test/mds/CMakeLists.txt b/src/test/mds/CMakeLists.txt
+index f80abe75083..18ebb648e68 100644
+--- a/src/test/mds/CMakeLists.txt
++++ b/src/test/mds/CMakeLists.txt
+@@ -18,11 +18,10 @@ target_link_libraries(unittest_mds_sessionfilter mds osdc ceph-common global ${B
+ add_executable(unittest_mds_quiesce_db
+   TestQuiesceDb.cc
+   ../../../src/mds/QuiesceDbManager.cc
+-  ../../../src/mds/BoostUrlImpl.cc
+   $<TARGET_OBJECTS:unit-main>
+ )
+ add_ceph_unittest(unittest_mds_quiesce_db)
+-target_link_libraries(unittest_mds_quiesce_db ceph-common global)
++target_link_libraries(unittest_mds_quiesce_db ceph-common global Boost::url)
+ 
+ # unittest_mds_quiesce_agent
+ add_executable(unittest_mds_quiesce_agent
+-- 
+2.47.0
+

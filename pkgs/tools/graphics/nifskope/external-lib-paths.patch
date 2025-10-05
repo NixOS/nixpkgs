@@ -1,0 +1,33 @@
+diff --git a/NifSkope.pro b/NifSkope.pro
+index 1c0bc5a..cc29fc5 100644
+--- a/NifSkope.pro
++++ b/NifSkope.pro
+@@ -330,14 +330,14 @@ nvtristrip {
+ }
+ 
+ qhull {
+-    !*msvc*:QMAKE_CFLAGS += -isystem ../nifskope/lib/qhull/src
+-    !*msvc*:QMAKE_CXXFLAGS += -isystem ../nifskope/lib/qhull/src
++    !*msvc*:QMAKE_CFLAGS += -isystem ./lib/qhull/src
++    !*msvc*:QMAKE_CXXFLAGS += -isystem ./lib/qhull/src
+     else:INCLUDEPATH += lib/qhull/src
+     HEADERS += $$files($$PWD/lib/qhull/src/libqhull/*.h, false)
+ }
+ 
+ gli {
+-    !*msvc*:QMAKE_CXXFLAGS += -isystem ../nifskope/lib/gli/gli -isystem ../nifskope/lib/gli/external
++    !*msvc*:QMAKE_CXXFLAGS += -isystem ./lib/gli/gli -isystem ./lib/gli/external
+     else:INCLUDEPATH += lib/gli/gli lib/gli/external
+     HEADERS += $$files($$PWD/lib/gli/gli/*.hpp, true)
+     HEADERS += $$files($$PWD/lib/gli/gli/*.inl, true)
+@@ -346,8 +346,8 @@ gli {
+ }
+ 
+ zlib {
+-    !*msvc*:QMAKE_CFLAGS += -isystem ../nifskope/lib/zlib
+-    !*msvc*:QMAKE_CXXFLAGS += -isystem ../nifskope/lib/zlib
++    !*msvc*:QMAKE_CFLAGS += -isystem ./lib/zlib
++    !*msvc*:QMAKE_CXXFLAGS += -isystem ./lib/zlib
+     else:INCLUDEPATH += lib/zlib
+     HEADERS += $$files($$PWD/lib/zlib/*.h, false)
+     SOURCES += $$files($$PWD/lib/zlib/*.c, false)

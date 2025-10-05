@@ -1,0 +1,73 @@
+From 0417f60c7e760e1ebc6acd3dc23818b38c3929e7 Mon Sep 17 00:00:00 2001
+From: Weijia Wang <contact@weijia.wang>
+Date: Mon, 7 Aug 2023 21:51:30 +0200
+Subject: [PATCH] Fix build with Exiv2 0.28
+
+---
+ src/gcm-helper-exiv.cpp | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/src/gcm-helper-exiv.cpp b/src/gcm-helper-exiv.cpp
+index 7ec69948..23c8b320 100644
+--- a/src/gcm-helper-exiv.cpp
++++ b/src/gcm-helper-exiv.cpp
+@@ -22,6 +22,10 @@
+ #include <exiv2/image.hpp>
+ #include <exiv2/exif.hpp>
+ 
++#if EXIV2_MAJOR_VERSION >= 1 || (EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION >= 28)
++#define HAVE_EXIV2_0_28
++#endif
++
+ #if EXIV2_MAJOR_VERSION >= 1 || (EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION >= 27)
+ #define HAVE_EXIV2_ERROR_CODE
+ #include <exiv2/error.hpp>
+@@ -33,7 +37,11 @@
+ int
+ main (int argc, char* const argv[])
+ {
++#ifdef HAVE_EXIV2_0_28
++	Exiv2::Image::UniquePtr image;
++#else
+ 	Exiv2::Image::AutoPtr image;
++#endif
+ 	Exiv2::ExifData exifData;
+ 	std::string filename;
+ 	std::string make;
+@@ -57,7 +65,9 @@ main (int argc, char* const argv[])
+ 		if (argc == 2)
+ 			filename = argv[1];
+ 		if (filename.empty())
+-#ifdef HAVE_EXIV2_ERROR_CODE
++#ifdef HAVE_EXIV2_0_28
++			throw Exiv2::Error(Exiv2::ErrorCode::kerErrorMessage, "No filename specified");
++#elif defined(HAVE_EXIV2_ERROR_CODE)
+ 			throw Exiv2::Error(Exiv2::kerErrorMessage, "No filename specified");
+ #else
+ 			throw Exiv2::Error(1, "No filename specified");
+@@ -70,7 +80,9 @@ main (int argc, char* const argv[])
+ 		if (exifData.empty()) {
+ 			std::string error(argv[1]);
+ 			error += ": No Exif data found in the file";
+-#ifdef HAVE_EXIV2_ERROR_CODE
++#ifdef HAVE_EXIV2_0_28
++			throw Exiv2::Error(Exiv2::ErrorCode::kerErrorMessage, error);
++#elif defined(HAVE_EXIV2_ERROR_CODE)
+ 			throw Exiv2::Error(Exiv2::kerErrorMessage, error);
+ #else
+ 			throw Exiv2::Error(1, error);
+@@ -89,7 +101,11 @@ main (int argc, char* const argv[])
+ 		std::cout << model << "\n";
+ 		std::cout << make << "\n";
+ 		std::cout << serial << "\n";
++#ifdef HAVE_EXIV2_0_28
++	} catch (Exiv2::Error& e) {
++#else
+ 	} catch (Exiv2::AnyError& e) {
++#endif
+ 		std::cout << "Failed to load: " << e << "\n";
+ 		retval = -1;
+ 	}
+-- 
+2.39.2 (Apple Git-143)
+

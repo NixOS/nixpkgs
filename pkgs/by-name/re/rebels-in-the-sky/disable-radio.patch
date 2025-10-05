@@ -1,0 +1,25 @@
+diff --git a/assets/data/stream_data.json b/assets/data/stream_data.json
+index c049ec7..fe51488 100644
+--- a/assets/data/stream_data.json
++++ b/assets/data/stream_data.json
+@@ -1,18 +1 @@
+-[
+-    {
+-        "name": "Radio Frittura",
+-        "url_string": "https://radio.frittura.org/frittura.ogg"
+-    },
+-    {
+-        "name": "Matt Johnson radio",
+-        "url_string": "https://us2.internet-radio.com/proxy/mattjohnsonradio?mp=/stream"
+-    },
+-    {
+-        "name" : "Lofi 24/7",
+-        "url_string": "http://usa9.fastcast4u.com/proxy/jamz?mp=/1"
+-    },
+-    {
+-        "name" : "Radio Sarajevo",
+-        "url_string": "https://cast2.asurahosting.com/proxy/balkanhi/stream"
+-    }
+-]
+\ No newline at end of file
++[]

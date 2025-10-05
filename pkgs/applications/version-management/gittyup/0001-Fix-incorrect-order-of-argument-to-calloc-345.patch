@@ -1,0 +1,25 @@
+From 687b5424128fd637555be4a0d18c72c4e870bd6f Mon Sep 17 00:00:00 2001
+From: Alfie <30699769+AHSauge@users.noreply.github.com>
+Date: Sat, 11 May 2024 13:11:08 +0200
+Subject: [PATCH] Fix incorrect order of argument to calloc (#345)
+
+---
+ src/zip.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/zip.c b/src/zip.c
+index b14f9e3..a7e5ef8 100644
+--- a/test/dep/zip/src/zip.c
++++ b/test/dep/zip/src/zip.c
+@@ -1874,7 +1874,7 @@ ssize_t zip_stream_copy(struct zip_t *zip, void **buf, size_t *bufsize) {
+     *bufsize = n;
+   }
+ 
+-  *buf = calloc(sizeof(unsigned char), n);
++  *buf = calloc(n, sizeof(unsigned char));
+   memcpy(*buf, zip->archive.m_pState->m_pMem, n);
+ 
+   return (ssize_t)n;
+-- 
+2.47.0
+

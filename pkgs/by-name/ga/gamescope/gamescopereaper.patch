@@ -1,0 +1,13 @@
+diff --git a/src/Utils/Process.cpp b/src/Utils/Process.cpp
+index 5688fb1..6cea8d8 100644
+--- a/src/Utils/Process.cpp
++++ b/src/Utils/Process.cpp
+@@ -392,7 +392,7 @@ namespace gamescope::Process
+     pid_t SpawnProcessInWatchdog( char **argv, bool bRespawn, std::function<void()> fnPreambleInChild )
+     {
+         std::vector<char *> args;
+-        args.push_back( (char *)"gamescopereaper" );
++        args.push_back( (char *)"@gamescopereaper@" );
+         if ( bRespawn )
+             args.push_back( (char *)"--respawn" );
+         args.push_back( (char *)"--" );

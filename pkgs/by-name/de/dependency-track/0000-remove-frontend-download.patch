@@ -1,0 +1,44 @@
+diff --git a/pom.xml b/pom.xml
+index 9988e765..906917c0 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -660,38 +660,13 @@
+                         <artifactId>maven-antrun-plugin</artifactId>
+                         <version>3.1.0</version>
+                         <executions>
+-                            <execution>
+-                                <id>frontend-download</id>
+-                                <phase>prepare-package</phase>
+-                                <configuration>
+-                                    <target>
+-                                        <get src="https://github.com/DependencyTrack/frontend/releases/download/${frontend.version}/frontend-dist.zip" dest="${project.build.directory}" verbose="true"/>
+-                                    </target>
+-                                </configuration>
+-                                <goals>
+-                                    <goal>run</goal>
+-                                </goals>
+-                            </execution>
+-                            <execution>
+-                                <id>frontend-extract</id>
+-                                <phase>prepare-package</phase>
+-                                <configuration>
+-                                    <target>
+-                                        <unzip src="${project.build.directory}/frontend-dist.zip" dest="${project.build.directory}/frontend">
+-                                        </unzip>
+-                                    </target>
+-                                </configuration>
+-                                <goals>
+-                                    <goal>run</goal>
+-                                </goals>
+-                            </execution>
+                             <execution>
+                                 <id>frontend-resource-deploy</id>
+                                 <phase>prepare-package</phase>
+                                 <configuration>
+                                     <target>
+                                         <copy todir="${project.build.directory}/${project.artifactId}">
+-                                            <fileset dir="${project.build.directory}/frontend/dist">
++                                            <fileset dir="${project.basedir}/frontend/dist">
+                                                 <include name="**/*"/>
+                                             </fileset>
+                                         </copy>

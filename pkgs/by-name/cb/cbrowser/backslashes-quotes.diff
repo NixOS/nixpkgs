@@ -1,0 +1,49 @@
+Based on this:
+http://sourceforge.net/tracker/?func=detail&aid=1493886&group_id=5152&atid=305152
+fix the infinite loops in quote highlight - ID: 1493886
+
+--- cbrowser-0.8-2/ftcllib.tcl	2000-07-04 01:17:43.000000000 +0200
++++ cbrowser-0.8/ftcllib.tcl	2006-05-24 00:39:18.833762522 +0200
+@@ -1290,13 +1290,39 @@
+   foreach {start end} [concat 1.0 [$widget tag ranges comment] end] {
+ 
+     while {[set temp [$widget search -regexp -- $pattern $start $end]] != ""} {
++      set startquote [$widget index "$temp + 1chars"]
+ 
+-      set endquote [$widget search -regexp -- {[^\\]\"} "$temp + 1chars" $end]
++      set temp [$widget index "$startquote + 1chars"]
++      while {1==1} {
++        set endquote [$widget search -regexp -- {\"} $temp $end]
++
++	# The program will not break if a /*C comment*/ is between C quotes.
++	if { $endquote == "" } {
++	  set endquote $startquote
++	  break
++	}
++
++        # look for double backslashes
++	if {[set temp2 [$widget search -regexp -- {\\\\} $temp $endquote]] != ""} {
++	  set temp "$temp2 + 2chars"
++	  continue
++	}
++        
++        # look for \"
++	if {[set temp2 [$widget search -regexp -- {\\\"} $temp $endquote]] != ""} {
++	  set temp "$temp2 + 2chars"
++	  continue
++	}
++
++	break
++      }
+ 
+       if {[strlen $endquote] > 0} {
+-        set start [$widget index "$endquote + 2chars"]
++        set start [$widget index "$endquote + 1chars"]
+ 
+-        $widget tag add quote "$temp + 1chars" $start
++        $widget tag add quote $startquote $start
++      } else {
++        set start [$widget index "$start + 1chars"]
+       }
+     }
+   }

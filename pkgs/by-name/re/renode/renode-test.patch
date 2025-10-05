@@ -1,0 +1,28 @@
+diff --git a/renode-test b/renode-test
+index 0f8f8d0..1fdfe23 100755
+--- a/renode-test
++++ b/renode-test
+@@ -5,22 +5,17 @@ set -u
+ # this is to support running renode-test from an external directory and via a symlink
+ ROOT_PATH="$(cd $(dirname $(readlink -f $0 2>/dev/null || echo $0)); echo $PWD)"
+ 
+-TESTS_FILE="$ROOT_PATH/tests/tests.yaml"
+-TESTS_RESULTS="$ROOT_PATH/output/tests"
+ 
+ . "${ROOT_PATH}/tools/common.sh"
+ 
+ set +e
+ STTY_CONFIG=`stty -g 2>/dev/null`
+-$PYTHON_RUNNER -u "`get_path "$ROOT_PATH/tests/run_tests.py"`" --exclude "skip_${DETECTED_OS}" --exclude "skip_host_${DETECTED_ARCH}" --properties-file "`get_path "$ROOT_PATH/output/properties.csproj"`" -r "`get_path "$TESTS_RESULTS"`" -t "`get_path "$TESTS_FILE"`" "$@"
++$PYTHON_RUNNER -u "`get_path "$ROOT_PATH/tests/run_tests.py"`" --exclude "skip_${DETECTED_OS}" -r $(pwd) --runner=dotnet "$@"
+ RESULT_CODE=$?
+ 
+ set -e
+ if [ -n "${STTY_CONFIG:-}" ]
+ then
+-    # SIGTTOU might be sent when trying to change the terminal settings when "renode-test" runs in the background so trap the signal.
+-    trap "" SIGTTOU
+     stty "$STTY_CONFIG"
+-    trap - SIGTTOU
+ fi
+ exit $RESULT_CODE

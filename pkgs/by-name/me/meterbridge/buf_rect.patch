@@ -1,0 +1,12 @@
+--- ../tmp-orig/meterbridge-0.9.2/src/main.h	2003-06-05 11:42:41.000000000 +0200
++++ ./src/main.h	2004-12-29 10:27:24.160912488 +0100
+@@ -8,7 +8,7 @@
+ 
+ extern SDL_Surface *screen;
+ extern SDL_Surface *image, *meter, *meter_buf;
+-extern SDL_Rect win, buf_rect[MAX_METERS], dest[MAX_METERS];
++extern SDL_Rect win, dest[MAX_METERS];
+ 
+ extern jack_port_t *input_ports[MAX_METERS];
+ extern jack_port_t *output_ports[MAX_METERS];
+

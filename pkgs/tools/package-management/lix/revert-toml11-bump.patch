@@ -1,0 +1,129 @@
+diff --git a/doc/manual/rl-next/toml-number-overflow.md b/doc/manual/rl-next/toml-number-overflow.md
+deleted file mode 100644
+index 1522213cb4..0000000000
+--- a/doc/manual/rl-next/toml-number-overflow.md
++++ /dev/null
+@@ -1,14 +0,0 @@
+----
+-synopsis: Reject overflowing TOML integer literals
+-issues: []
+-cls: [3916]
+-category: "Breaking Changes"
+-credits: [emilazy]
+----
+-
+-The toml11 library used by Lix was updated. The new
+-version aligns with the [TOML v1.0.0 specification’s
+-requirement](https://toml.io/en/v1.0.0#integer) to reject integer
+-literals that cannot be losslessly parsed. This means that code like
+-`builtins.fromTOML "v=0x8000000000000000"` will now produce an error
+-rather than silently saturating the integer result.
+diff --git a/lix/libexpr/primops/fromTOML.cc b/lix/libexpr/primops/fromTOML.cc
+index 9d4b5e6abf..3e26773eac 100644
+--- a/lix/libexpr/primops/fromTOML.cc
++++ b/lix/libexpr/primops/fromTOML.cc
+@@ -65,10 +65,13 @@
+             val,
+             toml::parse(
+                 tomlStream,
+-                "fromTOML", /* the "filename" */
++                "fromTOML" /* the "filename" */
++#if HAVE_TOML11_4
++                ,
+                 toml::spec::v(
+                     1, 0, 0
+                 ) // Be explicit that we are parsing TOML 1.0.0 without extensions
++#endif
+             )
+         );
+     } catch (std::exception & e) { // NOLINT(lix-foreign-exceptions) // TODO: toml::syntax_error
+diff --git a/meson.build b/meson.build
+index bede78a647..a72016522e 100644
+--- a/meson.build
++++ b/meson.build
+@@ -363,7 +363,10 @@
+   dependency('gmock_main', required : enable_tests, include_type : 'system'),
+ ]
+ 
+-toml11 = dependency('toml11', version : '>=4.0.0', required : true, method : 'cmake', include_type : 'system')
++toml11 = dependency('toml11', version : '>=3.7.0', required : true, method : 'cmake', include_type : 'system')
++configdata += {
++  'HAVE_TOML11_4': toml11.version().version_compare('>= 4.0.0').to_int(),
++}
+ 
+ pegtl = dependency(
+   'pegtl',
+diff --git a/package.nix b/package.nix
+index eb0e5c602a..9357b8ebd1 100644
+--- a/package.nix
++++ b/package.nix
+@@ -57,7 +57,6 @@
+   systemtap-lix ? __forDefaults.systemtap-lix,
+   # FIXME: remove default after dropping NixOS 25.05
+   toml11-lix ? __forDefaults.toml11-lix,
+-  toml11,
+   util-linuxMinimal ? utillinuxMinimal,
+   utillinuxMinimal ? null,
+   xz,
+@@ -118,8 +117,7 @@
+ 
+     passt-lix = callPackage ./misc/passt.nix { };
+ 
+-    toml11-lix =
+-      if lib.versionOlder toml11.version "4.4.0" then callPackage ./misc/toml11.nix { } else toml11;
++    toml11-lix = callPackage ./misc/toml11.nix { };
+   },
+ }:
+ 
+diff --git a/tests/functional2/lang/fromTOML-overflowing/eval-fail-overflow.err.exp b/tests/functional2/lang/fromTOML-overflowing/eval-fail-overflow.err.exp
+deleted file mode 100644
+index 0c90e85edf..0000000000
+--- a/tests/functional2/lang/fromTOML-overflowing/eval-fail-overflow.err.exp
++++ /dev/null
+@@ -1,13 +0,0 @@
+-error:
+-       … while calling the 'fromTOML' builtin
+-         at /pwd/in.nix:1:1:
+-            1| builtins.fromTOML ''attr = 9223372036854775808''
+-             | ^
+-            2|
+-
+-       error: while parsing TOML: [error] toml::parse_dec_integer: too large integer: current max digits = 2^63
+-        --> fromTOML
+-          |
+-        1 | attr = 9223372036854775808
+-          |                           ^-- must be < 2^63
+-       
+diff --git a/tests/functional2/lang/fromTOML-overflowing/eval-fail-underflow.err.exp b/tests/functional2/lang/fromTOML-overflowing/eval-fail-underflow.err.exp
+deleted file mode 100644
+index a287e18655..0000000000
+--- a/tests/functional2/lang/fromTOML-overflowing/eval-fail-underflow.err.exp
++++ /dev/null
+@@ -1,13 +0,0 @@
+-error:
+-       … while calling the 'fromTOML' builtin
+-         at /pwd/in.nix:1:1:
+-            1| builtins.fromTOML ''attr = -9223372036854775809''
+-             | ^
+-            2|
+-
+-       error: while parsing TOML: [error] toml::parse_dec_integer: too large integer: current max digits = 2^63
+-        --> fromTOML
+-          |
+-        1 | attr = -9223372036854775809
+-          |                            ^-- must be < 2^63
+-       
+diff --git a/tests/functional2/lang/fromTOML-overflowing/in-overflow.nix b/tests/functional2/lang/fromTOML-overflowing/in-overflow.nix
+deleted file mode 100644
+index 17f0448b3d..0000000000
+--- a/tests/functional2/lang/fromTOML-overflowing/in-overflow.nix
++++ /dev/null
+@@ -1,1 +0,0 @@
+-builtins.fromTOML ''attr = 9223372036854775808''
+diff --git a/tests/functional2/lang/fromTOML-overflowing/in-underflow.nix b/tests/functional2/lang/fromTOML-overflowing/in-underflow.nix
+deleted file mode 100644
+index 923fdf3545..0000000000
+--- a/tests/functional2/lang/fromTOML-overflowing/in-underflow.nix
++++ /dev/null
+@@ -1,1 +0,0 @@
+-builtins.fromTOML ''attr = -9223372036854775809''

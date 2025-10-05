@@ -1,0 +1,40 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "regex"
+      ],
+      "path": "/nix/store/y6w1gzbf6i691z35rbn6kzrmf1n5bmdc-source",
+      "ref": "v0.25.0",
+      "rev": "cb8b7bfdcdc2272aadf92153c668acd3c901bd6b",
+      "sha256": "1ggp5rvs217dv2n0p5ddm5h17pv2mc7724n8cd0b393kmsjiykhz",
+      "srcDir": "src",
+      "url": "https://github.com/nitely/nim-regex/archive/cb8b7bfdcdc2272aadf92153c668acd3c901bd6b.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "tempfile"
+      ],
+      "path": "/nix/store/d0x874ngf02b8fk1xralnvmij7xh0kjc-source",
+      "ref": "0.1.7",
+      "rev": "26e0239441755e5edcfd170e9aa566bb9c9eb6f3",
+      "sha256": "10d1g09q6p554pwr6a3b6ajnwqbphz3a4cwkfa05jbviflfyzjyk",
+      "srcDir": "",
+      "url": "https://github.com/OpenSystemsLab/tempfile.nim/archive/26e0239441755e5edcfd170e9aa566bb9c9eb6f3.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "unicodedb"
+      ],
+      "path": "/nix/store/wpilzdf8vdwp7w129yrl821p9qvl3ky3-source",
+      "ref": "0.12.0",
+      "rev": "b055310c08db8f879057b4fec15c8301ee93bb2a",
+      "sha256": "0w77h75vrgp6jiq4dd9i2m4za2cf8qhjkz2wlxiz27yn2isjrndy",
+      "srcDir": "src",
+      "url": "https://github.com/nitely/nim-unicodedb/archive/b055310c08db8f879057b4fec15c8301ee93bb2a.tar.gz"
+    }
+  ]
+}

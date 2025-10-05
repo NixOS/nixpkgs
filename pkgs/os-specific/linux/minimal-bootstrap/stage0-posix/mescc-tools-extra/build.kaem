@@ -1,0 +1,39 @@
+# This is a modified version of mescc-tools-extra/mescc-tools-extra.kaem
+# https://github.com/oriansj/mescc-tools-extra/blob/ec53af69d6d2119b47b369cd0ec37ac806e7ad60/mescc-tools-extra.kaem
+# - Paths to build inputs have been changed for nix
+# - Added additional step to create $out directory
+
+## Copyright (C) 2017 Jeremiah Orians
+## This file is part of mescc-tools.
+##
+## mescc-tools is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## mescc-tools is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
+
+alias CC="${mescc-tools}/bin/M2-Mesoplanet --operating-system ${m2libcOS} --architecture ${m2libcArch} -f"
+cd ${src}/mescc-tools-extra
+
+# Create output folder
+CC mkdir.c -o ${TMP}/mkdir
+${TMP}/mkdir -p ${out}/bin
+
+CC sha256sum.c -o ${out}/bin/sha256sum
+CC match.c -o ${out}/bin/match
+CC mkdir.c -o ${out}/bin/mkdir
+CC untar.c -o ${out}/bin/untar
+CC ungz.c -o ${out}/bin/ungz
+CC unbz2.c -o ${out}/bin/unbz2
+CC catm.c -o ${out}/bin/catm
+CC cp.c -o ${out}/bin/cp
+CC chmod.c -o ${out}/bin/chmod
+CC rm.c -o ${out}/bin/rm
+CC replace.c -o ${out}/bin/replace
