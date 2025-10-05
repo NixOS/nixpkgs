@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  platform-tools,
   makeWrapper,
   socat,
   go-mtpfs,
   adbfs-rootless,
+  androidenv,
 }:
 
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   installPhase =
     let
       dependencies = lib.makeBinPath [
-        platform-tools
+        androidenv.androidPkgs.platform-tools
         socat
         go-mtpfs
         adbfs-rootless
