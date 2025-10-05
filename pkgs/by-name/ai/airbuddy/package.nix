@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     name = "AirBuddy.dmg";
     url = "https://download.airbuddy.app/WebDownload/AirBuddy_v${finalAttrs.version}.dmg";
-    hash = "sha256-cwvSFvaREbF+JvV5Y5dFaj6fZbzdzcjBgzdQ9WDcCFY=";
+    hash = "sha256-envrZqcWASJN8j7LTdbOpE9RjOe3yeX8FzFYCxU/QlQ=";
   };
 
   dontPatch = true;
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Take Control of Your Wireless Devices on macOS";
     longDescription = ''
       Open your AirPods case next to your Mac to see the status right away, just like it works on your iPhone or iPad.
@@ -42,9 +42,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://v2.airbuddy.app";
     changelog = "https://support.airbuddy.app/articles/airbuddy-2-changelog";
-    license = with licenses; [ unfree ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ stepbrobd ];
+    license = with lib.licenses; [ unfree ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"
