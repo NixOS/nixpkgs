@@ -131,6 +131,22 @@ in
         default = true;
         description = "Whether to whitelist the FreeIPA domain in Chromium.";
       };
+
+      shells = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = with pkgs; [
+          bash
+          zsh
+        ];
+        defaultText = lib.literalExpression ''
+          with pkgs; [ bash zsh ];
+        '';
+        description = ''
+          List of shells which binaries should be installed to /bin/<name>.
+
+          FreeIPA typicly configures somesthing like /bin/bash into the users shell attribute.
+        '';
+      };
     };
   };
 
@@ -296,5 +312,15 @@ in
     networking.timeServers = lib.optional cfg.useAsTimeserver cfg.server;
 
     security.pki.certificateFiles = lib.singleton cfg.certificate;
+
+    systemd.tmpfiles.settings."10-ipa-shells" = lib.foldl' (
+      acc: pkg:
+      (
+        acc
+        // {
+          ${pkg.shellPath}."L+".argument = "${pkg}${pkg.shellPath}";
+        }
+      )
+    ) { } cfg.shells;
   };
 }
