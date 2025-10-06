@@ -59,6 +59,11 @@ stdenv.mkDerivation rec {
     libvorbis
   ];
 
+  cmakeFlags = [
+    # fix compatibility with CMake (https://cmake.org/cmake/help/v4.0/command/cmake_minimum_required.html)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "4.0")
+  ];
+
   meta = with lib; {
     description = "Toolbox for manipulating and creating Ogg video files";
     homepage = "http://www.streamnik.de/oggvideotools.html";
