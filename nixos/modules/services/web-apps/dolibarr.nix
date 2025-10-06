@@ -55,6 +55,23 @@ let
       ${concatStringsSep "\n" (mapAttrsToList (k: v: "\$${k} = ${toStr k v};") settings)}
     '';
 
+  dbUnit =
+    {
+      "mysql" = "mysql.service";
+      "postgresql" = "postgresql.target";
+    }
+    .${cfg.database.type};
+
+  dbPort =
+    if cfg.database.createLocally then
+      {
+        "mysql" = config.services.mysql.settings.mysqld.port;
+        "postgresql" = config.services.postgresql.settings.port;
+      }
+      .${cfg.database.type}
+    else
+      cfg.database.port;
+
   # see https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/install/install.forced.sample.php for all possible values
   install = {
     force_install_noedit = 2;
@@ -62,9 +79,14 @@ let
     force_install_nophpinfo = true;
     force_install_lockinstall = "444";
     force_install_distrib = "nixos";
-    force_install_type = "mysqli";
+    force_install_type =
+      {
+        "mysql" = "mysqli";
+        "postgresql" = "pgsql";
+      }
+      .${cfg.database.type};
     force_install_dbserver = cfg.database.host;
-    force_install_port = toString cfg.database.port;
+    force_install_port = toString dbPort;
     force_install_database = cfg.database.name;
     force_install_databaselogin = cfg.database.user;
 
@@ -128,6 +150,15 @@ in
     };
 
     database = {
+      type = mkOption {
+        type = types.enum [
+          "mysql"
+          "postgresql"
+        ];
+        example = "postgresql";
+        default = "mysql";
+        description = "Database engine to use.";
+      };
       host = mkOption {
         type = types.str;
         default = "localhost";
@@ -245,14 +276,19 @@ in
         dolibarr_main_data_root = "${cfg.stateDir}/documents";
 
         dolibarr_main_db_host = cfg.database.host;
-        dolibarr_main_db_port = toString cfg.database.port;
+        dolibarr_main_db_port = toString dbPort;
         dolibarr_main_db_name = cfg.database.name;
         dolibarr_main_db_prefix = "llx_";
         dolibarr_main_db_user = cfg.database.user;
         dolibarr_main_db_pass = mkIf (cfg.database.passwordFile != null) ''
           file_get_contents("${cfg.database.passwordFile}")
         '';
-        dolibarr_main_db_type = "mysqli";
+        dolibarr_main_db_type =
+          {
+            "mysql" = "mysqli";
+            "postgresql" = "pgsql";
+          }
+          .${cfg.database.type};
         dolibarr_main_db_character_set = mkDefault "utf8";
         dolibarr_main_db_collation = mkDefault "utf8_unicode_ci";
 
@@ -262,7 +298,16 @@ in
         # Security settings
         dolibarr_main_prod = true;
         dolibarr_main_force_https = vhostCfg.forceSSL or false;
-        dolibarr_main_restrict_os_commands = "${pkgs.mariadb}/bin/mysqldump, ${pkgs.mariadb}/bin/mysql";
+        dolibarr_main_restrict_os_commands =
+          {
+            "mysql" = "${pkgs.mariadb}/bin/mysqldump, ${pkgs.mariadb}/bin/mysql";
+            "postgresql" =
+              let
+                pkg = config.services.postgresql.package;
+              in
+              "${pkg}/bin/pg_dump, ${pkg}/bin/psql";
+          }
+          .${cfg.database.type};
         dolibarr_nocsrfcheck = false;
         dolibarr_main_instance_unique_id = ''
           file_get_contents("${cfg.stateDir}/dolibarr_main_instance_unique_id")
@@ -277,7 +322,7 @@ in
         "L '${cfg.stateDir}/install.forced.php' - ${cfg.user} ${cfg.group} - ${mkConfigFile "install.forced.php" install}"
       ];
 
-      services.mysql = mkIf cfg.database.createLocally {
+      services.mysql = mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
         enable = mkDefault true;
         package = mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
@@ -289,6 +334,20 @@ in
             };
           }
         ];
+      };
+
+      services.postgresql = mkIf (cfg.database.createLocally && cfg.database.type == "postgresql") {
+        enable = mkDefault true;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.user;
+            ensureDBOwnership = true;
+          }
+        ];
+        authentication = ''
+          host ${cfg.database.name} ${cfg.database.user} localhost trust
+        '';
       };
 
       services.nginx.enable = mkIf (cfg.nginx != null) true;
@@ -308,7 +367,11 @@ in
         ]
       );
 
-      systemd.services."phpfpm-dolibarr".after = mkIf cfg.database.createLocally [ "mysql.service" ];
+      systemd.services."phpfpm-dolibarr" = {
+        after = lib.optional cfg.database.createLocally dbUnit;
+        requires = lib.optional cfg.database.createLocally dbUnit;
+      };
+
       services.phpfpm.pools.dolibarr = {
         inherit (cfg) user group;
         phpPackage = pkgs.php83.buildEnv {
@@ -338,6 +401,7 @@ in
       systemd.services.dolibarr-config = {
         description = "dolibarr configuration file management via NixOS";
         wantedBy = [ "multi-user.target" ];
+        after = lib.optional cfg.database.createLocally dbUnit;
 
         script =
           let
