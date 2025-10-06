@@ -46,7 +46,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
     propagatedBuildInputs = [ ncurses ];
     preInstall = "mkdir -p $out/bin";
 
-    meta = with lib; {
+    meta = {
       description = "Build tool for OCaml";
       longDescription = ''
         ocp-build is a build system for OCaml application, based on simple
@@ -56,8 +56,8 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
         between source files.
       '';
       homepage = "https://www.typerex.org/ocp-build.html";
-      license = licenses.gpl3;
-      maintainers = [ maintainers.jirkamarsik ];
+      license = lib.licenses.gpl3;
+      maintainers = [ lib.maintainers.jirkamarsik ];
       mainProgram = "ocp-build";
       inherit (ocaml.meta) platforms;
     };

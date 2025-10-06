@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-GnchyE2TswvjYlehhMYesZruTTwyTorfR+17K0RXXFY=";
 
-  meta = with lib; {
+  meta = {
     description = "Asset discovery and identification tools";
     mainProgram = "dismap";
     homepage = "https://github.com/zhzyker/dismap";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

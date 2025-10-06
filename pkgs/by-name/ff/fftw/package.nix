@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Fastest Fourier Transform in the West library";
     homepage = "https://www.fftw.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     pkgConfigModules = [
       {
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
       .${precision}
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # quad-precision requires libquadmath from gfortran, but libquadmath is not supported on aarch64
     badPlatforms = lib.optionals (precision == "quad-precision") platforms.aarch64;
   };

@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyphen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to hyphenate text";
     homepage = "https://github.com/Kozea/Pyphen";
     changelog = "https://github.com/Kozea/Pyphen/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl21
       mpl20

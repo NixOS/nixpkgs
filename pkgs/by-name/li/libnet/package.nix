@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sam-github/libnet";
     description = "Portable framework for low-level network packet construction";
     mainProgram = "libnet-config";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -31,14 +31,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=different_input_colored"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small utility to compare Rust micro-benchmarks";
     mainProgram = "cargo-benchcmp";
     homepage = "https://github.com/BurntSushi/cargo-benchcmp";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       unlicense
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

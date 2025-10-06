@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beautysh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for beautifying Bash scripts";
     homepage = "https://github.com/lovesegfault/beautysh";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "beautysh";
   };
 }

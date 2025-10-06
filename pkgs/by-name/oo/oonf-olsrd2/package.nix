@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Adhoc wireless mesh routing daemon";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://olsr.org/";
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.linux;
   };
 }

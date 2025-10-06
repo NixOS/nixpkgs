@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "CFLAGS=-O3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pooler/cpuminer";
     description = "CPU miner for Litecoin and Bitcoin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "minerd";
   };
 }

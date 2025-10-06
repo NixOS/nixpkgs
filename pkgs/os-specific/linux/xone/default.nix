@@ -34,15 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel driver for Xbox One and Xbox Series X|S accessories";
     homepage = "https://github.com/dlundqvist/xone";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       rhysmdnz
       fazzi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "6";
   };
 })

@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Enables fully automatic tests for type annotated functions";
     homepage = "https://github.com/timothycrosley/hypothesis-auto/";
     changelog = "https://github.com/timothycrosley/hypothesis-auto/blob/master/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

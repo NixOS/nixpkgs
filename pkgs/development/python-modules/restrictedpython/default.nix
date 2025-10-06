@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RestrictedPython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Restricted execution environment for Python to run untrusted code";
     homepage = "https://github.com/zopefoundation/RestrictedPython";
     changelog = "https://github.com/zopefoundation/RestrictedPython/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ juaningan ];
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ juaningan ];
   };
 }

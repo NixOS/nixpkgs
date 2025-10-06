@@ -19,10 +19,10 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ home-connect-async ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative (and improved) Home Connect integration for Home Assistant";
     homepage = "https://github.com/ekutner/home-connect-hass";
-    maintainers = with maintainers; [ kranzes ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
+    license = lib.licenses.mit;
   };
 }

@@ -76,12 +76,12 @@ buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
     changelog = "https://github.com/Matoking/protontricks/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

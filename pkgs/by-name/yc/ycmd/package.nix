@@ -121,7 +121,7 @@ stdenv.mkDerivation {
       --replace __file__ "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Code-completion and comprehension server";
     longDescription = ''
       Note if YouCompleteMe Vim plugin complains with;
@@ -134,13 +134,13 @@ stdenv.mkDerivation {
     '';
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       rasendubi
       lnl7
       mel
       S0AndS0
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

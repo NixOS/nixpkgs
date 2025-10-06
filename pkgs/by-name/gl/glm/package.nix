@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp -v ../doc/manual.pdf $doc/share/doc/glm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenGL Mathematics library for C++";
     longDescription = ''
       OpenGL Mathematics (GLM) is a header only C++ mathematics library for
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
       specification and released under the MIT license.
     '';
     homepage = "https://github.com/g-truc/glm";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ smancill ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ smancill ];
   };
 }

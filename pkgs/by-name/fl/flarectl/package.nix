@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI application for interacting with a Cloudflare account";
     homepage = "https://github.com/cloudflare/cloudflare-go";
     changelog = "https://github.com/cloudflare/cloudflare-go/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jmbaur ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jmbaur ];
     mainProgram = "flarectl";
   };
 }

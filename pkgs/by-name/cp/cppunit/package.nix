@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   # tested compilers.
   configureFlags = [ "--disable-werror" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://freedesktop.org/wiki/Software/cppunit/";
     description = "C++ unit testing framework";
     mainProgram = "DllPlugInTester";
-    license = licenses.lgpl21;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

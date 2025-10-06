@@ -72,11 +72,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source host-based instrusion detection system";
     homepage = "https://www.ossec.net";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.all;
   };
 }

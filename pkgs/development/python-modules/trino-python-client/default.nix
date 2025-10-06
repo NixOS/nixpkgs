@@ -76,12 +76,12 @@ buildPythonPackage rec {
     "test_multithreaded_oauth2_authentication_flow"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trinodb/trino-python-client/blob/${src.tag}/CHANGES.md";
     description = "Client for the Trino distributed SQL Engine";
     homepage = "https://github.com/trinodb/trino-python-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
       flokli
     ];

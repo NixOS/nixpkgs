@@ -80,11 +80,11 @@ buildPythonPackage rec {
     "test_encrypted_private_key_handling_failure"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OPC UA / IEC 62541 Client and Server for Python";
     homepage = "https://github.com/FreeOpcUa/opcua-asyncio";
     changelog = "https://github.com/FreeOpcUa/opcua-asyncio/releases/tag/${src.tag}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ harvidsen ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ harvidsen ];
   };
 }

@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
     '';
-    platforms = platforms.all;
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       prusnak
       logger
     ];

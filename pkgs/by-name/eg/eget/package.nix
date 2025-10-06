@@ -47,10 +47,10 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easily install prebuilt binaries from GitHub";
     homepage = "https://github.com/zyedidia/eget";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

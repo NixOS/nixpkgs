@@ -33,11 +33,11 @@ buildPythonPackage rec {
     pytest tests/ -k 'not test_check_token'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free software implementation of Symantec's VIP Access application and protocol";
     mainProgram = "vipaccess";
     homepage = "https://github.com/dlenski/python-vipaccess";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aw ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aw ];
   };
 }

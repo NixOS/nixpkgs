@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "strenum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for enum that inherits from str";
     homepage = "https://github.com/irgeek/StrEnum";
     changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

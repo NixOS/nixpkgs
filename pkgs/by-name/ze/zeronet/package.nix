@@ -47,11 +47,11 @@ python3Packages.buildPythonApplication rec {
       --set PATH ${python3Packages.python}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized websites using Bitcoin crypto and BitTorrent network";
     homepage = "https://zeronet.io/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ fgaz ];
     knownVulnerabilities = [
       ''
         Unmaintained. Probable XSS/code injection vulnerability.

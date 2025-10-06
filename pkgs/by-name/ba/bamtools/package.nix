@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ API & command-line toolkit for working with BAM data";
     mainProgram = "bamtools";
     homepage = "https://github.com/pezmaster31/bamtools";
     changelog = "https://github.com/pezmaster31/bamtools/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 })

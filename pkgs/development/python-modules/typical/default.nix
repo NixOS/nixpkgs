@@ -72,11 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for runtime analysis, inference and validation of Python types";
     homepage = "https://python-typical.org/";
     changelog = "https://github.com/seandstewart/typical/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kfollesdal ];
   };
 }

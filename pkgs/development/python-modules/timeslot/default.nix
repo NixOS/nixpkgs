@@ -36,10 +36,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "timeslot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data type for representing time slots with a start and end";
     homepage = "https://github.com/ErikBjare/timeslot";
-    maintainers = with maintainers; [ huantian ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ huantian ];
+    license = lib.licenses.mit;
   };
 }

@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rapt_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for RAPT Pill hydrometer BLE devices";
     homepage = "https://github.com/sairon/rapt-ble";
     changelog = "https://github.com/sairon/rapt-ble/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -36,11 +36,11 @@ buildGoModule rec {
       --zsh <($out/bin/gator completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Policy Controller for Kubernetes";
     mainProgram = "gator";
     homepage = "https://github.com/open-policy-agent/gatekeeper";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

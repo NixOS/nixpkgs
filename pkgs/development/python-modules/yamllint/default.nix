@@ -48,12 +48,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yamllint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
     changelog = "https://github.com/adrienverge/yamllint/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mikefaille ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mikefaille ];
     mainProgram = "yamllint";
   };
 }

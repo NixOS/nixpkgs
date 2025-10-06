@@ -127,11 +127,11 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ntfy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for sending notifications, on demand and when commands finish";
     homepage = "https://ntfy.readthedocs.io/en/latest/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ kamilchm ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ kamilchm ];
     mainProgram = "ntfy";
   };
 }

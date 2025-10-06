@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "taglib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Taglib audio metadata library";
     mainProgram = "pyprinttags";
     homepage = "https://github.com/supermihi/pytaglib";
     changelog = "https://github.com/supermihi/pytaglib/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mrkkrp ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mrkkrp ];
   };
 }

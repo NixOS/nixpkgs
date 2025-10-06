@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ciscomobilityexpress" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Cisco Mobility Express APIs to fetch connected devices";
     homepage = "https://github.com/fbradyirl/ciscomobilityexpress";
-    license = licenses.mit;
-    maintainers = with maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
   };
 }

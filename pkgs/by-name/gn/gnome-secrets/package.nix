@@ -70,13 +70,13 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/secrets";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mvnetbiz ];
-    teams = [ teams.gnome-circle ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "secrets";
   };
 }

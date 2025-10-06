@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools.roadlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROADtools common components library";
     homepage = "https://pypi.org/project/roadlib/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

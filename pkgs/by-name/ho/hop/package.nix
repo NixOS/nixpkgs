@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "--bigloolibdir=${bigloo}/lib/bigloo/${bigloo-release}/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-tier programming language for the Web 2.0 and the so-called diffuse Web";
     homepage = "http://hop.inria.fr/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

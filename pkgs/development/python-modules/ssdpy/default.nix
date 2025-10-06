@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "test_server_extra_fields"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/MoshiBin/ssdpy/releases/tag/${version}";
     description = "Lightweight, compatible SSDP library for Python";
     homepage = "https://github.com/MoshiBin/ssdpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mjm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mjm ];
   };
 }

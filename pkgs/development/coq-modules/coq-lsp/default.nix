@@ -75,12 +75,12 @@
     yojson
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol and VS Code Extension for Coq";
     homepage = "https://github.com/ejgallego/coq-lsp";
     changelog = "https://github.com/ejgallego/coq-lsp/blob/${defaultVersion}/CHANGES.md";
-    maintainers = with maintainers; [ alizter ];
-    license = licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ alizter ];
+    license = lib.licenses.lgpl21Only;
   };
 }).overrideAttrs
   (

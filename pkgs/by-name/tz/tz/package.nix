@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-Mdp2bcqTawbeqdu06QfB4atLaPpPDoE/eisTytxCnj4=";
 
-  meta = with lib; {
+  meta = {
     description = "Time zone helper";
     homepage = "https://github.com/oz/tz";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "tz";
   };
 }

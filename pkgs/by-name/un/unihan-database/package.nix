@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode Han Database";
     homepage = "https://www.unicode.org/";
-    license = licenses.unicode-dfs-2016;
-    platforms = platforms.all;
+    license = lib.licenses.unicode-dfs-2016;
+    platforms = lib.platforms.all;
   };
 }

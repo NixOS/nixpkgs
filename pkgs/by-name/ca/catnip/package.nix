@@ -41,12 +41,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal audio visualizer for linux/unix/macOS/windows";
     homepage = "https://github.com/noriah/catnip";
     changelog = "https://github.com/noriah/catnip/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "catnip";
   };
 }

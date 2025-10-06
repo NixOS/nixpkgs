@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
     export XDG_DOCUMENTS_DIR=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LV2 & VST3 synthesizer plug-in (previously released as Vember Audio Surge)";
     homepage = "https://surge-synthesizer.github.io";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       magnetophon
       orivej
     ];

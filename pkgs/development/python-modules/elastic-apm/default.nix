@@ -91,12 +91,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elasticapm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
     changelog = "https://github.com/elastic/apm-agent-python/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "elasticapm-run";
   };
 }

@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Google Visualization";
     homepage = "https://developers.google.com/chart/interactive/docs/dev/gviz_api_lib";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

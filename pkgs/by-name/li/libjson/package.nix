@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++11" ];
   preInstall = "mkdir -p $out/lib";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libjson.sourceforge.net/";
     description = "JSON reader and writer";
     longDescription = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       It's highly customizable to optimize for your particular project, and
       very lightweight. For Windows, OSX, or Linux. Works in any language.
     '';
-    platforms = platforms.unix;
-    license = licenses.bsd2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd2;
   };
 }

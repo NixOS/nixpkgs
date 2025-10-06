@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI star constellations displayer";
     homepage = "https://github.com/Haruno19/starfetch";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "starfetch";
   };
 }

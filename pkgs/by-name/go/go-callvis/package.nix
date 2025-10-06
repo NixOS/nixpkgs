@@ -26,11 +26,11 @@ buildGoModule rec {
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Visualize call graph of a Go program using Graphviz";
     mainProgram = "go-callvis";
     homepage = "https://github.com/ofabry/go-callvis";
-    license = licenses.mit;
-    maintainers = with maintainers; [ meain ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ meain ];
   };
 }

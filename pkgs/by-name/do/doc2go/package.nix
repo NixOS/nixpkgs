@@ -36,7 +36,7 @@ buildGoModule rec {
     unset subPackages
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/abhinav/doc2go";
     changelog = "https://github.com/abhinav/doc2go/blob/${src.rev}/CHANGELOG.md";
     description = "Your Go project's documentation, to-go";
@@ -46,12 +46,12 @@ buildGoModule rec {
       from your Go code. It is a self-hosted static alternative to
       https://pkg.go.dev/ and https://godocs.io/.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       # general project license
       asl20
       # internal/godoc/synopsis*.go adapted from golang source
       bsd3
     ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

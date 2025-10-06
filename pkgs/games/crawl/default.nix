@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source, single-player, role-playing roguelike game";
     homepage = "http://crawl.develz.org/";
     longDescription = ''
@@ -123,13 +123,13 @@ stdenv.mkDerivation rec {
       with dangerous and unfriendly monsters in a quest to rescue the
       mystifyingly fabulous Orb of Zot.
     '';
-    platforms = platforms.linux ++ platforms.darwin;
-    license = with licenses; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = with lib.licenses; [
       gpl2Plus
       bsd2
       bsd3
       mit
-      licenses.zlib
+      lib.licenses.zlib
       cc0
     ];
     maintainers = [ ];

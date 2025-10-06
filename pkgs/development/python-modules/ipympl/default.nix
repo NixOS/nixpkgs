@@ -43,13 +43,13 @@ buildPythonPackage rec {
     "ipympl.backend_nbagg"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Matplotlib Jupyter Extension";
     homepage = "https://github.com/matplotlib/jupyter-matplotlib";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jluttine
       fabiangd
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

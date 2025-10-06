@@ -42,11 +42,11 @@ mkYarnPackage rec {
 
   doDist = false;
 
-  meta = with lib; {
+  meta = {
     description = "Show multiple entity states and attributes on entity rows in Home Assistant's Lovelace UI";
     homepage = "https://github.com/benct/lovelace-multiple-entity-row";
     changelog = "https://github.com/benct/lovelace-multiple-entity-row/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

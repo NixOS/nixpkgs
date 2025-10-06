@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Easy-to-use uinput library in C++";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

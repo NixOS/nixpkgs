@@ -46,9 +46,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc_tools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf code generator for gRPC";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
     maintainers = [ ];
   };

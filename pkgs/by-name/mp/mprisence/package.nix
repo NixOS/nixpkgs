@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Highly customizable Discord Rich Presence for MPRIS media players on Linux";
     homepage = "https://github.com/lazykern/mprisence";
-    license = licenses.mit;
-    maintainers = with maintainers; [ toasteruwu ];
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ toasteruwu ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "mprisence";
   };
 })

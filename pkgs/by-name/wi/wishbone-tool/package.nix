@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [ libusb-compat-0_1 ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate a Wishbone device over some sort of bridge";
     mainProgram = "wishbone-tool";
     homepage = "https://github.com/litex-hub/wishbone-utils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ edef ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ edef ];
+    platforms = lib.platforms.linux;
   };
 }

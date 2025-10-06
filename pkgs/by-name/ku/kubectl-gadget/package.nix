@@ -33,12 +33,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-gadget" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kranurag7
       devusb
     ];

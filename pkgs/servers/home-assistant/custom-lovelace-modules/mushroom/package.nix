@@ -26,11 +26,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/piitaya/lovelace-mushroom/releases/tag/v${version}";
     description = "Mushroom Cards - Build a beautiful dashboard easily";
     homepage = "https://github.com/piitaya/lovelace-mushroom";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

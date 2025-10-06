@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "feedparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal feed parser";
     homepage = "https://github.com/kurtmckee/feedparser";
     changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

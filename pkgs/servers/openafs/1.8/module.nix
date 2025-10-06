@@ -154,12 +154,12 @@ stdenv.mkDerivation {
     xz -f ${modDestDir}/libafs.ko
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open AFS client kernel module";
     homepage = "https://www.openafs.org";
-    license = licenses.ipl10;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.ipl10;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       andersk
       maggesi
       spacefrogg

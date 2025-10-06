@@ -60,16 +60,16 @@ stdenv.mkDerivation rec {
     taglib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection management software, free and simple";
     mainProgram = "tellico";
     homepage = "https://tellico-project.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       gpl3Only
       lgpl2Only
     ];
-    maintainers = with maintainers; [ numkem ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ numkem ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     "-DLUABIND_LIBRARY=${luabind}/lib/libluabind09.a"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Physics-based puzzle game";
     mainProgram = "soi";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free;
     downloadPage = "https://sourceforge.net/projects/soi/files/";
   };
 }

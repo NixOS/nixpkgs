@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
   # See http://ubuntuforums.org/showthread.php?p=10535837
   env.NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://segaretro.org/Gens/GS";
     description = "Genesis/Mega Drive emulator";
     platforms = [ "i686-linux" ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
-  meta = with lib; {
+  meta = {
     description = "Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
     mainProgram = "jumanpp";
     longDescription = ''
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
       language model (RNNLM).
     '';
     homepage = "https://nlp.ist.i.kyoto-u.ac.jp/index.php?JUMAN++";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mt-caret ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mt-caret ];
+    platforms = lib.platforms.all;
   };
 }

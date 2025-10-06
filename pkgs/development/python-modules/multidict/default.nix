@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multidict" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/aio-libs/multidict/blob/${src.tag}/CHANGES.rst";
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

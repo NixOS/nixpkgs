@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.data.tables" ];
 
-  meta = with lib; {
+  meta = {
     description = "NoSQL data storage service that can be accessed from anywhere";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-data-tables_${version}/sdk/tables/azure-data-tables/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

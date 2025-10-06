@@ -78,11 +78,11 @@ buildPythonPackage rec {
     "tests/tracing/test_opentelemetry.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for implementing GraphQL servers using schema-first approach";
     homepage = "https://ariadnegraphql.org";
     changelog = "https://github.com/mirumee/ariadne/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

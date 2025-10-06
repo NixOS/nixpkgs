@@ -26,8 +26,8 @@ let
         mpl11
         interbase
       ];
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
         bbenno
         marcweber
       ];

@@ -29,9 +29,9 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official web interface for ASF";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/JustArchiNET/ASF-ui";
     inherit (ArchiSteamFarm.meta) maintainers platforms;
   };

@@ -27,11 +27,11 @@ buildPythonPackage rec {
     sha256 = "d213c1de71d92505f95ced0460ee0f84fdc4ddcacb7d7dd343739ed4028e5569";
   };
 
-  meta = with lib; {
+  meta = {
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "XMPP library for Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "http://sleekxmpp.com/";
   };
 }

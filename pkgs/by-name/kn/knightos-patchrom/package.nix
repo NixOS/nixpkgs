@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://knightos.org/";
     description = "Patches jumptables into TI calculator ROM files and generates an include file";
     mainProgram = "patchrom";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

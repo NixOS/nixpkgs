@@ -73,11 +73,11 @@ buildPythonPackage rec {
     "--hypothesis-profile=ci"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for manipulating indices of ndarrays";
     homepage = "https://github.com/Quansight-Labs/ndindex";
     changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

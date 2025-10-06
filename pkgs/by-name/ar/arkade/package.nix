@@ -50,12 +50,12 @@ buildGoModule rec {
       --fish <($out/bin/arkade completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alexellis/arkade";
     description = "Open Source Kubernetes Marketplace";
     mainProgram = "arkade";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       welteki
       techknowlogick
       qjoly

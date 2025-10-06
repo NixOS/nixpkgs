@@ -31,11 +31,11 @@ buildPythonPackage rec {
     "mbientlab.warble"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for MbientLab's Warble library";
     homepage = "https://github.com/mbientlab/pywarble";
-    license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ stepbrobd ];
+    license = with lib.licenses; [ unfree ];
+    maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

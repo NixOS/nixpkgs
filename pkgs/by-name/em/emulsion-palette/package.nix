@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/io.github.lainsce.Emulsion $out/bin/emulsion-palette
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Store your color palettes in an easy way";
     homepage = "https://github.com/lainsce/emulsion";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

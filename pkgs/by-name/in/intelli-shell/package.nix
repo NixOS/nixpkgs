@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Like IntelliSense, but for shells";
     homepage = "https://github.com/lasantosr/intelli-shell";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lasantosr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lasantosr ];
     mainProgram = "intelli-shell";
   };
 }

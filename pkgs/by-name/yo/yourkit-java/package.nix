@@ -95,10 +95,10 @@ stdenvNoCC.mkDerivation {
     description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
     homepage = "https://www.yourkit.com";
     changelog = "https://www.yourkit.com/changes/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "yourkit-java-profiler";
     platforms = attrNames arches;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ herberteuler ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ herberteuler ];
   };
 }

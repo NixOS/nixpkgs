@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Deterministically output each input argument in a color assigned to it";
     homepage = "https://git.sleeping.town/wonder/colstr";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ annaaurora ];
+    license = with lib.licenses; [ cc0 ];
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "colstr";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

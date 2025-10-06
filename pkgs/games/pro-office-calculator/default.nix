@@ -26,12 +26,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Completely normal office calculator";
     mainProgram = "procalc";
     homepage = "https://proofficecalculator.com/";
-    maintainers = [ maintainers.pmiddend ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.pmiddend ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

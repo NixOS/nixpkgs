@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "soundcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the v2 SoundCloud API";
     homepage = "https://github.com/7x11x13/soundcloud.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
