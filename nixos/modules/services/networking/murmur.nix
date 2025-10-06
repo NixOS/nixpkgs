@@ -347,6 +347,7 @@ in
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateMounts = true;
         PrivateTmp = true;
         ProtectClock = true;
         ProtectControlGroups = true;
