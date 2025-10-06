@@ -12,7 +12,7 @@
   rustPlatform,
   cmake,
   gn,
-  go_1_24,
+  go,
   openjdk11_headless,
   ninja,
   patchelf,
@@ -124,7 +124,7 @@ buildBazelPackage rec {
     cmake
     python3
     gn
-    go_1_24
+    go
     jdk
     ninja
     patchelf
