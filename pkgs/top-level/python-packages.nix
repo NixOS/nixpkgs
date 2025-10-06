@@ -3653,6 +3653,10 @@ self: super: with self; {
 
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
+  dftd4 = callPackage ../by-name/df/dftd4/python.nix {
+    inherit (pkgs) dftd4;
+  };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
