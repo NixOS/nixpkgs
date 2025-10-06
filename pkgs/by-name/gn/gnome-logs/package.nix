@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  appstream,
   meson,
   ninja,
   pkg-config,
@@ -23,14 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "49.rc";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/gnome-logs-${version}.tar.xz";
-    hash = "sha256-FgqCL/N2Wgl6xFsbRSyGZajMJFQF1CH5/xZMk2q3hV4=";
+    hash = "sha256-+PV56wu22ajWrl7hQj+UR6+RIAeFF4tQu63UrC0lXUU=";
   };
 
   nativeBuildInputs = [
+    appstream
     meson
     ninja
     pkg-config
