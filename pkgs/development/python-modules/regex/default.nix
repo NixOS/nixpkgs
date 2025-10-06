@@ -31,6 +31,6 @@ buildPythonPackage rec {
       licenses.asl20
       licenses.cnri-python
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dwoffinden ];
   };
 }
