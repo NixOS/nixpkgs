@@ -121,6 +121,7 @@ let
       azurestack = archived "azurestack" "2025/10";
       googleworkspace = archived "googleworkspace" "2025/10";
       huaweicloudstack = archived "huaweicloudstack" "2025/10";
+      metal = archived "metal" "2025/10";
     };
 
   # excluding aliases, used by terraform-full
