@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.57.2";
+  version = "2.58.0";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
-    hash = "sha256-o4aSqsF09zt3SsYLp5XAwMYLpW1BNLag7APmSBZ0xgo=";
+    hash = "sha256-390zANong6IZaf+t4oiYF/t8GQak75JJfrpllps9q1o=";
   };
 
   nativeBuildInputs = [
