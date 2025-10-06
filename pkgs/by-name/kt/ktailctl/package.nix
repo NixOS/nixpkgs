@@ -3,7 +3,7 @@
   cmake,
   fetchFromGitHub,
   git,
-  go_1_24,
+  go,
   lib,
   nlohmann_json,
   stdenv,
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     git
-    go_1_24
+    go
     wrapQtAppsHook
   ];
 
