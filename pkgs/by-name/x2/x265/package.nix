@@ -76,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    nasm
   ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
   ++ lib.optionals numaSupport [ numactl ];
 
   cmakeFlags = [
