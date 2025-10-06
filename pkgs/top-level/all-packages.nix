@@ -3636,10 +3636,6 @@ with pkgs;
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
-  openmvg = callPackage ../applications/science/misc/openmvg {
-    inherit (llvmPackages) openmp;
-  };
-
   openmvs = callPackage ../applications/science/misc/openmvs {
     inherit (llvmPackages) openmp;
   };
