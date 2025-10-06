@@ -661,6 +661,15 @@ If you have any problems with formatting, please ping the [formatting team](http
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
+- Certain [prelude
+  attributes](https://nix.dev/manual/nix/latest/language/builtins.html) should
+  explicitly use the `builtins` prefix, while others should conveniently omit
+  it:
+
+  | Use `builtins` | Omit `builtins` |
+  |----------------|-----------------|
+  | <li>`builtins.abort`</li><li>`builtins.baseNameOf`</li><li>`builtins.break`</li><li>`builtins.derivation`</li><li>`builtins.derivationStrict`</li><li>`builtins.dirOf`</li><li>`builtins.false`</li><li>`builtins.fetchGit`</li><li>`builtins.fetchMercurial`</li><li>`builtins.fetchTarball`</li><li>`builtins.fetchTree`</li><li>`builtins.fromTOML`</li><li>`builtins.import`</li><li>`builtins.isNull`</li><li>`builtins.map`</li><li>`builtins.null`</li><li>`builtins.placeholder`</li><li>`builtins.removeAttrs`</li><li>`builtins.scopedImport`</li><li>`builtins.throw`</li><li>`builtins.toString`</li><li>`builtins.true`</li> | <li>`abort`</li><li>`baseNameOf`</li><li>`break`</li><li>`derivation`</li><li>`derivationStrict`</li><li>`dirOf`</li><li>`false`</li><li>`fetchGit`</li><li>`fetchMercurial`</li><li>`fetchTarball`</li><li>`fetchTree`</li><li>`fromTOML`</li><li>`import`</li><li>`isNull`</li><li>`map`</li><li>`null`</li><li>`placeholder`</li><li>`removeAttrs`</li><li>`scopedImport`</li><li>`throw`</li><li>`toString`</li><li>`true`</li> |
+
 - Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
   The purpose of this is:
    - to avoid churn as contributors with different style preferences undo each other's changes,
