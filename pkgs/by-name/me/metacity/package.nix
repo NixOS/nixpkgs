@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "metacity";
-  version = "3.57.1";
+  version = "3.58.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/metacity/${lib.versions.majorMinor finalAttrs.version}/metacity-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EpOibk3t/UvyALW7eIZzAIl5rjrG0wU/fbSBuHrMfN4=";
+    hash = "sha256-5DDIqSQJ7y+RpNq9UKcePTu8xHSj3sHK7DgTs4HX0bA=";
   };
 
   nativeBuildInputs = [
