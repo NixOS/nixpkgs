@@ -930,14 +930,13 @@
     "vendorHash": "sha256-ssmAveYUVI8z/1UWNeaMX0qdUewowCHNufJIFMirdVg="
   },
   "nutanix": {
-    "deleteVendor": true,
-    "hash": "sha256-p1VhGSor/uxQYiSb9enAeu6dtLRuXMKk9m2DtPEj6vs=",
+    "hash": "sha256-nk5wdbAzgBJ6gyYSXZAiNdjx/XQ6XldAMsjb8yv+y7w=",
     "homepage": "https://registry.terraform.io/providers/nutanix/nutanix",
     "owner": "nutanix",
     "repo": "terraform-provider-nutanix",
-    "rev": "v1.9.5",
+    "rev": "v2.3.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
+    "vendorHash": "sha256-ByB1ztK2/1pTFeO34eXVyQSSbe35qqoCeWe6MPZN7vY="
   },
   "oci": {
     "hash": "sha256-fEvo5R7HutlOmZ6DMvYKQiE0amwk/YPi1T2a55w70hQ=",
