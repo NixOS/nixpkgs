@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-weather";
-  version = "49.rc";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major finalAttrs.version}/gnome-weather-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gFwVmU12o1ap5+95AgCNnM2vNsqmpxD5PwuQWLHlgaw=";
+    hash = "sha256-7h92uF66nbDI1cAgQanYXs3SKrtexrs/8yIlkpwPzl8=";
   };
 
   nativeBuildInputs = [
