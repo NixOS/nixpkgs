@@ -97,6 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      adamcstephens
       nicoo
       rvdp
     ];
