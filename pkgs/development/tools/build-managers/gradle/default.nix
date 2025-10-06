@@ -129,8 +129,11 @@ let
       callPackage,
       makeWrapper,
       unzip,
+      coreutils,
+      findutils,
       ncurses5,
       ncurses6,
+      gnused,
       udev,
       testers,
       runCommand,
@@ -187,17 +190,40 @@ let
             if stdenv.hostPlatform.isLinux then "--add-flags \"-Djna.library.path=${jnaLibraryPath}\"" else "";
         in
         ''
+          # There are a lot of jars in lib, so put them under lib/gradle
+          # (note that this causes a minor incompatibility with the wrapper that we'll fix)
           mkdir -pv $out/lib/gradle/
           cp -rv lib/ $out/lib/gradle/
 
           gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
           test -f $gradle_launcher_jar
-          makeWrapper ${java}/bin/java $out/bin/gradle \
-            --set JAVA_HOME ${java} \
-            ${jnaFlag} \
-            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
 
           echo "${toolchainPaths}" > $out/lib/gradle/gradle.properties
+
+          # Just use the existing gradle wrapper (usually called `gradlew`).
+          mkdir -p $out/bin
+          cp bin/gradle $out/bin
+          patchShebangs --host $out/bin/gradle
+
+          # Use the path where we installed Gradle.
+          substituteInPlace $out/bin/gradle \
+            --replace-fail '$APP_HOME/lib' '$APP_HOME/lib/gradle/lib'
+
+          # Ensure that JAVA_HOME is set so the installed Gradle wrapper picks it up.
+          # The wrapper also needs coreutils, xargs, and sed.
+          wrapProgram $out/bin/gradle \
+            --set-default JAVA_HOME ${java} \
+            --suffix PATH : ${
+              lib.makeBinPath [
+                coreutils
+                findutils
+                gnused
+              ]
+            } \
+            ${jnaFlag}
+
+          # Support gradlew as an alias.
+          ln -s $out/bin/gradle $out/bin/gradlew
         '';
 
       dontFixup = !stdenv.hostPlatform.isLinux;
