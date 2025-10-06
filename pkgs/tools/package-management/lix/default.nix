@@ -51,7 +51,9 @@ let
           boehmgc =
             # TODO: Why is this called `boehmgc-nix_2_3`?
             let
-              boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
+              boehmgc-nix_2_3 = (boehmgc.override { enableLargeConfig = true; }).overrideAttrs (old: {
+                NIX_CFLAGS_COMPILE = (old.NIX_CFLAGS_COMPILE or "") + " -DINITIAL_MARK_STACK_SIZE=1048576";
+              });
             in
             # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
             if lib.versionOlder lix-args.version "2.91" then
@@ -243,15 +245,22 @@ lib.makeExtensible (self: {
     attrName = "git";
 
     lix-args = rec {
-      version = "2.94.0-pre-20250807_${builtins.substring 0 12 src.rev}";
+      version = "2.94.0-pre-20251001_${builtins.substring 0 12 src.rev}";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = "8bbd5e1d0df9c31b4d86ba07bc85beb952e42ccb";
-        hash = "sha256-P+WiN95OjCqHhfygglS/VOFTSj7qNdL5XQDo2wxhQqg=";
+        rev = "f1ef994f120a723839a6d837cc2b33914a30a4db";
+        hash = "sha256-Rmq98EchbKygPo+2g0nDsZ7QNMLe+loiMbflV5VKDzc=";
       };
+
+      patches = [
+        # Bumping to toml11 ≥4.0.0 makes integer parsing throw (as it should) instead of saturate on overflow.
+        # However, the updated version is not in nixpkgs yet, and the released versions still have the saturation bug.
+        # Hence reverting the bump for now seems to be the least bad option.
+        ./revert-toml11-bump.patch
+      ];
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
