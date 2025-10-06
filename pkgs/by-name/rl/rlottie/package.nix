@@ -8,24 +8,16 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rlottie";
-  version = "0.2";
+  version = "0.2-unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "rlottie";
-    rev = "v${version}";
-    sha256 = "10bxr1zf9wxl55d4cw2j02r6sgqln7mbxplhhfvhw0z92fi40kr3";
+    rev = "671c561130ead1c6e44805a7ec1263573a3440fd";
+    hash = "sha256-od3zatv4ZxUIoLkwy0TT8lAsDcjoPS4plci+ZDyz34Y=";
   };
-
-  patches = [
-    # Fixed build with GCC 11
-    (fetchpatch {
-      url = "https://github.com/Samsung/rlottie/commit/2d7b1fa2b005bba3d4b45e8ebfa632060e8a157a.patch";
-      hash = "sha256-2JPsj0WiBMMu0N3NUYDrHumvPN2YS8nPq5Zwagx6UWE=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
