@@ -8179,6 +8179,12 @@
     github = "pacien";
     githubId = 1449319;
   };
+  eval-exec = {
+    email = "execvy@gmail.com";
+    name = "Eval Exec";
+    github = "eval-exec";
+    githubId = 46400566;
+  };
   evalexpr = {
     name = "Jonathan Wilkins";
     email = "nixos@wilkins.tech";
