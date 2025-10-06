@@ -1738,7 +1738,7 @@
   };
   annaaurora = {
     email = "anna@annaaurora.eu";
-    matrix = "@papojari:artemislena.eu";
+    matrix = "@anna:annaaurora.eu";
     github = "auroraanna";
     githubId = 81317317;
     name = "Anna Aurora";
@@ -10339,6 +10339,11 @@
     email = "yuya.kusakabe@gmail.com";
     github = "higebu";
     githubId = 733288;
+  };
+  higherorderlogic = {
+    name = "Hol";
+    github = "HigherOrderLogic";
+    githubId = 73709188;
   };
   hirenashah = {
     email = "hiren@hiren.io";
