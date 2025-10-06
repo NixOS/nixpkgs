@@ -1244,15 +1244,6 @@
     "spdx": "MIT",
     "vendorHash": "sha256-vcuUt3WIo1TnLApch410JgtyCzliQRYMQQQ2Z9diDZ8="
   },
-  "stackpath": {
-    "hash": "sha256-n1IPOJ1NlguNMJASCXjNNUK0b5wGYe29aTcw7fNwVcU=",
-    "homepage": "https://registry.terraform.io/providers/stackpath/stackpath",
-    "owner": "stackpath",
-    "repo": "terraform-provider-stackpath",
-    "rev": "v2.1.0",
-    "spdx": "MPL-2.0",
-    "vendorHash": "sha256-G+5vSXhxmt0Qsqt7vnecPZfIxAonNF3l7ygQZ0nemnU="
-  },
   "statuscake": {
     "hash": "sha256-zXBZZA+2uRN2FeGrayq0a4EBk7T+PvlBIwbuxwM7yBc=",
     "homepage": "https://registry.terraform.io/providers/StatusCakeDev/statuscake",
