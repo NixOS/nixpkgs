@@ -594,12 +594,7 @@ self: super: with self; {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
-  aligator = toPythonModule (
-    pkgs.aligator.override {
-      python3Packages = self;
-      pythonSupport = true;
-    }
-  );
+  aligator = callPackage ../development/python-modules/aligator { inherit (pkgs) aligator; };
 
   alive-progress = callPackage ../development/python-modules/alive-progress { };
 

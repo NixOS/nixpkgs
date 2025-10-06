@@ -5,8 +5,6 @@
   fontconfig,
   llvmPackages,
   nix-update-script,
-  python3Packages,
-  pythonSupport ? false,
   stdenv,
 
   # nativeBuildInputs
@@ -45,6 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Simple-Robotics/aligator/commit/be6acbd9f558dc313c16bd8dc2d639eb0ec00f7e.patch";
       hash = "sha256-D2yvvnj4CcV2lJgaAh6oQShmEnXPd3NxTWMjtNIkN8U=";
     })
+    # ref. https://github.com/Simple-Robotics/aligator/pull/347 merged upstream
+    (fetchpatch {
+      name = "build-standalone-python-interface.patch";
+      url = "https://github.com/Simple-Robotics/aligator/commit/b0dd8a7f1c9b104a94bc4bd9764ae3d93ab02926.patch";
+      hash = "sha256-Oeh29UUiaz0r94r+NnYrDUbZu/yNybCdyi+Gv7uiE54=";
+    })
   ];
 
   outputs = [
@@ -59,48 +63,32 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     graphviz
     pkg-config
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.python
-    python3Packages.pythonImportsCheckHook
   ];
+
   buildInputs = [
     fmt
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ];
+
   propagatedBuildInputs = [
-    suitesparse
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.crocoddyl
-    python3Packages.matplotlib
-    python3Packages.pinocchio
-  ]
-  ++ lib.optionals (!pythonSupport) [
     crocoddyl
     pinocchio
+    suitesparse
   ];
+
   checkInputs = [
     gbenchmark
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.matplotlib
-    python3Packages.pytest
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PINOCCHIO_SUPPORT" true)
     (lib.cmakeBool "BUILD_CROCODDYL_COMPAT" true)
     (lib.cmakeBool "BUILD_WITH_OPENMP_SUPPORT" true)
     (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
     (lib.cmakeBool "GENERATE_PYTHON_STUBS" false) # this need git at configure time
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport) [
-    # ignore one failing test for now
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'aligator-test-py-rollout|aligator-test-py-frames'")
   ];
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
@@ -115,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-  pythonImportsCheck = [ "aligator" ];
 
   passthru.updateScript = nix-update-script { };
 
