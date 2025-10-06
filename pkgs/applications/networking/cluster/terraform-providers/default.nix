@@ -119,6 +119,7 @@ let
     lib.optionalAttrs config.allowAliases {
       _assert = archived "_assert" "2025/10";
       azurestack = archived "azurestack" "2025/10";
+      googleworkspace = archived "googleworkspace" "2025/10";
     };
 
   # excluding aliases, used by terraform-full
