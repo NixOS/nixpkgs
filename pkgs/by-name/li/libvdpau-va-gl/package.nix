@@ -49,6 +49,6 @@ stdenv.mkDerivation {
     description = "VDPAU driver with OpenGL/VAAPI backend";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [ maintainers.hater ];
   };
 }

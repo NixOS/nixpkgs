@@ -10060,6 +10060,13 @@
     githubId = 79340822;
     keys = [ { fingerprint = "3582 5B85 66C8 4F36 45C7  EC42 809F 7938 9CB1 8650"; } ];
   };
+  hater = {
+    name = "hater.dev";
+    github = "haterdotdev";
+    githubId = 101119701;
+    email = "hater@hater.dev";
+    keys = [ { fingerprint = "CC93 78E4 51B6 3490 8101  5260 3FB8 AFB5 95FA E565"; } ];
+  };
   havvy = {
     email = "ryan.havvy@gmail.com";
     github = "Havvy";
