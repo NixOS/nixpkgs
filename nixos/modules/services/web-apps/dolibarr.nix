@@ -25,7 +25,14 @@ let
   package = cfg.package.override { inherit (cfg) stateDir; };
 
   cfg = config.services.dolibarr;
-  vhostCfg = lib.optionalAttrs (cfg.nginx != null) config.services.nginx.virtualHosts."${cfg.domain}";
+
+  forcedTLS =
+    if cfg.h2o != null then
+      cfg.h2o.tls != null && cfg.h2o.tls.policy == "force"
+    else if cfg.nginx != null then
+      cfg.nginx.forceSSL
+    else
+      false;
 
   mkConfigFile =
     filename: settings:
@@ -72,6 +79,17 @@ let
     else
       cfg.database.port;
 
+  # exclusivity asserted in `assertions`
+  webServerService =
+    if cfg.h2o != null then
+      "h2o.service"
+    else if cfg.nginx != null then
+      "nginx.service"
+    else
+      null;
+
+  socketOwner = if cfg.h2o != null then config.services.h2o.user else cfg.user;
+
   # see https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/install/install.forced.sample.php for all possible values
   install = {
     force_install_noedit = 2;
@@ -90,7 +108,7 @@ let
     force_install_database = cfg.database.name;
     force_install_databaselogin = cfg.database.user;
 
-    force_install_mainforcehttps = vhostCfg.forceSSL or false;
+    force_install_mainforcehttps = forcedTLS;
     force_install_createuser = false;
     force_install_dolibarrlogin = null;
   }
@@ -204,6 +222,29 @@ in
       description = "Dolibarr settings, see <https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/conf/conf.php.example> for details.";
     };
 
+    h2o = mkOption {
+      type = types.nullOr (
+        types.submodule (import ../web-servers/h2o/vhost-options.nix { inherit config lib; })
+      );
+      default = null;
+      example =
+        lib.literalExpression # nix
+          ''
+            {
+              acme.enable = true;
+              tls.policy = "force";
+              compress = "ON";
+            }
+          '';
+      description = ''
+        With this option, you can customize an H2O virtual host which already
+        has sensible defaults for Dolibarr. Set to `{ }` if you do not need any
+        customization to the virtual host. If enabled, then by default, the
+        {option}`serverName` is `''${domain}`, If this is set to `null` (the
+        default), no H2O `hosts` will be configured.
+      '';
+    };
+
     nginx = mkOption {
       type = types.nullOr (
         types.submodule (
@@ -267,6 +308,22 @@ in
           assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
           message = "services.dolibarr.database.user must match services.dolibarr.user if the database is to be automatically provisioned";
         }
+        (
+          let
+            webServers = [
+              "h2o"
+              "nginx"
+            ];
+            checkConfigs = lib.concatMapStringsSep ", " (ws: "services.dolibarr.${ws}") webServers;
+          in
+          {
+            assertion = builtins.length (lib.lists.filter (ws: cfg.${ws} != null) webServers) <= 1;
+            message = ''
+              At most 1 web server virtual host configuration should be enabled
+              for Dolibarr at a time. Check ${checkConfigs}.
+            '';
+          }
+        )
       ];
 
       services.dolibarr.settings = {
@@ -297,7 +354,7 @@ in
 
         # Security settings
         dolibarr_main_prod = true;
-        dolibarr_main_force_https = vhostCfg.forceSSL or false;
+        dolibarr_main_force_https = forcedTLS;
         dolibarr_main_restrict_os_commands =
           {
             "mysql" = "${pkgs.mariadb}/bin/mysqldump, ${pkgs.mariadb}/bin/mysql";
@@ -350,6 +407,39 @@ in
         '';
       };
 
+      services.h2o = mkIf (cfg.h2o != null) {
+        enable = true;
+        hosts."${cfg.domain}" = mkMerge [
+          {
+            settings = {
+              paths = {
+                "/" = {
+                  "file.dir" = "${package}/htdocs";
+                  "file.index" = [
+                    "index.php"
+                    "index.html"
+                  ];
+                  redirect = {
+                    url = "/index.php/";
+                    internal = "YES";
+                    status = 307;
+                  };
+                };
+              };
+              "file.custom-handler" = {
+                extension = [ ".php" ];
+                "fastcgi.document_root" = "${package}/htdocs";
+                "fastcgi.connect" = {
+                  port = config.services.phpfpm.pools.dolibarr.socket;
+                  type = "unix";
+                };
+              };
+            };
+          }
+          cfg.h2o
+        ];
+      };
+
       services.nginx.enable = mkIf (cfg.nginx != null) true;
       services.nginx.virtualHosts."${cfg.domain}" = mkIf (cfg.nginx != null) (
         lib.mkMerge [
@@ -368,6 +458,8 @@ in
       );
 
       systemd.services."phpfpm-dolibarr" = {
+        wantedBy = lib.optional (webServerService != null) webServerService;
+        before = lib.optional (webServerService != null) webServerService;
         after = lib.optional cfg.database.createLocally dbUnit;
         requires = lib.optional cfg.database.createLocally dbUnit;
       };
@@ -388,7 +480,7 @@ in
 
         settings = {
           "listen.mode" = "0660";
-          "listen.owner" = cfg.user;
+          "listen.owner" = socketOwner;
           "listen.group" = cfg.group;
         }
         // cfg.poolConfig;
@@ -427,17 +519,23 @@ in
         };
       };
 
-      users.users.dolibarr = mkIf (cfg.user == "dolibarr") {
-        isSystemUser = true;
-        group = cfg.group;
-      };
-
-      users.groups = optionalAttrs (cfg.group == "dolibarr") {
-        dolibarr = { };
+      users = {
+        users = {
+          dolibarr = mkIf (cfg.user == "dolibarr") {
+            isSystemUser = true;
+            group = cfg.group;
+          };
+        }
+        // lib.optionalAttrs (cfg.h2o != null) {
+          "${config.services.h2o.user}".extraGroups = [ cfg.group ];
+        }
+        // lib.optionalAttrs (cfg.nginx != null) {
+          "${config.services.nginx.user}".extraGroups = [ cfg.group ];
+        };
+        groups = optionalAttrs (cfg.group == "dolibarr") {
+          dolibarr = { };
+        };
       };
     }
-    (mkIf (cfg.nginx != null) {
-      users.users."${config.services.nginx.group}".extraGroups = mkIf (cfg.nginx != null) [ cfg.group ];
-    })
   ]);
 }
