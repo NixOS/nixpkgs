@@ -148,6 +148,9 @@ in
   # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
   aeson = dontCheck super.aeson;
 
+  # Tests require skeletest which no longer supports GHC 9.6
+  toml-reader = dontCheck super.toml-reader;
+
   # Apply patch from PR with mtl-2.3 fix.
   ConfigFile = overrideCabal (drv: {
     editedCabalFile = null;
