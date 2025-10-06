@@ -1,12 +1,10 @@
 {
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  poetry-core,
-  i3ipc,
   lib,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "kitti3";
   version = "unstable-2021-09-11";
   format = "pyproject";
@@ -24,11 +22,11 @@ buildPythonApplication {
     ./kitti3-fix-build-system.patch
   ];
 
-  nativeBuildInputs = [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     i3ipc
   ];
 

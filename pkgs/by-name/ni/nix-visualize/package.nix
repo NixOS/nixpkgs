@@ -2,15 +2,10 @@
   lib,
   fetchFromGitHub,
   nix,
-  python,
-  matplotlib,
-  networkx,
-  pandas,
-  pygraphviz,
-  setuptools,
+  python3Packages,
 }:
 
-python.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   version = "1.0.5-unstable-2024-01-17";
   pname = "nix-visualize";
   pyproject = true;
@@ -27,9 +22,9 @@ python.pkgs.buildPythonApplication {
       --prefix PATH : ${lib.makeBinPath [ nix ]}
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     matplotlib
     networkx
     pandas

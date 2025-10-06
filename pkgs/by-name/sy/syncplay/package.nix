@@ -2,17 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildPythonApplication,
-  pem,
-  pyside6,
-  twisted,
-  certifi,
+  python3Packages,
   qt6,
-  appnope,
   enableGUI ? true,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "syncplay";
   version = "1.7.4";
 
@@ -32,14 +27,16 @@ buildPythonApplication rec {
   buildInputs = lib.optionals enableGUI [
     (if stdenv.hostPlatform.isLinux then qt6.qtwayland else qt6.qtbase)
   ];
-  propagatedBuildInputs = [
-    certifi
-    pem
-    twisted
-  ]
-  ++ twisted.optional-dependencies.tls
-  ++ lib.optional enableGUI pyside6
-  ++ lib.optional (stdenv.hostPlatform.isDarwin && enableGUI) appnope;
+  dependencies =
+    with python3Packages;
+    [
+      certifi
+      pem
+      twisted
+    ]
+    ++ twisted.optional-dependencies.tls
+    ++ lib.optional enableGUI pyside6
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && enableGUI) appnope;
   nativeBuildInputs = lib.optionals enableGUI [ qt6.wrapQtAppsHook ];
 
   makeFlags = [
