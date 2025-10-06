@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DLIBLOVE_USE_SYSTEM_ZLIB=ON"
     "-DLIBLOVE_USE_SYSTEM_LIBPNG=ON"
     "-DLIBLOVE_USE_SYSTEM_LIBJPEG=ON"
