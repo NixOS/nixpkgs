@@ -28,7 +28,6 @@ let
     };
     connection = cfg.connectionConfig;
     device = {
-      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
       "wifi.backend" = cfg.wifi.backend;
     };
   } cfg.settings;
@@ -77,52 +76,6 @@ let
     pre-down = "pre-down.d/";
   };
 
-  macAddressOptWifi = lib.mkOption {
-    type = lib.types.either lib.types.str (
-      lib.types.enum [
-        "permanent"
-        "preserve"
-        "random"
-        "stable"
-        "stable-ssid"
-      ]
-    );
-    default = "preserve";
-    example = "00:11:22:33:44:55";
-    description = ''
-      Set the MAC address of the interface.
-
-      - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
-      - `"permanent"`: Use the permanent MAC address of the device
-      - `"preserve"`: Don’t change the MAC address of the device upon activation
-      - `"random"`: Generate a randomized value upon each connect
-      - `"stable"`: Generate a stable, hashed MAC address
-      - `"stable-ssid"`: Generate a stable MAC addressed based on Wi-Fi network
-    '';
-  };
-
-  macAddressOptEth = lib.mkOption {
-    type = lib.types.either lib.types.str (
-      lib.types.enum [
-        "permanent"
-        "preserve"
-        "random"
-        "stable"
-      ]
-    );
-    default = "preserve";
-    example = "00:11:22:33:44:55";
-    description = ''
-      Set the MAC address of the interface.
-
-      - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
-      - `"permanent"`: Use the permanent MAC address of the device
-      - `"preserve"`: Don’t change the MAC address of the device upon activation
-      - `"random"`: Generate a randomized value upon each connect
-      - `"stable"`: Generate a stable, hashed MAC address
-    '';
-  };
-
   concatPluginAttrs = attr: lib.concatMap (plugin: plugin.${attr} or [ ]) cfg.plugins;
   pluginRuntimeDeps = concatPluginAttrs "networkManagerRuntimeDeps";
   pluginDbusDeps = concatPluginAttrs "networkManagerDbusDeps";
@@ -140,6 +93,8 @@ in
 {
   imports = [
     ./backwards-compat.nix
+
+    ./mac-address.nix
   ];
 
   meta = {
@@ -303,11 +258,7 @@ in
         '';
       };
 
-      ethernet.macAddress = macAddressOptEth;
-
       wifi = {
-        macAddress = macAddressOptWifi;
-
         backend = lib.mkOption {
           type = lib.types.enum [
             "wpa_supplicant"
@@ -325,15 +276,6 @@ in
           default = null;
           description = ''
             Whether to enable Wi-Fi power saving.
-          '';
-        };
-
-        scanRandMacAddress = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-          description = ''
-            Whether to enable MAC address randomization of a Wi-Fi device
-            during scanning.
           '';
         };
       };
@@ -625,8 +567,6 @@ in
         modemmanager.enable = lib.mkDefault true;
 
         networkmanager.connectionConfig = {
-          "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
-          "wifi.cloned-mac-address" = cfg.wifi.macAddress;
           "wifi.powersave" = lib.mkIf (cfg.wifi.powersave != null) (if cfg.wifi.powersave then 3 else 2);
         };
       }
